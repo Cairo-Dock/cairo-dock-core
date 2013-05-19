@@ -27,10 +27,13 @@
 #include "../config.h"
 #include "gldi-config.h"
 #include "cairo-dock-struct.h"
-#include "cairo-dock-module-factory.h"
+#include "cairo-dock-module-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-gui-manager.h"
+#include "cairo-dock-icon-facility.h"  // gldi_icons_get_any_without_dialog
+#include "cairo-dock-module-manager.h"  // GldiModule
+#include "cairo-dock-module-instance-manager.h"  // GldiModuleInstance
 #include "cairo-dock-applet-facility.h"  // play_sound
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-applications-manager.h"
@@ -43,8 +46,7 @@
 #include "cairo-dock-X-utilities.h"  // cairo_dock_get_xwindow_class
 #include "cairo-dock-task.h"
 #include "cairo-dock-image-buffer.h"
-#include "cairo-dock-X-manager.h"
-#include "cairo-dock-notifications.h"
+#include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-launcher-manager.h" // cairo_dock_launch_command_sync
 #include "cairo-dock-gui-factory.h"
 
@@ -1277,14 +1279,14 @@ static gboolean _on_screen_modified (GtkWidget *pCombo)
 	gtk_widget_set_sensitive (pCombo, g_desktopGeometry.iNbScreens > 1);
 	
 	g_hash_table_destroy (pHashTable);
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 static void _on_list_destroyed (G_GNUC_UNUSED gpointer data)
 {
-	cairo_dock_remove_notification_func_on_object (&myDesktopMgr,
-		NOTIFICATION_SCREEN_GEOMETRY_ALTERED,
-		(CairoDockNotificationFunc) _on_screen_modified,
-		CAIRO_DOCK_RUN_AFTER);
+	gldi_object_remove_notification (&myDesktopMgr,
+		NOTIFICATION_DESKTOP_GEOMETRY_CHANGED,
+		(GldiNotificationFunc) _on_screen_modified,
+		GLDI_RUN_AFTER);
 }
 
 static gboolean _test_one_name (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path, GtkTreeIter *iter, gpointer *data)
@@ -1383,17 +1385,12 @@ static void _got_themes_combo_list (GHashTable *pThemeTable, gpointer *data)
 }
 
 
-static void _cairo_dock_configure_module (G_GNUC_UNUSED GtkButton *button, gpointer *data)
+static void _cairo_dock_configure_module (G_GNUC_UNUSED GtkButton *button, const gchar *cModuleName)
 {
-	// GtkTreeView *pCombo = data[0];
-	// GtkWindow *pDialog = data[1];
-	gchar *cModuleName = data[2];
-	
-	CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
-	//CairoDockInternalModule *pInternalModule = cairo_dock_find_internal_module_from_name (cModuleName);
+	GldiModule *pModule = gldi_module_get (cModuleName);
 	Icon *pIcon = cairo_dock_get_current_active_icon ();
 	if (pIcon == NULL)
-		pIcon = cairo_dock_get_dialogless_icon ();
+		pIcon = gldi_icons_get_any_without_dialog ();
 	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon != NULL ? pIcon->cParentDockName : NULL);
 	gchar *cMessage = NULL;
 	
@@ -1402,35 +1399,26 @@ static void _cairo_dock_configure_module (G_GNUC_UNUSED GtkButton *button, gpoin
 		cMessage = g_strdup_printf (_("The '%s' module was not found.\nBe sure to install it with the same version as the dock to enjoy these features."), cModuleName);
 		int iDuration = 10e3;
 		if (pIcon != NULL && pDock != NULL)
-			cairo_dock_show_temporary_dialog_with_icon (cMessage, pIcon, CAIRO_CONTAINER (pDock), iDuration, "same icon");
+			gldi_dialog_show_temporary_with_icon (cMessage, pIcon, CAIRO_CONTAINER (pDock), iDuration, "same icon");
 		else
-			cairo_dock_show_general_message (cMessage, iDuration);
+			gldi_dialog_show_general_message (cMessage, iDuration);
 	}
 	else if (pModule != NULL && pModule->pInstancesList == NULL)
 	{
 		cMessage = g_strdup_printf (_("The '%s' plug-in is not active.\nActivate it now?"), cModuleName);
-		int iClickedButton = cairo_dock_show_dialog_and_wait (cMessage,
+		int iClickedButton = gldi_dialog_show_and_wait (cMessage,
 			pIcon, CAIRO_CONTAINER (pDock),
 			GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, NULL);
 		if (iClickedButton == 0 || iClickedButton == -1)  // ok button or Enter.
 		{
-			cairo_dock_activate_module (pModule, NULL);
-			///cairo_dock_show_module_gui (cModuleName);
+			gldi_module_activate (pModule);
 		}
-	}
-	else
-	{
-		///cairo_dock_show_module_gui (cModuleName);
 	}
 	g_free (cMessage);
 }
 
-static void _cairo_dock_widget_launch_command (G_GNUC_UNUSED GtkButton *button, gpointer *data)
+static void _cairo_dock_widget_launch_command (G_GNUC_UNUSED GtkButton *button, const gchar *cCommandToLaunch)
 {
-	// GtkTreeView *pCombo = data[0];
-	// GtkWindow *pDialog = data[1];
-	gchar *cCommandToLaunch = data[2];
-	
 	gchar *cResult = cairo_dock_launch_command_sync (cCommandToLaunch);
 	if (cResult != NULL)
 		cd_debug ("%s: %s => %s", __func__, cCommandToLaunch, cResult);
@@ -1701,7 +1689,7 @@ GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *p
 }
 
 
-GtkWidget *cairo_dock_widget_handbook_new (CairoDockModule *pModule)
+GtkWidget *cairo_dock_widget_handbook_new (GldiModule *pModule)
 {
 	g_return_val_if_fail (pModule != NULL, NULL);
 	
@@ -2050,7 +2038,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 		if (iElementType == CAIRO_DOCK_WIDGET_HANDBOOK)
 		{
 			cValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
-			CairoDockModule *pModule = cairo_dock_find_module_from_name (cValue);
+			GldiModule *pModule = gldi_module_get (cValue);
 			g_free (cValue);
 			GtkWidget *pHandbook = cairo_dock_widget_handbook_new (pModule);
 			if (pHandbook != NULL)
@@ -2704,10 +2692,10 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				g_object_unref (pScreensListStore);
 				g_hash_table_destroy (pHashTable);
 				
-				cairo_dock_register_notification_on_object (&myDesktopMgr,
-					NOTIFICATION_SCREEN_GEOMETRY_ALTERED,
-					(CairoDockNotificationFunc) _on_screen_modified,
-					CAIRO_DOCK_RUN_AFTER, pScreensListStore);
+				gldi_object_register_notification (&myDesktopMgr,
+					NOTIFICATION_DESKTOP_GEOMETRY_CHANGED,
+					(GldiNotificationFunc) _on_screen_modified,
+					GLDI_RUN_AFTER, pScreensListStore);
 				g_signal_connect (pOneWidget, "destroy", G_CALLBACK (_on_list_destroyed), NULL);
 				
 				if (g_desktopGeometry.iNbScreens <= 1)
@@ -2720,35 +2708,25 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				if (pAuthorizedValuesList == NULL || pAuthorizedValuesList[0] == NULL || *pAuthorizedValuesList[0] == '\0')
 					break ;
 				
-				const gchar *cModuleName = NULL;
-				/*CairoDockInternalModule *pInternalModule = cairo_dock_find_internal_module_from_name (pAuthorizedValuesList[0]);
-				if (pInternalModule != NULL)
-					cModuleName = pInternalModule->cModuleName;
-				else*/
+				gchar *cModuleName = NULL;
+				GldiModule *pModule = gldi_module_get (pAuthorizedValuesList[0]);
+				if (pModule != NULL)
+					cModuleName = (gchar*)pModule->pVisitCard->cModuleName;  // 'cModuleName' will not be freed
+				else
 				{
-					CairoDockModule *pModule = cairo_dock_find_module_from_name (pAuthorizedValuesList[0]);
-					if (pModule != NULL)
-						cModuleName = pModule->pVisitCard->cModuleName;
-					else
+					if (iElementType == CAIRO_DOCK_WIDGET_JUMP_TO_MODULE_IF_EXISTS)
 					{
-						if (iElementType == CAIRO_DOCK_WIDGET_JUMP_TO_MODULE_IF_EXISTS)
-						{
-							gtk_widget_set_sensitive (pLabel, FALSE);
-							break ;
-						}
-						cd_warning ("module '%s' not found", pAuthorizedValuesList[0]);
-						cModuleName = g_strdup (pAuthorizedValuesList[0]);  // petite fuite memoire dans ce cas tres rare ...
+						gtk_widget_set_sensitive (pLabel, FALSE);
+						break ;
 					}
+					cd_warning ("module '%s' not found", pAuthorizedValuesList[0]);
+					cModuleName = g_strdup (pAuthorizedValuesList[0]);  // petite fuite memoire dans ce cas tres rare ...
 				}
 				pOneWidget = gtk_button_new_from_stock (GTK_STOCK_JUMP_TO);
-				_allocate_new_buffer;
-				data[0] = pOneWidget;
-				data[1] = pMainWindow;
-				data[2] = cModuleName;
 				g_signal_connect (G_OBJECT (pOneWidget),
 					"clicked",
 					G_CALLBACK (_cairo_dock_configure_module),
-					data);
+					cModuleName);
 				_pack_subwidget (pOneWidget);
 			break ;
 			
@@ -2756,7 +2734,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			case CAIRO_DOCK_WIDGET_LAUNCH_COMMAND_IF_CONDITION :
 				if (pAuthorizedValuesList == NULL || pAuthorizedValuesList[0] == NULL || *pAuthorizedValuesList[0] == '\0')
 					break ;
-				const gchar *cFirstCommand = NULL;
+				gchar *cFirstCommand = NULL;
 				cFirstCommand = pAuthorizedValuesList[0];
 				if (iElementType == CAIRO_DOCK_WIDGET_LAUNCH_COMMAND_IF_CONDITION)
 				{
@@ -2777,14 +2755,10 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					g_free (cResult);
 				}
 				pOneWidget = gtk_button_new_from_stock (GTK_STOCK_JUMP_TO);
-				_allocate_new_buffer;
-				data[0] = pOneWidget;
-				data[1] = pMainWindow;
-				data[2] = g_strdup (cFirstCommand);
 				g_signal_connect (G_OBJECT (pOneWidget),
 					"clicked",
 					G_CALLBACK (_cairo_dock_widget_launch_command),
-					data);
+					g_strdup (cFirstCommand));
 				_pack_subwidget (pOneWidget);
 			break ;
 			

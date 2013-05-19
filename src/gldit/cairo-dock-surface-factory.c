@@ -26,11 +26,11 @@
 #include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-image-buffer.h"
-#include "cairo-dock-X-manager.h"
+#include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-icon-manager.h"  // cairo_dock_search_icon_s_path
 #include "cairo-dock-surface-factory.h"
 
-extern CairoContainer *g_pPrimaryContainer;
+extern GldiContainer *g_pPrimaryContainer;
 extern gboolean g_bUseOpenGL;
 
 static cairo_t *s_pSourceContext = NULL;
@@ -910,7 +910,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 	
 	if (pLabelDescription->fMaxRelativeWidth != 0)
 	{
-		int iMaxLineWidth = pLabelDescription->fMaxRelativeWidth * gldi_get_desktop_width() / g_desktopGeometry.iNbScreens;  // use the mean screen width since the text might be placed anywhere on the X screen.
+		int iMaxLineWidth = pLabelDescription->fMaxRelativeWidth * gldi_desktop_get_width() / g_desktopGeometry.iNbScreens;  // use the mean screen width since the text might be placed anywhere on the X screen.
 		int w = log.width;
 		//g_print ("text width : %d / %d\n", w, iMaxLineWidth);
 		if (w > iMaxLineWidth)  // le texte est trop long.

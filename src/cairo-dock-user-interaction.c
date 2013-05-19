@@ -34,21 +34,18 @@
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-dock-facility.h"
-#include "cairo-dock-notifications.h"
 #include "cairo-dock-desklet-factory.h"
-#include "cairo-dock-dialog-manager.h"
-#include "cairo-dock-dialog-manager.h"
+#include "cairo-dock-dialog-factory.h"
 #include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file
 #include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
-#include "cairo-dock-module-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-class-manager.h"
-#include "cairo-dock-X-utilities.h"
-#include "cairo-dock-X-manager.h"
+#include "cairo-dock-desktop-manager.h"
+#include "cairo-dock-windows-manager.h"
 #include "cairo-dock-gui-backend.h"
 #include "cairo-dock-dbus.h"
 #include "cairo-dock-user-interaction.h"
@@ -59,9 +56,9 @@ extern gchar *g_cCurrentIconsPath;
 
 static int _compare_zorder (Icon *icon1, Icon *icon2)  // classe par z-order decroissant.
 {
-	if (icon1->iStackOrder < icon2->iStackOrder)
+	if (icon1->pAppli->iStackOrder < icon2->pAppli->iStackOrder)
 		return -1;
-	else if (icon1->iStackOrder > icon2->iStackOrder)
+	else if (icon1->pAppli->iStackOrder > icon2->pAppli->iStackOrder)
 		return 1;
 	else
 		return 0;
@@ -76,7 +73,7 @@ static void _cairo_dock_hide_show_in_class_subdock (Icon *icon)
 	for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
 	{
 		pIcon = ic->data;
-		if (pIcon->Xid != 0 && pIcon->Xid == cairo_dock_get_current_active_window ())
+		if (pIcon->pAppli != NULL && pIcon->pAppli == gldi_windows_get_active ())
 		{
 			break;
 		}
@@ -87,9 +84,9 @@ static void _cairo_dock_hide_show_in_class_subdock (Icon *icon)
 		for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
 		{
 			pIcon = ic->data;
-			if (pIcon->Xid != 0 && ! pIcon->bIsHidden)
+			if (pIcon->pAppli != NULL && ! pIcon->pAppli->bIsHidden)
 			{
-				cairo_dock_minimize_xwindow (pIcon->Xid);
+				gldi_window_minimize (pIcon->pAppli);
 			}
 		}
 	}
@@ -99,32 +96,32 @@ static void _cairo_dock_hide_show_in_class_subdock (Icon *icon)
 		for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
 		{
 			pIcon = ic->data;
-			if (pIcon->Xid != 0)
+			if (pIcon->pAppli != NULL)
 				pZOrderList = g_list_insert_sorted (pZOrderList, pIcon, (GCompareFunc) _compare_zorder);
 		}
 		
 		int iNumDesktop, iViewPortX, iViewPortY;
-		cairo_dock_get_current_desktop_and_viewport (&iNumDesktop, &iViewPortX, &iViewPortY);
+		gldi_desktop_get_current (&iNumDesktop, &iViewPortX, &iViewPortY);
 		
 		for (ic = pZOrderList; ic != NULL; ic = ic->next)
 		{
 			pIcon = ic->data;
-			if (cairo_dock_appli_is_on_desktop (pIcon, iNumDesktop, iViewPortX, iViewPortY))
+			if (gldi_window_is_on_desktop (pIcon->pAppli, iNumDesktop, iViewPortX, iViewPortY))
 				break;
 		}
 		if (pZOrderList && ic == NULL)  // no window on the current desktop -> take the first desktop
 		{
 			pIcon = pZOrderList->data;
-			iNumDesktop = pIcon->iNumDesktop;
-			iViewPortX = pIcon->iViewPortX;
-			iViewPortY = pIcon->iViewPortY;
+			iNumDesktop = pIcon->pAppli->iNumDesktop;
+			iViewPortX = pIcon->pAppli->iViewPortX;
+			iViewPortY = pIcon->pAppli->iViewPortY;
 		}
 		
 		for (ic = pZOrderList; ic != NULL; ic = ic->next)
 		{
 			pIcon = ic->data;
-			if (cairo_dock_appli_is_on_desktop (pIcon, iNumDesktop, iViewPortX, iViewPortY))
-				cairo_dock_show_xwindow (pIcon->Xid);
+			if (gldi_window_is_on_desktop (pIcon->pAppli, iNumDesktop, iViewPortX, iViewPortY))
+				gldi_window_show (pIcon->pAppli);
 		}
 		g_list_free (pZOrderList);
 	}
@@ -134,13 +131,13 @@ static void _cairo_dock_show_prev_next_in_subdock (Icon *icon, gboolean bNext)
 {
 	if (icon->pSubDock == NULL || icon->pSubDock->icons == NULL)
 		return;
-	Window xActiveId = cairo_dock_get_current_active_window ();
+	GldiWindowActor *pActiveAppli = gldi_windows_get_active ();
 	GList *ic;
 	Icon *pIcon;
 	for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
 	{
 		pIcon = ic->data;
-		if (pIcon->Xid == xActiveId)
+		if (pIcon->pAppli == pActiveAppli)
 			break;
 	}
 	if (ic == NULL)
@@ -153,7 +150,7 @@ static void _cairo_dock_show_prev_next_in_subdock (Icon *icon, gboolean bNext)
 		pIcon = ic2->data;
 		if (CAIRO_DOCK_IS_APPLI (pIcon))
 		{
-			cairo_dock_show_xwindow (pIcon->Xid);
+			gldi_window_show (pIcon->pAppli);
 			break;
 		}
 	} while (ic2 != ic);
@@ -168,9 +165,9 @@ static void _cairo_dock_close_all_in_class_subdock (Icon *icon)
 	for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
 	{
 		pIcon = ic->data;
-		if (pIcon->Xid != 0)
+		if (pIcon->pAppli != NULL)
 		{
-			cairo_dock_close_xwindow (pIcon->Xid);
+			gldi_window_close (pIcon->pAppli);
 		}
 	}
 }
@@ -182,9 +179,9 @@ static void _show_all_windows (GList *pIcons)
 	for (ic = pIcons; ic != NULL; ic = ic->next)
 	{
 		pIcon = ic->data;
-		if (pIcon->Xid != 0 && pIcon->bIsHidden)  // a window is hidden...
+		if (pIcon->pAppli != NULL && pIcon->pAppli->bIsHidden)  // a window is hidden...
 		{
-			cairo_dock_show_xwindow (pIcon->Xid);
+			gldi_window_show (pIcon->pAppli);
 		}
 	}
 }
@@ -192,13 +189,13 @@ static void _show_all_windows (GList *pIcons)
 static gboolean _launch_icon_command (Icon *icon, CairoDock *pDock)
 {
 	if (icon->cCommand == NULL)
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+		return GLDI_NOTIFICATION_LET_PASS;
 	
 	if (pDock->iRefCount != 0)  // let the applets handle their own sub-icons.
 	{
 		Icon *pMainIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
 		if (CAIRO_DOCK_IS_APPLET (pMainIcon))
-			return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+			return GLDI_NOTIFICATION_LET_PASS;
 	}
 	
 	gboolean bSuccess = FALSE;
@@ -218,12 +215,12 @@ static gboolean _launch_icon_command (Icon *icon, CairoDock *pDock)
 	{
 		cairo_dock_request_icon_animation (icon, CAIRO_CONTAINER (pDock), "blink", 1);  // 1 blink if fail.
 	}
-	return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
+	return GLDI_NOTIFICATION_INTERCEPT;
 }
-gboolean cairo_dock_notification_click_icon (G_GNUC_UNUSED gpointer pUserData, Icon *icon, CairoContainer *pContainer, guint iButtonState)
+gboolean cairo_dock_notification_click_icon (G_GNUC_UNUSED gpointer pUserData, Icon *icon, GldiContainer *pContainer, guint iButtonState)
 {
 	if (icon == NULL || ! CAIRO_DOCK_IS_DOCK (pContainer))
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+		return GLDI_NOTIFICATION_LET_PASS;
 	CairoDock *pDock = CAIRO_DOCK (pContainer);
 	
 	// shit/ctrl + click on an icon that is linked to a program => re-launch this program.
@@ -235,7 +232,7 @@ gboolean cairo_dock_notification_click_icon (G_GNUC_UNUSED gpointer pUserData, I
 		{
 			return _launch_icon_command (icon, pDock);
 		}
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+		return GLDI_NOTIFICATION_LET_PASS;
 	}
 	
 	// scale on an icon holding a class sub-dock.
@@ -244,12 +241,12 @@ gboolean cairo_dock_notification_click_icon (G_GNUC_UNUSED gpointer pUserData, I
 		if (myTaskbarParam.bPresentClassOnClick // if we want to use this feature
 		&& (!myDocksParam.bShowSubDockOnClick  // if sub-docks are shown on mouse over
 			|| gldi_container_is_visible (CAIRO_CONTAINER (icon->pSubDock)))  // or this sub-dock is already visible
-		&& cairo_dock_wm_present_class (icon->cClass)) // we use the scale plugin if it's possible
+		&& gldi_desktop_present_class (icon->cClass)) // we use the scale plugin if it's possible
 		{
 			_show_all_windows (icon->pSubDock->icons); // show all windows
 			// in case the dock is visible or about to be visible, hide it, as it would confuse the user to have both.
 			cairo_dock_emit_leave_signal (CAIRO_CONTAINER (icon->pSubDock));
-			return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
+			return GLDI_NOTIFICATION_INTERCEPT;
 		}
 	}
 	
@@ -257,16 +254,16 @@ gboolean cairo_dock_notification_click_icon (G_GNUC_UNUSED gpointer pUserData, I
 	if (icon->pSubDock != NULL && (myDocksParam.bShowSubDockOnClick || !gldi_container_is_visible (CAIRO_CONTAINER (icon->pSubDock))))  // icon pointing to a sub-dock with either "sub-dock activation on click" option enabled, or sub-dock not visible -> open the sub-dock
 	{
 		cairo_dock_show_subdock (icon, pDock);
-		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
+		return GLDI_NOTIFICATION_INTERCEPT;
 	}
 	else if (CAIRO_DOCK_IS_APPLI (icon) && ! CAIRO_DOCK_IS_APPLET (icon))  // icon holding an appli, but not being an applet -> show/hide the window.
 	{
-		Icon *pAppli = cairo_dock_get_icon_with_Xid (icon->Xid);
-		if (pAppli && cairo_dock_get_current_active_window () == icon->Xid && myTaskbarParam.bMinimizeOnClick && ! pAppli->bIsHidden && cairo_dock_appli_is_on_current_desktop (pAppli))  // ne marche que si le dock est une fenêtre de type 'dock', sinon il prend le focus.
-			cairo_dock_minimize_xwindow (icon->Xid);
+		GldiWindowActor *pAppli = icon->pAppli;
+		if (gldi_windows_get_active () == pAppli && myTaskbarParam.bMinimizeOnClick && ! pAppli->bIsHidden && gldi_window_is_on_current_desktop (pAppli))  // ne marche que si le dock est une fenêtre de type 'dock', sinon il prend le focus.
+			gldi_window_minimize (pAppli);
 		else
-			cairo_dock_show_xwindow (icon->Xid);
-		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
+			gldi_window_show (pAppli);
+		return GLDI_NOTIFICATION_INTERCEPT;
 	}
 	else if (CAIRO_DOCK_IS_MULTI_APPLI (icon))  // icon holding a class sub-dock -> show/hide the windows of the class.
 	{
@@ -274,7 +271,7 @@ gboolean cairo_dock_notification_click_icon (G_GNUC_UNUSED gpointer pUserData, I
 		{
 			_cairo_dock_hide_show_in_class_subdock (icon);
 		}
-		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
+		return GLDI_NOTIFICATION_INTERCEPT;
 	}
 	else if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon))  // finally, launcher being none of the previous cases -> launch the command
 	{
@@ -284,14 +281,14 @@ gboolean cairo_dock_notification_click_icon (G_GNUC_UNUSED gpointer pUserData, I
 	{
 		cd_debug ("no action here");
 	}
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
 
-gboolean cairo_dock_notification_middle_click_icon (G_GNUC_UNUSED gpointer pUserData, Icon *icon, CairoContainer *pContainer)
+gboolean cairo_dock_notification_middle_click_icon (G_GNUC_UNUSED gpointer pUserData, Icon *icon, GldiContainer *pContainer)
 {
 	if (icon == NULL || ! CAIRO_DOCK_IS_DOCK (pContainer))
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+		return GLDI_NOTIFICATION_LET_PASS;
 	CairoDock *pDock = CAIRO_DOCK (pContainer);
 	
 	if (CAIRO_DOCK_IS_APPLI (icon) && ! CAIRO_DOCK_IS_APPLET (icon) && myTaskbarParam.iActionOnMiddleClick != 0)
@@ -299,23 +296,22 @@ gboolean cairo_dock_notification_middle_click_icon (G_GNUC_UNUSED gpointer pUser
 		switch (myTaskbarParam.iActionOnMiddleClick)
 		{
 			case 1:  // close
-				cairo_dock_close_xwindow (icon->Xid);
+				gldi_window_close (icon->pAppli);
 			break;
 			case 2:  // minimise
-				if (! icon->bIsHidden)
+				if (! icon->pAppli->bIsHidden)
 				{
-					cairo_dock_minimize_xwindow (icon->Xid);
+					gldi_window_minimize (icon->pAppli);
 				}
 			break;
 			case 3:  // launch new
 				if (icon->cCommand != NULL)
 				{
-					///cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
-					cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
+					gldi_object_notify (pDock, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
 				}
 			break;
 		}
-		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
+		return GLDI_NOTIFICATION_INTERCEPT;
 	}
 	else if (CAIRO_DOCK_IS_MULTI_APPLI (icon) && myTaskbarParam.iActionOnMiddleClick != 0)
 	{
@@ -330,19 +326,19 @@ gboolean cairo_dock_notification_middle_click_icon (G_GNUC_UNUSED gpointer pUser
 			case 3:  // launch new
 				if (icon->cCommand != NULL)
 				{
-					///cairo_dock_notify_on_object (&myContainersMgr, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
-					cairo_dock_notify_on_object (CAIRO_CONTAINER (pDock), NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
+					///gldi_object_notify (&myContainersMgr, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
+					gldi_object_notify (CAIRO_CONTAINER (pDock), NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
 				}
 			break;
 		}
 		
-		return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
+		return GLDI_NOTIFICATION_INTERCEPT;
 	}
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
 
-gboolean cairo_dock_notification_scroll_icon (G_GNUC_UNUSED gpointer pUserData, Icon *icon, G_GNUC_UNUSED CairoContainer *pContainer, int iDirection)
+gboolean cairo_dock_notification_scroll_icon (G_GNUC_UNUSED gpointer pUserData, Icon *icon, G_GNUC_UNUSED GldiContainer *pContainer, int iDirection)
 {
 	if (CAIRO_DOCK_IS_MULTI_APPLI (icon) || CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon))  // on emule un alt+tab sur la liste des applis du sous-dock.
 	{
@@ -352,17 +348,17 @@ gboolean cairo_dock_notification_scroll_icon (G_GNUC_UNUSED gpointer pUserData, 
 	{
 		Icon *pNextIcon = cairo_dock_get_prev_next_classmate_icon (icon, iDirection == GDK_SCROLL_DOWN);
 		if (pNextIcon != NULL)
-			cairo_dock_show_xwindow (pNextIcon->Xid);
+			gldi_window_show (pNextIcon->pAppli);
 	}
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
 
-gboolean cairo_dock_notification_drop_data (G_GNUC_UNUSED gpointer pUserData, const gchar *cReceivedData, Icon *icon, double fOrder, CairoContainer *pContainer)
+gboolean cairo_dock_notification_drop_data (G_GNUC_UNUSED gpointer pUserData, const gchar *cReceivedData, Icon *icon, double fOrder, GldiContainer *pContainer)
 {
 	cd_debug ("take the drop");
 	if (! CAIRO_DOCK_IS_DOCK (pContainer))
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+		return GLDI_NOTIFICATION_LET_PASS;
 	
 	CairoDock *pDock = CAIRO_DOCK (pContainer);
 	CairoDock *pReceivingDock = pDock;
@@ -370,7 +366,7 @@ gboolean cairo_dock_notification_drop_data (G_GNUC_UNUSED gpointer pUserData, co
 	{
 		cd_debug (" dropped a .desktop");
 		if (! myTaskbarParam.bMixLauncherAppli && CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon))
-			return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+			return GLDI_NOTIFICATION_LET_PASS;
 		cd_debug (" add it");
 		if (fOrder == CAIRO_DOCK_LAST_ORDER && CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon) && icon->pSubDock != NULL)  // drop onto a container icon.
 		{
@@ -390,7 +386,7 @@ gboolean cairo_dock_notification_drop_data (G_GNUC_UNUSED gpointer pUserData, co
 			|| CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (icon)) // launcher/appli -> fire the command with this file.
 			{
 				if (icon->cCommand == NULL)
-					return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+					return GLDI_NOTIFICATION_LET_PASS;
 				gchar *cPath = NULL;
 				if (strncmp (cReceivedData, "file://", 7) == 0)  // tous les programmes ne gerent pas les URI; pour parer au cas ou il ne le gererait pas, dans le cas d'un fichier local, on convertit en un chemin
 				{
@@ -402,25 +398,25 @@ gboolean cairo_dock_notification_drop_data (G_GNUC_UNUSED gpointer pUserData, co
 				g_free (cPath);
 				g_free (cCommand);
 				cairo_dock_request_icon_animation (icon, CAIRO_CONTAINER (pDock), "blink", 2);
-				return CAIRO_DOCK_INTERCEPT_NOTIFICATION;
+				return GLDI_NOTIFICATION_INTERCEPT;
 			}
 			else  // skip any other case.
 			{
-				return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+				return GLDI_NOTIFICATION_LET_PASS;
 			}
 		}  // else: dropped between 2 icons -> try to add it (for instance a script).
 	}
 
 	if (g_bLocked || myDocksParam.bLockAll)
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+		return GLDI_NOTIFICATION_LET_PASS;
 	
 	Icon *pNewIcon = cairo_dock_add_new_launcher_by_uri (cReceivedData, pReceivingDock, fOrder);
 	
-	return (pNewIcon ? CAIRO_DOCK_INTERCEPT_NOTIFICATION : CAIRO_DOCK_LET_PASS_NOTIFICATION);
+	return (pNewIcon ? GLDI_NOTIFICATION_INTERCEPT : GLDI_NOTIFICATION_LET_PASS);
 }
 
 
-void cairo_dock_set_custom_icon_on_appli (const gchar *cFilePath, Icon *icon, CairoContainer *pContainer)
+void cairo_dock_set_custom_icon_on_appli (const gchar *cFilePath, Icon *icon, GldiContainer *pContainer)
 {
 	g_return_if_fail (CAIRO_DOCK_IS_APPLI (icon) && cFilePath != NULL);
 	gchar *ext = strrchr (cFilePath, '.');
@@ -435,7 +431,7 @@ void cairo_dock_set_custom_icon_on_appli (const gchar *cFilePath, Icon *icon, Ca
 			cairo_dock_update_conf_file (g_cConfFile,
 				G_TYPE_BOOLEAN, "TaskBar", "overwrite xicon", myTaskbarParam.bOverWriteXIcons,
 				G_TYPE_INVALID);
-			cairo_dock_show_temporary_dialog_with_default_icon (_("The option 'overwrite X icons' has been automatically enabled in the config.\nIt is located in the 'Taskbar' module."), icon, pContainer, 6000);
+			gldi_dialog_show_temporary_with_default_icon (_("The option 'overwrite X icons' has been automatically enabled in the config.\nIt is located in the 'Taskbar' module."), icon, pContainer, 6000);
 		}
 		
 		gchar *cPath = NULL;
@@ -464,7 +460,7 @@ gboolean cairo_dock_notification_configure_desklet (G_GNUC_UNUSED gpointer pUser
 	//g_print ("desklet %s configured\n", pDesklet->pIcon?pDesklet->pIcon->cName:"unknown");
 	cairo_dock_gui_update_desklet_params (pDesklet);
 	
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
 gboolean cairo_dock_notification_icon_moved (G_GNUC_UNUSED gpointer pUserData, Icon *pIcon, G_GNUC_UNUSED CairoDock *pDock)
@@ -477,14 +473,14 @@ gboolean cairo_dock_notification_icon_moved (G_GNUC_UNUSED gpointer pUserData, I
 	|| CAIRO_DOCK_ICON_TYPE_IS_APPLET (pIcon))
 		cairo_dock_gui_trigger_reload_items ();
 	
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
 gboolean cairo_dock_notification_icon_inserted (G_GNUC_UNUSED gpointer pUserData, Icon *pIcon, G_GNUC_UNUSED CairoDock *pDock)
 {
 	//g_print ("icon %s inserted (%.2f)\n", pIcon?pIcon->cName:"unknown", pIcon->fInsertRemoveFactor);
 	//if (pIcon->fInsertRemoveFactor == 0)
-	//	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	//	return GLDI_NOTIFICATION_LET_PASS;
 	
 	if ( ( (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)
 	|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pIcon)
@@ -492,14 +488,14 @@ gboolean cairo_dock_notification_icon_inserted (G_GNUC_UNUSED gpointer pUserData
 	|| CAIRO_DOCK_ICON_TYPE_IS_APPLET (pIcon))
 		cairo_dock_gui_trigger_reload_items ();
 	
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
 gboolean cairo_dock_notification_icon_removed (G_GNUC_UNUSED gpointer pUserData, Icon *pIcon, G_GNUC_UNUSED CairoDock *pDock)
 {
 	//g_print ("icon %s removed (%.2f)\n", pIcon?pIcon->cName:"unknown", pIcon->fInsertRemoveFactor);
 	//if (pIcon->fInsertRemoveFactor == 0)
-	//	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	//	return GLDI_NOTIFICATION_LET_PASS;
 	
 	if ( ( (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)
 	|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pIcon)
@@ -507,17 +503,17 @@ gboolean cairo_dock_notification_icon_removed (G_GNUC_UNUSED gpointer pUserData,
 	|| CAIRO_DOCK_ICON_TYPE_IS_APPLET (pIcon))
 		cairo_dock_gui_trigger_reload_items ();
 	
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
-gboolean cairo_dock_notification_desklet_destroyed (G_GNUC_UNUSED gpointer pUserData, G_GNUC_UNUSED CairoDesklet *pDesklet)
+gboolean cairo_dock_notification_desklet_added_removed (G_GNUC_UNUSED gpointer pUserData, G_GNUC_UNUSED CairoDesklet *pDesklet)
 {
 	//Icon *pIcon = pDesklet->pIcon;
 	//g_print ("desklet %s removed\n", pIcon?pIcon->cName:"unknown");
 	
 	cairo_dock_gui_trigger_reload_items ();
 	
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
 gboolean cairo_dock_notification_dock_destroyed (G_GNUC_UNUSED gpointer pUserData, G_GNUC_UNUSED CairoDock *pDock)
@@ -525,7 +521,7 @@ gboolean cairo_dock_notification_dock_destroyed (G_GNUC_UNUSED gpointer pUserDat
 	//g_print ("dock destroyed\n");
 	cairo_dock_gui_trigger_reload_items ();
 	
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
 gboolean cairo_dock_notification_module_activated (G_GNUC_UNUSED gpointer pUserData, const gchar *cModuleName, G_GNUC_UNUSED gboolean bActivated)
@@ -535,7 +531,7 @@ gboolean cairo_dock_notification_module_activated (G_GNUC_UNUSED gpointer pUserD
 	
 	cairo_dock_gui_trigger_reload_items ();  // for plug-ins that don't have an applet, like Cairo-Pinguin.
 	
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
 gboolean cairo_dock_notification_module_registered (G_GNUC_UNUSED gpointer pUserData, G_GNUC_UNUSED const gchar *cModuleName, G_GNUC_UNUSED gboolean bRegistered)
@@ -543,22 +539,22 @@ gboolean cairo_dock_notification_module_registered (G_GNUC_UNUSED gpointer pUser
 	//g_print ("module %s (un)registered (%d)\n", cModuleName, bRegistered);
 	cairo_dock_gui_trigger_update_modules_list ();
 	
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
-gboolean cairo_dock_notification_module_detached (G_GNUC_UNUSED gpointer pUserData, CairoDockModuleInstance *pInstance, gboolean bIsDetached)
+gboolean cairo_dock_notification_module_detached (G_GNUC_UNUSED gpointer pUserData, GldiModuleInstance *pInstance, gboolean bIsDetached)
 {
 	//g_print ("module %s (de)tached (%d)\n", pInstance->pModule->pVisitCard->cModuleName, bIsDetached);
 	cairo_dock_gui_trigger_update_module_container (pInstance, bIsDetached);
 	
 	cairo_dock_gui_trigger_reload_items ();
 	
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
-gboolean cairo_dock_notification_shortkey_added_or_removed (G_GNUC_UNUSED gpointer pUserData, G_GNUC_UNUSED CairoKeyBinding *pKeyBinding)
+gboolean cairo_dock_notification_shortkey_added_removed_changed (G_GNUC_UNUSED gpointer pUserData, G_GNUC_UNUSED GldiShortkey *pShortkey)
 {
 	cairo_dock_gui_trigger_reload_shortkeys ();
 	
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }

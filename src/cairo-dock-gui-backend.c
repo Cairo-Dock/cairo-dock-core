@@ -28,11 +28,9 @@
 #include "cairo-dock-gui-advanced.h"
 #include "cairo-dock-gui-simple.h"
 #include "cairo-dock-gui-manager.h"
-#include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-dock-factory.h"
-#include "cairo-dock-module-manager.h"
-#include "cairo-dock-module-factory.h"
-#include "cairo-dock-notifications.h"
+#include "cairo-dock-desklet-manager.h"
+#include "cairo-dock-module-manager.h"  // gldi_module_get
 #include "cairo-dock-gui-simple.h"
 #include "cairo-dock-gui-backend.h"
 
@@ -132,7 +130,7 @@ static gboolean _update_module_state (gchar *cModuleName)
 {
 	if (s_pMainGuiBackend && s_pMainGuiBackend->update_module_state)
 	{
-		CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
+		GldiModule *pModule = gldi_module_get (cModuleName);
 		if (pModule != NULL)
 		{
 			s_pMainGuiBackend->update_module_state (cModuleName, pModule->pInstancesList != NULL);
@@ -195,7 +193,7 @@ void cairo_dock_gui_trigger_reload_shortkeys (void)
 }
 
 
-void cairo_dock_gui_trigger_update_module_container (CairoDockModuleInstance *pInstance, gboolean bIsDetached)
+void cairo_dock_gui_trigger_update_module_container (GldiModuleInstance *pInstance, gboolean bIsDetached)
 {
 	if (s_pMainGuiBackend && s_pMainGuiBackend->update_module_instance_container)
 		s_pMainGuiBackend->update_module_instance_container (pInstance, bIsDetached);  // on n'a encore pas de moyen simple d'etre prevenu de la destruction de l'instance, donc on effectue l'action tout de suite. -> si, regarder l'icone ...
@@ -261,7 +259,7 @@ void cairo_dock_close_gui (void)
 		s_pMainGuiBackend->close_gui ();
 }
 
-void cairo_dock_show_items_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, int iShowPage)
+void cairo_dock_show_items_gui (Icon *pIcon, GldiContainer *pContainer, GldiModuleInstance *pModuleInstance, int iShowPage)
 {
 	GtkWidget *pWindow = NULL;
 	if (s_pMainGuiBackend && s_pMainGuiBackend->show_gui)

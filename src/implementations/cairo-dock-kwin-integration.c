@@ -20,10 +20,9 @@
 #include <gdk/gdkx.h>
 
 #include "cairo-dock-icon-factory.h"
-#include "cairo-dock-X-utilities.h"
+#include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dbus.h"
-#include "cairo-dock-notifications.h"
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-X-manager.h"
@@ -72,12 +71,14 @@ static gboolean present_class (const gchar *cClass)
 	Atom aPresentWindows = XInternAtom (cairo_dock_get_Xdisplay(), "_KDE_PRESENT_WINDOWS_GROUP", False);
 	Window *data = g_new0 (Window, g_list_length (pIcons));
 	Icon *pOneIcon;
+	GldiXWindowActor *xactor;
 	GList *ic;
 	int i = 0;
 	for (ic = pIcons; ic != NULL; ic = ic->next)
 	{
 		pOneIcon = ic->data;
-		data[i++] = pOneIcon->Xid;
+		xactor = (GldiXWindowActor*)pOneIcon->pAppli;
+		data[i++] = xactor->Xid;
 	}
 	XChangeProperty(cairo_dock_get_Xdisplay(), data[0], aPresentWindows, aPresentWindows, 32, PropModeReplace, (unsigned char *)data, i);
 	g_free (data);
@@ -178,12 +179,12 @@ static gboolean _on_enter_icon (gpointer pUserData, Icon *pIcon, CairoDock *pDoc
 	{
 		_set_one_icon_geometry_for_window_manager (NULL, pDock);
 	}
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 */
 static void _register_kwin_backend (void)
 {
-	CairoDockWMBackend *p = g_new0 (CairoDockWMBackend, 1);
+	GldiDesktopManagerBackend *p = g_new0 (GldiDesktopManagerBackend, 1);
 	
 	p->present_class = present_class;
 	p->present_windows = present_windows;
@@ -191,20 +192,20 @@ static void _register_kwin_backend (void)
 	p->show_widget_layer = show_widget_layer;
 	p->set_on_widget_layer = NULL;  // the Dashboard is not a real widget layer :-/
 	
-	cairo_dock_wm_register_backend (p);
+	gldi_desktop_manager_register_backend (p);
 	
-	/*cairo_dock_register_notification_on_object (&myContainersMgr,
+	/*gldi_object_register_notification (&myContainersMgr,
 		NOTIFICATION_ENTER_ICON,
-		(CairoDockNotificationFunc) _on_enter_icon,
-		CAIRO_DOCK_RUN_FIRST, NULL);*/
+		(GldiNotificationFunc) _on_enter_icon,
+		GLDI_RUN_FIRST, NULL);*/
 }
 
 static void _unregister_kwin_backend (void)
 {
-	cairo_dock_wm_register_backend (NULL);
-	/*cairo_dock_remove_notification_func_on_object (&myContainersMgr,
+	//cairo_dock_wm_register_backend (NULL);
+	/*gldi_object_remove_notification (&myContainersMgr,
 		NOTIFICATION_ENTER_ICON,
-		(CairoDockNotificationFunc) _on_enter_icon, NULL);*/
+		(GldiNotificationFunc) _on_enter_icon, NULL);*/
 }
 
 static void _on_kwin_owner_changed (G_GNUC_UNUSED const gchar *cName, gboolean bOwned, G_GNUC_UNUSED gpointer data)

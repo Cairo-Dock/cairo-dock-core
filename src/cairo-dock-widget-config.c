@@ -27,9 +27,9 @@
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-module-factory.h"
+#include "cairo-dock-module-manager.h"
+#include "cairo-dock-module-instance-manager.h"  // gldi_module_instance_reload
 #include "cairo-dock-themes-manager.h"  // cairo_dock_current_theme_need_save
-#include "cairo-dock-X-manager.h"
 #include "cairo-dock-widget-config.h"
 
 #define CAIRO_DOCK_SIMPLE_CONF_FILE "cairo-dock-simple.conf"  // this file is not part of the theme, it's just a convenient way to display this big widget.
@@ -39,7 +39,6 @@
 extern gchar *g_cCurrentThemePath;
 extern gboolean g_bUseOpenGL;
 extern gchar *g_cConfFile;
-extern CairoDockDesktopGeometry g_desktopGeometry;
 
 static void _config_widget_apply (CDWidget *pCdWidget);
 static void _config_widget_reset (CDWidget *pCdWidget);
@@ -174,6 +173,8 @@ static GKeyFile *_make_simple_conf_file (ConfigWidget *pConfigWidget)
 	
 	g_key_file_set_string (pSimpleKeyFile, "Behavior", "hide effect", myDocksParam.cHideEffect);
 	
+	g_key_file_set_string (pSimpleKeyFile, "Behavior", "raise shortcut", myDocksParam.cRaiseDockShortcut);
+	
 	int iTaskbarType;
 	if (! myTaskbarParam.bShowAppli)
 		iTaskbarType = 0;
@@ -191,14 +192,14 @@ static GKeyFile *_make_simple_conf_file (ConfigWidget *pConfigWidget)
 	g_key_file_set_string (pSimpleKeyFile, "Behavior", "relative icon", myTaskbarParam.cRelativeIconName);
 	
 	// animations
-	CairoDockModule *pModule;
-	CairoDockModuleInstance *pModuleInstance;
+	GldiModule *pModule;
+	GldiModuleInstance *pModuleInstance;
 	int iAnimOnMouseHover = -1;
 	int iAnimOnClick = -1;
 	int iEffectOnMouseHover = -1;
 	int iEffectOnClick = -1;
 	gsize length;
-	pModule = cairo_dock_find_module_from_name ("Animated icons");
+	pModule = gldi_module_get ("Animated icons");
 	if (pModule != NULL && pModule->pInstancesList != NULL)
 	{
 		pModuleInstance = pModule->pInstancesList->data;
@@ -221,7 +222,7 @@ static GKeyFile *_make_simple_conf_file (ConfigWidget *pConfigWidget)
 		}
 	}
 	
-	pModule = cairo_dock_find_module_from_name ("icon effects");
+	pModule = gldi_module_get ("icon effects");
 	if (pModule != NULL && pModule->pInstancesList != NULL)
 	{
 		pModuleInstance = pModule->pInstancesList->data;
@@ -245,7 +246,7 @@ static GKeyFile *_make_simple_conf_file (ConfigWidget *pConfigWidget)
 	}
 	
 	pConfigWidget->iEffectOnDisappearance = -1;
-	pModule = cairo_dock_find_module_from_name ("illusion");
+	pModule = gldi_module_get ("illusion");
 	if (pModule != NULL && pModule->pInstancesList != NULL)
 	{
 		pModuleInstance = pModule->pInstancesList->data;
@@ -448,6 +449,10 @@ static void _config_widget_apply (CDWidget *pCdWidget)
 	g_key_file_set_string (pKeyFile, "Accessibility", "hide effect", cHideEffect);
 	g_free (cHideEffect);
 	
+	gchar *cRaiseDockShortcut = g_key_file_get_string (pSimpleKeyFile, "Behavior", "raise shortcut", NULL);
+	g_key_file_set_string (pKeyFile, "Accessibility", "raise shortcut", cRaiseDockShortcut);
+	g_free (cRaiseDockShortcut);
+	
 	int iShowOnClick = (g_key_file_get_integer (pSimpleKeyFile, "Behavior", "show_on_click", NULL) == 1);
 	g_key_file_set_integer (pKeyFile, "Accessibility", "show_on_click", iShowOnClick);
 	
@@ -506,16 +511,16 @@ static void _config_widget_apply (CDWidget *pCdWidget)
 	if (g_bUseOpenGL)
 		iEffectOnDisappearance = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "anim_disappear", NULL);
 	
-	CairoDockModule *pModule;
-	CairoDockModuleInstance *pModuleInstanceAnim = NULL;
-	CairoDockModuleInstance *pModuleInstanceEffect = NULL;
-	CairoDockModuleInstance *pModuleInstanceIllusion = NULL;
+	GldiModule *pModule;
+	GldiModuleInstance *pModuleInstanceAnim = NULL;
+	GldiModuleInstance *pModuleInstanceEffect = NULL;
+	GldiModuleInstance *pModuleInstanceIllusion = NULL;
 	
 	if (cOnMouseHover && cOnMouseHover[0])
 	{
 		if (strcmp (cOnMouseHover[0], pConfigWidget->cHoverAnim) != 0)
 		{
-			pModule = cairo_dock_find_module_from_name ("Animated icons");
+			pModule = gldi_module_get ("Animated icons");
 			if (pModule != NULL && pModule->pInstancesList != NULL)
 			{
 				pModuleInstanceAnim = pModule->pInstancesList->data;
@@ -528,7 +533,7 @@ static void _config_widget_apply (CDWidget *pCdWidget)
 		}
 		if (cOnMouseHover[1] && strcmp (cOnMouseHover[1], pConfigWidget->cHoverEffect) != 0)
 		{
-			pModule = cairo_dock_find_module_from_name ("icon effects");
+			pModule = gldi_module_get ("icon effects");
 			if (pModule != NULL && pModule->pInstancesList != NULL)
 			{
 				pModuleInstanceEffect = pModule->pInstancesList->data;
@@ -544,7 +549,7 @@ static void _config_widget_apply (CDWidget *pCdWidget)
 	{
 		if (strcmp (cOnClick[0], pConfigWidget->cClickAnim) != 0)
 		{
-			pModule = cairo_dock_find_module_from_name ("Animated icons");
+			pModule = gldi_module_get ("Animated icons");
 			if (pModule != NULL && pModule->pInstancesList != NULL)
 			{
 				pModuleInstanceAnim = pModule->pInstancesList->data;
@@ -560,7 +565,7 @@ static void _config_widget_apply (CDWidget *pCdWidget)
 		}
 		if (cOnClick[1] && strcmp (cOnClick[1], pConfigWidget->cClickEffect) != 0)
 		{
-			pModule = cairo_dock_find_module_from_name ("icon effects");
+			pModule = gldi_module_get ("icon effects");
 			if (pModule != NULL && pModule->pInstancesList != NULL)
 			{
 				pModuleInstanceEffect = pModule->pInstancesList->data;
@@ -577,7 +582,7 @@ static void _config_widget_apply (CDWidget *pCdWidget)
 	}
 	if (iEffectOnDisappearance != pConfigWidget->iEffectOnDisappearance)
 	{
-		pModule = cairo_dock_find_module_from_name ("illusion");
+		pModule = gldi_module_get ("illusion");
 		if (pModule != NULL && pModule->pInstancesList != NULL)
 		{
 			pModuleInstanceIllusion = pModule->pInstancesList->data;
@@ -635,15 +640,15 @@ static void _config_widget_apply (CDWidget *pCdWidget)
 	
 	if (pModuleInstanceAnim != NULL)
 	{
-		cairo_dock_reload_module_instance (pModuleInstanceAnim, TRUE);
+		gldi_module_instance_reload (pModuleInstanceAnim, TRUE);
 	}
 	if (pModuleInstanceEffect != NULL)
 	{
-		cairo_dock_reload_module_instance (pModuleInstanceEffect, TRUE);
+		gldi_module_instance_reload (pModuleInstanceEffect, TRUE);
 	}
 	if (pModuleInstanceIllusion != NULL)
 	{
-		cairo_dock_reload_module_instance (pModuleInstanceIllusion, TRUE);
+		gldi_module_instance_reload (pModuleInstanceIllusion, TRUE);
 	}
 	
 	g_key_file_free (pKeyFile);

@@ -20,14 +20,13 @@
 #include <string.h>
 #include <sys/stat.h>
 
-#include "cairo-dock-notifications.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-desklet-factory.h"  // cairo_dock_fm_create_icon_from_URI
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-draw.h"
-#include "cairo-dock-dialog-manager.h"
+#include "cairo-dock-dialog-factory.h"  // gldi_dialog_show_temporary
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-desktop-file-factory.h"
@@ -403,7 +402,7 @@ gboolean cairo_dock_fm_show_system_monitor (void)
 		return FALSE;
 }
 
-Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pContainer, CairoDockFMSortType iFileSortType)
+Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, GldiContainer *pContainer, CairoDockFMSortType iFileSortType)
 {
 	if (s_pEnvBackend == NULL || s_pEnvBackend->get_file_info == NULL)
 		return NULL;
@@ -451,7 +450,7 @@ Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pCo
 }
 
 
-gboolean cairo_dock_fm_move_into_directory (const gchar *cURI, Icon *icon, CairoContainer *pContainer)
+gboolean cairo_dock_fm_move_into_directory (const gchar *cURI, Icon *icon, GldiContainer *pContainer)
 {
 	g_return_val_if_fail (cURI != NULL && icon != NULL, FALSE);
 	cd_message (" -> copie de %s dans %s", cURI, icon->cBaseURI);
@@ -460,7 +459,7 @@ gboolean cairo_dock_fm_move_into_directory (const gchar *cURI, Icon *icon, Cairo
 	{
 		cd_warning ("couldn't copy this file.\nCheck that you have writing rights, and that the new does not already exist.");
 		gchar *cMessage = g_strdup_printf ("Warning : couldn't copy %s into %s.\nCheck that you have writing rights, and that the name does not already exist.", cURI, icon->cBaseURI);
-		cairo_dock_show_temporary_dialog (cMessage, icon, pContainer, 4000);
+		gldi_dialog_show_temporary (cMessage, icon, pContainer, 4000);
 		g_free (cMessage);
 	}
 	return bSuccess;
@@ -580,7 +579,7 @@ void gldi_register_desktop_environment_manager (void)
 	myDesktopEnvMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myDesktopEnvMgr.mgr.iSizeOfData = 0;
 	// signals
-	cairo_dock_install_notifications_on_object (&myDesktopEnvMgr, NB_NOTIFICATIONS_DESKTOP_ENV);
+	gldi_object_install_notifications (&myDesktopEnvMgr, NB_NOTIFICATIONS_DESKTOP_ENV);
 	// register
 	gldi_register_manager (GLDI_MANAGER(&myDesktopEnvMgr));
 }

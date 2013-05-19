@@ -34,27 +34,27 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-applications-manager.h"
-#include "cairo-dock-notifications.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-image-buffer.h"
-#include "cairo-dock-X-manager.h"
+#include "cairo-dock-desktop-manager.h"
+#include "cairo-dock-windows-manager.h"
 #include "cairo-dock-draw-opengl.h"  // pour cairo_dock_render_one_icon
 #include "cairo-dock-overlay.h"
 #include "cairo-dock-draw.h"
 
 extern CairoDockImageBuffer g_pVisibleZoneBuffer;
 
-extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;
+extern GldiDesktopBackground *g_pFakeTransparencyDesktopBg;
 extern gboolean g_bUseOpenGL;
 
 
-cairo_t * cairo_dock_create_drawing_context_generic (CairoContainer *pContainer)
+cairo_t * cairo_dock_create_drawing_context_generic (GldiContainer *pContainer)
 {
 	return gdk_cairo_create (gldi_container_get_gdk_window (pContainer));
 }
 
-cairo_t *cairo_dock_create_drawing_context_on_container (CairoContainer *pContainer)
+cairo_t *cairo_dock_create_drawing_context_on_container (GldiContainer *pContainer)
 {
 	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (pContainer);
 	g_return_val_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS, FALSE);
@@ -80,7 +80,7 @@ cairo_t *cairo_dock_create_drawing_context_on_container (CairoContainer *pContai
 	return pCairoContext;
 }
 
-cairo_t *cairo_dock_create_drawing_context_on_area (CairoContainer *pContainer, GdkRectangle *pArea, double *fBgColor)
+cairo_t *cairo_dock_create_drawing_context_on_area (GldiContainer *pContainer, GdkRectangle *pArea, double *fBgColor)
 {
 	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (pContainer);
 	g_return_val_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS, pCairoContext);
@@ -326,7 +326,7 @@ void cairo_dock_set_icon_scale_on_context (cairo_t *pCairoContext, Icon *icon, g
 }
 
 
-void cairo_dock_draw_icon_reflect_cairo (Icon *icon, CairoContainer *pContainer, cairo_t *pCairoContext)
+void cairo_dock_draw_icon_reflect_cairo (Icon *icon, GldiContainer *pContainer, cairo_t *pCairoContext)
 {
 	if (pContainer->bUseReflect && icon->image.pSurface != NULL)
 	{
@@ -469,7 +469,7 @@ void cairo_dock_draw_icon_cairo (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 gboolean cairo_dock_render_icon_notification (G_GNUC_UNUSED gpointer pUserData, Icon *icon, CairoDock *pDock, gboolean *bHasBeenRendered, cairo_t *pCairoContext)
 {
 	if (*bHasBeenRendered)
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+		return GLDI_NOTIFICATION_LET_PASS;
 	if (pCairoContext != NULL)
 	{
 		if (icon->image.pSurface != NULL)
@@ -486,7 +486,7 @@ gboolean cairo_dock_render_icon_notification (G_GNUC_UNUSED gpointer pUserData, 
 	}
 	
 	*bHasBeenRendered = TRUE;
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
 void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext, double fDockMagnitude, gboolean bUseText)
@@ -496,9 +496,9 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 	gboolean bDirectionUp = pDock->container.bDirectionUp;
 	gboolean bIsHorizontal = pDock->container.bIsHorizontal;
 	
-	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskbarParam.fVisibleAppliAlpha != 0 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon) && !(icon->iBackingPixmap != 0 && icon->bIsHidden))
+	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskbarParam.fVisibleAppliAlpha != 0 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon) && !(myTaskbarParam.iMinimizedWindowRenderType == 1 && icon->pAppli->bIsHidden))
 	{
-		double fAlpha = (icon->bIsHidden ? MIN (1 - myTaskbarParam.fVisibleAppliAlpha, 1) : MIN (myTaskbarParam.fVisibleAppliAlpha + 1, 1));
+		double fAlpha = (icon->pAppli->bIsHidden ? MIN (1 - myTaskbarParam.fVisibleAppliAlpha, 1) : MIN (myTaskbarParam.fVisibleAppliAlpha + 1, 1));
 		if (fAlpha != 1)
 			icon->fAlpha = fAlpha;  // astuce bidon pour pas multiplier 2 fois.
 		/**if (icon->bIsHidden)
@@ -547,8 +547,8 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 	
 	//\_____________________ On dessine l'icone.
 	gboolean bIconHasBeenDrawn = FALSE;
-	cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_PRE_RENDER_ICON, icon, pDock, pCairoContext);
-	cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_RENDER_ICON, icon, pDock, &bIconHasBeenDrawn, pCairoContext);
+	gldi_object_notify (&myIconsMgr, NOTIFICATION_PRE_RENDER_ICON, icon, pDock, pCairoContext);
+	gldi_object_notify (&myIconsMgr, NOTIFICATION_RENDER_ICON, icon, pDock, &bIconHasBeenDrawn, pCairoContext);
 	
 	cairo_restore (pCairoContext);  // retour juste apres la translation (fDrawX, fDrawY).
 	
@@ -637,7 +637,7 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 }
 
 
-void cairo_dock_render_one_icon_in_desklet (Icon *icon, CairoContainer *pContainer, cairo_t *pCairoContext, gboolean bUseText)
+void cairo_dock_render_one_icon_in_desklet (Icon *icon, GldiContainer *pContainer, cairo_t *pCairoContext, gboolean bUseText)
 {
 	//\_____________________ On dessine l'icone en fonction de son placement, son angle, et sa transparence.
 	//g_print ("%s (%.2f;%.2f x %.2f)\n", __func__, icon->fDrawX, icon->fDrawY, icon->fScale);

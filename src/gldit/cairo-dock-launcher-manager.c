@@ -39,7 +39,7 @@
 #include "cairo-dock-launcher-factory.h"  // cairo_dock_new_launcher_icon
 #include "cairo-dock-separator-manager.h"  // cairo_dock_create_separator_surface
 #include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file
-#include "cairo-dock-X-utilities.h"  // cairo_dock_show_xwindow
+#include "cairo-dock-windows-manager.h"  // gldi_window_set_thumbnail_area
 #include "cairo-dock-file-manager.h"  // g_iDesktopEnv
 #include "cairo-dock-launcher-manager.h"
 
@@ -59,7 +59,7 @@ static void _cairo_dock_handle_container (Icon *icon, const gchar *cRendererName
 	if (pParentDock == NULL)
 	{
 		cd_message ("The parent dock (%s) doesn't exist: we create it", icon->cParentDockName);
-		pParentDock = cairo_dock_create_dock (icon->cParentDockName);
+		pParentDock = gldi_dock_new (icon->cParentDockName);
 	}
 	
 	//\____________ On cree son sous-dock si necessaire.
@@ -82,12 +82,12 @@ static void _cairo_dock_handle_container (Icon *icon, const gchar *cRendererName
 		if (pChildDock == NULL)
 		{
 			cd_message ("The child dock (%s) doesn't exist, we create it with this view: %s", icon->cName, cRendererName);
-			pChildDock = cairo_dock_create_subdock (icon->cName, cRendererName, pParentDock, NULL);
+			pChildDock = gldi_subdock_new (icon->cName, cRendererName, pParentDock, NULL);
 		}
 		else
 		{
 			cd_message ("The dock is now a 'child-dock' (%d, %d)", pChildDock->container.bIsHorizontal, pChildDock->container.bDirectionUp);
-			cairo_dock_main_dock_to_sub_dock (pChildDock, pParentDock, cRendererName);
+			gldi_dock_make_subdock (pChildDock, pParentDock, cRendererName);
 		}
 		icon->pSubDock = pChildDock;
 	}
@@ -163,7 +163,7 @@ static gboolean _delete_launcher (Icon *icon)
 			if (pSubIcon->iface.on_delete)
 				r |= pSubIcon->iface.on_delete (pSubIcon);
 		}
-		cairo_dock_destroy_dock (icon->pSubDock, icon->cName);
+		gldi_object_unref (GLDI_OBJECT(icon->pSubDock));
 		icon->pSubDock = NULL;
 	}
 	return r;
@@ -171,8 +171,8 @@ static gboolean _delete_launcher (Icon *icon)
 
 static void _show_appli_for_drop (Icon *pIcon)
 {
-	if (pIcon->Xid != 0)
-		cairo_dock_show_xwindow (pIcon->Xid);
+	if (pIcon->pAppli != NULL)
+		gldi_window_show (pIcon->pAppli);
 }
 
 Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName)
@@ -341,7 +341,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 	if (pNewDock == NULL)
 	{
 		cd_message ("The parent dock (%s) doesn't exist, we create it", icon->cParentDockName);
-		pNewDock = cairo_dock_create_dock (icon->cParentDockName);
+		pNewDock = gldi_dock_new (icon->cParentDockName);
 	}
 	g_return_if_fail (pNewDock != NULL);
 	

@@ -33,7 +33,6 @@
 #include "cairo-dock-task.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-notifications.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-packages.h"
 
@@ -908,7 +907,7 @@ void gldi_register_connection_manager (void)
 	myConnectionMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myConnectionMgr.mgr.iSizeOfData = 0;
 	// signals
-	cairo_dock_install_notifications_on_object (&myConnectionMgr, NB_NOTIFICATIONS_CONNECTION);
+	gldi_object_install_notifications (&myConnectionMgr, NB_NOTIFICATIONS_CONNECTION);
 	// register
 	gldi_register_manager (GLDI_MANAGER(&myConnectionMgr));
 }

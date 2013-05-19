@@ -60,7 +60,7 @@ struct _CairoDockTransition {
 	/// number of setps since the beginning of the transition, in ms.
 	gint iCount;
 	/// Container of the Icon.
-	CairoContainer *pContainer;  // keep it up-to-date!
+	GldiContainer *pContainer;  // keep it up-to-date!
 	};
 
 /// Definition of a Hiding Effect backend (used to provide an animation when the docks hides/shows itself).
@@ -113,7 +113,7 @@ gfloat cairo_dock_calculate_magnitude (gint iMagnitudeIndex);
 /** Launch the animation of a Container.
 *@param pContainer the container to animate.
 */
-void cairo_dock_launch_animation (CairoContainer *pContainer);
+void cairo_dock_launch_animation (GldiContainer *pContainer);
 
 void cairo_dock_start_shrinking (CairoDock *pDock);
 
@@ -135,15 +135,15 @@ void cairo_dock_start_icon_animation (Icon *icon, CairoDock *pDock);
 *@param cAnimation name of the animation.
 *@param iNbRounds number of rounds the animation will be played.
 */
-void cairo_dock_request_icon_animation (Icon *pIcon, CairoContainer *pContainer, const gchar *cAnimation, int iNbRounds);
+void cairo_dock_request_icon_animation (Icon *pIcon, GldiContainer *pContainer, const gchar *cAnimation, int iNbRounds);
 
 /** Stop any animation on an Icon, except the disappearance/appearance animation.
 *@param pIcon the icon.
 */
 #define cairo_dock_stop_icon_animation(pIcon) do { \
 	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REMOVE_INSERT && pIcon->iAnimationState != CAIRO_DOCK_STATE_REST) {\
-		cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_STOP_ICON, pIcon); \
-		cairo_dock_notify_on_object (pIcon, NOTIFICATION_STOP_ICON, pIcon); \
+		gldi_object_notify (&myIconsMgr, NOTIFICATION_STOP_ICON, pIcon); \
+		gldi_object_notify (pIcon, NOTIFICATION_STOP_ICON, pIcon); \
 		pIcon->iAnimationState = CAIRO_DOCK_STATE_REST; } } while (0)
 
 void cairo_dock_request_icon_attention (Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds);
@@ -202,7 +202,7 @@ gboolean cairo_dock_stop_inserting_removing_icon_notification (gpointer pUserDat
 *@param pUserData data passed to the rendering functions.
 *@param pFreeUserDataFunc function called to free the user data when the transition is destroyed (optionnal).
 */
-void cairo_dock_set_transition_on_icon (Icon *pIcon, CairoContainer *pContainer, CairoDockTransitionRenderFunc render_step_cairo, CairoDockTransitionGLRenderFunc render_step_opengl, gboolean bFastPace, gint iDuration, gboolean bRemoveWhenFinished, gpointer pUserData, GFreeFunc pFreeUserDataFunc);
+void cairo_dock_set_transition_on_icon (Icon *pIcon, GldiContainer *pContainer, CairoDockTransitionRenderFunc render_step_cairo, CairoDockTransitionGLRenderFunc render_step_opengl, gboolean bFastPace, gint iDuration, gboolean bRemoveWhenFinished, gpointer pUserData, GFreeFunc pFreeUserDataFunc);
 
 /** Stop and remove the Transition of an Icon.
 *@param pIcon the icon.

@@ -163,7 +163,7 @@ static void _update_tip_text (CDTipsData *pTips, CairoDialog *pDialog)
 {
 	gchar *cText = _build_tip_text (pTips);
 	
-	cairo_dock_set_dialog_message (pDialog, cText);
+	gldi_dialog_set_message (pDialog, cText);
 	
 	g_free (cText);
 }
@@ -177,7 +177,7 @@ static void _tips_dialog_action (int iClickedButton, G_GNUC_UNUSED GtkWidget *pI
 		
 		_update_tip_text (pTips, pDialog);
 		
-		cairo_dock_dialog_reference (pDialog);  // keep the dialog alive.
+		gldi_object_ref (GLDI_OBJECT(pDialog));  // keep the dialog alive.
 	}
 	else if (iClickedButton == 1)  // click on "previous"
 	{
@@ -186,7 +186,7 @@ static void _tips_dialog_action (int iClickedButton, G_GNUC_UNUSED GtkWidget *pI
 		
 		_update_tip_text (pTips, pDialog);
 		
-		cairo_dock_dialog_reference (pDialog);  // keep the dialog alive.
+		gldi_object_ref (GLDI_OBJECT(pDialog));  // keep the dialog alive.
 	}
 	else  // click on "close" or Escape
 	{
@@ -303,15 +303,15 @@ void cairo_dock_show_tips (void)
 	g_signal_connect (G_OBJECT (pComboBox), "changed", G_CALLBACK(_on_tips_category_changed), data_combo);
 	GtkWidget *pJumpBox = _gtk_hbox_new (3);
 	GtkWidget *label = gtk_label_new (_("Category"));
-	cairo_dock_set_dialog_widget_text_color (label);
+	gldi_dialog_set_widget_text_color (label);
 	gtk_box_pack_end (GTK_BOX (pJumpBox), pComboBox, FALSE, FALSE, 0);
 	gtk_box_pack_end (GTK_BOX (pJumpBox), label, FALSE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (pInteractiveWidget), pJumpBox, FALSE, FALSE, 0);
 	
 	// build the dialog.
 	gchar *cText = _build_tip_text (pTips);
-	CairoDialogAttribute attr;
-	memset (&attr, 0, sizeof (CairoDialogAttribute));
+	CairoDialogAttr attr;
+	memset (&attr, 0, sizeof (CairoDialogAttr));
 	attr.cText = cText;
 	attr.cImageFilePath = NULL;
 	attr.pInteractiveWidget = pInteractiveWidget;
@@ -321,8 +321,9 @@ void cairo_dock_show_tips (void)
 	const gchar *cButtons[] = {"cancel", GTK_STOCK_GO_FORWARD"-rtl", GTK_STOCK_GO_FORWARD"-ltr", NULL};
 	attr.cButtonsImage = cButtons;
 	attr.bUseMarkup = TRUE;
-	
-	CairoDialog *pTipsDialog = cairo_dock_build_dialog (&attr, myIcon, myContainer);
+	attr.pIcon = myIcon;
+	attr.pContainer = myContainer;
+	CairoDialog *pTipsDialog = gldi_dialog_new (&attr);
 	
 	data_combo[1] = pTipsDialog;
 	

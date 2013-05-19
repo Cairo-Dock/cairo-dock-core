@@ -21,7 +21,6 @@
 #define  __CAIRO_DOCK_APPLET_FACILITY__
 
 #include "cairo-dock-struct.h"
-#include "cairo-dock-module-factory.h"
 G_BEGIN_DECLS
 
 /**
@@ -56,7 +55,7 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 *@param pContainer the container of the icon.
 *@return TRUE if everything went smoothly.
 */
-gboolean cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cIconName, Icon *pIcon, CairoContainer *pContainer);
+gboolean cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cIconName, Icon *pIcon, GldiContainer *pContainer);
 
 /** Apply an image on the context of an icon, clearing it beforehand, and adding the reflect. The image is searched in any possible locations, and the default image provided is used if the search was fruitless.
 *@param pIconContext the drawing context; is not altered by the function.
@@ -65,18 +64,18 @@ gboolean cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cIcon
 *@param pContainer the container of the icon.
 *@param cDefaultImagePath path to a default image.
 */
-void cairo_dock_set_image_on_icon_with_default (cairo_t *pIconContext, const gchar *cImage, Icon *pIcon, CairoContainer *pContainer, const gchar *cDefaultImagePath);
+void cairo_dock_set_image_on_icon_with_default (cairo_t *pIconContext, const gchar *cImage, Icon *pIcon, GldiContainer *pContainer, const gchar *cDefaultImagePath);
 
 
-void cairo_dock_set_hours_minutes_as_quick_info (Icon *pIcon, CairoContainer *pContainer, int iTimeInSeconds);
-void cairo_dock_set_minutes_secondes_as_quick_info (Icon *pIcon, CairoContainer *pContainer, int iTimeInSeconds);
+void cairo_dock_set_hours_minutes_as_quick_info (Icon *pIcon, GldiContainer *pContainer, int iTimeInSeconds);
+void cairo_dock_set_minutes_secondes_as_quick_info (Icon *pIcon, GldiContainer *pContainer, int iTimeInSeconds);
 
 /** Convert a size in bytes into a readable format.
 *@param iSizeInBytes size in bytes.
 *@return a newly allocated string.
 */
 gchar *cairo_dock_get_human_readable_size (long long int iSizeInBytes);
-void cairo_dock_set_size_as_quick_info (Icon *pIcon, CairoContainer *pContainer, long long int iSizeInBytes);
+void cairo_dock_set_size_as_quick_info (Icon *pIcon, GldiContainer *pContainer, long long int iSizeInBytes);
 
 /// type of possible display on a Icon.
 typedef enum {
@@ -108,22 +107,22 @@ void cairo_dock_play_sound (const gchar *cSoundPath);
 //void cairo_dock_get_gnome_version (int *iMajor, int *iMinor, int *iMicro);
 
 
-void cairo_dock_pop_up_about_applet (GtkMenuItem *menu_item, CairoDockModuleInstance *pModuleInstance);
+void cairo_dock_pop_up_about_applet (GtkMenuItem *menu_item, GldiModuleInstance *pModuleInstance);
 
-void cairo_dock_open_module_config_on_demand (int iClickedButton, GtkWidget *pInteractiveWidget, CairoDockModuleInstance *pModuleInstance, CairoDialog *pDialog);
+void cairo_dock_open_module_config_on_demand (int iClickedButton, GtkWidget *pInteractiveWidget, GldiModuleInstance *pModuleInstance, CairoDialog *pDialog);
 
-void cairo_dock_insert_icons_in_applet (CairoDockModuleInstance *pModuleInstance, GList *pIconsList, const gchar *cDockRenderer, const gchar *cDeskletRenderer, gpointer pDeskletRendererData);
+void cairo_dock_insert_icons_in_applet (GldiModuleInstance *pModuleInstance, GList *pIconsList, const gchar *cDockRenderer, const gchar *cDeskletRenderer, gpointer pDeskletRendererData);
 
-void cairo_dock_insert_icon_in_applet (CairoDockModuleInstance *pInstance, Icon *pOneIcon);
+void cairo_dock_insert_icon_in_applet (GldiModuleInstance *pInstance, Icon *pOneIcon);
 
-gboolean cairo_dock_detach_icon_from_applet (CairoDockModuleInstance *pModuleInstance, Icon *icon);
+gboolean cairo_dock_detach_icon_from_applet (GldiModuleInstance *pModuleInstance, Icon *icon);
 
-gboolean cairo_dock_remove_icon_from_applet (CairoDockModuleInstance *pModuleInstance, Icon *icon);
+gboolean cairo_dock_remove_icon_from_applet (GldiModuleInstance *pModuleInstance, Icon *icon);
 
-void cairo_dock_remove_all_icons_from_applet (CairoDockModuleInstance *pModuleInstance);
+void cairo_dock_remove_all_icons_from_applet (GldiModuleInstance *pModuleInstance);
 
 
-void cairo_dock_resize_applet (CairoDockModuleInstance *pInstance, int w, int h);
+void cairo_dock_resize_applet (GldiModuleInstance *pInstance, int w, int h);
 
 
   ////////////
@@ -258,9 +257,9 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 	gchar *_cThemePath = cairo_dock_get_theme_path_for_module (CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, cDefaultThemeName, MY_APPLET_SHARE_DATA_DIR"/"cThemeDirName, MY_APPLET_USER_DATA_DIR);\
 	if (_cThemePath == NULL) {\
 		const gchar *_cMessage = _("The theme could not be found; the default theme will be used instead.\n You can change this by opening the configuration of this module. Do you want to do it now?");\
-		Icon *_pIcon = cairo_dock_get_dialogless_icon ();\
+		Icon *_pIcon = gldi_icons_get_any_without_dialog ();\
 		gchar *_cQuestion = g_strdup_printf ("%s : %s", myApplet->pModule->pVisitCard->cModuleName, _cMessage);\
-		cairo_dock_show_dialog_with_question (_cQuestion, _pIcon, CAIRO_CONTAINER (g_pMainDock), MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE, (CairoDockActionOnAnswerFunc) cairo_dock_open_module_config_on_demand, myApplet, NULL);\
+		gldi_dialog_show_with_question (_cQuestion, _pIcon, CAIRO_CONTAINER (g_pMainDock), MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE, (CairoDockActionOnAnswerFunc) cairo_dock_open_module_config_on_demand, myApplet, NULL);\
 		g_free (_cQuestion); }\
 	_cThemePath; })
 
@@ -274,9 +273,9 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 	gchar *_cThemePath = cairo_dock_get_package_path_for_data_renderer("gauge", CD_APPLET_MY_CONF_FILE, pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, "Turbo-night-fuel");\
 	if (_cThemePath == NULL) {\
 		const gchar *_cMessage = _("The gauge theme could not be found; a default gauge will be used instead.\nYou can change this by opening the configuration of this module. Do you want to do it now?");\
-		Icon *_pIcon = cairo_dock_get_dialogless_icon ();\
+		Icon *_pIcon = gldi_icons_get_any_without_dialog ();\
 		gchar *_cQuestion = g_strdup_printf ("%s : %s", myApplet->pModule->pVisitCard->cModuleName, _cMessage);\
-		cairo_dock_show_dialog_with_question (_cQuestion, _pIcon, CAIRO_CONTAINER (g_pMainDock), MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE, (CairoDockActionOnAnswerFunc) cairo_dock_open_module_config_on_demand, myApplet, NULL);\
+		gldi_dialog_show_with_question (_cQuestion, _pIcon, CAIRO_CONTAINER (g_pMainDock), MY_APPLET_SHARE_DATA_DIR"/"MY_APPLET_ICON_FILE, (CairoDockActionOnAnswerFunc) cairo_dock_open_module_config_on_demand, myApplet, NULL);\
 		g_free (_cQuestion); }\
 	_cThemePath; })
 
@@ -429,16 +428,16 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_APPLET_SCROLL_DOWN (CD_APPLET_SCROLL_DIRECTION == GDK_SCROLL_DOWN)
 
-/** Bind a shortkey to an action. Unbind it when you don't want it anymore. myApplet is passed as the callback data.
- * @param cShortKey a shortkey.
+/** Bind a shortkey to an action. Unref it when you don't want it anymore. 'myApplet' is passed as the callback data.
+ * @param cShortKey a keyboard shortcut.
  * @param cDescription a short description of the action
  * @param cGroupName group name where it's stored in the applet's conf file
  * @param cKeyName key name where it's stored in the applet's conf file
  * @param handler function called when the shortkey is pressed by the user
- * @return the key binding
+ * @return the shortkey.
 */
 #define CD_APPLET_BIND_KEY(cShortKey, cDescription, cGroupName, cKeyName, handler) \
-cd_keybinder_bind (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescription, myApplet->pModule->pVisitCard->cIconFilePath, myApplet->cConfFilePath, cGroupName, cKeyName, handler, myApplet)
+gldi_shortkey_new (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescription, myApplet->pModule->pVisitCard->cIconFilePath, myApplet->cConfFilePath, cGroupName, cKeyName, handler, myApplet)
 
   /////////////////////
  // DRAWING SURFACE //
@@ -676,13 +675,15 @@ cd_keybinder_bind (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 #define CD_APPLET_SET_MY_DATA_RENDERER_HISTORY_TO_MAX cairo_dock_resize_data_renderer_history (myIcon, myIcon->fWidth)
 
 
-#define CD_APPLET_GET_MY_ICON_DATA(pIcon) cairo_dock_get_icon_data (pIcon, myApplet)
-#define CD_APPLET_GET_MY_CONTAINER_DATA(pContainer) cairo_dock_get_container_data (pContainer, myApplet)
+#define CD_APPLET_RESERVE_DATA_SLOT(...) gldi_module_instance_reserve_data_slot (myApplet)
+
+#define CD_APPLET_GET_MY_ICON_DATA(pIcon) gldi_module_instance_get_icon_data (pIcon, myApplet)
+#define CD_APPLET_GET_MY_CONTAINER_DATA(pContainer) gldi_module_instance_get_container_data (pContainer, myApplet)
 #define CD_APPLET_GET_MY_DOCK_DATA(pDock) CD_APPLET_GET_MY_CONTAINER_DATA (CAIRO_CONTAINER (pDock))
 #define CD_APPLET_GET_MY_DESKLET_DATA(pDesklet) CD_APPLET_GET_MY_CONTAINER_DATA (CAIRO_CONTAINER (pDesklet))
 
-#define CD_APPLET_SET_MY_ICON_DATA(pIcon, pData) cairo_dock_set_icon_data (pIcon, myApplet, pData)
-#define CD_APPLET_SET_MY_CONTAINER_DATA(pContainer, pData) cairo_dock_set_container_data (pContainer, myApplet, pData)
+#define CD_APPLET_SET_MY_ICON_DATA(pIcon, pData) gldi_module_instance_set_icon_data (pIcon, myApplet, pData)
+#define CD_APPLET_SET_MY_CONTAINER_DATA(pContainer, pData) gldi_module_instance_set_container_data (pContainer, myApplet, pData)
 #define CD_APPLET_SET_MY_DOCK_DATA(pDock, pData) CD_APPLET_SET_MY_CONTAINER_DATA (CAIRO_CONTAINER (pDock), pData)
 #define CD_APPLET_SET_MY_DESKLET_DATA(pDesklet, pData) CD_APPLET_SET_MY_CONTAINER_DATA (CAIRO_CONTAINER (pDesklet), pData)
 
@@ -738,11 +739,11 @@ cd_keybinder_bind (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 
 /** Prevent the desklet from being rotated. Use it if your desklet has some static GtkWidget inside.
 */
-#define CD_APPLET_SET_STATIC_DESKLET cairo_dock_set_static_desklet (myDesklet)
+#define CD_APPLET_SET_STATIC_DESKLET gldi_desklet_set_static (myDesklet)
 
 /** Prevent the desklet from being transparent to click. Use it if your desklet has no meaning in being unclickable.
 */
-#define CD_APPLET_ALLOW_NO_CLICKABLE_DESKLET cairo_dock_allow_no_clickable_desklet (myDesklet)
+#define CD_APPLET_ALLOW_NO_CLICKABLE_DESKLET gldi_desklet_allow_no_clickable (myDesklet)
 
 
 /** Delete the list of icons of an applet (keep the subdock in dock mode).

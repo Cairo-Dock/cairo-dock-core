@@ -33,8 +33,8 @@ struct _ItemsWidget {
 	GtkWidget *pTreeView;
 	GtkWidget *pCurrentLauncherWidget;
 	Icon *pCurrentIcon;
-	CairoContainer *pCurrentContainer;
-	CairoDockModuleInstance *pCurrentModuleInstance;
+	GldiContainer *pCurrentContainer;
+	GldiModuleInstance *pCurrentModuleInstance;
 	gchar *cPrevPath;
 	GtkWindow *pMainWindow;  // main window, needed to build other widgets (e.g. to create a file selector and attach it to the main window)
 };
@@ -47,7 +47,7 @@ struct _ItemsWidget {
 ItemsWidget *cairo_dock_items_widget_new (GtkWindow *pMainWindow);
 
 
-void cairo_dock_items_widget_select_item (ItemsWidget *pItemsWidget, Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, int iNotebookPage);
+void cairo_dock_items_widget_select_item (ItemsWidget *pItemsWidget, Icon *pIcon, GldiContainer *pContainer, GldiModuleInstance *pModuleInstance, int iNotebookPage);
 
 
 void cairo_dock_items_widget_update_desklet_params (ItemsWidget *pItemsWidget, CairoDesklet *pDesklet);
@@ -56,10 +56,10 @@ void cairo_dock_items_widget_update_desklet_params (ItemsWidget *pItemsWidget, C
 void cairo_dock_items_widget_update_desklet_visibility_params (ItemsWidget *pItemsWidget, CairoDesklet *pDesklet);
 
 
-void cairo_dock_items_widget_update_module_instance_container (ItemsWidget *pItemsWidget, CairoDockModuleInstance *pInstance, gboolean bDetached);
+void cairo_dock_items_widget_update_module_instance_container (ItemsWidget *pItemsWidget, GldiModuleInstance *pInstance, gboolean bDetached);
 
 
-void cairo_dock_items_widget_reload_current_widget (ItemsWidget *pItemsWidget, CairoDockModuleInstance *pInstance, int iShowPage);
+void cairo_dock_items_widget_reload_current_widget (ItemsWidget *pItemsWidget, GldiModuleInstance *pInstance, int iShowPage);
 
 
 G_END_DECLS

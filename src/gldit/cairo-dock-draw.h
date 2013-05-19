@@ -38,7 +38,7 @@ G_BEGIN_DECLS
 *@param pContainer a container.
 *@return the context on which to draw. Is never NULL, test it with cairo_status() before use it, and destroy it with cairo_destroy() when you're done with it.
 */
-cairo_t * cairo_dock_create_drawing_context_generic (CairoContainer *pContainer);
+cairo_t * cairo_dock_create_drawing_context_generic (GldiContainer *pContainer);
 #define cairo_dock_create_context_from_window cairo_dock_create_drawing_context_generic
 #define cairo_dock_create_context_from_container cairo_dock_create_drawing_context_generic
 
@@ -46,7 +46,7 @@ cairo_t * cairo_dock_create_drawing_context_generic (CairoContainer *pContainer)
 *@param pContainer the container on which you want to draw.
 *@return the newly allocated context, to be destroyed with 'cairo_destroy'.
 */
-cairo_t *cairo_dock_create_drawing_context_on_container (CairoContainer *pContainer);
+cairo_t *cairo_dock_create_drawing_context_on_container (GldiContainer *pContainer);
 #define cairo_dock_create_drawing_context cairo_dock_create_drawing_context_on_container
 
 /** Create a drawing context to draw on a part of a container. It handles fake transparency.
@@ -55,7 +55,7 @@ cairo_t *cairo_dock_create_drawing_context_on_container (CairoContainer *pContai
 *@param fBgColor background color (rgba) to fill the area with, or NULL to let it transparent.
 *@return the newly allocated context, with a clip corresponding to the area, to be destroyed with 'cairo_destroy'.
 */
-cairo_t *cairo_dock_create_drawing_context_on_area (CairoContainer *pContainer, GdkRectangle *pArea, double *fBgColor);
+cairo_t *cairo_dock_create_drawing_context_on_area (GldiContainer *pContainer, GdkRectangle *pArea, double *fBgColor);
 
 
 double cairo_dock_calculate_extra_width_for_trapeze (double fFrameHeight, double fInclination, double fRadius, double fLineWidth);
@@ -95,7 +95,7 @@ void cairo_dock_render_decorations_in_frame (cairo_t *pCairoContext, CairoDock *
 
 void cairo_dock_set_icon_scale_on_context (cairo_t *pCairoContext, Icon *icon, gboolean bIsHorizontal, double fRatio, gboolean bDirectionUp);
 
-void cairo_dock_draw_icon_reflect_cairo (Icon *icon, CairoContainer *pContainer, cairo_t *pCairoContext);
+void cairo_dock_draw_icon_reflect_cairo (Icon *icon, GldiContainer *pContainer, cairo_t *pCairoContext);
 
 /** Draw an icon and its reflect on a dock. Only draw the icon's image and reflect, and nothing else.
 *@param icon the icon to draw.
@@ -116,7 +116,7 @@ gboolean cairo_dock_render_icon_notification (gpointer pUserData, Icon *pIcon, C
 void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext, double fDockMagnitude, gboolean bUseText);
 void cairo_dock_render_icons_linear (cairo_t *pCairoContext, CairoDock *pDock);
 
-void cairo_dock_render_one_icon_in_desklet (Icon *icon, CairoContainer *pContainer, cairo_t *pCairoContext, gboolean bUseText);
+void cairo_dock_render_one_icon_in_desklet (Icon *icon, GldiContainer *pContainer, cairo_t *pCairoContext, gboolean bUseText);
 
 
 /** Draw a string linking the center of all the icons of a dock.

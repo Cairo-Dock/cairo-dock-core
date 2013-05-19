@@ -18,32 +18,28 @@
 */
 
 #include <math.h>
-#include <string.h>
-#include <stdio.h>
 #include <stdlib.h>
 
 #include <gtk/gtk.h>
-
 #include <cairo.h>
 
-
+#include "texture-blur.h"
 #include "gldi-config.h"
-#include "cairo-dock-animations.h"  // implicit
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-draw.h"
+#include "cairo-dock-animations.h"  // cairo_dock_calculate_magnitude
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-opengl-path.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-facility.h"
-#include "cairo-dock-notifications.h"
-#include "texture-blur.h"
-#include "cairo-dock-X-manager.h"
+#include "cairo-dock-object.h"
+#include "cairo-dock-desktop-manager.h"  // gldi_dock_get_screen_width
 #include "cairo-dock-default-view.h"
 
-extern CairoDockDesktopGeometry g_desktopGeometry;
 extern gboolean g_bUseOpenGL;
+
 static GLuint s_iFlatSeparatorTexture = 0;
 
 
@@ -55,7 +51,7 @@ static gboolean cd_default_view_free_data (G_GNUC_UNUSED gpointer pUserData, Cai
 		_cairo_dock_delete_texture (s_iFlatSeparatorTexture);
 		s_iFlatSeparatorTexture = 0;
 	}
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
 
@@ -692,8 +688,8 @@ void cairo_dock_register_default_renderer (void)
 	cairo_dock_register_renderer (CAIRO_DOCK_DEFAULT_RENDERER_NAME, pDefaultRenderer);
 	
 	// when and only when the current theme is unloaded, the main dock is destroyed, and we must release our data.
-	cairo_dock_register_notification_on_object (&myDocksMgr,
+	gldi_object_register_notification (&myDocksMgr,
 		NOTIFICATION_DESTROY,  // on ne fait cette fonction qu'une fois, donc on peut s'enregistrer ici.
-		(CairoDockNotificationFunc) cd_default_view_free_data,
-		CAIRO_DOCK_RUN_AFTER, NULL);
+		(GldiNotificationFunc) cd_default_view_free_data,
+		GLDI_RUN_AFTER, NULL);
 }

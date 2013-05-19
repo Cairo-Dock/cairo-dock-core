@@ -43,9 +43,9 @@ static char DES_crypt_key[64] =
 #include "cairo-dock-log.h"
 #include "cairo-dock-icon-manager.h"  // cairo_dock_hide_show_launchers_on_other_desktops
 #include "cairo-dock-applications-manager.h"  // cairo_dock_start_applications_manager
-#include "cairo-dock-module-factory.h"  // cairo_dock_activate_modules_from_list
+#include "cairo-dock-module-manager.h"  // gldi_modules_activate_from_list
 #include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file
-#include "cairo-dock-dock-manager.h"  // cairo_dock_create_dock
+#include "cairo-dock-dock-factory.h"  // gldi_dock_new
 #include "cairo-dock-file-manager.h"  // cairo_dock_get_file_size
 #include "cairo-dock-launcher-manager.h"  // cairo_dock_load_launchers_from_dir
 #include "cairo-dock-core.h"  // gldi_free_all
@@ -57,7 +57,6 @@ extern gchar *g_cCurrentLaunchersPath;
 extern gchar *g_cConfFile;
 extern gboolean g_bUseOpenGL;
 extern CairoDockDesktopEnv g_iDesktopEnv;
-extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;
 
 static gboolean s_bLoading = FALSE;
 
@@ -452,11 +451,11 @@ void cairo_dock_load_current_theme (void)
 	gldi_get_managers_config (g_cConfFile, GLDI_VERSION);  /// en fait, CAIRO_DOCK_VERSION ...
 	
 	//\___________________ Create the primary container (needed to have a cairo/opengl context).
-	CairoDock *pMainDock = cairo_dock_create_dock (CAIRO_DOCK_MAIN_DOCK_NAME);
+	CairoDock *pMainDock = gldi_dock_new (CAIRO_DOCK_MAIN_DOCK_NAME);
 	
 	//\___________________ Load all managers data.
 	gldi_load_managers ();
-	cairo_dock_activate_modules_from_list (NULL);  // load auto-loaded modules before loading anything (views, etc)
+	gldi_modules_activate_from_list (NULL);  // load auto-loaded modules before loading anything (views, etc)
 	
 	//\___________________ Now load the launchers.
 	cairo_dock_load_launchers_from_dir (g_cCurrentLaunchersPath);
@@ -464,16 +463,10 @@ void cairo_dock_load_current_theme (void)
 	cairo_dock_hide_show_launchers_on_other_desktops ();
 	
 	//\___________________ Load the applets.
-	cairo_dock_activate_modules_from_list (myModulesParam.cActiveModuleList);
+	gldi_modules_activate_from_list (myModulesParam.cActiveModuleList);
 	
 	//\___________________ Start the applications manager (will load the icons if the option is enabled).
 	cairo_dock_start_applications_manager (pMainDock);
-	
-	//\___________________ On charge les decorations des desklets.
-	/**if (myDeskletsParam.cDeskletDecorationsName != NULL)  // chargement initial, on charge juste ceux qui n'ont pas encore leur deco et qui ont atteint leur taille definitive.
-	{
-		cairo_dock_reload_desklets_decorations (FALSE);
-	}*/
 	
 	s_bLoading = FALSE;
 }

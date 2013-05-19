@@ -33,13 +33,13 @@ struct _CairoDockMainGuiBackend {
 	void (*close_gui) (void);
 	// update the GUI to mark a module as '(in)active'.
 	void (*update_module_state) (const gchar *cModuleName, gboolean bActive);
-	void (*update_module_instance_container) (CairoDockModuleInstance *pInstance, gboolean bDetached);
+	void (*update_module_instance_container) (GldiModuleInstance *pInstance, gboolean bDetached);
 	void (*update_desklet_params) (CairoDesklet *pDesklet);
 	void (*update_desklet_visibility_params) (CairoDesklet *pDesklet);
 	void (*update_modules_list) (void);
 	void (*update_shortkeys) (void);
 	// Show the config panel on a given icon/container, build or reload it if necessary.
-	GtkWidget * (*show_gui) (Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, int iShowPage);
+	GtkWidget * (*show_gui) (Icon *pIcon, GldiContainer *pContainer, GldiModuleInstance *pModuleInstance, int iShowPage);
 	// reload the gui and its content, for the case a launcher has changed (image, order, new container, etc).
 	void (*reload_items) (void);
 	// reload everything, in case the current theme has changed
@@ -74,7 +74,7 @@ void cairo_dock_gui_trigger_update_module_state (const gchar *cModuleName);
 
 void cairo_dock_gui_trigger_update_modules_list (void);
 
-void cairo_dock_gui_trigger_update_module_container (CairoDockModuleInstance *pInstance, gboolean bIsDetached);
+void cairo_dock_gui_trigger_update_module_container (GldiModuleInstance *pInstance, gboolean bIsDetached);
 
 void cairo_dock_gui_trigger_reload_shortkeys (void);
 
@@ -88,7 +88,7 @@ void cairo_dock_show_module_gui (const gchar *cModuleName);
 
 void cairo_dock_close_gui (void);
 
-void cairo_dock_show_items_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, int iShowPage);
+void cairo_dock_show_items_gui (Icon *pIcon, GldiContainer *pContainer, GldiModuleInstance *pModuleInstance, int iShowPage);
 
 void cairo_dock_reload_gui (void);
 

@@ -26,7 +26,6 @@
 
 #include "gldi-config.h"
 #include "cairo-dock-struct.h"
-#include "cairo-dock-module-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-keyfile-utilities.h"
@@ -39,7 +38,6 @@
 #include "cairo-dock-launcher-factory.h"
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-desktop-file-factory.h"
-#include "cairo-dock-X-manager.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-gui-manager.h"
 
@@ -87,13 +85,13 @@ void cairo_dock_set_status_message_printf (GtkWidget *pWindow, const gchar *cFor
 	va_end (args);
 }
 
-void cairo_dock_reload_current_widget_full (CairoDockModuleInstance *pModuleInstance, int iShowPage)
+void cairo_dock_reload_current_widget_full (GldiModuleInstance *pModuleInstance, int iShowPage)
 {
 	if (s_pGuiBackend && s_pGuiBackend->reload_current_widget)
 		s_pGuiBackend->reload_current_widget (pModuleInstance, iShowPage);
 }
 
-void cairo_dock_show_module_instance_gui (CairoDockModuleInstance *pModuleInstance, int iShowPage)
+void cairo_dock_show_module_instance_gui (GldiModuleInstance *pModuleInstance, int iShowPage)
 {
 	if (s_pGuiBackend && s_pGuiBackend->show_module_instance_gui)
 		s_pGuiBackend->show_module_instance_gui (pModuleInstance, iShowPage);

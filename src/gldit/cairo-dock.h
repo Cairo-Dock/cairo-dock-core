@@ -32,13 +32,11 @@
 #include <gldit/cairo-dock-global-variables.h>
 #include <gldit/cairo-dock-core.h>
 // icon factory
-#include <icon-factory/cairo-dock-application-factory.h>
 #include <icon-factory/cairo-dock-applet-factory.h>
 #include <icon-factory/cairo-dock-launcher-factory.h>
 #include <icon-factory/cairo-dock-separator-factory.h>
 #include <icon-factory/cairo-dock-desktop-file-factory.h>
 // structures de base.
-#include <gldit/cairo-dock-module-factory.h>
 #include <gldit/cairo-dock-icon-factory.h>
 #include <gldit/cairo-dock-container.h>
 #include <gldit/cairo-dock-flying-container.h>
@@ -52,7 +50,6 @@
 #include <gldit/cairo-dock-opengl-font.h>
 #include <gldit/cairo-dock-draw-opengl.h>
 #include <gldit/cairo-dock-draw.h>
-///#include <gldit/cairo-dock-emblem.h>
 #include <gldit/cairo-dock-overlay.h>
 #include <gldit/cairo-dock-dock-facility.h>
 #include <gldit/cairo-dock-animations.h>
@@ -63,19 +60,21 @@
 #include <gldit/cairo-dock-launcher-manager.h>
 #include <gldit/cairo-dock-separator-manager.h>
 #include <gldit/cairo-dock-application-facility.h>
-#include <gldit/cairo-dock-dialog-manager.h>
 #include <gldit/cairo-dock-image-buffer.h>
 #include <gldit/cairo-dock-icon-facility.h>
 #include <gldit/cairo-dock-config.h>
 // managers.
 #include <gldit/cairo-dock-manager.h>
 #include <gldit/cairo-dock-module-manager.h>
-#include <gldit/cairo-dock-X-manager.h>
+#include <gldit/cairo-dock-module-instance-manager.h>
+#include <gldit/cairo-dock-desktop-manager.h>
+#include <gldit/cairo-dock-windows-manager.h>
 #include <gldit/cairo-dock-indicator-manager.h>
 #include <gldit/cairo-dock-applications-manager.h>
 #include <gldit/cairo-dock-class-manager.h>
 #include <gldit/cairo-dock-dock-manager.h>
 #include <gldit/cairo-dock-desklet-manager.h>
+#include <gldit/cairo-dock-dialog-manager.h>
 #include <gldit/cairo-dock-backends-manager.h>
 #include <gldit/cairo-dock-file-manager.h>
 // GUI.
@@ -90,10 +89,10 @@
 #include <implementations/cairo-dock-progressbar.h>
 #include <implementations/cairo-dock-graph.h>
 #include <implementations/cairo-dock-gauge.h>
-#include <gldit/cairo-dock-notifications.h>
 #include <gldit/cairo-dock-surface-factory.h>
 #include <gldit/cairo-dock-X-utilities.h>
 // classes independantes de CD.
+#include <gldit/cairo-dock-object.h>
 #include <gldit/cairo-dock-log.h>
 #include <gldit/cairo-dock-dbus.h>
 #include <gldit/cairo-dock-keyfile-utilities.h>

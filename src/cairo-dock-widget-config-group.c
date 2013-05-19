@@ -22,10 +22,9 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-module-manager.h"
 #include "cairo-dock-themes-manager.h"  // cairo_dock_write_keys_to_conf_file
-#include "cairo-dock-module-factory.h"
+#include "cairo-dock-module-instance-manager.h"  // gldi_module_instance_reload
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-X-manager.h"
 #include "cairo-dock-widget-config-group.h"
 
 #define CAIRO_DOCK_ICON_MARGIN 6
@@ -46,8 +45,8 @@ static void _config_group_widget_apply (CDWidget *pCdWidget)
 	
 	// reload the associated managers.
 	const gchar *cManagerName, *cModuleName;
-	CairoDockModule *pModule;
-	CairoDockModuleInstance *pExtraInstance;
+	GldiModule *pModule;
+	GldiModuleInstance *pExtraInstance;
 	GldiManager *pManager;
 	GSList *pExtraWidgetList;
 	GKeyFile* pExtraKeyFile;
@@ -65,7 +64,7 @@ static void _config_group_widget_apply (CDWidget *pCdWidget)
 		{
 			// get the extension
 			cModuleName = e->data;
-			pModule = cairo_dock_find_module_from_name (cModuleName);
+			pModule = gldi_module_get (cModuleName);
 			if (!pModule)
 				continue;
 			
@@ -88,7 +87,7 @@ static void _config_group_widget_apply (CDWidget *pCdWidget)
 			g_key_file_free (pExtraKeyFile);
 			
 			// reload it
-			cairo_dock_reload_module_instance (pExtraInstance, TRUE);
+			gldi_module_instance_reload (pExtraInstance, TRUE);
 		}
 	}
 }
@@ -130,8 +129,8 @@ ConfigGroupWidget *cairo_dock_config_group_widget_new (const gchar *cGroupName, 
 	// build the widgets of the extensions
 	GtkWidget *pNoteBook = NULL;
 	GKeyFile* pExtraKeyFile;
-	CairoDockModule *pModule;
-	CairoDockModuleInstance *pExtraInstance;
+	GldiModule *pModule;
+	GldiModuleInstance *pExtraInstance;
 	GSList *pExtraWidgetList;
 	gchar *cOriginalConfFilePath;
 	GldiManager *pManager;
@@ -147,7 +146,7 @@ ConfigGroupWidget *cairo_dock_config_group_widget_new (const gchar *cGroupName, 
 		for (e = pManager->pExternalModules; e != NULL; e = e->next)
 		{
 			cModuleName = e->data;
-			pModule = cairo_dock_find_module_from_name (cModuleName);
+			pModule = gldi_module_get (cModuleName);
 			if (!pModule)
 				continue;
 			

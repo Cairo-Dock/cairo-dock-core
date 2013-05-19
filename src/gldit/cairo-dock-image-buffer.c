@@ -21,7 +21,7 @@
 #include <stdlib.h>
 
 #include "cairo-dock-icon-manager.h"  // myIconsParam.iIconWidth
-#include "cairo-dock-desklet-factory.h"  // CAIRO_DOCK_IS_DESKLET
+#include "cairo-dock-desklet-manager.h"  // CAIRO_DOCK_IS_DESKLET
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw.h"
@@ -34,7 +34,7 @@ extern gchar *g_cCurrentImagesPath;
 
 extern gboolean g_bUseOpenGL;
 extern CairoDockGLConfig g_openglConfig;
-extern CairoContainer *g_pPrimaryContainer;
+extern GldiContainer *g_pPrimaryContainer;
 extern gboolean g_bEasterEggs;
 
 
@@ -521,7 +521,7 @@ void cairo_dock_end_draw_image_buffer_cairo (CairoDockImageBuffer *pImage)
 }
 
 
-gboolean cairo_dock_begin_draw_image_buffer_opengl (CairoDockImageBuffer *pImage, CairoContainer *pContainer, gint iRenderingMode)
+gboolean cairo_dock_begin_draw_image_buffer_opengl (CairoDockImageBuffer *pImage, GldiContainer *pContainer, gint iRenderingMode)
 {
 	int iWidth, iHeight;
 	/// TODO: test without FBO and dock when iRenderingMode == 2
@@ -607,7 +607,7 @@ gboolean cairo_dock_begin_draw_image_buffer_opengl (CairoDockImageBuffer *pImage
 	return TRUE;
 }
 
-void cairo_dock_end_draw_image_buffer_opengl (CairoDockImageBuffer *pImage, CairoContainer *pContainer)
+void cairo_dock_end_draw_image_buffer_opengl (CairoDockImageBuffer *pImage, GldiContainer *pContainer)
 {
 	g_return_if_fail (pContainer != NULL && pImage->iTexture != 0);
 	

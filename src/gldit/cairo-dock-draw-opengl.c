@@ -19,13 +19,12 @@
 
 #include <math.h>
 #include <GL/gl.h>
-#include <gdk/gdkx.h>  // gdk_x11_get_default_xdisplay
 
 #include "cairo-dock-icon-facility.h"
-#include "cairo-dock-notifications.h"  // for NOTIFICATION_RENDER_ICON
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-facility.h"  // cairo_dock_get_first_drawn_element_linear
 #include "cairo-dock-applications-manager.h"  // myTaskbarParam.fVisibleAppliAlpha
+#include "cairo-dock-windows-manager.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-overlay.h"
@@ -39,7 +38,7 @@
 
 extern GLuint g_pGradationTexture[2];
 
-extern CairoContainer *g_pPrimaryContainer;
+extern GldiContainer *g_pPrimaryContainer;
 
 extern CairoDockImageBuffer g_pVisibleZoneBuffer;
 
@@ -49,14 +48,14 @@ extern CairoDockGLConfig g_openglConfig;
 extern gboolean g_bEasterEggs;
 
 
-void cairo_dock_set_icon_scale (Icon *pIcon, CairoContainer *pContainer, double fZoomFactor)
+void cairo_dock_set_icon_scale (Icon *pIcon, GldiContainer *pContainer, double fZoomFactor)
 {
 	double fSizeX, fSizeY;
 	cairo_dock_get_current_icon_size (pIcon, pContainer, &fSizeX, &fSizeY);
 	glScalef (fSizeX * fZoomFactor, fSizeY * fZoomFactor, fSizeY * fZoomFactor);
 }
 
-void cairo_dock_set_container_orientation_opengl (CairoContainer *pContainer)
+void cairo_dock_set_container_orientation_opengl (GldiContainer *pContainer)
 {
 	if (pContainer->bIsHorizontal)
 	{
@@ -246,7 +245,7 @@ void cairo_dock_draw_icon_opengl (Icon *pIcon, CairoDock *pDock)
 }
 
 
-static inline void _compute_icon_coordinate (Icon *icon, CairoContainer *pContainer, double fDockMagnitude, double *pX, double *pY)
+static inline void _compute_icon_coordinate (Icon *icon, GldiContainer *pContainer, double fDockMagnitude, double *pX, double *pY)
 {
 	double fX=0, fY=0;
 	double fRatio = pContainer->fRatio;
@@ -289,7 +288,7 @@ static inline void _compute_icon_coordinate (Icon *icon, CairoContainer *pContai
 	*pY = fY;
 }
 
-void cairo_dock_translate_on_icon_opengl (Icon *icon, CairoContainer *pContainer, double fDockMagnitude)
+void cairo_dock_translate_on_icon_opengl (Icon *icon, GldiContainer *pContainer, double fDockMagnitude)
 {
 	double fX=0, fY=0;
 	_compute_icon_coordinate (icon, pContainer, fDockMagnitude, &fX, &fY);
@@ -315,9 +314,9 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 			pDock->container.bIsHorizontal ? 48:1);
 		cd_debug ("g_pGradationTexture(%d) <- %d", pDock->container.bIsHorizontal, g_pGradationTexture[pDock->container.bIsHorizontal]);
 	}
-	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskbarParam.fVisibleAppliAlpha != 0 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon) && !(icon->iBackingPixmap != 0 && icon->bIsHidden))
+	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskbarParam.fVisibleAppliAlpha != 0 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon) && !(myTaskbarParam.iMinimizedWindowRenderType == 1 && icon->pAppli->bIsHidden))
 	{
-		double fAlpha = (icon->bIsHidden ? MIN (1 - myTaskbarParam.fVisibleAppliAlpha, 1) : MIN (myTaskbarParam.fVisibleAppliAlpha + 1, 1));
+		double fAlpha = (icon->pAppli->bIsHidden ? MIN (1 - myTaskbarParam.fVisibleAppliAlpha, 1) : MIN (myTaskbarParam.fVisibleAppliAlpha + 1, 1));
 		if (fAlpha != 1)
 			icon->fAlpha = fAlpha;  // astuce bidon pour pas multiplier 2 fois.
 	}
@@ -376,8 +375,8 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	
 	//\_____________________ On dessine l'icone.
 	gboolean bIconHasBeenDrawn = FALSE;
-	cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_PRE_RENDER_ICON, icon, pDock, NULL);
-	cairo_dock_notify_on_object (&myIconsMgr, NOTIFICATION_RENDER_ICON, icon, pDock, &bIconHasBeenDrawn, NULL);
+	gldi_object_notify (&myIconsMgr, NOTIFICATION_PRE_RENDER_ICON, icon, pDock, NULL);
+	gldi_object_notify (&myIconsMgr, NOTIFICATION_RENDER_ICON, icon, pDock, &bIconHasBeenDrawn, NULL);
 	
 	glPopMatrix ();  // retour juste apres la translation au milieu de l'icone.
 	
@@ -853,7 +852,7 @@ void cairo_dock_draw_texture (GLuint iTexture, int iWidth, int iHeight)
 	cairo_dock_draw_texture_with_alpha (iTexture, iWidth, iHeight, 1.);
 }
 
-void cairo_dock_apply_icon_texture_at_current_size (Icon *pIcon, CairoContainer *pContainer)
+void cairo_dock_apply_icon_texture_at_current_size (Icon *pIcon, GldiContainer *pContainer)
 {
 	double fSizeX, fSizeY;
 	cairo_dock_get_current_icon_size (pIcon, pContainer, &fSizeX, &fSizeY);
@@ -861,7 +860,7 @@ void cairo_dock_apply_icon_texture_at_current_size (Icon *pIcon, CairoContainer 
 	_cairo_dock_apply_texture_at_size (pIcon->image.iTexture, fSizeX, fSizeY);
 }
 
-void cairo_dock_draw_icon_texture (Icon *pIcon, CairoContainer *pContainer)
+void cairo_dock_draw_icon_texture (Icon *pIcon, GldiContainer *pContainer)
 {
 	double fSizeX, fSizeY;
 	cairo_dock_get_current_icon_size (pIcon, pContainer, &fSizeX, &fSizeY);
@@ -872,7 +871,7 @@ void cairo_dock_draw_icon_texture (Icon *pIcon, CairoContainer *pContainer)
 		pIcon->fAlpha);
 }
 
-static inline void  _draw_icon_bent_backwards (Icon *pIcon, CairoContainer *pContainer, GLuint iOriginalTexture, double f)
+static inline void  _draw_icon_bent_backwards (Icon *pIcon, GldiContainer *pContainer, GLuint iOriginalTexture, double f)
 {
 	cairo_dock_set_perspective_view_for_icon (pIcon, pContainer);
 	
@@ -907,7 +906,7 @@ static gboolean _transition_step (Icon *pIcon, gpointer data)
 	
 	GLuint iOriginalTexture = GPOINTER_TO_INT (data);
 	double f = cairo_dock_get_transition_fraction (pIcon);
-	if (!pIcon->bIsHidden)
+	if (!pIcon->pAppli->bIsHidden)
 		f = 1 - f;
 	
 	_draw_icon_bent_backwards (pIcon, CAIRO_CONTAINER (pDock), iOriginalTexture, f);
@@ -918,14 +917,14 @@ static void _free_transition_data (gpointer data)
 	GLuint iOriginalTexture = GPOINTER_TO_INT (data);
 	_cairo_dock_delete_texture (iOriginalTexture);
 }
-void cairo_dock_draw_hidden_appli_icon (Icon *pIcon, CairoContainer *pContainer, gboolean bStateChanged)
+void cairo_dock_draw_hidden_appli_icon (Icon *pIcon, GldiContainer *pContainer, gboolean bStateChanged)
 {
 	if (bStateChanged)
 	{
 		cairo_dock_remove_transition_on_icon (pIcon);
 		
 		GLuint iOriginalTexture;
-		if (pIcon->bIsHidden)
+		if (pIcon->pAppli->bIsHidden)
 		{
 			iOriginalTexture = pIcon->image.iTexture;
 			pIcon->image.iTexture = cairo_dock_create_texture_from_surface (pIcon->image.pSurface);
@@ -950,133 +949,11 @@ void cairo_dock_draw_hidden_appli_icon (Icon *pIcon, CairoContainer *pContainer,
 			GINT_TO_POINTER (iOriginalTexture),
 			_free_transition_data);
 	}
-	else if (pIcon->bIsHidden)
+	else if (pIcon->pAppli->bIsHidden)
 	{
 		if (!cairo_dock_begin_draw_icon (pIcon, pContainer, 2))
 			return ;
 		_draw_icon_bent_backwards (pIcon, pContainer, pIcon->image.iTexture, 1.);
 		cairo_dock_end_draw_icon (pIcon, pContainer);
 	}
-}
-
-
-
-//typedef void (*GLXBindTexImageProc) (Display *display, GLXDrawable drawable, int buffer, int *attribList);
-//typedef void (*GLXReleaseTexImageProc) (Display *display, GLXDrawable drawable, int buffer);
-
-// Bind redirected window to texture:
-GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
-{
-	if (!g_bEasterEggs)
-		return 0;  /// works for some windows (gnome-terminal) but not for all ... still need to figure why.
-	
-	if (!iBackingPixmap || ! g_openglConfig.bTextureFromPixmapAvailable)
-		return 0;
-	
-	Display *display = gdk_x11_get_default_xdisplay ();
-	XWindowAttributes attrib;
-	XGetWindowAttributes (display, Xid, &attrib);
-	
-	VisualID visualid = XVisualIDFromVisual (attrib.visual);
-	
-	int nfbconfigs;
-	int screen = 0;
-	GLXFBConfig *fbconfigs = glXGetFBConfigs (display, screen, &nfbconfigs);
-	
-	GLfloat top=0., bottom=0.;
-	XVisualInfo *visinfo;
-	int value;
-	int i;
-	for (i = 0; i < nfbconfigs; i++)
-	{
-		visinfo = glXGetVisualFromFBConfig (display, fbconfigs[i]);
-		if (!visinfo || visinfo->visualid != visualid)
-			continue;
-	
-		glXGetFBConfigAttrib (display, fbconfigs[i], GLX_DRAWABLE_TYPE, &value);
-		if (!(value & GLX_PIXMAP_BIT))
-			continue;
-	
-		glXGetFBConfigAttrib (display, fbconfigs[i],
-			GLX_BIND_TO_TEXTURE_TARGETS_EXT,
-			&value);
-		if (!(value & GLX_TEXTURE_2D_BIT_EXT))
-			continue;
-		
-		glXGetFBConfigAttrib (display, fbconfigs[i],
-			GLX_BIND_TO_TEXTURE_RGBA_EXT,
-			&value);
-		if (value == FALSE)
-		{
-			glXGetFBConfigAttrib (display, fbconfigs[i],
-				GLX_BIND_TO_TEXTURE_RGB_EXT,
-				&value);
-			if (value == FALSE)
-				continue;
-		}
-		
-		glXGetFBConfigAttrib (display, fbconfigs[i],
-			GLX_Y_INVERTED_EXT,
-			&value);
-		if (value == TRUE)
-		{
-			top = 0.0f;
-			bottom = 1.0f;
-		}
-		else
-		{
-			top = 1.0f;
-			bottom = 0.0f;
-		}
-		
-		break;
-	}
-	
-	if (i == nfbconfigs)
-	{
-		cd_warning ("No FB Config found");
-		return 0;
-	}
-	
-	int pixmapAttribs[5] = { GLX_TEXTURE_TARGET_EXT, GLX_TEXTURE_2D_EXT,
-		GLX_TEXTURE_FORMAT_EXT, GLX_TEXTURE_FORMAT_RGBA_EXT,
-		None };
-	GLXPixmap glxpixmap = glXCreatePixmap (display, fbconfigs[i], iBackingPixmap, pixmapAttribs);
-	g_return_val_if_fail (glxpixmap != 0, 0);
-	
-	GLuint texture;
-	glEnable (GL_TEXTURE_2D);
-	glGenTextures (1, &texture);
-	glBindTexture (GL_TEXTURE_2D, texture);
-	
-	g_openglConfig.bindTexImage (display, glxpixmap, GLX_FRONT_LEFT_EXT, NULL);
-	
-	glTexParameteri (GL_TEXTURE_2D,
-		GL_TEXTURE_MIN_FILTER,
-		g_bEasterEggs ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
-	if (g_bEasterEggs)
-		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	
-	// draw using iBackingPixmap as texture
-	glBegin (GL_QUADS);
-	
-	glTexCoord2d (0.0f, bottom);
-	glVertex2d (0.0f, 0.0f);
-	
-	glTexCoord2d (0.0f, top);
-	glVertex2d (0.0f, attrib.height);
-	
-	glTexCoord2d (1.0f, top);
-	glVertex2d (attrib.width, attrib.height);
-	
-	glTexCoord2d (1.0f, bottom);
-	glVertex2d (attrib.width, 0.0f);
-	
-	glEnd ();
-	glDisable (GL_TEXTURE_2D);
-	
-	g_openglConfig.releaseTexImage (display, glxpixmap, GLX_FRONT_LEFT_EXT);
-	glXDestroyGLXPixmap (display, glxpixmap);
-	return texture;
 }

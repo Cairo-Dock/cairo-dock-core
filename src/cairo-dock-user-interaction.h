@@ -26,16 +26,16 @@
 G_BEGIN_DECLS
 
 
-gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, CairoContainer *pContainer, guint iButtonState);
+gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, GldiContainer *pContainer, guint iButtonState);
 
-gboolean cairo_dock_notification_middle_click_icon (gpointer pUserData, Icon *icon, CairoContainer *pContainer);
+gboolean cairo_dock_notification_middle_click_icon (gpointer pUserData, Icon *icon, GldiContainer *pContainer);
 
-gboolean cairo_dock_notification_scroll_icon (gpointer pUserData, Icon *icon, CairoContainer *pContainer, int iDirection);
+gboolean cairo_dock_notification_scroll_icon (gpointer pUserData, Icon *icon, GldiContainer *pContainer, int iDirection);
 
-gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cReceivedData, Icon *icon, double fOrder, CairoContainer *pContainer);
+gboolean cairo_dock_notification_drop_data (gpointer pUserData, const gchar *cReceivedData, Icon *icon, double fOrder, GldiContainer *pContainer);
 
 
-void cairo_dock_set_custom_icon_on_appli (const gchar *cFilePath, Icon *icon, CairoContainer *pContainer);
+void cairo_dock_set_custom_icon_on_appli (const gchar *cFilePath, Icon *icon, GldiContainer *pContainer);
 
 
 gboolean cairo_dock_notification_configure_desklet (gpointer pUserData, CairoDesklet *pDesklet);
@@ -44,7 +44,7 @@ gboolean cairo_dock_notification_icon_moved (gpointer pUserData, Icon *pIcon, Ca
 gboolean cairo_dock_notification_icon_inserted (gpointer pUserData, Icon *pIcon, CairoDock *pDock);
 gboolean cairo_dock_notification_icon_removed(gpointer pUserData, Icon *pIcon, CairoDock *pDock);
 
-gboolean cairo_dock_notification_desklet_destroyed (gpointer pUserData, CairoDesklet *pDesklet);
+gboolean cairo_dock_notification_desklet_added_removed (gpointer pUserData, CairoDesklet *pDesklet);
 
 gboolean cairo_dock_notification_dock_destroyed (gpointer pUserData, CairoDock *pDock);
 
@@ -52,9 +52,9 @@ gboolean cairo_dock_notification_module_activated (gpointer pUserData, const gch
 
 gboolean cairo_dock_notification_module_registered (gpointer pUserData, const gchar *cModuleName, gboolean bRegistered);
 
-gboolean cairo_dock_notification_module_detached (gpointer pUserData, CairoDockModuleInstance *pInstance, gboolean bIsDetached);
+gboolean cairo_dock_notification_module_detached (gpointer pUserData, GldiModuleInstance *pInstance, gboolean bIsDetached);
 
-gboolean cairo_dock_notification_shortkey_added_or_removed (gpointer pUserData, CairoKeyBinding *pKeyBinding);
+gboolean cairo_dock_notification_shortkey_added_removed_changed (gpointer pUserData, GldiShortkey *pKeyBinding);
 
 
 G_END_DECLS

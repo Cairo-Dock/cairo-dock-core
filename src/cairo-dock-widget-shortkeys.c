@@ -26,11 +26,10 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file
-#include "cairo-dock-X-manager.h"
+#include "cairo-dock-desktop-manager.h"  // gldi_desktop_get_width
 #include "cairo-dock-widget-shortkeys.h"
 
 #define CAIRO_DOCK_PREVIEW_HEIGHT 250
-extern CairoDockDesktopGeometry g_desktopGeometry;
 
 static void _shortkeys_widget_reload (CDWidget *pCdWidget);
 
@@ -68,11 +67,11 @@ static void _on_key_grab_cb (GtkWidget *pInputDialog, GdkEventKey *event, GtkTre
 		if (gtk_tree_selection_get_selected (pSelection, &pModel, &iter))  // we retrieve it from the current selection, this way if the binding has been destroyed meanwhile (very unlikely), we're safe.
 		{
 			// Bind the new shortkey
-			CairoKeyBinding *binding = NULL;
+			GldiShortkey *binding = NULL;
 			gtk_tree_model_get (pModel, &iter,
 				CD_SHORTKEY_MODEL_BINDING, &binding, -1);
 			
-			cd_keybinder_rebind (binding, key, NULL);
+			gldi_shortkey_rebind (binding, key, NULL);
 			
 			// update the model
 			gtk_list_store_set (GTK_LIST_STORE (pModel), &iter,
@@ -180,7 +179,7 @@ static void _cairo_dock_render_shortkey (G_GNUC_UNUSED GtkTreeViewColumn *tree_c
 	}
 	g_free (cShortkey);
 }
-void cairo_dock_add_shortkey_to_model (CairoKeyBinding *binding, GtkListStore *pModel)
+void cairo_dock_add_shortkey_to_model (GldiShortkey *binding, GtkListStore *pModel)
 {
 	//g_print (" + %s\n",  pModule->pVisitCard->cIconFilePath);
 	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (binding->cIconFilePath, 32, 32, NULL);
@@ -208,7 +207,7 @@ static GtkWidget *cairo_dock_build_shortkeys_widget (void)
 		G_TYPE_BOOLEAN,  // grabbed or not
 		G_TYPE_POINTER);  // binding
 	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (pModel), CD_SHORTKEY_MODEL_NAME, GTK_SORT_ASCENDING);
-	cd_keybinder_foreach ((GFunc) cairo_dock_add_shortkey_to_model, pModel);
+	gldi_shortkeys_foreach ((GFunc) cairo_dock_add_shortkey_to_model, pModel);
 	
 	// make the treeview
 	GtkWidget *pOneWidget = gtk_tree_view_new_with_model (GTK_TREE_MODEL (pModel));
@@ -252,7 +251,7 @@ ShortkeysWidget *cairo_dock_shortkeys_widget_new (void)
 	pShortkeysWidget->pShortKeysTreeView = cairo_dock_build_shortkeys_widget ();
 	
 	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
-	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, gldi_get_desktop_height() - 175), NULL);
+	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, gldi_desktop_get_height() - 175), NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pShortkeysWidget->pShortKeysTreeView);
 	
@@ -268,5 +267,5 @@ static void _shortkeys_widget_reload (CDWidget *pCdWidget)
 	GtkTreeModel *pModel = gtk_tree_view_get_model (GTK_TREE_VIEW (pShortkeysWidget->pShortKeysTreeView));
 	g_return_if_fail (pModel != NULL);
 	gtk_list_store_clear (GTK_LIST_STORE (pModel));
-	cd_keybinder_foreach ((GFunc) cairo_dock_add_shortkey_to_model, pModel);
+	gldi_shortkeys_foreach ((GFunc) cairo_dock_add_shortkey_to_model, pModel);
 }

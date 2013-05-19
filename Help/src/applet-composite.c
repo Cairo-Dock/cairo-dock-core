@@ -68,7 +68,7 @@ static void _set_kwin_composite (gboolean bActive)
 
 static void cd_help_show_welcome_message (void)
 {
-	cairo_dock_show_dialog_full (D_("Welcome in Cairo-Dock !\n"
+	gldi_dialog_show (D_("Welcome in Cairo-Dock !\n"
 		"This applet is here to help you start using the dock; just click on it.\n"
 		"If you have any question/request/remark, please pay us a visit at http://glx-dock.org.\n"
 		"Hope you will enjoy this soft !\n"
@@ -163,12 +163,12 @@ void cd_help_enable_composite (void)
 	{
 		GtkWidget *pAskBox = _gtk_hbox_new (3);
 		GtkWidget *label = gtk_label_new (D_("Don't ask me any more"));
-		cairo_dock_set_dialog_widget_text_color (label);
+		gldi_dialog_set_widget_text_color (label);
 		GtkWidget *pCheckBox = gtk_check_button_new ();
 		gtk_box_pack_end (GTK_BOX (pAskBox), pCheckBox, FALSE, FALSE, 0);
 		gtk_box_pack_end (GTK_BOX (pAskBox), label, FALSE, FALSE, 0);
 		g_signal_connect (G_OBJECT (pCheckBox), "toggled", G_CALLBACK(_toggle_remember_choice), pAskBox);
-		int iClickedButton = cairo_dock_show_dialog_and_wait (D_("To remove the black rectangle around the dock, you need to activate a composite manager.\nDo you want to activate it now?"), myIcon, myContainer, NULL, pAskBox);
+		int iClickedButton = gldi_dialog_show_and_wait (D_("To remove the black rectangle around the dock, you need to activate a composite manager.\nDo you want to activate it now?"), myIcon, myContainer, NULL, pAskBox);
 
 		gboolean bRememberChoice = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (pCheckBox));
 		gtk_widget_destroy (pAskBox);  // le widget survit a un dialogue bloquant.
@@ -179,7 +179,7 @@ void cd_help_enable_composite (void)
 		if (iClickedButton == 0 || iClickedButton == -1)  // ok or Enter.
 		{
 			s_activate_composite (TRUE);
-			cairo_dock_show_dialog_full (D_("Do you want to keep this setting?\nIn 15 seconds, the previous setting will be restored."),
+			gldi_dialog_show (D_("Do you want to keep this setting?\nIn 15 seconds, the previous setting will be restored."),
 				myIcon, myContainer,
 				15e3,
 				"same icon",
@@ -195,7 +195,7 @@ void cd_help_enable_composite (void)
 	}
 	else  // just notify him about the problem and its solution.
 	{
-		cairo_dock_show_dialog_full (D_("To remove the black rectangle around the dock, you will need to activate a composite manager.\nFor instance, this can be done by activating desktop effects, launching Compiz, or activating the composition in Metacity.\nIf your machine can't support composition, Cairo-Dock can emulate it. This option is in the 'System' module of the configuration, at the bottom of the page."),
+		gldi_dialog_show (D_("To remove the black rectangle around the dock, you will need to activate a composite manager.\nFor instance, this can be done by activating desktop effects, launching Compiz, or activating the composition in Metacity.\nIf your machine can't support composition, Cairo-Dock can emulate it. This option is in the 'System' module of the configuration, at the bottom of the page."),
 			myIcon, myContainer,
 			0,
 			"same icon",

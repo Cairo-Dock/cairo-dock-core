@@ -1,7 +1,7 @@
 
 SET(icon_SRCS
 	cairo-dock-launcher-factory.c 	cairo-dock-launcher-factory.h
-	cairo-dock-application-factory.c 	cairo-dock-application-factory.h
+	#cairo-dock-application-factory.c 	cairo-dock-application-factory.h
 	cairo-dock-separator-factory.c 	cairo-dock-separator-factory.h
 	cairo-dock-applet-factory.c 		cairo-dock-applet-factory.h
 	cairo-dock-desktop-file-factory.c 	cairo-dock-desktop-file-factory.h

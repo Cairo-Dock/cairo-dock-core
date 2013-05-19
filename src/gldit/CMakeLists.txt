@@ -10,14 +10,14 @@ SET(core_lib_SRCS
 	cairo-dock-icon-factory.c 			cairo-dock-icon-factory.h
 	cairo-dock-icon-facility.c 			cairo-dock-icon-facility.h
 	cairo-dock-indicator-manager.c 		cairo-dock-indicator-manager.h
-	cairo-dock-applications-manager.c 	cairo-dock-applications-manager.h 
+	cairo-dock-applications-manager.c 	cairo-dock-applications-manager.h
 	cairo-dock-application-facility.c 	cairo-dock-application-facility.h
 	cairo-dock-launcher-manager.c 		cairo-dock-launcher-manager.h
 	cairo-dock-applet-manager.c 		cairo-dock-applet-manager.h
 	cairo-dock-applet-facility.c 		cairo-dock-applet-facility.h
 	cairo-dock-separator-manager.c 		cairo-dock-separator-manager.h
-	cairo-dock-module-factory.c 		cairo-dock-module-factory.h
 	cairo-dock-module-manager.c 		cairo-dock-module-manager.h
+	cairo-dock-module-instance-manager.c cairo-dock-module-instance-manager.h
 	# containers
 	cairo-dock-container.c 				cairo-dock-container.h
 	cairo-dock-desklet-manager.c 		cairo-dock-desklet-manager.h
@@ -28,16 +28,17 @@ SET(core_lib_SRCS
 	cairo-dock-dock-manager.c 			cairo-dock-dock-manager.h
 	cairo-dock-dock-factory.c 			cairo-dock-dock-factory.h
 	cairo-dock-dock-facility.c 			cairo-dock-dock-facility.h
+	cairo-dock-dock-visibility.c 		cairo-dock-dock-visibility.h
 	cairo-dock-callbacks.c 				cairo-dock-callbacks.h 
 	cairo-dock-animations.c 			cairo-dock-animations.h
-	cairo-dock-notifications.c 			cairo-dock-notifications.h
 	cairo-dock-backends-manager.c 		cairo-dock-backends-manager.h
 	cairo-dock-data-renderer.c 			cairo-dock-data-renderer.h
-	cairo-dock-data-renderer-manager.c 		cairo-dock-data-renderer-manager.h
+	cairo-dock-data-renderer-manager.c 	cairo-dock-data-renderer-manager.h
 	cairo-dock-file-manager.c 			cairo-dock-file-manager.h
 	cairo-dock-themes-manager.c 		cairo-dock-themes-manager.h
 	cairo-dock-class-manager.c 			cairo-dock-class-manager.h
-	cairo-dock-X-manager.c 				cairo-dock-X-manager.h
+	cairo-dock-desktop-manager.c		cairo-dock-desktop-manager.h
+	cairo-dock-windows-manager.c		cairo-dock-windows-manager.h
 	cairo-dock-image-buffer.c			cairo-dock-image-buffer.h 
 	cairo-dock-opengl.c 				cairo-dock-opengl.h
 	cairo-dock-opengl-path.c 			cairo-dock-opengl-path.h
@@ -126,7 +127,7 @@ install(FILES
 	cairo-dock-icon-facility.h
 	cairo-dock-applications-manager.h 	cairo-dock-launcher-manager.h
 	cairo-dock-separator-manager.h 		cairo-dock-applet-manager.h
-	cairo-dock-backends-manager.h		cairo-dock-notifications.h
+	cairo-dock-backends-manager.h
 	
 	cairo-dock-packages.h
 	cairo-dock-data-renderer.h
@@ -138,13 +139,14 @@ install(FILES
 	cairo-dock-themes-manager.h
 	cairo-dock-gui-manager.h
 	cairo-dock-file-manager.h
-	cairo-dock-X-manager.h
+	cairo-dock-desktop-manager.h
+	cairo-dock-windows-manager.h
 	cairo-dock-class-manager.h
 	cairo-dock-opengl.h
 	cairo-dock-image-buffer.h
 	cairo-dock-config.h
-	cairo-dock-module-factory.h
 	cairo-dock-module-manager.h
+	cairo-dock-module-instance-manager.h
 	cairo-dock-container.h
 	cairo-dock-dock-factory.h			cairo-dock-callbacks.h
 	cairo-dock-desklet-factory.h

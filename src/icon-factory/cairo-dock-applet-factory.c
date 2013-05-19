@@ -24,12 +24,13 @@
 
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-icon-facility.h"
-#include "cairo-dock-module-factory.h"
+#include "cairo-dock-module-manager.h"
+#include "cairo-dock-module-instance-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-applet-factory.h"
 
 
-Icon *cairo_dock_new_applet_icon (CairoDockMinimalAppletConfig *pMinimalConfig, CairoDockModuleInstance *pModuleInstance)
+Icon *cairo_dock_new_applet_icon (CairoDockMinimalAppletConfig *pMinimalConfig, GldiModuleInstance *pModuleInstance)
 {
 	//\____________ On cree l'icone.
 	Icon *icon = cairo_dock_new_icon ();

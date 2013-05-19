@@ -29,7 +29,7 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-module-factory.h"
+#include "cairo-dock-module-instance-manager.h"
 #include "cairo-dock-desktop-file-factory.h"
 
 #define CAIRO_DOCK_LAUNCHER_CONF_FILE "launcher.desktop"

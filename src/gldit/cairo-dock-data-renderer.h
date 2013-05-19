@@ -211,14 +211,14 @@ void cairo_dock_unload_default_data_renderer_font (void);
 *@param pIcon the icon
 *@param pContainer the icon's container
 *@param pAttribute attributes defining the Renderer*/
-void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pContainer, CairoDataRendererAttribute *pAttribute);
+void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, GldiContainer *pContainer, CairoDataRendererAttribute *pAttribute);
 
 /**Draw the current values associated with the Renderer on the icon.
 *@param pIcon the icon
 *@param pContainer the icon's container
 *@param pCairoContext a drawing context on the icon
 *@param pNewValues a set a new values (must be of the size defined on the creation of the Renderer)*/
-void cairo_dock_render_new_data_on_icon (Icon *pIcon, CairoContainer *pContainer, cairo_t *pCairoContext, double *pNewValues);
+void cairo_dock_render_new_data_on_icon (Icon *pIcon, GldiContainer *pContainer, cairo_t *pCairoContext, double *pNewValues);
 
 /**Remove the Data Renderer of an icon. All the allocated ressources will be freed.
 *@param pIcon the icon*/
@@ -227,7 +227,7 @@ void cairo_dock_remove_data_renderer_on_icon (Icon *pIcon);
 /**Reload the Data Renderer of an icon, keeping the history and the attributes. This is intended to be used when the icon size changes.
 *@param pIcon the icon
 *@param pContainer the icon's container*/
-void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pContainer);
+void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, GldiContainer *pContainer);
 
 
 /** Resize the history of a DataRenderer of an icon, that is to say change the number of previous values that are remembered by the DataRenderer.
@@ -238,7 +238,7 @@ void cairo_dock_resize_data_renderer_history (Icon *pIcon, int iNewMemorySize);
 /** Redraw the DataRenderer of an icon, with the current values.
 *@param pIcon the icon
 *@param pContainer the icon's container*/
-void cairo_dock_refresh_data_renderer (Icon *pIcon, CairoContainer *pContainer);
+void cairo_dock_refresh_data_renderer (Icon *pIcon, GldiContainer *pContainer);
 
 
 void cairo_dock_render_overlays_to_context (CairoDataRenderer *pRenderer, int iNumValue, cairo_t *pCairoContext);

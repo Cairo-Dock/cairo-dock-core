@@ -26,8 +26,8 @@
 #include "cairo-dock-draw.h"
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-icon-facility.h"  // cairo_dock_icon_get_allocated_width
-#include "cairo-dock-module-manager.h"  // cairo_dock_write_active_modules
-#include "cairo-dock-module-factory.h"
+#include "cairo-dock-module-manager.h"  // gldi_modules_write_active
+#include "cairo-dock-module-instance-manager.h"  // GldiModuleInstance
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-container.h"
@@ -78,16 +78,16 @@ static void _load_applet (Icon *icon)
 
 static gboolean _delete_applet (Icon *icon)
 {
-	if (icon->pModuleInstance != NULL)
+	if (icon->pModuleInstance != NULL)  // remove the instance from the current theme
 	{
-		cairo_dock_deinstanciate_module (icon->pModuleInstance);  // desactive l'instance du module -> n'est plus une applet valide.
-		cairo_dock_write_active_modules ();
+		g_print ("%s ()\n", __func__);
+		gldi_module_remove_instance (icon->pModuleInstance);
 		return TRUE;
 	}
 	return FALSE;
 }
 
-Icon *cairo_dock_create_icon_for_applet (CairoDockMinimalAppletConfig *pMinimalConfig, CairoDockModuleInstance *pModuleInstance)
+Icon *cairo_dock_create_icon_for_applet (CairoDockMinimalAppletConfig *pMinimalConfig, GldiModuleInstance *pModuleInstance)
 {
 	//\____________ On cree l'icone.
 	Icon *icon = cairo_dock_new_applet_icon (pMinimalConfig, pModuleInstance);

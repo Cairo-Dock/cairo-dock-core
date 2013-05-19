@@ -27,7 +27,8 @@
 #include "config.h"
 #include "gldi-config.h"
 #include "cairo-dock-config.h"
-#include "cairo-dock-module-factory.h"
+#include "cairo-dock-module-manager.h"
+#include "cairo-dock-module-instance-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-icon-facility.h"
@@ -38,7 +39,7 @@
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-launcher-factory.h"
 #include "cairo-dock-desktop-file-factory.h"
-#include "cairo-dock-X-manager.h"
+#include "cairo-dock-desktop-manager.h"  // gldi_desktop_get_width
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-gui-backend.h"
@@ -79,7 +80,6 @@ static CDCategoryEnum s_iCurrentCategory = 0;
 
 extern gchar *g_cCairoDockDataDir;
 extern CairoDock *g_pMainDock;
-extern CairoDockDesktopGeometry g_desktopGeometry;
 
 static CDWidget *_build_items_widget (void);
 static CDWidget *_build_config_widget (void);
@@ -237,8 +237,8 @@ GtkWidget *cairo_dock_build_generic_gui_window2 (const gchar *cTitle, int iWidth
 	
 	//\_____________ resize the window (placement is done later).
 	gtk_window_resize (GTK_WINDOW (pMainWindow),
-		MIN (iWidth, gldi_get_desktop_width()),
-		MIN (iHeight, gldi_get_desktop_height() - (g_pMainDock && g_pMainDock->container.bIsHorizontal ? g_pMainDock->iMaxDockHeight : 0)));
+		MIN (iWidth, gldi_desktop_get_width()),
+		MIN (iHeight, gldi_desktop_get_height() - (g_pMainDock && g_pMainDock->container.bIsHorizontal ? g_pMainDock->iMaxDockHeight : 0)));
 	
 	gtk_widget_show_all (pMainWindow);
 	
@@ -507,7 +507,7 @@ static void update_desklet_visibility_params (CairoDesklet *pDesklet)
 	}
 }
 
-static void update_module_instance_container (CairoDockModuleInstance *pInstance, gboolean bDetached)
+static void update_module_instance_container (GldiModuleInstance *pInstance, gboolean bDetached)
 {
 	if (s_pSimpleConfigWindow == NULL || pInstance == NULL)
 		return;
@@ -519,7 +519,7 @@ static void update_module_instance_container (CairoDockModuleInstance *pInstance
 	}
 }
 
-static GtkWidget *show_gui (Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, int iShowPage)
+static GtkWidget *show_gui (Icon *pIcon, GldiContainer *pContainer, GldiModuleInstance *pModuleInstance, int iShowPage)
 {
 	cairo_dock_build_simple_gui_window ();
 	
@@ -597,7 +597,7 @@ static void set_status_message_on_gui (const gchar *cMessage)
 	gtk_statusbar_push (GTK_STATUSBAR (pStatusBar), 0, cMessage);
 }
 
-static void reload_current_widget (CairoDockModuleInstance *pInstance, int iShowPage)
+static void reload_current_widget (GldiModuleInstance *pInstance, int iShowPage)
 {
 	g_return_if_fail (s_pSimpleConfigWindow != NULL);
 	
@@ -608,12 +608,12 @@ static void reload_current_widget (CairoDockModuleInstance *pInstance, int iShow
 	}
 }
 
-static void show_module_instance_gui (CairoDockModuleInstance *pModuleInstance, int iShowPage)
+static void show_module_instance_gui (GldiModuleInstance *pModuleInstance, int iShowPage)
 {
 	show_gui (pModuleInstance->pIcon, NULL, pModuleInstance, iShowPage);
 }
 
-static CairoDockGroupKeyWidget *get_widget_from_name (G_GNUC_UNUSED CairoDockModuleInstance *pInstance, const gchar *cGroupName, const gchar *cKeyName)
+static CairoDockGroupKeyWidget *get_widget_from_name (G_GNUC_UNUSED GldiModuleInstance *pInstance, const gchar *cGroupName, const gchar *cKeyName)
 {
 	g_return_val_if_fail (s_pSimpleConfigWindow != NULL, NULL);
 	cd_debug ("%s (%s, %s)", __func__, cGroupName, cKeyName);
@@ -640,7 +640,7 @@ void cairo_dock_register_simple_gui_backend (void)
 	pBackend->update_modules_list 				= update_modules_list;
 	pBackend->update_shortkeys 					= update_shortkeys;
 	pBackend->show_gui 							= show_gui;
-	pBackend->show_addons 							= show_addons;
+	pBackend->show_addons 						= show_addons;
 	pBackend->reload_items 						= reload_items;
 	pBackend->reload 							= reload;
 	pBackend->cDisplayedName 					= _("Advanced Mode");  // name of the other backend.

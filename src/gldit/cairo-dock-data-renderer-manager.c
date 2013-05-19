@@ -25,7 +25,6 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-config.h"  // cairo_dock_get_string_key_value
 #include "cairo-dock-keyfile-utilities.h"  // cairo_dock_write_keys_to_file
-#include "cairo-dock-notifications.h"
 #include "cairo-dock-opengl-font.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-data-renderer-manager.h"
@@ -210,7 +209,7 @@ void gldi_register_data_renderers_manager (void)
 	myDataRenderersMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myDataRenderersMgr.mgr.iSizeOfData = 0;
 	// signals
-	cairo_dock_install_notifications_on_object (&myDataRenderersMgr, NB_NOTIFICATIONS_DATA_RENDERERS);
+	gldi_object_install_notifications (&myDataRenderersMgr, NB_NOTIFICATIONS_DATA_RENDERERS);
 	// register
 	gldi_register_manager (GLDI_MANAGER(&myDataRenderersMgr));
 }

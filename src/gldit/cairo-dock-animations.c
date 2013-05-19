@@ -27,11 +27,12 @@
 #include "cairo-dock-dock-facility.h" // input shapes
 #include "cairo-dock-draw.h"  // for transitions
 #include "cairo-dock-draw-opengl.h"  // idem
-#include "cairo-dock-dialog-manager.h"  // cairo_dock_replace_all_dialogs
-#include "cairo-dock-applications-manager.h"  // cairo_dock_search_window_overlapping_dock
+#include "cairo-dock-desklet-manager.h"  // CAIRO_CONTAINER_IS_OPENGL
+#include "cairo-dock-dialog-manager.h"  // gldi_dialogs_replace_all
 #include "cairo-dock-dock-manager.h"
+#include "cairo-dock-applications-manager.h"
+#include "cairo-dock-dock-visibility.h"  // gldi_dock_search_overlapping_window
 #include "cairo-dock-log.h"
-#include "cairo-dock-notifications.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-overlay.h"
@@ -51,9 +52,8 @@ static gboolean _update_fade_out_dock (G_GNUC_UNUSED gpointer pUserData, CairoDo
 		pDock->bFadeInOut = FALSE;
 		//g_print ("set below\n");
 		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
-		// si fenetre maximisee, on met direct iFadeCounter a 0.  // malheureusement X met du temps a faire passer le dock derriere, et ca donne un "sursaut" :-/
-		///if (cairo_dock_search_window_covering_dock (pDock, FALSE, FALSE) != NULL)
-		///	pDock->iFadeCounter = 0;
+		// si fenetre maximisee, on met direct iFadeCounter a 0.
+		// malheureusement X met du temps a faire passer le dock derriere, et ca donne un "sursaut" :-/
 	}
 	
 	//g_print ("pDock->iFadeCounter : %d\n", pDock->iFadeCounter);
@@ -63,14 +63,14 @@ static gboolean _update_fade_out_dock (G_GNUC_UNUSED gpointer pUserData, CairoDo
 	}
 	else
 	{
-		cairo_dock_remove_notification_func_on_object (pDock,
+		gldi_object_remove_notification (pDock,
 			NOTIFICATION_UPDATE,
-			(CairoDockNotificationFunc) _update_fade_out_dock,
+			(GldiNotificationFunc) _update_fade_out_dock,
 			NULL);
 	}
 	
 	cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
 void cairo_dock_pop_up (CairoDock *pDock)
@@ -78,9 +78,9 @@ void cairo_dock_pop_up (CairoDock *pDock)
 	//g_print ("%s (%d)\n", __func__, pDock->bIsBelow);
 	if (pDock->bIsBelow)
 	{
-		cairo_dock_remove_notification_func_on_object (pDock,
+		gldi_object_remove_notification (pDock,
 			NOTIFICATION_UPDATE,
-			(CairoDockNotificationFunc) _update_fade_out_dock,
+			(GldiNotificationFunc) _update_fade_out_dock,
 			NULL);
 		pDock->iFadeCounter = 0;
 		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
@@ -95,14 +95,14 @@ void cairo_dock_pop_down (CairoDock *pDock)
 	//g_print ("%s (%d, %d)\n", __func__, pDock->bIsBelow, pDock->container.bInside);
 	if (! pDock->bIsBelow && pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && ! pDock->container.bInside)
 	{
-		if (cairo_dock_search_window_overlapping_dock (pDock) != NULL)
+		if (gldi_dock_search_overlapping_window (pDock) != NULL)
 		{
 			pDock->iFadeCounter = 0;
 			pDock->bFadeInOut = TRUE;
-			cairo_dock_register_notification_on_object (pDock,
+			gldi_object_register_notification (pDock,
 				NOTIFICATION_UPDATE,
-				(CairoDockNotificationFunc) _update_fade_out_dock,
-				CAIRO_DOCK_RUN_FIRST, NULL);
+				(GldiNotificationFunc) _update_fade_out_dock,
+				GLDI_RUN_FIRST, NULL);
 			if (g_pKeepingBelowBackend != NULL && g_pKeepingBelowBackend->init)
 				g_pKeepingBelowBackend->init (pDock);
 			cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
@@ -136,7 +136,7 @@ gfloat cairo_dock_calculate_magnitude (gint iMagnitudeIndex)  // merci a Robrob 
 }
 
 
-void cairo_dock_launch_animation (CairoContainer *pContainer)
+void cairo_dock_launch_animation (GldiContainer *pContainer)
 {
 	if (pContainer->iSidGLAnimation == 0 && pContainer->iface.animation_loop != NULL)
 	{
@@ -223,7 +223,7 @@ void cairo_dock_start_showing (CairoDock *pDock)
 			cairo_dock_set_input_shape_at_rest (pDock);
 			pDock->iInputState = CAIRO_DOCK_INPUT_AT_REST;
 			
-			cairo_dock_replace_all_dialogs ();
+			gldi_dialogs_replace_all ();
 		}
 		
 		// init the animation
@@ -249,7 +249,7 @@ void cairo_dock_start_icon_animation (Icon *pIcon, CairoDock *pDock)
 	}
 }
 
-void cairo_dock_request_icon_animation (Icon *pIcon, CairoContainer *pContainer, const gchar *cAnimation, int iNbRounds)
+void cairo_dock_request_icon_animation (Icon *pIcon, GldiContainer *pContainer, const gchar *cAnimation, int iNbRounds)
 {
 	CairoDock *pDock;
 	if (! CAIRO_DOCK_IS_DOCK (pContainer))  // at the moment, only docks can animate their icons
@@ -262,7 +262,7 @@ void cairo_dock_request_icon_animation (Icon *pIcon, CairoContainer *pContainer,
 	
 	if (cAnimation == NULL || iNbRounds == 0 || pIcon->iAnimationState != CAIRO_DOCK_STATE_REST)
 		return ;
-	cairo_dock_notify_on_object (pIcon, NOTIFICATION_REQUEST_ICON_ANIMATION, pIcon, pDock, cAnimation, iNbRounds);
+	gldi_object_notify (pIcon, NOTIFICATION_REQUEST_ICON_ANIMATION, pIcon, pDock, cAnimation, iNbRounds);
 	cairo_dock_start_icon_animation (pIcon, pDock);
 }
 
@@ -349,7 +349,7 @@ void cairo_dock_trigger_icon_removal_from_dock (Icon *pIcon)
 			pIcon->fInsertRemoveFactor = 1.0;
 		else
 			pIcon->fInsertRemoveFactor = 0.05;
-		cairo_dock_notify_on_object (pDock, NOTIFICATION_REMOVE_ICON, pIcon, pDock);
+		gldi_object_notify (pDock, NOTIFICATION_REMOVE_ICON, pIcon, pDock);
 		cairo_dock_start_icon_animation (pIcon, pDock);
 	}
 }
@@ -409,7 +409,7 @@ gboolean cairo_dock_update_inserting_removing_icon_notification (G_GNUC_UNUSED g
 	if (pIcon->fInsertRemoveFactor == 0)
 		pIcon->bBeingRemovedByCairo = FALSE;
 	if (! pIcon->bBeingRemovedByCairo)
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+		return GLDI_NOTIFICATION_LET_PASS;
 	
 	cairo_dock_update_removing_inserting_icon_size_default (pIcon);
 	
@@ -419,24 +419,24 @@ gboolean cairo_dock_update_inserting_removing_icon_notification (G_GNUC_UNUSED g
 		*bContinueAnimation = TRUE;
 	}
 	cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
 gboolean cairo_dock_on_insert_remove_icon_notification (G_GNUC_UNUSED gpointer pUserData, Icon *pIcon, G_GNUC_UNUSED CairoDock *pDock)
 {
 	if (pIcon->iAnimationState == CAIRO_DOCK_STATE_REMOVE_INSERT)  // already in insert/remove state
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+		return GLDI_NOTIFICATION_LET_PASS;
 	
 	if (pIcon->fInsertRemoveFactor == 0)  // animation not needed.
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+		return GLDI_NOTIFICATION_LET_PASS;
 	
 	cairo_dock_mark_icon_as_inserting_removing (pIcon);  // On prend en charge le dessin de l'icone pendant sa phase d'insertion/suppression.
 	
 	///if (fabs (pIcon->fInsertRemoveFactor) < .1)  // useless or not needed animation.
-	///	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	///	return GLDI_NOTIFICATION_LET_PASS;
 	
 	pIcon->bBeingRemovedByCairo = TRUE;
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
 gboolean cairo_dock_stop_inserting_removing_icon_notification (G_GNUC_UNUSED gpointer pUserData, Icon *pIcon)
@@ -444,7 +444,7 @@ gboolean cairo_dock_stop_inserting_removing_icon_notification (G_GNUC_UNUSED gpo
 	pIcon->fGlideOffset = 0;
 	pIcon->iGlideDirection = 0;
 	pIcon->bBeingRemovedByCairo = FALSE;
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
 
@@ -453,11 +453,11 @@ gboolean cairo_dock_stop_inserting_removing_icon_notification (G_GNUC_UNUSED gpo
 
 #define cairo_dock_set_transition(pIcon, transition) (pIcon)->pTransition = transition
 
-static gboolean _cairo_dock_transition_step (G_GNUC_UNUSED gpointer pUserData, Icon *pIcon, CairoContainer *pContainer, gboolean *bContinueAnimation)
+static gboolean _cairo_dock_transition_step (G_GNUC_UNUSED gpointer pUserData, Icon *pIcon, GldiContainer *pContainer, gboolean *bContinueAnimation)
 {
 	CairoDockTransition *pTransition = cairo_dock_get_transition (pIcon);
 	if (pTransition == NULL)
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+		return GLDI_NOTIFICATION_LET_PASS;
 	
 	pTransition->iCount ++;
 	int iDetlaT = (pTransition->bFastPace ? cairo_dock_get_animation_delta_t (pContainer) : cairo_dock_get_slow_animation_delta_t (pContainer));
@@ -467,7 +467,7 @@ static gboolean _cairo_dock_transition_step (G_GNUC_UNUSED gpointer pUserData, I
 		pTransition->iElapsedTime = pTransition->iDuration;
 	
 	if (! pTransition->bRemoveWhenFinished && pTransition->iDuration != 0 && pTransition->iElapsedTime >= pTransition->iDuration)  // skip
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+		return GLDI_NOTIFICATION_LET_PASS;
 	
 	gboolean bContinue = FALSE;
 	if (CAIRO_CONTAINER_IS_OPENGL (pTransition->pContainer))
@@ -475,7 +475,7 @@ static gboolean _cairo_dock_transition_step (G_GNUC_UNUSED gpointer pUserData, I
 		if (pTransition->render_opengl)
 		{
 			if (! cairo_dock_begin_draw_icon (pIcon, pContainer, 0))
-				return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+				return GLDI_NOTIFICATION_LET_PASS;
 			bContinue = pTransition->render_opengl (pIcon, pTransition->pUserData);
 			cairo_dock_end_draw_icon (pIcon, pContainer);
 			cairo_dock_redraw_icon (pIcon, pContainer);
@@ -502,9 +502,9 @@ static gboolean _cairo_dock_transition_step (G_GNUC_UNUSED gpointer pUserData, I
 	{
 		*bContinueAnimation = TRUE;
 	}
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
-void cairo_dock_set_transition_on_icon (Icon *pIcon, CairoContainer *pContainer, CairoDockTransitionRenderFunc render_step_cairo, CairoDockTransitionGLRenderFunc render_step_opengl, gboolean bFastPace, gint iDuration, gboolean bRemoveWhenFinished, gpointer pUserData, GFreeFunc pFreeUserDataFunc)
+void cairo_dock_set_transition_on_icon (Icon *pIcon, GldiContainer *pContainer, CairoDockTransitionRenderFunc render_step_cairo, CairoDockTransitionGLRenderFunc render_step_opengl, gboolean bFastPace, gint iDuration, gboolean bRemoveWhenFinished, gpointer pUserData, GFreeFunc pFreeUserDataFunc)
 {
 	cairo_dock_remove_transition_on_icon (pIcon);
 	
@@ -519,10 +519,10 @@ void cairo_dock_set_transition_on_icon (Icon *pIcon, CairoContainer *pContainer,
 	pTransition->pFreeUserDataFunc = pFreeUserDataFunc;
 	cairo_dock_set_transition (pIcon, pTransition);
 	
-	cairo_dock_register_notification_on_object (pIcon,
+	gldi_object_register_notification (pIcon,
 		bFastPace ? NOTIFICATION_UPDATE_ICON : NOTIFICATION_UPDATE_ICON_SLOW,
-		(CairoDockNotificationFunc) _cairo_dock_transition_step,
-		CAIRO_DOCK_RUN_AFTER, pUserData);
+		(GldiNotificationFunc) _cairo_dock_transition_step,
+		GLDI_RUN_AFTER, pUserData);
 	
 	cairo_dock_launch_animation (pContainer);
 }
@@ -533,9 +533,9 @@ void cairo_dock_remove_transition_on_icon (Icon *pIcon)
 	if (pTransition == NULL)
 		return ;
 	
-	cairo_dock_remove_notification_func_on_object (pIcon,
+	gldi_object_remove_notification (pIcon,
 		pTransition->bFastPace ? NOTIFICATION_UPDATE_ICON : NOTIFICATION_UPDATE_ICON_SLOW,
-		(CairoDockNotificationFunc) _cairo_dock_transition_step,
+		(GldiNotificationFunc) _cairo_dock_transition_step,
 		pTransition->pUserData);
 	
 	if (pTransition->pFreeUserDataFunc != NULL)

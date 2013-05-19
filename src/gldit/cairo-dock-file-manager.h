@@ -256,10 +256,10 @@ gboolean cairo_dock_fm_show_system_monitor (void);
 
 /** Create an Icon representing a given URI.
 */
-Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, CairoContainer *pContainer, CairoDockFMSortType iFileSortType);
+Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, GldiContainer *pContainer, CairoDockFMSortType iFileSortType);
 
 
-gboolean cairo_dock_fm_move_into_directory (const gchar *cURI, Icon *icon, CairoContainer *pContainer);
+gboolean cairo_dock_fm_move_into_directory (const gchar *cURI, Icon *icon, GldiContainer *pContainer);
 
 
 /** Get the size of a local file.

@@ -31,8 +31,7 @@
 #include "config.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-keyfile-utilities.h"
-#include "cairo-dock-module-manager.h"
-#include "cairo-dock-module-factory.h"
+#include "cairo-dock-desklet-factory.h"  // cairo_dock_desklet_is_sticky
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-factory.h"
@@ -40,7 +39,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-packages.h"
 #include "cairo-dock-keybinder.h"
-#include "cairo-dock-X-manager.h"
+#include "cairo-dock-desktop-manager.h"  // gldi_desktop_get_width
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-dialog-manager.h"
@@ -50,7 +49,6 @@
 
 #define CAIRO_DOCK_PLUGINS_EXTRAS_URL "http://extras.glx-dock.org"
 
-extern CairoDockDesktopGeometry g_desktopGeometry;
 extern gchar *g_cCairoDockDataDir;
 
 
@@ -85,8 +83,8 @@ void cairo_dock_update_desklet_widgets (CairoDesklet *pDesklet, GSList *pWidgetL
 			0, 0, NULL, _cairo_dock_set_value_in_pair, NULL);
 	}
 	
-	int iRelativePositionX = (pDesklet->container.iWindowPositionX + pDesklet->container.iWidth/2 <= gldi_get_desktop_width()/2 ? pDesklet->container.iWindowPositionX : pDesklet->container.iWindowPositionX - gldi_get_desktop_width());
-	int iRelativePositionY = (pDesklet->container.iWindowPositionY + pDesklet->container.iHeight/2 <= gldi_get_desktop_height()/2 ? pDesklet->container.iWindowPositionY : pDesklet->container.iWindowPositionY - gldi_get_desktop_height());
+	int iRelativePositionX = (pDesklet->container.iWindowPositionX + pDesklet->container.iWidth/2 <= gldi_desktop_get_width()/2 ? pDesklet->container.iWindowPositionX : pDesklet->container.iWindowPositionX - gldi_desktop_get_width());
+	int iRelativePositionY = (pDesklet->container.iWindowPositionY + pDesklet->container.iHeight/2 <= gldi_desktop_get_height()/2 ? pDesklet->container.iWindowPositionY : pDesklet->container.iWindowPositionY - gldi_desktop_get_height());
 	
 	pGroupKeyWidget = cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, "Desklet", "x position");
 	g_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
@@ -108,7 +106,7 @@ void cairo_dock_update_desklet_visibility_widgets (CairoDesklet *pDesklet, GSLis
 {
 	CairoDockGroupKeyWidget *pGroupKeyWidget;
 	GtkWidget *pOneWidget;
-	gboolean bIsSticky = cairo_dock_desklet_is_sticky (pDesklet);
+	gboolean bIsSticky = gldi_desklet_is_sticky (pDesklet);
 	CairoDeskletVisibility iVisibility = pDesklet->iVisibility;
 	
 	pGroupKeyWidget = cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, "Desklet", "accessibility");

@@ -27,7 +27,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-icon-facility.h"  // cairo_dock_get_icon_extent
 #include "cairo-dock-draw-opengl.h"
-#include "cairo-dock-X-manager.h"  // desktop dimensions
+#include "cairo-dock-desktop-manager.h"  // desktop dimensions
 
 #include "cairo-dock-opengl.h"
 
@@ -36,8 +36,8 @@ CairoDockGLConfig g_openglConfig;
 gboolean g_bUseOpenGL = FALSE;
 
 // dependancies
-extern CairoContainer *g_pPrimaryContainer;
-extern CairoDockDesktopBackground *g_pFakeTransparencyDesktopBg;
+extern GldiContainer *g_pPrimaryContainer;
+extern GldiDesktopBackground *g_pFakeTransparencyDesktopBg;
 extern gboolean g_bEasterEggs;
 
 // private
@@ -86,7 +86,7 @@ static gboolean _check_client_glx_extension (const char *extName)
 }
 
 
-static void _post_initialize_opengl_backend (G_GNUC_UNUSED GtkWidget *pWidget, CairoContainer *pContainer)  // initialisation necessitant un contexte opengl.
+static void _post_initialize_opengl_backend (G_GNUC_UNUSED GtkWidget *pWidget, GldiContainer *pContainer)  // initialisation necessitant un contexte opengl.
 {
 	g_return_if_fail (!s_bInitialized);
 	
@@ -320,7 +320,7 @@ static inline void _cairo_dock_set_perspective_view (int iWidth, int iHeight)
 	glTranslatef (0., 0., -iHeight*(sqrt(3)/2) - 1);
 	//glTranslatef (iWidth/2, iHeight/2, -iHeight*(sqrt(3)/2) - 1);
 }
-void cairo_dock_set_perspective_view (CairoContainer *pContainer)
+void cairo_dock_set_perspective_view (GldiContainer *pContainer)
 {
 	int w, h;
 	if (pContainer->bIsHorizontal)
@@ -337,7 +337,7 @@ void cairo_dock_set_perspective_view (CairoContainer *pContainer)
 	pContainer->bPerspectiveView = TRUE;
 }
 
-void cairo_dock_set_perspective_view_for_icon (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer)
+void cairo_dock_set_perspective_view_for_icon (Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer)
 {
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, &w, &h);
@@ -358,7 +358,7 @@ static inline void _cairo_dock_set_ortho_view (int iWidth, int iHeight)
 		0.0f, 1.0f, 0.0f);
 	glTranslatef (iWidth/2, iHeight/2, - iHeight/2);
 }
-void cairo_dock_set_ortho_view (CairoContainer *pContainer)
+void cairo_dock_set_ortho_view (GldiContainer *pContainer)
 {
 	int w, h;
 	if (pContainer->bIsHorizontal)
@@ -375,7 +375,7 @@ void cairo_dock_set_ortho_view (CairoContainer *pContainer)
 	pContainer->bPerspectiveView = FALSE;
 }
 
-void cairo_dock_set_ortho_view_for_icon (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer)
+void cairo_dock_set_ortho_view_for_icon (Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer)
 {
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, &w, &h);
@@ -383,7 +383,7 @@ void cairo_dock_set_ortho_view_for_icon (Icon *pIcon, G_GNUC_UNUSED CairoContain
 }
 
 
-void gldi_glx_apply_desktop_background (CairoContainer *pContainer)
+void gldi_glx_apply_desktop_background (GldiContainer *pContainer)
 {
 	if (/**! myContainersParam.bUseFakeTransparency || */! g_pFakeTransparencyDesktopBg || g_pFakeTransparencyDesktopBg->iTexture == 0)
 		return ;
@@ -437,7 +437,7 @@ void gldi_glx_apply_desktop_background (CairoContainer *pContainer)
 }
 
 
-gboolean gldi_glx_make_current (CairoContainer *pContainer)
+gboolean gldi_glx_make_current (GldiContainer *pContainer)
 {
 	Display *dpy = gdk_x11_display_get_xdisplay (gdk_display_get_default ());
 	Window Xid = gldi_container_get_Xid (pContainer);
@@ -445,7 +445,7 @@ gboolean gldi_glx_make_current (CairoContainer *pContainer)
 	return glXMakeCurrent (dpy, Xid, pContainer->glContext);
 }
 
-gboolean gldi_glx_begin_draw_container_full (CairoContainer *pContainer, gboolean bClear)
+gboolean gldi_glx_begin_draw_container_full (GldiContainer *pContainer, gboolean bClear)
 {
 	if (! gldi_glx_make_current (pContainer))
 		return FALSE;
@@ -460,7 +460,7 @@ gboolean gldi_glx_begin_draw_container_full (CairoContainer *pContainer, gboolea
 	return TRUE;
 }
 
-void gldi_glx_end_draw_container (CairoContainer *pContainer)
+void gldi_glx_end_draw_container (GldiContainer *pContainer)
 {
 	Display *dpy = gdk_x11_display_get_xdisplay (gdk_display_get_default ());
 	Window Xid = gldi_container_get_Xid (pContainer);
@@ -468,7 +468,7 @@ void gldi_glx_end_draw_container (CairoContainer *pContainer)
 	glXSwapBuffers (dpy, Xid);
 }
 
-static void _init_opengl_context (G_GNUC_UNUSED GtkWidget* pWidget, CairoContainer *pContainer)
+static void _init_opengl_context (G_GNUC_UNUSED GtkWidget* pWidget, GldiContainer *pContainer)
 {
 	if (! g_bUseOpenGL)
 		return ;
@@ -499,7 +499,7 @@ static void _init_opengl_context (G_GNUC_UNUSED GtkWidget* pWidget, CairoContain
 		GL_TEXTURE_MAG_FILTER,
 		GL_LINEAR);
 }
-void gldi_glx_init_container (CairoContainer *pContainer)
+void gldi_glx_init_container (GldiContainer *pContainer)
 {
 	// Set the visual we found during the init
 	#if (GTK_MAJOR_VERSION < 3)
@@ -510,8 +510,6 @@ void gldi_glx_init_container (CairoContainer *pContainer)
 	
 	// create a GL context for this container (this way, we can set the viewport once and for all).
 	Display *dpy = gdk_x11_display_get_xdisplay (gdk_display_get_default ());
-	///gboolean bFirstContainer = (! g_pPrimaryContainer || ! g_pPrimaryContainer->pWidget);
-	///GLXContext context = (bFirstContainer ? NULL : g_pPrimaryContainer->glContext);
 	GLXContext context = g_openglConfig.context;
 	pContainer->glContext = glXCreateContext (dpy, g_openglConfig.pVisInfo, context, TRUE);
 	
@@ -532,7 +530,7 @@ void gldi_glx_init_container (CairoContainer *pContainer)
 		pContainer);
 }
 
-void gldi_glx_finish_container (CairoContainer *pContainer)
+void gldi_glx_finish_container (GldiContainer *pContainer)
 {
 	if (pContainer->glContext != 0)
 	{

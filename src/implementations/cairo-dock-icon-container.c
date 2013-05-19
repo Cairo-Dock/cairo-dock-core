@@ -41,7 +41,7 @@ extern CairoDock *g_pMainDock;
 extern gboolean g_bUseOpenGL;
 
 
-static void _cairo_dock_draw_subdock_content_as_emblem (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer, int w, int h, cairo_t *pCairoContext)
+static void _cairo_dock_draw_subdock_content_as_emblem (Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer, int w, int h, cairo_t *pCairoContext)
 {
 	//\______________ On dessine les 4 premieres icones du sous-dock en embleme.
 	int wi, hi;
@@ -70,7 +70,7 @@ static void _cairo_dock_draw_subdock_content_as_emblem (Icon *pIcon, G_GNUC_UNUS
 	}
 }
 
-static void _cairo_dock_draw_subdock_content_as_emblem_opengl (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer, int w, int h)
+static void _cairo_dock_draw_subdock_content_as_emblem_opengl (Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer, int w, int h)
 {
 	//\______________ On dessine les 4 premieres icones du sous-dock en embleme.
 	int i;
@@ -89,7 +89,7 @@ static void _cairo_dock_draw_subdock_content_as_emblem_opengl (Icon *pIcon, G_GN
 	}
 }
 
-static void _cairo_dock_draw_subdock_content_as_stack (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer, int w, int h, cairo_t *pCairoContext)
+static void _cairo_dock_draw_subdock_content_as_stack (Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer, int w, int h, cairo_t *pCairoContext)
 {
 	//\______________ On dessine les 4 premieres icones du sous-dock en pile.
 	int wi, hi;
@@ -134,7 +134,7 @@ static void _cairo_dock_draw_subdock_content_as_stack (Icon *pIcon, G_GNUC_UNUSE
 	}
 }
 
-static void _cairo_dock_draw_subdock_content_as_stack_opengl (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer, int w, int h)
+static void _cairo_dock_draw_subdock_content_as_stack_opengl (Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer, int w, int h)
 {
 	//\______________ On dessine les 4 premieres icones du sous-dock en pile.
 	int i,k=0;
@@ -211,7 +211,7 @@ static void _cairo_dock_unload_box_surface (void)
 	cairo_dock_unload_image_buffer (&g_pBoxBelowBuffer);
 }
 
-static void _cairo_dock_draw_subdock_content_as_box (Icon *pIcon, CairoContainer *pContainer, int w, int h, cairo_t *pCairoContext)
+static void _cairo_dock_draw_subdock_content_as_box (Icon *pIcon, GldiContainer *pContainer, int w, int h, cairo_t *pCairoContext)
 {
 	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
 	cairo_save (pCairoContext);
@@ -296,7 +296,7 @@ static void _cairo_dock_draw_subdock_content_as_box (Icon *pIcon, CairoContainer
 		1.);
 }
 
-static void _cairo_dock_draw_subdock_content_as_box_opengl (Icon *pIcon, CairoContainer *pContainer, int w, int h)
+static void _cairo_dock_draw_subdock_content_as_box_opengl (Icon *pIcon, GldiContainer *pContainer, int w, int h)
 {
 	_cairo_dock_set_blend_source ();
 	glPushMatrix ();

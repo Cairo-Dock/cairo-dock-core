@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 *@param pModuleInstance instance of the module.
 *@return the newly allocated icon.
 */
-G_GNUC_MALLOC Icon *cairo_dock_new_applet_icon (CairoDockMinimalAppletConfig *pMinimalConfig, CairoDockModuleInstance *pModuleInstance);
+G_GNUC_MALLOC Icon *cairo_dock_new_applet_icon (CairoDockMinimalAppletConfig *pMinimalConfig, GldiModuleInstance *pModuleInstance);
 
 
 G_END_DECLS

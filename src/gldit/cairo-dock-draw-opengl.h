@@ -35,15 +35,15 @@ G_BEGIN_DECLS
 *@file cairo-dock-draw-opengl.h This class provides some useful functions to draw with OpenGL.
 */
 
-void cairo_dock_set_icon_scale (Icon *pIcon, CairoContainer *pContainer, double fZoomFactor);
+void cairo_dock_set_icon_scale (Icon *pIcon, GldiContainer *pContainer, double fZoomFactor);
 
-void cairo_dock_set_container_orientation_opengl (CairoContainer *pContainer);
+void cairo_dock_set_container_orientation_opengl (GldiContainer *pContainer);
 
 void cairo_dock_draw_icon_reflect_opengl (Icon *pIcon, CairoDock *pDock);
 
 void cairo_dock_draw_icon_opengl (Icon *pIcon, CairoDock *pDock);
 
-void cairo_dock_translate_on_icon_opengl (Icon *icon, CairoContainer *pContainer, double fDockMagnitude);
+void cairo_dock_translate_on_icon_opengl (Icon *icon, GldiContainer *pContainer, double fDockMagnitude);
 
 /** Draw an icon, according to its current parameters : position, transparency, reflect, rotation, stretching. Also draws its indicators, label, and quick-info. It generates a CAIRO_DOCK_RENDER_ICON notification.
 *@param icon the icon to draw.
@@ -96,7 +96,7 @@ GLuint cairo_dock_create_texture_from_image_full (const gchar *cImagePath, doubl
 */
 void cairo_dock_update_icon_texture (Icon *pIcon);
 
-void cairo_dock_draw_hidden_appli_icon (Icon *pIcon, CairoContainer *pContainer, gboolean bStateChanged);
+void cairo_dock_draw_hidden_appli_icon (Icon *pIcon, GldiContainer *pContainer, gboolean bStateChanged);
 
   //////////////////
  // DRAW TEXTURE //
@@ -198,11 +198,8 @@ void cairo_dock_draw_texture_with_alpha (GLuint iTexture, int iWidth, int iHeigh
 void cairo_dock_draw_texture (GLuint iTexture, int iWidth, int iHeight);
 
 void cairo_dock_apply_icon_texture (Icon *pIcon);
-void cairo_dock_apply_icon_texture_at_current_size (Icon *pIcon, CairoContainer *pContainer);
-void cairo_dock_draw_icon_texture (Icon *pIcon, CairoContainer *pContainer);
-
-
-GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap);
+void cairo_dock_apply_icon_texture_at_current_size (Icon *pIcon, GldiContainer *pContainer);
+void cairo_dock_draw_icon_texture (Icon *pIcon, GldiContainer *pContainer);
 
 
 G_END_DECLS

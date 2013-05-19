@@ -56,35 +56,35 @@ typedef struct _AppletData AppletData;
 
 //\_________________________________ PROTO
 #define CD_APPLET_DEFINE_PROTO \
-gboolean CD_APPLET_DEFINE_FUNC (CairoDockVisitCard *pVisitCard, CairoDockModuleInterface *pInterface)
+gboolean CD_APPLET_DEFINE_FUNC (GldiVisitCard *pVisitCard, GldiModuleInterface *pInterface)
 #define CD_APPLET_INIT_PROTO(pApplet) \
-void CD_APPLET_INIT_FUNC (CairoDockModuleInstance *pApplet, G_GNUC_UNUSED GKeyFile *pKeyFile)
+void CD_APPLET_INIT_FUNC (GldiModuleInstance *pApplet, G_GNUC_UNUSED GKeyFile *pKeyFile)
 #define CD_APPLET_STOP_PROTO \
-void CD_APPLET_STOP_FUNC (CairoDockModuleInstance *myApplet)
+void CD_APPLET_STOP_FUNC (GldiModuleInstance *myApplet)
 #define CD_APPLET_RELOAD_PROTO \
-gboolean CD_APPLET_RELOAD_FUNC (CairoDockModuleInstance *myApplet, CairoContainer *pOldContainer, G_GNUC_UNUSED GKeyFile *pKeyFile)
+gboolean CD_APPLET_RELOAD_FUNC (GldiModuleInstance *myApplet, GldiContainer *pOldContainer, G_GNUC_UNUSED GKeyFile *pKeyFile)
 
 #define CD_APPLET_READ_CONFIG_PROTO \
-gboolean CD_APPLET_READ_CONFIG_FUNC (CairoDockModuleInstance *myApplet, G_GNUC_UNUSED GKeyFile *pKeyFile)
+gboolean CD_APPLET_READ_CONFIG_FUNC (GldiModuleInstance *myApplet, G_GNUC_UNUSED GKeyFile *pKeyFile)
 #define CD_APPLET_RESET_CONFIG_PROTO \
-void CD_APPLET_RESET_CONFIG_FUNC (CairoDockModuleInstance *myApplet)
+void CD_APPLET_RESET_CONFIG_FUNC (GldiModuleInstance *myApplet)
 #define CD_APPLET_RESET_DATA_PROTO \
-void CD_APPLET_RESET_DATA_FUNC (CairoDockModuleInstance *myApplet)
+void CD_APPLET_RESET_DATA_FUNC (GldiModuleInstance *myApplet)
 
 #define CD_APPLET_ON_CLICK_PROTO \
-gboolean CD_APPLET_ON_CLICK_FUNC (CairoDockModuleInstance *myApplet, Icon *pClickedIcon, CairoContainer *pClickedContainer, G_GNUC_UNUSED guint iButtonState)
+gboolean CD_APPLET_ON_CLICK_FUNC (GldiModuleInstance *myApplet, Icon *pClickedIcon, GldiContainer *pClickedContainer, G_GNUC_UNUSED guint iButtonState)
 #define CD_APPLET_ON_BUILD_MENU_PROTO \
-gboolean CD_APPLET_ON_BUILD_MENU_FUNC (CairoDockModuleInstance *myApplet, Icon *pClickedIcon, CairoContainer *pClickedContainer, GtkWidget *pAppletMenu)
+gboolean CD_APPLET_ON_BUILD_MENU_FUNC (GldiModuleInstance *myApplet, Icon *pClickedIcon, GldiContainer *pClickedContainer, GtkWidget *pAppletMenu)
 #define CD_APPLET_ON_MIDDLE_CLICK_PROTO \
-gboolean CD_APPLET_ON_MIDDLE_CLICK_FUNC (CairoDockModuleInstance *myApplet, Icon *pClickedIcon, CairoContainer *pClickedContainer)
+gboolean CD_APPLET_ON_MIDDLE_CLICK_FUNC (GldiModuleInstance *myApplet, Icon *pClickedIcon, GldiContainer *pClickedContainer)
 #define CD_APPLET_ON_DOUBLE_CLICK_PROTO \
-gboolean CD_APPLET_ON_DOUBLE_CLICK_FUNC (CairoDockModuleInstance *myApplet, Icon *pClickedIcon, CairoContainer *pClickedContainer)
+gboolean CD_APPLET_ON_DOUBLE_CLICK_FUNC (GldiModuleInstance *myApplet, Icon *pClickedIcon, GldiContainer *pClickedContainer)
 #define CD_APPLET_ON_DROP_DATA_PROTO \
-gboolean CD_APPLET_ON_DROP_DATA_FUNC (CairoDockModuleInstance *myApplet, const gchar *cReceivedData, Icon *pClickedIcon, double fPosition, CairoContainer *pClickedContainer)
+gboolean CD_APPLET_ON_DROP_DATA_FUNC (GldiModuleInstance *myApplet, const gchar *cReceivedData, Icon *pClickedIcon, double fPosition, GldiContainer *pClickedContainer)
 #define CD_APPLET_ON_SCROLL_PROTO \
-gboolean CD_APPLET_ON_SCROLL_FUNC (CairoDockModuleInstance *myApplet, Icon *pClickedIcon, CairoContainer *pClickedContainer, int iDirection)
+gboolean CD_APPLET_ON_SCROLL_FUNC (GldiModuleInstance *myApplet, Icon *pClickedIcon, GldiContainer *pClickedContainer, int iDirection)
 #define CD_APPLET_ON_UPDATE_ICON_PROTO \
-gboolean CD_APPLET_ON_UPDATE_ICON_FUNC (CairoDockModuleInstance *myApplet, Icon *pIcon, CairoContainer *pContainer, gboolean *bContinueAnimation)
+gboolean CD_APPLET_ON_UPDATE_ICON_FUNC (GldiModuleInstance *myApplet, Icon *pIcon, GldiContainer *pContainer, gboolean *bContinueAnimation)
 
 //\_________________________________ HEADERS
 #define CD_APPLET_H \
@@ -285,10 +285,10 @@ CD_APPLET_ON_CLICK_PROTO \
 */
 #define CD_APPLET_ON_CLICK_END \
 		g_pCurrentModule = NULL;\
-		return CAIRO_DOCK_INTERCEPT_NOTIFICATION; \
+		return GLDI_NOTIFICATION_INTERCEPT; \
 	} \
 	g_pCurrentModule = NULL;\
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION; \
+	return GLDI_NOTIFICATION_LET_PASS; \
 }
 
 //\______________________ on build menu.
@@ -309,7 +309,7 @@ CD_APPLET_ON_BUILD_MENU_PROTO \
 #define CD_APPLET_ON_BUILD_MENU_END \
 	} \
 	g_pCurrentModule = NULL;\
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION; \
+	return GLDI_NOTIFICATION_LET_PASS; \
 }
 
 //\______________________ on middle-click.
@@ -325,10 +325,10 @@ CD_APPLET_ON_MIDDLE_CLICK_PROTO \
 */
 #define CD_APPLET_ON_MIDDLE_CLICK_END \
 		g_pCurrentModule = NULL;\
-		return CAIRO_DOCK_INTERCEPT_NOTIFICATION; \
+		return GLDI_NOTIFICATION_INTERCEPT; \
 	} \
 	g_pCurrentModule = NULL;\
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION; \
+	return GLDI_NOTIFICATION_LET_PASS; \
 }
 
 //\______________________ on double-click.
@@ -344,10 +344,10 @@ CD_APPLET_ON_DOUBLE_CLICK_PROTO \
 */
 #define CD_APPLET_ON_DOUBLE_CLICK_END \
 		g_pCurrentModule = NULL;\
-		return CAIRO_DOCK_INTERCEPT_NOTIFICATION; \
+		return GLDI_NOTIFICATION_INTERCEPT; \
 	} \
 	g_pCurrentModule = NULL;\
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION; \
+	return GLDI_NOTIFICATION_LET_PASS; \
 }
 
 //\______________________ on drop-data.
@@ -359,15 +359,15 @@ CD_APPLET_ON_DROP_DATA_PROTO \
 	g_pCurrentModule = myApplet;\
 	if (pClickedIcon == myIcon || (myIcon != NULL && pClickedContainer == CAIRO_CONTAINER (myIcon->pSubDock)) || pClickedContainer == CAIRO_CONTAINER (myDesklet)) \
 	{ \
-		g_return_val_if_fail (cReceivedData != NULL, CAIRO_DOCK_LET_PASS_NOTIFICATION);
+		g_return_val_if_fail (cReceivedData != NULL, GLDI_NOTIFICATION_LET_PASS);
 /** Fin de la fonction de notification du glisse-depose. Par defaut elle intercepte la notification si elle l'a recue.
 */
 #define CD_APPLET_ON_DROP_DATA_END \
 		g_pCurrentModule = NULL;\
-		return CAIRO_DOCK_INTERCEPT_NOTIFICATION; \
+		return GLDI_NOTIFICATION_INTERCEPT; \
 	} \
 	g_pCurrentModule = NULL;\
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION; \
+	return GLDI_NOTIFICATION_LET_PASS; \
 }
 
 //\______________________ on scroll.
@@ -383,10 +383,10 @@ CD_APPLET_ON_SCROLL_PROTO \
 */
 #define CD_APPLET_ON_SCROLL_END \
 		g_pCurrentModule = NULL;\
-		return CAIRO_DOCK_INTERCEPT_NOTIFICATION; \
+		return GLDI_NOTIFICATION_INTERCEPT; \
 	} \
 	g_pCurrentModule = NULL;\
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION; \
+	return GLDI_NOTIFICATION_LET_PASS; \
 }
 
 //\______________________ on update icon.
@@ -396,7 +396,7 @@ CD_APPLET_ON_SCROLL_PROTO \
 CD_APPLET_ON_UPDATE_ICON_PROTO \
 { \
 	if (pIcon != myIcon)\
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;\
+		return GLDI_NOTIFICATION_LET_PASS;\
 	g_pCurrentModule = myApplet;
 /** Fin de la fonction de notification d'update icon.
 */
@@ -404,7 +404,7 @@ CD_APPLET_ON_UPDATE_ICON_PROTO \
 	*bContinueAnimation = TRUE;\
 	CD_APPLET_REDRAW_MY_ICON;\
 	g_pCurrentModule = NULL;\
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION; \
+	return GLDI_NOTIFICATION_LET_PASS; \
 }
 
 /** Quit the update function immediately and wait for the next update.
@@ -412,90 +412,90 @@ CD_APPLET_ON_UPDATE_ICON_PROTO \
 #define CD_APPLET_SKIP_UPDATE_ICON do { \
 	*bContinueAnimation = TRUE; \
 	g_pCurrentModule = NULL;\
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION; } while (0)
+	return GLDI_NOTIFICATION_LET_PASS; } while (0)
 
 /** Quit the update function immediately with no more updates.
 */
 #define CD_APPLET_STOP_UPDATE_ICON do { \
 	g_pCurrentModule = NULL;\
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION; } while (0)
+	return GLDI_NOTIFICATION_LET_PASS; } while (0)
 
 /** Quit the update function immediately with no more updates after redrawing the icon.
 */
 #define CD_APPLET_PAUSE_UPDATE_ICON do { \
 	CD_APPLET_REDRAW_MY_ICON; \
 	g_pCurrentModule = NULL;\
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION; } while (0)
+	return GLDI_NOTIFICATION_LET_PASS; } while (0)
 
 
 //\_________________________________ NOTIFICATIONS
 //\______________________ notification clique gauche.
 /** Abonne l'applet aux notifications du clic gauche. A effectuer lors de l'init de l'applet.
 */
-#define CD_APPLET_REGISTER_FOR_CLICK_EVENT cairo_dock_register_notification_on_object (&myContainersMgr, NOTIFICATION_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_CLICK_FUNC, CAIRO_DOCK_RUN_AFTER, myApplet);
+#define CD_APPLET_REGISTER_FOR_CLICK_EVENT gldi_object_register_notification (&myContainersMgr, NOTIFICATION_CLICK_ICON, (GldiNotificationFunc) CD_APPLET_ON_CLICK_FUNC, GLDI_RUN_AFTER, myApplet);
 /** Desabonne l'applet aux notifications du clic gauche. A effectuer lors de l'arret de l'applet.
 */
-#define CD_APPLET_UNREGISTER_FOR_CLICK_EVENT cairo_dock_remove_notification_func_on_object (&myContainersMgr, NOTIFICATION_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_CLICK_FUNC, myApplet);
+#define CD_APPLET_UNREGISTER_FOR_CLICK_EVENT gldi_object_remove_notification (&myContainersMgr, NOTIFICATION_CLICK_ICON, (GldiNotificationFunc) CD_APPLET_ON_CLICK_FUNC, myApplet);
 /** Abonne l'applet aux notifications de construction du menu. A effectuer lors de l'init de l'applet.
 */
 
 //\______________________ notification construction menu.
-#define CD_APPLET_REGISTER_FOR_BUILD_MENU_EVENT cairo_dock_register_notification_on_object (&myContainersMgr, NOTIFICATION_BUILD_ICON_MENU, (CairoDockNotificationFunc) CD_APPLET_ON_BUILD_MENU_FUNC, CAIRO_DOCK_RUN_FIRST, myApplet);
+#define CD_APPLET_REGISTER_FOR_BUILD_MENU_EVENT gldi_object_register_notification (&myContainersMgr, NOTIFICATION_BUILD_ICON_MENU, (GldiNotificationFunc) CD_APPLET_ON_BUILD_MENU_FUNC, GLDI_RUN_FIRST, myApplet);
 /** Desabonne l'applet aux notifications de construction du menu. A effectuer lors de l'arret de l'applet.
 */
-#define CD_APPLET_UNREGISTER_FOR_BUILD_MENU_EVENT cairo_dock_remove_notification_func_on_object (&myContainersMgr, NOTIFICATION_BUILD_ICON_MENU, (CairoDockNotificationFunc) CD_APPLET_ON_BUILD_MENU_FUNC, myApplet);
+#define CD_APPLET_UNREGISTER_FOR_BUILD_MENU_EVENT gldi_object_remove_notification (&myContainersMgr, NOTIFICATION_BUILD_ICON_MENU, (GldiNotificationFunc) CD_APPLET_ON_BUILD_MENU_FUNC, myApplet);
 
 //\______________________ notification clic milieu.
 /** Abonne l'applet aux notifications du clic du milieu. A effectuer lors de l'init de l'applet.
 */
-#define CD_APPLET_REGISTER_FOR_MIDDLE_CLICK_EVENT cairo_dock_register_notification_on_object (&myContainersMgr, NOTIFICATION_MIDDLE_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_MIDDLE_CLICK_FUNC, CAIRO_DOCK_RUN_AFTER, myApplet)
+#define CD_APPLET_REGISTER_FOR_MIDDLE_CLICK_EVENT gldi_object_register_notification (&myContainersMgr, NOTIFICATION_MIDDLE_CLICK_ICON, (GldiNotificationFunc) CD_APPLET_ON_MIDDLE_CLICK_FUNC, GLDI_RUN_AFTER, myApplet)
 /** Desabonne l'applet aux notifications du clic du milieu. A effectuer lors de l'arret de l'applet.
 */
-#define CD_APPLET_UNREGISTER_FOR_MIDDLE_CLICK_EVENT cairo_dock_remove_notification_func_on_object (&myContainersMgr, NOTIFICATION_MIDDLE_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_MIDDLE_CLICK_FUNC, myApplet)
+#define CD_APPLET_UNREGISTER_FOR_MIDDLE_CLICK_EVENT gldi_object_remove_notification (&myContainersMgr, NOTIFICATION_MIDDLE_CLICK_ICON, (GldiNotificationFunc) CD_APPLET_ON_MIDDLE_CLICK_FUNC, myApplet)
 
 //\______________________ notification double clic.
 /** Abonne l'applet aux notifications du double clic. A effectuer lors de l'init de l'applet.
 */
 #define CD_APPLET_REGISTER_FOR_DOUBLE_CLICK_EVENT do {\
 	cairo_dock_listen_for_double_click (myIcon);\
-	cairo_dock_register_notification_on_object (&myContainersMgr, NOTIFICATION_DOUBLE_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_DOUBLE_CLICK_FUNC, CAIRO_DOCK_RUN_AFTER, myApplet); } while (0)
+	gldi_object_register_notification (&myContainersMgr, NOTIFICATION_DOUBLE_CLICK_ICON, (GldiNotificationFunc) CD_APPLET_ON_DOUBLE_CLICK_FUNC, GLDI_RUN_AFTER, myApplet); } while (0)
 /** Desabonne l'applet aux notifications du double clic. A effectuer lors de l'arret de l'applet.
 */
 #define CD_APPLET_UNREGISTER_FOR_DOUBLE_CLICK_EVENT do {\
-	cairo_dock_remove_notification_func_on_object (&myContainersMgr, NOTIFICATION_DOUBLE_CLICK_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_DOUBLE_CLICK_FUNC, myApplet);\
+	gldi_object_remove_notification (&myContainersMgr, NOTIFICATION_DOUBLE_CLICK_ICON, (GldiNotificationFunc) CD_APPLET_ON_DOUBLE_CLICK_FUNC, myApplet);\
 	cairo_dock_stop_listening_for_double_click (myIcon); } while (0)
 
 //\______________________ notification drag'n'drop.
 /** Abonne l'applet aux notifications du glisse-depose. A effectuer lors de l'init de l'applet.
 */
-#define CD_APPLET_REGISTER_FOR_DROP_DATA_EVENT cairo_dock_register_notification_on_object (&myContainersMgr, NOTIFICATION_DROP_DATA, (CairoDockNotificationFunc) CD_APPLET_ON_DROP_DATA_FUNC, CAIRO_DOCK_RUN_FIRST, myApplet);
+#define CD_APPLET_REGISTER_FOR_DROP_DATA_EVENT gldi_object_register_notification (&myContainersMgr, NOTIFICATION_DROP_DATA, (GldiNotificationFunc) CD_APPLET_ON_DROP_DATA_FUNC, GLDI_RUN_FIRST, myApplet);
 /** Desabonne l'applet aux notifications du glisse-depose. A effectuer lors de l'arret de l'applet.
 */
-#define CD_APPLET_UNREGISTER_FOR_DROP_DATA_EVENT cairo_dock_remove_notification_func_on_object (&myContainersMgr, NOTIFICATION_DROP_DATA, (CairoDockNotificationFunc) CD_APPLET_ON_DROP_DATA_FUNC, myApplet);
+#define CD_APPLET_UNREGISTER_FOR_DROP_DATA_EVENT gldi_object_remove_notification (&myContainersMgr, NOTIFICATION_DROP_DATA, (GldiNotificationFunc) CD_APPLET_ON_DROP_DATA_FUNC, myApplet);
 
 //\______________________ notification de scroll molette.
 /**
 *Abonne l'applet aux notifications du clic gauche. A effectuer lors de l'init de l'applet.
 */
-#define CD_APPLET_REGISTER_FOR_SCROLL_EVENT cairo_dock_register_notification_on_object (&myContainersMgr, NOTIFICATION_SCROLL_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_SCROLL_FUNC, CAIRO_DOCK_RUN_FIRST, myApplet)
+#define CD_APPLET_REGISTER_FOR_SCROLL_EVENT gldi_object_register_notification (&myContainersMgr, NOTIFICATION_SCROLL_ICON, (GldiNotificationFunc) CD_APPLET_ON_SCROLL_FUNC, GLDI_RUN_FIRST, myApplet)
 /**
 *Desabonne l'applet aux notifications du clic gauche. A effectuer lors de l'arret de l'applet.
 */
-#define CD_APPLET_UNREGISTER_FOR_SCROLL_EVENT cairo_dock_remove_notification_func_on_object (&myContainersMgr, NOTIFICATION_SCROLL_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_SCROLL_FUNC, myApplet)
+#define CD_APPLET_UNREGISTER_FOR_SCROLL_EVENT gldi_object_remove_notification (&myContainersMgr, NOTIFICATION_SCROLL_ICON, (GldiNotificationFunc) CD_APPLET_ON_SCROLL_FUNC, myApplet)
 
 //\______________________ notification de update icon.
 /** Register the applet to the 'update icon' notifications of the slow rendering loop. 
 */
-#define CD_APPLET_REGISTER_FOR_UPDATE_ICON_SLOW_EVENT cairo_dock_register_notification_on_object (&myIconsMgr, NOTIFICATION_UPDATE_ICON_SLOW, (CairoDockNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, CAIRO_DOCK_RUN_FIRST, myApplet)
+#define CD_APPLET_REGISTER_FOR_UPDATE_ICON_SLOW_EVENT gldi_object_register_notification (&myIconsMgr, NOTIFICATION_UPDATE_ICON_SLOW, (GldiNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, GLDI_RUN_FIRST, myApplet)
 /** Unregister the applet from the slow rendering loop. 
 */
-#define CD_APPLET_UNREGISTER_FOR_UPDATE_ICON_SLOW_EVENT cairo_dock_remove_notification_func_on_object (&myIconsMgr, NOTIFICATION_UPDATE_ICON_SLOW, (CairoDockNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, myApplet)
+#define CD_APPLET_UNREGISTER_FOR_UPDATE_ICON_SLOW_EVENT gldi_object_remove_notification (&myIconsMgr, NOTIFICATION_UPDATE_ICON_SLOW, (GldiNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, myApplet)
 /** Register the applet to the 'update icon' notifications of the fast rendering loop. 
 */
-#define CD_APPLET_REGISTER_FOR_UPDATE_ICON_EVENT cairo_dock_register_notification_on_object (&myIconsMgr, NOTIFICATION_UPDATE_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, CAIRO_DOCK_RUN_FIRST, myApplet)
+#define CD_APPLET_REGISTER_FOR_UPDATE_ICON_EVENT gldi_object_register_notification (&myIconsMgr, NOTIFICATION_UPDATE_ICON, (GldiNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, GLDI_RUN_FIRST, myApplet)
 /** Unregister the applet from the fast rendering loop. 
 */
-#define CD_APPLET_UNREGISTER_FOR_UPDATE_ICON_EVENT cairo_dock_remove_notification_func_on_object (&myIconsMgr, NOTIFICATION_UPDATE_ICON, (CairoDockNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, myApplet)
+#define CD_APPLET_UNREGISTER_FOR_UPDATE_ICON_EVENT gldi_object_remove_notification (&myIconsMgr, NOTIFICATION_UPDATE_ICON, (GldiNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, myApplet)
 
 
 //\_________________________________ INSTANCE

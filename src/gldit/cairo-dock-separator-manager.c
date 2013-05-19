@@ -91,3 +91,37 @@ void cairo_dock_insert_automatic_separator_in_dock (int iSeparatorType, double f
 		cairo_dock_insert_icon_in_dock_full (pSeparatorIcon, pDock, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
 	}
 }
+
+
+/// IN PROGRESS...
+void cairo_dock_insert_automatic_separators_amongst_icons (GList *pIconsList)
+{
+	//g_print ("%s ()\n", __func__);
+	Icon *icon, *pNextIcon;
+	GList *ic, *next_ic;
+	for (ic = pIconsList; ic != NULL; ic = ic->next)
+	{
+		icon = ic->data;
+		next_ic = ic->next;
+		if (! CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (icon))
+		{
+			if (next_ic != NULL)
+			{
+				pNextIcon = next_ic->data;
+				if (! CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (pNextIcon) && icon->iGroup != pNextIcon->iGroup)
+				{
+					int iSeparatorGroup = cairo_dock_get_icon_order (icon) +
+						(cairo_dock_get_icon_order (icon) == cairo_dock_get_icon_order (pNextIcon) ? 0 : 1);  // for separators, group = order.
+					double fOrder = (cairo_dock_get_icon_order (icon) == cairo_dock_get_icon_order (pNextIcon) ? (icon->fOrder + pNextIcon->fOrder) / 2 : 0);
+					/**Icon *pSeparatorIcon = cairo_dock_create_separator_icon (iSeparatorType);
+					g_list_insert_before (pIconsList, next_ic, 
+                                                         GList *sibling,
+                                                         gpointer data);
+					pIconsList = g_list_insert_sorted (pDock->icons,
+						icon,
+						cairo_dock_compare_icons_order);*/
+				}
+			}
+		}
+	}
+}

@@ -83,41 +83,41 @@ void cairo_dock_force_indirect_rendering (void);
  // CONTEXT //
 /////////////
 
-gboolean gldi_glx_make_current (CairoContainer *pContainer);
+gboolean gldi_glx_make_current (GldiContainer *pContainer);
 
-gboolean gldi_glx_begin_draw_container_full (CairoContainer *pContainer, gboolean bClear);
+gboolean gldi_glx_begin_draw_container_full (GldiContainer *pContainer, gboolean bClear);
 
 #define gldi_glx_begin_draw_container(pContainer) gldi_glx_begin_draw_container_full (pContainer, TRUE)
 
-void gldi_glx_end_draw_container (CairoContainer *pContainer);
+void gldi_glx_end_draw_container (GldiContainer *pContainer);
 
 
 /** Set a perspective view to the current GL context to fit a given ontainer. Perspective view accentuates the depth effect of the scene, but can distort it on the edges, and is difficult to manipulate because the size of objects depends on their position.
 *@param pContainer the container
 */
-void cairo_dock_set_perspective_view (CairoContainer *pContainer);
+void cairo_dock_set_perspective_view (GldiContainer *pContainer);
 
-void cairo_dock_set_perspective_view_for_icon (Icon *pIcon, CairoContainer *pContainer);
+void cairo_dock_set_perspective_view_for_icon (Icon *pIcon, GldiContainer *pContainer);
 
 /** Set an orthogonal view to the current GL context to fit a given ontainer. Orthogonal view is convenient to draw classic 2D, because the objects are not zoomed according to their position. The drawback is a poor depth effect.
 *@param pContainer the container
 */
-void cairo_dock_set_ortho_view (CairoContainer *pContainer);
+void cairo_dock_set_ortho_view (GldiContainer *pContainer);
 
-void cairo_dock_set_ortho_view_for_icon (Icon *pIcon, CairoContainer *pContainer);
+void cairo_dock_set_ortho_view_for_icon (Icon *pIcon, GldiContainer *pContainer);
 
 
 /** Apply the desktop background onto a container, to emulate fake transparency.
 *@param pContainer the container
 */
-void gldi_glx_apply_desktop_background (CairoContainer *pContainer);
+void gldi_glx_apply_desktop_background (GldiContainer *pContainer);
 
 /** Set a shared default-initialized GL context on a window.
 *@param pContainer the container, not yet realized.
 */
-void gldi_glx_init_container (CairoContainer *pContainer);
+void gldi_glx_init_container (GldiContainer *pContainer);
 
-void gldi_glx_finish_container (CairoContainer *pContainer);
+void gldi_glx_finish_container (GldiContainer *pContainer);
 
 
 G_END_DECLS

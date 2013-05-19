@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 /// Pointeur sur le dock principal.
 extern CairoDock *g_pMainDock;
-extern CairoContainer *g_pPrimaryContainer;
+extern GldiContainer *g_pPrimaryContainer;
 /// Chemin du fichier de conf de l'appli.
 extern gchar *g_cConfFile;
 /// Le chemin vers le repertoire racine.
@@ -42,9 +42,6 @@ extern CairoDockImageBuffer g_pBoxBelowBuffer;
 /// icon bg
 extern CairoDockImageBuffer g_pIconBackgroundBuffer;
 
-/// ecran
-extern CairoDockDesktopGeometry g_desktopGeometry;
-
 /// config opengl
 extern CairoDockGLConfig g_openglConfig;
 
@@ -57,7 +54,7 @@ extern gboolean g_bUseOpenGL;
 
 extern GLuint g_pGradationTexture[2];
 
-extern CairoDockModuleInstance *g_pCurrentModule;
+extern GldiModuleInstance *g_pCurrentModule;
 
 G_END_DECLS
 #endif

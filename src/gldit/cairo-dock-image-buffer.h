@@ -200,9 +200,9 @@ cairo_t *cairo_dock_begin_draw_image_buffer_cairo (CairoDockImageBuffer *pImage,
 
 void cairo_dock_end_draw_image_buffer_cairo (CairoDockImageBuffer *pImage);
 
-gboolean cairo_dock_begin_draw_image_buffer_opengl (CairoDockImageBuffer *pImage, CairoContainer *pContainer, gint iRenderingMode);
+gboolean cairo_dock_begin_draw_image_buffer_opengl (CairoDockImageBuffer *pImage, GldiContainer *pContainer, gint iRenderingMode);
 
-void cairo_dock_end_draw_image_buffer_opengl (CairoDockImageBuffer *pImage, CairoContainer *pContainer);
+void cairo_dock_end_draw_image_buffer_opengl (CairoDockImageBuffer *pImage, GldiContainer *pContainer);
 
 void cairo_dock_image_buffer_update_texture (CairoDockImageBuffer *pImage);
 

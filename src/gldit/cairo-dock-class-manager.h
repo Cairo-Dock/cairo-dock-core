@@ -83,7 +83,7 @@ CairoDock* cairo_dock_create_class_subdock (const gchar *cClass, CairoDock *pPar
 * @param pIcon l'icone de l'appli.
 * @return TRUE si l'enregistrement s'est effectue correctement ou si l'appli etait deja enregistree, FALSE sinon.
 */
-gboolean cairo_dock_add_appli_to_class (Icon *pIcon);
+gboolean cairo_dock_add_appli_icon_to_class (Icon *pIcon);
 /*
 * Desenregistre une icone d'appli de sa classe. Ne fais rien aux inhibiteurs.
 * @param pIcon l'icone de l'appli.
@@ -145,10 +145,10 @@ gboolean cairo_dock_prevent_inhibited_class (Icon *pIcon);
 void cairo_dock_deinhibite_class (const gchar *cClass, Icon *pInhibitorIcon);
 /*
 * Met a jour les inhibiteurs controlant une appli donnee pour leur en faire controler une autre.
-* @param Xid l'ID de l'appli.
+* @param pAppli l'appli.
 * @param cClass sa classe.
 */
-void cairo_dock_detach_Xid_from_inhibitors (Window Xid, const gchar *cClass);
+void cairo_dock_detach_Xid_from_inhibitors (GldiWindowActor *pAppli, const gchar *cClass);
 /*
 * Enleve toutes les applis de toutes les classes, et met a jour les inhibiteurs.
 */
@@ -174,24 +174,24 @@ cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, int 
 /*
 * Met a jour les inhibiteurs controlant une appli donnee pour les faire reagir au changement de visibilite de la fenetre, de la meme maniere que si l'icone etait dans la barre des taches.
 * @param cClass la classe.
-* @param Xid l'ID de l'appli.
+* @param pAppli l'appli.
 * @param bIsHidden TRUE ssi a fenetre vient de se cacher.
 */
-void cairo_dock_update_visibility_on_inhibitors (const gchar *cClass, Window Xid, gboolean bIsHidden);
+void cairo_dock_update_visibility_on_inhibitors (const gchar *cClass, GldiWindowActor *pAppli, gboolean bIsHidden);
 /*
 * Met a jour les inhibiteurs controlant une appli donnee pour les faire reagir a la prise d'activite de la fenetre, de la meme maniere que si l'icone etait dans la barre des taches.
 * @param cClass la classe.
-* @param Xid l'ID de l'appli.
+* @param pAppli l'appli.
 */
-void cairo_dock_update_activity_on_inhibitors (const gchar *cClass, Window Xid);
+void cairo_dock_update_activity_on_inhibitors (const gchar *cClass, GldiWindowActor *pAppli);
 /*
 * Met a jour les inhibiteurs controlant une appli donnee pour les redessiner en mode normal lors de la perte d'activite de la fenetre.
 * @param cClass la classe.
-* @param Xid l'ID de l'appli.
+* @param pAppli l'appli.
 */
-void cairo_dock_update_inactivity_on_inhibitors (const gchar *cClass, Window Xid);
+void cairo_dock_update_inactivity_on_inhibitors (const gchar *cClass, GldiWindowActor *pAppli);
 
-void cairo_dock_update_name_on_inhibitors (const gchar *cClass, Window Xid, gchar *cNewName);
+void cairo_dock_update_name_on_inhibitors (const gchar *cClass, GldiWindowActor *pAppli, gchar *cNewName);
 
 Icon *cairo_dock_get_classmate (Icon *pIcon);
 
@@ -246,6 +246,12 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 */
 void cairo_dock_set_data_from_class (const gchar *cClass, Icon *pIcon);
 
+
+/** Remove the version number from a string. Directly modifies the string.
+ * @param cString a string.
+ * @return TRUE if a version has been removed.
+ */
+gboolean cairo_dock_remove_version_from_string (gchar *cString);
 
 G_END_DECLS
 #endif

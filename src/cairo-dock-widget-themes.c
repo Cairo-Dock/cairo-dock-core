@@ -29,9 +29,10 @@
 #include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
 #include "cairo-dock-packages.h"
 #include "cairo-dock-surface-factory.h"
-#include "cairo-dock-dialog-manager.h"  // cairo_dock_show_dialog_and_wait
+#include "cairo-dock-dialog-factory.h"  // gldi_dialog_show_and_wait
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-icon-facility.h"  // gldi_icons_get_any_without_dialog
 #include "cairo-dock-task.h"
 #include "cairo-dock-dock-manager.h"  // cairo_dock_search_dock_from_name
 #include "cairo-dock-applications-manager.h"  // cairo_dock_get_current_active_icon
@@ -183,8 +184,8 @@ static gboolean _cairo_dock_load_theme (GKeyFile* pKeyFile, ThemesWidget *pTheme
 	gboolean bNeedSave = cairo_dock_current_theme_need_save ();
 	if (bNeedSave)
 	{
-		Icon *pIcon = cairo_dock_get_dialogless_icon ();
-		int iClickedButton = cairo_dock_show_dialog_and_wait (_("You have made some changes to the current theme.\nYou will lose them if you don't save before choosing a new theme. Continue anyway?"),
+		Icon *pIcon = gldi_icons_get_any_without_dialog ();
+		int iClickedButton = gldi_dialog_show_and_wait (_("You have made some changes to the current theme.\nYou will lose them if you don't save before choosing a new theme. Continue anyway?"),
 			pIcon, CAIRO_CONTAINER (g_pMainDock),
 			CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, NULL);
 		if (iClickedButton != 0 && iClickedButton != -1)  // cancel button or Escape.
@@ -366,14 +367,14 @@ static void _change_rating (G_GNUC_UNUSED GtkCellRendererText * cell, gchar * pa
 	}
 	else
 	{
-		Icon *pIcon = cairo_dock_get_current_active_icon ();
+		Icon *pIcon = cairo_dock_get_current_active_icon ();  // most probably the appli-icon representing the config window.
 		CairoDock *pDock = NULL;
 		if (pIcon != NULL)
 			pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
 		if (pDock != NULL)
-			cairo_dock_show_temporary_dialog_with_icon (_("You must try the theme before you can rate it."), pIcon, CAIRO_CONTAINER (pDock), 3000, "same icon");
+			gldi_dialog_show_temporary_with_icon (_("You must try the theme before you can rate it."), pIcon, CAIRO_CONTAINER (pDock), 3000, "same icon");
 		else
-			cairo_dock_show_general_message (_("You must try the theme before you can rate it."), 3000);
+			gldi_dialog_show_general_message (_("You must try the theme before you can rate it."), 3000);
 	}
 	g_free (cThemeName);
 	g_free (cRatingFile);

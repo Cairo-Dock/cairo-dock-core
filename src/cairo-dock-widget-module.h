@@ -31,8 +31,8 @@ typedef struct _ModuleWidget ModuleWidget;
 
 struct _ModuleWidget {
 	CDWidget widget;
-	CairoDockModule *pModule;
-	CairoDockModuleInstance *pModuleInstance;
+	GldiModule *pModule;
+	GldiModuleInstance *pModuleInstance;
 	gchar *cConfFilePath;
 	GtkWidget *pMainWindow;
 };
@@ -41,7 +41,7 @@ struct _ModuleWidget {
 #define IS_MODULE_WIDGET(w) (w && CD_WIDGET(w)->iType == WIDGET_MODULE)
 
 
-ModuleWidget *cairo_dock_module_widget_new (CairoDockModule *pModule, CairoDockModuleInstance *pInstance, GtkWidget *pMainWindow);
+ModuleWidget *cairo_dock_module_widget_new (GldiModule *pModule, GldiModuleInstance *pInstance, GtkWidget *pMainWindow);
 
 
 void cairo_dock_module_widget_update_desklet_params (ModuleWidget *pModuleWidget, CairoDesklet *pDesklet);
@@ -50,7 +50,7 @@ void cairo_dock_module_widget_update_desklet_params (ModuleWidget *pModuleWidget
 void cairo_dock_module_widget_update_desklet_visibility_params (ModuleWidget *pModuleWidget, CairoDesklet *pDesklet);
 
 
-void cairo_dock_module_widget_update_module_instance_container (ModuleWidget *pModuleWidget, CairoDockModuleInstance *pInstance, gboolean bDetached);
+void cairo_dock_module_widget_update_module_instance_container (ModuleWidget *pModuleWidget, GldiModuleInstance *pInstance, gboolean bDetached);
 
 
 void cairo_dock_module_widget_reload_current_widget (ModuleWidget *pModuleWidget);

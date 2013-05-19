@@ -31,12 +31,12 @@
 #include "cairo-dock-dock-manager.h"  // cairo_dock_redraw_root_docks
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-container.h"
-#include "cairo-dock-applications-manager.h"  // cairo_dock_foreach_applis
+#include "cairo-dock-applications-manager.h"  // cairo_dock_foreach_appli_icon
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-icon-manager.h"
-#include "cairo-dock-notifications.h"
 #include "cairo-dock-data-renderer.h"
 #include "cairo-dock-applications-manager.h"  // myTaskbarParam.bShowAppli
+#include "cairo-dock-windows-manager.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-indicator-manager.h"
 
@@ -237,12 +237,12 @@ static void _cairo_dock_draw_class_indicator (cairo_t *pCairoContext, Icon *icon
 static inline gboolean _active_indicator_is_visible (Icon *icon)
 {
 	gboolean bIsActive = FALSE;
-	if (icon->Xid)
+	if (icon->pAppli)
 	{
-		Window xActiveId = cairo_dock_get_current_active_window ();
-		if (xActiveId != 0)
+		GldiWindowActor *pAppli = gldi_windows_get_active ();
+		if (pAppli != NULL)
 		{
-			bIsActive = (icon->Xid == xActiveId);
+			bIsActive = (icon->pAppli == pAppli);
 			if (!bIsActive && icon->pSubDock != NULL)
 			{
 				Icon *subicon;
@@ -250,7 +250,7 @@ static inline gboolean _active_indicator_is_visible (Icon *icon)
 				for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
 				{
 					subicon = ic->data;
-					if (subicon->Xid == xActiveId)
+					if (subicon->pAppli == pAppli)
 					{
 						bIsActive = TRUE;
 						break;
@@ -290,7 +290,7 @@ static gboolean cairo_dock_pre_render_indicator_notification (G_GNUC_UNUSED gpoi
 			_cairo_dock_draw_active_window_indicator_opengl (icon, pDock, pDock->container.fRatio);
 		}
 	}
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
 static gboolean cairo_dock_render_indicator_notification (G_GNUC_UNUSED gpointer pUserData, Icon *icon, CairoDock *pDock, G_GNUC_UNUSED gboolean *bHasBeenRendered, cairo_t *pCairoContext)
@@ -307,7 +307,7 @@ static gboolean cairo_dock_render_indicator_notification (G_GNUC_UNUSED gpointer
 		{
 			_cairo_dock_draw_appli_indicator (icon, pDock, pCairoContext);
 		}
-		if (icon->pSubDock != NULL && icon->cClass != NULL && s_classIndicatorBuffer.pSurface != NULL && icon->Xid == 0)  // le dernier test est de la paranoia.
+		if (icon->pSubDock != NULL && icon->cClass != NULL && s_classIndicatorBuffer.pSurface != NULL && icon->pAppli == NULL)  // le dernier test est de la paranoia.
 		{
 			_cairo_dock_draw_class_indicator (pCairoContext, icon, pDock->container.bIsHorizontal, pDock->container.fRatio, pDock->container.bDirectionUp);
 		}
@@ -326,12 +326,12 @@ static gboolean cairo_dock_render_indicator_notification (G_GNUC_UNUSED gpointer
 		{
 			_cairo_dock_draw_active_window_indicator_opengl (icon, pDock, pDock->container.fRatio);
 		}
-		if (icon->pSubDock != NULL && icon->cClass != NULL && s_classIndicatorBuffer.iTexture != 0 && icon->Xid == 0)  // le dernier test est de la paranoia.
+		if (icon->pSubDock != NULL && icon->cClass != NULL && s_classIndicatorBuffer.iTexture != 0 && icon->pAppli == NULL)  // le dernier test est de la paranoia.
 		{
 			_cairo_dock_draw_class_indicator_opengl (icon, pDock->container.bIsHorizontal, pDock->container.fRatio, pDock->container.bDirectionUp);
 		}
 	}
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
 
@@ -565,18 +565,18 @@ static void load (void)
  /// RELOAD ///
 //////////////
 
-static void _set_indicator (Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer, gpointer data)
+static void _set_indicator (Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer, gpointer data)
 {
 	pIcon->bHasIndicator = GPOINTER_TO_INT (data);
 }
-static void _reload_progress_bar (Icon *pIcon, CairoContainer *pContainer, G_GNUC_UNUSED gpointer data)
+static void _reload_progress_bar (Icon *pIcon, GldiContainer *pContainer, G_GNUC_UNUSED gpointer data)
 {
 	if (cairo_dock_get_icon_data_renderer (pIcon) != NULL)
 	{
 		cairo_dock_reload_data_renderer_on_icon (pIcon, pContainer);
 	}
 }
-static void _reload_multi_appli (Icon *icon, CairoContainer *pContainer, G_GNUC_UNUSED gpointer data)
+static void _reload_multi_appli (Icon *icon, GldiContainer *pContainer, G_GNUC_UNUSED gpointer data)
 {
 	if (CAIRO_DOCK_IS_MULTI_APPLI (icon))
 	{
@@ -621,7 +621,7 @@ static void reload (CairoIndicatorsParam *pPrevIndicators, CairoIndicatorsParam 
 	
 	if (pPrevIndicators->bDrawIndicatorOnAppli != pIndicators->bDrawIndicatorOnAppli)
 	{
-		cairo_dock_foreach_applis ((CairoDockForeachIconFunc) _set_indicator, FALSE, GINT_TO_POINTER (pIndicators->bDrawIndicatorOnAppli));
+		cairo_dock_foreach_appli_icon ((CairoDockForeachIconFunc) _set_indicator, GINT_TO_POINTER (pIndicators->bDrawIndicatorOnAppli));
 	}
 	
 	if (pPrevIndicators->fBarColorStart[0] != pIndicators->fBarColorStart[0]
@@ -664,14 +664,14 @@ static void unload (void)
 
 static void init (void)
 {
-	cairo_dock_register_notification_on_object (&myIconsMgr,
+	gldi_object_register_notification (&myIconsMgr,
 		NOTIFICATION_PRE_RENDER_ICON,
-		(CairoDockNotificationFunc) cairo_dock_pre_render_indicator_notification,
-		CAIRO_DOCK_RUN_FIRST, NULL);
-	cairo_dock_register_notification_on_object (&myIconsMgr,
+		(GldiNotificationFunc) cairo_dock_pre_render_indicator_notification,
+		GLDI_RUN_FIRST, NULL);
+	gldi_object_register_notification (&myIconsMgr,
 		NOTIFICATION_RENDER_ICON,
-		(CairoDockNotificationFunc) cairo_dock_render_indicator_notification,
-		CAIRO_DOCK_RUN_AFTER, NULL);
+		(GldiNotificationFunc) cairo_dock_render_indicator_notification,
+		GLDI_RUN_AFTER, NULL);
 }
 
 
@@ -701,7 +701,7 @@ void gldi_register_indicators_manager (void)
 	myIndicatorsMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myIndicatorsMgr.mgr.iSizeOfData = 0;
 	// signals
-	cairo_dock_install_notifications_on_object (&myIndicatorsMgr, NB_NOTIFICATIONS_INDICATORS);
+	gldi_object_install_notifications (&myIndicatorsMgr, NB_NOTIFICATIONS_INDICATORS);
 	// register
 	gldi_register_manager (GLDI_MANAGER(&myIndicatorsMgr));
 }

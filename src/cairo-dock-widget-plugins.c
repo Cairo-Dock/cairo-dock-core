@@ -21,10 +21,9 @@
 #include "cairo-dock-struct.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-module-manager.h"
-#include "cairo-dock-module-factory.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-X-manager.h"
+#include "cairo-dock-desktop-manager.h"  // gldi_desktop_get_width
 #include "cairo-dock-gui-manager.h"  // cairo_dock_show_module_instance_gui
 #include "cairo-dock-gui-backend.h"  // cairo_dock_show_module_gui
 #include "cairo-dock-gui-commons.h"  // cairo_dock_get_third_party_applets_link
@@ -34,8 +33,7 @@
 #define CAIRO_DOCK_PLUGINS_ICON_SIZE 32
 
 extern gchar *g_cConfFile;
-extern CairoDockDesktopGeometry g_desktopGeometry;
-extern CairoContainer *g_pPrimaryContainer;
+extern GldiContainer *g_pPrimaryContainer;
 
 static void _widget_plugins_reload (CDWidget *pCdWidget);
 
@@ -53,25 +51,25 @@ static void _cairo_dock_activate_one_module (G_GNUC_UNUSED GtkCellRendererToggle
 	bState = !bState;
 	gtk_list_store_set (GTK_LIST_STORE (model), &iter, CAIRO_DOCK_MODEL_ACTIVE, bState, -1);
 	
-	CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
+	GldiModule *pModule = gldi_module_get (cModuleName);
 	if (g_pPrimaryContainer == NULL)
 	{
 		cairo_dock_add_remove_element_to_key (g_cConfFile, "System", "modules", cModuleName, bState);
 	}
 	else if (pModule->pInstancesList == NULL)
 	{
-		cairo_dock_activate_module_and_load (cModuleName);
+		gldi_module_activate (pModule);
 	}
 	else
 	{
-		cairo_dock_deactivate_module_and_unload (cModuleName);
+		gldi_module_deactivate (pModule);
 	}  // la ligne passera en gras automatiquement.
 	
 	g_free (cModuleName);
 }
-static void _cairo_dock_initiate_config_module (G_GNUC_UNUSED GtkMenuItem *pMenuItem, CairoDockModule *pModule)
+static void _cairo_dock_initiate_config_module (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GldiModule *pModule)
 {
-	CairoDockModuleInstance *pModuleInstance = (pModule->pInstancesList ? pModule->pInstancesList->data : NULL);
+	GldiModuleInstance *pModuleInstance = (pModule->pInstancesList ? pModule->pInstancesList->data : NULL);
 	if (pModuleInstance)
 		cairo_dock_show_module_instance_gui (pModuleInstance, -1);
 	else
@@ -91,7 +89,7 @@ static gboolean _on_click_module_tree_view (GtkTreeView *pTreeView, GdkEventButt
 		gchar *cModuleName = NULL;
 		gtk_tree_model_get (pModel, &iter,
 			CAIRO_DOCK_MODEL_RESULT, &cModuleName, -1);
-		CairoDockModule *pModule = cairo_dock_find_module_from_name (cModuleName);
+		GldiModule *pModule = gldi_module_get (cModuleName);
 		if (pModule == NULL)
 			return FALSE;
 		
@@ -184,10 +182,10 @@ static void _cairo_dock_render_category (G_GNUC_UNUSED GtkTreeViewColumn *tree_c
 	}
 }
 
-static gboolean _cairo_dock_add_module_to_modele (gchar *cModuleName, CairoDockModule *pModule, GtkListStore *pModel)
+static gboolean _cairo_dock_add_module_to_modele (gchar *cModuleName, GldiModule *pModule, GtkListStore *pModel)
 {
 	if (pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_THEME  // don't display the animations plug-ins
-		&& ! cairo_dock_module_is_auto_loaded (pModule))  // don't display modules that can't be disabled
+		&& ! gldi_module_is_auto_loaded (pModule))  // don't display modules that can't be disabled
 	{
 		//g_print (" + %s\n",  pModule->pVisitCard->cIconFilePath);
 		gchar *cIcon = cairo_dock_get_icon_for_gui (pModule->pVisitCard->cModuleName,
@@ -229,7 +227,7 @@ static GtkWidget *_cairo_dock_build_modules_treeview (void)
 	//\______________ On remplit le modele avec les modules de la categorie.
 	GtkTreeModel *pModel = gtk_tree_view_get_model (GTK_TREE_VIEW (pOneWidget));
 	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (pModel), CAIRO_DOCK_MODEL_STATE, GTK_SORT_ASCENDING);
-	cairo_dock_foreach_module ((GHRFunc) _cairo_dock_add_module_to_modele, pModel);
+	gldi_module_foreach ((GHRFunc) _cairo_dock_add_module_to_modele, pModel);
 	
 	//\______________ On definit l'affichage du modele dans le tree-view.
 	GtkTreeViewColumn* col;
@@ -268,7 +266,7 @@ static void _build_plugins_widget (PluginsWidget *pPluginsWidget)
 	//\_____________ On l'ajoute a la fenetre.
 	GtkWidget *pKeyBox = _gtk_hbox_new (CAIRO_DOCK_GUI_MARGIN);
 	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
-	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, gldi_get_desktop_height() - 210), NULL);
+	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, gldi_desktop_get_height() - 210), NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pPluginsWidget->pTreeView);
 	gtk_box_pack_start (GTK_BOX (pKeyBox), pScrolledWindow, TRUE, TRUE, 0);
@@ -278,7 +276,7 @@ static void _build_plugins_widget (PluginsWidget *pPluginsWidget)
 	gchar *cDefaultMessage = g_strdup_printf ("<b><span font_desc=\"Sans 14\">%s</span></b>", _("Click on an applet in order to have a preview and a description for it."));
 	GtkWidget *pPreviewBox = cairo_dock_gui_make_preview_box (pKeyBox, pPluginsWidget->pTreeView, FALSE, 1, cDefaultMessage, CAIRO_DOCK_SHARE_DATA_DIR"/images/"CAIRO_DOCK_LOGO, pDataGarbage);  // vertical packaging.
 	GtkWidget *pScrolledWindow2 = gtk_scrolled_window_new (NULL, NULL);
-	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, gldi_get_desktop_height() - 210), NULL);
+	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, gldi_desktop_get_height() - 210), NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow2), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow2), pPreviewBox);
 	gtk_box_pack_start (GTK_BOX (pKeyBox), pScrolledWindow2, FALSE, FALSE, 0);
@@ -342,5 +340,5 @@ static void _widget_plugins_reload (CDWidget *pCdWidget)
 	g_return_if_fail (pModel != NULL);
 	gtk_list_store_clear (GTK_LIST_STORE (pModel));
 	
-	cairo_dock_foreach_module ((GHRFunc) _cairo_dock_add_module_to_modele, pModel);
+	gldi_module_foreach ((GHRFunc) _cairo_dock_add_module_to_modele, pModel);
 }

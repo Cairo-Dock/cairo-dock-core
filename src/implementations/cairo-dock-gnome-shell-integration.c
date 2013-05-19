@@ -20,8 +20,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-dbus.h"
 #include "cairo-dock-class-manager.h"
-#include "cairo-dock-applications-manager.h"  // myTaskbarParam.bShowAppli
-#include "cairo-dock-X-manager.h"
+#include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-gnome-shell-integration.h"
 
 static DBusGProxy *s_pGSProxy = NULL;
@@ -88,7 +87,7 @@ static gboolean present_class (const gchar *cClass)
 		
 		const gchar *cWmClass = cairo_dock_get_class_wm_class (cClass);
 		int iNumDesktop, iViewPortX, iViewPortY;
-		cairo_dock_get_current_desktop_and_viewport (&iNumDesktop, &iViewPortX, &iViewPortY);
+		gldi_desktop_get_current (&iNumDesktop, &iViewPortX, &iViewPortY);
 		int iWorkspace = iNumDesktop * g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY + iViewPortX + iViewPortY * g_desktopGeometry.iNbViewportX;
 		/// Note: there is actually a bug in Gnome-Shell 3.6, in workspace.js in '_onCloneSelected': 'wsIndex' should be let undefined, because here we switch to a window that is on a different workspace.
 		gchar *code = g_strdup_printf ("Main.overview.show(); \
@@ -116,7 +115,7 @@ static gboolean present_class (const gchar *cClass)
 
 static void _register_gs_backend (void)
 {
-	CairoDockWMBackend *p = g_new0 (CairoDockWMBackend, 1);
+	GldiDesktopManagerBackend *p = g_new0 (GldiDesktopManagerBackend, 1);
 	
 	p->present_class = present_class;
 	p->present_windows = present_overview;
@@ -124,12 +123,12 @@ static void _register_gs_backend (void)
 	p->show_widget_layer = NULL;
 	p->set_on_widget_layer = NULL;
 	
-	cairo_dock_wm_register_backend (p);
+	gldi_desktop_manager_register_backend (p);
 }
 
 static void _unregister_gs_backend (void)
 {
-	cairo_dock_wm_register_backend (NULL);
+	//cairo_dock_wm_register_backend (NULL);
 }
 
 static void _on_gs_owner_changed (G_GNUC_UNUSED const gchar *cName, gboolean bOwned, G_GNUC_UNUSED gpointer data)

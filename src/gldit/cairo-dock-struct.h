@@ -20,7 +20,6 @@
 #ifndef __CAIRO_DOCK_STRUCT__
 #define  __CAIRO_DOCK_STRUCT__
 
-#include <X11/Xlib.h>
 #include <glib.h>
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
@@ -46,10 +45,8 @@
 #endif
 
 #include <glib/gi18n.h>
-//#include <X11/extensions/Xdamage.h>
 
 #include <GL/gl.h>
-#include <GL/glx.h>
 
 /*! \mainpage Cairo-Dock's API documentation.
  * \ref intro_sec
@@ -134,7 +131,7 @@
  * \section struct_sec Main structures
  *
  * \subsection containers Containers
- * See _CairoContainer for the definition of a Container, and cairo-dock-container.h for a complete description of the Container class.
+ * See _GldiContainer for the definition of a Container, and cairo-dock-container.h for a complete description of the Container class.
  * 
  * \subsection icons Icons
  * See _Icon for the definition of an Icon, and cairo-dock-icon-factory.h for a complete description of the Icon class.
@@ -353,17 +350,17 @@ typedef struct _CairoDialogDecorator CairoDialogDecorator;
 
 typedef struct _IconInterface IconInterface;
 typedef struct _Icon Icon;
-typedef struct _CairoContainer CairoContainer;
-typedef struct _CairoContainerInterface CairoContainerInterface;
+typedef struct _GldiContainer GldiContainer;
+typedef struct _GldiContainerInterface GldiContainerInterface;
 typedef struct _CairoDock CairoDock;
 typedef struct _CairoDesklet CairoDesklet;
 typedef struct _CairoDialog CairoDialog;
 typedef struct _CairoFlyingContainer CairoFlyingContainer;
 
-typedef struct _CairoDockModule CairoDockModule;
-typedef struct _CairoDockModuleInterface CairoDockModuleInterface;
-typedef struct _CairoDockModuleInstance CairoDockModuleInstance;
-typedef struct _CairoDockVisitCard CairoDockVisitCard;
+typedef struct _GldiModule GldiModule;
+typedef struct _GldiModuleInterface GldiModuleInterface;
+typedef struct _GldiVisitCard GldiVisitCard;
+typedef struct _GldiModuleInstance GldiModuleInstance;
 typedef struct _CairoDockMinimalAppletConfig CairoDockMinimalAppletConfig;
 typedef struct _CairoDockDesktopEnvBackend CairoDockDesktopEnvBackend;
 typedef struct _CairoDockClassAppli CairoDockClassAppli;
@@ -402,23 +399,27 @@ typedef struct _CairoDockGLFont CairoDockGLFont;
 
 typedef struct _CairoDockGLPath CairoDockGLPath;
 
-typedef struct _CairoDockDesktopGeometry CairoDockDesktopGeometry;
-
-typedef struct _CairoDockDesktopBackground CairoDockDesktopBackground;
-
-typedef struct _CairoDockWMBackend CairoDockWMBackend;
-
 typedef struct _CairoDockImageBuffer CairoDockImageBuffer;
 
 typedef struct _CairoOverlay CairoOverlay;
 
-typedef struct _CairoKeyBinding CairoKeyBinding;
+typedef struct _GldiShortkey GldiShortkey;
 
 typedef struct _GldiManager GldiManager;
 
 typedef struct _GldiObject GldiObject;
 
-typedef void (* _CairoDockForeachIconFunc) (Icon *icon, CairoContainer *pContainer, gpointer data);
+typedef struct _GldiDesktopGeometry GldiDesktopGeometry;
+
+typedef struct _GldiDesktopBackground GldiDesktopBackground;
+
+typedef struct _GldiDesktopManagerBackend GldiDesktopManagerBackend;
+
+typedef struct _GldiWindowManagerBackend GldiWindowManagerBackend;
+
+typedef struct _GldiWindowActor GldiWindowActor;
+
+typedef void (* _CairoDockForeachIconFunc) (Icon *icon, GldiContainer *pContainer, gpointer data);
 typedef _CairoDockForeachIconFunc CairoDockForeachIconFunc;
 
 #if (GTK_MAJOR_VERSION < 3)

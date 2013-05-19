@@ -24,10 +24,11 @@
 #include "gldi-config.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-backends-manager.h"
-#include "cairo-dock-notifications.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-opengl-font.h"
 #include "cairo-dock-animations.h"
+#include "cairo-dock-desklet-manager.h"  // CAIRO_CONTAINER_IS_OPENGL
+#include "cairo-dock-dock-manager.h"  // CAIRO_CONTAINER_IS_OPENGL
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-container.h"
@@ -294,7 +295,7 @@ void cairo_dock_render_overlays_to_context (CairoDataRenderer *pRenderer, int iN
 }
 
 
-static void _cairo_dock_render_to_context (CairoDataRenderer *pRenderer, Icon *pIcon, CairoContainer *pContainer, cairo_t *pCairoContext)
+static void _cairo_dock_render_to_context (CairoDataRenderer *pRenderer, Icon *pIcon, GldiContainer *pContainer, cairo_t *pCairoContext)
 {
 	cairo_t *ctx = NULL;
 	if (pRenderer->bUseOverlay && pRenderer->pOverlay != NULL)
@@ -351,7 +352,7 @@ static void _cairo_dock_render_to_context (CairoDataRenderer *pRenderer, Icon *p
 		cairo_destroy (ctx);
 }
 
-static void _cairo_dock_render_to_texture (CairoDataRenderer *pRenderer, Icon *pIcon, CairoContainer *pContainer)
+static void _cairo_dock_render_to_texture (CairoDataRenderer *pRenderer, Icon *pIcon, GldiContainer *pContainer)
 {
 	if (pRenderer->bUseOverlay)
 	{
@@ -401,7 +402,7 @@ static void _cairo_dock_render_to_texture (CairoDataRenderer *pRenderer, Icon *p
 	}
 }
 
-static inline void _refresh (CairoDataRenderer *pRenderer, Icon *pIcon, CairoContainer *pContainer)
+static inline void _refresh (CairoDataRenderer *pRenderer, Icon *pIcon, GldiContainer *pContainer)
 {
 	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer) && pRenderer->interface.render_opengl)
 	{
@@ -413,11 +414,11 @@ static inline void _refresh (CairoDataRenderer *pRenderer, Icon *pIcon, CairoCon
 	}
 }
 
-static gboolean cairo_dock_update_icon_data_renderer_notification (G_GNUC_UNUSED gpointer pUserData, Icon *pIcon, CairoContainer *pContainer, gboolean *bContinueAnimation)
+static gboolean cairo_dock_update_icon_data_renderer_notification (G_GNUC_UNUSED gpointer pUserData, Icon *pIcon, GldiContainer *pContainer, gboolean *bContinueAnimation)
 {
 	CairoDataRenderer *pRenderer = cairo_dock_get_icon_data_renderer (pIcon);
 	if (pRenderer == NULL)
-		return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+		return GLDI_NOTIFICATION_LET_PASS;
 	
 	if (pRenderer->iSmoothAnimationStep > 0)
 	{
@@ -433,7 +434,7 @@ static gboolean cairo_dock_update_icon_data_renderer_notification (G_GNUC_UNUSED
 			*bContinueAnimation = TRUE;
 	}
 	
-	return CAIRO_DOCK_LET_PASS_NOTIFICATION;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
 static void _cairo_dock_finish_load_data_renderer (CairoDataRenderer *pRenderer, gboolean bLoadTextures, Icon *pIcon)
@@ -542,7 +543,7 @@ static void _cairo_dock_finish_load_data_renderer (CairoDataRenderer *pRenderer,
 	}
 }
 
-void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pContainer, CairoDataRendererAttribute *pAttribute)
+void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, GldiContainer *pContainer, CairoDataRendererAttribute *pAttribute)
 {
 	//\___________________ if a previous renderer exists, keep its data alive.
 	CairoDataToRenderer *pData = NULL;
@@ -602,10 +603,10 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, CairoContainer *pCon
 	if (CAIRO_DOCK_CONTAINER_IS_OPENGL (pContainer) && pRenderer->interface.render_opengl)
 	{
 		bLoadTextures = TRUE;
-		cairo_dock_register_notification_on_object (pIcon,
+		gldi_object_register_notification (pIcon,
 			NOTIFICATION_UPDATE_ICON_SLOW,
-			(CairoDockNotificationFunc) cairo_dock_update_icon_data_renderer_notification,
-			CAIRO_DOCK_RUN_AFTER, NULL);  // pour l'affichage fluide.
+			(GldiNotificationFunc) cairo_dock_update_icon_data_renderer_notification,
+			GLDI_RUN_AFTER, NULL);  // pour l'affichage fluide.
 	}
 	
 	pRenderer->interface.load (pRenderer, pIcon, pAttribute);
@@ -628,7 +629,7 @@ static gboolean _render_delayed (Icon *pIcon)
 	CairoDataRenderer *pRenderer = cairo_dock_get_icon_data_renderer (pIcon);
 	g_return_val_if_fail (pRenderer != NULL, FALSE);
 	
-	CairoContainer *pContainer = pIcon->pContainer;
+	GldiContainer *pContainer = pIcon->pContainer;
 	cd_debug ("Render delayed: (%s, %dx%d)", pIcon->cName, pContainer->iWidth, pContainer->iHeight);
 	if (pContainer)
 	{
@@ -642,7 +643,7 @@ static gboolean _render_delayed (Icon *pIcon)
 	pRenderer->iSidRenderIdle = 0;
 	return FALSE;
 }
-void cairo_dock_render_new_data_on_icon (Icon *pIcon, CairoContainer *pContainer, cairo_t *pCairoContext, double *pNewValues)
+void cairo_dock_render_new_data_on_icon (Icon *pIcon, GldiContainer *pContainer, cairo_t *pCairoContext, double *pNewValues)
 {
 	CairoDataRenderer *pRenderer = cairo_dock_get_icon_data_renderer (pIcon);
 	g_return_if_fail (pRenderer != NULL);
@@ -771,7 +772,7 @@ void cairo_dock_free_data_renderer (CairoDataRenderer *pRenderer)
 	
 	g_free (pRenderer->pValuesText);
 	
-	cairo_dock_destroy_overlay (pRenderer->pOverlay);
+	gldi_object_unref (GLDI_OBJECT(pRenderer->pOverlay));
 	
 	g_free (pRenderer);
 }
@@ -781,7 +782,7 @@ void cairo_dock_remove_data_renderer_on_icon (Icon *pIcon)
 	CairoDataRenderer *pRenderer = cairo_dock_get_icon_data_renderer (pIcon);
 	if (pRenderer != NULL)
 	{
-		cairo_dock_remove_notification_func_on_object (pIcon, NOTIFICATION_UPDATE_ICON_SLOW, (CairoDockNotificationFunc) cairo_dock_update_icon_data_renderer_notification, NULL);
+		gldi_object_remove_notification (pIcon, NOTIFICATION_UPDATE_ICON_SLOW, (GldiNotificationFunc) cairo_dock_update_icon_data_renderer_notification, NULL);
 		
 		if (! pRenderer->bCanRenderValueAsText && pRenderer->bWriteValues)
 			cairo_dock_set_quick_info (pIcon, NULL, NULL);
@@ -792,7 +793,7 @@ void cairo_dock_remove_data_renderer_on_icon (Icon *pIcon)
 }
 
 
-void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, CairoContainer *pContainer)
+void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, GldiContainer *pContainer)
 {
 	cd_debug ("%s (%s)", __func__, pIcon->cName);
 	//\_____________ update the renderer size.
@@ -842,7 +843,7 @@ void cairo_dock_resize_data_renderer_history (Icon *pIcon, int iNewMemorySize)
 		pData->iCurrentIndex = pData->iMemorySize - 1;
 }
 
-void cairo_dock_refresh_data_renderer (Icon *pIcon, CairoContainer *pContainer)
+void cairo_dock_refresh_data_renderer (Icon *pIcon, GldiContainer *pContainer)
 {
 	CairoDataRenderer *pRenderer = cairo_dock_get_icon_data_renderer (pIcon);
 	g_return_if_fail (pRenderer != NULL);

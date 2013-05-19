@@ -9,6 +9,8 @@ SET(impl_SRCS
 	cairo-dock-compiz-integration.c      cairo-dock-compiz-integration.h
 	cairo-dock-kwin-integration.c        cairo-dock-kwin-integration.h
 	cairo-dock-gnome-shell-integration.c cairo-dock-gnome-shell-integration.h
+	cairo-dock-cinnamon-integration.c    cairo-dock-cinnamon-integration.h
+	cairo-dock-X-manager.c               cairo-dock-X-manager.h
 )
 
 add_library(implementations STATIC ${impl_SRCS})

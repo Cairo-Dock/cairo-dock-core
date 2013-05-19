@@ -62,10 +62,10 @@ struct _CairoDockGuiBackend {
 	/// display a message on the GUI.
 	void (*set_status_message_on_gui) (const gchar *cMessage);
 	/// Reload the current config window from the conf file. iShowPage is the page that should be displayed in case the module has several pages, -1 means to keep the current page.
-	void (*reload_current_widget) (CairoDockModuleInstance *pModuleInstance, int iShowPage);
-	void (*show_module_instance_gui) (CairoDockModuleInstance *pModuleInstance, int iShowPage);
+	void (*reload_current_widget) (GldiModuleInstance *pModuleInstance, int iShowPage);
+	void (*show_module_instance_gui) (GldiModuleInstance *pModuleInstance, int iShowPage);
 	/// retrieve the widgets in the current module window, corresponding to the (group,key) pair in its conf file.
-	CairoDockGroupKeyWidget * (*get_widget_from_name) (CairoDockModuleInstance *pModuleInstance, const gchar *cGroupName, const gchar *cKeyName);
+	CairoDockGroupKeyWidget * (*get_widget_from_name) (GldiModuleInstance *pModuleInstance, const gchar *cGroupName, const gchar *cKeyName);
 	} ;
 typedef struct _CairoDockGuiBackend CairoDockGuiBackend;
 
@@ -76,7 +76,7 @@ typedef struct _CairoDockGuiBackend CairoDockGuiBackend;
 void cairo_dock_register_gui_backend (CairoDockGuiBackend *pBackend);
 
 
-void cairo_dock_reload_current_widget_full (CairoDockModuleInstance *pModuleInstance, int iShowPage);
+void cairo_dock_reload_current_widget_full (GldiModuleInstance *pModuleInstance, int iShowPage);
 
 /**Reload the widget of a given module instance if it is currently opened (the current page is displayed). This is useful if the module has modified its conf file and wishes to display the changes.
 @param pModuleInstance an instance of a module.
@@ -84,7 +84,7 @@ void cairo_dock_reload_current_widget_full (CairoDockModuleInstance *pModuleInst
 #define cairo_dock_reload_current_module_widget(pModuleInstance) cairo_dock_reload_current_widget_full (pModuleInstance, -1)
 #define cairo_dock_reload_current_module_widget_full cairo_dock_reload_current_widget_full
 
-void cairo_dock_show_module_instance_gui (CairoDockModuleInstance *pModuleInstance, int iShowPage);
+void cairo_dock_show_module_instance_gui (GldiModuleInstance *pModuleInstance, int iShowPage);
 
 /** Display a message on a given window that has a status-bar. If no window is provided, the current config panel will be used.
 @param pWindow window where the message should be displayed, or NULL to target the config panel.

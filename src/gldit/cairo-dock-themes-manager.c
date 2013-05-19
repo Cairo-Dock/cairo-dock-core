@@ -33,9 +33,10 @@
 #include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
 #include "cairo-dock-launcher-manager.h" // cairo_dock_get_command_with_right_terminal
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-module-factory.h"
+#include "cairo-dock-module-manager.h"  // gldi_module_foreach
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-dialog-manager.h"
+#include "cairo-dock-icon-facility.h"  // gldi_icons_get_any_without_dialog
 #include "cairo-dock-task.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-packages.h"
@@ -184,8 +185,8 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 	{
 		cd_debug ("  This theme will be updated");
 		gchar *cQuestion = g_strdup_printf (_("Are you sure you want to overwrite theme %s?"), cNewThemeName);
-		Icon *pIcon = cairo_dock_get_dialogless_icon ();
-		int iClickedButton = cairo_dock_show_dialog_and_wait (cQuestion,
+		Icon *pIcon = gldi_icons_get_any_without_dialog ();
+		int iClickedButton = gldi_dialog_show_and_wait (cQuestion,
 			pIcon, CAIRO_CONTAINER (g_pMainDock),
 			GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, NULL);
 		g_free (cQuestion);
@@ -256,7 +257,7 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 	struct tm currentTime;
 	localtime_r (&epoch, &currentTime);
 	char cDateBuffer[50+1];
-	strftime (cDateBuffer, 50, "%a %d %b, %R", &currentTime);
+	strftime (cDateBuffer, 50, "%a %d %b %Y, %R", &currentTime);
 	gchar *cMessage = g_strdup_printf ("%s\n %s", _("Last modification on:"), cDateBuffer);
 	gchar *cReadmeFile = g_strdup_printf ("%s/%s", cNewThemePath, "readme");
 	g_file_set_contents (cReadmeFile,
@@ -314,7 +315,7 @@ gboolean cairo_dock_package_current_theme (const gchar *cThemeName)
 		}
 		g_free (cCommand);
 		g_free (cFullCommand);
-		cairo_dock_show_general_message (
+		gldi_dialog_show_general_message (
 			_("Your theme should now be available in your 'Home' directory."),
 			8000);
 	}
@@ -340,7 +341,7 @@ gchar *cairo_dock_depackage_theme (const gchar *cPackagePath)
 		cNewThemePath = cairo_dock_download_archive (cPackagePath, g_cThemesDirPath);
 		if (cNewThemePath == NULL)
 		{
-			cairo_dock_show_temporary_dialog_with_icon_printf (_("Could not access remote file %s. Maybe the server is down.\nPlease retry later or contact us at glx-dock.org."), NULL, NULL, 0, NULL, cPackagePath);
+			gldi_dialog_show_temporary_with_icon_printf (_("Could not access remote file %s. Maybe the server is down.\nPlease retry later or contact us at glx-dock.org."), NULL, NULL, 0, NULL, cPackagePath);
 		}
 	}
 	return cNewThemePath;
@@ -357,8 +358,8 @@ gboolean cairo_dock_delete_themes (gchar **cThemesList)
 		g_string_printf (sCommand, _("Are you sure you want to delete theme %s?"), cThemesList[0]);
 	else
 		g_string_printf (sCommand, _("Are you sure you want to delete these themes?"));
-	Icon *pIcon = cairo_dock_get_dialogless_icon ();
-	int iClickedButton = cairo_dock_show_dialog_and_wait (sCommand->str,
+	Icon *pIcon = gldi_icons_get_any_without_dialog ();
+	int iClickedButton = gldi_dialog_show_and_wait (sCommand->str,
 		pIcon, CAIRO_CONTAINER (g_pMainDock),
 		GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, NULL);
 	if (iClickedButton == 0 || iClickedButton == -1)  // ok button or Enter.
@@ -388,7 +389,7 @@ gboolean cairo_dock_delete_themes (gchar **cThemesList)
 	return bThemeDeleted;
 }
 
-static gboolean _find_module_from_user_data_dir (G_GNUC_UNUSED gchar *cModuleName, CairoDockModule *pModule, const gchar *cUserDataDirName)
+static gboolean _find_module_from_user_data_dir (G_GNUC_UNUSED gchar *cModuleName, GldiModule *pModule, const gchar *cUserDataDirName)
 {
 	if (pModule->pVisitCard->cUserDataDir && strcmp (cUserDataDirName, pModule->pVisitCard->cUserDataDir) == 0)
 		return TRUE;
@@ -599,7 +600,7 @@ static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboo
 			{
 				g_free (cConfFileName);
 				g_free (cNewConfFilePath);
-				CairoDockModule *pModule = cairo_dock_foreach_module ((GHRFunc) _find_module_from_user_data_dir, (gpointer) cModuleDirName);
+				GldiModule *pModule = gldi_module_foreach ((GHRFunc) _find_module_from_user_data_dir, (gpointer) cModuleDirName);
 				if (pModule == NULL)  // du coup, dans ce cas-la, on ne charge pas des plug-ins non utilises par l'utilisateur.
 				{
 					cd_warning ("couldn't find the module owning '%s', this file will be ignored.");

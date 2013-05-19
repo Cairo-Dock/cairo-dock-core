@@ -20,7 +20,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "cairo-dock-notifications.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-callbacks.h"
@@ -379,7 +378,7 @@ void cairo_dock_render_dialog_with_new_data (CairoDialog *pDialog, CairoDialogRe
 		pDialog->pRenderer->update (pDialog, pNewData);
 	
 	if (pDialog->pInteractiveWidget != NULL)
-		cairo_dock_damage_interactive_widget_dialog (pDialog);
+		gldi_dialog_redraw_interactive_widget (pDialog);
 	else
 		gtk_widget_queue_draw (pDialog->container.pWidget);
 }
@@ -467,6 +466,7 @@ const gchar *cairo_dock_get_animation_displayed_name (const gchar *cAnimation)
 
 void cairo_dock_unregister_animation (const gchar *cAnimation)
 {
+	g_return_if_fail (cAnimation != NULL);
 	g_hash_table_remove (s_hAnimationsTable, cAnimation);
 }
 
@@ -586,7 +586,7 @@ static void init (void)
 	s_hDeskletDecorationsTable = g_hash_table_new_full (g_str_hash,
 		g_str_equal,
 		g_free,
-		(GFreeFunc) cairo_dock_free_desklet_decoration);
+		(GFreeFunc) gldi_desklet_decoration_free);
 	
 	s_hAnimationsTable = g_hash_table_new_full (g_str_hash,
 		g_str_equal,
@@ -632,7 +632,7 @@ void gldi_register_backends_manager (void)
 	myBackendsMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myBackendsMgr.mgr.iSizeOfData = 0;
 	// signals
-	cairo_dock_install_notifications_on_object (&myBackendsMgr, NB_NOTIFICATIONS_BACKENDS);
+	gldi_object_install_notifications (&myBackendsMgr, NB_NOTIFICATIONS_BACKENDS);
 	// register
 	gldi_register_manager (GLDI_MANAGER(&myBackendsMgr));
 }

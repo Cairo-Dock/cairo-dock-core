@@ -17,7 +17,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef __CAIRO_DOCK_CALLBACKS__
 #define  __CAIRO_DOCK_CALLBACKS__
 
@@ -28,43 +27,11 @@ G_BEGIN_DECLS
 
 void cairo_dock_freeze_docks (gboolean bFreeze);
 
-gboolean cairo_dock_render_dock_notification (gpointer pUserData, CairoDock *pDock, cairo_t *pCairoContext);
-gboolean cairo_dock_on_expose (GtkWidget *pWidget,
-#if (GTK_MAJOR_VERSION < 3)
-	GdkEventExpose *pExpose,
-#else
-	cairo_t *ctx,
-#endif
-CairoDock *pDock);
-
 void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, CairoDock *pDock);
-gboolean cairo_dock_on_motion_notify (GtkWidget* pWidget, GdkEventMotion* pMotion, CairoDock *pDock);
 
+gboolean cairo_dock_on_leave_dock_notification (G_GNUC_UNUSED gpointer data, CairoDock *pDock, G_GNUC_UNUSED gboolean *bStartAnimation);
 
-gboolean cairo_dock_on_leave_dock_notification (gpointer data, CairoDock *pDock, gboolean *bStartAnimation);
-
-gboolean cairo_dock_on_leave_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock);
-
-gboolean cairo_dock_on_enter_notify (GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock);
-
-gboolean cairo_dock_on_key_release (GtkWidget *pWidget, GdkEventKey *pKey, CairoDock *pDock);
-
-gboolean cairo_dock_on_button_press (GtkWidget* pWidget, GdkEventButton* pButton, CairoDock *pDock);
-
-gboolean cairo_dock_on_scroll (GtkWidget* pWidget, GdkEventScroll* pScroll, CairoDock *pDock);
-
-gboolean cairo_dock_on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, CairoDock *pDock);
-
-void cairo_dock_on_drag_data_received (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, GtkSelectionData *selection_data, guint info, guint t, CairoDock *pDock);
-gboolean cairo_dock_on_drag_drop (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, guint time, CairoDock *pDock);
-
-gboolean cairo_dock_on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, guint t, CairoDock *pDock);
-void cairo_dock_on_drag_leave (GtkWidget *pWidget, GdkDragContext *dc, guint time, CairoDock *pDock);
-
-
-void cairo_dock_raise_from_shortcut (const char *cKeyShortcut, gpointer data);
-
-void cairo_dock_hide_after_shortcut (void);
+void gldi_dock_init_internals (CairoDock *pDock);
 
 G_END_DECLS
 #endif

@@ -24,9 +24,9 @@
 #define myDrawContext myApplet->pDrawContext
 
 #define CD_APPLET_DEFINE_BEGIN(cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, cDescription, cAuthor) \
-CairoDockModuleInstance *myApplet = NULL; \
+GldiModuleInstance *myApplet = NULL; \
 Icon *myIcon; \
-CairoContainer *myContainer; \
+GldiContainer *myContainer; \
 CairoDock *myDock; \
 CairoDesklet *myDesklet; \
 AppletConfig *myConfigPtr = NULL; \
@@ -82,11 +82,11 @@ myDataPtr = (AppletData*)myApplet->pData;
 
 
 extern Icon *myIcon;
-extern CairoContainer *myContainer;
+extern GldiContainer *myContainer;
 extern CairoDock *myDock;
 extern CairoDesklet *myDesklet;
 extern AppletConfig *myConfigPtr;
 extern AppletData *myDataPtr;
-extern CairoDockModuleInstance *myApplet;
+extern GldiModuleInstance *myApplet;
 
 #endif

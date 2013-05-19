@@ -28,8 +28,11 @@
 #include "cairo-dock-flying-container.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-backends-manager.h"
+#include "cairo-dock-desktop-manager.h"
+#include "cairo-dock-windows-manager.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-module-manager.h"
+#include "cairo-dock-module-instance-manager.h"
 #include "cairo-dock-packages.h"
 #include "cairo-dock-indicator-manager.h"
 #include "cairo-dock-keybinder.h"
@@ -40,12 +43,13 @@
 #include "cairo-dock-hiding-effect.h"
 #include "cairo-dock-icon-container.h"
 #include "cairo-dock-file-manager.h"
+#include "cairo-dock-overlay.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-core.h"
 
-extern CairoContainer *g_pPrimaryContainer;
+extern GldiContainer *g_pPrimaryContainer;
 int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;  // version de la lib.
 
 static void _gldi_register_core_managers (void)
@@ -58,13 +62,17 @@ static void _gldi_register_core_managers (void)
 	gldi_register_flying_manager ();
 	gldi_register_applications_manager ();
 	gldi_register_modules_manager ();
+	gldi_register_module_instances_manager ();
 	gldi_register_backends_manager ();
+	gldi_register_windows_manager ();
 	gldi_register_desktop_manager ();
 	gldi_register_connection_manager ();
 	gldi_register_indicators_manager ();
+	gldi_register_overlays_manager ();
 	gldi_register_shortkeys_manager ();
 	gldi_register_data_renderers_manager ();
 	gldi_register_desktop_environment_manager ();
+	gldi_register_X_manager ();
 }
 
 void gldi_init (GldiRenderingMethod iRendering)
@@ -105,9 +113,7 @@ void gldi_free_all (void)
 	gldi_unload_managers ();
 	
 	// reset specific managers.
-	///cairo_dock_reset_applications_manager ();  // y compris les applis detachees ou blacklistees.
-	
-	cairo_dock_deactivate_all_modules ();  // y compris les modules qui n'ont pas d'icone.
+	gldi_modules_deactivate_all ();  /// TODO: try to do that in the unload of the manager...
 	
 	cairo_dock_reset_docks_table ();  // detruit tous les docks, vide la table, et met le main-dock a NULL.
 }

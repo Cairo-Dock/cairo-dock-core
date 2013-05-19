@@ -31,6 +31,8 @@
 #include "cairo-dock-packages.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-applet-factory.h"
+#include "cairo-dock-module-instance-manager.h"  // GldiModuleInstance
+#include "cairo-dock-module-manager.h"  // GldiModuleInstance
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-callbacks.h"
@@ -102,7 +104,7 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 }
 
 
-gboolean cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cIconName, Icon *pIcon, G_GNUC_UNUSED CairoContainer *pContainer)
+gboolean cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cIconName, Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer)
 {
 	// load the image in a surface.
 	int iWidth, iHeight;
@@ -128,14 +130,14 @@ gboolean cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cIcon
 	return TRUE;
 }
 
-void cairo_dock_set_image_on_icon_with_default (cairo_t *pIconContext, const gchar *cIconName, Icon *pIcon, CairoContainer *pContainer, const gchar *cDefaultImagePath)
+void cairo_dock_set_image_on_icon_with_default (cairo_t *pIconContext, const gchar *cIconName, Icon *pIcon, GldiContainer *pContainer, const gchar *cDefaultImagePath)
 {
 	if (! cIconName || ! cairo_dock_set_image_on_icon (pIconContext, cIconName, pIcon, pContainer))
 		cairo_dock_set_image_on_icon (pIconContext, cDefaultImagePath, pIcon, pContainer);
 }
 
 
-void cairo_dock_set_hours_minutes_as_quick_info (Icon *pIcon, CairoContainer *pContainer, int iTimeInSeconds)
+void cairo_dock_set_hours_minutes_as_quick_info (Icon *pIcon, GldiContainer *pContainer, int iTimeInSeconds)
 {
 	int hours = iTimeInSeconds / 3600;
 	int minutes = (iTimeInSeconds % 3600) / 60;
@@ -145,7 +147,7 @@ void cairo_dock_set_hours_minutes_as_quick_info (Icon *pIcon, CairoContainer *pC
 		cairo_dock_set_quick_info_printf (pIcon, pContainer, "%dmn", minutes);
 }
 
-void cairo_dock_set_minutes_secondes_as_quick_info (Icon *pIcon, CairoContainer *pContainer, int iTimeInSeconds)
+void cairo_dock_set_minutes_secondes_as_quick_info (Icon *pIcon, GldiContainer *pContainer, int iTimeInSeconds)
 {
 	int minutes = iTimeInSeconds / 60;
 	int secondes = iTimeInSeconds % 60;
@@ -185,7 +187,7 @@ gchar *cairo_dock_get_human_readable_size (long long int iSizeInBytes)
 	}
 }
 
-void cairo_dock_set_size_as_quick_info (Icon *pIcon, CairoContainer *pContainer, long long int iSizeInBytes)
+void cairo_dock_set_size_as_quick_info (Icon *pIcon, GldiContainer *pContainer, long long int iSizeInBytes)
 {
 	gchar *cSize = cairo_dock_get_human_readable_size (iSizeInBytes);
 	cairo_dock_set_quick_info (pIcon, pContainer, cSize);
@@ -319,13 +321,13 @@ void cairo_dock_play_sound (const gchar *cSoundPath)
 	g_strfreev (cLineList);
 }*/
 
-void cairo_dock_pop_up_about_applet (G_GNUC_UNUSED GtkMenuItem *menu_item, CairoDockModuleInstance *pModuleInstance)
+void cairo_dock_pop_up_about_applet (G_GNUC_UNUSED GtkMenuItem *menu_item, GldiModuleInstance *pModuleInstance)
 {
-	cairo_dock_popup_module_instance_description (pModuleInstance);
+	gldi_module_instance_popup_description (pModuleInstance);
 }
 
 
-void cairo_dock_open_module_config_on_demand (int iClickedButton, G_GNUC_UNUSED GtkWidget *pInteractiveWidget, CairoDockModuleInstance *pModuleInstance, G_GNUC_UNUSED CairoDialog *pDialog)
+void cairo_dock_open_module_config_on_demand (int iClickedButton, G_GNUC_UNUSED GtkWidget *pInteractiveWidget, GldiModuleInstance *pModuleInstance, G_GNUC_UNUSED CairoDialog *pDialog)
 {
 	if (iClickedButton == 0 || iClickedButton == -1)  // bouton OK ou touche Entree.
 	{
@@ -334,12 +336,12 @@ void cairo_dock_open_module_config_on_demand (int iClickedButton, G_GNUC_UNUSED 
 }
 
 
-void cairo_dock_insert_icons_in_applet (CairoDockModuleInstance *pInstance, GList *pIconsList, const gchar *cDockRenderer, const gchar *cDeskletRenderer, gpointer pDeskletRendererData)
+void cairo_dock_insert_icons_in_applet (GldiModuleInstance *pInstance, GList *pIconsList, const gchar *cDockRenderer, const gchar *cDeskletRenderer, gpointer pDeskletRendererData)
 {
 	Icon *pIcon = pInstance->pIcon;
 	g_return_if_fail (pIcon != NULL);
 	
-	CairoContainer *pContainer = pInstance->pContainer;
+	GldiContainer *pContainer = pInstance->pContainer;
 	g_return_if_fail (pContainer != NULL);
 	
 	if (pInstance->pDock)
@@ -350,7 +352,7 @@ void cairo_dock_insert_icons_in_applet (CairoDockModuleInstance *pInstance, GLis
 				cairo_dock_set_icon_name (pInstance->pModule->pVisitCard->cModuleName, pIcon, pContainer);
 			if (cairo_dock_check_unique_subdock_name (pIcon))
 				cairo_dock_set_icon_name (pIcon->cName, pIcon, pContainer);
-			pIcon->pSubDock = cairo_dock_create_subdock (pIcon->cName, cDockRenderer, pInstance->pDock, pIconsList);
+			pIcon->pSubDock = gldi_subdock_new (pIcon->cName, cDockRenderer, pInstance->pDock, pIconsList);
 			if (pIcon->pSubDock)
 				pIcon->pSubDock->bPreventDraggingIcons = TRUE;  // par defaut pour toutes les applets on empeche de pouvoir deplacer/supprimer les icones a la souris.
 		}
@@ -378,7 +380,7 @@ void cairo_dock_insert_icons_in_applet (CairoDockModuleInstance *pInstance, GLis
 	{
 		if (pIcon->pSubDock != NULL)  // precaution.
 		{
-			cairo_dock_destroy_dock (pIcon->pSubDock, pIcon->cName);
+			gldi_object_unref (GLDI_OBJECT(pIcon->pSubDock));
 			pIcon->pSubDock = NULL;
 		}
 		Icon *pOneIcon;
@@ -395,12 +397,12 @@ void cairo_dock_insert_icons_in_applet (CairoDockModuleInstance *pInstance, GLis
 }
 
 
-void cairo_dock_insert_icon_in_applet (CairoDockModuleInstance *pInstance, Icon *pOneIcon)
+void cairo_dock_insert_icon_in_applet (GldiModuleInstance *pInstance, Icon *pOneIcon)
 {
 	Icon *pIcon = pInstance->pIcon;
 	g_return_if_fail (pIcon != NULL);
 	
-	CairoContainer *pContainer = pInstance->pContainer;
+	GldiContainer *pContainer = pInstance->pContainer;
 	g_return_if_fail (pContainer != NULL);
 	
 	if (pOneIcon == NULL)
@@ -414,7 +416,7 @@ void cairo_dock_insert_icon_in_applet (CairoDockModuleInstance *pInstance, Icon 
 				cairo_dock_set_icon_name (pInstance->pModule->pVisitCard->cModuleName, pIcon, pContainer);
 			if (cairo_dock_check_unique_subdock_name (pIcon))
 				cairo_dock_set_icon_name (pIcon->cName, pIcon, pContainer);
-			pIcon->pSubDock = cairo_dock_create_subdock (pIcon->cName, NULL, pInstance->pDock, NULL);
+			pIcon->pSubDock = gldi_subdock_new (pIcon->cName, NULL, pInstance->pDock, NULL);
 			if (pIcon->pSubDock)
 				pIcon->pSubDock->bPreventDraggingIcons = TRUE;  // par defaut pour toutes les applets on empeche de pouvoir deplacer/supprimer les icones a la souris.
 		}
@@ -433,7 +435,7 @@ void cairo_dock_insert_icon_in_applet (CairoDockModuleInstance *pInstance, Icon 
 	{
 		if (pIcon->pSubDock != NULL)  // precaution.
 		{
-			cairo_dock_destroy_dock (pIcon->pSubDock, pIcon->cName);
+			gldi_object_unref (GLDI_OBJECT(pIcon->pSubDock));
 			pIcon->pSubDock = NULL;
 		}
 		
@@ -442,16 +444,16 @@ void cairo_dock_insert_icon_in_applet (CairoDockModuleInstance *pInstance, Icon 
 			Icon *pLastIcon = cairo_dock_get_last_icon (pInstance->pDesklet->icons);
 			pOneIcon->fOrder = (pLastIcon ? pLastIcon->fOrder + 1 : 0);
 		}
-		cairo_dock_insert_icon_in_desklet (pOneIcon, pInstance->pDesklet);
+		gldi_desklet_insert_icon (pOneIcon, pInstance->pDesklet);
 	}
 }
 
-gboolean cairo_dock_detach_icon_from_applet (CairoDockModuleInstance *pInstance, Icon *pOneIcon)
+gboolean cairo_dock_detach_icon_from_applet (GldiModuleInstance *pInstance, Icon *pOneIcon)
 {
 	Icon *pIcon = pInstance->pIcon;
 	g_return_val_if_fail (pIcon != NULL, FALSE);
 	
-	CairoContainer *pContainer = pInstance->pContainer;
+	GldiContainer *pContainer = pInstance->pContainer;
 	g_return_val_if_fail (pContainer != NULL, FALSE);
 	
 	if (pOneIcon == NULL)
@@ -468,24 +470,24 @@ gboolean cairo_dock_detach_icon_from_applet (CairoDockModuleInstance *pInstance,
 	}
 	else if (pInstance->pDesklet)
 	{
-		bRemoved = cairo_dock_detach_icon_from_desklet (pOneIcon, pInstance->pDesklet);
+		bRemoved = gldi_desklet_detach_icon (pOneIcon, pInstance->pDesklet);
 	}
 	return bRemoved;
 }
 
-gboolean cairo_dock_remove_icon_from_applet (CairoDockModuleInstance *pInstance, Icon *pOneIcon)
+gboolean cairo_dock_remove_icon_from_applet (GldiModuleInstance *pInstance, Icon *pOneIcon)
 {
 	gboolean r = cairo_dock_detach_icon_from_applet (pInstance, pOneIcon);
 	cairo_dock_free_icon (pOneIcon);
 	return r;
 }
 
-void cairo_dock_remove_all_icons_from_applet (CairoDockModuleInstance *pInstance)
+void cairo_dock_remove_all_icons_from_applet (GldiModuleInstance *pInstance)
 {
 	Icon *pIcon = pInstance->pIcon;
 	g_return_if_fail (pIcon != NULL);
 	
-	CairoContainer *pContainer = pInstance->pContainer;
+	GldiContainer *pContainer = pInstance->pContainer;
 	g_return_if_fail (pContainer != NULL);
 	
 	cd_debug ("%s (%s)", __func__, pInstance->pModule->pVisitCard->cModuleName);
@@ -509,19 +511,19 @@ void cairo_dock_remove_all_icons_from_applet (CairoDockModuleInstance *pInstance
 		else  // precaution pas chere
 		{
 			cd_debug (" destroy sub-dock");
-			cairo_dock_destroy_dock (pIcon->pSubDock, pIcon->cName);
+			gldi_object_unref (GLDI_OBJECT(pIcon->pSubDock));
 			pIcon->pSubDock = NULL;
 		}
 	}
 }
 
 
-void cairo_dock_resize_applet (CairoDockModuleInstance *pInstance, int w, int h)
+void cairo_dock_resize_applet (GldiModuleInstance *pInstance, int w, int h)
 {
 	Icon *pIcon = pInstance->pIcon;
 	g_return_if_fail (pIcon != NULL);
 	
-	CairoContainer *pContainer = pInstance->pContainer;
+	GldiContainer *pContainer = pInstance->pContainer;
 	g_return_if_fail (pContainer != NULL);
 	
 	if (pInstance->pDock)

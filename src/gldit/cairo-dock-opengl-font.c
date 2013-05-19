@@ -34,7 +34,7 @@
 #define RADIAN (G_PI / 180.0)  // Conversion Radian/Degres
 #define DELTA_ROUND_DEGREE 3
 
-extern CairoContainer *g_pPrimaryContainer;
+extern GldiContainer *g_pPrimaryContainer;
 
 extern CairoDockGLConfig g_openglConfig;
 

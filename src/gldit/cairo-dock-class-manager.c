@@ -30,7 +30,8 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-dock-factory.h"
-#include "cairo-dock-module-factory.h"
+#include "cairo-dock-module-manager.h"  // GldiModule
+#include "cairo-dock-module-instance-manager.h"  // GldiModuleInstance
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-applications-manager.h"
@@ -43,7 +44,7 @@
 #include "cairo-dock-application-facility.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-file-manager.h"
-#include "cairo-dock-X-utilities.h"  // cairo_dock_remove_version_from_string
+#include "cairo-dock-windows-manager.h"
 #include "cairo-dock-class-manager.h"
 
 extern CairoDock *g_pMainDock;
@@ -143,7 +144,7 @@ CairoDock* cairo_dock_create_class_subdock (const gchar *cClass, CairoDock *pPar
 	{
 		g_free (pClassAppli->cDockName);
 		pClassAppli->cDockName = cairo_dock_get_unique_dock_name (cClass);
-		pDock = cairo_dock_create_subdock (pClassAppli->cDockName, NULL, pParentDock, NULL);
+		pDock = gldi_subdock_new (pClassAppli->cDockName, NULL, pParentDock, NULL);
 	}
 	
 	return pDock;
@@ -157,16 +158,16 @@ static void cairo_dock_destroy_class_subdock (const gchar *cClass)
 	CairoDock *pDock = cairo_dock_search_dock_from_name (pClassAppli->cDockName);
 	if (pDock)
 	{
-		cairo_dock_destroy_dock (pDock, pClassAppli->cDockName);
+		gldi_object_unref (GLDI_OBJECT(pDock));
 	}
 	
 	g_free (pClassAppli->cDockName);
 	pClassAppli->cDockName = NULL;
 }
 
-gboolean cairo_dock_add_appli_to_class (Icon *pIcon)
+gboolean cairo_dock_add_appli_icon_to_class (Icon *pIcon)
 {
-	g_return_val_if_fail (pIcon!= NULL, FALSE);
+	g_return_val_if_fail (CAIRO_DOCK_ICON_TYPE_IS_APPLI (pIcon) && pIcon->pAppli, FALSE);
 	cd_message ("%s (%s)", __func__, pIcon->cClass);
 	
 	if (pIcon->cClass == NULL)
@@ -179,7 +180,7 @@ gboolean cairo_dock_add_appli_to_class (Icon *pIcon)
 	
 	///if (pClassAppli->iAge == 0)  // age is > 0, so it means we have never set it yet.
 	if (pClassAppli->pAppliOfClass == NULL)  // the first appli of a class defines the age of the class.
-		pClassAppli->iAge = pIcon->iAge;
+		pClassAppli->iAge = pIcon->pAppli->iAge;
 	
 	g_return_val_if_fail (g_list_find (pClassAppli->pAppliOfClass, pIcon) == NULL, TRUE);
 	pClassAppli->pAppliOfClass = g_list_prepend (pClassAppli->pAppliOfClass, pIcon);
@@ -267,7 +268,7 @@ static void _cairo_dock_set_same_indicator_on_sub_dock (Icon *pInhibhatorIcon)
 	}
 }
 
-static Window _cairo_dock_detach_appli_of_class (const gchar *cClass)
+static GldiWindowActor *_cairo_dock_detach_appli_of_class (const gchar *cClass)
 {
 	g_return_val_if_fail (cClass != NULL, 0);
 	
@@ -277,7 +278,7 @@ static Window _cairo_dock_detach_appli_of_class (const gchar *cClass)
 	///gboolean bNeedsRedraw = FALSE;
 	gboolean bDetached;
 	CairoDock *pParentDock;
-	Window XFirstFoundId = 0;
+	GldiWindowActor *pFirstFoundActor = NULL;
 	for (pElement = pList; pElement != NULL; pElement = pElement->next)
 	{
 		pIcon = pElement->data;
@@ -285,7 +286,7 @@ static Window _cairo_dock_detach_appli_of_class (const gchar *cClass)
 		if (pParentDock == NULL)  // pas dans un dock => rien a faire.
 			continue;
 		
-		cd_debug ("detachement de l'icone %s (%d)", pIcon->cName, XFirstFoundId);
+		cd_debug ("detachement de l'icone %s (%p)", pIcon->cName, pFirstFoundActor);
 		gchar *cParentDockName = pIcon->cParentDockName;
 		pIcon->cParentDockName = NULL;  // astuce.
 		bDetached = cairo_dock_detach_icon_from_dock (pIcon, pParentDock);
@@ -316,9 +317,9 @@ static Window _cairo_dock_detach_appli_of_class (const gchar *cClass)
 		}
 		g_free (cParentDockName);
 		
-		if (XFirstFoundId == 0)  // on recupere la 1ere appli de la classe.
+		if (pFirstFoundActor == NULL)  // on recupere la 1ere appli de la classe.
 		{
-			XFirstFoundId = pIcon->Xid;
+			pFirstFoundActor = pIcon->pAppli;
 		}
 	}
 	/**if (! cairo_dock_is_loading () && bNeedsRedraw)  // mise a jour du main dock en 1 coup.
@@ -327,7 +328,7 @@ static Window _cairo_dock_detach_appli_of_class (const gchar *cClass)
 		cairo_dock_calculate_dock_icons (g_pMainDock);
 		gtk_widget_queue_draw (g_pMainDock->container.pWidget);
 	}*/
-	return XFirstFoundId;
+	return pFirstFoundActor;
 }
 gboolean cairo_dock_inhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
 {
@@ -348,12 +349,12 @@ gboolean cairo_dock_inhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
 	// if launchers are mixed with applis, steal applis icons.
 	if (!myTaskbarParam.bMixLauncherAppli)
 		return TRUE;
-	Window XFirstFoundId = _cairo_dock_detach_appli_of_class (cClass);  // detach existing applis, and then retach them to the inhibitor.
+	GldiWindowActor *pFirstFoundActor = _cairo_dock_detach_appli_of_class (cClass);  // detach existing applis, and then retach them to the inhibitor.
 	if (pInhibitorIcon != NULL)
 	{
 		// inhibitor takes control of the first existing appli of the class.
-		pInhibitorIcon->Xid = XFirstFoundId;
-		pInhibitorIcon->bHasIndicator = (XFirstFoundId > 0);
+		gldi_icon_set_appli (pInhibitorIcon, pFirstFoundActor);
+		pInhibitorIcon->bHasIndicator = (pFirstFoundActor != NULL);
 		_cairo_dock_set_same_indicator_on_sub_dock (pInhibitorIcon);
 		
 		// other applis icons are retached to the inhibitor.
@@ -364,7 +365,7 @@ gboolean cairo_dock_inhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
 		{
 			pIcon = pElement->data;
 			cd_debug ("une appli detachee (%s)", pIcon->cParentDockName);
-			if (pIcon->Xid != XFirstFoundId && pIcon->cParentDockName == NULL)  // s'est faite detacher et doit etre rattachee.
+			if (pIcon->pAppli != pFirstFoundActor && pIcon->cParentDockName == NULL)  // s'est faite detacher et doit etre rattachee.
 				cairo_dock_insert_appli_in_dock (pIcon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);
 		}
 	}
@@ -406,16 +407,15 @@ gboolean cairo_dock_prevent_inhibited_class (Icon *pIcon)
 			pInhibitorIcon = pElement->data;
 			if (pInhibitorIcon != NULL)  // un inhibiteur est present.
 			{
-				if (pInhibitorIcon->Xid == 0 && pInhibitorIcon->pSubDock == NULL)  // cette icone inhibe cette classe mais ne controle encore aucune appli, on s'y asservit.
+				if (pInhibitorIcon->pAppli == NULL && pInhibitorIcon->pSubDock == NULL)  // cette icone inhibe cette classe mais ne controle encore aucune appli, on s'y asservit.
 				{
-					pInhibitorIcon->Xid = pIcon->Xid;
-					pInhibitorIcon->bIsHidden = pIcon->bIsHidden;
-					cd_message (">>> %s prendra un indicateur au prochain redraw ! (Xid : %d)", pInhibitorIcon->cName, pInhibitorIcon->Xid);
+					gldi_icon_set_appli (pInhibitorIcon, pIcon->pAppli);
+					cd_message (">>> %s prendra un indicateur au prochain redraw ! (pAppli : %p)", pInhibitorIcon->cName, pInhibitorIcon->pAppli);
 					pInhibitorIcon->bHasIndicator = TRUE;
 					_cairo_dock_set_same_indicator_on_sub_dock (pInhibitorIcon);
 				/**}
 				
-				if (pInhibitorIcon->Xid == pIcon->Xid)  // cette icone nous controle.
+				if (pInhibitorIcon->pAppli == pIcon->pAppli)  // cette icone nous controle.
 				{*/
 					CairoDock *pInhibatorDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
 					//\______________ On place l'icone pour X.
@@ -438,7 +438,7 @@ gboolean cairo_dock_prevent_inhibited_class (Icon *pIcon)
 						cairo_dock_set_icon_name (pIcon->cName, pInhibitorIcon, CAIRO_CONTAINER (pInhibatorDock));
 					}
 				}
-				bToBeInhibited = (pInhibitorIcon->Xid == pIcon->Xid);
+				bToBeInhibited = (pInhibitorIcon->pAppli == pIcon->pAppli);
 			}
 		}
 	}
@@ -478,18 +478,18 @@ void cairo_dock_deinhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
 		cairo_dock_destroy_class_subdock (cClass);  // destroy the sub-dock without destroying its icons
 		
 		// then re-insert the appli icons.
-		Icon *pAppli;
+		Icon *pAppliIcon;
 		GList *ic;
 		for (ic = icons; ic != NULL; ic = ic->next)
 		{
-			pAppli = ic->data;
-			cairo_dock_set_icon_container (pAppli, NULL);  // manually "detach" it
-			cairo_dock_insert_appli_in_dock (pAppli, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);
+			pAppliIcon = ic->data;
+			cairo_dock_set_icon_container (pAppliIcon, NULL);  // manually "detach" it
+			cairo_dock_insert_appli_in_dock (pAppliIcon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);
 		}
 		g_list_free (icons);
 	}
 	
-	if (pInhibitorIcon == NULL || pInhibitorIcon->Xid != 0)  // the launcher is controlling 1 appli icon, or we deinhibate all the inhibitors.
+	if (pInhibitorIcon == NULL || pInhibitorIcon->pAppli != NULL)  // the launcher is controlling 1 appli icon, or we deinhibate all the inhibitors.
 	{
 		const GList *pList = cairo_dock_list_existing_appli_with_class (cClass);
 		Icon *pIcon;
@@ -499,9 +499,9 @@ void cairo_dock_deinhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
 		for (pElement = pList; pElement != NULL; pElement = pElement->next)
 		{
 			pIcon = pElement->data;
-			if (pInhibitorIcon == NULL || pIcon->Xid == pInhibitorIcon->Xid)
+			if (pInhibitorIcon == NULL || pIcon->pAppli == pInhibitorIcon->pAppli)
 			{
-				cd_message ("rajout de l'icone precedemment inhibee (Xid:%d)", pIcon->Xid);
+				cd_message ("rajout de l'icone precedemment inhibee (pAppli:%p)", pIcon->pAppli);
 				pIcon->fInsertRemoveFactor = 0;
 				pIcon->fScale = 1.;
 				pParentDock = cairo_dock_insert_appli_in_dock (pIcon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);
@@ -518,7 +518,7 @@ void cairo_dock_deinhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
 	if (pInhibitorIcon != NULL)
 	{
 		cd_message (" l'inhibiteur a perdu toute sa mana");
-		pInhibitorIcon->Xid = 0;
+		gldi_icon_unset_appli (pInhibitorIcon);
 		pInhibitorIcon->bHasIndicator = FALSE;
 		g_free (pInhibitorIcon->cClass);
 		pInhibitorIcon->cClass = NULL;
@@ -527,38 +527,40 @@ void cairo_dock_deinhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
 }
 
 
-void cairo_dock_detach_Xid_from_inhibitors (Window Xid, const gchar *cClass)
+void cairo_dock_detach_Xid_from_inhibitors (GldiWindowActor *pAppli, const gchar *cClass)
 {
 	cd_message ("%s (%s)", __func__, cClass);
 	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
 	if (pClassAppli != NULL)
 	{
-		int iNextXid = -1;  // next window that will be inhibited.
+		GldiWindowActor *pNextAppli = NULL;  // next window that will be inhibited.
+		gboolean bFirstSearch = TRUE;
 		Icon *pSameClassIcon = NULL;
 		Icon *pIcon;
 		GList *pElement;
 		for (pElement = pClassAppli->pIconsOfClass; pElement != NULL; pElement = pElement->next)
 		{
 			pIcon = pElement->data;
-			if (pIcon->Xid == Xid)  // this inhibitor controls the given window -> make it control another (possibly none).
+			if (pIcon->pAppli == pAppli)  // this inhibitor controls the given window -> make it control another (possibly none).
 			{
-				if (iNextXid == -1)  // we didn't search the next window yet, do it now.
+				if (bFirstSearch)  // we didn't search the next window yet, do it now.
 				{
+					bFirstSearch = FALSE;
 					Icon *pOneIcon;
 					GList *ic;
 					for (ic = g_list_last (pClassAppli->pAppliOfClass); ic != NULL; ic = ic->prev)  // reverse order, to take the oldest window of this class.
 					{
 						pOneIcon = ic->data;
 						if (pOneIcon != NULL
-						&& ! cairo_dock_icon_is_being_removed (pOneIcon)  // small optimization
-						&& pOneIcon->Xid != Xid  // not the window we precisely want to avoid
-						&& (! myTaskbarParam.bAppliOnCurrentDesktopOnly || cairo_dock_appli_is_on_current_desktop (pOneIcon)))  // can actually be displayed
+						&& pOneIcon->pAppli != NULL
+						&& pOneIcon->pAppli != pAppli  // not the window we precisely want to avoid
+						&& (! myTaskbarParam.bAppliOnCurrentDesktopOnly || gldi_window_is_on_current_desktop (pOneIcon->pAppli)))  // can actually be displayed
 						{
 							pSameClassIcon = pOneIcon;
 							break ;
 						}
 					}
-					iNextXid = (pSameClassIcon != NULL ? pSameClassIcon->Xid : 0);
+					pNextAppli = (pSameClassIcon != NULL ? pSameClassIcon->pAppli : 0);
 					if (pSameClassIcon != NULL)  // this icon will be inhibited, we need to detach it if needed
 					{
 						cd_message ("  c'est %s qui va la remplacer", pSameClassIcon->cName);
@@ -566,18 +568,18 @@ void cairo_dock_detach_Xid_from_inhibitors (Window Xid, const gchar *cClass)
 						if (pSameClassDock != NULL)  // it's inside a dock -> detach it
 						{
 							cairo_dock_detach_icon_from_dock (pSameClassIcon, pSameClassDock);
-							///cairo_dock_update_dock_size (pSameClassDock);  // it can't be the class sub-dock, because pIcon had the Xid, so it doesn't hold the class sub-dock and the class is not grouped (otherwise they would all be in the class sub-dock).
+							///cairo_dock_update_dock_size (pSameClassDock);  // it can't be the class sub-dock, because pIcon had the window actor, so it doesn't hold the class sub-dock and the class is not grouped (otherwise they would all be in the class sub-dock).
 						}
 					}
 				}
-				pIcon->Xid = iNextXid;
-				pIcon->bHasIndicator = (iNextXid != 0);
+				gldi_icon_set_appli (pIcon, pNextAppli);
+				pIcon->bHasIndicator = (pNextAppli != NULL);
 				_cairo_dock_set_same_indicator_on_sub_dock (pIcon);
 				if (! pIcon->bHasIndicator)
 				{
-					cairo_dock_set_icon_name (pIcon->cInitialName ,pIcon, NULL);
+					cairo_dock_set_icon_name (pIcon->cInitialName, pIcon, NULL);
 				}
-				cd_message (" %s : bHasIndicator <- %d, Xid <- %d", pIcon->cName, pIcon->bHasIndicator, pIcon->Xid);
+				cd_message (" %s : bHasIndicator <- %d, pAppli <- %p", pIcon->cName, pIcon->bHasIndicator, pIcon->pAppli);
 				CairoDock *pParentDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
 				if (pParentDock)
 					gtk_widget_queue_draw (pParentDock->container.pWidget);
@@ -597,7 +599,7 @@ static void _cairo_dock_remove_all_applis_from_class (G_GNUC_UNUSED gchar *cClas
 	{
 		pInhibitorIcon = pElement->data;
 		pInhibitorIcon->bHasIndicator = FALSE;
-		pInhibitorIcon->Xid = 0;
+		gldi_icon_unset_appli (pInhibitorIcon);
 		_cairo_dock_set_same_indicator_on_sub_dock (pInhibitorIcon);
 	}
 }
@@ -701,7 +703,7 @@ cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, int 
 }
 
 
-void cairo_dock_update_visibility_on_inhibitors (const gchar *cClass, Window Xid, gboolean bIsHidden)
+void cairo_dock_update_visibility_on_inhibitors (const gchar *cClass, GldiWindowActor *pAppli, gboolean bIsHidden)
 {
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
 	if (pClassAppli != NULL)
@@ -712,10 +714,9 @@ void cairo_dock_update_visibility_on_inhibitors (const gchar *cClass, Window Xid
 		{
 			pInhibitorIcon = pElement->data;
 			
-			if (pInhibitorIcon->Xid == Xid)
+			if (pInhibitorIcon->pAppli == pAppli)
 			{
 				cd_debug (" %s aussi se %s", pInhibitorIcon->cName, (bIsHidden ? "cache" : "montre"));
-				pInhibitorIcon->bIsHidden = bIsHidden;
 				if (! CAIRO_DOCK_ICON_TYPE_IS_APPLET (pInhibitorIcon) && myTaskbarParam.fVisibleAppliAlpha != 0)
 				{
 					CairoDock *pInhibatorDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
@@ -727,7 +728,7 @@ void cairo_dock_update_visibility_on_inhibitors (const gchar *cClass, Window Xid
 	}
 }
 
-void cairo_dock_update_activity_on_inhibitors (const gchar *cClass, Window Xid)
+void cairo_dock_update_activity_on_inhibitors (const gchar *cClass, GldiWindowActor *pAppli)
 {
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
 	if (pClassAppli != NULL)
@@ -738,7 +739,7 @@ void cairo_dock_update_activity_on_inhibitors (const gchar *cClass, Window Xid)
 		{
 			pInhibitorIcon = pElement->data;
 			
-			if (pInhibitorIcon->Xid == Xid)
+			if (pInhibitorIcon->pAppli == pAppli)
 			{
 				cd_debug (" %s aussi devient active", pInhibitorIcon->cName);
 				///pInhibitorIcon->bIsActive = TRUE;
@@ -750,7 +751,7 @@ void cairo_dock_update_activity_on_inhibitors (const gchar *cClass, Window Xid)
 	}
 }
 
-void cairo_dock_update_inactivity_on_inhibitors (const gchar *cClass, Window Xid)
+void cairo_dock_update_inactivity_on_inhibitors (const gchar *cClass, GldiWindowActor *pAppli)
 {
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
 	if (pClassAppli != NULL)
@@ -761,7 +762,7 @@ void cairo_dock_update_inactivity_on_inhibitors (const gchar *cClass, Window Xid
 		{
 			pInhibitorIcon = pElement->data;
 			
-			if (pInhibitorIcon->Xid == Xid)
+			if (pInhibitorIcon->pAppli == pAppli)
 			{
 				cd_debug (" %s aussi devient inactive", pInhibitorIcon->cName);
 				///pInhibitorIcon->bIsActive = FALSE;
@@ -773,7 +774,7 @@ void cairo_dock_update_inactivity_on_inhibitors (const gchar *cClass, Window Xid
 	}
 }
 
-void cairo_dock_update_name_on_inhibitors (const gchar *cClass, Window Xid, gchar *cNewName)
+void cairo_dock_update_name_on_inhibitors (const gchar *cClass, GldiWindowActor *actor, gchar *cNewName)
 {
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
 	if (pClassAppli != NULL)
@@ -784,7 +785,7 @@ void cairo_dock_update_name_on_inhibitors (const gchar *cClass, Window Xid, gcha
 		{
 			pInhibitorIcon = pElement->data;
 			
-			if (pInhibitorIcon->Xid == Xid)
+			if (pInhibitorIcon->pAppli == actor)
 			{
 				CairoDock *pParentDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
 				if (pParentDock != NULL)
@@ -825,8 +826,8 @@ Icon *cairo_dock_get_classmate (Icon *pIcon)
 		pFriendIcon = pElement->data;
 		if (pFriendIcon == NULL || pFriendIcon->cParentDockName == NULL)  // if not inside a dock, ignore.
 			continue ;
-		cd_debug (" friend : %s (%d)", pFriendIcon->cName, pFriendIcon->Xid);
-		if (pFriendIcon->Xid != 0 || pFriendIcon->pSubDock != NULL)  // is linked to a window, 1 or several times (Xid or class sub-dock).
+		cd_debug (" friend : %s", pFriendIcon->cName);
+		if (pFriendIcon->pAppli != NULL || pFriendIcon->pSubDock != NULL)  // is linked to a window, 1 or several times (window actor or class sub-dock).
 			return pFriendIcon;
 	}
 	
@@ -919,11 +920,10 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			
 			cairo_dock_destroy_class_subdock (cClass);
 			pFakeClassIcon->pSubDock = NULL;
-			cd_debug ("sanity check : pFakeClassIcon->Xid : %d", pFakeClassIcon->Xid);
 			if (! bLastIconIsRemoving)
 			{
 				cairo_dock_insert_appli_in_dock (pLastClassIcon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);  // a priori inutile.
-				cairo_dock_update_name_on_inhibitors (cClass, pLastClassIcon->Xid, pLastClassIcon->cName);
+				cairo_dock_update_name_on_inhibitors (cClass, pLastClassIcon->pAppli, pLastClassIcon->cName);
 			}
 			else  // la derniere icone est en cours de suppression, inutile de la re-inserer
 			{
@@ -1019,9 +1019,9 @@ Icon *cairo_dock_get_prev_next_classmate_icon (Icon *pIcon, gboolean bNext)
 	{
 		pClassmateIcon = pElement->data;
 		cd_debug (" %s est-elle active ?", pClassmateIcon->cName);
-		if (pClassmateIcon->Xid == pActiveIcon->Xid)  // on a trouve la fenetre active.
+		if (pClassmateIcon->pAppli == pActiveIcon->pAppli)  // on a trouve la fenetre active.
 		{
-			cd_debug ("  fenetre active trouvee (%s; %d)", pClassmateIcon->cName, pClassmateIcon->Xid);
+			cd_debug ("  fenetre active trouvee (%s; %p)", pClassmateIcon->cName, pClassmateIcon->pAppli);
 			if (bNext)  // on prend la 1ere non nulle qui suit.
 			{
 				ic = pElement;
@@ -1034,9 +1034,9 @@ Icon *cairo_dock_get_prev_next_classmate_icon (Icon *pIcon, gboolean bNext)
 						break ;
 					}
 					pClassmateIcon = ic->data;
-					if (pClassmateIcon != NULL && pClassmateIcon->Xid != 0)
+					if (pClassmateIcon != NULL && pClassmateIcon->pAppli != NULL)
 					{
-						cd_debug ("  ok on prend celle-la (%s; %d)", pClassmateIcon->cName, pClassmateIcon->Xid);
+						cd_debug ("  ok on prend celle-la (%s; %p)", pClassmateIcon->cName, pClassmateIcon->pAppli);
 						pNextIcon = pClassmateIcon;
 						break ;
 					}
@@ -1053,7 +1053,7 @@ Icon *cairo_dock_get_prev_next_classmate_icon (Icon *pIcon, gboolean bNext)
 					if (ic == pElement)
 						break ;
 					pClassmateIcon = ic->data;
-					if (pClassmateIcon != NULL && pClassmateIcon->Xid != 0)
+					if (pClassmateIcon != NULL && pClassmateIcon->pAppli != NULL)
 					{
 						pNextIcon = pClassmateIcon;
 						break ;
@@ -1080,7 +1080,7 @@ Icon *cairo_dock_get_inhibitor (Icon *pIcon, gboolean bOnlyInDock)
 		{
 			pInhibitorIcon = pElement->data;
 			
-			if (pInhibitorIcon->Xid == pIcon->Xid)
+			if (pInhibitorIcon->pAppli == pIcon->pAppli)
 			{
 				if (! bOnlyInDock || pInhibitorIcon->cParentDockName != NULL)
 					return pInhibitorIcon;
@@ -1270,7 +1270,7 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 			if (!pNextIcon->cClass || strcmp (pNextIcon->cClass, pIcon->cClass) != 0)  // not our class any more, quit.
 				break;
 			
-			if (pIcon->iAge > pNextIcon->iAge)  // we are more recent than this icon -> place on its right -> continue
+			if (pIcon->pAppli->iAge > pNextIcon->pAppli->iAge)  // we are more recent than this icon -> place on its right -> continue
 			{
 				pSameClassIcon = pNextIcon;  // 'pSameClassIcon' will be the last icon of our class older than us.
 				pNextIcon = NULL;
@@ -1401,7 +1401,7 @@ void cairo_dock_set_class_order_amongst_applis (Icon *pIcon, CairoDock *pDock)  
 				first_appli_ic = ic;
 			if (icon->cClass && strcmp (icon->cClass, pIcon->cClass) == 0)  // this icon is in our class.
 			{
-				if (icon->iAge < pIcon->iAge)  // it's older than us => we are more recent => go after => continue.
+				if (icon->pAppli->iAge < pIcon->pAppli->iAge)  // it's older than us => we are more recent => go after => continue.
 				{
 					last_ic = ic;  // remember the last item of our class.
 				}
@@ -1434,7 +1434,7 @@ void cairo_dock_set_class_order_amongst_applis (Icon *pIcon, CairoDock *pDock)  
 		if (first_appli_ic != NULL)  // if an appli exists in the dock, use it as an anchor.
 		{
 			Icon *pOldestAppli = g_list_last (pClassAppli->pAppliOfClass)->data;  // prepend
-			int iAge = pOldestAppli->iAge;  // the age of our class.
+			int iAge = pOldestAppli->pAppli->iAge;  // the age of our class.
 			
 			GList *last_appli_ic = NULL;  // last appli whose class is older than ours => we'll go just after.
 			for (ic = first_appli_ic; ic != NULL; ic = ic->next)
@@ -1451,7 +1451,7 @@ void cairo_dock_set_class_order_amongst_applis (Icon *pIcon, CairoDock *pDock)  
 				Icon *pOldestAppli = g_list_last (pOtherClassAppli->pAppliOfClass)->data;  // prepend
 				
 				// compare to our class.
-				if (pOldestAppli->iAge < iAge)  // it's older than our class -> skip this whole class, we'll go after.
+				if (pOldestAppli->pAppli->iAge < iAge)  // it's older than our class -> skip this whole class, we'll go after.
 				{
 					while (ic->next != NULL)
 					{
@@ -1990,3 +1990,27 @@ void cairo_dock_set_data_from_class (const gchar *cClass, Icon *pIcon)
 }
 
 
+gboolean cairo_dock_remove_version_from_string (gchar *cString)
+{
+	if (cString == NULL)
+		return FALSE;
+	int n = strlen (cString);
+	gchar *str = cString + n - 1;
+	do
+	{
+		if (g_ascii_isdigit(*str) || *str == '.')
+		{
+			str --;
+			continue;
+		}
+		if (*str == '-' || *str == ' ')  // 'Glade-2', 'OpenOffice 3.1'
+		{
+			*str = '\0';
+			return TRUE;
+		}
+		else
+			return FALSE;
+	}
+	while (str != cString);
+	return FALSE;
+}

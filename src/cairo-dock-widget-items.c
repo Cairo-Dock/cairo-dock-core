@@ -26,8 +26,10 @@
 #include <glib/gi18n.h>
 
 #include "config.h"
-#include "cairo-dock-module-factory.h"
+#include "cairo-dock-module-manager.h"  // gldi_module_foreach
+#include "cairo-dock-module-instance-manager.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-desklet-manager.h"  // cairo_dock_foreach_desklet
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-keyfile-utilities.h"
@@ -39,7 +41,7 @@
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-desktop-file-factory.h"
-#include "cairo-dock-X-manager.h"
+#include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-commons.h"
 #include "cairo-dock-widget-items.h"
@@ -54,7 +56,6 @@
 
 extern gchar *g_cCurrentLaunchersPath;
 extern gchar *g_cCurrentThemePath;
-extern CairoDockDesktopGeometry g_desktopGeometry;
 extern CairoDock *g_pMainDock;
 
 static void _add_one_dock_to_model (CairoDock *pDock, GtkTreeStore *model, GtkTreeIter *pParentIter);
@@ -67,8 +68,8 @@ typedef enum {
 	CD_MODEL_NAME = 0,  // displayed name
 	CD_MODEL_PIXBUF,  // icon image
 	CD_MODEL_ICON,  // Icon (for launcher/separator/sub-dock/applet)
-	CD_MODEL_CONTAINER,  // CairoContainer (for main docks)
-	CD_MODEL_MODULE,  // CairoDockModuleInstance (for plug-ins with no icon)
+	CD_MODEL_CONTAINER,  // GldiContainer (for main docks)
+	CD_MODEL_MODULE,  // GldiModuleInstance (for plug-ins with no icon)
 	CD_MODEL_NB_COLUMNS
 	} CDModelColumns;
 
@@ -157,8 +158,8 @@ static gboolean _on_select_one_item_in_tree (G_GNUC_UNUSED GtkTreeSelection * se
 	// get new current item
 	gchar *cName = NULL;
 	Icon *pIcon = NULL;
-	CairoContainer *pContainer = NULL;
-	CairoDockModuleInstance *pInstance = NULL;
+	GldiContainer *pContainer = NULL;
+	GldiModuleInstance *pInstance = NULL;
 	gtk_tree_model_get (model, &iter,
 		CD_MODEL_NAME, &cName,
 		CD_MODEL_ICON, &pIcon,
@@ -400,7 +401,7 @@ static gboolean _add_one_desklet_to_model (CairoDesklet *pDesklet, GtkTreeStore 
 	return FALSE; // FALSE => keep going
 }
 
-static inline void _add_one_module (G_GNUC_UNUSED const gchar *cModuleName, CairoDockModuleInstance *pModuleInstance, GtkTreeStore *model)
+static inline void _add_one_module (G_GNUC_UNUSED const gchar *cModuleName, GldiModuleInstance *pModuleInstance, GtkTreeStore *model)
 {
 	GtkTreeIter iter;
 	gtk_tree_store_append (model, &iter, NULL);
@@ -418,14 +419,14 @@ static inline void _add_one_module (G_GNUC_UNUSED const gchar *cModuleName, Cair
 	if (pixbuf)
 		g_object_unref (pixbuf);
 }
-static gboolean _add_one_module_to_model (const gchar *cModuleName, CairoDockModule *pModule, GtkTreeStore *model)
+static gboolean _add_one_module_to_model (const gchar *cModuleName, GldiModule *pModule, GtkTreeStore *model)
 {
-	if (pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_BEHAVIOR && pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_THEME && ! cairo_dock_module_is_auto_loaded (pModule))
+	if (pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_BEHAVIOR && pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_THEME && ! gldi_module_is_auto_loaded (pModule))
 	{
 		GList *pItem;
 		for (pItem = pModule->pInstancesList; pItem != NULL; pItem = pItem->next)
 		{
-			CairoDockModuleInstance *pModuleInstance = pItem->data;
+			GldiModuleInstance *pModuleInstance = pItem->data;
 			if (pModuleInstance->pIcon == NULL || (pModuleInstance->pDock && !pModuleInstance->pIcon->cParentDockName))
 			{
 				// on ajoute une ligne pour l'applet.
@@ -436,7 +437,7 @@ static gboolean _add_one_module_to_model (const gchar *cModuleName, CairoDockMod
 	return FALSE; // FALSE => keep going
 }
 
-static void _select_item (ItemsWidget *pItemsWidget, Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance)
+static void _select_item (ItemsWidget *pItemsWidget, Icon *pIcon, GldiContainer *pContainer, GldiModuleInstance *pModuleInstance)
 {
 	g_free (pItemsWidget->cPrevPath);
 	pItemsWidget->cPrevPath = NULL;
@@ -469,14 +470,14 @@ static GtkTreeModel *_build_tree_model (ItemsWidget *pItemsWidget)
 		G_TYPE_POINTER,  // Container
 		G_TYPE_POINTER);  // Module
 	cairo_dock_foreach_docks ((GHFunc) _add_one_root_dock_to_model, model);  // on n'utilise pas cairo_dock_foreach_root_docks(), de facon a avoir le nom du dock.
-	cairo_dock_foreach_desklet ((CairoDockForeachDeskletFunc) _add_one_desklet_to_model, model);
-	cairo_dock_foreach_module ((GHRFunc)_add_one_module_to_model, model);
-	/*CairoDockModule *pModule = cairo_dock_find_module_from_name ("Help");
+	gldi_desklets_foreach ((GldiDeskletForeachFunc) _add_one_desklet_to_model, model);
+	gldi_module_foreach ((GHRFunc)_add_one_module_to_model, model);
+	/*GldiModule *pModule = gldi_module_get ("Help");
 	if (pModule != NULL)
 	{
 		if (pModule->pInstancesList == NULL)  // Help is not active, so is not already in the icons list.
 		{
-			///CairoDockModuleInstance *pModuleInstance = pModule->pInstancesList->data;
+			///GldiModuleInstance *pModuleInstance = pModule->pInstancesList->data;
 			///_add_one_module ("Help", pModuleInstance, model);
 			/// add it ...
 		}
@@ -517,8 +518,8 @@ static void on_row_deleted (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path
 			// get the item that has been moved.
 			gchar *cName = NULL;
 			Icon *pIcon = NULL;
-			CairoContainer *pContainer = NULL;
-			CairoDockModuleInstance *pInstance = NULL;
+			GldiContainer *pContainer = NULL;
+			GldiModuleInstance *pInstance = NULL;
 			gtk_tree_model_get (model, &lastInsertedIter,
 				CD_MODEL_NAME, &cName,
 				CD_MODEL_ICON, &pIcon,
@@ -547,7 +548,7 @@ static void on_row_deleted (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path
 				{
 					gchar *cParentName = NULL;
 					Icon *pParentIcon = NULL;
-					CairoContainer *pParentContainer = NULL;
+					GldiContainer *pParentContainer = NULL;
 					gtk_tree_model_get (model, &parent_iter,
 						CD_MODEL_NAME, &cParentName,
 						CD_MODEL_ICON, &pParentIcon,
@@ -587,7 +588,7 @@ static void on_row_deleted (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path
 							}
 							else if (CAIRO_DOCK_IS_APPLET (pIcon))
 							{
-								cairo_dock_reload_module_instance (pIcon->pModuleInstance, TRUE);  // TRUE <=> reload config.
+								gldi_module_instance_reload (pIcon->pModuleInstance, TRUE);  // TRUE <=> reload config.
 							}
 						}
 						
@@ -663,8 +664,8 @@ static void _on_select_remove_item (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GtkWid
 	
 	// get the corresponding item, and the next line.
 	Icon *pIcon = NULL;
-	CairoContainer *pContainer = NULL;
-	CairoDockModuleInstance *pInstance = NULL;
+	GldiContainer *pContainer = NULL;
+	GldiModuleInstance *pInstance = NULL;
 	gtk_tree_model_get (pModel, &iter,
 		CD_MODEL_ICON, &pIcon,
 		CD_MODEL_CONTAINER, &pContainer,
@@ -686,7 +687,7 @@ static void _on_select_remove_item (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GtkWid
 	}
 	else if (pInstance != NULL)  // plug-in
 	{
-		cairo_dock_remove_module_instance (pInstance);
+		gldi_module_remove_instance (pInstance);
 	}
 	else if (CAIRO_DOCK_IS_DOCK (pContainer))  // main-dock
 	{
@@ -695,8 +696,7 @@ static void _on_select_remove_item (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GtkWid
 		{
 			cairo_dock_remove_icons_from_dock (pDock, NULL, NULL);
 		
-			const gchar *cDockName = cairo_dock_search_dock_name (pDock);
-			cairo_dock_destroy_dock (pDock, cDockName);
+			gldi_object_unref (GLDI_OBJECT(pDock));
 		}
 	}
 	
@@ -790,8 +790,8 @@ ItemsWidget *cairo_dock_items_widget_new (GtkWindow *pMainWindow)
 	gtk_paned_pack1 (GTK_PANED (pLauncherPane), pLauncherWindow, TRUE, FALSE);
 	
 	//\_____________ On essaie de definir une taille correcte.
-	int w = MIN (CAIRO_DOCK_LAUNCHER_PANEL_WIDTH, gldi_get_desktop_width());
-	if (gldi_get_desktop_width() < CAIRO_DOCK_LAUNCHER_PANEL_WIDTH)  // ecran trop petit, on va essayer de reserver au moins R pixels pour le panneau de droite (avec un minimum de L pixels pour celui de gauche).
+	int w = MIN (CAIRO_DOCK_LAUNCHER_PANEL_WIDTH, gldi_desktop_get_width());
+	if (gldi_desktop_get_width() < CAIRO_DOCK_LAUNCHER_PANEL_WIDTH)  // ecran trop petit, on va essayer de reserver au moins R pixels pour le panneau de droite (avec un minimum de L pixels pour celui de gauche).
 		gtk_paned_set_position (GTK_PANED (pLauncherPane), MAX (CAIRO_DOCK_LEFT_PANE_MIN_WIDTH, w - CAIRO_DOCK_RIGHT_PANE_MIN_WIDTH));
 	else  // we set a default width rather than letting GTK guess the best, because the right panel is more important than the left one.
 		gtk_paned_set_position (GTK_PANED (pLauncherPane), CAIRO_DOCK_LEFT_PANE_DEFAULT_WIDTH);
@@ -805,8 +805,8 @@ static void _items_widget_apply (CDWidget *pCdWidget)
 {
 	ItemsWidget *pItemsWidget = ITEMS_WIDGET (pCdWidget);
 	Icon *pIcon = pItemsWidget->pCurrentIcon;
-	CairoContainer *pContainer = pItemsWidget->pCurrentContainer;
-	CairoDockModuleInstance *pModuleInstance = pItemsWidget->pCurrentModuleInstance;
+	GldiContainer *pContainer = pItemsWidget->pCurrentContainer;
+	GldiModuleInstance *pModuleInstance = pItemsWidget->pCurrentModuleInstance;
 	
 	if (CAIRO_DOCK_IS_APPLET (pIcon))
 		pModuleInstance = pIcon->pModuleInstance;
@@ -848,7 +848,7 @@ static void _items_widget_apply (CDWidget *pCdWidget)
 		g_key_file_free (pKeyFile);
 		
 		// reload module.
-		cairo_dock_reload_module_instance (pModuleInstance, TRUE);
+		gldi_module_instance_reload (pModuleInstance, TRUE);
 	}
 	else if (CAIRO_DOCK_IS_DOCK (pContainer))
 	{
@@ -873,7 +873,7 @@ static void _items_widget_apply (CDWidget *pCdWidget)
 			g_free (cConfFilePath);
 			
 			// reload dock's config.
-			cairo_dock_reload_one_root_dock (cDockName, pDock);
+			gldi_dock_reload (pDock);
 		}
 	}
 	else if (pIcon)
@@ -917,7 +917,7 @@ static void _items_widget_apply (CDWidget *pCdWidget)
  /// WIDGET API ///
 //////////////////
 
-void cairo_dock_items_widget_select_item (ItemsWidget *pItemsWidget, Icon *pIcon, CairoContainer *pContainer, CairoDockModuleInstance *pModuleInstance, int iNotebookPage)
+void cairo_dock_items_widget_select_item (ItemsWidget *pItemsWidget, Icon *pIcon, GldiContainer *pContainer, GldiModuleInstance *pModuleInstance, int iNotebookPage)
 {
 	_delete_current_launcher_widget (pItemsWidget);  // pItemsWidget->pCurrentLauncherWidget <- 0
 	
@@ -948,8 +948,8 @@ static void _items_widget_reload (CDWidget *pCdWidget)
 	
 	// reload the current icon/container's widgets by reselecting the current line.
 	Icon *pCurrentIcon = pItemsWidget->pCurrentIcon;
-	CairoContainer *pCurrentContainer = pItemsWidget->pCurrentContainer;
-	CairoDockModuleInstance *pCurrentModuleInstance = pItemsWidget->pCurrentModuleInstance;
+	GldiContainer *pCurrentContainer = pItemsWidget->pCurrentContainer;
+	GldiModuleInstance *pCurrentModuleInstance = pItemsWidget->pCurrentModuleInstance;
 	
 	_delete_current_launcher_widget (pItemsWidget);  // pItemsWidget->pCurrentLauncherWidget <- 0
 	
@@ -993,7 +993,7 @@ void cairo_dock_items_widget_update_desklet_visibility_params (ItemsWidget *pIte
 	cairo_dock_update_desklet_visibility_widgets (pDesklet, pWidgetList);
 }
 
-void cairo_dock_items_widget_update_module_instance_container (ItemsWidget *pItemsWidget, CairoDockModuleInstance *pInstance, gboolean bDetached)
+void cairo_dock_items_widget_update_module_instance_container (ItemsWidget *pItemsWidget, GldiModuleInstance *pInstance, gboolean bDetached)
 {
 	g_return_if_fail (pItemsWidget != NULL);
 	// check that it's about the current item
@@ -1009,14 +1009,14 @@ void cairo_dock_items_widget_update_module_instance_container (ItemsWidget *pIte
 	cairo_dock_update_is_detached_widget (bDetached, pWidgetList);
 }
 
-void cairo_dock_items_widget_reload_current_widget (ItemsWidget *pItemsWidget, CairoDockModuleInstance *pInstance, int iShowPage)
+void cairo_dock_items_widget_reload_current_widget (ItemsWidget *pItemsWidget, GldiModuleInstance *pInstance, int iShowPage)
 {
 	g_return_if_fail (pItemsWidget != NULL && pItemsWidget->pTreeView != NULL);
 	cd_debug ("%s ()", __func__);
 	
 	// check that it's about the current item
 	Icon *pIcon = pItemsWidget->pCurrentIcon;
-	CairoDockModuleInstance *pModuleInstance = pItemsWidget->pCurrentModuleInstance;
+	GldiModuleInstance *pModuleInstance = pItemsWidget->pCurrentModuleInstance;
 	if (pInstance)
 	{
 		if (pIcon)

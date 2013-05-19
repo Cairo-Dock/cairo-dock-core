@@ -18,11 +18,14 @@
 */
 
 #include <X11/Xatom.h>
+#include <gdk/gdkx.h>  // GDK_WINDOW_XID
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dbus.h"
-#include "cairo-dock-X-manager.h"
+#include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-X-utilities.h"
+#include "cairo-dock-windows-manager.h"
+#include "cairo-dock-container.h"  // gldi_container_get_Xid
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-launcher-manager.h"  // cairo_dock_launch_command_sync
 #include "cairo-dock-config.h"  // cairo_dock_get_version_from_string
@@ -69,7 +72,7 @@ static gboolean present_class (const gchar *cClass)
 	for (ic = pIcons; ic != NULL; ic = ic->next)
 	{
 		pOneIcon = ic->data;
-		bAllHidden &= pOneIcon->bIsHidden;
+		bAllHidden &= pOneIcon->pAppli->bIsHidden;
 	}
 	if (bAllHidden)
 		return FALSE;
@@ -226,9 +229,10 @@ static gboolean _check_widget_plugin (G_GNUC_UNUSED gpointer data)
 	
 	return FALSE;
 }
-static gboolean set_on_widget_layer (Window Xid, gboolean bOnWidgetLayer)
+static gboolean set_on_widget_layer (GldiContainer *pContainer, gboolean bOnWidgetLayer)
 {
 	cd_debug ("%s ()", __func__);
+	Window Xid = gldi_container_get_Xid (pContainer);
 	static gboolean s_bFirst = TRUE;
 	Display *dpy = cairo_dock_get_Xdisplay ();
 	if (bOnWidgetLayer)
@@ -261,7 +265,7 @@ static gboolean set_on_widget_layer (Window Xid, gboolean bOnWidgetLayer)
 
 static void _register_compiz_backend (void)
 {
-	CairoDockWMBackend *p = g_new0 (CairoDockWMBackend, 1);
+	GldiDesktopManagerBackend *p = g_new0 (GldiDesktopManagerBackend, 1);
 	
 	p->present_class = present_class;
 	p->present_windows = present_windows;
@@ -269,12 +273,12 @@ static void _register_compiz_backend (void)
 	p->show_widget_layer = show_widget_layer;
 	p->set_on_widget_layer = set_on_widget_layer;
 	
-	cairo_dock_wm_register_backend (p);
+	gldi_desktop_manager_register_backend (p);
 }
 
 static void _unregister_compiz_backend (void)
 {
-	cairo_dock_wm_register_backend (NULL);
+	//cairo_dock_wm_register_backend (NULL);
 }
 
 gboolean cd_is_the_new_compiz (void)

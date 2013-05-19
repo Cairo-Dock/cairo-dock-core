@@ -60,12 +60,13 @@
 
 #include "config.h"
 #include "cairo-dock-icon-facility.h"  // cairo_dock_get_first_icon
-#include "cairo-dock-module-factory.h"
+#include "cairo-dock-module-manager.h"  // gldi_modules_new_from_directory
+#include "cairo-dock-module-instance-manager.h"  // GldiModuleInstance
 #include "cairo-dock-dock-manager.h"
+#include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-menu.h"
 #include "cairo-dock-themes-manager.h"
-#include "cairo-dock-dialog-manager.h"
-#include "cairo-dock-notifications.h"
+#include "cairo-dock-dialog-factory.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-file-manager.h"
@@ -100,7 +101,7 @@ extern CairoDockGLConfig g_openglConfig;
 extern gboolean g_bUseOpenGL;
 extern gboolean g_bEasterEggs;
 
-extern CairoDockModuleInstance *g_pCurrentModule;
+extern GldiModuleInstance *g_pCurrentModule;
 extern GtkWidget *cairo_dock_build_simple_gui_window (void);
 
 gboolean g_bForceCairo = FALSE;
@@ -146,10 +147,10 @@ static gboolean _cairo_dock_successful_launch (gpointer data)
 			G_TYPE_INVALID);
 		g_free (cConfFilePath);
 		
-		Icon *pIcon = cairo_dock_get_dialogless_icon ();
+		Icon *pIcon = gldi_icons_get_any_without_dialog ();
 		gchar *cMessage = g_strdup_printf (_("Happy new year %d !!!"), s_iLastYear);
 		gchar *cMessageFull = g_strdup_printf ("\n%s :-)\n", cMessage);
-		cairo_dock_show_temporary_dialog_with_icon (cMessageFull, pIcon, CAIRO_CONTAINER (g_pMainDock), 15000., CAIRO_DOCK_SHARE_DATA_DIR"/icons/balloons.png");
+		gldi_dialog_show_temporary_with_icon (cMessageFull, pIcon, CAIRO_CONTAINER (g_pMainDock), 15000., CAIRO_DOCK_SHARE_DATA_DIR"/icons/balloons.png");
 		g_free (cMessageFull);
 		g_free (cMessage);
 	}
@@ -599,7 +600,7 @@ int main (int argc, char** argv)
 	//\___________________ load plug-ins (must be done after everything is initialized).
 	if (! bSafeMode)
 	{
-		cairo_dock_load_modules_in_directory (NULL, &erreur);  // load gldi-based plug-ins
+		gldi_modules_new_from_directory (NULL, &erreur);  // load gldi-based plug-ins
 		if (erreur != NULL)
 		{
 			cd_warning ("%s\n  no module will be available", erreur->message);
@@ -609,7 +610,7 @@ int main (int argc, char** argv)
 		
 		if (cUserDefinedModuleDir != NULL)
 		{
-			cairo_dock_load_modules_in_directory (cUserDefinedModuleDir, &erreur);  // load user plug-ins
+			gldi_modules_new_from_directory (cUserDefinedModuleDir, &erreur);  // load user plug-ins
 			if (erreur != NULL)
 			{
 				cd_warning ("%s\n  no additionnal module will be available", erreur->message);
@@ -625,83 +626,83 @@ int main (int argc, char** argv)
 	cairo_dock_load_user_gui_backend (s_iGuiMode);
 	
 	//\___________________ register to the useful notifications.
-	cairo_dock_register_notification_on_object (&myContainersMgr,
+	gldi_object_register_notification (&myContainersMgr,
 		NOTIFICATION_DROP_DATA,
-		(CairoDockNotificationFunc) cairo_dock_notification_drop_data,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification_on_object (&myContainersMgr,
+		(GldiNotificationFunc) cairo_dock_notification_drop_data,
+		GLDI_RUN_AFTER, NULL);
+	gldi_object_register_notification (&myContainersMgr,
 		NOTIFICATION_CLICK_ICON,
-		(CairoDockNotificationFunc) cairo_dock_notification_click_icon,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification_on_object (&myContainersMgr,
+		(GldiNotificationFunc) cairo_dock_notification_click_icon,
+		GLDI_RUN_AFTER, NULL);
+	gldi_object_register_notification (&myContainersMgr,
 		NOTIFICATION_MIDDLE_CLICK_ICON,
-		(CairoDockNotificationFunc) cairo_dock_notification_middle_click_icon,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification_on_object (&myContainersMgr,
+		(GldiNotificationFunc) cairo_dock_notification_middle_click_icon,
+		GLDI_RUN_AFTER, NULL);
+	gldi_object_register_notification (&myContainersMgr,
 		NOTIFICATION_SCROLL_ICON,
-		(CairoDockNotificationFunc) cairo_dock_notification_scroll_icon,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification_on_object (&myContainersMgr,
+		(GldiNotificationFunc) cairo_dock_notification_scroll_icon,
+		GLDI_RUN_AFTER, NULL);
+	gldi_object_register_notification (&myContainersMgr,
 		NOTIFICATION_BUILD_CONTAINER_MENU,
-		(CairoDockNotificationFunc) cairo_dock_notification_build_container_menu,
-		CAIRO_DOCK_RUN_FIRST, NULL);
-	cairo_dock_register_notification_on_object (&myContainersMgr,
+		(GldiNotificationFunc) cairo_dock_notification_build_container_menu,
+		GLDI_RUN_FIRST, NULL);
+	gldi_object_register_notification (&myContainersMgr,
 		NOTIFICATION_BUILD_ICON_MENU,
-		(CairoDockNotificationFunc) cairo_dock_notification_build_icon_menu,
-		CAIRO_DOCK_RUN_AFTER, NULL);
+		(GldiNotificationFunc) cairo_dock_notification_build_icon_menu,
+		GLDI_RUN_AFTER, NULL);
 	
-	cairo_dock_register_notification_on_object (&myDeskletsMgr,
+	gldi_object_register_notification (&myDeskletsMgr,
 		NOTIFICATION_CONFIGURE_DESKLET,
-		(CairoDockNotificationFunc) cairo_dock_notification_configure_desklet,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification_on_object (&myDocksMgr,
+		(GldiNotificationFunc) cairo_dock_notification_configure_desklet,
+		GLDI_RUN_AFTER, NULL);
+	gldi_object_register_notification (&myDocksMgr,
 		NOTIFICATION_ICON_MOVED,
-		(CairoDockNotificationFunc) cairo_dock_notification_icon_moved,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification_on_object (&myDocksMgr,
+		(GldiNotificationFunc) cairo_dock_notification_icon_moved,
+		GLDI_RUN_AFTER, NULL);
+	gldi_object_register_notification (&myDocksMgr,
 		NOTIFICATION_DESTROY,
-		(CairoDockNotificationFunc) cairo_dock_notification_dock_destroyed,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification_on_object (&myModulesMgr,
+		(GldiNotificationFunc) cairo_dock_notification_dock_destroyed,
+		GLDI_RUN_AFTER, NULL);
+	gldi_object_register_notification (&myModulesMgr,
 		NOTIFICATION_MODULE_ACTIVATED,
-		(CairoDockNotificationFunc) cairo_dock_notification_module_activated,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification_on_object (&myModulesMgr,
+		(GldiNotificationFunc) cairo_dock_notification_module_activated,
+		GLDI_RUN_AFTER, NULL);
+	gldi_object_register_notification (&myModulesMgr,
 		NOTIFICATION_MODULE_REGISTERED,
-		(CairoDockNotificationFunc) cairo_dock_notification_module_registered,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification_on_object (&myModuleInstancesMgr,
+		(GldiNotificationFunc) cairo_dock_notification_module_registered,
+		GLDI_RUN_AFTER, NULL);
+	gldi_object_register_notification (&myModuleInstancesMgr,
 		NOTIFICATION_MODULE_INSTANCE_DETACHED,
-		(CairoDockNotificationFunc) cairo_dock_notification_module_detached,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification_on_object (&myDocksMgr,
+		(GldiNotificationFunc) cairo_dock_notification_module_detached,
+		GLDI_RUN_AFTER, NULL);
+	gldi_object_register_notification (&myDocksMgr,
 		NOTIFICATION_INSERT_ICON,
-		(CairoDockNotificationFunc) cairo_dock_notification_icon_inserted,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification_on_object (&myDocksMgr,
+		(GldiNotificationFunc) cairo_dock_notification_icon_inserted,
+		GLDI_RUN_AFTER, NULL);
+	gldi_object_register_notification (&myDocksMgr,
 		NOTIFICATION_REMOVE_ICON,
-		(CairoDockNotificationFunc) cairo_dock_notification_icon_removed,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification_on_object (&myDeskletsMgr,
+		(GldiNotificationFunc) cairo_dock_notification_icon_removed,
+		GLDI_RUN_AFTER, NULL);
+	gldi_object_register_notification (&myDeskletsMgr,
 		NOTIFICATION_DESTROY,
-		(CairoDockNotificationFunc) cairo_dock_notification_desklet_destroyed,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification_on_object (&myDeskletsMgr,
-		NOTIFICATION_NEW_DESKLET,
-		(CairoDockNotificationFunc) cairo_dock_notification_desklet_destroyed,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification_on_object (&myShortkeysMgr,
-		NOTIFICATION_SHORTKEY_ADDED,
-		(CairoDockNotificationFunc) cairo_dock_notification_shortkey_added_or_removed,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification_on_object (&myShortkeysMgr,
-		NOTIFICATION_SHORTKEY_REMOVED,
-		(CairoDockNotificationFunc) cairo_dock_notification_shortkey_added_or_removed,
-		CAIRO_DOCK_RUN_AFTER, NULL);
-	cairo_dock_register_notification_on_object (&myShortkeysMgr,
+		(GldiNotificationFunc) cairo_dock_notification_desklet_added_removed,
+		GLDI_RUN_AFTER, NULL);
+	gldi_object_register_notification (&myDeskletsMgr,
+		NOTIFICATION_NEW,
+		(GldiNotificationFunc) cairo_dock_notification_desklet_added_removed,
+		GLDI_RUN_AFTER, NULL);
+	gldi_object_register_notification (&myShortkeysMgr,
+		NOTIFICATION_NEW,
+		(GldiNotificationFunc) cairo_dock_notification_shortkey_added_removed_changed,
+		GLDI_RUN_AFTER, NULL);
+	gldi_object_register_notification (&myShortkeysMgr,
+		NOTIFICATION_DESTROY,
+		(GldiNotificationFunc) cairo_dock_notification_shortkey_added_removed_changed,
+		GLDI_RUN_AFTER, NULL);
+	gldi_object_register_notification (&myShortkeysMgr,
 		NOTIFICATION_SHORTKEY_CHANGED,
-		(CairoDockNotificationFunc) cairo_dock_notification_shortkey_added_or_removed,
-		CAIRO_DOCK_RUN_AFTER, NULL);
+		(GldiNotificationFunc) cairo_dock_notification_shortkey_added_removed_changed,
+		GLDI_RUN_AFTER, NULL);
 	
 	//\___________________ handle crashes.
 	if (! bTesting)
@@ -773,11 +774,11 @@ int main (int argc, char** argv)
 		myDocksParam.bLockAll = TRUE;
 	}
 	
-	if (!bSafeMode && cairo_dock_get_nb_modules () <= 1)  // 1 en comptant l'aide
+	if (!bSafeMode && gldi_module_get_nb () <= 1)  // 1 en comptant l'aide
 	{
-		Icon *pIcon = cairo_dock_get_dialogless_icon ();
+		Icon *pIcon = gldi_icons_get_any_without_dialog ();
 		///cairo_dock_ask_question_and_wait (_("No plug-in were found.\nPlug-ins provide most of the functionalities of Cairo-Dock (animations, applets, views, etc).\nSee http://glx-dock.org for more information.\nSince there is almost no meaning in running the dock without them, the application will quit now."), pIcon, CAIRO_CONTAINER (g_pMainDock));
-		cairo_dock_show_temporary_dialog_with_icon (_("No plug-in were found.\nPlug-ins provide most of the functionalities (animations, applets, views, etc).\nSee http://glx-dock.org for more information.\nThere is almost no meaning in running the dock without them and it's probably due to a problem with the installation of these plug-ins.\nBut if you really want to use the dock without these plug-ins, you can launch the dock with the '-f' option to no longer have this message.\n"), pIcon, CAIRO_CONTAINER (g_pMainDock), 0., CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON);
+		gldi_dialog_show_temporary_with_icon (_("No plug-in were found.\nPlug-ins provide most of the functionalities (animations, applets, views, etc).\nSee http://glx-dock.org for more information.\nThere is almost no meaning in running the dock without them and it's probably due to a problem with the installation of these plug-ins.\nBut if you really want to use the dock without these plug-ins, you can launch the dock with the '-f' option to no longer have this message.\n"), pIcon, CAIRO_CONTAINER (g_pMainDock), 0., CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON);
 	}
 	
 	//\___________________ display the changelog in case of a new version.
@@ -811,12 +812,14 @@ int main (int argc, char** argv)
 			{
 				Icon *pFirstIcon = cairo_dock_get_first_icon (g_pMainDock->icons);
 				
-				CairoDialogAttribute attr;
-				memset (&attr, 0, sizeof (CairoDialogAttribute));
+				CairoDialogAttr attr;
+				memset (&attr, 0, sizeof (CairoDialogAttr));
 				attr.cText = gettext (cChangeLogMessage);
 				attr.cImageFilePath = CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON;
 				attr.bUseMarkup = TRUE;
-				cairo_dock_build_dialog (&attr, pFirstIcon, CAIRO_CONTAINER (g_pMainDock));
+				attr.pIcon = pFirstIcon;
+				attr.pContainer = CAIRO_CONTAINER (g_pMainDock);
+				gldi_dialog_new (&attr);
 				g_free (cChangeLogMessage);
 			}
 			g_key_file_free (pKeyFile);
@@ -832,9 +835,9 @@ int main (int argc, char** argv)
 		else // since the 3th crash: the applet has been disabled
 			cMessage = g_strdup_printf (_("The module '%s' has been deactivated because it may have caused some problems.\nYou can reactivate it, if it happens again thanks to report it at http://glx-dock.org"), cExcludeModule);
 		
-		CairoDockModule *pModule = cairo_dock_find_module_from_name (cExcludeModule);
-		Icon *icon = cairo_dock_get_dialogless_icon ();
-		cairo_dock_show_temporary_dialog_with_icon (cMessage, icon, CAIRO_CONTAINER (g_pMainDock), 15000., (pModule ? pModule->pVisitCard->cIconFilePath : NULL));
+		GldiModule *pModule = gldi_module_get (cExcludeModule);
+		Icon *icon = gldi_icons_get_any_without_dialog ();
+		gldi_dialog_show_temporary_with_icon (cMessage, icon, CAIRO_CONTAINER (g_pMainDock), 15000., (pModule ? pModule->pVisitCard->cIconFilePath : NULL));
 		g_free (cMessage);
 	}
 	

@@ -59,13 +59,13 @@ const char *_cd_log_level_to_string (const GLogLevelFlags loglevel)
     case G_LOG_LEVEL_ERROR:
       return "\033[1;31mERROR   : \033[0m ";
     case G_LOG_LEVEL_WARNING:
-      return "\033[1;38mwarning : \033[0m ";
+      return "\033[1;31mwarning : \033[0m ";
     case G_LOG_LEVEL_MESSAGE:
       return "\033[1;32mmessage : \033[0m ";
     case G_LOG_LEVEL_INFO:
       return "\033[1;33minfo    : \033[0m ";
     case G_LOG_LEVEL_DEBUG:
-      return "\033[1;35mdebug   : \033[0m ";
+      return "\033[1;34mdebug   : \033[0m ";
     case G_LOG_FLAG_RECURSION:
     case G_LOG_FLAG_FATAL:
     case G_LOG_LEVEL_MASK:
