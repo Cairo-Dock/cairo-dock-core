@@ -787,6 +787,12 @@ static void _set_sticky (GldiWindowActor *actor, gboolean bSticky)
 	cairo_dock_set_xwindow_sticky (xactor->Xid, bSticky);
 }
 
+static void _can_minimize_maximize_close (GldiWindowActor *actor, gboolean *bCanMinimize, gboolean *bCanMaximize, gboolean *bCanClose)
+{
+	GldiXWindowActor *xactor = (GldiXWindowActor *)actor;
+	cairo_dock_xwindow_can_minimize_maximized_close (xactor->Xid, bCanMinimize, bCanMaximize, bCanClose);
+}
+
 
   ////////////
  /// INIT ///
@@ -881,6 +887,7 @@ static void init (void)
 	wmb.is_above_or_below = _is_above_or_below;
 	wmb.is_sticky = _is_sticky;
 	wmb.set_sticky = _set_sticky;
+	wmb.can_minimize_maximize_close = _can_minimize_maximize_close;
 	gldi_windows_manager_register_backend (&wmb);
 }
 
