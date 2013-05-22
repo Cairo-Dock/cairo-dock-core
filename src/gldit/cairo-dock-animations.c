@@ -341,7 +341,7 @@ void cairo_dock_stop_icon_attention (Icon *pIcon, CairoDock *pDock)
 
 void cairo_dock_trigger_icon_removal_from_dock (Icon *pIcon)
 {
-	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
+	CairoDock *pDock = gldi_dock_get (pIcon->cParentDockName);
 	if (pDock != NULL)
 	{
 		cairo_dock_stop_icon_animation (pIcon);

@@ -140,25 +140,23 @@ void cairo_dock_reset_docks_table (void);
 
 void gldi_dock_make_subdock (CairoDock *pDock, CairoDock *pParentDock, const gchar *cRendererName);
 
-
-
-/** Search the name of a Dock. It does a linear search in the table of Docks.
+/** Get the name of a Dock.
 * @param pDock the dock.
-* @return the name of the dock, or NULL if not found.
+* @return the name of the dock, that identifies it.
 */
-const gchar *cairo_dock_search_dock_name (CairoDock *pDock);
+#define gldi_dock_get_name(pDock) (pDock)->cDockName
 
-/** Get a readable name for a main Dock, suitable for display (like "Bottom dock"). Sub-Docks names are defined by the user, so you can just use \ref cairo_dock_search_dock_name for them.
+/** Get a readable name for a main Dock, suitable for display (like "Bottom dock"). Sub-Docks names are defined by the user, so you can just use \ref gldi_dock_get_name for them.
 * @param pDock the dock.
 * @return the readable name of the dock, or NULL if not found. Free it when you're done.
 */
-gchar *cairo_dock_get_readable_name_for_fock (CairoDock *pDock);
+gchar *gldi_dock_get_readable_name (CairoDock *pDock);
 
-/** Search a Dock from a given name. It does a fast search in the table of Docks.
+/** Get a Dock from a given name.
 * @param cDockName the name of the dock.
 * @return the dock that has been registerd under this name, or NULL if none exists.
 */
-CairoDock *cairo_dock_search_dock_from_name (const gchar *cDockName);
+CairoDock *gldi_dock_get (const gchar *cDockName);
 
 /** Search an icon pointing on a dock. If several icons point on it, the first one will be returned.
 * @param pDock the dock.
@@ -172,23 +170,22 @@ gchar *cairo_dock_get_unique_dock_name (const gchar *cPrefix);
 gboolean cairo_dock_check_unique_subdock_name (Icon *pIcon);
 
 /** Rename a dock. Update the container's name of all of its icons.
-*@param cDockName name of the dock.
 *@param pDock the dock (optional).
 *@param cNewName the new name.
 */
-void cairo_dock_rename_dock (const gchar *cDockName, CairoDock *pDock, const gchar *cNewName);
+void gldi_dock_rename (CairoDock *pDock, const gchar *cNewName);
 
 /** Execute an action on all docks.
 *@param pFunction the action.
 *@param pUserData data passed to the callback.
 */
-void cairo_dock_foreach_docks (GHFunc pFunction, gpointer pUserData);
+void gldi_docks_foreach (GHFunc pFunction, gpointer pUserData);
 
 /** Execute an action on all main docks.
 *@param pFunction the action.
 *@param pUserData data passed to the callback.
 */
-void cairo_dock_foreach_root_docks (GFunc pFunction, gpointer pUserData);
+void gldi_docks_foreach_root (GFunc pFunction, gpointer pUserData);
 
 /** Execute an action on all icons being inside a dock.
 *@param pFunction the action.
@@ -229,20 +226,15 @@ GldiIconSizeEnum cairo_dock_convert_icon_size_to_enum (int iIconSize);
 */
 void gldi_dock_reload (CairoDock *pDock);
 
-/* Delete the config of a root dock. Doesn't delete the dock (use \ref cairo_dock_destroy_dock for that), but if it was empty, it won't be created the next time you restart Cairo-Dock.
+/** Add a config file for a root dock. Does not create the dock (use \ref gldi_dock_new for that). If the config file already exists, it is overwritten (use \ref gldi_dock_get to check if the name is already used).
 *@param cDockName name of the dock.
 */
-//void cairo_dock_remove_root_dock_config (const gchar *cDockName);
+void gldi_dock_add_conf_file_for_name (const gchar *cDockName);
 
-/** Add a config file for a root dock. Does not create the dock (use \ref cairo_dock_create_dock for that). If the config file already exists, it is overwritten (use \ref cairo_dock_search_dock_from_name to check if the dock already exists).
-*@param cDockName name of the dock.
+/** Add a config file for a new root dock. Does not create the dock (use \ref gldi_dock_new for that).
+*@return the unique name for the new dock, to be passed to \ref gldi_dock_new.
 */
-void cairo_dock_add_root_dock_config_for_name (const gchar *cDockName);
-
-/** Add a config file for a new root dock. Does not create the dock (use \ref cairo_dock_create_dock for that).
-*@return the unique name for the new dock, to be passed to \ref cairo_dock_create_dock.
-*/
-gchar *cairo_dock_add_root_dock_config (void);
+gchar *gldi_dock_add_conf_file (void);
 
 /* Redraw all the root docks.
 *@param bExceptMainDock whether to redraw the main dock too.
@@ -267,15 +259,12 @@ void cairo_dock_synchronize_one_sub_dock_orientation (CairoDock *pSubDock, Cairo
 
 void cairo_dock_set_dock_orientation (CairoDock *pDock, CairoDockPositionType iScreenBorder);
 
-void cairo_dock_start_polling_screen_edge (void);
-void cairo_dock_stop_polling_screen_edge (void);
-void cairo_dock_unhide_root_docks_on_screen_edge (CairoDockPositionType iScreenBorder);
 
 /** Set the visibility of a root dock. Perform all the necessary actions.
 *@param pDock a root dock.
 *@param iVisibility its new visibility.
 */
-void cairo_dock_set_dock_visibility (CairoDock *pDock, CairoDockVisibility iVisibility);
+void gldi_dock_set_visibility (CairoDock *pDock, CairoDockVisibility iVisibility);
 
 
 void gldi_register_docks_manager (void);

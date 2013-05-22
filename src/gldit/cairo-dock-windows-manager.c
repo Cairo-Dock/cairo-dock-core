@@ -272,11 +272,11 @@ void gldi_window_can_minimize_maximize_close (GldiWindowActor *actor, gboolean *
 {
 	if (s_backend.can_minimize_maximize_close)
 		s_backend.can_minimize_maximize_close (actor, bCanMinimize, bCanMaximize, bCanClose);
-	else
+	else  // assume that the window can mnimize/maximize/close (default behavior)
 	{
-		*bCanMinimize = FALSE;
-		*bCanMaximize = FALSE;
-		*bCanClose = FALSE;
+		*bCanMinimize = TRUE;
+		*bCanMaximize = TRUE;
+		*bCanClose = TRUE;
 	}
 }
 

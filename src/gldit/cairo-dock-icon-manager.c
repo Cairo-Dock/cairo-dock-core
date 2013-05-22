@@ -135,7 +135,7 @@ static void _show_launcher_on_this_desktop (Icon *icon, int index)
 		cd_debug (" => est visible sur ce viewport (iSpecificDesktop = %d).",icon->iSpecificDesktop);
 		s_pFloatingIconsList = g_list_remove (s_pFloatingIconsList, icon);
 		
-		CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+		CairoDock *pParentDock = gldi_dock_get (icon->cParentDockName);
 		if (pParentDock != NULL)
 		{
 			cairo_dock_insert_icon_in_dock (icon, pParentDock, ! CAIRO_DOCK_ANIMATE_ICON);
@@ -801,7 +801,7 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 		pPrevIcons->fAmplitude != pIcons->fAmplitude)
 	{
 		bInsertSeparators = TRUE;
-		cairo_dock_foreach_docks ((GHFunc)_remove_separators, NULL);
+		gldi_docks_foreach ((GHFunc)_remove_separators, NULL);
 	}
 	
 	gboolean bThemeChanged = cairo_dock_strings_differ (pIcons->cIconTheme, pPrevIcons->cIconTheme);
@@ -840,7 +840,7 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 	
 	if (bInsertSeparators)
 	{
-		cairo_dock_foreach_docks ((GHFunc)_insert_separators, NULL);
+		gldi_docks_foreach ((GHFunc)_insert_separators, NULL);
 	}
 	
 	if (pPrevIcons->iIconWidth != pIcons->iIconWidth ||
@@ -854,7 +854,7 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 	}
 	
 	cairo_dock_set_all_views_to_default (0);  // met a jour la taille (decorations incluses) de tous les docks; le chargement des separateurs plats se fait dans le calcul de max dock size.
-	cairo_dock_foreach_docks ((GHFunc)_calculate_icons, NULL);
+	gldi_docks_foreach ((GHFunc)_calculate_icons, NULL);
 	cairo_dock_redraw_root_docks (FALSE);  // main dock inclus.
 	
 	// labels
@@ -864,7 +864,7 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 	
 	if (pPrevLabels->iLabelSize != pLabels->iLabelSize)
 	{
-		cairo_dock_foreach_docks ((GHFunc) _cairo_dock_resize_one_dock, NULL);
+		gldi_docks_foreach ((GHFunc) _cairo_dock_resize_one_dock, NULL);
 	}
 }
 

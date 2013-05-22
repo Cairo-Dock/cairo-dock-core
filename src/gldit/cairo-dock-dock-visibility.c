@@ -64,7 +64,7 @@ static void _hide_if_overlap (CairoDock *pDock, GldiWindowActor *pAppli)
 		return ;
 	if (! cairo_dock_is_temporary_hidden (pDock))
 	{
-		if (gldi_window_is_on_current_desktop (pAppli) && gldi_window_overlaps_dock (pAppli, pDock))
+		if (gldi_window_is_on_current_desktop (pAppli) && gldi_dock_overlaps_window (pDock, pAppli))
 		{
 			cairo_dock_activate_temporary_auto_hide (pDock);
 		}
@@ -75,7 +75,7 @@ static void _hide_if_overlap_or_show_if_no_overlapping_window (CairoDock *pDock,
 {
 	if (pDock->iVisibility != CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY)
 		return ;
-	if (gldi_window_overlaps_dock (pAppli, pDock))  // cette fenetre peut provoquer l'auto-hide.
+	if (gldi_dock_overlaps_window (pDock, pAppli))  // cette fenetre peut provoquer l'auto-hide.
 	{
 		if (! cairo_dock_is_temporary_hidden (pDock))
 		{
@@ -148,7 +148,7 @@ static gboolean _on_window_created (G_GNUC_UNUSED gpointer data, GldiWindowActor
 {
 	// docks visibility on overlap any
 	/// see how to handle modal dialogs ...
-	cairo_dock_foreach_root_docks ((GFunc)_hide_if_overlap, actor);
+	gldi_docks_foreach_root ((GFunc)_hide_if_overlap, actor);
 	
 	return GLDI_NOTIFICATION_LET_PASS;
 }
@@ -156,7 +156,7 @@ static gboolean _on_window_created (G_GNUC_UNUSED gpointer data, GldiWindowActor
 static gboolean _on_window_destroyed (G_GNUC_UNUSED gpointer data, G_GNUC_UNUSED GldiWindowActor *actor)
 {
 	// docks visibility on overlap any
-	cairo_dock_foreach_root_docks ((GFunc)_show_if_no_overlapping_window, NULL);
+	gldi_docks_foreach_root ((GFunc)_show_if_no_overlapping_window, NULL);
 	
 	return GLDI_NOTIFICATION_LET_PASS;
 }
@@ -166,17 +166,17 @@ static gboolean _on_window_size_position_changed (G_GNUC_UNUSED gpointer data, G
 	// docks visibility on overlap any
 	if (! gldi_window_is_on_current_desktop (actor))  // not on this desktop/viewport any more
 	{
-		cairo_dock_foreach_root_docks ((GFunc)_show_if_no_overlapping_window, actor);
+		gldi_docks_foreach_root ((GFunc)_show_if_no_overlapping_window, actor);
 	}
 	else  // elle est sur le viewport courant.
 	{
-		cairo_dock_foreach_root_docks ((GFunc)_hide_if_overlap_or_show_if_no_overlapping_window, actor);
+		gldi_docks_foreach_root ((GFunc)_hide_if_overlap_or_show_if_no_overlapping_window, actor);
 	}
 	
 	// docks visibility on overlap active
 	if (actor == gldi_windows_get_active())  // c'est la fenetre courante qui a change de bureau.
 	{
-		cairo_dock_foreach_root_docks ((GFunc)_hide_show_if_on_our_way, actor);
+		gldi_docks_foreach_root ((GFunc)_hide_show_if_on_our_way, actor);
 	}
 	
 	return GLDI_NOTIFICATION_LET_PASS;
@@ -189,7 +189,7 @@ static gboolean _on_window_state_changed (G_GNUC_UNUSED gpointer data, GldiWindo
 	{
 		if (bHiddenChanged || bFullScreenChanged)  // si c'est l'etat maximise qui a change, on le verra au changement de dimensions.
 		{
-			cairo_dock_foreach_root_docks ((GFunc)_hide_show_if_on_our_way, actor);
+			gldi_docks_foreach_root ((GFunc)_hide_show_if_on_our_way, actor);
 		}
 	}
 	
@@ -197,9 +197,9 @@ static gboolean _on_window_state_changed (G_GNUC_UNUSED gpointer data, GldiWindo
 	if (bHiddenChanged)
 	{
 		if (!actor->bIsHidden)  // la fenetre reapparait.
-			cairo_dock_foreach_root_docks ((GFunc)_hide_if_overlap, actor);
+			gldi_docks_foreach_root ((GFunc)_hide_if_overlap, actor);
 		else  // la fenetre se cache.
-			cairo_dock_foreach_root_docks ((GFunc)_show_if_no_overlapping_window, NULL);
+			gldi_docks_foreach_root ((GFunc)_show_if_no_overlapping_window, NULL);
 	}
 	
 	return GLDI_NOTIFICATION_LET_PASS;
@@ -210,17 +210,17 @@ static gboolean _on_window_desktop_changed (G_GNUC_UNUSED gpointer data, GldiWin
 	// docks visibility on overlap active
 	if (actor == gldi_windows_get_active())  // c'est la fenetre courante qui a change de bureau.
 	{
-		cairo_dock_foreach_root_docks ((GFunc)_hide_show_if_on_our_way, actor);
+		gldi_docks_foreach_root ((GFunc)_hide_show_if_on_our_way, actor);
 	}
 	
 	// docks visibility on overlap any
 	if (gldi_window_is_on_current_desktop (actor))  // petite optimisation : si l'appli arrive sur le bureau courant, on peut se contenter de ne verifier qu'elle.
 	{
-		cairo_dock_foreach_root_docks ((GFunc)_hide_if_overlap, actor);
+		gldi_docks_foreach_root ((GFunc)_hide_if_overlap, actor);
 	}
 	else  // la fenetre n'est plus sur le bureau courant.
 	{
-		cairo_dock_foreach_root_docks ((GFunc)_show_if_no_overlapping_window, NULL);
+		gldi_docks_foreach_root ((GFunc)_show_if_no_overlapping_window, NULL);
 	}
 	
 	return GLDI_NOTIFICATION_LET_PASS;
@@ -230,10 +230,10 @@ static gboolean _on_desktop_changed (G_GNUC_UNUSED gpointer data)
 {
 	// docks visibility on overlap active
 	GldiWindowActor *pCurrentAppli = gldi_windows_get_active ();
-	cairo_dock_foreach_root_docks ((GFunc)_hide_show_if_on_our_way, pCurrentAppli);
+	gldi_docks_foreach_root ((GFunc)_hide_show_if_on_our_way, pCurrentAppli);
 	
 	// docks visibility on overlap any
-	cairo_dock_foreach_root_docks ((GFunc)_hide_if_any_overlap_or_show, NULL);
+	gldi_docks_foreach_root ((GFunc)_hide_if_any_overlap_or_show, NULL);
 	
 	return GLDI_NOTIFICATION_LET_PASS;
 }
@@ -242,7 +242,7 @@ static gboolean _on_desktop_changed (G_GNUC_UNUSED gpointer data)
 static gboolean _on_active_window_changed (G_GNUC_UNUSED gpointer data, GldiWindowActor *actor)
 {
 	// docks visibility on overlap active
-	cairo_dock_foreach_root_docks ((GFunc)_hide_show_if_on_our_way, actor);
+	gldi_docks_foreach_root ((GFunc)_hide_show_if_on_our_way, actor);
 	
 	return GLDI_NOTIFICATION_LET_PASS;
 }
@@ -304,7 +304,7 @@ static gboolean _window_is_overlapping_dock (GldiWindowActor *actor, gpointer da
 	///if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_appli_is_on_current_desktop (actor) && ! actor->bIsHidden && ! cairo_dock_icon_is_being_removed (icon))
 	if (gldi_window_is_on_current_desktop (actor) && ! actor->bIsHidden)
 	{
-		if (gldi_window_overlaps_dock (actor, pDock))
+		if (gldi_dock_overlaps_window (pDock, actor))
 		{
 			return TRUE;
 		}
@@ -361,9 +361,9 @@ void gldi_docks_visibility_start (void)
 	
 	// handle current docks visibility
 	GldiWindowActor *pCurrentAppli = gldi_windows_get_active ();
-	cairo_dock_foreach_root_docks ((GFunc)_hide_show_if_on_our_way, pCurrentAppli);
+	gldi_docks_foreach_root ((GFunc)_hide_show_if_on_our_way, pCurrentAppli);
 	
-	cairo_dock_foreach_root_docks ((GFunc)_hide_if_any_overlap, NULL);
+	gldi_docks_foreach_root ((GFunc)_hide_if_any_overlap, NULL);
 }
 
 static void _unhide_all_docks (CairoDock *pDock, G_GNUC_UNUSED Icon *icon)
@@ -373,5 +373,5 @@ static void _unhide_all_docks (CairoDock *pDock, G_GNUC_UNUSED Icon *icon)
 }
 void gldi_docks_visibility_stop (void)  // not used yet
 {
-	cairo_dock_foreach_root_docks ((GFunc)_unhide_all_docks, NULL);
+	gldi_docks_foreach_root ((GFunc)_unhide_all_docks, NULL);
 }

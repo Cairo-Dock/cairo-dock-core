@@ -52,7 +52,7 @@ typedef enum {
 	CAIRO_DOCK_ICON_TYPE_APPLET,
 	CAIRO_DOCK_ICON_TYPE_OTHER,
 	CAIRO_DOCK_NB_ICON_TYPES
-	} CairoDockIconTrueType;
+	} CairoDockIconTrueType;  /// ideally, should disappear ...
 
 /// Available groups of icons.
 typedef enum {

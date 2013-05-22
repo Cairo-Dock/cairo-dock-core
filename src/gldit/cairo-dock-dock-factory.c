@@ -80,7 +80,7 @@ void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean
 
 	// maybe the icon was detached before and then cParentDockName is NULL
 	if (icon->cParentDockName == NULL)
-		icon->cParentDockName = g_strdup (cairo_dock_search_dock_name (pDock));
+		icon->cParentDockName = g_strdup (gldi_dock_get_name (pDock));
 
 	//\______________ check if a separator is needed (ie, if the group of the new icon (not its order) is new).
 	gboolean bSeparatorNeeded = FALSE;
@@ -363,7 +363,7 @@ Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFil
 {
 	//\_________________ On ajoute un fichier desktop dans le repertoire des lanceurs du theme courant.
 	GError *erreur = NULL;
-	const gchar *cDockName = cairo_dock_search_dock_name (pReceivingDock);
+	const gchar *cDockName = gldi_dock_get_name (pReceivingDock);
 	if (fOrder == CAIRO_DOCK_LAST_ORDER && pReceivingDock != NULL)
 	{
 		Icon *pLastIcon = cairo_dock_get_last_launcher (pReceivingDock->icons);
@@ -409,7 +409,7 @@ Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFil
 }
 
 
-void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingDock, const gchar *cReceivingDockName)
+void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingDock)
 {
 	GList *pIconsList = pDock->icons;
 	pDock->icons = NULL;
@@ -421,10 +421,10 @@ void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingD
 
 		if (icon->pSubDock != NULL)
 		{
-			cairo_dock_remove_icons_from_dock (icon->pSubDock, pReceivingDock, cReceivingDockName);
+			cairo_dock_remove_icons_from_dock (icon->pSubDock, pReceivingDock);
 		}
 
-		if (pReceivingDock == NULL || cReceivingDockName == NULL)  // alors on les jete.
+		if (pReceivingDock == NULL)  // alors on les jete.
 		{
 			cairo_dock_delete_icon_from_current_theme (icon);
 			
@@ -436,7 +436,7 @@ void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingD
 		}
 		else  // on les re-attribue au dock receveur.
 		{
-			cairo_dock_update_icon_s_container_name (icon, cReceivingDockName);
+			cairo_dock_update_icon_s_container_name (icon, pReceivingDock->cDockName);
 			
 			icon->fWidth /= pDock->container.fRatio;  // optimization: no need to detach the icon, we just steal all of them.
 			icon->fHeight /= pDock->container.fRatio;

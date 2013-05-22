@@ -383,7 +383,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 
 /** TRUE if the container type has changed (which can only happen if the config has changed).
 */
-#define CD_APPLET_MY_CONTAINER_TYPE_CHANGED (myApplet->pContainer == NULL || myApplet->pContainer->iType != pOldContainer->iType)
+#define CD_APPLET_MY_CONTAINER_TYPE_CHANGED (myApplet->pContainer == NULL || GLDI_OBJECT(myApplet->pContainer)->mgr != GLDI_OBJECT(pOldContainer)->mgr)
 
 /** The previous Container.
 */

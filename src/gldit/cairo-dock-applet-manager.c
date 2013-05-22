@@ -81,7 +81,7 @@ static gboolean _delete_applet (Icon *icon)
 	if (icon->pModuleInstance != NULL)  // remove the instance from the current theme
 	{
 		g_print ("%s ()\n", __func__);
-		gldi_module_remove_instance (icon->pModuleInstance);
+		gldi_module_delete_instance (icon->pModuleInstance);
 		return TRUE;
 	}
 	return FALSE;

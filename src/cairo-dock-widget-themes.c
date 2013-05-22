@@ -34,7 +34,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-icon-facility.h"  // gldi_icons_get_any_without_dialog
 #include "cairo-dock-task.h"
-#include "cairo-dock-dock-manager.h"  // cairo_dock_search_dock_from_name
+#include "cairo-dock-dock-manager.h"  // gldi_dock_get
 #include "cairo-dock-applications-manager.h"  // cairo_dock_get_current_active_icon
 #include "cairo-dock-themes-manager.h"  // cairo_dock_export_current_theme
 #include "cairo-dock-config.h"  // cairo_dock_load_current_theme
@@ -370,7 +370,7 @@ static void _change_rating (G_GNUC_UNUSED GtkCellRendererText * cell, gchar * pa
 		Icon *pIcon = cairo_dock_get_current_active_icon ();  // most probably the appli-icon representing the config window.
 		CairoDock *pDock = NULL;
 		if (pIcon != NULL)
-			pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
+			pDock = gldi_dock_get (pIcon->cParentDockName);
 		if (pDock != NULL)
 			gldi_dialog_show_temporary_with_icon (_("You must try the theme before you can rate it."), pIcon, CAIRO_CONTAINER (pDock), 3000, "same icon");
 		else

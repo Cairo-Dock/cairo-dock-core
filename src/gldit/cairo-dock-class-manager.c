@@ -123,7 +123,7 @@ CairoDock *cairo_dock_get_class_subdock (const gchar *cClass)
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
 	g_return_val_if_fail (pClassAppli!= NULL, NULL);
 	
-	return cairo_dock_search_dock_from_name (pClassAppli->cDockName);
+	return gldi_dock_get (pClassAppli->cDockName);
 }
 
 gchar *cairo_dock_get_class_subdock_name (const gchar *cClass)
@@ -139,7 +139,7 @@ CairoDock* cairo_dock_create_class_subdock (const gchar *cClass, CairoDock *pPar
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
 	g_return_val_if_fail (pClassAppli!= NULL, NULL);
 	
-	CairoDock *pDock = cairo_dock_search_dock_from_name (pClassAppli->cDockName);
+	CairoDock *pDock = gldi_dock_get (pClassAppli->cDockName);
 	if (pDock == NULL)  // cDockName not yet defined, or previous class subdock no longer exists
 	{
 		g_free (pClassAppli->cDockName);
@@ -155,7 +155,7 @@ static void cairo_dock_destroy_class_subdock (const gchar *cClass)
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
 	g_return_if_fail (pClassAppli!= NULL);
 	
-	CairoDock *pDock = cairo_dock_search_dock_from_name (pClassAppli->cDockName);
+	CairoDock *pDock = gldi_dock_get (pClassAppli->cDockName);
 	if (pDock)
 	{
 		gldi_object_unref (GLDI_OBJECT(pDock));
@@ -224,7 +224,7 @@ gboolean cairo_dock_set_class_use_xicon (const gchar *cClass, gboolean bUseXIcon
 			cd_message ("%s n'utilise plus l'icone de X", pAppliIcon->cName);
 		}
 		
-		pDock = cairo_dock_search_dock_from_name (pAppliIcon->cParentDockName);
+		pDock = gldi_dock_get (pAppliIcon->cParentDockName);
 		cairo_dock_reload_icon_image (pAppliIcon, CAIRO_CONTAINER (pDock));
 	}
 	
@@ -234,7 +234,7 @@ gboolean cairo_dock_set_class_use_xicon (const gchar *cClass, gboolean bUseXIcon
 
 static void _cairo_dock_set_same_indicator_on_sub_dock (Icon *pInhibhatorIcon)
 {
-	CairoDock *pInhibatorDock = cairo_dock_search_dock_from_name (pInhibhatorIcon->cParentDockName);
+	CairoDock *pInhibatorDock = gldi_dock_get (pInhibhatorIcon->cParentDockName);
 	if (pInhibatorDock != NULL && pInhibatorDock->iRefCount > 0)  // l'inhibiteur est dans un sous-dock.
 	{
 		gboolean bSubDockHasIndicator = FALSE;
@@ -282,7 +282,7 @@ static GldiWindowActor *_cairo_dock_detach_appli_of_class (const gchar *cClass)
 	for (pElement = pList; pElement != NULL; pElement = pElement->next)
 	{
 		pIcon = pElement->data;
-		pParentDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
+		pParentDock = gldi_dock_get (pIcon->cParentDockName);
 		if (pParentDock == NULL)  // pas dans un dock => rien a faire.
 			continue;
 		
@@ -417,7 +417,7 @@ gboolean cairo_dock_prevent_inhibited_class (Icon *pIcon)
 				
 				if (pInhibitorIcon->pAppli == pIcon->pAppli)  // cette icone nous controle.
 				{*/
-					CairoDock *pInhibatorDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
+					CairoDock *pInhibatorDock = gldi_dock_get (pInhibitorIcon->cParentDockName);
 					//\______________ On place l'icone pour X.
 					if (! bToBeInhibited)  // on ne met le thumbnail que sur la 1ere.
 					{
@@ -509,7 +509,7 @@ void cairo_dock_deinhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
 				//if (pInhibitorIcon != NULL)
 				//	break ;
 			}
-			pParentDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
+			pParentDock = gldi_dock_get (pIcon->cParentDockName);
 			cairo_dock_reload_icon_image (pIcon, CAIRO_CONTAINER (pParentDock));  /// question : pourquoi le faire pour toutes les icones ?...
 		}
 		if (bNeedsRedraw)
@@ -564,7 +564,7 @@ void cairo_dock_detach_Xid_from_inhibitors (GldiWindowActor *pAppli, const gchar
 					if (pSameClassIcon != NULL)  // this icon will be inhibited, we need to detach it if needed
 					{
 						cd_message ("  c'est %s qui va la remplacer", pSameClassIcon->cName);
-						CairoDock *pSameClassDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);
+						CairoDock *pSameClassDock = gldi_dock_get (pSameClassIcon->cParentDockName);
 						if (pSameClassDock != NULL)  // it's inside a dock -> detach it
 						{
 							cairo_dock_detach_icon_from_dock (pSameClassIcon, pSameClassDock);
@@ -580,7 +580,7 @@ void cairo_dock_detach_Xid_from_inhibitors (GldiWindowActor *pAppli, const gchar
 					cairo_dock_set_icon_name (pIcon->cInitialName, pIcon, NULL);
 				}
 				cd_message (" %s : bHasIndicator <- %d, pAppli <- %p", pIcon->cName, pIcon->bHasIndicator, pIcon->pAppli);
-				CairoDock *pParentDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
+				CairoDock *pParentDock = gldi_dock_get (pIcon->cParentDockName);
 				if (pParentDock)
 					gtk_widget_queue_draw (pParentDock->container.pWidget);
 			}
@@ -719,7 +719,7 @@ void cairo_dock_update_visibility_on_inhibitors (const gchar *cClass, GldiWindow
 				cd_debug (" %s aussi se %s", pInhibitorIcon->cName, (bIsHidden ? "cache" : "montre"));
 				if (! CAIRO_DOCK_ICON_TYPE_IS_APPLET (pInhibitorIcon) && myTaskbarParam.fVisibleAppliAlpha != 0)
 				{
-					CairoDock *pInhibatorDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
+					CairoDock *pInhibatorDock = gldi_dock_get (pInhibitorIcon->cParentDockName);
 					pInhibitorIcon->fAlpha = 1;  // on triche un peu.
 					cairo_dock_redraw_icon (pInhibitorIcon, CAIRO_CONTAINER (pInhibatorDock));
 				}
@@ -743,7 +743,7 @@ void cairo_dock_update_activity_on_inhibitors (const gchar *cClass, GldiWindowAc
 			{
 				cd_debug (" %s aussi devient active", pInhibitorIcon->cName);
 				///pInhibitorIcon->bIsActive = TRUE;
-				CairoDock *pParentDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
+				CairoDock *pParentDock = gldi_dock_get (pInhibitorIcon->cParentDockName);
 				if (pParentDock != NULL)
 					cairo_dock_animate_icon_on_active (pInhibitorIcon, pParentDock);
 			}
@@ -766,7 +766,7 @@ void cairo_dock_update_inactivity_on_inhibitors (const gchar *cClass, GldiWindow
 			{
 				cd_debug (" %s aussi devient inactive", pInhibitorIcon->cName);
 				///pInhibitorIcon->bIsActive = FALSE;
-				CairoDock *pParentDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
+				CairoDock *pParentDock = gldi_dock_get (pInhibitorIcon->cParentDockName);
 				if (pParentDock != NULL && ! pParentDock->bIsShrinkingDown)
 					cairo_dock_redraw_icon (pInhibitorIcon, CAIRO_CONTAINER (pParentDock));
 			}
@@ -787,7 +787,7 @@ void cairo_dock_update_name_on_inhibitors (const gchar *cClass, GldiWindowActor 
 			
 			if (pInhibitorIcon->pAppli == actor)
 			{
-				CairoDock *pParentDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
+				CairoDock *pParentDock = gldi_dock_get (pInhibitorIcon->cParentDockName);
 				if (pParentDock != NULL)
 				{
 					if (! CAIRO_DOCK_ICON_TYPE_IS_APPLET (pInhibitorIcon))
@@ -1220,7 +1220,7 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 	{
 		pInhibitorIcon = ic->data;
 
-		pParentDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
+		pParentDock = gldi_dock_get (pInhibitorIcon->cParentDockName);
 		if (!pParentDock)  // not inside a dock, for instance a desklet -> skip
 			continue;
 		///if (pParentDock->iRefCount != 0)  // inside a sub-dock, take the pointing icon inside the main dock.
@@ -1241,7 +1241,7 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 			pAppliIcon = ic->data;
 			if (pAppliIcon == pIcon)  // skip ourself
 				continue;
-			pParentDock = cairo_dock_search_dock_from_name (pAppliIcon->cParentDockName);
+			pParentDock = gldi_dock_get (pAppliIcon->cParentDockName);
 			if (pParentDock != NULL)  // && pParentDock->bIsMainDock
 			{
 				pSameClassIcon = pAppliIcon;

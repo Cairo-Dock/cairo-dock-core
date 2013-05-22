@@ -115,13 +115,13 @@ void cairo_dock_appli_demands_attention (Icon *icon)
 	icon->cLastAttentionDemand = g_strdup (icon->cName);*/
 	
 	gboolean bForceDemand = (myTaskbarParam.cForceDemandsAttention && icon->cClass && g_strstr_len (myTaskbarParam.cForceDemandsAttention, -1, icon->cClass));
-	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+	CairoDock *pParentDock = gldi_dock_get (icon->cParentDockName);
 	if (pParentDock == NULL)  // appli inhibee ou non affichee.
 	{
 		Icon *pInhibitorIcon = cairo_dock_get_inhibitor (icon, TRUE);  // on cherche son inhibiteur dans un dock.
 		if (pInhibitorIcon != NULL)  // appli inhibee.
 		{
-			pParentDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
+			pParentDock = gldi_dock_get (pInhibitorIcon->cParentDockName);
 			if (pParentDock != NULL)
 				_cairo_dock_appli_demands_attention (pInhibitorIcon, pParentDock, bForceDemand, NULL);
 		}
@@ -152,13 +152,13 @@ static void _cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoDock *
 }
 void cairo_dock_appli_stops_demanding_attention (Icon *icon)
 {
-	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+	CairoDock *pParentDock = gldi_dock_get (icon->cParentDockName);
 	if (pParentDock == NULL)
 	{
 		Icon *pInhibitorIcon = cairo_dock_get_inhibitor (icon, TRUE);
 		if (pInhibitorIcon != NULL)
 		{
-			pParentDock = cairo_dock_search_dock_from_name (pInhibitorIcon->cParentDockName);
+			pParentDock = gldi_dock_get (pInhibitorIcon->cParentDockName);
 			if (pParentDock != NULL)
 				_cairo_dock_appli_stops_demanding_attention (pInhibitorIcon, pParentDock);
 		}
@@ -261,7 +261,7 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 			pParentDock = cairo_dock_get_class_subdock (icon->cClass);
 			if (pParentDock == NULL)  // no class sub-dock => go to main dock
 			{
-				pParentDock = cairo_dock_search_dock_from_name (cMainDockName);
+				pParentDock = gldi_dock_get (cMainDockName);
 				icon->cParentDockName = g_strdup (cMainDockName);
 			}
 			else  // go to class sub-dock
@@ -276,7 +276,7 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 			if (pParentDock == NULL)  // alors il faut creer le sous-dock, qu'on associera soit a pSameClassIcon soit a un fake.
 			{
 				cd_message ("  creation du dock pour la classe %s", icon->cClass);
-				pMainDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);  // can be NULL (even if in practice will never be).
+				pMainDock = gldi_dock_get (pSameClassIcon->cParentDockName);  // can be NULL (even if in practice will never be).
 				pParentDock = cairo_dock_create_class_subdock (icon->cClass, pMainDock);
 			}
 			else
@@ -296,14 +296,14 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 					{
 						if (pSameClassIcon->cInitialName != NULL)
 						{
-							CairoDock *pSameClassDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);
+							CairoDock *pSameClassDock = gldi_dock_get (pSameClassIcon->cParentDockName);
 							if (pSameClassDock != NULL)
 							{
 								cairo_dock_set_icon_name (pSameClassIcon->cInitialName, pSameClassIcon, CAIRO_CONTAINER (pSameClassDock));  // on lui remet son nom de lanceur.
 							}
 						}
 						pSameClassIcon->pSubDock = pParentDock;
-						CairoDock *pRootDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);
+						CairoDock *pRootDock = gldi_dock_get (pSameClassIcon->cParentDockName);
 						if (pRootDock != NULL)
 							cairo_dock_redraw_icon (pSameClassIcon, CAIRO_CONTAINER (pRootDock));  // on la redessine car elle prend l'indicateur de classe.
 					}
@@ -324,7 +324,7 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 			{
 				//\______________ On cree une icone de paille.
 				cd_debug (" on cree un fake...");
-				CairoDock *pClassMateParentDock = cairo_dock_search_dock_from_name (pSameClassIcon->cParentDockName);  // c'est en fait le main dock.
+				CairoDock *pClassMateParentDock = gldi_dock_get (pSameClassIcon->cParentDockName);  // c'est en fait le main dock.
 				Icon *pFakeClassIcon = cairo_dock_create_icon_for_class_subdock (pSameClassIcon, pParentDock);
 				
 				//\______________ On detache le classmate, on le place dans le sous-dock, et on lui substitue le faux.
@@ -405,7 +405,7 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 CairoDock * cairo_dock_detach_appli (Icon *pIcon)
 {
 	cd_debug ("%s (%s)", __func__, pIcon->cName);
-	CairoDock *pParentDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
+	CairoDock *pParentDock = gldi_dock_get (pIcon->cParentDockName);
 	if (pParentDock == NULL)
 		return NULL;
 	
@@ -451,7 +451,7 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (GldiWindowActor *p
 		{
 			int x, y;
 			Icon *pClassmate = cairo_dock_get_classmate (icon);
-			CairoDock *pClassmateDock = (pClassmate ? cairo_dock_search_dock_from_name (pClassmate->cParentDockName) : NULL);
+			CairoDock *pClassmateDock = (pClassmate ? gldi_dock_get (pClassmate->cParentDockName) : NULL);
 			if (myTaskbarParam.bGroupAppliByClass && pClassmate != NULL && pClassmateDock != NULL)  // on va se grouper avec cette icone.
 			{
 				x = x_icon_geometry (pClassmate, pClassmateDock);

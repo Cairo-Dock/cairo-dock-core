@@ -156,7 +156,7 @@ struct _CairoDialog {
 *@param obj the object.
 *@return TRUE if the object is a dialog.
 */
-#define CAIRO_DOCK_IS_DIALOG(obj) gldi_object_is_manager_child (obj, &myDialogsMgr)
+#define CAIRO_DOCK_IS_DIALOG(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), GLDI_MANAGER(&myDialogsMgr))
 
 /** Cast a Container into a Dialog.
 *@param pContainer the container.

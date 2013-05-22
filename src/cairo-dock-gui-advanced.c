@@ -953,7 +953,7 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 	Icon *pIcon = cairo_dock_get_current_active_icon ();  // most probably the appli-icon representing the config window.
 	if (pIcon == NULL || pIcon->cParentDockName == NULL || cairo_dock_icon_is_being_removed (pIcon))
 		pIcon = gldi_icons_get_any_without_dialog ();
-	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon != NULL ? pIcon->cParentDockName : NULL);
+	CairoDock *pDock = gldi_dock_get (pIcon != NULL ? pIcon->cParentDockName : NULL);
 	
 	CairoDialogAttr attr;
 	memset (&attr, 0, sizeof (CairoDialogAttr));

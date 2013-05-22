@@ -111,7 +111,7 @@ static void _on_answer_delete_dock (int iClickedButton, G_GNUC_UNUSED GtkWidget 
 {
 	if (iClickedButton == 0 || iClickedButton == -1)  // ok button or Enter.
 	{
-		cairo_dock_remove_icons_from_dock (pDock, NULL, NULL);
+		cairo_dock_remove_icons_from_dock (pDock, NULL);
 		
 		gldi_object_unref (GLDI_OBJECT(pDock));
 	}
@@ -550,7 +550,7 @@ static void cairo_dock_add_sub_dock (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpoin
 
 static gboolean _show_new_dock_msg (gchar *cDockName)
 {
-	CairoDock *pDock = cairo_dock_search_dock_from_name (cDockName);
+	CairoDock *pDock = gldi_dock_get (cDockName);
 	if (pDock)
 		gldi_dialog_show_temporary_with_default_icon (_("The new dock has been created.\nNow move some launchers or applets into it by right-clicking on the icon -> move to another dock"), NULL, CAIRO_CONTAINER (pDock), 10000);
 	g_free (cDockName);
@@ -558,9 +558,9 @@ static gboolean _show_new_dock_msg (gchar *cDockName)
 }
 static void cairo_dock_add_main_dock (G_GNUC_UNUSED GtkMenuItem *pMenuItem, G_GNUC_UNUSED gpointer *data)
 {
-	gchar *cDockName = cairo_dock_add_root_dock_config ();
-	CairoDock *pDock = gldi_dock_new (cDockName);
-	gldi_dock_reload (pDock);
+	gchar *cDockName = gldi_dock_add_conf_file ();
+	/**CairoDock *pDock = */gldi_dock_new (cDockName);
+	///gldi_dock_reload (pDock);
 	
 	cairo_dock_gui_trigger_reload_items ();  // pas de signal "new_dock"
 	
@@ -617,13 +617,11 @@ static void _on_answer_remove_icon (int iClickedButton, G_GNUC_UNUSED GtkWidget 
 					bDestroyIcons = FALSE;
 			}
 			CairoDock *pDock = NULL;
-			const gchar *cDockName = NULL;
 			if (!bDestroyIcons)
 			{
 				pDock = CAIRO_DOCK (icon->pContainer);
-				cDockName = cairo_dock_search_dock_name (pDock);
 			}
-			cairo_dock_remove_icons_from_dock (icon->pSubDock, pDock, cDockName);
+			cairo_dock_remove_icons_from_dock (icon->pSubDock, pDock);
 			gldi_object_unref (GLDI_OBJECT(icon->pSubDock));
 			icon->pSubDock = NULL;  // no need, but be safe rather than sorry
 		}
@@ -674,7 +672,7 @@ static void _cairo_dock_move_launcher_to_dock (GtkMenuItem *pMenuItem, const gch
 	gchar *cValidDockName;
 	if (cDockName == NULL)  // nouveau dock
 	{
-		cValidDockName = cairo_dock_add_root_dock_config ();
+		cValidDockName = gldi_dock_add_conf_file ();
 	}
 	else
 	{
@@ -697,7 +695,7 @@ static void _cairo_dock_move_launcher_to_dock (GtkMenuItem *pMenuItem, const gch
 		gldi_module_instance_reload (pIcon->pModuleInstance, TRUE);  // TRUE <=> reload config.
 	}
 	
-	CairoDock *pNewDock = cairo_dock_search_dock_from_name (cValidDockName);
+	CairoDock *pNewDock = gldi_dock_get (cValidDockName);
 	if (pNewDock && pNewDock->iRefCount == 0 && pNewDock->icons && pNewDock->icons->next == NULL)  // le dock vient d'etre cree avec cette icone.
 		gldi_dialog_show_general_message (_("The new dock has been created.\nYou can customize it by right-clicking on it -> cairo-dock -> configure this dock."), 8000);  // on le place pas sur le nouveau dock, car sa fenetre n'est pas encore bien placee (0,0).
 	g_free (cValidDockName);
@@ -718,8 +716,8 @@ static void _cairo_dock_add_docks_sub_menu (GtkWidget *pMenu, Icon *pIcon)
 	for (d = pDocks; d != NULL; d = d->next)
 	{
 		pDock = d->data;
-		cName = cairo_dock_search_dock_name (pDock);
-		cUserName = cairo_dock_get_readable_name_for_fock (pDock);
+		cName = gldi_dock_get_name (pDock);
+		cUserName = gldi_dock_get_readable_name (pDock);
 		
 		GtkWidget *pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (cUserName ? cUserName : cName, NULL, G_CALLBACK (_cairo_dock_move_launcher_to_dock), pSubMenuDocks, (gpointer)cName);
 		g_object_set_data (G_OBJECT (pMenuItem), "icon-item", pIcon);
@@ -820,7 +818,7 @@ static void _on_answer_remove_module_instance (int iClickedButton, G_GNUC_UNUSED
 {
 	if (iClickedButton == 0 || iClickedButton == -1)  // ok button or Enter.
 	{
-		gldi_module_remove_instance (icon->pModuleInstance);
+		gldi_module_delete_instance (icon->pModuleInstance);
 	}
 }
 static void _cairo_dock_remove_module_instance (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpointer *data)

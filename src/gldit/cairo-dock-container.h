@@ -106,15 +106,6 @@ typedef enum {
 	CAIRO_DOCK_HORIZONTAL
 	} CairoDockTypeHorizontality;
 
-/// Types of available containers.
-typedef enum {
-	CAIRO_DOCK_TYPE_DOCK = 0,
-	CAIRO_DOCK_TYPE_DESKLET,
-	CAIRO_DOCK_TYPE_DIALOG,
-	CAIRO_DOCK_TYPE_FLYING_CONTAINER,
-	CAIRO_DOCK_NB_CONTAINER_TYPES
-	} CairoDockTypeContainer;
-
 struct _GldiContainerInterface {
 	gboolean (*animation_loop) (GldiContainer *pContainer);
 	void (*setup_menu) (GldiContainer *pContainer, Icon *pIcon, GtkWidget *pMenu);
@@ -126,8 +117,6 @@ struct _GldiContainer {
 	GldiObject object;
 	/// External data.
 	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
-	/// type of container.
-	CairoDockTypeContainer iType;
 	/// window of the container.
 	GtkWidget *pWidget;
 	/// size of the container.

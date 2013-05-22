@@ -68,7 +68,7 @@ struct _CairoFlyingContainer {
 *@param obj the object.
 *@return TRUE if the object is a FlyingContainer.
 */
-#define CAIRO_DOCK_IS_FLYING_CONTAINER(obj) gldi_object_is_manager_child (obj, &myFlyingsMgr)
+#define CAIRO_DOCK_IS_FLYING_CONTAINER(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), GLDI_MANAGER(&myFlyingsMgr))
 
 
 CairoFlyingContainer *gldi_flying_container_new (Icon *pFlyingIcon, CairoDock *pOriginDock);

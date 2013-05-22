@@ -284,7 +284,7 @@ void gldi_module_instance_reload (GldiModuleInstance *pInstance, gboolean bReadC
 					gchar *cNewName = cairo_dock_get_unique_dock_name (pMinimalConfig->cLabel);
 					cd_debug ("* le sous-dock %s prend le nom '%s'", pIcon->cName, cNewName);
 					if (strcmp (pIcon->cName, cNewName) != 0)
-						cairo_dock_rename_dock (pIcon->cName, NULL, cNewName);
+						gldi_dock_rename (pIcon->pSubDock, cNewName);
 					g_free (pMinimalConfig->cLabel);
 					pMinimalConfig->cLabel = cNewName;
 				}
@@ -305,10 +305,10 @@ void gldi_module_instance_reload (GldiModuleInstance *pInstance, gboolean bReadC
 			if (!pMinimalConfig->bIsDetached)  // elle est desormais dans un dock.
 			{
 				const gchar *cDockName = (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
-				pNewDock = cairo_dock_search_dock_from_name (cDockName);
+				pNewDock = gldi_dock_get (cDockName);
 				if (pNewDock == NULL)  // c'est un nouveau dock.
 				{
-					cairo_dock_add_root_dock_config_for_name (cDockName);
+					gldi_dock_add_conf_file_for_name (cDockName);
 					pNewDock = gldi_dock_new (cDockName);
 				}
 				pNewContainer = CAIRO_CONTAINER (pNewDock);
@@ -582,7 +582,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 		else
 		{
 			const gchar *cDockName = (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
-			pDock = cairo_dock_search_dock_from_name (cDockName);
+			pDock = gldi_dock_get (cDockName);
 			if (pDock == NULL)
 			{
 				pDock = gldi_dock_new (cDockName);

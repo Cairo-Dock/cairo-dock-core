@@ -900,7 +900,7 @@ static inline void  _draw_icon_bent_backwards (Icon *pIcon, GldiContainer *pCont
 }
 static gboolean _transition_step (Icon *pIcon, gpointer data)
 {
-	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
+	CairoDock *pDock = gldi_dock_get (pIcon->cParentDockName);
 	if (pDock == NULL)
 		return FALSE;
 	

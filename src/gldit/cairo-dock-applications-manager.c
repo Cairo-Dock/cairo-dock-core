@@ -113,7 +113,7 @@ static gboolean _on_window_destroyed (G_GNUC_UNUSED gpointer data, GldiWindowAct
 		if (actor->bDemandsAttention)  // force the stop demanding attention, in case the icon was in a sub-dock (the main icon is also animating).
 			cairo_dock_appli_stops_demanding_attention (icon);
 		
-		CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+		CairoDock *pParentDock = gldi_dock_get (icon->cParentDockName);
 		if (pParentDock != NULL)
 		{
 			cd_message ("  va etre supprimee");
@@ -237,7 +237,7 @@ static gboolean _on_window_state_changed (G_GNUC_UNUSED gpointer data, GldiWindo
 		return GLDI_NOTIFICATION_LET_PASS;
 	
 	// on gere le cachage/apparition de l'icone (transparence ou miniature, applis minimisees seulement).
-	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+	CairoDock *pParentDock = gldi_dock_get (icon->cParentDockName);
 	if (bHiddenChanged)
 	{
 		cd_message ("  changement de visibilite -> %d", actor->bIsHidden);
@@ -401,7 +401,7 @@ static gboolean _on_active_window_changed (G_GNUC_UNUSED gpointer data, GldiWind
 		if (icon->bIsDemandingAttention)  // force the stop demanding attention, as it can happen (for some reason) that the attention state doesn't change when the appli takes the focus.
 			cairo_dock_appli_stops_demanding_attention (icon);
 		
-		pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+		pParentDock = gldi_dock_get (icon->cParentDockName);
 		if (pParentDock == NULL)  // elle est soit inhibee, soit pas dans un dock.
 		{
 			cairo_dock_update_activity_on_inhibitors (icon->cClass, actor);
@@ -416,7 +416,7 @@ static gboolean _on_active_window_changed (G_GNUC_UNUSED gpointer data, GldiWind
 	Icon *pLastActiveIcon = _get_appli_icon (s_pCurrentActiveWindow);
 	if (CAIRO_DOCK_IS_APPLI (pLastActiveIcon))
 	{
-		CairoDock *pLastActiveParentDock = cairo_dock_search_dock_from_name (pLastActiveIcon->cParentDockName);
+		CairoDock *pLastActiveParentDock = gldi_dock_get (pLastActiveIcon->cParentDockName);
 		if (pLastActiveParentDock == NULL)  // elle est soit inhibee, soit pas dans un dock.
 		{
 			cairo_dock_update_inactivity_on_inhibitors (pLastActiveIcon->cClass, s_pCurrentActiveWindow);
@@ -509,7 +509,7 @@ static gboolean _remove_one_appli (G_GNUC_UNUSED GldiWindowActor *pAppli, Icon *
 		return TRUE;
 	}
 	
-	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
+	CairoDock *pDock = gldi_dock_get (pIcon->cParentDockName);
 	if (pDock != NULL)
 	{
 		cairo_dock_detach_icon_from_dock (pIcon, pDock);
@@ -580,7 +580,7 @@ static void _for_one_appli_icon (G_GNUC_UNUSED GldiWindowActor *actor, Icon *ico
 	
 	CairoDock *pParentDock = NULL;
 	if (icon->cParentDockName != NULL)
-		pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+		pParentDock = gldi_dock_get (icon->cParentDockName);
 	else
 		pParentDock = g_pMainDock;
 	pFunction (icon, CAIRO_CONTAINER (pParentDock), pUserData);
@@ -676,12 +676,12 @@ static void _load_appli (Icon *icon)
 		// draw the previous image as an emblem.
 		if (icon->image.iTexture != 0 && iPrevTexture != 0)
 		{
-			CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+			CairoDock *pParentDock = gldi_dock_get (icon->cParentDockName);
 			cairo_dock_print_overlay_on_icon_from_texture (icon, CAIRO_CONTAINER (pParentDock), iPrevTexture, CAIRO_OVERLAY_LOWER_LEFT);
 		}
 		else if (icon->image.pSurface != NULL && pPrevSurface != NULL)
 		{
-			CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+			CairoDock *pParentDock = gldi_dock_get (icon->cParentDockName);
 			cairo_dock_print_overlay_on_icon_from_surface (icon, CAIRO_CONTAINER (pParentDock), pPrevSurface, 0, 0, CAIRO_OVERLAY_LOWER_LEFT);
 		}
 	}
@@ -717,7 +717,7 @@ static void _load_appli (Icon *icon)
 	// bent the icon in the case of a minimized window and if defined in the config.
 	if (icon->pAppli->bIsHidden && myTaskbarParam.iMinimizedWindowRenderType == 2)
 	{
-		CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+		CairoDock *pParentDock = gldi_dock_get (icon->cParentDockName);
 		if (pParentDock)
 			cairo_dock_draw_hidden_appli_icon (icon, CAIRO_CONTAINER (pParentDock), FALSE);
 	}

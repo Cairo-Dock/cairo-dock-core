@@ -1097,14 +1097,14 @@ static void _add_one_dock_to_list (G_GNUC_UNUSED const gchar *cName, CairoDock *
 GList *cairo_dock_get_available_docks (CairoDock *pParentDock, CairoDock *pSubDock)  // avoid 'pParentDock', and 'pSubDock' and any of its children
 {
 	gpointer data[3] = {pParentDock, pSubDock, NULL};
-	cairo_dock_foreach_docks ((GHFunc)_add_one_dock_to_list, data);
+	gldi_docks_foreach ((GHFunc)_add_one_dock_to_list, data);
 	return data[2];
 }
 
 
 static gboolean _redraw_subdock_content_idle (Icon *pIcon)
 {
-	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon->cParentDockName);
+	CairoDock *pDock = gldi_dock_get (pIcon->cParentDockName);
 	if (pDock != NULL)
 	{
 		if (pIcon->pSubDock != NULL)

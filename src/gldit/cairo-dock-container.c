@@ -29,7 +29,7 @@
 
 #include "cairo-dock-icon-facility.h"  // cairo_dock_compute_icon_area
 #include "cairo-dock-dock-facility.h"  // cairo_dock_is_hidden
-#include "cairo-dock-dock-manager.h"  // cairo_dock_search_dock_from_name
+#include "cairo-dock-dock-manager.h"  // gldi_dock_get
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-config.h"
@@ -518,7 +518,7 @@ GldiShape *gldi_container_create_input_shape (GldiContainer *pContainer, int x, 
 
 static void _set_visibility (CairoDock *pDock, gpointer data)
 {
-	cairo_dock_set_dock_visibility (pDock, GPOINTER_TO_INT (data));
+	gldi_dock_set_visibility (pDock, GPOINTER_TO_INT (data));
 }
 static void _on_composited_changed (GdkScreen *pScreen, G_GNUC_UNUSED gpointer data)
 {
@@ -528,7 +528,7 @@ static void _on_composited_changed (GdkScreen *pScreen, G_GNUC_UNUSED gpointer d
 		g_pFakeTransparencyDesktopBg = gldi_desktop_background_get (g_bUseOpenGL);
 		s_bNoComposite = TRUE;
 		s_iPrevVisibility = g_pMainDock->iVisibility;
-		cairo_dock_foreach_root_docks ((GFunc)_set_visibility, GINT_TO_POINTER (CAIRO_DOCK_VISI_KEEP_BELOW));  // set the visibility to 'keep below'; that's the best compromise between accessibility and visual annoyance.
+		gldi_docks_foreach_root ((GFunc)_set_visibility, GINT_TO_POINTER (CAIRO_DOCK_VISI_KEEP_BELOW));  // set the visibility to 'keep below'; that's the best compromise between accessibility and visual annoyance.
 	}
 	else
 	{
@@ -536,7 +536,7 @@ static void _on_composited_changed (GdkScreen *pScreen, G_GNUC_UNUSED gpointer d
 		s_bNoComposite = FALSE;
 		g_pFakeTransparencyDesktopBg = NULL;
 		if (s_iPrevVisibility < CAIRO_DOCK_NB_VISI)
-			cairo_dock_foreach_root_docks ((GFunc)_set_visibility, GINT_TO_POINTER (s_iPrevVisibility));  // restore the previous visibility.
+			gldi_docks_foreach_root ((GFunc)_set_visibility, GINT_TO_POINTER (s_iPrevVisibility));  // restore the previous visibility.
 	}
 }
 static gboolean _check_composite_delayed (G_GNUC_UNUSED gpointer data)
@@ -639,11 +639,6 @@ static void init_object (GldiObject *obj, gpointer attr)
 	}
 	if (pContainer->iAnimationDeltaT == 0)
 		pContainer->iAnimationDeltaT = 30;
-	#if (GTK_MAJOR_VERSION < 3)
-	gdk_window_set_back_pixmap (gldi_container_get_gdk_window (pContainer), NULL, FALSE);
-	#else
-	gdk_window_set_background_pattern (gldi_container_get_gdk_window (pContainer), NULL);
-	#endif
 	
 	// set the opacity to 0 to avoid seeing grey rectangles until the window is ready to be painted by us.
 	if (s_bInitialOpacity0)

@@ -160,7 +160,6 @@ double cairo_dock_get_current_dock_width_linear (CairoDock *pDock);
 */
 void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock);
 
-///void cairo_dock_manage_mouse_position (CairoDock *pDock);
 
 /** Check if one can drop inside a linear dock.
 *Drop is allowed between 2 icons of the launchers group, if the user is dragging something over the dock. Update the 'bCanDrop' field.

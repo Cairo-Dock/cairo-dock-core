@@ -399,9 +399,8 @@ Icon *cairo_dock_add_new_launcher_by_uri_or_type (const gchar *cExternDesktopFil
 /** Remove all icons from a dock (and its sub-docks). If the receiving dock is NULL, the icons are destroyed and removed from the current theme itself.
 *@param pDock a dock.
 *@param pReceivingDock the dock that will receive the icons, or NULL to destroy and remove the icons.
-*@param cReceivingDockName name of the receiving dock.
 */
-void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingDock, const gchar *cReceivingDockName);
+void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingDock);
 
 void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, gboolean bUpdateIconSize);
 

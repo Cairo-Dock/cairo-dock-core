@@ -593,7 +593,7 @@ void cairo_dock_set_icon_name (const gchar *cIconName, Icon *pIcon, G_GNUC_UNUSE
 	{
 		cUniqueName = cairo_dock_get_unique_dock_name (cIconName);
 		cIconName = cUniqueName;
-		cairo_dock_rename_dock (pIcon->cName, pIcon->pSubDock, cUniqueName);
+		gldi_dock_rename (pIcon->pSubDock, cUniqueName);
 	}
 	if (pIcon->cName != cIconName)
 	{

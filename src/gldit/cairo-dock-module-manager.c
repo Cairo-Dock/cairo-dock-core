@@ -56,34 +56,6 @@ static GHashTable *s_hModuleTable = NULL;
 static GList *s_AutoLoadedModules = NULL;
 static guint s_iSidWriteModules = 0;
 
-/*
-MODULE
-gldi_module_new
-gldi_modules_new_from_directory
-gldi_modules_activate_from_list
-
-gldi_module_get
-gldi_module_foreach
-gldi_module_list_active
-gldi_module_get_nb
-
-gldi_module_get_config_dir
-gldi_module_add_conf_file
-gldi_module_activate
-gldi_module_deactivate
-gldi_module_reload
-gldi_module_add_instance -> add conf file, instance_new
-gldi_module_remove_instance -> delete conf file, unref
-
-INSTANCE
-gldi_module_instance_open_conf_file/cairo_dock_free_minimal_config
-gldi_module_instance_new = object_new -> open config, create icon/container, init, add to list, notify 'activated'
-object_unref -> stop, destroy icon/container, remove from list, notify 'deactivated'
-gldi_module_instance_reload
-gldi_module_instance_detach
-gldi_module_instance_popup_description
-gldi_module_instance_reserve_data_slot/gldi_module_instance_release_data_slot
-*/
 
   ///////////////
  /// MANAGER ///
@@ -499,7 +471,7 @@ void gldi_modules_deactivate_all (void)
 	}
 }
 
-void gldi_module_remove_instance (GldiModuleInstance *pInstance)
+void gldi_module_delete_instance (GldiModuleInstance *pInstance)
 {
 	cd_message ("%s (%s)", __func__, pInstance->cConfFilePath);
 	g_return_if_fail (pInstance->pModule->pInstancesList != NULL);

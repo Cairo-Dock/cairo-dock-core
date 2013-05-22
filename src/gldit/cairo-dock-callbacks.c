@@ -426,7 +426,7 @@ gboolean cairo_dock_on_leave_dock_notification (G_GNUC_UNUSED gpointer data, Cai
 		//if (! cairo_dock_hide_child_docks (pDock))  // on quitte si on entre dans un sous-dock, pour rester en position "haute".
 		//	return ;
 		
-		CairoDock *pOriginDock = cairo_dock_search_dock_from_name (s_pIconClicked->cParentDockName);
+		CairoDock *pOriginDock = gldi_dock_get (s_pIconClicked->cParentDockName);
 		g_return_val_if_fail (pOriginDock != NULL, TRUE);
 		if (pOriginDock == pDock && _mouse_is_really_outside (pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
 		{
@@ -450,7 +450,7 @@ gboolean cairo_dock_on_leave_dock_notification (G_GNUC_UNUSED gpointer data, Cai
 	}
 	/**else if (s_pFlyingContainer != NULL && s_pFlyingContainer->pIcon != NULL && pDock->iRefCount > 0)  // on evite les bouclages.
 	{
-		CairoDock *pOriginDock = cairo_dock_search_dock_from_name (s_pFlyingContainer->pIcon->cParentDockName);
+		CairoDock *pOriginDock = gldi_dock_get (s_pFlyingContainer->pIcon->cParentDockName);
 		if (pOriginDock == pDock)
 			return GLDI_NOTIFICATION_INTERCEPT;
 	}*/
@@ -675,7 +675,7 @@ static gboolean _on_motion_notify (GtkWidget* pWidget,
 		//if (! cairo_dock_hide_child_docks (pDock))  // on quitte si on entre dans un sous-dock, pour rester en position "haute".
 		//	return ;
 		
-		CairoDock *pOriginDock = cairo_dock_search_dock_from_name (s_pIconClicked->cParentDockName);
+		CairoDock *pOriginDock = gldi_dock_get (s_pIconClicked->cParentDockName);
 		g_return_val_if_fail (pOriginDock != NULL, TRUE);
 		if (pOriginDock == pDock && _mouse_is_really_outside (pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
 		{
@@ -696,7 +696,7 @@ static gboolean _on_motion_notify (GtkWidget* pWidget,
 	}
 	else if (s_pFlyingContainer != NULL && s_pFlyingContainer->pIcon != NULL && pDock->iRefCount > 0)  // on evite les bouclages.
 	{
-		CairoDock *pOriginDock = cairo_dock_search_dock_from_name (s_pFlyingContainer->pIcon->cParentDockName);
+		CairoDock *pOriginDock = gldi_dock_get (s_pFlyingContainer->pIcon->cParentDockName);
 		if (pOriginDock == pDock)
 			return GLDI_NOTIFICATION_INTERCEPT;
 	}
@@ -1014,7 +1014,7 @@ static gboolean _on_key_release (G_GNUC_UNUSED GtkWidget *pWidget,
 
 static gboolean _double_click_delay_over (Icon *icon)
 {
-	CairoDock *pDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+	CairoDock *pDock = gldi_dock_get (icon->cParentDockName);
 	if (pDock)
 	{
 		cairo_dock_stop_icon_attention (icon, pDock);  // we consider that clicking on the icon is an acknowledge of the demand of attention.
@@ -2093,7 +2093,7 @@ void gldi_dock_init_internals (CairoDock *pDock)
 	GtkWidget *pWindow = pDock->container.pWidget;
 	gtk_container_set_border_width (GTK_CONTAINER (pWindow), 0);
 	gtk_window_set_gravity (GTK_WINDOW (pWindow), GDK_GRAVITY_STATIC);
-	gtk_window_set_type_hint (GTK_WINDOW (pWindow), GDK_WINDOW_TYPE_HINT_DOCK);
+	gtk_window_set_type_hint (GTK_WINDOW (pWindow), GDK_WINDOW_TYPE_HINT_DOCK);  // window must not be mapped
 	
 	//\__________________ connect to events.
 	gtk_widget_add_events (pWindow,

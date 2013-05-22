@@ -55,7 +55,7 @@ static void _cairo_dock_handle_container (Icon *icon, const gchar *cRendererName
 	}
 
 	//\____________ On cree son container si necessaire.
-	CairoDock *pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+	CairoDock *pParentDock = gldi_dock_get (icon->cParentDockName);
 	if (pParentDock == NULL)
 	{
 		cd_message ("The parent dock (%s) doesn't exist: we create it", icon->cParentDockName);
@@ -65,7 +65,7 @@ static void _cairo_dock_handle_container (Icon *icon, const gchar *cRendererName
 	//\____________ On cree son sous-dock si necessaire.
 	if (icon->iTrueType == CAIRO_DOCK_ICON_TYPE_CONTAINER && icon->cName != NULL)
 	{
-		CairoDock *pChildDock = cairo_dock_search_dock_from_name (icon->cName);
+		CairoDock *pChildDock = gldi_dock_get (icon->cName);
 		if (pChildDock && (pChildDock->iRefCount > 0 || pChildDock->bIsMainDock))  // un sous-dock de meme nom existe deja, on change le nom de l'icone.
 		{
 			gchar *cUniqueDockName = cairo_dock_get_unique_dock_name (icon->cName);
@@ -256,7 +256,7 @@ void cairo_dock_load_launchers_from_dir (const gchar *cDirectory)
 				continue;
 			}
 			
-			pParentDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+			pParentDock = gldi_dock_get (icon->cParentDockName);
 			if (pParentDock != NULL)  // a priori toujours vrai.
 			{
 				cairo_dock_insert_icon_in_dock_full (icon, pParentDock, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
@@ -309,7 +309,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 			// rename sub-dock
 			cd_debug ("on renomme a l'avance le sous-dock en %s", cUniqueName);
 			if (icon->pSubDock != NULL)
-				cairo_dock_rename_dock (icon->cName, icon->pSubDock, cUniqueName);  // on le renomme ici pour eviter de transvaser dans un nouveau dock (ca marche aussi ceci dit).
+				gldi_dock_rename (icon->pSubDock, cUniqueName);  // on le renomme ici pour eviter de transvaser dans un nouveau dock (ca marche aussi ceci dit).
 			g_free (cUniqueName);
 		}
 		g_free (cName);
@@ -321,7 +321,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 	//\_____________ On memorise son etat.
 	gchar *cPrevDockName = icon->cParentDockName;
 	icon->cParentDockName = NULL;
-	CairoDock *pDock = cairo_dock_search_dock_from_name (cPrevDockName);  // changement de l'ordre ou du container.
+	CairoDock *pDock = gldi_dock_get (cPrevDockName);  // changement de l'ordre ou du container.
 	double fOrder = icon->fOrder;
 	
 	gchar *cClass = icon->cClass;
@@ -337,7 +337,7 @@ void cairo_dock_reload_launcher (Icon *icon)
 	g_return_if_fail (icon->cDesktopFileName != NULL);
 	
 	// get its (possibly new) container.
-	CairoDock *pNewDock = cairo_dock_search_dock_from_name (icon->cParentDockName);
+	CairoDock *pNewDock = gldi_dock_get (icon->cParentDockName);
 	if (pNewDock == NULL)
 	{
 		cd_message ("The parent dock (%s) doesn't exist, we create it", icon->cParentDockName);

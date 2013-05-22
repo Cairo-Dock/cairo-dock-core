@@ -212,14 +212,14 @@ static gboolean _on_select_one_item_in_tree (G_GNUC_UNUSED GtkTreeSelection * se
 		if (!pDock->bIsMainDock)  // pour l'instant le main dock n'a pas de fichier de conf
 		{
 			// build dock's widgets
-			const gchar *cDockName = cairo_dock_search_dock_name (pDock);  // CD_MODEL_NAME contient le nom affiche, qui peut differer.
+			const gchar *cDockName = gldi_dock_get_name (pDock);  // CD_MODEL_NAME contient le nom affiche, qui peut differer.
 			g_return_val_if_fail (cDockName != NULL, FALSE);
 			cd_message ("%s (%s)", __func__, cDockName);
 			
 			gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
 			if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))  // ne devrait pas arriver mais au cas ou.
 			{
-				cairo_dock_add_root_dock_config_for_name (cDockName);
+				gldi_dock_add_conf_file_for_name (cDockName);
 			}
 			
 			pDataGarbage = g_ptr_array_new ();
@@ -371,17 +371,15 @@ static void _add_one_dock_to_model (CairoDock *pDock, GtkTreeStore *model, GtkTr
 	}
 }
 
-static void _add_one_root_dock_to_model (const gchar *cName, CairoDock *pDock, GtkTreeStore *model)
+static void _add_one_root_dock_to_model (CairoDock *pDock, GtkTreeStore *model)
 {
-	if (pDock->iRefCount != 0)
-		return ;
 	GtkTreeIter iter;
 	
 	// on ajoute une ligne pour le dock.
 	gtk_tree_store_append (model, &iter, NULL);
-	gchar *cUserName = cairo_dock_get_readable_name_for_fock (pDock);
+	gchar *cUserName = gldi_dock_get_readable_name (pDock);
 	gtk_tree_store_set (model, &iter,
-		CD_MODEL_NAME, cUserName ? cUserName : cName,
+		CD_MODEL_NAME, cUserName ? cUserName : gldi_dock_get_name (pDock),
 		CD_MODEL_CONTAINER, pDock,
 		-1);
 	g_free (cUserName);
@@ -469,7 +467,7 @@ static GtkTreeModel *_build_tree_model (ItemsWidget *pItemsWidget)
 		G_TYPE_POINTER,  // Icon
 		G_TYPE_POINTER,  // Container
 		G_TYPE_POINTER);  // Module
-	cairo_dock_foreach_docks ((GHFunc) _add_one_root_dock_to_model, model);  // on n'utilise pas cairo_dock_foreach_root_docks(), de facon a avoir le nom du dock.
+	gldi_docks_foreach_root ((GFunc) _add_one_root_dock_to_model, model);
 	gldi_desklets_foreach ((GldiDeskletForeachFunc) _add_one_desklet_to_model, model);
 	gldi_module_foreach ((GHRFunc)_add_one_module_to_model, model);
 	/*GldiModule *pModule = gldi_module_get ("Help");
@@ -537,7 +535,7 @@ static void on_row_deleted (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path
 						pContainer = pInstance->pContainer;
 					else if (pIcon != NULL)
 					{
-						pContainer = CAIRO_CONTAINER (cairo_dock_search_dock_from_name (pIcon->cParentDockName));
+						pContainer = CAIRO_CONTAINER (gldi_dock_get (pIcon->cParentDockName));
 					}
 				}
 				
@@ -562,7 +560,7 @@ static void on_row_deleted (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path
 						}
 						else  // not an icon that can contain our item, so place it next to it.
 						{
-							pParentContainer = CAIRO_CONTAINER (cairo_dock_search_dock_from_name (pParentIcon->cParentDockName));
+							pParentContainer = CAIRO_CONTAINER (gldi_dock_get (pParentIcon->cParentDockName));
 							// we'll search the parent instead.
 							lastInsertedIter = parent_iter;
 							gtk_tree_model_iter_parent (model, &parent_iter, &lastInsertedIter);
@@ -573,7 +571,7 @@ static void on_row_deleted (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path
 						// if it has changed, update the conf file and the icon.
 						if (pParentContainer != pContainer)
 						{
-							const gchar *cNewParentDockName = cairo_dock_search_dock_name (CAIRO_DOCK (pParentContainer));
+							const gchar *cNewParentDockName = gldi_dock_get_name (CAIRO_DOCK (pParentContainer));
 							if (cNewParentDockName != NULL)
 							{
 								cairo_dock_write_container_name_in_conf_file (pIcon, cNewParentDockName);
@@ -687,14 +685,14 @@ static void _on_select_remove_item (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GtkWid
 	}
 	else if (pInstance != NULL)  // plug-in
 	{
-		gldi_module_remove_instance (pInstance);
+		gldi_module_delete_instance (pInstance);
 	}
 	else if (CAIRO_DOCK_IS_DOCK (pContainer))  // main-dock
 	{
 		CairoDock *pDock = CAIRO_DOCK (pContainer);
 		if (! pDock->bIsMainDock)
 		{
-			cairo_dock_remove_icons_from_dock (pDock, NULL, NULL);
+			cairo_dock_remove_icons_from_dock (pDock, NULL);
 		
 			gldi_object_unref (GLDI_OBJECT(pDock));
 		}
@@ -829,10 +827,10 @@ static void _items_widget_apply (CDWidget *pCdWidget)
 			gboolean bIsDetached = g_key_file_get_boolean (pKeyFile, "Desklet", "initially detached", NULL);
 			if (!bIsDetached)
 			{
-				CairoDock *pDock = cairo_dock_search_dock_from_name (cDockName);
+				CairoDock *pDock = gldi_dock_get (cDockName);
 				if (pDock == NULL)
 				{
-					gchar *cNewDockName = cairo_dock_add_root_dock_config ();
+					gchar *cNewDockName = gldi_dock_add_conf_file ();
 					g_key_file_set_string (pKeyFile, "Icon", "dock name", cNewDockName);
 					g_free (cNewDockName);
 				}
@@ -855,7 +853,7 @@ static void _items_widget_apply (CDWidget *pCdWidget)
 		CairoDock *pDock = CAIRO_DOCK (pContainer);
 		if (!pDock->bIsMainDock)  // pour l'instant le main dock n'a pas de fichier de conf
 		{
-			const gchar *cDockName = cairo_dock_search_dock_name (pDock);  // CD_MODEL_NAME contient le nom affiche, qui peut differer.
+			const gchar *cDockName = gldi_dock_get_name (pDock);  // CD_MODEL_NAME contient le nom affiche, qui peut differer.
 			g_return_if_fail (cDockName != NULL);
 			
 			gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
@@ -891,10 +889,10 @@ static void _items_widget_apply (CDWidget *pCdWidget)
 		if (g_key_file_has_key (pKeyFile, "Desktop Entry", "Container", NULL))
 		{
 			gchar *cDockName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Container", NULL);
-			CairoDock *pDock = cairo_dock_search_dock_from_name (cDockName);
+			CairoDock *pDock = gldi_dock_get (cDockName);
 			if (pDock == NULL)
 			{
-				gchar *cNewDockName = cairo_dock_add_root_dock_config ();
+				gchar *cNewDockName = gldi_dock_add_conf_file ();
 				g_key_file_set_string (pKeyFile, "Icon", "dock name", cNewDockName);
 				g_free (cNewDockName);
 			}

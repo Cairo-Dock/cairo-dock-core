@@ -1207,8 +1207,8 @@ static GtkListStore *_cairo_dock_build_dock_list_for_gui (GList *pDocks)
 	for (d = pDocks; d != NULL; d = d->next)
 	{
 		pDock = d->data;
-		cName = cairo_dock_search_dock_name (pDock);
-		cUserName = cairo_dock_get_readable_name_for_fock (pDock);
+		cName = gldi_dock_get_name (pDock);
+		cUserName = gldi_dock_get_readable_name (pDock);
 		
 		memset (&iter, 0, sizeof (GtkTreeIter));
 		gtk_list_store_append (pListStore, &iter);
@@ -1391,7 +1391,7 @@ static void _cairo_dock_configure_module (G_GNUC_UNUSED GtkButton *button, const
 	Icon *pIcon = cairo_dock_get_current_active_icon ();
 	if (pIcon == NULL)
 		pIcon = gldi_icons_get_any_without_dialog ();
-	CairoDock *pDock = cairo_dock_search_dock_from_name (pIcon != NULL ? pIcon->cParentDockName : NULL);
+	CairoDock *pDock = gldi_dock_get (pIcon != NULL ? pIcon->cParentDockName : NULL);
 	gchar *cMessage = NULL;
 	
 	if (pModule == NULL)
@@ -2511,7 +2511,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				else if (iIconType == CAIRO_DOCK_ICON_TYPE_CONTAINER) // it's a container
 				{
 					gchar *cContainerName = g_key_file_get_string (pKeyFile, cGroupName, "Name", NULL);
-					pSubDock = cairo_dock_search_dock_from_name (cContainerName);
+					pSubDock = gldi_dock_get (cContainerName);
 					g_free (cContainerName);
 				}
 				GList *pDocks = cairo_dock_get_available_docks (NULL, pSubDock);  // NULL because we want the current parent dock in the list.
@@ -2591,7 +2591,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				// get the dock
 				CairoDock *pDock = NULL;
 				if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[0] != NULL)
-					pDock = cairo_dock_search_dock_from_name (pAuthorizedValuesList[0]);
+					pDock = gldi_dock_get (pAuthorizedValuesList[0]);
 				if (!pDock)
 					pDock = g_pMainDock;
 				
