@@ -189,7 +189,6 @@ struct _Icon {
 	gint iHideLabel;
 	gint iThumbnailX, iThumbnailY;  // X icon geometry for apps
 	gint iThumbnailWidth, iThumbnailHeight;
-	gboolean bBeingRemovedByCairo;  // devrait etre dans pDataSlot...
 	
 	gpointer reserved[4];
 };

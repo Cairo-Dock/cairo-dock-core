@@ -993,12 +993,12 @@ static void init_object (GldiObject *obj, gpointer attr)
 	//\________________ Interactive dialogs are set modal, to be fixed.
 	if ((pDialog->pInteractiveWidget || pDialog->pButtons || pAttribute->iTimeLength == 0) && ! pDialog->bNoInput)
 	{
+		gtk_window_set_modal (GTK_WINDOW (pDialog->container.pWidget), TRUE);  // Note: there is a bug in Ubuntu version of GTK: gtkscrolledwindow in dialog breaks his modality (http://www.gtkforums.com/viewtopic.php?f=3&t=55727, LP: https://bugs.launchpad.net/ubuntu/+source/overlay-scrollbar/+bug/903302).
 		GldiContainer *pContainer = pAttribute->pContainer;
 		if (CAIRO_DOCK_IS_DOCK (pContainer))
-		gtk_window_set_modal (GTK_WINDOW (pDialog->container.pWidget), TRUE);  // Note: there is a bug in Ubuntu version of GTK: gtkscrolledwindow in dialog breaks his modality (http://www.gtkforums.com/viewtopic.php?f=3&t=55727, LP: https://bugs.launchpad.net/ubuntu/+source/overlay-scrollbar/+bug/903302).
 		{
 			CAIRO_DOCK (pContainer)->bHasModalWindow = TRUE;
-			cairo_dock_emit_enter_signal (pContainer);  // to prevent the dock from hiding. We want to see it until the dialog is visible (a leave event will be emited when it disappears).
+			cairo_dock_emit_enter_signal (pContainer);  // to prevent the dock from hiding. We want to see it while the dialog is visible (a leave event will be emited when it disappears).
 		}
 	}
 	pDialog->bHideOnClick = pAttribute->bHideOnClick;

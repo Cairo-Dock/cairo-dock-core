@@ -368,11 +368,9 @@ static void _change_rating (G_GNUC_UNUSED GtkCellRendererText * cell, gchar * pa
 	else
 	{
 		Icon *pIcon = cairo_dock_get_current_active_icon ();  // most probably the appli-icon representing the config window.
-		CairoDock *pDock = NULL;
-		if (pIcon != NULL)
-			pDock = gldi_dock_get (pIcon->cParentDockName);
-		if (pDock != NULL)
-			gldi_dialog_show_temporary_with_icon (_("You must try the theme before you can rate it."), pIcon, CAIRO_CONTAINER (pDock), 3000, "same icon");
+		GldiContainer *pContainer = (pIcon != NULL ? cairo_dock_get_icon_container (pIcon) : NULL);
+		if (pContainer != NULL)
+			gldi_dialog_show_temporary_with_icon (_("You must try the theme before you can rate it."), pIcon, pContainer, 3000, "same icon");
 		else
 			gldi_dialog_show_general_message (_("You must try the theme before you can rate it."), 3000);
 	}

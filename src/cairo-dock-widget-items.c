@@ -535,7 +535,7 @@ static void on_row_deleted (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path
 						pContainer = pInstance->pContainer;
 					else if (pIcon != NULL)
 					{
-						pContainer = CAIRO_CONTAINER (gldi_dock_get (pIcon->cParentDockName));
+						pContainer = CAIRO_CONTAINER (gldi_dock_get (pIcon->cParentDockName));  // don't use pIcon->pContainer here, in case it's a launcher on a given workspace; we can change if we make a 'hide' function in the docks
 					}
 				}
 				
@@ -853,9 +853,8 @@ static void _items_widget_apply (CDWidget *pCdWidget)
 		CairoDock *pDock = CAIRO_DOCK (pContainer);
 		if (!pDock->bIsMainDock)  // pour l'instant le main dock n'a pas de fichier de conf
 		{
-			const gchar *cDockName = gldi_dock_get_name (pDock);  // CD_MODEL_NAME contient le nom affiche, qui peut differer.
+			const gchar *cDockName = gldi_dock_get_name (pDock);
 			g_return_if_fail (cDockName != NULL);
-			
 			gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
 			
 			// open the conf file.

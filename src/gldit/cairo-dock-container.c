@@ -149,6 +149,14 @@ static gboolean _set_opacity (GtkWidget *pWidget,
 	return FALSE ;
 }
 
+static void _remove_background (G_GNUC_UNUSED GtkWidget *pWidget, GldiContainer *pContainer)
+{
+	#if (GTK_MAJOR_VERSION < 3)
+	gdk_window_set_back_pixmap (gldi_container_get_gdk_window (pContainer), NULL, FALSE);
+	#else
+	gdk_window_set_background_pattern (gldi_container_get_gdk_window (pContainer), NULL);  // window must be realized (shown)
+	#endif
+}
 
 void cairo_dock_redraw_container (GldiContainer *pContainer)
 {
@@ -653,6 +661,10 @@ static void init_object (GldiObject *obj, gpointer attr)
 			G_CALLBACK (_set_opacity),
 			pContainer);  // the callback will be removed once it has done its job.
 	}
+	g_signal_connect (G_OBJECT (pWindow),
+		"realize",
+		G_CALLBACK (_remove_background),
+		pContainer);
 	
 	// remove the resize grip added by gtk3 (it's also possible that this grip has been backported to gtk+-2.0 (e.g. in Ubuntu Natty...))
 	#if (GTK_MAJOR_VERSION >= 3 || ENABLE_GTK_GRIP == 1)

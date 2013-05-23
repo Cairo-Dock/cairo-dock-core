@@ -979,6 +979,11 @@ static void init (void)
 		GLDI_RUN_FIRST, NULL);
 }
 
+
+  ///////////////
+ /// MANAGER ///
+///////////////
+
 static void init_object (GldiObject *obj, gpointer attr)
 {
 	Icon *icon = (Icon*)obj;
@@ -1011,11 +1016,6 @@ static void reset_object (GldiObject *obj)
 	Icon *pIcon = (Icon*)obj;
 	cairo_dock_unregister_appli (pIcon);
 }
-
-
-  ///////////////
- /// MANAGER ///
-///////////////
 
 void gldi_register_applications_manager (void)
 {

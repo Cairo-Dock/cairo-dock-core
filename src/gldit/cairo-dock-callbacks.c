@@ -2160,6 +2160,6 @@ void gldi_dock_init_internals (CairoDock *pDock)
 		"drag-drop",
 		G_CALLBACK (_on_drag_drop),
 		pDock);*/
-
-	gtk_widget_show_all (pWindow);
+	
+	gtk_widget_show_all (pDock->container.pWidget);
 }

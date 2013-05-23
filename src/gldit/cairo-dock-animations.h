@@ -142,7 +142,6 @@ void cairo_dock_request_icon_animation (Icon *pIcon, GldiContainer *pContainer, 
 */
 #define cairo_dock_stop_icon_animation(pIcon) do { \
 	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REMOVE_INSERT && pIcon->iAnimationState != CAIRO_DOCK_STATE_REST) {\
-		gldi_object_notify (&myIconsMgr, NOTIFICATION_STOP_ICON, pIcon); \
 		gldi_object_notify (pIcon, NOTIFICATION_STOP_ICON, pIcon); \
 		pIcon->iAnimationState = CAIRO_DOCK_STATE_REST; } } while (0)
 
@@ -168,8 +167,6 @@ void cairo_dock_trigger_icon_removal_from_dock (Icon *pIcon);
 void cairo_dock_mark_icon_animation_as (Icon *pIcon, CairoDockAnimationState iAnimationState);
 void cairo_dock_stop_marking_icon_animation_as (Icon *pIcon, CairoDockAnimationState iAnimationState);
 
-void cairo_dock_update_removing_inserting_icon_size_default (Icon *icon);
-
 #define cairo_dock_mark_icon_as_hovered_by_mouse(pIcon) cairo_dock_mark_icon_animation_as (pIcon, CAIRO_DOCK_STATE_MOUSE_HOVERED)
 #define cairo_dock_stop_marking_icon_as_hovered_by_mouse(pIcon) cairo_dock_stop_marking_icon_animation_as (pIcon, CAIRO_DOCK_STATE_MOUSE_HOVERED)
 
@@ -184,11 +181,6 @@ void cairo_dock_update_removing_inserting_icon_size_default (Icon *icon);
 
 #define cairo_dock_mark_icon_as_inserting_removing(pIcon) cairo_dock_mark_icon_animation_as (pIcon, CAIRO_DOCK_STATE_REMOVE_INSERT)
 #define cairo_dock_stop_marking_icon_as_inserting_removing(pIcon) cairo_dock_stop_marking_icon_animation_as (pIcon, CAIRO_DOCK_STATE_REMOVE_INSERT)
-
-
-gboolean cairo_dock_update_inserting_removing_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bContinueAnimation);
-gboolean cairo_dock_on_insert_remove_icon_notification (gpointer pUserData, Icon *pIcon, CairoDock *pDock);
-gboolean cairo_dock_stop_inserting_removing_icon_notification (gpointer pUserData, Icon *pIcon);
 
 
 /** Set a Transition on an Icon.

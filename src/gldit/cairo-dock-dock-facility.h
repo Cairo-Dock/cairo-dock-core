@@ -21,8 +21,6 @@
 #ifndef __CAIRO_DOCK_FACILITY__
 #define  __CAIRO_DOCK_FACILITY__
 
-#include <glib.h>
-
 #include "cairo-dock-struct.h"
 #include "cairo-dock-dock-factory.h"
 G_BEGIN_DECLS

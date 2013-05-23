@@ -39,12 +39,45 @@
 #include "cairo-dock-launcher-factory.h"  // cairo_dock_new_launcher_icon
 #include "cairo-dock-separator-manager.h"  // cairo_dock_create_separator_surface
 #include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file
-#include "cairo-dock-windows-manager.h"  // gldi_window_set_thumbnail_area
+#include "cairo-dock-windows-manager.h"  // gldi_window_show
 #include "cairo-dock-file-manager.h"  // g_iDesktopEnv
 #include "cairo-dock-launcher-manager.h"
 
 extern gchar *g_cCurrentLaunchersPath;
 extern CairoDockDesktopEnv g_iDesktopEnv;
+
+/*
+user-icon = {icon, desktop-file}
+object-new(desktop-file, keyfile(may be null)): open file, get generic data (dock-name, order, workspace), iGroup = CAIRO_DOCK_LAUNCHER, set desktopfile, create container
+delete_user_icon
+
+specialized mgr: get data, update the key file if necessary, etc
+
+
+icon_create_from_conf_file -> open keyfile -> get type -> object_new(mgr), free keyfile
+
+
+- LauncherMgr (desktop file) -> get data, register class, set data from class, load_launcher, check validity, inhibite class
+- SeparatorMgr (desktop file or NULL) -> load_separator
+- ContainerIconMgr (desktop file) -> get data, create sub-dock, load_launcher_with_sub_dock, delete_sub_icons, create sub-dock, check name
+
+OR
+
+icon_create_from_conf_file -> object_new(myLauncherMgr, desktop file)
+-> user-icon = {icon, desktop-file}
+
+
+
+
+icon_create_dummy -> icon_new, set data (mgr = myIconsMgr)
+
+create auto separator: object_new(SeparatorMgr, NULL)
+is_auto_separator: is_separator && desktopfile == NULL
+
+icon->write_container_name -> user-icon, applet-icon
+icon->write_order -> user-icon, applet-icon
+
+*/
 
 static void _cairo_dock_handle_container (Icon *icon, const gchar *cRendererName)
 {

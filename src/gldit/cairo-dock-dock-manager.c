@@ -1257,6 +1257,11 @@ void gldi_dock_set_visibility (CairoDock *pDock, CairoDockVisibility iVisibility
 		_start_polling_screen_edge ();
 }
 
+
+  /////////////////
+ /// CALLBACKS ///
+/////////////////
+
 static gboolean _autohide_after_shortkey (CairoDock *pDock)
 {
 	if (pDock->iVisibility == CAIRO_DOCK_VISI_SHORTKEY && gldi_container_is_visible (CAIRO_CONTAINER (pDock)) && ! pDock->container.bInside)
@@ -1365,6 +1370,70 @@ static gboolean _render_dock_notification (G_GNUC_UNUSED gpointer pUserData, Cai
 		if (pDock->iFadeCounter != 0 && g_pKeepingBelowBackend != NULL && g_pKeepingBelowBackend->post_render_opengl)
 			g_pKeepingBelowBackend->post_render_opengl (pDock, (double) pDock->iFadeCounter / myBackendsParam.iHideNbSteps);
 	}
+	return GLDI_NOTIFICATION_LET_PASS;
+}
+
+static void _update_removing_inserting_icon_size (Icon *icon)
+{
+	icon->fInsertRemoveFactor *= .85;
+	if (icon->fInsertRemoveFactor > 0)
+	{
+		if (icon->fInsertRemoveFactor < 0.05)
+			icon->fInsertRemoveFactor = 0.05;
+	}
+	else if (icon->fInsertRemoveFactor < 0)
+	{
+		if (icon->fInsertRemoveFactor > -0.05)
+			icon->fInsertRemoveFactor = -0.05;
+	}
+}
+
+static gboolean on_update_inserting_removing_icon (G_GNUC_UNUSED gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bContinueAnimation)
+{
+	if (pIcon->iGlideDirection != 0)
+	{
+		pIcon->fGlideOffset += pIcon->iGlideDirection * .1;
+		if (fabs (pIcon->fGlideOffset) > .99)
+		{
+			pIcon->fGlideOffset = pIcon->iGlideDirection;
+			pIcon->iGlideDirection = 0;
+		}
+		else if (fabs (pIcon->fGlideOffset) < .01)
+		{
+			pIcon->fGlideOffset = 0;
+			pIcon->iGlideDirection = 0;
+		}
+		*bContinueAnimation = TRUE;
+		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
+	}
+	
+	if (pIcon->fInsertRemoveFactor != 0) // the icon is being inserted/removed
+	{
+		_update_removing_inserting_icon_size (pIcon);
+		if (fabs (pIcon->fInsertRemoveFactor) > 0.05)  // the animation is not yet finished
+		{
+			cairo_dock_mark_icon_as_inserting_removing (pIcon);
+			*bContinueAnimation = TRUE;
+		}
+		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
+	}
+	return GLDI_NOTIFICATION_LET_PASS;
+}
+
+static gboolean on_insert_remove_icon (G_GNUC_UNUSED gpointer pUserData, Icon *pIcon, G_GNUC_UNUSED CairoDock *pDock)
+{
+	if (pIcon->fInsertRemoveFactor == 0)  // animation not needed.
+		return GLDI_NOTIFICATION_LET_PASS;
+	
+	cairo_dock_mark_icon_as_inserting_removing (pIcon);  // On prend en charge le dessin de l'icone pendant sa phase d'insertion/suppression.
+	
+	return GLDI_NOTIFICATION_LET_PASS;
+}
+
+static gboolean on_stop_inserting_removing_icon (G_GNUC_UNUSED gpointer pUserData, Icon *pIcon)
+{
+	pIcon->fGlideOffset = 0;
+	pIcon->iGlideDirection = 0;
 	return GLDI_NOTIFICATION_LET_PASS;
 }
 
@@ -1831,23 +1900,23 @@ static void init (void)
 		GLDI_RUN_FIRST, NULL);*/
 	gldi_object_register_notification (&myDocksMgr,
 		NOTIFICATION_LEAVE_DOCK,
-		(GldiNotificationFunc) cairo_dock_on_leave_dock_notification,
+		(GldiNotificationFunc) cairo_dock_on_leave_dock_notification,  /// should probably not be in a notification...
 		GLDI_RUN_FIRST, NULL);
 	gldi_object_register_notification (&myDocksMgr,
 		NOTIFICATION_INSERT_ICON,
-		(GldiNotificationFunc) cairo_dock_on_insert_remove_icon_notification,
+		(GldiNotificationFunc) on_insert_remove_icon,
 		GLDI_RUN_AFTER, NULL);
 	gldi_object_register_notification (&myDocksMgr,
 		NOTIFICATION_REMOVE_ICON,
-		(GldiNotificationFunc) cairo_dock_on_insert_remove_icon_notification,
+		(GldiNotificationFunc) on_insert_remove_icon,
 		GLDI_RUN_AFTER, NULL);
 	gldi_object_register_notification (&myIconsMgr,
 		NOTIFICATION_UPDATE_ICON,
-		(GldiNotificationFunc) cairo_dock_update_inserting_removing_icon_notification,
+		(GldiNotificationFunc) on_update_inserting_removing_icon,
 		GLDI_RUN_AFTER, NULL);
 	gldi_object_register_notification (&myIconsMgr,
 		NOTIFICATION_STOP_ICON,
-		(GldiNotificationFunc) cairo_dock_stop_inserting_removing_icon_notification,
+		(GldiNotificationFunc) on_stop_inserting_removing_icon,
 		GLDI_RUN_AFTER, NULL);
 	gldi_object_register_notification (&myDesktopMgr,
 		NOTIFICATION_DESKTOP_GEOMETRY_CHANGED,
@@ -1880,13 +1949,6 @@ static void init_object (GldiObject *obj, gpointer attr)
 	gldi_dock_init_internals (pDock);
 	if (s_bKeepAbove)
 		gtk_window_set_keep_above (GTK_WINDOW (pDock->container.pWidget), s_bKeepAbove);
-	
-	gtk_widget_show_all (pDock->container.pWidget);
-	#if (GTK_MAJOR_VERSION < 3)
-	gdk_window_set_back_pixmap (gldi_container_get_gdk_window (pContainer), NULL, FALSE);
-	#else
-	gdk_window_set_background_pattern (gldi_container_get_gdk_window (CAIRO_CONTAINER(pDock)), NULL);  // window must be realized (shown)
-	#endif
 	
 	//\__________________ initialize its parameters (it's a root dock by default)
 	pDock->cDockName = g_strdup (dattr->cDockName);
