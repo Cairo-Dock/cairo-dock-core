@@ -217,7 +217,7 @@ gboolean cairo_dock_detach_icon_from_dock_full (Icon *icon, CairoDock *pDock, gb
 	cd_message ("%s (%s)", __func__, icon->cName);
 	
 	//\___________________ On stoppe ses animations.
-	cairo_dock_stop_icon_animation (icon);
+	gldi_icon_stop_animation (icon);
 	
 	//\___________________ On desactive sa miniature.
 	if (icon->pAppli != NULL)

@@ -123,31 +123,29 @@ void cairo_dock_start_hiding (CairoDock *pDock);
 
 void cairo_dock_start_showing (CairoDock *pDock);
 
-/** Launch the animation of an Icon. Do nothing if the icon will not be animated or if the icon is at rest.
+/** Start the animation of an Icon. Do nothing if the icon is at rest or if the animation won't be visible.
 *@param icon the icon to animate.
-*@param pDock the dock containing the icon.
 */
-void cairo_dock_start_icon_animation (Icon *icon, CairoDock *pDock);
+void gldi_icon_start_animation (Icon *icon);
 
 /** Launch a given animation on an Icon. Do nothing if the icon will not be animated or if the animation doesn't exist.
 *@param pIcon the icon to animate.
-*@param pContainer the container containing the icon.
 *@param cAnimation name of the animation.
 *@param iNbRounds number of rounds the animation will be played.
 */
-void cairo_dock_request_icon_animation (Icon *pIcon, GldiContainer *pContainer, const gchar *cAnimation, int iNbRounds);
+void gldi_icon_request_animation (Icon *pIcon, const gchar *cAnimation, int iNbRounds);
 
 /** Stop any animation on an Icon, except the disappearance/appearance animation.
 *@param pIcon the icon.
 */
-#define cairo_dock_stop_icon_animation(pIcon) do { \
+#define gldi_icon_stop_animation(pIcon) do { \
 	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REMOVE_INSERT && pIcon->iAnimationState != CAIRO_DOCK_STATE_REST) {\
 		gldi_object_notify (pIcon, NOTIFICATION_STOP_ICON, pIcon); \
 		pIcon->iAnimationState = CAIRO_DOCK_STATE_REST; } } while (0)
 
-void cairo_dock_request_icon_attention (Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds);
+void gldi_icon_request_attention (Icon *pIcon, const gchar *cAnimation, int iNbRounds);
 
-void cairo_dock_stop_icon_attention (Icon *pIcon, CairoDock *pDock);
+void gldi_icon_stop_attention (Icon *pIcon);
 
 /** Trigger the removal of an Icon from its Dock. The icon will effectively be removed at the end of the animation.
 *If the icon is not inside a dock, nothing happens.

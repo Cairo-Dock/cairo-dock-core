@@ -92,8 +92,8 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 			if (pParentDock)
 				cairo_dock_show_subdock (pPointedIcon, pParentDock);
 		}*/
-		cairo_dock_request_icon_attention (icon, pDock, myTaskbarParam.cAnimationOnDemandsAttention, 10000);  // animation de 2-3 heures.
-		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));  // dans le au cas ou le dock ne serait pas encore visible, la fonction precedente n'a pas lance l'animation.
+		gldi_icon_request_attention (icon, myTaskbarParam.cAnimationOnDemandsAttention, 10000);  // animation de 2-3 heures.
+		///cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));  // dans le au cas ou le dock ne serait pas encore visible, la fonction precedente n'a pas lance l'animation.
 	}
 }
 void cairo_dock_appli_demands_attention (Icon *icon)
@@ -144,7 +144,7 @@ static void _cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoDock *
 		gldi_dialogs_remove_on_icon (icon);
 	if (myTaskbarParam.cAnimationOnDemandsAttention)
 	{
-		cairo_dock_stop_icon_attention (icon, pDock);  // arrete l'animation precedemment lancee par la demande.
+		gldi_icon_stop_attention (icon);  // arrete l'animation precedemment lancee par la demande.
 		gtk_widget_queue_draw (pDock->container.pWidget);  // optimisation possible : ne redessiner que l'icone en tenant compte de la zone de sa derniere animation (pulse ou rebond).
 	}
 	if (pDock->iRefCount == 0 && pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && ! pDock->bIsBelow && ! pDock->container.bInside)
@@ -176,7 +176,7 @@ void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock)
 		if (myTaskbarParam.cAnimationOnActiveWindow)
 		{
 			if (cairo_dock_animation_will_be_visible (pParentDock) && icon->iAnimationState == CAIRO_DOCK_STATE_REST)
-				cairo_dock_request_icon_animation (icon, CAIRO_CONTAINER (pParentDock), myTaskbarParam.cAnimationOnActiveWindow, 1);
+				gldi_icon_request_animation (icon, myTaskbarParam.cAnimationOnActiveWindow, 1);
 		}
 		else
 		{

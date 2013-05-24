@@ -236,9 +236,11 @@ void cairo_dock_start_showing (CairoDock *pDock)
 }
 
 
-void cairo_dock_start_icon_animation (Icon *pIcon, CairoDock *pDock)
+void gldi_icon_start_animation (Icon *pIcon)
 {
-	g_return_if_fail (pIcon != NULL && pDock != NULL);
+	g_return_if_fail (pIcon != NULL);
+	CairoDock *pDock = CAIRO_DOCK (cairo_dock_get_icon_container(pIcon));
+	g_return_if_fail (CAIRO_DOCK_IS_DOCK (pDock));  // currently only animate icons that are inside a dock
 	cd_message ("%s (%s, %d)", __func__, pIcon->cName, pIcon->iAnimationState);
 	
 	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REST &&
@@ -249,27 +251,28 @@ void cairo_dock_start_icon_animation (Icon *pIcon, CairoDock *pDock)
 	}
 }
 
-void cairo_dock_request_icon_animation (Icon *pIcon, GldiContainer *pContainer, const gchar *cAnimation, int iNbRounds)
+void gldi_icon_request_animation (Icon *pIcon, const gchar *cAnimation, int iNbRounds)
 {
-	CairoDock *pDock;
-	if (! CAIRO_DOCK_IS_DOCK (pContainer))  // at the moment, only docks can animate their icons
-		return;
-	else
-		pDock = CAIRO_DOCK (pContainer);
+	CairoDock *pDock = CAIRO_DOCK (cairo_dock_get_icon_container(pIcon));
+	g_return_if_fail (CAIRO_DOCK_IS_DOCK (pDock));  // currently only animate icons that are inside a dock
+	
 	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REST)  // on le fait avant de changer d'animation, pour le cas ou l'icone ne serait plus placee au meme endroit (rebond).
 		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
-	cairo_dock_stop_icon_animation (pIcon);
+	gldi_icon_stop_animation (pIcon);
 	
 	if (cAnimation == NULL || iNbRounds == 0 || pIcon->iAnimationState != CAIRO_DOCK_STATE_REST)
 		return ;
 	gldi_object_notify (pIcon, NOTIFICATION_REQUEST_ICON_ANIMATION, pIcon, pDock, cAnimation, iNbRounds);
-	cairo_dock_start_icon_animation (pIcon, pDock);
+	gldi_icon_start_animation (pIcon);
 }
 
-void cairo_dock_request_icon_attention (Icon *pIcon, CairoDock *pDock, const gchar *cAnimation, int iNbRounds)
+void gldi_icon_request_attention (Icon *pIcon, const gchar *cAnimation, int iNbRounds)
 {
+	CairoDock *pDock = CAIRO_DOCK (cairo_dock_get_icon_container(pIcon));
+	g_return_if_fail (CAIRO_DOCK_IS_DOCK (pDock));  // currently only animate icons that are inside a dock
+	
 	// stop any current animation
-	cairo_dock_stop_icon_animation (pIcon);
+	gldi_icon_stop_animation (pIcon);
 	
 	// set the 'attention animation' flag
 	pIcon->bIsDemandingAttention = TRUE;
@@ -285,7 +288,7 @@ void cairo_dock_request_icon_attention (Icon *pIcon, CairoDock *pDock, const gch
 			cAnimation = "rotate";
 	}
 	
-	cairo_dock_request_icon_animation (pIcon, CAIRO_CONTAINER (pDock), cAnimation, iNbRounds);
+	gldi_icon_request_animation (pIcon, cAnimation, iNbRounds);
 	cairo_dock_mark_icon_as_clicked (pIcon);  // pour eviter qu'un simple survol ne stoppe l'animation.
 	
 	// if the icon is in a sub-dock, also animate the main icon.
@@ -295,21 +298,23 @@ void cairo_dock_request_icon_attention (Icon *pIcon, CairoDock *pDock, const gch
 		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
 		if (pPointingIcon != NULL)
 		{
-			cairo_dock_request_icon_attention (pPointingIcon, pParentDock, cAnimation, iNbRounds);
+			gldi_icon_request_attention (pPointingIcon, cAnimation, iNbRounds);
 		}
 	}
 	else if (pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && pDock->bIsBelow)
 		cairo_dock_pop_up (pDock);
 }
 
-void cairo_dock_stop_icon_attention (Icon *pIcon, CairoDock *pDock)
+void gldi_icon_stop_attention (Icon *pIcon)
 {
 	if (! pIcon->bIsDemandingAttention)
 		return;
 	cd_debug ("%s (%s)", __func__, pIcon->cName);
-	cairo_dock_stop_icon_animation (pIcon);
-	//cairo_dock_redraw_icon (pIcon, CAIRO_CONTAINER (pDock));  // a faire avant, lorsque l'icone est encore en mode demande d'attention.
+	gldi_icon_stop_animation (pIcon);
 	pIcon->bIsDemandingAttention = FALSE;
+	
+	CairoDock *pDock = CAIRO_DOCK (cairo_dock_get_icon_container(pIcon));
+	g_return_if_fail (pDock != NULL);
 	gtk_widget_queue_draw (pDock->container.pWidget);  // redraw all the dock, since the animation of the icon can be larger than the icon itself.
 	
 	// on stoppe la demande d'attention recursivement vers le bas.
@@ -328,7 +333,7 @@ void cairo_dock_stop_icon_attention (Icon *pIcon, CairoDock *pDock)
 			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
 			if (pPointingIcon != NULL)
 			{
-				cairo_dock_stop_icon_attention (pPointingIcon, pParentDock);
+				gldi_icon_stop_attention (pPointingIcon);
 			}
 		}
 	}
@@ -341,16 +346,16 @@ void cairo_dock_stop_icon_attention (Icon *pIcon, CairoDock *pDock)
 
 void cairo_dock_trigger_icon_removal_from_dock (Icon *pIcon)
 {
-	CairoDock *pDock = gldi_dock_get (pIcon->cParentDockName);
+	CairoDock *pDock = CAIRO_DOCK (cairo_dock_get_icon_container(pIcon));
 	if (pDock != NULL)
 	{
-		cairo_dock_stop_icon_animation (pIcon);
+		gldi_icon_stop_animation (pIcon);
 		if (cairo_dock_animation_will_be_visible (pDock))  // sinon inutile de se taper toute l'animation.
 			pIcon->fInsertRemoveFactor = 1.0;
 		else
 			pIcon->fInsertRemoveFactor = 0.05;
 		gldi_object_notify (pDock, NOTIFICATION_REMOVE_ICON, pIcon, pDock);
-		cairo_dock_start_icon_animation (pIcon, pDock);
+		gldi_icon_start_animation (pIcon);
 	}
 }
 

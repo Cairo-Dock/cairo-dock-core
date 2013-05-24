@@ -569,12 +569,12 @@ gldi_shortkey_new (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 *@param iAnimationLength number of rounds the animation should be played.
 */
 #define CD_APPLET_ANIMATE_MY_ICON(cAnimationName, iAnimationLength) \
-	cairo_dock_request_icon_animation (myIcon, myContainer, cAnimationName, iAnimationLength)
+	gldi_icon_request_animation (myIcon, cAnimationName, iAnimationLength)
 
 /** Stop any animation on the applet's icon.
 */
 #define CD_APPLET_STOP_ANIMATING_MY_ICON \
-	cairo_dock_stop_icon_animation (myIcon)
+	gldi_icon_stop_animation (myIcon)
 
 /** Make applet's icon demanding the attention : it will launch the given animation, and the icon will be visible even if the dock is hidden.
 *@param cAnimationName name of the animation.
@@ -583,14 +583,14 @@ gldi_shortkey_new (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 #define CD_APPLET_DEMANDS_ATTENTION(cAnimationName, iAnimationLength) \
 	do {\
 		if (myDock) \
-			cairo_dock_request_icon_attention (myIcon, myDock, cAnimationName, iAnimationLength); } while (0)
+			gldi_icon_request_attention (myIcon, cAnimationName, iAnimationLength); } while (0)
 
 /** Stop the demand of attention on the applet's icon.
 */
 #define CD_APPLET_STOP_DEMANDING_ATTENTION \
 	do {\
 		if (myDock) \
-			cairo_dock_stop_icon_attention (myIcon, myDock); } while (0)
+			gldi_icon_stop_attention (myIcon); } while (0)
 
 
 /** Get the dimension allocated to the surface/texture of the applet's icon.

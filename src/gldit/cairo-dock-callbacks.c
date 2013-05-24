@@ -835,7 +835,7 @@ static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 			{
 				cd_debug ("on remet l'icone volante dans un dock (dock d'origine : %s)", pFlyingIcon->cParentDockName);
 				gldi_object_unref (GLDI_OBJECT(s_pFlyingContainer));
-				cairo_dock_stop_icon_animation (pFlyingIcon);
+				gldi_icon_stop_animation (pFlyingIcon);
 				cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_ANIMATE_ICON);
 				s_pFlyingContainer = NULL;
 				pDock->bIconIsFlyingAway = FALSE;
@@ -932,7 +932,7 @@ static gboolean _on_enter_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 			{
 				//g_print ("on remet l'icone volante dans un dock (dock d'origine : %s)\n", pFlyingIcon->cParentDockName);
 				gldi_object_unref (GLDI_OBJECT(s_pFlyingContainer));
-				cairo_dock_stop_icon_animation (pFlyingIcon);
+				gldi_icon_stop_animation (pFlyingIcon);
 				// reinsert the icon where it was dropped, not at its original position.
 				Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);  // get the pointed icon before we insert the icon, since the inserted icon will be the pointed one!
 				//g_print (" pointed icon: %s\n", icon?icon->cName:"none");
@@ -1014,15 +1014,15 @@ static gboolean _on_key_release (G_GNUC_UNUSED GtkWidget *pWidget,
 
 static gboolean _double_click_delay_over (Icon *icon)
 {
-	CairoDock *pDock = gldi_dock_get (icon->cParentDockName);
+	CairoDock *pDock = CAIRO_DOCK (cairo_dock_get_icon_container(icon));
 	if (pDock)
 	{
-		cairo_dock_stop_icon_attention (icon, pDock);  // we consider that clicking on the icon is an acknowledge of the demand of attention.
+		gldi_icon_stop_attention (icon);  // we consider that clicking on the icon is an acknowledge of the demand of attention.
 		pDock->container.iMouseX = s_iFirstClickX;
 		pDock->container.iMouseY = s_iFirstClickY;
 		gldi_object_notify (pDock, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_BUTTON1_MASK);
 		
-		cairo_dock_start_icon_animation (icon, pDock);
+		gldi_icon_start_animation (icon);
 	}
 	icon->iSidDoubleClickDelay = 0;
 	return FALSE;
@@ -1098,11 +1098,11 @@ static gboolean _on_button_press (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventButt
 							}
 							else
 							{
-								cairo_dock_stop_icon_attention (icon, pDock);  // we consider that clicking on the icon is an acknowledge of the demand of attention.
+								gldi_icon_stop_attention (icon);  // we consider that clicking on the icon is an acknowledge of the demand of attention.
 								
 								gldi_object_notify (pDock, NOTIFICATION_CLICK_ICON, icon, pDock, pButton->state);
 								
-								cairo_dock_start_icon_animation (icon, pDock);
+								gldi_icon_start_animation (icon);
 							}
 						}
 					}
@@ -1147,7 +1147,7 @@ static gboolean _on_button_press (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventButt
 						
 						if (! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (s_pIconClicked))
 						{
-							cairo_dock_request_icon_animation (s_pIconClicked, CAIRO_CONTAINER (pDock), "bounce", 2);
+							gldi_icon_request_animation (s_pIconClicked, "bounce", 2);
 						}
 						gtk_widget_queue_draw (pDock->container.pWidget);
 					}
@@ -1796,7 +1796,7 @@ static gboolean _cairo_dock_hide (CairoDock *pDock)
 				}
 				
 				if (! pIcon->bIsDemandingAttention && ! pIcon->bAlwaysVisible)
-					cairo_dock_stop_icon_animation (pIcon);  // s'il y'a une autre animation en cours, on l'arrete.
+					gldi_icon_stop_animation (pIcon);  // s'il y'a une autre animation en cours, on l'arrete.
 				else
 					bVisibleIconsPresent = TRUE;
 			}
