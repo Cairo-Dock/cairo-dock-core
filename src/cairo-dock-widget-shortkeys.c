@@ -253,7 +253,11 @@ ShortkeysWidget *cairo_dock_shortkeys_widget_new (void)
 	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
 	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, gldi_desktop_get_height() - 175), NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+	#if GTK_CHECK_VERSION (3, 8, 0)
+	gtk_container_add (GTK_CONTAINER (pScrolledWindow), pShortkeysWidget->pShortKeysTreeView);
+	#else
 	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pShortkeysWidget->pShortKeysTreeView);
+	#endif
 	
 	pShortkeysWidget->widget.pWidget = pScrolledWindow;
 	

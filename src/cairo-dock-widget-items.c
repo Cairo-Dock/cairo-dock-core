@@ -784,7 +784,11 @@ ItemsWidget *cairo_dock_items_widget_new (GtkWindow *pMainWindow)
 	
 	GtkWidget *pLauncherWindow = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pLauncherWindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+	#if GTK_CHECK_VERSION (3, 8, 0)
+	gtk_container_add (GTK_CONTAINER (pLauncherWindow), pItemsWidget->pTreeView);
+	#else
 	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pLauncherWindow), pItemsWidget->pTreeView);
+	#endif
 	gtk_paned_pack1 (GTK_PANED (pLauncherPane), pLauncherWindow, TRUE, FALSE);
 	
 	//\_____________ On essaie de definir une taille correcte.

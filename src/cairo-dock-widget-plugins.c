@@ -268,7 +268,11 @@ static void _build_plugins_widget (PluginsWidget *pPluginsWidget)
 	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
 	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, gldi_desktop_get_height() - 210), NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+	#if GTK_CHECK_VERSION (3, 8, 0)
+	gtk_container_add (GTK_CONTAINER (pScrolledWindow), pPluginsWidget->pTreeView);
+	#else
 	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pPluginsWidget->pTreeView);
+	#endif
 	gtk_box_pack_start (GTK_BOX (pKeyBox), pScrolledWindow, TRUE, TRUE, 0);
 	
 	//\______________ On construit le widget de prevue et on le rajoute a la suite.
@@ -278,7 +282,11 @@ static void _build_plugins_widget (PluginsWidget *pPluginsWidget)
 	GtkWidget *pScrolledWindow2 = gtk_scrolled_window_new (NULL, NULL);
 	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, gldi_desktop_get_height() - 210), NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow2), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+	#if GTK_CHECK_VERSION (3, 8, 0)
+	gtk_container_add (GTK_CONTAINER (pScrolledWindow2), pPreviewBox);
+	#else
 	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow2), pPreviewBox);
+	#endif
 	gtk_box_pack_start (GTK_BOX (pKeyBox), pScrolledWindow2, FALSE, FALSE, 0);
 	g_free (cDefaultMessage);
 	
