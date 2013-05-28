@@ -18,10 +18,17 @@
 # http://www.gnu.org/licenses/licenses.html#GPL
 
 if test "x$1" = "x"; then
-	echo "usage : $0 theme_name"
+	echo "usage : $0 theme_name [dir]"
 	exit 1
 fi
 export THEME_NAME="$1"
+
+if test "x$2" = "x"; then
+	export SAVE_LOCATION="$HOME"
+else
+	export SAVE_LOCATION="$2"
+	mkdir -p "${SAVE_LOCATION}" || export SAVE_LOCATION="$HOME"
+fi
 
 export CAIRO_DOCK_DIR="$HOME/.config/cairo-dock"
 export CURRENT_THEME_DIR="$CAIRO_DOCK_DIR/current_theme"
@@ -398,11 +405,15 @@ done;
 cd ..
 echo "building of the tarball ..."
 tar cfz "${THEME_NAME}.tar.gz" "${THEME_NAME}"
-mv "${THEME_NAME}.tar.gz" ~
+if test -e "${SAVE_LOCATION}/${THEME_NAME}.tar.gz"; then # file exists
+	mv "${THEME_NAME}.tar.gz" "${SAVE_LOCATION}/${THEME_NAME}_`date +%H%M%S`.tar.gz"
+else
+	mv "${THEME_NAME}.tar.gz" "${SAVE_LOCATION}"
+fi
 rm -rf "$CURRENT_WORKING_DIR"
 
 echo ""
-echo "The theme has been packaged. It is available in your home."
+echo "The theme has been packaged. It is available in ${SAVE_LOCATION} dir."
 sleep 3
 
 exit 0

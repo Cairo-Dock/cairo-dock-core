@@ -57,11 +57,12 @@ void cairo_dock_write_keys_to_conf_file (GKeyFile *pKeyFile, const gchar *cConfF
  */
 gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean bSaveBehavior, gboolean bSaveLaunchers);
 
-/** Create a package of the current theme. Packages can be distributed easily, and imported into the dock by a mere drag and drop into the Theme Manager. The package is placed in the Home.
+/** Create a package of the current theme. Packages can be distributed easily, and imported into the dock by a mere drag and drop into the Theme Manager. The package is placed in the cDirPath directory (or $HOME if cDirPath is wrong).
  * @param cThemeName name of the package.
+ * @param cDirPath path to the directory
  * @return TRUE if the theme could be packaged succefuly.
  */
-gboolean cairo_dock_package_current_theme (const gchar *cThemeName);
+gboolean cairo_dock_package_current_theme (const gchar *cThemeName, const gchar *cDirPath);
 
 /** Extract a package into the themes folder. Does not load it.
  * @param cPackagePath path of a package. If the package is distant, it is first downoladed.

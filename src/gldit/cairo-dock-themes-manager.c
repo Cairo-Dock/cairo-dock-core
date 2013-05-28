@@ -288,11 +288,15 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 	return bThemeSaved;
 }
 
-gboolean cairo_dock_package_current_theme (const gchar *cThemeName)
+gboolean cairo_dock_package_current_theme (const gchar *cThemeName, const gchar *cDirPath)
 {
 	g_return_val_if_fail (cThemeName != NULL, FALSE);
+	gboolean bSuccess = FALSE;
 
 	gchar *cNewThemeName = _escape_string_for_filename (cThemeName);
+	if (cDirPath == NULL || *cDirPath == '\0'
+		|| (g_file_test (cDirPath, G_FILE_TEST_EXISTS) && g_file_test (cDirPath, G_FILE_TEST_IS_REGULAR))) // exist but not a directory
+		cDirPath = g_getenv ("HOME");
 	
 	cairo_dock_extract_package_type_from_name (cNewThemeName);
 	
@@ -302,8 +306,8 @@ gboolean cairo_dock_package_current_theme (const gchar *cThemeName)
 	if (bScriptFound)
 	{
 		int r;
-		gchar *cCommand = g_strdup_printf ("%s '%s'",
-			cPackageBuilderPath, cNewThemeName);
+		gchar *cCommand = g_strdup_printf ("%s '%s' \"%s\"",
+			cPackageBuilderPath, cNewThemeName, cDirPath);
 		gchar *cFullCommand = cairo_dock_get_command_with_right_terminal (cCommand);
 		r = system (cFullCommand); // we need to wait...
 		if (r != 0)
@@ -312,18 +316,28 @@ gboolean cairo_dock_package_current_theme (const gchar *cThemeName)
 			r = system (cCommand); // relaunch it without the terminal and wait
 			if (r != 0)
 				cd_warning ("Not able to launch this command: %s", cCommand);
+			else
+				bSuccess = TRUE;
 		}
+		else
+			bSuccess = TRUE;
 		g_free (cCommand);
 		g_free (cFullCommand);
-		gldi_dialog_show_general_message (
-			_("Your theme should now be available in your 'Home' directory."),
-			8000);
 	}
 	else
 		cd_warning ("the package builder script was not found !");
 
+	if (bSuccess)
+	{
+		gchar *cGeneralMessage = g_strdup_printf ("%s %s", _("Your theme should now be available in this directory:"), cDirPath);
+		gldi_dialog_show_general_message (cGeneralMessage, 8000);
+		g_free (cGeneralMessage);
+	}
+	else
+		gldi_dialog_show_general_message (_("Error when launching 'cairo-dock-package-theme' script"), 8000);
+
 	g_free (cNewThemeName);
-	return bScriptFound;
+	return bSuccess;
 }
 gchar *cairo_dock_depackage_theme (const gchar *cPackagePath)
 {

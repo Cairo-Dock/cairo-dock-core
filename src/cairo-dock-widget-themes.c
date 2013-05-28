@@ -114,7 +114,9 @@ static gchar * _cairo_dock_save_current_theme (GKeyFile* pKeyFile)
 	
 	if (g_key_file_get_boolean (pKeyFile, cGroupName, "package", NULL))
 	{
-		bThemeSaved |= cairo_dock_package_current_theme (cNewThemeName);
+		gchar *cDirPath = g_key_file_get_string (pKeyFile, cGroupName, "package dir", NULL);
+		bThemeSaved |= cairo_dock_package_current_theme (cNewThemeName, cDirPath);
+		g_free (cDirPath);
 	}
 	
 	if (bThemeSaved)

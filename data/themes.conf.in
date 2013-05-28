@@ -40,6 +40,9 @@ save current launchers = true
 #v
 sep=
 
-#b Build a package of the theme?
+#B Build a package of the theme?
 #{The dock will build a complete tarball of your current theme, allowing you to easily exchange it with other people.}
 package = false
+
+#D[Home directory] Directory in which the package will be saved:
+package dir =
