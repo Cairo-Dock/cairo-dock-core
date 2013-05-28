@@ -17,12 +17,19 @@
 # GNU General Public License for more details.
 # http://www.gnu.org/licenses/licenses.html#GPL
 
+# Usage: theme_name [dir]
+#	* Name of the theme
+#	* Output dir (home dir by default)
+#	* if the custom icons should be added in the package (1 = yes) by default
+
+# Name
 if test "x$1" = "x"; then
 	echo "usage : $0 theme_name [dir]"
 	exit 1
 fi
 export THEME_NAME="$1"
 
+# Output Dir
 if test "x$2" = "x"; then
 	export SAVE_LOCATION="$HOME"
 else
@@ -96,9 +103,9 @@ import_file_full()
 	  return
 	fi
 	if test ${f:0:1} = "/" -o ${f:0:1} = "~"; then
-		echo " a importer"
+		echo " to import"
 		if test ${f:0:35} != "~/.config/cairo-dock/current_theme/"; then
-			/bin/cp "$f" "$3"
+			/bin/cp -v "$f" "$3"
 		fi
 		local_file=${f##*/}
 		if test "$4" = "1"; then
@@ -130,31 +137,31 @@ _import_theme()
 	fi
 	theme=`get_value "$1" "$2"`
 	if test "x${theme}" != "x"; then
-		#\__________ On cherche si ce theme est un theme officiel ou non.
-		echo "un theme est present ($theme)"
-		wget "$THEME_SERVER/$3/list.conf" -O "liste.tmp" -t 3 -T 30
-		if test -f "liste.tmp" ; then
-			grep "^\[${theme}\]" "liste.tmp"
-			if test "$?" != "0" -a  "$theme" != "Classic" -a "$theme" != "default"; then  # pas un theme officiel
-				echo "  ce n'est pas un theme officiel"
-				#\__________ On cherche le chemin de ce theme.
+		#\__________ We check if this is an official theme or not.
+		echo "a theme is available ($theme)"
+		wget "$THEME_SERVER/$3/list.conf" -O "list.tmp" -t 3 -T 30
+		if test -f "list.tmp" ; then
+			grep "^\[${theme}\]" "list.tmp"
+			if test "$?" != "0" -a  "$theme" != "Classic" -a "$theme" != "default"; then  # not an official theme
+				echo "  This is not an official theme"
+				#\__________ We check the path of this theme.
 				theme_path=""
 				if test -e "${INSTALL_DIR}/$4/$3/themes/${theme}"; then
 					theme_path="${INSTALL_DIR}/$4/$3/themes/${theme}"
 				elif test -e "${CAIRO_DOCK_DIR}/extras/$3/${theme}"; then
 					theme_path="${CAIRO_DOCK_DIR}/extras/$3/${theme}"
 				fi
-				#\__________ On le copie.
+				#\__________ We copy it.
 				echo "  son chemin actuel est : $theme_path"
 				if test "x$theme_path" != "x"; then
-					echo "on importe $theme_path dans "`pwd`"/extras/$3/$THEME_NAME"
-					mkdir "extras/$3"
+					echo "We copy $theme_path to "`pwd`"/extras/$3/$THEME_NAME"
+					mkdir -p "extras/$3"
 					/bin/cp -r "$theme_path" "extras/$3/$THEME_NAME"
 					set_value "$1" "$2" "$THEME_NAME"
 				fi
 			fi
 		fi
-		rm -f "liste.tmp"
+		rm -f "list.tmp"
 	fi
 }
 
@@ -180,6 +187,8 @@ if test -e extras; then
 else
 	mkdir extras
 fi
+
+mkdir -p icons
 
 set_current_conf_file "cairo-dock.conf"
 import_file "Background"	"callback image"		.
@@ -240,7 +249,7 @@ import_file "Desklet"		"fg desklet"	.
 import_file "Module"		"empty image"	.
 import_file "Module"		"full image"	.
 theme=`get_value "Module" "empty image"`
-if test "x$theme" = "x"; then  # cas special : les images passent avant le theme.
+if test "x$theme" = "x"; then  # special case : images before the theme.
 	theme=`get_value "Module" "full image"`
 	if test "x$theme" = "x"; then
 		import_theme "Module" "theme" "dustbin"
