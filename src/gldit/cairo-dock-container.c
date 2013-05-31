@@ -144,7 +144,11 @@ static gboolean _set_opacity (GtkWidget *pWidget,
 	{
 		g_signal_handlers_disconnect_by_func (pWidget, _set_opacity, pContainer);  // we'll never need to pass here any more, so simply disconnect ourselves.
 		//g_print ("____OPACITY 1 (%dx%d)\n", pContainer->iWidth, pContainer->iHeight);
+		#if GTK_CHECK_VERSION (3, 8, 0)
+		gtk_widget_set_opacity (pWidget, 1.);
+		#else
 		gtk_window_set_opacity (GTK_WINDOW (pWidget), 1.);
+		#endif
 	}
 	return FALSE ;
 }
@@ -651,7 +655,11 @@ static void init_object (GldiObject *obj, gpointer attr)
 	// set the opacity to 0 to avoid seeing grey rectangles until the window is ready to be painted by us.
 	if (s_bInitialOpacity0)
 	{
+		#if GTK_CHECK_VERSION (3, 8, 0)
+		gtk_widget_set_opacity (pWindow, 0.);
+		#else
 		gtk_window_set_opacity (GTK_WINDOW (pWindow), 0.);
+		#endif
 		g_signal_connect (G_OBJECT (pWindow),
 			#if (GTK_MAJOR_VERSION < 3)
 			"expose-event",
