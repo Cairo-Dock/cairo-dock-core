@@ -22,6 +22,9 @@
 #define __EGG_ACCELERATORS_H__
 
 #include <gtk/gtk.h>
+#if (GTK_MAJOR_VERSION < 3)
+#include <gdk/gdkkeysyms.h> // GDK_Shift_[LR] for GTK2
+#endif
 #if (GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION > 20)
 #include <gdk/gdkkeysyms-compat.h>
 #endif

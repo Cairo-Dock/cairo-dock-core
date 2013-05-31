@@ -25,6 +25,11 @@
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-manager.h"
+
+#if (GTK_MAJOR_VERSION < 3)
+#include <gdk/gdkkeysyms.h> // GDK_Shift_[LR] for GTK2
+#endif
+
 G_BEGIN_DECLS
 
 

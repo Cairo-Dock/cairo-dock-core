@@ -17,8 +17,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//#include <gdk/gdkkeysyms.h>
-
 #include "gldi-config.h"
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-icon-facility.h"

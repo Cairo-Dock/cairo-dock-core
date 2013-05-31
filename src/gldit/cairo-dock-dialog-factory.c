@@ -20,7 +20,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <gdk/gdkkeysyms.h>
 #include <gdk/gdkx.h> // GDK_WINDOW_XID
 
 #include <GL/gl.h>
