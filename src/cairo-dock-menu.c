@@ -1911,7 +1911,7 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 		{
 			if (bCanMaximize)
 			{
-				_add_entry_in_menu (icon->bIsMaximized ? _("Unmaximise") : _("Maximise"),
+				_add_entry_in_menu (pAppli->bIsMaximized ? _("Unmaximise") : _("Maximise"),
 					pAppli->bIsMaximized ? CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-restore.svg" : CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-maximize.svg",
 					_cairo_dock_maximize_appli, pSubMenuWindowManagement);
 			}
@@ -1966,7 +1966,7 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 		_add_entry_in_menu (bIsAbove ? _("Don't keep above") : _("Keep above"), bIsAbove ? GTK_STOCK_GOTO_BOTTOM : GTK_STOCK_GOTO_TOP, _cairo_dock_change_window_above, pSubMenuOtherActions);
 
 		// Sticky
-		gboolean bIsSticky = gldi_window_is_sticky (icon->pAppli);
+		gboolean bIsSticky = gldi_window_is_sticky (pAppli);
 		_add_entry_in_menu (bIsSticky ? _("Visible only on this desktop") : _("Visible on all desktops"), GTK_STOCK_JUMP_TO, _cairo_dock_change_window_sticky, pSubMenuOtherActions);
 
 		_add_desktops_entry (pSubMenuOtherActions, FALSE, data);
