@@ -270,12 +270,6 @@ void cairo_dock_normalize_icons_order (GList *pIconList, CairoDockIconGroup iGro
 
 void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2);
 
-/** Update the container's name of an icon with the name of a dock. In the case of a launcher or an applet, the conf file is updated too.
-*@param icon an icon.
-*@param cNewParentDockName the name of its new dock.
-*/
-void cairo_dock_update_icon_s_container_name (Icon *icon, const gchar *cNewParentDockName);
-
 /** Make an icon static or not. Static icons are not animated when mouse hovers them.
 *@param icon an icon.
 *@param _bStatic static or not.
@@ -289,39 +283,30 @@ void cairo_dock_update_icon_s_container_name (Icon *icon, const gchar *cNewParen
 #define cairo_dock_set_icon_always_visible(icon, _bAlwaysVisible) (icon)->bAlwaysVisible = _bAlwaysVisible
 
 /** Set the label of an icon. If it has a sub-dock, it is renamed (the name is possibly altered to stay unique). The label buffer is updated too.
-*@param cIconName the new label of the icon. You can even pass pIcon->cName.
 *@param pIcon the icon.
-*@param pContainer the container of the icon.
+*@param cIconName the new label of the icon. You can even pass pIcon->cName.
 */
-void cairo_dock_set_icon_name (const gchar *cIconName, Icon *pIcon, GldiContainer *pContainer);
+void gldi_icon_set_name (Icon *pIcon, const gchar *cIconName);
 
 /** Same as above, but takes a printf-like format string.
 *@param pIcon the icon.
-*@param pContainer the container of the icon.
 *@param cIconNameFormat the new label of the icon, in a 'printf' way.
 *@param ... data to be inserted into the string.
 */
-void cairo_dock_set_icon_name_printf (Icon *pIcon, GldiContainer *pContainer, const gchar *cIconNameFormat, ...) G_GNUC_PRINTF (3, 4);
+void gldi_icon_set_name_printf (Icon *pIcon, const gchar *cIconNameFormat, ...) G_GNUC_PRINTF (2, 3);
 
 /** Set the quick-info of an icon. This is a small text (a few characters) that is superimposed on the icon.
 *@param pIcon the icon.
-*@param pContainer the container of the icon.
-*@param cQuickInfo the text of the quick-info.
+*@param cQuickInfo the text of the quick-info. If NULL, will just remove the current the quick-info.
 */
-void cairo_dock_set_quick_info (Icon *pIcon, GldiContainer *pContainer, const gchar *cQuickInfo);
+void gldi_icon_set_quick_info (Icon *pIcon, const gchar *cQuickInfo);
 
 /** Same as above, but takes a printf-like format string.
 *@param pIcon the icon.
-*@param pContainer the container of the icon.
 *@param cQuickInfoFormat the text of the quick-info, in a 'printf' way.
 *@param ... data to be inserted into the string.
 */
-void cairo_dock_set_quick_info_printf (Icon *pIcon, GldiContainer *pContainer, const gchar *cQuickInfoFormat, ...) G_GNUC_PRINTF (3, 4);
-
-/** Clear the quick-info of an icon.
-*@param pIcon the icon.
-*/
-#define cairo_dock_remove_quick_info(pIcon) cairo_dock_set_quick_info (pIcon, NULL, NULL)
+void gldi_icon_set_quick_info_printf (Icon *pIcon, const gchar *cQuickInfoFormat, ...) G_GNUC_PRINTF (2, 3);
 
 
 #define cairo_dock_listen_for_double_click(pIcon) (pIcon)->iNbDoubleClickListeners ++
@@ -329,9 +314,6 @@ void cairo_dock_set_quick_info_printf (Icon *pIcon, GldiContainer *pContainer, c
 #define cairo_dock_stop_listening_for_double_click(pIcon) do {\
 	if ((pIcon)->iNbDoubleClickListeners > 0)\
 		(pIcon)->iNbDoubleClickListeners --; } while (0)
-
-
-gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters);
 
 
 GdkPixbuf *cairo_dock_icon_buffer_to_pixbuf (Icon *icon);
@@ -354,6 +336,13 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, GldiContainer *pContainer, gin
 *@return TRUE if you can proceed to the drawing, FALSE if an error occured.
 */
 void cairo_dock_end_draw_icon (Icon *pIcon, GldiContainer *pContainer);
+
+
+void gldi_theme_icon_write_container_name_in_conf_file (Icon *pIcon, const gchar *cParentDockName);
+
+void gldi_theme_icon_write_order_in_conf_file (Icon *pIcon, double fOrder);
+
+
 
 G_END_DECLS
 #endif

@@ -35,6 +35,9 @@
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-indicator-manager.h"
+#include "cairo-dock-applications-manager.h"  // GLDI_OBJECT_IS_APPLI_ICON
+#include "cairo-dock-applet-manager.h"  // GLDI_OBJECT_IS_APPLET_ICON
+#include "cairo-dock-separator-manager.h"  // GLDI_OBJECT_IS_SEPARATOR_ICON
 #include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw-opengl.h"
@@ -66,21 +69,13 @@ void gldi_icon_set_appli (Icon *pIcon, GldiWindowActor *pAppli)
 
 CairoDockIconGroup cairo_dock_get_icon_type (Icon *icon)
 {
-	CairoDockIconGroup iGroup;
-	if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
+	/*CairoDockIconGroup iGroup;
+	if (GLDI_OBJECT_IS_SEPARATOR_ICON (icon))
 		iGroup = CAIRO_DOCK_SEPARATOR12;
 	else
 		iGroup = (icon->iGroup < CAIRO_DOCK_NB_GROUPS ? icon->iGroup : icon->iGroup & 1);
-	
-	return iGroup;
-	/**if (CAIRO_DOCK_IS_APPLI (icon))
-		return CAIRO_DOCK_APPLI;
-	else if (CAIRO_DOCK_IS_APPLET (icon))
-		return CAIRO_DOCK_APPLET;
-	else if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
-		return CAIRO_DOCK_SEPARATOR12;
-	else
-		return CAIRO_DOCK_LAUNCHER;*/
+	return iGroup;*/
+	return (icon->iGroup < CAIRO_DOCK_NB_GROUPS ? icon->iGroup : icon->iGroup & 1);
 }
 
 
@@ -387,14 +382,14 @@ Icon *gldi_icons_get_without_dialog (GList *pIconList)
 		return pIcon;
 	
 	pIcon = cairo_dock_get_pointed_icon (pIconList);
-	if (pIcon != NULL && ! CAIRO_DOCK_IS_NORMAL_APPLI (pIcon) && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (pIcon) && ! gldi_icon_has_dialog (pIcon) && pIcon->cParentDockName != NULL && ! cairo_dock_icon_is_being_removed (pIcon))
+	if (pIcon != NULL && ! CAIRO_DOCK_IS_NORMAL_APPLI (pIcon) && ! GLDI_OBJECT_IS_APPLET_ICON (pIcon) && ! gldi_icon_has_dialog (pIcon) && pIcon->cParentDockName != NULL && ! cairo_dock_icon_is_being_removed (pIcon))
 		return pIcon;
 
 	GList *ic;
 	for (ic = pIconList; ic != NULL; ic = ic->next)
 	{
 		pIcon = ic->data;
-		if (! gldi_icon_has_dialog (pIcon) && ! CAIRO_DOCK_IS_NORMAL_APPLI (pIcon) && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (pIcon) && pIcon->cParentDockName != NULL && ! cairo_dock_icon_is_being_removed (pIcon))
+		if (! gldi_icon_has_dialog (pIcon) && ! CAIRO_DOCK_IS_NORMAL_APPLI (pIcon) && ! GLDI_OBJECT_IS_APPLET_ICON (pIcon) && pIcon->cParentDockName != NULL && ! cairo_dock_icon_is_being_removed (pIcon))
 			return pIcon;
 	}
 	
@@ -412,7 +407,7 @@ void cairo_dock_get_current_icon_size (Icon *pIcon, GldiContainer *pContainer, d
 {
 	if (pContainer->bIsHorizontal)
 	{
-		if (myIconsParam.bConstantSeparatorSize && CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))
+		if (myIconsParam.bConstantSeparatorSize && GLDI_OBJECT_IS_SEPARATOR_ICON (pIcon))
 		{
 			*fSizeX = pIcon->fWidth;
 			*fSizeY = pIcon->fHeight;
@@ -425,7 +420,7 @@ void cairo_dock_get_current_icon_size (Icon *pIcon, GldiContainer *pContainer, d
 	}
 	else
 	{
-		if (myIconsParam.bConstantSeparatorSize && CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))
+		if (myIconsParam.bConstantSeparatorSize && GLDI_OBJECT_IS_SEPARATOR_ICON (pIcon))
 		{
 			*fSizeX = pIcon->fHeight;
 			*fSizeY = pIcon->fWidth;
@@ -545,7 +540,7 @@ void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2
 	//g_print ("icon1->fOrder:%.2f\n", icon1->fOrder);
 	
 	//\_________________ On change l'ordre dans le fichier du lanceur 1.
-	cairo_dock_write_order_in_conf_file (icon1, icon1->fOrder);
+	gldi_theme_icon_write_order_in_conf_file (icon1, icon1->fOrder);
 	
 	//\_________________ On change sa place dans la liste.
 	pDock->icons = g_list_remove (pDock->icons, icon1);
@@ -574,17 +569,7 @@ void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2
 }
 
 
-
-void cairo_dock_update_icon_s_container_name (Icon *icon, const gchar *cNewParentDockName)
-{
-	g_free (icon->cParentDockName);
-	icon->cParentDockName = g_strdup (cNewParentDockName);
-	
-	cairo_dock_write_container_name_in_conf_file (icon, cNewParentDockName);
-}
-
-
-void cairo_dock_set_icon_name (const gchar *cIconName, Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer_useless)  // fonction proposee par Necropotame.
+void gldi_icon_set_name (Icon *pIcon, const gchar *cIconName)  // fonction proposee par Necropotame.
 {
 	g_return_if_fail (pIcon != NULL);  // le contexte sera verifie plus loin.
 	gchar *cUniqueName = NULL;
@@ -609,17 +594,17 @@ void cairo_dock_set_icon_name (const gchar *cIconName, Icon *pIcon, G_GNUC_UNUSE
 		cairo_dock_redraw_container (pIcon->pContainer);  // this is not really optimized, ideally the view should provide a way to redraw the label area only...
 }
 
-void cairo_dock_set_icon_name_printf (Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer_useless, const gchar *cIconNameFormat, ...)
+void gldi_icon_set_name_printf (Icon *pIcon, const gchar *cIconNameFormat, ...)
 {
 	va_list args;
 	va_start (args, cIconNameFormat);
 	gchar *cFullText = g_strdup_vprintf (cIconNameFormat, args);
-	cairo_dock_set_icon_name (cFullText, pIcon, NULL);
+	gldi_icon_set_name (pIcon, cFullText);
 	g_free (cFullText);
 	va_end (args);
 }
 
-void cairo_dock_set_quick_info (Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer_useless, const gchar *cQuickInfo)
+void gldi_icon_set_quick_info (Icon *pIcon, const gchar *cQuickInfo)
 {
 	g_return_if_fail (pIcon != NULL);
 	
@@ -634,94 +619,14 @@ void cairo_dock_set_quick_info (Icon *pIcon, G_GNUC_UNUSED GldiContainer *pConta
 	cairo_dock_load_icon_quickinfo (pIcon);
 }
 
-void cairo_dock_set_quick_info_printf (Icon *pIcon, GldiContainer *pContainer_useless, const gchar *cQuickInfoFormat, ...)
+void gldi_icon_set_quick_info_printf (Icon *pIcon, const gchar *cQuickInfoFormat, ...)
 {
 	va_list args;
 	va_start (args, cQuickInfoFormat);
 	gchar *cFullText = g_strdup_vprintf (cQuickInfoFormat, args);
-	cairo_dock_set_quick_info (pIcon, pContainer_useless, cFullText);
+	gldi_icon_set_quick_info (pIcon, cFullText);
 	g_free (cFullText);
 	va_end (args);
-}
-
-
-gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters)  // gere l'UTF-8
-{
-	g_return_val_if_fail (cString != NULL, NULL);
-	gchar *cTruncatedName = NULL;
-	gsize bytes_read, bytes_written;
-	GError *erreur = NULL;
-	gchar *cUtf8Name = g_locale_to_utf8 (cString,
-		-1,
-		&bytes_read,
-		&bytes_written,
-		&erreur);  // inutile sur Ubuntu, qui est nativement UTF8, mais sur les autres on ne sait pas.
-	if (erreur != NULL)
-	{
-		cd_warning (erreur->message);
-		g_error_free (erreur);
-		erreur = NULL;
-	}
-	if (cUtf8Name == NULL)  // une erreur s'est produite, on tente avec la chaine brute.
-		cUtf8Name = g_strdup (cString);
-	
-	const gchar *cEndValidChain = NULL;
-	int iStringLength;
-	if (g_utf8_validate (cUtf8Name, -1, &cEndValidChain))
-	{
-		iStringLength = g_utf8_strlen (cUtf8Name, -1);
-		int iNbChars = -1;
-		if (iNbCaracters < 0)
-		{
-			iNbChars = MAX (0, iStringLength + iNbCaracters);
-		}
-		else if (iStringLength > iNbCaracters)
-		{
-			iNbChars = iNbCaracters;
-		}
-		
-		if (iNbChars != -1)
-		{
-			cTruncatedName = g_new0 (gchar, 8 * (iNbChars + 4));  // 8 octets par caractere.
-			if (iNbChars != 0)
-				g_utf8_strncpy (cTruncatedName, cUtf8Name, iNbChars);
-			
-			gchar *cTruncature = g_utf8_offset_to_pointer (cTruncatedName, iNbChars);
-			*cTruncature = '.';
-			*(cTruncature+1) = '.';
-			*(cTruncature+2) = '.';
-		}
-	}
-	else
-	{
-		iStringLength = strlen (cString);
-		int iNbChars = -1;
-		if (iNbCaracters < 0)
-		{
-			iNbChars = MAX (0, iStringLength + iNbCaracters);
-		}
-		else if (iStringLength > iNbCaracters)
-		{
-			iNbChars = iNbCaracters;
-		}
-		
-		if (iNbChars != -1)
-		{
-			cTruncatedName = g_new0 (gchar, iNbCaracters + 4);
-			if (iNbChars != 0)
-				strncpy (cTruncatedName, cString, iNbChars);
-			
-			cTruncatedName[iNbChars] = '.';
-			cTruncatedName[iNbChars+1] = '.';
-			cTruncatedName[iNbChars+2] = '.';
-		}
-	}
-	if (cTruncatedName == NULL)
-		cTruncatedName = cUtf8Name;
-	else
-		g_free (cUtf8Name);
-	//g_print (" -> etiquette : %s\n", cTruncatedName);
-	return cTruncatedName;
 }
 
 
@@ -734,12 +639,13 @@ GdkPixbuf *cairo_dock_icon_buffer_to_pixbuf (Icon *icon)
 
 cairo_t *cairo_dock_begin_draw_icon_cairo (Icon *pIcon, gint iRenderingMode, cairo_t *pCairoContext)
 {
+	g_print ("= %s %dx%d\n", pIcon->cName, pIcon->pContainer->iWidth, pIcon->pContainer->iHeight);
 	cairo_t *ctx = cairo_dock_begin_draw_image_buffer_cairo (&pIcon->image, iRenderingMode, pCairoContext);
 	
 	if (ctx && iRenderingMode != 1)
 	{
 		if (g_pIconBackgroundBuffer.pSurface != NULL
-		&& ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))
+		&& ! GLDI_OBJECT_IS_SEPARATOR_ICON (pIcon))
 		{
 			int iWidth, iHeight;
 			cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
@@ -763,7 +669,7 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, G_GNUC_UNUSED GldiContainer *p
 	if (r && iRenderingMode != 1)
 	{
 		if (g_pIconBackgroundBuffer.iTexture != 0
-		&& ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))
+		&& ! GLDI_OBJECT_IS_SEPARATOR_ICON (pIcon))
 		{
 			int iWidth, iHeight;
 			cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
@@ -784,4 +690,43 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, G_GNUC_UNUSED GldiContainer *p
 void cairo_dock_end_draw_icon (Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer)
 {
 	cairo_dock_end_draw_image_buffer_opengl (&pIcon->image, pIcon->pContainer);
+}
+
+
+void gldi_theme_icon_write_container_name_in_conf_file (Icon *pIcon, const gchar *cParentDockName)
+{
+	if (GLDI_OBJECT_IS_USER_ICON (pIcon))
+	{
+		g_return_if_fail (pIcon->cDesktopFileName != NULL);
+		gchar *cDesktopFilePath = *pIcon->cDesktopFileName == '/' ? g_strdup (pIcon->cDesktopFileName) : g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pIcon->cDesktopFileName);
+		cairo_dock_update_conf_file (cDesktopFilePath,
+			G_TYPE_STRING, "Desktop Entry", "Container", cParentDockName,
+			G_TYPE_INVALID);
+		g_free (cDesktopFilePath);
+	}
+	else if (CAIRO_DOCK_IS_APPLET (pIcon))
+	{
+		cairo_dock_update_conf_file (pIcon->pModuleInstance->cConfFilePath,
+			G_TYPE_STRING, "Icon", "dock name", cParentDockName,
+			G_TYPE_INVALID);
+	}
+}
+
+void gldi_theme_icon_write_order_in_conf_file (Icon *pIcon, double fOrder)
+{
+	if (GLDI_OBJECT_IS_USER_ICON (pIcon))
+	{
+		g_return_if_fail (pIcon->cDesktopFileName != NULL);
+		gchar *cDesktopFilePath = *pIcon->cDesktopFileName == '/' ? g_strdup (pIcon->cDesktopFileName) : g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pIcon->cDesktopFileName);
+		cairo_dock_update_conf_file (cDesktopFilePath,
+			G_TYPE_DOUBLE, "Desktop Entry", "Order", fOrder,
+			G_TYPE_INVALID);
+		g_free (cDesktopFilePath);
+	}
+	else if (CAIRO_DOCK_IS_APPLET (pIcon))
+	{
+		cairo_dock_update_conf_file (pIcon->pModuleInstance->cConfFilePath,
+			G_TYPE_DOUBLE, "Icon", "order", fOrder,
+			G_TYPE_INVALID);
+	}
 }
