@@ -25,415 +25,180 @@
 #include <string.h>
 #include <glib/gstdio.h>
 
-
+#include "gldi-config.h"  // GLDI_VERSION
 #include "cairo-dock-icon-facility.h"  // cairo_dock_compare_icons_order
 #include "cairo-dock-config.h"  // cairo_dock_update_conf_file
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-backends-manager.h"  // cairo_dock_set_renderer
 #include "cairo-dock-log.h"
+#include "cairo-dock-utils.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-applications-manager.h"  // myTaskbarParam.bMixLauncherAppli
+#include "cairo-dock-class-icon-manager.h"
 #include "cairo-dock-class-manager.h"  // cairo_dock_inhibite_class
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
-#include "cairo-dock-launcher-factory.h"  // cairo_dock_new_launcher_icon
 #include "cairo-dock-separator-manager.h"  // cairo_dock_create_separator_surface
 #include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file
 #include "cairo-dock-windows-manager.h"  // gldi_window_show
 #include "cairo-dock-file-manager.h"  // g_iDesktopEnv
 #include "cairo-dock-launcher-manager.h"
 
+// public (manager, config, data)
+GldiLauncherManager myLaunchersMgr;
+
+// dependancies
 extern gchar *g_cCurrentLaunchersPath;
 extern CairoDockDesktopEnv g_iDesktopEnv;
 
-/*
-user-icon = {icon, desktop-file}
-object-new(desktop-file, keyfile(may be null)): open file, get generic data (dock-name, order, workspace), iGroup = CAIRO_DOCK_LAUNCHER, set desktopfile, create container
-delete_user_icon
-
-specialized mgr: get data, update the key file if necessary, etc
+// private
+#define CAIRO_DOCK_LAUNCHER_CONF_FILE "launcher.desktop"
 
 
-icon_create_from_conf_file -> open keyfile -> get type -> object_new(mgr), free keyfile
-
-
-- LauncherMgr (desktop file) -> get data, register class, set data from class, load_launcher, check validity, inhibite class
-- SeparatorMgr (desktop file or NULL) -> load_separator
-- ContainerIconMgr (desktop file) -> get data, create sub-dock, load_launcher_with_sub_dock, delete_sub_icons, create sub-dock, check name
-
-OR
-
-icon_create_from_conf_file -> object_new(myLauncherMgr, desktop file)
--> user-icon = {icon, desktop-file}
-
-
-
-
-icon_create_dummy -> icon_new, set data (mgr = myIconsMgr)
-
-create auto separator: object_new(SeparatorMgr, NULL)
-is_auto_separator: is_separator && desktopfile == NULL
-
-icon->write_container_name -> user-icon, applet-icon
-icon->write_order -> user-icon, applet-icon
-
-*/
-
-static void _cairo_dock_handle_container (Icon *icon, const gchar *cRendererName)
+static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 {
-	if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon) && g_strcmp0 (icon->cName, icon->cParentDockName) == 0)  // it shouldn't happen, but if ever it does, be sure to forbid an icon pointing on itself.
+	gboolean bNeedUpdate = FALSE;
+	
+	// get launcher params
+	icon->cFileName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Icon", NULL);
+	if (icon->cFileName != NULL && *icon->cFileName == '\0')
 	{
-		cd_warning ("It seems we have a sub-dock in itself! => its parent dock is now the main dock");
-		cairo_dock_update_icon_s_container_name (icon, CAIRO_DOCK_MAIN_DOCK_NAME); // => to the main dock...
-	}
-
-	//\____________ On cree son container si necessaire.
-	CairoDock *pParentDock = gldi_dock_get (icon->cParentDockName);
-	if (pParentDock == NULL)
-	{
-		cd_message ("The parent dock (%s) doesn't exist: we create it", icon->cParentDockName);
-		pParentDock = gldi_dock_new (icon->cParentDockName);
+		g_free (icon->cFileName);
+		icon->cFileName = NULL;
 	}
 	
-	//\____________ On cree son sous-dock si necessaire.
-	if (icon->iTrueType == CAIRO_DOCK_ICON_TYPE_CONTAINER && icon->cName != NULL)
+	icon->cName = g_key_file_get_locale_string (pKeyFile, "Desktop Entry", "Name", NULL, NULL);
+	if (icon->cName != NULL && *icon->cName == '\0')
 	{
-		CairoDock *pChildDock = gldi_dock_get (icon->cName);
-		if (pChildDock && (pChildDock->iRefCount > 0 || pChildDock->bIsMainDock))  // un sous-dock de meme nom existe deja, on change le nom de l'icone.
+		g_free (icon->cName);
+		icon->cName = NULL;
+	}
+	
+	icon->cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", NULL);
+	if (icon->cCommand != NULL && *icon->cCommand == '\0')
+	{
+		g_free (icon->cCommand);
+		icon->cCommand = NULL;
+	}
+	
+	gchar *cStartupWMClass = g_key_file_get_string (pKeyFile, "Desktop Entry", "StartupWMClass", NULL);
+	if (cStartupWMClass && *cStartupWMClass == '\0')
+	{
+		g_free (cStartupWMClass);
+		cStartupWMClass = NULL;
+	}
+	
+	// get the origin of the desktop file.
+	gchar *cClass = NULL;
+	gsize length = 0;
+	gchar **pOrigins = g_key_file_get_string_list (pKeyFile, "Desktop Entry", "Origin", &length, NULL);
+	int iNumOrigin = -1;
+	if (pOrigins != NULL)  // some origins are provided, try them one by one.
+	{
+		int i;
+		for (i = 0; pOrigins[i] != NULL; i++)
 		{
-			gchar *cUniqueDockName = cairo_dock_get_unique_dock_name (icon->cName);
-			cd_warning ("A sub-dock with the same name (%s) already exists, we'll change it to %s", icon->cName, cUniqueDockName);
-			gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
-			cairo_dock_update_conf_file (cDesktopFilePath,
-				G_TYPE_STRING, "Desktop Entry", "Name", cUniqueDockName,
-				G_TYPE_INVALID);
-			g_free (cDesktopFilePath);
-			g_free (icon->cName);
-			icon->cName = cUniqueDockName;
-			pChildDock = NULL;
-		}
-		if (pChildDock == NULL)
-		{
-			cd_message ("The child dock (%s) doesn't exist, we create it with this view: %s", icon->cName, cRendererName);
-			pChildDock = gldi_subdock_new (icon->cName, cRendererName, pParentDock, NULL);
-		}
-		else
-		{
-			cd_message ("The dock is now a 'child-dock' (%d, %d)", pChildDock->container.bIsHorizontal, pChildDock->container.bDirectionUp);
-			gldi_dock_make_subdock (pChildDock, pParentDock, cRendererName);
-		}
-		icon->pSubDock = pChildDock;
-	}
-}
-
-static void _load_launcher (Icon *icon)
-{
-	int iWidth = cairo_dock_icon_get_allocated_width (icon);
-	int iHeight = cairo_dock_icon_get_allocated_height (icon);
-	cairo_surface_t *pSurface = NULL;
-	
-	if (icon->pSubDock != NULL && icon->iSubdockViewType != 0)  // icone de sous-dock avec un rendu specifique, on le redessinera lorsque les icones du sous-dock auront ete chargees.
-	{
-		pSurface = cairo_dock_create_blank_surface (iWidth, iHeight);
-		cairo_dock_trigger_redraw_subdock_content_on_icon (icon);  // now that the icon has a surface/texture, we can draw the sub-dock content on it.
-	}
-	else if (icon->cFileName)  // icone possedant une image, on affiche celle-ci.
-	{
-		gchar *cIconPath = cairo_dock_search_icon_s_path (icon->cFileName, MAX (iWidth, iHeight));
-		if (cIconPath != NULL && *cIconPath != '\0')
-			pSurface = cairo_dock_create_surface_from_image_simple (cIconPath,
-				iWidth,
-				iHeight);
-		g_free (cIconPath);
-	}
-	cairo_dock_load_image_buffer_from_surface (&icon->image, pSurface, iWidth, iHeight);
-}
-
-static void _load_user_separator (Icon *icon)
-{
-	int iWidth = cairo_dock_icon_get_allocated_width (icon);
-	int iHeight = cairo_dock_icon_get_allocated_height (icon);
-	cairo_surface_t *pSurface = NULL;
-	
-	if (icon->cFileName != NULL)
-	{
-		gchar *cIconPath = cairo_dock_search_icon_s_path (icon->cFileName, MAX (iWidth, iHeight));
-		if (cIconPath != NULL && *cIconPath != '\0')
-		{
-			pSurface = cairo_dock_create_surface_from_image_simple (cIconPath,
-				iWidth,
-				iHeight);
-		}
-		g_free (cIconPath);
-	}
-	if (pSurface == NULL)
-	{
-		pSurface = cairo_dock_create_separator_surface (
-			iWidth,
-			iHeight);
-	}
-	cairo_dock_load_image_buffer_from_surface (&icon->image, pSurface, iWidth, iHeight);
-}
-
-static gboolean _delete_launcher (Icon *icon)
-{
-	gboolean r = FALSE;
-	if (icon->cDesktopFileName != NULL && icon->cDesktopFileName[0] != '/')
-	{
-		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
-		cairo_dock_delete_conf_file (cDesktopFilePath);
-		g_free (cDesktopFilePath);
-		r = TRUE;
-	}
-	
-	if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon) && icon->pSubDock != NULL)  /// really useful ?...
-	{
-		Icon *pSubIcon;
-		GList *ic;
-		for (ic = icon->pSubDock->icons; ic != NULL; ic = ic->next)
-		{
-			pSubIcon = ic->data;
-			if (pSubIcon->iface.on_delete)
-				r |= pSubIcon->iface.on_delete (pSubIcon);
-		}
-		gldi_object_unref (GLDI_OBJECT(icon->pSubDock));
-		icon->pSubDock = NULL;
-	}
-	return r;
-}
-
-static void _show_appli_for_drop (Icon *pIcon)
-{
-	if (pIcon->pAppli != NULL)
-		gldi_window_show (pIcon->pAppli);
-}
-
-Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName)
-{
-	//g_print ("%s (%s)\n", __func__, cDesktopFileName);
-	
-	//\____________ Create the icon from the .desktop file..
-	gchar *cRendererName = NULL;
-	Icon *icon = cairo_dock_new_launcher_icon (cDesktopFileName, &cRendererName);
-	if (icon == NULL)  // couldn't load the icon (unreadable desktop file, unvalid or does not correspond to any installed program)
-		return NULL;
-	
-	if (icon->iTrueType == CAIRO_DOCK_ICON_TYPE_SEPARATOR)
-	{
-		icon->iface.load_image = _load_user_separator;
-	}
-	else
-	{
-		icon->iface.load_image = _load_launcher;
-		icon->iface.action_on_drag_hover = _show_appli_for_drop;
-	}
-	icon->iface.on_delete = _delete_launcher;
-	
-	//\____________ Handle its dock and sub-dock (create them if necesary).
-	_cairo_dock_handle_container (icon, cRendererName);
-	g_free (cRendererName);
-	
-	//\____________ Make it an inhibator for its class.
-	cd_message ("+ %s/%s", icon->cName, icon->cClass);
-	if (icon->cClass != NULL)
-	{
-		cairo_dock_inhibite_class (icon->cClass, icon);  // gere le bMixLauncherAppli
-	}
-	
-	return icon;
-}
-
-
-Icon * cairo_dock_create_dummy_launcher (gchar *cName, gchar *cFileName, gchar *cCommand, gchar *cQuickInfo, double fOrder)
-{
-	//\____________ On cree l'icone.
-	Icon *pIcon = cairo_dock_new_icon ();
-	pIcon->iTrueType = CAIRO_DOCK_ICON_TYPE_OTHER;
-	pIcon->iGroup = CAIRO_DOCK_LAUNCHER;
-	pIcon->cName = cName;
-	pIcon->cFileName = cFileName;
-	pIcon->cQuickInfo = cQuickInfo;
-	pIcon->fOrder = fOrder;
-	pIcon->fScale = 1.;
-	pIcon->fAlpha = 1.;
-	pIcon->fWidthFactor = 1.;
-	pIcon->fHeightFactor = 1.;
-	pIcon->cCommand = cCommand;
-	pIcon->iface.load_image = _load_launcher;
-	
-	return pIcon;
-}
-
-
-void cairo_dock_load_launchers_from_dir (const gchar *cDirectory)
-{
-	cd_message ("%s (%s)", __func__, cDirectory);
-	GDir *dir = g_dir_open (cDirectory, 0, NULL);
-	g_return_if_fail (dir != NULL);
-	
-	Icon* icon;
-	const gchar *cFileName;
-	CairoDock *pParentDock;
-
-	while ((cFileName = g_dir_read_name (dir)) != NULL)
-	{
-		if (g_str_has_suffix (cFileName, ".desktop"))
-		{
-			icon = cairo_dock_create_icon_from_desktop_file (cFileName);
-			if (icon == NULL)  // if the icon couldn't be loaded, remove it from the theme (it's useless to try and fail to load it each time).
+			cClass = cairo_dock_register_class_full (pOrigins[i], cStartupWMClass, NULL);
+			if (cClass != NULL)  // neat, this origin is a valid one, let's use it from now.
 			{
-				cd_warning ("Unable to load a valid icon from '%s/%s'; the file is either unreadable, unvalid or does not correspond to any installed program, and will be deleted", g_cCurrentLaunchersPath, cFileName);
-				gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cFileName);
-				cairo_dock_delete_conf_file (cDesktopFilePath);
-				g_free (cDesktopFilePath);
-				continue;
+				iNumOrigin = i;
+				break;
 			}
-			
-			pParentDock = gldi_dock_get (icon->cParentDockName);
-			if (pParentDock != NULL)  // a priori toujours vrai.
+		}
+		g_strfreev (pOrigins);
+	}
+
+	// if no origin class could be found, try to guess the class
+	gchar *cFallbackClass = NULL;
+	if (cClass == NULL)  // no class found, maybe an old launcher or a custom one, try to guess from the info in the user desktop file.
+	{
+		cFallbackClass = cairo_dock_guess_class (icon->cCommand, cStartupWMClass);
+		cClass = cairo_dock_register_class_full (cFallbackClass, cStartupWMClass, NULL);
+	}
+	
+	// get common data from the class
+	g_free (icon->cClass);
+	if (cClass != NULL)
+	{
+		icon->cClass = cClass;
+		g_free (cFallbackClass);
+		cairo_dock_set_data_from_class (cClass, icon);
+		if (iNumOrigin != 0)  // it's not the first origin that gave us the correct class, so let's write it down to avoid searching the next time.
+		{
+			g_key_file_set_string (pKeyFile, "Desktop Entry", "Origin", cairo_dock_get_class_desktop_file (cClass));
+			bNeedUpdate = TRUE;
+		}
+	}
+	else  // no class found, it's maybe an old launcher, take the remaining common params from the user desktop file.
+	{
+		icon->cClass = cFallbackClass;
+		gsize length = 0;
+		icon->pMimeTypes = g_key_file_get_string_list (pKeyFile, "Desktop Entry", "MimeType", &length, NULL);
+		
+		if (icon->cCommand != NULL)
+		{
+			icon->cWorkingDirectory = g_key_file_get_string (pKeyFile, "Desktop Entry", "Path", NULL);
+			if (icon->cWorkingDirectory != NULL && *icon->cWorkingDirectory == '\0')
 			{
-				cairo_dock_insert_icon_in_dock_full (icon, pParentDock, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
+				g_free (icon->cWorkingDirectory);
+				icon->cWorkingDirectory = NULL;
 			}
 		}
 	}
-	g_dir_close (dir);
+	
+	// take into account the execution in a terminal.
+	gboolean bExecInTerminal = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "Terminal", NULL);
+	if (bExecInTerminal)  // on le fait apres la classe puisqu'on change la commande.
+	{
+		gchar *cOldCommand = icon->cCommand;
+		icon->cCommand = cairo_dock_get_command_with_right_terminal (cOldCommand);
+		g_free (cOldCommand);
+	}
+	
+	gboolean bPreventFromInhibiting = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "prevent inhibate", NULL);  // FALSE by default
+	if (bPreventFromInhibiting)
+	{
+		g_free (icon->cClass);
+		icon->cClass = NULL;
+	}
+	
+	g_free (cStartupWMClass);
+	return bNeedUpdate;
 }
 
-
-
-void cairo_dock_reload_launcher (Icon *icon)
+static void _reload (Icon *icon)
 {
-	if (icon->cDesktopFileName == NULL || strcmp (icon->cDesktopFileName, "none") == 0)
-	{
-		cd_warning ("missing config file for icon %s", icon->cName);
-		return ;
-	}
-	
-	//\_____________ Rename sub-dock and ensure sub-dock's name unicity before we reload the icon.
-	if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon))
-	{
-		// get the new name of the icon (and therefore of its sub-dock).
-		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
-		GKeyFile* pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
-		g_return_if_fail (pKeyFile != NULL);
-		gchar *cName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Name", NULL);
-		
-		// set a default name if none.
-		if (cName == NULL || *cName == '\0')  // no name defined, we need one.
-		{
-			if (icon->cName != NULL)
-				cName = g_strdup (icon->cName);
-			else
-				cName = cairo_dock_get_unique_dock_name ("sub-dock");
-			g_key_file_set_string (pKeyFile, "Desktop Entry", "Name", cName);
-			cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
-		}
-		
-		// if it has changed, ensure its unicity, and rename the sub-dock to be able to link with it again.
-		if (icon->cName == NULL || strcmp (icon->cName, cName) != 0)  // name has changed -> rename the sub-dock.
-		{
-			// ensure unicity
-			gchar *cUniqueName = cairo_dock_get_unique_dock_name (cName);
-			if (strcmp (cName, cUniqueName) != 0)
-			{
-				g_key_file_set_string (pKeyFile, "Desktop Entry", "Name", cUniqueName);
-				cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
-			}
-			// rename sub-dock
-			cd_debug ("on renomme a l'avance le sous-dock en %s", cUniqueName);
-			if (icon->pSubDock != NULL)
-				gldi_dock_rename (icon->pSubDock, cUniqueName);  // on le renomme ici pour eviter de transvaser dans un nouveau dock (ca marche aussi ceci dit).
-			g_free (cUniqueName);
-		}
-		g_free (cName);
-		
-		g_key_file_free (pKeyFile);
-		g_free (cDesktopFilePath);
-	}
-	
-	//\_____________ On memorise son etat.
-	gchar *cPrevDockName = icon->cParentDockName;
-	icon->cParentDockName = NULL;
-	CairoDock *pDock = gldi_dock_get (cPrevDockName);  // changement de l'ordre ou du container.
-	double fOrder = icon->fOrder;
+	gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
+	GKeyFile* pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
+	g_return_if_fail (pKeyFile != NULL);
 	
 	gchar *cClass = icon->cClass;
 	icon->cClass = NULL;
-	gchar *cDesktopFileName = icon->cDesktopFileName;
-	icon->cDesktopFileName = NULL;
 	gchar *cName = icon->cName;
 	icon->cName = NULL;
+	g_free (icon->cFileName);
+	icon->cFileName = NULL;
+	g_free (icon->cCommand);
+	icon->cCommand = NULL;
+	if (icon->pMimeTypes != NULL)
+	{
+		g_strfreev (icon->pMimeTypes);
+		icon->pMimeTypes = NULL;
+	}
+	g_free (icon->cWorkingDirectory);
+	icon->cWorkingDirectory = NULL;
 	
-	//\_____________ get its new params.
-	gchar *cSubDockRendererName = NULL;
-	cairo_dock_load_icon_info_from_desktop_file (cDesktopFileName, icon, &cSubDockRendererName);
-	g_return_if_fail (icon->cDesktopFileName != NULL);
+	//\__________________ get parameters
+	_get_launcher_params (icon, pKeyFile);
+	g_key_file_free (pKeyFile);
+	g_free (cDesktopFilePath);
 	
-	// get its (possibly new) container.
+	//\_____________ reload icon's buffers
 	CairoDock *pNewDock = gldi_dock_get (icon->cParentDockName);
-	if (pNewDock == NULL)
-	{
-		cd_message ("The parent dock (%s) doesn't exist, we create it", icon->cParentDockName);
-		pNewDock = gldi_dock_new (icon->cParentDockName);
-	}
-	g_return_if_fail (pNewDock != NULL);
+	cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pNewDock));
 	
-	//\_____________ manage the change of container or order.
-	if (pDock != pNewDock)  // container has changed.
-	{
-		// on la detache de son container actuel et on l'insere dans le nouveau.
-		gchar *tmp = icon->cParentDockName;  // le detach_icon remet a 0 ce champ, il faut le donc conserver avant.
-		icon->cParentDockName = NULL;
-		cairo_dock_detach_icon_from_dock_full (icon, pDock, TRUE);
-		
-		cairo_dock_insert_icon_in_dock (icon, pNewDock, CAIRO_DOCK_ANIMATE_ICON);  // le remove et le insert vont declencher le redessin de l'icone pointant sur l'ancien et le nouveau sous-dock le cas echeant.
-		icon->cParentDockName = tmp;
-	}
-	else  // same container, but different order.
-	{
-		if (icon->fOrder != fOrder)  // On gere le changement d'ordre.
-		{
-			pNewDock->icons = g_list_remove (pNewDock->icons, icon);
-			pNewDock->icons = g_list_insert_sorted (pNewDock->icons,
-				icon,
-				(GCompareFunc) cairo_dock_compare_icons_order);
-			cairo_dock_update_dock_size (pDock);  // -> recalculate icons and update input shape
-		}
-		// on redessine l'icone pointant sur le sous-dock, pour le cas ou l'ordre et/ou l'image du lanceur aurait change.
-		if (pNewDock->iRefCount != 0)
-		{
-			cairo_dock_redraw_subdock_content (pNewDock);
-		}
-	}
-	
-	//\_____________ reload icon
-	// redraw icon
-	if (icon->pSubDock != NULL && icon->iSubdockViewType != 0)  // petite optimisation : vu que la taille du lanceur n'a pas change, on evite de detruire et refaire sa surface.
-	{
-		cairo_dock_draw_subdock_content_on_icon (icon, pNewDock);
-	}
-	else
-	{
-		cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pNewDock));
-	}
-	
-	// reload label
-	if (cName && ! icon->cName)
-		icon->cName = g_strdup (" ");
-	
-	if (cairo_dock_strings_differ (cName, icon->cName))
+	if (g_strcmp0 (cName, icon->cName) != 0)
 		cairo_dock_load_icon_text (icon);
-	
-	// set sub-dock renderer
-	if (icon->pSubDock != NULL)  // son rendu a pu changer.
-	{
-		if (cairo_dock_strings_differ (cSubDockRendererName, icon->pSubDock->cRendererName))
-		{
-			cairo_dock_set_renderer (icon->pSubDock, cSubDockRendererName);
-			cairo_dock_update_dock_size (icon->pSubDock);
-		}
-	}
-	g_free (cSubDockRendererName);
 	
 	//\_____________ handle class inhibition.
 	gchar *cNowClass = icon->cClass;
@@ -448,133 +213,166 @@ void cairo_dock_reload_launcher (Icon *icon)
 		cairo_dock_inhibite_class (cNowClass, icon);
 
 	//\_____________ redraw dock.
-	///cairo_dock_calculate_dock_icons (pNewDock);
-	cairo_dock_redraw_container (CAIRO_CONTAINER (pNewDock));
-
-	g_free (cPrevDockName);
+	cairo_dock_redraw_icon (icon);
+	
 	g_free (cClass);
-	g_free (cDesktopFileName);
 	g_free (cName);
 }
 
-
-
-gchar *cairo_dock_launch_command_sync_with_stderr (const gchar *cCommand, gboolean bPrintStdErr)
+static void _show_appli_for_drop (Icon *pIcon)
 {
-	gchar *standard_output=NULL, *standard_error=NULL;
-	gint exit_status=0;
-	GError *erreur = NULL;
-	gboolean r = g_spawn_command_line_sync (cCommand,
-		&standard_output,
-		&standard_error,
-		&exit_status,
-		&erreur);
-	if (erreur != NULL || !r)
-	{
-		cd_warning (erreur->message);
-		g_error_free (erreur);
-		g_free (standard_error);
-		return NULL;
-	}
-	if (bPrintStdErr && standard_error != NULL && *standard_error != '\0')
-	{
-		cd_warning (standard_error);
-	}
-	g_free (standard_error);
-	if (standard_output != NULL && *standard_output == '\0')
-	{
-		g_free (standard_output);
-		return NULL;
-	}
-	if (standard_output[strlen (standard_output) - 1] == '\n')
-		standard_output[strlen (standard_output) - 1] ='\0';
-	return standard_output;
+	if (pIcon->pAppli != NULL)
+		gldi_window_show (pIcon->pAppli);
 }
 
-gboolean cairo_dock_launch_command_printf (const gchar *cCommandFormat, gchar *cWorkingDirectory, ...)
+static void init_object (GldiObject *obj, gpointer attr)
 {
-	va_list args;
-	va_start (args, cWorkingDirectory);
-	gchar *cCommand = g_strdup_vprintf (cCommandFormat, args);
-	va_end (args);
+	Icon *icon = (Icon*)obj;
+	GldiUserIconAttr *pAttributes = (GldiUserIconAttr*)attr;
 	
-	gboolean r = cairo_dock_launch_command_full (cCommand, cWorkingDirectory);
-	g_free (cCommand);
+	icon->iface.action_on_drag_hover = _show_appli_for_drop;  // we use the generic 'load_image' method
 	
-	return r;
-}
-
-static gpointer _cairo_dock_launch_threaded (gchar *cCommand)
-{
-	int r;
-	r = system (cCommand);
-	if (r != 0)
-		cd_warning ("couldn't launch this command (%s)", cCommand);
-	g_free (cCommand);
-	return NULL;
-}
-gboolean cairo_dock_launch_command_full (const gchar *cCommand, gchar *cWorkingDirectory)
-{
-	g_return_val_if_fail (cCommand != NULL, FALSE);
-	cd_debug ("%s (%s , %s)", __func__, cCommand, cWorkingDirectory);
+	if (!pAttributes->pKeyFile)
+		return;
 	
-	gchar *cBGCommand = NULL;
-	if (cCommand[strlen (cCommand)-1] != '&')
-		cBGCommand = g_strconcat (cCommand, " &", NULL);
+	//\____________ get additional parameters
+	GKeyFile *pKeyFile = pAttributes->pKeyFile;
+	gboolean bNeedUpdate = _get_launcher_params (icon, pKeyFile);
 	
-	gchar *cCommandFull = NULL;
-	if (cWorkingDirectory != NULL)
+	//\____________ Make it an inhibator for its class.
+	cd_message ("+ %s/%s", icon->cName, icon->cClass);
+	if (icon->cClass != NULL)
 	{
-		cCommandFull = g_strdup_printf ("cd \"%s\" && %s", cWorkingDirectory, cBGCommand ? cBGCommand : cCommand);
-		g_free (cBGCommand);
-		cBGCommand = NULL;
-	}
-	else if (cBGCommand != NULL)
-	{
-		cCommandFull = cBGCommand;
-		cBGCommand = NULL;
+		cairo_dock_inhibite_class (icon->cClass, icon);  // gere le bMixLauncherAppli
 	}
 	
-	if (cCommandFull == NULL)
-		cCommandFull = g_strdup (cCommand);
-
-	GError *erreur = NULL;
-	#if (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32)
-	GThread* pThread = g_thread_create ((GThreadFunc) _cairo_dock_launch_threaded, cCommandFull, FALSE, &erreur);
-	#else
-	// The name can be useful for discriminating threads in a debugger.
-	// Some systems restrict the length of name to 16 bytes. 
-	gchar *cThreadName = g_strndup (cCommand, 15);
-	GThread* pThread = g_thread_try_new (cThreadName, (GThreadFunc) _cairo_dock_launch_threaded, cCommandFull, &erreur);
-	g_thread_unref (pThread);
-	g_free (cThreadName);
-	#endif
-	if (erreur != NULL)
+	//\____________ Update the conf file if needed.
+	if (! bNeedUpdate)
+		bNeedUpdate = cairo_dock_conf_file_needs_update (pKeyFile, GLDI_VERSION);
+	if (bNeedUpdate)
 	{
-		cd_warning ("couldn't launch this command (%s : %s)", cCommandFull, erreur->message);
-		g_error_free (erreur);
-		g_free (cCommandFull);
-		return FALSE;
+		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pAttributes->cConfFileName);
+		const gchar *cTemplateFile = GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_LAUNCHER_CONF_FILE;
+		cairo_dock_upgrade_conf_file (cDesktopFilePath, pKeyFile, cTemplateFile);  // update keys
+		g_free (cDesktopFilePath);
 	}
-	return TRUE;
 }
 
-gchar * cairo_dock_get_command_with_right_terminal (const gchar *cCommand)
+void gldi_register_launchers_manager (void)
 {
-	gchar *cFullCommand;
-	const gchar *cTerm = g_getenv ("COLORTERM");
-	if (cTerm != NULL && strlen (cTerm) > 1)  // Filter COLORTERM=1 ou COLORTERM=y because we need the name of the terminal
-		cFullCommand = g_strdup_printf ("%s -e \"%s\"", cTerm, cCommand);
-	else if (g_iDesktopEnv == CAIRO_DOCK_GNOME)
-		cFullCommand = g_strdup_printf ("gnome-terminal -e \"%s\"", cCommand);
-	else if (g_iDesktopEnv == CAIRO_DOCK_XFCE)
-		cFullCommand = g_strdup_printf ("xfce4-terminal -e \"%s\"", cCommand);
-	else if (g_iDesktopEnv == CAIRO_DOCK_KDE)
-		cFullCommand = g_strdup_printf ("konsole -e \"%s\"", cCommand);
-	else if ((cTerm = g_getenv ("TERM")) != NULL)
-		cFullCommand = g_strdup_printf ("%s -e \"%s\"", cTerm, cCommand);
-	else
-		cFullCommand = g_strdup_printf ("xterm -e \"%s\"", cCommand);
+	// Manager
+	memset (&myLaunchersMgr, 0, sizeof (GldiLauncherManager));
+	myLaunchersMgr.mgr.cModuleName   = "Launchers";
+	myLaunchersMgr.mgr.init_object   = init_object;
+	myLaunchersMgr.mgr.iObjectSize   = sizeof (GldiLauncherIcon);
+	// signals
+	gldi_object_install_notifications (&myLaunchersMgr, NB_NOTIFICATIONS_ICON);
+	gldi_object_set_manager (GLDI_OBJECT (&myLaunchersMgr), GLDI_MANAGER (&myUserIconsMgr));
+	// register
+	gldi_register_manager (GLDI_MANAGER(&myLaunchersMgr));
+}
 
-	return cFullCommand;
+
+Icon *gldi_launcher_new (const gchar *cConfFile, GKeyFile *pKeyFile)
+{
+	GldiLauncherIconAttr attr = {(gchar*)cConfFile, pKeyFile};
+	return (Icon*)gldi_object_new (GLDI_MANAGER(&myLaunchersMgr), &attr);
+}
+
+
+gchar *gldi_launcher_add_conf_file (const gchar *cOrigin, const gchar *cDockName, double fOrder)
+{
+	//\__________________ open the template.
+	const gchar *cTemplateFile = GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_LAUNCHER_CONF_FILE;	
+	GKeyFile *pKeyFile = cairo_dock_open_key_file (cTemplateFile);
+	g_return_val_if_fail (pKeyFile != NULL, NULL);
+	
+	//\__________________ fill the parameters
+	gchar *cFilePath = NULL;
+	if (cOrigin != NULL && *cOrigin != '/')  // transform the origin URI into a path or a file name.
+	{
+		if (strncmp (cOrigin, "application://", 14) == 0)  // Ubuntu >= 11.04: it's now an "app" URI
+			cFilePath = g_strdup (cOrigin + 14);  // in this case we don't have the actual path of the .desktop, but that doesn't matter.
+		else
+			cFilePath = g_filename_from_uri (cOrigin, NULL, NULL);
+	}
+	else  // no origin or already a path.
+		cFilePath = g_strdup (cOrigin);
+	g_key_file_set_string (pKeyFile, "Desktop Entry", "Origin", cFilePath?cFilePath:"");
+	
+	g_key_file_set_double (pKeyFile, "Desktop Entry", "Order", fOrder);
+	
+	g_key_file_set_string (pKeyFile, "Desktop Entry", "Container", cDockName);
+	
+	//\__________________ in the case of a script, set ourselves a valid name and command.
+	if (cFilePath != NULL && g_str_has_suffix (cFilePath, ".sh"))
+	{
+		gchar *cName = g_path_get_basename (cFilePath);
+		g_key_file_set_string (pKeyFile, "Desktop Entry", "Name", cName);
+		g_free (cName);
+		g_key_file_set_string (pKeyFile, "Desktop Entry", "Exec", cFilePath);
+		g_key_file_set_boolean (pKeyFile, "Desktop Entry", "Terminal", TRUE);
+	}
+	
+	//\__________________ in the case of a custom launcher, set a command (the launcher would be invalid without).
+	if (cFilePath == NULL)
+	{
+		g_key_file_set_string (pKeyFile, "Desktop Entry", "Exec", _("Enter a command"));
+		g_key_file_set_string (pKeyFile, "Desktop Entry", "Name", _("New launcher"));
+	}
+	
+	//\__________________ generate a unique and readable filename.
+	gchar *cBaseName = (cFilePath ?
+		*cFilePath == '/' ?
+			g_path_get_basename (cFilePath) :
+			g_strdup (cFilePath) :
+		g_path_get_basename (cTemplateFile));
+
+	if (! g_str_has_suffix (cBaseName, ".desktop")) // if we have a script (.sh file) => add '.desktop'
+	{
+		gchar *cTmpBaseName = g_strdup_printf ("%s.desktop", cBaseName);
+		g_free (cBaseName);
+		cBaseName = cTmpBaseName;
+	}
+
+	gchar *cNewDesktopFileName = cairo_dock_generate_unique_filename (cBaseName, g_cCurrentLaunchersPath);
+	g_free (cBaseName);
+	
+	//\__________________ write the keys.
+	gchar *cNewDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cNewDesktopFileName);
+	cairo_dock_write_keys_to_conf_file (pKeyFile, cNewDesktopFilePath);
+	g_free (cNewDesktopFilePath);
+	
+	g_free (cFilePath);
+	g_key_file_free (pKeyFile);
+	return cNewDesktopFileName;
+}
+
+
+Icon *gldi_launcher_add_new (const gchar *cURI, CairoDock *pDock, double fOrder)
+{
+	//\_________________ add a launcher in the current theme
+	const gchar *cDockName = gldi_dock_get_name (pDock);
+	if (fOrder == CAIRO_DOCK_LAST_ORDER)  // the order is not defined -> place at the end
+	{
+		Icon *pLastIcon = cairo_dock_get_last_launcher (pDock->icons);
+		fOrder = (pLastIcon ? pLastIcon->fOrder + 1 : 1);
+	}
+	gchar *cNewDesktopFileName = gldi_launcher_add_conf_file (cURI, cDockName, fOrder);
+	g_return_val_if_fail (cNewDesktopFileName != NULL, NULL);
+	
+	//\_________________ load the new icon
+	Icon *pNewIcon = gldi_user_icon_new (cNewDesktopFileName);
+	g_free (cNewDesktopFileName);
+	g_return_val_if_fail (pNewIcon, NULL);
+	
+	cairo_dock_insert_icon_in_dock (pNewIcon, pDock, CAIRO_DOCK_ANIMATE_ICON);
+	
+	return pNewIcon;
+}
+
+
+void cairo_dock_reload_launcher (Icon *icon)
+{
+	/// TODO: add a reload method in the Object class...
 }

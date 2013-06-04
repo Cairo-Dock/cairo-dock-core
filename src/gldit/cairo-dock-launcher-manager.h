@@ -17,40 +17,42 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-#ifndef __CAIRO_DOCK_LAUNCHER_MANAGER__
-#define  __CAIRO_DOCK_LAUNCHER_MANAGER__
+#ifndef __CAIRO_DOCK_LAUNCHER_ICON_MANAGER__
+#define  __CAIRO_DOCK_LAUNCHER_ICON_MANAGER__
 
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
+#include "cairo-dock-user-icon-manager.h"
 G_BEGIN_DECLS
 
-/** *@file cairo-dock-launcher-manager.h This class handles the creation, load and reload of launcher icons, from the desktop files contained inside the 'launchers' folder. The files holding the information are common desktop files, with additionnal keys added by the dock on the launcher creation.
+/**
+*@file cairo-dock-launcher-manager.h This class handles the Launcher Icons, which are user icons used to launch a program.
 */
 
-/** Create an Icon from a given desktop file, and fill its buffers. The resulting icon can directly be used inside a container. Class inhibiting is handled.
-* @param cDesktopFileName name of the desktop file, present in the "launchers" folder of the current theme.
-* @return the newly created icon.
-*/
-Icon * cairo_dock_create_icon_from_desktop_file (const gchar *cDesktopFileName);
+typedef struct _GldiLauncherManager GldiLauncherManager;
+typedef GldiUserIconAttr GldiLauncherIconAttr;
+typedef GldiUserIcon GldiLauncherIcon;
 
-/** Create an Icon that will behave like a launcher. It's especially useful for applets that want to fill a sub-dock or a desklet (the icon is not loaded by the function). Be careful that the strings are not duplicated. Therefore, you must use g_strdup() if you want to set a constant string; and must not free the strings after calling this function.
-* @param cName label of the icon
-* @param cFileName name of an image
-* @param cCommand a command, or NULL
-* @param cQuickInfo a quick-info, or NULL
-* @param fOrder order of the icon in its container.
-* @return the newly created icon.
-*/
-Icon * cairo_dock_create_dummy_launcher (gchar *cName, gchar *cFileName, gchar *cCommand, gchar *cQuickInfo, double fOrder);
+#ifndef _MANAGER_DEF_
+extern GldiLauncherManager myLaunchersMgr;
+#endif
 
+// manager
+struct _GldiLauncherManager {
+	GldiManager mgr;
+} ;
 
-/** Load a set of .desktop files that define icons, and build the corresponding tree of docks.
-* All the icons are created and placed inside their dock, which is created if necessary.
-* @param cDirectory a folder containing some .desktop files.
+// signals
+typedef enum {
+	NB_NOTIFICATIONS_LAUNCHER = NB_NOTIFICATIONS_USER_ICON,
+	} GldiLauncherNotifications;
+
+/** Say if an object is a LauncherIcon.
+*@param obj the object.
+*@return TRUE if the object is a LauncherIcon.
 */
-void cairo_dock_load_launchers_from_dir (const gchar *cDirectory);
+#define GLDI_OBJECT_IS_LAUNCHER_ICON(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), GLDI_MANAGER(&myLaunchersMgr))
 
 
 /** Reload completely a launcher. It handles all the side-effects like modifying the class, the sub-dock's view, the container, etc.
@@ -58,13 +60,18 @@ void cairo_dock_load_launchers_from_dir (const gchar *cDirectory);
 */
 void cairo_dock_reload_launcher (Icon *icon);
 
-gchar *cairo_dock_launch_command_sync_with_stderr (const gchar *cCommand, gboolean bPrintStdErr);
-#define cairo_dock_launch_command_sync(cCommand) cairo_dock_launch_command_sync_with_stderr (cCommand, TRUE)
 
-gboolean cairo_dock_launch_command_printf (const gchar *cCommandFormat, gchar *cWorkingDirectory, ...) G_GNUC_PRINTF (1, 3);
-gboolean cairo_dock_launch_command_full (const gchar *cCommand, gchar *cWorkingDirectory);
-#define cairo_dock_launch_command(cCommand) cairo_dock_launch_command_full (cCommand, NULL)
-gchar * cairo_dock_get_command_with_right_terminal (const gchar *cCommand);
+Icon *gldi_launcher_new (const gchar *cConfFile, GKeyFile *pKeyFile);
+
+
+gchar *gldi_launcher_add_conf_file (const gchar *cURI, const gchar *cDockName, double fOrder);
+
+
+Icon *gldi_launcher_add_new (const gchar *cURI, CairoDock *pDock, double fOrder);
+
+
+void gldi_register_launchers_manager (void);
+
 
 G_END_DECLS
 #endif
