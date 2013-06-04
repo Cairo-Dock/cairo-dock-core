@@ -13,6 +13,9 @@ SET(core_lib_SRCS
 	cairo-dock-applications-manager.c 	cairo-dock-applications-manager.h
 	cairo-dock-application-facility.c 	cairo-dock-application-facility.h
 	cairo-dock-launcher-manager.c 		cairo-dock-launcher-manager.h
+	cairo-dock-stack-icon-manager.c 	cairo-dock-stack-icon-manager.h
+	cairo-dock-class-icon-manager.c 	cairo-dock-class-icon-manager.h
+	cairo-dock-user-icon-manager.c 		cairo-dock-user-icon-manager.h
 	cairo-dock-applet-manager.c 		cairo-dock-applet-manager.h
 	cairo-dock-applet-facility.c 		cairo-dock-applet-facility.h
 	cairo-dock-separator-manager.c 		cairo-dock-separator-manager.h
@@ -59,7 +62,8 @@ SET(core_lib_SRCS
 	cairo-dock-particle-system.c 		cairo-dock-particle-system.h
 	cairo-dock-overlay.c 				cairo-dock-overlay.h
 	cairo-dock-task.c 					cairo-dock-task.h
-	cairo-dock-config.c 				cairo-dock-config.h 
+	cairo-dock-config.c 				cairo-dock-config.h
+	cairo-dock-utils.c 					cairo-dock-utils.h
 	texture-gradation.h
 	texture-blur.h
 )
@@ -74,7 +78,7 @@ include_directories(
 	${XEXTEND_INCLUDE_DIRS}
 	${XINERAMA_INCLUDE_DIRS}
 	${CMAKE_SOURCE_DIR}/src/gldit
-	${CMAKE_SOURCE_DIR}/src/icon-factory
+	#${CMAKE_SOURCE_DIR}/src/icon-factory
 	${CMAKE_SOURCE_DIR}/src/implementations)
 
 # Make sure the linker can find the libraries.
@@ -104,7 +108,7 @@ target_link_libraries("gldi"
 	${XEXTEND_LIBRARIES}
 	${XINERAMA_LIBRARIES}
 	${LIBCRYPT_LIBS}
-	icon-factory
+	#icon-factory
 	implementations
 	${LIBDL_LIBRARIES})
 
@@ -127,6 +131,8 @@ install(FILES
 	cairo-dock-icon-facility.h
 	cairo-dock-applications-manager.h 	cairo-dock-launcher-manager.h
 	cairo-dock-separator-manager.h 		cairo-dock-applet-manager.h
+	cairo-dock-stack-icon-manager.h			cairo-dock-user-icon-manager.h
+	cairo-dock-class-icon-manager.h
 	cairo-dock-backends-manager.h
 	
 	cairo-dock-packages.h
@@ -166,6 +172,7 @@ install(FILES
 	cairo-dock-task.h
 	cairo-dock-animations.h
 	cairo-dock-gui-factory.h
+	cairo-dock-utils.h
 	
 	DESTINATION ${includedir}/cairo-dock/gldit)
 

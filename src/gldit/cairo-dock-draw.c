@@ -34,6 +34,8 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-applications-manager.h"
+#include "cairo-dock-separator-manager.h"
+#include "cairo-dock-applet-manager.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-image-buffer.h"

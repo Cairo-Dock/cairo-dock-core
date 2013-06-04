@@ -136,15 +136,23 @@ void gldi_icon_start_animation (Icon *icon);
 void gldi_icon_request_animation (Icon *pIcon, const gchar *cAnimation, int iNbRounds);
 
 /** Stop any animation on an Icon, except the disappearance/appearance animation.
-*@param pIcon the icon.
+*@param pIcon the icon
 */
 #define gldi_icon_stop_animation(pIcon) do { \
 	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REMOVE_INSERT && pIcon->iAnimationState != CAIRO_DOCK_STATE_REST) {\
 		gldi_object_notify (pIcon, NOTIFICATION_STOP_ICON, pIcon); \
 		pIcon->iAnimationState = CAIRO_DOCK_STATE_REST; } } while (0)
 
+/** Launch an animation that will draw the user's attention (ie, the icon will be visible even if the dock is hidden or even if it's in a sub-dock).
+*@param pIcon the icon
+*@param cAnimation an animation name, or NULL or "default" to use the default attention animation
+*@param iNbRounds number of rounds, or <= 0 for an endles animation
+*/
 void gldi_icon_request_attention (Icon *pIcon, const gchar *cAnimation, int iNbRounds);
 
+/** Stop the icon from drawing the attention. If the icon is not drawing the attention, do nothing.
+*@param pIcon the icon
+*/
 void gldi_icon_stop_attention (Icon *pIcon);
 
 /** Trigger the removal of an Icon from its Dock. The icon will effectively be removed at the end of the animation.

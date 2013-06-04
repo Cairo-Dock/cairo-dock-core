@@ -39,6 +39,7 @@
 #include "cairo-dock-icon-facility.h"  // gldi_icons_get_any_without_dialog
 #include "cairo-dock-task.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-utils.h"  // cairo_dock_get_command_with_right_terminal
 #include "cairo-dock-packages.h"
 #include "cairo-dock-core.h"
 #include "cairo-dock-dock-facility.h"

@@ -67,15 +67,15 @@ gboolean cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cIcon
 void cairo_dock_set_image_on_icon_with_default (cairo_t *pIconContext, const gchar *cImage, Icon *pIcon, GldiContainer *pContainer, const gchar *cDefaultImagePath);
 
 
-void cairo_dock_set_hours_minutes_as_quick_info (Icon *pIcon, GldiContainer *pContainer, int iTimeInSeconds);
-void cairo_dock_set_minutes_secondes_as_quick_info (Icon *pIcon, GldiContainer *pContainer, int iTimeInSeconds);
+void cairo_dock_set_hours_minutes_as_quick_info (Icon *pIcon, int iTimeInSeconds);
+void cairo_dock_set_minutes_secondes_as_quick_info (Icon *pIcon, int iTimeInSeconds);
 
 /** Convert a size in bytes into a readable format.
 *@param iSizeInBytes size in bytes.
 *@return a newly allocated string.
 */
 gchar *cairo_dock_get_human_readable_size (long long int iSizeInBytes);
-void cairo_dock_set_size_as_quick_info (Icon *pIcon, GldiContainer *pContainer, long long int iSizeInBytes);
+void cairo_dock_set_size_as_quick_info (Icon *pIcon, long long int iSizeInBytes);
 
 /// type of possible display on a Icon.
 typedef enum {
@@ -96,15 +96,6 @@ gchar *cairo_dock_get_theme_path_for_module (const gchar *cAppletConfFilePath, G
 *@param cSoundPath path to an audio file.
 */
 void cairo_dock_play_sound (const gchar *cSoundPath);
-
-
-// should be in gnome-integration if needed...
-/* Get the Gnome's version.
-*@param iMajor pointer to the major.
-*@param iMinor pointer to the minor.
-*@param iMicro pointer to the micro.
-*/
-//void cairo_dock_get_gnome_version (int *iMajor, int *iMinor, int *iMicro);
 
 
 void cairo_dock_pop_up_about_applet (GtkMenuItem *menu_item, GldiModuleInstance *pModuleInstance);
@@ -446,7 +437,7 @@ gldi_shortkey_new (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 /** Redraw the applet's icon (as soon as the main loop is available).
 */
 #define CD_APPLET_REDRAW_MY_ICON \
-	cairo_dock_redraw_icon (myIcon, myContainer)
+	cairo_dock_redraw_icon (myIcon)
 /** Redraw the applet's container (as soon as the main loop is available).
 */
 #define CAIRO_DOCK_REDRAW_MY_CONTAINER \
@@ -480,7 +471,7 @@ gldi_shortkey_new (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 */
 #define CD_APPLET_SET_SURFACE_ON_MY_ICON(pSurface) do { \
 	cairo_dock_set_icon_surface (myDrawContext, pSurface, myIcon); \
-	cairo_dock_redraw_icon (myIcon, myContainer); } while (0)
+	cairo_dock_redraw_icon (myIcon); } while (0)
 
 /** Apply an image on the applet's icon. The image is resized at the same size as the icon. Does not trigger the icon refresh.
 *@param cIconName name of an icon or path to an image.
@@ -509,13 +500,13 @@ gldi_shortkey_new (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 *@param cIconName the label.
 */
 #define CD_APPLET_SET_NAME_FOR_MY_ICON(cIconName) \
-	cairo_dock_set_icon_name (cIconName, myIcon, myContainer)
+	gldi_icon_set_name (myIcon, cIconName)
 /** Set a new label on the applet's icon.
 *@param cIconNameFormat the label, in a 'printf'-like format.
 *@param ... values to be written in the string.
 */
 #define CD_APPLET_SET_NAME_FOR_MY_ICON_PRINTF(cIconNameFormat, ...) \
-	cairo_dock_set_icon_name_printf (myIcon, myContainer, cIconNameFormat, ##__VA_ARGS__)
+	gldi_icon_set_name_printf (myIcon, cIconNameFormat, ##__VA_ARGS__)
 
 
   ///////////////
@@ -525,29 +516,29 @@ gldi_shortkey_new (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 *@param cQuickInfo the quick-info. This is a small text (a few characters) that is superimposed on the icon.
 */
 #define CD_APPLET_SET_QUICK_INFO_ON_MY_ICON(cQuickInfo) \
-	cairo_dock_set_quick_info (myIcon, myContainer, cQuickInfo)
+	gldi_icon_set_quick_info (myIcon, cQuickInfo)
 /** Set a quick-info on the applet's icon.
 *@param cQuickInfoFormat the label, in a 'printf'-like format.
 *@param ... values to be written in the string.
 */
 #define CD_APPLET_SET_QUICK_INFO_ON_MY_ICON_PRINTF(cQuickInfoFormat, ...) \
-	cairo_dock_set_quick_info_printf (myIcon, myContainer, cQuickInfoFormat, ##__VA_ARGS__)
+	gldi_icon_set_quick_info_printf (myIcon, cQuickInfoFormat, ##__VA_ARGS__)
 
 /** Write the time in hours-minutes as a quick-info on the applet's icon.
 *@param iTimeInSeconds the time in seconds.
 */
 #define CD_APPLET_SET_HOURS_MINUTES_AS_QUICK_INFO(iTimeInSeconds) \
-	cairo_dock_set_hours_minutes_as_quick_info (myIcon, myContainer, iTimeInSeconds)
+	cairo_dock_set_hours_minutes_as_quick_info (myIcon, iTimeInSeconds)
 /** Write the time in minutes-secondes as a quick-info on the applet's icon.
 *@param iTimeInSeconds the time in seconds.
 */
 #define CD_APPLET_SET_MINUTES_SECONDES_AS_QUICK_INFO(iTimeInSeconds) \
-	cairo_dock_set_minutes_secondes_as_quick_info (myIcon, myContainer, iTimeInSeconds)
+	cairo_dock_set_minutes_secondes_as_quick_info (myIcon, iTimeInSeconds)
 /** Write a size in bytes as a quick-info on the applet's icon.
 *@param iSizeInBytes the size in bytes, converted into a readable format.
 */
 #define CD_APPLET_SET_SIZE_AS_QUICK_INFO(iSizeInBytes) \
-	cairo_dock_set_size_as_quick_info (myIcon, myContainer, iSizeInBytes)
+	cairo_dock_set_size_as_quick_info (myIcon, iSizeInBytes)
 
 
   ///////////////

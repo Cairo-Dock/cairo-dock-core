@@ -29,7 +29,9 @@
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-module-instance-manager.h"  // GldiModuleInstance
 #include "cairo-dock-log.h"
+#include "cairo-dock-utils.h"  // cairo_dock_cut_string
 #include "cairo-dock-applications-manager.h"  // myTaskbarParam.iAppliMaxNameLength
+#include "cairo-dock-separator-manager.h"  // GLDI_OBJECT_IS_SEPARATOR_ICON
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
 #include "cairo-dock-dock-manager.h"  // cairo_dock_synchronize_one_sub_dock_orientation
 #include "cairo-dock-backends-manager.h"  // cairo_dock_get_icon_container_renderer
@@ -39,16 +41,33 @@
 #include "cairo-dock-icon-factory.h"
 
 extern CairoDockImageBuffer g_pIconBackgroundBuffer;
-
-extern gboolean g_bUseOpenGL;
+//extern gboolean g_bUseOpenGL;
 
 const gchar *s_cRendererNames[4] = {NULL, "Emblem", "Stack", "Box"};  // c'est juste pour realiser la transition entre le chiffre en conf, et un nom (limitation du panneau de conf). On garde le numero pour savoir rapidement sur laquelle on set.
 
 
-inline Icon *cairo_dock_new_icon (void)
+Icon *gldi_icon_new (void)
 {
 	Icon *_icon = (Icon*)gldi_object_new (GLDI_MANAGER (&myIconsMgr), NULL);
 	return _icon;
+}
+
+Icon * cairo_dock_create_dummy_launcher (gchar *cName, gchar *cFileName, gchar *cCommand, gchar *cQuickInfo, double fOrder)
+{
+	//\____________ On cree l'icone.
+	Icon *pIcon = gldi_icon_new ();
+	pIcon->iGroup = CAIRO_DOCK_LAUNCHER;
+	pIcon->cName = cName;
+	pIcon->cFileName = cFileName;
+	pIcon->cQuickInfo = cQuickInfo;
+	pIcon->fOrder = fOrder;
+	pIcon->fScale = 1.;
+	pIcon->fAlpha = 1.;
+	pIcon->fWidthFactor = 1.;
+	pIcon->fHeightFactor = 1.;
+	pIcon->cCommand = cCommand;
+	
+	return pIcon;
 }
 
 
@@ -123,7 +142,7 @@ void cairo_dock_load_icon_image (Icon *icon, G_GNUC_UNUSED GldiContainer *pConta
 	
 	//\_____________ set the background if needed.
 	icon->bNeedApplyBackground = FALSE;
-	if (g_pIconBackgroundBuffer.pSurface != NULL && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
+	if (g_pIconBackgroundBuffer.pSurface != NULL && ! GLDI_OBJECT_IS_SEPARATOR_ICON (icon))
 	{
 		if (icon->image.iTexture != 0 && g_pIconBackgroundBuffer.iTexture != 0)
 		{
@@ -246,7 +265,7 @@ static gboolean _load_icon_buffer_idle (Icon *pIcon)
 		
 		cairo_dock_load_icon_quickinfo (pIcon);
 		
-		cairo_dock_redraw_icon (pIcon, pContainer);
+		cairo_dock_redraw_icon (pIcon);
 		//g_print ("icon-factory: do 1 main loop iteration\n");
 		//gtk_main_iteration_do (FALSE);  /// "unforseen consequences" : if _redraw_subdock_content_idle is planned just after, the container-icon stays blank in opengl only. couldn't figure why exactly :-/
 	}

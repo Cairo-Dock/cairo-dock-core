@@ -198,9 +198,11 @@ void cairo_dock_redraw_container_area (GldiContainer *pContainer, GdkRectangle *
 	_redraw_container_area (pContainer, pArea);
 }
 
-void cairo_dock_redraw_icon (Icon *icon, GldiContainer *pContainer)
+void cairo_dock_redraw_icon (Icon *icon)
 {
-	g_return_if_fail (icon != NULL && pContainer != NULL);
+	g_return_if_fail (icon != NULL);
+	GldiContainer *pContainer = cairo_dock_get_icon_container (icon);
+	g_return_if_fail (pContainer != NULL);
 	GdkRectangle rect;
 	cairo_dock_compute_icon_area (icon, pContainer, &rect);
 	

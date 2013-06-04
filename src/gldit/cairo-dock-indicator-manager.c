@@ -34,6 +34,9 @@
 #include "cairo-dock-applications-manager.h"  // cairo_dock_foreach_appli_icon
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-icon-manager.h"
+#include "cairo-dock-launcher-manager.h"
+#include "cairo-dock-applet-manager.h"
+#include "cairo-dock-class-icon-manager.h"
 #include "cairo-dock-data-renderer.h"
 #include "cairo-dock-applications-manager.h"  // myTaskbarParam.bShowAppli
 #include "cairo-dock-windows-manager.h"
@@ -615,7 +618,7 @@ static void reload (CairoIndicatorsParam *pPrevIndicators, CairoIndicatorsParam 
 		
 		if (pPrevIndicators->bUseClassIndic != pIndicators->bUseClassIndic)  // on recharge les icones pointant sur une classe (qui sont dans le main dock).
 		{
-			cairo_dock_foreach_icons_in_docks ((CairoDockForeachIconFunc)_reload_multi_appli, NULL);
+			gldi_icons_foreach_in_docks ((CairoDockForeachIconFunc)_reload_multi_appli, NULL);
 		}
 	}
 	
@@ -639,7 +642,7 @@ static void reload (CairoIndicatorsParam *pPrevIndicators, CairoIndicatorsParam 
 	|| pPrevIndicators->fBarColorOutline[2] != pIndicators->fBarColorOutline[2]
 	|| pPrevIndicators->fBarColorOutline[3] != pIndicators->fBarColorOutline[3])
 	{
-		cairo_dock_foreach_icons ((CairoDockForeachIconFunc) _reload_progress_bar, NULL);
+		gldi_icons_foreach ((CairoDockForeachIconFunc) _reload_progress_bar, NULL);
 	}
 	
 	cairo_dock_redraw_root_docks (FALSE);  // tous les docks (main dock et les autres qui peuvent contenir des applets avec un indicateur).

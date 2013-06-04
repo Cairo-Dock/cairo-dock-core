@@ -191,7 +191,7 @@ void gldi_docks_foreach_root (GFunc pFunction, gpointer pUserData);
 *@param pFunction the action.
 *@param pUserData data passed to the callback.
 */
-void cairo_dock_foreach_icons_in_docks (CairoDockForeachIconFunc pFunction, gpointer pUserData);
+void gldi_icons_foreach_in_docks (CairoDockForeachIconFunc pFunction, gpointer pUserData);
 
 
 /** Recursively hides all the parent docks of a sub-dock.

@@ -36,8 +36,11 @@
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-applications-manager.h"
+#include "cairo-dock-stack-icon-manager.h"
+#include "cairo-dock-separator-manager.h"
+#include "cairo-dock-applet-manager.h"
+#include "cairo-dock-class-icon-manager.h"
 #include "cairo-dock-application-facility.h"
-#include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-module-manager.h"
 #include "cairo-dock-module-instance-manager.h"
@@ -47,6 +50,7 @@
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
 #include "cairo-dock-log.h"
+#include "cairo-dock-utils.h"  // cairo_dock_launch_command_sync
 #include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-class-manager.h"
@@ -112,7 +116,7 @@ static void _on_answer_delete_dock (int iClickedButton, G_GNUC_UNUSED GtkWidget 
 	{
 		cairo_dock_remove_icons_from_dock (pDock, NULL);
 		
-		gldi_object_unref (GLDI_OBJECT(pDock));
+		gldi_object_delete (GLDI_OBJECT(pDock));
 	}
 }
 static void _cairo_dock_delete_dock (G_GNUC_UNUSED GtkMenuItem *pMenuItem, CairoDock *pDock)
@@ -504,9 +508,9 @@ GtkWidget *_add_item_sub_menu (Icon *icon, GtkWidget *pMenu)
 	return pItemSubMenu;
 }
 
-static void _cairo_dock_create_launcher (Icon *icon, CairoDock *pDock, CairoDockDesktopFileType iLauncherType)
+
+static double _get_next_order (Icon *icon, CairoDock *pDock)
 {
-	//\___________________ On determine l'ordre d'insertion suivant l'endroit du clique.
 	double fOrder;
 	if (icon != NULL)
 	{
@@ -523,32 +527,29 @@ static void _cairo_dock_create_launcher (Icon *icon, CairoDock *pDock, CairoDock
 	}
 	else
 		fOrder = CAIRO_DOCK_LAST_ORDER;
-	
-	//\___________________ On cree et on charge l'icone a partir d'un des templates.
-	Icon *pNewIcon = cairo_dock_add_new_launcher_by_type (iLauncherType, pDock, fOrder);
-	if (pNewIcon == NULL)
-	{
-		cd_warning ("Couldn't create create the icon.\nCheck that you have writing permissions on ~/.config/cairo-dock and its sub-folders");
-		return ;
-	}
-	
-	//\___________________ On ouvre automatiquement l'IHM pour permettre de modifier ses champs.
-	if (iLauncherType != CAIRO_DOCK_DESKTOP_FILE_FOR_SEPARATOR)  // inutile pour un separateur.
-		cairo_dock_show_items_gui (pNewIcon, NULL, NULL, -1);
+	return fOrder;
 }
 
 static void cairo_dock_add_launcher (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpointer *data)
 {
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
-	_cairo_dock_create_launcher (icon, pDock, CAIRO_DOCK_DESKTOP_FILE_FOR_LAUNCHER);
+	double fOrder = _get_next_order (icon, pDock);
+	Icon *pNewIcon = gldi_separator_icon_add_new (pDock, fOrder);
+	if (pNewIcon == NULL)
+		cd_warning ("Couldn't create create the icon.\nCheck that you have writing permissions on ~/.config/cairo-dock and its sub-folders");
+	else
+		cairo_dock_show_items_gui (pNewIcon, NULL, NULL, -1);  // open the config so that the user can complete its fields
 }
 
 static void cairo_dock_add_sub_dock (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpointer *data)
 {
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
-	_cairo_dock_create_launcher (icon, pDock, CAIRO_DOCK_DESKTOP_FILE_FOR_CONTAINER);
+	double fOrder = _get_next_order (icon, pDock);
+	Icon *pNewIcon = gldi_stack_icon_add_new (pDock, fOrder);
+	if (pNewIcon == NULL)
+		cd_warning ("Couldn't create create the icon.\nCheck that you have writing permissions on ~/.config/cairo-dock and its sub-folders");
 }
 
 static gboolean _show_new_dock_msg (gchar *cDockName)
@@ -562,10 +563,9 @@ static gboolean _show_new_dock_msg (gchar *cDockName)
 static void cairo_dock_add_main_dock (G_GNUC_UNUSED GtkMenuItem *pMenuItem, G_GNUC_UNUSED gpointer *data)
 {
 	gchar *cDockName = gldi_dock_add_conf_file ();
-	/**CairoDock *pDock = */gldi_dock_new (cDockName);
-	///gldi_dock_reload (pDock);
+	gldi_dock_new (cDockName);
 	
-	cairo_dock_gui_trigger_reload_items ();  // pas de signal "new_dock"
+	cairo_dock_gui_trigger_reload_items ();  // we could also connect to the signal "new-object" on docks...
 	
 	g_timeout_add_seconds (1, (GSourceFunc)_show_new_dock_msg, cDockName);  // delai, car sa fenetre n'est pas encore bien placee (0,0).
 }
@@ -574,7 +574,10 @@ static void cairo_dock_add_separator (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpoi
 {
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
-	_cairo_dock_create_launcher (icon, pDock, CAIRO_DOCK_DESKTOP_FILE_FOR_SEPARATOR);
+	double fOrder = _get_next_order (icon, pDock);
+	Icon *pNewIcon = gldi_separator_icon_add_new (pDock, fOrder);
+	if (pNewIcon == NULL)
+		cd_warning ("Couldn't create create the icon.\nCheck that you have writing permissions on ~/.config/cairo-dock and its sub-folders");
 }
 
 static void cairo_dock_add_applet (G_GNUC_UNUSED GtkMenuItem *pMenuItem, G_GNUC_UNUSED gpointer *data)
@@ -683,7 +686,7 @@ static void _cairo_dock_move_launcher_to_dock (GtkMenuItem *pMenuItem, const gch
 	}
 	
 	//\_________________________ on met a jour le fichier de conf de l'icone.
-	cairo_dock_write_container_name_in_conf_file (pIcon, cValidDockName);
+	gldi_theme_icon_write_container_name_in_conf_file (pIcon, cValidDockName);
 	
 	//\_________________________ on recharge l'icone, ce qui va creer le dock.
 	if ((CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)
@@ -781,7 +784,7 @@ static void _cairo_dock_make_launcher_from_appli (G_GNUC_UNUSED GtkMenuItem *pMe
 			else
 				fOrder = pIcon->fOrder + 1;
 		}
-		cairo_dock_add_new_launcher_by_uri (cDesktopFilePath, g_pMainDock, fOrder);  // on l'ajoute dans le main dock.
+		gldi_launcher_add_new (cDesktopFilePath, g_pMainDock, fOrder);  // add in the main dock
 	}
 	else
 	{
@@ -821,7 +824,7 @@ static void _on_answer_remove_module_instance (int iClickedButton, G_GNUC_UNUSED
 {
 	if (iClickedButton == 0 || iClickedButton == -1)  // ok button or Enter.
 	{
-		gldi_module_delete_instance (icon->pModuleInstance);
+		gldi_object_delete (GLDI_OBJECT(icon->pModuleInstance));
 	}
 }
 static void _cairo_dock_remove_module_instance (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpointer *data)
@@ -997,7 +1000,7 @@ static void _cairo_dock_remove_custom_appli_icon (G_GNUC_UNUSED GtkMenuItem *pMe
 	{
 		g_remove (cCustomIcon);
 		cairo_dock_reload_icon_image (icon, CAIRO_CONTAINER (pDock));
-		cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pDock));
+		cairo_dock_redraw_icon (icon);
 	}
 }
 

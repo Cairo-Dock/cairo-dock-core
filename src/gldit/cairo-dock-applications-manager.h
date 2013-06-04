@@ -30,6 +30,7 @@ G_BEGIN_DECLS
 
 typedef struct _CairoTaskbarParam CairoTaskbarParam;
 typedef struct _CairoTaskbarManager CairoTaskbarManager;
+typedef struct _Icon AppliIcon;
 
 #ifndef _MANAGER_DEF_
 extern CairoTaskbarParam myTaskbarParam;
@@ -78,8 +79,15 @@ struct _CairoTaskbarManager {
 
 // signals
 typedef enum {
-	NB_NOTIFICATIONS_TASKBAR = NB_NOTIFICATIONS_OBJECT,
+	NB_NOTIFICATIONS_TASKBAR = NB_NOTIFICATIONS_ICON,
 	} CairoTaskbarNotifications;
+
+
+/** Say if an object is an AppliIcon.
+*@param obj the object.
+*@return TRUE if the object is a AppliIcon.
+*/
+#define GLDI_OBJECT_IS_APPLI_ICON(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), GLDI_MANAGER(&myTaskbarMgr))
 
 
 /** Start the applications manager. It will load all the appli-icons, and keep monitoring them. If enabled, it will insert them into the dock.

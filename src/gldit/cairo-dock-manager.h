@@ -67,6 +67,7 @@ struct _GldiManager {
 	
 	void (*init_object) (GldiObject *pObject, gpointer attr);
 	void (*reset_object) (GldiObject *pObject);
+	gboolean (*delete_object) (GldiObject *pObject);
 	gint iObjectSize;
 	
 	//\_____________ Instance.

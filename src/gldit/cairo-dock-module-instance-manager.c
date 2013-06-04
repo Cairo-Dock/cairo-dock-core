@@ -24,6 +24,9 @@
 #include "cairo-dock-keyfile-utilities.h"  // cairo_dock_conf_file_needs_update
 #include "cairo-dock-log.h"
 #include "cairo-dock-applet-manager.h"
+#include "cairo-dock-launcher-manager.h"
+#include "cairo-dock-stack-icon-manager.h"
+#include "cairo-dock-separator-manager.h"
 #include "cairo-dock-dialog-factory.h"  // gldi_dialog_new
 #include "cairo-dock-config.h"  // cairo_dock_get_string_key_value
 #include "cairo-dock-icon-facility.h"  // cairo_dock_set_icon_container
@@ -126,7 +129,7 @@ GKeyFile *gldi_module_instance_open_conf_file (GldiModuleInstance *pInstance, Ca
 				for (ic = g_pMainDock->icons; ic != NULL; ic = ic->next)
 				{
 					icon = ic->data;
-					if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon) || CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon) || CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))
+					if (GLDI_OBJECT_IS_LAUNCHER_ICON (icon) || GLDI_OBJECT_IS_STACK_ICON (icon) || GLDI_OBJECT_IS_APPLET_ICON (icon))
 					{
 						icon1 = icon;
 						next_ic = ic->next;
@@ -569,7 +572,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	if (pInstance->pModule->pVisitCard->iContainerType != CAIRO_DOCK_MODULE_IS_PLUGIN)  // le module a une icone (c'est une applet).
 	{
 		// create the icon.
-		pIcon = cairo_dock_create_icon_for_applet (pMinimalConfig,
+		pIcon = gldi_applet_icon_new (pMinimalConfig,
 			pInstance);
 		
 		// create/find its container and insert the icon inside.
@@ -685,13 +688,33 @@ static void reset_object (GldiObject *obj)
 	}
 }
 
+static gboolean delete_object (GldiObject *obj)
+{
+	GldiModuleInstance *pInstance = (GldiModuleInstance*)obj;
+	cd_message ("%s (%s)", __func__, pInstance->cConfFilePath);
+	g_return_val_if_fail (pInstance->pModule->pInstancesList != NULL, FALSE);
+	
+	//\_________________ remove this instance from the current theme
+	if (pInstance->pModule->pInstancesList->next != NULL)  // not the last one
+	{
+		cd_debug ("We remove %s", pInstance->cConfFilePath);
+		cairo_dock_delete_conf_file (pInstance->cConfFilePath);
+		
+		// We also remove the cConfFilePath (=> this conf file no longer exist during the 'stop' callback)
+		g_free (pInstance->cConfFilePath);
+		pInstance->cConfFilePath = NULL;
+	}
+	return TRUE;
+}
+
 void gldi_register_module_instances_manager (void)
 {
 	memset (&myModuleInstancesMgr, 0, sizeof (GldiModuleInstancesManager));
-	myModuleInstancesMgr.mgr.cModuleName  = "ModuleInstances";
-	myModuleInstancesMgr.mgr.init_object  = init_object;
-	myModuleInstancesMgr.mgr.reset_object = reset_object;
-	myModuleInstancesMgr.mgr.iObjectSize  = sizeof (GldiModuleInstance);
+	myModuleInstancesMgr.mgr.cModuleName   = "ModuleInstances";
+	myModuleInstancesMgr.mgr.init_object   = init_object;
+	myModuleInstancesMgr.mgr.reset_object  = reset_object;
+	myModuleInstancesMgr.mgr.delete_object = delete_object;
+	myModuleInstancesMgr.mgr.iObjectSize   = sizeof (GldiModuleInstance);
 	// Config
 	myModuleInstancesMgr.mgr.pConfig = NULL;
 	myModuleInstancesMgr.mgr.iSizeOfConfig = 0;

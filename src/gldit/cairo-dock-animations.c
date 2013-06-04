@@ -406,7 +406,7 @@ static gboolean _cairo_dock_transition_step (G_GNUC_UNUSED gpointer pUserData, I
 				return GLDI_NOTIFICATION_LET_PASS;
 			bContinue = pTransition->render_opengl (pIcon, pTransition->pUserData);
 			cairo_dock_end_draw_icon (pIcon, pContainer);
-			cairo_dock_redraw_icon (pIcon, pContainer);
+			cairo_dock_redraw_icon (pIcon);
 		}
 		else if (pTransition->render != NULL)
 		{

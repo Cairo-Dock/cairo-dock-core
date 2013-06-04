@@ -115,19 +115,12 @@ typedef enum {
 	} CairoIconNotifications;
 
 
-/** Terminate an Icon and free all its allocated ressources, except its sub-dock.
-*@param icon the icon to destroy.
-*/
-void cairo_dock_free_icon (Icon *icon);
-
-void cairo_dock_delete_icon_from_current_theme (Icon *icon);
-
 
 /** Execute an action on all icons.
 *@param pFunction the action.
 *@param pUserData data passed to the callback.
 */
-void cairo_dock_foreach_icons (CairoDockForeachIconFunc pFunction, gpointer pUserData);
+void gldi_icons_foreach (CairoDockForeachIconFunc pFunction, gpointer pUserData);
 
 
 void cairo_dock_hide_show_launchers_on_other_desktops (void);

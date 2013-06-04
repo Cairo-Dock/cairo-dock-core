@@ -25,12 +25,12 @@
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-config.h"
+#include "cairo-dock-utils.h"  // cairo_dock_launch_command
 #include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-packages.h"
 #include "cairo-dock-keyfile-utilities.h"
-#include "cairo-dock-applet-factory.h"
 #include "cairo-dock-module-instance-manager.h"  // GldiModuleInstance
 #include "cairo-dock-module-manager.h"  // GldiModuleInstance
 #include "cairo-dock-log.h"
@@ -104,8 +104,10 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 }
 
 
+/// TODO: don't use 'cairo_dock_set_icon_surface' here...
 gboolean cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cIconName, Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer)
 {
+	g_print ("%s (%s)\n", __func__, cIconName);
 	// load the image in a surface.
 	int iWidth, iHeight;
 	cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
@@ -137,25 +139,25 @@ void cairo_dock_set_image_on_icon_with_default (cairo_t *pIconContext, const gch
 }
 
 
-void cairo_dock_set_hours_minutes_as_quick_info (Icon *pIcon, GldiContainer *pContainer, int iTimeInSeconds)
+void cairo_dock_set_hours_minutes_as_quick_info (Icon *pIcon, int iTimeInSeconds)
 {
 	int hours = iTimeInSeconds / 3600;
 	int minutes = (iTimeInSeconds % 3600) / 60;
 	if (hours != 0)
-		cairo_dock_set_quick_info_printf (pIcon, pContainer, "%dh%02d", hours, abs (minutes));
+		gldi_icon_set_quick_info_printf (pIcon, "%dh%02d", hours, abs (minutes));
 	else
-		cairo_dock_set_quick_info_printf (pIcon, pContainer, "%dmn", minutes);
+		gldi_icon_set_quick_info_printf (pIcon, "%dmn", minutes);
 }
 
-void cairo_dock_set_minutes_secondes_as_quick_info (Icon *pIcon, GldiContainer *pContainer, int iTimeInSeconds)
+void cairo_dock_set_minutes_secondes_as_quick_info (Icon *pIcon, int iTimeInSeconds)
 {
 	int minutes = iTimeInSeconds / 60;
 	int secondes = iTimeInSeconds % 60;
 	//cd_debug ("%s (%d:%d)", __func__, minutes, secondes);
 	if (minutes != 0)
-		cairo_dock_set_quick_info_printf (pIcon, pContainer, "%d:%02d", minutes, abs (secondes));
+		gldi_icon_set_quick_info_printf (pIcon, "%d:%02d", minutes, abs (secondes));
 	else
-		cairo_dock_set_quick_info_printf (pIcon, pContainer, "%s0:%02d", (secondes < 0 ? "-" : ""), abs (secondes));
+		gldi_icon_set_quick_info_printf (pIcon, "%s0:%02d", (secondes < 0 ? "-" : ""), abs (secondes));
 }
 
 gchar *cairo_dock_get_human_readable_size (long long int iSizeInBytes)
@@ -187,10 +189,10 @@ gchar *cairo_dock_get_human_readable_size (long long int iSizeInBytes)
 	}
 }
 
-void cairo_dock_set_size_as_quick_info (Icon *pIcon, GldiContainer *pContainer, long long int iSizeInBytes)
+void cairo_dock_set_size_as_quick_info (Icon *pIcon, long long int iSizeInBytes)
 {
 	gchar *cSize = cairo_dock_get_human_readable_size (iSizeInBytes);
-	cairo_dock_set_quick_info (pIcon, pContainer, cSize);
+	gldi_icon_set_quick_info (pIcon, cSize);
 	g_free (cSize);
 }
 
@@ -349,9 +351,9 @@ void cairo_dock_insert_icons_in_applet (GldiModuleInstance *pInstance, GList *pI
 		if (pIcon->pSubDock == NULL)
 		{
 			if (pIcon->cName == NULL)
-				cairo_dock_set_icon_name (pInstance->pModule->pVisitCard->cModuleName, pIcon, pContainer);
+				gldi_icon_set_name (pIcon, pInstance->pModule->pVisitCard->cModuleName);
 			if (cairo_dock_check_unique_subdock_name (pIcon))
-				cairo_dock_set_icon_name (pIcon->cName, pIcon, pContainer);
+				gldi_icon_set_name (pIcon, pIcon->cName);
 			pIcon->pSubDock = gldi_subdock_new (pIcon->cName, cDockRenderer, pInstance->pDock, pIconsList);
 			if (pIcon->pSubDock)
 				pIcon->pSubDock->bPreventDraggingIcons = TRUE;  // par defaut pour toutes les applets on empeche de pouvoir deplacer/supprimer les icones a la souris.
@@ -413,9 +415,9 @@ void cairo_dock_insert_icon_in_applet (GldiModuleInstance *pInstance, Icon *pOne
 		if (pIcon->pSubDock == NULL)
 		{
 			if (pIcon->cName == NULL)
-				cairo_dock_set_icon_name (pInstance->pModule->pVisitCard->cModuleName, pIcon, pContainer);
+				gldi_icon_set_name (pIcon, pInstance->pModule->pVisitCard->cModuleName);
 			if (cairo_dock_check_unique_subdock_name (pIcon))
-				cairo_dock_set_icon_name (pIcon->cName, pIcon, pContainer);
+				gldi_icon_set_name (pIcon, pIcon->cName);
 			pIcon->pSubDock = gldi_subdock_new (pIcon->cName, NULL, pInstance->pDock, NULL);
 			if (pIcon->pSubDock)
 				pIcon->pSubDock->bPreventDraggingIcons = TRUE;  // par defaut pour toutes les applets on empeche de pouvoir deplacer/supprimer les icones a la souris.
@@ -478,7 +480,7 @@ gboolean cairo_dock_detach_icon_from_applet (GldiModuleInstance *pInstance, Icon
 gboolean cairo_dock_remove_icon_from_applet (GldiModuleInstance *pInstance, Icon *pOneIcon)
 {
 	gboolean r = cairo_dock_detach_icon_from_applet (pInstance, pOneIcon);
-	cairo_dock_free_icon (pOneIcon);
+	gldi_object_unref (GLDI_OBJECT (pOneIcon));
 	return r;
 }
 
@@ -494,7 +496,7 @@ void cairo_dock_remove_all_icons_from_applet (GldiModuleInstance *pInstance)
 	if (pInstance->pDesklet && pInstance->pDesklet->icons != NULL)
 	{
 		cd_debug (" destroy desklet icons");
-		g_list_foreach (pInstance->pDesklet->icons, (GFunc) cairo_dock_free_icon, NULL);
+		g_list_foreach (pInstance->pDesklet->icons, (GFunc) gldi_object_unref, NULL);
 		g_list_free (pInstance->pDesklet->icons);
 		pInstance->pDesklet->icons = NULL;
 		cairo_dock_redraw_container (pInstance->pContainer);
@@ -504,7 +506,7 @@ void cairo_dock_remove_all_icons_from_applet (GldiModuleInstance *pInstance)
 		if (pInstance->pDock)  // optimisation : on ne detruit pas le sous-dock.
 		{
 			cd_debug (" destroy sub-dock icons");
-			g_list_foreach (pIcon->pSubDock->icons, (GFunc) cairo_dock_free_icon, NULL);
+			g_list_foreach (pIcon->pSubDock->icons, (GFunc) gldi_object_unref, NULL);
 			g_list_free (pIcon->pSubDock->icons);
 			pIcon->pSubDock->icons = NULL;
 		}
@@ -538,3 +540,4 @@ void cairo_dock_resize_applet (GldiModuleInstance *pInstance, int w, int h)
 			h);  /// TODO: actually, the renderer should handle this, because except with the 'Simple' view, we can't know the actual size of the icon.
 	}
 }
+

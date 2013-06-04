@@ -35,12 +35,13 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-draw.h"
+#include "cairo-dock-stack-icon-manager.h"
+#include "cairo-dock-separator-manager.h"
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-launcher-manager.h"
-#include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-commons.h"
@@ -574,7 +575,7 @@ static void on_row_deleted (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path
 							const gchar *cNewParentDockName = gldi_dock_get_name (CAIRO_DOCK (pParentContainer));
 							if (cNewParentDockName != NULL)
 							{
-								cairo_dock_write_container_name_in_conf_file (pIcon, cNewParentDockName);
+								gldi_theme_icon_write_container_name_in_conf_file (pIcon, cNewParentDockName);
 							}
 							
 							if ((CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)
@@ -685,7 +686,7 @@ static void _on_select_remove_item (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GtkWid
 	}
 	else if (pInstance != NULL)  // plug-in
 	{
-		gldi_module_delete_instance (pInstance);
+		gldi_object_delete (GLDI_OBJECT(pInstance));
 	}
 	else if (CAIRO_DOCK_IS_DOCK (pContainer))  // main-dock
 	{

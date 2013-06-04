@@ -47,7 +47,8 @@ static char DES_crypt_key[64] =
 #include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file
 #include "cairo-dock-dock-factory.h"  // gldi_dock_new
 #include "cairo-dock-file-manager.h"  // cairo_dock_get_file_size
-#include "cairo-dock-launcher-manager.h"  // cairo_dock_load_launchers_from_dir
+#include "cairo-dock-user-icon-manager.h"  // gldi_user_icons_new_from_directory
+#include "cairo-dock-utils.h"  // cairo_dock_launch_command_sync
 #include "cairo-dock-core.h"  // gldi_free_all
 #include "cairo-dock-config.h"
 
@@ -457,8 +458,8 @@ void cairo_dock_load_current_theme (void)
 	gldi_load_managers ();
 	gldi_modules_activate_from_list (NULL);  // load auto-loaded modules before loading anything (views, etc)
 	
-	//\___________________ Now load the launchers.
-	cairo_dock_load_launchers_from_dir (g_cCurrentLaunchersPath);
+	//\___________________ Now load the user icons (launchers, etc).
+	gldi_user_icons_new_from_directory (g_cCurrentLaunchersPath);
 	
 	cairo_dock_hide_show_launchers_on_other_desktops ();
 	

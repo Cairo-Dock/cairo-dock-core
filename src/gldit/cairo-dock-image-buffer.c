@@ -538,7 +538,8 @@ gboolean cairo_dock_begin_draw_image_buffer_opengl (CairoDockImageBuffer *pImage
 	else if (s_iFboId != 0)
 	{
 		// on attache la texture au FBO.
-		if (pContainer->iWidth == 1 && pContainer->iHeight == 1)  // container not yet fully resized
+		///if (pContainer->iWidth == 1 && pContainer->iHeight == 1)  // container not yet fully resized
+		if (pContainer->iWidth < pImage->iWidth || pContainer->iHeight < pImage->iHeight)
 		{
 			return FALSE;
 		}

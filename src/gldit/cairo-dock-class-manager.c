@@ -29,6 +29,11 @@
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
+#include "cairo-dock-applet-manager.h"
+#include "cairo-dock-launcher-manager.h"
+#include "cairo-dock-stack-icon-manager.h"
+#include "cairo-dock-separator-manager.h"
+#include "cairo-dock-class-icon-manager.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-module-manager.h"  // GldiModule
 #include "cairo-dock-module-instance-manager.h"  // GldiModuleInstance
@@ -263,7 +268,7 @@ static void _cairo_dock_set_same_indicator_on_sub_dock (Icon *pInhibhatorIcon)
 			cd_message ("  pour le sous-dock %s : indicateur <- %d", pPointingIcon->cName, bSubDockHasIndicator);
 			pPointingIcon->bHasIndicator = bSubDockHasIndicator;
 			if (pParentDock != NULL)
-				cairo_dock_redraw_icon (pPointingIcon, CAIRO_CONTAINER (pParentDock));
+				cairo_dock_redraw_icon (pPointingIcon);
 		}
 	}
 }
@@ -302,18 +307,13 @@ static GldiWindowActor *_cairo_dock_detach_appli_of_class (const gchar *cClass)
 						Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pParentDock, &pMainDock);
 						if (pMainDock && CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pPointingIcon))
 						{
-							cairo_dock_remove_icon_from_dock (pMainDock, pPointingIcon);
-							///bNeedsRedraw |= pMainDock->bIsMainDock;
-							cairo_dock_free_icon (pPointingIcon);
+							cairo_dock_detach_icon_from_dock (pPointingIcon, pMainDock);
+							gldi_object_delete (GLDI_OBJECT(pPointingIcon));
 						}
 					}
 					cairo_dock_destroy_class_subdock (cClass);
 				}
-				///else  // non vide => on le met a jour.
-				///	cairo_dock_update_dock_size (pParentDock);
 			}
-			///else  // main dock => on le met a jour a la fin.
-			///	bNeedsRedraw = TRUE;
 		}
 		g_free (cParentDockName);
 		
@@ -322,12 +322,6 @@ static GldiWindowActor *_cairo_dock_detach_appli_of_class (const gchar *cClass)
 			pFirstFoundActor = pIcon->pAppli;
 		}
 	}
-	/**if (! cairo_dock_is_loading () && bNeedsRedraw)  // mise a jour du main dock en 1 coup.
-	{
-		cairo_dock_update_dock_size (g_pMainDock);
-		cairo_dock_calculate_dock_icons (g_pMainDock);
-		gtk_widget_queue_draw (g_pMainDock->container.pWidget);
-	}*/
 	return pFirstFoundActor;
 }
 gboolean cairo_dock_inhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
@@ -435,7 +429,7 @@ gboolean cairo_dock_prevent_inhibited_class (Icon *pIcon)
 						else
 							g_free (pInhibitorIcon->cName);
 						pInhibitorIcon->cName = NULL;
-						cairo_dock_set_icon_name (pIcon->cName, pInhibitorIcon, CAIRO_CONTAINER (pInhibatorDock));
+						gldi_icon_set_name (pInhibitorIcon, pIcon->cName);
 					}
 				}
 				bToBeInhibited = (pInhibitorIcon->pAppli == pIcon->pAppli);
@@ -577,7 +571,7 @@ void cairo_dock_detach_Xid_from_inhibitors (GldiWindowActor *pAppli, const gchar
 				_cairo_dock_set_same_indicator_on_sub_dock (pIcon);
 				if (! pIcon->bHasIndicator)
 				{
-					cairo_dock_set_icon_name (pIcon->cInitialName, pIcon, NULL);
+					gldi_icon_set_name (pIcon, pIcon->cInitialName);
 				}
 				cd_message (" %s : bHasIndicator <- %d, pAppli <- %p", pIcon->cName, pIcon->bHasIndicator, pIcon->pAppli);
 				CairoDock *pParentDock = gldi_dock_get (pIcon->cParentDockName);
@@ -719,9 +713,8 @@ void cairo_dock_update_visibility_on_inhibitors (const gchar *cClass, GldiWindow
 				cd_debug (" %s aussi se %s", pInhibitorIcon->cName, (bIsHidden ? "cache" : "montre"));
 				if (! CAIRO_DOCK_ICON_TYPE_IS_APPLET (pInhibitorIcon) && myTaskbarParam.fVisibleAppliAlpha != 0)
 				{
-					CairoDock *pInhibatorDock = gldi_dock_get (pInhibitorIcon->cParentDockName);
 					pInhibitorIcon->fAlpha = 1;  // on triche un peu.
-					cairo_dock_redraw_icon (pInhibitorIcon, CAIRO_CONTAINER (pInhibatorDock));
+					cairo_dock_redraw_icon (pInhibitorIcon);
 				}
 			}
 		}
@@ -768,7 +761,7 @@ void cairo_dock_update_inactivity_on_inhibitors (const gchar *cClass, GldiWindow
 				///pInhibitorIcon->bIsActive = FALSE;
 				CairoDock *pParentDock = gldi_dock_get (pInhibitorIcon->cParentDockName);
 				if (pParentDock != NULL && ! pParentDock->bIsShrinkingDown)
-					cairo_dock_redraw_icon (pInhibitorIcon, CAIRO_CONTAINER (pParentDock));
+					cairo_dock_redraw_icon (pInhibitorIcon);
 			}
 		}
 	}
@@ -802,10 +795,10 @@ void cairo_dock_update_name_on_inhibitors (const gchar *cClass, GldiWindowActor 
 							g_free (pInhibitorIcon->cName);
 						pInhibitorIcon->cName = NULL;
 						
-						cairo_dock_set_icon_name ((cNewName != NULL ? cNewName : pInhibitorIcon->cInitialName), pInhibitorIcon, CAIRO_CONTAINER (pParentDock));
+						gldi_icon_set_name (pInhibitorIcon, (cNewName != NULL ? cNewName : pInhibitorIcon->cInitialName));
 					}
 					if (! pParentDock->bIsShrinkingDown)
-						cairo_dock_redraw_icon (pInhibitorIcon, CAIRO_CONTAINER (pParentDock));
+						cairo_dock_redraw_icon (pInhibitorIcon);
 				}
 			}
 		}
@@ -860,8 +853,8 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 		pFakeClassIcon->pSubDock = NULL;
 		if (CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pFakeClassIcon))
 		{
-			cairo_dock_remove_icon_from_dock (pFakeParentDock, pFakeClassIcon);
-			cairo_dock_free_icon (pFakeClassIcon);
+			cairo_dock_detach_icon_from_dock (pFakeClassIcon, pFakeParentDock);
+			gldi_object_delete (GLDI_OBJECT(pFakeClassIcon));
 			cairo_dock_update_dock_size (pFakeParentDock);
 			cairo_dock_calculate_dock_icons (pFakeParentDock);
 		}
@@ -889,26 +882,18 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			pFakeClassIcon->pSubDock = NULL;
 			
 			cd_debug ("on enleve l'icone de paille");
-			cairo_dock_remove_icon_from_dock (pFakeParentDock, pFakeClassIcon);
-			
-			cd_debug ("on detruit l'icone de paille");
-			cairo_dock_free_icon (pFakeClassIcon);
+			cairo_dock_detach_icon_from_dock (pFakeClassIcon, pFakeParentDock);
+			gldi_object_delete (GLDI_OBJECT(pFakeClassIcon));
 			
 			cd_debug (" puis on re-insere l'appli restante");
 			if (! bLastIconIsRemoving)
 			{
 				cairo_dock_insert_icon_in_dock (pLastClassIcon, pFakeParentDock, ! CAIRO_DOCK_ANIMATE_ICON);
-				///cairo_dock_calculate_dock_icons (pFakeParentDock);
-				///cairo_dock_redraw_icon (pLastClassIcon, CAIRO_CONTAINER (pFakeParentDock));  // on suppose que les tailles des 2 icones sont identiques.
-				///cairo_dock_redraw_container (CAIRO_CONTAINER (pFakeParentDock));
 			}
 			else  // la derniere icone est en cours de suppression, inutile de la re-inserer. (c'est souvent lorsqu'on ferme toutes une classe d'un coup. donc les animations sont pratiquement dans le meme etat, donc la derniere icone en est aussi a la fin, donc on ne verrait de toute facon aucune animation.
 			{
 				cd_debug ("inutile de re-inserer l'icone restante");
-				cairo_dock_free_icon (pLastClassIcon);
-				///cairo_dock_update_dock_size (pFakeParentDock);
-				///cairo_dock_calculate_dock_icons (pFakeParentDock);
-				///cairo_dock_redraw_container (CAIRO_CONTAINER (pFakeParentDock));
+				gldi_object_unref (GLDI_OBJECT (pLastClassIcon));
 			}
 		}
 		else  // le sous-dock est pointe par un inhibiteur (normal launcher ou applet).
@@ -928,9 +913,9 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			else  // la derniere icone est en cours de suppression, inutile de la re-inserer
 			{
 				pFakeClassIcon->bHasIndicator = FALSE;
-				cairo_dock_free_icon (pLastClassIcon);
+				gldi_object_unref (GLDI_OBJECT (pLastClassIcon));
 			}
-			cairo_dock_redraw_icon (pFakeClassIcon, CAIRO_CONTAINER (g_pMainDock));
+			cairo_dock_redraw_icon (pFakeClassIcon);
 		}
 		cd_debug ("no more dock");
 		return TRUE;

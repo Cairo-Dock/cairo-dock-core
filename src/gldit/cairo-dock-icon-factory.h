@@ -212,12 +212,18 @@ struct _CairoIconContainerRenderer {
 */
 #define CAIRO_DOCK_IS_ICON(obj) gldi_object_is_manager_child (obj, GLDI_MANAGER(&myIconsMgr))
 
-#define CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_LAUNCHER)
+#define CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER GLDI_OBJECT_IS_LAUNCHER_ICON
+#define CAIRO_DOCK_ICON_TYPE_IS_CONTAINER GLDI_OBJECT_IS_STACK_ICON
+#define CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR GLDI_OBJECT_IS_SEPARATOR_ICON
+#define CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER GLDI_OBJECT_IS_CLASS_ICON
+#define CAIRO_DOCK_ICON_TYPE_IS_APPLI GLDI_OBJECT_IS_APPLI_ICON
+#define CAIRO_DOCK_ICON_TYPE_IS_APPLET GLDI_OBJECT_IS_APPLET_ICON
+/*#define CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_LAUNCHER)
 #define CAIRO_DOCK_ICON_TYPE_IS_CONTAINER(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_CONTAINER)
 #define CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_SEPARATOR)
 #define CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_CLASS_CONTAINER)
 #define CAIRO_DOCK_ICON_TYPE_IS_APPLI(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_APPLI)
-#define CAIRO_DOCK_ICON_TYPE_IS_APPLET(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_APPLET)
+#define CAIRO_DOCK_ICON_TYPE_IS_APPLET(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_APPLET)*/
 
 /** TRUE if the icon holds a window.
 *@param icon an icon.
@@ -262,7 +268,18 @@ struct _CairoIconContainerRenderer {
 /** Create an empty icon.
 *@return the newly allocated icon object.
 */
-Icon *cairo_dock_new_icon (void);
+Icon *gldi_icon_new (void);
+
+
+/** Create an Icon that will behave like a launcher. It's especially useful for applets that want to fill a sub-dock or a desklet (the icon is not loaded by the function). Be careful that the strings are not duplicated. Therefore, you must use g_strdup() if you want to set a constant string; and must not free the strings after calling this function.
+* @param cName label of the icon
+* @param cFileName name of an image
+* @param cCommand a command, or NULL
+* @param cQuickInfo a quick-info, or NULL
+* @param fOrder order of the icon in its container.
+* @return the newly created icon.
+*/
+Icon * cairo_dock_create_dummy_launcher (gchar *cName, gchar *cFileName, gchar *cCommand, gchar *cQuickInfo, double fOrder);
 
 
 /* Cree la surface de reflection d'une icone (pour cairo).

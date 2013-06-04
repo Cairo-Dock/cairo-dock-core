@@ -21,12 +21,18 @@
 
 #include "gldi-config.h"
 #include "cairo-dock-icon-manager.h"
+#include "cairo-dock-user-icon-manager.h"
+#include "cairo-dock-launcher-manager.h"
+#include "cairo-dock-separator-manager.h"
+#include "cairo-dock-stack-icon-manager.h"
+#include "cairo-dock-class-icon-manager.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-flying-container.h"
 #include "cairo-dock-applications-manager.h"
+#include "cairo-dock-applet-manager.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-windows-manager.h"
@@ -55,12 +61,18 @@ int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;  // version de la lib.
 static void _gldi_register_core_managers (void)
 {
 	gldi_register_containers_manager ();
-	gldi_register_icons_manager ();
 	gldi_register_docks_manager ();
 	gldi_register_desklets_manager ();
 	gldi_register_dialogs_manager ();
 	gldi_register_flying_manager ();
+	gldi_register_icons_manager ();
+	gldi_register_user_icons_manager ();
+	gldi_register_launchers_manager ();
+	gldi_register_stack_icons_manager ();
+	gldi_register_class_icons_manager ();
+	gldi_register_separator_icons_manager ();
 	gldi_register_applications_manager ();
+	gldi_register_applet_icons_manager ();
 	gldi_register_modules_manager ();
 	gldi_register_module_instances_manager ();
 	gldi_register_windows_manager ();

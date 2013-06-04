@@ -28,6 +28,7 @@
 #include "cairo-dock-container.h"  // gldi_container_get_Xid
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-launcher-manager.h"  // cairo_dock_launch_command_sync
+#include "cairo-dock-utils.h"  // cairo_dock_launch_command_sync
 #include "cairo-dock-config.h"  // cairo_dock_get_version_from_string
 #include "cairo-dock-compiz-integration.h"
 

@@ -22,6 +22,10 @@
 #include <gdk/gdkx.h>  // GDK_WINDOW_XID
 
 #include "cairo-dock-applications-manager.h"  // cairo_dock_set_icons_geometry_for_window_manager
+#include "cairo-dock-launcher-manager.h"
+#include "cairo-dock-separator-manager.h"  // GLDI_OBJECT_IS_SEPARATOR_ICON
+#include "cairo-dock-stack-icon-manager.h"  // GLDI_OBJECT_IS_DRAWER_ICON
+#include "cairo-dock-class-icon-manager.h"
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-backends-manager.h"  // myBackendsParam.fSubDockSizeRatio
 #include "cairo-dock-X-utilities.h" // cairo_dock_set_strut_partial
@@ -67,7 +71,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 			icon->fWidth /= pDock->container.fRatio;
 			icon->fHeight /= pDock->container.fRatio;
 			pDock->fFlatDockWidth += icon->fWidth + myIconsParam.iIconGap;
-			if (! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
+			if (! GLDI_OBJECT_IS_SEPARATOR_ICON (icon))
 				pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, icon->fHeight);
 		}
 		if (pDock->iMaxIconHeight == 0)
@@ -1080,7 +1084,7 @@ static void _add_one_dock_to_list (G_GNUC_UNUSED const gchar *cName, CairoDock *
 	
 	// get user docks only
 	Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
-	if (pPointingIcon && ! CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pPointingIcon))  // avoid sub-docks that are not from the theme (applet sub-docks, class sub-docks, etc).
+	if (pPointingIcon && ! GLDI_OBJECT_IS_STACK_ICON (pPointingIcon))  // avoid sub-docks that are not from the theme (applet sub-docks, class sub-docks, etc).
 		return;
 	
 	// ignore the parent dock.
@@ -1115,7 +1119,7 @@ static gboolean _redraw_subdock_content_idle (Icon *pIcon)
 		{
 			cairo_dock_reload_icon_image (pIcon, CAIRO_CONTAINER (pDock));
 		}
-		cairo_dock_redraw_icon (pIcon, CAIRO_CONTAINER (pDock));
+		cairo_dock_redraw_icon (pIcon);
 		if (pDock->iRefCount != 0 && ! pIcon->bDamaged)  // now that the icon image is correct, redraw the pointing icon if needed
 			cairo_dock_trigger_redraw_subdock_content (pDock);
 	}
@@ -1126,7 +1130,7 @@ void cairo_dock_trigger_redraw_subdock_content (CairoDock *pDock)
 {
 	Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
 	//g_print ("%s (%s, %d)\n", __func__, pPointingIcon?pPointingIcon->cName:NULL, pPointingIcon?pPointingIcon->iSubdockViewType:0);
-	if (pPointingIcon != NULL && (pPointingIcon->iSubdockViewType != 0 || (pPointingIcon->cClass != NULL && ! myIndicatorsParam.bUseClassIndic && (CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pPointingIcon) || CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pPointingIcon)))))
+	if (pPointingIcon != NULL && (pPointingIcon->iSubdockViewType != 0 || (pPointingIcon->cClass != NULL && ! myIndicatorsParam.bUseClassIndic && (CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pPointingIcon) || GLDI_OBJECT_IS_LAUNCHER_ICON (pPointingIcon)))))
 	{
 		if (pPointingIcon->iSidRedrawSubdockContent != 0)  // s'il y'a deja un redessin de prevu, on le passe a la fin de facon a ce qu'il ne se fasse  pas avant le redessin de l'icone responsable de ce trigger.
 			g_source_remove (pPointingIcon->iSidRedrawSubdockContent);
@@ -1148,7 +1152,7 @@ void cairo_dock_redraw_subdock_content (CairoDock *pDock)
 	if (pPointingIcon != NULL && pPointingIcon->iSubdockViewType != 0 && pPointingIcon->iSidRedrawSubdockContent == 0 && pParentDock != NULL)
 	{
 		cairo_dock_draw_subdock_content_on_icon (pPointingIcon, pParentDock);
-		cairo_dock_redraw_icon (pPointingIcon, CAIRO_CONTAINER (pParentDock));
+		cairo_dock_redraw_icon (pPointingIcon);
 	}
 }
 

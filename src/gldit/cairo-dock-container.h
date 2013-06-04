@@ -246,9 +246,8 @@ void cairo_dock_redraw_container_area (GldiContainer *pContainer, GdkRectangle *
 
 /** Clear and trigger the redraw of an Icon. The drawing is not done immediately, but when the expose event is received.
 *@param icon l'icone a retracer.
-*@param pContainer le container de l'icone.
 */
-void cairo_dock_redraw_icon (Icon *icon, GldiContainer *pContainer);
+void cairo_dock_redraw_icon (Icon *icon);
 
 
 void cairo_dock_allow_widget_to_receive_data (GtkWidget *pWidget, GCallback pCallBack, gpointer data);

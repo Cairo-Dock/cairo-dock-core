@@ -27,6 +27,7 @@
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-module-instance-manager.h"  // gldi_module_instance_detach_at_position
+#include "cairo-dock-applet-manager.h"  // GLDI_OBJECT_IS_APPLET_ICON
 #include "cairo-dock-config.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-desklet-factory.h"
@@ -62,7 +63,7 @@ static CairoDockImageBuffer *s_pEmblem = NULL;
 static void _load_emblem (Icon *pIcon)
 {
 	const gchar *cImage = NULL;
-	if (CAIRO_DOCK_ICON_TYPE_IS_APPLET (pIcon))
+	if (GLDI_OBJECT_IS_APPLET_ICON (pIcon))
 	{
 		cImage = GTK_STOCK_JUMP_TO"-rtl";  // GTK_STOCK_JUMP_TO only doesn't exist.
 	}
@@ -301,8 +302,7 @@ void gldi_flying_container_terminate (CairoFlyingContainer *pFlyingContainer)
 	// destroy it, or place it in a desklet.
 	if (pIcon->cDesktopFileName != NULL)  // a launcher/sub-dock/separator, that is part of the theme
 	{
-		cairo_dock_delete_icon_from_current_theme (pIcon);
-		gldi_object_unref (GLDI_OBJECT(pIcon));
+		gldi_object_delete (GLDI_OBJECT(pIcon));
 	}
 	else if (CAIRO_DOCK_IS_APPLET(pIcon))  /// faire une fonction dans la factory ...
 	{

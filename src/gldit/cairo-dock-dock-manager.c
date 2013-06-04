@@ -37,8 +37,11 @@
 #include "cairo-dock-callbacks.h"
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-icon-facility.h"
-#include "cairo-dock-separator-factory.h"
-#include "cairo-dock-launcher-factory.h"
+#include "cairo-dock-separator-manager.h"  // gldi_automatic_separators_add_in_list
+#include "cairo-dock-launcher-manager.h"
+#include "cairo-dock-applet-manager.h"
+#include "cairo-dock-stack-icon-manager.h"
+#include "cairo-dock-class-icon-manager.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-log.h"
@@ -351,7 +354,9 @@ void gldi_dock_rename (CairoDock *pDock, const gchar *cNewName)
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
-		cairo_dock_update_icon_s_container_name (icon, cNewName);
+		gldi_theme_icon_write_container_name_in_conf_file (icon, cNewName);
+		g_free (icon->cParentDockName);
+		icon->cParentDockName = g_strdup (cNewName);
 	}
 }
 
@@ -366,7 +371,7 @@ void gldi_docks_foreach_root (GFunc pFunction, gpointer data)
 	g_list_foreach (s_pRootDockList, pFunction, data);
 }
 
-static void _cairo_dock_foreach_icons_in_dock (G_GNUC_UNUSED gchar *cDockName, CairoDock *pDock, gpointer *data)
+static void _gldi_icons_foreach_in_dock (G_GNUC_UNUSED gchar *cDockName, CairoDock *pDock, gpointer *data)
 {
 	CairoDockForeachIconFunc pFunction = data[0];
 	gpointer pUserData = data[1];
@@ -378,10 +383,10 @@ static void _cairo_dock_foreach_icons_in_dock (G_GNUC_UNUSED gchar *cDockName, C
 		ic = next_ic;
 	}
 }
-void cairo_dock_foreach_icons_in_docks (CairoDockForeachIconFunc pFunction, gpointer pUserData)
+void gldi_icons_foreach_in_docks (CairoDockForeachIconFunc pFunction, gpointer pUserData)
 {
 	gpointer data[2] = {pFunction, pUserData};
-	g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_foreach_icons_in_dock, data);
+	g_hash_table_foreach (s_hDocksTable, (GHFunc) _gldi_icons_foreach_in_dock, data);
 }
 
 
@@ -464,7 +469,7 @@ static void _cairo_dock_draw_one_subdock_icon (G_GNUC_UNUSED const gchar *cDockN
 	{
 		icon = ic->data;
 		if (icon->pSubDock != NULL
-		&& (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon) || CAIRO_DOCK_IS_MULTI_APPLI (icon) || CAIRO_DOCK_IS_APPLET (icon))
+		&& (GLDI_OBJECT_IS_STACK_ICON (icon) || CAIRO_DOCK_IS_MULTI_APPLI (icon) || GLDI_OBJECT_IS_APPLET_ICON (icon))
 		&& (icon->iSubdockViewType != 0
 			|| (CAIRO_DOCK_IS_MULTI_APPLI (icon) && !myIndicatorsParam.bUseClassIndic))
 		/**&& icon->iSidRedrawSubdockContent == 0*/)  // icone de sous-dock ou de classe ou d'applets.
@@ -515,7 +520,7 @@ void cairo_dock_write_root_dock_gaps (CairoDock *pDock)
 	{
 		const gchar *cDockName = gldi_dock_get_name (pDock);
 		gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
-		if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
+		if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))  // shouldn't happen
 		{
 			cairo_dock_add_conf_file (GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
 		}
@@ -1373,6 +1378,32 @@ static gboolean _render_dock_notification (G_GNUC_UNUSED gpointer pUserData, Cai
 	return GLDI_NOTIFICATION_LET_PASS;
 }
 
+static gboolean _on_leave_dock (G_GNUC_UNUSED gpointer data, CairoDock *pDock, G_GNUC_UNUSED gboolean *bStartAnimation)
+{
+	//g_print ("%s (%d, %d)\n", __func__, pDock->iRefCount, pDock->bHasModalWindow);
+	
+	//\_______________ On lance l'animation du dock.
+	if (pDock->iRefCount == 0)
+	{
+		//g_print ("%s (auto-hide:%d)\n", __func__, pDock->bAutoHide);
+		if (pDock->bAutoHide)
+		{
+			///pDock->fFoldingFactor = (myBackendsParam.bAnimateOnAutoHide ? 0.001 : 0.);
+			cairo_dock_start_hiding (pDock);
+		}
+	}
+	else if (pDock->icons != NULL)
+	{
+		pDock->fFoldingFactor = (myDocksParam.bAnimateSubDock ? 0.001 : 0.);
+		Icon *pIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
+		//g_print ("'%s' se replie\n", pIcon?pIcon->cName:"none");
+		gldi_object_notify (pIcon, NOTIFICATION_UNFOLD_SUBDOCK, pIcon);
+	}
+	//g_print ("start shrinking\n");
+	cairo_dock_start_shrinking (pDock);  // on commence a faire diminuer la taille des icones.
+	return GLDI_NOTIFICATION_LET_PASS;
+}
+
 static void _update_removing_inserting_icon_size (Icon *icon)
 {
 	icon->fInsertRemoveFactor *= .85;
@@ -1900,7 +1931,7 @@ static void init (void)
 		GLDI_RUN_FIRST, NULL);*/
 	gldi_object_register_notification (&myDocksMgr,
 		NOTIFICATION_LEAVE_DOCK,
-		(GldiNotificationFunc) cairo_dock_on_leave_dock_notification,  /// should probably not be in a notification...
+		(GldiNotificationFunc) _on_leave_dock,  // is a notification so that others can prevent a dock from hiding (ex Slide view)
 		GLDI_RUN_FIRST, NULL);
 	gldi_object_register_notification (&myDocksMgr,
 		NOTIFICATION_INSERT_ICON,
@@ -1974,7 +2005,8 @@ static void init_object (GldiObject *obj, gpointer attr)
 	
 	//\__________________ set the icons.
 	GList *pIconList = dattr->pIconList;
-	/// insert automatic separators...
+	
+	gldi_automatic_separators_add_in_list (pIconList);
 	
 	pDock->icons = pIconList;  // set icons now, before we set the ratio and the renderer.
 	Icon *icon;
@@ -1986,7 +2018,6 @@ static void init_object (GldiObject *obj, gpointer attr)
 			icon->cParentDockName = g_strdup (pDock->cDockName);
 		cairo_dock_set_icon_container (icon, pDock);
 	}
-	cairo_dock_insert_automatic_separators_in_dock (pDock);  /// TODO: do it before...
 	
 	//\__________________ 
 	if (! dattr->bSubDock)
@@ -2114,20 +2145,36 @@ static void reset_object (GldiObject *obj)
 	g_free (pDock->cDockName);
 }
 
+static gboolean delete_object (GldiObject *obj)
+{
+	CairoDock *pDock = (CairoDock*)obj;
+	if (pDock->bIsMainDock)
+	{
+		cd_warning ("can't delete the main dock");
+		return FALSE;
+	}
+	
+	// remove the conf file
+	_remove_root_dock_config (pDock->cDockName);
+	return TRUE;
+}
+
+
 void gldi_register_docks_manager (void)
 {
 	// Manager
 	memset (&myDocksMgr, 0, sizeof (CairoDocksManager));
-	myDocksMgr.mgr.cModuleName 	= "Docks";
-	myDocksMgr.mgr.init 		= init;
-	myDocksMgr.mgr.load 		= load;
-	myDocksMgr.mgr.unload 		= unload;
-	myDocksMgr.mgr.reload 		= (GldiManagerReloadFunc)reload;
-	myDocksMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)get_config;
-	myDocksMgr.mgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
-	myDocksMgr.mgr.init_object  = init_object;
-	myDocksMgr.mgr.reset_object = reset_object;
-	myDocksMgr.mgr.iObjectSize  = sizeof (CairoDock);
+	myDocksMgr.mgr.cModuleName   = "Docks";
+	myDocksMgr.mgr.init          = init;
+	myDocksMgr.mgr.load          = load;
+	myDocksMgr.mgr.unload        = unload;
+	myDocksMgr.mgr.reload        = (GldiManagerReloadFunc)reload;
+	myDocksMgr.mgr.get_config    = (GldiManagerGetConfigFunc)get_config;
+	myDocksMgr.mgr.reset_config  = (GldiManagerResetConfigFunc)reset_config;
+	myDocksMgr.mgr.init_object   = init_object;
+	myDocksMgr.mgr.reset_object  = reset_object;
+	myDocksMgr.mgr.delete_object = delete_object;
+	myDocksMgr.mgr.iObjectSize   = sizeof (CairoDock);
 	// Config
 	memset (&myDocksParam, 0, sizeof (CairoDocksParam));
 	myDocksMgr.mgr.pConfig = (GldiManagerConfigPtr)&myDocksParam;

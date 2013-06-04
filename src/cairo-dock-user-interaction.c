@@ -17,21 +17,16 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <math.h>
-#include <sys/time.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <cairo.h>
-#include <gtk/gtk.h>
-#include <X11/Xatom.h>
-
 #include "cairo-dock-animations.h"
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-application-facility.h"
-#include "cairo-dock-desktop-file-factory.h"
-#include "cairo-dock-launcher-manager.h"
+#include "cairo-dock-launcher-manager.h"  // gldi_launcher_add_new
+#include "cairo-dock-utils.h"  // cairo_dock_launch_command_full
+#include "cairo-dock-stack-icon-manager.h"
+#include "cairo-dock-separator-manager.h"
+#include "cairo-dock-applet-manager.h"
+#include "cairo-dock-class-icon-manager.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-dialog-factory.h"
@@ -409,7 +404,7 @@ gboolean cairo_dock_notification_drop_data (G_GNUC_UNUSED gpointer pUserData, co
 	if (g_bLocked || myDocksParam.bLockAll)
 		return GLDI_NOTIFICATION_LET_PASS;
 	
-	Icon *pNewIcon = cairo_dock_add_new_launcher_by_uri (cReceivedData, pReceivingDock, fOrder);
+	Icon *pNewIcon = gldi_launcher_add_new (cReceivedData, pReceivingDock, fOrder);
 	
 	return (pNewIcon ? GLDI_NOTIFICATION_INTERCEPT : GLDI_NOTIFICATION_LET_PASS);
 }
@@ -449,7 +444,7 @@ void cairo_dock_set_custom_icon_on_appli (const gchar *cFilePath, Icon *icon, Gl
 		g_free (cPath);
 		
 		cairo_dock_reload_icon_image (icon, pContainer);
-		cairo_dock_redraw_icon (icon, pContainer);
+		cairo_dock_redraw_icon (icon);
 	}
 }
 

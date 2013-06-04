@@ -29,9 +29,8 @@
 #include "cairo-dock-dialog-factory.h"  // gldi_dialog_show_temporary
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-container.h"
-#include "cairo-dock-launcher-manager.h"  // cairo_dock_launch_command_syncl
+#include "cairo-dock-utils.h"  // cairo_dock_launch_command_sync
 #include "cairo-dock-X-utilities.h"  // cairo_dock_property_is_present_on_root
 #include "cairo-dock-icon-manager.h"  // cairo_dock_free_icon
 #define _MANAGER_DEF_
@@ -412,7 +411,7 @@ Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, GldiContainer *pCon
 	s_pEnvBackend->get_file_info (cURI, &pNewIcon->cName, &pNewIcon->cCommand, &pNewIcon->cFileName, &bIsDirectory, &pNewIcon->iVolumeID, &pNewIcon->fOrder, iFileSortType);
 	if (pNewIcon->cName == NULL)
 	{
-		cairo_dock_free_icon (pNewIcon);
+		gldi_object_unref (GLDI_OBJECT (pNewIcon));
 		return NULL;
 	}
 	if (bIsDirectory)

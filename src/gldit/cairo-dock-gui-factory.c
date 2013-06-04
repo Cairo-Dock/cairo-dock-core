@@ -29,6 +29,7 @@
 #include "cairo-dock-struct.h"
 #include "cairo-dock-module-manager.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-utils.h"  // cairo_dock_launch_command_sync
 #include "cairo-dock-animations.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-icon-facility.h"  // gldi_icons_get_any_without_dialog
@@ -48,6 +49,7 @@
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-launcher-manager.h" // cairo_dock_launch_command_sync
+#include "cairo-dock-separator-manager.h" // GLDI_OBJECT_IS_SEPARATOR_ICON
 #include "cairo-dock-gui-factory.h"
 
 #define CAIRO_DOCK_ICON_MARGIN 6
@@ -2628,7 +2630,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						if (cImagePath == NULL || ! g_file_test (cImagePath, G_FILE_TEST_EXISTS))
 						{
 							g_free (cImagePath);
-							if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))
+							if (GLDI_OBJECT_IS_SEPARATOR_ICON (pIcon))
 							{
 								if (myIconsParam.cSeparatorImage)
 									cImagePath = cairo_dock_search_image_s_path (myIconsParam.cSeparatorImage);

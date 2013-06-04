@@ -27,7 +27,8 @@
 #include "gldi-config.h"
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-backends-manager.h"
-#include "cairo-dock-dock-manager.h"
+#include "cairo-dock-stack-icon-manager.h"
+#include "cairo-dock-separator-manager.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-animations.h"  // cairo_dock_calculate_magnitude
 #include "cairo-dock-draw-opengl.h"
@@ -35,6 +36,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-object.h"
+#include "cairo-dock-dock-manager.h"
 #include "cairo-dock-desktop-manager.h"  // gldi_dock_get_screen_width
 #include "cairo-dock-default-view.h"
 
@@ -293,7 +295,7 @@ static void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
 		icon = ic->data;
 
 		cairo_save (pCairoContext);
-		if (myIconsParam.iSeparatorType != CAIRO_DOCK_NORMAL_SEPARATOR && icon->cFileName == NULL && CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
+		if (myIconsParam.iSeparatorType != CAIRO_DOCK_NORMAL_SEPARATOR && icon->cFileName == NULL && GLDI_OBJECT_IS_SEPARATOR_ICON (icon))
 			_cairo_dock_draw_separator (icon, pDock, pCairoContext, fDockMagnitude);
 		else
 			cairo_dock_render_one_icon (icon, pDock, pCairoContext, fDockMagnitude, TRUE);
@@ -628,7 +630,7 @@ static void cd_render_opengl_default (CairoDock *pDock)
 		icon = ic->data;
 		
 		glPushMatrix ();
-		if (myIconsParam.iSeparatorType != CAIRO_DOCK_NORMAL_SEPARATOR && icon->cFileName == NULL && CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
+		if (myIconsParam.iSeparatorType != CAIRO_DOCK_NORMAL_SEPARATOR && icon->cFileName == NULL && GLDI_OBJECT_IS_SEPARATOR_ICON (icon))
 			_cairo_dock_draw_separator_opengl (icon, pDock, fDockMagnitude);
 		else
 			cairo_dock_render_one_icon_opengl (icon, pDock, fDockMagnitude, TRUE);

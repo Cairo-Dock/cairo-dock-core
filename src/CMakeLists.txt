@@ -1,5 +1,5 @@
 
-add_subdirectory (icon-factory)
+#add_subdirectory (icon-factory)
 add_subdirectory (gldit)
 add_subdirectory (implementations)
 
@@ -45,7 +45,7 @@ target_link_libraries (${PROJECT_NAME}
 	${PACKAGE_LIBRARIES}
 	${GTK_LIBRARIES}
 	gldi
-	icon-factory
+	#icon-factory
 	${LIBINTL_LIBRARIES})
 
 # install the program once it is built.

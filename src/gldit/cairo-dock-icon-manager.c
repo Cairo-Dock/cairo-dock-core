@@ -33,16 +33,19 @@
 #include "cairo-dock-draw.h"  // cairo_dock_render_icon_notification
 #include "cairo-dock-draw-opengl.h"  // cairo_dock_destroy_icon_fbo
 #include "cairo-dock-container.h"
-#include "cairo-dock-dock-manager.h"  // cairo_dock_foreach_icons_in_docks
+#include "cairo-dock-dock-manager.h"  // gldi_icons_foreach_in_docks
 #include "cairo-dock-dialog-manager.h"  // cairo_dock_remove_dialog_if_any
 #include "cairo-dock-data-renderer.h"  // cairo_dock_remove_data_renderer_on_icon
 #include "cairo-dock-file-manager.h"  // cairo_dock_fm_remove_monitor_full
 #include "cairo-dock-animations.h"  // cairo_dock_animation_will_be_visible
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
-#include "cairo-dock-icon-facility.h"  // cairo_dock_foreach_icons_of_type
+#include "cairo-dock-icon-facility.h"  // gldi_icons_foreach_of_type
 #include "cairo-dock-keyfile-utilities.h"  // cairo_dock_open_key_file
 #include "cairo-dock-indicator-manager.h"  // cairo_dock_unload_indicator_textures
 #include "cairo-dock-desktop-manager.h"  // cairo_dock_get_current_desktop_and_viewport
+#include "cairo-dock-user-icon-manager.h"  // GLDI_OBJECT_IS_USER_ICON
+#include "cairo-dock-separator-manager.h"  // GLDI_OBJECT_IS_SEPARATOR_ICON
+#include "cairo-dock-applications-manager.h"  // GLDI_OBJECT_IS_APPLI_ICON
 #include "cairo-dock-backends-manager.h"  // cairo_dock_foreach_icon_container_renderer
 #define _MANAGER_DEF_
 #include "cairo-dock-icon-manager.h"
@@ -72,23 +75,9 @@ static void _cairo_dock_unload_icon_theme (void);
 static void _on_icon_theme_changed (GtkIconTheme *pIconTheme, gpointer data);
 
 
-void cairo_dock_free_icon (Icon *icon)
+void gldi_icons_foreach (CairoDockForeachIconFunc pFunction, gpointer pUserData)
 {
-	gldi_object_unref (GLDI_OBJECT (icon));
-}
-
-
-void cairo_dock_delete_icon_from_current_theme (Icon *icon)
-{
-	if (icon->iface.on_delete)
-	{
-		icon->iface.on_delete (icon);
-	}
-}
-
-void cairo_dock_foreach_icons (CairoDockForeachIconFunc pFunction, gpointer pUserData)
-{
-	cairo_dock_foreach_icons_in_docks (pFunction, pUserData);
+	gldi_icons_foreach_in_docks (pFunction, pUserData);
 	gldi_desklets_foreach_icons (pFunction, pUserData);
 }
 
@@ -122,7 +111,7 @@ static void _hide_launcher_on_other_desktops (Icon *icon, int index)
 }
 static void _hide_icon_on_other_desktops (Icon *icon, G_GNUC_UNUSED GldiContainer *pContainer, gpointer data)
 {
-	if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon) || CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon))
+	if (GLDI_OBJECT_IS_USER_ICON (icon))
 	{
 		int index = GPOINTER_TO_INT (data);
 		_hide_launcher_on_other_desktops (icon, index);
@@ -143,7 +132,7 @@ static void _show_launcher_on_this_desktop (Icon *icon, int index)
 		else  // the dock doesn't exist any more -> free the icon
 		{
 			icon->iSpecificDesktop = 0;  // pour ne pas qu'elle soit enlevee de la liste en parallele.
-			cairo_dock_free_icon (icon);
+			gldi_object_unref (GLDI_OBJECT (icon));
 		}
 	}
 }
@@ -159,7 +148,7 @@ void cairo_dock_hide_show_launchers_on_other_desktops (void )
 	int index = iCurrentDesktop * g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY + iCurrentViewportX * g_desktopGeometry.iNbViewportY + iCurrentViewportY + 1;  // +1 car on commence a compter a partir de 1.
 	
 	// first detach what shouldn't be shown on this desktop
-	cairo_dock_foreach_icons_in_docks ((CairoDockForeachIconFunc)_hide_icon_on_other_desktops, GINT_TO_POINTER (index));
+	gldi_icons_foreach_in_docks ((CairoDockForeachIconFunc)_hide_icon_on_other_desktops, GINT_TO_POINTER (index));
 	
 	// then reattach what was eventually missing
 	Icon *icon;
@@ -187,7 +176,7 @@ static void _cairo_dock_delete_floating_icons (void)
 	{
 		icon = ic->data;
 		icon->iSpecificDesktop = 0;  // pour ne pas qu'elle soit enlevee de la liste en parallele.
-		cairo_dock_free_icon (icon);
+		gldi_object_unref (GLDI_OBJECT (icon));
 	}
 	g_list_free (s_pFloatingIconsList);
 	s_pFloatingIconsList = NULL;
@@ -773,7 +762,7 @@ static void _insert_separators (G_GNUC_UNUSED const gchar *cDockName, CairoDock 
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)  // les separateurs utilisateurs ne sont pas recrees, on les recharge donc.
 	{
 		icon = ic->data;
-		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))  // il n'y a que des separateurs utilisateurs dans le dock en ce moment.
+		if (GLDI_OBJECT_IS_SEPARATOR_ICON (icon))  // il n'y a que des separateurs utilisateurs dans le dock en ce moment.
 		{
 			cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pDock));
 		}
@@ -864,7 +853,7 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 	// labels
 	CairoIconsParam *pLabels = pIcons;
 	CairoIconsParam *pPrevLabels = pPrevIcons;
-	cairo_dock_foreach_icons ((CairoDockForeachIconFunc) _reload_one_label, pLabels);
+	gldi_icons_foreach ((CairoDockForeachIconFunc) _reload_one_label, pLabels);
 	
 	if (pPrevLabels->iLabelSize != pLabels->iLabelSize)
 	{
@@ -938,6 +927,33 @@ static void init (void)
 	
 }
 
+  ///////////////
+ /// MANAGER ///
+///////////////
+
+static void _load_image (Icon *icon)
+{
+	int iWidth = cairo_dock_icon_get_allocated_width (icon);
+	int iHeight = cairo_dock_icon_get_allocated_height (icon);
+	cairo_surface_t *pSurface = NULL;
+	
+	if (icon->cFileName)
+	{
+		gchar *cIconPath = cairo_dock_search_icon_s_path (icon->cFileName, MAX (iWidth, iHeight));
+		if (cIconPath != NULL && *cIconPath != '\0')
+			pSurface = cairo_dock_create_surface_from_image_simple (cIconPath,
+				iWidth,
+				iHeight);
+		g_free (cIconPath);
+	}
+	cairo_dock_load_image_buffer_from_surface (&icon->image, pSurface, iWidth, iHeight);
+}
+static void init_object (GldiObject *obj, G_GNUC_UNUSED gpointer attr)
+{
+	Icon *icon = (Icon*)obj;
+	icon->iface.load_image = _load_image;
+}
+
 static void reset_object (GldiObject *obj)
 {
 	Icon *icon = (Icon*)obj;
@@ -950,14 +966,8 @@ static void reset_object (GldiObject *obj)
 	if (icon->iSidDoubleClickDelay != 0)
 		g_source_remove (icon->iSidDoubleClickDelay);
 	
-	if (CAIRO_DOCK_IS_NORMAL_APPLI (icon))
-	{
-		///cairo_dock_unregister_appli (icon);
-	}
-	else if (icon->cClass != NULL)  // c'est un inhibiteur.
+	if (icon->cClass != NULL && ! GLDI_OBJECT_IS_APPLI_ICON (icon))  // c'est un inhibiteur.
 		cairo_dock_deinhibite_class (icon->cClass, icon);  // unset the appli if it had any
-	//if (icon->pModuleInstance != NULL)
-	//	gldi_object_unref (GLDI_OBJECT(icon->pModuleInstance));
 	
 	gldi_object_notify (icon, NOTIFICATION_STOP_ICON, icon);
 	cairo_dock_remove_transition_on_icon (icon);
@@ -993,11 +1003,6 @@ static void reset_object (GldiObject *obj)
 	cairo_dock_destroy_icon_overlays (icon);
 }
 
-
-  ///////////////
- /// MANAGER ///
-///////////////
-
 void gldi_register_icons_manager (void)
 {
 	// Manager
@@ -1009,7 +1014,7 @@ void gldi_register_icons_manager (void)
 	myIconsMgr.mgr.reload       = (GldiManagerReloadFunc)reload;
 	myIconsMgr.mgr.get_config   = (GldiManagerGetConfigFunc)get_config;
 	myIconsMgr.mgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
-	myIconsMgr.mgr.init_object  = NULL;  // nothing to do
+	myIconsMgr.mgr.init_object  = init_object;
 	myIconsMgr.mgr.reset_object = reset_object;
 	myIconsMgr.mgr.iObjectSize  = sizeof (Icon);
 	// Config

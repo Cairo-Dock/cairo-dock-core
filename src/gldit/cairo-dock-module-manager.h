@@ -270,8 +270,6 @@ void gldi_modules_activate_from_list (gchar **cActiveModuleList);
 
 void gldi_modules_deactivate_all (void);
 
-// deactivate_module_instance_and_unload + remove file
-void gldi_module_delete_instance (GldiModuleInstance *pInstance);  /// should probably be in the module-instance...
 // cp file
 gchar *gldi_module_add_conf_file (GldiModule *pModule);  /// should maybe be in the module-instance too...
 // cp file + instanciate_module

@@ -17,21 +17,15 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <math.h>
-#include <string.h>
-#include <cairo.h>
-#include <stdlib.h>
-
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-#include <X11/Xutil.h>
-#include <gdk/gdkx.h>
-
-#include "cairo-dock-icon-facility.h"  // cairo_dock_set_icon_name
+#include "cairo-dock-icon-facility.h"  // gldi_icon_set_name
 #include "cairo-dock-dialog-factory.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-applications-manager.h"
+#include "cairo-dock-launcher-manager.h"
+#include "cairo-dock-separator-manager.h"
+#include "cairo-dock-applet-manager.h"
+#include "cairo-dock-stack-icon-manager.h"
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
@@ -39,6 +33,7 @@
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-indicator-manager.h"  // myIndicatorsParam.bUseClassIndic
+#include "cairo-dock-class-icon-manager.h"  // gldi_class_icon_new
 #include "cairo-dock-application-facility.h"
 
 extern CairoDock *g_pMainDock;
@@ -180,7 +175,7 @@ void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock)
 		}
 		else
 		{
-			cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));  // Si pas d'animation, on le fait pour redessiner l'indicateur.
+			cairo_dock_redraw_icon (icon);  // Si pas d'animation, on le fait pour redessiner l'indicateur.
 		}
 		if (pParentDock->iRefCount != 0)  // l'icone est dans un sous-dock, on veut que l'indicateur soit aussi dessine sur l'icone pointant sur ce sous-dock.
 		{
@@ -188,63 +183,12 @@ void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock)
 			Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pParentDock, &pMainDock);
 			if (pPointingIcon && pMainDock)
 			{
-				cairo_dock_redraw_icon (pPointingIcon, CAIRO_CONTAINER (pMainDock));  // on se contente de redessiner cette icone sans l'animer. Une facon comme une autre de differencier ces 2 cas.
+				cairo_dock_redraw_icon (pPointingIcon);  // on se contente de redessiner cette icone sans l'animer. Une facon comme une autre de differencier ces 2 cas.
 			}
 		}
 	}
 }
 
-
-static void _load_class_icon (Icon *icon)
-{
-	int iWidth = icon->iAllocatedWidth;
-	int iHeight = icon->iAllocatedWidth;
-	cairo_surface_t *pSurface = NULL;
-	if (icon->pSubDock != NULL && !myIndicatorsParam.bUseClassIndic)  // icone de sous-dock avec un rendu specifique, on le redessinera lorsque les icones du sous-dock auront ete chargees.
-	{
-		pSurface = cairo_dock_create_blank_surface (iWidth, iHeight);
-	}
-	else
-	{
-		cd_debug ("%s (%dx%d)", __func__, iWidth, iHeight);
-		pSurface = cairo_dock_create_surface_from_class (icon->cClass,
-			iWidth,
-			iHeight);
-		if (pSurface == NULL)  // aucun inhibiteur ou aucune image correspondant a cette classe, on cherche a copier une des icones d'appli de cette classe.
-		{
-			const GList *pApplis = cairo_dock_list_existing_appli_with_class (icon->cClass);
-			if (pApplis != NULL)
-			{
-				Icon *pOneIcon = (Icon *) (g_list_last ((GList*)pApplis)->data);  // on prend le dernier car les applis sont inserees a l'envers, et on veut avoir celle qui etait deja present dans le dock (pour 2 raison : continuite, et la nouvelle (en 1ere position) n'est pas forcement deja dans un dock, ce qui fausse le ratio).
-				cd_debug ("  load from %s (%dx%d)", pOneIcon->cName, iWidth, iHeight);
-				pSurface = cairo_dock_duplicate_inhibitor_surface_for_appli (pOneIcon,
-					iWidth,
-					iHeight);
-			}
-		}
-	}
-	
-	cairo_dock_load_image_buffer_from_surface (&icon->image, pSurface, iWidth, iHeight);
-}
-static Icon *cairo_dock_create_icon_for_class_subdock (Icon *pSameClassIcon, CairoDock *pClassDock)
-{
-	Icon *pFakeClassIcon = cairo_dock_new_icon ();
-	pFakeClassIcon->iTrueType = CAIRO_DOCK_ICON_TYPE_CLASS_CONTAINER;
-	pFakeClassIcon->iface.load_image = _load_class_icon;
-	pFakeClassIcon->iGroup = pSameClassIcon->iGroup;
-	
-	pFakeClassIcon->cName = g_strdup (pSameClassIcon->cClass);
-	pFakeClassIcon->cCommand = g_strdup (pSameClassIcon->cCommand);
-	pFakeClassIcon->pMimeTypes = g_strdupv (pSameClassIcon->pMimeTypes);
-	pFakeClassIcon->cClass = g_strdup (pSameClassIcon->cClass);
-	pFakeClassIcon->fOrder = pSameClassIcon->fOrder;
-	pFakeClassIcon->cParentDockName = g_strdup (pSameClassIcon->cParentDockName);
-	pFakeClassIcon->bHasIndicator = pSameClassIcon->bHasIndicator;
-	
-	pFakeClassIcon->pSubDock = pClassDock;
-	
-	return pFakeClassIcon;
-}
 
 // this function is used when we have an appli that is not inhibited. we can place it either in its subdock or in the dock next to an inhibitor or in the main dock amongst the other applis
 static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoDock *pMainDock, const gchar *cMainDockName)
@@ -285,7 +229,7 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 			icon->cParentDockName = g_strdup (cairo_dock_get_class_subdock_name (icon->cClass));
 			
 			//\____________ link this sub-dock to the inhibitor, or to a fake appli icon.
-			if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pSameClassIcon) || CAIRO_DOCK_ICON_TYPE_IS_APPLET (pSameClassIcon))  // c'est un inhibiteur.
+			if (GLDI_OBJECT_IS_LAUNCHER_ICON (pSameClassIcon) || GLDI_OBJECT_IS_APPLET_ICON (pSameClassIcon))  // c'est un inhibiteur.
 			{
 				if (pSameClassIcon->pAppli != NULL)  // actuellement l'inhibiteur inhibe 1 seule appli.
 				{
@@ -299,13 +243,13 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 							CairoDock *pSameClassDock = gldi_dock_get (pSameClassIcon->cParentDockName);
 							if (pSameClassDock != NULL)
 							{
-								cairo_dock_set_icon_name (pSameClassIcon->cInitialName, pSameClassIcon, CAIRO_CONTAINER (pSameClassDock));  // on lui remet son nom de lanceur.
+								gldi_icon_set_name (pSameClassIcon, pSameClassIcon->cInitialName);  // on lui remet son nom de lanceur.
 							}
 						}
 						pSameClassIcon->pSubDock = pParentDock;
 						CairoDock *pRootDock = gldi_dock_get (pSameClassIcon->cParentDockName);
 						if (pRootDock != NULL)
-							cairo_dock_redraw_icon (pSameClassIcon, CAIRO_CONTAINER (pRootDock));  // on la redessine car elle prend l'indicateur de classe.
+							cairo_dock_redraw_icon (pSameClassIcon);  // on la redessine car elle prend l'indicateur de classe.
 					}
 					else if (pSameClassIcon->pSubDock != pParentDock)
 						cd_warning ("this launcher (%s) already has a subdock, but it's not the class's subdock !", pSameClassIcon->cName);
@@ -325,7 +269,7 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 				//\______________ On cree une icone de paille.
 				cd_debug (" on cree un fake...");
 				CairoDock *pClassMateParentDock = gldi_dock_get (pSameClassIcon->cParentDockName);  // c'est en fait le main dock.
-				Icon *pFakeClassIcon = cairo_dock_create_icon_for_class_subdock (pSameClassIcon, pParentDock);
+				Icon *pFakeClassIcon = gldi_class_icon_new (pSameClassIcon, pParentDock);
 				
 				//\______________ On detache le classmate, on le place dans le sous-dock, et on lui substitue le faux.
 				cd_debug (" on detache %s pour la passer dans le sous-dock de sa classe", pSameClassIcon->cName);
@@ -338,7 +282,8 @@ static CairoDock *_cairo_dock_set_parent_dock_name_for_appli (Icon *icon, CairoD
 				cairo_dock_insert_icon_in_dock_full (pFakeClassIcon, pClassMateParentDock, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
 				cairo_dock_redraw_container (CAIRO_CONTAINER (pClassMateParentDock));
 				
-				if (pFakeClassIcon->iSubdockViewType != 0)
+				///if (pFakeClassIcon->iSubdockViewType != 0)
+				if (!myIndicatorsParam.bUseClassIndic)
 					cairo_dock_trigger_redraw_subdock_content_on_icon (pFakeClassIcon);
 			}
 		}
@@ -483,10 +428,10 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (GldiWindowActor *p
 				for (ic = pMainDock->icons; ic != NULL; ic = ic->next)
 				{
 					pIcon = ic->data;
-					if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)  // launcher, even without class
-					|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pIcon)  // container icon (likely to contain some launchers)
-					|| (CAIRO_DOCK_ICON_TYPE_IS_APPLET (pIcon) && pIcon->cClass != NULL)  // applet acting like a launcher
-					|| (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon)))  // separator (user or auto).
+					if (GLDI_OBJECT_IS_LAUNCHER_ICON (pIcon)  // launcher, even without class
+					|| GLDI_OBJECT_IS_STACK_ICON (pIcon)  // container icon (likely to contain some launchers)
+					|| (GLDI_OBJECT_IS_APPLET_ICON (pIcon) && pIcon->cClass != NULL)  // applet acting like a launcher
+					|| (GLDI_OBJECT_IS_SEPARATOR_ICON (pIcon)))  // separator (user or auto).
 					{
 						pLastLauncher = pIcon;
 					}

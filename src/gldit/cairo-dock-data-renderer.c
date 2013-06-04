@@ -428,7 +428,7 @@ static gboolean cairo_dock_update_icon_data_renderer_notification (G_GNUC_UNUSED
 		
 		pRenderer->fLatency = (double) pRenderer->iSmoothAnimationStep / iNbIterations;
 		_cairo_dock_render_to_texture (pRenderer, pIcon, pContainer);
-		cairo_dock_redraw_icon (pIcon, pContainer);
+		cairo_dock_redraw_icon (pIcon);
 		
 		if (pRenderer->iSmoothAnimationStep < iNbIterations)
 			*bContinueAnimation = TRUE;
@@ -531,7 +531,7 @@ static void _cairo_dock_finish_load_data_renderer (CairoDataRenderer *pRenderer,
 	}
 	
 	if (pRenderer->bCanRenderValueAsText && pRenderer->bWriteValues)
-		cairo_dock_set_quick_info (pIcon, NULL, NULL);
+		gldi_icon_set_quick_info (pIcon, NULL);
 	
 	//\___________________ Build an overlay if the renderer will use some.
 	if (pRenderer->bUseOverlay)
@@ -637,7 +637,7 @@ static gboolean _render_delayed (Icon *pIcon)
 			return TRUE;
 	
 		_cairo_dock_render_to_texture (pRenderer, pIcon, pContainer);
-		cairo_dock_redraw_icon (pIcon, pContainer);
+		cairo_dock_redraw_icon (pIcon);
 	}
 	
 	pRenderer->iSidRenderIdle = 0;
@@ -715,11 +715,11 @@ void cairo_dock_render_new_data_on_icon (Icon *pIcon, GldiContainer *pContainer,
 				str ++;
 			}
 		}
-		cairo_dock_set_quick_info (pIcon, pContainer, cBuffer);
+		gldi_icon_set_quick_info (pIcon, cBuffer);
 		g_free (cBuffer);
 	}
 	
-	cairo_dock_redraw_icon (pIcon, pContainer);
+	cairo_dock_redraw_icon (pIcon);
 }
 
 
@@ -785,7 +785,7 @@ void cairo_dock_remove_data_renderer_on_icon (Icon *pIcon)
 		gldi_object_remove_notification (pIcon, NOTIFICATION_UPDATE_ICON_SLOW, (GldiNotificationFunc) cairo_dock_update_icon_data_renderer_notification, NULL);
 		
 		if (! pRenderer->bCanRenderValueAsText && pRenderer->bWriteValues)
-			cairo_dock_set_quick_info (pIcon, NULL, NULL);
+			gldi_icon_set_quick_info (pIcon, NULL);
 		
 		cairo_dock_free_data_renderer (pRenderer);
 		cairo_dock_set_data_renderer_on_icon (pIcon, NULL);

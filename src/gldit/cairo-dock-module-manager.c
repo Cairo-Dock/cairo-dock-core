@@ -33,7 +33,6 @@
 #include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-config.h"
-#include "cairo-dock-icon-manager.h"  // cairo_dock_free_icon
 #include "cairo-dock-module-instance-manager.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-module-manager.h"
@@ -471,25 +470,6 @@ void gldi_modules_deactivate_all (void)
 	}
 }
 
-void gldi_module_delete_instance (GldiModuleInstance *pInstance)
-{
-	cd_message ("%s (%s)", __func__, pInstance->cConfFilePath);
-	g_return_if_fail (pInstance->pModule->pInstancesList != NULL);
-	
-	//\_________________ remove this instance from the current theme
-	if (pInstance->pModule->pInstancesList->next != NULL)  // not the last one
-	{
-		cd_debug ("We remove %s", pInstance->cConfFilePath);
-		cairo_dock_delete_conf_file (pInstance->cConfFilePath);
-		
-		// We also remove the cConfFilePath (=> this conf file no longer exist during the 'stop' callback)
-		g_free (pInstance->cConfFilePath);
-		pInstance->cConfFilePath = NULL;
-	}
-	
-	//\_________________ destroy the instance
-	gldi_object_unref (GLDI_OBJECT(pInstance));
-}
 
 gchar *gldi_module_add_conf_file (GldiModule *pModule)
 {

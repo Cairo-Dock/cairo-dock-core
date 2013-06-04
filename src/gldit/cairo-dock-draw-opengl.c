@@ -25,6 +25,8 @@
 #include "cairo-dock-dock-facility.h"  // cairo_dock_get_first_drawn_element_linear
 #include "cairo-dock-applications-manager.h"  // myTaskbarParam.fVisibleAppliAlpha
 #include "cairo-dock-windows-manager.h"
+#include "cairo-dock-separator-manager.h"
+#include "cairo-dock-applet-manager.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-overlay.h"
@@ -115,7 +117,7 @@ void cairo_dock_draw_icon_reflect_opengl (Icon *pIcon, CairoDock *pDock)
 		}
 		glPushMatrix ();
 		double x0, y0, x1, y1;
-		double fScale = ((myIconsParam.bConstantSeparatorSize && CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon)) ? 1. : pIcon->fScale);
+		double fScale = ((myIconsParam.bConstantSeparatorSize && GLDI_OBJECT_IS_SEPARATOR_ICON (pIcon)) ? 1. : pIcon->fScale);
 		///double fReflectSize = MIN (myIconsParam.fReflectSize, pIcon->fHeight/pDock->container.fRatio*fScale);
 		double fReflectSize = pIcon->fHeight * myIconsParam.fReflectHeightRatio * fScale;
 		///double fReflectRatio = fReflectSize * pDock->container.fRatio / pIcon->fHeight / fScale  / pIcon->fHeightFactor;
@@ -314,7 +316,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 			pDock->container.bIsHorizontal ? 48:1);
 		cd_debug ("g_pGradationTexture(%d) <- %d", pDock->container.bIsHorizontal, g_pGradationTexture[pDock->container.bIsHorizontal]);
 	}
-	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskbarParam.fVisibleAppliAlpha != 0 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon) && !(myTaskbarParam.iMinimizedWindowRenderType == 1 && icon->pAppli->bIsHidden))
+	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskbarParam.fVisibleAppliAlpha != 0 && ! GLDI_OBJECT_IS_APPLET_ICON (icon) && !(myTaskbarParam.iMinimizedWindowRenderType == 1 && icon->pAppli->bIsHidden))
 	{
 		double fAlpha = (icon->pAppli->bIsHidden ? MIN (1 - myTaskbarParam.fVisibleAppliAlpha, 1) : MIN (myTaskbarParam.fVisibleAppliAlpha + 1, 1));
 		if (fAlpha != 1)
@@ -333,7 +335,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	
 	//\_____________________ On positionne l'icone.
 	glPushMatrix ();
-	if (myIconsParam.bConstantSeparatorSize && CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
+	if (myIconsParam.bConstantSeparatorSize && GLDI_OBJECT_IS_SEPARATOR_ICON (icon))
 	{
 		if (pDock->container.bIsHorizontal)
 		{
@@ -350,7 +352,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
 		glTranslatef (icon->fWidth * icon->fScale/2, -icon->fHeight * icon->fScale/2, 0.);
 	}
-	if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) && myIconsParam.bRevolveSeparator)
+	if (GLDI_OBJECT_IS_SEPARATOR_ICON (icon) && myIconsParam.bRevolveSeparator)
 	{
 		if (pDock->container.bIsHorizontal)
 		{
@@ -380,7 +382,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	
 	glPopMatrix ();  // retour juste apres la translation au milieu de l'icone.
 	
-	if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) && myIconsParam.bRevolveSeparator && !pDock->container.bIsHorizontal)
+	if (GLDI_OBJECT_IS_SEPARATOR_ICON (icon) && myIconsParam.bRevolveSeparator && !pDock->container.bIsHorizontal)
 	{
 		glMatrixMode(GL_TEXTURE);
 		glLoadIdentity ();

@@ -29,8 +29,6 @@ void cairo_dock_freeze_docks (gboolean bFreeze);
 
 void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, CairoDock *pDock);
 
-gboolean cairo_dock_on_leave_dock_notification (G_GNUC_UNUSED gpointer data, CairoDock *pDock, G_GNUC_UNUSED gboolean *bStartAnimation);
-
 void gldi_dock_init_internals (CairoDock *pDock);
 
 G_END_DECLS

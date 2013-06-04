@@ -37,7 +37,6 @@
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-dock-factory.h"
-#include "cairo-dock-launcher-factory.h"
 #include "cairo-dock-desktop-file-factory.h"
 #include "cairo-dock-desktop-manager.h"  // gldi_desktop_get_width
 #include "cairo-dock-gui-manager.h"

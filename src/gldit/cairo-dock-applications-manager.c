@@ -29,9 +29,10 @@
 #include "gldi-config.h"
 #include "cairo-dock-icon-manager.h"
 #include "cairo-dock-indicator-manager.h"  // myIndicatorsParam.bDrawIndicatorOnAppli
+#include "cairo-dock-class-icon-manager.h"
 #include "cairo-dock-animations.h"  // cairo_dock_trigger_icon_removal_from_dock
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
-#include "cairo-dock-icon-facility.h"  // cairo_dock_set_icon_name
+#include "cairo-dock-icon-facility.h"  // gldi_icon_set_name
 #include "cairo-dock-container.h"
 #include "cairo-dock-object.h"
 #include "cairo-dock-log.h"
@@ -125,7 +126,7 @@ static gboolean _on_window_destroyed (G_GNUC_UNUSED gpointer data, GldiWindowAct
 		{
 			cd_message ("  pas dans un container, on la detruit donc immediatement");
 			cairo_dock_update_name_on_inhibitors (icon->cClass, actor, NULL);
-			cairo_dock_free_icon (icon);  // will call cairo_dock_unregister_appli and update the inhibitors.
+			gldi_object_unref (GLDI_OBJECT (icon));  // will call cairo_dock_unregister_appli and update the inhibitors.
 		}
 	}
 	
@@ -141,7 +142,7 @@ static gboolean _on_window_name_changed (G_GNUC_UNUSED gpointer data, GldiWindow
 	if (pIcon == NULL)
 		return GLDI_NOTIFICATION_LET_PASS;
 	
-	cairo_dock_set_icon_name (actor->cName, pIcon, NULL);
+	gldi_icon_set_name (pIcon, actor->cName);
 	
 	cairo_dock_update_name_on_inhibitors (actor->cClass, actor, pIcon->cName);
 	return GLDI_NOTIFICATION_LET_PASS;
@@ -165,7 +166,7 @@ static gboolean _on_window_icon_changed (G_GNUC_UNUSED gpointer data, GldiWindow
 				if (pDock->iRefCount != 0)
 					cairo_dock_trigger_redraw_subdock_content (pDock);
 			}
-			cairo_dock_redraw_icon (icon, pContainer);
+			cairo_dock_redraw_icon (icon);
 		}
 	}
 	
@@ -280,7 +281,7 @@ static gboolean _on_window_state_changed (G_GNUC_UNUSED gpointer data, GldiWindo
 		{
 			icon->fAlpha = 1;  // on triche un peu.
 			if (pParentDock != NULL)
-				cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));
+				cairo_dock_redraw_icon (icon);
 		}
 		
 		// miniature (on le fait apres l'avoir inseree/detachee, car comme ca dans le cas ou on l'enleve du dock apres l'avoir deminimisee, l'icone est marquee comme en cours de suppression, et donc on ne recharge pas son icone. Sinon l'image change pendant la transition, ce qui est pas top. Comme ca ne change pas la taille de l'icone dans le dock, on peut faire ca apres l'avoir inseree.
@@ -290,7 +291,7 @@ static gboolean _on_window_state_changed (G_GNUC_UNUSED gpointer data, GldiWindo
 			cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pParentDock));
 			if (pParentDock)
 			{
-				cairo_dock_redraw_icon (icon, CAIRO_CONTAINER (pParentDock));
+				cairo_dock_redraw_icon (icon);
 				if (pParentDock->iRefCount != 0)  // on prevoit le redessin de l'icone pointant sur le sous-dock.
 				{
 					cairo_dock_trigger_redraw_subdock_content (pParentDock);
@@ -423,14 +424,14 @@ static gboolean _on_active_window_changed (G_GNUC_UNUSED gpointer data, GldiWind
 		}
 		else
 		{
-			cairo_dock_redraw_icon (pLastActiveIcon, CAIRO_CONTAINER (pLastActiveParentDock));
+			cairo_dock_redraw_icon (pLastActiveIcon);
 			if (pLastActiveParentDock->iRefCount != 0)  // l'icone est dans un sous-dock, comme l'indicateur est aussi dessine sur l'icone pointant sur ce sous-dock, il faut la redessiner sans l'indicateur.
 			{
 				CairoDock *pMainDock = NULL;
 				Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pLastActiveParentDock, &pMainDock);
 				if (pPointingIcon && pMainDock)
 				{
-					cairo_dock_redraw_icon (pPointingIcon, CAIRO_CONTAINER (pMainDock));
+					cairo_dock_redraw_icon (pPointingIcon);
 				}
 			}
 		}
@@ -523,7 +524,7 @@ static gboolean _remove_one_appli (G_GNUC_UNUSED GldiWindowActor *pAppli, Icon *
 				{
 					cd_debug ("on degage le fake qui pointe sur %s", pDock->cDockName);
 					cairo_dock_detach_icon_from_dock (pFakeClassIcon, pFakeClassParentDock);
-					cairo_dock_free_icon (pFakeClassIcon);
+					gldi_object_unref (GLDI_OBJECT (pFakeClassIcon));
 					if (! pFakeClassParentDock->bIsMainDock)
 						cairo_dock_update_dock_size (pFakeClassParentDock);
 				}
@@ -535,7 +536,7 @@ static gboolean _remove_one_appli (G_GNUC_UNUSED GldiWindowActor *pAppli, Icon *
 	gldi_icon_unset_appli (pIcon);  // on ne veut pas passer dans le 'unregister'
 	g_free (pIcon->cClass);  // ni la gestion de la classe.
 	pIcon->cClass = NULL;
-	cairo_dock_free_icon (pIcon);
+	gldi_object_unref (GLDI_OBJECT (pIcon));
 	return TRUE;
 }
 static void _cairo_dock_stop_application_manager (void)
@@ -903,7 +904,7 @@ static gboolean _remove_appli (G_GNUC_UNUSED GldiWindowActor *actor, Icon *pIcon
 	// if not inside a dock, free it, else it will be freeed with the dock.
 	if (pIcon->cParentDockName == NULL)  // not in a dock.
 	{
-		cairo_dock_free_icon (pIcon);
+		gldi_object_unref (GLDI_OBJECT (pIcon));
 	}
 	
 	return TRUE;
@@ -989,7 +990,6 @@ static void init_object (GldiObject *obj, gpointer attr)
 	Icon *icon = (Icon*)obj;
 	GldiWindowActor *actor = (GldiWindowActor*)attr;
 	
-	icon->iTrueType = CAIRO_DOCK_ICON_TYPE_APPLI;
 	icon->iGroup = CAIRO_DOCK_APPLI;
 	icon->fOrder = CAIRO_DOCK_LAST_ORDER;
 	gldi_icon_set_appli (icon, actor);
@@ -999,7 +999,6 @@ static void init_object (GldiObject *obj, gpointer attr)
 	
 	icon->iface.load_image           = _load_appli;
 	icon->iface.action_on_drag_hover = _show_appli_for_drop;
-	icon->iface.on_delete            = NULL;
 	
 	icon->bHasIndicator = myIndicatorsParam.bDrawIndicatorOnAppli;
 	if (myTaskbarParam.bSeparateApplis)

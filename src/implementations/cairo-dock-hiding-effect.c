@@ -18,19 +18,6 @@
 */
 
 #include <math.h>
-#include <sys/time.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h> 
-#include <cairo.h>
-#include <gtk/gtk.h>
-
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-#include <X11/Xutil.h>
-#include <gdk/gdkx.h>
-
-#include <GL/glu.h>
 
 #include "cairo-dock-animations.h"  // definition of CairoDockHidingEffect
 #include "cairo-dock-log.h"

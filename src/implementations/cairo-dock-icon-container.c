@@ -29,6 +29,7 @@
 #include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-icon-manager.h"
+#include "cairo-dock-separator-manager.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-icon-container.h"
@@ -51,7 +52,7 @@ static void _cairo_dock_draw_subdock_content_as_emblem (Icon *pIcon, G_GNUC_UNUS
 	for (ic = pIcon->pSubDock->icons, i = 0; ic != NULL && i < 4; ic = ic->next)
 	{
 		icon = ic->data;
-		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) || icon->image.pSurface == NULL)
+		if (GLDI_OBJECT_IS_SEPARATOR_ICON (icon) || icon->image.pSurface == NULL)
 			continue;
 		
 		cairo_dock_get_icon_extent (icon, &wi, &hi);
@@ -146,6 +147,7 @@ static void _cairo_dock_draw_subdock_content_as_stack_opengl (Icon *pIcon, G_GNU
 		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) || icon->image.iTexture == 0)
 			continue;
 		
+		g_print ("%d) %s\n", i, icon->cName);
 		switch (i)
 		{
 			case 0:

@@ -74,7 +74,7 @@
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-packages.h"
-#include "cairo-dock-launcher-manager.h"  // cairo_dock_launch_command
+#include "cairo-dock-utils.h"  // cairo_dock_launch_command
 #include "cairo-dock-core.h"
 
 #include "cairo-dock-gui-manager.h"
