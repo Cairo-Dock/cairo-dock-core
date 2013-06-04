@@ -56,10 +56,14 @@ void gldi_object_ref (GldiObject *pObject);
 
 void gldi_object_unref (GldiObject *pObject);
 
+void gldi_object_delete (GldiObject *pObject);
+
 
 void gldi_object_set_manager (GldiObject *pObject, GldiManager *pMgr);
 
 gboolean gldi_object_is_manager_child (GldiObject *pObject, GldiManager *pMgr);
+
+#define gldi_object_get_type(obj) (GLDI_OBJECT(obj)->mgr ? GLDI_OBJECT(obj)->mgr->cModuleName : "manager")
 
 
 /// Generic prototype of a notification callback.

@@ -101,6 +101,26 @@ void gldi_object_unref (GldiObject *pObject)
 	}
 }
 
+void gldi_object_delete (GldiObject *pObject)
+{
+	if (pObject == NULL)
+		return;
+	
+	//\_________________ delete the object from the current theme
+	gboolean r = TRUE;
+	GldiManager *pMgr = pObject->mgr;
+	while (pMgr)
+	{
+		if (pMgr->delete_object)
+			r = pMgr->delete_object (pObject);
+		if (!r)
+			return;
+		pMgr = pMgr->object.mgr;
+	}
+	
+	//\_________________ destroy the object
+	gldi_object_unref (pObject);
+}
 
 gboolean gldi_object_is_manager_child (GldiObject *pObject, GldiManager *pMgr)
 {
