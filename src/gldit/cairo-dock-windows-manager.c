@@ -280,6 +280,13 @@ void gldi_window_can_minimize_maximize_close (GldiWindowActor *actor, gboolean *
 	}
 }
 
+guint gldi_window_get_id (GldiWindowActor *pAppli)
+{
+	if (s_backend.get_id)
+		return s_backend.get_id (pAppli);
+	return 0;
+}
+
 
   /////////////////
  /// UTILITIES ///
@@ -331,9 +338,10 @@ void gldi_window_move_to_current_desktop (GldiWindowActor *pAppli)
 {
 	gldi_window_move_to_desktop (pAppli,
 		g_desktopGeometry.iCurrentDesktop,
-		0,
-		0);  // on ne veut pas decaler son viewport par rapport a nous.
+		g_desktopGeometry.iCurrentViewportX,
+		g_desktopGeometry.iCurrentViewportY);  // on ne veut pas decaler son viewport par rapport a nous.
 }
+
 
   ///////////////
  /// MANAGER ///

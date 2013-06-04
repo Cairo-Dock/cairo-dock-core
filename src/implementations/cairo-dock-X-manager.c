@@ -793,6 +793,11 @@ static void _can_minimize_maximize_close (GldiWindowActor *actor, gboolean *bCan
 	cairo_dock_xwindow_can_minimize_maximized_close (xactor->Xid, bCanMinimize, bCanMaximize, bCanClose);
 }
 
+static guint _get_id (GldiWindowActor *actor)
+{
+	GldiXWindowActor *xactor = (GldiXWindowActor *)actor;
+	return xactor->Xid;
+}
 
   ////////////
  /// INIT ///
@@ -888,6 +893,7 @@ static void init (void)
 	wmb.is_sticky = _is_sticky;
 	wmb.set_sticky = _set_sticky;
 	wmb.can_minimize_maximize_close = _can_minimize_maximize_close;
+	wmb.get_id = _get_id;
 	gldi_windows_manager_register_backend (&wmb);
 }
 

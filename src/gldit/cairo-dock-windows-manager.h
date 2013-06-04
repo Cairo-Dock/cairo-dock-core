@@ -82,6 +82,7 @@ struct _GldiWindowManagerBackend {
 	gboolean (*is_sticky) (GldiWindowActor *actor);
 	void (*set_sticky) (GldiWindowActor *actor, gboolean bSticky);
 	void (*can_minimize_maximize_close) (GldiWindowActor *actor, gboolean *bCanMinimize, gboolean *bCanMaximize, gboolean *bCanClose);
+	guint (*get_id) (GldiWindowActor *actor);
 	} ;
 
 /// Definition of a window actor.
@@ -169,6 +170,8 @@ gboolean gldi_window_is_on_current_desktop (GldiWindowActor *actor);
 gboolean gldi_window_is_on_desktop (GldiWindowActor *pAppli, int iNumDesktop, int iNumViewportX, int iNumViewportY);
 
 void gldi_window_move_to_current_desktop (GldiWindowActor *pAppli);
+
+guint gldi_window_get_id (GldiWindowActor *pAppli);
 
 
 void gldi_register_windows_manager (void);
