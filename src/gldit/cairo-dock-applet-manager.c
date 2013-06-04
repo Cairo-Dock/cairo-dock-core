@@ -33,12 +33,18 @@
 #include "cairo-dock-container.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-applet-factory.h"
 #include "cairo-dock-icon-manager.h"  // cairo_dock_search_icon_s_path
 #include "cairo-dock-applet-manager.h"
 
+// public (manager, config, data)
+GldiAppletIconManager myAppletIconsMgr;
 
-static cairo_surface_t *cairo_dock_create_applet_surface (const gchar *cIconFileName, int iWidth, int iHeight)
+// dependancies
+
+// private
+
+
+static cairo_surface_t *_create_applet_surface (const gchar *cIconFileName, int iWidth, int iHeight)
 {
 	cairo_surface_t *pNewSurface;
 	if (cIconFileName == NULL)
@@ -59,11 +65,11 @@ static cairo_surface_t *cairo_dock_create_applet_surface (const gchar *cIconFile
 }
 
 
-static void _load_applet (Icon *icon)
+static void _load_image (Icon *icon)
 {
 	int iWidth = cairo_dock_icon_get_allocated_width (icon);
 	int iHeight = cairo_dock_icon_get_allocated_height (icon);
-	cairo_surface_t *pSurface = cairo_dock_create_applet_surface (icon->cFileName,
+	cairo_surface_t *pSurface = _create_applet_surface (icon->cFileName,
 		iWidth,
 		iHeight);
 	if (pSurface == NULL && icon->pModuleInstance != NULL)  // une image inexistante a ete definie en conf => on met l'icone par defaut. Si aucune image n'est definie, alors c'est a l'applet de faire qqch (dessiner qqch, mettre une image par defaut, etc).
@@ -76,23 +82,94 @@ static void _load_applet (Icon *icon)
 	cairo_dock_load_image_buffer_from_surface (&icon->image, pSurface, iWidth, iHeight);
 }
 
-static gboolean _delete_applet (Icon *icon)
+
+Icon *gldi_applet_icon_new (CairoDockMinimalAppletConfig *pMinimalConfig, GldiModuleInstance *pModuleInstance)
 {
+	GldiAppletIconAttr attr = {pMinimalConfig, pModuleInstance};
+	return (Icon*)gldi_object_new (GLDI_MANAGER(&myAppletIconsMgr), &attr);
+}
+
+
+  ///////////////
+ /// MANAGER ///
+///////////////
+
+static void init_object (GldiObject *obj, gpointer attr)
+{
+	GldiAppletIcon *icon = (GldiAppletIcon*)obj;
+	GldiAppletIconAttr *pAttributes = (GldiAppletIconAttr*)attr;
+	g_return_if_fail (pAttributes->pModuleInstance != NULL);
+	
+	CairoDockMinimalAppletConfig *pMinimalConfig = pAttributes->pMinimalConfig;
+	
+	icon->iface.load_image = _load_image;
+	icon->iGroup = CAIRO_DOCK_LAUNCHER;
+	icon->pModuleInstance = pAttributes->pModuleInstance;
+	
+	//\____________ On recupere les infos de sa config.
+	icon->cName = pMinimalConfig->cLabel;
+	pMinimalConfig->cLabel = NULL;
+	icon->cFileName = pMinimalConfig->cIconFileName;
+	pMinimalConfig->cIconFileName = NULL;
+	
+	icon->fOrder = pMinimalConfig->fOrder;
+	icon->bAlwaysVisible = pMinimalConfig->bAlwaysVisible;
+	icon->bHasHiddenBg = pMinimalConfig->bAlwaysVisible;  // if we're going to see the applet all the time, let's add a background. if the user doesn't want it, he can always set a transparent bg color.
+	icon->pHiddenBgColor = pMinimalConfig->pHiddenBgColor;
+	pMinimalConfig->pHiddenBgColor = NULL;
+	
+	if (! pMinimalConfig->bIsDetached)
+	{
+		cairo_dock_icon_set_requested_display_size (icon, pMinimalConfig->iDesiredIconWidth, pMinimalConfig->iDesiredIconHeight);
+		icon->cParentDockName = g_strdup (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
+	}
+	else  // l'applet creera la surface elle-meme, car on ne sait ni la taille qu'elle voudra lui donner, ni meme si elle l'utilisera !
+	{
+		icon->fWidth = -1;
+		icon->fHeight = -1;
+	}
+	// probably not useful...
+	icon->fScale = 1;
+	icon->fGlideScale = 1;
+	icon->fWidthFactor = 1.;
+	icon->fHeightFactor = 1.;
+}
+
+static void reset_object (GldiObject *obj)
+{
+	GldiAppletIcon *icon = (GldiAppletIcon*)obj;
 	if (icon->pModuleInstance != NULL)  // remove the instance from the current theme
 	{
 		g_print ("%s ()\n", __func__);
-		gldi_module_delete_instance (icon->pModuleInstance);
-		return TRUE;
+		gldi_object_unref (GLDI_OBJECT(icon->pModuleInstance));
+		icon->pModuleInstance = NULL;
 	}
-	return FALSE;
 }
 
-Icon *cairo_dock_create_icon_for_applet (CairoDockMinimalAppletConfig *pMinimalConfig, GldiModuleInstance *pModuleInstance)
+static gboolean delete_object (GldiObject *obj)
 {
-	//\____________ On cree l'icone.
-	Icon *icon = cairo_dock_new_applet_icon (pMinimalConfig, pModuleInstance);
-	icon->iface.load_image = _load_applet;
-	icon->iface.on_delete = _delete_applet;
-	
-	return icon;
+	GldiAppletIcon *icon = (GldiAppletIcon*)obj;
+	if (icon->pModuleInstance != NULL)  // remove the instance from the current theme
+	{
+		g_print ("%s ()\n", __func__);
+		gldi_object_delete (GLDI_OBJECT(icon->pModuleInstance));
+		icon->pModuleInstance = NULL;
+	}
+	return TRUE;
+}
+
+void gldi_register_applet_icons_manager (void)
+{
+	// Manager
+	memset (&myAppletIconsMgr, 0, sizeof (GldiAppletIconManager));
+	myAppletIconsMgr.mgr.cModuleName    = "AppletIcon";
+	myAppletIconsMgr.mgr.init_object    = init_object;
+	myAppletIconsMgr.mgr.reset_object   = reset_object;
+	myAppletIconsMgr.mgr.delete_object  = delete_object;
+	myAppletIconsMgr.mgr.iObjectSize    = sizeof (GldiAppletIcon);
+	// signals
+	gldi_object_install_notifications (GLDI_OBJECT (&myAppletIconsMgr), NB_NOTIFICATIONS_APPLET_ICON);
+	gldi_object_set_manager (GLDI_OBJECT (&myAppletIconsMgr), GLDI_MANAGER (&myIconsMgr));
+	// register
+	gldi_register_manager (GLDI_MANAGER(&myAppletIconsMgr));
 }

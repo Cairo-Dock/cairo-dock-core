@@ -17,24 +17,55 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __CAIRO_DOCK_APPLET_MANAGER__
-#define  __CAIRO_DOCK_APPLET_MANAGER__
+#ifndef __CAIRO_DOCK_APPLET_ICON_MANAGER__
+#define  __CAIRO_DOCK_APPLET_ICON_MANAGER__
 
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
+#include "cairo-dock-icon-manager.h"
 G_BEGIN_DECLS
 
-/* Cree une icone destinee a une applet.
-*@param pContainer le container ou sera inseree ulterieurement cette icone.
-*@param iWidth la largeur desiree de l'icone.
-*@param iHeight la hauteur desiree de l'icone.
-*@param cName le nom de l'icone, tel qu'il apparaitra en etiquette de l'icone.
-*@param cIconFileName le nom d'un fichier image a afficher dans l'icone, ou NULL si l'on souhaitera dessiner soi-meme dans l'icone.
-*@param pModuleInstance l'instance du module (necessaire pour que l'icone soit consideree comme une applet lors de son remplissage).
-*@return l'icone nouvellement cree. Elle n'est _pas_ inseree dans le dock, c'est le gestionnaire de module qui se charge d'inserer les icones renvoyees par les modules.
+/**
+*@file cairo-dock-applet-manager.h This class handles the Applet Icons, which are icons used by module instances.
+* Note: they are not UserIcon, because they are created by and belongs to a ModuleInstance, which is the actual object belonging to the user.
 */
-Icon *cairo_dock_create_icon_for_applet (CairoDockMinimalAppletConfig *pMinimalConfig, GldiModuleInstance *pModuleInstance);
+
+typedef struct _GldiAppletIconManager GldiAppletIconManager;
+typedef struct _GldiAppletIconAttr GldiAppletIconAttr;
+typedef Icon GldiAppletIcon;  /// icon + module-instance
+
+#ifndef _MANAGER_DEF_
+extern GldiAppletIconManager myAppletIconsMgr;
+#endif
+
+// manager
+struct _GldiAppletIconManager {
+	GldiManager mgr;
+} ;
+
+struct _GldiAppletIconAttr {
+	CairoDockMinimalAppletConfig *pMinimalConfig;
+	GldiModuleInstance *pModuleInstance;
+};
+
+// signals
+typedef enum {
+	NB_NOTIFICATIONS_APPLET_ICON = NB_NOTIFICATIONS_ICON,
+	} GldiAppletIconNotifications;
+
+
+/** Say if an object is a AppletIcon.
+*@param obj the object.
+*@return TRUE if the object is a AppletIcon.
+*/
+#define GLDI_OBJECT_IS_APPLET_ICON(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), GLDI_MANAGER(&myAppletIconsMgr))
+
+
+Icon *gldi_applet_icon_new (CairoDockMinimalAppletConfig *pMinimalConfig, GldiModuleInstance *pModuleInstance);
+
+
+void gldi_register_applet_icons_manager (void);
 
 
 G_END_DECLS
