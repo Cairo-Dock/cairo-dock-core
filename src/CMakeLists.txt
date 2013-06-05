@@ -1,5 +1,4 @@
 
-#add_subdirectory (icon-factory)
 add_subdirectory (gldit)
 add_subdirectory (implementations)
 
@@ -27,8 +26,7 @@ SET(cairo_dock_SRCS
 include_directories(
 	${PACKAGE_INCLUDE_DIRS}
 	${GTK_INCLUDE_DIRS}
-	${CMAKE_SOURCE_DIR}/src/gldit
-	${CMAKE_SOURCE_DIR}/src/icon-factory)
+	${CMAKE_SOURCE_DIR}/src/gldit)
 
 # Make sure the linker can find the libraries.
 link_directories(
@@ -45,7 +43,6 @@ target_link_libraries (${PROJECT_NAME}
 	${PACKAGE_LIBRARIES}
 	${GTK_LIBRARIES}
 	gldi
-	#icon-factory
 	${LIBINTL_LIBRARIES})
 
 # install the program once it is built.

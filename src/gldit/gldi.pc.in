@@ -10,5 +10,5 @@ Name: gldi
 Description: openGL Desktop Interface. A library to build advanced interfaces for the desktop (dock, panel, desklet, dialog, ...); it supports both cairo and openGL.
 Requires: @gtk_required@ @packages_required@ @xextend_required@
 Libs: -L${libdir} -lgldi
-Cflags: -I${includedir}/cairo-dock -I${includedir}/cairo-dock/gldit -I${includedir}/cairo-dock/icon-factory -I${includedir}/cairo-dock/implementations
+Cflags: -I${includedir}/cairo-dock -I${includedir}/cairo-dock/gldit -I${includedir}/cairo-dock/implementations
 Version: @VERSION@

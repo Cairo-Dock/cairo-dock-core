@@ -31,7 +31,6 @@ include_directories (
 	${GTK_INCLUDE_DIRS}
 	${CMAKE_SOURCE_DIR}/src
 	${CMAKE_SOURCE_DIR}/src/gldit
-	${CMAKE_SOURCE_DIR}/src/icon-factory
 	${CMAKE_SOURCE_DIR}/src/implementations)
 
 link_directories (

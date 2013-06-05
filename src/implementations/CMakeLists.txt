@@ -25,7 +25,6 @@ include_directories(
 	${PACKAGE_INCLUDE_DIRS}
 	${GTK_INCLUDE_DIRS}
 	${CMAKE_SOURCE_DIR}/src/gldit
-	${CMAKE_SOURCE_DIR}/src/icon-factory
 	${CMAKE_SOURCE_DIR}/src/implementations)
 
 ########### install files ###############

@@ -9,5 +9,5 @@ Name: cairo-dock
 Description: A pretty and convenient interface to your desktop: dock, panel, desklet.
 Requires: @packages_required@ @xextend_required@ @gtk_required@
 Libs: -L${libdir}
-Cflags: -I${includedir}/cairo-dock -I${includedir}/cairo-dock/gldit -I${includedir}/cairo-dock/icon-factory -I${includedir}/cairo-dock/implementations
+Cflags: -I${includedir}/cairo-dock -I${includedir}/cairo-dock/gldit -I${includedir}/cairo-dock/implementations
 Version: @VERSION@

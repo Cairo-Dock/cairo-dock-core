@@ -78,7 +78,6 @@ include_directories(
 	${XEXTEND_INCLUDE_DIRS}
 	${XINERAMA_INCLUDE_DIRS}
 	${CMAKE_SOURCE_DIR}/src/gldit
-	#${CMAKE_SOURCE_DIR}/src/icon-factory
 	${CMAKE_SOURCE_DIR}/src/implementations)
 
 # Make sure the linker can find the libraries.
@@ -108,7 +107,6 @@ target_link_libraries("gldi"
 	${XEXTEND_LIBRARIES}
 	${XINERAMA_LIBRARIES}
 	${LIBCRYPT_LIBS}
-	#icon-factory
 	implementations
 	${LIBDL_LIBRARIES})
 
