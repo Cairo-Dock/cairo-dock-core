@@ -325,17 +325,15 @@ void cairo_dock_end_draw_icon_cairo (Icon *pIcon);
 
 /** Initiate an OpenGL drawing session on an icon's texture.
 *@param pIcon the icon on which to draw.
-*@param pContainer its container, or NULL if the icon is not yet inside a container.
 *@param iRenderingMode rendering mode. 0:normal, 1:don't clear the current texture, so that the drawing will be superimposed on it, 2:keep the current icon texture unchanged for all the drawing (the drawing is made on another texture).
 *@return TRUE if you can proceed to the drawing, FALSE if an error occured.
 */
-gboolean cairo_dock_begin_draw_icon (Icon *pIcon, GldiContainer *pContainer, gint iRenderingMode);
+gboolean cairo_dock_begin_draw_icon (Icon *pIcon, gint iRenderingMode);
 /** Finish an OpenGL drawing session on an icon.
 *@param pIcon the icon on which to draw.
-*@param pContainer its container, or NULL if the icon is not yet inside a container.
 *@return TRUE if you can proceed to the drawing, FALSE if an error occured.
 */
-void cairo_dock_end_draw_icon (Icon *pIcon, GldiContainer *pContainer);
+void cairo_dock_end_draw_icon (Icon *pIcon);
 
 
 void gldi_theme_icon_write_container_name_in_conf_file (Icon *pIcon, const gchar *cParentDockName);

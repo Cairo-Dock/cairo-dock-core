@@ -666,7 +666,7 @@ void cairo_dock_end_draw_icon_cairo (Icon *pIcon)
 	cairo_dock_end_draw_image_buffer_cairo (&pIcon->image);
 }
 
-gboolean cairo_dock_begin_draw_icon (Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer, gint iRenderingMode)
+gboolean cairo_dock_begin_draw_icon (Icon *pIcon, gint iRenderingMode)
 {
 	gboolean r = cairo_dock_begin_draw_image_buffer_opengl (&pIcon->image, pIcon->pContainer, iRenderingMode);
 	
@@ -691,7 +691,7 @@ gboolean cairo_dock_begin_draw_icon (Icon *pIcon, G_GNUC_UNUSED GldiContainer *p
 	return r;
 }
 
-void cairo_dock_end_draw_icon (Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer)
+void cairo_dock_end_draw_icon (Icon *pIcon)
 {
 	cairo_dock_end_draw_image_buffer_opengl (&pIcon->image, pIcon->pContainer);
 }
