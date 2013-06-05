@@ -77,7 +77,7 @@ Icon * cairo_dock_create_dummy_launcher (gchar *cName, gchar *cFileName, gchar *
 
 gboolean cairo_dock_apply_icon_background_opengl (Icon *icon)
 {
-	if (cairo_dock_begin_draw_icon (icon, icon->pContainer, 1))  // 1 => don't clear current image
+	if (cairo_dock_begin_draw_icon (icon, 1))  // 1 => don't clear current image
 	{
 		_cairo_dock_enable_texture ();
 		glBlendFunc (GL_ONE_MINUS_DST_ALPHA, GL_ONE);  // dest_over = src * (1 - dst.a) + dst
@@ -85,7 +85,7 @@ gboolean cairo_dock_apply_icon_background_opengl (Icon *icon)
 		_cairo_dock_apply_texture_at_size (g_pIconBackgroundBuffer.iTexture,
 			icon->image.iWidth,
 			icon->image.iHeight);
-		cairo_dock_end_draw_icon (icon, icon->pContainer);
+		cairo_dock_end_draw_icon (icon);
 		return TRUE;
 	}
 	return FALSE;
@@ -302,7 +302,7 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 	if (pIcon->image.iTexture != 0 && pRenderer->render_opengl)  // dessin opengl
 	{
 		//\______________ On efface le dessin existant.
-		if (! cairo_dock_begin_draw_icon (pIcon, CAIRO_CONTAINER (pDock), 0))  // 0 <=> erase the current texture.
+		if (! cairo_dock_begin_draw_icon (pIcon, 0))  // 0 <=> erase the current texture.
 			return ;
 		
 		_cairo_dock_set_blend_alpha ();
@@ -314,7 +314,7 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 		
 		//\______________ On finit le dessin.
 		_cairo_dock_disable_texture ();
-		cairo_dock_end_draw_icon (pIcon, CAIRO_CONTAINER (pDock));
+		cairo_dock_end_draw_icon (pIcon);
 	}
 	else if (pIcon->image.pSurface != NULL && pRenderer->render != NULL)  // dessin cairo
 	{

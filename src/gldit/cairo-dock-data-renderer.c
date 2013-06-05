@@ -367,7 +367,7 @@ static void _cairo_dock_render_to_texture (CairoDataRenderer *pRenderer, Icon *p
 	}
 	else
 	{
-		if (! cairo_dock_begin_draw_icon (pIcon, pContainer, 0))
+		if (! cairo_dock_begin_draw_icon (pIcon, 0))
 			return ;
 	}
 	
@@ -398,7 +398,7 @@ static void _cairo_dock_render_to_texture (CairoDataRenderer *pRenderer, Icon *p
 	}
 	else
 	{
-		cairo_dock_end_draw_icon (pIcon, pContainer);
+		cairo_dock_end_draw_icon (pIcon);
 	}
 }
 

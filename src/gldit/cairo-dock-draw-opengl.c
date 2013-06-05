@@ -953,9 +953,9 @@ void cairo_dock_draw_hidden_appli_icon (Icon *pIcon, GldiContainer *pContainer, 
 	}
 	else if (pIcon->pAppli->bIsHidden)
 	{
-		if (!cairo_dock_begin_draw_icon (pIcon, pContainer, 2))
+		if (!cairo_dock_begin_draw_icon (pIcon, 2))
 			return ;
 		_draw_icon_bent_backwards (pIcon, pContainer, pIcon->image.iTexture, 1.);
-		cairo_dock_end_draw_icon (pIcon, pContainer);
+		cairo_dock_end_draw_icon (pIcon);
 	}
 }

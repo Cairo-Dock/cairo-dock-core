@@ -602,7 +602,7 @@ gldi_shortkey_new (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 *@param ... value to return in case of failure.
 */
 #define CD_APPLET_START_DRAWING_MY_ICON_OR_RETURN(...) \
-	if (! cairo_dock_begin_draw_icon (myIcon, myContainer, 0)) \
+	if (! cairo_dock_begin_draw_icon (myIcon, 0)) \
 		CD_APPLET_LEAVE (__VA_ARGS__)
 
 /** Initiate a Cairo drawing session on the applet's icon, or quit the function if failed.
@@ -614,7 +614,7 @@ gldi_shortkey_new (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 
 /** Terminate an OpenGL drawing session on the applet's icon. Does not trigger the icon's redraw.
 */
-#define CD_APPLET_FINISH_DRAWING_MY_ICON cairo_dock_end_draw_icon (myIcon, myContainer); \
+#define CD_APPLET_FINISH_DRAWING_MY_ICON cairo_dock_end_draw_icon (myIcon); \
 	CD_APPLET_REDRAW_MY_ICON;
 
 /** Terminate an OpenGL drawing session on the applet's icon. Does not trigger the icon's redraw.
@@ -635,7 +635,7 @@ gldi_shortkey_new (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
  *@param iPosition position where to display the overlay
  *@return TRUE if the overlay has been successfuly printed.
  */
-#define CD_APPLET_PRINT_OVERLAY_ON_MY_ICON(cImageFile, iPosition) cairo_dock_print_overlay_on_icon_from_image (myIcon, myContainer, cImageFile, iPosition)
+#define CD_APPLET_PRINT_OVERLAY_ON_MY_ICON(cImageFile, iPosition) cairo_dock_print_overlay_on_icon_from_image (myIcon, cImageFile, iPosition)
 
 /** Remove an overlay from the applet's icon. The overlay is destroyed.
  *@param iPosition position of the overlay

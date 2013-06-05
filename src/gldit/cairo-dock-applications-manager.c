@@ -677,13 +677,11 @@ static void _load_appli (Icon *icon)
 		// draw the previous image as an emblem.
 		if (icon->image.iTexture != 0 && iPrevTexture != 0)
 		{
-			CairoDock *pParentDock = gldi_dock_get (icon->cParentDockName);
-			cairo_dock_print_overlay_on_icon_from_texture (icon, CAIRO_CONTAINER (pParentDock), iPrevTexture, CAIRO_OVERLAY_LOWER_LEFT);
+			cairo_dock_print_overlay_on_icon_from_texture (icon, iPrevTexture, CAIRO_OVERLAY_LOWER_LEFT);
 		}
 		else if (icon->image.pSurface != NULL && pPrevSurface != NULL)
 		{
-			CairoDock *pParentDock = gldi_dock_get (icon->cParentDockName);
-			cairo_dock_print_overlay_on_icon_from_surface (icon, CAIRO_CONTAINER (pParentDock), pPrevSurface, 0, 0, CAIRO_OVERLAY_LOWER_LEFT);
+			cairo_dock_print_overlay_on_icon_from_surface (icon, pPrevSurface, 0, 0, CAIRO_OVERLAY_LOWER_LEFT);
 		}
 	}
 	

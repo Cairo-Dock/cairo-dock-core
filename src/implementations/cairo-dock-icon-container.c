@@ -56,7 +56,7 @@ static void _cairo_dock_draw_subdock_content_as_emblem (Icon *pIcon, G_GNUC_UNUS
 			continue;
 		
 		cairo_dock_get_icon_extent (icon, &wi, &hi);
-		// we could use cairo_dock_print_overlay_on_icon_from_surface (pIcon, pContainer, icon->image.pSurface, wi, hi, i), but it's slightly optimized to draw it ourselves.
+		// we could use cairo_dock_print_overlay_on_icon_from_surface (pIcon, icon->image.pSurface, wi, hi, i), but it's slightly optimized to draw it ourselves.
 		
 		cairo_save (pCairoContext);
 		cairo_translate (pCairoContext, (i&1) * w/2, (i/2) * h/2);
