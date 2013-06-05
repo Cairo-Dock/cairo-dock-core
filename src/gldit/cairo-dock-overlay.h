@@ -171,25 +171,23 @@ void cairo_dock_draw_icon_overlays_opengl (Icon *pIcon, double fRatio);
 
 /** Print an overlay onto an icon from an image at a given position. You can't remove/modify the overlay then. The overlay will be displayed until you modify the icon directly (for instance by setting a new image).
  *@param pIcon the icon
- *@param pContainer container of the icon
  *@param cImageFile an image (if it's not a path, it is searched amongst the current theme's images)
  *@param iPosition position where to display the overlay
  *@return TRUE if the overlay has been successfuly printed.
  */
-gboolean cairo_dock_print_overlay_on_icon_from_image (Icon *pIcon, GldiContainer *pContainer, const gchar *cImageFile, CairoOverlayPosition iPosition);
+gboolean cairo_dock_print_overlay_on_icon_from_image (Icon *pIcon, const gchar *cImageFile, CairoOverlayPosition iPosition);
 
 /** Print an overlay onto an icon from a surface at a given position. You can't remove/modify the overlay then. The overlay will be displayed until you modify the icon directly (for instance by setting a new image).
  *@param pIcon the icon
- *@param pContainer container of the icon
  *@param pSurface a cairo surface
  *@param iWidth width of the surface
  *@param iHeight height of the surface
  *@param iPosition position where to display the overlay
  *@return TRUE if the overlay has been successfuly printed.
  */
-void cairo_dock_print_overlay_on_icon_from_surface (Icon *pIcon, GldiContainer *pContainer, cairo_surface_t *pSurface, int iWidth, int iHeight, CairoOverlayPosition iPosition);
+void cairo_dock_print_overlay_on_icon_from_surface (Icon *pIcon, cairo_surface_t *pSurface, int iWidth, int iHeight, CairoOverlayPosition iPosition);
 
-void cairo_dock_print_overlay_on_icon_from_texture (Icon *pIcon, GldiContainer *pContainer, GLuint iTexture, CairoOverlayPosition iPosition);
+void cairo_dock_print_overlay_on_icon_from_texture (Icon *pIcon, GLuint iTexture, CairoOverlayPosition iPosition);
 
 
 void gldi_register_overlays_manager (void);

@@ -310,7 +310,7 @@ void cairo_dock_draw_icon_overlays_opengl (Icon *pIcon, double fRatio)
  /// PRINT ///
 /////////////
 
-static void cairo_dock_print_overlay_on_icon (Icon *pIcon, GldiContainer *pContainer, CairoOverlay *pOverlay, CairoOverlayPosition iPosition)
+static void cairo_dock_print_overlay_on_icon (Icon *pIcon, CairoOverlay *pOverlay, CairoOverlayPosition iPosition)
 {
 	if (! pOverlay)
 		return;
@@ -327,7 +327,7 @@ static void cairo_dock_print_overlay_on_icon (Icon *pIcon, GldiContainer *pConta
 	if (pIcon->image.iTexture != 0 && pOverlay->image.iTexture != 0)  // dessin opengl : on dessine sur la texture de l'icone avec le mecanisme habituel.
 	{
 		/// TODO: handle the case where the drawing is not yet possible (container not yet sized).
-		if (! cairo_dock_begin_draw_icon (pIcon, pContainer, 1))  // 1 = keep current drawing
+		if (! cairo_dock_begin_draw_icon (pIcon, 1))  // 1 = keep current drawing
 			return ;
 		
 		glPushMatrix ();
@@ -345,7 +345,7 @@ static void cairo_dock_print_overlay_on_icon (Icon *pIcon, GldiContainer *pConta
 		_cairo_dock_disable_texture ();
 		glPopMatrix ();
 		
-		cairo_dock_end_draw_icon (pIcon, pContainer);
+		cairo_dock_end_draw_icon (pIcon);
 	}
 	else if (pIcon->image.pSurface != NULL && pOverlay->image.pSurface != NULL)
 	{
@@ -367,33 +367,33 @@ static void cairo_dock_print_overlay_on_icon (Icon *pIcon, GldiContainer *pConta
 	}
 }
 
-gboolean cairo_dock_print_overlay_on_icon_from_image (Icon *pIcon, GldiContainer *pContainer, const gchar *cImageFile, CairoOverlayPosition iPosition)
+gboolean cairo_dock_print_overlay_on_icon_from_image (Icon *pIcon, const gchar *cImageFile, CairoOverlayPosition iPosition)
 {
 	CairoOverlay *pOverlay = cairo_dock_add_overlay_from_image (pIcon, cImageFile, iPosition, NULL);
 	if (! pOverlay)
 		return FALSE;
 	
-	cairo_dock_print_overlay_on_icon (pIcon, pContainer, pOverlay, iPosition);
+	cairo_dock_print_overlay_on_icon (pIcon, pOverlay, iPosition);
 	
 	gldi_object_unref (GLDI_OBJECT(pOverlay));
 	return TRUE;
 }
 
-void cairo_dock_print_overlay_on_icon_from_surface (Icon *pIcon, GldiContainer *pContainer, cairo_surface_t *pSurface, int iWidth, int iHeight, CairoOverlayPosition iPosition)
+void cairo_dock_print_overlay_on_icon_from_surface (Icon *pIcon, cairo_surface_t *pSurface, int iWidth, int iHeight, CairoOverlayPosition iPosition)
 {
 	CairoOverlay *pOverlay = cairo_dock_add_overlay_from_surface (pIcon, pSurface, iWidth, iHeight, iPosition, NULL);
 	
-	cairo_dock_print_overlay_on_icon (pIcon, pContainer, pOverlay, iPosition);
+	cairo_dock_print_overlay_on_icon (pIcon, pOverlay, iPosition);
 	
 	pOverlay->image.pSurface = NULL;  // we don't want to free the surface.
 	gldi_object_unref (GLDI_OBJECT(pOverlay));
 }
 
-void cairo_dock_print_overlay_on_icon_from_texture (Icon *pIcon, GldiContainer *pContainer, GLuint iTexture, CairoOverlayPosition iPosition)
+void cairo_dock_print_overlay_on_icon_from_texture (Icon *pIcon, GLuint iTexture, CairoOverlayPosition iPosition)
 {
 	CairoOverlay *pOverlay = cairo_dock_add_overlay_from_texture (pIcon, iTexture, iPosition, NULL);  // we don't need the exact size of the texture as long as the scale is not 0, since then we'll simply draw the texture at the size of the icon * scale
 	
-	cairo_dock_print_overlay_on_icon (pIcon, pContainer, pOverlay, iPosition);
+	cairo_dock_print_overlay_on_icon (pIcon, pOverlay, iPosition);
 	
 	pOverlay->image.iTexture = 0;  // we don't want to free the texture.
 	gldi_object_unref (GLDI_OBJECT(pOverlay));
