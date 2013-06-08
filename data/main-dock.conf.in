@@ -62,7 +62,7 @@ frame_bg =
 #Y+[Same as main dock;0;0;Image;1;2;Colour gradation;3;2] Fill the background with:
 fill bg = 0
 
-#S+ Image filename to use as a background :
+#g+ Image filename to use as a background :
 #{Any format allowed; if empty, the colour gradation will be used as a fall back.}
 background image = 
 
