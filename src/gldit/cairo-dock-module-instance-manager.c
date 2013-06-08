@@ -245,178 +245,6 @@ void gldi_module_instance_free_generic_config (CairoDockMinimalAppletConfig *pMi
 	g_free (pMinimalConfig);
 }
 
-void gldi_module_instance_reload (GldiModuleInstance *pInstance, gboolean bReadConfig)
-{
-	g_return_if_fail (pInstance != NULL);
-	GldiModule *module = pInstance->pModule;
-	cd_message ("%s (%s, %d)", __func__, module->pVisitCard->cModuleName, bReadConfig);
-	
-	GldiContainer *pCurrentContainer = pInstance->pContainer;
-	pInstance->pContainer = NULL;
-	CairoDock *pCurrentDock = pInstance->pDock;
-	pInstance->pDock = NULL;
-	CairoDesklet *pCurrentDesklet = pInstance->pDesklet;
-	pInstance->pDesklet = NULL;
-	gchar *cCurrentSubDockName = NULL;
-	
-	GldiContainer *pNewContainer = NULL;
-	CairoDock *pNewDock = NULL;
-	CairoDesklet *pNewDesklet = NULL;
-	
-	//\______________ update the icon/container.
-	Icon *pIcon = pInstance->pIcon;
-	GKeyFile *pKeyFile = NULL;
-	CairoDockMinimalAppletConfig *pMinimalConfig = NULL;
-	if (bReadConfig && pInstance->cConfFilePath != NULL)
-	{
-		pMinimalConfig = g_new0 (CairoDockMinimalAppletConfig, 1);
-		pKeyFile = gldi_module_instance_open_conf_file (pInstance, pMinimalConfig);
-		
-		if (pInstance->pModule->pVisitCard->iContainerType != CAIRO_DOCK_MODULE_IS_PLUGIN)  // c'est une applet.
-		{
-			// update the name, image and visibility of the icon
-			if (pIcon != NULL)
-			{
-				if (pCurrentDock && ! pIcon->pContainer)  // icon already detached (by drag and drop)
-					pCurrentDock = NULL;
-				cCurrentSubDockName = g_strdup (pIcon->cName);
-				
-				// on gere le changement de nom de son sous-dock.
-				if (pIcon->cName != NULL && pIcon->pSubDock != NULL && cairo_dock_strings_differ (pIcon->cName, pMinimalConfig->cLabel))
-				{
-					gchar *cNewName = cairo_dock_get_unique_dock_name (pMinimalConfig->cLabel);
-					cd_debug ("* le sous-dock %s prend le nom '%s'", pIcon->cName, cNewName);
-					if (strcmp (pIcon->cName, cNewName) != 0)
-						gldi_dock_rename (pIcon->pSubDock, cNewName);
-					g_free (pMinimalConfig->cLabel);
-					pMinimalConfig->cLabel = cNewName;
-				}
-				
-				g_free (pIcon->cName);
-				pIcon->cName = pMinimalConfig->cLabel;
-				pMinimalConfig->cLabel = NULL;  // we won't need it any more, so skip a duplication.
-				g_free (pIcon->cFileName);
-				pIcon->cFileName = pMinimalConfig->cIconFileName;
-				pMinimalConfig->cIconFileName = NULL;  // idem
-				pIcon->bAlwaysVisible = pMinimalConfig->bAlwaysVisible;
-				pIcon->bHasHiddenBg = pMinimalConfig->bAlwaysVisible;  // if were going to see the applet all the time, let's add a background. if the user doesn't want it, he can always set a transparent bg color.
-				pIcon->pHiddenBgColor = pMinimalConfig->pHiddenBgColor;
-				pMinimalConfig->pHiddenBgColor = NULL;
-			}
-			
-			// get its new dock
-			if (!pMinimalConfig->bIsDetached)  // elle est desormais dans un dock.
-			{
-				const gchar *cDockName = (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
-				pNewDock = gldi_dock_get (cDockName);
-				if (pNewDock == NULL)  // c'est un nouveau dock.
-				{
-					gldi_dock_add_conf_file_for_name (cDockName);
-					pNewDock = gldi_dock_new (cDockName);
-				}
-				pNewContainer = CAIRO_CONTAINER (pNewDock);
-			}
-			
-			// detach the icon from its container if it has changed
-			if (pCurrentDock != NULL && (pMinimalConfig->bIsDetached || pNewDock != pCurrentDock))  // was in a dock, now is in another dock or in a desklet
-			{
-				cd_message ("le container a change (%s -> %s)", pIcon->cParentDockName, pMinimalConfig->bIsDetached ? "desklet" : pMinimalConfig->cDockName);
-				cairo_dock_detach_icon_from_dock (pIcon, pCurrentDock);
-			}
-			else if (pCurrentDesklet != NULL && ! pMinimalConfig->bIsDetached)  // was in a desklet, now is in a dock
-			{
-				pCurrentDesklet->pIcon = NULL;
-				cairo_dock_set_icon_container (pIcon, NULL);
-			}
-			
-			// get its desklet
-			if (pMinimalConfig->bIsDetached)
-			{
-				if (pCurrentDesklet == NULL)  // c'est un nouveau desklet.
-				{
-					pMinimalConfig->deskletAttribute.pIcon = pIcon;
-					pNewDesklet = gldi_desklet_new (&pMinimalConfig->deskletAttribute);
-				}
-				else  // on reconfigure le desklet courant.
-				{
-					pNewDesklet = pCurrentDesklet;
-					gldi_desklet_configure (pNewDesklet, &pMinimalConfig->deskletAttribute);
-				}
-				pNewContainer = CAIRO_CONTAINER (pNewDesklet);
-			}
-		}
-	}
-	else
-	{
-		pNewContainer = pCurrentContainer;
-		pNewDock = pCurrentDock;
-		pNewDesklet = pCurrentDesklet;
-	}
-	pInstance->pContainer = pNewContainer;
-	pInstance->pDock = pNewDock;
-	pInstance->pDesklet = pNewDesklet;
-	
-	if (pNewDock != NULL && pIcon != NULL)  // the icon is now in a dock, update its size and insert it
-	{
-		// on recupere la taille voulue.
-		if (pMinimalConfig == NULL)  // on recupere sa taille, car elle peut avoir change (si c'est la taille par defaut, ou si elle est devenue trop grande).
-		{
-			pMinimalConfig = g_new0 (CairoDockMinimalAppletConfig, 1);
-			pKeyFile = gldi_module_instance_open_conf_file (pInstance, pMinimalConfig);
-			g_key_file_free (pKeyFile);
-			pKeyFile = NULL;
-		}
-		cairo_dock_icon_set_requested_display_size (pIcon, pMinimalConfig->iDesiredIconWidth, pMinimalConfig->iDesiredIconHeight);
-		
-		// on insere l'icone dans le dock ou on met a jour celui-ci.
-		if (pNewDock != pCurrentDock)  // insert in its new dock.
-		{
-			cairo_dock_insert_icon_in_dock (pIcon, pNewDock, CAIRO_DOCK_ANIMATE_ICON);
-			pIcon->cParentDockName = g_strdup (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
-			cairo_dock_load_icon_buffers (pIcon, pNewContainer);  // do it now, since the applet may need it. no ned to do it in desklet mode, since the desklet doesn't have a renderer yet (so buffer can't be loaded).
-		}
-		else  // same dock, just update its size.
-		{
-			cairo_dock_resize_icon_in_dock (pIcon, pNewDock);
-			if (bReadConfig)
-				cairo_dock_load_icon_text (pIcon);
-		}
-	}
-	
-	//\_______________________ read the config.
-	gboolean bCanReload = TRUE;
-	if (pKeyFile != NULL)
-	{
-		_read_module_config (pKeyFile, pInstance);
-	}
-	
-	//\_______________________ reload the instance.
-	if (bCanReload && module && module->pInterface && module->pInterface->reloadModule != NULL)
-		module->pInterface->reloadModule (pInstance, pCurrentContainer, pKeyFile);
-	
-	if (pNewDock != NULL && pNewDock->iRefCount != 0)  // on redessine l'icone pointant sur le sous-dock contenant l'applet, au cas ou son image aurait change.
-	{
-		cairo_dock_redraw_subdock_content (pNewDock);
-	}
-	
-	//\_______________________ clean up.
-	gldi_module_instance_free_generic_config (pMinimalConfig);
-	if (pKeyFile != NULL)
-		g_key_file_free (pKeyFile);
-	
-	if (pCurrentDesklet != NULL && pCurrentDesklet != pNewDesklet)
-		gldi_object_unref (GLDI_OBJECT(pCurrentDesklet));
-	if (pNewDesklet != NULL && pIcon && pIcon->pSubDock != NULL)
-	{
-		gldi_object_unref (GLDI_OBJECT(pIcon->pSubDock));
-		pIcon->pSubDock = NULL;
-	}  // no need to destroy the dock where the applet was, it will be done automatically
-	g_free (cCurrentSubDockName);
-	
-	if (! bReadConfig && cairo_dock_get_icon_data_renderer (pIcon) != NULL)  // reload the data-renderer at the new size
-		cairo_dock_reload_data_renderer_on_icon (pIcon, pNewContainer);
-}
-
 
 void gldi_module_instance_detach (GldiModuleInstance *pInstance)
 {
@@ -432,7 +260,7 @@ void gldi_module_instance_detach (GldiModuleInstance *pInstance)
 			G_TYPE_INVALID);
 		
 		//\__________________ reload the applet.
-		gldi_module_instance_reload (pInstance, TRUE);
+		gldi_object_reload (GLDI_OBJECT(pInstance), TRUE);
 		
 		//\__________________ notify everybody.
 		gldi_object_notify (pInstance, NOTIFICATION_MODULE_INSTANCE_DETACHED, pInstance, !bIsDetached);
@@ -465,7 +293,7 @@ void gldi_module_instance_detach_at_position (GldiModuleInstance *pInstance, int
 	g_key_file_free (pKeyFile);
 	
 	//\__________________ reload the applet.
-	gldi_module_instance_reload (pInstance, TRUE);
+	gldi_object_reload (GLDI_OBJECT(pInstance), TRUE);
 	
 	//\__________________ notify everybody.
 	gldi_object_notify (pInstance, NOTIFICATION_MODULE_INSTANCE_DETACHED, pInstance, TRUE);  // inutile de notifier du changement de taille, le configure-event du desklet s'en chargera.
@@ -707,6 +535,178 @@ static gboolean delete_object (GldiObject *obj)
 	return TRUE;
 }
 
+static GKeyFile* reload_object (GldiObject *obj, gboolean bReadConfig, GKeyFile *pKeyFile)
+{
+	GldiModuleInstance *pInstance = (GldiModuleInstance*)obj;
+	GldiModule *module = pInstance->pModule;
+	cd_message ("%s (%s, %d)", __func__, module->pVisitCard->cModuleName, bReadConfig);
+	
+	GldiContainer *pCurrentContainer = pInstance->pContainer;
+	pInstance->pContainer = NULL;
+	CairoDock *pCurrentDock = pInstance->pDock;
+	pInstance->pDock = NULL;
+	CairoDesklet *pCurrentDesklet = pInstance->pDesklet;
+	pInstance->pDesklet = NULL;
+	gchar *cCurrentSubDockName = NULL;
+	
+	GldiContainer *pNewContainer = NULL;
+	CairoDock *pNewDock = NULL;
+	CairoDesklet *pNewDesklet = NULL;
+	
+	//\______________ update the icon/container.
+	Icon *pIcon = pInstance->pIcon;
+	CairoDockMinimalAppletConfig *pMinimalConfig = NULL;
+	if (bReadConfig && pInstance->cConfFilePath != NULL)
+	{
+		pMinimalConfig = g_new0 (CairoDockMinimalAppletConfig, 1);
+		if (!pKeyFile)
+			pKeyFile = gldi_module_instance_open_conf_file (pInstance, pMinimalConfig);
+		
+		if (pInstance->pModule->pVisitCard->iContainerType != CAIRO_DOCK_MODULE_IS_PLUGIN)  // c'est une applet.
+		{
+			// update the name, image and visibility of the icon
+			if (pIcon != NULL)
+			{
+				if (pCurrentDock && ! pIcon->pContainer)  // icon already detached (by drag and drop)
+					pCurrentDock = NULL;
+				cCurrentSubDockName = g_strdup (pIcon->cName);
+				
+				// on gere le changement de nom de son sous-dock.
+				if (pIcon->cName != NULL && pIcon->pSubDock != NULL && cairo_dock_strings_differ (pIcon->cName, pMinimalConfig->cLabel))
+				{
+					gchar *cNewName = cairo_dock_get_unique_dock_name (pMinimalConfig->cLabel);
+					cd_debug ("* le sous-dock %s prend le nom '%s'", pIcon->cName, cNewName);
+					if (strcmp (pIcon->cName, cNewName) != 0)
+						gldi_dock_rename (pIcon->pSubDock, cNewName);
+					g_free (pMinimalConfig->cLabel);
+					pMinimalConfig->cLabel = cNewName;
+				}
+				
+				g_free (pIcon->cName);
+				pIcon->cName = pMinimalConfig->cLabel;
+				pMinimalConfig->cLabel = NULL;  // we won't need it any more, so skip a duplication.
+				g_free (pIcon->cFileName);
+				pIcon->cFileName = pMinimalConfig->cIconFileName;
+				pMinimalConfig->cIconFileName = NULL;  // idem
+				pIcon->bAlwaysVisible = pMinimalConfig->bAlwaysVisible;
+				pIcon->bHasHiddenBg = pMinimalConfig->bAlwaysVisible;  // if were going to see the applet all the time, let's add a background. if the user doesn't want it, he can always set a transparent bg color.
+				pIcon->pHiddenBgColor = pMinimalConfig->pHiddenBgColor;
+				pMinimalConfig->pHiddenBgColor = NULL;
+			}
+			
+			// get its new dock
+			if (!pMinimalConfig->bIsDetached)  // elle est desormais dans un dock.
+			{
+				const gchar *cDockName = (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
+				pNewDock = gldi_dock_get (cDockName);
+				if (pNewDock == NULL)  // c'est un nouveau dock.
+				{
+					gldi_dock_add_conf_file_for_name (cDockName);
+					pNewDock = gldi_dock_new (cDockName);
+				}
+				pNewContainer = CAIRO_CONTAINER (pNewDock);
+			}
+			
+			// detach the icon from its container if it has changed
+			if (pCurrentDock != NULL && (pMinimalConfig->bIsDetached || pNewDock != pCurrentDock))  // was in a dock, now is in another dock or in a desklet
+			{
+				cd_message ("le container a change (%s -> %s)", pIcon->cParentDockName, pMinimalConfig->bIsDetached ? "desklet" : pMinimalConfig->cDockName);
+				cairo_dock_detach_icon_from_dock (pIcon, pCurrentDock);
+			}
+			else if (pCurrentDesklet != NULL && ! pMinimalConfig->bIsDetached)  // was in a desklet, now is in a dock
+			{
+				pCurrentDesklet->pIcon = NULL;
+				cairo_dock_set_icon_container (pIcon, NULL);
+			}
+			
+			// get its desklet
+			if (pMinimalConfig->bIsDetached)
+			{
+				if (pCurrentDesklet == NULL)  // c'est un nouveau desklet.
+				{
+					pMinimalConfig->deskletAttribute.pIcon = pIcon;
+					pNewDesklet = gldi_desklet_new (&pMinimalConfig->deskletAttribute);
+				}
+				else  // on reconfigure le desklet courant.
+				{
+					pNewDesklet = pCurrentDesklet;
+					gldi_desklet_configure (pNewDesklet, &pMinimalConfig->deskletAttribute);
+				}
+				pNewContainer = CAIRO_CONTAINER (pNewDesklet);
+			}
+		}
+	}
+	else
+	{
+		pNewContainer = pCurrentContainer;
+		pNewDock = pCurrentDock;
+		pNewDesklet = pCurrentDesklet;
+	}
+	pInstance->pContainer = pNewContainer;
+	pInstance->pDock = pNewDock;
+	pInstance->pDesklet = pNewDesklet;
+	
+	if (pNewDock != NULL && pIcon != NULL)  // the icon is now in a dock, update its size and insert it
+	{
+		// on recupere la taille voulue.
+		if (pMinimalConfig == NULL)  // on recupere sa taille, car elle peut avoir change (si c'est la taille par defaut, ou si elle est devenue trop grande).
+		{
+			pMinimalConfig = g_new0 (CairoDockMinimalAppletConfig, 1);
+			pKeyFile = gldi_module_instance_open_conf_file (pInstance, pMinimalConfig);
+			g_key_file_free (pKeyFile);
+			pKeyFile = NULL;
+		}
+		cairo_dock_icon_set_requested_display_size (pIcon, pMinimalConfig->iDesiredIconWidth, pMinimalConfig->iDesiredIconHeight);
+		
+		// on insere l'icone dans le dock ou on met a jour celui-ci.
+		if (pNewDock != pCurrentDock)  // insert in its new dock.
+		{
+			cairo_dock_insert_icon_in_dock (pIcon, pNewDock, CAIRO_DOCK_ANIMATE_ICON);
+			pIcon->cParentDockName = g_strdup (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
+			cairo_dock_load_icon_buffers (pIcon, pNewContainer);  // do it now, since the applet may need it. no ned to do it in desklet mode, since the desklet doesn't have a renderer yet (so buffer can't be loaded).
+		}
+		else  // same dock, just update its size.
+		{
+			cairo_dock_resize_icon_in_dock (pIcon, pNewDock);
+			if (bReadConfig)
+				cairo_dock_load_icon_text (pIcon);
+		}
+	}
+	
+	//\_______________________ read the config.
+	gboolean bCanReload = TRUE;
+	if (pKeyFile != NULL)
+	{
+		_read_module_config (pKeyFile, pInstance);
+	}
+	
+	//\_______________________ reload the instance.
+	if (bCanReload && module && module->pInterface && module->pInterface->reloadModule != NULL)
+		module->pInterface->reloadModule (pInstance, pCurrentContainer, pKeyFile);
+	
+	if (pNewDock != NULL && pNewDock->iRefCount != 0)  // on redessine l'icone pointant sur le sous-dock contenant l'applet, au cas ou son image aurait change.
+	{
+		cairo_dock_redraw_subdock_content (pNewDock);
+	}
+	
+	//\_______________________ clean up.
+	gldi_module_instance_free_generic_config (pMinimalConfig);
+	
+	if (pCurrentDesklet != NULL && pCurrentDesklet != pNewDesklet)
+		gldi_object_unref (GLDI_OBJECT(pCurrentDesklet));
+	if (pNewDesklet != NULL && pIcon && pIcon->pSubDock != NULL)
+	{
+		gldi_object_unref (GLDI_OBJECT(pIcon->pSubDock));
+		pIcon->pSubDock = NULL;
+	}  // no need to destroy the dock where the applet was, it will be done automatically
+	g_free (cCurrentSubDockName);
+	
+	if (! bReadConfig && cairo_dock_get_icon_data_renderer (pIcon) != NULL)  // reload the data-renderer at the new size
+		cairo_dock_reload_data_renderer_on_icon (pIcon, pNewContainer);
+	
+	return pKeyFile;
+}
+
 void gldi_register_module_instances_manager (void)
 {
 	memset (&myModuleInstancesMgr, 0, sizeof (GldiModuleInstancesManager));
@@ -714,6 +714,7 @@ void gldi_register_module_instances_manager (void)
 	myModuleInstancesMgr.mgr.init_object   = init_object;
 	myModuleInstancesMgr.mgr.reset_object  = reset_object;
 	myModuleInstancesMgr.mgr.delete_object = delete_object;
+	myModuleInstancesMgr.mgr.reload_object = reload_object;
 	myModuleInstancesMgr.mgr.iObjectSize   = sizeof (GldiModuleInstance);
 	// Config
 	myModuleInstancesMgr.mgr.pConfig = NULL;

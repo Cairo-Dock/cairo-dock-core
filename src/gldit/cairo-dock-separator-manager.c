@@ -165,13 +165,21 @@ static void init_object (GldiObject *obj, gpointer attr)
 	}
 }
 
+static GKeyFile* reload_object (GldiObject *obj, G_GNUC_UNUSED gboolean bReloadConf, G_GNUC_UNUSED GKeyFile *pKeyFile)
+{
+	Icon *icon = (Icon*)obj;
+	cairo_dock_load_icon_image (icon, icon->pContainer);  // n oother parameters in config -> just reload the image
+	return pKeyFile;
+}
+
 void gldi_register_separator_icons_manager (void)
 {
 	// Manager
 	memset (&mySeparatorIconsMgr, 0, sizeof (GldiSeparatorIconManager));
-	mySeparatorIconsMgr.mgr.cModuleName    = "SeparatorIcon";
-	mySeparatorIconsMgr.mgr.init_object    = init_object;
-	mySeparatorIconsMgr.mgr.iObjectSize    = sizeof (GldiSeparatorIcon);
+	mySeparatorIconsMgr.mgr.cModuleName   = "SeparatorIcon";
+	mySeparatorIconsMgr.mgr.init_object   = init_object;
+	mySeparatorIconsMgr.mgr.reload_object = reload_object;
+	mySeparatorIconsMgr.mgr.iObjectSize   = sizeof (GldiSeparatorIcon);
 	// signals
 	gldi_object_install_notifications (GLDI_OBJECT (&mySeparatorIconsMgr), NB_NOTIFICATIONS_SEPARATOR_ICON);
 	gldi_object_set_manager (GLDI_OBJECT (&mySeparatorIconsMgr), GLDI_MANAGER (&myUserIconsMgr));

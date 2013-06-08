@@ -221,11 +221,6 @@ int cairo_dock_convert_icon_size_to_pixels (GldiIconSizeEnum s, double *fMaxScal
 
 GldiIconSizeEnum cairo_dock_convert_icon_size_to_enum (int iIconSize);
 
-/** Reload the config of a root dock and update it accordingly.
-*@param pDock the dock.
-*/
-void gldi_dock_reload (CairoDock *pDock);
-
 /** Add a config file for a root dock. Does not create the dock (use \ref gldi_dock_new for that). If the config file already exists, it is overwritten (use \ref gldi_dock_get to check if the name is already used).
 *@param cDockName name of the dock.
 */

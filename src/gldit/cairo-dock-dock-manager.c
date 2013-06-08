@@ -773,19 +773,6 @@ gchar *gldi_dock_add_conf_file (void)
 	return cValidDockName;
 }
 
-void gldi_dock_reload (CairoDock *pDock)
-{
-	_get_root_dock_config (pDock);
-	
-	cairo_dock_set_default_renderer (pDock);
-	
-	pDock->backgroundBuffer.iWidth ++;  // pour forcer le chargement du fond.
-	cairo_dock_reload_buffers_in_dock (pDock, TRUE, TRUE);
-	
-	_cairo_dock_draw_one_subdock_icon (NULL, pDock, NULL);  // container-icons may be drawn differently according to the orientation (ex.: box). must be done after sub-docks are reloaded.
-	
-	gtk_widget_queue_draw (pDock->container.pWidget);
-}
 
 static void _cairo_dock_redraw_one_root_dock (CairoDock *pDock, gpointer data)
 {
@@ -2156,9 +2143,33 @@ static gboolean delete_object (GldiObject *obj)
 	
 	// remove the conf file
 	_remove_root_dock_config (pDock->cDockName);
+	
+	// delete all the icons
+	GList *icons = pDock->icons;
+	pDock->icons = NULL;
+	g_list_foreach (icons, (GFunc)gldi_object_delete, NULL);
+	g_list_free (icons);
+	
 	return TRUE;
 }
 
+static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, G_GNUC_UNUSED GKeyFile *pKeyFile)
+{
+	CairoDock *pDock = (CairoDock*)obj;
+	
+	if (bReloadConf)  // maybe we should update the parameters that have the global value ?...
+		_get_root_dock_config (pDock);
+	
+	cairo_dock_set_default_renderer (pDock);
+	
+	pDock->backgroundBuffer.iWidth ++;  // pour forcer le chargement du fond.
+	cairo_dock_reload_buffers_in_dock (pDock, TRUE, TRUE);
+	
+	_cairo_dock_draw_one_subdock_icon (NULL, pDock, NULL);  // container-icons may be drawn differently according to the orientation (ex.: box). must be done after sub-docks are reloaded.
+	
+	gtk_widget_queue_draw (pDock->container.pWidget);
+	return NULL;
+}
 
 void gldi_register_docks_manager (void)
 {
@@ -2174,6 +2185,7 @@ void gldi_register_docks_manager (void)
 	myDocksMgr.mgr.init_object   = init_object;
 	myDocksMgr.mgr.reset_object  = reset_object;
 	myDocksMgr.mgr.delete_object = delete_object;
+	myDocksMgr.mgr.reload_object = reload_object;
 	myDocksMgr.mgr.iObjectSize   = sizeof (CairoDock);
 	// Config
 	memset (&myDocksParam, 0, sizeof (CairoDocksParam));

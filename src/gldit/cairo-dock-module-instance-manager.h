@@ -102,12 +102,6 @@ GKeyFile *gldi_module_instance_open_conf_file (GldiModuleInstance *pInstance, Ca
 
 void gldi_module_instance_free_generic_config (CairoDockMinimalAppletConfig *pMinimalConfig);
 
-/** Reload an instance of a module.
-*@param pInstance the instance to reload
-*@param bReadConfig TRUE to read the config of the instance before reloading it.
-*/
-void gldi_module_instance_reload (GldiModuleInstance *pInstance, gboolean bReadConfig);
-
 void gldi_module_instance_detach (GldiModuleInstance *pInstance);
 
 void gldi_module_instance_detach_at_position (GldiModuleInstance *pInstance, int iCenterX, int iCenterY);

@@ -388,16 +388,6 @@ void gldi_module_deactivate (GldiModule *module)  // stop all instances of a mod
 	gldi_modules_write_active ();  // same
 }
 
-void gldi_module_reload (GldiModule *pModule, gboolean bReloadAppletConf)
-{
-	GList *pElement;
-	GldiModuleInstance *pInstance;
-	for (pElement = pModule->pInstancesList; pElement != NULL; pElement = pElement->next)
-	{
-		pInstance = pElement->data;
-		gldi_module_instance_reload (pInstance, bReloadAppletConf);
-	}
-}
 
 void gldi_modules_activate_from_list (gchar **cActiveModuleList)
 {
@@ -645,20 +635,34 @@ static void reset_object (GldiObject *obj)
 	cairo_dock_free_visit_card (pModule->pVisitCard);
 }
 
+static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, G_GNUC_UNUSED GKeyFile *pKeyFile)
+{
+	GldiModule *pModule = (GldiModule*)obj;
+	GList *pElement;
+	GldiModuleInstance *pInstance;
+	for (pElement = pModule->pInstancesList; pElement != NULL; pElement = pElement->next)
+	{
+		pInstance = pElement->data;
+		gldi_object_reload (GLDI_OBJECT(pInstance), bReloadConf);
+	}
+	return NULL;
+}
+
 void gldi_register_modules_manager (void)
 {
 	// Manager
 	memset (&myModulesMgr, 0, sizeof (GldiModulesManager));
-	myModulesMgr.mgr.cModuleName  = "Modules";
-	myModulesMgr.mgr.init         = init;
-	myModulesMgr.mgr.load         = NULL;
-	myModulesMgr.mgr.unload       = NULL;
-	myModulesMgr.mgr.reload       = (GldiManagerReloadFunc)NULL;
-	myModulesMgr.mgr.get_config   = (GldiManagerGetConfigFunc)get_config;
-	myModulesMgr.mgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
-	myModulesMgr.mgr.init_object  = init_object;
-	myModulesMgr.mgr.reset_object = reset_object;
-	myModulesMgr.mgr.iObjectSize  = sizeof (GldiModule);
+	myModulesMgr.mgr.cModuleName   = "Modules";
+	myModulesMgr.mgr.init          = init;
+	myModulesMgr.mgr.load          = NULL;
+	myModulesMgr.mgr.unload        = NULL;
+	myModulesMgr.mgr.reload        = (GldiManagerReloadFunc)NULL;
+	myModulesMgr.mgr.get_config    = (GldiManagerGetConfigFunc)get_config;
+	myModulesMgr.mgr.reset_config  = (GldiManagerResetConfigFunc)reset_config;
+	myModulesMgr.mgr.init_object   = init_object;
+	myModulesMgr.mgr.reset_object  = reset_object;
+	myModulesMgr.mgr.reload_object = reload_object;
+	myModulesMgr.mgr.iObjectSize   = sizeof (GldiModule);
 	// Config
 	memset (&myModulesParam, 0, sizeof (GldiModulesParam));
 	myModulesMgr.mgr.pConfig = (GldiManagerConfigPtr)&myModulesParam;

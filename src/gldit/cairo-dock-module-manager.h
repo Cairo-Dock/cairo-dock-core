@@ -260,12 +260,6 @@ void gldi_module_activate (GldiModule *module);
 */
 void gldi_module_deactivate (GldiModule *module);
 
-/** Reload all the instances of a module.
-*@param module the module to reload
-*@param bReloadAppletConf TRUE to reload the config of the instances before reloading them.
-*/
-void gldi_module_reload (GldiModule *module, gboolean bReloadAppletConf);
-
 void gldi_modules_activate_from_list (gchar **cActiveModuleList);
 
 void gldi_modules_deactivate_all (void);

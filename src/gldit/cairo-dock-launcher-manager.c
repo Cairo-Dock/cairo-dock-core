@@ -166,59 +166,6 @@ static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 	return bNeedUpdate;
 }
 
-static void _reload (Icon *icon)
-{
-	gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
-	GKeyFile* pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
-	g_return_if_fail (pKeyFile != NULL);
-	
-	gchar *cClass = icon->cClass;
-	icon->cClass = NULL;
-	gchar *cName = icon->cName;
-	icon->cName = NULL;
-	g_free (icon->cFileName);
-	icon->cFileName = NULL;
-	g_free (icon->cCommand);
-	icon->cCommand = NULL;
-	if (icon->pMimeTypes != NULL)
-	{
-		g_strfreev (icon->pMimeTypes);
-		icon->pMimeTypes = NULL;
-	}
-	g_free (icon->cWorkingDirectory);
-	icon->cWorkingDirectory = NULL;
-	
-	//\__________________ get parameters
-	_get_launcher_params (icon, pKeyFile);
-	g_key_file_free (pKeyFile);
-	g_free (cDesktopFilePath);
-	
-	//\_____________ reload icon's buffers
-	CairoDock *pNewDock = gldi_dock_get (icon->cParentDockName);
-	cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pNewDock));
-	
-	if (g_strcmp0 (cName, icon->cName) != 0)
-		cairo_dock_load_icon_text (icon);
-	
-	//\_____________ handle class inhibition.
-	gchar *cNowClass = icon->cClass;
-	if (cClass != NULL && (cNowClass == NULL || strcmp (cNowClass, cClass) != 0))  // la classe a change, on desinhibe l'ancienne.
-	{
-		icon->cClass = cClass;
-		cairo_dock_deinhibite_class (cClass, icon);
-		cClass = NULL;  // libere par la fonction precedente.
-		icon->cClass = cNowClass;
-	}
-	if (myTaskbarParam.bMixLauncherAppli && cNowClass != NULL && (cClass == NULL || strcmp (cNowClass, cClass) != 0))  // la classe a change, on inhibe la nouvelle.
-		cairo_dock_inhibite_class (cNowClass, icon);
-
-	//\_____________ redraw dock.
-	cairo_dock_redraw_icon (icon);
-	
-	g_free (cClass);
-	g_free (cName);
-}
-
 static void _show_appli_for_drop (Icon *pIcon)
 {
 	if (pIcon->pAppli != NULL)
@@ -258,12 +205,68 @@ static void init_object (GldiObject *obj, gpointer attr)
 	}
 }
 
+
+static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, GKeyFile *pKeyFile)
+{
+	Icon *icon = (Icon*)obj;
+	if (bReloadConf)
+		g_return_val_if_fail (pKeyFile != NULL, NULL);
+	
+	gchar *cClass = icon->cClass;
+	icon->cClass = NULL;
+	gchar *cName = icon->cName;
+	icon->cName = NULL;
+	g_free (icon->cFileName);
+	icon->cFileName = NULL;
+	g_free (icon->cCommand);
+	icon->cCommand = NULL;
+	if (icon->pMimeTypes != NULL)
+	{
+		g_strfreev (icon->pMimeTypes);
+		icon->pMimeTypes = NULL;
+	}
+	g_free (icon->cWorkingDirectory);
+	icon->cWorkingDirectory = NULL;
+	
+	//\__________________ get parameters
+	_get_launcher_params (icon, pKeyFile);
+	
+	//\_____________ reload icon's buffers
+	CairoDock *pNewDock = gldi_dock_get (icon->cParentDockName);
+	cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pNewDock));
+	
+	if (g_strcmp0 (cName, icon->cName) != 0)
+		cairo_dock_load_icon_text (icon);
+	
+	//\_____________ handle class inhibition.
+	gchar *cNowClass = icon->cClass;
+	if (cClass != NULL && (cNowClass == NULL || strcmp (cNowClass, cClass) != 0))  // la classe a change, on desinhibe l'ancienne.
+	{
+		icon->cClass = cClass;
+		cairo_dock_deinhibite_class (cClass, icon);
+		cClass = NULL;  // libere par la fonction precedente.
+		icon->cClass = cNowClass;
+	}
+	if (myTaskbarParam.bMixLauncherAppli && cNowClass != NULL && (cClass == NULL || strcmp (cNowClass, cClass) != 0))  // la classe a change, on inhibe la nouvelle.
+		cairo_dock_inhibite_class (cNowClass, icon);
+
+	//\_____________ redraw dock.
+	cairo_dock_redraw_icon (icon);
+	
+	g_free (cClass);
+	g_free (cName);
+	
+	return pKeyFile;
+}
+
+
 void gldi_register_launchers_manager (void)
 {
 	// Manager
 	memset (&myLaunchersMgr, 0, sizeof (GldiLauncherManager));
 	myLaunchersMgr.mgr.cModuleName   = "Launchers";
 	myLaunchersMgr.mgr.init_object   = init_object;
+	myLaunchersMgr.mgr.reload_object = reload_object;
 	myLaunchersMgr.mgr.iObjectSize   = sizeof (GldiLauncherIcon);
 	// signals
 	gldi_object_install_notifications (&myLaunchersMgr, NB_NOTIFICATIONS_ICON);
@@ -369,10 +372,4 @@ Icon *gldi_launcher_add_new (const gchar *cURI, CairoDock *pDock, double fOrder)
 	cairo_dock_insert_icon_in_dock (pNewIcon, pDock, CAIRO_DOCK_ANIMATE_ICON);
 	
 	return pNewIcon;
-}
-
-
-void cairo_dock_reload_launcher (Icon *icon)
-{
-	/// TODO: add a reload method in the Object class...
 }

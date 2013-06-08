@@ -189,76 +189,6 @@ void gldi_user_icons_new_from_directory (const gchar *cDirectory)
 }
 
 
-static void _reload (Icon *icon)
-{
-	gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
-	GKeyFile* pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
-	g_return_if_fail (pKeyFile != NULL);
-	
-	//\_____________ remember current state.
-	CairoDock *pDock = CAIRO_DOCK (cairo_dock_get_icon_container (icon));
-	double fOrder = icon->fOrder;
-	
-	//\_____________ get its new params.
-	icon->fOrder = g_key_file_get_double (pKeyFile, "Desktop Entry", "Order", NULL);
-	
-	g_free (icon->cParentDockName);
-	icon->cParentDockName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Container", NULL);
-	if (icon->cParentDockName == NULL || *icon->cParentDockName == '\0')
-	{
-		g_free (icon->cParentDockName);
-		icon->cParentDockName = g_strdup (CAIRO_DOCK_MAIN_DOCK_NAME);
-	}
-	
-	int iSpecificDesktop = g_key_file_get_integer (pKeyFile, "Desktop Entry", "ShowOnViewport", NULL);
-	cairo_dock_set_specified_desktop_for_icon (icon, iSpecificDesktop);
-	
-	// get its (possibly new) container.
-	CairoDock *pNewDock = gldi_dock_get (icon->cParentDockName);
-	if (pNewDock == NULL)
-	{
-		cd_message ("The parent dock (%s) doesn't exist, we create it", icon->cParentDockName);
-		pNewDock = gldi_dock_new (icon->cParentDockName);
-	}
-	g_return_if_fail (pNewDock != NULL);
-	
-	//\_____________ manage the change of container or order.
-	/**if (pDock != pNewDock)  // container has changed.
-	{
-		// on la detache de son container actuel et on l'insere dans le nouveau.
-		cairo_dock_detach_icon_from_dock (icon, pDock);
-		cairo_dock_insert_icon_in_dock (icon, pNewDock, CAIRO_DOCK_ANIMATE_ICON);  // le remove et le insert vont declencher le redessin de l'icone pointant sur l'ancien et le nouveau sous-dock le cas echeant.
-	}
-	else  // same container, but different order.
-	{
-		if (icon->fOrder != fOrder)  // On gere le changement d'ordre.
-		{
-			pNewDock->icons = g_list_remove (pNewDock->icons, icon);
-			pNewDock->icons = g_list_insert_sorted (pNewDock->icons,
-				icon,
-				(GCompareFunc) cairo_dock_compare_icons_order);
-			cairo_dock_update_dock_size (pDock);  // -> recalculate icons and update input shape
-		}
-		// on redessine l'icone pointant sur le sous-dock, pour le cas ou l'ordre et/ou l'image du lanceur aurait change.
-		if (pNewDock->iRefCount != 0)
-		{
-			cairo_dock_redraw_subdock_content (pNewDock);
-		}
-	}*/
-	if (pDock != pNewDock || icon->fOrder != fOrder)
-	{
-		cairo_dock_detach_icon_from_dock (icon, pDock);
-		cairo_dock_insert_icon_in_dock (icon, pNewDock, CAIRO_DOCK_ANIMATE_ICON);  // le remove et le insert vont declencher le redessin de l'icone pointant sur l'ancien et le nouveau sous-dock le cas echeant.
-	}
-	else if (pNewDock->iRefCount != 0)  // on redessine l'icone pointant sur le sous-dock, pour le cas ou l'image du lanceur aurait change.
-	{
-		cairo_dock_redraw_subdock_content (pNewDock);
-	}
-	
-	g_key_file_free (pKeyFile);
-	g_free (cDesktopFilePath);
-}
-
 static void init_object (GldiObject *obj, gpointer attr)
 {
 	Icon *icon = (Icon*)obj;
@@ -320,6 +250,86 @@ static gboolean delete_object (GldiObject *obj)
 	return TRUE;
 }
 
+static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, GKeyFile *pKeyFile)
+{
+	Icon *icon = (Icon*)obj;
+	
+	if (!bReloadConf)  // just reload the icon buffers.
+	{
+		if (GLDI_OBJECT_IS_DOCK (icon->pContainer))
+			cairo_dock_set_icon_size_in_dock (CAIRO_DOCK(icon->pContainer), icon);
+		cairo_dock_load_icon_buffers (icon, icon->pContainer);
+		return NULL;
+	}
+	
+	gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
+	pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
+	g_return_val_if_fail (pKeyFile != NULL, NULL);
+	
+	//\_____________ remember current state.
+	CairoDock *pDock = CAIRO_DOCK (cairo_dock_get_icon_container (icon));
+	double fOrder = icon->fOrder;
+	
+	//\_____________ get its new params.
+	icon->fOrder = g_key_file_get_double (pKeyFile, "Desktop Entry", "Order", NULL);
+	
+	g_free (icon->cParentDockName);
+	icon->cParentDockName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Container", NULL);
+	if (icon->cParentDockName == NULL || *icon->cParentDockName == '\0')
+	{
+		g_free (icon->cParentDockName);
+		icon->cParentDockName = g_strdup (CAIRO_DOCK_MAIN_DOCK_NAME);
+	}
+	
+	int iSpecificDesktop = g_key_file_get_integer (pKeyFile, "Desktop Entry", "ShowOnViewport", NULL);
+	cairo_dock_set_specified_desktop_for_icon (icon, iSpecificDesktop);
+	
+	// get its (possibly new) container.
+	CairoDock *pNewDock = gldi_dock_get (icon->cParentDockName);
+	if (pNewDock == NULL)
+	{
+		cd_message ("The parent dock (%s) doesn't exist, we create it", icon->cParentDockName);
+		pNewDock = gldi_dock_new (icon->cParentDockName);
+	}
+	g_return_val_if_fail (pNewDock != NULL, pKeyFile);
+	
+	//\_____________ manage the change of container or order.
+	/**if (pDock != pNewDock)  // container has changed.
+	{
+		// on la detache de son container actuel et on l'insere dans le nouveau.
+		cairo_dock_detach_icon_from_dock (icon, pDock);
+		cairo_dock_insert_icon_in_dock (icon, pNewDock, CAIRO_DOCK_ANIMATE_ICON);  // le remove et le insert vont declencher le redessin de l'icone pointant sur l'ancien et le nouveau sous-dock le cas echeant.
+	}
+	else  // same container, but different order.
+	{
+		if (icon->fOrder != fOrder)  // On gere le changement d'ordre.
+		{
+			pNewDock->icons = g_list_remove (pNewDock->icons, icon);
+			pNewDock->icons = g_list_insert_sorted (pNewDock->icons,
+				icon,
+				(GCompareFunc) cairo_dock_compare_icons_order);
+			cairo_dock_update_dock_size (pDock);  // -> recalculate icons and update input shape
+		}
+		// on redessine l'icone pointant sur le sous-dock, pour le cas ou l'ordre et/ou l'image du lanceur aurait change.
+		if (pNewDock->iRefCount != 0)
+		{
+			cairo_dock_redraw_subdock_content (pNewDock);
+		}
+	}*/
+	if (pDock != pNewDock || icon->fOrder != fOrder)
+	{
+		cairo_dock_detach_icon_from_dock (icon, pDock);
+		cairo_dock_insert_icon_in_dock (icon, pNewDock, CAIRO_DOCK_ANIMATE_ICON);  // le remove et le insert vont declencher le redessin de l'icone pointant sur l'ancien et le nouveau sous-dock le cas echeant.
+	}
+	else if (pNewDock->iRefCount != 0)  // on redessine l'icone pointant sur le sous-dock, pour le cas ou l'image ou l'ordre de l'icone aurait change.
+	{
+		cairo_dock_trigger_redraw_subdock_content (pNewDock);
+	}
+	
+	g_free (cDesktopFilePath);
+	return pKeyFile;
+}
+
 void gldi_register_user_icons_manager (void)
 {
 	// Manager
@@ -328,6 +338,7 @@ void gldi_register_user_icons_manager (void)
 	myUserIconsMgr.mgr.init_object   = init_object;
 	myUserIconsMgr.mgr.reset_object  = reset_object;
 	myUserIconsMgr.mgr.delete_object = delete_object;
+	myUserIconsMgr.mgr.reload_object = reload_object;
 	myUserIconsMgr.mgr.iObjectSize   = sizeof (GldiUserIcon);
 	// signals
 	gldi_object_install_notifications (&myUserIconsMgr, NB_NOTIFICATIONS_ICON);

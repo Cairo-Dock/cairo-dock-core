@@ -40,92 +40,6 @@ extern gchar *g_cCurrentLaunchersPath;
 #define CAIRO_DOCK_CONTAINER_CONF_FILE "container.desktop"
 
 
-static void _reload (Icon *icon)
-{
-	// get the new name of the icon (and therefore of its sub-dock).
-	gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
-	GKeyFile* pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
-	g_return_if_fail (pKeyFile != NULL);
-	
-	// get additional parameters
-	g_free (icon->cFileName);
-	icon->cFileName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Icon", NULL);
-	if (icon->cFileName != NULL && *icon->cFileName == '\0')
-	{
-		g_free (icon->cFileName);
-		icon->cFileName = NULL;
-	}
-	
-	gchar *cName = icon->cName;
-	icon->cName = g_key_file_get_locale_string (pKeyFile, "Desktop Entry", "Name", NULL, NULL);
-	if (icon->cName == NULL || *icon->cName == '\0')  // no name defined, we need one.
-	{
-		g_free (icon->cName);
-		if (cName != NULL)
-			icon->cName = g_strdup (cName);
-		else
-			icon->cName = cairo_dock_get_unique_dock_name ("sub-dock");
-		g_key_file_set_string (pKeyFile, "Desktop Entry", "Name", icon->cName);
-		cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
-	}
-	
-	// if it has changed, ensure its unicity, and rename the sub-dock to be able to link with it again.
-	if (g_strcmp0 (icon->cName, cName) != 0)  // name has changed -> rename the sub-dock.
-	{
-		// ensure unicity
-		gchar *cUniqueName = cairo_dock_get_unique_dock_name (icon->cName);
-		if (strcmp (icon->cName, cUniqueName) != 0)
-		{
-			g_free (icon->cName);
-			icon->cName = cUniqueName;
-			cUniqueName = NULL;
-			g_key_file_set_string (pKeyFile, "Desktop Entry", "Name", icon->cName);
-			cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
-		}
-		g_free (cUniqueName);
-		
-		// rename sub-dock
-		cd_debug ("on renomme a l'avance le sous-dock en %s", icon->cName);
-		if (icon->pSubDock != NULL)
-			gldi_dock_rename (icon->pSubDock, icon->cName);  // also updates sub-icon's container name
-	}
-	
-	icon->iSubdockViewType = g_key_file_get_integer (pKeyFile, "Desktop Entry", "render", NULL);  // on a besoin d'un entier dans le panneau de conf pour pouvoir degriser des options selon le rendu choisi. De plus c'est utile aussi pour Animated Icons...
-	
-	gchar *cSubDockRendererName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Renderer", NULL);
-	
-	//\_____________ reload icon
-	// redraw icon
-	CairoDock *pNewDock = gldi_dock_get (icon->cParentDockName);
-	if (icon->pSubDock != NULL && icon->iSubdockViewType != 0)  // petite optimisation : vu que la taille du lanceur n'a pas change, on evite de detruire et refaire sa surface.
-	{
-		cairo_dock_draw_subdock_content_on_icon (icon, pNewDock);
-	}
-	else
-	{
-		cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pNewDock));
-	}
-	
-	// reload label
-	if (cairo_dock_strings_differ (cName, icon->cName))
-		cairo_dock_load_icon_text (icon);
-	
-	// set sub-dock renderer
-	if (icon->pSubDock != NULL)  // son rendu a pu changer.
-	{
-		if (g_strcmp0 (cSubDockRendererName, icon->pSubDock->cRendererName) != 0)
-		{
-			cairo_dock_set_renderer (icon->pSubDock, cSubDockRendererName);
-			cairo_dock_update_dock_size (icon->pSubDock);
-		}
-	}
-	
-	g_key_file_free (pKeyFile);
-	g_free (cDesktopFilePath);
-	g_free (cSubDockRendererName);
-	g_free (cName);
-}
-
 static void _load_image (Icon *icon)
 {
 	int iWidth = cairo_dock_icon_get_allocated_width (icon);
@@ -301,15 +215,97 @@ static gboolean delete_object (GldiObject *obj)
 	return TRUE;
 }
 
+static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, GKeyFile *pKeyFile)
+{
+	Icon *icon = (Icon*)obj;
+	if (bReloadConf)
+		g_return_val_if_fail (pKeyFile != NULL, NULL);
+	
+	// get additional parameters
+	g_free (icon->cFileName);
+	icon->cFileName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Icon", NULL);
+	if (icon->cFileName != NULL && *icon->cFileName == '\0')
+	{
+		g_free (icon->cFileName);
+		icon->cFileName = NULL;
+	}
+	
+	gchar *cName = icon->cName;
+	icon->cName = g_key_file_get_locale_string (pKeyFile, "Desktop Entry", "Name", NULL, NULL);
+	if (icon->cName == NULL || *icon->cName == '\0')  // no name defined, we need one.
+	{
+		g_free (icon->cName);
+		if (cName != NULL)
+			icon->cName = g_strdup (cName);
+		else
+			icon->cName = cairo_dock_get_unique_dock_name ("sub-dock");
+		g_key_file_set_string (pKeyFile, "Desktop Entry", "Name", icon->cName);
+		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
+		cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
+		g_free (cDesktopFilePath);
+	}
+	
+	// if it has changed, ensure its unicity, and rename the sub-dock to be able to link with it again.
+	if (g_strcmp0 (icon->cName, cName) != 0)  // name has changed -> rename the sub-dock.
+	{
+		// ensure unicity
+		gchar *cUniqueName = cairo_dock_get_unique_dock_name (icon->cName);
+		if (strcmp (icon->cName, cUniqueName) != 0)
+		{
+			g_free (icon->cName);
+			icon->cName = cUniqueName;
+			cUniqueName = NULL;
+			g_key_file_set_string (pKeyFile, "Desktop Entry", "Name", icon->cName);
+			gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
+			cairo_dock_write_keys_to_file (pKeyFile, cDesktopFilePath);
+			g_free (cDesktopFilePath);
+		}
+		g_free (cUniqueName);
+		
+		// rename sub-dock
+		cd_debug ("on renomme a l'avance le sous-dock en %s", icon->cName);
+		if (icon->pSubDock != NULL)
+			gldi_dock_rename (icon->pSubDock, icon->cName);  // also updates sub-icon's container name
+	}
+	
+	icon->iSubdockViewType = g_key_file_get_integer (pKeyFile, "Desktop Entry", "render", NULL);  // on a besoin d'un entier dans le panneau de conf pour pouvoir degriser des options selon le rendu choisi. De plus c'est utile aussi pour Animated Icons...
+	
+	gchar *cSubDockRendererName = g_key_file_get_string (pKeyFile, "Desktop Entry", "Renderer", NULL);
+	
+	//\_____________ reload icon
+	// redraw icon
+	cairo_dock_load_icon_image (icon, icon->pContainer);
+	
+	// reload label
+	if (g_strcmp0 (cName, icon->cName) != 0)
+		cairo_dock_load_icon_text (icon);
+	
+	// set sub-dock renderer
+	if (icon->pSubDock != NULL)
+	{
+		if (g_strcmp0 (cSubDockRendererName, icon->pSubDock->cRendererName) != 0)
+		{
+			cairo_dock_set_renderer (icon->pSubDock, cSubDockRendererName);
+			cairo_dock_update_dock_size (icon->pSubDock);
+		}
+	}
+	
+	g_free (cSubDockRendererName);
+	g_free (cName);
+	
+	return pKeyFile;
+}
+
 void gldi_register_stack_icons_manager (void)
 {
 	// Manager
 	memset (&myStackIconsMgr, 0, sizeof (GldiStackIconManager));
-	myStackIconsMgr.mgr.cModuleName    = "StackIcon";
-	myStackIconsMgr.mgr.init_object    = init_object;
-	myStackIconsMgr.mgr.reset_object   = NULL;  // no need to unref the sub-dock, it's done upstream
-	myStackIconsMgr.mgr.delete_object  = delete_object;
-	myStackIconsMgr.mgr.iObjectSize    = sizeof (GldiStackIcon);
+	myStackIconsMgr.mgr.cModuleName   = "StackIcon";
+	myStackIconsMgr.mgr.init_object   = init_object;
+	myStackIconsMgr.mgr.reset_object  = NULL;  // no need to unref the sub-dock, it's done upstream
+	myStackIconsMgr.mgr.delete_object = delete_object;
+	myStackIconsMgr.mgr.reload_object = reload_object;
+	myStackIconsMgr.mgr.iObjectSize   = sizeof (GldiStackIcon);
 	// signals
 	gldi_object_install_notifications (GLDI_OBJECT (&myStackIconsMgr), NB_NOTIFICATIONS_STACK_ICON);
 	gldi_object_set_manager (GLDI_OBJECT (&myStackIconsMgr), GLDI_MANAGER (&myUserIconsMgr));

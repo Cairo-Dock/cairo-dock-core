@@ -55,12 +55,6 @@ typedef enum {
 #define GLDI_OBJECT_IS_LAUNCHER_ICON(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), GLDI_MANAGER(&myLaunchersMgr))
 
 
-/** Reload completely a launcher. It handles all the side-effects like modifying the class, the sub-dock's view, the container, etc.
-* @param icon the launcher Icon to reload.
-*/
-void cairo_dock_reload_launcher (Icon *icon);
-
-
 Icon *gldi_launcher_new (const gchar *cConfFile, GKeyFile *pKeyFile);
 
 
