@@ -122,6 +122,21 @@ void gldi_object_delete (GldiObject *pObject)
 	gldi_object_unref (pObject);
 }
 
+void gldi_object_reload (GldiObject *obj, gboolean bReloadConfig)
+{
+	GKeyFile *pKeyFile = NULL;
+	GList *m;
+	GldiManager *pMgr;
+	for (m = obj->mgrs; m != NULL; m = m->next)
+	{
+		pMgr = m->data;
+		if (pMgr->reload_object)
+			pKeyFile = pMgr->reload_object (obj, bReloadConfig, pKeyFile);
+	}
+	if (pKeyFile)
+		g_key_file_free (pKeyFile);
+}
+
 gboolean gldi_object_is_manager_child (GldiObject *pObject, GldiManager *pMgr)
 {
 	while (pObject)
@@ -132,9 +147,6 @@ gboolean gldi_object_is_manager_child (GldiObject *pObject, GldiManager *pMgr)
 	}
 	return FALSE;
 }
-
-#define GLDI_OBJECT_IS_DOCK(obj) gldi_object_is_manager_child (obj, &myDocksMgr)
-
 
 
 void gldi_object_register_notification (gpointer pObject, GldiNotificationType iNotifType, GldiNotificationFunc pFunction, gboolean bRunFirst, gpointer pUserData)

@@ -58,6 +58,8 @@ void gldi_object_unref (GldiObject *pObject);
 
 void gldi_object_delete (GldiObject *pObject);
 
+void gldi_object_reload (GldiObject *obj, gboolean bReloadConfig);
+
 
 void gldi_object_set_manager (GldiObject *pObject, GldiManager *pMgr);
 
