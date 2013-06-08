@@ -187,6 +187,7 @@ gboolean cairo_dock_detach_icon_from_dock_full (Icon *icon, CairoDock *pDock, gb
 {
 	if (pDock == NULL)
 		return FALSE;
+	g_return_val_if_fail (icon != NULL, FALSE);
 	if (icon->pContainer == NULL)
 	{
 		cd_warning ("This icon (%s) is already not inside a container !", icon->cName);  // not a big deal, just print that for debug.
