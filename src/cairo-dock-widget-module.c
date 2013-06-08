@@ -93,7 +93,7 @@ static void _module_widget_apply (CDWidget *pCdWidget)
 	// reload the module instance
 	if (pModuleWidget->pModuleInstance != NULL)
 	{
-		gldi_module_instance_reload (pModuleWidget->pModuleInstance, TRUE);
+		gldi_object_reload (GLDI_OBJECT(pModuleWidget->pModuleInstance), TRUE);
 	}
 }
 

@@ -184,7 +184,7 @@ static gboolean _cairo_dock_write_desklet_size (CairoDesklet *pDesklet)
 			}
 			
 			// on recharge le module associe.
-			gldi_module_instance_reload (pDesklet->pIcon->pModuleInstance, FALSE);
+			gldi_object_reload (GLDI_OBJECT(pDesklet->pIcon->pModuleInstance), FALSE);
 			
 			gtk_widget_queue_draw (pDesklet->container.pWidget);  // sinon on ne redessine que l'interieur.
 		}

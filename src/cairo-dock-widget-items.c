@@ -583,11 +583,11 @@ static void on_row_deleted (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path
 								|| CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))
 							&& pIcon->cDesktopFileName != NULL)  // user icon.
 							{
-								cairo_dock_reload_launcher (pIcon);
+								gldi_object_reload (GLDI_OBJECT(pIcon), TRUE);  // TRUE <=> reload config.
 							}
 							else if (CAIRO_DOCK_IS_APPLET (pIcon))
 							{
-								gldi_module_instance_reload (pIcon->pModuleInstance, TRUE);  // TRUE <=> reload config.
+								gldi_object_reload (GLDI_OBJECT(pIcon->pModuleInstance), TRUE);  // TRUE <=> reload config.
 							}
 						}
 						
@@ -851,7 +851,7 @@ static void _items_widget_apply (CDWidget *pCdWidget)
 		g_key_file_free (pKeyFile);
 		
 		// reload module.
-		gldi_module_instance_reload (pModuleInstance, TRUE);
+		gldi_object_reload (GLDI_OBJECT(pModuleInstance), TRUE);
 	}
 	else if (CAIRO_DOCK_IS_DOCK (pContainer))
 	{
@@ -875,7 +875,7 @@ static void _items_widget_apply (CDWidget *pCdWidget)
 			g_free (cConfFilePath);
 			
 			// reload dock's config.
-			gldi_dock_reload (pDock);
+			gldi_object_reload (GLDI_OBJECT(pDock), TRUE);
 		}
 	}
 	else if (pIcon)
@@ -909,7 +909,7 @@ static void _items_widget_apply (CDWidget *pCdWidget)
 		g_free (cConfFilePath);
 		
 		// reload widgets.
-		cairo_dock_reload_launcher (pIcon);  // prend tout en compte, y compris le redessin et declenche le rechargement de l'IHM.
+		gldi_object_reload (GLDI_OBJECT(pIcon), TRUE);  // prend tout en compte, y compris le redessin et declenche le rechargement de l'IHM.
 	}
 	_items_widget_reload (CD_WIDGET (pItemsWidget));  // we reload in case the items place has changed (icon's container, dock orientation, etc).
 }

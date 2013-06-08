@@ -694,11 +694,11 @@ static void _cairo_dock_move_launcher_to_dock (GtkMenuItem *pMenuItem, const gch
 		|| CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))
 	&& pIcon->cDesktopFileName != NULL)  // user icon.
 	{
-		cairo_dock_reload_launcher (pIcon);
+		gldi_object_reload (GLDI_OBJECT(pIcon), TRUE);  // TRUE <=> reload config.
 	}
 	else if (CAIRO_DOCK_IS_APPLET (pIcon))
 	{
-		gldi_module_instance_reload (pIcon->pModuleInstance, TRUE);  // TRUE <=> reload config.
+		gldi_object_reload (GLDI_OBJECT(pIcon->pModuleInstance), TRUE);  // TRUE <=> reload config.
 	}
 	
 	CairoDock *pNewDock = gldi_dock_get (cValidDockName);

@@ -1266,7 +1266,7 @@ static gboolean _on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, Ca
 					}
 					else if (CAIRO_DOCK_IS_APPLET (icon))
 					{
-						gldi_module_instance_reload (icon->pModuleInstance, FALSE);  // easy but safe way to redraw the icon properly.
+						gldi_object_reload (GLDI_OBJECT(icon->pModuleInstance), FALSE);  // easy but safe way to redraw the icon properly.
 					}
 					else  // if we don't know how the icon should be drawn, just reload it.
 					{

@@ -640,15 +640,15 @@ static void _config_widget_apply (CDWidget *pCdWidget)
 	
 	if (pModuleInstanceAnim != NULL)
 	{
-		gldi_module_instance_reload (pModuleInstanceAnim, TRUE);
+		gldi_object_reload (GLDI_OBJECT(pModuleInstanceAnim), TRUE);
 	}
 	if (pModuleInstanceEffect != NULL)
 	{
-		gldi_module_instance_reload (pModuleInstanceEffect, TRUE);
+		gldi_object_reload (GLDI_OBJECT(pModuleInstanceEffect), TRUE);
 	}
 	if (pModuleInstanceIllusion != NULL)
 	{
-		gldi_module_instance_reload (pModuleInstanceIllusion, TRUE);
+		gldi_object_reload (GLDI_OBJECT(pModuleInstanceIllusion), TRUE);
 	}
 	
 	g_key_file_free (pKeyFile);

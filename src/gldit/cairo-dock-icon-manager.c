@@ -699,7 +699,7 @@ static void _reload_in_desklet (CairoDesklet *pDesklet, G_GNUC_UNUSED gpointer d
 {
 	if (CAIRO_DOCK_IS_APPLET (pDesklet->pIcon))
 	{
-		gldi_module_instance_reload (pDesklet->pIcon->pModuleInstance, FALSE);
+		gldi_object_reload (GLDI_OBJECT(pDesklet->pIcon->pModuleInstance), FALSE);
 	}
 }
 static gboolean _on_icon_theme_changed_idle (G_GNUC_UNUSED gpointer data)
@@ -958,6 +958,15 @@ static void reset_object (GldiObject *obj)
 {
 	Icon *icon = (Icon*)obj;
 	cd_debug ("%s (%s , %s)", __func__, icon->cName, icon->cClass);
+	
+	GldiContainer *pContainer = cairo_dock_get_icon_container (icon);
+	if (pContainer != NULL)  /// TODO: make a 'detach' method in the container interface...
+	{
+		if (GLDI_OBJECT_IS_DOCK (pContainer))
+			cairo_dock_detach_icon_from_dock(icon, CAIRO_DOCK(pContainer));
+		else if (GLDI_OBJECT_IS_DESKLET (pContainer))
+			gldi_desklet_detach_icon (icon, CAIRO_DESKLET(pContainer));
+	}
 	
 	if (icon->iSidRedrawSubdockContent != 0)
 		g_source_remove (icon->iSidRedrawSubdockContent);

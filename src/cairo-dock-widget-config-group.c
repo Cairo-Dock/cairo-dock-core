@@ -87,7 +87,7 @@ static void _config_group_widget_apply (CDWidget *pCdWidget)
 			g_key_file_free (pExtraKeyFile);
 			
 			// reload it
-			gldi_module_instance_reload (pExtraInstance, TRUE);
+			gldi_object_reload (GLDI_OBJECT(pExtraInstance), TRUE);
 		}
 	}
 }

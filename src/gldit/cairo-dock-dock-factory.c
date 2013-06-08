@@ -379,7 +379,7 @@ void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingD
 			{
 				icon->pModuleInstance->pContainer = CAIRO_CONTAINER (pReceivingDock);  // astuce pour ne pas avoir a recharger le fichier de conf ^_^
 				icon->pModuleInstance->pDock = pReceivingDock;
-				gldi_module_instance_reload (icon->pModuleInstance, FALSE);
+				gldi_object_reload (GLDI_OBJECT(icon->pModuleInstance), FALSE);
 			}
 			else if (cairo_dock_get_icon_data_renderer (icon) != NULL)
 				cairo_dock_reload_data_renderer_on_icon (icon, CAIRO_CONTAINER (pReceivingDock));
@@ -405,7 +405,7 @@ void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, g
 		
 		if (CAIRO_DOCK_IS_APPLET (icon))  // for an applet, we need to let the module know that the size or the theme has changed, so that it can reload its private buffers.
 		{
-			gldi_module_instance_reload (icon->pModuleInstance, FALSE);
+			gldi_object_reload (GLDI_OBJECT(icon->pModuleInstance), FALSE);
 		}
 		else
 		{
