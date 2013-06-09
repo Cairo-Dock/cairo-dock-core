@@ -639,10 +639,10 @@ GdkPixbuf *cairo_dock_icon_buffer_to_pixbuf (Icon *icon)
 
 cairo_t *cairo_dock_begin_draw_icon_cairo (Icon *pIcon, gint iRenderingMode, cairo_t *pCairoContext)
 {
-	if (pIcon->pContainer)
+	/*if (pIcon->pContainer)
 		g_print ("= %s %dx%d\n", pIcon->cName, pIcon->pContainer->iWidth, pIcon->pContainer->iHeight);
 	else
-		g_print ("= %s no container yet\n", pIcon->cName); // e.g. 'indicator' applets -> maybe a return is needed?
+		g_print ("= %s no container yet\n", pIcon->cName); // e.g. 'indicator' applets -> maybe a return is needed?*/
 
 	cairo_t *ctx = cairo_dock_begin_draw_image_buffer_cairo (&pIcon->image, iRenderingMode, pCairoContext);
 	

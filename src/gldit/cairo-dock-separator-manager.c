@@ -165,7 +165,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	}
 }
 
-static GKeyFile* reload_object (GldiObject *obj, G_GNUC_UNUSED gboolean bReloadConf, G_GNUC_UNUSED GKeyFile *pKeyFile)
+static GKeyFile* reload_object (GldiObject *obj, G_GNUC_UNUSED gboolean bReloadConf, GKeyFile *pKeyFile)
 {
 	Icon *icon = (Icon*)obj;
 	cairo_dock_load_icon_image (icon, icon->pContainer);  // n oother parameters in config -> just reload the image

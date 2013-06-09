@@ -926,7 +926,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	actor->windowGeometry.width = iWidthExtent;
 	actor->windowGeometry.height = iHeightExtent;
 	actor->bIsTransientFor = (xactor->XTransientFor != None);
-	g_print ("%s is transient: %d\n", actor->cName, actor->bIsTransientFor);
+	cd_debug ("%s is transient: %d", actor->cName, actor->bIsTransientFor);
 	
 	actor->iAge = s_iNumWindow ++;
 	
@@ -952,8 +952,8 @@ static void init_object (GldiObject *obj, gpointer attr)
 
 static void reset_object (GldiObject *obj)
 {
-	g_print ("X reset\n");
 	GldiXWindowActor *actor = (GldiXWindowActor*)obj;
+	cd_debug ("X reset: %s", ((GldiWindowActor*)actor)->cName);
 	// stop watching events
 	cairo_dock_set_xwindow_mask (actor->Xid, None);
 	
@@ -964,7 +964,7 @@ static void reset_object (GldiObject *obj)
 		g_hash_table_remove (s_hXWindowTable, &actor->Xid);
 	
 	// free data
-	#ifdef HAVE_XEXTEND	
+	#ifdef HAVE_XEXTEND
 	if (actor->iBackingPixmap != 0)
 	{
 		XFreePixmap (s_XDisplay, actor->iBackingPixmap);
