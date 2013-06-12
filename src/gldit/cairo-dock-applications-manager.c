@@ -60,7 +60,7 @@ extern gboolean g_bUseOpenGL;
 //extern int g_iDamageEvent;
 
 // private
-static GHashTable *s_hXWindowTable = NULL;  // table des fenetres affichees dans le dock.
+static GHashTable *s_hAppliIconsTable = NULL;  // table des fenetres affichees dans le dock.
 static int s_bAppliManagerIsRunning = FALSE;
 static GldiWindowActor *s_pCurrentActiveWindow = NULL;
 
@@ -77,7 +77,7 @@ static Icon * cairo_dock_create_icon_from_window (GldiWindowActor *actor)
 
 static Icon *_get_appli_icon (GldiWindowActor *actor)
 {
-	return g_hash_table_lookup (s_hXWindowTable, actor);
+	return g_hash_table_lookup (s_hAppliIconsTable, actor);
 }
 
 
@@ -386,7 +386,7 @@ static gboolean _on_desktop_changed (G_GNUC_UNUSED gpointer data)
 	// applis du bureau courant seulement.
 	if (myTaskbarParam.bAppliOnCurrentDesktopOnly && myTaskbarParam.bShowAppli)
 	{
-		g_hash_table_foreach (s_hXWindowTable, (GHFunc) _hide_show_appli_icons_on_other_desktops, g_pMainDock);
+		g_hash_table_foreach (s_hAppliIconsTable, (GHFunc) _hide_show_appli_icons_on_other_desktops, g_pMainDock);
 	}
 	
 	return GLDI_NOTIFICATION_LET_PASS;
@@ -452,7 +452,7 @@ static void cairo_dock_register_appli (Icon *icon)
 	{
 		cd_debug ("%s (%p ; %s)", __func__, icon->pAppli, icon->cName);
 		// add to table
-		g_hash_table_insert (s_hXWindowTable, icon->pAppli, icon);
+		g_hash_table_insert (s_hAppliIconsTable, icon->pAppli, icon);
 		
 		// add to class
 		cairo_dock_add_appli_icon_to_class (icon);
@@ -465,7 +465,7 @@ static void cairo_dock_unregister_appli (Icon *icon)
 	{
 		cd_debug ("%s (%p ; %s)", __func__, icon->pAppli, icon->cName);
 		// remove from table
-		g_hash_table_remove (s_hXWindowTable, icon->pAppli);
+		g_hash_table_remove (s_hAppliIconsTable, icon->pAppli);
 		
 		// remove from class
 		cairo_dock_remove_appli_from_class (icon);  // n'efface pas sa classe (on peut en avoir besoin encore).
@@ -510,23 +510,21 @@ static gboolean _remove_one_appli (G_GNUC_UNUSED GldiWindowActor *pAppli, Icon *
 		return TRUE;
 	}
 	
-	CairoDock *pDock = gldi_dock_get (pIcon->cParentDockName);
-	if (pDock != NULL)
+	CairoDock *pDock = CAIRO_DOCK(cairo_dock_get_icon_container (pIcon));
+	if (GLDI_OBJECT_IS_DOCK(pDock))
 	{
-		cairo_dock_detach_icon_from_dock (pIcon, pDock);
-		if (! pDock->bIsMainDock)  // la taille du main dock est mis a jour 1 fois a la fin.
+		gldi_icon_detach (pIcon);
+		if (pDock->iRefCount != 0)  // this appli-icon is in a sub-dock (above a launcher or a class-icon)
 		{
-			if (pDock->icons == NULL)  // le dock degage, le fake aussi.
+			if (pDock->icons == NULL)  // the sub-dock gets empty -> free it
 			{
 				CairoDock *pFakeClassParentDock = NULL;
 				Icon *pFakeClassIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pFakeClassParentDock);
-				if (CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pFakeClassIcon)) // fake launcher
+				if (CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pFakeClassIcon))  // also remove the fake launcher that was pointing on it
 				{
 					cd_debug ("on degage le fake qui pointe sur %s", pDock->cDockName);
-					cairo_dock_detach_icon_from_dock (pFakeClassIcon, pFakeClassParentDock);
+					gldi_icon_detach (pFakeClassIcon);
 					gldi_object_unref (GLDI_OBJECT (pFakeClassIcon));
-					if (! pFakeClassParentDock->bIsMainDock)
-						cairo_dock_update_dock_size (pFakeClassParentDock);
 				}
 				gldi_object_unref (GLDI_OBJECT(pDock));
 			}
@@ -545,7 +543,7 @@ static void _cairo_dock_stop_application_manager (void)
 	
 	cairo_dock_remove_all_applis_from_class_table ();  // enleve aussi les indicateurs.
 	
-	g_hash_table_foreach_remove (s_hXWindowTable, (GHRFunc) _remove_one_appli, NULL);  // libere toutes les icones d'appli.
+	g_hash_table_foreach_remove (s_hAppliIconsTable, (GHRFunc) _remove_one_appli, NULL);  // libere toutes les icones d'appli.
 }
 
 
@@ -556,7 +554,7 @@ static void _cairo_dock_stop_application_manager (void)
 
 GList *cairo_dock_get_current_applis_list (void)
 {
-	return g_hash_table_get_values (s_hXWindowTable);
+	return g_hash_table_get_values (s_hAppliIconsTable);
 }
 
 Icon *cairo_dock_get_current_active_icon (void)
@@ -569,7 +567,7 @@ Icon *cairo_dock_get_appli_icon (GldiWindowActor *actor)
 {
 	if (! actor)
 		return NULL;
-	return g_hash_table_lookup (s_hXWindowTable, actor);
+	return g_hash_table_lookup (s_hAppliIconsTable, actor);
 }
 
 static void _for_one_appli_icon (G_GNUC_UNUSED GldiWindowActor *actor, Icon *icon, gpointer *data)
@@ -589,7 +587,7 @@ static void _for_one_appli_icon (G_GNUC_UNUSED GldiWindowActor *actor, Icon *ico
 void cairo_dock_foreach_appli_icon (CairoDockForeachIconFunc pFunction, gpointer pUserData)
 {
 	gpointer data[2] = {pFunction, pUserData};
-	g_hash_table_foreach (s_hXWindowTable, (GHFunc) _for_one_appli_icon, data);
+	g_hash_table_foreach (s_hAppliIconsTable, (GHFunc) _for_one_appli_icon, data);
 }
 
 void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock)
@@ -625,7 +623,7 @@ void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock)
 	
 	if (pDock->bIsMainDock && myTaskbarParam.bHideVisibleApplis)  // on complete avec les applis pas dans le dock, pour que l'effet de minimisation pointe (a peu pres) au bon endroit quand on la minimisera.
 	{
-		g_hash_table_foreach (s_hXWindowTable, (GHFunc) cairo_dock_reserve_one_icon_geometry_for_window_manager, pDock);
+		g_hash_table_foreach (s_hAppliIconsTable, (GHFunc) cairo_dock_reserve_one_icon_geometry_for_window_manager, pDock);
 	}
 }
 
@@ -913,7 +911,7 @@ static void unload (void)
 	cairo_dock_reset_class_table ();
 	
 	// empty the applis table.
-	g_hash_table_foreach_remove (s_hXWindowTable, (GHRFunc) _remove_appli, NULL);
+	g_hash_table_foreach_remove (s_hAppliIconsTable, (GHRFunc) _remove_appli, NULL);
 	
 	s_bAppliManagerIsRunning = FALSE;
 }
@@ -925,7 +923,7 @@ static void unload (void)
 
 static void init (void)
 {
-	s_hXWindowTable = g_hash_table_new_full (g_direct_hash,
+	s_hAppliIconsTable = g_hash_table_new_full (g_direct_hash,
 		g_direct_equal,
 		NULL,  // window actor
 		NULL);  // appli-icon

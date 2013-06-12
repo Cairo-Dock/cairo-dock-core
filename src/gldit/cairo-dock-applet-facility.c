@@ -365,9 +365,7 @@ void cairo_dock_insert_icons_in_applet (GldiModuleInstance *pInstance, GList *pI
 			for (ic = pIconsList; ic != NULL; ic = ic->next)
 			{
 				pOneIcon = ic->data;
-				cairo_dock_insert_icon_in_dock (pOneIcon, pIcon->pSubDock, ! CAIRO_DOCK_ANIMATE_ICON);
-				pOneIcon->cParentDockName = g_strdup (pIcon->cName);
-				cairo_dock_trigger_load_icon_buffers (pOneIcon);
+				gldi_icon_insert_in_container (pOneIcon, CAIRO_CONTAINER(pIcon->pSubDock), ! CAIRO_DOCK_ANIMATE_ICON);
 			}
 			g_list_free (pIconsList);
 			
@@ -380,11 +378,6 @@ void cairo_dock_insert_icons_in_applet (GldiModuleInstance *pInstance, GList *pI
 	}
 	else if (pInstance->pDesklet)
 	{
-		if (pIcon->pSubDock != NULL)  // precaution.
-		{
-			gldi_object_unref (GLDI_OBJECT(pIcon->pSubDock));
-			pIcon->pSubDock = NULL;
-		}
 		Icon *pOneIcon;
 		GList *ic;
 		for (ic = pIconsList; ic != NULL; ic = ic->next)
@@ -392,7 +385,7 @@ void cairo_dock_insert_icons_in_applet (GldiModuleInstance *pInstance, GList *pI
 			pOneIcon = ic->data;
 			cairo_dock_set_icon_container (pOneIcon, pInstance->pDesklet);
 		}
-		pInstance->pDesklet->icons = g_list_concat (pInstance->pDesklet->icons, pIconsList);
+		pInstance->pDesklet->icons = g_list_concat (pInstance->pDesklet->icons, pIconsList);  /// + sort icons and insert automatic separators...
 		cairo_dock_set_desklet_renderer_by_name (pInstance->pDesklet, cDeskletRenderer, (CairoDeskletRendererConfigPtr) pDeskletRendererData);
 		cairo_dock_redraw_container (pInstance->pContainer);
 	}
@@ -401,7 +394,33 @@ void cairo_dock_insert_icons_in_applet (GldiModuleInstance *pInstance, GList *pI
 
 void cairo_dock_insert_icon_in_applet (GldiModuleInstance *pInstance, Icon *pOneIcon)
 {
-	Icon *pIcon = pInstance->pIcon;
+	// get the container (create it if necessary)
+	GldiContainer *pContainer = NULL;
+	if (pInstance->pDock)
+	{
+		Icon *pIcon = pInstance->pIcon;
+		if (pIcon->pSubDock == NULL)
+		{
+			if (pIcon->cName == NULL)
+				gldi_icon_set_name (pIcon, pInstance->pModule->pVisitCard->cModuleName);
+			if (cairo_dock_check_unique_subdock_name (pIcon))
+				gldi_icon_set_name (pIcon, pIcon->cName);
+			pIcon->pSubDock = gldi_subdock_new (pIcon->cName, NULL, pInstance->pDock, NULL);
+			if (pIcon->pSubDock)
+				pIcon->pSubDock->bPreventDraggingIcons = TRUE;  // par defaut pour toutes les applets on empeche de pouvoir deplacer/supprimer les icones a la souris.
+		}
+		pContainer = CAIRO_CONTAINER (pIcon->pSubDock);
+	}
+	else if (pInstance->pDesklet)
+	{
+		pContainer = CAIRO_CONTAINER (pInstance->pDesklet);
+	}
+	g_return_if_fail (pContainer != NULL);
+	
+	// insert the icon inside
+	gldi_icon_insert_in_container (pOneIcon, pContainer, ! CAIRO_DOCK_ANIMATE_ICON);
+	
+	/**Icon *pIcon = pInstance->pIcon;
 	g_return_if_fail (pIcon != NULL);
 	
 	GldiContainer *pContainer = pInstance->pContainer;
@@ -447,42 +466,9 @@ void cairo_dock_insert_icon_in_applet (GldiModuleInstance *pInstance, Icon *pOne
 			pOneIcon->fOrder = (pLastIcon ? pLastIcon->fOrder + 1 : 0);
 		}
 		gldi_desklet_insert_icon (pOneIcon, pInstance->pDesklet);
-	}
+	}*/
 }
 
-gboolean cairo_dock_detach_icon_from_applet (GldiModuleInstance *pInstance, Icon *pOneIcon)
-{
-	Icon *pIcon = pInstance->pIcon;
-	g_return_val_if_fail (pIcon != NULL, FALSE);
-	
-	GldiContainer *pContainer = pInstance->pContainer;
-	g_return_val_if_fail (pContainer != NULL, FALSE);
-	
-	if (pOneIcon == NULL)
-		return FALSE;
-	
-	gboolean bRemoved = FALSE;
-	if (pInstance->pDock)
-	{
-		if (pIcon->pSubDock != NULL)
-		{
-			bRemoved = cairo_dock_detach_icon_from_dock_full (pOneIcon, pIcon->pSubDock, FALSE);
-			cairo_dock_update_dock_size (pIcon->pSubDock);
-		}
-	}
-	else if (pInstance->pDesklet)
-	{
-		bRemoved = gldi_desklet_detach_icon (pOneIcon, pInstance->pDesklet);
-	}
-	return bRemoved;
-}
-
-gboolean cairo_dock_remove_icon_from_applet (GldiModuleInstance *pInstance, Icon *pOneIcon)
-{
-	gboolean r = cairo_dock_detach_icon_from_applet (pInstance, pOneIcon);
-	gldi_object_unref (GLDI_OBJECT (pOneIcon));
-	return r;
-}
 
 void cairo_dock_remove_all_icons_from_applet (GldiModuleInstance *pInstance)
 {

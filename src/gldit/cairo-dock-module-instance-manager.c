@@ -422,7 +422,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 			
 			if (pDock)
 			{
-				cairo_dock_insert_icon_in_dock (pIcon, pDock, ! cairo_dock_is_loading ());  // animate the icon if it's instanciated by the user, not during the initial loading.
+				gldi_icon_insert_in_container (pIcon, CAIRO_CONTAINER(pDock), ! cairo_dock_is_loading ());  // animate the icon if it's instanciated by the user, not during the initial loading.
 				
 				// we need to load the icon's buffer before we init the module, because the applet may need it. no ned to do it in desklet mode, since the desklet doesn't have a renderer yet (so buffer can't be loaded).
 				cairo_dock_load_icon_buffers (pIcon, pContainer);  // ne cree rien si w ou h < 0 (par exemple si l'applet est detachee).
@@ -493,10 +493,8 @@ static void reset_object (GldiObject *obj)
 			gldi_object_unref (GLDI_OBJECT(pIcon->pSubDock));
 			pIcon->pSubDock = NULL;
 		}
-		if (pInstance->pDock)
-		{
-			cairo_dock_detach_icon_from_dock (pIcon, pInstance->pDock);
-		}
+		
+		gldi_icon_detach (pIcon);
 		gldi_object_unref (GLDI_OBJECT(pIcon));
 	}
 	
@@ -611,7 +609,7 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReadConfig, GKeyFile 
 			if (pCurrentDock != NULL && (pMinimalConfig->bIsDetached || pNewDock != pCurrentDock))  // was in a dock, now is in another dock or in a desklet
 			{
 				cd_message ("le container a change (%s -> %s)", pIcon->cParentDockName, pMinimalConfig->bIsDetached ? "desklet" : pMinimalConfig->cDockName);
-				cairo_dock_detach_icon_from_dock (pIcon, pCurrentDock);
+				gldi_icon_detach (pIcon);
 			}
 			else if (pCurrentDesklet != NULL && ! pMinimalConfig->bIsDetached)  // was in a desklet, now is in a dock
 			{
@@ -661,7 +659,7 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReadConfig, GKeyFile 
 		// on insere l'icone dans le dock ou on met a jour celui-ci.
 		if (pNewDock != pCurrentDock)  // insert in its new dock.
 		{
-			cairo_dock_insert_icon_in_dock (pIcon, pNewDock, CAIRO_DOCK_ANIMATE_ICON);
+			gldi_icon_insert_in_container (pIcon, CAIRO_CONTAINER(pNewDock), CAIRO_DOCK_ANIMATE_ICON);
 			pIcon->cParentDockName = g_strdup (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
 			cairo_dock_load_icon_buffers (pIcon, pNewContainer);  // do it now, since the applet may need it. no ned to do it in desklet mode, since the desklet doesn't have a renderer yet (so buffer can't be loaded).
 		}

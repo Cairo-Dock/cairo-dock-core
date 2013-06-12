@@ -92,7 +92,7 @@ void gldi_icons_foreach (CairoDockForeachIconFunc pFunction, gpointer pUserData)
 static void _cairo_dock_detach_launcher (Icon *pIcon)
 {
 	gchar *cParentDockName = g_strdup (pIcon->cParentDockName);
-	cairo_dock_detach_icon_from_dock (pIcon, CAIRO_DOCK (pIcon->pContainer));  // this will set cParentDockName to NULL
+	gldi_icon_detach (pIcon);  // this will set cParentDockName to NULL
 	
 	pIcon->cParentDockName = cParentDockName;  // put it back !
 }
@@ -127,17 +127,17 @@ static void _show_launcher_on_this_desktop (Icon *icon, int index)
 		CairoDock *pParentDock = gldi_dock_get (icon->cParentDockName);
 		if (pParentDock != NULL)
 		{
-			cairo_dock_insert_icon_in_dock (icon, pParentDock, ! CAIRO_DOCK_ANIMATE_ICON);
+			gldi_icon_insert_in_container (icon, CAIRO_CONTAINER(pParentDock), ! CAIRO_DOCK_ANIMATE_ICON);
 		}
 		else  // the dock doesn't exist any more -> free the icon
 		{
 			icon->iSpecificDesktop = 0;  // pour ne pas qu'elle soit enlevee de la liste en parallele.
-			gldi_object_unref (GLDI_OBJECT (icon));
+			gldi_object_delete (GLDI_OBJECT (icon));
 		}
 	}
 }
 
-void cairo_dock_hide_show_launchers_on_other_desktops (void )
+void cairo_dock_hide_show_launchers_on_other_desktops (void )  /// TODO: add a mechanism to hide an icon in a dock (or even in a container ?) without detaching it...
 {
 	if (s_iNbNonStickyLaunchers <= 0)
 		return ;
@@ -960,12 +960,9 @@ static void reset_object (GldiObject *obj)
 	cd_debug ("%s (%s , %s)", __func__, icon->cName, icon->cClass);
 	
 	GldiContainer *pContainer = cairo_dock_get_icon_container (icon);
-	if (pContainer != NULL)  /// TODO: make a 'detach' method in the container interface...
+	if (pContainer != NULL)
 	{
-		if (GLDI_OBJECT_IS_DOCK (pContainer))
-			cairo_dock_detach_icon_from_dock(icon, CAIRO_DOCK(pContainer));
-		else if (GLDI_OBJECT_IS_DESKLET (pContainer))
-			gldi_desklet_detach_icon (icon, CAIRO_DESKLET(pContainer));
+		gldi_icon_detach (icon);
 	}
 	
 	if (icon->iSidRedrawSubdockContent != 0)

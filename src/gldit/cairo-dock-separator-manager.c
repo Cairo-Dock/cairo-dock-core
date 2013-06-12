@@ -135,7 +135,7 @@ Icon *gldi_separator_icon_add_new (CairoDock *pDock, double fOrder)
 	g_free (cNewDesktopFileName);
 	g_return_val_if_fail (pNewIcon, NULL);
 	
-	cairo_dock_insert_icon_in_dock (pNewIcon, pDock, CAIRO_DOCK_ANIMATE_ICON);
+	gldi_icon_insert_in_container (pNewIcon, CAIRO_CONTAINER(pDock), CAIRO_DOCK_ANIMATE_ICON);
 	
 	return pNewIcon;
 }

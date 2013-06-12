@@ -106,10 +106,6 @@ void cairo_dock_insert_icons_in_applet (GldiModuleInstance *pModuleInstance, GLi
 
 void cairo_dock_insert_icon_in_applet (GldiModuleInstance *pInstance, Icon *pOneIcon);
 
-gboolean cairo_dock_detach_icon_from_applet (GldiModuleInstance *pModuleInstance, Icon *icon);
-
-gboolean cairo_dock_remove_icon_from_applet (GldiModuleInstance *pModuleInstance, Icon *icon);
-
 void cairo_dock_remove_all_icons_from_applet (GldiModuleInstance *pModuleInstance);
 
 
@@ -745,13 +741,13 @@ gldi_shortkey_new (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 * @param pIcon the icon to remove.
 * @return whether the icon has been removed or not. In any case, the icon is freed.
 */
-#define CD_APPLET_REMOVE_ICON_FROM_MY_ICONS_LIST(pIcon) cairo_dock_remove_icon_from_applet (myApplet, pIcon)
+#define CD_APPLET_REMOVE_ICON_FROM_MY_ICONS_LIST(pIcon) gldi_object_unref (GLDI_OBJECT(pIcon))
 
 /** Detach an icon from the list of icons of an applet. The icon is not destroyed.
 * @param pIcon the icon to remove.
 * @return whether the icon has been removed or not.
 */
-#define CD_APPLET_DETACH_ICON_FROM_MY_ICONS_LIST(pIcon) cairo_dock_detach_icon_from_applet (myApplet, pIcon)
+#define CD_APPLET_DETACH_ICON_FROM_MY_ICONS_LIST(pIcon) gldi_icon_detach (pIcon)
 
 /** Load a list of icons into an applet, with the given renderer for the sub-dock or the desklet. The icons will be loaded automatically in an idle process.
 *@param pIconList a list of icons. It will belong to the applet's container after that.

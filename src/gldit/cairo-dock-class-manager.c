@@ -281,41 +281,35 @@ static GldiWindowActor *_cairo_dock_detach_appli_of_class (const gchar *cClass)
 	Icon *pIcon;
 	const GList *pElement;
 	///gboolean bNeedsRedraw = FALSE;
-	gboolean bDetached;
 	CairoDock *pParentDock;
 	GldiWindowActor *pFirstFoundActor = NULL;
 	for (pElement = pList; pElement != NULL; pElement = pElement->next)
 	{
 		pIcon = pElement->data;
-		pParentDock = gldi_dock_get (pIcon->cParentDockName);
+		pParentDock = CAIRO_DOCK(cairo_dock_get_icon_container (pIcon));
 		if (pParentDock == NULL)  // pas dans un dock => rien a faire.
 			continue;
 		
 		cd_debug ("detachement de l'icone %s (%p)", pIcon->cName, pFirstFoundActor);
-		gchar *cParentDockName = pIcon->cParentDockName;
-		pIcon->cParentDockName = NULL;  // astuce.
-		bDetached = cairo_dock_detach_icon_from_dock (pIcon, pParentDock);
-		if (bDetached)  // detachee => on met a jour son dock.
+		gldi_icon_detach (pIcon);
+		
+		// if the icon was in the class sub-dock, check if it became empty
+		if (pParentDock == cairo_dock_get_class_subdock (cClass))  // the icon was in the class sub-dock
 		{
-			if (pParentDock == cairo_dock_get_class_subdock (cClass))  // sous-dock de classe => on le met a jour / detruit.
+			if (pParentDock->icons == NULL)  // and it's now empty -> destroy it (and the class-icon pointing on it as well)
 			{
-				if (pParentDock->icons == NULL)  // devient vide => on le detruit.
+				CairoDock *pMainDock = NULL;
+				Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pParentDock, &pMainDock);
+				if (pMainDock && CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pPointingIcon))
 				{
-					if (pParentDock->iRefCount != 0)  // on vire l'icone de paille qui pointe sur ce sous-dock.
-					{
-						CairoDock *pMainDock = NULL;
-						Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pParentDock, &pMainDock);
-						if (pMainDock && CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pPointingIcon))
-						{
-							cairo_dock_detach_icon_from_dock (pPointingIcon, pMainDock);
-							gldi_object_delete (GLDI_OBJECT(pPointingIcon));
-						}
-					}
-					cairo_dock_destroy_class_subdock (cClass);
+					gldi_icon_detach (pPointingIcon);
+					gldi_object_unref (GLDI_OBJECT(pPointingIcon));
 				}
+				
+				cairo_dock_destroy_class_subdock (cClass);
 			}
 		}
-		g_free (cParentDockName);
+		
 		
 		if (pFirstFoundActor == NULL)  // on recupere la 1ere appli de la classe.
 		{
@@ -537,6 +531,7 @@ void cairo_dock_detach_Xid_from_inhibitors (GldiWindowActor *pAppli, const gchar
 			pIcon = pElement->data;
 			if (pIcon->pAppli == pAppli)  // this inhibitor controls the given window -> make it control another (possibly none).
 			{
+				// find the next inhibited appli
 				if (bFirstSearch)  // we didn't search the next window yet, do it now.
 				{
 					bFirstSearch = FALSE;
@@ -554,29 +549,26 @@ void cairo_dock_detach_Xid_from_inhibitors (GldiWindowActor *pAppli, const gchar
 							break ;
 						}
 					}
-					pNextAppli = (pSameClassIcon != NULL ? pSameClassIcon->pAppli : 0);
+					pNextAppli = (pSameClassIcon != NULL ? pSameClassIcon->pAppli : NULL);
 					if (pSameClassIcon != NULL)  // this icon will be inhibited, we need to detach it if needed
 					{
 						cd_message ("  c'est %s qui va la remplacer", pSameClassIcon->cName);
-						CairoDock *pSameClassDock = gldi_dock_get (pSameClassIcon->cParentDockName);
-						if (pSameClassDock != NULL)  // it's inside a dock -> detach it
-						{
-							cairo_dock_detach_icon_from_dock (pSameClassIcon, pSameClassDock);
-							///cairo_dock_update_dock_size (pSameClassDock);  // it can't be the class sub-dock, because pIcon had the window actor, so it doesn't hold the class sub-dock and the class is not grouped (otherwise they would all be in the class sub-dock).
-						}
+						gldi_icon_detach (pSameClassIcon);  // it can't be the class sub-dock, because pIcon had the window actor, so it doesn't hold the class sub-dock and the class is not grouped (otherwise they would all be in the class sub-dock).
 					}
 				}
+				
+				// make the icon inhibite the next appli (possibly none)
 				gldi_icon_set_appli (pIcon, pNextAppli);
 				pIcon->bHasIndicator = (pNextAppli != NULL);
 				_cairo_dock_set_same_indicator_on_sub_dock (pIcon);
-				if (! pIcon->bHasIndicator)
-				{
+				if (pNextAppli == NULL)
 					gldi_icon_set_name (pIcon, pIcon->cInitialName);
-				}
 				cd_message (" %s : bHasIndicator <- %d, pAppli <- %p", pIcon->cName, pIcon->bHasIndicator, pIcon->pAppli);
-				CairoDock *pParentDock = gldi_dock_get (pIcon->cParentDockName);
-				if (pParentDock)
-					gtk_widget_queue_draw (pParentDock->container.pWidget);
+				
+				// redraw
+				GldiContainer *pContainer = cairo_dock_get_icon_container (pIcon);
+				if (pContainer)
+					gtk_widget_queue_draw (pContainer->pWidget);
 			}
 		}
 	}
@@ -847,16 +839,13 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 	if (pDock->icons == NULL)  // shouldn't happen, handle this case and make some noise.
 	{
 		cd_warning ("the %s class sub-dock has no element, which is probably an error !\nit will be destroyed.", cClass);
-		CairoDock *pFakeParentDock = NULL;
-		Icon *pFakeClassIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pFakeParentDock);
+		Icon *pFakeClassIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
 		cairo_dock_destroy_class_subdock (cClass);
 		pFakeClassIcon->pSubDock = NULL;
 		if (CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pFakeClassIcon))
 		{
-			cairo_dock_detach_icon_from_dock (pFakeClassIcon, pFakeParentDock);
-			gldi_object_delete (GLDI_OBJECT(pFakeClassIcon));
-			cairo_dock_update_dock_size (pFakeParentDock);
-			cairo_dock_calculate_dock_icons (pFakeParentDock);
+			gldi_icon_detach (pFakeClassIcon);
+			gldi_object_unref (GLDI_OBJECT(pFakeClassIcon));
 		}
 		return TRUE;
 	}
@@ -868,52 +857,45 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 		CairoDock *pFakeParentDock = NULL;
 		Icon *pFakeClassIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pFakeParentDock);
 		g_return_val_if_fail (pFakeClassIcon != NULL, TRUE);
-		if (CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pFakeClassIcon))  // le sous-dock est pointe par une icone de paille.
+		
+		// detach the last icon from the class sub-dock
+		gboolean bLastIconIsRemoving = cairo_dock_icon_is_being_removed (pLastClassIcon);  // keep the removing state because when we detach the icon, it returns to normal state.
+		gldi_icon_detach (pLastClassIcon);
+		pLastClassIcon->fOrder = pFakeClassIcon->fOrder;  // if re-inserted in a dock, insert at the same place
+		
+		// destroy the class sub-dock
+		cairo_dock_destroy_class_subdock (cClass);
+		pFakeClassIcon->pSubDock = NULL;
+		
+		if (CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pFakeClassIcon))  // the class sub-dock is pointed by a class-icon
 		{
-			cd_debug ("trouve l'icone en papier (%x;%x)", pFakeClassIcon, pFakeParentDock);
-			gboolean bLastIconIsRemoving = cairo_dock_icon_is_being_removed (pLastClassIcon);  // keep the removing state because when we detach the icon, it returns to normal state.
-			cairo_dock_detach_icon_from_dock_full (pLastClassIcon, pDock, FALSE);
-			g_free (pLastClassIcon->cParentDockName);
-			pLastClassIcon->cParentDockName = g_strdup (pFakeClassIcon->cParentDockName);
-			pLastClassIcon->fOrder = pFakeClassIcon->fOrder;
+			// destroy the class-icon
+			gldi_icon_detach (pFakeClassIcon);
+			gldi_object_unref (GLDI_OBJECT(pFakeClassIcon));
 			
-			cd_debug (" on detruit le sous-dock...");
-			cairo_dock_destroy_class_subdock (cClass);
-			pFakeClassIcon->pSubDock = NULL;
-			
-			cd_debug ("on enleve l'icone de paille");
-			cairo_dock_detach_icon_from_dock (pFakeClassIcon, pFakeParentDock);
-			gldi_object_delete (GLDI_OBJECT(pFakeClassIcon));
-			
-			cd_debug (" puis on re-insere l'appli restante");
+			// re-insert the last icon in place of it, or destroy it if it was being removed
 			if (! bLastIconIsRemoving)
 			{
-				cairo_dock_insert_icon_in_dock (pLastClassIcon, pFakeParentDock, ! CAIRO_DOCK_ANIMATE_ICON);
+				gldi_icon_insert_in_container (pLastClassIcon, CAIRO_CONTAINER(pFakeParentDock), ! CAIRO_DOCK_ANIMATE_ICON);
 			}
 			else  // la derniere icone est en cours de suppression, inutile de la re-inserer. (c'est souvent lorsqu'on ferme toutes une classe d'un coup. donc les animations sont pratiquement dans le meme etat, donc la derniere icone en est aussi a la fin, donc on ne verrait de toute facon aucune animation.
 			{
 				cd_debug ("inutile de re-inserer l'icone restante");
-				gldi_object_unref (GLDI_OBJECT (pLastClassIcon));
+				gldi_object_unref (GLDI_OBJECT(pLastClassIcon));
 			}
 		}
-		else  // le sous-dock est pointe par un inhibiteur (normal launcher ou applet).
+		else  // the class sub-dock is pointed by a launcher/applet
 		{
-			gboolean bLastIconIsRemoving = cairo_dock_icon_is_being_removed (pLastClassIcon);  // keep the removing state because when we detach the icon, it returns to normal state.
-			cairo_dock_detach_icon_from_dock_full (pLastClassIcon, pDock, FALSE);
-			g_free (pLastClassIcon->cParentDockName);
-			pLastClassIcon->cParentDockName = NULL;
-			
-			cairo_dock_destroy_class_subdock (cClass);
-			pFakeClassIcon->pSubDock = NULL;
+			// re-inhibite the last icon or destroy it if it was being removed
 			if (! bLastIconIsRemoving)
 			{
-				cairo_dock_insert_appli_in_dock (pLastClassIcon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);  // a priori inutile.
+				cairo_dock_insert_appli_in_dock (pLastClassIcon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);  // probably not needed...
 				cairo_dock_update_name_on_inhibitors (cClass, pLastClassIcon->pAppli, pLastClassIcon->cName);
 			}
 			else  // la derniere icone est en cours de suppression, inutile de la re-inserer
 			{
 				pFakeClassIcon->bHasIndicator = FALSE;
-				gldi_object_unref (GLDI_OBJECT (pLastClassIcon));
+				gldi_object_unref (GLDI_OBJECT(pLastClassIcon));
 			}
 			cairo_dock_redraw_icon (pFakeClassIcon);
 		}

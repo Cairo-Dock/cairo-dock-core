@@ -181,7 +181,7 @@ void gldi_user_icons_new_from_directory (const gchar *cDirectory)
 			pParentDock = gldi_dock_get (icon->cParentDockName);
 			if (pParentDock != NULL)  // a priori toujours vrai.
 			{
-				cairo_dock_insert_icon_in_dock_full (icon, pParentDock, ! CAIRO_DOCK_ANIMATE_ICON, ! CAIRO_DOCK_INSERT_SEPARATOR, NULL);
+				gldi_icon_insert_in_container (icon, CAIRO_CONTAINER(pParentDock), ! CAIRO_DOCK_ANIMATE_ICON);
 			}
 		}
 	}
@@ -294,32 +294,10 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, GKeyFile 
 	g_return_val_if_fail (pNewDock != NULL, pKeyFile);
 	
 	//\_____________ manage the change of container or order.
-	/**if (pDock != pNewDock)  // container has changed.
-	{
-		// on la detache de son container actuel et on l'insere dans le nouveau.
-		cairo_dock_detach_icon_from_dock (icon, pDock);
-		cairo_dock_insert_icon_in_dock (icon, pNewDock, CAIRO_DOCK_ANIMATE_ICON);  // le remove et le insert vont declencher le redessin de l'icone pointant sur l'ancien et le nouveau sous-dock le cas echeant.
-	}
-	else  // same container, but different order.
-	{
-		if (icon->fOrder != fOrder)  // On gere le changement d'ordre.
-		{
-			pNewDock->icons = g_list_remove (pNewDock->icons, icon);
-			pNewDock->icons = g_list_insert_sorted (pNewDock->icons,
-				icon,
-				(GCompareFunc) cairo_dock_compare_icons_order);
-			cairo_dock_update_dock_size (pDock);  // -> recalculate icons and update input shape
-		}
-		// on redessine l'icone pointant sur le sous-dock, pour le cas ou l'ordre et/ou l'image du lanceur aurait change.
-		if (pNewDock->iRefCount != 0)
-		{
-			cairo_dock_redraw_subdock_content (pNewDock);
-		}
-	}*/
 	if (pDock != pNewDock || icon->fOrder != fOrder)
 	{
-		cairo_dock_detach_icon_from_dock (icon, pDock);
-		cairo_dock_insert_icon_in_dock (icon, pNewDock, CAIRO_DOCK_ANIMATE_ICON);  // le remove et le insert vont declencher le redessin de l'icone pointant sur l'ancien et le nouveau sous-dock le cas echeant.
+		gldi_icon_detach (icon);
+		gldi_icon_insert_in_container (icon, CAIRO_CONTAINER(pNewDock), CAIRO_DOCK_ANIMATE_ICON);  // le remove et le insert vont declencher le redessin de l'icone pointant sur l'ancien et le nouveau sous-dock le cas echeant.
 	}
 	else if (pNewDock->iRefCount != 0)  // on redessine l'icone pointant sur le sous-dock, pour le cas ou l'image ou l'ordre de l'icone aurait change.
 	{
