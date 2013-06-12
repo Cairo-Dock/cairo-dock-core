@@ -114,8 +114,8 @@ typedef enum {
 struct _GldiContainerInterface {
 	gboolean (*animation_loop) (GldiContainer *pContainer);
 	void (*setup_menu) (GldiContainer *pContainer, Icon *pIcon, GtkWidget *pMenu);
-	///void (*detach_icon) (GldiContainer *pContainer, Icon *pIcon);  /// TODO...
-	///void (*insert_icon) (GldiContainer *pContainer, Icon *pIcon);
+	void (*detach_icon) (GldiContainer *pContainer, Icon *pIcon);
+	void (*insert_icon) (GldiContainer *pContainer, Icon *pIcon, gboolean bAnimateIcon);
 	};
 
 /// Definition of a Container, whom derive Dock, Desklet, Dialog and FlyingContainer. 

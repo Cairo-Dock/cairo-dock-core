@@ -330,3 +330,25 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 		cairo_destroy (pCairoContext);
 	}
 }
+
+
+void gldi_icon_detach (Icon *pIcon)
+{
+	GldiContainer *pContainer = cairo_dock_get_icon_container (pIcon);
+	if (! pContainer)  // the icon is not in a container -> nothing to do
+		return;
+	pContainer->iface.detach_icon (pContainer, pIcon);
+	cairo_dock_set_icon_container (pIcon, NULL);
+}
+
+void gldi_icon_insert_in_container (Icon *pIcon, GldiContainer *pContainer, gboolean bAnimateIcon)
+{
+	g_return_if_fail (pContainer->iface.insert_icon != NULL);  // the container must handle icons
+	if (cairo_dock_get_icon_container (pIcon) != NULL)  // the icon must not be in a container yet
+	{
+		cd_warning ("This icon (%s) is already inside a container !", pIcon->cName);
+		return;
+	}
+	cairo_dock_set_icon_container (pIcon, pContainer);  // set the container already, the icon might need it to set its size.
+	pContainer->iface.insert_icon (pContainer, pIcon, bAnimateIcon);
+}

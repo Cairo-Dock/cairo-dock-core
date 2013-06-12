@@ -322,5 +322,10 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock);
 #define cairo_dock_set_subdock_content_renderer(pIcon, view) (pIcon)->iSubdockViewType = view
 
 
+void gldi_icon_detach (Icon *pIcon);
+
+void gldi_icon_insert_in_container (Icon *pIcon, GldiContainer *pContainer, gboolean bAnimateIcon);
+
+
 G_END_DECLS
 #endif
