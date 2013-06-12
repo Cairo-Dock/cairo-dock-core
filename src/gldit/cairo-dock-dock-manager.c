@@ -2080,7 +2080,14 @@ static void reset_object (GldiObject *obj)
 	// free icons that are still present
 	GList *icons = pDock->icons;
 	pDock->icons = NULL;  // remove the icons first, to avoid any use of 'icons' in the 'destroy' callbacks.
-	g_list_foreach (icons, (GFunc)gldi_object_unref, NULL);
+	GList *ic;
+	for (ic = icons; ic != NULL; ic = ic->next)
+	{
+		Icon *pIcon = ic->data;
+		cairo_dock_set_icon_container (pIcon, NULL);  // optimisation, to avoid detaching the icon from the container.
+		gldi_object_unref (GLDI_OBJECT(pIcon));
+	}
+	///g_list_foreach (icons, (GFunc)gldi_object_unref, NULL);
 	g_list_free (icons);
 	
 	// if it's a sub-dock, ensure the main icon looses its sub-dock

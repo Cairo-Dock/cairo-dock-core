@@ -301,7 +301,7 @@ struct _CairoDock {
 #define CAIRO_DOCK_IS_DOCK GLDI_OBJECT_IS_DOCK
 
 /** Cast a Container into a Dock.
-* @param pDock the container to consider as a dock.
+* @param p the container to consider as a dock.
 * @return the dock.
 */
 #define CAIRO_DOCK(p) ((CairoDock *)p)
@@ -322,49 +322,6 @@ CairoDock *gldi_dock_new (const gchar *cDockName);
 */
 CairoDock *gldi_subdock_new (const gchar *cDockName, const gchar *cRendererName, CairoDock *pParentDock, GList *pIconList);
 
-
-/** Insert an icon into a dock.
-* Do nothing if the icon already exists inside the dock.
-* @param icon the icon to be inserted. It should have been filled beforehand.
-* @param pDock the dock to insert inside.
-* @param bAnimated TRUE to arm the icon's animation for insertion.
-* @param bInsertSeparator TRUE to insert an automatic separator if needed.
-* @param pCompareFunc a sorting function to place the new icon amongst the others, or NULL to sort by group/order.
-*/
-void cairo_dock_insert_icon_in_dock_full (Icon *icon, CairoDock *pDock, gboolean bAnimated, gboolean bInsertSeparator, GCompareFunc pCompareFunc);
-
-/** Insert an icon into a dock.
-* Insert an automatic separator if needed. Do nothing if the icon already exists inside the dock.
-* @param icon the icon to be inserted. It should have been filled beforehand.
-* @param pDock the dock to insert inside.
-* @param bAnimated TRUE to arm the icon's animation for insertion.
-*/
-#define cairo_dock_insert_icon_in_dock(icon, pDock, bAnimated) cairo_dock_insert_icon_in_dock_full (icon, pDock, bAnimated, TRUE, NULL)
-
-/** Detach an icon from its dock. The icon is not destroyed, and can be directly re-inserted in another container; it keeps its sub-dock, but looses its dialogs. Do nothing if the icon doesn't exist inside the dock.
-*@param icon the icon to detach.
-*@param pDock the dock containing the icon.
-*@param bCheckUnusedSeparator TRUE to check and remove unnecessary separators.
-*@return TRUE if the icon has been detached.
-*/
-gboolean cairo_dock_detach_icon_from_dock_full (Icon *icon, CairoDock *pDock, gboolean bCheckUnusedSeparator);
-#define cairo_dock_detach_icon_from_dock(icon, pDock) cairo_dock_detach_icon_from_dock_full (icon, pDock, TRUE)
-
-/** Completely remove an icon from the dock, that is to say detach the icon, and remove all links with Cairo-Dock : its .desktop is deleted, its module is deactivated, and its Xid is removed from the Taskbar (its class is handled too).
-* Unnecessary separators are not tested.
-* The icon is not yet destroyed, but looses its sub-dock in case of a container launcher.
-*@param pDock the dock containing the icon, or NULL if the icon is already detached.
-*@param icon the icon to be removed.
-*/
-#define cairo_dock_remove_one_icon_from_dock(pDock, icon) cairo_dock_remove_icon_from_dock_full (pDock, icon, FALSE)
-
-/** Completely remove an icon from the dock, that is to say detach the icon, and  remove all links with Cairo-Dock : its .desktop is deleted, its module is deactivated, and its Xid is removed from the Taskbar (its class is handled too).
-* Unnecessary separators are removed as well.
-* The icon is not yet destroyed, but looses its sub-dock in case of a container launcher.
-*@param pDock the dock containing the icon, or NULL if the icon is already detached.
-*@param icon the icon to be removed.
-*/
-#define cairo_dock_remove_icon_from_dock(pDock, icon) cairo_dock_remove_icon_from_dock_full (pDock, icon, TRUE)
 
 /** Remove and destroy all automatic separators inside a dock.
 *@param pDock the dock.

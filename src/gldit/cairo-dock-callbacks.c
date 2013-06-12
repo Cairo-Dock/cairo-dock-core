@@ -713,11 +713,7 @@ static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 		{
 			cd_debug (" on detache l'icone");
 			pOriginDock->bIconIsFlyingAway = TRUE;
-			/**gchar *cParentDockName = s_pIconClicked->cParentDockName;
-			s_pIconClicked->cParentDockName = NULL;*/
-			cairo_dock_detach_icon_from_dock (s_pIconClicked, pOriginDock);
-			/**s_pIconClicked->cParentDockName = cParentDockName;  // we keep the parent dock name, to be able to re-insert it. we'll have to remove it when the icon is dropped.
-			cairo_dock_update_dock_size (pOriginDock);*/
+			gldi_icon_detach (s_pIconClicked);
 			cairo_dock_stop_icon_glide (pOriginDock);
 			
 			s_pFlyingContainer = gldi_flying_container_new (s_pIconClicked, pOriginDock);
@@ -830,12 +826,12 @@ static gboolean _on_enter_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 			if (t - s_pFlyingContainer->fCreationTime > 1)  // on empeche le cas ou enlever l'icone fait augmenter le ratio du dock, et donc sa hauteur, et nous fait rentrer dedans des qu'on sort l'icone.
 			{
 				//g_print ("on remet l'icone volante dans un dock (dock d'origine : %s)\n", pFlyingIcon->cParentDockName);
-				gldi_object_unref (GLDI_OBJECT(s_pFlyingContainer));
+				gldi_object_unref (GLDI_OBJECT(s_pFlyingContainer));  // will detach the icon
 				gldi_icon_stop_animation (pFlyingIcon);
 				// reinsert the icon where it was dropped, not at its original position.
 				Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);  // get the pointed icon before we insert the icon, since the inserted icon will be the pointed one!
 				//g_print (" pointed icon: %s\n", icon?icon->cName:"none");
-				cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_ANIMATE_ICON);
+				gldi_icon_insert_in_container (pFlyingIcon, CAIRO_CONTAINER(pDock), CAIRO_DOCK_ANIMATE_ICON);
 				if (icon != NULL && cairo_dock_get_icon_order (icon) == cairo_dock_get_icon_order (pFlyingIcon))
 				{
 					cairo_dock_move_icon_after_icon (pDock, pFlyingIcon, icon);
@@ -1011,11 +1007,11 @@ static gboolean _on_button_press (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventButt
 						CairoDock *pOriginDock = CAIRO_DOCK (cairo_dock_get_icon_container (s_pIconClicked));
 						if (pOriginDock != NULL && pDock != pOriginDock)
 						{
-							cairo_dock_detach_icon_from_dock (s_pIconClicked, pOriginDock);
+							gldi_icon_detach (s_pIconClicked);
 							
 							gldi_theme_icon_write_container_name_in_conf_file (s_pIconClicked, gldi_dock_get_name (pDock));
 							
-							cairo_dock_insert_icon_in_dock (s_pIconClicked, pDock, CAIRO_DOCK_ANIMATE_ICON);
+							gldi_icon_insert_in_container (s_pIconClicked, CAIRO_CONTAINER(pDock), CAIRO_DOCK_ANIMATE_ICON);
 						}
 						
 						Icon *prev_icon, *next_icon;
@@ -1061,7 +1057,7 @@ static gboolean _on_button_press (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventButt
 							cairo_dock_stop_marking_icon_as_following_mouse (pFlyingIcon);
 							// reinsert the icon where it was dropped, not at its original position.
 							Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);  // get the pointed icon before we insert the icon, since the inserted icon will be the pointed one!
-							cairo_dock_insert_icon_in_dock (pFlyingIcon, pDock, CAIRO_DOCK_ANIMATE_ICON);
+							gldi_icon_insert_in_container (pFlyingIcon, CAIRO_CONTAINER(pDock), CAIRO_DOCK_ANIMATE_ICON);
 							if (icon != NULL && cairo_dock_get_icon_order (icon) == cairo_dock_get_icon_order (pFlyingIcon))
 							{
 								cairo_dock_move_icon_after_icon (pDock, pFlyingIcon, icon);
@@ -1774,7 +1770,7 @@ static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 			{
 				cd_message (" - %s va etre supprimee", pIcon->cName);
 				/// TODO: do that in the 'reset_object'...
-				cairo_dock_detach_icon_from_dock (pIcon, pDock);
+				gldi_icon_detach (pIcon);
 				if (pIcon->cClass != NULL && pDock == cairo_dock_get_class_subdock (pIcon->cClass))  // appli icon in its class sub-dock => destroy the class sub-dock if it becomes empty (we don't want an empty sub-dock).
 				{
 					gboolean bEmptyClassSubDock = cairo_dock_check_class_subdock_is_empty (pDock, pIcon->cClass);
@@ -1983,10 +1979,225 @@ static void _setup_menu (GldiContainer *pContainer, G_GNUC_UNUSED Icon *pIcon, G
 	}
 }
 
+
+static gboolean _destroy_empty_dock (CairoDock *pDock)
+{
+	if (pDock->bIconIsFlyingAway)  // keep the dock alive for now, in case the user re-inserts the flying icon in it.
+		return TRUE;
+	pDock->iSidDestroyEmptyDock = 0;
+	if (pDock->icons == NULL && pDock->iRefCount == 0 && ! pDock->bIsMainDock)  // le dock est toujours a detruire.
+	{
+		cd_debug ("The dock '%s' is empty. No icon, no dock.", pDock->cDockName);
+		gldi_object_unref (GLDI_OBJECT(pDock));
+	}
+	return FALSE;
+}
+static void _detach_icon (GldiContainer *pContainer, Icon *icon)
+{
+	CairoDock *pDock = CAIRO_DOCK (pContainer);
+	g_print ("%s (%s)\n", __func__, icon->cName);
+	
+	//\___________________ On trouve l'icone et ses 2 voisins.
+	GList *prev_ic = NULL, *ic, *next_ic;
+	Icon *pPrevIcon = NULL, *pNextIcon = NULL;
+	for (ic = pDock->icons; ic != NULL; ic = ic->next)
+	{
+		if (ic->data == icon)
+		{
+			prev_ic = ic->prev;
+			next_ic = ic->next;
+			if (prev_ic)
+				pPrevIcon = prev_ic->data;
+			if (next_ic)
+				pNextIcon = next_ic->data;
+			break;
+		}
+	}
+	g_return_if_fail (ic != NULL);  // not found (shouldn't happen)
+	
+	cd_message ("%s (%s)", __func__, icon->cName);
+	
+	//\___________________ On stoppe ses animations.
+	gldi_icon_stop_animation (icon);
+	
+	//\___________________ On desactive sa miniature.
+	if (icon->pAppli != NULL)
+	{
+		//cd_debug ("on desactive la miniature de %s (Xid : %lx)", icon->cName, icon->Xid);
+		gldi_window_set_thumbnail_area (icon->pAppli, 0, 0, 0, 0);
+	}
+	
+	//\___________________ On l'enleve de la liste.
+	pDock->icons = g_list_delete_link (pDock->icons, ic);
+	ic = NULL;
+	pDock->fFlatDockWidth -= icon->fWidth + myIconsParam.iIconGap;
+	
+	//\___________________ On enleve le separateur si c'est la derniere icone de son type.
+	if (! CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (icon))
+	{
+		if ((pPrevIcon == NULL || CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pPrevIcon)) && CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (pNextIcon))
+		{
+			pDock->icons = g_list_delete_link (pDock->icons, next_ic);  // opimisation
+			cairo_dock_set_icon_container ((Icon*)next_ic->data, NULL);
+			next_ic = NULL;
+			pDock->fFlatDockWidth -= pNextIcon->fWidth + myIconsParam.iIconGap;
+			gldi_object_unref (GLDI_OBJECT (pNextIcon));
+			pNextIcon = NULL;
+		}
+		if ((pNextIcon == NULL || CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pNextIcon)) && CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (pPrevIcon))
+		{
+			pDock->icons = g_list_delete_link (pDock->icons, prev_ic);  // opimisation
+			cairo_dock_set_icon_container ((Icon*)prev_ic->data, NULL);
+			prev_ic = NULL;
+			pDock->fFlatDockWidth -= pPrevIcon->fWidth + myIconsParam.iIconGap;
+			gldi_object_unref (GLDI_OBJECT (pPrevIcon));
+			pPrevIcon = NULL;
+		}
+	}
+	
+	//\___________________ Cette icone realisait peut-etre le max des hauteurs, comme on l'enleve on recalcule ce max.
+	Icon *pOtherIcon;
+	if (icon->fHeight >= pDock->iMaxIconHeight)
+	{
+		pDock->iMaxIconHeight = 0;
+		for (ic = pDock->icons; ic != NULL; ic = ic->next)
+		{
+			pOtherIcon = ic->data;
+			if (! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pOtherIcon))
+			{
+				pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, pOtherIcon->fHeight);
+				if (pOtherIcon->fHeight == icon->fHeight)  // on sait qu'on n'ira pas plus haut.
+					break;
+			}
+		}
+	}
+
+	//\___________________ On la remet a la taille normale en vue d'une reinsertion quelque part.
+	icon->fWidth /= pDock->container.fRatio;
+	icon->fHeight /= pDock->container.fRatio;
+	
+	//\___________________ On prevoit le redessin de l'icone pointant sur le sous-dock.
+	if (pDock->iRefCount != 0 && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
+	{
+		cairo_dock_trigger_redraw_subdock_content (pDock);
+	}
+	
+	//\___________________ On prevoit la destruction du dock si c'est un dock principal qui devient vide.
+	if (pDock->iRefCount == 0 && pDock->icons == NULL && ! pDock->bIsMainDock)  // on supprime les docks principaux vides.
+	{
+		if (pDock->iSidDestroyEmptyDock == 0)
+			pDock->iSidDestroyEmptyDock = g_idle_add ((GSourceFunc) _destroy_empty_dock, pDock);  // on ne passe pas le nom du dock en parametre, car le dock peut se faire renommer (improbable, mais bon).
+	}
+	else
+	{
+		cairo_dock_trigger_update_dock_size (pDock);
+	}
+	
+	//\___________________ Notify everybody.
+	icon->fInsertRemoveFactor = 0.;
+	gldi_object_notify (pDock, NOTIFICATION_REMOVE_ICON, icon, pDock);
+	
+	//\___________________ unset the container, now that it's completely detached from it.
+	g_free (icon->cParentDockName);
+	icon->cParentDockName = NULL;
+}
+
+static void _insert_icon (GldiContainer *pContainer, Icon *icon, gboolean bAnimateIcon)
+{
+	CairoDock *pDock = CAIRO_DOCK (pContainer);
+	
+	if (icon->cParentDockName == NULL)
+		icon->cParentDockName = g_strdup (gldi_dock_get_name (pDock));
+
+	//\______________ check if a separator is needed (ie, if the group of the new icon (not its order) is new).
+	gboolean bSeparatorNeeded = FALSE;
+	if (! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
+	{
+		Icon *pSameTypeIcon = cairo_dock_get_first_icon_of_group (pDock->icons, icon->iGroup);
+		if (pSameTypeIcon == NULL && pDock->icons != NULL)
+		{
+			bSeparatorNeeded = TRUE;
+		}
+	}
+
+	//\______________ insert the icon in the list.
+	if (icon->fOrder == CAIRO_DOCK_LAST_ORDER)
+	{
+		Icon *pLastIcon = cairo_dock_get_last_icon_of_order (pDock->icons, icon->iGroup);
+		if (pLastIcon != NULL)
+			icon->fOrder = pLastIcon->fOrder + 1;
+		else
+			icon->fOrder = 1;
+	}
+	
+	pDock->icons = g_list_insert_sorted (pDock->icons,
+		icon,
+		(GCompareFunc)cairo_dock_compare_icons_order);
+	
+	//\______________ set the icon size, now that it's inside a container.
+	int wi = icon->image.iWidth, hi = icon->image.iHeight;
+	cairo_dock_set_icon_size_in_dock (pDock, icon);
+	
+	if (wi != cairo_dock_icon_get_allocated_width (icon) || hi != cairo_dock_icon_get_allocated_height (icon)  // if size has changed, reload the buffers
+	|| (! icon->image.pSurface && ! icon->image.iTexture))  // might happen, for instance if the icon is a launcher pinned on a desktop and was detached before being loaded.
+		cairo_dock_trigger_load_icon_buffers (icon);
+	
+	pDock->fFlatDockWidth += myIconsParam.iIconGap + icon->fWidth;
+	if (! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
+		pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, icon->fHeight);
+	
+	//\______________ insert a separator if needed.
+	if (bSeparatorNeeded)
+	{
+		// insert a separator after if needed
+		Icon *pNextIcon = cairo_dock_get_next_icon (pDock->icons, icon);
+		if (pNextIcon != NULL && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pNextIcon))
+		{
+			Icon *pSeparatorIcon = gldi_auto_separator_icon_new (icon, pNextIcon);
+			gldi_icon_insert_in_container (pSeparatorIcon, CAIRO_CONTAINER(pDock), ! CAIRO_DOCK_ANIMATE_ICON);
+		}
+		
+		// insert a separator before if needed
+		Icon *pPrevIcon = cairo_dock_get_previous_icon (pDock->icons, icon);
+		if (pPrevIcon != NULL && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pPrevIcon))
+		{
+			Icon *pSeparatorIcon = gldi_auto_separator_icon_new (pPrevIcon, icon);
+			gldi_icon_insert_in_container (pSeparatorIcon, CAIRO_CONTAINER(pDock), ! CAIRO_DOCK_ANIMATE_ICON);
+		}
+	}
+	
+	//\______________ On effectue les actions demandees.
+	if (bAnimateIcon)
+	{
+		if (cairo_dock_animation_will_be_visible (pDock))
+			icon->fInsertRemoveFactor = - 0.95;
+		else
+			icon->fInsertRemoveFactor = - 0.05;
+		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
+	}
+	else
+		icon->fInsertRemoveFactor = 0.;
+	
+	cairo_dock_trigger_update_dock_size (pDock);
+	
+	if (pDock->iRefCount != 0 && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))  // on prevoit le redessin de l'icone pointant sur le sous-dock.
+	{
+		cairo_dock_trigger_redraw_subdock_content (pDock);
+	}
+	
+	if (icon->pSubDock != NULL)
+		cairo_dock_synchronize_one_sub_dock_orientation (icon->pSubDock, pDock, FALSE);
+	
+	//\______________ Notify everybody.
+	gldi_object_notify (pDock, NOTIFICATION_INSERT_ICON, icon, pDock);  /// TODO: make it a Container notification...
+}
+
 void gldi_dock_init_internals (CairoDock *pDock)
 {
 	pDock->container.iface.animation_loop = _cairo_dock_dock_animation_loop;
 	pDock->container.iface.setup_menu = _setup_menu;
+	pDock->container.iface.detach_icon = _detach_icon;
+	pDock->container.iface.insert_icon = _insert_icon;
 	
 	//\__________________ set up its window
 	GtkWidget *pWindow = pDock->container.pWidget;

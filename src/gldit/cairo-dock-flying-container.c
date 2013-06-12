@@ -354,6 +354,21 @@ static void init (void)
  /// MANAGER ///
 ///////////////
 
+static void _detach_icon (GldiContainer *pContainer, G_GNUC_UNUSED Icon *pIcon)
+{
+	CairoFlyingContainer *pFlyingContainer = (CairoFlyingContainer*)pContainer;
+	// remove icon
+	pFlyingContainer->pIcon = NULL;
+}
+
+static void _insert_icon (GldiContainer *pContainer, Icon *pIcon, G_GNUC_UNUSED gboolean bAnimateIcon)
+{
+	CairoFlyingContainer *pFlyingContainer = (CairoFlyingContainer*)pContainer;
+	// insert icon
+	g_return_if_fail (pFlyingContainer->pIcon == NULL || pFlyingContainer->pIcon == pIcon);
+	pFlyingContainer->pIcon = pIcon;
+}
+
 static void init_object (GldiObject *obj, gpointer attr)
 {
 	CairoFlyingContainer *pFlyingContainer = (CairoFlyingContainer*)obj;
@@ -362,6 +377,8 @@ static void init_object (GldiObject *obj, gpointer attr)
 	CairoDock *pOriginDock = pAttribute->pOriginDock;  // since the icon is already detached, we need its origin dock in the attributes
 	
 	pFlyingContainer->container.iface.animation_loop = _animation_loop;
+	pFlyingContainer->container.iface.insert_icon = _insert_icon;
+	pFlyingContainer->container.iface.detach_icon = _detach_icon;
 	
 	// insert the icon inside
 	pFlyingContainer->pIcon = pFlyingIcon;
