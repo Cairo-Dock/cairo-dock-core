@@ -34,7 +34,6 @@
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-config.h"
-#include "cairo-dock-callbacks.h"
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-separator-manager.h"  // gldi_automatic_separators_add_in_list
@@ -83,6 +82,7 @@ static int s_iNbPolls = 0;
 static gboolean s_bQuickHide = FALSE;
 static gboolean s_bKeepAbove = FALSE;
 static GldiShortkey *s_pPopupBinding = NULL;  // option 'pop up on shortkey'
+static gboolean s_bResetAll = FALSE;
 
 #define MOUSE_POLLING_DT 150  // mouse polling delay in ms
 
@@ -127,11 +127,13 @@ static gboolean _free_one_dock (G_GNUC_UNUSED const gchar *cDockName, CairoDock 
 }
 void cairo_dock_reset_docks_table (void)
 {
+	s_bResetAll = TRUE;
 	g_hash_table_foreach_remove (s_hDocksTable, (GHRFunc) _free_one_dock, NULL);
 	g_pMainDock = NULL;
 	
 	g_list_free (s_pRootDockList);
 	s_pRootDockList = NULL;
+	s_bResetAll = FALSE;
 }
 
 
@@ -202,22 +204,6 @@ void gldi_dock_make_subdock (CairoDock *pDock, CairoDock *pParentDock, const gch
 		gldi_dock_set_visibility (pDock, CAIRO_DOCK_VISI_KEEP_ABOVE);  // si la visibilite n'avait pas ete mise (sub-dock), ne fera rien (vu que la visibilite par defaut est KEEP_ABOVE).
 	}
 }
-
-void gldi_dock_delete (CairoDock *pDock)
-{
-	if (pDock->bIsMainDock)
-	{
-		cd_warning ("can't delete the main dock");
-		return ;
-	}
-	
-	// remove the conf file
-	_remove_root_dock_config (pDock->cDockName);
-	
-	// free it
-	gldi_object_unref (GLDI_OBJECT(pDock));
-}
-
 
 
 
@@ -378,7 +364,7 @@ static void _gldi_icons_foreach_in_dock (G_GNUC_UNUSED gchar *cDockName, CairoDo
 	GList *ic = pDock->icons, *next_ic;
 	while (ic != NULL)
 	{
-		next_ic = ic->next;  // the function bolew may remove the current icon
+		next_ic = ic->next;  // the function below may remove the current icon
 		pFunction ((Icon*)ic->data, CAIRO_CONTAINER (pDock), pUserData);
 		ic = next_ic;
 	}
@@ -2085,6 +2071,8 @@ static void reset_object (GldiObject *obj)
 	{
 		Icon *pIcon = ic->data;
 		cairo_dock_set_icon_container (pIcon, NULL);  // optimisation, to avoid detaching the icon from the container.
+		if (pIcon->pSubDock != NULL && s_bResetAll)  // if we're deleting the whole table, we don't want the icon to destroy its sub-dock
+			pIcon->pSubDock = NULL;
 		gldi_object_unref (GLDI_OBJECT(pIcon));
 	}
 	///g_list_foreach (icons, (GFunc)gldi_object_unref, NULL);
@@ -2142,9 +2130,8 @@ static void reset_object (GldiObject *obj)
 static gboolean delete_object (GldiObject *obj)
 {
 	CairoDock *pDock = (CairoDock*)obj;
-	if (pDock->bIsMainDock)
+	if (pDock->bIsMainDock)  // can't delete the main dock
 	{
-		cd_warning ("can't delete the main dock");
 		return FALSE;
 	}
 	
@@ -2153,8 +2140,15 @@ static gboolean delete_object (GldiObject *obj)
 	
 	// delete all the icons
 	GList *icons = pDock->icons;
-	pDock->icons = NULL;
-	g_list_foreach (icons, (GFunc)gldi_object_delete, NULL);
+	pDock->icons = NULL;  // remove the icons first, to avoid any use of 'icons' in the 'destroy' callbacks.
+	GList *ic;
+	for (ic = icons; ic != NULL; ic = ic->next)
+	{
+		Icon *pIcon = ic->data;
+		cairo_dock_set_icon_container (pIcon, NULL);  // optimisation, to avoid detaching the icon from the container.
+		gldi_object_delete (GLDI_OBJECT(pIcon));
+	}
+	///g_list_foreach (icons, (GFunc)gldi_object_delete, NULL);
 	g_list_free (icons);
 	
 	return TRUE;

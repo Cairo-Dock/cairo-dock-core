@@ -32,7 +32,6 @@ SET(core_lib_SRCS
 	cairo-dock-dock-factory.c 			cairo-dock-dock-factory.h
 	cairo-dock-dock-facility.c 			cairo-dock-dock-facility.h
 	cairo-dock-dock-visibility.c 		cairo-dock-dock-visibility.h
-	cairo-dock-callbacks.c 				cairo-dock-callbacks.h 
 	cairo-dock-animations.c 			cairo-dock-animations.h
 	cairo-dock-backends-manager.c 		cairo-dock-backends-manager.h
 	cairo-dock-data-renderer.c 			cairo-dock-data-renderer.h
@@ -152,7 +151,7 @@ install(FILES
 	cairo-dock-module-manager.h
 	cairo-dock-module-instance-manager.h
 	cairo-dock-container.h
-	cairo-dock-dock-factory.h			cairo-dock-callbacks.h
+	cairo-dock-dock-factory.h
 	cairo-dock-desklet-factory.h
 	cairo-dock-dialog-factory.h
 	cairo-dock-flying-container.h

@@ -307,6 +307,13 @@ struct _CairoDock {
 #define CAIRO_DOCK(p) ((CairoDock *)p)
 
 
+void cairo_dock_freeze_docks (gboolean bFreeze);
+
+void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, CairoDock *pDock);
+
+void gldi_dock_init_internals (CairoDock *pDock);
+
+
 /** Create a new root dock.
 *@param cDockName the name that identifies the dock
 *@return the new dock.

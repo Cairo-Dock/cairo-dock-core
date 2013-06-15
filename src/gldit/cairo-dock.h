@@ -35,7 +35,6 @@
 #include <gldit/cairo-dock-container.h>
 #include <gldit/cairo-dock-dock-manager.h>
 #include <gldit/cairo-dock-dock-factory.h>
-#include <gldit/cairo-dock-callbacks.h>
 #include <gldit/cairo-dock-desklet-manager.h>
 #include <gldit/cairo-dock-desklet-factory.h>
 #include <gldit/cairo-dock-dialog-manager.h>

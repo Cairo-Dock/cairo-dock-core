@@ -35,7 +35,6 @@
 #include "cairo-dock-module-manager.h"  // GldiModuleInstance
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-factory.h"
-#include "cairo-dock-callbacks.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-icon-factory.h"

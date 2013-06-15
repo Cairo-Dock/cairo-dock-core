@@ -18,31 +18,23 @@
 */
 
 #include <math.h>
-#include <string.h>
-#include <stdlib.h>
-#include <cairo.h>
-#include <pango/pango.h>
-#include <gtk/gtk.h>
 
-
-#include "cairo-dock-icon-factory.h"
-#include "cairo-dock-icon-facility.h"
+#include "cairo-dock-icon-facility.h"  // cairo_dock_get_next_element
 #include "cairo-dock-dock-factory.h"
-#include "cairo-dock-dock-facility.h"
-#include "cairo-dock-callbacks.h"
-#include "cairo-dock-animations.h"
+#include "cairo-dock-dock-facility.h"  // cairo_dock_get_first_drawn_element_linear
+#include "cairo-dock-animations.h"  // cairo_dock_calculate_magnitude
 #include "cairo-dock-log.h"
-#include "cairo-dock-dock-manager.h"
+#include "cairo-dock-dock-manager.h"  // myDocksParam
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-separator-manager.h"
 #include "cairo-dock-applet-manager.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-image-buffer.h"
-#include "cairo-dock-desktop-manager.h"
+#include "cairo-dock-desktop-manager.h"  // g_pFakeTransparencyDesktopBg
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-draw-opengl.h"  // pour cairo_dock_render_one_icon
-#include "cairo-dock-overlay.h"
+#include "cairo-dock-overlay.h"  // cairo_dock_draw_icon_overlays_cairo
 #include "cairo-dock-draw.h"
 
 extern CairoDockImageBuffer g_pVisibleZoneBuffer;

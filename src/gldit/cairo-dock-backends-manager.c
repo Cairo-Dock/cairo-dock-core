@@ -22,7 +22,6 @@
 
 #include "cairo-dock-draw.h"
 #include "cairo-dock-icon-factory.h"
-#include "cairo-dock-callbacks.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-log.h"

@@ -676,11 +676,8 @@ static void _on_select_remove_item (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GtkWid
 	// remove it.
 	if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)
 		|| CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pIcon)
-		|| CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon))  // launcher/separator/sub-dock
-	{
-		cairo_dock_trigger_icon_removal_from_dock (pIcon);
-	}
-	else if (CAIRO_DOCK_IS_APPLET (pIcon))  // applet
+		|| CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon)
+		|| CAIRO_DOCK_IS_APPLET (pIcon))  // icon
 	{
 		cairo_dock_trigger_icon_removal_from_dock (pIcon);
 	}
@@ -688,14 +685,12 @@ static void _on_select_remove_item (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GtkWid
 	{
 		gldi_object_delete (GLDI_OBJECT(pInstance));
 	}
-	else if (CAIRO_DOCK_IS_DOCK (pContainer))  // main-dock
+	else if (CAIRO_DOCK_IS_DOCK (pContainer))  // root dock
 	{
 		CairoDock *pDock = CAIRO_DOCK (pContainer);
 		if (! pDock->bIsMainDock)
 		{
-			cairo_dock_remove_icons_from_dock (pDock, NULL);
-		
-			gldi_object_unref (GLDI_OBJECT(pDock));
+			gldi_object_delete (GLDI_OBJECT(pDock));
 		}
 	}
 	

@@ -34,7 +34,6 @@
 #include "cairo-dock-draw.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-icon-facility.h"
-#include "cairo-dock-callbacks.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-stack-icon-manager.h"
 #include "cairo-dock-separator-manager.h"
@@ -114,8 +113,6 @@ static void _on_answer_delete_dock (int iClickedButton, G_GNUC_UNUSED GtkWidget 
 {
 	if (iClickedButton == 0 || iClickedButton == -1)  // ok button or Enter.
 	{
-		cairo_dock_remove_icons_from_dock (pDock, NULL);
-		
 		gldi_object_delete (GLDI_OBJECT(pDock));
 	}
 }
@@ -613,25 +610,18 @@ static void _on_answer_remove_icon (int iClickedButton, G_GNUC_UNUSED GtkWidget 
 		if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon)
 		&& icon->pSubDock != NULL)  // remove the sub-dock's content from the theme or dispatch it in the main dock.
 		{
-			gboolean bDestroyIcons = TRUE;
 			if (icon->pSubDock->icons != NULL)  // on propose de repartir les icones de son sous-dock dans le dock principal.
 			{
 				int iClickedButton = gldi_dialog_show_and_wait (_("Do you want to re-dispatch the icons contained inside this container into the dock?\n(otherwise they will be destroyed)"),
 					icon, CAIRO_CONTAINER (icon->pContainer),
 					CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, NULL);
 				if (iClickedButton == 0 || iClickedButton == -1)  // ok button or Enter.
-					bDestroyIcons = FALSE;
+				{
+					CairoDock *pDock = CAIRO_DOCK (icon->pContainer);
+					cairo_dock_remove_icons_from_dock (icon->pSubDock, pDock);
+				}
 			}
-			CairoDock *pDock = NULL;
-			if (!bDestroyIcons)
-			{
-				pDock = CAIRO_DOCK (icon->pContainer);
-			}
-			cairo_dock_remove_icons_from_dock (icon->pSubDock, pDock);
-			gldi_object_unref (GLDI_OBJECT(icon->pSubDock));
-			icon->pSubDock = NULL;  // no need, but be safe rather than sorry
 		}
-		
 		cairo_dock_trigger_icon_removal_from_dock (icon);
 	}
 }

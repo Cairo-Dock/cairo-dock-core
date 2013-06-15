@@ -42,6 +42,7 @@ GldiModuleInstancesManager myModuleInstancesMgr;
 
 // dependancies
 extern CairoDock *g_pMainDock;
+extern gchar *g_cCurrentThemePath;
 
 // private
 static int s_iNbUsedSlots = 0;
@@ -521,7 +522,7 @@ static gboolean delete_object (GldiObject *obj)
 	g_return_val_if_fail (pInstance->pModule->pInstancesList != NULL, FALSE);
 	
 	//\_________________ remove this instance from the current theme
-	if (pInstance->pModule->pInstancesList->next != NULL)  // not the last one
+	if (pInstance->pModule->pInstancesList->next != NULL)  // not the last one -> delete its conf file
 	{
 		cd_debug ("We remove %s", pInstance->cConfFilePath);
 		cairo_dock_delete_conf_file (pInstance->cConfFilePath);
@@ -529,6 +530,16 @@ static gboolean delete_object (GldiObject *obj)
 		// We also remove the cConfFilePath (=> this conf file no longer exist during the 'stop' callback)
 		g_free (pInstance->cConfFilePath);
 		pInstance->cConfFilePath = NULL;
+	}
+	else  // last one -> we keep its conf file, so if the parent dock has been deleted, put it back in the main dock the next time the module is activated
+	{
+		if (pInstance->pIcon && pInstance->pDock && ! pInstance->pDock->bIsMainDock)  // it's an applet in a dock
+		{
+			const gchar *cDockName = gldi_dock_get_name (pInstance->pDock);
+			gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
+			if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))  // the parent dock has been deleted -> put it back in the main dock the next time the module is activated
+				gldi_theme_icon_write_container_name_in_conf_file (pInstance->pIcon, CAIRO_DOCK_MAIN_DOCK_NAME);
+		}
 	}
 	return TRUE;
 }

@@ -708,7 +708,7 @@ void gldi_theme_icon_write_container_name_in_conf_file (Icon *pIcon, const gchar
 			G_TYPE_INVALID);
 		g_free (cDesktopFilePath);
 	}
-	else if (CAIRO_DOCK_IS_APPLET (pIcon))
+	else if (GLDI_OBJECT_IS_APPLET_ICON (pIcon))
 	{
 		cairo_dock_update_conf_file (pIcon->pModuleInstance->cConfFilePath,
 			G_TYPE_STRING, "Icon", "dock name", cParentDockName,
@@ -727,7 +727,7 @@ void gldi_theme_icon_write_order_in_conf_file (Icon *pIcon, double fOrder)
 			G_TYPE_INVALID);
 		g_free (cDesktopFilePath);
 	}
-	else if (CAIRO_DOCK_IS_APPLET (pIcon))
+	else if (GLDI_OBJECT_IS_APPLET_ICON (pIcon))
 	{
 		cairo_dock_update_conf_file (pIcon->pModuleInstance->cConfFilePath,
 			G_TYPE_DOUBLE, "Icon", "order", fOrder,

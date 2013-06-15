@@ -979,6 +979,9 @@ static void reset_object (GldiObject *obj)
 	cairo_dock_remove_transition_on_icon (icon);
 	cairo_dock_remove_data_renderer_on_icon (icon);
 	
+	if (icon->pSubDock != NULL)
+		gldi_object_unref (GLDI_OBJECT(icon->pSubDock));
+	
 	if (icon->iSpecificDesktop != 0)
 	{
 		s_iNbNonStickyLaunchers --;

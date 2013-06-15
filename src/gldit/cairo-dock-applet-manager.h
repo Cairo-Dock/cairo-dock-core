@@ -33,7 +33,7 @@ G_BEGIN_DECLS
 
 typedef struct _GldiAppletIconManager GldiAppletIconManager;
 typedef struct _GldiAppletIconAttr GldiAppletIconAttr;
-typedef Icon GldiAppletIcon;  /// icon + module-instance
+typedef Icon GldiAppletIcon;  // icon + module-instance
 
 #ifndef _MANAGER_DEF_
 extern GldiAppletIconManager myAppletIconsMgr;
