@@ -481,9 +481,17 @@ void cairo_dock_remove_all_icons_from_applet (GldiModuleInstance *pInstance)
 	if (pInstance->pDesklet && pInstance->pDesklet->icons != NULL)
 	{
 		cd_debug (" destroy desklet icons");
-		g_list_foreach (pInstance->pDesklet->icons, (GFunc) gldi_object_unref, NULL);
-		g_list_free (pInstance->pDesklet->icons);
+		GList *icons = pInstance->pDesklet->icons;
 		pInstance->pDesklet->icons = NULL;
+		GList *ic;
+		Icon *icon;
+		for (ic = icons; ic != NULL; ic = ic->next)
+		{
+			icon = ic->data;
+			cairo_dock_set_icon_container (icon, NULL);
+			gldi_object_unref (GLDI_OBJECT(icon));
+		}
+		g_list_free (icons);
 		cairo_dock_redraw_container (pInstance->pContainer);
 	}
 	if (pIcon->pSubDock != NULL)
@@ -491,9 +499,17 @@ void cairo_dock_remove_all_icons_from_applet (GldiModuleInstance *pInstance)
 		if (pInstance->pDock)  // optimisation : on ne detruit pas le sous-dock.
 		{
 			cd_debug (" destroy sub-dock icons");
-			g_list_foreach (pIcon->pSubDock->icons, (GFunc) gldi_object_unref, NULL);
-			g_list_free (pIcon->pSubDock->icons);
+			GList *icons = pIcon->pSubDock->icons;
 			pIcon->pSubDock->icons = NULL;
+			GList *ic;
+			Icon *icon;
+			for (ic = icons; ic != NULL; ic = ic->next)
+			{
+				icon = ic->data;
+				cairo_dock_set_icon_container (icon, NULL);
+				gldi_object_unref (GLDI_OBJECT(icon));
+			}
+			g_list_free (icons);
 		}
 		else  // precaution pas chere
 		{

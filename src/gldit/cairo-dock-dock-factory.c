@@ -2011,8 +2011,6 @@ static void _detach_icon (GldiContainer *pContainer, Icon *icon)
 	}
 	g_return_if_fail (ic != NULL);  // not found (shouldn't happen)
 	
-	cd_message ("%s (%s)", __func__, icon->cName);
-	
 	//\___________________ On stoppe ses animations.
 	gldi_icon_stop_animation (icon);
 	
