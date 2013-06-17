@@ -46,4 +46,4 @@ Order=0
 
 Icon Type=0
 Type=Application
-Origin=/usr/share/applications/gnome-terminal.desktop;konsole.desktop;xfce4-terminal.desktop;lxterminal.desktop
+Origin=/usr/share/applications/gnome-terminal.desktop;konsole.desktop;xfce4-terminal.desktop;lxterminal.desktop;exo-terminal-emulator.desktop

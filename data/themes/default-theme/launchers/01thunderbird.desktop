@@ -46,4 +46,4 @@ Order=6
 
 Icon Type=0
 Type=Application
-Origin=/usr/share/applications/thunderbird.desktop;icedove.desktop;evolution.desktop;KMail2.desktop;kmail.desktop;sylpheed.desktop;postler.desktop
+Origin=/usr/share/applications/thunderbird.desktop;icedove.desktop;evolution.desktop;KMail2.desktop;kmail.desktop;sylpheed.desktop;sylpheed-claws.desktop;postler.desktop;claws-mail.desktop
