@@ -300,13 +300,13 @@ static GldiWindowActor *_cairo_dock_detach_appli_of_class (const gchar *cClass)
 			{
 				CairoDock *pMainDock = NULL;
 				Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pParentDock, &pMainDock);
+				/// TODO: register to the destroy event of the class sub-dock...
+				cairo_dock_destroy_class_subdock (cClass);  // destroy it before the class-icon, since it will destroy the sub-dock
 				if (pMainDock && CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pPointingIcon))
 				{
 					gldi_icon_detach (pPointingIcon);
 					gldi_object_unref (GLDI_OBJECT(pPointingIcon));
 				}
-				
-				cairo_dock_destroy_class_subdock (cClass);
 			}
 		}
 		
@@ -465,13 +465,18 @@ void cairo_dock_deinhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
 		pInhibitorIcon->pSubDock->icons = NULL;  // empty the sub-dock
 		cairo_dock_destroy_class_subdock (cClass);  // destroy the sub-dock without destroying its icons
 		
-		// then re-insert the appli icons.
 		Icon *pAppliIcon;
 		GList *ic;
 		for (ic = icons; ic != NULL; ic = ic->next)
 		{
 			pAppliIcon = ic->data;
 			cairo_dock_set_icon_container (pAppliIcon, NULL);  // manually "detach" it
+		}
+		
+		// then re-insert the appli icons.
+		for (ic = icons; ic != NULL; ic = ic->next)
+		{
+			pAppliIcon = ic->data;
 			cairo_dock_insert_appli_in_dock (pAppliIcon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);
 		}
 		g_list_free (icons);
@@ -816,13 +821,15 @@ Icon *cairo_dock_get_classmate (Icon *pIcon)
 			return pFriendIcon;
 	}
 	
+	GldiContainer *pClassSubDock = CAIRO_CONTAINER(cairo_dock_get_class_subdock (pIcon->cClass));
 	for (pElement = pClassAppli->pAppliOfClass; pElement != NULL; pElement = pElement->next)
 	{
 		pFriendIcon = pElement->data;
 		if (pFriendIcon == pIcon)  // skip ourselves
 			continue ;
 		
-		if (pFriendIcon->cParentDockName != NULL && (pClassAppli->cDockName == NULL || strcmp (pFriendIcon->cParentDockName, pClassAppli->cDockName) != 0))  // inside a dock, but not the class sub-dock
+		///if (pFriendIcon->cParentDockName != NULL && (pClassAppli->cDockName == NULL || strcmp (pFriendIcon->cParentDockName, pClassAppli->cDockName) != 0))  // inside a dock, but not the class sub-dock
+		if (cairo_dock_get_icon_container (pFriendIcon) != NULL && cairo_dock_get_icon_container (pFriendIcon) != pClassSubDock)  // inside a dock, but not the class sub-dock
 			return pFriendIcon;
 	}
 	

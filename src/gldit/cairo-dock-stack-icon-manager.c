@@ -206,7 +206,13 @@ static gboolean delete_object (GldiObject *obj)
 	{
 		GList *pSubIcons = icon->pSubDock->icons;
 		icon->pSubDock->icons = NULL;
-		g_list_foreach (pSubIcons, (GFunc)gldi_object_delete, NULL);
+		GList *ic;
+		for (ic = pSubIcons; ic != NULL; ic = ic->next)
+		{
+			Icon *pIcon = ic->data;
+			cairo_dock_set_icon_container (pIcon, NULL);
+			gldi_object_delete (GLDI_OBJECT(pIcon));
+		}
 		g_list_free (pSubIcons);
 		
 		gldi_object_unref (GLDI_OBJECT(icon->pSubDock));  // probably not useful to do that here...

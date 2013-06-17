@@ -186,6 +186,12 @@ static void init_object (GldiObject *obj, gpointer attr)
 	GKeyFile *pKeyFile = pAttributes->pKeyFile;
 	gboolean bNeedUpdate = _get_launcher_params (icon, pKeyFile);
 	
+	if (icon->cCommand == NULL)  // no command could be found for this launcher -> mark it as invalid
+	{
+		g_free (icon->cDesktopFileName);
+		icon->cDesktopFileName = NULL;  // we use this as a way to tell the UserIcon manager that the icon is invalid; we could add a boolean in the GldiUserIcon structure, but it's not that necessary
+	}
+	
 	//\____________ Make it an inhibator for its class.
 	cd_message ("+ %s/%s", icon->cName, icon->cClass);
 	if (icon->cClass != NULL)

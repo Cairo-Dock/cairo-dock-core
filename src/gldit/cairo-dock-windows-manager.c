@@ -280,10 +280,10 @@ void gldi_window_can_minimize_maximize_close (GldiWindowActor *actor, gboolean *
 	}
 }
 
-guint gldi_window_get_id (GldiWindowActor *pAppli)
+guint gldi_window_get_id (GldiWindowActor *actor)
 {
-	if (s_backend.get_id)
-		return s_backend.get_id (pAppli);
+	if (actor && s_backend.get_id)
+		return s_backend.get_id (actor);
 	return 0;
 }
 

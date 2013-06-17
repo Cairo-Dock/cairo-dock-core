@@ -169,8 +169,10 @@ void gldi_user_icons_new_from_directory (const gchar *cDirectory)
 		if (g_str_has_suffix (cFileName, ".desktop"))
 		{
 			icon = gldi_user_icon_new (cFileName);
-			if (icon == NULL)  // if the icon couldn't be loaded, remove it from the theme (it's useless to try and fail to load it each time).
+			if (icon == NULL || icon->cDesktopFileName == NULL)  // if the icon couldn't be loaded, remove it from the theme (it's useless to try and fail to load it each time).
 			{
+				if (icon)
+					gldi_object_unref (GLDI_OBJECT(icon));
 				cd_warning ("Unable to load a valid icon from '%s/%s'; the file is either unreadable, unvalid or does not correspond to any installed program, and will be deleted", g_cCurrentLaunchersPath, cFileName);
 				gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cFileName);
 				cairo_dock_delete_conf_file (cDesktopFilePath);
