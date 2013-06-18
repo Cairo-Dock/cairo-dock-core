@@ -418,54 +418,6 @@ void cairo_dock_insert_icon_in_applet (GldiModuleInstance *pInstance, Icon *pOne
 	
 	// insert the icon inside
 	gldi_icon_insert_in_container (pOneIcon, pContainer, ! CAIRO_DOCK_ANIMATE_ICON);
-	
-	/**Icon *pIcon = pInstance->pIcon;
-	g_return_if_fail (pIcon != NULL);
-	
-	GldiContainer *pContainer = pInstance->pContainer;
-	g_return_if_fail (pContainer != NULL);
-	
-	if (pOneIcon == NULL)
-		return;
-	
-	if (pInstance->pDock)
-	{
-		if (pIcon->pSubDock == NULL)
-		{
-			if (pIcon->cName == NULL)
-				gldi_icon_set_name (pIcon, pInstance->pModule->pVisitCard->cModuleName);
-			if (cairo_dock_check_unique_subdock_name (pIcon))
-				gldi_icon_set_name (pIcon, pIcon->cName);
-			pIcon->pSubDock = gldi_subdock_new (pIcon->cName, NULL, pInstance->pDock, NULL);
-			if (pIcon->pSubDock)
-				pIcon->pSubDock->bPreventDraggingIcons = TRUE;  // par defaut pour toutes les applets on empeche de pouvoir deplacer/supprimer les icones a la souris.
-		}
-		if (pOneIcon->fOrder == CAIRO_DOCK_LAST_ORDER)
-		{
-			Icon *pLastIcon = cairo_dock_get_last_icon (pIcon->pSubDock->icons);
-			pOneIcon->fOrder = (pLastIcon ? pLastIcon->fOrder + 1 : 0);
-		}
-		cairo_dock_insert_icon_in_dock (pOneIcon, pIcon->pSubDock, ! CAIRO_DOCK_ANIMATE_ICON);
-		pOneIcon->cParentDockName = g_strdup (pIcon->cName);
-		cairo_dock_trigger_load_icon_buffers (pOneIcon);
-		if (pIcon->iSubdockViewType != 0)
-			cairo_dock_trigger_redraw_subdock_content_on_icon (pIcon);
-	}
-	else if (pInstance->pDesklet)
-	{
-		if (pIcon->pSubDock != NULL)  // precaution.
-		{
-			gldi_object_unref (GLDI_OBJECT(pIcon->pSubDock));
-			pIcon->pSubDock = NULL;
-		}
-		
-		if (pOneIcon->fOrder == CAIRO_DOCK_LAST_ORDER)
-		{
-			Icon *pLastIcon = cairo_dock_get_last_icon (pInstance->pDesklet->icons);
-			pOneIcon->fOrder = (pLastIcon ? pLastIcon->fOrder + 1 : 0);
-		}
-		gldi_desklet_insert_icon (pOneIcon, pInstance->pDesklet);
-	}*/
 }
 
 

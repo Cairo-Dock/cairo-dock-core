@@ -310,7 +310,6 @@ static GldiWindowActor *_cairo_dock_detach_appli_of_class (const gchar *cClass)
 			}
 		}
 		
-		
 		if (pFirstFoundActor == NULL)  // on recupere la 1ere appli de la classe.
 		{
 			pFirstFoundActor = pIcon->pAppli;
@@ -802,7 +801,7 @@ void cairo_dock_update_name_on_inhibitors (const gchar *cClass, GldiWindowActor 
 	}
 }
 
-Icon *cairo_dock_get_classmate (Icon *pIcon)
+Icon *cairo_dock_get_classmate (Icon *pIcon)  // gets an icon of the same class, that is inside a dock (or will be for an inhibitor), but not inside the class sub-dock
 {
 	cd_debug ("%s (%s)", __func__, pIcon->cClass);
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (pIcon->cClass);
@@ -814,7 +813,8 @@ Icon *cairo_dock_get_classmate (Icon *pIcon)
 	for (pElement = pClassAppli->pIconsOfClass; pElement != NULL; pElement = pElement->next)
 	{
 		pFriendIcon = pElement->data;
-		if (pFriendIcon == NULL || pFriendIcon->cParentDockName == NULL)  // if not inside a dock, ignore.
+		/// TODO: this is ugly... maybe an inhibitor shouldn't inhibite when not yet in a dock...
+		if (pFriendIcon == NULL || (cairo_dock_get_icon_container(pFriendIcon) == NULL && pFriendIcon->cParentDockName == NULL))  // if not inside a dock (for instance a detached applet, but not a hidden launcher), ignore.
 			continue ;
 		cd_debug (" friend : %s", pFriendIcon->cName);
 		if (pFriendIcon->pAppli != NULL || pFriendIcon->pSubDock != NULL)  // is linked to a window, 1 or several times (window actor or class sub-dock).
@@ -828,7 +828,6 @@ Icon *cairo_dock_get_classmate (Icon *pIcon)
 		if (pFriendIcon == pIcon)  // skip ourselves
 			continue ;
 		
-		///if (pFriendIcon->cParentDockName != NULL && (pClassAppli->cDockName == NULL || strcmp (pFriendIcon->cParentDockName, pClassAppli->cDockName) != 0))  // inside a dock, but not the class sub-dock
 		if (cairo_dock_get_icon_container (pFriendIcon) != NULL && cairo_dock_get_icon_container (pFriendIcon) != pClassSubDock)  // inside a dock, but not the class sub-dock
 			return pFriendIcon;
 	}

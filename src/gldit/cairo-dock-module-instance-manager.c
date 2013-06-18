@@ -619,7 +619,7 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReadConfig, GKeyFile 
 			// detach the icon from its container if it has changed
 			if (pCurrentDock != NULL && (pMinimalConfig->bIsDetached || pNewDock != pCurrentDock))  // was in a dock, now is in another dock or in a desklet
 			{
-				cd_message ("le container a change (%s -> %s)", pIcon->cParentDockName, pMinimalConfig->bIsDetached ? "desklet" : pMinimalConfig->cDockName);
+				cd_message ("le container a change (%s -> %s)", gldi_dock_get_name(pCurrentDock), pMinimalConfig->bIsDetached ? "desklet" : pMinimalConfig->cDockName);
 				gldi_icon_detach (pIcon);
 			}
 			else if (pCurrentDesklet != NULL && ! pMinimalConfig->bIsDetached)  // was in a desklet, now is in a dock
@@ -671,7 +671,6 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReadConfig, GKeyFile 
 		if (pNewDock != pCurrentDock)  // insert in its new dock.
 		{
 			gldi_icon_insert_in_container (pIcon, CAIRO_CONTAINER(pNewDock), CAIRO_DOCK_ANIMATE_ICON);
-			pIcon->cParentDockName = g_strdup (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
 			cairo_dock_load_icon_buffers (pIcon, pNewContainer);  // do it now, since the applet may need it. no ned to do it in desklet mode, since the desklet doesn't have a renderer yet (so buffer can't be loaded).
 		}
 		else  // same dock, just update its size.

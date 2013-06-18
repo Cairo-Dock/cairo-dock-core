@@ -1108,7 +1108,7 @@ GList *cairo_dock_get_available_docks (CairoDock *pParentDock, CairoDock *pSubDo
 
 static gboolean _redraw_subdock_content_idle (Icon *pIcon)
 {
-	CairoDock *pDock = gldi_dock_get (pIcon->cParentDockName);
+	CairoDock *pDock = CAIRO_DOCK(cairo_dock_get_icon_container (pIcon));
 	if (pDock != NULL)
 	{
 		if (pIcon->pSubDock != NULL)

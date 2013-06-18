@@ -426,9 +426,8 @@ static gboolean _add_one_module_to_model (const gchar *cModuleName, GldiModule *
 		for (pItem = pModule->pInstancesList; pItem != NULL; pItem = pItem->next)
 		{
 			GldiModuleInstance *pModuleInstance = pItem->data;
-			if (pModuleInstance->pIcon == NULL || (pModuleInstance->pDock && !pModuleInstance->pIcon->cParentDockName))
+			if (pModuleInstance->pIcon == NULL || (pModuleInstance->pDock && cairo_dock_get_icon_container(pModuleInstance->pIcon) == NULL))  // either a plug-in or a detached applet -> add a line for it
 			{
-				// on ajoute une ligne pour l'applet.
 				_add_one_module (cModuleName, pModuleInstance, model);
 			}
 		}
@@ -468,9 +467,9 @@ static GtkTreeModel *_build_tree_model (ItemsWidget *pItemsWidget)
 		G_TYPE_POINTER,  // Icon
 		G_TYPE_POINTER,  // Container
 		G_TYPE_POINTER);  // Module
-	gldi_docks_foreach_root ((GFunc) _add_one_root_dock_to_model, model);
-	gldi_desklets_foreach ((GldiDeskletForeachFunc) _add_one_desklet_to_model, model);
-	gldi_module_foreach ((GHRFunc)_add_one_module_to_model, model);
+	gldi_docks_foreach_root ((GFunc) _add_one_root_dock_to_model, model);  // add all docks, with their icons
+	gldi_desklets_foreach ((GldiDeskletForeachFunc) _add_one_desklet_to_model, model);  // add all desklets
+	gldi_module_foreach ((GHRFunc)_add_one_module_to_model, model);  // add all modules that are neither in a dock nor a desklet (plug-ins or detached applets)
 	/*GldiModule *pModule = gldi_module_get ("Help");
 	if (pModule != NULL)
 	{
@@ -528,15 +527,15 @@ static void on_row_deleted (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path
 			if (pIcon)  // launcher/separator/sub-dock-icon or applet
 			{
 				// get the icon and container.
-				/**if (pIcon == NULL)
-					pIcon = pInstance->pIcon;*/
 				if (pContainer == NULL)
 				{
-					if (pInstance != NULL)
-						pContainer = pInstance->pContainer;
-					else if (pIcon != NULL)
+					pContainer = cairo_dock_get_icon_container(pIcon);
+					if (pContainer == NULL)  // detached icon
 					{
-						pContainer = CAIRO_CONTAINER (gldi_dock_get (pIcon->cParentDockName));  // don't use pIcon->pContainer here, in case it's a launcher on a given workspace; we can change if we make a 'hide' function in the docks
+						if (pInstance != NULL)
+							pContainer = pInstance->pContainer;
+						else
+							pContainer = CAIRO_CONTAINER (gldi_dock_get (pIcon->cParentDockName));  // hidden icon (for instance a launcher on a given workspace; we can change that if we make a 'hide' function in the docks)
 					}
 				}
 				
@@ -561,7 +560,9 @@ static void on_row_deleted (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path
 						}
 						else  // not an icon that can contain our item, so place it next to it.
 						{
-							pParentContainer = CAIRO_CONTAINER (gldi_dock_get (pParentIcon->cParentDockName));
+							pParentContainer = cairo_dock_get_icon_container (pParentIcon);
+							if (!pParentContainer)  // detached icon
+								pParentContainer = CAIRO_CONTAINER (gldi_dock_get (pParentIcon->cParentDockName));  // hidden icon
 							// we'll search the parent instead.
 							lastInsertedIter = parent_iter;
 							gtk_tree_model_iter_parent (model, &parent_iter, &lastInsertedIter);

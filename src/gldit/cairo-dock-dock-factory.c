@@ -2032,18 +2032,18 @@ static void _detach_icon (GldiContainer *pContainer, Icon *icon)
 		if ((pPrevIcon == NULL || CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pPrevIcon)) && CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (pNextIcon))
 		{
 			pDock->icons = g_list_delete_link (pDock->icons, next_ic);  // opimisation
-			cairo_dock_set_icon_container ((Icon*)next_ic->data, NULL);
 			next_ic = NULL;
 			pDock->fFlatDockWidth -= pNextIcon->fWidth + myIconsParam.iIconGap;
+			cairo_dock_set_icon_container (pNextIcon, NULL);
 			gldi_object_unref (GLDI_OBJECT (pNextIcon));
 			pNextIcon = NULL;
 		}
 		if ((pNextIcon == NULL || CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pNextIcon)) && CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (pPrevIcon))
 		{
 			pDock->icons = g_list_delete_link (pDock->icons, prev_ic);  // opimisation
-			cairo_dock_set_icon_container ((Icon*)prev_ic->data, NULL);
 			prev_ic = NULL;
 			pDock->fFlatDockWidth -= pPrevIcon->fWidth + myIconsParam.iIconGap;
+			cairo_dock_set_icon_container (pPrevIcon, NULL);
 			gldi_object_unref (GLDI_OBJECT (pPrevIcon));
 			pPrevIcon = NULL;
 		}

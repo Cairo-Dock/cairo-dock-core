@@ -121,7 +121,6 @@ static void init_object (GldiObject *obj, gpointer attr)
 	if (! pMinimalConfig->bIsDetached)
 	{
 		cairo_dock_icon_set_requested_display_size (icon, pMinimalConfig->iDesiredIconWidth, pMinimalConfig->iDesiredIconHeight);
-		icon->cParentDockName = g_strdup (pMinimalConfig->cDockName != NULL ? pMinimalConfig->cDockName : CAIRO_DOCK_MAIN_DOCK_NAME);
 	}
 	else  // l'applet creera la surface elle-meme, car on ne sait ni la taille qu'elle voudra lui donner, ni meme si elle l'utilisera !
 	{

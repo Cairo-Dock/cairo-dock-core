@@ -1241,7 +1241,7 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
 					_add_entry_in_menu (_("Duplicate"), GTK_STOCK_ADD, _cairo_dock_add_module_instance, pItemSubMenu);  // Launch another instance of this applet
 				}
 				
-				if (CAIRO_DOCK_IS_DOCK (pContainer) && pIcon->cParentDockName != NULL)  // sinon bien sur ca n'est pas la peine de presenter l'option (Cairo-Penguin par exemple)
+				if (CAIRO_DOCK_IS_DOCK (pContainer) && cairo_dock_get_icon_container(pIcon) != NULL)  // sinon bien sur ca n'est pas la peine de presenter l'option (Cairo-Penguin par exemple)
 				{
 					_cairo_dock_add_docks_sub_menu (pItemSubMenu, pIcon);
 				}

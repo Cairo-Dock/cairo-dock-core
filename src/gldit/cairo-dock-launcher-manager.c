@@ -238,8 +238,8 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, GKeyFile 
 	_get_launcher_params (icon, pKeyFile);
 	
 	//\_____________ reload icon's buffers
-	CairoDock *pNewDock = gldi_dock_get (icon->cParentDockName);
-	cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pNewDock));
+	GldiContainer *pNewContainer = cairo_dock_get_icon_container (icon);
+	cairo_dock_load_icon_image (icon, pNewContainer);
 	
 	if (g_strcmp0 (cName, icon->cName) != 0)
 		cairo_dock_load_icon_text (icon);
