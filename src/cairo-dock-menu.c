@@ -532,7 +532,7 @@ static void cairo_dock_add_launcher (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpoin
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
 	double fOrder = _get_next_order (icon, pDock);
-	Icon *pNewIcon = gldi_separator_icon_add_new (pDock, fOrder);
+	Icon *pNewIcon = gldi_launcher_add_new (NULL, pDock, fOrder);
 	if (pNewIcon == NULL)
 		cd_warning ("Couldn't create create the icon.\nCheck that you have writing permissions on ~/.config/cairo-dock and its sub-folders");
 	else
