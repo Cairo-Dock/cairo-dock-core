@@ -104,7 +104,10 @@ static GldiXWindowActor *_make_new_actor (Window Xid)
 			cClass = cairo_dock_get_xwindow_class (Xid, &cWmClass);
 			if (cClass == NULL)
 			{
-				cd_warning ("this window (%s, %ld) doesn't belong to any class, skip it.\nPlease report this bug to the application's devs.", cairo_dock_get_xwindow_name (Xid, TRUE), Xid);
+				gchar *cName = cairo_dock_get_xwindow_name (Xid, TRUE);
+				cd_warning ("this window (%s, %ld) doesn't belong to any class, skip it.\n"
+					"Please report this bug to the application's devs.", cName, Xid);
+				g_free (cName);
 				bShowInTaskbar = FALSE;
 			}
 		}
