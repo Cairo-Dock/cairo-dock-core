@@ -151,6 +151,7 @@ static gboolean delete_object (GldiObject *obj)
 	{
 		g_print ("%s ()\n", __func__);
 		gldi_object_delete (GLDI_OBJECT(icon->pModuleInstance));
+		return FALSE;  // don't go further, since the ModuleInstance has already unref'd ourself
 	}
 	return TRUE;
 }
