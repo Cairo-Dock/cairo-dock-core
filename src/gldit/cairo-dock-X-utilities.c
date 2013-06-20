@@ -1830,7 +1830,7 @@ gboolean cairo_dock_get_xwindow_type (Window Xid, Window *pTransientFor)
 	else  // no type, take it by default, unless it's transient.
 	{
 		XGetTransientForHint (s_XDisplay, Xid, pTransientFor);
-		bKeep = *pTransientFor == None;
+		bKeep = (*pTransientFor == None);
 	}
 	return bKeep;
 }

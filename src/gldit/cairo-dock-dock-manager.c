@@ -438,15 +438,6 @@ static void _reload_buffer_in_one_dock (/**const gchar *cDockName, */CairoDock *
 {
 	cairo_dock_reload_buffers_in_dock (pDock, TRUE, GPOINTER_TO_INT (data));
 }
-void cairo_dock_reload_buffers_in_all_docks (gboolean bUpdateIconSize)
-{
-	///g_hash_table_foreach (s_hDocksTable, (GHFunc) _reload_buffer_in_one_dock, GINT_TO_POINTER (bUpdateIconSize));
-	g_list_foreach (s_pRootDockList, (GFunc)_reload_buffer_in_one_dock, GINT_TO_POINTER (bUpdateIconSize));  // we load the root docks first, so that sub-docks can have the correct icon size.
-	
-	cairo_dock_draw_subdock_icons ();
-}
-
-
 static void _cairo_dock_draw_one_subdock_icon (G_GNUC_UNUSED const gchar *cDockName, CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 {
 	Icon *icon;
@@ -464,11 +455,14 @@ static void _cairo_dock_draw_one_subdock_icon (G_GNUC_UNUSED const gchar *cDockN
 		}
 	}
 }
-void cairo_dock_draw_subdock_icons (void)
+void cairo_dock_reload_buffers_in_all_docks (gboolean bUpdateIconSize)
 {
-	//g_print ("%s ()\n", __func__);
+	g_list_foreach (s_pRootDockList, (GFunc)_reload_buffer_in_one_dock, GINT_TO_POINTER (bUpdateIconSize));  // we load the root docks first, so that sub-docks can have the correct icon size.
+	
+	// now that all icons in sub-docks are drawn, redraw icons pointing to a sub-dock
 	g_hash_table_foreach (s_hDocksTable, (GHFunc)_cairo_dock_draw_one_subdock_icon, NULL);
 }
+
 
 
 static void _cairo_dock_set_one_dock_view_to_default (G_GNUC_UNUSED gchar *cDockName, CairoDock *pDock, gpointer data)
@@ -2070,7 +2064,7 @@ static void reset_object (GldiObject *obj)
 	for (ic = icons; ic != NULL; ic = ic->next)
 	{
 		Icon *pIcon = ic->data;
-		cairo_dock_set_icon_container (pIcon, NULL);  // optimisation, to avoid detaching the icon from the container.
+		cairo_dock_set_icon_container (pIcon, NULL);  // optimisation, to avoid detaching the icon from the container (it also prevents from auto-destroying the dock when it becomes empty)
 		if (pIcon->pSubDock != NULL && s_bResetAll)  // if we're deleting the whole table, we don't want the icon to destroy its sub-dock
 			pIcon->pSubDock = NULL;
 		gldi_object_unref (GLDI_OBJECT(pIcon));

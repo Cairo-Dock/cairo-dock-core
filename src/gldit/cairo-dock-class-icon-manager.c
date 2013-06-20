@@ -91,7 +91,6 @@ static void init_object (GldiObject *obj, gpointer attr)
 	pIcon->pMimeTypes = g_strdupv (pSameClassIcon->pMimeTypes);
 	pIcon->cClass = g_strdup (pSameClassIcon->cClass);
 	pIcon->fOrder = pSameClassIcon->fOrder;
-	pIcon->cParentDockName = g_strdup (pSameClassIcon->cParentDockName);
 	pIcon->bHasIndicator = pSameClassIcon->bHasIndicator;
 	
 	pIcon->pSubDock = pAttributes->pClassSubDock;

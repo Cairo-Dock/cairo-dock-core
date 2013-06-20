@@ -704,8 +704,7 @@ static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 		//if (! cairo_dock_hide_child_docks (pDock))  // on quitte si on entre dans un sous-dock, pour rester en position "haute".
 		//	return ;
 		
-		CairoDock *pOriginDock = gldi_dock_get (s_pIconClicked->cParentDockName);
-		g_return_val_if_fail (pOriginDock != NULL, TRUE);
+		CairoDock *pOriginDock = CAIRO_DOCK(cairo_dock_get_icon_container (s_pIconClicked));
 		if (pOriginDock == pDock && _mouse_is_really_outside (pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
 		{
 			cd_debug (" on detache l'icone");
@@ -2099,6 +2098,8 @@ static void _detach_icon (GldiContainer *pContainer, Icon *icon)
 static void _insert_icon (GldiContainer *pContainer, Icon *icon, gboolean bAnimateIcon)
 {
 	CairoDock *pDock = CAIRO_DOCK (pContainer);
+	
+	cd_debug ("insert %s in %s", icon->cName, gldi_dock_get_name (pDock));
 	
 	if (icon->cParentDockName == NULL)
 		icon->cParentDockName = g_strdup (gldi_dock_get_name (pDock));
