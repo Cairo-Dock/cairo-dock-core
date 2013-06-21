@@ -965,13 +965,6 @@ static void reset_object (GldiObject *obj)
 		gldi_icon_detach (icon);
 	}
 	
-	if (icon->iSidRedrawSubdockContent != 0)
-		g_source_remove (icon->iSidRedrawSubdockContent);
-	if (icon->iSidLoadImage != 0)
-		g_source_remove (icon->iSidLoadImage);
-	if (icon->iSidDoubleClickDelay != 0)
-		g_source_remove (icon->iSidDoubleClickDelay);
-	
 	if (icon->cClass != NULL && ! GLDI_OBJECT_IS_APPLI_ICON (icon))  // c'est un inhibiteur.
 		cairo_dock_deinhibite_class (icon->cClass, icon);  // unset the appli if it had any
 	
@@ -987,6 +980,13 @@ static void reset_object (GldiObject *obj)
 		s_iNbNonStickyLaunchers --;
 		s_pFloatingIconsList = g_list_remove(s_pFloatingIconsList, icon);
 	}
+	
+	if (icon->iSidRedrawSubdockContent != 0)
+		g_source_remove (icon->iSidRedrawSubdockContent);
+	if (icon->iSidLoadImage != 0)  // remove timers after any function that could trigger one (for instance, cairo_dock_deinhibite_class calls cairo_dock_trigger_load_icon_buffers)
+		g_source_remove (icon->iSidLoadImage);
+	if (icon->iSidDoubleClickDelay != 0)
+		g_source_remove (icon->iSidDoubleClickDelay);
 	
 	// free data
 	g_free (icon->cDesktopFileName);

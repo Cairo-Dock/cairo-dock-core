@@ -68,8 +68,6 @@ const GList *cairo_dock_list_existing_appli_with_class (const gchar *cClass);
 
 CairoDock *cairo_dock_get_class_subdock (const gchar *cClass);
 
-gchar *cairo_dock_get_class_subdock_name (const gchar *cClass);
-
 CairoDock* cairo_dock_create_class_subdock (const gchar *cClass, CairoDock *pParentDock);
 
 /*

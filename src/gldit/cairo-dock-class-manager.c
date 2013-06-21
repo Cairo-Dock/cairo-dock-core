@@ -131,14 +131,6 @@ CairoDock *cairo_dock_get_class_subdock (const gchar *cClass)
 	return gldi_dock_get (pClassAppli->cDockName);
 }
 
-gchar *cairo_dock_get_class_subdock_name (const gchar *cClass)
-{
-	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
-	g_return_val_if_fail (pClassAppli!= NULL, NULL);
-	
-	return pClassAppli->cDockName;
-}
-
 CairoDock* cairo_dock_create_class_subdock (const gchar *cClass, CairoDock *pParentDock)
 {
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
@@ -451,8 +443,6 @@ void cairo_dock_deinhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
 	cd_message ("%s (%s)", __func__, cClass);
 	gboolean bStillInhibited = _cairo_dock_remove_icon_from_class (pInhibitorIcon);
 	cd_debug (" bStillInhibited : %d", bStillInhibited);
-	///if (! bStillInhibited)  // il n'y a plus personne dans cette classe.
-	///	return ;
 	
 	if (pInhibitorIcon != NULL && pInhibitorIcon->pSubDock != NULL && pInhibitorIcon->pSubDock == cairo_dock_get_class_subdock (cClass))  // the launcher is controlling several appli icons, place them back in the taskbar.
 	{
@@ -461,6 +451,7 @@ void cairo_dock_deinhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
 		GList *icons = pInhibitorIcon->pSubDock->icons;
 		pInhibitorIcon->pSubDock->icons = NULL;  // empty the sub-dock
 		cairo_dock_destroy_class_subdock (cClass);  // destroy the sub-dock without destroying its icons
+		pInhibitorIcon->pSubDock = NULL;  // since the inhibitor can already be detached, the sub-dock can't find it
 		
 		Icon *pAppliIcon;
 		GList *ic;

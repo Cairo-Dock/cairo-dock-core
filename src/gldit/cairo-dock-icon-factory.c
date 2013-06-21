@@ -275,7 +275,6 @@ void cairo_dock_trigger_load_icon_buffers (Icon *pIcon)
 {
 	if (pIcon->iSidLoadImage == 0)
 	{
-		//g_print ("trigger load for %s\n", pIcon->cName);
 		cairo_dock_load_icon_text (pIcon);  // la vue peut avoir besoin de connaitre la taille du texte.
 		pIcon->iSidLoadImage = g_idle_add ((GSourceFunc)_load_icon_buffer_idle, pIcon);
 	}
