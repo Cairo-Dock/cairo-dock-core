@@ -371,13 +371,29 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 			*x = y0 + pIcon->fHeight * pIcon->fScale;
 	}
 }
+static gboolean _popup_menu_delayed (gpointer *data)
+{
+	GtkMenuPositionFunc place_menu = data[2];
+	GtkWidget *menu = data[3];
+	gtk_menu_popup (GTK_MENU (menu),
+		NULL,
+		NULL,
+		place_menu,
+		data,
+		0,
+		0);
+	return FALSE;
+}
 void cairo_dock_popup_menu_on_icon (GtkWidget *menu, Icon *pIcon, GldiContainer *pContainer)
 {
-	static gpointer data[2];  // 1 seul menu a la fois, donc on peut la faire statique.
-	
+	static gpointer data[4];  // data[0&1] is used by _place_menu_on_icon, data[2&3] is used by the delayed callback.
 	if (menu == NULL)
 		return;
-	GtkMenuPositionFunc place_menu = NULL;  // if 'place_menu' is NULL, then 'data' is ignored.
+	
+	guint32 t = gtk_get_current_event_time();
+	cd_debug ("gtk_get_current_event_time: %d", t);
+	
+	GtkMenuPositionFunc place_menu = NULL;
 	if (pIcon != NULL && pContainer != NULL)
 	{
 		place_menu = (GtkMenuPositionFunc)_place_menu_on_icon;
@@ -385,18 +401,27 @@ void cairo_dock_popup_menu_on_icon (GtkWidget *menu, Icon *pIcon, GldiContainer 
 		data[1] = pContainer;
 	}
 	
-	if (pContainer->iface.setup_menu)
+	if (pContainer && pContainer->iface.setup_menu)
 		pContainer->iface.setup_menu (pContainer, pIcon, menu);
 	
 	gtk_widget_show_all (GTK_WIDGET (menu));
 	
-	gtk_menu_popup (GTK_MENU (menu),
-		NULL,
-		NULL,
-		place_menu,
-		data,
-		1,
-		gtk_get_current_event_time ());
+	if (t > 0)
+	{
+		gtk_menu_popup (GTK_MENU (menu),
+			NULL,
+			NULL,
+			place_menu,
+			data,
+			0,
+			t);
+	}
+	else  // 'gtk_menu_popup' is buggy and doesn't work if not triggered directly by an X event :-/ so in this case, we run it with a delay (200ms is the minimal value that always works).
+	{
+		data[2] = place_menu;
+		data[3] = menu;
+		g_timeout_add (200, (GSourceFunc)_popup_menu_delayed, data);
+	}
 }
 
 
