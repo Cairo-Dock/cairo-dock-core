@@ -1,15 +1,9 @@
-install (FILES
-	cairo-dock.desktop
-	cairo-dock-fallback.desktop
-	cairo-dock-unity.desktop
-	DESTINATION /usr/share/xsessions)
-
-install (FILES
-	cairo-dock.session
-	cairo-dock-fallback.session
-	cairo-dock-unity.session
-	cairo-dock-unity-fallback.session
-	DESTINATION /usr/share/gnome-session/sessions)
+# (we assume GTK and Gnome-Session are using the same version)
+if (${GTK_MAJOR} LESS 3 OR (${GTK_MAJOR} EQUAL 3 AND ${GTK_MINOR} LESS 8)) # GTK < 3.8
+	add_subdirectory(gnome-session-3.0)
+else()
+	add_subdirectory(gnome-session-3.8)
+endif()
 
 install (FILES cairo-dock-session
 	DESTINATION ${bindir}
