@@ -23,10 +23,17 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-module-manager.h"  // GldiVisitCard (for gldi_extend_manager)
 #include "cairo-dock-keyfile-utilities.h"
+#define __MANAGER_DEF__
 #include "cairo-dock-manager.h"
 
-extern GldiContainer *g_pPrimaryContainer;
+// public (manager, config, data)
+GldiObjectManager myManagerObjectMgr;
 
+// dependancies
+extern GldiContainer *g_pPrimaryContainer;
+extern gchar *g_cConfFile;
+
+// private
 static GList *s_pManagers = NULL;
 
 
@@ -38,8 +45,8 @@ static void _gldi_init_manager (GldiManager *pManager)
 	pManager->bInitIsDone = TRUE;
 	
 	// if the manager depends on another, init this one first.
-	if (pManager->object.mgr != NULL)
-		_gldi_init_manager (pManager->object.mgr);
+	if (pManager->pDependence != NULL)
+		_gldi_init_manager (pManager->pDependence);
 	
 	// init the manager
 	if (pManager->init)
@@ -65,7 +72,7 @@ static inline void _gldi_unload_manager (GldiManager *pManager)
 }
 
 
-void gldi_reload_manager_from_keyfile (GldiManager *pManager, GKeyFile *pKeyFile)
+static void _gldi_manager_reload_from_keyfile (GldiManager *pManager, GKeyFile *pKeyFile)
 {
 	gpointer *pPrevConfig = NULL;
 	// get new config
@@ -88,20 +95,20 @@ void gldi_reload_manager_from_keyfile (GldiManager *pManager, GKeyFile *pKeyFile
 }
 
 
-void gldi_reload_manager (GldiManager *pManager, const gchar *cConfFilePath)  // expose pour Dbus.
+/*void gldi_manager_reload (GldiManager *pManager, const gchar *cConfFilePath)  // expose pour Dbus.
 {
 	g_return_if_fail (pManager != NULL);
 	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
 	if (pKeyFile == NULL)
 		return;
 	
-	gldi_reload_manager_from_keyfile (pManager, pKeyFile);
+	gldi_manager_reload_from_keyfile (pManager, pKeyFile);
 	
 	g_key_file_free (pKeyFile);
-}
- 
+}*/
 
-static gboolean gldi_get_manager_config (GldiManager *pManager, GKeyFile *pKeyFile)
+
+static gboolean gldi_manager_get_config (GldiManager *pManager, GKeyFile *pKeyFile)
 {
 	if (! pManager->get_config || ! pManager->pConfig || pManager->iSizeOfConfig == 0)
 		return FALSE;
@@ -114,9 +121,9 @@ static gboolean gldi_get_manager_config (GldiManager *pManager, GKeyFile *pKeyFi
 }
 
 
-void gldi_extend_manager (GldiVisitCard *pVisitCard, const gchar *cManagerName)
+void gldi_manager_extend (GldiVisitCard *pVisitCard, const gchar *cManagerName)
 {
-	GldiManager *pManager = gldi_get_manager (cManagerName);
+	GldiManager *pManager = gldi_manager_get (cManagerName);
 	g_return_if_fail (pManager != NULL && pVisitCard->cInternalModule == NULL);
 	pManager->pExternalModules = g_list_prepend (pManager->pExternalModules, (gpointer)pVisitCard->cModuleName);
 	pVisitCard->cInternalModule = cManagerName;
@@ -127,13 +134,7 @@ void gldi_extend_manager (GldiVisitCard *pVisitCard, const gchar *cManagerName)
  /// MANAGER ///
 ///////////////
 
-void gldi_register_manager (GldiManager *pManager)
-{
-	s_pManagers = g_list_prepend (s_pManagers, pManager);
-}
-
-
-GldiManager *gldi_get_manager (const gchar *cName)
+GldiManager *gldi_manager_get (const gchar *cName)
 {
 	GldiManager *pManager = NULL;
 	GList *m;
@@ -147,7 +148,7 @@ GldiManager *gldi_get_manager (const gchar *cName)
 }
 
 
-void gldi_init_managers (void)
+void gldi_managers_init (void)
 {
 	cd_message ("%s()", __func__);
 	GldiManager *pManager;
@@ -160,7 +161,7 @@ void gldi_init_managers (void)
 }
 
 
-gboolean gldi_get_managers_config_from_key_file (GKeyFile *pKeyFile)
+gboolean gldi_managers_get_config_from_key_file (GKeyFile *pKeyFile)
 {
 	gboolean bFlushConfFileNeeded = FALSE;
 	GldiManager *pManager;
@@ -168,27 +169,26 @@ gboolean gldi_get_managers_config_from_key_file (GKeyFile *pKeyFile)
 	for (m = s_pManagers; m != NULL; m = m->next)
 	{
 		pManager = m->data;
-		bFlushConfFileNeeded |= gldi_get_manager_config (pManager, pKeyFile);
+		bFlushConfFileNeeded |= gldi_manager_get_config (pManager, pKeyFile);
 	}
 	return bFlushConfFileNeeded;
 }
 
 
-void gldi_get_managers_config (const gchar *cConfFilePath, const gchar *cVersion)
+void gldi_managers_get_config (const gchar *cConfFilePath, const gchar *cVersion)
 {
 	//\___________________ On ouvre le fichier de conf.
 	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
 	g_return_if_fail (pKeyFile != NULL);
 	
 	//\___________________ On recupere la conf de tous les managers.
-	gboolean bFlushConfFileNeeded = gldi_get_managers_config_from_key_file (pKeyFile);
+	gboolean bFlushConfFileNeeded = gldi_managers_get_config_from_key_file (pKeyFile);
 	
 	//\___________________ On met a jour le fichier sur le disque si necessaire.
 	if (! bFlushConfFileNeeded && cVersion != NULL)
 		bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, cVersion);
 	if (bFlushConfFileNeeded)
 	{
-		///cairo_dock_flush_conf_file (pKeyFile, cConfFilePath, GLDI_SHARE_DATA_DIR, CAIRO_DOCK_CONF_FILE);
 		cairo_dock_upgrade_conf_file (cConfFilePath, pKeyFile, GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_CONF_FILE);
 	}
 	
@@ -196,7 +196,7 @@ void gldi_get_managers_config (const gchar *cConfFilePath, const gchar *cVersion
 }
 
 
-void gldi_load_managers (void)
+void gldi_managers_load (void)
 {
 	cd_message ("%s()", __func__);
 	GldiManager *pManager;
@@ -209,7 +209,7 @@ void gldi_load_managers (void)
 }
 
 
-void gldi_unload_managers (void)
+void gldi_managers_unload (void)
 {
 	cd_message ("%s()", __func__);
 	GldiManager *pManager;
@@ -219,4 +219,56 @@ void gldi_unload_managers (void)
 		pManager = m->data;
 		_gldi_unload_manager (pManager);
 	}
+}
+
+
+void gldi_managers_foreach (GFunc callback, gpointer data)
+{
+	g_list_foreach (s_pManagers, callback, data);
+}
+
+
+  //////////////
+ /// OBJECT ///
+//////////////
+
+static void init_object (GldiObject *obj, G_GNUC_UNUSED gpointer attr)
+{
+	GldiManager *pManager = (GldiManager*)obj;
+	
+	s_pManagers = g_list_prepend (s_pManagers, pManager);  // we don't init the manager, since we want to do that after all maangers have been created
+}
+
+static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, GKeyFile *pKeyFile)
+{
+	GldiManager *pManager = (GldiManager*)obj;
+	g_print ("reload %s\n", pManager->cModuleName);
+	if (bReloadConf && !pKeyFile)
+	{
+		pKeyFile = cairo_dock_open_key_file (g_cConfFile);
+		g_return_val_if_fail (pKeyFile != NULL, NULL);
+	}
+	
+	_gldi_manager_reload_from_keyfile (pManager, pKeyFile);
+	
+	return pKeyFile;
+}
+
+static gboolean delete_object (G_GNUC_UNUSED GldiObject *obj)
+{
+	return FALSE;  // don't allow to delete a manager
+}
+
+void gldi_register_managers_manager (void)
+{
+	// Object Manager
+	memset (&myManagerObjectMgr, 0, sizeof (GldiObjectManager));
+	myManagerObjectMgr.cName         = "Manager";
+	myManagerObjectMgr.iObjectSize   = sizeof (GldiManager);
+	// interface
+	myManagerObjectMgr.init_object   = init_object;
+	myManagerObjectMgr.reload_object = reload_object;
+	myManagerObjectMgr.delete_object = delete_object;
+	// signals
+	gldi_object_install_notifications (GLDI_OBJECT (&myManagerObjectMgr), NB_NOTIFICATIONS_MANAGER);
 }

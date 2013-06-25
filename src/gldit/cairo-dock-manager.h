@@ -28,13 +28,22 @@
 G_BEGIN_DECLS
 
 /**
-*@file cairo-dock-manager.h This class defines the Managers. Managers are the core of Cairo-Dock. A Manager is a set of parameters and an interface, and manages all the ressources associated to its functions.
+*@file cairo-dock-manager.h This class defines the Managers. A Manager is like an internal module: it has a classic module interface, manages a set of ressources, and has its own configuration.
 * 
 * Each manager is initialized at the beginning.
 * When loading the current theme, get_config and load are called.
 * When unloading the current theme, unload and reset_config are called.
 * When reloading a part of the current theme, reset_config, get_config and load are called.
 */
+
+#ifndef __MANAGER_DEF__
+extern GldiObjectManager myManagerObjectMgr;
+#endif
+
+// signals
+typedef enum {
+	NB_NOTIFICATIONS_MANAGER = NB_NOTIFICATIONS_OBJECT,
+	} GldiManagerNotifications;
 
 typedef gpointer GldiManagerConfigPtr;
 typedef gpointer GldiManagerDataPtr;
@@ -64,51 +73,44 @@ struct _GldiManager {
 	GldiManagerGetConfigFunc get_config;
 	/// function called when resetting the current theme, or a part of it.
 	GldiManagerResetConfigFunc reset_config;
-	
-	void (*init_object) (GldiObject *pObject, gpointer attr);
-	void (*reset_object) (GldiObject *pObject);
-	gboolean (*delete_object) (GldiObject *pObject);
-	GKeyFile* (*reload_object) (GldiObject *pObject, gboolean bReloadConf, GKeyFile *pKeyFile);
-	gint iObjectSize;
-	
 	//\_____________ Instance.
 	GldiManagerConfigPtr pConfig;
 	GldiManagerDataPtr pData;
 	GList *pExternalModules;
 	gboolean bInitIsDone;
+	GldiManager *pDependence;  // only 1 at the moment, can be a GSList if needed
 };
 
 #define GLDI_MANAGER(m) ((GldiManager*)(m))
 
-
-/** Say if an object is an Icon.
+/** Say if an object is a Manager.
 *@param obj the object.
-*@return TRUE if the object is an icon.
+*@return TRUE if the object is a Manager.
 */
-#define CAIRO_DOCK_IS_MANAGER(obj) (GLDI_OBJECT(obj)->mgr == NULL)
+#define GLDI_OBJECT_IS_MANAGER(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), &myManagerObjectMgr)
 
 
 // facility
-void gldi_reload_manager_from_keyfile (GldiManager *pManager, GKeyFile *pKeyFile);
+/*void gldi_manager_reload_from_keyfile (GldiManager *pManager, GKeyFile *pKeyFile);
 
-void gldi_reload_manager (GldiManager *pManager, const gchar *cConfFilePath);  // expose pour Dbus.
-
-void gldi_extend_manager (GldiVisitCard *pVisitCard, const gchar *cManagerName);
+void gldi_manager_reload (GldiManager *pManager, const gchar *cConfFilePath);  // expose pour Dbus.
+*/
+void gldi_manager_extend (GldiVisitCard *pVisitCard, const gchar *cManagerName);
 
 // manager
-void gldi_register_manager (GldiManager *pManager);
+GldiManager *gldi_manager_get (const gchar *cName);
 
-GldiManager *gldi_get_manager (const gchar *cName);
+void gldi_managers_init (void);
 
-void gldi_init_managers (void);
+gboolean gldi_managers_get_config_from_key_file (GKeyFile *pKeyFile);
 
-gboolean gldi_get_managers_config_from_key_file (GKeyFile *pKeyFile);
+void gldi_managers_get_config (const gchar *cConfFilePath, const gchar *cVersion);
 
-void gldi_get_managers_config (const gchar *cConfFilePath, const gchar *cVersion);
+void gldi_managers_load (void);
 
-void gldi_load_managers (void);
+void gldi_managers_unload (void);
 
-void gldi_unload_managers (void);
+void gldi_managers_foreach (GFunc callback, gpointer data);
 
 
 #define	GLDI_STR_HELPER(x) #x
@@ -146,6 +148,8 @@ void gldi_register_##name##s_manager (void) { \
 
 #define GLDI_MANAGER_DEFINE_END }
 
+
+void gldi_register_managers_manager (void);
 
 G_END_DECLS
 #endif
