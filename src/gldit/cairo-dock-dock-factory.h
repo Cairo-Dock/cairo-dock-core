@@ -297,7 +297,7 @@ struct _CairoDock {
 *@param obj the object.
 *@return TRUE if the object is a Dock.
 */
-#define GLDI_OBJECT_IS_DOCK(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), GLDI_MANAGER(&myDocksMgr))
+#define GLDI_OBJECT_IS_DOCK(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), &myDockObjectMgr)
 #define CAIRO_DOCK_IS_DOCK GLDI_OBJECT_IS_DOCK
 
 /** Cast a Container into a Dock.

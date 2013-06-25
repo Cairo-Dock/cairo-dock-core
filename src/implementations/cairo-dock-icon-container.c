@@ -147,7 +147,6 @@ static void _cairo_dock_draw_subdock_content_as_stack_opengl (Icon *pIcon, G_GNU
 		if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon) || icon->image.iTexture == 0)
 			continue;
 		
-		g_print ("%d) %s\n", i, icon->cName);
 		switch (i)
 		{
 			case 0:

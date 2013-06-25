@@ -30,29 +30,25 @@ G_BEGIN_DECLS
 *@file cairo-dock-launcher-manager.h This class handles the Launcher Icons, which are user icons used to launch a program.
 */
 
-typedef struct _GldiLauncherManager GldiLauncherManager;
+// manager
 typedef GldiUserIconAttr GldiLauncherIconAttr;
 typedef GldiUserIcon GldiLauncherIcon;
 
 #ifndef _MANAGER_DEF_
-extern GldiLauncherManager myLaunchersMgr;
+extern GldiObjectManager myLauncherObjectMgr;
 #endif
-
-// manager
-struct _GldiLauncherManager {
-	GldiManager mgr;
-} ;
 
 // signals
 typedef enum {
 	NB_NOTIFICATIONS_LAUNCHER = NB_NOTIFICATIONS_USER_ICON,
 	} GldiLauncherNotifications;
 
+
 /** Say if an object is a LauncherIcon.
 *@param obj the object.
 *@return TRUE if the object is a LauncherIcon.
 */
-#define GLDI_OBJECT_IS_LAUNCHER_ICON(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), GLDI_MANAGER(&myLaunchersMgr))
+#define GLDI_OBJECT_IS_LAUNCHER_ICON(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), &myLauncherObjectMgr)
 
 
 Icon *gldi_launcher_new (const gchar *cConfFile, GKeyFile *pKeyFile);

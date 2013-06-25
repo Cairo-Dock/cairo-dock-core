@@ -893,12 +893,14 @@ void gldi_register_connection_manager (void)
 {
 	// Manager
 	memset (&myConnectionMgr, 0, sizeof (CairoConnectionManager));
-	myConnectionMgr.mgr.cModuleName 	= "Connection";
-	myConnectionMgr.mgr.init 		= init;
-	myConnectionMgr.mgr.load 		= NULL;
-	myConnectionMgr.mgr.unload 		= NULL;
-	myConnectionMgr.mgr.reload 		= (GldiManagerReloadFunc)NULL;
-	myConnectionMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)get_config;
+	gldi_object_init (GLDI_OBJECT(&myConnectionMgr), &myManagerObjectMgr, NULL);
+	myConnectionMgr.mgr.cModuleName  = "Connection";
+	// interface
+	myConnectionMgr.mgr.init         = init;
+	myConnectionMgr.mgr.load         = NULL;
+	myConnectionMgr.mgr.unload       = NULL;
+	myConnectionMgr.mgr.reload       = (GldiManagerReloadFunc)NULL;
+	myConnectionMgr.mgr.get_config   = (GldiManagerGetConfigFunc)get_config;
 	myConnectionMgr.mgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
 	// Config
 	myConnectionMgr.mgr.pConfig = (GldiManagerConfigPtr)&myConnectionParam;
@@ -907,7 +909,5 @@ void gldi_register_connection_manager (void)
 	myConnectionMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myConnectionMgr.mgr.iSizeOfData = 0;
 	// signals
-	gldi_object_install_notifications (&myConnectionMgr, NB_NOTIFICATIONS_CONNECTION);
-	// register
-	gldi_register_manager (GLDI_MANAGER(&myConnectionMgr));
+	gldi_object_install_notifications (&myConnectionMgr, NB_NOTIFICATIONS_CONNECTION);  // we don't have a Connection Object, so let's put the signals here
 }

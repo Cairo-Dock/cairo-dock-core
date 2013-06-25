@@ -37,7 +37,7 @@
 #include "cairo-dock-applet-manager.h"
 
 // public (manager, config, data)
-GldiAppletIconManager myAppletIconsMgr;
+GldiObjectManager myAppletIconObjectMgr;
 
 // dependancies
 
@@ -86,7 +86,7 @@ static void _load_image (Icon *icon)
 Icon *gldi_applet_icon_new (CairoDockMinimalAppletConfig *pMinimalConfig, GldiModuleInstance *pModuleInstance)
 {
 	GldiAppletIconAttr attr = {pMinimalConfig, pModuleInstance};
-	return (Icon*)gldi_object_new (GLDI_MANAGER(&myAppletIconsMgr), &attr);
+	return (Icon*)gldi_object_new (&myAppletIconObjectMgr, &attr);
 }
 
 
@@ -158,16 +158,16 @@ static gboolean delete_object (GldiObject *obj)
 
 void gldi_register_applet_icons_manager (void)
 {
-	// Manager
-	memset (&myAppletIconsMgr, 0, sizeof (GldiAppletIconManager));
-	myAppletIconsMgr.mgr.cModuleName    = "AppletIcon";
-	myAppletIconsMgr.mgr.init_object    = init_object;
-	myAppletIconsMgr.mgr.reset_object   = reset_object;
-	myAppletIconsMgr.mgr.delete_object  = delete_object;
-	myAppletIconsMgr.mgr.iObjectSize    = sizeof (GldiAppletIcon);
+	// Object Manager
+	memset (&myAppletIconObjectMgr, 0, sizeof (GldiObjectManager));
+	myAppletIconObjectMgr.cName          = "AppletIcon";
+	myAppletIconObjectMgr.iObjectSize    = sizeof (GldiAppletIcon);
+	// interface
+	myAppletIconObjectMgr.init_object    = init_object;
+	myAppletIconObjectMgr.reset_object   = reset_object;
+	myAppletIconObjectMgr.delete_object  = delete_object;
 	// signals
-	gldi_object_install_notifications (GLDI_OBJECT (&myAppletIconsMgr), NB_NOTIFICATIONS_APPLET_ICON);
-	gldi_object_set_manager (GLDI_OBJECT (&myAppletIconsMgr), GLDI_MANAGER (&myIconsMgr));
-	// register
-	gldi_register_manager (GLDI_MANAGER(&myAppletIconsMgr));
+	gldi_object_install_notifications (GLDI_OBJECT (&myAppletIconObjectMgr), NB_NOTIFICATIONS_APPLET_ICON);
+	// parent object
+	gldi_object_set_manager (GLDI_OBJECT (&myAppletIconObjectMgr), &myIconObjectMgr);
 }

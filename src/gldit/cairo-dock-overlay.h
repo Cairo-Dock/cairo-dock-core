@@ -40,17 +40,12 @@ G_BEGIN_DECLS
  * If you need to modify an overlay directly, you can get its image buffer with \ref cairo_dock_get_overlay_image_buffer.
  */
 
-typedef struct _CairoOverlaysManager CairoOverlaysManager;
+// manager
 typedef struct _CairoOverlayAttr CairoOverlayAttr;
 
 #ifndef _MANAGER_DEF_
-extern CairoOverlaysManager myOverlaysMgr;
+extern GldiObjectManager myOverlayObjectMgr;
 #endif
-
-// manager
-struct _CairoOverlaysManager {
-	GldiManager mgr;
-	};
 
 /// Available position of an overlay on an icon.
 typedef enum {
@@ -79,7 +74,7 @@ struct _CairoOverlayAttr {
 // signals
 typedef enum {
 	NB_NOTIFICATIONS_OVERLAYS = NB_NOTIFICATIONS_OBJECT
-	} CairoOverlayssNotifications;
+	} CairoOverlayNotifications;
 
 
 

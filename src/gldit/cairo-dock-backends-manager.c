@@ -617,7 +617,9 @@ void gldi_register_backends_manager (void)
 {
 	// Manager
 	memset (&myBackendsMgr, 0, sizeof (CairoBackendsManager));
+	gldi_object_init (GLDI_OBJECT(&myBackendsMgr), &myManagerObjectMgr, NULL);
 	myBackendsMgr.mgr.cModuleName 	= "Backends";
+	// interface
 	myBackendsMgr.mgr.init 			= init;
 	myBackendsMgr.mgr.load 			= NULL;
 	myBackendsMgr.mgr.unload 		= NULL;
@@ -630,8 +632,4 @@ void gldi_register_backends_manager (void)
 	// data
 	myBackendsMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myBackendsMgr.mgr.iSizeOfData = 0;
-	// signals
-	gldi_object_install_notifications (&myBackendsMgr, NB_NOTIFICATIONS_BACKENDS);
-	// register
-	gldi_register_manager (GLDI_MANAGER(&myBackendsMgr));
 }

@@ -564,7 +564,9 @@ void gldi_register_desktop_environment_manager (void)
 {
 	// Manager
 	memset (&myDesktopEnvMgr, 0, sizeof (CairoDesktopEnvManager));
+	gldi_object_init (GLDI_OBJECT(&myDesktopEnvMgr), &myManagerObjectMgr, NULL);
 	myDesktopEnvMgr.mgr.cModuleName 	= "Desktop Env";
+	// interface
 	myDesktopEnvMgr.mgr.init 			= init;
 	myDesktopEnvMgr.mgr.load 			= NULL;
 	myDesktopEnvMgr.mgr.unload 			= NULL;
@@ -577,8 +579,4 @@ void gldi_register_desktop_environment_manager (void)
 	// data
 	myDesktopEnvMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myDesktopEnvMgr.mgr.iSizeOfData = 0;
-	// signals
-	gldi_object_install_notifications (&myDesktopEnvMgr, NB_NOTIFICATIONS_DESKTOP_ENV);
-	// register
-	gldi_register_manager (GLDI_MANAGER(&myDesktopEnvMgr));
 }

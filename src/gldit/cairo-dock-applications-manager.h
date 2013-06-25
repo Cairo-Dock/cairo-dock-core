@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 *@file cairo-dock-applications-manager.h This class manages the list of icons representing a window, ie the Taskbar.
 */
 
+// manager
 typedef struct _CairoTaskbarParam CairoTaskbarParam;
 typedef struct _CairoTaskbarManager CairoTaskbarManager;
 typedef struct _Icon AppliIcon;
@@ -35,7 +36,12 @@ typedef struct _Icon AppliIcon;
 #ifndef _MANAGER_DEF_
 extern CairoTaskbarParam myTaskbarParam;
 extern CairoTaskbarManager myTaskbarMgr;
+extern GldiObjectManager myAppliIconObjectMgr;
 #endif
+
+struct _CairoTaskbarManager {
+	GldiManager mgr;
+} ;
 
 typedef enum {
 	CAIRO_APPLI_BEFORE_FIRST_ICON,
@@ -72,11 +78,6 @@ struct _CairoTaskbarParam {
 	gboolean bSeparateApplis;
 	} ;
 
-// manager
-struct _CairoTaskbarManager {
-	GldiManager mgr;
-} ;
-
 // signals
 typedef enum {
 	NB_NOTIFICATIONS_TASKBAR = NB_NOTIFICATIONS_ICON,
@@ -87,7 +88,7 @@ typedef enum {
 *@param obj the object.
 *@return TRUE if the object is a AppliIcon.
 */
-#define GLDI_OBJECT_IS_APPLI_ICON(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), GLDI_MANAGER(&myTaskbarMgr))
+#define GLDI_OBJECT_IS_APPLI_ICON(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), &myAppliIconObjectMgr)
 
 
 /** Start the applications manager. It will load all the appli-icons, and keep monitoring them. If enabled, it will insert them into the dock.

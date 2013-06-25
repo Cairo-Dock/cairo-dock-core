@@ -33,19 +33,12 @@ G_BEGIN_DECLS
 * All these parameters are optionnal; a module-instance that has an icon is also called an applet.
 */
 
-typedef struct _GldiModuleInstancesManager GldiModuleInstancesManager;
+// manager
 typedef struct _GldiModuleInstanceAttr GldiModuleInstanceAttr;
 
 #ifndef _MANAGER_DEF_
-extern GldiModuleInstancesManager myModuleInstancesMgr;
+extern GldiObjectManager myModuleInstanceObjectMgr;
 #endif
-
-// no params
-
-// manager
-struct _GldiModuleInstancesManager {
-	GldiManager mgr;
-};
 
 // signals
 typedef enum {
@@ -93,7 +86,7 @@ struct _GldiModuleInstanceAttr {
 *@param obj the object.
 *@return TRUE if the object is a Module-instance.
 */
-#define CAIRO_DOCK_IS_MODULE_INSTANCE(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), GLDI_MANAGER(&myModuleInstancesMgr))
+#define GLDI_OBJECT_IS_MODULE_INSTANCE(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), &myModuleInstanceObjectMgr)
 
 
 GldiModuleInstance *gldi_module_instance_new (GldiModule *pModule, gchar *cConfFilePah);

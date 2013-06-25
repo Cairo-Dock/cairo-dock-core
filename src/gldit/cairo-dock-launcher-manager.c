@@ -45,7 +45,7 @@
 #include "cairo-dock-launcher-manager.h"
 
 // public (manager, config, data)
-GldiLauncherManager myLaunchersMgr;
+GldiObjectManager myLauncherObjectMgr;
 
 // dependancies
 extern gchar *g_cCurrentLaunchersPath;
@@ -268,24 +268,24 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, GKeyFile 
 
 void gldi_register_launchers_manager (void)
 {
-	// Manager
-	memset (&myLaunchersMgr, 0, sizeof (GldiLauncherManager));
-	myLaunchersMgr.mgr.cModuleName   = "Launchers";
-	myLaunchersMgr.mgr.init_object   = init_object;
-	myLaunchersMgr.mgr.reload_object = reload_object;
-	myLaunchersMgr.mgr.iObjectSize   = sizeof (GldiLauncherIcon);
+	// Object Manager
+	memset (&myLauncherObjectMgr, 0, sizeof (GldiObjectManager));
+	myLauncherObjectMgr.cName             = "Launcher";
+	myLauncherObjectMgr.iObjectSize   = sizeof (GldiLauncherIcon);
+	// interface
+	myLauncherObjectMgr.init_object   = init_object;
+	myLauncherObjectMgr.reload_object = reload_object;
 	// signals
-	gldi_object_install_notifications (&myLaunchersMgr, NB_NOTIFICATIONS_ICON);
-	gldi_object_set_manager (GLDI_OBJECT (&myLaunchersMgr), GLDI_MANAGER (&myUserIconsMgr));
-	// register
-	gldi_register_manager (GLDI_MANAGER(&myLaunchersMgr));
+	gldi_object_install_notifications (&myLauncherObjectMgr, NB_NOTIFICATIONS_LAUNCHER);
+	// parent object
+	gldi_object_set_manager (GLDI_OBJECT (&myLauncherObjectMgr), &myUserIconObjectMgr);
 }
 
 
 Icon *gldi_launcher_new (const gchar *cConfFile, GKeyFile *pKeyFile)
 {
 	GldiLauncherIconAttr attr = {(gchar*)cConfFile, pKeyFile};
-	return (Icon*)gldi_object_new (GLDI_MANAGER(&myLaunchersMgr), &attr);
+	return (Icon*)gldi_object_new (&myLauncherObjectMgr, &attr);
 }
 
 

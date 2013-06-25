@@ -53,6 +53,7 @@
 // public (manager, config, data)
 CairoTaskbarParam myTaskbarParam;
 CairoTaskbarManager myTaskbarMgr;
+GldiObjectManager myAppliIconObjectMgr;
 
 // dependancies
 extern CairoDock *g_pMainDock;
@@ -70,7 +71,7 @@ static void cairo_dock_unregister_appli (Icon *icon);
 static Icon * cairo_dock_create_icon_from_window (GldiWindowActor *actor)
 {
 	if (actor->bDisplayed)
-		return (Icon*)gldi_object_new (GLDI_MANAGER (&myTaskbarMgr), actor);
+		return (Icon*)gldi_object_new (&myAppliIconObjectMgr, actor);
 	else
 		return NULL;
 }
@@ -928,39 +929,39 @@ static void init (void)
 	
 	cairo_dock_initialize_class_manager ();
 	
-	gldi_object_register_notification (&myWindowsMgr,
+	gldi_object_register_notification (&myWindowObjectMgr,
 		NOTIFICATION_WINDOW_CREATED,
 		(GldiNotificationFunc) _on_window_created,
 		GLDI_RUN_FIRST, NULL);
-	gldi_object_register_notification (&myWindowsMgr,
+	gldi_object_register_notification (&myWindowObjectMgr,
 		NOTIFICATION_WINDOW_DESTROYED,
 		(GldiNotificationFunc) _on_window_destroyed,
 		GLDI_RUN_FIRST, NULL);
-	gldi_object_register_notification (&myWindowsMgr,
+	gldi_object_register_notification (&myWindowObjectMgr,
 		NOTIFICATION_WINDOW_NAME_CHANGED,
 		(GldiNotificationFunc) _on_window_name_changed,
 		GLDI_RUN_FIRST, NULL);
-	gldi_object_register_notification (&myWindowsMgr,
+	gldi_object_register_notification (&myWindowObjectMgr,
 		NOTIFICATION_WINDOW_ICON_CHANGED,
 		(GldiNotificationFunc) _on_window_icon_changed,
 		GLDI_RUN_FIRST, NULL);
-	gldi_object_register_notification (&myWindowsMgr,
+	gldi_object_register_notification (&myWindowObjectMgr,
 		NOTIFICATION_WINDOW_ATTENTION_CHANGED,
 		(GldiNotificationFunc) _on_window_attention_changed,
 		GLDI_RUN_FIRST, NULL);
-	gldi_object_register_notification (&myWindowsMgr,
+	gldi_object_register_notification (&myWindowObjectMgr,
 		NOTIFICATION_WINDOW_SIZE_POSITION_CHANGED,
 		(GldiNotificationFunc) _on_window_size_position_changed,
 		GLDI_RUN_FIRST, NULL);
-	gldi_object_register_notification (&myWindowsMgr,
+	gldi_object_register_notification (&myWindowObjectMgr,
 		NOTIFICATION_WINDOW_STATE_CHANGED,
 		(GldiNotificationFunc) _on_window_state_changed,
 		GLDI_RUN_FIRST, NULL);
-	gldi_object_register_notification (&myWindowsMgr,
+	gldi_object_register_notification (&myWindowObjectMgr,
 		NOTIFICATION_WINDOW_CLASS_CHANGED,
 		(GldiNotificationFunc) _on_window_class_changed,
 		GLDI_RUN_FIRST, NULL);
-	gldi_object_register_notification (&myWindowsMgr,
+	gldi_object_register_notification (&myWindowObjectMgr,
 		NOTIFICATION_WINDOW_DESKTOP_CHANGED,
 		(GldiNotificationFunc) _on_window_desktop_changed,
 		GLDI_RUN_FIRST, NULL);
@@ -968,7 +969,7 @@ static void init (void)
 		NOTIFICATION_DESKTOP_CHANGED,
 		(GldiNotificationFunc) _on_desktop_changed,
 		GLDI_RUN_FIRST, NULL);
-	gldi_object_register_notification (&myWindowsMgr,
+	gldi_object_register_notification (&myWindowObjectMgr,
 		NOTIFICATION_WINDOW_ACTIVATED,
 		(GldiNotificationFunc) _on_active_window_changed,
 		GLDI_RUN_FIRST, NULL);
@@ -1013,17 +1014,16 @@ static void reset_object (GldiObject *obj)
 void gldi_register_applications_manager (void)
 {
 	// Manager
-	memset (&myTaskbarMgr, 0, sizeof (CairoTaskbarManager));
+	memset (&myTaskbarMgr, 0, sizeof (GldiManager));
+	gldi_object_init (GLDI_OBJECT(&myTaskbarMgr), &myManagerObjectMgr, NULL);
 	myTaskbarMgr.mgr.cModuleName    = "Taskbar";
+	// interface
 	myTaskbarMgr.mgr.init           = init;
 	myTaskbarMgr.mgr.load           = NULL;  // the manager is started after the launchers&applets have been created, to avoid unecessary computations.
 	myTaskbarMgr.mgr.unload         = unload;
 	myTaskbarMgr.mgr.reload         = (GldiManagerReloadFunc)reload;
 	myTaskbarMgr.mgr.get_config     = (GldiManagerGetConfigFunc)get_config;
 	myTaskbarMgr.mgr.reset_config   = (GldiManagerResetConfigFunc)reset_config;
-	myTaskbarMgr.mgr.init_object    = init_object;
-	myTaskbarMgr.mgr.reset_object   = reset_object;
-	myTaskbarMgr.mgr.iObjectSize    = sizeof (Icon);
 	// Config
 	memset (&myTaskbarParam, 0, sizeof (CairoTaskbarParam));
 	myTaskbarMgr.mgr.pConfig = (GldiManagerConfigPtr)&myTaskbarParam;
@@ -1031,9 +1031,16 @@ void gldi_register_applications_manager (void)
 	// data
 	myTaskbarMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myTaskbarMgr.mgr.iSizeOfData = 0;
+	
+	// Object Manager
+	memset (&myAppliIconObjectMgr, 0, sizeof (GldiObjectManager));
+	myAppliIconObjectMgr.cName          = "AppliIcon";
+	myAppliIconObjectMgr.iObjectSize    = sizeof (Icon);
+	// interface
+	myAppliIconObjectMgr.init_object    = init_object;
+	myAppliIconObjectMgr.reset_object   = reset_object;
 	// signals
-	gldi_object_install_notifications (GLDI_OBJECT (&myTaskbarMgr), NB_NOTIFICATIONS_TASKBAR);
-	gldi_object_set_manager (GLDI_OBJECT (&myTaskbarMgr), GLDI_MANAGER (&myIconsMgr));
-	// register
-	gldi_register_manager (GLDI_MANAGER(&myTaskbarMgr));
+	gldi_object_install_notifications (GLDI_OBJECT (&myAppliIconObjectMgr), NB_NOTIFICATIONS_TASKBAR);
+	// parent object
+	gldi_object_set_manager (GLDI_OBJECT (&myAppliIconObjectMgr), &myIconObjectMgr);
 }

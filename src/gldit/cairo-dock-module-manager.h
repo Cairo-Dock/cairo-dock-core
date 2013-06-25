@@ -36,6 +36,7 @@ G_BEGIN_DECLS
 * Each instance holds a set of data: the icon and its container, the config structure and its conf file, the data structure and a slot to plug datas into containers and icons. All these data are optionnal; a module that has an icon is also called an applet.
 */
 
+// manager
 typedef struct _GldiModulesParam GldiModulesParam;
 typedef struct _GldiModulesManager GldiModulesManager;
 typedef struct _GldiModuleAttr GldiModuleAttr;
@@ -43,14 +44,9 @@ typedef struct _GldiModuleAttr GldiModuleAttr;
 #ifndef _MANAGER_DEF_
 extern GldiModulesParam myModulesParam;
 extern GldiModulesManager myModulesMgr;
+extern GldiObjectManager myModuleObjectMgr;
 #endif
 
-// params
-struct _GldiModulesParam {
-	gchar **cActiveModuleList;
-	};
-
-// manager
 struct _GldiModulesManager {
 	GldiManager mgr;
 };
@@ -60,12 +56,17 @@ struct _GldiModuleAttr {
 	GldiModuleInterface *pInterface;
 };
 
+// params
+struct _GldiModulesParam {
+	gchar **cActiveModuleList;
+	};
+
 // signals
 typedef enum {
 	NOTIFICATION_MODULE_REGISTERED = NB_NOTIFICATIONS_OBJECT,
 	NOTIFICATION_MODULE_ACTIVATED,
 	NB_NOTIFICATIONS_MODULES
-	} GldiModulesNotifications;
+	} GldiModuleNotifications;
 
 
 /// Categories a module can be in.
@@ -188,7 +189,7 @@ struct _CairoDockMinimalAppletConfig {
 *@param obj the object.
 *@return TRUE if the object is a Module.
 */
-#define CAIRO_DOCK_IS_MODULE(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), GLDI_MANAGER(&myModulesMgr))
+#define GLDI_OBJECT_IS_MODULE(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), &myModuleObjectMgr)
 
   ///////////////////
  // MODULE LOADER //

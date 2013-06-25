@@ -31,18 +31,12 @@ G_BEGIN_DECLS
 * Note: they are not UserIcon, because they are created by and belongs to a ModuleInstance, which is the actual object belonging to the user.
 */
 
-typedef struct _GldiAppletIconManager GldiAppletIconManager;
+// manager
 typedef struct _GldiAppletIconAttr GldiAppletIconAttr;
 typedef Icon GldiAppletIcon;  // icon + module-instance
-
 #ifndef _MANAGER_DEF_
-extern GldiAppletIconManager myAppletIconsMgr;
+extern GldiObjectManager myAppletIconObjectMgr;
 #endif
-
-// manager
-struct _GldiAppletIconManager {
-	GldiManager mgr;
-} ;
 
 struct _GldiAppletIconAttr {
 	CairoDockMinimalAppletConfig *pMinimalConfig;
@@ -59,7 +53,7 @@ typedef enum {
 *@param obj the object.
 *@return TRUE if the object is a AppletIcon.
 */
-#define GLDI_OBJECT_IS_APPLET_ICON(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), GLDI_MANAGER(&myAppletIconsMgr))
+#define GLDI_OBJECT_IS_APPLET_ICON(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), &myAppletIconObjectMgr)
 
 
 Icon *gldi_applet_icon_new (CairoDockMinimalAppletConfig *pMinimalConfig, GldiModuleInstance *pModuleInstance);

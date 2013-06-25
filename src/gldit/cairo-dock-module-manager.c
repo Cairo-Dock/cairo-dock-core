@@ -40,7 +40,7 @@
 // public (manager, config, data)
 GldiModulesParam myModulesParam;
 GldiModulesManager myModulesMgr;
-GldiModuleInstancesManager myModuleInstancesMgr;
+GldiObjectManager myModuleObjectMgr;
 
 GldiModuleInstance *g_pCurrentModule = NULL;  // only used to trace a possible crash in one of the modules.
 
@@ -143,7 +143,7 @@ GldiModule *gldi_module_new (GldiVisitCard *pVisitCard, GldiModuleInterface *pIn
 	g_return_val_if_fail (pVisitCard != NULL && pVisitCard->cModuleName != NULL, NULL);
 	
 	GldiModuleAttr attr = {pVisitCard, pInterface};
-	return (GldiModule*)gldi_object_new (GLDI_MANAGER (&myModulesMgr), &attr);
+	return (GldiModule*)gldi_object_new (&myModuleObjectMgr, &attr);
 }
 
 GldiModule *gldi_module_new_from_so_file (const gchar *cSoFilePath)
@@ -610,7 +610,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 		s_AutoLoadedModules = g_list_prepend (s_AutoLoadedModules, pModule);
 	
 	// notify everybody
-	gldi_object_notify (&myModulesMgr, NOTIFICATION_MODULE_REGISTERED, pModule->pVisitCard->cModuleName, TRUE);
+	gldi_object_notify (&myModuleObjectMgr, NOTIFICATION_MODULE_REGISTERED, pModule->pVisitCard->cModuleName, TRUE);
 }
 
 static void reset_object (GldiObject *obj)
@@ -626,7 +626,7 @@ static void reset_object (GldiObject *obj)
 	g_hash_table_remove (s_hModuleTable, pModule->pVisitCard->cModuleName);
 	
 	// notify everybody
-	gldi_object_notify (&myModulesMgr, NOTIFICATION_MODULE_REGISTERED, pModule->pVisitCard->cModuleName, FALSE);
+	gldi_object_notify (&myModuleObjectMgr, NOTIFICATION_MODULE_REGISTERED, pModule->pVisitCard->cModuleName, FALSE);
 	
 	// free data
 	if (pModule->handle)
@@ -652,17 +652,15 @@ void gldi_register_modules_manager (void)
 {
 	// Manager
 	memset (&myModulesMgr, 0, sizeof (GldiModulesManager));
+	gldi_object_init (GLDI_OBJECT(&myModulesMgr), &myManagerObjectMgr, NULL);
 	myModulesMgr.mgr.cModuleName   = "Modules";
+	// interface
 	myModulesMgr.mgr.init          = init;
 	myModulesMgr.mgr.load          = NULL;
 	myModulesMgr.mgr.unload        = NULL;
 	myModulesMgr.mgr.reload        = (GldiManagerReloadFunc)NULL;
 	myModulesMgr.mgr.get_config    = (GldiManagerGetConfigFunc)get_config;
 	myModulesMgr.mgr.reset_config  = (GldiManagerResetConfigFunc)reset_config;
-	myModulesMgr.mgr.init_object   = init_object;
-	myModulesMgr.mgr.reset_object  = reset_object;
-	myModulesMgr.mgr.reload_object = reload_object;
-	myModulesMgr.mgr.iObjectSize   = sizeof (GldiModule);
 	// Config
 	memset (&myModulesParam, 0, sizeof (GldiModulesParam));
 	myModulesMgr.mgr.pConfig = (GldiManagerConfigPtr)&myModulesParam;
@@ -670,8 +668,15 @@ void gldi_register_modules_manager (void)
 	// data
 	myModulesMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myModulesMgr.mgr.iSizeOfData = 0;
+	
+	// Object Manager
+	memset (&myModuleObjectMgr, 0, sizeof (GldiObjectManager));
+	myModuleObjectMgr.cName         = "Module";
+	myModuleObjectMgr.iObjectSize   = sizeof (GldiModule);
+	// interface
+	myModuleObjectMgr.init_object   = init_object;
+	myModuleObjectMgr.reset_object  = reset_object;
+	myModuleObjectMgr.reload_object = reload_object;
 	// signals
-	gldi_object_install_notifications (GLDI_OBJECT(&myModulesMgr), NB_NOTIFICATIONS_MODULES);
-	// register
-	gldi_register_manager (GLDI_MANAGER(&myModulesMgr));
+	gldi_object_install_notifications (GLDI_OBJECT(&myModuleObjectMgr), NB_NOTIFICATIONS_MODULES);
 }

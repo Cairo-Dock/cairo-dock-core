@@ -55,6 +55,7 @@
 // public (manager, config, data)
 CairoDeskletsParam myDeskletsParam;
 CairoDeskletsManager myDeskletsMgr;
+GldiObjectManager myDeskletObjectMgr;
 
 // dependancies
 extern gboolean g_bUseOpenGL;
@@ -862,19 +863,19 @@ static void unload (void)
 
 static void init (void)
 {
-	gldi_object_register_notification (&myDeskletsMgr,
+	gldi_object_register_notification (&myDeskletObjectMgr,
 		NOTIFICATION_UPDATE,
 		(GldiNotificationFunc) _on_update_desklet_notification,
 		GLDI_RUN_FIRST, NULL);
-	gldi_object_register_notification (&myDeskletsMgr,
+	gldi_object_register_notification (&myDeskletObjectMgr,
 		NOTIFICATION_ENTER_DESKLET,
 		(GldiNotificationFunc) _on_enter_leave_desklet_notification,
 		GLDI_RUN_FIRST, NULL);
-	gldi_object_register_notification (&myDeskletsMgr,
+	gldi_object_register_notification (&myDeskletObjectMgr,
 		NOTIFICATION_LEAVE_DESKLET,
 		(GldiNotificationFunc) _on_enter_leave_desklet_notification,
 		GLDI_RUN_FIRST, NULL);
-	gldi_object_register_notification (&myDeskletsMgr,
+	gldi_object_register_notification (&myDeskletObjectMgr,
 		NOTIFICATION_RENDER,
 		(GldiNotificationFunc) _on_render_desklet_notification,
 		GLDI_RUN_FIRST, NULL);
@@ -981,16 +982,15 @@ void gldi_register_desklets_manager (void)
 {
 	// Manager
 	memset (&myDeskletsMgr, 0, sizeof (CairoDeskletsManager));
+	gldi_object_init (GLDI_OBJECT(&myDeskletsMgr), &myManagerObjectMgr, NULL);
 	myDeskletsMgr.mgr.cModuleName  = "Desklets";
+	// interface
 	myDeskletsMgr.mgr.init         = init;
 	myDeskletsMgr.mgr.load         = NULL;  // data are loaded the first time a desklet is created, to avoid create them for nothing.
 	myDeskletsMgr.mgr.unload       = unload;
 	myDeskletsMgr.mgr.reload       = (GldiManagerReloadFunc)reload;
 	myDeskletsMgr.mgr.get_config   = (GldiManagerGetConfigFunc)get_config;
 	myDeskletsMgr.mgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
-	myDeskletsMgr.mgr.init_object  = init_object;
-	myDeskletsMgr.mgr.reset_object = reset_object;
-	myDeskletsMgr.mgr.iObjectSize  = sizeof (CairoDesklet);
 	// Config
 	memset (&myDeskletsParam, 0, sizeof (CairoDeskletsParam));
 	myDeskletsMgr.mgr.pConfig = (GldiManagerConfigPtr)&myDeskletsParam;
@@ -1002,11 +1002,18 @@ void gldi_register_desklets_manager (void)
 	memset (&s_pNoInputButtonBuffer, 0, sizeof (CairoDockImageBuffer));
 	myDeskletsMgr.mgr.iSizeOfData = 0;
 	myDeskletsMgr.mgr.pData = (GldiManagerDataPtr)NULL;
+	
+	// Object Manager
+	memset (&myDeskletObjectMgr, 0, sizeof (GldiObjectManager));
+	myDeskletObjectMgr.cName        = "Desklet";
+	myDeskletObjectMgr.iObjectSize  = sizeof (CairoDesklet);
+	// interface
+	myDeskletObjectMgr.init_object  = init_object;
+	myDeskletObjectMgr.reset_object = reset_object;
 	// signals
-	gldi_object_install_notifications (&myDeskletsMgr, NB_NOTIFICATIONS_DESKLET);
-	gldi_object_set_manager (GLDI_OBJECT (&myDeskletsMgr), GLDI_MANAGER (&myContainersMgr));
-	// register
-	gldi_register_manager (GLDI_MANAGER(&myDeskletsMgr));
+	gldi_object_install_notifications (&myDeskletObjectMgr, NB_NOTIFICATIONS_DESKLET);
+	// parent object
+	gldi_object_set_manager (GLDI_OBJECT (&myDeskletObjectMgr), &myContainerObjectMgr);
 }
 
 /*GLDI_MANAGER_DEFINE_BEGIN (Desklet, DESKLET)

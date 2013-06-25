@@ -45,6 +45,7 @@
 
 // public (manager, config, data)
 GldiXManager myXMgr;
+GldiObjectManager myXObjectMgr;
 
 // dependancies
 extern GldiContainer *g_pPrimaryContainer;
@@ -120,7 +121,7 @@ static GldiXWindowActor *_make_new_actor (Window Xid)
 	
 	if (bShowInTaskbar)  // the window passed all the tests -> make a new actor
 	{
-		xactor = (GldiXWindowActor*)gldi_object_new (GLDI_MANAGER (&myXMgr), &Xid);
+		xactor = (GldiXWindowActor*)gldi_object_new (&myXObjectMgr, &Xid);
 		// set all the properties we got before
 		xactor->XTransientFor = iTransientFor;
 		GldiWindowActor *actor = (GldiWindowActor*)xactor;
@@ -229,7 +230,7 @@ static gboolean _remove_old_applis (Window *Xid, GldiXWindowActor *actor, gpoint
 		cd_message ("cette fenetre (%ld, %p, %s) est trop vieille (%d / %d)", *Xid, actor, actor->actor.cName, actor->iLastCheckTime, iTime);
 		// notify everybody
 		if (! actor->bIgnored)
-			gldi_object_notify (&myWindowsMgr, NOTIFICATION_WINDOW_DESTROYED, actor);
+			gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESTROYED, actor);
 		
 		actor->iLastCheckTime = -1;  // to not remove it from the table during the free
 		_delete_actor (actor);
@@ -261,7 +262,7 @@ static void _on_update_applis_list (void)
 			
 			// notify everybody
 			if (! actor->bIgnored)
-				gldi_object_notify (&myWindowsMgr, NOTIFICATION_WINDOW_CREATED, actor);
+				gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_CREATED, actor);
 		}
 		else  // just update its check-time
 			actor->iLastCheckTime = s_iTime;
@@ -290,7 +291,7 @@ static void _set_demand_attention (GldiXWindowActor *actor, XAttentionFlag flag)
 	g_free (actor->actor.cLastAttentionDemand);
 	actor->actor.cLastAttentionDemand = g_strdup (actor->actor.cName);
 	actor->actor.bDemandsAttention = TRUE;
-	gldi_object_notify (&myWindowsMgr, NOTIFICATION_WINDOW_ATTENTION_CHANGED, actor);
+	gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ATTENTION_CHANGED, actor);
 }
 
 static void _unset_demand_attention (GldiXWindowActor *actor, XAttentionFlag flag)
@@ -302,7 +303,7 @@ static void _unset_demand_attention (GldiXWindowActor *actor, XAttentionFlag fla
 	if (actor->iDemandsAttention != 0)  // still demanding attention
 		return;
 	actor->actor.bDemandsAttention = FALSE;
-	gldi_object_notify (&myWindowsMgr, NOTIFICATION_WINDOW_ATTENTION_CHANGED, actor);
+	gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ATTENTION_CHANGED, actor);
 }
 
 static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
@@ -339,7 +340,7 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 							bForceKbdStateRefresh = TRUE;
 						s_iCurrentActiveWindow = XActiveWindow;
 						GldiXWindowActor *xactor = g_hash_table_lookup (s_hXWindowTable, &XActiveWindow);
-						gldi_object_notify (&myWindowsMgr, NOTIFICATION_WINDOW_ACTIVATED, xactor && ! xactor->bIgnored ? xactor : NULL);
+						gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ACTIVATED, xactor && ! xactor->bIgnored ? xactor : NULL);
 						if (bForceKbdStateRefresh)
 						{
 							// si on active une fenetre n'ayant pas de focus clavier, on n'aura pas d'evenement kbd_changed, pourtant en interne le clavier changera. du coup si apres on revient sur une fenetre qui a un focus clavier, il risque de ne pas y avoir de changement de clavier, et donc encore une fois pas d'evenement ! pour palier a ce, on considere que les fenetres avec focus clavier sont celles presentes en barre des taches. On decide de generer un evenement lorsqu'on revient sur une fenetre avec focus, a partir d'une fenetre sans focus (mettre a jour le clavier pour une fenetre sans focus n'a pas grand interet, autant le laisser inchange).
@@ -409,7 +410,7 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 						else  // is now ignored
 						{
 							xactor->bIgnored = bSkipTaskbar;
-							gldi_object_notify (&myWindowsMgr, NOTIFICATION_WINDOW_DESTROYED, actor);
+							gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESTROYED, actor);
 						}
 						continue;  // actor is either freeed or ignored
 					}
@@ -431,7 +432,7 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 						_set_demand_attention (xactor, X_DEMANDS_ATTENTION);  // -> NOTIFICATION_WINDOW_ATTENTION_CHANGED
 					else
 						_unset_demand_attention (xactor, X_DEMANDS_ATTENTION);  // -> NOTIFICATION_WINDOW_ATTENTION_CHANGED
-					gldi_object_notify (&myWindowsMgr, NOTIFICATION_WINDOW_STATE_CHANGED, actor, bHiddenChanged, bMaximizedChanged, bFullScreenChanged);
+					gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_STATE_CHANGED, actor, bHiddenChanged, bMaximizedChanged, bFullScreenChanged);
 				}
 				else if (event.xproperty.atom == s_aNetWmDesktop)
 				{
@@ -441,7 +442,7 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 					actor->iNumDesktop = cairo_dock_get_xwindow_desktop (Xid);
 					
 					// notify everybody
-					gldi_object_notify (&myWindowsMgr, NOTIFICATION_WINDOW_DESKTOP_CHANGED, actor);
+					gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESKTOP_CHANGED, actor);
 				}
 				else if (event.xproperty.atom == s_aWmName
 				|| event.xproperty.atom == s_aNetWmName)
@@ -452,7 +453,7 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 					g_free (actor->cName);
 					actor->cName = cairo_dock_get_xwindow_name (Xid, event.xproperty.atom == s_aWmName);
 					// notify everybody
-					gldi_object_notify (&myWindowsMgr, NOTIFICATION_WINDOW_NAME_CHANGED, actor);
+					gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_NAME_CHANGED, actor);
 				}
 				else if (event.xproperty.atom == s_aWmHints)
 				{
@@ -470,7 +471,7 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 						
 						if (event.xproperty.state == PropertyNewValue && (pWMHints->flags & (IconPixmapHint | IconMaskHint | IconWindowHint)))
 						{
-							gldi_object_notify (&myWindowsMgr, NOTIFICATION_WINDOW_ICON_CHANGED, actor);
+							gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ICON_CHANGED, actor);
 						}
 						XFree (pWMHints);
 					}
@@ -484,7 +485,7 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 					if (xactor->bIgnored)  // skip taskbar
 						continue;
 					// notify everybody
-					gldi_object_notify (&myWindowsMgr, NOTIFICATION_WINDOW_ICON_CHANGED, actor);
+					gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ICON_CHANGED, actor);
 				}
 				else if (event.xproperty.atom == s_aWmClass)
 				{
@@ -500,7 +501,7 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 					actor->cWmClass = cWmClass;
 					
 					// notify everybody
-					gldi_object_notify (&myWindowsMgr, NOTIFICATION_WINDOW_CLASS_CHANGED, actor, cOldClass, cOldWmClass);
+					gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_CLASS_CHANGED, actor, cOldClass, cOldWmClass);
 					
 					g_free (cOldClass);
 					g_free (cOldWmClass);
@@ -528,7 +529,7 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 				}
 				
 				// notify everybody
-				gldi_object_notify (&myWindowsMgr, NOTIFICATION_WINDOW_SIZE_POSITION_CHANGED, actor);
+				gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_SIZE_POSITION_CHANGED, actor);
 			}
 			/*else if (event.type == g_iDamageEvent + XDamageNotify)
 			{
@@ -987,20 +988,27 @@ void gldi_register_X_manager (void)
 	myXMgr.mgr.reload        = (GldiManagerReloadFunc)NULL;
 	myXMgr.mgr.get_config    = (GldiManagerGetConfigFunc)NULL;
 	myXMgr.mgr.reset_config  = (GldiManagerResetConfigFunc)NULL;
-	myXMgr.mgr.init_object    = init_object;
-	myXMgr.mgr.reset_object   = reset_object;
-	myXMgr.mgr.iObjectSize    = sizeof (GldiXWindowActor);
 	// Config
 	myXMgr.mgr.pConfig = (GldiManagerConfigPtr)NULL;
 	myXMgr.mgr.iSizeOfConfig = 0;
 	// data
 	myXMgr.mgr.iSizeOfData = 0;
 	myXMgr.mgr.pData = (GldiManagerDataPtr)NULL;
-	// signals
-	gldi_object_install_notifications (&myXMgr, NB_NOTIFICATIONS_X_MANAGER);
-	gldi_object_set_manager (GLDI_OBJECT (&myXMgr), GLDI_MANAGER (&myWindowsMgr));
-	// connect to X (now, because other modules may need it for their init)
-	s_XDisplay = cairo_dock_initialize_X_desktop_support ();  // renseigne la taille de l'ecran.
 	// register
-	gldi_register_manager (GLDI_MANAGER(&myXMgr));
+	gldi_object_init (GLDI_OBJECT(&myXMgr), &myManagerObjectMgr, NULL);
+	
+	// Object Manager
+	memset (&myXObjectMgr, 0, sizeof (GldiObjectManager));
+	myXObjectMgr.cName   = "X";
+	myXObjectMgr.iObjectSize    = sizeof (GldiXWindowActor);
+	// interface
+	myXObjectMgr.init_object    = init_object;
+	myXObjectMgr.reset_object   = reset_object;
+	// signals
+	gldi_object_install_notifications (&myXObjectMgr, NB_NOTIFICATIONS_X_MANAGER);
+	// parent object
+	gldi_object_set_manager (GLDI_OBJECT (&myXObjectMgr), &myWindowObjectMgr);
+	
+	// connect to X (now, because other modules may need it for their init)  /// TODO: this should not be needed any more, at least not this way...
+	s_XDisplay = cairo_dock_initialize_X_desktop_support ();  // renseigne la taille de l'ecran.
 }

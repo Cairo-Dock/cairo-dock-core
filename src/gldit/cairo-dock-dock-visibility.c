@@ -329,23 +329,23 @@ void gldi_docks_visibility_start (void)
 	if (first)
 	{
 		first = FALSE;
-		gldi_object_register_notification (&myWindowsMgr,
+		gldi_object_register_notification (&myWindowObjectMgr,
 			NOTIFICATION_WINDOW_CREATED,
 			(GldiNotificationFunc) _on_window_created,
 			GLDI_RUN_FIRST, NULL);
-		gldi_object_register_notification (&myWindowsMgr,
+		gldi_object_register_notification (&myWindowObjectMgr,
 			NOTIFICATION_WINDOW_DESTROYED,
 			(GldiNotificationFunc) _on_window_destroyed,
 			GLDI_RUN_FIRST, NULL);
-		gldi_object_register_notification (&myWindowsMgr,
+		gldi_object_register_notification (&myWindowObjectMgr,
 			NOTIFICATION_WINDOW_SIZE_POSITION_CHANGED,
 			(GldiNotificationFunc) _on_window_size_position_changed,
 			GLDI_RUN_FIRST, NULL);
-		gldi_object_register_notification (&myWindowsMgr,
+		gldi_object_register_notification (&myWindowObjectMgr,
 			NOTIFICATION_WINDOW_STATE_CHANGED,
 			(GldiNotificationFunc) _on_window_state_changed,
 			GLDI_RUN_FIRST, NULL);
-		gldi_object_register_notification (&myWindowsMgr,
+		gldi_object_register_notification (&myWindowObjectMgr,
 			NOTIFICATION_WINDOW_DESKTOP_CHANGED,
 			(GldiNotificationFunc) _on_window_desktop_changed,
 			GLDI_RUN_FIRST, NULL);
@@ -353,7 +353,7 @@ void gldi_docks_visibility_start (void)
 			NOTIFICATION_DESKTOP_CHANGED,
 			(GldiNotificationFunc) _on_desktop_changed,
 			GLDI_RUN_FIRST, NULL);
-		gldi_object_register_notification (&myWindowsMgr,
+		gldi_object_register_notification (&myWindowObjectMgr,
 			NOTIFICATION_WINDOW_ACTIVATED,
 			(GldiNotificationFunc) _on_active_window_changed,
 			GLDI_RUN_FIRST, NULL);

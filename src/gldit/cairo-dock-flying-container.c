@@ -50,6 +50,7 @@
 
 // public (manager, config, data)
 CairoFlyingManager myFlyingsMgr;
+GldiObjectManager myFlyingObjectMgr;
 
 // dependancies
 extern GldiContainer *g_pPrimaryContainer;
@@ -271,7 +272,7 @@ CairoFlyingContainer *gldi_flying_container_new (Icon *pFlyingIcon, CairoDock *p
 	memset (&attr, 0, sizeof (CairoFlyingAttr));
 	attr.pIcon = pFlyingIcon;
 	attr.pOriginDock = pOriginDock;
-	return (CairoFlyingContainer*)gldi_object_new (GLDI_MANAGER(&myFlyingsMgr), &attr);
+	return (CairoFlyingContainer*)gldi_object_new (&myFlyingObjectMgr, &attr);
 }
 
 void gldi_flying_container_drag (CairoFlyingContainer *pFlyingContainer, CairoDock *pOriginDock)
@@ -340,11 +341,11 @@ static void unload (void)
 
 static void init (void)
 {
-	gldi_object_register_notification (&myFlyingsMgr,
+	gldi_object_register_notification (&myFlyingObjectMgr,
 		NOTIFICATION_UPDATE,
 		(GldiNotificationFunc) _on_update_flying_container_notification,
 		GLDI_RUN_AFTER, NULL);
-	gldi_object_register_notification (&myFlyingsMgr,
+	gldi_object_register_notification (&myFlyingObjectMgr,
 		NOTIFICATION_RENDER,
 		(GldiNotificationFunc) _on_render_flying_container_notification,
 		GLDI_RUN_AFTER, NULL);
@@ -457,25 +458,31 @@ void gldi_register_flying_manager (void)
 {
 	// Manager
 	memset (&myFlyingsMgr, 0, sizeof (CairoFlyingManager));
-	myFlyingsMgr.mgr.cModuleName 	= "Flying";
+	myFlyingsMgr.mgr.cModuleName 	= "Flyings";
 	myFlyingsMgr.mgr.init 			= init;
 	myFlyingsMgr.mgr.load 			= NULL;  // data loaded on the 1st creation.
 	myFlyingsMgr.mgr.unload 		= unload;
 	myFlyingsMgr.mgr.reload 		= (GldiManagerReloadFunc)NULL;
 	myFlyingsMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)NULL;
 	myFlyingsMgr.mgr.reset_config 	= (GldiManagerResetConfigFunc)NULL;
-	myFlyingsMgr.mgr.init_object    = init_object;
-	myFlyingsMgr.mgr.reset_object   = reset_object;
-	myFlyingsMgr.mgr.iObjectSize    = sizeof (CairoFlyingContainer);
 	// Config
 	myFlyingsMgr.mgr.pConfig = (GldiManagerConfigPtr)NULL;
 	myFlyingsMgr.mgr.iSizeOfConfig = 0;
 	// data
 	myFlyingsMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myFlyingsMgr.mgr.iSizeOfData = 0;
-	// signals
-	gldi_object_install_notifications (&myFlyingsMgr, NB_NOTIFICATIONS_FLYING_CONTAINER);
-	gldi_object_set_manager (GLDI_OBJECT (&myFlyingsMgr), GLDI_MANAGER (&myContainersMgr));
 	// register
-	gldi_register_manager (GLDI_MANAGER(&myFlyingsMgr));
+	gldi_object_init (GLDI_OBJECT(&myFlyingsMgr), &myManagerObjectMgr, NULL);
+	
+	// Object Manager
+	memset (&myFlyingObjectMgr, 0, sizeof (GldiObjectManager));
+	myFlyingObjectMgr.cName 	     = "Flying";
+	myFlyingObjectMgr.iObjectSize    = sizeof (CairoFlyingContainer);
+	// interface
+	myFlyingObjectMgr.init_object    = init_object;
+	myFlyingObjectMgr.reset_object   = reset_object;
+	// signals
+	gldi_object_install_notifications (&myFlyingObjectMgr, NB_NOTIFICATIONS_FLYING_CONTAINER);
+	// parent object
+	gldi_object_set_manager (GLDI_OBJECT (&myFlyingObjectMgr), &myContainerObjectMgr);
 }

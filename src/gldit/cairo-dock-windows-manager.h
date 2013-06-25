@@ -28,18 +28,12 @@ G_BEGIN_DECLS
 *@file cairo-dock-windows-manager.h This class manages the windows actors and notifies for any change on them.
 */
 
+// manager
 typedef struct _GldiWindowsManager GldiWindowsManager;
 
 #ifndef _MANAGER_DEF_
-extern GldiWindowsManager myWindowsMgr;
+extern GldiObjectManager myWindowObjectMgr;
 #endif
-
-// no param
-
-// manager
-struct _GldiWindowsManager {
-	GldiManager mgr;
-	} ;
 
 /// signals
 typedef enum {
@@ -55,7 +49,7 @@ typedef enum {
 	NOTIFICATION_WINDOW_ACTIVATED,
 	NOTIFICATION_WINDOW_DESKTOP_CHANGED,
 	NB_NOTIFICATIONS_WINDOWS
-	} GldiWindowsNotifications;
+	} GldiWindowNotifications;
 
 // data
 

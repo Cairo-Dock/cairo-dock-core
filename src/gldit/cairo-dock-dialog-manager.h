@@ -37,6 +37,7 @@ G_BEGIN_DECLS
 * - if you want to pop up only 1 dialog at once on a given icon, use \ref gldi_dialogs_remove_on_icon before you pop up your dialog.
 */
 
+// manager
 typedef struct _CairoDialogsParam CairoDialogsParam;
 typedef struct _CairoDialogsManager CairoDialogsManager;
 typedef struct _CairoDialogAttr CairoDialogAttr;
@@ -44,6 +45,7 @@ typedef struct _CairoDialogAttr CairoDialogAttr;
 #ifndef _MANAGER_DEF_
 extern CairoDialogsParam myDialogsParam;
 extern CairoDialogsManager myDialogsMgr;
+extern GldiObjectManager myDialogObjectMgr;
 #endif
 
 // params
@@ -58,7 +60,6 @@ struct _CairoDialogsParam {
 	gdouble fDialogColor[4];
 };
 
-// manager
 struct _CairoDialogsManager {
 	GldiManager mgr;
 };

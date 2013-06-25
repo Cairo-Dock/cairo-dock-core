@@ -53,6 +53,7 @@
 // public (manager, config, data)
 CairoIconsParam myIconsParam;
 CairoIconsManager myIconsMgr;
+GldiObjectManager myIconObjectMgr;
 CairoDockImageBuffer g_pIconBackgroundBuffer;
 GLuint g_pGradationTexture[2]={0, 0};
 
@@ -920,7 +921,7 @@ static void init (void)
 		NOTIFICATION_DESKTOP_CHANGED,
 		(GldiNotificationFunc) _on_change_current_desktop_viewport_notification,
 		GLDI_RUN_AFTER, NULL);
-	gldi_object_register_notification (&myIconsMgr,
+	gldi_object_register_notification (&myIconObjectMgr,
 		NOTIFICATION_RENDER_ICON,
 		(GldiNotificationFunc) cairo_dock_render_icon_notification,
 		GLDI_RUN_FIRST, NULL);
@@ -1016,16 +1017,15 @@ void gldi_register_icons_manager (void)
 {
 	// Manager
 	memset (&myIconsMgr, 0, sizeof (CairoIconsManager));
+	gldi_object_init (GLDI_OBJECT(&myIconsMgr), &myManagerObjectMgr, NULL);
 	myIconsMgr.mgr.cModuleName  = "Icons";
+	// interface
 	myIconsMgr.mgr.init         = init;
 	myIconsMgr.mgr.load         = load;
 	myIconsMgr.mgr.unload       = unload;
 	myIconsMgr.mgr.reload       = (GldiManagerReloadFunc)reload;
 	myIconsMgr.mgr.get_config   = (GldiManagerGetConfigFunc)get_config;
 	myIconsMgr.mgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
-	myIconsMgr.mgr.init_object  = init_object;
-	myIconsMgr.mgr.reset_object = reset_object;
-	myIconsMgr.mgr.iObjectSize  = sizeof (Icon);
 	// Config
 	memset (&myIconsParam, 0, sizeof (CairoIconsParam));
 	myIconsMgr.mgr.pConfig = (GldiManagerConfigPtr)&myIconsParam;
@@ -1034,8 +1034,14 @@ void gldi_register_icons_manager (void)
 	memset (&g_pIconBackgroundBuffer, 0, sizeof (CairoDockImageBuffer));
 	myIconsMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myIconsMgr.mgr.iSizeOfData = 0;
+	
+	// ObjectManager
+	memset (&myIconObjectMgr, 0, sizeof (GldiObjectManager));
+	myIconObjectMgr.cName        = "Icon";
+	myIconObjectMgr.iObjectSize  = sizeof (Icon);
+	// interface
+	myIconObjectMgr.init_object  = init_object;
+	myIconObjectMgr.reset_object = reset_object;
 	// signals
-	gldi_object_install_notifications (&myIconsMgr, NB_NOTIFICATIONS_ICON);
-	// register
-	gldi_register_manager (GLDI_MANAGER(&myIconsMgr));
+	gldi_object_install_notifications (&myIconObjectMgr, NB_NOTIFICATIONS_ICON);
 }

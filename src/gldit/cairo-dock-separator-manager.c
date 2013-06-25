@@ -33,7 +33,7 @@
 #include "cairo-dock-separator-manager.h"
 
 // public (manager, config, data)
-GldiSeparatorIconManager mySeparatorIconsMgr;
+GldiObjectManager mySeparatorIconObjectMgr;
 
 // dependancies
 extern gchar *g_cCurrentLaunchersPath;
@@ -79,13 +79,13 @@ static void _load_image (Icon *icon)
 Icon *gldi_separator_icon_new (const gchar *cConfFile, GKeyFile *pKeyFile)
 {
 	GldiSeparatorIconAttr attr = {(gchar*)cConfFile, pKeyFile};
-	return (Icon*)gldi_object_new (GLDI_MANAGER(&mySeparatorIconsMgr), &attr);
+	return (Icon*)gldi_object_new (&mySeparatorIconObjectMgr, &attr);
 }
 
 Icon *gldi_auto_separator_icon_new (Icon *pPrevIcon, Icon *pNextIcon)
 {
 	GldiSeparatorIconAttr attr = {NULL, NULL};
-	Icon *icon = (Icon*)gldi_object_new (GLDI_MANAGER(&mySeparatorIconsMgr), &attr);
+	Icon *icon = (Icon*)gldi_object_new (&mySeparatorIconObjectMgr, &attr);
 	
 	icon->iGroup = cairo_dock_get_icon_order (pPrevIcon) +
 		(cairo_dock_get_icon_order (pPrevIcon) == cairo_dock_get_icon_order (pNextIcon) ? 0 : 1);  // for separators, group = order.
@@ -174,17 +174,17 @@ static GKeyFile* reload_object (GldiObject *obj, G_GNUC_UNUSED gboolean bReloadC
 
 void gldi_register_separator_icons_manager (void)
 {
-	// Manager
-	memset (&mySeparatorIconsMgr, 0, sizeof (GldiSeparatorIconManager));
-	mySeparatorIconsMgr.mgr.cModuleName   = "SeparatorIcon";
-	mySeparatorIconsMgr.mgr.init_object   = init_object;
-	mySeparatorIconsMgr.mgr.reload_object = reload_object;
-	mySeparatorIconsMgr.mgr.iObjectSize   = sizeof (GldiSeparatorIcon);
+	// Object Manager
+	memset (&mySeparatorIconObjectMgr, 0, sizeof (GldiObjectManager));
+	mySeparatorIconObjectMgr.cName         = "SeparatorIcon";
+	mySeparatorIconObjectMgr.iObjectSize   = sizeof (GldiSeparatorIcon);
+	// interface
+	mySeparatorIconObjectMgr.init_object   = init_object;
+	mySeparatorIconObjectMgr.reload_object = reload_object;
 	// signals
-	gldi_object_install_notifications (GLDI_OBJECT (&mySeparatorIconsMgr), NB_NOTIFICATIONS_SEPARATOR_ICON);
-	gldi_object_set_manager (GLDI_OBJECT (&mySeparatorIconsMgr), GLDI_MANAGER (&myUserIconsMgr));
-	// register
-	gldi_register_manager (GLDI_MANAGER(&mySeparatorIconsMgr));
+	gldi_object_install_notifications (GLDI_OBJECT (&mySeparatorIconObjectMgr), NB_NOTIFICATIONS_SEPARATOR_ICON);
+	// parent object
+	gldi_object_set_manager (GLDI_OBJECT (&mySeparatorIconObjectMgr), &myUserIconObjectMgr);
 }
 
 

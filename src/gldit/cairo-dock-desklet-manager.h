@@ -45,6 +45,7 @@ typedef struct _CairoDeskletsManager CairoDeskletsManager;
 #ifndef _MANAGER_DEF_
 extern CairoDeskletsParam myDeskletsParam;
 extern CairoDeskletsManager myDeskletsMgr;
+extern GldiObjectManager myDeskletObjectMgr;
 #endif
 
 // params

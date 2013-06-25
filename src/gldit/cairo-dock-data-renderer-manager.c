@@ -31,6 +31,7 @@
 
 // public (manager, config, data)
 CairoDataRenderersManager myDataRenderersMgr;
+GldiObjectManager myDataRendererObjectMgr;
 
 // dependancies
 extern gboolean g_bUseOpenGL;
@@ -195,7 +196,9 @@ void gldi_register_data_renderers_manager (void)
 {
 	// Manager
 	memset (&myDataRenderersMgr, 0, sizeof (CairoDataRenderersManager));
+	gldi_object_init (GLDI_OBJECT(&myDataRenderersMgr), &myManagerObjectMgr, NULL);
 	myDataRenderersMgr.mgr.cModuleName 	= "Data-Renderers";
+	// interface
 	myDataRenderersMgr.mgr.init 		= init;
 	myDataRenderersMgr.mgr.load 		= NULL;  // loaded on demand
 	myDataRenderersMgr.mgr.unload 		= unload;
@@ -208,8 +211,10 @@ void gldi_register_data_renderers_manager (void)
 	// data
 	myDataRenderersMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myDataRenderersMgr.mgr.iSizeOfData = 0;
+	
+	// Object Manager
+	memset (&myDataRendererObjectMgr, 0, sizeof (GldiObjectManager));
+	myDataRendererObjectMgr.cName 	= "Data-Renderers";
 	// signals
-	gldi_object_install_notifications (&myDataRenderersMgr, NB_NOTIFICATIONS_DATA_RENDERERS);
-	// register
-	gldi_register_manager (GLDI_MANAGER(&myDataRenderersMgr));
+	gldi_object_install_notifications (&myDataRendererObjectMgr, NB_NOTIFICATIONS_DATA_RENDERERS);
 }

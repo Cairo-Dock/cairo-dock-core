@@ -409,6 +409,8 @@ typedef struct _GldiManager GldiManager;
 
 typedef struct _GldiObject GldiObject;
 
+typedef struct _GldiObjectManager GldiObjectManager;
+
 typedef struct _GldiDesktopGeometry GldiDesktopGeometry;
 
 typedef struct _GldiDesktopBackground GldiDesktopBackground;

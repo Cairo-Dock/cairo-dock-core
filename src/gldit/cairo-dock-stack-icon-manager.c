@@ -31,7 +31,7 @@
 #include "cairo-dock-stack-icon-manager.h"
 
 // public (manager, config, data)
-GldiStackIconManager myStackIconsMgr;
+GldiObjectManager myStackIconObjectMgr;
 
 // dependancies
 extern gchar *g_cCurrentLaunchersPath;
@@ -304,17 +304,17 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, GKeyFile 
 
 void gldi_register_stack_icons_manager (void)
 {
-	// Manager
-	memset (&myStackIconsMgr, 0, sizeof (GldiStackIconManager));
-	myStackIconsMgr.mgr.cModuleName   = "StackIcon";
-	myStackIconsMgr.mgr.init_object   = init_object;
-	myStackIconsMgr.mgr.reset_object  = NULL;  // no need to unref the sub-dock, it's done upstream
-	myStackIconsMgr.mgr.delete_object = delete_object;
-	myStackIconsMgr.mgr.reload_object = reload_object;
-	myStackIconsMgr.mgr.iObjectSize   = sizeof (GldiStackIcon);
+	// Object Manager
+	memset (&myStackIconObjectMgr, 0, sizeof (GldiObjectManager));
+	myStackIconObjectMgr.cName         = "StackIcon";
+	myStackIconObjectMgr.iObjectSize   = sizeof (GldiStackIcon);
+	// interface
+	myStackIconObjectMgr.init_object   = init_object;
+	myStackIconObjectMgr.reset_object  = NULL;  // no need to unref the sub-dock, it's done upstream
+	myStackIconObjectMgr.delete_object = delete_object;
+	myStackIconObjectMgr.reload_object = reload_object;
 	// signals
-	gldi_object_install_notifications (GLDI_OBJECT (&myStackIconsMgr), NB_NOTIFICATIONS_STACK_ICON);
-	gldi_object_set_manager (GLDI_OBJECT (&myStackIconsMgr), GLDI_MANAGER (&myUserIconsMgr));
-	// register
-	gldi_register_manager (GLDI_MANAGER(&myStackIconsMgr));
+	gldi_object_install_notifications (GLDI_OBJECT (&myStackIconObjectMgr), NB_NOTIFICATIONS_STACK_ICON);
+	// parent object
+	gldi_object_set_manager (GLDI_OBJECT (&myStackIconObjectMgr), &myUserIconObjectMgr);
 }

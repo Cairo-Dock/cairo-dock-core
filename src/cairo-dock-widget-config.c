@@ -45,9 +45,9 @@ static void _config_widget_reset (CDWidget *pCdWidget);
 static void _config_widget_reload (CDWidget *pCdWidget);
 
 #define cd_reload(module_name) do {\
-	pManager = gldi_get_manager (module_name);\
+	pManager = gldi_manager_get (module_name);\
 	if (pManager != NULL)\
-		gldi_reload_manager_from_keyfile (pManager, pKeyFile);\
+		GLDI_OBJECT(pManager)->mgr->reload_object (GLDI_OBJECT(pManager), TRUE, pKeyFile); /* that's quite hacky, but we already have the keyfile, so... */ \
 	} while (0)
 
 static gchar *_get_animation_name (int i)

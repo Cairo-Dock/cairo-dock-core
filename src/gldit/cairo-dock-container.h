@@ -49,6 +49,7 @@ typedef struct _GldiContainerAttr GldiContainerAttr;
 #ifndef _MANAGER_DEF_
 extern GldiContainersParam myContainersParam;
 extern GldiContainersManager myContainersMgr;
+extern GldiObjectManager myContainerObjectMgr;
 #endif
 
 #define CD_DOUBLE_CLICK_DELAY 250  // ms
@@ -169,7 +170,7 @@ struct _GldiContainer {
 *@param obj the object.
 *@return TRUE if the object is a Container.
 */
-#define CAIRO_DOCK_IS_CONTAINER(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), GLDI_MANAGER(&myContainersMgr))
+#define CAIRO_DOCK_IS_CONTAINER(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), &myContainerObjectMgr)
 
   /////////////
  // WINDOW //

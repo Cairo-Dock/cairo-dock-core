@@ -194,7 +194,7 @@ static void _register_kwin_backend (void)
 	
 	gldi_desktop_manager_register_backend (p);
 	
-	/*gldi_object_register_notification (&myContainersMgr,
+	/*gldi_object_register_notification (&myContainerObjectMgr,
 		NOTIFICATION_ENTER_ICON,
 		(GldiNotificationFunc) _on_enter_icon,
 		GLDI_RUN_FIRST, NULL);*/
@@ -203,7 +203,7 @@ static void _register_kwin_backend (void)
 static void _unregister_kwin_backend (void)
 {
 	//cairo_dock_wm_register_backend (NULL);
-	/*gldi_object_remove_notification (&myContainersMgr,
+	/*gldi_object_remove_notification (&myContainerObjectMgr,
 		NOTIFICATION_ENTER_ICON,
 		(GldiNotificationFunc) _on_enter_icon, NULL);*/
 }

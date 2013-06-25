@@ -28,18 +28,13 @@ G_BEGIN_DECLS
 *@file cairo-dock-stack-icon-manager.h This class handles the Stack Icons, which are user icons pointing to a sub-dock.
 */
 
-typedef struct _GldiStackIconManager GldiStackIconManager;
+// manager
 typedef struct GldiUserIconAttr GldiStackIconAttr;
 typedef GldiUserIcon GldiStackIcon;
 
 #ifndef _MANAGER_DEF_
-extern GldiStackIconManager myStackIconsMgr;
+extern GldiObjectManager myStackIconObjectMgr;
 #endif
-
-// manager
-struct _GldiStackIconManager {
-	GldiManager mgr;
-} ;
 
 // signals
 typedef enum {
@@ -51,7 +46,7 @@ typedef enum {
 *@param obj the object.
 *@return TRUE if the object is a StackIcon.
 */
-#define GLDI_OBJECT_IS_STACK_ICON(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), GLDI_MANAGER(&myStackIconsMgr))
+#define GLDI_OBJECT_IS_STACK_ICON(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), &myStackIconObjectMgr)
 
 
 gchar *gldi_stack_icon_add_conf_file (const gchar *cDockName, double fOrder);

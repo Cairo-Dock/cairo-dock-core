@@ -46,6 +46,7 @@
 // public (manager, config, data)
 CairoDialogsParam myDialogsParam;
 CairoDialogsManager myDialogsMgr;
+GldiObjectManager myDialogObjectMgr;
 
 // dependancies
 extern CairoDock *g_pMainDock;
@@ -966,11 +967,11 @@ static void unload (void)
 
 static void init (void)
 {
-	gldi_object_register_notification (&myDialogsMgr,
+	gldi_object_register_notification (&myDialogObjectMgr,
 		NOTIFICATION_RENDER,
 		(GldiNotificationFunc) _cairo_dock_render_dialog_notification,
 		GLDI_RUN_AFTER, NULL);
-	gldi_object_register_notification (&myDocksMgr,
+	gldi_object_register_notification (&myDockObjectMgr,
 		NOTIFICATION_REMOVE_ICON,
 		(GldiNotificationFunc) on_icon_removed,
 		GLDI_RUN_AFTER, NULL);
@@ -1139,16 +1140,15 @@ void gldi_register_dialogs_manager (void)
 {
 	// Manager
 	memset (&myDialogsMgr, 0, sizeof (CairoDialogsManager));
-	myDialogsMgr.mgr.cModuleName 	= "Dialogs";
-	myDialogsMgr.mgr.init 		= init;
-	myDialogsMgr.mgr.load 		= NULL;  // data are loaded the first time a dialog is created, to avoid create them for nothing.
-	myDialogsMgr.mgr.unload 		= unload;
-	myDialogsMgr.mgr.reload 		= (GldiManagerReloadFunc)reload;
-	myDialogsMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)get_config;
-	myDialogsMgr.mgr.reset_config   = (GldiManagerResetConfigFunc)reset_config;
-	myDialogsMgr.mgr.init_object    = init_object;
-	myDialogsMgr.mgr.reset_object   = reset_object;
-	myDialogsMgr.mgr.iObjectSize    = sizeof (CairoDialog);
+	gldi_object_init (GLDI_OBJECT(&myDialogsMgr), &myManagerObjectMgr, NULL);
+	myDialogsMgr.mgr.cModuleName  = "Dialogs";
+	// interface
+	myDialogsMgr.mgr.init         = init;
+	myDialogsMgr.mgr.load         = NULL;  // data are loaded the first time a dialog is created, to avoid create them for nothing.
+	myDialogsMgr.mgr.unload       = unload;
+	myDialogsMgr.mgr.reload       = (GldiManagerReloadFunc)reload;
+	myDialogsMgr.mgr.get_config   = (GldiManagerGetConfigFunc)get_config;
+	myDialogsMgr.mgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
 	// Config
 	memset (&myDialogsParam, 0, sizeof (CairoDialogsParam));
 	myDialogsMgr.mgr.pConfig = (GldiManagerConfigPtr)&myDialogsParam;
@@ -1156,9 +1156,16 @@ void gldi_register_dialogs_manager (void)
 	// data
 	myDialogsMgr.mgr.iSizeOfData = 0;
 	myDialogsMgr.mgr.pData = (GldiManagerDataPtr)NULL;
+	
+	// Object Manager
+	memset (&myDialogObjectMgr, 0, sizeof (GldiObjectManager));
+	myDialogObjectMgr.cName 	= "Dialog";
+	myDialogObjectMgr.iObjectSize    = sizeof (CairoDialog);
+	// interface
+	myDialogObjectMgr.init_object    = init_object;
+	myDialogObjectMgr.reset_object   = reset_object;
 	// signals
-	gldi_object_install_notifications (&myDialogsMgr, NB_NOTIFICATIONS_DIALOG);
-	gldi_object_set_manager (GLDI_OBJECT (&myDialogsMgr), GLDI_MANAGER (&myContainersMgr));
-	// register
-	gldi_register_manager (GLDI_MANAGER(&myDialogsMgr));
+	gldi_object_install_notifications (&myDialogObjectMgr, NB_NOTIFICATIONS_DIALOG);
+	// parent object
+	gldi_object_set_manager (GLDI_OBJECT (&myDialogObjectMgr), &myContainerObjectMgr);
 }

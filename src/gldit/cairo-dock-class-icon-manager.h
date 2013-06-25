@@ -28,18 +28,13 @@ G_BEGIN_DECLS
 *@file cairo-dock-class-manager.h This class handles the Class Icons, which are icons pointing to the sub-dock of a class.
 */
 
-typedef struct _GldiClassIconManager GldiClassIconManager;
+// manager
 typedef struct _GldiClassIconAttr GldiClassIconAttr;
 typedef Icon GldiClassIcon;
 
 #ifndef _MANAGER_DEF_
-extern GldiClassIconManager myClassIconsMgr;
+extern GldiObjectManager myClassIconObjectMgr;
 #endif
-
-// manager
-struct _GldiClassIconManager {
-	GldiManager mgr;
-} ;
 
 struct _GldiClassIconAttr {
 	Icon *pAppliIcon;
@@ -56,7 +51,7 @@ typedef enum {
 *@param obj the object.
 *@return TRUE if the object is a ClassIcon.
 */
-#define GLDI_OBJECT_IS_CLASS_ICON(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), GLDI_MANAGER(&myClassIconsMgr))
+#define GLDI_OBJECT_IS_CLASS_ICON(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), &myClassIconObjectMgr)
 
 
 Icon *gldi_class_icon_new (Icon *pAppliIcon, CairoDock *pClassSubDock);

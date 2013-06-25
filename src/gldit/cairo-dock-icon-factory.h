@@ -210,7 +210,7 @@ struct _CairoIconContainerRenderer {
 *@param obj the object.
 *@return TRUE if the object is an icon.
 */
-#define CAIRO_DOCK_IS_ICON(obj) gldi_object_is_manager_child (obj, GLDI_MANAGER(&myIconsMgr))
+#define CAIRO_DOCK_IS_ICON(obj) gldi_object_is_manager_child (obj, &myIconObjectMgr)
 
 #define CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER GLDI_OBJECT_IS_LAUNCHER_ICON
 #define CAIRO_DOCK_ICON_TYPE_IS_CONTAINER GLDI_OBJECT_IS_STACK_ICON

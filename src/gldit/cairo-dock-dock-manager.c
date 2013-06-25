@@ -63,6 +63,7 @@
 // public (manager, config, data)
 CairoDocksParam myDocksParam;
 CairoDocksManager myDocksMgr;
+GldiObjectManager myDockObjectMgr;
 CairoDockImageBuffer g_pVisibleZoneBuffer;
 CairoDock *g_pMainDock = NULL;  // pointeur sur le dock principal.
 CairoDockHidingEffect *g_pHidingBackend = NULL;
@@ -1892,27 +1893,27 @@ static void init (void)
 		NULL,  // name of the dock (points directly to the dock)
 		NULL);  // dock
 	
-	/**gldi_object_register_notification (&myDocksMgr,
+	/**gldi_object_register_notification (&myDockObjectMgr,
 		NOTIFICATION_RENDER,
 		(GldiNotificationFunc) _render_dock_notification,
 		GLDI_RUN_FIRST, NULL);*/
-	gldi_object_register_notification (&myDocksMgr,
+	gldi_object_register_notification (&myDockObjectMgr,
 		NOTIFICATION_LEAVE_DOCK,
 		(GldiNotificationFunc) _on_leave_dock,  // is a notification so that others can prevent a dock from hiding (ex Slide view)
 		GLDI_RUN_FIRST, NULL);
-	gldi_object_register_notification (&myDocksMgr,
+	gldi_object_register_notification (&myDockObjectMgr,
 		NOTIFICATION_INSERT_ICON,
 		(GldiNotificationFunc) on_insert_remove_icon,
 		GLDI_RUN_AFTER, NULL);
-	gldi_object_register_notification (&myDocksMgr,
+	gldi_object_register_notification (&myDockObjectMgr,
 		NOTIFICATION_REMOVE_ICON,
 		(GldiNotificationFunc) on_insert_remove_icon,
 		GLDI_RUN_AFTER, NULL);
-	gldi_object_register_notification (&myIconsMgr,
+	gldi_object_register_notification (&myIconObjectMgr,
 		NOTIFICATION_UPDATE_ICON,
 		(GldiNotificationFunc) on_update_inserting_removing_icon,
 		GLDI_RUN_AFTER, NULL);
-	gldi_object_register_notification (&myIconsMgr,
+	gldi_object_register_notification (&myIconObjectMgr,
 		NOTIFICATION_STOP_ICON,
 		(GldiNotificationFunc) on_stop_inserting_removing_icon,
 		GLDI_RUN_AFTER, NULL);
@@ -2169,19 +2170,16 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, G_GNUC_UN
 void gldi_register_docks_manager (void)
 {
 	// Manager
-	memset (&myDocksMgr, 0, sizeof (CairoDocksManager));
+	memset (&myDocksMgr, 0, sizeof (GldiManager));
+	gldi_object_init (GLDI_OBJECT(&myDocksMgr), &myManagerObjectMgr, NULL);
 	myDocksMgr.mgr.cModuleName   = "Docks";
+	// interface
 	myDocksMgr.mgr.init          = init;
 	myDocksMgr.mgr.load          = load;
 	myDocksMgr.mgr.unload        = unload;
 	myDocksMgr.mgr.reload        = (GldiManagerReloadFunc)reload;
 	myDocksMgr.mgr.get_config    = (GldiManagerGetConfigFunc)get_config;
 	myDocksMgr.mgr.reset_config  = (GldiManagerResetConfigFunc)reset_config;
-	myDocksMgr.mgr.init_object   = init_object;
-	myDocksMgr.mgr.reset_object  = reset_object;
-	myDocksMgr.mgr.delete_object = delete_object;
-	myDocksMgr.mgr.reload_object = reload_object;
-	myDocksMgr.mgr.iObjectSize   = sizeof (CairoDock);
 	// Config
 	memset (&myDocksParam, 0, sizeof (CairoDocksParam));
 	myDocksMgr.mgr.pConfig = (GldiManagerConfigPtr)&myDocksParam;
@@ -2190,9 +2188,18 @@ void gldi_register_docks_manager (void)
 	memset (&g_pVisibleZoneBuffer, 0, sizeof (CairoDockImageBuffer));
 	myDocksMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myDocksMgr.mgr.iSizeOfData = 0;
+	
+	// Object Manager
+	memset (&myDockObjectMgr, 0, sizeof (GldiObjectManager));
+	myDockObjectMgr.cName         = "Dock";
+	myDockObjectMgr.iObjectSize   = sizeof (CairoDock);
+	// interface
+	myDockObjectMgr.init_object   = init_object;
+	myDockObjectMgr.reset_object  = reset_object;
+	myDockObjectMgr.delete_object = delete_object;
+	myDockObjectMgr.reload_object = reload_object;
 	// signals
-	gldi_object_install_notifications (&myDocksMgr, NB_NOTIFICATIONS_DOCKS);
-	gldi_object_set_manager (GLDI_OBJECT (&myDocksMgr), GLDI_MANAGER (&myContainersMgr));
-	// register
-	gldi_register_manager (GLDI_MANAGER(&myDocksMgr));
+	gldi_object_install_notifications (&myDockObjectMgr, NB_NOTIFICATIONS_DOCKS);
+	// parent object
+	gldi_object_set_manager (GLDI_OBJECT (&myDockObjectMgr), &myContainerObjectMgr);
 }

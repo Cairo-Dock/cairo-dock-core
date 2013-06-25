@@ -541,8 +541,8 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 	
 	//\_____________________ On dessine l'icone.
 	gboolean bIconHasBeenDrawn = FALSE;
-	gldi_object_notify (&myIconsMgr, NOTIFICATION_PRE_RENDER_ICON, icon, pDock, pCairoContext);
-	gldi_object_notify (&myIconsMgr, NOTIFICATION_RENDER_ICON, icon, pDock, &bIconHasBeenDrawn, pCairoContext);
+	gldi_object_notify (&myIconObjectMgr, NOTIFICATION_PRE_RENDER_ICON, icon, pDock, pCairoContext);
+	gldi_object_notify (&myIconObjectMgr, NOTIFICATION_RENDER_ICON, icon, pDock, &bIconHasBeenDrawn, pCairoContext);
 	
 	cairo_restore (pCairoContext);  // retour juste apres la translation (fDrawX, fDrawY).
 	

@@ -27,18 +27,13 @@ G_BEGIN_DECLS
 *@file cairo-dock-separator-manager.h This class handles the Separator Icons, which are user icons doing nothing.
 */
 
-typedef struct _GldiSeparatorIconManager GldiSeparatorIconManager;
+// manager
 typedef GldiUserIconAttr GldiSeparatorIconAttr;
 typedef GldiUserIcon GldiSeparatorIcon;
 
 #ifndef _MANAGER_DEF_
-extern GldiSeparatorIconManager mySeparatorIconsMgr;
+extern GldiObjectManager mySeparatorIconObjectMgr;
 #endif
-
-// manager
-struct _GldiSeparatorIconManager {
-	GldiManager mgr;
-} ;
 
 // signals
 typedef enum {
@@ -50,7 +45,7 @@ typedef enum {
 *@param obj the object.
 *@return TRUE if the object is a SeparatorIcon.
 */
-#define GLDI_OBJECT_IS_SEPARATOR_ICON(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), GLDI_MANAGER(&mySeparatorIconsMgr))
+#define GLDI_OBJECT_IS_SEPARATOR_ICON(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), &mySeparatorIconObjectMgr)
 
 #define GLDI_OBJECT_IS_USER_SEPARATOR_ICON(obj) (GLDI_OBJECT_IS_SEPARATOR_ICON(obj) && ((GldiSeparatorIcon*)obj)->cDesktopFileName != NULL)
 

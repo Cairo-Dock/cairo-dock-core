@@ -32,7 +32,7 @@
 #include "cairo-dock-overlay.h"
 
 // public (manager, config, data)
-CairoOverlaysManager myOverlaysMgr;
+GldiObjectManager myOverlayObjectMgr;
 
 // dependancies
 extern gboolean g_bUseOpenGL;
@@ -43,7 +43,7 @@ extern gboolean g_bUseOpenGL;
 
 CairoOverlay *gldi_overlay_new (CairoOverlayAttr *attr)
 {
-	return (CairoOverlay*)gldi_object_new (GLDI_MANAGER(&myOverlaysMgr), attr);
+	return (CairoOverlay*)gldi_object_new (&myOverlayObjectMgr, attr);
 }
 
 
@@ -452,14 +452,13 @@ static void reset_object (GldiObject *obj)
 
 void gldi_register_overlays_manager (void)
 {
-	// Manager
-	memset (&myOverlaysMgr, 0, sizeof (CairoOverlaysManager));
-	myOverlaysMgr.mgr.cModuleName  = "Overlays";
-	myOverlaysMgr.mgr.init_object  = init_object;
-	myOverlaysMgr.mgr.reset_object = reset_object;
-	myOverlaysMgr.mgr.iObjectSize  = sizeof (CairoOverlay);
+	// Object Manager
+	memset (&myOverlayObjectMgr, 0, sizeof (GldiObjectManager));
+	myOverlayObjectMgr.cName        = "Overlay";
+	myOverlayObjectMgr.iObjectSize  = sizeof (CairoOverlay);
+	// interface
+	myOverlayObjectMgr.init_object  = init_object;
+	myOverlayObjectMgr.reset_object = reset_object;
 	// signals
-	gldi_object_install_notifications (&myOverlaysMgr, NB_NOTIFICATIONS_OVERLAYS);
-	// register
-	gldi_register_manager (GLDI_MANAGER(&myOverlaysMgr));
+	gldi_object_install_notifications (&myOverlayObjectMgr, NB_NOTIFICATIONS_OVERLAYS);
 }

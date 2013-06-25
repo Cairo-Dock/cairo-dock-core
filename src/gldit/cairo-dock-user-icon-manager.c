@@ -32,56 +32,13 @@
 #include "cairo-dock-user-icon-manager.h"
 
 // public (manager, config, data)
-GldiUserIconManager myUserIconsMgr;
+GldiObjectManager myUserIconObjectMgr;
 
 // dependancies
 extern gchar *g_cCurrentLaunchersPath;
 
 // private
 
-
-/*
-user-icon = {icon, desktop-file}
-object-new(desktop-file, keyfile(may be null)): open file, get generic data (dock-name, order, workspace), iGroup = CAIRO_DOCK_LAUNCHER, set desktopfile, create container
-delete_user_icon
-
-specialized mgr: get data, update the key file if necessary, etc
-
-
-icon_create_from_conf_file -> open keyfile -> get type -> object_new(mgr), free keyfile
-
-- LauncherMgr (desktop file) -> get data, register class, set data from class, load_launcher, check validity, inhibite class
-- SeparatorMgr (desktop file or NULL) -> load_separator
-- ContainerIconMgr (desktop file) -> get data, create sub-dock, load_launcher_with_sub_dock, delete_sub_icons, create sub-dock, check name
-
-is_user_icon: is_child(user-icon-mgr)
-is_separator: is_child(separator-mgr)
-is_auto_separator: is_separator && conf-file == NULL
-
-create auto separator: object_new(SeparatorMgr, NULL)
-
-OR
-
-- AutoSeparatorMgr() -> load_separator
-is_separator: is_child(separator-mgr) || is_child(auto-separator-mgr)
-
-
-
-
-icon_create_from_conf_file -> object_new(myLauncherMgr, desktop file)
--> user-icon = {icon, desktop-file}
-
-icon_create_dummy -> icon_new, set data (mgr = myIconsMgr)
-
-icon->write_container_name -> user-icon, applet-icon
-icon->write_order -> user-icon, applet-icon
-
-
-ThemeIcon 
-write-container-name
-write-order
-
-*/
 
 Icon *gldi_user_icon_new (const gchar *cConfFile)
 {
@@ -125,17 +82,17 @@ Icon *gldi_user_icon_new (const gchar *cConfFile)
 	}
 	
 	//\__________________ make an icon for the given type
-	GldiManager *pMgr = NULL;
+	GldiObjectManager *pMgr = NULL;
 	switch (iType)
 	{
 		case CAIRO_DOCK_ICON_TYPE_LAUNCHER:
-			pMgr = GLDI_MANAGER (&myLaunchersMgr);
+			pMgr = &myLauncherObjectMgr;
 		break;
 		case CAIRO_DOCK_ICON_TYPE_CONTAINER:
-			pMgr = GLDI_MANAGER (&myStackIconsMgr);
+			pMgr = &myStackIconObjectMgr;
 		break;
 		case CAIRO_DOCK_ICON_TYPE_SEPARATOR:
-			pMgr = GLDI_MANAGER (&mySeparatorIconsMgr);
+			pMgr = &mySeparatorIconObjectMgr;
 		break;
 		default:
 			cd_warning ("unknown user icon type for file %s", cDesktopFilePath);
@@ -313,16 +270,16 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, GKeyFile 
 void gldi_register_user_icons_manager (void)
 {
 	// Manager
-	memset (&myUserIconsMgr, 0, sizeof (GldiUserIconManager));
-	myUserIconsMgr.mgr.cModuleName   = "User-Icons";
-	myUserIconsMgr.mgr.init_object   = init_object;
-	myUserIconsMgr.mgr.reset_object  = reset_object;
-	myUserIconsMgr.mgr.delete_object = delete_object;
-	myUserIconsMgr.mgr.reload_object = reload_object;
-	myUserIconsMgr.mgr.iObjectSize   = sizeof (GldiUserIcon);
+	memset (&myUserIconObjectMgr, 0, sizeof (GldiObjectManager));
+	myUserIconObjectMgr.cName         = "User-Icons";
+	myUserIconObjectMgr.iObjectSize   = sizeof (GldiUserIcon);
+	// interface
+	myUserIconObjectMgr.init_object   = init_object;
+	myUserIconObjectMgr.reset_object  = reset_object;
+	myUserIconObjectMgr.delete_object = delete_object;
+	myUserIconObjectMgr.reload_object = reload_object;
 	// signals
-	gldi_object_install_notifications (&myUserIconsMgr, NB_NOTIFICATIONS_ICON);
-	gldi_object_set_manager (GLDI_OBJECT (&myUserIconsMgr), GLDI_MANAGER (&myIconsMgr));
-	// register
-	gldi_register_manager (GLDI_MANAGER(&myUserIconsMgr));
+	gldi_object_install_notifications (&myUserIconObjectMgr, NB_NOTIFICATIONS_USER_ICON);
+	// parent object
+	gldi_object_set_manager (GLDI_OBJECT (&myUserIconObjectMgr), &myIconObjectMgr);
 }

@@ -690,7 +690,7 @@ void cairo_dock_register_default_renderer (void)
 	cairo_dock_register_renderer (CAIRO_DOCK_DEFAULT_RENDERER_NAME, pDefaultRenderer);
 	
 	// when and only when the current theme is unloaded, the main dock is destroyed, and we must release our data.
-	gldi_object_register_notification (&myDocksMgr,
+	gldi_object_register_notification (&myDockObjectMgr,
 		NOTIFICATION_DESTROY,  // on ne fait cette fonction qu'une fois, donc on peut s'enregistrer ici.
 		(GldiNotificationFunc) cd_default_view_free_data,
 		GLDI_RUN_AFTER, NULL);

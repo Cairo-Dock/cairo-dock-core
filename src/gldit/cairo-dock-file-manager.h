@@ -32,6 +32,7 @@ G_BEGIN_DECLS
 * - the various desktop-related tools.
 */
 
+// manager
 typedef struct _CairoDesktopEnvManager CairoDesktopEnvManager;
 
 #ifndef _MANAGER_DEF_
@@ -39,15 +40,9 @@ extern CairoDesktopEnvManager myDesktopEnvMgr;
 #endif
 
 
-// manager
 struct _CairoDesktopEnvManager {
 	GldiManager mgr;
 	};
-
-// signals
-typedef enum {
-	NB_NOTIFICATIONS_DESKTOP_ENV = NB_NOTIFICATIONS_OBJECT
-	} CairoDesktopEnvNotifications;
 
 
 /// Type of available Desktop Environments.

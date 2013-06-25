@@ -341,8 +341,9 @@ void gldi_register_desktop_manager (void)
 {
 	// Manager
 	memset (&myDesktopMgr, 0, sizeof (GldiDesktopManager));
-	memset (&s_backend, 0, sizeof (GldiDesktopManagerBackend));
+	gldi_object_init (GLDI_OBJECT(&myDesktopMgr), &myManagerObjectMgr, NULL);
 	myDesktopMgr.mgr.cModuleName  = "Desktop";
+	// interface
 	myDesktopMgr.mgr.init         = init;
 	myDesktopMgr.mgr.load         = NULL;
 	myDesktopMgr.mgr.unload       = unload;
@@ -355,11 +356,11 @@ void gldi_register_desktop_manager (void)
 	// data
 	myDesktopMgr.mgr.iSizeOfData = 0;
 	myDesktopMgr.mgr.pData = (GldiManagerDataPtr)NULL;
+	memset (&s_backend, 0, sizeof (GldiDesktopManagerBackend));
 	// signals
-	gldi_object_install_notifications (&myDesktopMgr, NB_NOTIFICATIONS_DESKTOP);
-	// register
-	gldi_register_manager (GLDI_MANAGER(&myDesktopMgr));
+	gldi_object_install_notifications (&myDesktopMgr, NB_NOTIFICATIONS_DESKTOP);  // we don't have a Desktop Object, so let's put the signals here
 	
+	// init
 	gldi_object_register_notification (&myDesktopMgr,
 		NOTIFICATION_DESKTOP_WALLPAPER_CHANGED,
 		(GldiNotificationFunc) on_wallpaper_changed,

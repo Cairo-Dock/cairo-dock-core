@@ -32,6 +32,13 @@ gchar *cairo_dock_generate_unique_filename (const gchar *cBaseName, const gchar 
 gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters);;
 
 
+/** Remove the version number from a string. Directly modifies the string.
+ * @param cString a string.
+ * @return TRUE if a version has been removed.
+ */
+gboolean cairo_dock_remove_version_from_string (gchar *cString);
+
+
 /** Replace the %20 by normal spaces into the string. The string is directly modified.
 *@param cString the string (it can't be a constant string)
 */

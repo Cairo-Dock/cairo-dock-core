@@ -57,11 +57,6 @@ struct _CairoBackendsManager {
 	GldiManager mgr;
 	};
 
-// signals
-typedef enum {
-	NB_NOTIFICATIONS_BACKENDS = NB_NOTIFICATIONS_OBJECT
-	} CairoBackendsNotifications;
-
 
 struct _CairoDockAnimationRecord {
 	gint id;

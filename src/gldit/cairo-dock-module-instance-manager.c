@@ -38,7 +38,7 @@
 #include "cairo-dock-module-instance-manager.h"
 
 // public (manager, config, data)
-GldiModuleInstancesManager myModuleInstancesMgr;
+GldiObjectManager myModuleInstanceObjectMgr;
 
 // dependancies
 extern CairoDock *g_pMainDock;
@@ -54,7 +54,7 @@ GldiModuleInstance *gldi_module_instance_new (GldiModule *pModule, gchar *cConfF
 	GldiModuleInstanceAttr attr = {pModule, cConfFilePah};
 	
 	GldiModuleInstance *pInstance = g_malloc0 (sizeof (GldiModuleInstance) + pModule->pVisitCard->iSizeOfConfig + pModule->pVisitCard->iSizeOfData);  // we allocate everything at once, since config and data will anyway live as long as the instance itself.
-	gldi_object_init (GLDI_OBJECT(pInstance), GLDI_MANAGER(&myModuleInstancesMgr), &attr);
+	gldi_object_init (GLDI_OBJECT(pInstance), &myModuleInstanceObjectMgr, &attr);
 	return pInstance;
 }
 
@@ -717,21 +717,15 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReadConfig, GKeyFile 
 
 void gldi_register_module_instances_manager (void)
 {
-	memset (&myModuleInstancesMgr, 0, sizeof (GldiModuleInstancesManager));
-	myModuleInstancesMgr.mgr.cModuleName   = "ModuleInstances";
-	myModuleInstancesMgr.mgr.init_object   = init_object;
-	myModuleInstancesMgr.mgr.reset_object  = reset_object;
-	myModuleInstancesMgr.mgr.delete_object = delete_object;
-	myModuleInstancesMgr.mgr.reload_object = reload_object;
-	myModuleInstancesMgr.mgr.iObjectSize   = sizeof (GldiModuleInstance);
-	// Config
-	myModuleInstancesMgr.mgr.pConfig = NULL;
-	myModuleInstancesMgr.mgr.iSizeOfConfig = 0;
-	// data
-	myModuleInstancesMgr.mgr.pData = (GldiManagerDataPtr)NULL;
-	myModuleInstancesMgr.mgr.iSizeOfData = 0;
+	// Object Manager
+	memset (&myModuleInstanceObjectMgr, 0, sizeof (GldiObjectManager));
+	myModuleInstanceObjectMgr.cName         = "ModuleInstance";
+	myModuleInstanceObjectMgr.iObjectSize   = sizeof (GldiModuleInstance);
+	// interface
+	myModuleInstanceObjectMgr.init_object   = init_object;
+	myModuleInstanceObjectMgr.reset_object  = reset_object;
+	myModuleInstanceObjectMgr.delete_object = delete_object;
+	myModuleInstanceObjectMgr.reload_object = reload_object;
 	// signals
-	gldi_object_install_notifications (GLDI_MANAGER(&myModuleInstancesMgr), NB_NOTIFICATIONS_MODULE_INSTANCES);
-	// register
-	gldi_register_manager (GLDI_MANAGER(&myModuleInstancesMgr));
+	gldi_object_install_notifications (GLDI_OBJECT(&myModuleInstanceObjectMgr), NB_NOTIFICATIONS_MODULE_INSTANCES);
 }

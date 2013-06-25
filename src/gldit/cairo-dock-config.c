@@ -449,13 +449,13 @@ void cairo_dock_load_current_theme (void)
 	gldi_free_all ();  // do nothing if there is nothing to unload.
 		
 	//\___________________ Get all managers config.
-	gldi_get_managers_config (g_cConfFile, GLDI_VERSION);  /// en fait, CAIRO_DOCK_VERSION ...
+	gldi_managers_get_config (g_cConfFile, GLDI_VERSION);  /// en fait, CAIRO_DOCK_VERSION ...
 	
 	//\___________________ Create the primary container (needed to have a cairo/opengl context).
 	CairoDock *pMainDock = gldi_dock_new (CAIRO_DOCK_MAIN_DOCK_NAME);
 	
 	//\___________________ Load all managers data.
-	gldi_load_managers ();
+	gldi_managers_load ();
 	gldi_modules_activate_from_list (NULL);  // load auto-loaded modules before loading anything (views, etc)
 	
 	//\___________________ Now load the user icons (launchers, etc).

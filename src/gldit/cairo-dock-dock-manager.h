@@ -32,12 +32,14 @@ G_BEGIN_DECLS
 * Each Dock has a name that is unique. A Dock can be a sub-dock or a root-dock, whether there exists an icon that points on it or not, but there is no fundamental difference between both.
 */
 
+// manager
 typedef struct _CairoDocksParam CairoDocksParam;
 typedef struct _CairoDocksManager CairoDocksManager;
 
 #ifndef _MANAGER_DEF_
 extern CairoDocksParam myDocksParam;
 extern CairoDocksManager myDocksMgr;
+extern GldiObjectManager myDockObjectMgr;
 #endif
 
 typedef enum {

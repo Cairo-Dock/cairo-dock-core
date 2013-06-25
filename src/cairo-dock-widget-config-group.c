@@ -55,9 +55,9 @@ static void _config_group_widget_apply (CDWidget *pCdWidget)
 	for (m = pConfigGroupWidget->pManagers; m != NULL; m = m->next)
 	{
 		cManagerName = m->data;
-		pManager = gldi_get_manager (cManagerName);
+		pManager = gldi_manager_get (cManagerName);
 		g_return_if_fail (pManager != NULL);
-		gldi_reload_manager (pManager, g_cConfFile);
+		gldi_object_reload (GLDI_OBJECT(pManager), TRUE);
 		
 		// reload the extensions too
 		for (e = pManager->pExternalModules; e != NULL && w != NULL; e = e->next)
@@ -139,7 +139,7 @@ ConfigGroupWidget *cairo_dock_config_group_widget_new (const gchar *cGroupName, 
 	for (m = pManagers; m != NULL; m = m->next)
 	{
 		cManagerName = m->data;
-		pManager = gldi_get_manager (cManagerName);
+		pManager = gldi_manager_get (cManagerName);
 		if (!pManager)
 			continue;
 		

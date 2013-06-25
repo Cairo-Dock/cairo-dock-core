@@ -244,12 +244,5 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 */
 void cairo_dock_set_data_from_class (const gchar *cClass, Icon *pIcon);
 
-
-/** Remove the version number from a string. Directly modifies the string.
- * @param cString a string.
- * @return TRUE if a version has been removed.
- */
-gboolean cairo_dock_remove_version_from_string (gchar *cString);
-
 G_END_DECLS
 #endif

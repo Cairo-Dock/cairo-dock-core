@@ -28,6 +28,7 @@
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-utils.h"  // cairo_dock_remove_version_from_string
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-applet-manager.h"
 #include "cairo-dock-launcher-manager.h"
@@ -1940,28 +1941,3 @@ void cairo_dock_set_data_from_class (const gchar *cClass, Icon *pIcon)
 		pIcon->pMimeTypes = g_strdupv ((gchar**)pClassAppli->pMimeTypes);	
 }
 
-
-gboolean cairo_dock_remove_version_from_string (gchar *cString)
-{
-	if (cString == NULL)
-		return FALSE;
-	int n = strlen (cString);
-	gchar *str = cString + n - 1;
-	do
-	{
-		if (g_ascii_isdigit(*str) || *str == '.')
-		{
-			str --;
-			continue;
-		}
-		if (*str == '-' || *str == ' ')  // 'Glade-2', 'OpenOffice 3.1'
-		{
-			*str = '\0';
-			return TRUE;
-		}
-		else
-			return FALSE;
-	}
-	while (str != cString);
-	return FALSE;
-}

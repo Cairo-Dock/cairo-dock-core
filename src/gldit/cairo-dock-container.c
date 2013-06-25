@@ -42,6 +42,7 @@
 // public (manager, config, data)
 GldiContainersParam myContainersParam;
 GldiContainersManager myContainersMgr;
+GldiObjectManager myContainerObjectMgr;
 GldiContainer *g_pPrimaryContainer = NULL;
 GldiDesktopBackground *g_pFakeTransparencyDesktopBg = NULL;
 
@@ -49,7 +50,7 @@ GldiDesktopBackground *g_pFakeTransparencyDesktopBg = NULL;
 extern CairoDockGLConfig g_openglConfig;
 extern gboolean g_bUseOpenGL;
 extern CairoDockHidingEffect *g_pHidingBackend;  // cairo_dock_is_hidden
-extern CairoDock *g_pMainDock;
+extern CairoDock *g_pMainDock;  // for the default dock visibility when composite goes off->on
 
 // private
 static gboolean s_bSticky = TRUE;
@@ -737,24 +738,29 @@ void gldi_register_containers_manager (void)
 {
 	// Manager
 	memset (&myContainersMgr, 0, sizeof (GldiContainersManager));
+	gldi_object_init (GLDI_OBJECT(&myContainersMgr), &myManagerObjectMgr, NULL);
 	myContainersMgr.mgr.cModuleName  = "Containers";
+	// interface
 	myContainersMgr.mgr.init         = init;
 	myContainersMgr.mgr.load         = load;
 	myContainersMgr.mgr.unload       = unload;
 	myContainersMgr.mgr.reload       = (GldiManagerReloadFunc)NULL;
 	myContainersMgr.mgr.get_config   = (GldiManagerGetConfigFunc)get_config;
 	myContainersMgr.mgr.reset_config = (GldiManagerResetConfigFunc)NULL;
-	myContainersMgr.mgr.init_object  = init_object;
-	myContainersMgr.mgr.reset_object = reset_object;
-	myContainersMgr.mgr.iObjectSize  = sizeof (GldiContainer);
 	// Config
 	myContainersMgr.mgr.pConfig = (GldiManagerConfigPtr)&myContainersParam;
 	myContainersMgr.mgr.iSizeOfConfig = sizeof (GldiContainersParam);
 	// data
 	myContainersMgr.mgr.pData = (GldiManagerDataPtr)NULL;
 	myContainersMgr.mgr.iSizeOfData = 0;
+	
+	// Object Manager
+	memset (&myContainerObjectMgr, 0, sizeof (GldiObjectManager));
+	myContainerObjectMgr.cName        = "Container";
+	myContainerObjectMgr.iObjectSize  = sizeof (GldiContainer);
+	// interface
+	myContainerObjectMgr.init_object  = init_object;
+	myContainerObjectMgr.reset_object = reset_object;
 	// signals
-	gldi_object_install_notifications (&myContainersMgr, NB_NOTIFICATIONS_CONTAINER);
-	// register
-	gldi_register_manager (GLDI_MANAGER(&myContainersMgr));
+	gldi_object_install_notifications (&myContainerObjectMgr, NB_NOTIFICATIONS_CONTAINER);
 }

@@ -41,7 +41,7 @@ G_BEGIN_DECLS
 * Keyboard shortcuts are of the form &lt;alt&gt;F1 or &lt;ctrl&gt;&lt;shift&gt;s.
 * 
 * Use \ref gldi_shortkey_new to create a new shortkey, and simply unref it with \ref gldi_object_unref to unbind the keyboard shortcut.
-* To update a binding (whenever the shortcut or the description changes, or just to re-grab it), use \ref gldi_shortkey_rebind.
+* To update a binding (whenever the shortcut or the description change, or just to re-grab it), use \ref gldi_shortkey_rebind.
 */
 
 
@@ -66,22 +66,12 @@ struct _GldiShortkey {
 } ;
 
 
-typedef struct _GldiShortkeysManager GldiShortkeysManager;
+// manager
 typedef struct _GldiShortkeyAttr GldiShortkeyAttr;
 
 #ifndef _MANAGER_DEF_
-extern GldiShortkeysManager myShortkeysMgr;
+extern GldiObjectManager myShortkeyObjectMgr;
 #endif
-
-// params
-
-// manager
-struct _GldiShortkeysManager {
-	GldiManager mgr;
-	gboolean (*bind) (const gchar *keystring, CDBindkeyHandler handler, gpointer user_data);
-	void (*unbind) (const gchar *keystring, CDBindkeyHandler handler);
-	gboolean (*trigger_shortkey) (const gchar *cKeyString);
-	} ;
 
 struct _GldiShortkeyAttr {
 	const gchar            *keystring;
@@ -112,7 +102,7 @@ typedef enum {
  * @param cKeyName key name where it's stored in the conf file
  * @param handler function called when the shortkey is pressed by the user
  * @param user_data data passed to the callback
- * @return the key binding
+ * @return the shortkey, already bound.
 */
 GldiShortkey *gldi_shortkey_new (const gchar *keystring,
 	const gchar *cDemander,
@@ -133,8 +123,8 @@ GldiShortkey *gldi_shortkey_new (const gchar *keystring,
 
 /** Rebind a shortkey to a new one. If the shortkey is the same, don't re-bind it.
  * @param binding a key binding.
- * @param .cNewKeyString the new shortkey
- * @param .cNewDescription the new description, or NULL to keep the current one.
+ * @param cNewKeyString the new shortkey
+ * @param cNewDescription the new description, or NULL to keep the current one.
  * @return TRUE on success
 */
 gboolean gldi_shortkey_rebind (GldiShortkey *binding,
@@ -144,7 +134,7 @@ gboolean gldi_shortkey_rebind (GldiShortkey *binding,
 
 void gldi_shortkeys_foreach (GFunc pCallback, gpointer data);
 
-/** Trigger the given shortkey. It will be as if the user effectively pressed the shortkey on its keyboard. It uses the 'XTest' X extension.
+/** Trigger a given shortkey. It will be as if the user effectively pressed the shortkey on its keyboard. It uses the 'XTest' X extension.
  * @param cKeyString a shortkey.
  * @return TRUE if success.
 */

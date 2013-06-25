@@ -126,6 +126,32 @@ gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters)  // gere l
 }
 
 
+gboolean cairo_dock_remove_version_from_string (gchar *cString)
+{
+	if (cString == NULL)
+		return FALSE;
+	int n = strlen (cString);
+	gchar *str = cString + n - 1;
+	do
+	{
+		if (g_ascii_isdigit(*str) || *str == '.')
+		{
+			str --;
+			continue;
+		}
+		if (*str == '-' || *str == ' ')  // 'Glade-2', 'OpenOffice 3.1'
+		{
+			*str = '\0';
+			return TRUE;
+		}
+		else
+			return FALSE;
+	}
+	while (str != cString);
+	return FALSE;
+}
+
+
 void cairo_dock_remove_html_spaces (gchar *cString)
 {
 	gchar *str = cString;

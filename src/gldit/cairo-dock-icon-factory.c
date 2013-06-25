@@ -48,7 +48,7 @@ const gchar *s_cRendererNames[4] = {NULL, "Emblem", "Stack", "Box"};  // c'est j
 
 Icon *gldi_icon_new (void)
 {
-	Icon *_icon = (Icon*)gldi_object_new (GLDI_MANAGER (&myIconsMgr), NULL);
+	Icon *_icon = (Icon*)gldi_object_new (&myIconObjectMgr, NULL);
 	return _icon;
 }
 

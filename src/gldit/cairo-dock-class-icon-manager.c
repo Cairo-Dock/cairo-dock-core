@@ -24,7 +24,7 @@
 #include "cairo-dock-class-icon-manager.h"
 
 // public (manager, config, data)
-GldiClassIconManager myClassIconsMgr;
+GldiObjectManager myClassIconObjectMgr;
 
 // dependancies
 
@@ -69,7 +69,7 @@ Icon *gldi_class_icon_new (Icon *pAppliIcon, CairoDock *pClassSubDock)
 	memset (&attr, 0, sizeof (attr));
 	attr.pAppliIcon = pAppliIcon;
 	attr.pClassSubDock = pClassSubDock;
-	return (Icon*)gldi_object_new (GLDI_MANAGER(&myClassIconsMgr), &attr);
+	return (Icon*)gldi_object_new (&myClassIconObjectMgr, &attr);
 }
 
 
@@ -96,18 +96,17 @@ static void init_object (GldiObject *obj, gpointer attr)
 	pIcon->pSubDock = pAttributes->pClassSubDock;
 }
 
-
 void gldi_register_class_icons_manager (void)
 {
 	// Manager
-	memset (&myClassIconsMgr, 0, sizeof (GldiClassIconManager));
-	myClassIconsMgr.mgr.cModuleName    = "ClassIcon";
-	myClassIconsMgr.mgr.init_object    = init_object;
-	myClassIconsMgr.mgr.reset_object   = NULL;
-	myClassIconsMgr.mgr.iObjectSize    = sizeof (GldiClassIcon);
+	memset (&myClassIconObjectMgr, 0, sizeof (GldiObjectManager));
+	myClassIconObjectMgr.cName          = "ClassIcon";
+	myClassIconObjectMgr.iObjectSize    = sizeof (GldiClassIcon);
+	// interface
+	myClassIconObjectMgr.init_object    = init_object;
+	myClassIconObjectMgr.reset_object   = NULL;
 	// signals
-	gldi_object_install_notifications (GLDI_OBJECT (&myClassIconsMgr), NB_NOTIFICATIONS_CLASS_ICON);
-	gldi_object_set_manager (GLDI_OBJECT (&myClassIconsMgr), GLDI_MANAGER (&myIconsMgr));
-	// register
-	gldi_register_manager (GLDI_MANAGER(&myClassIconsMgr));
+	gldi_object_install_notifications (GLDI_OBJECT (&myClassIconObjectMgr), NB_NOTIFICATIONS_CLASS_ICON);
+	// parent object
+	gldi_object_set_manager (GLDI_OBJECT (&myClassIconObjectMgr), &myIconObjectMgr);
 }

@@ -60,6 +60,7 @@ int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;  // version de la lib.
 
 static void _gldi_register_core_managers (void)
 {
+	gldi_register_managers_manager ();  // must be first, since all managers derive from it
 	gldi_register_containers_manager ();
 	gldi_register_docks_manager ();
 	gldi_register_desklets_manager ();
@@ -92,13 +93,12 @@ void gldi_init (GldiRenderingMethod iRendering)
 	// allow messages.
 	cd_log_init (FALSE);  // warnings by default.
 	
+	cairo_dock_get_version_from_string (GLDI_VERSION, &g_iMajorVersion, &g_iMinorVersion, &g_iMicroVersion);
+	
 	// register all managers
 	_gldi_register_core_managers ();
 	
-	//\___________________ On initialise les numeros de version.
-	cairo_dock_get_version_from_string (GLDI_VERSION, &g_iMajorVersion, &g_iMinorVersion, &g_iMicroVersion);
-	
-	gldi_init_managers ();
+	gldi_managers_init ();
 	
 	// register internal backends.
 	cairo_dock_register_built_in_data_renderers ();
@@ -122,7 +122,7 @@ void gldi_free_all (void)
 		return ;
 	
 	// unload all data.
-	gldi_unload_managers ();
+	gldi_managers_unload ();
 	
 	// reset specific managers.
 	gldi_modules_deactivate_all ();  /// TODO: try to do that in the unload of the manager...

@@ -674,7 +674,7 @@ static void cairo_dock_apply_filter_on_group_list (const gchar **pKeyWords, gboo
 				for (m = pGroupDescription->pManagers; m != NULL; m = m->next)
 				{
 					const gchar *cManagerName = m->data;
-					GldiManager *pManager = gldi_get_manager (cManagerName);
+					GldiManager *pManager = gldi_manager_get (cManagerName);
 					g_return_if_fail (pManager != NULL);
 					for (e = pManager->pExternalModules; e != NULL; e = e->next)
 					{

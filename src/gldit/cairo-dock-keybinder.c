@@ -44,7 +44,7 @@
 #include "cairo-dock-keybinder.h"
 
 // public (manager, config, data)
-GldiShortkeysManager myShortkeysMgr;
+GldiObjectManager myShortkeyObjectMgr;
 
 // dependancies
 
@@ -254,7 +254,7 @@ GldiShortkey *gldi_shortkey_new (const gchar *keystring,
 	attr.cKeyName = cKeyName;
 	attr.handler = handler;
 	attr.user_data = user_data;
-	return (GldiShortkey*)gldi_object_new (GLDI_MANAGER(&myShortkeysMgr), &attr);
+	return (GldiShortkey*)gldi_object_new (&myShortkeyObjectMgr, &attr);
 }
 
 
@@ -376,7 +376,7 @@ static void init (void)
 			do_ungrab_key (binding);
 			binding->bSuccess = FALSE;
 		}
-		gldi_object_notify (&myShortkeysMgr, NOTIFICATION_SHORTKEY_REMOVED, binding);
+		gldi_object_notify (&myShortkeyObjectMgr, NOTIFICATION_SHORTKEY_REMOVED, binding);
 		
 		_free_binding (binding);
 	}
@@ -444,25 +444,15 @@ static void reset_object (GldiObject *obj)
 void gldi_register_shortkeys_manager (void)
 {
 	// Manager
-	memset (&myShortkeysMgr, 0, sizeof (GldiShortkeysManager));
-	myShortkeysMgr.mgr.cModuleName = "Shortkeys";
-	myShortkeysMgr.mgr.init         = init;
-	myShortkeysMgr.mgr.load         = NULL;
-	myShortkeysMgr.mgr.unload       = NULL;  /// unload
-	myShortkeysMgr.mgr.reload       = (GldiManagerReloadFunc)NULL;
-	myShortkeysMgr.mgr.get_config   = (GldiManagerGetConfigFunc)NULL;
-	myShortkeysMgr.mgr.reset_config = (GldiManagerResetConfigFunc)NULL;
-	myShortkeysMgr.mgr.init_object  = init_object;
-	myShortkeysMgr.mgr.reset_object = reset_object;
-	myShortkeysMgr.mgr.iObjectSize  = sizeof (GldiShortkey);
-	// Config
-	myShortkeysMgr.mgr.pConfig = (GldiManagerConfigPtr)NULL;
-	myShortkeysMgr.mgr.iSizeOfConfig = 0;
-	// data
-	myShortkeysMgr.mgr.pData = (GldiManagerDataPtr)NULL;
-	myShortkeysMgr.mgr.iSizeOfData = 0;
+	memset (&myShortkeyObjectMgr, 0, sizeof (GldiObjectManager));
+	myShortkeyObjectMgr.cName        = "Shortkeys";
+	myShortkeyObjectMgr.iObjectSize  = sizeof (GldiShortkey);
+	// interface
+	myShortkeyObjectMgr.init_object  = init_object;
+	myShortkeyObjectMgr.reset_object = reset_object;
 	// signals
-	gldi_object_install_notifications (&myShortkeysMgr, NB_NOTIFICATIONS_SHORTKEYS);
-	// register
-	gldi_register_manager (GLDI_MANAGER(&myShortkeysMgr));
+	gldi_object_install_notifications (&myShortkeyObjectMgr, NB_NOTIFICATIONS_SHORTKEYS);
+	
+	// init (since we don't unload the shortkeys ourselves, and the init can be done immediately, no need for a Manager) 
+	init ();
 }

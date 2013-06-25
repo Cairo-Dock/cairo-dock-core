@@ -799,7 +799,7 @@ static void _insert_icon (GldiContainer *pContainer, Icon *pIcon, G_GNUC_UNUSED 
 
 CairoDesklet *gldi_desklet_new (CairoDeskletAttr *attr)
 {
-	return (CairoDesklet*)gldi_object_new (GLDI_MANAGER(&myDeskletsMgr), attr);
+	return (CairoDesklet*)gldi_object_new (&myDeskletObjectMgr, attr);
 }
 
 void gldi_desklet_init_internals (CairoDesklet *pDesklet)

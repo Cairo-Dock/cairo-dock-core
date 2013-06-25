@@ -201,7 +201,7 @@ struct _CairoDesklet {
 *@param obj the object.
 *@return TRUE if the object is a Desklet.
 */
-#define GLDI_OBJECT_IS_DESKLET(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), GLDI_MANAGER(&myDeskletsMgr))
+#define GLDI_OBJECT_IS_DESKLET(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), &myDeskletObjectMgr)
 #define CAIRO_DOCK_IS_DESKLET GLDI_OBJECT_IS_DESKLET
 
 /** Cast a Container into a Desklet.

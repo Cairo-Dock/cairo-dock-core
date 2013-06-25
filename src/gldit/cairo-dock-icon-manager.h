@@ -40,6 +40,7 @@ typedef struct _CairoIconsManager CairoIconsManager;
 #ifndef _MANAGER_DEF_
 extern CairoIconsParam myIconsParam;
 extern CairoIconsManager myIconsMgr;
+extern GldiObjectManager myIconObjectMgr;
 #endif
 
 #define CAIRO_DOCK_DEFAULT_ICON_SIZE 128

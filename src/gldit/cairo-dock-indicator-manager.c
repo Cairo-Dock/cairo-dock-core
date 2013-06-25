@@ -667,11 +667,11 @@ static void unload (void)
 
 static void init (void)
 {
-	gldi_object_register_notification (&myIconsMgr,
+	gldi_object_register_notification (&myIconObjectMgr,
 		NOTIFICATION_PRE_RENDER_ICON,
 		(GldiNotificationFunc) cairo_dock_pre_render_indicator_notification,
 		GLDI_RUN_FIRST, NULL);
-	gldi_object_register_notification (&myIconsMgr,
+	gldi_object_register_notification (&myIconObjectMgr,
 		NOTIFICATION_RENDER_ICON,
 		(GldiNotificationFunc) cairo_dock_render_indicator_notification,
 		GLDI_RUN_AFTER, NULL);
@@ -686,13 +686,15 @@ void gldi_register_indicators_manager (void)
 {
 	// Manager
 	memset (&myIndicatorsMgr, 0, sizeof (CairoIndicatorsManager));
-	myIndicatorsMgr.mgr.cModuleName 	= "Indicators";
-	myIndicatorsMgr.mgr.init 			= init;
-	myIndicatorsMgr.mgr.load 			= load;
-	myIndicatorsMgr.mgr.unload 			= unload;
-	myIndicatorsMgr.mgr.reload 			= (GldiManagerReloadFunc)reload;
-	myIndicatorsMgr.mgr.get_config 		= (GldiManagerGetConfigFunc)get_config;
-	myIndicatorsMgr.mgr.reset_config 	= (GldiManagerResetConfigFunc)reset_config;
+	gldi_object_init (GLDI_OBJECT(&myIndicatorsMgr), &myManagerObjectMgr, NULL);
+	myIndicatorsMgr.mgr.cModuleName  = "Indicators";
+	// interface
+	myIndicatorsMgr.mgr.init         = init;
+	myIndicatorsMgr.mgr.load         = load;
+	myIndicatorsMgr.mgr.unload       = unload;
+	myIndicatorsMgr.mgr.reload       = (GldiManagerReloadFunc)reload;
+	myIndicatorsMgr.mgr.get_config   = (GldiManagerGetConfigFunc)get_config;
+	myIndicatorsMgr.mgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
 	// Config
 	memset (&myIndicatorsParam, 0, sizeof (CairoIndicatorsParam));
 	myIndicatorsMgr.mgr.pConfig = (GldiManagerConfigPtr)&myIndicatorsParam;
@@ -705,6 +707,4 @@ void gldi_register_indicators_manager (void)
 	myIndicatorsMgr.mgr.iSizeOfData = 0;
 	// signals
 	gldi_object_install_notifications (&myIndicatorsMgr, NB_NOTIFICATIONS_INDICATORS);
-	// register
-	gldi_register_manager (GLDI_MANAGER(&myIndicatorsMgr));
 }

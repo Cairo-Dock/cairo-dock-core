@@ -25,14 +25,15 @@
 #include "cairo-dock-container.h"
 G_BEGIN_DECLS
 
+// manager
 typedef struct _CairoFlyingManager CairoFlyingManager;
 typedef struct _CairoFlyingAttr CairoFlyingAttr;
 
 #ifndef _MANAGER_DEF_
 extern CairoFlyingManager myFlyingsMgr;
+extern GldiObjectManager myFlyingObjectMgr;
 #endif
 
-// manager
 struct _CairoFlyingManager {
 	GldiManager mgr;
 	} ;
@@ -68,7 +69,7 @@ struct _CairoFlyingContainer {
 *@param obj the object.
 *@return TRUE if the object is a FlyingContainer.
 */
-#define CAIRO_DOCK_IS_FLYING_CONTAINER(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), GLDI_MANAGER(&myFlyingsMgr))
+#define CAIRO_DOCK_IS_FLYING_CONTAINER(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), &myFlyingObjectMgr)
 
 
 CairoFlyingContainer *gldi_flying_container_new (Icon *pFlyingIcon, CairoDock *pOriginDock);

@@ -377,8 +377,8 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	
 	//\_____________________ On dessine l'icone.
 	gboolean bIconHasBeenDrawn = FALSE;
-	gldi_object_notify (&myIconsMgr, NOTIFICATION_PRE_RENDER_ICON, icon, pDock, NULL);
-	gldi_object_notify (&myIconsMgr, NOTIFICATION_RENDER_ICON, icon, pDock, &bIconHasBeenDrawn, NULL);
+	gldi_object_notify (&myIconObjectMgr, NOTIFICATION_PRE_RENDER_ICON, icon, pDock, NULL);
+	gldi_object_notify (&myIconObjectMgr, NOTIFICATION_RENDER_ICON, icon, pDock, &bIconHasBeenDrawn, NULL);
 	
 	glPopMatrix ();  // retour juste apres la translation au milieu de l'icone.
 	

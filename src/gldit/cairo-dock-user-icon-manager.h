@@ -30,18 +30,13 @@ G_BEGIN_DECLS
 * The config file contains at least the dock the icon belongs to and the position inside the dock.
 */
 
-typedef struct _GldiUserIconManager GldiUserIconManager;
+// manager
 typedef struct _GldiUserIconAttr GldiUserIconAttr;
 typedef struct _Icon GldiUserIcon;
 
 #ifndef _MANAGER_DEF_
-extern GldiUserIconManager myUserIconsMgr;
+extern GldiObjectManager myUserIconObjectMgr;
 #endif
-
-// manager
-struct _GldiUserIconManager {
-	GldiManager mgr;
-} ;
 
 struct _GldiUserIconAttr {
 	gchar *cConfFileName;
@@ -58,7 +53,7 @@ typedef enum {
 *@param obj the object.
 *@return TRUE if the object is a UserIcon.
 */
-#define GLDI_OBJECT_IS_USER_ICON(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), GLDI_MANAGER(&myUserIconsMgr))
+#define GLDI_OBJECT_IS_USER_ICON(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), &myUserIconObjectMgr)
 
 
 Icon *gldi_user_icon_new (const gchar *cConfFile);

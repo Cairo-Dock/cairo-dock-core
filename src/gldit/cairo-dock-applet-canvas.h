@@ -180,7 +180,7 @@ CD_APPLET_DEFINE_COMMON_APPLET_INTERFACE \
 CD_APPLET_DEFINE_END
 
 
-#define CD_APPLET_EXTEND_MANAGER(cManagerName) gldi_extend_manager (pVisitCard, cManagerName)
+#define CD_APPLET_EXTEND_MANAGER(cManagerName) gldi_manager_extend (pVisitCard, cManagerName)
 
 //\______________________ init.
 /** Debut de la fonction d'initialisation de l'applet (celle qui est appelee a chaque chargement de l'applet).
@@ -432,70 +432,70 @@ CD_APPLET_ON_UPDATE_ICON_PROTO \
 //\______________________ notification clique gauche.
 /** Abonne l'applet aux notifications du clic gauche. A effectuer lors de l'init de l'applet.
 */
-#define CD_APPLET_REGISTER_FOR_CLICK_EVENT gldi_object_register_notification (&myContainersMgr, NOTIFICATION_CLICK_ICON, (GldiNotificationFunc) CD_APPLET_ON_CLICK_FUNC, GLDI_RUN_AFTER, myApplet);
+#define CD_APPLET_REGISTER_FOR_CLICK_EVENT gldi_object_register_notification (&myContainerObjectMgr, NOTIFICATION_CLICK_ICON, (GldiNotificationFunc) CD_APPLET_ON_CLICK_FUNC, GLDI_RUN_AFTER, myApplet);
 /** Desabonne l'applet aux notifications du clic gauche. A effectuer lors de l'arret de l'applet.
 */
-#define CD_APPLET_UNREGISTER_FOR_CLICK_EVENT gldi_object_remove_notification (&myContainersMgr, NOTIFICATION_CLICK_ICON, (GldiNotificationFunc) CD_APPLET_ON_CLICK_FUNC, myApplet);
+#define CD_APPLET_UNREGISTER_FOR_CLICK_EVENT gldi_object_remove_notification (&myContainerObjectMgr, NOTIFICATION_CLICK_ICON, (GldiNotificationFunc) CD_APPLET_ON_CLICK_FUNC, myApplet);
 /** Abonne l'applet aux notifications de construction du menu. A effectuer lors de l'init de l'applet.
 */
 
 //\______________________ notification construction menu.
-#define CD_APPLET_REGISTER_FOR_BUILD_MENU_EVENT gldi_object_register_notification (&myContainersMgr, NOTIFICATION_BUILD_ICON_MENU, (GldiNotificationFunc) CD_APPLET_ON_BUILD_MENU_FUNC, GLDI_RUN_FIRST, myApplet);
+#define CD_APPLET_REGISTER_FOR_BUILD_MENU_EVENT gldi_object_register_notification (&myContainerObjectMgr, NOTIFICATION_BUILD_ICON_MENU, (GldiNotificationFunc) CD_APPLET_ON_BUILD_MENU_FUNC, GLDI_RUN_FIRST, myApplet);
 /** Desabonne l'applet aux notifications de construction du menu. A effectuer lors de l'arret de l'applet.
 */
-#define CD_APPLET_UNREGISTER_FOR_BUILD_MENU_EVENT gldi_object_remove_notification (&myContainersMgr, NOTIFICATION_BUILD_ICON_MENU, (GldiNotificationFunc) CD_APPLET_ON_BUILD_MENU_FUNC, myApplet);
+#define CD_APPLET_UNREGISTER_FOR_BUILD_MENU_EVENT gldi_object_remove_notification (&myContainerObjectMgr, NOTIFICATION_BUILD_ICON_MENU, (GldiNotificationFunc) CD_APPLET_ON_BUILD_MENU_FUNC, myApplet);
 
 //\______________________ notification clic milieu.
 /** Abonne l'applet aux notifications du clic du milieu. A effectuer lors de l'init de l'applet.
 */
-#define CD_APPLET_REGISTER_FOR_MIDDLE_CLICK_EVENT gldi_object_register_notification (&myContainersMgr, NOTIFICATION_MIDDLE_CLICK_ICON, (GldiNotificationFunc) CD_APPLET_ON_MIDDLE_CLICK_FUNC, GLDI_RUN_AFTER, myApplet)
+#define CD_APPLET_REGISTER_FOR_MIDDLE_CLICK_EVENT gldi_object_register_notification (&myContainerObjectMgr, NOTIFICATION_MIDDLE_CLICK_ICON, (GldiNotificationFunc) CD_APPLET_ON_MIDDLE_CLICK_FUNC, GLDI_RUN_AFTER, myApplet)
 /** Desabonne l'applet aux notifications du clic du milieu. A effectuer lors de l'arret de l'applet.
 */
-#define CD_APPLET_UNREGISTER_FOR_MIDDLE_CLICK_EVENT gldi_object_remove_notification (&myContainersMgr, NOTIFICATION_MIDDLE_CLICK_ICON, (GldiNotificationFunc) CD_APPLET_ON_MIDDLE_CLICK_FUNC, myApplet)
+#define CD_APPLET_UNREGISTER_FOR_MIDDLE_CLICK_EVENT gldi_object_remove_notification (&myContainerObjectMgr, NOTIFICATION_MIDDLE_CLICK_ICON, (GldiNotificationFunc) CD_APPLET_ON_MIDDLE_CLICK_FUNC, myApplet)
 
 //\______________________ notification double clic.
 /** Abonne l'applet aux notifications du double clic. A effectuer lors de l'init de l'applet.
 */
 #define CD_APPLET_REGISTER_FOR_DOUBLE_CLICK_EVENT do {\
 	cairo_dock_listen_for_double_click (myIcon);\
-	gldi_object_register_notification (&myContainersMgr, NOTIFICATION_DOUBLE_CLICK_ICON, (GldiNotificationFunc) CD_APPLET_ON_DOUBLE_CLICK_FUNC, GLDI_RUN_AFTER, myApplet); } while (0)
+	gldi_object_register_notification (&myContainerObjectMgr, NOTIFICATION_DOUBLE_CLICK_ICON, (GldiNotificationFunc) CD_APPLET_ON_DOUBLE_CLICK_FUNC, GLDI_RUN_AFTER, myApplet); } while (0)
 /** Desabonne l'applet aux notifications du double clic. A effectuer lors de l'arret de l'applet.
 */
 #define CD_APPLET_UNREGISTER_FOR_DOUBLE_CLICK_EVENT do {\
-	gldi_object_remove_notification (&myContainersMgr, NOTIFICATION_DOUBLE_CLICK_ICON, (GldiNotificationFunc) CD_APPLET_ON_DOUBLE_CLICK_FUNC, myApplet);\
+	gldi_object_remove_notification (&myContainerObjectMgr, NOTIFICATION_DOUBLE_CLICK_ICON, (GldiNotificationFunc) CD_APPLET_ON_DOUBLE_CLICK_FUNC, myApplet);\
 	cairo_dock_stop_listening_for_double_click (myIcon); } while (0)
 
 //\______________________ notification drag'n'drop.
 /** Abonne l'applet aux notifications du glisse-depose. A effectuer lors de l'init de l'applet.
 */
-#define CD_APPLET_REGISTER_FOR_DROP_DATA_EVENT gldi_object_register_notification (&myContainersMgr, NOTIFICATION_DROP_DATA, (GldiNotificationFunc) CD_APPLET_ON_DROP_DATA_FUNC, GLDI_RUN_FIRST, myApplet);
+#define CD_APPLET_REGISTER_FOR_DROP_DATA_EVENT gldi_object_register_notification (&myContainerObjectMgr, NOTIFICATION_DROP_DATA, (GldiNotificationFunc) CD_APPLET_ON_DROP_DATA_FUNC, GLDI_RUN_FIRST, myApplet);
 /** Desabonne l'applet aux notifications du glisse-depose. A effectuer lors de l'arret de l'applet.
 */
-#define CD_APPLET_UNREGISTER_FOR_DROP_DATA_EVENT gldi_object_remove_notification (&myContainersMgr, NOTIFICATION_DROP_DATA, (GldiNotificationFunc) CD_APPLET_ON_DROP_DATA_FUNC, myApplet);
+#define CD_APPLET_UNREGISTER_FOR_DROP_DATA_EVENT gldi_object_remove_notification (&myContainerObjectMgr, NOTIFICATION_DROP_DATA, (GldiNotificationFunc) CD_APPLET_ON_DROP_DATA_FUNC, myApplet);
 
 //\______________________ notification de scroll molette.
 /**
 *Abonne l'applet aux notifications du clic gauche. A effectuer lors de l'init de l'applet.
 */
-#define CD_APPLET_REGISTER_FOR_SCROLL_EVENT gldi_object_register_notification (&myContainersMgr, NOTIFICATION_SCROLL_ICON, (GldiNotificationFunc) CD_APPLET_ON_SCROLL_FUNC, GLDI_RUN_FIRST, myApplet)
+#define CD_APPLET_REGISTER_FOR_SCROLL_EVENT gldi_object_register_notification (&myContainerObjectMgr, NOTIFICATION_SCROLL_ICON, (GldiNotificationFunc) CD_APPLET_ON_SCROLL_FUNC, GLDI_RUN_FIRST, myApplet)
 /**
 *Desabonne l'applet aux notifications du clic gauche. A effectuer lors de l'arret de l'applet.
 */
-#define CD_APPLET_UNREGISTER_FOR_SCROLL_EVENT gldi_object_remove_notification (&myContainersMgr, NOTIFICATION_SCROLL_ICON, (GldiNotificationFunc) CD_APPLET_ON_SCROLL_FUNC, myApplet)
+#define CD_APPLET_UNREGISTER_FOR_SCROLL_EVENT gldi_object_remove_notification (&myContainerObjectMgr, NOTIFICATION_SCROLL_ICON, (GldiNotificationFunc) CD_APPLET_ON_SCROLL_FUNC, myApplet)
 
 //\______________________ notification de update icon.
 /** Register the applet to the 'update icon' notifications of the slow rendering loop. 
 */
-#define CD_APPLET_REGISTER_FOR_UPDATE_ICON_SLOW_EVENT gldi_object_register_notification (&myIconsMgr, NOTIFICATION_UPDATE_ICON_SLOW, (GldiNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, GLDI_RUN_FIRST, myApplet)
+#define CD_APPLET_REGISTER_FOR_UPDATE_ICON_SLOW_EVENT gldi_object_register_notification (&myIconObjectMgr, NOTIFICATION_UPDATE_ICON_SLOW, (GldiNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, GLDI_RUN_FIRST, myApplet)
 /** Unregister the applet from the slow rendering loop. 
 */
-#define CD_APPLET_UNREGISTER_FOR_UPDATE_ICON_SLOW_EVENT gldi_object_remove_notification (&myIconsMgr, NOTIFICATION_UPDATE_ICON_SLOW, (GldiNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, myApplet)
+#define CD_APPLET_UNREGISTER_FOR_UPDATE_ICON_SLOW_EVENT gldi_object_remove_notification (&myIconObjectMgr, NOTIFICATION_UPDATE_ICON_SLOW, (GldiNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, myApplet)
 /** Register the applet to the 'update icon' notifications of the fast rendering loop. 
 */
-#define CD_APPLET_REGISTER_FOR_UPDATE_ICON_EVENT gldi_object_register_notification (&myIconsMgr, NOTIFICATION_UPDATE_ICON, (GldiNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, GLDI_RUN_FIRST, myApplet)
+#define CD_APPLET_REGISTER_FOR_UPDATE_ICON_EVENT gldi_object_register_notification (&myIconObjectMgr, NOTIFICATION_UPDATE_ICON, (GldiNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, GLDI_RUN_FIRST, myApplet)
 /** Unregister the applet from the fast rendering loop. 
 */
-#define CD_APPLET_UNREGISTER_FOR_UPDATE_ICON_EVENT gldi_object_remove_notification (&myIconsMgr, NOTIFICATION_UPDATE_ICON, (GldiNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, myApplet)
+#define CD_APPLET_UNREGISTER_FOR_UPDATE_ICON_EVENT gldi_object_remove_notification (&myIconObjectMgr, NOTIFICATION_UPDATE_ICON, (GldiNotificationFunc) CD_APPLET_ON_UPDATE_ICON_FUNC, myApplet)
 
 
 //\_________________________________ INSTANCE

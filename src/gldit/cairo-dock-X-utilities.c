@@ -32,6 +32,7 @@
 #endif
 
 #include "cairo-dock-log.h"
+#include "cairo-dock-utils.h"  // cairo_dock_remove_version_from_string
 #include "cairo-dock-surface-factory.h"  // cairo_dock_create_surface_from_xicon_buffer
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-opengl.h"

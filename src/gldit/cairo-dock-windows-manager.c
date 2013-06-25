@@ -23,10 +23,9 @@
 #include "cairo-dock-windows-manager.h"
 
 // public (manager, config, data)
-GldiWindowsManager myWindowsMgr;
+GldiObjectManager myWindowObjectMgr;
 
 // dependancies
-
 
 // private
 GList *s_pWindowsList = NULL;  // list of all window actors
@@ -365,30 +364,19 @@ static void reset_object (GldiObject *obj)
 
 void gldi_register_windows_manager (void)
 {
-	// Manager
-	memset (&myWindowsMgr, 0, sizeof (GldiWindowsManager));
-	memset (&s_backend, 0, sizeof (GldiWindowManagerBackend));
-	myWindowsMgr.mgr.cModuleName    = "Windows";
-	myWindowsMgr.mgr.init           = NULL;
-	myWindowsMgr.mgr.load           = NULL;
-	myWindowsMgr.mgr.unload         = NULL;
-	myWindowsMgr.mgr.reload         = (GldiManagerReloadFunc)NULL;
-	myWindowsMgr.mgr.get_config     = (GldiManagerGetConfigFunc)NULL;
-	myWindowsMgr.mgr.reset_config   = (GldiManagerResetConfigFunc)NULL;
-	myWindowsMgr.mgr.init_object    = init_object;
-	myWindowsMgr.mgr.reset_object   = reset_object;
-	myWindowsMgr.mgr.iObjectSize    = sizeof (GldiWindowActor);
-	// Config
-	myWindowsMgr.mgr.pConfig = (GldiManagerConfigPtr)NULL;
-	myWindowsMgr.mgr.iSizeOfConfig = 0;
-	// data
-	myWindowsMgr.mgr.pData = (GldiManagerDataPtr)NULL;
-	myWindowsMgr.mgr.iSizeOfData = 0;
+	// Object Manager
+	memset (&myWindowObjectMgr, 0, sizeof (GldiObjectManager));
+	myWindowObjectMgr.cName          = "WindowActor";
+	myWindowObjectMgr.iObjectSize    = sizeof (GldiWindowActor);
+	// interface
+	myWindowObjectMgr.init_object    = init_object;
+	myWindowObjectMgr.reset_object   = reset_object;
 	// signals
-	gldi_object_install_notifications (&myWindowsMgr, NB_NOTIFICATIONS_WINDOWS);
-	gldi_register_manager (GLDI_MANAGER(&myWindowsMgr));
+	gldi_object_install_notifications (&myWindowObjectMgr, NB_NOTIFICATIONS_WINDOWS);
 	
-	gldi_object_register_notification (&myWindowsMgr,
+	// init
+	memset (&s_backend, 0, sizeof (GldiWindowManagerBackend));
+	gldi_object_register_notification (&myWindowObjectMgr,
 		NOTIFICATION_WINDOW_Z_ORDER_CHANGED,
 		(GldiNotificationFunc) on_zorder_changed,
 		GLDI_RUN_FIRST, NULL);

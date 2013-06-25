@@ -2279,7 +2279,7 @@ CairoDock *gldi_dock_new (const gchar *cDockName)
 	CairoDockAttr attr;
 	memset (&attr, 0, sizeof (CairoDockAttr));
 	attr.cDockName = cDockName;
-	return (CairoDock*)gldi_object_new (GLDI_MANAGER(&myDocksMgr), &attr);
+	return (CairoDock*)gldi_object_new (&myDockObjectMgr, &attr);
 }
 
 CairoDock *gldi_subdock_new (const gchar *cDockName, const gchar *cRendererName, CairoDock *pParentDock, GList *pIconList)
@@ -2291,7 +2291,7 @@ CairoDock *gldi_subdock_new (const gchar *cDockName, const gchar *cRendererName,
 	attr.cRendererName = cRendererName;
 	attr.pParentDock = pParentDock;
 	attr.pIconList = pIconList;
-	return (CairoDock*)gldi_object_new (GLDI_MANAGER(&myDocksMgr), &attr);
+	return (CairoDock*)gldi_object_new (&myDockObjectMgr, &attr);
 }
 
 

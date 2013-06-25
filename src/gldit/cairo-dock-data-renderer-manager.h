@@ -36,6 +36,7 @@ typedef struct _CairoDataRenderersManager CairoDataRenderersManager;
 
 #ifndef _MANAGER_DEF_
 extern CairoDataRenderersManager myDataRenderersMgr;
+extern GldiObjectManager myDataRendererObjectMgr;
 #endif
 
 
@@ -70,6 +71,13 @@ struct _CairoDataRenderersManager {
 typedef enum {
 	NB_NOTIFICATIONS_DATA_RENDERERS = NB_NOTIFICATIONS_OBJECT
 	} CairoDataRendererNotifications;
+
+
+/** Say if an object is a DataRenderer.
+*@param obj the object.
+*@return TRUE if the object is a DataRenderer.
+*/
+#define GLDI_OBJECT_IS_DATA_RENDERER(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), &myDataRendererObjectMgr)
 
 
 /** Get the default GLX font for Data Renderer. It can render strings of ASCII characters fastly. Don't destroy it.
