@@ -26,17 +26,38 @@
 G_BEGIN_DECLS
 
 /**
-*@file cairo-dock-object.h This class defines the Objects, a sort of GObject, but simpler and more optimized.
+*@file cairo-dock-object.h This class defines the Objects, the base class of libgldi.
+* Every element in this library is an Object.
+* An object is defined by an ObjectManager, which defines its capabilitie and signals.
+* 
+* Any object is created with \ref gldi_object_new and destroyed with \ref gldi_object_unref.
+* An object can be deleted from the current theme with \ref gldi_object_delete.
+* An object can be reloaded with \ref gldi_object_reload.
+* 
+* You can listen for notifications on an object with \ref gldi_object_register_notification and stop listening with \ref gldi_object_remove_notification.
+* To listen for notifications on any object of a given type, simply register yourself on its ObjectManager.
 */
 
 struct _GldiObject {
 	gint ref;
 	GPtrArray *pNotificationsTab;
-	GldiManager *mgr;
+	GldiObjectManager *mgr;
 	GList *mgrs;  // sorted in reverse order
 };
 
-/// signals
+
+struct _GldiObjectManager {
+	GldiObject object;
+	const gchar *cName;
+	gint iObjectSize;
+	void (*init_object) (GldiObject *pObject, gpointer attr);
+	void (*reset_object) (GldiObject *pObject);
+	gboolean (*delete_object) (GldiObject *pObject);
+	GKeyFile* (*reload_object) (GldiObject *pObject, gboolean bReloadConf, GKeyFile *pKeyFile);
+};
+
+
+/// signals (any object has at least these ones)
 typedef enum {
 	/// notification called when an object has been created. data : the object
 	NOTIFICATION_NEW,
@@ -48,24 +69,42 @@ typedef enum {
 #define GLDI_OBJECT(p) ((GldiObject*)(p))
 
 
-void gldi_object_init (GldiObject *obj, GldiManager *pMgr, gpointer attr);
+void gldi_object_init (GldiObject *obj, GldiObjectManager *pMgr, gpointer attr);
 
-GldiObject *gldi_object_new (GldiManager *pMgr, gpointer attr);
+/** Create a new object.
+ * @param pMgr the ObjectManager
+ * @param attr the attributes of the object
+ * @return the new object, with a reference of 1; use \ref gldi_object_unref to destroy it
+ */
+GldiObject *gldi_object_new (GldiObjectManager *pMgr, gpointer attr);
 
+/** Take a reference on an object.
+ * @param pObject the Object
+ */
 void gldi_object_ref (GldiObject *pObject);
 
+/** Drop your reference on an object. If it's the last reference, the object is destroyed, otherwise nothing happen.
+ * @param pObject the Object
+ */
 void gldi_object_unref (GldiObject *pObject);
 
+/** Delete an object from the current theme. The object is unref'd, and won't be created again on next startup.
+ * @param pObject the Object
+ */
 void gldi_object_delete (GldiObject *pObject);
 
+/** Reload an object.
+ * @param pObject the Object
+ * @param bReloadConfig TRUE to read its config file again (if the object has one)
+ */
 void gldi_object_reload (GldiObject *obj, gboolean bReloadConfig);
 
 
-void gldi_object_set_manager (GldiObject *pObject, GldiManager *pMgr);
+void gldi_object_set_manager (GldiObject *pObject, GldiObjectManager *pMgr);
 
-gboolean gldi_object_is_manager_child (GldiObject *pObject, GldiManager *pMgr);
+gboolean gldi_object_is_manager_child (GldiObject *pObject, GldiObjectManager *pMgr);
 
-#define gldi_object_get_type(obj) (GLDI_OBJECT(obj)->mgr ? GLDI_OBJECT(obj)->mgr->cModuleName : "manager")
+#define gldi_object_get_type(obj) (GLDI_OBJECT(obj)->mgr && GLDI_OBJECT(obj)->ref > 0 ? GLDI_OBJECT(obj)->mgr->cName : "ObjectManager")
 
 
 /// Generic prototype of a notification callback.
@@ -90,10 +129,10 @@ typedef guint GldiNotificationType;
 
 
 #define gldi_object_install_notifications(pObject, iNbNotifs) do {\
-	GPtrArray *pNotificationsTab = ((GldiObject*)pObject)->pNotificationsTab;\
+	GPtrArray *pNotificationsTab = (GLDI_OBJECT(pObject))->pNotificationsTab;\
 	if (pNotificationsTab == NULL) {\
 		pNotificationsTab = g_ptr_array_new ();\
-		((GldiObject*)pObject)->pNotificationsTab = pNotificationsTab; }\
+		(GLDI_OBJECT(pObject))->pNotificationsTab = pNotificationsTab; }\
 	if (pNotificationsTab->len < iNbNotifs)\
 		g_ptr_array_set_size (pNotificationsTab, iNbNotifs); } while (0)
 

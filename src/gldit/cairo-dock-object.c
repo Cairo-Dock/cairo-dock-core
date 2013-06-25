@@ -28,14 +28,15 @@
  * GLDI_OBJECT_IS_xxx obj->mgr == pMgr || mgr->parent->mrg == pMgr || ...
  * */
 
-void gldi_object_set_manager (GldiObject *pObject, GldiManager *pMgr)
+
+void gldi_object_set_manager (GldiObject *pObject, GldiObjectManager *pMgr)
 {
 	pObject->mgr = pMgr;
 	pObject->mgrs = g_list_copy (pMgr->object.mgrs);
 	pObject->mgrs = g_list_append (pObject->mgrs, pMgr);
 	gldi_object_install_notifications (pObject, pMgr->object.pNotificationsTab->len);
 }
-void gldi_object_init (GldiObject *obj, GldiManager *pMgr, gpointer attr)
+void gldi_object_init (GldiObject *obj, GldiObjectManager *pMgr, gpointer attr)
 {
 	obj->ref = 1;
 	// set the manager
@@ -53,7 +54,7 @@ void gldi_object_init (GldiObject *obj, GldiManager *pMgr, gpointer attr)
 	gldi_object_notify (obj, NOTIFICATION_NEW, obj);
 }
 
-GldiObject *gldi_object_new (GldiManager *pMgr, gpointer attr)
+GldiObject *gldi_object_new (GldiObjectManager *pMgr, gpointer attr)
 {
 	GldiObject *obj = g_malloc0 (pMgr->iObjectSize);
 	gldi_object_init (obj, pMgr, attr);
@@ -77,7 +78,7 @@ void gldi_object_unref (GldiObject *pObject)
 		gldi_object_notify (pObject, NOTIFICATION_DESTROY, pObject);
 		
 		// reset the object
-		GldiManager *pMgr = pObject->mgr;
+		GldiObjectManager *pMgr = pObject->mgr;
 		while (pMgr)
 		{
 			if (pMgr->reset_object)
@@ -108,7 +109,7 @@ void gldi_object_delete (GldiObject *pObject)
 	
 	//\_________________ delete the object from the current theme
 	gboolean r = TRUE;
-	GldiManager *pMgr = pObject->mgr;
+	GldiObjectManager *pMgr = pObject->mgr;
 	while (pMgr)
 	{
 		if (pMgr->delete_object)
@@ -126,7 +127,7 @@ void gldi_object_reload (GldiObject *obj, gboolean bReloadConfig)
 {
 	GKeyFile *pKeyFile = NULL;
 	GList *m;
-	GldiManager *pMgr;
+	GldiObjectManager *pMgr;
 	for (m = obj->mgrs; m != NULL; m = m->next)
 	{
 		pMgr = m->data;
@@ -137,7 +138,7 @@ void gldi_object_reload (GldiObject *obj, gboolean bReloadConfig)
 		g_key_file_free (pKeyFile);
 }
 
-gboolean gldi_object_is_manager_child (GldiObject *pObject, GldiManager *pMgr)
+gboolean gldi_object_is_manager_child (GldiObject *pObject, GldiObjectManager *pMgr)
 {
 	while (pObject)
 	{
@@ -156,7 +157,7 @@ void gldi_object_register_notification (gpointer pObject, GldiNotificationType i
 	GPtrArray *pNotificationsTab = GLDI_OBJECT(pObject)->pNotificationsTab;
 	if (!pNotificationsTab || pNotificationsTab->len < iNotifType)
 	{
-		cd_warning ("someone tried to register to an inexisting notification (%d) on an object of type '%s'", iNotifType, GLDI_OBJECT(pObject)->mgr?GLDI_OBJECT(pObject)->mgr->cModuleName:"manager");
+		cd_warning ("someone tried to register to an inexisting notification (%d) on an object of type '%s'", iNotifType, gldi_object_get_type(pObject));
 		return ;  // don't try to create/resize the notifications tab, since noone will emit this notification.
 	}
 	
