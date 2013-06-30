@@ -37,12 +37,12 @@ G_BEGIN_DECLS
 * To access a package, use \ref cairo_dock_get_package_path.
 */
 
+// manager
 typedef struct _CairoConnectionParam CairoConnectionParam;
-typedef struct _CairoConnectionManager CairoConnectionManager;
 
 #ifndef _MANAGER_DEF_
 extern CairoConnectionParam myConnectionParam;
-extern CairoConnectionManager myConnectionMgr;
+extern GldiManager myConnectionMgr;
 #endif
 
 // params
@@ -55,12 +55,6 @@ struct _CairoConnectionParam {
 	gchar *cConnectionPasswd;
 	gboolean bForceIPv4;
 	};
-
-// manager
-struct _CairoConnectionManager {
-	GldiManager mgr;
-	gchar* (*get_url_data) (const gchar *cURL, GError **erreur);
-	} ;
 
 // signals
 typedef enum {

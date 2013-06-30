@@ -38,18 +38,14 @@ G_BEGIN_DECLS
 
 // manager
 typedef struct _GldiModulesParam GldiModulesParam;
-typedef struct _GldiModulesManager GldiModulesManager;
 typedef struct _GldiModuleAttr GldiModuleAttr;
 
 #ifndef _MANAGER_DEF_
 extern GldiModulesParam myModulesParam;
-extern GldiModulesManager myModulesMgr;
+extern GldiManager myModulesMgr;
 extern GldiObjectManager myModuleObjectMgr;
 #endif
 
-struct _GldiModulesManager {
-	GldiManager mgr;
-};
 
 struct _GldiModuleAttr {
 	GldiVisitCard *pVisitCard;

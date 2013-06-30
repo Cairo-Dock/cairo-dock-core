@@ -54,7 +54,7 @@
 
 // public (manager, config, data)
 CairoDeskletsParam myDeskletsParam;
-CairoDeskletsManager myDeskletsMgr;
+GldiManager myDeskletsMgr;
 GldiObjectManager myDeskletObjectMgr;
 
 // dependancies
@@ -981,27 +981,27 @@ static void reset_object (GldiObject *obj)
 void gldi_register_desklets_manager (void)
 {
 	// Manager
-	memset (&myDeskletsMgr, 0, sizeof (CairoDeskletsManager));
+	memset (&myDeskletsMgr, 0, sizeof (GldiManager));
 	gldi_object_init (GLDI_OBJECT(&myDeskletsMgr), &myManagerObjectMgr, NULL);
-	myDeskletsMgr.mgr.cModuleName  = "Desklets";
+	myDeskletsMgr.cModuleName  = "Desklets";
 	// interface
-	myDeskletsMgr.mgr.init         = init;
-	myDeskletsMgr.mgr.load         = NULL;  // data are loaded the first time a desklet is created, to avoid create them for nothing.
-	myDeskletsMgr.mgr.unload       = unload;
-	myDeskletsMgr.mgr.reload       = (GldiManagerReloadFunc)reload;
-	myDeskletsMgr.mgr.get_config   = (GldiManagerGetConfigFunc)get_config;
-	myDeskletsMgr.mgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
+	myDeskletsMgr.init         = init;
+	myDeskletsMgr.load         = NULL;  // data are loaded the first time a desklet is created, to avoid create them for nothing.
+	myDeskletsMgr.unload       = unload;
+	myDeskletsMgr.reload       = (GldiManagerReloadFunc)reload;
+	myDeskletsMgr.get_config   = (GldiManagerGetConfigFunc)get_config;
+	myDeskletsMgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
 	// Config
 	memset (&myDeskletsParam, 0, sizeof (CairoDeskletsParam));
-	myDeskletsMgr.mgr.pConfig = (GldiManagerConfigPtr)&myDeskletsParam;
-	myDeskletsMgr.mgr.iSizeOfConfig = sizeof (CairoDeskletsParam);
+	myDeskletsMgr.pConfig = (GldiManagerConfigPtr)&myDeskletsParam;
+	myDeskletsMgr.iSizeOfConfig = sizeof (CairoDeskletsParam);
 	// data
 	memset (&s_pRotateButtonBuffer, 0, sizeof (CairoDockImageBuffer));
 	memset (&s_pRetachButtonBuffer, 0, sizeof (CairoDockImageBuffer));
 	memset (&s_pDepthRotateButtonBuffer, 0, sizeof (CairoDockImageBuffer));
 	memset (&s_pNoInputButtonBuffer, 0, sizeof (CairoDockImageBuffer));
-	myDeskletsMgr.mgr.iSizeOfData = 0;
-	myDeskletsMgr.mgr.pData = (GldiManagerDataPtr)NULL;
+	myDeskletsMgr.iSizeOfData = 0;
+	myDeskletsMgr.pData = (GldiManagerDataPtr)NULL;
 	
 	// Object Manager
 	memset (&myDeskletObjectMgr, 0, sizeof (GldiObjectManager));

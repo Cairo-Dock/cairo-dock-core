@@ -28,19 +28,15 @@ G_BEGIN_DECLS
 *@file cairo-dock-desktop-manager.h This class manages the desktop: screen geometry, current desktop/viewport, etc, and notifies for any change on it.
 */
 
-typedef struct _GldiDesktopManager GldiDesktopManager;
+// manager
 
 #ifndef _MANAGER_DEF_
-extern GldiDesktopManager myDesktopMgr;
+extern GldiManager myDesktopMgr;
 extern GldiDesktopGeometry g_desktopGeometry;
 #endif
 
 // no param
 
-// manager
-struct _GldiDesktopManager {
-	GldiManager mgr;
-	} ;
 
 /// signals
 typedef enum {

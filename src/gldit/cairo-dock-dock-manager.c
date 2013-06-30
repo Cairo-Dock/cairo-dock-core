@@ -62,7 +62,7 @@
 
 // public (manager, config, data)
 CairoDocksParam myDocksParam;
-CairoDocksManager myDocksMgr;
+GldiManager myDocksMgr;
 GldiObjectManager myDockObjectMgr;
 CairoDockImageBuffer g_pVisibleZoneBuffer;
 CairoDock *g_pMainDock = NULL;  // pointeur sur le dock principal.
@@ -2175,22 +2175,22 @@ void gldi_register_docks_manager (void)
 	// Manager
 	memset (&myDocksMgr, 0, sizeof (GldiManager));
 	gldi_object_init (GLDI_OBJECT(&myDocksMgr), &myManagerObjectMgr, NULL);
-	myDocksMgr.mgr.cModuleName   = "Docks";
+	myDocksMgr.cModuleName   = "Docks";
 	// interface
-	myDocksMgr.mgr.init          = init;
-	myDocksMgr.mgr.load          = load;
-	myDocksMgr.mgr.unload        = unload;
-	myDocksMgr.mgr.reload        = (GldiManagerReloadFunc)reload;
-	myDocksMgr.mgr.get_config    = (GldiManagerGetConfigFunc)get_config;
-	myDocksMgr.mgr.reset_config  = (GldiManagerResetConfigFunc)reset_config;
+	myDocksMgr.init          = init;
+	myDocksMgr.load          = load;
+	myDocksMgr.unload        = unload;
+	myDocksMgr.reload        = (GldiManagerReloadFunc)reload;
+	myDocksMgr.get_config    = (GldiManagerGetConfigFunc)get_config;
+	myDocksMgr.reset_config  = (GldiManagerResetConfigFunc)reset_config;
 	// Config
 	memset (&myDocksParam, 0, sizeof (CairoDocksParam));
-	myDocksMgr.mgr.pConfig = (GldiManagerConfigPtr)&myDocksParam;
-	myDocksMgr.mgr.iSizeOfConfig = sizeof (CairoDocksParam);
+	myDocksMgr.pConfig = (GldiManagerConfigPtr)&myDocksParam;
+	myDocksMgr.iSizeOfConfig = sizeof (CairoDocksParam);
 	// data
 	memset (&g_pVisibleZoneBuffer, 0, sizeof (CairoDockImageBuffer));
-	myDocksMgr.mgr.pData = (GldiManagerDataPtr)NULL;
-	myDocksMgr.mgr.iSizeOfData = 0;
+	myDocksMgr.pData = (GldiManagerDataPtr)NULL;
+	myDocksMgr.iSizeOfData = 0;
 	
 	// Object Manager
 	memset (&myDockObjectMgr, 0, sizeof (GldiObjectManager));

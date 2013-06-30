@@ -34,12 +34,12 @@ G_BEGIN_DECLS
 * Specialized Icons are handled by the corresponding manager.
 */
 
+// manager
 typedef struct _CairoIconsParam CairoIconsParam;
-typedef struct _CairoIconsManager CairoIconsManager;
 
 #ifndef _MANAGER_DEF_
 extern CairoIconsParam myIconsParam;
-extern CairoIconsManager myIconsMgr;
+extern GldiManager myIconsMgr;
 extern GldiObjectManager myIconObjectMgr;
 #endif
 
@@ -85,15 +85,6 @@ struct _CairoIconsParam {
 	gdouble fLabelAlphaThreshold;
 	gboolean bTextAlwaysHorizontal;
 	};
-
-// manager
-struct _CairoIconsManager {
-	GldiManager mgr;
-	void (*free_icon) (Icon *icon);
-	void (*foreach_icons) (CairoDockForeachIconFunc pFunction, gpointer pUserData);
-	void (*hide_show_launchers_on_other_desktops) (CairoDock *pDock);
-	void (*set_specified_desktop_for_icon) (Icon *pIcon, int iSpecificDesktop);
-	} ;
 
 /// signals
 typedef enum {

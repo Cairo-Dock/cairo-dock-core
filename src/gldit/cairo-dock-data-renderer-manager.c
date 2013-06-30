@@ -30,7 +30,7 @@
 #include "cairo-dock-data-renderer-manager.h"
 
 // public (manager, config, data)
-CairoDataRenderersManager myDataRenderersMgr;
+GldiManager myDataRenderersMgr;
 GldiObjectManager myDataRendererObjectMgr;
 
 // dependancies
@@ -195,22 +195,22 @@ static void init (void)
 void gldi_register_data_renderers_manager (void)
 {
 	// Manager
-	memset (&myDataRenderersMgr, 0, sizeof (CairoDataRenderersManager));
+	memset (&myDataRenderersMgr, 0, sizeof (GldiManager));
 	gldi_object_init (GLDI_OBJECT(&myDataRenderersMgr), &myManagerObjectMgr, NULL);
-	myDataRenderersMgr.mgr.cModuleName 	= "Data-Renderers";
+	myDataRenderersMgr.cModuleName 	= "Data-Renderers";
 	// interface
-	myDataRenderersMgr.mgr.init 		= init;
-	myDataRenderersMgr.mgr.load 		= NULL;  // loaded on demand
-	myDataRenderersMgr.mgr.unload 		= unload;
-	myDataRenderersMgr.mgr.reload 		= (GldiManagerReloadFunc)NULL;
-	myDataRenderersMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)NULL;
-	myDataRenderersMgr.mgr.reset_config = (GldiManagerResetConfigFunc)NULL;
+	myDataRenderersMgr.init 		= init;
+	myDataRenderersMgr.load 		= NULL;  // loaded on demand
+	myDataRenderersMgr.unload 		= unload;
+	myDataRenderersMgr.reload 		= (GldiManagerReloadFunc)NULL;
+	myDataRenderersMgr.get_config 	= (GldiManagerGetConfigFunc)NULL;
+	myDataRenderersMgr.reset_config = (GldiManagerResetConfigFunc)NULL;
 	// Config
-	myDataRenderersMgr.mgr.pConfig = (GldiManagerConfigPtr)NULL;
-	myDataRenderersMgr.mgr.iSizeOfConfig = 0;
+	myDataRenderersMgr.pConfig = (GldiManagerConfigPtr)NULL;
+	myDataRenderersMgr.iSizeOfConfig = 0;
 	// data
-	myDataRenderersMgr.mgr.pData = (GldiManagerDataPtr)NULL;
-	myDataRenderersMgr.mgr.iSizeOfData = 0;
+	myDataRenderersMgr.pData = (GldiManagerDataPtr)NULL;
+	myDataRenderersMgr.iSizeOfData = 0;
 	
 	// Object Manager
 	memset (&myDataRendererObjectMgr, 0, sizeof (GldiObjectManager));

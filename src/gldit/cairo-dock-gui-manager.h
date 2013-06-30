@@ -33,28 +33,10 @@ G_BEGIN_DECLS
 * Note: GUIs are built from a .conf file; .conf files are normal group/key files, but with some special indications in the comments. Each key will be represented by a pre-defined widget, that is defined by the first caracter of its comment. The comment also contains a description of the key, and an optionnal tooltip. See cairo-dock-gui-factory.h for the list of pre-defined widgets and a short explanation on how to use them inside a conf file. The file 'cairo-dock.conf' can be an useful example.
 */
 
-// manager
 /// Definition of the callback called when the user apply the config panel.
 typedef gboolean (* CairoDockApplyConfigFunc) (gpointer data);
 typedef void (* CairoDockLoadCustomWidgetFunc) (GtkWidget *pWindow, GKeyFile *pKeyFile, GSList *pWidgetList);
 typedef void (* CairoDockSaveCustomWidgetFunc) (GtkWidget *pWindow, GKeyFile *pKeyFile, GSList *pWidgetList);
-
-struct _CairoGuiManager {
-	GldiManager mgr;
-	CairoDockGroupKeyWidget* (*get_group_key_widget_from_name) (const gchar *cGroupName, const gchar *cKeyName);
-	
-	GtkWidget* (*build_generic_gui_window) (const gchar *cTitle, int iWidth, int iHeight, CairoDockApplyConfigFunc pAction, gpointer pUserData, GFreeFunc pFreeUserData);
-	GtkWidget* (*build_generic_gui_full) (const gchar *cConfFilePath, const gchar *cGettextDomain, const gchar *cTitle, int iWidth, int iHeight, CairoDockApplyConfigFunc pAction, gpointer pUserData, GFreeFunc pFreeUserData, CairoDockLoadCustomWidgetFunc load_custom_widgets, CairoDockSaveCustomWidgetFunc save_custom_widgets);
-	void (*reload_generic_gui) (GtkWidget *pWindow);
-	} ;
-
-// signals
-typedef enum {
-	NOTIFICATION_SHOW_MODULE_INSTANCE_GUI = NB_NOTIFICATIONS_OBJECT,
-	NOTIFICATION_STATUS_MESSAGE,
-	NOTIFICATION_GET_GROUP_KEY_WIDGET,
-	NB_NOTIFICATIONS_GUI
-	} CairoGuiNotifications;
 
 
 /// Definition of the GUI interface for modules.

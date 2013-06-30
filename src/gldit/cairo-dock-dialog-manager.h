@@ -39,12 +39,11 @@ G_BEGIN_DECLS
 
 // manager
 typedef struct _CairoDialogsParam CairoDialogsParam;
-typedef struct _CairoDialogsManager CairoDialogsManager;
 typedef struct _CairoDialogAttr CairoDialogAttr;
 
 #ifndef _MANAGER_DEF_
 extern CairoDialogsParam myDialogsParam;
-extern CairoDialogsManager myDialogsMgr;
+extern GldiManager myDialogsMgr;
 extern GldiObjectManager myDialogObjectMgr;
 #endif
 
@@ -60,9 +59,6 @@ struct _CairoDialogsParam {
 	gdouble fDialogColor[4];
 };
 
-struct _CairoDialogsManager {
-	GldiManager mgr;
-};
 
 /// Definition of a generic callback of a dialog, called when the user clicks on a button. Buttons are numbered from 0, -1 means 'Return' and -2 means 'Escape'.
 typedef void (* CairoDockActionOnAnswerFunc) (int iClickedButton, GtkWidget *pInteractiveWidget, gpointer data, CairoDialog *pDialog);

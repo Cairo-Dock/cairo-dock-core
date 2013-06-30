@@ -31,12 +31,12 @@ G_BEGIN_DECLS
 *@file cairo-dock-indicator-manager.h This class manages the indicators.
 */
 
+// manager
 typedef struct _CairoIndicatorsParam CairoIndicatorsParam;
-typedef struct _CairoIndicatorsManager CairoIndicatorsManager;
 
 #ifndef _MANAGER_DEF_
 extern CairoIndicatorsParam myIndicatorsParam;
-extern CairoIndicatorsManager myIndicatorsMgr;
+extern GldiManager myIndicatorsMgr;
 #endif
 
 // params
@@ -65,11 +65,6 @@ struct _CairoIndicatorsParam {
 	gboolean bBarHasOutline;
 	gdouble fBarColorOutline[4];
 	gint iBarThickness;
-	};
-
-// manager
-struct _CairoIndicatorsManager {
-	GldiManager mgr;
 	};
 
 // signals

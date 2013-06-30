@@ -45,7 +45,7 @@
 
 // public (manager, config, data)
 CairoIndicatorsParam myIndicatorsParam;
-CairoIndicatorsManager myIndicatorsMgr;
+GldiManager myIndicatorsMgr;
 
 // dependancies
 extern CairoDock *g_pMainDock;
@@ -685,26 +685,26 @@ static void init (void)
 void gldi_register_indicators_manager (void)
 {
 	// Manager
-	memset (&myIndicatorsMgr, 0, sizeof (CairoIndicatorsManager));
+	memset (&myIndicatorsMgr, 0, sizeof (GldiManager));
 	gldi_object_init (GLDI_OBJECT(&myIndicatorsMgr), &myManagerObjectMgr, NULL);
-	myIndicatorsMgr.mgr.cModuleName  = "Indicators";
+	myIndicatorsMgr.cModuleName  = "Indicators";
 	// interface
-	myIndicatorsMgr.mgr.init         = init;
-	myIndicatorsMgr.mgr.load         = load;
-	myIndicatorsMgr.mgr.unload       = unload;
-	myIndicatorsMgr.mgr.reload       = (GldiManagerReloadFunc)reload;
-	myIndicatorsMgr.mgr.get_config   = (GldiManagerGetConfigFunc)get_config;
-	myIndicatorsMgr.mgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
+	myIndicatorsMgr.init         = init;
+	myIndicatorsMgr.load         = load;
+	myIndicatorsMgr.unload       = unload;
+	myIndicatorsMgr.reload       = (GldiManagerReloadFunc)reload;
+	myIndicatorsMgr.get_config   = (GldiManagerGetConfigFunc)get_config;
+	myIndicatorsMgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
 	// Config
 	memset (&myIndicatorsParam, 0, sizeof (CairoIndicatorsParam));
-	myIndicatorsMgr.mgr.pConfig = (GldiManagerConfigPtr)&myIndicatorsParam;
-	myIndicatorsMgr.mgr.iSizeOfConfig = sizeof (CairoIndicatorsParam);
+	myIndicatorsMgr.pConfig = (GldiManagerConfigPtr)&myIndicatorsParam;
+	myIndicatorsMgr.iSizeOfConfig = sizeof (CairoIndicatorsParam);
 	// data
 	memset (&s_indicatorBuffer, 0, sizeof (CairoDockImageBuffer));
 	memset (&s_activeIndicatorBuffer, 0, sizeof (CairoDockImageBuffer));
 	memset (&s_classIndicatorBuffer, 0, sizeof (CairoDockImageBuffer));
-	myIndicatorsMgr.mgr.pData = (GldiManagerDataPtr)NULL;
-	myIndicatorsMgr.mgr.iSizeOfData = 0;
+	myIndicatorsMgr.pData = (GldiManagerDataPtr)NULL;
+	myIndicatorsMgr.iSizeOfData = 0;
 	// signals
 	gldi_object_install_notifications (&myIndicatorsMgr, NB_NOTIFICATIONS_INDICATORS);
 }

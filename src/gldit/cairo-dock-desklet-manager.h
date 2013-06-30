@@ -39,12 +39,12 @@ G_BEGIN_DECLS
 * Desklets can be resized or moved directly with the mouse, and can be rotated in the 3 directions of space.
 */
 
+// manager
 typedef struct _CairoDeskletsParam CairoDeskletsParam;
-typedef struct _CairoDeskletsManager CairoDeskletsManager;
 
 #ifndef _MANAGER_DEF_
 extern CairoDeskletsParam myDeskletsParam;
-extern CairoDeskletsManager myDeskletsMgr;
+extern GldiManager myDeskletsMgr;
 extern GldiObjectManager myDeskletObjectMgr;
 #endif
 
@@ -58,13 +58,8 @@ struct _CairoDeskletsParam {
 	gchar *cNoInputButtonImage;
 	};
 
-// manager
 /// Definition of a function that runs through all desklets.
 typedef gboolean (* GldiDeskletForeachFunc) (CairoDesklet *pDesklet, gpointer data);
-
-struct _CairoDeskletsManager {
-	GldiManager mgr;
-	} ;
 
 /// signals
 typedef enum {

@@ -52,7 +52,7 @@
 
 // public (manager, config, data)
 CairoTaskbarParam myTaskbarParam;
-CairoTaskbarManager myTaskbarMgr;
+GldiManager myTaskbarMgr;
 GldiObjectManager myAppliIconObjectMgr;
 
 // dependancies
@@ -1016,21 +1016,21 @@ void gldi_register_applications_manager (void)
 	// Manager
 	memset (&myTaskbarMgr, 0, sizeof (GldiManager));
 	gldi_object_init (GLDI_OBJECT(&myTaskbarMgr), &myManagerObjectMgr, NULL);
-	myTaskbarMgr.mgr.cModuleName    = "Taskbar";
+	myTaskbarMgr.cModuleName    = "Taskbar";
 	// interface
-	myTaskbarMgr.mgr.init           = init;
-	myTaskbarMgr.mgr.load           = NULL;  // the manager is started after the launchers&applets have been created, to avoid unecessary computations.
-	myTaskbarMgr.mgr.unload         = unload;
-	myTaskbarMgr.mgr.reload         = (GldiManagerReloadFunc)reload;
-	myTaskbarMgr.mgr.get_config     = (GldiManagerGetConfigFunc)get_config;
-	myTaskbarMgr.mgr.reset_config   = (GldiManagerResetConfigFunc)reset_config;
+	myTaskbarMgr.init           = init;
+	myTaskbarMgr.load           = NULL;  // the manager is started after the launchers&applets have been created, to avoid unecessary computations.
+	myTaskbarMgr.unload         = unload;
+	myTaskbarMgr.reload         = (GldiManagerReloadFunc)reload;
+	myTaskbarMgr.get_config     = (GldiManagerGetConfigFunc)get_config;
+	myTaskbarMgr.reset_config   = (GldiManagerResetConfigFunc)reset_config;
 	// Config
 	memset (&myTaskbarParam, 0, sizeof (CairoTaskbarParam));
-	myTaskbarMgr.mgr.pConfig = (GldiManagerConfigPtr)&myTaskbarParam;
-	myTaskbarMgr.mgr.iSizeOfConfig = sizeof (CairoTaskbarParam);
+	myTaskbarMgr.pConfig = (GldiManagerConfigPtr)&myTaskbarParam;
+	myTaskbarMgr.iSizeOfConfig = sizeof (CairoTaskbarParam);
 	// data
-	myTaskbarMgr.mgr.pData = (GldiManagerDataPtr)NULL;
-	myTaskbarMgr.mgr.iSizeOfData = 0;
+	myTaskbarMgr.pData = (GldiManagerDataPtr)NULL;
+	myTaskbarMgr.iSizeOfData = 0;
 	
 	// Object Manager
 	memset (&myAppliIconObjectMgr, 0, sizeof (GldiObjectManager));

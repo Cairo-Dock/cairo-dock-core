@@ -17,7 +17,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef __CAIRO_FLYING_CONTAINER__
 #define  __CAIRO_FLYING_CONTAINER__
 
@@ -26,17 +25,12 @@
 G_BEGIN_DECLS
 
 // manager
-typedef struct _CairoFlyingManager CairoFlyingManager;
 typedef struct _CairoFlyingAttr CairoFlyingAttr;
 
 #ifndef _MANAGER_DEF_
-extern CairoFlyingManager myFlyingsMgr;
+extern GldiManager myFlyingsMgr;
 extern GldiObjectManager myFlyingObjectMgr;
 #endif
-
-struct _CairoFlyingManager {
-	GldiManager mgr;
-	} ;
 
 struct _CairoFlyingAttr {
 	GldiContainerAttr cattr;

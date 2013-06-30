@@ -44,7 +44,7 @@
 #define CAIRO_DOCK_CHECK_XEVENTS_INTERVAL 200
 
 // public (manager, config, data)
-GldiXManager myXMgr;
+GldiManager myXMgr;
 GldiObjectManager myXObjectMgr;
 
 // dependancies
@@ -980,20 +980,20 @@ static void reset_object (GldiObject *obj)
 void gldi_register_X_manager (void)
 {
 	// Manager
-	memset (&myXMgr, 0, sizeof (GldiXManager));
-	myXMgr.mgr.cModuleName   = "X";
-	myXMgr.mgr.init          = init;
-	myXMgr.mgr.load          = NULL;
-	myXMgr.mgr.unload        = NULL;
-	myXMgr.mgr.reload        = (GldiManagerReloadFunc)NULL;
-	myXMgr.mgr.get_config    = (GldiManagerGetConfigFunc)NULL;
-	myXMgr.mgr.reset_config  = (GldiManagerResetConfigFunc)NULL;
+	memset (&myXMgr, 0, sizeof (GldiManager));
+	myXMgr.cModuleName   = "X";
+	myXMgr.init          = init;
+	myXMgr.load          = NULL;
+	myXMgr.unload        = NULL;
+	myXMgr.reload        = (GldiManagerReloadFunc)NULL;
+	myXMgr.get_config    = (GldiManagerGetConfigFunc)NULL;
+	myXMgr.reset_config  = (GldiManagerResetConfigFunc)NULL;
 	// Config
-	myXMgr.mgr.pConfig = (GldiManagerConfigPtr)NULL;
-	myXMgr.mgr.iSizeOfConfig = 0;
+	myXMgr.pConfig = (GldiManagerConfigPtr)NULL;
+	myXMgr.iSizeOfConfig = 0;
 	// data
-	myXMgr.mgr.iSizeOfData = 0;
-	myXMgr.mgr.pData = (GldiManagerDataPtr)NULL;
+	myXMgr.iSizeOfData = 0;
+	myXMgr.pData = (GldiManagerDataPtr)NULL;
 	// register
 	gldi_object_init (GLDI_OBJECT(&myXMgr), &myManagerObjectMgr, NULL);
 	

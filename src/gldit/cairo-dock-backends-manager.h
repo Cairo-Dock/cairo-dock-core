@@ -30,11 +30,11 @@
 #include "cairo-dock-dialog-factory.h"
 G_BEGIN_DECLS
 
-typedef struct _CairoBackendsManager CairoBackendsManager;
+// manager
 typedef struct _CairoBackendsParam CairoBackendsParam;
 
 #ifndef _MANAGER_DEF_
-extern CairoBackendsManager myBackendsMgr;
+extern GldiManager myBackendsMgr;
 extern CairoBackendsParam myBackendsParam;
 #endif
 
@@ -51,12 +51,6 @@ struct _CairoBackendsParam {
 	gdouble fRefreshInterval;
 	gboolean bDynamicReflection;
 	};
-
-// manager
-struct _CairoBackendsManager {
-	GldiManager mgr;
-	};
-
 
 struct _CairoDockAnimationRecord {
 	gint id;

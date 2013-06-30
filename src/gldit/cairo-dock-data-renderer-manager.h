@@ -32,13 +32,19 @@ G_BEGIN_DECLS
 *@file cairo-dock-data-renderer-manager.h This class manages the list of available Data Renderers and their global ressources.
 */
 
-typedef struct _CairoDataRenderersManager CairoDataRenderersManager;
+// manager
 
 #ifndef _MANAGER_DEF_
-extern CairoDataRenderersManager myDataRenderersMgr;
+extern GldiManager myDataRenderersMgr;
 extern GldiObjectManager myDataRendererObjectMgr;
 #endif
 
+// no params
+
+// signals
+typedef enum {
+	NB_NOTIFICATIONS_DATA_RENDERERS = NB_NOTIFICATIONS_OBJECT
+	} CairoDataRendererNotifications;
 
 struct _CairoDockDataRendererRecord {
 	CairoDataRendererInterface interface;
@@ -49,28 +55,6 @@ struct _CairoDockDataRendererRecord {
 	/// whether the data-renderer draws on an overlay rather than directly on the icon.
 	gboolean bUseOverlay;
 	};
-
-// params
-
-// manager
-struct _CairoDataRenderersManager {
-	GldiManager mgr;
-	
-	CairoDockGLFont* (*get_default_data_renderer_font) (void);
-	
-	void (*register_data_renderer) (const gchar *cRendererName, CairoDockDataRendererRecord *pRecord);
-	void (*remove_data_renderer) (const gchar *cRendererName);
-	CairoDataRenderer* (*new_data_renderer) (const gchar *cRendererName);
-	
-	GHashTable* (*list_available_themes_for_data_renderer) (const gchar *cRendererName);
-	gchar* (*get_data_renderer_theme_path) (const gchar *cRendererName, const gchar *cThemeName, CairoDockPackageType iType);
-	gchar* (*get_package_path_for_data_renderer) (const gchar *cRendererName, const gchar *cAppletConfFilePath, GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultThemeName);
-	} ;
-
-// signals
-typedef enum {
-	NB_NOTIFICATIONS_DATA_RENDERERS = NB_NOTIFICATIONS_OBJECT
-	} CairoDataRendererNotifications;
 
 
 /** Say if an object is a DataRenderer.

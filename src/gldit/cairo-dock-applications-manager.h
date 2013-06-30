@@ -30,18 +30,14 @@ G_BEGIN_DECLS
 
 // manager
 typedef struct _CairoTaskbarParam CairoTaskbarParam;
-typedef struct _CairoTaskbarManager CairoTaskbarManager;
 typedef struct _Icon AppliIcon;
 
 #ifndef _MANAGER_DEF_
 extern CairoTaskbarParam myTaskbarParam;
-extern CairoTaskbarManager myTaskbarMgr;
+extern GldiManager myTaskbarMgr;
 extern GldiObjectManager myAppliIconObjectMgr;
 #endif
 
-struct _CairoTaskbarManager {
-	GldiManager mgr;
-} ;
 
 typedef enum {
 	CAIRO_APPLI_BEFORE_FIRST_ICON,

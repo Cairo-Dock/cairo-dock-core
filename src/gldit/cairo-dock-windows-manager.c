@@ -33,14 +33,6 @@ static gboolean s_bSortedByZ = FALSE;  // whether the list is currently sorted b
 static gboolean s_bSortedByAge = FALSE;  // whether the list is currently sorted by age
 static GldiWindowManagerBackend s_backend;
 
-/*
- * 
- * post-init -> class != NULL => register
- * 
- * new-object -> class != NULL => register
- * 
- * X-mgr: new window -> get props, if OK new-actor else new struct, then fill props
- * */
 
 static gboolean on_zorder_changed (G_GNUC_UNUSED gpointer data)
 {

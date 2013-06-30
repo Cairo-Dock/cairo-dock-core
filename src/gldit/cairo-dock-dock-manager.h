@@ -34,11 +34,10 @@ G_BEGIN_DECLS
 
 // manager
 typedef struct _CairoDocksParam CairoDocksParam;
-typedef struct _CairoDocksManager CairoDocksManager;
 
 #ifndef _MANAGER_DEF_
 extern CairoDocksParam myDocksParam;
-extern CairoDocksManager myDocksMgr;
+extern GldiManager myDocksMgr;
 extern GldiObjectManager myDockObjectMgr;
 #endif
 
@@ -112,11 +111,6 @@ struct _CairoDocksParam {
 	gboolean bLockIcons;
 	gboolean bLockAll;
 	};
-
-// manager
-struct _CairoDocksManager {
-	GldiManager mgr;
-	} ;
 
 /// signals
 typedef enum {

@@ -32,7 +32,6 @@
 
 G_BEGIN_DECLS
 
-
 /**
 *@file cairo-dock-container.h This class defines the Containers, that are classic or hardware accelerated animated windows, and exposes common functions, such as redrawing a part of a container or popping a menu on a container.
 *
@@ -42,18 +41,17 @@ G_BEGIN_DECLS
 *
 */
 
+// manager
 typedef struct _GldiContainersParam GldiContainersParam;
-typedef struct _GldiContainersManager GldiContainersManager;
 typedef struct _GldiContainerAttr GldiContainerAttr;
 
 #ifndef _MANAGER_DEF_
 extern GldiContainersParam myContainersParam;
-extern GldiContainersManager myContainersMgr;
+extern GldiManager myContainersMgr;
 extern GldiObjectManager myContainerObjectMgr;
 #endif
 
 #define CD_DOUBLE_CLICK_DELAY 250  // ms
-
 
 // params
 struct _GldiContainersParam{
@@ -61,11 +59,6 @@ struct _GldiContainersParam{
 	gint iGLAnimationDeltaT;
 	gint iCairoAnimationDeltaT;
 	};
-
-// manager
-struct _GldiContainersManager {
-	GldiManager mgr;
-};
 
 struct _GldiContainerAttr {
 	gboolean bNoOpengl;

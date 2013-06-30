@@ -35,7 +35,7 @@
 #include "cairo-dock-backends-manager.h"
 
 // public (manager, config, data)
-CairoBackendsManager myBackendsMgr;
+GldiManager myBackendsMgr;
 CairoBackendsParam myBackendsParam;
 
 // dependancies
@@ -616,20 +616,20 @@ static void init (void)
 void gldi_register_backends_manager (void)
 {
 	// Manager
-	memset (&myBackendsMgr, 0, sizeof (CairoBackendsManager));
+	memset (&myBackendsMgr, 0, sizeof (GldiManager));
 	gldi_object_init (GLDI_OBJECT(&myBackendsMgr), &myManagerObjectMgr, NULL);
-	myBackendsMgr.mgr.cModuleName 	= "Backends";
+	myBackendsMgr.cModuleName 	= "Backends";
 	// interface
-	myBackendsMgr.mgr.init 			= init;
-	myBackendsMgr.mgr.load 			= NULL;
-	myBackendsMgr.mgr.unload 		= NULL;
-	myBackendsMgr.mgr.reload 		= (GldiManagerReloadFunc)reload;
-	myBackendsMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)get_config;
-	myBackendsMgr.mgr.reset_config  = (GldiManagerResetConfigFunc)reset_config;
+	myBackendsMgr.init 			= init;
+	myBackendsMgr.load 			= NULL;
+	myBackendsMgr.unload 		= NULL;
+	myBackendsMgr.reload 		= (GldiManagerReloadFunc)reload;
+	myBackendsMgr.get_config 	= (GldiManagerGetConfigFunc)get_config;
+	myBackendsMgr.reset_config  = (GldiManagerResetConfigFunc)reset_config;
 	// Config
-	myBackendsMgr.mgr.pConfig = (GldiManagerConfigPtr)&myBackendsParam;
-	myBackendsMgr.mgr.iSizeOfConfig = sizeof (CairoBackendsParam);
+	myBackendsMgr.pConfig = (GldiManagerConfigPtr)&myBackendsParam;
+	myBackendsMgr.iSizeOfConfig = sizeof (CairoBackendsParam);
 	// data
-	myBackendsMgr.mgr.pData = (GldiManagerDataPtr)NULL;
-	myBackendsMgr.mgr.iSizeOfData = 0;
+	myBackendsMgr.pData = (GldiManagerDataPtr)NULL;
+	myBackendsMgr.iSizeOfData = 0;
 }

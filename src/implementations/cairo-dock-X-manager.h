@@ -29,15 +29,12 @@ G_BEGIN_DECLS
 * The X manager handles signals from X and dispatch them to the Windows manager and the Desktop manager.
 */
 
-typedef struct _GldiXManager CairoDockDesktopManager;
-
-// no param (and the manager is not exported)
-
 // manager
-typedef struct _GldiXManager GldiXManager;
 struct _GldiXManager {
 	GldiManager mgr;
 	} ;
+
+// no param (and the manager is not exported)
 
 // signals
 typedef enum {

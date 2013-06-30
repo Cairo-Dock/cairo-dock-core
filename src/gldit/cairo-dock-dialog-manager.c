@@ -45,7 +45,7 @@
 
 // public (manager, config, data)
 CairoDialogsParam myDialogsParam;
-CairoDialogsManager myDialogsMgr;
+GldiManager myDialogsMgr;
 GldiObjectManager myDialogObjectMgr;
 
 // dependancies
@@ -1139,23 +1139,23 @@ static void reset_object (GldiObject *obj)
 void gldi_register_dialogs_manager (void)
 {
 	// Manager
-	memset (&myDialogsMgr, 0, sizeof (CairoDialogsManager));
+	memset (&myDialogsMgr, 0, sizeof (GldiManager));
 	gldi_object_init (GLDI_OBJECT(&myDialogsMgr), &myManagerObjectMgr, NULL);
-	myDialogsMgr.mgr.cModuleName  = "Dialogs";
+	myDialogsMgr.cModuleName  = "Dialogs";
 	// interface
-	myDialogsMgr.mgr.init         = init;
-	myDialogsMgr.mgr.load         = NULL;  // data are loaded the first time a dialog is created, to avoid create them for nothing.
-	myDialogsMgr.mgr.unload       = unload;
-	myDialogsMgr.mgr.reload       = (GldiManagerReloadFunc)reload;
-	myDialogsMgr.mgr.get_config   = (GldiManagerGetConfigFunc)get_config;
-	myDialogsMgr.mgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
+	myDialogsMgr.init         = init;
+	myDialogsMgr.load         = NULL;  // data are loaded the first time a dialog is created, to avoid create them for nothing.
+	myDialogsMgr.unload       = unload;
+	myDialogsMgr.reload       = (GldiManagerReloadFunc)reload;
+	myDialogsMgr.get_config   = (GldiManagerGetConfigFunc)get_config;
+	myDialogsMgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
 	// Config
 	memset (&myDialogsParam, 0, sizeof (CairoDialogsParam));
-	myDialogsMgr.mgr.pConfig = (GldiManagerConfigPtr)&myDialogsParam;
-	myDialogsMgr.mgr.iSizeOfConfig = sizeof (CairoDialogsParam);
+	myDialogsMgr.pConfig = (GldiManagerConfigPtr)&myDialogsParam;
+	myDialogsMgr.iSizeOfConfig = sizeof (CairoDialogsParam);
 	// data
-	myDialogsMgr.mgr.iSizeOfData = 0;
-	myDialogsMgr.mgr.pData = (GldiManagerDataPtr)NULL;
+	myDialogsMgr.iSizeOfData = 0;
+	myDialogsMgr.pData = (GldiManagerDataPtr)NULL;
 	
 	// Object Manager
 	memset (&myDialogObjectMgr, 0, sizeof (GldiObjectManager));

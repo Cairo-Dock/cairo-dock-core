@@ -49,7 +49,7 @@
 */
 
 // public (manager, config, data)
-CairoFlyingManager myFlyingsMgr;
+GldiManager myFlyingsMgr;
 GldiObjectManager myFlyingObjectMgr;
 
 // dependancies
@@ -457,20 +457,20 @@ static void reset_object (GldiObject *obj)
 void gldi_register_flying_manager (void)
 {
 	// Manager
-	memset (&myFlyingsMgr, 0, sizeof (CairoFlyingManager));
-	myFlyingsMgr.mgr.cModuleName 	= "Flyings";
-	myFlyingsMgr.mgr.init 			= init;
-	myFlyingsMgr.mgr.load 			= NULL;  // data loaded on the 1st creation.
-	myFlyingsMgr.mgr.unload 		= unload;
-	myFlyingsMgr.mgr.reload 		= (GldiManagerReloadFunc)NULL;
-	myFlyingsMgr.mgr.get_config 	= (GldiManagerGetConfigFunc)NULL;
-	myFlyingsMgr.mgr.reset_config 	= (GldiManagerResetConfigFunc)NULL;
+	memset (&myFlyingsMgr, 0, sizeof (GldiManager));
+	myFlyingsMgr.cModuleName 	= "Flyings";
+	myFlyingsMgr.init 			= init;
+	myFlyingsMgr.load 			= NULL;  // data loaded on the 1st creation.
+	myFlyingsMgr.unload 		= unload;
+	myFlyingsMgr.reload 		= (GldiManagerReloadFunc)NULL;
+	myFlyingsMgr.get_config 	= (GldiManagerGetConfigFunc)NULL;
+	myFlyingsMgr.reset_config 	= (GldiManagerResetConfigFunc)NULL;
 	// Config
-	myFlyingsMgr.mgr.pConfig = (GldiManagerConfigPtr)NULL;
-	myFlyingsMgr.mgr.iSizeOfConfig = 0;
+	myFlyingsMgr.pConfig = (GldiManagerConfigPtr)NULL;
+	myFlyingsMgr.iSizeOfConfig = 0;
 	// data
-	myFlyingsMgr.mgr.pData = (GldiManagerDataPtr)NULL;
-	myFlyingsMgr.mgr.iSizeOfData = 0;
+	myFlyingsMgr.pData = (GldiManagerDataPtr)NULL;
+	myFlyingsMgr.iSizeOfData = 0;
 	// register
 	gldi_object_init (GLDI_OBJECT(&myFlyingsMgr), &myManagerObjectMgr, NULL);
 	

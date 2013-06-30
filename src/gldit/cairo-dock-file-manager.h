@@ -17,7 +17,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef __CAIRO_DOCK_FILE_MANAGER__
 #define  __CAIRO_DOCK_FILE_MANAGER__
 
@@ -33,16 +32,9 @@ G_BEGIN_DECLS
 */
 
 // manager
-typedef struct _CairoDesktopEnvManager CairoDesktopEnvManager;
-
 #ifndef _MANAGER_DEF_
-extern CairoDesktopEnvManager myDesktopEnvMgr;
+extern GldiManager myDesktopEnvMgr;
 #endif
-
-
-struct _CairoDesktopEnvManager {
-	GldiManager mgr;
-	};
 
 
 /// Type of available Desktop Environments.

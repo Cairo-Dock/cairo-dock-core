@@ -41,7 +41,7 @@
 
 // public (manager, config, data)
 GldiContainersParam myContainersParam;
-GldiContainersManager myContainersMgr;
+GldiManager myContainersMgr;
 GldiObjectManager myContainerObjectMgr;
 GldiContainer *g_pPrimaryContainer = NULL;
 GldiDesktopBackground *g_pFakeTransparencyDesktopBg = NULL;
@@ -737,22 +737,22 @@ static void reset_object (GldiObject *obj)
 void gldi_register_containers_manager (void)
 {
 	// Manager
-	memset (&myContainersMgr, 0, sizeof (GldiContainersManager));
+	memset (&myContainersMgr, 0, sizeof (GldiManager));
 	gldi_object_init (GLDI_OBJECT(&myContainersMgr), &myManagerObjectMgr, NULL);
-	myContainersMgr.mgr.cModuleName  = "Containers";
+	myContainersMgr.cModuleName  = "Containers";
 	// interface
-	myContainersMgr.mgr.init         = init;
-	myContainersMgr.mgr.load         = load;
-	myContainersMgr.mgr.unload       = unload;
-	myContainersMgr.mgr.reload       = (GldiManagerReloadFunc)NULL;
-	myContainersMgr.mgr.get_config   = (GldiManagerGetConfigFunc)get_config;
-	myContainersMgr.mgr.reset_config = (GldiManagerResetConfigFunc)NULL;
+	myContainersMgr.init         = init;
+	myContainersMgr.load         = load;
+	myContainersMgr.unload       = unload;
+	myContainersMgr.reload       = (GldiManagerReloadFunc)NULL;
+	myContainersMgr.get_config   = (GldiManagerGetConfigFunc)get_config;
+	myContainersMgr.reset_config = (GldiManagerResetConfigFunc)NULL;
 	// Config
-	myContainersMgr.mgr.pConfig = (GldiManagerConfigPtr)&myContainersParam;
-	myContainersMgr.mgr.iSizeOfConfig = sizeof (GldiContainersParam);
+	myContainersMgr.pConfig = (GldiManagerConfigPtr)&myContainersParam;
+	myContainersMgr.iSizeOfConfig = sizeof (GldiContainersParam);
 	// data
-	myContainersMgr.mgr.pData = (GldiManagerDataPtr)NULL;
-	myContainersMgr.mgr.iSizeOfData = 0;
+	myContainersMgr.pData = (GldiManagerDataPtr)NULL;
+	myContainersMgr.iSizeOfData = 0;
 	
 	// Object Manager
 	memset (&myContainerObjectMgr, 0, sizeof (GldiObjectManager));

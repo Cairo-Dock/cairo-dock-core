@@ -37,7 +37,7 @@
 #include "cairo-dock-file-manager.h"
 
 // public (manager, config, data)
-CairoDesktopEnvManager myDesktopEnvMgr;
+GldiManager myDesktopEnvMgr;
 CairoDockDesktopEnv g_iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
 
 // dependancies
@@ -563,20 +563,20 @@ static void init (void)
 void gldi_register_desktop_environment_manager (void)
 {
 	// Manager
-	memset (&myDesktopEnvMgr, 0, sizeof (CairoDesktopEnvManager));
+	memset (&myDesktopEnvMgr, 0, sizeof (GldiManager));
 	gldi_object_init (GLDI_OBJECT(&myDesktopEnvMgr), &myManagerObjectMgr, NULL);
-	myDesktopEnvMgr.mgr.cModuleName 	= "Desktop Env";
+	myDesktopEnvMgr.cModuleName 	= "Desktop Env";
 	// interface
-	myDesktopEnvMgr.mgr.init 			= init;
-	myDesktopEnvMgr.mgr.load 			= NULL;
-	myDesktopEnvMgr.mgr.unload 			= NULL;
-	myDesktopEnvMgr.mgr.reload 			= (GldiManagerReloadFunc)NULL;
-	myDesktopEnvMgr.mgr.get_config 		= (GldiManagerGetConfigFunc)NULL;
-	myDesktopEnvMgr.mgr.reset_config	 = (GldiManagerResetConfigFunc)NULL;
+	myDesktopEnvMgr.init 			= init;
+	myDesktopEnvMgr.load 			= NULL;
+	myDesktopEnvMgr.unload 			= NULL;
+	myDesktopEnvMgr.reload 			= (GldiManagerReloadFunc)NULL;
+	myDesktopEnvMgr.get_config 		= (GldiManagerGetConfigFunc)NULL;
+	myDesktopEnvMgr.reset_config	 = (GldiManagerResetConfigFunc)NULL;
 	// Config
-	myDesktopEnvMgr.mgr.pConfig = (GldiManagerConfigPtr)NULL;
-	myDesktopEnvMgr.mgr.iSizeOfConfig = 0;
+	myDesktopEnvMgr.pConfig = (GldiManagerConfigPtr)NULL;
+	myDesktopEnvMgr.iSizeOfConfig = 0;
 	// data
-	myDesktopEnvMgr.mgr.pData = (GldiManagerDataPtr)NULL;
-	myDesktopEnvMgr.mgr.iSizeOfData = 0;
+	myDesktopEnvMgr.pData = (GldiManagerDataPtr)NULL;
+	myDesktopEnvMgr.iSizeOfData = 0;
 }

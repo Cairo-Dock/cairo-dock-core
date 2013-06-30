@@ -39,7 +39,7 @@
 
 // public (manager, config, data)
 GldiModulesParam myModulesParam;
-GldiModulesManager myModulesMgr;
+GldiManager myModulesMgr;
 GldiObjectManager myModuleObjectMgr;
 
 GldiModuleInstance *g_pCurrentModule = NULL;  // only used to trace a possible crash in one of the modules.
@@ -651,23 +651,23 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, G_GNUC_UN
 void gldi_register_modules_manager (void)
 {
 	// Manager
-	memset (&myModulesMgr, 0, sizeof (GldiModulesManager));
+	memset (&myModulesMgr, 0, sizeof (GldiManager));
 	gldi_object_init (GLDI_OBJECT(&myModulesMgr), &myManagerObjectMgr, NULL);
-	myModulesMgr.mgr.cModuleName   = "Modules";
+	myModulesMgr.cModuleName   = "Modules";
 	// interface
-	myModulesMgr.mgr.init          = init;
-	myModulesMgr.mgr.load          = NULL;
-	myModulesMgr.mgr.unload        = NULL;
-	myModulesMgr.mgr.reload        = (GldiManagerReloadFunc)NULL;
-	myModulesMgr.mgr.get_config    = (GldiManagerGetConfigFunc)get_config;
-	myModulesMgr.mgr.reset_config  = (GldiManagerResetConfigFunc)reset_config;
+	myModulesMgr.init          = init;
+	myModulesMgr.load          = NULL;
+	myModulesMgr.unload        = NULL;
+	myModulesMgr.reload        = (GldiManagerReloadFunc)NULL;
+	myModulesMgr.get_config    = (GldiManagerGetConfigFunc)get_config;
+	myModulesMgr.reset_config  = (GldiManagerResetConfigFunc)reset_config;
 	// Config
 	memset (&myModulesParam, 0, sizeof (GldiModulesParam));
-	myModulesMgr.mgr.pConfig = (GldiManagerConfigPtr)&myModulesParam;
-	myModulesMgr.mgr.iSizeOfConfig = sizeof (GldiModulesParam);
+	myModulesMgr.pConfig = (GldiManagerConfigPtr)&myModulesParam;
+	myModulesMgr.iSizeOfConfig = sizeof (GldiModulesParam);
 	// data
-	myModulesMgr.mgr.pData = (GldiManagerDataPtr)NULL;
-	myModulesMgr.mgr.iSizeOfData = 0;
+	myModulesMgr.pData = (GldiManagerDataPtr)NULL;
+	myModulesMgr.iSizeOfData = 0;
 	
 	// Object Manager
 	memset (&myModuleObjectMgr, 0, sizeof (GldiObjectManager));

@@ -29,7 +29,7 @@
 #include "cairo-dock-desktop-manager.h"
 
 // public (manager, config, data)
-GldiDesktopManager myDesktopMgr;
+GldiManager myDesktopMgr;
 GldiDesktopGeometry g_desktopGeometry;
 
 // dependancies
@@ -340,22 +340,22 @@ static void init (void)
 void gldi_register_desktop_manager (void)
 {
 	// Manager
-	memset (&myDesktopMgr, 0, sizeof (GldiDesktopManager));
+	memset (&myDesktopMgr, 0, sizeof (GldiManager));
 	gldi_object_init (GLDI_OBJECT(&myDesktopMgr), &myManagerObjectMgr, NULL);
-	myDesktopMgr.mgr.cModuleName  = "Desktop";
+	myDesktopMgr.cModuleName  = "Desktop";
 	// interface
-	myDesktopMgr.mgr.init         = init;
-	myDesktopMgr.mgr.load         = NULL;
-	myDesktopMgr.mgr.unload       = unload;
-	myDesktopMgr.mgr.reload       = (GldiManagerReloadFunc)NULL;
-	myDesktopMgr.mgr.get_config   = (GldiManagerGetConfigFunc)NULL;
-	myDesktopMgr.mgr.reset_config = (GldiManagerResetConfigFunc)NULL;
+	myDesktopMgr.init         = init;
+	myDesktopMgr.load         = NULL;
+	myDesktopMgr.unload       = unload;
+	myDesktopMgr.reload       = (GldiManagerReloadFunc)NULL;
+	myDesktopMgr.get_config   = (GldiManagerGetConfigFunc)NULL;
+	myDesktopMgr.reset_config = (GldiManagerResetConfigFunc)NULL;
 	// Config
-	myDesktopMgr.mgr.pConfig = (GldiManagerConfigPtr)NULL;
-	myDesktopMgr.mgr.iSizeOfConfig = 0;
+	myDesktopMgr.pConfig = (GldiManagerConfigPtr)NULL;
+	myDesktopMgr.iSizeOfConfig = 0;
 	// data
-	myDesktopMgr.mgr.iSizeOfData = 0;
-	myDesktopMgr.mgr.pData = (GldiManagerDataPtr)NULL;
+	myDesktopMgr.iSizeOfData = 0;
+	myDesktopMgr.pData = (GldiManagerDataPtr)NULL;
 	memset (&s_backend, 0, sizeof (GldiDesktopManagerBackend));
 	// signals
 	gldi_object_install_notifications (&myDesktopMgr, NB_NOTIFICATIONS_DESKTOP);  // we don't have a Desktop Object, so let's put the signals here

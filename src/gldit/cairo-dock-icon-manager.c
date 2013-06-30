@@ -52,7 +52,7 @@
 
 // public (manager, config, data)
 CairoIconsParam myIconsParam;
-CairoIconsManager myIconsMgr;
+GldiManager myIconsMgr;
 GldiObjectManager myIconObjectMgr;
 CairoDockImageBuffer g_pIconBackgroundBuffer;
 GLuint g_pGradationTexture[2]={0, 0};
@@ -842,9 +842,9 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 		pPrevIcons->fAmplitude != pIcons->fAmplitude)
 	{
 		_cairo_dock_unload_icon_textures ();
-		myIndicatorsMgr.mgr.unload ();
+		myIndicatorsMgr.unload ();
 		_cairo_dock_load_icon_textures ();
-		myIndicatorsMgr.mgr.load ();
+		myIndicatorsMgr.load ();
 	}
 	
 	cairo_dock_set_all_views_to_default (0);  // met a jour la taille (decorations incluses) de tous les docks; le chargement des separateurs plats se fait dans le calcul de max dock size.
@@ -1016,24 +1016,24 @@ static void reset_object (GldiObject *obj)
 void gldi_register_icons_manager (void)
 {
 	// Manager
-	memset (&myIconsMgr, 0, sizeof (CairoIconsManager));
+	memset (&myIconsMgr, 0, sizeof (GldiManager));
 	gldi_object_init (GLDI_OBJECT(&myIconsMgr), &myManagerObjectMgr, NULL);
-	myIconsMgr.mgr.cModuleName  = "Icons";
+	myIconsMgr.cModuleName  = "Icons";
 	// interface
-	myIconsMgr.mgr.init         = init;
-	myIconsMgr.mgr.load         = load;
-	myIconsMgr.mgr.unload       = unload;
-	myIconsMgr.mgr.reload       = (GldiManagerReloadFunc)reload;
-	myIconsMgr.mgr.get_config   = (GldiManagerGetConfigFunc)get_config;
-	myIconsMgr.mgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
+	myIconsMgr.init         = init;
+	myIconsMgr.load         = load;
+	myIconsMgr.unload       = unload;
+	myIconsMgr.reload       = (GldiManagerReloadFunc)reload;
+	myIconsMgr.get_config   = (GldiManagerGetConfigFunc)get_config;
+	myIconsMgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
 	// Config
 	memset (&myIconsParam, 0, sizeof (CairoIconsParam));
-	myIconsMgr.mgr.pConfig = (GldiManagerConfigPtr)&myIconsParam;
-	myIconsMgr.mgr.iSizeOfConfig = sizeof (CairoIconsParam);
+	myIconsMgr.pConfig = (GldiManagerConfigPtr)&myIconsParam;
+	myIconsMgr.iSizeOfConfig = sizeof (CairoIconsParam);
 	// data
 	memset (&g_pIconBackgroundBuffer, 0, sizeof (CairoDockImageBuffer));
-	myIconsMgr.mgr.pData = (GldiManagerDataPtr)NULL;
-	myIconsMgr.mgr.iSizeOfData = 0;
+	myIconsMgr.pData = (GldiManagerDataPtr)NULL;
+	myIconsMgr.iSizeOfData = 0;
 	
 	// ObjectManager
 	memset (&myIconObjectMgr, 0, sizeof (GldiObjectManager));
