@@ -6,6 +6,8 @@
 #   unset DESKTOP_SESSION
 #   cairo-dock -T -d ~/test
 #
+# They also require 'xdotool'
+#
 # Usage: ./main.y [name of a test]
 # In 'config.py', you can adjust some variables to fit your environment
 
@@ -20,6 +22,7 @@ from TestSeparatorIcon import TestSeparatorIcon
 from TestStackIcon import TestStackIcon
 from TestTaskbar import TestTaskbar, TestTaskbar2
 from TestIconManager import TestIconManager
+from TestDesklet import TestDesklet
 
 from CairoDock import CairoDock
 dock = CairoDock()
@@ -49,6 +52,8 @@ if __name__ == '__main__':
 			TestDockManager(dock).run()
 		elif sys.argv[1] == "TestIconManager":
 			TestIconManager(dock).run()
+		elif sys.argv[1] == "TestDesklet":
+			TestDesklet(dock).run()
 		else:
 			print ("Unknown test")
 	else:  # run them all
@@ -63,4 +68,5 @@ if __name__ == '__main__':
 		TestTaskbar2(dock).run()
 		TestDockManager(dock).run()
 		TestIconManager(dock).run()
+		TestDesklet(dock).run()
 	
