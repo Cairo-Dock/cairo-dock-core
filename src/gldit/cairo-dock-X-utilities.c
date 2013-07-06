@@ -37,7 +37,8 @@
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-class-manager.h"  // cairo_dock_remove_version_from_string
-#include "cairo-dock-X-manager.h"
+//#include "cairo-dock-X-manager.h"
+#define _X_MANAGER_
 #include "cairo-dock-X-utilities.h"
 
 #if (GTK_MAJOR_VERSION >= 3)
@@ -172,16 +173,6 @@ Display *cairo_dock_initialize_X_desktop_support (void)
 	return s_XDisplay;
 }
 
-Display *cairo_dock_get_Xdisplay (void)
-{
-	return s_XDisplay;
-}
-
-guint cairo_dock_get_root_id (void)
-{
-	return DefaultRootWindow (s_XDisplay);
-}
-
 
 static GtkAllocation *_get_screens_geometry (int *pNbScreens)
 {
@@ -288,8 +279,8 @@ static GtkAllocation *_get_screens_geometry (int *pNbScreens)
 		pScreen = &pScreens[0];
 		pScreen->x = 0;
 		pScreen->y = 0;
-		pScreen->width = gldi_get_desktop_width();
-		pScreen->height = gldi_get_desktop_height();
+		pScreen->width = gldi_desktop_get_width();
+		pScreen->height = gldi_desktop_get_height();
 	}
 	
 	/*Window root = DefaultRootWindow (s_XDisplay);
@@ -322,13 +313,13 @@ gboolean cairo_dock_update_screen_geometry (void)
 		&x_return, &y_return,
 		&width_return, &height_return,
 		&border_width_return, &depth_return);
-	cd_debug (">>>>>   screen resolution: %dx%d -> %dx%d", gldi_get_desktop_width(), gldi_get_desktop_height(), width_return, height_return);
+	cd_debug (">>>>>   screen resolution: %dx%d -> %dx%d", gldi_desktop_get_width(), gldi_desktop_get_height(), width_return, height_return);
 	gboolean bNewSize = FALSE;
-	if ((int)width_return != gldi_get_desktop_width() || (int)height_return != gldi_get_desktop_height())  // on n'utilise pas WidthOfScreen() et HeightOfScreen() car leurs valeurs ne sont pas mises a jour immediatement apres les changements de resolution.
+	if ((int)width_return != gldi_desktop_get_width() || (int)height_return != gldi_desktop_get_height())  // on n'utilise pas WidthOfScreen() et HeightOfScreen() car leurs valeurs ne sont pas mises a jour immediatement apres les changements de resolution.
 	{
 		g_desktopGeometry.Xscreen.width = width_return;
 		g_desktopGeometry.Xscreen.height = height_return;
-		cd_debug ("new screen size : %dx%d", gldi_get_desktop_width(), gldi_get_desktop_height());
+		cd_debug ("new screen size : %dx%d", gldi_desktop_get_width(), gldi_desktop_get_height());
 		bNewSize = TRUE;
 	}
 	
@@ -513,9 +504,9 @@ void cairo_dock_get_nb_viewports (int *iNbViewportX, int *iNbViewportY)
 	XGetWindowProperty (s_XDisplay, root, s_aNetDesktopGeometry, 0, G_MAXULONG, False, XA_CARDINAL, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pVirtualScreenSizeBuffer);
 	if (iBufferNbElements > 0)
 	{
-		cd_debug ("pVirtualScreenSizeBuffer : %dx%d ; screen : %dx%d", pVirtualScreenSizeBuffer[0], pVirtualScreenSizeBuffer[1], gldi_get_desktop_width(), gldi_get_desktop_height());
-		*iNbViewportX = pVirtualScreenSizeBuffer[0] / gldi_get_desktop_width();
-		*iNbViewportY = pVirtualScreenSizeBuffer[1] / gldi_get_desktop_height();
+		cd_debug ("pVirtualScreenSizeBuffer : %dx%d ; screen : %dx%d", pVirtualScreenSizeBuffer[0], pVirtualScreenSizeBuffer[1], gldi_desktop_get_width(), gldi_desktop_get_height());
+		*iNbViewportX = pVirtualScreenSizeBuffer[0] / gldi_desktop_get_width();
+		*iNbViewportY = pVirtualScreenSizeBuffer[1] / gldi_desktop_get_height();
 		XFree (pVirtualScreenSizeBuffer);
 	}
 }
@@ -589,7 +580,7 @@ static void cairo_dock_move_current_viewport_to (int iDesktopViewportX, int iDes
 }
 void cairo_dock_set_current_viewport (int iViewportNumberX, int iViewportNumberY)
 {
-	cairo_dock_move_current_viewport_to (iViewportNumberX * gldi_get_desktop_width(), iViewportNumberY * gldi_get_desktop_height());
+	cairo_dock_move_current_viewport_to (iViewportNumberX * gldi_desktop_get_width(), iViewportNumberY * gldi_desktop_get_height());
 }
 void cairo_dock_set_current_desktop (int iDesktopNumber)
 {
@@ -728,8 +719,8 @@ void cairo_dock_set_nb_viewports (int iNbViewportX, int iNbViewportY)
 	xClientMessage.xclient.window = root;
 	xClientMessage.xclient.message_type = s_aNetDesktopGeometry;
 	xClientMessage.xclient.format = 32;
-	xClientMessage.xclient.data.l[0] = iNbViewportX * gldi_get_desktop_width();
-	xClientMessage.xclient.data.l[1] = iNbViewportY * gldi_get_desktop_height();
+	xClientMessage.xclient.data.l[0] = iNbViewportX * gldi_desktop_get_width();
+	xClientMessage.xclient.data.l[1] = iNbViewportY * gldi_desktop_get_height();
 	xClientMessage.xclient.data.l[2] = 0;
 	xClientMessage.xclient.data.l[3] = 2;
 	xClientMessage.xclient.data.l[4] = 0;
@@ -1487,13 +1478,13 @@ void cairo_dock_get_xwindow_position_on_its_viewport (Window Xid, int *iRelative
 	cairo_dock_get_xwindow_geometry (Xid, &iLocalPositionX, &iLocalPositionY, &iWidthExtent, &iHeightExtent);
 	
 	while (iLocalPositionX < 0)  // on passe au referentiel du viewport de la fenetre; inutile de connaitre sa position, puisqu'ils ont tous la meme taille.
-		iLocalPositionX += gldi_get_desktop_width();
-	while (iLocalPositionX >= gldi_get_desktop_width())
-		iLocalPositionX -= gldi_get_desktop_width();
+		iLocalPositionX += gldi_desktop_get_width();
+	while (iLocalPositionX >= gldi_desktop_get_width())
+		iLocalPositionX -= gldi_desktop_get_width();
 	while (iLocalPositionY < 0)
-		iLocalPositionY += gldi_get_desktop_height();
-	while (iLocalPositionY >= gldi_get_desktop_height())
-		iLocalPositionY -= gldi_get_desktop_height();
+		iLocalPositionY += gldi_desktop_get_height();
+	while (iLocalPositionY >= gldi_desktop_get_height())
+		iLocalPositionY -= gldi_desktop_get_height();
 	
 	*iRelativePositionX = iLocalPositionX;
 	*iRelativePositionY = iLocalPositionY;
