@@ -383,7 +383,7 @@ void cairo_dock_set_ortho_view_for_icon (Icon *pIcon, G_GNUC_UNUSED GldiContaine
 }
 
 
-void gldi_glx_apply_desktop_background (GldiContainer *pContainer)  /// TODO: make it static...
+static void gldi_glx_apply_desktop_background (GldiContainer *pContainer)
 {
 	if (/**! myContainersParam.bUseFakeTransparency || */! g_pFakeTransparencyDesktopBg || g_pFakeTransparencyDesktopBg->iTexture == 0)
 		return ;
@@ -445,23 +445,36 @@ gboolean gldi_glx_make_current (GldiContainer *pContainer)
 	return glXMakeCurrent (dpy, Xid, pContainer->glContext);
 }
 
-gboolean gldi_glx_begin_draw_container_full (GldiContainer *pContainer, gboolean bClear)
+gboolean gldi_glx_begin_draw_container_full (GldiContainer *pContainer, GdkRectangle *pArea, gboolean bClear)
 {
 	if (! gldi_glx_make_current (pContainer))
 		return FALSE;
+	
+	glLoadIdentity ();
+	
+	if (pArea != NULL)
+	{
+		glEnable (GL_SCISSOR_TEST);  // ou comment diviser par 4 l'occupation CPU !
+		glScissor ((int) pArea->x,
+			(int) (pContainer->bIsHorizontal ? pContainer->iHeight : pContainer->iWidth) -
+				pArea->y - pArea->height,  // lower left corner of the scissor box.
+			(int) pArea->width,
+			(int) pArea->height);
+	}
 	
 	if (bClear)
 	{
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		gldi_glx_apply_desktop_background (pContainer);
 	}
-	glLoadIdentity ();
 	
 	return TRUE;
 }
 
 void gldi_glx_end_draw_container (GldiContainer *pContainer)
 {
+	glDisable (GL_SCISSOR_TEST);
+	
 	Display *dpy = gdk_x11_display_get_xdisplay (gdk_display_get_default ());
 	Window Xid = gldi_container_get_Xid (pContainer);
 

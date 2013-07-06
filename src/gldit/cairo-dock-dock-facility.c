@@ -1359,9 +1359,8 @@ void cairo_dock_make_preview (CairoDock *pDock, const gchar *cPreviewPath)
 		GLubyte *glbuffer = NULL;
 		if (g_bUseOpenGL)
 		{
-			if (gldi_glx_begin_draw_container_full (CAIRO_CONTAINER (pDock), FALSE))  // FALSE to keep the color buffer (motion-blur).
+			if (gldi_glx_begin_draw_container (CAIRO_CONTAINER (pDock)))
 			{
-				glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->pRenderer->bUseStencil && g_openglConfig.bStencilBufferAvailable ? GL_STENCIL_BUFFER_BIT : 0));
 				pDock->pRenderer->render_opengl (pDock);
 			}
 			int s = 4;  // 4 chanels of 1 byte each (rgba).

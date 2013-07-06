@@ -36,7 +36,6 @@ G_BEGIN_DECLS
 
 /// This strucure summarizes the available OpenGL configuration on the system.
 struct _CairoDockGLConfig {
-	///GdkGLConfig *pGlConfig;
 	GLXContext context;
 	XVisualInfo *pVisInfo;
 	#if (GTK_MAJOR_VERSION < 3)
@@ -85,9 +84,9 @@ void cairo_dock_force_indirect_rendering (void);
 
 gboolean gldi_glx_make_current (GldiContainer *pContainer);
 
-gboolean gldi_glx_begin_draw_container_full (GldiContainer *pContainer, gboolean bClear);
+gboolean gldi_glx_begin_draw_container_full (GldiContainer *pContainer, GdkRectangle *pArea, gboolean bClear);
 
-#define gldi_glx_begin_draw_container(pContainer) gldi_glx_begin_draw_container_full (pContainer, TRUE)
+#define gldi_glx_begin_draw_container(pContainer) gldi_glx_begin_draw_container_full (pContainer, NULL, TRUE)
 
 void gldi_glx_end_draw_container (GldiContainer *pContainer);
 
@@ -105,12 +104,6 @@ void cairo_dock_set_perspective_view_for_icon (Icon *pIcon, GldiContainer *pCont
 void cairo_dock_set_ortho_view (GldiContainer *pContainer);
 
 void cairo_dock_set_ortho_view_for_icon (Icon *pIcon, GldiContainer *pContainer);
-
-
-/** Apply the desktop background onto a container, to emulate fake transparency.
-*@param pContainer the container
-*/
-void gldi_glx_apply_desktop_background (GldiContainer *pContainer);
 
 /** Set a shared default-initialized GL context on a window.
 *@param pContainer the container, not yet realized.

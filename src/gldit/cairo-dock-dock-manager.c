@@ -1326,9 +1326,6 @@ static gboolean _render_dock_notification (G_GNUC_UNUSED gpointer pUserData, Cai
 	}
 	else  // opengl
 	{
-		//glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->pRenderer->bUseStencil && g_openglConfig.bStencilBufferAvailable ? GL_STENCIL_BUFFER_BIT : 0));
-		//gldi_glx_apply_desktop_background (CAIRO_CONTAINER (pDock));
-		
 		if (pDock->fHideOffset != 0 && g_pHidingBackend != NULL && g_pHidingBackend->pre_render_opengl)
 			g_pHidingBackend->pre_render_opengl (pDock, pDock->fHideOffset);
 		
