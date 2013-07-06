@@ -80,6 +80,7 @@ struct _GldiDesktopManagerBackend {
 	cairo_surface_t* (*get_desktop_bg_surface) (void);
 	gboolean (*set_current_desktop) (int iDesktopNumber, int iViewportNumberX, int iViewportNumberY);
 	gboolean (*set_nb_desktops) (int iNbDesktops, int iNbViewportX, int iNbViewportY);
+	void (*refresh) (void);
 	};
 
 /// Definition of a Desktop Background Buffer. It has a reference count so that it can be shared across all the lib.
@@ -121,8 +122,8 @@ gboolean gldi_desktop_present_desktops (void);
 */
 gboolean gldi_desktop_show_widget_layer (void);
 
-/** Set a window to be displayed on the Widget Layer.
-*@param Xid X ID of the window.
+/** Set a Container to be displayed on the Widget Layer.
+*@param pContainer a container.
 *@param bOnWidgetLayer whether to set or unset the option.
 *@return TRUE on success
 */
@@ -138,6 +139,10 @@ gboolean gldi_desktop_show_hide (gboolean bShow);
 gboolean gldi_desktop_is_visible (void);
 gchar** gldi_desktop_get_names (void);
 gboolean gldi_desktop_set_names (gchar **cNames);
+gboolean gldi_desktop_set_current (int iDesktopNumber, int iViewportNumberX, int iViewportNumberY);
+gboolean gldi_desktop_set_nb_desktops (int iNbDesktops, int iNbViewportX, int iNbViewportY);
+
+void gldi_desktop_refresh (void);
 
   ////////////////////
  // Desktop access //
@@ -149,7 +154,6 @@ gboolean gldi_desktop_set_names (gchar **cNames);
 *@param iCurrentViewportY will be filled with the current vertical viewport number
 */
 void gldi_desktop_get_current (int *iCurrentDesktop, int *iCurrentViewportX, int *iCurrentViewportY);
-#define cairo_dock_get_current_desktop_and_viewport gldi_desktop_get_current
 
 #define GLDI_DEFAULT_SCREEN 0 // it's the first screen. -1 = all screens
 #define cairo_dock_get_screen_position_x(i) (i >= 0 && i < g_desktopGeometry.iNbScreens ? g_desktopGeometry.pScreens[i].x : 0)
@@ -158,25 +162,19 @@ void gldi_desktop_get_current (int *iCurrentDesktop, int *iCurrentViewportX, int
 #define cairo_dock_get_screen_height(i) (i >= 0 && i < g_desktopGeometry.iNbScreens ? g_desktopGeometry.pScreens[i].height : g_desktopGeometry.Xscreen.height)
 #define cairo_dock_get_nth_screen(i) (i >= 0 && i < g_desktopGeometry.iNbScreens ? &g_desktopGeometry.pScreens[i] : &g_desktopGeometry.Xscreen)
 #define gldi_desktop_get_width() g_desktopGeometry.Xscreen.width
-#define gldi_get_desktop_width gldi_desktop_get_width
 #define gldi_desktop_get_height() g_desktopGeometry.Xscreen.height
-#define gldi_get_desktop_height gldi_desktop_get_height
 
   ////////////////////////
  // Desktop background //
 ////////////////////////
 
 GldiDesktopBackground *gldi_desktop_background_get (gboolean bWithTextureToo);
-#define cairo_dock_get_desktop_background gldi_desktop_background_get
 
 void gldi_desktop_background_destroy (GldiDesktopBackground *pDesktopBg);
-#define cairo_dock_destroy_desktop_background gldi_desktop_background_destroy
 
 cairo_surface_t *gldi_desktop_background_get_surface (GldiDesktopBackground *pDesktopBg);
-#define cairo_dock_get_desktop_bg_surface gldi_desktop_background_get_surface
 
-GLuint cairo_dock_get_desktop_bg_texture (GldiDesktopBackground *pDesktopBg);
-#define cairo_dock_get_desktop_bg_texture gldi_desktop_background_get_texture
+GLuint gldi_desktop_background_get_texture (GldiDesktopBackground *pDesktopBg);
 
 
 void gldi_register_desktop_manager (void);

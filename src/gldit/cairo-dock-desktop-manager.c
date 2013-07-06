@@ -192,6 +192,25 @@ static cairo_surface_t *_get_desktop_bg_surface (void)
 	return NULL;
 }
 
+gboolean gldi_desktop_set_current (int iDesktopNumber, int iViewportNumberX, int iViewportNumberY)
+{
+	if (s_backend.set_current_desktop)
+		return s_backend.set_current_desktop (iDesktopNumber, iViewportNumberX, iViewportNumberY);
+	return FALSE;
+}
+
+gboolean gldi_desktop_set_nb_desktops (int iNbDesktops, int iNbViewportX, int iNbViewportY)
+{
+	if (s_backend.set_nb_desktops)
+		return s_backend.set_nb_desktops (iNbDesktops, iNbViewportX, iNbViewportY);
+	return FALSE;
+}
+
+void gldi_desktop_refresh (void)
+{
+	if (s_backend.refresh)
+		s_backend.refresh ();
+}
 
   //////////////////
  /// DESKTOP BG ///
