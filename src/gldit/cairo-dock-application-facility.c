@@ -416,7 +416,7 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (GldiWindowActor *p
 					x = x_icon_geometry (pLastLauncher, pMainDock) + pLastLauncher->fWidth/2;
 					if (cairo_dock_is_hidden (pMainDock))
 					{
-						y = (pMainDock->container.bDirectionUp ? 0 : gldi_get_desktop_height());
+						y = (pMainDock->container.bDirectionUp ? 0 : gldi_desktop_get_height());
 					}
 					else
 					{
@@ -428,7 +428,7 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (GldiWindowActor *p
 					x = pMainDock->container.iWindowPositionX + 0 + (pMainDock->container.iWidth - pMainDock->fFlatDockWidth) / 2;
 					if (cairo_dock_is_hidden (pMainDock))
 					{
-						y = (pMainDock->container.bDirectionUp ? 0 : gldi_get_desktop_height());
+						y = (pMainDock->container.bDirectionUp ? 0 : gldi_desktop_get_height());
 					}
 					else
 					{

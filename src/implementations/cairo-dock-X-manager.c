@@ -33,11 +33,12 @@
 
 #include "gldi-config.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-X-utilities.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-applications-manager.h"  // myTaskbarParam.iMinimizedWindowRenderType
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-windows-manager.h"
+#define _X_MANAGER_
+#include "cairo-dock-X-utilities.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-X-manager.h"
 
@@ -173,8 +174,8 @@ static inline void _cairo_dock_retrieve_current_desktop_and_viewport (void)
 {
 	g_desktopGeometry.iCurrentDesktop = cairo_dock_get_current_desktop ();
 	cairo_dock_get_current_viewport (&g_desktopGeometry.iCurrentViewportX, &g_desktopGeometry.iCurrentViewportY);
-	g_desktopGeometry.iCurrentViewportX /= gldi_get_desktop_width();
-	g_desktopGeometry.iCurrentViewportY /= gldi_get_desktop_height();
+	g_desktopGeometry.iCurrentViewportX /= gldi_desktop_get_width();
+	g_desktopGeometry.iCurrentViewportY /= gldi_desktop_get_height();
 }
 
 static gboolean _on_change_current_desktop_viewport (void)
@@ -520,8 +521,8 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 				actor->windowGeometry.x = x;
 				actor->windowGeometry.y = y;
 				
-				actor->iViewPortX = x / gldi_get_desktop_width() + g_desktopGeometry.iCurrentViewportX;
-				actor->iViewPortY = y / gldi_get_desktop_height() + g_desktopGeometry.iCurrentViewportY;
+				actor->iViewPortX = x / gldi_desktop_get_width() + g_desktopGeometry.iCurrentViewportX;
+				actor->iViewPortY = y / gldi_desktop_get_height() + g_desktopGeometry.iCurrentViewportY;
 				
 				if (w != actor->windowGeometry.width || h != actor->windowGeometry.height)  // size has changed
 				{
@@ -591,9 +592,9 @@ static gboolean _set_current_desktop (int iDesktopNumber, int iViewportNumberX, 
 
 static gboolean _set_nb_desktops (int iNbDesktops, int iNbViewportX, int iNbViewportY)
 {
-	if (iNbDesktops >= 0)
+	if (iNbDesktops > 0)
 		cairo_dock_set_nb_desktops (iNbDesktops);
-	if (iNbViewportX >= 0 && iNbViewportY >= 0)
+	if (iNbViewportX > 0 && iNbViewportY > 0)
 		cairo_dock_set_nb_viewports (iNbViewportX, iNbViewportY);
 	return TRUE;
 }
@@ -601,7 +602,7 @@ static gboolean _set_nb_desktops (int iNbDesktops, int iNbViewportX, int iNbView
 static cairo_surface_t *_get_desktop_bg_surface (void)  // attention : fonction lourde.
 {
 	//g_print ("+++ %s ()\n", __func__);
-	Pixmap iRootPixmapID = cairo_dock_get_window_background_pixmap (cairo_dock_get_root_id ());
+	Pixmap iRootPixmapID = cairo_dock_get_window_background_pixmap (DefaultRootWindow (s_XDisplay));
 	g_return_val_if_fail (iRootPixmapID != 0, NULL);  // Note: depending on the WM, iRootPixmapID might be 0, and a window of type 'Desktop' might be used instead (covering the whole screen). We don't handle this case, as I've never encountered it yet.
 	
 	cairo_surface_t *pDesktopBgSurface = NULL;
@@ -614,8 +615,8 @@ static cairo_surface_t *_get_desktop_bg_surface (void)  // attention : fonction 
 			cd_debug ("c'est une couleur unie (%.2f, %.2f, %.2f)", (double) pixels[0] / 255, (double) pixels[1] / 255, (double) pixels[2] / 255);
 			
 			pDesktopBgSurface = cairo_dock_create_blank_surface (
-				gldi_get_desktop_width(),
-				gldi_get_desktop_height());
+				gldi_desktop_get_width(),
+				gldi_desktop_get_height());
 			
 			cairo_t *pCairoContext = cairo_create (pDesktopBgSurface);
 			cairo_set_source_rgb (pCairoContext,
@@ -638,12 +639,12 @@ static cairo_surface_t *_get_desktop_bg_surface (void)  // attention : fonction 
 				&fHeight,
 				NULL, NULL);
 			
-			if (fWidth < gldi_get_desktop_width() || fHeight < gldi_get_desktop_height())  // pattern/color gradation
+			if (fWidth < gldi_desktop_get_width() || fHeight < gldi_desktop_get_height())  // pattern/color gradation
 			{
 				cd_debug ("c'est un degrade ou un motif (%dx%d)", (int) fWidth, (int) fHeight);
 				pDesktopBgSurface = cairo_dock_create_blank_surface (
-					gldi_get_desktop_width(),
-					gldi_get_desktop_height());
+					gldi_desktop_get_width(),
+					gldi_desktop_get_height());
 				cairo_t *pCairoContext = cairo_create (pDesktopBgSurface);
 				
 				cairo_pattern_t *pPattern = cairo_pattern_create_for_surface (pBgSurface);
@@ -669,6 +670,13 @@ static cairo_surface_t *_get_desktop_bg_surface (void)  // attention : fonction 
 	return pDesktopBgSurface;
 }
 
+
+static void _refresh (void)
+{
+	g_desktopGeometry.iNbDesktops = cairo_dock_get_nb_desktops ();
+	cairo_dock_get_nb_viewports (&g_desktopGeometry.iNbViewportX, &g_desktopGeometry.iNbViewportY);
+	cd_debug ("desktop refresh -> %dx%dx%d", g_desktopGeometry.iNbDesktops, g_desktopGeometry.iNbViewportX, g_desktopGeometry.iNbViewportY);
+}
 
   ///////////////////////////////
  /// WINDOWS MANAGER BACKEND ///
@@ -872,6 +880,7 @@ static void init (void)
 	dmb.get_desktop_bg_surface = _get_desktop_bg_surface;
 	dmb.set_current_desktop    = _set_current_desktop;
 	dmb.set_nb_desktops        = _set_nb_desktops;
+	dmb.refresh                = _refresh;
 	gldi_desktop_manager_register_backend (&dmb);
 	
 	GldiWindowManagerBackend wmb;

@@ -616,9 +616,9 @@ void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock)
 	}
 	
 	/*data[0] = i;
-	Atom atom = XInternAtom (cairo_dock_get_Xdisplay(), "_KDE_WINDOW_PREVIEW", False);
+	Atom atom = XInternAtom (gdk_x11_get_default_xdisplay(), "_KDE_WINDOW_PREVIEW", False);
 	Window Xid = GDK_WINDOW_XID (pDock->container.pWidget->window);
-	XChangeProperty(cairo_dock_get_Xdisplay(), Xid, atom, atom, 32, PropModeReplace, data, 1+6*i);*/
+	XChangeProperty(gdk_x11_get_default_xdisplay(), Xid, atom, atom, 32, PropModeReplace, data, 1+6*i);*/
 	
 	if (pDock->bIsMainDock && myTaskbarParam.bHideVisibleApplis)  // on complete avec les applis pas dans le dock, pour que l'effet de minimisation pointe (a peu pres) au bon endroit quand on la minimisera.
 	{

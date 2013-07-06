@@ -1019,7 +1019,7 @@ static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, CDMouse
 	//\________________ On verifie les conditions.
 	int x1, x2;  // coordinates range on the X screen edge.
 	gboolean bShow = FALSE;
-	int Ws = (pDock->container.bIsHorizontal ? gldi_get_desktop_width() : gldi_get_desktop_height());
+	int Ws = (pDock->container.bIsHorizontal ? gldi_desktop_get_width() : gldi_desktop_get_height());
 	switch (myDocksParam.iCallbackMethod)
 	{
 		case CAIRO_HIT_SCREEN_BORDER:
@@ -1326,8 +1326,8 @@ static gboolean _render_dock_notification (G_GNUC_UNUSED gpointer pUserData, Cai
 	}
 	else  // opengl
 	{
-		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->pRenderer->bUseStencil && g_openglConfig.bStencilBufferAvailable ? GL_STENCIL_BUFFER_BIT : 0));
-		gldi_glx_apply_desktop_background (CAIRO_CONTAINER (pDock));
+		//glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->pRenderer->bUseStencil && g_openglConfig.bStencilBufferAvailable ? GL_STENCIL_BUFFER_BIT : 0));
+		//gldi_glx_apply_desktop_background (CAIRO_CONTAINER (pDock));
 		
 		if (pDock->fHideOffset != 0 && g_pHidingBackend != NULL && g_pHidingBackend->pre_render_opengl)
 			g_pHidingBackend->pre_render_opengl (pDock, pDock->fHideOffset);

@@ -68,7 +68,7 @@ static gboolean present_class (const gchar *cClass)
 	if (pIcons == NULL)
 		return FALSE;
 	
-	Atom aPresentWindows = XInternAtom (cairo_dock_get_Xdisplay(), "_KDE_PRESENT_WINDOWS_GROUP", False);
+	Atom aPresentWindows = XInternAtom (gdk_x11_get_default_xdisplay(), "_KDE_PRESENT_WINDOWS_GROUP", False);
 	Window *data = g_new0 (Window, g_list_length (pIcons));
 	Icon *pOneIcon;
 	GldiXWindowActor *xactor;
@@ -80,7 +80,7 @@ static gboolean present_class (const gchar *cClass)
 		xactor = (GldiXWindowActor*)pOneIcon->pAppli;
 		data[i++] = xactor->Xid;
 	}
-	XChangeProperty(cairo_dock_get_Xdisplay(), data[0], aPresentWindows, aPresentWindows, 32, PropModeReplace, (unsigned char *)data, i);
+	XChangeProperty(gdk_x11_get_default_xdisplay(), data[0], aPresentWindows, aPresentWindows, 32, PropModeReplace, (unsigned char *)data, i);
 	g_free (data);
 	return TRUE;
 }
@@ -163,9 +163,9 @@ static void _set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock *pD
 		
 	}
 	
-	Atom atom = XInternAtom (cairo_dock_get_Xdisplay(), "_KDE_WINDOW_PREVIEW", False);
+	Atom atom = XInternAtom (gdk_x11_get_default_xdisplay(), "_KDE_WINDOW_PREVIEW", False);
 	Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDock));
-	XChangeProperty (cairo_dock_get_Xdisplay(), Xid, atom, atom, 32, PropModeReplace, (const unsigned char*)data, 1+6);
+	XChangeProperty (gdk_x11_get_default_xdisplay(), Xid, atom, atom, 32, PropModeReplace, (const unsigned char*)data, 1+6);
 }
 */
 /* Not used

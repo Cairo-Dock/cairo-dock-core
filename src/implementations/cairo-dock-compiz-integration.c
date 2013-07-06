@@ -37,6 +37,8 @@ static DBusGProxy *s_pExposeProxy = NULL;
 static DBusGProxy *s_pWidgetLayerProxy = NULL;
 static Atom s_aCompizWidget = 0;
 
+#define _get_root_id(...) DefaultRootWindow (gdk_x11_get_default_xdisplay ())
+
 static gboolean present_windows (void)
 {
 	gboolean bSuccess = FALSE;
@@ -45,7 +47,7 @@ static gboolean present_windows (void)
 		GError *erreur = NULL;
 		bSuccess = dbus_g_proxy_call (s_pScaleProxy, "activate", &erreur,
 			G_TYPE_STRING, "root",
-			G_TYPE_INT, cairo_dock_get_root_id (),
+			G_TYPE_INT, _get_root_id (),
 			G_TYPE_STRING, "",
 			G_TYPE_STRING, "",
 			G_TYPE_INVALID,
@@ -91,7 +93,7 @@ static gboolean present_class (const gchar *cClass)
 		cd_message ("Compiz: match '%s'", cMatch);
 		bSuccess = dbus_g_proxy_call (s_pScaleProxy, "activate", &erreur,
 			G_TYPE_STRING, "root",
-			G_TYPE_INT, cairo_dock_get_root_id (),
+			G_TYPE_INT, _get_root_id (),
 			G_TYPE_STRING, "match",
 			G_TYPE_STRING, cMatch,
 			G_TYPE_INVALID,
@@ -115,7 +117,7 @@ static gboolean present_desktops (void)
 		GError *erreur = NULL;
 		bSuccess = dbus_g_proxy_call (s_pExposeProxy, "activate", &erreur,
 			G_TYPE_STRING, "root",
-			G_TYPE_INT, cairo_dock_get_root_id (),
+			G_TYPE_INT, _get_root_id (),
 			G_TYPE_INVALID,
 			G_TYPE_INVALID);
 		if (erreur)
@@ -136,7 +138,7 @@ static gboolean show_widget_layer (void)
 		GError *erreur = NULL;
 		bSuccess = dbus_g_proxy_call (s_pWidgetLayerProxy, "activate", &erreur,
 			G_TYPE_STRING, "root",
-			G_TYPE_INT, cairo_dock_get_root_id (),
+			G_TYPE_INT, _get_root_id (),
 			G_TYPE_INVALID,
 			G_TYPE_INVALID);
 		if (erreur)
@@ -235,7 +237,7 @@ static gboolean set_on_widget_layer (GldiContainer *pContainer, gboolean bOnWidg
 	cd_debug ("%s ()", __func__);
 	Window Xid = gldi_container_get_Xid (pContainer);
 	static gboolean s_bFirst = TRUE;
-	Display *dpy = cairo_dock_get_Xdisplay ();
+	Display *dpy = gdk_x11_get_default_xdisplay ();
 	if (bOnWidgetLayer)
 	{
 		// the first time, trigger a check to ensure the 'widget' plug-in is operationnal.

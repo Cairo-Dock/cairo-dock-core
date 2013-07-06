@@ -42,7 +42,7 @@
 #include "cairo-dock-icon-facility.h"  // gldi_icons_foreach_of_type
 #include "cairo-dock-keyfile-utilities.h"  // cairo_dock_open_key_file
 #include "cairo-dock-indicator-manager.h"  // cairo_dock_unload_indicator_textures
-#include "cairo-dock-desktop-manager.h"  // cairo_dock_get_current_desktop_and_viewport
+#include "cairo-dock-desktop-manager.h"  // gldi_desktop_get_current
 #include "cairo-dock-user-icon-manager.h"  // GLDI_OBJECT_IS_USER_ICON
 #include "cairo-dock-separator-manager.h"  // GLDI_OBJECT_IS_SEPARATOR_ICON
 #include "cairo-dock-applications-manager.h"  // GLDI_OBJECT_IS_APPLI_ICON
@@ -145,7 +145,7 @@ void cairo_dock_hide_show_launchers_on_other_desktops (void )  /// TODO: add a m
 	
 	// calculate the index of the current desktop
 	int iCurrentDesktop = 0, iCurrentViewportX = 0, iCurrentViewportY = 0;
-	cairo_dock_get_current_desktop_and_viewport (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
+	gldi_desktop_get_current (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
 	int index = iCurrentDesktop * g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY + iCurrentViewportX * g_desktopGeometry.iNbViewportY + iCurrentViewportY + 1;  // +1 car on commence a compter a partir de 1.
 	
 	// first detach what shouldn't be shown on this desktop

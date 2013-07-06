@@ -273,8 +273,6 @@ static gboolean on_map_dialog (G_GNUC_UNUSED GtkWidget* pWidget,
 {
 	if (pDialog->pInteractiveWidget)
 	{
-		///cairo_dock_show_xwindow (gldi_container_get_Xid(CAIRO_CONTAINER (pDialog)));  // gtk_window_present doesn't work as expected...
-		/// TODO: TEST THAT ...
 		gtk_window_present_with_time (GTK_WINDOW (pDialog->container.pWidget), gdk_x11_get_server_time (gldi_container_get_gdk_window(CAIRO_CONTAINER (pDialog))));  // to avoid the focus steal prevention.
 	}
 	return FALSE;

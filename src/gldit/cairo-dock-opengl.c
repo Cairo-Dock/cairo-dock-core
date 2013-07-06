@@ -383,7 +383,7 @@ void cairo_dock_set_ortho_view_for_icon (Icon *pIcon, G_GNUC_UNUSED GldiContaine
 }
 
 
-void gldi_glx_apply_desktop_background (GldiContainer *pContainer)
+void gldi_glx_apply_desktop_background (GldiContainer *pContainer)  /// TODO: make it static...
 {
 	if (/**! myContainersParam.bUseFakeTransparency || */! g_pFakeTransparencyDesktopBg || g_pFakeTransparencyDesktopBg->iTexture == 0)
 		return ;
@@ -399,8 +399,8 @@ void gldi_glx_apply_desktop_background (GldiContainer *pContainer)
 	glBindTexture (GL_TEXTURE_2D, g_pFakeTransparencyDesktopBg->iTexture);
 	
 	double x, y, w, h, W, H;
-	W = gldi_get_desktop_width();
-	H = gldi_get_desktop_height();
+	W = gldi_desktop_get_width();
+	H = gldi_desktop_get_height();
 	if (pContainer->bIsHorizontal)
 	{
 		w = pContainer->iWidth;

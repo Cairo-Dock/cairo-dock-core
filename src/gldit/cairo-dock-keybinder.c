@@ -317,7 +317,7 @@ gboolean cairo_dock_trigger_shortkey (const gchar *cKeyString)  // the idea was 
 
 	int i;
 	int keycode;
-	Display *dpy = cairo_dock_get_Xdisplay ();
+	Display *dpy = gdk_x11_get_default_xdisplay ();
 	for (i = 0; i < iNbKeys; i ++)
 	{
 		keycode = XKeysymToKeycode (dpy, pKeySyms[i]);

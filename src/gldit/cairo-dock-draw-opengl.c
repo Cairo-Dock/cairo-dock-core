@@ -525,10 +525,6 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 {
 	//g_print ("%s (%d, %x)\n", __func__, pDock->bIsMainDock, g_pVisibleZoneSurface);
 	//\_____________________ on dessine la zone de rappel.
-	///glLoadIdentity ();  // annule l'offset de cachage.
-	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | (pDock->pRenderer->bUseStencil && g_openglConfig.bStencilBufferAvailable ? GL_STENCIL_BUFFER_BIT : 0));
-	gldi_glx_apply_desktop_background (CAIRO_CONTAINER (pDock));
-	
 	if (g_pVisibleZoneBuffer.iTexture != 0)
 	{
 		_cairo_dock_enable_texture ();

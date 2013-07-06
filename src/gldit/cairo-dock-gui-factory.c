@@ -1519,7 +1519,7 @@ GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *p
 
 	// min size
 	int iFrameWidth = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pMainWindow), "frame-width"));
-	int iMinSize = (gldi_get_desktop_width() - iFrameWidth) /2.5;
+	int iMinSize = (gldi_desktop_get_width() - iFrameWidth) /2.5;
 	#if (GTK_MAJOR_VERSION < 3)
 		int iLabelWidth = bHorizontalPackaging ? MIN (iMinSize * 1.5, CAIRO_DOCK_README_WIDTH_MIN) : CAIRO_DOCK_README_WIDTH;
 		gtk_widget_set_size_request (pDescriptionLabel, iLabelWidth, -1);
@@ -3231,7 +3231,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			case CAIRO_DOCK_WIDGET_TEXT_LABEL :  // juste le label de texte.
 			{
 				int iFrameWidth = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pMainWindow), "frame-width"));
-				gtk_widget_set_size_request (pLabel, MIN (800, gldi_get_desktop_width() - iFrameWidth), -1);
+				gtk_widget_set_size_request (pLabel, MIN (800, gldi_desktop_get_width() - iFrameWidth), -1);
 				gtk_label_set_justify (GTK_LABEL (pLabel), GTK_JUSTIFY_LEFT);
 				gtk_label_set_line_wrap (GTK_LABEL (pLabel), TRUE);
 			}

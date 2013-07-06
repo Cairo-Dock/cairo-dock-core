@@ -147,12 +147,12 @@ static gboolean _on_render_flying_container_notification (G_GNUC_UNUSED gpointer
 	}
 	else
 	{
-		glClear (GL_COLOR_BUFFER_BIT);
+		/**glClear (GL_COLOR_BUFFER_BIT);
 		_cairo_dock_set_blend_source ();
 		_cairo_dock_set_alpha (1.);
 		
 		gldi_glx_apply_desktop_background (CAIRO_CONTAINER (pFlyingContainer));
-		glLoadIdentity ();
+		glLoadIdentity ();*/
 		
 		if (pIcon != NULL)
 		{

@@ -332,8 +332,8 @@ static void _cairo_dock_about (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GldiContain
 	g_free (text);
 	
 	gtk_window_resize (GTK_WINDOW (pDialog),
-		MIN (CAIRO_DOCK_ABOUT_WIDTH, gldi_get_desktop_width()),
-		MIN (CAIRO_DOCK_ABOUT_HEIGHT, gldi_get_desktop_height() - (g_pMainDock && g_pMainDock->container.bIsHorizontal ? g_pMainDock->iMaxDockHeight : 0)));
+		MIN (CAIRO_DOCK_ABOUT_WIDTH, gldi_desktop_get_width()),
+		MIN (CAIRO_DOCK_ABOUT_HEIGHT, gldi_desktop_get_height() - (g_pMainDock && g_pMainDock->container.bIsHorizontal ? g_pMainDock->iMaxDockHeight : 0)));
 
 	gtk_widget_show_all (pDialog);
 

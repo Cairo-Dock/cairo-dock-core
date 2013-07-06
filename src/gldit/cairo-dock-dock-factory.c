@@ -162,7 +162,8 @@ static gboolean _on_expose (G_GNUC_UNUSED GtkWidget *pWidget,
 	//\________________ OpenGL rendering
 	if (g_bUseOpenGL && pDock->pRenderer->render_opengl != NULL)
 	{
-		if (! gldi_glx_begin_draw_container_full (CAIRO_CONTAINER (pDock), FALSE))  // FALSE to keep the color buffer (motion-blur).
+		/// TODO: put the scissor in gldi_glx_begin_draw_container_full...
+		if (! gldi_glx_begin_draw_container_full (CAIRO_CONTAINER (pDock), FALSE))  // FALE will become TRUE
 			return FALSE;
 		
 		if (area.x + area.y != 0)
@@ -174,6 +175,9 @@ static gboolean _on_expose (G_GNUC_UNUSED GtkWidget *pWidget,
 				(int) area.width,
 				(int) area.height);
 		}
+		
+		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		gldi_glx_apply_desktop_background (CAIRO_CONTAINER(pDock));
 		
 		if (cairo_dock_is_loading ())
 		{
@@ -187,9 +191,9 @@ static gboolean _on_expose (G_GNUC_UNUSED GtkWidget *pWidget,
 		{
 			gldi_object_notify (pDock, NOTIFICATION_RENDER, pDock, NULL);
 		}
-		glDisable (GL_SCISSOR_TEST);
 		
-		gldi_glx_end_draw_container (CAIRO_CONTAINER (pDock));
+		glDisable (GL_SCISSOR_TEST);
+		gldi_glx_end_draw_container (CAIRO_CONTAINER (pDock));  /// TODO: same here
 	}
 	else if (! g_bUseOpenGL && pDock->pRenderer->render != NULL)
 	{

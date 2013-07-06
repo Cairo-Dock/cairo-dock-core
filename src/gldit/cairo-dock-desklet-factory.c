@@ -222,7 +222,7 @@ static gboolean _cairo_dock_write_desklet_position (CairoDesklet *pDesklet)
 			int iViewportY = iGlobalPositionY / gldi_desktop_get_height();
 			
 			int iCurrentDesktop, iCurrentViewportX, iCurrentViewportY;
-			cairo_dock_get_current_desktop_and_viewport (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
+			gldi_desktop_get_current (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
 			
 			iViewportX += iCurrentViewportX;
 			if (iViewportX >= g_desktopGeometry.iNbViewportX)
@@ -919,7 +919,7 @@ void gldi_desklet_configure (CairoDesklet *pDesklet, CairoDeskletAttr *pAttribut
 			iNumViewportY = index2 % g_desktopGeometry.iNbViewportY;
 			
 			int iCurrentDesktop, iCurrentViewportX, iCurrentViewportY;
-			cairo_dock_get_current_desktop_and_viewport (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
+			gldi_desktop_get_current (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
 			cd_debug (">>> on fixe le desklet sur le bureau (%d,%d,%d) (cur : %d,%d,%d)", iNumDesktop, iNumViewportX, iNumViewportY, iCurrentDesktop, iCurrentViewportX, iCurrentViewportY);
 			
 			iNumViewportX -= iCurrentViewportX;
@@ -1189,7 +1189,7 @@ void gldi_desklet_set_sticky (CairoDesklet *pDesklet, gboolean bSticky)
 	{
 		gtk_window_unstick (GTK_WINDOW (pDesklet->container.pWidget));
 		int iCurrentDesktop, iCurrentViewportX, iCurrentViewportY;
-		cairo_dock_get_current_desktop_and_viewport (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
+		gldi_desktop_get_current (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
 		iNumDesktop = iCurrentDesktop * g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY + iCurrentViewportX * g_desktopGeometry.iNbViewportY + iCurrentViewportY;
 		cd_debug (">>> on colle ce desklet sur le bureau %d", iNumDesktop);
 	}
