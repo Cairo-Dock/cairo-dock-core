@@ -33,6 +33,7 @@
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-config.h"
+#include "cairo-dock-windows-manager.h"  // gldi_windows_get_active
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-animations.h"  // cairo_dock_animation_will_be_visible
 #include "cairo-dock-desktop-manager.h"  // gldi_desktop_get_width
@@ -316,6 +317,14 @@ void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, doub
 	g_string_free (sArg, TRUE);
 }
 
+
+gboolean gldi_container_is_active (GldiContainer *pContainer)
+{
+	Window Xid = gldi_container_get_Xid (pContainer);
+	GldiWindowActor *pActiveWindow = gldi_windows_get_active ();
+	return (gldi_window_get_id (pActiveWindow) == Xid);  // gtk_window_has_toplevel_focus/gtk_window_is_active is not reliable
+
+}
 
 gboolean cairo_dock_emit_signal_on_container (GldiContainer *pContainer, const gchar *cSignal)
 {
@@ -621,7 +630,7 @@ static void load (void)
 {
 	if (s_bNoComposite)
 	{
-		g_pFakeTransparencyDesktopBg = cairo_dock_get_desktop_background (g_bUseOpenGL);
+		g_pFakeTransparencyDesktopBg = gldi_desktop_background_get (g_bUseOpenGL);
 	}
 }
 

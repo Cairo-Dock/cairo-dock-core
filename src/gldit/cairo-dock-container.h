@@ -220,6 +220,8 @@ void cairo_dock_disable_containers_opacity (void);
 		gdk_window_get_device_position (gldi_container_get_gdk_window (pContainer), pDevice, &pContainer->iMouseY, &pContainer->iMouseX, NULL); } while (0)
 #endif
 
+gboolean gldi_container_is_active (GldiContainer *pContainer);
+
 gboolean cairo_dock_emit_signal_on_container (GldiContainer *pContainer, const gchar *cSignal);
 gboolean cairo_dock_emit_leave_signal (GldiContainer *pContainer);
 gboolean cairo_dock_emit_enter_signal (GldiContainer *pContainer);
