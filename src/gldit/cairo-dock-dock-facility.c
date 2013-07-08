@@ -199,6 +199,12 @@ void cairo_dock_trigger_update_dock_size (CairoDock *pDock)
 	}
 }
 
+static gboolean _emit_leave_signal_delayed (CairoDock *pDock)
+{
+	cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
+	pDock->iSidLeaveDemand = 0;
+	return FALSE;
+}
 static void cairo_dock_manage_mouse_position (CairoDock *pDock)
 {
 	switch (pDock->iMousePositionType)
@@ -246,7 +252,7 @@ static void cairo_dock_manage_mouse_position (CairoDock *pDock)
 						return;
 				}
 				//g_print ("on force a quitter (iRefCount:%d; bIsGrowingUp:%d; iMagnitudeIndex:%d)\n", pDock->iRefCount, pDock->bIsGrowingUp, pDock->iMagnitudeIndex);
-				pDock->iSidLeaveDemand = g_timeout_add (MAX (myDocksParam.iLeaveSubDockDelay, 330), (GSourceFunc) cairo_dock_emit_leave_signal, (gpointer) pDock);
+				pDock->iSidLeaveDemand = g_timeout_add (MAX (myDocksParam.iLeaveSubDockDelay, 300), (GSourceFunc) _emit_leave_signal_delayed, (gpointer) pDock);
 			}
 		break ;
 	}
@@ -255,7 +261,8 @@ Icon *cairo_dock_calculate_dock_icons (CairoDock *pDock)
 {
 	Icon *pPointedIcon = pDock->pRenderer->calculate_icons (pDock);
 	cairo_dock_manage_mouse_position (pDock);
-	if (1||pDock->iMousePositionType == CAIRO_DOCK_MOUSE_INSIDE)
+	return pPointedIcon;
+	/**if (pDock->iMousePositionType == CAIRO_DOCK_MOUSE_INSIDE)
 	{
 		return pPointedIcon;
 	}
@@ -264,8 +271,7 @@ Icon *cairo_dock_calculate_dock_icons (CairoDock *pDock)
 		if (pPointedIcon)
 			pPointedIcon->bPointed = FALSE;
 		return NULL;
-	}
-	///return (pDock->iMousePositionType == CAIRO_DOCK_MOUSE_INSIDE ? pPointedIcon : NULL);
+	}*/
 }
 
 
