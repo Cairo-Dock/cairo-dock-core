@@ -500,18 +500,18 @@ static void _cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 			}
 		}
 	}
-	// g_print (" -> [%d ; %d], %d, %d\n", iLimitXLeft, iLimitXRight, iWidth, iMinYLimit);
+	//g_print (" -> [%d ; %d], %d, %d\n", iLimitXLeft, iLimitXRight, iWidth, iMinYLimit);
 	if (iLimitXRight - iLimitXLeft >= MIN (gldi_desktop_get_width(), iWidth) || !bDialogOnOurWay)  // there is enough room to place the dialog.
 	{
 		if (pDialog->bRight)
 			pDialog->iComputedPositionX = MAX (0, MIN (pDialog->iAimedX - pDialog->fAlign * iWidth, iLimitXRight - iWidth));
 		else
-			pDialog->iComputedPositionX = MAX (pDialog->iAimedX - (1. - pDialog->fAlign) * iWidth, iLimitXLeft);
+			pDialog->iComputedPositionX = MIN (gldi_desktop_get_width() - iWidth, MAX (pDialog->iAimedX - (1. - pDialog->fAlign) * iWidth, iLimitXLeft));
 		if (pDialog->container.bDirectionUp && pDialog->iComputedPositionY < 0)
 			pDialog->iComputedPositionY = 0;
 		else if (!pDialog->container.bDirectionUp && pDialog->iComputedPositionY + iHeight > gldi_desktop_get_height())
 			pDialog->iComputedPositionY = gldi_desktop_get_height() - iHeight;
-		// g_print ("  --> %d\n", pDialog->iComputedPositionX);
+		//g_print (" --> %d\n", pDialog->iComputedPositionX);
 	}
 	else  // not enough room, try again above the closest dialog that was disturbing.
 	{
@@ -672,7 +672,7 @@ static void _place_dialog (CairoDialog *pDialog, GldiContainer *pContainer)
 	
 	pDialog->bPositionForced = FALSE;
 	///gtk_window_set_gravity (GTK_WINDOW (pDialog->container.pWidget), iGravity);
-	//g_print (" => move to (%d;%d) %dx%d , %d\n", pDialog->iComputedPositionX, pDialog->iComputedPositionY, pDialog->iComputedWidth, pDialog->iComputedHeight, iGravity);
+	//g_print (" => move to (%d;%d) %dx%d\n", pDialog->iComputedPositionX, pDialog->iComputedPositionY, pDialog->iComputedWidth, pDialog->iComputedHeight);
 	gtk_window_move (GTK_WINDOW (pDialog->container.pWidget),
 		pDialog->iComputedPositionX,
 		pDialog->iComputedPositionY);
