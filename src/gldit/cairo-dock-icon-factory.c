@@ -33,7 +33,6 @@
 #include "cairo-dock-applications-manager.h"  // myTaskbarParam.iAppliMaxNameLength
 #include "cairo-dock-separator-manager.h"  // GLDI_OBJECT_IS_SEPARATOR_ICON
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
-#include "cairo-dock-dock-manager.h"  // cairo_dock_synchronize_one_sub_dock_orientation
 #include "cairo-dock-backends-manager.h"  // cairo_dock_get_icon_container_renderer
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-data-renderer.h"

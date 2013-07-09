@@ -330,15 +330,15 @@ CairoDock *gldi_dock_new (const gchar *cDockName);
 CairoDock *gldi_subdock_new (const gchar *cDockName, const gchar *cRendererName, CairoDock *pParentDock, GList *pIconList);
 
 
-/** Remove and destroy all automatic separators inside a dock.
+/* Remove and destroy all automatic separators inside a dock.
 *@param pDock the dock.
 */
-void cairo_dock_remove_automatic_separators (CairoDock *pDock);
+void cairo_dock_remove_automatic_separators (CairoDock *pDock);  // -> IconManager
 
-/** Add automatic separators between the different groups of icons inside a dock.
+/* Add automatic separators between the different groups of icons inside a dock.
 *@param pDock the dock.
 */
-void cairo_dock_insert_automatic_separators_in_dock (CairoDock *pDock);
+void cairo_dock_insert_automatic_separators_in_dock (CairoDock *pDock);  // -> IconManager
 
 /** Remove all icons from a dock (and its sub-docks). If the receiving dock is NULL, the icons are destroyed and removed from the current theme itself.
 *@param pDock a dock.

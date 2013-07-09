@@ -862,14 +862,15 @@ static void reload (CairoTaskbarParam *pPrevTaskBar, CairoTaskbarParam *pTaskBar
 		
 		cairo_dock_start_applications_manager (pDock);
 		
-		cairo_dock_calculate_dock_icons (pDock);
+		/**cairo_dock_calculate_dock_icons (pDock);
 		gtk_widget_queue_draw (pDock->container.pWidget);  // le 'gdk_window_move_resize' ci-dessous ne provoquera pas le redessin si la taille n'a pas change.
 		
-		cairo_dock_move_resize_dock (pDock);
+		cairo_dock_move_resize_dock (pDock);*/
+		gtk_widget_queue_draw (pDock->container.pWidget);  // if no appli-icon has been inserted, but an indicator or a grouped class has been added, we need to draw them now
 	}
 	else
 	{
-		gtk_widget_queue_draw (pDock->container.pWidget);  // pour le fVisibleAlpha
+		gtk_widget_queue_draw (pDock->container.pWidget);  // in case 'fVisibleAlpha' has changed
 	}
 }
 

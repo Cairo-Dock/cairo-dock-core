@@ -903,7 +903,7 @@ static gboolean _on_key_release (G_GNUC_UNUSED GtkWidget *pWidget,
 		if ((pKey->state & GDK_MOD1_MASK) && pKey->keyval == 0)  // On relache la touche ALT, typiquement apres avoir fait un ALT + clique gauche + deplacement.
 		{
 			if (pDock->iRefCount == 0 && pDock->iVisibility != CAIRO_DOCK_VISI_SHORTKEY)
-				cairo_dock_write_root_dock_gaps (pDock);
+				gldi_rootdock_write_gaps (pDock);
 		}
 	}
 	return TRUE;
@@ -1080,7 +1080,7 @@ static gboolean _on_button_press (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventButt
 				else
 				{
 					if (pDock->iRefCount == 0 && pDock->iVisibility != CAIRO_DOCK_VISI_SHORTKEY)
-						cairo_dock_write_root_dock_gaps (pDock);
+						gldi_rootdock_write_gaps (pDock);
 				}
 				//g_print ("- apres clic : s_pIconClicked <- NULL\n");
 				s_pIconClicked = NULL;
@@ -2188,7 +2188,7 @@ static void _insert_icon (GldiContainer *pContainer, Icon *icon, gboolean bAnima
 	}
 	
 	if (icon->pSubDock != NULL)
-		cairo_dock_synchronize_one_sub_dock_orientation (icon->pSubDock, pDock, FALSE);
+		gldi_subdock_synchronize_orientation (icon->pSubDock, pDock, FALSE);
 	
 	//\______________ Notify everybody.
 	gldi_object_notify (pDock, NOTIFICATION_INSERT_ICON, icon, pDock);  /// TODO: make it a Container notification...
@@ -2408,7 +2408,7 @@ void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, g
 		
 		if (bRecursive && icon->pSubDock != NULL)  // we handle the sub-dock for applets too, so that they don't need to care.
 		{
-			///cairo_dock_synchronize_one_sub_dock_orientation (icon->pSubDock, pDock, FALSE);  /// should probably not be here.
+			///gldi_subdock_synchronize_orientation (icon->pSubDock, pDock, FALSE);  /// should probably not be here.
 			if (bUpdateIconSize)
 				icon->pSubDock->iIconSize = pDock->iIconSize;
 			cairo_dock_reload_buffers_in_dock (icon->pSubDock, bRecursive, bUpdateIconSize);

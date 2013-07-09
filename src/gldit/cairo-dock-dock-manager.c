@@ -90,7 +90,8 @@ static gboolean s_bResetAll = FALSE;
 static gboolean _get_root_dock_config (CairoDock *pDock);
 static void _start_polling_screen_edge (void);
 static void _stop_polling_screen_edge (void);
-static void cairo_dock_synchronize_sub_docks_orientation (CairoDock *pDock, gboolean bUpdateDockSize);
+static void _synchronize_sub_docks_orientation (CairoDock *pDock, gboolean bUpdateDockSize);
+static void _set_dock_orientation (CairoDock *pDock, CairoDockPositionType iScreenBorder);
 static void _remove_root_dock_config (const gchar *cDockName);
 
 typedef struct {
@@ -487,7 +488,7 @@ void cairo_dock_set_all_views_to_default (int iDockType)
  // ROOT DOCK CONFIG //
 //////////////////////
 
-void cairo_dock_write_root_dock_gaps (CairoDock *pDock)
+void gldi_rootdock_write_gaps (CairoDock *pDock)
 {
 	if (pDock->iRefCount > 0)
 		return;
@@ -495,7 +496,10 @@ void cairo_dock_write_root_dock_gaps (CairoDock *pDock)
 	cairo_dock_prevent_dock_from_out_of_screen (pDock);
 	if (pDock->bIsMainDock)
 	{
-		cairo_dock_update_conf_file_with_position (g_cConfFile, pDock->iGapX, pDock->iGapY);
+		cairo_dock_update_conf_file (g_cConfFile,
+			G_TYPE_INT, "Position", "x gap", pDock->iGapX,
+			G_TYPE_INT, "Position", "y gap", pDock->iGapY,
+			G_TYPE_INVALID);
 	}
 	else
 	{
@@ -602,7 +606,7 @@ static gboolean _get_root_dock_config (CairoDock *pDock)
 		
 		pDock->iNumScreen = myDocksParam.iNumScreen;
 		
-		cairo_dock_set_dock_orientation (pDock, myDocksParam.iScreenBorder);  // do it after all position parameters have been set; it sets the sub-docks orientation too.
+		_set_dock_orientation (pDock, myDocksParam.iScreenBorder);  // do it after all position parameters have been set; it sets the sub-docks orientation too.
 		
 		gldi_dock_set_visibility (pDock, myDocksParam.iVisibility);
 		
@@ -648,7 +652,7 @@ static gboolean _get_root_dock_config (CairoDock *pDock)
 	pDock->iNumScreen = cairo_dock_get_integer_key_value (pKeyFile, "Behavior", "num_screen", &bFlushConfFileNeeded, GLDI_DEFAULT_SCREEN, "Position", NULL);
 	
 	CairoDockPositionType iScreenBorder = cairo_dock_get_integer_key_value (pKeyFile, "Behavior", "screen border", &bFlushConfFileNeeded, 0, "Position", NULL);
-	cairo_dock_set_dock_orientation (pDock, iScreenBorder);  // do it after all position parameters have been set; it sets the sub-docks orientation too.
+	_set_dock_orientation (pDock, iScreenBorder);  // do it after all position parameters have been set; it sets the sub-docks orientation too.
 	
 	//\______________ Visibility.
 	CairoDockVisibility iVisibility = cairo_dock_get_integer_key_value (pKeyFile, "Behavior", "visibility", &bFlushConfFileNeeded, FALSE, "Position", NULL);
@@ -779,33 +783,41 @@ static void _reposition_one_root_dock (G_GNUC_UNUSED const gchar *cDockName, Cai
 		cairo_dock_move_resize_dock (pDock);
 		gtk_widget_show (pDock->container.pWidget);
 		gtk_widget_queue_draw (pDock->container.pWidget);
-		cairo_dock_synchronize_sub_docks_orientation (pDock, TRUE);
+		_synchronize_sub_docks_orientation (pDock, TRUE);
 	}
 }
-void cairo_dock_reposition_root_docks (gboolean bExceptMainDock)
+static void _reposition_root_docks (gboolean bExceptMainDock)
 {
 	g_hash_table_foreach (s_hDocksTable, (GHFunc)_reposition_one_root_dock, GINT_TO_POINTER (bExceptMainDock));
 }
 
-void cairo_dock_synchronize_one_sub_dock_orientation (CairoDock *pSubDock, CairoDock *pDock, gboolean bUpdateDockSize)
+void gldi_subdock_synchronize_orientation (CairoDock *pSubDock, CairoDock *pDock, gboolean bUpdateDockSize)
 {
-	if (pSubDock->container.bDirectionUp != pDock->container.bDirectionUp || pSubDock->container.bIsHorizontal != pDock->container.bIsHorizontal)
+	if (pSubDock->container.bDirectionUp != pDock->container.bDirectionUp)
 	{
 		pSubDock->container.bDirectionUp = pDock->container.bDirectionUp;
-		pSubDock->container.bIsHorizontal = pDock->container.bIsHorizontal;
-		
-		cairo_dock_update_dock_size (pSubDock);
+		bUpdateDockSize = TRUE;
 	}
-	else if (bUpdateDockSize)
+	if (pSubDock->container.bIsHorizontal != pDock->container.bIsHorizontal)
+	{
+		pSubDock->container.bIsHorizontal = pDock->container.bIsHorizontal;
+		bUpdateDockSize = TRUE;
+	}
+	if (pSubDock->iNumScreen != pDock->iNumScreen)
+	{
+		pSubDock->iNumScreen = pDock->iNumScreen;
+		bUpdateDockSize = TRUE;
+	}
+	
+	if (bUpdateDockSize)
 	{
 		cairo_dock_update_dock_size (pSubDock);
 	}
-	pSubDock->iNumScreen = pDock->iNumScreen;
 	
-	cairo_dock_synchronize_sub_docks_orientation (pSubDock, bUpdateDockSize);
+	_synchronize_sub_docks_orientation (pSubDock, bUpdateDockSize);
 }
 
-static void cairo_dock_synchronize_sub_docks_orientation (CairoDock *pDock, gboolean bUpdateDockSize)
+static void _synchronize_sub_docks_orientation (CairoDock *pDock, gboolean bUpdateDockSize)
 {
 	GList* ic;
 	Icon *icon;
@@ -814,12 +826,12 @@ static void cairo_dock_synchronize_sub_docks_orientation (CairoDock *pDock, gboo
 		icon = ic->data;
 		if (icon->pSubDock != NULL)
 		{
-			cairo_dock_synchronize_one_sub_dock_orientation (icon->pSubDock, pDock, bUpdateDockSize);  // recursively synchronize all children (no need to check for loops, as it shouldn't occur... if it does, then the problem is to fix upstream).
+			gldi_subdock_synchronize_orientation (icon->pSubDock, pDock, bUpdateDockSize);  // recursively synchronize all children (no need to check for loops, as it shouldn't occur... if it does, then the problem is to fix upstream).
 		}
 	}
 }
 
-void cairo_dock_set_dock_orientation (CairoDock *pDock, CairoDockPositionType iScreenBorder)
+static void _set_dock_orientation (CairoDock *pDock, CairoDockPositionType iScreenBorder)
 {
 	switch (iScreenBorder)
 	{
@@ -843,7 +855,7 @@ void cairo_dock_set_dock_orientation (CairoDock *pDock, CairoDockPositionType iS
 		case CAIRO_DOCK_NB_POSITIONS :
 		break;
 	}
-	cairo_dock_synchronize_sub_docks_orientation (pDock, FALSE);  // synchronize l'orientation et l'offset Xinerama des sous-docks.
+	_synchronize_sub_docks_orientation (pDock, FALSE);
 }
 
 
@@ -1217,7 +1229,7 @@ void gldi_dock_set_visibility (CairoDock *pDock, CairoDockVisibility iVisibility
 		}
 		else if (bShortKey0)  // option is now disabled => show the dock.
 		{
-			cairo_dock_reposition_root_docks (FALSE);  // FALSE => tous.
+			_reposition_root_docks (FALSE);  // FALSE => tous.
 		}
 	}
 	
@@ -1300,7 +1312,7 @@ static void _raise_from_shortcut (G_GNUC_UNUSED const char *cKeyShortcut, G_GNUC
 static gboolean _on_screen_geometry_changed (G_GNUC_UNUSED gpointer data, gboolean bSizeHasChanged)
 {
 	if (bSizeHasChanged)
-		cairo_dock_reposition_root_docks (FALSE);  // FALSE <=> main dock included
+		_reposition_root_docks (FALSE);  // FALSE <=> main dock included
 	return GLDI_NOTIFICATION_LET_PASS;
 }
 
@@ -1710,7 +1722,7 @@ static void load (void)
 		g_pMainDock->iNumScreen = myDocksParam.iNumScreen;
 		g_pMainDock->bExtendedMode = myDocksParam.bExtendedMode;
 		
-		cairo_dock_set_dock_orientation (g_pMainDock, myDocksParam.iScreenBorder);
+		_set_dock_orientation (g_pMainDock, myDocksParam.iScreenBorder);
 		cairo_dock_move_resize_dock (g_pMainDock);
 		
 		g_pMainDock->fFlatDockWidth = - myIconsParam.iIconGap;  // car on ne le connaissait pas encore au moment de sa creation.
@@ -1779,14 +1791,14 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 	
 	if (pPosition->iNumScreen != pPrevPosition->iNumScreen)
 	{
-		cairo_dock_reposition_root_docks (TRUE);  // on replace tous les docks racines sauf le main dock, puisque c'est fait apres.
+		_reposition_root_docks (TRUE);  // on replace tous les docks racines sauf le main dock, puisque c'est fait apres.
 	}
 	
 	CairoDockTypeHorizontality bWasHorizontal = pDock->container.bIsHorizontal;
 	if (pPosition->iScreenBorder != pPrevPosition->iScreenBorder)
 	{
-		cairo_dock_set_dock_orientation (pDock, pPosition->iScreenBorder);
-		cairo_dock_reload_buffers_in_all_docks (TRUE);  // icons may have a different width and height, so changing the orientation will affect them.  also, container-icons may be drawn differently according to the orientation (ex.: box).
+		_set_dock_orientation (pDock, pPosition->iScreenBorder);
+		cairo_dock_reload_buffers_in_all_docks (TRUE);  // icons may have a different width and height, so changing the orientation will affect them.  also, stack-icons may be drawn differently according to the orientation (ex.: box).
 		///_cairo_dock_draw_one_subdock_icon (NULL, g_pMainDock, NULL);  // container-icons may be drawn differently according to the orientation (ex.: box).
 	}
 	pDock->bExtendedMode = pBackground->bExtendedMode;

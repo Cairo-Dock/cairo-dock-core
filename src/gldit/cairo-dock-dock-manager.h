@@ -190,16 +190,16 @@ void gldi_docks_foreach_root (GFunc pFunction, gpointer pUserData);
 void gldi_icons_foreach_in_docks (CairoDockForeachIconFunc pFunction, gpointer pUserData);
 
 
-/** Recursively hides all the parent docks of a sub-dock.
+/* Recursively hides all the parent docks of a sub-dock.
 *@param pDock the (sub)dock.
 */
-void cairo_dock_hide_parent_dock (CairoDock *pDock);
+void cairo_dock_hide_parent_dock (CairoDock *pDock);  // -> dock-factory
 
-/** Recursively hides all the sub-docks of a given dock.
+/* Recursively hides all the sub-docks of a given dock.
 *@param pDock the dock.
 * @return TRUE if a sub-dock has been hidden.
 */
-gboolean cairo_dock_hide_child_docks (CairoDock *pDock);
+gboolean cairo_dock_hide_child_docks (CairoDock *pDock);  // -> dock-factory
 
 /** (Re)load all buffers of all icons in all docks.
 @param bUpdateIconSize TRUE to recalculate the icons and docks size.
@@ -209,7 +209,7 @@ void cairo_dock_reload_buffers_in_all_docks (gboolean bUpdateIconSize);
 void cairo_dock_set_all_views_to_default (int iDockType);
 
 
-void cairo_dock_write_root_dock_gaps (CairoDock *pDock);
+void gldi_rootdock_write_gaps (CairoDock *pDock);
 
 int cairo_dock_convert_icon_size_to_pixels (GldiIconSizeEnum s, double *fMaxScale, double *fReflectSize, int *iIconGap);
 
@@ -230,11 +230,6 @@ gchar *gldi_dock_add_conf_file (void);
 */
 void cairo_dock_redraw_root_docks (gboolean bExceptMainDock);
 
-/* Reposition all the root docks.
-*@param bExceptMainDock whether to redraw the main dock too.
-*/
-void cairo_dock_reposition_root_docks (gboolean bExceptMainDock);
-
 
 void cairo_dock_quick_hide_all_docks (void);
 void cairo_dock_stop_quick_hide (void);
@@ -244,9 +239,7 @@ gboolean cairo_dock_entrance_is_allowed (CairoDock *pDock);
 void cairo_dock_activate_temporary_auto_hide (CairoDock *pDock);
 void cairo_dock_deactivate_temporary_auto_hide (CairoDock *pDock);
 #define cairo_dock_is_temporary_hidden(pDock) (pDock)->bTemporaryHidden
-void cairo_dock_synchronize_one_sub_dock_orientation (CairoDock *pSubDock, CairoDock *pDock, gboolean bUpdateDockSize);
-
-void cairo_dock_set_dock_orientation (CairoDock *pDock, CairoDockPositionType iScreenBorder);
+void gldi_subdock_synchronize_orientation (CairoDock *pSubDock, CairoDock *pDock, gboolean bUpdateDockSize);
 
 
 /** Set the visibility of a root dock. Perform all the necessary actions.

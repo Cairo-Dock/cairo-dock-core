@@ -163,14 +163,6 @@ void cairo_dock_load_config (const gchar *cConfFilePath);
 gboolean cairo_dock_is_loading (void);
 
 
-/* Met a jour un fichier de conf de dock racine avec sa position définie par les écarts en x et en y.
-*@param cConfFilePath chemin du fichier de conf.
-*@param x écart latéral.
-*@param y écart vertical.
-*/
-void cairo_dock_update_conf_file_with_position (const gchar *cConfFilePath, int x, int y);
-
-
 /** Get the 3 version numbers of a string.
 *@param cVersionString the string of the form "x.y.z".
 *@param iMajorVersion pointer to the major version.

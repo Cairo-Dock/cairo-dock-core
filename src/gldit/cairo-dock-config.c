@@ -479,17 +479,6 @@ gboolean cairo_dock_is_loading (void)
 }
 
 
-
-void cairo_dock_update_conf_file_with_position (const gchar *cConfFilePath, int x, int y)
-{
-	//g_print ("%s (%s ; %d;%d)\n", __func__, cConfFilePath, x, y);
-	cairo_dock_update_conf_file (cConfFilePath,
-		G_TYPE_INT, "Position", "x gap", x,
-		G_TYPE_INT, "Position", "y gap", y,
-		G_TYPE_INVALID);
-}
-
-
 void cairo_dock_get_version_from_string (const gchar *cVersionString, int *iMajorVersion, int *iMinorVersion, int *iMicroVersion)
 {
 	gchar **cVersions = g_strsplit (cVersionString, ".", -1);
