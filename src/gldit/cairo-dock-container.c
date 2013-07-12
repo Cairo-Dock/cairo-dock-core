@@ -430,7 +430,7 @@ void cairo_dock_popup_menu_on_icon (GtkWidget *menu, Icon *pIcon, GldiContainer 
 	{
 		data[2] = place_menu;
 		data[3] = menu;
-		g_timeout_add (200, (GSourceFunc)_popup_menu_delayed, data);
+		g_timeout_add (250, (GSourceFunc)_popup_menu_delayed, data);
 	}
 }
 
