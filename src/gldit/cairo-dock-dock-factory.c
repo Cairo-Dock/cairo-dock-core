@@ -307,7 +307,7 @@ static gboolean _cairo_dock_action_on_drag_hover (Icon *pIcon)
 	s_iSidActionOnDragHover = 0;
 	return FALSE;
 }
-void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, CairoDock *pDock)
+static void _on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, CairoDock *pDock)
 {
 	//g_print ("%s (%s -> %s)\n", __func__, pLastPointedIcon?pLastPointedIcon->cName:"none", pPointedIcon?pPointedIcon->cName:"none");
 	//cd_debug ("on change d'icone dans %x (-> %s)", pDock, (pPointedIcon != NULL ? pPointedIcon->cName : "rien"));
@@ -552,7 +552,7 @@ static gboolean _on_motion_notify (GtkWidget* pWidget,
 	gboolean bStartAnimation = FALSE;
 	if (pPointedIcon != pLastPointedIcon)
 	{
-		cairo_dock_on_change_icon (pLastPointedIcon, pPointedIcon, pDock);
+		_on_change_icon (pLastPointedIcon, pPointedIcon, pDock);
 		
 		if (pPointedIcon != NULL && s_pIconClicked != NULL && s_pIconClicked->iGroup == pPointedIcon->iGroup && ! myDocksParam.bLockIcons && ! myDocksParam.bLockAll && ! pDock->bPreventDraggingIcons)
 		{
@@ -567,6 +567,33 @@ static gboolean _on_motion_notify (GtkWidget* pWidget,
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 	
 	return FALSE;
+}
+
+static gboolean _hide_child_docks (CairoDock *pDock)
+{
+	GList* ic;
+	Icon *icon;
+	for (ic = pDock->icons; ic != NULL; ic = ic->next)
+	{
+		icon = ic->data;
+		if (icon->pSubDock == NULL)
+			continue;
+		if (gldi_container_is_visible (CAIRO_CONTAINER (icon->pSubDock)))
+		{
+			if (icon->pSubDock->container.bInside)
+			{
+				//cd_debug ("on est dans le sous-dock, donc on ne le cache pas");
+				return FALSE;
+			}
+			else if (icon->pSubDock->iSidLeaveDemand == 0)  // si on sort du dock sans passer par le sous-dock, par exemple en sortant par le bas.
+			{
+				//cd_debug ("on cache %s par filiation", icon->cName);
+				icon->pSubDock->fFoldingFactor = (myDocksParam.bAnimateSubDock ? 1 : 0);  /// 0
+				gtk_widget_hide (icon->pSubDock->container.pWidget);
+			}
+		}
+	}
+	return TRUE;
 }
 
 static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
@@ -663,7 +690,7 @@ static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 	pDock->fAvoidingMouseMargin = 0;
 	
 	//\_______________ On cache ses sous-docks.
-	if (! cairo_dock_hide_child_docks (pDock))  // on quitte si l'un des sous-docks reste visible (on est entre dedans), pour rester en position "haute".
+	if (! _hide_child_docks (pDock))  // on quitte si l'un des sous-docks reste visible (on est entre dedans), pour rester en position "haute".
 	{
 		//g_print (" un des sous-docks reste visible");
 		return TRUE;
@@ -708,7 +735,7 @@ static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 	{
 		cd_debug ("on a sorti %s du dock (%d;%d) / %dx%d", s_pIconClicked->cName, pDock->container.iMouseX, pDock->container.iMouseY, pDock->container.iWidth, pDock->container.iHeight);
 		
-		//if (! cairo_dock_hide_child_docks (pDock))  // on quitte si on entre dans un sous-dock, pour rester en position "haute".
+		//if (! _hide_child_docks (pDock))  // on quitte si on entre dans un sous-dock, pour rester en position "haute".
 		//	return ;
 		
 		CairoDock *pOriginDock = CAIRO_DOCK(cairo_dock_get_icon_container (s_pIconClicked));
@@ -880,7 +907,7 @@ static gboolean _on_enter_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 		// trigger the change to trigger the animation and sub-dock popup
 		if (icon != NULL)
 		{
-			cairo_dock_on_change_icon (NULL, icon, pDock);  // we were out of the dock, so there is no previous pointed icon.
+			_on_change_icon (NULL, icon, pDock);  // we were out of the dock, so there is no previous pointed icon.
 		}
 	}
 	
@@ -1573,7 +1600,7 @@ static gboolean _cairo_dock_grow_up (CairoDock *pDock)
 		return FALSE;
 	
 	if (pLastPointedIcon != pPointedIcon && pDock->container.bInside)
-		cairo_dock_on_change_icon (pLastPointedIcon, pPointedIcon, pDock);  /// probablement inutile...
+		_on_change_icon (pLastPointedIcon, pPointedIcon, pDock);  /// probablement inutile...
 
 	if (pDock->iMagnitudeIndex == CAIRO_DOCK_NB_MAX_ITERATIONS && pDock->fFoldingFactor == 0)  // fin de grossissement et de depliage.
 	{
@@ -1582,6 +1609,25 @@ static gboolean _cairo_dock_grow_up (CairoDock *pDock)
 	}
 	else
 		return TRUE;
+}
+
+static void _hide_parent_dock (CairoDock *pDock)
+{
+	CairoDock *pParentDock = NULL;
+	Icon *pIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
+	if (pIcon && pParentDock)
+	{
+		if (pParentDock->iRefCount == 0)
+		{
+			cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pParentDock));
+		}
+		else
+		{
+			//cd_message ("on cache %s par parente", cDockName);
+			gtk_widget_hide (pParentDock->container.pWidget);
+			_hide_parent_dock (pParentDock);
+		}
+	}
 }
 
 static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
@@ -1645,7 +1691,7 @@ static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 			{
 				//g_print ("on cache ce sous-dock en sortant par lui\n");
 				gtk_widget_hide (pDock->container.pWidget);
-				cairo_dock_hide_parent_dock (pDock);
+				_hide_parent_dock (pDock);
 			}
 			///cairo_dock_hide_after_shortcut ();
 			if (pDock->iVisibility == CAIRO_DOCK_VISI_SHORTKEY)  // hide at the end of the shrink animation
@@ -2037,7 +2083,7 @@ static void _detach_icon (GldiContainer *pContainer, Icon *icon)
 	{
 		if ((pPrevIcon == NULL || CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pPrevIcon)) && CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (pNextIcon))
 		{
-			pDock->icons = g_list_delete_link (pDock->icons, next_ic);  // opimisation
+			pDock->icons = g_list_delete_link (pDock->icons, next_ic);  // optimisation
 			next_ic = NULL;
 			pDock->fFlatDockWidth -= pNextIcon->fWidth + myIconsParam.iIconGap;
 			cairo_dock_set_icon_container (pNextIcon, NULL);
@@ -2046,7 +2092,7 @@ static void _detach_icon (GldiContainer *pContainer, Icon *icon)
 		}
 		if ((pNextIcon == NULL || CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pNextIcon)) && CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (pPrevIcon))
 		{
-			pDock->icons = g_list_delete_link (pDock->icons, prev_ic);  // opimisation
+			pDock->icons = g_list_delete_link (pDock->icons, prev_ic);  // optimisation
 			prev_ic = NULL;
 			pDock->fFlatDockWidth -= pPrevIcon->fWidth + myIconsParam.iIconGap;
 			cairo_dock_set_icon_container (pPrevIcon, NULL);
@@ -2302,48 +2348,6 @@ CairoDock *gldi_subdock_new (const gchar *cDockName, const gchar *cRendererName,
 }
 
 
-void cairo_dock_remove_automatic_separators (CairoDock *pDock)
-{
-	//g_print ("%s ()\n", __func__);
-	Icon *icon;
-	GList *ic = pDock->icons, *next_ic;
-	while (ic != NULL)
-	{
-		icon = ic->data;
-		next_ic = ic->next;  // si l'icone se fait enlever, on perdrait le fil.
-		if (CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (icon))
-		{
-			gldi_icon_detach (icon);
-			gldi_object_unref (GLDI_OBJECT(icon));
-		}
-		ic = next_ic;
-	}
-}
-
-void cairo_dock_insert_automatic_separators_in_dock (CairoDock *pDock)
-{
-	//g_print ("%s ()\n", __func__);
-	Icon *icon, *pNextIcon;
-	GList *ic;
-	for (ic = pDock->icons; ic != NULL; ic = ic->next)
-	{
-		icon = ic->data;
-		if (! GLDI_OBJECT_IS_SEPARATOR_ICON (icon))
-		{
-			if (ic->next != NULL)
-			{
-				pNextIcon = ic->next->data;
-				if (! GLDI_OBJECT_IS_SEPARATOR_ICON (pNextIcon) && icon->iGroup != pNextIcon->iGroup)
-				{
-					Icon *pSeparatorIcon = gldi_auto_separator_icon_new (icon, pNextIcon);
-					gldi_icon_insert_in_container (pSeparatorIcon, CAIRO_CONTAINER(pDock), ! CAIRO_DOCK_ANIMATE_ICON);
-				}
-			}
-		}
-	}
-}
-
-
 void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingDock)
 {
 	g_return_if_fail (pReceivingDock != NULL);
@@ -2400,15 +2404,20 @@ void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, g
 				cairo_dock_icon_set_requested_size (icon, 0, 0);
 				cairo_dock_set_icon_size_in_dock (pDock, icon);
 			}
-			cairo_dock_trigger_load_icon_buffers (icon);
 			
-			if (bUpdateIconSize && cairo_dock_get_icon_data_renderer (icon) != NULL)
+			if (bUpdateIconSize && cairo_dock_get_icon_data_renderer (icon) != NULL)  // we need to reload the DataRenderer to use the new size
+			{
+				cairo_dock_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));  // the DataRenderer uses the ImageBuffer's size on loading, so we need to load it now
 				cairo_dock_reload_data_renderer_on_icon (icon, CAIRO_CONTAINER (pDock));
+			}
+			else
+			{
+				cairo_dock_trigger_load_icon_buffers (icon);
+			}
 		}
 		
 		if (bRecursive && icon->pSubDock != NULL)  // we handle the sub-dock for applets too, so that they don't need to care.
 		{
-			///gldi_subdock_synchronize_orientation (icon->pSubDock, pDock, FALSE);  /// should probably not be here.
 			if (bUpdateIconSize)
 				icon->pSubDock->iIconSize = pDock->iIconSize;
 			cairo_dock_reload_buffers_in_dock (icon->pSubDock, bRecursive, bUpdateIconSize);
@@ -2418,13 +2427,8 @@ void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, g
 	if (bUpdateIconSize)
 	{
 		cairo_dock_update_dock_size (pDock);
-		cairo_dock_calculate_dock_icons (pDock);
-		
-		cairo_dock_move_resize_dock (pDock);
-		if (pDock->iVisibility == CAIRO_DOCK_VISI_RESERVE)  // la position/taille a change, il faut refaire la reservation.
-			cairo_dock_reserve_space_for_dock (pDock, TRUE);
-		gtk_widget_queue_draw (pDock->container.pWidget);
 	}
+	gtk_widget_queue_draw (pDock->container.pWidget);
 }
 
 

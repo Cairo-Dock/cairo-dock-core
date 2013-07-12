@@ -242,7 +242,7 @@ static void init_object (GldiObject *obj, G_GNUC_UNUSED gpointer attr)
 static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, GKeyFile *pKeyFile)
 {
 	GldiManager *pManager = (GldiManager*)obj;
-	g_print ("reload %s\n", pManager->cModuleName);
+	cd_message ("reload %s (%d)", pManager->cModuleName, bReloadConf);
 	if (bReloadConf && !pKeyFile)
 	{
 		pKeyFile = cairo_dock_open_key_file (g_cConfFile);

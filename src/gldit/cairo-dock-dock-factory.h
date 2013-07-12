@@ -309,8 +309,6 @@ struct _CairoDock {
 
 void cairo_dock_freeze_docks (gboolean bFreeze);
 
-void cairo_dock_on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, CairoDock *pDock);
-
 void gldi_dock_init_internals (CairoDock *pDock);
 
 
@@ -324,21 +322,11 @@ CairoDock *gldi_dock_new (const gchar *cDockName);
 * @param cDockName the name that identifies the dock.
 * @param cRendererName name of a renderer. If NULL, the default renderer will be applied.
 * @param pParentDock the parent dock.
-* @param pIconList a list of icons that will be loaded and inserted into the new dock.
+* @param pIconList a list of icons that will be loaded and inserted into the new dock (optional).
 * @return the new dock.
 */
 CairoDock *gldi_subdock_new (const gchar *cDockName, const gchar *cRendererName, CairoDock *pParentDock, GList *pIconList);
 
-
-/* Remove and destroy all automatic separators inside a dock.
-*@param pDock the dock.
-*/
-void cairo_dock_remove_automatic_separators (CairoDock *pDock);  // -> IconManager
-
-/* Add automatic separators between the different groups of icons inside a dock.
-*@param pDock the dock.
-*/
-void cairo_dock_insert_automatic_separators_in_dock (CairoDock *pDock);  // -> IconManager
 
 /** Remove all icons from a dock (and its sub-docks). If the receiving dock is NULL, the icons are destroyed and removed from the current theme itself.
 *@param pDock a dock.

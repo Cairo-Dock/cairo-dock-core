@@ -190,17 +190,6 @@ void gldi_docks_foreach_root (GFunc pFunction, gpointer pUserData);
 void gldi_icons_foreach_in_docks (CairoDockForeachIconFunc pFunction, gpointer pUserData);
 
 
-/* Recursively hides all the parent docks of a sub-dock.
-*@param pDock the (sub)dock.
-*/
-void cairo_dock_hide_parent_dock (CairoDock *pDock);  // -> dock-factory
-
-/* Recursively hides all the sub-docks of a given dock.
-*@param pDock the dock.
-* @return TRUE if a sub-dock has been hidden.
-*/
-gboolean cairo_dock_hide_child_docks (CairoDock *pDock);  // -> dock-factory
-
 /** (Re)load all buffers of all icons in all docks.
 @param bUpdateIconSize TRUE to recalculate the icons and docks size.
 */
@@ -225,10 +214,9 @@ void gldi_dock_add_conf_file_for_name (const gchar *cDockName);
 */
 gchar *gldi_dock_add_conf_file (void);
 
-/* Redraw all the root docks.
-*@param bExceptMainDock whether to redraw the main dock too.
+/** Redraw every root docks.
 */
-void cairo_dock_redraw_root_docks (gboolean bExceptMainDock);
+void gldi_docks_redraw_all_root (void);
 
 
 void cairo_dock_quick_hide_all_docks (void);

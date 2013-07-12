@@ -28,7 +28,7 @@
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-dock-manager.h"  // cairo_dock_redraw_root_docks
+#include "cairo-dock-dock-manager.h"  // gldi_docks_redraw_all_root
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-applications-manager.h"  // cairo_dock_foreach_appli_icon
@@ -645,7 +645,7 @@ static void reload (CairoIndicatorsParam *pPrevIndicators, CairoIndicatorsParam 
 		gldi_icons_foreach ((CairoDockForeachIconFunc) _reload_progress_bar, NULL);
 	}
 	
-	cairo_dock_redraw_root_docks (FALSE);  // tous les docks (main dock et les autres qui peuvent contenir des applets avec un indicateur).
+	gldi_docks_redraw_all_root ();
 }
 
 

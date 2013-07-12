@@ -238,18 +238,6 @@ Icon* cairo_dock_get_last_icon_of_order (GList *pIconList, CairoDockIconGroup iG
 	}
 	return NULL;
 }
-Icon* cairo_dock_get_first_icon_of_true_type (GList *pIconList, CairoDockIconTrueType iType)
-{
-	GList* ic;
-	Icon *icon;
-	for (ic = pIconList; ic != NULL; ic = ic->next)
-	{
-		icon = ic->data;
-		if (icon->iTrueType == iType)
-			return icon;
-	}
-	return NULL;
-}
 
 Icon* cairo_dock_get_pointed_icon (GList *pIconList)
 {
@@ -374,10 +362,6 @@ Icon *gldi_icons_get_without_dialog (GList *pIconList)
 		return NULL;
 
 	Icon *pIcon = cairo_dock_get_first_icon_of_group (pIconList, CAIRO_DOCK_SEPARATOR12);
-	if (pIcon != NULL && ! gldi_icon_has_dialog (pIcon) && pIcon->cParentDockName != NULL && ! cairo_dock_icon_is_being_removed (pIcon))
-		return pIcon;
-	
-	pIcon = cairo_dock_get_first_icon_of_true_type (pIconList, CAIRO_DOCK_ICON_TYPE_SEPARATOR);
 	if (pIcon != NULL && ! gldi_icon_has_dialog (pIcon) && pIcon->cParentDockName != NULL && ! cairo_dock_icon_is_being_removed (pIcon))
 		return pIcon;
 	

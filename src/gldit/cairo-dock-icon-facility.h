@@ -151,7 +151,6 @@ Icon *cairo_dock_get_first_icon_of_group (GList *pIconList, CairoDockIconGroup i
 *@return the last found icon with this group, or NULL if none matches.
 */
 Icon *cairo_dock_get_last_icon_of_group (GList *pIconList, CairoDockIconGroup iGroup);
-#define cairo_dock_get_last_icon_of_type cairo_dock_get_last_icon_of_group
 
 /** Get the first icon whose group has the same order as a given one.
 *@param pIconList a list of icons.
@@ -166,8 +165,6 @@ Icon* cairo_dock_get_first_icon_of_order (GList *pIconList, CairoDockIconGroup i
 *@return the last found icon, or NULL if none matches.
 */
 Icon* cairo_dock_get_last_icon_of_order (GList *pIconList, CairoDockIconGroup iGroup);
-
-Icon* cairo_dock_get_first_icon_of_true_type (GList *pIconList, CairoDockIconTrueType iType);
 
 /** Get the currently pointed icon in a list of icons.
 *@param pIconList a list of icons.
@@ -237,10 +234,7 @@ Icon *gldi_icons_get_without_dialog (GList *pIconList);
 
 gboolean gldi_icon_has_dialog (Icon *pIcon);
 
-#define cairo_dock_get_first_launcher(pIconList) cairo_dock_get_first_icon_of_group (pIconList, CAIRO_DOCK_LAUNCHER)
 #define cairo_dock_get_last_launcher(pIconList) cairo_dock_get_last_icon_of_group (pIconList, CAIRO_DOCK_LAUNCHER)
-#define cairo_dock_get_first_appli(pIconList) cairo_dock_get_first_icon_of_group (pIconList, CAIRO_DOCK_APPLI)
-#define cairo_dock_get_last_appli(pIconList) cairo_dock_get_last_icon_of_group (pIconList, CAIRO_DOCK_APPLI)
 
 /** Get the dimension allocated to the surface/texture of an icon.
 @param pIcon the icon.

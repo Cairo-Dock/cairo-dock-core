@@ -77,8 +77,6 @@ typedef enum {
 struct _IconInterface {
 	/// function that loads the icon surface (and optionnally texture).
 	void (*load_image) (Icon *icon);
-	/// function called when the icon is deleted from the current theme.
-	gboolean (*on_delete) (Icon *icon);
 	/// function called when the user drag something over the icon for more than 500ms.
 	void (*action_on_drag_hover) (Icon *icon);
 	};
@@ -89,8 +87,6 @@ struct _Icon {
 	/// object
 	GldiObject object;
 	gpointer pDataSlot[CAIRO_DOCK_NB_DATA_SLOT];
-	/// type of the icon.
-	CairoDockIconTrueType iTrueType;
 	/// group of the icon.
 	CairoDockIconGroup iGroup;
 	/// interface

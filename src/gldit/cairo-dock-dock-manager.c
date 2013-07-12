@@ -378,63 +378,6 @@ void gldi_icons_foreach_in_docks (CairoDockForeachIconFunc pFunction, gpointer p
 }
 
 
-static gboolean _cairo_dock_hide_dock_if_parent (G_GNUC_UNUSED gchar *cDockName, CairoDock *pDock, CairoDock *pChildDock)
-{
-	if (pDock == pChildDock)
-		return FALSE;
-	if (pDock->container.bInside)
-		return FALSE;
-		
-	Icon *pPointedIcon = cairo_dock_get_icon_with_subdock (pDock->icons, pChildDock);
-	if (pPointedIcon != NULL)
-	{
-		//g_print (" il faut cacher ce dock parent (%d)\n", pDock->iRefCount);
-		if (pDock->iRefCount == 0)
-		{
-			cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
-		}
-		else
-		{
-			//cd_message ("on cache %s par parente", cDockName);
-			gtk_widget_hide (pDock->container.pWidget);
-			cairo_dock_hide_parent_dock (pDock);
-		}
-		return TRUE;
-	}
-	return FALSE;
-}
-void cairo_dock_hide_parent_dock (CairoDock *pDock)
-{
-	g_hash_table_find (s_hDocksTable, (GHRFunc)_cairo_dock_hide_dock_if_parent, pDock);
-}
-
-gboolean cairo_dock_hide_child_docks (CairoDock *pDock)
-{
-	GList* ic;
-	Icon *icon;
-	for (ic = pDock->icons; ic != NULL; ic = ic->next)
-	{
-		icon = ic->data;
-		if (icon->pSubDock == NULL)
-			continue;
-		if (gldi_container_is_visible (CAIRO_CONTAINER (icon->pSubDock)))
-		{
-			if (icon->pSubDock->container.bInside)
-			{
-				//cd_debug ("on est dans le sous-dock, donc on ne le cache pas");
-				return FALSE;
-			}
-			else if (icon->pSubDock->iSidLeaveDemand == 0)  // si on sort du dock sans passer par le sous-dock, par exemple en sortant par le bas.
-			{
-				//cd_debug ("on cache %s par filiation", icon->cName);
-				icon->pSubDock->fFoldingFactor = (myDocksParam.bAnimateSubDock ? 1 : 0);  /// 0
-				gtk_widget_hide (icon->pSubDock->container.pWidget);
-			}
-		}
-	}
-	return TRUE;
-}
-
 
 static void _reload_buffer_in_one_dock (/**const gchar *cDockName, */CairoDock *pDock, gpointer data)
 {
@@ -759,16 +702,9 @@ gchar *gldi_dock_add_conf_file (void)
 }
 
 
-static void _cairo_dock_redraw_one_root_dock (CairoDock *pDock, gpointer data)
+void gldi_docks_redraw_all_root (void)
 {
-	if (! (data && pDock->bIsMainDock))
-	{
-		gtk_widget_queue_draw (pDock->container.pWidget);
-	}
-}
-void cairo_dock_redraw_root_docks (gboolean bExceptMainDock)
-{
-	g_list_foreach (s_pRootDockList, (GFunc)_cairo_dock_redraw_one_root_dock, GINT_TO_POINTER (bExceptMainDock));
+	gldi_docks_foreach_root ((GFunc)cairo_dock_redraw_container, NULL);
 }
 
 
@@ -1693,7 +1629,7 @@ static void reset_config (CairoDocksParam *pDocksParam)
  /// LOAD ///
 ////////////
 
-static void _cairo_dock_load_visible_zone (const gchar *cVisibleZoneImageFile, int iVisibleZoneWidth, int iVisibleZoneHeight, double fVisibleZoneAlpha)
+static void _load_visible_zone (const gchar *cVisibleZoneImageFile, int iVisibleZoneWidth, int iVisibleZoneHeight, double fVisibleZoneAlpha)
 {
 	cairo_dock_unload_image_buffer (&g_pVisibleZoneBuffer);
 	
@@ -1706,7 +1642,7 @@ static void _cairo_dock_load_visible_zone (const gchar *cVisibleZoneImageFile, i
 }
 static void load (void)
 {
-	_cairo_dock_load_visible_zone (myDocksParam.cZoneImage, myDocksParam.iZoneWidth, myDocksParam.iZoneHeight, myDocksParam.fZoneAlpha);
+	_load_visible_zone (myDocksParam.cZoneImage, myDocksParam.iZoneWidth, myDocksParam.iZoneHeight, myDocksParam.fZoneAlpha);
 	
 	g_pHidingBackend = cairo_dock_get_hiding_effect (myDocksParam.cHideEffect);
 	
@@ -1798,8 +1734,7 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 	if (pPosition->iScreenBorder != pPrevPosition->iScreenBorder)
 	{
 		_set_dock_orientation (pDock, pPosition->iScreenBorder);
-		cairo_dock_reload_buffers_in_all_docks (TRUE);  // icons may have a different width and height, so changing the orientation will affect them.  also, stack-icons may be drawn differently according to the orientation (ex.: box).
-		///_cairo_dock_draw_one_subdock_icon (NULL, g_pMainDock, NULL);  // container-icons may be drawn differently according to the orientation (ex.: box).
+		cairo_dock_reload_buffers_in_dock (pDock, TRUE, FALSE);  // icons may have a different width and height, so changing the orientation will affect them.  also, stack-icons may be drawn differently according to the orientation (ex.: box).
 	}
 	pDock->bExtendedMode = pBackground->bExtendedMode;
 	pDock->iGapX = pPosition->iGapX;
@@ -1821,10 +1756,9 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 		cairo_dock_update_dock_size (pDock);
 	}
 	
-	cairo_dock_calculate_dock_icons (pDock);
-	//cairo_dock_move_resize_dock (pDock);
+	///cairo_dock_calculate_dock_icons (pDock);
 	
-	gtk_widget_queue_draw (pDock->container.pWidget);
+	gldi_docks_redraw_all_root ();  // the background is a global parameter
 	
 	// accessibility
 	//\_______________ Shortkey.
@@ -1869,9 +1803,9 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 		pAccessibility->iZoneHeight != pPrevAccessibility->iZoneHeight ||
 		pAccessibility->fZoneAlpha != pPrevAccessibility->fZoneAlpha)
 	{
-		_cairo_dock_load_visible_zone (pAccessibility->cZoneImage, pAccessibility->iZoneWidth, pAccessibility->iZoneHeight, pAccessibility->fZoneAlpha);
+		_load_visible_zone (pAccessibility->cZoneImage, pAccessibility->iZoneWidth, pAccessibility->iZoneHeight, pAccessibility->fZoneAlpha);
 		
-		cairo_dock_redraw_root_docks (FALSE);  // FALSE <=> main dock inclus.
+		gldi_docks_redraw_all_root ();
 	}
 	
 	gldi_dock_set_visibility (pDock, pAccessibility->iVisibility);

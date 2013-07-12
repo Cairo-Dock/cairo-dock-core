@@ -550,7 +550,7 @@ static void reload (CairoBackendsParam *pPrevBackendsParam, CairoBackendsParam *
 	if (cairo_dock_strings_differ (pPrevViews->cMainDockDefaultRendererName, pBackendsParam->cMainDockDefaultRendererName))
 	{
 		cairo_dock_set_all_views_to_default (1);  // met a jour la taille des docks principaux.
-		cairo_dock_redraw_root_docks (FALSE);  // FALSE <=> main dock inclus.
+		gldi_docks_redraw_all_root ();
 	}
 	
 	if (cairo_dock_strings_differ (pPrevViews->cSubDockDefaultRendererName, pBackendsParam->cSubDockDefaultRendererName) ||
