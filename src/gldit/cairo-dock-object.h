@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 /**
 *@file cairo-dock-object.h This class defines the Objects, the base class of libgldi.
 * Every element in this library is an Object.
-* An object is defined by an ObjectManager, which defines its capabilitie and signals.
+* An object is defined by an ObjectManager, which defines its capabilities and signals.
 * 
 * Any object is created with \ref gldi_object_new and destroyed with \ref gldi_object_unref.
 * An object can be deleted from the current theme with \ref gldi_object_delete.
@@ -38,6 +38,7 @@ G_BEGIN_DECLS
 * To listen for notifications on any object of a given type, simply register yourself on its ObjectManager.
 */
 
+/// Definition of an Object.
 struct _GldiObject {
 	gint ref;
 	GPtrArray *pNotificationsTab;
@@ -45,7 +46,7 @@ struct _GldiObject {
 	GList *mgrs;  // sorted in reverse order
 };
 
-
+/// Definition of an ObjectManager.
 struct _GldiObjectManager {
 	GldiObject object;
 	const gchar *cName;
@@ -97,14 +98,15 @@ void gldi_object_delete (GldiObject *pObject);
  * @param pObject the Object
  * @param bReloadConfig TRUE to read its config file again (if the object has one)
  */
-void gldi_object_reload (GldiObject *obj, gboolean bReloadConfig);
+void gldi_object_reload (GldiObject *pObject, gboolean bReloadConfig);
 
-
+/* Sets the ObjectManager of an object. It is only useful to make an ObjectManager derive from another one. For any other object, it is done automatically.
+ */
 void gldi_object_set_manager (GldiObject *pObject, GldiObjectManager *pMgr);
 
 gboolean gldi_object_is_manager_child (GldiObject *pObject, GldiObjectManager *pMgr);
 
-#define gldi_object_get_type(obj) (GLDI_OBJECT(obj)->mgr && GLDI_OBJECT(obj)->ref > 0 ? GLDI_OBJECT(obj)->mgr->cName : "ObjectManager")
+#define gldi_object_get_type(obj) (GLDI_OBJECT(obj)->mgr ? GLDI_OBJECT(obj)->mgr->cName : "ObjectManager")
 
 
 /// Generic prototype of a notification callback.
@@ -117,9 +119,9 @@ typedef struct {
 
 typedef guint GldiNotificationType;
 
-/// Use this in \ref gldi_object_register_notification to be called before the dock.
+/// Use this in \ref gldi_object_register_notification to be called before the core.
 #define GLDI_RUN_FIRST TRUE
-/// Use this in \ref gldi_object_register_notification to be called after the dock.
+/// Use this in \ref gldi_object_register_notification to be called after the core.
 #define GLDI_RUN_AFTER FALSE
 
 /// Return this in your callback to prevent the other callbacks from being called after you.
@@ -140,7 +142,7 @@ typedef guint GldiNotificationType;
 *@param pObject the object (Icon, Container, Manager).
 *@param iNotifType type of the notification.
 *@param pFunction callback.
-*@param bRunFirst CAIRO_DOCK_RUN_FIRST to be called before Cairo-Dock, CAIRO_DOCK_RUN_AFTER to be called after.
+*@param bRunFirst GLDI_RUN_FIRST to be called before Cairo-Dock, GLDI_RUN_AFTER to be called after.
 *@param pUserData data to be passed as the first parameter of the callback.
 */
 void gldi_object_register_notification (gpointer pObject, GldiNotificationType iNotifType, GldiNotificationFunc pFunction, gboolean bRunFirst, gpointer pUserData);

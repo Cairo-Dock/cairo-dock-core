@@ -33,7 +33,6 @@ G_BEGIN_DECLS
 *@file cairo-dock-opengl-font.h This class provides different ways to draw text directly in OpenGL.
 * \ref cairo_dock_create_texture_from_text_simple lets you draw any text in any font, by creating a texture from a Pango font description. This is a convenient function but not very fast.
 * For a more efficient way, you load a font into a CairoDockGLFont with either :
-* \ref cairo_dock_load_bitmap_font to load a subset of any font into bitmaps (bitmaps are not influenced by the transformation matrix)
 * \ref cairo_dock_load_textured_font to load a subset of a Mono font into textures.
 * You then use \ref cairo_dock_draw_gl_text_at_position to draw the text.
 */

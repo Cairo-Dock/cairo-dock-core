@@ -28,7 +28,7 @@
 G_BEGIN_DECLS
 
 /**
-*@file cairo-dock-manager.h This class defines the Managers. A Manager is like an internal module: it has a classic module interface, manages a set of ressources, and has its own configuration.
+*@file cairo-dock-manager.h This class defines the Managers. A Manager is like an internal module: it has a classic module interface, manages a set of resources, and has its own configuration.
 * 
 * Each manager is initialized at the beginning.
 * When loading the current theme, get_config and load are called.
@@ -53,6 +53,7 @@ typedef void (*GldiManagerUnloadFunc) (void);
 typedef void (* GldiManagerReloadFunc) (GldiManagerConfigPtr pPrevConfig, GldiManagerConfigPtr pNewConfig);
 typedef gboolean (* GldiManagerGetConfigFunc) (GKeyFile *pKeyFile, GldiManagerConfigPtr pConfig);
 typedef void (* GldiManagerResetConfigFunc) (GldiManagerConfigPtr pConfig);
+/// Definition of a Manager.
 struct _GldiManager {
 	/// object
 	GldiObject object;

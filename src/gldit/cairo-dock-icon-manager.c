@@ -46,6 +46,8 @@
 #include "cairo-dock-user-icon-manager.h"  // GLDI_OBJECT_IS_USER_ICON
 #include "cairo-dock-separator-manager.h"  // GLDI_OBJECT_IS_SEPARATOR_ICON
 #include "cairo-dock-applications-manager.h"  // GLDI_OBJECT_IS_APPLI_ICON
+#include "cairo-dock-launcher-manager.h"  // GLDI_OBJECT_IS_LAUNCHER_ICON
+#include "cairo-dock-applet-manager.h"  // GLDI_OBJECT_IS_APPLET_ICON
 #include "cairo-dock-backends-manager.h"  // cairo_dock_foreach_icon_container_renderer
 #define _MANAGER_DEF_
 #include "cairo-dock-icon-manager.h"
@@ -752,24 +754,35 @@ static void load (void)
  /// RELOAD ///
 //////////////
 
-static void _remove_separators (G_GNUC_UNUSED const gchar *cDockName, CairoDock *pDock, G_GNUC_UNUSED gpointer data)
+static void _reload_separators (G_GNUC_UNUSED const gchar *cDockName, CairoDock *pDock, gpointer data)
 {
-	cairo_dock_remove_automatic_separators (pDock);
-}
-static void _insert_separators (G_GNUC_UNUSED const gchar *cDockName, CairoDock *pDock, G_GNUC_UNUSED gpointer data)
-{
+	///cairo_dock_remove_automatic_separators (pDock);
+	gboolean bSeparatorsNeedReload = GPOINTER_TO_INT(data);
+	gboolean bHasSeparator = FALSE;
 	Icon *icon;
 	GList *ic;
-	for (ic = pDock->icons; ic != NULL; ic = ic->next)  // les separateurs utilisateurs ne sont pas recrees, on les recharge donc.
+	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
-		if (GLDI_OBJECT_IS_SEPARATOR_ICON (icon))  // il n'y a que des separateurs utilisateurs dans le dock en ce moment.
+		if (GLDI_OBJECT_IS_SEPARATOR_ICON (icon))
 		{
-			cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pDock));
+			if (bSeparatorsNeedReload)
+			{
+				cairo_dock_icon_set_requested_size (icon, 0, 0);
+				cairo_dock_set_icon_size_in_dock (pDock, icon);
+			}
+			cairo_dock_load_icon_image (icon, icon->pContainer);
+			bHasSeparator = TRUE;
 		}
 	}
-	cairo_dock_insert_automatic_separators_in_dock (pDock);
+	if (bHasSeparator)
+	{
+		if (bSeparatorsNeedReload)
+			cairo_dock_update_dock_size (pDock);  // either to trigger the loading of the separator rendering, or to take into account the change in the separators size
+		gtk_widget_queue_draw (pDock->container.pWidget);  // in any case, refresh the drawing
+	}
 }
+
 static void _calculate_icons (G_GNUC_UNUSED const gchar *cDockName, CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 {
 	cairo_dock_calculate_dock_icons (pDock);
@@ -780,22 +793,27 @@ static void _reload_one_label (Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContai
 	cairo_dock_load_icon_text (pIcon);
 	cairo_dock_load_icon_quickinfo (pIcon);
 }
-static void _cairo_dock_resize_one_dock (G_GNUC_UNUSED gchar *cDockName, CairoDock *pDock, G_GNUC_UNUSED gpointer data)
+static void _cairo_dock_resize_one_dock (G_GNUC_UNUSED const gchar *cDockName, CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 {
 	cairo_dock_update_dock_size (pDock);
 }
 
 static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 {
-	gboolean bInsertSeparators = FALSE;
+	// if the separator size has changed, we need to re-allocate it, reload the image, and update the dock size
+	// if the separator rendering has changed (type or color), we need to load the new rendering, which is done by the View (during the compute_size)
+	// otherwise, we just need to redraw 
+	gboolean bSeparatorsNeedReload = (pPrevIcons->iSeparatorWidth != pIcons->iSeparatorWidth
+		|| pPrevIcons->iSeparatorHeight != pIcons->iSeparatorHeight
+		|| pPrevIcons->iSeparatorType != pIcons->iSeparatorType
+		|| cairo_dock_colors_differ (pPrevIcons->fSeparatorColor, pIcons->fSeparatorColor));  // same if color has changed (for the flat separator rendering)
+	gboolean bSeparatorNeedRedraw = (g_strcmp0 (pPrevIcons->cSeparatorImage, pIcons->cSeparatorImage) != 0
+		|| pPrevIcons->bRevolveSeparator != pIcons->bRevolveSeparator);
 	
-	if (cairo_dock_strings_differ (pPrevIcons->cSeparatorImage, pIcons->cSeparatorImage) ||
-		pPrevIcons->iSeparatorWidth != pIcons->iSeparatorWidth ||
-		pPrevIcons->iSeparatorHeight != pIcons->iSeparatorHeight ||
-		pPrevIcons->fAmplitude != pIcons->fAmplitude)
+	if (bSeparatorsNeedReload || bSeparatorNeedRedraw)
 	{
-		bInsertSeparators = TRUE;
-		gldi_docks_foreach ((GHFunc)_remove_separators, NULL);
+		gldi_docks_foreach ((GHFunc)_reload_separators, GINT_TO_POINTER(bSeparatorsNeedReload));
+		return;
 	}
 	
 	gboolean bThemeChanged = cairo_dock_strings_differ (pIcons->cIconTheme, pPrevIcons->cIconTheme);
@@ -832,11 +850,6 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 		cairo_dock_reload_buffers_in_all_docks (TRUE);
 	}
 	
-	if (bInsertSeparators)
-	{
-		gldi_docks_foreach ((GHFunc)_insert_separators, NULL);
-	}
-	
 	if (pPrevIcons->iIconWidth != pIcons->iIconWidth ||
 		pPrevIcons->iIconHeight != pIcons->iIconHeight ||
 		pPrevIcons->fAmplitude != pIcons->fAmplitude)
@@ -849,7 +862,7 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 	
 	cairo_dock_set_all_views_to_default (0);  // met a jour la taille (decorations incluses) de tous les docks; le chargement des separateurs plats se fait dans le calcul de max dock size.
 	gldi_docks_foreach ((GHFunc)_calculate_icons, NULL);
-	cairo_dock_redraw_root_docks (FALSE);  // main dock inclus.
+	gldi_docks_redraw_all_root ();
 	
 	// labels
 	CairoIconsParam *pLabels = pIcons;
@@ -958,7 +971,7 @@ static void init_object (GldiObject *obj, G_GNUC_UNUSED gpointer attr)
 static void reset_object (GldiObject *obj)
 {
 	Icon *icon = (Icon*)obj;
-	cd_debug ("%s (%s , %s)", __func__, icon->cName, icon->cClass);
+	cd_debug ("%s (%s , %s, %s)", __func__, icon->cName, icon->cClass, gldi_object_get_type(icon));
 	
 	GldiContainer *pContainer = cairo_dock_get_icon_container (icon);
 	if (pContainer != NULL)
@@ -966,7 +979,7 @@ static void reset_object (GldiObject *obj)
 		gldi_icon_detach (icon);
 	}
 	
-	if (icon->cClass != NULL && ! GLDI_OBJECT_IS_APPLI_ICON (icon))  // c'est un inhibiteur.
+	if (icon->cClass != NULL && (GLDI_OBJECT_IS_LAUNCHER_ICON (icon) || GLDI_OBJECT_IS_APPLET_ICON (icon)))  // c'est un inhibiteur.
 		cairo_dock_deinhibite_class (icon->cClass, icon);  // unset the appli if it had any
 	
 	gldi_object_notify (icon, NOTIFICATION_STOP_ICON, icon);

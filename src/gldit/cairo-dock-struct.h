@@ -54,12 +54,16 @@
  * \ref install_sec
  * 
  * \ref struct_sec
+ * -  \ref objects
+ * -  \ref managers
  * -  \ref containers
  * -  \ref icons
  * -  \ref dock
  * -  \ref desklet
  * -  \ref dialog
  * -  \ref flying
+ * -  \ref modules
+ * -  \ref module-instances
  * 
  * \ref applets_sec
  * -  \ref module
@@ -85,12 +89,10 @@
  * \n
  * \section intro_sec Introduction
  *
- * This documentation is divided into 3 parts :
- * - the definition of the main classes (dock, icon, etc)
- * - utilities functions (interaction with X, GUI, etc)
- * - plug-ins framework.
+ * This documentation presents the architecture of <i>libgldi</i>, and how to make a plug-in for it.
  *
- * It is useful if you want to write a complex plug-in or add new features in the core (or if you just love C); to write simple applets in any language, see http://doc.glx-dock.org.
+ * It is useful if you want to write a plug-in, add new features in the core, or just love C.
+ * Note: to write applets in any language very easily, see http://doc.glx-dock.org.
  *
  * Cairo-Dock has a <b>decentralized conception</b> : it has a minimalistic core, and lets external modules extend its functionnalities.\n
  * This is a strong design, because it allows to extend functionnalities easily without having to hack into the core, which makes the project more stable and allows developpers to use high-level functions only, that are very tested and optimized.\n
@@ -113,14 +115,14 @@
  *   bzr checkout --lightweight lp:cairo-dock-core
  *   ### compil the dock and install it
  *   cd cairo-dock-core
- *   cmake CMakeLists.txt  -DCMAKE_INSTALL_PREFIX=/usr
+ *   cmake CMakeLists.txt -DCMAKE_INSTALL_PREFIX=/usr
  *   make
  *   sudo make install
  *   ### grab the sources of the plug-ins
  *   cd ..
  *   bzr checkout --lightweight lp:cairo-dock-plug-ins
  *   ### compil the stable plug-ins and install them
- *   cmake CMakeLists.txt  -DCMAKE_INSTALL_PREFIX=/usr
+ *   cmake CMakeLists.txt -DCMAKE_INSTALL_PREFIX=/usr
  *   make
  *   sudo make install
  * \endcode
@@ -130,24 +132,50 @@
  * \n
  * \section struct_sec Main structures
  *
+ * \subsection objects Objects
+ * Any element in <i>libgldi</i> is a _GldiObject.<br>
+ * An Object is created by an ObjectManager, which defines the properties and notifications of its children.<br>
+ * It has a reference counter, can be deleted from the current theme, and can be reloaded.<br>
+ * An Object can cast notifications; notifications are broadcasted on its ObjectManager.<br>
+ * An ObjectManager can inherit from another ObjectManager; in this case, all methods of the parent ObjectManagers are called recursively, and likewise all notifications on the object are casted recursively to all parent ObjectManagers.
+ * 
+ * \subsection managers Managers
+ * The core is divided in several internal modules, called Managers.
+ * Each Manager manages a set of parameters and objects (for instance, the Dock Manager manages the list of all Docks and their parameters).
+ * See _GldiManager and cairo-dock-manager.h for more details.
+ * 
  * \subsection containers Containers
- * See _GldiContainer for the definition of a Container, and cairo-dock-container.h for a complete description of the Container class.
+ * Containers are generic animated windows. They can hold Icons and support cairo/OpenGL drawing.
+ * See _GldiContainer and cairo-dock-container.h for more details.
  * 
  * \subsection icons Icons
- * See _Icon for the definition of an Icon, and cairo-dock-icon-factory.h for a complete description of the Icon class.
+ * Icons are elements inside a Container on which the user can interact. For instance, a Launcher is an Icon that launches a program on left-click.
+ * See _Icon and cairo-dock-icon-factory.h for more details.
  * 
  * \subsection dock Dock
  * See _CairoDock for the definition of a Dock, and cairo-dock-dock-factory.h for a complete description of the Dock class.
  * 
  * \subsection desklet Desklet
- * See _CairoDesklet for the definition of a Desklet, and cairo-dock-desklet.h for a complete description of the Desklet class.
+ * See _CairoDesklet for the definition of a Desklet, and cairo-dock-desklet-factory.h for a complete description of the Desklet class.
  * 
  * \subsection dialog Dialog
- * See _CairoDialog for the definition of a Dialog, and cairo-dock-dialogs.h for a complete description of the Dialog class.
+ * See _CairoDialog for the definition of a Dialog, and cairo-dock-dialog-factory.h for a complete description of the Dialog class.
  * 
  * \subsection flying Flying Container
  * See _CairoFlyingContainer for the definition of a Flying Container, and cairo-dock-flying-container.h for a complete description of the FlyingContainer class.
  * 
+ * \subsection modules Modules
+ * A Module is an object representing a plug-in for <i>libgldi</i>.
+ * It defines a set of properties and an interface for init/stop/reload.
+ * A Module that adds an Icon is called an 'applet'.
+ * See _GldiModule and cairo-dock-module-manager.h for more details.
+ * Note: the cairo-dock-plug-ins project is a set of modules in the form of loadable libraries (.so files).
+ * the cairo-dock-plug-ins-extra project is a set of modules in the form of scripts (Python or any language) that interact on the core through Dbus.
+ *
+ * \subsection module-instances Module-Instances
+ * A Module-Instance is an actual instance of a Module.
+ * It holds a set of parameters and data (amongst them the Applet-Icon if it's an applet).
+ * A Module can have several instances.
  * 
  * 
  * \n
@@ -212,11 +240,11 @@
  * 
  * \subsection notifications The notifications system.
  * 
- * When something happens, Cairo-Dock notifies everybody about it, including itself. An applet can register to any notification (see \ref cairo-dock-notifications.h) before or after the dock, to be notified of the event of its choice. When you are notified, the function you registered for this event will be called; it must match the notification prototype as defined in \ref cairo-dock-notifications.h.
+ * When something happens, Cairo-Dock notifies everybody about it, including itself. An applet can register to any notification (see \ref cairo-dock-object.h) before or after the dock, to be notified of the event of its choice. When you are notified, the function you registered for this event will be called; it must match the notification prototype.
  *
  * For instance if you want to know when the user clicks on your icon, you will register to the \ref NOTIFICATION_CLICK_ICON notification.
  *
- * To register to a notification, you have the \ref cairo_dock_register_notification_on_object function. Always unregister when your applet is stopped, to avoid being notified when you shouldn't, with the function \ref cairo_dock_remove_notification_func_on_object.
+ * To register to a notification, you have the \ref gldi_object_register_notification function. Always unregister when your applet is stopped, to avoid being notified when you shouldn't, with the function \ref gldi_object_remove_notification.
  * 
  * For convenience, there are macros to register to the most common events:
  * - \ref CD_APPLET_REGISTER_FOR_CLICK_EVENT
