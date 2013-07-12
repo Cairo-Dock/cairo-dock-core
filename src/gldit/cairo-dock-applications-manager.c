@@ -511,6 +511,7 @@ static gboolean _remove_one_appli (G_GNUC_UNUSED GldiWindowActor *pAppli, Icon *
 		return TRUE;
 	}
 	
+	cd_debug (" remove %s...", pIcon->cName);
 	CairoDock *pDock = CAIRO_DOCK(cairo_dock_get_icon_container (pIcon));
 	if (GLDI_OBJECT_IS_DOCK(pDock))
 	{
@@ -524,6 +525,7 @@ static gboolean _remove_one_appli (G_GNUC_UNUSED GldiWindowActor *pAppli, Icon *
 				if (CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pFakeClassIcon))  // also remove the fake launcher that was pointing on it
 				{
 					cd_debug ("on degage le fake qui pointe sur %s", pDock->cDockName);
+					pFakeClassIcon->pSubDock = NULL;  // don't free the sub-dock, since we do it below
 					gldi_icon_detach (pFakeClassIcon);
 					gldi_object_unref (GLDI_OBJECT (pFakeClassIcon));
 				}
@@ -862,10 +864,6 @@ static void reload (CairoTaskbarParam *pPrevTaskBar, CairoTaskbarParam *pTaskBar
 		
 		cairo_dock_start_applications_manager (pDock);
 		
-		/**cairo_dock_calculate_dock_icons (pDock);
-		gtk_widget_queue_draw (pDock->container.pWidget);  // le 'gdk_window_move_resize' ci-dessous ne provoquera pas le redessin si la taille n'a pas change.
-		
-		cairo_dock_move_resize_dock (pDock);*/
 		gtk_widget_queue_draw (pDock->container.pWidget);  // if no appli-icon has been inserted, but an indicator or a grouped class has been added, we need to draw them now
 	}
 	else
