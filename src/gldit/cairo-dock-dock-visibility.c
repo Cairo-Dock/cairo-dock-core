@@ -109,8 +109,8 @@ static void _hide_show_if_on_our_way (CairoDock *pDock, GldiWindowActor *pCurren
 	{
 		pParentAppli = gldi_window_get_transient_for (pCurrentAppli);
 	}
-	if (_cairo_dock_appli_is_on_our_way (pCurrentAppli, pDock) // the new active window is above the dock
-	|| (pParentAppli && _cairo_dock_appli_is_on_our_way (pParentAppli, pDock))) // it's a transient window; consider its parent too.
+	if (_gldi_window_is_on_our_way (pCurrentAppli, pDock) // the new active window is above the dock
+	|| (pParentAppli && _gldi_window_is_on_our_way (pParentAppli, pDock))) // it's a transient window; consider its parent too.
 	{
 		if (!cairo_dock_is_temporary_hidden (pDock))
 			cairo_dock_activate_temporary_auto_hide (pDock);
@@ -301,7 +301,6 @@ gboolean gldi_dock_overlaps_window (CairoDock *pDock, GldiWindowActor *actor)
 static gboolean _window_is_overlapping_dock (GldiWindowActor *actor, gpointer data)
 {
 	CairoDock *pDock = CAIRO_DOCK (data);
-	///if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_appli_is_on_current_desktop (actor) && ! actor->bIsHidden && ! cairo_dock_icon_is_being_removed (icon))
 	if (gldi_window_is_on_current_desktop (actor) && ! actor->bIsHidden)
 	{
 		if (gldi_dock_overlaps_window (pDock, actor))

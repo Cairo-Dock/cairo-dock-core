@@ -17,7 +17,9 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <gdk/gdkx.h>
+#include <gdk/gdkx.h>  // gdk_x11_get_default_xdisplay
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
 
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-desktop-manager.h"

@@ -24,7 +24,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -33,7 +32,6 @@
 #include <GL/gl.h> 
 #include <GL/glu.h> 
 #include <GL/glx.h> 
-#include <gdk/gdkx.h>
 
 #include "gldi-config.h"
 #include "cairo-dock-module-manager.h"
@@ -1015,20 +1013,3 @@ void gldi_register_desklets_manager (void)
 	// parent object
 	gldi_object_set_manager (GLDI_OBJECT (&myDeskletObjectMgr), &myContainerObjectMgr);
 }
-
-/*GLDI_MANAGER_DEFINE_BEGIN (Desklet, DESKLET)
-	GLDI_MGR_HAS_INIT
-	GLDI_MGR_HAS_UNLOAD
-	GLDI_MGR_HAS_RELOAD
-	GLDI_MGR_HAS_GET_CONFIG(Desklet)
-	GLDI_MGR_HAS_RESET_CONFIG
-	GLDI_MGR_HAS_OBJECT(Desklet)
-	GLDI_MGR_HAS_INIT_OBJECT
-	GLDI_MGR_HAS_RESET_OBJECT
-	GLDI_MGR_DERIVES_FROM(&myContainersMgr)
-	memset (&s_pRotateButtonBuffer, 0, sizeof (CairoDockImageBuffer));
-	memset (&s_pRetachButtonBuffer, 0, sizeof (CairoDockImageBuffer));
-	memset (&s_pDepthRotateButtonBuffer, 0, sizeof (CairoDockImageBuffer));
-	memset (&s_pNoInputButtonBuffer, 0, sizeof (CairoDockImageBuffer));
-GLDI_MANAGER_DEFINE_END*/
-

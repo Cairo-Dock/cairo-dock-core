@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <gdk/gdkx.h> // GDK_WINDOW_XID
+#include <gdk/gdkx.h>  // gldi_container_present
 
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -273,7 +273,7 @@ static gboolean on_map_dialog (G_GNUC_UNUSED GtkWidget* pWidget,
 {
 	if (pDialog->pInteractiveWidget)
 	{
-		gtk_window_present_with_time (GTK_WINDOW (pDialog->container.pWidget), gdk_x11_get_server_time (gldi_container_get_gdk_window(CAIRO_CONTAINER (pDialog))));  // to avoid the focus steal prevention.
+		gldi_container_present (CAIRO_CONTAINER (pDialog));
 	}
 	return FALSE;
 }

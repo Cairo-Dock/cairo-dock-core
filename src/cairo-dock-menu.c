@@ -26,8 +26,7 @@
 #include <glib/gi18n.h>
 #include <cairo.h>
 #include <gtk/gtk.h>
-#include <glib/gstdio.h>
-#include <gdk/gdkx.h>
+#include <glib/gstdio.h>  // g_mkdir/g_remove
 
 #include "config.h"
 #include "cairo-dock-config.h"

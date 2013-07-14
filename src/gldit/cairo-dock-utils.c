@@ -168,6 +168,23 @@ void cairo_dock_remove_html_spaces (gchar *cString)
 }
 
 
+void cairo_dock_get_version_from_string (const gchar *cVersionString, int *iMajorVersion, int *iMinorVersion, int *iMicroVersion)
+{
+	gchar **cVersions = g_strsplit (cVersionString, ".", -1);
+	if (cVersions[0] != NULL)
+	{
+		*iMajorVersion = atoi (cVersions[0]);
+		if (cVersions[1] != NULL)
+		{
+			*iMinorVersion = atoi (cVersions[1]);
+			if (cVersions[2] != NULL)
+				*iMicroVersion = atoi (cVersions[2]);
+		}
+	}
+	g_strfreev (cVersions);
+}
+
+
 gchar *cairo_dock_launch_command_sync_with_stderr (const gchar *cCommand, gboolean bPrintStdErr)
 {
 	gchar *standard_output=NULL, *standard_error=NULL;

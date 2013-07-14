@@ -165,16 +165,18 @@
  * See _CairoFlyingContainer for the definition of a Flying Container, and cairo-dock-flying-container.h for a complete description of the FlyingContainer class.
  * 
  * \subsection modules Modules
- * A Module is an object representing a plug-in for <i>libgldi</i>.
- * It defines a set of properties and an interface for init/stop/reload.
+ * A Module is an object representing a plug-in for <i>libgldi</i>.<br>
+ * It defines a set of properties and an interface for init/stop/reload.<br>
  * A Module that adds an Icon is called an 'applet'.
+ * 
  * See _GldiModule and cairo-dock-module-manager.h for more details.
- * Note: the cairo-dock-plug-ins project is a set of modules in the form of loadable libraries (.so files).
+ * 
+ * <u>Note:</u> the cairo-dock-plug-ins project is a set of modules in the form of loadable libraries (.so files).<br>
  * the cairo-dock-plug-ins-extra project is a set of modules in the form of scripts (Python or any language) that interact on the core through Dbus.
  *
  * \subsection module-instances Module-Instances
- * A Module-Instance is an actual instance of a Module.
- * It holds a set of parameters and data (amongst them the Applet-Icon if it's an applet).
+ * A Module-Instance is an actual instance of a Module.<br>
+ * It holds a set of parameters and data (amongst them the Applet-Icon if it's an applet).<br>
  * A Module can have several instances.
  * 
  * 

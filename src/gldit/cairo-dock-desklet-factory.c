@@ -32,7 +32,8 @@
 #include <GL/glu.h>
 #include <GL/glx.h>
 
-#include <gdk/gdkx.h>
+#include <gdk/gdkx.h>  // gldi_container_get_Xid
+
 #include "cairo-dock-draw.h"
 #include "cairo-dock-icon-facility.h"  // cairo_dock_set_icon_container
 #include "cairo-dock-module-instance-manager.h"  // gldi_module_instance_detach

@@ -152,24 +152,15 @@ gchar *cairo_dock_get_file_path_key_value (GKeyFile *pKeyFile, const gchar *cGro
 #define cairo_dock_get_pango_weight_from_1_9(iWeight) ((int) ((((PANGO_WEIGHT_HEAVY - PANGO_WEIGHT_ULTRALIGHT) * iWeight + 9 * PANGO_WEIGHT_ULTRALIGHT - PANGO_WEIGHT_HEAVY) / 8) / 100)) * 100
 
 
-/** Load the Cairo-Dock's config and everything.
-*@param cConfFilePath path to the main conf file.
+/** Load the current theme. This will (re)load all the parameters of Cairo-Dock and all the plug-ins, as if you just started the dock.
 */
-void cairo_dock_load_config (const gchar *cConfFilePath);
+void cairo_dock_load_current_theme (void);
+
 
 /** Say if Cairo-Dock is loading.
 *@return TRUE if the global config is being loaded (this happens when a theme is loaded).
 */
 gboolean cairo_dock_is_loading (void);
-
-
-/** Get the 3 version numbers of a string.
-*@param cVersionString the string of the form "x.y.z".
-*@param iMajorVersion pointer to the major version.
-*@param iMinorVersion pointer to the minor version.
-*@param iMicroVersion pointer to the micro version.
-*/
-void cairo_dock_get_version_from_string (const gchar *cVersionString, int *iMajorVersion, int *iMinorVersion, int *iMicroVersion);
 
 
 /** Decrypt a string (uses DES-encryption from libcrypt).
@@ -192,14 +183,6 @@ void cairo_dock_close_xml_file (xmlDocPtr doc);
 
 gchar *cairo_dock_get_default_system_font (void);
 
-
-#define DEFINE_PRE_INIT(cGroupName) \
-void cairo_dock_pre_init_##cGroupName (CairoDockInternalModule *pModule)
-
-
-/** Load the current theme. This will (re)load all the parameters of Cairo-Dock and all the plug-ins, as if you just started the dock.
-*/
-void cairo_dock_load_current_theme (void);
 
 
 G_END_DECLS

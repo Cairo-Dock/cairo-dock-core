@@ -25,8 +25,6 @@
 #define __USE_POSIX
 #include <time.h>
 #include <glib/gstdio.h>
-#include <glib/gi18n.h>
-#include <gdk/gdkx.h>
 
 #include "config.h"
 #include "cairo-dock-config.h"

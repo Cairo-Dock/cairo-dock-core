@@ -114,43 +114,8 @@ void gldi_managers_unload (void);
 void gldi_managers_foreach (GFunc callback, gpointer data);
 
 
-#define	GLDI_STR_HELPER(x) #x
-#define	GLDI_STR(x) GLDI_STR_HELPER(x)
-
-#define GLDI_MGR_NAME(name) my##name##sMgr
-#define GLDI_MGR_PARAM_NAME(name) my##name##sParam
-#define GLDI_MGR_TYPE(name) Cairo##name##sManager
-#define GLDI_MGR_OBJECT_TYPE(name) Cairo##name
-#define GLDI_MGR_PARAM_TYPE(name) Cairo##name##sParam
-
-#define GLDI_MGR_HAS_INIT         mgr->init          = init;
-#define GLDI_MGR_HAS_LOAD         mgr->load          = load;
-#define GLDI_MGR_HAS_UNLOAD       mgr->unload        = unload;
-#define GLDI_MGR_HAS_RELOAD       mgr->reload        = (GldiManagerReloadFunc)reload;
-#define GLDI_MGR_HAS_GET_CONFIG(name)   mgr->get_config    = (GldiManagerGetConfigFunc)get_config;\
-	memset (&GLDI_MGR_PARAM_NAME(name), 0, sizeof (GLDI_MGR_PARAM_TYPE(name)));\
-	mgr->pConfig = (GldiManagerConfigPtr)&GLDI_MGR_PARAM_NAME(name);\
-	mgr->iSizeOfConfig = sizeof (GLDI_MGR_PARAM_TYPE(name));
-#define GLDI_MGR_HAS_RESET_CONFIG mgr->reset_config  = (GldiManagerResetConfigFunc)reset_config;
-#define GLDI_MGR_HAS_OBJECT(name)       mgr->iObjectSize   = sizeof (GLDI_MGR_OBJECT_TYPE(name));
-#define GLDI_MGR_HAS_INIT_OBJECT  mgr->init_object   = init_object;
-#define GLDI_MGR_HAS_RESET_OBJECT mgr->reset_object  = reset_object;
-
-#define GLDI_MGR_DERIVES_FROM(mgr2) gldi_object_set_manager (GLDI_OBJECT (mgr), GLDI_MANAGER (mgr2));
-
-
-#define GLDI_MANAGER_DEFINE_BEGIN(name, NAME) \
-void gldi_register_##name##s_manager (void) { \
-	GldiManager *mgr = GLDI_MANAGER(&GLDI_MGR_NAME(name)); \
-	memset (mgr, 0, sizeof (GLDI_MGR_TYPE(name))); \
-	mgr->cModuleName  = GLDI_STR(name##s); \
-	gldi_object_install_notifications (mgr, NB_NOTIFICATIONS_##NAME); \
-	gldi_register_manager (mgr);
-
-#define GLDI_MANAGER_DEFINE_END }
-
-
 void gldi_register_managers_manager (void);
+
 
 G_END_DECLS
 #endif

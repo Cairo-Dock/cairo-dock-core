@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 *@file cairo-dock-dock-visibility.h This class manages the visibility of Docks.
 */
 
-#define _cairo_dock_appli_is_on_our_way(pAppli, pDock) (pAppli != NULL && gldi_window_is_on_current_desktop (pAppli) &&  pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP && gldi_dock_overlaps_window (pDock, pAppli))
+#define _gldi_window_is_on_our_way(pAppli, pDock) (pAppli != NULL && gldi_window_is_on_current_desktop (pAppli) &&  pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP && gldi_dock_overlaps_window (pDock, pAppli))
 
 void gldi_dock_hide_show_if_current_window_is_on_our_way (CairoDock *pDock);
 

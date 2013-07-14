@@ -1317,7 +1317,7 @@ static gboolean _on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, Ca
 		if (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP)
 		{
 			GldiWindowActor *pActiveAppli = gldi_windows_get_active ();
-			if (_cairo_dock_appli_is_on_our_way (pActiveAppli, pDock))  // la fenetre active nous gene.
+			if (_gldi_window_is_on_our_way (pActiveAppli, pDock))  // la fenetre active nous gene.
 			{
 				if (!cairo_dock_is_temporary_hidden (pDock))
 					cairo_dock_activate_temporary_auto_hide (pDock);

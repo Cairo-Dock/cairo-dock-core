@@ -28,9 +28,7 @@ G_BEGIN_DECLS
 
 gchar *cairo_dock_generate_unique_filename (const gchar *cBaseName, const gchar *cCairoDockDataDir);
 
-
 gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters);;
-
 
 /** Remove the version number from a string. Directly modifies the string.
  * @param cString a string.
@@ -38,11 +36,18 @@ gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters);;
  */
 gboolean cairo_dock_remove_version_from_string (gchar *cString);
 
-
 /** Replace the %20 by normal spaces into the string. The string is directly modified.
 *@param cString the string (it can't be a constant string)
 */
 void cairo_dock_remove_html_spaces (gchar *cString);
+
+/** Get the 3 version numbers of a string.
+*@param cVersionString the string of the form "x.y.z".
+*@param iMajorVersion pointer to the major version.
+*@param iMinorVersion pointer to the minor version.
+*@param iMicroVersion pointer to the micro version.
+*/
+void cairo_dock_get_version_from_string (const gchar *cVersionString, int *iMajorVersion, int *iMinorVersion, int *iMicroVersion);
 
 
 gchar *cairo_dock_launch_command_sync_with_stderr (const gchar *cCommand, gboolean bPrintStdErr);

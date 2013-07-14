@@ -20,7 +20,7 @@
 #include <stdlib.h>
 
 #include <gtk/gtk.h>
-#include <gdk/gdkx.h>
+#include <gdk/gdkx.h>  // gldi_container_get_Xid
 
 #include <math.h>
 #include <cairo.h>

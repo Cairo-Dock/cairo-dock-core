@@ -37,14 +37,13 @@
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-class-manager.h"  // cairo_dock_remove_version_from_string
-//#include "cairo-dock-X-manager.h"
 #define _X_MANAGER_
 #include "cairo-dock-X-utilities.h"
 
 #if (GTK_MAJOR_VERSION >= 3)
 #include <cairo/cairo-xlib.h>  // needed for cairo_xlib_surface_create
 #else
-#include <gdk/gdkx.h>
+#include <gdk/gdkx.h>  // gdk_xid_table_lookup (gtk2)
 #endif
 
 extern gboolean g_bEasterEggs;

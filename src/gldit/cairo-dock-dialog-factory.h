@@ -81,7 +81,6 @@ struct _CairoDialogButton {
 struct _CairoDialog {
 	/// container.
 	GldiContainer container;
-	gint iRefCount;// conmpteur de reference.
 	//\_____________________ Position
 	Icon *pIcon;// icon sur laquelle pointe the dialog.
 	gint iAimedX;// position en X visee par la pointe dans le referentiel de l'ecran.

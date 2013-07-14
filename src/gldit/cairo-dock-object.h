@@ -192,5 +192,30 @@ void gldi_object_remove_notification (gpointer pObject, GldiNotificationType iNo
 	})
 
 
+
+#define	GLDI_STR_HELPER(x) #x
+#define	GLDI_STR(x) GLDI_STR_HELPER(x)
+
+#define GLDI_MGR_NAME(name) my##name##ObjectMgr
+#define GLDI_OBJECT_NAME(name) Gldi##name
+
+//name=Dock, NAME=DOCK
+#define GLDI_OBJECT_MANAGER_DEFINE_BEGIN(name, NAME) \
+	GldiObjectManager *mgr = &GLDI_MGR_NAME(name); \
+	memset (mgr, 0, sizeof (GldiObjectManager)); \
+	mgr->cName         = GLDI_STR(name); \
+	mgr->iObjectSize   = sizeof (GLDI_OBJECT_NAME(name)); \
+	gldi_object_install_notifications (mgr, NB_NOTIFICATIONS_##NAME);
+
+#define GLDI_MGR_HAS_INIT_OBJECT  mgr->init_object     = init_object;
+#define GLDI_MGR_HAS_RESET_OBJECT mgr->reset_object    = reset_object;
+#define GLDI_MGR_HAS_DELETE_OBJECT mgr->delete_object  = delete_object;
+#define GLDI_MGR_HAS_RELOAD_OBJECT mgr->reload_object  = reload_object;
+
+#define GLDI_OBJECT_MANAGER_DERIVES_FROM(name, mgr2) gldi_object_set_manager (GLDI_OBJECT (mgr), mgr2)
+
+#define GLDI_OBJECT_MANAGER_DEFINE_END }
+
+
 G_END_DECLS
 #endif

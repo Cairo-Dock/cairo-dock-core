@@ -48,6 +48,7 @@
 #include "cairo-dock-default-view.h"
 #include "cairo-dock-hiding-effect.h"
 #include "cairo-dock-icon-container.h"
+#include "cairo-dock-utils.h"  // cairo_dock_get_version_from_string
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-overlay.h"
 #include "cairo-dock-log.h"

@@ -19,7 +19,7 @@
 
 #include <math.h>
 #include <gtk/gtk.h>
-#include <gdk/gdkx.h>  // GDK_WINDOW_XID
+#include <gdk/gdkx.h>  // gldi_container_get_Xid
 
 #include "cairo-dock-applications-manager.h"  // cairo_dock_set_icons_geometry_for_window_manager
 #include "cairo-dock-launcher-manager.h"

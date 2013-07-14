@@ -22,10 +22,7 @@
 #define __USE_XOPEN_EXTENDED
 #include <stdlib.h>
 #include <glib/gstdio.h>
-#include <glib/gi18n.h>
-
-
-#include <gdk/gdkx.h>
+#include <gdk/gdkx.h>  // GDK_WINDOW_XID
 
 #include "config.h"
 #include "cairo-dock-module-manager.h"
@@ -39,7 +36,7 @@
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-desktop-manager.h"  // gldi_desktop_get_width
-#include "cairo-dock-X-utilities.h"  // cairo_dock_get_active_xwindow
+#include "cairo-dock-windows-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-commons.h"
 #include "cairo-dock-gui-backend.h"
@@ -1001,8 +998,9 @@ static gboolean on_enter_group_button (GtkButton *button, G_GNUC_UNUSED GdkEvent
 }
 static gboolean _check_group_button (G_GNUC_UNUSED gpointer data)
 {
+	GldiWindowActor *pActiveWindow = gldi_windows_get_active ();
 	Window Xid = GDK_WINDOW_XID (gtk_widget_get_window (s_pMainWindow));
-	if (Xid != cairo_dock_get_active_xwindow ())  // we're not the active window any more, so the 'leave' event was probably due to an Alt+Tab -> the mouse is really out of the button.
+	if (gldi_window_get_id (pActiveWindow) != Xid)  // we're not the active window any more, so the 'leave' event was probably due to an Alt+Tab -> the mouse is really out of the button.
 	{
 		gtk_widget_hide (s_pPreviewBox);
 		
