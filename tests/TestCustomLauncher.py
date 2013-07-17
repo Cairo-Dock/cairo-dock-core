@@ -1,4 +1,3 @@
-from time import sleep
 import sys  # argv
 import os  # system, path
 import subprocess  # system, path
@@ -36,7 +35,7 @@ class TestCustomLauncher(Test):
 			if result != "123":
 				self.print_error ("Failed to reload the launcher")
 		except:
-			self.print_error ("[Test custom launcher] Failed to activate the launcher")
+			self.print_error ("Failed to activate the launcher")
 		
 		# remove it
 		self.d.Remove('config-file='+conf_file);
