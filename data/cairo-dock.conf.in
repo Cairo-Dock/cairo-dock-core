@@ -100,7 +100,7 @@ show applications = true
 #{Allows launchers to act as applications when their programs are running and displays a marker on icons to indicate this. You can launch other occurences of the program with SHIFT+click.}
 mix launcher appli = true
 
-#b- Animate the launchers until the application opens
+#b- Animate the launcher until the corresponding application opens
 opening animation = true
 
 #b- Only show applications on current desktop
