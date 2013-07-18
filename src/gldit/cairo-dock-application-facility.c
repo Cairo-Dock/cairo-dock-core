@@ -34,6 +34,7 @@
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-indicator-manager.h"  // myIndicatorsParam.bUseClassIndic
 #include "cairo-dock-class-icon-manager.h"  // gldi_class_icon_new
+#include "cairo-dock-utils.h"  // cairo_dock_launch_command_full
 #include "cairo-dock-application-facility.h"
 
 extern CairoDock *g_pMainDock;
@@ -177,6 +178,25 @@ void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock)
 			}
 		}
 	}
+}
+
+static gboolean _stop_opening_animation (Icon *pIcon)
+{
+	pIcon->iSidAnimationOpening = 0; // 0 <=> no more repeat animations
+	return FALSE;
+}
+
+gboolean cairo_dock_launch_command_with_opening_animation_full (Icon *pIcon, const gchar *cCommand, gchar *cWorkingDirectory)
+{
+	gboolean bSuccess = cairo_dock_launch_command_full (cCommand, cWorkingDirectory);
+	if (myTaskbarParam.bOpeningAnimation && myTaskbarParam.bMixLauncherAppli)
+	{
+		if (bSuccess && pIcon->iSidAnimationOpening == 0) // only one animation
+			// repeat the animation until iSidAnimationOpening = 0
+			pIcon->iSidAnimationOpening = g_timeout_add_seconds (10,
+				(GSourceFunc) _stop_opening_animation, pIcon);
+	}
+	return bSuccess;
 }
 
 
