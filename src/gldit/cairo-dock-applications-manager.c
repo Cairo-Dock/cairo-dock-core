@@ -726,6 +726,25 @@ static void _show_appli_for_drop (Icon *pIcon)
 	gldi_window_show (pIcon->pAppli);
 }
 
+static gboolean _stop_opening_animation (Icon *pIcon)
+{
+	pIcon->iSidAnimationOpening = 0; // 0 <=> no more repeat animations
+	return FALSE;
+}
+
+gboolean cairo_dock_launch_command_with_opening_animation_full (Icon *pIcon, const gchar *cCommand, const gchar *cWorkingDirectory)
+{
+	gboolean bSuccess = cairo_dock_launch_command_full (cCommand, cWorkingDirectory);
+	if (myTaskbarParam.bOpeningAnimation && myTaskbarParam.bMixLauncherAppli)
+	{
+		if (bSuccess && pIcon->iSidAnimationOpening == 0) // only one animation
+			// repeat the animation until iSidAnimationOpening = 0
+			pIcon->iSidAnimationOpening = g_timeout_add_seconds (10,
+				(GSourceFunc) _stop_opening_animation, pIcon);
+	}
+	return bSuccess;
+}
+
 
   //////////////////
  /// GET CONFIG ///

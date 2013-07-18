@@ -118,6 +118,15 @@ void cairo_dock_foreach_appli_icon (CairoDockForeachIconFunc pFunction, gpointer
 
 void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock);
 
+/** Launch a command and play the opening animation during max 10 seconds 
+*@param pIcon the icon which launch the command and will be animated
+*@param cCommand the command
+*@param cWorkingDirectory the working directory (can be NULL)
+*@return TRUE if the command has been launched correctly
+*/
+gboolean cairo_dock_launch_command_with_opening_animation_full (Icon *pIcon, const gchar *cCommand, const gchar *cWorkingDirectory);
+#define cairo_dock_launch_command_with_opening_animation(pIcon) cairo_dock_launch_command_with_opening_animation_full (pIcon, pIcon->cCommand, pIcon->cWorkingDirectory);
+
 
 void gldi_register_applications_manager (void);
 
