@@ -180,6 +180,26 @@ static void _show_all_windows (GList *pIcons)
 	}
 }
 
+static gboolean _stop_opening_animation (Icon *pIcon)
+{
+	pIcon->iSidAnimationOpening = 0; // 0 <=> no more repeat animations
+	return FALSE;
+}
+
+static gboolean _launch_command_and_opening_animation (Icon *pIcon)
+{
+	gboolean bSuccess = cairo_dock_launch_command_full (pIcon->cCommand,
+		pIcon->cWorkingDirectory);
+	if (myTaskbarParam.bOpeningAnimation && myTaskbarParam.bMixLauncherAppli)
+	{
+		if (bSuccess && pIcon->iSidAnimationOpening == 0) // only one animation
+			// repeat the animation until iSidAnimationOpening = 0
+			pIcon->iSidAnimationOpening = g_timeout_add_seconds (10,
+				(GSourceFunc) _stop_opening_animation, pIcon);
+	}
+	return bSuccess;
+}
+
 static gboolean _launch_icon_command (Icon *icon, CairoDock *pDock)
 {
 	if (icon->cCommand == NULL)
@@ -197,11 +217,11 @@ static gboolean _launch_icon_command (Icon *icon, CairoDock *pDock)
 	{
 		bSuccess = cairo_dock_trigger_shortkey (icon->cCommand);
 		if (!bSuccess)
-			bSuccess = cairo_dock_launch_command_full (icon->cCommand, icon->cWorkingDirectory);
+			bSuccess = _launch_command_and_opening_animation (icon);
 	}
 	else  // normal command
 	{
-		bSuccess = cairo_dock_launch_command_full (icon->cCommand, icon->cWorkingDirectory);
+		bSuccess = _launch_command_and_opening_animation (icon);
 		if (! bSuccess)
 			bSuccess = cairo_dock_trigger_shortkey (icon->cCommand);
 	}

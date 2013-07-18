@@ -369,6 +369,17 @@ gboolean cairo_dock_class_is_expanded (const gchar *cClass)
 	return (pClassAppli != NULL && pClassAppli->bExpand);
 }
 
+static void _stop_opening_animation (Icon *pIcon)
+{
+	if (pIcon->iSidAnimationOpening != 0)
+	{
+		cd_debug ("Stop opening animation on %s", pIcon->cName);
+		g_source_remove (pIcon->iSidAnimationOpening);
+		pIcon->iSidAnimationOpening = 0;
+		// gldi_icon_stop_animation (pIcon); // maybe better to wait for the end of the current animation
+	}
+}
+
 gboolean cairo_dock_prevent_inhibited_class (Icon *pIcon)
 {
 	g_return_val_if_fail (pIcon != NULL, FALSE);
@@ -385,6 +396,7 @@ gboolean cairo_dock_prevent_inhibited_class (Icon *pIcon)
 			pInhibitorIcon = pElement->data;
 			if (pInhibitorIcon != NULL)  // un inhibiteur est present.
 			{
+				_stop_opening_animation (pInhibitorIcon); // stop the opening animation on the current icon or its parent icon 
 				if (pInhibitorIcon->pAppli == NULL && pInhibitorIcon->pSubDock == NULL)  // cette icone inhibe cette classe mais ne controle encore aucune appli, on s'y asservit.
 				{
 					gldi_icon_set_appli (pInhibitorIcon, pIcon->pAppli);

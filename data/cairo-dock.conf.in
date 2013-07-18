@@ -96,9 +96,12 @@ frame1 =
 #{Cairo-Dock will then act as your taskbar. It is recommended to remove any other taskbars.}
 show applications = true
 
-#b- Mix launchers and applications
+#B- Mix launchers and applications
 #{Allows launchers to act as applications when their programs are running and displays a marker on icons to indicate this. You can launch other occurences of the program with SHIFT+click.}
 mix launcher appli = true
+
+#b- Animate the launchers until the application opens
+opening animation = true
 
 #b- Only show applications on current desktop
 current desktop only = false

@@ -66,6 +66,7 @@ struct _CairoTaskbarParam {
 	gboolean bOverWriteXIcons;
 	gint iMinimizedWindowRenderType;
 	gboolean bMixLauncherAppli;
+	gboolean bOpeningAnimation;
 	gchar *cOverwriteException;
 	gchar *cGroupException;
 	gchar *cForceDemandsAttention;

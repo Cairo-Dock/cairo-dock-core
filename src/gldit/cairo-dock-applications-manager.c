@@ -743,7 +743,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoTaskbarParam *pTaskBar)
 		pTaskBar->bAppliOnCurrentDesktopOnly = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "current desktop only", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
 		
 		pTaskBar->bMixLauncherAppli = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "mix launcher appli", &bFlushConfFileNeeded, TRUE, NULL, NULL);
-		
+		pTaskBar->bOpeningAnimation = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "opening animation", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+
 		pTaskBar->bGroupAppliByClass = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "group by class", &bFlushConfFileNeeded, TRUE, "Applications", NULL);
 		pTaskBar->cGroupException = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "group exception", &bFlushConfFileNeeded, "pidgin;xchat", NULL, NULL);
 		if (pTaskBar->cGroupException)
@@ -850,6 +851,7 @@ static void reload (CairoTaskbarParam *pPrevTaskBar, CairoTaskbarParam *pTaskBar
 		|| pPrevTaskBar->bHideVisibleApplis != pTaskBar->bHideVisibleApplis
 		|| pPrevTaskBar->bAppliOnCurrentDesktopOnly != pTaskBar->bAppliOnCurrentDesktopOnly
 		|| pPrevTaskBar->bMixLauncherAppli != pTaskBar->bMixLauncherAppli
+		|| pPrevTaskBar->bOpeningAnimation != pTaskBar->bOpeningAnimation
 		|| pPrevTaskBar->bOverWriteXIcons != pTaskBar->bOverWriteXIcons
 		|| pPrevTaskBar->iMinimizedWindowRenderType != pTaskBar->iMinimizedWindowRenderType
 		|| pPrevTaskBar->iAppliMaxNameLength != pTaskBar->iAppliMaxNameLength
