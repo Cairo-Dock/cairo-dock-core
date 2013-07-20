@@ -193,7 +193,7 @@ gboolean cairo_dock_launch_command_with_opening_animation_full (Icon *pIcon, con
 	{
 		if (bSuccess && pIcon->iSidAnimationOpening == 0) // only one animation
 			// repeat the animation until iSidAnimationOpening = 0
-			pIcon->iSidAnimationOpening = g_timeout_add_seconds (10,
+			pIcon->iSidAnimationOpening = g_timeout_add_seconds (15,
 				(GSourceFunc) _stop_opening_animation, pIcon);
 	}
 	return bSuccess;
