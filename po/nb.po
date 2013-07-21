@@ -17,56 +17,56 @@ msgstr ""
 "X-Launchpad-Export-Date: 2013-03-05 04:37+0000\n"
 "X-Generator: Launchpad (build 16514)\n"
 
-#: ../src/cairo-dock-gui-advanced.c:124 ../src/cairo-dock-widget-plugins.c:171
+#: ../src/cairo-dock-gui-advanced.c:121 ../src/cairo-dock-widget-plugins.c:171
 #: ../data/messages:259
 msgid "Behaviour"
 msgstr "Oppførsel"
 
-#: ../src/cairo-dock-gui-advanced.c:125 ../data/messages:111
-#: ../data/messages:911
+#: ../src/cairo-dock-gui-advanced.c:122 ../data/messages:111
+#: ../data/messages:913
 msgid "Appearance"
 msgstr "Utseende"
 
-#: ../src/cairo-dock-gui-advanced.c:126 ../src/cairo-dock-widget-plugins.c:141
+#: ../src/cairo-dock-gui-advanced.c:123 ../src/cairo-dock-widget-plugins.c:141
 msgid "Files"
 msgstr "Filer"
 
-#: ../src/cairo-dock-gui-advanced.c:127 ../src/cairo-dock-widget-plugins.c:146
+#: ../src/cairo-dock-gui-advanced.c:124 ../src/cairo-dock-widget-plugins.c:146
 msgid "Internet"
 msgstr "Internett"
 
-#: ../src/cairo-dock-gui-advanced.c:128 ../src/cairo-dock-widget-plugins.c:151
+#: ../src/cairo-dock-gui-advanced.c:125 ../src/cairo-dock-widget-plugins.c:151
 msgid "Desktop"
 msgstr "Skrivebord"
 
-#: ../src/cairo-dock-gui-advanced.c:129
+#: ../src/cairo-dock-gui-advanced.c:126
 msgid "Accessories"
 msgstr "Tilbehør"
 
-#: ../src/cairo-dock-gui-advanced.c:130 ../src/cairo-dock-gui-advanced.c:1527
-#: ../src/cairo-dock-widget-plugins.c:161 ../data/messages:363
+#: ../src/cairo-dock-gui-advanced.c:127 ../src/cairo-dock-gui-advanced.c:1525
+#: ../src/cairo-dock-widget-plugins.c:161 ../data/messages:365
 msgid "System"
 msgstr "System"
 
-#: ../src/cairo-dock-gui-advanced.c:131 ../src/cairo-dock-widget-plugins.c:166
+#: ../src/cairo-dock-gui-advanced.c:128 ../src/cairo-dock-widget-plugins.c:166
 msgid "Fun"
 msgstr "Moro"
 
-#: ../src/cairo-dock-gui-advanced.c:132 ../src/cairo-dock-gui-advanced.c:1804
+#: ../src/cairo-dock-gui-advanced.c:129 ../src/cairo-dock-gui-advanced.c:1802
 #: ../src/gldit/cairo-dock-gui-factory.c:784
 msgid "All"
 msgstr "Alle"
 
-#: ../src/cairo-dock-gui-advanced.c:1495
+#: ../src/cairo-dock-gui-advanced.c:1493
 msgid "Set the position of the main dock."
 msgstr "Bestem hovedsamlevinduets plassering."
 
-#: ../src/cairo-dock-gui-advanced.c:1496 ../Help/data/messages:321
+#: ../src/cairo-dock-gui-advanced.c:1494 ../Help/data/messages:321
 #: ../data/messages:141
 msgid "Position"
 msgstr "Plassering"
 
-#: ../src/cairo-dock-gui-advanced.c:1503
+#: ../src/cairo-dock-gui-advanced.c:1501
 msgid ""
 "Do you like your dock to be always visible,\n"
 " or on the contrary unobtrusive?\n"
@@ -76,68 +76,68 @@ msgstr ""
 " eller heller være diskret?\n"
 "Tilpass måten du bruker dine panel og deres underpanel!"
 
-#: ../src/cairo-dock-gui-advanced.c:1504 ../src/cairo-dock-menu.c:2051
+#: ../src/cairo-dock-gui-advanced.c:1502 ../src/cairo-dock-menu.c:2039
 #: ../Help/data/messages:339
 msgid "Visibility"
 msgstr "Synlighet"
 
-#: ../src/cairo-dock-gui-advanced.c:1511
+#: ../src/cairo-dock-gui-advanced.c:1509
 msgid "Display and interact with currently open windows."
 msgstr "Vis og påvirk vinduene som er åpne."
 
-#: ../src/cairo-dock-gui-advanced.c:1512 ../Help/data/messages:41
+#: ../src/cairo-dock-gui-advanced.c:1510 ../Help/data/messages:41
 #: ../data/messages:63
 msgid "Taskbar"
 msgstr "Oppgavelinje"
 
-#: ../src/cairo-dock-gui-advanced.c:1519
+#: ../src/cairo-dock-gui-advanced.c:1517
 msgid "Define all the keyboard shortcuts currently available."
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1520 ../data/messages:137
+#: ../src/cairo-dock-gui-advanced.c:1518 ../data/messages:137
 msgid "Shortkeys"
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1526
+#: ../src/cairo-dock-gui-advanced.c:1524
 msgid "All of the parameters you will never want to tweak."
 msgstr "Alle innstillingene som du aldri vil ønske å endre på."
 
-#: ../src/cairo-dock-gui-advanced.c:1537
+#: ../src/cairo-dock-gui-advanced.c:1535
 msgid "Set a background for your dock."
 msgstr "Velg en bakgrunn for samlevinduet."
 
-#: ../src/cairo-dock-gui-advanced.c:1538 ../data/messages:449
-#: ../data/messages:831 ../data/messages:937
+#: ../src/cairo-dock-gui-advanced.c:1536 ../data/messages:451
+#: ../data/messages:833 ../data/messages:939
 msgid "Background"
 msgstr "Bakgrunn"
 
-#: ../src/cairo-dock-gui-advanced.c:1545
+#: ../src/cairo-dock-gui-advanced.c:1543
 msgid "Select a view for each of your docks."
 msgstr "Velg en visning for hver av dine samlevinduer."
 
-#: ../src/cairo-dock-gui-advanced.c:1546 ../data/messages:129
-#: ../data/messages:517 ../data/messages:931
+#: ../src/cairo-dock-gui-advanced.c:1544 ../data/messages:129
+#: ../data/messages:519 ../data/messages:933
 msgid "Views"
 msgstr "Visninger"
 
-#: ../src/cairo-dock-gui-advanced.c:1553
+#: ../src/cairo-dock-gui-advanced.c:1551
 msgid "Configure text bubble appearance."
 msgstr "Velg utseende for meldingsbobler."
 
-#: ../src/cairo-dock-gui-advanced.c:1554
+#: ../src/cairo-dock-gui-advanced.c:1552
 msgid "Dialog boxes"
 msgstr "Dialogvinduer"
 
-#: ../src/cairo-dock-gui-advanced.c:1561
+#: ../src/cairo-dock-gui-advanced.c:1559
 msgid "Applets can be displayed on your desktop as widgets."
 msgstr "Miniprogrammene kan brukes på skrivebordet som widgets."
 
-#: ../src/cairo-dock-gui-advanced.c:1562 ../Help/data/messages:89
-#: ../data/messages:573
+#: ../src/cairo-dock-gui-advanced.c:1560 ../Help/data/messages:89
+#: ../data/messages:575
 msgid "Desklets"
 msgstr "Skrivebordsprogrammer"
 
-#: ../src/cairo-dock-gui-advanced.c:1569
+#: ../src/cairo-dock-gui-advanced.c:1567
 msgid ""
 "All about icons:\n"
 " size, reflection, icon theme,..."
@@ -145,90 +145,90 @@ msgstr ""
 "Alt om ikoner:\n"
 " størrelse, gjenskinn, ikondrakt, ..."
 
-#: ../src/cairo-dock-gui-advanced.c:1570 ../Help/data/messages:11
-#: ../data/messages:113 ../data/messages:637 ../data/messages:913
+#: ../src/cairo-dock-gui-advanced.c:1568 ../Help/data/messages:11
+#: ../data/messages:113 ../data/messages:639 ../data/messages:915
 msgid "Icons"
 msgstr "Ikoner"
 
-#: ../src/cairo-dock-gui-advanced.c:1577
+#: ../src/cairo-dock-gui-advanced.c:1575
 msgid "Indicators are additional markers for your icons."
 msgstr "Indikatorer er ytterligere indikasjoner på ikonene dine."
 
-#: ../src/cairo-dock-gui-advanced.c:1578 ../data/messages:721
+#: ../src/cairo-dock-gui-advanced.c:1576 ../data/messages:723
 msgid "Indicators"
 msgstr "Indikatorer"
 
-#: ../src/cairo-dock-gui-advanced.c:1585
+#: ../src/cairo-dock-gui-advanced.c:1583
 msgid "Define icon caption and quick-info style."
 msgstr "Bestem ikonetikettenes stil og beskrivelse"
 
-#: ../src/cairo-dock-gui-advanced.c:1586
+#: ../src/cairo-dock-gui-advanced.c:1584
 msgid "Captions"
 msgstr "Etiketter"
 
-#: ../src/cairo-dock-gui-advanced.c:1593
+#: ../src/cairo-dock-gui-advanced.c:1591
 msgid "Try new themes and save your theme."
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1594 ../src/cairo-dock-gui-simple.c:116
+#: ../src/cairo-dock-gui-advanced.c:1592 ../src/cairo-dock-gui-simple.c:116
 #: ../src/cairo-dock-gui-simple.c:118
 msgid "Themes"
 msgstr "Drakt"
 
-#: ../src/cairo-dock-gui-advanced.c:1600
+#: ../src/cairo-dock-gui-advanced.c:1598
 msgid "Current items in your dock(s)."
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1601 ../src/cairo-dock-gui-simple.c:92
+#: ../src/cairo-dock-gui-advanced.c:1599 ../src/cairo-dock-gui-simple.c:92
 #: ../src/cairo-dock-gui-simple.c:94
 msgid "Current items"
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1721
+#: ../src/cairo-dock-gui-advanced.c:1719
 msgid "Filter"
 msgstr "Filter"
 
-#: ../src/cairo-dock-gui-advanced.c:1762
+#: ../src/cairo-dock-gui-advanced.c:1760
 msgid "All words"
 msgstr "Alle ord"
 
-#: ../src/cairo-dock-gui-advanced.c:1763
+#: ../src/cairo-dock-gui-advanced.c:1761
 msgid "Highlighted words"
 msgstr "Marker ord"
 
-#: ../src/cairo-dock-gui-advanced.c:1764
+#: ../src/cairo-dock-gui-advanced.c:1762
 msgid "Hide others"
 msgstr "Skjul andre"
 
-#: ../src/cairo-dock-gui-advanced.c:1765
+#: ../src/cairo-dock-gui-advanced.c:1763
 msgid "Search in description"
 msgstr "Søk i beskrivelse"
 
-#: ../src/cairo-dock-gui-advanced.c:1769
+#: ../src/cairo-dock-gui-advanced.c:1767
 msgid "Hide disabled"
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1778
+#: ../src/cairo-dock-gui-advanced.c:1776
 msgid "Categories"
 msgstr "Kategorier"
 
-#: ../src/cairo-dock-gui-advanced.c:1888
+#: ../src/cairo-dock-gui-advanced.c:1886
 msgid "Enable this module"
 msgstr "Aktiver denne modulen"
 
-#: ../src/cairo-dock-gui-advanced.c:1955
+#: ../src/cairo-dock-gui-advanced.c:1953
 msgid "More applets"
 msgstr "Flere miniprogram"
 
-#: ../src/cairo-dock-gui-advanced.c:1956
+#: ../src/cairo-dock-gui-advanced.c:1954
 msgid "Get more applets online !"
 msgstr "Få flere miniprogram på nettet!"
 
-#: ../src/cairo-dock-gui-advanced.c:2051 ../src/cairo-dock-gui-simple.c:363
+#: ../src/cairo-dock-gui-advanced.c:2049 ../src/cairo-dock-gui-simple.c:363
 msgid "Cairo-Dock configuration"
 msgstr "Konfigurer Cairo-Dock"
 
-#: ../src/cairo-dock-gui-advanced.c:2639
+#: ../src/cairo-dock-gui-advanced.c:2637
 msgid "Simple Mode"
 msgstr "Enkel modus"
 
@@ -252,69 +252,69 @@ msgstr ""
 "Den avanserte modus lar det justere alle enkeltparametere for dokken. Det er "
 "et kraftfullt verktøy for å tilpasse din nåværende drakt."
 
-#: ../src/cairo-dock-menu.c:128
+#: ../src/cairo-dock-menu.c:124
 msgid "Delete this dock?"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:185
+#: ../src/cairo-dock-menu.c:181
 msgid "About Cairo-Dock"
 msgstr "Om Cairo-Dock"
 
-#: ../src/cairo-dock-menu.c:222 ../Help/data/messages:271
+#: ../src/cairo-dock-menu.c:218 ../Help/data/messages:271
 msgid "Development site"
 msgstr "Utviklers nettside"
 
-#: ../src/cairo-dock-menu.c:223 ../Help/data/messages:269
+#: ../src/cairo-dock-menu.c:219 ../Help/data/messages:269
 msgid "Find the latest version of Cairo-Dock here !"
 msgstr "Skaff siste versjon av Cairo-Dock her!"
 
-#: ../src/cairo-dock-menu.c:227 ../src/cairo-dock-menu.c:1114
+#: ../src/cairo-dock-menu.c:223 ../src/cairo-dock-menu.c:1102
 #: ../src/cairo-dock-widget-plugins.c:298
 msgid "Get more applets!"
 msgstr "Skaff deg flere panelprogram!"
 
-#: ../src/cairo-dock-menu.c:231 ../src/cairo-dock-menu.c:237
+#: ../src/cairo-dock-menu.c:227 ../src/cairo-dock-menu.c:233
 msgid "Donate"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:234 ../src/cairo-dock-menu.c:240
+#: ../src/cairo-dock-menu.c:230 ../src/cairo-dock-menu.c:236
 msgid ""
 "Support the people who spend countless hours to bring you the best dock ever."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:268
+#: ../src/cairo-dock-menu.c:264
 msgid "Here is a list of the current developers and contributors"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:269
+#: ../src/cairo-dock-menu.c:265
 msgid "Developers"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:270
+#: ../src/cairo-dock-menu.c:266
 msgid "Main developer and project leader"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:271
+#: ../src/cairo-dock-menu.c:267
 msgid "Contributors / Hackers"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:273
+#: ../src/cairo-dock-menu.c:269
 msgid "Development"
 msgstr "Utvikling"
 
-#: ../src/cairo-dock-menu.c:288
+#: ../src/cairo-dock-menu.c:284
 msgid "Website"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:289
+#: ../src/cairo-dock-menu.c:285
 msgid "Beta-testing / Suggestions / Forum animation"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:290
+#: ../src/cairo-dock-menu.c:286
 msgid "Translators for this language"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:291
+#: ../src/cairo-dock-menu.c:287
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -323,57 +323,57 @@ msgstr ""
 "  Kjetil Birkeland Moe https://launchpad.net/~kjetilbmoe\n"
 "  Ontika https://launchpad.net/~gyopk-deactivatedaccount"
 
-#: ../src/cairo-dock-menu.c:293
+#: ../src/cairo-dock-menu.c:289
 msgid "Support"
 msgstr "Støtte"
 
-#: ../src/cairo-dock-menu.c:323
+#: ../src/cairo-dock-menu.c:319
 msgid ""
 "Thanks to all people that help us to improve the Cairo-Dock project.\n"
 "Thanks to all current, former and future contributors."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:325
+#: ../src/cairo-dock-menu.c:321
 msgid "How to help us?"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:326
+#: ../src/cairo-dock-menu.c:322
 msgid "Don't hesitate to join the project, we need you ;)"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:327
+#: ../src/cairo-dock-menu.c:323
 msgid "Former contributors"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:328
+#: ../src/cairo-dock-menu.c:324
 msgid "For a complete list, please have a look to BZR logs"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:329
+#: ../src/cairo-dock-menu.c:325
 msgid "Users of our forum"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:330
+#: ../src/cairo-dock-menu.c:326
 msgid "List of our forum's members"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:331
+#: ../src/cairo-dock-menu.c:327
 msgid "Artwork"
 msgstr "Grafikk"
 
-#: ../src/cairo-dock-menu.c:333
+#: ../src/cairo-dock-menu.c:329
 msgid "Thanks"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:423
+#: ../src/cairo-dock-menu.c:419
 msgid "Quit Cairo-Dock?"
 msgstr "Avslutte Cairo-Dock?"
 
-#: ../src/cairo-dock-menu.c:453 ../src/cairo-dock-menu.c:596
+#: ../src/cairo-dock-menu.c:449 ../src/cairo-dock-menu.c:592
 msgid "Separator"
 msgstr "Skillelinje"
 
-#: ../src/cairo-dock-menu.c:559
+#: ../src/cairo-dock-menu.c:555
 msgid ""
 "The new dock has been created.\n"
 "Now move some launchers or applets into it by right-clicking on the icon -> "
@@ -383,34 +383,34 @@ msgstr ""
 "Nå kan du flytte ønskede oppstartere og miniprogram til panelet ved å "
 "høyreklikke ikon -> flytt til annet panel"
 
-#: ../src/cairo-dock-menu.c:590
+#: ../src/cairo-dock-menu.c:586
 msgid "Add"
 msgstr "Legg til"
 
-#: ../src/cairo-dock-menu.c:592
+#: ../src/cairo-dock-menu.c:588
 msgid "Sub-dock"
 msgstr "Under-dokk"
 
-#: ../src/cairo-dock-menu.c:594
+#: ../src/cairo-dock-menu.c:590
 msgid "Main dock"
 msgstr "Hoved-dokk"
 
-#: ../src/cairo-dock-menu.c:598
+#: ../src/cairo-dock-menu.c:594
 msgid "Custom launcher"
 msgstr "Brukerdefinert oppstarter"
 
-#: ../src/cairo-dock-menu.c:599
+#: ../src/cairo-dock-menu.c:595
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
 msgstr ""
 "Vanligvis vil du trekke en oppstarter fra menyen og slippe den på "
 "samlevinduet."
 
-#: ../src/cairo-dock-menu.c:601
+#: ../src/cairo-dock-menu.c:597
 msgid "Applet"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:619
+#: ../src/cairo-dock-menu.c:614
 msgid ""
 "Do you want to re-dispatch the icons contained inside this container into "
 "the dock?\n"
@@ -419,21 +419,21 @@ msgstr ""
 "Ønsker du å re-sende ikonene i denne beholderen til samlevinduet?\n"
 "(Ikonene vil ellers bli tapt)"
 
-#: ../src/cairo-dock-menu.c:647
+#: ../src/cairo-dock-menu.c:636
 msgid "separator"
 msgstr "skillelinje"
 
-#: ../src/cairo-dock-menu.c:651
+#: ../src/cairo-dock-menu.c:640
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
 msgstr ""
 "Du er i ferd med å fjerne dette ikonet (%s) fra samlevinduet. Er du sikker?"
 
-#: ../src/cairo-dock-menu.c:666
+#: ../src/cairo-dock-menu.c:655
 msgid "Sorry, this icon doesn't have a configuration file."
 msgstr "Beklager, dette ikonet mangler konfigurasjonsfil."
 
-#: ../src/cairo-dock-menu.c:706
+#: ../src/cairo-dock-menu.c:695
 msgid ""
 "The new dock has been created.\n"
 "You can customize it by right-clicking on it -> cairo-dock -> configure this "
@@ -443,15 +443,15 @@ msgstr ""
 "Du kan tilpasse det ved å høyreklikke -> cairo-panel -> konfigurer dette "
 "panelet"
 
-#: ../src/cairo-dock-menu.c:712
+#: ../src/cairo-dock-menu.c:701
 msgid "Move to another dock"
 msgstr "Flytt til et annet samlevindu"
 
-#: ../src/cairo-dock-menu.c:714 ../src/gldit/cairo-dock-gui-factory.c:1228
+#: ../src/cairo-dock-menu.c:703 ../src/gldit/cairo-dock-gui-factory.c:1228
 msgid "New main dock"
 msgstr "Et nytt hovedsamlevindu"
 
-#: ../src/cairo-dock-menu.c:791
+#: ../src/cairo-dock-menu.c:780
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
@@ -459,307 +459,307 @@ msgstr ""
 "Beklager, den tilhørende beskrivelsesfilen ble ikke funnet.\n"
 "Vurder å dra og slippe starteren fra applikasjonsmenyen."
 
-#: ../src/cairo-dock-menu.c:838
+#: ../src/cairo-dock-menu.c:827
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr ""
 "Du er i ferd med å fjerne dette miniprogrammet (%s) fra samlevinduet. Er du "
 "sikker?"
 
-#: ../src/cairo-dock-menu.c:908 ../src/gldit/cairo-dock-gui-factory.c:757
+#: ../src/cairo-dock-menu.c:896 ../src/gldit/cairo-dock-gui-factory.c:757
 msgid "Pick up an image"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:925 ../src/gldit/cairo-dock-gui-factory.c:791
-#: ../data/messages:453 ../data/messages:459 ../data/messages:727
-#: ../data/messages:943
+#: ../src/cairo-dock-menu.c:913 ../src/gldit/cairo-dock-gui-factory.c:791
+#: ../data/messages:455 ../data/messages:461 ../data/messages:729
+#: ../data/messages:945
 msgid "Image"
 msgstr "Bilde"
 
-#: ../src/cairo-dock-menu.c:1030
+#: ../src/cairo-dock-menu.c:1018
 msgid "Configure"
 msgstr "Konfigurer"
 
-#: ../src/cairo-dock-menu.c:1035
+#: ../src/cairo-dock-menu.c:1023
 msgid "Configure behaviour, appearance, and applets."
 msgstr "Konfigurer oppførsel, utseende og panelprogram"
 
-#: ../src/cairo-dock-menu.c:1040
+#: ../src/cairo-dock-menu.c:1028
 msgid "Configure this dock"
 msgstr "Sett opp dette samlevinduet"
 
-#: ../src/cairo-dock-menu.c:1045
+#: ../src/cairo-dock-menu.c:1033
 msgid "Customize the position, visibility and appearance of this main dock."
 msgstr "Tilpass hoveddokkens plassering, synlighet og utseende."
 
-#: ../src/cairo-dock-menu.c:1047
+#: ../src/cairo-dock-menu.c:1035
 msgid "Delete this dock"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1057
+#: ../src/cairo-dock-menu.c:1045
 msgid "Manage themes"
 msgstr "Behandle drakter."
 
-#: ../src/cairo-dock-menu.c:1062
+#: ../src/cairo-dock-menu.c:1050
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
 msgstr ""
 "Velg fra de mange draktene på serveren eller lagre din nåværende drakt."
 
-#: ../src/cairo-dock-menu.c:1075
+#: ../src/cairo-dock-menu.c:1063
 msgid "Lock icons position"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1079
+#: ../src/cairo-dock-menu.c:1067
 msgid "This will (un)lock the position of the icons."
 msgstr "Dette vil låse (opp) ikonenes plassering."
 
-#: ../src/cairo-dock-menu.c:1085
+#: ../src/cairo-dock-menu.c:1073
 msgid "Quick-Hide"
 msgstr "Hurtigskjul"
 
-#: ../src/cairo-dock-menu.c:1090
+#: ../src/cairo-dock-menu.c:1078
 msgid "This will hide the dock until you hover over it with the mouse."
 msgstr "Dette vil skjule samlevinduet inntil du holder musepekeren over det."
 
-#: ../src/cairo-dock-menu.c:1103
+#: ../src/cairo-dock-menu.c:1091
 msgid "Launch Cairo-Dock on startup"
 msgstr "Kjøre Cairo-Dock ved oppstart"
 
-#: ../src/cairo-dock-menu.c:1119
+#: ../src/cairo-dock-menu.c:1107
 msgid "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Tredjeparts-panelprogram tilbyr integrasjon med mange program, eksempelvis "
 "Pidgin"
 
-#: ../src/cairo-dock-menu.c:1122 ../Help/src/applet-init.c:28
+#: ../src/cairo-dock-menu.c:1110 ../Help/src/applet-init.c:28
 #: ../Help/src/applet-notifications.c:269
 msgid "Help"
 msgstr "Hjelp"
 
-#: ../src/cairo-dock-menu.c:1127
+#: ../src/cairo-dock-menu.c:1115
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
 msgstr ""
 "Det finnes ikke problemer, kun løsninger (og massevis av nyttige hint og "
 "vink!)."
 
-#: ../src/cairo-dock-menu.c:1131
+#: ../src/cairo-dock-menu.c:1119
 msgid "About"
 msgstr "Om"
 
-#: ../src/cairo-dock-menu.c:1140
+#: ../src/cairo-dock-menu.c:1128
 msgid "Quit"
 msgstr "Avslutt"
 
-#: ../src/cairo-dock-menu.c:1149
+#: ../src/cairo-dock-menu.c:1137
 msgid ""
 "You're using a Cairo-Dock Session!\n"
 "It's not advised to quit the dock but you can press Shift to unlock this "
 "menu entry."
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1175 ../src/cairo-dock-menu.c:1188
+#: ../src/cairo-dock-menu.c:1163 ../src/cairo-dock-menu.c:1176
 msgid "Launch a new (Shift+clic)"
 msgstr "Start en ny (shift-klikk)"
 
-#: ../src/cairo-dock-menu.c:1180 ../src/cairo-dock-menu.c:1262
+#: ../src/cairo-dock-menu.c:1168 ../src/cairo-dock-menu.c:1250
 msgid "Applet's handbook"
 msgstr "Manual for miniprogram"
 
-#: ../src/cairo-dock-menu.c:1195 ../src/cairo-dock-menu.c:1240
+#: ../src/cairo-dock-menu.c:1183 ../src/cairo-dock-menu.c:1228
 msgid "Edit"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1197 ../src/cairo-dock-menu.c:1247
+#: ../src/cairo-dock-menu.c:1185 ../src/cairo-dock-menu.c:1235
 msgid "Remove"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1198
+#: ../src/cairo-dock-menu.c:1186
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
 msgstr ""
 "Du kan fjerne en oppstarter ved å trekke den ut av samlevinduet med musen."
 
-#: ../src/cairo-dock-menu.c:1207
+#: ../src/cairo-dock-menu.c:1195
 msgid "Make it a launcher"
 msgstr "Gjør til oppstarter"
 
-#: ../src/cairo-dock-menu.c:1230
+#: ../src/cairo-dock-menu.c:1218
 msgid "Remove custom icon"
 msgstr "Fjern brukertilpasset ikon"
 
-#: ../src/cairo-dock-menu.c:1234
+#: ../src/cairo-dock-menu.c:1222
 msgid "Set a custom icon"
 msgstr "Sett selvvalgt ikon"
 
-#: ../src/cairo-dock-menu.c:1244
+#: ../src/cairo-dock-menu.c:1232
 msgid "Detach"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1244
+#: ../src/cairo-dock-menu.c:1232
 msgid "Return to the dock"
 msgstr "Returner til samlevindu"
 
-#: ../src/cairo-dock-menu.c:1251
+#: ../src/cairo-dock-menu.c:1239
 msgid "Duplicate"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1426
+#: ../src/cairo-dock-menu.c:1414
 #, c-format
 msgid "Move all to desktop %d - face %d"
 msgstr "Flytt alle til skrivebord %d - flate %d"
 
-#: ../src/cairo-dock-menu.c:1426
+#: ../src/cairo-dock-menu.c:1414
 #, c-format
 msgid "Move to desktop %d - face %d"
 msgstr "Flytt til skrivebord %d - flate %d"
 
-#: ../src/cairo-dock-menu.c:1428
+#: ../src/cairo-dock-menu.c:1416
 #, c-format
 msgid "Move all to desktop %d"
 msgstr "Flytt alle til skrivebord %d"
 
-#: ../src/cairo-dock-menu.c:1428
+#: ../src/cairo-dock-menu.c:1416
 #, c-format
 msgid "Move to desktop %d"
 msgstr "Flytt til skrivebord %d"
 
-#: ../src/cairo-dock-menu.c:1430
+#: ../src/cairo-dock-menu.c:1418
 #, c-format
 msgid "Move all to face %d"
 msgstr "Flytt alle til flate %d"
 
-#: ../src/cairo-dock-menu.c:1430
+#: ../src/cairo-dock-menu.c:1418
 #, c-format
 msgid "Move to face %d"
 msgstr "Flytt til flate %d"
 
-#: ../src/cairo-dock-menu.c:1855 ../src/cairo-dock-menu.c:1906
+#: ../src/cairo-dock-menu.c:1843 ../src/cairo-dock-menu.c:1894
 msgid "Window"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1861 ../src/cairo-dock-menu.c:1863
-#: ../src/cairo-dock-menu.c:1936 ../src/cairo-dock-menu.c:1938
-#: ../data/messages:335
+#: ../src/cairo-dock-menu.c:1849 ../src/cairo-dock-menu.c:1851
+#: ../src/cairo-dock-menu.c:1924 ../src/cairo-dock-menu.c:1926
+#: ../data/messages:337
 msgid "Close"
 msgstr "Lukk"
 
-#: ../src/cairo-dock-menu.c:1861 ../src/cairo-dock-menu.c:1884
-#: ../src/cairo-dock-menu.c:1925 ../src/cairo-dock-menu.c:1936
-#: ../src/cairo-dock-menu.c:1959 ../src/cairo-dock-menu.c:2000
-#: ../src/cairo-dock-menu.c:2010 ../Help/src/applet-notifications.c:259
+#: ../src/cairo-dock-menu.c:1849 ../src/cairo-dock-menu.c:1872
+#: ../src/cairo-dock-menu.c:1913 ../src/cairo-dock-menu.c:1924
+#: ../src/cairo-dock-menu.c:1947 ../src/cairo-dock-menu.c:1988
+#: ../src/cairo-dock-menu.c:1998 ../Help/src/applet-notifications.c:259
 msgid "middle-click"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1876 ../src/cairo-dock-menu.c:1917
+#: ../src/cairo-dock-menu.c:1864 ../src/cairo-dock-menu.c:1905
 msgid "Unmaximise"
 msgstr "Gjenopprett"
 
-#: ../src/cairo-dock-menu.c:1876 ../src/cairo-dock-menu.c:1917
+#: ../src/cairo-dock-menu.c:1864 ../src/cairo-dock-menu.c:1905
 msgid "Maximise"
 msgstr "Maksimer"
 
-#: ../src/cairo-dock-menu.c:1884 ../src/cairo-dock-menu.c:1886
-#: ../src/cairo-dock-menu.c:1925 ../src/cairo-dock-menu.c:1927
+#: ../src/cairo-dock-menu.c:1872 ../src/cairo-dock-menu.c:1874
+#: ../src/cairo-dock-menu.c:1913 ../src/cairo-dock-menu.c:1915
 msgid "Minimise"
 msgstr "Minimer"
 
-#: ../src/cairo-dock-menu.c:1901 ../src/cairo-dock-menu.c:1911
+#: ../src/cairo-dock-menu.c:1889 ../src/cairo-dock-menu.c:1899
 msgid "Show"
 msgstr "Vis"
 
-#: ../src/cairo-dock-menu.c:1945 ../src/cairo-dock-menu.c:2034
+#: ../src/cairo-dock-menu.c:1933 ../src/cairo-dock-menu.c:2022
 msgid "Other actions"
 msgstr "Andre handlinger"
 
-#: ../src/cairo-dock-menu.c:1948
+#: ../src/cairo-dock-menu.c:1936
 msgid "Move to this desktop"
 msgstr "Flytt til dette skrivebordet"
 
-#: ../src/cairo-dock-menu.c:1953
+#: ../src/cairo-dock-menu.c:1941
 msgid "Not Fullscreen"
 msgstr "Ikke fullskjerm"
 
-#: ../src/cairo-dock-menu.c:1953
+#: ../src/cairo-dock-menu.c:1941
 msgid "Fullscreen"
 msgstr "Fullskjerm"
 
-#: ../src/cairo-dock-menu.c:1959 ../src/cairo-dock-menu.c:1961
+#: ../src/cairo-dock-menu.c:1947 ../src/cairo-dock-menu.c:1949
 msgid "Below other windows"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1969
+#: ../src/cairo-dock-menu.c:1957
 msgid "Don't keep above"
 msgstr "Ikke behold ovenpå"
 
-#: ../src/cairo-dock-menu.c:1969 ../Help/data/messages:349
+#: ../src/cairo-dock-menu.c:1957 ../Help/data/messages:349
 msgid "Keep above"
 msgstr "Behold ovenpå"
 
-#: ../src/cairo-dock-menu.c:1973
+#: ../src/cairo-dock-menu.c:1961
 msgid "Visible only on this desktop"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1973
+#: ../src/cairo-dock-menu.c:1961
 msgid "Visible on all desktops"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:1981
+#: ../src/cairo-dock-menu.c:1969
 msgid "Kill"
 msgstr "Drep"
 
-#: ../src/cairo-dock-menu.c:1996
+#: ../src/cairo-dock-menu.c:1984
 msgid "Windows"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:2000 ../src/cairo-dock-menu.c:2002
-#: ../src/cairo-dock-menu.c:2030
+#: ../src/cairo-dock-menu.c:1988 ../src/cairo-dock-menu.c:1990
+#: ../src/cairo-dock-menu.c:2018
 msgid "Close all"
 msgstr "Lukk alle"
 
-#: ../src/cairo-dock-menu.c:2010 ../src/cairo-dock-menu.c:2012
-#: ../src/cairo-dock-menu.c:2028
+#: ../src/cairo-dock-menu.c:1998 ../src/cairo-dock-menu.c:2000
+#: ../src/cairo-dock-menu.c:2016
 msgid "Minimise all"
 msgstr "Minimaliser alle"
 
-#: ../src/cairo-dock-menu.c:2020 ../src/cairo-dock-menu.c:2026
+#: ../src/cairo-dock-menu.c:2008 ../src/cairo-dock-menu.c:2014
 msgid "Show all"
 msgstr "Vis alt"
 
-#: ../src/cairo-dock-menu.c:2024
+#: ../src/cairo-dock-menu.c:2012
 msgid "Windows management"
 msgstr ""
 
-#: ../src/cairo-dock-menu.c:2036
+#: ../src/cairo-dock-menu.c:2024
 msgid "Move all to this desktop"
 msgstr "Flytt alle til dette skrivebordet"
 
-#: ../src/cairo-dock-menu.c:2059 ../Help/data/messages:347
+#: ../src/cairo-dock-menu.c:2047 ../Help/data/messages:347
 msgid "Normal"
 msgstr "Normal"
 
-#: ../src/cairo-dock-menu.c:2065 ../data/messages:21 ../data/messages:183
-#: ../data/messages:889
+#: ../src/cairo-dock-menu.c:2053 ../data/messages:21 ../data/messages:183
+#: ../data/messages:891
 msgid "Always on top"
 msgstr "Alltid øverst"
 
-#: ../src/cairo-dock-menu.c:2072
+#: ../src/cairo-dock-menu.c:2060
 msgid "Always below"
 msgstr "Alltid under"
 
-#: ../src/cairo-dock-menu.c:2089 ../Help/data/messages:355
+#: ../src/cairo-dock-menu.c:2077 ../Help/data/messages:355
 msgid "Reserve space"
 msgstr "Reserver plass"
 
-#: ../src/cairo-dock-menu.c:2096
+#: ../src/cairo-dock-menu.c:2084
 msgid "On all desktops"
 msgstr "På alle skrivebord"
 
-#: ../src/cairo-dock-menu.c:2102
+#: ../src/cairo-dock-menu.c:2090
 msgid "Lock position"
 msgstr "Lås posisjon"
 
-#: ../src/cairo-dock-user-interaction.c:428
+#: ../src/cairo-dock-user-interaction.c:432
 msgid ""
 "The option 'overwrite X icons' has been automatically enabled in the "
 "config.\n"
@@ -782,7 +782,7 @@ msgstr ""
 "Hoved-dokkens innstillinger er tilgjengelige i hovedvinduet til "
 "innstillingene."
 
-#: ../src/cairo-dock-widget-items.c:724
+#: ../src/cairo-dock-widget-items.c:720
 msgid "Remove this item"
 msgstr ""
 
@@ -1071,7 +1071,7 @@ msgstr ""
 "Den har blitt gjenopprettet, men hvis feilen skjer igjen vennligst rapporter "
 "det på http://glx-dock.org"
 
-#: ../src/gldit/cairo-dock-applet-facility.h:250
+#: ../src/gldit/cairo-dock-applet-facility.h:246
 msgid ""
 "The theme could not be found; the default theme will be used instead.\n"
 " You can change this by opening the configuration of this module. Do you "
@@ -1081,7 +1081,7 @@ msgstr ""
 " Du kan endre dette ved å åpne konfigurasjonen av denne modulen. Ønsker du å "
 "gjøre dette nå?"
 
-#: ../src/gldit/cairo-dock-applet-facility.h:266
+#: ../src/gldit/cairo-dock-applet-facility.h:262
 msgid ""
 "The gauge theme could not be found; a default gauge will be used instead.\n"
 "You can change this by opening the configuration of this module. Do you want "
@@ -1091,32 +1091,32 @@ msgstr ""
 " Du kan endre dette ved å åpne konfigurasjonen av denne modulen. Ønsker du å "
 "gjøre dette nå?"
 
-#: ../src/gldit/cairo-dock-callbacks.c:1408
-msgid "Sorry but the dock is locked"
-msgstr ""
-
-#: ../src/gldit/cairo-dock-desklet-manager.c:783
+#: ../src/gldit/cairo-dock-desklet-manager.c:782
 msgid "_custom decoration_"
 msgstr "_tilpasset dekorasjon_"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:253
+#: ../src/gldit/cairo-dock-dock-factory.c:1434
+msgid "Sorry but the dock is locked"
+msgstr ""
+
+#: ../src/gldit/cairo-dock-dock-manager.c:240
 msgid "Bottom dock"
 msgstr "Nedre dokk"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:255
+#: ../src/gldit/cairo-dock-dock-manager.c:242
 msgid "Top dock"
 msgstr "Øvre dokk"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:260
+#: ../src/gldit/cairo-dock-dock-manager.c:247
 msgid "Right dock"
 msgstr "Høyre dokk"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:262
+#: ../src/gldit/cairo-dock-dock-manager.c:249
 msgid "Left dock"
 msgstr "Venstre dokk"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:1760
-#: ../src/gldit/cairo-dock-dock-manager.c:1857
+#: ../src/gldit/cairo-dock-dock-manager.c:1672
+#: ../src/gldit/cairo-dock-dock-manager.c:1770
 msgid "Pop up the main dock"
 msgstr ""
 
@@ -1171,12 +1171,12 @@ msgid "Use all screens"
 msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1090 ../data/messages:13
-#: ../data/messages:153 ../data/messages:159 ../data/messages:875
+#: ../data/messages:153 ../data/messages:159 ../data/messages:877
 msgid "left"
 msgstr "venstre"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1092 ../data/messages:11
-#: ../data/messages:151 ../data/messages:161 ../data/messages:873
+#: ../data/messages:151 ../data/messages:161 ../data/messages:875
 msgid "right"
 msgstr "høyre"
 
@@ -1186,12 +1186,12 @@ msgid "middle"
 msgstr ""
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1100 ../data/messages:9
-#: ../data/messages:149 ../data/messages:871
+#: ../data/messages:149 ../data/messages:873
 msgid "top"
 msgstr "øverst"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1102 ../data/messages:7
-#: ../data/messages:147 ../data/messages:869
+#: ../data/messages:147 ../data/messages:871
 msgid "bottom"
 msgstr "bunn"
 
@@ -1227,20 +1227,20 @@ msgstr "lenke"
 msgid "Grab"
 msgstr "Grip"
 
-#: ../src/gldit/cairo-dock-launcher-manager.c:320
+#: ../src/gldit/cairo-dock-launcher-manager.c:329
 msgid "Enter a command"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-launcher-manager.c:321
+#: ../src/gldit/cairo-dock-launcher-manager.c:330
 msgid "New launcher"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-module-instance-manager.c:480
+#: ../src/gldit/cairo-dock-module-instance-manager.c:309
 msgid "by"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-struct.h:442 ../data/messages:1033
-#: ../data/messages:1041
+#: ../src/gldit/cairo-dock-struct.h:474 ../data/messages:1035
+#: ../data/messages:1043
 msgid "Default"
 msgstr "standard"
 
@@ -2207,8 +2207,8 @@ msgid ""
 "system and reinstall 'cairo-dock' package."
 msgstr ""
 
-#: ../Help/data/messages:303 ../Help/data/messages:305 ../data/messages:995
-#: ../data/messages:1027 ../data/messages:1063
+#: ../Help/data/messages:303 ../Help/data/messages:305 ../data/messages:997
+#: ../data/messages:1029 ../data/messages:1065
 msgid "Icon"
 msgstr ""
 
@@ -2291,7 +2291,7 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:345 ../data/messages:19 ../data/messages:57
-#: ../data/messages:181 ../data/messages:243 ../data/messages:887
+#: ../data/messages:181 ../data/messages:243 ../data/messages:889
 msgid "Visibility:"
 msgstr "Synlighet:"
 
@@ -2307,7 +2307,7 @@ msgstr ""
 msgid "Should be visible on all desktops?"
 msgstr ""
 
-#: ../Help/data/messages:359 ../data/messages:575
+#: ../Help/data/messages:359 ../data/messages:577
 msgid "Decorations"
 msgstr "Dekorasjoner"
 
@@ -2378,15 +2378,15 @@ msgstr ""
 msgid "Foreground tansparency:"
 msgstr ""
 
-#: ../data/messages:1 ../data/messages:863
+#: ../data/messages:1 ../data/messages:865
 msgid "Behavior"
 msgstr "Oppførsel"
 
-#: ../data/messages:3 ../data/messages:143 ../data/messages:865
+#: ../data/messages:3 ../data/messages:143 ../data/messages:867
 msgid "Position on the screen"
 msgstr "Plassering på skjerm"
 
-#: ../data/messages:5 ../data/messages:145 ../data/messages:867
+#: ../data/messages:5 ../data/messages:145 ../data/messages:869
 msgid "Choose which border of the screen the dock will be placed on:"
 msgstr "Velg hvilken kant av skjermen samlevinduet skal plasseres på:"
 
@@ -2394,7 +2394,7 @@ msgstr "Velg hvilken kant av skjermen samlevinduet skal plasseres på:"
 msgid "Visibility of the main dock"
 msgstr "Hovedpanelets synlighet"
 
-#: ../data/messages:17 ../data/messages:179 ../data/messages:885
+#: ../data/messages:17 ../data/messages:179 ../data/messages:887
 msgid ""
 "Modes are sorted from the most intrusive to the less intrusive.\n"
 "When the dock is hidden or below a window, place the mouse on the screen's "
@@ -2409,23 +2409,23 @@ msgstr ""
 "musens posisjon. Resten av tiden holder den seg usynlig og oppfører seg "
 "dermed som en meny."
 
-#: ../data/messages:23 ../data/messages:185 ../data/messages:891
+#: ../data/messages:23 ../data/messages:185 ../data/messages:893
 msgid "Reserve space for the dock"
 msgstr "Reserver plass til panelet"
 
-#: ../data/messages:25 ../data/messages:187 ../data/messages:893
+#: ../data/messages:25 ../data/messages:187 ../data/messages:895
 msgid "Keep the dock below"
 msgstr "Legg panelet bakerst"
 
-#: ../data/messages:27 ../data/messages:189 ../data/messages:895
+#: ../data/messages:27 ../data/messages:189 ../data/messages:897
 msgid "Hide the dock when it overlaps the current window"
 msgstr "Gjem panelet når det overlapper aktivt vindu"
 
-#: ../data/messages:29 ../data/messages:191 ../data/messages:897
+#: ../data/messages:29 ../data/messages:191 ../data/messages:899
 msgid "Hide the dock whenever it overlaps any window"
 msgstr "Gjem panelet når det overlapper ethvert vindu"
 
-#: ../data/messages:31 ../data/messages:193 ../data/messages:899
+#: ../data/messages:31 ../data/messages:193 ../data/messages:901
 msgid "Keep the dock hidden"
 msgstr "Hold panelet skjult"
 
@@ -2501,31 +2501,31 @@ msgstr ""
 msgid "Separated"
 msgstr ""
 
-#: ../data/messages:77 ../data/messages:273
+#: ../data/messages:77 ../data/messages:275
 msgid "Place new icons"
 msgstr ""
 
-#: ../data/messages:79 ../data/messages:275
+#: ../data/messages:79 ../data/messages:277
 msgid "At the beginning of the dock"
 msgstr ""
 
-#: ../data/messages:81 ../data/messages:277
+#: ../data/messages:81 ../data/messages:279
 msgid "Before the launchers"
 msgstr ""
 
-#: ../data/messages:83 ../data/messages:279
+#: ../data/messages:83 ../data/messages:281
 msgid "After the launchers"
 msgstr ""
 
-#: ../data/messages:85 ../data/messages:281
+#: ../data/messages:85 ../data/messages:283
 msgid "At the end of the dock"
 msgstr ""
 
-#: ../data/messages:87 ../data/messages:283
+#: ../data/messages:87 ../data/messages:285
 msgid "After a given icon"
 msgstr ""
 
-#: ../data/messages:89 ../data/messages:285
+#: ../data/messages:89 ../data/messages:287
 msgid "Place new icons after this one"
 msgstr ""
 
@@ -2569,39 +2569,39 @@ msgstr ""
 msgid "Choose a theme of icons :"
 msgstr "Velg et sett av ikoner:"
 
-#: ../data/messages:117 ../data/messages:915
+#: ../data/messages:117 ../data/messages:917
 msgid "Icons size:"
 msgstr "Ikoners størrelse:"
 
-#: ../data/messages:119 ../data/messages:921
+#: ../data/messages:119 ../data/messages:923
 msgid "Very small"
 msgstr "Veldig liten"
 
-#: ../data/messages:121 ../data/messages:923
+#: ../data/messages:121 ../data/messages:925
 msgid "Small"
 msgstr "Liten"
 
-#: ../data/messages:123 ../data/messages:925
+#: ../data/messages:123 ../data/messages:927
 msgid "Medium"
 msgstr "Middels"
 
-#: ../data/messages:125 ../data/messages:927
+#: ../data/messages:125 ../data/messages:929
 msgid "Big"
 msgstr "Stor"
 
-#: ../data/messages:127 ../data/messages:929
+#: ../data/messages:127 ../data/messages:931
 msgid "Very Big"
 msgstr "Veldig stor"
 
-#: ../data/messages:131 ../data/messages:521
+#: ../data/messages:131 ../data/messages:523
 msgid "Choose the default view for main docks :"
 msgstr "Velg standardvisningen for samlevindueer:"
 
-#: ../data/messages:133 ../data/messages:525
+#: ../data/messages:133 ../data/messages:527
 msgid "You can overwrite this parameter for each sub-dock."
 msgstr "Du kan overskrive dette parameteret for hver under-samlevindu."
 
-#: ../data/messages:135 ../data/messages:527
+#: ../data/messages:135 ../data/messages:529
 msgid "Choose the default view for sub-docks :"
 msgstr "Velg standardvisningen for under-samlevinduer:"
 
@@ -2613,7 +2613,7 @@ msgid ""
 "corresponding action."
 msgstr ""
 
-#: ../data/messages:155 ../data/messages:877
+#: ../data/messages:155 ../data/messages:879
 msgid ""
 "When set to 0 the dock will position itself relative to the left corner if "
 "horizontal and the top corner if vertical. When set to 1 it will position "
@@ -2627,19 +2627,19 @@ msgstr ""
 "hjørne hvis vertikalt. Når satt til 0.5 vil posisjonen selv være relativ til "
 "midten av skjermens kanter."
 
-#: ../data/messages:157 ../data/messages:879
+#: ../data/messages:157 ../data/messages:881
 msgid "Relative alignment:"
 msgstr "Relativ plassering:"
 
-#: ../data/messages:163 ../data/messages:881
+#: ../data/messages:163 ../data/messages:883
 msgid "Multi-screens"
 msgstr ""
 
-#: ../data/messages:165 ../data/messages:901
+#: ../data/messages:165 ../data/messages:903
 msgid "Offset from the screen's edge"
 msgstr "Avstand fra skjermens kant"
 
-#: ../data/messages:167 ../data/messages:903
+#: ../data/messages:167 ../data/messages:905
 msgid ""
 "Gap from the absolute position on the screen's edge, in pixels. You can also "
 "move the dock by holding the ALT or CTRL key and the left mouse button."
@@ -2648,11 +2648,11 @@ msgstr ""
 "også bevege samlevinduet ved å holdet ALT eller CTRL tastene og venstre "
 "musetast."
 
-#: ../data/messages:169 ../data/messages:905
+#: ../data/messages:169 ../data/messages:907
 msgid "Lateral offset:"
 msgstr "Sidelengs avstand:"
 
-#: ../data/messages:171 ../data/messages:907
+#: ../data/messages:171 ../data/messages:909
 msgid ""
 "in pixels. You can also move the dock by holding the ALT or CTRL key and the "
 "left mouse button."
@@ -2660,7 +2660,7 @@ msgstr ""
 "i piksler. Du kan også bevege samlevinduet ved å holdet ALT eller CTRL "
 "tastene og venstre musetast."
 
-#: ../data/messages:173 ../data/messages:909
+#: ../data/messages:173 ../data/messages:911
 msgid "Distance to the screen edge:"
 msgstr "Avstand fra skjermkant:"
 
@@ -2763,18 +2763,22 @@ msgid "Mix launchers and applications"
 msgstr "Bland oppstartere og programmer."
 
 #: ../data/messages:269
+msgid "Animate the launcher until the corresponding application opens"
+msgstr ""
+
+#: ../data/messages:271
 msgid "Only show applications on current desktop"
 msgstr "Vis kun programmer på gjeldende skrivebord"
 
-#: ../data/messages:271
+#: ../data/messages:273
 msgid "Only show icons whose windows are minimised"
 msgstr "Vis bare ikoner til minimerte vinduer"
 
-#: ../data/messages:287
+#: ../data/messages:289
 msgid "Automatically add a separator"
 msgstr ""
 
-#: ../data/messages:289
+#: ../data/messages:291
 msgid ""
 "This allows you to group all the windows of a given application into a "
 "unique sub-dock, and to act on all of the windows at the same time."
@@ -2782,23 +2786,23 @@ msgstr ""
 "Dette gir deg muligheten til å gruppere alle vinduene til ett gitt program i "
 "en egen samledokk og utføre handlinger på alle vinduene samtidig."
 
-#: ../data/messages:291
+#: ../data/messages:293
 msgid "Group windows from the same application in a sub-dock ?"
 msgstr "Samle vinduer fra samme program i et under-panel?"
 
-#: ../data/messages:293 ../data/messages:303
+#: ../data/messages:295 ../data/messages:305
 msgid "Enter the class of the applications, separated by a semi-colon ';'"
 msgstr "Oppgi applikasjonenes klasse, separeret med semikolon ';'"
 
-#: ../data/messages:295 ../data/messages:305
+#: ../data/messages:297 ../data/messages:307
 msgid "\t\tExcept the following classes:"
 msgstr "\t\tUnntatt følgende klasser:"
 
-#: ../data/messages:297
+#: ../data/messages:299
 msgid "Representation"
 msgstr "Visning"
 
-#: ../data/messages:299
+#: ../data/messages:301
 msgid ""
 "If not set, the icon provided by X for each application will be used. If "
 "set, the same icon as the corresponding launcher will be used for each "
@@ -2808,11 +2812,11 @@ msgstr ""
 "istedet. Dersom valgt, vil det samme ikonet som den tilhørende oppstarteren "
 "bruker også bli brukt for hver applikasjon."
 
-#: ../data/messages:301
+#: ../data/messages:303
 msgid "Overwrite the X icon with the launchers' icon?"
 msgstr "Erstatte ikon X med oppstarterens ikon?"
 
-#: ../data/messages:307
+#: ../data/messages:309
 msgid ""
 "A composite manager is required to display the thumbnail.\n"
 "OpenGL is required to draw the icon bent backwards."
@@ -2820,77 +2824,77 @@ msgstr ""
 "Å vise miniatyrbildet trenger en grafisk kompositt-håndterer.\n"
 "OpenGL kreves for å kunne tegne ikonet bøyd bakover."
 
-#: ../data/messages:309
+#: ../data/messages:311
 msgid "How to draw minimised windows ?"
 msgstr "Hvordan vise minimerte vinduer?"
 
-#: ../data/messages:311
+#: ../data/messages:313
 msgid "Make the icon transparent"
 msgstr "Gjør ikonet gjennomsiktig"
 
-#: ../data/messages:313
+#: ../data/messages:315
 msgid "Show a window's thumbnail"
 msgstr "Viser et vindus minityrbilde."
 
-#: ../data/messages:315
+#: ../data/messages:317
 msgid "Draw it bent backwards"
 msgstr "Vis ikonet bøyd bakover"
 
-#: ../data/messages:317
+#: ../data/messages:319
 msgid "Transparency of icons whose window is minimised:"
 msgstr "Graden av gjennomsiktighet for ikonet til et minimert vindu."
 
-#: ../data/messages:319 ../data/messages:469 ../data/messages:589
-#: ../data/messages:615 ../data/messages:713
+#: ../data/messages:321 ../data/messages:471 ../data/messages:591
+#: ../data/messages:617 ../data/messages:715
 msgid "Opaque"
 msgstr "Ugjennomsiktig"
 
-#: ../data/messages:321 ../data/messages:467 ../data/messages:587
-#: ../data/messages:613 ../data/messages:711
+#: ../data/messages:323 ../data/messages:469 ../data/messages:589
+#: ../data/messages:615 ../data/messages:713
 msgid "Transparent"
 msgstr "Gjennomsiktig"
 
-#: ../data/messages:323
+#: ../data/messages:325
 msgid "Play a short animation of the icon when its window becomes active"
 msgstr "Vis kort animasjon av ikonet når dets vindu aktiveres"
 
-#: ../data/messages:325
+#: ../data/messages:327
 msgid "\"...\" will be added at the end if the name is too long."
 msgstr "\"...\" vil bli lagt til ved slutten dersom navnet er for langt."
 
-#: ../data/messages:327
+#: ../data/messages:329
 msgid "Maximum number of caracters in application name:"
 msgstr "Maksimalt antall tegn i programmets navn:"
 
-#: ../data/messages:329
+#: ../data/messages:331
 msgid "Interaction"
 msgstr "Interaksjon"
 
-#: ../data/messages:331
+#: ../data/messages:333
 msgid "Action on middle-click on the related application"
 msgstr "Handling på tilhørende program ved klikk med midterste musetast"
 
-#: ../data/messages:333
+#: ../data/messages:335
 msgid "Nothing"
 msgstr "Ingenting"
 
-#: ../data/messages:337
+#: ../data/messages:339
 msgid "Minimize"
 msgstr "Minimer"
 
-#: ../data/messages:339
+#: ../data/messages:341
 msgid "Launch new"
 msgstr "Start ny"
 
-#: ../data/messages:341
+#: ../data/messages:343
 msgid "Lower"
 msgstr ""
 
-#: ../data/messages:343
+#: ../data/messages:345
 msgid "This is the default behaviour of most taskbars."
 msgstr "Dette er den vanlige oppførselen til de fleste oppgavelinjer."
 
-#: ../data/messages:345
+#: ../data/messages:347
 msgid ""
 "Minimise the window when its icon is clicked, if it was already the active "
 "window ?"
@@ -2898,28 +2902,28 @@ msgstr ""
 "Dersom ikonet til et vindu som allerede er aktivt blir klikket på, skal det "
 "da minimeres?"
 
-#: ../data/messages:347
+#: ../data/messages:349
 msgid "Only if your Window Manager supports it."
 msgstr ""
 
-#: ../data/messages:349
+#: ../data/messages:351
 msgid ""
 "Present windows preview on click when several windows are grouped togather"
 msgstr ""
 
-#: ../data/messages:351
+#: ../data/messages:353
 msgid "Highlight applications requiring your attention with a dialog bubble"
 msgstr "Fremhev applikasjoner som ber om din oppmerksomhet med en dialog-boble"
 
-#: ../data/messages:353
+#: ../data/messages:355
 msgid "in seconds"
 msgstr "i sekunder"
 
-#: ../data/messages:355
+#: ../data/messages:357
 msgid "Duration of the dialog:"
 msgstr "Dialogens varighet:"
 
-#: ../data/messages:357
+#: ../data/messages:359
 msgid ""
 "It will notify you even if, for instance, you are watching a movie in full "
 "screen or you are on another desktop.\n"
@@ -2927,23 +2931,23 @@ msgstr ""
 "Du vil motta varsler selv om du for eksempel ser en film i full-skjerm eller "
 "arbeider på et annet skrivebord.\n"
 
-#: ../data/messages:359
+#: ../data/messages:361
 msgid "Force the following applications to demand your attention"
 msgstr "Tving følgende applikasjoner til å forlange din oppmerksomhet"
 
-#: ../data/messages:361
+#: ../data/messages:363
 msgid "Highlight applications demanding your attention with an animation"
 msgstr "Fremhev applikasjoner som ber om din oppmerksomhet med en animasjon"
 
-#: ../data/messages:365
+#: ../data/messages:367
 msgid "Animations speed"
 msgstr "Animasjonshastighet"
 
-#: ../data/messages:367
+#: ../data/messages:369
 msgid "Animate sub-docks when they appear"
 msgstr "Animer under-panel når de oppstår"
 
-#: ../data/messages:369
+#: ../data/messages:371
 msgid ""
 "Icons will appear folded on themselves and will then unfold until they fill "
 "the whole dock. The smaller this value, the faster this will be."
@@ -2951,53 +2955,53 @@ msgstr ""
 "Ikoner vises som foldet sammen på seg selv og vil deretter brette seg ut til "
 "de fyller hele dokken. Jo lavere denne verdien er jo raskere vil det skje."
 
-#: ../data/messages:371
+#: ../data/messages:373
 msgid "Animation unfolding duration:"
 msgstr "Utbretts-animasjonens varighet:"
 
-#: ../data/messages:373 ../data/messages:381 ../data/messages:385
-#: ../data/messages:393 ../data/messages:397
+#: ../data/messages:375 ../data/messages:383 ../data/messages:387
+#: ../data/messages:395 ../data/messages:399
 msgid "fast"
 msgstr "hurtig"
 
-#: ../data/messages:375 ../data/messages:383 ../data/messages:387
-#: ../data/messages:395 ../data/messages:399
+#: ../data/messages:377 ../data/messages:385 ../data/messages:389
+#: ../data/messages:397 ../data/messages:401
 msgid "slow"
 msgstr "langsom"
 
-#: ../data/messages:377 ../data/messages:389
+#: ../data/messages:379 ../data/messages:391
 msgid "The more there are, the slower it will be"
 msgstr "Jo flere de er, jo saktere vil det gå"
 
-#: ../data/messages:379
+#: ../data/messages:381
 msgid "Number of steps in the zoom animation (grow/shrink):"
 msgstr "Antall steg i skaleringsanimasjonen (vokse/krympe):"
 
-#: ../data/messages:391
+#: ../data/messages:393
 msgid "Number of steps in the auto-hide animation (move up/move down):"
 msgstr "Antall steg i auto-skjul animasjonen (bevege seg opp/ned):"
 
-#: ../data/messages:401
+#: ../data/messages:403
 msgid "Refresh rate"
 msgstr "Oppfriskingsrate"
 
-#: ../data/messages:403 ../data/messages:407 ../data/messages:411
+#: ../data/messages:405 ../data/messages:409 ../data/messages:413
 msgid "in Hz. This is to adjust behaviour relative to your CPU power."
 msgstr "i hertz. Dette er for å tilpasse adferden til din CPU-kraft."
 
-#: ../data/messages:405
+#: ../data/messages:407
 msgid "Refresh rate when mouving cursor into the dock:"
 msgstr ""
 
-#: ../data/messages:409
+#: ../data/messages:411
 msgid "Animation frequency for the OpenGL backend:"
 msgstr ""
 
-#: ../data/messages:413
+#: ../data/messages:415
 msgid "Animation frequency for the Cairo backend:"
 msgstr ""
 
-#: ../data/messages:415
+#: ../data/messages:417
 msgid ""
 "The transparency gradation pattern will then be re-calculated in real time. "
 "May need more CPU power."
@@ -3005,15 +3009,15 @@ msgstr ""
 "Den gradvise gjennomsiktigheten vil dermed bli beregnet i realtid. Dette kan "
 "kreve mer CPU-kraft."
 
-#: ../data/messages:417
+#: ../data/messages:419
 msgid "Reflections should be calculated in real-time?"
 msgstr ""
 
-#: ../data/messages:419
+#: ../data/messages:421
 msgid "Connection to the Internet"
 msgstr "Tilkobling til internett"
 
-#: ../data/messages:421
+#: ../data/messages:423
 msgid ""
 "Maximum time in seconds that you allow the connection to the server to take. "
 "This only limits the connection phase,  once the dock has connected this "
@@ -3023,11 +3027,11 @@ msgstr ""
 "tjeneren. Dette begrenser kun oppkoblingsfasen, når dokken først er "
 "tilkoblet er denne innstillingen ikke lenger i bruk."
 
-#: ../data/messages:423
+#: ../data/messages:425
 msgid "Connection timeout :"
 msgstr "Tilkoblingens tidsavbrudd:"
 
-#: ../data/messages:425
+#: ../data/messages:427
 msgid ""
 "Maximum time in seconds that you allow the whole operation to last. Some "
 "themes can be up to a few MB."
@@ -3035,63 +3039,63 @@ msgstr ""
 "Maksimalt antall sekunder som du tillater hele hendelsen å bruke. Enkelte "
 "temaer kan være opptil noen få MB."
 
-#: ../data/messages:427
+#: ../data/messages:429
 msgid "Maximum time to download a file:"
 msgstr "Øvre tidsgrense for å laste ned en fil:"
 
-#: ../data/messages:429
+#: ../data/messages:431
 msgid "Use this option if you experience problems to connect."
 msgstr "Bruk dette valget dersom du erfarer problemer med å koble opp."
 
-#: ../data/messages:431
+#: ../data/messages:433
 msgid "Force IPv4 ?"
 msgstr "Tvinge IPv4?"
 
-#: ../data/messages:433
+#: ../data/messages:435
 msgid "Use this option if you connect to the Internet through a proxy."
 msgstr ""
 "Bruk dette alternativet dersom du kobler deg til internett via en proxy."
 
-#: ../data/messages:435
+#: ../data/messages:437
 msgid "Are you behind a proxy ?"
 msgstr "Er du bak en proxy (mellomtjener)?"
 
-#: ../data/messages:437
+#: ../data/messages:439
 msgid "Proxy name :"
 msgstr "Proxy navn:"
 
-#: ../data/messages:439
+#: ../data/messages:441
 msgid "Port :"
 msgstr "Port :"
 
-#: ../data/messages:441 ../data/messages:445
+#: ../data/messages:443 ../data/messages:447
 msgid ""
 "Let empty if you don't need to log-in to the proxy with a user/password."
 msgstr ""
 "La stå tom dersom du ikke trenger å logge deg på proxy-serveren med "
 "brukernavn/passord."
 
-#: ../data/messages:443
+#: ../data/messages:445
 msgid "User :"
 msgstr "Bruker:"
 
-#: ../data/messages:447
+#: ../data/messages:449
 msgid "Password :"
 msgstr "Passord :"
 
-#: ../data/messages:451 ../data/messages:939
+#: ../data/messages:453 ../data/messages:941
 msgid "Fill the background with:"
 msgstr "Fyll bakgrunnen med:"
 
-#: ../data/messages:455 ../data/messages:475 ../data/messages:945
+#: ../data/messages:457 ../data/messages:477 ../data/messages:947
 msgid "Colour gradation"
 msgstr "Fargegradering"
 
-#: ../data/messages:457
+#: ../data/messages:459
 msgid "Use a background image."
 msgstr "Bruk et bakgrunnsbilde."
 
-#: ../data/messages:461 ../data/messages:947
+#: ../data/messages:463 ../data/messages:949
 msgid ""
 "Any format allowed; if empty, the colour gradation will be used as a fall "
 "back."
@@ -3099,104 +3103,104 @@ msgstr ""
 "Ethvert format er tillatt; dersom tom vil fargegraderingen bli brukt som "
 "utgangspunkt."
 
-#: ../data/messages:463 ../data/messages:949
+#: ../data/messages:465 ../data/messages:951
 msgid "Image filename to use as a background :"
 msgstr "Filnavnet til bildet som skal brukes som bakgrunn:"
 
-#: ../data/messages:465
+#: ../data/messages:467
 msgid "Image's transparency :"
 msgstr "Bildets gjennomsiktighet:"
 
-#: ../data/messages:471 ../data/messages:951
+#: ../data/messages:473 ../data/messages:953
 msgid "Repeat image as a pattern to fill background?"
 msgstr "Flislegge bildet for å fylle bakgrunnen?"
 
-#: ../data/messages:473
+#: ../data/messages:475
 msgid "Use a colour gradation."
 msgstr "Bruk fargetoning."
 
-#: ../data/messages:477 ../data/messages:953
+#: ../data/messages:479 ../data/messages:955
 msgid "Bright colour:"
 msgstr "Lys farge:"
 
-#: ../data/messages:479 ../data/messages:955
+#: ../data/messages:481 ../data/messages:957
 msgid "Dark colour:"
 msgstr "Mørk farge:"
 
-#: ../data/messages:481
+#: ../data/messages:483
 msgid "In degrees, in relation to the vertical"
 msgstr "Antall grader i forhold til vertikal"
 
-#: ../data/messages:483
+#: ../data/messages:485
 msgid "Angle of the gradation :"
 msgstr "Overtoningens vinkel:"
 
-#: ../data/messages:485
+#: ../data/messages:487
 msgid "If not nul, it will form stripes."
 msgstr "Alt annet enn null vil lage striper"
 
-#: ../data/messages:487
+#: ../data/messages:489
 msgid "Repeat the gradation this number of times:"
 msgstr "Gjenta graderingen følgende antall ganger:"
 
-#: ../data/messages:489
+#: ../data/messages:491
 msgid "Percentage of the bright colour:"
 msgstr "Prosentandel av den lyse fargen:"
 
-#: ../data/messages:491
+#: ../data/messages:493
 msgid "Background when hidden"
 msgstr ""
 
-#: ../data/messages:493
+#: ../data/messages:495
 msgid "Several applets can be visible even when the dock is hidden"
 msgstr ""
 
-#: ../data/messages:495
+#: ../data/messages:497
 msgid "Default background color when the dock is hidden"
 msgstr ""
 
-#: ../data/messages:497 ../data/messages:957
+#: ../data/messages:499 ../data/messages:959
 msgid "Stretch the dock to always fill the screen"
 msgstr "Strekk samlevinduet til å alltid fylle skjermen"
 
-#: ../data/messages:499
+#: ../data/messages:501
 msgid "External Frame"
 msgstr "Ekstern ramme"
 
-#: ../data/messages:501 ../data/messages:505 ../data/messages:511
-#: ../data/messages:559 ../data/messages:651
+#: ../data/messages:503 ../data/messages:507 ../data/messages:513
+#: ../data/messages:561 ../data/messages:653
 msgid "in pixels."
 msgstr "i pixler."
 
-#: ../data/messages:503
+#: ../data/messages:505
 msgid "Corner radius :"
 msgstr "Hjørnets radius:"
 
-#: ../data/messages:507
+#: ../data/messages:509
 msgid "Linewidth of the external line :"
 msgstr "Bredden på den ytre linjen:"
 
-#: ../data/messages:509
+#: ../data/messages:511
 msgid "Colour of the external line:"
 msgstr "Fargen på den ytre linjen:"
 
-#: ../data/messages:513
+#: ../data/messages:515
 msgid "Margin between the frame and the icons or their reflects :"
 msgstr "Marg mellom rammen og ikonene eller deres reflekson:"
 
-#: ../data/messages:515
+#: ../data/messages:517
 msgid "Are the bottom left and right corners rounded?"
 msgstr "Er hjørnene nederst til venstre og høyre avrundet?"
 
-#: ../data/messages:519
+#: ../data/messages:521
 msgid "Main Dock"
 msgstr "Hoveddokken"
 
-#: ../data/messages:523
+#: ../data/messages:525
 msgid "Sub-Docks"
 msgstr "Underliggende samlevinduer"
 
-#: ../data/messages:529
+#: ../data/messages:531
 msgid ""
 "You can specify a ratio for the size of the sub-docks' icons, in relation to "
 "the main docks' icons size"
@@ -3204,84 +3208,84 @@ msgstr ""
 "Du kan spesifisere størrelsesforholdet til under-dokkens ikoner i relasjon "
 "til ikonene på hoveddokken."
 
-#: ../data/messages:531
+#: ../data/messages:533
 msgid "Ratio for the size of the sub-docks' icons :"
 msgstr "Størrelsesforholdet til under-dokken:"
 
-#: ../data/messages:533 ../data/messages:767
+#: ../data/messages:535 ../data/messages:769
 msgid "smaller"
 msgstr "mindre"
 
-#: ../data/messages:535
+#: ../data/messages:537
 msgid "larger"
 msgstr ""
 
-#: ../data/messages:537
+#: ../data/messages:539
 msgid "Dialogs"
 msgstr "Dialogvinduer"
 
-#: ../data/messages:539
+#: ../data/messages:541
 msgid "Bubble"
 msgstr "Boble"
 
-#: ../data/messages:541
+#: ../data/messages:543
 msgid "Background colour of the bubble:"
 msgstr "Boblens bakgrunnsfarge:"
 
-#: ../data/messages:543
+#: ../data/messages:545
 msgid "Shape of the bubble:"
 msgstr "Boblens form:"
 
-#: ../data/messages:545
+#: ../data/messages:547
 msgid "Text"
 msgstr "Tekst"
 
-#: ../data/messages:547 ../data/messages:823
+#: ../data/messages:549 ../data/messages:825
 msgid "Otherwise the default's system one will be used."
 msgstr "Ellers vil det som er standard for systemet bli brukt."
 
-#: ../data/messages:549
+#: ../data/messages:551
 msgid "Use a custom font for the text?"
 msgstr "Benytte tilpasset skrifttype for teksten?"
 
-#: ../data/messages:551
+#: ../data/messages:553
 msgid "Text font:"
 msgstr "Tekstens skrifttype:"
 
-#: ../data/messages:553 ../data/messages:829
+#: ../data/messages:555 ../data/messages:831
 msgid "Draw the outline of the text?"
 msgstr "Tegne ytterkant på teksten?"
 
-#: ../data/messages:555 ../data/messages:859
+#: ../data/messages:557 ../data/messages:861
 msgid "Text color:"
 msgstr "Tekstfarge:"
 
-#: ../data/messages:557 ../data/messages:617
+#: ../data/messages:559 ../data/messages:619
 msgid "Buttons"
 msgstr "Knapper"
 
-#: ../data/messages:561
+#: ../data/messages:563
 msgid "Size of buttons in the info-bubbles (width x height) :"
 msgstr "Størrelsen til knappene i informasjons-boblene (bredde x høyde):"
 
-#: ../data/messages:563 ../data/messages:567 ../data/messages:621
-#: ../data/messages:625 ../data/messages:629 ../data/messages:633
+#: ../data/messages:565 ../data/messages:569 ../data/messages:623
+#: ../data/messages:627 ../data/messages:631 ../data/messages:635
 msgid "If you don't provide any, a default image will be used."
 msgstr "Dersom du ikke spesifisere noen vil et standard bilde bli brukt."
 
-#: ../data/messages:565
+#: ../data/messages:567
 msgid "Name of an image to use for the yes/ok button :"
 msgstr "Navnet til bildet som skal brukes til ja/ok-knappen:"
 
-#: ../data/messages:569
+#: ../data/messages:571
 msgid "Name of an image to use for the no/cancel button :"
 msgstr "Navnet på bildet som skal brukes til nei/avbryt-knappen:"
 
-#: ../data/messages:571
+#: ../data/messages:573
 msgid "Size of the icon displayed next to the text :"
 msgstr "Størrelsen til ikonet plassert ved tekstens side:"
 
-#: ../data/messages:577
+#: ../data/messages:579
 msgid ""
 "This can be customized for each desklet separately.\n"
 "Choose 'Custom decoration' to define your own decorations below"
@@ -3289,11 +3293,11 @@ msgstr ""
 "Dette kan tilpasses for hver skrivebordsdings individuelt.\n"
 "Velg \"Tilpasset dekorasjon\" for å definere din egen dekorasjon nedenfor"
 
-#: ../data/messages:579
+#: ../data/messages:581
 msgid "Choose a default decoration for all desklets :"
 msgstr "Velg standard dekorasjon for alle skrivebordsdingser:"
 
-#: ../data/messages:581
+#: ../data/messages:583
 msgid ""
 "It's an image that will be displayed below the drawings, like a frame for "
 "example. Leave empty to not use any."
@@ -3301,47 +3305,47 @@ msgstr ""
 "Dette er et bilde som vil bli vist nedenfor tegningene, for eksempel en "
 "ramme. La stå tom om du ikke ønsker å bruke noen."
 
-#: ../data/messages:583
+#: ../data/messages:585
 msgid "Background image :"
 msgstr "Bakgrunnsbilde:"
 
-#: ../data/messages:585
+#: ../data/messages:587
 msgid "Background transparency :"
 msgstr "Bakgrunnens gjennomsiktighet:"
 
-#: ../data/messages:591
+#: ../data/messages:593
 msgid "in pixels. Use this to adjust the left position of the drawings."
 msgstr "i pixler. Bruk denne for å justere tegningens venstre posisjon."
 
-#: ../data/messages:593
+#: ../data/messages:595
 msgid "Left offset :"
 msgstr "Venstre forskyvning:"
 
-#: ../data/messages:595
+#: ../data/messages:597
 msgid "in pixels. Use this to adjust the top position of the drawings."
 msgstr "i pixler. Bruk denne for å justere tegningens øvre posisjon."
 
-#: ../data/messages:597
+#: ../data/messages:599
 msgid "Top offset :"
 msgstr "Øvre forskyvning:"
 
-#: ../data/messages:599
+#: ../data/messages:601
 msgid "in pixels. Use this to adjust the right position of the drawings."
 msgstr "i pixler. Brukes til å justere tegningens høyre posisjon."
 
-#: ../data/messages:601
+#: ../data/messages:603
 msgid "Right offset :"
 msgstr "Høyre forskyvning:"
 
-#: ../data/messages:603
+#: ../data/messages:605
 msgid "in pixels. Use this to adjust the bottom position of the drawings."
 msgstr "i pixler. Bruk denne for å justere tegningens bunnposisjon."
 
-#: ../data/messages:605
+#: ../data/messages:607
 msgid "Bottom offset :"
 msgstr "Bunn-forskyvning:"
 
-#: ../data/messages:607
+#: ../data/messages:609
 msgid ""
 "It's an image that will be displayed above the drawings, like a reflection "
 "for example. Leave empty to not use any."
@@ -3349,39 +3353,39 @@ msgstr ""
 "Dette er bildet som vil vises over tegningene, for eksempel en refleksjon. "
 "La stå tom for å ikke bruke noen."
 
-#: ../data/messages:609
+#: ../data/messages:611
 msgid "Foreground image :"
 msgstr "Forgrunnsbilde:"
 
-#: ../data/messages:611
+#: ../data/messages:613
 msgid "Foreground tansparency :"
 msgstr "Forgrunnens gjennomsiktighet:"
 
-#: ../data/messages:619
+#: ../data/messages:621
 msgid "Buttons size :"
 msgstr "Knappenes størrelse:"
 
-#: ../data/messages:623 ../data/messages:635
+#: ../data/messages:625 ../data/messages:637
 msgid "Name of an image to use for the 'rotate' button :"
 msgstr "Navn på bilde til roteringsknappen:"
 
-#: ../data/messages:627
+#: ../data/messages:629
 msgid "Name of an image to use for the 'reattach' button :"
 msgstr "Oppgi navn på bildet du vil bruke for returknappen til dokken:"
 
-#: ../data/messages:631
+#: ../data/messages:633
 msgid "Name of an image to use for the 'depth rotate' button :"
 msgstr "Filnavnet til bildet til bruk i roterings-knappen:"
 
-#: ../data/messages:639
+#: ../data/messages:641
 msgid "Icons' themes"
 msgstr "Ikon-tema"
 
-#: ../data/messages:641
+#: ../data/messages:643
 msgid "Choose an icon theme :"
 msgstr "Velg et ikon-tema:"
 
-#: ../data/messages:643
+#: ../data/messages:645
 msgid ""
 "Any format allowed; leave this field empty if you don't want to use an image "
 "as background."
@@ -3389,60 +3393,60 @@ msgstr ""
 "Ethvert format tillates; la feltet stå tomt dersom du ikke ønsker å bruke "
 "noe bilde som bakgrunn."
 
-#: ../data/messages:645
+#: ../data/messages:647
 msgid "Image filename to use as a background for icons :"
 msgstr "Navnet på bildefilen som skal brukes som bakgrunn til ikonene:"
 
-#: ../data/messages:647
+#: ../data/messages:649
 msgid "Icons size"
 msgstr "Ikonstørrelse"
 
-#: ../data/messages:649
+#: ../data/messages:651
 msgid "Icons' size at rest (width x height) :"
 msgstr ""
 
-#: ../data/messages:653
+#: ../data/messages:655
 msgid "Space between icons :"
 msgstr "Avstand mellom ikonene:"
 
-#: ../data/messages:655
+#: ../data/messages:657
 msgid "Zoom effect"
 msgstr "Forstørringseffekt"
 
-#: ../data/messages:657
+#: ../data/messages:659
 msgid "set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Sett til 1 dersom du ikke ønsker at ikonene skal forstørres når musen "
 "beveger seg over dem."
 
-#: ../data/messages:659
+#: ../data/messages:661
 msgid "Maximum zoom of the icons :"
 msgstr "Maksimal forstørring av ikonene:"
 
-#: ../data/messages:661
+#: ../data/messages:663
 msgid ""
 "in pixels. Outside of this space (centered on the mouse), there is no zoom."
 msgstr ""
 "i pixler. På utsiden av dette området (sentrert med musa) er det ingen "
 "forstørring."
 
-#: ../data/messages:663
+#: ../data/messages:665
 msgid "Width of the space in which the zoom will be effective :"
 msgstr "Bredden på det området der lupen skal være aktiv:"
 
-#: ../data/messages:665
+#: ../data/messages:667
 msgid "Separators"
 msgstr "Skiller"
 
-#: ../data/messages:667
+#: ../data/messages:669
 msgid "Icon size at rest (width x height) :"
 msgstr "Ikonets passive størrelse (bredde X høyde):"
 
-#: ../data/messages:669
+#: ../data/messages:671
 msgid "Force separator's image size to stay constant?"
 msgstr "Tvinge fast størrelse på skillemerkets grafikk?"
 
-#: ../data/messages:671
+#: ../data/messages:673
 msgid ""
 "Only the default, 3D-plane and curve views support flat and physical "
 "separators. Flat separators are rendered differently according to the view."
@@ -3450,31 +3454,31 @@ msgstr ""
 "Kun standard, 3D-plan og bøyd utseende støtter flate og fysiske "
 "skillelinjer. Flate skillelinjer er tegnet anderledes, avhengig av utseende."
 
-#: ../data/messages:673
+#: ../data/messages:675
 msgid "How to draw the separators?"
 msgstr "Hvordan skal skillene vises?"
 
-#: ../data/messages:675
+#: ../data/messages:677
 msgid "Use an image."
 msgstr "Bruk et bilde."
 
-#: ../data/messages:677
+#: ../data/messages:679
 msgid "Flat separator"
 msgstr "Flatt skille"
 
-#: ../data/messages:679
+#: ../data/messages:681
 msgid "Physical separator"
 msgstr "Fysisk skille"
 
-#: ../data/messages:681
+#: ../data/messages:683
 msgid "If you don't provide one, blanks will be used."
 msgstr "Dersom du ikke oppgir noen vil blanke bli brukt."
 
-#: ../data/messages:683
+#: ../data/messages:685
 msgid "Filename of an image to use for separators :"
 msgstr "Filnavnet til bildet som skal brukes som skille:"
 
-#: ../data/messages:685
+#: ../data/messages:687
 msgid ""
 "Make the separator's image revolve when dock is on top/on the left/on the "
 "right?"
@@ -3482,15 +3486,15 @@ msgstr ""
 "Skal skillelinjens grafikk roteres i forhold til dokkens plassering oppe/til "
 "venstre/til høyre?"
 
-#: ../data/messages:687
+#: ../data/messages:689
 msgid "Colour of flat separators :"
 msgstr "Det flate skillets farge:"
 
-#: ../data/messages:689
+#: ../data/messages:691
 msgid "Reflections"
 msgstr "Gjenspeilinger"
 
-#: ../data/messages:691
+#: ../data/messages:693
 msgid ""
 "It is its albedo (reflectivity); at 1 the icons reflect to the maximum, at 0 "
 "reflections are not used."
@@ -3498,19 +3502,19 @@ msgstr ""
 "Bestemmer graden av gjenskinn: På 1 har ikonene maksimal refleksjon, ved 0 "
 "brukes ikke denne effekten."
 
-#: ../data/messages:693
+#: ../data/messages:695
 msgid "Reflective power of the plane :"
 msgstr "Styrken på områdets gjenspeiling:"
 
-#: ../data/messages:695
+#: ../data/messages:697
 msgid "light"
 msgstr "lys"
 
-#: ../data/messages:697
+#: ../data/messages:699
 msgid "strong"
 msgstr "sterk"
 
-#: ../data/messages:699
+#: ../data/messages:701
 msgid ""
 "In percent of the icon's size. This parameter influence the total height of "
 "the dock."
@@ -3518,19 +3522,19 @@ msgstr ""
 "I prosent av ikonets størrelse. Dette parameteret påvirker den totale høyden "
 "på dokken."
 
-#: ../data/messages:701
+#: ../data/messages:703
 msgid "Height of the reflection:"
 msgstr "Gjenspeilingens høyde:"
 
-#: ../data/messages:703
+#: ../data/messages:705
 msgid "small"
 msgstr "liten"
 
-#: ../data/messages:705
+#: ../data/messages:707
 msgid "tall"
 msgstr "høy"
 
-#: ../data/messages:707
+#: ../data/messages:709
 msgid ""
 "It is their transparency when the dock is at rest; they will \"materialize\" "
 "progressively as the dock grows up. The closer to 0, the more transparent "
@@ -3540,68 +3544,68 @@ msgstr ""
 "\" progressivt etter hvert som dokken vokser. Jo nærmere null desto mer "
 "gjennomsiktig blir de."
 
-#: ../data/messages:709
+#: ../data/messages:711
 msgid "Icons' transparency at rest :"
 msgstr "Ikonenes passive gjennomsiktighet:"
 
-#: ../data/messages:715
+#: ../data/messages:717
 msgid "Link the icons with a string"
 msgstr "Koble ikonene til en tekstlinje"
 
-#: ../data/messages:717
+#: ../data/messages:719
 msgid "Linewidth of the string, in pixels (0 to not use string) :"
 msgstr "Tekstlinjens bredde, i pixler (0 for å ikke bruke noen tekst):"
 
-#: ../data/messages:719
+#: ../data/messages:721
 msgid "Colour of the string (red, blue, green, alpha) :"
 msgstr "Tekstens farge (rød, blå, grønn, alfa):"
 
-#: ../data/messages:723
+#: ../data/messages:725
 msgid "Indicator of the active window"
 msgstr "Indikator for aktivt vindu"
 
-#: ../data/messages:725
+#: ../data/messages:727
 msgid "Type of indicator:"
 msgstr "Type indikator:"
 
-#: ../data/messages:729
+#: ../data/messages:731
 msgid "Frame"
 msgstr "Ramme"
 
-#: ../data/messages:731 ../data/messages:749 ../data/messages:787
+#: ../data/messages:733 ../data/messages:751 ../data/messages:789
 msgid "Image file:"
 msgstr "Bildefil:"
 
-#: ../data/messages:733
+#: ../data/messages:735
 msgid "Set transparency to 0 if you don't want to use an indicator."
 msgstr ""
 "Sett gjennomsiktighet til null dersom du ikke øneker å bruke noen indikator."
 
-#: ../data/messages:735
+#: ../data/messages:737
 msgid "Colour of the frame :"
 msgstr "Rammens farge:"
 
-#: ../data/messages:737
+#: ../data/messages:739
 msgid "Set 0 to fill the frame."
 msgstr "Sett 0 for å fylle rammen."
 
-#: ../data/messages:739
+#: ../data/messages:741
 msgid "Linewidth of the frame around the active window :"
 msgstr "Linjetykkelse på rammen rundt aktivt vindu:"
 
-#: ../data/messages:741
+#: ../data/messages:743
 msgid "Corner radius of the frame around the active window :"
 msgstr "Hjørneradius på rammen rundt det aktive vinduet:"
 
-#: ../data/messages:743 ../data/messages:775
+#: ../data/messages:745 ../data/messages:777
 msgid "Draw indicator above the icon?"
 msgstr "Tegne indikatoren ovenfor ikonet?"
 
-#: ../data/messages:745
+#: ../data/messages:747
 msgid "Indicator of active launcher"
 msgstr "Indikator for aktiv oppstarter"
 
-#: ../data/messages:747
+#: ../data/messages:749
 msgid ""
 "Indicators are drawn on launchers icons to show that they have already been "
 "launched. Leave blank to use the default one."
@@ -3609,7 +3613,7 @@ msgstr ""
 "Indikatorer tegnet på oppstarterikonet for å vise at de allerede er startet "
 "opp. La stå tomt for å bruke standard-tegnet."
 
-#: ../data/messages:751
+#: ../data/messages:753
 msgid ""
 "The indicator is drawn on active launchers, but you may want to display it "
 "on applications too."
@@ -3617,11 +3621,11 @@ msgstr ""
 "Indikatoren er tegnet på aktiv oppstarter, men du vil kanskje ønske å vise "
 "den på applikasjoner også."
 
-#: ../data/messages:753
+#: ../data/messages:755
 msgid "Display an indicator on application icons too ?"
 msgstr "Vise en indikator på programmets ikon også?"
 
-#: ../data/messages:755
+#: ../data/messages:757
 msgid ""
 "Relatively to the icons' size. You can use this parameter to adjust the "
 "indicator's vertical position.\n"
@@ -3633,11 +3637,11 @@ msgstr ""
 "Dersom indikatoren er lenket til ikonet vil forskyvningen rettes oppover, "
 "ellers nedover."
 
-#: ../data/messages:757
+#: ../data/messages:759
 msgid "Vertical offset :"
 msgstr "Vertikal forskyving:"
 
-#: ../data/messages:759
+#: ../data/messages:761
 msgid ""
 "If the indicator is linked to the icon, it will then be zoomed like the icon "
 "and the offset will be upwards.\n"
@@ -3648,11 +3652,11 @@ msgstr ""
 "måte som ikonet og skjøvet i retning oppover.\n"
 "I andre tilfelle vil den bli tegnet direkte på dokken, forskjøvet nedover."
 
-#: ../data/messages:761
+#: ../data/messages:763
 msgid "Link the indicator with its icon?"
 msgstr "Skal indikatoren lenkes til ikonet?"
 
-#: ../data/messages:763
+#: ../data/messages:765
 msgid ""
 "You can choose to make the indicator smaller or bigger than the icons. The "
 "bigger the value is, the bigger the indicator is. 1 means the indicator will "
@@ -3662,15 +3666,15 @@ msgstr ""
 "jo større blir indikatoren. 1 betyr at indikatoren vil ha samme størrelse "
 "som ikonene."
 
-#: ../data/messages:765
+#: ../data/messages:767
 msgid "Indicator size ratio :"
 msgstr "Indikatorens størrelsesforhold:"
 
-#: ../data/messages:769
+#: ../data/messages:771
 msgid "bigger"
 msgstr "større"
 
-#: ../data/messages:771
+#: ../data/messages:773
 msgid ""
 "Use it to make the indicator follow the orientation of the dock (top/bottom/"
 "right/left)."
@@ -3678,27 +3682,27 @@ msgstr ""
 "Bruk denne for å la indikatoren følge dokkens orientering (topp/bunn/høyre/"
 "venstre)."
 
-#: ../data/messages:773
+#: ../data/messages:775
 msgid "Rotate the indicator with dock?"
 msgstr "Rotere indikatoren med dokken?"
 
-#: ../data/messages:777
+#: ../data/messages:779
 msgid "Indicator of grouped windows"
 msgstr "Grupperte vinduers indikator"
 
-#: ../data/messages:779
+#: ../data/messages:781
 msgid "How to show that several icons are grouped :"
 msgstr "Hvordan vise at flere ikoner er i gruppe:"
 
-#: ../data/messages:781
+#: ../data/messages:783
 msgid "Draw an emblem"
 msgstr ""
 
-#: ../data/messages:783
+#: ../data/messages:785
 msgid "Draw the sub-dock's icons as a stack"
 msgstr "Tegn under-dokkens ikon som en stabel"
 
-#: ../data/messages:785
+#: ../data/messages:787
 msgid ""
 "It only makes sense if you chose to group the applis of the same class "
 "together. Leave blank to use the default one."
@@ -3706,86 +3710,86 @@ msgstr ""
 "Det er bare relevant dersom du velger å gruppere de som er av samme type. La "
 "det stå blankt for å bruke standardinnstillingene."
 
-#: ../data/messages:789
+#: ../data/messages:791
 msgid "Zoom the indicator with its icon?"
 msgstr "Fremhev indikatoren med dens ikon?"
 
-#: ../data/messages:791
+#: ../data/messages:793
 msgid "Progress bars"
 msgstr ""
 
-#: ../data/messages:793
+#: ../data/messages:795
 msgid "Start color"
 msgstr ""
 
-#: ../data/messages:795
+#: ../data/messages:797
 msgid "End color"
 msgstr ""
 
-#: ../data/messages:797
+#: ../data/messages:799
 msgid "Draw outline"
 msgstr ""
 
-#: ../data/messages:799
+#: ../data/messages:801
 msgid "Outline color"
 msgstr ""
 
-#: ../data/messages:801
+#: ../data/messages:803
 msgid "Bar thickness"
 msgstr ""
 
-#: ../data/messages:803
+#: ../data/messages:805
 msgid "Labels"
 msgstr "Etiketter"
 
-#: ../data/messages:805
+#: ../data/messages:807
 msgid "Label visibility"
 msgstr "Etikettens synlighet"
 
-#: ../data/messages:807
+#: ../data/messages:809
 msgid "Show labels:"
 msgstr "Vis titler:"
 
-#: ../data/messages:809
+#: ../data/messages:811
 msgid "No"
 msgstr "Nei"
 
-#: ../data/messages:811
+#: ../data/messages:813
 msgid "On pointed icon"
 msgstr "Foer ikon det pekes på"
 
-#: ../data/messages:813
+#: ../data/messages:815
 msgid "On all icons"
 msgstr "For alle ikonene"
 
-#: ../data/messages:815
+#: ../data/messages:817
 msgid ""
 "the bigger, the more the labels next to the selected icon will be "
 "transparent."
 msgstr ""
 "økes for å gjøre tittelen ved siden av det valgte ikonet mer gjennomsiktig."
 
-#: ../data/messages:817
+#: ../data/messages:819
 msgid "label's visibility threshold :"
 msgstr "grensen for titelens synlighet:"
 
-#: ../data/messages:819
+#: ../data/messages:821
 msgid "Should the labels always be horizontal, even when dock is vertical?"
 msgstr "Skal titlene alltid være horisontale, også når dokken er vertikal?"
 
-#: ../data/messages:821
+#: ../data/messages:823
 msgid "Font"
 msgstr "Skrifttype"
 
-#: ../data/messages:825
+#: ../data/messages:827
 msgid "Use a custom font for labels?"
 msgstr "Bruke egendefinert skrifttype på titlene?"
 
-#: ../data/messages:827
+#: ../data/messages:829
 msgid "Font used for labels :"
 msgstr "Skrifttype for etiketter:"
 
-#: ../data/messages:833
+#: ../data/messages:835
 msgid ""
 "If you set it to fully transparent, there will be no background for the "
 "text, but the margin around the text will still be in effect."
@@ -3793,27 +3797,27 @@ msgstr ""
 "Dersom du velger å sette den fullstendig gjennomsiktig så blir det ingen "
 "bakgrunn til teksten, men margen rundt vil fremdeles være der."
 
-#: ../data/messages:835
+#: ../data/messages:837
 msgid "Colour of the label's background :"
 msgstr "Fargen på tittelens bakgrunn:"
 
-#: ../data/messages:837
+#: ../data/messages:839
 msgid "Margin around the text (in pixels) :"
 msgstr "Marg rundt teksten (i pixler):"
 
-#: ../data/messages:839
+#: ../data/messages:841
 msgid "Colour"
 msgstr "Farge"
 
-#: ../data/messages:841
+#: ../data/messages:843
 msgid "It's the first color of the gradation."
 msgstr "Den første fargen i graderingen."
 
-#: ../data/messages:843
+#: ../data/messages:845
 msgid "Start color :"
 msgstr "Første farge"
 
-#: ../data/messages:845
+#: ../data/messages:847
 msgid ""
 "It's the second color of the gradation. Set it to the same value as the "
 "first if you don't want to have any gradation."
@@ -3821,11 +3825,11 @@ msgstr ""
 "Det er den andre fargen i overtoningen. Sett den til samme verdi som den "
 "første dersom du ikke ønsker noen gradering."
 
-#: ../data/messages:847
+#: ../data/messages:849
 msgid "Stop color :"
 msgstr "Siste farge"
 
-#: ../data/messages:849
+#: ../data/messages:851
 msgid ""
 "If checked, the pattern will go from top to bottom, otherwise from left to "
 "right."
@@ -3833,63 +3837,63 @@ msgstr ""
 "Dersom avmerket vil mønsteret gå fra topp til bunn, ellers fra venstre til "
 "høyre."
 
-#: ../data/messages:851
+#: ../data/messages:853
 msgid "Pattern should be vertical?"
 msgstr "Skal mønsteret legges vertikalt?"
 
-#: ../data/messages:853
+#: ../data/messages:855
 msgid "Quick-info are short information drawn on the icons."
 msgstr "Hurtig-info er kort informasjon tegnet på ikonene."
 
-#: ../data/messages:855
+#: ../data/messages:857
 msgid "Quick-info"
 msgstr "Hurtig-info"
 
-#: ../data/messages:857
+#: ../data/messages:859
 msgid "Use the same look as the labels?"
 msgstr "Bruke samme utseende som på etikettene?"
 
-#: ../data/messages:861
+#: ../data/messages:863
 msgid "Background color:"
 msgstr "Bakgrunnsfarge:"
 
-#: ../data/messages:883
+#: ../data/messages:885
 msgid "Visibility of the dock"
 msgstr ""
 
-#: ../data/messages:917 ../data/messages:941
+#: ../data/messages:919 ../data/messages:943
 msgid "Same as main dock"
 msgstr ""
 
-#: ../data/messages:919
+#: ../data/messages:921
 msgid "Tiny"
 msgstr ""
 
-#: ../data/messages:933
+#: ../data/messages:935
 msgid "Leave it empty to use the same view as the main dock."
 msgstr ""
 
-#: ../data/messages:935
+#: ../data/messages:937
 msgid "Choose the view for this dock :/"
 msgstr ""
 
-#: ../data/messages:959
+#: ../data/messages:961
 msgid "Load theme"
 msgstr ""
 
-#: ../data/messages:961
+#: ../data/messages:963
 msgid "You can even paste an internet URL."
 msgstr ""
 
-#: ../data/messages:963
+#: ../data/messages:965
 msgid "...or drag and drop a theme package here :"
 msgstr ""
 
-#: ../data/messages:965
+#: ../data/messages:967
 msgid "Theme loading options"
 msgstr ""
 
-#: ../data/messages:967
+#: ../data/messages:969
 msgid ""
 "If you tick this box, your launchers will be deleted and replaced by the "
 "ones provided in the new theme. Otherwise the current launchers will be "
@@ -3899,11 +3903,11 @@ msgstr ""
 "i den nye drakten. Ellers vil de nåværende oppstartere bli behold, kun "
 "ikonene erstattes."
 
-#: ../data/messages:969
+#: ../data/messages:971
 msgid "Use the new theme's launchers?"
 msgstr "Bruk den nye draktens oppstarere?"
 
-#: ../data/messages:971
+#: ../data/messages:973
 msgid ""
 "Otherwise the current behaviour will be kept. This defines the dock's "
 "position, behavioural settings such as auto-hide, using taskbar or not, etc."
@@ -3912,116 +3916,116 @@ msgstr ""
 "posisjon, adferdsinnstillinger som auto-skjul, bruk av oppgavelinjer eller "
 "ikke, osv."
 
-#: ../data/messages:973
+#: ../data/messages:975
 msgid "Use the new theme's behaviour?"
 msgstr "Bruk den nye draktens adferd?"
 
-#: ../data/messages:975
+#: ../data/messages:977
 msgid "Save"
 msgstr ""
 
-#: ../data/messages:977
+#: ../data/messages:979
 msgid "You will then be able to re-open it at any time."
 msgstr ""
 
-#: ../data/messages:979
+#: ../data/messages:981
 msgid "Save current behaviour also?"
 msgstr ""
 
-#: ../data/messages:981
+#: ../data/messages:983
 msgid "Save current launchers also?"
 msgstr ""
 
-#: ../data/messages:983
+#: ../data/messages:985
 msgid ""
 "The dock will build a complete tarball of your current theme, allowing you "
 "to easily exchange it with other people."
 msgstr ""
 
-#: ../data/messages:985
+#: ../data/messages:987
 msgid "Build a package of the theme?"
 msgstr ""
 
-#: ../data/messages:987
+#: ../data/messages:989
 msgid "Directory in which the package will be saved:"
 msgstr ""
 
-#: ../data/messages:989 ../data/messages:991 ../data/messages:993
-#: ../data/messages:1025 ../data/messages:1061
+#: ../data/messages:991 ../data/messages:993 ../data/messages:995
+#: ../data/messages:1027 ../data/messages:1063
 msgid "Desktop Entry"
 msgstr ""
 
-#: ../data/messages:997 ../data/messages:1029 ../data/messages:1065
+#: ../data/messages:999 ../data/messages:1031 ../data/messages:1067
 msgid "Name of the container it belongs to:"
 msgstr ""
 
-#: ../data/messages:999
+#: ../data/messages:1001
 msgid "Sub-dock's name:"
 msgstr ""
 
-#: ../data/messages:1001
+#: ../data/messages:1003
 msgid "New sub-dock"
 msgstr ""
 
-#: ../data/messages:1003
+#: ../data/messages:1005
 msgid "How to render the icon:"
 msgstr ""
 
-#: ../data/messages:1005
+#: ../data/messages:1007
 msgid "Use an image"
 msgstr ""
 
-#: ../data/messages:1007
+#: ../data/messages:1009
 msgid "Draw sub-dock's content as emblems"
 msgstr ""
 
-#: ../data/messages:1009
+#: ../data/messages:1011
 msgid "Draw sub-dock's content as stack"
 msgstr ""
 
-#: ../data/messages:1011
+#: ../data/messages:1013
 msgid "Draw sub-dock's content inside a box"
 msgstr ""
 
-#: ../data/messages:1013 ../data/messages:1035
+#: ../data/messages:1015 ../data/messages:1037
 msgid "Image's name or path:"
 msgstr ""
 
-#: ../data/messages:1015 ../data/messages:1043 ../data/messages:1069
+#: ../data/messages:1017 ../data/messages:1045 ../data/messages:1071
 msgid "Extra parameters"
 msgstr ""
 
-#: ../data/messages:1017
+#: ../data/messages:1019
 msgid "Name of the view used for the sub-dock:"
 msgstr ""
 
-#: ../data/messages:1019
+#: ../data/messages:1021
 msgid "If '0' the container will be displayed on every viewport."
 msgstr ""
 
-#: ../data/messages:1021 ../data/messages:1057
+#: ../data/messages:1023 ../data/messages:1059
 msgid "Only show in this specific viewport:"
 msgstr ""
 
-#: ../data/messages:1023 ../data/messages:1059 ../data/messages:1071
+#: ../data/messages:1025 ../data/messages:1061 ../data/messages:1073
 msgid "Order you want for this launcher among the others:"
 msgstr ""
 
-#: ../data/messages:1031
+#: ../data/messages:1033
 msgid "Launcher's name:"
 msgstr ""
 
-#: ../data/messages:1037
+#: ../data/messages:1039
 msgid ""
 "Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
 "g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
-#: ../data/messages:1039
+#: ../data/messages:1041
 msgid "Command to launch on click:"
 msgstr ""
 
-#: ../data/messages:1045
+#: ../data/messages:1047
 msgid ""
 "If you chose to mix launcher and applications, this option will deactivate "
 "this behaviour for this launcher only. It can be useful for instance for a "
@@ -4029,11 +4033,11 @@ msgid ""
 "steal the terminal's icon from the taskbar."
 msgstr ""
 
-#: ../data/messages:1047
+#: ../data/messages:1049
 msgid "Prevent this launcher from stealing this application from taskbar?"
 msgstr ""
 
-#: ../data/messages:1049
+#: ../data/messages:1051
 msgid ""
 "The only reason you may want to modify this parameter is if you made this "
 "launcher by hands. If you dropped it into the dock from the menu, it is "
@@ -4041,29 +4045,29 @@ msgid ""
 "program, which is useful to link the application with its launcher."
 msgstr ""
 
-#: ../data/messages:1051
+#: ../data/messages:1053
 msgid "Class of the program:"
 msgstr ""
 
-#: ../data/messages:1053
+#: ../data/messages:1055
 msgid "Run in a terminal?"
 msgstr ""
 
-#: ../data/messages:1055
+#: ../data/messages:1057
 msgid "If '0' the launcher will be displayed on every viewport."
 msgstr ""
 
-#: ../data/messages:1067
+#: ../data/messages:1069
 msgid "Separators' appearance is defined in the global configuration."
 msgstr ""
 
-#: ../data/messages:1074
+#: ../data/messages:1076
 msgid ""
 "<b>The basic 2D view of Cairo-Dock</b>\n"
 "Perfect if you want to make the dock look like a panel."
 msgstr ""
 
-#: ../data/messages:1075
+#: ../data/messages:1077
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.0</span>!</b>\n"
 " - The <b>taskbar</b> has been greatly enhanced.\n"
@@ -4085,7 +4089,7 @@ msgid ""
 " - It's possible to donate to support the project!"
 msgstr ""
 
-#: ../data/messages:1077
+#: ../data/messages:1079
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.1</span>!</b>\n"
 " - Better integration in of Unity: support of the <b>Launcher API</b> and "
@@ -4097,7 +4101,7 @@ msgid ""
 " - And as always ... various bug fixes and improvements :-)"
 msgstr ""
 
-#: ../data/messages:1079
+#: ../data/messages:1081
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.2</span>!</b>\n"
 " - Multi-screen support has been improved\n"
