@@ -6,15 +6,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.1.0-alpha\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2013-03-21 06:32+0000\n"
+"POT-Creation-Date: 2013-07-21 16:21+0000\n"
+"PO-Revision-Date: 2013-07-21 20:19+0000\n"
 "Last-Translator: pedro jorge oliveira <pedrojorgeoliveira93@gmail.com>\n"
 "Language-Team: \n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-22 04:34+0000\n"
-"X-Generator: Launchpad (build 16532)\n"
+"X-Launchpad-Export-Date: 2013-07-22 05:16+0000\n"
+"X-Generator: Launchpad (build 16696)\n"
+"Language: \n"
 
 #: ../src/cairo-dock-gui-advanced.c:121 ../src/cairo-dock-widget-plugins.c:171
 #: ../data/messages:259
@@ -58,7 +59,7 @@ msgstr "Todas"
 
 #: ../src/cairo-dock-gui-advanced.c:1493
 msgid "Set the position of the main dock."
-msgstr "Definir a posição da \"dock\" principal"
+msgstr "Definir a posição da doca principal."
 
 #: ../src/cairo-dock-gui-advanced.c:1494 ../Help/data/messages:321
 #: ../data/messages:141
@@ -71,9 +72,9 @@ msgid ""
 " or on the contrary unobtrusive?\n"
 "Configure the way you access your docks and sub-docks!"
 msgstr ""
-"Pretende que a \"dock\" esteja sempre visível,\n"
-" ou que ela não o incomode?\n"
-"Configure o método de acesso às \"docks\" e \"sub-docks\"!"
+"Pretende que a doca esteja sempre visível,\n"
+" ou que não o incomode?\n"
+"Configure o método de acesso às docas e subdocas!"
 
 #: ../src/cairo-dock-gui-advanced.c:1502 ../src/cairo-dock-menu.c:2039
 #: ../Help/data/messages:339
@@ -91,19 +92,19 @@ msgstr "Barra de tarefas"
 
 #: ../src/cairo-dock-gui-advanced.c:1517
 msgid "Define all the keyboard shortcuts currently available."
-msgstr ""
+msgstr "Definir todos os atalhos de teclado disponíveis."
 
 #: ../src/cairo-dock-gui-advanced.c:1518 ../data/messages:137
 msgid "Shortkeys"
-msgstr ""
+msgstr "Atalhos"
 
 #: ../src/cairo-dock-gui-advanced.c:1524
 msgid "All of the parameters you will never want to tweak."
-msgstr "Todos os parâmetros que você nunca desejará ajustar."
+msgstr "Todos os parâmetros que não ajustará."
 
 #: ../src/cairo-dock-gui-advanced.c:1535
 msgid "Set a background for your dock."
-msgstr "Defina um fundo para a sua \"dock\"."
+msgstr "Defina um fundo para a doca."
 
 #: ../src/cairo-dock-gui-advanced.c:1536 ../data/messages:451
 #: ../data/messages:833 ../data/messages:939
@@ -183,7 +184,7 @@ msgstr ""
 #: ../src/cairo-dock-gui-advanced.c:1599 ../src/cairo-dock-gui-simple.c:92
 #: ../src/cairo-dock-gui-simple.c:94
 msgid "Current items"
-msgstr ""
+msgstr "Itens actuais"
 
 #: ../src/cairo-dock-gui-advanced.c:1719
 msgid "Filter"
@@ -326,6 +327,7 @@ msgstr ""
 "  Pedro Cunha https://launchpad.net/~pedro-01\n"
 "  Sérgio Marques https://launchpad.net/~sergio+marques\n"
 "  Tiago Silva https://launchpad.net/~tiagosilva\n"
+"  cafrails https://launchpad.net/~cafonso62\n"
 "  ilusi0n https://launchpad.net/~ha-cabrita\n"
 "  pedro jorge oliveira https://launchpad.net/~pedrojorgeoliveira93"
 
@@ -433,7 +435,8 @@ msgstr "separador"
 #: ../src/cairo-dock-menu.c:640
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
-msgstr "Você está prestes a remover o ícone (%s) da \"dock\". Tem a certeza ?"
+msgstr ""
+"Você está prestes a remover o ícone (%s) da \"dock\". Tem a certeza ?"
 
 #: ../src/cairo-dock-menu.c:655
 msgid "Sorry, this icon doesn't have a configuration file."
@@ -508,7 +511,8 @@ msgstr "Gerir temas"
 #: ../src/cairo-dock-menu.c:1050
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
-msgstr "Escolha entre os vários temas no servidor ou guarde o seu tema atual."
+msgstr ""
+"Escolha entre os vários temas no servidor ou guarde o seu tema atual."
 
 #: ../src/cairo-dock-menu.c:1063
 msgid "Lock icons position"
@@ -532,7 +536,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Executar Cairo-Dock ao iniciar"
 
 #: ../src/cairo-dock-menu.c:1107
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Os \"applets\" de terceiros disponibilizam a integração com diversos "
 "programas, como por exemplo o Pidgin"
@@ -781,7 +786,8 @@ msgid "Effects:"
 msgstr "Efeitos:"
 
 #: ../src/cairo-dock-widget-items.c:241
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-widget-items.c:720
@@ -805,7 +811,8 @@ msgid "Category"
 msgstr "Categoria"
 
 #: ../src/cairo-dock-widget-plugins.c:280
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Clique no \"applet\" para uma pré-visualização e uma descrição."
 
 #: ../src/cairo-dock-widget-shortkeys.c:122
@@ -1917,8 +1924,9 @@ msgstr ""
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1968,8 +1976,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
@@ -2880,7 +2888,8 @@ msgstr "Transparente"
 
 #: ../data/messages:325
 msgid "Play a short animation of the icon when its window becomes active"
-msgstr "Mostrar uma pequena animação no ícone quando a sua janela fica ativa?"
+msgstr ""
+"Mostrar uma pequena animação no ícone quando a sua janela fica ativa?"
 
 #: ../data/messages:327
 msgid "\"...\" will be added at the end if the name is too long."
@@ -3439,7 +3448,8 @@ msgid "Zoom effect"
 msgstr "Efeito de ampliação"
 
 #: ../data/messages:659
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr "defina 1 se não quiser ampliar os ícones ao passar por cima deles."
 
 #: ../data/messages:661
@@ -3689,11 +3699,11 @@ msgstr "maior"
 
 #: ../data/messages:773
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
-"Use isto para fazer com que o indicador siga a orientação da Doca (cima/"
-"baixo/esq./dta.)."
+"Use isto para fazer com que o indicador siga a orientação da Doca "
+"(cima/baixo/esq./dta.)."
 
 #: ../data/messages:775
 msgid "Rotate the indicator with dock?"
@@ -4035,8 +4045,8 @@ msgstr ""
 
 #: ../data/messages:1039
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1041
@@ -4132,32 +4142,3 @@ msgid ""
 " - Countless bug-fixes and improvements\n"
 " - If you like the project, please donate :-)"
 msgstr ""
-
-#~ msgid ""
-#~ "This is only usefull if you do not already use auto-hide and if your "
-#~ "Window Manager allows the dock in front of fullscreen windows (which is "
-#~ "rare)."
-#~ msgstr ""
-#~ "Isto só é útil se não utilizar a ocultação automática e caso o seu gestor "
-#~ "de janelas não permita que a \"dock\" se sobreponha às janelas em ecrã "
-#~ "completo."
-
-#~ msgid "Automatically hide the dock when a window becomes full screen?"
-#~ msgstr ""
-#~ "Ocultar automaticamente a \"dock\" quando uma janela ficar em ecrã "
-#~ "completo ?"
-
-#~ msgid "Composition"
-#~ msgstr "Composição"
-
-#~ msgid ""
-#~ "Only use this if you don't run a composite manager like Compiz, xcompmgr, "
-#~ "etc and have a black background around your dock. For aesthetic reasons, "
-#~ "the dock will be kept under other windows."
-#~ msgstr ""
-#~ "Só deve ser utilizado se você não possuir um gestor de composição como o "
-#~ "Compiz, o xcompmgr... e se tiver um fundo negro em torno da sua \"dock\". "
-#~ "Por razões estéticas, a \"dock\" ficará por baixo das janelas."
-
-#~ msgid "Emulate composition with fake transparency?"
-#~ msgstr "Emular composição com transparência falsa?"

@@ -8,16 +8,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.6.2\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-09-30 17:33+0000\n"
+"POT-Creation-Date: 2013-07-21 16:21+0000\n"
+"PO-Revision-Date: 2013-07-21 20:11+0000\n"
 "Last-Translator: Daniel Nylander <yeager@ubuntu.com>\n"
 "Language-Team: Swedish\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-05 04:38+0000\n"
-"X-Generator: Launchpad (build 16514)\n"
+"X-Launchpad-Export-Date: 2013-07-22 05:17+0000\n"
+"X-Generator: Launchpad (build 16696)\n"
 "X-Poedit-Country: SWEDEN\n"
+"Language: \n"
 "X-Poedit-Language: Swedish\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -435,7 +436,8 @@ msgstr "avgränsare"
 #: ../src/cairo-dock-menu.c:640
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
-msgstr "Du håller på att ta bort den här ikonen (%s) från docken. Är du säker?"
+msgstr ""
+"Du håller på att ta bort den här ikonen (%s) från docken. Är du säker?"
 
 #: ../src/cairo-dock-menu.c:655
 msgid "Sorry, this icon doesn't have a configuration file."
@@ -493,7 +495,8 @@ msgstr "Konfigurera den här docken"
 
 #: ../src/cairo-dock-menu.c:1033
 msgid "Customize the position, visibility and appearance of this main dock."
-msgstr "Anpassa positionen, synligheten och utseendet av den här huvuddocken."
+msgstr ""
+"Anpassa positionen, synligheten och utseendet av den här huvuddocken."
 
 #: ../src/cairo-dock-menu.c:1035
 msgid "Delete this dock"
@@ -522,14 +525,16 @@ msgstr "Dölj"
 
 #: ../src/cairo-dock-menu.c:1078
 msgid "This will hide the dock until you hover over it with the mouse."
-msgstr "Det här kommer att dölja docken tills du fokuserar över den med musen."
+msgstr ""
+"Det här kommer att dölja docken tills du fokuserar över den med musen."
 
 #: ../src/cairo-dock-menu.c:1091
 msgid "Launch Cairo-Dock on startup"
 msgstr "Starta Cairo-Dock vid uppstart"
 
 #: ../src/cairo-dock-menu.c:1107
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:1110 ../Help/src/applet-init.c:28
@@ -773,7 +778,8 @@ msgid "Effects:"
 msgstr "Effekter"
 
 #: ../src/cairo-dock-widget-items.c:241
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-widget-items.c:720
@@ -797,7 +803,8 @@ msgid "Category"
 msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:280
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
 #: ../src/cairo-dock-widget-shortkeys.c:122
@@ -1891,8 +1898,9 @@ msgstr ""
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1940,8 +1948,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
@@ -3341,7 +3349,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:659
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:661
@@ -3578,8 +3587,8 @@ msgstr ""
 
 #: ../data/messages:773
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:775
@@ -3909,8 +3918,8 @@ msgstr ""
 
 #: ../data/messages:1039
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1041
@@ -4006,12 +4015,3 @@ msgid ""
 " - Countless bug-fixes and improvements\n"
 " - If you like the project, please donate :-)"
 msgstr ""
-
-#~ msgid ""
-#~ "This is only usefull if you do not already use auto-hide and if your "
-#~ "Window Manager allows the dock in front of fullscreen windows (which is "
-#~ "rare)."
-#~ msgstr ""
-#~ "Detta är bara användbart om du inte använder dölj automatiskt och din "
-#~ "fönsterhanterare låter dockan visas ovanpå fullskärmsfönster (inte så "
-#~ "vanligt)."

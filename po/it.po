@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.4.5\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2013-03-26 17:37+0000\n"
-"Last-Translator: Wonderfulheart <Unknown>\n"
+"POT-Creation-Date: 2013-07-21 16:21+0000\n"
+"PO-Revision-Date: 2013-07-21 20:16+0000\n"
+"Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@lists.kde.org>\n"
-"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-27 04:35+0000\n"
-"X-Generator: Launchpad (build 16540)\n"
+"X-Launchpad-Export-Date: 2013-07-22 05:16+0000\n"
+"X-Generator: Launchpad (build 16696)\n"
+"Language: it\n"
 
 #: ../src/cairo-dock-gui-advanced.c:121 ../src/cairo-dock-widget-plugins.c:171
 #: ../data/messages:259
@@ -544,7 +545,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Lancia Cairo-Dock all'avvio"
 
 #: ../src/cairo-dock-menu.c:1107
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Le applet di terze-parti forniscono un'integrazione a molti programmi, come "
 "Pidgin"
@@ -797,7 +799,8 @@ msgid "Effects:"
 msgstr "Effetti:"
 
 #: ../src/cairo-dock-widget-items.c:241
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "I parametri della dock principale si trovano nella finestra di "
 "configurazione principale."
@@ -823,7 +826,8 @@ msgid "Category"
 msgstr "Categoria"
 
 #: ../src/cairo-dock-widget-plugins.c:280
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Clicca su un'applet per avere un'anteprima e una sua descrizione."
 
 #: ../src/cairo-dock-widget-shortkeys.c:122
@@ -1004,7 +1008,8 @@ msgstr "Stampa la versione ed esci."
 
 #: ../src/cairo-dock.c:400
 msgid "Lock the dock so that any modification is impossible for users."
-msgstr "Blocca la dock cosicché sia impossibile da modificare per gli utenti."
+msgstr ""
+"Blocca la dock cosicché sia impossibile da modificare per gli utenti."
 
 #: ../src/cairo-dock.c:404
 msgid "Keep the dock above other windows whatever."
@@ -1308,9 +1313,8 @@ msgid "Last modification on:"
 msgstr "Ultima modifica su:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:333
-#, fuzzy
 msgid "Your theme should now be available in this directory:"
-msgstr "Adesso il tuo tema dovrebbe essere disponibile nella directory 'Home'."
+msgstr ""
 
 #: ../src/gldit/cairo-dock-themes-manager.c:338
 msgid "Error when launching 'cairo-dock-package-theme' script"
@@ -1952,7 +1956,8 @@ msgstr ""
 
 #: ../Help/data/messages:129
 msgid "Quick-launching a program from keyboard (replacing ALT+F2)"
-msgstr "Lanciare rapidamente un programma dalla tastiera (sostituisce Alt+F2)"
+msgstr ""
+"Lanciare rapidamente un programma dalla tastiera (sostituisce Alt+F2)"
 
 #: ../Help/data/messages:131
 msgid ""
@@ -2125,8 +2130,8 @@ msgid ""
 msgstr ""
 "Alcune applet possono avere diverse istanze avviate nello stesso momento: "
 "Orologio, Recipiente, Meteo, ...\n"
-"Clic destro sull'icona dell'applet - > \"Lancia un'altra istanza dell'applet"
-"\".\n"
+"Clic destro sull'icona dell'applet - > \"Lancia un'altra istanza "
+"dell'applet\".\n"
 "Puoi configurare ogni istanza in modo indipendente. Questo permette, ad "
 "esempio, di avere l'ora corrente di differenti paesi nella tua dock, oppure "
 "il meteo di diverse città."
@@ -2182,13 +2187,15 @@ msgstr "Rimuovi completamente il pannello di gnome"
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Apri gconf-editor, modifica la chiave /desktop/gnome/session/"
-"required_components/panel e rimpiazza il suo contenuto con \"cairo-dock\".\n"
+"Apri gconf-editor, modifica la chiave "
+"/desktop/gnome/session/required_components/panel e rimpiazza il suo "
+"contenuto con \"cairo-dock\".\n"
 "Successivamente fai ripartire la sessione: il pannello gnome non si avvierà, "
 "mentre la dock si (se non accadesse puoi inserirla tra i programmi di avvio)."
 
@@ -2239,16 +2246,16 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Hai bisogno di avviare il compositing. Ad esempio, puoi avviare Compiz o "
 "xcompmgr. \n"
 "Se usi XFCE o KDE, basta soltanto abilitare il compositing nelle opzioni del "
 "Window Manager.\n"
 "Se usi Gnome, puoi abilitarlo in Metacity in questo modo:\n"
-" Apri gconf-editor e modifica la chiave '/apps/metacity/general/"
-"compositing_manager' impostandola a 'true'."
+" Apri gconf-editor e modifica la chiave "
+"'/apps/metacity/general/compositing_manager' impostandola a 'true'."
 
 #: ../Help/data/messages:207
 msgid ""
@@ -2524,8 +2531,8 @@ msgid ""
 " After that, you can launch your update manager in order to install the "
 "latest weekly version."
 msgstr ""
-"Se stai utilizzando Ubuntu puoi aggiungere il nostro repository \"weekly"
-"\" (potrebbe essere instabile) cliccando su questo pulsante:\n"
+"Se stai utilizzando Ubuntu puoi aggiungere il nostro repository \"weekly\" "
+"(potrebbe essere instabile) cliccando su questo pulsante:\n"
 " Successivamente puoi lanciare il tuo update-manager per installare l'ultima "
 "versione settimanale."
 
@@ -2608,8 +2615,8 @@ msgid ""
 "Depending on your WindowManager, you may be able to resize this with ALT + "
 "middle-click or ALT + left-click."
 msgstr ""
-"In base al Gestore delle Finestre utilizzato puoi ridimensionarla con Alt"
-"+clic centrale o Alt+clic sinistro."
+"In base al Gestore delle Finestre utilizzato puoi ridimensionarla con "
+"Alt+clic centrale o Alt+clic sinistro."
 
 #: ../Help/data/messages:329
 msgid "Desklet dimensions (width x height):"
@@ -2837,7 +2844,8 @@ msgstr "Visibilità delle sub-dock"
 msgid ""
 "they will appear either when you click or when you linger over the icon "
 "pointing on it."
-msgstr "appariranno quando clicchi o quando indugerai sull'icona, puntandola."
+msgstr ""
+"appariranno quando clicchi o quando indugerai sull'icona, puntandola."
 
 #: ../data/messages:59 ../data/messages:245
 msgid "Appear on mouse over"
@@ -3171,7 +3179,8 @@ msgstr ""
 
 #: ../data/messages:293
 msgid "Group windows from the same application in a sub-dock ?"
-msgstr "Raggruppa tutte le finestre della stessa applicazione in una sub-dock?"
+msgstr ""
+"Raggruppa tutte le finestre della stessa applicazione in una sub-dock?"
 
 #: ../data/messages:295 ../data/messages:305
 msgid "Enter the class of the applications, separated by a semi-colon ';'"
@@ -3377,7 +3386,8 @@ msgstr "Frequenza di aggiornamento"
 
 #: ../data/messages:405 ../data/messages:409 ../data/messages:413
 msgid "in Hz. This is to adjust behaviour relative to your CPU power."
-msgstr "in Hz. Questo è da aggiustare in base alla potenza della propria CPU."
+msgstr ""
+"in Hz. Questo è da aggiustare in base alla potenza della propria CPU."
 
 #: ../data/messages:407
 msgid "Refresh rate when mouving cursor into the dock:"
@@ -3544,7 +3554,8 @@ msgstr "Oscurato quando nascosto"
 
 #: ../data/messages:495
 msgid "Several applets can be visible even when the dock is hidden"
-msgstr "Diverse applet possono essere visibili anche quando la dock è nascosta"
+msgstr ""
+"Diverse applet possono essere visibili anche quando la dock è nascosta"
 
 #: ../data/messages:497
 msgid "Default background color when the dock is hidden"
@@ -3814,7 +3825,8 @@ msgid "Zoom effect"
 msgstr "Effetto zoom"
 
 #: ../data/messages:659
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr "a 1 se non vuoi che le icone si restringano quando ci passi sopra"
 
 #: ../data/messages:661
@@ -4073,8 +4085,8 @@ msgstr "più grande"
 
 #: ../data/messages:773
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Utilizza questo per fare si che l'indicatore segua l'orientamento della dock "
 "(alto/basso/destra/sinistra)."
@@ -4419,8 +4431,8 @@ msgstr "Nome del lanciatore:"
 
 #: ../data/messages:1039
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 "Esempio: nautilus --no-desktop, gedit, ecc. Si può anche inserire una "
 "scorciatoia, ad esempio <Alt>F1, <Ctrl>c, <Ctrl>v, ecc"
@@ -4573,35 +4585,3 @@ msgstr ""
 " - Aggiunto il supporto per tutti gli indicatori di Unity\n"
 " - Diversi bug-fixes e miglioramenti\n"
 " - Se il progetto ti piace, per favore fai una donazione :-)"
-
-#~ msgid ""
-#~ "This is only usefull if you do not already use auto-hide and if your "
-#~ "Window Manager allows the dock in front of fullscreen windows (which is "
-#~ "rare)."
-#~ msgstr ""
-#~ "Questo è utile solo se non utilizzi già l'auto-nascondimento e se il tuo "
-#~ "Window Manager lascia la dock davanti alle finestre a tutto schermo (ed è "
-#~ "raro)."
-
-#~ msgid "Automatically hide the dock when a window becomes full screen?"
-#~ msgstr ""
-#~ "Nascondi la dock automaticamente quando una finestra diventa a pieno "
-#~ "schermo?"
-
-# #################################
-# ########### cairo-dock.conf #############
-# #################################
-#~ msgid "Composition"
-#~ msgstr "Composizione"
-
-#~ msgid ""
-#~ "Only use this if you don't run a composite manager like Compiz, xcompmgr, "
-#~ "etc and have a black background around your dock. For aesthetic reasons, "
-#~ "the dock will be kept under other windows."
-#~ msgstr ""
-#~ "Da utilizzare se non hai attivo nessun composite manager come Compiz, "
-#~ "xcompmgr, etc .. e se hai uno sfondo nero attorno alla dock. Per ragioni "
-#~ "estetiche la dock sarà mantenuta sotto le altre finestre."
-
-#~ msgid "Emulate composition with fake transparency?"
-#~ msgstr "Emula la composizione con false trasparenze?"

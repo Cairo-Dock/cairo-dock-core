@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2013-03-27 12:13+0000\n"
-"Last-Translator: Milan Slovák <Unknown>\n"
+"POT-Creation-Date: 2013-07-21 16:21+0000\n"
+"PO-Revision-Date: 2013-07-21 19:52+0000\n"
+"Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
 "Language-Team: Slovak <sk@li.org>\n"
-"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-28 04:39+0000\n"
-"X-Generator: Launchpad (build 16546)\n"
+"X-Launchpad-Export-Date: 2013-07-22 05:17+0000\n"
+"X-Generator: Launchpad (build 16696)\n"
+"Language: sk\n"
 
 #: ../src/cairo-dock-gui-advanced.c:121 ../src/cairo-dock-widget-plugins.c:171
 #: ../data/messages:259
@@ -524,7 +525,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Spustiť Cairo-dock pri štarte"
 
 #: ../src/cairo-dock-menu.c:1107
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Aplety tretej strany poskytujú integráciu do mnohých programov, ako je Pidgin"
 
@@ -774,8 +776,10 @@ msgid "Effects:"
 msgstr "Efekty:"
 
 #: ../src/cairo-dock-widget-items.c:241
-msgid "Main dock's parameters are available in the main configuration window."
-msgstr "Parametre hlavného panelu sú k dispozícii v hlavnom okne konfigurácie."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
+msgstr ""
+"Parametre hlavného panelu sú k dispozícii v hlavnom okne konfigurácie."
 
 #: ../src/cairo-dock-widget-items.c:720
 msgid "Remove this item"
@@ -798,7 +802,8 @@ msgid "Category"
 msgstr "Kategória"
 
 #: ../src/cairo-dock-widget-plugins.c:280
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Kliknite na applet, a získate náhľad a jeho popis."
 
 #: ../src/cairo-dock-widget-shortkeys.c:122
@@ -1262,9 +1267,8 @@ msgid "Last modification on:"
 msgstr "Posledná úprava:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:333
-#, fuzzy
 msgid "Your theme should now be available in this directory:"
-msgstr "Vaša téma by mala byť teraz k dispozícii vo vašom \"Home\" adresári."
+msgstr ""
 
 #: ../src/gldit/cairo-dock-themes-manager.c:338
 msgid "Error when launching 'cairo-dock-package-theme' script"
@@ -1969,13 +1973,15 @@ msgstr "Úplne odstrániť gnome panel"
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Otvorte gconf-editor, upravte kľúč /desktop/gnome/sesion/required_components/"
-"panel, a nahradte jeho obsah s \"cairo-dock\".\n"
+"Otvorte gconf-editor, upravte kľúč "
+"/desktop/gnome/sesion/required_components/panel, a nahradte jeho obsah s "
+"\"cairo-dock\".\n"
 "Reštartujte sedenie: gnome-panel sa nespustí, a panel bude spustený (ak nie, "
 "pridajte do programov po spustení)."
 
@@ -2027,15 +2033,15 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Musíte zapnúť kompozíciu. Napríklad, môžete spustiť Compiz alebo xcompmgr. \n"
 "Ak používate XFCE alebo KDE, stačí povoliť kompozície v nastavení správcu "
 "okien.\n"
 "Ak používate Gnome, môžete to povoliť v Metacity týmto spôsobom:\n"
-" Otvorte gconf-editor, upravte kľúč '/apps/metacity/general/"
-"compositing_manager' a nastavte na 'true'."
+" Otvorte gconf-editor, upravte kľúč "
+"'/apps/metacity/general/compositing_manager' a nastavte na 'true'."
 
 #: ../Help/data/messages:207
 msgid ""
@@ -3540,7 +3546,8 @@ msgid "Zoom effect"
 msgstr "Efekt priblíženia"
 
 #: ../data/messages:659
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "nastavený na hodnotu 1, ak nechcete zväčšujúce sa ikony, keď  nad nimi "
 "podržíte kurzor."
@@ -3789,8 +3796,8 @@ msgstr "väčší"
 
 #: ../data/messages:773
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:775
@@ -4126,8 +4133,8 @@ msgstr "Názov spúšťača:"
 
 #: ../data/messages:1039
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 "Príklad: nautilus --no-desktop, gedit, atď Môžete dokonca zadávať skratky, "
 "ako <Alt> F1, <Ctrl> c, <Ctrl> v, atď"
@@ -4227,30 +4234,3 @@ msgid ""
 " - Countless bug-fixes and improvements\n"
 " - If you like the project, please donate :-)"
 msgstr ""
-
-#~ msgid ""
-#~ "This is only usefull if you do not already use auto-hide and if your "
-#~ "Window Manager allows the dock in front of fullscreen windows (which is "
-#~ "rare)."
-#~ msgstr ""
-#~ "To je užitočné iba ak nepoužívate automatické skrývanie, a ak váš správca "
-#~ "okien umožňuje zobzaziť dok pred oknom roztiahnutým na celú obrazovku (čo "
-#~ "je zriedkavé)."
-
-#~ msgid "Automatically hide the dock when a window becomes full screen?"
-#~ msgstr "Automaticky skrývať dock ak je okno prepnuté na celú obrazovku ?"
-
-#~ msgid "Composition"
-#~ msgstr "Kompozícia"
-
-#~ msgid ""
-#~ "Only use this if you don't run a composite manager like Compiz, xcompmgr, "
-#~ "etc and have a black background around your dock. For aesthetic reasons, "
-#~ "the dock will be kept under other windows."
-#~ msgstr ""
-#~ "Použiť iba ak nemôžete spustiť kompozitného manažéra ako Compiz, "
-#~ "xcompmgr, atď a máte čierne pozadie okolo doku. Z estetických dôvodov, "
-#~ "bude dok držaný pod inými oknami."
-
-#~ msgid "Emulate composition with fake transparency?"
-#~ msgstr "Napodobňuje zloženie s falošnou transparentnosťou ?"

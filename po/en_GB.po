@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2013-07-21 18:10+0200\n"
-"PO-Revision-Date: 2012-09-30 17:37+0000\n"
+"POT-Creation-Date: 2013-07-21 16:21+0000\n"
+"PO-Revision-Date: 2013-07-21 19:53+0000\n"
 "Last-Translator: taiebot65 <taiebot65@yahoo.fr>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-05 04:38+0000\n"
-"X-Generator: Launchpad (build 16514)\n"
+"X-Launchpad-Export-Date: 2013-07-22 05:17+0000\n"
+"X-Generator: Launchpad (build 16696)\n"
+"Language: \n"
 
 #: ../src/cairo-dock-gui-advanced.c:121 ../src/cairo-dock-widget-plugins.c:171
 #: ../data/messages:259
@@ -127,7 +127,7 @@ msgstr "Configure text bubble appearance."
 
 #: ../src/cairo-dock-gui-advanced.c:1552
 msgid "Dialog boxes"
-msgstr "Dialog boxes"
+msgstr "Dialogue boxes"
 
 #: ../src/cairo-dock-gui-advanced.c:1559
 msgid "Applets can be displayed on your desktop as widgets."
@@ -169,7 +169,7 @@ msgstr "Captions"
 
 #: ../src/cairo-dock-gui-advanced.c:1591
 msgid "Try new themes and save your theme."
-msgstr ""
+msgstr "Try new themes and save your theme."
 
 #: ../src/cairo-dock-gui-advanced.c:1592 ../src/cairo-dock-gui-simple.c:116
 #: ../src/cairo-dock-gui-simple.c:118
@@ -178,12 +178,12 @@ msgstr "Themes"
 
 #: ../src/cairo-dock-gui-advanced.c:1598
 msgid "Current items in your dock(s)."
-msgstr ""
+msgstr "Current items in your dock(s)."
 
 #: ../src/cairo-dock-gui-advanced.c:1599 ../src/cairo-dock-gui-simple.c:92
 #: ../src/cairo-dock-gui-simple.c:94
 msgid "Current items"
-msgstr ""
+msgstr "Current items"
 
 #: ../src/cairo-dock-gui-advanced.c:1719
 msgid "Filter"
@@ -207,7 +207,7 @@ msgstr "Search in description"
 
 #: ../src/cairo-dock-gui-advanced.c:1767
 msgid "Hide disabled"
-msgstr ""
+msgstr "Hide disabled"
 
 #: ../src/cairo-dock-gui-advanced.c:1776
 msgid "Categories"
@@ -239,7 +239,7 @@ msgstr "Add-ons"
 
 #: ../src/cairo-dock-gui-simple.c:108 ../src/cairo-dock-gui-simple.c:110
 msgid "Configuration"
-msgstr ""
+msgstr "Configuration"
 
 #: ../src/cairo-dock-gui-simple.c:644
 msgid "Advanced Mode"
@@ -320,6 +320,7 @@ msgstr "Translators for this language"
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
+"  Andi Chandler https://launchpad.net/~bing\n"
 "  Anthony Harrington https://launchpad.net/~untaintableangel\n"
 "  Anthony Scarth https://launchpad.net/~maroubal2\n"
 "  Gary M https://launchpad.net/~garym\n"
@@ -415,7 +416,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:597
 msgid "Applet"
-msgstr ""
+msgstr "Applet"
 
 #: ../src/cairo-dock-menu.c:614
 msgid ""
@@ -532,7 +533,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Launch Cairo-Dock on startup"
 
 #: ../src/cairo-dock-menu.c:1107
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Third-party applets provide integration with many programs, like Pidgin"
 
@@ -641,7 +643,7 @@ msgstr "Move to face %d"
 
 #: ../src/cairo-dock-menu.c:1843 ../src/cairo-dock-menu.c:1894
 msgid "Window"
-msgstr ""
+msgstr "Window"
 
 #: ../src/cairo-dock-menu.c:1849 ../src/cairo-dock-menu.c:1851
 #: ../src/cairo-dock-menu.c:1924 ../src/cairo-dock-menu.c:1926
@@ -691,7 +693,7 @@ msgstr "Fullscreen"
 
 #: ../src/cairo-dock-menu.c:1947 ../src/cairo-dock-menu.c:1949
 msgid "Below other windows"
-msgstr ""
+msgstr "Below other windows"
 
 #: ../src/cairo-dock-menu.c:1957
 msgid "Don't keep above"
@@ -703,11 +705,11 @@ msgstr "Keep above"
 
 #: ../src/cairo-dock-menu.c:1961
 msgid "Visible only on this desktop"
-msgstr ""
+msgstr "Visible only on this desktop"
 
 #: ../src/cairo-dock-menu.c:1961
 msgid "Visible on all desktops"
-msgstr ""
+msgstr "Visible on all desktops"
 
 #: ../src/cairo-dock-menu.c:1969
 msgid "Kill"
@@ -715,7 +717,7 @@ msgstr "Kill"
 
 #: ../src/cairo-dock-menu.c:1984
 msgid "Windows"
-msgstr ""
+msgstr "Windows"
 
 #: ../src/cairo-dock-menu.c:1988 ../src/cairo-dock-menu.c:1990
 #: ../src/cairo-dock-menu.c:2018
@@ -733,7 +735,7 @@ msgstr "Show all"
 
 #: ../src/cairo-dock-menu.c:2012
 msgid "Windows management"
-msgstr ""
+msgstr "Windows management"
 
 #: ../src/cairo-dock-menu.c:2024
 msgid "Move all to this desktop"
@@ -783,8 +785,10 @@ msgid "Effects:"
 msgstr "Effects:"
 
 #: ../src/cairo-dock-widget-items.c:241
-msgid "Main dock's parameters are available in the main configuration window."
-msgstr "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
+msgstr ""
+"Main dock's parameters are available in the main configuration window."
 
 #: ../src/cairo-dock-widget-items.c:720
 msgid "Remove this item"
@@ -800,14 +804,15 @@ msgstr "Accessory"
 
 #: ../src/cairo-dock-widget-plugins.c:246
 msgid "Plug-in"
-msgstr ""
+msgstr "Plug-in"
 
 #: ../src/cairo-dock-widget-plugins.c:252 ../Help/src/applet-tips-dialog.c:305
 msgid "Category"
 msgstr "Category"
 
 #: ../src/cairo-dock-widget-plugins.c:280
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Click on an applet in order to have a preview and a description for it."
 
@@ -859,11 +864,11 @@ msgstr "You must try the theme before you can rate it."
 
 #: ../src/cairo-dock-widget-themes.c:424
 msgid "The theme has been deleted"
-msgstr ""
+msgstr "The theme has been deleted"
 
 #: ../src/cairo-dock-widget-themes.c:454
 msgid "Delete this theme"
-msgstr ""
+msgstr "Delete this theme"
 
 #: ../src/cairo-dock-widget-themes.c:485
 #: ../src/gldit/cairo-dock-gui-factory.c:2435
@@ -967,6 +972,8 @@ msgid ""
 "Work around some bugs in Metacity Window-Manager (invisible dialogs or sub-"
 "docks)"
 msgstr ""
+"Work around some bugs in Metacity Window-Manager (invisible dialogues or sub-"
+"docks)"
 
 #: ../src/cairo-dock.c:391
 msgid ""
@@ -1043,7 +1050,7 @@ msgstr ""
 "However, some cards and/or their drivers do not fully support it, which may "
 "prevent the dock from running correctly.\n"
 "Do you want to activate OpenGL?\n"
-"(To not show this dialog, launch the dock from the Applications menu,\n"
+"(To not show this dialogue, launch the dock from the Applications menu,\n"
 "or with the -o flag to force OpenGL or -c to force cairo.)"
 
 #: ../src/cairo-dock.c:558
@@ -1058,6 +1065,10 @@ msgid ""
 "You can reactivate it, if it happens again thanks to report it at http://glx-"
 "dock.org"
 msgstr ""
+"The module '%s' has been deactivated because it may have caused some "
+"problems.\n"
+"You can reactivate it, if it happens again thanks to report it at http://glx-"
+"dock.org"
 
 #: ../src/cairo-dock.c:732
 msgid "< Maintenance mode >"
@@ -1065,7 +1076,7 @@ msgstr "< Maintenance mode >"
 
 #: ../src/cairo-dock.c:734
 msgid "Something went wrong with this applet:"
-msgstr ""
+msgstr "Something went wrong with this applet:"
 
 #: ../src/cairo-dock.c:781
 msgid ""
@@ -1078,6 +1089,14 @@ msgid ""
 "But if you really want to use the dock without these plug-ins, you can "
 "launch the dock with the '-f' option to no longer have this message.\n"
 msgstr ""
+"No plug-ins were found.\n"
+"Plug-ins provide most of the functionalities (animations, applets, views, "
+"etc).\n"
+"See http://glx-dock.org for more information.\n"
+"There is almost no meaning in running the dock without them and it's "
+"probably due to a problem with the installation of these plug-ins.\n"
+"But if you really want to use the dock without these plug-ins, you can "
+"launch the dock with the '-f' option to no longer have this message.\n"
 
 #: ../src/cairo-dock.c:834
 #, c-format
@@ -1187,7 +1206,7 @@ msgstr "_Custom Icons_"
 #: ../src/gldit/cairo-dock-gui-factory.c:1068
 #: ../src/gldit/cairo-dock-gui-factory.c:1113
 msgid "Use all screens"
-msgstr ""
+msgstr "Use all screens"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1090 ../data/messages:13
 #: ../data/messages:153 ../data/messages:159 ../data/messages:877
@@ -1202,7 +1221,7 @@ msgstr "right"
 #: ../src/gldit/cairo-dock-gui-factory.c:1094
 #: ../src/gldit/cairo-dock-gui-factory.c:1104
 msgid "middle"
-msgstr ""
+msgstr "middle"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1100 ../data/messages:9
 #: ../data/messages:149 ../data/messages:873
@@ -1216,7 +1235,7 @@ msgstr "bottom"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1107
 msgid "Screen"
-msgstr ""
+msgstr "Screen"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1401
 #, c-format
@@ -1256,7 +1275,7 @@ msgstr "New launcher"
 
 #: ../src/gldit/cairo-dock-module-instance-manager.c:309
 msgid "by"
-msgstr ""
+msgstr "by"
 
 #: ../src/gldit/cairo-dock-struct.h:474 ../data/messages:1035
 #: ../data/messages:1043
@@ -1274,11 +1293,11 @@ msgstr "Last modification on:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:333
 msgid "Your theme should now be available in this directory:"
-msgstr ""
+msgstr "Your theme should now be available in this directory:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:338
 msgid "Error when launching 'cairo-dock-package-theme' script"
-msgstr ""
+msgstr "Error when launching 'cairo-dock-package-theme' script"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:359
 #, c-format
@@ -1627,7 +1646,7 @@ msgstr ""
 
 #: ../Help/data/messages:51
 msgid "Minimizing / restauring a window"
-msgstr "Minimizing / restoring a window"
+msgstr "Minimising / restoring a window"
 
 #: ../Help/data/messages:53
 msgid ""
@@ -2133,13 +2152,15 @@ msgstr "Removing completely the gnome-panel"
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 
@@ -2190,16 +2211,16 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "You need to turn on compositing. For instance, you can run Compiz or "
 "xcompmgr. \n"
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way:\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 
 #: ../Help/data/messages:207
 msgid ""
@@ -2267,7 +2288,8 @@ msgstr ""
 
 #: ../Help/data/messages:223
 msgid "I don't have any themes in the Theme Manager, except the default one."
-msgstr "I don't have any themes in the Theme Manager, except the default one."
+msgstr ""
+"I don't have any themes in the Theme Manager, except the default one."
 
 #: ../Help/data/messages:225
 msgid "Hint : Up to version 2.1.1-2, wget was used."
@@ -2957,7 +2979,7 @@ msgstr "Relative alignment:"
 
 #: ../data/messages:163 ../data/messages:883
 msgid "Multi-screens"
-msgstr ""
+msgstr "Multi-screens"
 
 #: ../data/messages:165 ../data/messages:903
 msgid "Offset from the screen's edge"
@@ -3087,7 +3109,7 @@ msgstr "Mix launchers and applications"
 
 #: ../data/messages:269
 msgid "Animate the launcher until the corresponding application opens"
-msgstr ""
+msgstr "Animate the launcher until the corresponding application opens"
 
 #: ../data/messages:271
 msgid "Only show applications on current desktop"
@@ -3245,7 +3267,7 @@ msgstr "in seconds"
 
 #: ../data/messages:357
 msgid "Duration of the dialog:"
-msgstr "Duration of the dialog:"
+msgstr "Duration of the dialogue:"
 
 #: ../data/messages:359
 msgid ""
@@ -3544,7 +3566,7 @@ msgstr "larger"
 
 #: ../data/messages:539
 msgid "Dialogs"
-msgstr "Dialog boxes"
+msgstr "Dialogue boxes"
 
 #: ../data/messages:541
 msgid "Bubble"
@@ -3736,8 +3758,10 @@ msgid "Zoom effect"
 msgstr "Zoom effect"
 
 #: ../data/messages:659
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
-msgstr "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
+msgstr ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 
 #: ../data/messages:661
 msgid "Maximum zoom of the icons :"
@@ -3859,7 +3883,7 @@ msgid ""
 "progressively as the dock grows up. The closer to 0, the more transparent "
 "they will be."
 msgstr ""
-"Their transparency when the dock is at rest; they will \"materialize\" "
+"Their transparency when the dock is at rest; they will \"materialise\" "
 "progressively as the dock grows up. The closer to 0, the more transparent "
 "they will be."
 
@@ -3995,11 +4019,11 @@ msgstr "bigger"
 
 #: ../data/messages:773
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 
 #: ../data/messages:775
 msgid "Rotate the indicator with dock?"
@@ -4035,27 +4059,27 @@ msgstr "Zoom the indicator with its icon?"
 
 #: ../data/messages:793
 msgid "Progress bars"
-msgstr ""
+msgstr "Progress bars"
 
 #: ../data/messages:795
 msgid "Start color"
-msgstr ""
+msgstr "Start colour"
 
 #: ../data/messages:797
 msgid "End color"
-msgstr ""
+msgstr "End colour"
 
 #: ../data/messages:799
 msgid "Draw outline"
-msgstr ""
+msgstr "Draw outline"
 
 #: ../data/messages:801
 msgid "Outline color"
-msgstr ""
+msgstr "Outline colour"
 
 #: ../data/messages:803
 msgid "Bar thickness"
-msgstr ""
+msgstr "Bar thickness"
 
 #: ../data/messages:805
 msgid "Labels"
@@ -4199,7 +4223,7 @@ msgstr "Choose the view for this dock:/"
 
 #: ../data/messages:961
 msgid "Load theme"
-msgstr ""
+msgstr "Load theme"
 
 #: ../data/messages:963
 msgid "You can even paste an internet URL."
@@ -4269,7 +4293,7 @@ msgstr "Build a package of the theme?"
 
 #: ../data/messages:989
 msgid "Directory in which the package will be saved:"
-msgstr ""
+msgstr "Directory in which the package will be saved:"
 
 #: ../data/messages:991 ../data/messages:993 ../data/messages:995
 #: ../data/messages:1027 ../data/messages:1063
@@ -4286,7 +4310,7 @@ msgstr "Sub-dock's name:"
 
 #: ../data/messages:1003
 msgid "New sub-dock"
-msgstr ""
+msgstr "New sub-dock"
 
 #: ../data/messages:1005
 msgid "How to render the icon:"
@@ -4338,11 +4362,11 @@ msgstr "Launcher's name:"
 
 #: ../data/messages:1039
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 
 #: ../data/messages:1041
 msgid "Command to launch on click:"
@@ -4397,6 +4421,8 @@ msgid ""
 "<b>The basic 2D view of Cairo-Dock</b>\n"
 "Perfect if you want to make the dock look like a panel."
 msgstr ""
+"<b>The basic 2D view of Cairo-Dock</b>\n"
+"Perfect if you want to make the dock look like a panel."
 
 #: ../data/messages:1077
 msgid ""
@@ -4449,6 +4475,14 @@ msgid ""
 " - Icons of the <b>taskbar</b> can be separated from launchers or not\n"
 " - And as always ... various bug fixes and improvements :-)"
 msgstr ""
+"<b>New version: <span color='red'>GLX-Dock 3.1</span>!</b>\n"
+" - Better integration in of Unity: support of the <b>Launcher API</b> and "
+"better support of <b>indicators</b>\n"
+" - All <b>configuration windows</b> have been merged into a single one.\n"
+" - Added <b>progress bars</b> in several applets and in the Dbus API\n"
+" - The <b>Music Player</b> applet can control players in the systray.\n"
+" - Icons of the <b>taskbar</b> can be separated from launchers or not\n"
+" - And as always ... various bug fixes and improvements :-)"
 
 #: ../data/messages:1081
 msgid ""
@@ -4463,30 +4497,13 @@ msgid ""
 " - Countless bug-fixes and improvements\n"
 " - If you like the project, please donate :-)"
 msgstr ""
-
-#~ msgid ""
-#~ "This is only usefull if you do not already use auto-hide and if your "
-#~ "Window Manager allows the dock in front of fullscreen windows (which is "
-#~ "rare)."
-#~ msgstr ""
-#~ "This is only usefull if you do not already use auto-hide and if your "
-#~ "Window Manager allows the dock in front of fullscreen windows (which is "
-#~ "rare)."
-
-#~ msgid "Automatically hide the dock when a window becomes full screen?"
-#~ msgstr "Automatically hide the dock when a window becomes full screen?"
-
-#~ msgid "Composition"
-#~ msgstr "Composition"
-
-#~ msgid ""
-#~ "Only use this if you don't run a composite manager like Compiz, xcompmgr, "
-#~ "etc and have a black background around your dock. For aesthetic reasons, "
-#~ "the dock will be kept under other windows."
-#~ msgstr ""
-#~ "Only use this if you don't run a composite manager like Compiz, xcompmgr, "
-#~ "etc and have a black background around your dock. For aesthetic reasons, "
-#~ "the dock will be kept under other windows."
-
-#~ msgid "Emulate composition with fake transparency?"
-#~ msgstr "Emulate composition with fake transparency?"
+"<b>New version: <span color='red'>GLX-Dock 3.2</span>!</b>\n"
+" - Multi-screen support has been improved\n"
+" - New applet : Screenshot\n"
+" - New plug-in: Sound-Effects\n"
+" - Added Gnome-Shell support \n"
+" - Added GDM support for user switching\n"
+" - Added Systemd support for the session management (Fedora, Arch, ...)\n"
+" - Added support for all the Unity indicators\n"
+" - Countless bug-fixes and improvements\n"
+" - If you like the project, please donate :-)"

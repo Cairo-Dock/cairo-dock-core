@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-11-05 18:34+0000\n"
+"POT-Creation-Date: 2013-07-21 16:21+0000\n"
+"PO-Revision-Date: 2013-07-21 20:19+0000\n"
 "Last-Translator: EspenK <espen.kromke@beatradar.no>\n"
 "Language-Team: Norwegian Bokmal <nb@li.org>\n"
-"Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-05 04:37+0000\n"
-"X-Generator: Launchpad (build 16514)\n"
+"X-Launchpad-Export-Date: 2013-07-22 05:16+0000\n"
+"X-Generator: Launchpad (build 16696)\n"
+"Language: nb\n"
 
 #: ../src/cairo-dock-gui-advanced.c:121 ../src/cairo-dock-widget-plugins.c:171
 #: ../data/messages:259
@@ -527,7 +528,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Kjøre Cairo-Dock ved oppstart"
 
 #: ../src/cairo-dock-menu.c:1107
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Tredjeparts-panelprogram tilbyr integrasjon med mange program, eksempelvis "
 "Pidgin"
@@ -777,7 +779,8 @@ msgid "Effects:"
 msgstr "Effekter:"
 
 #: ../src/cairo-dock-widget-items.c:241
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Hoved-dokkens innstillinger er tilgjengelige i hovedvinduet til "
 "innstillingene."
@@ -803,7 +806,8 @@ msgid "Category"
 msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:280
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Klikk på et av de små programmene for å få en forhåndsvisning og beskrivelse."
 
@@ -1920,8 +1924,9 @@ msgstr ""
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1969,8 +1974,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
@@ -2138,7 +2143,8 @@ msgstr ""
 
 #: ../Help/data/messages:265
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
-msgstr "Et problem? Et forslag? Noen å snakke med? Du er hjertelig velkommen."
+msgstr ""
+"Et problem? Et forslag? Noen å snakke med? Du er hjertelig velkommen."
 
 #: ../Help/data/messages:267
 msgid "Community site"
@@ -2913,7 +2919,8 @@ msgstr ""
 
 #: ../data/messages:353
 msgid "Highlight applications requiring your attention with a dialog bubble"
-msgstr "Fremhev applikasjoner som ber om din oppmerksomhet med en dialog-boble"
+msgstr ""
+"Fremhev applikasjoner som ber om din oppmerksomhet med en dialog-boble"
 
 #: ../data/messages:355
 msgid "in seconds"
@@ -3414,7 +3421,8 @@ msgid "Zoom effect"
 msgstr "Forstørringseffekt"
 
 #: ../data/messages:659
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Sett til 1 dersom du ikke ønsker at ikonene skal forstørres når musen "
 "beveger seg over dem."
@@ -3540,8 +3548,8 @@ msgid ""
 "progressively as the dock grows up. The closer to 0, the more transparent "
 "they will be."
 msgstr ""
-"Dette er gjennomsiktigheten når dokken er passiv: De vil \"materalisere seg"
-"\" progressivt etter hvert som dokken vokser. Jo nærmere null desto mer "
+"Dette er gjennomsiktigheten når dokken er passiv: De vil \"materalisere "
+"seg\" progressivt etter hvert som dokken vokser. Jo nærmere null desto mer "
 "gjennomsiktig blir de."
 
 #: ../data/messages:711
@@ -3676,11 +3684,11 @@ msgstr "større"
 
 #: ../data/messages:773
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
-"Bruk denne for å la indikatoren følge dokkens orientering (topp/bunn/høyre/"
-"venstre)."
+"Bruk denne for å la indikatoren følge dokkens orientering "
+"(topp/bunn/høyre/venstre)."
 
 #: ../data/messages:775
 msgid "Rotate the indicator with dock?"
@@ -4017,8 +4025,8 @@ msgstr ""
 
 #: ../data/messages:1039
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1041
@@ -4114,30 +4122,3 @@ msgid ""
 " - Countless bug-fixes and improvements\n"
 " - If you like the project, please donate :-)"
 msgstr ""
-
-#~ msgid ""
-#~ "This is only usefull if you do not already use auto-hide and if your "
-#~ "Window Manager allows the dock in front of fullscreen windows (which is "
-#~ "rare)."
-#~ msgstr ""
-#~ "Denne funksjonen er kun aktuell dersom du allerede bruker automatisk "
-#~ "skjuling og din vindushåndterer tillater å vise dokken foran "
-#~ "fullskjermvinduer (noe som sjelden er tilfelle)."
-
-#~ msgid "Automatically hide the dock when a window becomes full screen?"
-#~ msgstr "Automatisk skjul samlevinduet når et vindu maksimeres?"
-
-#~ msgid "Composition"
-#~ msgstr "Sammensetting"
-
-#~ msgid ""
-#~ "Only use this if you don't run a composite manager like Compiz, xcompmgr, "
-#~ "etc and have a black background around your dock. For aesthetic reasons, "
-#~ "the dock will be kept under other windows."
-#~ msgstr ""
-#~ "Denne bør kun brukes dersom du ikke kjører en kompositt-behandler som "
-#~ "Compiz, xcompmngr eller lignende, og har et sort felt rundt din dokk. Av "
-#~ "estetiske årsaker vil dokken ligge bak andre vinduer."
-
-#~ msgid "Emulate composition with fake transparency?"
-#~ msgstr "Emulere komposisjonen med falsk gjennomsiktighet?"
