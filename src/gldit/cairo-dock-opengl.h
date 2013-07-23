@@ -54,7 +54,17 @@ struct _CairoDockGLConfig {
 	// texture from pixmap
 	void (*bindTexImage) (Display *display, GLXDrawable drawable, int buffer, int *attribList);
 	void (*releaseTexImage) (Display *display, GLXDrawable drawable, int buffer);
-	} ;
+};
+
+struct _GldiGLManagerBackend {
+	gboolean (*init) (gboolean bForceOpenGL);
+	void (*stop) (void);
+	gboolean (*container_make_current) (GldiContainer *pContainer);
+	void (*container_end_draw) (GldiContainer *pContainer);
+	void (*container_init) (GldiContainer *pContainer);
+	void (*container_finish) (GldiContainer *pContainer);
+};
+	
 
 
   ///////////////////
@@ -64,31 +74,35 @@ struct _CairoDockGLConfig {
 *@param bForceOpenGL whether to force the use of OpenGL, or let the function decide.
 *@return TRUE if OpenGL is usable.
 */
-gboolean cairo_dock_initialize_opengl_backend (gboolean bForceOpenGL);
+gboolean gldi_gl_backend_init (gboolean bForceOpenGL);
 
-#define cairo_dock_opengl_is_safe(...) (g_openglConfig.context != 0 && ! g_openglConfig.bIndirectRendering && g_openglConfig.bAlphaAvailable && g_openglConfig.bStencilBufferAvailable)  // bNonPowerOfTwoAvailable et FBO sont detectes une fois qu'on a un contexte OpenGL, on ne peut donc pas les inclure ici.
+void gldi_gl_backend_deactivate (void);
+
+#define gldi_gl_backend_is_safe(...) (g_bUseOpenGL && ! g_openglConfig.bIndirectRendering && g_openglConfig.bAlphaAvailable && g_openglConfig.bStencilBufferAvailable)  // bNonPowerOfTwoAvailable et FBO sont detectes une fois qu'on a un contexte OpenGL, on ne peut donc pas les inclure ici.
 
 /* Toggle on/off the indirect rendering mode (for cards like Radeon 35xx).
-*@param bToggleIndirectRendering whether to toggle on/off the indirect rendering mode that have been detected by the function (for cards like Radeon 35xx).
 */
-void cairo_dock_force_indirect_rendering (void);
-
-#define cairo_dock_deactivate_opengl(...) do {\
-	g_bUseOpenGL = FALSE;\
-	g_openglConfig.context = 0; } while (0)
+void gldi_gl_backend_force_indirect_rendering (void);
 
 
   /////////////
  // CONTEXT //
 /////////////
 
-gboolean gldi_glx_make_current (GldiContainer *pContainer);
+/** Make a Container's OpenGL context the current one.
+*@param pContainer the container
+*@return TRUE if the Container's context is now the current one.
+*/
+gboolean gldi_gl_container_make_current (GldiContainer *pContainer);
 
-gboolean gldi_glx_begin_draw_container_full (GldiContainer *pContainer, GdkRectangle *pArea, gboolean bClear);
+gboolean gldi_gl_container_begin_draw_full (GldiContainer *pContainer, GdkRectangle *pArea, gboolean bClear);
 
-#define gldi_glx_begin_draw_container(pContainer) gldi_glx_begin_draw_container_full (pContainer, NULL, TRUE)
+#define gldi_gl_container_begin_draw(pContainer) gldi_gl_container_begin_draw_full (pContainer, NULL, TRUE)
 
-void gldi_glx_end_draw_container (GldiContainer *pContainer);
+/** Ends the drawing on a Container's OpenGL context (swap buffers).
+*@param pContainer the container
+*/
+void gldi_gl_container_end_draw (GldiContainer *pContainer);
 
 
 /** Set a perspective view to the current GL context to fit a given ontainer. Perspective view accentuates the depth effect of the scene, but can distort it on the edges, and is difficult to manipulate because the size of objects depends on their position.
@@ -108,10 +122,12 @@ void cairo_dock_set_ortho_view_for_icon (Icon *pIcon, GldiContainer *pContainer)
 /** Set a shared default-initialized GL context on a window.
 *@param pContainer the container, not yet realized.
 */
-void gldi_glx_init_container (GldiContainer *pContainer);
+void gldi_gl_container_init (GldiContainer *pContainer);
 
-void gldi_glx_finish_container (GldiContainer *pContainer);
+void gldi_gl_container_finish (GldiContainer *pContainer);
 
+
+void gldi_gl_manager_register_backend (GldiGLManagerBackend *pBackend);
 
 G_END_DECLS
 #endif
