@@ -57,6 +57,7 @@ extern CairoDock *g_pMainDock;  // for the default dock visibility when composit
 static gboolean s_bSticky = TRUE;
 static gboolean s_bInitialOpacity0 = TRUE;  // set initial window opacity to 0, to avoid grey rectangles.
 static gboolean s_bNoComposite = FALSE;
+static GldiContainerManagerBackend s_backend;
 
 
 void cairo_dock_set_containers_non_sticky (void)
@@ -318,13 +319,61 @@ void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, doub
 }
 
 
-gboolean gldi_container_is_active (GldiContainer *pContainer)
+/*gboolean gldi_container_is_active (GldiContainer *pContainer)
 {
 	Window Xid = gldi_container_get_Xid (pContainer);
 	GldiWindowActor *pActiveWindow = gldi_windows_get_active ();
 	return (gldi_window_get_id (pActiveWindow) == Xid);  // gtk_window_has_toplevel_focus/gtk_window_is_active is not reliable
+}*/
 
+
+void gldi_container_reserve_space (GldiContainer *pContainer, int left, int right, int top, int bottom, int left_start_y, int left_end_y, int right_start_y, int right_end_y, int top_start_x, int top_end_x, int bottom_start_x, int bottom_end_x)
+{
+	if (s_backend.reserve_space)
+		s_backend.reserve_space (pContainer, left, right, top, bottom, left_start_y, left_end_y, right_start_y, right_end_y, top_start_x, top_end_x, bottom_start_x, bottom_end_x);
 }
+
+int gldi_container_get_current_desktop_index (GldiContainer *pContainer)
+{
+	if (s_backend.get_current_desktop_index)
+		return s_backend.get_current_desktop_index (pContainer);
+	return 0;
+}
+
+void gldi_container_move (GldiContainer *pContainer, int iNumDesktop, int iAbsolutePositionX, int iAbsolutePositionY)
+{
+	if (s_backend.move)
+		s_backend.move (pContainer, iNumDesktop, iAbsolutePositionX, iAbsolutePositionY);
+}
+
+gboolean gldi_container_is_active (GldiContainer *pContainer)
+{
+	if (s_backend.is_active)
+		return s_backend.is_active (pContainer);
+	return FALSE;
+}
+
+void gldi_container_present (GldiContainer *pContainer)
+{
+	if (s_backend.present)
+		s_backend.present (pContainer);
+}
+
+void gldi_container_manager_register_backend (GldiContainerManagerBackend *pBackend)
+{
+	gpointer *ptr = (gpointer*)&s_backend;
+	gpointer *src = (gpointer*)pBackend;
+	gpointer *src_end = (gpointer*)(pBackend + 1);
+	while (src != src_end)
+	{
+		if (*src != NULL)
+			*ptr = *src;
+		src ++;
+		ptr ++;
+	}
+}
+
+
 
 gboolean cairo_dock_emit_signal_on_container (GldiContainer *pContainer, const gchar *cSignal)
 {
@@ -488,7 +537,7 @@ GtkWidget *cairo_dock_create_sub_menu (const gchar *cLabel, GtkWidget *pMenu, co
 
 
 static GtkWidget *s_pMenu = NULL;  // right-click menu
-GtkWidget *cairo_dock_build_menu (Icon *icon, GldiContainer *pContainer)
+GtkWidget *gldi_container_build_menu (GldiContainer *pContainer, Icon *icon)
 {
 	if (s_pMenu != NULL)
 	{
@@ -678,7 +727,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	// set an RGBA visual for cairo or opengl
 	if (g_bUseOpenGL && ! cattr->bNoOpengl)
 	{
-		gldi_glx_init_container (pContainer);
+		gldi_gl_container_init (pContainer);
 		pContainer->iAnimationDeltaT = myContainersParam.iGLAnimationDeltaT;
 	}
 	else
@@ -726,7 +775,7 @@ static void reset_object (GldiObject *obj)
 	GldiContainer *pContainer = (GldiContainer*)obj;
 	
 	// destroy the opengl context
-	gldi_glx_finish_container (pContainer);
+	gldi_gl_container_finish (pContainer);
 	
 	// destroy the window (will remove all signals)
 	gtk_widget_destroy (pContainer->pWidget);

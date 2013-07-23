@@ -156,6 +156,17 @@ struct _GldiContainer {
 	gpointer reserved[4];
 };
 
+
+/// Definition of the Container backend. It defines some operations that should be, but are not, provided by GTK.
+struct _GldiContainerManagerBackend {
+	void (*reserve_space) (GldiContainer *pContainer, int left, int right, int top, int bottom, int left_start_y, int left_end_y, int right_start_y, int right_end_y, int top_start_x, int top_end_x, int bottom_start_x, int bottom_end_x);
+	int (*get_current_desktop_index) (GldiContainer *pContainer);
+	void (*move) (GldiContainer *pContainer, int iNumDesktop, int iAbsolutePositionX, int iAbsolutePositionY);
+	gboolean (*is_active) (GldiContainer *pContainer);
+	void (*present) (GldiContainer *pContainer);
+};
+
+
 /// Get the Container part of a pointer.
 #define CAIRO_CONTAINER(p) ((GldiContainer *) (p))
 
@@ -220,9 +231,49 @@ void cairo_dock_disable_containers_opacity (void);
 		gdk_window_get_device_position (gldi_container_get_gdk_window (pContainer), pDevice, &pContainer->iMouseY, &pContainer->iMouseX, NULL); } while (0)
 #endif
 
-#define gldi_container_present(pContainer) gtk_window_present_with_time (GTK_WINDOW ((pContainer)->pWidget), gdk_x11_get_server_time (gldi_container_get_gdk_window(pContainer)))  // to avoid the focus steal prevention.
 
+/** Reserve a space on the screen for a Container; other windows won't overlap this space when maximised.
+*@param pContainer the container
+*@param left 
+*@param right 
+*@param top 
+*@param bottom 
+*@param left_start_y 
+*@param left_end_y 
+*@param right_start_y 
+*@param right_end_y 
+*@param top_start_x 
+*@param top_end_x 
+*@param bottom_start_x 
+*@param bottom_end_x 
+*/
+void gldi_container_reserve_space (GldiContainer *pContainer, int left, int right, int top, int bottom, int left_start_y, int left_end_y, int right_start_y, int right_end_y, int top_start_x, int top_end_x, int bottom_start_x, int bottom_end_x);
+
+/** Get the desktop and viewports a Container is placed on.
+*@param pContainer the container
+*@return an index representing the desktop and viewports.
+*/
+int gldi_container_get_current_desktop_index (GldiContainer *pContainer);
+
+/** Move a Container to a given desktop, viewport, and position (similar to gtk_window_move except that the position is defined on the whole desktop (made of all viewports); it's only useful if the Container is sticky).
+*@param pContainer the container
+*/
+void gldi_container_move (GldiContainer *pContainer, int iNumDesktop, int iAbsolutePositionX, int iAbsolutePositionY);
+
+/** Tell if a Container is the current active window (similar to gtk_window_is_active but actually works).
+*@param pContainer the container
+*@return TRUE if the Container is the current active window.
+*/
 gboolean gldi_container_is_active (GldiContainer *pContainer);
+
+/** Show a Container and make it take the focus  (similar to gtk_window_present, but bypasses the WM focus steal prevention).
+*@param pContainer the container
+*/
+void gldi_container_present (GldiContainer *pContainer);
+
+
+void gldi_container_manager_register_backend (GldiContainerManagerBackend *pBackend);
+
 
 gboolean cairo_dock_emit_signal_on_container (GldiContainer *pContainer, const gchar *cSignal);
 gboolean cairo_dock_emit_leave_signal (GldiContainer *pContainer);
@@ -317,7 +368,7 @@ GtkWidget *cairo_dock_create_sub_menu (const gchar *cLabel, GtkWidget *pMenu, co
 *@param pContainer the container that was left-clicked.
 *@return the menu.
 */
-GtkWidget *cairo_dock_build_menu (Icon *icon, GldiContainer *pContainer);
+GtkWidget *gldi_container_build_menu (GldiContainer *pContainer, Icon *icon);
 
 #if (GTK_MAJOR_VERSION < 3)
 #define _gtk_hbox_new(m) gtk_hbox_new (FALSE, m)
