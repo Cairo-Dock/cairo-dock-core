@@ -36,7 +36,7 @@
 #include "cairo-dock-animations.h"
 #include "cairo-dock-desktop-manager.h"  // gldi_desktop_get*
 #include "cairo-dock-data-renderer.h"  // cairo_dock_reload_data_renderer_on_icon
-#include "cairo-dock-opengl.h"  // gldi_glx_begin_draw_container_full
+#include "cairo-dock-opengl.h"  // gldi_gl_container_begin_draw
 
 extern CairoDockGLConfig g_openglConfig;
 #include "cairo-dock-dock-facility.h"
@@ -1365,7 +1365,7 @@ void cairo_dock_make_preview (CairoDock *pDock, const gchar *cPreviewPath)
 		GLubyte *glbuffer = NULL;
 		if (g_bUseOpenGL)
 		{
-			if (gldi_glx_begin_draw_container (CAIRO_CONTAINER (pDock)))
+			if (gldi_gl_container_begin_draw (CAIRO_CONTAINER (pDock)))
 			{
 				pDock->pRenderer->render_opengl (pDock);
 			}

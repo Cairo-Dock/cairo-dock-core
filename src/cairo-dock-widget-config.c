@@ -491,7 +491,6 @@ static void _config_widget_apply (CDWidget *pCdWidget)
 			g_key_file_set_boolean (pKeyFile, "TaskBar", "hide visible", bHideVisible);
 			g_key_file_set_boolean (pKeyFile, "TaskBar", "current desktop only", bCurrentDesktopOnly);
 			g_key_file_set_boolean (pKeyFile, "TaskBar", "mix launcher appli", bMixLauncherAppli);
-			g_key_file_set_boolean (pKeyFile, "TaskBar", "opening animation", TRUE); // animation until appli opens
 			g_key_file_set_boolean (pKeyFile, "TaskBar", "group by class", bGroupAppliByClass);
 		}
 		pConfigWidget->iTaskbarType = iTaskbarType;

@@ -113,7 +113,7 @@ void gldi_init (GldiRenderingMethod iRendering)
 	// set up rendering method.
 	if (iRendering != GLDI_CAIRO)  // if cairo, nothing to do.
 	{
-		cairo_dock_initialize_opengl_backend (iRendering == GLDI_OPENGL);  // TRUE <=> force.
+		gldi_gl_backend_init (iRendering == GLDI_OPENGL);  // TRUE <=> force.
 	}
 }
 

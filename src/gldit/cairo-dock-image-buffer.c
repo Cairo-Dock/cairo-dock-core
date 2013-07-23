@@ -26,6 +26,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"
+#include "cairo-dock-opengl.h"  // gldi_gl_container_make_current
 #include "cairo-dock-image-buffer.h"
 
 extern gchar *g_cCurrentThemePath;
@@ -527,7 +528,7 @@ gboolean cairo_dock_begin_draw_image_buffer_opengl (CairoDockImageBuffer *pImage
 	/// TODO: test without FBO and dock when iRenderingMode == 2
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))
 	{
-		if (! gldi_glx_make_current (pContainer))
+		if (! gldi_gl_container_make_current (pContainer))
 		{
 			return FALSE;
 		}
@@ -546,7 +547,7 @@ gboolean cairo_dock_begin_draw_image_buffer_opengl (CairoDockImageBuffer *pImage
 		iWidth = pImage->iWidth, iHeight = pImage->iHeight;
 		if (pContainer == NULL)
 			pContainer = g_pPrimaryContainer;
-		if (! gldi_glx_make_current (pContainer))
+		if (! gldi_gl_container_make_current (pContainer))
 		{
 			cd_warning ("couldn't set the opengl context");
 			return FALSE;

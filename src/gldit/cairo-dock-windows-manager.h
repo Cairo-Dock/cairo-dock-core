@@ -88,7 +88,7 @@ struct _GldiWindowActor {
 	gboolean bIsMaximized;
 	gboolean bDemandsAttention;
 	GtkAllocation windowGeometry;
-	gint iNumDesktop;
+	gint iNumDesktop;  // can be -1
 	gint iViewPortX, iViewPortY;
 	gint iStackOrder;
 	gchar *cClass;
@@ -166,6 +166,52 @@ gboolean gldi_window_is_on_desktop (GldiWindowActor *pAppli, int iNumDesktop, in
 void gldi_window_move_to_current_desktop (GldiWindowActor *pAppli);
 
 guint gldi_window_get_id (GldiWindowActor *pAppli);
+
+
+
+////////////////////////////////////////////////////////////////////
+
+GldiWindowActor *gldi_container_get_window_actor (GldiContainer *pContainer);  // -> backend._get_window_actor_for_container -> _make_new_actor
+
+void gldi_window_reserve_space (GldiWindowActor *actor, int left, int right, int top, int bottom, int left_start_y, int left_end_y, int right_start_y, int right_end_y, int top_start_x, int top_end_x, int bottom_start_x, int bottom_end_x);  // backend._reserve_space
+
+void gldi_window_move (GldiWindowActor *actor, int iNumDesktop, int iAbsolutePositionX, int iAbsolutePositionY);  // backend._move_full
+
+gboolean _gtk_window_is_active (GtkWindow *pWindow);
+
+
+
+////////////////////////////////////////////////////////////////////
+
+void gldi_container_reserve_space (GldiContainer *pContainer, int left, int right, int top, int bottom, int left_start_y, int left_end_y, int right_start_y, int right_end_y, int top_start_x, int top_end_x, int bottom_start_x, int bottom_end_x);
+
+int gldi_container_get_current_desktop_viewport (GldiContainer *pContainer);
+
+void gldi_container_move (GldiContainer *pContainer, int iNumDesktop, int iAbsolutePositionX, int iAbsolutePositionY);
+
+gboolean gldi_container_is_active (GldiContainer *pContainer);
+
+void gldi_container_present2 (GldiContainer *pContainer);
+
+/* gboolean gldi_glx_make_current (GldiContainer *pContainer);
+ * void gldi_glx_end_draw_container (GldiContainer *pContainer);
+ * 
+ */
+ 
+////////////////////////////////////////////////////////////////////
+
+void _gtk_window_reserve_space (GtkWindow *pWindow, int left, int right, int top, int bottom, int left_start_y, int left_end_y, int right_start_y, int right_end_y, int top_start_x, int top_end_x, int bottom_start_x, int bottom_end_x);
+
+int _gtk_window_get_current_desktop_viewport (GtkWindow *pWindow);
+
+void _gtk_window_move (GtkWindow *pWindow, int iNumDesktop, int iAbsolutePositionX, int iAbsolutePositionY);
+
+gboolean _gtk_window_is_active (GtkWindow *pWindow);
+
+void _gtk_window_present (GtkWindow *pWindow);
+
+////////////////////////////////////////////////////////////////////
+
 
 
 void gldi_register_windows_manager (void);

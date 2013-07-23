@@ -189,12 +189,12 @@ static gboolean on_expose_flying_icon (G_GNUC_UNUSED GtkWidget *pWidget,
 {
 	if (g_bUseOpenGL)
 	{
-		if (! gldi_glx_begin_draw_container (CAIRO_CONTAINER (pFlyingContainer)))
+		if (! gldi_gl_container_begin_draw (CAIRO_CONTAINER (pFlyingContainer)))
 			return FALSE;
 		
 		gldi_object_notify (pFlyingContainer, NOTIFICATION_RENDER, pFlyingContainer, NULL);
 		
-		gldi_glx_end_draw_container (CAIRO_CONTAINER (pFlyingContainer));
+		gldi_gl_container_end_draw (CAIRO_CONTAINER (pFlyingContainer));
 	}
  	else
 	{
@@ -220,7 +220,7 @@ static gboolean on_configure_flying_icon (GtkWidget* pWidget,
 		
 		if (g_bUseOpenGL)
 		{
-			if (! gldi_glx_make_current (CAIRO_CONTAINER (pFlyingContainer)))
+			if (! gldi_gl_container_make_current (CAIRO_CONTAINER (pFlyingContainer)))
 				return FALSE;
 			
 			cairo_dock_set_ortho_view (CAIRO_CONTAINER (pFlyingContainer));

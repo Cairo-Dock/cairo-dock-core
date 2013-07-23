@@ -146,7 +146,7 @@ void cairo_dock_deinhibite_class (const gchar *cClass, Icon *pInhibitorIcon);
 * @param pAppli l'appli.
 * @param cClass sa classe.
 */
-void cairo_dock_detach_Xid_from_inhibitors (GldiWindowActor *pAppli, const gchar *cClass);
+void gldi_window_detach_from_inhibitors (GldiWindowActor *pAppli);
 /*
 * Enleve toutes les applis de toutes les classes, et met a jour les inhibiteurs.
 */
@@ -156,8 +156,6 @@ void cairo_dock_remove_all_applis_from_class_table (void);
 */
 void cairo_dock_reset_class_table (void);
 
-
-cairo_surface_t *cairo_dock_duplicate_inhibitor_surface_for_appli (Icon *pInhibitorIcon, int iWidth, int ifHeight);
 /*
 * Cree la surface d'une appli en utilisant le lanceur correspondant, si la classe n'utilise pas les icones X.
 * @param cClass la classe.

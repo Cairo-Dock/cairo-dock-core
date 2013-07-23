@@ -31,7 +31,6 @@
 
 #include <GL/gl.h> 
 #include <GL/glu.h> 
-#include <GL/glx.h> 
 
 #include "gldi-config.h"
 #include "cairo-dock-module-manager.h"
@@ -47,6 +46,7 @@
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-desklet-factory.h"
+#include "cairo-dock-opengl.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-desklet-manager.h"
 
@@ -443,7 +443,7 @@ static Icon *_cairo_dock_pick_icon_on_opengl_desklet (CairoDesklet *pDesklet)
 	GLint hits=0;
 	GLint viewport[4];
 	
-	if (! gldi_glx_make_current (CAIRO_CONTAINER (pDesklet)))
+	if (! gldi_gl_container_make_current (CAIRO_CONTAINER (pDesklet)))
 		return NULL;
 	
 	glGetIntegerv (GL_VIEWPORT, viewport);

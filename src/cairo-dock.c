@@ -523,7 +523,7 @@ int main (int argc, char** argv)
 		cairo_dock_fm_force_desktop_env (iDesktopEnv);
 	
 	if (bToggleIndirectRendering)
-		cairo_dock_force_indirect_rendering ();
+		gldi_gl_backend_force_indirect_rendering ();
 	
 	gchar *cExtraDirPath = g_strconcat (cRootDataDirPath, "/"CAIRO_DOCK_EXTRAS_DIR, NULL);
 	gchar *cThemesDirPath = g_strconcat (cRootDataDirPath, "/"CAIRO_DOCK_THEMES_DIR, NULL);
@@ -532,7 +532,7 @@ int main (int argc, char** argv)
 	cairo_dock_set_paths (cRootDataDirPath, cExtraDirPath, cThemesDirPath, cCurrentThemeDirPath, (gchar*)CAIRO_DOCK_SHARE_THEMES_DIR, (gchar*)CAIRO_DOCK_DISTANT_THEMES_DIR, cThemeServerAdress ? cThemeServerAdress : g_strdup (CAIRO_DOCK_THEME_SERVER));
 	
 	//\___________________ Check that OpenGL is safely usable, if not ask the user what to do.
-	if (bAskBackend || (g_bUseOpenGL && ! bForceOpenGL && ! bToggleIndirectRendering && ! cairo_dock_opengl_is_safe ()))  // opengl disponible sans l'avoir force mais pas safe => on demande confirmation.
+	if (bAskBackend || (g_bUseOpenGL && ! bForceOpenGL && ! bToggleIndirectRendering && ! gldi_gl_backend_is_safe ()))  // opengl disponible sans l'avoir force mais pas safe => on demande confirmation.
 	{
 		if (s_cDefaulBackend == NULL)  // pas de backend par defaut defini.
 		{
@@ -567,7 +567,7 @@ int main (int argc, char** argv)
 			gtk_widget_destroy (dialog);
 			if (iAnswer == GTK_RESPONSE_NO)
 			{
-				cairo_dock_deactivate_opengl ();
+				gldi_gl_backend_deactivate ();
 			}
 			
 			if (bRememberChoice)  // l'utilisateur a defini le choix par defaut.
@@ -582,7 +582,7 @@ int main (int argc, char** argv)
 		}
 		else if (strcmp (s_cDefaulBackend, "opengl") != 0)  // un backend par defaut qui n'est pas OpenGL.
 		{
-			cairo_dock_deactivate_opengl ();
+			gldi_gl_backend_deactivate ();
 		}
 	}
 	g_print ("\n"

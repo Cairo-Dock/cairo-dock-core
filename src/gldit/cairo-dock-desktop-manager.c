@@ -60,7 +60,6 @@ void gldi_desktop_get_current (int *iCurrentDesktop, int *iCurrentViewportX, int
 
 static gboolean _set_desklets_on_widget_layer (CairoDesklet *pDesklet, G_GNUC_UNUSED gpointer data)
 {
-	///Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDesklet));
 	if (pDesklet->iVisibility == CAIRO_DESKLET_ON_WIDGET_LAYER)
 		gldi_desktop_set_on_widget_layer (CAIRO_CONTAINER (pDesklet), TRUE);
 	return FALSE;  // continue

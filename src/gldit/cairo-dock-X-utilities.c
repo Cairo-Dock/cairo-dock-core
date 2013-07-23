@@ -97,6 +97,8 @@ static Atom s_aString;
 
 static GtkAllocation *_get_screens_geometry (int *pNbScreens);
 
+static gboolean cairo_dock_support_X_extension (void);
+
 typedef struct {
     unsigned long flags;
     unsigned long functions;
@@ -236,7 +238,7 @@ static GtkAllocation *_get_screens_geometry (int *pNbScreens)
 	}
 	
 	#ifdef HAVE_XINERAMA
-	if (iNbScreens == 0 && cairo_dock_xinerama_is_available () && XineramaIsActive (s_XDisplay))
+	if (iNbScreens == 0 && s_bUseXinerama && XineramaIsActive (s_XDisplay))
 	{
 		cd_debug ("Using Xinerama to determine the screen's position and size ...");
 		int n;
@@ -757,10 +759,10 @@ void cairo_dock_set_nb_desktops (gulong iNbDesktops)
 }
 
 
-gboolean cairo_dock_support_X_extension (void)
+static gboolean cairo_dock_support_X_extension (void)
 {
 #ifdef HAVE_XEXTEND
-	// check for XComposite >= 1.2
+	// check for XComposite >= 0.2
 	int event_base, error_base, major, minor;
 	if (! XCompositeQueryExtension (s_XDisplay, &event_base, &error_base))  // on regarde si le serveur X supporte l'extension.
 	{
@@ -840,10 +842,10 @@ gboolean cairo_dock_xtest_is_available (void)
 	return s_bUseXTest;
 }
 
-gboolean cairo_dock_xinerama_is_available (void)
+/**gboolean cairo_dock_xinerama_is_available (void)
 {
 	return s_bUseXinerama;
-}
+}*/
 
 gboolean cairo_dock_check_xrandr (int major, int minor)
 {
@@ -1102,6 +1104,24 @@ void cairo_dock_move_xwindow_to_absolute_position (Window Xid, int iDesktopNumbe
 	//cairo_dock_set_xwindow_timestamp (Xid, cairo_dock_get_xwindow_timestamp (root));
 }
 
+static void cairo_dock_get_xwindow_position_on_its_viewport (Window Xid, int *iRelativePositionX, int *iRelativePositionY)
+{
+	int iLocalPositionX, iLocalPositionY, iWidthExtent=1, iHeightExtent=1;  // we don't care wbout the size
+	cairo_dock_get_xwindow_geometry (Xid, &iLocalPositionX, &iLocalPositionY, &iWidthExtent, &iHeightExtent);
+	
+	while (iLocalPositionX < 0)  // on passe au referentiel du viewport de la fenetre; inutile de connaitre sa position, puisqu'ils ont tous la meme taille.
+		iLocalPositionX += gldi_desktop_get_width();
+	while (iLocalPositionX >= gldi_desktop_get_width())
+		iLocalPositionX -= gldi_desktop_get_width();
+	while (iLocalPositionY < 0)
+		iLocalPositionY += gldi_desktop_get_height();
+	while (iLocalPositionY >= gldi_desktop_get_height())
+		iLocalPositionY -= gldi_desktop_get_height();
+	
+	*iRelativePositionX = iLocalPositionX;
+	*iRelativePositionY = iLocalPositionY;
+	//cd_debug ("position relative : (%d;%d) taille : %dx%d", *iRelativePositionX, *iRelativePositionY, iWidthExtent, iHeightExtent);
+}
 void cairo_dock_move_xwindow_to_nth_desktop (Window Xid, int iDesktopNumber, int iDesktopViewportX, int iDesktopViewportY)
 {
 	g_return_if_fail (Xid > 0);
@@ -1469,25 +1489,6 @@ void cairo_dock_get_xwindow_geometry (Window Xid, int *iLocalPositionX, int *iLo
 	*iLocalPositionY = dest_y_return - top;
 	*iWidthExtent += left + right;
 	*iHeightExtent += top + bottom;
-}
-
-void cairo_dock_get_xwindow_position_on_its_viewport (Window Xid, int *iRelativePositionX, int *iRelativePositionY)
-{
-	int iLocalPositionX, iLocalPositionY, iWidthExtent=1, iHeightExtent=1;  // we don't care wbout the size
-	cairo_dock_get_xwindow_geometry (Xid, &iLocalPositionX, &iLocalPositionY, &iWidthExtent, &iHeightExtent);
-	
-	while (iLocalPositionX < 0)  // on passe au referentiel du viewport de la fenetre; inutile de connaitre sa position, puisqu'ils ont tous la meme taille.
-		iLocalPositionX += gldi_desktop_get_width();
-	while (iLocalPositionX >= gldi_desktop_get_width())
-		iLocalPositionX -= gldi_desktop_get_width();
-	while (iLocalPositionY < 0)
-		iLocalPositionY += gldi_desktop_get_height();
-	while (iLocalPositionY >= gldi_desktop_get_height())
-		iLocalPositionY -= gldi_desktop_get_height();
-	
-	*iRelativePositionX = iLocalPositionX;
-	*iRelativePositionY = iLocalPositionY;
-	//cd_debug ("position relative : (%d;%d) taille : %dx%d", *iRelativePositionX, *iRelativePositionY, iWidthExtent, iHeightExtent);
 }
 
 

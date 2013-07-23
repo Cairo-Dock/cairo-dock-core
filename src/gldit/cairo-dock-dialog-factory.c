@@ -288,14 +288,6 @@ static gboolean on_button_press_widget (G_GNUC_UNUSED GtkWidget *widget,
 	return FALSE;
 }
 
-static void _force_above (G_GNUC_UNUSED GtkWidget *pWidget, CairoDialog *pDialog)
-{
-	gtk_window_set_keep_above (GTK_WINDOW (pDialog->container.pWidget), TRUE);
-	//Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDialog));
-	//cairo_dock_set_xwindow_type_hint (Xid, "_NET_WM_WINDOW_TYPE_DOCK");  // pour passer devant les fenetres plein ecran; depend du WM.
-	gtk_window_set_type_hint (GTK_WINDOW (pDialog->container.pWidget), GDK_WINDOW_TYPE_HINT_DOCK);
-}
-
 static GtkWidget *_cairo_dock_add_dialog_internal_box (CairoDialog *pDialog, int iWidth, int iHeight, gboolean bCanResize)
 {
 	GtkWidget *pBox = _gtk_hbox_new (0);
@@ -420,12 +412,10 @@ void gldi_dialog_init_internals (CairoDialog *pDialog, CairoDialogAttr *pAttribu
 	gtk_window_set_keep_above (GTK_WINDOW (pWindow), TRUE);
 	
 	pDialog->pIcon = pAttribute->pIcon;
-	if (pAttribute->bForceAbove)
+	if (pAttribute->bForceAbove)  // try to force it above other windows (with most WM, it will still stay below fullscreen windows).
 	{
-		g_signal_connect (G_OBJECT (pDialog->container.pWidget),
-			"realize",
-			G_CALLBACK (_force_above),
-			pDialog);  // gtk_widget_get_window() returns NULL until the window is realized.
+		gtk_window_set_keep_above (GTK_WINDOW (pDialog->container.pWidget), TRUE);
+		gtk_window_set_type_hint (GTK_WINDOW (pDialog->container.pWidget), GDK_WINDOW_TYPE_HINT_DOCK);  // should be called before the window becomes visible
 	}
 	
 	//\________________ load the message

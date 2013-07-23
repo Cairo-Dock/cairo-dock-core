@@ -278,6 +278,13 @@ guint gldi_window_get_id (GldiWindowActor *actor)
 	return 0;
 }
 
+/*GldiWindowActor *gldi_container_get_window_actor (GldiContainer *pContainer)
+{
+	if (actor && s_backend.get_container_window)
+		return s_backend.get_container_window (pContainer);
+	return NULL;
+}*/
+
 
   /////////////////
  /// UTILITIES ///
@@ -295,7 +302,7 @@ static inline gboolean _window_is_on_current_desktop (GtkAllocation *pWindowGeom
 		iGlobalPositionX + iWidthExtent > 0 &&
 		iGlobalPositionX < gldi_desktop_get_width() &&
 		iGlobalPositionY + iHeightExtent > 0 &&
-		iGlobalPositionY < gldi_desktop_get_height() );  // -1 <=> 0xFFFFFFFF en unsigned.
+		iGlobalPositionY < gldi_desktop_get_height() );
 }
 gboolean gldi_window_is_on_current_desktop (GldiWindowActor *actor)
 {

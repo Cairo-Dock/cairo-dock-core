@@ -216,7 +216,7 @@ static gboolean _on_window_size_position_changed (G_GNUC_UNUSED gpointer data, G
 					gtk_widget_queue_draw (pParentDock->container.pWidget);
 			}
 			else
-				cairo_dock_detach_Xid_from_inhibitors (actor, icon->cClass);
+				gldi_window_detach_from_inhibitors (actor);
 		}
 	}
 	else  // elle est sur le viewport courant.
@@ -315,7 +315,7 @@ static gboolean _on_window_class_changed (G_GNUC_UNUSED gpointer data, GldiWindo
 	if (cairo_dock_get_icon_container (icon) != NULL)  // if in a dock, detach it
 		pParentDock = cairo_dock_detach_appli (icon);
 	else  // else if inhibited, detach from the inhibitor
-		cairo_dock_detach_Xid_from_inhibitors (actor, icon->cClass);
+		gldi_window_detach_from_inhibitors (actor);
 	cairo_dock_remove_appli_from_class (icon);
 	
 	// set the new class
@@ -360,7 +360,7 @@ static void _hide_show_appli_icons_on_other_desktops (GldiWindowActor *pAppli, I
 			if (cairo_dock_get_icon_container (icon) != NULL)  // if in a dock, detach it
 				pParentDock = cairo_dock_detach_appli (icon);
 			else  // else if inhibited, detach from the inhibitor
-				cairo_dock_detach_Xid_from_inhibitors (icon->pAppli, icon->cClass);
+				gldi_window_detach_from_inhibitors (icon->pAppli);
 		}
 		if (pParentDock != NULL)
 			gtk_widget_queue_draw (pParentDock->container.pWidget);
@@ -470,7 +470,7 @@ static void cairo_dock_unregister_appli (Icon *icon)
 		
 		// remove from class
 		cairo_dock_remove_appli_from_class (icon);  // n'efface pas sa classe (on peut en avoir besoin encore).
-		cairo_dock_detach_Xid_from_inhibitors (icon->pAppli, icon->cClass);
+		gldi_window_detach_from_inhibitors (icon->pAppli);
 		
 		// unset the appli
 		gldi_icon_unset_appli (icon);
@@ -780,16 +780,9 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoTaskbarParam *pTaskBar)
 			g_key_file_set_integer (pKeyFile, "TaskBar", "minimized", pTaskBar->iMinimizedWindowRenderType);
 		}
 		
-		/**if (pTaskBar->iMinimizedWindowRenderType == 1 && ! cairo_dock_xcomposite_is_available ())
-		{
-			cd_warning ("Sorry but either your X server does not have the XComposite extension, or your version of Cairo-Dock was not built with the support of XComposite.\n You can't have window thumbnails in the dock");
-			pTaskBar->iMinimizedWindowRenderType = 0;
-		}
-		if (pTaskBar->iMinimizedWindowRenderType == 0)*/
-			pTaskBar->fVisibleAppliAlpha = MIN (.6, cairo_dock_get_double_key_value (pKeyFile, "TaskBar", "visibility alpha", &bFlushConfFileNeeded, .35, "Applications", NULL));
+		pTaskBar->fVisibleAppliAlpha = MIN (.6, cairo_dock_get_double_key_value (pKeyFile, "TaskBar", "visibility alpha", &bFlushConfFileNeeded, .35, "Applications", NULL));
 		
 		pTaskBar->iAppliMaxNameLength = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "max name length", &bFlushConfFileNeeded, 25, "Applications", NULL);
-		
 		
 		// interaction
 		pTaskBar->iActionOnMiddleClick = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "action on middle click", &bFlushConfFileNeeded, 1, NULL, NULL);

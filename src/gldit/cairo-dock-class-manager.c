@@ -521,8 +521,9 @@ void cairo_dock_deinhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
 }
 
 
-void cairo_dock_detach_Xid_from_inhibitors (GldiWindowActor *pAppli, const gchar *cClass)
+void gldi_window_detach_from_inhibitors (GldiWindowActor *pAppli)
 {
+	const gchar *cClass = pAppli->cClass;
 	cd_message ("%s (%s)", __func__, cClass);
 	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
 	if (pClassAppli != NULL)
@@ -606,18 +607,6 @@ void cairo_dock_reset_class_table (void)
 }
 
 
-
-cairo_surface_t *cairo_dock_duplicate_inhibitor_surface_for_appli (Icon *pInhibitorIcon, int iWidth, int iHeight)
-{
-	int w, h;
-	cairo_dock_get_icon_extent (pInhibitorIcon, &w, &h);
-	
-	return cairo_dock_duplicate_surface (pInhibitorIcon->image.pSurface,
-		w,
-		h,
-		iWidth,
-		iHeight);
-}
 cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, int iWidth, int iHeight)
 {
 	cd_debug ("%s (%s)", __func__, cClass);
@@ -640,7 +629,11 @@ cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, int 
 				if (pInhibitorIcon->pSubDock == NULL || myIndicatorsParam.bUseClassIndic)  // dans le cas d'un lanceur qui aurait deja plusieurs instances de sa classe, et qui les representerait en pile, on ne prend pas son icone.
 				{
 					cd_debug ("%s will give its surface", pInhibitorIcon->cName);
-					return cairo_dock_duplicate_inhibitor_surface_for_appli (pInhibitorIcon, iWidth, iHeight);
+					return cairo_dock_duplicate_surface (pInhibitorIcon->image.pSurface,
+						pInhibitorIcon->image.iWidth,
+						pInhibitorIcon->image.iHeight,
+						iWidth,
+						iHeight);
 				}
 				else if (pInhibitorIcon->cFileName != NULL)
 				{

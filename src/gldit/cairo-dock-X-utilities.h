@@ -101,11 +101,11 @@ void cairo_dock_xwindow_can_minimize_maximized_close (Window Xid, gboolean *bCan
 gboolean cairo_dock_window_is_utility (int Xid);
 gboolean cairo_dock_window_is_dock (int Xid);
 
-void cairo_dock_get_xwindow_position_on_its_viewport (Window Xid, int *iRelativePositionX, int *iRelativePositionY);
-
-///gboolean cairo_dock_xwindow_is_on_current_desktop (Window Xid);
+//void cairo_dock_get_xwindow_position_on_its_viewport (Window Xid, int *iRelativePositionX, int *iRelativePositionY);
 
 Window *cairo_dock_get_windows_list (gulong *iNbWindows, gboolean bStackOrder);
+
+Window cairo_dock_get_active_xwindow (void);
 
 
 cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, int iWidth, int iHeight);
@@ -116,20 +116,19 @@ GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap);
 
 
 gboolean cairo_dock_get_xwindow_type (Window Xid, Window *pTransientFor);
+
+gboolean cairo_dock_xcomposite_is_available (void);
 #endif
 
 
 gboolean cairo_dock_property_is_present_on_root (const gchar *cPropertyName);  // env-manager
 
-gboolean cairo_dock_support_X_extension (void);
-gboolean cairo_dock_xcomposite_is_available (void);
-gboolean cairo_dock_xtest_is_available (void);
-gboolean cairo_dock_xinerama_is_available (void);
+gboolean cairo_dock_xtest_is_available (void);  // cairo_dock_trigger_shortkey
+
 gboolean cairo_dock_check_xrandr (int major, int minor);  // returns TRUE if the version is supported
 
 void cairo_dock_set_strut_partial (int Xid, int left, int right, int top, int bottom, int left_start_y, int left_end_y, int right_start_y, int right_end_y, int top_start_x, int top_end_x, int bottom_start_x, int bottom_end_x);  // dock/desklet
 
-Window cairo_dock_get_active_xwindow (void);  // gui-advanced
 gchar *cairo_dock_get_xwindow_class (Window Xid, gchar **cWMClass);  // gui-advanced
 int cairo_dock_get_xwindow_desktop (Window Xid);  // desklet
 void cairo_dock_get_xwindow_geometry (Window Xid, int *iLocalPositionX, int *iLocalPositionY, int *iWidthExtent, int *iHeightExtent);  // desklet

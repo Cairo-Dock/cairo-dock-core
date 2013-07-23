@@ -162,7 +162,7 @@ static gboolean _on_expose (G_GNUC_UNUSED GtkWidget *pWidget,
 	//\________________ OpenGL rendering
 	if (g_bUseOpenGL && pDock->pRenderer->render_opengl != NULL)
 	{
-		if (! gldi_glx_begin_draw_container_full (CAIRO_CONTAINER (pDock), area.x + area.y != 0 ? &area : NULL, TRUE))
+		if (! gldi_gl_container_begin_draw_full (CAIRO_CONTAINER (pDock), area.x + area.y != 0 ? &area : NULL, TRUE))
 			return FALSE;
 		
 		if (cairo_dock_is_loading ())
@@ -178,7 +178,7 @@ static gboolean _on_expose (G_GNUC_UNUSED GtkWidget *pWidget,
 			gldi_object_notify (pDock, NOTIFICATION_RENDER, pDock, NULL);
 		}
 		
-		gldi_glx_end_draw_container (CAIRO_CONTAINER (pDock));
+		gldi_gl_container_end_draw (CAIRO_CONTAINER (pDock));
 	}
 	else if (! g_bUseOpenGL && pDock->pRenderer->render != NULL)
 	{
@@ -1150,7 +1150,7 @@ static gboolean _on_button_press (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventButt
 	}
 	else if (pButton->button == 3 && pButton->type == GDK_BUTTON_PRESS)  // clique droit.
 	{
-		GtkWidget *menu = cairo_dock_build_menu (icon, CAIRO_CONTAINER (pDock));  // genere un CAIRO_DOCK_BUILD_CONTAINER_MENU et CAIRO_DOCK_BUILD_ICON_MENU.
+		GtkWidget *menu = gldi_container_build_menu (CAIRO_CONTAINER (pDock), icon);  // genere un CAIRO_DOCK_BUILD_CONTAINER_MENU et CAIRO_DOCK_BUILD_ICON_MENU.
 		
 		cairo_dock_popup_menu_on_icon (menu, icon, CAIRO_CONTAINER (pDock));
 	}
@@ -1243,7 +1243,7 @@ static gboolean _on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, Ca
 		// update the GL context
 		if (g_bUseOpenGL)
 		{
-			if (! gldi_glx_make_current (CAIRO_CONTAINER (pDock)))
+			if (! gldi_gl_container_make_current (CAIRO_CONTAINER (pDock)))
 				return FALSE;
 			
 			cairo_dock_set_ortho_view (CAIRO_CONTAINER (pDock));

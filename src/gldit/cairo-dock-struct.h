@@ -451,6 +451,10 @@ typedef struct _GldiWindowManagerBackend GldiWindowManagerBackend;
 
 typedef struct _GldiWindowActor GldiWindowActor;
 
+typedef struct _GldiContainerManagerBackend GldiContainerManagerBackend;
+
+typedef struct _GldiGLManagerBackend GldiGLManagerBackend;
+
 typedef void (* _CairoDockForeachIconFunc) (Icon *icon, GldiContainer *pContainer, gpointer data);
 typedef _CairoDockForeachIconFunc CairoDockForeachIconFunc;
 
