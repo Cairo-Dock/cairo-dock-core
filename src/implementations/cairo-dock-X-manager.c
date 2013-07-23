@@ -25,6 +25,7 @@
 #include <signal.h>
 
 #include <cairo.h>
+#include <gdk/gdkx.h>  // GDK_WINDOW_XID
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
@@ -36,8 +37,10 @@
 #include "cairo-dock-applications-manager.h"  // myTaskbarParam.iMinimizedWindowRenderType
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-windows-manager.h"
+#include "cairo-dock-container.h"  // GldiContainerManagerBackend
 #define _X_MANAGER_
 #include "cairo-dock-X-utilities.h"
+#include "cairo-dock-glx.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-X-manager.h"
 
@@ -47,7 +50,7 @@
 GldiManager myXMgr;
 GldiObjectManager myXObjectMgr;
 
-// dependancies
+// dependencies
 extern GldiContainer *g_pPrimaryContainer;
 //extern int g_iDamageEvent;
 
@@ -212,7 +215,7 @@ static void _on_change_desktop_geometry (void)
 static void _update_backing_pixmap (GldiXWindowActor *actor)
 {
 #ifdef HAVE_XEXTEND
-	if (myTaskbarParam.bShowAppli && myTaskbarParam.iMinimizedWindowRenderType == 1)
+	if (myTaskbarParam.bShowAppli && myTaskbarParam.iMinimizedWindowRenderType == 1 && cairo_dock_xcomposite_is_available ())
 	{
 		if (actor->iBackingPixmap != 0)
 			XFreePixmap (s_XDisplay, actor->iBackingPixmap);
@@ -509,7 +512,7 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 			}
 			else if (event.type == ConfigureNotify)
 			{
-				if (xactor->bIgnored)  // skip taskbar
+				if (xactor->bIgnored)  // skip taskbar  /// TODO: don't skip if XTransientFor != 0 ?...
 					continue;
 				// update the actor
 				int x = event.xconfigure.x, y = event.xconfigure.y;
@@ -810,6 +813,69 @@ static guint _get_id (GldiWindowActor *actor)
 	return xactor->Xid;
 }
 
+
+  /////////////////////////////////
+ /// CONTAINER MANAGER BACKEND ///
+/////////////////////////////////
+
+#define _gldi_container_get_Xid(pContainer) GDK_WINDOW_XID (gldi_container_get_gdk_window(pContainer))
+
+static void _reserve_space (GldiContainer *pContainer, int left, int right, int top, int bottom, int left_start_y, int left_end_y, int right_start_y, int right_end_y, int top_start_x, int top_end_x, int bottom_start_x, int bottom_end_x)
+{
+	Window Xid = _gldi_container_get_Xid (pContainer);
+	cairo_dock_set_strut_partial (Xid, left, right, top, bottom, left_start_y, left_end_y, right_start_y, right_end_y, top_start_x, top_end_x, bottom_start_x, bottom_end_x);
+}
+
+static int _get_current_desktop_index (GldiContainer *pContainer)
+{
+	Window Xid = _gldi_container_get_Xid (pContainer);
+	
+	int iDesktop = cairo_dock_get_xwindow_desktop (Xid);
+	
+	int iGlobalPositionX, iGlobalPositionY, iWidthExtent, iHeightExtent;
+	cairo_dock_get_xwindow_geometry (Xid, &iGlobalPositionX, &iGlobalPositionY, &iWidthExtent, &iHeightExtent);  // relative to the current viewport
+	if (iGlobalPositionX < 0)
+		iGlobalPositionX += g_desktopGeometry.iNbViewportX * gldi_desktop_get_width();
+	if (iGlobalPositionY < 0)
+		iGlobalPositionY += g_desktopGeometry.iNbViewportY * gldi_desktop_get_height();
+	
+	int iViewportX = iGlobalPositionX / gldi_desktop_get_width();
+	int iViewportY = iGlobalPositionY / gldi_desktop_get_height();
+	
+	int iCurrentDesktop, iCurrentViewportX, iCurrentViewportY;
+	gldi_desktop_get_current (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
+	
+	iViewportX += iCurrentViewportX;
+	if (iViewportX >= g_desktopGeometry.iNbViewportX)
+		iViewportX -= g_desktopGeometry.iNbViewportX;
+	iViewportY += iCurrentViewportY;
+	if (iViewportY >= g_desktopGeometry.iNbViewportY)
+		iViewportY -= g_desktopGeometry.iNbViewportY;
+	//g_print ("position : %d,%d,%d / %d,%d,%d\n", iDesktop, iViewportX, iViewportY, iCurrentDesktop, iCurrentViewportX, iCurrentViewportY);
+	
+	return iDesktop * g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY + iViewportX * g_desktopGeometry.iNbViewportY + iViewportY;
+}
+
+static void _move (GldiContainer *pContainer, int iNumDesktop, int iAbsolutePositionX, int iAbsolutePositionY)
+{
+	Window Xid = _gldi_container_get_Xid (pContainer);
+	cairo_dock_move_xwindow_to_absolute_position (Xid, iNumDesktop, iAbsolutePositionX, iAbsolutePositionY);
+}
+
+static gboolean _is_active (GldiContainer *pContainer)
+{
+	Window Xid = _gldi_container_get_Xid (pContainer);
+	return (Xid == s_iCurrentActiveWindow);
+}
+
+static void _present (GldiContainer *pContainer)
+{
+	Window Xid = _gldi_container_get_Xid (pContainer);
+	cairo_dock_show_xwindow (Xid);
+	//gtk_window_present_with_time (GTK_WINDOW ((pContainer)->pWidget), gdk_x11_get_server_time (gldi_container_get_gdk_window(pContainer)))  // to avoid the focus steal prevention.
+}
+
+
   ////////////
  /// INIT ///
 ////////////
@@ -907,6 +973,17 @@ static void init (void)
 	wmb.can_minimize_maximize_close = _can_minimize_maximize_close;
 	wmb.get_id = _get_id;
 	gldi_windows_manager_register_backend (&wmb);
+	
+	GldiContainerManagerBackend cmb;
+	memset (&cmb, 0, sizeof (GldiContainerManagerBackend));
+	cmb.reserve_space = _reserve_space;
+	cmb.get_current_desktop_index = _get_current_desktop_index;
+	cmb.move = _move;
+	cmb.is_active = _is_active;
+	cmb.present = _present;
+	gldi_container_manager_register_backend (&cmb);
+	
+	gldi_register_glx_backend ();
 }
 
 
@@ -944,7 +1021,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	
 	// get window thumbnail
 	#ifdef HAVE_XEXTEND
-	if (myTaskbarParam.bShowAppli && myTaskbarParam.iMinimizedWindowRenderType == 1)
+	if (myTaskbarParam.bShowAppli && myTaskbarParam.iMinimizedWindowRenderType == 1 && cairo_dock_xcomposite_is_available ())
 	{
 		XCompositeRedirectWindow (s_XDisplay, Xid, CompositeRedirectAutomatic);  // redirect the window content to the backing pixmap (the WM may or may not already do this).
 		xactor->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, Xid);
