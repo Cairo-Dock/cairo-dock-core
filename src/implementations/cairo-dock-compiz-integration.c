@@ -17,15 +17,18 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "gldi-config.h"
+#ifdef HAVE_X11
 #include <X11/Xatom.h>
 #include <gdk/gdkx.h>  // GDK_WINDOW_XID
+#endif
+
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dbus.h"
 #include "cairo-dock-desktop-manager.h"
-#include "cairo-dock-X-utilities.h"
 #include "cairo-dock-windows-manager.h"
-#include "cairo-dock-container.h"  // gldi_container_get_Xid
+#include "cairo-dock-container.h"  // gldi_container_get_gdk_window
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-launcher-manager.h"  // cairo_dock_launch_command_sync
 #include "cairo-dock-utils.h"  // cairo_dock_launch_command_sync
@@ -35,9 +38,13 @@
 static DBusGProxy *s_pScaleProxy = NULL;
 static DBusGProxy *s_pExposeProxy = NULL;
 static DBusGProxy *s_pWidgetLayerProxy = NULL;
-static Atom s_aCompizWidget = 0;
 
+#ifdef HAVE_X11
+static Atom s_aCompizWidget = 0;
 #define _get_root_id(...) DefaultRootWindow (gdk_x11_get_default_xdisplay ())
+#else
+#define _get_root_id(...) 0  /// can it still work with 0 ?...
+#endif
 
 static gboolean present_windows (void)
 {
@@ -151,6 +158,7 @@ static gboolean show_widget_layer (void)
 	return bSuccess;
 }
 
+#ifdef HAVE_X11
 static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, G_GNUC_UNUSED gpointer data)
 {
 	cd_debug ("%s ()", __func__);
@@ -232,10 +240,12 @@ static gboolean _check_widget_plugin (G_GNUC_UNUSED gpointer data)
 	
 	return FALSE;
 }
+#endif  // else not used
 static gboolean set_on_widget_layer (GldiContainer *pContainer, gboolean bOnWidgetLayer)
 {
+	#ifdef HAVE_X11
 	cd_debug ("%s ()", __func__);
-	Window Xid = gldi_container_get_Xid (pContainer);
+	Window Xid = GDK_WINDOW_XID (gldi_container_get_gdk_window(pContainer));
 	static gboolean s_bFirst = TRUE;
 	Display *dpy = gdk_x11_get_default_xdisplay ();
 	if (bOnWidgetLayer)
@@ -263,6 +273,11 @@ static gboolean set_on_widget_layer (GldiContainer *pContainer, gboolean bOnWidg
 			s_aCompizWidget);
 	}
 	return TRUE;
+	#else
+	(void)pContainer;  // avoid unused parameter
+	(void)bOnWidgetLayer;  // avoid unused parameter
+	return FALSE;
+	#endif
 }
 
 

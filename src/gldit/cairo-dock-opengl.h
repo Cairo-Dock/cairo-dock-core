@@ -17,14 +17,12 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef __CAIRO_DOCK_OPENGL__
 #define  __CAIRO_DOCK_OPENGL__
 
 #include <glib.h>
 
-#include <GL/glx.h>
-
+#include "gldi-config.h"
 #include "cairo-dock-struct.h"
 #include "cairo-dock-container.h"
 
@@ -36,14 +34,6 @@ G_BEGIN_DECLS
 
 /// This strucure summarizes the available OpenGL configuration on the system.
 struct _CairoDockGLConfig {
-	GLXContext context;
-	XVisualInfo *pVisInfo;
-	#if (GTK_MAJOR_VERSION < 3)
-	Colormap xcolormap;
-	GdkColormap *pColormap;
-	#else  // GTK3
-	GdkVisual *pGdkVisual;
-	#endif
 	gboolean bIndirectRendering;
 	gboolean bAlphaAvailable;
 	gboolean bStencilBufferAvailable;
@@ -51,9 +41,19 @@ struct _CairoDockGLConfig {
 	gboolean bFboAvailable;
 	gboolean bNonPowerOfTwoAvailable;
 	gboolean bTextureFromPixmapAvailable;
-	// texture from pixmap
-	void (*bindTexImage) (Display *display, GLXDrawable drawable, int buffer, int *attribList);
-	void (*releaseTexImage) (Display *display, GLXDrawable drawable, int buffer);
+	// GLX-backend's data
+	#ifdef HAVE_GLX
+	GLXContext context;
+	XVisualInfo *pVisInfo;
+	#if (GTK_MAJOR_VERSION < 3)  // GTK2
+	Colormap xcolormap;
+	GdkColormap *pColormap;
+	#else  // GTK3
+	GdkVisual *pGdkVisual;
+	#endif
+	void (*bindTexImage) (Display *display, GLXDrawable drawable, int buffer, int *attribList);  // texture from pixmap
+	void (*releaseTexImage) (Display *display, GLXDrawable drawable, int buffer);  // texture from pixmap
+	#endif
 };
 
 struct _GldiGLManagerBackend {
@@ -67,9 +67,9 @@ struct _GldiGLManagerBackend {
 	
 
 
-  ///////////////////
- // CONFIGURATION //
-///////////////////
+  /////////////
+ // BACKEND //
+/////////////
 /** Initialize the OpenGL backend, by trying to get a suitable GLX configuration.
 *@param bForceOpenGL whether to force the use of OpenGL, or let the function decide.
 *@return TRUE if OpenGL is usable.
@@ -85,9 +85,9 @@ void gldi_gl_backend_deactivate (void);
 void gldi_gl_backend_force_indirect_rendering (void);
 
 
-  /////////////
- // CONTEXT //
-/////////////
+  ///////////////
+ // CONTAINER //
+///////////////
 
 /** Make a Container's OpenGL context the current one.
 *@param pContainer the container

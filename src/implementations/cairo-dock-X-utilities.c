@@ -17,6 +17,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "gldi-config.h"
+#ifdef HAVE_X11
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
@@ -24,7 +26,6 @@
 #ifdef HAVE_XEXTEND
 #include <X11/extensions/Xcomposite.h>
 //#include <X11/extensions/Xdamage.h>
-#include <X11/extensions/XTest.h>
 #ifdef HAVE_XINERAMA
 #include <X11/extensions/Xinerama.h>  // Note: Xinerama is deprecated by XRandr >= 1.3
 #endif
@@ -32,12 +33,10 @@
 #endif
 
 #include "cairo-dock-log.h"
-#include "cairo-dock-utils.h"  // cairo_dock_remove_version_from_string
+#include "cairo-dock-utils.h"  // cairo_dock_remove_version_from_string, cairo_dock_check_xrandr
 #include "cairo-dock-surface-factory.h"  // cairo_dock_create_surface_from_xicon_buffer
 #include "cairo-dock-desktop-manager.h"
-#include "cairo-dock-opengl.h"
-#include "cairo-dock-class-manager.h"  // cairo_dock_remove_version_from_string
-#define _X_MANAGER_
+#include "cairo-dock-opengl.h"  // for texture_from_pixmap
 #include "cairo-dock-X-utilities.h"
 
 #if (GTK_MAJOR_VERSION >= 3)
@@ -50,10 +49,8 @@ extern gboolean g_bEasterEggs;
 extern CairoDockGLConfig g_openglConfig;
 
 static gboolean s_bUseXComposite = TRUE;
-static gboolean s_bUseXTest = TRUE;
 static gboolean s_bUseXinerama = TRUE;
 static gboolean s_bUseXrandr = TRUE;
-static gint s_iXrandrMajor = 0,  s_iXrandrMinor = 0;
 //extern int g_iDamageEvent;
 
 static Display *s_XDisplay = NULL;
@@ -127,42 +124,42 @@ Display *cairo_dock_initialize_X_desktop_support (void)
 	
 	cairo_dock_support_X_extension ();
 	
-	s_aNetWmWindowType		= XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE", False);
-	s_aNetWmWindowTypeNormal	= XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_NORMAL", False);
-	s_aNetWmWindowTypeDialog	= XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_DIALOG", False);
-	s_aNetWmWindowTypeDock		= XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_DOCK", False);
-	s_aNetWmIconGeometry		= XInternAtom (s_XDisplay, "_NET_WM_ICON_GEOMETRY", False);
-	s_aNetCurrentDesktop		= XInternAtom (s_XDisplay, "_NET_CURRENT_DESKTOP", False);
-	s_aNetDesktopViewport		= XInternAtom (s_XDisplay, "_NET_DESKTOP_VIEWPORT", False);
-	s_aNetDesktopGeometry		= XInternAtom (s_XDisplay, "_NET_DESKTOP_GEOMETRY", False);
-	s_aNetNbDesktops			= XInternAtom (s_XDisplay, "_NET_NUMBER_OF_DESKTOPS", False);
-	s_aNetDesktopNames			= XInternAtom (s_XDisplay, "_NET_DESKTOP_NAMES", False);
-	s_aRootMapID				= XInternAtom (s_XDisplay, "_XROOTPMAP_ID", False);
-	
-	s_aNetClientListStacking	= XInternAtom (s_XDisplay, "_NET_CLIENT_LIST_STACKING", False);
-	s_aNetClientList			= XInternAtom (s_XDisplay, "_NET_CLIENT_LIST", False);
-	s_aNetActiveWindow		= XInternAtom (s_XDisplay, "_NET_ACTIVE_WINDOW", False);
-	s_aNetWmState			= XInternAtom (s_XDisplay, "_NET_WM_STATE", False);
-	s_aNetWmFullScreen		= XInternAtom (s_XDisplay, "_NET_WM_STATE_FULLSCREEN", False);
-	s_aNetWmAbove			= XInternAtom (s_XDisplay, "_NET_WM_STATE_ABOVE", False);
-	s_aNetWmBelow			= XInternAtom (s_XDisplay, "_NET_WM_STATE_BELOW", False);
-	s_aNetWmSticky			= XInternAtom (s_XDisplay, "_NET_WM_STATE_STICKY", False);
-	s_aNetWmHidden			= XInternAtom (s_XDisplay, "_NET_WM_STATE_HIDDEN", False);
-	s_aNetWmSkipTaskbar 		= XInternAtom (s_XDisplay, "_NET_WM_STATE_SKIP_TASKBAR", False);
-	s_aNetWmMaximizedHoriz		= XInternAtom (s_XDisplay, "_NET_WM_STATE_MAXIMIZED_HORZ", False);
-	s_aNetWmMaximizedVert		= XInternAtom (s_XDisplay, "_NET_WM_STATE_MAXIMIZED_VERT", False);
-	s_aNetWmDemandsAttention	= XInternAtom (s_XDisplay, "_NET_WM_STATE_DEMANDS_ATTENTION", False);
-	s_aNetWMAllowedActions		= XInternAtom (s_XDisplay, "_NET_WM_ALLOWED_ACTIONS", False);
-	s_aNetWMActionMinimize		= XInternAtom (s_XDisplay, "_NET_WM_ACTION_MINIMIZE", False);
-	s_aNetWMActionMaximizeHorz	= XInternAtom (s_XDisplay, "_NET_WM_ACTION_MAXIMIZE_HORZ", False);
-	s_aNetWMActionMaximizeVert	= XInternAtom (s_XDisplay, "_NET_WM_ACTION_MAXIMIZE_VERT", False);
-	s_aNetWMActionClose		= XInternAtom (s_XDisplay, "_NET_WM_ACTION_CLOSE", False);
-	s_aNetWmDesktop			= XInternAtom (s_XDisplay, "_NET_WM_DESKTOP", False);
-	s_aNetWmIcon 			= XInternAtom (s_XDisplay, "_NET_WM_ICON", False);
-	s_aNetWmName 			= XInternAtom (s_XDisplay, "_NET_WM_NAME", False);
-	s_aWmName 				= XInternAtom (s_XDisplay, "WM_NAME", False);
-	s_aUtf8String 			= XInternAtom (s_XDisplay, "UTF8_STRING", False);
-	s_aString 				= XInternAtom (s_XDisplay, "STRING", False);
+	s_aNetWmWindowType          = XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE", False);
+    s_aNetWmWindowTypeNormal    = XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_NORMAL", False);
+    s_aNetWmWindowTypeDialog    = XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_DIALOG", False);
+    s_aNetWmWindowTypeDock      = XInternAtom (s_XDisplay, "_NET_WM_WINDOW_TYPE_DOCK", False);
+    s_aNetWmIconGeometry        = XInternAtom (s_XDisplay, "_NET_WM_ICON_GEOMETRY", False);
+    s_aNetCurrentDesktop        = XInternAtom (s_XDisplay, "_NET_CURRENT_DESKTOP", False);
+    s_aNetDesktopViewport       = XInternAtom (s_XDisplay, "_NET_DESKTOP_VIEWPORT", False);
+    s_aNetDesktopGeometry       = XInternAtom (s_XDisplay, "_NET_DESKTOP_GEOMETRY", False);
+    s_aNetNbDesktops            = XInternAtom (s_XDisplay, "_NET_NUMBER_OF_DESKTOPS", False);
+    s_aNetDesktopNames          = XInternAtom (s_XDisplay, "_NET_DESKTOP_NAMES", False);
+    s_aRootMapID                = XInternAtom (s_XDisplay, "_XROOTPMAP_ID", False);
+    
+    s_aNetClientListStacking    = XInternAtom (s_XDisplay, "_NET_CLIENT_LIST_STACKING", False);
+    s_aNetClientList            = XInternAtom (s_XDisplay, "_NET_CLIENT_LIST", False);
+    s_aNetActiveWindow          = XInternAtom (s_XDisplay, "_NET_ACTIVE_WINDOW", False);
+    s_aNetWmState               = XInternAtom (s_XDisplay, "_NET_WM_STATE", False);
+    s_aNetWmFullScreen          = XInternAtom (s_XDisplay, "_NET_WM_STATE_FULLSCREEN", False);
+    s_aNetWmAbove               = XInternAtom (s_XDisplay, "_NET_WM_STATE_ABOVE", False);
+    s_aNetWmBelow               = XInternAtom (s_XDisplay, "_NET_WM_STATE_BELOW", False);
+    s_aNetWmSticky              = XInternAtom (s_XDisplay, "_NET_WM_STATE_STICKY", False);
+    s_aNetWmHidden              = XInternAtom (s_XDisplay, "_NET_WM_STATE_HIDDEN", False);
+    s_aNetWmSkipTaskbar         = XInternAtom (s_XDisplay, "_NET_WM_STATE_SKIP_TASKBAR", False);
+    s_aNetWmMaximizedHoriz      = XInternAtom (s_XDisplay, "_NET_WM_STATE_MAXIMIZED_HORZ", False);
+    s_aNetWmMaximizedVert       = XInternAtom (s_XDisplay, "_NET_WM_STATE_MAXIMIZED_VERT", False);
+    s_aNetWmDemandsAttention    = XInternAtom (s_XDisplay, "_NET_WM_STATE_DEMANDS_ATTENTION", False);
+    s_aNetWMAllowedActions      = XInternAtom (s_XDisplay, "_NET_WM_ALLOWED_ACTIONS", False);
+    s_aNetWMActionMinimize      = XInternAtom (s_XDisplay, "_NET_WM_ACTION_MINIMIZE", False);
+    s_aNetWMActionMaximizeHorz  = XInternAtom (s_XDisplay, "_NET_WM_ACTION_MAXIMIZE_HORZ", False);
+    s_aNetWMActionMaximizeVert  = XInternAtom (s_XDisplay, "_NET_WM_ACTION_MAXIMIZE_VERT", False);
+    s_aNetWMActionClose         = XInternAtom (s_XDisplay, "_NET_WM_ACTION_CLOSE", False);
+    s_aNetWmDesktop             = XInternAtom (s_XDisplay, "_NET_WM_DESKTOP", False);
+    s_aNetWmIcon                = XInternAtom (s_XDisplay, "_NET_WM_ICON", False);
+    s_aNetWmName                = XInternAtom (s_XDisplay, "_NET_WM_NAME", False);
+    s_aWmName                   = XInternAtom (s_XDisplay, "WM_NAME", False);
+    s_aUtf8String               = XInternAtom (s_XDisplay, "UTF8_STRING", False);
+    s_aString                   = XInternAtom (s_XDisplay, "STRING", False);
 	
 	Screen *XScreen = XDefaultScreenOfDisplay (s_XDisplay);
 	
@@ -350,23 +347,6 @@ gboolean cairo_dock_update_screen_geometry (void)
 	return bNewSize;
 }
 
-
-gboolean cairo_dock_property_is_present_on_root (const gchar *cPropertyName)
-{
-	g_return_val_if_fail (s_XDisplay != NULL, FALSE);
-	Atom atom = XInternAtom (s_XDisplay, cPropertyName, False);
-	Window root = DefaultRootWindow (s_XDisplay);
-	int iNbProperties;
-	Atom *pAtomList = XListProperties (s_XDisplay, root, &iNbProperties);
-	int i;
-	for (i = 0; i < iNbProperties; i ++)
-	{
-		if (pAtomList[i] == atom)
-			break;
-	}
-	XFree (pAtomList);
-	return (i != iNbProperties);
-}
 
 gchar **cairo_dock_get_desktops_names (void)
 {
@@ -786,14 +766,6 @@ static gboolean cairo_dock_support_X_extension (void)
 		return FALSE;
 	}*/
 	
-	// check for XTest
-	major = 0, minor = 0;
-	if (! XTestQueryExtension (s_XDisplay, &event_base, &error_base, &major, &minor))
-	{
-		cd_warning ("XTest extension not available.");
-		s_bUseXTest = FALSE;
-	}
-	
 	// check for Xinerama
 	#ifdef HAVE_XINERAMA
 	if (! XineramaQueryExtension (s_XDisplay, &event_base, &error_base))
@@ -806,26 +778,12 @@ static gboolean cairo_dock_support_X_extension (void)
 	#endif
 	
 	// check for Xrandr >= 1.3
-	if (! XRRQueryExtension (s_XDisplay, &event_base, &error_base))
-	{
-		cd_warning ("Xrandr extension not available.");
-		s_bUseXrandr = FALSE;
-	}
-	else
-	{
-		XRRQueryVersion (s_XDisplay, &s_iXrandrMajor, &s_iXrandrMinor);
-		if (! cairo_dock_check_xrandr (1, 3))  // 1.3 is required to have XRRGetCrtcInfo
-		{
-			cd_warning ("Xrandr extension is too old (%d.%d) to use XRRGetCrtcInfo", s_iXrandrMajor, s_iXrandrMinor);
-			s_bUseXrandr = FALSE;
-		}
-	}
+	s_bUseXrandr = cairo_dock_check_xrandr (1, 3);
 	
 	return TRUE;
 #else
 	cd_warning ("The dock was not compiled with the X extensions (XComposite, Xinerama, Xtest, Xrandr, etc).");
 	s_bUseXComposite = FALSE;
-	s_bUseXTest = FALSE;
 	s_bUseXinerama = FALSE;
 	s_bUseXrandr = FALSE;
 	return FALSE;
@@ -836,22 +794,6 @@ gboolean cairo_dock_xcomposite_is_available (void)
 {
 	return s_bUseXComposite;
 }
-
-gboolean cairo_dock_xtest_is_available (void)
-{
-	return s_bUseXTest;
-}
-
-/**gboolean cairo_dock_xinerama_is_available (void)
-{
-	return s_bUseXinerama;
-}*/
-
-gboolean cairo_dock_check_xrandr (int major, int minor)
-{
-	return (s_iXrandrMajor > major || (s_iXrandrMajor == major && s_iXrandrMinor >= minor));  // if XRandr is not available, the version will stay at 0.0 and therefore the function will always return FALSE.
-}
-
 
 
 void cairo_dock_set_xwindow_timestamp (Window Xid, gulong iTimeStamp)
@@ -865,7 +807,7 @@ void cairo_dock_set_xwindow_timestamp (Window Xid, gulong iTimeStamp)
 		(guchar *)&iTimeStamp, 1);
 }
 
-void cairo_dock_set_strut_partial (int Xid, int left, int right, int top, int bottom, int left_start_y, int left_end_y, int right_start_y, int right_end_y, int top_start_x, int top_end_x, int bottom_start_x, int bottom_end_x)
+void cairo_dock_set_strut_partial (Window Xid, int left, int right, int top, int bottom, int left_start_y, int left_end_y, int right_start_y, int right_end_y, int top_start_x, int top_end_x, int bottom_start_x, int bottom_end_x)
 {
 	g_return_if_fail (Xid > 0);
 	//g_print ("%s (%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d\n", __func__, left, right, top, bottom, left_start_y, left_end_y, right_start_y, right_end_y, top_start_x, top_end_x, bottom_start_x, bottom_end_x);
@@ -1643,6 +1585,7 @@ cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, int iWidth,
 // Bind redirected window to texture:
 GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 {
+	#ifdef HAVE_GLX
 	if (!g_bEasterEggs)
 		return 0;  /// works for some windows (gnome-terminal) but not for all ... still need to figure why.
 	
@@ -1755,6 +1698,10 @@ GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 	g_openglConfig.releaseTexImage (display, glxpixmap, GLX_FRONT_LEFT_EXT);
 	glXDestroyGLXPixmap (display, glxpixmap);
 	return texture;
+	
+	#else
+	return 0;
+	#endif
 }
 
 
@@ -1826,107 +1773,5 @@ gboolean cairo_dock_get_xwindow_type (Window Xid, Window *pTransientFor)
 	}
 	return bKeep;
 }
-/*
-void gldi_x_window_actor_init (gpointer _xactor, Window Xid)
-{
-	GldiXWindowActor *xactor = (GldiXWindowActor*)_xactor;
-	GldiWindowActor *actor = (GldiWindowActor *)xactor;
-	xactor->Xid = Xid;
-	xactor->bIgnored = TRUE;
-	
-	Atom aReturnedType = 0;
-	int aReturnedFormat = 0;
-	unsigned long iLeftBytes, iBufferNbElements;
-	
-	//\__________________ see if we should skip it
-	gboolean bShowInTaskbar = FALSE, bIsHidden = FALSE, bIsFullScreen = FALSE, bIsMaximized = FALSE, bDemandsAttention = FALSE;
-	bShowInTaskbar = cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Xid, &bIsFullScreen, &bIsHidden, &bIsMaximized, &bDemandsAttention);
-	if (!bShowInTaskbar)
-	{
-		cd_debug ("  cette fenetre est timide");
-		return;
-	}
 
-	//\__________________ filter from its type (only take normal windows, and dialogs that are not transient)
-	/// TODO: consider keeping dialogs and utilities/toolbox, with displayed=false, for dock visibility...
-	gulong *pTypeBuffer = NULL;
-	cd_debug (" + nouvelle icone d'appli (%d)", Xid);
-	XGetWindowProperty (s_XDisplay, Xid, s_aNetWmWindowType, 0, G_MAXULONG, False, XA_ATOM, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pTypeBuffer);
-	if (iBufferNbElements != 0)
-	{
-		gboolean bKeep = FALSE;
-		guint i;
-		for (i = 0; i < iBufferNbElements; i ++)  // The Client SHOULD specify window types in order of preference (the first being most preferable) but MUST include at least one of the basic window type atoms.
-		{
-			if (pTypeBuffer[i] == s_aNetWmWindowTypeNormal)  // normal window -> take it
-			{
-				bKeep = TRUE;
-				break;
-			}
-			if (pTypeBuffer[i] == s_aNetWmWindowTypeDialog)  // dialog -> skip modal dialog, because it's most probably a dialog box (like an open/save dialog)
-			{
-				XGetTransientForHint (s_XDisplay, Xid, &xactor->XTransientFor);  // maybe we should also get the _NET_WM_STATE_MODAL property, although if a dialog is set modal but not transient, that would probably be an error from the application.
-				if (xactor->XTransientFor == None)
-				{
-					bKeep = TRUE;
-					break;
-				}  // else it's a transient dialog, don't keep it, unless it also has the "normal" type further in the buffer.
-			}  // skip any other type (dock, menu, etc)
-			else if (pTypeBuffer[i] == s_aNetWmWindowTypeDock)  // workaround for the Unity-panel: if the type 'dock' is present, don't look further (as they add the 'normal' type too, which is non-sense).
-			{
-				break;
-			}
-		}
-		XFree (pTypeBuffer);
-		if (! bKeep)
-		{
-			cd_debug ("ignore this window");
-			return;
-		}
-	}
-	else  // no type, take it by default, unless it's transient.
-	{
-		XGetTransientForHint (s_XDisplay, Xid, &xactor->XTransientFor);
-		if (xactor->XTransientFor != None)
-		{
-			cd_debug ("  transient window => skip it");
-			return;
-		}
-	}
-	
-	//\__________________ get its name and class
-	gchar *cName = cairo_dock_get_xwindow_name (Xid, TRUE);
-	
-	gchar *cClass, *cWmClass = NULL;
-	cClass = cairo_dock_get_xwindow_class (Xid, &cWmClass);
-	if (cClass == NULL)
-	{
-		cd_warning ("this window (%s, %ld) doesn't belong to any class, skip it.\nPlease report this bug to the application's devs.", cName, Xid);
-		return;
-	}
-	
-	//\__________________ from now, the window is interesting for us -> fill its properties
-	cd_debug (" retrieving '%s' (id: %ld, class: %s, hidden: %d)...", cName, Xid, cClass, bIsHidden);
-	xactor->bIgnored = FALSE;
-	actor->cName = (cName ? cName : g_strdup (cClass));
-	actor->cClass = cClass;  // we'll register the class during the loading of the icon, since it can take some time, and we don't really need the class params right now.
-	actor->cWmClass = cWmClass;
-	actor->bIsHidden = bIsHidden;
-	actor->bIsMaximized = bIsMaximized;
-	actor->bIsFullScreen = bIsFullScreen;
-	actor->bDemandsAttention = bDemandsAttention;
-	
-	actor->iNumDesktop = cairo_dock_get_xwindow_desktop (Xid);
-	
-	int iLocalPositionX=0, iLocalPositionY=0, iWidthExtent=0, iHeightExtent=0;
-	cairo_dock_get_xwindow_geometry (Xid, &iLocalPositionX, &iLocalPositionY, &iWidthExtent, &iHeightExtent);
-	
-	actor->iViewPortX = iLocalPositionX / g_desktopGeometry.Xscreen.width + g_desktopGeometry.iCurrentViewportX;
-	actor->iViewPortY = iLocalPositionY / g_desktopGeometry.Xscreen.height + g_desktopGeometry.iCurrentViewportY;
-	
-	actor->windowGeometry.x = iLocalPositionX;
-	actor->windowGeometry.y = iLocalPositionY;
-	actor->windowGeometry.width = iWidthExtent;
-	actor->windowGeometry.height = iHeightExtent;
-	actor->bIsTransientFor = (xactor->XTransientFor != None);
-}*/
+#endif

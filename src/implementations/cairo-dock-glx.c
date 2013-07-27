@@ -17,6 +17,9 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "gldi-config.h"
+#ifdef HAVE_GLX
+
 #include <GL/gl.h>
 #include <GL/glx.h>
 #include <gdk/gdkx.h>  // gdk_x11_get_default_xdisplay/GDK_WINDOW_XID
@@ -400,3 +403,11 @@ void gldi_register_glx_backend (void)
 	gmb.container_finish = _container_finish;
 	gldi_gl_manager_register_backend (&gmb);
 }
+
+#else
+#include "cairo-dock-log.h"
+void gldi_register_glx_backend (void)
+{
+	cd_warning ("Cairo-Dock was not built with GLX support, OpenGL will not be available");  // if we're here, we already have X support, so not having GLX is probably an error.
+}
+#endif

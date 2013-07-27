@@ -21,7 +21,10 @@
 #include "eggaccelerators.h"
 
 #include <string.h>
-#include <gdk/gdkx.h>
+#include "gldi-config.h"
+#ifdef HAVE_X11
+#include <gdk/gdkx.h>  // gdk_x11_get_default_xdisplay, also includes Xlib.h
+#endif
 
 enum
 {
@@ -44,7 +47,7 @@ typedef struct
 
 } EggModmap;
 
-const EggModmap* egg_keymap_get_modmap (GdkKeymap *keymap);
+static const EggModmap* egg_keymap_get_modmap (GdkKeymap *keymap);
 
 static inline gboolean
 is_alt (const gchar *string)
@@ -348,7 +351,37 @@ egg_accelerator_parse_virtual (const gchar            *accelerator,
 }
 
 
-/**
+void
+egg_keymap_resolve_virtual_modifiers (GdkKeymap              *keymap,
+                                      EggVirtualModifierType  virtual_mods,
+                                      GdkModifierType        *concrete_mods)
+{
+  GdkModifierType concrete;
+  int i;
+  const EggModmap *modmap;
+
+  g_return_if_fail (GDK_IS_KEYMAP (keymap));
+  g_return_if_fail (concrete_mods != NULL);
+  
+  modmap = egg_keymap_get_modmap (keymap);
+  
+  /* Not so sure about this algorithm. */
+  
+  concrete = 0;
+  i = 0;
+  while (i < EGG_MODMAP_ENTRY_LAST)
+    {
+      if (modmap->mapping[i] & virtual_mods)
+        concrete |= (1 << i);
+
+      ++i;
+    }
+
+  *concrete_mods = concrete;
+}
+
+
+/*
  * Converts an accelerator keyval and modifier mask
  * into a string parseable by egg_accelerator_parse_virtual().
  * For example, if you pass in #GDK_q and #EGG_VIRTUAL_CONTROL_MASK,
@@ -359,7 +392,7 @@ egg_accelerator_parse_virtual (const gchar            *accelerator,
  * @param accelerator_mods: accelerator modifier mask
  * @returns:          a newly-allocated accelerator name
  */
-gchar*
+/*gchar*
 egg_virtual_accelerator_name (guint                  accelerator_key,
                               EggVirtualModifierType accelerator_mods)
 {
@@ -474,34 +507,6 @@ egg_virtual_accelerator_name (guint                  accelerator_key,
   return accelerator;
 }
 
-void
-egg_keymap_resolve_virtual_modifiers (GdkKeymap              *keymap,
-                                      EggVirtualModifierType  virtual_mods,
-                                      GdkModifierType        *concrete_mods)
-{
-  GdkModifierType concrete;
-  int i;
-  const EggModmap *modmap;
-
-  g_return_if_fail (GDK_IS_KEYMAP (keymap));
-  g_return_if_fail (concrete_mods != NULL);
-  
-  modmap = egg_keymap_get_modmap (keymap);
-  
-  /* Not so sure about this algorithm. */
-  
-  concrete = 0;
-  i = 0;
-  while (i < EGG_MODMAP_ENTRY_LAST)
-    {
-      if (modmap->mapping[i] & virtual_mods)
-        concrete |= (1 << i);
-
-      ++i;
-    }
-
-  *concrete_mods = concrete;
-}
 
 void
 egg_keymap_virtualize_modifiers (GdkKeymap              *keymap,
@@ -517,7 +522,7 @@ egg_keymap_virtualize_modifiers (GdkKeymap              *keymap,
 
   modmap = egg_keymap_get_modmap (keymap);
   
-  /* Not so sure about this algorithm. */
+  // Not so sure about this algorithm.
   
   virtual = 0;
   i = 0;
@@ -538,9 +543,8 @@ egg_keymap_virtualize_modifiers (GdkKeymap              *keymap,
             }
           else
             {
-              /* Rather than dropping mod2->mod5 if not bound,
-               * go ahead and use the concrete names
-               */
+              // Rather than dropping mod2->mod5 if not bound,
+              // go ahead and use the concrete names
               virtual |= modmap->mapping[i];
             }
         }
@@ -549,8 +553,9 @@ egg_keymap_virtualize_modifiers (GdkKeymap              *keymap,
     }
   
   *virtual_mods = virtual;
-}
+}*/
 
+#ifdef HAVE_X11
 static void
 reload_modmap (GdkKeymap *keymap,
                EggModmap *modmap)
@@ -636,8 +641,11 @@ reload_modmap (GdkKeymap *keymap,
   
   XFreeModifiermap (xmodmap);
 }
+#else
+#define reload_modmap(...)
+#endif
 
-const EggModmap*
+static const EggModmap*
 egg_keymap_get_modmap (GdkKeymap *keymap)
 {
   EggModmap *modmap;
@@ -674,6 +682,7 @@ egg_keymap_get_modmap (GdkKeymap *keymap)
 
 int *egg_keystring_to_keysyms (const gchar *accelerator, int *iNbKeys)
 {
+	#ifdef HAVE_X11
 	int i = 0, iNbKeyMax = 10;  // on limite a 10, c'est bien assez.
 	gint *pKeySyms = g_new0 (int, iNbKeyMax);
 	const gchar *cKeyName;
@@ -745,7 +754,7 @@ int *egg_keystring_to_keysyms (const gchar *accelerator, int *iNbKeys)
 			{
 				accelerator += 7;
 				len -= 7;
-				cKeyName = "Hyper_L";  /// ?
+				cKeyName = "Hyper_L";
 			}
 			else if (len >= 7 && is_super (accelerator))
 			{
@@ -790,4 +799,9 @@ int *egg_keystring_to_keysyms (const gchar *accelerator, int *iNbKeys)
 	}
 	*iNbKeys = i;
 	return pKeySyms;
+	#else
+	(void)accelerator;  // avoid 'unused parameter' warning
+	*iNbKeys = 0;
+	return NULL;
+	#endif
 }

@@ -38,7 +38,6 @@
 #include "cairo-dock-packages.h"
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-desktop-manager.h"  // gldi_desktop_get_width
-#include "cairo-dock-X-utilities.h"
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-gui-backend.h"

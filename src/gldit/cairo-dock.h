@@ -25,7 +25,6 @@
 #include <string.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <GL/glx.h>
 
 #include <gldit/cairo-dock-struct.h>
 #include <gldit/gldi-config.h>
@@ -93,8 +92,6 @@
 #include <gldit/cairo-dock-packages.h>
 #include <gldit/cairo-dock-surface-factory.h>
 #include <gldit/cairo-dock-image-buffer.h>
-// X
-#include <gldit/cairo-dock-X-utilities.h>
 
 #include <gldit/cairo-dock-utils.h>
 

@@ -20,9 +20,6 @@
 #include <math.h>
 #include <GL/gl.h>
 #include <GL/glu.h>  // gluLookAt
-#include <GL/glx.h>
-#include <gdk/gdkx.h>  // gdk_x11_get_default_xdisplay/gldi_container_get_Xid
-#include <X11/extensions/Xrender.h>  // XRenderFindVisualFormat
 
 #include "cairo-dock-log.h"
 #include "cairo-dock-icon-facility.h"  // cairo_dock_get_icon_extent

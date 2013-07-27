@@ -29,31 +29,6 @@ G_BEGIN_DECLS
 * The X manager handles signals from X and dispatch them to the Windows manager and the Desktop manager.
 */
 
-// manager
-struct _GldiXManager {
-	GldiManager mgr;
-	} ;
-
-// no param (and the manager is not exported)
-
-// signals
-typedef enum {
-	NB_NOTIFICATIONS_X_MANAGER = NB_NOTIFICATIONS_WINDOWS
-	} CairoXManagerNotifications;
-
-// data
-typedef struct _GldiXWindowActor GldiXWindowActor;
-struct _GldiXWindowActor {
-	GldiWindowActor actor;
-	// X-specific
-	Window Xid;
-	gint iLastCheckTime;
-	Pixmap iBackingPixmap;
-	Window XTransientFor;
-	guint iDemandsAttention;  // a mask of XAttentionFlag
-	gboolean bIgnored;
-	};
-
 
 void gldi_register_X_manager (void);
 

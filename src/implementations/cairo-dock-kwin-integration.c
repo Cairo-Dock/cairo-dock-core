@@ -17,9 +17,12 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "gldi-config.h"
+#ifdef HAVE_X11
 #include <gdk/gdkx.h>  // gdk_x11_get_default_xdisplay
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
+#endif
 
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-desktop-manager.h"
@@ -27,8 +30,7 @@
 #include "cairo-dock-dbus.h"
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-dock-factory.h"
-#include "cairo-dock-X-manager.h"
-#include "cairo-dock-X-utilities.h"
+#include "cairo-dock-windows-manager.h"  // gldi_window_get_id
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-icon-manager.h"  // myIconsParam.fAmplitude
 #include "cairo-dock-kwin-integration.h"
@@ -65,6 +67,7 @@ static gboolean present_windows (void)
 
 static gboolean present_class (const gchar *cClass)
 {
+	#ifdef HAVE_X11
 	cd_debug ("%s (%s)", __func__, cClass);
 	GList *pIcons = (GList*)cairo_dock_list_existing_appli_with_class (cClass);
 	if (pIcons == NULL)
@@ -73,18 +76,22 @@ static gboolean present_class (const gchar *cClass)
 	Atom aPresentWindows = XInternAtom (gdk_x11_get_default_xdisplay(), "_KDE_PRESENT_WINDOWS_GROUP", False);
 	Window *data = g_new0 (Window, g_list_length (pIcons));
 	Icon *pOneIcon;
-	GldiXWindowActor *xactor;
+	GldiWindowActor *xactor;
 	GList *ic;
 	int i = 0;
 	for (ic = pIcons; ic != NULL; ic = ic->next)
 	{
 		pOneIcon = ic->data;
-		xactor = (GldiXWindowActor*)pOneIcon->pAppli;
-		data[i++] = xactor->Xid;
+		xactor = (GldiWindowActor*)pOneIcon->pAppli;
+		data[i++] = gldi_window_get_id (xactor);
 	}
 	XChangeProperty(gdk_x11_get_default_xdisplay(), data[0], aPresentWindows, aPresentWindows, 32, PropModeReplace, (unsigned char *)data, i);
 	g_free (data);
 	return TRUE;
+	#else
+	(void)cClass;  // avoid unused parameter
+	return FALSE;
+	#endif
 }
 
 static gboolean present_desktops (void)

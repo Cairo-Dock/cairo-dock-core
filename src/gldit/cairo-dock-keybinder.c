@@ -30,17 +30,19 @@
 
 #include <string.h>
 #include <sys/types.h>
+
 #include <gdk/gdk.h>
+#include "gldi-config.h"
+#ifdef HAVE_X11
 #include <gdk/gdkx.h>
 #include <X11/Xlib.h>
-#include "gldi-config.h"
+#endif
 #ifdef HAVE_XEXTEND
 #include <X11/extensions/XTest.h>
 #endif
 
 #include "eggaccelerators.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-X-utilities.h"
 #include "cairo-dock-keybinder.h"
 
 // public (manager, config, data)
@@ -70,6 +72,8 @@ lookup_ignorable_modifiers (GdkKeymap *keymap)
 					      EGG_VIRTUAL_SCROLL_LOCK_MASK,
 					      &scroll_lock_mask);
 }
+
+#ifdef HAVE_X11
 
 static void
 grab_ungrab_with_ignorable_modifiers (GdkWindow *rootwin,
@@ -210,6 +214,18 @@ filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, G_GNUC_UNUSED gpointer data
 	return return_val;
 }
 
+#else
+
+static gboolean do_grab_key (GldiShortkey *binding)
+{
+	cd_warning ("Cairo-Dock was not built with shortkey support - can't bind '%s'", binding->keystring);
+	return FALSE;
+}
+
+#define do_ungrab_key(binding) (void)binding  // avoid unused parameter
+
+#endif
+
 static void
 on_keymap_changed (G_GNUC_UNUSED GdkKeymap *map)
 {
@@ -229,7 +245,7 @@ on_keymap_changed (G_GNUC_UNUSED GdkKeymap *map)
 	for (iter = s_pKeyBindings; iter != NULL; iter = iter->next)
 	{
 		GldiShortkey *binding = (GldiShortkey *) iter->data;
-		do_grab_key (binding);
+		binding->bSuccess = do_grab_key (binding);
 	}
 }
 
@@ -305,6 +321,25 @@ void gldi_shortkeys_foreach (GFunc pCallback, gpointer data)
 }
 
 
+#ifdef HAVE_XEXTEND
+static gboolean cairo_dock_xtest_is_available (void)
+{
+	
+	static gboolean s_bChecked = FALSE;
+	static gboolean s_bUseXTest = FALSE;
+	if (!s_bChecked)
+	{
+		s_bChecked = TRUE;
+		Display *display = gdk_x11_get_default_xdisplay ();
+		int event_base, error_base, major = 0, minor = 0;
+		s_bUseXTest = XTestQueryExtension (display, &event_base, &error_base, &major, &minor);
+		if (!s_bUseXTest)
+			cd_warning ("XTest extension not available.");
+	}
+	return s_bUseXTest;
+}
+#endif
+
 gboolean cairo_dock_trigger_shortkey (const gchar *cKeyString)  // the idea was taken from xdo.
 {
 #ifdef HAVE_XEXTEND
@@ -334,6 +369,7 @@ gboolean cairo_dock_trigger_shortkey (const gchar *cKeyString)  // the idea was 
 	
 	return TRUE;
 #else
+	(void)cKeyString;  // avoid unused parameter
 	cd_warning ("The dock was not compiled with the support of XTest.");
 	return FALSE;
 #endif
@@ -348,14 +384,16 @@ gboolean cairo_dock_trigger_shortkey (const gchar *cKeyString)  // the idea was 
 static void init (void)
 {
 	GdkKeymap *keymap = gdk_keymap_get_default ();
-	GdkWindow *rootwin = gdk_get_default_root_window ();
-
+	
 	lookup_ignorable_modifiers (keymap);
 
+	#ifdef HAVE_X11
+	GdkWindow *rootwin = gdk_get_default_root_window ();
 	gdk_window_add_filter (rootwin,
 		filter_func,
 		NULL);
-
+	#endif
+	
 	g_signal_connect (keymap,
 		"keys_changed",
 		G_CALLBACK (on_keymap_changed),

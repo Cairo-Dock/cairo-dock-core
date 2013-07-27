@@ -2,10 +2,16 @@
 #ifndef __GLDI_INTERNAL_CONFIG_H__
 #define __GLDI_INTERNAL_CONFIG_H__
 
+/* Defined if we can use X. */
+#cmakedefine HAVE_X11 @HAVE_X11@
+
+/* Defined if we can use GLX. */
+#cmakedefine HAVE_GLX @HAVE_GLX@
+
 /* Defined if we can use X Extensions. */
 #cmakedefine HAVE_XEXTEND @HAVE_XEXTEND@
 
-/* Defined if we can use Xinerala. */
+/* Defined if we can use Xinerama. */
 #cmakedefine HAVE_XINERAMA @HAVE_XINERAMA@
 
 /* Defined if we can crypt passwords. */

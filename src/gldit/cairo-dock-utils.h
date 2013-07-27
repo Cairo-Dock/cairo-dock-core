@@ -60,6 +60,14 @@ gboolean cairo_dock_launch_command_full (const gchar *cCommand, gchar *cWorkingD
 gchar * cairo_dock_get_command_with_right_terminal (const gchar *cCommand);
 
 
+#include "gldi-config.h"
+#ifdef HAVE_X11
+
+gboolean cairo_dock_property_is_present_on_root (const gchar *cPropertyName);  // env-manager
+
+gboolean cairo_dock_check_xrandr (int major, int minor);  // showDesktop
+
+#endif
 
 G_END_DECLS
 #endif

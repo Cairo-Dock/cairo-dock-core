@@ -20,6 +20,7 @@
 #include <string.h>
 #include <sys/stat.h>
 
+#include "gldi-config.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-desklet-factory.h"  // cairo_dock_fm_create_icon_from_URI
@@ -30,8 +31,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-container.h"
-#include "cairo-dock-utils.h"  // cairo_dock_launch_command_sync
-#include "cairo-dock-X-utilities.h"  // cairo_dock_property_is_present_on_root
+#include "cairo-dock-utils.h"  // cairo_dock_launch_command_sync, cairo_dock_property_is_present_on_root
 #include "cairo-dock-icon-manager.h"  // cairo_dock_free_icon
 #define _MANAGER_DEF_
 #include "cairo-dock-file-manager.h"
@@ -536,8 +536,10 @@ static inline CairoDockDesktopEnv _guess_environment (void)
 	if (cEnv != NULL && *cEnv != '\0')
 		return CAIRO_DOCK_KDE;
 	
+	#ifdef HAVE_X11
 	if (cairo_dock_property_is_present_on_root ("_DT_SAVE_MODE"))
 		return CAIRO_DOCK_XFCE;
+	#endif
 	
 	gchar *cKWin = cairo_dock_launch_command_sync ("pgrep kwin");
 	if (cKWin != NULL && *cKWin != '\0')

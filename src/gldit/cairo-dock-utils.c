@@ -304,3 +304,58 @@ gchar * cairo_dock_get_command_with_right_terminal (const gchar *cCommand)
 
 	return cFullCommand;
 }
+
+
+#ifdef HAVE_X11
+
+#include <gdk/gdkx.h>  // gdk_x11_get_default_xdisplay
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
+#ifdef HAVE_XEXTEND
+#include <X11/extensions/Xrandr.h>
+#endif
+
+gboolean cairo_dock_property_is_present_on_root (const gchar *cPropertyName)
+{
+	Display *display = gdk_x11_get_default_xdisplay ();
+	Atom atom = XInternAtom (display, cPropertyName, False);
+	Window root = DefaultRootWindow (display);
+	int iNbProperties;
+	Atom *pAtomList = XListProperties (display, root, &iNbProperties);
+	int i;
+	for (i = 0; i < iNbProperties; i ++)
+	{
+		if (pAtomList[i] == atom)
+			break;
+	}
+	XFree (pAtomList);
+	return (i != iNbProperties);
+}
+
+gboolean cairo_dock_check_xrandr (int iMajor, int iMinor)
+{
+	#ifdef HAVE_XEXTEND
+	static gboolean s_bChecked = FALSE;
+	static int s_iXrandrMajor = 0, s_iXrandrMinor = 0;
+	if (!s_bChecked)
+	{
+		s_bChecked = TRUE;
+		Display *display = gdk_x11_get_default_xdisplay ();
+		int event_base, error_base;
+		if (! XRRQueryExtension (display, &event_base, &error_base))
+		{
+			cd_warning ("Xrandr extension not available.");
+		}
+		else
+		{
+			XRRQueryVersion (display, &s_iXrandrMajor, &s_iXrandrMinor);
+		}
+	}
+	
+	return (s_iXrandrMajor > iMajor || (s_iXrandrMajor == iMajor && s_iXrandrMinor >= iMinor));  // if XRandr is not available, the version will stay at 0.0 and therefore the function will always return FALSE.
+	#else
+	return FALSE;
+	#endif
+}
+
+#endif

@@ -55,7 +55,6 @@ SET(core_lib_SRCS
 	eggaccelerators.c 					eggaccelerators.h
 	cairo-dock-keybinder.c 				cairo-dock-keybinder.h
 	cairo-dock-dbus.c 					cairo-dock-dbus.h 
-	cairo-dock-X-utilities.c 			cairo-dock-X-utilities.h
 	cairo-dock-keyfile-utilities.c 		cairo-dock-keyfile-utilities.h
 	cairo-dock-packages.c 				cairo-dock-packages.h
 	cairo-dock-particle-system.c 		cairo-dock-particle-system.h
@@ -162,7 +161,7 @@ install(FILES
 	cairo-dock-draw.h					cairo-dock-draw-opengl.h
 	cairo-dock-opengl-path.h 			cairo-dock-opengl-font.h 
 	cairo-dock-particle-system.h		cairo-dock-overlay.h
-	cairo-dock-X-utilities.h			cairo-dock-dbus.h
+	cairo-dock-dbus.h
 	cairo-dock-keyfile-utilities.h		cairo-dock-surface-factory.h
 	cairo-dock-log.h					cairo-dock-keybinder.h
 	cairo-dock-application-facility.h	cairo-dock-dock-facility.h

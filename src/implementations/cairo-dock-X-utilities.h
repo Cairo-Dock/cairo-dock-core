@@ -21,6 +21,8 @@
 #ifndef __CAIRO_DOCK_X_UTILITIES__
 #define  __CAIRO_DOCK_X_UTILITIES__
 
+#include "gldi-config.h"
+#ifdef HAVE_X11
 #include <X11/Xlib.h>
 #include <glib.h>
 #include "cairo-dock-struct.h"
@@ -29,8 +31,6 @@ G_BEGIN_DECLS
 /**
 *@file cairo-dock-X-utilities.h This class provides some utilities functions to interact very specifically on X.
 */
-
-#ifdef _X_MANAGER_
 
 Display *cairo_dock_initialize_X_desktop_support (void);
 
@@ -90,6 +90,7 @@ void cairo_dock_set_xwindow_border (Window Xid, gboolean bWithBorder);
 // GET //
 gulong cairo_dock_get_xwindow_timestamp (Window Xid);
 gchar *cairo_dock_get_xwindow_name (Window Xid, gboolean bSearchWmName);
+gchar *cairo_dock_get_xwindow_class (Window Xid, gchar **cWMClass);
 
 gboolean cairo_dock_xwindow_is_maximized (Window Xid);
 gboolean cairo_dock_xwindow_is_fullscreen (Window Xid);
@@ -118,22 +119,15 @@ GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap);
 gboolean cairo_dock_get_xwindow_type (Window Xid, Window *pTransientFor);
 
 gboolean cairo_dock_xcomposite_is_available (void);
-#endif
 
 
-gboolean cairo_dock_property_is_present_on_root (const gchar *cPropertyName);  // env-manager
+void cairo_dock_set_strut_partial (Window Xid, int left, int right, int top, int bottom, int left_start_y, int left_end_y, int right_start_y, int right_end_y, int top_start_x, int top_end_x, int bottom_start_x, int bottom_end_x);  // dock/desklet
 
-gboolean cairo_dock_xtest_is_available (void);  // cairo_dock_trigger_shortkey
-
-gboolean cairo_dock_check_xrandr (int major, int minor);  // returns TRUE if the version is supported
-
-void cairo_dock_set_strut_partial (int Xid, int left, int right, int top, int bottom, int left_start_y, int left_end_y, int right_start_y, int right_end_y, int top_start_x, int top_end_x, int bottom_start_x, int bottom_end_x);  // dock/desklet
-
-gchar *cairo_dock_get_xwindow_class (Window Xid, gchar **cWMClass);  // gui-advanced
 int cairo_dock_get_xwindow_desktop (Window Xid);  // desklet
 void cairo_dock_get_xwindow_geometry (Window Xid, int *iLocalPositionX, int *iLocalPositionY, int *iWidthExtent, int *iHeightExtent);  // desklet
 void cairo_dock_move_xwindow_to_absolute_position (Window Xid, int iDesktopNumber, int iPositionX, int iPositionY);  // desklet
 
+#endif
 
 G_END_DECLS
 #endif

@@ -18,7 +18,6 @@
 */
 
 #include <math.h>
-#include <gdk/gdkx.h>  // struct Display *
 #include <pango/pango.h>
 #include <cairo.h>
 #include <GL/gl.h>

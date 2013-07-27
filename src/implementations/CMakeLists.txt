@@ -11,8 +11,15 @@ SET(impl_SRCS
 	cairo-dock-gnome-shell-integration.c cairo-dock-gnome-shell-integration.h
 	cairo-dock-cinnamon-integration.c    cairo-dock-cinnamon-integration.h
 	cairo-dock-X-manager.c               cairo-dock-X-manager.h
+	cairo-dock-X-utilities.c 			cairo-dock-X-utilities.h
 	cairo-dock-glx.c                     cairo-dock-glx.h
 )
+#if ("${HAVE_X11}")
+#	SET(impl_SRCS ${impl_SRCS}
+#		cairo-dock-X-manager.c               cairo-dock-X-manager.h
+#		cairo-dock-glx.c                     cairo-dock-glx.h
+#	)
+#endif()
 
 add_library(implementations STATIC ${impl_SRCS})
 add_definitions (-fPIC)

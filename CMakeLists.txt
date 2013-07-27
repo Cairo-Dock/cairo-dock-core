@@ -90,14 +90,30 @@ endif ()
 
 ########### dependencies ###############
 
-set (packages_required "glib-2.0 gthread-2.0 cairo librsvg-2.0 dbus-1 dbus-glib-1 libxml-2.0 xrender gl glu libcurl")  # for the .pc and to have details
+# check for mendatory dependencies
+set (packages_required "glib-2.0 gthread-2.0 cairo librsvg-2.0 dbus-1 dbus-glib-1 libxml-2.0 gl glu libcurl")  # for the .pc and to have details
 STRING (REGEX REPLACE " " ";" packages_required_semicolon ${packages_required})  # replace blank space by semicolon => to have more details if a package is missing
 pkg_check_modules ("PACKAGE" REQUIRED "${packages_required_semicolon}")
 
+set (with_x11 no)
 set (with_xentend no)
-enable_if_not_defined (enable-x11-ext-support) # enabled by default
-if (enable-x11-ext-support)
-	set (xextend_required "xtst xcomposite xrandr")  # for the .pc
+enable_if_not_defined (enable-x11-support) # enabled by default
+if (enable-x11-support)
+	# check for X11
+	set (x11_required "x11")  # for the .pc
+	pkg_check_modules ("X11" ${x11_required})
+	if (X11_FOUND)
+		set (HAVE_X11 1)
+		set (with_x11 yes)
+	else()
+		set (x11_required)
+	endif()
+	
+	# check for GLX
+	check_library_exists (GL glXMakeCurrent "" HAVE_GLX)  # HAVE_GLX remains undefined if not found, else it's "1"
+	
+	# check for X extensions
+	set (xextend_required "xtst xcomposite xrandr xrender")  # for the .pc
 	STRING (REGEX REPLACE " " ";" xextend_required_semicolon ${xextend_required})
 	pkg_check_modules ("XEXTEND" "${xextend_required_semicolon}")
 	
@@ -105,7 +121,7 @@ if (enable-x11-ext-support)
 		set (HAVE_XEXTEND 1)
 		set (with_xentend yes)
 		
-		pkg_check_modules ("XINERAMA" "xinerama")  # check for Xinerama separately, since is now replaced by Xrandr >= 1.3
+		pkg_check_modules ("XINERAMA" "xinerama")  # check for Xinerama separately, since it is now replaced by Xrandr >= 1.3
 		if (XINERAMA_FOUND)
 			set (HAVE_XINERAMA 1)
 		endif()
@@ -196,7 +212,6 @@ add_subdirectory (Help)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake.in ${CMAKE_CURRENT_SOURCE_DIR}/src/config.h)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/src/gldit/gldi-config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/src/gldit/gldi-config.h)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/src/gldit/gldi-module-config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/src/gldit/gldi-module-config.h)  # separated from gldi-config.h because it's architecture-dependant (it contains $libdir), so it can't be installed in /usr/include without causing a conflict between 32 and 64 bits packages.
-configure_file (${CMAKE_CURRENT_SOURCE_DIR}/cairo-dock.pc.in ${CMAKE_CURRENT_BINARY_DIR}/cairo-dock.pc)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake IMMEDIATE @ONLY)
 
 ########### install files ###############
@@ -207,26 +222,26 @@ install (FILES ${CMAKE_CURRENT_BINARY_DIR}/cairo-dock.pc DESTINATION ${install-p
 
 MESSAGE (STATUS)
 MESSAGE (STATUS "Cairo-Dock ${VERSION} will be compiled with the following options:")
-if (XEXTEND_FOUND)
-	MESSAGE (STATUS " * Use X Extensions: Yes")
+MESSAGE (STATUS " * Installation in    : ${prefix}")
+MESSAGE (STATUS " * Lib directory      : ${libdir}")
+MESSAGE (STATUS " * GTK version        : ${GTK_MAJOR} (${GTK_VERSION})")
+MESSAGE (STATUS " * With X11 support   : ${with_x11}")
+MESSAGE (STATUS " * With X11 extensions: ${with_xentend} (${xextend_required})")
+if (HAVE_GLX)
+	MESSAGE (STATUS " * With GLX support   : yes")
 else()
-	MESSAGE (STATUS " * Use X Extensions: No")
+	MESSAGE (STATUS " * With GLX support   : no")
 endif()
 if (HAVE_LIBCRYPT)
-	MESSAGE (STATUS " * Crypt passwords : Yes")
+	MESSAGE (STATUS " * Crypt passwords    : yes")
 else()
-	MESSAGE (STATUS " * Crypt passwords : No")
+	MESSAGE (STATUS " * Crypt passwords    : no")
 endif()
-MESSAGE (STATUS " * GTK version       : ${GTK_MAJOR} (${GTK_VERSION})")
-MESSAGE (STATUS " * Installation in   : ${prefix}")
-MESSAGE (STATUS " * Lib directory     : ${libdir}")
-MESSAGE (STATUS " * With X11 backend  : ${enable-x11-ext-support}")
-MESSAGE (STATUS " * With X11 ext.     : ${with_xentend} (${xextend_required})")
-MESSAGE (STATUS " * Themes directory  : ${CAIRO_DOCK_DISTANT_THEMES_DIR}")
 if (enable-desktop-manager)
 	set (with_cd_session "yes")
 else()
 	set (with_cd_session "no (use '-Denable-desktop-manager=ON' to enable it)")
 endif()
-MESSAGE (STATUS " * Cairo-dock session: ${with_cd_session}")
+MESSAGE (STATUS " * Cairo-dock session : ${with_cd_session}")
+MESSAGE (STATUS " * Themes directory   : ${CAIRO_DOCK_DISTANT_THEMES_DIR} (on the server)")
 MESSAGE (STATUS)

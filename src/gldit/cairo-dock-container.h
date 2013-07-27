@@ -20,8 +20,11 @@
 #ifndef __CAIRO_DOCK_CONTAINER__
 #define  __CAIRO_DOCK_CONTAINER__
 
+#include "gldi-config.h"
 #include <glib.h>
+#ifdef HAVE_GLX
 #include <GL/glx.h>  // GLXContext
+#endif
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-manager.h"
@@ -142,8 +145,12 @@ struct _GldiContainer {
 	gdouble fRatio;
 	/// TRUE if the container has a reflection power.
 	gboolean bUseReflect;
+	#ifdef HAVE_GLX
 	/// OpenGL context.
 	GLXContext glContext;
+	#else
+	gpointer unused;  // to keep ABI compatibility for plug-ins
+	#endif
 	/// whether the GL context is an ortho or a perspective view.
 	gboolean bPerspectiveView;
 	/// TRUE if a slow animation is running.
