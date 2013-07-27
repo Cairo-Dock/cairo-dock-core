@@ -278,12 +278,12 @@ guint gldi_window_get_id (GldiWindowActor *actor)
 	return 0;
 }
 
-/*GldiWindowActor *gldi_container_get_window_actor (GldiContainer *pContainer)
+GldiWindowActor *gldi_window_pick (void)
 {
-	if (actor && s_backend.get_container_window)
-		return s_backend.get_container_window (pContainer);
+	if (s_backend.pick_window)
+		return s_backend.pick_window ();
 	return NULL;
-}*/
+}
 
 
   /////////////////

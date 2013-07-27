@@ -44,7 +44,7 @@
 #include "cairo-dock-config.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-backends-manager.h"
-#include "cairo-dock-X-utilities.h"  // cairo_dock_get_xwindow_class
+#include "cairo-dock-windows-manager.h"  // gldi_window_pick
 #include "cairo-dock-task.h"
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-desktop-manager.h"
@@ -938,27 +938,19 @@ static void _cairo_dock_key_grab_class (G_GNUC_UNUSED GtkButton *button, gpointe
 	cd_debug ("clicked");
 	gtk_widget_set_sensitive (GTK_WIDGET(pEntry), FALSE);  // lock the widget during the grab (it makes it more comprehensive).
 	
-	// We could use 'xprop' and look for the WM_CLASS field; however, in case of a Wine or Mono application, it wouldn't work so easily.
-	// So we just get the window ID, and pass it to the Class Manager, which has all the logic needed for class matching.
-	gchar *cResult = NULL;
-	gchar *cProp = cairo_dock_launch_command_sync ("xwininfo");  // let the user grab the window, and get the result.
-	const gchar *str = g_strstr_len (cProp, -1, "Window id");  // look for the window ID
-	if (str)
-	{
-		// xwininfo: Window id: 0xc00009 "name-of-the-window"
-		str += 9;  // skip "Window id"
-		while (*str == ' ' || *str == ':')  // skip the ':'
-			str ++;
-		Window Xid = strtol (str, NULL, 0);  // XID is an unsigned long; we let the base be 0, so that the function guesses by itself.
-		cResult = cairo_dock_get_xwindow_class (Xid, NULL);  // let the class manager do the dirty job.
-	}
-	if (cResult == NULL)  // shouldn't happen, so don't bother to present the warning to the user more than that.
-		cd_warning ("couldn't find the class of this window.");
+	const gchar *cResult = NULL;
+	GldiWindowActor *actor = gldi_window_pick ();
+	
+	if (actor && actor->bIsTransientFor)
+		actor = gldi_window_get_transient_for (actor);
+	
+	if (actor)
+		cResult = actor->cClass;
+	else
+		cd_warning ("couldn't get a window actor");
 	
 	gtk_widget_set_sensitive (GTK_WIDGET(pEntry), TRUE);  // unlock the widget
 	gtk_entry_set_text (pEntry, cResult);  // write the result in the entry-box
-	g_free (cProp);
-	g_free (cResult);
 }
 
 void _cairo_dock_set_value_in_pair (GtkSpinButton *pSpinButton, gpointer *data)

@@ -17,6 +17,9 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "gldi-config.h"
+#ifdef HAVE_X11
+
 #include <math.h>
 #include <string.h>
 #include <stdio.h>
@@ -31,14 +34,13 @@
 #include <X11/Xutil.h>
 #include <X11/extensions/Xcomposite.h>
 
-#include "gldi-config.h"
+#include "cairo-dock-utils.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-applications-manager.h"  // myTaskbarParam.iMinimizedWindowRenderType
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-container.h"  // GldiContainerManagerBackend
-#define _X_MANAGER_
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-glx.h"
 #define _MANAGER_DEF_
@@ -84,6 +86,24 @@ typedef enum {
 	X_DEMANDS_ATTENTION = (1<<0),
 	X_URGENCY_HINT = (1 << 2)
 } XAttentionFlag;
+
+// signals
+typedef enum {
+	NB_NOTIFICATIONS_X_MANAGER = NB_NOTIFICATIONS_WINDOWS
+	} CairoXManagerNotifications;
+
+// data
+typedef struct _GldiXWindowActor GldiXWindowActor;
+struct _GldiXWindowActor {
+	GldiWindowActor actor;
+	// X-specific
+	Window Xid;
+	gint iLastCheckTime;
+	Pixmap iBackingPixmap;
+	Window XTransientFor;
+	guint iDemandsAttention;  // a mask of XAttentionFlag
+	gboolean bIgnored;
+	};
 
 
 static GldiXWindowActor *_make_new_actor (Window Xid)
@@ -813,6 +833,30 @@ static guint _get_id (GldiWindowActor *actor)
 	return xactor->Xid;
 }
 
+static GldiWindowActor *_pick_window (void)
+{
+	GldiWindowActor *actor = NULL;
+	
+	// let the user grab the window, and get the result.
+	gchar *cProp = cairo_dock_launch_command_sync ("xwininfo");
+	
+	// get the corresponding actor
+	// look for the window ID in this chain: xwininfo: Window id: 0xc00009 "name-of-the-window"
+	
+	const gchar *str = g_strstr_len (cProp, -1, "Window id");  
+	if (str)
+	{
+		str += 9;  // skip "Window id"
+		while (*str == ' ' || *str == ':')  // skip the ':' and spaces
+			str ++;
+		Window Xid = strtol (str, NULL, 0);  // XID is an unsigned long; we let the base be 0, so that the function guesses by itself.
+		
+		actor = g_hash_table_lookup (s_hXWindowTable, &Xid);
+	}
+	g_free (cProp);
+	
+	return actor;
+}
 
   /////////////////////////////////
  /// CONTAINER MANAGER BACKEND ///
@@ -972,6 +1016,7 @@ static void init (void)
 	wmb.set_sticky = _set_sticky;
 	wmb.can_minimize_maximize_close = _can_minimize_maximize_close;
 	wmb.get_id = _get_id;
+	wmb.pick_window = _pick_window;
 	gldi_windows_manager_register_backend (&wmb);
 	
 	GldiContainerManagerBackend cmb;
@@ -1097,3 +1142,11 @@ void gldi_register_X_manager (void)
 	// connect to X (now, because other modules may need it for their init)  /// TODO: this should not be needed any more, at least not this way...
 	s_XDisplay = cairo_dock_initialize_X_desktop_support ();  // renseigne la taille de l'ecran.
 }
+
+#else
+#include "cairo-dock-log.h"
+void gldi_register_X_manager (void)
+{
+	cd_message ("Cairo-Dock was not built with X support");
+}
+#endif
