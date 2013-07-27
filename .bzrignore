@@ -29,7 +29,6 @@ data/themes.conf
 data/cairo-dock.conf
 data/main-dock.conf
 data/cairo-dock-simple.conf
-cairo-dock.pc
 src/gldit/gldi.pc
 src/config.h
 src/gldit/gldi-config.h
