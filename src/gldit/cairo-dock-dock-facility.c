@@ -19,7 +19,6 @@
 
 #include <math.h>
 #include <gtk/gtk.h>
-#include <gdk/gdkx.h>  // gldi_container_get_Xid
 
 #include "cairo-dock-applications-manager.h"  // cairo_dock_set_icons_geometry_for_window_manager
 #include "cairo-dock-launcher-manager.h"
@@ -28,7 +27,6 @@
 #include "cairo-dock-class-icon-manager.h"
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-backends-manager.h"  // myBackendsParam.fSubDockSizeRatio
-#include "cairo-dock-X-utilities.h" // cairo_dock_set_strut_partial
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-dialog-manager.h"  // gldi_dialogs_replace_all
@@ -286,10 +284,9 @@ Icon *cairo_dock_calculate_dock_icons (CairoDock *pDock)
 
 void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 {
-	Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDock));
 	int left=0, right=0, top=0, bottom=0;
 	int left_start_y=0, left_end_y=0, right_start_y=0, right_end_y=0, top_start_x=0, top_end_x=0, bottom_start_x=0, bottom_end_x=0;
-
+	
 	if (bReserve)
 	{
 		int w = pDock->iMinDockWidth;
@@ -356,7 +353,7 @@ void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 			}
 		}
 	}
-	cairo_dock_set_strut_partial (Xid, left, right, top, bottom, left_start_y, left_end_y, right_start_y, right_end_y, top_start_x, top_end_x, bottom_start_x, bottom_end_x);
+	gldi_container_reserve_space (CAIRO_CONTAINER(pDock), left, right, top, bottom, left_start_y, left_end_y, right_start_y, right_end_y, top_start_x, top_end_x, bottom_start_x, bottom_end_x);
 }
 
 void cairo_dock_prevent_dock_from_out_of_screen (CairoDock *pDock)

@@ -20,11 +20,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <gdk/gdkx.h>  // gldi_container_present
 
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <GL/glx.h>
 
 #include "gldi-config.h"
 #include "cairo-dock-icon-factory.h"
@@ -43,7 +41,6 @@
 #include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-applications-manager.h"
-#include "cairo-dock-X-utilities.h"  // cairo_dock_show_xwindow
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-dialog-manager.h"

@@ -31,8 +31,6 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-#include <gdk/gdkx.h>  // gldi_container_get_Xid
-
 #include "cairo-dock-draw.h"
 #include "cairo-dock-icon-facility.h"  // cairo_dock_set_icon_container
 #include "cairo-dock-module-instance-manager.h"  // gldi_module_instance_detach
@@ -43,7 +41,6 @@
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-container.h"
-#include "cairo-dock-X-utilities.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-draw-opengl.h"
@@ -208,38 +205,7 @@ static gboolean _cairo_dock_write_desklet_position (CairoDesklet *pDesklet)
 		int iNumDesktop = -1;
 		if (! gldi_desklet_is_sticky (pDesklet))
 		{
-			/*GldiWindowActor *actor = gldi_container_get_window_actor ((CAIRO_CONTAINER (pDesklet));
-			g_return_val_if_fail (actor != NULL, FALSE);
-			
-			/// get desktop and viewport relatively to (0,0,0)
-			/// iNumDesktop = gldi_container_get_current_desktop_viewport ((CAIRO_CONTAINER (pDesklet));
-			iNumDesktop = actor->iNumDesktop * g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY + actor->iViewportX * g_desktopGeometry.iNbViewportY + actor->iViewportY;*/
-			
-			Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDesklet));
-			cd_debug ("This window (%d) is not sticky", (int) Xid);
-			int iDesktop = cairo_dock_get_xwindow_desktop (Xid);
-			int iGlobalPositionX, iGlobalPositionY, iWidthExtent, iHeightExtent;
-			cairo_dock_get_xwindow_geometry (Xid, &iGlobalPositionX, &iGlobalPositionY, &iWidthExtent, &iHeightExtent);
-			if (iGlobalPositionX < 0)
-				iGlobalPositionX += g_desktopGeometry.iNbViewportX * gldi_desktop_get_width();
-			if (iGlobalPositionY < 0)
-				iGlobalPositionY += g_desktopGeometry.iNbViewportY * gldi_desktop_get_height();
-			
-			int iViewportX = iGlobalPositionX / gldi_desktop_get_width();
-			int iViewportY = iGlobalPositionY / gldi_desktop_get_height();
-			
-			int iCurrentDesktop, iCurrentViewportX, iCurrentViewportY;
-			gldi_desktop_get_current (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
-			
-			iViewportX += iCurrentViewportX;
-			if (iViewportX >= g_desktopGeometry.iNbViewportX)
-				iViewportX -= g_desktopGeometry.iNbViewportX;
-			iViewportY += iCurrentViewportY;
-			if (iViewportY >= g_desktopGeometry.iNbViewportY)
-				iViewportY -= g_desktopGeometry.iNbViewportY;
-			//g_print ("position : %d,%d,%d / %d,%d,%d\n", iDesktop, iViewportX, iViewportY, iCurrentDesktop, iCurrentViewportX, iCurrentViewportY);
-			
-			iNumDesktop = iDesktop * g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY + iViewportX * g_desktopGeometry.iNbViewportY + iViewportY;
+			iNumDesktop = gldi_container_get_current_desktop_index (CAIRO_CONTAINER (pDesklet));
 			//g_print ("desormais on place le desklet sur le bureau (%d,%d,%d)\n", iDesktop, iViewportX, iViewportY);
 		}
 		g_print (" -> %d; %d; %d\n", iNumDesktop, iRelativePositionX, iRelativePositionY);
@@ -928,10 +894,7 @@ void gldi_desklet_configure (CairoDesklet *pDesklet, CairoDeskletAttr *pAttribut
 			iNumViewportY -= iCurrentViewportY;
 			cd_debug ("on le place en %d + %d", iNumViewportX * gldi_desktop_get_width(), iAbsolutePositionX);
 			
-			/// move to absolute position...
-			/// gldi_container_move (CAIRO_CONTAINER (pDesklet), iNumDesktop, iNumViewportX * gldi_desktop_get_width() + iAbsolutePositionX, iNumViewportY * gldi_desktop_get_height() + iAbsolutePositionY);
-			Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDesklet));
-			cairo_dock_move_xwindow_to_absolute_position (Xid, iNumDesktop, iNumViewportX * gldi_desktop_get_width() + iAbsolutePositionX, iNumViewportY * gldi_desktop_get_height() + iAbsolutePositionY);
+			gldi_container_move (CAIRO_CONTAINER (pDesklet), iNumDesktop, iNumViewportX * gldi_desktop_get_width() + iAbsolutePositionX, iNumViewportY * gldi_desktop_get_height() + iAbsolutePositionY);
 		}
 	}
 	pDesklet->bPositionLocked = pAttribute->bPositionLocked;
@@ -1147,11 +1110,7 @@ static void _reserve_space_for_desklet (CairoDesklet *pDesklet, gboolean bReserv
 			right_end_y = iY + iHeight;
 		}
 	}
-	/// reserve space ...
-	/// gldi_container_reserve_space (CAIRO_CONTAINER (pDesklet), left, right, top, bottom, left_start_y, left_end_y, right_start_y, right_end_y, top_start_x, top_end_x, bottom_start_x, bottom_end_x);
-	
-	Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDesklet));
-	cairo_dock_set_strut_partial (Xid, left, right, top, bottom, left_start_y, left_end_y, right_start_y, right_end_y, top_start_x, top_end_x, bottom_start_x, bottom_end_x);
+	gldi_container_reserve_space (CAIRO_CONTAINER(pDesklet), left, right, top, bottom, left_start_y, left_end_y, right_start_y, right_end_y, top_start_x, top_end_x, bottom_start_x, bottom_end_x);
 	pDesklet->bSpaceReserved = bReserve;
 }
 

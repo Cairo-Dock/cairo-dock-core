@@ -18,13 +18,10 @@
 */
 
 #include <stdlib.h>
-
-#include <gtk/gtk.h>
-#include <gdk/gdkx.h>  // gldi_container_get_Xid
-
 #include <math.h>
-#include <cairo.h>
 
+#include <cairo.h>
+#include <gtk/gtk.h>
 #include <GL/gl.h> 
 
 #include "cairo-dock-icon-facility.h"  // cairo_dock_compute_icon_area
@@ -317,14 +314,6 @@ void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, doub
 	g_strfreev (cStringList);
 	g_string_free (sArg, TRUE);
 }
-
-
-/*gboolean gldi_container_is_active (GldiContainer *pContainer)
-{
-	Window Xid = gldi_container_get_Xid (pContainer);
-	GldiWindowActor *pActiveWindow = gldi_windows_get_active ();
-	return (gldi_window_get_id (pActiveWindow) == Xid);  // gtk_window_has_toplevel_focus/gtk_window_is_active is not reliable
-}*/
 
 
 void gldi_container_reserve_space (GldiContainer *pContainer, int left, int right, int top, int bottom, int left_start_y, int left_end_y, int right_start_y, int right_end_y, int top_start_x, int top_end_x, int bottom_start_x, int bottom_end_x)
