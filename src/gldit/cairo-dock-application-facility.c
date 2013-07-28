@@ -180,22 +180,20 @@ void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock)
 	}
 }
 
-static gboolean _stop_opening_animation (Icon *pIcon)
+static gboolean _stop_opening_timeout (Icon *pIcon)
 {
-	pIcon->iSidAnimationOpening = 0; // 0 <=> no more repeat animations
+	pIcon->iSidOpeningTimeout = 0; // 0 <=> no more repeat animations
 	return FALSE;
 }
 
 gboolean cairo_dock_launch_command_with_opening_animation_full (Icon *pIcon, const gchar *cCommand, gchar *cWorkingDirectory)
 {
 	gboolean bSuccess = cairo_dock_launch_command_full (cCommand, cWorkingDirectory);
-	if (myTaskbarParam.bOpeningAnimation && myTaskbarParam.bMixLauncherAppli)
-	{
-		if (bSuccess && pIcon->iSidAnimationOpening == 0) // only one animation
-			// repeat the animation until iSidAnimationOpening = 0
-			pIcon->iSidAnimationOpening = g_timeout_add_seconds (15,
-				(GSourceFunc) _stop_opening_animation, pIcon);
-	}
+	/// can be useful to check if we're launching it from a terminal and if the class is "correct"
+	if (bSuccess && pIcon->iSidOpeningTimeout == 0 && pIcon->cClass != NULL) // only one animation
+		// repeat the animation until iSidOpeningTimeout = 0
+		pIcon->iSidOpeningTimeout = g_timeout_add_seconds (15, /// added the possibility to change the timeout?
+			(GSourceFunc) _stop_opening_timeout, pIcon);
 	return bSuccess;
 }
 

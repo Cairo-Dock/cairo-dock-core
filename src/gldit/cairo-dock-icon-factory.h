@@ -180,7 +180,7 @@ struct _Icon {
 	//\____________ Other dynamic parameters.
 	guint iSidRedrawSubdockContent;
 	guint iSidLoadImage;
-	guint iSidAnimationOpening;
+	guint iSidOpeningTimeout;
 	guint iSidDoubleClickDelay;
 	gint iNbDoubleClickListeners;
 	gint iHideLabel;

@@ -180,7 +180,7 @@ static void _show_all_windows (GList *pIcons)
 	}
 }
 
-static gboolean _launch_icon_command (Icon *icon, CairoDock *pDock)
+static gboolean _launch_icon_command (Icon *icon, CairoDock *pDock, gboolean bForce)
 {
 	if (icon->cCommand == NULL)
 		return GLDI_NOTIFICATION_LET_PASS;
@@ -191,7 +191,12 @@ static gboolean _launch_icon_command (Icon *icon, CairoDock *pDock)
 		if (CAIRO_DOCK_IS_APPLET (pMainIcon))
 			return GLDI_NOTIFICATION_LET_PASS;
 	}
-	
+
+	// do not launch it twice (avoid wrong double click)
+	// => if we want 2 apps, we have to use Shift + Click
+	if (! bForce && icon->iSidOpeningTimeout != 0)
+		return GLDI_NOTIFICATION_INTERCEPT;
+
 	gboolean bSuccess = FALSE;
 	if (*icon->cCommand == '<')  // shortkey
 	{
@@ -224,7 +229,7 @@ gboolean cairo_dock_notification_click_icon (G_GNUC_UNUSED gpointer pUserData, I
 		|| CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon)
 		|| CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (icon))
 		{
-			return _launch_icon_command (icon, pDock);
+			return _launch_icon_command (icon, pDock, TRUE);
 		}
 		return GLDI_NOTIFICATION_LET_PASS;
 	}
@@ -269,7 +274,7 @@ gboolean cairo_dock_notification_click_icon (G_GNUC_UNUSED gpointer pUserData, I
 	}
 	else if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon))  // finally, launcher being none of the previous cases -> launch the command
 	{
-		return _launch_icon_command (icon, pDock);
+		return _launch_icon_command (icon, pDock, FALSE);
 	}
 	else
 	{

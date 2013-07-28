@@ -371,11 +371,11 @@ gboolean cairo_dock_class_is_expanded (const gchar *cClass)
 
 static void _stop_opening_animation (Icon *pIcon)
 {
-	if (pIcon->iSidAnimationOpening != 0)
+	if (pIcon->iSidOpeningTimeout != 0)
 	{
 		cd_debug ("Stop opening animation on %s", pIcon->cName);
-		g_source_remove (pIcon->iSidAnimationOpening);
-		pIcon->iSidAnimationOpening = 0;
+		g_source_remove (pIcon->iSidOpeningTimeout);
+		pIcon->iSidOpeningTimeout = 0;
 		// gldi_icon_stop_animation (pIcon); // maybe better to wait for the end of the current animation
 	}
 }
