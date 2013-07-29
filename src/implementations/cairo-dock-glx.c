@@ -22,6 +22,7 @@
 
 #include <GL/gl.h>
 #include <GL/glx.h>
+#include <string.h>  // strstr
 #include <gdk/gdkx.h>  // gdk_x11_get_default_xdisplay/GDK_WINDOW_XID
 #include <X11/Xlib.h>
 #include <X11/extensions/Xrender.h>  // XRenderFindVisualFormat
@@ -36,8 +37,23 @@ extern GldiContainer *g_pPrimaryContainer;
 
 // private
 static gboolean s_bInitialized = FALSE;
+static gboolean s_bForceOpenGL = FALSE;
 #define _gldi_container_get_Xid(pContainer) GDK_WINDOW_XID (gldi_container_get_gdk_window(pContainer))
 
+
+static gboolean _is_blacklisted (const gchar *cVersion, const gchar *cVendor, const gchar *cRenderer)
+{
+	if (strstr (cVersion, "3.0 Mesa") != NULL // affect all versions and latest seen with the bug was: 3.0 Mesa 9.1.4 (July 13)
+	   && strstr (cVendor, "Intel Open Source Technology Center") != NULL
+	   && strstr (cRenderer, "Mesa DRI Intel(R) Ivybridge Mobile") != NULL)
+	{
+		cd_warning ("%s Intel 4000 HD Ivybridge Mobile.\n %s https://bugs.freedesktop.org/show_bug.cgi?id=55036",
+			_("This card is blacklisted due to a bug with your video drivers:"),
+			_("Please have a look there:"));
+		return TRUE;
+	}
+	return FALSE;
+}
 
 static inline gboolean _check_extension (const char *extName, const gchar *cExtensions)
 {
@@ -118,6 +134,7 @@ static XVisualInfo *_get_visual_from_fbconfigs (GLXFBConfig *pFBConfigs, int iNu
 
 static gboolean _initialize_opengl_backend (gboolean bForceOpenGL)
 {
+	s_bForceOpenGL = bForceOpenGL;
 	gboolean bStencilBufferAvailable, bAlphaAvailable;
 	Display *XDisplay = gdk_x11_get_default_xdisplay ();
 	
@@ -329,7 +346,11 @@ static void _post_initialize_opengl_backend (G_GNUC_UNUSED GtkWidget *pWidget, G
 		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &fMaximumAnistropy);
 		glTexParameterf (GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, fMaximumAnistropy);
 	}
-	
+
+	const gchar *cVersion  = (const gchar *) glGetString (GL_VERSION);
+	const gchar *cVendor   = (const gchar *) glGetString (GL_VENDOR);
+	const gchar *cRenderer = (const gchar *) glGetString (GL_RENDERER);
+
 	cd_message ("OpenGL config summary :\n - bNonPowerOfTwoAvailable : %d\n - bFboAvailable : %d\n - direct rendering : %d\n - bTextureFromPixmapAvailable : %d\n - bAccumBufferAvailable : %d\n - Anisotroy filtering level max : %.1f\n - OpenGL version: %s\n - OpenGL vendor: %s\n - OpenGL renderer: %s\n\n",
 		g_openglConfig.bNonPowerOfTwoAvailable,
 		g_openglConfig.bFboAvailable,
@@ -337,9 +358,21 @@ static void _post_initialize_opengl_backend (G_GNUC_UNUSED GtkWidget *pWidget, G
 		g_openglConfig.bTextureFromPixmapAvailable,
 		g_openglConfig.bAccumBufferAvailable,
 		fMaximumAnistropy,
-		glGetString (GL_VERSION),
-		glGetString (GL_VENDOR),
-		glGetString (GL_RENDERER));
+		cVersion,
+		cVendor,
+		cRenderer);
+
+	// we need a context to use glGetString, this is why we did it now
+	if (! s_bForceOpenGL && _is_blacklisted (cVersion, cVendor, cRenderer))
+	{
+		// maybe interesting to translate this message!
+		cd_warning ("%s 'cairo-dock -c'\n"
+			" OpenGL Version: %s\n OpenGL Vendor: %s\n OpenGL Renderer: %s",
+			_("The OpenGL backend will be deactivated. Note that you can force "
+			"this OpenGL backend by launching the dock with this command:"),
+			cVersion, cVendor, cRenderer);
+		gldi_gl_backend_deactivate ();
+	}
 }
 
 static void _container_init (GldiContainer *pContainer)
