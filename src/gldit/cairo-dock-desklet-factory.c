@@ -1119,11 +1119,20 @@ void gldi_desklet_set_accessibility (CairoDesklet *pDesklet, CairoDeskletVisibil
 	cd_debug ("%s (%d)", __func__, iVisibility);
 	
 	//\_________________ On applique la nouvelle accessibilite.
+	
 	gtk_window_set_keep_below (GTK_WINDOW (pDesklet->container.pWidget), iVisibility == CAIRO_DESKLET_KEEP_BELOW);
 	
 	gtk_window_set_keep_above (GTK_WINDOW (pDesklet->container.pWidget), iVisibility == CAIRO_DESKLET_KEEP_ABOVE);
 	
-	gldi_desktop_set_on_widget_layer (CAIRO_CONTAINER (pDesklet), iVisibility == CAIRO_DESKLET_ON_WIDGET_LAYER);
+	if (iVisibility == CAIRO_DESKLET_ON_WIDGET_LAYER)
+	{
+		if (pDesklet->iVisibility != CAIRO_DESKLET_ON_WIDGET_LAYER)
+			gldi_desktop_set_on_widget_layer (CAIRO_CONTAINER (pDesklet), TRUE);
+	}
+	else if (pDesklet->iVisibility == CAIRO_DESKLET_ON_WIDGET_LAYER)
+	{
+		gldi_desktop_set_on_widget_layer (CAIRO_CONTAINER (pDesklet), FALSE);
+	}
 	
 	if (iVisibility == CAIRO_DESKLET_RESERVE_SPACE)
 	{
