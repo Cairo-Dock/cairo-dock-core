@@ -823,15 +823,15 @@ static void reset_config (CairoDeskletsParam *pDesklets)
 
 static void reload (CairoDeskletsParam *pPrevDesklets, CairoDeskletsParam *pDesklets)
 {
-	if (cairo_dock_strings_differ (pPrevDesklets->cRotateButtonImage, pDesklets->cRotateButtonImage) ||
-		cairo_dock_strings_differ (pPrevDesklets->cRetachButtonImage, pDesklets->cRetachButtonImage) ||
-		cairo_dock_strings_differ (pPrevDesklets->cDepthRotateButtonImage, pDesklets->cDepthRotateButtonImage) ||
-		cairo_dock_strings_differ (pPrevDesklets->cNoInputButtonImage, pDesklets->cNoInputButtonImage))
+	if (g_strcmp0 (pPrevDesklets->cRotateButtonImage, pDesklets->cRotateButtonImage) != 0
+	|| g_strcmp0 (pPrevDesklets->cRetachButtonImage, pDesklets->cRetachButtonImage) != 0
+	|| g_strcmp0 (pPrevDesklets->cDepthRotateButtonImage, pDesklets->cDepthRotateButtonImage) != 0
+	|| g_strcmp0 (pPrevDesklets->cNoInputButtonImage, pDesklets->cNoInputButtonImage) != 0)
 	{
 		_unload_desklet_buttons ();
 		_load_desklet_buttons ();
 	}
-	if (cairo_dock_strings_differ (pPrevDesklets->cDeskletDecorationsName, pDesklets->cDeskletDecorationsName))  // the default theme has changed -> reload all desklets that use it
+	if (g_strcmp0 (pPrevDesklets->cDeskletDecorationsName, pDesklets->cDeskletDecorationsName) != 0)  // the default theme has changed -> reload all desklets that use it
 	{
 		CairoDesklet *pDesklet;
 		GList *dl;

@@ -547,14 +547,14 @@ static void reload (CairoBackendsParam *pPrevBackendsParam, CairoBackendsParam *
 	CairoBackendsParam *pPrevViews = pPrevBackendsParam;
 	
 	// views
-	if (cairo_dock_strings_differ (pPrevViews->cMainDockDefaultRendererName, pBackendsParam->cMainDockDefaultRendererName))
+	if (g_strcmp0 (pPrevViews->cMainDockDefaultRendererName, pBackendsParam->cMainDockDefaultRendererName) != 0)
 	{
 		cairo_dock_set_all_views_to_default (1);  // met a jour la taille des docks principaux.
 		gldi_docks_redraw_all_root ();
 	}
 	
-	if (cairo_dock_strings_differ (pPrevViews->cSubDockDefaultRendererName, pBackendsParam->cSubDockDefaultRendererName) ||
-		pPrevViews->fSubDockSizeRatio != pBackendsParam->fSubDockSizeRatio)
+	if (g_strcmp0 (pPrevViews->cSubDockDefaultRendererName, pBackendsParam->cSubDockDefaultRendererName) != 0
+	|| pPrevViews->fSubDockSizeRatio != pBackendsParam->fSubDockSizeRatio)
 	{
 		cairo_dock_set_all_views_to_default (2);  // met a jour la taille des sous-docks.
 	}

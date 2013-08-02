@@ -39,29 +39,6 @@ extern GldiContainer *g_pPrimaryContainer;
 extern gboolean g_bEasterEggs;
 
 
-void cairo_dock_free_label_description (CairoDockLabelDescription *pTextDescription)
-{
-	if (pTextDescription == NULL)
-		return ;
-	g_free (pTextDescription->cFont);
-	g_free (pTextDescription);
-}
-
-void cairo_dock_copy_label_description (CairoDockLabelDescription *pDestTextDescription, CairoDockLabelDescription *pOrigTextDescription)
-{
-	g_return_if_fail (pOrigTextDescription != NULL && pDestTextDescription != NULL);
-	memcpy (pDestTextDescription, pOrigTextDescription, sizeof (CairoDockLabelDescription));
-	pDestTextDescription->cFont = g_strdup (pOrigTextDescription->cFont);
-}
-
-CairoDockLabelDescription *cairo_dock_duplicate_label_description (CairoDockLabelDescription *pOrigTextDescription)
-{
-	g_return_val_if_fail (pOrigTextDescription != NULL, NULL);
-	CairoDockLabelDescription *pTextDescription = g_memdup (pOrigTextDescription, sizeof (CairoDockLabelDescription));
-	pTextDescription->cFont = g_strdup (pOrigTextDescription->cFont);
-	return pTextDescription;
-}
-
 gchar *cairo_dock_search_image_s_path (const gchar *cImageFile)
 {
 	g_return_val_if_fail (cImageFile != NULL, NULL);

@@ -565,7 +565,7 @@ reload_modmap (GdkKeymap *keymap,
   int i;
 
   /* FIXME multihead */
-  xmodmap = XGetModifierMapping (gdk_x11_get_default_xdisplay ());
+  xmodmap = XGetModifierMapping (gdk_x11_get_default_xdisplay ());  // doesn't cast any error
 
   memset (modmap->mapping, 0, sizeof (modmap->mapping));
   

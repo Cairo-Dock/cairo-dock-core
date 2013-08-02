@@ -331,12 +331,6 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 	pMenuItem = gtk_separator_menu_item_new (); \
 	gtk_menu_shell_append(GTK_MENU_SHELL (pMenu), pMenuItem); } while (0)
 
-/** Create and add the first separator to the main menu.
- */
-#define CD_APPLET_ADD_FIRST_SEPARATOR_IN_MENU do { \
-	if (pClickedIcon == myIcon || (pClickedContainer == CAIRO_CONTAINER (myDesklet) && pClickedIcon == NULL)) \
-		CD_APPLET_ADD_SEPARATOR_IN_MENU (CD_APPLET_MY_MENU); } while (0)
-
 
 /** Pop-up a menu on the applet's icon.
 *@param pMenu menu to show

@@ -1603,7 +1603,7 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 	
 	cd_debug ("%s (%s, '%s')", __func__, cCommand, cStartupWMClass);
 	gchar *cResult = NULL;
-	if (cStartupWMClass == NULL || *cStartupWMClass == '\0' || g_strcmp0 (cStartupWMClass, "Wine") == 0)  // on force pour wine, car meme si la classe est explicitement definie en tant que "Wine", cette information est inexploitable.
+	if (cStartupWMClass == NULL || *cStartupWMClass == '\0' || strcmp (cStartupWMClass, "Wine") == 0)  // on force pour wine, car meme si la classe est explicitement definie en tant que "Wine", cette information est inexploitable.
 	{
 		if (cCommand == NULL || *cCommand == '\0')
 			return NULL;

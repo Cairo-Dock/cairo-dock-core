@@ -264,6 +264,9 @@ int gldi_container_get_current_desktop_index (GldiContainer *pContainer);
 
 /** Move a Container to a given desktop, viewport, and position (similar to gtk_window_move except that the position is defined on the whole desktop (made of all viewports); it's only useful if the Container is sticky).
 *@param pContainer the container
+*@param iNumDesktop desktop number
+*@param iAbsolutePositionX horizontal position on the virtual screen
+*@param iAbsolutePositionY vertical position on the virtual screen
 */
 void gldi_container_move (GldiContainer *pContainer, int iNumDesktop, int iAbsolutePositionX, int iAbsolutePositionY);
 

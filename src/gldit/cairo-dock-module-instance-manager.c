@@ -581,7 +581,7 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReadConfig, GKeyFile 
 				cCurrentSubDockName = g_strdup (pIcon->cName);
 				
 				// on gere le changement de nom de son sous-dock.
-				if (pIcon->cName != NULL && pIcon->pSubDock != NULL && cairo_dock_strings_differ (pIcon->cName, pMinimalConfig->cLabel))
+				if (pIcon->cName != NULL && pIcon->pSubDock != NULL && g_strcmp0 (pIcon->cName, pMinimalConfig->cLabel) != 0)
 				{
 					gchar *cNewName = cairo_dock_get_unique_dock_name (pMinimalConfig->cLabel);
 					cd_debug ("* le sous-dock %s prend le nom '%s'", pIcon->cName, cNewName);

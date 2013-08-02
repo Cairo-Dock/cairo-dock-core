@@ -60,6 +60,15 @@ gboolean cairo_dock_launch_command_full (const gchar *cCommand, gchar *cWorkingD
 gchar * cairo_dock_get_command_with_right_terminal (const gchar *cCommand);
 
 
+/** Say if 2 RGBA colors differ.
+*/
+#define cairo_dock_colors_rvb_differ(c1, c2) ((c1[0] != c2[0]) || (c1[1] != c2[1]) || (c1[2] != c2[2]))
+
+/** Say if 2 RGB colors differ.
+*/
+#define cairo_dock_colors_differ(c1, c2) (cairo_dock_colors_rvb_differ (c1, c2) || (c1[3] != c2[3]))
+
+
 #include "gldi-config.h"
 #ifdef HAVE_X11
 

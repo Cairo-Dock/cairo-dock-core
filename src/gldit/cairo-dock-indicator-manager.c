@@ -28,6 +28,7 @@
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-utils.h"  // cairo_dock_colors_differ
 #include "cairo-dock-dock-manager.h"  // gldi_docks_redraw_all_root
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-container.h"
@@ -592,17 +593,17 @@ static void reload (CairoIndicatorsParam *pPrevIndicators, CairoIndicatorsParam 
 {
 	double fMaxScale = 1 + myIconsParam.fAmplitude;
 	
-	if (cairo_dock_strings_differ (pPrevIndicators->cIndicatorImagePath, pIndicators->cIndicatorImagePath) ||
-		pPrevIndicators->bIndicatorOnIcon != pIndicators->bIndicatorOnIcon ||
-		pPrevIndicators->fIndicatorRatio != pIndicators->fIndicatorRatio)
+	if (g_strcmp0 (pPrevIndicators->cIndicatorImagePath, pIndicators->cIndicatorImagePath) != 0
+	|| pPrevIndicators->bIndicatorOnIcon != pIndicators->bIndicatorOnIcon
+	|| pPrevIndicators->fIndicatorRatio != pIndicators->fIndicatorRatio)
 	{
 		_load_task_indicator (myTaskbarParam.bShowAppli && (myTaskbarParam.bMixLauncherAppli || myIndicatorsParam.bDrawIndicatorOnAppli) ? pIndicators->cIndicatorImagePath : NULL, fMaxScale, pIndicators->fIndicatorRatio);
 	}
 	
-	if (cairo_dock_strings_differ (pPrevIndicators->cActiveIndicatorImagePath, pIndicators->cActiveIndicatorImagePath) ||
-		pPrevIndicators->iActiveCornerRadius != pIndicators->iActiveCornerRadius ||
-		pPrevIndicators->iActiveLineWidth != pIndicators->iActiveLineWidth ||
-		cairo_dock_colors_differ (pPrevIndicators->fActiveColor, pIndicators->fActiveColor))
+	if (g_strcmp0 (pPrevIndicators->cActiveIndicatorImagePath, pIndicators->cActiveIndicatorImagePath) != 0
+	|| pPrevIndicators->iActiveCornerRadius != pIndicators->iActiveCornerRadius
+	|| pPrevIndicators->iActiveLineWidth != pIndicators->iActiveLineWidth
+	|| cairo_dock_colors_differ (pPrevIndicators->fActiveColor, pIndicators->fActiveColor))
 	{
 		_load_active_window_indicator (pIndicators->cActiveIndicatorImagePath,
 			fMaxScale,
@@ -611,8 +612,8 @@ static void reload (CairoIndicatorsParam *pPrevIndicators, CairoIndicatorsParam 
 			pIndicators->fActiveColor);
 	}
 	
-	if (cairo_dock_strings_differ (pPrevIndicators->cClassIndicatorImagePath, pIndicators->cClassIndicatorImagePath) ||
-		pPrevIndicators->bUseClassIndic != pIndicators->bUseClassIndic)
+	if (g_strcmp0 (pPrevIndicators->cClassIndicatorImagePath, pIndicators->cClassIndicatorImagePath) != 0
+	|| pPrevIndicators->bUseClassIndic != pIndicators->bUseClassIndic)
 	{
 		_load_class_indicator (myTaskbarParam.bShowAppli && myTaskbarParam.bGroupAppliByClass ? pIndicators->cClassIndicatorImagePath : NULL);
 		

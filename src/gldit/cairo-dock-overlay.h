@@ -77,7 +77,6 @@ typedef enum {
 	} CairoOverlayNotifications;
 
 
-
 /// Definition of an Icon Overlay.
 struct _CairoOverlay {
 	/// object

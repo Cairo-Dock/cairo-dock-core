@@ -1787,7 +1787,7 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 	}
 	
 	//\_______________ Hiding effect.
-	if (cairo_dock_strings_differ (pAccessibility->cHideEffect, pPrevAccessibility->cHideEffect))
+	if (g_strcmp0 (pAccessibility->cHideEffect, pPrevAccessibility->cHideEffect) != 0)
 	{
 		g_pHidingBackend = cairo_dock_get_hiding_effect (pAccessibility->cHideEffect);
 		if (g_pHidingBackend && g_pHidingBackend->init)
@@ -1797,10 +1797,10 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 	}
 	
 	//\_______________ Callback zone.
-	if (cairo_dock_strings_differ (pAccessibility->cZoneImage, pPrevAccessibility->cZoneImage) ||
-		pAccessibility->iZoneWidth != pPrevAccessibility->iZoneWidth ||
-		pAccessibility->iZoneHeight != pPrevAccessibility->iZoneHeight ||
-		pAccessibility->fZoneAlpha != pPrevAccessibility->fZoneAlpha)
+	if (g_strcmp0 (pAccessibility->cZoneImage, pPrevAccessibility->cZoneImage) != 0
+	|| pAccessibility->iZoneWidth != pPrevAccessibility->iZoneWidth
+	|| pAccessibility->iZoneHeight != pPrevAccessibility->iZoneHeight
+	|| pAccessibility->fZoneAlpha != pPrevAccessibility->fZoneAlpha)
 	{
 		_load_visible_zone (pAccessibility->cZoneImage, pAccessibility->iZoneWidth, pAccessibility->iZoneHeight, pAccessibility->fZoneAlpha);
 		

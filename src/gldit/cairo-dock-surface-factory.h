@@ -119,6 +119,12 @@ void cairo_dock_calculate_size_fill (double *fImageWidth, double *fImageHeight, 
 */
 void cairo_dock_calculate_size_constant_ratio (double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, gboolean bNoZoomUp, double *fZoom);
 
+
+void cairo_dock_free_label_description (CairoDockLabelDescription *pTextDescription);
+void cairo_dock_copy_label_description (CairoDockLabelDescription *pDestTextDescription, CairoDockLabelDescription *pOrigTextDescription);
+CairoDockLabelDescription *cairo_dock_duplicate_label_description (CairoDockLabelDescription *pOrigTextDescription);
+
+
 /** Calculate the size of an image according to a constraint on width and height, and a loading modifier.
 *@param fImageWidth pointer to the width of the image. Initially contains the width of the original image, and is updated with the resulting width.
 *@param fImageHeight pointer to the height of the image. Initially contains the height of the original image, and is updated with the resulting height.
@@ -220,18 +226,6 @@ cairo_surface_t *cairo_dock_create_surface_from_pattern (const gchar *cImageFile
 *@return the newly allocated surface.
 */
 cairo_surface_t * cairo_dock_rotate_surface (cairo_surface_t *pSurface, double fImageWidth, double fImageHeight, double fRotationAngle);
-
-/* Create a surface by reflection of another. Apply a transparency gradation. The size of the reflect is given by the global config,and its position if given by the orientation of the icon; if this changes, the reflect needs to be re-created.
-*@param pSurface surface to reflect.
-*@param fImageWidth the width of the surface.
-*@param fImageHeight the height of the surface.
-*@param fReflectSize size of the reflection.
-*@param fAlbedo power of the reflection (1 : strong, 0 : transparent)
-*@param bIsHorizontal TRUE if the surface is in an horizontal container.
-*@param bDirectionUp TRUE if the surface is in a container whose direction is towards.
-*@return the newly allocated surface.
-*/
-//cairo_surface_t * cairo_dock_create_reflection_surface (cairo_surface_t *pSurface, double fImageWidth, double fImageHeight, double fReflectSize, double fAlbedo, gboolean bIsHorizontal, gboolean bDirectionUp);
 
 /** Create a surface representing a text, according to a given text description.
 *@param cText the text.

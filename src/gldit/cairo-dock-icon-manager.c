@@ -27,6 +27,7 @@
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-module-instance-manager.h"  // gldi_module_instance_reload
 #include "cairo-dock-desklet-manager.h"  // gldi_desklets_foreach_icons
+#include "cairo-dock-utils.h"  // cairo_dock_colors_differ
 #include "cairo-dock-log.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-class-manager.h"  // cairo_dock_deinhibite_class
@@ -816,7 +817,7 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 		return;
 	}
 	
-	gboolean bThemeChanged = cairo_dock_strings_differ (pIcons->cIconTheme, pPrevIcons->cIconTheme);
+	gboolean bThemeChanged = (g_strcmp0 (pIcons->cIconTheme, pPrevIcons->cIconTheme) != 0);
 	if (bThemeChanged)
 	{
 		_cairo_dock_unload_icon_theme ();
@@ -826,8 +827,8 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 	
 	gboolean bIconBackgroundImagesChanged = FALSE;
 	// if background images are different, reload them and trigger the reload of all icons
-	if (cairo_dock_strings_differ (pPrevIcons->cBackgroundImagePath, pIcons->cBackgroundImagePath) ||
-		pPrevIcons->fAmplitude != pIcons->fAmplitude)
+	if (g_strcmp0 (pPrevIcons->cBackgroundImagePath, pIcons->cBackgroundImagePath) != 0
+	|| pPrevIcons->fAmplitude != pIcons->fAmplitude)
 	{
 		bIconBackgroundImagesChanged = TRUE;
 		_cairo_dock_load_icons_background_surface (pIcons->cBackgroundImagePath);

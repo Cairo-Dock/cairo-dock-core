@@ -847,12 +847,12 @@ static void reload (CairoTaskbarParam *pPrevTaskBar, CairoTaskbarParam *pTaskBar
 		|| pPrevTaskBar->bOverWriteXIcons != pTaskBar->bOverWriteXIcons
 		|| pPrevTaskBar->iMinimizedWindowRenderType != pTaskBar->iMinimizedWindowRenderType
 		|| pPrevTaskBar->iAppliMaxNameLength != pTaskBar->iAppliMaxNameLength
-		|| cairo_dock_strings_differ (pPrevTaskBar->cGroupException, pTaskBar->cGroupException)
-		|| cairo_dock_strings_differ (pPrevTaskBar->cOverwriteException, pTaskBar->cOverwriteException)
+		|| g_strcmp0 (pPrevTaskBar->cGroupException, pTaskBar->cGroupException) != 0
+		|| g_strcmp0 (pPrevTaskBar->cOverwriteException, pTaskBar->cOverwriteException) != 0
 		|| pPrevTaskBar->bShowAppli != pTaskBar->bShowAppli
 		|| pPrevTaskBar->iIconPlacement != pTaskBar->iIconPlacement
 		|| pPrevTaskBar->bSeparateApplis != pTaskBar->bSeparateApplis
-		|| cairo_dock_strings_differ (pPrevTaskBar->cRelativeIconName, pTaskBar->cRelativeIconName))
+		|| g_strcmp0 (pPrevTaskBar->cRelativeIconName, pTaskBar->cRelativeIconName) != 0)
 	{
 		_cairo_dock_stop_application_manager ();
 		

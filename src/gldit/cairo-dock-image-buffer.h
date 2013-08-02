@@ -54,20 +54,6 @@ struct _CairoDockImageBuffer {
 	struct timeval time;  // time the current frame has been set
 	} ;
 
-void cairo_dock_free_label_description (CairoDockLabelDescription *pTextDescription);
-void cairo_dock_copy_label_description (CairoDockLabelDescription *pDestTextDescription, CairoDockLabelDescription *pOrigTextDescription);
-CairoDockLabelDescription *cairo_dock_duplicate_label_description (CairoDockLabelDescription *pOrigTextDescription);
-
-/** Say if 2 strings differ, taking into account NULL strings.
-*/
-#define cairo_dock_strings_differ(s1, s2) ((s1 && ! s2) || (! s1 && s2) || (s1 && s2 && strcmp (s1, s2)))
-/** Say if 2 RGBA colors differ.
-*/
-#define cairo_dock_colors_rvb_differ(c1, c2) ((c1[0] != c2[0]) || (c1[1] != c2[1]) || (c1[2] != c2[2]))
-/** Say if 2 RGB colors differ.
-*/
-#define cairo_dock_colors_differ(c1, c2) (cairo_dock_colors_rvb_differ (c1, c2) || (c1[3] != c2[3]))
-
 /** Find the path of an image. '~' is handled, as well as the 'images' folder of the current theme. Use \ref cairo_dock_search_icon_s_path to search theme icons.
 *@param cImageFile a file name or path. If it's already a path, it will just be duplicated.
 *@return the path of the file, or NULL if it has not been found.
@@ -85,7 +71,8 @@ gchar *cairo_dock_search_image_s_path (const gchar *cImageFile);
 *@param fAlpha transparency (1:fully opaque)
 */
 void cairo_dock_load_image_buffer_full (CairoDockImageBuffer *pImage, const gchar *cImageFile, int iWidth, int iHeight, CairoDockLoadImageModifier iLoadModifier, double fAlpha);
-/** Load an image into an ImageBuffer. If the image is given by its sole name, it is taken in the root folder of the current theme.
+/** \fn cairo_dock_load_image_buffer(pImage, cImageFile, iWidth, iHeight, iLoadModifier)
+ * Load an image into an ImageBuffer. If the image is given by its sole name, it is taken in the root folder of the current theme.
 *@param pImage an ImageBuffer.
 *@param cImageFile name of a file
 *@param iWidth width it should be loaded. The resulting width can be different depending on the modifier.

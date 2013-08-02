@@ -943,9 +943,9 @@ static void reset_config (CairoDialogsParam *pDialogs)
 
 static void reload (CairoDialogsParam *pPrevDialogs, CairoDialogsParam *pDialogs)
 {
-	if (cairo_dock_strings_differ (pPrevDialogs->cButtonOkImage, pDialogs->cButtonOkImage) ||
-		cairo_dock_strings_differ (pPrevDialogs->cButtonCancelImage, pDialogs->cButtonCancelImage) ||
-		pPrevDialogs->iDialogIconSize != pDialogs->iDialogIconSize)
+	if (g_strcmp0 (pPrevDialogs->cButtonOkImage, pDialogs->cButtonOkImage) != 0
+	|| g_strcmp0 (pPrevDialogs->cButtonCancelImage, pDialogs->cButtonCancelImage) != 0
+	|| pPrevDialogs->iDialogIconSize != pDialogs->iDialogIconSize)
 	{
 		_unload_dialog_buttons ();
 		_load_dialog_buttons (pDialogs->cButtonOkImage, pDialogs->cButtonCancelImage);
