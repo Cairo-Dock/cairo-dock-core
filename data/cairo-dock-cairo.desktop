@@ -5,11 +5,11 @@ Exec=cairo-dock -A
 Icon=cairo-dock
 Terminal=false
 
+Name=Cairo-Dock (safe mode)
+Name[fr]=Cairo-Dock (mode sans échec)
+
 Comment=A light and eye-candy dock and desklets for your desktop.
 Comment[fr]=Un dock et des desklets légers et sexy pour votre bureau.
-
-Name=Cairo-Dock (no OpenGL)
-Name[fr]=Cairo-Dock (sans OpenGL)
 
 GenericName=Multi-purpose Dock and Desklets
 GenericName[fr]=Dock et Desklets multi-usage
