@@ -172,6 +172,11 @@ Display *cairo_dock_initialize_X_desktop_support (void)
 }
 
 
+Display *cairo_dock_get_X_display (void)
+{
+	return s_XDisplay;
+}
+
 static GtkAllocation *_get_screens_geometry (int *pNbScreens)
 {
 	GtkAllocation *pScreens = NULL;

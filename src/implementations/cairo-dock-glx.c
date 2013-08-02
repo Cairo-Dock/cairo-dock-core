@@ -23,11 +23,12 @@
 #include <GL/gl.h>
 #include <GL/glx.h>
 #include <string.h>  // strstr
-#include <gdk/gdkx.h>  // gdk_x11_get_default_xdisplay/GDK_WINDOW_XID
+#include <gdk/gdkx.h>  // GDK_WINDOW_XID
 #include <X11/Xlib.h>
 #include <X11/extensions/Xrender.h>  // XRenderFindVisualFormat
 
 #include "cairo-dock-log.h"
+#include "cairo-dock-X-utilities.h"  // cairo_dock_get_X_display
 #include "cairo-dock-opengl.h"
 
 // dependencies
@@ -37,6 +38,7 @@ extern GldiContainer *g_pPrimaryContainer;
 
 // private
 static gboolean s_bInitialized = FALSE;
+static Display *s_XDisplay = NULL;
 static gboolean s_bForceOpenGL = FALSE;
 #define _gldi_container_get_Xid(pContainer) GDK_WINDOW_XID (gldi_container_get_gdk_window(pContainer))
 
@@ -90,7 +92,7 @@ static gboolean _check_gl_extension (const char *extName)
 }
 static gboolean _check_client_glx_extension (const char *extName)
 {
-	Display *display = gdk_x11_get_default_xdisplay ();
+	Display *display = s_XDisplay;
 	//int screen = 0;
 	//const gchar *glxExtensions = glXQueryExtensionsString (display, screen);
 	const gchar *glxExtensions = glXGetClientString (display, GLX_EXTENSIONS);
@@ -136,7 +138,7 @@ static gboolean _initialize_opengl_backend (gboolean bForceOpenGL)
 {
 	s_bForceOpenGL = bForceOpenGL;
 	gboolean bStencilBufferAvailable, bAlphaAvailable;
-	Display *XDisplay = gdk_x11_get_default_xdisplay ();
+	Display *XDisplay = s_XDisplay;
 	
 	//\_________________ On cherche un visual qui reponde a tous les criteres.
 	GLXFBConfig *pFBConfigs;
@@ -239,7 +241,7 @@ static gboolean _initialize_opengl_backend (gboolean bForceOpenGL)
 	}
 	
 	//\_________________ create a context for this visual. All other context will share ressources with it, and it will be the default context in case no other context exist.
-	Display *dpy = gdk_x11_display_get_xdisplay (gdk_display_get_default ());
+	Display *dpy = s_XDisplay;
 	g_openglConfig.context = glXCreateContext (dpy, pVisInfo, NULL, TRUE);
 	g_return_val_if_fail (g_openglConfig.context != 0, FALSE);
 	
@@ -274,7 +276,7 @@ static void _stop (void)
 {
 	if (g_openglConfig.context != 0)
 	{
-		Display *dpy = gdk_x11_display_get_xdisplay (gdk_display_get_default ());
+		Display *dpy = s_XDisplay;
 		glXDestroyContext (dpy, g_openglConfig.context);
 		g_openglConfig.context = 0;
 	}
@@ -283,7 +285,7 @@ static void _stop (void)
 static gboolean _container_make_current (GldiContainer *pContainer)
 {
 	Window Xid = _gldi_container_get_Xid (pContainer);
-	Display *dpy = gdk_x11_display_get_xdisplay (gdk_display_get_default ());
+	Display *dpy = s_XDisplay;
 	return glXMakeCurrent (dpy, Xid, pContainer->glContext);
 }
 
@@ -291,7 +293,7 @@ static void _container_end_draw (GldiContainer *pContainer)
 {
 	glDisable (GL_SCISSOR_TEST);  /// should not be here ...
 	Window Xid = _gldi_container_get_Xid (pContainer);
-	Display *dpy = gdk_x11_display_get_xdisplay (gdk_display_get_default ());
+	Display *dpy = s_XDisplay;
 	glXSwapBuffers (dpy, Xid);
 }
 
@@ -385,7 +387,7 @@ static void _container_init (GldiContainer *pContainer)
 	#endif
 	
 	// create a GL context for this container (this way, we can set the viewport once and for all).
-	Display *dpy = gdk_x11_display_get_xdisplay (gdk_display_get_default ());
+	Display *dpy = s_XDisplay;
 	GLXContext context = g_openglConfig.context;
 	pContainer->glContext = glXCreateContext (dpy, g_openglConfig.pVisInfo, context, TRUE);
 	
@@ -410,7 +412,7 @@ static void _container_finish (GldiContainer *pContainer)
 {
 	if (pContainer->glContext != 0)
 	{
-		Display *dpy = gdk_x11_display_get_xdisplay (gdk_display_get_default ());
+		Display *dpy = s_XDisplay;
 		
 		if (glXGetCurrentContext() == pContainer->glContext)
 		{
@@ -435,6 +437,8 @@ void gldi_register_glx_backend (void)
 	gmb.container_init = _container_init;
 	gmb.container_finish = _container_finish;
 	gldi_gl_manager_register_backend (&gmb);
+	
+	s_XDisplay = cairo_dock_get_X_display ();  // initialize it once and for all at the beginning; we use this display rather than the GDK one to avoid the GDK X errors check.
 }
 
 #else

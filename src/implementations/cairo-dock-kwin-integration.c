@@ -19,7 +19,6 @@
 
 #include "gldi-config.h"
 #ifdef HAVE_X11
-#include <gdk/gdkx.h>  // gdk_x11_get_default_xdisplay
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #endif
@@ -28,6 +27,7 @@
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dbus.h"
+#include "cairo-dock-X-utilities.h"  // cairo_dock_get_X_display
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-windows-manager.h"  // gldi_window_get_id
@@ -72,8 +72,11 @@ static gboolean present_class (const gchar *cClass)
 	GList *pIcons = (GList*)cairo_dock_list_existing_appli_with_class (cClass);
 	if (pIcons == NULL)
 		return FALSE;
+	Display *dpy = cairo_dock_get_X_display ();
+	if (! dpy)
+		return FALSE;
 	
-	Atom aPresentWindows = XInternAtom (gdk_x11_get_default_xdisplay(), "_KDE_PRESENT_WINDOWS_GROUP", False);
+	Atom aPresentWindows = XInternAtom (dpy, "_KDE_PRESENT_WINDOWS_GROUP", False);
 	Window *data = g_new0 (Window, g_list_length (pIcons));
 	Icon *pOneIcon;
 	GldiWindowActor *xactor;
@@ -85,7 +88,7 @@ static gboolean present_class (const gchar *cClass)
 		xactor = (GldiWindowActor*)pOneIcon->pAppli;
 		data[i++] = gldi_window_get_id (xactor);
 	}
-	XChangeProperty(gdk_x11_get_default_xdisplay(), data[0], aPresentWindows, aPresentWindows, 32, PropModeReplace, (unsigned char *)data, i);
+	XChangeProperty(dpy, data[0], aPresentWindows, aPresentWindows, 32, PropModeReplace, (unsigned char *)data, i);
 	g_free (data);
 	return TRUE;
 	#else

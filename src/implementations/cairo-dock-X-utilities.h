@@ -28,11 +28,15 @@
 #include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
-/**
-*@file cairo-dock-X-utilities.h This class provides some utilities functions to interact very specifically on X.
+/*
+*@file cairo-dock-X-utilities.h Some utilities functions to interact very specifically on X.
 */
 
 Display *cairo_dock_initialize_X_desktop_support (void);
+
+/* Get the X Display used by the X manager. This is useful to ignore any X error silently (without having to call gdk_error_trap_push/pop each time).
+ */
+Display *cairo_dock_get_X_display (void);
 
   /////////////
  // DESKTOP //
@@ -101,8 +105,6 @@ gboolean cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Window Xid, gb
 void cairo_dock_xwindow_can_minimize_maximized_close (Window Xid, gboolean *bCanMinimize, gboolean *bCanMaximize, gboolean *bCanClose);
 gboolean cairo_dock_window_is_utility (int Xid);
 gboolean cairo_dock_window_is_dock (int Xid);
-
-//void cairo_dock_get_xwindow_position_on_its_viewport (Window Xid, int *iRelativePositionX, int *iRelativePositionY);
 
 Window *cairo_dock_get_windows_list (gulong *iNbWindows, gboolean bStackOrder);
 

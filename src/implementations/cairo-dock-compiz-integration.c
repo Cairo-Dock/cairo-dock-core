@@ -23,16 +23,15 @@
 #include <gdk/gdkx.h>  // GDK_WINDOW_XID
 #endif
 
-#include "cairo-dock-icon-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dbus.h"
 #include "cairo-dock-desktop-manager.h"
-#include "cairo-dock-windows-manager.h"
+#include "cairo-dock-windows-manager.h"  // bIsHidden
+#include "cairo-dock-icon-factory.h"  // pAppli
 #include "cairo-dock-container.h"  // gldi_container_get_gdk_window
 #include "cairo-dock-class-manager.h"
-#include "cairo-dock-launcher-manager.h"  // cairo_dock_launch_command_sync
 #include "cairo-dock-utils.h"  // cairo_dock_launch_command_sync
-#include "cairo-dock-config.h"  // cairo_dock_get_version_from_string
+#include "cairo-dock-X-utilities.h"  // cairo_dock_get_X_display
 #include "cairo-dock-compiz-integration.h"
 
 static DBusGProxy *s_pScaleProxy = NULL;
@@ -40,21 +39,27 @@ static DBusGProxy *s_pExposeProxy = NULL;
 static DBusGProxy *s_pWidgetLayerProxy = NULL;
 
 #ifdef HAVE_X11
-static Atom s_aCompizWidget = 0;
-#define _get_root_id(...) DefaultRootWindow (gdk_x11_get_default_xdisplay ())
+static inline Window _get_root_Xid (void)
+{
+	Display *dpy = cairo_dock_get_X_display ();
+	return (dpy ? DefaultRootWindow(dpy) : 0);
+}
 #else
-#define _get_root_id(...) 0  /// can it still work with 0 ?...
+#define _get_root_Xid(...) 0
 #endif
 
 static gboolean present_windows (void)
 {
+	int root = _get_root_Xid();
+	if (! root)
+		return FALSE;
 	gboolean bSuccess = FALSE;
 	if (s_pScaleProxy != NULL)
 	{
 		GError *erreur = NULL;
 		bSuccess = dbus_g_proxy_call (s_pScaleProxy, "activate", &erreur,
 			G_TYPE_STRING, "root",
-			G_TYPE_INT, _get_root_id (),
+			G_TYPE_INT, root,
 			G_TYPE_STRING, "",
 			G_TYPE_STRING, "",
 			G_TYPE_INVALID,
@@ -87,6 +92,10 @@ static gboolean present_class (const gchar *cClass)
 	if (bAllHidden)
 		return FALSE;
 	
+	int root = _get_root_Xid();
+	if (! root)
+		return FALSE;
+	
 	gboolean bSuccess = FALSE;
 	if (s_pScaleProxy != NULL)
 	{
@@ -100,7 +109,7 @@ static gboolean present_class (const gchar *cClass)
 		cd_message ("Compiz: match '%s'", cMatch);
 		bSuccess = dbus_g_proxy_call (s_pScaleProxy, "activate", &erreur,
 			G_TYPE_STRING, "root",
-			G_TYPE_INT, _get_root_id (),
+			G_TYPE_INT, root,
 			G_TYPE_STRING, "match",
 			G_TYPE_STRING, cMatch,
 			G_TYPE_INVALID,
@@ -118,13 +127,17 @@ static gboolean present_class (const gchar *cClass)
 
 static gboolean present_desktops (void)
 {
+	int root = _get_root_Xid();
+	if (! root)
+		return FALSE;
+	
 	gboolean bSuccess = FALSE;
 	if (s_pExposeProxy != NULL)
 	{
 		GError *erreur = NULL;
 		bSuccess = dbus_g_proxy_call (s_pExposeProxy, "activate", &erreur,
 			G_TYPE_STRING, "root",
-			G_TYPE_INT, _get_root_id (),
+			G_TYPE_INT, root,
 			G_TYPE_INVALID,
 			G_TYPE_INVALID);
 		if (erreur)
@@ -139,13 +152,17 @@ static gboolean present_desktops (void)
 
 static gboolean show_widget_layer (void)
 {
+	int root = _get_root_Xid();
+	if (! root)
+		return FALSE;
+	
 	gboolean bSuccess = FALSE;
 	if (s_pWidgetLayerProxy != NULL)
 	{
 		GError *erreur = NULL;
 		bSuccess = dbus_g_proxy_call (s_pWidgetLayerProxy, "activate", &erreur,
 			G_TYPE_STRING, "root",
-			G_TYPE_INT, _get_root_id (),
+			G_TYPE_INT, root,
 			G_TYPE_INVALID,
 			G_TYPE_INVALID);
 		if (erreur)
@@ -244,19 +261,24 @@ static gboolean _check_widget_plugin (G_GNUC_UNUSED gpointer data)
 static gboolean set_on_widget_layer (GldiContainer *pContainer, gboolean bOnWidgetLayer)
 {
 	#ifdef HAVE_X11
+	static gboolean s_bChecked = TRUE;
+	static Atom s_aCompizWidget = None;
+	
 	cd_debug ("%s ()", __func__);
 	Window Xid = GDK_WINDOW_XID (gldi_container_get_gdk_window(pContainer));
-	static gboolean s_bFirst = TRUE;
-	Display *dpy = gdk_x11_get_default_xdisplay ();
+	Display *dpy = cairo_dock_get_X_display ();
+	if (! dpy)
+		return FALSE;
+	if (s_aCompizWidget == None)
+		s_aCompizWidget = XInternAtom (dpy, "_COMPIZ_WIDGET", False);
+	
 	if (bOnWidgetLayer)
 	{
 		// the first time, trigger a check to ensure the 'widget' plug-in is operationnal.
-		if (s_bFirst)
+		if (s_bChecked)
 		{
 			g_timeout_add_seconds (2, _check_widget_plugin, NULL);
-			
-			s_aCompizWidget = XInternAtom (dpy, "_COMPIZ_WIDGET", False);
-			s_bFirst = FALSE;
+			s_bChecked = FALSE;
 		}
 		// set the _COMPIZ_WIDGET atom on the window to mark it.
 		gulong widget = 1;
