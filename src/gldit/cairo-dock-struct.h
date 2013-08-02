@@ -61,21 +61,20 @@
  * -  \ref dock
  * -  \ref desklet
  * -  \ref dialog
- * -  \ref flying
  * -  \ref modules
  * -  \ref module-instances
+ * -  \ref drawing
+ * -  \ref windows
  * 
  * \ref applets_sec
- * -  \ref module
- * -  \ref generate
- * -  \ref definition
- * -  \ref sections
- * -  \ref notifications
- * -  \ref useful_functions
+ * -  \ref creation
+ * -  \ref first_steps
+ * -  \ref further
  * -  \ref opengl
  * -  \ref animation
  * -  \ref tasks
- * -  \ref sub-icons
+ * -  \ref key_binding
+ * -  \ref sub_icons
  * 
  * \ref advanced_sec
  * -  \ref advanced_config
@@ -89,26 +88,18 @@
  * \n
  * \section intro_sec Introduction
  *
- * This documentation presents the architecture of <i>libgldi</i>, and how to make a plug-in for it.
+ * This documentation presents the core library of Cairo-Dock: <i>libgldi</i> (GL Desktop Interface).
  *
- * It is useful if you want to write a plug-in, add new features in the core, or just love C.
+ * It is useful if you want to write a plug-in, add new features in the core, or just love C.\n
  * Note: to write applets in any language very easily, see http://doc.glx-dock.org.
  *
- * Cairo-Dock has a <b>decentralized conception</b> : it has a minimalistic core, and lets external modules extend its functionnalities.\n
- * This is a strong design, because it allows to extend functionnalities easily without having to hack into the core, which makes the project more stable and allows developpers to use high-level functions only, that are very tested and optimized.\n
- * Thus, Cairo-Dock itself has no animation, but has a convenient notification system that allows external plug-ins to animate icons when they want.\n
- *
- * The core itself is a library made of several modules. Each module is made on the same model:
- * - the "factory" defines the structures/enums/interfaces of a class and creation/modification/destruction functions
- * - the "manager" manages all the ressources of the module and all the instances of the class
- * - the "facility" or "utilities" are a collection of helper functions to related to the class.
- *
- * In this document, we will focus on the notification system and the plug-ins framework. Part 1 will be seen briefly, and part 2 will be let to your curiosity. This should be enough to quickly be able to write a lot of applets.
+ * It has a <b>decentralized conception</b> and is built of several modules: internal modules (\ref managers) and external modules (\ref modules) that can extend it.\n
+ * It also has an \ref objects architecture.
  * 
  * \n
  * \section install_sec Installation
  *
- * The installation is very easy and uses cmake. In a terminal, copy-paste the following commands :
+ * The installation is very easy and uses <i>cmake</i>. In a terminal, copy-paste the following commands :
  * \code
  *   ### grab the sources of the core
  *   mkdir CD && cd CD
@@ -133,158 +124,170 @@
  * \section struct_sec Main structures
  *
  * \subsection objects Objects
- * Any element in <i>libgldi</i> is a _GldiObject.<br>
- * An Object is created by an ObjectManager, which defines the properties and notifications of its children.<br>
- * It has a reference counter, can be deleted from the current theme, and can be reloaded.<br>
- * An Object can cast notifications; notifications are broadcasted on its ObjectManager.<br>
- * An ObjectManager can inherit from another ObjectManager; in this case, all methods of the parent ObjectManagers are called recursively, and likewise all notifications on the object are casted recursively to all parent ObjectManagers.
+ * Any element in <i>libgldi</i> is a _GldiObject.\n
+ * An Object is created by an ObjectManager, which defines the properties and notifications of its children.\n
+ * It has a reference counter, can be deleted from the current theme, and can be reloaded.\n
+ * An Object can cast <b>notifications</b>; notifications are broadcasted on its ObjectManager.\n
+ * An ObjectManager can inherit from another ObjectManager; in this case, all methods of the parent ObjectManagers are called recursively, and likewise all notifications on an Object are casted recursively to all parent ObjectManagers.
+ * 
+ * See _GldiObject and cairo-dock-object.h for more details.
  * 
  * \subsection managers Managers
- * The core is divided in several internal modules, called Managers.
+ * The core is divided in several internal modules, called Managers.\n
  * Each Manager manages a set of parameters and objects (for instance, the Dock Manager manages the list of all Docks and their parameters).
+ * 
  * See _GldiManager and cairo-dock-manager.h for more details.
  * 
  * \subsection containers Containers
  * Containers are generic animated windows. They can hold Icons and support cairo/OpenGL drawing.
+ * 
  * See _GldiContainer and cairo-dock-container.h for more details.
  * 
  * \subsection icons Icons
  * Icons are elements inside a Container on which the user can interact. For instance, a Launcher is an Icon that launches a program on left-click.
+ * 
  * See _Icon and cairo-dock-icon-factory.h for more details.
  * 
  * \subsection dock Dock
- * See _CairoDock for the definition of a Dock, and cairo-dock-dock-factory.h for a complete description of the Dock class.
+ * Docks are a kind of Container that sits on a border of the screen.
+ * 
+ * See _CairoDock and cairo-dock-dock-factory.h for more details.
  * 
  * \subsection desklet Desklet
- * See _CairoDesklet for the definition of a Desklet, and cairo-dock-desklet-factory.h for a complete description of the Desklet class.
+ * Desklets are a kind of Container that stays on the desktop and holds one or many icons.
+ * 
+ * See _CairoDesklet and cairo-dock-desklet-factory.h for more details.
  * 
  * \subsection dialog Dialog
- * See _CairoDialog for the definition of a Dialog, and cairo-dock-dialog-factory.h for a complete description of the Dialog class.
+ * Dialogs are a kind of Container that holds no icon, but rather point to an icon, and are used to display some information or interact with the user.
  * 
- * \subsection flying Flying Container
- * See _CairoFlyingContainer for the definition of a Flying Container, and cairo-dock-flying-container.h for a complete description of the FlyingContainer class.
+ * See _CairoDialog and cairo-dock-dialog-factory.h for more details.
  * 
  * \subsection modules Modules
- * A Module is an object representing a plug-in for <i>libgldi</i>.<br>
- * It defines a set of properties and an interface for init/stop/reload.<br>
- * A Module that adds an Icon is called an 'applet'.
+ * A Module is an Object representing a plug-in for <i>libgldi</i>.\n
+ * It defines a set of properties and an interface for init/stop/reload.\n
+ * A Module that adds an Icon is called an <i>"applet"</i>.
  * 
  * See _GldiModule and cairo-dock-module-manager.h for more details.
  * 
- * <u>Note:</u> the cairo-dock-plug-ins project is a set of modules in the form of loadable libraries (.so files).<br>
- * the cairo-dock-plug-ins-extra project is a set of modules in the form of scripts (Python or any language) that interact on the core through Dbus.
+ * Note: the <a href="https://launchpad.net/cairo-dock-plug-ins">cairo-dock-plug-ins</a> project is a set of modules in the form of loadable libraries (.so files).\n
+ * the <a href="https://launchpad.net/cairo-dock-plug-ins-extras">cairo-dock-plug-ins-extra</a> project is a set of modules in the form of scripts (Python or any language) that interact on the core through Dbus.
  *
  * \subsection module-instances Module-Instances
- * A Module-Instance is an actual instance of a Module.<br>
- * It holds a set of parameters and data (amongst them the Applet-Icon if it's an applet).<br>
+ * A Module-Instance is an actual instance of a Module.\n
+ * It holds a set of parameters and data (amongst them the Applet-Icon if it's an applet).\n
  * A Module can have several instances.
+ * 
+ * See _GldiModuleInstance and cairo-dock-module-instance-manager.h for more details.
+ * 
+ * 
+ * \subsection drawing Drawing with cairo/opengl
+ * 
+ * libgldi defines \ref _CairoDockImageBuffer, a generic Image that works for both cairo and OpenGL.\n
+ * See cairo-dock-image-buffer.h for more details.
+ * 
+ * It is possible to add small images above Icons; they are called \ref _CairoOverlay.\n
+ * For instance quick-info and progress-bars are Overlays.\n
+ * See cairo-dock-overlay.h for more details.
+ * 
+ * 
+ * \subsection windows Windows management
+ * 
+ * libgldi keeps track of all the currently existing windows, with all their properties, and notifies everybody of any change. It is used for the Taskbar.\n
+ * Each window has a corresponding \ref _GldiWindowActor object.\n
+ * See cairo-dock-windows-manager.h for more details.
  * 
  * 
  * \n
  * \section applets_sec External Modules
  * 
- * \subsection module First, what is a module ?
+ * \subsection creation Create a new applet
  * 
- * Modules are compiled .so files (that is to say, library) that are plugged into the dock at run-time.
- * Therefore, they can use any function used by the dock, and have a total interaction freedom on the dock.
- * The advantage is that applets can do anything, in fact they are extensions of the dock itself.
- * The drawback is that a buggy applet can make the dock unstable.
+ * Go to the "plug-ins" folder, and run the <i>generate-applet.sh</i> script. Answer the few questions, and you're done!\n
+ * The script creates a <module-name> folder, with <i>src</i> and <i>data</i> sub-folders, which contain the following:\n
+ *   - data/icon.png: the default icon of your applet
+ *   - data/preview.jpg: a preview of your applet, around 200x200 pixels
+ *   - data/<module-name>.conf.in: the config file of your applet
+ *   - src/applet-init.c: contains the <i>init</i>, <i>stop</i> and <i>reload</i> methods, as well as the definition of your applet.
+ *   - src/applet-config.c: container the <i>get_config</i> and <i>reset_config</i> methods
+ *   - src/applet-notifications.c: contains the callbacks of your applet (ie, the code that is called on events, for instance on click on the icon)
+ *   - src/applet-struct.h: contains the structures (Config, Data, and any other you may need)
  * 
- * A module has an <b>interface</b> and a <b>visit card</b> :
- *  - the visit card allows it to define itself (name, category, default icon, etc)
- *  - the interface defines the entry points for init, stop, reload, read config, and reset config/data.
- * 
- * Modules can be instanciated several times; each time they are, an <b>instance</b> is created. This instance will hold all the data used by the module: the icon and its container, the config structure and its conf file, the data structure and a slot to plug data into containers and icons. All these parameters are optionnal; a module that has an icon is also called an <b>applet</b>.
- * 
- * When instanciating a module, CD will check the presence of an "Icon" group in the conf file. If there is one, it will create an icon accordingly and insert it into its container. If there is a "Desklet" group, the module is considered as detachable, and can be placed into a desklet.
- * Here we will focus on applets, that is to say, we will have an icon and a container (dock or desklet).
- * 
- * 
- * \subsection generate Let's start, how do I create an empty applet ?
- * 
- * Easy ! just go to the "plug-ins" folder, and run the <i>generate-applet.sh</i> script. Answer the few questions, and you're done ! Don't forget to install the plug-in each time you modify it (<i>sudo make install</i> in your applet's folder).
- * You can see that the script has created for you the architecture of your applet :
- * - in the <b>plug-ins</b> parent folder, you have the "CMakeLists.txt", where you can set the version number of your applet, the dependencies, etc
- * - in the <b>src</b> folder, you have the sources of your applet. It is common to put the init/stop/reload in applet-init.c, the get_config/reset_config/reset_data in applet-config.c, the notifications in applet-notifications.c, and the structures in applet-struct.h. Of course, you can add as many files as you want, just don't forget to specify them in the CMakeLists.txt.
- * - in the <b>data</b> folder, you have the config file, the default icon, and a preview. You will have to choose a default icon that fits your applet, and make a preview that makes users want to try it ;-)
- * If you have other files to install, it's here you will do it.
- * If you change the name of the default icon (for instance you use an SVG file), don't forget to modify the data/CMakeLists.txt and also the src/CMakeLists.txt.
+ * Note: when adding a new file, don't forget to add it in the CMakeLists.txt.\n
+ * when changing something in the config file, don't forget to update the version number of the applet, in the main CMakeLists.txt.\n
+ * when changing anything, don't forget to install (<i>sudo make install</i>)
  * 
  * 
- * \subsection definition Ok I have a generic applet, how do I define it ?
+ * \subsection first_steps First steps
  * 
- * As we saw, a module must fill a visit card and an interface, to be acecpted by the dock.
- * This is done very easily by the \ref CD_APPLET_DEFINITION macro. All you have to give is the name of the applet, its category, a brief description/manual (very important !), and your name.
+ * Edit the file <i>src/applet-inic.c</i>; the macro \ref CD_APPLET_DEFINITION is a convenient way to define an applet: just fill its name, its category, a brief description, and your name.
  * 
- * Once you have finished your applet, don't forget to make a nice preview (~200x200 pixels) and a nice default icon, and place them in the <i>data</i> folder.
+ * In the section CD_APPLET_INIT_BEGIN/CD_APPLET_INIT_END, write the code that will run on startup.
  * 
+ * In the section CD_APPLET_STOP_BEGIN/CD_APPLET_STOP_END, write the code that will run when the applet is deactivated: remove any timer, destroy any allocated ressources, unregister notifications, etc.
  * 
- * \subsection sections Great, I can see my applet in the dock ! Now, where should I continue ?
+ * In the section CD_APPLET_RELOAD_BEGIN/CD_APPLET_RELOAD_END section, write the code that will run when the applet is reloaded; this can happen in 2 cases:
+ *   - when the configuration is changed (\ref CD_APPLET_MY_CONFIG_CHANGED is TRUE, for instance when the user edits the applet)
+ *   - when something else changed (\ref CD_APPLET_MY_CONFIG_CHANGED is FALSE, for instance when the icon theme is changed, or the icon size is changed); in this case, most of the time you have nothing to do, except if you loaded some ressources yourself.
  * 
- * We saw that when our applet is activated, an instance is created. It is called <b>myApplet</b>, and it will hold the following :
- * - <b>myIcon</b> : this is your icon ! It will act as a drawing surface to represent whatever you want.
- * - <b>myDrawContext</b> : a cairo context, to draw on your icon with the libcairo.
- * - <b>myContainer</b> : the container your icon belongs to (a Dock or a Desklet). For convenience, the following 2 parameters are availale.
- * - <b>myDock</b> : if your container is a dock, myDock = myContainer, otherwise it is NULL.
- * - <b>myDesklet</b> : if your container is a desklet, myDesklet = myContainer, otherwise it is NULL.
- * - <b>myConfig</b> : the structure holding all the parameters you get in your conf file. You have to define it in applet-struct.h.
- * - <b>myData</b> : the structure holding all the ressources loaded at run-time. You have to define it in applet-struct.h.
+ * Edit the file <i>src/applet-config.c</i>;
+ * In the section CD_APPLET_GET_CONFIG_BEGIN/CD_APPLET_GET_CONFIG_END, get all your config parameters (don't forget to define them in applet-struct.h).
  * 
- * The framework defines different <b>sections</b>, and all you have to do is to fill them :
+ * In the section  CD_APPLET_RESET_CONFIG_BEGIN/CD_APPLET_RESET_CONFIG_END, free any config parameter that was allocated (for instance, strings).
  * 
- * - First of all you will have to get your config parameters. This is done in the \ref CD_APPLET_GET_CONFIG_BEGIN/\ref CD_APPLET_GET_CONFIG_END section, in applet-config.c.
- * - Each time you add a parameter, think of freeing it if it's a dynamic ressource like a string; this is done in the \ref CD_APPLET_RESET_CONFIG_BEGIN/\ref CD_APPLET_RESET_CONFIG_END section.
- * - In a similar way, you will free all the ressources you allocated by myData in the \ref CD_APPLET_RESET_DATA_BEGIN/\ref CD_APPLET_RESET_DATA_END section.
- * - After the instance is created, the dock lets you start. This is done in the \ref CD_APPLET_INIT_BEGIN/\ref CD_APPLET_INIT_END section. At this point, myApplet is already fully defined, and myConfig has been filled. Therefore you can already draw on your icon, launch timers, register to notifications, etc.
- * - Each time the user changes something in its config, or the desklet is resized, your applet is reloaded. This is done in the \ref CD_APPLET_RELOAD_BEGIN/\ref CD_APPLET_RELOAD_END section. The macro \ref CD_APPLET_MY_CONFIG_CHANGED tells you if something has changed in your config or if it's just a resizing.
- * - Last, when your applet is stopped, you have to stop everything you set up in the init (timers, notifications, etc) in the \ref CD_APPLET_STOP_BEGIN/\ref CD_APPLET_STOP_END section.
+ * Edit the file <i>src/applet-notifications.c</i>;
  * 
+ * In the section CD_APPLET_ON_CLICK_BEGIN/CD_APPLET_ON_CLICK_END, write the code that will run when the user clicks on the icon (or an icon of the sub-dock).
  * 
- * \subsection notifications The notifications system.
+ * There are other similar sections available:
+ * - \ref CD_APPLET_ON_MIDDLE_CLICK_BEGIN/\ref CD_APPLET_ON_MIDDLE_CLICK_END for the actions on middle click on your icon or one of its sub-dock.
+ * - \ref CD_APPLET_ON_DOUBLE_CLICK_BEGIN/\ref CD_APPLET_ON_DOUBLE_CLICK_END for the actions on double click on your icon or one of its sub-dock.
+ * - \ref CD_APPLET_ON_SCROLL_BEGIN/\ref CD_APPLET_ON_SCROLL_END for the actions on scroll on your icon or one of its sub-dock.
+ * - \ref CD_APPLET_ON_BUILD_MENU_BEGIN/\ref CD_APPLET_ON_BUILD_MENU_END for the building of the menu on left click on your icon or one of its sub-dock.
  * 
- * When something happens, Cairo-Dock notifies everybody about it, including itself. An applet can register to any notification (see \ref cairo-dock-object.h) before or after the dock, to be notified of the event of its choice. When you are notified, the function you registered for this event will be called; it must match the notification prototype.
- *
- * For instance if you want to know when the user clicks on your icon, you will register to the \ref NOTIFICATION_CLICK_ICON notification.
- *
- * To register to a notification, you have the \ref gldi_object_register_notification function. Always unregister when your applet is stopped, to avoid being notified when you shouldn't, with the function \ref gldi_object_remove_notification.
- * 
- * For convenience, there are macros to register to the most common events:
+ * To register to an event, use one of the following convenient macro during the init:
  * - \ref CD_APPLET_REGISTER_FOR_CLICK_EVENT
  * - \ref CD_APPLET_REGISTER_FOR_MIDDLE_CLICK_EVENT
  * - \ref CD_APPLET_REGISTER_FOR_DOUBLE_CLICK_EVENT
  * - \ref CD_APPLET_REGISTER_FOR_SCROLL_EVENT
  * - \ref CD_APPLET_REGISTER_FOR_BUILD_MENU_EVENT
  *
- * Then you just have to fill the corresponding sections:
- * - \ref CD_APPLET_ON_CLICK_BEGIN/\ref CD_APPLET_ON_CLICK_END for the actions on right click on your icon or one of its sub-dock.
- * - \ref CD_APPLET_ON_MIDDLE_CLICK_BEGIN/\ref CD_APPLET_ON_MIDDLE_CLICK_END for the actions on middle click on your icon or one of its sub-dock.
- * - \ref CD_APPLET_ON_DOUBLE_CLICK_BEGIN/\ref CD_APPLET_ON_DOUBLE_CLICK_END for the actions on double click on your icon or one of its sub-dock.
- * - \ref CD_APPLET_ON_SCROLL_BEGIN/\ref CD_APPLET_ON_SCROLL_END for the actions on scroll on your icon or one of its sub-dock.
- * - \ref CD_APPLET_ON_BUILD_MENU_BEGIN/\ref CD_APPLET_ON_BUILD_MENU_END for the building of the menu on left click on your icon or one of its sub-dock.
+ * Note: don't forget to unregister during the stop.
  * 
- *
- * \subsection useful_functions Ok now I have several sections of code to fill. Are there any useful functions to do it ?
- * A lot of useful macros are provided in cairo-dock-applet-facility.h to make your life easier :
+ * 
+ * \subsection further Go further
+ * 
+ * A lot of useful macros are provided in cairo-dock-applet-facility.h to make your life easier.
+ * 
+ * The applet instance is <b>myApplet</b>, and it holds the following:
+ * - <b>myIcon</b> : this is your icon !
+ * - <b>myContainer</b> : the container your icon belongs to (a Dock or a Desklet). For convenience, the following 2 parameters are available.
+ * - <b>myDock</b> : if your container is a dock, myDock = myContainer, otherwise it is NULL.
+ * - <b>myDesklet</b> : if your container is a desklet, myDesklet = myContainer, otherwise it is NULL.
+ * - <b>myConfig</b> : the structure holding all the parameters you get in your config file. You have to define it in <i>applet-struct.h</i>.
+ * - <b>myData</b> : the structure holding all the ressources loaded at run-time. You have to define it in <i>applet-struct.h</i>.
+ * - <b>myDrawContext</b> : a cairo context, if you need to draw on the icon with the libcairo.
+ * 
  * - To get values contained inside your <b>conf file</b>, you can use the following :\n
  * \ref CD_CONFIG_GET_BOOLEAN & cie
  * 
  * - To <b>build your menu</b>, you can use the following :\n
  * \ref CD_APPLET_ADD_SUB_MENU & cie
  * 
- * - To <b>create a surface</b> that fits your icon from an image, you can use the following :\n
- * \ref CD_APPLET_LOAD_SURFACE_FOR_MY_APPLET & cie
- * 
  * - To directly <b>set an image on your icon</b>, you can use the following :\n
  * \ref CD_APPLET_SET_IMAGE_ON_MY_ICON & cie
- * 
- * - To trigger the <b>refresh</b> of your icon or container after you drew something, you can use the following :\n
- * \ref CD_APPLET_REDRAW_MY_ICON & \ref CAIRO_DOCK_REDRAW_MY_CONTAINER
  * 
  * - To modify the <b>label</b> of your icon, you can use the following :\n
  * \ref CD_APPLET_SET_NAME_FOR_MY_ICON & cie
  * 
  * - To set a <b>quick-info</b> on your icon, you can use the following :\n
  * \ref CD_APPLET_SET_QUICK_INFO_ON_MY_ICON & cie
+ * 
+ * - To <b>create a surface</b> that fits your icon from an image, you can use the following :\n
+ * \ref CD_APPLET_LOAD_SURFACE_FOR_MY_APPLET & cie
+ * 
+ * - To trigger the <b>refresh</b> of your icon or container after you drew something, you can use the following :\n
+ * \ref CD_APPLET_REDRAW_MY_ICON & \ref CAIRO_DOCK_REDRAW_MY_CONTAINER
  * 
  *
  * \subsection opengl How can I take advantage of the OpenGL ?
@@ -313,12 +316,21 @@
  *
  * \subsection tasks I have heavy treatments to do, how can I make them without slowing the dock ?
  * 
- * Say for instance you want to download a file on the Net, it is likely to take some amount of time, during which the dock will be frozen, waiting for you. To avoid such a situation, Cairo-Dock defines \ref _CairoDockTask "Tasks". They are perform their job <b>asynchronously</b>, and can be <b>periodic</b>. See cairo-dock-task.h for a quick explanation on how a Task works.
+ * Say for instance you want to download a file on the Net, it is likely to take some amount of time, during which the dock will be frozen, waiting for you. To avoid such a situation, Cairo-Dock defines \ref _CairoDockTask "Tasks". They perform their job <b>asynchronously</b>, and can be <b>periodic</b>. See cairo-dock-task.h for a quick explanation on how a Task works.
  * 
  * You create a Task with \ref cairo_dock_new_task, launch it with \ref cairo_dock_launch_task, and either cancel it with \ref cairo_dock_discard_task or destroy it with \ref cairo_dock_free_task.
  * 
  * 
- * \subsection sub-icons I need more than one icon, how can I easily get more ?
+ * \subsection key_binding Key binding
+ * 
+ * You can bind an action to a shortkey with the following macro: \ref CD_APPLET_BIND_KEY.\n
+ * For instance, the GMenu applet displays the menu on ctrl+F1.\n
+ * You get a GldiShortkey that you simply destroy when the applet stops (with \ref gldi_object_unref).
+ * 
+ * See cairo-dock-keybinder.h for more details.
+ * 
+ * 
+ * \subsection sub_icons I need more than one icon, how can I easily get more ?
  * 
  * In dock mode, your icon can have a sub-dock; in desklet mode, you can load a list of icons into your desklet. Cairo-Dock provides a convenient macro to <b>quickly load a list of icons</b> in both cases : \ref CD_APPLET_LOAD_MY_ICONS_LIST to load a list of icons and \ref CD_APPLET_DELETE_MY_ICONS_LIST to destroy it. Thus you don't need to know in which mode you are, neither to care about loading the icons, freeing them, or anything.
  * 
@@ -332,7 +344,7 @@
  * 
  * Cairo-Dock can build itself the config panel of your applet from the config file. Moreover, it can do the opposite : update the conf file from the config panel. However, it is limited to the widgets it knows, and there are some cases it is not enough.
  * Because of that, Cairo-Dock offers 2 hooks in the process of building/reading the config panel : 
-when defining your applet in the \ref CD_APPLET_DEFINE_BEGIN/\ref CD_APPLET_DEFINE_END section, add to the interface the 2 functions pInterface->load_custom_widget and pInterface->save_custom_widget.
+ * when defining your applet in the CD_APPLET_DEFINE_BEGIN/CD_APPLET_DEFINE_END section, add to the interface the 2 functions pInterface->load_custom_widget and pInterface->save_custom_widget.
  * They will be respectively called when the config panel of your applet is raised, and when it is validated.
  * 
  * If you want to modify the content of an existing widget, you can grab it with \ref cairo_dock_gui_find_group_key_widget_in_list.
