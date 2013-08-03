@@ -59,6 +59,10 @@ gboolean cairo_dock_launch_command_full (const gchar *cCommand, gchar *cWorkingD
 
 gchar * cairo_dock_get_command_with_right_terminal (const gchar *cCommand);
 
+/* Like g_strcmp0, but saves a function call.
+*/
+#define gldi_strings_differ(s1, s2) (!s1 ? s2 != NULL : !s2 ? s1 != NULL : strcmp(s1, s2) != 0)
+#define cairo_dock_strings_differ gldi_strings_differ
 
 /** Say if 2 RGBA colors differ.
 */
