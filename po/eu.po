@@ -8,16 +8,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2013-07-21 16:21+0000\n"
 "PO-Revision-Date: 2013-07-21 20:16+0000\n"
 "Last-Translator: Ander Elortondo <ander.elor@gmail.com>\n"
 "Language-Team: librezale.org\n"
+"Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2013-07-22 05:15+0000\n"
 "X-Generator: Launchpad (build 16696)\n"
-"Language: eu\n"
 
 #: ../src/cairo-dock-gui-advanced.c:121 ../src/cairo-dock-widget-plugins.c:171
 #: ../data/messages:259
@@ -448,7 +447,7 @@ msgstr ""
 msgid "Move to another dock"
 msgstr "Mugitu beste dock batera"
 
-#: ../src/cairo-dock-menu.c:703 ../src/gldit/cairo-dock-gui-factory.c:1228
+#: ../src/cairo-dock-menu.c:703 ../src/gldit/cairo-dock-gui-factory.c:1220
 msgid "New main dock"
 msgstr "Dock nagusi berria"
 
@@ -527,8 +526,7 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Abiarazi Cairo-Dock abioan"
 
 #: ../src/cairo-dock-menu.c:1107
-msgid ""
-"Third-party applets provide integration with many programs, like Pidgin"
+msgid "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Hirugarrenen appletek hainbat programen integrazioa ahalbidetzen dute, "
 "adibidez pidgin"
@@ -581,8 +579,7 @@ msgstr "Kendu"
 #: ../src/cairo-dock-menu.c:1186
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
-msgstr ""
-"Abiarazlea ezabatu dezakezu docketik arrastatu eta kanpoan jareginez."
+msgstr "Abiarazlea ezabatu dezakezu docketik arrastatu eta kanpoan jareginez."
 
 #: ../src/cairo-dock-menu.c:1195
 msgid "Make it a launcher"
@@ -781,8 +778,7 @@ msgid "Effects:"
 msgstr "Efektuak:"
 
 #: ../src/cairo-dock-widget-items.c:241
-msgid ""
-"Main dock's parameters are available in the main configuration window."
+msgid "Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Dock nagusiaren parametroak konfigurazio-leiho nagusian daude eskuragarri."
 
@@ -807,8 +803,7 @@ msgid "Category"
 msgstr "Kategoria"
 
 #: ../src/cairo-dock-widget-plugins.c:280
-msgid ""
-"Click on an applet in order to have a preview and a description for it."
+msgid "Click on an applet in order to have a preview and a description for it."
 msgstr "Klik appletean bere aurrebista eta deskribapena jasotzeko."
 
 #: ../src/cairo-dock-widget-shortkeys.c:122
@@ -866,7 +861,7 @@ msgid "Delete this theme"
 msgstr "Ezabatu gai hau"
 
 #: ../src/cairo-dock-widget-themes.c:485
-#: ../src/gldit/cairo-dock-gui-factory.c:2435
+#: ../src/gldit/cairo-dock-gui-factory.c:2427
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr "'%s'n gaiak zerrendatzen..."
@@ -1067,8 +1062,8 @@ msgid ""
 msgstr ""
 "'%s' modulua desaktibatu egin da, zenbait arazo sortu dituela susmatzen "
 "delako.\n"
-"Berriro aktiba dezakezu, berriro gertatzen bada jakinarazi http://glx-"
-"dock.org helbidean"
+"Berriro aktiba dezakezu, berriro gertatzen bada jakinarazi http://glx-dock."
+"org helbidean"
 
 #: ../src/cairo-dock.c:732
 msgid "< Maintenance mode >"
@@ -1198,45 +1193,45 @@ msgstr "Hartu fitxategi bat"
 msgid "Pick up a directory"
 msgstr "Hartu direktorio bat"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1051
+#: ../src/gldit/cairo-dock-gui-factory.c:1043
 msgid "_Custom Icons_"
 msgstr "_Ikono pertsonalizatuak_"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1068
-#: ../src/gldit/cairo-dock-gui-factory.c:1113
+#: ../src/gldit/cairo-dock-gui-factory.c:1060
+#: ../src/gldit/cairo-dock-gui-factory.c:1105
 msgid "Use all screens"
 msgstr "Erabili pantaila guztiak"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1090 ../data/messages:13
+#: ../src/gldit/cairo-dock-gui-factory.c:1082 ../data/messages:13
 #: ../data/messages:153 ../data/messages:159 ../data/messages:877
 msgid "left"
 msgstr "ezkerrean"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1092 ../data/messages:11
+#: ../src/gldit/cairo-dock-gui-factory.c:1084 ../data/messages:11
 #: ../data/messages:151 ../data/messages:161 ../data/messages:875
 msgid "right"
 msgstr "eskuinean"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1094
-#: ../src/gldit/cairo-dock-gui-factory.c:1104
+#: ../src/gldit/cairo-dock-gui-factory.c:1086
+#: ../src/gldit/cairo-dock-gui-factory.c:1096
 msgid "middle"
 msgstr "erdian"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1100 ../data/messages:9
+#: ../src/gldit/cairo-dock-gui-factory.c:1092 ../data/messages:9
 #: ../data/messages:149 ../data/messages:873
 msgid "top"
 msgstr "goian"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1102 ../data/messages:7
+#: ../src/gldit/cairo-dock-gui-factory.c:1094 ../data/messages:7
 #: ../data/messages:147 ../data/messages:871
 msgid "bottom"
 msgstr "behean"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1107
+#: ../src/gldit/cairo-dock-gui-factory.c:1099
 msgid "Screen"
 msgstr "Pantaila"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1401
+#: ../src/gldit/cairo-dock-gui-factory.c:1393
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -1247,7 +1242,7 @@ msgstr ""
 "Ziurtatu dockaren bertsio bera instalatu duzula ezaugarri horiek erabili "
 "ahal izateko."
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1410
+#: ../src/gldit/cairo-dock-gui-factory.c:1402
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
@@ -1256,11 +1251,11 @@ msgstr ""
 "'%s' plugina ez dago aktibatuta.\n"
 "Orain aktibatu?"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3111
+#: ../src/gldit/cairo-dock-gui-factory.c:3103
 msgid "link"
 msgstr "esteka"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3173
+#: ../src/gldit/cairo-dock-gui-factory.c:3165
 msgid "Grab"
 msgstr "Hartu"
 
@@ -1276,7 +1271,7 @@ msgstr "Abiarazle berria"
 msgid "by"
 msgstr "egilea"
 
-#: ../src/gldit/cairo-dock-struct.h:474 ../data/messages:1035
+#: ../src/gldit/cairo-dock-struct.h:490 ../data/messages:1035
 #: ../data/messages:1043
 msgid "Default"
 msgstr "Lehenetsia"
@@ -1316,6 +1311,20 @@ msgstr "Seguru zaude %s gaia ezabatu nahi duzula?"
 msgid "Are you sure you want to delete these themes?"
 msgstr "Seguru zaude gai hauek ezabatu nahi duzula?"
 
+#: ../src/implementations/cairo-dock-glx.c:53
+msgid "This card is blacklisted due to a bug with your video drivers:"
+msgstr ""
+
+#: ../src/implementations/cairo-dock-glx.c:54
+msgid "Please have a look there:"
+msgstr ""
+
+#: ../src/implementations/cairo-dock-glx.c:373
+msgid ""
+"The OpenGL backend will be deactivated. Note that you can force this OpenGL "
+"backend by launching the dock with this command:"
+msgstr ""
+
 #: ../src/implementations/cairo-dock-hiding-effect.c:582 ../data/messages:39
 #: ../data/messages:201
 msgid "Move down"
@@ -1352,8 +1361,8 @@ msgid ""
 msgstr ""
 "Ongi etorri Cairo-Dockera!\n"
 "Applet honek docka erabiltzen hasten lagunduko dizu; egin klik bertan.\n"
-"Edozein galdera/eskari/iradokizun badaukazu, bisita gaitzazu http://glx-"
-"dock.org webgunean.\n"
+"Edozein galdera/eskari/iradokizun badaukazu, bisita gaitzazu http://glx-dock."
+"org webgunean.\n"
 "Software honekin goza dezazula espero dugu!\n"
 "  (orain elkarrizketa-koadro honetan klik egin dezakezu leihoa ixteko)"
 
@@ -1664,8 +1673,8 @@ msgid ""
 "You can launch an application several times by SHIFT+clicking on its icon "
 "(or from the menu)."
 msgstr ""
-"Aplikazio bat behin baino gehiagotan abiaraz dezakezu haren ikonoan "
-"SHIFT+klik eginda (edo menutik)."
+"Aplikazio bat behin baino gehiagotan abiaraz dezakezu haren ikonoan SHIFT"
+"+klik eginda (edo menutik)."
 
 #: ../Help/data/messages:59
 msgid "Switching between the windows of a same application"
@@ -2034,8 +2043,7 @@ msgstr ""
 
 #: ../Help/data/messages:153
 msgid "Quickly opening a recent file with a launcher"
-msgstr ""
-"Azken aldiko fitxategi bat modu azkarrean irekitzea abiarazle batekin"
+msgstr "Azken aldiko fitxategi bat modu azkarrean irekitzea abiarazle batekin"
 
 #: ../Help/data/messages:155
 msgid ""
@@ -2102,8 +2110,8 @@ msgid ""
 msgstr ""
 "Zenbait appletek (Clock, Stack, Weather...) hainbat instantzia eduki "
 "ditzakete aldi berean exekutatzen.\n"
-"Egin eskuineko klik appletaren ikonoan -> \"abiarazi beste instantzia "
-"bat\".\n"
+"Egin eskuineko klik appletaren ikonoan -> \"abiarazi beste instantzia bat"
+"\".\n"
 "Instantzia bakoitza bere aldetik konfigura dezakezu. Modu horretan, adibidez "
 "hiri ezberdinetako uneko ordua eduki dezakezu zure dockean, edo hiri baten "
 "baino gehiagoren eguraldia."
@@ -2119,8 +2127,8 @@ msgid ""
 "You can even name each of them."
 msgstr ""
 "Aktibatu Switcher appleta.\n"
-"Eskuineko klik gainean -> \"gehitu mahaigain bat\" edo \"kendu mahaigain "
-"hau\".\n"
+"Eskuineko klik gainean -> \"gehitu mahaigain bat\" edo \"kendu mahaigain hau"
+"\".\n"
 "Haietako bakoitzari izen ezberdin bat eman diezaiokezu."
 
 #: ../Help/data/messages:173
@@ -2159,9 +2167,8 @@ msgstr "gnome-panel erabat kentzea"
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key "
-"/desktop/gnome/session/required_components/panel, and replace its content "
-"with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
+"panel, and replace its content with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -2220,8 +2227,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key "
-"'/apps/metacity/general/compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key '/apps/metacity/general/"
+"compositing_manager' and set it to 'true'."
 msgstr ""
 "Konposizioa aktibatu behar duzu. Adibidez, Compiz edo xcompmgr exekutatu "
 "behar duzu. \n"
@@ -2380,8 +2387,8 @@ msgid ""
 msgstr ""
 "Gnomen, dockaren aukera hori gainidazteko aukera bat dago. Ikonoak menuetan "
 "gaitzeko, ireki 'gconf-editor', joan Mahaigaina / Gnome / Interfazea "
-"aukerara eta gaitu \"menuek ikonoak dituzte\" eta \"botoiek ikonoak "
-"dituzte\" aukerak. "
+"aukerara eta gaitu \"menuek ikonoak dituzte\" eta \"botoiek ikonoak dituzte"
+"\" aukerak. "
 
 #: ../Help/data/messages:245
 msgid "If you're on Gnome you can click on this button:"
@@ -2605,8 +2612,8 @@ msgid ""
 "left-click.. Negative values are counted from the right/bottom of the screen"
 msgstr ""
 "Zure leiho-kudeatzailearen arabera, horren tamaina aldatu ahal izango duzu "
-"Alt + ezkerreko klik erabiliz. Balio negatiboak pantailaren "
-"eskuin/behealdetik zenbatzen dira."
+"Alt + ezkerreko klik erabiliz. Balio negatiboak pantailaren eskuin/"
+"behealdetik zenbatzen dira."
 
 #: ../Help/data/messages:333
 msgid "Desklet position (x, y):"
@@ -3773,8 +3780,7 @@ msgid "Zoom effect"
 msgstr "Zoom efektua"
 
 #: ../data/messages:659
-msgid ""
-"set to 1 if you don't want the icons to zoom when you hover over them."
+msgid "set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Ezarri 1 balioan ikonoen gainetik pasatzean zoom efekturik ez baduzu nahi."
 
@@ -3785,8 +3791,7 @@ msgstr "Ikonoen zoom maximoa:"
 #: ../data/messages:663
 msgid ""
 "in pixels. Outside of this space (centered on the mouse), there is no zoom."
-msgstr ""
-"pixeletan. Tarte honetatik kanpora (saguan zentratua), ez dago zoomik."
+msgstr "pixeletan. Tarte honetatik kanpora (saguan zentratua), ez dago zoomik."
 
 #: ../data/messages:665
 msgid "Width of the space in which the zoom will be effective :"
@@ -4032,8 +4037,8 @@ msgstr "handiagoa"
 
 #: ../data/messages:773
 msgid ""
-"Use it to make the indicator follow the orientation of the dock "
-"(top/bottom/right/left)."
+"Use it to make the indicator follow the orientation of the dock (top/bottom/"
+"right/left)."
 msgstr ""
 "Erabili adierazleak dockaren kokapenari (Goian/Behean/eskuman/ezkerrean) "
 "jarrai diezaion."
@@ -4131,8 +4136,7 @@ msgstr "Etiketen ikusgaitasun atalasea :"
 
 #: ../data/messages:821
 msgid "Should the labels always be horizontal, even when dock is vertical?"
-msgstr ""
-"Etiketak beti horizontalak izango dira nahiz eta docka bertikala izan?"
+msgstr "Etiketak beti horizontalak izango dira nahiz eta docka bertikala izan?"
 
 #: ../data/messages:823
 msgid "Font"
@@ -4373,8 +4377,8 @@ msgstr "Abiarazlearen izena:"
 
 #: ../data/messages:1039
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
-"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
+"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 "Adibidea: nautilus --no-desktop, gedit, etab. You can even enter a shortkey, "
 "e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
@@ -4427,7 +4431,19 @@ msgstr ""
 "<b>Cairo-Docken oinarrizko 2D bistaratzea</b>\n"
 "Perfektua dockak panel baten itxura eduki dezan nahi baduzu."
 
-#: ../data/messages:1077
+#: ../data/messages:1078
+msgid "Cairo-Dock (Fallback Mode)"
+msgstr ""
+
+#: ../data/messages:1080
+msgid "A light and eye-candy dock and desklets for your desktop."
+msgstr ""
+
+#: ../data/messages:1082
+msgid "Multi-purpose Dock and Desklets"
+msgstr ""
+
+#: ../data/messages:1084
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.0</span>!</b>\n"
 " - The <b>taskbar</b> has been greatly enhanced.\n"
@@ -4467,7 +4483,7 @@ msgstr ""
 " - Few additions to the DBus API.\n"
 " - It's possible to donate to support the project!"
 
-#: ../data/messages:1079
+#: ../data/messages:1086
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.1</span>!</b>\n"
 " - Better integration in of Unity: support of the <b>Launcher API</b> and "
@@ -4487,7 +4503,7 @@ msgstr ""
 " - Icons of the <b>taskbar</b> can be separated from launchers or not\n"
 " - And as always ... various bug fixes and improvements :-)"
 
-#: ../data/messages:1081
+#: ../data/messages:1088
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.2</span>!</b>\n"
 " - Multi-screen support has been improved\n"

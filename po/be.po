@@ -7,16 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2013-07-21 16:21+0000\n"
 "PO-Revision-Date: 2013-07-21 20:02+0000\n"
 "Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
 "Language-Team: Belarusian <be@li.org>\n"
+"Language: be\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2013-07-22 05:15+0000\n"
 "X-Generator: Launchpad (build 16696)\n"
-"Language: be\n"
 
 #: ../src/cairo-dock-gui-advanced.c:121 ../src/cairo-dock-widget-plugins.c:171
 #: ../data/messages:259
@@ -444,7 +443,7 @@ msgstr ""
 msgid "Move to another dock"
 msgstr "Перамясціць на іншую панэль"
 
-#: ../src/cairo-dock-menu.c:703 ../src/gldit/cairo-dock-gui-factory.c:1228
+#: ../src/cairo-dock-menu.c:703 ../src/gldit/cairo-dock-gui-factory.c:1220
 msgid "New main dock"
 msgstr "Новая асноўная панэль"
 
@@ -485,8 +484,7 @@ msgstr "Наладзіць гэтую панэль"
 
 #: ../src/cairo-dock-menu.c:1033
 msgid "Customize the position, visibility and appearance of this main dock."
-msgstr ""
-"Наладзьце месцазнаходжанне, бачнасць і знешні выгляд асноўнай панэлі."
+msgstr "Наладзьце месцазнаходжанне, бачнасць і знешні выгляд асноўнай панэлі."
 
 #: ../src/cairo-dock-menu.c:1035
 msgid "Delete this dock"
@@ -522,8 +520,7 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Запускаць Cairo-Dock пры старце сістэмы"
 
 #: ../src/cairo-dock-menu.c:1107
-msgid ""
-"Third-party applets provide integration with many programs, like Pidgin"
+msgid "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Апплеты трэціх бакоў забяспечваюць інтэграцыю з рознымі праграмамі, "
 "напрыклад Pidgin"
@@ -770,8 +767,7 @@ msgid "Effects:"
 msgstr "Эфекты:"
 
 #: ../src/cairo-dock-widget-items.c:241
-msgid ""
-"Main dock's parameters are available in the main configuration window."
+msgid "Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-widget-items.c:720
@@ -795,8 +791,7 @@ msgid "Category"
 msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:280
-msgid ""
-"Click on an applet in order to have a preview and a description for it."
+msgid "Click on an applet in order to have a preview and a description for it."
 msgstr "Пстрыкніце па аплеце, каб убачыць яго апісанне і прыкладны выгляд."
 
 #: ../src/cairo-dock-widget-shortkeys.c:122
@@ -854,7 +849,7 @@ msgid "Delete this theme"
 msgstr ""
 
 #: ../src/cairo-dock-widget-themes.c:485
-#: ../src/gldit/cairo-dock-gui-factory.c:2435
+#: ../src/gldit/cairo-dock-gui-factory.c:2427
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr "Спіс тым з '%s' ..."
@@ -1153,45 +1148,45 @@ msgstr ""
 msgid "Pick up a directory"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1051
+#: ../src/gldit/cairo-dock-gui-factory.c:1043
 msgid "_Custom Icons_"
 msgstr "_Наладзіць тэму_"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1068
-#: ../src/gldit/cairo-dock-gui-factory.c:1113
+#: ../src/gldit/cairo-dock-gui-factory.c:1060
+#: ../src/gldit/cairo-dock-gui-factory.c:1105
 msgid "Use all screens"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1090 ../data/messages:13
+#: ../src/gldit/cairo-dock-gui-factory.c:1082 ../data/messages:13
 #: ../data/messages:153 ../data/messages:159 ../data/messages:877
 msgid "left"
 msgstr "злева"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1092 ../data/messages:11
+#: ../src/gldit/cairo-dock-gui-factory.c:1084 ../data/messages:11
 #: ../data/messages:151 ../data/messages:161 ../data/messages:875
 msgid "right"
 msgstr "справа"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1094
-#: ../src/gldit/cairo-dock-gui-factory.c:1104
+#: ../src/gldit/cairo-dock-gui-factory.c:1086
+#: ../src/gldit/cairo-dock-gui-factory.c:1096
 msgid "middle"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1100 ../data/messages:9
+#: ../src/gldit/cairo-dock-gui-factory.c:1092 ../data/messages:9
 #: ../data/messages:149 ../data/messages:873
 msgid "top"
 msgstr "зверху"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1102 ../data/messages:7
+#: ../src/gldit/cairo-dock-gui-factory.c:1094 ../data/messages:7
 #: ../data/messages:147 ../data/messages:871
 msgid "bottom"
 msgstr "знізу"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1107
+#: ../src/gldit/cairo-dock-gui-factory.c:1099
 msgid "Screen"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1401
+#: ../src/gldit/cairo-dock-gui-factory.c:1393
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -1202,7 +1197,7 @@ msgstr ""
 "Пераканайцеся, што вы ўстанавілі версію гэтага модуля ідэнтычную версіі "
 "самой панэлі."
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1410
+#: ../src/gldit/cairo-dock-gui-factory.c:1402
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
@@ -1211,11 +1206,11 @@ msgstr ""
 "Плягін '%s' не актыўны.\n"
 "Актываваць яго зараз?"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3111
+#: ../src/gldit/cairo-dock-gui-factory.c:3103
 msgid "link"
 msgstr "спасылка"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3173
+#: ../src/gldit/cairo-dock-gui-factory.c:3165
 msgid "Grab"
 msgstr "захапіць"
 
@@ -1231,7 +1226,7 @@ msgstr ""
 msgid "by"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-struct.h:474 ../data/messages:1035
+#: ../src/gldit/cairo-dock-struct.h:490 ../data/messages:1035
 #: ../data/messages:1043
 msgid "Default"
 msgstr "па змоўчванні"
@@ -1268,6 +1263,20 @@ msgstr "Вы ўпэўненыя, што жадаеце выдаліць тэму
 #: ../src/gldit/cairo-dock-themes-manager.c:375
 msgid "Are you sure you want to delete these themes?"
 msgstr "Вы ўпэўненыя, што жадаеце выдаліць гэтыя тэмы?"
+
+#: ../src/implementations/cairo-dock-glx.c:53
+msgid "This card is blacklisted due to a bug with your video drivers:"
+msgstr ""
+
+#: ../src/implementations/cairo-dock-glx.c:54
+msgid "Please have a look there:"
+msgstr ""
+
+#: ../src/implementations/cairo-dock-glx.c:373
+msgid ""
+"The OpenGL backend will be deactivated. Note that you can force this OpenGL "
+"backend by launching the dock with this command:"
+msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:582 ../data/messages:39
 #: ../data/messages:201
@@ -1908,9 +1917,8 @@ msgstr ""
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key "
-"/desktop/gnome/session/required_components/panel, and replace its content "
-"with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
+"panel, and replace its content with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1958,8 +1966,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key "
-"'/apps/metacity/general/compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key '/apps/metacity/general/"
+"compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
@@ -3402,8 +3410,7 @@ msgid "Zoom effect"
 msgstr "Эфект набліжэння"
 
 #: ../data/messages:659
-msgid ""
-"set to 1 if you don't want the icons to zoom when you hover over them."
+msgid "set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Усталюйце значэнне 1, калі не жадаеце каб абразкі павялічваліся пры "
 "навядзенні на іх."
@@ -3527,9 +3534,9 @@ msgid ""
 "progressively as the dock grows up. The closer to 0, the more transparent "
 "they will be."
 msgstr ""
-"Наколькі будуць празрыстыя значкі ў стане спакою; Яны будуць "
-"\"матэрыялізацца\" па меры з'яўлення панэлі. Чым бліжэй значэнне да 0, тым "
-"празрыстай яны будуць."
+"Наколькі будуць празрыстыя значкі ў стане спакою; Яны будуць \"матэрыялізацца"
+"\" па меры з'яўлення панэлі. Чым бліжэй значэнне да 0, тым празрыстай яны "
+"будуць."
 
 #: ../data/messages:711
 msgid "Icons' transparency at rest :"
@@ -3663,8 +3670,8 @@ msgstr "большы"
 
 #: ../data/messages:773
 msgid ""
-"Use it to make the indicator follow the orientation of the dock "
-"(top/bottom/right/left)."
+"Use it to make the indicator follow the orientation of the dock (top/bottom/"
+"right/left)."
 msgstr ""
 "Выкарыстоўвайце, каб арыентаваць індыкатар адносна размяшчэння панэлі "
 "(зверху, знізу, справа, злева)."
@@ -4005,8 +4012,8 @@ msgstr ""
 
 #: ../data/messages:1039
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
-"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
+"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1041
@@ -4055,7 +4062,19 @@ msgid ""
 "Perfect if you want to make the dock look like a panel."
 msgstr ""
 
-#: ../data/messages:1077
+#: ../data/messages:1078
+msgid "Cairo-Dock (Fallback Mode)"
+msgstr ""
+
+#: ../data/messages:1080
+msgid "A light and eye-candy dock and desklets for your desktop."
+msgstr ""
+
+#: ../data/messages:1082
+msgid "Multi-purpose Dock and Desklets"
+msgstr ""
+
+#: ../data/messages:1084
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.0</span>!</b>\n"
 " - The <b>taskbar</b> has been greatly enhanced.\n"
@@ -4077,7 +4096,7 @@ msgid ""
 " - It's possible to donate to support the project!"
 msgstr ""
 
-#: ../data/messages:1079
+#: ../data/messages:1086
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.1</span>!</b>\n"
 " - Better integration in of Unity: support of the <b>Launcher API</b> and "
@@ -4089,7 +4108,7 @@ msgid ""
 " - And as always ... various bug fixes and improvements :-)"
 msgstr ""
 
-#: ../data/messages:1081
+#: ../data/messages:1088
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.2</span>!</b>\n"
 " - Multi-screen support has been improved\n"

@@ -7,16 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2013-07-21 16:21+0000\n"
 "PO-Revision-Date: 2013-07-21 19:52+0000\n"
 "Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
 "Language-Team: Slovak <sk@li.org>\n"
+"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2013-07-22 05:17+0000\n"
 "X-Generator: Launchpad (build 16696)\n"
-"Language: sk\n"
 
 #: ../src/cairo-dock-gui-advanced.c:121 ../src/cairo-dock-widget-plugins.c:171
 #: ../data/messages:259
@@ -448,7 +447,7 @@ msgstr ""
 msgid "Move to another dock"
 msgstr "Premiestniť na iný dock"
 
-#: ../src/cairo-dock-menu.c:703 ../src/gldit/cairo-dock-gui-factory.c:1228
+#: ../src/cairo-dock-menu.c:703 ../src/gldit/cairo-dock-gui-factory.c:1220
 msgid "New main dock"
 msgstr "Nový hlavný panel"
 
@@ -525,8 +524,7 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Spustiť Cairo-dock pri štarte"
 
 #: ../src/cairo-dock-menu.c:1107
-msgid ""
-"Third-party applets provide integration with many programs, like Pidgin"
+msgid "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Aplety tretej strany poskytujú integráciu do mnohých programov, ako je Pidgin"
 
@@ -776,10 +774,8 @@ msgid "Effects:"
 msgstr "Efekty:"
 
 #: ../src/cairo-dock-widget-items.c:241
-msgid ""
-"Main dock's parameters are available in the main configuration window."
-msgstr ""
-"Parametre hlavného panelu sú k dispozícii v hlavnom okne konfigurácie."
+msgid "Main dock's parameters are available in the main configuration window."
+msgstr "Parametre hlavného panelu sú k dispozícii v hlavnom okne konfigurácie."
 
 #: ../src/cairo-dock-widget-items.c:720
 msgid "Remove this item"
@@ -802,8 +798,7 @@ msgid "Category"
 msgstr "Kategória"
 
 #: ../src/cairo-dock-widget-plugins.c:280
-msgid ""
-"Click on an applet in order to have a preview and a description for it."
+msgid "Click on an applet in order to have a preview and a description for it."
 msgstr "Kliknite na applet, a získate náhľad a jeho popis."
 
 #: ../src/cairo-dock-widget-shortkeys.c:122
@@ -861,7 +856,7 @@ msgid "Delete this theme"
 msgstr "Odstrániť tento vzhľad"
 
 #: ../src/cairo-dock-widget-themes.c:485
-#: ../src/gldit/cairo-dock-gui-factory.c:2435
+#: ../src/gldit/cairo-dock-gui-factory.c:2427
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr "Výpis tém v '%s' ..."
@@ -1175,45 +1170,45 @@ msgstr "Prejsť do súboru"
 msgid "Pick up a directory"
 msgstr "Prejsť do vyššieho adresára"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1051
+#: ../src/gldit/cairo-dock-gui-factory.c:1043
 msgid "_Custom Icons_"
 msgstr "_Vlastné ikony_"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1068
-#: ../src/gldit/cairo-dock-gui-factory.c:1113
+#: ../src/gldit/cairo-dock-gui-factory.c:1060
+#: ../src/gldit/cairo-dock-gui-factory.c:1105
 msgid "Use all screens"
 msgstr "Použiť všetky obrazovky"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1090 ../data/messages:13
+#: ../src/gldit/cairo-dock-gui-factory.c:1082 ../data/messages:13
 #: ../data/messages:153 ../data/messages:159 ../data/messages:877
 msgid "left"
 msgstr "vľavo"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1092 ../data/messages:11
+#: ../src/gldit/cairo-dock-gui-factory.c:1084 ../data/messages:11
 #: ../data/messages:151 ../data/messages:161 ../data/messages:875
 msgid "right"
 msgstr "vpravo"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1094
-#: ../src/gldit/cairo-dock-gui-factory.c:1104
+#: ../src/gldit/cairo-dock-gui-factory.c:1086
+#: ../src/gldit/cairo-dock-gui-factory.c:1096
 msgid "middle"
 msgstr "stredné"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1100 ../data/messages:9
+#: ../src/gldit/cairo-dock-gui-factory.c:1092 ../data/messages:9
 #: ../data/messages:149 ../data/messages:873
 msgid "top"
 msgstr "hore"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1102 ../data/messages:7
+#: ../src/gldit/cairo-dock-gui-factory.c:1094 ../data/messages:7
 #: ../data/messages:147 ../data/messages:871
 msgid "bottom"
 msgstr "dole"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1107
+#: ../src/gldit/cairo-dock-gui-factory.c:1099
 msgid "Screen"
 msgstr "Obrazovka"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1401
+#: ../src/gldit/cairo-dock-gui-factory.c:1393
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -1223,7 +1218,7 @@ msgstr ""
 "Modul '%s' nebol nájdený.\n"
 "Nainštalujte ho v rovnakej verzii ako dok a užívajte si nových možností."
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1410
+#: ../src/gldit/cairo-dock-gui-factory.c:1402
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
@@ -1232,11 +1227,11 @@ msgstr ""
 "Rozšírenie '%s' nie je aktívne.\n"
 "Chcete ho aktivovať teraz ?"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3111
+#: ../src/gldit/cairo-dock-gui-factory.c:3103
 msgid "link"
 msgstr "odkaz"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3173
+#: ../src/gldit/cairo-dock-gui-factory.c:3165
 msgid "Grab"
 msgstr "Zachytiť"
 
@@ -1252,7 +1247,7 @@ msgstr "Nový spúšťač"
 msgid "by"
 msgstr "od"
 
-#: ../src/gldit/cairo-dock-struct.h:474 ../data/messages:1035
+#: ../src/gldit/cairo-dock-struct.h:490 ../data/messages:1035
 #: ../data/messages:1043
 msgid "Default"
 msgstr "predvolené"
@@ -1291,6 +1286,20 @@ msgstr "Ste si istý, že chcete odstrániť tému %s ?"
 #: ../src/gldit/cairo-dock-themes-manager.c:375
 msgid "Are you sure you want to delete these themes?"
 msgstr "Ste si istý, že chcete odstrániť tieto témy ?"
+
+#: ../src/implementations/cairo-dock-glx.c:53
+msgid "This card is blacklisted due to a bug with your video drivers:"
+msgstr ""
+
+#: ../src/implementations/cairo-dock-glx.c:54
+msgid "Please have a look there:"
+msgstr ""
+
+#: ../src/implementations/cairo-dock-glx.c:373
+msgid ""
+"The OpenGL backend will be deactivated. Note that you can force this OpenGL "
+"backend by launching the dock with this command:"
+msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:582 ../data/messages:39
 #: ../data/messages:201
@@ -1973,15 +1982,13 @@ msgstr "Úplne odstrániť gnome panel"
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key "
-"/desktop/gnome/session/required_components/panel, and replace its content "
-"with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
+"panel, and replace its content with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Otvorte gconf-editor, upravte kľúč "
-"/desktop/gnome/sesion/required_components/panel, a nahradte jeho obsah s "
-"\"cairo-dock\".\n"
+"Otvorte gconf-editor, upravte kľúč /desktop/gnome/sesion/required_components/"
+"panel, a nahradte jeho obsah s \"cairo-dock\".\n"
 "Reštartujte sedenie: gnome-panel sa nespustí, a panel bude spustený (ak nie, "
 "pridajte do programov po spustení)."
 
@@ -2033,15 +2040,15 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key "
-"'/apps/metacity/general/compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key '/apps/metacity/general/"
+"compositing_manager' and set it to 'true'."
 msgstr ""
 "Musíte zapnúť kompozíciu. Napríklad, môžete spustiť Compiz alebo xcompmgr. \n"
 "Ak používate XFCE alebo KDE, stačí povoliť kompozície v nastavení správcu "
 "okien.\n"
 "Ak používate Gnome, môžete to povoliť v Metacity týmto spôsobom:\n"
-" Otvorte gconf-editor, upravte kľúč "
-"'/apps/metacity/general/compositing_manager' a nastavte na 'true'."
+" Otvorte gconf-editor, upravte kľúč '/apps/metacity/general/"
+"compositing_manager' a nastavte na 'true'."
 
 #: ../Help/data/messages:207
 msgid ""
@@ -3546,8 +3553,7 @@ msgid "Zoom effect"
 msgstr "Efekt priblíženia"
 
 #: ../data/messages:659
-msgid ""
-"set to 1 if you don't want the icons to zoom when you hover over them."
+msgid "set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "nastavený na hodnotu 1, ak nechcete zväčšujúce sa ikony, keď  nad nimi "
 "podržíte kurzor."
@@ -3796,8 +3802,8 @@ msgstr "väčší"
 
 #: ../data/messages:773
 msgid ""
-"Use it to make the indicator follow the orientation of the dock "
-"(top/bottom/right/left)."
+"Use it to make the indicator follow the orientation of the dock (top/bottom/"
+"right/left)."
 msgstr ""
 
 #: ../data/messages:775
@@ -4133,8 +4139,8 @@ msgstr "Názov spúšťača:"
 
 #: ../data/messages:1039
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
-"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
+"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 "Príklad: nautilus --no-desktop, gedit, atď Môžete dokonca zadávať skratky, "
 "ako <Alt> F1, <Ctrl> c, <Ctrl> v, atď"
@@ -4187,7 +4193,19 @@ msgstr ""
 "<b> Základný 2D vzhľad Cairo-Dock </b>\n"
 "Perfektné, ak chcete, aby sa dock vyzeral ako panel."
 
-#: ../data/messages:1077
+#: ../data/messages:1078
+msgid "Cairo-Dock (Fallback Mode)"
+msgstr ""
+
+#: ../data/messages:1080
+msgid "A light and eye-candy dock and desklets for your desktop."
+msgstr ""
+
+#: ../data/messages:1082
+msgid "Multi-purpose Dock and Desklets"
+msgstr ""
+
+#: ../data/messages:1084
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.0</span>!</b>\n"
 " - The <b>taskbar</b> has been greatly enhanced.\n"
@@ -4209,7 +4227,7 @@ msgid ""
 " - It's possible to donate to support the project!"
 msgstr ""
 
-#: ../data/messages:1079
+#: ../data/messages:1086
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.1</span>!</b>\n"
 " - Better integration in of Unity: support of the <b>Launcher API</b> and "
@@ -4221,7 +4239,7 @@ msgid ""
 " - And as always ... various bug fixes and improvements :-)"
 msgstr ""
 
-#: ../data/messages:1081
+#: ../data/messages:1088
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.2</span>!</b>\n"
 " - Multi-screen support has been improved\n"

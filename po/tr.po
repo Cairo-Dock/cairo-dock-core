@@ -7,16 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2013-07-21 16:21+0000\n"
 "PO-Revision-Date: 2013-07-21 20:01+0000\n"
 "Last-Translator: Murat ikilik <muratikilik@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2013-07-22 05:17+0000\n"
 "X-Generator: Launchpad (build 16696)\n"
-"Language: tr\n"
 
 #: ../src/cairo-dock-gui-advanced.c:121 ../src/cairo-dock-widget-plugins.c:171
 #: ../data/messages:259
@@ -281,8 +280,7 @@ msgstr "Bağışta Bulunun"
 #: ../src/cairo-dock-menu.c:230 ../src/cairo-dock-menu.c:236
 msgid ""
 "Support the people who spend countless hours to bring you the best dock ever."
-msgstr ""
-"Size en iyi limanı yapmak için saatlerce çalışan insanları destekleyin"
+msgstr "Size en iyi limanı yapmak için saatlerce çalışan insanları destekleyin"
 
 #: ../src/cairo-dock-menu.c:264
 msgid "Here is a list of the current developers and contributors"
@@ -465,7 +463,7 @@ msgstr ""
 msgid "Move to another dock"
 msgstr "Başka bir rıhtıma taşı"
 
-#: ../src/cairo-dock-menu.c:703 ../src/gldit/cairo-dock-gui-factory.c:1228
+#: ../src/cairo-dock-menu.c:703 ../src/gldit/cairo-dock-gui-factory.c:1220
 msgid "New main dock"
 msgstr "Yeni ana rıhtım"
 
@@ -542,8 +540,7 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Cairo-Dock'u başlangıçta başlat"
 
 #: ../src/cairo-dock-menu.c:1107
-msgid ""
-"Third-party applets provide integration with many programs, like Pidgin"
+msgid "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Üçüncü parti uygulamacıklar Pidgin gibi birçok programla entegrasyon sağlar."
 
@@ -593,8 +590,7 @@ msgstr "Kaldır"
 #: ../src/cairo-dock-menu.c:1186
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
-msgstr ""
-"Bir başlatıcıyı fare ile rıhtımın dışına sürükleyerek silebilirsiniz ."
+msgstr "Bir başlatıcıyı fare ile rıhtımın dışına sürükleyerek silebilirsiniz ."
 
 #: ../src/cairo-dock-menu.c:1195
 msgid "Make it a launcher"
@@ -794,8 +790,7 @@ msgid "Effects:"
 msgstr "Efektler:"
 
 #: ../src/cairo-dock-widget-items.c:241
-msgid ""
-"Main dock's parameters are available in the main configuration window."
+msgid "Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Ana rıhtımın parametreleri ana yapılandırma penceresi içinde mevcuttur."
 
@@ -820,8 +815,7 @@ msgid "Category"
 msgstr "Kategori"
 
 #: ../src/cairo-dock-widget-plugins.c:280
-msgid ""
-"Click on an applet in order to have a preview and a description for it."
+msgid "Click on an applet in order to have a preview and a description for it."
 msgstr "Önizleme ve açıklamalar için uygulamacığın üzerine tıklayın."
 
 #: ../src/cairo-dock-widget-shortkeys.c:122
@@ -879,7 +873,7 @@ msgid "Delete this theme"
 msgstr "Temayı sil"
 
 #: ../src/cairo-dock-widget-themes.c:485
-#: ../src/gldit/cairo-dock-gui-factory.c:2435
+#: ../src/gldit/cairo-dock-gui-factory.c:2427
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr "Temalar listeleniyor '%s' ..."
@@ -940,8 +934,7 @@ msgstr "Rıhtımı bu bu ortamı düşünmesi için zorla - ilgi göster."
 #: ../src/cairo-dock.c:370
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
-msgstr ""
-"Bunun yerine emirlere uyuması için rıhtımı zorla ~/.config/cairo-dock."
+msgstr "Bunun yerine emirlere uyuması için rıhtımı zorla ~/.config/cairo-dock."
 
 #: ../src/cairo-dock.c:373
 msgid ""
@@ -1201,45 +1194,45 @@ msgstr "Bir dosya seçin"
 msgid "Pick up a directory"
 msgstr "Bir dizin seçin"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1051
+#: ../src/gldit/cairo-dock-gui-factory.c:1043
 msgid "_Custom Icons_"
 msgstr "_Özel simgeler_"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1068
-#: ../src/gldit/cairo-dock-gui-factory.c:1113
+#: ../src/gldit/cairo-dock-gui-factory.c:1060
+#: ../src/gldit/cairo-dock-gui-factory.c:1105
 msgid "Use all screens"
 msgstr "Tüm ekranlarda uygula"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1090 ../data/messages:13
+#: ../src/gldit/cairo-dock-gui-factory.c:1082 ../data/messages:13
 #: ../data/messages:153 ../data/messages:159 ../data/messages:877
 msgid "left"
 msgstr "sol"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1092 ../data/messages:11
+#: ../src/gldit/cairo-dock-gui-factory.c:1084 ../data/messages:11
 #: ../data/messages:151 ../data/messages:161 ../data/messages:875
 msgid "right"
 msgstr "sağ"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1094
-#: ../src/gldit/cairo-dock-gui-factory.c:1104
+#: ../src/gldit/cairo-dock-gui-factory.c:1086
+#: ../src/gldit/cairo-dock-gui-factory.c:1096
 msgid "middle"
 msgstr "Orta"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1100 ../data/messages:9
+#: ../src/gldit/cairo-dock-gui-factory.c:1092 ../data/messages:9
 #: ../data/messages:149 ../data/messages:873
 msgid "top"
 msgstr "üst"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1102 ../data/messages:7
+#: ../src/gldit/cairo-dock-gui-factory.c:1094 ../data/messages:7
 #: ../data/messages:147 ../data/messages:871
 msgid "bottom"
 msgstr "alt"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1107
+#: ../src/gldit/cairo-dock-gui-factory.c:1099
 msgid "Screen"
 msgstr "Ekran"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1401
+#: ../src/gldit/cairo-dock-gui-factory.c:1393
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -1250,7 +1243,7 @@ msgstr ""
 "Dock'un bu özelliklerinden yararlanmak için aynı sürümün yüklendiğinden emin "
 "ol."
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1410
+#: ../src/gldit/cairo-dock-gui-factory.c:1402
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
@@ -1259,11 +1252,11 @@ msgstr ""
 "'%s' eklen-ti aktif değil.\n"
 "Şimdi etkinleştir?"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3111
+#: ../src/gldit/cairo-dock-gui-factory.c:3103
 msgid "link"
 msgstr "bağlantı"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3173
+#: ../src/gldit/cairo-dock-gui-factory.c:3165
 msgid "Grab"
 msgstr "yakala"
 
@@ -1279,7 +1272,7 @@ msgstr "Yeni başlatıcı"
 msgid "by"
 msgstr "yoluyla"
 
-#: ../src/gldit/cairo-dock-struct.h:474 ../data/messages:1035
+#: ../src/gldit/cairo-dock-struct.h:490 ../data/messages:1035
 #: ../data/messages:1043
 msgid "Default"
 msgstr "Varsayılan"
@@ -1319,6 +1312,20 @@ msgstr "%s temasını silmek istediğinizden emin misiniz?"
 msgid "Are you sure you want to delete these themes?"
 msgstr "Bu temaları silmek istediğinizden emin misiniz?"
 
+#: ../src/implementations/cairo-dock-glx.c:53
+msgid "This card is blacklisted due to a bug with your video drivers:"
+msgstr ""
+
+#: ../src/implementations/cairo-dock-glx.c:54
+msgid "Please have a look there:"
+msgstr ""
+
+#: ../src/implementations/cairo-dock-glx.c:373
+msgid ""
+"The OpenGL backend will be deactivated. Note that you can force this OpenGL "
+"backend by launching the dock with this command:"
+msgstr ""
+
 #: ../src/implementations/cairo-dock-hiding-effect.c:582 ../data/messages:39
 #: ../data/messages:201
 msgid "Move down"
@@ -1356,8 +1363,8 @@ msgstr ""
 "Cario-Dock2'ye hoşgeldiniz !\n"
 "Bu uygulamacık, size rıhtımı kullanmaya başlamanız için yardımcı olmak için "
 "burada; sadece onun üzerine tıklayın.\n"
-"Eğer herhangi bir sorunuz/talebiniz/yorumunuz var ise, lütfen bizi "
-"http://glx-dock.org adresinde ziyaret edin.\n"
+"Eğer herhangi bir sorunuz/talebiniz/yorumunuz var ise, lütfen bizi http://"
+"glx-dock.org adresinde ziyaret edin.\n"
 "Bu yazılımın hoşunuza gideceğini umarız !\n"
 "  (şimdi bu iletişim kutusunun üzerine, onu kapatmak üzere tıklayabilirsiniz)"
 
@@ -1979,9 +1986,8 @@ msgstr ""
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key "
-"/desktop/gnome/session/required_components/panel, and replace its content "
-"with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
+"panel, and replace its content with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -2029,8 +2035,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key "
-"'/apps/metacity/general/compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key '/apps/metacity/general/"
+"compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
@@ -3420,8 +3426,7 @@ msgid "Zoom effect"
 msgstr "Zum efekti"
 
 #: ../data/messages:659
-msgid ""
-"set to 1 if you don't want the icons to zoom when you hover over them."
+msgid "set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:661
@@ -3653,8 +3658,8 @@ msgstr "daha büyük"
 
 #: ../data/messages:773
 msgid ""
-"Use it to make the indicator follow the orientation of the dock "
-"(top/bottom/right/left)."
+"Use it to make the indicator follow the orientation of the dock (top/bottom/"
+"right/left)."
 msgstr ""
 
 #: ../data/messages:775
@@ -3977,8 +3982,8 @@ msgstr ""
 
 #: ../data/messages:1039
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
-"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
+"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1041
@@ -4027,7 +4032,19 @@ msgid ""
 "Perfect if you want to make the dock look like a panel."
 msgstr ""
 
-#: ../data/messages:1077
+#: ../data/messages:1078
+msgid "Cairo-Dock (Fallback Mode)"
+msgstr ""
+
+#: ../data/messages:1080
+msgid "A light and eye-candy dock and desklets for your desktop."
+msgstr ""
+
+#: ../data/messages:1082
+msgid "Multi-purpose Dock and Desklets"
+msgstr ""
+
+#: ../data/messages:1084
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.0</span>!</b>\n"
 " - The <b>taskbar</b> has been greatly enhanced.\n"
@@ -4049,7 +4066,7 @@ msgid ""
 " - It's possible to donate to support the project!"
 msgstr ""
 
-#: ../data/messages:1079
+#: ../data/messages:1086
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.1</span>!</b>\n"
 " - Better integration in of Unity: support of the <b>Launcher API</b> and "
@@ -4061,7 +4078,7 @@ msgid ""
 " - And as always ... various bug fixes and improvements :-)"
 msgstr ""
 
-#: ../data/messages:1081
+#: ../data/messages:1088
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.2</span>!</b>\n"
 " - Multi-screen support has been improved\n"

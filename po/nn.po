@@ -7,16 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2013-07-21 16:21+0000\n"
 "PO-Revision-Date: 2013-07-21 19:51+0000\n"
 "Last-Translator: Alexander Mackinnon Jansen <alexander.jansen@hesbynett.no>\n"
 "Language-Team: Norwegian Nynorsk <nn@li.org>\n"
+"Language: nn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2013-07-22 05:16+0000\n"
 "X-Generator: Launchpad (build 16696)\n"
-"Language: nn\n"
 
 #: ../src/cairo-dock-gui-advanced.c:121 ../src/cairo-dock-widget-plugins.c:171
 #: ../data/messages:259
@@ -427,8 +426,7 @@ msgstr "skillelinje"
 #: ../src/cairo-dock-menu.c:640
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
-msgstr ""
-"Du er i ferd med å fjerne dette ikonet (%s) frå panelet. Er du sikker?"
+msgstr "Du er i ferd med å fjerne dette ikonet (%s) frå panelet. Er du sikker?"
 
 #: ../src/cairo-dock-menu.c:655
 msgid "Sorry, this icon doesn't have a configuration file."
@@ -447,7 +445,7 @@ msgstr ""
 msgid "Move to another dock"
 msgstr "Flytt til eit anna panel"
 
-#: ../src/cairo-dock-menu.c:703 ../src/gldit/cairo-dock-gui-factory.c:1228
+#: ../src/cairo-dock-menu.c:703 ../src/gldit/cairo-dock-gui-factory.c:1220
 msgid "New main dock"
 msgstr "Nytt hovudpanel"
 
@@ -504,8 +502,7 @@ msgstr "Handsam draktar"
 #: ../src/cairo-dock-menu.c:1050
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
-msgstr ""
-"Vel mellom dei mange draktene på tenaren eller lagre drakta du har no."
+msgstr "Vel mellom dei mange draktene på tenaren eller lagre drakta du har no."
 
 #: ../src/cairo-dock-menu.c:1063
 msgid "Lock icons position"
@@ -528,8 +525,7 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Køyr Cairo-Dock ved oppstart"
 
 #: ../src/cairo-dock-menu.c:1107
-msgid ""
-"Third-party applets provide integration with many programs, like Pidgin"
+msgid "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Tredjeparts-miniprogram tilbyd samanslåing med mange program, som Pidgin"
 
@@ -778,8 +774,7 @@ msgid "Effects:"
 msgstr "Effektar:"
 
 #: ../src/cairo-dock-widget-items.c:241
-msgid ""
-"Main dock's parameters are available in the main configuration window."
+msgid "Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Innstillingane for hovudpanelet er tilbode i hovudvindauget til "
 "innstillingane."
@@ -805,8 +800,7 @@ msgid "Category"
 msgstr "Kategori"
 
 #: ../src/cairo-dock-widget-plugins.c:280
-msgid ""
-"Click on an applet in order to have a preview and a description for it."
+msgid "Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Klikk på eit av miniprogramma for å få ei førehandsvising og ei skildring av "
 "henne."
@@ -866,7 +860,7 @@ msgid "Delete this theme"
 msgstr "Slett denne drakta"
 
 #: ../src/cairo-dock-widget-themes.c:485
-#: ../src/gldit/cairo-dock-gui-factory.c:2435
+#: ../src/gldit/cairo-dock-gui-factory.c:2427
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr "Viser draktene i «%s»..."
@@ -956,8 +950,7 @@ msgstr ""
 
 #: ../src/cairo-dock.c:382
 msgid "Exclude a given plug-in from activating (it is still loaded though)."
-msgstr ""
-"Utelat eit gitt tillegg frå å aktivere (men det blir framleis lasta)."
+msgstr "Utelat eit gitt tillegg frå å aktivere (men det blir framleis lasta)."
 
 #: ../src/cairo-dock.c:385
 msgid "Don't load any plug-ins."
@@ -1063,8 +1056,8 @@ msgid ""
 "dock.org"
 msgstr ""
 "«%s»-modulen har vorte slådd av sia han kan ha skapa nokre problem.\n"
-"Du kan starte han på nytt, viss dette skjer att kan du melde det på "
-"http://glx-dock.org"
+"Du kan starte han på nytt, viss dette skjer att kan du melde det på http://"
+"glx-dock.org"
 
 #: ../src/cairo-dock.c:732
 msgid "< Maintenance mode >"
@@ -1194,45 +1187,45 @@ msgstr "Plukk opp ei fil"
 msgid "Pick up a directory"
 msgstr "Plukk opp ein katalog"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1051
+#: ../src/gldit/cairo-dock-gui-factory.c:1043
 msgid "_Custom Icons_"
 msgstr "_Tilpassa ikon_"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1068
-#: ../src/gldit/cairo-dock-gui-factory.c:1113
+#: ../src/gldit/cairo-dock-gui-factory.c:1060
+#: ../src/gldit/cairo-dock-gui-factory.c:1105
 msgid "Use all screens"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1090 ../data/messages:13
+#: ../src/gldit/cairo-dock-gui-factory.c:1082 ../data/messages:13
 #: ../data/messages:153 ../data/messages:159 ../data/messages:877
 msgid "left"
 msgstr "venstre"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1092 ../data/messages:11
+#: ../src/gldit/cairo-dock-gui-factory.c:1084 ../data/messages:11
 #: ../data/messages:151 ../data/messages:161 ../data/messages:875
 msgid "right"
 msgstr "høgre"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1094
-#: ../src/gldit/cairo-dock-gui-factory.c:1104
+#: ../src/gldit/cairo-dock-gui-factory.c:1086
+#: ../src/gldit/cairo-dock-gui-factory.c:1096
 msgid "middle"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1100 ../data/messages:9
+#: ../src/gldit/cairo-dock-gui-factory.c:1092 ../data/messages:9
 #: ../data/messages:149 ../data/messages:873
 msgid "top"
 msgstr "topp"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1102 ../data/messages:7
+#: ../src/gldit/cairo-dock-gui-factory.c:1094 ../data/messages:7
 #: ../data/messages:147 ../data/messages:871
 msgid "bottom"
 msgstr "botn"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1107
+#: ../src/gldit/cairo-dock-gui-factory.c:1099
 msgid "Screen"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1401
+#: ../src/gldit/cairo-dock-gui-factory.c:1393
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -1243,7 +1236,7 @@ msgstr ""
 "Installer han med same versjon som panelet for å nytte alle desse "
 "funksjonane."
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1410
+#: ../src/gldit/cairo-dock-gui-factory.c:1402
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
@@ -1252,11 +1245,11 @@ msgstr ""
 "Programtillegget «%s» er ikkje aktivt.\n"
 "Vil du aktivere det no?"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3111
+#: ../src/gldit/cairo-dock-gui-factory.c:3103
 msgid "link"
 msgstr "lenke"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3173
+#: ../src/gldit/cairo-dock-gui-factory.c:3165
 msgid "Grab"
 msgstr "Hent"
 
@@ -1272,7 +1265,7 @@ msgstr "Ny programstartar"
 msgid "by"
 msgstr "av"
 
-#: ../src/gldit/cairo-dock-struct.h:474 ../data/messages:1035
+#: ../src/gldit/cairo-dock-struct.h:490 ../data/messages:1035
 #: ../data/messages:1043
 msgid "Default"
 msgstr "Standard"
@@ -1311,6 +1304,20 @@ msgstr "Er du sikker på at du vil slette %s-drakta?"
 #: ../src/gldit/cairo-dock-themes-manager.c:375
 msgid "Are you sure you want to delete these themes?"
 msgstr "Er du sikker på at du vil slette desse draktane?"
+
+#: ../src/implementations/cairo-dock-glx.c:53
+msgid "This card is blacklisted due to a bug with your video drivers:"
+msgstr ""
+
+#: ../src/implementations/cairo-dock-glx.c:54
+msgid "Please have a look there:"
+msgstr ""
+
+#: ../src/implementations/cairo-dock-glx.c:373
+msgid ""
+"The OpenGL backend will be deactivated. Note that you can force this OpenGL "
+"backend by launching the dock with this command:"
+msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:582 ../data/messages:39
 #: ../data/messages:201
@@ -1656,8 +1663,7 @@ msgstr "Å køyre eit program fleire gonger"
 msgid ""
 "You can launch an application several times by SHIFT+clicking on its icon "
 "(or from the menu)."
-msgstr ""
-"Du kan køyre eit program med shift+klikke på ikonet (eller frå menyen)"
+msgstr "Du kan køyre eit program med shift+klikke på ikonet (eller frå menyen)"
 
 #: ../Help/data/messages:59
 msgid "Switching between the windows of a same application"
@@ -2135,15 +2141,13 @@ msgstr "Å fjerne gnome-panelet heilt"
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key "
-"/desktop/gnome/session/required_components/panel, and replace its content "
-"with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
+"panel, and replace its content with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Opne gconf-editor, endre nøkkelen "
-"/desktop/gnome/session/required_components/panel, og erstatt innhaldet med "
-"«cairo-dock».\n"
+"Opne gconf-editor, endre nøkkelen /desktop/gnome/session/required_components/"
+"panel, og erstatt innhaldet med «cairo-dock».\n"
 "Så startar du økta på nytt: gnome-panelet er ikkje starta, men dokka er "
 "starta (viss ikkje kan du legge henne til oppstartsprogramma)."
 
@@ -2194,16 +2198,16 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key "
-"'/apps/metacity/general/compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key '/apps/metacity/general/"
+"compositing_manager' and set it to 'true'."
 msgstr ""
 "Du må skru på samansetting.  Du kan for eksempel køyre Compiz eller "
 "xcompgr.\n"
 "Viss du køyrer XFCE eller KDE, kan du skru på samansetting i vala for "
 "vindaugehandsamar.\n"
 "Viss du køyrer GNOME kan du skru det på i Metacity:\n"
-" Opne gconf-editor, endre nøkkelen "
-"«/apps/metacity/general/compositing_manager» og still han inn på «true»."
+" Opne gconf-editor, endre nøkkelen «/apps/metacity/general/"
+"compositing_manager» og still han inn på «true»."
 
 #: ../Help/data/messages:207
 msgid ""
@@ -2248,8 +2252,7 @@ msgstr ""
 
 #: ../Help/data/messages:217
 msgid "I don't have these wonderful effects like fire, cube rotating, etc."
-msgstr ""
-"Eg har ikkje dei vedunderlige effektane som eld, roterande kube, osb."
+msgstr "Eg har ikkje dei vedunderlige effektane som eld, roterande kube, osb."
 
 #: ../Help/data/messages:219
 msgid ""
@@ -3709,8 +3712,7 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:659
-msgid ""
-"set to 1 if you don't want the icons to zoom when you hover over them."
+msgid "set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:661
@@ -3942,8 +3944,8 @@ msgstr ""
 
 #: ../data/messages:773
 msgid ""
-"Use it to make the indicator follow the orientation of the dock "
-"(top/bottom/right/left)."
+"Use it to make the indicator follow the orientation of the dock (top/bottom/"
+"right/left)."
 msgstr ""
 
 #: ../data/messages:775
@@ -4266,8 +4268,8 @@ msgstr ""
 
 #: ../data/messages:1039
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
-"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
+"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1041
@@ -4316,7 +4318,19 @@ msgid ""
 "Perfect if you want to make the dock look like a panel."
 msgstr ""
 
-#: ../data/messages:1077
+#: ../data/messages:1078
+msgid "Cairo-Dock (Fallback Mode)"
+msgstr ""
+
+#: ../data/messages:1080
+msgid "A light and eye-candy dock and desklets for your desktop."
+msgstr ""
+
+#: ../data/messages:1082
+msgid "Multi-purpose Dock and Desklets"
+msgstr ""
+
+#: ../data/messages:1084
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.0</span>!</b>\n"
 " - The <b>taskbar</b> has been greatly enhanced.\n"
@@ -4338,7 +4352,7 @@ msgid ""
 " - It's possible to donate to support the project!"
 msgstr ""
 
-#: ../data/messages:1079
+#: ../data/messages:1086
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.1</span>!</b>\n"
 " - Better integration in of Unity: support of the <b>Launcher API</b> and "
@@ -4350,7 +4364,7 @@ msgid ""
 " - And as always ... various bug fixes and improvements :-)"
 msgstr ""
 
-#: ../data/messages:1081
+#: ../data/messages:1088
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.2</span>!</b>\n"
 " - Multi-screen support has been improved\n"

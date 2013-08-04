@@ -65,6 +65,10 @@ if test $UPDATE_CORE -gt 0; then
 			echo >> data/messages
 			bash $CAIRO_DOCK_ADD_README data/readme-default-view
 		fi
+		if test -f data/cairo-dock-cairo.desktop; then
+			echo >> data/messages
+			grep -e "Name=" -e "Comment=" data/cairo-dock-cairo.desktop | cut -d= -f2 | sed 's/^/_("/g;s/$/")\n/g' >> data/messages
+		fi
 		$CAIRO_DOCK_EXTRACT_MESSAGE data/ChangeLog.txt
 	fi
 

@@ -7,16 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2013-07-21 16:21+0000\n"
 "PO-Revision-Date: 2013-07-21 20:14+0000\n"
 "Last-Translator: Michael Konrad <Nephelyn@arcor.de>\n"
 "Language-Team: German <de@li.org>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2013-07-22 05:15+0000\n"
 "X-Generator: Launchpad (build 16696)\n"
-"Language: de\n"
 
 #: ../src/cairo-dock-gui-advanced.c:121 ../src/cairo-dock-widget-plugins.c:171
 #: ../data/messages:259
@@ -487,7 +486,7 @@ msgstr ""
 msgid "Move to another dock"
 msgstr "In anderes Dock einfügen"
 
-#: ../src/cairo-dock-menu.c:703 ../src/gldit/cairo-dock-gui-factory.c:1228
+#: ../src/cairo-dock-menu.c:703 ../src/gldit/cairo-dock-gui-factory.c:1220
 msgid "New main dock"
 msgstr "Neues Hauptdock"
 
@@ -570,11 +569,10 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Cairo-Dock beim Hochfahren starten"
 
 #: ../src/cairo-dock-menu.c:1107
-msgid ""
-"Third-party applets provide integration with many programs, like Pidgin"
+msgid "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
-"Applets von Drittanbietern stellen Integration mit vielen Programmen (wie "
-"z.B. Pidgin) zur Verfügung."
+"Applets von Drittanbietern stellen Integration mit vielen Programmen (wie z."
+"B. Pidgin) zur Verfügung."
 
 #: ../src/cairo-dock-menu.c:1110 ../Help/src/applet-init.c:28
 #: ../Help/src/applet-notifications.c:269
@@ -824,8 +822,7 @@ msgid "Effects:"
 msgstr "Effekte :"
 
 #: ../src/cairo-dock-widget-items.c:241
-msgid ""
-"Main dock's parameters are available in the main configuration window."
+msgid "Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Die Einstellungen des Hauptdocks sind im Hauptkonfigurationsfenster "
 "verfügbar."
@@ -851,8 +848,7 @@ msgid "Category"
 msgstr "Kategorie"
 
 #: ../src/cairo-dock-widget-plugins.c:280
-msgid ""
-"Click on an applet in order to have a preview and a description for it."
+msgid "Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Klicken Sie auf ein Applet, um eine Vorschau und eine Beschreibung dazu "
 "anzuzeigen."
@@ -912,7 +908,7 @@ msgid "Delete this theme"
 msgstr "Dieses Thema löschen"
 
 #: ../src/cairo-dock-widget-themes.c:485
-#: ../src/gldit/cairo-dock-gui-factory.c:2435
+#: ../src/gldit/cairo-dock-gui-factory.c:2427
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr "Liste Themen in '%s' ... auf"
@@ -1103,8 +1099,8 @@ msgstr ""
 "abhalten.\n"
 "Möchten Sie OpenGL aktivieren ?\n"
 "(Diesen Dialog nicht zeigen und das Dock vom Applikationsmenü aus starten,\n"
-"  oder mit der Option \"-o\" um OpenGL zu erzwingen und mit der Option \"-"
-"c\" um den Start vom Cairo Dock zu erzwingen."
+"  oder mit der Option \"-o\" um OpenGL zu erzwingen und mit der Option \"-c"
+"\" um den Start vom Cairo Dock zu erzwingen."
 
 #: ../src/cairo-dock.c:558
 msgid "Remember this choice"
@@ -1160,8 +1156,8 @@ msgid ""
 msgstr ""
 "Das Modul '%s' ist eventuell auf ein Problem gestoßen.\n"
 "Das Modul wurde erfolgreich wiederhergestellt, aber sollte dieser Fehler "
-"erneut auftreten, würden wir Sie bitten, uns das unter http://cairo-"
-"dock.org/ zu melden."
+"erneut auftreten, würden wir Sie bitten, uns das unter http://cairo-dock."
+"org/ zu melden."
 
 #: ../src/gldit/cairo-dock-applet-facility.h:246
 msgid ""
@@ -1255,45 +1251,45 @@ msgstr "Wählen Sie eine Datei aus"
 msgid "Pick up a directory"
 msgstr "Wählen Sie ein Verzeichnis aus"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1051
+#: ../src/gldit/cairo-dock-gui-factory.c:1043
 msgid "_Custom Icons_"
 msgstr "_Benutzerdefinierte Icons_"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1068
-#: ../src/gldit/cairo-dock-gui-factory.c:1113
+#: ../src/gldit/cairo-dock-gui-factory.c:1060
+#: ../src/gldit/cairo-dock-gui-factory.c:1105
 msgid "Use all screens"
 msgstr "Alle Bildschirme benutzen"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1090 ../data/messages:13
+#: ../src/gldit/cairo-dock-gui-factory.c:1082 ../data/messages:13
 #: ../data/messages:153 ../data/messages:159 ../data/messages:877
 msgid "left"
 msgstr "Links"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1092 ../data/messages:11
+#: ../src/gldit/cairo-dock-gui-factory.c:1084 ../data/messages:11
 #: ../data/messages:151 ../data/messages:161 ../data/messages:875
 msgid "right"
 msgstr "Rechts"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1094
-#: ../src/gldit/cairo-dock-gui-factory.c:1104
+#: ../src/gldit/cairo-dock-gui-factory.c:1086
+#: ../src/gldit/cairo-dock-gui-factory.c:1096
 msgid "middle"
 msgstr "Mitte"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1100 ../data/messages:9
+#: ../src/gldit/cairo-dock-gui-factory.c:1092 ../data/messages:9
 #: ../data/messages:149 ../data/messages:873
 msgid "top"
 msgstr "Oben"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1102 ../data/messages:7
+#: ../src/gldit/cairo-dock-gui-factory.c:1094 ../data/messages:7
 #: ../data/messages:147 ../data/messages:871
 msgid "bottom"
 msgstr "Unten"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1107
+#: ../src/gldit/cairo-dock-gui-factory.c:1099
 msgid "Screen"
 msgstr "Bildschirm"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1401
+#: ../src/gldit/cairo-dock-gui-factory.c:1393
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -1304,7 +1300,7 @@ msgstr ""
 "Vergewissern Sie sich, dass Sie es in der gleichen Version wie das Dock "
 "installieren, um diese Eigenschaften genießen zu können."
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1410
+#: ../src/gldit/cairo-dock-gui-factory.c:1402
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
@@ -1313,11 +1309,11 @@ msgstr ""
 "Das Plug-in \"%s\" ist nicht aktiviert.\n"
 "Jetzt aktivieren ?"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3111
+#: ../src/gldit/cairo-dock-gui-factory.c:3103
 msgid "link"
 msgstr "Link"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3173
+#: ../src/gldit/cairo-dock-gui-factory.c:3165
 msgid "Grab"
 msgstr "Schnappen"
 
@@ -1333,7 +1329,7 @@ msgstr "Neuer Starter"
 msgid "by"
 msgstr "durch"
 
-#: ../src/gldit/cairo-dock-struct.h:474 ../data/messages:1035
+#: ../src/gldit/cairo-dock-struct.h:490 ../data/messages:1035
 #: ../data/messages:1043
 msgid "Default"
 msgstr "Vorgabe"
@@ -1363,8 +1359,8 @@ msgid ""
 msgstr ""
 "Konnte nicht auf entfernte Datei %s zugreifen. Vielleicht ist der Server "
 "nicht am Netz.\n"
-"Bitte versuchen Sie es später erneut oder kontaktieren Sie uns bei glx-"
-"dock.org."
+"Bitte versuchen Sie es später erneut oder kontaktieren Sie uns bei glx-dock."
+"org."
 
 #: ../src/gldit/cairo-dock-themes-manager.c:373
 #, c-format
@@ -1374,6 +1370,20 @@ msgstr "Sind Sie sicher, dass Sie das Thema %s löschen möchten ?"
 #: ../src/gldit/cairo-dock-themes-manager.c:375
 msgid "Are you sure you want to delete these themes?"
 msgstr "Sind Sie sicher, dass Sie diese Themen löschen möchten ?"
+
+#: ../src/implementations/cairo-dock-glx.c:53
+msgid "This card is blacklisted due to a bug with your video drivers:"
+msgstr ""
+
+#: ../src/implementations/cairo-dock-glx.c:54
+msgid "Please have a look there:"
+msgstr ""
+
+#: ../src/implementations/cairo-dock-glx.c:373
+msgid ""
+"The OpenGL backend will be deactivated. Note that you can force this OpenGL "
+"backend by launching the dock with this command:"
+msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:582 ../data/messages:39
 #: ../data/messages:201
@@ -1634,8 +1644,8 @@ msgstr ""
 "entfernen\" auswählen.\n"
 "\n"
 "Wenn Sie Symbolthemen auf ihrem PC installiert haben, können Sie diese "
-"anstatt des voreingestellten Symbolthemas im Fenster \"Globale "
-"Konfiguration\" auswählen."
+"anstatt des voreingestellten Symbolthemas im Fenster \"Globale Konfiguration"
+"\" auswählen."
 
 #: ../Help/data/messages:33
 msgid "Resizing icons"
@@ -1734,8 +1744,7 @@ msgstr ""
 
 #: ../Help/data/messages:59
 msgid "Switching between the windows of a same application"
-msgstr ""
-"Zwischen mehreren Fenstern derselben Applikation hin- und herschalten"
+msgstr "Zwischen mehreren Fenstern derselben Applikation hin- und herschalten"
 
 #: ../Help/data/messages:61
 msgid ""
@@ -1769,8 +1778,8 @@ msgstr "Ein benutzerdefiniertes Symbol für eine Applikation bestimmen"
 #: ../Help/data/messages:69
 msgid "See \"Changing an icon's image\" in the \"Icons\" category."
 msgstr ""
-"Schlagen Sie dafür \"Verändern eines Symbolbilds\" in der Kategorie "
-"\"Symbole\" auf."
+"Schlagen Sie dafür \"Verändern eines Symbolbilds\" in der Kategorie \"Symbole"
+"\" auf."
 
 #: ../Help/data/messages:71
 msgid "Showing windows preview over the icons"
@@ -2018,8 +2027,8 @@ msgstr ""
 "Führen Sie einen Mittelklick oder Rechtsklick aus und gehen Sie auf "
 "\"Schnellstart\".\n"
 "Sie können dieser Funktion eine Tastenkombination zuweisen.\n"
-"Die Eingabe wird automatisch vervollständigt (z.B. wird \"fir\" zu "
-"\"firefox\" ergänzt)."
+"Die Eingabe wird automatisch vervollständigt (z.B. wird \"fir\" zu \"firefox"
+"\" ergänzt)."
 
 #: ../Help/data/messages:133
 msgid "Turning Composite OFF during games"
@@ -2116,8 +2125,7 @@ msgstr ""
 
 #: ../Help/data/messages:153
 msgid "Quickly opening a recent file with a launcher"
-msgstr ""
-"Schnellöffnung einer kürzlich erstellten Datei mithilfe eines Starters"
+msgstr "Schnellöffnung einer kürzlich erstellten Datei mithilfe eines Starters"
 
 #: ../Help/data/messages:155
 msgid ""
@@ -2243,15 +2251,14 @@ msgstr "Das gesamte Gnome-Panel entfernen"
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key "
-"/desktop/gnome/session/required_components/panel, and replace its content "
-"with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
+"panel, and replace its content with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Öffnen Sie den gconf-Editor, editieren Sie den Schlüssel in "
-"\"/desktop/gnome/session/required_components/panel\" und ersetzen Sie den "
-"Inhalt mit \"cairo-dock\".\n"
+"Öffnen Sie den gconf-Editor, editieren Sie den Schlüssel in \"/desktop/gnome/"
+"session/required_components/panel\" und ersetzen Sie den Inhalt mit \"cairo-"
+"dock\".\n"
 "Dann starten Sie ihre Sitzung neu. Das Gnome-Panel wird dann nicht gestartet "
 "sein, aber das Dock (wenn nicht, können Sie es einfach zu den "
 "Startprogrammen hinzufügen)."
@@ -2306,8 +2313,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key "
-"'/apps/metacity/general/compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key '/apps/metacity/general/"
+"compositing_manager' and set it to 'true'."
 msgstr ""
 "Sie müssen das Compositing einschalten. Sie können dafür z.B. Compiz oder "
 "xcompmgr verwenden.\n"
@@ -2315,8 +2322,8 @@ msgstr ""
 "Optionen des Fenstermangers aktivieren.\n"
 "Wenn Sie Gnome verwenden, können Sie das Compositing auf diese Art in "
 "Metacity aktivieren :\n"
-"Öffnen Sie den gconf-Editor, editieren Sie den Schlüssel "
-":\"/apps/metacity/general/compositing_manager\" und setzen ihn auf \"true\"."
+"Öffnen Sie den gconf-Editor, editieren Sie den Schlüssel :\"/apps/metacity/"
+"general/compositing_manager\" und setzen ihn auf \"true\"."
 
 #: ../Help/data/messages:207
 msgid ""
@@ -2694,8 +2701,8 @@ msgid ""
 "Depending on your WindowManager, you may be able to resize this with ALT + "
 "middle-click or ALT + left-click."
 msgstr ""
-"Abhängig von ihrem Fenstermanager können Sie die Größe mithilfe von "
-"ALT+Mittelklick oder ALT+Linksklick verändern."
+"Abhängig von ihrem Fenstermanager können Sie die Größe mithilfe von ALT"
+"+Mittelklick oder ALT+Linksklick verändern."
 
 #: ../Help/data/messages:329
 msgid "Desklet dimensions (width x height):"
@@ -2849,8 +2856,7 @@ msgstr "Position auf dem Bildschirm"
 
 #: ../data/messages:5 ../data/messages:145 ../data/messages:869
 msgid "Choose which border of the screen the dock will be placed on:"
-msgstr ""
-"Auswählen, an welchem Bildschirmrand das Dock platziert werden soll :"
+msgstr "Auswählen, an welchem Bildschirmrand das Dock platziert werden soll :"
 
 #: ../data/messages:15 ../data/messages:177
 msgid "Visibility of the main dock"
@@ -3419,8 +3425,7 @@ msgstr ""
 
 #: ../data/messages:361
 msgid "Force the following applications to demand your attention"
-msgstr ""
-"Die folgenden Applikationen zwingen, ihre Aufmerksamkeit zu verlangen"
+msgstr "Die folgenden Applikationen zwingen, ihre Aufmerksamkeit zu verlangen"
 
 #: ../data/messages:363
 msgid "Highlight applications demanding your attention with an animation"
@@ -3465,8 +3470,7 @@ msgstr "Je mehr da sind, desto langsamer wird es sein"
 
 #: ../data/messages:381
 msgid "Number of steps in the zoom animation (grow/shrink):"
-msgstr ""
-"Anzahl der Schritte der Vergrößerungsanimation (wachsen/schrumpfen) :"
+msgstr "Anzahl der Schritte der Vergrößerungsanimation (wachsen/schrumpfen) :"
 
 #: ../data/messages:393
 msgid "Number of steps in the auto-hide animation (move up/move down):"
@@ -3922,8 +3926,7 @@ msgid "Zoom effect"
 msgstr "Zoom-Effekt"
 
 #: ../data/messages:659
-msgid ""
-"set to 1 if you don't want the icons to zoom when you hover over them."
+msgid "set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Auf 1 setzen, wenn Sie nicht möchten, dass sich die Symbole vergrößern, wenn "
 "Sie darüber fahren."
@@ -4189,11 +4192,11 @@ msgstr "größer"
 
 #: ../data/messages:773
 msgid ""
-"Use it to make the indicator follow the orientation of the dock "
-"(top/bottom/right/left)."
+"Use it to make the indicator follow the orientation of the dock (top/bottom/"
+"right/left)."
 msgstr ""
-"Benutzen, um den Indikator der Ausrichtung des Docks folgen zu lassen "
-"(oben/unten/rechts/links)."
+"Benutzen, um den Indikator der Ausrichtung des Docks folgen zu lassen (oben/"
+"unten/rechts/links)."
 
 #: ../data/messages:775
 msgid "Rotate the indicator with dock?"
@@ -4291,8 +4294,8 @@ msgstr "Sichtbarkeitsgrenze der Aufkleber"
 #: ../data/messages:821
 msgid "Should the labels always be horizontal, even when dock is vertical?"
 msgstr ""
-"Sollen die Aufkleber immer waagerecht sein, auch wenn das Dock senkrecht ist "
-"?"
+"Sollen die Aufkleber immer waagerecht sein, auch wenn das Dock senkrecht "
+"ist ?"
 
 #: ../data/messages:823
 msgid "Font"
@@ -4538,8 +4541,8 @@ msgstr "Name des Starters:"
 
 #: ../data/messages:1039
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
-"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
+"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 "Beispiel: nautilus --no-desktop, gedit, usw. Sie können sogar ein "
 "Tastenkürzel angeben, z. B. <Alt>F1, <Strg>c, <Strg>v, usw."
@@ -4603,7 +4606,19 @@ msgstr ""
 "<b>Die einfache 2D-Ansicht von Cairo-Dock</b>\n"
 "Bestens geeignet, um dem Dock das Aussehen eines Panels zu verleihen."
 
-#: ../data/messages:1077
+#: ../data/messages:1078
+msgid "Cairo-Dock (Fallback Mode)"
+msgstr ""
+
+#: ../data/messages:1080
+msgid "A light and eye-candy dock and desklets for your desktop."
+msgstr ""
+
+#: ../data/messages:1082
+msgid "Multi-purpose Dock and Desklets"
+msgstr ""
+
+#: ../data/messages:1084
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.0</span>!</b>\n"
 " - The <b>taskbar</b> has been greatly enhanced.\n"
@@ -4645,7 +4660,7 @@ msgstr ""
 " - Wenig Hinzugekommenes zur DBus API.\n"
 " - Es ist möglich zu spenden um das Projekt zu unterstützen!"
 
-#: ../data/messages:1079
+#: ../data/messages:1086
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.1</span>!</b>\n"
 " - Better integration in of Unity: support of the <b>Launcher API</b> and "
@@ -4667,7 +4682,7 @@ msgstr ""
 "- Icons in der <b>Taskleiste</b> können von Startern getrennt werden.\n"
 "- Und wie immer ... diverse Bug-Fixes und Verbesserungen :-)"
 
-#: ../data/messages:1081
+#: ../data/messages:1088
 msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.2</span>!</b>\n"
 " - Multi-screen support has been improved\n"
