@@ -23,54 +23,49 @@
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-cinnamon-integration.h"
 
-static DBusGProxy *s_pGSProxy = NULL;
-static gboolean s_DashIsVisible = FALSE;
-static gint s_iSidShowDash = 0;
+static DBusGProxy *s_pProxy = NULL;
 
 #define CD_CINNAMON_BUS "org.Cinnamon"
 #define CD_CINNAMON_OBJECT "/org/Cinnamon"
 #define CD_CINNAMON_INTERFACE "org.Cinnamon"
 
+/// Note: this has been tested with Cinnamon-1.6 on Mint-14 and Cinnamon-1.7.4 on Ubuntu-13.04
 
-static gboolean _show_dash (G_GNUC_UNUSED gpointer data)
+static gboolean _eval (const gchar *cmd)
 {
-	dbus_g_proxy_call_no_reply (s_pGSProxy, "Eval",
-		G_TYPE_STRING, "Main.overview._dash.actor.show();",
-		G_TYPE_INVALID,
-		G_TYPE_INVALID);
-	s_iSidShowDash = 0;
-	return FALSE;
-}
-static void _hide_dash (void)
-{
-	dbus_g_proxy_call_no_reply (s_pGSProxy, "Eval",
-		G_TYPE_STRING, "Main.overview._dash.actor.hide();",
-		G_TYPE_INVALID,
-		G_TYPE_INVALID);  // hide the dash, since it's completely redundant with the dock ("Main.panel.actor.hide()" to hide the top panel)
-	if (s_iSidShowDash != 0)
+	gboolean bSuccess = FALSE;
+	if (s_pProxy != NULL)
 	{
-		g_source_remove (s_iSidShowDash);
-		s_iSidShowDash = 0;
+		gchar *cResult = NULL;
+		GError *error = NULL;
+		dbus_g_proxy_call (s_pProxy, "Eval", &error,
+			G_TYPE_STRING, cmd,
+			G_TYPE_INVALID,
+			G_TYPE_BOOLEAN, &bSuccess,
+			G_TYPE_STRING, &cResult,
+			G_TYPE_INVALID);
+		if (error)
+		{
+			cd_warning (error->message);
+			g_error_free (error);
+		}
+		if (cResult)
+		{
+			g_print ("%s\n", cResult);
+			g_free (cResult);
+		}
 	}
-	
-	if (s_DashIsVisible)
-		s_iSidShowDash = g_timeout_add_seconds (8, _show_dash, NULL);
+	return bSuccess;
 }
 
 static gboolean present_overview (void)
 {
-	gboolean bSuccess = FALSE;
-	if (s_pGSProxy != NULL)
-	{
-		_hide_dash ();
-		
-		dbus_g_proxy_call_no_reply (s_pGSProxy, "Eval",
-			G_TYPE_STRING, "Main.overview.toggle();",
-			G_TYPE_INVALID,
-			G_TYPE_INVALID);  // no reply, because this method doesn't output anything (we get an error if we use 'dbus_g_proxy_call')
-		bSuccess = TRUE;
-	}
-	return bSuccess;
+	return _eval ("Main.overview.toggle();");
+}
+
+static gboolean present_expo (void)
+{
+	return _eval ("Main.expo.toggle();");
 }
 
 static gboolean present_class (const gchar *cClass)
@@ -81,18 +76,16 @@ static gboolean present_class (const gchar *cClass)
 		return FALSE;
 	
 	gboolean bSuccess = FALSE;
-	if (s_pGSProxy != NULL)
+	if (s_pProxy != NULL)
 	{
-		_hide_dash ();
-		
 		const gchar *cWmClass = cairo_dock_get_class_wm_class (cClass);
 		int iNumDesktop, iViewPortX, iViewPortY;
 		gldi_desktop_get_current (&iNumDesktop, &iViewPortX, &iViewPortY);
 		int iWorkspace = iNumDesktop * g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY + iViewPortX + iViewPortY * g_desktopGeometry.iNbViewportX;
-		/// Note: there is actually a bug in Gnome-Shell 3.6, in workspace.js in '_onCloneSelected': 'wsIndex' should be let undefined, because here we switch to a window that is on a different workspace.
+		/// Note: there is actually a bug in Cinnamon 1.4, in workspace.js in '_onCloneSelected': 'wsIndex' should be let undefined, because here we switch to a window that is on a different workspace.
 		gchar *code = g_strdup_printf ("Main.overview.show(); \
 		let windows = global.get_window_actors(); \
-		let ws = Main.overview._viewSelector._workspacesDisplay._workspacesViews[0]._workspaces[%d]; \
+		let ws = Main.overview._viewSelector._workspacesDisplay.workspacesView._workspaces[%d]; \
 		for (let i = 0; i < windows.length; i++) { \
 			let win = windows[i]; \
 			let metaWin = win.get_meta_window(); \
@@ -101,83 +94,69 @@ static gboolean present_class (const gchar *cClass)
 				{ if (index == -1) ws._addWindowClone(win); } \
 			else \
 				{ if (index != -1) { let clone = ws._windows[index]; ws._windows.splice(index, 1); ws._windowOverlays.splice(index, 1); clone.destroy(); } }\
-		}", iWorkspace, cWmClass);  // _workspacesViews[0] seems to be for the first monitor, we need some feedback here with multi-screens.
-		dbus_g_proxy_call_no_reply (s_pGSProxy, "Eval",
-			G_TYPE_STRING, code,
-			G_TYPE_INVALID,
-			G_TYPE_INVALID);  // no reply, because this method doesn't output anything (we get an error if we use 'dbus_g_proxy_call')
+		}", iWorkspace, cWmClass);
+		bSuccess = _eval (code);
 		g_free (code);
-		bSuccess = TRUE;
 	}
 	return bSuccess;
 }
 
 
-static void _register_gs_backend (void)
+static void _register_cinnamon_backend (void)
 {
 	GldiDesktopManagerBackend *p = g_new0 (GldiDesktopManagerBackend, 1);
 	
 	p->present_class = present_class;
 	p->present_windows = present_overview;
-	p->present_desktops = present_overview;
+	p->present_desktops = present_expo;
 	p->show_widget_layer = NULL;
 	p->set_on_widget_layer = NULL;
 	
 	gldi_desktop_manager_register_backend (p);
 }
 
-static void _unregister_gs_backend (void)
+static void _unregister_cinnamon_backend (void)
 {
 	//cairo_dock_wm_register_backend (NULL);
 }
 
-static void _on_gs_owner_changed (G_GNUC_UNUSED const gchar *cName, gboolean bOwned, G_GNUC_UNUSED gpointer data)
+static void _on_cinnamon_owner_changed (G_GNUC_UNUSED const gchar *cName, gboolean bOwned, G_GNUC_UNUSED gpointer data)
 {
-	cd_debug ("Gnome-Shell is on the bus (%d)", bOwned);
+	cd_debug ("Cinnamon is on the bus (%d)", bOwned);
 	
 	if (bOwned)  // set up the proxies
 	{
-		g_return_if_fail (s_pGSProxy == NULL);
+		g_return_if_fail (s_pProxy == NULL);
 		
-		s_pGSProxy = cairo_dock_create_new_session_proxy (
+		s_pProxy = cairo_dock_create_new_session_proxy (
 			CD_CINNAMON_BUS,
 			CD_CINNAMON_OBJECT,
 			CD_CINNAMON_INTERFACE);
 		
-		gchar *cResult = NULL;
-		gboolean bSuccess = FALSE;
-		dbus_g_proxy_call (s_pGSProxy, "Eval", NULL,
-			G_TYPE_STRING, "Main.overview._dash.actor.visible;",
-			G_TYPE_INVALID,
-			G_TYPE_BOOLEAN, &bSuccess,
-			G_TYPE_STRING, &cResult,
-			G_TYPE_INVALID);
-		s_DashIsVisible = (!cResult || strcmp (cResult, "true") == 0);
-		
-		_register_gs_backend ();
+		_register_cinnamon_backend ();
 	}
-	else if (s_pGSProxy != NULL)
+	else if (s_pProxy != NULL)
 	{
-		g_object_unref (s_pGSProxy);
-		s_pGSProxy = NULL;
+		g_object_unref (s_pProxy);
+		s_pProxy = NULL;
 		
-		_unregister_gs_backend ();
+		_unregister_cinnamon_backend ();
 	}
 }
-static void _on_detect_gs (gboolean bPresent, G_GNUC_UNUSED gpointer data)
+static void _on_detect_cinnamon (gboolean bPresent, G_GNUC_UNUSED gpointer data)
 {
-	cd_debug ("Gnome-Shell is present: %d", bPresent);
+	cd_debug ("Cinnamon is present: %d", bPresent);
 	if (bPresent)
 	{
-		_on_gs_owner_changed (CD_CINNAMON_BUS, TRUE, NULL);
+		_on_cinnamon_owner_changed (CD_CINNAMON_BUS, TRUE, NULL);
 	}
 	cairo_dock_watch_dbus_name_owner (CD_CINNAMON_BUS,
-		(CairoDockDbusNameOwnerChangedFunc) _on_gs_owner_changed,
+		(CairoDockDbusNameOwnerChangedFunc) _on_cinnamon_owner_changed,
 		NULL);
 }
 void cd_init_cinnamon_backend (void)
 {
 	cairo_dock_dbus_detect_application_async (CD_CINNAMON_BUS,
-		(CairoDockOnAppliPresentOnDbus) _on_detect_gs,
+		(CairoDockOnAppliPresentOnDbus) _on_detect_cinnamon,
 		NULL);
 }
