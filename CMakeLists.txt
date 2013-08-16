@@ -144,7 +144,7 @@ STRING (REGEX REPLACE "\\..*" "" GTK_MAJOR "${GTK_VERSION}")
 STRING (REGEX REPLACE "[0-9]*\\.([^ ]+)" "\\1" GTK_MINOR "${GTK_VERSION}")  # 3.8.2 => 3.8
 STRING (REGEX REPLACE "\\.[0-9]*" "" GTK_MINOR "${GTK_MINOR}") # 3.8 => 8
 
-add_definitions (-DGTK_DISABLE_DEPRECATED="1")
+# add_definitions (-DGTK_DISABLE_DEPRECATED="1")
 # add_definitions (-DG_DISABLE_DEPRECATED="1")
 
 # We use crypt(3) which may be in libc, or in libcrypt (eg FreeBSD)
