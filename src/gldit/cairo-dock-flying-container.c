@@ -66,7 +66,12 @@ static void _load_emblem (Icon *pIcon)
 	const gchar *cImage = NULL;
 	if (GLDI_OBJECT_IS_APPLET_ICON (pIcon))
 	{
+		/// GTK_STOCK is now deprecated, here is a temporary fix to avoid compilation errors
+		#if GTK_CHECK_VERSION(3, 9, 8)
+		cImage = "gtk-jump-to-rtl";
+		#else
 		cImage = GTK_STOCK_JUMP_TO"-rtl";  // GTK_STOCK_JUMP_TO only doesn't exist.
+		#endif
 	}
 	else
 	{
