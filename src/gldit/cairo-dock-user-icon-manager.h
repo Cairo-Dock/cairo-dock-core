@@ -49,6 +49,18 @@ typedef enum {
 	} GldiUserIconNotifications;
 
 
+// ID of the different types of UserIcon, used in the .desktop (exported for the GUI factory)
+typedef enum {
+	GLDI_USER_ICON_TYPE_LAUNCHER = 0,
+	GLDI_USER_ICON_TYPE_STACK,
+	GLDI_USER_ICON_TYPE_SEPARATOR,
+	/*CAIRO_DOCK_ICON_TYPE_CLASS_CONTAINER,
+	CAIRO_DOCK_ICON_TYPE_APPLI,
+	CAIRO_DOCK_ICON_TYPE_APPLET,
+	CAIRO_DOCK_ICON_TYPE_OTHER,*/
+	GLDI_USER_ICON_NB_ICON_TYPES
+	} GldiUserIconType;
+
 /** Say if an object is a UserIcon.
 *@param obj the object.
 *@return TRUE if the object is a UserIcon.

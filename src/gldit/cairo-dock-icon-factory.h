@@ -42,18 +42,6 @@ G_BEGIN_DECLS
 * Specialized Icons are created by the corresponding factory.
 */
 
-/// Definition of the type of icons.
-typedef enum {
-	CAIRO_DOCK_ICON_TYPE_LAUNCHER = 0,
-	CAIRO_DOCK_ICON_TYPE_CONTAINER,
-	CAIRO_DOCK_ICON_TYPE_SEPARATOR,
-	CAIRO_DOCK_ICON_TYPE_CLASS_CONTAINER,
-	CAIRO_DOCK_ICON_TYPE_APPLI,
-	CAIRO_DOCK_ICON_TYPE_APPLET,
-	CAIRO_DOCK_ICON_TYPE_OTHER,
-	CAIRO_DOCK_NB_ICON_TYPES
-	} CairoDockIconTrueType;  /// ideally, should disappear ...
-
 /// Available groups of icons.
 typedef enum {
 	CAIRO_DOCK_LAUNCHER = 0,  // launchers and applets, and applis if mixed
@@ -114,7 +102,7 @@ struct _Icon {
 	gint iSubdockViewType;
 	/// a hint to indicate the icon should be kept static (no animation like bouncing).
 	gboolean bStatic;
-	/// a flag that allows the icon to be always visible, even with the dock is hidden.
+	/// a flag that allows the icon to be always visible, even when the dock is hidden.
 	gboolean bAlwaysVisible;
 	gboolean bIsDemandingAttention;
 	gboolean bHasHiddenBg;

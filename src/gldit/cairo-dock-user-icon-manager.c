@@ -67,15 +67,15 @@ Icon *gldi_user_icon_new (const gchar *cConfFile)
 		
 		if (bIsContainer)
 		{
-			iType = CAIRO_DOCK_ICON_TYPE_CONTAINER;
+			iType = GLDI_USER_ICON_TYPE_STACK;
 		}
 		else if (cCommand == NULL || *cCommand == '\0')
 		{
-			iType = CAIRO_DOCK_ICON_TYPE_SEPARATOR;
+			iType = GLDI_USER_ICON_TYPE_SEPARATOR;
 		}
 		else
 		{
-			iType = CAIRO_DOCK_ICON_TYPE_LAUNCHER;
+			iType = GLDI_USER_ICON_TYPE_LAUNCHER;
 		}
 		g_key_file_set_integer (pKeyFile, "Desktop Entry", "Icon Type", iType);  // the specialized manager will update the conf-file because the version has changed.
 		g_free (cCommand);
@@ -85,13 +85,13 @@ Icon *gldi_user_icon_new (const gchar *cConfFile)
 	GldiObjectManager *pMgr = NULL;
 	switch (iType)
 	{
-		case CAIRO_DOCK_ICON_TYPE_LAUNCHER:
+		case GLDI_USER_ICON_TYPE_LAUNCHER:
 			pMgr = &myLauncherObjectMgr;
 		break;
-		case CAIRO_DOCK_ICON_TYPE_CONTAINER:
+		case GLDI_USER_ICON_TYPE_STACK:
 			pMgr = &myStackIconObjectMgr;
 		break;
-		case CAIRO_DOCK_ICON_TYPE_SEPARATOR:
+		case GLDI_USER_ICON_TYPE_SEPARATOR:
 			pMgr = &mySeparatorIconObjectMgr;
 		break;
 		default:

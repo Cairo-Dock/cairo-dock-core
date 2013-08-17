@@ -2496,13 +2496,13 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			
 			case CAIRO_DOCK_WIDGET_DOCK_LIST :  // liste des docks existant.
 			{
-				// get the list of available docks
+				// get the list of available docks, avoiding the sub-dock in the case of a Stack-Icon
 				CairoDock *pSubDock = NULL;
 				GError *error = NULL;
 				int iIconType = g_key_file_get_integer (pKeyFile, cGroupName, "Icon Type", &error);
 				if (error != NULL) // it's certainly not a container
 					g_error_free (error);
-				else if (iIconType == CAIRO_DOCK_ICON_TYPE_CONTAINER) // it's a container
+				else if (iIconType == GLDI_USER_ICON_TYPE_STACK) // it's a stack-icon
 				{
 					gchar *cContainerName = g_key_file_get_string (pKeyFile, cGroupName, "Name", NULL);
 					pSubDock = gldi_dock_get (cContainerName);

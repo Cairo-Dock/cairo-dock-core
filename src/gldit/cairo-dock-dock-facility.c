@@ -1073,7 +1073,7 @@ static gboolean _cairo_dock_dock_is_child (CairoDock *pCurrentDock, CairoDock *p
 	for (pIconsList = pCurrentDock->icons; pIconsList != NULL; pIconsList = pIconsList->next)
 	{
 		pIcon = pIconsList->data;
-		if (/**CAIRO_DOCK_ICON_TYPE_CONTAINER (pIcon) && */pIcon->pSubDock != NULL  // only subdock...
+		if (pIcon->pSubDock != NULL
 		&& (pIcon->pSubDock == pSubDock // this subdock is inside the current dock!
 			|| _cairo_dock_dock_is_child (pIcon->pSubDock, pSubDock))) // check recursively
 			return TRUE;
