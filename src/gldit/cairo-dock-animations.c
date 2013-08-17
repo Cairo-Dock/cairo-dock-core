@@ -273,6 +273,8 @@ void gldi_icon_request_attention (Icon *pIcon, const gchar *cAnimation, int iNbR
 	
 	// stop any current animation
 	gldi_icon_stop_animation (pIcon);
+	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REST)
+		return ;
 	
 	// set the 'attention animation' flag
 	pIcon->bIsDemandingAttention = TRUE;
@@ -374,6 +376,30 @@ void cairo_dock_stop_marking_icon_animation_as (Icon *pIcon, CairoDockAnimationS
 		pIcon->iAnimationState = CAIRO_DOCK_STATE_REST;
 	}
 }
+
+static gboolean _stop_opening_timeout (Icon *pIcon)
+{
+	pIcon->iSidOpeningTimeout = 0;  // 0 <=> no more repeat animations
+	return FALSE;
+}
+void gldi_icon_mark_as_launching (Icon *pIcon)
+{
+	if (pIcon->iSidOpeningTimeout == 0 && pIcon->cClass != NULL)  // the id also serves as a flag
+	{
+		pIcon->iSidOpeningTimeout = g_timeout_add_seconds (15,  // 15 seconds, for applications that take a really long time to start
+			(GSourceFunc) _stop_opening_timeout, pIcon);
+	}
+}
+
+void gldi_icon_stop_marking_as_launching (Icon *pIcon)
+{
+	if (pIcon->iSidOpeningTimeout != 0)
+	{
+		g_source_remove (pIcon->iSidOpeningTimeout);
+		pIcon->iSidOpeningTimeout = 0;
+	}
+}
+
 
 
 

@@ -180,23 +180,6 @@ void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock)
 	}
 }
 
-static gboolean _stop_opening_timeout (Icon *pIcon)
-{
-	pIcon->iSidOpeningTimeout = 0; // 0 <=> no more repeat animations
-	return FALSE;
-}
-
-gboolean cairo_dock_launch_command_with_opening_animation_full (Icon *pIcon, const gchar *cCommand, gchar *cWorkingDirectory)
-{
-	gboolean bSuccess = cairo_dock_launch_command_full (cCommand, cWorkingDirectory);
-	/// can be useful to check if we're launching it from a terminal and if the class is "correct"
-	if (bSuccess && pIcon->iSidOpeningTimeout == 0 && pIcon->cClass != NULL) // only one animation
-		// repeat the animation until iSidOpeningTimeout = 0
-		pIcon->iSidOpeningTimeout = g_timeout_add_seconds (15, /// added the possibility to change the timeout?
-			(GSourceFunc) _stop_opening_timeout, pIcon);
-	return bSuccess;
-}
-
 
 // this function is used when we have an appli that is not inhibited. we can place it either in its subdock or in a dock next to an inhibitor or in the main dock amongst the other applis
 static CairoDock *_get_parent_dock_for_appli (Icon *icon, CairoDock *pMainDock)

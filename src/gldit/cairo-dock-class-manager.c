@@ -76,6 +76,57 @@ static void cairo_dock_free_class_appli (CairoDockClassAppli *pClassAppli)
 	g_free (pClassAppli);
 }
 
+static inline CairoDockClassAppli *_cairo_dock_lookup_class_appli (const gchar *cClass)
+{
+	return (cClass != NULL ? g_hash_table_lookup (s_hClassTable, cClass) : NULL);
+}
+
+
+static gboolean _on_window_created (G_GNUC_UNUSED gpointer data, GldiWindowActor *actor)
+{
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (actor->cClass);
+	if (pClassAppli != NULL)
+	{
+		GList* ic;
+		Icon *icon;
+		for (ic = pClassAppli->pIconsOfClass; ic != NULL; ic = ic->next)
+		{
+			icon = ic->data;
+			gldi_icon_stop_marking_as_launching (icon);
+		}
+		for (ic = pClassAppli->pAppliOfClass; ic != NULL; ic = ic->next)
+		{
+			icon = ic->data;
+			gldi_icon_stop_marking_as_launching (icon);
+		}
+	}
+	
+	return GLDI_NOTIFICATION_LET_PASS;
+}
+static gboolean _on_window_activated (G_GNUC_UNUSED gpointer data, GldiWindowActor *actor)
+{
+	if (! actor)
+		return GLDI_NOTIFICATION_LET_PASS;
+	
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (actor->cClass);
+	if (pClassAppli != NULL)
+	{
+		GList* ic;
+		Icon *icon;
+		for (ic = pClassAppli->pIconsOfClass; ic != NULL; ic = ic->next)
+		{
+			icon = ic->data;
+			gldi_icon_stop_marking_as_launching (icon);
+		}
+		for (ic = pClassAppli->pAppliOfClass; ic != NULL; ic = ic->next)
+		{
+			icon = ic->data;
+			gldi_icon_stop_marking_as_launching (icon);
+		}
+	}
+	
+	return GLDI_NOTIFICATION_LET_PASS;
+}
 void cairo_dock_initialize_class_manager (void)
 {
 	if (s_hClassTable == NULL)
@@ -83,13 +134,17 @@ void cairo_dock_initialize_class_manager (void)
 			g_str_equal,
 			g_free,
 			(GDestroyNotify) cairo_dock_free_class_appli);
+	// register to events to detect the ending of a launching
+	gldi_object_register_notification (&myWindowObjectMgr,
+		NOTIFICATION_WINDOW_CREATED,
+		(GldiNotificationFunc) _on_window_created,
+		GLDI_RUN_AFTER, NULL);
+	gldi_object_register_notification (&myWindowObjectMgr,
+		NOTIFICATION_WINDOW_ACTIVATED,
+		(GldiNotificationFunc) _on_window_activated,
+		GLDI_RUN_AFTER, NULL);  // some applications don't open a new window, but rather take the focus; 
 }
 
-
-static inline CairoDockClassAppli *_cairo_dock_lookup_class_appli (const gchar *cClass)
-{
-	return (cClass != NULL ? g_hash_table_lookup (s_hClassTable, cClass) : NULL);
-}
 
 const GList *cairo_dock_list_existing_appli_with_class (const gchar *cClass)
 {
@@ -369,17 +424,6 @@ gboolean cairo_dock_class_is_expanded (const gchar *cClass)
 	return (pClassAppli != NULL && pClassAppli->bExpand);
 }
 
-static void _stop_opening_animation (Icon *pIcon)
-{
-	if (pIcon->iSidOpeningTimeout != 0)
-	{
-		cd_debug ("Stop opening animation on %s", pIcon->cName);
-		g_source_remove (pIcon->iSidOpeningTimeout);
-		pIcon->iSidOpeningTimeout = 0;
-		// gldi_icon_stop_animation (pIcon); // maybe better to wait for the end of the current animation
-	}
-}
-
 gboolean cairo_dock_prevent_inhibited_class (Icon *pIcon)
 {
 	g_return_val_if_fail (pIcon != NULL, FALSE);
@@ -396,7 +440,6 @@ gboolean cairo_dock_prevent_inhibited_class (Icon *pIcon)
 			pInhibitorIcon = pElement->data;
 			if (pInhibitorIcon != NULL)  // un inhibiteur est present.
 			{
-				_stop_opening_animation (pInhibitorIcon); // stop the opening animation on the current icon or its parent icon 
 				if (pInhibitorIcon->pAppli == NULL && pInhibitorIcon->pSubDock == NULL)  // cette icone inhibe cette classe mais ne controle encore aucune appli, on s'y asservit.
 				{
 					gldi_icon_set_appli (pInhibitorIcon, pIcon->pAppli);

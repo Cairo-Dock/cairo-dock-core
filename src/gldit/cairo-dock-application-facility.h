@@ -36,15 +36,6 @@ void cairo_dock_appli_stops_demanding_attention (Icon *icon);
 
 void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock);
 
-/** Launch a command and play the opening animation during max 10 seconds 
-*@param pIcon the icon which launch the command and will be animated
-*@param cCommand the command
-*@param cWorkingDirectory the working directory (can be NULL)
-*@return TRUE if the command has been launched correctly
-*/
-gboolean cairo_dock_launch_command_with_opening_animation_full (Icon *pIcon, const gchar *cCommand, gchar *cWorkingDirectory);
-#define cairo_dock_launch_command_with_opening_animation(pIcon) cairo_dock_launch_command_with_opening_animation_full (pIcon, pIcon->cCommand, pIcon->cWorkingDirectory);
-
 
 CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gboolean bAnimate);
 
