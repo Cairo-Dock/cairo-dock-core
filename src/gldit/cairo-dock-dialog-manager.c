@@ -1001,17 +1001,8 @@ static void init_object (GldiObject *obj, gpointer attr)
 	}
 	pDialog->bHideOnClick = pAttribute->bHideOnClick;
 	
-	//\________________ hide sub-dock or label that would overlap it
 	Icon *pIcon = pAttribute->pIcon;
 	GldiContainer *pContainer = pAttribute->pContainer;
-	if (pIcon && pIcon->pSubDock)  // un sous-dock par-dessus le dialogue est tres genant.
-		cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pIcon->pSubDock));
-	if (pIcon && CAIRO_DOCK_IS_DOCK (pContainer) && cairo_dock_get_icon_max_scale (pIcon) < 1.01)  // view without zoom, the dialog is stuck to the icon, and therefore is under the label, so hide this one.
-	{
-		if (pIcon->iHideLabel == 0 && pContainer)
-			gtk_widget_queue_draw (pContainer->pWidget);
-		pIcon->iHideLabel ++;
-	}
 	
 	//\________________ register the dialog
 	s_pDialogList = g_slist_prepend (s_pDialogList, pDialog);

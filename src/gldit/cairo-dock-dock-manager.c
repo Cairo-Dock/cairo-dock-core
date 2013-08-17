@@ -576,7 +576,7 @@ static gboolean _get_root_dock_config (CairoDock *pDock)
 	}
 	
 	//\______________ On ouvre le fichier de conf.
-	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath ? cConfFilePath : g_cConfFile);
+	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
 	if (pKeyFile == NULL)
 	{
 		cd_warning ("wrong conf file (%s) !", cConfFilePath);
@@ -1251,6 +1251,29 @@ static gboolean _on_screen_geometry_changed (G_GNUC_UNUSED gpointer data, gboole
 	return GLDI_NOTIFICATION_LET_PASS;
 }
 
+static gboolean _on_new_dialog (G_GNUC_UNUSED gpointer data, CairoDialog *pDialog)
+{
+	//\________________ hide sub-dock or label that would overlap it
+	Icon *pIcon = pDialog->pIcon;
+	if (! pIcon)
+		return GLDI_NOTIFICATION_LET_PASS;
+	
+	if (pIcon->pSubDock)  // un sous-dock par-dessus le dialogue est tres genant.
+	{
+		cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pIcon->pSubDock));
+	}
+	
+	GldiContainer *pContainer = cairo_dock_get_icon_container (pIcon);
+	if (CAIRO_DOCK_IS_DOCK (pContainer) && cairo_dock_get_icon_max_scale (pIcon) < 1.01)  // view without zoom, the dialog is stuck to the icon, and therefore is under the label, so hide this one.
+	{
+		if (pIcon->iHideLabel == 0)
+			gtk_widget_queue_draw (pContainer->pWidget);
+		pIcon->iHideLabel ++;
+	}
+	
+	return GLDI_NOTIFICATION_LET_PASS;
+}
+
 static gboolean _render_dock_notification (G_GNUC_UNUSED gpointer pUserData, CairoDock *pDock, cairo_t *pCairoContext)
 {
 	if (pCairoContext)  // cairo
@@ -1866,6 +1889,10 @@ static void init (void)
 		NOTIFICATION_DESKTOP_GEOMETRY_CHANGED,
 		(GldiNotificationFunc) _on_screen_geometry_changed,
 		GLDI_RUN_FIRST, NULL);
+	gldi_object_register_notification (&myDialogObjectMgr,
+		NOTIFICATION_NEW,
+		(GldiNotificationFunc) _on_new_dialog,
+		GLDI_RUN_AFTER, NULL);
 	
 	gldi_docks_visibility_start ();
 }

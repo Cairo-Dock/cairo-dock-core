@@ -381,7 +381,6 @@ static void _on_change_icon (Icon *pLastPointedIcon, Icon *pPointedIcon, CairoDo
 		
 		if (bStartAnimation)
 		{
-			///pPointedIcon->iAnimationState = CAIRO_DOCK_STATE_MOUSE_HOVERED;
 			cairo_dock_mark_icon_as_hovered_by_mouse (pPointedIcon);  // mark the animation as 'hover' if it's not already in another state (clicked, etc).
 			cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 		}
@@ -521,7 +520,6 @@ static gboolean _on_motion_notify (GtkWidget* pWidget,
 		if (s_pIconClicked != NULL && s_pIconClicked->iAnimationState != CAIRO_DOCK_STATE_REMOVE_INSERT && ! myDocksParam.bLockIcons && ! myDocksParam.bLockAll && (fabs (pMotion->x - s_iClickX) > CD_CLICK_ZONE || fabs (pMotion->y - s_iClickY) > CD_CLICK_ZONE) && ! pDock->bPreventDraggingIcons)
 		{
 			s_bIconDragged = TRUE;
-			///s_pIconClicked->iAnimationState = CAIRO_DOCK_STATE_FOLLOW_MOUSE;
 			cairo_dock_mark_icon_as_following_mouse (s_pIconClicked);
 			//pDock->fAvoidingMouseMargin = .5;
 			pDock->iAvoidingMouseIconType = s_pIconClicked->iGroup;  // on pourrait le faire lors du clic aussi.
@@ -696,13 +694,13 @@ static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 		return TRUE;
 	}
 	
-	if (pDock->iRefCount != 0)  // sub-dock -> if the main icon is currently pointed, stay visible
+	if (pDock->iRefCount != 0)  // sub-dock -> if the main icon is currently pointed, and doesn't have a dialog that would be in the way, stay visible
 	{
 		CairoDock *pParentDock = NULL;
 		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
 		if (pPointingIcon && pParentDock)
 		{
-			if (pPointingIcon->bPointed && pParentDock->container.bInside)
+			if (pPointingIcon->bPointed && pParentDock->container.bInside && ! gldi_icon_has_dialog (pPointingIcon))
 			{
 				//g_print (" the main icon is currently pointed, stay visible\n");
 				return TRUE;
