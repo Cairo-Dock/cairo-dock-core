@@ -727,26 +727,30 @@ static void _cairo_dock_make_launcher_from_appli (G_GNUC_UNUSED GtkMenuItem *pMe
 	CairoDock *pDock = data[1];
 	g_return_if_fail (icon->cClass != NULL);
 	
-	// on trouve le .desktop du programme.
+	// look for the .desktop file of the program
 	cd_debug ("%s (%s)", __func__, icon->cClass);
 	gchar *cDesktopFilePath = g_strdup (cairo_dock_get_class_desktop_file (icon->cClass));
-	if (cDesktopFilePath == NULL)
+	if (cDesktopFilePath == NULL)  // empty class
 	{
-		gchar *cCommand = g_strdup_printf ("locate /usr/*/%s.desktop --limit=1 -i", icon->cClass);
+		gchar *cCommand = g_strdup_printf ("find /usr/share/applications /usr/local/share/applications -iname \"*%s*.desktop\"", icon->cClass);  // look for a desktop file from their file name
 		gchar *cResult = cairo_dock_launch_command_sync (cCommand);
+		if (cResult == NULL || *cResult == '\0')  // no luck, search harder
+		{
+			g_free (cCommand);
+			cCommand = g_strdup_printf ("find /usr/share/applications /usr/local/share/applications -name \"*.desktop\" -exec grep -qi '%s' {} \\; -print", icon->cClass);  // look for a desktop file from their content
+			cResult = cairo_dock_launch_command_sync (cCommand);
+		}
 		if (cResult != NULL && *cResult != '\0')
 		{
-			if (cResult[strlen (cResult) - 1] == '\n')
-				cResult[strlen (cResult) - 1] = '\0';
+			gchar *str = strchr (cResult, '\n');  // remove the trailing linefeed, and only take the first result
+			if (str)
+				*str = '\0';
 			cDesktopFilePath = cResult;
 		}
-		else  // chercher un desktop qui contienne command="command from /proc"...
-		{
-			g_free (cResult);
-		}
+		g_free (cCommand);
 	}
 	
-	// on cree un nouveau lanceur a partir de la classe.
+	// make a new launcher from this desktop file
 	if (cDesktopFilePath != NULL)
 	{
 		cd_message ("found desktop file : %s", cDesktopFilePath);
