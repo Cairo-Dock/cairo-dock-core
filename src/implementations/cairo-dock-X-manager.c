@@ -116,15 +116,16 @@ static GldiXWindowActor *_make_new_actor (Window Xid)
 	gboolean bIsHidden = FALSE, bIsFullScreen = FALSE, bIsMaximized = FALSE, bDemandsAttention = FALSE;
 	
 	//\__________________ see if we should skip it
+	// check its 'skip taskbar' property
 	bShowInTaskbar = cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Xid, &bIsFullScreen, &bIsHidden, &bIsMaximized, &bDemandsAttention);
 	
 	if (bShowInTaskbar)
 	{
-		//\__________________ get its type
+		// check its type
 		bNormalWindow = cairo_dock_get_xwindow_type (Xid, &iTransientFor);
 		if (bNormalWindow || iTransientFor != None)
 		{
-			//\__________________ get its class
+			// check get its class
 			cClass = cairo_dock_get_xwindow_class (Xid, &cWmClass);
 			if (cClass == NULL)
 			{
@@ -141,12 +142,15 @@ static GldiXWindowActor *_make_new_actor (Window Xid)
 			bShowInTaskbar = FALSE;
 		}
 	}
+	else
+	{
+		XGetTransientForHint (s_XDisplay, Xid, &iTransientFor);
+	}
 	
-	if (bShowInTaskbar)  // the window passed all the tests -> make a new actor
+	//\__________________ if the window passed all the tests, make a new actor
+	if (bShowInTaskbar)  // make a new actor and fill the properties we got before
 	{
 		xactor = (GldiXWindowActor*)gldi_object_new (&myXObjectMgr, &Xid);
-		// set all the properties we got before
-		xactor->XTransientFor = iTransientFor;
 		GldiWindowActor *actor = (GldiWindowActor*)xactor;
 		actor->bDisplayed = bNormalWindow;
 		actor->cClass = cClass;
@@ -168,7 +172,8 @@ static GldiXWindowActor *_make_new_actor (Window Xid)
 		*pXid = xactor->Xid;
 		g_hash_table_insert (s_hXWindowTable, pXid, xactor);
 	}
-	
+	xactor->XTransientFor = iTransientFor;
+	((GldiWindowActor*)xactor)->bIsTransientFor = (iTransientFor != None);
 	xactor->iLastCheckTime = s_iTime;
 	return xactor;
 }
@@ -1059,8 +1064,6 @@ static void init_object (GldiObject *obj, gpointer attr)
 	actor->windowGeometry.y = iLocalPositionY;
 	actor->windowGeometry.width = iWidthExtent;
 	actor->windowGeometry.height = iHeightExtent;
-	actor->bIsTransientFor = (xactor->XTransientFor != None);
-	cd_debug ("%s is transient: %d", actor->cName, actor->bIsTransientFor);
 	
 	actor->iAge = s_iNumWindow ++;
 	
