@@ -50,8 +50,8 @@ static gboolean _is_blacklisted (const gchar *cVersion, const gchar *cVendor, co
 	   && strstr (cRenderer, "Mesa DRI Intel(R) Ivybridge Mobile") != NULL)
 	{
 		cd_warning ("%s Intel 4000 HD Ivybridge Mobile.\n %s https://bugs.freedesktop.org/show_bug.cgi?id=55036",
-			_("This card is blacklisted due to a bug with your video drivers:"),
-			_("Please have a look there:"));
+			"This card is blacklisted due to a bug with your video drivers:",
+			"Please have a look there:");
 		return TRUE;
 	}
 	return FALSE;
@@ -367,11 +367,10 @@ static void _post_initialize_opengl_backend (G_GNUC_UNUSED GtkWidget *pWidget, G
 	// we need a context to use glGetString, this is why we did it now
 	if (! s_bForceOpenGL && _is_blacklisted (cVersion, cVendor, cRenderer))
 	{
-		// maybe interesting to translate this message!
-		cd_warning ("%s 'cairo-dock -c'\n"
+		cd_warning ("%s 'cairo-dock -o'\n"
 			" OpenGL Version: %s\n OpenGL Vendor: %s\n OpenGL Renderer: %s",
-			_("The OpenGL backend will be deactivated. Note that you can force "
-			"this OpenGL backend by launching the dock with this command:"),
+			"The OpenGL backend will be deactivated. Note that you can force "
+			"this OpenGL backend by launching the dock with this command:",
 			cVersion, cVendor, cRenderer);
 		gldi_gl_backend_deactivate ();
 	}
