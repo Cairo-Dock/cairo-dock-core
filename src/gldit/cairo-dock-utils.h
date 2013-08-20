@@ -53,8 +53,8 @@ void cairo_dock_get_version_from_string (const gchar *cVersionString, int *iMajo
 gchar *cairo_dock_launch_command_sync_with_stderr (const gchar *cCommand, gboolean bPrintStdErr);
 #define cairo_dock_launch_command_sync(cCommand) cairo_dock_launch_command_sync_with_stderr (cCommand, TRUE)
 
-gboolean cairo_dock_launch_command_printf (const gchar *cCommandFormat, gchar *cWorkingDirectory, ...) G_GNUC_PRINTF (1, 3);
-gboolean cairo_dock_launch_command_full (const gchar *cCommand, gchar *cWorkingDirectory);
+gboolean cairo_dock_launch_command_printf (const gchar *cCommandFormat, const gchar *cWorkingDirectory, ...) G_GNUC_PRINTF (1, 3);
+gboolean cairo_dock_launch_command_full (const gchar *cCommand, const gchar *cWorkingDirectory);
 #define cairo_dock_launch_command(cCommand) cairo_dock_launch_command_full (cCommand, NULL)
 
 gchar * cairo_dock_get_command_with_right_terminal (const gchar *cCommand);

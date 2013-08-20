@@ -377,30 +377,6 @@ void cairo_dock_stop_marking_icon_animation_as (Icon *pIcon, CairoDockAnimationS
 	}
 }
 
-static gboolean _stop_opening_timeout (Icon *pIcon)
-{
-	pIcon->iSidOpeningTimeout = 0;  // 0 <=> no more repeat animations
-	return FALSE;
-}
-void gldi_icon_mark_as_launching (Icon *pIcon)
-{
-	if (pIcon->iSidOpeningTimeout == 0 && pIcon->cClass != NULL)  // the id also serves as a flag
-	{
-		pIcon->iSidOpeningTimeout = g_timeout_add_seconds (15,  // 15 seconds, for applications that take a really long time to start
-			(GSourceFunc) _stop_opening_timeout, pIcon);
-	}
-}
-
-void gldi_icon_stop_marking_as_launching (Icon *pIcon)
-{
-	if (pIcon->iSidOpeningTimeout != 0)
-	{
-		g_source_remove (pIcon->iSidOpeningTimeout);
-		pIcon->iSidOpeningTimeout = 0;
-	}
-}
-
-
 
 
 #define cairo_dock_get_transition(pIcon) (pIcon)->pTransition

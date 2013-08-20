@@ -335,6 +335,19 @@ void gldi_theme_icon_write_container_name_in_conf_file (Icon *pIcon, const gchar
 void gldi_theme_icon_write_order_in_conf_file (Icon *pIcon, double fOrder);
 
 
+gboolean gldi_icon_launch_command (Icon *pIcon);
+
+/** Mark an Icon as 'launching'. This states lasts until the corresponding window appears (with a timeout of 15 seconds).
+ * Typically used to prevent the program from being started 2 times in a row, or to keep the animation running until the program is started.
+ */
+#define gldi_icon_mark_as_launching(pIcon) (pIcon)->bIsLaunching = TRUE
+
+#define gldi_icon_stop_marking_as_launching(pIcon) (pIcon)->bIsLaunching = FALSE
+
+/** Tell if an Icon is being launched.
+ */
+#define gldi_icon_is_launching(pIcon) ((pIcon)->bIsLaunching)
+
 
 G_END_DECLS
 #endif

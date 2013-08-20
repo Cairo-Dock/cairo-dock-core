@@ -217,7 +217,7 @@ gchar *cairo_dock_launch_command_sync_with_stderr (const gchar *cCommand, gboole
 	return standard_output;
 }
 
-gboolean cairo_dock_launch_command_printf (const gchar *cCommandFormat, gchar *cWorkingDirectory, ...)
+gboolean cairo_dock_launch_command_printf (const gchar *cCommandFormat, const gchar *cWorkingDirectory, ...)
 {
 	va_list args;
 	va_start (args, cWorkingDirectory);
@@ -239,7 +239,7 @@ static gpointer _cairo_dock_launch_threaded (gchar *cCommand)
 	g_free (cCommand);
 	return NULL;
 }
-gboolean cairo_dock_launch_command_full (const gchar *cCommand, gchar *cWorkingDirectory)
+gboolean cairo_dock_launch_command_full (const gchar *cCommand, const gchar *cWorkingDirectory)
 {
 	g_return_val_if_fail (cCommand != NULL, FALSE);
 	cd_debug ("%s (%s , %s)", __func__, cCommand, cWorkingDirectory);

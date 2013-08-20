@@ -52,6 +52,8 @@ struct _CairoDockClassAppli {
 	GList *pMenuItems;
 	gint iAge;  // age of the first created window of this class
 	gchar *cDockName;  // unique name of the class sub-dock
+	guint iSidOpeningTimeout;  // timeout and flag to mark a class is being launched
+	gboolean bHasStartupNotify;  // if the application sends a "remove" event when its launch is complete
 };
 
 /*
@@ -241,6 +243,14 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 * @param pIcon the icon
 */
 void cairo_dock_set_data_from_class (const gchar *cClass, Icon *pIcon);
+
+
+
+void gldi_class_startup_notify (Icon *pIcon);
+
+void gldi_class_startup_notify_end (const gchar *cClass);
+
+gboolean gldi_class_is_starting (const gchar *cClass);
 
 G_END_DECLS
 #endif

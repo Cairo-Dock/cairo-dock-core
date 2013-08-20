@@ -36,6 +36,7 @@
 #include "cairo-dock-separator-manager.h"
 #include "cairo-dock-class-icon-manager.h"
 #include "cairo-dock-dock-factory.h"
+#include "cairo-dock-desktop-manager.h"  // gldi_desktop_notify_startup
 #include "cairo-dock-module-manager.h"  // GldiModule
 #include "cairo-dock-module-instance-manager.h"  // GldiModuleInstance
 #include "cairo-dock-dock-facility.h"
@@ -73,6 +74,8 @@ static void cairo_dock_free_class_appli (CairoDockClassAppli *pClassAppli)
 		g_strfreev (pClassAppli->pMimeTypes);
 	g_list_foreach (pClassAppli->pMenuItems, (GFunc)g_strfreev, NULL);
 	g_list_free (pClassAppli->pMenuItems);
+	if (pClassAppli->iSidOpeningTimeout != 0)
+		g_source_remove (pClassAppli->iSidOpeningTimeout);
 	g_free (pClassAppli);
 }
 
@@ -84,22 +87,7 @@ static inline CairoDockClassAppli *_cairo_dock_lookup_class_appli (const gchar *
 
 static gboolean _on_window_created (G_GNUC_UNUSED gpointer data, GldiWindowActor *actor)
 {
-	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (actor->cClass);
-	if (pClassAppli != NULL)
-	{
-		GList* ic;
-		Icon *icon;
-		for (ic = pClassAppli->pIconsOfClass; ic != NULL; ic = ic->next)
-		{
-			icon = ic->data;
-			gldi_icon_stop_marking_as_launching (icon);
-		}
-		for (ic = pClassAppli->pAppliOfClass; ic != NULL; ic = ic->next)
-		{
-			icon = ic->data;
-			gldi_icon_stop_marking_as_launching (icon);
-		}
-	}
+	gldi_class_startup_notify_end (actor->cClass);
 	
 	return GLDI_NOTIFICATION_LET_PASS;
 }
@@ -108,22 +96,7 @@ static gboolean _on_window_activated (G_GNUC_UNUSED gpointer data, GldiWindowAct
 	if (! actor)
 		return GLDI_NOTIFICATION_LET_PASS;
 	
-	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (actor->cClass);
-	if (pClassAppli != NULL)
-	{
-		GList* ic;
-		Icon *icon;
-		for (ic = pClassAppli->pIconsOfClass; ic != NULL; ic = ic->next)
-		{
-			icon = ic->data;
-			gldi_icon_stop_marking_as_launching (icon);
-		}
-		for (ic = pClassAppli->pAppliOfClass; ic != NULL; ic = ic->next)
-		{
-			icon = ic->data;
-			gldi_icon_stop_marking_as_launching (icon);
-		}
-	}
+	gldi_class_startup_notify_end (actor->cClass);
 	
 	return GLDI_NOTIFICATION_LET_PASS;
 }
@@ -1456,7 +1429,7 @@ void cairo_dock_set_class_order_amongst_applis (Icon *pIcon, CairoDock *pDock)  
 					while (ic->next != NULL)
 					{
 						icon = ic->next->data;
-						if (icon->cClass && strcmp (icon->cClass, pOldestAppli->cClass) == 0)  // next icon is of the same class -> skip
+						if (CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon) && icon->cClass && strcmp (icon->cClass, pOldestAppli->cClass) == 0)  // next icon is an appli of the same class -> skip
 							ic = ic->next;
 						else
 							break;
@@ -1943,6 +1916,8 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	
 	pClassAppli->cWorkingDirectory = g_key_file_get_string (pKeyFile, "Desktop Entry", "Path", NULL);
 
+	pClassAppli->bHasStartupNotify = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "StartupNotify", NULL);  // let's handle the case StartupNotify=false as if the key was absent (ie: rely on the window events to stop the launching)
+
 	//\__________________ Gettext domain
 	// The translations of the quicklist menus are generally available in a .mo file
 	gchar *cGettextDomain = g_key_file_get_string (pKeyFile, "Desktop Entry", "X-Ubuntu-Gettext-Domain", NULL);
@@ -1988,4 +1963,100 @@ void cairo_dock_set_data_from_class (const gchar *cClass, Icon *pIcon)
 	if (pIcon->pMimeTypes == NULL)
 		pIcon->pMimeTypes = g_strdupv ((gchar**)pClassAppli->pMimeTypes);	
 }
+
+
+
+static gboolean _stop_opening_timeout (const gchar *cClass)
+{
+	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
+	g_return_val_if_fail (pClassAppli != NULL, FALSE);
+	pClassAppli->iSidOpeningTimeout = 0;
+	gldi_class_startup_notify_end (cClass);
+	return FALSE;
+}
+void gldi_class_startup_notify (Icon *pIcon)
+{
+	const gchar *cClass = pIcon->cClass;
+	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
+	if (! pClassAppli)
+		return;
+	
+	if (pClassAppli->iSidOpeningTimeout != 0)
+		return;
+	
+	// mark the class as launching and set a timeout
+	pClassAppli->iSidOpeningTimeout = g_timeout_add_seconds (15,  // 15 seconds, for applications that take a really long time to start
+		(GSourceFunc) _stop_opening_timeout, g_strdup (cClass));  /// TODO: there is a memory leak here...
+	
+	// notify about the startup
+	gldi_desktop_notify_startup (cClass);
+	
+	// mark the icon as launching (this is just for convenience for the animations)
+	gldi_icon_mark_as_launching (pIcon);
+}
+
+void gldi_class_startup_notify_end (const gchar *cClass)
+{
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
+	if (! pClassAppli || pClassAppli->iSidOpeningTimeout == 0)
+		return;
+	
+	// unset the icons as launching
+	GList* ic;
+	Icon *icon;
+	for (ic = pClassAppli->pIconsOfClass; ic != NULL; ic = ic->next)
+	{
+		icon = ic->data;
+		gldi_icon_stop_marking_as_launching (icon);
+	}
+	for (ic = pClassAppli->pAppliOfClass; ic != NULL; ic = ic->next)
+	{
+		icon = ic->data;
+		gldi_icon_stop_marking_as_launching (icon);
+	}
+	
+	// unset the class as launching and stop a timeout
+	if (pClassAppli->iSidOpeningTimeout != 0)
+	{
+		g_source_remove (pClassAppli->iSidOpeningTimeout);
+		pClassAppli->iSidOpeningTimeout = 0;
+	}
+}
+
+gboolean gldi_class_is_starting (const gchar *cClass)
+{
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
+	return (pClassAppli != NULL && pClassAppli->iSidOpeningTimeout != 0);
+}
+
+/*
+
+class->is_launching
+
+gldi_class_startup_notify_begin (icon):
+	if class->is_launching || icon->is_launching : return
+	class->is_launching = TRUE
+	icon->is_launching = TRUE
+	notify -> setenv (DESKTOP_STARTUP_ID), XClientMessage ("new: ID=gldi-123 DESKTOP=...")
+		ID = gldi-class-seq, add timeout on class
+		OR
+		ID = gldi-seq, insert in list (ID, icon), icon destroyed => remove from list, add timeout on icon
+
+ClientMessage "remove: gldi-class-123" -> class -> gldi_class_startup_notify_end(class)
+OR
+ClientMessage "remove: gldi-123" -> icon -> remove from list, gldi_class_startup_notify_end (icon)
+
+15s timeout -> gldi_class_startup_notify_end (class)
+	XClientMessage ("remove: ID=gldi-123")
+
+new window actor -> gldi_class_startup_notify_end (actor->class)
+
+gldi_class_startup_notify_end (class):
+	mark_classs_as_not_launching
+		-> class->is_launching = FALSE
+		-> foreach icon: icon->is_launching = FALSE
+	
+
+
+*/
 

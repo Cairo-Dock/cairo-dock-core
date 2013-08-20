@@ -1002,8 +1002,6 @@ static void reset_object (GldiObject *obj)
 		g_source_remove (icon->iSidLoadImage);
 	if (icon->iSidDoubleClickDelay != 0)
 		g_source_remove (icon->iSidDoubleClickDelay);
-	if (icon->iSidOpeningTimeout != 0)
-		g_source_remove (icon->iSidOpeningTimeout);
 	
 	// free data
 	g_free (icon->cDesktopFileName);

@@ -81,6 +81,7 @@ struct _GldiDesktopManagerBackend {
 	gboolean (*set_current_desktop) (int iDesktopNumber, int iViewportNumberX, int iViewportNumberY);
 	gboolean (*set_nb_desktops) (int iNbDesktops, int iNbViewportX, int iNbViewportY);
 	void (*refresh) (void);
+	void (*notify_startup) (const gchar *cClass);
 	};
 
 /// Definition of a Desktop Background Buffer. It has a reference count so that it can be shared across all the lib.
@@ -143,6 +144,9 @@ gboolean gldi_desktop_set_current (int iDesktopNumber, int iViewportNumberX, int
 gboolean gldi_desktop_set_nb_desktops (int iNbDesktops, int iNbViewportX, int iNbViewportY);
 
 void gldi_desktop_refresh (void);
+
+void gldi_desktop_notify_startup (const gchar *cClass);
+
 
   ////////////////////
  // Desktop access //

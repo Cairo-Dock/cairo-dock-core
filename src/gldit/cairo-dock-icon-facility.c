@@ -34,6 +34,8 @@
 #include "cairo-dock-module-instance-manager.h"  // GldiModuleInstance
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-dock-manager.h"
+#include "cairo-dock-utils.h"  // cairo_dock_launch_command_full
+#include "cairo-dock-class-manager.h"  // gldi_class_startup_notify
 #include "cairo-dock-indicator-manager.h"
 #include "cairo-dock-applications-manager.h"  // GLDI_OBJECT_IS_APPLI_ICON
 #include "cairo-dock-applet-manager.h"  // GLDI_OBJECT_IS_APPLET_ICON
@@ -717,4 +719,25 @@ void gldi_theme_icon_write_order_in_conf_file (Icon *pIcon, double fOrder)
 			G_TYPE_DOUBLE, "Icon", "order", fOrder,
 			G_TYPE_INVALID);
 	}
+}
+
+
+
+gboolean gldi_icon_launch_command (Icon *pIcon)
+{
+	// notify startup
+	gldi_class_startup_notify (pIcon);
+	
+	// launch command
+	const gchar *cCommand = pIcon->cCommand;
+	const gchar *cWorkingDirectory = pIcon->cWorkingDirectory;
+	if (! cCommand)
+	{
+		cCommand = cairo_dock_get_class_command (pIcon->cClass);
+		cWorkingDirectory = cairo_dock_get_class_command (pIcon->cClass);
+	}
+	gboolean bSuccess = cairo_dock_launch_command_full (cCommand, cWorkingDirectory);
+	if (! bSuccess)
+		gldi_class_startup_notify_end (pIcon->cClass);
+	return bSuccess;
 }

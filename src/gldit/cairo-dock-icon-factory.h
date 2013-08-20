@@ -168,13 +168,13 @@ struct _Icon {
 	//\____________ Other dynamic parameters.
 	guint iSidRedrawSubdockContent;
 	guint iSidLoadImage;
-	guint iSidOpeningTimeout;
 	guint iSidDoubleClickDelay;
 	gint iNbDoubleClickListeners;
 	gint iHideLabel;
 	gint iThumbnailX, iThumbnailY;  // X icon geometry for apps
 	gint iThumbnailWidth, iThumbnailHeight;
 	
+	gboolean bIsLaunching;  // a mere recopy of gldi_class_is_starting()
 	gpointer reserved[4];
 };
 
@@ -203,12 +203,6 @@ struct _CairoIconContainerRenderer {
 #define CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER GLDI_OBJECT_IS_CLASS_ICON
 #define CAIRO_DOCK_ICON_TYPE_IS_APPLI GLDI_OBJECT_IS_APPLI_ICON
 #define CAIRO_DOCK_ICON_TYPE_IS_APPLET GLDI_OBJECT_IS_APPLET_ICON
-/*#define CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_LAUNCHER)
-#define CAIRO_DOCK_ICON_TYPE_IS_CONTAINER(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_CONTAINER)
-#define CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_SEPARATOR)
-#define CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_CLASS_CONTAINER)
-#define CAIRO_DOCK_ICON_TYPE_IS_APPLI(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_APPLI)
-#define CAIRO_DOCK_ICON_TYPE_IS_APPLET(icon) (icon != NULL && (icon)->iTrueType == CAIRO_DOCK_ICON_TYPE_APPLET)*/
 
 /** TRUE if the icon holds a window.
 *@param icon an icon.

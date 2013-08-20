@@ -188,16 +188,6 @@ void cairo_dock_stop_marking_icon_animation_as (Icon *pIcon, CairoDockAnimationS
 #define cairo_dock_mark_icon_as_inserting_removing(pIcon) cairo_dock_mark_icon_animation_as (pIcon, CAIRO_DOCK_STATE_REMOVE_INSERT)
 #define cairo_dock_stop_marking_icon_as_inserting_removing(pIcon) cairo_dock_stop_marking_icon_animation_as (pIcon, CAIRO_DOCK_STATE_REMOVE_INSERT)
 
-/** Mark an Icon as 'launching'. This states lasts until the corresponding window appears (with a timeout of 15 seconds).
- * Typically used to prevent the program from being started 2 times in a row, or to keep the animation running until the program is started.
- */
-void gldi_icon_mark_as_launching (Icon *pIcon);
-
-void gldi_icon_stop_marking_as_launching (Icon *pIcon);
-
-/** Tell if an Icon is being launched.
- */
-#define gldi_icon_is_launching(pIcon) ((pIcon)->iSidOpeningTimeout != 0)
 
 /** Set a Transition on an Icon.
 *@param pIcon the icon.

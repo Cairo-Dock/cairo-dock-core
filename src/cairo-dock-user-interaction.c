@@ -181,17 +181,7 @@ static void _show_all_windows (GList *pIcons)
 }
 
 
-
-static gboolean cairo_dock_launch_command_with_opening_animation (Icon *pIcon)
-{
-	gboolean bSuccess = cairo_dock_launch_command_full (pIcon->cCommand, pIcon->cWorkingDirectory);
-	/// can be useful to check if we're launching it from a terminal and if the class is "correct"
-	if (bSuccess)
-		gldi_icon_mark_as_launching (pIcon);
-	return bSuccess;
-}
-
-static gboolean _launch_icon_command (Icon *icon, G_GNUC_UNUSED CairoDock *pDock)
+static gboolean _launch_icon_command (Icon *icon)
 {
 	if (icon->cCommand == NULL)
 		return GLDI_NOTIFICATION_LET_PASS;
@@ -201,11 +191,11 @@ static gboolean _launch_icon_command (Icon *icon, G_GNUC_UNUSED CairoDock *pDock
 	{
 		bSuccess = cairo_dock_trigger_shortkey (icon->cCommand);
 		if (!bSuccess)
-			bSuccess = cairo_dock_launch_command_with_opening_animation (icon);
+			bSuccess = gldi_icon_launch_command (icon);
 	}
 	else  // normal command
 	{
-		bSuccess = cairo_dock_launch_command_with_opening_animation (icon);
+		bSuccess = gldi_icon_launch_command (icon);
 		if (! bSuccess)
 			bSuccess = cairo_dock_trigger_shortkey (icon->cCommand);
 	}
@@ -228,7 +218,7 @@ gboolean cairo_dock_notification_click_icon (G_GNUC_UNUSED gpointer pUserData, I
 		|| CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon)
 		|| CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (icon))
 		{
-			return _launch_icon_command (icon, pDock);
+			_launch_icon_command (icon);
 		}
 		return GLDI_NOTIFICATION_LET_PASS;
 	}
@@ -273,8 +263,8 @@ gboolean cairo_dock_notification_click_icon (G_GNUC_UNUSED gpointer pUserData, I
 	}
 	else if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon))  // finally, launcher being none of the previous cases -> launch the command
 	{
-		if (! gldi_icon_is_launching (icon))  // do not launch it twice (avoid wrong double click) => if we want to launch it 2 times in a row, we have to use Shift + Click
-			return _launch_icon_command (icon, pDock);
+		if (! gldi_class_is_starting (icon->cClass) && ! gldi_icon_is_launching (icon))  // do not launch it twice (avoid wrong double click) => if we want to launch it 2 times in a row, we have to use Shift + Click
+			_launch_icon_command (icon);
 	}
 	else  // for applets and their sub-icons, let the module-instance handles the click; for separators, no action.
 	{

@@ -39,6 +39,7 @@
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-applications-manager.h"  // myTaskbarParam.iMinimizedWindowRenderType
 #include "cairo-dock-desktop-manager.h"
+#include "cairo-dock-class-manager.h"  // gldi_class_startup_notify_end
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-container.h"  // GldiContainerManagerBackend
 #include "cairo-dock-X-utilities.h"
@@ -77,7 +78,10 @@ static Atom s_aWmName;
 static Atom s_aWmClass;
 static Atom s_aNetWmIcon;
 static Atom s_aWmHints;
+static Atom s_aNetStartupInfoBegin;
+static Atom s_aNetStartupInfo;
 static GHashTable *s_hXWindowTable = NULL;  // table of (Xid,actor)
+static GHashTable *s_hXClientMessageTable = NULL;  // table of (Xid,client-message)
 static int s_iTime = 1;  // on peut aller jusqu'a 2^31, soit 17 ans a 4Hz.
 static int s_iNumWindow = 1;  // used to order appli icons by age (=creation date).
 static Window s_iCurrentActiveWindow = 0;
@@ -341,7 +345,7 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 	if (!g_pPrimaryContainer)  // peut arriver en cours de chargement d'un theme.
 		return TRUE;
 	
-	long event_mask = 0xFFFFFFFF;  // on les recupere tous, ca vide la pile au fur et a mesure plutot que tout a la fin.
+	long event_mask = 0xffffffff;  // on les recupere tous, ca vide la pile au fur et a mesure plutot que tout a la fin.
 	Window Xid;
 	Window root = DefaultRootWindow (s_XDisplay);
 	
@@ -574,6 +578,94 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 				cd_debug ("  type : %d (%d); window : %d", event.type, XDamageNotify, Xid);*/
 		}  // end of event
 	}
+	
+	// get ClientMessage events (since they can't be masked, they are not retrieved by 'XCheckMaskEvent')
+	while (XCheckTypedEvent (s_XDisplay, ClientMessage, &event))
+	{
+		Xid = event.xclient.window;
+		cd_debug ("+ message: %s (%ld/%ld)", XGetAtomName (s_XDisplay, event.xclient.message_type), Xid, root);
+		
+		// make a new message or get the existing one from previous startup events on this window
+		GString *pMsg = NULL;
+		if (event.xclient.message_type == s_aNetStartupInfoBegin)
+		{
+			if (strncmp (&event.xclient.data.b[0], "remove:", 7) == 0)  // ignore 'new:' and 'change:' messages
+			{
+				pMsg = g_string_sized_new (128);
+				
+				Window *pXid = g_new (Window, 1);
+				*pXid = Xid;
+				g_hash_table_insert (s_hXClientMessageTable, pXid, pMsg);
+			}
+		}
+		else if (event.xclient.message_type == s_aNetStartupInfo)
+		{
+			pMsg = g_hash_table_lookup (s_hXClientMessageTable, &Xid);
+		}
+		
+		// if a startup message is available, take it into account
+		if (pMsg)
+		{
+			// append the new data to the message
+			g_string_append_len (pMsg, &event.xclient.data.b[0], 20);
+			
+			// check if the messge is complete
+			int i = 0;
+			while (i < 20 && event.xclient.data.b[i] != '\0')
+				i ++;
+			
+			// if it is, parse it
+			if (i < 20)  // this event is the end of the message => it's complete; we should have something like: 'remove ID="id-value"'
+			{
+				cd_debug (" => message: %s", pMsg->str);
+				// look for the ID key
+				gchar *str = NULL;
+				do  // look for "ID *="
+				{
+					str = strstr (pMsg->str, "ID");
+					if (str)
+					{
+						str += 2;
+						while (*str == ' ') str++;
+						if (*str == '=')
+						{
+							str ++;
+							break;
+						}
+					}
+					str = NULL;
+				}
+				while(1);
+				
+				if (str)
+				{
+					// extract the ID value
+					while (*str == ' ') str++;
+					gboolean quoted = (*str == '"');
+					if (quoted)
+						str ++;
+					gchar *id_end = str+1;
+					while (*id_end != ' ' && *id_end != '\0' && (!quoted || *id_end != '"')) id_end ++;
+					*id_end = '\0';
+					cd_debug (" => ID: %s", str);
+					
+					// extract the class if it's one of our ID
+					if (strncmp (str, "gldi-", 5) == 0)  // we built this ID => it has the class inside
+					{
+						str += 5;
+						id_end = strrchr (str, '-');
+						*id_end = '\0';
+						cd_debug (" => class: %s", str);
+						// notify the class about the end of the launching
+						gldi_class_startup_notify_end (str);
+					}
+				}
+				
+				// destroy this message
+				g_hash_table_remove (s_hXClientMessageTable, &Xid);
+			}
+		}
+	}
 	if (XEventsQueued (s_XDisplay, QueuedAlready) != 0)
 		XSync (s_XDisplay, True);  // True <=> discard.
 	//g_print ("XEventsQueued : %d\n", XEventsQueued (s_XDisplay, QueuedAfterFlush));  // QueuedAlready, QueuedAfterReading, QueuedAfterFlush
@@ -703,6 +795,14 @@ static void _refresh (void)
 	g_desktopGeometry.iNbDesktops = cairo_dock_get_nb_desktops ();
 	cairo_dock_get_nb_viewports (&g_desktopGeometry.iNbViewportX, &g_desktopGeometry.iNbViewportY);
 	cd_debug ("desktop refresh -> %dx%dx%d", g_desktopGeometry.iNbDesktops, g_desktopGeometry.iNbViewportX, g_desktopGeometry.iNbViewportY);
+}
+
+static void _notify_startup (const gchar *cClass)
+{
+	static int seq = 0;
+	gchar cDesktopId[128];
+	snprintf (cDesktopId, 128, "gldi-%s-%d", cClass, seq++);
+	g_setenv ("DESKTOP_STARTUP_ID", cDesktopId, TRUE);  // TRUE = overwrite; this will be passed to the launched application, which will in return send a _NET_STARTUP_INFO "remove" ClientMessage when it's completely started
 }
 
   ///////////////////////////////
@@ -929,6 +1029,10 @@ static void _present (GldiContainer *pContainer)
  /// INIT ///
 ////////////
 
+static void _string_free (GString *pString)
+{
+	g_string_free (pString, TRUE);
+}
 static void init (void)
 {
 	//\__________________ init internal data
@@ -950,11 +1054,18 @@ static void init (void)
 	s_aNetWmIcon 			= XInternAtom (s_XDisplay, "_NET_WM_ICON", False);
 	s_aWmHints 				= XInternAtom (s_XDisplay, "WM_HINTS", False);
 	s_aNetWmDesktop			= XInternAtom (s_XDisplay, "_NET_WM_DESKTOP", False);
+	s_aNetStartupInfoBegin 	= XInternAtom (s_XDisplay, "_NET_STARTUP_INFO_BEGIN", False);
+	s_aNetStartupInfo 		= XInternAtom (s_XDisplay, "_NET_STARTUP_INFO", False);
 	
 	s_hXWindowTable = g_hash_table_new_full (g_int_hash,
 		g_int_equal,
 		g_free,  // Xid
 		NULL);  // actor
+	
+	s_hXClientMessageTable = g_hash_table_new_full (g_int_hash,
+		g_int_equal,
+		g_free,  // Xid
+		(GDestroyNotify)_string_free);  // GString
 	
 	//\__________________ get the list of windows
 	gulong i, iNbWindows = 0;
@@ -982,6 +1093,18 @@ static void init (void)
 	//\__________________ listen for X events
 	Window root = DefaultRootWindow (s_XDisplay);
 	cairo_dock_set_xwindow_mask (root, PropertyChangeMask);
+	/*KeyPressMask | KeyReleaseMask | 
+			   ButtonReleaseMask | EnterWindowMask |
+			   LeaveWindowMask | PointerMotionMask |
+			   Button1MotionMask |
+			   Button2MotionMask | Button3MotionMask |
+			   Button4MotionMask | Button5MotionMask |
+			   ButtonMotionMask | KeymapStateMask |
+			   ExposureMask | VisibilityChangeMask |
+			   StructureNotifyMask |
+			   SubstructureNotifyMask | 
+			   FocusChangeMask | PropertyChangeMask |
+			   ColormapChangeMask | OwnerGrabButtonMask);*/
 	s_iSidPollXEvents = g_timeout_add (CAIRO_DOCK_CHECK_XEVENTS_INTERVAL, (GSourceFunc) _cairo_dock_unstack_Xevents, (gpointer) NULL);  // un g_idle_add () consomme 90% de CPU ! :-/
 	
 	//\__________________ Register backends
@@ -995,6 +1118,7 @@ static void init (void)
 	dmb.set_current_desktop    = _set_current_desktop;
 	dmb.set_nb_desktops        = _set_nb_desktops;
 	dmb.refresh                = _refresh;
+	dmb.notify_startup         = _notify_startup;
 	gldi_desktop_manager_register_backend (&dmb);
 	
 	GldiWindowManagerBackend wmb;
