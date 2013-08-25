@@ -126,7 +126,8 @@ if test $UPDATE_THIRD_PARTY -gt 0; then
 				if test -x $CAIRO_DOCK_EXTRACT_MESSAGE; then
 					rm -f messages
 					$CAIRO_DOCK_EXTRACT_MESSAGE ${applet}.conf
-					bash $CAIRO_DOCK_ADD_DESCRIPTION
+					bash $CAIRO_DOCK_ADD_DESCRIPTION "description"
+					bash $CAIRO_DOCK_ADD_DESCRIPTION "title"
 				fi
 			fi
 			cd ..
