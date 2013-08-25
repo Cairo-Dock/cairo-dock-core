@@ -799,28 +799,48 @@ int main (int argc, char** argv)
 	{
 		g_timeout_add_seconds (4, _cairo_dock_first_launch_setup, NULL);
 	}
-	else if (bNewVersion)  // nouvelle version -> changelog (si c'est le 1er lancement, inutile de dire ce qui est nouveau, et de plus on a deja le message de bienvenue).
+	else if (bNewVersion)  // new version -> changelog (if it's the first launch, useless to display what's new, we already have the Welcome message).
 	{
 		gchar *cChangeLogFilePath = g_strdup_printf ("%s/ChangeLog.txt", CAIRO_DOCK_SHARE_DATA_DIR);
 		GKeyFile *pKeyFile = cairo_dock_open_key_file (cChangeLogFilePath);
 		if (pKeyFile != NULL)
 		{
-			gchar *cKeyName = g_strdup_printf ("%d.%d.%d", g_iMajorVersion, g_iMinorVersion, g_iMicroVersion);  // version sans les "alpha", "beta", "rc", etc.
+			gchar *cKeyName = g_strdup_printf ("%d.%d.%d", g_iMajorVersion, g_iMinorVersion, g_iMicroVersion);  // version without "alpha", "beta", "rc", etc.
 			gchar *cChangeLogMessage = g_key_file_get_string (pKeyFile, "ChangeLog", cKeyName, NULL);
 			g_free (cKeyName);
 			if (cChangeLogMessage != NULL)
 			{
+				GString *sChangeLogMessage = g_string_new (gettext (cChangeLogMessage));
+				g_free (cChangeLogMessage);
+
+				// changelog message is now split (by line): to not re-translate all the message when there is a modification
+				int i = 0;
+				while (TRUE)
+				{
+					cKeyName = g_strdup_printf ("%d.%d.%d.%d", g_iMajorVersion, g_iMinorVersion, g_iMicroVersion, i);
+					cChangeLogMessage = g_key_file_get_string (pKeyFile, "ChangeLog", cKeyName, NULL);
+					g_free (cKeyName);
+
+					if (cChangeLogMessage == NULL) // no more message
+						break;
+
+					g_string_append_printf (sChangeLogMessage, "\n %s", gettext (cChangeLogMessage));
+
+					g_free (cChangeLogMessage);
+					i++;
+				}
+
 				Icon *pFirstIcon = cairo_dock_get_first_icon (g_pMainDock->icons);
 				
 				CairoDialogAttr attr;
 				memset (&attr, 0, sizeof (CairoDialogAttr));
-				attr.cText = gettext (cChangeLogMessage);
+				attr.cText = sChangeLogMessage->str;
 				attr.cImageFilePath = CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON;
 				attr.bUseMarkup = TRUE;
 				attr.pIcon = pFirstIcon;
 				attr.pContainer = CAIRO_CONTAINER (g_pMainDock);
 				gldi_dialog_new (&attr);
-				g_free (cChangeLogMessage);
+				g_string_free (sChangeLogMessage, TRUE);
 			}
 			g_key_file_free (pKeyFile);
 		}
