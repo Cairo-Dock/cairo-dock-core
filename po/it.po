@@ -76,7 +76,7 @@ msgstr ""
 " oppure nascosta?\n"
 "Configura la modalità di accesso alla tua dock e sub-dock!"
 
-#: ../src/cairo-dock-gui-advanced.c:1502 ../src/cairo-dock-menu.c:2039
+#: ../src/cairo-dock-gui-advanced.c:1502 ../src/cairo-dock-menu.c:2043
 #: ../Help/data/messages:339
 msgid "Visibility"
 msgstr "Visibilità"
@@ -272,7 +272,7 @@ msgstr "Sito di sviluppo"
 msgid "Find the latest version of Cairo-Dock here !"
 msgstr "Scopri qui l'ultima versione di Cairo-Dock!"
 
-#: ../src/cairo-dock-menu.c:223 ../src/cairo-dock-menu.c:1102
+#: ../src/cairo-dock-menu.c:223 ../src/cairo-dock-menu.c:1106
 #: ../src/cairo-dock-widget-plugins.c:298
 msgid "Get more applets!"
 msgstr "Ottieni altre applet!"
@@ -467,7 +467,7 @@ msgstr "Sposta in un'altra dock"
 msgid "New main dock"
 msgstr "Una nuova dock principale"
 
-#: ../src/cairo-dock-menu.c:780
+#: ../src/cairo-dock-menu.c:784
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
@@ -476,98 +476,98 @@ msgstr ""
 "descrizione.\n"
 "Prova a trascinare il lanciatore dal Menu delle Applicazioni."
 
-#: ../src/cairo-dock-menu.c:827
+#: ../src/cairo-dock-menu.c:831
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr "Stai per rimuovere questa applet (%s) dalla dock. Sei sicuro?"
 
-#: ../src/cairo-dock-menu.c:896 ../src/gldit/cairo-dock-gui-factory.c:757
+#: ../src/cairo-dock-menu.c:900 ../src/gldit/cairo-dock-gui-factory.c:757
 msgid "Pick up an image"
 msgstr "Trovare un'immagine"
 
-#: ../src/cairo-dock-menu.c:913 ../src/gldit/cairo-dock-gui-factory.c:791
+#: ../src/cairo-dock-menu.c:917 ../src/gldit/cairo-dock-gui-factory.c:791
 #: ../data/messages:455 ../data/messages:461 ../data/messages:729
 #: ../data/messages:945
 msgid "Image"
 msgstr "Immagine"
 
-#: ../src/cairo-dock-menu.c:1018
+#: ../src/cairo-dock-menu.c:1022
 msgid "Configure"
 msgstr "Configura"
 
-#: ../src/cairo-dock-menu.c:1023
+#: ../src/cairo-dock-menu.c:1027
 msgid "Configure behaviour, appearance, and applets."
 msgstr "Configura il comportamento, l'aspetto e le applet."
 
-#: ../src/cairo-dock-menu.c:1028
+#: ../src/cairo-dock-menu.c:1032
 msgid "Configure this dock"
 msgstr "Configura questa dock"
 
-#: ../src/cairo-dock-menu.c:1033
+#: ../src/cairo-dock-menu.c:1037
 msgid "Customize the position, visibility and appearance of this main dock."
 msgstr ""
 "Personalizza la posizione, la visibilità e l'aspetto della dock principale."
 
-#: ../src/cairo-dock-menu.c:1035
+#: ../src/cairo-dock-menu.c:1039
 msgid "Delete this dock"
 msgstr "Cancella questa dock"
 
-#: ../src/cairo-dock-menu.c:1045
+#: ../src/cairo-dock-menu.c:1049
 msgid "Manage themes"
 msgstr "Gestisci i temi"
 
-#: ../src/cairo-dock-menu.c:1050
+#: ../src/cairo-dock-menu.c:1054
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
 msgstr ""
 "Scegli tra uno dei molti temi disponibili sul server o salva il tuo tema "
 "attuale."
 
-#: ../src/cairo-dock-menu.c:1063
+#: ../src/cairo-dock-menu.c:1067
 msgid "Lock icons position"
 msgstr "Blocca le icone"
 
-#: ../src/cairo-dock-menu.c:1067
+#: ../src/cairo-dock-menu.c:1071
 msgid "This will (un)lock the position of the icons."
 msgstr "Questo (s)bloccherà la posizione delle icone."
 
-#: ../src/cairo-dock-menu.c:1073
+#: ../src/cairo-dock-menu.c:1077
 msgid "Quick-Hide"
 msgstr "Nascondi ora"
 
-#: ../src/cairo-dock-menu.c:1078
+#: ../src/cairo-dock-menu.c:1082
 msgid "This will hide the dock until you hover over it with the mouse."
 msgstr "Nasconderà la dock finché non verrà toccata dal mouse."
 
-#: ../src/cairo-dock-menu.c:1091
+#: ../src/cairo-dock-menu.c:1095
 msgid "Launch Cairo-Dock on startup"
 msgstr "Lancia Cairo-Dock all'avvio"
 
-#: ../src/cairo-dock-menu.c:1107
+#: ../src/cairo-dock-menu.c:1111
 msgid "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Le applet di terze-parti forniscono un'integrazione a molti programmi, come "
 "Pidgin"
 
-#: ../src/cairo-dock-menu.c:1110 ../Help/src/applet-init.c:28
+#: ../src/cairo-dock-menu.c:1114 ../Help/src/applet-init.c:28
 #: ../Help/src/applet-notifications.c:269
 msgid "Help"
 msgstr "Aiuto"
 
-#: ../src/cairo-dock-menu.c:1115
+#: ../src/cairo-dock-menu.c:1119
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
 msgstr ""
 "I problemi non esistono, esistono solo le soluzioni (e molti aiutini utili!)."
 
-#: ../src/cairo-dock-menu.c:1119
+#: ../src/cairo-dock-menu.c:1123
 msgid "About"
 msgstr "A proposito di"
 
-#: ../src/cairo-dock-menu.c:1128
+#: ../src/cairo-dock-menu.c:1132
 msgid "Quit"
 msgstr "Esci"
 
-#: ../src/cairo-dock-menu.c:1137
+#: ../src/cairo-dock-menu.c:1141
 msgid ""
 "You're using a Cairo-Dock Session!\n"
 "It's not advised to quit the dock but you can press Shift to unlock this "
@@ -577,208 +577,208 @@ msgstr ""
 "Non è consigliato uscire dalla dock ma è possibile premere Shift per "
 "sbloccare questa voce del menu."
 
-#: ../src/cairo-dock-menu.c:1163 ../src/cairo-dock-menu.c:1176
+#: ../src/cairo-dock-menu.c:1167 ../src/cairo-dock-menu.c:1180
 msgid "Launch a new (Shift+clic)"
 msgstr "Lanciane uno nuovo (Shift+clic)"
 
-#: ../src/cairo-dock-menu.c:1168 ../src/cairo-dock-menu.c:1250
+#: ../src/cairo-dock-menu.c:1172 ../src/cairo-dock-menu.c:1254
 msgid "Applet's handbook"
 msgstr "Manuale dell'applet"
 
-#: ../src/cairo-dock-menu.c:1183 ../src/cairo-dock-menu.c:1228
+#: ../src/cairo-dock-menu.c:1187 ../src/cairo-dock-menu.c:1232
 msgid "Edit"
 msgstr "Modifica"
 
-#: ../src/cairo-dock-menu.c:1185 ../src/cairo-dock-menu.c:1235
+#: ../src/cairo-dock-menu.c:1189 ../src/cairo-dock-menu.c:1239
 msgid "Remove"
 msgstr "Elimina"
 
-#: ../src/cairo-dock-menu.c:1186
+#: ../src/cairo-dock-menu.c:1190
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
 msgstr ""
 "Si può rimuovere un lanciatore trascinandolo con il mouse fuori dalla dock."
 
-#: ../src/cairo-dock-menu.c:1195
+#: ../src/cairo-dock-menu.c:1199
 msgid "Make it a launcher"
 msgstr "Trasforma in lanciatore"
 
-#: ../src/cairo-dock-menu.c:1218
+#: ../src/cairo-dock-menu.c:1222
 msgid "Remove custom icon"
 msgstr "Rimuovi l'icona personalizzata"
 
-#: ../src/cairo-dock-menu.c:1222
+#: ../src/cairo-dock-menu.c:1226
 msgid "Set a custom icon"
 msgstr "Seleziona un'icona personalizzata"
 
-#: ../src/cairo-dock-menu.c:1232
+#: ../src/cairo-dock-menu.c:1236
 msgid "Detach"
 msgstr "Distacca"
 
-#: ../src/cairo-dock-menu.c:1232
+#: ../src/cairo-dock-menu.c:1236
 msgid "Return to the dock"
 msgstr "Ritorna alla dock"
 
-#: ../src/cairo-dock-menu.c:1239
+#: ../src/cairo-dock-menu.c:1243
 msgid "Duplicate"
 msgstr "Duplica"
 
-#: ../src/cairo-dock-menu.c:1414
+#: ../src/cairo-dock-menu.c:1418
 #, c-format
 msgid "Move all to desktop %d - face %d"
 msgstr "Sposta tutto sulla scrivania %d - lato %d"
 
-#: ../src/cairo-dock-menu.c:1414
+#: ../src/cairo-dock-menu.c:1418
 #, c-format
 msgid "Move to desktop %d - face %d"
 msgstr "Sposta sulla scrivania %d - lato %d"
 
-#: ../src/cairo-dock-menu.c:1416
+#: ../src/cairo-dock-menu.c:1420
 #, c-format
 msgid "Move all to desktop %d"
 msgstr "Muovi tutto sulla scrivania %d"
 
-#: ../src/cairo-dock-menu.c:1416
+#: ../src/cairo-dock-menu.c:1420
 #, c-format
 msgid "Move to desktop %d"
 msgstr "Sposta sulla scrivania %d"
 
-#: ../src/cairo-dock-menu.c:1418
+#: ../src/cairo-dock-menu.c:1422
 #, c-format
 msgid "Move all to face %d"
 msgstr "Sposta tutto sul lato %d"
 
-#: ../src/cairo-dock-menu.c:1418
+#: ../src/cairo-dock-menu.c:1422
 #, c-format
 msgid "Move to face %d"
 msgstr "Sposta sul lato %d"
 
-#: ../src/cairo-dock-menu.c:1843 ../src/cairo-dock-menu.c:1894
+#: ../src/cairo-dock-menu.c:1847 ../src/cairo-dock-menu.c:1898
 msgid "Window"
 msgstr "Finestra"
 
-#: ../src/cairo-dock-menu.c:1849 ../src/cairo-dock-menu.c:1851
-#: ../src/cairo-dock-menu.c:1924 ../src/cairo-dock-menu.c:1926
+#: ../src/cairo-dock-menu.c:1853 ../src/cairo-dock-menu.c:1855
+#: ../src/cairo-dock-menu.c:1928 ../src/cairo-dock-menu.c:1930
 #: ../data/messages:337
 msgid "Close"
 msgstr "Chiudi"
 
-#: ../src/cairo-dock-menu.c:1849 ../src/cairo-dock-menu.c:1872
-#: ../src/cairo-dock-menu.c:1913 ../src/cairo-dock-menu.c:1924
-#: ../src/cairo-dock-menu.c:1947 ../src/cairo-dock-menu.c:1988
-#: ../src/cairo-dock-menu.c:1998 ../Help/src/applet-notifications.c:259
+#: ../src/cairo-dock-menu.c:1853 ../src/cairo-dock-menu.c:1876
+#: ../src/cairo-dock-menu.c:1917 ../src/cairo-dock-menu.c:1928
+#: ../src/cairo-dock-menu.c:1951 ../src/cairo-dock-menu.c:1992
+#: ../src/cairo-dock-menu.c:2002 ../Help/src/applet-notifications.c:259
 msgid "middle-click"
 msgstr "clic centrale"
 
-#: ../src/cairo-dock-menu.c:1864 ../src/cairo-dock-menu.c:1905
+#: ../src/cairo-dock-menu.c:1868 ../src/cairo-dock-menu.c:1909
 msgid "Unmaximise"
 msgstr "Ripristina"
 
-#: ../src/cairo-dock-menu.c:1864 ../src/cairo-dock-menu.c:1905
+#: ../src/cairo-dock-menu.c:1868 ../src/cairo-dock-menu.c:1909
 msgid "Maximise"
 msgstr "Massimizza"
 
-#: ../src/cairo-dock-menu.c:1872 ../src/cairo-dock-menu.c:1874
-#: ../src/cairo-dock-menu.c:1913 ../src/cairo-dock-menu.c:1915
+#: ../src/cairo-dock-menu.c:1876 ../src/cairo-dock-menu.c:1878
+#: ../src/cairo-dock-menu.c:1917 ../src/cairo-dock-menu.c:1919
 msgid "Minimise"
 msgstr "Minimizza"
 
-#: ../src/cairo-dock-menu.c:1889 ../src/cairo-dock-menu.c:1899
+#: ../src/cairo-dock-menu.c:1893 ../src/cairo-dock-menu.c:1903
 msgid "Show"
 msgstr "Mostra"
 
-#: ../src/cairo-dock-menu.c:1933 ../src/cairo-dock-menu.c:2022
+#: ../src/cairo-dock-menu.c:1937 ../src/cairo-dock-menu.c:2026
 msgid "Other actions"
 msgstr "Altre azioni"
 
-#: ../src/cairo-dock-menu.c:1936
+#: ../src/cairo-dock-menu.c:1940
 msgid "Move to this desktop"
 msgstr "Sposta in questa scrivania"
 
-#: ../src/cairo-dock-menu.c:1941
+#: ../src/cairo-dock-menu.c:1945
 msgid "Not Fullscreen"
 msgstr "Non a schermo intero"
 
-#: ../src/cairo-dock-menu.c:1941
+#: ../src/cairo-dock-menu.c:1945
 msgid "Fullscreen"
 msgstr "Schermo intero"
 
-#: ../src/cairo-dock-menu.c:1947 ../src/cairo-dock-menu.c:1949
+#: ../src/cairo-dock-menu.c:1951 ../src/cairo-dock-menu.c:1953
 msgid "Below other windows"
 msgstr "Sotto le altre finestre"
 
-#: ../src/cairo-dock-menu.c:1957
+#: ../src/cairo-dock-menu.c:1961
 msgid "Don't keep above"
 msgstr "Non tenere al di sopra"
 
-#: ../src/cairo-dock-menu.c:1957 ../Help/data/messages:349
+#: ../src/cairo-dock-menu.c:1961 ../Help/data/messages:349
 msgid "Keep above"
 msgstr "Tieni al di sopra"
 
-#: ../src/cairo-dock-menu.c:1961
+#: ../src/cairo-dock-menu.c:1965
 msgid "Visible only on this desktop"
 msgstr "Visibile solo su questo desktop"
 
-#: ../src/cairo-dock-menu.c:1961
+#: ../src/cairo-dock-menu.c:1965
 msgid "Visible on all desktops"
 msgstr "Visibile su tutti i desktop"
 
-#: ../src/cairo-dock-menu.c:1969
+#: ../src/cairo-dock-menu.c:1973
 msgid "Kill"
 msgstr "Termina"
 
-#: ../src/cairo-dock-menu.c:1984
+#: ../src/cairo-dock-menu.c:1988
 msgid "Windows"
 msgstr "Finestre"
 
-#: ../src/cairo-dock-menu.c:1988 ../src/cairo-dock-menu.c:1990
-#: ../src/cairo-dock-menu.c:2018
+#: ../src/cairo-dock-menu.c:1992 ../src/cairo-dock-menu.c:1994
+#: ../src/cairo-dock-menu.c:2022
 msgid "Close all"
 msgstr "Chiudi tutto"
 
-#: ../src/cairo-dock-menu.c:1998 ../src/cairo-dock-menu.c:2000
-#: ../src/cairo-dock-menu.c:2016
+#: ../src/cairo-dock-menu.c:2002 ../src/cairo-dock-menu.c:2004
+#: ../src/cairo-dock-menu.c:2020
 msgid "Minimise all"
 msgstr "Minimizza tutto"
 
-#: ../src/cairo-dock-menu.c:2008 ../src/cairo-dock-menu.c:2014
+#: ../src/cairo-dock-menu.c:2012 ../src/cairo-dock-menu.c:2018
 msgid "Show all"
 msgstr "Mostra tutto"
 
-#: ../src/cairo-dock-menu.c:2012
+#: ../src/cairo-dock-menu.c:2016
 msgid "Windows management"
 msgstr "Gestore delle finestre"
 
-#: ../src/cairo-dock-menu.c:2024
+#: ../src/cairo-dock-menu.c:2028
 msgid "Move all to this desktop"
 msgstr "Sposta tutto su questa scrivania"
 
-#: ../src/cairo-dock-menu.c:2047 ../Help/data/messages:347
+#: ../src/cairo-dock-menu.c:2051 ../Help/data/messages:347
 msgid "Normal"
 msgstr "Normale"
 
-#: ../src/cairo-dock-menu.c:2053 ../data/messages:21 ../data/messages:183
+#: ../src/cairo-dock-menu.c:2057 ../data/messages:21 ../data/messages:183
 #: ../data/messages:891
 msgid "Always on top"
 msgstr "Sempre in primo piano"
 
-#: ../src/cairo-dock-menu.c:2060
+#: ../src/cairo-dock-menu.c:2064
 msgid "Always below"
 msgstr "Sempre al di sotto"
 
-#: ../src/cairo-dock-menu.c:2077 ../Help/data/messages:355
+#: ../src/cairo-dock-menu.c:2081 ../Help/data/messages:355
 msgid "Reserve space"
 msgstr "Riserva lo spazio"
 
-#: ../src/cairo-dock-menu.c:2084
+#: ../src/cairo-dock-menu.c:2088
 msgid "On all desktops"
 msgstr "Su tutte le scrivanie"
 
-#: ../src/cairo-dock-menu.c:2090
+#: ../src/cairo-dock-menu.c:2094
 msgid "Lock position"
 msgstr "Blocca la posizione"
 
-#: ../src/cairo-dock-user-interaction.c:432
+#: ../src/cairo-dock-user-interaction.c:422
 msgid ""
 "The option 'overwrite X icons' has been automatically enabled in the "
 "config.\n"
@@ -1073,7 +1073,7 @@ msgstr ""
 msgid "Remember this choice"
 msgstr "Ricorda questa scelta"
 
-#: ../src/cairo-dock.c:720 ../src/cairo-dock.c:836
+#: ../src/cairo-dock.c:720 ../src/cairo-dock.c:854
 #, c-format
 msgid ""
 "The module '%s' has been deactivated because it may have caused some "
@@ -1113,7 +1113,7 @@ msgstr ""
 "Ma se davvero vuoi utilizzare la dock senza questi plug-in, per non ricevere "
 "più questo messaggio, puoi avviarla con l'opzione '-f'.\n"
 
-#: ../src/cairo-dock.c:834
+#: ../src/cairo-dock.c:852
 #, c-format
 msgid ""
 "The module '%s' may have encountered a problem.\n"
@@ -1149,7 +1149,7 @@ msgstr ""
 msgid "_custom decoration_"
 msgstr "_decorazione personalizzata_"
 
-#: ../src/gldit/cairo-dock-dock-factory.c:1434
+#: ../src/gldit/cairo-dock-dock-factory.c:1432
 msgid "Sorry but the dock is locked"
 msgstr "Spiacente ma la dock è bloccata"
 
@@ -1169,8 +1169,8 @@ msgstr "Dock a destra"
 msgid "Left dock"
 msgstr "Dock a sinistra"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:1672
-#: ../src/gldit/cairo-dock-dock-manager.c:1770
+#: ../src/gldit/cairo-dock-dock-manager.c:1695
+#: ../src/gldit/cairo-dock-dock-manager.c:1793
 msgid "Pop up the main dock"
 msgstr "Fai apparire la Dock principale"
 
@@ -1332,20 +1332,6 @@ msgstr "Sei sicuro di voler cancellare il tema %s?"
 #: ../src/gldit/cairo-dock-themes-manager.c:375
 msgid "Are you sure you want to delete these themes?"
 msgstr "Vuoi cancellare veramente questi temi?"
-
-#: ../src/implementations/cairo-dock-glx.c:53
-msgid "This card is blacklisted due to a bug with your video drivers:"
-msgstr ""
-
-#: ../src/implementations/cairo-dock-glx.c:54
-msgid "Please have a look there:"
-msgstr ""
-
-#: ../src/implementations/cairo-dock-glx.c:373
-msgid ""
-"The OpenGL backend will be deactivated. Note that you can force this OpenGL "
-"backend by launching the dock with this command:"
-msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:582 ../data/messages:39
 #: ../data/messages:201
@@ -4456,10 +4442,9 @@ msgstr ""
 "applicazioni."
 
 #: ../data/messages:1049
-msgid "Prevent this launcher from stealing this application from taskbar?"
-msgstr ""
-"Impedire a questo lanciatore di occupare con questa applicazione la barra "
-"delle applicazioni?"
+#, fuzzy
+msgid "Don't link the launcher with its window"
+msgstr "Collega gli indicatori alla loro icona?"
 
 #: ../data/messages:1051
 msgid ""
@@ -4512,70 +4497,6 @@ msgstr ""
 
 #: ../data/messages:1084
 msgid ""
-"<b>New version: <span color='red'>GLX-Dock 3.0</span>!</b>\n"
-" - The <b>taskbar</b> has been greatly enhanced.\n"
-" - The <b>Log out</b> applet has been rewritten, now allows to switch "
-"users.\n"
-" - The <b>control of the dock from the keyboard</b> is now very powerful:\n"
-"   - many shortkeys have been added in different applets\n"
-"   - you can activate a launcher by pressing a shortkey + its number\n"
-"   - all shortkeys can now be managed in a single place in the configuration "
-"window.\n"
-" - The <b>Sound Menu</b> from Ubuntu has been integrated into the Sound-"
-"Control applet.\n"
-" - A new <b>Twitter applet</b> lets you tweet in one click.\n"
-" - A new applet to <b>inhibit the screensaver</b> in one click.\n"
-" - Separators are transparent to click in <b>'Panel'</b> mode\n"
-" - Cairo-Dock now uses <b>GTK3</b>, for a better integration in a Gnome "
-"desktop\n"
-" - Few additions to the DBus API.\n"
-" - It's possible to donate to support the project!"
-msgstr ""
-"<b>Nuova versione: <span color='red'>GLX-Dock 3.0</span>!</b>\n"
-" - La <b>taskbar</b> è stata notevolmente migliorata.\n"
-" - L'applet <b>Log out</b> è stata riscritta, adesso consente il cambio "
-"utente.\n"
-" - Il <b>controllo della dock dalla tastiera</b> è ora più potente:\n"
-"   - sono state aggiunte molte scorciatoie in diverse applet\n"
-"   - potete attivare un lanciatore premendo una scorciatoia + il suo numero\n"
-"   - ora le scorciatoie possono essere tutte gestite nella finestra di "
-"configurazione.\n"
-" - Il <b>Sound Menu</b> di Ubuntu è stato integrato dentro l'applet Sound-"
-"Control.\n"
-" - Una nuova <b>applet Twitter</b> vi permette di 'cinguettare' in un clic.\n"
-" - Una nuova applet per <b>inibire il salvaschermo</b> in un clic.\n"
-" - I separatori sono trasparenti al clic nella modalità <b>'Pannello'</b>\n"
-" - Cairo-Dock adesso usa le <b>GTK3</b>, per una migliore integrazione "
-"nell'ambiente Gnome\n"
-" - Poche aggiunte alle API DBus.\n"
-" - È possibile fare delle donazioni per sostenere il progetto!"
-
-#: ../data/messages:1086
-msgid ""
-"<b>New version: <span color='red'>GLX-Dock 3.1</span>!</b>\n"
-" - Better integration in of Unity: support of the <b>Launcher API</b> and "
-"better support of <b>indicators</b>\n"
-" - All <b>configuration windows</b> have been merged into a single one.\n"
-" - Added <b>progress bars</b> in several applets and in the Dbus API\n"
-" - The <b>Music Player</b> applet can control players in the systray.\n"
-" - Icons of the <b>taskbar</b> can be separated from launchers or not\n"
-" - And as always ... various bug fixes and improvements :-)"
-msgstr ""
-"<b>Nuova versione: <span color='red'>GLX-Dock 3.1</span>!</b>\n"
-"- Migliore integrazione in Unity: supporto del <b>Lanciatore API</b> e "
-"miglior supporto degli <b>indicatori</b>.\n"
-"- Tutte le <b>finestre di configurazione</b> sono state raggruppate in una "
-"sola.\n"
-"- Aggiunti gli <b>indicatori di avanzamento</b> in diverse applet e nell'API "
-"Dbus.\n"
-"- L'applet <b>Music Player</b> può controllare i lettori presenti nell'area "
-"di notifica.\n"
-"- Le icone della <b>barra delle applicazioni</b> possono essere separati dai "
-"lanciatori o meno.\n"
-"- E come sempre ... correzioni di bug e miglioramenti vari :-)"
-
-#: ../data/messages:1088
-msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.2</span>!</b>\n"
 " - Multi-screen support has been improved\n"
 " - New applet : Screenshot\n"
@@ -4598,3 +4519,98 @@ msgstr ""
 " - Aggiunto il supporto per tutti gli indicatori di Unity\n"
 " - Diversi bug-fixes e miglioramenti\n"
 " - Se il progetto ti piace, per favore fai una donazione :-)"
+
+#: ../data/messages:1086
+msgid "<b>New version: <span color='red'>GLX-Dock 3.3</span>!</b>"
+msgstr ""
+
+#: ../data/messages:1088
+msgid "- Added support of logind in the Logout applet"
+msgstr ""
+
+#: ../data/messages:1090
+msgid "- Added support of the StartupNotification protocol"
+msgstr ""
+
+#: ../data/messages:1092
+msgid "- Upgraded the Dbus API to be even more powerful"
+msgstr ""
+
+#: ../data/messages:1094
+msgid "- A huge rewrite of the core using Objects"
+msgstr ""
+
+#: ../data/messages:1096
+msgid "- If you like the project, please donate :-)"
+msgstr ""
+
+#~ msgid ""
+#~ "<b>New version: <span color='red'>GLX-Dock 3.0</span>!</b>\n"
+#~ " - The <b>taskbar</b> has been greatly enhanced.\n"
+#~ " - The <b>Log out</b> applet has been rewritten, now allows to switch "
+#~ "users.\n"
+#~ " - The <b>control of the dock from the keyboard</b> is now very "
+#~ "powerful:\n"
+#~ "   - many shortkeys have been added in different applets\n"
+#~ "   - you can activate a launcher by pressing a shortkey + its number\n"
+#~ "   - all shortkeys can now be managed in a single place in the "
+#~ "configuration window.\n"
+#~ " - The <b>Sound Menu</b> from Ubuntu has been integrated into the Sound-"
+#~ "Control applet.\n"
+#~ " - A new <b>Twitter applet</b> lets you tweet in one click.\n"
+#~ " - A new applet to <b>inhibit the screensaver</b> in one click.\n"
+#~ " - Separators are transparent to click in <b>'Panel'</b> mode\n"
+#~ " - Cairo-Dock now uses <b>GTK3</b>, for a better integration in a Gnome "
+#~ "desktop\n"
+#~ " - Few additions to the DBus API.\n"
+#~ " - It's possible to donate to support the project!"
+#~ msgstr ""
+#~ "<b>Nuova versione: <span color='red'>GLX-Dock 3.0</span>!</b>\n"
+#~ " - La <b>taskbar</b> è stata notevolmente migliorata.\n"
+#~ " - L'applet <b>Log out</b> è stata riscritta, adesso consente il cambio "
+#~ "utente.\n"
+#~ " - Il <b>controllo della dock dalla tastiera</b> è ora più potente:\n"
+#~ "   - sono state aggiunte molte scorciatoie in diverse applet\n"
+#~ "   - potete attivare un lanciatore premendo una scorciatoia + il suo "
+#~ "numero\n"
+#~ "   - ora le scorciatoie possono essere tutte gestite nella finestra di "
+#~ "configurazione.\n"
+#~ " - Il <b>Sound Menu</b> di Ubuntu è stato integrato dentro l'applet Sound-"
+#~ "Control.\n"
+#~ " - Una nuova <b>applet Twitter</b> vi permette di 'cinguettare' in un "
+#~ "clic.\n"
+#~ " - Una nuova applet per <b>inibire il salvaschermo</b> in un clic.\n"
+#~ " - I separatori sono trasparenti al clic nella modalità <b>'Pannello'</"
+#~ "b>\n"
+#~ " - Cairo-Dock adesso usa le <b>GTK3</b>, per una migliore integrazione "
+#~ "nell'ambiente Gnome\n"
+#~ " - Poche aggiunte alle API DBus.\n"
+#~ " - È possibile fare delle donazioni per sostenere il progetto!"
+
+#~ msgid ""
+#~ "<b>New version: <span color='red'>GLX-Dock 3.1</span>!</b>\n"
+#~ " - Better integration in of Unity: support of the <b>Launcher API</b> and "
+#~ "better support of <b>indicators</b>\n"
+#~ " - All <b>configuration windows</b> have been merged into a single one.\n"
+#~ " - Added <b>progress bars</b> in several applets and in the Dbus API\n"
+#~ " - The <b>Music Player</b> applet can control players in the systray.\n"
+#~ " - Icons of the <b>taskbar</b> can be separated from launchers or not\n"
+#~ " - And as always ... various bug fixes and improvements :-)"
+#~ msgstr ""
+#~ "<b>Nuova versione: <span color='red'>GLX-Dock 3.1</span>!</b>\n"
+#~ "- Migliore integrazione in Unity: supporto del <b>Lanciatore API</b> e "
+#~ "miglior supporto degli <b>indicatori</b>.\n"
+#~ "- Tutte le <b>finestre di configurazione</b> sono state raggruppate in "
+#~ "una sola.\n"
+#~ "- Aggiunti gli <b>indicatori di avanzamento</b> in diverse applet e "
+#~ "nell'API Dbus.\n"
+#~ "- L'applet <b>Music Player</b> può controllare i lettori presenti "
+#~ "nell'area di notifica.\n"
+#~ "- Le icone della <b>barra delle applicazioni</b> possono essere separati "
+#~ "dai lanciatori o meno.\n"
+#~ "- E come sempre ... correzioni di bug e miglioramenti vari :-)"
+
+#~ msgid "Prevent this launcher from stealing this application from taskbar?"
+#~ msgstr ""
+#~ "Impedire a questo lanciatore di occupare con questa applicazione la barra "
+#~ "delle applicazioni?"

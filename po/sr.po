@@ -74,7 +74,7 @@ msgstr ""
 "или, супротно, ненаметљив?\n"
 "Подесите начин приступа доку и под-доковима!"
 
-#: ../src/cairo-dock-gui-advanced.c:1502 ../src/cairo-dock-menu.c:2039
+#: ../src/cairo-dock-gui-advanced.c:1502 ../src/cairo-dock-menu.c:2043
 #: ../Help/data/messages:339
 msgid "Visibility"
 msgstr "Видљивост"
@@ -267,7 +267,7 @@ msgstr "Развојни сајт"
 msgid "Find the latest version of Cairo-Dock here !"
 msgstr "Нађите најсвежије издање Каиро-дока овде!"
 
-#: ../src/cairo-dock-menu.c:223 ../src/cairo-dock-menu.c:1102
+#: ../src/cairo-dock-menu.c:223 ../src/cairo-dock-menu.c:1106
 #: ../src/cairo-dock-widget-plugins.c:298
 msgid "Get more applets!"
 msgstr "Набавите још програмчића!"
@@ -449,7 +449,7 @@ msgstr "Премести на следећи док"
 msgid "New main dock"
 msgstr "нови главни док"
 
-#: ../src/cairo-dock-menu.c:780
+#: ../src/cairo-dock-menu.c:784
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
@@ -457,96 +457,96 @@ msgstr ""
 "Извините, не могу да пронађем одговарајући описну датотеку.\n"
 "Можете превући и пустити покретач из програмског изборника."
 
-#: ../src/cairo-dock-menu.c:827
+#: ../src/cairo-dock-menu.c:831
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr "Уклањате програмче (%s) са дока. Да ли сте сигурни?"
 
-#: ../src/cairo-dock-menu.c:896 ../src/gldit/cairo-dock-gui-factory.c:757
+#: ../src/cairo-dock-menu.c:900 ../src/gldit/cairo-dock-gui-factory.c:757
 msgid "Pick up an image"
 msgstr "Одаберите слику"
 
-#: ../src/cairo-dock-menu.c:913 ../src/gldit/cairo-dock-gui-factory.c:791
+#: ../src/cairo-dock-menu.c:917 ../src/gldit/cairo-dock-gui-factory.c:791
 #: ../data/messages:455 ../data/messages:461 ../data/messages:729
 #: ../data/messages:945
 msgid "Image"
 msgstr "Слика"
 
-#: ../src/cairo-dock-menu.c:1018
+#: ../src/cairo-dock-menu.c:1022
 msgid "Configure"
 msgstr "Подесите"
 
-#: ../src/cairo-dock-menu.c:1023
+#: ../src/cairo-dock-menu.c:1027
 msgid "Configure behaviour, appearance, and applets."
 msgstr "Подесите понашање, изглед и програмчиће."
 
-#: ../src/cairo-dock-menu.c:1028
+#: ../src/cairo-dock-menu.c:1032
 msgid "Configure this dock"
 msgstr "Подесите овај док"
 
-#: ../src/cairo-dock-menu.c:1033
+#: ../src/cairo-dock-menu.c:1037
 msgid "Customize the position, visibility and appearance of this main dock."
 msgstr "Подесите положај, видљивост и изглед овог главног дока."
 
-#: ../src/cairo-dock-menu.c:1035
+#: ../src/cairo-dock-menu.c:1039
 msgid "Delete this dock"
 msgstr "Уклоните овај док"
 
-#: ../src/cairo-dock-menu.c:1045
+#: ../src/cairo-dock-menu.c:1049
 msgid "Manage themes"
 msgstr "Управљање темама"
 
-#: ../src/cairo-dock-menu.c:1050
+#: ../src/cairo-dock-menu.c:1054
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
 msgstr ""
 "Одаберите тему међу многим темама од даваоца услуга или снимите своју "
 "тренутну тему."
 
-#: ../src/cairo-dock-menu.c:1063
+#: ../src/cairo-dock-menu.c:1067
 msgid "Lock icons position"
 msgstr "Закључава положај иконица"
 
-#: ../src/cairo-dock-menu.c:1067
+#: ../src/cairo-dock-menu.c:1071
 msgid "This will (un)lock the position of the icons."
 msgstr "Ово ће (за/от)кључати положај икона."
 
-#: ../src/cairo-dock-menu.c:1073
+#: ../src/cairo-dock-menu.c:1077
 msgid "Quick-Hide"
 msgstr "Брзо скривање"
 
-#: ../src/cairo-dock-menu.c:1078
+#: ../src/cairo-dock-menu.c:1082
 msgid "This will hide the dock until you hover over it with the mouse."
 msgstr "Ово ће сакрити док док не пређете мишем преко њега."
 
-#: ../src/cairo-dock-menu.c:1091
+#: ../src/cairo-dock-menu.c:1095
 msgid "Launch Cairo-Dock on startup"
 msgstr "Покрени Каиро-док при покретању система"
 
-#: ../src/cairo-dock-menu.c:1107
+#: ../src/cairo-dock-menu.c:1111
 msgid "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Програмчићи треће стране омогућавају сарађивање са многим програмима, на "
 "пример Пиџином"
 
-#: ../src/cairo-dock-menu.c:1110 ../Help/src/applet-init.c:28
+#: ../src/cairo-dock-menu.c:1114 ../Help/src/applet-init.c:28
 #: ../Help/src/applet-notifications.c:269
 msgid "Help"
 msgstr "Помоћ"
 
-#: ../src/cairo-dock-menu.c:1115
+#: ../src/cairo-dock-menu.c:1119
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
 msgstr "Нема проблема, само решења (и много корисних савета!)"
 
-#: ../src/cairo-dock-menu.c:1119
+#: ../src/cairo-dock-menu.c:1123
 msgid "About"
 msgstr "О програму"
 
-#: ../src/cairo-dock-menu.c:1128
+#: ../src/cairo-dock-menu.c:1132
 msgid "Quit"
 msgstr "Изађи"
 
-#: ../src/cairo-dock-menu.c:1137
+#: ../src/cairo-dock-menu.c:1141
 msgid ""
 "You're using a Cairo-Dock Session!\n"
 "It's not advised to quit the dock but you can press Shift to unlock this "
@@ -556,207 +556,207 @@ msgstr ""
 "Није препоручљиво да напустите док, али, можете стиснути Шифт за откључавање "
 "ове ставке изборника."
 
-#: ../src/cairo-dock-menu.c:1163 ../src/cairo-dock-menu.c:1176
+#: ../src/cairo-dock-menu.c:1167 ../src/cairo-dock-menu.c:1180
 msgid "Launch a new (Shift+clic)"
 msgstr "Покрени нови (Шифт + клик)"
 
-#: ../src/cairo-dock-menu.c:1168 ../src/cairo-dock-menu.c:1250
+#: ../src/cairo-dock-menu.c:1172 ../src/cairo-dock-menu.c:1254
 msgid "Applet's handbook"
 msgstr "Приручник програмчића"
 
-#: ../src/cairo-dock-menu.c:1183 ../src/cairo-dock-menu.c:1228
+#: ../src/cairo-dock-menu.c:1187 ../src/cairo-dock-menu.c:1232
 msgid "Edit"
 msgstr "Уређивање"
 
-#: ../src/cairo-dock-menu.c:1185 ../src/cairo-dock-menu.c:1235
+#: ../src/cairo-dock-menu.c:1189 ../src/cairo-dock-menu.c:1239
 msgid "Remove"
 msgstr "Уклони"
 
-#: ../src/cairo-dock-menu.c:1186
+#: ../src/cairo-dock-menu.c:1190
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
 msgstr "Можете мишем уклонити покретач превлачењем ван дока ."
 
-#: ../src/cairo-dock-menu.c:1195
+#: ../src/cairo-dock-menu.c:1199
 msgid "Make it a launcher"
 msgstr "Начини од њега покретач"
 
-#: ../src/cairo-dock-menu.c:1218
+#: ../src/cairo-dock-menu.c:1222
 msgid "Remove custom icon"
 msgstr "Уклони прилагођене иконе"
 
-#: ../src/cairo-dock-menu.c:1222
+#: ../src/cairo-dock-menu.c:1226
 msgid "Set a custom icon"
 msgstr "Поставите прилагођену икону"
 
-#: ../src/cairo-dock-menu.c:1232
+#: ../src/cairo-dock-menu.c:1236
 msgid "Detach"
 msgstr "Одспоји"
 
-#: ../src/cairo-dock-menu.c:1232
+#: ../src/cairo-dock-menu.c:1236
 msgid "Return to the dock"
 msgstr "Врати у док"
 
-#: ../src/cairo-dock-menu.c:1239
+#: ../src/cairo-dock-menu.c:1243
 msgid "Duplicate"
 msgstr "Удвостручи"
 
-#: ../src/cairo-dock-menu.c:1414
+#: ../src/cairo-dock-menu.c:1418
 #, c-format
 msgid "Move all to desktop %d - face %d"
 msgstr "Премести све на радну површину %d - страна %d"
 
-#: ../src/cairo-dock-menu.c:1414
+#: ../src/cairo-dock-menu.c:1418
 #, c-format
 msgid "Move to desktop %d - face %d"
 msgstr "Премести на радну површину %d - страна %d"
 
-#: ../src/cairo-dock-menu.c:1416
+#: ../src/cairo-dock-menu.c:1420
 #, c-format
 msgid "Move all to desktop %d"
 msgstr "Премести све на радну површину %d"
 
-#: ../src/cairo-dock-menu.c:1416
+#: ../src/cairo-dock-menu.c:1420
 #, c-format
 msgid "Move to desktop %d"
 msgstr "Премести на радни простор %d"
 
-#: ../src/cairo-dock-menu.c:1418
+#: ../src/cairo-dock-menu.c:1422
 #, c-format
 msgid "Move all to face %d"
 msgstr "Премести све на страну %d"
 
-#: ../src/cairo-dock-menu.c:1418
+#: ../src/cairo-dock-menu.c:1422
 #, c-format
 msgid "Move to face %d"
 msgstr "Премести на страну %d"
 
-#: ../src/cairo-dock-menu.c:1843 ../src/cairo-dock-menu.c:1894
+#: ../src/cairo-dock-menu.c:1847 ../src/cairo-dock-menu.c:1898
 msgid "Window"
 msgstr "Прозор"
 
-#: ../src/cairo-dock-menu.c:1849 ../src/cairo-dock-menu.c:1851
-#: ../src/cairo-dock-menu.c:1924 ../src/cairo-dock-menu.c:1926
+#: ../src/cairo-dock-menu.c:1853 ../src/cairo-dock-menu.c:1855
+#: ../src/cairo-dock-menu.c:1928 ../src/cairo-dock-menu.c:1930
 #: ../data/messages:337
 msgid "Close"
 msgstr "Затвори"
 
-#: ../src/cairo-dock-menu.c:1849 ../src/cairo-dock-menu.c:1872
-#: ../src/cairo-dock-menu.c:1913 ../src/cairo-dock-menu.c:1924
-#: ../src/cairo-dock-menu.c:1947 ../src/cairo-dock-menu.c:1988
-#: ../src/cairo-dock-menu.c:1998 ../Help/src/applet-notifications.c:259
+#: ../src/cairo-dock-menu.c:1853 ../src/cairo-dock-menu.c:1876
+#: ../src/cairo-dock-menu.c:1917 ../src/cairo-dock-menu.c:1928
+#: ../src/cairo-dock-menu.c:1951 ../src/cairo-dock-menu.c:1992
+#: ../src/cairo-dock-menu.c:2002 ../Help/src/applet-notifications.c:259
 msgid "middle-click"
 msgstr "средњи клик"
 
-#: ../src/cairo-dock-menu.c:1864 ../src/cairo-dock-menu.c:1905
+#: ../src/cairo-dock-menu.c:1868 ../src/cairo-dock-menu.c:1909
 msgid "Unmaximise"
 msgstr "Поништи увећање"
 
-#: ../src/cairo-dock-menu.c:1864 ../src/cairo-dock-menu.c:1905
+#: ../src/cairo-dock-menu.c:1868 ../src/cairo-dock-menu.c:1909
 msgid "Maximise"
 msgstr "Увећај"
 
-#: ../src/cairo-dock-menu.c:1872 ../src/cairo-dock-menu.c:1874
-#: ../src/cairo-dock-menu.c:1913 ../src/cairo-dock-menu.c:1915
+#: ../src/cairo-dock-menu.c:1876 ../src/cairo-dock-menu.c:1878
+#: ../src/cairo-dock-menu.c:1917 ../src/cairo-dock-menu.c:1919
 msgid "Minimise"
 msgstr "Умањи"
 
-#: ../src/cairo-dock-menu.c:1889 ../src/cairo-dock-menu.c:1899
+#: ../src/cairo-dock-menu.c:1893 ../src/cairo-dock-menu.c:1903
 msgid "Show"
 msgstr "Прикажи"
 
-#: ../src/cairo-dock-menu.c:1933 ../src/cairo-dock-menu.c:2022
+#: ../src/cairo-dock-menu.c:1937 ../src/cairo-dock-menu.c:2026
 msgid "Other actions"
 msgstr "Остале радње"
 
-#: ../src/cairo-dock-menu.c:1936
+#: ../src/cairo-dock-menu.c:1940
 msgid "Move to this desktop"
 msgstr "Премести на овај радни простор"
 
-#: ../src/cairo-dock-menu.c:1941
+#: ../src/cairo-dock-menu.c:1945
 msgid "Not Fullscreen"
 msgstr "Не преко целог екрана"
 
-#: ../src/cairo-dock-menu.c:1941
+#: ../src/cairo-dock-menu.c:1945
 msgid "Fullscreen"
 msgstr "Цео екран"
 
-#: ../src/cairo-dock-menu.c:1947 ../src/cairo-dock-menu.c:1949
+#: ../src/cairo-dock-menu.c:1951 ../src/cairo-dock-menu.c:1953
 msgid "Below other windows"
 msgstr "Испод осталих прозора"
 
-#: ../src/cairo-dock-menu.c:1957
+#: ../src/cairo-dock-menu.c:1961
 msgid "Don't keep above"
 msgstr "Не задржавај изнад"
 
-#: ../src/cairo-dock-menu.c:1957 ../Help/data/messages:349
+#: ../src/cairo-dock-menu.c:1961 ../Help/data/messages:349
 msgid "Keep above"
 msgstr "Задржавај изнад"
 
-#: ../src/cairo-dock-menu.c:1961
+#: ../src/cairo-dock-menu.c:1965
 msgid "Visible only on this desktop"
 msgstr "Видљив само на овом радном простору"
 
-#: ../src/cairo-dock-menu.c:1961
+#: ../src/cairo-dock-menu.c:1965
 msgid "Visible on all desktops"
 msgstr "Видљив на свим радним просторима"
 
-#: ../src/cairo-dock-menu.c:1969
+#: ../src/cairo-dock-menu.c:1973
 msgid "Kill"
 msgstr "Убиј"
 
-#: ../src/cairo-dock-menu.c:1984
+#: ../src/cairo-dock-menu.c:1988
 msgid "Windows"
 msgstr "Прозори"
 
-#: ../src/cairo-dock-menu.c:1988 ../src/cairo-dock-menu.c:1990
-#: ../src/cairo-dock-menu.c:2018
+#: ../src/cairo-dock-menu.c:1992 ../src/cairo-dock-menu.c:1994
+#: ../src/cairo-dock-menu.c:2022
 msgid "Close all"
 msgstr "Затвори све"
 
-#: ../src/cairo-dock-menu.c:1998 ../src/cairo-dock-menu.c:2000
-#: ../src/cairo-dock-menu.c:2016
+#: ../src/cairo-dock-menu.c:2002 ../src/cairo-dock-menu.c:2004
+#: ../src/cairo-dock-menu.c:2020
 msgid "Minimise all"
 msgstr "Умањи све"
 
-#: ../src/cairo-dock-menu.c:2008 ../src/cairo-dock-menu.c:2014
+#: ../src/cairo-dock-menu.c:2012 ../src/cairo-dock-menu.c:2018
 msgid "Show all"
 msgstr "Прикажи све"
 
-#: ../src/cairo-dock-menu.c:2012
+#: ../src/cairo-dock-menu.c:2016
 msgid "Windows management"
 msgstr "Управљање прозорима"
 
-#: ../src/cairo-dock-menu.c:2024
+#: ../src/cairo-dock-menu.c:2028
 msgid "Move all to this desktop"
 msgstr "Премести све на овај радни простор"
 
-#: ../src/cairo-dock-menu.c:2047 ../Help/data/messages:347
+#: ../src/cairo-dock-menu.c:2051 ../Help/data/messages:347
 msgid "Normal"
 msgstr "Уобичајено"
 
-#: ../src/cairo-dock-menu.c:2053 ../data/messages:21 ../data/messages:183
+#: ../src/cairo-dock-menu.c:2057 ../data/messages:21 ../data/messages:183
 #: ../data/messages:891
 msgid "Always on top"
 msgstr "увек на врху"
 
-#: ../src/cairo-dock-menu.c:2060
+#: ../src/cairo-dock-menu.c:2064
 msgid "Always below"
 msgstr "Увек испод"
 
-#: ../src/cairo-dock-menu.c:2077 ../Help/data/messages:355
+#: ../src/cairo-dock-menu.c:2081 ../Help/data/messages:355
 msgid "Reserve space"
 msgstr "Чувај простор"
 
-#: ../src/cairo-dock-menu.c:2084
+#: ../src/cairo-dock-menu.c:2088
 msgid "On all desktops"
 msgstr "На свим радним просторима"
 
-#: ../src/cairo-dock-menu.c:2090
+#: ../src/cairo-dock-menu.c:2094
 msgid "Lock position"
 msgstr "Закључај положај"
 
-#: ../src/cairo-dock-user-interaction.c:432
+#: ../src/cairo-dock-user-interaction.c:422
 msgid ""
 "The option 'overwrite X icons' has been automatically enabled in the "
 "config.\n"
@@ -1043,7 +1043,7 @@ msgstr ""
 msgid "Remember this choice"
 msgstr "Запамти овај избор"
 
-#: ../src/cairo-dock.c:720 ../src/cairo-dock.c:836
+#: ../src/cairo-dock.c:720 ../src/cairo-dock.c:854
 #, c-format
 msgid ""
 "The module '%s' has been deactivated because it may have caused some "
@@ -1082,7 +1082,7 @@ msgstr ""
 "Али, ако стварно желите користити док без ових прикључака, можете покренути "
 "док са „-f“ могућношћу да с не би опет приказивала ова порука.\n"
 
-#: ../src/cairo-dock.c:834
+#: ../src/cairo-dock.c:852
 #, c-format
 msgid ""
 "The module '%s' may have encountered a problem.\n"
@@ -1117,7 +1117,7 @@ msgstr ""
 msgid "_custom decoration_"
 msgstr "_прилагођени украси_"
 
-#: ../src/gldit/cairo-dock-dock-factory.c:1434
+#: ../src/gldit/cairo-dock-dock-factory.c:1432
 msgid "Sorry but the dock is locked"
 msgstr "Жао ми је, али, док је закључан;-("
 
@@ -1137,8 +1137,8 @@ msgstr "Десни док"
 msgid "Left dock"
 msgstr "Леви док"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:1672
-#: ../src/gldit/cairo-dock-dock-manager.c:1770
+#: ../src/gldit/cairo-dock-dock-manager.c:1695
+#: ../src/gldit/cairo-dock-dock-manager.c:1793
 msgid "Pop up the main dock"
 msgstr "Искакање главног дока"
 
@@ -1300,20 +1300,6 @@ msgstr "Да ли сте сигурни да желите обрисати те�
 #: ../src/gldit/cairo-dock-themes-manager.c:375
 msgid "Are you sure you want to delete these themes?"
 msgstr "Да ли сте сигурни да желите обрисати ове теме?"
-
-#: ../src/implementations/cairo-dock-glx.c:53
-msgid "This card is blacklisted due to a bug with your video drivers:"
-msgstr ""
-
-#: ../src/implementations/cairo-dock-glx.c:54
-msgid "Please have a look there:"
-msgstr ""
-
-#: ../src/implementations/cairo-dock-glx.c:373
-msgid ""
-"The OpenGL backend will be deactivated. Note that you can force this OpenGL "
-"backend by launching the dock with this command:"
-msgstr ""
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:582 ../data/messages:39
 #: ../data/messages:201
@@ -4358,8 +4344,9 @@ msgstr ""
 "икону терминала из траке задатака."
 
 #: ../data/messages:1049
-msgid "Prevent this launcher from stealing this application from taskbar?"
-msgstr "Онемогућити крађу из траке задатака овог покретача?"
+#, fuzzy
+msgid "Don't link the launcher with its window"
+msgstr "Направити везу указивача са иконом?"
 
 #: ../data/messages:1051
 msgid ""
@@ -4411,66 +4398,6 @@ msgstr ""
 
 #: ../data/messages:1084
 msgid ""
-"<b>New version: <span color='red'>GLX-Dock 3.0</span>!</b>\n"
-" - The <b>taskbar</b> has been greatly enhanced.\n"
-" - The <b>Log out</b> applet has been rewritten, now allows to switch "
-"users.\n"
-" - The <b>control of the dock from the keyboard</b> is now very powerful:\n"
-"   - many shortkeys have been added in different applets\n"
-"   - you can activate a launcher by pressing a shortkey + its number\n"
-"   - all shortkeys can now be managed in a single place in the configuration "
-"window.\n"
-" - The <b>Sound Menu</b> from Ubuntu has been integrated into the Sound-"
-"Control applet.\n"
-" - A new <b>Twitter applet</b> lets you tweet in one click.\n"
-" - A new applet to <b>inhibit the screensaver</b> in one click.\n"
-" - Separators are transparent to click in <b>'Panel'</b> mode\n"
-" - Cairo-Dock now uses <b>GTK3</b>, for a better integration in a Gnome "
-"desktop\n"
-" - Few additions to the DBus API.\n"
-" - It's possible to donate to support the project!"
-msgstr ""
-"b>Ново издање: <span color='red'>ГЛИкс-Док 3.0</span>!</b>\n"
-"- <b>трака стања</b> је доста побољшана.\n"
-"- <b>Одјава</b> програмче је прерађен, и сада омогућава промену корисника.\n"
-"- <b>Управљање доком уз помоћ тастатуре</b> сада је врло моћно:\n"
-"- многе пречице су додате разним програмчићима\n"
-"- Можете покренути покретач притиском на пречицу + његов број\n"
-"- сваком пречицом се сада може управљати са једног места у прозору "
-"поставки.\n"
-"- <b>Изборник звука</b> из Убунта је сада уграђен у програмче управљање "
-"звуком.\n"
-"- Ново <b>програмче Цвркутање</b> омогућава цвркутање на један клик "
-"(twiter).\n"
-"- Ново програмче <b>онемогућава чувар екрана</b> на један клик.\n"
-"- Одвајачи су провидни за клик у њих у <b>„Плоча“</b> начину рада\n"
-"- Каиро-док сада користи <b>ГТК3</b>, за бољу уградњу у Гном радну површ\n"
-"- Неколико додатака Дбус АПИ-ју.\n"
-"- Могуће је приложити пројекту ради подршке!"
-
-#: ../data/messages:1086
-msgid ""
-"<b>New version: <span color='red'>GLX-Dock 3.1</span>!</b>\n"
-" - Better integration in of Unity: support of the <b>Launcher API</b> and "
-"better support of <b>indicators</b>\n"
-" - All <b>configuration windows</b> have been merged into a single one.\n"
-" - Added <b>progress bars</b> in several applets and in the Dbus API\n"
-" - The <b>Music Player</b> applet can control players in the systray.\n"
-" - Icons of the <b>taskbar</b> can be separated from launchers or not\n"
-" - And as always ... various bug fixes and improvements :-)"
-msgstr ""
-"<b>Ново издање: <span color='red'>ГЛИкс-док 3.1</span>!</b>\n"
-" - Боља сарадња са подршка: за Унитијем <b>Покретач АПИ</b> и боља подршка "
-"за <b>указиваче</b>\n"
-" - Сви <b>прозори подешавања</b> Су утопљени у један.\n"
-" - Додате <b>траке напретка</b> у неколико програмчића у Дбас АПИ\n"
-" - <b>Музички пуштач</b> програмчић може управљати пуштачима у системској "
-"касети.\n"
-" - Иконе <b>траке задатакаr</b> могу бити раздвојене од покретача\n"
-" - И, као и увек, ... многа разна побољшања и поправак буба :-)"
-
-#: ../data/messages:1088
-msgid ""
 "<b>New version: <span color='red'>GLX-Dock 3.2</span>!</b>\n"
 " - Multi-screen support has been improved\n"
 " - New applet : Screenshot\n"
@@ -4492,3 +4419,90 @@ msgstr ""
 " - Додата подршка за све указиваче Јединства\n"
 " - Безбројне исправке буба и побољшања\n"
 " - Ако Вам се свиђа пројекат, молимо, приложите:-)"
+
+#: ../data/messages:1086
+msgid "<b>New version: <span color='red'>GLX-Dock 3.3</span>!</b>"
+msgstr ""
+
+#: ../data/messages:1088
+msgid "- Added support of logind in the Logout applet"
+msgstr ""
+
+#: ../data/messages:1090
+msgid "- Added support of the StartupNotification protocol"
+msgstr ""
+
+#: ../data/messages:1092
+msgid "- Upgraded the Dbus API to be even more powerful"
+msgstr ""
+
+#: ../data/messages:1094
+msgid "- A huge rewrite of the core using Objects"
+msgstr ""
+
+#: ../data/messages:1096
+msgid "- If you like the project, please donate :-)"
+msgstr ""
+
+#~ msgid ""
+#~ "<b>New version: <span color='red'>GLX-Dock 3.0</span>!</b>\n"
+#~ " - The <b>taskbar</b> has been greatly enhanced.\n"
+#~ " - The <b>Log out</b> applet has been rewritten, now allows to switch "
+#~ "users.\n"
+#~ " - The <b>control of the dock from the keyboard</b> is now very "
+#~ "powerful:\n"
+#~ "   - many shortkeys have been added in different applets\n"
+#~ "   - you can activate a launcher by pressing a shortkey + its number\n"
+#~ "   - all shortkeys can now be managed in a single place in the "
+#~ "configuration window.\n"
+#~ " - The <b>Sound Menu</b> from Ubuntu has been integrated into the Sound-"
+#~ "Control applet.\n"
+#~ " - A new <b>Twitter applet</b> lets you tweet in one click.\n"
+#~ " - A new applet to <b>inhibit the screensaver</b> in one click.\n"
+#~ " - Separators are transparent to click in <b>'Panel'</b> mode\n"
+#~ " - Cairo-Dock now uses <b>GTK3</b>, for a better integration in a Gnome "
+#~ "desktop\n"
+#~ " - Few additions to the DBus API.\n"
+#~ " - It's possible to donate to support the project!"
+#~ msgstr ""
+#~ "b>Ново издање: <span color='red'>ГЛИкс-Док 3.0</span>!</b>\n"
+#~ "- <b>трака стања</b> је доста побољшана.\n"
+#~ "- <b>Одјава</b> програмче је прерађен, и сада омогућава промену "
+#~ "корисника.\n"
+#~ "- <b>Управљање доком уз помоћ тастатуре</b> сада је врло моћно:\n"
+#~ "- многе пречице су додате разним програмчићима\n"
+#~ "- Можете покренути покретач притиском на пречицу + његов број\n"
+#~ "- сваком пречицом се сада може управљати са једног места у прозору "
+#~ "поставки.\n"
+#~ "- <b>Изборник звука</b> из Убунта је сада уграђен у програмче управљање "
+#~ "звуком.\n"
+#~ "- Ново <b>програмче Цвркутање</b> омогућава цвркутање на један клик "
+#~ "(twiter).\n"
+#~ "- Ново програмче <b>онемогућава чувар екрана</b> на један клик.\n"
+#~ "- Одвајачи су провидни за клик у њих у <b>„Плоча“</b> начину рада\n"
+#~ "- Каиро-док сада користи <b>ГТК3</b>, за бољу уградњу у Гном радну површ\n"
+#~ "- Неколико додатака Дбус АПИ-ју.\n"
+#~ "- Могуће је приложити пројекту ради подршке!"
+
+#~ msgid ""
+#~ "<b>New version: <span color='red'>GLX-Dock 3.1</span>!</b>\n"
+#~ " - Better integration in of Unity: support of the <b>Launcher API</b> and "
+#~ "better support of <b>indicators</b>\n"
+#~ " - All <b>configuration windows</b> have been merged into a single one.\n"
+#~ " - Added <b>progress bars</b> in several applets and in the Dbus API\n"
+#~ " - The <b>Music Player</b> applet can control players in the systray.\n"
+#~ " - Icons of the <b>taskbar</b> can be separated from launchers or not\n"
+#~ " - And as always ... various bug fixes and improvements :-)"
+#~ msgstr ""
+#~ "<b>Ново издање: <span color='red'>ГЛИкс-док 3.1</span>!</b>\n"
+#~ " - Боља сарадња са подршка: за Унитијем <b>Покретач АПИ</b> и боља "
+#~ "подршка за <b>указиваче</b>\n"
+#~ " - Сви <b>прозори подешавања</b> Су утопљени у један.\n"
+#~ " - Додате <b>траке напретка</b> у неколико програмчића у Дбас АПИ\n"
+#~ " - <b>Музички пуштач</b> програмчић може управљати пуштачима у системској "
+#~ "касети.\n"
+#~ " - Иконе <b>траке задатакаr</b> могу бити раздвојене од покретача\n"
+#~ " - И, као и увек, ... многа разна побољшања и поправак буба :-)"
+
+#~ msgid "Prevent this launcher from stealing this application from taskbar?"
+#~ msgstr "Онемогућити крађу из траке задатака овог покретача?"
