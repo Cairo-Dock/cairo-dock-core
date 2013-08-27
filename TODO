@@ -5,8 +5,8 @@
 For each new version:
 	* Bump dock's version (CMakeLists.txt - Core & Plug-ins)
 	* Check the link to third-party applets' website:
-		- src/cairo-dock-gui-commons.c:139:#define DISTANT_DIR "3.1.0"
-		- ../cairo-dock-plug-ins/Dbus/src/applet-dbus.c:55:#define DISTANT_DIR "3.1.0"
+		- src/cairo-dock-gui-commons.c:136:#define DISTANT_DIR "3.3.0"
+		- ../cairo-dock-plug-ins/Dbus/src/applet-dbus.c:55:#define DISTANT_DIR "3.3.0"
 	* Check the link to theme dir on the server:
 		- CMakeList.txt:134: set (CAIRO_DOCK_DISTANT_THEMES_DIR "themes3.1")
 	* Remove useless g_print
