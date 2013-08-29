@@ -63,9 +63,6 @@ callback image =
 #{When you press the shortcut, the dock will show itself at the potition of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
 raise shortcut = 
 
-#F-[Additional parameters]
-frame_extra =
-
 max_authorized_width = 0
 
 #F-[Sub-docks' visibility;@pkgdatadir@/icons/icon-subdock.png]
