@@ -79,7 +79,7 @@ static void _cairo_dock_unload_icon_theme (void);
 static void _on_icon_theme_changed (GtkIconTheme *pIconTheme, gpointer data);
 
 
-void gldi_icons_foreach (CairoDockForeachIconFunc pFunction, gpointer pUserData)
+void gldi_icons_foreach (GldiIconFunc pFunction, gpointer pUserData)
 {
 	gldi_icons_foreach_in_docks (pFunction, pUserData);
 	gldi_desklets_foreach_icons (pFunction, pUserData);
@@ -113,7 +113,7 @@ static void _hide_launcher_on_other_desktops (Icon *icon, int index)
 		}
 	}
 }
-static void _hide_icon_on_other_desktops (Icon *icon, G_GNUC_UNUSED GldiContainer *pContainer, gpointer data)
+static void _hide_icon_on_other_desktops (Icon *icon, gpointer data)
 {
 	if (GLDI_OBJECT_IS_USER_ICON (icon))
 	{
@@ -152,7 +152,7 @@ void cairo_dock_hide_show_launchers_on_other_desktops (void )  /// TODO: add a m
 	int index = iCurrentDesktop * g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY + iCurrentViewportX * g_desktopGeometry.iNbViewportY + iCurrentViewportY + 1;  // +1 car on commence a compter a partir de 1.
 	
 	// first detach what shouldn't be shown on this desktop
-	gldi_icons_foreach_in_docks ((CairoDockForeachIconFunc)_hide_icon_on_other_desktops, GINT_TO_POINTER (index));
+	gldi_icons_foreach_in_docks ((GldiIconFunc)_hide_icon_on_other_desktops, GINT_TO_POINTER (index));
 	
 	// then reattach what was eventually missing
 	Icon *icon;
@@ -789,7 +789,7 @@ static void _calculate_icons (G_GNUC_UNUSED const gchar *cDockName, CairoDock *p
 	cairo_dock_calculate_dock_icons (pDock);
 }
 
-static void _reload_one_label (Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer, G_GNUC_UNUSED CairoIconsParam *pLabels)
+static void _reload_one_label (Icon *pIcon, G_GNUC_UNUSED gpointer data)
 {
 	cairo_dock_load_icon_text (pIcon);
 	cairo_dock_load_icon_quickinfo (pIcon);
@@ -868,7 +868,7 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 	// labels
 	CairoIconsParam *pLabels = pIcons;
 	CairoIconsParam *pPrevLabels = pPrevIcons;
-	gldi_icons_foreach ((CairoDockForeachIconFunc) _reload_one_label, pLabels);
+	gldi_icons_foreach ((GldiIconFunc) _reload_one_label, NULL);
 	
 	if (pPrevLabels->iLabelSize != pLabels->iLabelSize)
 	{

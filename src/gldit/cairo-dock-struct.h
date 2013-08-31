@@ -467,8 +467,10 @@ typedef struct _GldiContainerManagerBackend GldiContainerManagerBackend;
 
 typedef struct _GldiGLManagerBackend GldiGLManagerBackend;
 
-typedef void (* _CairoDockForeachIconFunc) (Icon *icon, GldiContainer *pContainer, gpointer data);
-typedef _CairoDockForeachIconFunc CairoDockForeachIconFunc;
+typedef void (*_GldiIconFunc) (Icon *icon, gpointer data);
+typedef _GldiIconFunc GldiIconFunc;
+typedef gboolean (*_GldiIconRFunc) (Icon *icon, gpointer data);  // TRUE to continue
+typedef _GldiIconRFunc GldiIconRFunc;
 
 #if (GTK_MAJOR_VERSION < 3)
 #define GldiShape GdkBitmap

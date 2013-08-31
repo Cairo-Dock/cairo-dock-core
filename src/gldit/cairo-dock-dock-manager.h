@@ -187,7 +187,7 @@ void gldi_docks_foreach_root (GFunc pFunction, gpointer pUserData);
 *@param pFunction the action.
 *@param pUserData data passed to the callback.
 */
-void gldi_icons_foreach_in_docks (CairoDockForeachIconFunc pFunction, gpointer pUserData);
+void gldi_icons_foreach_in_docks (GldiIconFunc pFunction, gpointer pUserData);
 
 
 /** (Re)load all buffers of all icons in all docks.

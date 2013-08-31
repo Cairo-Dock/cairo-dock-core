@@ -29,34 +29,27 @@
 #include <glib/gstdio.h>  // g_mkdir/g_remove
 
 #include "config.h"
-#include "cairo-dock-config.h"
-#include "cairo-dock-draw.h"
-#include "cairo-dock-animations.h"
+#include "cairo-dock-animations.h"  // cairo_dock_trigger_icon_removal_from_dock
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-stack-icon-manager.h"
 #include "cairo-dock-separator-manager.h"
 #include "cairo-dock-applet-manager.h"
 #include "cairo-dock-class-icon-manager.h"
-#include "cairo-dock-application-facility.h"
 #include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-module-manager.h"
 #include "cairo-dock-module-instance-manager.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-facility.h"
-#include "cairo-dock-themes-manager.h"
-#include "cairo-dock-dialog-manager.h"
+#include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file
 #include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
 #include "cairo-dock-log.h"
 #include "cairo-dock-utils.h"  // cairo_dock_launch_command_sync
 #include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-class-manager.h"
-#include "cairo-dock-gui-factory.h"
-#include "cairo-dock-gui-manager.h"
 #include "cairo-dock-container.h"
-#include "cairo-dock-keyfile-utilities.h"
-#include "cairo-dock-backends-manager.h"
+#include "cairo-dock-dialog-factory.h"  // gldi_dialog_show_*
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-user-interaction.h"  // set_custom_icon_on_appli
@@ -948,14 +941,9 @@ static void _cairo_dock_set_custom_appli_icon (G_GNUC_UNUSED GtkMenuItem *pMenuI
 				myTaskbarParam.cOverwriteException = g_strjoinv (";", pExceptions);
 				cairo_dock_set_overwrite_exceptions (myTaskbarParam.cOverwriteException);
 				
-				GKeyFile *pKeyFile = cairo_dock_open_key_file (g_cConfFile);
-				if (pKeyFile != NULL)
-				{
-					g_key_file_set_string (pKeyFile, "TaskBar", "overwrite exception", myTaskbarParam.cOverwriteException);
-					cairo_dock_write_keys_to_conf_file (pKeyFile, g_cConfFile);
-					
-					g_key_file_free (pKeyFile);
-				}
+				cairo_dock_update_conf_file (g_cConfFile,
+					G_TYPE_STRING, "TaskBar", "overwrite exception", myTaskbarParam.cOverwriteException,
+					G_TYPE_INVALID);
 			}
 			g_strfreev (pExceptions);
 		}

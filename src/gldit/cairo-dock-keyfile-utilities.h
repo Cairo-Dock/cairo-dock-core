@@ -23,7 +23,7 @@
 
 #include <glib.h>
 #include "cairo-dock-struct.h"
-#include "cairo-dock-gui-factory.h"
+#include "cairo-dock-gui-factory.h"  // CairoDockGUIWidgetType
 G_BEGIN_DECLS
 
 

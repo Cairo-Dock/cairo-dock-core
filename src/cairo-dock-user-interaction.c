@@ -17,10 +17,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "cairo-dock-animations.h"
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-applications-manager.h"
-#include "cairo-dock-application-facility.h"
 #include "cairo-dock-launcher-manager.h"  // gldi_launcher_add_new
 #include "cairo-dock-utils.h"  // cairo_dock_launch_command_full
 #include "cairo-dock-stack-icon-manager.h"
@@ -28,20 +26,17 @@
 #include "cairo-dock-applet-manager.h"
 #include "cairo-dock-class-icon-manager.h"
 #include "cairo-dock-dock-facility.h"
-#include "cairo-dock-desklet-factory.h"
-#include "cairo-dock-dialog-factory.h"
+#include "cairo-dock-dialog-factory.h"  // gldi_dialog_show_temporary_with_default_icon
 #include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file
 #include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
 #include "cairo-dock-log.h"
-#include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-keybinder.h"
-#include "cairo-dock-animations.h"
+#include "cairo-dock-keybinder.h"  // cairo_dock_trigger_shortkey
+#include "cairo-dock-animations.h"  // gldi_icon_request_animation
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-gui-backend.h"
-#include "cairo-dock-dbus.h"
 #include "cairo-dock-user-interaction.h"
 
 extern gboolean g_bLocked;

@@ -37,11 +37,9 @@
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-surface-factory.h"
-#include "cairo-dock-animations.h"
-#include "cairo-dock-launcher-manager.h"
-#include "cairo-dock-gui-manager.h"
-#include "cairo-dock-applications-manager.h"
-#include "cairo-dock-windows-manager.h"
+#include "cairo-dock-animations.h"  // cairo_dock_launch_animation
+#include "cairo-dock-launcher-manager.h"  // cairo_dock_search_icon_s_path
+#include "cairo-dock-windows-manager.h"  // gldi_windows_get_active
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-dialog-factory.h"

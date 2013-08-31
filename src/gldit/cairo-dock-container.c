@@ -603,21 +603,25 @@ GldiShape *gldi_container_create_input_shape (GldiContainer *pContainer, int x, 
  /// INIT ///
 ////////////
 
+static CairoDockVisibility s_iPrevVisibility = CAIRO_DOCK_NB_VISI;
 static void _set_visibility (CairoDock *pDock, gpointer data)
 {
 	gldi_dock_set_visibility (pDock, GPOINTER_TO_INT (data));
 }
+static void _enable_fake_transparency (void)
+{
+	g_pFakeTransparencyDesktopBg = gldi_desktop_background_get (g_bUseOpenGL);
+	s_bNoComposite = TRUE;
+	s_iPrevVisibility = g_pMainDock->iVisibility;
+	gldi_docks_foreach_root ((GFunc)_set_visibility, GINT_TO_POINTER (CAIRO_DOCK_VISI_KEEP_BELOW));  // set the visibility to 'keep below'; that's the best compromise between accessibility and visual annoyance.
+}
 static void _on_composited_changed (GdkScreen *pScreen, G_GNUC_UNUSED gpointer data)
 {
-	static CairoDockVisibility s_iPrevVisibility = CAIRO_DOCK_NB_VISI;
 	if (!gdk_screen_is_composited (pScreen) || (g_bUseOpenGL && ! g_openglConfig.bAlphaAvailable))
 	{
-		g_pFakeTransparencyDesktopBg = gldi_desktop_background_get (g_bUseOpenGL);
-		s_bNoComposite = TRUE;
-		s_iPrevVisibility = g_pMainDock->iVisibility;
-		gldi_docks_foreach_root ((GFunc)_set_visibility, GINT_TO_POINTER (CAIRO_DOCK_VISI_KEEP_BELOW));  // set the visibility to 'keep below'; that's the best compromise between accessibility and visual annoyance.
+		_enable_fake_transparency ();
 	}
-	else
+	else  // composite is now ON => disable fake transparency
 	{
 		gldi_desktop_background_destroy (g_pFakeTransparencyDesktopBg);
 		s_bNoComposite = FALSE;
@@ -632,8 +636,9 @@ static gboolean _check_composite_delayed (G_GNUC_UNUSED gpointer data)
 	if (!gdk_screen_is_composited (pScreen) || (g_bUseOpenGL && ! g_openglConfig.bAlphaAvailable))  // no composite available -> load the desktop background
 	{
 		cd_message ("Composite is not available");
-		g_pFakeTransparencyDesktopBg = gldi_desktop_background_get (g_bUseOpenGL);  // we don't modify the visibility on startup; if it's the first launch, the user has to notice the problem. and if it's not, just respect his configuration.
-		s_bNoComposite = TRUE;
+		/**g_pFakeTransparencyDesktopBg = gldi_desktop_background_get (g_bUseOpenGL);  // we don't modify the visibility on startup; if it's the first launch, the user has to notice the problem. and if it's not, just respect his configuration.
+		s_bNoComposite = TRUE;*/
+		_enable_fake_transparency ();  // modify the visibility even on startup, because there is no configuration that is really usable except for 'keep-below'
 	}
 	g_signal_connect (pScreen, "composited-changed", G_CALLBACK (_on_composited_changed), NULL);
 	return FALSE;

@@ -35,6 +35,7 @@
 #include "cairo-dock-applications-manager.h"  // cairo_dock_foreach_appli_icon
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-icon-manager.h"
+#include "cairo-dock-icon-facility.h"  // cairo_dock_get_icon_container
 #include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-applet-manager.h"
 #include "cairo-dock-class-icon-manager.h"
@@ -569,21 +570,23 @@ static void load (void)
  /// RELOAD ///
 //////////////
 
-static void _set_indicator (Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer, gpointer data)
+static void _set_indicator (Icon *pIcon, gpointer data)
 {
 	pIcon->bHasIndicator = GPOINTER_TO_INT (data);
 }
-static void _reload_progress_bar (Icon *pIcon, GldiContainer *pContainer, G_GNUC_UNUSED gpointer data)
+static void _reload_progress_bar (Icon *pIcon, G_GNUC_UNUSED gpointer data)
 {
 	if (cairo_dock_get_icon_data_renderer (pIcon) != NULL)
 	{
+		GldiContainer *pContainer = cairo_dock_get_icon_container (pIcon);
 		cairo_dock_reload_data_renderer_on_icon (pIcon, pContainer);
 	}
 }
-static void _reload_multi_appli (Icon *icon, GldiContainer *pContainer, G_GNUC_UNUSED gpointer data)
+static void _reload_multi_appli (Icon *icon, G_GNUC_UNUSED gpointer data)
 {
 	if (CAIRO_DOCK_IS_MULTI_APPLI (icon))
 	{
+		GldiContainer *pContainer = cairo_dock_get_icon_container (icon);
 		cairo_dock_load_icon_image (icon, pContainer);
 		if (!myIndicatorsParam.bUseClassIndic)
 			cairo_dock_draw_subdock_content_on_icon (icon, CAIRO_DOCK (pContainer));
@@ -619,13 +622,13 @@ static void reload (CairoIndicatorsParam *pPrevIndicators, CairoIndicatorsParam 
 		
 		if (pPrevIndicators->bUseClassIndic != pIndicators->bUseClassIndic)  // on recharge les icones pointant sur une classe (qui sont dans le main dock).
 		{
-			gldi_icons_foreach_in_docks ((CairoDockForeachIconFunc)_reload_multi_appli, NULL);
+			gldi_icons_foreach_in_docks ((GldiIconFunc)_reload_multi_appli, NULL);
 		}
 	}
 	
 	if (pPrevIndicators->bDrawIndicatorOnAppli != pIndicators->bDrawIndicatorOnAppli)
 	{
-		cairo_dock_foreach_appli_icon ((CairoDockForeachIconFunc) _set_indicator, GINT_TO_POINTER (pIndicators->bDrawIndicatorOnAppli));
+		cairo_dock_foreach_appli_icon ((GldiIconFunc) _set_indicator, GINT_TO_POINTER (pIndicators->bDrawIndicatorOnAppli));
 	}
 	
 	if (pPrevIndicators->fBarColorStart[0] != pIndicators->fBarColorStart[0]
@@ -643,7 +646,7 @@ static void reload (CairoIndicatorsParam *pPrevIndicators, CairoIndicatorsParam 
 	|| pPrevIndicators->fBarColorOutline[2] != pIndicators->fBarColorOutline[2]
 	|| pPrevIndicators->fBarColorOutline[3] != pIndicators->fBarColorOutline[3])
 	{
-		gldi_icons_foreach ((CairoDockForeachIconFunc) _reload_progress_bar, NULL);
+		gldi_icons_foreach ((GldiIconFunc) _reload_progress_bar, NULL);
 	}
 	
 	gldi_docks_redraw_all_root ();

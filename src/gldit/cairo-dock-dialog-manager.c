@@ -28,17 +28,12 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-desklet-manager.h"
-#include "cairo-dock-dock-manager.h"
-#include "cairo-dock-dock-facility.h"
+#include "cairo-dock-dock-manager.h"  // myDockObjectMgr
+#include "cairo-dock-dock-facility.h"  // cairo_dock_is_hidden
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-surface-factory.h"
-#include "cairo-dock-animations.h"
-#include "cairo-dock-launcher-manager.h"
-#include "cairo-dock-gui-manager.h"
-#include "cairo-dock-application-facility.h"
-#include "cairo-dock-applications-manager.h"
+#include "cairo-dock-animations.h"  // for cairo_dock_is_hidden
 #include "cairo-dock-desktop-manager.h"
-#include "cairo-dock-windows-manager.h"
 #include "cairo-dock-dialog-factory.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-dialog-manager.h"

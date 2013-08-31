@@ -44,7 +44,6 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-draw.h"
-#include "cairo-dock-gui-manager.h"  // cairo_dock_trigger_refresh_launcher_gui
 #include "cairo-dock-animations.h"  // CairoDockHidingEffect
 #include "cairo-dock-icon-facility.h"
 

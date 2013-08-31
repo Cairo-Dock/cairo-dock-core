@@ -44,7 +44,6 @@
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-image-buffer.h"
-#include "cairo-dock-gui-manager.h"
 #include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-opengl.h"
 #define _MANAGER_DEF_
@@ -658,18 +657,18 @@ CairoDesklet *gldi_desklets_foreach (GldiDeskletForeachFunc pCallback, gpointer 
 
 static gboolean _foreach_icons_in_desklet (CairoDesklet *pDesklet, gpointer *data)
 {
-	CairoDockForeachIconFunc pFunction = data[0];
+	GldiIconFunc pFunction = data[0];
 	gpointer pUserData = data[1];
 	if (pDesklet->pIcon != NULL)
-		pFunction (pDesklet->pIcon, CAIRO_CONTAINER (pDesklet), pUserData);
+		pFunction (pDesklet->pIcon, pUserData);
 	GList *ic;
 	for (ic = pDesklet->icons; ic != NULL; ic = ic->next)
 	{
-		pFunction ((Icon*)ic->data, CAIRO_CONTAINER (pDesklet), pUserData);
+		pFunction ((Icon*)ic->data, pUserData);
 	}
 	return FALSE;
 }
-void gldi_desklets_foreach_icons (CairoDockForeachIconFunc pFunction, gpointer pUserData)
+void gldi_desklets_foreach_icons (GldiIconFunc pFunction, gpointer pUserData)
 {
 	gpointer data[2] = {pFunction, pUserData};
 	gldi_desklets_foreach ((GldiDeskletForeachFunc) _foreach_icons_in_desklet, data);

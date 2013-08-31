@@ -30,12 +30,11 @@
 #include "cairo-dock-desklet-manager.h"  // CAIRO_CONTAINER_IS_OPENGL
 #include "cairo-dock-dialog-manager.h"  // gldi_dialogs_replace_all
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-applications-manager.h"
+#include "cairo-dock-applications-manager.h"  // myTaskbarParam.cAnimationOnDemandsAttention
 #include "cairo-dock-dock-visibility.h"  // gldi_dock_search_overlapping_window
 #include "cairo-dock-log.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-container.h"
-#include "cairo-dock-overlay.h"
 #include "cairo-dock-animations.h"
 
 extern gboolean g_bUseOpenGL;

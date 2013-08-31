@@ -23,7 +23,7 @@
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
-#include "cairo-dock-icon-manager.h"  // CairoDockForeachIconFunc
+#include "cairo-dock-icon-factory.h"  // CairoDockIconGroup
 G_BEGIN_DECLS
 
 

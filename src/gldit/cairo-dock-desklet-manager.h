@@ -87,7 +87,7 @@ CairoDesklet *gldi_desklets_foreach (GldiDeskletForeachFunc pCallback, gpointer 
 *@param pFunction the action.
 *@param pUserData data passed to the callback.
 */
-void gldi_desklets_foreach_icons (CairoDockForeachIconFunc pFunction, gpointer pUserData);
+void gldi_desklets_foreach_icons (GldiIconFunc pFunction, gpointer pUserData);
 
 
 /** Make all desklets visible. Their accessibility is set to #CAIRO_DESKLET_NORMAL. 

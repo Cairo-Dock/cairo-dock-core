@@ -112,7 +112,7 @@ typedef enum {
 *@param pFunction the action.
 *@param pUserData data passed to the callback.
 */
-void gldi_icons_foreach (CairoDockForeachIconFunc pFunction, gpointer pUserData);
+void gldi_icons_foreach (GldiIconFunc pFunction, gpointer pUserData);
 
 
 void cairo_dock_hide_show_launchers_on_other_desktops (void);

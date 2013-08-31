@@ -28,9 +28,6 @@
 #include <cairo.h>
 
 #include "gldi-config.h"
-#include "cairo-dock-applications-manager.h"
-#include "cairo-dock-application-facility.h"
-#include "cairo-dock-class-manager.h"
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-icon-factory.h"
@@ -52,7 +49,6 @@
 #include "cairo-dock-animations.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-keybinder.h"
-#include "cairo-dock-gui-manager.h"
 #include "cairo-dock-indicator-manager.h"  // myIndicatorsParam.bUseClassIndic
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-opengl.h"
@@ -360,17 +356,17 @@ void gldi_docks_foreach_root (GFunc pFunction, gpointer data)
 
 static void _gldi_icons_foreach_in_dock (G_GNUC_UNUSED gchar *cDockName, CairoDock *pDock, gpointer *data)
 {
-	CairoDockForeachIconFunc pFunction = data[0];
+	GldiIconFunc pFunction = data[0];
 	gpointer pUserData = data[1];
 	GList *ic = pDock->icons, *next_ic;
 	while (ic != NULL)
 	{
 		next_ic = ic->next;  // the function below may remove the current icon
-		pFunction ((Icon*)ic->data, CAIRO_CONTAINER (pDock), pUserData);
+		pFunction ((Icon*)ic->data, pUserData);
 		ic = next_ic;
 	}
 }
-void gldi_icons_foreach_in_docks (CairoDockForeachIconFunc pFunction, gpointer pUserData)
+void gldi_icons_foreach_in_docks (GldiIconFunc pFunction, gpointer pUserData)
 {
 	gpointer data[2] = {pFunction, pUserData};
 	g_hash_table_foreach (s_hDocksTable, (GHFunc) _gldi_icons_foreach_in_dock, data);

@@ -46,7 +46,6 @@
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-animations.h"
-#include "cairo-dock-gui-manager.h"
 #include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-desklet-factory.h"
