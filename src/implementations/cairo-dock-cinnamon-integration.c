@@ -70,7 +70,7 @@ static gboolean present_expo (void)
 
 static gboolean present_class (const gchar *cClass)
 {
-	cd_debug ("%s (%s)", __func__, cClass);
+	g_print ("%s (%s)\n", __func__, cClass);
 	GList *pIcons = (GList*)cairo_dock_list_existing_appli_with_class (cClass);
 	if (pIcons == NULL)
 		return FALSE;
@@ -82,25 +82,26 @@ static gboolean present_class (const gchar *cClass)
 		int iNumDesktop, iViewPortX, iViewPortY;
 		gldi_desktop_get_current (&iNumDesktop, &iViewPortX, &iViewPortY);
 		int iWorkspace = iNumDesktop * g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY + iViewPortX + iViewPortY * g_desktopGeometry.iNbViewportX;
-		/// Note: there is actually a bug in Cinnamon 1.4, in workspace.js in '_onCloneSelected': 'wsIndex' should be let undefined, because here we switch to a window that is on a different workspace.
 		gchar *code = g_strdup_printf ("Main.overview.show(); \
 		let windows = global.get_window_actors(); \
-		let ws = Main.overview._viewSelector._workspacesDisplay.workspacesView._workspaces[%d]; \
-		for (let i = 0; i < windows.length; i++) { \
+		let ws = Main.overview.workspacesView._workspaces[%d]._monitors[0]; \
+		for (let i = 0; i < windows.length; i++) \
+		{ \
 			let win = windows[i]; \
 			let metaWin = win.get_meta_window(); \
-			let index = ws._lookupIndex (metaWin);  \
+			let index = ws._lookupIndex(metaWin); \
 			if (metaWin.get_wm_class() == '%s') \
 				{ if (index == -1) ws._addWindowClone(win); } \
-			else \
-				{ if (index != -1) { let clone = ws._windows[index]; ws._windows.splice(index, 1); ws._windowOverlays.splice(index, 1); clone.destroy(); } }\
+				else \
+				{ if (index != -1) { let clone = ws._windows[index]; ws._windows.splice(index, 1);clone.destroy(); } \
+			} \
 		}", iWorkspace, cWmClass);
+		g_print ("eval(%s)\n", code);
 		bSuccess = _eval (code);
 		g_free (code);
 	}
 	return bSuccess;
 }
-
 
 static void _register_cinnamon_backend (void)
 {
@@ -124,7 +125,7 @@ static void _on_cinnamon_owner_changed (G_GNUC_UNUSED const gchar *cName, gboole
 {
 	cd_debug ("Cinnamon is on the bus (%d)", bOwned);
 	
-	if (bOwned)  // set up the proxies
+	if (bOwned)  // set up the proxy
 	{
 		g_return_if_fail (s_pProxy == NULL);
 		
