@@ -40,7 +40,7 @@
 #include "cairo-dock-module-instance-manager.h"  // gldi_module_instance_reload
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-icon-facility.h"
-#include "cairo-dock-applications-manager.h"
+#include "cairo-dock-applications-manager.h"  // myTaskbarParam.bHideVisibleApplis
 #include "cairo-dock-stack-icon-manager.h"
 #include "cairo-dock-separator-manager.h"
 #include "cairo-dock-class-icon-manager.h"
@@ -55,9 +55,8 @@
 #include "cairo-dock-dock-visibility.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-flying-container.h"
-#include "cairo-dock-animations.h"
 #include "cairo-dock-backends-manager.h"
-#include "cairo-dock-class-manager.h"
+#include "cairo-dock-class-manager.h"  // cairo_dock_check_class_subdock_is_empty
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-windows-manager.h"  // gldi_windows_get_active
 #include "cairo-dock-data-renderer.h"  // cairo_dock_refresh_data_renderer
@@ -292,7 +291,7 @@ static gboolean _cairo_dock_show_sub_dock_delayed (CairoDock *pDock)
 
 	return FALSE;
 }
-static void _search_icon (Icon *icon, G_GNUC_UNUSED GldiContainer *pContainer, gpointer *data)
+static void _search_icon (Icon *icon, gpointer *data)
 {
 	if (icon == data[0])
 		data[1] = icon;
@@ -300,7 +299,7 @@ static void _search_icon (Icon *icon, G_GNUC_UNUSED GldiContainer *pContainer, g
 static gboolean _cairo_dock_action_on_drag_hover (Icon *pIcon)
 {
 	gpointer data[2] = {pIcon, NULL};
-	gldi_icons_foreach_in_docks ((CairoDockForeachIconFunc)_search_icon, data);  // on verifie que l'icone ne s'est pas faite effacee entre-temps.
+	gldi_icons_foreach_in_docks ((GldiIconFunc)_search_icon, data);  // on verifie que l'icone ne s'est pas faite effacee entre-temps.
 	pIcon = data[1];
 	if (pIcon && pIcon->iface.action_on_drag_hover)
 		pIcon->iface.action_on_drag_hover (pIcon);
@@ -1796,27 +1795,30 @@ static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 	while (ic != NULL)
 	{
 		pIcon = ic->data;
-		next_ic = ic->next;
-		if (pIcon->fInsertRemoveFactor == (gdouble)0.05)
+		if (pIcon->fInsertRemoveFactor == (gdouble)0.05)  // end of removal animation -> the icon will be detached (at least)
 		{
+			GList *prev_ic = ic->prev;
+			Icon *pPrevIcon = (prev_ic ? prev_ic->data : NULL);
+			if (GLDI_OBJECT_IS_AUTO_SEPARATOR_ICON (pPrevIcon))  // this icon will maybe disappear with pIcon, so take the previous one
+				prev_ic = prev_ic->prev;
+			
 			gboolean bIsAppli = CAIRO_DOCK_IS_NORMAL_APPLI (pIcon);
-			if (bIsAppli)  // c'est une icone d'appli non vieille qui disparait, elle s'est probablement cachee => on la detache juste.
+			if (bIsAppli)  // it's a valid appli icon that hides itself (for instance, because the window was unminimized with bHideVisibleApplis=true) => just detach it
 			{
-				cd_message ("cette (%s) appli est toujours valide, on la detache juste", pIcon->cName);
+				cd_message ("cette appli (%s) est toujours valide, on la detache juste", pIcon->cName);
 				pIcon->fInsertRemoveFactor = 0.;  // on le fait avant le reload, sinon l'icone n'est pas rechargee.
 				if (!pIcon->pAppli->bIsHidden && myTaskbarParam.bHideVisibleApplis)  // on lui remet l'image normale qui servira d'embleme lorsque l'icone sera inseree a nouveau dans le dock.
 					cairo_dock_reload_icon_image (pIcon, CAIRO_CONTAINER (pDock));
-				pDock = cairo_dock_detach_appli (pIcon);
+				pDock = gldi_appli_icon_detach (pIcon);
 				if (pDock == NULL)  // the dock has been destroyed (empty class sub-dock).
 				{
-					gldi_object_unref (GLDI_OBJECT (pIcon));
 					return FALSE;
 				}
 			}
 			else
 			{
 				cd_message (" - %s va etre supprimee", pIcon->cName);
-				/// TODO: do that in the 'reset_object'...
+				
 				gldi_icon_detach (pIcon);
 				if (pIcon->cClass != NULL && pDock == cairo_dock_get_class_subdock (pIcon->cClass))  // appli icon in its class sub-dock => destroy the class sub-dock if it becomes empty (we don't want an empty sub-dock).
 				{
@@ -1830,15 +1832,20 @@ static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 				
 				gldi_object_delete (GLDI_OBJECT(pIcon));
 			}
+			next_ic = (prev_ic ? prev_ic->next : pDock->icons);
 		}
-		else if (pIcon->fInsertRemoveFactor == (gdouble)-0.05)
+		else
 		{
-			pIcon->fInsertRemoveFactor = 0;  // cela n'arrete pas l'animation, qui peut se poursuivre meme apres que l'icone ait atteint sa taille maximale.
-			bRecalculateIcons = TRUE;
-		}
-		else if (pIcon->fInsertRemoveFactor != 0)
-		{
-			bRecalculateIcons = TRUE;
+			if (pIcon->fInsertRemoveFactor == (gdouble)-0.05)  // end of appearance animation
+			{
+				pIcon->fInsertRemoveFactor = 0;  // cela n'arrete pas l'animation, qui peut se poursuivre meme apres que l'icone ait atteint sa taille maximale.
+				bRecalculateIcons = TRUE;
+			}
+			else if (pIcon->fInsertRemoveFactor != 0)  // currently (dis)appearing
+			{
+				bRecalculateIcons = TRUE;
+			}
+			next_ic = ic->next;
 		}
 		ic = next_ic;
 	}
@@ -2130,7 +2137,7 @@ static void _detach_icon (GldiContainer *pContainer, Icon *icon)
 	if (pDock->iRefCount == 0 && pDock->icons == NULL && ! pDock->bIsMainDock)  // on supprime les docks principaux vides.
 	{
 		if (pDock->iSidDestroyEmptyDock == 0)
-			pDock->iSidDestroyEmptyDock = g_idle_add ((GSourceFunc) _destroy_empty_dock, pDock);  // on ne passe pas le nom du dock en parametre, car le dock peut se faire renommer (improbable, mais bon).
+			pDock->iSidDestroyEmptyDock = g_idle_add ((GSourceFunc) _destroy_empty_dock, pDock);
 	}
 	else
 	{
