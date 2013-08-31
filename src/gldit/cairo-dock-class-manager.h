@@ -21,8 +21,6 @@
 #ifndef __CAIRO_DOCK_CLASS_MANAGER__
 #define  __CAIRO_DOCK_CLASS_MANAGER__
 
-#include <X11/Xlib.h>
-
 #include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
@@ -72,12 +70,6 @@ CairoDock *cairo_dock_get_class_subdock (const gchar *cClass);
 
 CairoDock* cairo_dock_create_class_subdock (const gchar *cClass, CairoDock *pParentDock);
 
-/*
-* Enregistre une icone de lanceur/applet dans sa classe. N'inhinibe pas la classe.
-* @param pIcon l'inhibiteur.
-* @return TRUE si l'enregistrement s'est effectue correctement ou si l'icone etait deja enregistree, FALSE sinon.
-*/
-//gboolean cairo_dock_add_inhibitor_to_class (const gchar *cClass, Icon *pIcon);
 /*
 * Enregistre une icone d'appli dans sa classe. Ne fais rien aux inhibiteurs.
 * @param pIcon l'icone de l'appli.
@@ -169,27 +161,14 @@ void cairo_dock_reset_class_table (void);
 */
 cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, int iWidth, int ifHeight);
 
-/*
-* Met a jour les inhibiteurs controlant une appli donnee pour les faire reagir au changement de visibilite de la fenetre, de la meme maniere que si l'icone etait dans la barre des taches.
-* @param cClass la classe.
-* @param pAppli l'appli.
-* @param bIsHidden TRUE ssi a fenetre vient de se cacher.
-*/
-void cairo_dock_update_visibility_on_inhibitors (const gchar *cClass, GldiWindowActor *pAppli, gboolean bIsHidden);
-/*
-* Met a jour les inhibiteurs controlant une appli donnee pour les faire reagir a la prise d'activite de la fenetre, de la meme maniere que si l'icone etait dans la barre des taches.
-* @param cClass la classe.
-* @param pAppli l'appli.
-*/
-void cairo_dock_update_activity_on_inhibitors (const gchar *cClass, GldiWindowActor *pAppli);
-/*
-* Met a jour les inhibiteurs controlant une appli donnee pour les redessiner en mode normal lors de la perte d'activite de la fenetre.
-* @param cClass la classe.
-* @param pAppli l'appli.
-*/
-void cairo_dock_update_inactivity_on_inhibitors (const gchar *cClass, GldiWindowActor *pAppli);
 
-void cairo_dock_update_name_on_inhibitors (const gchar *cClass, GldiWindowActor *pAppli, gchar *cNewName);
+/** Run a function on each Icon that inhibites a given window.
+*@param actor the window actor
+*@param callback function to be called
+*@param data data passed to the callback
+*/
+void gldi_window_foreach_inhibitor (GldiWindowActor *actor, GldiIconRFunc callback, gpointer data);
+
 
 Icon *cairo_dock_get_classmate (Icon *pIcon);
 

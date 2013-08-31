@@ -41,7 +41,7 @@ extern CairoDock *g_pMainDock;
 extern CairoDockHidingEffect *g_pHidingBackend;  // cairo_dock_is_hidden
 extern GldiContainer *g_pPrimaryContainer;
 
-static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, gboolean bForceDemand, Icon *pHiddenIcon)
+static void _gldi_appli_icon_demands_attention (Icon *icon, CairoDock *pDock, gboolean bForceDemand, Icon *pHiddenIcon)
 {
 	cd_debug ("%s (%s, force:%d)", __func__, icon->cName, bForceDemand);
 	if (CAIRO_DOCK_IS_APPLET (icon))  // on considere qu'une applet prenant le controle d'une icone d'appli dispose de bien meilleurs moyens pour interagir avec l'appli que la barre des taches.
@@ -91,7 +91,7 @@ static void _cairo_dock_appli_demands_attention (Icon *icon, CairoDock *pDock, g
 		gldi_icon_request_attention (icon, myTaskbarParam.cAnimationOnDemandsAttention, 10000);  // animation de 2-3 heures.
 	}
 }
-void cairo_dock_appli_demands_attention (Icon *icon)
+void gldi_appli_icon_demands_attention (Icon *icon)
 {
 	cd_debug ("%s (%s, %p)", __func__, icon->cName, cairo_dock_get_icon_container(icon));
 	if (icon->pAppli == gldi_windows_get_active())  // apparemment ce cas existe, et conduit a ne pas pouvoir stopper l'animation de demande d'attention facilement.
@@ -109,20 +109,20 @@ void cairo_dock_appli_demands_attention (Icon *icon)
 		{
 			pParentDock = CAIRO_DOCK(cairo_dock_get_icon_container (pInhibitorIcon));
 			if (pParentDock != NULL)  // if the inhibitor is hidden (detached), there is no way to remember what should be its animation, so just forget it (we could fix it when inserting the icon back into a container, by checking if its appli is demanding the attention)
-				_cairo_dock_appli_demands_attention (pInhibitorIcon, pParentDock, bForceDemand, NULL);
+				_gldi_appli_icon_demands_attention (pInhibitorIcon, pParentDock, bForceDemand, NULL);
 		}
 		else if (bForceDemand)  // appli pas affichee, mais on veut tout de meme etre notifie.
 		{
 			Icon *pOneIcon = gldi_icons_get_any_without_dialog ();  // on prend une icone dans le main dock.
 			if (pOneIcon != NULL)
-				_cairo_dock_appli_demands_attention (pOneIcon, g_pMainDock, bForceDemand, icon);
+				_gldi_appli_icon_demands_attention (pOneIcon, g_pMainDock, bForceDemand, icon);
 		}
 	}
 	else  // appli dans un dock.
-		_cairo_dock_appli_demands_attention (icon, pParentDock, bForceDemand, NULL);
+		_gldi_appli_icon_demands_attention (icon, pParentDock, bForceDemand, NULL);
 }
 
-static void _cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoDock *pDock)
+static void _gldi_appli_icon_stop_demanding_attention (Icon *icon, CairoDock *pDock)
 {
 	if (CAIRO_DOCK_IS_APPLET (icon))  // cf remarque plus haut.
 		return ;
@@ -136,7 +136,7 @@ static void _cairo_dock_appli_stops_demanding_attention (Icon *icon, CairoDock *
 	if (pDock->iRefCount == 0 && pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && ! pDock->bIsBelow && ! pDock->container.bInside)
 		cairo_dock_pop_down (pDock);
 }
-void cairo_dock_appli_stops_demanding_attention (Icon *icon)
+void gldi_appli_icon_stop_demanding_attention (Icon *icon)
 {
 	CairoDock *pParentDock = CAIRO_DOCK(cairo_dock_get_icon_container (icon));
 	if (pParentDock == NULL)  // inhibited
@@ -146,15 +146,15 @@ void cairo_dock_appli_stops_demanding_attention (Icon *icon)
 		{
 			pParentDock = CAIRO_DOCK(cairo_dock_get_icon_container (pInhibitorIcon));
 			if (pParentDock != NULL)
-				_cairo_dock_appli_stops_demanding_attention (pInhibitorIcon, pParentDock);
+				_gldi_appli_icon_stop_demanding_attention (pInhibitorIcon, pParentDock);
 		}
 	}
 	else
-		_cairo_dock_appli_stops_demanding_attention (icon, pParentDock);
+		_gldi_appli_icon_stop_demanding_attention (icon, pParentDock);
 }
 
 
-void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock)
+void gldi_appli_icon_animate_on_active (Icon *icon, CairoDock *pParentDock)
 {
 	g_return_if_fail (pParentDock != NULL);
 	if (! cairo_dock_icon_is_being_inserted_or_removed (icon))  // sinon on laisse l'animation actuelle.
@@ -270,7 +270,7 @@ static CairoDock *_get_parent_dock_for_appli (Icon *icon, CairoDock *pMainDock)
 	return pParentDock;
 }
 
-CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gboolean bAnimate)
+CairoDock *gldi_appli_icon_insert_in_dock (Icon *icon, CairoDock *pMainDock, gboolean bAnimate)
 {
 	if (! myTaskbarParam.bShowAppli)
 		return NULL;
@@ -289,7 +289,7 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 	//\_________________ On gere le filtre 'applis minimisees seulement'.
 	if (!icon->pAppli->bIsHidden && myTaskbarParam.bHideVisibleApplis)
 	{
-		cairo_dock_reserve_one_icon_geometry_for_window_manager (icon->pAppli, icon, pMainDock);  // on reserve la position de l'icone dans le dock pour que l'effet de minimisation puisse viser la bonne position avant que l'icone ne soit effectivement dans le dock.
+		gldi_appli_reserve_geometry_for_window_manager (icon->pAppli, icon, pMainDock);  // on reserve la position de l'icone dans le dock pour que l'effet de minimisation puisse viser la bonne position avant que l'icone ne soit effectivement dans le dock.
 		return NULL;
 	}
 	
@@ -322,7 +322,7 @@ CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gb
 	return pParentDock;
 }
 
-CairoDock * cairo_dock_detach_appli (Icon *pIcon)
+CairoDock * gldi_appli_icon_detach (Icon *pIcon)
 {
 	cd_debug ("%s (%s)", __func__, pIcon->cName);
 	CairoDock *pParentDock = CAIRO_DOCK(cairo_dock_get_icon_container (pIcon));
@@ -343,7 +343,7 @@ CairoDock * cairo_dock_detach_appli (Icon *pIcon)
 #define x_icon_geometry(icon, pDock) (pDock->container.iWindowPositionX + icon->fXAtRest + (pDock->container.iWidth - pDock->iActiveWidth) * pDock->fAlign + (pDock->iActiveWidth - pDock->fFlatDockWidth) / 2)
 ///#define y_icon_geometry(icon, pDock) (pDock->container.iWindowPositionY + icon->fDrawY - icon->fHeight * myIconsParam.fAmplitude * pDock->fMagnitudeMax)
 #define y_icon_geometry(icon, pDock) (pDock->container.iWindowPositionY + icon->fDrawY)
-void  cairo_dock_set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock *pDock)
+void gldi_appli_icon_set_geometry_for_window_manager (Icon *icon, CairoDock *pDock)
 {
 	//g_print ("%s (%s)\n", __func__, icon->cName);
 	int iX, iY, iWidth, iHeight;
@@ -360,7 +360,7 @@ void  cairo_dock_set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock
 		gldi_window_set_thumbnail_area (icon->pAppli, iY - dh, iX, iHeight, iWidth);
 }
 
-void cairo_dock_reserve_one_icon_geometry_for_window_manager (GldiWindowActor *pAppli, Icon *icon, CairoDock *pMainDock)
+void gldi_appli_reserve_geometry_for_window_manager (GldiWindowActor *pAppli, Icon *icon, CairoDock *pMainDock)
 {
 	if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_get_icon_container(icon) == NULL)  // a detached appli
 	{
@@ -452,7 +452,7 @@ void cairo_dock_reserve_one_icon_geometry_for_window_manager (GldiWindowActor *p
 }
 
 
-const CairoDockImageBuffer *cairo_dock_appli_get_image_buffer (Icon *pIcon)
+const CairoDockImageBuffer *gldi_appli_icon_get_image_buffer (Icon *pIcon)
 {
 	static CairoDockImageBuffer image;
 	
@@ -499,4 +499,65 @@ const CairoDockImageBuffer *cairo_dock_appli_get_image_buffer (Icon *pIcon)
 	{
 		return NULL;
 	}
+}
+
+
+static gboolean _set_inhibitor_name (Icon *pInhibitorIcon, const gchar *cNewName)
+{
+	if (! CAIRO_DOCK_ICON_TYPE_IS_APPLET (pInhibitorIcon))
+	{
+		cd_debug (" %s change son nom en %s", pInhibitorIcon->cName, cNewName);
+		if (pInhibitorIcon->cInitialName == NULL)
+		{
+			pInhibitorIcon->cInitialName = pInhibitorIcon->cName;
+			cd_debug ("pInhibitorIcon->cInitialName <- %s", pInhibitorIcon->cInitialName);
+		}
+		else
+			g_free (pInhibitorIcon->cName);
+		pInhibitorIcon->cName = NULL;
+		
+		gldi_icon_set_name (pInhibitorIcon, (cNewName != NULL ? cNewName : pInhibitorIcon->cInitialName));
+	}
+	cairo_dock_redraw_icon (pInhibitorIcon);
+	return TRUE;  // continue
+}
+void gldi_window_inhibitors_set_name (GldiWindowActor *actor, const gchar *cNewName)
+{
+	gldi_window_foreach_inhibitor (actor, (GldiIconRFunc)_set_inhibitor_name, (gpointer)cNewName);
+}
+
+
+static gboolean _set_active_state (Icon *pInhibitorIcon, gpointer data)
+{
+	gboolean bActive = GPOINTER_TO_INT(data);
+	if (bActive)
+	{
+		CairoDock *pParentDock = CAIRO_DOCK(cairo_dock_get_icon_container (pInhibitorIcon));
+		if (pParentDock != NULL)
+			gldi_appli_icon_animate_on_active (pInhibitorIcon, pParentDock);
+	}
+	else
+	{
+		cairo_dock_redraw_icon (pInhibitorIcon);
+	}
+	return TRUE;  // continue
+}
+void gldi_window_inhibitors_set_active_state (GldiWindowActor *actor, gboolean bActive)
+{
+	gldi_window_foreach_inhibitor (actor, (GldiIconRFunc)_set_active_state, GINT_TO_POINTER(bActive));
+}
+
+
+static gboolean _set_hidden_state (Icon *pInhibitorIcon, G_GNUC_UNUSED gpointer data)
+{
+	if (! CAIRO_DOCK_ICON_TYPE_IS_APPLET (pInhibitorIcon) && myTaskbarParam.fVisibleAppliAlpha != 0)
+	{
+		pInhibitorIcon->fAlpha = 1;  // on triche un peu.
+		cairo_dock_redraw_icon (pInhibitorIcon);
+	}
+	return TRUE;  // continue
+}
+void gldi_window_inhibitors_set_hidden_state (GldiWindowActor *actor, gboolean bIsHidden)
+{
+	gldi_window_foreach_inhibitor (actor, (GldiIconRFunc)_set_hidden_state, GINT_TO_POINTER(bIsHidden));
 }

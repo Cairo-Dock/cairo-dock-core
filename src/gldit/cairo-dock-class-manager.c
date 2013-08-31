@@ -292,7 +292,7 @@ static void _cairo_dock_set_same_indicator_on_sub_dock (Icon *pInhibhatorIcon)
 	}
 }
 
-static GldiWindowActor *_cairo_dock_detach_appli_of_class (const gchar *cClass)
+static GldiWindowActor *_gldi_appli_icon_detach_of_class (const gchar *cClass)
 {
 	g_return_val_if_fail (cClass != NULL, 0);
 	
@@ -355,7 +355,7 @@ gboolean cairo_dock_inhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
 	// if launchers are mixed with applis, steal applis icons.
 	if (!myTaskbarParam.bMixLauncherAppli)
 		return TRUE;
-	GldiWindowActor *pFirstFoundActor = _cairo_dock_detach_appli_of_class (cClass);  // detach existing applis, and then retach them to the inhibitor.
+	GldiWindowActor *pFirstFoundActor = _gldi_appli_icon_detach_of_class (cClass);  // detach existing applis, and then retach them to the inhibitor.
 	if (pInhibitorIcon != NULL)
 	{
 		// inhibitor takes control of the first existing appli of the class.
@@ -372,7 +372,7 @@ gboolean cairo_dock_inhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
 			pIcon = pElement->data;
 			cd_debug (" une appli detachee (%s)", pIcon->cName);
 			if (pIcon->pAppli != pFirstFoundActor && cairo_dock_get_icon_container (pIcon) == NULL)  // s'est faite detacher et doit etre rattachee.
-				cairo_dock_insert_appli_in_dock (pIcon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);
+				gldi_appli_icon_insert_in_dock (pIcon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);
 		}
 	}
 	
@@ -430,7 +430,7 @@ gboolean cairo_dock_prevent_inhibited_class (Icon *pIcon)
 						if (pInhibatorDock != NULL)
 						{
 							//g_print ("on positionne la miniature sur l'inhibiteur %s\n", pInhibitorIcon->cName);
-							cairo_dock_set_one_icon_geometry_for_window_manager (pInhibitorIcon, pInhibatorDock);
+							gldi_appli_icon_set_geometry_for_window_manager (pInhibitorIcon, pInhibatorDock);
 						}
 					}
 					//\______________ On met a jour l'etiquette de l'inhibiteur.
@@ -452,26 +452,22 @@ gboolean cairo_dock_prevent_inhibited_class (Icon *pIcon)
 }
 
 
-static gboolean _cairo_dock_remove_icon_from_class (Icon *pInhibitorIcon)
+static void _cairo_dock_remove_icon_from_class (Icon *pInhibitorIcon)
 {
-	g_return_val_if_fail (pInhibitorIcon != NULL, FALSE);
+	g_return_if_fail (pInhibitorIcon != NULL);
 	cd_message ("%s (%s)", __func__, pInhibitorIcon->cClass);
 	
-	gboolean bStillInhibited = FALSE;
 	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (pInhibitorIcon->cClass);
 	if (pClassAppli != NULL)
 	{
 		pClassAppli->pIconsOfClass = g_list_remove (pClassAppli->pIconsOfClass, pInhibitorIcon);
-		bStillInhibited = (pClassAppli->pIconsOfClass != NULL);  // don't delete the class even if it's totally empty, as we don't want to read the .desktop file again if it appears again.
 	}
-	return bStillInhibited;
 }
 
 void cairo_dock_deinhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
 {
 	cd_message ("%s (%s)", __func__, cClass);
-	gboolean bStillInhibited = _cairo_dock_remove_icon_from_class (pInhibitorIcon);
-	cd_debug (" bStillInhibited : %d", bStillInhibited);
+	_cairo_dock_remove_icon_from_class (pInhibitorIcon);
 	
 	if (pInhibitorIcon != NULL && pInhibitorIcon->pSubDock != NULL && pInhibitorIcon->pSubDock == cairo_dock_get_class_subdock (cClass))  // the launcher is controlling several appli icons, place them back in the taskbar.
 	{
@@ -494,7 +490,7 @@ void cairo_dock_deinhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
 		for (ic = icons; ic != NULL; ic = ic->next)
 		{
 			pAppliIcon = ic->data;
-			cairo_dock_insert_appli_in_dock (pAppliIcon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);
+			gldi_appli_icon_insert_in_dock (pAppliIcon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);
 		}
 		g_list_free (icons);
 		
@@ -517,7 +513,7 @@ void cairo_dock_deinhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
 				pIcon->fInsertRemoveFactor = 0;
 				pIcon->fScale = 1.;
 				/**pParentDock = */
-				cairo_dock_insert_appli_in_dock (pIcon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);
+				gldi_appli_icon_insert_in_dock (pIcon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);
 				///bNeedsRedraw = (pParentDock != NULL && pParentDock->bIsMainDock);
 			}
 			///cairo_dock_reload_icon_image (pIcon, cairo_dock_get_icon_container (pIcon));  /// question : pourquoi le faire pour toutes les icones ?...
@@ -703,7 +699,7 @@ cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, int 
 	return NULL;
 }
 
-
+/**
 void cairo_dock_update_visibility_on_inhibitors (const gchar *cClass, GldiWindowActor *pAppli, gboolean bIsHidden)
 {
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
@@ -742,10 +738,9 @@ void cairo_dock_update_activity_on_inhibitors (const gchar *cClass, GldiWindowAc
 			if (pInhibitorIcon->pAppli == pAppli)
 			{
 				cd_debug (" %s aussi devient active", pInhibitorIcon->cName);
-				///pInhibitorIcon->bIsActive = TRUE;
 				CairoDock *pParentDock = CAIRO_DOCK(cairo_dock_get_icon_container (pInhibitorIcon));
 				if (pParentDock != NULL)
-					cairo_dock_animate_icon_on_active (pInhibitorIcon, pParentDock);
+					gldi_appli_icon_animate_on_active (pInhibitorIcon, pParentDock);
 			}
 		}
 	}
@@ -802,6 +797,26 @@ void cairo_dock_update_name_on_inhibitors (const gchar *cClass, GldiWindowActor 
 		}
 	}
 }
+*/
+void gldi_window_foreach_inhibitor (GldiWindowActor *actor, GldiIconRFunc callback, gpointer data)
+{
+	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (actor->cClass);
+	if (pClassAppli != NULL)
+	{
+		Icon *pInhibitorIcon;
+		GList *ic;
+		for (ic = pClassAppli->pIconsOfClass; ic != NULL; ic = ic->next)
+		{
+			pInhibitorIcon = ic->data;
+			if (pInhibitorIcon->pAppli == actor)
+			{
+				if (! callback (pInhibitorIcon, data))
+					break;
+			}
+		}
+	}
+}
+
 
 Icon *cairo_dock_get_classmate (Icon *pIcon)  // gets an icon of the same class, that is inside a dock (or will be for an inhibitor), but not inside the class sub-dock
 {
@@ -897,8 +912,8 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			// re-inhibite the last icon or destroy it if it was being removed
 			if (! bLastIconIsRemoving)
 			{
-				cairo_dock_insert_appli_in_dock (pLastClassIcon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);  // probably not needed...
-				cairo_dock_update_name_on_inhibitors (cClass, pLastClassIcon->pAppli, pLastClassIcon->cName);
+				gldi_appli_icon_insert_in_dock (pLastClassIcon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);  // Note that we could optimize and manually set the appli and the name...
+				///cairo_dock_update_name_on_inhibitors (cClass, pLastClassIcon->pAppli, pLastClassIcon->cName);
 			}
 			else  // la derniere icone est en cours de suppression, inutile de la re-inserer
 			{
@@ -1515,6 +1530,23 @@ const gchar *cairo_dock_get_class_wm_class (const gchar *cClass)
 {
 	g_return_val_if_fail (cClass != NULL, NULL);
 	CairoDockClassAppli *pClassAppli = _get_class_appli_with_attributes (cClass);
+	
+	if (pClassAppli->cStartupWMClass == NULL)  // if the WMClass has not been retrieved beforehand, do it now
+	{
+		g_print ("retrieve WMClass for %s...\n", cClass);
+		Icon *pIcon;
+		GList *ic;
+		for (ic = pClassAppli->pAppliOfClass; ic != NULL; ic = ic->next)
+		{
+			pIcon = ic->data;
+			if (pIcon->pAppli && pIcon->pAppli->cWmClass)
+			{
+				pClassAppli->cStartupWMClass = g_strdup (pIcon->pAppli->cWmClass);
+				break;
+			}
+		}
+	}
+	
 	return pClassAppli->cStartupWMClass;
 }
 
@@ -1811,6 +1843,7 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 		//g_print ("class %s already known (%s)\n", cClass?cClass:cDesktopFile, pClassAppli->cDesktopFile);
 		if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)  // if the cStartupWMClass was not defined in the .desktop file, store it now.
 			pClassAppli->cStartupWMClass = g_strdup (cWmClass);
+		g_print ("%s --> %s\n", cClass, pClassAppli->cStartupWMClass);
 		return (cClass?cClass:g_strdup (cDesktopFile));
 	}
 	
@@ -1826,6 +1859,7 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 			{
 				if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)
 					pClassAppli->cStartupWMClass = g_strdup (cWmClass);
+				g_print ("%s ---> %s\n", cClass, pClassAppli->cStartupWMClass);
 				pClassAppli->bSearchedAttributes = TRUE;
 			}
 		}
@@ -1866,6 +1900,7 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	{
 		if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)  // we already searched this class before, but we couldn't have its WM class.
 			pClassAppli->cStartupWMClass = g_strdup (cWmClass);
+		g_print ("%s ----> %s\n", cClass, pClassAppli->cStartupWMClass);
 		g_free (cDesktopFilePath);
 		g_free (cCommand);
 		g_free (cStartupWMClass);
@@ -1902,6 +1937,8 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	
 	if (pClassAppli->cStartupWMClass == NULL)
 		pClassAppli->cStartupWMClass = (cStartupWMClass ? cStartupWMClass : g_strdup (cWmClass));
+	
+	g_print ("%s -> pClassAppli->cStartupWMClass: %s\n", cClass, pClassAppli->cStartupWMClass);
 	
 	pClassAppli->cIcon = g_key_file_get_string (pKeyFile, "Desktop Entry", "Icon", NULL);
 	if (pClassAppli->cIcon != NULL && *pClassAppli->cIcon != '/')  // remove any extension.
@@ -2028,35 +2065,3 @@ gboolean gldi_class_is_starting (const gchar *cClass)
 	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
 	return (pClassAppli != NULL && pClassAppli->iSidOpeningTimeout != 0);
 }
-
-/*
-
-class->is_launching
-
-gldi_class_startup_notify_begin (icon):
-	if class->is_launching || icon->is_launching : return
-	class->is_launching = TRUE
-	icon->is_launching = TRUE
-	notify -> setenv (DESKTOP_STARTUP_ID), XClientMessage ("new: ID=gldi-123 DESKTOP=...")
-		ID = gldi-class-seq, add timeout on class
-		OR
-		ID = gldi-seq, insert in list (ID, icon), icon destroyed => remove from list, add timeout on icon
-
-ClientMessage "remove: gldi-class-123" -> class -> gldi_class_startup_notify_end(class)
-OR
-ClientMessage "remove: gldi-123" -> icon -> remove from list, gldi_class_startup_notify_end (icon)
-
-15s timeout -> gldi_class_startup_notify_end (class)
-	XClientMessage ("remove: ID=gldi-123")
-
-new window actor -> gldi_class_startup_notify_end (actor->class)
-
-gldi_class_startup_notify_end (class):
-	mark_classs_as_not_launching
-		-> class->is_launching = FALSE
-		-> foreach icon: icon->is_launching = FALSE
-	
-
-
-*/
-

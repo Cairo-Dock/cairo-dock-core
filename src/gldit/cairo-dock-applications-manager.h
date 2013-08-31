@@ -110,11 +110,11 @@ Icon *cairo_dock_get_current_active_icon (void);
 */
 Icon *cairo_dock_get_appli_icon (GldiWindowActor *actor);
 
-/** Run a function on all appli's icons.
-*@param pFunction a /ref CairoDockForeachIconFunc function to be called
-*@param pUserData a data passed to the function.
+/** Run a function on all Appli icons.
+*@param pFunction function to be called
+*@param pUserData data passed to the function.
 */
-void cairo_dock_foreach_appli_icon (CairoDockForeachIconFunc pFunction, gpointer pUserData);
+void cairo_dock_foreach_appli_icon (GldiIconFunc pFunction, gpointer pUserData);
 
 void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock);
 

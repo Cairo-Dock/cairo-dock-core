@@ -21,7 +21,6 @@
 #define  __CAIRO_DOCK_APPLICATION_FACILITY__
 
 #include <glib.h>
-#include <X11/Xlib.h>
 
 #include "cairo-dock-struct.h"
 G_BEGIN_DECLS
@@ -30,24 +29,32 @@ G_BEGIN_DECLS
 *@file cairo-dock-application-facility.h A set of utilities for handling appli-icons.
 */
 
-void cairo_dock_appli_demands_attention (Icon *icon);
+void gldi_appli_icon_demands_attention (Icon *icon);  // applications-manager
 
-void cairo_dock_appli_stops_demanding_attention (Icon *icon);
+void gldi_appli_icon_stop_demanding_attention (Icon *icon);  // applications-manager
 
-void cairo_dock_animate_icon_on_active (Icon *icon, CairoDock *pParentDock);
-
-
-CairoDock *cairo_dock_insert_appli_in_dock (Icon *icon, CairoDock *pMainDock, gboolean bAnimate);
-
-CairoDock *cairo_dock_detach_appli (Icon *pIcon);
+void gldi_appli_icon_animate_on_active (Icon *icon, CairoDock *pParentDock);  // applications-manager
 
 
-void cairo_dock_set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock *pDock);
+CairoDock *gldi_appli_icon_insert_in_dock (Icon *icon, CairoDock *pMainDock, gboolean bAnimate);
 
-void cairo_dock_reserve_one_icon_geometry_for_window_manager (GldiWindowActor *pAppli, Icon *icon, CairoDock *pMainDock);
+CairoDock *gldi_appli_icon_detach (Icon *pIcon);
 
 
-const CairoDockImageBuffer *cairo_dock_appli_get_image_buffer (Icon *pIcon);
+void gldi_appli_icon_set_geometry_for_window_manager (Icon *icon, CairoDock *pDock);
+
+void gldi_appli_reserve_geometry_for_window_manager (GldiWindowActor *pAppli, Icon *icon, CairoDock *pMainDock);  // applications-manager
+
+
+const CairoDockImageBuffer *gldi_appli_icon_get_image_buffer (Icon *pIcon);
+
+
+void gldi_window_inhibitors_set_name (GldiWindowActor *actor, const gchar *cNewName);  // applications-manager
+
+void gldi_window_inhibitors_set_active_state (GldiWindowActor *actor, gboolean bActive);  // applications-manager
+
+void gldi_window_inhibitors_set_hidden_state (GldiWindowActor *actor, gboolean bIsHidden);  // applications-manager
+
 
 G_END_DECLS
 #endif

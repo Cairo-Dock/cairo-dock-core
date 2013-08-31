@@ -99,7 +99,7 @@ static gboolean _on_window_created (G_GNUC_UNUSED gpointer data, GldiWindowActor
 		if (myTaskbarParam.bShowAppli)
 		{
 			cd_message (" insertion de %s ...", pIcon->cName);
-			cairo_dock_insert_appli_in_dock (pIcon, g_pMainDock, CAIRO_DOCK_ANIMATE_ICON);
+			gldi_appli_icon_insert_in_dock (pIcon, g_pMainDock, CAIRO_DOCK_ANIMATE_ICON);
 		}
 	}
 	
@@ -113,7 +113,7 @@ static gboolean _on_window_destroyed (G_GNUC_UNUSED gpointer data, GldiWindowAct
 	if (icon != NULL)
 	{
 		if (actor->bDemandsAttention)  // force the stop demanding attention, in case the icon was in a sub-dock (the main icon is also animating).
-			cairo_dock_appli_stops_demanding_attention (icon);
+			gldi_appli_icon_stop_demanding_attention (icon);
 		
 		CairoDock *pParentDock = CAIRO_DOCK(cairo_dock_get_icon_container (icon));
 		if (pParentDock != NULL)
@@ -126,7 +126,8 @@ static gboolean _on_window_destroyed (G_GNUC_UNUSED gpointer data, GldiWindowAct
 		else  // inhibited or not shown -> destroy it immediately
 		{
 			cd_message ("  pas dans un container, on la detruit donc immediatement");
-			cairo_dock_update_name_on_inhibitors (icon->cClass, actor, NULL);
+			///cairo_dock_update_name_on_inhibitors (icon->cClass, actor, NULL);
+			gldi_window_inhibitors_set_name (actor, NULL);
 			gldi_object_unref (GLDI_OBJECT (icon));  // will call cairo_dock_unregister_appli and update the inhibitors.
 		}
 	}
@@ -145,7 +146,8 @@ static gboolean _on_window_name_changed (G_GNUC_UNUSED gpointer data, GldiWindow
 	
 	gldi_icon_set_name (pIcon, actor->cName);
 	
-	cairo_dock_update_name_on_inhibitors (actor->cClass, actor, pIcon->cName);
+	///cairo_dock_update_name_on_inhibitors (actor->cClass, actor, pIcon->cName);
+	gldi_window_inhibitors_set_name (actor, pIcon->cName);
 	return GLDI_NOTIFICATION_LET_PASS;
 }
 
@@ -185,13 +187,13 @@ static gboolean _on_window_attention_changed (G_GNUC_UNUSED gpointer data, GldiW
 		cd_debug ("%s demande votre attention", pIcon->cName);
 		if (myTaskbarParam.bDemandsAttentionWithDialog || myTaskbarParam.cAnimationOnDemandsAttention)
 		{
-			cairo_dock_appli_demands_attention (pIcon);
+			gldi_appli_icon_demands_attention (pIcon);
 		}
 	}
 	else
 	{
 		cd_debug ("%s se tait", pIcon->cName);
-		cairo_dock_appli_stops_demanding_attention (pIcon);
+		gldi_appli_icon_stop_demanding_attention (pIcon);
 	}
 	
 	return GLDI_NOTIFICATION_LET_PASS;
@@ -211,7 +213,7 @@ static gboolean _on_window_size_position_changed (G_GNUC_UNUSED gpointer data, G
 		{
 			if (cairo_dock_get_icon_container (icon) != NULL)
 			{
-				CairoDock *pParentDock = cairo_dock_detach_appli (icon);
+				CairoDock *pParentDock = gldi_appli_icon_detach (icon);
 				if (pParentDock)
 					gtk_widget_queue_draw (pParentDock->container.pWidget);
 			}
@@ -225,7 +227,7 @@ static gboolean _on_window_size_position_changed (G_GNUC_UNUSED gpointer data, G
 		if (myTaskbarParam.bAppliOnCurrentDesktopOnly && cairo_dock_get_icon_container (icon) == NULL && myTaskbarParam.bShowAppli)
 		{
 			//cd_message ("cette fenetre est sur le bureau courant (%d;%d)", x, y);
-			cairo_dock_insert_appli_in_dock (icon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);  // the icon might be on this desktop and yet not in a dock (inhibited), in which case this function does nothing.
+			gldi_appli_icon_insert_in_dock (icon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);  // the icon might be on this desktop and yet not in a dock (inhibited), in which case this function does nothing.
 		}
 	}
 	
@@ -255,7 +257,8 @@ static gboolean _on_window_state_changed (G_GNUC_UNUSED gpointer data, GldiWindo
 		else if (myTaskbarParam.iMinimizedWindowRenderType == 0)
 		{
 			// transparence sur les inhibiteurs.
-			cairo_dock_update_visibility_on_inhibitors (icon->cClass, actor, actor->bIsHidden);
+			///cairo_dock_update_visibility_on_inhibitors (icon->cClass, actor, actor->bIsHidden);
+			gldi_window_inhibitors_set_hidden_state (actor, actor->bIsHidden);
 		}
 		
 		// showing hidden appli-icons only
@@ -264,7 +267,7 @@ static gboolean _on_window_state_changed (G_GNUC_UNUSED gpointer data, GldiWindo
 			if (actor->bIsHidden)  // se cache => on insere son icone.
 			{
 				cd_message (" => se cache");
-				pParentDock = cairo_dock_insert_appli_in_dock (icon, g_pMainDock, CAIRO_DOCK_ANIMATE_ICON);
+				pParentDock = gldi_appli_icon_insert_in_dock (icon, g_pMainDock, CAIRO_DOCK_ANIMATE_ICON);
 				if (pParentDock != NULL)
 				{
 					if (g_bUseOpenGL && myTaskbarParam.iMinimizedWindowRenderType == 2)  // quand on est passe dans ce cas tout a l'heure l'icone n'etait pas encore dans son dock.
@@ -313,7 +316,7 @@ static gboolean _on_window_class_changed (G_GNUC_UNUSED gpointer data, GldiWindo
 	// remove the icon from the dock, and then from its class
 	CairoDock *pParentDock = NULL;
 	if (cairo_dock_get_icon_container (icon) != NULL)  // if in a dock, detach it
-		pParentDock = cairo_dock_detach_appli (icon);
+		pParentDock = gldi_appli_icon_detach (icon);
 	else  // else if inhibited, detach from the inhibitor
 		gldi_window_detach_from_inhibitors (actor);
 	cairo_dock_remove_appli_from_class (icon);
@@ -326,7 +329,7 @@ static gboolean _on_window_class_changed (G_GNUC_UNUSED gpointer data, GldiWindo
 	cairo_dock_add_appli_icon_to_class (icon);
 	
 	// re-insert the icon
-	pParentDock = cairo_dock_insert_appli_in_dock (icon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);
+	pParentDock = gldi_appli_icon_insert_in_dock (icon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);
 	if (pParentDock != NULL)
 		gtk_widget_queue_draw (pParentDock->container.pWidget);
 	
@@ -351,14 +354,14 @@ static void _hide_show_appli_icons_on_other_desktops (GldiWindowActor *pAppli, I
 			cd_debug (" => est sur le bureau actuel.");
 			if (cairo_dock_get_icon_container(icon) == NULL)
 			{
-				pParentDock = cairo_dock_insert_appli_in_dock (icon, pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);
+				pParentDock = gldi_appli_icon_insert_in_dock (icon, pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);
 			}
 		}
 		else
 		{
 			cd_debug (" => n'est pas sur le bureau actuel.");
 			if (cairo_dock_get_icon_container (icon) != NULL)  // if in a dock, detach it
-				pParentDock = cairo_dock_detach_appli (icon);
+				pParentDock = gldi_appli_icon_detach (icon);
 			else  // else if inhibited, detach from the inhibitor
 				gldi_window_detach_from_inhibitors (icon->pAppli);
 		}
@@ -401,16 +404,17 @@ static gboolean _on_active_window_changed (G_GNUC_UNUSED gpointer data, GldiWind
 	if (CAIRO_DOCK_IS_APPLI (icon))
 	{
 		if (icon->bIsDemandingAttention)  // force the stop demanding attention, as it can happen (for some reason) that the attention state doesn't change when the appli takes the focus.
-			cairo_dock_appli_stops_demanding_attention (icon);
+			gldi_appli_icon_stop_demanding_attention (icon);
 		
 		pParentDock = CAIRO_DOCK(cairo_dock_get_icon_container (icon));
 		if (pParentDock == NULL)  // inhibited or not shown
 		{
-			cairo_dock_update_activity_on_inhibitors (icon->cClass, actor);
+			///cairo_dock_update_activity_on_inhibitors (icon->cClass, actor);
+			gldi_window_inhibitors_set_active_state (actor, TRUE);
 		}
 		else
 		{
-			cairo_dock_animate_icon_on_active (icon, pParentDock);
+			gldi_appli_icon_animate_on_active (icon, pParentDock);
 		}
 	}
 	
@@ -421,7 +425,8 @@ static gboolean _on_active_window_changed (G_GNUC_UNUSED gpointer data, GldiWind
 		CairoDock *pLastActiveParentDock = CAIRO_DOCK(cairo_dock_get_icon_container (pLastActiveIcon));
 		if (pLastActiveParentDock == NULL)  // inhibited or not shown
 		{
-			cairo_dock_update_inactivity_on_inhibitors (pLastActiveIcon->cClass, s_pCurrentActiveWindow);
+			///cairo_dock_update_inactivity_on_inhibitors (pLastActiveIcon->cClass, s_pCurrentActiveWindow);
+			gldi_window_inhibitors_set_active_state (s_pCurrentActiveWindow, FALSE);
 		}
 		else
 		{
@@ -484,7 +489,7 @@ static void _create_appli_icon (GldiWindowActor *actor, CairoDock *pDock)
 	{
 		if (myTaskbarParam.bShowAppli && pDock)
 		{
-			cairo_dock_insert_appli_in_dock (pIcon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);
+			gldi_appli_icon_insert_in_dock (pIcon, g_pMainDock, ! CAIRO_DOCK_ANIMATE_ICON);
 		}
 	}
 }
@@ -577,15 +582,12 @@ static void _for_one_appli_icon (G_GNUC_UNUSED GldiWindowActor *actor, Icon *ico
 {
 	if (! CAIRO_DOCK_IS_APPLI (icon) || cairo_dock_icon_is_being_removed (icon))
 		return ;
-	CairoDockForeachIconFunc pFunction = data[0];
+	GldiIconFunc pFunction = data[0];
 	gpointer pUserData = data[1];
 	
-	CairoDock *pParentDock = CAIRO_DOCK(cairo_dock_get_icon_container (icon));
-	if (! pParentDock)
-		pParentDock = g_pMainDock;  // contestable...
-	pFunction (icon, CAIRO_CONTAINER (pParentDock), pUserData);
+	pFunction (icon, pUserData);
 }
-void cairo_dock_foreach_appli_icon (CairoDockForeachIconFunc pFunction, gpointer pUserData)
+void cairo_dock_foreach_appli_icon (GldiIconFunc pFunction, gpointer pUserData)
 {
 	gpointer data[2] = {pFunction, pUserData};
 	g_hash_table_foreach (s_hAppliIconsTable, (GHFunc) _for_one_appli_icon, data);
@@ -606,7 +608,7 @@ void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock)
 		icon = ic->data;
 		if (CAIRO_DOCK_IS_APPLI (icon))
 		{
-			cairo_dock_set_one_icon_geometry_for_window_manager (icon, pDock);
+			gldi_appli_icon_set_geometry_for_window_manager (icon, pDock);
 			/*data[1+6*i+0] = 5;
 			data[1+6*i+1] = icon->Xid;
 			data[1+6*i+2] = pDock->container.iWindowPositionX + icon->fXAtRest;
@@ -624,7 +626,7 @@ void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock)
 	
 	if (pDock->bIsMainDock && myTaskbarParam.bHideVisibleApplis)  // on complete avec les applis pas dans le dock, pour que l'effet de minimisation pointe (a peu pres) au bon endroit quand on la minimisera.
 	{
-		g_hash_table_foreach (s_hAppliIconsTable, (GHFunc) cairo_dock_reserve_one_icon_geometry_for_window_manager, pDock);
+		g_hash_table_foreach (s_hAppliIconsTable, (GHFunc) gldi_appli_reserve_geometry_for_window_manager, pDock);
 	}
 }
 
