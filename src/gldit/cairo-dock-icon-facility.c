@@ -726,15 +726,13 @@ gboolean gldi_icon_launch_command (Icon *pIcon)
 {
 	// notify startup
 	gldi_class_startup_notify (pIcon);
-	
+
 	// launch command
 	const gchar *cCommand = pIcon->cCommand;
 	const gchar *cWorkingDirectory = pIcon->cWorkingDirectory;
 	if (! cCommand)
-	{
 		cCommand = cairo_dock_get_class_command (pIcon->cClass);
-		cWorkingDirectory = cairo_dock_get_class_command (pIcon->cClass);
-	}
+
 	gboolean bSuccess = cairo_dock_launch_command_full (cCommand, cWorkingDirectory);
 	if (! bSuccess)
 		gldi_class_startup_notify_end (pIcon->cClass);
