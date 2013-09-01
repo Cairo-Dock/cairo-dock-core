@@ -4,11 +4,11 @@
 3.2.0 = <b>New version: <span color='red'>GLX-Dock 3.2</span>!</b>\n - Multi-screen support has been improved\n - New applet : Screenshot\n - New plug-in: Sound-Effects\n - Added Gnome-Shell support \n - Added GDM support for user switching\n - Added Systemd support for the session management (Fedora, Arch, ...)\n - Added support for all the Unity indicators\n - Countless bug-fixes and improvements\n - If you like the project, please donate :-)
 
 3.3.0 = <b>New version: <span color='red'>GLX-Dock 3.3</span>!</b>
-3.3.0.0 = - Added a search entry in the <b>Applications Menu</b>\n  it allows to rapidly look for programs from their name or their description
+3.3.0.0 = - Added a search entry in the <b>Applications Menu</b>.\n    It allows to rapidly look for programs from their name or their description
 3.3.0.1 = - Added support of <b>logind</b> in the Logout applet
 3.3.0.2 = - Better integration in the Cinnamon desktop
-3.3.0.3 = - Added support of the <b>StartupNotification</b> protocol\n  it allows launchers to animate until they're launched and avoids accidental double-launch
-3.3.0.4 = - Added an new applet: <b>Notification History'</b> to never miss a notification
+3.3.0.3 = - Added support of the <b>StartupNotification</b> protocol.\n    It allows launchers to be animated until the application opens and avoids accidental double launches
+3.3.0.4 = - Added an new third-party applet: <b>Notification History</b> to never miss a notification
 3.3.0.5 = - Upgraded the <b>Dbus API</b> to be even more powerful
 3.3.0.6 = - A huge rewrite of the core using Objects
 3.3.0.7 = - If you like the project, please donate :-)
