@@ -523,10 +523,8 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 	int w = pDock->iMinDockWidth;
 	int h = pDock->iMinDockHeight;
 	//g_print ("%s (%dx%d; %dx%d)\n", __func__, w, h, W, H);
-	///int w_ = MIN (myDocksParam.iVisibleZoneWidth, pDock->iMaxDockWidth);
-	///int h_ = MIN (myDocksParam.iVisibleZoneHeight, pDock->iMaxDockHeight);
-	int w_ = 1;
-	int h_ = 1;
+	int w_ = 0;  // Note: in older versions of X, a fully empty input shape was not working and we had to set 1 pixel ON.
+	int h_ = 0;
 	
 	//\_______________ check that the dock can have input zones.
 	if (w == 0 || h == 0 || pDock->iRefCount > 0 || W == 0 || H == 0)
