@@ -219,7 +219,6 @@ static void _cairo_dock_set_signal_interception (void)
 	signal (SIGFPE, _cairo_dock_intercept_signal);  // Floating-point exception
 	signal (SIGILL, _cairo_dock_intercept_signal);  // Illegal instruction
 	signal (SIGABRT, _cairo_dock_intercept_signal);  // Abort // kill -6
-	signal (SIGTERM, _cairo_dock_quit);  // Term // kill -15 (system)
 }
 
 static gboolean on_delete_maintenance_gui (G_GNUC_UNUSED GtkWidget *pWidget, GMainLoop *pBlockingLoop)
@@ -707,6 +706,8 @@ int main (int argc, char** argv)
 	//\___________________ handle crashes.
 	if (! bTesting)
 		_cairo_dock_set_signal_interception ();
+	signal (SIGTERM, _cairo_dock_quit);  // Term // kill -15 (system)
+	signal (SIGHUP,  _cairo_dock_quit);  // sent to a process when its controlling terminal is closed
 
 	//\___________________ Disable modules that have crashed
 	if (cExcludeModule != NULL && (s_iNbCrashes > 2 || bMaintenance)) // 3th crash or 4th (with -m)
@@ -863,9 +864,8 @@ int main (int argc, char** argv)
 	
 	if (! bTesting)
 		g_timeout_add_seconds (5, _cairo_dock_successful_launch, GINT_TO_POINTER (bFirstLaunch));
-	
-	// TODO list in the 'TODO' file ;)
-	
+
+	// Start Mainloop
 	gtk_main ();
 	
 	signal (SIGSEGV, NULL);  // Segmentation violation
@@ -873,6 +873,8 @@ int main (int argc, char** argv)
 	signal (SIGILL, NULL);  // Illegal instruction
 	signal (SIGABRT, NULL);
 	signal (SIGTERM, NULL);
+	signal (SIGHUP, NULL);
+
 	gldi_free_all ();
 
 	#if (LIBRSVG_MAJOR_VERSION == 2 && LIBRSVG_MINOR_VERSION < 36)
