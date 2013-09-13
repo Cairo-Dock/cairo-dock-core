@@ -1633,7 +1633,7 @@ static gboolean _draw_menu_item (GtkWidget* pWidget, cairo_t *cr)
     gtk_container_propagate_draw (GTK_CONTAINER (pWidget),
 		gtk_bin_get_child (GTK_BIN (pWidget)),
 		cr);  // skip the drawing of the menu-item, just propagate to its child; there is no need to make anything else, the child hbox will draw its child as usual.
-  return FALSE;
+	return TRUE;  // intercept
 }
 gboolean _on_motion_notify_menu_item (GtkWidget* pWidget,
 	GdkEventMotion* pEvent,
@@ -1756,8 +1756,12 @@ static GtkWidget *_add_menu_item_with_buttons (GtkWidget *menu)
 		"enter-notify-event",
 		G_CALLBACK (_on_enter_menu_item),
 		NULL);  // to force the label to not highlight (it gets highlighted, even if we overwrite the motion_notify_event callback)
-	GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (pMenuItem);
-	widget_class->draw = _draw_menu_item;  // we don't want the whole menu-item to be higlighted, but only the currently pointed button; so we draw the menu-item ourselves.
+	//GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (pMenuItem);
+	//widget_class->draw = _draw_menu_item;  // we don't want the whole menu-item to be higlighted, but only the currently pointed button; so we draw the menu-item ourselves.
+	g_signal_connect (G_OBJECT (pMenuItem),
+		"draw",
+		G_CALLBACK (_draw_menu_item),
+		NULL);
 	
 	GtkWidget *hbox = _gtk_hbox_new (0);
 	gtk_container_add (GTK_CONTAINER (pMenuItem), hbox);
