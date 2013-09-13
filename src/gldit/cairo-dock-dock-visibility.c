@@ -153,10 +153,13 @@ static gboolean _on_window_created (G_GNUC_UNUSED gpointer data, GldiWindowActor
 	return GLDI_NOTIFICATION_LET_PASS;
 }
 
-static gboolean _on_window_destroyed (G_GNUC_UNUSED gpointer data, G_GNUC_UNUSED GldiWindowActor *actor)
+static gboolean _on_window_destroyed (G_GNUC_UNUSED gpointer data, GldiWindowActor *actor)
 {
 	// docks visibility on overlap any
+	gboolean bIsHidden = actor->bIsHidden;  // the window is already destroyed, but the actor is still valid (it represents the last state of the window); temporarily make it hidden so that it doesn't overlap the dock (that's a bit tricky, we could also add an "except-this-window" parameter to 'gldi_dock_search_overlapping_window()')
+	actor->bIsHidden = TRUE;
 	gldi_docks_foreach_root ((GFunc)_show_if_no_overlapping_window, NULL);
+	actor->bIsHidden = bIsHidden;
 	
 	return GLDI_NOTIFICATION_LET_PASS;
 }
