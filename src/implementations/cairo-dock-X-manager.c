@@ -277,6 +277,7 @@ static void _on_update_applis_list (void)
 	gulong i, iNbWindows = 0;
 	Window *pXWindowsList = cairo_dock_get_windows_list (&iNbWindows, TRUE);  // TRUE => ordered by z-stack.
 	
+	// set the z-order of existing windows, and create actors for new windows
 	Window Xid;
 	GldiXWindowActor *actor;
 	int iStackOrder = 0;
@@ -304,8 +305,11 @@ static void _on_update_applis_list (void)
 			actor->actor.iStackOrder = iStackOrder ++;
 	}
 	
-	// remove old windows
+	// remove old actors for windows that disappeared
 	g_hash_table_foreach_remove (s_hXWindowTable, (GHRFunc) _remove_old_applis, GINT_TO_POINTER (s_iTime));
+	
+	// notify everybody that the stack order has changed
+	gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_Z_ORDER_CHANGED, NULL);
 	
 	XFree (pXWindowsList);
 }
@@ -357,7 +361,7 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 		{
 			if (event.type == PropertyNotify)
 			{
-				if (event.xproperty.atom == s_aNetClientList)
+				if (event.xproperty.atom == s_aNetClientList)  // the stack order has changed: it's either because a window z-order has changed, or  a window disappeared (destroyed or hidden), or a window appeared.
 				{
 					_on_update_applis_list ();
 				}
