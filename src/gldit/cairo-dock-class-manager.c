@@ -194,7 +194,7 @@ static void cairo_dock_destroy_class_subdock (const gchar *cClass)
 gboolean cairo_dock_add_appli_icon_to_class (Icon *pIcon)
 {
 	g_return_val_if_fail (CAIRO_DOCK_ICON_TYPE_IS_APPLI (pIcon) && pIcon->pAppli, FALSE);
-	cd_message ("%s (%s)", __func__, pIcon->cClass);
+	cd_debug ("%s (%s)", __func__, pIcon->cClass);
 	
 	if (pIcon->cClass == NULL)
 	{
@@ -217,7 +217,7 @@ gboolean cairo_dock_add_appli_icon_to_class (Icon *pIcon)
 gboolean cairo_dock_remove_appli_from_class (Icon *pIcon)
 {
 	g_return_val_if_fail (pIcon!= NULL, FALSE);
-	cd_message ("%s (%s, %s)", __func__, pIcon->cClass, pIcon->cName);
+	cd_debug ("%s (%s, %s)", __func__, pIcon->cClass, pIcon->cName);
 	
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (pIcon->cClass);
 	g_return_val_if_fail (pClassAppli!= NULL, FALSE);
@@ -1389,7 +1389,7 @@ void cairo_dock_set_class_order_amongst_applis (Icon *pIcon, CairoDock *pDock)  
 				first_appli_ic = ic;
 			if (icon->cClass && strcmp (icon->cClass, pIcon->cClass) == 0)  // this icon is in our class.
 			{
-				if (icon->pAppli->iAge < pIcon->pAppli->iAge)  // it's older than us => we are more recent => go after => continue.
+				if (!icon->pAppli || icon->pAppli->iAge < pIcon->pAppli->iAge)  // it's older than us => we are more recent => go after => continue. (Note: icon->pAppli can be NULL if the icon in the dock is being removed)
 				{
 					last_ic = ic;  // remember the last item of our class.
 				}
@@ -2018,11 +2018,13 @@ void gldi_class_startup_notify (Icon *pIcon)
 	if (! pClassAppli)
 		return;
 	
-	if (pClassAppli->iSidOpeningTimeout != 0)
+	if (pClassAppli->bIsLaunching)
 		return;
 	
 	// mark the class as launching and set a timeout
-	pClassAppli->iSidOpeningTimeout = g_timeout_add_seconds (15,  // 15 seconds, for applications that take a really long time to start
+	pClassAppli->bIsLaunching = TRUE;
+	if (pClassAppli->iSidOpeningTimeout == 0)
+		pClassAppli->iSidOpeningTimeout = g_timeout_add_seconds (15,  // 15 seconds, for applications that take a really long time to start
 		(GSourceFunc) _stop_opening_timeout, g_strdup (cClass));  /// TODO: there is a memory leak here...
 	
 	// notify about the startup
@@ -2035,7 +2037,7 @@ void gldi_class_startup_notify (Icon *pIcon)
 void gldi_class_startup_notify_end (const gchar *cClass)
 {
 	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
-	if (! pClassAppli || pClassAppli->iSidOpeningTimeout == 0)
+	if (! pClassAppli || ! pClassAppli->bIsLaunching)
 		return;
 	
 	// unset the icons as launching
@@ -2053,6 +2055,7 @@ void gldi_class_startup_notify_end (const gchar *cClass)
 	}
 	
 	// unset the class as launching and stop a timeout
+	pClassAppli->bIsLaunching = FALSE;
 	if (pClassAppli->iSidOpeningTimeout != 0)
 	{
 		g_source_remove (pClassAppli->iSidOpeningTimeout);

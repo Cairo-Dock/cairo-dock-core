@@ -50,8 +50,9 @@ struct _CairoDockClassAppli {
 	GList *pMenuItems;
 	gint iAge;  // age of the first created window of this class
 	gchar *cDockName;  // unique name of the class sub-dock
-	guint iSidOpeningTimeout;  // timeout and flag to mark a class is being launched
-	gboolean bHasStartupNotify;  // if the application sends a "remove" event when its launch is complete
+	guint iSidOpeningTimeout;  // timeout to stop the launching, if not stopped by the application before
+	gboolean bIsLaunching;  // flag to mark a class as being launched
+	gboolean bHasStartupNotify;  // TRUE if the application sends a "remove" event when its launch is complete (not used yet)
 };
 
 /*
