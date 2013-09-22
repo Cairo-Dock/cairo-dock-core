@@ -47,6 +47,19 @@ if test -n "`which compiz`"; then
 					sed -i "/s0_active_plugins/ s/.*/&$i;/g" $HOME/.config/compiz-1/compizconfig/Default.ini
 				fi
 			done
+
+			# add a staticswitcher (Alt+Tab) if none is enabled
+			switcher=""
+			for i in staticswitcher ring shift switcher; do
+				if test `echo $pluginsFlat | grep -c $i` -gt 0; then
+					switcher=$i
+					break
+				fi
+			done
+			if test -z "$switcher"; then
+				pluginsFlat="$pluginsFlat""staticswitcher;"
+				sed -i "/s0_active_plugins/ s/.*/&staticswitcher;/g" $HOME/.config/compiz-1/compizconfig/Default.ini
+			fi
 		fi
 		# gconf
 		if test -n "$GCONFTOOL_CHECK"; then
@@ -58,6 +71,19 @@ if test -n "`which compiz`"; then
 						gconftool-2 -s /apps/compiz-1/general/screen0/options/active_plugins --type=list --list-type=string "$plugins"
 					fi
 				done
+
+			# add a staticswitcher (Alt+Tab) if none is enabled
+				switcher=""
+				for i in staticswitcher ring shift switcher; do
+					if test `echo $plugins | grep -c $i` -gt 0; then
+						switcher=$i
+						break
+					fi
+				done
+				if test -z "$switcher"; then
+					plugins=${plugins:0:${#plugins}-1},staticswitcher]
+					gconftool-2 -s /apps/compiz-1/general/screen0/options/active_plugins --type=list --list-type=string "$plugins"
+				fi
 			else # it's possible that the gconf is empty
 				plugins="[core,composite,opengl,compiztoolbox,decor,vpswitch,snap,mousepoll,resize,place,move,wall,grid,regex,imgpng,session,gnomecompat,animation,fade,staticswitcher,workarounds,scale,expo,ezoom,dbus]"
 				gconftool-2 -s /apps/compiz-1/general/screen0/options/active_plugins --type=list --list-type=string "$plugins"
