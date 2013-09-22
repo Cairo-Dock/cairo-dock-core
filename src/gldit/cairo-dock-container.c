@@ -23,6 +23,7 @@
 #include <cairo.h>
 #include <gtk/gtk.h>
 #include <GL/gl.h> 
+#include "gtk3imagemenuitem.h"
 
 #include "cairo-dock-icon-facility.h"  // cairo_dock_compute_icon_area
 #include "cairo-dock-dock-facility.h"  // cairo_dock_is_hidden
@@ -30,6 +31,7 @@
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-config.h"
+#include "cairo-dock-utils.h"  // cairo_dock_string_is_address
 #include "cairo-dock-windows-manager.h"  // gldi_windows_get_active
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-animations.h"  // cairo_dock_animation_will_be_visible
@@ -249,28 +251,6 @@ void gldi_container_disable_drop (GldiContainer *pContainer)
 	gtk_drag_dest_set_target_list (pContainer->pWidget, NULL);
 }
 
-gboolean cairo_dock_string_is_adress (const gchar *cString)
-{
-	gchar *protocole = g_strstr_len (cString, -1, "://");
-	if (protocole == NULL || protocole == cString)
-	{
-		if (strncmp (cString, "www", 3) == 0)
-			return TRUE;
-		return FALSE;
-	}
-	const gchar *str = cString;
-	while (*str == ' ')
-		str ++;
-	while (str < protocole)
-	{
-		if (! g_ascii_isalnum (*str) && *str != '-')  // x-nautilus-desktop://
-			return FALSE;
-		str ++;
-	}
-	
-	return TRUE;
-}
-
 void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, double fOrder, GldiContainer *pContainer)
 {
 	g_return_if_fail (cReceivedData != NULL);
@@ -283,12 +263,12 @@ void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, doub
 	{
 		g_string_assign (sArg, cStringList[i]);
 		
-		if (! cairo_dock_string_is_adress (cStringList[i]))
+		if (! cairo_dock_string_is_address (cStringList[i]))
 		{
 			j = i + 1;
 			while (cStringList[j] != NULL)
 			{
-				if (cairo_dock_string_is_adress (cStringList[j]))
+				if (cairo_dock_string_is_address (cStringList[j]))
 					break ;
 				g_string_append_printf (sArg, "\n%s", cStringList[j]);
 				j ++;
@@ -432,7 +412,7 @@ static gboolean _popup_menu_delayed (gpointer *data)
 		0);
 	return FALSE;
 }
-void cairo_dock_popup_menu_on_icon (GtkWidget *menu, Icon *pIcon, GldiContainer *pContainer)
+void gldi_menu_popup_on_icon (GtkWidget *menu, Icon *pIcon, GldiContainer *pContainer)
 {
 	static gpointer data[4];  // data[0&1] is used by _place_menu_on_icon, data[2&3] is used by the delayed callback.
 	if (menu == NULL)
@@ -473,7 +453,7 @@ void cairo_dock_popup_menu_on_icon (GtkWidget *menu, Icon *pIcon, GldiContainer 
 }
 
 
-GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, const gchar *gtkStock, GCallback pFunction, GtkWidget *pMenu, gpointer pData)
+/*GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, const gchar *gtkStock, GCallback pFunction, GtkWidget *pMenu, gpointer pData)
 {
 	GtkWidget *pMenuItem = gtk_image_menu_item_new_with_label (cLabel);
 	if (gtkStock)
@@ -521,6 +501,81 @@ GtkWidget *cairo_dock_create_sub_menu (const gchar *cLabel, GtkWidget *pMenu, co
 	}
 	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem); 
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenu);
+	return pSubMenu; 
+}*/
+
+GtkWidget *gldi_menu_item_new (const gchar *cLabel, const gchar *cImage, gboolean bUseMnemonic)
+{
+	GtkWidget *pMenuItem;
+	if (! cImage)
+		return (bUseMnemonic ? gtk_menu_item_new_with_mnemonic (cLabel) : gtk_menu_item_new_with_label (cLabel));
+	
+	GtkWidget *image = NULL;
+#if (! GTK_CHECK_VERSION (3, 10, 0)) || (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
+	if (*cImage == '/')
+	{
+		int size;
+		gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &size, NULL);
+		GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cImage, size, size, NULL);
+		image = gtk_image_new_from_pixbuf (pixbuf);
+		g_object_unref (pixbuf);
+	}
+	else
+	{
+		image = gtk_image_new_from_icon_name (cImage, GTK_ICON_SIZE_MENU);
+	}
+#endif
+	
+#if GTK_CHECK_VERSION (3, 10, 0)
+	#if (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
+	pMenuItem = (bUseMnemonic ? gtk3_image_menu_item_new_with_mnemonic (cLabel) : gtk3_image_menu_item_new_with_label (cLabel));
+	gtk3_image_menu_item_set_image (GTK3_IMAGE_MENU_ITEM (pMenuItem), image);
+	#else
+	pMenuItem = (bUseMnemonic ? gtk_menu_item_new_with_mnemonic (cLabel) : gtk_menu_item_new_with_label (cLabel));
+	#endif
+#else
+	pMenuItem = (bUseMnemonic ? gtk_image_menu_item_new_with_mnemonic (cLabel) : gtk_image_menu_item_new_with_label (cLabel));
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
+	#if ((CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1) && (GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION >= 16))
+	gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (pMenuItem), TRUE);
+	#endif
+#endif
+	
+	return pMenuItem;
+}
+
+GtkWidget *gldi_menu_item_new_with_action (const gchar *cLabel, const gchar *cImage, gboolean bUseMnemonic, GCallback pFunction, gpointer pData)
+{
+	GtkWidget *pMenuItem = gldi_menu_item_new (cLabel, cImage, bUseMnemonic);
+	if (pFunction)
+		g_signal_connect (G_OBJECT (pMenuItem), "activate", G_CALLBACK (pFunction), pData);
+	return pMenuItem;
+}
+
+GtkWidget *gldi_menu_item_new_with_submenu (const gchar *cLabel, const gchar *cImage, GtkWidget **pSubMenuPtr)
+{
+	GtkWidget *pMenuItem = gldi_menu_item_new (cLabel, cImage, FALSE);
+	GtkWidget *pSubMenu = gtk_menu_new ();
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenu);
+	
+	*pSubMenuPtr = pSubMenu;
+	return pMenuItem;
+}
+
+GtkWidget *gldi_menu_add_item_full (GtkWidget *pMenu, const gchar *cLabel, const gchar *cImage, GCallback pFunction, gpointer pData, gboolean bUseMnemonic)
+{
+	GtkWidget *pMenuItem = gldi_menu_item_new_with_action (cLabel, cImage, bUseMnemonic, pFunction, pData);
+	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
+	return pMenuItem;
+}
+
+GtkWidget *gldi_menu_add_sub_menu_full (GtkWidget *pMenu, const gchar *cLabel, const gchar *cImage, GtkWidget **pMenuItemPtr)
+{
+	GtkWidget *pSubMenu;
+	GtkWidget *pMenuItem = gldi_menu_item_new_with_submenu (cLabel, cImage, &pSubMenu);
+	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
+	if (pMenuItemPtr)
+		*pMenuItemPtr = pMenuItem;
 	return pSubMenu; 
 }
 

@@ -706,6 +706,8 @@ int main (int argc, char** argv)
 	//\___________________ handle crashes.
 	if (! bTesting)
 		_cairo_dock_set_signal_interception ();
+	
+	//\___________________ handle terminate signals to quit properly (especially when the system shuts down).
 	signal (SIGTERM, _cairo_dock_quit);  // Term // kill -15 (system)
 	signal (SIGHUP,  _cairo_dock_quit);  // sent to a process when its controlling terminal is closed
 

@@ -322,12 +322,6 @@ void cairo_dock_allow_widget_to_receive_data (GtkWidget *pWidget, GCallback pCal
 
 void gldi_container_disable_drop (GldiContainer *pContainer);
 
-/** Say if a string is an adress (file://xxx, http://xxx, ftp://xxx, etc).
-* @param cString a string.
-* @return TRUE if it's an address.
-*/
-gboolean cairo_dock_string_is_adress (const gchar *cString);
-
 /** Notify everybody that a drop has just occured.
 * @param cReceivedData the dropped data.
 * @param pPointedIcon the icon which was pointed when the drop occured.
@@ -346,13 +340,15 @@ void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, doub
 *@param pIcon the icon, or NULL.
 *@param pContainer the container that was clicked.
 */
-void cairo_dock_popup_menu_on_icon (GtkWidget *menu, Icon *pIcon, GldiContainer *pContainer);
+void gldi_menu_popup_on_icon (GtkWidget *menu, Icon *pIcon, GldiContainer *pContainer);
+#define cairo_dock_popup_menu_on_icon gldi_menu_popup_on_icon
 
 /** Pop-up a menu on a container. In the case of a dock, it prevents this one from shrinking down.
 *@param menu the menu.
 *@param pContainer the container that was clicked.
 */
-#define cairo_dock_popup_menu_on_container(menu, pContainer) cairo_dock_popup_menu_on_icon (menu, NULL, pContainer)
+#define gldi_menu_popup_on_container(menu, pContainer) gldi_menu_popup_on_icon (menu, NULL, pContainer)
+#define cairo_dock_popup_menu_on_container gldi_menu_popup_on_container
 
 /** Add an entry to a given menu.
 *@param cLabel label of the entry
@@ -362,7 +358,8 @@ void cairo_dock_popup_menu_on_icon (GtkWidget *menu, Icon *pIcon, GldiContainer 
 *@param pData data to feed the callback with
 * @return the new menu-entry that has been added.
 */
-GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, const gchar *gtkStock, GCallback pFunction, GtkWidget *pMenu, gpointer pData);
+//GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, const gchar *gtkStock, GCallback pFunction, GtkWidget *pMenu, gpointer pData);
+#define cairo_dock_add_in_menu_with_stock_and_data(cLabel, gtkStock, pFunction, pMenu, pData) gldi_menu_add_item (pMenu, cLabel, gtkStock, pFunction, pData)
 
 /** Add sub-menu to a given menu.
 *@param cLabel label of the sub-menu
@@ -370,7 +367,21 @@ GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, cons
 *@param cImage a GTK stock or a path to an image
 * @return the new sub-menu that has been added.
 */
-GtkWidget *cairo_dock_create_sub_menu (const gchar *cLabel, GtkWidget *pMenu, const gchar *cImage);
+//GtkWidget *cairo_dock_create_sub_menu (const gchar *cLabel, GtkWidget *pMenu, const gchar *cImage);
+#define cairo_dock_create_sub_menu(cLabel, pMenu, cImage) gldi_menu_add_sub_menu (pMenu, cLabel, cImage)
+
+
+GtkWidget *gldi_menu_item_new (const gchar *cLabel, const gchar *cImage, gboolean bUseMnemonic);
+
+GtkWidget *gldi_menu_item_new_with_action (const gchar *cLabel, const gchar *cImage, gboolean bUseMnemonic, GCallback pFunction, gpointer pData);
+
+GtkWidget *gldi_menu_item_new_with_submenu (const gchar *cLabel, const gchar *cImage, GtkWidget **pSubMenuPtr);
+
+GtkWidget *gldi_menu_add_item_full (GtkWidget *pMenu, const gchar *cLabel, const gchar *cImage, GCallback pFunction, gpointer pData, gboolean bUseMnemonic);
+#define gldi_menu_add_item(pMenu, cLabel, cImage, pFunction, pData) gldi_menu_add_item_full (pMenu, cLabel, cImage, pFunction, pData, FALSE)
+
+GtkWidget *gldi_menu_add_sub_menu_full (GtkWidget *pMenu, const gchar *cLabel, const gchar *cImage, GtkWidget **pMenuItemPtr);
+#define gldi_menu_add_sub_menu(pMenu, cLabel, cImage) gldi_menu_add_sub_menu_full (pMenu, cLabel, cImage, NULL)
 
 
 /** Build the main menu of a Container.

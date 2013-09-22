@@ -49,6 +49,12 @@ void cairo_dock_remove_html_spaces (gchar *cString);
 */
 void cairo_dock_get_version_from_string (const gchar *cVersionString, int *iMajorVersion, int *iMinorVersion, int *iMicroVersion);
 
+/** Say if a string is an adress (file://xxx, http://xxx, ftp://xxx, etc).
+* @param cString a string.
+* @return TRUE if it's an address.
+*/
+gboolean cairo_dock_string_is_address (const gchar *cString);
+#define cairo_dock_string_is_adress cairo_dock_string_is_address
 
 gchar *cairo_dock_launch_command_sync_with_stderr (const gchar *cCommand, gboolean bPrintStdErr);
 #define cairo_dock_launch_command_sync(cCommand) cairo_dock_launch_command_sync_with_stderr (cCommand, TRUE)

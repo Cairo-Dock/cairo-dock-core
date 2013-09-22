@@ -1149,7 +1149,7 @@ static gboolean _on_button_press (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventButt
 	{
 		GtkWidget *menu = gldi_container_build_menu (CAIRO_CONTAINER (pDock), icon);  // genere un CAIRO_DOCK_BUILD_CONTAINER_MENU et CAIRO_DOCK_BUILD_ICON_MENU.
 		
-		cairo_dock_popup_menu_on_icon (menu, icon, CAIRO_CONTAINER (pDock));
+		gldi_menu_popup_on_icon (menu, icon, CAIRO_CONTAINER (pDock));
 	}
 	else if (pButton->button == 2 && pButton->type == GDK_BUTTON_PRESS)  // clique milieu.
 	{

@@ -185,6 +185,30 @@ void cairo_dock_get_version_from_string (const gchar *cVersionString, int *iMajo
 }
 
 
+gboolean cairo_dock_string_is_address (const gchar *cString)
+{
+	gchar *protocole = g_strstr_len (cString, -1, "://");
+	if (protocole == NULL || protocole == cString)
+	{
+		if (strncmp (cString, "www", 3) == 0)
+			return TRUE;
+		return FALSE;
+	}
+	const gchar *str = cString;
+	while (*str == ' ')
+		str ++;
+	while (str < protocole)
+	{
+		if (! g_ascii_isalnum (*str) && *str != '-')  // x-nautilus-desktop://
+			return FALSE;
+		str ++;
+	}
+	
+	return TRUE;
+}
+
+
+
 gchar *cairo_dock_launch_command_sync_with_stderr (const gchar *cCommand, gboolean bPrintStdErr)
 {
 	gchar *standard_output=NULL, *standard_error=NULL;
