@@ -53,7 +53,6 @@ SET(core_lib_SRCS
 	cairo-dock-gui-manager.c 			cairo-dock-gui-manager.h
 	cairo-dock-gui-factory.c 			cairo-dock-gui-factory.h
 	eggaccelerators.c 					eggaccelerators.h
-	gtk3imagemenuitem.c 				gtk3imagemenuitem.h
 	cairo-dock-keybinder.c 				cairo-dock-keybinder.h
 	cairo-dock-dbus.c 					cairo-dock-dbus.h 
 	cairo-dock-keyfile-utilities.c 		cairo-dock-keyfile-utilities.h
@@ -67,6 +66,10 @@ SET(core_lib_SRCS
 	texture-blur.h
 )
 
+# Gtk > 3.8
+if (GTK_MAJOR GREATER 3 OR GTK_MAJOR EQUAL 3 AND GTK_MINOR GREATER 8)
+	LIST(APPEND core_lib_SRCS gtk3imagemenuitem.c gtk3imagemenuitem.h)
+endif()
 
 ########### compilation ###############
 
@@ -172,6 +175,11 @@ install(FILES
 	cairo-dock-utils.h
 	
 	DESTINATION ${includedir}/cairo-dock/gldit)
+
+# Gtk > 3.8
+if (GTK_MAJOR GREATER 3 OR GTK_MAJOR EQUAL 3 AND GTK_MINOR GREATER 8)
+	install(FILES gtk3imagemenuitem.h DESTINATION ${includedir}/cairo-dock/gldit)
+endif()
 
 if (disable-gtk-grip)
 	add_definitions (-DENABLE_GTK_GRIP=1)

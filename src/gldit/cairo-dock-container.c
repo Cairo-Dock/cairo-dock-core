@@ -22,8 +22,10 @@
 
 #include <cairo.h>
 #include <gtk/gtk.h>
-#include <GL/gl.h> 
+#include <GL/gl.h>
+#if GTK_CHECK_VERSION (3, 10, 0)
 #include "gtk3imagemenuitem.h"
+#endif
 
 #include "cairo-dock-icon-facility.h"  // cairo_dock_compute_icon_area
 #include "cairo-dock-dock-facility.h"  // cairo_dock_is_hidden
