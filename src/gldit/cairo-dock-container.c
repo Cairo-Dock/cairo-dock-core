@@ -511,7 +511,7 @@ GtkWidget *gldi_menu_item_new_full (const gchar *cLabel, const gchar *cImage, gb
 		return (bUseMnemonic ? gtk_menu_item_new_with_mnemonic (cLabel) : gtk_menu_item_new_with_label (cLabel));
 	
 	GtkWidget *image = NULL;
-#if (! GTK_CHECK_VERSION (3, 10, 0)) || (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
+#if (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
 	if (*cImage == '/')
 	{
 		int size;
@@ -522,7 +522,11 @@ GtkWidget *gldi_menu_item_new_full (const gchar *cLabel, const gchar *cImage, gb
 	}
 	else
 	{
+		#if GTK_CHECK_VERSION (3, 10, 0)
 		image = gtk_image_new_from_icon_name (cImage, iSize);
+		#else
+		image = gtk_image_new_from_stock (cImage, iSize);
+		#endif
 	}
 #endif
 	
