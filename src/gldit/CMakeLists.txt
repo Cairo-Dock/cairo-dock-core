@@ -177,7 +177,7 @@ install(FILES
 	DESTINATION ${includedir}/cairo-dock/gldit)
 
 # Gtk > 3.8
-if (GTK_MAJOR GREATER 3 OR GTK_MAJOR EQUAL 3 AND GTK_MINOR GREATER 8)
+if (${GTK_MAJOR} GREATER 3 OR (${GTK_MAJOR} EQUAL 3 AND ${GTK_MINOR} GREATER 8))
 	install(FILES gtk3imagemenuitem.h DESTINATION ${includedir}/cairo-dock/gldit)
 endif()
 
