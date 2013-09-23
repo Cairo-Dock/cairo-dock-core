@@ -370,8 +370,8 @@ void gldi_menu_popup_on_icon (GtkWidget *menu, Icon *pIcon, GldiContainer *pCont
 //GtkWidget *cairo_dock_create_sub_menu (const gchar *cLabel, GtkWidget *pMenu, const gchar *cImage);
 #define cairo_dock_create_sub_menu(cLabel, pMenu, cImage) gldi_menu_add_sub_menu (pMenu, cLabel, cImage)
 
-
-GtkWidget *gldi_menu_item_new (const gchar *cLabel, const gchar *cImage, gboolean bUseMnemonic);
+GtkWidget *gldi_menu_item_new_full (const gchar *cLabel, const gchar *cImage, gboolean bUseMnemonic, GtkIconSize iSize);
+#define gldi_menu_item_new(cLabel, cImage, bUseMnemonic) gldi_menu_item_new_full (cLabel, cImage, bUseMnemonic, GTK_ICON_SIZE_MENU)
 
 GtkWidget *gldi_menu_item_new_with_action (const gchar *cLabel, const gchar *cImage, gboolean bUseMnemonic, GCallback pFunction, gpointer pData);
 

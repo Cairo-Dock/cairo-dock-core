@@ -504,7 +504,7 @@ GtkWidget *cairo_dock_create_sub_menu (const gchar *cLabel, GtkWidget *pMenu, co
 	return pSubMenu; 
 }*/
 
-GtkWidget *gldi_menu_item_new (const gchar *cLabel, const gchar *cImage, gboolean bUseMnemonic)
+GtkWidget *gldi_menu_item_new_full (const gchar *cLabel, const gchar *cImage, gboolean bUseMnemonic, GtkIconSize iSize)
 {
 	GtkWidget *pMenuItem;
 	if (! cImage)
@@ -515,14 +515,14 @@ GtkWidget *gldi_menu_item_new (const gchar *cLabel, const gchar *cImage, gboolea
 	if (*cImage == '/')
 	{
 		int size;
-		gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &size, NULL);
+		gtk_icon_size_lookup (iSize, &size, NULL);
 		GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cImage, size, size, NULL);
 		image = gtk_image_new_from_pixbuf (pixbuf);
 		g_object_unref (pixbuf);
 	}
 	else
 	{
-		image = gtk_image_new_from_icon_name (cImage, GTK_ICON_SIZE_MENU);
+		image = gtk_image_new_from_icon_name (cImage, iSize);
 	}
 #endif
 	
@@ -554,7 +554,7 @@ GtkWidget *gldi_menu_item_new_with_action (const gchar *cLabel, const gchar *cIm
 
 GtkWidget *gldi_menu_item_new_with_submenu (const gchar *cLabel, const gchar *cImage, GtkWidget **pSubMenuPtr)
 {
-	GtkWidget *pMenuItem = gldi_menu_item_new (cLabel, cImage, FALSE);
+	GtkWidget *pMenuItem = gldi_menu_item_new_full (cLabel, cImage, FALSE, GTK_ICON_SIZE_LARGE_TOOLBAR);
 	GtkWidget *pSubMenu = gtk_menu_new ();
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenu);
 	
