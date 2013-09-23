@@ -67,7 +67,7 @@ SET(core_lib_SRCS
 )
 
 # Gtk > 3.8
-if (GTK_MAJOR GREATER 3 OR GTK_MAJOR EQUAL 3 AND GTK_MINOR GREATER 8)
+if (${GTK_MAJOR} GREATER 3 OR (${GTK_MAJOR} EQUAL 3 AND ${GTK_MINOR} GREATER 8))
 	LIST(APPEND core_lib_SRCS gtk3imagemenuitem.c gtk3imagemenuitem.h)
 endif()
 

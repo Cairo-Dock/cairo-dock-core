@@ -114,8 +114,6 @@ static void gtk3_image_menu_item_get_property         (GObject         *object,
                                                       guint            prop_id,
                                                       GValue          *value,
                                                       GParamSpec      *pspec);
-static void gtk3_image_menu_item_screen_changed       (GtkWidget        *widget,
-                                                      GdkScreen        *previous_screen);
 
 static void gtk3_image_menu_item_recalculate          (Gtk3ImageMenuItem *image_menu_item);
 
@@ -141,7 +139,7 @@ gtk3_image_menu_item_class_init (Gtk3ImageMenuItemClass *klass)
   GtkContainerClass *container_class = (GtkContainerClass*) klass;
 
   widget_class->destroy = gtk3_image_menu_item_destroy;
-  widget_class->screen_changed = gtk3_image_menu_item_screen_changed;
+  widget_class->screen_changed = NULL;
   widget_class->get_preferred_width = gtk3_image_menu_item_get_preferred_width;
   widget_class->get_preferred_height = gtk3_image_menu_item_get_preferred_height;
   widget_class->get_preferred_height_for_width = gtk3_image_menu_item_get_preferred_height_for_width;
@@ -298,20 +296,16 @@ gtk3_image_menu_item_get_property (GObject         *object,
     }
 }
 
+#if (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
+#define show_image(image_menu_item) TRUE
+#else
 static gboolean
 show_image (Gtk3ImageMenuItem *image_menu_item)
 {
   Gtk3ImageMenuItemPrivate *priv = image_menu_item->priv;
-  GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (image_menu_item));
-  gboolean show;
-
-  if (priv->always_show_image)
-    show = TRUE;
-  else
-    g_object_get (settings, "gtk-menu-images", &show, NULL);
-
-  return show;
+  return priv->always_show_image;
 }
+#endif
 
 static void
 gtk3_image_menu_item_map (GtkWidget *widget)
@@ -1093,67 +1087,4 @@ gtk3_image_menu_item_remove (GtkContainer *container,
     {
       GTK_CONTAINER_CLASS (gtk3_image_menu_item_parent_class)->remove (container, child);
     }
-}
-
-static void
-show_image_change_notify (Gtk3ImageMenuItem *image_menu_item)
-{
-  Gtk3ImageMenuItemPrivate *priv = image_menu_item->priv;
-
-  if (priv->image)
-    {
-      if (show_image (image_menu_item))
-        gtk_widget_show (priv->image);
-      else
-        gtk_widget_hide (priv->image);
-    }
-}
-
-static void
-traverse_container (GtkWidget *widget,
-                    gpointer   data)
-{
-  if (GTK3_IS_IMAGE_MENU_ITEM (widget))
-    show_image_change_notify (GTK3_IMAGE_MENU_ITEM (widget));
-  else if (GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget), traverse_container, NULL);
-}
-
-static void
-gtk3_image_menu_item_setting_changed (GtkSettings *settings)
-{
-  GList *list, *l;
-
-  list = gtk_window_list_toplevels ();
-
-  for (l = list; l; l = l->next)
-    gtk_container_forall (GTK_CONTAINER (l->data),
-                          traverse_container, NULL);
-
-  g_list_free (list);
-}
-
-static void
-gtk3_image_menu_item_screen_changed (GtkWidget *widget,
-                                    GdkScreen *previous_screen)
-{
-  GtkSettings *settings;
-  gulong show_image_connection;
-
-  if (!gtk_widget_has_screen (widget))
-    return;
-
-  settings = gtk_widget_get_settings (widget);
-
-  show_image_connection =
-    g_signal_handler_find (settings, G_SIGNAL_MATCH_FUNC, 0, 0,
-                           NULL, gtk3_image_menu_item_setting_changed, NULL);
-
-  if (show_image_connection)
-    return;
-
-  g_signal_connect (settings, "notify::gtk-menu-images",
-                    G_CALLBACK (gtk3_image_menu_item_setting_changed), NULL);
-
-  show_image_change_notify (GTK3_IMAGE_MENU_ITEM (widget));
 }
