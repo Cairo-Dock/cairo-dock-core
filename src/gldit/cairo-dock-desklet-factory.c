@@ -47,6 +47,7 @@
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-launcher-manager.h"
+#include "cairo-dock-menu.h"
 #include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-desklet-factory.h"
 
@@ -461,7 +462,7 @@ static gboolean on_button_press_desklet(G_GNUC_UNUSED GtkWidget *pWidget,
 	{
 		Icon *pClickedIcon = gldi_desklet_find_clicked_icon (pDesklet);
 		GtkWidget *menu = gldi_container_build_menu (CAIRO_CONTAINER (pDesklet), pClickedIcon);  // genere un CAIRO_DOCK_BUILD_ICON_MENU.
-		gldi_menu_popup_on_container (menu, CAIRO_CONTAINER (pDesklet));
+		gldi_menu_popup (menu);
 	}
 	else if (pButton->button == 2 && pButton->type == GDK_BUTTON_PRESS)  // clique milieu.
 	{
@@ -498,12 +499,10 @@ static gboolean on_button_press_desklet(G_GNUC_UNUSED GtkWidget *pWidget,
 	return FALSE;
 }
 
-static void _on_drag_data_received (G_GNUC_UNUSED GtkWidget *pWidget, G_GNUC_UNUSED GdkDragContext *dc, gint x, gint y, GtkSelectionData *selection_data, G_GNUC_UNUSED guint info, G_GNUC_UNUSED guint t, CairoDesklet *pDesklet)
+static void _on_drag_data_received (G_GNUC_UNUSED GtkWidget *pWidget, G_GNUC_UNUSED GdkDragContext *dc, gint x, gint y, GtkSelectionData *selection_data, G_GNUC_UNUSED guint info, guint time, CairoDesklet *pDesklet)
 {
-	//g_print ("%s (%dx%d)\n", __func__, x, y);
-	
 	//\_________________ On recupere l'URI.
-	gchar *cReceivedData = (gchar *) gtk_selection_data_get_text (selection_data);
+	gchar *cReceivedData = (gchar *) gtk_selection_data_get_data (selection_data);  // the data are actually 'const guchar*', but since we only allowed text and urls, it will be a string
 	g_return_if_fail (cReceivedData != NULL);
 	int length = strlen (cReceivedData);
 	if (cReceivedData[length-1] == '\n')
@@ -511,10 +510,14 @@ static void _on_drag_data_received (G_GNUC_UNUSED GtkWidget *pWidget, G_GNUC_UNU
 	if (cReceivedData[length-1] == '\r')
 		cReceivedData[--length] = '\0';
 	
+	g_print ("%s (%dx%d, %s)\n", __func__, x, y, cReceivedData);
+	
 	pDesklet->container.iMouseX = x;
 	pDesklet->container.iMouseY = y;
 	Icon *pClickedIcon = gldi_desklet_find_clicked_icon (pDesklet);
-	cairo_dock_notify_drop_data (cReceivedData, pClickedIcon, 0, CAIRO_CONTAINER (pDesklet));
+	gldi_container_notify_drop_data (CAIRO_CONTAINER (pDesklet), cReceivedData, pClickedIcon, 0);
+	
+	gtk_drag_finish (dc, TRUE, FALSE, time);
 }
 
 static gboolean on_motion_notify_desklet (GtkWidget *pWidget,

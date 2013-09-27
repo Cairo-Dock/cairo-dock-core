@@ -38,6 +38,7 @@
 #include "cairo-dock-applications-manager.h"  // cairo_dock_get_current_active_icon
 #include "cairo-dock-themes-manager.h"  // cairo_dock_export_current_theme
 #include "cairo-dock-config.h"  // cairo_dock_load_current_theme
+#include "cairo-dock-menu.h"  // cairo_dock_add_in_menu_with_stock_and_data
 #include "cairo-dock-gui-manager.h"  // cairo_dock_set_status_message
 #include "cairo-dock-gui-backend.h"
 #include "cairo-dock-widget-themes.h"

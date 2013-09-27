@@ -23,6 +23,7 @@
 #include "cairo-dock-module-manager.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-menu.h"  // cairo_dock_add_in_menu_with_stock_and_data
 #include "cairo-dock-desktop-manager.h"  // gldi_desktop_get_width
 #include "cairo-dock-gui-manager.h"  // cairo_dock_show_module_instance_gui
 #include "cairo-dock-gui-backend.h"  // cairo_dock_show_module_gui

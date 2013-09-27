@@ -40,6 +40,7 @@
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-container.h"
+#include "cairo-dock-menu.h"  // cairo_dock_add_in_menu_with_stock_and_data
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-desktop-manager.h"

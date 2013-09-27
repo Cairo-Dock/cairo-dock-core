@@ -335,7 +335,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 /** Pop-up a menu on the applet's icon.
 *@param pMenu menu to show
 */
-#define CD_APPLET_POPUP_MENU_ON_MY_ICON(pMenu) cairo_dock_popup_menu_on_icon (pMenu, myIcon, myContainer)
+#define CD_APPLET_POPUP_MENU_ON_MY_ICON(pMenu) gldi_menu_popup (pMenu)
 
 /** Reload the config panel of the applet. This is useful if you have custom widgets inside your conf file, and need to reload them.
 */

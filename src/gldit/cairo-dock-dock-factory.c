@@ -51,6 +51,7 @@
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-menu.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-dock-visibility.h"
 #include "cairo-dock-draw-opengl.h"
@@ -1149,7 +1150,7 @@ static gboolean _on_button_press (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventButt
 	{
 		GtkWidget *menu = gldi_container_build_menu (CAIRO_CONTAINER (pDock), icon);  // genere un CAIRO_DOCK_BUILD_CONTAINER_MENU et CAIRO_DOCK_BUILD_ICON_MENU.
 		
-		gldi_menu_popup_on_icon (menu, icon, CAIRO_CONTAINER (pDock));
+		gldi_menu_popup (menu);
 	}
 	else if (pButton->button == 2 && pButton->type == GDK_BUTTON_PRESS)  // clique milieu.
 	{
@@ -1356,7 +1357,7 @@ void _on_drag_data_received (G_GNUC_UNUSED GtkWidget *pWidget, GdkDragContext *d
 	if (cairo_dock_is_hidden (pDock))  // X ne semble pas tenir compte de la zone d'input pour dropper les trucs...
 		return ;
 	//\_________________ On recupere l'URI.
-	gchar *cReceivedData = (gchar *)gtk_selection_data_get_data (selection_data);
+	gchar *cReceivedData = (gchar *)gtk_selection_data_get_data (selection_data);  // the data are actually 'const guchar*', but since we only allowed text and urls, it will be a string
 	g_return_if_fail (cReceivedData != NULL);
 	int length = strlen (cReceivedData);
 	if (cReceivedData[length-1] == '\n')
@@ -1446,7 +1447,7 @@ void _on_drag_data_received (G_GNUC_UNUSED GtkWidget *pWidget, GdkDragContext *d
 	}
 	cd_debug ("drop on %s (%.2f)", pPointedIcon?pPointedIcon->cName:"dock", fOrder);
 	
-	cairo_dock_notify_drop_data (cReceivedData, pPointedIcon, fOrder, CAIRO_CONTAINER (pDock));
+	gldi_container_notify_drop_data (CAIRO_CONTAINER (pDock), cReceivedData, pPointedIcon, fOrder);
 	
 	gtk_drag_finish (dc, TRUE, FALSE, time);
 }

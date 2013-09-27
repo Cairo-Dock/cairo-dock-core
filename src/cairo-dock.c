@@ -64,7 +64,6 @@
 #include "cairo-dock-module-instance-manager.h"  // GldiModuleInstance
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-desklet-manager.h"
-#include "cairo-dock-menu.h"
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-dialog-factory.h"
 #include "cairo-dock-keyfile-utilities.h"
@@ -80,6 +79,7 @@
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-backend.h"
 #include "cairo-dock-user-interaction.h"
+#include "cairo-dock-user-menu.h"
 
 //#define CAIRO_DOCK_THEME_SERVER "http://themes.glx-dock.org"
 #define CAIRO_DOCK_THEME_SERVER "http://download.tuxfamily.org/glxdock/themes"
@@ -132,7 +132,6 @@ static void _on_got_server_answer (const gchar *data, G_GNUC_UNUSED gpointer use
 static gboolean _cairo_dock_successful_launch (gpointer data)
 {
 	s_bSucessfulLaunch = TRUE;
-	
 	// new year greetings.
 	time_t t = time (NULL);
 	struct tm st;
