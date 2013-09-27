@@ -4,7 +4,7 @@ add_subdirectory (implementations)
 
 SET(cairo_dock_SRCS
 	cairo-dock.c
-	cairo-dock-menu.c 					cairo-dock-menu.h 
+	cairo-dock-user-menu.c 				cairo-dock-user-menu.h 
 	cairo-dock-user-interaction.c 		cairo-dock-user-interaction.h 
 	cairo-dock-gui-advanced.c 			cairo-dock-gui-advanced.h
 	cairo-dock-gui-simple.c 			cairo-dock-gui-simple.h

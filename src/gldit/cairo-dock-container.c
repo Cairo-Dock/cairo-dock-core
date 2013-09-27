@@ -38,6 +38,7 @@
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-animations.h"  // cairo_dock_animation_will_be_visible
 #include "cairo-dock-desktop-manager.h"  // gldi_desktop_get_width
+#include "cairo-dock-menu.h"  // gldi_menu_new
 #define _MANAGER_DEF_
 #include "cairo-dock-container.h"
 
@@ -88,7 +89,7 @@ static gboolean _prevent_delete (G_GNUC_UNUSED GtkWidget *pWidget, G_GNUC_UNUSED
 	return TRUE;  // on empeche les ALT+F4 malheureux.
 }
 
-static void cairo_dock_set_default_rgba_visual (GtkWidget *pWidget)
+void cairo_dock_set_default_rgba_visual (GtkWidget *pWidget)
 {
 	GdkScreen* pScreen = gtk_widget_get_screen (pWidget);
 	
@@ -253,7 +254,7 @@ void gldi_container_disable_drop (GldiContainer *pContainer)
 	gtk_drag_dest_set_target_list (pContainer->pWidget, NULL);
 }
 
-void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, double fOrder, GldiContainer *pContainer)
+void gldi_container_notify_drop_data (GldiContainer *pContainer, gchar *cReceivedData, Icon *pPointedIcon, double fOrder)
 {
 	g_return_if_fail (cReceivedData != NULL);
 	gchar *cData = NULL;
@@ -345,7 +346,6 @@ void gldi_container_manager_register_backend (GldiContainerManagerBackend *pBack
 }
 
 
-
 gboolean cairo_dock_emit_signal_on_container (GldiContainer *pContainer, const gchar *cSignal)
 {
 	static gboolean bReturn;
@@ -364,228 +364,6 @@ gboolean cairo_dock_emit_enter_signal (GldiContainer *pContainer)
 }
 
 
-static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push_in, gpointer *data)
-{
-	*push_in = FALSE;
-	Icon *pIcon = data[0];
-	GldiContainer *pContainer = data[1];
-	int x0 = pContainer->iWindowPositionX + pIcon->fDrawX;
-	int y0 = pContainer->iWindowPositionY + pIcon->fDrawY;
-	
-	int w, h;  // taille menu
-	GtkRequisition requisition;
-	#if (GTK_MAJOR_VERSION < 3)
-	gtk_widget_size_request (GTK_WIDGET (menu), &requisition);
-	#else
-	gtk_widget_get_preferred_size (GTK_WIDGET (menu), &requisition, NULL);
-	#endif
-	w = requisition.width;
-	h = requisition.height;
-	
-	int Hs = (pContainer->bIsHorizontal ? gldi_desktop_get_height() : gldi_desktop_get_width());
-	//g_print ("%d;%d %dx%d\n", x0, y0, w, h);
-	if (pContainer->bIsHorizontal)
-	{
-		*x = x0;
-		if (y0 > Hs/2)  // pContainer->bDirectionUp
-			*y = y0 - h;
-		else
-			*y = y0 + pIcon->fHeight * pIcon->fScale;
-	}
-	else
-	{
-		*y = MIN (x0, gldi_desktop_get_height() - h);
-		if (y0 > Hs/2)  // pContainer->bDirectionUp
-			*x = y0 - w;
-		else
-			*x = y0 + pIcon->fHeight * pIcon->fScale;
-	}
-}
-static gboolean _popup_menu_delayed (gpointer *data)
-{
-	GtkMenuPositionFunc place_menu = data[2];
-	GtkWidget *menu = data[3];
-	gtk_menu_popup (GTK_MENU (menu),
-		NULL,
-		NULL,
-		place_menu,
-		data,
-		0,
-		0);
-	return FALSE;
-}
-void gldi_menu_popup_on_icon (GtkWidget *menu, Icon *pIcon, GldiContainer *pContainer)
-{
-	static gpointer data[4];  // data[0&1] is used by _place_menu_on_icon, data[2&3] is used by the delayed callback.
-	if (menu == NULL)
-		return;
-	
-	guint32 t = gtk_get_current_event_time();
-	cd_debug ("gtk_get_current_event_time: %d", t);
-	
-	GtkMenuPositionFunc place_menu = NULL;
-	if (pIcon != NULL && pContainer != NULL)
-	{
-		place_menu = (GtkMenuPositionFunc)_place_menu_on_icon;
-		data[0] = pIcon;
-		data[1] = pContainer;
-	}
-	
-	if (pContainer && pContainer->iface.setup_menu)
-		pContainer->iface.setup_menu (pContainer, pIcon, menu);
-	
-	gtk_widget_show_all (GTK_WIDGET (menu));
-	
-	if (t > 0)
-	{
-		gtk_menu_popup (GTK_MENU (menu),
-			NULL,
-			NULL,
-			place_menu,
-			data,
-			0,
-			t);
-	}
-	else  // 'gtk_menu_popup' is buggy and doesn't work if not triggered directly by an X event :-/ so in this case, we run it with a delay (200ms is the minimal value that always works).
-	{
-		data[2] = place_menu;
-		data[3] = menu;
-		g_timeout_add (250, (GSourceFunc)_popup_menu_delayed, data);
-	}
-}
-
-
-/*GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, const gchar *gtkStock, GCallback pFunction, GtkWidget *pMenu, gpointer pData)
-{
-	GtkWidget *pMenuItem = gtk_image_menu_item_new_with_label (cLabel);
-	if (gtkStock)
-	{
-		GtkWidget *image = NULL;
-		if (*gtkStock == '/')
-		{
-			GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (gtkStock, 16, 16, NULL);
-			image = gtk_image_new_from_pixbuf (pixbuf);
-			g_object_unref (pixbuf);
-		}
-		else
-		{
-			image = gtk_image_new_from_stock (gtkStock, GTK_ICON_SIZE_MENU);
-		}
-		_gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
-	}
-	gtk_menu_shell_append  (GTK_MENU_SHELL (pMenu), pMenuItem);
-	if (pFunction)
-		g_signal_connect (G_OBJECT (pMenuItem), "activate", G_CALLBACK (pFunction), pData);
-	return pMenuItem;
-}
-
-GtkWidget *cairo_dock_create_sub_menu (const gchar *cLabel, GtkWidget *pMenu, const gchar *cImage)
-{
-	GtkWidget *pMenuItem, *image, *pSubMenu = gtk_menu_new ();
-	if (cImage == NULL)
-	{
-		pMenuItem = gtk_image_menu_item_new_with_label (cLabel);
-	}
-	else
-	{
-		pMenuItem = gtk_image_menu_item_new_with_label (cLabel);
-		if (*cImage == '/')
-		{
-			GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cImage, 24, 24, NULL);
-			image = gtk_image_new_from_pixbuf (pixbuf);
-			g_object_unref (pixbuf);
-		}
-		else
-		{
-			image = gtk_image_new_from_stock (cImage, GTK_ICON_SIZE_MENU);
-		}
-		_gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
-	}
-	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem); 
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenu);
-	return pSubMenu; 
-}*/
-
-GtkWidget *gldi_menu_item_new_full (const gchar *cLabel, const gchar *cImage, gboolean bUseMnemonic, GtkIconSize iSize)
-{
-	GtkWidget *pMenuItem;
-	if (! cImage)
-		return (bUseMnemonic ? gtk_menu_item_new_with_mnemonic (cLabel) : gtk_menu_item_new_with_label (cLabel));
-	
-	GtkWidget *image = NULL;
-#if (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
-	if (*cImage == '/')
-	{
-		int size;
-		gtk_icon_size_lookup (iSize, &size, NULL);
-		GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cImage, size, size, NULL);
-		image = gtk_image_new_from_pixbuf (pixbuf);
-		g_object_unref (pixbuf);
-	}
-	else
-	{
-		#if GTK_CHECK_VERSION (3, 10, 0)
-		image = gtk_image_new_from_icon_name (cImage, iSize);
-		#else
-		image = gtk_image_new_from_stock (cImage, iSize);
-		#endif
-	}
-#endif
-	
-#if GTK_CHECK_VERSION (3, 10, 0)
-	#if (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
-	pMenuItem = (bUseMnemonic ? gtk3_image_menu_item_new_with_mnemonic (cLabel) : gtk3_image_menu_item_new_with_label (cLabel));
-	gtk3_image_menu_item_set_image (GTK3_IMAGE_MENU_ITEM (pMenuItem), image);
-	#else
-	pMenuItem = (bUseMnemonic ? gtk_menu_item_new_with_mnemonic (cLabel) : gtk_menu_item_new_with_label (cLabel));
-	#endif
-#else
-	pMenuItem = (bUseMnemonic ? gtk_image_menu_item_new_with_mnemonic (cLabel) : gtk_image_menu_item_new_with_label (cLabel));
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
-	#if ((CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1) && (GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION >= 16))
-	gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (pMenuItem), TRUE);
-	#endif
-#endif
-	
-	return pMenuItem;
-}
-
-GtkWidget *gldi_menu_item_new_with_action (const gchar *cLabel, const gchar *cImage, gboolean bUseMnemonic, GCallback pFunction, gpointer pData)
-{
-	GtkWidget *pMenuItem = gldi_menu_item_new (cLabel, cImage, bUseMnemonic);
-	if (pFunction)
-		g_signal_connect (G_OBJECT (pMenuItem), "activate", G_CALLBACK (pFunction), pData);
-	return pMenuItem;
-}
-
-GtkWidget *gldi_menu_item_new_with_submenu (const gchar *cLabel, const gchar *cImage, GtkWidget **pSubMenuPtr)
-{
-	GtkWidget *pMenuItem = gldi_menu_item_new_full (cLabel, cImage, FALSE, GTK_ICON_SIZE_LARGE_TOOLBAR);
-	GtkWidget *pSubMenu = gtk_menu_new ();
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenu);
-	
-	*pSubMenuPtr = pSubMenu;
-	return pMenuItem;
-}
-
-GtkWidget *gldi_menu_add_item_full (GtkWidget *pMenu, const gchar *cLabel, const gchar *cImage, GCallback pFunction, gpointer pData, gboolean bUseMnemonic)
-{
-	GtkWidget *pMenuItem = gldi_menu_item_new_with_action (cLabel, cImage, bUseMnemonic, pFunction, pData);
-	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
-	return pMenuItem;
-}
-
-GtkWidget *gldi_menu_add_sub_menu_full (GtkWidget *pMenu, const gchar *cLabel, const gchar *cImage, GtkWidget **pMenuItemPtr)
-{
-	GtkWidget *pSubMenu;
-	GtkWidget *pMenuItem = gldi_menu_item_new_with_submenu (cLabel, cImage, &pSubMenu);
-	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
-	if (pMenuItemPtr)
-		*pMenuItemPtr = pMenuItem;
-	return pSubMenu; 
-}
-
-
 static GtkWidget *s_pMenu = NULL;  // right-click menu
 GtkWidget *gldi_container_build_menu (GldiContainer *pContainer, Icon *icon)
 {
@@ -597,7 +375,7 @@ GtkWidget *gldi_container_build_menu (GldiContainer *pContainer, Icon *icon)
 	g_return_val_if_fail (pContainer != NULL, NULL);
 	
 	//\_________________________ On construit le menu.
-	GtkWidget *menu = gtk_menu_new ();
+	GtkWidget *menu = gldi_menu_new (icon);
 	
 	//\_________________________ On passe la main a ceux qui veulent y rajouter des choses.
 	gboolean bDiscardMenu = FALSE;

@@ -18,8 +18,8 @@
 */
 
 
-#ifndef __CAIRO_DOCK_MENU__
-#define  __CAIRO_DOCK_MENU__
+#ifndef __CAIRO_DOCK_USER_MENU__
+#define  __CAIRO_DOCK_USER_MENU__
 
 #include <gtk/gtk.h>
 

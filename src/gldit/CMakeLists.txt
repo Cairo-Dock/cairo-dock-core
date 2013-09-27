@@ -62,6 +62,7 @@ SET(core_lib_SRCS
 	cairo-dock-task.c 					cairo-dock-task.h
 	cairo-dock-config.c 				cairo-dock-config.h
 	cairo-dock-utils.c 					cairo-dock-utils.h
+	cairo-dock-menu.c 					cairo-dock-menu.h
 	texture-gradation.h
 	texture-blur.h
 )
@@ -172,14 +173,10 @@ install(FILES
 	cairo-dock-task.h
 	cairo-dock-animations.h
 	cairo-dock-gui-factory.h
+	cairo-dock-menu.h
 	cairo-dock-utils.h
 	
 	DESTINATION ${includedir}/cairo-dock/gldit)
-
-# Gtk > 3.8
-if (${GTK_MAJOR} GREATER 3 OR (${GTK_MAJOR} EQUAL 3 AND ${GTK_MINOR} GREATER 8))
-	install(FILES gtk3imagemenuitem.h DESTINATION ${includedir}/cairo-dock/gldit)
-endif()
 
 if (disable-gtk-grip)
 	add_definitions (-DENABLE_GTK_GRIP=1)

@@ -285,14 +285,12 @@ void gldi_container_present (GldiContainer *pContainer);
 void gldi_container_manager_register_backend (GldiContainerManagerBackend *pBackend);
 
 
-gboolean cairo_dock_emit_signal_on_container (GldiContainer *pContainer, const gchar *cSignal);
-gboolean cairo_dock_emit_leave_signal (GldiContainer *pContainer);
-gboolean cairo_dock_emit_enter_signal (GldiContainer *pContainer);
-
 
   ////////////
  // REDRAW //
 ////////////
+
+void cairo_dock_set_default_rgba_visual (GtkWidget *pWidget);
 
 /** Clear and trigger the redraw of a Container.
 *@param pContainer the Container to redraw.
@@ -328,61 +326,12 @@ void gldi_container_disable_drop (GldiContainer *pContainer);
 * @param fOrder the order of the icon if the drop occured on it, or LAST_ORDER if the drop occured between 2 icons.
 * @param pContainer the container of the icon
 */
-void cairo_dock_notify_drop_data (gchar *cReceivedData, Icon *pPointedIcon, double fOrder, GldiContainer *pContainer);
+void gldi_container_notify_drop_data (GldiContainer *pContainer, gchar *cReceivedData, Icon *pPointedIcon, double fOrder);
 
 
-  //////////
- // MENU //
-//////////
-
-/** Pop-up a menu on an icon. The menu is placed so that it touches the icon, without overlapping it. If the icon is NULL, it will be placed it at the mouse's position. In the case of a dock, it prevents this one from shrinking down.
-*@param menu the menu.
-*@param pIcon the icon, or NULL.
-*@param pContainer the container that was clicked.
-*/
-void gldi_menu_popup_on_icon (GtkWidget *menu, Icon *pIcon, GldiContainer *pContainer);
-#define cairo_dock_popup_menu_on_icon gldi_menu_popup_on_icon
-
-/** Pop-up a menu on a container. In the case of a dock, it prevents this one from shrinking down.
-*@param menu the menu.
-*@param pContainer the container that was clicked.
-*/
-#define gldi_menu_popup_on_container(menu, pContainer) gldi_menu_popup_on_icon (menu, NULL, pContainer)
-#define cairo_dock_popup_menu_on_container gldi_menu_popup_on_container
-
-/** Add an entry to a given menu.
-*@param cLabel label of the entry
-*@param gtkStock a GTK stock or a path to an image
-*@param pFunction callback
-*@param pMenu the menu to insert the entry in
-*@param pData data to feed the callback with
-* @return the new menu-entry that has been added.
-*/
-//GtkWidget *cairo_dock_add_in_menu_with_stock_and_data (const gchar *cLabel, const gchar *gtkStock, GCallback pFunction, GtkWidget *pMenu, gpointer pData);
-#define cairo_dock_add_in_menu_with_stock_and_data(cLabel, gtkStock, pFunction, pMenu, pData) gldi_menu_add_item (pMenu, cLabel, gtkStock, pFunction, pData)
-
-/** Add sub-menu to a given menu.
-*@param cLabel label of the sub-menu
-*@param pMenu the menu to insert the entry in
-*@param cImage a GTK stock or a path to an image
-* @return the new sub-menu that has been added.
-*/
-//GtkWidget *cairo_dock_create_sub_menu (const gchar *cLabel, GtkWidget *pMenu, const gchar *cImage);
-#define cairo_dock_create_sub_menu(cLabel, pMenu, cImage) gldi_menu_add_sub_menu (pMenu, cLabel, cImage)
-
-GtkWidget *gldi_menu_item_new_full (const gchar *cLabel, const gchar *cImage, gboolean bUseMnemonic, GtkIconSize iSize);
-#define gldi_menu_item_new(cLabel, cImage, bUseMnemonic) gldi_menu_item_new_full (cLabel, cImage, bUseMnemonic, GTK_ICON_SIZE_MENU)
-
-GtkWidget *gldi_menu_item_new_with_action (const gchar *cLabel, const gchar *cImage, gboolean bUseMnemonic, GCallback pFunction, gpointer pData);
-
-GtkWidget *gldi_menu_item_new_with_submenu (const gchar *cLabel, const gchar *cImage, GtkWidget **pSubMenuPtr);
-
-GtkWidget *gldi_menu_add_item_full (GtkWidget *pMenu, const gchar *cLabel, const gchar *cImage, GCallback pFunction, gpointer pData, gboolean bUseMnemonic);
-#define gldi_menu_add_item(pMenu, cLabel, cImage, pFunction, pData) gldi_menu_add_item_full (pMenu, cLabel, cImage, pFunction, pData, FALSE)
-
-GtkWidget *gldi_menu_add_sub_menu_full (GtkWidget *pMenu, const gchar *cLabel, const gchar *cImage, GtkWidget **pMenuItemPtr);
-#define gldi_menu_add_sub_menu(pMenu, cLabel, cImage) gldi_menu_add_sub_menu_full (pMenu, cLabel, cImage, NULL)
-
+gboolean cairo_dock_emit_signal_on_container (GldiContainer *pContainer, const gchar *cSignal);
+gboolean cairo_dock_emit_leave_signal (GldiContainer *pContainer);
+gboolean cairo_dock_emit_enter_signal (GldiContainer *pContainer);
 
 /** Build the main menu of a Container.
 *@param icon the icon that was left-clicked, or NULL if none.
@@ -397,15 +346,6 @@ GtkWidget *gldi_container_build_menu (GldiContainer *pContainer, Icon *icon);
 #else
 #define _gtk_hbox_new(m) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, m)
 #define _gtk_vbox_new(m) gtk_box_new (GTK_ORIENTATION_VERTICAL, m)
-#endif
-
-
-#if ((CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1) && (GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION >= 16))
-	#define _gtk_image_menu_item_set_image(pMenuItem, image) do {\
-		gtk_image_menu_item_set_image (pMenuItem, image);\
-		gtk_image_menu_item_set_always_show_image (pMenuItem, TRUE); } while (0)
-#else
-	#define _gtk_image_menu_item_set_image gtk_image_menu_item_set_image
 #endif
 
 

@@ -57,6 +57,7 @@
 #include "cairo-dock-gui-commons.h"
 #include "cairo-dock-applet-facility.h"
 #include "cairo-dock-menu.h"
+#include "cairo-dock-user-menu.h"
 
 #define CAIRO_DOCK_CONF_PANEL_WIDTH 1000
 #define CAIRO_DOCK_CONF_PANEL_HEIGHT 600
@@ -478,15 +479,12 @@ GtkWidget *_add_item_sub_menu (Icon *icon, GtkWidget *pMenu)
 	
 	if (pixbuf)
 	{
-		GtkWidget *pMenuItem = gtk_image_menu_item_new_with_label (cName);
+		GtkWidget *pMenuItem = NULL;
+		pItemSubMenu = gldi_menu_add_sub_menu_full (pMenu, cName, "", &pMenuItem);
+		
 		GtkWidget *image = gtk_image_new_from_pixbuf (pixbuf);
+		gldi_menu_item_set_image (pMenuItem, image);
 		g_object_unref (pixbuf);
-		_gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
-		
-		gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem); 
-		
-		pItemSubMenu = gtk_menu_new ();
-		gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pItemSubMenu);
 	}
 	else
 	{

@@ -39,6 +39,7 @@
 #include <gldit/cairo-dock-dialog-manager.h>
 #include <gldit/cairo-dock-dialog-factory.h>
 #include <gldit/cairo-dock-flying-container.h>
+#include <gldit/cairo-dock-menu.h>
 // Icons
 #include <gldit/cairo-dock-icon-manager.h>
 #include <gldit/cairo-dock-applications-manager.h>
