@@ -118,7 +118,7 @@ static gboolean on_expose_dialog (G_GNUC_UNUSED GtkWidget *pWidget,
 		
 		if (area.x != 0 || area.y != 0)
 		{
-			pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDialog), &area, myDialogsParam.fDialogColor);
+			pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDialog), &area, NULL);  // pass a NULL color, so that the context is filled with transparency (otherwise, internal widgets can appear).
 		}
 		else
 		{
