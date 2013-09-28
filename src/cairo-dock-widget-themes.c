@@ -187,7 +187,9 @@ static gboolean _cairo_dock_load_theme (GKeyFile* pKeyFile, ThemesWidget *pTheme
 	gboolean bNeedSave = cairo_dock_current_theme_need_save ();
 	if (bNeedSave)
 	{
-		Icon *pIcon = gldi_icons_get_any_without_dialog ();
+		Icon *pIcon = cairo_dock_get_current_active_icon ();  // it's most probably the icon corresponding to the configuration window
+		if (pIcon == NULL || cairo_dock_get_icon_container (pIcon) == NULL)  // if not available, get any icon
+			pIcon = gldi_icons_get_any_without_dialog ();
 		int iClickedButton = gldi_dialog_show_and_wait (_("You have made some changes to the current theme.\nYou will lose them if you don't save before choosing a new theme. Continue anyway?"),
 			pIcon, CAIRO_CONTAINER (g_pMainDock),
 			CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, NULL);

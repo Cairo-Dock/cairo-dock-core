@@ -1843,7 +1843,7 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 		//g_print ("class %s already known (%s)\n", cClass?cClass:cDesktopFile, pClassAppli->cDesktopFile);
 		if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)  // if the cStartupWMClass was not defined in the .desktop file, store it now.
 			pClassAppli->cStartupWMClass = g_strdup (cWmClass);
-		g_print ("%s --> %s\n", cClass, pClassAppli->cStartupWMClass);
+		//g_print ("%s --> %s\n", cClass, pClassAppli->cStartupWMClass);
 		return (cClass?cClass:g_strdup (cDesktopFile));
 	}
 	
@@ -1859,7 +1859,7 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 			{
 				if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)
 					pClassAppli->cStartupWMClass = g_strdup (cWmClass);
-				g_print ("%s ---> %s\n", cClass, pClassAppli->cStartupWMClass);
+				//g_print ("%s ---> %s\n", cClass, pClassAppli->cStartupWMClass);
 				pClassAppli->bSearchedAttributes = TRUE;
 			}
 		}
@@ -1900,7 +1900,7 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	{
 		if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)  // we already searched this class before, but we couldn't have its WM class.
 			pClassAppli->cStartupWMClass = g_strdup (cWmClass);
-		g_print ("%s ----> %s\n", cClass, pClassAppli->cStartupWMClass);
+		//g_print ("%s ----> %s\n", cClass, pClassAppli->cStartupWMClass);
 		g_free (cDesktopFilePath);
 		g_free (cCommand);
 		g_free (cStartupWMClass);
@@ -1937,8 +1937,7 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	
 	if (pClassAppli->cStartupWMClass == NULL)
 		pClassAppli->cStartupWMClass = (cStartupWMClass ? cStartupWMClass : g_strdup (cWmClass));
-	
-	g_print ("%s -> pClassAppli->cStartupWMClass: %s\n", cClass, pClassAppli->cStartupWMClass);
+	//g_print ("%s -> pClassAppli->cStartupWMClass: %s\n", cClass, pClassAppli->cStartupWMClass);
 	
 	pClassAppli->cIcon = g_key_file_get_string (pKeyFile, "Desktop Entry", "Icon", NULL);
 	if (pClassAppli->cIcon != NULL && *pClassAppli->cIcon != '/')  // remove any extension.

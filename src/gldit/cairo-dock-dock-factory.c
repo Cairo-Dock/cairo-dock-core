@@ -2049,7 +2049,7 @@ static gboolean _destroy_empty_dock (CairoDock *pDock)
 static void _detach_icon (GldiContainer *pContainer, Icon *icon)
 {
 	CairoDock *pDock = CAIRO_DOCK (pContainer);
-	g_print ("%s (%s)\n", __func__, icon->cName);
+	cd_debug ("%s (%s)", __func__, icon->cName);
 	
 	//\___________________ On trouve l'icone et ses 2 voisins.
 	GList *prev_ic = NULL, *ic, *next_ic;

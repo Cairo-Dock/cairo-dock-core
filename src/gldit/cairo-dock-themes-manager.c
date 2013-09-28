@@ -42,6 +42,7 @@
 #include "cairo-dock-utils.h"  // cairo_dock_get_command_with_right_terminal
 #include "cairo-dock-packages.h"
 #include "cairo-dock-core.h"
+#include "cairo-dock-applications-manager.h"  // cairo_dock_get_current_active_icon
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-themes-manager.h"
 
@@ -186,7 +187,10 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 	{
 		cd_debug ("  This theme will be updated");
 		gchar *cQuestion = g_strdup_printf (_("Are you sure you want to overwrite theme %s?"), cNewThemeName);
-		Icon *pIcon = gldi_icons_get_any_without_dialog ();
+		Icon *pIcon = cairo_dock_get_current_active_icon ();  // it's most probably the icon corresponding to the configuration window
+		if (pIcon == NULL || cairo_dock_get_icon_container (pIcon) == NULL)  // if not available, get any icon
+			pIcon = gldi_icons_get_any_without_dialog ();
+		g_print ("%s\n", pIcon->cName);
 		int iClickedButton = gldi_dialog_show_and_wait (cQuestion,
 			pIcon, CAIRO_CONTAINER (g_pMainDock),
 			GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, NULL);
@@ -373,9 +377,11 @@ gboolean cairo_dock_delete_themes (gchar **cThemesList)
 		g_string_printf (sCommand, _("Are you sure you want to delete theme %s?"), cThemesList[0]);
 	else
 		g_string_printf (sCommand, _("Are you sure you want to delete these themes?"));
-	Icon *pIcon = gldi_icons_get_any_without_dialog ();
+	Icon *pIcon = cairo_dock_get_current_active_icon ();  // it's most probably the icon corresponding to the configuration window
+	if (pIcon == NULL || cairo_dock_get_icon_container (pIcon) == NULL)  // if not available, get any icon
+		pIcon = gldi_icons_get_any_without_dialog ();
 	int iClickedButton = gldi_dialog_show_and_wait (sCommand->str,
-		pIcon, CAIRO_CONTAINER (g_pMainDock),
+		pIcon, cairo_dock_get_icon_container (pIcon),
 		GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, NULL);
 	if (iClickedButton == 0 || iClickedButton == -1)  // ok button or Enter.
 	{

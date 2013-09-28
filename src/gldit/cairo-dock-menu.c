@@ -262,12 +262,7 @@ GtkWidget *gldi_menu_item_new_with_action (const gchar *cLabel, const gchar *cIm
 
 GtkWidget *gldi_menu_item_new_with_submenu (const gchar *cLabel, const gchar *cImage, GtkWidget **pSubMenuPtr)
 {
-	GtkIconSize iSize;
-	if (cImage && (*cImage == '/' || *cImage == '\0')) // a larger icon only for non stock icons
-		iSize = GTK_ICON_SIZE_LARGE_TOOLBAR;
-	else
-		iSize = 0;
-	GtkWidget *pMenuItem = gldi_menu_item_new_full (cLabel, cImage, FALSE, iSize);
+	GtkWidget *pMenuItem = gldi_menu_item_new (cLabel, cImage);
 	GtkWidget *pSubMenu = gldi_submenu_new ();
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenu);
 	

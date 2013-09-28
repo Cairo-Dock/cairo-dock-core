@@ -106,7 +106,7 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 /// TODO: don't use 'cairo_dock_set_icon_surface' here...
 gboolean cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cIconName, Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer)
 {
-	g_print ("%s (%s)\n", __func__, cIconName);
+	//g_print ("%s (%s)\n", __func__, cIconName);
 	// load the image in a surface.
 	int iWidth, iHeight;
 	cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);

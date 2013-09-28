@@ -11,7 +11,7 @@ include ("${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/GNUInstallDirs.cmake")
 ########### project ###############
 
 project ("cairo-dock")
-set (VERSION "3.2.99.rc1")
+set (VERSION "3.3.0")
 
 add_definitions (-std=c99 -Wall -Wextra -Werror-implicit-function-declaration) # -Wextra -Wwrite-strings -Wuninitialized -Werror-implicit-function-declaration -Wstrict-prototypes -Wreturn-type -Wparentheses -Warray-bounds)
 if (NOT DEFINED CMAKE_BUILD_TYPE)
