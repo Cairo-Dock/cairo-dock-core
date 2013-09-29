@@ -972,7 +972,7 @@ static void _set_text_surface (CairoDialog *pDialog, cairo_surface_t *pNewTextSu
 
 void gldi_dialog_set_message (CairoDialog *pDialog, const gchar *cMessage)
 {
-	g_print ("%s (%s)\n", __func__, cMessage);
+	cd_debug ("%s", cMessage);
 	int iNewTextWidth=0, iNewTextHeight=0;
 	cairo_surface_t *pNewTextSurface = _cairo_dock_create_dialog_text_surface (cMessage, pDialog->bUseMarkup, &iNewTextWidth, &iNewTextHeight);
 	

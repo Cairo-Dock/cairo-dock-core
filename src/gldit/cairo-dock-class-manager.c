@@ -1533,7 +1533,7 @@ const gchar *cairo_dock_get_class_wm_class (const gchar *cClass)
 	
 	if (pClassAppli->cStartupWMClass == NULL)  // if the WMClass has not been retrieved beforehand, do it now
 	{
-		g_print ("retrieve WMClass for %s...\n", cClass);
+		cd_debug ("retrieve WMClass for %s...", cClass);
 		Icon *pIcon;
 		GList *ic;
 		for (ic = pClassAppli->pAppliOfClass; ic != NULL; ic = ic->next)

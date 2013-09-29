@@ -190,7 +190,7 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 		Icon *pIcon = cairo_dock_get_current_active_icon ();  // it's most probably the icon corresponding to the configuration window
 		if (pIcon == NULL || cairo_dock_get_icon_container (pIcon) == NULL)  // if not available, get any icon
 			pIcon = gldi_icons_get_any_without_dialog ();
-		g_print ("%s\n", pIcon->cName);
+		cd_debug ("%s", pIcon->cName);
 		int iClickedButton = gldi_dialog_show_and_wait (cQuestion,
 			pIcon, CAIRO_CONTAINER (g_pMainDock),
 			GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, NULL);

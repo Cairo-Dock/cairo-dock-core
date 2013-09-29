@@ -51,7 +51,7 @@ static gboolean _eval (const gchar *cmd)
 		}
 		if (cResult)
 		{
-			g_print ("%s\n", cResult);
+			cd_debug ("%s", cResult);
 			g_free (cResult);
 		}
 	}
@@ -70,7 +70,7 @@ static gboolean present_expo (void)
 
 static gboolean present_class (const gchar *cClass)
 {
-	g_print ("%s (%s)\n", __func__, cClass);
+	cd_debug ("%s", cClass);
 	GList *pIcons = (GList*)cairo_dock_list_existing_appli_with_class (cClass);
 	if (pIcons == NULL)
 		return FALSE;
@@ -96,7 +96,7 @@ static gboolean present_class (const gchar *cClass)
 				{ if (index != -1) { let clone = ws._windows[index]; ws._windows.splice(index, 1);clone.destroy(); } \
 			} \
 		}", iWorkspace, cWmClass);
-		g_print ("eval(%s)\n", code);
+		cd_debug ("eval(%s)", code);
 		bSuccess = _eval (code);
 		g_free (code);
 	}

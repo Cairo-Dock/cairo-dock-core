@@ -139,7 +139,7 @@ static void reset_object (GldiObject *obj)
 	GldiAppletIcon *icon = (GldiAppletIcon*)obj;
 	if (icon->pModuleInstance != NULL)  // delete the module-instance the icon belongs to
 	{
-		g_print ("%s ()\n", __func__);
+		cd_debug ("Reset: %s", icon->cName);
 		gldi_object_unref (GLDI_OBJECT(icon->pModuleInstance));  // if called from the 'reset' of the instance, this will do nothing since the ref is already 0; else, when the instance unref the icon, it will do nothing since its ref is already 0
 	}
 }
@@ -149,7 +149,7 @@ static gboolean delete_object (GldiObject *obj)
 	GldiAppletIcon *icon = (GldiAppletIcon*)obj;
 	if (icon->pModuleInstance != NULL)  // remove the instance from the current theme
 	{
-		g_print ("%s ()\n", __func__);
+		cd_debug ("Delete: %s", icon->cName);
 		gldi_object_delete (GLDI_OBJECT(icon->pModuleInstance));
 		return FALSE;  // don't go further, since the ModuleInstance has already unref'd ourself
 	}

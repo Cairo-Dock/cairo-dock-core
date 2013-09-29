@@ -208,7 +208,7 @@ static gboolean _cairo_dock_write_desklet_position (CairoDesklet *pDesklet)
 			iNumDesktop = gldi_container_get_current_desktop_index (CAIRO_CONTAINER (pDesklet));
 			//g_print ("desormais on place le desklet sur le bureau (%d,%d,%d)\n", iDesktop, iViewportX, iViewportY);
 		}
-		g_print (" -> %d; %d; %d\n", iNumDesktop, iRelativePositionX, iRelativePositionY);
+		cd_debug ("%d; %d; %d", iNumDesktop, iRelativePositionX, iRelativePositionY);
 		cairo_dock_update_conf_file (pDesklet->pIcon->pModuleInstance->cConfFilePath,
 			G_TYPE_INT, "Desklet", "x position", iRelativePositionX,
 			G_TYPE_INT, "Desklet", "y position", iRelativePositionY,
@@ -510,7 +510,7 @@ static void _on_drag_data_received (G_GNUC_UNUSED GtkWidget *pWidget, G_GNUC_UNU
 	if (cReceivedData[length-1] == '\r')
 		cReceivedData[--length] = '\0';
 	
-	g_print ("%s (%dx%d, %s)\n", __func__, x, y, cReceivedData);
+	// g_print ("%s (%dx%d, %s)\n", __func__, x, y, cReceivedData);
 	
 	pDesklet->container.iMouseX = x;
 	pDesklet->container.iMouseY = y;

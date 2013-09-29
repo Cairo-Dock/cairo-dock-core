@@ -119,7 +119,7 @@ static gchar *_gldi_module_list_active (void)
 static gboolean _write_modules_idle (G_GNUC_UNUSED gpointer data)
 {
 	gchar *cModuleNames = _gldi_module_list_active ();
-	g_print ("%s (%s)\n", __func__, cModuleNames);
+	cd_debug ("%s", cModuleNames);
 	cairo_dock_update_conf_file (g_cConfFile,
 		G_TYPE_STRING, "System", "modules", cModuleNames,
 		G_TYPE_INVALID);

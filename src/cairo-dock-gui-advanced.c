@@ -2338,7 +2338,7 @@ static void update_module_state (const gchar *cModuleName, gboolean bActive)
 {
 	if (s_pMainWindow == NULL || cModuleName == NULL)
 		return ;
-	g_print ("%s (%s)\n", __func__, cModuleName);
+	cd_debug ("%s", cModuleName);
 	
 	if (s_pCurrentGroup != NULL && s_pCurrentGroup->cGroupName != NULL && strcmp (cModuleName, s_pCurrentGroup->cGroupName) == 0)  // on est en train d'editer ce module dans le panneau de conf.
 	{
@@ -2394,7 +2394,6 @@ static void update_modules_list (void)
 {
 	if (s_pMainWindow == NULL)
 		return ;
-	g_print ("%s ()\n", __func__);
 	
 	// On detruit la liste des boutons de chaque groupe.
 	gchar *cCurrentGroupName = (s_pCurrentGroup ? g_strdup (s_pCurrentGroup->cGroupName) : NULL);

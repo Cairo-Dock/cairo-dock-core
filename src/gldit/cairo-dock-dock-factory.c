@@ -952,7 +952,7 @@ static gboolean _double_click_delay_over (Icon *icon)
 }
 static gboolean _check_mouse_outside (CairoDock *pDock)  // ce test est principalement fait pour detecter les cas ou X nous envoit un signal leave errone alors qu'on est dedans (=> sortie refusee, bInside reste a TRUE), puis du coup ne nous en envoit pas de leave lorsqu'on quitte reellement le dock.
 {
-	g_print (" %s (%d, %d, %d)\n", __func__, pDock->bIsShrinkingDown, pDock->iMagnitudeIndex, pDock->container.bInside);
+	// g_print (" %s (%d, %d, %d)\n", __func__, pDock->bIsShrinkingDown, pDock->iMagnitudeIndex, pDock->container.bInside);
 	if (pDock->bIsShrinkingDown || pDock->iMagnitudeIndex == 0 || ! pDock->container.bInside)  // trivial cases : if the dock has already shrunk, or we're not inside any more, we can quit the loop.
 	{
 		pDock->iSidTestMouseOutside = 0;
@@ -960,7 +960,7 @@ static gboolean _check_mouse_outside (CairoDock *pDock)  // ce test est principa
 	}
 	
 	gldi_container_update_mouse_position (CAIRO_CONTAINER (pDock));
-	g_print (" -> (%d, %d)\n", pDock->container.iMouseX, pDock->container.iMouseY);
+	// g_print (" -> (%d, %d)\n", pDock->container.iMouseX, pDock->container.iMouseY);
 	
 	cairo_dock_calculate_dock_icons (pDock);  // pour faire retrecir le dock si on n'est pas dedans, merci X de nous faire sortir du dock alors que la souris est toujours dedans :-/
 	return TRUE;

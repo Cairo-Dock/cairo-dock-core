@@ -1154,7 +1154,7 @@ void gldi_dock_set_visibility (CairoDock *pDock, CairoDockVisibility iVisibility
 			}
 			else  // bind couldn't be done (no shortkey or couldn't grab it).
 			{
-				g_print ("bind couldn't be done (no shortkey or couldn't grab it).\n");
+				// g_print ("bind couldn't be done (no shortkey or couldn't grab it).\n");
 				pDock->iVisibility = CAIRO_DOCK_VISI_KEEP_ABOVE;
 			}
 		}
@@ -1236,7 +1236,7 @@ static void _show_dock_at_mouse (CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 }
 static void _raise_from_shortcut (G_GNUC_UNUSED const char *cKeyShortcut, G_GNUC_UNUSED gpointer data)
 {
-	g_print ("shortkey\n");
+	// g_print ("shortkey\n");
 	gldi_docks_foreach_root ((GFunc)_show_dock_at_mouse, NULL);
 }
 
