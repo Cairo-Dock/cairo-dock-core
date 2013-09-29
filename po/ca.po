@@ -8,15 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2013-07-21 20:13+0000\n"
-"Last-Translator: Fabounet <fabounet03@gmail.com>\n"
+"POT-Creation-Date: 2013-09-11 07:12+0000\n"
+"PO-Revision-Date: 2013-08-24 10:41+0000\n"
+"Last-Translator: Miquel Escarrà <Unknown>\n"
 "Language-Team: Catalan <ca@li.org>\n"
-"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-07-22 05:15+0000\n"
-"X-Generator: Launchpad (build 16696)\n"
+"X-Launchpad-Export-Date: 2013-09-12 04:47+0000\n"
+"X-Generator: Launchpad (build 16761)\n"
+"Language: ca\n"
 
 #: ../src/cairo-dock-gui-advanced.c:121 ../src/cairo-dock-widget-plugins.c:171
 #: ../data/messages:257
@@ -73,6 +74,9 @@ msgid ""
 " or on the contrary unobtrusive?\n"
 "Configure the way you access your docks and sub-docks!"
 msgstr ""
+"Voleu que la barra sigui sempre visible,\n"
+"o que tingui una presència més discreta?\n"
+"Configureu la manera d'accedir a les barres i a les barres secundàries"
 
 #: ../src/cairo-dock-gui-advanced.c:1502 ../src/cairo-dock-menu.c:2031
 #: ../Help/data/messages:339
@@ -90,7 +94,7 @@ msgstr "Barra de tasques"
 
 #: ../src/cairo-dock-gui-advanced.c:1517
 msgid "Define all the keyboard shortcuts currently available."
-msgstr ""
+msgstr "Defineix les dreceres de teclat disponibles"
 
 #: ../src/cairo-dock-gui-advanced.c:1518 ../data/messages:137
 msgid "Shortkeys"
@@ -98,7 +102,7 @@ msgstr "Tecla Curta"
 
 #: ../src/cairo-dock-gui-advanced.c:1524
 msgid "All of the parameters you will never want to tweak."
-msgstr ""
+msgstr "Tots els paràmetres que no us caldrà ajustar mai."
 
 #: ../src/cairo-dock-gui-advanced.c:1535
 msgid "Set a background for your dock."
@@ -111,7 +115,7 @@ msgstr "Fons"
 
 #: ../src/cairo-dock-gui-advanced.c:1543
 msgid "Select a view for each of your docks."
-msgstr "Trieü una vista per cada un del Docks"
+msgstr "Seleccioneu una vista per cada una de les barres"
 
 #: ../src/cairo-dock-gui-advanced.c:1544 ../data/messages:129
 #: ../data/messages:517 ../data/messages:931
@@ -129,6 +133,7 @@ msgstr "Diàlegs"
 #: ../src/cairo-dock-gui-advanced.c:1559
 msgid "Applets can be displayed on your desktop as widgets."
 msgstr ""
+"Les miniaplicacions es poden ubicar a l'escriptori com a ginys independents"
 
 #: ../src/cairo-dock-gui-advanced.c:1560 ../Help/data/messages:89
 #: ../data/messages:573
@@ -140,8 +145,8 @@ msgid ""
 "All about icons:\n"
 " size, reflection, icon theme,..."
 msgstr ""
-"Tot sobre els Icons\n"
-" Mesure, reflexos, temas d'ico"
+"Tot sobre les icones\n"
+"<ul><li>mida, reflexos, tema, ...</li></ul>"
 
 #: ../src/cairo-dock-gui-advanced.c:1568 ../Help/data/messages:11
 #: ../data/messages:113 ../data/messages:637 ../data/messages:913
@@ -166,7 +171,7 @@ msgstr "Etiquetes"
 
 #: ../src/cairo-dock-gui-advanced.c:1591
 msgid "Try new themes and save your theme."
-msgstr ""
+msgstr "Proveu altres temes i deseu el vostre"
 
 #: ../src/cairo-dock-gui-advanced.c:1592 ../src/cairo-dock-gui-simple.c:116
 #: ../src/cairo-dock-gui-simple.c:118
@@ -175,16 +180,16 @@ msgstr "Temes"
 
 #: ../src/cairo-dock-gui-advanced.c:1598
 msgid "Current items in your dock(s)."
-msgstr ""
+msgstr "Elements de la vostra/les vostres barres"
 
 #: ../src/cairo-dock-gui-advanced.c:1599 ../src/cairo-dock-gui-simple.c:92
 #: ../src/cairo-dock-gui-simple.c:94
 msgid "Current items"
-msgstr ""
+msgstr "Elements de la barra"
 
 #: ../src/cairo-dock-gui-advanced.c:1719
 msgid "Filter"
-msgstr "Filtrar"
+msgstr "Filtra"
 
 #: ../src/cairo-dock-gui-advanced.c:1760
 msgid "All words"
@@ -192,7 +197,7 @@ msgstr "Totes les paraules"
 
 #: ../src/cairo-dock-gui-advanced.c:1761
 msgid "Highlighted words"
-msgstr "Realçar les paraules"
+msgstr "Paraules realçades"
 
 #: ../src/cairo-dock-gui-advanced.c:1762
 msgid "Hide others"
@@ -204,7 +209,7 @@ msgstr "Cerca a la descripció"
 
 #: ../src/cairo-dock-gui-advanced.c:1767
 msgid "Hide disabled"
-msgstr ""
+msgstr "Amaga inactius"
 
 #: ../src/cairo-dock-gui-advanced.c:1776
 msgid "Categories"
@@ -216,11 +221,11 @@ msgstr "Activa aquest mòdul"
 
 #: ../src/cairo-dock-gui-advanced.c:1953
 msgid "More applets"
-msgstr "Mes Applets"
+msgstr "Més miniaplicacions"
 
 #: ../src/cairo-dock-gui-advanced.c:1954
 msgid "Get more applets online !"
-msgstr ""
+msgstr "Obteniu més complements en línia!"
 
 #: ../src/cairo-dock-gui-advanced.c:2049 ../src/cairo-dock-gui-simple.c:363
 msgid "Cairo-Dock configuration"
@@ -228,7 +233,7 @@ msgstr "Configuració de Cairo-Dock"
 
 #: ../src/cairo-dock-gui-advanced.c:2637
 msgid "Simple Mode"
-msgstr ""
+msgstr "Mode simple"
 
 #: ../src/cairo-dock-gui-simple.c:100 ../src/cairo-dock-gui-simple.c:102
 msgid "Add-ons"
@@ -236,25 +241,27 @@ msgstr "Complements"
 
 #: ../src/cairo-dock-gui-simple.c:108 ../src/cairo-dock-gui-simple.c:110
 msgid "Configuration"
-msgstr ""
+msgstr "Configuració"
 
 #: ../src/cairo-dock-gui-simple.c:644
 msgid "Advanced Mode"
-msgstr ""
+msgstr "Mode Avançat"
 
 #: ../src/cairo-dock-gui-simple.c:645
 msgid ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customise your current theme."
 msgstr ""
+"El mode avançat us permet ajustar tots els paràmetres de la barra. És una "
+"bona eina per personalitzar el tema actual."
 
 #: ../src/cairo-dock-menu.c:117
 msgid "Delete this dock?"
-msgstr ""
+msgstr "Suprimireu aquesta barra?"
 
 #: ../src/cairo-dock-menu.c:174
 msgid "About Cairo-Dock"
-msgstr ""
+msgstr "Quant al Cairo-Dock"
 
 #: ../src/cairo-dock-menu.c:211 ../Help/data/messages:271
 msgid "Development site"
@@ -262,37 +269,39 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:212 ../Help/data/messages:269
 msgid "Find the latest version of Cairo-Dock here !"
-msgstr "Troba aquí la darrera versió de Cairo-Dock !."
+msgstr "Trobeu aquí la darrera versió del Cairo-Dock !."
 
 #: ../src/cairo-dock-menu.c:216 ../src/cairo-dock-menu.c:1094
 #: ../src/cairo-dock-widget-plugins.c:298
 msgid "Get more applets!"
-msgstr ""
+msgstr "Obteniu més complements!"
 
 #: ../src/cairo-dock-menu.c:220 ../src/cairo-dock-menu.c:226
 msgid "Donate"
-msgstr ""
+msgstr "Donació"
 
 #: ../src/cairo-dock-menu.c:223 ../src/cairo-dock-menu.c:229
 msgid ""
 "Support the people who spend countless hours to bring you the best dock ever."
 msgstr ""
+"Ajudeu la gent que passa moltes hores treballant per proporcionar-vos la "
+"millor barra que hi ha."
 
 #: ../src/cairo-dock-menu.c:257
 msgid "Here is a list of the current developers and contributors"
-msgstr ""
+msgstr "Llista dels desenvolupadors en actiu i de contribuïdors"
 
 #: ../src/cairo-dock-menu.c:258
 msgid "Developers"
-msgstr ""
+msgstr "Desenvolupadors"
 
 #: ../src/cairo-dock-menu.c:259
 msgid "Main developer and project leader"
-msgstr ""
+msgstr "Desenvolupador principal i capdavanter del projecte"
 
 #: ../src/cairo-dock-menu.c:260
 msgid "Contributors / Hackers"
-msgstr ""
+msgstr "Contribuïdors / Hackers"
 
 #: ../src/cairo-dock-menu.c:262
 msgid "Development"
@@ -300,7 +309,7 @@ msgstr "Desenvolupament"
 
 #: ../src/cairo-dock-menu.c:277
 msgid "Website"
-msgstr ""
+msgstr "Lloc web"
 
 #: ../src/cairo-dock-menu.c:278
 msgid "Beta-testing / Suggestions / Forum animation"
@@ -308,7 +317,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:279
 msgid "Translators for this language"
-msgstr ""
+msgstr "Traductors per a aquesta llengua"
 
 #: ../src/cairo-dock-menu.c:280
 msgid "translator-credits"
@@ -319,12 +328,13 @@ msgstr ""
 "  Fabounet https://launchpad.net/~fabounet03\n"
 "  Ferran Roig https://launchpad.net/~ferro9\n"
 "  Javier Antonio Nisa Avila https://launchpad.net/~javiernisa\n"
+"  Miquel Escarrà https://launchpad.net/~quelet\n"
 "  Titotatin https://launchpad.net/~astromiquel\n"
 "  ferran https://launchpad.net/~traductor"
 
 #: ../src/cairo-dock-menu.c:282
 msgid "Support"
-msgstr "Assistència"
+msgstr "Suport"
 
 #: ../src/cairo-dock-menu.c:312
 msgid ""
@@ -334,15 +344,15 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:314
 msgid "How to help us?"
-msgstr ""
+msgstr "Com ajurdar-nos?"
 
 #: ../src/cairo-dock-menu.c:315
 msgid "Don't hesitate to join the project, we need you ;)"
-msgstr ""
+msgstr "Si us plau, afegiu-vos al projecte, us necessitem ;)"
 
 #: ../src/cairo-dock-menu.c:316
 msgid "Former contributors"
-msgstr ""
+msgstr "Antics col·laboradors"
 
 #: ../src/cairo-dock-menu.c:317
 msgid "For a complete list, please have a look to BZR logs"
@@ -350,19 +360,19 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:318
 msgid "Users of our forum"
-msgstr ""
+msgstr "Usuaris dels fòrums"
 
 #: ../src/cairo-dock-menu.c:319
 msgid "List of our forum's members"
-msgstr ""
+msgstr "Llista dels membres dels fòrums"
 
 #: ../src/cairo-dock-menu.c:320
 msgid "Artwork"
-msgstr ""
+msgstr "Treball artístic"
 
 #: ../src/cairo-dock-menu.c:322
 msgid "Thanks"
-msgstr ""
+msgstr "Gràcies"
 
 #: ../src/cairo-dock-menu.c:412
 msgid "Quit Cairo-Dock?"
@@ -370,7 +380,7 @@ msgstr "Tancar Cairo-Dock ?"
 
 #: ../src/cairo-dock-menu.c:442 ../src/cairo-dock-menu.c:585
 msgid "Separator"
-msgstr ""
+msgstr "Separador"
 
 #: ../src/cairo-dock-menu.c:548
 msgid ""
@@ -378,31 +388,35 @@ msgid ""
 "Now move some launchers or applets into it by right-clicking on the icon -> "
 "move to another dock"
 msgstr ""
+"S'ha creat una barra.\n"
+"Ara podeu moure-ni alguns llançadors o miniaplicacions fent un clic dret i "
+"aplicant l'opció Mou cap a una altra barra"
 
 #: ../src/cairo-dock-menu.c:579
 msgid "Add"
-msgstr ""
+msgstr "Afegix"
 
 #: ../src/cairo-dock-menu.c:581
 msgid "Sub-dock"
-msgstr ""
+msgstr "barra secundària"
 
 #: ../src/cairo-dock-menu.c:583
 msgid "Main dock"
-msgstr ""
+msgstr "Barra principal"
 
 #: ../src/cairo-dock-menu.c:587
 msgid "Custom launcher"
-msgstr ""
+msgstr "Carregador personalitzat"
 
 #: ../src/cairo-dock-menu.c:588
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
 msgstr ""
+"Normalment podreu arrossegar un llançador del menú i afegir-lo a la barra."
 
 #: ../src/cairo-dock-menu.c:590
 msgid "Applet"
-msgstr ""
+msgstr "Miniaplicació"
 
 #: ../src/cairo-dock-menu.c:607
 msgid ""
@@ -413,16 +427,18 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:629
 msgid "separator"
-msgstr ""
+msgstr "separador"
 
 #: ../src/cairo-dock-menu.c:633
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
-msgstr "Estàs a punt de treure aquesta icona (%s) de la barra. N'estàs segur ?"
+msgstr ""
+"Esteu a punt d'eliminar aquesta icona (%s) de la barra; segur que voleu "
+"continuar?"
 
 #: ../src/cairo-dock-menu.c:648
 msgid "Sorry, this icon doesn't have a configuration file."
-msgstr ""
+msgstr "Ho sentim, aquesta icona no té cap fitxer de configuració."
 
 #: ../src/cairo-dock-menu.c:688
 msgid ""
@@ -430,61 +446,67 @@ msgid ""
 "You can customize it by right-clicking on it -> cairo-dock -> configure this "
 "dock."
 msgstr ""
+"S'ha creat una altra barra.\n"
+"Podeu personalitzar-la amb un clic dret -> Cairo-dock -> Configuració"
 
 #: ../src/cairo-dock-menu.c:694
 msgid "Move to another dock"
-msgstr ""
+msgstr "Mou a una altra barra"
 
 #: ../src/cairo-dock-menu.c:696 ../src/gldit/cairo-dock-gui-factory.c:1220
 msgid "New main dock"
-msgstr ""
+msgstr "Barra principal nova"
 
 #: ../src/cairo-dock-menu.c:777
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
 msgstr ""
+"No es troba la descripció corresponent a l'arxiu.\n"
+"Penseu en la possibilitat d'arrossegar el llançador des del menú d'plicacions"
 
 #: ../src/cairo-dock-menu.c:824
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr ""
-"Estàs a punt de treure aquesta miniaplicació (%s) de la barra. N'estàs "
-"segur ?"
+"Esteu a punt d'eliminar aquesta  miniaplicació (%s) de la barra. Voleu "
+"continuar?"
 
 #: ../src/cairo-dock-menu.c:893 ../src/gldit/cairo-dock-gui-factory.c:757
 msgid "Pick up an image"
-msgstr ""
+msgstr "Escolliu una imatge"
 
 #: ../src/cairo-dock-menu.c:910 ../src/gldit/cairo-dock-gui-factory.c:791
 #: ../data/messages:453 ../data/messages:459 ../data/messages:727
 #: ../data/messages:943
 msgid "Image"
-msgstr ""
+msgstr "Imatge"
 
 #: ../src/cairo-dock-menu.c:1010
 msgid "Configure"
-msgstr "Configurar"
+msgstr "Configuració"
 
 #: ../src/cairo-dock-menu.c:1015
 msgid "Configure behaviour, appearance, and applets."
-msgstr "Configurar el comportament, aparença i miniaplicacions."
+msgstr "Configura el comportament, l'aparença i les miniaplicacions"
 
 #: ../src/cairo-dock-menu.c:1020
 msgid "Configure this dock"
-msgstr "Configurar aquesta barra"
+msgstr "Configuració d'aquesta barra"
 
 #: ../src/cairo-dock-menu.c:1025
 msgid "Customize the position, visibility and appearance of this main dock."
 msgstr ""
+"Personalització de la posició, visibilitat i aparença d'aquesta barra "
+"principal."
 
 #: ../src/cairo-dock-menu.c:1027
 msgid "Delete this dock"
-msgstr ""
+msgstr "Suprimeix aquesta barra"
 
 #: ../src/cairo-dock-menu.c:1037
 msgid "Manage themes"
-msgstr "Gestiona temes"
+msgstr "Gestiona els temes"
 
 #: ../src/cairo-dock-menu.c:1042
 msgid ""
@@ -493,7 +515,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:1055
 msgid "Lock icons position"
-msgstr ""
+msgstr "Bloca la posició de les icones"
 
 #: ../src/cairo-dock-menu.c:1059
 msgid "This will (un)lock the position of the icons."
@@ -505,15 +527,18 @@ msgstr "Oculta automàticament"
 
 #: ../src/cairo-dock-menu.c:1070
 msgid "This will hide the dock until you hover over it with the mouse."
-msgstr "Amagarà la barra fins que hi entris amb el ratolí."
+msgstr "S'amagarà la barra fins que hi passeu amb el ratolí."
 
 #: ../src/cairo-dock-menu.c:1083
 msgid "Launch Cairo-Dock on startup"
 msgstr "Executa Cairo-Dock a l'inici"
 
 #: ../src/cairo-dock-menu.c:1099
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
+"Miniaplicacions de tercers proporcionen la integració amb altres programes, "
+"com ara el Pidgin"
 
 #: ../src/cairo-dock-menu.c:1102 ../Help/src/applet-init.c:28
 #: ../Help/src/applet-notifications.c:269
@@ -522,7 +547,7 @@ msgstr "Ajuda"
 
 #: ../src/cairo-dock-menu.c:1107
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
-msgstr ""
+msgstr "No hi ha problemes, només solucions (i una bona pila de consells!)"
 
 #: ../src/cairo-dock-menu.c:1111
 msgid "About"
@@ -538,6 +563,9 @@ msgid ""
 "It's not advised to quit the dock but you can press Shift to unlock this "
 "menu entry."
 msgstr ""
+"Ara utilitzeu una sessió del Cairo-Dock!\n"
+"No és aconsellable aturar la barra, però podeu desblocar aquesta entrada de "
+"mnú pitjant la tecja Maj."
 
 #: ../src/cairo-dock-menu.c:1155 ../src/cairo-dock-menu.c:1168
 msgid "Launch a new (Shift+clic)"
@@ -558,31 +586,31 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:1178
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
-msgstr ""
+msgstr "Podeu eliminar un llançador arrossegant-lo fora de la barra."
 
 #: ../src/cairo-dock-menu.c:1187
 msgid "Make it a launcher"
-msgstr ""
+msgstr "Converteix-lo en llançador"
 
 #: ../src/cairo-dock-menu.c:1210
 msgid "Remove custom icon"
-msgstr ""
+msgstr "Elimina icona personalitzada"
 
 #: ../src/cairo-dock-menu.c:1214
 msgid "Set a custom icon"
-msgstr ""
+msgstr "Defineix una icona personalitzada"
 
 #: ../src/cairo-dock-menu.c:1224
 msgid "Detach"
-msgstr ""
+msgstr "Desacobla"
 
 #: ../src/cairo-dock-menu.c:1224
 msgid "Return to the dock"
-msgstr ""
+msgstr "Torna a la barra"
 
 #: ../src/cairo-dock-menu.c:1231
 msgid "Duplicate"
-msgstr ""
+msgstr "Duplica"
 
 #: ../src/cairo-dock-menu.c:1406
 #, c-format
@@ -597,12 +625,12 @@ msgstr ""
 #: ../src/cairo-dock-menu.c:1408
 #, c-format
 msgid "Move all to desktop %d"
-msgstr "Mou-ho tot a l'escriptori %d"
+msgstr "Trasllada-ho tot a l'escriptori %d"
 
 #: ../src/cairo-dock-menu.c:1408
 #, c-format
 msgid "Move to desktop %d"
-msgstr ""
+msgstr "Trasllada-ho a l'escriptori %d"
 
 #: ../src/cairo-dock-menu.c:1410
 #, c-format
@@ -616,45 +644,45 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:1835 ../src/cairo-dock-menu.c:1886
 msgid "Window"
-msgstr ""
+msgstr "Finestra"
 
 #: ../src/cairo-dock-menu.c:1841 ../src/cairo-dock-menu.c:1843
 #: ../src/cairo-dock-menu.c:1916 ../src/cairo-dock-menu.c:1918
 #: ../data/messages:335
 msgid "Close"
-msgstr ""
+msgstr "Tanca"
 
 #: ../src/cairo-dock-menu.c:1841 ../src/cairo-dock-menu.c:1864
 #: ../src/cairo-dock-menu.c:1905 ../src/cairo-dock-menu.c:1916
 #: ../src/cairo-dock-menu.c:1939 ../src/cairo-dock-menu.c:1980
 #: ../src/cairo-dock-menu.c:1990 ../Help/src/applet-notifications.c:259
 msgid "middle-click"
-msgstr ""
+msgstr "Clic del mig"
 
 #: ../src/cairo-dock-menu.c:1856 ../src/cairo-dock-menu.c:1897
 msgid "Unmaximise"
-msgstr ""
+msgstr "Desmaximitza"
 
 #: ../src/cairo-dock-menu.c:1856 ../src/cairo-dock-menu.c:1897
 msgid "Maximise"
-msgstr ""
+msgstr "Maximitza"
 
 #: ../src/cairo-dock-menu.c:1864 ../src/cairo-dock-menu.c:1866
 #: ../src/cairo-dock-menu.c:1905 ../src/cairo-dock-menu.c:1907
 msgid "Minimise"
-msgstr ""
+msgstr "Minimitza"
 
 #: ../src/cairo-dock-menu.c:1881 ../src/cairo-dock-menu.c:1891
 msgid "Show"
-msgstr ""
+msgstr "Mostra"
 
 #: ../src/cairo-dock-menu.c:1925 ../src/cairo-dock-menu.c:2014
 msgid "Other actions"
-msgstr ""
+msgstr "Altres accions"
 
 #: ../src/cairo-dock-menu.c:1928
 msgid "Move to this desktop"
-msgstr ""
+msgstr "Mou cap aquest escriptori"
 
 #: ../src/cairo-dock-menu.c:1933
 msgid "Not Fullscreen"
@@ -662,74 +690,74 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:1933
 msgid "Fullscreen"
-msgstr ""
+msgstr "Pantalla completa"
 
 #: ../src/cairo-dock-menu.c:1939 ../src/cairo-dock-menu.c:1941
 msgid "Below other windows"
-msgstr ""
+msgstr "Persota d'altres finestres"
 
 #: ../src/cairo-dock-menu.c:1949
 msgid "Don't keep above"
-msgstr ""
+msgstr "No mantinguis a sobre"
 
 #: ../src/cairo-dock-menu.c:1949 ../Help/data/messages:349
 msgid "Keep above"
-msgstr ""
+msgstr "Mantén a sobre"
 
 #: ../src/cairo-dock-menu.c:1953
 msgid "Visible only on this desktop"
-msgstr ""
+msgstr "Només visible en aquest escriptori"
 
 #: ../src/cairo-dock-menu.c:1953
 msgid "Visible on all desktops"
-msgstr ""
+msgstr "Visible en tots els escriptoris"
 
 #: ../src/cairo-dock-menu.c:1961
 msgid "Kill"
-msgstr ""
+msgstr "Atura"
 
 #: ../src/cairo-dock-menu.c:1976
 msgid "Windows"
-msgstr ""
+msgstr "Finestres"
 
 #: ../src/cairo-dock-menu.c:1980 ../src/cairo-dock-menu.c:1982
 #: ../src/cairo-dock-menu.c:2010
 msgid "Close all"
-msgstr ""
+msgstr "Tanca-ho tot"
 
 #: ../src/cairo-dock-menu.c:1990 ../src/cairo-dock-menu.c:1992
 #: ../src/cairo-dock-menu.c:2008
 msgid "Minimise all"
-msgstr ""
+msgstr "Minimitza tot"
 
 #: ../src/cairo-dock-menu.c:2000 ../src/cairo-dock-menu.c:2006
 msgid "Show all"
-msgstr ""
+msgstr "Mostra-ho tot"
 
 #: ../src/cairo-dock-menu.c:2004
 msgid "Windows management"
-msgstr ""
+msgstr "Gestió de finestres"
 
 #: ../src/cairo-dock-menu.c:2016
 msgid "Move all to this desktop"
-msgstr ""
+msgstr "Mou-tot  cap a aquest escriptori"
 
 #: ../src/cairo-dock-menu.c:2039 ../Help/data/messages:347
 msgid "Normal"
-msgstr ""
+msgstr "Normal"
 
 #: ../src/cairo-dock-menu.c:2045 ../data/messages:21 ../data/messages:183
 #: ../data/messages:889
 msgid "Always on top"
-msgstr ""
+msgstr "Sempre en primer pla"
 
 #: ../src/cairo-dock-menu.c:2052
 msgid "Always below"
-msgstr ""
+msgstr "Sempre per sota"
 
 #: ../src/cairo-dock-menu.c:2069 ../Help/data/messages:355
 msgid "Reserve space"
-msgstr ""
+msgstr "Reserva espai"
 
 #: ../src/cairo-dock-menu.c:2076
 msgid "On all desktops"
@@ -755,7 +783,8 @@ msgid "Effects:"
 msgstr "Efectes:"
 
 #: ../src/cairo-dock-widget-items.c:241
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-widget-items.c:720
@@ -764,7 +793,7 @@ msgstr "Esborrar l'item"
 
 #: ../src/cairo-dock-widget-plugins.c:103
 msgid "Configure this applet"
-msgstr "Configurar aquesta mini-aplicació"
+msgstr "Configura aquesta miniaplicació"
 
 #: ../src/cairo-dock-widget-plugins.c:156
 msgid "Accessory"
@@ -779,8 +808,11 @@ msgid "Category"
 msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:280
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
+"Cliqueu sobre una miniaplicació per previsualitzar-la i llegir-ne una "
+"descripció."
 
 #: ../src/cairo-dock-widget-shortkeys.c:122
 msgid "Press the shortkey"
@@ -1020,7 +1052,7 @@ msgstr "< Mode de manteniment >"
 
 #: ../src/cairo-dock.c:735
 msgid "Something went wrong with this applet:"
-msgstr ""
+msgstr "Alguna cosa ha anat malament amb aquesta miniaplicació"
 
 #: ../src/cairo-dock.c:782
 msgid ""
@@ -1613,6 +1645,10 @@ msgid ""
 "wherever on your desktop.\n"
 "To detach an applet from the dock, simply drag and drop it outside the dock."
 msgstr ""
+"Les miniaplicacions poden residir en zones independents: finestretes que es "
+"poden desplaçar a qualsevol punt de l'escriptori.\n"
+"Per desvincular una miniaplicació de la barra, només cal que l'arrossegueu "
+"enfora."
 
 #: ../Help/data/messages:95
 msgid "Moving desklets"
@@ -1670,6 +1706,13 @@ msgid ""
 "When a task has been or is going to be scheduled, the applet will warn you "
 "(15mn before the event, and also 1 day before in the case of an anniversary)."
 msgstr ""
+"Activa la miniaplicació del rellotge.\n"
+"Si hi feu un clic apareixerà un calendari.\n"
+"Si feu doble clic en un dia es desplega un editor de tasques. En podeu "
+"afegir o eliminar-les.\n"
+"Quan una tasca està a punt d'arribar a la data prevista, la miniaplicació "
+"n'avisarà (15 minuts abans del moment, un dia abans si es tracta d'un "
+"aniversari)."
 
 #: ../Help/data/messages:113
 msgid "Having a list of all windows"
@@ -1684,6 +1727,12 @@ msgid ""
 "to do that.\n"
 "You can bind this action to the middle-click."
 msgstr ""
+"Activa la miniaplicació de l'intercanviador d'escriptoris.\n"
+"Amb un clic dret accedireu a una llista de les finestres obertes, ordenades "
+"per escriptoris.\n"
+"També podreu organitzar les finestres solapant-les si el gestor de finestres "
+"té aquesta possiblitat.\n"
+"Podeu vincular aquesta acció al clic central."
 
 #: ../Help/data/messages:117
 msgid "Showing all the desktops"
@@ -1695,6 +1744,9 @@ msgid ""
 "Right-click on it -> \"show all the desktop\".\n"
 "You can bind this action to the middle-click."
 msgstr ""
+"Activa l'intercanviador d'escriptoris o el Mostra escriptori.\n"
+"Amb un clic dret -> \"Mostra l'escriptori\".\n"
+"Podeu  vincular aquesta acció al clic central."
 
 #: ../Help/data/messages:121
 msgid "Changing the screen resolution"
@@ -1705,6 +1757,8 @@ msgid ""
 "Activate the Show-Desktop applet.\n"
 "Right-click on it -> \"change resolution\" -> select the one you want."
 msgstr ""
+"Activa la miniaplicació Mostra l'escriptori.\n"
+"Podeu canviar la resolució de pantalla:  clic dret -> \"Canvia la resolució\""
 
 #: ../Help/data/messages:125
 msgid "Locking your session"
@@ -1716,6 +1770,9 @@ msgid ""
 "Right-click on it -> \"lock screen\".\n"
 "You can bind this action to the middle-click."
 msgstr ""
+"Activa la miniaplicació de Sortida.\n"
+"Amb un clic esquerre obtindreu un menú per sortir de la sessió, del sistema "
+"o blocar la pantalla."
 
 #: ../Help/data/messages:129
 msgid "Quick-launching a program from keyboard (replacing ALT+F2)"
@@ -1729,6 +1786,11 @@ msgid ""
 "The text is automatically completed (for instance, typing \"fir\" will be "
 "completed into \"firefox\")."
 msgstr ""
+"Activa la miniaplicació del Menú d'aplicacions.\n"
+"Un clic central, o un clic dret -> \"Executa el programa\".\n"
+"Podeu vincular una drecera de teclat per a aquesta acció.\n"
+"El text tendeix a completar-se automàticament (per exemple, si escriviu "
+"\"fir\", veureu que es completa a \"firefox\")."
 
 #: ../Help/data/messages:133
 msgid "Turning Composite OFF during games"
@@ -1741,6 +1803,13 @@ msgid ""
 "smooth.\n"
 "Clicking again on it will enable the Composite."
 msgstr ""
+"Activa la miniaplicació Compositor (transparències a l'escriptori).\n"
+"Un clic a la icona desactivarà el compositor, cosa que fa anar més lleugers "
+"els jocs.\n"
+"Un altre clic el tornarà a activar.\n"
+"(La desactivació del compositor sol tenir efectes secundaris en la "
+"presentació de les barres:  apareix un contorn fosc per sobre de les "
+"finestres dels programes)."
 
 #: ../Help/data/messages:137
 msgid "Seeing the hourly weather forecast"
@@ -1755,6 +1824,13 @@ msgid ""
 "Now, double-clicking on a day will lead you to the web page of the hourly "
 "forecast for this day."
 msgstr ""
+"Activa la miniaplicació de Pronòstic del temps.\n"
+"Haureu de configurar la població: obriu el seu editor de paràmetres, aneu a "
+"configuració i escriviu el nom de la població i Intro al mateix quadre per "
+"triar a la llista i obtenir el codi de població.\n"
+"Apliqueu i tanqueu,\n"
+"Des d'ara un doble clic en un dia us portarà per Internet a un pronòstic "
+"horari del dia."
 
 #: ../Help/data/messages:141
 msgid "Adding a file or a web page into the dock"
@@ -1887,8 +1963,9 @@ msgstr ""
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1936,8 +2013,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
@@ -3343,7 +3420,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:657
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:659
@@ -3577,8 +3655,8 @@ msgstr ""
 
 #: ../data/messages:771
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:773
@@ -3907,8 +3985,8 @@ msgstr ""
 
 #: ../data/messages:1037
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1039

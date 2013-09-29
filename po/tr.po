@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2013-07-21 20:01+0000\n"
-"Last-Translator: Murat ikilik <muratikilik@gmail.com>\n"
+"POT-Creation-Date: 2013-09-11 07:12+0000\n"
+"PO-Revision-Date: 2013-08-29 12:48+0000\n"
+"Last-Translator: kulkke <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
-"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-07-22 05:17+0000\n"
-"X-Generator: Launchpad (build 16696)\n"
+"X-Launchpad-Export-Date: 2013-09-12 04:50+0000\n"
+"X-Generator: Launchpad (build 16761)\n"
+"Language: tr\n"
 
 #: ../src/cairo-dock-gui-advanced.c:121 ../src/cairo-dock-widget-plugins.c:171
 #: ../data/messages:257
@@ -280,7 +281,8 @@ msgstr "Bağışta Bulunun"
 #: ../src/cairo-dock-menu.c:223 ../src/cairo-dock-menu.c:229
 msgid ""
 "Support the people who spend countless hours to bring you the best dock ever."
-msgstr "Size en iyi limanı yapmak için saatlerce çalışan insanları destekleyin"
+msgstr ""
+"Size en iyi limanı yapmak için saatlerce çalışan insanları destekleyin"
 
 #: ../src/cairo-dock-menu.c:257
 msgid "Here is a list of the current developers and contributors"
@@ -540,7 +542,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Cairo-Dock'u başlangıçta başlat"
 
 #: ../src/cairo-dock-menu.c:1099
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Üçüncü parti uygulamacıklar Pidgin gibi birçok programla entegrasyon sağlar."
 
@@ -590,7 +593,8 @@ msgstr "Kaldır"
 #: ../src/cairo-dock-menu.c:1178
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
-msgstr "Bir başlatıcıyı fare ile rıhtımın dışına sürükleyerek silebilirsiniz ."
+msgstr ""
+"Bir başlatıcıyı fare ile rıhtımın dışına sürükleyerek silebilirsiniz ."
 
 #: ../src/cairo-dock-menu.c:1187
 msgid "Make it a launcher"
@@ -790,7 +794,8 @@ msgid "Effects:"
 msgstr "Efektler:"
 
 #: ../src/cairo-dock-widget-items.c:241
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Ana rıhtımın parametreleri ana yapılandırma penceresi içinde mevcuttur."
 
@@ -815,7 +820,8 @@ msgid "Category"
 msgstr "Kategori"
 
 #: ../src/cairo-dock-widget-plugins.c:280
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Önizleme ve açıklamalar için uygulamacığın üzerine tıklayın."
 
 #: ../src/cairo-dock-widget-shortkeys.c:122
@@ -934,7 +940,8 @@ msgstr "Rıhtımı bu bu ortamı düşünmesi için zorla - ilgi göster."
 #: ../src/cairo-dock.c:369
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
-msgstr "Bunun yerine emirlere uyuması için rıhtımı zorla ~/.config/cairo-dock."
+msgstr ""
+"Bunun yerine emirlere uyuması için rıhtımı zorla ~/.config/cairo-dock."
 
 #: ../src/cairo-dock.c:372
 msgid ""
@@ -1349,8 +1356,8 @@ msgstr ""
 "Cario-Dock2'ye hoşgeldiniz !\n"
 "Bu uygulamacık, size rıhtımı kullanmaya başlamanız için yardımcı olmak için "
 "burada; sadece onun üzerine tıklayın.\n"
-"Eğer herhangi bir sorunuz/talebiniz/yorumunuz var ise, lütfen bizi http://"
-"glx-dock.org adresinde ziyaret edin.\n"
+"Eğer herhangi bir sorunuz/talebiniz/yorumunuz var ise, lütfen bizi "
+"http://glx-dock.org adresinde ziyaret edin.\n"
 "Bu yazılımın hoşunuza gideceğini umarız !\n"
 "  (şimdi bu iletişim kutusunun üzerine, onu kapatmak üzere tıklayabilirsiniz)"
 
@@ -1740,7 +1747,7 @@ msgstr ""
 
 #: ../Help/data/messages:107
 msgid "Useful Features"
-msgstr ""
+msgstr "Kullanışlı Özellikler"
 
 #: ../Help/data/messages:109
 msgid "Having a calendar with tasks"
@@ -1793,7 +1800,7 @@ msgstr ""
 
 #: ../Help/data/messages:125
 msgid "Locking your session"
-msgstr ""
+msgstr "Oturumunuzu kilitlemek"
 
 #: ../Help/data/messages:127
 msgid ""
@@ -1972,8 +1979,9 @@ msgstr ""
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -2021,8 +2029,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
@@ -3408,7 +3416,8 @@ msgid "Zoom effect"
 msgstr "Zum efekti"
 
 #: ../data/messages:657
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:659
@@ -3640,8 +3649,8 @@ msgstr "daha büyük"
 
 #: ../data/messages:771
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:773
@@ -3964,8 +3973,8 @@ msgstr ""
 
 #: ../data/messages:1037
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1039

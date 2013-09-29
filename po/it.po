@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.4.5\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2013-07-21 20:16+0000\n"
-"Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
+"POT-Creation-Date: 2013-09-11 07:12+0000\n"
+"PO-Revision-Date: 2013-09-18 21:15+0000\n"
+"Last-Translator: Pietro Quadalti <p.quadalti@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@lists.kde.org>\n"
-"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-07-22 05:16+0000\n"
-"X-Generator: Launchpad (build 16696)\n"
+"X-Launchpad-Export-Date: 2013-09-19 04:40+0000\n"
+"X-Generator: Launchpad (build 16765)\n"
+"Language: it\n"
 
 #: ../src/cairo-dock-gui-advanced.c:121 ../src/cairo-dock-widget-plugins.c:171
 #: ../data/messages:257
@@ -333,6 +334,7 @@ msgstr ""
 "  Matthieu Baerts https://launchpad.net/~matttbe\n"
 "  Mattia Tavernini https://launchpad.net/~maathias\n"
 "  Natale https://launchpad.net/~ngm270189\n"
+"  Pietro Quadalti https://launchpad.net/~p-quadalti\n"
 "  Stefano Prenna https://launchpad.net/~stefanoprenna\n"
 "  Wonderfulheart https://launchpad.net/~wonderfulheart\n"
 "  bobol68 https://launchpad.net/~bobol68\n"
@@ -544,7 +546,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Lancia Cairo-Dock all'avvio"
 
 #: ../src/cairo-dock-menu.c:1099
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Le applet di terze-parti forniscono un'integrazione a molti programmi, come "
 "Pidgin"
@@ -797,7 +800,8 @@ msgid "Effects:"
 msgstr "Effetti:"
 
 #: ../src/cairo-dock-widget-items.c:241
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "I parametri della dock principale si trovano nella finestra di "
 "configurazione principale."
@@ -823,7 +827,8 @@ msgid "Category"
 msgstr "Categoria"
 
 #: ../src/cairo-dock-widget-plugins.c:280
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Clicca su un'applet per avere un'anteprima e una sua descrizione."
 
 #: ../src/cairo-dock-widget-shortkeys.c:122
@@ -1004,7 +1009,8 @@ msgstr "Stampa la versione ed esci."
 
 #: ../src/cairo-dock.c:399
 msgid "Lock the dock so that any modification is impossible for users."
-msgstr "Blocca la dock cosicché sia impossibile da modificare per gli utenti."
+msgstr ""
+"Blocca la dock cosicché sia impossibile da modificare per gli utenti."
 
 #: ../src/cairo-dock.c:403
 msgid "Keep the dock above other windows whatever."
@@ -1309,11 +1315,11 @@ msgstr "Ultima modifica su:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:333
 msgid "Your theme should now be available in this directory:"
-msgstr ""
+msgstr "Il tuo tema adesso dovrebbe essere disponibile in questa directory:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:338
 msgid "Error when launching 'cairo-dock-package-theme' script"
-msgstr ""
+msgstr "Errore nell'avvio dello script 'cairo-dock-package-theme'"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:359
 #, c-format
@@ -1951,7 +1957,8 @@ msgstr ""
 
 #: ../Help/data/messages:129
 msgid "Quick-launching a program from keyboard (replacing ALT+F2)"
-msgstr "Lanciare rapidamente un programma dalla tastiera (sostituisce Alt+F2)"
+msgstr ""
+"Lanciare rapidamente un programma dalla tastiera (sostituisce Alt+F2)"
 
 #: ../Help/data/messages:131
 msgid ""
@@ -2124,8 +2131,8 @@ msgid ""
 msgstr ""
 "Alcune applet possono avere diverse istanze avviate nello stesso momento: "
 "Orologio, Recipiente, Meteo, ...\n"
-"Clic destro sull'icona dell'applet - > \"Lancia un'altra istanza dell'applet"
-"\".\n"
+"Clic destro sull'icona dell'applet - > \"Lancia un'altra istanza "
+"dell'applet\".\n"
 "Puoi configurare ogni istanza in modo indipendente. Questo permette, ad "
 "esempio, di avere l'ora corrente di differenti paesi nella tua dock, oppure "
 "il meteo di diverse città."
@@ -2181,13 +2188,15 @@ msgstr "Rimuovi completamente il pannello di gnome"
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Apri gconf-editor, modifica la chiave /desktop/gnome/session/"
-"required_components/panel e rimpiazza il suo contenuto con \"cairo-dock\".\n"
+"Apri gconf-editor, modifica la chiave "
+"/desktop/gnome/session/required_components/panel e rimpiazza il suo "
+"contenuto con \"cairo-dock\".\n"
 "Successivamente fai ripartire la sessione: il pannello gnome non si avvierà, "
 "mentre la dock si (se non accadesse puoi inserirla tra i programmi di avvio)."
 
@@ -2238,16 +2247,16 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Hai bisogno di avviare il compositing. Ad esempio, puoi avviare Compiz o "
 "xcompmgr. \n"
 "Se usi XFCE o KDE, basta soltanto abilitare il compositing nelle opzioni del "
 "Window Manager.\n"
 "Se usi Gnome, puoi abilitarlo in Metacity in questo modo:\n"
-" Apri gconf-editor e modifica la chiave '/apps/metacity/general/"
-"compositing_manager' impostandola a 'true'."
+" Apri gconf-editor e modifica la chiave "
+"'/apps/metacity/general/compositing_manager' impostandola a 'true'."
 
 #: ../Help/data/messages:207
 msgid ""
@@ -2523,8 +2532,8 @@ msgid ""
 " After that, you can launch your update manager in order to install the "
 "latest weekly version."
 msgstr ""
-"Se stai utilizzando Ubuntu puoi aggiungere il nostro repository \"weekly"
-"\" (potrebbe essere instabile) cliccando su questo pulsante:\n"
+"Se stai utilizzando Ubuntu puoi aggiungere il nostro repository \"weekly\" "
+"(potrebbe essere instabile) cliccando su questo pulsante:\n"
 " Successivamente puoi lanciare il tuo update-manager per installare l'ultima "
 "versione settimanale."
 
@@ -2607,8 +2616,8 @@ msgid ""
 "Depending on your WindowManager, you may be able to resize this with ALT + "
 "middle-click or ALT + left-click."
 msgstr ""
-"In base al Gestore delle Finestre utilizzato puoi ridimensionarla con Alt"
-"+clic centrale o Alt+clic sinistro."
+"In base al Gestore delle Finestre utilizzato puoi ridimensionarla con "
+"Alt+clic centrale o Alt+clic sinistro."
 
 #: ../Help/data/messages:329
 msgid "Desklet dimensions (width x height):"
@@ -2836,7 +2845,8 @@ msgstr "Visibilità delle sub-dock"
 msgid ""
 "they will appear either when you click or when you linger over the icon "
 "pointing on it."
-msgstr "appariranno quando clicchi o quando indugerai sull'icona, puntandola."
+msgstr ""
+"appariranno quando clicchi o quando indugerai sull'icona, puntandola."
 
 #: ../data/messages:59 ../data/messages:243
 msgid "Appear on mouse over"
@@ -3142,7 +3152,7 @@ msgstr "Mischia i lanciatori e le applicazioni"
 
 #: ../data/messages:267
 msgid "Animate the launcher until the corresponding application opens"
-msgstr ""
+msgstr "Anima il lanciatore finché non si apre l'applicazione corrispondente"
 
 #: ../data/messages:269
 msgid "Only show applications on current desktop"
@@ -3166,7 +3176,8 @@ msgstr ""
 
 #: ../data/messages:291
 msgid "Group windows from the same application in a sub-dock ?"
-msgstr "Raggruppa tutte le finestre della stessa applicazione in una sub-dock?"
+msgstr ""
+"Raggruppa tutte le finestre della stessa applicazione in una sub-dock?"
 
 #: ../data/messages:293 ../data/messages:303
 msgid "Enter the class of the applications, separated by a semi-colon ';'"
@@ -3372,7 +3383,8 @@ msgstr "Frequenza di aggiornamento"
 
 #: ../data/messages:403 ../data/messages:407 ../data/messages:411
 msgid "in Hz. This is to adjust behaviour relative to your CPU power."
-msgstr "in Hz. Questo è da aggiustare in base alla potenza della propria CPU."
+msgstr ""
+"in Hz. Questo è da aggiustare in base alla potenza della propria CPU."
 
 #: ../data/messages:405
 msgid "Refresh rate when mouving cursor into the dock:"
@@ -3539,7 +3551,8 @@ msgstr "Oscurato quando nascosto"
 
 #: ../data/messages:493
 msgid "Several applets can be visible even when the dock is hidden"
-msgstr "Diverse applet possono essere visibili anche quando la dock è nascosta"
+msgstr ""
+"Diverse applet possono essere visibili anche quando la dock è nascosta"
 
 #: ../data/messages:495
 msgid "Default background color when the dock is hidden"
@@ -3809,7 +3822,8 @@ msgid "Zoom effect"
 msgstr "Effetto zoom"
 
 #: ../data/messages:657
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr "a 1 se non vuoi che le icone si restringano quando ci passi sopra"
 
 #: ../data/messages:659
@@ -4068,8 +4082,8 @@ msgstr "più grande"
 
 #: ../data/messages:771
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Utilizza questo per fare si che l'indicatore segua l'orientamento della dock "
 "(alto/basso/destra/sinistra)."
@@ -4345,7 +4359,7 @@ msgstr "Costruire un pacchetto del tema?"
 
 #: ../data/messages:987
 msgid "Directory in which the package will be saved:"
-msgstr ""
+msgstr "Directory nella quale verrà salvato il pacchetto:"
 
 #: ../data/messages:989 ../data/messages:991 ../data/messages:993
 #: ../data/messages:1025 ../data/messages:1061
@@ -4414,8 +4428,8 @@ msgstr "Nome del lanciatore:"
 
 #: ../data/messages:1037
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 "Esempio: nautilus --no-desktop, gedit, ecc. Si può anche inserire una "
 "scorciatoia, ad esempio <Alt>F1, <Ctrl>c, <Ctrl>v, ecc"
@@ -4438,9 +4452,8 @@ msgstr ""
 "applicazioni."
 
 #: ../data/messages:1047
-#, fuzzy
 msgid "Don't link the launcher with its window"
-msgstr "Collega gli indicatori alla loro icona?"
+msgstr "Non collegare il lanciatore con la sua finestra"
 
 #: ../data/messages:1049
 msgid ""
@@ -4481,15 +4494,15 @@ msgstr ""
 
 #: ../data/messages:1076
 msgid "Cairo-Dock (Fallback Mode)"
-msgstr ""
+msgstr "Cairo-Dock (Modalità Fallback)"
 
 #: ../data/messages:1078
 msgid "A light and eye-candy dock and desklets for your desktop."
-msgstr ""
+msgstr "Una dock e delle desklet leggere e gradevoli per il tuo desktop."
 
 #: ../data/messages:1080
 msgid "Multi-purpose Dock and Desklets"
-msgstr ""
+msgstr "Dock multifunzionale e Desklet"
 
 #: ../data/messages:1082
 msgid ""
@@ -4518,7 +4531,7 @@ msgstr ""
 
 #: ../data/messages:1084
 msgid "<b>New version: <span color='red'>GLX-Dock 3.3</span>!</b>"
-msgstr ""
+msgstr "<b>Nuova versione: <span color='red'>GLX-Dock 3.3</span>!</b>"
 
 #: ../data/messages:1086
 msgid ""
@@ -4529,11 +4542,11 @@ msgstr ""
 
 #: ../data/messages:1088
 msgid "- Added support of <b>logind</b> in the Logout applet"
-msgstr ""
+msgstr "- Aggiunto il supporto di <b>logind</b> nella applet Logout"
 
 #: ../data/messages:1090
 msgid "- Better integration in the Cinnamon desktop"
-msgstr ""
+msgstr "- Migliorata l'integrazione con il desktop Cinnamon"
 
 #: ../data/messages:1092
 msgid ""
@@ -4554,82 +4567,8 @@ msgstr ""
 
 #: ../data/messages:1098
 msgid "- A huge rewrite of the core using Objects"
-msgstr ""
+msgstr "- Un'ampia riscrittura del nucleo usando Oggetti"
 
 #: ../data/messages:1100
 msgid "- If you like the project, please donate :-)"
-msgstr ""
-
-#~ msgid "Additional parameters"
-#~ msgstr "Parametri addizionali"
-
-#~ msgid ""
-#~ "<b>New version: <span color='red'>GLX-Dock 3.0</span>!</b>\n"
-#~ " - The <b>taskbar</b> has been greatly enhanced.\n"
-#~ " - The <b>Log out</b> applet has been rewritten, now allows to switch "
-#~ "users.\n"
-#~ " - The <b>control of the dock from the keyboard</b> is now very "
-#~ "powerful:\n"
-#~ "   - many shortkeys have been added in different applets\n"
-#~ "   - you can activate a launcher by pressing a shortkey + its number\n"
-#~ "   - all shortkeys can now be managed in a single place in the "
-#~ "configuration window.\n"
-#~ " - The <b>Sound Menu</b> from Ubuntu has been integrated into the Sound-"
-#~ "Control applet.\n"
-#~ " - A new <b>Twitter applet</b> lets you tweet in one click.\n"
-#~ " - A new applet to <b>inhibit the screensaver</b> in one click.\n"
-#~ " - Separators are transparent to click in <b>'Panel'</b> mode\n"
-#~ " - Cairo-Dock now uses <b>GTK3</b>, for a better integration in a Gnome "
-#~ "desktop\n"
-#~ " - Few additions to the DBus API.\n"
-#~ " - It's possible to donate to support the project!"
-#~ msgstr ""
-#~ "<b>Nuova versione: <span color='red'>GLX-Dock 3.0</span>!</b>\n"
-#~ " - La <b>taskbar</b> è stata notevolmente migliorata.\n"
-#~ " - L'applet <b>Log out</b> è stata riscritta, adesso consente il cambio "
-#~ "utente.\n"
-#~ " - Il <b>controllo della dock dalla tastiera</b> è ora più potente:\n"
-#~ "   - sono state aggiunte molte scorciatoie in diverse applet\n"
-#~ "   - potete attivare un lanciatore premendo una scorciatoia + il suo "
-#~ "numero\n"
-#~ "   - ora le scorciatoie possono essere tutte gestite nella finestra di "
-#~ "configurazione.\n"
-#~ " - Il <b>Sound Menu</b> di Ubuntu è stato integrato dentro l'applet Sound-"
-#~ "Control.\n"
-#~ " - Una nuova <b>applet Twitter</b> vi permette di 'cinguettare' in un "
-#~ "clic.\n"
-#~ " - Una nuova applet per <b>inibire il salvaschermo</b> in un clic.\n"
-#~ " - I separatori sono trasparenti al clic nella modalità <b>'Pannello'</"
-#~ "b>\n"
-#~ " - Cairo-Dock adesso usa le <b>GTK3</b>, per una migliore integrazione "
-#~ "nell'ambiente Gnome\n"
-#~ " - Poche aggiunte alle API DBus.\n"
-#~ " - È possibile fare delle donazioni per sostenere il progetto!"
-
-#~ msgid ""
-#~ "<b>New version: <span color='red'>GLX-Dock 3.1</span>!</b>\n"
-#~ " - Better integration in of Unity: support of the <b>Launcher API</b> and "
-#~ "better support of <b>indicators</b>\n"
-#~ " - All <b>configuration windows</b> have been merged into a single one.\n"
-#~ " - Added <b>progress bars</b> in several applets and in the Dbus API\n"
-#~ " - The <b>Music Player</b> applet can control players in the systray.\n"
-#~ " - Icons of the <b>taskbar</b> can be separated from launchers or not\n"
-#~ " - And as always ... various bug fixes and improvements :-)"
-#~ msgstr ""
-#~ "<b>Nuova versione: <span color='red'>GLX-Dock 3.1</span>!</b>\n"
-#~ "- Migliore integrazione in Unity: supporto del <b>Lanciatore API</b> e "
-#~ "miglior supporto degli <b>indicatori</b>.\n"
-#~ "- Tutte le <b>finestre di configurazione</b> sono state raggruppate in "
-#~ "una sola.\n"
-#~ "- Aggiunti gli <b>indicatori di avanzamento</b> in diverse applet e "
-#~ "nell'API Dbus.\n"
-#~ "- L'applet <b>Music Player</b> può controllare i lettori presenti "
-#~ "nell'area di notifica.\n"
-#~ "- Le icone della <b>barra delle applicazioni</b> possono essere separati "
-#~ "dai lanciatori o meno.\n"
-#~ "- E come sempre ... correzioni di bug e miglioramenti vari :-)"
-
-#~ msgid "Prevent this launcher from stealing this application from taskbar?"
-#~ msgstr ""
-#~ "Impedire a questo lanciatore di occupare con questa applicazione la barra "
-#~ "delle applicazioni?"
+msgstr "- Se gradisci il progetto, per favore fai una donazione :-)"

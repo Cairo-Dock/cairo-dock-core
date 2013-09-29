@@ -2,15 +2,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.6.2\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2013-07-21 20:04+0000\n"
+"POT-Creation-Date: 2013-09-11 07:12+0000\n"
+"PO-Revision-Date: 2013-09-11 10:27+0000\n"
 "Last-Translator: Adolfo Jayme Barrientos <fitoschido@gmail.com>\n"
 "Language-Team: \n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-07-22 05:17+0000\n"
-"X-Generator: Launchpad (build 16696)\n"
+"X-Launchpad-Export-Date: 2013-09-12 04:50+0000\n"
+"X-Generator: Launchpad (build 16761)\n"
+"Language: \n"
 "X-Poedit-Language: Spanish\n"
 
 #: ../src/cairo-dock-gui-advanced.c:121 ../src/cairo-dock-widget-plugins.c:171
@@ -446,7 +447,7 @@ msgstr ""
 
 #: ../src/cairo-dock-menu.c:590
 msgid "Applet"
-msgstr ""
+msgstr "Applet"
 
 #: ../src/cairo-dock-menu.c:607
 msgid ""
@@ -569,7 +570,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Lanzar Cairo-Dock al inicio"
 
 #: ../src/cairo-dock-menu.c:1099
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Las miniaplicaciones de terceros proporcionan integración con muchos "
 "programas, como Pidgin"
@@ -741,11 +743,11 @@ msgstr "Mantener encima"
 
 #: ../src/cairo-dock-menu.c:1953
 msgid "Visible only on this desktop"
-msgstr ""
+msgstr "Visible solo en este escritorio"
 
 #: ../src/cairo-dock-menu.c:1953
 msgid "Visible on all desktops"
-msgstr ""
+msgstr "Visible en cualquier escritorio"
 
 #: ../src/cairo-dock-menu.c:1961
 msgid "Kill"
@@ -821,7 +823,8 @@ msgid "Effects:"
 msgstr "Efectos:"
 
 #: ../src/cairo-dock-widget-items.c:241
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Los parámetros de la barra principal se encuentran en la ventana de "
 "configuración principal."
@@ -847,7 +850,8 @@ msgid "Category"
 msgstr "Categoría"
 
 #: ../src/cairo-dock-widget-plugins.c:280
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Pulse sobre una miniaplicación para ver una previsualización y una "
 "descripción de ella."
@@ -1235,7 +1239,7 @@ msgstr "_Íconos personalizados_"
 #: ../src/gldit/cairo-dock-gui-factory.c:1060
 #: ../src/gldit/cairo-dock-gui-factory.c:1105
 msgid "Use all screens"
-msgstr ""
+msgstr "Usar todas las pantallas"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1082 ../data/messages:13
 #: ../data/messages:153 ../data/messages:159 ../data/messages:875
@@ -1250,7 +1254,7 @@ msgstr "derecha"
 #: ../src/gldit/cairo-dock-gui-factory.c:1086
 #: ../src/gldit/cairo-dock-gui-factory.c:1096
 msgid "middle"
-msgstr ""
+msgstr "en medio"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1092 ../data/messages:9
 #: ../data/messages:149 ../data/messages:871
@@ -1264,7 +1268,7 @@ msgstr "inferior"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1099
 msgid "Screen"
-msgstr ""
+msgstr "Pantalla"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1393
 #, c-format
@@ -1740,7 +1744,8 @@ msgstr "Establecer un icono personalizado para una aplicación"
 
 #: ../Help/data/messages:69
 msgid "See \"Changing an icon's image\" in the \"Icons\" category."
-msgstr "Consulte \"Cambiar la imagen de un icono\" en la categoria \"Iconos\"."
+msgstr ""
+"Consulte \"Cambiar la imagen de un icono\" en la categoria \"Iconos\"."
 
 #: ../Help/data/messages:71
 msgid "Showing windows preview over the icons"
@@ -1854,9 +1859,9 @@ msgid ""
 "the small bottom-right button."
 msgstr ""
 "En el menú (derecho -> Visibilidad), puede decidir si mantiene encima otras "
-"ventanas, o en \"Widget Layer\" (si usa Compiz), o crear una \"barra desklet"
-"\" ubicandolos en un lado de la pantalla y seleccionando \"reservar espacio"
-"\".\n"
+"ventanas, o en \"Widget Layer\" (si usa Compiz), o crear una \"barra "
+"desklet\" ubicandolos en un lado de la pantalla y seleccionando \"reservar "
+"espacio\".\n"
 "Los desklets que no necesitan interacción (como el reloj) pueden ser puestos "
 "a transparente al mouse (significa que puede hacer clic en lo que esta "
 "detrás de ellos), haciendo clic en el botón central."
@@ -2156,8 +2161,8 @@ msgid ""
 "You can even name each of them."
 msgstr ""
 "Activar la miniaplicación \"Cambiador\".\n"
-"Haga clic derecho -> \"agregar un escritorio\" o \"quitar este escritorio"
-"\".\n"
+"Haga clic derecho -> \"agregar un escritorio\" o \"quitar este "
+"escritorio\".\n"
 "También puede nombrarlos a su gusto."
 
 #: ../Help/data/messages:173
@@ -2189,8 +2194,8 @@ msgid ""
 "Alternatively, you can click on the icon and move the scroll bar."
 msgstr ""
 "Activar la miniaplicación de Luminosidad de Pantalla.\n"
-"Luego utilice las teclas de desplazamiento arriba/abajo para aumentar/"
-"disminuir el brillo.\n"
+"Luego utilice las teclas de desplazamiento arriba/abajo para "
+"aumentar/disminuir el brillo.\n"
 "Alternativamente, puede hace clic en el icono y mover la barra de "
 "desplazamiento."
 
@@ -2200,13 +2205,15 @@ msgstr "Borrando completamente el panel de Gnome."
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Abre el gconf-editor, edite la llave /desktop/gnome/session/"
-"required_components/panel, y sustituya su contenido con \"cairo-dock\".\n"
+"Abre el gconf-editor, edite la llave "
+"/desktop/gnome/session/required_components/panel, y sustituya su contenido "
+"con \"cairo-dock\".\n"
 "Reanuda tu sesión: el tablero-gnome no ha sido iniciado, y el dock ha sido "
 "iniciado (sino, puedes añadirlo a los programa iniciales)."
 
@@ -2232,7 +2239,8 @@ msgstr "Foro"
 
 #: ../Help/data/messages:195
 msgid "Our wiki can also help you, it is more complete on some points."
-msgstr "Nuestro wiki también puede ayudar, es más completo en algunos puntos."
+msgstr ""
+"Nuestro wiki también puede ayudar, es más completo en algunos puntos."
 
 #: ../Help/data/messages:197
 msgid "Wiki"
@@ -2257,16 +2265,16 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Necessitas poner componiendo en marcha. Por ejemplo, puedes ejecutar Compiz "
 "o xcompmgr.\n"
 "Si usas XFCE o KDE, puedes poner componiendo en marcha en las opciónes del "
 "gestor de ventanas.\n"
 "Si usas Gnome, puedes permitirlo en Metacity por ésta manera:\n"
-" Abra gconf-editor, edite la llave '/apps/metacity/general/"
-"compositing_manager' y fijala en 'true'."
+" Abra gconf-editor, edite la llave "
+"'/apps/metacity/general/compositing_manager' y fijala en 'true'."
 
 #: ../Help/data/messages:207
 msgid ""
@@ -2706,7 +2714,8 @@ msgstr ""
 
 #: ../Help/data/messages:363
 msgid "Choose a decoration theme for this desklet:"
-msgstr "Seleccione un tema de decoración para este complemento del escritorio:"
+msgstr ""
+"Seleccione un tema de decoración para este complemento del escritorio:"
 
 #: ../Help/data/messages:365
 msgid ""
@@ -2734,7 +2743,8 @@ msgstr "Desplazamiento izquierdo:"
 
 #: ../Help/data/messages:375
 msgid "in pixels. Use this to adjust the top position of drawings."
-msgstr "en Píxeles. Use esto para ajustar la posición superior de los dibujos."
+msgstr ""
+"en Píxeles. Use esto para ajustar la posición superior de los dibujos."
 
 #: ../Help/data/messages:377
 msgid "Top offset:"
@@ -2742,7 +2752,8 @@ msgstr "Desplazamiento superior:"
 
 #: ../Help/data/messages:379
 msgid "in pixels. Use this to adjust the right position of drawings."
-msgstr "en Píxeles. Use esto para ajustar la posición derecha de los dibujos."
+msgstr ""
+"en Píxeles. Use esto para ajustar la posición derecha de los dibujos."
 
 #: ../Help/data/messages:381
 msgid "Right offset:"
@@ -2750,7 +2761,8 @@ msgstr "Desplazamiento derecho:"
 
 #: ../Help/data/messages:383
 msgid "in pixels. Use this to adjust the bottom position of drawings."
-msgstr "en Píxeles. Use esto para ajustar la posición inferior de los dibujos."
+msgstr ""
+"en Píxeles. Use esto para ajustar la posición inferior de los dibujos."
 
 #: ../Help/data/messages:385
 msgid "Bottom offset:"
@@ -3036,7 +3048,7 @@ msgstr "Alineamiento relativo :"
 
 #: ../data/messages:163 ../data/messages:881
 msgid "Multi-screens"
-msgstr ""
+msgstr "Multipantalla"
 
 #: ../data/messages:165 ../data/messages:901
 msgid "Offset from the screen's edge"
@@ -3163,7 +3175,7 @@ msgstr "¿Mezclar lanzadores y aplicaciones?"
 
 #: ../data/messages:267
 msgid "Animate the launcher until the corresponding application opens"
-msgstr ""
+msgstr "Animar el lanzador cuando se abren las aplicaciones"
 
 #: ../data/messages:269
 msgid "Only show applications on current desktop"
@@ -3293,7 +3305,8 @@ msgstr "Inferior"
 
 #: ../data/messages:343
 msgid "This is the default behaviour of most taskbars."
-msgstr "Es el comportamiento por defecto de la mayoria de las barras de tarea."
+msgstr ""
+"Es el comportamiento por defecto de la mayoria de las barras de tarea."
 
 #: ../data/messages:345
 msgid ""
@@ -3389,7 +3402,8 @@ msgstr "Frecuencia de actualización"
 
 #: ../data/messages:403 ../data/messages:407 ../data/messages:411
 msgid "in Hz. This is to adjust behaviour relative to your CPU power."
-msgstr "en Hz. Esto es para ajustar con respecto a la potencia del procesador."
+msgstr ""
+"en Hz. Esto es para ajustar con respecto a la potencia del procesador."
 
 #: ../data/messages:405
 msgid "Refresh rate when mouving cursor into the dock:"
@@ -3473,8 +3487,8 @@ msgstr "Puerto:"
 msgid ""
 "Let empty if you don't need to log-in to the proxy with a user/password."
 msgstr ""
-"Dejar en blanco si no necesita iniciar sesión en el proxy con un usuario/"
-"contraseña."
+"Dejar en blanco si no necesita iniciar sesión en el proxy con un "
+"usuario/contraseña."
 
 #: ../data/messages:443
 msgid "User :"
@@ -3800,7 +3814,8 @@ msgstr ""
 
 #: ../data/messages:645
 msgid "Image filename to use as a background for icons :"
-msgstr "Nombre de archivo de la imagen para utilizar como fondo de los iconos:"
+msgstr ""
+"Nombre de archivo de la imagen para utilizar como fondo de los iconos:"
 
 #: ../data/messages:647
 msgid "Icons size"
@@ -3819,7 +3834,8 @@ msgid "Zoom effect"
 msgstr "Efecto de acercamiento"
 
 #: ../data/messages:657
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Establezca en 1 si no quiere que los iconos se agranden cuando mueva el "
 "ratón sobre ellos."
@@ -4084,11 +4100,11 @@ msgstr "más grande"
 
 #: ../data/messages:771
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
-"Hacer que el indicador siga la orientación de la barra (superior/inferior/"
-"derecha/izquierda)"
+"Hacer que el indicador siga la orientación de la barra "
+"(superior/inferior/derecha/izquierda)"
 
 #: ../data/messages:773
 msgid "Rotate the indicator with dock?"
@@ -4393,11 +4409,11 @@ msgstr "Dibujar el contenido del Sub-dock como iconos"
 
 #: ../data/messages:1009
 msgid "Draw sub-dock's content as stack"
-msgstr ""
+msgstr "Mostrar la sub-barra como una pila"
 
 #: ../data/messages:1011
 msgid "Draw sub-dock's content inside a box"
-msgstr ""
+msgstr "Mostrar la sub-barra dentro de un recuadro"
 
 #: ../data/messages:1013 ../data/messages:1035
 msgid "Image's name or path:"
@@ -4429,8 +4445,8 @@ msgstr "Nombre del lanzador:"
 
 #: ../data/messages:1037
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1039
@@ -4446,9 +4462,8 @@ msgid ""
 msgstr ""
 
 #: ../data/messages:1047
-#, fuzzy
 msgid "Don't link the launcher with its window"
-msgstr "¿Vincular el indicador son el icono?"
+msgstr ""
 
 #: ../data/messages:1049
 msgid ""
@@ -4508,7 +4523,7 @@ msgstr ""
 
 #: ../data/messages:1084
 msgid "<b>New version: <span color='red'>GLX-Dock 3.3</span>!</b>"
-msgstr ""
+msgstr "<b>Nueva Version: <span color='red'>GLX-Dock 3.3</span>!</b>"
 
 #: ../data/messages:1086
 msgid ""
@@ -4558,12 +4573,11 @@ msgstr ""
 #~ " - The <b>taskbar</b> has been greatly enhanced.\n"
 #~ " - The <b>Log out</b> applet has been rewritten, now allows to switch "
 #~ "users.\n"
-#~ " - The <b>control of the dock from the keyboard</b> is now very "
-#~ "powerful:\n"
+#~ " - The <b>control of the dock from the keyboard</b> is now very powerful:\n"
 #~ "   - many shortkeys have been added in different applets\n"
 #~ "   - you can activate a launcher by pressing a shortkey + its number\n"
-#~ "   - all shortkeys can now be managed in a single place in the "
-#~ "configuration window.\n"
+#~ "   - all shortkeys can now be managed in a single place in the configuration "
+#~ "window.\n"
 #~ " - The <b>Sound Menu</b> from Ubuntu has been integrated into the Sound-"
 #~ "Control applet.\n"
 #~ " - A new <b>Twitter applet</b> lets you tweet in one click.\n"
@@ -4576,21 +4590,19 @@ msgstr ""
 #~ msgstr ""
 #~ "<b>Nueva versión: <span color='red'>GLX-Dock 3.0</span>!</b>\n"
 #~ " - La <b>barra de tareas</b> ha sido felizmente mejorada.\n"
-#~ " - El <b>applet de cierre de sesión</b> fue reescrito, permitiendo el "
-#~ "cambio de usuarios.\n"
+#~ " - El <b>applet de cierre de sesión</b> fue reescrito, permitiendo el cambio "
+#~ "de usuarios.\n"
 #~ " - El <b>control del dock desde el teclado</b> ahora es más poderoso:\n"
 #~ "   - muchas teclas abreviadas fueron fijadas a diferentes applets\n"
-#~ "   - puede activar el lanzador presionando una tecla abreviada + su "
-#~ "número\n"
-#~ "   - ahora todas las teclas abreviadas pueden ser administradas en un "
-#~ "solo lugar de la ventana de configuración.\n"
-#~ " - El <b>Menú de Sonido</b> de Ubuntu fue integrado al applet de Control-"
-#~ "de-Sonido.\n"
+#~ "   - puede activar el lanzador presionando una tecla abreviada + su número\n"
+#~ "   - ahora todas las teclas abreviadas pueden ser administradas en un solo "
+#~ "lugar de la ventana de configuración.\n"
+#~ " - El <b>Menú de Sonido</b> de Ubuntu fue integrado al applet de Control-de-"
+#~ "Sonido.\n"
 #~ " - Un nuevo <b>applet Twitter</b> le permite twittear con un solo clic.\n"
-#~ " - Un nuevo applet para <b>inhibir el protector de pantalla</b> en un "
-#~ "sólo clic.\n"
-#~ " - Los separadores son transparentes al hacer clic en modo <b>'Panel'</"
-#~ "b>\n"
+#~ " - Un nuevo applet para <b>inhibir el protector de pantalla</b> en un sólo "
+#~ "clic.\n"
+#~ " - Los separadores son transparentes al hacer clic en modo <b>'Panel'</b>\n"
 #~ " - Ahora Cairo-Dock usa <b>GTK3</b>, para una mejor integración al "
 #~ "escritorio Gnome\n"
 #~ " - Pequeños agregados al DBus API.\n"
@@ -4614,6 +4626,6 @@ msgstr ""
 #~ " - Añadido <b>barra de progreso</b> en distitnas applets y en Dbus API\n"
 #~ " - El  applet del <b>Reproductor de Música</b> puede controlarse desde la "
 #~ "bandeja de sistema.\n"
-#~ " - Iconos de la  <b>barra de tareas</b> pueden ser separados del lanzador "
-#~ "o no.\n"
+#~ " - Iconos de la  <b>barra de tareas</b> pueden ser separados del lanzador o "
+#~ "no.\n"
 #~ " - Y como siempre...correcion de distintos errores y pequeñas mejoras  :-)"

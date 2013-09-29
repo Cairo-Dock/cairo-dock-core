@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2013-07-21 19:58+0000\n"
+"POT-Creation-Date: 2013-09-11 07:12+0000\n"
+"PO-Revision-Date: 2013-09-12 10:36+0000\n"
 "Last-Translator: rob <linuxned@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-07-22 05:15+0000\n"
-"X-Generator: Launchpad (build 16696)\n"
+"X-Launchpad-Export-Date: 2013-09-13 04:48+0000\n"
+"X-Generator: Launchpad (build 16761)\n"
+"Language: \n"
 
 #: ../src/cairo-dock-gui-advanced.c:121 ../src/cairo-dock-widget-plugins.c:171
 #: ../data/messages:257
@@ -230,7 +231,7 @@ msgstr "Configureren van Cairo-Dock"
 
 #: ../src/cairo-dock-gui-advanced.c:2637
 msgid "Simple Mode"
-msgstr "Simpele modus"
+msgstr "Eenvoudige modus"
 
 #: ../src/cairo-dock-gui-simple.c:100 ../src/cairo-dock-gui-simple.c:102
 msgid "Add-ons"
@@ -429,7 +430,8 @@ msgstr "scheiding"
 #: ../src/cairo-dock-menu.c:633
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
-msgstr "U wilt het pictogram (%s) uit het dock verwijderen. Weet u het zeker ?"
+msgstr ""
+"U wilt het pictogram (%s) uit het dock verwijderen. Weet u het zeker ?"
 
 #: ../src/cairo-dock-menu.c:648
 msgid "Sorry, this icon doesn't have a configuration file."
@@ -526,7 +528,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Start Cairo-Dock op tijdens het opstarten"
 
 #: ../src/cairo-dock-menu.c:1099
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Applets van derden die integratie bevatten voor vele toepassingen zoals "
 "Pidgin"
@@ -780,7 +783,8 @@ msgid "Effects:"
 msgstr "Effecten:"
 
 #: ../src/cairo-dock-widget-items.c:241
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "De instellingen van het hoof-dock zijn beschikbaar in het "
 "hoofdconfiguratievenster."
@@ -806,7 +810,8 @@ msgid "Category"
 msgstr "Categorie"
 
 #: ../src/cairo-dock-widget-plugins.c:280
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Klik op het applet om een voorbeeld en omschrijving van het applet te "
 "krijgen."
@@ -924,14 +929,14 @@ msgstr "Bij opstarten opnieuw vragen welk backend te gebruiken."
 msgid "Force the dock to consider this environnement - use it with care."
 msgstr ""
 "Het dock forceren om deze omgeving te overwegen - wees voorzichtig met het "
-"gebruik ervan.."
+"gebruik ervan."
 
 #: ../src/cairo-dock.c:369
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
 msgstr ""
-"Het dock forceren om te laden vanuit deze map, in plaats vanuit de map ~/."
-"config/cairo-dock."
+"Het dock forceren om te laden vanuit deze map, in plaats vanuit de map "
+"~/.config/cairo-dock."
 
 #: ../src/cairo-dock.c:372
 msgid ""
@@ -990,7 +995,8 @@ msgstr "Versie tonen en afsluiten."
 
 #: ../src/cairo-dock.c:399
 msgid "Lock the dock so that any modification is impossible for users."
-msgstr "Het dock vergrendelen zodat gebruikers geen aanpassingen kunnen doen."
+msgstr ""
+"Het dock vergrendelen zodat gebruikers geen aanpassingen kunnen doen."
 
 #: ../src/cairo-dock.c:403
 msgid "Keep the dock above other windows whatever."
@@ -1043,13 +1049,13 @@ msgid ""
 " (To not show this dialog, launch the dock from the Application menu,\n"
 "  or with the -o option to force OpenGL and -c to force cairo.)"
 msgstr ""
-"Met OpenGL kunt u gebruik maken van de hardware-acceleratie, terwijl het CPU-"
-"gebruik beperkt wordt tot het minimum.\n"
+"Met OpenGL kunt u gebruik maken van de hardware-acceleratie, terwijl het "
+"processorgebruik beperkt wordt tot het minimum.\n"
 "Het maakt sommige mooie visuele effecten mogelijk, gelijkwaardig aan "
 "Compiz.\n"
 "Echter, sommige kaarten en/of hun stuurprogramma's ondersteunen OpenGL niet "
 "volledig, waardoor het dock mogelijk niet goed kan werken.\n"
-"Wilt u OpenGL activeren ?\n"
+"Wilt u OpenGL inschakelen ?\n"
 " (Om deze dialoog niet te tonen, kunt u het dock openen vanuit het "
 "Toepassingenmenu,\n"
 "  of met de -o optie om OpenGL te forceren en -c om cairo te forceren.)"
@@ -1482,9 +1488,9 @@ msgstr ""
 "Om nieuwe applets te activeren, opent u de instellingen (rechtermuisklik -> "
 "Cairo-Dock -> Configureren), gaat naar \"Extra's\" en vinkt het applet aan "
 "dat u wilt gaan gebruiken.\n"
-"Als u meer applets wilt installeren, klikt u op de knop \"Meer applets"
-"\" (hierdoor wordt u verder geleid naar onze applets-website) en kunt "
-"applets installeren door de link van een applet naar uw dock te verslepen."
+"Als u meer applets wilt installeren, klikt u op de knop \"Meer applets\" "
+"(hierdoor wordt u verder geleid naar onze applets-website) en kunt applets "
+"installeren door de link van een applet naar uw dock te verslepen."
 
 #: ../Help/data/messages:13
 msgid "Adding a launcher"
@@ -1579,9 +1585,9 @@ msgstr ""
 "afbeelding te verwijderen, klikt u met rechts op het pictogram -> \"Andere "
 "acties\" -> \"Aangepast pictogram verwijderen\".\n"
 "\n"
-"Als u extra icoonthema's heeft geïnstalleerd op uw PC, dan kunt u ook één "
-"van deze thema's selecteren in het algemene configuratievenster, om te "
-"gebruiken in plaats van het standaardicoonthema."
+"Als u extra pictogramthema's heeft geïnstalleerd op uw PC, dan kunt u ook "
+"één van deze thema's selecteren in het algemene configuratievenster, om te "
+"gebruiken in plaats van het standaardpictogramthema."
 
 #: ../Help/data/messages:33
 msgid "Resizing icons"
@@ -1719,7 +1725,8 @@ msgstr "Aangepast pictogram instellen voor een toepassing"
 
 #: ../Help/data/messages:69
 msgid "See \"Changing an icon's image\" in the \"Icons\" category."
-msgstr "Zie \"Pictogramafbeelding wijzigen\" in de categorie \"Pictogrammen\"."
+msgstr ""
+"Zie \"Pictogramafbeelding wijzigen\" in de categorie \"Pictogrammen\"."
 
 #: ../Help/data/messages:71
 msgid "Showing windows preview over the icons"
@@ -1739,7 +1746,8 @@ msgstr ""
 #: ../Help/data/messages:285 ../Help/data/messages:289
 #: ../Help/data/messages:295 ../Help/data/messages:299
 msgid "Tip: If this line is grayed, it's because this tip is not for you.)"
-msgstr "Tip: indien deze regel grijs is, dan is deze tip niet voor u bedoeld."
+msgstr ""
+"Tip: indien deze regel grijs is, dan is deze tip niet voor u bedoeld."
 
 #: ../Help/data/messages:77
 msgid "If you're using Compiz, you can click on this button:"
@@ -2180,14 +2188,15 @@ msgstr "Het gnome-paneel in zijn geheel verwijderen"
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Open 'Configuratie-editor', ga dan naar /desktop/gnome/session/"
-"required_components, klik met rechts op 'panel' dan 'Sleutel bewerken' en "
-"vervang de waarde door \"cairo-dock\".\n"
+"Open 'Configuratie-editor', ga dan naar "
+"/desktop/gnome/session/required_components, klik met rechts op 'panel' dan "
+"'Sleutel bewerken' en vervang de waarde door \"cairo-dock\".\n"
 "Herstart daarna uw sessie : het gnome-paneel is nu niet opgestart, maar het "
 "dock is nu wel opgestart (indien niet, dan kunt u het toevoegen aan de "
 "'Opstarttoepassingen')."
@@ -2241,8 +2250,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "U moet composite inschakelen. U kunt bijvoorbeeld Compiz of xcompmgr "
 "draaien.\n"
@@ -2250,8 +2259,9 @@ msgstr ""
 "vensterbeheerder’s opties.\n"
 "Als u Gnome gebruikt, kunt u het in Metacity op de volgende manier "
 "inschakelen :\n"
-" Open de Configuratie-editor, bewerk de sleutel '/apps/metacity/general/"
-"compositing_manager' en vink het vakje onder ´waarde´ aan."
+" Open de Configuratie-editor, bewerk de sleutel "
+"'/apps/metacity/general/compositing_manager' en vink het vakje onder "
+"´waarde´ aan."
 
 #: ../Help/data/messages:207
 msgid ""
@@ -2288,11 +2298,11 @@ msgid ""
 "If the dock is running with OpenGL, try to disable it by launching the dock "
 "with «cairo-dock -c»."
 msgstr ""
-"Als u een GeForce8-kaart heeft, moet u de laatste stuurprogramma's "
+"Als u een NVIDIA GeForce8-kaart heeft, moet u de laatste stuurprogramma's "
 "installeren, omdat de eerste stuurprogramma's vele fouten hadden.\n"
-"Indien het dock werkt zonder openGL, probeer dan het aantal pictogrammen te "
+"Indien het dock werkt zonder OpenGL, probeer dan het aantal pictogrammen te "
 "beperken in het hoofd-dock, of probeer de grootte te verkleinen.\n"
-"Indien het dock werkt met openGL, probeer dat dan te deactiveren door het "
+"Indien het dock werkt met OpenGL, probeer dit dan uit te schakelen door het "
 "dock te starten met “cairo-dock –c”."
 
 #: ../Help/data/messages:217
@@ -2314,12 +2324,13 @@ msgid ""
 "support OpenGL2.0."
 msgstr ""
 "U heeft een grafische kaart nodig die openGL2.0 ondersteunt. De meeste "
-"Nvidia-kaarten doen dit, meer en meer Intel-kaarten doen dit nu ook. De "
+"NVIDIA-kaarten doen dit, meer en meer Intel-kaarten doen dit nu ook. De "
 "meeste ATI-kaarten echter niet."
 
 #: ../Help/data/messages:223
 msgid "I don't have any themes in the Theme Manager, except the default one."
-msgstr "Ik heb geen thema's in de Themabeheerder, behalve het standaardthema."
+msgstr ""
+"Ik heb geen thema's in de Themabeheerder, behalve het standaardthema."
 
 #: ../Help/data/messages:225
 msgid "Hint : Up to version 2.1.1-2, wget was used."
@@ -2401,9 +2412,9 @@ msgid ""
 "the \"menus have icons\" and the \"buttons have icons\" options. "
 msgstr ""
 "In Gnome, is er een optie om die van het dock te negeren. Om pictogrammen in "
-"menu's in te schakelen, opent u 'Configuratie-editor', gaat dan naar "
-"Desktop / Gnome / Interface en stelt \"menus have icons (pictogrammen in "
-"menu's weergeven)\" in op 'True' en vinkt u de optie \"buttons have icons "
+"menu's in te schakelen, opent u 'Configuratie-editor', gaat dan naar Desktop "
+"/ Gnome / Interface en stelt \"menus have icons (pictogrammen in menu's "
+"weergeven)\" in op 'True' en vinkt u de optie \"buttons have icons "
 "(pictogrammen op knoppen weergeven)\" aan. "
 
 #: ../Help/data/messages:245
@@ -2431,8 +2442,8 @@ msgstr ""
 "We stellen uw hulp op prijs! Als u een fout ziet of denkt dat er iets "
 "verbeterd kan worden,\\n\n"
 "of hebt gedroomd over het dock, bezoek ons dan op glx-dock.org.\\n\n"
-"Engels sprekende en anderstalige mensen zijn welkom, dus wees niet "
-"verlegen ! ;-)\\n\n"
+"Engels sprekende en anderstalige mensen zijn welkom, dus wees niet verlegen "
+"! ;-)\\n\n"
 "\\n\n"
 "Als u een thema voor het dock heeft gemaakt of een applet en deze wilt "
 "delen, dan zullen wij deze graag toevoegen aan onze server !"
@@ -2460,7 +2471,7 @@ msgstr ""
 
 #: ../Help/data/messages:259
 msgid "DBus API"
-msgstr "DBus-API"
+msgstr "DBus API"
 
 #: ../Help/data/messages:261
 msgid ""
@@ -2479,8 +2490,8 @@ msgstr "Websites"
 #: ../Help/data/messages:265
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
 msgstr ""
-"Een probleem ? Een suggestie ? Wilt u met ons spreken ? U bent altijd "
-"welkom !"
+"Een probleem ? Een suggestie ? Wilt u met ons spreken ? U bent altijd welkom "
+"!"
 
 #: ../Help/data/messages:267
 msgid "Community site"
@@ -3154,7 +3165,7 @@ msgstr "Starters en toepassingen mixen ?"
 
 #: ../data/messages:267
 msgid "Animate the launcher until the corresponding application opens"
-msgstr ""
+msgstr "Animeer de starter totdat de corresponderende toepassing zich opent"
 
 #: ../data/messages:269
 msgid "Only show applications on current desktop"
@@ -3213,7 +3224,8 @@ msgid ""
 "A composite manager is required to display the thumbnail.\n"
 "OpenGL is required to draw the icon bent backwards."
 msgstr ""
-"U heeft een composite-beheerder nodig om de miniatuur te kunnen tonen.\n"
+"U heeft een composite-beheerder nodig om de miniatuurafbeelding te kunnen "
+"tonen.\n"
 "U heeft OpenGL nodig om het pictogram achterover gebogen te kunnen tekenen."
 
 #: ../data/messages:309
@@ -3226,7 +3238,7 @@ msgstr "Pictogram doorzichtig maken ?"
 
 #: ../data/messages:313
 msgid "Show a window's thumbnail"
-msgstr "Vensterminiatuur tonen voor geminimaliseerde vensters"
+msgstr "Vensterminiatuurafbeelding tonen voor geminimaliseerde vensters"
 
 #: ../data/messages:315
 msgid "Draw it bent backwards"
@@ -3328,7 +3340,7 @@ msgid ""
 "It will notify you even if, for instance, you are watching a movie in full "
 "screen or you are on another desktop.\n"
 msgstr ""
-"Het waarschuwt u zelfs wanneer u bijvoorbeeld een film bekijkt in een "
+"Het geeft u zelfs een melding wanneer u bijvoorbeeld een film bekijkt in een "
 "volledig scherm of wanneer u bezig bent op een ander bureaublad.\n"
 
 #: ../data/messages:359
@@ -3391,7 +3403,7 @@ msgstr "Vernieuwingsfrequentie"
 
 #: ../data/messages:403 ../data/messages:407 ../data/messages:411
 msgid "in Hz. This is to adjust behaviour relative to your CPU power."
-msgstr "In Hz. Dit is om uw CPU-gebruik aan te passen."
+msgstr "In Hz. Dit is om het processorgebruik aan te passen."
 
 #: ../data/messages:405
 msgid "Refresh rate when mouving cursor into the dock:"
@@ -3825,7 +3837,8 @@ msgid "Zoom effect"
 msgstr "Vergrotingseffect"
 
 #: ../data/messages:657
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Stel in op 1 als u niet wilt dat de pictogrammen vergroot worden wanneer u "
 "eroverheen beweegt."
@@ -3895,8 +3908,8 @@ msgid ""
 "Make the separator's image revolve when dock is on top/on the left/on the "
 "right?"
 msgstr ""
-"De afbeelding van de scheiding laten draaien wanneer het dock boven/links/"
-"rechts is ?"
+"De afbeelding van de scheiding laten draaien wanneer het dock "
+"boven/links/rechts is ?"
 
 #: ../data/messages:687
 msgid "Colour of flat separators :"
@@ -3990,7 +4003,8 @@ msgstr "Afbeeldingsbestand :"
 
 #: ../data/messages:733
 msgid "Set transparency to 0 if you don't want to use an indicator."
-msgstr "Stel doorzichtigheid in op 0 wanneer u geen indicator wilt gebruiken."
+msgstr ""
+"Stel doorzichtigheid in op 0 wanneer u geen indicator wilt gebruiken."
 
 #: ../data/messages:735
 msgid "Colour of the frame :"
@@ -4089,8 +4103,8 @@ msgstr "Groter"
 
 #: ../data/messages:771
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Gebruik dit om de indicator de oriëntatie van het dock te laten volgen "
 "(boven/onder/rechts/links)."
@@ -4435,8 +4449,8 @@ msgstr "Naam starter:"
 
 #: ../data/messages:1037
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 "Bijvoorbeeld : nautilus --no-desktop, gedit, etc. U kunt zelfs een sneltoets "
 "instellen, bijvoorbeeld <Alt>F1, <Ctrl>c, <Ctrl>v, etc"
@@ -4459,9 +4473,8 @@ msgstr ""
 "steelt uit de taakbalk."
 
 #: ../data/messages:1047
-#, fuzzy
 msgid "Don't link the launcher with its window"
-msgstr "Indicator verbinden aan zijn pictogram ?"
+msgstr "Starter niet koppelen aan zijn venster"
 
 #: ../data/messages:1049
 msgid ""
@@ -4502,15 +4515,15 @@ msgstr ""
 
 #: ../data/messages:1076
 msgid "Cairo-Dock (Fallback Mode)"
-msgstr ""
+msgstr "Cairo-Dock (terugval-modus)"
 
 #: ../data/messages:1078
 msgid "A light and eye-candy dock and desklets for your desktop."
-msgstr ""
+msgstr "Licht en mooi uitziend dock en desklets voor uw bureaublad."
 
 #: ../data/messages:1080
 msgid "Multi-purpose Dock and Desklets"
-msgstr ""
+msgstr "Dock en desklets bruikbaar voor meerdere doeleinden"
 
 #: ../data/messages:1082
 msgid ""
@@ -4539,7 +4552,7 @@ msgstr ""
 
 #: ../data/messages:1084
 msgid "<b>New version: <span color='red'>GLX-Dock 3.3</span>!</b>"
-msgstr ""
+msgstr "<b>Nieuwe versie: <span color='red'>GLX-Dock 3.3</span>!</b>"
 
 #: ../data/messages:1086
 msgid ""
@@ -4547,14 +4560,16 @@ msgid ""
 "    It allows to rapidly look for programs from their name or their "
 "description"
 msgstr ""
+"- Zoekveld toegevoegd aan het <b>Toepassingenmenu</b>.\n"
+"    Hiermee kunt u snel toepassingen vinden via hun naam of omschrijving"
 
 #: ../data/messages:1088
 msgid "- Added support of <b>logind</b> in the Logout applet"
-msgstr ""
+msgstr "- Ondersteuning toegevoegd voor <b>logind</b> in het Afmelden-applet"
 
 #: ../data/messages:1090
 msgid "- Better integration in the Cinnamon desktop"
-msgstr ""
+msgstr "- Betere integratie met Cinnamon-bestandsbeheer"
 
 #: ../data/messages:1092
 msgid ""
@@ -4562,39 +4577,54 @@ msgid ""
 "    It allows launchers to be animated until the application opens and "
 "avoids accidental double launches"
 msgstr ""
+"- Ondersteuning toegevoegd voor het <b>Opstartnotificatieprotocol</b>.\n"
+"    Hierdoor kunnen starters geanimeerd worden tot de toepassing zich opent "
+"en voorkomt dat een toepassing per ongeluk dubbel wordt geopend"
 
 #: ../data/messages:1094
 msgid ""
 "- Added an new third-party applet: <b>Notification History</b> to never miss "
 "a notification"
 msgstr ""
+"- Applet van derden toegevoegd: <b>Meldingsgeschiedenis</b> om nooit meer "
+"een melding te missen"
 
 #: ../data/messages:1096
 msgid "- Upgraded the <b>Dbus API</b> to be even more powerful"
-msgstr ""
+msgstr "- De <b>Dbus API</b> is nog krachtiger gemaakt"
 
 #: ../data/messages:1098
 msgid "- A huge rewrite of the core using Objects"
-msgstr ""
+msgstr "- Een groot gedeelte van de kern herschreven door middel van Objects"
 
 #: ../data/messages:1100
 msgid "- If you like the project, please donate :-)"
 msgstr ""
+"Als het project u bevalt, wilt u dan a.u.b. een donatie doen. Alvast bedankt "
+":-)"
 
 #~ msgid "Additional parameters"
 #~ msgstr "Extra opties"
+
+#~ msgid "- Added support of the StartupNotification protocol"
+#~ msgstr "- Ondersteuning toegevoegd voor het Opstartnotificatieprotocol"
+
+#~ msgid "- Added support of logind in the Logout applet"
+#~ msgstr "- Ondersteuning toegevoegd voor logind in het Afmelden-applet"
+
+#~ msgid "- Upgraded the Dbus API to be even more powerful"
+#~ msgstr "- De Dbus API nog krachtiger gemaakt"
 
 #~ msgid ""
 #~ "<b>New version: <span color='red'>GLX-Dock 3.0</span>!</b>\n"
 #~ " - The <b>taskbar</b> has been greatly enhanced.\n"
 #~ " - The <b>Log out</b> applet has been rewritten, now allows to switch "
 #~ "users.\n"
-#~ " - The <b>control of the dock from the keyboard</b> is now very "
-#~ "powerful:\n"
+#~ " - The <b>control of the dock from the keyboard</b> is now very powerful:\n"
 #~ "   - many shortkeys have been added in different applets\n"
 #~ "   - you can activate a launcher by pressing a shortkey + its number\n"
-#~ "   - all shortkeys can now be managed in a single place in the "
-#~ "configuration window.\n"
+#~ "   - all shortkeys can now be managed in a single place in the configuration "
+#~ "window.\n"
 #~ " - The <b>Sound Menu</b> from Ubuntu has been integrated into the Sound-"
 #~ "Control applet.\n"
 #~ " - A new <b>Twitter applet</b> lets you tweet in one click.\n"
@@ -4607,23 +4637,23 @@ msgstr ""
 #~ msgstr ""
 #~ "<b>Nieuwe versie: <span color='red'>GLX-Dock 3.0</span>!</b>\n"
 #~ " - De <b>taakbalk</b> is sterk verbeterd.\n"
-#~ " - Het applet <b>Afmelden</b> is herschreven, waardoor het nu mogelijk is "
-#~ "om van gebruiker te wisselen.\n"
-#~ " - Het <b>beheren van het dock vanaf het toetsenbord</b> is nu zeer "
-#~ "krachtig geworden:\n"
+#~ " - Het applet <b>Afmelden</b> is herschreven, waardoor het nu mogelijk is om "
+#~ "van gebruiker te wisselen.\n"
+#~ " - Het <b>beheren van het dock vanaf het toetsenbord</b> is nu zeer krachtig "
+#~ "geworden:\n"
 #~ "   - er zijn diverse sneltoetsen toegevoegd aan verschillende applets\n"
 #~ "   - u kunt nu een starter activeren door zijn nummer + sneltoets in te "
 #~ "toetsen\n"
-#~ "   - alle sneltoetsen kunnen nu beheerd worden op één enkele plaats in "
-#~ "het configuratievenster.\n"
+#~ "   - alle sneltoetsen kunnen nu beheerd worden op één enkele plaats in het "
+#~ "configuratievenster.\n"
 #~ " - Het <b>Geluidsmenu</b> van Ubuntu is nu geïntegreerd in het applet "
 #~ "Geluidsbeheer.\n"
 #~ " - Met het nieuwe applet <b>Twitter</b> kunt u in één klik een tweet "
 #~ "versturen.\n"
-#~ " - Met het nieuwe applet <b>Schermbeveiliging inschakelen</b> kunt u in "
-#~ "één klik de schermbeveiliging inschakelen.\n"
-#~ " - Scheidingen zijn nu transparant om in de <b>'Paneel-modus'</b> te "
-#~ "kunnen klikken.\n"
+#~ " - Met het nieuwe applet <b>Schermbeveiliging inschakelen</b> kunt u in één "
+#~ "klik de schermbeveiliging inschakelen.\n"
+#~ " - Scheidingen zijn nu transparant om in de <b>'Paneel-modus'</b> te kunnen "
+#~ "klikken.\n"
 #~ " - Cairo-Dock gebruikt nu <b>GTK3</b>, voor een betere integratie in de "
 #~ "Gnome-werkomgeving.\n"
 #~ " - Er zijn enkele uitbreidingen voor de DBus-API.\n"
@@ -4640,14 +4670,12 @@ msgstr ""
 #~ " - And as always ... various bug fixes and improvements :-)"
 #~ msgstr ""
 #~ "<b>Nieuwe versie: <span color='red'>GLX-Dock 3.1</span>!</b>\n"
-#~ " - Betere integratie in Unity: ondersteuning van de <b>Launcher API</b> "
-#~ "en betere ondersteuning van <b>indicatoren</b>\n"
+#~ " - Betere integratie in Unity: ondersteuning van de <b>Launcher API</b> en "
+#~ "betere ondersteuning van <b>indicatoren</b>\n"
 #~ " - Alle <b>configuratievensters</b> zijn samengevoegd tot één enkel "
 #~ "venster.\n"
-#~ " - <b>Voortgangsbalken</b> toegevoegd aan diverse applets en in de Dbus "
-#~ "API\n"
-#~ " - Het <b>Muziekspeler</b>-applet kan nu spelers in het systeemvak "
-#~ "beheren.\n"
+#~ " - <b>Voortgangsbalken</b> toegevoegd aan diverse applets en in de Dbus API\n"
+#~ " - Het <b>Muziekspeler</b>-applet kan nu spelers in het systeemvak beheren.\n"
 #~ " - Pictogrammen in de <b>taakbalk</b> kunnen nu gescheiden worden van "
 #~ "starters\n"
 #~ " - En zoals altijd ... diverse foutoplossingen en verbeteringen :-)"

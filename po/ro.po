@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2013-07-21 20:16+0000\n"
-"Last-Translator: dahas <bogdan.daja@dahas.ro>\n"
+"POT-Creation-Date: 2013-09-11 07:12+0000\n"
+"PO-Revision-Date: 2013-09-01 10:38+0000\n"
+"Last-Translator: Ithreexas <Unknown>\n"
 "Language-Team: Romanian <ro@li.org>\n"
-"Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-07-22 05:16+0000\n"
-"X-Generator: Launchpad (build 16696)\n"
+"X-Launchpad-Export-Date: 2013-09-12 04:49+0000\n"
+"X-Generator: Launchpad (build 16761)\n"
+"Language: ro\n"
 
 #: ../src/cairo-dock-gui-advanced.c:121 ../src/cairo-dock-widget-plugins.c:171
 #: ../data/messages:257
@@ -50,7 +51,7 @@ msgstr "Sistem"
 
 #: ../src/cairo-dock-gui-advanced.c:128 ../src/cairo-dock-widget-plugins.c:166
 msgid "Fun"
-msgstr "Distractiv"
+msgstr "Amuzant"
 
 #: ../src/cairo-dock-gui-advanced.c:129 ../src/cairo-dock-gui-advanced.c:1802
 #: ../src/gldit/cairo-dock-gui-factory.c:784
@@ -96,7 +97,7 @@ msgstr "Defineste toate scurtaturile de taste disponibile curent"
 
 #: ../src/cairo-dock-gui-advanced.c:1518 ../data/messages:137
 msgid "Shortkeys"
-msgstr ""
+msgstr "Scurtături de taste"
 
 #: ../src/cairo-dock-gui-advanced.c:1524
 msgid "All of the parameters you will never want to tweak."
@@ -113,7 +114,7 @@ msgstr "Fundal"
 
 #: ../src/cairo-dock-gui-advanced.c:1543
 msgid "Select a view for each of your docks."
-msgstr "Selectare vizualizare pentru fiecare din docuri."
+msgstr "Selectare vizualizare pentru fiecare dintre docuri."
 
 #: ../src/cairo-dock-gui-advanced.c:1544 ../data/messages:129
 #: ../data/messages:517 ../data/messages:931
@@ -122,7 +123,7 @@ msgstr "Vizualizări"
 
 #: ../src/cairo-dock-gui-advanced.c:1551
 msgid "Configure text bubble appearance."
-msgstr ""
+msgstr "Configurare aspect bulă de notificare"
 
 #: ../src/cairo-dock-gui-advanced.c:1552
 msgid "Dialog boxes"
@@ -130,12 +131,12 @@ msgstr "Căsuţe de dialog"
 
 #: ../src/cairo-dock-gui-advanced.c:1559
 msgid "Applets can be displayed on your desktop as widgets."
-msgstr ""
+msgstr "Applet-urile pot fi afişate pe desktop ca widget-uri"
 
 #: ../src/cairo-dock-gui-advanced.c:1560 ../Help/data/messages:89
 #: ../data/messages:573
 msgid "Desklets"
-msgstr ""
+msgstr "Desklet-uri"
 
 #: ../src/cairo-dock-gui-advanced.c:1567
 msgid ""
@@ -152,7 +153,7 @@ msgstr "Pictograme"
 
 #: ../src/cairo-dock-gui-advanced.c:1575
 msgid "Indicators are additional markers for your icons."
-msgstr ""
+msgstr "Indicatorii sunt marcatori adiţionali pentru pictograme"
 
 #: ../src/cairo-dock-gui-advanced.c:1576 ../data/messages:721
 msgid "Indicators"
@@ -164,11 +165,11 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1584
 msgid "Captions"
-msgstr ""
+msgstr "Legende"
 
 #: ../src/cairo-dock-gui-advanced.c:1591
 msgid "Try new themes and save your theme."
-msgstr ""
+msgstr "Incercaţi teme noi şi salvaţi-le pe ale dumneavoastră"
 
 #: ../src/cairo-dock-gui-advanced.c:1592 ../src/cairo-dock-gui-simple.c:116
 #: ../src/cairo-dock-gui-simple.c:118
@@ -177,12 +178,12 @@ msgstr "Teme"
 
 #: ../src/cairo-dock-gui-advanced.c:1598
 msgid "Current items in your dock(s)."
-msgstr ""
+msgstr "Elemente curente in dock-uri"
 
 #: ../src/cairo-dock-gui-advanced.c:1599 ../src/cairo-dock-gui-simple.c:92
 #: ../src/cairo-dock-gui-simple.c:94
 msgid "Current items"
-msgstr ""
+msgstr "Elemente curente"
 
 #: ../src/cairo-dock-gui-advanced.c:1719
 msgid "Filter"
@@ -202,15 +203,15 @@ msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1763
 msgid "Search in description"
-msgstr "Caută în descriere"
+msgstr "Căutare în descriere"
 
 #: ../src/cairo-dock-gui-advanced.c:1767
 msgid "Hide disabled"
-msgstr ""
+msgstr "Ascundere elemente dezactivate"
 
 #: ../src/cairo-dock-gui-advanced.c:1776
 msgid "Categories"
-msgstr "Categorii."
+msgstr "Categorii"
 
 #: ../src/cairo-dock-gui-advanced.c:1886
 msgid "Enable this module"
@@ -222,7 +223,7 @@ msgstr "Mai multe mini-aplicații"
 
 #: ../src/cairo-dock-gui-advanced.c:1954
 msgid "Get more applets online !"
-msgstr ""
+msgstr "Obţine mai multe applet-uri online!"
 
 #: ../src/cairo-dock-gui-advanced.c:2049 ../src/cairo-dock-gui-simple.c:363
 msgid "Cairo-Dock configuration"
@@ -238,7 +239,7 @@ msgstr "Module"
 
 #: ../src/cairo-dock-gui-simple.c:108 ../src/cairo-dock-gui-simple.c:110
 msgid "Configuration"
-msgstr ""
+msgstr "Configurație"
 
 #: ../src/cairo-dock-gui-simple.c:644
 msgid "Advanced Mode"
@@ -249,10 +250,12 @@ msgid ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customise your current theme."
 msgstr ""
+"Modulul avansat vă permite să modificaţi orice parametru al dock-ului. Este "
+"o unealtă puternică pentru personalizarea temei curente."
 
 #: ../src/cairo-dock-menu.c:117
 msgid "Delete this dock?"
-msgstr ""
+msgstr "Şterge acest dock?"
 
 #: ../src/cairo-dock-menu.c:174
 msgid "About Cairo-Dock"
@@ -260,7 +263,7 @@ msgstr "Despre Cairo-Dock"
 
 #: ../src/cairo-dock-menu.c:211 ../Help/data/messages:271
 msgid "Development site"
-msgstr ""
+msgstr "Site-ul dezvoltatorului"
 
 #: ../src/cairo-dock-menu.c:212 ../Help/data/messages:269
 msgid "Find the latest version of Cairo-Dock here !"
@@ -269,32 +272,34 @@ msgstr "Găsești ultima versiune la Cairo-Dock aici !"
 #: ../src/cairo-dock-menu.c:216 ../src/cairo-dock-menu.c:1094
 #: ../src/cairo-dock-widget-plugins.c:298
 msgid "Get more applets!"
-msgstr ""
+msgstr "Obţine mai multe applet-uri!"
 
 #: ../src/cairo-dock-menu.c:220 ../src/cairo-dock-menu.c:226
 msgid "Donate"
-msgstr ""
+msgstr "Donare"
 
 #: ../src/cairo-dock-menu.c:223 ../src/cairo-dock-menu.c:229
 msgid ""
 "Support the people who spend countless hours to bring you the best dock ever."
 msgstr ""
+"Sprijiniţi oamenii care muncesc nenumărate ore pentru a vă oferi cel mai bun "
+"dock."
 
 #: ../src/cairo-dock-menu.c:257
 msgid "Here is a list of the current developers and contributors"
-msgstr ""
+msgstr "Aici este lista cu dezvoltatorii si contribuitorii curenţi"
 
 #: ../src/cairo-dock-menu.c:258
 msgid "Developers"
-msgstr ""
+msgstr "Dezvoltatori"
 
 #: ../src/cairo-dock-menu.c:259
 msgid "Main developer and project leader"
-msgstr ""
+msgstr "Dezvoltator principal si lider al proiectului"
 
 #: ../src/cairo-dock-menu.c:260
 msgid "Contributors / Hackers"
-msgstr ""
+msgstr "Contribuitori / Hack-eri"
 
 #: ../src/cairo-dock-menu.c:262
 msgid "Development"
@@ -302,20 +307,21 @@ msgstr "Dezvoltare"
 
 #: ../src/cairo-dock-menu.c:277
 msgid "Website"
-msgstr ""
+msgstr "Pagină internet"
 
 #: ../src/cairo-dock-menu.c:278
 msgid "Beta-testing / Suggestions / Forum animation"
-msgstr ""
+msgstr "Testare beta/ Sugestii / Forum animaţe"
 
 #: ../src/cairo-dock-menu.c:279
 msgid "Translators for this language"
-msgstr ""
+msgstr "Traducători în această limbă"
 
 #: ../src/cairo-dock-menu.c:280
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
+"  Ithreexas https://launchpad.net/~ithreexas\n"
 "  bert https://launchpad.net/~crinbert\n"
 "  dahas https://launchpad.net/~bogdan-daja"
 
@@ -328,30 +334,35 @@ msgid ""
 "Thanks to all people that help us to improve the Cairo-Dock project.\n"
 "Thanks to all current, former and future contributors."
 msgstr ""
+"Multumiri tutror oamenilor care ne-au ajutat să îmbunătăţim proiectul Cairo-"
+"Dock\n"
+"Mulţumim tuturor contribuitorilor actuali, foşti şi viitori."
 
 #: ../src/cairo-dock-menu.c:314
 msgid "How to help us?"
-msgstr ""
+msgstr "Cum puteţi ajuta?"
 
 #: ../src/cairo-dock-menu.c:315
 msgid "Don't hesitate to join the project, we need you ;)"
 msgstr ""
+"Nu ezitaţi să vă alăturaţi proiectului, avem nevoie de dumneavoastră!"
 
 #: ../src/cairo-dock-menu.c:316
 msgid "Former contributors"
-msgstr ""
+msgstr "Foști contribuitori"
 
 #: ../src/cairo-dock-menu.c:317
 msgid "For a complete list, please have a look to BZR logs"
 msgstr ""
+"Pentru o listă completă, vă rugăm să aruncaţi o privire in jurnalul BZR"
 
 #: ../src/cairo-dock-menu.c:318
 msgid "Users of our forum"
-msgstr ""
+msgstr "Utilizatori ai forumului"
 
 #: ../src/cairo-dock-menu.c:319
 msgid "List of our forum's members"
-msgstr ""
+msgstr "Lista membrilor forumului"
 
 #: ../src/cairo-dock-menu.c:320
 msgid "Artwork"
@@ -359,11 +370,11 @@ msgstr "Grafică"
 
 #: ../src/cairo-dock-menu.c:322
 msgid "Thanks"
-msgstr ""
+msgstr "Mulțumiri"
 
 #: ../src/cairo-dock-menu.c:412
 msgid "Quit Cairo-Dock?"
-msgstr ""
+msgstr "Inchire Cairo-Dock?"
 
 #: ../src/cairo-dock-menu.c:442 ../src/cairo-dock-menu.c:585
 msgid "Separator"
@@ -507,7 +518,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Lansare Cairo-Dock la pornire"
 
 #: ../src/cairo-dock-menu.c:1099
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 
 #: ../src/cairo-dock-menu.c:1102 ../Help/src/applet-init.c:28
@@ -750,7 +762,8 @@ msgid "Effects:"
 msgstr "Efecte"
 
 #: ../src/cairo-dock-widget-items.c:241
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Parametri principali ai doc-ului sunt disponibili in fereasta principala de "
 "configurare."
@@ -776,7 +789,8 @@ msgid "Category"
 msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:280
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
 #: ../src/cairo-dock-widget-shortkeys.c:122
@@ -1860,8 +1874,9 @@ msgstr ""
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1909,8 +1924,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
@@ -3293,7 +3308,8 @@ msgid "Zoom effect"
 msgstr "Efect lupă"
 
 #: ../data/messages:657
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:659
@@ -3525,8 +3541,8 @@ msgstr "mai mare"
 
 #: ../data/messages:771
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:773
@@ -3849,8 +3865,8 @@ msgstr ""
 
 #: ../data/messages:1037
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1039
