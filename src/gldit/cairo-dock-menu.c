@@ -262,7 +262,12 @@ GtkWidget *gldi_menu_item_new_with_action (const gchar *cLabel, const gchar *cIm
 
 GtkWidget *gldi_menu_item_new_with_submenu (const gchar *cLabel, const gchar *cImage, GtkWidget **pSubMenuPtr)
 {
-	GtkWidget *pMenuItem = gldi_menu_item_new (cLabel, cImage);
+	GtkIconSize iSize;
+	if (cImage && (*cImage == '/' || *cImage == '\0'))  // for icons that are not stock-icons, we choose a bigger size; the reason is that these icons usually don't have a 16x16 version, and don't scale very well to such a small size (most of the time, it's the icon of an application, or the cairo-dock or recent-documents icon (note: for these 2, we could make a small version)). it's a workaround and a better solution may exist ^^
+		iSize = GTK_ICON_SIZE_LARGE_TOOLBAR;
+	else
+		iSize = 0;
+	GtkWidget *pMenuItem = gldi_menu_item_new_full (cLabel, cImage, FALSE, iSize);
 	GtkWidget *pSubMenu = gldi_submenu_new ();
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (pMenuItem), pSubMenu);
 	
