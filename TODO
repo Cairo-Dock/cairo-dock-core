@@ -11,6 +11,9 @@ For each new version:
 		- CMakeList.txt:134: set (CAIRO_DOCK_DISTANT_THEMES_DIR "themes3.1")
 	* Remove useless g_print
 	* Check the ChangeLog file
+	* Update doc on doc.glx-dock.org
+	* Update translations: cd po/misc && ./update-translations.sh -cpt
+	* Update desktop-files: cd po/misc && ./update-desktop-files.sh
 
 
 ====================================================

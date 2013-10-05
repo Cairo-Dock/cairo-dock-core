@@ -8,9 +8,20 @@ Terminal=false
 Name=Cairo-Dock
 
 Comment=A light and eye-candy dock and desklets for your desktop.
+Comment[en]=Light and eye-candy filled dock and desklets for your desktop.
 Comment[fr]=Un dock et des desklets légers et sexy pour votre bureau.
+Comment[it]=Una dock e delle desklet leggere e gradevoli per il tuo desktop.
+Comment[nl]=Licht en mooi uitziend dock en desklets voor uw bureaublad.
+Comment[sr]=Лагани док и справице радне површи дивног изгледа.
+Comment[sr@latin]=Лагани док и справице радне површи дивног изгледа.
+Comment[uk]=Легка і приємна панель та віджети для вашої стільниці.
 
 GenericName=Multi-purpose Dock and Desklets
 GenericName[fr]=Dock et Desklets multi-usage
+GenericName[it]=Dock multifunzionale e Desklet
+GenericName[nl]=Dock en desklets bruikbaar voor meerdere doeleinden
+GenericName[sr]=Док и справице површи са разним могућностима
+GenericName[sr@latin]=Док и справице површи са разним могућностима
+GenericName[uk]=Багатоцільова панель та віжети.
 
 Categories=System;

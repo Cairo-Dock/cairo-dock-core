@@ -14,6 +14,7 @@ added_translations() {
 	test -n "$FILE2" && echo "\n$KEY=$TEXT" >> $FILE2
 
 	for i in *.po; do
+		if [ "$i" = "en_GB.po" ]; then continue; fi
 		PO_FILE=`echo $i | cut -d. -f1`
 		TRANSLATION=`env LANGUAGE=$PO_FILE gettext -d cairo-dock "$TEXT"`
 		if [ "$TRANSLATION" != "$TEXT" ]; then
