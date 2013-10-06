@@ -223,6 +223,8 @@ GtkWidget *gldi_menu_item_new_full (const gchar *cLabel, const gchar *cImage, gb
 	#endif
 #endif
 	
+	gtk_widget_show_all (pMenuItem);  // show immediately, so that the menu-item is realized when the menu is popped up
+	
 	return pMenuItem;
 }
 
