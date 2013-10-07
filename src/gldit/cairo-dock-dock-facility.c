@@ -154,8 +154,8 @@ void cairo_dock_update_dock_size (CairoDock *pDock)  // iMaxIconHeight et fFlatD
 		cairo_dock_update_input_shape (pDock);  // done after the icons' position is known.
 		switch (pDock->iInputState)  // update the input zone
 		{
-			case CAIRO_DOCK_INPUT_ACTIVE: cairo_dock_set_input_shape_active (pDock);;
-			case CAIRO_DOCK_INPUT_AT_REST: cairo_dock_set_input_shape_at_rest (pDock);
+			case CAIRO_DOCK_INPUT_ACTIVE: cairo_dock_set_input_shape_active (pDock); break;
+			case CAIRO_DOCK_INPUT_AT_REST: cairo_dock_set_input_shape_at_rest (pDock); break;
 			default: break;  // if hidden, nothing to do.
 		}
 	}

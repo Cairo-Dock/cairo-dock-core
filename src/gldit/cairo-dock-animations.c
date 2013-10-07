@@ -179,7 +179,7 @@ void cairo_dock_start_hiding (CairoDock *pDock)
 		pDock->bIsHiding = TRUE;
 		
 		// empty the input shape (so that the dock doesn't disturb us immediately)
-		if (pDock->pHiddenShapeBitmap && pDock->iInputState != CAIRO_DOCK_INPUT_HIDDEN)
+		if (pDock->iInputState != CAIRO_DOCK_INPUT_HIDDEN)  // if pDock->pHiddenShapeBitmap == NULL (at the beginning), set iInputState anyway, so that when the input-shapes are created, pDock->pHiddenShapeBitmap will be applied to the dock.
 		{
 			//g_print ("+++ input shape hidden on start hiding\n");
 			cairo_dock_set_input_shape_hidden (pDock);

@@ -1222,20 +1222,19 @@ static gboolean _on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, Ca
 		
 		// update the input shape (it has been calculated in the function that made the resize)
 		cairo_dock_update_input_shape (pDock);
-		if (pDock->pHiddenShapeBitmap != NULL && pDock->iInputState == CAIRO_DOCK_INPUT_HIDDEN)
+		switch (pDock->iInputState)  // update the input zone
 		{
-			//g_print ("+++ input shape hidden on configure\n");
-			cairo_dock_set_input_shape_hidden (pDock);
-		}
-		else if (pDock->pShapeBitmap != NULL && pDock->iInputState == CAIRO_DOCK_INPUT_AT_REST)
-		{
-			//g_print ("+++ input shape at rest on configure\n");
-			cairo_dock_set_input_shape_at_rest (pDock);
-		}
-		else if (pDock->iInputState == CAIRO_DOCK_INPUT_ACTIVE)
-		{
-			//g_print ("+++ input shape active on configure\n");
-			cairo_dock_set_input_shape_active (pDock);
+			case CAIRO_DOCK_INPUT_ACTIVE:
+				cairo_dock_set_input_shape_active (pDock);
+			break;
+			case CAIRO_DOCK_INPUT_AT_REST:
+				cairo_dock_set_input_shape_at_rest (pDock);
+			break;
+			case CAIRO_DOCK_INPUT_HIDDEN:
+				cairo_dock_set_input_shape_hidden (pDock);
+			break;
+			default:
+			break;
 		}
 		
 		// update the GL context
