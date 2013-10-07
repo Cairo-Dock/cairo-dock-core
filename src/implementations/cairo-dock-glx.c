@@ -437,7 +437,11 @@ void gldi_register_glx_backend (void)
 	gmb.container_finish = _container_finish;
 	gldi_gl_manager_register_backend (&gmb);
 	
+	#if (GTK_MAJOR_VERSION < 3)
+	s_XDisplay = gdk_x11_display_get_xdisplay (gdk_display_get_default ());  /// for an obscur reason, using our own XDisplay here causes the 'gtk_widget_set_colormap' to screw things (invisible dock, or even a crash later). So we keep using the GDK display as we did before 3.3, it should stay ok since GTK2 is frozen.
+	#else
 	s_XDisplay = cairo_dock_get_X_display ();  // initialize it once and for all at the beginning; we use this display rather than the GDK one to avoid the GDK X errors check.
+	#endif
 }
 
 #else
