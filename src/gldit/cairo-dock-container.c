@@ -388,9 +388,6 @@ GtkWidget *gldi_container_build_menu (GldiContainer *pContainer, Icon *icon)
 	
 	gldi_object_notify (pContainer, NOTIFICATION_BUILD_ICON_MENU, icon, pContainer, menu);
 	
-	if (pContainer->iface.setup_menu)
-		pContainer->iface.setup_menu (pContainer, icon, menu);
-	
 	s_pMenu = menu;
 	g_object_add_weak_pointer (G_OBJECT (menu), (gpointer*)&s_pMenu);  // will nullify 's_pMenu' as soon as the menu is destroyed.
 	return menu;

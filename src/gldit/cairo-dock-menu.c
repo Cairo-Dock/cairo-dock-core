@@ -81,6 +81,14 @@ void gldi_menu_init (G_GNUC_UNUSED GtkWidget *pMenu, G_GNUC_UNUSED Icon *pIcon)
 			"destroy",
 			G_CALLBACK (_on_menu_destroyed),
 			NULL);  // when the menu is destroyed, unregister the above notification on the icon
+		
+		// setup the menu for the container
+		GldiContainer *pContainer = cairo_dock_get_icon_container (pIcon);
+		if (pContainer != NULL)
+		{
+			if (pContainer->iface.setup_menu)
+				pContainer->iface.setup_menu (pContainer, pIcon, pMenu);
+		}
 	}
 }
 
