@@ -244,6 +244,7 @@ static void _on_menu_destroyed (GtkWidget *pMenu, G_GNUC_UNUSED gpointer data)
 			NULL);
 }
 
+#if GTK_MAJOR_VERSION > 2
 static void (*f) (GtkWidget *widget, gint for_size, gint *minimum_size, gint *natural_size) = NULL;
 static void _get_preferred_height_for_width (GtkWidget *widget,
 	gint for_size,
@@ -293,6 +294,7 @@ static void _get_preferred_width (GtkWidget *widget,
 		}
 	}
 }
+#endif
 
 void gldi_menu_init (G_GNUC_UNUSED GtkWidget *pMenu, G_GNUC_UNUSED Icon *pIcon)
 {
@@ -385,8 +387,10 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	#endif
 	w = requisition.width;
 	h = requisition.height;
+	#if GTK_MAJOR_VERSION > 2
 	int w_ = w - 2 * r;
 	int h_ = h - 2 * r - ah;
+	#endif
 	
 	/// TODO: use iMarginPosition...
 	int iAimedX, iAimedY;
@@ -395,7 +399,11 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	if (pContainer->bIsHorizontal)
 	{
 		iAimedX = x0 + pIcon->image.iWidth/2;
+		#if GTK_MAJOR_VERSION > 2
 		*x = MAX (0, iAimedX - fAlign * w_ - r);
+		#else
+		*x = iAimedX;
+		#endif
 		if (y0 > Hs/2)  // pContainer->bDirectionUp
 		{
 			*y = y0 - h;
@@ -410,7 +418,11 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	else
 	{
 		iAimedY = x0 + pIcon->image.iWidth/2;
+		#if GTK_MAJOR_VERSION > 2
 		*y = MIN (iAimedY - fAlign * h_ - r, gldi_desktop_get_height() - h);
+		#else
+		*y = MIN (iAimedY, gldi_desktop_get_height() - h);
+		#endif
 		if (y0 > Hs/2)  // pContainer->bDirectionUp
 		{
 			*x = y0 - w;
@@ -676,7 +688,6 @@ static void _on_destroy_menu_item (GtkWidget* pMenuItem, G_GNUC_UNUSED gpointer 
 		g_object_set_data (G_OBJECT(pMenuItem), "gldi-animation", NULL);
 	}
 }
-#endif
 
 static void (*g) (GtkWidget *widget, GtkAllocation *allocation) = NULL;
 
@@ -706,6 +717,8 @@ static void _size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 	}
 	g (widget, allocation);
 }
+#endif
+
 GtkWidget *gldi_menu_item_new_full (const gchar *cLabel, const gchar *cImage, gboolean bUseMnemonic, GtkIconSize iSize)
 {
 	if (iSize == 0)
