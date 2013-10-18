@@ -294,6 +294,18 @@ static void _get_preferred_width (GtkWidget *widget,
 		}
 	}
 }
+
+static void _on_menu_deactivated (GtkMenuShell *pMenu, G_GNUC_UNUSED gpointer data)
+{
+	Icon *pIcon = g_object_get_data (G_OBJECT(pMenu), "gldi-icon");
+	if (pIcon->iHideLabel > 0)
+	{
+		pIcon->iHideLabel --;
+		GldiContainer *pContainer = cairo_dock_get_icon_container (pIcon);
+		if (pIcon->iHideLabel == 0 && pContainer)
+			gtk_widget_queue_draw (pContainer->pWidget);
+	}
+}
 #endif
 
 void gldi_menu_init (G_GNUC_UNUSED GtkWidget *pMenu, G_GNUC_UNUSED Icon *pIcon)
@@ -352,6 +364,11 @@ void gldi_menu_init (G_GNUC_UNUSED GtkWidget *pMenu, G_GNUC_UNUSED Icon *pIcon)
 				iMarginPosition = (y0 > Hs/2 ? 2 : 3);
 			}
 			g_object_set_data (G_OBJECT (pMenu), "gldi-margin-position", GINT_TO_POINTER (iMarginPosition));
+			
+			g_signal_connect (G_OBJECT (pMenu),
+				"deactivate",
+				G_CALLBACK (_on_menu_deactivated),
+				NULL);  // show the icon's label back when the menu is hidden
 			#endif
 		}
 		
@@ -445,6 +462,15 @@ static void _popup_menu (GtkWidget *menu, guint32 time)
 	// setup the menu for the container
 	if (pContainer && pContainer->iface.setup_menu)
 		pContainer->iface.setup_menu (pContainer, pIcon, menu);
+	
+	#if GTK_MAJOR_VERSION > 2
+	if (pIcon && pContainer)  // hide the icon's label, since menus are placed right above the icon (and therefore, the arrow overlaps the label, which makes it hard to see if both colors are similar).
+	{
+		if (pIcon->iHideLabel == 0 && pContainer)
+			gtk_widget_queue_draw (pContainer->pWidget);
+		pIcon->iHideLabel ++;
+	}
+	#endif
 	
 	gtk_widget_show_all (GTK_WIDGET (menu));
 	
