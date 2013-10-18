@@ -1736,7 +1736,7 @@ static gboolean _cairo_dock_hide (CairoDock *pDock)
 						pIcon->fInsertRemoveFactor = - 0.05;
 				}
 				
-				if (! pIcon->bIsDemandingAttention && ! pIcon->bAlwaysVisible)
+				if (! pIcon->bIsDemandingAttention && ! pIcon->bAlwaysVisible && ! pIcon->bIsLaunching)
 					gldi_icon_stop_animation (pIcon);  // s'il y'a une autre animation en cours, on l'arrete.
 				else
 					bVisibleIconsPresent = TRUE;
