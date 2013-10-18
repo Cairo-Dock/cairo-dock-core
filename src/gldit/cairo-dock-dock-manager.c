@@ -1125,6 +1125,7 @@ void gldi_dock_set_visibility (CairoDock *pDock, CairoDockVisibility iVisibility
 		}
 		else if (bAutoHideOnAnyOverlap)
 		{
+			pDock->bTemporaryHidden = pDock->bAutoHide;  // needed to use the following function
 			gldi_dock_hide_if_any_window_overlap_or_show (pDock);
 		}
 		else
@@ -1137,7 +1138,7 @@ void gldi_dock_set_visibility (CairoDock *pDock, CairoDockVisibility iVisibility
 			}
 			if (bAutoHideOnOverlap)
 			{
-				pDock->bTemporaryHidden = pDock->bAutoHide;  // astuce pour utiliser la fonction ci-dessous.
+				pDock->bTemporaryHidden = pDock->bAutoHide;  // needed to use the following function
 				gldi_dock_hide_show_if_current_window_is_on_our_way (pDock);
 			}
 		}
@@ -1760,7 +1761,9 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 	pDock->fAlign = pPosition->fAlign;
 	
 	if (pPosition->iNumScreen != pPrevPosition->iNumScreen
-	|| pPosition->iScreenBorder != pPrevPosition->iScreenBorder)  // if the orientation or the screen has changed, the available size may have changed too
+	|| pPosition->iScreenBorder != pPrevPosition->iScreenBorder  // if the orientation or the screen has changed, the available size may have changed too
+	|| pPosition->iGapX != pPrevPosition->iGapX
+	|| pPosition->iGapY != pPrevPosition->iGapY)
 	{
 		cairo_dock_update_dock_size (pDock);
 		cairo_dock_move_resize_dock (pDock);
