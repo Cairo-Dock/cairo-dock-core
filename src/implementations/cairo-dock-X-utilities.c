@@ -1142,6 +1142,11 @@ gchar *cairo_dock_get_xwindow_class (Window Xid, gchar **cWMClass)
 			cd_debug ("  wine application detected, changing the class '%s' to '%s'", pClassHint->res_class, pClassHint->res_name);
 			cClass = g_ascii_strdown (pClassHint->res_name, -1);
 		}
+		else if (strcmp (pClassHint->res_class, "Chromium") == 0 && pClassHint->res_name)
+		{
+			cd_debug ("  chromium application detected, changing the class '%s' to '%s'", pClassHint->res_class, pClassHint->res_name);
+			cClass = g_ascii_strdown (pClassHint->res_name, -1);
+		}
 		else if (*pClassHint->res_class == '/' && (g_str_has_suffix (pClassHint->res_class, ".exe") || g_str_has_suffix (pClassHint->res_name, ".EXE")))  // cas des applications Mono telles que tomboy ...
 		{
 			gchar *str = strrchr (pClassHint->res_class, '/');
