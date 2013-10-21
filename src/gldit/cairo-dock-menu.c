@@ -162,39 +162,62 @@ static void _rendering_draw_outline (GtkWidget *pWidget, cairo_t *pCairoContext)
 		fRadius,
 		G_PI, -G_PI/2);
 	
+	// set bg color/pattern
 	GdkRGBA bg_normal;
+	cairo_pattern_t *pattern = NULL;
 	GtkStyleContext *style = gtk_widget_get_style_context (pWidget);
 	gtk_style_context_get_background_color (style, GTK_STATE_NORMAL, (GdkRGBA*)&bg_normal);  // bg color, taken from the GTK theme
-	/// TODO: handle the case where there is a pattern instead of a color... how to draw the outline then ?... maybe we should fall back to a custom color ?...
+	if (bg_normal.alpha == 0)
+	{
+		gtk_style_context_get (style, GTK_STATE_FLAG_PRELIGHT,
+			GTK_STYLE_PROPERTY_BACKGROUND_IMAGE, &pattern,
+			NULL);  /// TODO: maybe we could keep this value...
+		if (pattern == NULL)
+		{
+			bg_normal.red = bg_normal.green = bg_normal.blue = bg_normal.alpha = 1.;  /// how can we get the default color ?...
+		}
+	}
 	
+	if (pattern)
+		cairo_set_source (pCairoContext, pattern);
+	else
+		cairo_set_source_rgba (pCairoContext, bg_normal.red, bg_normal.green, bg_normal.blue, 1.);
+	
+	// draw outline
 	if (l != 0)  // draw the outline with same color as bg, but opaque
 	{
-		cairo_set_source_rgba (pCairoContext, bg_normal.red, bg_normal.green, bg_normal.blue, 1.);
 		cairo_stroke_preserve (pCairoContext);
 	}
 	
 	cairo_clip (pCairoContext);  // clip
 	
 	// draw the background
-	cairo_set_source_rgba (pCairoContext, bg_normal.red, bg_normal.green, bg_normal.blue, 1.);
-	cairo_pattern_t *pGradationPattern;
-	pGradationPattern = cairo_pattern_create_linear (
-		0,
-		0,
-		alloc.width,
-		0);
-	cairo_pattern_set_extend (pGradationPattern, CAIRO_EXTEND_NONE);
-	cairo_pattern_add_color_stop_rgba (pGradationPattern,
-		0.,
-		1., 1., 1.,
-		1.);
-	cairo_pattern_add_color_stop_rgba (pGradationPattern,
-		1.,
-		1., 1., 1.,
-		alpha);  // bg color with horizontal alpha gradation
-	cairo_mask (pCairoContext, pGradationPattern);
-	
-	cairo_pattern_destroy (pGradationPattern);
+	if (pattern)
+	{
+		cairo_paint (pCairoContext);
+		cairo_pattern_destroy (pattern);
+	}
+	else
+	{
+		cairo_pattern_t *pGradationPattern;
+		pGradationPattern = cairo_pattern_create_linear (
+			0,
+			0,
+			alloc.width,
+			0);
+		cairo_pattern_set_extend (pGradationPattern, CAIRO_EXTEND_NONE);
+		cairo_pattern_add_color_stop_rgba (pGradationPattern,
+			0.,
+			1., 1., 1.,
+			1.);
+		cairo_pattern_add_color_stop_rgba (pGradationPattern,
+			1.,
+			1., 1., 1.,
+			alpha);  // bg color with horizontal alpha gradation
+		cairo_mask (pCairoContext, pGradationPattern);
+		
+		cairo_pattern_destroy (pGradationPattern);
+	}
 }
 
 static gboolean _draw_menu (GtkWidget *pWidget,
