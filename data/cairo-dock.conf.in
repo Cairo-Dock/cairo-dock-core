@@ -97,9 +97,6 @@ show applications = true
 #{Allows launchers to act as applications when their programs are running and displays a marker on icons to indicate this. You can launch other occurences of the program with SHIFT+click.}
 mix launcher appli = true
 
-#b- Animate the launcher until the corresponding application opens
-opening animation = true
-
 #b- Only show applications on current desktop
 current desktop only = false
 
@@ -163,6 +160,9 @@ minimize on click = true
 #b- Present windows preview on click when several windows are grouped togather
 #{Only if your Window Manager supports it.}
 present class on click = true
+
+#b- Animate the launcher until the corresponding application opens
+opening animation = true
 
 #v- 
 sep_att =
