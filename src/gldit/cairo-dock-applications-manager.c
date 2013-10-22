@@ -845,7 +845,6 @@ static void reload (CairoTaskbarParam *pPrevTaskBar, CairoTaskbarParam *pTaskBar
 		|| pPrevTaskBar->bHideVisibleApplis != pTaskBar->bHideVisibleApplis
 		|| pPrevTaskBar->bAppliOnCurrentDesktopOnly != pTaskBar->bAppliOnCurrentDesktopOnly
 		|| pPrevTaskBar->bMixLauncherAppli != pTaskBar->bMixLauncherAppli
-		|| pPrevTaskBar->bOpeningAnimation != pTaskBar->bOpeningAnimation
 		|| pPrevTaskBar->bOverWriteXIcons != pTaskBar->bOverWriteXIcons
 		|| pPrevTaskBar->iMinimizedWindowRenderType != pTaskBar->iMinimizedWindowRenderType
 		|| pPrevTaskBar->iAppliMaxNameLength != pTaskBar->iAppliMaxNameLength

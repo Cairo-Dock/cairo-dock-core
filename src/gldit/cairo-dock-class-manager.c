@@ -2012,6 +2012,9 @@ static gboolean _stop_opening_timeout (const gchar *cClass)
 }
 void gldi_class_startup_notify (Icon *pIcon)
 {
+	if (! myTaskbarParam.bOpeningAnimation)
+		return;
+	
 	const gchar *cClass = pIcon->cClass;
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
 	if (! pClassAppli)
