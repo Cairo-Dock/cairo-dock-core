@@ -1137,12 +1137,19 @@ gchar *cairo_dock_get_xwindow_class (Window Xid, gchar **cWMClass)
 		cWmClass = g_strdup (pClassHint->res_class);
 		
 		cd_debug ("  res_name : %s(%x); res_class : %s(%x)", pClassHint->res_name, pClassHint->res_name, pClassHint->res_class, pClassHint->res_class);
-		if (strcmp (pClassHint->res_class, "Wine") == 0 && pClassHint->res_name && (g_str_has_suffix (pClassHint->res_name, ".exe") || g_str_has_suffix (pClassHint->res_name, ".EXE")))
+		if (strcmp (pClassHint->res_class, "Wine") == 0 && pClassHint->res_name && (g_str_has_suffix (pClassHint->res_name, ".exe") || g_str_has_suffix (pClassHint->res_name, ".EXE")))  // wine application: use the name instead, because we don't want to group all wine apps togather
 		{
 			cd_debug ("  wine application detected, changing the class '%s' to '%s'", pClassHint->res_class, pClassHint->res_name);
 			cClass = g_ascii_strdown (pClassHint->res_name, -1);
 		}
-		else if (*pClassHint->res_class == '/' && (g_str_has_suffix (pClassHint->res_class, ".exe") || g_str_has_suffix (pClassHint->res_name, ".EXE")))  // cas des applications Mono telles que tomboy ...
+		else if ((strcmp (pClassHint->res_class, "Chromium") == 0 || strcmp (pClassHint->res_class, "Chromium-browser") == 0)
+		&& pClassHint->res_name
+		&& strcmp (pClassHint->res_name, "chromium") != 0 && strcmp (pClassHint->res_name, "chromium-browser") != 0)  // chromium web app: same remark as for wine apps
+		{
+			cd_debug ("  chromium application detected, changing the class '%s' to '%s'", pClassHint->res_class, pClassHint->res_name);
+			cClass = g_ascii_strdown (pClassHint->res_name, -1);
+		}
+		else if (*pClassHint->res_class == '/' && (g_str_has_suffix (pClassHint->res_class, ".exe") || g_str_has_suffix (pClassHint->res_name, ".EXE")))  // case of Mono applications like tomboy ...
 		{
 			gchar *str = strrchr (pClassHint->res_class, '/');
 			if (str)
