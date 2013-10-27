@@ -307,19 +307,24 @@ static gboolean _on_window_state_changed (G_GNUC_UNUSED gpointer data, GldiWindo
 	return GLDI_NOTIFICATION_LET_PASS;
 }
 
-static gboolean _on_window_class_changed (G_GNUC_UNUSED gpointer data, GldiWindowActor *actor, G_GNUC_UNUSED const gchar *cOldClass, G_GNUC_UNUSED const gchar *cOldWmClass)
+static gboolean _on_window_class_changed (G_GNUC_UNUSED gpointer data, GldiWindowActor *actor, const gchar *cOldClass, G_GNUC_UNUSED const gchar *cOldWmClass)
 {
 	Icon *icon = _get_appli_icon (actor);
 	if (icon == NULL)
 		return GLDI_NOTIFICATION_LET_PASS;
 	
 	// remove the icon from the dock, and then from its class
+	gchar *tmp = actor->cClass;
+	actor->cClass = (gchar*)cOldClass;  // temporarily set the old class to the actor, so that we can detach it from inhibitors
+	
 	CairoDock *pParentDock = NULL;
 	if (cairo_dock_get_icon_container (icon) != NULL)  // if in a dock, detach it
 		pParentDock = gldi_appli_icon_detach (icon);
 	else  // else if inhibited, detach from the inhibitor
 		gldi_window_detach_from_inhibitors (actor);
 	cairo_dock_remove_appli_from_class (icon);
+	
+	actor->cClass = tmp;
 	
 	// set the new class
 	g_free (icon->cClass);
