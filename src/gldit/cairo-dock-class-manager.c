@@ -2014,10 +2014,7 @@ void gldi_class_startup_notify (Icon *pIcon)
 {
 	const gchar *cClass = pIcon->cClass;
 	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
-	if (! pClassAppli)  // note: myTaskbarParam.bOpeningAnimation only concerns the animation, the class (and its icons) is marked as launching anyway, it's up to the animation to respect this parameter.
-		return;
-	
-	if (pClassAppli->bIsLaunching)
+	if (! pClassAppli || pClassAppli->bIsLaunching)
 		return;
 	
 	// mark the class as launching and set a timeout
