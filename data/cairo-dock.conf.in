@@ -161,9 +161,6 @@ minimize on click = true
 #{Only if your Window Manager supports it.}
 present class on click = true
 
-#b- Animate the launcher until the corresponding application opens
-opening animation = true
-
 #v- 
 sep_att =
 
