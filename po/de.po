@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
 "POT-Creation-Date: 2013-09-11 07:12+0000\n"
-"PO-Revision-Date: 2013-09-11 10:32+0000\n"
-"Last-Translator: Michael Konrad <Nephelyn@arcor.de>\n"
+"PO-Revision-Date: 2013-10-29 02:06+0000\n"
+"Last-Translator: Tobias B. <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-12 04:48+0000\n"
-"X-Generator: Launchpad (build 16761)\n"
+"X-Launchpad-Export-Date: 2013-10-29 04:38+0000\n"
+"X-Generator: Launchpad (build 16818)\n"
 "Language: de\n"
 
 #: ../src/cairo-dock-gui-advanced.c:121 ../src/cairo-dock-widget-plugins.c:171
@@ -38,7 +38,7 @@ msgstr "Internet"
 
 #: ../src/cairo-dock-gui-advanced.c:125 ../src/cairo-dock-widget-plugins.c:151
 msgid "Desktop"
-msgstr "Arbeitsfläche"
+msgstr "Schreibtisch"
 
 #: ../src/cairo-dock-gui-advanced.c:126
 msgid "Accessories"
@@ -347,6 +347,7 @@ msgstr ""
 "  Sascha https://launchpad.net/~skbierm-deactivatedaccount\n"
 "  SpaceCafé https://launchpad.net/~spacecafe\n"
 "  Tim Schulz https://launchpad.net/~timschulz1998\n"
+"  Tobias B. https://launchpad.net/~toba\n"
 "  Tommy https://launchpad.net/~tommy-sparber\n"
 "  Ubuntuxer https://launchpad.net/~johannes-schw\n"
 "  aviary-o2 https://launchpad.net/~vaviary\n"
@@ -1349,11 +1350,11 @@ msgstr "Letzte Änderung am:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:333
 msgid "Your theme should now be available in this directory:"
-msgstr ""
+msgstr "Ihr Thema sollte nun in diesem Verzeichnis verfügbar sein :"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:338
 msgid "Error when launching 'cairo-dock-package-theme' script"
-msgstr ""
+msgstr "Fehler beim Laden vom 'cairo-dock-package-theme' Skript"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:359
 #, c-format
@@ -3239,6 +3240,7 @@ msgstr "Starter und Anwendungen vermischen ?"
 #: ../data/messages:267
 msgid "Animate the launcher until the corresponding application opens"
 msgstr ""
+"Den Starter solange animieren, bis sich die dazugehörige Applikation öffnet."
 
 #: ../data/messages:269
 msgid "Only show applications on current desktop"
@@ -4465,7 +4467,7 @@ msgstr "Ein Paket aus dem Thema bauen ?"
 
 #: ../data/messages:987
 msgid "Directory in which the package will be saved:"
-msgstr ""
+msgstr "Verzeichnis, in dem das Paket gespeichert wird :"
 
 #: ../data/messages:989 ../data/messages:991 ../data/messages:993
 #: ../data/messages:1025 ../data/messages:1061
@@ -4559,7 +4561,7 @@ msgstr ""
 
 #: ../data/messages:1047
 msgid "Don't link the launcher with its window"
-msgstr ""
+msgstr "Den Starter nicht mit seinem Fenster verlinken"
 
 #: ../data/messages:1049
 msgid ""
@@ -4600,15 +4602,15 @@ msgstr ""
 
 #: ../data/messages:1076
 msgid "Cairo-Dock (Fallback Mode)"
-msgstr ""
+msgstr "Cairo-Dock (Fallback-Modus)"
 
 #: ../data/messages:1078
 msgid "A light and eye-candy dock and desklets for your desktop."
-msgstr ""
+msgstr "Ein schlankes und hübsches Dock mit Desklets für Ihre Arbeitsfläche."
 
 #: ../data/messages:1080
 msgid "Multi-purpose Dock and Desklets"
-msgstr ""
+msgstr "Multifunktions-Dock und Desklets"
 
 #: ../data/messages:1082
 msgid ""
@@ -4637,7 +4639,7 @@ msgstr ""
 
 #: ../data/messages:1084
 msgid "<b>New version: <span color='red'>GLX-Dock 3.3</span>!</b>"
-msgstr ""
+msgstr "<b>Neue Version : <span color='red'>GLX-Dock 3.3</span>!</b>"
 
 #: ../data/messages:1086
 msgid ""
@@ -4645,14 +4647,17 @@ msgid ""
 "    It allows to rapidly look for programs from their name or their "
 "description"
 msgstr ""
+"- Neue Suchfunktion im <b>Applikationsmenü</b> hinzugefügt.\n"
+"    Es erlaubt eine schnelle Programmsuche aus ihrem Namen oder deren "
+"Beschreibung heraus."
 
 #: ../data/messages:1088
 msgid "- Added support of <b>logind</b> in the Logout applet"
-msgstr ""
+msgstr "- Unterstützung von <b>logind</b> im Abmelden-Applet"
 
 #: ../data/messages:1090
 msgid "- Better integration in the Cinnamon desktop"
-msgstr ""
+msgstr "- Bessere Integration in den Cinnamon-Desktop"
 
 #: ../data/messages:1092
 msgid ""
@@ -4660,90 +4665,26 @@ msgid ""
 "    It allows launchers to be animated until the application opens and "
 "avoids accidental double launches"
 msgstr ""
+"- Unterstützung des <b>StartpNotification</b> Protokolls.\n"
+"    Es erlaubt animierte Starter bis sich die Applikation öffnet und "
+"vermeidet jetzt versehentliche Doppelstarts."
 
 #: ../data/messages:1094
 msgid ""
 "- Added an new third-party applet: <b>Notification History</b> to never miss "
 "a notification"
 msgstr ""
+"- Neues Drittanbieter-Applet : <b>Notifcation History</b> um niemals eine "
+"Benachrichtigung zu verpassen"
 
 #: ../data/messages:1096
 msgid "- Upgraded the <b>Dbus API</b> to be even more powerful"
-msgstr ""
+msgstr "- Die <b>DBus API</b> wurde verbessert und ist jetzt noch mächtiger."
 
 #: ../data/messages:1098
 msgid "- A huge rewrite of the core using Objects"
-msgstr ""
+msgstr "- Eine enorme Neufassung des Kerns die Objekte betreffend"
 
 #: ../data/messages:1100
 msgid "- If you like the project, please donate :-)"
-msgstr ""
-
-#~ msgid "Additional parameters"
-#~ msgstr "Zusätzliche Parameter"
-
-#~ msgid ""
-#~ "<b>New version: <span color='red'>GLX-Dock 3.0</span>!</b>\n"
-#~ " - The <b>taskbar</b> has been greatly enhanced.\n"
-#~ " - The <b>Log out</b> applet has been rewritten, now allows to switch "
-#~ "users.\n"
-#~ " - The <b>control of the dock from the keyboard</b> is now very powerful:\n"
-#~ "   - many shortkeys have been added in different applets\n"
-#~ "   - you can activate a launcher by pressing a shortkey + its number\n"
-#~ "   - all shortkeys can now be managed in a single place in the configuration "
-#~ "window.\n"
-#~ " - The <b>Sound Menu</b> from Ubuntu has been integrated into the Sound-"
-#~ "Control applet.\n"
-#~ " - A new <b>Twitter applet</b> lets you tweet in one click.\n"
-#~ " - A new applet to <b>inhibit the screensaver</b> in one click.\n"
-#~ " - Separators are transparent to click in <b>'Panel'</b> mode\n"
-#~ " - Cairo-Dock now uses <b>GTK3</b>, for a better integration in a Gnome "
-#~ "desktop\n"
-#~ " - Few additions to the DBus API.\n"
-#~ " - It's possible to donate to support the project!"
-#~ msgstr ""
-#~ "<b>Neue Versionn: <span color='red'>GLX-Dock 3.0</span>!</b>\n"
-#~ " - Die <b>Aufgabenleiste</b> wurde umfangreich erweitert.\n"
-#~ " - Das <b>Abmelden</b>-Applet wurde neu geschrieben und erlaubt es jetzt den "
-#~ "Anwender zu wechseln.\n"
-#~ " - Die <b>Kontrolle des Docks per Tastatur</b> ist jetzt äußerst mächtig:\n"
-#~ "   - viele Tastenkürzel wurden in den verschiedenen Applets hinzugefügt\n"
-#~ "   - du kannst einen Starter aktivieren durch drücken eines Tastenkürzels + "
-#~ "seiner Zahl\n"
-#~ "   - alle Tastenkürzel können nun an einem einzigen Ort in einem "
-#~ "Einstellungsfenster bearbeitet werden.\n"
-#~ " - Das <b>Klang-Menü</b> aus Ubuntu wurde in das Klang-Kontroll-Applet "
-#~ "integriert.\n"
-#~ " - Ein neues <b>Twitter-Applet</b> lässt dich mit einem Klick zwitschern.\n"
-#~ " - Ein neues Applet zum <b>Blockieren des Bildschirmschoners</b> mit einem "
-#~ "Klick.\n"
-#~ " - Abtrenner sind transparent gegenüber Anklicken im <b>'Panel'</b>-Modus\n"
-#~ " - Cairo-Dock verwendet jetzt <b>GTK3</b>, zur besseren Integration in einer "
-#~ "GNOME Schreibtischoberfläche\n"
-#~ " - Wenig Hinzugekommenes zur DBus API.\n"
-#~ " - Es ist möglich zu spenden um das Projekt zu unterstützen!"
-
-#~ msgid ""
-#~ "<b>New version: <span color='red'>GLX-Dock 3.1</span>!</b>\n"
-#~ " - Better integration in of Unity: support of the <b>Launcher API</b> and "
-#~ "better support of <b>indicators</b>\n"
-#~ " - All <b>configuration windows</b> have been merged into a single one.\n"
-#~ " - Added <b>progress bars</b> in several applets and in the Dbus API\n"
-#~ " - The <b>Music Player</b> applet can control players in the systray.\n"
-#~ " - Icons of the <b>taskbar</b> can be separated from launchers or not\n"
-#~ " - And as always ... various bug fixes and improvements :-)"
-#~ msgstr ""
-#~ "<b>Neue Version: <span color='red'>GLX-Dock 3.1</span>!</b>\n"
-#~ "- Verbesserte Integration von Unity: Unterstützung der <b>Starter-API</b> "
-#~ "und verbesserte Unterstützung von <b>Indikatoren</b>\n"
-#~ "- Alle <b>Einstellungs-Fenster</b> wurden in einem einzigen "
-#~ "zusammengefasst.\n"
-#~ "- <b>Fortschrittsbalken</b> wurden in diversen Applets und in der Dbus-API "
-#~ "hinzugefügt.\n"
-#~ "- Das <b>Musik-Player</b> Applet kann Player im Systray steuern.\n"
-#~ "- Icons in der <b>Taskleiste</b> können von Startern getrennt werden.\n"
-#~ "- Und wie immer ... diverse Bug-Fixes und Verbesserungen :-)"
-
-#~ msgid "Prevent this launcher from stealing this application from taskbar?"
-#~ msgstr ""
-#~ "Diesen Starter vom Stehlen dieser Anwendung aus der Taskleiste abhalten?"
+msgstr "- Wenn Sie das Projekt mögen, spenden Sie bitte :-)"
