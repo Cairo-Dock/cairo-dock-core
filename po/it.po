@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: 1.4.5\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
 "POT-Creation-Date: 2013-09-11 07:12+0000\n"
-"PO-Revision-Date: 2013-09-18 21:15+0000\n"
-"Last-Translator: Pietro Quadalti <p.quadalti@gmail.com>\n"
+"PO-Revision-Date: 2013-10-20 01:41+0000\n"
+"Last-Translator: Wonderfulheart <Unknown>\n"
 "Language-Team: Italian <kde-i18n-it@lists.kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-19 04:40+0000\n"
-"X-Generator: Launchpad (build 16765)\n"
+"X-Launchpad-Export-Date: 2013-10-21 04:33+0000\n"
+"X-Generator: Launchpad (build 16807)\n"
 "Language: it\n"
 
 #: ../src/cairo-dock-gui-advanced.c:121 ../src/cairo-dock-widget-plugins.c:171
@@ -89,7 +89,7 @@ msgstr "Mostra ed interagisci con le finestre attualmente aperte."
 #: ../src/cairo-dock-gui-advanced.c:1510 ../Help/data/messages:41
 #: ../data/messages:63
 msgid "Taskbar"
-msgstr "Taskbar"
+msgstr "Barra delle applicazioni"
 
 #: ../src/cairo-dock-gui-advanced.c:1517
 msgid "Define all the keyboard shortcuts currently available."
@@ -165,7 +165,7 @@ msgstr "Definisci lo stile delle etichette delle icone e delle info veloci."
 
 #: ../src/cairo-dock-gui-advanced.c:1584
 msgid "Captions"
-msgstr "Etichette"
+msgstr "Didascalie"
 
 #: ../src/cairo-dock-gui-advanced.c:1591
 msgid "Try new themes and save your theme."
@@ -181,12 +181,12 @@ msgstr "Temi"
 
 #: ../src/cairo-dock-gui-advanced.c:1598
 msgid "Current items in your dock(s)."
-msgstr "Voci attuali nella(e) tua(e) dock."
+msgstr "Elementi attuali nella tua dock."
 
 #: ../src/cairo-dock-gui-advanced.c:1599 ../src/cairo-dock-gui-simple.c:92
 #: ../src/cairo-dock-gui-simple.c:94
 msgid "Current items"
-msgstr "Voci attuali"
+msgstr "Elementi attuali"
 
 #: ../src/cairo-dock-gui-advanced.c:1719
 msgid "Filter"
@@ -423,7 +423,7 @@ msgstr "Lanciatore personalizzato"
 #: ../src/cairo-dock-menu.c:588
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
-msgstr "Di solito dovresti trascinare un lanciatore dal menu alla dock."
+msgstr "Di solito dovresti trascinare un lanciatore dal menù alla dock."
 
 #: ../src/cairo-dock-menu.c:590
 msgid "Applet"
@@ -476,7 +476,7 @@ msgid ""
 msgstr ""
 "Spiacente, non è stato possibile trovare il file corrispondente alla "
 "descrizione.\n"
-"Prova a trascinare il lanciatore dal Menu delle Applicazioni."
+"Prova a trascinare il lanciatore dal Menù delle Applicazioni."
 
 #: ../src/cairo-dock-menu.c:824
 #, c-format
@@ -578,7 +578,7 @@ msgid ""
 msgstr ""
 "Stai usando una sessione Cairo-Dock!\n"
 "Non è consigliato uscire dalla dock ma è possibile premere Shift per "
-"sbloccare questa voce del menu."
+"sbloccare questa voce del menù."
 
 #: ../src/cairo-dock-menu.c:1155 ../src/cairo-dock-menu.c:1168
 msgid "Launch a new (Shift+clic)"
@@ -789,7 +789,7 @@ msgid ""
 msgstr ""
 "L'opzione 'sovrascrivi le icone di X' è stata automaticamente abilitata "
 "nella configurazione.\n"
-"È rintracciabile nel modulo 'Taskbar'."
+"È rintracciabile nel modulo 'Taskbar' (Barra delle applicazioni)."
 
 #: ../src/cairo-dock-widget-config.c:328
 msgid "Animation:"
@@ -1071,7 +1071,7 @@ msgstr ""
 "completamente, il che potrebbe causare un funzionamento non corretto della "
 "dock.\n"
 "Vuoi attivare OpenGL?\n"
-" (Per non mostrare questo avviso, lanciare la dock dal menu delle "
+" (Per non mostrare questo avviso, lanciare la dock dal menù delle "
 "Applicazioni,\n"
 "  oppure con l'opzione -o per forzare OpenGL e -c per forzare Cairo.)"
 
@@ -1475,11 +1475,11 @@ msgid ""
 "Some applets let you bind a shortkey to an action, and decide which action "
 "sould be on middle-click."
 msgstr ""
-"Molte icone nella dock hanno svariate azioni: la primaria con clic sinistro, "
-"una seconda con clic centrale, ed una addizionale con clic destro (nel "
-"menu).\n"
-"Certe applet ti permettono di impostare scorciatoie da tastiera per le "
-"azioni, e decidere quale azioni svolgere al clic centrale."
+"Molte icone nella dock svolgono diverse azioni: quella primaria è con il "
+"clic sinistro, una secondaria è con il clic centrale e una addizionale è con "
+"il clic destro (nel menù).\n"
+"Alcune applet ti consentono di impostare una scorciatoia da tastiera per "
+"svolgere un'azione e decidere quale azione assegnare al clic centrale."
 
 #: ../Help/data/messages:7
 msgid "Adding features"
@@ -1516,7 +1516,7 @@ msgid ""
 "Alternatively, if an application is already opened, you can right-click on "
 "its icon and select \"make it a launcher\"."
 msgstr ""
-"Puoi aggiungere un lanciatore trascinandolo dal Menu Applicazioni alla dock. "
+"Puoi aggiungere un lanciatore trascinandolo dal Menù Applicazioni alla dock. "
 "Puoi rilasciarlo quando apparirà una freccia animata.\n"
 "Altrimenti, se un'applicazione è già aperta, fai clic destro sulla sua icona "
 "e seleziona \"Trasforma in lanciatore\"."
@@ -1641,7 +1641,7 @@ msgstr ""
 
 #: ../Help/data/messages:43
 msgid "Using the dock as a taskbar"
-msgstr "Usare la dock come taskbar"
+msgstr "Usare la dock come una barra delle applicazioni"
 
 #: ../Help/data/messages:45
 msgid ""
@@ -1669,7 +1669,7 @@ msgstr "Chiudere una finestra"
 msgid ""
 "You can close a window by middle-clicking on its icon (or from the menu)."
 msgstr ""
-"Puoi chiudere una finestra con un clic centrale sulla sua icona (o dal menu)."
+"Puoi chiudere una finestra con un clic centrale sulla sua icona (o dal menù)."
 
 #: ../Help/data/messages:51
 msgid "Minimizing / restauring a window"
@@ -1693,7 +1693,7 @@ msgid ""
 "(or from the menu)."
 msgstr ""
 "Puoi lanciare più istanze di un'applicazione con SHIFT+clic sulla sua icona "
-"(o dal menu)."
+"(o dal menù)."
 
 #: ../Help/data/messages:59
 msgid "Switching between the windows of a same application"
@@ -1846,14 +1846,13 @@ msgid ""
 "to the mouse (means you can click on what is behind them), by clicking on "
 "the small bottom-right button."
 msgstr ""
-"Dal menu (clic destro -> visibilità) puoi decidere di lasciarle al di sopra "
-"delle altre finestre, o nella Sezione Widget (se utilizzi Compiz), oppure "
+"Dal menù (clic destro -> visibilità) puoi decidere di lasciarle al di sopra "
+"delle altre finestre o nella Sezione Widget (se utilizzi Compiz) oppure "
 "creare una \"barra delle desklet\" posizionandole in un lato dello schermo e "
 "scegliendo \"riserva spazio\".\n"
 "Le desklet che non hanno bisogno di interazione (come l'orologio) possono "
 "diventare trasparenti al passaggio del mouse (significa che potrai cliccare "
-"sugli oggetti sotto di esse), cliccando sul piccolo bottone in basso a "
-"destra."
+"sugli oggetti sotto di esse) cliccando sul piccolo bottone in basso a destra."
 
 #: ../Help/data/messages:103
 msgid "Changing the desklets decorations"
@@ -1968,9 +1967,9 @@ msgid ""
 "The text is automatically completed (for instance, typing \"fir\" will be "
 "completed into \"firefox\")."
 msgstr ""
-"Attiva l'applet Menu Applicazioni.\n"
+"Attiva l'applet Menù Applicazioni.\n"
 "Clic centrale su di essa o clic destro -> Avvio rapido.\n"
-"Puoi impostare scorciatoie da tastiera per questa azione.\n"
+"Per questa azione puoi impostare una scorciatoia da tastiera.\n"
 "Il testo si completerà automaticamente (ad esempio, digitando \"fir\" sarà "
 "completato con \"firefox\")."
 
@@ -2076,10 +2075,10 @@ msgid ""
 "opened with this launcher will appear in its menu."
 msgstr ""
 "Attiva l'applet Eventi Recenti.\n"
-"Il demone di Zeitgeist deve essere attivo per attivarla. Installalo se non è "
+"Per attivarla deve essere attivo il demone Zeitgeist. Installalo se non è "
 "ancora presente.\n"
-"Ora con un clic destro su di un lanciatore tutti i file recenti che possono "
-"essere aperti con questa applicazione appariranno nel suo menu."
+"Ora con un clic destro su un lanciatore, tutti i file recenti che possono "
+"essere aperti con questa applicazione appariranno nel suo menù."
 
 #: ../Help/data/messages:157
 msgid "Accessing disks"
@@ -2393,7 +2392,7 @@ msgstr ""
 msgid ""
 "There is no icon in the Applications Menu even though I enable the option."
 msgstr ""
-"Non ci sono icone nel Menu Applicazioni, anche se l'opzione è stata "
+"Non ci sono icone nel Menù Applicazioni, anche se l'opzione è stata "
 "abilitata."
 
 #: ../Help/data/messages:241
@@ -2403,7 +2402,7 @@ msgid ""
 "the \"menus have icons\" and the \"buttons have icons\" options. "
 msgstr ""
 "In Gnome, c'è un opzione che sovrascrive quella della dock. Per abilitare le "
-"icone nel menu, apri 'gconf-editor', vai a Desktop / Gnome / Interface e "
+"icone nel menù, apri 'gconf-editor', vai in Desktop / Gnome / Interface e "
 "abilita le opzioni \"menus have icons\" e \"buttons have icons\". "
 
 #: ../Help/data/messages:245
@@ -2695,8 +2694,8 @@ msgstr "Scegli un tema decorativo per questa desklet:"
 msgid ""
 "Image to be displayed below drawings, e.g. a frame. Leave empty for no image."
 msgstr ""
-"Immagine da mostrare sotto i disegni, come un motivo ad esempio. Lasciare "
-"vuoto per non utilizzarne."
+"È un'immagine che viene mostrata sotto i disegni, ad esempio una cornice. "
+"Lascia vuoto per non utilizzarla."
 
 #: ../Help/data/messages:367
 msgid "Background image:"
@@ -2751,8 +2750,8 @@ msgid ""
 "Image to be displayed above the drawings, e.g. a reflection. Leave empty for "
 "no image."
 msgstr ""
-"Immagine da mostrare sopra i disegni, come un riflesso ad esempio. Lasciare "
-"vuoto per non utilizzarne."
+"È un'immagine che viene mostrata sopra i disegni, ad esempio un riflesso. "
+"Lascia vuoto per non utilizzarla."
 
 #: ../Help/data/messages:389
 msgid "Foreground image:"
@@ -2789,8 +2788,8 @@ msgstr ""
 "Le modalità sono disposte dalla più intrusiva alla meno intrusiva.\n"
 "Quando la dock è nascosta o sotto una finestra, posiziona il mouse sul bordo "
 "dello schermo per richiamarla.\n"
-"Quando la dock salta fuori con una scorciatoia, apparirà alla posizione del "
-"tuo mouse. Il resto del tempo resterà invisibile, agendo come un menu."
+"Quando la dock salta fuori con una scorciatoia, apparirà nella posizione del "
+"tuo mouse. Il resto del tempo resterà invisibile, agendo come un menù."
 
 #: ../data/messages:23 ../data/messages:185 ../data/messages:891
 msgid "Reserve space for the dock"
@@ -2831,7 +2830,7 @@ msgid ""
 "menu."
 msgstr ""
 "Quando premerai la scorciatoia, la dock si mostrerà nella posizione del tuo "
-"mouse. Il resto del tempo resterà invisibile agendo come un menu."
+"mouse. Il resto del tempo resterà invisibile agendo come un menù."
 
 #: ../data/messages:51 ../data/messages:235
 msgid "Keyboard shortcut to pop-up the dock:"
@@ -2872,12 +2871,12 @@ msgstr ""
 "Integrata  : Le applicazioni sono unite al proprio lanciatore, mostra tutte "
 "le altre finestre, e i gruppi di esse, insieme nella sub-dock "
 "(predefinito).\n"
-"Separata : Separa la taskbar dai lanciatori e mostra solo le finestre che si "
-"trovano sulla scrivania attuale."
+"Separata : Separa la barra delle applicazioni dai lanciatori e mostra solo "
+"le finestre che si trovano sulla scrivania attuale."
 
 #: ../data/messages:67
 msgid "Behaviour of the Taskbar:"
-msgstr "Comportamento della Taskbar:"
+msgstr "Comportamento della Barra delle applicazioni:"
 
 #: ../data/messages:71
 msgid "Minimalistic"
@@ -3122,15 +3121,15 @@ msgstr "Ritardo prima che il lasciare la sub-dock abbia effetto:"
 
 #: ../data/messages:255
 msgid "TaskBar"
-msgstr "TaskBar"
+msgstr "Barra delle applicazioni"
 
 #: ../data/messages:259
 msgid ""
 "Cairo-Dock will then act as your taskbar. It is recommended to remove any "
 "other taskbars."
 msgstr ""
-"Cairo-Dock agirà come tua taskbar. È raccomandato rimuovere ogni altra "
-"taskbar."
+"Cairo-Dock agirà come tua barra delle applicazioni. È raccomandato rimuovere "
+"ogni altra barra delle applicazioni."
 
 #: ../data/messages:261
 msgid "Show currently opened applications in the dock?"
@@ -3210,12 +3209,12 @@ msgid ""
 "A composite manager is required to display the thumbnail.\n"
 "OpenGL is required to draw the icon bent backwards."
 msgstr ""
-"Un manager di composizione è richiesto per mostrare l'anteprima.\n"
-"OpenGL è richiesto per disegnare le icone piegate all'indietro."
+"Per mostrare l'anteprima è richiesto un manager di composizione.\n"
+"Per disegnare le icone piegate all'indietro è richiesto OpenGL."
 
 #: ../data/messages:309
 msgid "How to draw minimised windows ?"
-msgstr "Disegna le finestre minimizzate come?"
+msgstr "Come disegnare le finestre minimizzate?"
 
 #: ../data/messages:311
 msgid "Make the icon transparent"
@@ -3231,7 +3230,7 @@ msgstr "Disegnala piegata all'indietro"
 
 #: ../data/messages:317
 msgid "Transparency of icons whose window is minimised:"
-msgstr "Trasparenza dell'icona la cui finestra è o non è minimizzata:"
+msgstr "Trasparenza delle icone la cui finestra sia minimizzata:"
 
 #: ../data/messages:319 ../data/messages:469 ../data/messages:589
 #: ../data/messages:615 ../data/messages:713
@@ -3250,7 +3249,8 @@ msgstr ""
 
 #: ../data/messages:325
 msgid "\"...\" will be added at the end if the name is too long."
-msgstr "\"...\" saranno aggiunte alla fine se il nome è troppo lungo."
+msgstr ""
+"Se il nome è troppo lungo saranno aggiunti i tre punti \"...\" alla fine."
 
 #: ../data/messages:327
 msgid "Maximum number of caracters in application name:"
@@ -3282,15 +3282,15 @@ msgstr "Arrotola"
 
 #: ../data/messages:343
 msgid "This is the default behaviour of most taskbars."
-msgstr "È il comportamento predefinito della maggior parte delle taskbar."
+msgstr ""
+"È il comportamento predefinito della maggior parte delle barre delle "
+"applicazioni."
 
 #: ../data/messages:345
 msgid ""
 "Minimise the window when its icon is clicked, if it was already the active "
 "window ?"
-msgstr ""
-"Minimizza la finestra quando la sua icona è cliccata, se era già la finestra "
-"attiva?"
+msgstr "Se la finestra era già attiva, la minizzo cliccando sulla sua icona?"
 
 #: ../data/messages:347
 msgid "Only if your Window Manager supports it."
@@ -3347,7 +3347,7 @@ msgid ""
 "Icons will appear folded on themselves and will then unfold until they fill "
 "the whole dock. The smaller this value, the faster this will be."
 msgstr ""
-"Le icone appariranno arrotolate su se stesse, poi si srotoleranno fino a "
+"Le icone appariranno arrotolate su sé stesse, poi si srotoleranno fino a "
 "riempire l'intera dock. Più sono piccole, più il processo sarà veloce."
 
 #: ../data/messages:371
@@ -3370,7 +3370,7 @@ msgstr "Più ce ne sono, più sarà lento"
 
 #: ../data/messages:379
 msgid "Number of steps in the zoom animation (grow/shrink):"
-msgstr "Numero di passi nella animazione zoom (aumenta su/diminuisci giù):"
+msgstr "Numero di passi nell'animazione zoom (aumenta su/diminuisci giù):"
 
 #: ../data/messages:391
 msgid "Number of steps in the auto-hide animation (move up/move down):"
@@ -3403,8 +3403,8 @@ msgid ""
 "The transparency gradation pattern will then be re-calculated in real time. "
 "May need more CPU power."
 msgstr ""
-"Il pattern della gradazione della trasparenza sarà ricalcolato in tempo "
-"reale. Questo può usare molta CPU."
+"Il modello di gradazione della trasparenza sarà ricalcolato in tempo reale. "
+"Questo può usare molta CPU."
 
 #: ../data/messages:417
 msgid "Reflections should be calculated in real-time?"
@@ -3420,13 +3420,13 @@ msgid ""
 "This only limits the connection phase,  once the dock has connected this "
 "option is of no more use."
 msgstr ""
-"Tempo massimo in secondi che viene permesso per la connessione al server. "
-"Questo limiterà solo la fase di connessione, una volta che la dock  è "
+"Tempo massimo in secondi che viene consentito per la connessione al server. "
+"Questo limiterà solo la fase di connessione, una volta che la dock si è "
 "connessa questa opzione non sarà più in uso."
 
 #: ../data/messages:423
 msgid "Connection timeout :"
-msgstr "Scadenza connessione:"
+msgstr "Scadenza della connessione:"
 
 #: ../data/messages:425
 msgid ""
@@ -3470,8 +3470,8 @@ msgstr "Porta:"
 msgid ""
 "Let empty if you don't need to log-in to the proxy with a user/password."
 msgstr ""
-"Lasciare vuoto se non hai bisogno del login con user/password per il proxy "
-"di rete."
+"Lascia vuoto se non hai bisogno del login con user/password per il proxy di "
+"rete."
 
 #: ../data/messages:443
 msgid "User :"
@@ -3498,12 +3498,12 @@ msgid ""
 "Any format allowed; if empty, the colour gradation will be used as a fall "
 "back."
 msgstr ""
-"Qualsiasi formato è permesso; se vuoto, la gradazione di colore utilizzata "
+"È consentito qualsiasi formato; se vuoto, la gradazione di colore utilizzata "
 "sarà quella precedente."
 
 #: ../data/messages:463 ../data/messages:949
 msgid "Image filename to use as a background :"
-msgstr "Percorso dell'immagine da mettere come sfondo:"
+msgstr "Percorso dell'immagine da utilizzare come sfondo:"
 
 #: ../data/messages:465
 msgid "Image's transparency :"
@@ -3560,7 +3560,7 @@ msgstr "Colore predefinito di sfondo quando la dock è nascosta"
 
 #: ../data/messages:497 ../data/messages:957
 msgid "Stretch the dock to always fill the screen"
-msgstr "Allunga la dock fino a riempire sempre lo schermo?"
+msgstr "Allungare la dock fino a riempire sempre lo schermo?"
 
 #: ../data/messages:499
 msgid "External Frame"
@@ -3690,8 +3690,9 @@ msgid ""
 "This can be customized for each desklet separately.\n"
 "Choose 'Custom decoration' to define your own decorations below"
 msgstr ""
-"Questo può essere personalizzato separatamente per ogni desklet.\n"
-"Scegli 'Decorazione Personalizzata' per scegliere sotto le tue decorazioni"
+"Questa può essere personalizzata separatamente per ogni desklet.\n"
+"Scegli 'Decorazione personalizzata' per scegliere qui sotto le tue "
+"decorazioni"
 
 #: ../data/messages:579
 msgid "Choose a default decoration for all desklets :"
@@ -3703,7 +3704,7 @@ msgid ""
 "example. Leave empty to not use any."
 msgstr ""
 "È un'immagine che viene mostrata sotto i disegni, come una cornice ad "
-"esempio. Lasciare vuoto per non utilizzarla."
+"esempio. Lascia vuoto per non utilizzarla."
 
 #: ../data/messages:583
 msgid "Background image :"
@@ -3759,7 +3760,7 @@ msgid ""
 "for example. Leave empty to not use any."
 msgstr ""
 "È un'immagine che viene mostrata sopra i disegni, come un riflesso ad "
-"esempio. Lasciare vuoto per non utilizzarla."
+"esempio. Lascia vuoto per non utilizzarla."
 
 #: ../data/messages:609
 msgid "Foreground image :"
@@ -3775,7 +3776,7 @@ msgstr "Dimensione dei pulsanti:"
 
 #: ../data/messages:623 ../data/messages:635
 msgid "Name of an image to use for the 'rotate' button :"
-msgstr "Percorso dell'immagine da usare per il pulsante 'ruota' :"
+msgstr "Percorso dell'immagine da usare per il pulsante 'ruota':"
 
 #: ../data/messages:627
 msgid "Name of an image to use for the 'reattach' button :"
@@ -3783,7 +3784,7 @@ msgstr "Percorso dell'immagine da usare per il pulsante 'riaggancia':"
 
 #: ../data/messages:631
 msgid "Name of an image to use for the 'depth rotate' button :"
-msgstr "Percorso dell'immagine da usare per il pulsante 'ruota':"
+msgstr "Percorso dell'immagine da usare per il pulsante 'ruota graduale':"
 
 #: ../data/messages:639
 msgid "Icons' themes"
@@ -3803,7 +3804,7 @@ msgstr ""
 
 #: ../data/messages:645
 msgid "Image filename to use as a background for icons :"
-msgstr "Percorso dell'immagine da mettere come sfondo alle icone:"
+msgstr "Percorso dell'immagine da utilizzare come sfondo delle icone:"
 
 #: ../data/messages:647
 msgid "Icons size"
@@ -4016,7 +4017,7 @@ msgid ""
 "launched. Leave blank to use the default one."
 msgstr ""
 "Gli indicatori sono disegnati sulle icone dei lanciatori per mostrare che "
-"essi sono stati già aperti. Lasciare vuoto per utilizzare quello predefinito."
+"essi sono stati già aperti. Lascia vuoto per utilizzare quello predefinito."
 
 #: ../data/messages:751
 msgid ""
@@ -4085,7 +4086,7 @@ msgid ""
 "Use it to make the indicator follow the orientation of the dock "
 "(top/bottom/right/left)."
 msgstr ""
-"Utilizza questo per fare si che l'indicatore segua l'orientamento della dock "
+"Utilizzalo per far sì che l'indicatore segua l'orientamento della dock "
 "(alto/basso/destra/sinistra)."
 
 #: ../data/messages:773
@@ -4114,11 +4115,11 @@ msgid ""
 "together. Leave blank to use the default one."
 msgstr ""
 "Ha senso solo se hai scelto di raggruppare insieme le applicazioni di "
-"qualche classe. Lasciare vuoto per usare quello predefinito."
+"qualche classe. Lascia vuoto per usare quello predefinito."
 
 #: ../data/messages:789
 msgid "Zoom the indicator with its icon?"
-msgstr "Ingrandisci gli indicatori assieme alla loro icona?"
+msgstr "Ingrandire gli indicatori assieme alla loro icona?"
 
 #: ../data/messages:791
 msgid "Progress bars"
@@ -4276,11 +4277,11 @@ msgstr "Identico alla dock principale"
 
 #: ../data/messages:919
 msgid "Tiny"
-msgstr "Piccolo"
+msgstr "Minuscolo"
 
 #: ../data/messages:933
 msgid "Leave it empty to use the same view as the main dock."
-msgstr "Lasciare vuoto per utilizzare la stessa vista della dock principale."
+msgstr "Lascia vuoto per utilizzare la stessa vista della dock principale."
 
 #: ../data/messages:935
 msgid "Choose the view for this dock :/"
@@ -4321,9 +4322,9 @@ msgid ""
 "Otherwise the current behaviour will be kept. This defines the dock's "
 "position, behavioural settings such as auto-hide, using taskbar or not, etc."
 msgstr ""
-"Altrimenti il comportamento attuale sarà conservato. Ciò riguarda la "
+"Altrimenti sarà conservato il comportamento attuale. Ciò riguarda la "
 "posizione della dock, i parametri di comportamento come l'auto-"
-"nascondimento, l'utilizzo della TaskBar o meno, ecc."
+"nascondimento, l'utilizzo della barra delle applicazioni o meno, ecc."
 
 #: ../data/messages:973
 msgid "Use the new theme's behaviour?"
@@ -4462,8 +4463,8 @@ msgid ""
 "nearly sure that you shouldn't touch it. It defines the class of the "
 "program, which is useful to link the application with its launcher."
 msgstr ""
-"Se hai creato tu questo lanciatore allora potresti avere motivo di "
-"modificare questo parametro. Se è stato trascinato nella dock dal menu è "
+"Se hai creato tu questo lanciatore allora potresti avere un motivo per "
+"modificare questo parametro. Se è stato trascinato nella dock dal menù è "
 "quasi sicuro che non dovresti modificarlo. Definisce la classe del "
 "programma, la quale è utile per collegare l'applicazione con il suo "
 "lanciatore."
@@ -4539,6 +4540,9 @@ msgid ""
 "    It allows to rapidly look for programs from their name or their "
 "description"
 msgstr ""
+"- È stata aggiunta la funzione \"Ricerca\" nel  <b>Menù Applicazioni</b>.\n"
+"    Ti consente di trovare velocemente i programmi usando parti del nome o "
+"della descrizione"
 
 #: ../data/messages:1088
 msgid "- Added support of <b>logind</b> in the Logout applet"
@@ -4554,16 +4558,21 @@ msgid ""
 "    It allows launchers to be animated until the application opens and "
 "avoids accidental double launches"
 msgstr ""
+"- Aggiunto il supporto del protocollo <b>StartupNotification</b>.\n"
+"    Permette ai lanciatori di essere animati finché l'applicazione non si "
+"apre, evitando avvii multipli accidentali"
 
 #: ../data/messages:1094
 msgid ""
 "- Added an new third-party applet: <b>Notification History</b> to never miss "
 "a notification"
 msgstr ""
+"- Aggiunta una nuova applet di terze parti: <b>Cronologia delle "
+"Notifiche</b> per non perdersi mai nessuna notifica"
 
 #: ../data/messages:1096
 msgid "- Upgraded the <b>Dbus API</b> to be even more powerful"
-msgstr ""
+msgstr "- Aggiornata l'<b>API Dbus</b> e resa ancora più potente"
 
 #: ../data/messages:1098
 msgid "- A huge rewrite of the core using Objects"
