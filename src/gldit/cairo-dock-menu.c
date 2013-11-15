@@ -420,14 +420,16 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	/// TODO: use iMarginPosition...
 	int iAimedX, iAimedY;
 	int Hs = (pContainer->bIsHorizontal ? gldi_desktop_get_height() : gldi_desktop_get_width());
+	#if GTK_MAJOR_VERSION > 2
 	int w_, h_;
+	#endif
 	//g_print ("%d;%d %dx%d\n", x0, y0, w, h);
 	if (pContainer->bIsHorizontal)
 	{
-		w_ = w - 2 * r;
-		h_ = h - 2 * r - ah;
 		iAimedX = x0 + pIcon->image.iWidth/2;
 		#if GTK_MAJOR_VERSION > 2
+		w_ = w - 2 * r;
+		h_ = h - 2 * r - ah;
 		*x = MAX (0, iAimedX - fAlign * w_ - r);
 		#else
 		*x = iAimedX;
@@ -445,10 +447,10 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	}
 	else
 	{
-		w_ = w - 2 * r - ah;
-		h_ = h - 2 * r;
 		iAimedY = x0 + pIcon->image.iWidth/2;
 		#if GTK_MAJOR_VERSION > 2
+		w_ = w - 2 * r - ah;
+		h_ = h - 2 * r;
 		*y = MIN (iAimedY - fAlign * h_ - r, gldi_desktop_get_height() - h);
 		#else
 		*y = MIN (iAimedY, gldi_desktop_get_height() - h);
