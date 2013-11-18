@@ -18,6 +18,7 @@
 */
 
 #include <stdlib.h>
+#include <math.h>  // fabs
 
 #include <cairo.h>
 #include <gtk/gtk.h>
@@ -31,169 +32,228 @@
 #include "cairo-dock-desktop-manager.h"  // gldi_desktop_get_height
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw.h"
+#include "cairo-dock-backends-manager.h"  // cairo_dock_get_dialog_decorator
+#include "cairo-dock-dialog-manager.h"  // myDialogsParam
 #include "cairo-dock-menu.h"
+
+static gboolean _draw_menu_item (GtkWidget *widget, cairo_t *cr, G_GNUC_UNUSED gpointer data);
+static gboolean _on_select_menu_item (GtkWidget* pMenuItem, G_GNUC_UNUSED gpointer data);
+static gboolean _on_deselect_menu_item (GtkWidget* pMenuItem, G_GNUC_UNUSED gpointer data);
+static void _on_destroy_menu_item (GtkWidget* pMenuItem, G_GNUC_UNUSED gpointer data);
+
+
+/* simple config:
+ * color: system / custom (= bg color, custom text color = white or black automatically)
+ * 
+ * system -> update params to system, don't modify colors
+ * custom -> update params to custom, update colors
+ * 
+ * 
+ * Dialogs:
+ * bg color: system / custom
+ * text color: system / custom
+ * 
+ * system -> get label fg color, get menu bg color -> myDialogsParam
+ * custom -> foreach menu-item: gldi_dialog_set_widget_bg_color / gldi_dialog_set_widget_text_color
+ *           for intertactive widget: same
+ * */
 
   ////////////
  /// MENU ///
 /////////////
 
 #if GTK_MAJOR_VERSION > 2
-const int ah = 8;  // arrow height
-const int aw = 8;  // arrow demi-width
-const int r = 8;  // corner radius
-const int l = 1;  // outline width, 0 for no outline
-const double alpha = 0.75;  // min alpha (max is 1)
-const double fAlign = 0.5;
+const double alpha = 0.85;  // min alpha (max is 1)
 
 static GtkStyleContext *s_pStyle = NULL;
 static gboolean s_bGotMenuitemStyle = FALSE;
 static gboolean s_bGotMenuStyle = FALSE;
+static gboolean s_bGotTextStyle = FALSE;
 static GdkRGBA s_menu_bg_color;
 static cairo_pattern_t *s_menu_bg_pattern = NULL;
 static GdkRGBA s_menuitem_bg_color;
 static cairo_pattern_t *s_menuitem_bg_pattern = NULL;
+static GdkRGBA s_text_color;
+static int s_iMenuItemColorId = 1;
+static gboolean s_bIgnoreStyleChange = FALSE;
 
 static void _on_style_changed (G_GNUC_UNUSED GtkStyleContext *style, G_GNUC_UNUSED gpointer data)
 {
-	g_print ("style changed\n");
-	if (s_menu_bg_pattern != NULL)
+	if (! s_bIgnoreStyleChange)
 	{
-		cairo_pattern_destroy (s_menu_bg_pattern);
-		s_menu_bg_pattern = NULL;
+		g_print ("style changed\n");
+		if (s_menu_bg_pattern != NULL)
+		{
+			cairo_pattern_destroy (s_menu_bg_pattern);
+			s_menu_bg_pattern = NULL;
+		}
+		if (s_menuitem_bg_pattern != NULL)
+		{
+			cairo_pattern_destroy (s_menuitem_bg_pattern);
+			s_menuitem_bg_pattern = NULL;
+		}
+		s_bGotMenuitemStyle = FALSE;
+		s_bGotMenuStyle = FALSE;
+		s_bGotTextStyle = FALSE;
+		s_iMenuItemColorId ++;  // invalidate menu-items' text color
 	}
-	if (s_menuitem_bg_pattern != NULL)
-	{
-		cairo_pattern_destroy (s_menuitem_bg_pattern);
-		s_menuitem_bg_pattern = NULL;
-	}
-	s_bGotMenuitemStyle = FALSE;
-	s_bGotMenuStyle = FALSE;
 }
 
-static void _rendering_init_menu (GtkWidget *pMenu)
+static double hue2rgb (double p, double q, double t)
 {
-	g_object_set_data (G_OBJECT (pMenu), "gldi-arrow-height", (gpointer)&ah);  /// TODO: see if it's ok to assign const values...
-	g_object_set_data (G_OBJECT (pMenu), "gldi-align", (gpointer)&fAlign);
+	if(t < 0) t += 1;
+	if(t > 1) t -= 1;
+	if(t < 1/6) return p + (q - p) * 6 * t;
+	if(t < 1/2) return q;
+	if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+	return p;
+}
+static void hslToRgb (double h, double s, double l, double *r, double *g, double *b)
+{
+	if (s == 0) // achromatic
+	{
+		*r = *g = *b = l;
+	}
+	else
+	{
+		double q = (l < 0.5 ? l * (1 + s) : l + s - l * s);
+		double p = 2 * l - q;
+		*r = hue2rgb(p, q, h + 1/3);
+		*g = hue2rgb(p, q, h);
+		*b = hue2rgb(p, q, h - 1/3);
+	}
+}
+static void rgbToHsl (double r, double g, double b, double *h_, double *s_, double *l_)
+{
+	double max = MAX (MAX (r, g), b), min = MIN (MIN (r, g), b);
+	double h, s, l = (max + min) / 2;
+
+	if(max == min)  // achromatic
+	{
+		h = s = 0;
+	}
+	else
+	{
+		double d = max - min;
+		s = (l > 0.5 ? d / (2 - max - min) : d / (max + min));
+		if (max == r)
+			h = (g - b) / d + (g < b ? 6 : 0);
+		else if (max == g)
+			h = (b - r) / d + 2;
+		else
+			h = (r - g) / d + 4;
+		h /= 6;
+	}
+
+	*h_ = h;
+	*s_ = s;
+	*l_ = l;
 }
 
-static void _rendering_draw_menu (GtkWidget *pWidget, cairo_t *pCairoContext)
+static void _init_menu_style (void)
 {
-	int iMarginPosition = -1;
-	if (g_object_get_data (G_OBJECT (pWidget), "gldi-icon") != NULL)
-		iMarginPosition = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pWidget), "gldi-margin-position"));
+	static GtkCssProvider *cssProvider = NULL;
+	static int index = 0;
 	
-	// draw the outline and set the clip
-	GtkAllocation alloc;
-	gtk_widget_get_allocation (pWidget, &alloc);
+	if (index == s_iMenuItemColorId)
+		return;
+	index = s_iMenuItemColorId;
+	g_print ("%s (%d)\n", __func__, index);
 	
-	int w = alloc.width, h = alloc.height;
-	int x, y;
-	gdk_window_get_position (gtk_widget_get_window (gtk_widget_get_toplevel(pWidget)), &x, &y);
-	int iAimedX = GPOINTER_TO_INT (g_object_get_data (G_OBJECT(pWidget), "gldi-aimed-x"));
-	int iAimedY = GPOINTER_TO_INT (g_object_get_data (G_OBJECT(pWidget), "gldi-aimed-y"));
-	int _ah = ah - l;  // we want the tip of the arrow to reach the border, not the middle of the stroke
-	int _aw = aw;
-	double dx, dy;
-	
-	double fRadius = r, fLineWidth = l;
-	double fDockOffsetX = fRadius + fLineWidth/2;
-	double fDockOffsetY = fLineWidth/2;
-	double fFrameWidth, fFrameHeight;
-	fFrameWidth = w - 2*r - l;
-	fFrameHeight = h;
-	switch (iMarginPosition)
+	if (myDialogsParam.bUseSystemColors)
 	{
-		case 0:  // bottom
-			fFrameHeight -= ah;
-		break;
-		case 1:  // top
-			fFrameHeight -= ah;
-			fDockOffsetY += ah;
-		break;
-		case 2:  // right
-			fFrameWidth -= ah;
-		break;
-		case 3:  // left
-			fFrameWidth -= ah;
-			fDockOffsetX += ah;
-		break;
-		default:
-		break;
-	}
-	
-	cairo_move_to (pCairoContext, fDockOffsetX, fDockOffsetY);
-	
-	if (iMarginPosition == 1)  // top arrow
-	{
-		dx = MIN (w - r - 2*aw, MAX (r, iAimedX - x - aw));
-		cairo_line_to (pCairoContext, dx, fDockOffsetY);
-		cairo_line_to (pCairoContext, MIN (w, MAX (0, iAimedX - x)), fDockOffsetY - _ah);
-		cairo_line_to (pCairoContext, dx + 2*aw, fDockOffsetY);
-		cairo_line_to (pCairoContext, fFrameWidth, fDockOffsetY);
+		if (cssProvider != NULL)
+		{
+			s_bIgnoreStyleChange = TRUE;
+			gtk_style_context_remove_provider_for_screen (gdk_screen_get_default(), GTK_STYLE_PROVIDER(cssProvider));
+			s_bIgnoreStyleChange = FALSE;
+			g_object_unref (cssProvider);
+			cssProvider = NULL;
+		}
 	}
 	else
-		cairo_rel_line_to (pCairoContext, fFrameWidth, 0);
-	
-	//\_________________ Coin haut droit.
-	cairo_arc (pCairoContext,
-		fDockOffsetX + fFrameWidth, fDockOffsetY + fRadius,
-		fRadius,
-		-G_PI/2, 0.);
-	if (iMarginPosition == 2)  // right arrow
 	{
-		if (h < 2*aw + 2*r)
-			_aw = (h - 2*r) / 2;
-		dy = MIN (h - r - 2*aw, MAX (r, iAimedY - y - _aw));
-		cairo_line_to (pCairoContext, w - ah, dy);
-		cairo_line_to (pCairoContext, w - ah + _ah, MAX (0, iAimedY - y));
-		cairo_line_to (pCairoContext, w - ah, dy + 2*_aw);
-		cairo_line_to (pCairoContext, w - ah, h - r);
+		if (cssProvider == NULL)
+		{
+			cssProvider = gtk_css_provider_new ();
+			s_bIgnoreStyleChange = TRUE;
+			gtk_style_context_add_provider_for_screen (gdk_screen_get_default(), GTK_STYLE_PROVIDER(cssProvider), GTK_STYLE_PROVIDER_PRIORITY_USER);
+			s_bIgnoreStyleChange = FALSE;
+		}
+		
+		double r = myDialogsParam.fDialogColor[0], g = myDialogsParam.fDialogColor[1], b = myDialogsParam.fDialogColor[2];
+		double h, s, l;
+		rgbToHsl (r, g, b, &h, &s, &l);
+		if (l > .5)
+			l -= .2;
+		else
+			l += .2;
+		hslToRgb (h, s, l, &r, &g, &b);
+		
+		double rs = myDialogsParam.fDialogColor[0], gs = myDialogsParam.fDialogColor[1], bs = myDialogsParam.fDialogColor[2];
+		double hs, ss, ls;
+		rgbToHsl (rs, gs, bs, &hs, &ss, &ls);
+		if (ls > .5)
+			ls -= .1;
+		else
+			ls += .1;
+		hslToRgb (hs, ss, ls, &rs, &gs, &bs);
+		
+		/// TODO: for entry, set a background color ? and for calendar ?...
+		gchar *css = g_strdup_printf ("@define-color menuitem_bg_color rgb (%d, %d, %d); \
+		@define-color menuitem_text_color rgb (%d, %d, %d); \
+		@define-color menuitem_insensitive_text_color rgba (%d, %d, %d, .5); \
+		@define-color menuitem_separator_color rgb (%d, %d, %d); \
+		.menuitem { \
+			text-shadow: none; \
+			border-image: none; \
+			box-shadow: none; \
+			background: transparent; \
+			color: @menuitem_text_color; \
+		} \
+		.menuitem GtkImage { \
+			background: transparent; \
+		} \
+		.menuitem .separator { \
+			color: @menuitem_separator_color; \
+			border-width: 1px; \
+			border-style: solid; \
+			border-color: @menuitem_separator_color; \
+			border-bottom-color: alpha (@menuitem_separator_color, 0.6); \
+			border-right-color: alpha (@menuitem_separator_color, 0.6); \
+		} \
+		.menuitem:hover { \
+			background: @menuitem_bg_color; \
+		} \
+		.menuitem *:insensitive { \
+			text-shadow: none; \
+			color: @menuitem_insensitive_text_color; \
+		} \
+		.menuitem .entry { \
+			background: transparent; \
+			border-width: 0px; \
+			color: @menuitem_text_color; \
+		}",
+		(int)(r*255), (int)(g*255), (int)(b*255),
+		(int)(myDialogsParam.dialogTextDescription.fColorStart[0]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[1]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[2]*255),
+		(int)(myDialogsParam.dialogTextDescription.fColorStart[0]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[1]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[2]*255),
+		(int)(rs*255), (int)(gs*255), (int)(bs*255));
+		
+		s_bIgnoreStyleChange = TRUE;
+		gtk_css_provider_load_from_data (cssProvider,
+			css, -1, NULL);  // (should) clear any previously loaded information
+		s_bIgnoreStyleChange = FALSE;
+		g_free (css);
 	}
-	else
-		cairo_rel_line_to (pCairoContext, 0, (fFrameHeight + fLineWidth - fRadius * 2));
-	
-	//\_________________ Coin bas droit.
-	cairo_arc (pCairoContext,
-		fDockOffsetX + fFrameWidth, fDockOffsetY + fFrameHeight - fLineWidth/2 - fRadius,
-		fRadius,
-		0., G_PI/2);
-	
-	if (iMarginPosition == 0)  // bottom arrow
-	{
-		dx = MIN (w - r - 2*aw, MAX (r, iAimedX - x - aw));
-		cairo_line_to (pCairoContext, dx + 2*aw, fFrameHeight);
-		cairo_line_to (pCairoContext, MIN (w, MAX (0, iAimedX - x)), fFrameHeight + _ah);
-		cairo_line_to (pCairoContext, dx, fFrameHeight);
-		cairo_line_to (pCairoContext, fDockOffsetX, fFrameHeight);
-	}
-	else
-		cairo_rel_line_to (pCairoContext, - fFrameWidth, 0);
-	
-	//\_________________ Coin bas gauche.
-	cairo_arc (pCairoContext,
-		fDockOffsetX, fDockOffsetY + fFrameHeight - fLineWidth/2 - fRadius,
-		fRadius,
-		G_PI/2, G_PI);
-	
-	if (iMarginPosition == 3)  // left arrow
-	{
-		if (h < 2*aw + 2*r)
-			_aw = (h - 2*r) / 2;
-		dy = MIN (h - r - 2*aw, MAX (r, iAimedY - y - _aw));
-		cairo_line_to (pCairoContext, ah, dy);
-		cairo_line_to (pCairoContext, ah - _ah, MAX (0, iAimedY - y));
-		cairo_line_to (pCairoContext, ah, dy + 2*_aw);
-		cairo_line_to (pCairoContext, ah, r);
-	}
-	else
-		cairo_rel_line_to (pCairoContext, 0, (- fFrameHeight - fLineWidth + fRadius * 2));
-	//\_________________ Coin haut gauche.
-	cairo_arc (pCairoContext,
-		fDockOffsetX, fDockOffsetY + fRadius,
-		fRadius,
-		G_PI, -G_PI/2);
-	
-	// set bg color/pattern
+}
+
+void gldi_menu_invalidate_colors (void)
+{
+	_on_style_changed (NULL, NULL);
+}
+
+static void _get_menu_bg_color (GtkWidget *pWidget)
+{
 	if (! s_bGotMenuStyle)
 	{
 		GtkStyleContext *style = gtk_widget_get_style_context (pWidget);
@@ -218,45 +278,46 @@ static void _rendering_draw_menu (GtkWidget *pWidget, cairo_t *pCairoContext)
 		
 		s_bGotMenuStyle = TRUE;
 	}
-	
-	if (s_menu_bg_pattern)
-		cairo_set_source (pCairoContext, s_menu_bg_pattern);
-	else
-		cairo_set_source_rgba (pCairoContext, s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue, 1.);
-	
-	// draw outline
-	if (l != 0)  // draw the outline with same color as bg, but opaque
+}
+
+static void _get_menu_item_bg_color (GtkWidget *pWidget)
+{
+	if (! s_bGotMenuitemStyle)
 	{
-		cairo_stroke_preserve (pCairoContext);
+		GtkStyleContext *style = gtk_widget_get_style_context (pWidget);
+		gtk_style_context_get_background_color (style, GTK_STATE_PRELIGHT, (GdkRGBA*)&s_menuitem_bg_color);
+		if (s_menuitem_bg_color.alpha == 0)
+		{
+			gtk_style_context_get (style, GTK_STATE_FLAG_PRELIGHT,
+				GTK_STYLE_PROPERTY_BACKGROUND_IMAGE, &s_menuitem_bg_pattern,
+				NULL);
+			if (s_menuitem_bg_pattern == NULL)
+			{
+				s_menuitem_bg_color.red = s_menuitem_bg_color.green = s_menuitem_bg_color.blue = s_menuitem_bg_color.alpha = 1.;
+			}
+		}
+		//g_print ("menuitem style: %.2f;%.2f;%.2f;%.2f\n", s_menuitem_bg_color.red, s_menuitem_bg_color.green, s_menuitem_bg_color.blue, s_menuitem_bg_color.alpha);
+		s_bGotMenuitemStyle = TRUE;
 	}
-	
-	cairo_clip (pCairoContext);  // clip
-	
-	// draw the background
-	if (s_menu_bg_pattern)
+}
+
+static void _get_text_color (void)
+{
+	if (! s_bGotTextStyle)
 	{
-		cairo_paint (pCairoContext);
-	}
-	else
-	{
-		cairo_pattern_t *pGradationPattern;
-		pGradationPattern = cairo_pattern_create_linear (
-			0,
-			0,
-			alloc.width,
-			0);
-		cairo_pattern_set_extend (pGradationPattern, CAIRO_EXTEND_NONE);
-		cairo_pattern_add_color_stop_rgba (pGradationPattern,
-			0.,
-			1., 1., 1.,
-			1.);
-		cairo_pattern_add_color_stop_rgba (pGradationPattern,
-			1.,
-			1., 1., 1.,
-			alpha);  // bg color with horizontal alpha gradation
-		cairo_mask (pCairoContext, pGradationPattern);
+		GtkWidget *pWidget = gtk_label_new (NULL);
+		GtkStyleContext *style = gtk_widget_get_style_context (pWidget);
+		gtk_style_context_get_color (style, GTK_STATE_NORMAL, (GdkRGBA*)&s_text_color);
+		gtk_widget_destroy (pWidget);
+		g_print ("fg_color: %.2f;%.2f;%.2f;%.2f\n", s_text_color.red, s_text_color.green, s_text_color.blue, s_text_color.alpha);
 		
-		cairo_pattern_destroy (pGradationPattern);
+		if ( ! s_pStyle)
+		{
+			s_pStyle = gtk_style_context_new ();
+			g_signal_connect (s_pStyle, "changed", G_CALLBACK(_on_style_changed), NULL);
+		}
+		
+		s_bGotTextStyle = TRUE;
 	}
 }
 
@@ -268,18 +329,196 @@ static gboolean _draw_menu (GtkWidget *pWidget,
 	cairo_dock_erase_cairo_context (pCairoContext);
 	
 	// draw the background/outline and set the clip
-	_rendering_draw_menu (pWidget, pCairoContext);
+	CairoDialogDecorator *pDecorator = cairo_dock_get_dialog_decorator (myDialogsParam.cDecoratorName);
+	if (pDecorator)
+		pDecorator->render_menu (pWidget, pCairoContext);
 	
 	// draw the items
 	cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, 1.0);
 	
 	GtkWidgetClass *parent_class = g_type_class_peek (g_type_parent (G_TYPE_FROM_INSTANCE (pWidget)));
+	parent_class = g_type_class_peek_parent (parent_class);  // skip the direct parent (GtkBin, which does anyway nothing usually), because dbusmenu-gtk draws it
 	parent_class->draw (pWidget, pCairoContext);
 	
 	return TRUE;
 }
 #endif
 
+
+void gldi_menu_set_bg_color (cairo_t *pCairoContext)
+{
+	if (myDialogsParam.bUseSystemColors)
+	{
+		if (s_menu_bg_pattern)
+			cairo_set_source (pCairoContext, s_menu_bg_pattern);
+		else
+			cairo_set_source_rgba (pCairoContext, s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue, 1.);
+	}
+	else
+	{
+		cairo_set_source_rgba (pCairoContext, myDialogsParam.fDialogColor[0], myDialogsParam.fDialogColor[1], myDialogsParam.fDialogColor[2], 1.);
+	}
+}
+
+static void gldi_menuitem_set_bg_color (cairo_t *pCairoContext)
+{
+	if (myDialogsParam.bUseSystemColors)
+	{
+		if (s_menuitem_bg_pattern)
+			cairo_set_source (pCairoContext, s_menuitem_bg_pattern);
+		else
+			cairo_set_source_rgba (pCairoContext, s_menuitem_bg_color.red, s_menuitem_bg_color.green, s_menuitem_bg_color.blue, 1.);
+	}
+	else
+	{
+		double r = myDialogsParam.fDialogColor[0], g = myDialogsParam.fDialogColor[1], b = myDialogsParam.fDialogColor[2];
+		double h, s, l;
+		rgbToHsl (r, g, b, &h, &s, &l);
+		if (l > .5)
+			l -= .2;
+		else
+			l += .2;
+		hslToRgb (h, s, l, &r, &g, &b);
+		
+		cairo_set_source_rgba (pCairoContext, r, g, b, 1.);
+	}
+}
+
+void gldi_menu_set_line_color (cairo_t *pCairoContext)
+{
+	if (myDialogsParam.bUseSystemColors)
+	{
+		if (s_menu_bg_pattern)
+			cairo_set_source (pCairoContext, s_menu_bg_pattern);
+		else
+			cairo_set_source_rgb (pCairoContext, s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue);
+	}
+	else
+	{
+		cairo_set_source_rgba (pCairoContext, myDialogsParam.fLineColor[0], myDialogsParam.fLineColor[1], myDialogsParam.fLineColor[2], myDialogsParam.fLineColor[3]);
+	}
+}
+
+void gldi_dialog_get_text_color (double *pColor)
+{
+	if (myDialogsParam.bUseSystemColors)
+	{
+		if (! s_bGotTextStyle)
+			_get_text_color ();
+		pColor[0] = s_text_color.red / 65535.;
+		pColor[1] = s_text_color.green / 65535.;
+		pColor[2] = s_text_color.blue / 65535.;
+	}
+	else
+	{
+		memcpy (pColor, myDialogsParam.dialogTextDescription.fColorStart, 3*sizeof(double));
+	}
+}
+
+void gldi_menu_paint_bg_color (cairo_t *pCairoContext, int iWidth)
+{
+	// paint bg: 
+	// pattern -> a=1
+	// color -> if c.a == 1: a=.75 else c.a
+	// or
+	// option transparency
+	// a=1: paint
+	// else: mask
+	if (myDialogsParam.bUseSystemColors && s_menu_bg_pattern)
+	{
+		cairo_paint (pCairoContext);
+	}
+	else
+	{
+		cairo_pattern_t *pGradationPattern;
+		pGradationPattern = cairo_pattern_create_linear (
+			0, 0,
+			iWidth, 0);
+		cairo_pattern_set_extend (pGradationPattern, CAIRO_EXTEND_NONE);
+		cairo_pattern_add_color_stop_rgba (pGradationPattern,
+			0.,
+			1., 1., 1., 1.);
+		cairo_pattern_add_color_stop_rgba (pGradationPattern,
+			1.,
+			1., 1., 1., alpha);  // bg color with horizontal alpha gradation
+		cairo_mask (pCairoContext, pGradationPattern);
+		
+		cairo_pattern_destroy (pGradationPattern);
+	}
+}
+
+static void _set_margin_position (GtkWidget *pMenu, GldiMenuParams *pParams)
+{
+	if (pParams == NULL)
+		pParams = g_object_get_data (G_OBJECT (pMenu), "gldi-params");
+	g_return_if_fail (pParams);
+	Icon *pIcon = pParams->pIcon;
+	g_return_if_fail (pIcon);
+	GldiContainer *pContainer = cairo_dock_get_icon_container (pIcon);
+	g_return_if_fail (pContainer);
+	
+	// define where the menu will point
+	int iMarginPosition;  // b, t, r, l
+	int y0 = pContainer->iWindowPositionY + pIcon->fDrawY;
+	if (pContainer->bDirectionUp)
+		y0 += pIcon->fHeight * pIcon->fScale - pIcon->image.iHeight;  // the icon might not be maximised yet
+	int Hs = (pContainer->bIsHorizontal ? gldi_desktop_get_height() : gldi_desktop_get_width());
+	if (pContainer->bIsHorizontal)
+	{
+		iMarginPosition = (y0 > Hs/2 ? 0 : 1);
+	}
+	else
+	{
+		iMarginPosition = (y0 > Hs/2 ? 2 : 3);
+	}
+	
+	// store the result, and allocate some space to draw the arrow
+	if (iMarginPosition != pParams->iMarginPosition)  // margin position is now defined or has changed -> update it on the menu
+	{
+		g_print ("margin position: %d -> %d\n", pParams->iMarginPosition, iMarginPosition);
+		// store the value
+		pParams->iMarginPosition = iMarginPosition;
+		
+		// get/add a css (gtk_widget_set_margin_xxx doesn't work as expected :-/)
+		GtkCssProvider *cssProvider = pParams->cssProvider;
+		if (cssProvider)  // unfortunately, GTK doesn't update correctly a css provider if we load some new data inside (the previous padding values are kept, along with the new ones, although 'gtk_css_provider_load_from_data' is supposed to "clear any previously loaded information"), so we have to remove/add it :-/
+		{
+			gtk_style_context_remove_provider (gtk_widget_get_style_context(pMenu), GTK_STYLE_PROVIDER(cssProvider));
+			g_object_unref (cssProvider);
+			cssProvider = NULL;
+			pParams->cssProvider = NULL;
+		}
+		if (cssProvider == NULL)
+		{
+			cssProvider = gtk_css_provider_new ();
+			gtk_style_context_add_provider (gtk_widget_get_style_context(pMenu), GTK_STYLE_PROVIDER(cssProvider), GTK_STYLE_PROVIDER_PRIORITY_USER);  // this adds a reference on the provider, plus the one we own
+			pParams->cssProvider = cssProvider;
+			g_print (" + css\n");
+		}
+		
+		// load the new padding rule into the css
+		gchar *css = NULL;
+		int ah = pParams->iArrowHeight;
+		int b=0, t=0, r=0, l=0;
+		switch (iMarginPosition)
+		{
+			case 0: b = ah; break;
+			case 1: t = ah; break;
+			case 2: r = ah; break;
+			case 3: l = ah; break;
+			default: break;
+		}
+		css = g_strdup_printf ("GtkMenu { \
+			padding-bottom: %dpx; \
+			padding-top: %dpx; \
+			padding-right: %dpx; \
+			padding-left: %dpx; \
+		}", b, t, r, l);  // we must define all the paddings, else if the margin position changes, clearing the css won't make the padding disappear :-/
+		gtk_css_provider_load_from_data (cssProvider,
+			css, -1, NULL);
+		g_free (css);
+	}
+}
 
 GtkWidget *gldi_menu_new (G_GNUC_UNUSED Icon *pIcon)
 {
@@ -292,24 +531,39 @@ GtkWidget *gldi_menu_new (G_GNUC_UNUSED Icon *pIcon)
 
 static gboolean _on_icon_destroyed (GtkWidget *pMenu, G_GNUC_UNUSED Icon *pIcon)
 {
-	g_object_set_data (G_OBJECT (pMenu), "gldi-icon", NULL);
+	GldiMenuParams *pParams = g_object_get_data (G_OBJECT (pMenu), "gldi-params");
+	if (pParams)
+		pParams->pIcon = NULL;
 	return GLDI_NOTIFICATION_LET_PASS;
 }
 
 static void _on_menu_destroyed (GtkWidget *pMenu, G_GNUC_UNUSED gpointer data)
 {
-	Icon *pIcon = g_object_get_data (G_OBJECT(pMenu), "gldi-icon");
+	GldiMenuParams *pParams = g_object_get_data (G_OBJECT (pMenu), "gldi-params");
+	if (!pParams)
+		return;
+	Icon *pIcon = pParams->pIcon;
 	if (pIcon)
 		gldi_object_remove_notification (pIcon,
 			NOTIFICATION_DESTROY,
 			(GldiNotificationFunc) _on_icon_destroyed,
 			NULL);
+	#if GTK_MAJOR_VERSION > 2
+	if (pParams->cssProvider)
+	{
+		g_object_unref (pParams->cssProvider);  /// need to remove the provider from the style context ?... probably not
+	}
+	g_free (pParams);
+	#endif
 }
 
 #if GTK_MAJOR_VERSION > 2
 static void _on_menu_deactivated (GtkMenuShell *pMenu, G_GNUC_UNUSED gpointer data)
 {
-	Icon *pIcon = g_object_get_data (G_OBJECT(pMenu), "gldi-icon");
+	GldiMenuParams *pParams = g_object_get_data (G_OBJECT (pMenu), "gldi-params");
+	if (!pParams)
+		return;
+	Icon *pIcon = pParams->pIcon;
 	if (pIcon->iHideLabel > 0)
 	{
 		pIcon->iHideLabel --;
@@ -320,7 +574,7 @@ static void _on_menu_deactivated (GtkMenuShell *pMenu, G_GNUC_UNUSED gpointer da
 }
 #endif
 
-void gldi_menu_init (G_GNUC_UNUSED GtkWidget *pMenu, G_GNUC_UNUSED Icon *pIcon)
+void gldi_menu_init (G_GNUC_UNUSED GtkWidget *pMenu, Icon *pIcon)
 {
 	#if (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
 	gtk_menu_set_reserve_toggle_size (GTK_MENU(pMenu), TRUE);
@@ -335,72 +589,82 @@ void gldi_menu_init (G_GNUC_UNUSED GtkWidget *pMenu, G_GNUC_UNUSED Icon *pIcon)
 		"draw",
 		G_CALLBACK (_draw_menu),
 		pMenu);
+	
+	_get_menu_bg_color (pMenu);
+	
+	_init_menu_style ();
 	#endif
 	
+	// set params
+	GldiMenuParams *pParams = g_new0 (GldiMenuParams, 1);
+	g_object_set_data (G_OBJECT (pMenu), "gldi-params", pParams);
+	g_signal_connect (G_OBJECT (pMenu),
+		"destroy",
+		G_CALLBACK (_on_menu_destroyed),
+		NULL);
+		
+	// init a main menu
 	if (pIcon != NULL)  // the menu points on an icon
 	{
+		// link it to the icon
+		g_object_set_data (G_OBJECT (pMenu), "gldi-icon", pIcon);
+		pParams->pIcon = pIcon;
+		gldi_object_register_notification (pIcon,
+			NOTIFICATION_DESTROY,
+			(GldiNotificationFunc) _on_icon_destroyed,
+			GLDI_RUN_AFTER, pMenu);  // when the icon is destroyed, unlink the menu from it; when the menu is destroyed, the above notification will be unregistered on the icon in the "destroy" callback
+		
 		GldiContainer *pContainer = cairo_dock_get_icon_container (pIcon);
 		if (pContainer != NULL)
 		{
 			#if GTK_MAJOR_VERSION > 2
 			// init the rendering --> align, margin-height
-			_rendering_init_menu (pMenu);
+			CairoDialogDecorator *pDecorator = cairo_dock_get_dialog_decorator (myDialogsParam.cDecoratorName);
+			if (pDecorator)
+				pDecorator->setup_menu (pMenu);
 			
 			// define where the menu will point, and allocate some space to draw the arrow
-			int iMarginPosition;  // b, t, r, l
-			int y0 = pContainer->iWindowPositionY + pIcon->fDrawY;
-			if (pContainer->bDirectionUp)
-				y0 += pIcon->fHeight * pIcon->fScale - pIcon->image.iHeight;  // the icon might not be maximised yet
-			int Hs = (pContainer->bIsHorizontal ? gldi_desktop_get_height() : gldi_desktop_get_width());
-			if (pContainer->bIsHorizontal)
-			{
-				iMarginPosition = (y0 > Hs/2 ? 0 : 1);
-			}
-			else
-			{
-				iMarginPosition = (y0 > Hs/2 ? 2 : 3);
-			}
-			g_object_set_data (G_OBJECT (pMenu), "gldi-margin-position", GINT_TO_POINTER (iMarginPosition));
+			pParams->iMarginPosition = -1;
+			_set_margin_position (pMenu, pParams);
 			
+			// show the icon's label back when the menu is hidden
 			g_signal_connect (G_OBJECT (pMenu),
 				"deactivate",
 				G_CALLBACK (_on_menu_deactivated),
-				NULL);  // show the icon's label back when the menu is hidden
+				NULL);
 			
-			GtkCssProvider *cssProvider = gtk_css_provider_new ();
 			gchar *css = NULL;
-			switch (iMarginPosition)
+			const gchar *orientation = "";
+			int ah = pParams->iArrowHeight;
+			switch (pParams->iMarginPosition)
 			{
-				case 0: css = g_strdup_printf ("GtkMenu { padding-bottom: %dpx }", ah); break;
-				case 1: css = g_strdup_printf ("GtkMenu { padding-top: %dpx }", ah); break;
-				case 2: css = g_strdup_printf ("GtkMenu { padding-right: %dpx }", ah); break;
-				case 3: css = g_strdup_printf ("GtkMenu { padding-left: %dpx }", ah); break;
+				case 0: orientation = "bottom";  break;
+				case 1: orientation = "top";  break;
+				case 2: orientation = "right";  break;
+				case 3: orientation = "left";  break;
 				default: break;
 			}
+			
+			GtkCssProvider *cssProvider = gtk_css_provider_new ();
+			css = g_strdup_printf ("GtkMenu { \
+				padding-%s: %dpx; \
+			}", orientation, ah);
 			gtk_css_provider_load_from_data (cssProvider,
 				css, -1, NULL);
 			gtk_style_context_add_provider (gtk_widget_get_style_context(pMenu), GTK_STYLE_PROVIDER(cssProvider), GTK_STYLE_PROVIDER_PRIORITY_USER);
 			g_free (css);
 			#endif
 		}
-		
-		// link it to the icon
-		g_object_set_data (G_OBJECT (pMenu), "gldi-icon", pIcon);
-		gldi_object_register_notification (pIcon,
-			NOTIFICATION_DESTROY,
-			(GldiNotificationFunc) _on_icon_destroyed,
-			GLDI_RUN_AFTER, pMenu);  // when the icon is destroyed, unlink the menu from it
-		g_signal_connect (G_OBJECT (pMenu),
-			"destroy",
-			G_CALLBACK (_on_menu_destroyed),
-			NULL);  // when the menu is destroyed, unregister the above notification on the icon
 	}
 }
 
 static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push_in, G_GNUC_UNUSED gpointer data)
 {
 	*push_in = FALSE;
-	Icon *pIcon = g_object_get_data (G_OBJECT(menu), "gldi-icon");
+	GldiMenuParams *pParams = g_object_get_data (G_OBJECT(menu), "gldi-params");
+	g_return_if_fail (pParams != NULL);
+	
+	Icon *pIcon = pParams->pIcon;
 	GldiContainer *pContainer = (pIcon ? cairo_dock_get_icon_container (pIcon) : NULL);
 	int x0 = pContainer->iWindowPositionX + pIcon->fDrawX;
 	int y0 = pContainer->iWindowPositionY + pIcon->fDrawY;
@@ -418,12 +682,14 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	h = requisition.height;
 	
 	/// TODO: use iMarginPosition...
+	double fAlign = pParams->fAlign;
+	int r = pParams->iRadius;
+	int ah = pParams->iArrowHeight;
 	int iAimedX, iAimedY;
 	int Hs = (pContainer->bIsHorizontal ? gldi_desktop_get_height() : gldi_desktop_get_width());
 	#if GTK_MAJOR_VERSION > 2
 	int w_, h_;
 	#endif
-	//g_print ("%d;%d %dx%d\n", x0, y0, w, h);
 	if (pContainer->bIsHorizontal)
 	{
 		iAimedX = x0 + pIcon->image.iWidth/2;
@@ -466,12 +732,48 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 			iAimedX = y0 + pIcon->image.iHeight;
 		}
 	}
-	g_object_set_data (G_OBJECT(menu), "gldi-aimed-x", GINT_TO_POINTER(iAimedX));
-	g_object_set_data (G_OBJECT(menu), "gldi-aimed-y", GINT_TO_POINTER(iAimedY));
+	pParams->iAimedX = iAimedX;
+	pParams->iAimedY = iAimedY;
 }
+
+static void _init_menu_item (GtkWidget *pMenuItem)
+{
+	int index = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pMenuItem), "gldi-text-color"));
+	if (index == 0)
+	{
+		// the following code is to draw the menu item; this is more like a proof of concept
+		#if GTK_MAJOR_VERSION > 2
+		g_signal_connect (G_OBJECT (pMenuItem),
+			"draw",
+			G_CALLBACK (_draw_menu_item),
+			NULL);
+		g_signal_connect (G_OBJECT (pMenuItem),
+			"select",
+			G_CALLBACK (_on_select_menu_item),
+			NULL);
+		g_signal_connect (G_OBJECT (pMenuItem),
+			"deselect",
+			G_CALLBACK (_on_deselect_menu_item),
+			NULL);
+		g_signal_connect (G_OBJECT (pMenuItem),
+			"destroy",
+			G_CALLBACK (_on_destroy_menu_item),
+			NULL);
+		#endif
+		g_object_set_data (G_OBJECT (pMenuItem), "gldi-text-color", GINT_TO_POINTER(1));
+	}
+	
+	GtkWidget *pSubMenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (pMenuItem));
+	if (pSubMenu != NULL)
+		gtk_container_forall (GTK_CONTAINER (pSubMenu), (GtkCallback) _init_menu_item, NULL);
+}
+
 static void _popup_menu (GtkWidget *menu, guint32 time)
 {
-	Icon *pIcon = g_object_get_data (G_OBJECT(menu), "gldi-icon");
+	GldiMenuParams *pParams = g_object_get_data (G_OBJECT(menu), "gldi-params");
+	g_return_if_fail (pParams != NULL);
+	
+	Icon *pIcon = pParams->pIcon;
 	GldiContainer *pContainer = (pIcon ? cairo_dock_get_icon_container (pIcon) : NULL);
 	
 	// setup the menu for the container
@@ -479,15 +781,26 @@ static void _popup_menu (GtkWidget *menu, guint32 time)
 		pContainer->iface.setup_menu (pContainer, pIcon, menu);
 	
 	#if GTK_MAJOR_VERSION > 2
-	if (pIcon && pContainer)  // hide the icon's label, since menus are placed right above the icon (and therefore, the arrow overlaps the label, which makes it hard to see if both colors are similar).
 	{
+		_init_menu_style ();
+	}
+	
+	if (pIcon && pContainer)
+	{
+		// hide the icon's label, since menus are placed right above the icon (and therefore, the arrow overlaps the label, which makes it hard to see if both colors are similar).
 		if (pIcon->iHideLabel == 0 && pContainer)
 			gtk_widget_queue_draw (pContainer->pWidget);
 		pIcon->iHideLabel ++;
+		
+		// ensure margin position is still correct
+		_set_margin_position (menu, pParams);
 	}
 	#endif
 	
 	gtk_widget_show_all (GTK_WIDGET (menu));
+	
+	// to draw the items ourselves
+	///gtk_container_forall (GTK_CONTAINER (menu), (GtkCallback) _init_menu_item, NULL);
 	
 	gtk_menu_popup (GTK_MENU (menu),
 		NULL,
@@ -572,47 +885,26 @@ static gboolean _draw_menu_item (GtkWidget *widget,
 	GtkWidget *child;
 	gint x, y, w, h, width, height;
 	guint border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-
+	
+	child = gtk_bin_get_child (GTK_BIN (widget));
+	
 	//state = gtk_widget_get_state_flags (widget);
 	context = gtk_widget_get_style_context (widget);
 	width = gtk_widget_get_allocated_width (widget);
 	height = gtk_widget_get_allocated_height (widget);
 	
-	if (! s_bGotMenuitemStyle)
-	{
-		GtkStyleContext *style = context;
-		gtk_style_context_get_background_color (style, GTK_STATE_PRELIGHT, (GdkRGBA*)&s_menuitem_bg_color);
-		if (s_menuitem_bg_color.alpha == 0)
-		{
-			gtk_style_context_get (style, GTK_STATE_FLAG_PRELIGHT,
-				GTK_STYLE_PROPERTY_BACKGROUND_IMAGE, &s_menuitem_bg_pattern,
-				NULL);
-			if (s_menuitem_bg_pattern == NULL)
-			{
-				s_menuitem_bg_color.red = s_menuitem_bg_color.green = s_menuitem_bg_color.blue = s_menuitem_bg_color.alpha = 1.;
-			}
-		}
-		//g_print ("menuitem style: %.2f;%.2f;%.2f;%.2f\n", s_menuitem_bg_color.red, s_menuitem_bg_color.green, s_menuitem_bg_color.blue, s_menuitem_bg_color.alpha);
-		s_bGotMenuitemStyle = TRUE;
-	}
+	_get_menu_item_bg_color (widget);
 	
 	x = border_width;
 	y = border_width;
 	w = width - border_width * 2;
 	h = height - border_width * 2;
 	
-	child = gtk_bin_get_child (GTK_BIN (widget));
-	
 	// draw the background
 	int n = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (widget), "gldi-step"));
-	if (n != 0)  // so we only draw the barkground if the item is or was selected; I don't think any theme has a normal bg color for menu-items, usually this color is fully transparent.
+	if (n != 0)  // so we only draw the barkground if the item is or was selected
 	{
-		GdkRGBA bg_color;
-		
 		double a = (double)n/N;
-		
-		bg_color = s_menuitem_bg_color;
-		bg_color.alpha *= a;
 		
 		cairo_save (cr);
 		
@@ -620,18 +912,8 @@ static gboolean _draw_menu_item (GtkWidget *widget,
 		cairo_dock_draw_rounded_rectangle (cr, r, l, w - 2*r, h);
 		cairo_clip (cr);
 		
-		//g_print ("%.2f;%.2f;%.2f;%.2f\n", bg_color1.red, bg_color1.green, bg_color1.blue, bg_color1.alpha);
-		//g_print ("%.2f;%.2f;%.2f;%.2f\n", bg_color2.red, bg_color2.green, bg_color2.blue, bg_color2.alpha);
-		if (bg_color.alpha != 0)
-		{
-			cairo_set_source_rgba (cr, bg_color.red, bg_color.green, bg_color.blue, bg_color.alpha);
-			cairo_paint (cr);
-		}
-		else if (s_menuitem_bg_pattern)
-		{
-			cairo_set_source (cr, s_menuitem_bg_pattern);
-			cairo_paint_with_alpha (cr, a);
-		}
+		gldi_menuitem_set_bg_color (cr);
+		cairo_paint_with_alpha (cr, a);
 		
 		cairo_restore (cr);
 	}
@@ -661,14 +943,39 @@ static gboolean _draw_menu_item (GtkWidget *widget,
 		arrow_y = y + (h - arrow_size) / 2;
 
 		gtk_render_arrow (context, cr, angle, arrow_x, arrow_y, arrow_size);
-	}  // we don't draw separator items
+	}
+	else if (!child)  // separator
+	{
+		gboolean wide_separators;
+		gint     separator_height;
+		GtkBorder padding;
+		
+		g_print ("SEPARATOR\n");
+		gtk_style_context_get_padding (context, 0, &padding);
+		gtk_widget_style_get (widget,
+			"wide-separators",    &wide_separators,
+			"separator-height",   &separator_height,
+			NULL);
+		if (wide_separators)
+			gtk_render_frame (context, cr,
+				x + padding.left,
+				y + padding.top,
+				w - padding.left - padding.right,
+				separator_height);
+		else
+			gtk_render_line (context, cr,
+				x + padding.left,
+				y + padding.top,
+				x + w - padding.right - 1,
+				y + padding.top);
+	}
 	
 	// draw the item's content
 	GtkWidgetClass *parent_class = g_type_class_peek (g_type_parent (G_TYPE_FROM_INSTANCE (widget)));
 	parent_class = g_type_class_peek_parent (parent_class);
 	
 	cairo_set_source_rgba (cr, 1, 1, 1, 1);
-
+	
 	parent_class->draw (widget, cr);
 	return TRUE;  // intercept
 }
@@ -680,7 +987,7 @@ static gboolean _update_menu_item (GtkWidget* pMenuItem, G_GNUC_UNUSED gpointer 
 	
 	if (bInside)
 	{
-		if (n < N-1)
+		if (n < N)
 			n ++;
 	}
 	else
@@ -699,8 +1006,8 @@ static gboolean _update_menu_item (GtkWidget* pMenuItem, G_GNUC_UNUSED gpointer 
 		{
 			g_source_remove (iSidAnimation);
 			g_object_set_data (G_OBJECT(pMenuItem), "gldi-animation", NULL);
-			return FALSE;
 		}
+		return FALSE;
 	}
 	return TRUE;
 }
@@ -799,26 +1106,6 @@ GtkWidget *gldi_menu_item_new_full (const gchar *cLabel, const gchar *cImage, gb
 #endif
 	}
 	gtk_widget_show_all (pMenuItem);  // show immediately, so that the menu-item is realized when the menu is popped up
-	
-	// the following code is to draw the menu item; this is more like a proof of concept
-	#if GTK_MAJOR_VERSION > 2
-	g_signal_connect (G_OBJECT (pMenuItem),
-		"draw",
-		G_CALLBACK (_draw_menu_item),
-		NULL);
-	g_signal_connect (G_OBJECT (pMenuItem),
-		"select",
-		G_CALLBACK (_on_select_menu_item),
-		NULL);
-	g_signal_connect (G_OBJECT (pMenuItem),
-		"deselect",
-		G_CALLBACK (_on_deselect_menu_item),
-		NULL);
-	g_signal_connect (G_OBJECT (pMenuItem),
-		"destroy",
-		G_CALLBACK (_on_destroy_menu_item),
-		NULL);
-	#endif
 	
 	return pMenuItem;
 }

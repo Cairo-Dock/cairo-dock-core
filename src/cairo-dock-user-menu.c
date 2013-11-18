@@ -1608,18 +1608,18 @@ static gboolean _on_press_menu_item (GtkWidget* pWidget, GdkEventButton *pEvent,
 		if (x >= xb && x < (xb + alloc.width)
 		&& y >= yb && y < (yb + alloc.height))
 		{
-			gtk_widget_set_state (pButton, GTK_STATE_ACTIVE);
-			gtk_widget_set_state (
+			gtk_widget_set_state_flags (pButton, GTK_STATE_FLAG_ACTIVE, FALSE);
+			gtk_widget_set_state_flags (
 				gtk_bin_get_child(GTK_BIN(pButton)),
-				GTK_STATE_ACTIVE);
+				GTK_STATE_FLAG_ACTIVE, FALSE);
 			gtk_button_clicked (GTK_BUTTON (pButton));
 		}
 		else
 		{
-			gtk_widget_set_state (pButton, GTK_STATE_NORMAL);
-			gtk_widget_set_state (
+			gtk_widget_set_state_flags (pButton, GTK_STATE_FLAG_NORMAL, FALSE);
+			gtk_widget_set_state_flags (
 				gtk_bin_get_child(GTK_BIN(pButton)),
-				GTK_STATE_NORMAL);
+				GTK_STATE_FLAG_NORMAL, FALSE);
 		}
 	}
 	g_list_free (children);

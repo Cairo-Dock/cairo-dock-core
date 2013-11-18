@@ -28,6 +28,36 @@ G_BEGIN_DECLS
 *@file cairo-dock-menu.h This class defines the Menu. They are classical menus, but with a custom looking.
 */
 
+struct _GldiMenuParams {
+	Icon *pIcon;
+	gint iMarginPosition;
+	gint iAimedX, iAimedY;
+	gdouble fAlign;
+	gint iRadius;  // actually it's more an horizontal padding/offset
+	gint iArrowHeight;
+	#if GTK_MAJOR_VERSION > 2
+	GtkCssProvider *cssProvider;
+	#endif
+};
+typedef struct _GldiMenuParams GldiMenuParams;
+
+struct _GldiMenuItemParams {
+	guint iSidAnimation;
+	gint iStep;
+	gboolean bInside;
+};
+
+
+void gldi_menu_invalidate_colors (void);
+
+void gldi_menu_set_bg_color (cairo_t *pCairoContext);
+
+void gldi_menu_set_line_color (cairo_t *pCairoContext);
+
+void gldi_dialog_get_text_color (double *pColor);
+
+void gldi_menu_paint_bg_color (cairo_t *pCairoContext, int iWidth);
+
 /** Creates a new menu that will point on a given Icon. If the Icon is NULL, it will be placed under the mouse.
  * @param pIcon the icon, or NULL
  * @return the new menu.
