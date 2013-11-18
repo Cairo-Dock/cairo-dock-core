@@ -62,11 +62,15 @@ struct _CairoDialogRenderer {
 typedef void (* CairoDialogSetDecorationSizeFunc) (CairoDialog *pDialog);
 typedef void (* CairoDialogRenderDecorationFunc) (cairo_t *pCairoContext, CairoDialog *pDialog);
 typedef void (* CairoDialogGLRenderDecorationFunc) (CairoDialog *pDialog);
+typedef void (* CairoMenuSetupFunc) (GtkWidget *pMenu);
+typedef void (* CairoMenuRenderFunc) (GtkWidget *pMenu, cairo_t *pCairoContext);
 /// Definition of a Dialog decorator. It draws the frame of the Dialog.
 struct _CairoDialogDecorator {
-	CairoDialogSetDecorationSizeFunc 		set_size;
-	CairoDialogRenderDecorationFunc 		render;
-	CairoDialogGLRenderDecorationFunc 		render_opengl;
+	CairoDialogSetDecorationSizeFunc    set_size;
+	CairoDialogRenderDecorationFunc     render;
+	CairoDialogGLRenderDecorationFunc   render_opengl;
+	CairoMenuSetupFunc                  setup_menu;
+	CairoMenuRenderFunc                 render_menu;
 	const gchar *cDisplayedName;
 };
 

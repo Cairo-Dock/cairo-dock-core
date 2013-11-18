@@ -26,6 +26,7 @@
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-keyfile-utilities.h"  // cairo_dock_open_key_file
 #include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-dock-manager.h"  // myDockObjectMgr
@@ -35,6 +36,7 @@
 #include "cairo-dock-animations.h"  // for cairo_dock_is_hidden
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-dialog-factory.h"
+#include "cairo-dock-menu.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-dialog-manager.h"
 
@@ -47,6 +49,7 @@ GldiObjectManager myDialogObjectMgr;
 extern CairoDock *g_pMainDock;
 extern gboolean g_bUseOpenGL;
 extern CairoDockHidingEffect *g_pHidingBackend;  // cairo_dock_is_hidden
+extern gchar *g_cCurrentThemePath;
 
 // private
 static GSList *s_pDialogList = NULL;
@@ -293,7 +296,7 @@ static void _cairo_dock_draw_inside_dialog_opengl (CairoDialog *pDialog, double 
 	double x, y;
 	if (pDialog->iIconTexture != 0)
 	{
-		x = pDialog->iLeftMargin;
+		x = pDialog->iLeftMargin;  /// TODO: use iconoffset here, and add a padding for placement only...
 		y = (pDialog->container.bDirectionUp ? pDialog->iTopMargin : pDialog->container.iHeight - (pDialog->iTopMargin + pDialog->iBubbleHeight));
 		
 		glBindTexture (GL_TEXTURE_2D, pDialog->iIconTexture);
@@ -499,9 +502,9 @@ static void _cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 	if (iLimitXRight - iLimitXLeft >= MIN (gldi_desktop_get_width(), iWidth) || !bDialogOnOurWay)  // there is enough room to place the dialog.
 	{
 		if (pDialog->bRight)
-			pDialog->iComputedPositionX = MAX (0, MIN (pDialog->iAimedX - pDialog->fAlign * iWidth, iLimitXRight - iWidth));
+			pDialog->iComputedPositionX = MAX (0, MIN (pDialog->iAimedX - pDialog->fAlign * (iWidth - pDialog->iIconOffsetX) - pDialog->iIconOffsetX, iLimitXRight - iWidth));
 		else
-			pDialog->iComputedPositionX = MIN (gldi_desktop_get_width() - iWidth, MAX (pDialog->iAimedX - (1. - pDialog->fAlign) * iWidth, iLimitXLeft));
+			pDialog->iComputedPositionX = MIN (gldi_desktop_get_width() - iWidth, MAX (pDialog->iAimedX - (1. - pDialog->fAlign) * (iWidth - pDialog->iIconOffsetX) - pDialog->iIconOffsetX, iLimitXLeft));
 		if (pDialog->container.bDirectionUp && pDialog->iComputedPositionY < 0)
 			pDialog->iComputedPositionY = 0;
 		else if (!pDialog->container.bDirectionUp && pDialog->iComputedPositionY + iHeight > gldi_desktop_get_height())
@@ -861,12 +864,50 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDialogsParam *pDialogs)
 	
 	pDialogs->cButtonOkImage = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "button_ok image", &bFlushConfFileNeeded, NULL, NULL, NULL);
 	pDialogs->cButtonCancelImage = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "button_cancel image", &bFlushConfFileNeeded, NULL, NULL, NULL);
-
+	
 	cairo_dock_get_size_key_value_helper (pKeyFile, "Dialogs", "button ", bFlushConfFileNeeded, pDialogs->iDialogButtonWidth, pDialogs->iDialogButtonHeight);
-
+	
 	double couleur_bulle[4] = {1.0, 1.0, 1.0, 0.7};
 	cairo_dock_get_double_list_key_value (pKeyFile, "Dialogs", "background color", &bFlushConfFileNeeded, pDialogs->fDialogColor, 4, couleur_bulle, NULL, NULL);
 	pDialogs->iDialogIconSize = MAX (16, cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "icon size", &bFlushConfFileNeeded, 48, NULL, NULL));
+	
+	pDialogs->cDecoratorName = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "decorator", &bFlushConfFileNeeded, "comics", NULL, NULL);
+	
+	if (! g_key_file_has_key (pKeyFile, "Dialogs", "line color", NULL))  // old params (< 3.4)
+	{
+		// get the old params from the Dialog module's config
+		gchar *cRenderingConfFile = g_strdup_printf ("%s/plug-ins/dialog-rendering/dialog-rendering.conf", g_cCurrentThemePath);
+		GKeyFile *keyfile = cairo_dock_open_key_file (cRenderingConfFile);
+		g_free (cRenderingConfFile);
+		
+		gchar *cRenderer = g_strdup (pDialogs->cDecoratorName);
+		if (cRenderer)
+		{
+			cRenderer[0] = g_ascii_toupper (cRenderer[0]);
+			
+			cairo_dock_get_double_list_key_value (keyfile, cRenderer, "line color", &bFlushConfFileNeeded, pDialogs->fLineColor, 4, NULL, NULL, NULL);
+			g_key_file_set_double_list (pKeyFile, "Dialogs", "line color", pDialogs->fLineColor, 4);
+			
+			pDialogs->iLineWidth = g_key_file_get_integer (keyfile, cRenderer, "border", NULL);
+			g_key_file_set_integer (pKeyFile, "Dialogs", "linewidth", pDialogs->iLineWidth);
+			
+			pDialogs->iCornerRadius = g_key_file_get_integer (keyfile, cRenderer, "corner", NULL);
+			g_key_file_set_integer (pKeyFile, "Dialogs", "corner", pDialogs->iCornerRadius);
+			
+			g_free (cRenderer);
+		}
+		g_key_file_free (keyfile);
+		
+		bFlushConfFileNeeded = TRUE;
+	}
+	else
+	{
+		pDialogs->iCornerRadius = g_key_file_get_integer (pKeyFile, "Dialogs", "corner", NULL);
+		pDialogs->iLineWidth = g_key_file_get_integer (pKeyFile, "Dialogs", "linewidth", NULL);
+		cairo_dock_get_double_list_key_value (pKeyFile, "Dialogs", "line color", &bFlushConfFileNeeded, pDialogs->fLineColor, 4, NULL, NULL, NULL);
+	}
+	
+	pDialogs->bUseSystemColors = (cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "colors", &bFlushConfFileNeeded, 1, NULL, NULL) == 0);
 	
 	gboolean bCustomFont = cairo_dock_get_boolean_key_value (pKeyFile, "Dialogs", "custom", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	gchar *cFontDescription = (bCustomFont ? cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "message police", &bFlushConfFileNeeded, NULL, "Icons", NULL) : NULL);
@@ -912,11 +953,12 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDialogsParam *pDialogs)
 	pDialogs->dialogTextDescription.iMargin = 0;
 	
 	double couleur_dtext[3] = {0., 0., 0.};
-	cairo_dock_get_double_list_key_value (pKeyFile, "Dialogs", "text color", &bFlushConfFileNeeded, pDialogs->dialogTextDescription.fColorStart, 3, couleur_dtext, NULL, NULL);
+	if (pDialogs->bUseSystemColors)
+		gldi_dialog_get_text_color (pDialogs->dialogTextDescription.fColorStart);
+	else
+		cairo_dock_get_double_list_key_value (pKeyFile, "Dialogs", "text color", &bFlushConfFileNeeded, pDialogs->dialogTextDescription.fColorStart, 3, couleur_dtext, NULL, NULL);
 	memcpy (&pDialogs->dialogTextDescription.fColorStop, &pDialogs->dialogTextDescription.fColorStart, 3*sizeof (double));
 	
-	pDialogs->cDecoratorName = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "decorator", &bFlushConfFileNeeded, "comics", NULL, NULL);
-
 	return bFlushConfFileNeeded;
 }
 
@@ -945,6 +987,7 @@ static void reload (CairoDialogsParam *pPrevDialogs, CairoDialogsParam *pDialogs
 		_unload_dialog_buttons ();
 		_load_dialog_buttons (pDialogs->cButtonOkImage, pDialogs->cButtonCancelImage);
 	}
+	gldi_menu_invalidate_colors ();
 }
 
   //////////////
@@ -981,6 +1024,10 @@ static void init_object (GldiObject *obj, gpointer attr)
 	CairoDialog *pDialog = (CairoDialog*)obj;
 	CairoDialogAttr *pAttribute = (CairoDialogAttr*)attr;
 	
+	//\________________ set up its orientation (do it now, as we need bDirectionUp to place the internal widgets)
+	pDialog->pIcon = pAttribute->pIcon;
+	_set_dialog_orientation (pDialog, pAttribute->pContainer);  // renseigne aussi bDirectionUp, bIsHorizontal, et iHeight.
+	
 	gldi_dialog_init_internals (pDialog, pAttribute);
 	
 	//\________________ Interactive dialogs are set modal, to be fixed.
@@ -1005,9 +1052,6 @@ static void init_object (GldiObject *obj, gpointer attr)
 	//\________________ load the button images
 	if (pDialog->iNbButtons != 0 && (s_pButtonOkSurface == NULL || s_pButtonCancelSurface == NULL))
 		_load_dialog_buttons (myDialogsParam.cButtonOkImage, myDialogsParam.cButtonCancelImage);
-	
-	//\________________ On definit son orientation.
-	_set_dialog_orientation (pDialog, pContainer);  // renseigne aussi bDirectionUp, bIsHorizontal, et iHeight.
 	
 	//\________________ on le place parmi les autres.
 	_place_dialog (pDialog, pContainer);  // renseigne aussi bDirectionUp, bIsHorizontal, et iHeight.

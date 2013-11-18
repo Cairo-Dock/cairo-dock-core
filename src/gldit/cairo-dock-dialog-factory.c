@@ -286,6 +286,7 @@ static gboolean on_button_press_widget (G_GNUC_UNUSED GtkWidget *widget,
 static GtkWidget *_cairo_dock_add_dialog_internal_box (CairoDialog *pDialog, int iWidth, int iHeight, gboolean bCanResize)
 {
 	GtkWidget *pBox = _gtk_hbox_new (0);
+	g_print ("%s (%dx%d)\n", __func__, iWidth, iHeight);
 	if (iWidth != 0 && iHeight != 0)
 		g_object_set (pBox, "height-request", iHeight, "width-request", iWidth, NULL);
 	else if (iWidth != 0)
@@ -443,6 +444,8 @@ void gldi_dialog_init_internals (CairoDialog *pDialog, CairoDialogAttr *pAttribu
 		#endif
 		pDialog->iInteractiveWidth = requisition.width;
 		pDialog->iInteractiveHeight = requisition.height;
+		gldi_dialog_set_widget_text_color (pDialog->pInteractiveWidget);
+		gldi_dialog_set_widget_bg_color (pDialog->pInteractiveWidget);
 	}
 	
 	//\________________ load the buttons
@@ -812,38 +815,60 @@ GtkWidget *gldi_dialog_steal_interactive_widget (CairoDialog *pDialog)
 
 void gldi_dialog_set_widget_text_color (GtkWidget *pWidget)
 {
-	#if (GTK_MAJOR_VERSION < 3)
-	static GdkColor color;
-	color.red = myDialogsParam.dialogTextDescription.fColorStart[0] * 65535;
-	color.green = myDialogsParam.dialogTextDescription.fColorStart[1] * 65535;
-	color.blue = myDialogsParam.dialogTextDescription.fColorStart[2] * 65535;
-	gtk_widget_modify_fg (pWidget, GTK_STATE_NORMAL, &color);
-	#else
-	static GdkRGBA color;
-	color.red = myDialogsParam.dialogTextDescription.fColorStart[0];
-	color.green = myDialogsParam.dialogTextDescription.fColorStart[1];
-	color.blue = myDialogsParam.dialogTextDescription.fColorStart[2];
-	color.alpha = 1.;
-	gtk_widget_override_color (pWidget, GTK_STATE_NORMAL, &color);
-	#endif
+	if (myDialogsParam.bUseSystemColors)
+	{
+		#if (GTK_MAJOR_VERSION < 3)
+		gtk_widget_modify_fg (pWidget, GTK_STATE_NORMAL, NULL);  // NULL = undo previous modifications
+		#else
+		gtk_widget_override_color (pWidget, GTK_STATE_NORMAL, NULL);  // NULL = undo previous modifications
+		#endif
+	}
+	else
+	{
+		#if (GTK_MAJOR_VERSION < 3)
+		static GdkColor color;
+		color.red = myDialogsParam.dialogTextDescription.fColorStart[0] * 65535;
+		color.green = myDialogsParam.dialogTextDescription.fColorStart[1] * 65535;
+		color.blue = myDialogsParam.dialogTextDescription.fColorStart[2] * 65535;
+		gtk_widget_modify_fg (pWidget, GTK_STATE_NORMAL, &color);
+		#else
+		static GdkRGBA color;
+		color.red = myDialogsParam.dialogTextDescription.fColorStart[0];
+		color.green = myDialogsParam.dialogTextDescription.fColorStart[1];
+		color.blue = myDialogsParam.dialogTextDescription.fColorStart[2];
+		color.alpha = 1.;
+		gtk_widget_override_color (pWidget, GTK_STATE_NORMAL, &color);
+		#endif
+	}
 }
 
 void gldi_dialog_set_widget_bg_color (GtkWidget *pWidget)
 {
-	#if (GTK_MAJOR_VERSION < 3)
-	static GdkColor color;
-	color.red = myDialogsParam.fDialogColor[0] * 65535;
-	color.green = myDialogsParam.fDialogColor[1] * 65535;
-	color.blue = myDialogsParam.fDialogColor[2] * 65535;
-	gtk_widget_modify_bg (pWidget, GTK_STATE_NORMAL, &color);
-	#else
-	static GdkRGBA color;
-	color.red = myDialogsParam.fDialogColor[0];
-	color.green = myDialogsParam.fDialogColor[1];
-	color.blue = myDialogsParam.fDialogColor[2];
-	color.alpha = myDialogsParam.fDialogColor[3];
-	gtk_widget_override_color (pWidget, GTK_STATE_NORMAL, &color);
-	#endif
+	if (myDialogsParam.bUseSystemColors)
+	{
+		#if (GTK_MAJOR_VERSION < 3)
+		gtk_widget_modify_bg (pWidget, GTK_STATE_NORMAL, NULL);  // NULL = undo previous modifications
+		#else
+		gtk_widget_override_background_color (pWidget, GTK_STATE_NORMAL, NULL);  // NULL = undo previous modifications
+		#endif
+	}
+	else
+	{
+		#if (GTK_MAJOR_VERSION < 3)
+		static GdkColor color;
+		color.red = myDialogsParam.fDialogColor[0] * 65535;
+		color.green = myDialogsParam.fDialogColor[1] * 65535;
+		color.blue = myDialogsParam.fDialogColor[2] * 65535;
+		gtk_widget_modify_bg (pWidget, GTK_STATE_NORMAL, &color);
+		#else
+		static GdkRGBA color;
+		color.red = myDialogsParam.fDialogColor[0];
+		color.green = myDialogsParam.fDialogColor[1];
+		color.blue = myDialogsParam.fDialogColor[2];
+		color.alpha = myDialogsParam.fDialogColor[3];
+		gtk_widget_override_background_color (pWidget, GTK_STATE_NORMAL, &color);
+		#endif
+	}
 }
 
 

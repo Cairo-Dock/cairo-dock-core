@@ -1549,7 +1549,7 @@ static void _add_main_groups_buttons (void)
 		"icon-dialogs.svg",
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("Configure text bubble appearance."),
-		_("Dialog boxes"));
+		_("Dialog boxes and Menus"));
 	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Dialogs");  // -> "dialog rendering"
 	pGroupDescription->build_widget = _build_config_group_widget;
 	
