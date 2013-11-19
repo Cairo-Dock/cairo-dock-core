@@ -194,9 +194,9 @@ static void _init_menu_style (void)
 		double hs, ss, ls;
 		rgbToHsl (rs, gs, bs, &hs, &ss, &ls);
 		if (ls > .5)
-			ls -= .1;
+			ls -= .2;
 		else
-			ls += .1;
+			ls += .2;
 		hslToRgb (hs, ss, ls, &rs, &gs, &bs);
 		
 		/// TODO: for entry, set a background color ? and for calendar ?...
@@ -214,25 +214,43 @@ static void _init_menu_style (void)
 		.menuitem GtkImage { \
 			background: transparent; \
 		} \
+		.menuitem.separator, \
 		.menuitem .separator { \
 			color: @menuitem_separator_color; \
 			border-width: 1px; \
 			border-style: solid; \
+			border-image: none; \
 			border-color: @menuitem_separator_color; \
 			border-bottom-color: alpha (@menuitem_separator_color, 0.6); \
 			border-right-color: alpha (@menuitem_separator_color, 0.6); \
 		} \
-		.menuitem:hover { \
+		.menuitem:hover, \
+		.menuitem *:hover { \
 			background: @menuitem_bg_color; \
+			background-image: none; \
+			text-shadow: none; \
+			border-image: none; \
+			box-shadow: none; \
+			color: @menuitem_text_color; \
 		} \
 		.menuitem *:insensitive { \
 			text-shadow: none; \
 			color: @menuitem_insensitive_text_color; \
 		} \
-		.menuitem .entry { \
-			background: transparent; \
-			border-width: 0px; \
+		.menuitem .entry, \
+		.menuitem.entry { \
+			background: @menuitem_bg_color; \
+			border-image: none; \
+			border-color: transparent; \
 			color: @menuitem_text_color; \
+		} \
+		.menuitem .button, \
+		.menuitem.button { \
+			background: @menuitem_bg_color; \
+			background-image: none; \
+			box-shadow: none; \
+			border-color: transparent; \
+			padding: 2px; \
 		}",
 		(int)(r*255), (int)(g*255), (int)(b*255),
 		(int)(myDialogsParam.dialogTextDescription.fColorStart[0]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[1]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[2]*255),
@@ -687,15 +705,13 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	int ah = pParams->iArrowHeight;
 	int iAimedX, iAimedY;
 	int Hs = (pContainer->bIsHorizontal ? gldi_desktop_get_height() : gldi_desktop_get_width());
-	#if GTK_MAJOR_VERSION > 2
 	int w_, h_;
-	#endif
 	if (pContainer->bIsHorizontal)
 	{
-		iAimedX = x0 + pIcon->image.iWidth/2;
-		#if GTK_MAJOR_VERSION > 2
 		w_ = w - 2 * r;
 		h_ = h - 2 * r - ah;
+		iAimedX = x0 + pIcon->image.iWidth/2;
+		#if GTK_MAJOR_VERSION > 2
 		*x = MAX (0, iAimedX - fAlign * w_ - r);
 		#else
 		*x = iAimedX;
@@ -713,10 +729,10 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	}
 	else
 	{
-		iAimedY = x0 + pIcon->image.iWidth/2;
-		#if GTK_MAJOR_VERSION > 2
 		w_ = w - 2 * r - ah;
 		h_ = h - 2 * r;
+		iAimedY = x0 + pIcon->image.iWidth/2;
+		#if GTK_MAJOR_VERSION > 2
 		*y = MIN (iAimedY - fAlign * h_ - r, gldi_desktop_get_height() - h);
 		#else
 		*y = MIN (iAimedY, gldi_desktop_get_height() - h);
