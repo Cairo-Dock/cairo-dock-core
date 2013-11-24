@@ -48,16 +48,6 @@ struct _GldiMenuItemParams {
 };
 
 
-void gldi_menu_invalidate_colors (void);
-
-void gldi_menu_set_bg_color (cairo_t *pCairoContext);
-
-void gldi_menu_set_line_color (cairo_t *pCairoContext);
-
-void gldi_dialog_get_text_color (double *pColor);
-
-void gldi_menu_paint_bg_color (cairo_t *pCairoContext, int iWidth);
-
 /** Creates a new menu that will point on a given Icon. If the Icon is NULL, it will be placed under the mouse.
  * @param pIcon the icon, or NULL
  * @return the new menu.

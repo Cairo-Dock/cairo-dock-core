@@ -130,7 +130,7 @@ double cairo_dock_calculate_extra_width_for_trapeze (double fFrameHeight, double
 	return (2 * (fLineWidth/2 + fDeltaXForLoop + fDeltaCornerForLoop + myDocksParam.iFrameMargin));*/
 }
 
-void cairo_dock_draw_rounded_rectangle (cairo_t *pCairoContext, double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight)
+/**void cairo_dock_draw_rounded_rectangle (cairo_t *pCairoContext, double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight)
 {
 	if (2*fRadius > fFrameHeight + fLineWidth)
 		fRadius = (fFrameHeight + fLineWidth) / 2 - 1;
@@ -162,6 +162,43 @@ void cairo_dock_draw_rounded_rectangle (cairo_t *pCairoContext, double fRadius, 
 		0, 0,
 		0, -fRadius,
 		fRadius, -fRadius);
+	if (fRadius < 1)
+		cairo_close_path (pCairoContext);
+}*/
+void cairo_dock_draw_rounded_rectangle (cairo_t *pCairoContext, double fRadius, double fLineWidth, double fFrameWidth, double fFrameHeight)
+{
+	if (2*fRadius > fFrameHeight + fLineWidth)
+		fRadius = (fFrameHeight + fLineWidth) / 2 - 1;
+	double fDockOffsetX = fRadius + fLineWidth/2;
+	double fDockOffsetY = fLineWidth/2;
+	cairo_move_to (pCairoContext, fDockOffsetX, fDockOffsetY);
+	cairo_rel_line_to (pCairoContext, fFrameWidth, 0);
+	//\_________________ Coin haut droit.
+	cairo_arc (pCairoContext,
+		fDockOffsetX + fFrameWidth, fDockOffsetY + fRadius,
+		fRadius,
+		-G_PI/2, 0.);
+	cairo_rel_line_to (pCairoContext, 0, (fFrameHeight + fLineWidth - fRadius * 2));
+	//\_________________ Coin bas droit.
+	cairo_arc (pCairoContext,
+		fDockOffsetX + fFrameWidth, fDockOffsetY + fFrameHeight - fLineWidth/2 - fRadius,
+		fRadius,
+		0., G_PI/2);
+	
+	cairo_rel_line_to (pCairoContext, - fFrameWidth, 0);
+	//\_________________ Coin bas gauche.
+	cairo_arc (pCairoContext,
+		fDockOffsetX, fDockOffsetY + fFrameHeight - fLineWidth/2 - fRadius,
+		fRadius,
+		G_PI/2, G_PI);
+	
+	cairo_rel_line_to (pCairoContext, 0, (- fFrameHeight - fLineWidth + fRadius * 2));
+	//\_________________ Coin haut gauche.
+	cairo_arc (pCairoContext,
+		fDockOffsetX, fDockOffsetY + fRadius,
+		fRadius,
+		G_PI, -G_PI/2);
+	
 	if (fRadius < 1)
 		cairo_close_path (pCairoContext);
 }

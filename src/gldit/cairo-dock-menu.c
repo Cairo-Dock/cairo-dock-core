@@ -34,6 +34,7 @@
 #include "cairo-dock-draw.h"
 #include "cairo-dock-backends-manager.h"  // cairo_dock_get_dialog_decorator
 #include "cairo-dock-dialog-manager.h"  // myDialogsParam
+#include "cairo-dock-style-colors.h"
 #include "cairo-dock-menu.h"
 
 static gboolean _draw_menu_item (GtkWidget *widget, cairo_t *cr, G_GNUC_UNUSED gpointer data);
@@ -42,131 +43,29 @@ static gboolean _on_deselect_menu_item (GtkWidget* pMenuItem, G_GNUC_UNUSED gpoi
 static void _on_destroy_menu_item (GtkWidget* pMenuItem, G_GNUC_UNUSED gpointer data);
 
 
-/* simple config:
- * color: system / custom (= bg color, custom text color = white or black automatically)
- * 
- * system -> update params to system, don't modify colors
- * custom -> update params to custom, update colors
- * 
- * 
- * Dialogs:
- * bg color: system / custom
- * text color: system / custom
- * 
- * system -> get label fg color, get menu bg color -> myDialogsParam
- * custom -> foreach menu-item: gldi_dialog_set_widget_bg_color / gldi_dialog_set_widget_text_color
- *           for intertactive widget: same
- * */
-
   ////////////
  /// MENU ///
 /////////////
 
 #if GTK_MAJOR_VERSION > 2
-const double alpha = 0.85;  // min alpha (max is 1)
-
-static GtkStyleContext *s_pStyle = NULL;
-static gboolean s_bGotMenuitemStyle = FALSE;
-static gboolean s_bGotMenuStyle = FALSE;
-static gboolean s_bGotTextStyle = FALSE;
-static GdkRGBA s_menu_bg_color;
-static cairo_pattern_t *s_menu_bg_pattern = NULL;
-static GdkRGBA s_menuitem_bg_color;
-static cairo_pattern_t *s_menuitem_bg_pattern = NULL;
-static GdkRGBA s_text_color;
-static int s_iMenuItemColorId = 1;
-static gboolean s_bIgnoreStyleChange = FALSE;
-
-static void _on_style_changed (G_GNUC_UNUSED GtkStyleContext *style, G_GNUC_UNUSED gpointer data)
-{
-	if (! s_bIgnoreStyleChange)
-	{
-		g_print ("style changed\n");
-		if (s_menu_bg_pattern != NULL)
-		{
-			cairo_pattern_destroy (s_menu_bg_pattern);
-			s_menu_bg_pattern = NULL;
-		}
-		if (s_menuitem_bg_pattern != NULL)
-		{
-			cairo_pattern_destroy (s_menuitem_bg_pattern);
-			s_menuitem_bg_pattern = NULL;
-		}
-		s_bGotMenuitemStyle = FALSE;
-		s_bGotMenuStyle = FALSE;
-		s_bGotTextStyle = FALSE;
-		s_iMenuItemColorId ++;  // invalidate menu-items' text color
-	}
-}
-
-static double hue2rgb (double p, double q, double t)
-{
-	if(t < 0) t += 1;
-	if(t > 1) t -= 1;
-	if(t < 1/6) return p + (q - p) * 6 * t;
-	if(t < 1/2) return q;
-	if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
-	return p;
-}
-static void hslToRgb (double h, double s, double l, double *r, double *g, double *b)
-{
-	if (s == 0) // achromatic
-	{
-		*r = *g = *b = l;
-	}
-	else
-	{
-		double q = (l < 0.5 ? l * (1 + s) : l + s - l * s);
-		double p = 2 * l - q;
-		*r = hue2rgb(p, q, h + 1/3);
-		*g = hue2rgb(p, q, h);
-		*b = hue2rgb(p, q, h - 1/3);
-	}
-}
-static void rgbToHsl (double r, double g, double b, double *h_, double *s_, double *l_)
-{
-	double max = MAX (MAX (r, g), b), min = MIN (MIN (r, g), b);
-	double h, s, l = (max + min) / 2;
-
-	if(max == min)  // achromatic
-	{
-		h = s = 0;
-	}
-	else
-	{
-		double d = max - min;
-		s = (l > 0.5 ? d / (2 - max - min) : d / (max + min));
-		if (max == r)
-			h = (g - b) / d + (g < b ? 6 : 0);
-		else if (max == g)
-			h = (b - r) / d + 2;
-		else
-			h = (r - g) / d + 4;
-		h /= 6;
-	}
-
-	*h_ = h;
-	*s_ = s;
-	*l_ = l;
-}
 
 static void _init_menu_style (void)
 {
 	static GtkCssProvider *cssProvider = NULL;
 	static int index = 0;
 	
-	if (index == s_iMenuItemColorId)
+	if (index == gldi_style_colors_get_index())
 		return;
-	index = s_iMenuItemColorId;
+	index = gldi_style_colors_get_index();
 	g_print ("%s (%d)\n", __func__, index);
 	
 	if (myDialogsParam.bUseSystemColors)
 	{
 		if (cssProvider != NULL)
 		{
-			s_bIgnoreStyleChange = TRUE;
+			gldi_style_colors_freeze ();
 			gtk_style_context_remove_provider_for_screen (gdk_screen_get_default(), GTK_STYLE_PROVIDER(cssProvider));
-			s_bIgnoreStyleChange = FALSE;
+			gldi_style_colors_freeze ();
 			g_object_unref (cssProvider);
 			cssProvider = NULL;
 		}
@@ -176,30 +75,18 @@ static void _init_menu_style (void)
 		if (cssProvider == NULL)
 		{
 			cssProvider = gtk_css_provider_new ();
-			s_bIgnoreStyleChange = TRUE;
+			gldi_style_colors_freeze ();
 			gtk_style_context_add_provider_for_screen (gdk_screen_get_default(), GTK_STYLE_PROVIDER(cssProvider), GTK_STYLE_PROVIDER_PRIORITY_USER);
-			s_bIgnoreStyleChange = FALSE;
+			gldi_style_colors_freeze ();
 		}
 		
-		double r = myDialogsParam.fDialogColor[0], g = myDialogsParam.fDialogColor[1], b = myDialogsParam.fDialogColor[2];
-		double h, s, l;
-		rgbToHsl (r, g, b, &h, &s, &l);
-		if (l > .5)
-			l -= .2;
-		else
-			l += .2;
-		hslToRgb (h, s, l, &r, &g, &b);
+		double rgb[4];
+		gldi_style_color_shade (myDialogsParam.fDialogColor, .2, rgb);
 		
-		double rs = myDialogsParam.fDialogColor[0], gs = myDialogsParam.fDialogColor[1], bs = myDialogsParam.fDialogColor[2];
-		double hs, ss, ls;
-		rgbToHsl (rs, gs, bs, &hs, &ss, &ls);
-		if (ls > .5)
-			ls -= .2;
-		else
-			ls += .2;
-		hslToRgb (hs, ss, ls, &rs, &gs, &bs);
+		double rgbs[4];
+		gldi_style_color_shade (myDialogsParam.fDialogColor, .2, rgbs);
 		
-		/// TODO: for entry, set a background color ? and for calendar ?...
+		/// TODO: and for calendar ?...
 		gchar *css = g_strdup_printf ("@define-color menuitem_bg_color rgb (%d, %d, %d); \
 		@define-color menuitem_text_color rgb (%d, %d, %d); \
 		@define-color menuitem_insensitive_text_color rgba (%d, %d, %d, .5); \
@@ -252,90 +139,17 @@ static void _init_menu_style (void)
 			border-color: transparent; \
 			padding: 2px; \
 		}",
-		(int)(r*255), (int)(g*255), (int)(b*255),
+		(int)(rgb[0]*255), (int)(rgb[1]*255), (int)(rgb[2]*255),
 		(int)(myDialogsParam.dialogTextDescription.fColorStart[0]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[1]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[2]*255),
 		(int)(myDialogsParam.dialogTextDescription.fColorStart[0]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[1]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[2]*255),
-		(int)(rs*255), (int)(gs*255), (int)(bs*255));
+		(int)(rgbs[0]*255), (int)(rgbs[1]*255), (int)(rgbs[2]*255));
+		//g_print ("css color: %d; %d; %d\n", (int)(myDialogsParam.dialogTextDescription.fColorStart[0]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[1]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[2]*255));
 		
-		s_bIgnoreStyleChange = TRUE;
+		gldi_style_colors_freeze ();
 		gtk_css_provider_load_from_data (cssProvider,
 			css, -1, NULL);  // (should) clear any previously loaded information
-		s_bIgnoreStyleChange = FALSE;
+		gldi_style_colors_freeze ();
 		g_free (css);
-	}
-}
-
-void gldi_menu_invalidate_colors (void)
-{
-	_on_style_changed (NULL, NULL);
-}
-
-static void _get_menu_bg_color (GtkWidget *pWidget)
-{
-	if (! s_bGotMenuStyle)
-	{
-		GtkStyleContext *style = gtk_widget_get_style_context (pWidget);
-		gtk_style_context_get_background_color (style, GTK_STATE_NORMAL, (GdkRGBA*)&s_menu_bg_color);
-		if (s_menu_bg_color.alpha == 0)
-		{
-			gtk_style_context_get (style, GTK_STATE_FLAG_PRELIGHT,
-				GTK_STYLE_PROPERTY_BACKGROUND_IMAGE, &s_menu_bg_pattern,
-				NULL);
-			if (s_menu_bg_pattern == NULL)
-			{
-				s_menu_bg_color.red = s_menu_bg_color.green = s_menu_bg_color.blue = s_menu_bg_color.alpha = 1.;  /// how can we get the default color ?...
-			}
-		}
-		//g_print ("menu style: %.2f;%.2f;%.2f;%.2f\n", s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue, s_menu_bg_color.alpha);
-		
-		if ( ! s_pStyle)
-		{
-			s_pStyle = gtk_style_context_new ();
-			g_signal_connect (s_pStyle, "changed", G_CALLBACK(_on_style_changed), NULL);
-		}
-		
-		s_bGotMenuStyle = TRUE;
-	}
-}
-
-static void _get_menu_item_bg_color (GtkWidget *pWidget)
-{
-	if (! s_bGotMenuitemStyle)
-	{
-		GtkStyleContext *style = gtk_widget_get_style_context (pWidget);
-		gtk_style_context_get_background_color (style, GTK_STATE_PRELIGHT, (GdkRGBA*)&s_menuitem_bg_color);
-		if (s_menuitem_bg_color.alpha == 0)
-		{
-			gtk_style_context_get (style, GTK_STATE_FLAG_PRELIGHT,
-				GTK_STYLE_PROPERTY_BACKGROUND_IMAGE, &s_menuitem_bg_pattern,
-				NULL);
-			if (s_menuitem_bg_pattern == NULL)
-			{
-				s_menuitem_bg_color.red = s_menuitem_bg_color.green = s_menuitem_bg_color.blue = s_menuitem_bg_color.alpha = 1.;
-			}
-		}
-		//g_print ("menuitem style: %.2f;%.2f;%.2f;%.2f\n", s_menuitem_bg_color.red, s_menuitem_bg_color.green, s_menuitem_bg_color.blue, s_menuitem_bg_color.alpha);
-		s_bGotMenuitemStyle = TRUE;
-	}
-}
-
-static void _get_text_color (void)
-{
-	if (! s_bGotTextStyle)
-	{
-		GtkWidget *pWidget = gtk_label_new (NULL);
-		GtkStyleContext *style = gtk_widget_get_style_context (pWidget);
-		gtk_style_context_get_color (style, GTK_STATE_NORMAL, (GdkRGBA*)&s_text_color);
-		gtk_widget_destroy (pWidget);
-		g_print ("fg_color: %.2f;%.2f;%.2f;%.2f\n", s_text_color.red, s_text_color.green, s_text_color.blue, s_text_color.alpha);
-		
-		if ( ! s_pStyle)
-		{
-			s_pStyle = gtk_style_context_new ();
-			g_signal_connect (s_pStyle, "changed", G_CALLBACK(_on_style_changed), NULL);
-		}
-		
-		s_bGotTextStyle = TRUE;
 	}
 }
 
@@ -361,109 +175,6 @@ static gboolean _draw_menu (GtkWidget *pWidget,
 	return TRUE;
 }
 #endif
-
-
-void gldi_menu_set_bg_color (cairo_t *pCairoContext)
-{
-	if (myDialogsParam.bUseSystemColors)
-	{
-		if (s_menu_bg_pattern)
-			cairo_set_source (pCairoContext, s_menu_bg_pattern);
-		else
-			cairo_set_source_rgba (pCairoContext, s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue, 1.);
-	}
-	else
-	{
-		cairo_set_source_rgba (pCairoContext, myDialogsParam.fDialogColor[0], myDialogsParam.fDialogColor[1], myDialogsParam.fDialogColor[2], 1.);
-	}
-}
-
-static void gldi_menuitem_set_bg_color (cairo_t *pCairoContext)
-{
-	if (myDialogsParam.bUseSystemColors)
-	{
-		if (s_menuitem_bg_pattern)
-			cairo_set_source (pCairoContext, s_menuitem_bg_pattern);
-		else
-			cairo_set_source_rgba (pCairoContext, s_menuitem_bg_color.red, s_menuitem_bg_color.green, s_menuitem_bg_color.blue, 1.);
-	}
-	else
-	{
-		double r = myDialogsParam.fDialogColor[0], g = myDialogsParam.fDialogColor[1], b = myDialogsParam.fDialogColor[2];
-		double h, s, l;
-		rgbToHsl (r, g, b, &h, &s, &l);
-		if (l > .5)
-			l -= .2;
-		else
-			l += .2;
-		hslToRgb (h, s, l, &r, &g, &b);
-		
-		cairo_set_source_rgba (pCairoContext, r, g, b, 1.);
-	}
-}
-
-void gldi_menu_set_line_color (cairo_t *pCairoContext)
-{
-	if (myDialogsParam.bUseSystemColors)
-	{
-		if (s_menu_bg_pattern)
-			cairo_set_source (pCairoContext, s_menu_bg_pattern);
-		else
-			cairo_set_source_rgb (pCairoContext, s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue);
-	}
-	else
-	{
-		cairo_set_source_rgba (pCairoContext, myDialogsParam.fLineColor[0], myDialogsParam.fLineColor[1], myDialogsParam.fLineColor[2], myDialogsParam.fLineColor[3]);
-	}
-}
-
-void gldi_dialog_get_text_color (double *pColor)
-{
-	if (myDialogsParam.bUseSystemColors)
-	{
-		if (! s_bGotTextStyle)
-			_get_text_color ();
-		pColor[0] = s_text_color.red / 65535.;
-		pColor[1] = s_text_color.green / 65535.;
-		pColor[2] = s_text_color.blue / 65535.;
-	}
-	else
-	{
-		memcpy (pColor, myDialogsParam.dialogTextDescription.fColorStart, 3*sizeof(double));
-	}
-}
-
-void gldi_menu_paint_bg_color (cairo_t *pCairoContext, int iWidth)
-{
-	// paint bg: 
-	// pattern -> a=1
-	// color -> if c.a == 1: a=.75 else c.a
-	// or
-	// option transparency
-	// a=1: paint
-	// else: mask
-	if (myDialogsParam.bUseSystemColors && s_menu_bg_pattern)
-	{
-		cairo_paint (pCairoContext);
-	}
-	else
-	{
-		cairo_pattern_t *pGradationPattern;
-		pGradationPattern = cairo_pattern_create_linear (
-			0, 0,
-			iWidth, 0);
-		cairo_pattern_set_extend (pGradationPattern, CAIRO_EXTEND_NONE);
-		cairo_pattern_add_color_stop_rgba (pGradationPattern,
-			0.,
-			1., 1., 1., 1.);
-		cairo_pattern_add_color_stop_rgba (pGradationPattern,
-			1.,
-			1., 1., 1., alpha);  // bg color with horizontal alpha gradation
-		cairo_mask (pCairoContext, pGradationPattern);
-		
-		cairo_pattern_destroy (pGradationPattern);
-	}
-}
 
 static void _set_margin_position (GtkWidget *pMenu, GldiMenuParams *pParams)
 {
@@ -569,7 +280,7 @@ static void _on_menu_destroyed (GtkWidget *pMenu, G_GNUC_UNUSED gpointer data)
 	#if GTK_MAJOR_VERSION > 2
 	if (pParams->cssProvider)
 	{
-		g_object_unref (pParams->cssProvider);  /// need to remove the provider from the style context ?... probably not
+		g_object_unref (pParams->cssProvider);  /// need to remove the provider from the style context ?... probably not since the style context will be destroyed and will release its reference on the provider
 	}
 	g_free (pParams);
 	#endif
@@ -607,8 +318,6 @@ void gldi_menu_init (G_GNUC_UNUSED GtkWidget *pMenu, Icon *pIcon)
 		"draw",
 		G_CALLBACK (_draw_menu),
 		pMenu);
-	
-	_get_menu_bg_color (pMenu);
 	
 	_init_menu_style ();
 	#endif
@@ -909,8 +618,6 @@ static gboolean _draw_menu_item (GtkWidget *widget,
 	width = gtk_widget_get_allocated_width (widget);
 	height = gtk_widget_get_allocated_height (widget);
 	
-	_get_menu_item_bg_color (widget);
-	
 	x = border_width;
 	y = border_width;
 	w = width - border_width * 2;
@@ -928,7 +635,7 @@ static gboolean _draw_menu_item (GtkWidget *widget,
 		cairo_dock_draw_rounded_rectangle (cr, r, l, w - 2*r, h);
 		cairo_clip (cr);
 		
-		gldi_menuitem_set_bg_color (cr);
+		gldi_style_colors_set_selected_bg_color (cr);
 		cairo_paint_with_alpha (cr, a);
 		
 		cairo_restore (cr);

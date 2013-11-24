@@ -63,6 +63,7 @@ SET(core_lib_SRCS
 	cairo-dock-config.c 				cairo-dock-config.h
 	cairo-dock-utils.c 					cairo-dock-utils.h
 	cairo-dock-menu.c 					cairo-dock-menu.h
+	cairo-dock-style-colors.c 			cairo-dock-style-colors.h
 	texture-gradation.h
 	texture-blur.h
 )
@@ -174,6 +175,7 @@ install(FILES
 	cairo-dock-animations.h
 	cairo-dock-gui-factory.h
 	cairo-dock-menu.h
+	cairo-dock-style-colors.h
 	cairo-dock-utils.h
 	
 	DESTINATION ${includedir}/cairo-dock/gldit)

@@ -36,7 +36,7 @@
 #include "cairo-dock-animations.h"  // for cairo_dock_is_hidden
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-dialog-factory.h"
-#include "cairo-dock-menu.h"
+#include "cairo-dock-style-colors.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-dialog-manager.h"
 
@@ -909,6 +909,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDialogsParam *pDialogs)
 	
 	pDialogs->bUseSystemColors = (cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "colors", &bFlushConfFileNeeded, 1, NULL, NULL) == 0);
 	
+	gldi_style_colors_reload ();
+	
 	gboolean bCustomFont = cairo_dock_get_boolean_key_value (pKeyFile, "Dialogs", "custom", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	gchar *cFontDescription = (bCustomFont ? cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "message police", &bFlushConfFileNeeded, NULL, "Icons", NULL) : NULL);
 	if (cFontDescription == NULL)
@@ -954,10 +956,11 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDialogsParam *pDialogs)
 	
 	double couleur_dtext[3] = {0., 0., 0.};
 	if (pDialogs->bUseSystemColors)
-		gldi_dialog_get_text_color (pDialogs->dialogTextDescription.fColorStart);
+		gldi_style_colors_get_text_color (pDialogs->dialogTextDescription.fColorStart);
 	else
 		cairo_dock_get_double_list_key_value (pKeyFile, "Dialogs", "text color", &bFlushConfFileNeeded, pDialogs->dialogTextDescription.fColorStart, 3, couleur_dtext, NULL, NULL);
 	memcpy (&pDialogs->dialogTextDescription.fColorStop, &pDialogs->dialogTextDescription.fColorStart, 3*sizeof (double));
+	g_print ("dialog text color: %.2f;%.2f;%.2f\n", pDialogs->dialogTextDescription.fColorStart[0], pDialogs->dialogTextDescription.fColorStart[1], pDialogs->dialogTextDescription.fColorStart[2]);
 	
 	return bFlushConfFileNeeded;
 }
@@ -987,7 +990,7 @@ static void reload (CairoDialogsParam *pPrevDialogs, CairoDialogsParam *pDialogs
 		_unload_dialog_buttons ();
 		_load_dialog_buttons (pDialogs->cButtonOkImage, pDialogs->cButtonCancelImage);
 	}
-	gldi_menu_invalidate_colors ();
+	gldi_style_colors_reload ();
 }
 
   //////////////
@@ -1013,6 +1016,7 @@ static void init (void)
 		NOTIFICATION_REMOVE_ICON,
 		(GldiNotificationFunc) on_icon_removed,
 		GLDI_RUN_AFTER, NULL);
+	gldi_style_colors_init ();
 }
 
   ///////////////
