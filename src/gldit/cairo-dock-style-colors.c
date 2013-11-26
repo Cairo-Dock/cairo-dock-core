@@ -248,11 +248,11 @@ void gldi_style_colors_set_bg_color (cairo_t *pCairoContext)
 		if (s_menu_bg_pattern)
 			cairo_set_source (pCairoContext, s_menu_bg_pattern);
 		else
-			cairo_set_source_rgba (pCairoContext, s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue, 1.);
+			cairo_set_source_rgba (pCairoContext, s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue, s_menu_bg_color.alpha);
 	}
 	else
 	{
-		cairo_set_source_rgba (pCairoContext, myDialogsParam.fDialogColor[0], myDialogsParam.fDialogColor[1], myDialogsParam.fDialogColor[2], 1.);
+		cairo_set_source_rgba (pCairoContext, myDialogsParam.fDialogColor[0], myDialogsParam.fDialogColor[1], myDialogsParam.fDialogColor[2], myDialogsParam.fDialogColor[3]);
 	}
 }
 
@@ -287,11 +287,23 @@ void gldi_style_colors_set_line_color (cairo_t *pCairoContext)
 		if (s_menu_bg_pattern)
 			cairo_set_source (pCairoContext, s_menu_bg_pattern);
 		else
-			cairo_set_source_rgb (pCairoContext, s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue);
+			cairo_set_source_rgb (pCairoContext, s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue);  /// shade a little ?...
 	}
 	else
 	{
 		cairo_set_source_rgba (pCairoContext, myDialogsParam.fLineColor[0], myDialogsParam.fLineColor[1], myDialogsParam.fLineColor[2], myDialogsParam.fLineColor[3]);
+	}
+}
+
+void gldi_style_colors_set_text_color (cairo_t *pCairoContext)
+{
+	if (myDialogsParam.bUseSystemColors)
+	{
+		cairo_set_source_rgb (pCairoContext, s_text_color.red, s_text_color.green, s_text_color.blue);
+	}
+	else
+	{
+		cairo_set_source_rgb (pCairoContext, myDialogsParam.dialogTextDescription.fColorStart[0], myDialogsParam.dialogTextDescription.fColorStart[1], myDialogsParam.dialogTextDescription.fColorStart[2]);
 	}
 }
 
@@ -306,6 +318,37 @@ void gldi_style_colors_get_text_color (double *pColor)
 	else
 	{
 		memcpy (pColor, myDialogsParam.dialogTextDescription.fColorStart, 3*sizeof(double));
+	}
+}
+
+void gldi_style_colors_get_bg_color (double *pColor)
+{
+	if (myDialogsParam.bUseSystemColors)
+	{
+		pColor[0] = s_menu_bg_color.red;
+		pColor[1] = s_menu_bg_color.green;
+		pColor[2] = s_menu_bg_color.blue;
+		pColor[3] = s_menu_bg_color.alpha;
+	}
+	else
+	{
+		memcpy (pColor, myDialogsParam.fDialogColor, 4*sizeof(double));
+	}
+}
+
+void gldi_style_colors_get_line_color (double *pColor)
+{
+	if (myDialogsParam.bUseSystemColors)
+	{
+		pColor[0] = s_menu_bg_color.red;
+		pColor[1] = s_menu_bg_color.green;
+		pColor[2] = s_menu_bg_color.blue;
+		pColor[3] = 1;
+	}
+	else
+	{
+		memcpy (pColor, myDialogsParam.fDialogColor, 3*sizeof(double));
+		pColor[3] = 1;
 	}
 }
 

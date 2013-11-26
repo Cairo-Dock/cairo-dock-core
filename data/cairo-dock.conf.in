@@ -364,7 +364,7 @@ relative icon size = .8
 #F+[Bubble;@pkgdatadir@/icons/icon-bubble.png]
 frame_bubble =
 
-#Y-[System;0;0;Custom;1;2] Colors
+#Y-[System;0;0;Custom;1;3] Colors
 colors = 1
 
 #C+ Background colour
@@ -372,6 +372,9 @@ background color = 1.0; 1.0; 1.0; 0.8
 
 #C+ Outline colour
 line color = 1.0; 1.0; 1.0; 1.0
+
+#c+ Text color:
+text color = 0.0; 0.0; 0.0
 
 #v
 sep_bul=
@@ -385,7 +388,8 @@ corner=8
 #i+[1;10] Outline width
 linewidth=1
 
-#F+[Text;gtk-select-font]
+
+#F+[Font;gtk-select-font]
 frame_text =
 
 #B+ Use a custom font for the text?
@@ -394,12 +398,6 @@ custom = false
 
 #P+ Text font:
 message police = 
-
-#b+ Draw the outline of the text?
-outlined = false
-
-#c+ Text color:
-text color = 0.0; 0.0; 0.0
 
 #F+[Buttons;@pkgdatadir@/icons/icon-buttons.png]
 frame_button =
@@ -675,6 +673,27 @@ alpha threshold = 10.
 #b- Should the labels always be horizontal, even when dock is vertical?
 always horizontal = true
 
+#F+[Appearance;gtk-orientation-portrait]
+frame_bg =
+
+#Y-[Auto;0;0;Custom;1;4] Colors
+colors = 1
+
+#C+ Background colour
+text background color = 0;0;0;.85
+
+#C+ Outline colour
+text line color = 1.0; 1.0; 1.0; 1.0
+
+#c+ Text color:
+text color = 1;1;1
+
+#b+ Draw the outline of the text?
+text oulined = false
+
+#i+[0;20] Margin around the text (in pixels) :
+text margin = 3
+
 #F+[Font;gtk-select-font]
 frame_font =
 
@@ -684,34 +703,6 @@ custom = false
 
 #P+ Font used for labels :
 police = Sans 10
-
-#b+ Draw the outline of the text?
-text oulined = false
-
-#F+[Background;gtk-orientation-portrait]
-frame_bg =
-
-#C+ Colour of the label's background :
-#{If you set it to fully transparent, there will be no background for the text, but the margin around the text will still be in effect.}
-text background color=0;0;0;1;
-
-#i+[0;20] Margin around the text (in pixels) :
-text margin = 3
-
-#F+[Colour;gtk-select-color]
-frame_col =
-
-#c+ Start color :
-#{It's the first color of the gradation.}
-text color start = 1;1;1
-
-#c+ Stop color :
-#{It's the second color of the gradation. Set it to the same value as the first if you don't want to have any gradation.}
-text color stop = 1;1;1
-
-#b+ Pattern should be vertical?
-#{If checked, the pattern will go from top to bottom, otherwise from left to right.}
-vertical label pattern = false
 
 #F+[Quick-info;stock_dialog-info]
 #{Quick-info are short information drawn on the icons.}

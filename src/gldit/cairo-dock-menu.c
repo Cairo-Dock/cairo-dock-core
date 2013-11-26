@@ -86,11 +86,15 @@ static void _init_menu_style (void)
 		double rgbs[4];
 		gldi_style_color_shade (myDialogsParam.fDialogColor, .2, rgbs);
 		
+		double rgbb[4];
+		gldi_style_color_shade (myDialogsParam.fDialogColor, .3, rgbb);
+		
 		/// TODO: and for calendar ?...
 		gchar *css = g_strdup_printf ("@define-color menuitem_bg_color rgb (%d, %d, %d); \
 		@define-color menuitem_text_color rgb (%d, %d, %d); \
 		@define-color menuitem_insensitive_text_color rgba (%d, %d, %d, .5); \
 		@define-color menuitem_separator_color rgb (%d, %d, %d); \
+		@define-color menuitem_bg_color2 rgb (%d, %d, %d); \
 		.menuitem { \
 			text-shadow: none; \
 			border-image: none; \
@@ -138,11 +142,40 @@ static void _init_menu_style (void)
 			box-shadow: none; \
 			border-color: transparent; \
 			padding: 2px; \
+		} \
+		.menuitem .scale, \
+		.menuitem.scale { \
+			background: @menuitem_bg_color2; \
+			background-image: none; \
+			color: @menuitem_text_color; \
+		} \
+		.menuitem .scale.left, \
+		.menuitem.scale.left, \
+		.menuitem .scale.left:hover { \
+			background: green; \
+			background-image: none; \
+			color: green; \
+		} \
+		.menuitem .scale.slider, \
+		.menuitem.scale.slider { \
+			background: @menuitem_text_color; \
+			background-image: none; \
+		} \
+		.scale.trough.highlight { \
+			background-color: green; \
+			background-image: none; \
+			background-clip: content-box; \
+		} \
+		.scale.trough.highlight:backdrop { \
+			background-color: green; \
+			background-image: none; \
+			background-clip: content-box; \
 		}",
 		(int)(rgb[0]*255), (int)(rgb[1]*255), (int)(rgb[2]*255),
 		(int)(myDialogsParam.dialogTextDescription.fColorStart[0]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[1]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[2]*255),
 		(int)(myDialogsParam.dialogTextDescription.fColorStart[0]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[1]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[2]*255),
-		(int)(rgbs[0]*255), (int)(rgbs[1]*255), (int)(rgbs[2]*255));
+		(int)(rgbs[0]*255), (int)(rgbs[1]*255), (int)(rgbs[2]*255),
+		(int)(rgbb[0]*255), (int)(rgbb[1]*255), (int)(rgbb[2]*255));
 		//g_print ("css color: %d; %d; %d\n", (int)(myDialogsParam.dialogTextDescription.fColorStart[0]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[1]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[2]*255));
 		
 		gldi_style_colors_freeze ();

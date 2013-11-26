@@ -50,6 +50,7 @@
 #include "cairo-dock-launcher-manager.h"  // GLDI_OBJECT_IS_LAUNCHER_ICON
 #include "cairo-dock-applet-manager.h"  // GLDI_OBJECT_IS_APPLET_ICON
 #include "cairo-dock-backends-manager.h"  // cairo_dock_foreach_icon_container_renderer
+#include "cairo-dock-style-colors.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-icon-manager.h"
 
@@ -525,8 +526,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 
 	pIcons->bConstantSeparatorSize = cairo_dock_get_boolean_key_value (pKeyFile, "Icons", "force size", &bFlushConfFileNeeded, TRUE, "Separators", NULL);
 	
-	///pIcons->fReflectSize = pIcons->iIconHeight * pIcons->fReflectHeightRatio;
-	
 	//\___________________ labels font
 	CairoIconsParam *pLabels = pIcons;
 	gboolean bCustomFont = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "custom", &bFlushConfFileNeeded, TRUE, NULL, NULL);
@@ -573,25 +572,34 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 	//\___________________ labels text color
 	pLabels->iconTextDescription.bOutlined = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "text oulined", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
+	double couleur_backlabel[4] = {0., 0., 0., 0.85};
 	double couleur_label[3] = {1., 1., 1.};
-	cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "text color start", &bFlushConfFileNeeded, pLabels->iconTextDescription.fColorStart, 3, couleur_label, "Icons", NULL);
-	
-	cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "text color stop", &bFlushConfFileNeeded, pLabels->iconTextDescription.fColorStop, 3, couleur_label, "Icons", NULL);
-	
-	pLabels->iconTextDescription.bVerticalPattern = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "vertical label pattern", &bFlushConfFileNeeded, TRUE, "Icons", NULL);
-
-	double couleur_backlabel[4] = {0., 0., 0., 0.5};
-	cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "text background color", &bFlushConfFileNeeded, pLabels->iconTextDescription.fBackgroundColor, 4, couleur_backlabel, "Icons", NULL);
-	if (!g_key_file_has_key (pKeyFile, "Labels", "qi same", NULL))  // old params
+	gboolean bDefaultColors = (cairo_dock_get_integer_key_value (pKeyFile, "Labels", "colors", &bFlushConfFileNeeded, 1, NULL, NULL) == 0);
+	if (bDefaultColors)
 	{
-		gboolean bUseBackgroundForLabel = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "background for label", &bFlushConfFileNeeded, FALSE, "Icons", NULL);
-		if (! bUseBackgroundForLabel)
+		gldi_style_colors_get_text_color (pLabels->iconTextDescription.fColorStart);
+		pLabels->iconTextDescription.bOutlined = FALSE;
+	}
+	else
+	{
+		cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "text color", &bFlushConfFileNeeded, pLabels->iconTextDescription.fColorStart, 3, couleur_label, "Labels", "text color start");
+		
+		double couleur_linelabel[4] = {0., 0., 0., 1};
+		cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "text line color", &bFlushConfFileNeeded, pLabels->iconTextDescription.fLineColor, 4, couleur_linelabel, NULL, NULL);
+		
+		cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "text background color", &bFlushConfFileNeeded, pLabels->iconTextDescription.fBackgroundColor, 4, couleur_backlabel, "Icons", NULL);
+		if (!g_key_file_has_key (pKeyFile, "Labels", "qi same", NULL))  // old params
 		{
-			pLabels->iconTextDescription.fBackgroundColor[3] = 0;  // ne sera pas dessine.
-			g_key_file_set_double_list (pKeyFile, "Icons", "text background color", pLabels->iconTextDescription.fBackgroundColor, 4);
+			gboolean bUseBackgroundForLabel = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "background for label", &bFlushConfFileNeeded, FALSE, "Icons", NULL);
+			if (! bUseBackgroundForLabel)
+			{
+				pLabels->iconTextDescription.fBackgroundColor[3] = 0;  // ne sera pas dessine.
+				g_key_file_set_double_list (pKeyFile, "Icons", "text background color", pLabels->iconTextDescription.fBackgroundColor, 4);
+			}
 		}
 	}
 	
+	memcpy (pLabels->iconTextDescription.fColorStop, pLabels->iconTextDescription.fColorStart, 3 * sizeof (gdouble));
 	pLabels->iconTextDescription.iMargin = cairo_dock_get_integer_key_value (pKeyFile, "Labels", "text margin", &bFlushConfFileNeeded, 4, NULL, NULL);
 	
 	//\___________________ quick-info

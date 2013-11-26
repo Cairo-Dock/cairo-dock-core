@@ -47,6 +47,8 @@ void gldi_style_colors_set_selected_bg_color (cairo_t *pCairoContext);
 
 void gldi_style_colors_set_line_color (cairo_t *pCairoContext);
 
+void gldi_style_colors_set_text_color (cairo_t *pCairoContext);
+
 void gldi_style_colors_get_text_color (double *pColor);
 
 void gldi_style_colors_paint_bg_color (cairo_t *pCairoContext, int iWidth);

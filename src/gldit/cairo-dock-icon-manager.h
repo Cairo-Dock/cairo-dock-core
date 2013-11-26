@@ -51,7 +51,8 @@ typedef enum {
 	CAIRO_DOCK_FLAT_SEPARATOR,
 	CAIRO_DOCK_PHYSICAL_SEPARATOR,
 	CAIRO_DOCK_NB_SEPARATOR_TYPES
-	} CairoDockSpeparatorType;
+	} CairoDockSeparatorType;
+#define CairoDockSpeparatorType CairoDockSeparatorType
 
 struct _CairoIconsParam {
 	// icons
@@ -70,7 +71,7 @@ struct _CairoIconsParam {
 	gint iIconWidth;  // default icon size
 	gint iIconHeight;
 	// separators
-	CairoDockSpeparatorType iSeparatorType;
+	CairoDockSeparatorType iSeparatorType;
 	gint iSeparatorWidth;
 	gint iSeparatorHeight;
 	gchar *cSeparatorImage;

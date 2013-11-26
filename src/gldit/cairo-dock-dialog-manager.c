@@ -951,7 +951,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDialogsParam *pDialogs)
 	}
 	pango_font_description_free (fd);
 	g_free (cFontDescription);
-	pDialogs->dialogTextDescription.bOutlined = cairo_dock_get_boolean_key_value (pKeyFile, "Dialogs", "outlined", &bFlushConfFileNeeded, FALSE, NULL, NULL);
+	pDialogs->dialogTextDescription.bOutlined = FALSE;
 	pDialogs->dialogTextDescription.iMargin = 0;
 	
 	double couleur_dtext[3] = {0., 0., 0.};
