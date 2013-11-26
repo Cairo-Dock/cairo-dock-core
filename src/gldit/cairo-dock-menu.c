@@ -37,11 +37,12 @@
 #include "cairo-dock-style-colors.h"
 #include "cairo-dock-menu.h"
 
+#if GTK_MAJOR_VERSION > 2
 static gboolean _draw_menu_item (GtkWidget *widget, cairo_t *cr, G_GNUC_UNUSED gpointer data);
 static gboolean _on_select_menu_item (GtkWidget* pMenuItem, G_GNUC_UNUSED gpointer data);
 static gboolean _on_deselect_menu_item (GtkWidget* pMenuItem, G_GNUC_UNUSED gpointer data);
 static void _on_destroy_menu_item (GtkWidget* pMenuItem, G_GNUC_UNUSED gpointer data);
-
+#endif
 
   ////////////
  /// MENU ///
@@ -79,6 +80,7 @@ static void _init_menu_style (void)
 			gtk_style_context_add_provider_for_screen (gdk_screen_get_default(), GTK_STYLE_PROVIDER(cssProvider), GTK_STYLE_PROVIDER_PRIORITY_USER);
 			gldi_style_colors_freeze ();
 		}
+		g_print ("+ css provider\n");
 		
 		double rgb[4];
 		gldi_style_color_shade (myDialogsParam.fDialogColor, .2, rgb);
@@ -170,6 +172,21 @@ static void _init_menu_style (void)
 			background-color: green; \
 			background-image: none; \
 			background-clip: content-box; \
+		} \
+		.menuitem GtkCalendar, \
+		.menuitem GtkCalendar.button, \
+		.menuitem GtkCalendar.header, \
+		.menuitem GtkCalendar.view { \
+			background-color: @menuitem_bg_color; \
+			background-image: none; \
+			color: @menuitem_text_color; \
+		} \
+		.menuitem GtkCalendar { \
+			background-color: @menuitem_bg_color2; \
+			background-image: none; \
+		} \
+		.menuitem GtkCalendar:inconsistent { \
+			color: shade (@menuitem_bg_color2, 0.6); \
 		}",
 		(int)(rgb[0]*255), (int)(rgb[1]*255), (int)(rgb[2]*255),
 		(int)(myDialogsParam.dialogTextDescription.fColorStart[0]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[1]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[2]*255),
@@ -207,7 +224,6 @@ static gboolean _draw_menu (GtkWidget *pWidget,
 	
 	return TRUE;
 }
-#endif
 
 static void _set_margin_position (GtkWidget *pMenu, GldiMenuParams *pParams)
 {
@@ -281,6 +297,7 @@ static void _set_margin_position (GtkWidget *pMenu, GldiMenuParams *pParams)
 		g_free (css);
 	}
 }
+#endif
 
 GtkWidget *gldi_menu_new (G_GNUC_UNUSED Icon *pIcon)
 {
@@ -442,18 +459,20 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	h = requisition.height;
 	
 	/// TODO: use iMarginPosition...
+	#if GTK_MAJOR_VERSION > 2
 	double fAlign = pParams->fAlign;
 	int r = pParams->iRadius;
 	int ah = pParams->iArrowHeight;
+	int w_, h_;
+	#endif
 	int iAimedX, iAimedY;
 	int Hs = (pContainer->bIsHorizontal ? gldi_desktop_get_height() : gldi_desktop_get_width());
-	int w_, h_;
 	if (pContainer->bIsHorizontal)
 	{
-		w_ = w - 2 * r;
-		h_ = h - 2 * r - ah;
 		iAimedX = x0 + pIcon->image.iWidth/2;
 		#if GTK_MAJOR_VERSION > 2
+		w_ = w - 2 * r;
+		h_ = h - 2 * r - ah;
 		*x = MAX (0, iAimedX - fAlign * w_ - r);
 		#else
 		*x = iAimedX;
@@ -471,10 +490,10 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	}
 	else
 	{
-		w_ = w - 2 * r - ah;
-		h_ = h - 2 * r;
 		iAimedY = x0 + pIcon->image.iWidth/2;
 		#if GTK_MAJOR_VERSION > 2
+		w_ = w - 2 * r - ah;
+		h_ = h - 2 * r;
 		*y = MIN (iAimedY - fAlign * h_ - r, gldi_desktop_get_height() - h);
 		#else
 		*y = MIN (iAimedY, gldi_desktop_get_height() - h);
