@@ -28,6 +28,8 @@
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-icon-manager.h"  // cairo_dock_search_icon_s_path
+#include "cairo-dock-dialog-manager.h"
+#include "cairo-dock-style-colors.h"
 #include "cairo-dock-surface-factory.h"
 
 extern GldiContainer *g_pPrimaryContainer;
@@ -857,19 +859,21 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 	}
 	
 	//\_________________ On cree une surface aux dimensions du texte.
-	gboolean bDrawBackground = (pLabelDescription->fBackgroundColor != NULL && pLabelDescription->fBackgroundColor[3] > 0);
+	///gboolean bDrawBackground = (pLabelDescription->fBackgroundColor[3] > 0);
+	gboolean bDrawBackground = TRUE;  /// TODO: check that we actually always draw the bg...
 	double fRadius = fMaxScale * MAX (pLabelDescription->iMargin, MIN (6, pLabelDescription->iSize/4));  // permet d'avoir un rayon meme si on n'a pas de marge.
 	int iOutlineMargin = 2*pLabelDescription->iMargin + (pLabelDescription->bOutlined ? 2 : 0);  // outlined => +1 tout autour des lettres.
 	double fZoomX = ((iMaxWidth != 0 && log.width + iOutlineMargin > iMaxWidth) ? (double)iMaxWidth / (log.width + iOutlineMargin) : 1.);
+	double fLineWidth = 1;
 	
-	*iTextWidth = (log.width + iOutlineMargin) * fZoomX;  // le texte + la marge de chaque cote.
+	*iTextWidth = (log.width + iOutlineMargin) * fZoomX + 2*fLineWidth;  // le texte + la marge de chaque cote.
 	if (bDrawBackground)  // quand on trace le cadre, on evite qu'avec des petits textes genre "1" on obtienne un fond tout rond.
 	{
 		*iTextWidth = MAX (*iTextWidth, 2 * fRadius + 10);
 		if (iMaxWidth != 0 && *iTextWidth > iMaxWidth)
 			*iTextWidth = iMaxWidth;
 	}
-	*iTextHeight = log.height + iOutlineMargin;
+	*iTextHeight = log.height + iOutlineMargin + 2*fLineWidth;
 	
 	cairo_surface_t* pNewSurface = cairo_dock_create_blank_surface (
 		*iTextWidth,
@@ -880,11 +884,23 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 	if (bDrawBackground)  // non transparent.
 	{
 		cairo_save (pCairoContext);
-		double fFrameWidth = *iTextWidth - 2 * fRadius;
-		double fFrameHeight = *iTextHeight;
-		cairo_dock_draw_rounded_rectangle (pCairoContext, fRadius, 0., fFrameWidth, fFrameHeight);
-		cairo_set_source_rgba (pCairoContext, pLabelDescription->fBackgroundColor[0], pLabelDescription->fBackgroundColor[1], pLabelDescription->fBackgroundColor[2], pLabelDescription->fBackgroundColor[3]);
-		cairo_fill (pCairoContext);
+		double fFrameWidth = *iTextWidth - 2 * fRadius - fLineWidth;
+		double fFrameHeight = *iTextHeight - fLineWidth/2;
+		cairo_dock_draw_rounded_rectangle (pCairoContext, fRadius, fLineWidth, fFrameWidth, fFrameHeight);
+		
+		if (pLabelDescription->fBackgroundColor[3] != 0)
+			cairo_set_source_rgba (pCairoContext, pLabelDescription->fBackgroundColor[0], pLabelDescription->fBackgroundColor[1], pLabelDescription->fBackgroundColor[2], pLabelDescription->fBackgroundColor[3]);
+		else
+			gldi_style_colors_set_bg_color (pCairoContext);
+		cairo_fill_preserve (pCairoContext);
+		
+		if (pLabelDescription->fLineColor[3] != 0)
+			cairo_set_source_rgba (pCairoContext, pLabelDescription->fLineColor[0], pLabelDescription->fLineColor[1], pLabelDescription->fLineColor[2], pLabelDescription->fLineColor[3]);
+		else
+			gldi_style_colors_set_line_color (pCairoContext);
+		cairo_set_line_width (pCairoContext, fLineWidth);
+		cairo_stroke (pCairoContext);
+		
 		cairo_restore(pCairoContext);
 	}
 	
@@ -922,7 +938,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 
 	//\_________________ On remplit l'interieur du texte.
 	cairo_pattern_t *pGradationPattern = NULL;
-	if (pLabelDescription->fColorStart != pLabelDescription->fColorStop)
+	/**if (pLabelDescription->fColorStart != pLabelDescription->fColorStop)
 	{
 		if (pLabelDescription->bVerticalPattern)
 			pGradationPattern = cairo_pattern_create_linear (0.,
@@ -950,8 +966,11 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 			1.);
 		cairo_set_source (pCairoContext, pGradationPattern);
 	}
-	else
+	else*/
+	if (pLabelDescription->fBackgroundColor[3] != 0)
 		cairo_set_source_rgb (pCairoContext, pLabelDescription->fColorStart[0], pLabelDescription->fColorStart[1], pLabelDescription->fColorStart[2]);
+	else
+		gldi_style_colors_set_text_color (pCairoContext);
 	cairo_move_to (pCairoContext, 0, 0);
 	if (fZoomX != 1)
 		cairo_scale (pCairoContext, fZoomX, 1.);

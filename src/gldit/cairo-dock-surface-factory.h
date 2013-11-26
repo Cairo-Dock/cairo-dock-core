@@ -87,6 +87,8 @@ struct _CairoDockLabelDescription {
 	gboolean bVerticalPattern;
 	/// frame background color. Set the alpha channel to 0 to not draw a frame in the background.
 	gdouble fBackgroundColor[4];
+	/// frame outline color. Set the alpha channel to 0 to not draw a the outline.
+	gdouble fLineColor[4];
 	/// TRUE to stroke the outline of the characters (in black).
 	gboolean bOutlined;
 	/// margin around the text, it is also the dimension of the frame if available.
