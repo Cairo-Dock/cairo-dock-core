@@ -52,7 +52,6 @@ typedef enum {
 	CAIRO_DOCK_PHYSICAL_SEPARATOR,
 	CAIRO_DOCK_NB_SEPARATOR_TYPES
 	} CairoDockSeparatorType;
-#define CairoDockSpeparatorType CairoDockSeparatorType
 
 struct _CairoIconsParam {
 	// icons

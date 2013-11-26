@@ -79,15 +79,15 @@ struct _CairoDockLabelDescription {
 	PangoWeight iWeight;
 	/// text style (italic or normal).
 	PangoStyle iStyle;
-	/// first color of the characters.
+	/// whether to draw the decorations or not
+	gboolean bNoDecorations;
+	/// whether to use the default colors or the colors defined below
+	gboolean bUseDefaultColors;
+	/// text color
 	gdouble fColorStart[3];
-	/// second color of the characters. If different from the first one, it will make a gradation.
-	gdouble fColorStop[3];
-	/// TRUE if the gradation is vertical (from top to bottom).
-	gboolean bVerticalPattern;
-	/// frame background color. Set the alpha channel to 0 to not draw a frame in the background.
+	/// background color
 	gdouble fBackgroundColor[4];
-	/// frame outline color. Set the alpha channel to 0 to not draw a the outline.
+	/// outline color
 	gdouble fLineColor[4];
 	/// TRUE to stroke the outline of the characters (in black).
 	gboolean bOutlined;

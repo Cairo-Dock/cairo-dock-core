@@ -57,7 +57,72 @@ static cairo_pattern_t *s_menuitem_bg_pattern = NULL;
 static GdkRGBA s_text_color;
 static int s_iMenuItemColorId = 1;
 static gboolean s_bIgnoreStyleChange = FALSE;
+#endif
 
+static double hue2rgb (double p, double q, double t)
+{
+	if(t < 0) t += 1;
+	if(t > 1) t -= 1;
+	if(t < 1./6) return p + (q - p) * 6 * t;
+	if(t < 1./2) return q;
+	if(t < 2./3) return p + (q - p) * (2./3 - t) * 6;
+	return p;
+}
+static void hslToRgb (double h, double s, double l, double *r, double *g, double *b)
+{
+	if (s == 0) // achromatic
+	{
+		*r = *g = *b = l;
+	}
+	else
+	{
+		double q = (l < 0.5 ? l * (1 + s) : l + s - l * s);
+		double p = 2 * l - q;
+		*r = hue2rgb(p, q, h + 1./3);
+		*g = hue2rgb(p, q, h);
+		*b = hue2rgb(p, q, h - 1./3);
+	}
+}
+static void rgbToHsl (double r, double g, double b, double *h_, double *s_, double *l_)
+{
+	double max = MAX (MAX (r, g), b), min = MIN (MIN (r, g), b);
+	double h, s, l = (max + min) / 2;
+
+	if(max == min)  // achromatic
+	{
+		h = s = 0;
+	}
+	else
+	{
+		double d = max - min;
+		s = (l > 0.5 ? d / (2 - max - min) : d / (max + min));
+		if (max == r)
+			h = (g - b) / d + (g < b ? 6 : 0);
+		else if (max == g)
+			h = (b - r) / d + 2;
+		else
+			h = (r - g) / d + 4;
+		h /= 6;
+	}
+
+	*h_ = h;
+	*s_ = s;
+	*l_ = l;
+}
+void gldi_style_color_shade (double *icolor, double shade, double *ocolor)
+{
+	double h, s, l;
+	rgbToHsl (icolor[0], icolor[1], icolor[2], &h, &s, &l);
+	
+	if (l > .5)
+		l -= shade;
+	else
+		l += shade;
+	
+	hslToRgb (h, s, l, &ocolor[0], &ocolor[1], &ocolor[2]);
+}
+
+#if GTK_MAJOR_VERSION > 2
 static void _on_style_changed (G_GNUC_UNUSED GtkStyleContext *_style, G_GNUC_UNUSED gpointer data)
 {
 	if (! s_bIgnoreStyleChange)
@@ -146,84 +211,27 @@ static void _on_style_changed (G_GNUC_UNUSED GtkStyleContext *_style, G_GNUC_UNU
 	}
 	else g_print (" style changed ignored\n");
 }
-
-static double hue2rgb (double p, double q, double t)
-{
-	if(t < 0) t += 1;
-	if(t > 1) t -= 1;
-	if(t < 1./6) return p + (q - p) * 6 * t;
-	if(t < 1./2) return q;
-	if(t < 2./3) return p + (q - p) * (2./3 - t) * 6;
-	return p;
-}
-static void hslToRgb (double h, double s, double l, double *r, double *g, double *b)
-{
-	if (s == 0) // achromatic
-	{
-		*r = *g = *b = l;
-	}
-	else
-	{
-		double q = (l < 0.5 ? l * (1 + s) : l + s - l * s);
-		double p = 2 * l - q;
-		*r = hue2rgb(p, q, h + 1./3);
-		*g = hue2rgb(p, q, h);
-		*b = hue2rgb(p, q, h - 1./3);
-	}
-}
-static void rgbToHsl (double r, double g, double b, double *h_, double *s_, double *l_)
-{
-	double max = MAX (MAX (r, g), b), min = MIN (MIN (r, g), b);
-	double h, s, l = (max + min) / 2;
-
-	if(max == min)  // achromatic
-	{
-		h = s = 0;
-	}
-	else
-	{
-		double d = max - min;
-		s = (l > 0.5 ? d / (2 - max - min) : d / (max + min));
-		if (max == r)
-			h = (g - b) / d + (g < b ? 6 : 0);
-		else if (max == g)
-			h = (b - r) / d + 2;
-		else
-			h = (r - g) / d + 4;
-		h /= 6;
-	}
-
-	*h_ = h;
-	*s_ = s;
-	*l_ = l;
-}
-
-void gldi_style_color_shade (double *icolor, double shade, double *ocolor)
-{
-	double h, s, l;
-	rgbToHsl (icolor[0], icolor[1], icolor[2], &h, &s, &l);
-	
-	if (l > .5)
-		l -= shade;
-	else
-		l += shade;
-	
-	hslToRgb (h, s, l, &ocolor[0], &ocolor[1], &ocolor[2]);
-}
-
+#endif
 
 void gldi_style_colors_freeze (void)
 {
+	#if GTK_MAJOR_VERSION > 2
 	s_bIgnoreStyleChange = ! s_bIgnoreStyleChange;
+	#endif
 }
 
 int gldi_style_colors_get_index (void)
 {
+	#if GTK_MAJOR_VERSION > 2
 	return s_iMenuItemColorId;
+	#else
+	return 0;
+	#endif
 }
 
 void gldi_style_colors_init (void)
 {
+	#if GTK_MAJOR_VERSION > 2
 	if (s_pStyle != NULL)
 		return;
 	
@@ -231,18 +239,20 @@ void gldi_style_colors_init (void)
 	s_pStyle = gtk_style_context_new();
 	gtk_style_context_set_screen (s_pStyle, gdk_screen_get_default());
 	g_signal_connect (s_pStyle, "changed", G_CALLBACK(_on_style_changed), NULL);
+	#endif
 }
 
 void gldi_style_colors_reload (void)
 {
+	#if GTK_MAJOR_VERSION > 2
 	_on_style_changed (s_pStyle, NULL);
+	#endif
 }
-
-#endif
 
 
 void gldi_style_colors_set_bg_color (cairo_t *pCairoContext)
 {
+	#if GTK_MAJOR_VERSION > 2
 	if (myDialogsParam.bUseSystemColors)
 	{
 		if (s_menu_bg_pattern)
@@ -251,6 +261,7 @@ void gldi_style_colors_set_bg_color (cairo_t *pCairoContext)
 			cairo_set_source_rgba (pCairoContext, s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue, s_menu_bg_color.alpha);
 	}
 	else
+	#endif
 	{
 		cairo_set_source_rgba (pCairoContext, myDialogsParam.fDialogColor[0], myDialogsParam.fDialogColor[1], myDialogsParam.fDialogColor[2], myDialogsParam.fDialogColor[3]);
 	}
@@ -258,6 +269,7 @@ void gldi_style_colors_set_bg_color (cairo_t *pCairoContext)
 
 void gldi_style_colors_set_selected_bg_color (cairo_t *pCairoContext)
 {
+	#if GTK_MAJOR_VERSION > 2
 	if (myDialogsParam.bUseSystemColors)
 	{
 		if (s_menuitem_bg_pattern)
@@ -266,6 +278,7 @@ void gldi_style_colors_set_selected_bg_color (cairo_t *pCairoContext)
 			cairo_set_source_rgba (pCairoContext, s_menuitem_bg_color.red, s_menuitem_bg_color.green, s_menuitem_bg_color.blue, 1.);
 	}
 	else
+	#endif
 	{
 		double r = myDialogsParam.fDialogColor[0], g = myDialogsParam.fDialogColor[1], b = myDialogsParam.fDialogColor[2];
 		double h, s, l;
@@ -282,6 +295,7 @@ void gldi_style_colors_set_selected_bg_color (cairo_t *pCairoContext)
 
 void gldi_style_colors_set_line_color (cairo_t *pCairoContext)
 {
+	#if GTK_MAJOR_VERSION > 2
 	if (myDialogsParam.bUseSystemColors)
 	{
 		if (s_menu_bg_pattern)
@@ -290,6 +304,7 @@ void gldi_style_colors_set_line_color (cairo_t *pCairoContext)
 			cairo_set_source_rgb (pCairoContext, s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue);  /// shade a little ?...
 	}
 	else
+	#endif
 	{
 		cairo_set_source_rgba (pCairoContext, myDialogsParam.fLineColor[0], myDialogsParam.fLineColor[1], myDialogsParam.fLineColor[2], myDialogsParam.fLineColor[3]);
 	}
@@ -297,58 +312,15 @@ void gldi_style_colors_set_line_color (cairo_t *pCairoContext)
 
 void gldi_style_colors_set_text_color (cairo_t *pCairoContext)
 {
+	#if GTK_MAJOR_VERSION > 2
 	if (myDialogsParam.bUseSystemColors)
 	{
 		cairo_set_source_rgb (pCairoContext, s_text_color.red, s_text_color.green, s_text_color.blue);
 	}
 	else
+	#endif
 	{
 		cairo_set_source_rgb (pCairoContext, myDialogsParam.dialogTextDescription.fColorStart[0], myDialogsParam.dialogTextDescription.fColorStart[1], myDialogsParam.dialogTextDescription.fColorStart[2]);
-	}
-}
-
-void gldi_style_colors_get_text_color (double *pColor)
-{
-	if (myDialogsParam.bUseSystemColors)
-	{
-		pColor[0] = s_text_color.red;
-		pColor[1] = s_text_color.green;
-		pColor[2] = s_text_color.blue;
-	}
-	else
-	{
-		memcpy (pColor, myDialogsParam.dialogTextDescription.fColorStart, 3*sizeof(double));
-	}
-}
-
-void gldi_style_colors_get_bg_color (double *pColor)
-{
-	if (myDialogsParam.bUseSystemColors)
-	{
-		pColor[0] = s_menu_bg_color.red;
-		pColor[1] = s_menu_bg_color.green;
-		pColor[2] = s_menu_bg_color.blue;
-		pColor[3] = s_menu_bg_color.alpha;
-	}
-	else
-	{
-		memcpy (pColor, myDialogsParam.fDialogColor, 4*sizeof(double));
-	}
-}
-
-void gldi_style_colors_get_line_color (double *pColor)
-{
-	if (myDialogsParam.bUseSystemColors)
-	{
-		pColor[0] = s_menu_bg_color.red;
-		pColor[1] = s_menu_bg_color.green;
-		pColor[2] = s_menu_bg_color.blue;
-		pColor[3] = 1;
-	}
-	else
-	{
-		memcpy (pColor, myDialogsParam.fDialogColor, 3*sizeof(double));
-		pColor[3] = 1;
 	}
 }
 
@@ -361,6 +333,7 @@ void gldi_style_colors_paint_bg_color (cairo_t *pCairoContext, int iWidth)
 	// option transparency
 	// a=1: paint
 	// else: mask
+	#if GTK_MAJOR_VERSION > 2
 	if (myDialogsParam.bUseSystemColors && s_menu_bg_pattern)
 	{
 		cairo_paint (pCairoContext);
@@ -382,4 +355,8 @@ void gldi_style_colors_paint_bg_color (cairo_t *pCairoContext, int iWidth)
 		
 		cairo_pattern_destroy (pGradationPattern);
 	}
+	#else
+	(void)iWidth;
+	cairo_paint (pCairoContext);
+	#endif
 }

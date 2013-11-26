@@ -953,14 +953,12 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDialogsParam *pDialogs)
 	g_free (cFontDescription);
 	pDialogs->dialogTextDescription.bOutlined = FALSE;
 	pDialogs->dialogTextDescription.iMargin = 0;
+	pDialogs->dialogTextDescription.bNoDecorations = TRUE;
 	
 	double couleur_dtext[3] = {0., 0., 0.};
-	if (pDialogs->bUseSystemColors)
-		gldi_style_colors_get_text_color (pDialogs->dialogTextDescription.fColorStart);
-	else
-		cairo_dock_get_double_list_key_value (pKeyFile, "Dialogs", "text color", &bFlushConfFileNeeded, pDialogs->dialogTextDescription.fColorStart, 3, couleur_dtext, NULL, NULL);
-	memcpy (&pDialogs->dialogTextDescription.fColorStop, &pDialogs->dialogTextDescription.fColorStart, 3*sizeof (double));
-	g_print ("dialog text color: %.2f;%.2f;%.2f\n", pDialogs->dialogTextDescription.fColorStart[0], pDialogs->dialogTextDescription.fColorStart[1], pDialogs->dialogTextDescription.fColorStart[2]);
+	cairo_dock_get_double_list_key_value (pKeyFile, "Dialogs", "text color", &bFlushConfFileNeeded, pDialogs->dialogTextDescription.fColorStart, 3, couleur_dtext, NULL, NULL);
+	
+	pDialogs->dialogTextDescription.bUseDefaultColors = pDialogs->bUseSystemColors;
 	
 	return bFlushConfFileNeeded;
 }

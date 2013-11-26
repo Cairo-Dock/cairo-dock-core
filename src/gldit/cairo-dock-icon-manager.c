@@ -575,9 +575,9 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 	double couleur_backlabel[4] = {0., 0., 0., 0.85};
 	double couleur_label[3] = {1., 1., 1.};
 	gboolean bDefaultColors = (cairo_dock_get_integer_key_value (pKeyFile, "Labels", "colors", &bFlushConfFileNeeded, 1, NULL, NULL) == 0);
+	pLabels->iconTextDescription.bUseDefaultColors = bDefaultColors;
 	if (bDefaultColors)
 	{
-		gldi_style_colors_get_text_color (pLabels->iconTextDescription.fColorStart);
 		pLabels->iconTextDescription.bOutlined = FALSE;
 	}
 	else
@@ -599,7 +599,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 		}
 	}
 	
-	memcpy (pLabels->iconTextDescription.fColorStop, pLabels->iconTextDescription.fColorStart, 3 * sizeof (gdouble));
 	pLabels->iconTextDescription.iMargin = cairo_dock_get_integer_key_value (pKeyFile, "Labels", "text margin", &bFlushConfFileNeeded, 4, NULL, NULL);
 	
 	//\___________________ quick-info
@@ -621,7 +620,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 		cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "qi bg color", &bFlushConfFileNeeded, pLabels->quickInfoTextDescription.fBackgroundColor, 4, couleur_backlabel, NULL, NULL);
 		cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "qi text color", &bFlushConfFileNeeded, pLabels->quickInfoTextDescription.fColorStart, 3, couleur_label, NULL, NULL);
 	}
-	memcpy (pLabels->quickInfoTextDescription.fColorStop, pLabels->quickInfoTextDescription.fColorStart, 3 * sizeof (gdouble));
 	
 	pLabels->iLabelSize = (pLabels->iconTextDescription.iSize != 0 ?
 		pLabels->iconTextDescription.iSize +

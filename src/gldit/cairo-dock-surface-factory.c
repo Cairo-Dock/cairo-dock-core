@@ -860,7 +860,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 	
 	//\_________________ On cree une surface aux dimensions du texte.
 	///gboolean bDrawBackground = (pLabelDescription->fBackgroundColor[3] > 0);
-	gboolean bDrawBackground = TRUE;  /// TODO: check that we actually always draw the bg...
+	gboolean bDrawBackground = ! pLabelDescription->bNoDecorations;
 	double fRadius = fMaxScale * MAX (pLabelDescription->iMargin, MIN (6, pLabelDescription->iSize/4));  // permet d'avoir un rayon meme si on n'a pas de marge.
 	int iOutlineMargin = 2*pLabelDescription->iMargin + (pLabelDescription->bOutlined ? 2 : 0);  // outlined => +1 tout autour des lettres.
 	double fZoomX = ((iMaxWidth != 0 && log.width + iOutlineMargin > iMaxWidth) ? (double)iMaxWidth / (log.width + iOutlineMargin) : 1.);

@@ -286,7 +286,6 @@ static gboolean on_button_press_widget (G_GNUC_UNUSED GtkWidget *widget,
 static GtkWidget *_cairo_dock_add_dialog_internal_box (CairoDialog *pDialog, int iWidth, int iHeight, gboolean bCanResize)
 {
 	GtkWidget *pBox = _gtk_hbox_new (0);
-	g_print ("%s (%dx%d)\n", __func__, iWidth, iHeight);
 	if (iWidth != 0 && iHeight != 0)
 		g_object_set (pBox, "height-request", iHeight, "width-request", iWidth, NULL);
 	else if (iWidth != 0)

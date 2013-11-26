@@ -1124,7 +1124,7 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
 		if (bIsCairoDockSession)
 		{
 			gtk_widget_set_sensitive (pMenuItem, FALSE); // locked
-			gtk_widget_set_state_flags (pMenuItem, GTK_STATE_FLAG_INSENSITIVE, TRUE);
+			///gtk_widget_set_state_flags (pMenuItem, GTK_STATE_FLAG_INSENSITIVE, TRUE);
 			gtk_widget_set_tooltip_text (pMenuItem, _("You're using a Cairo-Dock Session!\nIt's not advised to quit the dock but you can press Shift to unlock this menu entry."));
 			// signal to unlock the entry (signal monitored only in the submenu)
 			g_signal_connect (pSubMenu, "key-press-event", G_CALLBACK (_cairo_dock_set_sensitive_quit_menu), pMenuItem);
