@@ -91,7 +91,6 @@ static void _init_menu_style (void)
 		double rgbb[4];
 		gldi_style_color_shade (myDialogsParam.fDialogColor, .3, rgbb);
 		
-		/// TODO: and for calendar ?...
 		gchar *css = g_strdup_printf ("@define-color menuitem_bg_color rgb (%d, %d, %d); \
 		@define-color menuitem_text_color rgb (%d, %d, %d); \
 		@define-color menuitem_insensitive_text_color rgba (%d, %d, %d, .5); \
@@ -150,28 +149,19 @@ static void _init_menu_style (void)
 			background: @menuitem_bg_color2; \
 			background-image: none; \
 			color: @menuitem_text_color; \
+			border-image: none; \
 		} \
 		.menuitem .scale.left, \
-		.menuitem.scale.left, \
-		.menuitem .scale.left:hover { \
-			background: green; \
+		.menuitem.scale.left { \
+			background: @menuitem_bg_color; \
 			background-image: none; \
-			color: green; \
+			border-image: none; \
 		} \
 		.menuitem .scale.slider, \
 		.menuitem.scale.slider { \
 			background: @menuitem_text_color; \
 			background-image: none; \
-		} \
-		.scale.trough.highlight { \
-			background-color: green; \
-			background-image: none; \
-			background-clip: content-box; \
-		} \
-		.scale.trough.highlight:backdrop { \
-			background-color: green; \
-			background-image: none; \
-			background-clip: content-box; \
+			border-image: none; \
 		} \
 		.menuitem GtkCalendar, \
 		.menuitem GtkCalendar.button, \
