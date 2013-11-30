@@ -443,8 +443,12 @@ void gldi_dialog_init_internals (CairoDialog *pDialog, CairoDialogAttr *pAttribu
 		#endif
 		pDialog->iInteractiveWidth = requisition.width;
 		pDialog->iInteractiveHeight = requisition.height;
-		gldi_dialog_set_widget_text_color (pDialog->pInteractiveWidget);
-		gldi_dialog_set_widget_bg_color (pDialog->pInteractiveWidget);
+		
+		// set a MenuItem style to the dialog, so that the interactive widget can use the style defined for menu-items (either from the GTK theme, or from our own .css), and therefore be well integrated into the dialog, as if it was inside a menu.
+		#if GTK_MAJOR_VERSION > 2
+		GtkStyleContext *ctx = gtk_widget_get_style_context (pDialog->container.pWidget);
+		gtk_style_context_add_class (ctx, GTK_STYLE_CLASS_MENUITEM);
+		#endif
 	}
 	
 	//\________________ load the buttons
@@ -698,7 +702,7 @@ static inline GtkWidget *_cairo_dock_make_hscale_for_dialog (double fValueForHSc
 	gtk_range_set_value (GTK_RANGE (pWidget), fValueForHScale);
 
 	g_object_set (pWidget, "width-request", CAIRO_DIALOG_MIN_SCALE_WIDTH, NULL);
-	gldi_dialog_set_widget_text_color (pWidget);
+	//gldi_dialog_set_widget_text_color (pWidget);
 	return pWidget;
 }
 

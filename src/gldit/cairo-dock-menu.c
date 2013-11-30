@@ -80,7 +80,6 @@ static void _init_menu_style (void)
 			gtk_style_context_add_provider_for_screen (gdk_screen_get_default(), GTK_STYLE_PROVIDER(cssProvider), GTK_STYLE_PROVIDER_PRIORITY_USER);
 			gldi_style_colors_freeze ();
 		}
-		g_print ("+ css provider\n");
 		
 		double rgb[4];
 		gldi_style_color_shade (myDialogsParam.fDialogColor, .2, rgb);
@@ -96,6 +95,7 @@ static void _init_menu_style (void)
 		@define-color menuitem_insensitive_text_color rgba (%d, %d, %d, .5); \
 		@define-color menuitem_separator_color rgb (%d, %d, %d); \
 		@define-color menuitem_bg_color2 rgb (%d, %d, %d); \
+		@define-color menu_bg_color rgba (%d, %d, %d, %d); \
 		.menuitem { \
 			text-shadow: none; \
 			border-image: none; \
@@ -177,12 +177,18 @@ static void _init_menu_style (void)
 		} \
 		.menuitem GtkCalendar:inconsistent { \
 			color: shade (@menuitem_bg_color2, 0.6); \
+		} \
+		.menu { \
+			background: @menu_bg_color; \
+			background-image: none; \
+			color: @menuitem_text_color; \
 		}",
 		(int)(rgb[0]*255), (int)(rgb[1]*255), (int)(rgb[2]*255),
 		(int)(myDialogsParam.dialogTextDescription.fColorStart[0]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[1]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[2]*255),
 		(int)(myDialogsParam.dialogTextDescription.fColorStart[0]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[1]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[2]*255),
 		(int)(rgbs[0]*255), (int)(rgbs[1]*255), (int)(rgbs[2]*255),
-		(int)(rgbb[0]*255), (int)(rgbb[1]*255), (int)(rgbb[2]*255));
+		(int)(rgbb[0]*255), (int)(rgbb[1]*255), (int)(rgbb[2]*255),
+		(int)(myDialogsParam.fDialogColor[0]*255), (int)(myDialogsParam.fDialogColor[1]*255), (int)(myDialogsParam.fDialogColor[2]*255), (int)(myDialogsParam.fDialogColor[3]*255));  // we also define ".menu", so that custom widgets (like in the SoundMenu) can get our colors.
 		//g_print ("css color: %d; %d; %d\n", (int)(myDialogsParam.dialogTextDescription.fColorStart[0]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[1]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[2]*255));
 		
 		gldi_style_colors_freeze ();
