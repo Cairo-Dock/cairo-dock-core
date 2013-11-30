@@ -666,17 +666,13 @@ frame_label =
 #Y+[No;0;0;On pointed icon;0;0;On all icons;1;1] Show labels:
 show_labels = 1
 
-#f-[0.;50.] label's visibility threshold :
-#{the bigger, the more the labels next to the selected icon will be transparent.}
+#e-[0.;50.;more visible;less visible] Neighbouring labels visibility:
 alpha threshold = 10.
-
-#b- Should the labels always be horizontal, even when dock is vertical?
-always horizontal = true
 
 #F+[Appearance;gtk-orientation-portrait]
 frame_bg =
 
-#Y-[Auto;0;0;Custom;1;4] Colors
+#Y-[Automatic;0;0;Custom;1;4] Colors
 colors = 1
 
 #C+ Background colour

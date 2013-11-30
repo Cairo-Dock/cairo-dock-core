@@ -616,15 +616,12 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 		else if (icon->fDrawX + fOffsetX + icon->label.iWidth > iWidth)  // l'etiquette deborde a droite.
 			fOffsetX = iWidth - icon->label.iWidth - icon->fDrawX;
 		
-		if (icon->fOrientation != 0 && ! myIconsParam.bTextAlwaysHorizontal)
-			cairo_rotate (pCairoContext, icon->fOrientation);
-		
 		if (bIsHorizontal)
 		{
 			cairo_dock_apply_image_buffer_surface_with_offset (&icon->label, pCairoContext,
 				floor (fOffsetX), floor (bDirectionUp ? -iLabelSize : icon->fHeight * icon->fScale), fMagnitude);
 		}
-		else if (myIconsParam.bTextAlwaysHorizontal)  // horizontal label on a vertical dock -> draw them next to the icon, vertically centered (like the Parabolic view)
+		else  // horizontal label on a vertical dock -> draw them next to the icon, vertically centered (like the Parabolic view)
 		{
 			if (icon->pSubDock && gldi_container_is_visible (CAIRO_CONTAINER (icon->pSubDock)))  // in vertical mode 
 			{
@@ -650,14 +647,6 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 			{
 				cairo_dock_apply_image_buffer_surface_with_offset_and_limit (&icon->label, pCairoContext, iOffsetX, iOffsetY, fMagnitude, iMaxWidth);
 			}
-		}
-		else
-		{
-			cairo_rotate (pCairoContext, bDirectionUp ? - G_PI/2 : G_PI/2);
-			cairo_dock_apply_image_buffer_surface_with_offset (&icon->label, pCairoContext,
-				floor (bDirectionUp ? fOffsetX - icon->fWidth * icon->fScale : fOffsetX),
-				-floor (bDirectionUp ? iLabelSize : icon->fHeight * icon->fScale + iLabelSize),
-				fMagnitude);
 		}
 		
 		cairo_restore (pCairoContext);  // retour juste apres la translation (fDrawX, fDrawY).

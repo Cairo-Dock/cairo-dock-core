@@ -83,7 +83,6 @@ struct _CairoIconsParam {
 	gboolean bLabelForPointedIconOnly;
 	gint iLabelSize;  // taille des etiquettes des icones, en prenant en compte le contour et la marge.
 	gdouble fLabelAlphaThreshold;
-	gboolean bTextAlwaysHorizontal;
 	};
 
 /// signals

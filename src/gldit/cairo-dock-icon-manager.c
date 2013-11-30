@@ -653,8 +653,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 	pLabels->fLabelAlphaThreshold = cairo_dock_get_double_key_value (pKeyFile, "Labels", "alpha threshold", &bFlushConfFileNeeded, 10., "System", NULL);
 	pLabels->fLabelAlphaThreshold = (pLabels->fLabelAlphaThreshold + 10.) / 10.;  // [0;50] -> [1;6]
 	
-	pLabels->bTextAlwaysHorizontal = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "always horizontal", &bFlushConfFileNeeded, FALSE, "System", NULL);
-	
 	return bFlushConfFileNeeded;
 }
 

@@ -418,7 +418,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		double dx = .5 * (icon->label.iWidth & 1);  // on decale la texture pour la coller sur la grille des coordonnees entieres.
 		double dy = .5 * (icon->label.iHeight & 1);
 		
-		if (pDock->container.bIsHorizontal || !myIconsParam.bTextAlwaysHorizontal)
+		if (pDock->container.bIsHorizontal)
 		{
 			if (fX + icon->label.iWidth/2 > pDock->container.iWidth)  // l'etiquette deborde a droite.
 				fX = pDock->container.iWidth - icon->label.iWidth/2;
@@ -439,12 +439,6 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 					floor (fX) + dx,
 					0.);
 				glRotatef (pDock->container.bDirectionUp ? 90 : -90, 0., 0., 1.);
-			}
-			if (icon->fOrientation != 0 && ! myIconsParam.bTextAlwaysHorizontal)
-			{
-				glTranslatef (-icon->fWidth * icon->fScale/2, icon->fHeight * icon->fScale/2, 0.);
-				glRotatef (-icon->fOrientation/G_PI*180., 0., 0., 1.);
-				glTranslatef (icon->fWidth * icon->fScale/2, -icon->fHeight * icon->fScale/2, 0.);
 			}
 			
 			_cairo_dock_set_alpha (fMagnitude);

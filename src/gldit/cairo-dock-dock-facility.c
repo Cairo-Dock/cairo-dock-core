@@ -1041,8 +1041,7 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 			iNewPositionX,
 			iNewHeight,
 			iNewWidth);
-		if (myIconsParam.bTextAlwaysHorizontal)  // in this case, the sub-dock is over the label, so this one is drawn with a low transparency, so we trigger the redraw.
-			gtk_widget_queue_draw (pParentDock->container.pWidget);
+		gtk_widget_queue_draw (pParentDock->container.pWidget);  // in this case, the sub-dock is over the label, so this one is drawn with a low transparency, so we trigger the redraw.
 	}
 	
 	// animate it
