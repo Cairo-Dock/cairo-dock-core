@@ -309,24 +309,27 @@ gboolean cairo_dock_launch_command_full (const gchar *cCommand, const gchar *cWo
 	return TRUE;
 }
 
+const gchar * cairo_dock_get_default_terminal (void)
+{
+	const gchar *cTerm = g_getenv ("COLORTERM");
+	if (cTerm != NULL && strlen (cTerm) > 1)  // Filter COLORTERM=1 or COLORTERM=y because we need the name of the terminal
+		return cTerm;
+	else if (g_iDesktopEnv == CAIRO_DOCK_GNOME)
+		return "gnome-terminal";
+	else if (g_iDesktopEnv == CAIRO_DOCK_XFCE)
+		return "xfce4-terminal";
+	else if (g_iDesktopEnv == CAIRO_DOCK_KDE)
+		return "konsole";
+	else if ((cTerm = g_getenv ("TERM")) != NULL)
+		return cTerm;
+	else
+		return "xterm";
+}
+
 gchar * cairo_dock_get_command_with_right_terminal (const gchar *cCommand)
 {
-	gchar *cFullCommand;
-	const gchar *cTerm = g_getenv ("COLORTERM");
-	if (cTerm != NULL && strlen (cTerm) > 1)  // Filter COLORTERM=1 ou COLORTERM=y because we need the name of the terminal
-		cFullCommand = g_strdup_printf ("%s -e \"%s\"", cTerm, cCommand);
-	else if (g_iDesktopEnv == CAIRO_DOCK_GNOME)
-		cFullCommand = g_strdup_printf ("gnome-terminal -e \"%s\"", cCommand);
-	else if (g_iDesktopEnv == CAIRO_DOCK_XFCE)
-		cFullCommand = g_strdup_printf ("xfce4-terminal -e \"%s\"", cCommand);
-	else if (g_iDesktopEnv == CAIRO_DOCK_KDE)
-		cFullCommand = g_strdup_printf ("konsole -e \"%s\"", cCommand);
-	else if ((cTerm = g_getenv ("TERM")) != NULL)
-		cFullCommand = g_strdup_printf ("%s -e \"%s\"", cTerm, cCommand);
-	else
-		cFullCommand = g_strdup_printf ("xterm -e \"%s\"", cCommand);
-
-	return cFullCommand;
+	const gchar *cTerm = cairo_dock_get_default_terminal ();
+	return g_strdup_printf ("%s -e \"%s\"", cTerm, cCommand);
 }
 
 
