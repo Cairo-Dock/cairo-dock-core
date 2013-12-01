@@ -729,80 +729,6 @@ cairo_surface_t * cairo_dock_rotate_surface (cairo_surface_t *pSurface, double f
 }
 
 
-static void _cairo_dock_limit_string_width (gchar *cLine, PangoLayout *pLayout, gboolean bUseMarkup, int iMaxWidth)
-{
-	//g_print ("%s (%s)\n", __func__, cLine);
-	// on insere des retours chariot pour tenir dans la largeur donnee.
-	PangoRectangle log;
-	gchar *sp, *last_sp=NULL;
-	double w;
-	int iNbLines = 0;
-	
-	gchar *str = cLine;
-	while (*str == ' ')  // on saute les espaces en debut de ligne.
-		str ++;
-	
-	sp = str;
-	do
-	{
-		sp = strchr (sp+1, ' ');  // on trouve l'espace suivant.
-		if (!sp)  // plus d'espace, on quitte.
-			break ;
-		
-		*sp = '\0';  // on coupe a cet espace.
-		if (bUseMarkup)  // on regarde la taille de str a sp.
-			pango_layout_set_markup (pLayout, str, -1);
-		else
-			pango_layout_set_text (pLayout, str, -1);
-		pango_layout_get_pixel_extents (pLayout, NULL, &log);
-		//g_print ("%s => w:%d, x:%d\n", str, log.width, log.x);
-		w = log.width + log.x;
-		
-		if (w > iMaxWidth)  // on deborde.
-		{
-			if (last_sp != NULL)  // on coupe au dernier espace connu.
-			{
-				*sp = ' ';  // on remet l'espace.
-				*last_sp = '\n';  // on coupe.
-				iNbLines ++;
-				str = last_sp + 1;  // on place le debut de ligne apres la coupure.
-			}
-			else  // aucun espace, c'est un mot entier.
-			{
-				*sp = '\n';  // on coupe apres le mot.
-				iNbLines ++;
-				str = sp + 1;  // on place le debut de ligne apres la coupure.
-			}
-			
-			while (*str == ' ')  // on saute les espaces en debut de ligne.
-				str ++;
-			sp = str;
-			last_sp = NULL;
-		}
-		else  // ca rentre.
-		{
-			*sp = ' ';  // on remet l'espace.
-			last_sp = sp;  // on memorise la derniere cesure qui fait tenir la ligne en largeur.
-			sp ++;  // on se place apres.
-			while (*sp == ' ')  // on saute tous les espaces.
-				sp ++;
-		}
-	} while (sp);
-	
-	// dernier mot.
-	if (bUseMarkup)  // on regarde la taille de str a sp.
-		pango_layout_set_markup (pLayout, str, -1);
-	else
-		pango_layout_set_text (pLayout, str, -1);
-	pango_layout_get_pixel_extents (pLayout, NULL, &log);
-	w = log.width + log.x;
-	if (w > iMaxWidth)  // on deborde.
-	{
-		if (last_sp != NULL)  // on coupe au dernier espace connu.
-			*last_sp = '\n';
-	}
-}
-
 cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, CairoDockLabelDescription *pLabelDescription, double fMaxScale, int iMaxWidth, int *iTextWidth, int *iTextHeight)
 {
 	g_return_val_if_fail (cText != NULL && pLabelDescription != NULL, NULL);
@@ -827,39 +753,14 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 		pango_layout_set_text (pLayout, cText, -1);
 	
 	//\_________________ On insere des retours chariot si necessaire.
-	pango_layout_get_pixel_extents (pLayout, NULL, &log);
-	
 	if (pLabelDescription->fMaxRelativeWidth != 0)
 	{
 		int iMaxLineWidth = pLabelDescription->fMaxRelativeWidth * gldi_desktop_get_width() / g_desktopGeometry.iNbScreens;  // use the mean screen width since the text might be placed anywhere on the X screen.
-		int w = log.width;
-		//g_print ("text width : %d / %d\n", w, iMaxLineWidth);
-		if (w > iMaxLineWidth)  // le texte est trop long.
-		{
-			// on decoupe le texte en lignes et on limite chaque ligne trop longue.
-			gchar **cLines = g_strsplit (cText, "\n", -1);
-			gchar *cLine;
-			int i;
-			for (i = 0; cLines[i] != NULL; i ++)
-			{
-				cLine = cLines[i];
-				_cairo_dock_limit_string_width (cLine, pLayout, FALSE/*pLabelDescription->bUseMarkup*/, iMaxLineWidth);  // we can't use the markups inside this func, because it works on parts of the string, which can contain piece of markups.
-			}
-			
-			// on reforme le texte et on le passe a pango.
-			gchar *cCutText = g_strjoinv ("\n", cLines);
-			if (pLabelDescription->bUseMarkup)
-				pango_layout_set_markup (pLayout, cCutText, -1);
-			else
-				pango_layout_set_text (pLayout, cCutText, -1);
-			pango_layout_get_pixel_extents (pLayout, NULL, &log);
-			g_strfreev (cLines);
-			g_free (cCutText);
-		}
+		pango_layout_set_width (pLayout, iMaxLineWidth * PANGO_SCALE);  // PANGO_WRAP_WORD by default
 	}
+	pango_layout_get_pixel_extents (pLayout, NULL, &log);
 	
 	//\_________________ On cree une surface aux dimensions du texte.
-	///gboolean bDrawBackground = (pLabelDescription->fBackgroundColor[3] > 0);
 	gboolean bDrawBackground = ! pLabelDescription->bNoDecorations;
 	double fRadius = fMaxScale * MAX (pLabelDescription->iMargin, MIN (6, pLabelDescription->iSize/4));  // permet d'avoir un rayon meme si on n'a pas de marge.
 	int iOutlineMargin = 2*pLabelDescription->iMargin + (pLabelDescription->bOutlined ? 2 : 0);  // outlined => +1 tout autour des lettres.
@@ -885,19 +786,19 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 	{
 		cairo_save (pCairoContext);
 		double fFrameWidth = *iTextWidth - 2 * fRadius - fLineWidth;
-		double fFrameHeight = *iTextHeight - fLineWidth/2;
+		double fFrameHeight = *iTextHeight - fLineWidth;
 		cairo_dock_draw_rounded_rectangle (pCairoContext, fRadius, fLineWidth, fFrameWidth, fFrameHeight);
 		
-		if (pLabelDescription->fBackgroundColor[3] != 0)
-			cairo_set_source_rgba (pCairoContext, pLabelDescription->fBackgroundColor[0], pLabelDescription->fBackgroundColor[1], pLabelDescription->fBackgroundColor[2], pLabelDescription->fBackgroundColor[3]);
-		else
+		if (pLabelDescription->bUseDefaultColors)
 			gldi_style_colors_set_bg_color (pCairoContext);
+		else
+			cairo_set_source_rgba (pCairoContext, pLabelDescription->fBackgroundColor[0], pLabelDescription->fBackgroundColor[1], pLabelDescription->fBackgroundColor[2], pLabelDescription->fBackgroundColor[3]);
 		cairo_fill_preserve (pCairoContext);
 		
-		if (pLabelDescription->fLineColor[3] != 0)
-			cairo_set_source_rgba (pCairoContext, pLabelDescription->fLineColor[0], pLabelDescription->fLineColor[1], pLabelDescription->fLineColor[2], pLabelDescription->fLineColor[3]);
-		else
+		if (pLabelDescription->bUseDefaultColors)
 			gldi_style_colors_set_line_color (pCairoContext);
+		else
+			cairo_set_source_rgba (pCairoContext, pLabelDescription->fLineColor[0], pLabelDescription->fLineColor[1], pLabelDescription->fLineColor[2], pLabelDescription->fLineColor[3]);
 		cairo_set_line_width (pCairoContext, fLineWidth);
 		cairo_stroke (pCairoContext);
 		
@@ -931,53 +832,21 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 			pango_cairo_show_layout (pCairoContext, pLayout);
 		}
 		cairo_pop_group_to_source (pCairoContext);
-		//cairo_paint_with_alpha (pCairoContext, .75);
 		cairo_paint (pCairoContext);
 		cairo_restore(pCairoContext);
 	}
 
 	//\_________________ On remplit l'interieur du texte.
-	cairo_pattern_t *pGradationPattern = NULL;
-	/**if (pLabelDescription->fColorStart != pLabelDescription->fColorStop)
-	{
-		if (pLabelDescription->bVerticalPattern)
-			pGradationPattern = cairo_pattern_create_linear (0.,
-				log.y,
-				0.,
-				log.y + log.height);
-		else
-			pGradationPattern = cairo_pattern_create_linear (log.x,
-				0.,
-				log.x + log.width,
-				0.);
-		g_return_val_if_fail (cairo_pattern_status (pGradationPattern) == CAIRO_STATUS_SUCCESS, NULL);
-		cairo_pattern_set_extend (pGradationPattern, CAIRO_EXTEND_NONE);
-		cairo_pattern_add_color_stop_rgba (pGradationPattern,
-			0.,
-			pLabelDescription->fColorStart[0],
-			pLabelDescription->fColorStart[1],
-			pLabelDescription->fColorStart[2],
-			1.);
-		cairo_pattern_add_color_stop_rgba (pGradationPattern,
-			1.,
-			pLabelDescription->fColorStop[0],
-			pLabelDescription->fColorStop[1],
-			pLabelDescription->fColorStop[2],
-			1.);
-		cairo_set_source (pCairoContext, pGradationPattern);
-	}
-	else*/
-	if (pLabelDescription->fBackgroundColor[3] != 0)
-		cairo_set_source_rgb (pCairoContext, pLabelDescription->fColorStart[0], pLabelDescription->fColorStart[1], pLabelDescription->fColorStart[2]);
-	else
+	if (pLabelDescription->bUseDefaultColors)
 		gldi_style_colors_set_text_color (pCairoContext);
+	else
+		cairo_set_source_rgb (pCairoContext, pLabelDescription->fColorStart[0], pLabelDescription->fColorStart[1], pLabelDescription->fColorStart[2]);
 	cairo_move_to (pCairoContext, 0, 0);
 	if (fZoomX != 1)
 		cairo_scale (pCairoContext, fZoomX, 1.);
 	//if (pLabelDescription->bOutlined)
 	//	cairo_move_to (pCairoContext, 1,1);
 	pango_cairo_show_layout (pCairoContext, pLayout);
-	cairo_pattern_destroy (pGradationPattern);
 	
 	cairo_destroy (pCairoContext);
 	

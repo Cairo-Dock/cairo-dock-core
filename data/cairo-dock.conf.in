@@ -320,15 +320,15 @@ extended = false
 
 #F+[External Frame;@pkgdatadir@/icons/icon-frame.png]
 frame_frame =
-#i+[0;30] Corner radius :
+#i+[0;30] Corner radius
 #{in pixels.}
 corner radius = 10
 
-#i+[0;20] Linewidth of the external line :
+#i+[0;20] Outline width
 #{in pixels.}
 line width = 2
 
-#C+ Colour of the external line:
+#C+ Outline colour
 line color = 0.0; 0.0; 0.8; 0.4
 
 #i+[0;20] Margin between the frame and the icons or their reflects :
@@ -406,12 +406,10 @@ frame_button =
 #{in pixels.}
 button size = 28;28
 
-#g+ Name of an image to use for the yes/ok button :
-#{If you don't provide any, a default image will be used.}
+#g+[Default] Name of an image to use for the yes/ok button :
 button_ok image = 
 
-#g+ Name of an image to use for the no/cancel button :
-#{If you don't provide any, a default image will be used.}
+#g+[Default] Name of an image to use for the no/cancel button :
 button_cancel image = 
 
 #F+
@@ -463,20 +461,16 @@ frame_button =
 #i+[4;28] Buttons size :
 button size = 16
 
-#g+ Name of an image to use for the 'rotate' button :
-#{If you don't provide any, a default image will be used.}
+#g+[Default] Name of an image to use for the 'rotate' button :
 rotate image = 
 
-#g+ Name of an image to use for the 'reattach' button :
-#{If you don't provide any, a default image will be used.}
+#g+[Default] Name of an image to use for the 'reattach' button :
 retach image = 
 
-#g+ Name of an image to use for the 'depth rotate' button :
-#{If you don't provide any, a default image will be used.}
+#g+[Default] Name of an image to use for the 'depth rotate' button :
 depth rotate image = 
 
-#g+ Name of an image to use for the 'rotate' button :
-#{If you don't provide any, a default image will be used.}
+#g+[Default] Name of an image to use for the 'rotate' button :
 no input image = 
 
 
@@ -488,8 +482,7 @@ frame_theme=
 #w+ Choose an icon theme :
 default icon directory = 
 
-#g+ Image filename to use as a background for icons :
-#{Any format allowed; leave this field empty if you don't want to use an image as background.}
+#g+[No background] Image filename to use as a background for icons :
 icons bg =
 
 #F+[Icons size;gtk-zoom-fit]
@@ -515,7 +508,7 @@ sinusoid width = 150
 #F+[Separators]
 frame_sep =
 
-#j+[4;128] Icon size at rest (width x height) :
+#j+[4;128] Icons' size at rest (width x height) :
 separator size = 8;40
 
 #b+ Force separator's image size to stay constant?
@@ -525,8 +518,7 @@ force size = false
 #{Only the default, 3D-plane and curve views support flat and physical separators. Flat separators are rendered differently according to the view.}
 separator type = 0
 
-#g+ Filename of an image to use for separators :
-#{If you don't provide one, blanks will be used.}
+#g+[Blank] Filename of an image to use for separators :
 separator image = separateur.svg
 
 #b+ Make the separator's image revolve when dock is on top/on the left/on the right?
@@ -538,8 +530,7 @@ separator color = 0.9;0.9;0.9;1.0
 #X+[Reflections]
 frame_refl =
 
-#e+[0;1;light;strong] Reflective power of the plane :
-#{It is its albedo (reflectivity); at 1 the icons reflect to the maximum, at 0 reflections are not used.}
+#e+[0;1;light;strong] Reflection visibility
 albedo = .45
 
 #e+[0;1;small;tall] Height of the reflection:
@@ -666,8 +657,8 @@ frame_label =
 #Y+[No;0;0;On pointed icon;0;0;On all icons;1;1] Show labels:
 show_labels = 1
 
-#e-[0.;50.;more visible;less visible] Neighbouring labels visibility:
-alpha threshold = 10.
+#e-[0;50;more visible;less visible] Neighbouring labels visibility:
+alpha threshold = 20
 
 #F+[Appearance;gtk-orientation-portrait]
 frame_bg =
@@ -693,11 +684,11 @@ text margin = 3
 #F+[Font;gtk-select-font]
 frame_font =
 
-#B+ Use a custom font for labels?
+#B+ Use a custom font for the text?
 #{Otherwise the default's system one will be used.}
 custom = false
 
-#P+ Font used for labels :
+#P+ Text font:
 police = Sans 10
 
 #F+[Quick-info;stock_dialog-info]
