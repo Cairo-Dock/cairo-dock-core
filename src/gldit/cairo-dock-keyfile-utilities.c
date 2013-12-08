@@ -385,6 +385,20 @@ gboolean cairo_dock_rename_group_in_conf_file (GKeyFile *pKeyFile, const gchar *
 	return TRUE;
 }
 
+gchar * cairo_dock_get_locale_string_from_conf_file (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, const gchar *cLocale)
+{
+	gchar *cKeyValue = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);
+	// if the string is empty, gettext mays return a non empty string (e.g. on OpenSUSE we get the .po header)
+	if (cKeyValue == NULL || *cKeyValue == '\0')
+	{
+		g_free (cKeyValue);
+		return NULL;
+	}
+
+	g_free (cKeyValue);
+	return g_key_file_get_locale_string (pKeyFile, cGroupName, cKeyName, cLocale, NULL);
+}
+
 void cairo_dock_update_keyfile_va_args (const gchar *cConfFilePath, GType iFirstDataType, va_list args)
 {
 	cd_message ("%s (%s)", __func__, cConfFilePath);
