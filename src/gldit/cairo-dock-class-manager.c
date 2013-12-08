@@ -1911,7 +1911,7 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	//\__________________ get the attributes.
 	pClassAppli->cDesktopFile = cDesktopFilePath;
 	
-	pClassAppli->cName = g_key_file_get_locale_string (pKeyFile, "Desktop Entry", "Name", NULL, NULL);
+	pClassAppli->cName = cairo_dock_get_locale_string_from_conf_file (pKeyFile, "Desktop Entry", "Name", NULL);
 	
 	if (cCommand != NULL)  // remove the launching options %x.
 	{

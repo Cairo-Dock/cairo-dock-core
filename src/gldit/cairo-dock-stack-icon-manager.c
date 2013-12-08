@@ -136,7 +136,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 		icon->cFileName = NULL;
 	}
 	
-	icon->cName = g_key_file_get_locale_string (pKeyFile, "Desktop Entry", "Name", NULL, NULL);
+	icon->cName = cairo_dock_get_locale_string_from_conf_file (pKeyFile, "Desktop Entry", "Name", NULL);
 	if (icon->cName != NULL && *icon->cName == '\0')
 	{
 		g_free (icon->cName);
@@ -237,7 +237,7 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, GKeyFile 
 	}
 	
 	gchar *cName = icon->cName;
-	icon->cName = g_key_file_get_locale_string (pKeyFile, "Desktop Entry", "Name", NULL, NULL);
+	icon->cName = cairo_dock_get_locale_string_from_conf_file (pKeyFile, "Desktop Entry", "Name", NULL);
 	if (icon->cName == NULL || *icon->cName == '\0')  // no name defined, we need one.
 	{
 		g_free (icon->cName);

@@ -67,7 +67,7 @@ static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 		icon->cFileName = NULL;
 	}
 	
-	icon->cName = g_key_file_get_locale_string (pKeyFile, "Desktop Entry", "Name", NULL, NULL);
+	icon->cName = cairo_dock_get_locale_string_from_conf_file (pKeyFile, "Desktop Entry", "Name", NULL);
 	if (icon->cName != NULL && *icon->cName == '\0')
 	{
 		g_free (icon->cName);
