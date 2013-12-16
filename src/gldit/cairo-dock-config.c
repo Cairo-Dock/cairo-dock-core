@@ -645,8 +645,12 @@ gchar *cairo_dock_get_default_system_font (void)
 	if (s_cFontName == NULL)
 	{
 		if (g_iDesktopEnv == CAIRO_DOCK_GNOME)
-			s_cFontName = cairo_dock_launch_command_sync ("gconftool-2 -g /desktop/gnome/interface/font_name");  /// ou document_font_name ?...
-		else
+		{
+			s_cFontName = cairo_dock_launch_command_sync ("gconftool-2 -g /desktop/gnome/interface/font_name");  // GTK2
+			if (! s_cFontName)
+				s_cFontName = cairo_dock_launch_command_sync ("gsettings get org.gnome.desktop.interface font-name");  // GTK3
+		}
+		if (! s_cFontName)
 			s_cFontName = g_strdup ("Sans 10");
 	}
 	return g_strdup (s_cFontName);
