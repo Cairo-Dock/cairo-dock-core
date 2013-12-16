@@ -91,7 +91,7 @@ sev_view=
 sub-dock view = default
 
 
-#[gtk-select-font]
+#[@pkgdatadir@/icons/icon-shortkeys.svg]
 [Shortkeys]
 
 #< 

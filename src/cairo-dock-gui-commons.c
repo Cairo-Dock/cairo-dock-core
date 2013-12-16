@@ -253,7 +253,7 @@ gchar * cairo_dock_get_icon_for_gui (const gchar *cGroupName, const gchar *cIcon
 			if (cIconPath == NULL)
 			{
 				cIconPath = cairo_dock_search_icon_s_path (cIcon, iSize);
-				if (cIconPath == NULL && cShareDataDir) // maybe we don't have any icon with this name
+				if (cIconPath == NULL) // maybe we don't have any icon with this name
 					cIconPath = cShareDataDir ? g_strdup_printf ("%s/icon", cShareDataDir) : g_strdup (cIcon);
 			}
 		}
