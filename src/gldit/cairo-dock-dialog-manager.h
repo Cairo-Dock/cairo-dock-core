@@ -54,13 +54,13 @@ struct _CairoDialogsParam {
 	gint iDialogButtonWidth;
 	gint iDialogButtonHeight;
 	gint iDialogIconSize;
-	CairoDockLabelDescription dialogTextDescription;
 	gchar *cDecoratorName;
-	gdouble fDialogColor[4];
+	gboolean bUseDefaultColors;
+	gdouble fBgColor[4];
 	gdouble fLineColor[4];
 	gint iLineWidth;
 	gint iCornerRadius;
-	gboolean bUseSystemColors;
+	GldiTextDescription dialogTextDescription;
 };
 
 

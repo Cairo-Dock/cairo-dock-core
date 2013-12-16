@@ -34,7 +34,7 @@
 #include "cairo-dock-draw.h"
 #include "cairo-dock-backends-manager.h"  // cairo_dock_get_dialog_decorator
 #include "cairo-dock-dialog-manager.h"  // myDialogsParam
-#include "cairo-dock-style-colors.h"
+#include "cairo-dock-style-manager.h"
 #include "cairo-dock-menu.h"
 
 #if GTK_MAJOR_VERSION > 2
@@ -60,7 +60,7 @@ static void _init_menu_style (void)
 	index = gldi_style_colors_get_index();
 	g_print ("%s (%d)\n", __func__, index);
 	
-	if (myDialogsParam.bUseSystemColors)
+	if (myDialogsParam.bUseDefaultColors && myStyleParam.bUseSystemColors)
 	{
 		if (cssProvider != NULL)
 		{
@@ -81,14 +81,15 @@ static void _init_menu_style (void)
 			gldi_style_colors_freeze ();
 		}
 		
+		double *bg_color = (myDialogsParam.bUseDefaultColors ? myStyleParam.fBgColor : myDialogsParam.fBgColor);
+		double *text_color = (myDialogsParam.bUseDefaultColors ? myStyleParam.textDescription.fColorStart : myDialogsParam.dialogTextDescription.fColorStart);
+		
 		double rgb[4];
-		gldi_style_color_shade (myDialogsParam.fDialogColor, .2, rgb);
-		
+		gldi_style_color_shade (bg_color, .2, rgb);
 		double rgbs[4];
-		gldi_style_color_shade (myDialogsParam.fDialogColor, .2, rgbs);
-		
+		gldi_style_color_shade (bg_color, .2, rgbs);
 		double rgbb[4];
-		gldi_style_color_shade (myDialogsParam.fDialogColor, .3, rgbb);
+		gldi_style_color_shade (bg_color, .3, rgbb);
 		
 		gchar *css = g_strdup_printf ("@define-color menuitem_bg_color rgb (%d, %d, %d); \
 		@define-color menuitem_text_color rgb (%d, %d, %d); \
@@ -96,18 +97,18 @@ static void _init_menu_style (void)
 		@define-color menuitem_separator_color rgb (%d, %d, %d); \
 		@define-color menuitem_bg_color2 rgb (%d, %d, %d); \
 		@define-color menu_bg_color rgba (%d, %d, %d, %d); \
-		.menuitem { \
+		.menuitem2 { \
 			text-shadow: none; \
 			border-image: none; \
 			box-shadow: none; \
 			background: transparent; \
 			color: @menuitem_text_color; \
 		} \
-		.menuitem GtkImage { \
+		.menuitem2 GtkImage { \
 			background: transparent; \
 		} \
-		.menuitem.separator, \
-		.menuitem .separator { \
+		.menuitem2.separator, \
+		.menuitem2 .separator { \
 			color: @menuitem_separator_color; \
 			border-width: 1px; \
 			border-style: solid; \
@@ -116,8 +117,8 @@ static void _init_menu_style (void)
 			border-bottom-color: alpha (@menuitem_separator_color, 0.6); \
 			border-right-color: alpha (@menuitem_separator_color, 0.6); \
 		} \
-		.menuitem:hover, \
-		.menuitem *:hover { \
+		.menuitem2:hover, \
+		.menuitem2 *:hover { \
 			background: @menuitem_bg_color; \
 			background-image: none; \
 			text-shadow: none; \
@@ -125,71 +126,70 @@ static void _init_menu_style (void)
 			box-shadow: none; \
 			color: @menuitem_text_color; \
 		} \
-		.menuitem *:insensitive { \
+		.menuitem2 *:insensitive { \
 			text-shadow: none; \
 			color: @menuitem_insensitive_text_color; \
 		} \
-		.menuitem .entry, \
-		.menuitem.entry { \
+		.menuitem2 .entry, \
+		.menuitem2.entry { \
 			background: @menuitem_bg_color; \
 			border-image: none; \
 			border-color: transparent; \
 			color: @menuitem_text_color; \
 		} \
-		.menuitem .button, \
-		.menuitem.button { \
+		.menuitem2 .button, \
+		.menuitem2.button { \
 			background: @menuitem_bg_color; \
 			background-image: none; \
 			box-shadow: none; \
 			border-color: transparent; \
 			padding: 2px; \
 		} \
-		.menuitem .scale, \
-		.menuitem.scale { \
+		.menuitem2 .scale, \
+		.menuitem2.scale { \
 			background: @menuitem_bg_color2; \
 			background-image: none; \
 			color: @menuitem_text_color; \
 			border-image: none; \
 		} \
-		.menuitem .scale.left, \
-		.menuitem.scale.left { \
+		.menuitem2 .scale.left, \
+		.menuitem2.scale.left { \
 			background: @menuitem_bg_color; \
 			background-image: none; \
 			border-image: none; \
 		} \
-		.menuitem .scale.slider, \
-		.menuitem.scale.slider { \
+		.menuitem2 .scale.slider, \
+		.menuitem2.scale.slider { \
 			background: @menuitem_text_color; \
 			background-image: none; \
 			border-image: none; \
 		} \
-		.menuitem GtkCalendar, \
-		.menuitem GtkCalendar.button, \
-		.menuitem GtkCalendar.header, \
-		.menuitem GtkCalendar.view { \
+		.menuitem2 GtkCalendar, \
+		.menuitem2 GtkCalendar.button, \
+		.menuitem2 GtkCalendar.header, \
+		.menuitem2 GtkCalendar.view { \
 			background-color: @menuitem_bg_color; \
 			background-image: none; \
 			color: @menuitem_text_color; \
 		} \
-		.menuitem GtkCalendar { \
+		.menuitem2 GtkCalendar { \
 			background-color: @menuitem_bg_color2; \
 			background-image: none; \
 		} \
-		.menuitem GtkCalendar:inconsistent { \
+		.menuitem2 GtkCalendar:inconsistent { \
 			color: shade (@menuitem_bg_color2, 0.6); \
 		} \
-		.menu { \
+		.menu2 { \
 			background: @menu_bg_color; \
 			background-image: none; \
 			color: @menuitem_text_color; \
 		}",
 		(int)(rgb[0]*255), (int)(rgb[1]*255), (int)(rgb[2]*255),
-		(int)(myDialogsParam.dialogTextDescription.fColorStart[0]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[1]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[2]*255),
-		(int)(myDialogsParam.dialogTextDescription.fColorStart[0]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[1]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[2]*255),
+		(int)(text_color[0]*255), (int)(text_color[1]*255), (int)(text_color[2]*255),
+		(int)(text_color[0]*255), (int)(text_color[1]*255), (int)(text_color[2]*255),
 		(int)(rgbs[0]*255), (int)(rgbs[1]*255), (int)(rgbs[2]*255),
 		(int)(rgbb[0]*255), (int)(rgbb[1]*255), (int)(rgbb[2]*255),
-		(int)(myDialogsParam.fDialogColor[0]*255), (int)(myDialogsParam.fDialogColor[1]*255), (int)(myDialogsParam.fDialogColor[2]*255), (int)(myDialogsParam.fDialogColor[3]*255));  // we also define ".menu", so that custom widgets (like in the SoundMenu) can get our colors.
-		//g_print ("css color: %d; %d; %d\n", (int)(myDialogsParam.dialogTextDescription.fColorStart[0]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[1]*255), (int)(myDialogsParam.dialogTextDescription.fColorStart[2]*255));
+		(int)(bg_color[0]*255), (int)(bg_color[1]*255), (int)(bg_color[2]*255), (int)(bg_color[3]*255));  // we also define ".menu", so that custom widgets (like in the SoundMenu) can get our colors.
 		
 		gldi_style_colors_freeze ();
 		gtk_css_provider_load_from_data (cssProvider,
@@ -366,6 +366,8 @@ void gldi_menu_init (G_GNUC_UNUSED GtkWidget *pMenu, Icon *pIcon)
 		pMenu);
 	
 	_init_menu_style ();
+	
+	gtk_style_context_add_class (gtk_widget_get_style_context (pMenu), "menu2");
 	#endif
 	
 	// set params
@@ -516,7 +518,7 @@ static void _init_menu_item (GtkWidget *pMenuItem)
 	{
 		// the following code is to draw the menu item; this is more like a proof of concept
 		#if GTK_MAJOR_VERSION > 2
-		g_signal_connect (G_OBJECT (pMenuItem),
+		/**g_signal_connect (G_OBJECT (pMenuItem),
 			"draw",
 			G_CALLBACK (_draw_menu_item),
 			NULL);
@@ -531,8 +533,11 @@ static void _init_menu_item (GtkWidget *pMenuItem)
 		g_signal_connect (G_OBJECT (pMenuItem),
 			"destroy",
 			G_CALLBACK (_on_destroy_menu_item),
-			NULL);
+			NULL);*/
 		#endif
+		
+		gtk_style_context_add_class (gtk_widget_get_style_context (pMenuItem), "menuitem2");
+		
 		g_object_set_data (G_OBJECT (pMenuItem), "gldi-text-color", GINT_TO_POINTER(1));
 	}
 	
@@ -573,7 +578,7 @@ static void _popup_menu (GtkWidget *menu, guint32 time)
 	gtk_widget_show_all (GTK_WIDGET (menu));
 	
 	// to draw the items ourselves
-	///gtk_container_forall (GTK_CONTAINER (menu), (GtkCallback) _init_menu_item, NULL);
+	gtk_container_forall (GTK_CONTAINER (menu), (GtkCallback) _init_menu_item, NULL);
 	
 	gtk_menu_popup (GTK_MENU (menu),
 		NULL,

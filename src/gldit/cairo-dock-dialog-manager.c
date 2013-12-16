@@ -36,7 +36,7 @@
 #include "cairo-dock-animations.h"  // for cairo_dock_is_hidden
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-dialog-factory.h"
-#include "cairo-dock-style-colors.h"
+#include "cairo-dock-style-manager.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-dialog-manager.h"
 
@@ -868,7 +868,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDialogsParam *pDialogs)
 	cairo_dock_get_size_key_value_helper (pKeyFile, "Dialogs", "button ", bFlushConfFileNeeded, pDialogs->iDialogButtonWidth, pDialogs->iDialogButtonHeight);
 	
 	double couleur_bulle[4] = {1.0, 1.0, 1.0, 0.7};
-	cairo_dock_get_double_list_key_value (pKeyFile, "Dialogs", "background color", &bFlushConfFileNeeded, pDialogs->fDialogColor, 4, couleur_bulle, NULL, NULL);
+	cairo_dock_get_double_list_key_value (pKeyFile, "Dialogs", "background color", &bFlushConfFileNeeded, pDialogs->fBgColor, 4, couleur_bulle, NULL, NULL);
 	pDialogs->iDialogIconSize = MAX (16, cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "icon size", &bFlushConfFileNeeded, 48, NULL, NULL));
 	
 	pDialogs->cDecoratorName = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "decorator", &bFlushConfFileNeeded, "comics", NULL, NULL);
@@ -907,50 +907,14 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDialogsParam *pDialogs)
 		cairo_dock_get_double_list_key_value (pKeyFile, "Dialogs", "line color", &bFlushConfFileNeeded, pDialogs->fLineColor, 4, NULL, NULL, NULL);
 	}
 	
-	pDialogs->bUseSystemColors = (cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "colors", &bFlushConfFileNeeded, 1, NULL, NULL) == 0);
-	
-	gldi_style_colors_reload ();
+	pDialogs->bUseDefaultColors = (cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "colors", &bFlushConfFileNeeded, 0, NULL, NULL) == 0);
 	
 	gboolean bCustomFont = cairo_dock_get_boolean_key_value (pKeyFile, "Dialogs", "custom", &bFlushConfFileNeeded, TRUE, NULL, NULL);
-	gchar *cFontDescription = (bCustomFont ? cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "message police", &bFlushConfFileNeeded, NULL, "Icons", NULL) : NULL);
-	if (cFontDescription == NULL)
-		cFontDescription = cairo_dock_get_default_system_font ();
+	gchar *cFont = (bCustomFont ? cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "message police", &bFlushConfFileNeeded, NULL, "Icons", NULL) : NULL);
+	gldi_text_description_set_font (&pDialogs->dialogTextDescription, cFont);
 	
-	PangoFontDescription *fd = pango_font_description_from_string (cFontDescription);
-	pDialogs->dialogTextDescription.cFont = g_strdup (pango_font_description_get_family (fd));
-	pDialogs->dialogTextDescription.iSize = pango_font_description_get_size (fd);
-	if (!pango_font_description_get_size_is_absolute (fd))
-		pDialogs->dialogTextDescription.iSize /= PANGO_SCALE;
-	if (pDialogs->dialogTextDescription.iSize == 0)
-		pDialogs->dialogTextDescription.iSize = 14;
-	if (!bCustomFont)
-		pDialogs->dialogTextDescription.iSize *= 1.33;  // c'est pas beau, mais ca evite de casser tous les themes.
-	pDialogs->dialogTextDescription.iWeight = pango_font_description_get_weight (fd);
-	pDialogs->dialogTextDescription.iStyle = pango_font_description_get_style (fd);
 	pDialogs->dialogTextDescription.fMaxRelativeWidth = .5;  // limit to half of the screen (the dialog is not placed on a given screen, it can overlap 2 screens, so it's half of the mean screen width)
 	
-	if (g_key_file_has_key (pKeyFile, "Dialogs", "message size", NULL))  // anciens parametres.
-	{
-		pDialogs->dialogTextDescription.iSize = g_key_file_get_integer (pKeyFile, "Dialogs", "message size", NULL);
-		int iLabelWeight = g_key_file_get_integer (pKeyFile, "Dialogs", "message weight", NULL);
-		pDialogs->dialogTextDescription.iWeight = cairo_dock_get_pango_weight_from_1_9 (iLabelWeight);
-		gboolean bLabelStyleItalic = g_key_file_get_boolean (pKeyFile, "Dialogs", "message italic", NULL);
-		if (bLabelStyleItalic)
-			pDialogs->dialogTextDescription.iStyle = PANGO_STYLE_ITALIC;
-		else
-			pDialogs->dialogTextDescription.iStyle = PANGO_STYLE_NORMAL;
-		
-		pango_font_description_set_size (fd, pDialogs->dialogTextDescription.iSize * PANGO_SCALE);
-		pango_font_description_set_weight (fd, pDialogs->dialogTextDescription.iWeight);
-		pango_font_description_set_style (fd, pDialogs->dialogTextDescription.iStyle);
-		
-		g_free (cFontDescription);
-		cFontDescription = pango_font_description_to_string (fd);
-		g_key_file_set_string (pKeyFile, "Dialogs", "message police", cFontDescription);
-		bFlushConfFileNeeded = TRUE;
-	}
-	pango_font_description_free (fd);
-	g_free (cFontDescription);
 	pDialogs->dialogTextDescription.bOutlined = FALSE;
 	pDialogs->dialogTextDescription.iMargin = 0;
 	pDialogs->dialogTextDescription.bNoDecorations = TRUE;
@@ -958,7 +922,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDialogsParam *pDialogs)
 	double couleur_dtext[3] = {0., 0., 0.};
 	cairo_dock_get_double_list_key_value (pKeyFile, "Dialogs", "text color", &bFlushConfFileNeeded, pDialogs->dialogTextDescription.fColorStart, 3, couleur_dtext, NULL, NULL);
 	
-	pDialogs->dialogTextDescription.bUseDefaultColors = pDialogs->bUseSystemColors;
+	pDialogs->dialogTextDescription.bUseDefaultColors = pDialogs->bUseDefaultColors;
 	
 	return bFlushConfFileNeeded;
 }
@@ -971,7 +935,7 @@ static void reset_config (CairoDialogsParam *pDialogs)
 {
 	g_free (pDialogs->cButtonOkImage);
 	g_free (pDialogs->cButtonCancelImage);
-	g_free (pDialogs->dialogTextDescription.cFont);
+	gldi_text_description_reset (&pDialogs->dialogTextDescription);
 	g_free (pDialogs->cDecoratorName);
 }
 
@@ -988,7 +952,6 @@ static void reload (CairoDialogsParam *pPrevDialogs, CairoDialogsParam *pDialogs
 		_unload_dialog_buttons ();
 		_load_dialog_buttons (pDialogs->cButtonOkImage, pDialogs->cButtonCancelImage);
 	}
-	gldi_style_colors_reload ();
 }
 
   //////////////
@@ -1014,7 +977,6 @@ static void init (void)
 		NOTIFICATION_REMOVE_ICON,
 		(GldiNotificationFunc) on_icon_removed,
 		GLDI_RUN_AFTER, NULL);
-	gldi_style_colors_init ();
 }
 
   ///////////////

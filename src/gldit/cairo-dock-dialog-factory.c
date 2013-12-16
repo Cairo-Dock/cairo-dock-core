@@ -41,6 +41,7 @@
 #include "cairo-dock-launcher-manager.h"  // cairo_dock_search_icon_s_path
 #include "cairo-dock-windows-manager.h"  // gldi_windows_get_active
 #include "cairo-dock-desktop-manager.h"
+#include "cairo-dock-style-manager.h"
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-dialog-factory.h"
 
@@ -447,7 +448,7 @@ void gldi_dialog_init_internals (CairoDialog *pDialog, CairoDialogAttr *pAttribu
 		// set a MenuItem style to the dialog, so that the interactive widget can use the style defined for menu-items (either from the GTK theme, or from our own .css), and therefore be well integrated into the dialog, as if it was inside a menu.
 		#if GTK_MAJOR_VERSION > 2
 		GtkStyleContext *ctx = gtk_widget_get_style_context (pDialog->container.pWidget);
-		gtk_style_context_add_class (ctx, GTK_STYLE_CLASS_MENUITEM);
+		gtk_style_context_add_class (ctx, myDialogsParam.bUseDefaultColors && myStyleParam.bUseSystemColors ? GTK_STYLE_CLASS_MENUITEM : "menuitem2");
 		#endif
 	}
 	
@@ -818,7 +819,7 @@ GtkWidget *gldi_dialog_steal_interactive_widget (CairoDialog *pDialog)
 
 void gldi_dialog_set_widget_text_color (GtkWidget *pWidget)
 {
-	if (myDialogsParam.bUseSystemColors)
+	if (myDialogsParam.bUseDefaultColors)
 	{
 		#if (GTK_MAJOR_VERSION < 3)
 		gtk_widget_modify_fg (pWidget, GTK_STATE_NORMAL, NULL);  // NULL = undo previous modifications
@@ -847,7 +848,7 @@ void gldi_dialog_set_widget_text_color (GtkWidget *pWidget)
 
 void gldi_dialog_set_widget_bg_color (GtkWidget *pWidget)
 {
-	if (myDialogsParam.bUseSystemColors)
+	if (myDialogsParam.bUseDefaultColors)
 	{
 		#if (GTK_MAJOR_VERSION < 3)
 		gtk_widget_modify_bg (pWidget, GTK_STATE_NORMAL, NULL);  // NULL = undo previous modifications
@@ -859,16 +860,16 @@ void gldi_dialog_set_widget_bg_color (GtkWidget *pWidget)
 	{
 		#if (GTK_MAJOR_VERSION < 3)
 		static GdkColor color;
-		color.red = myDialogsParam.fDialogColor[0] * 65535;
-		color.green = myDialogsParam.fDialogColor[1] * 65535;
-		color.blue = myDialogsParam.fDialogColor[2] * 65535;
+		color.red = myDialogsParam.fBgColor[0] * 65535;
+		color.green = myDialogsParam.fBgColor[1] * 65535;
+		color.blue = myDialogsParam.fBgColor[2] * 65535;
 		gtk_widget_modify_bg (pWidget, GTK_STATE_NORMAL, &color);
 		#else
 		static GdkRGBA color;
-		color.red = myDialogsParam.fDialogColor[0];
-		color.green = myDialogsParam.fDialogColor[1];
-		color.blue = myDialogsParam.fDialogColor[2];
-		color.alpha = myDialogsParam.fDialogColor[3];
+		color.red = myDialogsParam.fBgColor[0];
+		color.green = myDialogsParam.fBgColor[1];
+		color.blue = myDialogsParam.fBgColor[2];
+		color.alpha = myDialogsParam.fBgColor[3];
 		gtk_widget_override_background_color (pWidget, GTK_STATE_NORMAL, &color);
 		#endif
 	}
