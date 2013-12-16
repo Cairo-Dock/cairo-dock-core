@@ -364,7 +364,7 @@ relative icon size = .8
 #F+[Bubble;@pkgdatadir@/icons/icon-bubble.png]
 frame_bubble =
 
-#Y-[System;0;0;Custom;1;3] Colors
+#Y-[Automatic;0;0;Custom;1;3] Colours
 colors = 1
 
 #C+ Background colour
@@ -373,7 +373,7 @@ background color = 1.0; 1.0; 1.0; 0.8
 #C+ Outline colour
 line color = 1.0; 1.0; 1.0; 1.0
 
-#c+ Text color:
+#c+ Text colour
 text color = 0.0; 0.0; 0.0
 
 #v
@@ -642,7 +642,7 @@ bar_color_stop = 0.87;0.87;0.87;.85
 #B+ Draw outline
 bar_outline = true
 
-#C+ Outline color
+#C+ Outline colour
 bar_color_outline = 1.;1.;1.;.85
 
 #i-[2;10] Bar thickness
@@ -663,7 +663,7 @@ alpha threshold = 20
 #F+[Appearance;gtk-orientation-portrait]
 frame_bg =
 
-#Y-[Automatic;0;0;Custom;1;4] Colors
+#Y-[Automatic;0;0;Custom;1;4] Colours
 colors = 1
 
 #C+ Background colour
@@ -672,7 +672,7 @@ text background color = 0;0;0;.85
 #C+ Outline colour
 text line color = 1.0; 1.0; 1.0; 1.0
 
-#c+ Text color:
+#c+ Text colour
 text color = 1;1;1
 
 #b+ Draw the outline of the text?
@@ -698,8 +698,44 @@ frame_qi =
 #B[-2] Use the same look as the labels?
 qi same = false
 
-#c+ Text color:
+#c+ Text colour
 qi text color = 1;1;1
 
-#C+ Background color:
+#C+ Background colour
 qi bg color = 0;0;0;0.667
+
+
+[Style]
+
+#F+[Appearance;gtk-orientation-portrait]
+frame_bg =
+
+#Y-[System;0;0;Custom;1;3] Colours
+colors = 1
+
+#C+ Background colour
+bg color = 1.0; 1.0; 1.0; 0.8
+
+#C+ Outline colour
+line color = 1.0; 1.0; 1.0; 1.0
+
+#c+ Text colour:
+text color = 0.0; 0.0; 0.0
+
+#v
+sep_shape=
+
+#i+[0;20] Corner radius
+corner=8
+
+#i+[1;10] Outline width
+linewidth=1
+
+#F+[Font;gtk-select-font]
+frame_text =
+
+#B+ Use a custom font for the text?
+custom font = false
+
+#P+ Text font:
+font = 

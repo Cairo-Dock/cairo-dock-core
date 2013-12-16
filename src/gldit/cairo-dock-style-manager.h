@@ -17,17 +17,49 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __GLDI_STYLE_COLORS__
-#define  __GLDI_STYLE_COLORS__
+#ifndef __CAIRO_STYLE_MANAGER__
+#define  __CAIRO_STYLE_MANAGER__
+
+#include <glib.h>
 
 #include "cairo-dock-struct.h"
+#include "cairo-dock-surface-factory.h"  // CairoDockLabelDescription
+#include "cairo-dock-manager.h"
 
 G_BEGIN_DECLS
 
 /**
-*@file cairo-dock-style-colors.h This class holds the style of Dialogs, Menus, Labels, etc.
-* It defines background, selected background, outline and text colors.
+*@file cairo-dock-style-manager.h This class defines the global style used by all widgets (Docks, Dialogs, Desklets, Menus, Icons).
+* This includes background color, outline color, text color, linewidth, corner radius.
+*
 */
+
+// manager
+typedef struct _GldiStyleParam GldiStyleParam;
+
+#ifndef _MANAGER_DEF_
+extern GldiStyleParam myStyleParam;
+extern GldiManager myStyleMgr;
+#endif
+
+// params
+struct _GldiStyleParam {
+	gboolean bUseSystemColors;
+	gdouble fBgColor[4];
+	gdouble fLineColor[4];
+	gint iLineWidth;
+	gint iCornerRadius;
+	GldiTextDescription textDescription;
+	};
+
+/// signals
+typedef enum {
+	/// notification called when the menu is being built on a container. data : {Icon, GldiContainer, GtkMenu, gboolean*}
+	NOTIFICATION_STYLE_CHANGED,
+	NB_NOTIFICATIONS_STYLE
+	} GldiStyleNotifications;
+
+
 
 void gldi_style_color_shade (double *icolor, double shade, double *ocolor);
 
@@ -35,10 +67,6 @@ void gldi_style_color_shade (double *icolor, double shade, double *ocolor);
 void gldi_style_colors_freeze (void);
 
 int gldi_style_colors_get_index (void);
-
-void gldi_style_colors_init (void);
-
-void gldi_style_colors_reload (void);
 
 
 void gldi_style_colors_set_bg_color (cairo_t *pCairoContext);
@@ -52,6 +80,7 @@ void gldi_style_colors_set_text_color (cairo_t *pCairoContext);
 void gldi_style_colors_paint_bg_color (cairo_t *pCairoContext, int iWidth);
 
 
+void gldi_register_style_manager (void);
 
 G_END_DECLS
 #endif
