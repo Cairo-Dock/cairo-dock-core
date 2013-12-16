@@ -1992,7 +1992,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	pFrameVBox = NULL;
 	
 	pKeyList = g_key_file_get_keys (pKeyFile, cGroupName, NULL, NULL);
-
+	g_return_val_if_fail (pKeyList != NULL, NULL);
+	
 	for (j = 0; pKeyList[j] != NULL; j ++)
 	{
 		cKeyName = pKeyList[j];
@@ -3398,16 +3399,20 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 }
 
 
-GtkWidget *cairo_dock_build_key_file_widget (GKeyFile* pKeyFile, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFilePath)
+GtkWidget *cairo_dock_build_key_file_widget_full (GKeyFile* pKeyFile, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFilePath, GtkWidget *pCurrentNoteBook)
 {
 	gsize length = 0;
 	gchar **pGroupList = g_key_file_get_groups (pKeyFile, &length);
 	g_return_val_if_fail (pGroupList != NULL, NULL);
 	
-	GtkWidget *pNoteBook = gtk_notebook_new ();
-	gtk_notebook_set_scrollable (GTK_NOTEBOOK (pNoteBook), TRUE);
-	gtk_notebook_popup_enable (GTK_NOTEBOOK (pNoteBook));
-	g_object_set (G_OBJECT (pNoteBook), "tab-pos", GTK_POS_TOP, NULL);
+	GtkWidget *pNoteBook = pCurrentNoteBook;
+	if (! pNoteBook)
+	{
+		pNoteBook = gtk_notebook_new ();
+		gtk_notebook_set_scrollable (GTK_NOTEBOOK (pNoteBook), TRUE);
+		gtk_notebook_popup_enable (GTK_NOTEBOOK (pNoteBook));
+		g_object_set (G_OBJECT (pNoteBook), "tab-pos", GTK_POS_TOP, NULL);
+	}
 	
 	GtkWidget *pGroupWidget, *pLabel, *pLabelContainer, *pAlign;
 	gchar *cGroupName, *cGroupComment, *cIcon, *cDisplayedGroupName;

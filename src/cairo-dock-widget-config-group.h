@@ -31,7 +31,9 @@ typedef struct _ConfigGroupWidget ConfigGroupWidget;
 
 struct _ConfigGroupWidget {
 	CDWidget widget;
-	gchar *cGroupName;
+	//gchar *cGroupName;
+	gchar *cTitle;
+	gchar *cIcon;
 	GList *pManagers;
 	GSList *pExtraWidgets;
 };
@@ -40,8 +42,7 @@ struct _ConfigGroupWidget {
 #define IS_CONFIG_GROUP_WIDGET(w) (w && CD_WIDGET(w)->iType == WIDGET_CONFIG_GROUP)
 
 
-ConfigGroupWidget *cairo_dock_config_group_widget_new (const gchar *cGroupName, GList *pManagers, const gchar *cTitle, const gchar *cIcon);
-
+ConfigGroupWidget *cairo_dock_config_group_widget_new (GList *pGroups, GList *pManagers);
 
 G_END_DECLS
 #endif
