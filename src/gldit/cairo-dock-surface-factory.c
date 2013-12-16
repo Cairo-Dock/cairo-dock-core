@@ -29,37 +29,13 @@
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-icon-manager.h"  // cairo_dock_search_icon_s_path
 #include "cairo-dock-dialog-manager.h"
-#include "cairo-dock-style-colors.h"
+#include "cairo-dock-style-manager.h"
 #include "cairo-dock-surface-factory.h"
 
 extern GldiContainer *g_pPrimaryContainer;
 extern gboolean g_bUseOpenGL;
 
 static cairo_t *s_pSourceContext = NULL;
-
-
-void cairo_dock_free_label_description (CairoDockLabelDescription *pTextDescription)
-{
-	if (pTextDescription == NULL)
-		return ;
-	g_free (pTextDescription->cFont);
-	g_free (pTextDescription);
-}
-
-void cairo_dock_copy_label_description (CairoDockLabelDescription *pDestTextDescription, CairoDockLabelDescription *pOrigTextDescription)
-{
-	g_return_if_fail (pOrigTextDescription != NULL && pDestTextDescription != NULL);
-	memcpy (pDestTextDescription, pOrigTextDescription, sizeof (CairoDockLabelDescription));
-	pDestTextDescription->cFont = g_strdup (pOrigTextDescription->cFont);
-}
-
-CairoDockLabelDescription *cairo_dock_duplicate_label_description (CairoDockLabelDescription *pOrigTextDescription)
-{
-	g_return_val_if_fail (pOrigTextDescription != NULL, NULL);
-	CairoDockLabelDescription *pTextDescription = g_memdup (pOrigTextDescription, sizeof (CairoDockLabelDescription));
-	pTextDescription->cFont = g_strdup (pOrigTextDescription->cFont);
-	return pTextDescription;
-}
 
 
 void cairo_dock_calculate_size_fill (double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, gboolean bNoZoomUp, double *fZoomWidth, double *fZoomHeight)
@@ -729,41 +705,39 @@ cairo_surface_t * cairo_dock_rotate_surface (cairo_surface_t *pSurface, double f
 }
 
 
-cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, CairoDockLabelDescription *pLabelDescription, double fMaxScale, int iMaxWidth, int *iTextWidth, int *iTextHeight)
+cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, GldiTextDescription *pTextDescription, double fMaxScale, int iMaxWidth, int *iTextWidth, int *iTextHeight)
 {
-	g_return_val_if_fail (cText != NULL && pLabelDescription != NULL, NULL);
+	g_return_val_if_fail (cText != NULL && pTextDescription != NULL, NULL);
 	cairo_t *pSourceContext = _get_source_context ();
 	g_return_val_if_fail (pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 	
-	//\_________________ On ecrit le texte dans un calque Pango.
+	//\_________________ get the font description
+	PangoFontDescription *pDesc = gldi_text_description_get_description (pTextDescription);
+	int iSize = gldi_text_description_get_size (pTextDescription);
+	pango_font_description_set_absolute_size (pDesc, fMaxScale * iSize * PANGO_SCALE);
+	
+	//\_________________ create a layout
 	PangoLayout *pLayout = pango_cairo_create_layout (pSourceContext);
-	PangoRectangle log;
-	
-	PangoFontDescription *pDesc = pango_font_description_new ();
-	pango_font_description_set_absolute_size (pDesc, fMaxScale * pLabelDescription->iSize * PANGO_SCALE);
-	pango_font_description_set_family_static (pDesc, pLabelDescription->cFont);
-	pango_font_description_set_weight (pDesc, pLabelDescription->iWeight);
-	pango_font_description_set_style (pDesc, pLabelDescription->iStyle);
 	pango_layout_set_font_description (pLayout, pDesc);
-	pango_font_description_free (pDesc);
 	
-	if (pLabelDescription->bUseMarkup)
+	if (pTextDescription->bUseMarkup)
 		pango_layout_set_markup (pLayout, cText, -1);
 	else
 		pango_layout_set_text (pLayout, cText, -1);
 	
-	//\_________________ On insere des retours chariot si necessaire.
-	if (pLabelDescription->fMaxRelativeWidth != 0)
+	//\_________________ handle max width
+	if (pTextDescription->fMaxRelativeWidth != 0)
 	{
-		int iMaxLineWidth = pLabelDescription->fMaxRelativeWidth * gldi_desktop_get_width() / g_desktopGeometry.iNbScreens;  // use the mean screen width since the text might be placed anywhere on the X screen.
+		int iMaxLineWidth = pTextDescription->fMaxRelativeWidth * gldi_desktop_get_width() / g_desktopGeometry.iNbScreens;  // use the mean screen width since the text might be placed anywhere on the X screen.
 		pango_layout_set_width (pLayout, iMaxLineWidth * PANGO_SCALE);  // PANGO_WRAP_WORD by default
 	}
+	PangoRectangle log;
 	pango_layout_get_pixel_extents (pLayout, NULL, &log);
 	
-	//\_________________ On cree une surface aux dimensions du texte.
-	gboolean bDrawBackground = ! pLabelDescription->bNoDecorations;
-	double fRadius = fMaxScale * MAX (pLabelDescription->iMargin, MIN (6, pLabelDescription->iSize/4));  // permet d'avoir un rayon meme si on n'a pas de marge.
-	int iOutlineMargin = 2*pLabelDescription->iMargin + (pLabelDescription->bOutlined ? 2 : 0);  // outlined => +1 tout autour des lettres.
+	//\_________________ load the layout into a surface
+	gboolean bDrawBackground = ! pTextDescription->bNoDecorations;
+	double fRadius = fMaxScale * MAX (pTextDescription->iMargin, MIN (6, iSize/4));  // permet d'avoir un rayon meme si on n'a pas de marge.
+	int iOutlineMargin = 2*pTextDescription->iMargin + (pTextDescription->bOutlined ? 2 : 0);  // outlined => +1 tout autour des lettres.
 	double fZoomX = ((iMaxWidth != 0 && log.width + iOutlineMargin > iMaxWidth) ? (double)iMaxWidth / (log.width + iOutlineMargin) : 1.);
 	double fLineWidth = 1;
 	
@@ -781,7 +755,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 		*iTextHeight);
 	cairo_t* pCairoContext = cairo_create (pNewSurface);
 	
-	//\_________________ On dessine le fond.
+	//\_________________ draw the background
 	if (bDrawBackground)  // non transparent.
 	{
 		cairo_save (pCairoContext);
@@ -789,16 +763,16 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 		double fFrameHeight = *iTextHeight - fLineWidth;
 		cairo_dock_draw_rounded_rectangle (pCairoContext, fRadius, fLineWidth, fFrameWidth, fFrameHeight);
 		
-		if (pLabelDescription->bUseDefaultColors)
+		if (pTextDescription->bUseDefaultColors)
 			gldi_style_colors_set_bg_color (pCairoContext);
 		else
-			cairo_set_source_rgba (pCairoContext, pLabelDescription->fBackgroundColor[0], pLabelDescription->fBackgroundColor[1], pLabelDescription->fBackgroundColor[2], pLabelDescription->fBackgroundColor[3]);
+			cairo_set_source_rgba (pCairoContext, pTextDescription->fBackgroundColor[0], pTextDescription->fBackgroundColor[1], pTextDescription->fBackgroundColor[2], pTextDescription->fBackgroundColor[3]);
 		cairo_fill_preserve (pCairoContext);
 		
-		if (pLabelDescription->bUseDefaultColors)
+		if (pTextDescription->bUseDefaultColors)
 			gldi_style_colors_set_line_color (pCairoContext);
 		else
-			cairo_set_source_rgba (pCairoContext, pLabelDescription->fLineColor[0], pLabelDescription->fLineColor[1], pLabelDescription->fLineColor[2], pLabelDescription->fLineColor[3]);
+			cairo_set_source_rgba (pCairoContext, pTextDescription->fLineColor[0], pTextDescription->fLineColor[1], pTextDescription->fLineColor[2], pTextDescription->fLineColor[3]);
 		cairo_set_line_width (pCairoContext, fLineWidth);
 		cairo_stroke (pCairoContext);
 		
@@ -813,7 +787,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 		-log.y + dy);
 	
 	//\_________________ On dessine les contours du texte.
-	if (pLabelDescription->bOutlined)
+	if (pTextDescription->bOutlined)
 	{
 		cairo_save (pCairoContext);
 		if (fZoomX != 1)
@@ -837,14 +811,14 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 	}
 
 	//\_________________ On remplit l'interieur du texte.
-	if (pLabelDescription->bUseDefaultColors)
+	if (pTextDescription->bUseDefaultColors)
 		gldi_style_colors_set_text_color (pCairoContext);
 	else
-		cairo_set_source_rgb (pCairoContext, pLabelDescription->fColorStart[0], pLabelDescription->fColorStart[1], pLabelDescription->fColorStart[2]);
+		cairo_set_source_rgb (pCairoContext, pTextDescription->fColorStart[0], pTextDescription->fColorStart[1], pTextDescription->fColorStart[2]);
 	cairo_move_to (pCairoContext, 0, 0);
 	if (fZoomX != 1)
 		cairo_scale (pCairoContext, fZoomX, 1.);
-	//if (pLabelDescription->bOutlined)
+	//if (pTextDescription->bOutlined)
 	//	cairo_move_to (pCairoContext, 1,1);
 	pango_cairo_show_layout (pCairoContext, pLayout);
 	
@@ -854,6 +828,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 	*iTextHeight = *iTextHeight/** / fMaxScale*/;
 	
 	g_object_unref (pLayout);
+	pango_font_description_set_absolute_size (pDesc, iSize * PANGO_SCALE);
 	return pNewSurface;
 }
 
@@ -885,4 +860,73 @@ cairo_surface_t * cairo_dock_duplicate_surface (cairo_surface_t *pSurface, doubl
 	cairo_destroy (pCairoContext);
 	
 	return pNewSurface;
+}
+
+
+
+void gldi_text_description_free (GldiTextDescription *pTextDescription)
+{
+	if (pTextDescription == NULL)
+		return ;
+	g_free (pTextDescription->cFont);
+	if (pTextDescription->fd)
+		pango_font_description_free (pTextDescription->fd);
+	g_free (pTextDescription);
+}
+
+void gldi_text_description_copy (GldiTextDescription *pDestTextDescription, GldiTextDescription *pOrigTextDescription)
+{
+	g_return_if_fail (pOrigTextDescription != NULL && pDestTextDescription != NULL);
+	memcpy (pDestTextDescription, pOrigTextDescription, sizeof (GldiTextDescription));
+	pDestTextDescription->cFont = g_strdup (pOrigTextDescription->cFont);
+	pDestTextDescription->fd = pango_font_description_copy (pOrigTextDescription->fd);
+}
+
+GldiTextDescription *gldi_text_description_duplicate (GldiTextDescription *pTextDescription)
+{
+	g_return_val_if_fail (pTextDescription != NULL, NULL);
+	GldiTextDescription *pTextDescription2 = g_memdup (pTextDescription, sizeof (GldiTextDescription));
+	pTextDescription2->cFont = g_strdup (pTextDescription->cFont);
+	pTextDescription2->fd = pango_font_description_copy (pTextDescription->fd);
+	return pTextDescription2;
+}
+
+void gldi_text_description_reset (GldiTextDescription *pTextDescription)
+{
+	g_free (pTextDescription->cFont);
+	pTextDescription->cFont = NULL;
+	if (pTextDescription->fd)
+	{
+		pango_font_description_free (pTextDescription->fd);
+		pTextDescription->fd = NULL;
+	}
+	pTextDescription->iSize = 0;
+}
+
+void gldi_text_description_set_font (GldiTextDescription *pTextDescription, gchar *cFont)
+{
+	pTextDescription->cFont = cFont;
+	
+	if (cFont != NULL)
+	{
+		pTextDescription->fd = pango_font_description_from_string (cFont);
+		
+		if (pango_font_description_get_size_is_absolute (pTextDescription->fd))
+		{
+			pTextDescription->iSize = pango_font_description_get_size (pTextDescription->fd) / PANGO_SCALE;
+			g_print ("abs size: %d\n", pTextDescription->iSize);
+		}
+		else
+		{
+			gdouble dpi = gdk_screen_get_resolution (gdk_screen_get_default ());
+			if (dpi < 0) dpi = 96.;
+			pTextDescription->iSize = dpi * pango_font_description_get_size (pTextDescription->fd) / PANGO_SCALE / 72.;  // font_size in dots (pixels) = font_size in points / (72 points per inch) * (dpi dots per inch)
+			g_print ("size: %d\n", pTextDescription->iSize);
+		}
+	}
+	else  // no font, take the default one
+	{
+		pTextDescription->fd = pango_font_description_copy (myStyleParam.textDescription.fd);
+		pTextDescription->iSize = myStyleParam.textDescription.iSize;
+	}
 }

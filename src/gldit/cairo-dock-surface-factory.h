@@ -36,7 +36,7 @@ G_BEGIN_DECLS
 * 
 * If you just want to load an image at a given size, use \ref cairo_dock_create_surface_from_image_simple, or \ref cairo_dock_create_surface_from_icon.
 * 
-* To load a text into a surface, describe your text look with a _CairoDockLabelDescription, and pass it to \ref cairo_dock_create_surface_from_text.
+* To load a text into a surface, describe your text look with a _GldiTextDescription, and pass it to \ref cairo_dock_create_surface_from_text.
 *
 * Note: if you also need to load the image into a texture, it's easier to use the higher level ImageBuffer API (see \ref cairo_dock_create_image_buffer).
 */
@@ -70,15 +70,13 @@ typedef enum {
 #define CAIRO_DOCK_ORIENTATION_MASK (7<<3)
 
 /// Description of the rendering of a text.
-struct _CairoDockLabelDescription {
-	/// font size (also approximately the resulting size in pixels)
-	gint iSize;
+struct _GldiTextDescription {
 	/// font.
 	gchar *cFont;
-	/// text weight. The higher, the thicker the strokes are.
-	PangoWeight iWeight;
-	/// text style (italic or normal).
-	PangoStyle iStyle;
+	/// pango font
+	PangoFontDescription *fd;
+	/// size in pixels
+	gint iSize;
 	/// whether to draw the decorations or not
 	gboolean bNoDecorations;
 	/// whether to use the default colors or the colors defined below
@@ -120,11 +118,6 @@ void cairo_dock_calculate_size_fill (double *fImageWidth, double *fImageHeight, 
 *@param fZoom sera renseigné avec le facteur de zoom qui a été appliqué.
 */
 void cairo_dock_calculate_size_constant_ratio (double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, gboolean bNoZoomUp, double *fZoom);
-
-
-void cairo_dock_free_label_description (CairoDockLabelDescription *pTextDescription);
-void cairo_dock_copy_label_description (CairoDockLabelDescription *pDestTextDescription, CairoDockLabelDescription *pOrigTextDescription);
-CairoDockLabelDescription *cairo_dock_duplicate_label_description (CairoDockLabelDescription *pOrigTextDescription);
 
 
 /** Calculate the size of an image according to a constraint on width and height, and a loading modifier.
@@ -238,7 +231,7 @@ cairo_surface_t * cairo_dock_rotate_surface (cairo_surface_t *pSurface, double f
 *@param iTextHeight will be filled the height of the resulting surface.
 *@return the newly allocated surface.
 */
-cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, CairoDockLabelDescription *pLabelDescription, double fMaxScale, int iMaxWidth, int *iTextWidth, int *iTextHeight);
+cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, GldiTextDescription *pLabelDescription, double fMaxScale, int iMaxWidth, int *iTextWidth, int *iTextHeight);
 
 /** Create a surface representing a text, according to a given text description.
 *@param cText the text.
@@ -258,6 +251,20 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, C
 *@return the newly allocated surface.
 */
 cairo_surface_t * cairo_dock_duplicate_surface (cairo_surface_t *pSurface, double fWidth, double fHeight, double fDesiredWidth, double fDesiredHeight);
+
+
+
+void gldi_text_description_free (GldiTextDescription *pTextDescription);
+void gldi_text_description_copy (GldiTextDescription *pDestTextDescription, GldiTextDescription *pOrigTextDescription);
+GldiTextDescription *gldi_text_description_duplicate (GldiTextDescription *pTextDescription);
+
+void gldi_text_description_reset (GldiTextDescription *pTextDescription);
+
+void gldi_text_description_set_font (GldiTextDescription *pTextDescription, gchar *cFont);
+
+#define gldi_text_description_get_size(pTextDescription) (pTextDescription)->iSize
+
+#define gldi_text_description_get_description(pTextDescription) (pTextDescription)->fd
 
 
 G_END_DECLS
