@@ -1543,7 +1543,7 @@ static void _add_main_groups_buttons (void)
 	pGroupDescription->build_widget = _build_config_group_widget;
 	
 	pGroupDescription = _add_one_main_group_button ("Style",
-		"icon-style.png",
+		"icon-style.svg",
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("Configure the global style."),
 		_("Style"));
@@ -1580,11 +1580,11 @@ static void _add_main_groups_buttons (void)
 	pGroupDescription->build_widget = _build_config_group_widget;
 	
 	pGroupDescription = _add_one_main_group_button ("Desklets",
-		"icon-desklets.svg",
+		"icon-desklets.png",
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("Applets can be displayed on your desktop as widgets."),
 		_("Desklets"));
-	_add_sub_group_to_group_button (pGroupDescription, "Desklets", "icon-desklets.svg", _("Desklets"));
+	_add_sub_group_to_group_button (pGroupDescription, "Desklets", "icon-desklets.png", _("Desklets"));
 	pGroupDescription->pManagers = g_list_prepend (pGroupDescription->pManagers, (gchar*)"Desklets");  // -> "desklet rendering"
 	pGroupDescription->build_widget = _build_config_group_widget;
 	

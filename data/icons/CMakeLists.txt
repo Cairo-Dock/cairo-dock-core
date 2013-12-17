@@ -34,8 +34,10 @@ install (FILES
 	icon-close.svg
 	icon-connection.svg
 	icon-controler.svg
+	icon-desklets.png
 	icon-desktop.svg
 	icon-dialogs.svg
+	icon-docks.svg
 	icon-extensions.svg
 	icon-files.svg
 	icon-frame.png
@@ -55,14 +57,12 @@ install (FILES
 	icon-plug-ins.svg
 	icon-position.svg
 	icon-restore.svg
+	icon-shortkeys.svg
 	icon-subdock.png
+	icon-style.svg
 	icon-system.svg
 	icon-taskbar.png
 	icon-views.svg
 	icon-visibility.svg
 	icon-wave.png
-	icon-shortkeys.svg
-	icon-style.png
-	icon-docks.svg
-	icon-desklets.svg
 	DESTINATION ${pkgdatadir}/icons )
