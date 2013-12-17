@@ -236,7 +236,7 @@ static void init_object (GldiObject *obj, G_GNUC_UNUSED gpointer attr)
 {
 	GldiManager *pManager = (GldiManager*)obj;
 	
-	s_pManagers = g_list_prepend (s_pManagers, pManager);  // we don't init the manager, since we want to do that after all maangers have been created
+	s_pManagers = g_list_prepend (s_pManagers, pManager);  // we don't init the manager, since we want to do that after all managers have been created
 }
 
 static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, GKeyFile *pKeyFile)

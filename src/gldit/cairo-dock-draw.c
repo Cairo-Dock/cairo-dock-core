@@ -601,8 +601,9 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 			///fMagnitude *= (fMagnitude * myIconsParam.fLabelAlphaThreshold + 1) / (myIconsParam.fLabelAlphaThreshold + 1);
 		}
 		
-		//int iLabelSize = icon->label.iHeight;
-		int iLabelSize = myIconsParam.iLabelSize;
+		int iLabelSize = icon->label.iHeight;
+		///int iLabelSize = myIconsParam.iLabelSize;
+		int gap = (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + 1;  // gap between icon and label: let 1px between the icon or the dock's outline
 		//g_print ("%d / %d\n", icon->label.iHeight, myIconsParam.iLabelSize),
 		cairo_identity_matrix (pCairoContext);  // on positionne les etiquettes sur un pixels entier, sinon ca floute.
 		if (bIsHorizontal)
@@ -619,7 +620,7 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 		if (bIsHorizontal)
 		{
 			cairo_dock_apply_image_buffer_surface_with_offset (&icon->label, pCairoContext,
-				floor (fOffsetX), floor (bDirectionUp ? -iLabelSize : icon->fHeight * icon->fScale), fMagnitude);
+				floor (fOffsetX), floor (bDirectionUp ? - iLabelSize - gap : icon->fHeight * icon->fScale + gap), fMagnitude);
 		}
 		else  // horizontal label on a vertical dock -> draw them next to the icon, vertically centered (like the Parabolic view)
 		{
@@ -627,14 +628,14 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 			{
 				fMagnitude /= 3;
 			}
-			const int pad = 3;
+			const int pad = 0;
 			double fY = icon->fDrawY;
 			int  iMaxWidth = (pDock->container.bDirectionUp ?
-				fY - (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) - pad :
-				pDock->container.iHeight - (fY + icon->fHeight * icon->fScale + (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + pad));
+				fY - gap - pad :
+				pDock->container.iHeight - (fY + icon->fHeight * icon->fScale + gap + pad));
 			int iOffsetX = floor (bDirectionUp ? 
-				MAX (- iMaxWidth, - (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) - pad - icon->label.iWidth):
-				icon->fHeight * icon->fScale + (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + pad);
+				MAX (- iMaxWidth, - gap - pad - icon->label.iWidth):
+				icon->fHeight * icon->fScale + gap + pad);
 			int iOffsetY = floor (icon->fWidth * icon->fScale/2 - icon->label.iHeight/2);
 			if (icon->label.iWidth < iMaxWidth)
 			{
@@ -694,7 +695,7 @@ void cairo_dock_render_one_icon_in_desklet (Icon *icon, GldiContainer *pContaine
 			cairo_rotate (pCairoContext, icon->fOrientation);
 		}
 		cairo_dock_apply_image_buffer_surface_with_offset (&icon->label, pCairoContext,
-			fOffsetX, -myIconsParam.iLabelSize, 1.);
+			fOffsetX, -icon->label.iHeight, 1.);
 		cairo_restore (pCairoContext);  // retour juste apres la translation (fDrawX, fDrawY).
 	}
 	

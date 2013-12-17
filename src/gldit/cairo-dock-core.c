@@ -40,6 +40,7 @@
 #include "cairo-dock-module-manager.h"
 #include "cairo-dock-module-instance-manager.h"
 #include "cairo-dock-packages.h"
+#include "cairo-dock-style-manager.h"
 #include "cairo-dock-indicator-manager.h"
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-data-renderer-manager.h"
@@ -86,6 +87,7 @@ static void _gldi_register_core_managers (void)
 	gldi_register_shortkeys_manager ();
 	gldi_register_data_renderers_manager ();
 	gldi_register_desktop_environment_manager ();
+	gldi_register_style_manager ();  // get config before other manager that could
 	gldi_register_X_manager ();
 }
 

@@ -50,7 +50,7 @@
 #include "cairo-dock-launcher-manager.h"  // GLDI_OBJECT_IS_LAUNCHER_ICON
 #include "cairo-dock-applet-manager.h"  // GLDI_OBJECT_IS_APPLET_ICON
 #include "cairo-dock-backends-manager.h"  // cairo_dock_foreach_icon_container_renderer
-#include "cairo-dock-style-colors.h"
+#include "cairo-dock-style-manager.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-icon-manager.h"
 
@@ -530,51 +530,17 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 	CairoIconsParam *pLabels = pIcons;
 	gboolean bCustomFont = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "custom", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
-	gchar *cFontDescription = (bCustomFont ? cairo_dock_get_string_key_value (pKeyFile, "Labels", "police", &bFlushConfFileNeeded, NULL, "Icons", NULL) : NULL);
-	if (cFontDescription == NULL)
-		cFontDescription = cairo_dock_get_default_system_font ();
+	gchar *cFont = (bCustomFont ? cairo_dock_get_string_key_value (pKeyFile, "Labels", "police", &bFlushConfFileNeeded, NULL, "Icons", NULL) : NULL);
+	gldi_text_description_set_font (&pLabels->iconTextDescription, cFont);
 	
-	PangoFontDescription *fd = pango_font_description_from_string (cFontDescription);
-	pLabels->iconTextDescription.cFont = g_strdup (pango_font_description_get_family (fd));
-	pLabels->iconTextDescription.iSize = pango_font_description_get_size (fd);
-	if (!pango_font_description_get_size_is_absolute (fd))
-		pLabels->iconTextDescription.iSize /= PANGO_SCALE;
-	if (!bCustomFont)
-		pLabels->iconTextDescription.iSize *= 1.33;  // c'est pas beau, mais ca evite de casser tous les themes.
-	if (pLabels->iconTextDescription.iSize == 0)
-		pLabels->iconTextDescription.iSize = 14;
-	pLabels->iconTextDescription.iWeight = pango_font_description_get_weight (fd);
-	pLabels->iconTextDescription.iStyle = pango_font_description_get_style (fd);
-	
-	if (g_key_file_has_key (pKeyFile, "Labels", "size", NULL))  // anciens parametres.
-	{
-		pLabels->iconTextDescription.iSize = g_key_file_get_integer (pKeyFile, "Labels", "size", NULL);
-		int iLabelWeight = g_key_file_get_integer (pKeyFile, "Labels", "weight", NULL);
-		pLabels->iconTextDescription.iWeight = cairo_dock_get_pango_weight_from_1_9 (iLabelWeight);
-		gboolean bLabelStyleItalic = g_key_file_get_boolean (pKeyFile, "Labels", "italic", NULL);
-		if (bLabelStyleItalic)
-			pLabels->iconTextDescription.iStyle = PANGO_STYLE_ITALIC;
-		else
-			pLabels->iconTextDescription.iStyle = PANGO_STYLE_NORMAL;
-		
-		pango_font_description_set_size (fd, pLabels->iconTextDescription.iSize * PANGO_SCALE);
-		pango_font_description_set_weight (fd, pLabels->iconTextDescription.iWeight);
-		pango_font_description_set_style (fd, pLabels->iconTextDescription.iStyle);
-		
-		g_free (cFontDescription);
-		cFontDescription = pango_font_description_to_string (fd);
-		g_key_file_set_string (pKeyFile, "Labels", "police", cFontDescription);
-		bFlushConfFileNeeded = TRUE;
-	}
-	pango_font_description_free (fd);
-	g_free (cFontDescription);
+	g_print ("pLabels->iconTextDescription.cFont: %s, %d\n", pLabels->iconTextDescription.cFont, pLabels->iconTextDescription.iSize);
 	
 	//\___________________ labels text color
 	pLabels->iconTextDescription.bOutlined = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "text oulined", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
 	double couleur_backlabel[4] = {0., 0., 0., 0.85};
 	double couleur_label[3] = {1., 1., 1.};
-	gboolean bDefaultColors = (cairo_dock_get_integer_key_value (pKeyFile, "Labels", "colors", &bFlushConfFileNeeded, 1, NULL, NULL) == 0);
+	gboolean bDefaultColors = (cairo_dock_get_integer_key_value (pKeyFile, "Labels", "colors", &bFlushConfFileNeeded, 0, NULL, NULL) == 0);
 	pLabels->iconTextDescription.bUseDefaultColors = bDefaultColors;
 	if (bDefaultColors)
 	{
@@ -602,30 +568,25 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 	pLabels->iconTextDescription.iMargin = cairo_dock_get_integer_key_value (pKeyFile, "Labels", "text margin", &bFlushConfFileNeeded, 4, NULL, NULL);
 	
 	//\___________________ quick-info
-	memcpy (&pLabels->quickInfoTextDescription, &pLabels->iconTextDescription, sizeof (CairoDockLabelDescription));
+	gldi_text_description_copy (&pLabels->quickInfoTextDescription, &pLabels->iconTextDescription);
 	pLabels->quickInfoTextDescription.iMargin = 1;  // to minimize the surface of the quick-info (0 would be too much).
-	pLabels->quickInfoTextDescription.cFont = g_strdup (pLabels->iconTextDescription.cFont);
-	pLabels->quickInfoTextDescription.iSize = 12;
-	pLabels->quickInfoTextDescription.iWeight = PANGO_WEIGHT_HEAVY;
-	pLabels->quickInfoTextDescription.iStyle = PANGO_STYLE_NORMAL;
+	pLabels->quickInfoTextDescription.iSize = 12;  // no need to update the fd, it will be done when loading the text buffer
 	
 	gboolean bQuickInfoSameLook = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "qi same", &bFlushConfFileNeeded, TRUE, NULL, NULL);
-	if (bQuickInfoSameLook)
-	{
-		memcpy (pLabels->quickInfoTextDescription.fBackgroundColor, pLabels->iconTextDescription.fBackgroundColor, 4 * sizeof (gdouble));
-		memcpy (pLabels->quickInfoTextDescription.fColorStart, pLabels->iconTextDescription.fColorStart, 3 * sizeof (gdouble));
-	}
-	else
+	if ( !bQuickInfoSameLook)
 	{
 		cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "qi bg color", &bFlushConfFileNeeded, pLabels->quickInfoTextDescription.fBackgroundColor, 4, couleur_backlabel, NULL, NULL);
 		cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "qi text color", &bFlushConfFileNeeded, pLabels->quickInfoTextDescription.fColorStart, 3, couleur_label, NULL, NULL);
+		pLabels->quickInfoTextDescription.bUseDefaultColors = FALSE;
 	}
 	
 	pLabels->iLabelSize = (pLabels->iconTextDescription.iSize != 0 ?
 		pLabels->iconTextDescription.iSize +
 		(pLabels->iconTextDescription.bOutlined ? 2 : 0) +
-		2 * pLabels->iconTextDescription.iMargin
-		+ 6 : 0);
+		2 * pLabels->iconTextDescription.iMargin +
+		6  // 2px linewidth + 3px to take into account the y offset of the characters + 1 px to take into account the gap between icon and label
+		: 0);
+	g_print ("pLabels->iLabelSize: %d (%d)\n", pLabels->iLabelSize, pLabels->iconTextDescription.iSize);
 	
 	//\___________________ labels visibility
 	int iShowLabel = cairo_dock_get_integer_key_value (pKeyFile, "Labels", "show_labels", &bFlushConfFileNeeded, -1, NULL, NULL);
@@ -669,8 +630,8 @@ static void reset_config (CairoIconsParam *pIcons)
 	
 	// labels
 	CairoIconsParam *pLabels = pIcons;
-	g_free (pLabels->iconTextDescription.cFont);
-	g_free (pLabels->quickInfoTextDescription.cFont);
+	gldi_text_description_reset (&pLabels->iconTextDescription);
+	gldi_text_description_reset (&pLabels->quickInfoTextDescription);
 }
 
 
@@ -793,14 +754,15 @@ static void _calculate_icons (G_GNUC_UNUSED const gchar *cDockName, CairoDock *p
 	cairo_dock_calculate_dock_icons (pDock);
 }
 
+static void _cairo_dock_resize_one_dock (G_GNUC_UNUSED const gchar *cDockName, CairoDock *pDock, G_GNUC_UNUSED gpointer data)
+{
+	cairo_dock_update_dock_size (pDock);
+}
+
 static void _reload_one_label (Icon *pIcon, G_GNUC_UNUSED gpointer data)
 {
 	cairo_dock_load_icon_text (pIcon);
 	cairo_dock_load_icon_quickinfo (pIcon);
-}
-static void _cairo_dock_resize_one_dock (G_GNUC_UNUSED const gchar *cDockName, CairoDock *pDock, G_GNUC_UNUSED gpointer data)
-{
-	cairo_dock_update_dock_size (pDock);
 }
 
 static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
@@ -933,6 +895,35 @@ static void unload (void)
  /// INIT ///
 ////////////
 
+static gboolean on_style_changed (G_GNUC_UNUSED gpointer data)
+{
+	g_print ("%s (%d)\n", __func__, myIconsParam.iconTextDescription.bUseDefaultColors);
+	if (myIconsParam.iconTextDescription.bUseDefaultColors)  // reload labels and quick-info
+	{
+		g_print (" reload labels...\n");
+		gldi_icons_foreach ((GldiIconFunc) _reload_one_label, NULL);
+	}
+	
+	if (myIconsParam.iconTextDescription.cFont == NULL)  // if label size changed, reload docks views
+	{
+		gldi_text_description_set_font (&myIconsParam.iconTextDescription, NULL);
+		
+		int iLabelSize = (myIconsParam.iconTextDescription.iSize != 0 ?
+			myIconsParam.iconTextDescription.iSize +
+			(myIconsParam.iconTextDescription.bOutlined ? 2 : 0) +
+			2 * myIconsParam.iconTextDescription.iMargin +
+			5  // linewidth + 2px to take into account the y offset of the characters + 1 px to take into account the gap between icon and label
+			: 0);
+		if (iLabelSize != myIconsParam.iLabelSize)
+		{
+			g_print ("myIconsParam.iLabelSize: %d (%d)\n", myIconsParam.iLabelSize, myIconsParam.iconTextDescription.iSize);
+			myIconsParam.iLabelSize = iLabelSize;
+			gldi_docks_foreach ((GHFunc) _cairo_dock_resize_one_dock, NULL);
+		}
+	}
+	return GLDI_NOTIFICATION_LET_PASS;
+}
+
 static void init (void)
 {
 	gldi_object_register_notification (&myDesktopMgr,
@@ -944,6 +935,10 @@ static void init (void)
 		(GldiNotificationFunc) cairo_dock_render_icon_notification,
 		GLDI_RUN_FIRST, NULL);
 	
+	gldi_object_register_notification (&myStyleMgr,
+		NOTIFICATION_STYLE_CHANGED,
+		(GldiNotificationFunc) on_style_changed,
+		GLDI_RUN_AFTER, NULL);
 }
 
   ///////////////

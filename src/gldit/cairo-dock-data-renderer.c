@@ -479,8 +479,8 @@ static void _cairo_dock_finish_load_data_renderer (CairoDataRenderer *pRenderer,
 	//\___________________ On charge les labels si l'implementation les a valides.
 	if (pRenderer->pLabels != NULL)
 	{
-		CairoDockLabelDescription textDescription;
-		cairo_dock_copy_label_description (&textDescription, &myIconsParam.quickInfoTextDescription);
+		GldiTextDescription textDescription;
+		gldi_text_description_copy (&textDescription, &myIconsParam.quickInfoTextDescription);
 		
 		CairoDataRendererText *pLabel;
 		cairo_surface_t *pSurface;

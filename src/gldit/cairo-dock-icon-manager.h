@@ -78,8 +78,8 @@ struct _CairoIconsParam {
 	gboolean bConstantSeparatorSize;
 	gdouble fSeparatorColor[4];
 	// labels
-	CairoDockLabelDescription iconTextDescription;
-	CairoDockLabelDescription quickInfoTextDescription;
+	GldiTextDescription iconTextDescription;
+	GldiTextDescription quickInfoTextDescription;
 	gboolean bLabelForPointedIconOnly;
 	gint iLabelSize;  // taille des etiquettes des icones, en prenant en compte le contour et la marge.
 	gdouble fLabelAlphaThreshold;

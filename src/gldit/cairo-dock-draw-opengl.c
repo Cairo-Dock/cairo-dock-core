@@ -418,6 +418,8 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		double dx = .5 * (icon->label.iWidth & 1);  // on decale la texture pour la coller sur la grille des coordonnees entieres.
 		double dy = .5 * (icon->label.iHeight & 1);
 		
+		int gap = (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + 1;  // gap between icon and label: let 1px between the icon or the dock's outline
+		
 		if (pDock->container.bIsHorizontal)
 		{
 			if (fX + icon->label.iWidth/2 > pDock->container.iWidth)  // l'etiquette deborde a droite.
@@ -425,21 +427,11 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 			if (fX - icon->label.iWidth/2 < 0)  // l'etiquette deborde a gauche.
 				fX = icon->label.iWidth/2;
 			
-			if (pDock->container.bIsHorizontal)
-				glTranslatef (floor (fX) + dx,
-					pDock->container.bDirectionUp ? 
-						floor (fY + myIconsParam.iLabelSize - icon->label.iHeight / 2) - dy:
-						floor (fY - icon->fHeight * icon->fScale - myIconsParam.iLabelSize + icon->label.iHeight / 2) + dy,
-					0.);
-			else
-			{
-				glTranslatef (pDock->container.bDirectionUp ? 
-						floor (fY - myIconsParam.iLabelSize + icon->label.iHeight / 2) - dy:
-						floor (fY + icon->fHeight * icon->fScale + myIconsParam.iLabelSize - icon->label.iHeight / 2) + dy,
-					floor (fX) + dx,
-					0.);
-				glRotatef (pDock->container.bDirectionUp ? 90 : -90, 0., 0., 1.);
-			}
+			glTranslatef (floor (fX) + dx,
+				pDock->container.bDirectionUp ? 
+					floor (fY + /**myIconsParam.iLabelSize - */icon->label.iHeight / 2) + gap + dy:
+					floor (fY - icon->fHeight * icon->fScale - /**myIconsParam.iLabelSize + */icon->label.iHeight / 2) - gap - dy,
+				0.);
 			
 			_cairo_dock_set_alpha (fMagnitude);
 			cairo_dock_apply_image_buffer_texture (&icon->label);
@@ -451,11 +443,11 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 				fMagnitude /= 3;
 			}
 			
-			const int pad = 3;
+			const int pad = 0;
 			int iXStick = (pDock->container.bDirectionUp ? 
-				floor (fY - (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) - pad) :  // right border
-				floor (fY + icon->fHeight * icon->fScale + (myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin) * (1 - pDock->fMagnitudeMax) + pad));  // left border
-			int  iMaxWidth = (pDock->container.bDirectionUp ?
+				floor (fY - gap - pad) :  // right border
+				floor (fY + icon->fHeight * icon->fScale + gap + pad));  // left border
+			int iMaxWidth = (pDock->container.bDirectionUp ?
 				iXStick :
 				pDock->container.iHeight - iXStick);
 			
@@ -470,7 +462,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 				w = icon->label.iWidth;
 			}
 			glTranslatef ((pDock->container.bDirectionUp ? 
-					floor (iXStick - w/2) + dx :
+					floor (iXStick - w/2) - dx :
 					floor (iXStick + w/2) + dx),
 				floor (fX) + dy,
 				0.);
@@ -478,27 +470,6 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 			if (icon->label.iWidth > iMaxWidth)  // draw with an alpha gradation on the last part.
 			{
 				cairo_dock_apply_image_buffer_texture_with_limit (&icon->label, fMagnitude, iMaxWidth);
-				/*glBindTexture (GL_TEXTURE_2D, icon->label.iTexture);
-				
-				double h = icon->label.iHeight;
-				double u0 = 0., u1 = (double) iMaxWidth / icon->label.iWidth;
-				glBegin(GL_QUAD_STRIP);
-				
-				double a = .75; // 3/4 plain, 1/4 gradation
-				a = (double) (floor ((-.5+a)*w)) / w + .5;
-				glColor4f (1., 1., 1., fMagnitude);
-				glTexCoord2f(u0, 0); glVertex3f (-.5*w,  .5*h, 0.);  // top left
-				glTexCoord2f(u0, 1); glVertex3f (-.5*w, -.5*h, 0.);  // bottom left
-				
-				glTexCoord2f(u1*a, 0); glVertex3f ((-.5+a)*w,  .5*h, 0.);  // top middle
-				glTexCoord2f(u1*a, 1); glVertex3f ((-.5+a)*w, -.5*h, 0.);  // bottom middle
-				
-				glColor4f (1., 1., 1., 0.);
-				
-				glTexCoord2f(u1, 0); glVertex3f (.5*w,  .5*h, 0.);  // top right
-				glTexCoord2f(u1, 1); glVertex3f (.5*w, -.5*h, 0.);  // bottom right
-				
-				glEnd();*/
 			}
 			else
 			{
@@ -506,8 +477,6 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 				cairo_dock_apply_image_buffer_texture_with_offset (&icon->label, 0, 0);
 			}
 		}
-		/*_cairo_dock_set_alpha (fMagnitude);
-		cairo_dock_apply_image_buffer_texture (&icon->label);*/
 		_cairo_dock_disable_texture ();
 		
 		glPopMatrix ();
