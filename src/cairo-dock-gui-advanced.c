@@ -1580,7 +1580,7 @@ static void _add_main_groups_buttons (void)
 	pGroupDescription->build_widget = _build_config_group_widget;
 	
 	pGroupDescription = _add_one_main_group_button ("Desklets",
-		"icon-desklets.png",
+		"icon-desklets.svg",
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("Applets can be displayed on your desktop as widgets."),
 		_("Desklets"));
