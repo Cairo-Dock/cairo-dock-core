@@ -32,6 +32,7 @@
 #include "cairo-dock-config.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-indicator-manager.h"
+#include "cairo-dock-style-manager.h"
 #include "cairo-dock-container.h"  // cairo_dock_get_max_scale
 #include "cairo-dock-icon-facility.h"  // cairo_dock_get_icon_max_scale
 #include "cairo-dock-progressbar.h"
@@ -75,29 +76,37 @@ static void _make_bar_surface (ProgressBar *pProgressBar)
 		// create a surface to bufferize the pattern.
 		pProgressBar->pBarSurface = cairo_dock_create_blank_surface (iWidth, pProgressBar->iBarThickness);
 		
-		// create the pattern.
 		cairo_t *ctx = cairo_create (pProgressBar->pBarSurface);
-		cairo_pattern_t *pGradationPattern = cairo_pattern_create_linear (0.,
-			0.,
-			iWidth,
-			0.);  // de gauche a droite.
-		g_return_if_fail (cairo_pattern_status (pGradationPattern) == CAIRO_STATUS_SUCCESS);
-
-		cairo_pattern_set_extend (pGradationPattern, CAIRO_EXTEND_NONE);
-
-		gdouble *fColorGradation = pProgressBar->fColorGradation;
-		int iNbColors = 2;
-		int i;
-		for (i = 0; i < iNbColors; i ++)
+		cairo_pattern_t *pGradationPattern = NULL;
+		if (myIndicatorsParam.bBarUseDefaultColors)
 		{
-			cairo_pattern_add_color_stop_rgba (pGradationPattern,
-				(double)i / (iNbColors-1),
-				fColorGradation[4*i+0],
-				fColorGradation[4*i+1],
-				fColorGradation[4*i+2],
-				fColorGradation[4*i+3]);
+			gldi_style_colors_set_selected_bg_color (ctx);
 		}
-		cairo_set_source (ctx, pGradationPattern);
+		else
+		{
+			// create the pattern.
+			pGradationPattern = cairo_pattern_create_linear (0.,
+				0.,
+				iWidth,
+				0.);  // de gauche a droite.
+			g_return_if_fail (cairo_pattern_status (pGradationPattern) == CAIRO_STATUS_SUCCESS);
+			
+			cairo_pattern_set_extend (pGradationPattern, CAIRO_EXTEND_NONE);
+			
+			gdouble *fColorGradation = pProgressBar->fColorGradation;
+			int iNbColors = 2;
+			int i;
+			for (i = 0; i < iNbColors; i ++)
+			{
+				cairo_pattern_add_color_stop_rgba (pGradationPattern,
+					(double)i / (iNbColors-1),
+					fColorGradation[4*i+0],
+					fColorGradation[4*i+1],
+					fColorGradation[4*i+2],
+					fColorGradation[4*i+3]);
+			}
+			cairo_set_source (ctx, pGradationPattern);
+		}
 		
 		// draw the pattern on the surface.
 		cairo_set_operator (ctx, CAIRO_OPERATOR_OVER);
@@ -110,7 +119,8 @@ static void _make_bar_surface (ProgressBar *pProgressBar)
 		
 		cairo_stroke (ctx);
 		
-		cairo_pattern_destroy (pGradationPattern);
+		if (pGradationPattern)
+			cairo_pattern_destroy (pGradationPattern);
 		cairo_destroy (ctx);
 	}
 	pProgressBar->iBarTexture = cairo_dock_create_texture_from_surface (pProgressBar->pBarSurface);
@@ -136,6 +146,7 @@ static void load (ProgressBar *pProgressBar, Icon *pIcon, CairoProgressBarAttrib
 	pProgressBar->bInverted = pAttribute->bInverted;
 	
 	// load the bar image
+	
 	pProgressBar->cImageGradation = g_strdup (pAttribute->cImageGradation);
 	if (pAttribute->fColorGradation)
 	{
@@ -193,13 +204,16 @@ static void render (ProgressBar *pProgressBar, cairo_t *pCairoContext)
 			r = .5*pProgressBar->iBarThickness;
 			
 			// outline
-			if (myIndicatorsParam.bBarHasOutline)
+			if (myIndicatorsParam.bBarUseDefaultColors || myIndicatorsParam.fBarColorOutline[3] != 0.)
 			{
-				cairo_set_source_rgba (pCairoContext,
-					myIndicatorsParam.fBarColorOutline[0],
-					myIndicatorsParam.fBarColorOutline[1],
-					myIndicatorsParam.fBarColorOutline[2],
-					myIndicatorsParam.fBarColorOutline[3]);
+				if (myIndicatorsParam.bBarUseDefaultColors)
+					gldi_style_colors_set_line_color (pCairoContext);
+				else
+					cairo_set_source_rgba (pCairoContext,
+						myIndicatorsParam.fBarColorOutline[0],
+						myIndicatorsParam.fBarColorOutline[1],
+						myIndicatorsParam.fBarColorOutline[2],
+						myIndicatorsParam.fBarColorOutline[3]);
 				cairo_set_line_width (pCairoContext, pProgressBar->iBarThickness);
 				
 				cairo_move_to (pCairoContext, r, r);
@@ -281,7 +295,7 @@ static void render_opengl (ProgressBar *pProgressBar)
 			glDisableClientState (GL_TEXTURE_COORD_ARRAY);
 			
 			// outline
-			if (myIndicatorsParam.bBarHasOutline)
+			if (myIndicatorsParam.fBarColorOutline[3] != 0.)
 			{
 				glColor4f (myIndicatorsParam.fBarColorOutline[0],
 					myIndicatorsParam.fBarColorOutline[1],
