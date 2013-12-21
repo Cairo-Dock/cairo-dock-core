@@ -42,6 +42,8 @@ extern GldiManager myIndicatorsMgr;
 // params
 struct _CairoIndicatorsParam {
 	// active indicator.
+	gboolean bActiveUseDefaultColors;
+	gboolean bActiveFillFrame;  // outline or fill frame
 	gchar *cActiveIndicatorImagePath;
 	gdouble fActiveColor[4];
 	gint iActiveLineWidth;
@@ -60,9 +62,9 @@ struct _CairoIndicatorsParam {
 	gboolean bZoomClassIndicator;
 	gboolean bUseClassIndic;
 	// progress bars
+	gboolean bBarUseDefaultColors;
 	gdouble fBarColorStart[4];
 	gdouble fBarColorStop[4];
-	gboolean bBarHasOutline;
 	gdouble fBarColorOutline[4];
 	gint iBarThickness;
 	};
