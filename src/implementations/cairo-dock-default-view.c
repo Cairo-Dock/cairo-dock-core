@@ -37,6 +37,7 @@
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-object.h"
 #include "cairo-dock-dock-manager.h"
+#include "cairo-dock-style-manager.h"
 #include "cairo-dock-desktop-manager.h"  // gldi_dock_get_screen_width
 #include "cairo-dock-default-view.h"
 
@@ -62,9 +63,11 @@ static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 	cairo_dock_calculate_icons_positions_at_rest_linear (pDock->icons, pDock->fFlatDockWidth);
 
 	pDock->iDecorationsHeight = pDock->iMaxIconHeight * pDock->container.fRatio + 2 * myDocksParam.iFrameMargin;
-
-	double fRadius = MIN (myDocksParam.iDockRadius, (pDock->iDecorationsHeight + myDocksParam.iDockLineWidth) / 2 - 1);
-	double fExtraWidth = myDocksParam.iDockLineWidth + 2 * (fRadius + myDocksParam.iFrameMargin);
+	double fLineWidth = (myDocksParam.bUseDefaultColors ? myStyleParam.iLineWidth : myDocksParam.iDockLineWidth);
+	double fRadius = (myDocksParam.bUseDefaultColors ? myStyleParam.iCornerRadius : myDocksParam.iDockRadius);
+	if (pDock->iDecorationsHeight + fLineWidth - 2 * fRadius < 0)
+		fRadius = (pDock->iDecorationsHeight + fLineWidth) / 2 - 1;
+	double fExtraWidth = fLineWidth + 2 * (fRadius + myDocksParam.iFrameMargin);
 	int iMaxDockWidth = ceil (cairo_dock_calculate_max_dock_width (pDock, pDock->fFlatDockWidth, 1., fExtraWidth));
 	pDock->iOffsetForExtend = 0;
 	pDock->iMaxDockWidth = iMaxDockWidth;
@@ -85,11 +88,11 @@ static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 		}
 	}
 	
-	pDock->iMaxDockHeight = (int) ((1 + myIconsParam.fAmplitude) * pDock->iMaxIconHeight * pDock->container.fRatio) + myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin + (pDock->container.bIsHorizontal ? myIconsParam.iLabelSize : 0);
+	pDock->iMaxDockHeight = (int) ((1 + myIconsParam.fAmplitude) * pDock->iMaxIconHeight * pDock->container.fRatio) + fLineWidth + myDocksParam.iFrameMargin + (pDock->container.bIsHorizontal ? myIconsParam.iLabelSize : 0);
 	//g_print ("myIconsParam.iLabelSize : %d => %d\n", myIconsParam.iLabelSize, (int)pDock->iMaxDockHeight);
 
 	pDock->iDecorationsWidth = pDock->iMaxDockWidth;
-	pDock->iMinDockHeight = pDock->iMaxIconHeight * pDock->container.fRatio + 2 * myDocksParam.iFrameMargin + 2 * myDocksParam.iDockLineWidth;
+	pDock->iMinDockHeight = pDock->iMaxIconHeight * pDock->container.fRatio + 2 * myDocksParam.iFrameMargin + 2 * fLineWidth;
 	
 	/**if (cairo_dock_is_extended_dock (pDock))  // mode panel etendu.
 	{
@@ -224,9 +227,11 @@ static void _cairo_dock_draw_separator (Icon *icon, CairoDock *pDock, cairo_t *p
 static void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
 {
 	//\____________________ On trace le cadre.
-	double fLineWidth = myDocksParam.iDockLineWidth;
+	double fLineWidth = (myDocksParam.bUseDefaultColors ? myStyleParam.iLineWidth : myDocksParam.iDockLineWidth);
 	double fMargin = myDocksParam.iFrameMargin;
-	double fRadius = (pDock->iDecorationsHeight + fLineWidth - 2 * myDocksParam.iDockRadius > 0 ? myDocksParam.iDockRadius : (pDock->iDecorationsHeight + fLineWidth) / 2 - 1);
+	double fRadius = (myDocksParam.bUseDefaultColors ? myStyleParam.iCornerRadius : myDocksParam.iDockRadius);
+	if (pDock->iDecorationsHeight + fLineWidth - 2 * fRadius < 0)
+		fRadius = (pDock->iDecorationsHeight + fLineWidth) / 2 - 1;
 	double fExtraWidth = 2 * fRadius + fLineWidth;
 	double fDockWidth;
 	int sens;
@@ -269,7 +274,10 @@ static void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
 	if (fLineWidth > 0)
 	{
 		cairo_set_line_width (pCairoContext, fLineWidth);
-		cairo_set_source_rgba (pCairoContext, myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
+		if (myDocksParam.bUseDefaultColors)
+			gldi_style_colors_set_line_color (pCairoContext);
+		else
+			cairo_set_source_rgba (pCairoContext, myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
 		cairo_stroke (pCairoContext);
 	}
 	else

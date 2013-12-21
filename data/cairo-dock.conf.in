@@ -267,15 +267,15 @@ modules=
 
 [Background]
 
-#y+[Image;Colour gradation] Fill the background with:
-fill bg = 1
+#Y+[Automatic;0;0;Image;1;1;Colour gradation;2;1] Style
+style = 1
+
 
 #F+[Image;gtk-orientation-portrait]
 #{Use a background image.}
 frame2 = 
 
-#g+ Image filename to use as a background :
-#{Any format allowed; if empty, the colour gradation will be used as a fall back.}
+#g+ Image file:
 background image = 
 
 #e+[0;1;Transparent;Opaque] Image's transparency :
@@ -283,6 +283,7 @@ image alpha = 1
 
 #b+ Repeat image as a pattern to fill background?
 repeat image = true
+
 
 #F+[Colour gradation;@pkgdatadir@/icons/icon-gradation.png]
 #{Use a colour gradation.}
@@ -305,6 +306,7 @@ number of stripes = 0
 #f+[0;1] Percentage of the bright colour:
 stripes width = 0.5
 
+
 #F+[Background when hidden;gtk-orientation-portrait]
 frame4 = 
 
@@ -312,11 +314,6 @@ frame4 =
 #{Several applets can be visible even when the dock is hidden}
 hidden bg color = .8;.8;.8;.5
 
-#F
-frame4_=
-
-#b+ Stretch the dock to always fill the screen
-extended = false
 
 #F+[External Frame;@pkgdatadir@/icons/icon-frame.png]
 frame_frame =
@@ -337,6 +334,13 @@ frame margin = 2
 
 #b+ Are the bottom left and right corners rounded?
 rounded bottom corner = true
+
+
+#F
+frame4_=
+
+#b+ Stretch the dock to always fill the screen
+extended = false
 
 
 [Views]
@@ -364,7 +368,7 @@ relative icon size = .8
 #F+[Bubble;@pkgdatadir@/icons/icon-bubble.png]
 frame_bubble =
 
-#Y-[Automatic;0;0;Custom;1;3] Colours
+#Y-[Automatic;0;0;Custom;1;3] Style
 colors = 1
 
 #C+ Background colour
@@ -518,7 +522,7 @@ force size = false
 #{Only the default, 3D-plane and curve views support flat and physical separators. Flat separators are rendered differently according to the view.}
 separator type = 0
 
-#g+[Blank] Filename of an image to use for separators :
+#g+[Blank] Image file:
 separator image = separateur.svg
 
 #b+ Make the separator's image revolve when dock is on top/on the left/on the right?
@@ -556,28 +560,29 @@ string color = 0.0; 0.0; 0.8; 0.4
 #X+[Indicator of the active window]
 frame_window =
 
-#Y+[Image;1;1;Frame;2;3] Type of indicator:
-active indic type = 1
+#Y+[Automatic;2;1;Image;1;1;Frame;2;4] Style
+active style = 1
 
 #g+ Image file:
 active indicator =
 
-#C+ Colour of the frame :
-#{Set transparency to 0 if you don't want to use an indicator.}
+#l+[Fill background; Frame] Frame
+active frame = 1
+
+#C+ Colour
 active color = 0.; 0.4; 0.8; 0.5
 
-#i+[0;20] Linewidth of the frame around the active window :
-#{Set 0 to fill the frame.}
+#i+[1;20] Linewidth
 active line width = 3
 
-#i+[0;30] Corner radius of the frame around the active window :
+#i+[0;30] Corner radius
 active corner radius = 6
 
 #v
 sep_active =
 
 #b+ Draw indicator above the icon?
-active frame position = true
+active frame position = false
 
 
 #X+[Indicator of active launcher]
@@ -633,14 +638,14 @@ zoom class = false
 #X+[Progress bars]
 frame_bar =
 
+#Y-[Automatic;0;0;Custom;1;3] Style
+bar_colors = 1
+
 #C+ Start color
 bar_color_start = 0.53;0.53;0.53;.85
 
 #C+ End color
 bar_color_stop = 0.87;0.87;0.87;.85
-
-#B+ Draw outline
-bar_outline = true
 
 #C+ Outline colour
 bar_color_outline = 1.;1.;1.;.85
@@ -663,7 +668,7 @@ alpha threshold = 20
 #F+[Appearance;gtk-orientation-portrait]
 frame_bg =
 
-#Y-[Automatic;0;0;Custom;1;4] Colours
+#Y-[Automatic;0;0;Custom;1;4] Style
 colors = 1
 
 #C+ Background colour
@@ -710,7 +715,7 @@ qi bg color = 0;0;0;0.667
 #F+[Appearance;gtk-orientation-portrait]
 frame_bg =
 
-#Y-[System;0;0;Custom;1;3] Colours
+#Y-[System;0;0;Custom;1;3] Style
 colors = 1
 
 #C+ Background colour

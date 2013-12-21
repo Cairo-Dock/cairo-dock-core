@@ -934,7 +934,6 @@ static void init (void)
 		NOTIFICATION_RENDER_ICON,
 		(GldiNotificationFunc) cairo_dock_render_icon_notification,
 		GLDI_RUN_FIRST, NULL);
-	
 	gldi_object_register_notification (&myStyleMgr,
 		NOTIFICATION_STYLE_CHANGED,
 		(GldiNotificationFunc) on_style_changed,

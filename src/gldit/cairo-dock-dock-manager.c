@@ -51,6 +51,7 @@
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-indicator-manager.h"  // myIndicatorsParam.bUseClassIndic
 #include "cairo-dock-dialog-manager.h"
+#include "cairo-dock-style-manager.h"
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-dock-visibility.h"
 #include "cairo-dock-dock-manager.h"
@@ -1414,7 +1415,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 	CairoDocksParam *pAccessibility = pDocksParam;
 	CairoDocksParam *pSystem = pDocksParam;
 	
-	// cadre.
+	// frame
 	pBackground->iDockRadius = cairo_dock_get_integer_key_value (pKeyFile, "Background", "corner radius", &bFlushConfFileNeeded, 12, NULL, NULL);
 
 	pBackground->iDockLineWidth = cairo_dock_get_integer_key_value (pKeyFile, "Background", "line width", &bFlushConfFileNeeded, 2, NULL, NULL);
@@ -1426,35 +1427,33 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 
 	pBackground->bRoundedBottomCorner = cairo_dock_get_boolean_key_value (pKeyFile, "Background", "rounded bottom corner", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
-	// image de fond.
-	gchar *cBgImage = cairo_dock_get_string_key_value (pKeyFile, "Background", "background image", &bFlushConfFileNeeded, NULL, NULL, NULL);
-	int iFillBg = cairo_dock_get_integer_key_value (pKeyFile, "Background", "fill bg", &bFlushConfFileNeeded, -1, NULL, NULL);  // -1 pour intercepter le cas ou la cle n'existe pas.
-	if (iFillBg == -1)  // nouvelle cle
+	// background image
+	int iStyle = cairo_dock_get_integer_key_value (pKeyFile, "Background", "style", &bFlushConfFileNeeded, -1, NULL, NULL);  // -1 pour intercepter le cas ou la cle n'existe pas.
+	if (iStyle == -1)  // old params < 3.4
 	{
-		iFillBg = (cBgImage != NULL ? 0 : 1);  // si une image etait definie auparavant, on dit qu'on veut le mode "image"
-		g_key_file_set_integer (pKeyFile, "Background", "fill bg", iFillBg);
+		iStyle = g_key_file_get_integer (pKeyFile, "Background", "fill bg", NULL);
+		iStyle ++;
+		g_key_file_set_integer (pKeyFile, "Background", "style", iStyle);
 	}
-	else
+	
+	if (iStyle == 0)
 	{
-		if (iFillBg != 0)  // remplissage avec un degrade => on ne veut pas d'image
+		myDocksParam.bUseDefaultColors =TRUE;
+	}
+	else if (iStyle == 1)
+	{
+		gchar *cBgImage = (iStyle == 1 ? cairo_dock_get_string_key_value (pKeyFile, "Background", "background image", &bFlushConfFileNeeded, NULL, NULL, NULL) : NULL);
+		if (cBgImage != NULL)
 		{
+			pBackground->cBackgroundImageFile = cairo_dock_search_image_s_path (cBgImage);
 			g_free (cBgImage);
-			cBgImage = NULL;
+			pBackground->fBackgroundImageAlpha = cairo_dock_get_double_key_value (pKeyFile, "Background", "image alpha", &bFlushConfFileNeeded, 0.5, NULL, NULL);
+			pBackground->bBackgroundImageRepeat = cairo_dock_get_boolean_key_value (pKeyFile, "Background", "repeat image", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 		}
 	}
 	
-	if (cBgImage != NULL)
-	{
-		pBackground->cBackgroundImageFile = cairo_dock_search_image_s_path (cBgImage);
-		g_free (cBgImage);
-	}
-	
-	pBackground->fBackgroundImageAlpha = cairo_dock_get_double_key_value (pKeyFile, "Background", "image alpha", &bFlushConfFileNeeded, 0.5, NULL, NULL);
-
-	pBackground->bBackgroundImageRepeat = cairo_dock_get_boolean_key_value (pKeyFile, "Background", "repeat image", &bFlushConfFileNeeded, FALSE, NULL, NULL);
-	
-	// degrade du fond.
-	if (pBackground->cBackgroundImageFile == NULL)
+	// background gradation
+	if (iStyle != 0 && pBackground->cBackgroundImageFile == NULL)
 	{
 		pBackground->iNbStripes = cairo_dock_get_integer_key_value (pKeyFile, "Background", "number of stripes", &bFlushConfFileNeeded, 10, NULL, NULL);
 		
@@ -1731,7 +1730,7 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 	CairoDocksParam *pAccessibility = pDocksParam;
 	// CairoDocksParam *pViews = pDocksParam;
 	// CairoDocksParam *pSystem = pDocksParam;
-	 CairoDocksParam *pPrevBackground = pPrevDocksParam;
+	CairoDocksParam *pPrevBackground = pPrevDocksParam;
 	CairoDocksParam *pPrevPosition = pPrevDocksParam;
 	CairoDocksParam *pPrevAccessibility = pPrevDocksParam;
 	// CairoDocksParam *pPrevViews = pPrevDocksParam;
@@ -1853,6 +1852,17 @@ static void unload (void)
  /// INIT ///
 ////////////
 
+static gboolean on_style_changed (G_GNUC_UNUSED gpointer data)
+{
+	g_print ("%s (%d)\n", __func__, myIndicatorsParam.bBarUseDefaultColors);
+	if (myDocksParam.bUseDefaultColors)  // reload bg
+	{
+		g_print (" reload dock's bg...\n");
+		gldi_docks_foreach_root ((GFunc)_reload_bg, NULL);
+	}
+	return GLDI_NOTIFICATION_LET_PASS;
+}
+
 static void init (void)
 {
 	s_hDocksTable = g_hash_table_new_full (g_str_hash,
@@ -1891,6 +1901,10 @@ static void init (void)
 	gldi_object_register_notification (&myDialogObjectMgr,
 		NOTIFICATION_NEW,
 		(GldiNotificationFunc) _on_new_dialog,
+		GLDI_RUN_AFTER, NULL);
+	gldi_object_register_notification (&myStyleMgr,
+		NOTIFICATION_STYLE_CHANGED,
+		(GldiNotificationFunc) on_style_changed,
 		GLDI_RUN_AFTER, NULL);
 	
 	gldi_docks_visibility_start ();

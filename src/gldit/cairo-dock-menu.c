@@ -542,7 +542,7 @@ static void _init_menu_item (GtkWidget *pMenuItem)
 	}
 	
 	GtkWidget *pSubMenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (pMenuItem));
-	if (pSubMenu != NULL)
+	if (pSubMenu != NULL)  /// TODO: if it's a sub-menu not made by us (for instance, the NetworkManager indicator), set the drawing callback...
 		gtk_container_forall (GTK_CONTAINER (pSubMenu), (GtkCallback) _init_menu_item, NULL);
 }
 

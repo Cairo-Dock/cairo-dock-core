@@ -713,6 +713,8 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, G
 	
 	//\_________________ get the font description
 	PangoFontDescription *pDesc = gldi_text_description_get_description (pTextDescription);
+	if (!pDesc)
+		g_print ("no text desc for '%s'\n", cText);
 	int iSize = gldi_text_description_get_size (pTextDescription);
 	pango_font_description_set_absolute_size (pDesc, fMaxScale * iSize * PANGO_SCALE);
 	
@@ -736,8 +738,8 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, G
 	
 	//\_________________ load the layout into a surface
 	gboolean bDrawBackground = ! pTextDescription->bNoDecorations;
-	double fRadius = fMaxScale * MAX (pTextDescription->iMargin, MIN (6, iSize/4));  // permet d'avoir un rayon meme si on n'a pas de marge.
-	int iOutlineMargin = 2*pTextDescription->iMargin + (pTextDescription->bOutlined ? 2 : 0);  // outlined => +1 tout autour des lettres.
+	double fRadius = (pTextDescription->bUseDefaultColors ? MIN (myStyleParam.iCornerRadius * .75, iSize/2) : fMaxScale * MAX (pTextDescription->iMargin, MIN (6, iSize/2)));  // permet d'avoir un rayon meme si on n'a pas de marge.
+	int iOutlineMargin = 2*pTextDescription->iMargin * fMaxScale + (pTextDescription->bOutlined ? 2 : 0);  // outlined => +1 tout autour des lettres.
 	double fZoomX = ((iMaxWidth != 0 && log.width + iOutlineMargin > iMaxWidth) ? (double)iMaxWidth / (log.width + iOutlineMargin) : 1.);
 	double fLineWidth = 1;
 	

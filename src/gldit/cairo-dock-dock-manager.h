@@ -110,6 +110,7 @@ struct _CairoDocksParam {
 	gboolean bExtendedMode;
 	gboolean bLockIcons;
 	gboolean bLockAll;
+	gboolean bUseDefaultColors;
 	};
 
 /// signals

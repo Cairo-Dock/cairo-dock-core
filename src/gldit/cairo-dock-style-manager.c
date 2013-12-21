@@ -74,6 +74,21 @@ static const double alpha = 0.85;  // min alpha (max is 1)
  * or
  *   auto -> style = NULL, use style mgr's style
  *   custom -> fill a style
+ * 
+ * progressbars: auto/custom
+ *   auto -> bg color = bg color -> bg color + .3, outline color = outline color
+ *   custom -> bg color gradation, outline color
+ * 
+ * active indic: auto/custom/image, fill = frame / bg
+ *   auto -> bg color = bg color or outline color
+ *   custom -> bg color = color, radius, linewidth
+ *   image -> image
+ * 
+ * docks: auto/gradation/image
+ *   auto -> style mgr
+ *   gradation -> bg colors __.--> outline color, radius, linewidth
+ *   image -> image path ____/
+ * 
  */
 
 static double hue2rgb (double p, double q, double t)

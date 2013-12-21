@@ -28,6 +28,7 @@
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-backends-manager.h"  // myBackendsParam.fSubDockSizeRatio
 #include "cairo-dock-log.h"
+#include "cairo-dock-style-manager.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-dialog-manager.h"  // gldi_dialogs_replace_all
 #include "cairo-dock-indicator-manager.h"  // myIndicators.bUseClassIndic
@@ -1262,9 +1263,22 @@ static cairo_surface_t *_cairo_dock_make_stripes_background (int iWidth, int iHe
 }
 static void _cairo_dock_load_default_background (CairoDockImageBuffer *pImage, int iWidth, int iHeight)
 {
-	cd_debug ("%s (%s, %d, %dx%d)", __func__, myDocksParam.cBackgroundImageFile, myDocksParam.bBackgroundImageRepeat, iWidth,
-				iHeight);
-	if (myDocksParam.cBackgroundImageFile != NULL)
+	cd_debug ("%s (%s, %d, %dx%d)", __func__, myDocksParam.cBackgroundImageFile, myDocksParam.bBackgroundImageRepeat, iWidth, iHeight);
+	if (myDocksParam.bUseDefaultColors)
+	{
+		cairo_surface_t *pBgSurface = cairo_dock_create_blank_surface (
+			iWidth,
+			iHeight);
+		cairo_t *pImageContext = cairo_create (pBgSurface);
+		gldi_style_colors_set_bg_color (pImageContext);
+		cairo_paint (pImageContext);
+		cairo_destroy (pImageContext);
+		cairo_dock_load_image_buffer_from_surface (pImage,
+			pBgSurface,
+			iWidth,
+			iHeight);
+	}
+	else if (myDocksParam.cBackgroundImageFile != NULL)
 	{
 		if (myDocksParam.bBackgroundImageRepeat)
 		{
