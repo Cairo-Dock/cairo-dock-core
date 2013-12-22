@@ -898,7 +898,14 @@ static void unload (void)
 static gboolean on_style_changed (G_GNUC_UNUSED gpointer data)
 {
 	g_print ("%s (%d)\n", __func__, myIconsParam.iconTextDescription.bUseDefaultColors);
-	if (myIconsParam.iconTextDescription.bUseDefaultColors)  // reload labels and quick-info
+	
+	if (myIconsParam.iconTextDescription.cFont == NULL)  // default font -> reload our text description
+	{
+		gldi_text_description_set_font (&myIconsParam.iconTextDescription, NULL);
+		myIconsParam.quickInfoTextDescription.fd = pango_font_description_copy (myIconsParam.iconTextDescription.fd);
+	}
+	
+	if (myIconsParam.iconTextDescription.bUseDefaultColors || myIconsParam.iconTextDescription.cFont == NULL)  // reload labels and quick-info
 	{
 		g_print (" reload labels...\n");
 		gldi_icons_foreach ((GldiIconFunc) _reload_one_label, NULL);
@@ -906,8 +913,6 @@ static gboolean on_style_changed (G_GNUC_UNUSED gpointer data)
 	
 	if (myIconsParam.iconTextDescription.cFont == NULL)  // if label size changed, reload docks views
 	{
-		gldi_text_description_set_font (&myIconsParam.iconTextDescription, NULL);
-		
 		int iLabelSize = (myIconsParam.iconTextDescription.iSize != 0 ?
 			myIconsParam.iconTextDescription.iSize +
 			(myIconsParam.iconTextDescription.bOutlined ? 2 : 0) +

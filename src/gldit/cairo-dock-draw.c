@@ -33,6 +33,7 @@
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-desktop-manager.h"  // g_pFakeTransparencyDesktopBg
 #include "cairo-dock-windows-manager.h"
+#include "cairo-dock-style-manager.h"
 #include "cairo-dock-draw-opengl.h"  // pour cairo_dock_render_one_icon
 #include "cairo-dock-overlay.h"  // cairo_dock_draw_icon_overlays_cairo
 #include "cairo-dock-draw.h"
@@ -899,8 +900,9 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 	Icon *icon;
 	GList *ic = pFirstDrawnElement;
 	double *pHiddenBgColor;
-	const double r = 4; // corner radius of the background
+	const double r = (myDocksParam.bUseDefaultColors ? myStyleParam.iCornerRadius/2 : 4);  // corner radius of the background
 	const double gap = 2;  // gap to the screen
+	double alpha;
 	double dw = (myIconsParam.iIconGap > 2 ? 2 : 0);  // 1px margin around the icons for a better readability (only if icons won't be stuck togather then).
 	double w, h;
 	do
@@ -913,14 +915,24 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 			
 			if (icon->bHasHiddenBg)
 			{
+				pHiddenBgColor = NULL;
 				if (icon->pHiddenBgColor)  // custom bg color
 					pHiddenBgColor = icon->pHiddenBgColor;
-				else  // default bg color
+				else if (! myDocksParam.bUseDefaultColors)  // default bg color
 					pHiddenBgColor = myDocksParam.fHiddenBg;
-				if ( pHiddenBgColor[3] != 0)
+				//if (pHiddenBgColor && pHiddenBgColor[3] != 0)
 				{
 					cairo_save (pCairoContext);
-					cairo_set_source_rgba (pCairoContext, pHiddenBgColor[0], pHiddenBgColor[1], pHiddenBgColor[2], pHiddenBgColor[3] * pDock->fPostHideOffset);
+					if (pHiddenBgColor)
+					{
+						cairo_set_source_rgba (pCairoContext, pHiddenBgColor[0], pHiddenBgColor[1], pHiddenBgColor[2], pHiddenBgColor[3]);
+						alpha = 1.;
+					}
+					else
+					{
+						gldi_style_colors_set_bg_color (pCairoContext);
+						alpha = .7;
+					}
 					w = icon->fWidth * icon->fScale;
 					h = icon->fHeight * icon->fScale;
 					if (pDock->container.bIsHorizontal)
@@ -933,7 +945,9 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 						cairo_translate (pCairoContext, icon->fDrawY - dw / 2, icon->fDrawX);
 						cairo_dock_draw_rounded_rectangle (pCairoContext, r, 0, h - 2*r + dw, w);
 					}
-					cairo_fill (pCairoContext);
+					///cairo_fill (pCairoContext);
+					cairo_clip (pCairoContext);
+					cairo_paint_with_alpha (pCairoContext, alpha * pDock->fPostHideOffset);
 					cairo_restore (pCairoContext);
 				}
 			}
