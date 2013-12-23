@@ -511,13 +511,13 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	pParams->iAimedY = iAimedY;
 }
 
+#if GTK_MAJOR_VERSION > 2
 static void _init_menu_item (GtkWidget *pMenuItem)
 {
 	int index = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pMenuItem), "gldi-text-color"));
 	if (index == 0)
 	{
 		// the following code is to draw the menu item; this is more like a proof of concept
-		#if GTK_MAJOR_VERSION > 2
 		/**g_signal_connect (G_OBJECT (pMenuItem),
 			"draw",
 			G_CALLBACK (_draw_menu_item),
@@ -534,7 +534,6 @@ static void _init_menu_item (GtkWidget *pMenuItem)
 			"destroy",
 			G_CALLBACK (_on_destroy_menu_item),
 			NULL);*/
-		#endif
 		
 		gtk_style_context_add_class (gtk_widget_get_style_context (pMenuItem), "menuitem2");
 		
@@ -545,6 +544,7 @@ static void _init_menu_item (GtkWidget *pMenuItem)
 	if (pSubMenu != NULL)  /// TODO: if it's a sub-menu not made by us (for instance, the NetworkManager indicator), set the drawing callback...
 		gtk_container_forall (GTK_CONTAINER (pSubMenu), (GtkCallback) _init_menu_item, NULL);
 }
+#endif
 
 static void _popup_menu (GtkWidget *menu, guint32 time)
 {
@@ -577,8 +577,10 @@ static void _popup_menu (GtkWidget *menu, guint32 time)
 	
 	gtk_widget_show_all (GTK_WIDGET (menu));
 	
+	#if GTK_MAJOR_VERSION > 2
 	// to draw the items ourselves
 	gtk_container_forall (GTK_CONTAINER (menu), (GtkCallback) _init_menu_item, NULL);
+	#endif
 	
 	gtk_menu_popup (GTK_MENU (menu),
 		NULL,
