@@ -268,7 +268,7 @@ static void render_opengl (ProgressBar *pProgressBar)
 			const CairoDockGLPath *pFramePath = cairo_dock_generate_rectangle_path (w * v, 2*r, r, TRUE);
 			
 			// bind the texture to the path
-			// we don't use the automatic coods generation because we want to bind the texture to the interval [0; v].
+			// we don't use the automatic coords generation because we want to bind the texture to the interval [0; v].
 			glColor4f (1., 1., 1., 1.);
 			_cairo_dock_set_blend_source ();  // doesn't really matter here.
 			_cairo_dock_enable_texture ();
@@ -295,9 +295,12 @@ static void render_opengl (ProgressBar *pProgressBar)
 			glDisableClientState (GL_TEXTURE_COORD_ARRAY);
 			
 			// outline
-			if (myIndicatorsParam.fBarColorOutline[3] != 0.)
+			if (myIndicatorsParam.bBarUseDefaultColors || myIndicatorsParam.fBarColorOutline[3] != 0.)
 			{
-				glColor4f (myIndicatorsParam.fBarColorOutline[0],
+				if (myIndicatorsParam.bBarUseDefaultColors)
+					gldi_style_colors_set_line_color (NULL);
+				else
+					glColor4f (myIndicatorsParam.fBarColorOutline[0],
 					myIndicatorsParam.fBarColorOutline[1],
 					myIndicatorsParam.fBarColorOutline[2],
 					myIndicatorsParam.fBarColorOutline[3]);

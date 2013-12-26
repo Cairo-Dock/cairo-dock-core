@@ -911,20 +911,18 @@ static gboolean on_style_changed (G_GNUC_UNUSED gpointer data)
 		gldi_icons_foreach ((GldiIconFunc) _reload_one_label, NULL);
 	}
 	
-	if (myIconsParam.iconTextDescription.cFont == NULL)  // if label size changed, reload docks views
+	// if label size changed, reload docks views
+	int iLabelSize = (myIconsParam.iconTextDescription.iSize != 0 ?
+		myIconsParam.iconTextDescription.iSize +
+		(myIconsParam.iconTextDescription.bOutlined ? 2 : 0) +
+		2 * myIconsParam.iconTextDescription.iMargin +
+		6  // 2px linewidth + 3px to take into account the y offset of the characters + 1 px to take into account the gap between icon and label
+		: 0);
+	if (iLabelSize != myIconsParam.iLabelSize)
 	{
-		int iLabelSize = (myIconsParam.iconTextDescription.iSize != 0 ?
-			myIconsParam.iconTextDescription.iSize +
-			(myIconsParam.iconTextDescription.bOutlined ? 2 : 0) +
-			2 * myIconsParam.iconTextDescription.iMargin +
-			5  // linewidth + 2px to take into account the y offset of the characters + 1 px to take into account the gap between icon and label
-			: 0);
-		if (iLabelSize != myIconsParam.iLabelSize)
-		{
-			g_print ("myIconsParam.iLabelSize: %d (%d)\n", myIconsParam.iLabelSize, myIconsParam.iconTextDescription.iSize);
-			myIconsParam.iLabelSize = iLabelSize;
-			gldi_docks_foreach ((GHFunc) _cairo_dock_resize_one_dock, NULL);
-		}
+		g_print ("myIconsParam.iLabelSize: %d -> %d (%d)\n", myIconsParam.iLabelSize, iLabelSize, myIconsParam.iconTextDescription.iSize);
+		myIconsParam.iLabelSize = iLabelSize;
+		gldi_docks_foreach ((GHFunc) _cairo_dock_resize_one_dock, NULL);
 	}
 	return GLDI_NOTIFICATION_LET_PASS;
 }
