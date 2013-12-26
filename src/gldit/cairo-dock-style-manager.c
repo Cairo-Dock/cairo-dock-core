@@ -316,15 +316,25 @@ void gldi_style_colors_set_line_color (cairo_t *pCairoContext)
 	#if GTK_MAJOR_VERSION > 2
 	if (myStyleParam.bUseSystemColors)
 	{
-		if (s_menu_bg_pattern)
-			cairo_set_source (pCairoContext, s_menu_bg_pattern);
+		if (pCairoContext)
+		{
+			if (s_menu_bg_pattern)
+				cairo_set_source (pCairoContext, s_menu_bg_pattern);
+			else
+				cairo_set_source_rgb (pCairoContext, s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue);  /// shade a little ?...
+		}
 		else
-			cairo_set_source_rgb (pCairoContext, s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue);  /// shade a little ?...
+		{
+			glColor3f (s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue);  /// shade a little ?...
+		}
 	}
 	else
 	#endif
 	{
-		cairo_set_source_rgba (pCairoContext, myStyleParam.fLineColor[0], myStyleParam.fLineColor[1], myStyleParam.fLineColor[2], myStyleParam.fLineColor[3]);
+		if (pCairoContext)
+			cairo_set_source_rgba (pCairoContext, myStyleParam.fLineColor[0], myStyleParam.fLineColor[1], myStyleParam.fLineColor[2], myStyleParam.fLineColor[3]);
+		else
+			glColor4f (myStyleParam.fLineColor[0], myStyleParam.fLineColor[1], myStyleParam.fLineColor[2], myStyleParam.fLineColor[3]);
 	}
 }
 
