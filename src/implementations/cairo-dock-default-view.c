@@ -543,9 +543,11 @@ static void _cairo_dock_draw_separator_opengl (Icon *icon, CairoDock *pDock, dou
 static void cd_render_opengl_default (CairoDock *pDock)
 {
 	//\_____________ On definit notre rectangle.
-	double fLineWidth = myDocksParam.iDockLineWidth;
+	double fLineWidth = (myDocksParam.bUseDefaultColors ? myStyleParam.iLineWidth : myDocksParam.iDockLineWidth);
 	double fMargin = myDocksParam.iFrameMargin;
-	double fRadius = (pDock->iDecorationsHeight + fLineWidth - 2 * myDocksParam.iDockRadius > 0 ? myDocksParam.iDockRadius : (pDock->iDecorationsHeight + fLineWidth) / 2 - 1);
+	double fRadius = (myDocksParam.bUseDefaultColors ? myStyleParam.iCornerRadius : myDocksParam.iDockRadius);
+	if (pDock->iDecorationsHeight + fLineWidth - 2 * fRadius < 0)
+		fRadius = (pDock->iDecorationsHeight + fLineWidth) / 2 - 1;
 	double fExtraWidth = 2 * fRadius + fLineWidth;
 	double fDockWidth;
 	double fFrameHeight = pDock->iDecorationsHeight + fLineWidth;
@@ -573,6 +575,9 @@ static void cd_render_opengl_default (CairoDock *pDock)
 	
 	fDockOffsetY = pDock->iDecorationsHeight + 1.5 * fLineWidth;
 	
+	fDockOffsetX = floor (fDockOffsetX);  // round values so that left and right edges are pixel-aligned
+	fDockWidth = floor (fDockWidth);
+	
 	double fDockMagnitude = cairo_dock_calculate_magnitude (pDock->iMagnitudeIndex);
 	
 	//\_____________ On genere les coordonnees du contour.
@@ -581,7 +586,7 @@ static void cd_render_opengl_default (CairoDock *pDock)
 	//\_____________ On remplit avec le fond.
 	glPushMatrix ();
 	cairo_dock_set_container_orientation_opengl (CAIRO_CONTAINER (pDock));
-	glTranslatef (fDockOffsetX + (fDockWidth+2*fRadius)/2,
+	glTranslatef (fDockOffsetX + (fDockWidth+2*fRadius)/2 + .5,  // +.5 so that left and right edges are pixel-aligned
 		fDockOffsetY - fFrameHeight/2,
 		0.);
 	
@@ -599,7 +604,10 @@ static void cd_render_opengl_default (CairoDock *pDock)
 	if (fLineWidth != 0)
 	{
 		glLineWidth (fLineWidth);
-		glColor4f (myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
+		if (myDocksParam.bUseDefaultColors)
+			gldi_style_colors_set_line_color (NULL);
+		else
+			glColor4f (myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
 		_cairo_dock_set_blend_alpha ();
 		cairo_dock_stroke_gl_path (pFramePath, TRUE);
 	}
