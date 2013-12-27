@@ -1438,7 +1438,9 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 	
 	if (iStyle == 0)
 	{
-		myDocksParam.bUseDefaultColors =TRUE;
+		pBackground->bUseDefaultColors = TRUE;
+		pBackground->iDockRadius = myStyleParam.iCornerRadius;
+		pBackground->iDockLineWidth = myStyleParam.iLineWidth;
 	}
 	else if (iStyle == 1)
 	{
@@ -1854,10 +1856,14 @@ static void unload (void)
 
 static gboolean on_style_changed (G_GNUC_UNUSED gpointer data)
 {
-	g_print ("%s (%d)\n", __func__, myIndicatorsParam.bBarUseDefaultColors);
+	g_print ("%s (%d)\n", __func__, myDocksParam.bUseDefaultColors);
 	if (myDocksParam.bUseDefaultColors)  // reload bg
 	{
 		g_print (" reload dock's bg...\n");
+		
+		myDocksParam.iDockRadius = myStyleParam.iCornerRadius;
+		myDocksParam.iDockLineWidth = myStyleParam.iLineWidth;
+		
 		gldi_docks_foreach_root ((GFunc)_reload_bg, NULL);
 	}
 	return GLDI_NOTIFICATION_LET_PASS;

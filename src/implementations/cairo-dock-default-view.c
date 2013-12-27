@@ -179,7 +179,10 @@ static void _draw_physical_separator (Icon *icon, CairoDock *pDock, cairo_t *pCa
 		cairo_fill (pCairoContext);
 		
 		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
-		cairo_set_source_rgba (pCairoContext, myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
+		if (myDocksParam.bUseDefaultColors)
+			gldi_style_colors_set_line_color (pCairoContext);
+		else
+			cairo_set_source_rgba (pCairoContext, myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
 		
 		cairo_move_to (pCairoContext,
 			-.5*myDocksParam.iDockLineWidth,
@@ -200,7 +203,10 @@ static void _draw_physical_separator (Icon *icon, CairoDock *pDock, cairo_t *pCa
 		cairo_fill (pCairoContext);
 		
 		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
-		cairo_set_source_rgba (pCairoContext, myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
+		if (myDocksParam.bUseDefaultColors)
+			gldi_style_colors_set_line_color (pCairoContext);
+		else
+			cairo_set_source_rgba (pCairoContext, myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
 		
 		cairo_move_to (pCairoContext,
 			pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iDecorationsHeight - myDocksParam.iDockLineWidth : 0.,
@@ -360,6 +366,10 @@ static void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDoc
 	cairo_dock_render_decorations_in_frame (pCairoContext, pDock, fDockOffsetY, fOffsetX - fDeltaXTrapeze, fDockWidth + 2*fDeltaXTrapeze);
 	
 	//\____________________ On dessine la partie du cadre qui va bien.
+	if (myDocksParam.bUseDefaultColors)
+		gldi_style_colors_set_line_color (pCairoContext);
+	else
+		cairo_set_source_rgba (pCairoContext, myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
 	cairo_new_path (pCairoContext);
 
 	if (pDock->container.bIsHorizontal)
@@ -367,28 +377,24 @@ static void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDoc
 		cairo_move_to (pCairoContext, fDockOffsetX, fDockOffsetY - fLineWidth / 2);
 		cairo_rel_line_to (pCairoContext, pArea->width, 0);
 		cairo_set_line_width (pCairoContext, fLineWidth);
-		cairo_set_source_rgba (pCairoContext, myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
 		cairo_stroke (pCairoContext);
 
 		cairo_new_path (pCairoContext);
 		cairo_move_to (pCairoContext, fDockOffsetX, (pDock->container.bDirectionUp ? iHeight - fLineWidth / 2 : pDock->iDecorationsHeight + 1.5 * fLineWidth));
 		cairo_rel_line_to (pCairoContext, pArea->width, 0);
 		cairo_set_line_width (pCairoContext, fLineWidth);
-		cairo_set_source_rgba (pCairoContext, myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
 	}
 	else
 	{
 		cairo_move_to (pCairoContext, fDockOffsetX - fLineWidth / 2, fDockOffsetY);
 		cairo_rel_line_to (pCairoContext, 0, pArea->height);
 		cairo_set_line_width (pCairoContext, fLineWidth);
-		cairo_set_source_rgba (pCairoContext, myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
 		cairo_stroke (pCairoContext);
 
 		cairo_new_path (pCairoContext);
 		cairo_move_to (pCairoContext, (pDock->container.bDirectionUp ? iHeight - fLineWidth / 2 : pDock->iDecorationsHeight + 1.5 * fLineWidth), fDockOffsetY);
 		cairo_rel_line_to (pCairoContext, 0, pArea->height);
 		cairo_set_line_width (pCairoContext, fLineWidth);
-		cairo_set_source_rgba (pCairoContext, myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
 	}
 	cairo_stroke (pCairoContext);
 
@@ -486,7 +492,10 @@ static void _draw_physical_separator_opengl (Icon *icon, CairoDock *pDock, G_GNU
 		glEnd();
 		
 		_cairo_dock_set_blend_alpha ();
-		glColor4f (myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
+		if (myDocksParam.bUseDefaultColors)
+			gldi_style_colors_set_line_color (NULL);
+		else
+			glColor4f (myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
 		glPolygonMode(GL_FRONT, GL_LINE);
 		
 		if (! pDock->container.bDirectionUp)
@@ -513,7 +522,10 @@ static void _draw_physical_separator_opengl (Icon *icon, CairoDock *pDock, G_GNU
 		glEnd();
 		
 		_cairo_dock_set_blend_alpha ();
-		glColor4f (myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
+		if (myDocksParam.bUseDefaultColors)
+			gldi_style_colors_set_line_color (NULL);
+		else
+			glColor4f (myDocksParam.fLineColor[0], myDocksParam.fLineColor[1], myDocksParam.fLineColor[2], myDocksParam.fLineColor[3]);
 		glPolygonMode(GL_FRONT, GL_LINE);
 		
 		if (pDock->container.bDirectionUp)
