@@ -37,17 +37,14 @@
 **    Karl Lattimer <karl@qdh.org.uk>
 ** Originally conceived as a stress-test for cairo, librsvg, and glitz.
 **
-*********************** VERSION 0.1 and above (2007-2013) *********************
+*********************** VERSION 0.1 and above (2007-2014) *********************
 **
 ** author(s) :
 **     Fabrice Rey <fabounet@glx-dock.org>
 ** With the help of:
-**     A lot of people !!!
+**     A lot of people !!! (see the About menu and the 'copyright' file)
 **
 *******************************************************************************/
-
-/// http://www.siteduzero.com/tutoriel-3-307309-le-systeme-de-micro-paiement-flattr.html
-/// http://www.cyber-junk.de/wp-content/cache/supercache/cyber-junk.de/entwickelt/flattr-button-im-eigenbau-mittels-curl-und-mini-api/index.html
 
 #include <unistd.h> // sleep, execl
 #include <signal.h>
