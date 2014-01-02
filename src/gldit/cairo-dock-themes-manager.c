@@ -311,7 +311,7 @@ gboolean cairo_dock_package_current_theme (const gchar *cThemeName, const gchar 
 	if (bScriptFound)
 	{
 		int r;
-		gchar *cCommand = g_strdup_printf ("%s '%s' \"%s\"",
+		gchar *cCommand = g_strdup_printf ("%s '%s' '%s'",
 			cPackageBuilderPath, cNewThemeName, cDirPath);
 		gchar *cFullCommand = cairo_dock_get_command_with_right_terminal (cCommand);
 		r = system (cFullCommand); // we need to wait...
