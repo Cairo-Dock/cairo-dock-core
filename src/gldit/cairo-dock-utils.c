@@ -329,7 +329,13 @@ const gchar * cairo_dock_get_default_terminal (void)
 gchar * cairo_dock_get_command_with_right_terminal (const gchar *cCommand)
 {
 	const gchar *cTerm = cairo_dock_get_default_terminal ();
-	return g_strdup_printf ("%s -e \"%s\"", cTerm, cCommand);
+	/* Very very strange, an exception for KDE! :-)
+	 * From konsole's man: -e <command> [ arguments ]
+	 */
+	if (strncmp (cTerm, "konsole", 7) == 0)
+		return g_strdup_printf ("%s -e %s", cTerm, cCommand);
+	else
+		return g_strdup_printf ("%s -e \"%s\"", cTerm, cCommand);
 }
 
 
