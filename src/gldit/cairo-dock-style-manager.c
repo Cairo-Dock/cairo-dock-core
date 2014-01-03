@@ -150,6 +150,8 @@ void gldi_style_color_shade (double *icolor, double shade, double *ocolor)
 		l -= shade;
 	else
 		l += shade;
+	if (l > 1.) l = 1.;
+	if (l < 0.) l = 0.;
 	
 	hslToRgb (h, s, l, &ocolor[0], &ocolor[1], &ocolor[2]);
 }
@@ -458,17 +460,15 @@ static gboolean get_config (GKeyFile *pKeyFile, GldiStyleParam *pStyleParam)
 	gchar *cFont = (bCustomFont ? cairo_dock_get_string_key_value (pKeyFile, "Style", "font", &bFlushConfFileNeeded, NULL, "Dialogs", "message police") : cairo_dock_get_default_system_font ());
 	gldi_text_description_set_font (&pStyleParam->textDescription, cFont);
 	
-	g_print ("pStyleParam->textDescription.cFont: %s, %d\n", pStyleParam->textDescription.cFont, pStyleParam->textDescription.iSize);
-	
 	double text_color[3] = {0., 0., 0.};
 	cairo_dock_get_double_list_key_value (pKeyFile, "Style", "text color", &bFlushConfFileNeeded, pStyleParam->textDescription.fColorStart, 3, text_color, "Dialogs", "text color");
 	
 	return bFlushConfFileNeeded;
 }
 
-static void reset_config (void)
+static void reset_config (GldiStyleParam *pStyleParam)
 {
-	gldi_text_description_reset (&myStyleParam.textDescription);
+	gldi_text_description_reset (&pStyleParam->textDescription);
 }
 
   ////////////
