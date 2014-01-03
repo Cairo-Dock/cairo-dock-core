@@ -79,6 +79,7 @@ typedef struct {
 	int iFirstSensitiveWidget;
 	int iNbControlledWidgets;
 	int iNbSensitiveWidgets;
+	int iNonSensitiveWidget;
 	} CDControlWidget;
 
 #define _cairo_dock_gui_allocate_new_model(...)\
@@ -676,10 +677,11 @@ static void _cairo_dock_select_one_item_in_control_combo_selective (GtkComboBox 
 	if (!gtk_combo_box_get_active_iter (widget, &iter))
 		return ;
 	
-	int iOrder1, iOrder2;
+	int iOrder1, iOrder2, iExcept;
 	gtk_tree_model_get (model, &iter,
 		CAIRO_DOCK_MODEL_ORDER, &iOrder1,
-		CAIRO_DOCK_MODEL_ORDER2, &iOrder2, -1);
+		CAIRO_DOCK_MODEL_ORDER2, &iOrder2,
+		CAIRO_DOCK_MODEL_STATE, &iExcept, -1);
 	
 	GtkWidget *parent = data[1];
 	GtkWidget *pKeyBox = data[0];
@@ -703,7 +705,7 @@ static void _cairo_dock_select_one_item_in_control_combo_selective (GtkComboBox 
 			c = c->next;
 			continue;
 		}
-		bSensitive = (i >= iOrder1 - 1 && i < iOrder1 + iOrder2 - 1);
+		bSensitive = (i >= iOrder1 - 1 && i < iOrder1 + iOrder2 - 1 && i != iExcept - 1);
 		gtk_widget_set_sensitive (w, bSensitive);
 		
 		iNbControlSubWidgets = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (w), "nb-ctrl-widgets"));
@@ -2081,9 +2083,10 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					cw->iNbControlledWidgets --;
 					if (cw->iFirstSensitiveWidget > 0)
 						cw->iFirstSensitiveWidget --;
+					cw->iNonSensitiveWidget --;
 					
 					GtkWidget *w = (pAdditionalItemsVBox ? pAdditionalItemsVBox : pKeyBox);
-					if (cw->iFirstSensitiveWidget == 0 && cw->iNbSensitiveWidgets > 0)  // on est dans la zone des widgets sensitifs.
+					if (cw->iFirstSensitiveWidget == 0 && cw->iNbSensitiveWidgets > 0 && cw->iNonSensitiveWidget != 0)  // on est dans la zone des widgets sensitifs.
 					{
 						//g_print (" => sensitive\n");
 						cw->iNbSensitiveWidgets --;
@@ -2772,11 +2775,12 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				modele = GTK_LIST_STORE (gtk_combo_box_get_model (GTK_COMBO_BOX (pOneWidget)));
 				gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (modele), GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, GTK_SORT_ASCENDING);
 				
+				int iNonSensitiveWidget = 0;
 				// on la remplit.
 				if (pAuthorizedValuesList != NULL)
 				{
 					k = 0;
-					int iSelectedItem = -1, iOrder1, iOrder2;
+					int iSelectedItem = -1, iOrder1, iOrder2, iExcept;
 					gboolean bNumberedList = (iElementType == CAIRO_DOCK_WIDGET_NUMBERED_LIST || iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST || iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST_SELECTIVE);
 					if (bNumberedList)
 						iSelectedItem = atoi (cValue);
@@ -2794,9 +2798,16 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						if (cResult != NULL)
 							snprintf (cResult, 9, "%d", k/dk);
 						
+						iExcept = 0;
 						if (iElementType == CAIRO_DOCK_WIDGET_NUMBERED_CONTROL_LIST_SELECTIVE)
 						{
 							iOrder1 = atoi (pAuthorizedValuesList[k+1]);
+							gchar *str = strchr (pAuthorizedValuesList[k+2], ',');
+							if (str)  // Note: this mechanism is an addition to the original {first widget, number of widgets}; it's not very generic nor beautiful, but until we need more, it's well enough (currently, only the Dock background needs it).
+							{
+								*str = '\0';
+								iExcept = atoi (str+1);
+							}
 							iOrder2 = atoi (pAuthorizedValuesList[k+2]);
 							iNbControlledWidgets = MAX (iNbControlledWidgets, iOrder1 + iOrder2 - 1);
 							//g_print ("iSelectedItem:%d ; k/dk:%d\n", iSelectedItem , k/dk);
@@ -2804,6 +2815,9 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							{
 								iFirstSensitiveWidget = iOrder1;
 								iNbSensitiveWidgets = iOrder2;
+								iNonSensitiveWidget = iExcept;
+								if (iNonSensitiveWidget != 0)
+									iNbControlledWidgets ++;
 							}
 						}
 						else
@@ -2814,7 +2828,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							CAIRO_DOCK_MODEL_NAME, (iElementType != CAIRO_DOCK_WIDGET_LIST_WITH_ENTRY ? dgettext (cGettextDomain, pAuthorizedValuesList[k]) : pAuthorizedValuesList[k]),
 							CAIRO_DOCK_MODEL_RESULT, (cResult != NULL ? cResult : pAuthorizedValuesList[k]),
 							CAIRO_DOCK_MODEL_ORDER, iOrder1,
-							CAIRO_DOCK_MODEL_ORDER2, iOrder2, -1);
+							CAIRO_DOCK_MODEL_ORDER2, iOrder2,
+							CAIRO_DOCK_MODEL_STATE, iExcept, -1);
 					}
 					g_free (cResult);
 					
@@ -2864,6 +2879,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						cw->iNbControlledWidgets = iNbControlledWidgets;
 						cw->iFirstSensitiveWidget = iFirstSensitiveWidget;
 						cw->iNbSensitiveWidgets = iNbSensitiveWidgets;
+						cw->iNonSensitiveWidget = iNonSensitiveWidget;
 						//g_print (" pControlContainer:%x\n", pControlContainer);
 					}
 				}
@@ -3315,9 +3331,10 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							cw->iNbControlledWidgets --;
 							if (cw->iFirstSensitiveWidget > 0)
 								cw->iFirstSensitiveWidget --;
+							cw->iNonSensitiveWidget --;
 							
 							GtkWidget *w = pExternFrame;
-							if (cw->iFirstSensitiveWidget == 0 && cw->iNbSensitiveWidgets > 0)
+							if (cw->iFirstSensitiveWidget == 0 && cw->iNbSensitiveWidgets > 0 && cw->iNonSensitiveWidget != 0)
 							{
 								cd_debug (" => sensitive\n");
 								cw->iNbSensitiveWidgets --;
