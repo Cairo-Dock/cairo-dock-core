@@ -868,7 +868,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDialogsParam *pDialogs)
 	cairo_dock_get_size_key_value_helper (pKeyFile, "Dialogs", "button ", bFlushConfFileNeeded, pDialogs->iDialogButtonWidth, pDialogs->iDialogButtonHeight);
 	
 	double couleur_bulle[4] = {1.0, 1.0, 1.0, 0.7};
-	cairo_dock_get_double_list_key_value (pKeyFile, "Dialogs", "background color", &bFlushConfFileNeeded, pDialogs->fBgColor, 4, couleur_bulle, NULL, NULL);
+	cairo_dock_get_double_list_key_value (pKeyFile, "Dialogs", "bg color", &bFlushConfFileNeeded, pDialogs->fBgColor, 4, couleur_bulle, NULL, "background color");
 	pDialogs->iDialogIconSize = MAX (16, cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "icon size", &bFlushConfFileNeeded, 48, NULL, NULL));
 	
 	pDialogs->cDecoratorName = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "decorator", &bFlushConfFileNeeded, "comics", NULL, NULL);
@@ -907,7 +907,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDialogsParam *pDialogs)
 		cairo_dock_get_double_list_key_value (pKeyFile, "Dialogs", "line color", &bFlushConfFileNeeded, pDialogs->fLineColor, 4, NULL, NULL, NULL);
 	}
 	
-	pDialogs->bUseDefaultColors = (cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "colors", &bFlushConfFileNeeded, 0, NULL, NULL) == 0);
+	pDialogs->bUseDefaultColors = (cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "style", &bFlushConfFileNeeded, 0, NULL, NULL) == 0);
 	
 	gboolean bCustomFont = cairo_dock_get_boolean_key_value (pKeyFile, "Dialogs", "custom", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	gchar *cFont = (bCustomFont ? cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "message police", &bFlushConfFileNeeded, NULL, "Icons", NULL) : NULL);

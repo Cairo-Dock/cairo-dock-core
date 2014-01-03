@@ -745,7 +745,7 @@ static void unload (void)
 
 static gboolean on_style_changed (G_GNUC_UNUSED gpointer data)
 {
-	g_print ("%s (%d)\n", __func__, myIndicatorsParam.bBarUseDefaultColors);
+	g_print ("%s (Indic, %d)\n", __func__, myIndicatorsParam.bBarUseDefaultColors);
 	if (myIndicatorsParam.bBarUseDefaultColors)  // reload progress bars
 	{
 		g_print (" reload indicators...\n");

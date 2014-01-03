@@ -540,7 +540,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 	
 	double couleur_backlabel[4] = {0., 0., 0., 0.85};
 	double couleur_label[3] = {1., 1., 1.};
-	gboolean bDefaultColors = (cairo_dock_get_integer_key_value (pKeyFile, "Labels", "colors", &bFlushConfFileNeeded, 0, NULL, NULL) == 0);
+	gboolean bDefaultColors = (cairo_dock_get_integer_key_value (pKeyFile, "Labels", "style", &bFlushConfFileNeeded, 0, NULL, NULL) == 0);
 	pLabels->iconTextDescription.bUseDefaultColors = bDefaultColors;
 	if (bDefaultColors)
 	{
@@ -553,7 +553,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 		double couleur_linelabel[4] = {0., 0., 0., 1};
 		cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "text line color", &bFlushConfFileNeeded, pLabels->iconTextDescription.fLineColor, 4, couleur_linelabel, NULL, NULL);
 		
-		cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "text background color", &bFlushConfFileNeeded, pLabels->iconTextDescription.fBackgroundColor, 4, couleur_backlabel, "Icons", NULL);
+		cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "text bg color", &bFlushConfFileNeeded, pLabels->iconTextDescription.fBackgroundColor, 4, couleur_backlabel, "Icons", "text background color");
 		if (!g_key_file_has_key (pKeyFile, "Labels", "qi same", NULL))  // old params
 		{
 			gboolean bUseBackgroundForLabel = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "background for label", &bFlushConfFileNeeded, FALSE, "Icons", NULL);
@@ -897,7 +897,7 @@ static void unload (void)
 
 static gboolean on_style_changed (G_GNUC_UNUSED gpointer data)
 {
-	g_print ("%s (%d)\n", __func__, myIconsParam.iconTextDescription.bUseDefaultColors);
+	g_print ("%s (Icons, %d)\n", __func__, myIconsParam.iconTextDescription.bUseDefaultColors);
 	
 	if (myIconsParam.iconTextDescription.cFont == NULL)  // default font -> reload our text description
 	{

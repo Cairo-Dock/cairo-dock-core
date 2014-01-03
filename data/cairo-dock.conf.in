@@ -267,7 +267,7 @@ modules=
 
 [Background]
 
-#Y+[Automatic;0;0;Image;1;1;Colour gradation;2;1] Style
+#Y+[Automatic;0;0;Image;1;4,2;Colour gradation;2;3] Style
 style = 1
 
 
@@ -326,7 +326,11 @@ corner radius = 10
 line width = 2
 
 #C+ Outline colour
-line color = 0.0; 0.0; 0.8; 0.4
+line color = 0.827; 0.843; 0.811; 1.0
+
+
+#F
+frame4_=
 
 #i+[0;20] Margin between the frame and the icons or their reflects :
 #{in pixels.}
@@ -334,10 +338,6 @@ frame margin = 2
 
 #b+ Are the bottom left and right corners rounded?
 rounded bottom corner = true
-
-
-#F
-frame4_=
 
 #b+ Stretch the dock to always fill the screen
 extended = false
@@ -369,10 +369,10 @@ relative icon size = .8
 frame_bubble =
 
 #Y-[Automatic;0;0;Custom;1;3] Style
-colors = 1
+style = 1
 
 #C+ Background colour
-background color = 1.0; 1.0; 1.0; 0.8
+bg color = 1.0; 1.0; 1.0; 0.8
 
 #C+ Outline colour
 line color = 1.0; 1.0; 1.0; 1.0
@@ -669,10 +669,10 @@ alpha threshold = 20
 frame_bg =
 
 #Y-[Automatic;0;0;Custom;1;4] Style
-colors = 1
+style = 1
 
 #C+ Background colour
-text background color = 0;0;0;.85
+text bg color = 0;0;0;.85
 
 #C+ Outline colour
 text line color = 1.0; 1.0; 1.0; 1.0

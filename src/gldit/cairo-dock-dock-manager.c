@@ -1856,7 +1856,7 @@ static void unload (void)
 
 static gboolean on_style_changed (G_GNUC_UNUSED gpointer data)
 {
-	g_print ("%s (%d)\n", __func__, myDocksParam.bUseDefaultColors);
+	g_print ("%s (Docks, %d)\n", __func__, myDocksParam.bUseDefaultColors);
 	if (myDocksParam.bUseDefaultColors)  // reload bg
 	{
 		g_print (" reload dock's bg...\n");

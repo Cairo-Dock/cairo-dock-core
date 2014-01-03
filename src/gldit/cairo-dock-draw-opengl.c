@@ -547,12 +547,14 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 			
 			if (icon->bHasHiddenBg)
 			{
+				/// TODO: handle default style bg ...
+				
 				if (icon->pHiddenBgColor)  // custom bg color
 					memcpy (pHiddenBgColor, icon->pHiddenBgColor, 4*sizeof (gdouble));
-				else  // default bg color
+				else if (! myDocksParam.bUseDefaultColors)  // default bg color
 					memcpy (pHiddenBgColor, myDocksParam.fHiddenBg, 4*sizeof (gdouble));
 				pHiddenBgColor[3] *= pDock->fPostHideOffset;
-				if (pHiddenBgColor[3] != 0)
+				//if (pHiddenBgColor[3] != 0)
 				{
 					_cairo_dock_set_blend_alpha ();
 					glPushMatrix ();
