@@ -67,6 +67,17 @@ anim_disappear=
 #[@pkgdatadir@/icons/icon-appearance.svg]
 [Appearance]
 
+
+#F[Style;@pkgdatadir@/icons/icon-style.svg]
+frame_style=
+
+#Y-[System;0;0;Custom;1;1] Style
+style = 1
+
+#C+ Colour
+bg color = 1.0; 1.0; 1.0; 0.8
+
+
 #F[Icons;@pkgdatadir@/icons/icon-icons.svg]
 frame_icons=
 

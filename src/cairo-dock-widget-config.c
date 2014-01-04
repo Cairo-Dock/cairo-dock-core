@@ -26,7 +26,9 @@
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-keybinder.h"
+#include "cairo-dock-utils.h"  // cairo_dock_colors_differ
 #include "cairo-dock-dock-manager.h"
+#include "cairo-dock-style-manager.h"
 #include "cairo-dock-module-manager.h"
 #include "cairo-dock-module-instance-manager.h"  // gldi_module_instance_reload
 #include "cairo-dock-themes-manager.h"  // cairo_dock_current_theme_need_save
@@ -277,6 +279,10 @@ static GKeyFile *_make_simple_conf_file (ConfigWidget *pConfigWidget)
 		g_key_file_set_integer (pSimpleKeyFile, "Behavior", "anim_disappear", pConfigWidget->iEffectOnDisappearance);
 	
 	// apparence
+	g_key_file_set_integer (pSimpleKeyFile, "Appearance", "style", myStyleParam.bUseSystemColors ? 0 : 1);
+	
+	g_key_file_set_double_list (pSimpleKeyFile, "Appearance", "background color", myStyleParam.fBgColor, 4);
+	
 	g_key_file_set_string (pSimpleKeyFile, "Appearance", "default icon directory", myIconsParam.cIconTheme);
 	
 	int iIconSize = cairo_dock_convert_icon_size_to_enum (myIconsParam.iIconWidth);
@@ -438,7 +444,7 @@ static void _config_widget_apply (CDWidget *pCdWidget)
 	GKeyFile* pKeyFile = cairo_dock_open_key_file (g_cConfFile);
 	g_return_if_fail (pKeyFile != NULL);
 	
-	// comportement
+	// behavior
 	CairoDockPositionType iScreenBorder = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "screen border", NULL);
 	g_key_file_set_integer (pKeyFile, "Position", "screen border", iScreenBorder);
 	
@@ -597,7 +603,81 @@ static void _config_widget_apply (CDWidget *pCdWidget)
 	g_strfreev (cOnMouseHover);
 	g_strfreev (cOnClick);
 	
-	// apparence
+	// appearance
+	gboolean bUseSystemColors = (g_key_file_get_integer (pSimpleKeyFile, "Appearance", "style", NULL) == 0);
+	double *pBgColor;
+	pBgColor = g_key_file_get_double_list (pSimpleKeyFile, "Appearance", "bg color", &length, NULL);
+	gboolean bUpdateColors = FALSE;
+	if (bUseSystemColors != myStyleParam.bUseSystemColors)
+	{
+		g_key_file_set_integer (pKeyFile, "Style", "colors", bUseSystemColors ? 0 : 1);
+		bUpdateColors = TRUE;
+	}
+	if (! bUseSystemColors && pBgColor && cairo_dock_colors_differ (pBgColor, myStyleParam.fBgColor))  // custom color has changed -> update the Style manager colors (bg, text and line)
+	{
+		g_key_file_set_double_list (pKeyFile, "Style", "bg color", pBgColor, 4);
+		
+		// define line color too
+		double rgba[4];
+		gldi_style_color_shade (pBgColor, .2, rgba);
+		rgba[3] = 1.;
+		g_key_file_set_double_list (pKeyFile, "Style", "line color", rgba, 4);
+		
+		// define text color too
+		gldi_style_color_shade (pBgColor, 1, rgba);  // saturate the bg color -> white or black
+		g_key_file_set_double_list (pKeyFile, "Style", "text color", rgba, 3);
+		
+		bUpdateColors = TRUE;
+	}
+	if (bUpdateColors)  // ensure that every modules that have a style use the default style from the Style manager
+	{
+		// make managers use the default style
+		g_key_file_set_integer (pKeyFile, "Background", "style", 0);
+		g_key_file_set_integer (pKeyFile, "Dialogs", "style", 0);
+		g_key_file_set_integer (pKeyFile, "Indicators", "active style", 0);
+		g_key_file_set_integer (pKeyFile, "Indicators", "bar_colors", 0);
+		
+		gchar *cUserDataDirPath;
+		gchar *cConfFilePath;
+		GldiModule *pModule;
+		// make Clock use the default style too
+		pModule = gldi_module_get ("clock");
+		if (pModule)
+		{
+			cUserDataDirPath = gldi_module_get_config_dir (pModule);
+			cConfFilePath = g_strdup_printf ("%s/%s", cUserDataDirPath, pModule->pVisitCard->cConfFileName);
+			if (g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
+			{
+				cairo_dock_update_keyfile (cConfFilePath,
+					G_TYPE_INT, "Configuration", "numeric style", 0,
+					G_TYPE_INVALID);
+			}
+			g_free (cUserDataDirPath);
+			g_free (cConfFilePath);
+		}
+		
+		// make Keyboard Indicator use the default style too 
+		pModule = gldi_module_get ("keyboard indicator");
+		if (pModule)
+		{
+			cUserDataDirPath = gldi_module_get_config_dir (pModule);
+			cConfFilePath = g_strdup_printf ("%s/%s", cUserDataDirPath, pModule->pVisitCard->cConfFileName);
+			if (g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
+			{
+				cairo_dock_update_keyfile (cConfFilePath,
+					G_TYPE_INT, "Configuration", "style", 0,
+					G_TYPE_INVALID);
+			}
+			g_free (cUserDataDirPath);
+			g_free (cConfFilePath);
+		}
+		
+		/// TODO: make the Slide view use the default style too...
+		
+		
+	}
+	g_free (pBgColor);
+	
 	gchar *cIconTheme = g_key_file_get_string (pSimpleKeyFile, "Appearance", "default icon directory", NULL);
 	g_key_file_set_string (pKeyFile, "Icons", "default icon directory", cIconTheme);
 	g_free (cIconTheme);
@@ -628,11 +708,24 @@ static void _config_widget_apply (CDWidget *pCdWidget)
 	g_key_file_set_string (pKeyFile, "Views", "sub-dock view", cSubDockDefaultRendererName);
 	g_free (cSubDockDefaultRendererName);
 	
-	// on ecrit tout.
+	// write down
 	cairo_dock_write_keys_to_conf_file (pKeyFile, g_cConfFile);
 	
-	//\_____________ On recharge les modules concernes.
+	//\_____________ reload modules that are concerned by these changes
 	GldiManager *pManager;
+	if (bUpdateColors)
+	{
+		cd_reload ("Style");
+		cd_reload ("Indicators");
+		cd_reload ("Dialogs");
+		GldiModule *pModule;
+		pModule = gldi_module_get ("clock");
+		if (pModule)
+			gldi_object_reload (GLDI_OBJECT (pModule), TRUE);
+		pModule = gldi_module_get ("keyboard indicator");
+		if (pModule)
+			gldi_object_reload (GLDI_OBJECT (pModule), TRUE);
+	}
 	cd_reload ("Docks");
 	cd_reload ("Taskbar");
 	cd_reload ("Icons");
