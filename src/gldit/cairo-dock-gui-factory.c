@@ -764,19 +764,29 @@ static void _cairo_dock_pick_a_file (G_GNUC_UNUSED GtkButton *button, gpointer *
 		GTK_STOCK_CANCEL,
 		GTK_RESPONSE_CANCEL,
 		NULL);
+
+	// set the current folder to the current value in conf.
 	const gchar *cFilePath = gtk_entry_get_text (pEntry);
-	gchar *cDirectoryPath = (cFilePath == NULL || *cFilePath != '/' ?
-		g_strdup (iFileType == 2 ? "/usr/share/icons" : g_getenv ("HOME")) :
-		g_path_get_dirname (cFilePath));
-	//g_print (">>> on se place sur '%s'\n", cDirectoryPath);
-	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (pFileChooserDialog), cDirectoryPath);  // set the current folder to the current value in conf.
-	g_free (cDirectoryPath);
+	if (cFilePath == NULL || *cFilePath != '/')
+		gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (pFileChooserDialog),
+			iFileType == 2 ?
+				g_get_user_special_dir (G_USER_DIRECTORY_PICTURES) :
+				g_getenv ("HOME"));
+	else
+	{
+		gchar *cDirectoryPath = g_path_get_dirname (cFilePath);
+		gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (pFileChooserDialog),
+			cDirectoryPath);
+		g_free (cDirectoryPath);
+	}
 	gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (pFileChooserDialog), FALSE);
-	
-	// a preview
-	GtkWidget *pPreviewImage = gtk_image_new ();
-	gtk_file_chooser_set_preview_widget (GTK_FILE_CHOOSER (pFileChooserDialog), pPreviewImage);
-	g_signal_connect (GTK_FILE_CHOOSER (pFileChooserDialog), "update-preview", G_CALLBACK (_cairo_dock_show_image_preview), pPreviewImage);
+	if (iFileType == 2) // image: add shortcuts to icons of the system
+	{
+		gtk_file_chooser_add_shortcut_folder (GTK_FILE_CHOOSER (pFileChooserDialog),
+			"/usr/share/icons", NULL);
+		gtk_file_chooser_add_shortcut_folder (GTK_FILE_CHOOSER (pFileChooserDialog),
+			"/usr/share/pixmaps", NULL);
+	}
 
 	// a filter
 	GtkFileFilter *pFilter;
@@ -787,12 +797,18 @@ static void _cairo_dock_pick_a_file (G_GNUC_UNUSED GtkButton *button, gpointer *
 		gtk_file_filter_add_pattern (pFilter, "*");
 		gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (pFileChooserDialog), pFilter);
 	}
-	if (iFileType == 0 || iFileType == 2) // images
+	if (iFileType != 1) // preview and images filter: not when selecting a directory
 	{
 		pFilter = gtk_file_filter_new ();
 		gtk_file_filter_set_name (pFilter, _("Image"));
 		gtk_file_filter_add_pixbuf_formats (pFilter);
 		gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (pFileChooserDialog), pFilter);
+
+		// a preview
+		GtkWidget *pPreviewImage = gtk_image_new ();
+		gtk_file_chooser_set_preview_widget (GTK_FILE_CHOOSER (pFileChooserDialog), pPreviewImage);
+		g_signal_connect (GTK_FILE_CHOOSER (pFileChooserDialog), "update-preview",
+			G_CALLBACK (_cairo_dock_show_image_preview), pPreviewImage);
 	}
 
 	gtk_widget_show (pFileChooserDialog);
