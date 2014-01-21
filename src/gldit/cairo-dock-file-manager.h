@@ -258,6 +258,23 @@ int cairo_dock_get_file_size (const gchar *cFilePath);
 gboolean cairo_dock_copy_file (const gchar *cFilePath, const gchar *cDestPath);
 
 
+/** Get process ID given its name
+ * @param cProcessName name of the process
+ * @return the PID if it exists or -1
+ */
+int cairo_dock_fm_get_pid (const gchar *cProcessName);
+
+/** Monitor a process. Call a function when the process is no longer running
+ * @param cProcessName name of the process
+ * @param pCallback function to call when the process is no longer running
+ * @param bAlwaysLaunch TRUE to launch the callback function even if the process
+          is not running or if there is an error
+ * @param pUserData data to pass to pCallback
+ * @return FALSE if the process is not running or if there is an error
+ */
+gboolean cairo_dock_fm_monitor_pid (const gchar *cProcessName, GSourceFunc pCallback, gboolean bAlwaysLaunch, gpointer pUserData);
+
+
 void gldi_register_desktop_environment_manager (void);
 
 G_END_DECLS

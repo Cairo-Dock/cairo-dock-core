@@ -17,8 +17,9 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <string.h>
-#include <sys/stat.h>
+#include <stdlib.h>      // atoi
+#include <string.h>      // memset
+#include <sys/stat.h>    // stat
 
 #include "gldi-config.h"
 #include "cairo-dock-dock-factory.h"
@@ -515,6 +516,74 @@ gboolean cairo_dock_copy_file (const gchar *cFilePath, const gchar *cDestPath)
 		g_error_free (error);
 		return FALSE;
 	}
+	return TRUE;
+}
+
+
+  ///////////
+ /// PID ///
+///////////
+
+int cairo_dock_fm_get_pid (const gchar *cProcessName)
+{
+	int iPID = -1;
+	gchar *cCommand = g_strdup_printf ("pgrep %s", cProcessName);
+	gchar *cPID = cairo_dock_launch_command_sync (cCommand);
+
+	if (cPID != NULL && *cPID != '\0')
+		iPID = atoi (cPID);
+
+	g_free (cPID);
+	g_free (cCommand);
+
+	return iPID;
+}
+
+static gboolean _wait_pid (gpointer *pData)
+{
+	gchar *cFilePath = pData[0];
+
+	// check if /proc/%d dir exists
+	if (! g_file_test (cFilePath, G_FILE_TEST_EXISTS))
+	{
+		GSourceFunc pCallback = pData[1];
+		gpointer pUserData = pData[2];
+
+		pCallback (pUserData);
+
+		g_free (cFilePath);
+		g_free (pData);
+
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+gboolean cairo_dock_fm_monitor_pid (const gchar *cProcessName, GSourceFunc pCallback, gboolean bAlwaysLaunch, gpointer pUserData)
+{
+	int iPID = cairo_dock_fm_get_pid (cProcessName);
+	if (iPID == -1)
+	{
+		if (bAlwaysLaunch)
+			pCallback (pUserData);
+		return FALSE;
+	}
+
+	gpointer *pData = g_new (gpointer, 3);
+	pData[0] = g_strdup_printf ("/proc/%d", iPID);
+	pData[1] = pCallback;
+	pData[2] = pUserData;
+
+	/* It's not easy to be notified when a non child process is stopped...
+	 * We can't use waitpid (not a child process) or monitor /proc/PID dir (or a
+	 * file into it) with g_file_monitor, poll or inotify => it's not working...
+	 * And for apt-get/dpkg, we can't monitor the lock file with fcntl because
+	 * we need root rights to do that.
+	 * Let's just check every 5 seconds if the PID is still running
+	 */
+	g_timeout_add_seconds (5, (GSourceFunc)_wait_pid, pData);
+
 	return TRUE;
 }
 

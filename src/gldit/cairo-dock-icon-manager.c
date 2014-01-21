@@ -37,7 +37,6 @@
 #include "cairo-dock-dock-manager.h"  // gldi_icons_foreach_in_docks
 #include "cairo-dock-dialog-manager.h"  // cairo_dock_remove_dialog_if_any
 #include "cairo-dock-data-renderer.h"  // cairo_dock_remove_data_renderer_on_icon
-#include "cairo-dock-file-manager.h"  // cairo_dock_fm_remove_monitor_full
 #include "cairo-dock-animations.h"  // cairo_dock_animation_will_be_visible
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
 #include "cairo-dock-icon-facility.h"  // gldi_icons_foreach_of_type
