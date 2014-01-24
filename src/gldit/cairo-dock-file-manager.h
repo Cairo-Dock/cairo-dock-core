@@ -265,14 +265,17 @@ gboolean cairo_dock_copy_file (const gchar *cFilePath, const gchar *cDestPath);
 int cairo_dock_fm_get_pid (const gchar *cProcessName);
 
 /** Monitor a process. Call a function when the process is no longer running
- * @param cProcessName name of the process
+ * @param cProcessName name(es) of the process(es)
+ * @param bCheckSameProcess TRUE to check if first match is running. FALSE to
+ *        check every time if this process name is running even if it's not the
+ *        same PID.
  * @param pCallback function to call when the process is no longer running
  * @param bAlwaysLaunch TRUE to launch the callback function even if the process
-          is not running or if there is an error
+ *        is not running or if there is an error
  * @param pUserData data to pass to pCallback
  * @return FALSE if the process is not running or if there is an error
  */
-gboolean cairo_dock_fm_monitor_pid (const gchar *cProcessName, GSourceFunc pCallback, gboolean bAlwaysLaunch, gpointer pUserData);
+gboolean cairo_dock_fm_monitor_pid (const gchar *cProcessName, gboolean bCheckSameProcess, GSourceFunc pCallback, gboolean bAlwaysLaunch, gpointer pUserData);
 
 
 void gldi_register_desktop_environment_manager (void);

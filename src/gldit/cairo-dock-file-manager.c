@@ -527,7 +527,7 @@ gboolean cairo_dock_copy_file (const gchar *cFilePath, const gchar *cDestPath)
 int cairo_dock_fm_get_pid (const gchar *cProcessName)
 {
 	int iPID = -1;
-	gchar *cCommand = g_strdup_printf ("pgrep %s", cProcessName);
+	gchar *cCommand = g_strdup_printf ("pidof %s", cProcessName);
 	gchar *cPID = cairo_dock_launch_command_sync (cCommand);
 
 	if (cPID != NULL && *cPID != '\0')
@@ -541,17 +541,20 @@ int cairo_dock_fm_get_pid (const gchar *cProcessName)
 
 static gboolean _wait_pid (gpointer *pData)
 {
-	gchar *cFilePath = pData[0];
+	gboolean bCheckSameProcess = GPOINTER_TO_INT (pData[0]);
+	gchar *cProcess = pData[1];
 
-	// check if /proc/%d dir exists
-	if (! g_file_test (cFilePath, G_FILE_TEST_EXISTS))
+	// check if /proc/%d dir exists or the process is running
+	if ((bCheckSameProcess && ! g_file_test (cProcess, G_FILE_TEST_EXISTS))
+		|| (! bCheckSameProcess && cairo_dock_fm_get_pid (cProcess) == -1))
 	{
-		GSourceFunc pCallback = pData[1];
-		gpointer pUserData = pData[2];
+		GSourceFunc pCallback = pData[2];
+		gpointer pUserData = pData[3];
 
 		pCallback (pUserData);
 
-		g_free (cFilePath);
+		// free allocated ressources just used for this function
+		g_free (cProcess);
 		g_free (pData);
 
 		return FALSE;
@@ -560,7 +563,7 @@ static gboolean _wait_pid (gpointer *pData)
 	return TRUE;
 }
 
-gboolean cairo_dock_fm_monitor_pid (const gchar *cProcessName, GSourceFunc pCallback, gboolean bAlwaysLaunch, gpointer pUserData)
+gboolean cairo_dock_fm_monitor_pid (const gchar *cProcessName, gboolean bCheckSameProcess, GSourceFunc pCallback, gboolean bAlwaysLaunch, gpointer pUserData)
 {
 	int iPID = cairo_dock_fm_get_pid (cProcessName);
 	if (iPID == -1)
@@ -570,10 +573,14 @@ gboolean cairo_dock_fm_monitor_pid (const gchar *cProcessName, GSourceFunc pCall
 		return FALSE;
 	}
 
-	gpointer *pData = g_new (gpointer, 3);
-	pData[0] = g_strdup_printf ("/proc/%d", iPID);
-	pData[1] = pCallback;
-	pData[2] = pUserData;
+	gpointer *pData = g_new (gpointer, 4);
+	pData[0] = GINT_TO_POINTER (bCheckSameProcess);
+	if (bCheckSameProcess)
+		pData[1] = g_strdup_printf ("/proc/%d", iPID);
+	else
+		pData[1] = g_strdup (cProcessName);
+	pData[2] = pCallback;
+	pData[3] = pUserData;
 
 	/* It's not easy to be notified when a non child process is stopped...
 	 * We can't use waitpid (not a child process) or monitor /proc/PID dir (or a
