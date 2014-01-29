@@ -566,7 +566,7 @@ active style = 1
 #g+ Image file:
 active indicator =
 
-#l+[Fill background; Frame] Frame
+#l+[Fill background;Frame] Frame
 active frame = 1
 
 #C+ Colour
