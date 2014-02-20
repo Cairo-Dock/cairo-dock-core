@@ -448,7 +448,7 @@ void gldi_dialog_init_internals (CairoDialog *pDialog, CairoDialogAttr *pAttribu
 		// set a MenuItem style to the dialog, so that the interactive widget can use the style defined for menu-items (either from the GTK theme, or from our own .css), and therefore be well integrated into the dialog, as if it was inside a menu.
 		#if GTK_MAJOR_VERSION > 2
 		GtkStyleContext *ctx = gtk_widget_get_style_context (pDialog->container.pWidget);
-		gtk_style_context_add_class (ctx, myDialogsParam.bUseDefaultColors && myStyleParam.bUseSystemColors ? GTK_STYLE_CLASS_MENUITEM : "menuitem2");
+		gtk_style_context_add_class (ctx, myDialogsParam.bUseDefaultColors && myStyleParam.bUseSystemColors ? GTK_STYLE_CLASS_MENUITEM : "gldimenuitem");  /// TODO: if we change the style (system <-> custom), then we probably neeed to re-set this property on existing dialogs...
 		#endif
 	}
 	

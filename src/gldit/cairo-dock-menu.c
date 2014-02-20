@@ -55,10 +55,10 @@ static void _init_menu_style (void)
 	static GtkCssProvider *cssProvider = NULL;
 	static int index = 0;
 	
-	if (index == gldi_style_colors_get_index())
+	if (index == gldi_style_colors_get_index())  // if the style has not changed since we last called this function, there is nothing to do
 		return;
 	index = gldi_style_colors_get_index();
-	g_print ("%s (%d)\n", __func__, index);
+	cd_debug ("%s (%d)", __func__, index);
 	
 	if (myDialogsParam.bUseDefaultColors && myStyleParam.bUseSystemColors)
 	{
@@ -84,31 +84,39 @@ static void _init_menu_style (void)
 		double *bg_color = (myDialogsParam.bUseDefaultColors ? myStyleParam.fBgColor : myDialogsParam.fBgColor);
 		double *text_color = (myDialogsParam.bUseDefaultColors ? myStyleParam.textDescription.fColorStart : myDialogsParam.dialogTextDescription.fColorStart);
 		
-		double rgb[4];
+		double rgb[4];  // menuitem bg color: a little darker/lighter than the menu's bg color; also separator color (with no alpha)
 		gldi_style_color_shade (bg_color, .2, rgb);
-		double rgbs[4];
-		gldi_style_color_shade (bg_color, .2, rgbs);
-		double rgbb[4];
+		double rgbb[4];  // menuitem border color and menuitem's child bg color (for instance, calendar, scale, etc): a little darker/lighter than the menuitem bg color
 		gldi_style_color_shade (bg_color, .3, rgbb);
 		
 		gchar *css = g_strdup_printf ("@define-color menuitem_bg_color rgb (%d, %d, %d); \
 		@define-color menuitem_text_color rgb (%d, %d, %d); \
 		@define-color menuitem_insensitive_text_color rgba (%d, %d, %d, .5); \
 		@define-color menuitem_separator_color rgb (%d, %d, %d); \
-		@define-color menuitem_bg_color2 rgb (%d, %d, %d); \
+		@define-color menuitem_child_bg_color rgb (%d, %d, %d); \
 		@define-color menu_bg_color rgba (%d, %d, %d, %d); \
-		.menuitem2 { \
+		.gldimenuitem { \
 			text-shadow: none; \
 			border-image: none; \
 			box-shadow: none; \
 			background: transparent; \
 			color: @menuitem_text_color; \
+			border-radius: 5px;\
+			border-style: solid;\
+			border-width: 1px;\
+			border-color: @menuitem_child_bg_color;\
+			-unico-border-gradient: none;\
+			-unico-inner-stroke-width: 0px;\
+			-unico-outer-stroke-width: 0px;\
+			-unico-bullet-color: transparent;\
+			-unico-glow-color: transparent;\
+			-unico-glow-radius: 0;\
 		} \
-		.menuitem2 GtkImage { \
+		.gldimenuitem GtkImage { \
 			background: transparent; \
 		} \
-		.menuitem2.separator, \
-		.menuitem2 .separator { \
+		.gldimenuitem.separator, \
+		.gldimenuitem .separator { \
 			color: @menuitem_separator_color; \
 			border-width: 1px; \
 			border-style: solid; \
@@ -117,69 +125,70 @@ static void _init_menu_style (void)
 			border-bottom-color: alpha (@menuitem_separator_color, 0.6); \
 			border-right-color: alpha (@menuitem_separator_color, 0.6); \
 		} \
-		.menuitem2:hover, \
-		.menuitem2 *:hover { \
+		.gldimenuitem:hover, \
+		.gldimenuitem *:hover { \
 			background: @menuitem_bg_color; \
 			background-image: none; \
 			text-shadow: none; \
 			border-image: none; \
 			box-shadow: none; \
 			color: @menuitem_text_color; \
+			-unico-inner-stroke-color: @menuitem_child_bg_color;\
 		} \
-		.menuitem2 *:insensitive { \
+		.gldimenuitem *:insensitive { \
 			text-shadow: none; \
 			color: @menuitem_insensitive_text_color; \
 		} \
-		.menuitem2 .entry, \
-		.menuitem2.entry { \
+		.gldimenuitem .entry, \
+		.gldimenuitem.entry { \
 			background: @menuitem_bg_color; \
 			border-image: none; \
 			border-color: transparent; \
 			color: @menuitem_text_color; \
 		} \
-		.menuitem2 .button, \
-		.menuitem2.button { \
+		.gldimenuitem .button, \
+		.gldimenuitem.button { \
 			background: @menuitem_bg_color; \
 			background-image: none; \
 			box-shadow: none; \
 			border-color: transparent; \
 			padding: 2px; \
 		} \
-		.menuitem2 .scale, \
-		.menuitem2.scale { \
-			background: @menuitem_bg_color2; \
+		.gldimenuitem .scale, \
+		.gldimenuitem.scale { \
+			background: @menuitem_child_bg_color; \
 			background-image: none; \
 			color: @menuitem_text_color; \
 			border-image: none; \
 		} \
-		.menuitem2 .scale.left, \
-		.menuitem2.scale.left { \
+		.gldimenuitem .scale.left, \
+		.gldimenuitem.scale.left { \
 			background: @menuitem_bg_color; \
 			background-image: none; \
 			border-image: none; \
 		} \
-		.menuitem2 .scale.slider, \
-		.menuitem2.scale.slider { \
+		.gldimenuitem .scale.slider, \
+		.gldimenuitem.scale.slider { \
 			background: @menuitem_text_color; \
 			background-image: none; \
 			border-image: none; \
 		} \
-		.menuitem2 GtkCalendar, \
-		.menuitem2 GtkCalendar.button, \
-		.menuitem2 GtkCalendar.header, \
-		.menuitem2 GtkCalendar.view { \
+		.gldimenuitem GtkCalendar, \
+		.gldimenuitem GtkCalendar.button, \
+		.gldimenuitem GtkCalendar.header, \
+		.gldimenuitem GtkCalendar.view { \
 			background-color: @menuitem_bg_color; \
 			background-image: none; \
 			color: @menuitem_text_color; \
 		} \
-		.menuitem2 GtkCalendar { \
-			background-color: @menuitem_bg_color2; \
+		.gldimenuitem GtkCalendar { \
+			background-color: @menuitem_child_bg_color; \
 			background-image: none; \
 		} \
-		.menuitem2 GtkCalendar:inconsistent { \
-			color: shade (@menuitem_bg_color2, 0.6); \
+		.gldimenuitem GtkCalendar:inconsistent { \
+			color: shade (@menuitem_child_bg_color, 0.6); \
 		} \
-		.menu2 { \
+		.gldimenu { \
 			background: @menu_bg_color; \
 			background-image: none; \
 			color: @menuitem_text_color; \
@@ -187,7 +196,7 @@ static void _init_menu_style (void)
 		(int)(rgb[0]*255), (int)(rgb[1]*255), (int)(rgb[2]*255),
 		(int)(text_color[0]*255), (int)(text_color[1]*255), (int)(text_color[2]*255),
 		(int)(text_color[0]*255), (int)(text_color[1]*255), (int)(text_color[2]*255),
-		(int)(rgbs[0]*255), (int)(rgbs[1]*255), (int)(rgbs[2]*255),
+		(int)(rgb[0]*255), (int)(rgb[1]*255), (int)(rgb[2]*255),
 		(int)(rgbb[0]*255), (int)(rgbb[1]*255), (int)(rgbb[2]*255),
 		(int)(bg_color[0]*255), (int)(bg_color[1]*255), (int)(bg_color[2]*255), (int)(bg_color[3]*255));  // we also define ".menu", so that custom widgets (like in the SoundMenu) can get our colors.
 		
@@ -367,7 +376,7 @@ void gldi_menu_init (G_GNUC_UNUSED GtkWidget *pMenu, Icon *pIcon)
 	
 	_init_menu_style ();
 	
-	gtk_style_context_add_class (gtk_widget_get_style_context (pMenu), "menu2");
+	gtk_style_context_add_class (gtk_widget_get_style_context (pMenu), "gldimenu");
 	#endif
 	
 	// set params
@@ -535,7 +544,7 @@ static void _init_menu_item (GtkWidget *pMenuItem)
 			G_CALLBACK (_on_destroy_menu_item),
 			NULL);*/
 		
-		gtk_style_context_add_class (gtk_widget_get_style_context (pMenuItem), "menuitem2");
+		gtk_style_context_add_class (gtk_widget_get_style_context (pMenuItem), "gldimenuitem");
 		
 		g_object_set_data (G_OBJECT (pMenuItem), "gldi-text-color", GINT_TO_POINTER(1));
 	}
@@ -883,6 +892,11 @@ GtkWidget *gldi_menu_item_new_full (const gchar *cLabel, const gchar *cImage, gb
 		#endif
 #endif
 	}
+	
+	#if GTK_MAJOR_VERSION > 2
+	_init_menu_item (pMenuItem);
+	#endif
+	
 	gtk_widget_show_all (pMenuItem);  // show immediately, so that the menu-item is realized when the menu is popped up
 	
 	return pMenuItem;
