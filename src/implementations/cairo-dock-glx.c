@@ -43,15 +43,15 @@ static gboolean s_bForceOpenGL = FALSE;
 #define _gldi_container_get_Xid(pContainer) GDK_WINDOW_XID (gldi_container_get_gdk_window(pContainer))
 
 
+// TODO: remove that when Mesa 10.1 will be used by most people
 static gboolean _is_blacklisted (const gchar *cVersion, const gchar *cVendor, const gchar *cRenderer)
 {
-	if (strstr (cVersion, "3.0 Mesa") != NULL // affect all versions and latest seen with the bug was: 3.0 Mesa 9.1.4 (July 13)
-	   && strstr (cVendor, "Intel Open Source Technology Center") != NULL
-	   && strstr (cRenderer, "Mesa DRI Intel(R) Ivybridge Mobile") != NULL)
+	if (strstr (cRenderer, "Mesa DRI Intel(R) Ivybridge Mobile") != NULL
+	    && (strstr (cVersion, "Mesa 9") != NULL // affect all versions <= 10.0
+	        || strstr (cVersion, "Mesa 10.0") != NULL)
+	    && strstr (cVendor, "Intel Open Source Technology Center") != NULL)
 	{
-		cd_warning ("%s Intel 4000 HD Ivybridge Mobile.\n %s https://bugs.freedesktop.org/show_bug.cgi?id=55036",
-			"This card is blacklisted due to a bug with your video drivers:",
-			"Please have a look there:");
+		cd_warning ("This card is blacklisted due to a bug with your video drivers: Intel 4000 HD Ivybridge Mobile.\n Please install Mesa >= 10.1");
 		return TRUE;
 	}
 	return FALSE;
