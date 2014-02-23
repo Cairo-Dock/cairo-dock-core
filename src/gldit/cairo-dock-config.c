@@ -648,7 +648,15 @@ gchar *cairo_dock_get_default_system_font (void)
 		{
 			s_cFontName = cairo_dock_launch_command_sync ("gconftool-2 -g /desktop/gnome/interface/font_name");  // GTK2
 			if (! s_cFontName)
+			{
 				s_cFontName = cairo_dock_launch_command_sync ("gsettings get org.gnome.desktop.interface font-name");  // GTK3
+				g_print ("s_cFontName: %s\n", s_cFontName);
+				if (s_cFontName && *s_cFontName == '\'')  // the value may be between quotes... get rid of them!
+				{
+					s_cFontName ++;  // s_cFontName is never freeed
+					s_cFontName[strlen(s_cFontName) - 1] = '\0';
+				}
+			}
 		}
 		if (! s_cFontName)
 			s_cFontName = g_strdup ("Sans 10");
