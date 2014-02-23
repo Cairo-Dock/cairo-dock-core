@@ -36,7 +36,7 @@ struct _GldiMenuParams {
 	gint iRadius;  // actually it's more an horizontal padding/offset
 	gint iArrowHeight;
 	#if GTK_MAJOR_VERSION > 2
-	GtkCssProvider *cssProvider;
+	GtkCssProvider *cssProvider;  // a css to define the margins of the menu
 	#endif
 };
 typedef struct _GldiMenuParams GldiMenuParams;
