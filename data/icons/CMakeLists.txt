@@ -34,7 +34,7 @@ install (FILES
 	icon-close.svg
 	icon-connection.svg
 	icon-controler.svg
-	icon-desklets.png
+	icon-desklets.svg
 	icon-desktop.svg
 	icon-dialogs.svg
 	icon-docks.svg
