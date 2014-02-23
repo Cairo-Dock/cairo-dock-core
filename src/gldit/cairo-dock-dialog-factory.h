@@ -38,6 +38,8 @@ G_BEGIN_DECLS
 * To add buttons, you specify a list of images in the attributes. "ok" and "cancel" are key words for the default ok/cancel buttons. You also has to provide a callback function that will be called on click. When the user clicks on a button, the function is called with the number of the clicked button, counted from 0. -1 and -2 are set if the user pushed the Return or Escape keys. The dialog is unreferenced after the user's answer, so <i>you have to reference the dialog in the callback if you want to keep the dialog alive</i>.
 * 
 * This class defines various helper functions to build a Dialog.
+* 
+* Note that Dialogs and Menus share the same rendering.
 */
 
 typedef gpointer CairoDialogRendererDataParameter;
@@ -64,13 +66,18 @@ typedef void (* CairoDialogRenderDecorationFunc) (cairo_t *pCairoContext, CairoD
 typedef void (* CairoDialogGLRenderDecorationFunc) (CairoDialog *pDialog);
 typedef void (* CairoMenuSetupFunc) (GtkWidget *pMenu);
 typedef void (* CairoMenuRenderFunc) (GtkWidget *pMenu, cairo_t *pCairoContext);
-/// Definition of a Dialog decorator. It draws the frame of the Dialog.
+/// Definition of a Dialog/Menu decorator. It draws the frame of the Dialog/Menu.
 struct _CairoDialogDecorator {
+	/// defines the various margins and alignment of the dialog
 	CairoDialogSetDecorationSizeFunc    set_size;
+	/// draw the dialog's frame (outline and background)
 	CairoDialogRenderDecorationFunc     render;
-	CairoDialogGLRenderDecorationFunc   render_opengl;
+	CairoDialogGLRenderDecorationFunc   render_opengl;  // not used, all drawings are done with cairo
+	/// defines the GldiMenuParams of the menu (radius, alignment, arrow height)
 	CairoMenuSetupFunc                  setup_menu;
+	/// draw the menu's frame (outline and background); in the end, must clip the shape of the frame on the context
 	CairoMenuRenderFunc                 render_menu;
+	/// readable name of the decorator
 	const gchar *cDisplayedName;
 };
 

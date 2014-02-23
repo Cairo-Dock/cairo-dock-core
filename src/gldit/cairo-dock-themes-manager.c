@@ -62,6 +62,7 @@ static gchar *s_cLocalThemeDirPath = NULL;
 static gchar *s_cDistantThemeDirName = NULL;
 
 #define CAIRO_DOCK_MODIFIED_THEME_FILE ".cairo-dock-need-save"
+// the structure of a theme (including the current theme, except that it doesn't have an extras folders)
 #define CAIRO_DOCK_LOCAL_EXTRAS_DIR "extras"
 #define CAIRO_DOCK_LAUNCHERS_DIR "launchers"
 #define CAIRO_DOCK_PLUG_INS_DIR "plug-ins"
@@ -69,7 +70,6 @@ static gchar *s_cDistantThemeDirName = NULL;
 #define CAIRO_DOCK_LOCAL_IMAGES_DIR "images"
 
 // dependancies
-//extern gboolean g_bUseOpenGL;
 extern CairoDock *g_pMainDock;
 
 

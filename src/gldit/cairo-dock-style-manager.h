@@ -17,13 +17,13 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __CAIRO_STYLE_MANAGER__
-#define  __CAIRO_STYLE_MANAGER__
+#ifndef __GLID_STYLE_MANAGER__
+#define  __GLDI_STYLE_MANAGER__
 
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
-#include "cairo-dock-surface-factory.h"  // CairoDockLabelDescription
+#include "cairo-dock-surface-factory.h"  // GldiTextDescription
 #include "cairo-dock-manager.h"
 
 G_BEGIN_DECLS
@@ -54,31 +54,57 @@ struct _GldiStyleParam {
 
 /// signals
 typedef enum {
-	/// notification called when the menu is being built on a container. data : {Icon, GldiContainer, GtkMenu, gboolean*}
+	/// notification called when the global style has changed
 	NOTIFICATION_STYLE_CHANGED,
 	NB_NOTIFICATIONS_STYLE
 	} GldiStyleNotifications;
 
 
-
+/** Shade a color, making it darker if it's light, and lighter if it's dark. Note that the opposite behavior can be obtained by passing a negative shade value.
+*@param icolor input color (rgba)
+*@param shade amount of light to add/remove, <= 1.
+*@param ocolor output color (rgba)
+*/
 void gldi_style_color_shade (double *icolor, double shade, double *ocolor);
 
-
+// block/unblock the change signal of the global style; call it before and after your code.
 void gldi_style_colors_freeze (void);
 
-int gldi_style_colors_get_index (void);
+// get the current stamp of the global style; each time the global style changes, the stamp is increased.
+int gldi_style_colors_get_stamp (void);
 
+/** Set the global background color on a context, with or without the alpha component.
+*@param pCairoContext a context
+*@param bUseAlpha TRUE to use the alpha, FALSE to set it fully opaque
+*/
+void gldi_style_colors_set_bg_color_full (cairo_t *pCairoContext, gboolean bUseAlpha);
 
-void gldi_style_colors_set_bg_color (cairo_t *pCairoContext);
+/** Set the global background color on a context.
+*@param pCairoContext a context
+*/
+#define gldi_style_colors_set_bg_color(pCairoContext) gldi_style_colors_set_bg_color_full (pCairoContext, TRUE)
 
+/** Set the global selected color on a context.
+*@param pCairoContext a context
+*/
 void gldi_style_colors_set_selected_bg_color (cairo_t *pCairoContext);
 
+/** Set the global line color on a context.
+*@param pCairoContext a context
+*/
 void gldi_style_colors_set_line_color (cairo_t *pCairoContext);
 
+/** Set the global text color on a context.
+*@param pCairoContext a context
+*/
 void gldi_style_colors_set_text_color (cairo_t *pCairoContext);
 
-void gldi_style_colors_paint_bg_color (cairo_t *pCairoContext, int iWidth);
-
+/** Paint a context with a horizontal alpha gradation. If the alpha is negative, the global style is used to find the alpha.
+*@param pCairoContext a context
+*@param iWidth width of the gradation
+*@param fAlpha alpha to use
+*/
+void gldi_style_colors_paint_bg_color_with_alpha (cairo_t *pCairoContext, int iWidth, double fAlpha);
 
 void gldi_register_style_manager (void);
 

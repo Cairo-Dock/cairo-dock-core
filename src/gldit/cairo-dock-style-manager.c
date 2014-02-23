@@ -44,9 +44,8 @@ static cairo_pattern_t *s_menu_bg_pattern = NULL;
 static GdkRGBA s_menuitem_bg_color;
 static cairo_pattern_t *s_menuitem_bg_pattern = NULL;
 static GdkRGBA s_text_color;
-static int s_iMenuItemColorId = 1;
+static int s_iStyleStamp = 1;
 static gboolean s_bIgnoreStyleChange = FALSE;
-static const double alpha = 0.85;  // min alpha (max is 1)
 #endif
 
 /*
@@ -162,7 +161,7 @@ static void _on_style_changed (G_GNUC_UNUSED GtkStyleContext *_style, gpointer d
 {
 	if (! s_bIgnoreStyleChange)
 	{
-		g_print ("style changed (%d)\n", GPOINTER_TO_INT (data));
+		cd_message ("style changed (%d)", GPOINTER_TO_INT (data));
 		if (s_menu_bg_pattern != NULL)
 		{
 			cairo_pattern_destroy (s_menu_bg_pattern);
@@ -174,7 +173,7 @@ static void _on_style_changed (G_GNUC_UNUSED GtkStyleContext *_style, gpointer d
 			s_menuitem_bg_pattern = NULL;
 		}
 		
-		s_iMenuItemColorId ++;  // invalidate menu-items' text color
+		s_iStyleStamp ++;  // invalidate menu-items' text color
 		
 		if (myStyleParam.bUseSystemColors)
 		{
@@ -195,7 +194,7 @@ static void _on_style_changed (G_GNUC_UNUSED GtkStyleContext *_style, gpointer d
 			gtk_style_context_add_class (style, GTK_STYLE_CLASS_MENUITEM);
 			
 			gtk_style_context_get_color (style, GTK_STATE_FLAG_NORMAL, &s_text_color);
-			g_print ("text color: %.2f;%.2f;%.2f;%.2f\n", s_text_color.red, s_text_color.green, s_text_color.blue, s_text_color.alpha);
+			cd_debug ("text color: %.2f;%.2f;%.2f;%.2f", s_text_color.red, s_text_color.green, s_text_color.blue, s_text_color.alpha);
 			
 			// get selected bg color
 			gtk_style_context_get_background_color (style, GTK_STATE_PRELIGHT, (GdkRGBA*)&s_menuitem_bg_color);
@@ -209,7 +208,7 @@ static void _on_style_changed (G_GNUC_UNUSED GtkStyleContext *_style, gpointer d
 					s_menuitem_bg_color.red = s_menuitem_bg_color.green = s_menuitem_bg_color.blue = s_menuitem_bg_color.alpha = 1.;
 				}
 			}
-			g_print ("menuitem color: %.2f;%.2f;%.2f;%.2f; %p\n", s_menuitem_bg_color.red, s_menuitem_bg_color.green, s_menuitem_bg_color.blue, s_menuitem_bg_color.alpha, s_menuitem_bg_pattern);
+			cd_debug ("menuitem color: %.2f;%.2f;%.2f;%.2f; %p", s_menuitem_bg_color.red, s_menuitem_bg_color.green, s_menuitem_bg_color.blue, s_menuitem_bg_color.alpha, s_menuitem_bg_pattern);
 			
 			gtk_style_context_remove_class (style, GTK_STYLE_CLASS_MENUITEM);
 			gtk_style_context_remove_class (style, GTK_STYLE_CLASS_MENU);
@@ -237,7 +236,7 @@ static void _on_style_changed (G_GNUC_UNUSED GtkStyleContext *_style, gpointer d
 					s_menu_bg_color.red = s_menu_bg_color.green = s_menu_bg_color.blue = s_menu_bg_color.alpha = 1.;  // shouldn't happen
 				}
 			}
-			g_print ("menu color: %.2f;%.2f;%.2f;%.2f; %p\n", s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue, s_menu_bg_color.alpha, s_menu_bg_pattern);
+			cd_debug ("menu color: %.2f;%.2f;%.2f;%.2f; %p", s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue, s_menu_bg_color.alpha, s_menu_bg_pattern);
 			
 			gtk_style_context_remove_class (style, GTK_STYLE_CLASS_MENU);
 			gtk_style_context_remove_class (style, GTK_STYLE_CLASS_BACKGROUND);
@@ -249,7 +248,7 @@ static void _on_style_changed (G_GNUC_UNUSED GtkStyleContext *_style, gpointer d
 				gldi_object_notify (&myStyleMgr, NOTIFICATION_STYLE_CHANGED);
 		}
 	}
-	else g_print (" style changed ignored\n");
+	else cd_debug (" style changed ignored");
 }
 #endif
 
@@ -260,30 +259,41 @@ void gldi_style_colors_freeze (void)
 	#endif
 }
 
-int gldi_style_colors_get_index (void)
+int gldi_style_colors_get_stamp (void)
 {
 	#if GTK_MAJOR_VERSION > 2
-	return s_iMenuItemColorId;
+	return s_iStyleStamp;
 	#else
 	return 0;
 	#endif
 }
 
 
-void gldi_style_colors_set_bg_color (cairo_t *pCairoContext)
+void gldi_style_colors_set_bg_color_full (cairo_t *pCairoContext, gboolean bUseAlpha)
 {
 	#if GTK_MAJOR_VERSION > 2
 	if (myStyleParam.bUseSystemColors)
 	{
-		if (s_menu_bg_pattern)
-			cairo_set_source (pCairoContext, s_menu_bg_pattern);
+		if (pCairoContext)
+		{
+			if (s_menu_bg_pattern)
+				cairo_set_source (pCairoContext, s_menu_bg_pattern);
+			else
+				cairo_set_source_rgba (pCairoContext, s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue, bUseAlpha ? s_menu_bg_color.alpha : 1.);
+		}
 		else
-			cairo_set_source_rgba (pCairoContext, s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue, s_menu_bg_color.alpha);
+		{
+			/// TODO: if s_menu_bg_pattern != NULL, load it into a texture and apply it...
+			glColor4f (s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue, bUseAlpha ? s_menu_bg_color.alpha : 1.);
+		}
 	}
 	else
 	#endif
 	{
-		cairo_set_source_rgba (pCairoContext, myStyleParam.fBgColor[0], myStyleParam.fBgColor[1], myStyleParam.fBgColor[2], myStyleParam.fBgColor[3]);
+		if (pCairoContext)
+			cairo_set_source_rgba (pCairoContext, myStyleParam.fBgColor[0], myStyleParam.fBgColor[1], myStyleParam.fBgColor[2], bUseAlpha ? myStyleParam.fBgColor[3] : 1.);
+		else
+			glColor4f (myStyleParam.fBgColor[0], myStyleParam.fBgColor[1], myStyleParam.fBgColor[2], bUseAlpha ? myStyleParam.fBgColor[3] : 1.);
 	}
 }
 
@@ -292,10 +302,17 @@ void gldi_style_colors_set_selected_bg_color (cairo_t *pCairoContext)
 	#if GTK_MAJOR_VERSION > 2
 	if (myStyleParam.bUseSystemColors)
 	{
-		if (s_menuitem_bg_pattern)
-			cairo_set_source (pCairoContext, s_menuitem_bg_pattern);
+		if (pCairoContext)
+		{
+			if (s_menuitem_bg_pattern)
+				cairo_set_source (pCairoContext, s_menuitem_bg_pattern);
+			else
+				cairo_set_source_rgba (pCairoContext, s_menuitem_bg_color.red, s_menuitem_bg_color.green, s_menuitem_bg_color.blue, 1.);
+		}
 		else
-			cairo_set_source_rgba (pCairoContext, s_menuitem_bg_color.red, s_menuitem_bg_color.green, s_menuitem_bg_color.blue, 1.);
+		{
+			glColor4f (s_menuitem_bg_color.red, s_menuitem_bg_color.green, s_menuitem_bg_color.blue, s_menuitem_bg_color.alpha);
+		}
 	}
 	else
 	#endif
@@ -309,7 +326,10 @@ void gldi_style_colors_set_selected_bg_color (cairo_t *pCairoContext)
 			l += .2;
 		hslToRgb (h, s, l, &r, &g, &b);
 		
-		cairo_set_source_rgba (pCairoContext, r, g, b, 1.);
+		if (pCairoContext)
+			cairo_set_source_rgba (pCairoContext, r, g, b, myStyleParam.fBgColor[3]);
+		else
+			glColor4f (r, g, b, myStyleParam.fBgColor[3]);
 	}
 }
 
@@ -354,21 +374,17 @@ void gldi_style_colors_set_text_color (cairo_t *pCairoContext)
 	}
 }
 
-void gldi_style_colors_paint_bg_color (cairo_t *pCairoContext, int iWidth)
+void gldi_style_colors_paint_bg_color_with_alpha (cairo_t *pCairoContext, int iWidth, double fAlpha)
 {
-	// paint bg: 
-	// pattern -> a=1
-	// color -> if c.a == 1: a=.75 else c.a
-	// or
-	// option transparency
-	// a=1: paint
-	// else: mask
 	#if GTK_MAJOR_VERSION > 2
-	if (myStyleParam.bUseSystemColors && s_menu_bg_pattern)
+	if (fAlpha < 0)  // alpha is not defined => take it from the global style
 	{
-		cairo_paint (pCairoContext);
+		if (! (myStyleParam.bUseSystemColors && s_menu_bg_pattern))
+		{
+			fAlpha = (myStyleParam.bUseSystemColors ? s_menu_bg_color.alpha : myStyleParam.fBgColor[3]);
+		}
 	}
-	else
+	if (fAlpha >= 0)  // alpha is now defined => use it
 	{
 		cairo_pattern_t *pGradationPattern;
 		pGradationPattern = cairo_pattern_create_linear (
@@ -380,14 +396,21 @@ void gldi_style_colors_paint_bg_color (cairo_t *pCairoContext, int iWidth)
 			1., 1., 1., 1.);
 		cairo_pattern_add_color_stop_rgba (pGradationPattern,
 			1.,
-			1., 1., 1., alpha);  // bg color with horizontal alpha gradation
+			1., 1., 1., fAlpha);  // bg color with horizontal alpha gradation
 		cairo_mask (pCairoContext, pGradationPattern);
 		
 		cairo_pattern_destroy (pGradationPattern);
 	}
+	else
+	{
+		cairo_paint (pCairoContext);
+	}
 	#else
 	(void)iWidth;
-	cairo_paint (pCairoContext);
+	if (fAlpha >= 0)
+		cairo_paint_with_alpha (pCairoContext, fAlpha);
+	else
+		cairo_paint (pCairoContext);
 	#endif
 }
 
@@ -489,12 +512,12 @@ static void load (void)
 
 static void reload (GldiStyleParam *pPrevStyleParam, GldiStyleParam *pStyleParam)
 {
-	g_print ("reload style mgr...\n");
+	cd_message ("reload style mgr...");
 	#if GTK_MAJOR_VERSION > 2
 	if (pPrevStyleParam->bUseSystemColors != pStyleParam->bUseSystemColors)
 		_on_style_changed (s_pStyle, NULL);  // load or invalidate the previous style
 	else
-		s_iMenuItemColorId ++;  // just invalidate
+		s_iStyleStamp ++;  // just invalidate
 	#endif
 	gldi_object_notify (&myStyleMgr, NOTIFICATION_STYLE_CHANGED);
 }

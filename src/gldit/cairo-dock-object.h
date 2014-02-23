@@ -84,7 +84,7 @@ GldiObject *gldi_object_new (GldiObjectManager *pMgr, gpointer attr);
  */
 void gldi_object_ref (GldiObject *pObject);
 
-/** Drop your reference on an object. If it's the last reference, the object is destroyed, otherwise nothing happen.
+/** Drop your reference on an object. If it's the last reference, the object is destroyed, otherwise nothing happens.
  * @param pObject the Object
  */
 void gldi_object_unref (GldiObject *pObject);

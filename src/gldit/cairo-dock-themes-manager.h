@@ -25,11 +25,10 @@
 #include <gtk/gtk.h>
 G_BEGIN_DECLS
 
-/**@file cairo-dock-themes-manager.h This class allows defines the structure of the global theme of the dock (launchers, icons, plug-ins, configuration files, etc).
+/**@file cairo-dock-themes-manager.h This class defines the structure of the global theme (launchers, icons, plug-ins, configuration files, etc).
 * It also provides methods to manage the themes, like exporting the current theme, importing new themes, deleting themes, etc.
 */
 
-//void cairo_dock_mark_current_theme_as_modified (gboolean bModified);  // needed here because of cairo_dock_update_conf_file()
 gboolean cairo_dock_current_theme_need_save (void);
 
 void cairo_dock_delete_conf_file (const gchar *cConfFilePath);
@@ -51,7 +50,7 @@ void cairo_dock_write_keys_to_conf_file (GKeyFile *pKeyFile, const gchar *cConfF
 
 /** Export the current theme to a given name. Exported themes can be imported directly from the Theme Manager.
  * @param cNewThemeName name to export the theme to.
- * @param bSaveBehavior whether to save the behavior paremeters too.
+ * @param bSaveBehavior whether to save the behavior parameters too.
  * @param bSaveLaunchers whether to save the launchers too.
  * @return TRUE if the theme could be exported succefuly.
  */
@@ -63,6 +62,7 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
  * @return TRUE if the theme could be packaged succefuly.
  */
 gboolean cairo_dock_package_current_theme (const gchar *cThemeName, const gchar *cDirPath);
+
 
 /** Extract a package into the themes folder. Does not load it.
  * @param cPackagePath path of a package. If the package is distant, it is first downoladed.
@@ -95,7 +95,15 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
  */
 CairoDockTask *cairo_dock_import_theme_async (const gchar *cThemeName, gboolean bLoadBehavior, gboolean bLoadLaunchers, GFunc pCallback, gpointer data);
 
-
+/** Define the paths of themes. Do it just after 'gldi_init'.
+*@param cRootDataDirPath path to the root folder of libgldi
+*@param cExtraDirPath path to the extras themes (plug-in themes)
+*@param cThemesDirPath path to the user themes
+*@param cCurrentThemeDirPath path to the current theme
+*@param cLocalThemeDirPath path to the installed themes (default themes)
+*@param cDistantThemeDirName folder of the themes on the server
+*@param cThemeServerAdress adress of the themes server
+*/
 void cairo_dock_set_paths (gchar *cRootDataDirPath, gchar *cExtraDirPath, gchar *cThemesDirPath, gchar *cCurrentThemeDirPath, gchar *cLocalThemeDirPath, gchar *cDistantThemeDirName, gchar *cThemeServerAdress);
 
 
