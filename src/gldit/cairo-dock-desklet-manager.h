@@ -67,11 +67,8 @@ typedef enum {
 	NOTIFICATION_ENTER_DESKLET = NB_NOTIFICATIONS_CONTAINER,
 	/// notification called when the mouse leave a desklet.
 	NOTIFICATION_LEAVE_DESKLET,
-	NOTIFICATION_STOP_DESKLET_DEPRECATED,
 	/// notification called when a desklet is resized or moved on the screen.
 	NOTIFICATION_CONFIGURE_DESKLET,
-	/// notification called when a new desklet is created.
-	NOTIFICATION_NEW_DESKLET,
 	NB_NOTIFICATIONS_DESKLET
 	} CairoDeskletNotifications;
 

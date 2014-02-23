@@ -42,10 +42,13 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-backends-manager.h"
+#include "cairo-dock-style-manager.h"
+#include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-opengl.h"
+#include "cairo-dock-opengl-path.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-desklet-manager.h"
 
@@ -172,9 +175,10 @@ static inline double _compute_zoom_for_rotation (CairoDesklet *pDesklet)
 	return fZoom;
 }
 
-static inline void _render_desklet_cairo (CairoDesklet *pDesklet, cairo_t *pCairoContext)
+static void _render_desklet_cairo (CairoDesklet *pDesklet, cairo_t *pCairoContext)
 {
 	cairo_save (pCairoContext);
+	gboolean bUseSystemColors = (pDesklet->backGroundImageBuffer.pSurface == NULL && pDesklet->foreGroundImageBuffer.pSurface == NULL);
 	
 	if (pDesklet->container.fRatio != 1)
 	{
@@ -202,7 +206,18 @@ static inline void _render_desklet_cairo (CairoDesklet *pDesklet, cairo_t *pCair
 			-.5*pDesklet->container.iHeight);
 	}
 	
-	if (pDesklet->backGroundImageBuffer.pSurface != NULL)
+	if (bUseSystemColors)
+	{
+		cairo_save (pCairoContext);
+		cairo_dock_draw_rounded_rectangle (pCairoContext, myStyleParam.iCornerRadius, myStyleParam.iLineWidth, pDesklet->container.iWidth - 2 * (myStyleParam.iCornerRadius + myStyleParam.iLineWidth), pDesklet->container.iHeight - myStyleParam.iLineWidth);
+		gldi_style_colors_set_bg_color (pCairoContext);
+		cairo_fill_preserve (pCairoContext);
+		gldi_style_colors_set_line_color (pCairoContext);
+		cairo_set_line_width (pCairoContext, myStyleParam.iLineWidth);
+		cairo_stroke (pCairoContext);
+		cairo_restore (pCairoContext);
+	}
+	else if (pDesklet->backGroundImageBuffer.pSurface != NULL)
 	{
 		cairo_dock_apply_image_buffer_surface (&pDesklet->backGroundImageBuffer, pCairoContext);
 	}
@@ -285,17 +300,27 @@ static inline void _set_desklet_matrix (CairoDesklet *pDesklet)
 	}
 }
 
-static inline void _render_desklet_opengl (CairoDesklet *pDesklet)
+static void _render_desklet_opengl (CairoDesklet *pDesklet)
 {
+	gboolean bUseSystemColors = (pDesklet->backGroundImageBuffer.pSurface == NULL && pDesklet->foreGroundImageBuffer.pSurface == NULL);
 	glPushMatrix ();
 	///glTranslatef (0*pDesklet->container.iWidth/2, 0*pDesklet->container.iHeight/2, 0.);  // avec une perspective ortho.
 	///glTranslatef (0*pDesklet->container.iWidth/2, 0*pDesklet->container.iHeight/2, -pDesklet->container.iWidth*(1.87 +.35*fabs (sin(pDesklet->fDepthRotationY))));  // avec 30 deg de perspective
 	_set_desklet_matrix (pDesklet);
 	
+	if (bUseSystemColors)
+	{
+		_cairo_dock_set_blend_alpha ();
+		gldi_style_colors_set_bg_color (NULL);
+		cairo_dock_draw_rounded_rectangle_opengl (pDesklet->container.iWidth - 2 * (myStyleParam.iCornerRadius + myStyleParam.iLineWidth), pDesklet->container.iHeight - 2*myStyleParam.iLineWidth, myStyleParam.iCornerRadius, 0, NULL);
+		
+		gldi_style_colors_set_line_color (NULL);
+		cairo_dock_draw_rounded_rectangle_opengl (pDesklet->container.iWidth - 2 * (myStyleParam.iCornerRadius + myStyleParam.iLineWidth), pDesklet->container.iHeight - 2*myStyleParam.iLineWidth, myStyleParam.iCornerRadius, myStyleParam.iLineWidth, NULL);
+	}
+	
 	_cairo_dock_enable_texture ();
 	_cairo_dock_set_blend_pbuffer ();
 	_cairo_dock_set_alpha (1.);
-	
 	if (pDesklet->backGroundImageBuffer.iTexture != 0)
 	{
 		cairo_dock_apply_image_buffer_texture (&pDesklet->backGroundImageBuffer);
@@ -773,7 +798,19 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDeskletsParam *pDesklets)
 {
 	gboolean bFlushConfFileNeeded = FALSE;
 	
-	pDesklets->cDeskletDecorationsName = cairo_dock_get_string_key_value (pKeyFile, "Desklets", "decorations", &bFlushConfFileNeeded, "dark", NULL, NULL);
+	// register an "automatic" decoration, that takes its colors from the global style (do it now, after the global style has been defined)
+	CairoDeskletDecoration * pDecoration = cairo_dock_get_desklet_decoration ("automatic");
+	if (pDecoration == NULL)
+	{
+		pDecoration = g_new0 (CairoDeskletDecoration, 1);
+		pDecoration->cDisplayedName = _("Automatic");
+		pDecoration->iLeftMargin = pDecoration->iTopMargin = pDecoration->iRightMargin = pDecoration->iBottomMargin = myStyleParam.iLineWidth;
+		g_print ("pDecoration->iLeftMargin: %d\n", pDecoration->iLeftMargin);
+		cairo_dock_register_desklet_decoration ("automatic", pDecoration);  // we don't actually load an Imagebuffer, 
+	}
+	
+	// register a "custom" decoration, that takes its colors from the config if the use has defined it
+	pDesklets->cDeskletDecorationsName = cairo_dock_get_string_key_value (pKeyFile, "Desklets", "decorations", &bFlushConfFileNeeded, NULL, NULL, NULL);
 	CairoDeskletDecoration *pUserDeskletDecorations = cairo_dock_get_desklet_decoration ("personnal");
 	if (pUserDeskletDecorations == NULL)
 	{
@@ -781,7 +818,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDeskletsParam *pDesklets)
 		pUserDeskletDecorations->cDisplayedName = _("_custom decoration_");
 		cairo_dock_register_desklet_decoration ("personnal", pUserDeskletDecorations);
 	}
-	if (pDesklets->cDeskletDecorationsName == NULL || strcmp (pDesklets->cDeskletDecorationsName, "personnal") == 0)
+	if (pDesklets->cDeskletDecorationsName != NULL && strcmp (pDesklets->cDeskletDecorationsName, "personnal") == 0)
 	{
 		g_free (pUserDeskletDecorations->cBackGroundImagePath);
 		pUserDeskletDecorations->cBackGroundImagePath = cairo_dock_get_string_key_value (pKeyFile, "Desklets", "bg desklet", &bFlushConfFileNeeded, NULL, NULL, NULL);
@@ -795,6 +832,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDeskletsParam *pDesklets)
 		pUserDeskletDecorations->iRightMargin = cairo_dock_get_integer_key_value (pKeyFile, "Desklets", "right offset", &bFlushConfFileNeeded, 0, NULL, NULL);
 		pUserDeskletDecorations->iBottomMargin = cairo_dock_get_integer_key_value (pKeyFile, "Desklets", "bottom offset", &bFlushConfFileNeeded, 0, NULL, NULL);
 	}
+	
 	pDesklets->iDeskletButtonSize = cairo_dock_get_integer_key_value (pKeyFile, "Desklets", "button size", &bFlushConfFileNeeded, 16, NULL, NULL);
 	pDesklets->cRotateButtonImage = cairo_dock_get_string_key_value (pKeyFile, "Desklets", "rotate image", &bFlushConfFileNeeded, NULL, NULL, NULL);
 	pDesklets->cRetachButtonImage = cairo_dock_get_string_key_value (pKeyFile, "Desklets", "retach image", &bFlushConfFileNeeded, NULL, NULL, NULL);
@@ -858,6 +896,31 @@ static void unload (void)
  /// INIT ///
 ////////////
 
+static gboolean on_style_changed (G_GNUC_UNUSED gpointer data)
+{
+	g_print ("%s (Desklets, %s)\n", __func__, myDeskletsParam.cDeskletDecorationsName);
+	gboolean bUseDefaultColors = (!myDeskletsParam.cDeskletDecorationsName || strcmp (myDeskletsParam.cDeskletDecorationsName, "automatic") == 0);
+	
+	CairoDeskletDecoration * pDecoration = cairo_dock_get_desklet_decoration ("automatic");
+	if (pDecoration)
+		pDecoration->iLeftMargin = pDecoration->iTopMargin = pDecoration->iRightMargin = pDecoration->iBottomMargin = myStyleParam.iLineWidth;
+	
+	CairoDesklet *pDesklet;
+	GList *dl;
+	for (dl = s_pDeskletList; dl != NULL; dl = dl->next)
+	{
+		pDesklet = dl->data;
+		if ( ((pDesklet->cDecorationTheme == NULL || strcmp (pDesklet->cDecorationTheme, "default") == 0) && bUseDefaultColors)
+		|| strcmp (pDesklet->cDecorationTheme, "automatic") == 0)
+		{
+			g_print (" reload desklet's bg...\n");
+			gldi_desklet_load_desklet_decorations (pDesklet);
+			cairo_dock_redraw_container (CAIRO_CONTAINER (pDesklet));
+		}
+	}
+	return GLDI_NOTIFICATION_LET_PASS;
+}
+
 static void init (void)
 {
 	gldi_object_register_notification (&myDeskletObjectMgr,
@@ -880,6 +943,10 @@ static void init (void)
 		NOTIFICATION_DESKTOP_GEOMETRY_CHANGED,
 		(GldiNotificationFunc) _on_desktop_geometry_changed,
 		GLDI_RUN_AFTER, NULL);  // replace all desklets that are positionned relatively to the right or bottom edge
+	gldi_object_register_notification (&myStyleMgr,
+		NOTIFICATION_STYLE_CHANGED,
+		(GldiNotificationFunc) on_style_changed,
+		GLDI_RUN_AFTER, NULL);
 	s_iStartupTime = time (NULL);  // on startup, the WM can take a long time before it has positionned all the desklets. To avoid irrelevant configure events, we set a delay.
 }
 

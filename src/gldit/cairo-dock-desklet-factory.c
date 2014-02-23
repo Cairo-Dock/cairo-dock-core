@@ -928,17 +928,17 @@ void gldi_desklet_load_desklet_decorations (CairoDesklet *pDesklet)
 	
 	CairoDeskletDecoration *pDeskletDecorations;
 	//cd_debug ("%s (%s)", __func__, pDesklet->cDecorationTheme);
-	if (pDesklet->cDecorationTheme == NULL || strcmp (pDesklet->cDecorationTheme, "personnal") == 0)
-		pDeskletDecorations = pDesklet->pUserDecoration;
-	else if (strcmp (pDesklet->cDecorationTheme, "default") == 0)
+	if (pDesklet->cDecorationTheme == NULL || strcmp (pDesklet->cDecorationTheme, "default") == 0)
 		pDeskletDecorations = cairo_dock_get_desklet_decoration (myDeskletsParam.cDeskletDecorationsName);
+	else if (strcmp (pDesklet->cDecorationTheme, "personnal") == 0)
+		pDeskletDecorations = pDesklet->pUserDecoration;
 	else
 		pDeskletDecorations = cairo_dock_get_desklet_decoration (pDesklet->cDecorationTheme);
 	if (pDeskletDecorations == NULL)  // peut arriver si rendering n'a pas encore charge ses decorations.
 		return ;
 	//cd_debug ("pDeskletDecorations : %s (%x)", pDesklet->cDecorationTheme, pDeskletDecorations);
 	
-	double fZoomX = 0., fZoomY = 0.;
+	double fZoomX = 1., fZoomY = 1.;
 	if  (pDeskletDecorations->cBackGroundImagePath != NULL && pDeskletDecorations->fBackGroundAlpha > 0)
 	{
 		//cd_debug ("bg : %s", pDeskletDecorations->cBackGroundImagePath);
@@ -967,7 +967,7 @@ void gldi_desklet_load_desklet_decorations (CairoDesklet *pDesklet)
 	pDesklet->iTopSurfaceOffset = pDeskletDecorations->iTopMargin * fZoomY;
 	pDesklet->iRightSurfaceOffset = pDeskletDecorations->iRightMargin * fZoomX;
 	pDesklet->iBottomSurfaceOffset = pDeskletDecorations->iBottomMargin * fZoomY;
-	//g_print ("%d;%d;%d;%d ; %.2f;%.2f\n", pDesklet->iLeftSurfaceOffset, pDesklet->iTopSurfaceOffset, pDesklet->iRightSurfaceOffset, pDesklet->iBottomSurfaceOffset, fZoomX, fZoomY);
+	g_print ("%d;%d;%d;%d ; %.2f;%.2f\n", pDesklet->iLeftSurfaceOffset, pDesklet->iTopSurfaceOffset, pDesklet->iRightSurfaceOffset, pDesklet->iBottomSurfaceOffset, fZoomX, fZoomY);
 }
 
 void gldi_desklet_decoration_free (CairoDeskletDecoration *pDecoration)

@@ -206,7 +206,7 @@ GKeyFile *gldi_module_instance_open_conf_file (GldiModuleInstance *pInstance, Ca
 		
 		// on recupere les decorations du desklet.
 		gchar *cDecorationTheme = cairo_dock_get_string_key_value (pKeyFile, "Desklet", "decorations", NULL, NULL, NULL, NULL);
-		if (cDecorationTheme == NULL || strcmp (cDecorationTheme, "personnal") == 0)
+		if (cDecorationTheme != NULL && strcmp (cDecorationTheme, "personnal") == 0)
 		{
 			//g_print ("on recupere les decorations personnelles au desklet\n");
 			CairoDeskletDecoration *pUserDeskletDecorations = g_new0 (CairoDeskletDecoration, 1);

@@ -67,7 +67,7 @@ struct _CairoDeskletDecoration {
 	gint iTopMargin;
 	gint iRightMargin;
 	gint iBottomMargin;
-	};
+	};  /// TODO: see how to define the "automatic" decoration cleanly...
 
 typedef struct _CairoDeskletAttr CairoDeskletAttr;
 
