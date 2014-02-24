@@ -939,7 +939,12 @@ void gldi_desklet_load_desklet_decorations (CairoDesklet *pDesklet)
 	//cd_debug ("pDeskletDecorations : %s (%x)", pDesklet->cDecorationTheme, pDeskletDecorations);
 	
 	double fZoomX = 1., fZoomY = 1.;
-	if  (pDeskletDecorations->cBackGroundImagePath != NULL && pDeskletDecorations->fBackGroundAlpha > 0)
+	pDesklet->bUseDefaultColors = FALSE;
+	if (pDeskletDecorations->cBackGroundImagePath && strcmp (pDeskletDecorations->cBackGroundImagePath, "automatic") == 0)
+	{
+		pDesklet->bUseDefaultColors = TRUE;
+	}
+	else if  (pDeskletDecorations->cBackGroundImagePath != NULL && pDeskletDecorations->fBackGroundAlpha > 0)
 	{
 		//cd_debug ("bg : %s", pDeskletDecorations->cBackGroundImagePath);
 		cairo_dock_load_image_buffer_full (&pDesklet->backGroundImageBuffer,
@@ -967,7 +972,6 @@ void gldi_desklet_load_desklet_decorations (CairoDesklet *pDesklet)
 	pDesklet->iTopSurfaceOffset = pDeskletDecorations->iTopMargin * fZoomY;
 	pDesklet->iRightSurfaceOffset = pDeskletDecorations->iRightMargin * fZoomX;
 	pDesklet->iBottomSurfaceOffset = pDeskletDecorations->iBottomMargin * fZoomY;
-	g_print ("%d;%d;%d;%d ; %.2f;%.2f\n", pDesklet->iLeftSurfaceOffset, pDesklet->iTopSurfaceOffset, pDesklet->iRightSurfaceOffset, pDesklet->iBottomSurfaceOffset, fZoomX, fZoomY);
 }
 
 void gldi_desklet_decoration_free (CairoDeskletDecoration *pDecoration)

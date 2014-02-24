@@ -178,7 +178,7 @@ static inline double _compute_zoom_for_rotation (CairoDesklet *pDesklet)
 static void _render_desklet_cairo (CairoDesklet *pDesklet, cairo_t *pCairoContext)
 {
 	cairo_save (pCairoContext);
-	gboolean bUseSystemColors = (pDesklet->backGroundImageBuffer.pSurface == NULL && pDesklet->foreGroundImageBuffer.pSurface == NULL);
+	gboolean bUseDefaultColors = pDesklet->bUseDefaultColors;
 	
 	if (pDesklet->container.fRatio != 1)
 	{
@@ -206,7 +206,7 @@ static void _render_desklet_cairo (CairoDesklet *pDesklet, cairo_t *pCairoContex
 			-.5*pDesklet->container.iHeight);
 	}
 	
-	if (bUseSystemColors)
+	if (bUseDefaultColors)
 	{
 		cairo_save (pCairoContext);
 		cairo_dock_draw_rounded_rectangle (pCairoContext, myStyleParam.iCornerRadius, myStyleParam.iLineWidth, pDesklet->container.iWidth - 2 * (myStyleParam.iCornerRadius + myStyleParam.iLineWidth), pDesklet->container.iHeight - myStyleParam.iLineWidth);
@@ -302,13 +302,13 @@ static inline void _set_desklet_matrix (CairoDesklet *pDesklet)
 
 static void _render_desklet_opengl (CairoDesklet *pDesklet)
 {
-	gboolean bUseSystemColors = (pDesklet->backGroundImageBuffer.pSurface == NULL && pDesklet->foreGroundImageBuffer.pSurface == NULL);
+	gboolean bUseDefaultColors = pDesklet->bUseDefaultColors;
 	glPushMatrix ();
 	///glTranslatef (0*pDesklet->container.iWidth/2, 0*pDesklet->container.iHeight/2, 0.);  // avec une perspective ortho.
 	///glTranslatef (0*pDesklet->container.iWidth/2, 0*pDesklet->container.iHeight/2, -pDesklet->container.iWidth*(1.87 +.35*fabs (sin(pDesklet->fDepthRotationY))));  // avec 30 deg de perspective
 	_set_desklet_matrix (pDesklet);
 	
-	if (bUseSystemColors)
+	if (bUseDefaultColors)
 	{
 		_cairo_dock_set_blend_alpha ();
 		gldi_style_colors_set_bg_color (NULL);
@@ -805,6 +805,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDeskletsParam *pDesklets)
 		pDecoration = g_new0 (CairoDeskletDecoration, 1);
 		pDecoration->cDisplayedName = _("Automatic");
 		pDecoration->iLeftMargin = pDecoration->iTopMargin = pDecoration->iRightMargin = pDecoration->iBottomMargin = myStyleParam.iLineWidth;
+		pDecoration->fBackGroundAlpha = 1.;
+		pDecoration->cBackGroundImagePath = g_strdup ("automatic");  // keyword to say we use global style colors rather an image
 		g_print ("pDecoration->iLeftMargin: %d\n", pDecoration->iLeftMargin);
 		cairo_dock_register_desklet_decoration ("automatic", pDecoration);  // we don't actually load an Imagebuffer, 
 	}

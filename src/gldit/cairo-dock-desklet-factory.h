@@ -67,7 +67,7 @@ struct _CairoDeskletDecoration {
 	gint iTopMargin;
 	gint iRightMargin;
 	gint iBottomMargin;
-	};  /// TODO: see how to define the "automatic" decoration cleanly...
+	};
 
 typedef struct _CairoDeskletAttr CairoDeskletAttr;
 
@@ -158,6 +158,7 @@ struct _CairoDesklet {
 	gint iBottomSurfaceOffset;
 	CairoDockImageBuffer backGroundImageBuffer;
 	CairoDockImageBuffer foreGroundImageBuffer;
+	gboolean bUseDefaultColors;  // use default colors instead of the bg/fg images
 	
 	//\________________ properties.
 	gdouble fRotation;  // rotation.
