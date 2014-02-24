@@ -27,7 +27,6 @@
 #include <glib/gstdio.h>
 
 #include "config.h"
-#include "cairo-dock-config.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-desklet-factory.h"  // cairo_dock_desklet_is_sticky
 #include "cairo-dock-dock-manager.h"

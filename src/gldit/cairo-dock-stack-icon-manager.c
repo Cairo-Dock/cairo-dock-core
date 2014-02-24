@@ -20,7 +20,6 @@
 #include "gldi-config.h"  // GLDI_VERSION
 #include "cairo-dock-icon-facility.h"  // 
 #include "cairo-dock-dock-facility.h"  // cairo_dock_trigger_redraw_subdock_content_on_icon
-#include "cairo-dock-config.h"  // cairo_dock_update_conf_file
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-backends-manager.h"  // cairo_dock_set_renderer
 #include "cairo-dock-log.h"

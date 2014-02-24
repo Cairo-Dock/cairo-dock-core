@@ -24,7 +24,6 @@
 
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-draw.h"
-#include "cairo-dock-config.h"
 #include "cairo-dock-utils.h"  // cairo_dock_launch_command
 #include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-surface-factory.h"
@@ -34,6 +33,7 @@
 #include "cairo-dock-module-instance-manager.h"  // GldiModuleInstance
 #include "cairo-dock-module-manager.h"  // GldiModuleInstance
 #include "cairo-dock-log.h"
+#include "cairo-dock-config.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-draw-opengl.h"

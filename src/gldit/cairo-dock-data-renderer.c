@@ -36,7 +36,6 @@
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-icon-manager.h"  // myIconsParam, NOTIFICATION_UPDATE_ICON_SLOW
 #include "cairo-dock-image-buffer.h"
-#include "cairo-dock-config.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-packages.h"
 #include "cairo-dock-overlay.h"

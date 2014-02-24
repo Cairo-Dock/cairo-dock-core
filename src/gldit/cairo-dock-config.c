@@ -48,7 +48,6 @@ static char DES_crypt_key[64] =
 #include "cairo-dock-dock-factory.h"  // gldi_dock_new
 #include "cairo-dock-file-manager.h"  // cairo_dock_get_file_size
 #include "cairo-dock-user-icon-manager.h"  // gldi_user_icons_new_from_directory
-#include "cairo-dock-utils.h"  // cairo_dock_launch_command_sync
 #include "cairo-dock-core.h"  // gldi_free_all
 #include "cairo-dock-config.h"
 
@@ -57,7 +56,6 @@ gboolean g_bEasterEggs = FALSE;
 extern gchar *g_cCurrentLaunchersPath;
 extern gchar *g_cConfFile;
 extern gboolean g_bUseOpenGL;
-extern CairoDockDesktopEnv g_iDesktopEnv;
 
 static gboolean s_bLoading = FALSE;
 
@@ -635,31 +633,4 @@ void cairo_dock_close_xml_file (xmlDocPtr doc)
 {
 	if (doc)
 		xmlFreeDoc (doc);  // ne pas utiliser xmlCleanupParser(), cela peut affecter les autres threads utilisant libxml !
-}
-
-
-
-gchar *cairo_dock_get_default_system_font (void)
-{
-	static gchar *s_cFontName = NULL;
-	if (s_cFontName == NULL)
-	{
-		if (g_iDesktopEnv == CAIRO_DOCK_GNOME)
-		{
-			s_cFontName = cairo_dock_launch_command_sync ("gconftool-2 -g /desktop/gnome/interface/font_name");  // GTK2
-			if (! s_cFontName)
-			{
-				s_cFontName = cairo_dock_launch_command_sync ("gsettings get org.gnome.desktop.interface font-name");  // GTK3
-				g_print ("s_cFontName: %s\n", s_cFontName);
-				if (s_cFontName && *s_cFontName == '\'')  // the value may be between quotes... get rid of them!
-				{
-					s_cFontName ++;  // s_cFontName is never freeed
-					s_cFontName[strlen(s_cFontName) - 1] = '\0';
-				}
-			}
-		}
-		if (! s_cFontName)
-			s_cFontName = g_strdup ("Sans 10");
-	}
-	return g_strdup (s_cFontName);
 }

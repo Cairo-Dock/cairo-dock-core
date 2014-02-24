@@ -26,7 +26,6 @@
 
 #include "config.h"
 #include "gldi-config.h"
-#include "cairo-dock-config.h"
 #include "cairo-dock-module-manager.h"
 #include "cairo-dock-module-instance-manager.h"
 #include "cairo-dock-log.h"

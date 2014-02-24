@@ -28,7 +28,6 @@
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-module-instance-manager.h"  // gldi_module_instance_detach_at_position
 #include "cairo-dock-applet-manager.h"  // GLDI_OBJECT_IS_APPLET_ICON
-#include "cairo-dock-config.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-container.h"

@@ -28,7 +28,6 @@
 #include <glib/gi18n.h>
 
 #include "gldi-config.h"
-#include "cairo-dock-config.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
 #include "cairo-dock-launcher-manager.h" // cairo_dock_get_command_with_right_terminal

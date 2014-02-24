@@ -25,6 +25,8 @@
 
 #include "cairo-dock-config.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-file-manager.h"
+#include "cairo-dock-utils.h"  // cairo_dock_launch_command_sync
 #include "cairo-dock-keyfile-utilities.h"  // cairo_dock_open_key_file
 #define _MANAGER_DEF_
 #include "cairo-dock-style-manager.h"
@@ -35,6 +37,7 @@ GldiManager myStyleMgr;
 
 // dependancies
 extern gchar *g_cCurrentThemePath;
+extern CairoDockDesktopEnv g_iDesktopEnv;
 
 // private
 #if GTK_MAJOR_VERSION > 2
@@ -153,6 +156,32 @@ void gldi_style_color_shade (double *icolor, double shade, double *ocolor)
 	if (l < 0.) l = 0.;
 	
 	hslToRgb (h, s, l, &ocolor[0], &ocolor[1], &ocolor[2]);
+}
+
+
+gchar *_get_default_system_font (void)
+{
+	static gchar *s_cFontName = NULL;
+	if (s_cFontName == NULL)
+	{
+		if (g_iDesktopEnv == CAIRO_DOCK_GNOME)
+		{
+			s_cFontName = cairo_dock_launch_command_sync ("gconftool-2 -g /desktop/gnome/interface/font_name");  // GTK2
+			if (! s_cFontName)
+			{
+				s_cFontName = cairo_dock_launch_command_sync ("gsettings get org.gnome.desktop.interface font-name");  // GTK3
+				cd_debug ("s_cFontName: %s", s_cFontName);
+				if (s_cFontName && *s_cFontName == '\'')  // the value may be between quotes... get rid of them!
+				{
+					s_cFontName ++;  // s_cFontName is never freeed
+					s_cFontName[strlen(s_cFontName) - 1] = '\0';
+				}
+			}
+		}
+		if (! s_cFontName)
+			s_cFontName = g_strdup ("Sans 10");
+	}
+	return g_strdup (s_cFontName);
 }
 
 
@@ -480,7 +509,7 @@ static gboolean get_config (GKeyFile *pKeyFile, GldiStyleParam *pStyleParam)
 	cairo_dock_get_double_list_key_value (pKeyFile, "Style", "bg color", &bFlushConfFileNeeded, pStyleParam->fBgColor, 4, bg_color, "Dialogs", "background color");
 	
 	gboolean bCustomFont = cairo_dock_get_boolean_key_value (pKeyFile, "Style", "custom font", &bFlushConfFileNeeded, FALSE, "Dialogs", "custom");
-	gchar *cFont = (bCustomFont ? cairo_dock_get_string_key_value (pKeyFile, "Style", "font", &bFlushConfFileNeeded, NULL, "Dialogs", "message police") : cairo_dock_get_default_system_font ());
+	gchar *cFont = (bCustomFont ? cairo_dock_get_string_key_value (pKeyFile, "Style", "font", &bFlushConfFileNeeded, NULL, "Dialogs", "message police") : _get_default_system_font ());
 	gldi_text_description_set_font (&pStyleParam->textDescription, cFont);
 	
 	double text_color[3] = {0., 0., 0.};

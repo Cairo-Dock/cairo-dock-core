@@ -40,7 +40,6 @@
 #include "cairo-dock-module-manager.h"  // GldiModule
 #include "cairo-dock-module-instance-manager.h"  // GldiModuleInstance
 #include "cairo-dock-dock-facility.h"
-#include "cairo-dock-config.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-image-buffer.h"

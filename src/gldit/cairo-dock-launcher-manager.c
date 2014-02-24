@@ -27,7 +27,6 @@
 
 #include "gldi-config.h"  // GLDI_VERSION
 #include "cairo-dock-icon-facility.h"  // cairo_dock_compare_icons_order
-#include "cairo-dock-config.h"  // cairo_dock_update_conf_file
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-backends-manager.h"  // cairo_dock_set_renderer
 #include "cairo-dock-log.h"

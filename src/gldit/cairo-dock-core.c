@@ -53,7 +53,6 @@
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-overlay.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-config.h"
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-core.h"
 

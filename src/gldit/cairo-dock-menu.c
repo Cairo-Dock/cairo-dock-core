@@ -225,117 +225,7 @@ static void _init_menu_style (void)
 				color: @menuitem_text_color; \
 			}", NULL);  // we also define ".menu", so that custom widgets (like in the SoundMenu) can get our colors.
 		}
-		/**gchar *css= g_strdup_printf ("@define-color menuitem_bg_color rgb (%d, %d, %d); \
-		@define-color menuitem_text_color rgb (%d, %d, %d); \
-		@define-color menuitem_insensitive_text_color rgba (%d, %d, %d, .5); \
-		@define-color menuitem_separator_color rgb (%d, %d, %d); \
-		@define-color menuitem_child_bg_color rgb (%d, %d, %d); \
-		@define-color menu_bg_color rgba (%d, %d, %d, %d); \
-		.gldimenuitem { \
-			text-shadow: none; \
-			border-image: none; \
-			box-shadow: none; \
-			background: transparent; \
-			color: @menuitem_text_color; \
-			border-radius: 5px;\
-			border-style: solid;\
-			border-width: 1px;\
-			border-color: @menuitem_child_bg_color;\
-			-unico-border-gradient: none;\
-			-unico-inner-stroke-width: 0px;\
-			-unico-outer-stroke-width: 0px;\
-			-unico-bullet-color: transparent;\
-			-unico-glow-color: transparent;\
-			-unico-glow-radius: 0;\
-		} \
-		.gldimenuitem GtkImage { \
-			background: transparent; \
-		} \
-		.gldimenuitem.separator, \
-		.gldimenuitem .separator { \
-			color: @menuitem_separator_color; \
-			border-width: 1px; \
-			border-style: solid; \
-			border-image: none; \
-			border-color: @menuitem_separator_color; \
-			border-bottom-color: alpha (@menuitem_separator_color, 0.6); \
-			border-right-color: alpha (@menuitem_separator_color, 0.6); \
-		} \
-		.gldimenuitem:hover, \
-		.gldimenuitem *:hover { \
-			background: @menuitem_bg_color; \
-			background-image: none; \
-			text-shadow: none; \
-			border-image: none; \
-			box-shadow: none; \
-			color: @menuitem_text_color; \
-			-unico-inner-stroke-color: @menuitem_child_bg_color;\
-		} \
-		.gldimenuitem *:insensitive { \
-			text-shadow: none; \
-			color: @menuitem_insensitive_text_color; \
-		} \
-		.gldimenuitem .entry, \
-		.gldimenuitem.entry { \
-			background: @menuitem_bg_color; \
-			border-image: none; \
-			border-color: transparent; \
-			color: @menuitem_text_color; \
-		} \
-		.gldimenuitem .button, \
-		.gldimenuitem.button { \
-			background: @menuitem_bg_color; \
-			background-image: none; \
-			box-shadow: none; \
-			border-color: transparent; \
-			padding: 2px; \
-		} \
-		.gldimenuitem .scale, \
-		.gldimenuitem.scale { \
-			background: @menuitem_child_bg_color; \
-			background-image: none; \
-			color: @menuitem_text_color; \
-			border-image: none; \
-		} \
-		.gldimenuitem .scale.left, \
-		.gldimenuitem.scale.left { \
-			background: @menuitem_bg_color; \
-			background-image: none; \
-			border-image: none; \
-		} \
-		.gldimenuitem .scale.slider, \
-		.gldimenuitem.scale.slider { \
-			background: @menuitem_text_color; \
-			background-image: none; \
-			border-image: none; \
-		} \
-		.gldimenuitem GtkCalendar, \
-		.gldimenuitem GtkCalendar.button, \
-		.gldimenuitem GtkCalendar.header, \
-		.gldimenuitem GtkCalendar.view { \
-			background-color: @menuitem_bg_color; \
-			background-image: none; \
-			color: @menuitem_text_color; \
-		} \
-		.gldimenuitem GtkCalendar { \
-			background-color: @menuitem_child_bg_color; \
-			background-image: none; \
-		} \
-		.gldimenuitem GtkCalendar:inconsistent { \
-			color: shade (@menuitem_child_bg_color, 0.6); \
-		} \
-		.gldimenu { \
-			background: @menu_bg_color; \
-			background-image: none; \
-			color: @menuitem_text_color; \
-		}",
-		(int)(rgb[0]*255), (int)(rgb[1]*255), (int)(rgb[2]*255),
-		(int)(text_color[0]*255), (int)(text_color[1]*255), (int)(text_color[2]*255),
-		(int)(text_color[0]*255), (int)(text_color[1]*255), (int)(text_color[2]*255),
-		(int)(rgb[0]*255), (int)(rgb[1]*255), (int)(rgb[2]*255),
-		(int)(rgbb[0]*255), (int)(rgbb[1]*255), (int)(rgbb[2]*255),
-		(int)(bg_color[0]*255), (int)(bg_color[1]*255), (int)(bg_color[2]*255), (int)(bg_color[3]*255));  // we also define ".menu", so that custom widgets (like in the SoundMenu) can get our colors.
-		*/
+		
 		gldi_style_colors_freeze ();
 		gtk_css_provider_load_from_data (cssProvider,
 			css, -1, NULL);  // (should) clear any previously loaded information
@@ -394,7 +284,6 @@ static void _set_margin_position (GtkWidget *pMenu, GldiMenuParams *pParams)
 	// store the result, and allocate some space to draw the arrow
 	if (iMarginPosition != pParams->iMarginPosition)  // margin position is now defined or has changed -> update it on the menu
 	{
-		g_print ("margin position: %d -> %d\n", pParams->iMarginPosition, iMarginPosition);
 		// store the value
 		pParams->iMarginPosition = iMarginPosition;
 		
@@ -412,7 +301,6 @@ static void _set_margin_position (GtkWidget *pMenu, GldiMenuParams *pParams)
 			cssProvider = gtk_css_provider_new ();
 			gtk_style_context_add_provider (gtk_widget_get_style_context(pMenu), GTK_STYLE_PROVIDER(cssProvider), GTK_STYLE_PROVIDER_PRIORITY_USER);  // this adds a reference on the provider, plus the one we own
 			pParams->cssProvider = cssProvider;
-			g_print (" + css\n");
 		}
 		
 		// load the new padding rule into the css

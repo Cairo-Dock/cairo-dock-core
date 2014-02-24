@@ -29,7 +29,6 @@
 #include "cairo-dock-packages.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-keyfile-utilities.h"
-#include "cairo-dock-config.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-indicator-manager.h"
 #include "cairo-dock-style-manager.h"

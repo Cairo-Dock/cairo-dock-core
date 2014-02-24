@@ -181,9 +181,5 @@ xmlDocPtr cairo_dock_open_xml_file (const gchar *cDataFilePath, const gchar *cRo
 void cairo_dock_close_xml_file (xmlDocPtr doc);
 
 
-gchar *cairo_dock_get_default_system_font (void);
-
-
-
 G_END_DECLS
 #endif
