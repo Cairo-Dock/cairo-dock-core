@@ -328,7 +328,7 @@ static void _set_margin_position (GtkWidget *pMenu, GldiMenuParams *pParams)
 }
 #endif
 
-GtkWidget *gldi_menu_new (G_GNUC_UNUSED Icon *pIcon)
+GtkWidget *gldi_menu_new (Icon *pIcon)
 {
 	GtkWidget *pMenu = gtk_menu_new ();
 	
@@ -355,7 +355,7 @@ static void _on_menu_destroyed (GtkWidget *pMenu, G_GNUC_UNUSED gpointer data)
 		gldi_object_remove_notification (pIcon,
 			NOTIFICATION_DESTROY,
 			(GldiNotificationFunc) _on_icon_destroyed,
-			NULL);
+			pMenu);
 	#if GTK_MAJOR_VERSION > 2
 	if (pParams->cssProvider)
 	{
@@ -382,8 +382,10 @@ static void _on_menu_deactivated (GtkMenuShell *pMenu, G_GNUC_UNUSED gpointer da
 }
 #endif
 
-void gldi_menu_init (G_GNUC_UNUSED GtkWidget *pMenu, Icon *pIcon)
+void gldi_menu_init (GtkWidget *pMenu, Icon *pIcon)
 {
+	g_return_if_fail (g_object_get_data (G_OBJECT (pMenu), "gldi-params") == NULL);
+	
 	#if (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
 	gtk_menu_set_reserve_toggle_size (GTK_MENU(pMenu), TRUE);
 	#endif
