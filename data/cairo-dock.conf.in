@@ -368,7 +368,7 @@ relative icon size = .8
 #F+[Bubble;@pkgdatadir@/icons/icon-bubble.png]
 frame_bubble =
 
-#Y-[Automatic;0;0;Custom;1;3] Style
+#Y-[Automatic;0;0;Custom;1;5] Style
 style = 1
 
 #C+ Background colour
@@ -380,17 +380,17 @@ line color = 1.0; 1.0; 1.0; 1.0
 #c+ Text colour
 text color = 0.0; 0.0; 0.0
 
-#v
-sep_bul=
-
-#t+ Shape of the bubble:
-decorator = comics
-
 #i+[0;20] Corner radius
 corner=8
 
 #i+[1;10] Outline width
 linewidth=1
+
+#v
+sep_bul=
+
+#t+ Shape of the bubble:
+decorator = comics
 
 
 #F+[Font;gtk-select-font]
