@@ -132,16 +132,16 @@ static void _init_menu_style (void)
 				box-shadow: none; \
 				background: transparent; \
 				color: @menuitem_text_color; \
-				border-radius: 5px;\
-				border-style: solid;\
-				border-width: 1px;\
-				border-color: @menuitem_child_bg_color;\
-				-unico-border-gradient: none;\
-				-unico-inner-stroke-width: 0px;\
-				-unico-outer-stroke-width: 0px;\
-				-unico-bullet-color: transparent;\
-				-unico-glow-color: transparent;\
-				-unico-glow-radius: 0;\
+				border-radius: 5px; \
+				border-style: solid; \
+				border-width: 1px; \
+				border-color: @menuitem_child_bg_color; \
+				-unico-border-gradient: none; \
+				-unico-inner-stroke-width: 0px; \
+				-unico-outer-stroke-width: 0px; \
+				-unico-bullet-color: transparent; \
+				-unico-glow-color: transparent; \
+				-unico-glow-radius: 0; \
 			} \
 			.gldimenuitem GtkImage { \
 				background: transparent; \
@@ -164,7 +164,7 @@ static void _init_menu_style (void)
 				border-image: none; \
 				box-shadow: none; \
 				color: @menuitem_text_color; \
-				-unico-inner-stroke-color: @menuitem_child_bg_color;\
+				-unico-inner-stroke-color: @menuitem_child_bg_color; \
 			} \
 			.gldimenuitem *:insensitive { \
 				text-shadow: none; \
@@ -173,9 +173,15 @@ static void _init_menu_style (void)
 			.gldimenuitem .entry, \
 			.gldimenuitem.entry { \
 				background: @menuitem_bg_color; \
+				border-width: 1px; \
+				border-style: solid; \
 				border-image: none; \
-				border-color: transparent; \
+				border-color: @menuitem_child_bg_color; \
 				color: @menuitem_text_color; \
+				-unico-border-gradient: none; \
+				-unico-border-width: 0px; \
+				-unico-inner-stroke-width: 0px; \
+				-unico-outer-stroke-width: 0px; \
 			} \
 			.gldimenuitem .button, \
 			.gldimenuitem.button { \
@@ -218,6 +224,23 @@ static void _init_menu_style (void)
 			} \
 			.gldimenuitem GtkCalendar:inconsistent { \
 				color: shade (@menuitem_child_bg_color, 0.6); \
+			} \
+			.gldimenuitem .toolbar .button, \
+			.gldimenuitem column-header .button  { \
+				color: @menuitem_text_color; \
+				text-shadow: none; \
+			} \
+			.gldimenuitem row { \
+				color: @menuitem_text_color; \
+				text-shadow: none; \
+				background-color: @menu_bg_color; \
+				background-image: none; \
+			} \
+			.gldimenuitem row:selected { \
+				color: @menuitem_text_color; \
+				text-shadow: none; \
+				background-color: @menuitem_bg_color; \
+				background-image: none; \
 			} \
 			.gldimenu { \
 				background: @menu_bg_color; \
