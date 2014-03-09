@@ -292,18 +292,18 @@ const CairoDockGLPath *cairo_dock_generate_trapeze_path (double fUpperFrameWidth
 {
 	static CairoDockGLPath *pPath = NULL;
 	
-	double a = atan (fInclination);
+	double a = atan (fInclination);  // /|
 	double cosa = 1. / sqrt (1 + fInclination * fInclination);
 	double sina = cosa * fInclination;
 	
 	double fFrameHeight = MAX (0, fTotalHeight - 2 * fRadius);
-	*fExtraWidth = fInclination * (fFrameHeight - (bRoundedBottomCorner ? 2 : 1-cosa) * fRadius) + fRadius * (bRoundedBottomCorner ? 1 : sina);
+	*fExtraWidth = fInclination * (fTotalHeight - (bRoundedBottomCorner ? 2 : 1-sina) * fRadius) + fRadius * (bRoundedBottomCorner ? 1 : cosa);
 	double fTotalWidth = fUpperFrameWidth + 2*(*fExtraWidth);
-	double dw = (bRoundedBottomCorner ? fInclination * (fFrameHeight) : *fExtraWidth);
+	double dw = *fExtraWidth;
 	double r = fRadius;
 	double w = fUpperFrameWidth / 2;
 	double h = fFrameHeight / 2;
-	double w_ = w + dw + (bRoundedBottomCorner ? 0 : r * cosa);
+	double w_ = w + dw - (bRoundedBottomCorner ? r : 0);
 	
 	int iNbPoins1Round = 70/DELTA_ROUND_DEGREE;  // pour une inclinaison classique (~30deg), les coins du haut feront moins d'1/4 de tour.
 	int iNbPoins1Curve = 10;

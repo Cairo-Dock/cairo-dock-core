@@ -208,9 +208,9 @@ static double cairo_dock_draw_frame_horizontal (cairo_t *pCairoContext, double f
 {
 	if (2*fRadius > fFrameHeight + fLineWidth)
 		fRadius = (fFrameHeight + fLineWidth) / 2 - 1;
-	double fDeltaXForLoop = fInclination * (fFrameHeight + fLineWidth - (bRoundedBottomCorner ? 2 : 1) * fRadius);
 	double cosa = 1. / sqrt (1 + fInclination * fInclination);
 	double sina = cosa * fInclination;
+	double fDeltaXForLoop = fInclination * (fFrameHeight + fLineWidth - (bRoundedBottomCorner ? 2 : 1-sina) * fRadius);
 
 	cairo_move_to (pCairoContext, fDockOffsetX, fDockOffsetY);
 
