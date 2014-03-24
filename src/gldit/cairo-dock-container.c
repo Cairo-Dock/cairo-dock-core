@@ -468,6 +468,10 @@ static void _on_composited_changed (GdkScreen *pScreen, G_GNUC_UNUSED gpointer d
 }
 static gboolean _check_composite_delayed (G_GNUC_UNUSED gpointer data)
 {
+	// if there is a dialogue at startup, there is no main dock, wait a bit more.
+	if (g_pMainDock == NULL)
+		return TRUE;
+
 	GdkScreen *pScreen = gdk_screen_get_default ();
 	if (!gdk_screen_is_composited (pScreen) || (g_bUseOpenGL && ! g_openglConfig.bAlphaAvailable))  // no composite available -> load the desktop background
 	{
