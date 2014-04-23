@@ -528,6 +528,9 @@ separator image = separateur.svg
 #b+ Make the separator's image revolve when dock is on top/on the left/on the right?
 revolve separator image = true
 
+#Y-[Automatic;0;0;Custom;1;1] Style
+separator_style = 0
+
 #C+ Colour of flat separators :
 separator color = 0.9;0.9;0.9;1.0
 

@@ -518,6 +518,9 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 		double couleur[4] = {0.9,0.9,1.0,1.0};
 		cairo_dock_get_double_list_key_value (pKeyFile, "Icons", "separator color", &bFlushConfFileNeeded, pIcons->fSeparatorColor, 4, couleur, NULL, NULL);
 	}
+	
+	pIcons->bSeparatorUseDefaultColors = (cairo_dock_get_integer_key_value (pKeyFile, "Icons", "separator_style", &bFlushConfFileNeeded, 1, NULL, NULL) == 0);
+	
 	if (pIcons->iSeparatorType == CAIRO_DOCK_NORMAL_SEPARATOR)
 		pIcons->cSeparatorImage = cairo_dock_get_string_key_value (pKeyFile, "Icons", "separator image", &bFlushConfFileNeeded, NULL, "Separators", NULL);
 

@@ -24,7 +24,7 @@
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-manager.h"
-#include "cairo-dock-surface-factory.h"  // CairoDockLabelDescription
+#include "cairo-dock-style-facility.h"  // GldiTextDescription
 #include "cairo-dock-icon-factory.h"  // CairoDockIconGroup
 G_BEGIN_DECLS
 
@@ -76,6 +76,7 @@ struct _CairoIconsParam {
 	gchar *cSeparatorImage;
 	gboolean bRevolveSeparator;
 	gboolean bConstantSeparatorSize;
+	gboolean bSeparatorUseDefaultColors;
 	gdouble fSeparatorColor[4];
 	// labels
 	GldiTextDescription iconTextDescription;
