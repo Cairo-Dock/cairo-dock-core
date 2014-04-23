@@ -17,13 +17,13 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __GLID_STYLE_MANAGER__
+#ifndef __GLDI_STYLE_MANAGER__
 #define  __GLDI_STYLE_MANAGER__
 
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
-#include "cairo-dock-surface-factory.h"  // GldiTextDescription
+#include "cairo-dock-style-facility.h"  // GldiTextDescription
 #include "cairo-dock-manager.h"
 
 G_BEGIN_DECLS
@@ -55,17 +55,18 @@ struct _GldiStyleParam {
 /// signals
 typedef enum {
 	/// notification called when the global style has changed
-	NOTIFICATION_STYLE_CHANGED,
+	NOTIFICATION_STYLE_CHANGED = NB_NOTIFICATIONS_OBJECT,
 	NB_NOTIFICATIONS_STYLE
 	} GldiStyleNotifications;
 
 
-/** Shade a color, making it darker if it's light, and lighter if it's dark. Note that the opposite behavior can be obtained by passing a negative shade value.
-*@param icolor input color (rgba)
-*@param shade amount of light to add/remove, <= 1.
-*@param ocolor output color (rgba)
+/** Get the value of a color. In case the color is actually a pattern, it gives its dominant color.
+ * This function is really only useful when you need to have a color for sure (rather than potentially a pattern/texture), or when you need to apply the color with some transformation. Most of the time, you only want to use the gldi_style_colors_set_* functions.
+*@param iColorType type of the color
+*@param pColor output color
 */
-void gldi_style_color_shade (double *icolor, double shade, double *ocolor);
+void gldi_style_color_get (GldiStyleColors iColorType, GldiColor *pColor);
+
 
 // block/unblock the change signal of the global style; call it before and after your code.
 void gldi_style_colors_freeze (void);
@@ -98,6 +99,16 @@ void gldi_style_colors_set_line_color (cairo_t *pCairoContext);
 *@param pCairoContext a context
 */
 void gldi_style_colors_set_text_color (cairo_t *pCairoContext);
+
+/** Set the global separator color on a context.
+*@param pCairoContext a context
+*/
+void gldi_style_colors_set_separator_color (cairo_t *pCairoContext);
+
+/** Set the global child color on a context.
+*@param pCairoContext a context
+*/
+void gldi_style_colors_set_child_color (cairo_t *pCairoContext);
 
 /** Paint a context with a horizontal alpha gradation. If the alpha is negative, the global style is used to find the alpha.
 *@param pCairoContext a context

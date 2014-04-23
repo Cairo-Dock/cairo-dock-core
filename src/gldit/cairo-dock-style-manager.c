@@ -25,8 +25,8 @@
 
 #include "cairo-dock-config.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-file-manager.h"
-#include "cairo-dock-utils.h"  // cairo_dock_launch_command_sync
+#include "cairo-dock-draw-opengl.h"
+#include "cairo-dock-surface-factory.h"  // cairo_dock_create_blank_surface
 #include "cairo-dock-keyfile-utilities.h"  // cairo_dock_open_key_file
 #define _MANAGER_DEF_
 #include "cairo-dock-style-manager.h"
@@ -37,152 +37,20 @@ GldiManager myStyleMgr;
 
 // dependancies
 extern gchar *g_cCurrentThemePath;
-extern CairoDockDesktopEnv g_iDesktopEnv;
+extern gboolean g_bUseOpenGL;
 
 // private
 #if GTK_MAJOR_VERSION > 2
 static GtkStyleContext *s_pStyle = NULL;
 static GdkRGBA s_menu_bg_color;
 static cairo_pattern_t *s_menu_bg_pattern = NULL;
+static GLuint s_menu_bg_texture = 0;
 static GdkRGBA s_menuitem_bg_color;
 static cairo_pattern_t *s_menuitem_bg_pattern = NULL;
 static GdkRGBA s_text_color;
 static int s_iStyleStamp = 1;
 static gboolean s_bIgnoreStyleChange = FALSE;
 #endif
-
-/*
- * style mgr: bg color, line color, text color, linewidth, radius, font -> style
- * 
- * config reload / theme changed -> index ++, notify style changed -> icons mgr (reload labels, quickinfo), dock mgr (reload bg, update size), dialogs mgr (update size, reload text), clock/keyboard-indic (reload text buffers)
- * 
- * get config -> set font text desc -> fd, size
- * 
- * icons mgr::get config -> set font text desc or copy style mgr -> fd, size
- * 
- * clock::get config -> set font text desc or copy style mgr -> fd, size -> set weight
- * 
- * notification -> update text desc, reload text buffers
- * 
- * 
- * set_color(style) is style null, use system colors
- * or
- * if (default) set_color, else cairo_set_rgba
- * 
- * 
- * dialog mgr: auto/custom
- *   auto -> copy from style mgr or set use_system to TRUE
- *   custom -> get from config
- * or
- *   auto -> style = NULL, use style mgr's style
- *   custom -> fill a style
- * 
- * progressbars: auto/custom
- *   auto -> bg color = bg color -> bg color + .3, outline color = outline color
- *   custom -> bg color gradation, outline color
- * 
- * active indic: auto/custom/image, fill = frame / bg
- *   auto -> bg color = bg color or outline color
- *   custom -> bg color = color, radius, linewidth
- *   image -> image
- * 
- * docks: auto/gradation/image
- *   auto -> style mgr
- *   gradation -> bg colors __.--> outline color, radius, linewidth
- *   image -> image path ____/
- * 
- */
-
-static double hue2rgb (double p, double q, double t)
-{
-	if(t < 0) t += 1;
-	if(t > 1) t -= 1;
-	if(t < 1./6) return p + (q - p) * 6 * t;
-	if(t < 1./2) return q;
-	if(t < 2./3) return p + (q - p) * (2./3 - t) * 6;
-	return p;
-}
-static void hslToRgb (double h, double s, double l, double *r, double *g, double *b)
-{
-	if (s == 0)  // achromatic
-	{
-		*r = *g = *b = l;
-	}
-	else
-	{
-		double q = (l < 0.5 ? l * (1 + s) : l + s - l * s);
-		double p = 2 * l - q;
-		*r = hue2rgb(p, q, h + 1./3);
-		*g = hue2rgb(p, q, h);
-		*b = hue2rgb(p, q, h - 1./3);
-	}
-}
-static void rgbToHsl (double r, double g, double b, double *h_, double *s_, double *l_)
-{
-	double max = MAX (MAX (r, g), b), min = MIN (MIN (r, g), b);
-	double h, s, l = (max + min) / 2;
-	
-	if(max == min)  // achromatic
-	{
-		h = s = 0;
-	}
-	else
-	{
-		double d = max - min;
-		s = (l > 0.5 ? d / (2 - max - min) : d / (max + min));
-		if (max == r)
-			h = (g - b) / d + (g < b ? 6 : 0);
-		else if (max == g)
-			h = (b - r) / d + 2;
-		else
-			h = (r - g) / d + 4;
-		h /= 6;
-	}
-	
-	*h_ = h;
-	*s_ = s;
-	*l_ = l;
-}
-void gldi_style_color_shade (double *icolor, double shade, double *ocolor)
-{
-	double h, s, l;
-	rgbToHsl (icolor[0], icolor[1], icolor[2], &h, &s, &l);
-	
-	if (l > .5)
-		l -= shade;
-	else
-		l += shade;
-	if (l > 1.) l = 1.;
-	if (l < 0.) l = 0.;
-	
-	hslToRgb (h, s, l, &ocolor[0], &ocolor[1], &ocolor[2]);
-}
-
-
-gchar *_get_default_system_font (void)
-{
-	static gchar *s_cFontName = NULL;
-	if (s_cFontName == NULL)
-	{
-		if (g_iDesktopEnv == CAIRO_DOCK_GNOME)
-		{
-			s_cFontName = cairo_dock_launch_command_sync ("gconftool-2 -g /desktop/gnome/interface/font_name");  // GTK2
-			if (! s_cFontName)
-			{
-				s_cFontName = cairo_dock_launch_command_sync ("gsettings get org.gnome.desktop.interface font-name");  // GTK3
-				cd_debug ("s_cFontName: %s", s_cFontName);
-				if (s_cFontName && *s_cFontName == '\'')  // the value may be between quotes... get rid of them!
-				{
-					s_cFontName ++;  // s_cFontName is never freeed
-					s_cFontName[strlen(s_cFontName) - 1] = '\0';
-				}
-			}
-		}
-		if (! s_cFontName)
-			s_cFontName = g_strdup ("Sans 10");
-	}
-	return g_strdup (s_cFontName);
-}
 
 
 #if GTK_MAJOR_VERSION > 2
@@ -195,6 +63,11 @@ static void _on_style_changed (G_GNUC_UNUSED GtkStyleContext *_style, gpointer d
 		{
 			cairo_pattern_destroy (s_menu_bg_pattern);
 			s_menu_bg_pattern = NULL;
+		}
+		if (s_menu_bg_texture != 0)
+		{
+			_cairo_dock_delete_texture (s_menu_bg_texture);
+			s_menu_bg_texture = 0;
 		}
 		if (s_menuitem_bg_pattern != NULL)
 		{
@@ -264,6 +137,17 @@ static void _on_style_changed (G_GNUC_UNUSED GtkStyleContext *_style, gpointer d
 				{
 					s_menu_bg_color.red = s_menu_bg_color.green = s_menu_bg_color.blue = s_menu_bg_color.alpha = 1.;  // shouldn't happen
 				}
+				else if (g_bUseOpenGL)
+				{
+					cairo_surface_t *pSurface = cairo_dock_create_blank_surface (20, 20);
+					cairo_t *pCairoContext = cairo_create (pSurface);
+					cairo_set_source (pCairoContext, s_menu_bg_pattern);
+					cairo_paint (pCairoContext);
+					cairo_destroy (pCairoContext);
+					
+					s_menu_bg_texture = cairo_dock_create_texture_from_surface (pSurface);
+					cairo_surface_destroy (pSurface);
+				}
 			}
 			cd_debug ("menu color: %.2f;%.2f;%.2f;%.2f; %p", s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue, s_menu_bg_color.alpha, s_menu_bg_pattern);
 			
@@ -297,6 +181,87 @@ int gldi_style_colors_get_stamp (void)
 	#endif
 }
 
+static void _get_bg_color (GldiColor *pColor)
+{
+	if (myStyleParam.bUseSystemColors)
+	{
+		if (s_menu_bg_pattern)
+			_get_color_from_pattern (s_menu_bg_pattern, pColor);
+		else
+			memcpy (&pColor->rgba, &s_menu_bg_color, sizeof(GdkRGBA));
+	}
+	else
+	{
+		memcpy (&pColor->rgba, myStyleParam.fBgColor, sizeof(GdkRGBA));
+	}
+}
+
+void gldi_style_color_get (GldiStyleColors iColorType, GldiColor *pColor)
+{
+	switch (iColorType)
+	{
+		case GLDI_COLOR_BG:
+			_get_bg_color (pColor);
+		break;
+		case GLDI_COLOR_SELECTED:
+			#if GTK_MAJOR_VERSION > 2
+			if (myStyleParam.bUseSystemColors)
+			{
+				if (s_menuitem_bg_pattern)
+					_get_color_from_pattern (s_menuitem_bg_pattern, pColor);
+				else
+					pColor->rgba = s_menuitem_bg_color;
+			}
+			else
+			#endif
+			{
+				gldi_style_color_shade (myStyleParam.fBgColor, .2, (double*)&pColor->rgba);
+			}
+		break;
+		case GLDI_COLOR_LINE:
+			#if GTK_MAJOR_VERSION > 2
+			if (myStyleParam.bUseSystemColors)
+			{
+				if (s_menu_bg_pattern)
+					_get_color_from_pattern (s_menu_bg_pattern, pColor);
+				else
+				{
+					pColor->rgba = s_menu_bg_color;  /// shade a little, maybe in negative ?...
+				}
+				pColor->rgba.alpha = 1.;
+			}
+			else
+			#endif
+			{
+				memcpy (&pColor->rgba, myStyleParam.fLineColor, sizeof(GdkRGBA));
+			}
+		break;
+		case GLDI_COLOR_TEXT:
+			#if GTK_MAJOR_VERSION > 2
+			if (myStyleParam.bUseSystemColors)
+			{
+				pColor->rgba = s_text_color;
+			}
+			else
+			#endif
+			{
+				memcpy (&pColor->rgba, myStyleParam.textDescription.fColorStart, sizeof(GdkRGBA));
+				pColor->rgba.alpha = 1.;
+			}
+		break;
+		case GLDI_COLOR_SEPARATOR:
+			_get_bg_color (pColor);
+			gldi_style_color_shade ((double*)&pColor->rgba, .2, (double*)&pColor->rgba);
+			pColor->rgba.alpha = 1.;
+		break;
+		case GLDI_COLOR_CHILD:
+			_get_bg_color (pColor);
+			gldi_style_color_shade ((double*)&pColor->rgba, .3, (double*)&pColor->rgba);
+		break;
+		default:
+		break;
+	}
+}
 
 void gldi_style_colors_set_bg_color_full (cairo_t *pCairoContext, gboolean bUseAlpha)
 {
@@ -312,8 +277,14 @@ void gldi_style_colors_set_bg_color_full (cairo_t *pCairoContext, gboolean bUseA
 		}
 		else
 		{
-			/// TODO: if s_menu_bg_pattern != NULL, load it into a texture and apply it...
-			glColor4f (s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue, bUseAlpha ? s_menu_bg_color.alpha : 1.);
+			if (s_menu_bg_texture != 0)
+			{
+				_cairo_dock_enable_texture ();
+				glColor4f (1., 1., 1., 1.);
+				glBindTexture (GL_TEXTURE_2D, s_menu_bg_texture);
+			}
+			else
+				glColor4f (s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue, bUseAlpha ? s_menu_bg_color.alpha : 1.);
 		}
 	}
 	else
@@ -346,19 +317,13 @@ void gldi_style_colors_set_selected_bg_color (cairo_t *pCairoContext)
 	else
 	#endif
 	{
-		double r = myStyleParam.fBgColor[0], g = myStyleParam.fBgColor[1], b = myStyleParam.fBgColor[2];
-		double h, s, l;
-		rgbToHsl (r, g, b, &h, &s, &l);
-		if (l > .5)
-			l -= .2;
-		else
-			l += .2;
-		hslToRgb (h, s, l, &r, &g, &b);
+		double color[4];
+		gldi_style_color_shade (myStyleParam.fBgColor, .2, color);
 		
 		if (pCairoContext)
-			cairo_set_source_rgba (pCairoContext, r, g, b, myStyleParam.fBgColor[3]);
+			cairo_set_source_rgba (pCairoContext, color[0], color[1], color[2], color[3]);
 		else
-			glColor4f (r, g, b, myStyleParam.fBgColor[3]);
+			glColor4f (color[0], color[1], color[2], color[3]);
 	}
 }
 
@@ -394,13 +359,41 @@ void gldi_style_colors_set_text_color (cairo_t *pCairoContext)
 	#if GTK_MAJOR_VERSION > 2
 	if (myStyleParam.bUseSystemColors)
 	{
-		cairo_set_source_rgb (pCairoContext, s_text_color.red, s_text_color.green, s_text_color.blue);
+		if (pCairoContext)
+			cairo_set_source_rgb (pCairoContext, s_text_color.red, s_text_color.green, s_text_color.blue);
+		else
+			glColor3f (s_text_color.red, s_text_color.green, s_text_color.blue);
 	}
 	else
 	#endif
 	{
-		cairo_set_source_rgb (pCairoContext, myStyleParam.textDescription.fColorStart[0], myStyleParam.textDescription.fColorStart[1], myStyleParam.textDescription.fColorStart[2]);
+		if (pCairoContext)
+			cairo_set_source_rgb (pCairoContext, myStyleParam.textDescription.fColorStart[0], myStyleParam.textDescription.fColorStart[1], myStyleParam.textDescription.fColorStart[2]);
+		else
+			glColor3f (myStyleParam.textDescription.fColorStart[0], myStyleParam.textDescription.fColorStart[1], myStyleParam.textDescription.fColorStart[2]);
 	}
+}
+
+void gldi_style_colors_set_separator_color (cairo_t *pCairoContext)
+{
+	GldiColor color;
+	_get_bg_color (&color);
+	gldi_style_color_shade ((double*)&color.rgba, .2, (double*)&color.rgba);
+	if (pCairoContext)
+		cairo_set_source_rgb (pCairoContext, color.rgba.red, color.rgba.green, color.rgba.blue);  // alpha set to 1
+	else
+		glColor3f (color.rgba.red, color.rgba.green, color.rgba.blue);
+}
+
+void gldi_style_colors_set_child_color (cairo_t *pCairoContext)
+{
+	GldiColor color;
+	_get_bg_color (&color);
+	gldi_style_color_shade ((double*)&color.rgba, .3, (double*)&color.rgba);
+	if (pCairoContext)
+		cairo_set_source_rgba (pCairoContext, color.rgba.red, color.rgba.green, color.rgba.blue, color.rgba.alpha);
+	else
+		glColor4f (color.rgba.red, color.rgba.green, color.rgba.blue, color.rgba.alpha);
 }
 
 void gldi_style_colors_paint_bg_color_with_alpha (cairo_t *pCairoContext, int iWidth, double fAlpha)
@@ -457,7 +450,7 @@ static void init (void)
 	// init a style context
 	s_pStyle = gtk_style_context_new();
 	gtk_style_context_set_screen (s_pStyle, gdk_screen_get_default());
-	g_signal_connect (s_pStyle, "changed", G_CALLBACK(_on_style_changed), GINT_TO_POINTER (TRUE));
+	g_signal_connect (s_pStyle, "changed", G_CALLBACK(_on_style_changed), GINT_TO_POINTER (TRUE));  // TRUE => throw a notification
 	#endif
 }
 
@@ -531,7 +524,7 @@ static void load (void)
 {
 	#if GTK_MAJOR_VERSION > 2
 	if (myStyleParam.bUseSystemColors)
-		_on_style_changed (s_pStyle, NULL);
+		_on_style_changed (s_pStyle, NULL);  // NULL => don't notify
 	#endif
 }
 
@@ -544,7 +537,7 @@ static void reload (GldiStyleParam *pPrevStyleParam, GldiStyleParam *pStyleParam
 	cd_message ("reload style mgr...");
 	#if GTK_MAJOR_VERSION > 2
 	if (pPrevStyleParam->bUseSystemColors != pStyleParam->bUseSystemColors)
-		_on_style_changed (s_pStyle, NULL);  // load or invalidate the previous style
+		_on_style_changed (s_pStyle, NULL);  // load or invalidate the previous style, NULL => don't notify (it's done just after)
 	else
 		s_iStyleStamp ++;  // just invalidate
 	#endif
@@ -557,7 +550,11 @@ static void reload (GldiStyleParam *pPrevStyleParam, GldiStyleParam *pStyleParam
 
 static void unload (void)
 {
-	
+	if (s_menu_bg_texture != 0)
+	{
+		_cairo_dock_delete_texture (s_menu_bg_texture);
+		s_menu_bg_texture = 0;
+	}
 }
 
   ///////////////
