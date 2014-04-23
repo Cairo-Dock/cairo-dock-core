@@ -283,8 +283,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 *@param cImage name of an image (can be a path or a GtkStock).
 *@return the sub-menu, newly created and attached to the menu.
 */
-#define CD_APPLET_ADD_SUB_MENU_WITH_IMAGE(cLabel, pMenu, cImage) \
-	cairo_dock_create_sub_menu (cLabel, pMenu, cImage)
+#define CD_APPLET_ADD_SUB_MENU_WITH_IMAGE(cLabel, pMenu, cImage) gldi_menu_add_sub_menu (pMenu, cLabel, cImage)
 
 /** Create and add a sub-menu to a given menu.
 *@param cLabel name of the sub-menu.
@@ -300,7 +299,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 *@param pMenu menu to add the entry to.
 *@param pData data passed as parameter of the callback.
 */
-#define CD_APPLET_ADD_IN_MENU_WITH_STOCK_AND_DATA(cLabel, gtkStock, pCallBack, pMenu, pData) cairo_dock_add_in_menu_with_stock_and_data (cLabel, gtkStock, G_CALLBACK(pCallBack), pMenu, pData)
+#define CD_APPLET_ADD_IN_MENU_WITH_STOCK_AND_DATA(cLabel, gtkStock, pCallBack, pMenu, pData) gldi_menu_add_item (pMenu, cLabel, gtkStock, (GCallback)pCallBack, pData)
 
 /** Create and add an entry to a menu.
 *@param cLabel name of the entry.
@@ -327,9 +326,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 
 /** Create and add a separator to a menu.
  */
-#define CD_APPLET_ADD_SEPARATOR_IN_MENU(pMenu) do { \
-	pMenuItem = gtk_separator_menu_item_new (); \
-	gtk_menu_shell_append(GTK_MENU_SHELL (pMenu), pMenuItem); } while (0)
+#define CD_APPLET_ADD_SEPARATOR_IN_MENU(pMenu) gldi_menu_add_separator (pMenu)
 
 
 /** Pop-up a menu on the applet's icon.

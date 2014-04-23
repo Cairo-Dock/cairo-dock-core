@@ -1046,8 +1046,7 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
 			_add_add_entry (pSubMenu, data);
 		}
 		
-		pMenuItem = gtk_separator_menu_item_new ();
-		gtk_menu_shell_append (GTK_MENU_SHELL (pSubMenu), pMenuItem);
+		gldi_menu_add_separator (pSubMenu);
 		
 		// lock icons position
 		pMenuItem = gtk_check_menu_item_new_with_label (_("Lock icons position"));
@@ -1235,8 +1234,7 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
 					_cairo_dock_add_docks_sub_menu (pItemSubMenu, pIcon);
 				}
 				
-				pMenuItem = gtk_separator_menu_item_new ();
-				gtk_menu_shell_append (GTK_MENU_SHELL (pItemSubMenu), pMenuItem);
+				gldi_menu_add_separator (pItemSubMenu);
 				
 				cairo_dock_add_in_menu_with_stock_and_data (_("Applet's handbook"), GTK_STOCK_ABOUT, G_CALLBACK (cairo_dock_pop_up_about_applet), pItemSubMenu, pIcon->pModuleInstance);
 			}

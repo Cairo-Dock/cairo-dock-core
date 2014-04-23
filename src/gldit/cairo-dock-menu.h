@@ -147,6 +147,10 @@ GtkWidget *gldi_menu_add_sub_menu_full (GtkWidget *pMenu, const gchar *cLabel, c
 #define gldi_menu_add_sub_menu(pMenu, cLabel, cImage) gldi_menu_add_sub_menu_full (pMenu, cLabel, cImage, NULL)
 #define cairo_dock_create_sub_menu(cLabel, pMenu, cImage) gldi_menu_add_sub_menu (pMenu, cLabel, cImage)
 
+/** A convenient function to add a separator to a given menu.
+ * @param pMenu the menu
+ */
+void gldi_menu_add_separator (GtkWidget *pMenu);
 
 G_END_DECLS
 #endif

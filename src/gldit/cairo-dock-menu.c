@@ -91,20 +91,20 @@ static void _init_menu_style (void)
 		double rgb[4];  // menuitem bg color: a little darker/lighter than the menu's bg color; also separator color (with no alpha)
 		gldi_style_color_shade (bg_color, .2, rgb);
 		double rgbb[4];  // menuitem border color and menuitem's child bg color (for instance, calendar, scale, etc): a little darker/lighter than the menuitem bg color
-		gldi_style_color_shade (bg_color, .3, rgbb);
+		gldi_style_color_shade (bg_color, .35, rgbb);
 		
-		gchar *cssheader = g_strdup_printf ("@define-color menuitem_bg_color rgb (%d, %d, %d); \
-		@define-color menuitem_text_color rgb (%d, %d, %d); \
-		@define-color menuitem_insensitive_text_color rgba (%d, %d, %d, .5); \
-		@define-color menuitem_separator_color rgb (%d, %d, %d); \
-		@define-color menuitem_child_bg_color rgb (%d, %d, %d); \
-		@define-color menu_bg_color rgba (%d, %d, %d, %d);\n",
-			(int)(rgb[0]*255), (int)(rgb[1]*255), (int)(rgb[2]*255),
+		gchar *cssheader = g_strdup_printf ("@define-color menuitem_bg_color rgba (%d, %d, %d, %f); \n\
+		@define-color menuitem_text_color rgb (%d, %d, %d); \n\
+		@define-color menuitem_insensitive_text_color rgba (%d, %d, %d, .5); \n\
+		@define-color menuitem_separator_color rgb (%d, %d, %d); \n\
+		@define-color menuitem_child_bg_color rgba (%d, %d, %d, %f); \n\
+		@define-color menu_bg_color rgba (%d, %d, %d, %f);\n",
+			(int)(rgb[0]*255), (int)(rgb[1]*255), (int)(rgb[2]*255), rgb[3],
 			(int)(text_color[0]*255), (int)(text_color[1]*255), (int)(text_color[2]*255),
 			(int)(text_color[0]*255), (int)(text_color[1]*255), (int)(text_color[2]*255),
 			(int)(rgb[0]*255), (int)(rgb[1]*255), (int)(rgb[2]*255),
-			(int)(rgbb[0]*255), (int)(rgbb[1]*255), (int)(rgbb[2]*255),
-			(int)(bg_color[0]*255), (int)(bg_color[1]*255), (int)(bg_color[2]*255), (int)(bg_color[3]*255));
+			(int)(rgbb[0]*255), (int)(rgbb[1]*255), (int)(rgbb[2]*255), rgbb[3],
+			(int)(bg_color[0]*255), (int)(bg_color[1]*255), (int)(bg_color[2]*255), bg_color[3]);
 		
 		// css body: load a custom file if it exists
 		gchar *cCustomCss = NULL;
@@ -155,6 +155,7 @@ static void _init_menu_style (void)
 				border-color: @menuitem_separator_color; \
 				border-bottom-color: alpha (@menuitem_separator_color, 0.6); \
 				border-right-color: alpha (@menuitem_separator_color, 0.6); \
+				-unico-inner-stroke-color: transparent; \
 			} \
 			.gldimenuitem:hover, \
 			.gldimenuitem *:hover { \
@@ -1012,4 +1013,13 @@ GtkWidget *gldi_menu_add_sub_menu_full (GtkWidget *pMenu, const gchar *cLabel, c
 	if (pMenuItemPtr)
 		*pMenuItemPtr = pMenuItem;
 	return pSubMenu; 
+}
+
+void gldi_menu_add_separator (GtkWidget *pMenu)
+{
+	GtkWidget *pMenuItem = gtk_separator_menu_item_new ();
+	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
+	#if GTK_MAJOR_VERSION > 2
+	_init_menu_item (pMenuItem);
+	#endif
 }
