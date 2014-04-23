@@ -21,7 +21,7 @@
 #define  __CAIRO_DIALOG_MANAGER__
 
 #include "cairo-dock-struct.h"
-#include "cairo-dock-surface-factory.h"  // CairoDockLabelDescription
+#include "cairo-dock-style-facility.h"  // GldiTextDescription
 #include "cairo-dock-container.h"
 G_BEGIN_DECLS
 

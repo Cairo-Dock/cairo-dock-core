@@ -69,34 +69,6 @@ typedef enum {
 /// mask to get the orientation from a CairoDockLoadImageModifier.
 #define CAIRO_DOCK_ORIENTATION_MASK (7<<3)
 
-/// Description of the rendering of a text.
-struct _GldiTextDescription {
-	/// font.
-	gchar *cFont;
-	/// pango font
-	PangoFontDescription *fd;
-	/// size in pixels
-	gint iSize;
-	/// whether to draw the decorations or not
-	gboolean bNoDecorations;
-	/// whether to use the default colors or the colors defined below
-	gboolean bUseDefaultColors;
-	/// text color
-	gdouble fColorStart[3];
-	/// background color
-	gdouble fBackgroundColor[4];
-	/// outline color
-	gdouble fLineColor[4];
-	/// TRUE to stroke the outline of the characters (in black).
-	gboolean bOutlined;
-	/// margin around the text, it is also the dimension of the frame if available.
-	gint iMargin;
-	/// whether to use Pango markups or not (markups are html-like marks, like <b>...</b>; using markups force you to escape some characters like "&" -> "&amp;")
-	gboolean bUseMarkup;
-	/// maximum width allowed, in ratio of the screen's width. Carriage returns will be inserted if necessary. 0 means no limit.
-	gdouble fMaxRelativeWidth;
-};
-
 
 /* Calcule la taille d'une image selon une contrainte en largeur et hauteur de manière à remplir l'espace donné.
 *@param fImageWidth the width of the image. Contient initialement the width of the image, et sera écrasée avec la largeur obtenue.
@@ -251,20 +223,6 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, G
 *@return the newly allocated surface.
 */
 cairo_surface_t * cairo_dock_duplicate_surface (cairo_surface_t *pSurface, double fWidth, double fHeight, double fDesiredWidth, double fDesiredHeight);
-
-
-
-void gldi_text_description_free (GldiTextDescription *pTextDescription);
-void gldi_text_description_copy (GldiTextDescription *pDestTextDescription, GldiTextDescription *pOrigTextDescription);
-GldiTextDescription *gldi_text_description_duplicate (GldiTextDescription *pTextDescription);
-
-void gldi_text_description_reset (GldiTextDescription *pTextDescription);
-
-void gldi_text_description_set_font (GldiTextDescription *pTextDescription, gchar *cFont);
-
-#define gldi_text_description_get_size(pTextDescription) (pTextDescription)->iSize
-
-#define gldi_text_description_get_description(pTextDescription) (pTextDescription)->fd
 
 
 G_END_DECLS
