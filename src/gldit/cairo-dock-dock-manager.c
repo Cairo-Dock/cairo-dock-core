@@ -1861,10 +1861,14 @@ static gboolean on_style_changed (G_GNUC_UNUSED gpointer data)
 	{
 		g_print (" reload dock's bg...\n");
 		
+		gboolean bNeedUpdateSize = (myDocksParam.iDockLineWidth != myStyleParam.iLineWidth);  // frame size changed
 		myDocksParam.iDockRadius = myStyleParam.iCornerRadius;
 		myDocksParam.iDockLineWidth = myStyleParam.iLineWidth;
 		
-		gldi_docks_foreach_root ((GFunc)_reload_bg, NULL);
+		if (bNeedUpdateSize)  // update docks size and background
+			gldi_docks_foreach_root ((GFunc)cairo_dock_update_dock_size, NULL);
+		else  // update docks background for color change
+			gldi_docks_foreach_root ((GFunc)_reload_bg, NULL);
 	}
 	return GLDI_NOTIFICATION_LET_PASS;
 }
