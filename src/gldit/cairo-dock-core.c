@@ -18,6 +18,7 @@
 */
 
 #include <stdlib.h>
+#include <locale.h>
 
 #include "gldi-config.h"
 #include "cairo-dock-icon-manager.h"
@@ -94,6 +95,7 @@ void gldi_init (GldiRenderingMethod iRendering)
 {
 	// allow messages.
 	cd_log_init (FALSE);  // warnings by default.
+	setlocale (LC_NUMERIC, "C");  // avoid stupid conversion of decimal
 	
 	cairo_dock_get_version_from_string (GLDI_VERSION, &g_iMajorVersion, &g_iMinorVersion, &g_iMicroVersion);
 	
