@@ -95,19 +95,6 @@ static void _gldi_manager_reload_from_keyfile (GldiManager *pManager, GKeyFile *
 }
 
 
-/*void gldi_manager_reload (GldiManager *pManager, const gchar *cConfFilePath)  // expose pour Dbus.
-{
-	g_return_if_fail (pManager != NULL);
-	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
-	if (pKeyFile == NULL)
-		return;
-	
-	gldi_manager_reload_from_keyfile (pManager, pKeyFile);
-	
-	g_key_file_free (pKeyFile);
-}*/
-
-
 static gboolean gldi_manager_get_config (GldiManager *pManager, GKeyFile *pKeyFile)
 {
 	if (! pManager->get_config || ! pManager->pConfig || pManager->iSizeOfConfig == 0)

@@ -139,7 +139,7 @@ static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 
 static void _draw_flat_separator (Icon *icon, G_GNUC_UNUSED CairoDock *pDock, cairo_t *pCairoContext, G_GNUC_UNUSED double fDockMagnitude)
 {
-	double fSizeX = icon->fWidth * icon->fScale, fSizeY = icon->fHeight * icon->fScale;
+	/*double fSizeX = icon->fWidth * icon->fScale, fSizeY = icon->fHeight * icon->fScale;
 	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
 	
 	cairo_translate (pCairoContext, icon->fDrawX + .25 * fSizeX, icon->fDrawY);
@@ -162,7 +162,24 @@ static void _draw_flat_separator (Icon *icon, G_GNUC_UNUSED CairoDock *pDock, ca
 	cairo_scale (pCairoContext, rx/ry, 1.);
 	cairo_set_source (pCairoContext, pPattern);
 	cairo_paint (pCairoContext);
-	cairo_pattern_destroy (pPattern);
+	cairo_pattern_destroy (pPattern);*/
+	
+	
+	double fSizeX = icon->fWidth * icon->fScale, fSizeY = icon->fHeight;
+	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
+	
+	if (myIconsParam.bSeparatorUseDefaultColors)
+		gldi_style_colors_set_separator_color (pCairoContext);
+	else
+		cairo_set_source_rgba (pCairoContext, myIconsParam.fSeparatorColor[0], myIconsParam.fSeparatorColor[1], myIconsParam.fSeparatorColor[2], myIconsParam.fSeparatorColor[3]);
+	cairo_move_to (pCairoContext, icon->fDrawX + .5 * fSizeX, icon->fDrawY + (pDock->container.bDirectionUp ? icon->fHeight * icon->fScale - fSizeY : 0));
+	cairo_set_line_width (pCairoContext, myDocksParam.iDockLineWidth);
+	cairo_rel_line_to (pCairoContext, 0., fSizeY);
+	cairo_stroke (pCairoContext);
+	
+	/*cairo_translate (pCairoContext, icon->fDrawX + .25 * fSizeX, icon->fDrawY + (pDock->container.bDirectionUp ? icon->fHeight * icon->fScale - fSizeY : 0));
+	gldi_style_colors_set_text_color (pCairoContext);
+	cairo_paint_with_alpha (pCairoContext, .6);*/
 }
 
 static void _draw_physical_separator (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext, G_GNUC_UNUSED double fDockMagnitude)
@@ -447,7 +464,7 @@ static void cd_render_optimized_default (cairo_t *pCairoContext, CairoDock *pDoc
 
 static void _draw_flat_separator_opengl (Icon *icon, CairoDock *pDock, G_GNUC_UNUSED double fDockMagnitude)
 {
-	if (s_iFlatSeparatorTexture == 0)
+	/**if (s_iFlatSeparatorTexture == 0)
 		return;
 	
 	double fSizeX = icon->fWidth * icon->fScale, fSizeY = icon->fHeight * icon->fScale;
@@ -468,7 +485,38 @@ static void _draw_flat_separator_opengl (Icon *icon, CairoDock *pDock, G_GNUC_UN
 		glTranslatef (icon->fDrawY + fSizeY/2, pDock->container.iWidth - (icon->fDrawX + fSizeX/2), 0.);
 		_cairo_dock_apply_texture_at_size (s_iFlatSeparatorTexture, ry, rx);
 	}
-	_cairo_dock_disable_texture ();
+	_cairo_dock_disable_texture ();*/
+	
+	
+	double fSizeX = icon->fWidth * icon->fScale, fSizeY = icon->fHeight;
+	if (myIconsParam.bSeparatorUseDefaultColors)
+		gldi_style_colors_set_separator_color (NULL);
+	else
+		glColor4f (myIconsParam.fSeparatorColor[0], myIconsParam.fSeparatorColor[1], myIconsParam.fSeparatorColor[2], myIconsParam.fSeparatorColor[3]);
+	glPolygonMode (GL_FRONT, GL_LINE);
+	glEnable (GL_LINE_SMOOTH);
+	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
+	glEnable (GL_BLEND);
+	_cairo_dock_set_blend_alpha ();
+	glLineWidth(myDocksParam.iDockLineWidth);
+	
+	if (pDock->container.bIsHorizontal)
+	{
+		glTranslatef (icon->fDrawX + fSizeX/2, pDock->container.iHeight - icon->fDrawY - icon->fHeight * icon->fScale + fSizeY/2, 0.);  // must be before the glBegin()
+		glBegin(GL_LINES);
+		glVertex3f(0., -.5*fSizeY, 0.);
+		glVertex3f(0.,  .5*fSizeY, 0.);
+	}
+	else
+	{
+		glTranslatef (icon->fDrawY + fSizeY/2, pDock->container.iWidth - (icon->fDrawX + fSizeX/2), 0.);
+		glBegin(GL_LINES);
+		glVertex3f(-.5*fSizeY, 0., 0.);
+		glVertex3f( .5*fSizeY, 0., 0.);
+	}
+	glEnd();
+	glDisable (GL_LINE_SMOOTH);
+	glDisable (GL_BLEND);
 }
 
 static void _draw_physical_separator_opengl (Icon *icon, CairoDock *pDock, G_GNUC_UNUSED double fDockMagnitude)

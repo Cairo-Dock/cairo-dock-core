@@ -90,12 +90,6 @@ struct _GldiManager {
 */
 #define GLDI_OBJECT_IS_MANAGER(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), &myManagerObjectMgr)
 
-
-// facility
-/*void gldi_manager_reload_from_keyfile (GldiManager *pManager, GKeyFile *pKeyFile);
-
-void gldi_manager_reload (GldiManager *pManager, const gchar *cConfFilePath);  // expose pour Dbus.
-*/
 void gldi_manager_extend (GldiVisitCard *pVisitCard, const gchar *cManagerName);
 
 // manager
