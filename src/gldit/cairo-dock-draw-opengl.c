@@ -30,6 +30,7 @@
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-overlay.h"
+#include "cairo-dock-style-manager.h"
 #include "cairo-dock-opengl-path.h"
 
 #include "cairo-dock-draw-opengl.h"
@@ -401,8 +402,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 		glLoadIdentity ();
 		
 		_cairo_dock_enable_texture ();
-		_cairo_dock_set_blend_alpha ();  // not good with a transparent background :-/
-		
+		_cairo_dock_set_blend_over ();  // _cairo_dock_set_blend_alpha() makes the outline look bad when they have a light color :-/
 		double fMagnitude;
 		if (myIconsParam.bLabelForPointedIconOnly || pDock->fMagnitudeMax == 0. || myIconsParam.fAmplitude == 0.)
 		{
@@ -530,7 +530,8 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 	double y;
 	Icon *icon;
 	GList *ic = pFirstDrawnElement;
-	double pHiddenBgColor[4];
+	GldiColor *pHiddenBgColor;
+	GldiColor bg_color;
 	const double r = 4; // corner radius of the background
 	const double gap = 2;  // gap to the screen
 	double dw = (myIconsParam.iIconGap > 2 ? 2 : 0);  // 1px margin around the icons for a better readability (only if icons won't be stuck togather then).
@@ -550,13 +551,19 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 				/// TODO: handle default style bg ...
 				
 				if (icon->pHiddenBgColor)  // custom bg color
-					memcpy (pHiddenBgColor, icon->pHiddenBgColor, 4*sizeof (gdouble));
+					pHiddenBgColor = icon->pHiddenBgColor;
 				else if (! myDocksParam.bUseDefaultColors)  // default bg color
-					memcpy (pHiddenBgColor, myDocksParam.fHiddenBg, 4*sizeof (gdouble));
-				pHiddenBgColor[3] *= pDock->fPostHideOffset;
+					pHiddenBgColor = &myDocksParam.fHiddenBg;
+				else
+				{
+					gldi_style_color_get (GLDI_COLOR_BG, &bg_color);
+					pHiddenBgColor = &bg_color;
+				}
 				//if (pHiddenBgColor[3] != 0)
 				{
 					_cairo_dock_set_blend_alpha ();
+					glColor4f (pHiddenBgColor->rgba.red, pHiddenBgColor->rgba.green, pHiddenBgColor->rgba.blue, pHiddenBgColor->rgba.alpha * pDock->fPostHideOffset);
+					
 					glPushMatrix ();
 					w = icon->fWidth * icon->fScale;
 					h = icon->fHeight * icon->fScale;
@@ -565,14 +572,14 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 						glTranslatef (icon->fDrawX + w/2,
 							pDock->container.iHeight - icon->fDrawY - h/2,
 							0.);
-						cairo_dock_draw_rounded_rectangle_opengl (w - 2*r + dw, h, r, 0, pHiddenBgColor);
+						cairo_dock_draw_rounded_rectangle_opengl (w - 2*r + dw, h, r, 0, NULL);
 					}
 					else
 					{
 						glTranslatef (icon->fDrawY + h/2,
 							pDock->container.iWidth - icon->fDrawX - w/2,
 							0.);
-						cairo_dock_draw_rounded_rectangle_opengl (h - 2*r + dw, w, r, 0, pHiddenBgColor);
+						cairo_dock_draw_rounded_rectangle_opengl (h - 2*r + dw, w, r, 0, NULL);
 					}
 					glPopMatrix ();
 				}
