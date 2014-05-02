@@ -21,23 +21,17 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-#include "cairo-dock-icon-facility.h"
 #include "cairo-dock-separator-manager.h"  // gldi_auto_separator_icon_new
 #include "cairo-dock-log.h"
-#include "cairo-dock-dock-manager.h"
-#include "cairo-dock-module-instance-manager.h"
-#include "cairo-dock-container.h"
-#include "cairo-dock-dock-facility.h"
 #include "cairo-dock-draw-opengl.h"  // for the redirected texture
 #include "cairo-dock-data-renderer.h"  // cairo_dock_reload_data_renderer_on_icon
 #include "cairo-dock-windows-manager.h"  // gldi_windows_get_active
 #include "cairo-dock-indicator-manager.h"  // myIndicators.bUseClassIndic
-#include "cairo-dock-dock-factory.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-module-manager.h"  // CAIRO_DOCK_MODULE_CAN_DESKLET
-#include "cairo-dock-module-instance-manager.h"  // gldi_module_instance_reload
+#include "cairo-dock-module-instance-manager.h"  // pModuleInstance->
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-applications-manager.h"  // myTaskbarParam.bHideVisibleApplis
@@ -46,22 +40,19 @@
 #include "cairo-dock-class-icon-manager.h"
 #include "cairo-dock-application-facility.h"
 #include "cairo-dock-launcher-manager.h"
-#include "cairo-dock-config.h"
-#include "cairo-dock-container.h"
+#include "cairo-dock-config.h"  // cairo_dock_is_loading
 #include "cairo-dock-dock-facility.h"
-#include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-menu.h"
+#include "cairo-dock-menu.h"  // gldi_menu_popup
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-dock-visibility.h"
-#include "cairo-dock-draw-opengl.h"
+#include "cairo-dock-dock-visibility.h"  // gldi_dock_search_overlapping_window
 #include "cairo-dock-flying-container.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-class-manager.h"  // cairo_dock_check_class_subdock_is_empty
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-windows-manager.h"  // gldi_windows_get_active
 #include "cairo-dock-data-renderer.h"  // cairo_dock_refresh_data_renderer
-#include "cairo-dock-indicator-manager.h"  // myIndicators.bUseClassIndic
+#include "cairo-dock-dock-factory.h"
 
 // dependencies
 extern CairoDockHidingEffect *g_pHidingBackend;

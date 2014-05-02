@@ -899,7 +899,7 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 	double y;
 	Icon *icon;
 	GList *ic = pFirstDrawnElement;
-	double *pHiddenBgColor;
+	GldiColor *pHiddenBgColor;
 	const double r = (myDocksParam.bUseDefaultColors ? myStyleParam.iCornerRadius/2 : 4);  // corner radius of the background
 	const double gap = 2;  // gap to the screen
 	double alpha;
@@ -919,14 +919,14 @@ void cairo_dock_render_hidden_dock (cairo_t *pCairoContext, CairoDock *pDock)
 				if (icon->pHiddenBgColor)  // custom bg color
 					pHiddenBgColor = icon->pHiddenBgColor;
 				else if (! myDocksParam.bUseDefaultColors)  // default bg color
-					pHiddenBgColor = myDocksParam.fHiddenBg;
+					pHiddenBgColor = &myDocksParam.fHiddenBg;
 				//if (pHiddenBgColor && pHiddenBgColor[3] != 0)
 				{
 					cairo_save (pCairoContext);
 					if (pHiddenBgColor)
 					{
-						cairo_set_source_rgba (pCairoContext, pHiddenBgColor[0], pHiddenBgColor[1], pHiddenBgColor[2], pHiddenBgColor[3]);
-						alpha = 1.;
+						gldi_color_set_cairo (pCairoContext, pHiddenBgColor);
+						alpha = pHiddenBgColor->rgba.alpha;
 					}
 					else
 					{

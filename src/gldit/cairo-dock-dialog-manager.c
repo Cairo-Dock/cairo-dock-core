@@ -36,6 +36,7 @@
 #include "cairo-dock-animations.h"  // for cairo_dock_is_hidden
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-dialog-factory.h"
+#include "cairo-dock-menu.h"  // _init_menu_style
 #include "cairo-dock-style-manager.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-dialog-manager.h"
@@ -59,6 +60,7 @@ static guint s_iSidReplaceDialogs = 0;
 
 static void _set_dialog_orientation (CairoDialog *pDialog, GldiContainer *pContainer);
 static void _place_dialog (CairoDialog *pDialog, GldiContainer *pContainer);
+static gboolean on_style_changed (G_GNUC_UNUSED gpointer data);
 
 
 static inline cairo_surface_t *_cairo_dock_load_button_icon (const gchar *cButtonImage, const gchar *cDefaultButtonImage)
@@ -867,8 +869,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDialogsParam *pDialogs)
 	
 	cairo_dock_get_size_key_value_helper (pKeyFile, "Dialogs", "button ", bFlushConfFileNeeded, pDialogs->iDialogButtonWidth, pDialogs->iDialogButtonHeight);
 	
-	double couleur_bulle[4] = {1.0, 1.0, 1.0, 0.7};
-	cairo_dock_get_double_list_key_value (pKeyFile, "Dialogs", "bg color", &bFlushConfFileNeeded, pDialogs->fBgColor, 4, couleur_bulle, NULL, "background color");
+	GldiColor couleur_bulle = {{1.0, 1.0, 1.0, 0.7}};
+	cairo_dock_get_color_key_value (pKeyFile, "Dialogs", "bg color", &bFlushConfFileNeeded, &pDialogs->fBgColor, &couleur_bulle, NULL, "background color");
 	pDialogs->iDialogIconSize = MAX (16, cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "icon size", &bFlushConfFileNeeded, 48, NULL, NULL));
 	
 	pDialogs->cDecoratorName = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "decorator", &bFlushConfFileNeeded, "comics", NULL, NULL);
@@ -885,8 +887,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDialogsParam *pDialogs)
 		{
 			cRenderer[0] = g_ascii_toupper (cRenderer[0]);
 			
-			cairo_dock_get_double_list_key_value (keyfile, cRenderer, "line color", &bFlushConfFileNeeded, pDialogs->fLineColor, 4, NULL, NULL, NULL);
-			g_key_file_set_double_list (pKeyFile, "Dialogs", "line color", pDialogs->fLineColor, 4);
+			cairo_dock_get_color_key_value (keyfile, cRenderer, "line color", &bFlushConfFileNeeded, &pDialogs->fLineColor, NULL, NULL, NULL);
+			g_key_file_set_double_list (pKeyFile, "Dialogs", "line color", (double*)&pDialogs->fLineColor.rgba, 4);
 			
 			pDialogs->iLineWidth = g_key_file_get_integer (keyfile, cRenderer, "border", NULL);
 			g_key_file_set_integer (pKeyFile, "Dialogs", "linewidth", pDialogs->iLineWidth);
@@ -904,7 +906,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDialogsParam *pDialogs)
 	{
 		pDialogs->iCornerRadius = g_key_file_get_integer (pKeyFile, "Dialogs", "corner", NULL);
 		pDialogs->iLineWidth = g_key_file_get_integer (pKeyFile, "Dialogs", "linewidth", NULL);
-		cairo_dock_get_double_list_key_value (pKeyFile, "Dialogs", "line color", &bFlushConfFileNeeded, pDialogs->fLineColor, 4, NULL, NULL, NULL);
+		cairo_dock_get_color_key_value (pKeyFile, "Dialogs", "line color", &bFlushConfFileNeeded, &pDialogs->fLineColor, NULL, NULL, NULL);
 	}
 	
 	pDialogs->bUseDefaultColors = (cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "style", &bFlushConfFileNeeded, 0, NULL, NULL) == 0);
@@ -919,8 +921,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDialogsParam *pDialogs)
 	pDialogs->dialogTextDescription.iMargin = 0;
 	pDialogs->dialogTextDescription.bNoDecorations = TRUE;
 	
-	double couleur_dtext[3] = {0., 0., 0.};
-	cairo_dock_get_double_list_key_value (pKeyFile, "Dialogs", "text color", &bFlushConfFileNeeded, pDialogs->dialogTextDescription.fColorStart, 3, couleur_dtext, NULL, NULL);
+	GldiColor couleur_dtext = {{0., 0., 0., 1.}};
+	cairo_dock_get_color_key_value (pKeyFile, "Dialogs", "text color", &bFlushConfFileNeeded, &pDialogs->dialogTextDescription.fColorStart, &couleur_dtext, NULL, NULL);
 	
 	pDialogs->dialogTextDescription.bUseDefaultColors = pDialogs->bUseDefaultColors;
 	
@@ -939,6 +941,16 @@ static void reset_config (CairoDialogsParam *pDialogs)
 	g_free (pDialogs->cDecoratorName);
 }
 
+  ////////////
+ /// LOAD ///
+////////////
+
+static void load (void)
+{
+	_init_menu_style ();
+	// additional data are loaded the first time a dialog is created, to avoid create them for nothing.
+}
+
   //////////////
  /// RELOAD ///
 //////////////
@@ -952,6 +964,10 @@ static void reload (CairoDialogsParam *pPrevDialogs, CairoDialogsParam *pDialogs
 		_unload_dialog_buttons ();
 		_load_dialog_buttons (pDialogs->cButtonOkImage, pDialogs->cButtonCancelImage);
 	}
+	
+	if (pPrevDialogs->bUseDefaultColors != pDialogs->bUseDefaultColors
+	|| ! pDialogs->bUseDefaultColors)
+		on_style_changed (NULL);
 }
 
   //////////////
@@ -967,6 +983,50 @@ static void unload (void)
  /// INIT ///
 ////////////
 
+static void _reload_dialogs (void)
+{
+	GSList *d;
+	CairoDialog *pDialog;
+	for (d = s_pDialogList; d != NULL; d = d->next)
+	{
+		pDialog = d->data;
+		
+		#if GTK_MAJOR_VERSION > 2
+		// re-set the GTK style class (global style may have changed between system / custom)
+		GtkStyleContext *ctx = gtk_widget_get_style_context (pDialog->pWidgetLayout);
+		
+		gtk_style_context_remove_class (ctx, GTK_STYLE_CLASS_MENUITEM);
+		gtk_style_context_remove_class (ctx, "gldimenuitem");
+		
+		gtk_style_context_add_class (ctx, myDialogsParam.bUseDefaultColors && myStyleParam.bUseSystemColors ? GTK_STYLE_CLASS_MENUITEM : "gldimenuitem");
+		#endif
+		
+		// reload the text buffer (color or font may have changed)
+		if (pDialog->cText != NULL)
+		{
+			gchar *cText = pDialog->cText;
+			pDialog->cText = NULL;
+			gldi_dialog_set_message (pDialog, cText);
+			g_free (cText);
+		}
+	}
+	
+}
+static gboolean on_style_changed (G_GNUC_UNUSED gpointer data)
+{
+	g_print ("%s (Dialogs, %d)\n", __func__, myDialogsParam.bUseDefaultColors);
+	
+	#if GTK_MAJOR_VERSION > 2
+	// init the menu style (create the "gldimenuitem" gtk style class)
+	_init_menu_style ();
+	#endif
+	
+	// update existing dialogs
+	_reload_dialogs ();
+	
+	return GLDI_NOTIFICATION_LET_PASS;
+}
+
 static void init (void)
 {
 	gldi_object_register_notification (&myDialogObjectMgr,
@@ -976,6 +1036,10 @@ static void init (void)
 	gldi_object_register_notification (&myDockObjectMgr,
 		NOTIFICATION_REMOVE_ICON,
 		(GldiNotificationFunc) on_icon_removed,
+		GLDI_RUN_AFTER, NULL);
+	gldi_object_register_notification (&myStyleMgr,
+		NOTIFICATION_STYLE_CHANGED,
+		(GldiNotificationFunc) on_style_changed,
 		GLDI_RUN_AFTER, NULL);
 }
 
@@ -1138,7 +1202,7 @@ void gldi_register_dialogs_manager (void)
 	myDialogsMgr.cModuleName  = "Dialogs";
 	// interface
 	myDialogsMgr.init         = init;
-	myDialogsMgr.load         = NULL;  // data are loaded the first time a dialog is created, to avoid create them for nothing.
+	myDialogsMgr.load         = load;
 	myDialogsMgr.unload       = unload;
 	myDialogsMgr.reload       = (GldiManagerReloadFunc)reload;
 	myDialogsMgr.get_config   = (GldiManagerGetConfigFunc)get_config;

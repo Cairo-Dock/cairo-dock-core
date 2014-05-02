@@ -146,10 +146,7 @@ gchar *cairo_dock_get_file_path_key_value (GKeyFile *pKeyFile, const gchar *cGro
 			int iSize[2] = {iWidth, iHeight};\
 			g_key_file_set_integer_list (pKeyFile, cGroupName, cKeyPrefix"size", iSize, 2); } }
 
-/** Convert an integer in [0,9] into a Pango text weight.
-*@param iWeight weight between 0 and 9.
-*/
-#define cairo_dock_get_pango_weight_from_1_9(iWeight) ((int) ((((PANGO_WEIGHT_HEAVY - PANGO_WEIGHT_ULTRALIGHT) * iWeight + 9 * PANGO_WEIGHT_ULTRALIGHT - PANGO_WEIGHT_HEAVY) / 8) / 100)) * 100
+void cairo_dock_get_color_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, GldiColor *fValueBuffer, GldiColor *fDefaultValues, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName);
 
 
 /** Load the current theme. This will (re)load all the parameters of Cairo-Dock and all the plug-ins, as if you just started the dock.

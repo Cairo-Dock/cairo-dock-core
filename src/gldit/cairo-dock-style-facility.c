@@ -78,10 +78,10 @@ static void rgbToHsl (double r, double g, double b, double *h_, double *s_, doub
 	*s_ = s;
 	*l_ = l;
 }
-void gldi_style_color_shade (double *icolor, double shade, double *ocolor)
+void gldi_style_color_shade (GldiColor *icolor, double shade, GldiColor *ocolor)
 {
 	double h, s, l;
-	rgbToHsl (icolor[0], icolor[1], icolor[2], &h, &s, &l);
+	rgbToHsl (icolor->rgba.red, icolor->rgba.green, icolor->rgba.blue, &h, &s, &l);
 	
 	if (l > .5)
 		l -= shade;
@@ -90,8 +90,8 @@ void gldi_style_color_shade (double *icolor, double shade, double *ocolor)
 	if (l > 1.) l = 1.;
 	if (l < 0.) l = 0.;
 	
-	hslToRgb (h, s, l, &ocolor[0], &ocolor[1], &ocolor[2]);
-	ocolor[3] = icolor[3];
+	hslToRgb (h, s, l, &ocolor->rgba.red, &ocolor->rgba.green, &ocolor->rgba.blue);
+	ocolor->rgba.alpha = icolor->rgba.alpha;
 }
 
 gchar *_get_default_system_font (void)

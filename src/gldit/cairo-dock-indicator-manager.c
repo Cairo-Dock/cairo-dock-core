@@ -28,7 +28,6 @@
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-utils.h"  // cairo_dock_colors_differ
 #include "cairo-dock-dock-manager.h"  // gldi_docks_redraw_all_root
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-container.h"
@@ -449,8 +448,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIndicatorsParam *pIndicator
 	}
 	else if (iIndicType == 2)
 	{
-		double couleur_active[4] = {0., 0.4, 0.8, 0.5};
-		cairo_dock_get_double_list_key_value (pKeyFile, "Indicators", "active color", &bFlushConfFileNeeded, pIndicators->fActiveColor, 4, couleur_active, "Icons", NULL);
+		GldiColor couleur_active = {{0., 0.4, 0.8, 0.5}};
+		cairo_dock_get_color_key_value (pKeyFile, "Indicators", "active color", &bFlushConfFileNeeded, &pIndicators->fActiveColor, &couleur_active, "Icons", NULL);
 		pIndicators->iActiveLineWidth = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "active line width", &bFlushConfFileNeeded, 3, "Icons", NULL);
 		pIndicators->iActiveCornerRadius = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "active corner radius", &bFlushConfFileNeeded, 6, "Icons", NULL);
 	}
@@ -474,8 +473,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIndicatorsParam *pIndicator
 	
 	if (pIndicators->cActiveIndicatorImagePath == NULL)  // 'frame' option, or no image defined, or nonexistent image => load the frame
 	{
-		double couleur_active[4] = {0., 0.4, 0.8, 0.5};
-		cairo_dock_get_double_list_key_value (pKeyFile, "Indicators", "active color", &bFlushConfFileNeeded, pIndicators->fActiveColor, 4, couleur_active, "Icons", NULL);
+		GldiColor couleur_active = {{0., 0.4, 0.8, 0.5}};
+		cairo_dock_get_color_key_value (pKeyFile, "Indicators", "active color", &bFlushConfFileNeeded, &pIndicators->fActiveColor, &couleur_active, "Icons", NULL);
 		pIndicators->iActiveLineWidth = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "active line width", &bFlushConfFileNeeded, 3, "Icons", NULL);
 		pIndicators->iActiveCornerRadius = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "active corner radius", &bFlushConfFileNeeded, 6, "Icons", NULL);
 	}  // donc ici si on choisit le mode "image" sans en definir une, le alpha de la couleur reste a 0 => aucun indicateur
@@ -502,16 +501,16 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIndicatorsParam *pIndicator
 	
 	//\__________________ Progress bar.
 	pIndicators->bBarUseDefaultColors = (cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "bar_colors", &bFlushConfFileNeeded, 1, NULL, NULL) == 0);
-	double start_color[4] = {.53, .53, .53, .85};  // grey
-	cairo_dock_get_double_list_key_value (pKeyFile, "Indicators", "bar_color_start", &bFlushConfFileNeeded, pIndicators->fBarColorStart, 4, start_color, NULL, NULL);
-	double stop_color[4] = {.87, .87, .87, .85};  // grey (lighter)
-	cairo_dock_get_double_list_key_value (pKeyFile, "Indicators", "bar_color_stop", &bFlushConfFileNeeded, pIndicators->fBarColorStop, 4, stop_color, NULL, NULL);
-	double outline_color[4] = {1, 1, 1, .85};  // white
-	cairo_dock_get_double_list_key_value (pKeyFile, "Indicators", "bar_color_outline", &bFlushConfFileNeeded, pIndicators->fBarColorOutline, 4, outline_color, NULL, NULL);
+	GldiColor start_color = {{.53, .53, .53, .85}};  // grey
+	cairo_dock_get_color_key_value (pKeyFile, "Indicators", "bar_color_start", &bFlushConfFileNeeded, &pIndicators->fBarColorStart, &start_color, NULL, NULL);
+	GldiColor stop_color= {{.87, .87, .87, .85}};  // grey (lighter)
+	cairo_dock_get_color_key_value (pKeyFile, "Indicators", "bar_color_stop", &bFlushConfFileNeeded, &pIndicators->fBarColorStop, &stop_color, NULL, NULL);
+	GldiColor outline_color = {{1, 1, 1, .85}};  // white
+	cairo_dock_get_color_key_value (pKeyFile, "Indicators", "bar_color_outline", &bFlushConfFileNeeded, &pIndicators->fBarColorOutline, &outline_color, NULL, NULL);
 	if (g_key_file_has_key (pKeyFile, "Indicators", "bar_outline", NULL))  // old param < 3.4
 	{
 		if (! g_key_file_get_boolean (pKeyFile, "Indicators", "bar_outline", NULL))
-			pIndicators->fBarColorOutline[3] = 0.;
+			pIndicators->fBarColorOutline.rgba.alpha = 0.;
 	}
 	pIndicators->iBarThickness = cairo_dock_get_integer_key_value (pKeyFile, "Indicators", "bar_thickness", &bFlushConfFileNeeded, 4, NULL, NULL);
 	
@@ -549,7 +548,7 @@ static inline void _load_task_indicator (const gchar *cIndicatorImagePath, doubl
 		fLauncherHeight * fScale,
 		CAIRO_DOCK_KEEP_RATIO);
 }
-static inline void _load_active_window_indicator (const gchar *cImagePath, double fMaxScale, double fCornerRadius, double fLineWidth, double *fActiveColor, gboolean bDefaultValues, gboolean bFillFrame)
+static inline void _load_active_window_indicator (const gchar *cImagePath, double fMaxScale, double fCornerRadius, double fLineWidth, GldiColor *fActiveColor, gboolean bDefaultValues, gboolean bFillFrame)
 {
 	cairo_dock_unload_image_buffer (&s_activeIndicatorBuffer);
 	
@@ -591,7 +590,7 @@ static inline void _load_active_window_indicator (const gchar *cImagePath, doubl
 		}
 		else
 		{
-			cairo_set_source_rgba (pCairoContext, fActiveColor[0], fActiveColor[1], fActiveColor[2], fActiveColor[3]);
+			gldi_color_set_cairo (pCairoContext, fActiveColor);
 			if (! bFillFrame)
 				cairo_set_line_width (pCairoContext, fLineWidth);
 		}
@@ -630,7 +629,7 @@ static void load (void)
 	
 	_load_task_indicator (myTaskbarParam.bShowAppli && (myTaskbarParam.bMixLauncherAppli || myIndicatorsParam.bDrawIndicatorOnAppli) ? myIndicatorsParam.cIndicatorImagePath : NULL, fMaxScale, myIndicatorsParam.fIndicatorRatio);
 	
-	_load_active_window_indicator (myIndicatorsParam.cActiveIndicatorImagePath, fMaxScale, myIndicatorsParam.iActiveCornerRadius, myIndicatorsParam.iActiveLineWidth, myIndicatorsParam.fActiveColor, myIndicatorsParam.bActiveUseDefaultColors, myIndicatorsParam.bActiveFillFrame);
+	_load_active_window_indicator (myIndicatorsParam.cActiveIndicatorImagePath, fMaxScale, myIndicatorsParam.iActiveCornerRadius, myIndicatorsParam.iActiveLineWidth, &myIndicatorsParam.fActiveColor, myIndicatorsParam.bActiveUseDefaultColors, myIndicatorsParam.bActiveFillFrame);
 	
 	_load_class_indicator (myTaskbarParam.bShowAppli && myTaskbarParam.bGroupAppliByClass ? myIndicatorsParam.cClassIndicatorImagePath : NULL);
 }
@@ -676,7 +675,7 @@ static void reload (CairoIndicatorsParam *pPrevIndicators, CairoIndicatorsParam 
 	if (g_strcmp0 (pPrevIndicators->cActiveIndicatorImagePath, pIndicators->cActiveIndicatorImagePath) != 0
 	|| pPrevIndicators->iActiveCornerRadius != pIndicators->iActiveCornerRadius
 	|| pPrevIndicators->iActiveLineWidth != pIndicators->iActiveLineWidth
-	|| cairo_dock_colors_differ (pPrevIndicators->fActiveColor, pIndicators->fActiveColor)
+	|| gldi_color_compare (&pPrevIndicators->fActiveColor, &pIndicators->fActiveColor)
 	|| pPrevIndicators->bActiveUseDefaultColors != pIndicators->bActiveUseDefaultColors
 	|| pPrevIndicators->bActiveFillFrame != pIndicators->bActiveFillFrame)
 	{
@@ -684,7 +683,7 @@ static void reload (CairoIndicatorsParam *pPrevIndicators, CairoIndicatorsParam 
 			fMaxScale,
 			pIndicators->iActiveCornerRadius,
 			pIndicators->iActiveLineWidth,
-			pIndicators->fActiveColor,
+			&pIndicators->fActiveColor,
 			pIndicators->bActiveUseDefaultColors,
 			pIndicators->bActiveFillFrame);
 	}
@@ -706,19 +705,10 @@ static void reload (CairoIndicatorsParam *pPrevIndicators, CairoIndicatorsParam 
 	}
 	
 	if (pPrevIndicators->bBarUseDefaultColors != pIndicators->bBarUseDefaultColors
-	|| pPrevIndicators->fBarColorStart[0] != pIndicators->fBarColorStart[0]
-	|| pPrevIndicators->fBarColorStart[1] != pIndicators->fBarColorStart[1]
-	|| pPrevIndicators->fBarColorStart[2] != pIndicators->fBarColorStart[2]
-	|| pPrevIndicators->fBarColorStart[3] != pIndicators->fBarColorStart[3]
-	|| pPrevIndicators->fBarColorStop[0] != pIndicators->fBarColorStop[0]
-	|| pPrevIndicators->fBarColorStop[1] != pIndicators->fBarColorStop[1]
-	|| pPrevIndicators->fBarColorStop[2] != pIndicators->fBarColorStop[2]
-	|| pPrevIndicators->fBarColorStop[3] != pIndicators->fBarColorStop[3]
-	|| pPrevIndicators->iBarThickness != pIndicators->iBarThickness
-	|| pPrevIndicators->fBarColorOutline[0] != pIndicators->fBarColorOutline[0]
-	|| pPrevIndicators->fBarColorOutline[1] != pIndicators->fBarColorOutline[1]
-	|| pPrevIndicators->fBarColorOutline[2] != pIndicators->fBarColorOutline[2]
-	|| pPrevIndicators->fBarColorOutline[3] != pIndicators->fBarColorOutline[3])
+	|| gldi_color_compare (&pPrevIndicators->fBarColorStart, &pIndicators->fBarColorStart)
+	|| gldi_color_compare (&pPrevIndicators->fBarColorStop, &pIndicators->fBarColorStop)
+	|| gldi_color_compare (&pPrevIndicators->fBarColorOutline, &pIndicators->fBarColorOutline)
+	|| pPrevIndicators->iBarThickness != pIndicators->iBarThickness)
 	{
 		gldi_icons_foreach ((GldiIconFunc) _reload_progress_bar, NULL);
 	}
@@ -755,7 +745,7 @@ static gboolean on_style_changed (G_GNUC_UNUSED gpointer data)
 	{
 		g_print (" reload active indicator...\n");
 		double fMaxScale = 1 + myIconsParam.fAmplitude;
-		_load_active_window_indicator (myIndicatorsParam.cActiveIndicatorImagePath, fMaxScale, myIndicatorsParam.iActiveCornerRadius, myIndicatorsParam.iActiveLineWidth, myIndicatorsParam.fActiveColor, myIndicatorsParam.bActiveUseDefaultColors, myIndicatorsParam.bActiveFillFrame);
+		_load_active_window_indicator (myIndicatorsParam.cActiveIndicatorImagePath, fMaxScale, myIndicatorsParam.iActiveCornerRadius, myIndicatorsParam.iActiveLineWidth, &myIndicatorsParam.fActiveColor, myIndicatorsParam.bActiveUseDefaultColors, myIndicatorsParam.bActiveFillFrame);
 	}
 	return GLDI_NOTIFICATION_LET_PASS;
 }

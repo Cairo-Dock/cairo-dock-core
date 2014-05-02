@@ -21,7 +21,7 @@
 #define  __CAIRO_DIALOG_MANAGER__
 
 #include "cairo-dock-struct.h"
-#include "cairo-dock-style-facility.h"  // GldiTextDescription
+#include "cairo-dock-style-facility.h"  // GldiTextDescription, GldiColor
 #include "cairo-dock-container.h"
 G_BEGIN_DECLS
 
@@ -56,8 +56,8 @@ struct _CairoDialogsParam {
 	gint iDialogIconSize;
 	gchar *cDecoratorName;
 	gboolean bUseDefaultColors;
-	gdouble fBgColor[4];
-	gdouble fLineColor[4];
+	GldiColor fBgColor;
+	GldiColor fLineColor;
 	gint iLineWidth;
 	gint iCornerRadius;
 	GldiTextDescription dialogTextDescription;

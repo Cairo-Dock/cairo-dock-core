@@ -177,7 +177,7 @@ struct _CairoDockMinimalAppletConfig {
 	gdouble fOrder;
 	gchar *cDockName;
 	gboolean bAlwaysVisible;
-	gdouble *pHiddenBgColor;
+	GldiColor *pHiddenBgColor;
 	CairoDeskletAttr deskletAttribute;
 	gboolean bIsDetached;
 };

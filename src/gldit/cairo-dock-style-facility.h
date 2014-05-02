@@ -50,18 +50,23 @@ typedef enum {
 struct _GldiColor {
 	GdkRGBA rgba;  /// maybe we'll handle a double color later, to have simple linear patterns...
 	};
-typedef struct _GldiColor GldiColor;
 
-/** Shade a color, making it darker if it's light, and lighter if it's dark. Note that the opposite behavior can be obtained by passing a negative shade value.
-*@param icolor input color (rgba)
+/** Shade a color, making it darker if it's light, and lighter if it's dark. Note that the opposite behavior can be obtained by passing a negative shade value. Alpha is copied unchanged. Both pointers can be the same.
+*@param icolor input color
 *@param shade amount of light to add/remove, <= 1.
-*@param ocolor output color (rgba)
+*@param ocolor output color
 */
-void gldi_style_color_shade (double *icolor, double shade, double *ocolor);
+void gldi_style_color_shade (GldiColor *icolor, double shade, GldiColor *ocolor);
 
 gchar *_get_default_system_font (void);
 
 void _get_color_from_pattern (cairo_pattern_t *pPattern, GldiColor *color);
+
+#define gldi_color_set_cairo(pCairoContext, pColor) cairo_set_source_rgba (pCairoContext, (pColor)->rgba.red, (pColor)->rgba.green, (pColor)->rgba.blue, (pColor)->rgba.alpha)
+#define gldi_color_set_cairo_rgb(pCairoContext, pColor) cairo_set_source_rgb (pCairoContext, (pColor)->rgba.red, (pColor)->rgba.green, (pColor)->rgba.blue)
+#define gldi_color_set_opengl(pColor) glColor4f ((pColor)->rgba.red, (pColor)->rgba.green, (pColor)->rgba.blue, (pColor)->rgba.alpha)
+#define gldi_color_set_opengl_rgb(pColor) glColor3f ((pColor)->rgba.red, (pColor)->rgba.green, (pColor)->rgba.blue)
+#define gldi_color_compare(pColor1, pColor2) memcmp (pColor1, pColor2, sizeof(GldiColor))  // return 0 if equal
 
 
 /// Description of the rendering of a text.
@@ -77,11 +82,11 @@ struct _GldiTextDescription {
 	/// whether to use the default colors or the colors defined below
 	gboolean bUseDefaultColors;
 	/// text color
-	gdouble fColorStart[4];
+	GldiColor fColorStart;
 	/// background color
-	gdouble fBackgroundColor[4];
+	GldiColor fBackgroundColor;
 	/// outline color
-	gdouble fLineColor[4];
+	GldiColor fLineColor;
 	/// TRUE to stroke the outline of the characters (in black).
 	gboolean bOutlined;
 	/// margin around the text, it is also the dimension of the frame if available.

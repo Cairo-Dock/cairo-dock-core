@@ -393,6 +393,40 @@ static gboolean _animation_loop (GldiContainer *pContainer)
 		return TRUE;
 }
 
+#if (GTK_MAJOR_VERSION < 3)
+static void _set_widget_text_color (GtkWidget *pWidget)
+{
+	if (myDialogsParam.bUseDefaultColors)
+	{
+		gtk_widget_modify_fg (pWidget, GTK_STATE_NORMAL, NULL);  // NULL = undo previous modifications
+	}
+	else
+	{
+		static GdkColor color;
+		color.red = myDialogsParam.dialogTextDescription.fColorStart.rgba.red * 65535;
+		color.green = myDialogsParam.dialogTextDescription.fColorStart.rgba.green * 65535;
+		color.blue = myDialogsParam.dialogTextDescription.fColorStart.rgba.blue * 65535;
+		gtk_widget_modify_fg (pWidget, GTK_STATE_NORMAL, &color);
+	}
+}
+
+static void _set_widget_bg_color (GtkWidget *pWidget)
+{
+	if (myDialogsParam.bUseDefaultColors)
+	{
+		gtk_widget_modify_bg (pWidget, GTK_STATE_NORMAL, NULL);  // NULL = undo previous modifications
+	}
+	else
+	{
+		static GdkColor color;
+		color.red = myDialogsParam.fBgColor.red * 65535;
+		color.green = myDialogsParam.fBgColor.green * 65535;
+		color.blue = myDialogsParam.fBgColor.blue * 65535;
+		gtk_widget_modify_bg (pWidget, GTK_STATE_NORMAL, &color);
+	}
+}
+#endif
+
 void gldi_dialog_init_internals (CairoDialog *pDialog, CairoDialogAttr *pAttribute)
 {
 	pDialog->container.iface.animation_loop = _animation_loop;
@@ -417,6 +451,7 @@ void gldi_dialog_init_internals (CairoDialog *pDialog, CairoDialogAttr *pAttribu
 	//\________________ load the message
 	if (pAttribute->cText != NULL)
 	{
+		pDialog->cText = g_strdup (pAttribute->cText);  // it may be a const string, so duplicate it
 		pDialog->pTextBuffer = _cairo_dock_create_dialog_text_surface (pAttribute->cText,
 			pAttribute->bUseMarkup,
 			&pDialog->iTextWidth, &pDialog->iTextHeight);
@@ -444,12 +479,6 @@ void gldi_dialog_init_internals (CairoDialog *pDialog, CairoDialogAttr *pAttribu
 		#endif
 		pDialog->iInteractiveWidth = requisition.width;
 		pDialog->iInteractiveHeight = requisition.height;
-		
-		// set a MenuItem style to the dialog, so that the interactive widget can use the style defined for menu-items (either from the GTK theme, or from our own .css), and therefore be well integrated into the dialog, as if it was inside a menu.
-		#if GTK_MAJOR_VERSION > 2
-		GtkStyleContext *ctx = gtk_widget_get_style_context (pDialog->container.pWidget);
-		gtk_style_context_add_class (ctx, myDialogsParam.bUseDefaultColors && myStyleParam.bUseSystemColors ? GTK_STYLE_CLASS_MENUITEM : "gldimenuitem");  /// TODO: if we change the style (system <-> custom), then we probably neeed to re-set this property on existing dialogs...
-		#endif
 	}
 	
 	//\________________ load the buttons
@@ -551,6 +580,15 @@ void gldi_dialog_init_internals (CairoDialog *pDialog, CairoDialogAttr *pAttribu
 			0);
 		gtk_window_present (GTK_WINDOW (pDialog->container.pWidget));
 		gtk_widget_grab_focus (pDialog->pInteractiveWidget);
+		
+		// set a MenuItem style to the dialog, so that the interactive widget can use the style defined for menu-items (either from the GTK theme, or from our own .css), and therefore be well integrated into the dialog, as if it was inside a menu.
+		#if GTK_MAJOR_VERSION > 2
+		GtkStyleContext *ctx = gtk_widget_get_style_context (pDialog->pWidgetLayout);
+		gtk_style_context_add_class (ctx, myDialogsParam.bUseDefaultColors && myStyleParam.bUseSystemColors ? GTK_STYLE_CLASS_MENUITEM : "gldimenuitem");
+		#else
+		_set_widget_bg_color (pDialog->pWidgetLayout);
+		_set_widget_text_color (pDialog->pWidgetLayout);
+		#endif
 	}
 	if (pDialog->pButtons != NULL)
 	{
@@ -703,7 +741,6 @@ static inline GtkWidget *_cairo_dock_make_hscale_for_dialog (double fValueForHSc
 	gtk_range_set_value (GTK_RANGE (pWidget), fValueForHScale);
 
 	g_object_set (pWidget, "width-request", CAIRO_DIALOG_MIN_SCALE_WIDTH, NULL);
-	//gldi_dialog_set_widget_text_color (pWidget);
 	return pWidget;
 }
 
@@ -816,65 +853,6 @@ GtkWidget *gldi_dialog_steal_interactive_widget (CairoDialog *pDialog)
 	}
 	return pInteractiveWidget;
 }
-
-void gldi_dialog_set_widget_text_color (GtkWidget *pWidget)
-{
-	if (myDialogsParam.bUseDefaultColors)
-	{
-		#if (GTK_MAJOR_VERSION < 3)
-		gtk_widget_modify_fg (pWidget, GTK_STATE_NORMAL, NULL);  // NULL = undo previous modifications
-		#else
-		gtk_widget_override_color (pWidget, GTK_STATE_NORMAL, NULL);  // NULL = undo previous modifications
-		#endif
-	}
-	else
-	{
-		#if (GTK_MAJOR_VERSION < 3)
-		static GdkColor color;
-		color.red = myDialogsParam.dialogTextDescription.fColorStart[0] * 65535;
-		color.green = myDialogsParam.dialogTextDescription.fColorStart[1] * 65535;
-		color.blue = myDialogsParam.dialogTextDescription.fColorStart[2] * 65535;
-		gtk_widget_modify_fg (pWidget, GTK_STATE_NORMAL, &color);
-		#else
-		static GdkRGBA color;
-		color.red = myDialogsParam.dialogTextDescription.fColorStart[0];
-		color.green = myDialogsParam.dialogTextDescription.fColorStart[1];
-		color.blue = myDialogsParam.dialogTextDescription.fColorStart[2];
-		color.alpha = 1.;
-		gtk_widget_override_color (pWidget, GTK_STATE_NORMAL, &color);
-		#endif
-	}
-}
-
-void gldi_dialog_set_widget_bg_color (GtkWidget *pWidget)
-{
-	if (myDialogsParam.bUseDefaultColors)
-	{
-		#if (GTK_MAJOR_VERSION < 3)
-		gtk_widget_modify_bg (pWidget, GTK_STATE_NORMAL, NULL);  // NULL = undo previous modifications
-		#else
-		gtk_widget_override_background_color (pWidget, GTK_STATE_NORMAL, NULL);  // NULL = undo previous modifications
-		#endif
-	}
-	else
-	{
-		#if (GTK_MAJOR_VERSION < 3)
-		static GdkColor color;
-		color.red = myDialogsParam.fBgColor[0] * 65535;
-		color.green = myDialogsParam.fBgColor[1] * 65535;
-		color.blue = myDialogsParam.fBgColor[2] * 65535;
-		gtk_widget_modify_bg (pWidget, GTK_STATE_NORMAL, &color);
-		#else
-		static GdkRGBA color;
-		color.red = myDialogsParam.fBgColor[0];
-		color.green = myDialogsParam.fBgColor[1];
-		color.blue = myDialogsParam.fBgColor[2];
-		color.alpha = myDialogsParam.fBgColor[3];
-		gtk_widget_override_background_color (pWidget, GTK_STATE_NORMAL, &color);
-		#endif
-	}
-}
-
 
 static void _redraw_icon_surface (CairoDialog *pDialog)
 {
@@ -1006,6 +984,9 @@ void gldi_dialog_set_message (CairoDialog *pDialog, const gchar *cMessage)
 	cairo_surface_t *pNewTextSurface = _cairo_dock_create_dialog_text_surface (cMessage, pDialog->bUseMarkup, &iNewTextWidth, &iNewTextHeight);
 	
 	_set_text_surface (pDialog, pNewTextSurface, iNewTextWidth, iNewTextHeight);
+	
+	g_free (pDialog->cText);
+	pDialog->cText = g_strdup (cMessage);
 }
 void gldi_dialog_set_message_printf (CairoDialog *pDialog, const gchar *cMessageFormat, ...)
 {
@@ -1016,4 +997,29 @@ void gldi_dialog_set_message_printf (CairoDialog *pDialog, const gchar *cMessage
 	gldi_dialog_set_message (pDialog, cMessage);
 	g_free (cMessage);
 	va_end (args);
+}
+
+void gldi_dialog_reload (CairoDialog *pDialog)
+{
+	#if GTK_MAJOR_VERSION > 2
+	// re-set the GTK style class (global style may have changed between system / custom)
+	GtkStyleContext *ctx = gtk_widget_get_style_context (pDialog->pWidgetLayout);
+	
+	gtk_style_context_remove_class (ctx, GTK_STYLE_CLASS_MENUITEM);
+	gtk_style_context_remove_class (ctx, "gldimenuitem");
+	
+	gtk_style_context_add_class (ctx, myDialogsParam.bUseDefaultColors && myStyleParam.bUseSystemColors ? GTK_STYLE_CLASS_MENUITEM : "gldimenuitem");
+	#endif
+	
+	// reload the text buffer (color or font may have changed)
+	if (pDialog->cText != NULL)
+	{
+		gchar *cText = pDialog->cText;
+		pDialog->cText = NULL;
+		gldi_dialog_set_message (pDialog, cText);
+		g_free (cText);
+	}
+	
+	// reload sizes (radius or linewidth may have changed)
+	_compute_dialog_sizes (pDialog);
 }

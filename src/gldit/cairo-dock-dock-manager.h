@@ -23,6 +23,7 @@
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
+#include "cairo-dock-style-facility.h"  // GldiColor
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-dock-factory.h"
 G_BEGIN_DECLS
@@ -75,7 +76,7 @@ struct _CairoDocksParam {
 	gint iDockRadius;
 	gint iDockLineWidth;
 	gint iFrameMargin;
-	gdouble fLineColor[4];
+	GldiColor fLineColor;
 	gboolean bRoundedBottomCorner;
 	// background
 	gchar *cBackgroundImageFile;
@@ -83,10 +84,10 @@ struct _CairoDocksParam {
 	gboolean bBackgroundImageRepeat;
 	gint iNbStripes;
 	gdouble fStripesWidth;
-	gdouble fStripesColorBright[4];
-	gdouble fStripesColorDark[4];
+	GldiColor fStripesColorBright;
+	GldiColor fStripesColorDark;
 	gdouble fStripesAngle;
-	gdouble fHiddenBg[4];
+	GldiColor fHiddenBg;
 	// position
 	gint iGapX, iGapY;
 	CairoDockPositionType iScreenBorder;

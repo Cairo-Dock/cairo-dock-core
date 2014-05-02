@@ -113,7 +113,7 @@ static gboolean present_class (const gchar *cClass)
 			G_TYPE_STRING, "match",
 			G_TYPE_STRING, cMatch,
 			G_TYPE_INVALID,
-			G_TYPE_INVALID);
+			G_TYPE_INVALID);  // in oldest version of Compiz (< 0.9.8), it doesn't present windows of other viewports
 		g_free (cMatch);
 		if (erreur)
 		{

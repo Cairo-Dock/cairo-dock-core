@@ -406,7 +406,6 @@ typedef struct _GldiModuleInstance GldiModuleInstance;
 typedef struct _CairoDockMinimalAppletConfig CairoDockMinimalAppletConfig;
 typedef struct _CairoDockDesktopEnvBackend CairoDockDesktopEnvBackend;
 typedef struct _CairoDockClassAppli CairoDockClassAppli;
-typedef struct _GldiTextDescription GldiTextDescription;
 typedef struct _CairoDialogAttribute CairoDialogAttribute;
 typedef struct _CairoDeskletAttribute CairoDeskletAttribute;
 typedef struct _CairoDialogButton CairoDialogButton;
@@ -471,6 +470,9 @@ typedef void (*_GldiIconFunc) (Icon *icon, gpointer data);
 typedef _GldiIconFunc GldiIconFunc;
 typedef gboolean (*_GldiIconRFunc) (Icon *icon, gpointer data);  // TRUE to continue
 typedef _GldiIconRFunc GldiIconRFunc;
+
+typedef struct _GldiTextDescription GldiTextDescription;
+typedef struct _GldiColor GldiColor;
 
 #if (GTK_MAJOR_VERSION < 3)
 #define GldiShape GdkBitmap

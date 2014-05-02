@@ -75,7 +75,7 @@ static void _on_style_changed (G_GNUC_UNUSED GtkStyleContext *_style, gpointer d
 			s_menuitem_bg_pattern = NULL;
 		}
 		
-		s_iStyleStamp ++;  // invalidate menu-items' text color
+		s_iStyleStamp ++;  // invalidate previous style
 		
 		if (myStyleParam.bUseSystemColors)
 		{
@@ -192,7 +192,7 @@ static void _get_bg_color (GldiColor *pColor)
 	}
 	else
 	{
-		memcpy (&pColor->rgba, myStyleParam.fBgColor, sizeof(GdkRGBA));
+		memcpy (pColor, &myStyleParam.fBgColor, sizeof(GldiColor));
 	}
 }
 
@@ -215,7 +215,7 @@ void gldi_style_color_get (GldiStyleColors iColorType, GldiColor *pColor)
 			else
 			#endif
 			{
-				gldi_style_color_shade (myStyleParam.fBgColor, .2, (double*)&pColor->rgba);
+				gldi_style_color_shade (&myStyleParam.fBgColor, .2, pColor);
 			}
 		break;
 		case GLDI_COLOR_LINE:
@@ -233,7 +233,7 @@ void gldi_style_color_get (GldiStyleColors iColorType, GldiColor *pColor)
 			else
 			#endif
 			{
-				memcpy (&pColor->rgba, myStyleParam.fLineColor, sizeof(GdkRGBA));
+				memcpy (pColor, &myStyleParam.fLineColor, sizeof(GldiColor));
 			}
 		break;
 		case GLDI_COLOR_TEXT:
@@ -245,18 +245,18 @@ void gldi_style_color_get (GldiStyleColors iColorType, GldiColor *pColor)
 			else
 			#endif
 			{
-				memcpy (&pColor->rgba, myStyleParam.textDescription.fColorStart, sizeof(GdkRGBA));
+				memcpy (pColor, &myStyleParam.textDescription.fColorStart, sizeof(GldiColor));
 				pColor->rgba.alpha = 1.;
 			}
 		break;
 		case GLDI_COLOR_SEPARATOR:
 			_get_bg_color (pColor);
-			gldi_style_color_shade ((double*)&pColor->rgba, .2, (double*)&pColor->rgba);
+			gldi_style_color_shade (pColor, .2, pColor);
 			pColor->rgba.alpha = 1.;
 		break;
 		case GLDI_COLOR_CHILD:
 			_get_bg_color (pColor);
-			gldi_style_color_shade ((double*)&pColor->rgba, .3, (double*)&pColor->rgba);
+			gldi_style_color_shade (pColor, .3, pColor);
 		break;
 		default:
 		break;
@@ -291,9 +291,11 @@ void gldi_style_colors_set_bg_color_full (cairo_t *pCairoContext, gboolean bUseA
 	#endif
 	{
 		if (pCairoContext)
-			cairo_set_source_rgba (pCairoContext, myStyleParam.fBgColor[0], myStyleParam.fBgColor[1], myStyleParam.fBgColor[2], bUseAlpha ? myStyleParam.fBgColor[3] : 1.);
+		{
+			cairo_set_source_rgba (pCairoContext, myStyleParam.fBgColor.rgba.red, myStyleParam.fBgColor.rgba.green, myStyleParam.fBgColor.rgba.blue, bUseAlpha ? myStyleParam.fBgColor.rgba.alpha : 1.);
+		}
 		else
-			glColor4f (myStyleParam.fBgColor[0], myStyleParam.fBgColor[1], myStyleParam.fBgColor[2], bUseAlpha ? myStyleParam.fBgColor[3] : 1.);
+			glColor4f (myStyleParam.fBgColor.rgba.red, myStyleParam.fBgColor.rgba.green, myStyleParam.fBgColor.rgba.blue, bUseAlpha ? myStyleParam.fBgColor.rgba.alpha : 1.);
 	}
 }
 
@@ -317,13 +319,12 @@ void gldi_style_colors_set_selected_bg_color (cairo_t *pCairoContext)
 	else
 	#endif
 	{
-		double color[4];
-		gldi_style_color_shade (myStyleParam.fBgColor, .2, color);
-		
+		GldiColor color;
+		gldi_style_color_shade (&myStyleParam.fBgColor, .2, &color);
 		if (pCairoContext)
-			cairo_set_source_rgba (pCairoContext, color[0], color[1], color[2], color[3]);
+			gldi_color_set_cairo (pCairoContext, &color);
 		else
-			glColor4f (color[0], color[1], color[2], color[3]);
+			gldi_color_set_opengl (&color);
 	}
 }
 
@@ -348,9 +349,9 @@ void gldi_style_colors_set_line_color (cairo_t *pCairoContext)
 	#endif
 	{
 		if (pCairoContext)
-			cairo_set_source_rgba (pCairoContext, myStyleParam.fLineColor[0], myStyleParam.fLineColor[1], myStyleParam.fLineColor[2], myStyleParam.fLineColor[3]);
+			gldi_color_set_cairo (pCairoContext, &myStyleParam.fLineColor);
 		else
-			glColor4f (myStyleParam.fLineColor[0], myStyleParam.fLineColor[1], myStyleParam.fLineColor[2], myStyleParam.fLineColor[3]);
+			gldi_color_set_opengl (&myStyleParam.fLineColor);
 	}
 }
 
@@ -368,9 +369,9 @@ void gldi_style_colors_set_text_color (cairo_t *pCairoContext)
 	#endif
 	{
 		if (pCairoContext)
-			cairo_set_source_rgb (pCairoContext, myStyleParam.textDescription.fColorStart[0], myStyleParam.textDescription.fColorStart[1], myStyleParam.textDescription.fColorStart[2]);
+			gldi_color_set_cairo_rgb (pCairoContext, &myStyleParam.textDescription.fColorStart);
 		else
-			glColor3f (myStyleParam.textDescription.fColorStart[0], myStyleParam.textDescription.fColorStart[1], myStyleParam.textDescription.fColorStart[2]);
+			gldi_color_set_opengl_rgb (&myStyleParam.textDescription.fColorStart);
 	}
 }
 
@@ -378,22 +379,22 @@ void gldi_style_colors_set_separator_color (cairo_t *pCairoContext)
 {
 	GldiColor color;
 	_get_bg_color (&color);
-	gldi_style_color_shade ((double*)&color.rgba, .2, (double*)&color.rgba);
+	gldi_style_color_shade (&color, .2, &color);
 	if (pCairoContext)
-		cairo_set_source_rgb (pCairoContext, color.rgba.red, color.rgba.green, color.rgba.blue);  // alpha set to 1
+		gldi_color_set_cairo_rgb (pCairoContext, &color);  // alpha set to 1
 	else
-		glColor3f (color.rgba.red, color.rgba.green, color.rgba.blue);
+		gldi_color_set_opengl_rgb (&color);
 }
 
 void gldi_style_colors_set_child_color (cairo_t *pCairoContext)
 {
 	GldiColor color;
 	_get_bg_color (&color);
-	gldi_style_color_shade ((double*)&color.rgba, .3, (double*)&color.rgba);
+	gldi_style_color_shade (&color, .3, &color);
 	if (pCairoContext)
-		cairo_set_source_rgba (pCairoContext, color.rgba.red, color.rgba.green, color.rgba.blue, color.rgba.alpha);
+		gldi_color_set_cairo (pCairoContext, &color);
 	else
-		glColor4f (color.rgba.red, color.rgba.green, color.rgba.blue, color.rgba.alpha);
+		gldi_color_set_opengl (&color);
 }
 
 void gldi_style_colors_paint_bg_color_with_alpha (cairo_t *pCairoContext, int iWidth, double fAlpha)
@@ -403,7 +404,7 @@ void gldi_style_colors_paint_bg_color_with_alpha (cairo_t *pCairoContext, int iW
 	{
 		if (! (myStyleParam.bUseSystemColors && s_menu_bg_pattern))
 		{
-			fAlpha = (myStyleParam.bUseSystemColors ? s_menu_bg_color.alpha : myStyleParam.fBgColor[3]);
+			fAlpha = (myStyleParam.bUseSystemColors ? s_menu_bg_color.alpha : myStyleParam.fBgColor.rgba.alpha);
 		}
 	}
 	if (fAlpha >= 0)  // alpha is now defined => use it
@@ -476,8 +477,8 @@ static gboolean get_config (GKeyFile *pKeyFile, GldiStyleParam *pStyleParam)
 		{
 			cRenderer[0] = g_ascii_toupper (cRenderer[0]);
 			
-			cairo_dock_get_double_list_key_value (keyfile, cRenderer, "line color", &bFlushConfFileNeeded, pStyleParam->fLineColor, 4, NULL, NULL, NULL);
-			g_key_file_set_double_list (pKeyFile, "Style", "line color", pStyleParam->fLineColor, 4);
+			cairo_dock_get_color_key_value (keyfile, cRenderer, "line color", &bFlushConfFileNeeded, &pStyleParam->fLineColor, NULL, NULL, NULL);
+			g_key_file_set_double_list (pKeyFile, "Style", "line color", (double*)&pStyleParam->fLineColor.rgba, 4);
 			
 			pStyleParam->iLineWidth = g_key_file_get_integer (keyfile, cRenderer, "border", NULL);
 			g_key_file_set_integer (pKeyFile, "Style", "linewidth", pStyleParam->iLineWidth);
@@ -495,18 +496,18 @@ static gboolean get_config (GKeyFile *pKeyFile, GldiStyleParam *pStyleParam)
 	{
 		pStyleParam->iCornerRadius = g_key_file_get_integer (pKeyFile, "Style", "corner", NULL);
 		pStyleParam->iLineWidth = g_key_file_get_integer (pKeyFile, "Style", "linewidth", NULL);
-		cairo_dock_get_double_list_key_value (pKeyFile, "Style", "line color", &bFlushConfFileNeeded, pStyleParam->fLineColor, 4, NULL, NULL, NULL);
+		cairo_dock_get_color_key_value (pKeyFile, "Style", "line color", &bFlushConfFileNeeded, &pStyleParam->fLineColor, NULL, NULL, NULL);
 	}
 	
-	double bg_color[4] = {1.0, 1.0, 1.0, 0.7};
-	cairo_dock_get_double_list_key_value (pKeyFile, "Style", "bg color", &bFlushConfFileNeeded, pStyleParam->fBgColor, 4, bg_color, "Dialogs", "background color");
+	GldiColor bg_color = {{1.0, 1.0, 1.0, 0.7}};
+	cairo_dock_get_color_key_value (pKeyFile, "Style", "bg color", &bFlushConfFileNeeded, &pStyleParam->fBgColor, &bg_color, "Dialogs", "background color");
 	
 	gboolean bCustomFont = cairo_dock_get_boolean_key_value (pKeyFile, "Style", "custom font", &bFlushConfFileNeeded, FALSE, "Dialogs", "custom");
 	gchar *cFont = (bCustomFont ? cairo_dock_get_string_key_value (pKeyFile, "Style", "font", &bFlushConfFileNeeded, NULL, "Dialogs", "message police") : _get_default_system_font ());
 	gldi_text_description_set_font (&pStyleParam->textDescription, cFont);
 	
-	double text_color[3] = {0., 0., 0.};
-	cairo_dock_get_double_list_key_value (pKeyFile, "Style", "text color", &bFlushConfFileNeeded, pStyleParam->textDescription.fColorStart, 3, text_color, "Dialogs", "text color");
+	GldiColor text_color = {{0., 0., 0., 1.}};
+	cairo_dock_get_color_key_value (pKeyFile, "Style", "text color", &bFlushConfFileNeeded, &pStyleParam->textDescription.fColorStart, &text_color, "Dialogs", "text color");
 	
 	return bFlushConfFileNeeded;
 }

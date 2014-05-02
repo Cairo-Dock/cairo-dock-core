@@ -503,9 +503,10 @@ static void _cairo_dock_finish_load_data_renderer (CairoDataRenderer *pRenderer,
 				textDescription.bUseDefaultColors = FALSE;
 				textDescription.iMargin = 0;
 				textDescription.bOutlined = TRUE;  /// tester avec et sans ...
-				textDescription.fColorStart[0] = pLabel->param.pColor[0];
-				textDescription.fColorStart[1] = pLabel->param.pColor[1];
-				textDescription.fColorStart[2] = pLabel->param.pColor[2];
+				textDescription.fColorStart.rgba.red = pLabel->param.pColor[0];
+				textDescription.fColorStart.rgba.green = pLabel->param.pColor[1];
+				textDescription.fColorStart.rgba.blue = pLabel->param.pColor[2];
+				textDescription.fColorStart.rgba.alpha = 1.;
 				pSurface = cairo_dock_create_surface_from_text (pLabel->cText,
 					&textDescription,
 					&pLabel->iTextWidth, &pLabel->iTextHeight);

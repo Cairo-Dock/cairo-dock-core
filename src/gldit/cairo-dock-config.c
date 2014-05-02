@@ -366,6 +366,12 @@ void cairo_dock_get_double_list_key_value (GKeyFile *pKeyFile, const gchar *cGro
 	g_free (fValuesList);
 }
 
+void cairo_dock_get_color_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, GldiColor *fValueBuffer, GldiColor *fDefaultValues, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName)
+{
+	fValueBuffer->rgba.alpha = 1.;  // in case it's an RGB color in conf
+	cairo_dock_get_double_list_key_value (pKeyFile, cGroupName, cKeyName, bFlushConfFileNeeded, (double*)&fValueBuffer->rgba, 4, (double*)&fDefaultValues->rgba, cDefaultGroupName, cDefaultKeyName);
+}
+
 gchar **cairo_dock_get_string_list_key_value (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, gsize *length, const gchar *cDefaultValues, const gchar *cDefaultGroupName, const gchar *cDefaultKeyName)
 {
 	GError *erreur = NULL;

@@ -55,7 +55,7 @@
 #include "cairo-dock-user-interaction.h"  // set_custom_icon_on_appli
 #include "cairo-dock-gui-backend.h"
 #include "cairo-dock-gui-commons.h"
-#include "cairo-dock-applet-facility.h"
+#include "cairo-dock-applet-facility.h"  // cairo_dock_pop_up_about_applet
 #include "cairo-dock-menu.h"
 #include "cairo-dock-user-menu.h"
 

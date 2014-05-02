@@ -45,8 +45,8 @@ extern GldiManager myStyleMgr;
 // params
 struct _GldiStyleParam {
 	gboolean bUseSystemColors;
-	gdouble fBgColor[4];
-	gdouble fLineColor[4];
+	GldiColor fBgColor;
+	GldiColor fLineColor;
 	gint iLineWidth;
 	gint iCornerRadius;
 	GldiTextDescription textDescription;

@@ -24,7 +24,7 @@
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-manager.h"
-#include "cairo-dock-surface-factory.h"
+#include "cairo-dock-style-facility.h"  // GldiColor
 G_BEGIN_DECLS
 
 /**
@@ -45,7 +45,7 @@ struct _CairoIndicatorsParam {
 	gboolean bActiveUseDefaultColors;
 	gboolean bActiveFillFrame;  // outline or fill frame
 	gchar *cActiveIndicatorImagePath;
-	gdouble fActiveColor[4];
+	GldiColor fActiveColor;
 	gint iActiveLineWidth;
 	gint iActiveCornerRadius;
 	gboolean bActiveIndicatorAbove;
@@ -63,9 +63,9 @@ struct _CairoIndicatorsParam {
 	gboolean bUseClassIndic;
 	// progress bars
 	gboolean bBarUseDefaultColors;
-	gdouble fBarColorStart[4];
-	gdouble fBarColorStop[4];
-	gdouble fBarColorOutline[4];
+	GldiColor fBarColorStart;
+	GldiColor fBarColorStop;
+	GldiColor fBarColorOutline;
 	gint iBarThickness;
 	};
 

@@ -50,7 +50,6 @@
 #include "cairo-dock-container.h"
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-indicator-manager.h"  // myIndicatorsParam.bUseClassIndic
-#include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-style-manager.h"
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-dock-visibility.h"
@@ -630,11 +629,11 @@ static gboolean _get_root_dock_config (CairoDock *pDock)
 			pDock->bBgImageRepeat = cairo_dock_get_boolean_key_value (pKeyFile, "Appearance", "repeat image", &bFlushConfFileNeeded, FALSE, NULL, NULL);
 		}
 		// on recupere la couleur tout le temps pour avoir un plan B.
-		double couleur[4] = {.7, .7, 1., .7};
-		cairo_dock_get_double_list_key_value (pKeyFile, "Appearance", "stripes color dark", &bFlushConfFileNeeded, pDock->fBgColorDark, 4, couleur, NULL, NULL);
+		GldiColor couleur = {{.7, .7, 1., .7}};
+		cairo_dock_get_color_key_value (pKeyFile, "Appearance", "stripes color dark", &bFlushConfFileNeeded, &pDock->fBgColorDark, &couleur, NULL, NULL);
 		
-		double couleur2[4] = {.7, .9, .7, .4};
-		cairo_dock_get_double_list_key_value (pKeyFile, "Appearance", "stripes color bright", &bFlushConfFileNeeded, pDock->fBgColorBright, 4, couleur2, NULL, NULL);
+		GldiColor couleur2 = {{.7, .9, .7, .4}};
+		cairo_dock_get_color_key_value (pKeyFile, "Appearance", "stripes color bright", &bFlushConfFileNeeded, &pDock->fBgColorBright, &couleur2, NULL, NULL);
 	}
 	
 	pDock->bExtendedMode = cairo_dock_get_boolean_key_value (pKeyFile, "Appearance", "extended", &bFlushConfFileNeeded, FALSE, NULL, NULL);
@@ -1422,8 +1421,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 
 	pBackground->iFrameMargin = cairo_dock_get_integer_key_value (pKeyFile, "Background", "frame margin", &bFlushConfFileNeeded, 2, NULL, NULL);
 
-	double couleur[4] = {0., 0., 0.6, 0.4};
-	cairo_dock_get_double_list_key_value (pKeyFile, "Background", "line color", &bFlushConfFileNeeded, pBackground->fLineColor, 4, couleur, NULL, NULL);
+	GldiColor couleur = {{0., 0., 0.6, 0.4}};
+	cairo_dock_get_color_key_value (pKeyFile, "Background", "line color", &bFlushConfFileNeeded, &pBackground->fLineColor, &couleur, NULL, NULL);
 
 	pBackground->bRoundedBottomCorner = cairo_dock_get_boolean_key_value (pKeyFile, "Background", "rounded bottom corner", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
@@ -1463,11 +1462,11 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 		{
 			pBackground->fStripesWidth = MAX (.01, MIN (.99, cairo_dock_get_double_key_value (pKeyFile, "Background", "stripes width", &bFlushConfFileNeeded, 0.2, NULL, NULL))) / pBackground->iNbStripes;
 		}
-		double couleur3[4] = {.7, .7, 1., .7};
-		cairo_dock_get_double_list_key_value (pKeyFile, "Background", "stripes color dark", &bFlushConfFileNeeded, pBackground->fStripesColorDark, 4, couleur3, NULL, NULL);
+		GldiColor couleur3 = {{.7, .7, 1., .7}};
+		cairo_dock_get_color_key_value (pKeyFile, "Background", "stripes color dark", &bFlushConfFileNeeded, &pBackground->fStripesColorDark, &couleur3, NULL, NULL);
 		
-		double couleur2[4] = {.7, .9, .7, .4};
-		cairo_dock_get_double_list_key_value (pKeyFile, "Background", "stripes color bright", &bFlushConfFileNeeded, pBackground->fStripesColorBright, 4, couleur2, NULL, NULL);
+		GldiColor couleur2 = {{.7, .9, .7, .4}};
+		cairo_dock_get_color_key_value (pKeyFile, "Background", "stripes color bright", &bFlushConfFileNeeded, &pBackground->fStripesColorBright, &couleur2, NULL, NULL);
 		
 		pBackground->fStripesAngle = cairo_dock_get_double_key_value (pKeyFile, "Background", "stripes angle", &bFlushConfFileNeeded, 90., NULL, NULL);
 	}
@@ -1475,8 +1474,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 	pAccessibility->bExtendedMode = cairo_dock_get_boolean_key_value (pKeyFile, "Background", "extended", &bFlushConfFileNeeded, FALSE, "Accessibility", NULL);
 	
 	// hidden bg
-	double hcolor[4] = {.8, .8, .8, .5};
-	cairo_dock_get_double_list_key_value (pKeyFile, "Background", "hidden bg color", &bFlushConfFileNeeded, pBackground->fHiddenBg, 4, hcolor, NULL, NULL);
+	GldiColor hcolor = {{.8, .8, .8, .5}};
+	cairo_dock_get_color_key_value (pKeyFile, "Background", "hidden bg color", &bFlushConfFileNeeded, &pBackground->fHiddenBg, &hcolor, NULL, NULL);
 	
 	// position
 	pPosition->iGapX = cairo_dock_get_integer_key_value (pKeyFile, "Position", "x gap", &bFlushConfFileNeeded, 0, NULL, NULL);

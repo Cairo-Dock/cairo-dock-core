@@ -151,7 +151,7 @@ do_grab_key (GldiShortkey *binding)
 
 	if (gdk_error_trap_pop ())
 	{
-		g_warning ("GldiShortkey '%s' failed!", binding->keystring);
+		cd_debug ("XGrabKey (%s) failed", binding->keystring);
 		return FALSE;
 	}
 

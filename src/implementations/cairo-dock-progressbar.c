@@ -156,13 +156,13 @@ static void load (ProgressBar *pProgressBar, Icon *pIcon, CairoProgressBarAttrib
 	{
 		if (!pAttribute->bInverted)
 		{
-			memcpy (pProgressBar->fColorGradation, myIndicatorsParam.fBarColorStart, 4*sizeof (gdouble));
-			memcpy (&pProgressBar->fColorGradation[4], myIndicatorsParam.fBarColorStop, 4*sizeof (gdouble));
+			memcpy (pProgressBar->fColorGradation, &myIndicatorsParam.fBarColorStart.rgba, 4*sizeof (gdouble));
+			memcpy (&pProgressBar->fColorGradation[4], &myIndicatorsParam.fBarColorStop.rgba, 4*sizeof (gdouble));
 		}
 		else
 		{
-			memcpy (pProgressBar->fColorGradation, myIndicatorsParam.fBarColorStop, 4*sizeof (gdouble));
-			memcpy (&pProgressBar->fColorGradation[4], myIndicatorsParam.fBarColorStart, 4*sizeof (gdouble));
+			memcpy (pProgressBar->fColorGradation, &myIndicatorsParam.fBarColorStop.rgba, 4*sizeof (gdouble));
+			memcpy (&pProgressBar->fColorGradation[4], &myIndicatorsParam.fBarColorStart.rgba, 4*sizeof (gdouble));
 		}
 	}
 	
@@ -203,16 +203,12 @@ static void render (ProgressBar *pProgressBar, cairo_t *pCairoContext)
 			r = .5*pProgressBar->iBarThickness;
 			
 			// outline
-			if (myIndicatorsParam.bBarUseDefaultColors || myIndicatorsParam.fBarColorOutline[3] != 0.)
+			if (myIndicatorsParam.bBarUseDefaultColors || myIndicatorsParam.fBarColorOutline.rgba.alpha != 0.)
 			{
 				if (myIndicatorsParam.bBarUseDefaultColors)
 					gldi_style_colors_set_line_color (pCairoContext);
 				else
-					cairo_set_source_rgba (pCairoContext,
-						myIndicatorsParam.fBarColorOutline[0],
-						myIndicatorsParam.fBarColorOutline[1],
-						myIndicatorsParam.fBarColorOutline[2],
-						myIndicatorsParam.fBarColorOutline[3]);
+					gldi_color_set_cairo (pCairoContext, &myIndicatorsParam.fBarColorOutline);
 				cairo_set_line_width (pCairoContext, pProgressBar->iBarThickness);
 				
 				cairo_move_to (pCairoContext, r, r);
@@ -294,15 +290,12 @@ static void render_opengl (ProgressBar *pProgressBar)
 			glDisableClientState (GL_TEXTURE_COORD_ARRAY);
 			
 			// outline
-			if (myIndicatorsParam.bBarUseDefaultColors || myIndicatorsParam.fBarColorOutline[3] != 0.)
+			if (myIndicatorsParam.bBarUseDefaultColors || myIndicatorsParam.fBarColorOutline.rgba.alpha != 0.)
 			{
 				if (myIndicatorsParam.bBarUseDefaultColors)
 					gldi_style_colors_set_line_color (NULL);
 				else
-					glColor4f (myIndicatorsParam.fBarColorOutline[0],
-					myIndicatorsParam.fBarColorOutline[1],
-					myIndicatorsParam.fBarColorOutline[2],
-					myIndicatorsParam.fBarColorOutline[3]);
+					gldi_color_set_opengl (&myIndicatorsParam.fBarColorOutline);
 				_cairo_dock_set_blend_alpha ();
 				glLineWidth (1.5);
 				cairo_dock_stroke_gl_path (pFramePath, FALSE);
@@ -335,13 +328,13 @@ static void reload (ProgressBar *pProgressBar)
 	{
 		if (!pProgressBar->bInverted)
 		{
-			memcpy (pProgressBar->fColorGradation, myIndicatorsParam.fBarColorStart, 4*sizeof (gdouble));
-			memcpy (&pProgressBar->fColorGradation[4], myIndicatorsParam.fBarColorStop, 4*sizeof (gdouble));
+			memcpy (pProgressBar->fColorGradation, &myIndicatorsParam.fBarColorStart.rgba, 4*sizeof (gdouble));
+			memcpy (&pProgressBar->fColorGradation[4], &myIndicatorsParam.fBarColorStop.rgba, 4*sizeof (gdouble));
 		}
 		else
 		{
-			memcpy (pProgressBar->fColorGradation, myIndicatorsParam.fBarColorStop, 4*sizeof (gdouble));
-			memcpy (&pProgressBar->fColorGradation[4], myIndicatorsParam.fBarColorStart, 4*sizeof (gdouble));
+			memcpy (pProgressBar->fColorGradation, &myIndicatorsParam.fBarColorStop.rgba, 4*sizeof (gdouble));
+			memcpy (&pProgressBar->fColorGradation[4], &myIndicatorsParam.fBarColorStart.rgba, 4*sizeof (gdouble));
 		}
 	}
 	

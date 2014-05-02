@@ -77,7 +77,7 @@ struct _CairoIconsParam {
 	gboolean bRevolveSeparator;
 	gboolean bConstantSeparatorSize;
 	gboolean bSeparatorUseDefaultColors;
-	gdouble fSeparatorColor[4];
+	GldiColor fSeparatorColor;
 	// labels
 	GldiTextDescription iconTextDescription;
 	GldiTextDescription quickInfoTextDescription;

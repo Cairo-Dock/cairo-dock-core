@@ -269,7 +269,8 @@ static gboolean _destroy_bg (GldiDesktopBackground *pDesktopBg)
 void gldi_desktop_background_destroy (GldiDesktopBackground *pDesktopBg)
 {
 	//g_print ("%s ()\n", __func__);
-	g_return_if_fail (pDesktopBg != NULL);
+	if (!pDesktopBg)
+		return;
 	if (pDesktopBg->iRefCount > 0)
 		pDesktopBg->iRefCount --;
 	if (pDesktopBg->iRefCount == 0 && pDesktopBg->iSidDestroyBg == 0)

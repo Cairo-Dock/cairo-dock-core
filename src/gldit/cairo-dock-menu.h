@@ -48,6 +48,8 @@ struct _GldiMenuItemParams {
 };
 
 
+void _init_menu_style (void);
+
 /** Creates a new menu that will point on a given Icon. If the Icon is NULL, it will be placed under the mouse.
  * @param pIcon the icon, or NULL
  * @return the new menu.

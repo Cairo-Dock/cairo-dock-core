@@ -24,6 +24,7 @@
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
+#include "cairo-dock-style-facility.h"  // GldiColor
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-container.h"
@@ -164,9 +165,9 @@ struct _CairoDock {
 	/// whether to repeat the image as a pattern, or to stretch it to fill the dock.
 	gboolean bBgImageRepeat;
 	/// first color of the gradation
-	gdouble fBgColorBright[4];
+	GldiColor fBgColorBright;
 	/// second color of the gradation
-	gdouble fBgColorDark[4];
+	GldiColor fBgColorDark;
 	/// Background image buffer of the dock.
 	CairoDockImageBuffer backgroundBuffer;
 	gboolean bExtendedMode;

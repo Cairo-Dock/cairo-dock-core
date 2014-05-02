@@ -165,12 +165,13 @@ GKeyFile *gldi_module_instance_open_conf_file (GldiModuleInstance *pInstance, Ca
 		if (iBgColorType == 2)  // custom bg color
 		{
 			gsize length;
-			pMinimalConfig->pHiddenBgColor = g_key_file_get_double_list (pKeyFile, "Icon", "bg color", &length, NULL);
-			if (length < 4)  // invalid rgba color => use the default one.
+			double *col = g_key_file_get_double_list (pKeyFile, "Icon", "bg color", &length, NULL);
+			if (length >= 4)
 			{
-				g_free (pMinimalConfig->pHiddenBgColor);
-				pMinimalConfig->pHiddenBgColor = NULL;
+				pMinimalConfig->pHiddenBgColor = g_new0 (GldiColor, 1);
+				memcpy (&pMinimalConfig->pHiddenBgColor->rgba, col, sizeof(GdkRGBA));
 			}
+			g_free (col);
 		}
 	}
 	

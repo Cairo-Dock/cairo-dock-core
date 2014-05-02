@@ -211,26 +211,34 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 *@param pColorBuffer a table of 4 'double' already allocated, that will be filled with the color components.
 *@param pDefaultColor default value if the group/key is not found (typically if the key is new). It is a table of 4 'double'. It can be NULL.
 */
-#define CD_CONFIG_GET_COLOR_WITH_DEFAULT(cGroupName, cKeyName, pColorBuffer, pDefaultColor) cairo_dock_get_double_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, (double*)pColorBuffer, 4, pDefaultColor, NULL, NULL)
+#define CD_CONFIG_GET_COLOR_RGBA_WITH_DEFAULT(cGroupName, cKeyName, pColorBuffer, pDefaultColor) cairo_dock_get_double_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, (double*)pColorBuffer, 4, pDefaultColor, NULL, NULL)
 /** Get the value of a 'color' in the RGBA format from the conf file, with NULL as default value.
 *@param cGroupName name of the group in the conf file.
 *@param cKeyName name of the key in the conf file.
 *@param pColorBuffer a table of 4 'double' already allocated, that will be filled with the color components.
 */
-#define CD_CONFIG_GET_COLOR(cGroupName, cKeyName, pColorBuffer) CD_CONFIG_GET_COLOR_WITH_DEFAULT(cGroupName, cKeyName, pColorBuffer, NULL)
+#define CD_CONFIG_GET_COLOR_RGBA(cGroupName, cKeyName, pColorBuffer) CD_CONFIG_GET_COLOR_RGBA_WITH_DEFAULT(cGroupName, cKeyName, pColorBuffer, NULL)
 /** Get the value of a 'color' in the RGB format from the conf file.
 *@param cGroupName name of the group in the conf file.
 *@param cKeyName name of the key in the conf file.
 *@param pColorBuffer a table of 3 'double' already allocated, that will be filled with the color components.
 *@param pDefaultColor default value if the group/key is not found (typically if the key is new). It is a table of 3 'double'. It can be NULL.
 */
-#define CD_CONFIG_GET_COLOR_RVB_WITH_DEFAULT(cGroupName, cKeyName, pColorBuffer, pDefaultColor) cairo_dock_get_double_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, pColorBuffer, 3, pDefaultColor, NULL, NULL)
+#define CD_CONFIG_GET_COLOR_RGB_WITH_DEFAULT(cGroupName, cKeyName, pColorBuffer, pDefaultColor) cairo_dock_get_double_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, pColorBuffer, 3, pDefaultColor, NULL, NULL)
 /** Get the value of a 'color' in the RGB format from the conf file, with NULL as default value.
 *@param cGroupName name of the group in the conf file.
 *@param cKeyName name of the key in the conf file.
 *@param pColorBuffer a table of 3 'double' already allocated, that will be filled with the color components.
 */
-#define CD_CONFIG_GET_COLOR_RVB(cGroupName, cKeyName, pColorBuffer) CD_CONFIG_GET_COLOR_RVB_WITH_DEFAULT(cGroupName, cKeyName, pColorBuffer, NULL)
+#define CD_CONFIG_GET_COLOR_RGB(cGroupName, cKeyName, pColorBuffer) CD_CONFIG_GET_COLOR_RGB_WITH_DEFAULT(cGroupName, cKeyName, pColorBuffer, NULL)
+/** Get the value of a 'color' in a GldiColor from the conf file, with NULL as default value.
+*@param cGroupName name of the group in the conf file.
+*@param cKeyName name of the key in the conf file.
+*@param pColor a GldiColor already allocated, that will be filled with the color components.
+*/
+#define CD_CONFIG_GET_COLOR(cGroupName, cKeyName, pColor) cairo_dock_get_color_key_value (pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, pColor, NULL, NULL, NULL)
+
+
 
 /** Get the complete path of a theme in the conf file.
 *@param cGroupName name of the group (in the conf file).

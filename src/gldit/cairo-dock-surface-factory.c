@@ -768,13 +768,13 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, G
 		if (pTextDescription->bUseDefaultColors)
 			gldi_style_colors_set_bg_color (pCairoContext);
 		else
-			cairo_set_source_rgba (pCairoContext, pTextDescription->fBackgroundColor[0], pTextDescription->fBackgroundColor[1], pTextDescription->fBackgroundColor[2], pTextDescription->fBackgroundColor[3]);
+			gldi_color_set_cairo (pCairoContext, &pTextDescription->fBackgroundColor);
 		cairo_fill_preserve (pCairoContext);
 		
 		if (pTextDescription->bUseDefaultColors)
 			gldi_style_colors_set_line_color (pCairoContext);
 		else
-			cairo_set_source_rgba (pCairoContext, pTextDescription->fLineColor[0], pTextDescription->fLineColor[1], pTextDescription->fLineColor[2], pTextDescription->fLineColor[3]);
+			gldi_color_set_cairo (pCairoContext, &pTextDescription->fLineColor);
 		cairo_set_line_width (pCairoContext, fLineWidth);
 		cairo_stroke (pCairoContext);
 		
@@ -816,7 +816,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, G
 	if (pTextDescription->bUseDefaultColors)
 		gldi_style_colors_set_text_color (pCairoContext);
 	else
-		cairo_set_source_rgb (pCairoContext, pTextDescription->fColorStart[0], pTextDescription->fColorStart[1], pTextDescription->fColorStart[2]);
+		gldi_color_set_cairo_rgb (pCairoContext, &pTextDescription->fColorStart);
 	cairo_move_to (pCairoContext, 0, 0);
 	if (fZoomX != 1)
 		cairo_scale (pCairoContext, fZoomX, 1.);

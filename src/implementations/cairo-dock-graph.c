@@ -258,10 +258,8 @@ static inline cairo_surface_t *_cairo_dock_create_graph_background (double fWidt
 	
 	// on trace les axes.
 	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_OVER);
-	cairo_set_source_rgb (pCairoContext,
-		myIconsParam.quickInfoTextDescription.fBackgroundColor[0],
-		myIconsParam.quickInfoTextDescription.fBackgroundColor[1],
-		myIconsParam.quickInfoTextDescription.fBackgroundColor[2]);  // meme couleur que le fond des info-rapides, mais opaque.
+	gldi_color_set_cairo_rgb (pCairoContext,
+		&myIconsParam.quickInfoTextDescription.fBackgroundColor);  // meme couleur que le fond des info-rapides, mais opaque.
 	cairo_set_line_width (pCairoContext, 1.);
 	if (iType == CAIRO_DOCK_GRAPH_CIRCLE || iType == CAIRO_DOCK_GRAPH_CIRCLE_PLAIN)
 	{

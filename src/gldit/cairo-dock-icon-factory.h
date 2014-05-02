@@ -106,7 +106,7 @@ struct _Icon {
 	gboolean bAlwaysVisible;
 	gboolean bIsDemandingAttention;
 	gboolean bHasHiddenBg;
-	gdouble *pHiddenBgColor;  // NULL to use the default color
+	GldiColor *pHiddenBgColor;  // NULL to use the default color
 	gboolean bIgnoreQuicklist;  // TRUE to not display the Ubuntu's quicklist of the class
 	gboolean bHasIndicator;
 	

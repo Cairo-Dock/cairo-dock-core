@@ -40,7 +40,6 @@
 #include <gldit/cairo-dock-dialog-factory.h>
 #include <gldit/cairo-dock-flying-container.h>
 #include <gldit/cairo-dock-menu.h>
-#include <gldit/cairo-dock-style-manager.h>
 // Icons
 #include <gldit/cairo-dock-icon-manager.h>
 #include <gldit/cairo-dock-applications-manager.h>
@@ -94,6 +93,8 @@
 #include <gldit/cairo-dock-packages.h>
 #include <gldit/cairo-dock-surface-factory.h>
 #include <gldit/cairo-dock-image-buffer.h>
+#include <gldit/cairo-dock-style-facility.h>
+#include <gldit/cairo-dock-style-manager.h>
 
 #include <gldit/cairo-dock-utils.h>
 

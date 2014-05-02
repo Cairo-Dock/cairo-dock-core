@@ -21,12 +21,11 @@
 #include "cairo-dock-struct.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-config.h"  // cairo_dock_get_color_key_value
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-backends-manager.h"
-#include "cairo-dock-keybinder.h"
-#include "cairo-dock-utils.h"  // cairo_dock_colors_differ
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-style-manager.h"
 #include "cairo-dock-module-manager.h"
@@ -281,7 +280,7 @@ static GKeyFile *_make_simple_conf_file (ConfigWidget *pConfigWidget)
 	// apparence
 	g_key_file_set_integer (pSimpleKeyFile, "Appearance", "style", myStyleParam.bUseSystemColors ? 0 : 1);
 	
-	g_key_file_set_double_list (pSimpleKeyFile, "Appearance", "background color", myStyleParam.fBgColor, 4);
+	g_key_file_set_double_list (pSimpleKeyFile, "Appearance", "background color", (double*)&myStyleParam.fBgColor.rgba, 4);
 	
 	g_key_file_set_string (pSimpleKeyFile, "Appearance", "default icon directory", myIconsParam.cIconTheme);
 	
@@ -605,27 +604,28 @@ static void _config_widget_apply (CDWidget *pCdWidget)
 	
 	// appearance
 	gboolean bUseSystemColors = (g_key_file_get_integer (pSimpleKeyFile, "Appearance", "style", NULL) == 0);
-	double *pBgColor;
-	pBgColor = g_key_file_get_double_list (pSimpleKeyFile, "Appearance", "bg color", &length, NULL);
+	GldiColor bgColor;
+	gboolean bFlushConfFileNeeded;
+	cairo_dock_get_color_key_value (pSimpleKeyFile, "Appearance", "bg color", &bFlushConfFileNeeded, &bgColor, NULL, NULL, NULL);
 	gboolean bUpdateColors = FALSE;
 	if (bUseSystemColors != myStyleParam.bUseSystemColors)
 	{
 		g_key_file_set_integer (pKeyFile, "Style", "colors", bUseSystemColors ? 0 : 1);
 		bUpdateColors = TRUE;
 	}
-	if (! bUseSystemColors && pBgColor && cairo_dock_colors_differ (pBgColor, myStyleParam.fBgColor))  // custom color has changed -> update the Style manager colors (bg, text and line)
+	if (! bUseSystemColors && gldi_color_compare (&bgColor, &myStyleParam.fBgColor))  // custom color has changed -> update the Style manager colors (bg, text and line)
 	{
-		g_key_file_set_double_list (pKeyFile, "Style", "bg color", pBgColor, 4);
+		g_key_file_set_double_list (pKeyFile, "Style", "bg color", (double*)&bgColor.rgba, 4);
 		
 		// define line color too
-		double rgba[4];
-		gldi_style_color_shade (pBgColor, .2, rgba);
-		rgba[3] = 1.;
-		g_key_file_set_double_list (pKeyFile, "Style", "line color", rgba, 4);
+		GldiColor rgba;
+		gldi_style_color_shade (&bgColor, .2, &rgba);
+		rgba.rgba.alpha = 1.;
+		g_key_file_set_double_list (pKeyFile, "Style", "line color", (double*)&rgba.rgba, 4);
 		
 		// define text color too
-		gldi_style_color_shade (pBgColor, 1, rgba);  // saturate the bg color -> white or black
-		g_key_file_set_double_list (pKeyFile, "Style", "text color", rgba, 3);
+		gldi_style_color_shade (&bgColor, 1, &rgba);  // saturate the bg color -> white or black
+		g_key_file_set_double_list (pKeyFile, "Style", "text color", (double*)&rgba.rgba, 3);
 		
 		bUpdateColors = TRUE;
 	}
@@ -676,7 +676,6 @@ static void _config_widget_apply (CDWidget *pCdWidget)
 		
 		
 	}
-	g_free (pBgColor);
 	
 	gchar *cIconTheme = g_key_file_get_string (pSimpleKeyFile, "Appearance", "default icon directory", NULL);
 	g_key_file_set_string (pKeyFile, "Icons", "default icon directory", cIconTheme);

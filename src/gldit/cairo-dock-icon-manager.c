@@ -27,7 +27,6 @@
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-module-instance-manager.h"  // gldi_module_instance_reload
 #include "cairo-dock-desklet-manager.h"  // gldi_desklets_foreach_icons
-#include "cairo-dock-utils.h"  // cairo_dock_colors_differ
 #include "cairo-dock-log.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-class-manager.h"  // cairo_dock_deinhibite_class
@@ -488,7 +487,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 				pIcons->iSeparatorType = CAIRO_DOCK_NORMAL_SEPARATOR;
 			else
 			{
-				gsize length=0;
 				if (strcmp (cMainDockDefaultRendererName, "3D plane") == 0)
 				{
 					pIcons->iSeparatorType = g_key_file_get_integer (keyfile, "Inclinated Plane", "draw separator", NULL);
@@ -497,26 +495,18 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 				{
 					pIcons->iSeparatorType = g_key_file_get_integer (keyfile, "Curve", "draw curve separator", NULL);
 				}
-				double *color = g_key_file_get_double_list (keyfile, "Inclinated Plane", "separator color", &length, NULL);
-				if (length > 0)
-					memcpy (pIcons->fSeparatorColor, color, length*sizeof (gdouble));
-				else
-				{
-					pIcons->fSeparatorColor[0] = pIcons->fSeparatorColor[1] = pIcons->fSeparatorColor[2] = .9;
-				}
-				if (length < 4)
-					pIcons->fSeparatorColor[3] = 1.;
+				cairo_dock_get_color_key_value (keyfile, "Inclinated Plane", "separator color", &bFlushConfFileNeeded, &pIcons->fSeparatorColor, NULL, NULL, NULL);
 				g_key_file_free (keyfile);
 			}
 		}
 		g_key_file_set_integer (pKeyFile, "Icons", "separator type", pIcons->iSeparatorType);
-		g_key_file_set_double_list (pKeyFile, "Icons", "separator color", pIcons->fSeparatorColor, 4);
+		g_key_file_set_double_list (pKeyFile, "Icons", "separator color", (double*)&pIcons->fSeparatorColor.rgba, 4);
 		g_free (cMainDockDefaultRendererName);
 	}
 	else
 	{
-		double couleur[4] = {0.9,0.9,1.0,1.0};
-		cairo_dock_get_double_list_key_value (pKeyFile, "Icons", "separator color", &bFlushConfFileNeeded, pIcons->fSeparatorColor, 4, couleur, NULL, NULL);
+		GldiColor couleur = {{0.9,0.9,1.0,1.0}};
+		cairo_dock_get_color_key_value (pKeyFile, "Icons", "separator color", &bFlushConfFileNeeded, &pIcons->fSeparatorColor, &couleur, NULL, NULL);
 	}
 	
 	pIcons->bSeparatorUseDefaultColors = (cairo_dock_get_integer_key_value (pKeyFile, "Icons", "separator_style", &bFlushConfFileNeeded, 1, NULL, NULL) == 0);
@@ -540,8 +530,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 	//\___________________ labels text color
 	pLabels->iconTextDescription.bOutlined = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "text oulined", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
-	double couleur_backlabel[4] = {0., 0., 0., 0.85};
-	double couleur_label[3] = {1., 1., 1.};
+	GldiColor couleur_backlabel = {{0., 0., 0., 0.85}};
+	GldiColor couleur_label = {{1., 1., 1., 1.}};
 	gboolean bDefaultColors = (cairo_dock_get_integer_key_value (pKeyFile, "Labels", "style", &bFlushConfFileNeeded, 0, NULL, NULL) == 0);
 	pLabels->iconTextDescription.bUseDefaultColors = bDefaultColors;
 	if (bDefaultColors)
@@ -550,19 +540,19 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 	}
 	else
 	{
-		cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "text color", &bFlushConfFileNeeded, pLabels->iconTextDescription.fColorStart, 3, couleur_label, "Labels", "text color start");
+		cairo_dock_get_color_key_value (pKeyFile, "Labels", "text color", &bFlushConfFileNeeded, &pLabels->iconTextDescription.fColorStart, &couleur_label, "Labels", "text color start");
 		
-		double couleur_linelabel[4] = {0., 0., 0., 1};
-		cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "text line color", &bFlushConfFileNeeded, pLabels->iconTextDescription.fLineColor, 4, couleur_linelabel, NULL, NULL);
+		GldiColor couleur_linelabel = {{0., 0., 0., 1}};
+		cairo_dock_get_color_key_value (pKeyFile, "Labels", "text line color", &bFlushConfFileNeeded, &pLabels->iconTextDescription.fLineColor, &couleur_linelabel, NULL, NULL);
 		
-		cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "text bg color", &bFlushConfFileNeeded, pLabels->iconTextDescription.fBackgroundColor, 4, couleur_backlabel, "Icons", "text background color");
+		cairo_dock_get_color_key_value (pKeyFile, "Labels", "text bg color", &bFlushConfFileNeeded, &pLabels->iconTextDescription.fBackgroundColor, &couleur_backlabel, "Icons", "text background color");
 		if (!g_key_file_has_key (pKeyFile, "Labels", "qi same", NULL))  // old params
 		{
 			gboolean bUseBackgroundForLabel = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "background for label", &bFlushConfFileNeeded, FALSE, "Icons", NULL);
 			if (! bUseBackgroundForLabel)
 			{
-				pLabels->iconTextDescription.fBackgroundColor[3] = 0;  // ne sera pas dessine.
-				g_key_file_set_double_list (pKeyFile, "Icons", "text background color", pLabels->iconTextDescription.fBackgroundColor, 4);
+				pLabels->iconTextDescription.fBackgroundColor.rgba.alpha = 0;  // ne sera pas dessine.
+				g_key_file_set_double_list (pKeyFile, "Icons", "text background color", (double*)&pLabels->iconTextDescription.fBackgroundColor.rgba, 4);
 			}
 		}
 	}
@@ -577,8 +567,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 	gboolean bQuickInfoSameLook = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "qi same", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	if ( !bQuickInfoSameLook)
 	{
-		cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "qi bg color", &bFlushConfFileNeeded, pLabels->quickInfoTextDescription.fBackgroundColor, 4, couleur_backlabel, NULL, NULL);
-		cairo_dock_get_double_list_key_value (pKeyFile, "Labels", "qi text color", &bFlushConfFileNeeded, pLabels->quickInfoTextDescription.fColorStart, 3, couleur_label, NULL, NULL);
+		cairo_dock_get_color_key_value (pKeyFile, "Labels", "qi bg color", &bFlushConfFileNeeded, &pLabels->quickInfoTextDescription.fBackgroundColor, &couleur_backlabel, NULL, NULL);
+		cairo_dock_get_color_key_value (pKeyFile, "Labels", "qi text color", &bFlushConfFileNeeded, &pLabels->quickInfoTextDescription.fColorStart, &couleur_label, NULL, NULL);
 		pLabels->quickInfoTextDescription.bUseDefaultColors = FALSE;
 	}
 	
@@ -775,7 +765,7 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 	gboolean bSeparatorsNeedReload = (pPrevIcons->iSeparatorWidth != pIcons->iSeparatorWidth
 		|| pPrevIcons->iSeparatorHeight != pIcons->iSeparatorHeight
 		|| pPrevIcons->iSeparatorType != pIcons->iSeparatorType
-		|| cairo_dock_colors_differ (pPrevIcons->fSeparatorColor, pIcons->fSeparatorColor));  // same if color has changed (for the flat separator rendering)
+		|| gldi_color_compare (&pPrevIcons->fSeparatorColor, &pIcons->fSeparatorColor));  // same if color has changed (for the flat separator rendering)
 	gboolean bSeparatorNeedRedraw = (g_strcmp0 (pPrevIcons->cSeparatorImage, pIcons->cSeparatorImage) != 0
 		|| pPrevIcons->bRevolveSeparator != pIcons->bRevolveSeparator);
 	

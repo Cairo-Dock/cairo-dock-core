@@ -147,7 +147,8 @@ struct _CairoDialog {
 	gboolean bHideOnClick;
 	guint iButtonPressTime;
 	gboolean bInAnswer;
-	gpointer reserved[2];
+	gchar *cText;
+	gpointer reserved[1];
 };
 
 #define CAIRO_DIALOG_FIRST_BUTTON 0
@@ -303,9 +304,7 @@ GtkWidget *cairo_dock_steal_widget_from_its_container (GtkWidget *pWidget);  // 
 */
 GtkWidget *gldi_dialog_steal_interactive_widget (CairoDialog *pDialog);
 
-void gldi_dialog_set_widget_text_color (GtkWidget *pWidget);  /// shouldn't it be done on the interactive widget automatically ?...
-void gldi_dialog_set_widget_bg_color (GtkWidget *pWidget);  /// same ...
-
+void gldi_dialog_redraw_interactive_widget (CairoDialog *pDialog);
 
 void gldi_dialog_set_icon (CairoDialog *pDialog, const gchar *cImageFilePath);
 void gldi_dialog_set_icon_surface (CairoDialog *pDialog, cairo_surface_t *pNewIconSurface, int iNewIconSize);
@@ -313,8 +312,10 @@ void gldi_dialog_set_icon_surface (CairoDialog *pDialog, cairo_surface_t *pNewIc
 void gldi_dialog_set_message (CairoDialog *pDialog, const gchar *cMessage);
 void gldi_dialog_set_message_printf (CairoDialog *pDialog, const gchar *cMessageFormat, ...);
 
-void gldi_dialog_redraw_interactive_widget (CairoDialog *pDialog);
+void gldi_dialog_reload (CairoDialog *pDialog);
 
+#define gldi_dialog_set_widget_text_color(...)
+#define gldi_dialog_set_widget_bg_color(...)
 
 G_END_DECLS
 #endif
