@@ -1189,7 +1189,7 @@ void cairo_dock_resize_icon_in_dock (Icon *pIcon, CairoDock *pDock)  // resize t
  /// DOCK BACKGROUND ///
 ///////////////////////
 
-static cairo_surface_t *_cairo_dock_make_stripes_background (int iWidth, int iHeight, double *fStripesColorBright, double *fStripesColorDark, int iNbStripes, double fStripesWidth, double fStripesAngle)
+static cairo_surface_t *_cairo_dock_make_stripes_background (int iWidth, int iHeight, GldiColor *fStripesColorBright, GldiColor *fStripesColorDark, int iNbStripes, double fStripesWidth, double fStripesAngle)
 {
 	cairo_pattern_t *pStripesPattern;
 	if (fabs (fStripesAngle) != 90)
@@ -1215,38 +1215,38 @@ static cairo_surface_t *_cairo_dock_make_stripes_background (int iWidth, int iHe
 			fStep = (double)i / iNbStripes;
 			cairo_pattern_add_color_stop_rgba (pStripesPattern,
 				fStep - fStripesWidth / 2.,
-				fStripesColorBright[0],
-				fStripesColorBright[1],
-				fStripesColorBright[2],
-				fStripesColorBright[3]);
+				fStripesColorBright->rgba.red,
+				fStripesColorBright->rgba.green,
+				fStripesColorBright->rgba.blue,
+				fStripesColorBright->rgba.alpha);
 			cairo_pattern_add_color_stop_rgba (pStripesPattern,
 				fStep,
-				fStripesColorDark[0],
-				fStripesColorDark[1],
-				fStripesColorDark[2],
-				fStripesColorDark[3]);
+				fStripesColorDark->rgba.red,
+				fStripesColorDark->rgba.green,
+				fStripesColorDark->rgba.blue,
+				fStripesColorDark->rgba.alpha);
 			cairo_pattern_add_color_stop_rgba (pStripesPattern,
 				fStep + fStripesWidth / 2.,
-				fStripesColorBright[0],
-				fStripesColorBright[1],
-				fStripesColorBright[2],
-				fStripesColorBright[3]);
+				fStripesColorBright->rgba.red,
+				fStripesColorBright->rgba.green,
+				fStripesColorBright->rgba.blue,
+				fStripesColorBright->rgba.alpha);
 		}
 	}
 	else
 	{
 		cairo_pattern_add_color_stop_rgba (pStripesPattern,
 			0.,
-			fStripesColorDark[0],
-			fStripesColorDark[1],
-			fStripesColorDark[2],
-			fStripesColorDark[3]);
+			fStripesColorDark->rgba.red,
+			fStripesColorDark->rgba.green,
+			fStripesColorDark->rgba.blue,
+			fStripesColorDark->rgba.alpha);
 		cairo_pattern_add_color_stop_rgba (pStripesPattern,
 			1.,
-			fStripesColorBright[0],
-			fStripesColorBright[1],
-			fStripesColorBright[2],
-			fStripesColorBright[3]);
+			fStripesColorBright->rgba.red,
+			fStripesColorBright->rgba.green,
+			fStripesColorBright->rgba.blue,
+			fStripesColorBright->rgba.alpha);
 	}
 
 	cairo_surface_t *pNewSurface = cairo_dock_create_blank_surface (
@@ -1270,7 +1270,28 @@ static void _cairo_dock_load_default_background (CairoDockImageBuffer *pImage, i
 			iWidth,
 			iHeight);
 		cairo_t *pImageContext = cairo_create (pBgSurface);
-		gldi_style_colors_set_bg_color (pImageContext);
+		
+		// add a small vertical gradation to the bg color, it looks better than a completely monochrome background
+		// at the top is the original color, which connects nicely with other items (labels, menus, dialogs).
+		GldiColor bg_color, bg_color2;
+		gldi_style_color_get (GLDI_COLOR_BG, &bg_color);
+		gldi_style_color_shade (&bg_color, .12, &bg_color2);  // 0.12 is barely noticeable, but that's fine
+		
+		cairo_pattern_t *pattern = cairo_pattern_create_linear (0, 0, 0, iHeight);
+		cairo_pattern_set_extend (pattern, CAIRO_EXTEND_NONE);
+		cairo_pattern_add_color_stop_rgba (pattern,
+			1.,
+			bg_color.rgba.red, bg_color.rgba.green, bg_color.rgba.blue, bg_color.rgba.alpha);  // this will be at the bottom of the dock
+		cairo_pattern_add_color_stop_rgba (pattern,
+			0.5,
+			bg_color2.rgba.red, bg_color2.rgba.green, bg_color2.rgba.blue, bg_color2.rgba.alpha);  // middle
+		cairo_pattern_add_color_stop_rgba (pattern,
+			0.,
+			bg_color.rgba.red, bg_color.rgba.green, bg_color.rgba.blue, bg_color.rgba.alpha);  // and this is at the top
+		cairo_set_source (pImageContext, pattern);
+		///gldi_style_colors_set_bg_color (pImageContext);
+		
+		cairo_pattern_destroy (pattern);
 		cairo_paint (pImageContext);
 		cairo_destroy (pImageContext);
 		cairo_dock_load_image_buffer_from_surface (pImage,
@@ -1306,8 +1327,8 @@ static void _cairo_dock_load_default_background (CairoDockImageBuffer *pImage, i
 		cairo_surface_t *pBgSurface = _cairo_dock_make_stripes_background (
 			iWidth,
 			iHeight,
-			myDocksParam.fStripesColorBright,
-			myDocksParam.fStripesColorDark,
+			&myDocksParam.fStripesColorBright,
+			&myDocksParam.fStripesColorDark,
 			myDocksParam.iNbStripes,
 			myDocksParam.fStripesWidth,
 			myDocksParam.fStripesAngle);
@@ -1335,7 +1356,7 @@ void cairo_dock_load_dock_background (CairoDock *pDock)
 	}
 	if (pDock->backgroundBuffer.pSurface == NULL)
 	{
-		cairo_surface_t *pSurface = _cairo_dock_make_stripes_background (iWidth, iHeight, pDock->fBgColorBright, pDock->fBgColorDark, 0, 0., 90);
+		cairo_surface_t *pSurface = _cairo_dock_make_stripes_background (iWidth, iHeight, &pDock->fBgColorBright, &pDock->fBgColorDark, 0, 0., 90);
 		cairo_dock_load_image_buffer_from_surface (&pDock->backgroundBuffer, pSurface, iWidth, iHeight);
 	}
 	gtk_widget_queue_draw (pDock->container.pWidget);
