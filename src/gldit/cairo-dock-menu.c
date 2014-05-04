@@ -159,8 +159,7 @@ void _init_menu_style (void)
 				border-right-color: alpha (@menuitem_separator_color, 0.6); \
 				-unico-inner-stroke-color: transparent; \
 			} \
-			.gldimenuitem:hover, \
-			.gldimenuitem *:hover { \
+			.gldimenuitem:hover{ \
 				background-color: @menuitem_bg_color; \
 				background-image: none; \
 				text-shadow: none; \
@@ -179,7 +178,7 @@ void _init_menu_style (void)
 			} \
 			.gldimenuitem .entry, \
 			.gldimenuitem.entry { \
-				background-color: @menuitem_bg_color; \
+				background: @menuitem_bg_color; \
 				border-width: 1px; \
 				border-style: solid; \
 				border-image: none; \
@@ -289,6 +288,7 @@ void _init_menu_style (void)
 				color: @menuitem_text_color; \
 			}",
 			NULL);  // we also define ".menu", so that custom widgets (like in the SoundMenu) can get our colors. Note that we don't redefine Gtk's menuitem, because we want to keep normal menus for GUI
+			// for "entry", using "background-color" will not affect entries inside another widget (like a box), we actually have to use "background" ... (TBC with gtk > 3.6)
 		}
 		
 		gldi_style_colors_freeze ();
