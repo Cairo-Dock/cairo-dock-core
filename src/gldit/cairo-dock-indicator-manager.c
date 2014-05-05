@@ -570,7 +570,13 @@ static inline void _load_active_window_indicator (const gchar *cImagePath, doubl
 		cairo_surface_t *pSurface = cairo_dock_create_blank_surface (iWidth, iHeight);
 		cairo_t *pCairoContext = cairo_create (pSurface);
 		
-		if (bDefaultValues) fCornerRadius = myStyleParam.iCornerRadius;
+		if (bDefaultValues)
+		{
+			fCornerRadius = myStyleParam.iCornerRadius;
+			fLineWidth = 2*myStyleParam.iLineWidth;  // *2 or it will be too light
+		}
+		if (bFillFrame)
+			fLineWidth = 0;
 		fCornerRadius = MIN (fCornerRadius, (iWidth - fLineWidth) / 2);
 		double fFrameWidth = iWidth - (2 * fCornerRadius + fLineWidth);
 		double fFrameHeight = iHeight - 2 * fLineWidth;
@@ -584,8 +590,8 @@ static inline void _load_active_window_indicator (const gchar *cImagePath, doubl
 				gldi_style_colors_set_selected_bg_color (pCairoContext);
 			else
 			{
-				gldi_style_colors_set_text_color (pCairoContext);
-				cairo_set_line_width (pCairoContext, 2*myStyleParam.iLineWidth);  // *2 or it will be too light
+				gldi_style_colors_set_child_color (pCairoContext);  // for a line, the selected color is often too close to the bg color
+				cairo_set_line_width (pCairoContext, fLineWidth);
 			}
 		}
 		else
