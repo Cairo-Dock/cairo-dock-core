@@ -280,7 +280,7 @@ static GKeyFile *_make_simple_conf_file (ConfigWidget *pConfigWidget)
 	// apparence
 	g_key_file_set_integer (pSimpleKeyFile, "Appearance", "style", myStyleParam.bUseSystemColors ? 0 : 1);
 	
-	g_key_file_set_double_list (pSimpleKeyFile, "Appearance", "background color", (double*)&myStyleParam.fBgColor.rgba, 4);
+	g_key_file_set_double_list (pSimpleKeyFile, "Appearance", "bg color", (double*)&myStyleParam.fBgColor.rgba, 4);
 	
 	g_key_file_set_string (pSimpleKeyFile, "Appearance", "default icon directory", myIconsParam.cIconTheme);
 	
