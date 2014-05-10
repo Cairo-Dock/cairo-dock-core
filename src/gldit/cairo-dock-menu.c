@@ -137,6 +137,7 @@ void _init_menu_style (void)
 				box-shadow: none; \
 				background: transparent; \
 				color: @menuitem_text_color; \
+				border-color: transparent; \
 				-unico-border-gradient: none; \
 				-unico-inner-stroke-width: 0px; \
 				-unico-outer-stroke-width: 0px; \
@@ -175,6 +176,7 @@ void _init_menu_style (void)
 			.gldimenuitem *:insensitive { \
 				text-shadow: none; \
 				color: @menuitem_insensitive_text_color; \
+				background: transparent; \
 			} \
 			.gldimenuitem .entry, \
 			.gldimenuitem.entry { \
