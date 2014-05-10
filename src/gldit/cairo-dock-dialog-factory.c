@@ -419,9 +419,9 @@ static void _set_widget_bg_color (GtkWidget *pWidget)
 	else
 	{
 		static GdkColor color;
-		color.red = myDialogsParam.fBgColor.red * 65535;
-		color.green = myDialogsParam.fBgColor.green * 65535;
-		color.blue = myDialogsParam.fBgColor.blue * 65535;
+		color.red = myDialogsParam.fBgColor.rgba.red * 65535;
+		color.green = myDialogsParam.fBgColor.rgba.green * 65535;
+		color.blue = myDialogsParam.fBgColor.rgba.blue * 65535;
 		gtk_widget_modify_bg (pWidget, GTK_STATE_NORMAL, &color);
 	}
 }
