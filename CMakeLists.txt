@@ -95,6 +95,15 @@ set (packages_required "glib-2.0 gthread-2.0 cairo librsvg-2.0 dbus-1 dbus-glib-
 STRING (REGEX REPLACE " " ";" packages_required_semicolon ${packages_required})  # replace blank space by semicolon => to have more details if a package is missing
 pkg_check_modules ("PACKAGE" REQUIRED "${packages_required_semicolon}")
 
+set (with_egl no)  # although EGL can be used with X (replacing GLX), it requires drivers that support DRI2, so most of the time GLX works better; so it's disabled by default for now; later, it will be required for Wayland, and we'll have to decide whether we compile with both, or whether we load one of them as a plug-in at run-time. It may depend on EGL having been built to support a given graphic target.
+if (enable-egl-support)
+	pkg_check_modules ("EGL" "egl")
+	if (EGL_FOUND)
+		set (HAVE_EGL 1)
+		set (with_egl yes)
+	endif()
+endif()
+
 set (with_x11 no)
 set (with_xentend no)
 enable_if_not_defined (enable-x11-support) # enabled by default
@@ -110,7 +119,9 @@ if (enable-x11-support)
 	endif()
 	
 	# check for GLX
-	check_library_exists (GL glXMakeCurrent "" HAVE_GLX)  # HAVE_GLX remains undefined if not found, else it's "1"
+	if (NOT EGL_FOUND)  # currently we only have an X backend so we use either GLX or EGL, not both at once.
+		check_library_exists (GL glXMakeCurrent "" HAVE_GLX)  # HAVE_GLX remains undefined if not found, else it's "1"
+	endif()
 	
 	# check for X extensions
 	set (xextend_required "xtst xcomposite xrandr xrender")  # for the .pc
@@ -228,6 +239,7 @@ if (HAVE_GLX)
 else()
 	MESSAGE (STATUS " * With GLX support   : no")
 endif()
+MESSAGE (STATUS " * With EGL support   : ${with_egl}")
 if (HAVE_LIBCRYPT)
 	MESSAGE (STATUS " * Crypt passwords    : yes")
 else()
