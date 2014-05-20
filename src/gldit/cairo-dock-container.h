@@ -25,7 +25,9 @@
 #ifdef HAVE_GLX
 #include <GL/glx.h>  // GLXContext
 #endif
-
+#ifdef HAVE_EGL
+#include <EGL/egl.h>  // EGLContext, EGLSurface
+#endif
 #include "cairo-dock-struct.h"
 #include "cairo-dock-manager.h"
 
@@ -148,8 +150,12 @@ struct _GldiContainer {
 	#ifdef HAVE_GLX
 	/// OpenGL context.
 	GLXContext glContext;
-	#else
-	gpointer unused;  // to keep ABI compatibility for plug-ins
+	void *unused;  // keep ABI compatibility
+	#elif defined(HAVE_EGL)
+	/// OpenGL context.
+	EGLContext glContext;
+	/// EGL surface.
+	EGLSurface eglSurface;
 	#endif
 	/// whether the GL context is an ortho or a perspective view.
 	gboolean bPerspectiveView;

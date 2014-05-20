@@ -82,6 +82,7 @@ include_directories(
 	${GTK_INCLUDE_DIRS}
 	${XEXTEND_INCLUDE_DIRS}
 	${XINERAMA_INCLUDE_DIRS}
+	${EGL_INCLUDE_DIRS}
 	${CMAKE_SOURCE_DIR}/src/gldit
 	${CMAKE_SOURCE_DIR}/src/implementations)
 
@@ -89,6 +90,7 @@ include_directories(
 link_directories(
 	${PACKAGE_LIBRARY_DIRS}
 	${GTK_LIBRARY_DIRS}
+	${EGL_LIBRARY_DIRS}
 	${XEXTEND_LIBRARY_DIRS}
 	${XINERAMA_LIBRARY_DIRS})
 
@@ -109,6 +111,7 @@ set_target_properties ("gldi" PROPERTIES
 target_link_libraries("gldi"
 	${PACKAGE_LIBRARIES}
 	${GTK_LIBRARIES}
+	${EGL_LIBRARIES}
 	${XEXTEND_LIBRARIES}
 	${XINERAMA_LIBRARIES}
 	${LIBCRYPT_LIBS}

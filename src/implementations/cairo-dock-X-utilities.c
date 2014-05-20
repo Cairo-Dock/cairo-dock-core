@@ -1717,6 +1717,8 @@ GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 	return texture;
 	
 	#else
+	(void)Xid;  // avoid unused warning
+	(void)iBackingPixmap;
 	return 0;
 	#endif
 }

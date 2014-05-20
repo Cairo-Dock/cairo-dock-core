@@ -44,6 +44,7 @@
 #include "cairo-dock-container.h"  // GldiContainerManagerBackend
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-glx.h"
+#include "cairo-dock-egl.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-X-manager.h"
 
@@ -901,7 +902,7 @@ static cairo_surface_t* _get_thumbnail_surface (GldiWindowActor *actor, int iWid
 static GLuint _get_texture (GldiWindowActor *actor)
 {
 	GldiXWindowActor *xactor = (GldiXWindowActor *)actor;
-	return cairo_dock_texture_from_pixmap (xactor->Xid, xactor->iBackingPixmap);
+	return cairo_dock_texture_from_pixmap (xactor->Xid, xactor->iBackingPixmap);  /// TODO: make an EGL version of this...
 }
 
 static GldiWindowActor *_get_transient_for (GldiWindowActor *actor)
@@ -1161,7 +1162,8 @@ static void init (void)
 	cmb.present = _present;
 	gldi_container_manager_register_backend (&cmb);
 	
-	gldi_register_glx_backend ();
+	gldi_register_glx_backend ();  // actually one of them is a nop
+	gldi_register_egl_backend ();
 }
 
 
