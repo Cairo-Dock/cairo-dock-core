@@ -56,6 +56,9 @@ void cairo_dock_get_version_from_string (const gchar *cVersionString, int *iMajo
 gboolean cairo_dock_string_is_address (const gchar *cString);
 #define cairo_dock_string_is_adress cairo_dock_string_is_address
 
+gboolean cairo_dock_string_contains (const char *cNames, const gchar *cName, const gchar *separators);
+
+
 gchar *cairo_dock_launch_command_sync_with_stderr (const gchar *cCommand, gboolean bPrintStdErr);
 #define cairo_dock_launch_command_sync(cCommand) cairo_dock_launch_command_sync_with_stderr (cCommand, TRUE)
 

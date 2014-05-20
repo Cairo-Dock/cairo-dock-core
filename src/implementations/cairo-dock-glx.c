@@ -28,75 +28,30 @@
 #include <X11/extensions/Xrender.h>  // XRenderFindVisualFormat
 
 #include "cairo-dock-log.h"
+#include "cairo-dock-utils.h"  // cairo_dock_string_contains
 #include "cairo-dock-X-utilities.h"  // cairo_dock_get_X_display
 #include "cairo-dock-opengl.h"
 
 // dependencies
 extern CairoDockGLConfig g_openglConfig;
-extern gboolean g_bEasterEggs;
 extern GldiContainer *g_pPrimaryContainer;
 
 // private
-static gboolean s_bInitialized = FALSE;
 static Display *s_XDisplay = NULL;
-static gboolean s_bForceOpenGL = FALSE;
+static GLXContext s_XContext = 0;
+static XVisualInfo *s_XVisInfo = NULL;
+#if (GTK_MAJOR_VERSION < 3)  // GTK2
+GdkColormap *s_pGdkColormap = NULL;
+#else  // GTK3
+GdkVisual *s_pGdkVisual = NULL;
+#endif
 #define _gldi_container_get_Xid(pContainer) GDK_WINDOW_XID (gldi_container_get_gdk_window(pContainer))
 
-
-// TODO: remove that when Mesa 10.1 will be used by most people
-static gboolean _is_blacklisted (const gchar *cVersion, const gchar *cVendor, const gchar *cRenderer)
-{
-	if (strstr (cRenderer, "Mesa DRI Intel(R) Ivybridge Mobile") != NULL
-	    && (strstr (cVersion, "Mesa 9") != NULL // affect all versions <= 10.0
-	        || strstr (cVersion, "Mesa 10.0") != NULL)
-	    && strstr (cVendor, "Intel Open Source Technology Center") != NULL)
-	{
-		cd_warning ("This card is blacklisted due to a bug with your video drivers: Intel 4000 HD Ivybridge Mobile.\n Please install Mesa >= 10.1");
-		return TRUE;
-	}
-	return FALSE;
-}
-
-static inline gboolean _check_extension (const char *extName, const gchar *cExtensions)
-{
-	g_return_val_if_fail (cExtensions != NULL, FALSE);
-	/*
-	** Search for extName in the extensions string.  Use of strstr()
-	** is not sufficient because extension names can be prefixes of
-	** other extension names.  Could use strtok() but the constant
-	** string returned by glGetString can be in read-only memory.
-	*/
-	char *p = (char *) cExtensions;
-
-	char *end;
-	int extNameLen;
-
-	extNameLen = strlen(extName);
-	end = p + strlen(p);
-
-	while (p < end)
-	{
-		int n = strcspn(p, " ");
-		if ((extNameLen == n) && (strncmp(extName, p, n) == 0))
-		{
-			return TRUE;
-		}
-		p += (n + 1);
-	}
-	return FALSE;
-}
-static gboolean _check_gl_extension (const char *extName)
-{
-	const gchar *glExtensions = (gchar *) glGetString (GL_EXTENSIONS);
-	return _check_extension (extName, glExtensions);
-}
 static gboolean _check_client_glx_extension (const char *extName)
 {
 	Display *display = s_XDisplay;
-	//int screen = 0;
-	//const gchar *glxExtensions = glXQueryExtensionsString (display, screen);
 	const gchar *glxExtensions = glXGetClientString (display, GLX_EXTENSIONS);
-	return _check_extension (extName, glxExtensions);
+	return cairo_dock_string_contains (glxExtensions, extName, " ");
 }
 
 static XVisualInfo *_get_visual_from_fbconfigs (GLXFBConfig *pFBConfigs, int iNumOfFBConfigs, Display *XDisplay)
@@ -136,7 +91,6 @@ static XVisualInfo *_get_visual_from_fbconfigs (GLXFBConfig *pFBConfigs, int iNu
 
 static gboolean _initialize_opengl_backend (gboolean bForceOpenGL)
 {
-	s_bForceOpenGL = bForceOpenGL;
 	gboolean bStencilBufferAvailable, bAlphaAvailable;
 	Display *XDisplay = s_XDisplay;
 	
@@ -194,7 +148,6 @@ static gboolean _initialize_opengl_backend (gboolean bForceOpenGL)
 		if (pVisInfo == NULL && bForceOpenGL)
 		{
 			cd_warning ("we could not get an ARGB-visual, trying to get an RGB one (fake transparency will be used in return) ...");
-			g_openglConfig.bAlphaAvailable = FALSE;
 			doubleBufferAttributes[14] = None;
 			int i, iNumOfFBConfigs;
 			pFBConfigs = glXChooseFBConfig (XDisplay,
@@ -242,20 +195,20 @@ static gboolean _initialize_opengl_backend (gboolean bForceOpenGL)
 	
 	//\_________________ create a context for this visual. All other context will share ressources with it, and it will be the default context in case no other context exist.
 	Display *dpy = s_XDisplay;
-	g_openglConfig.context = glXCreateContext (dpy, pVisInfo, NULL, TRUE);
-	g_return_val_if_fail (g_openglConfig.context != 0, FALSE);
+	s_XContext = glXCreateContext (dpy, pVisInfo, NULL, TRUE);
+	g_return_val_if_fail (s_XContext != 0, FALSE);
 	
 	//\_________________ create a colormap based on this visual.
 	GdkScreen *screen = gdk_screen_get_default ();
 	GdkVisual *pGdkVisual = gdk_x11_screen_lookup_visual (screen, pVisInfo->visualid);
 	#if (GTK_MAJOR_VERSION < 3)
-	g_openglConfig.xcolormap = XCreateColormap (dpy, DefaultRootWindow (dpy), pVisInfo->visual, AllocNone);
-	g_openglConfig.pColormap = gdk_x11_colormap_foreign_new (pGdkVisual, g_openglConfig.xcolormap);
+	Colormap XColormap = XCreateColormap (dpy, DefaultRootWindow (dpy), pVisInfo->visual, AllocNone);
+	s_pGdkColormap = gdk_x11_colormap_foreign_new (pGdkVisual, XColormap);
 	#else
-	g_openglConfig.pGdkVisual = pGdkVisual;
-	g_return_val_if_fail (g_openglConfig.pGdkVisual != NULL, FALSE);
+	s_pGdkVisual = pGdkVisual;
+	g_return_val_if_fail (s_pGdkVisual != NULL, FALSE);
 	#endif
-	g_openglConfig.pVisInfo = pVisInfo;
+	s_XVisInfo = pVisInfo;
 	/** Note: this is where we can't use gtkglext: gdk_x11_gl_config_new_from_visualid() sets a new colormap on the root window, and Qt doesn't like that
 	cf https://bugzilla.redhat.com/show_bug.cgi?id=440340
 	which would force us to do a XDeleteProperty ( dpy, DefaultRootWindow (dpy), XInternAtom (dpy, "RGB_DEFAULT_MAP", 0) ) */
@@ -274,11 +227,11 @@ static gboolean _initialize_opengl_backend (gboolean bForceOpenGL)
 
 static void _stop (void)
 {
-	if (g_openglConfig.context != 0)
+	if (s_XContext != 0)
 	{
 		Display *dpy = s_XDisplay;
-		glXDestroyContext (dpy, g_openglConfig.context);
-		g_openglConfig.context = 0;
+		glXDestroyContext (dpy, s_XContext);
+		s_XContext = 0;
 	}
 }
 
@@ -291,120 +244,27 @@ static gboolean _container_make_current (GldiContainer *pContainer)
 
 static void _container_end_draw (GldiContainer *pContainer)
 {
-	glDisable (GL_SCISSOR_TEST);  /// should not be here ...
 	Window Xid = _gldi_container_get_Xid (pContainer);
 	Display *dpy = s_XDisplay;
 	glXSwapBuffers (dpy, Xid);
-}
-
-static void _init_opengl_context (G_GNUC_UNUSED GtkWidget* pWidget, GldiContainer *pContainer)
-{
-	if (! _container_make_current (pContainer))
-		return;
-	
-	//g_print ("INIT OPENGL ctx\n");
-	glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
-	glClearDepth (1.0f);
-	glClearStencil (0);
-	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
-	
-	/// a tester ...
-	///if (g_bEasterEggs)
-	///	glEnable (GL_MULTISAMPLE_ARB);
-	
-	// set once and for all
-	glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);  // GL_MODULATE / GL_DECAL /  GL_BLEND
-	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri (GL_TEXTURE_2D,
-		GL_TEXTURE_MIN_FILTER,
-		g_bEasterEggs ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
-	if (g_bEasterEggs)
-		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-	glTexParameteri (GL_TEXTURE_2D,
-		GL_TEXTURE_MAG_FILTER,
-		GL_LINEAR);
-}
-
-static void _post_initialize_opengl_backend (G_GNUC_UNUSED GtkWidget *pWidget, GldiContainer *pContainer)  // initialisation necessitant un contexte opengl.
-{
-	g_return_if_fail (!s_bInitialized);
-	
-	if (! _container_make_current (pContainer))
-		return ;
-	
-	s_bInitialized = TRUE;
-	g_openglConfig.bNonPowerOfTwoAvailable = _check_gl_extension ("GL_ARB_texture_non_power_of_two");
-	g_openglConfig.bFboAvailable = _check_gl_extension ("GL_EXT_framebuffer_object");
-	if (!g_openglConfig.bFboAvailable)
-		cd_warning ("No FBO support, some applets will be invisible if placed inside the dock.");
-	
-	g_openglConfig.bNonPowerOfTwoAvailable = _check_gl_extension ("GL_ARB_texture_non_power_of_two");
-	g_openglConfig.bAccumBufferAvailable = _check_gl_extension ("GL_SUN_slice_accum");
-	
-	GLfloat fMaximumAnistropy = 0.;
-	if (_check_gl_extension ("GL_EXT_texture_filter_anisotropic"))
-	{
-		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &fMaximumAnistropy);
-		glTexParameterf (GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, fMaximumAnistropy);
-	}
-
-	const gchar *cVersion  = (const gchar *) glGetString (GL_VERSION);
-	const gchar *cVendor   = (const gchar *) glGetString (GL_VENDOR);
-	const gchar *cRenderer = (const gchar *) glGetString (GL_RENDERER);
-
-	cd_message ("OpenGL config summary :\n - bNonPowerOfTwoAvailable : %d\n - bFboAvailable : %d\n - direct rendering : %d\n - bTextureFromPixmapAvailable : %d\n - bAccumBufferAvailable : %d\n - Anisotroy filtering level max : %.1f\n - OpenGL version: %s\n - OpenGL vendor: %s\n - OpenGL renderer: %s\n\n",
-		g_openglConfig.bNonPowerOfTwoAvailable,
-		g_openglConfig.bFboAvailable,
-		!g_openglConfig.bIndirectRendering,
-		g_openglConfig.bTextureFromPixmapAvailable,
-		g_openglConfig.bAccumBufferAvailable,
-		fMaximumAnistropy,
-		cVersion,
-		cVendor,
-		cRenderer);
-
-	// we need a context to use glGetString, this is why we did it now
-	if (! s_bForceOpenGL && _is_blacklisted (cVersion, cVendor, cRenderer))
-	{
-		cd_warning ("%s 'cairo-dock -o'\n"
-			" OpenGL Version: %s\n OpenGL Vendor: %s\n OpenGL Renderer: %s",
-			"The OpenGL backend will be deactivated. Note that you can force "
-			"this OpenGL backend by launching the dock with this command:",
-			cVersion, cVendor, cRenderer);
-		gldi_gl_backend_deactivate ();
-	}
 }
 
 static void _container_init (GldiContainer *pContainer)
 {
 	// Set the visual we found during the init
 	#if (GTK_MAJOR_VERSION < 3)
-	gtk_widget_set_colormap (pContainer->pWidget, g_openglConfig.pColormap);
+	gtk_widget_set_colormap (pContainer->pWidget, s_pGdkColormap);
 	#else
-	gtk_widget_set_visual (pContainer->pWidget, g_openglConfig.pGdkVisual);
+	gtk_widget_set_visual (pContainer->pWidget, s_pGdkVisual);
 	#endif
 	
 	// create a GL context for this container (this way, we can set the viewport once and for all).
 	Display *dpy = s_XDisplay;
-	GLXContext context = g_openglConfig.context;
-	pContainer->glContext = glXCreateContext (dpy, g_openglConfig.pVisInfo, context, TRUE);
+	GLXContext shared_context = s_XContext;
+	pContainer->glContext = glXCreateContext (dpy, s_XVisInfo, shared_context, TRUE);
 	
 	// handle the double buffer manually.
 	gtk_widget_set_double_buffered (pContainer->pWidget, FALSE);
-	
-	// finish the initialisation of the opengl backend, now that we have a context (and a window to bind it to)
-	if (! s_bInitialized)
-		g_signal_connect (G_OBJECT (pContainer->pWidget),
-			"realize",
-			G_CALLBACK (_post_initialize_opengl_backend),
-			pContainer);
-	
-	// when the window will be realised, initialise its GL context.
-	g_signal_connect_after (G_OBJECT (pContainer->pWidget),
-		"realize",
-		G_CALLBACK (_init_opengl_context),
-		pContainer);
 }
 
 static void _container_finish (GldiContainer *pContainer)
@@ -418,7 +278,7 @@ static void _container_finish (GldiContainer *pContainer)
 			if (g_pPrimaryContainer != NULL && pContainer != g_pPrimaryContainer)
 				_container_make_current (g_pPrimaryContainer);
 			else
-				glXMakeCurrent (dpy, 0, g_openglConfig.context);
+				glXMakeCurrent (dpy, 0, s_XContext);
 		}
 		
 		glXDestroyContext (dpy, pContainer->glContext);

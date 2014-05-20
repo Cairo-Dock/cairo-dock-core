@@ -22,6 +22,7 @@
 #include <GL/glu.h>  // gluLookAt
 
 #include "cairo-dock-log.h"
+#include "cairo-dock-utils.h"  // cairo_dock_string_contains
 #include "cairo-dock-icon-facility.h"  // cairo_dock_get_icon_extent
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-desktop-manager.h"  // desktop dimensions
@@ -34,15 +35,19 @@ gboolean g_bUseOpenGL = FALSE;
 
 // dependencies
 extern GldiDesktopBackground *g_pFakeTransparencyDesktopBg;
+extern gboolean g_bEasterEggs;
 
 // private
 static GldiGLManagerBackend s_backend;
+static gboolean s_bInitialized = FALSE;
+static gboolean s_bForceOpenGL = FALSE;
 
 
 gboolean gldi_gl_backend_init (gboolean bForceOpenGL)
 {
 	memset (&g_openglConfig, 0, sizeof (CairoDockGLConfig));
 	g_bUseOpenGL = FALSE;
+	s_bForceOpenGL = bForceOpenGL;  // remember it, in case later we can't post-initialize the opengl context
 	
 	if (s_backend.init)
 		g_bUseOpenGL = s_backend.init (bForceOpenGL);
@@ -236,10 +241,122 @@ void gldi_gl_container_end_draw (GldiContainer *pContainer)
 }
 
 
+static void _init_opengl_context (G_GNUC_UNUSED GtkWidget* pWidget, GldiContainer *pContainer)
+{
+	if (! gldi_gl_container_make_current (pContainer))
+		return;
+	
+	//g_print ("INIT OPENGL ctx\n");
+	glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
+	glClearDepth (1.0f);
+	glClearStencil (0);
+	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
+	
+	/// a tester ...
+	///if (g_bEasterEggs)
+	///	glEnable (GL_MULTISAMPLE_ARB);
+	
+	// set once and for all
+	glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);  // GL_MODULATE / GL_DECAL /  GL_BLEND
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri (GL_TEXTURE_2D,
+		GL_TEXTURE_MIN_FILTER,
+		g_bEasterEggs ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
+	if (g_bEasterEggs)
+		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+	glTexParameteri (GL_TEXTURE_2D,
+		GL_TEXTURE_MAG_FILTER,
+		GL_LINEAR);
+}
+
+// TODO: remove that when Mesa 10.1 will be used by most people
+static gboolean _is_blacklisted (const gchar *cVersion, const gchar *cVendor, const gchar *cRenderer)
+{
+	if (strstr (cRenderer, "Mesa DRI Intel(R) Ivybridge Mobile") != NULL
+	    && (strstr (cVersion, "Mesa 9") != NULL // affect all versions <= 10.0
+	        || strstr (cVersion, "Mesa 10.0") != NULL)
+	    && strstr (cVendor, "Intel Open Source Technology Center") != NULL)
+	{
+		cd_warning ("This card is blacklisted due to a bug with your video drivers: Intel 4000 HD Ivybridge Mobile.\n Please install Mesa >= 10.1");
+		return TRUE;
+	}
+	return FALSE;
+}
+
+static gboolean _check_gl_extension (const char *extName)
+{
+	const char *glExtensions = (const char *) glGetString (GL_EXTENSIONS);
+	return cairo_dock_string_contains (glExtensions, extName, " ");
+}
+
+static void _post_initialize_opengl_backend (G_GNUC_UNUSED GtkWidget *pWidget, GldiContainer *pContainer)  // initialisation necessitant un contexte opengl.
+{
+	g_return_if_fail (!s_bInitialized);
+	
+	if (! gldi_gl_container_make_current (pContainer))
+		return ;
+	
+	s_bInitialized = TRUE;
+	g_openglConfig.bNonPowerOfTwoAvailable = _check_gl_extension ("GL_ARB_texture_non_power_of_two");
+	g_openglConfig.bFboAvailable = _check_gl_extension ("GL_EXT_framebuffer_object");
+	if (!g_openglConfig.bFboAvailable)
+		cd_warning ("No FBO support, some applets will be invisible if placed inside the dock.");
+	
+	g_openglConfig.bNonPowerOfTwoAvailable = _check_gl_extension ("GL_ARB_texture_non_power_of_two");
+	g_openglConfig.bAccumBufferAvailable = _check_gl_extension ("GL_SUN_slice_accum");
+	
+	GLfloat fMaximumAnistropy = 0.;
+	if (_check_gl_extension ("GL_EXT_texture_filter_anisotropic"))
+	{
+		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &fMaximumAnistropy);
+		glTexParameterf (GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, fMaximumAnistropy);
+	}
+
+	const gchar *cVersion  = (const gchar *) glGetString (GL_VERSION);
+	const gchar *cVendor   = (const gchar *) glGetString (GL_VENDOR);
+	const gchar *cRenderer = (const gchar *) glGetString (GL_RENDERER);
+
+	cd_message ("OpenGL config summary :\n - bNonPowerOfTwoAvailable : %d\n - bFboAvailable : %d\n - direct rendering : %d\n - bTextureFromPixmapAvailable : %d\n - bAccumBufferAvailable : %d\n - Anisotroy filtering level max : %.1f\n - OpenGL version: %s\n - OpenGL vendor: %s\n - OpenGL renderer: %s\n\n",
+		g_openglConfig.bNonPowerOfTwoAvailable,
+		g_openglConfig.bFboAvailable,
+		!g_openglConfig.bIndirectRendering,
+		g_openglConfig.bTextureFromPixmapAvailable,
+		g_openglConfig.bAccumBufferAvailable,
+		fMaximumAnistropy,
+		cVersion,
+		cVendor,
+		cRenderer);
+
+	// we need a context to use glGetString, this is why we did it now
+	if (! s_bForceOpenGL && _is_blacklisted (cVersion, cVendor, cRenderer))
+	{
+		cd_warning ("%s 'cairo-dock -o'\n"
+			" OpenGL Version: %s\n OpenGL Vendor: %s\n OpenGL Renderer: %s",
+			"The OpenGL backend will be deactivated. Note that you can force "
+			"this OpenGL backend by launching the dock with this command:",
+			cVersion, cVendor, cRenderer);
+		gldi_gl_backend_deactivate ();
+	}
+}
+
 void gldi_gl_container_init (GldiContainer *pContainer)
 {
 	if (g_bUseOpenGL && s_backend.container_init)
 		s_backend.container_init (pContainer);
+	
+	// finish the initialisation of the opengl backend, now that we have a window we can bind context to.
+	if (! s_bInitialized)
+		g_signal_connect (G_OBJECT (pContainer->pWidget),
+			"realize",
+			G_CALLBACK (_post_initialize_opengl_backend),
+			pContainer);
+	
+	// when the window will be realised, initialise its GL context.
+	g_signal_connect_after (G_OBJECT (pContainer->pWidget),
+		"realize",
+		G_CALLBACK (_init_opengl_context),
+		pContainer);
 }
 
 void gldi_gl_container_finish (GldiContainer *pContainer)

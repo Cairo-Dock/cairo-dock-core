@@ -208,6 +208,35 @@ gboolean cairo_dock_string_is_address (const gchar *cString)
 }
 
 
+gboolean cairo_dock_string_contains (const char *cNames, const gchar *cName, const gchar *separators)
+{
+	g_return_val_if_fail (cNames != NULL, FALSE);
+	/*
+	** Search for cName in the extensions string.  Use of strstr()
+	** is not sufficient because extension names can be prefixes of
+	** other extension names.  Could use strtok() but the constant
+	** string returned by glGetString can be in read-only memory.
+	*/
+	char *p = (char *) cNames;
+
+	char *end;
+	int cNameLen;
+
+	cNameLen = strlen(cName);
+	end = p + strlen(p);
+
+	while (p < end)
+	{
+		int n = strcspn(p, separators);
+		if ((cNameLen == n) && (strncmp(cName, p, n) == 0))
+		{
+			return TRUE;
+		}
+		p += (n + 1);
+	}
+	return FALSE;
+}
+
 
 gchar *cairo_dock_launch_command_sync_with_stderr (const gchar *cCommand, gboolean bPrintStdErr)
 {

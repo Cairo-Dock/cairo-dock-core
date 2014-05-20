@@ -41,18 +41,12 @@ struct _CairoDockGLConfig {
 	gboolean bFboAvailable;
 	gboolean bNonPowerOfTwoAvailable;
 	gboolean bTextureFromPixmapAvailable;
-	// GLX-backend's data
 	#ifdef HAVE_GLX
-	GLXContext context;
-	XVisualInfo *pVisInfo;
-	#if (GTK_MAJOR_VERSION < 3)  // GTK2
-	Colormap xcolormap;
-	GdkColormap *pColormap;
-	#else  // GTK3
-	GdkVisual *pGdkVisual;
-	#endif
 	void (*bindTexImage) (Display *display, GLXDrawable drawable, int buffer, int *attribList);  // texture from pixmap
 	void (*releaseTexImage) (Display *display, GLXDrawable drawable, int buffer);  // texture from pixmap
+	#elif defined(HAVE_EGL)
+	void (*bindTexImage) (EGLDisplay *display, EGLSurface drawable, int buffer);  // texture from pixmap
+	void (*releaseTexImage) (EGLDisplay *display, EGLSurface drawable, int buffer);  // texture from pixmap
 	#endif
 };
 
