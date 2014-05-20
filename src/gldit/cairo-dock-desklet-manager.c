@@ -807,7 +807,6 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDeskletsParam *pDesklets)
 		pDecoration->iLeftMargin = pDecoration->iTopMargin = pDecoration->iRightMargin = pDecoration->iBottomMargin = myStyleParam.iLineWidth;
 		pDecoration->fBackGroundAlpha = 1.;
 		pDecoration->cBackGroundImagePath = g_strdup ("automatic");  // keyword to say we use global style colors rather an image
-		g_print ("pDecoration->iLeftMargin: %d\n", pDecoration->iLeftMargin);
 		cairo_dock_register_desklet_decoration ("automatic", pDecoration);  // we don't actually load an Imagebuffer, 
 	}
 	

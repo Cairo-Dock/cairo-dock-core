@@ -214,14 +214,12 @@ void gldi_text_description_set_font (GldiTextDescription *pTextDescription, gcha
 		if (pango_font_description_get_size_is_absolute (pTextDescription->fd))
 		{
 			pTextDescription->iSize = pango_font_description_get_size (pTextDescription->fd) / PANGO_SCALE;
-			g_print ("abs size: %d\n", pTextDescription->iSize);
 		}
 		else
 		{
 			gdouble dpi = gdk_screen_get_resolution (gdk_screen_get_default ());
 			if (dpi < 0) dpi = 96.;
 			pTextDescription->iSize = dpi * pango_font_description_get_size (pTextDescription->fd) / PANGO_SCALE / 72.;  // font_size in dots (pixels) = font_size in points / (72 points per inch) * (dpi dots per inch)
-			g_print ("size: %d\n", pTextDescription->iSize);
 		}
 	}
 	else  // no font, take the default one

@@ -553,7 +553,7 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	#if (GTK_MAJOR_VERSION < 3)
 	gtk_widget_size_request (GTK_WIDGET (menu), &requisition);
 	#else
-	gtk_widget_get_preferred_size (GTK_WIDGET (menu), NULL, &requisition);  // retrieve the natural size; Note: before gtk3.10 we used the minimum size and it was ok; TODO: check that it's still alright with gtk<3.10...
+	gtk_widget_get_preferred_size (GTK_WIDGET (menu), NULL, &requisition);  // retrieve the natural size; Note: before gtk3.10 we used the minimum size but it's now incorrect; the natural size works for prior versions too.
 	#endif
 	w = requisition.width;
 	h = requisition.height;

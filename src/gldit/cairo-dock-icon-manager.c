@@ -525,7 +525,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 	gchar *cFont = (bCustomFont ? cairo_dock_get_string_key_value (pKeyFile, "Labels", "police", &bFlushConfFileNeeded, NULL, "Icons", NULL) : NULL);
 	gldi_text_description_set_font (&pLabels->iconTextDescription, cFont);
 	
-	g_print ("pLabels->iconTextDescription.cFont: %s, %d\n", pLabels->iconTextDescription.cFont, pLabels->iconTextDescription.iSize);
+	cd_debug ("label font: %s, %d\n", pLabels->iconTextDescription.cFont, pLabels->iconTextDescription.iSize);
 	
 	//\___________________ labels text color
 	pLabels->iconTextDescription.bOutlined = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "text oulined", &bFlushConfFileNeeded, TRUE, NULL, NULL);
@@ -578,7 +578,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 		2 * pLabels->iconTextDescription.iMargin +
 		6  // 2px linewidth + 3px to take into account the y offset of the characters + 1 px to take into account the gap between icon and label
 		: 0);
-	g_print ("pLabels->iLabelSize: %d (%d)\n", pLabels->iLabelSize, pLabels->iconTextDescription.iSize);
+	cd_debug ("iLabelSize: %d (%d)\n", pLabels->iLabelSize, pLabels->iconTextDescription.iSize);
 	
 	//\___________________ labels visibility
 	int iShowLabel = cairo_dock_get_integer_key_value (pKeyFile, "Labels", "show_labels", &bFlushConfFileNeeded, -1, NULL, NULL);
