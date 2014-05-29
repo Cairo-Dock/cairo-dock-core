@@ -467,8 +467,6 @@ void gldi_menu_init (GtkWidget *pMenu, Icon *pIcon)
 		G_CALLBACK (_draw_menu),
 		pMenu);
 	
-	///_init_menu_style ();
-	
 	gtk_style_context_add_class (gtk_widget_get_style_context (pMenu), "gldimenu");
 	#endif
 	
@@ -616,6 +614,8 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 #if GTK_MAJOR_VERSION > 2
 static void _init_menu_item (GtkWidget *pMenuItem)
 {
+	GtkWidget *pSubMenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (pMenuItem));
+	
 	// add our class on the menu-item; the style of this class is (will be) defined in a css, which will override the default gtkmenuitem style.
 	gboolean bStyleIsSet = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pMenuItem), "gldi-style-set"));
 	if (! bStyleIsSet)  // not done yet -> do it once
@@ -640,12 +640,15 @@ static void _init_menu_item (GtkWidget *pMenuItem)
 		
 		gtk_style_context_add_class (gtk_widget_get_style_context (pMenuItem), "gldimenuitem");
 		
+		if (pSubMenu != NULL)  // if this item has a sub-menu, init it as well
+			gldi_menu_init (pSubMenu, NULL);
+		
 		g_object_set_data (G_OBJECT (pMenuItem), "gldi-style-set", GINT_TO_POINTER(1));
+		
 	}
 	
 	// iterate on sub-menu's items
-	GtkWidget *pSubMenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (pMenuItem));
-	if (pSubMenu != NULL)  /// TODO: if it's a sub-menu not made by us (for instance, the NetworkManager indicator), set the drawing callback...
+	if (pSubMenu != NULL)
 		gtk_container_forall (GTK_CONTAINER (pSubMenu), (GtkCallback) _init_menu_item, NULL);
 }
 #endif
@@ -663,8 +666,7 @@ static void _popup_menu (GtkWidget *menu, guint32 time)
 		pContainer->iface.setup_menu (pContainer, pIcon, menu);
 	
 	#if GTK_MAJOR_VERSION > 2
-	// init the style now, in case it has not been done before (for instance, if it's not a GldiMenu, like an indicator menu or the gtk recent files menu)
-	///_init_menu_style ();  // init menu style
+	// init each items (and sub-menus), in case it contains some foreign GtkMenuItems (for instance in case of an indicator menu or the gtk recent files sub-menu, which can have new items at any time)
 	gtk_container_forall (GTK_CONTAINER (menu), (GtkCallback) _init_menu_item, NULL);  // init each menu-item style
 	
 	if (pIcon && pContainer)
