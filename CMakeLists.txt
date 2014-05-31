@@ -27,7 +27,7 @@ add_custom_target (uninstall "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/
 
 ###########     Misc     ###############
 macro (enable_if_not_defined MODULE1)
-	if (NOT DEFINED MODULE1) # true if not defined
+	if (NOT DEFINED ${MODULE1}) # true if not defined
 		set (${MODULE1} TRUE)
 	endif ()
 endmacro (enable_if_not_defined)
