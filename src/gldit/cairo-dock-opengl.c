@@ -353,7 +353,7 @@ void gldi_gl_container_init (GldiContainer *pContainer)
 			pContainer);
 	
 	// when the window will be realised, initialise its GL context.
-	g_signal_connect_after (G_OBJECT (pContainer->pWidget),
+	g_signal_connect (G_OBJECT (pContainer->pWidget),
 		"realize",
 		G_CALLBACK (_init_opengl_context),
 		pContainer);

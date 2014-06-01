@@ -60,7 +60,7 @@ static gboolean _initialize_opengl_backend (gboolean bForceOpenGL)
 	{
 		cd_warning ("Can't initialise EGL display, OpenGL will not be available");
 		return FALSE;
-    }
+	}
 	g_print ("EGL version: %d;%d\n", major, minor);
 	
 	// find a Frame Buffer Configuration (= Visual) that supports the features we need
@@ -117,11 +117,11 @@ static gboolean _initialize_opengl_backend (gboolean bForceOpenGL)
 	eglBindAPI (EGL_OPENGL_API);  // specify the type of client API context before we create one.
 	
 	s_eglContext = eglCreateContext (dpy, config, EGL_NO_CONTEXT, ctx_attribs);
-    if (s_eglContext == EGL_NO_CONTEXT)
-    {
+	if (s_eglContext == EGL_NO_CONTEXT)
+	{
 		cd_warning ("Couldn't create an EGL context, OpenGL will not be available");
 		return FALSE;
-    }
+	}
 	
 	// check some texture abilities
 	g_openglConfig.bTextureFromPixmapAvailable = _check_client_egl_extension ("EGL_EXT_texture_from_pixmap");
@@ -183,7 +183,7 @@ static void _container_init (GldiContainer *pContainer)
 	// handle the double buffer manually.
 	gtk_widget_set_double_buffered (pContainer->pWidget, FALSE);
 	
-	g_signal_connect_after (G_OBJECT (pContainer->pWidget),
+	g_signal_connect (G_OBJECT (pContainer->pWidget),
 		"realize",
 		G_CALLBACK (_init_surface),
 		pContainer);
