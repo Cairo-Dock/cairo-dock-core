@@ -70,39 +70,6 @@ typedef enum {
 #define CAIRO_DOCK_ORIENTATION_MASK (7<<3)
 
 
-/* Calcule la taille d'une image selon une contrainte en largeur et hauteur de manière à remplir l'espace donné.
-*@param fImageWidth the width of the image. Contient initialement the width of the image, et sera écrasée avec la largeur obtenue.
-*@param fImageHeight the height of the image. Contient initialement the height of the image, et sera écrasée avec la hauteur obtenue.
-*@param iWidthConstraint contrainte en largeur (0 <=> pas de contrainte).
-*@param iHeightConstraint contrainte en hauteur (0 <=> pas de contrainte).
-*@param bNoZoomUp TRUE ssi on ne doit pas agrandir the image (seulement la rétrécir).
-*@param fZoomWidth sera renseigné avec le facteur de zoom en largeur qui a été appliqué.
-*@param fZoomHeight sera renseigné avec le facteur de zoom en hauteur qui a été appliqué.
-*/
-void cairo_dock_calculate_size_fill (double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, gboolean bNoZoomUp, double *fZoomWidth, double *fZoomHeight);
-
-/* Calcule la taille d'une image selon une contrainte en largeur et hauteur en gardant le ratio hauteur/largeur constant.
-*@param fImageWidth the width of the image. Contient initialement the width of the image, et sera écrasée avec la largeur obtenue.
-*@param fImageHeight the height of the image. Contient initialement the height of the image, et sera écrasée avec la hauteur obtenue.
-*@param iWidthConstraint contrainte en largeur (0 <=> pas de contrainte).
-*@param iHeightConstraint contrainte en hauteur (0 <=> pas de contrainte).
-*@param bNoZoomUp TRUE ssi on ne doit pas agrandir the image (seulement la rétrécir).
-*@param fZoom sera renseigné avec le facteur de zoom qui a été appliqué.
-*/
-void cairo_dock_calculate_size_constant_ratio (double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, gboolean bNoZoomUp, double *fZoom);
-
-
-/** Calculate the size of an image according to a constraint on width and height, and a loading modifier.
-*@param fImageWidth pointer to the width of the image. Initially contains the width of the original image, and is updated with the resulting width.
-*@param fImageHeight pointer to the height of the image. Initially contains the height of the original image, and is updated with the resulting height.
-*@param iWidthConstraint constraint on width (0 <=> no constraint).
-*@param iHeightConstraint constraint on height (0 <=> no constraint).
-*@param iLoadingModifier a mask of different loading modifiers.
-*@param fZoomWidth will be filled with the zoom that has been applied on width.
-*@param fZoomHeight will be filled with the zoom that has been applied on height.
-*/
-void cairo_dock_calculate_constrainted_size (double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fZoomWidth, double *fZoomHeight);
-
 /** Create a surface from raw data of an X icon. The biggest icon possible is taken. The ratio is kept, and the surface will fill the space with transparency if necessary.
 *@param pXIconBuffer raw data of the icon.
 *@param iBufferNbElements number of elements in the buffer.
@@ -125,9 +92,6 @@ cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuff
 *@return the newly allocated surface.
 */
 cairo_surface_t *cairo_dock_create_surface_from_pixbuf (GdkPixbuf *pixbuf, double fMaxScale, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fImageWidth, double *fImageHeight, double *fZoomX, double *fZoomY);
-
-
-void cairo_dock_reset_source_context (void);
 
 /** Create an empty surface (transparent) of a given size. In OpenGL mode, this surface can act as a buffer to generate a texture.
 *@param iWidth width of the surface.
@@ -174,7 +138,6 @@ cairo_surface_t *cairo_dock_create_surface_from_icon (const gchar *cImagePath, d
 */
 #define cairo_dock_create_surface_for_square_icon(cImagePath, fImageSize) cairo_dock_create_surface_for_icon (cImagePath, fImageSize, fImageSize)
 
-
 /** Create a surface at a given size, and fill it with a pattern. If the pattern image is given by its sole name, it is searched inside the current theme root folder.
 *@param cImageFile path or name of an image that will be repeated to fill the surface.
 *@param fImageWidth the desired surface width.
@@ -183,7 +146,6 @@ cairo_surface_t *cairo_dock_create_surface_from_icon (const gchar *cImagePath, d
 *@return the newly allocated surface.
 */
 cairo_surface_t *cairo_dock_create_surface_from_pattern (const gchar *cImageFile, double fImageWidth, double fImageHeight, double fAlpha);
-
 
 /** Create a surface by rotating another. Only works for 1/4 of rounds.
 *@param pSurface surface to rotate.

@@ -35,10 +35,17 @@
 extern GldiContainer *g_pPrimaryContainer;
 extern gboolean g_bUseOpenGL;
 
-static cairo_t *s_pSourceContext = NULL;
 
-
-void cairo_dock_calculate_size_fill (double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, gboolean bNoZoomUp, double *fZoomWidth, double *fZoomHeight)
+/* Calcule la taille d'une image selon une contrainte en largeur et hauteur de manière à remplir l'espace donné.
+*@param fImageWidth the width of the image. Contient initialement the width of the image, et sera écrasée avec la largeur obtenue.
+*@param fImageHeight the height of the image. Contient initialement the height of the image, et sera écrasée avec la hauteur obtenue.
+*@param iWidthConstraint contrainte en largeur (0 <=> pas de contrainte).
+*@param iHeightConstraint contrainte en hauteur (0 <=> pas de contrainte).
+*@param bNoZoomUp TRUE ssi on ne doit pas agrandir the image (seulement la rétrécir).
+*@param fZoomWidth sera renseigné avec le facteur de zoom en largeur qui a été appliqué.
+*@param fZoomHeight sera renseigné avec le facteur de zoom en hauteur qui a été appliqué.
+*/
+static void _cairo_dock_calculate_size_fill (double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, gboolean bNoZoomUp, double *fZoomWidth, double *fZoomHeight)
 {
 	if (iWidthConstraint != 0)
 	{
@@ -62,7 +69,15 @@ void cairo_dock_calculate_size_fill (double *fImageWidth, double *fImageHeight, 
 		*fZoomHeight = 1.;
 }
 
-void cairo_dock_calculate_size_constant_ratio (double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, gboolean bNoZoomUp, double *fZoom)
+/* Calcule la taille d'une image selon une contrainte en largeur et hauteur en gardant le ratio hauteur/largeur constant.
+*@param fImageWidth the width of the image. Contient initialement the width of the image, et sera écrasée avec la largeur obtenue.
+*@param fImageHeight the height of the image. Contient initialement the height of the image, et sera écrasée avec la hauteur obtenue.
+*@param iWidthConstraint contrainte en largeur (0 <=> pas de contrainte).
+*@param iHeightConstraint contrainte en hauteur (0 <=> pas de contrainte).
+*@param bNoZoomUp TRUE ssi on ne doit pas agrandir the image (seulement la rétrécir).
+*@param fZoom sera renseigné avec le facteur de zoom qui a été appliqué.
+*/
+static void _cairo_dock_calculate_size_constant_ratio (double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, gboolean bNoZoomUp, double *fZoom)
 {
 	if (iWidthConstraint != 0 && iHeightConstraint != 0)
 		*fZoom = MIN (iWidthConstraint / (*fImageWidth), iHeightConstraint / (*fImageHeight));
@@ -79,8 +94,16 @@ void cairo_dock_calculate_size_constant_ratio (double *fImageWidth, double *fIma
 }
 
 
-
-void cairo_dock_calculate_constrainted_size (double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fZoomWidth, double *fZoomHeight)
+/* Calculate the size of an image according to a constraint on width and height, and a loading modifier.
+*@param fImageWidth pointer to the width of the image. Initially contains the width of the original image, and is updated with the resulting width.
+*@param fImageHeight pointer to the height of the image. Initially contains the height of the original image, and is updated with the resulting height.
+*@param iWidthConstraint constraint on width (0 <=> no constraint).
+*@param iHeightConstraint constraint on height (0 <=> no constraint).
+*@param iLoadingModifier a mask of different loading modifiers.
+*@param fZoomWidth will be filled with the zoom that has been applied on width.
+*@param fZoomHeight will be filled with the zoom that has been applied on height.
+*/
+static void _cairo_dock_calculate_constrainted_size (double *fImageWidth, double *fImageHeight, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fZoomWidth, double *fZoomHeight)
 {
 	gboolean bFillSpace = iLoadingModifier & CAIRO_DOCK_FILL_SPACE;
 	gboolean bKeepRatio = iLoadingModifier & CAIRO_DOCK_KEEP_RATIO;
@@ -122,7 +145,7 @@ void cairo_dock_calculate_constrainted_size (double *fImageWidth, double *fImage
 	
 	if (bKeepRatio)
 	{
-		cairo_dock_calculate_size_constant_ratio (fImageWidth,
+		_cairo_dock_calculate_size_constant_ratio (fImageWidth,
 			fImageHeight,
 			iWidthConstraint,
 			iHeightConstraint,
@@ -141,7 +164,7 @@ void cairo_dock_calculate_constrainted_size (double *fImageWidth, double *fImage
 	}
 	else
 	{
-		cairo_dock_calculate_size_fill (fImageWidth,
+		_cairo_dock_calculate_size_fill (fImageWidth,
 			fImageHeight,
 			iWidthConstraint,
 			iHeightConstraint,
@@ -152,34 +175,34 @@ void cairo_dock_calculate_constrainted_size (double *fImageWidth, double *fImage
 }
 
 
-#define _get_source_context(...) \
-	__extension__ ({\
-	if (s_pSourceContext == NULL) {\
-		if (g_pPrimaryContainer != NULL)\
-			s_pSourceContext = cairo_dock_create_drawing_context_generic (g_pPrimaryContainer); }\
-	s_pSourceContext; })
-#define _destroy_source_context(...) do {\
-	if (s_pSourceContext != NULL) {\
-		cairo_destroy (s_pSourceContext);\
-		s_pSourceContext = NULL; } } while (0)
-
-void cairo_dock_reset_source_context (void)
+static inline cairo_t *_get_source_context (void)
 {
-	_destroy_source_context ();
+	cairo_t *pSourceContext = NULL;
+	if (g_pPrimaryContainer != NULL)
+	{
+		gtk_widget_realize (g_pPrimaryContainer->pWidget);  // ensure the widget is realized
+		pSourceContext = gdk_cairo_create (gldi_container_get_gdk_window(g_pPrimaryContainer));
+	}
+	return pSourceContext;  // Note: we can't keep the context alive and reuse it later, because under Wayland it will make the container invisible
 }
 
 cairo_surface_t *cairo_dock_create_blank_surface (int iWidth, int iHeight)
 {
-	cairo_t *pSourceContext = _get_source_context ();
-	if (pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS && ! g_bUseOpenGL)
-		return cairo_surface_create_similar (cairo_get_target (pSourceContext),
+	cairo_t *pSourceContext = NULL;
+	if (! g_bUseOpenGL)
+		pSourceContext = _get_source_context ();
+	cairo_surface_t *pSurface;
+	if (pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS)
+		pSurface = cairo_surface_create_similar (cairo_get_target (pSourceContext),
 			CAIRO_CONTENT_COLOR_ALPHA,
 			iWidth,
 			iHeight);
-	else
-		return cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+	else  // opengl or invalid context -> create an image that is a mere ARGB buffer that can be mapped into a texture
+		pSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
 			iWidth,
 			iHeight);
+	cairo_destroy (pSourceContext);
+	return pSurface;
 }
 
 static inline void _apply_orientation_and_scale (cairo_t *pCairoContext, CairoDockLoadImageModifier iLoadingModifier, double fImageWidth, double fImageHeight, double fZoomX, double fZoomY, double fUsefulWidth, double fUsefulheight)
@@ -295,7 +318,7 @@ cairo_surface_t *cairo_dock_create_surface_from_xicon_buffer (gulong *pXIconBuff
 	
 	double fWidth = w, fHeight = h;
 	double fIconWidthSaturationFactor = 1., fIconHeightSaturationFactor = 1.;
-	cairo_dock_calculate_constrainted_size (&fWidth,
+	_cairo_dock_calculate_constrainted_size (&fWidth,
 		&fHeight,
 		iWidth,
 		iHeight,
@@ -330,7 +353,7 @@ cairo_surface_t *cairo_dock_create_surface_from_pixbuf (GdkPixbuf *pixbuf, doubl
 	*fImageWidth = gdk_pixbuf_get_width (pixbuf);
 	*fImageHeight = gdk_pixbuf_get_height (pixbuf);
 	double fIconWidthSaturationFactor = 1., fIconHeightSaturationFactor = 1.;
-	cairo_dock_calculate_constrainted_size (fImageWidth,
+	_cairo_dock_calculate_constrainted_size (fImageWidth,
 			fImageHeight,
 			iWidthConstraint,
 			iHeightConstraint,
@@ -469,7 +492,7 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 			*fImageWidth = (gdouble) w;
 			*fImageHeight = (gdouble) h;
 			//g_print ("%.2fx%.2f\n", *fImageWidth, *fImageHeight);
-			cairo_dock_calculate_constrainted_size (fImageWidth,
+			_cairo_dock_calculate_constrainted_size (fImageWidth,
 				fImageHeight,
 				iWidthConstraint,
 				iHeightConstraint,
@@ -504,7 +527,7 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 			int h = cairo_image_surface_get_height (surface_ini);
 			*fImageWidth = (double) w;
 			*fImageHeight = (double) h;
-			cairo_dock_calculate_constrainted_size (fImageWidth,
+			_cairo_dock_calculate_constrainted_size (fImageWidth,
 				fImageHeight,
 				iWidthConstraint,
 				iHeightConstraint,
@@ -831,6 +854,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, G
 	
 	g_object_unref (pLayout);
 	pango_font_description_set_absolute_size (pDesc, iSize * PANGO_SCALE);
+	cairo_destroy (pSourceContext);
 	return pNewSurface;
 }
 
