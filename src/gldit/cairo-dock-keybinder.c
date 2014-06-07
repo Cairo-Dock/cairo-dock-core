@@ -36,12 +36,12 @@
 #ifdef HAVE_X11
 #include <gdk/gdkx.h>
 #include <X11/Xlib.h>
+#include <X11/XKBlib.h>  // we should check for XkbQueryExtension...
 #endif
 #ifdef HAVE_XEXTEND
 #include <X11/extensions/XTest.h>
 #endif
 
-#include "eggaccelerators.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-keybinder.h"
 
@@ -52,34 +52,30 @@ GldiObjectManager myShortkeyObjectMgr;
 
 // private
 static GSList *s_pKeyBindings = NULL;
-///static guint32 last_event_time = 0;
-///static gboolean processing_event = FALSE;
-
 static guint num_lock_mask=0, caps_lock_mask=0, scroll_lock_mask=0;
 
-static void
-lookup_ignorable_modifiers (GdkKeymap *keymap)
+#ifdef HAVE_X11
+static void lookup_ignorable_modifiers (void)
 {
-	egg_keymap_resolve_virtual_modifiers (keymap,
-					      EGG_VIRTUAL_LOCK_MASK,
-					      &caps_lock_mask);
-
-	egg_keymap_resolve_virtual_modifiers (keymap,
-					      EGG_VIRTUAL_NUM_LOCK_MASK,
-					      &num_lock_mask);
-
-	egg_keymap_resolve_virtual_modifiers (keymap,
-					      EGG_VIRTUAL_SCROLL_LOCK_MASK,
-					      &scroll_lock_mask);
+	GdkDisplay *gdsp = gdk_display_get_default();
+	if (! GDK_IS_X11_DISPLAY(gdsp))
+		return;
+	Display *display = GDK_DISPLAY_XDISPLAY (gdsp);
+	
+	caps_lock_mask = XkbKeysymToModifiers (display, GDK_KEY_Caps_Lock);
+	num_lock_mask = XkbKeysymToModifiers (display, GDK_KEY_Num_Lock);
+	scroll_lock_mask = XkbKeysymToModifiers (display, GDK_KEY_Scroll_Lock);
+	cd_debug ("lock masks: %d; %d; %d\n", num_lock_mask, caps_lock_mask, scroll_lock_mask);
 }
 
-#ifdef HAVE_X11
-
-static void
-grab_ungrab_with_ignorable_modifiers (GdkWindow *rootwin,
-				      GldiShortkey   *binding,
-				      gboolean   grab)
+static void grab_ungrab_with_ignorable_modifiers (GldiShortkey *binding, gboolean grab)
 {
+	GdkDisplay *gdsp = gdk_display_get_default();
+	if (! GDK_IS_X11_DISPLAY(gdsp))
+		return;
+	Display *display = GDK_DISPLAY_XDISPLAY (gdsp);
+	GdkWindow *rootwin = gdk_get_default_root_window ();
+	
 	guint mod_masks [] = {
 		0, /* modifier only */
 		num_lock_mask,
@@ -89,12 +85,13 @@ grab_ungrab_with_ignorable_modifiers (GdkWindow *rootwin,
 		num_lock_mask  | scroll_lock_mask,
 		caps_lock_mask | scroll_lock_mask,
 		num_lock_mask  | caps_lock_mask | scroll_lock_mask,
-	};
+	};  // these 3 modifiers are taken into account by X; so we need to add every possible combinations of them to the modifiers of the shortkey
 	
 	guint i;
-	for (i = 0; i < G_N_ELEMENTS (mod_masks); i++) {
+	for (i = 0; i < G_N_ELEMENTS (mod_masks); i++)
+	{
 		if (grab) {
-			XGrabKey (GDK_WINDOW_XDISPLAY (rootwin),
+			XGrabKey (display,
 				  binding->keycode,
 				  binding->modifiers | mod_masks [i],
 				  GDK_WINDOW_XID (rootwin),
@@ -102,99 +99,92 @@ grab_ungrab_with_ignorable_modifiers (GdkWindow *rootwin,
 				  GrabModeAsync,
 				  GrabModeAsync);
 		} else {
-			XUngrabKey (GDK_WINDOW_XDISPLAY (rootwin),
+			XUngrabKey (display,
 				    binding->keycode,
 				    binding->modifiers | mod_masks [i],
 				    GDK_WINDOW_XID (rootwin));
 		}
 	}
 }
+#else
+#define lookup_ignorable_modifiers() 
 
-static gboolean
-do_grab_key (GldiShortkey *binding)
+static void grab_ungrab_with_ignorable_modifiers (G_GNUC_UNUSED GldiShortkey *binding, G_GNUC_UNUSED gboolean grab)
 {
-	GdkKeymap *keymap = gdk_keymap_get_default ();
-	GdkWindow *rootwin = gdk_get_default_root_window ();
+	cd_warning ("Cairo-Dock was not built with shortkey support - can't bind '%s'", binding->keystring);
+}
+#endif
 
-	EggVirtualModifierType virtual_mods = 0;
+static gboolean do_grab_key (GldiShortkey *binding)
+{
+	if (binding->keystring == NULL)
+		return FALSE;
+	
+	// parse the shortkey to get the keycode and modifiers
 	guint keysym = 0;
-
-	if (keymap == NULL || rootwin == NULL || binding->keystring == NULL)
-		return FALSE;
-
-	if (!egg_accelerator_parse_virtual (binding->keystring,
-			&keysym,
-			&virtual_mods))
-		return FALSE;
-
-	cd_debug ("Got accel %d, %d", keysym, virtual_mods);
-
-	binding->keycode = XKeysymToKeycode (GDK_WINDOW_XDISPLAY (rootwin), keysym);
-	if (binding->keycode == 0)
-		return FALSE;
-
-	cd_debug ("Got keycode %d", binding->keycode);
-
-	egg_keymap_resolve_virtual_modifiers (keymap,
-		virtual_mods,
+	guint *accelerator_codes = NULL;
+	gtk_accelerator_parse_with_keycode (binding->keystring,
+		&keysym,
+		&accelerator_codes,
 		&binding->modifiers);
-
-	cd_debug ("Got modmask %d", binding->modifiers);
-
-	gdk_error_trap_push ();
-
-	grab_ungrab_with_ignorable_modifiers (rootwin,
-		binding,
-		TRUE /* grab */);
-
+	if (accelerator_codes == NULL)
+		return FALSE;
+	
+	// convert virtual modifiers to concrete ones
+	GdkKeymap *keymap = gdk_keymap_get_default ();
+	gdk_keymap_map_virtual_modifiers (keymap, &binding->modifiers);  // map the Meta, Super, Hyper virtual modifiers to their concrete counterparts
+	binding->modifiers &= ~(GDK_SUPER_MASK | GDK_META_MASK | GDK_HYPER_MASK);  // and then remove them
+	
+	binding->keycode = accelerator_codes[0];  // just take the first one
+	
+	cd_debug ("%s -> %d, %d %d", binding->keystring, keysym, binding->keycode, binding->modifiers);
+	g_free (accelerator_codes);
+	
+	// now grab the shortkey from the server
+	gdk_error_trap_push ();  // catch any error that may occur in the next lines
+	
+	grab_ungrab_with_ignorable_modifiers (binding, TRUE);  // TRUE <=> grab
+	
 	gdk_flush ();
-
+	
 	if (gdk_error_trap_pop ())
 	{
 		cd_debug ("XGrabKey (%s) failed", binding->keystring);
 		return FALSE;
 	}
-
+	
 	return TRUE;
 }
 
 static gboolean
 do_ungrab_key (GldiShortkey *binding)
 {
-	GdkWindow *rootwin = gdk_get_default_root_window ();
 	cd_debug ("Removing grab for '%s'", binding->keystring);
-
-	grab_ungrab_with_ignorable_modifiers (rootwin,
-		binding,
-		FALSE /* ungrab */);
-
+	
+	grab_ungrab_with_ignorable_modifiers (binding, FALSE);  // FALSE <=> ungrab
+	
 	return TRUE;
 }
 
+#ifdef HAVE_X11
 static GdkFilterReturn
-filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, G_GNUC_UNUSED gpointer data)
+filter_func (GdkXEvent *gdk_xevent, G_GNUC_UNUSED GdkEvent *event, G_GNUC_UNUSED gpointer data)
 {
 	GdkFilterReturn return_val = GDK_FILTER_CONTINUE;
-	XEvent *xevent = (XEvent *) gdk_xevent;
+	XEvent *xevent = (XEvent *) gdk_xevent;  // the GdkEvent actually doesn't provide the keycode and state :-/
 	guint event_mods;
 	GSList *iter;
-
-	cd_debug ("Got Event! %d, %d", xevent->type, event->type);
-
+	
 	switch (xevent->type)
 	{
 		case KeyPress:
+		{
 			cd_debug ("Got KeyPress! keycode: %d, modifiers: %d", xevent->xkey.keycode, xevent->xkey.state);
-			/*
-			 * Set the last event time for use when showing
-			 * windows to avoid anti-focus-stealing code.
-			 */
-			///processing_event = TRUE;
-			///last_event_time = xevent->xkey.time;
-
-			event_mods = xevent->xkey.state & ~(num_lock_mask | caps_lock_mask | scroll_lock_mask);
-
-			for (iter = s_pKeyBindings; iter != NULL; iter = iter->next) {
+			
+			event_mods = xevent->xkey.state & ~(num_lock_mask | caps_lock_mask | scroll_lock_mask);  // remove the lock masks
+			
+			for (iter = s_pKeyBindings; iter != NULL; iter = iter->next)
+			{
 				GldiShortkey *binding = (GldiShortkey *) iter->data;
 
 				if (binding->keycode == xevent->xkey.keycode
@@ -204,43 +194,29 @@ filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, G_GNUC_UNUSED gpointer data
 					(binding->handler) (binding->keystring, binding->user_data);
 				}
 			}
-			///processing_event = FALSE;
+		}
 		break;
 		case KeyRelease:
-			cd_debug ("Got KeyRelease! ");
+			cd_debug ("Got KeyRelease!");
 		break;
 	}
 
 	return return_val;
 }
-
-#else
-
-static gboolean do_grab_key (GldiShortkey *binding)
-{
-	cd_warning ("Cairo-Dock was not built with shortkey support - can't bind '%s'", binding->keystring);
-	return FALSE;
-}
-
-#define do_ungrab_key(binding) (void)binding  // avoid unused parameter
-
 #endif
 
-static void
-on_keymap_changed (G_GNUC_UNUSED GdkKeymap *map)
+static void on_keymap_changed (G_GNUC_UNUSED GdkKeymap *keymap)
 {
-	GdkKeymap *keymap = gdk_keymap_get_default ();
 	GSList *iter;
-
 	cd_debug ("Keymap changed! Regrabbing keys...");
-
+	
 	for (iter = s_pKeyBindings; iter != NULL; iter = iter->next)
 	{
 		GldiShortkey *binding = (GldiShortkey *) iter->data;
 		do_ungrab_key (binding);
 	}
 
-	lookup_ignorable_modifiers (keymap);
+	lookup_ignorable_modifiers ();
 
 	for (iter = s_pKeyBindings; iter != NULL; iter = iter->next)
 	{
@@ -322,15 +298,18 @@ void gldi_shortkeys_foreach (GFunc pCallback, gpointer data)
 
 
 #ifdef HAVE_XEXTEND
-static gboolean cairo_dock_xtest_is_available (void)
+static gboolean _xtest_is_available (void)
 {
-	
 	static gboolean s_bChecked = FALSE;
 	static gboolean s_bUseXTest = FALSE;
 	if (!s_bChecked)
 	{
 		s_bChecked = TRUE;
-		Display *display = gdk_x11_get_default_xdisplay ();
+		GdkDisplay *gdsp = gdk_display_get_default();
+		if (! GDK_IS_X11_DISPLAY(gdsp))
+			return FALSE;
+		
+		Display *display = GDK_DISPLAY_XDISPLAY (gdsp);
 		int event_base, error_base, major = 0, minor = 0;
 		s_bUseXTest = XTestQueryExtension (display, &event_base, &error_base, &major, &minor);
 		if (!s_bUseXTest)
@@ -338,42 +317,73 @@ static gboolean cairo_dock_xtest_is_available (void)
 	}
 	return s_bUseXTest;
 }
-#endif
 
 gboolean cairo_dock_trigger_shortkey (const gchar *cKeyString)  // the idea was taken from xdo.
 {
-#ifdef HAVE_XEXTEND
-	g_return_val_if_fail (cairo_dock_xtest_is_available (), FALSE);
 	g_return_val_if_fail (cKeyString != NULL, FALSE);
+	if (! _xtest_is_available ())  // XTest extension not available, or not an X session
+		return FALSE;
 	cd_message ("%s (%s)", __func__, cKeyString);
 	
-	int iNbKeys = 0;
-	int *pKeySyms = egg_keystring_to_keysyms (cKeyString, &iNbKeys);
-
-	int i;
+	// parse the shortkey (let gtk do the job)
+	int pKeySyms[7];
+	GdkModifierType modifiers;
+	guint keysym = 0;
+	guint *accelerator_codes = NULL;
+	gtk_accelerator_parse_with_keycode (cKeyString,
+		&keysym,
+		&accelerator_codes,
+		&modifiers);
+	if (accelerator_codes == NULL)
+		return FALSE;
+	
+	// extract the modifiers keysyms first, and then the key (the order of the modifiers doesn't matter, and any shortley is made of N modifiers followed by a single key, so we can fill the array easily)
+	int i = 0;
+	if (modifiers & GDK_SHIFT_MASK)
+		pKeySyms[i++] = XStringToKeysym ("Shift_L");
+	if (modifiers & GDK_CONTROL_MASK)
+		pKeySyms[i++] = XStringToKeysym ("Control_L");
+	if (modifiers & GDK_MOD1_MASK)
+		pKeySyms[i++] = XStringToKeysym ("Alt_L");
+	if (modifiers & GDK_SUPER_MASK)
+		pKeySyms[i++] = XStringToKeysym ("Super_L");
+	if (modifiers & GDK_HYPER_MASK)
+		pKeySyms[i++] = XStringToKeysym ("Hyper_L");
+	if (modifiers & GDK_META_MASK)
+		pKeySyms[i++] = XStringToKeysym ("Meta_L");
+	pKeySyms[i++] = keysym;
+	int iNbKeys = i;
+	
+	// press the keys one by one
 	int keycode;
-	Display *dpy = gdk_x11_get_default_xdisplay ();
+	GdkDisplay *gdsp = gdk_display_get_default();
+	if (! GDK_IS_X11_DISPLAY(gdsp))
+		return FALSE;
+	Display *dpy = GDK_DISPLAY_XDISPLAY (gdsp);
 	for (i = 0; i < iNbKeys; i ++)
 	{
 		keycode = XKeysymToKeycode (dpy, pKeySyms[i]);
 		XTestFakeKeyEvent (dpy, keycode, TRUE, CurrentTime);  // TRUE <=> presse.
 	}
 	
+	// and then release them in reverse order, as you would do by hands
 	for (i = iNbKeys-1; i >=0; i --)
 	{
 		keycode = XKeysymToKeycode (dpy, pKeySyms[i]);
-		XTestFakeKeyEvent (dpy, keycode, FALSE, CurrentTime);  // TRUE <=> presse.
+		XTestFakeKeyEvent (dpy, keycode, FALSE, CurrentTime);  // FALSE <=> release
 	}
 	
 	XFlush (dpy);
 	
 	return TRUE;
-#else
-	(void)cKeyString;  // avoid unused parameter
-	cd_warning ("The dock was not compiled with the support of XTest.");
-	return FALSE;
-#endif
 }
+#else
+gboolean cairo_dock_trigger_shortkey (G_GNUC_UNUSED const gchar *cKeyString)
+{
+	cd_warning ("The dock was not compiled with the support of XTest.");  // currently we have no way to do that with Wayland...
+	return FALSE;
+}
+#endif
 
 
 
@@ -383,9 +393,7 @@ gboolean cairo_dock_trigger_shortkey (const gchar *cKeyString)  // the idea was 
 
 static void init (void)
 {
-	GdkKeymap *keymap = gdk_keymap_get_default ();
-	
-	lookup_ignorable_modifiers (keymap);
+	lookup_ignorable_modifiers ();
 
 	#ifdef HAVE_X11
 	GdkWindow *rootwin = gdk_get_default_root_window ();
@@ -394,6 +402,7 @@ static void init (void)
 		NULL);
 	#endif
 	
+	GdkKeymap *keymap = gdk_keymap_get_default ();
 	g_signal_connect (keymap,
 		"keys_changed",
 		G_CALLBACK (on_keymap_changed),
