@@ -877,8 +877,6 @@ static void unload (void)
 		g_pGradationTexture[1] = 0;
 	}
 	
-	cairo_dock_reset_source_context ();
-	
 	_cairo_dock_unload_icon_theme ();
 }
 
