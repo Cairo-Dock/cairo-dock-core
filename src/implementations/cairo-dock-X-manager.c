@@ -28,7 +28,10 @@
 #include <signal.h>
 
 #include <cairo.h>
-#include <gdk/gdkx.h>  // GDK_WINDOW_XID
+#include <gdk/gdk.h>
+#ifdef GDK_WINDOWING_X11
+#include <gdk/gdkx.h>  // GDK_WINDOW_XID, GDK_IS_X11_DISPLAY
+#endif
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
@@ -972,7 +975,11 @@ static GldiWindowActor *_pick_window (void)
  /// CONTAINER MANAGER BACKEND ///
 /////////////////////////////////
 
+#ifdef GDK_WINDOWING_X11
 #define _gldi_container_get_Xid(pContainer) GDK_WINDOW_XID (gldi_container_get_gdk_window(pContainer))
+#else
+_gldi_container_get_Xid(pContainer) 0
+#endif
 
 static void _reserve_space (GldiContainer *pContainer, int left, int right, int top, int bottom, int left_start_y, int left_end_y, int right_start_y, int right_end_y, int top_start_x, int top_end_x, int bottom_start_x, int bottom_end_x)
 {
@@ -1098,18 +1105,6 @@ static void init (void)
 	//\__________________ listen for X events
 	Window root = DefaultRootWindow (s_XDisplay);
 	cairo_dock_set_xwindow_mask (root, PropertyChangeMask);
-	/*KeyPressMask | KeyReleaseMask | 
-			   ButtonReleaseMask | EnterWindowMask |
-			   LeaveWindowMask | PointerMotionMask |
-			   Button1MotionMask |
-			   Button2MotionMask | Button3MotionMask |
-			   Button4MotionMask | Button5MotionMask |
-			   ButtonMotionMask | KeymapStateMask |
-			   ExposureMask | VisibilityChangeMask |
-			   StructureNotifyMask |
-			   SubstructureNotifyMask | 
-			   FocusChangeMask | PropertyChangeMask |
-			   ColormapChangeMask | OwnerGrabButtonMask);*/
 	s_iSidPollXEvents = g_timeout_add (CAIRO_DOCK_CHECK_XEVENTS_INTERVAL, (GSourceFunc) _cairo_dock_unstack_Xevents, (gpointer) NULL);  // un g_idle_add () consomme 90% de CPU ! :-/
 	
 	//\__________________ Register backends
@@ -1242,6 +1237,16 @@ static void reset_object (GldiObject *obj)
 
 void gldi_register_X_manager (void)
 {
+	// check if we're in an X session
+	GdkDisplay *dsp = gdk_display_get_default ();  // let's GDK do the guess
+	#ifdef GDK_WINDOWING_X11  // if GTK doesn't support X, there is no point in trying
+	if (! GDK_IS_X11_DISPLAY (dsp))  // if not an X session
+	#endif
+	{
+		cd_message ("Not an X session");
+		return;
+	}
+	
 	// Manager
 	memset (&myXMgr, 0, sizeof (GldiManager));
 	myXMgr.cModuleName   = "X";
