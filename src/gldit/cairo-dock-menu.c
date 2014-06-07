@@ -263,6 +263,7 @@ void _init_menu_style (void)
 				text-shadow: none; \
 				background-color: @menuitem_bg_color; \
 				background-image: none; \
+				border-color: @menuitem_child_bg_color; \
 			} \
 			.gldimenuitem .check, \
 			.gldimenuitem.check{ \
