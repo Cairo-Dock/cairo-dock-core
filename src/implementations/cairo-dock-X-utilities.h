@@ -38,6 +38,9 @@ Display *cairo_dock_initialize_X_desktop_support (void);
  */
 Display *cairo_dock_get_X_display (void);
 
+void cairo_dock_reset_X_error_code (void);
+unsigned char cairo_dock_get_X_error_code (void);
+
   /////////////
  // DESKTOP //
 /////////////

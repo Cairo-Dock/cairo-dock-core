@@ -91,6 +91,7 @@ static Atom s_aNetWmName;
 static Atom s_aWmName;
 static Atom s_aUtf8String;
 static Atom s_aString;
+static unsigned char error_code = Success;
 
 static GtkAllocation *_get_screens_geometry (int *pNbScreens);
 
@@ -110,7 +111,8 @@ typedef struct {
 
 static int _cairo_dock_xerror_handler (G_GNUC_UNUSED Display * pDisplay, XErrorEvent *pXError)
 {
-	cd_debug ("Error (%d, %d, %d) during an X request on %d", pXError->error_code, pXError->request_code, pXError->minor_code, pXError->resourceid);
+	//g_print ("Error (%d, %d, %d) during an X request on %d\n", pXError->error_code, pXError->request_code, pXError->minor_code, pXError->resourceid);
+	error_code = pXError->error_code;
 	return 0;
 }
 Display *cairo_dock_initialize_X_desktop_support (void)
@@ -175,6 +177,16 @@ Display *cairo_dock_initialize_X_desktop_support (void)
 Display *cairo_dock_get_X_display (void)
 {
 	return s_XDisplay;
+}
+
+void cairo_dock_reset_X_error_code (void)
+{
+	error_code = Success;
+}
+
+unsigned char cairo_dock_get_X_error_code (void)
+{
+	return error_code;
 }
 
 static GtkAllocation *_get_screens_geometry (int *pNbScreens)
@@ -538,6 +550,7 @@ void cairo_dock_show_hide_desktop (gboolean bShow)
 		False,
 		SubstructureRedirectMask | SubstructureNotifyMask,
 		&xClientMessage);
+	XFlush (s_XDisplay);
 }
 
 static void cairo_dock_move_current_viewport_to (int iDesktopViewportX, int iDesktopViewportY)
@@ -563,6 +576,7 @@ static void cairo_dock_move_current_viewport_to (int iDesktopViewportX, int iDes
 		False,
 		SubstructureRedirectMask | SubstructureNotifyMask,
 		&xClientMessage);
+	XFlush (s_XDisplay);
 }
 void cairo_dock_set_current_viewport (int iViewportNumberX, int iViewportNumberY)
 {
@@ -592,6 +606,7 @@ void cairo_dock_set_current_desktop (int iDesktopNumber)
 		False,
 		SubstructureRedirectMask | SubstructureNotifyMask,
 		&xClientMessage);
+	XFlush (s_XDisplay);
 }
 
 Pixmap cairo_dock_get_window_background_pixmap (Window Xid)
@@ -716,6 +731,7 @@ void cairo_dock_set_nb_viewports (int iNbViewportX, int iNbViewportY)
 		False,
 		SubstructureRedirectMask | SubstructureNotifyMask,
 		&xClientMessage);
+	XFlush (s_XDisplay);
 }
 
 void cairo_dock_set_nb_desktops (gulong iNbDesktops)
@@ -741,6 +757,7 @@ void cairo_dock_set_nb_desktops (gulong iNbDesktops)
 		False,
 		SubstructureRedirectMask | SubstructureNotifyMask,
 		&xClientMessage);
+	XFlush (s_XDisplay);
 }
 
 
@@ -898,6 +915,7 @@ void cairo_dock_close_xwindow (Window Xid)
 		False,
 		SubstructureRedirectMask | SubstructureNotifyMask,
 		&xClientMessage);
+	XFlush (s_XDisplay);
 	//cairo_dock_set_xwindow_timestamp (Xid, cairo_dock_get_xwindow_timestamp (root));
 }
 
@@ -905,6 +923,7 @@ void cairo_dock_kill_xwindow (Window Xid)
 {
 	g_return_if_fail (Xid > 0);
 	XKillClient (s_XDisplay, Xid);
+	XFlush (s_XDisplay);
 }
 
 void cairo_dock_show_xwindow (Window Xid)
@@ -937,22 +956,21 @@ void cairo_dock_show_xwindow (Window Xid)
 		False,
 		SubstructureRedirectMask | SubstructureNotifyMask,
 		&xClientMessage);
-
-	//cairo_dock_set_xwindow_timestamp (Xid, cairo_dock_get_xwindow_timestamp (root));
+	XFlush (s_XDisplay);
 }
 
 void cairo_dock_minimize_xwindow (Window Xid)
 {
 	g_return_if_fail (Xid > 0);
 	XIconifyWindow (s_XDisplay, Xid, DefaultScreen (s_XDisplay));
-	//Window root = DefaultRootWindow (s_XDisplay);
-	//cairo_dock_set_xwindow_timestamp (Xid, cairo_dock_get_xwindow_timestamp (root));
+	XFlush (s_XDisplay);
 }
 
 void cairo_dock_lower_xwindow (Window Xid)
 {
 	g_return_if_fail (Xid > 0);
 	XLowerWindow (s_XDisplay, Xid);
+	XFlush (s_XDisplay);
 }
 
 
@@ -983,6 +1001,7 @@ static void _cairo_dock_change_window_state (Window Xid, gulong iNewValue, Atom 
 		&xClientMessage);
 
 	cairo_dock_set_xwindow_timestamp (Xid, cairo_dock_get_xwindow_timestamp (root));
+	XFlush (s_XDisplay);
 }
 void cairo_dock_maximize_xwindow (Window Xid, gboolean bMaximize)
 {
@@ -1047,6 +1066,7 @@ void cairo_dock_move_xwindow_to_absolute_position (Window Xid, int iDesktopNumbe
 		False,
 		SubstructureRedirectMask | SubstructureNotifyMask,
 		&xClientMessage);
+	XFlush (s_XDisplay);
 
 	//cairo_dock_set_xwindow_timestamp (Xid, cairo_dock_get_xwindow_timestamp (root));
 }
