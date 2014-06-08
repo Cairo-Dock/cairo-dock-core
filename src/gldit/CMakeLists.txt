@@ -52,7 +52,6 @@ SET(core_lib_SRCS
 	cairo-dock-log.c 					cairo-dock-log.h
 	cairo-dock-gui-manager.c 			cairo-dock-gui-manager.h
 	cairo-dock-gui-factory.c 			cairo-dock-gui-factory.h
-	eggaccelerators.c 					eggaccelerators.h
 	cairo-dock-keybinder.c 				cairo-dock-keybinder.h
 	cairo-dock-dbus.c 					cairo-dock-dbus.h 
 	cairo-dock-keyfile-utilities.c 		cairo-dock-keyfile-utilities.h
