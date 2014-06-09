@@ -52,6 +52,10 @@ typedef enum {
 	NOTIFICATION_DESKTOP_NAMES_CHANGED,
 	/// notification called when the wallpaper has changed
 	NOTIFICATION_DESKTOP_WALLPAPER_CHANGED,
+	/// notification called when a shortkey that has been registered by the dock is pressed. data: keycode, modifiers
+	NOTIFICATION_SHORTKEY_PRESSED,
+	/// notification called when the keymap changed, before and after updating it. data: updated
+	NOTIFICATION_KEYMAP_CHANGED,
 	NB_NOTIFICATIONS_DESKTOP
 	} CairoDesktopNotifications;
 
@@ -82,6 +86,7 @@ struct _GldiDesktopManagerBackend {
 	gboolean (*set_nb_desktops) (int iNbDesktops, int iNbViewportX, int iNbViewportY);
 	void (*refresh) (void);
 	void (*notify_startup) (const gchar *cClass);
+	gboolean (*grab_shortkey) (guint keycode, guint modifiers, gboolean grab);
 	};
 
 /// Definition of a Desktop Background Buffer. It has a reference count so that it can be shared across all the lib.
@@ -147,6 +152,7 @@ void gldi_desktop_refresh (void);
 
 void gldi_desktop_notify_startup (const gchar *cClass);
 
+gboolean gldi_desktop_grab_shortkey (guint keycode, guint modifiers, gboolean grab);
 
   ////////////////////
  // Desktop access //
