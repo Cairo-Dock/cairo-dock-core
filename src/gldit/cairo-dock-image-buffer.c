@@ -558,14 +558,12 @@ gboolean cairo_dock_begin_draw_image_buffer_opengl (CairoDockImageBuffer *pImage
 	
 	if (pContainer->bPerspectiveView)
 	{
-		cairo_dock_set_ortho_view (pContainer);
+		gldi_gl_container_set_ortho_view (pContainer);
 		s_bSetPerspective = TRUE;
 	}
 	else
 	{
-		cairo_dock_set_ortho_view (pContainer);  // au demarrage, le contexte n'a pas encore de vue.
-		///glLoadIdentity ();
-		///glTranslatef (iWidth/2, iHeight/2, - iHeight/2);
+		gldi_gl_container_set_ortho_view (pContainer);  // au demarrage, le contexte n'a pas encore de vue.
 	}
 	
 	glLoadIdentity ();
@@ -639,7 +637,7 @@ void cairo_dock_end_draw_image_buffer_opengl (CairoDockImageBuffer *pImage, Gldi
 	
 	if (pContainer && s_bSetPerspective)
 	{
-		cairo_dock_set_perspective_view (pContainer);
+		gldi_gl_container_set_perspective_view (pContainer);
 		s_bSetPerspective = FALSE;
 	}
 }

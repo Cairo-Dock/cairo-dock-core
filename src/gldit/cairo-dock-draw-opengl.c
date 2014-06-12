@@ -843,7 +843,7 @@ void cairo_dock_draw_icon_texture (Icon *pIcon, GldiContainer *pContainer)
 
 static inline void  _draw_icon_bent_backwards (Icon *pIcon, GldiContainer *pContainer, GLuint iOriginalTexture, double f)
 {
-	cairo_dock_set_perspective_view_for_icon (pIcon, pContainer);
+	gldi_gl_container_set_perspective_view_for_icon (pIcon);
 	
 	int iWidth, iHeight;
 	cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
@@ -862,11 +862,8 @@ static inline void  _draw_icon_bent_backwards (Icon *pIcon, GldiContainer *pCont
 		0.,
 		iHeight*(a/2*f));  // on elargit un peu la texture, car avec l'effet de profondeur elle parait trop petite.
 	_cairo_dock_disable_texture ();
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glViewport(0, 0, pContainer->iWidth, pContainer->iHeight);
-	glMatrixMode(GL_MODELVIEW);
-	cairo_dock_set_ortho_view (pContainer);
+	
+	gldi_gl_container_set_ortho_view (pContainer);
 }
 static gboolean _transition_step (Icon *pIcon, gpointer data)
 {

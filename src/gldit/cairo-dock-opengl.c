@@ -69,7 +69,7 @@ void gldi_gl_backend_force_indirect_rendering (void)
 }
 
 
-static inline void _cairo_dock_set_perspective_view (int iWidth, int iHeight)
+static inline void _set_perspective_view (int iWidth, int iHeight)
 {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -78,12 +78,14 @@ static inline void _cairo_dock_set_perspective_view (int iWidth, int iHeight)
 	glMatrixMode (GL_MODELVIEW);
 	
 	glLoadIdentity ();
-	gluLookAt (0, 0, 3., 0, 0, 0., 0.0f, 1.0f, 0.0f);
-	//gluLookAt (0/2, 0/2, 3., 0/2, 0/2, 0., 0.0f, 1.0f, 0.0f);
-	glTranslatef (0., 0., -iHeight*(sqrt(3)/2) - 1);
-	//glTranslatef (iWidth/2, iHeight/2, -iHeight*(sqrt(3)/2) - 1);
+	///gluLookAt (0, 0, 3., 0, 0, 0., 0.0f, 1.0f, 0.0f);
+	///glTranslatef (0., 0., -iHeight*(sqrt(3)/2) - 1);
+	gluLookAt (iWidth/2, iHeight/2, 3.,  // eye position
+		iWidth/2, iHeight/2, 0.,  // center position
+		0.0f, 1.0f, 0.0f);  // up direction
+	glTranslatef (iWidth/2, iHeight/2, -iHeight*(sqrt(3)/2) - 1);
 }
-void cairo_dock_set_perspective_view (GldiContainer *pContainer)
+void gldi_gl_container_set_perspective_view (GldiContainer *pContainer)
 {
 	int w, h;
 	if (pContainer->bIsHorizontal)
@@ -96,18 +98,18 @@ void cairo_dock_set_perspective_view (GldiContainer *pContainer)
 		w = pContainer->iHeight;
 		h = pContainer->iWidth;
 	}
-	_cairo_dock_set_perspective_view (w, h);
+	_set_perspective_view (w, h);
 	pContainer->bPerspectiveView = TRUE;
 }
 
-void cairo_dock_set_perspective_view_for_icon (Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer)
+void gldi_gl_container_set_perspective_view_for_icon (Icon *pIcon)
 {
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, &w, &h);
-	_cairo_dock_set_perspective_view (w, h);
+	_set_perspective_view (w, h);
 }
 
-static inline void _cairo_dock_set_ortho_view (int iWidth, int iHeight)
+static inline void _set_ortho_view (int iWidth, int iHeight)
 {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -116,12 +118,12 @@ static inline void _cairo_dock_set_ortho_view (int iWidth, int iHeight)
 	glMatrixMode (GL_MODELVIEW);
 	
 	glLoadIdentity ();
-	gluLookAt (0/2, 0/2, 3.,
-		0/2, 0/2, 0.,
-		0.0f, 1.0f, 0.0f);
+	gluLookAt (iWidth/2, iHeight/2, 3.,  // eye position
+		iWidth/2, iHeight/2, 0.,  // center position
+		0.0f, 1.0f, 0.0f);  // up direction
 	glTranslatef (iWidth/2, iHeight/2, - iHeight/2);
 }
-void cairo_dock_set_ortho_view (GldiContainer *pContainer)
+void gldi_gl_container_set_ortho_view (GldiContainer *pContainer)
 {
 	int w, h;
 	if (pContainer->bIsHorizontal)
@@ -134,15 +136,15 @@ void cairo_dock_set_ortho_view (GldiContainer *pContainer)
 		w = pContainer->iHeight;
 		h = pContainer->iWidth;
 	}
-	_cairo_dock_set_ortho_view (w, h);
+	_set_ortho_view (w, h);
 	pContainer->bPerspectiveView = FALSE;
 }
 
-void cairo_dock_set_ortho_view_for_icon (Icon *pIcon, G_GNUC_UNUSED GldiContainer *pContainer)
+void gldi_gl_container_set_ortho_view_for_icon (Icon *pIcon)
 {
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, &w, &h);
-	_cairo_dock_set_ortho_view (w, h);
+	_set_ortho_view (w, h);
 }
 
 
@@ -156,13 +158,13 @@ gboolean gldi_gl_container_make_current (GldiContainer *pContainer)
 
 static void _apply_desktop_background (GldiContainer *pContainer)
 {
-	if (/**! myContainersParam.bUseFakeTransparency || */! g_pFakeTransparencyDesktopBg || g_pFakeTransparencyDesktopBg->iTexture == 0)
+	if (! g_pFakeTransparencyDesktopBg || g_pFakeTransparencyDesktopBg->iTexture == 0)
 		return ;
 	
 	glPushMatrix ();
 	gboolean bSetPerspective = pContainer->bPerspectiveView;
 	if (bSetPerspective)
-		cairo_dock_set_ortho_view (pContainer);
+		gldi_gl_container_set_ortho_view (pContainer);
 	glLoadIdentity ();
 	_cairo_dock_enable_texture ();
 	_cairo_dock_set_blend_source ();
@@ -203,7 +205,7 @@ static void _apply_desktop_background (GldiContainer *pContainer)
 	
 	_cairo_dock_disable_texture ();
 	if (bSetPerspective)
-		cairo_dock_set_perspective_view (pContainer);
+		gldi_gl_container_set_perspective_view (pContainer);
 	glPopMatrix ();
 }
 

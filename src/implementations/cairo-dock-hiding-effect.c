@@ -485,13 +485,11 @@ static void _post_render_folding_opengl (CairoDock *pDock, double fOffset)
 	iWidth = pDock->container.iWidth;
 	iHeight = pDock->container.iHeight;
 	
-	cairo_dock_set_perspective_view (CAIRO_CONTAINER (pDock));
+	gldi_gl_container_set_perspective_view (CAIRO_CONTAINER (pDock));
 	glPushMatrix ();
 	if (!pDock->container.bIsHorizontal)
 	{
-		//glTranslatef (iHeight/2, iWidth/2, 0.);
 		glRotatef (-90., 0., 0., 1.);
-		//glTranslatef (-iWidth/2, -iHeight/2, 0.);
 		glMatrixMode(GL_TEXTURE);
 		glTranslatef (1./2, 1./2, 0.);
 		glRotatef (-90., 0., 0., 1.);
@@ -500,9 +498,7 @@ static void _post_render_folding_opengl (CairoDock *pDock, double fOffset)
 	}
 	if ((!pDock->container.bDirectionUp && pDock->container.bIsHorizontal) || (pDock->container.bDirectionUp && !pDock->container.bIsHorizontal))
 	{
-		//glTranslatef (0., iHeight/2, 0.);
 		glScalef (1., -1., 1.);
-		//glTranslatef (0., -iHeight/2, 0.);
 		glMatrixMode(GL_TEXTURE);
 		glTranslatef (1./2, 1./2, 0.);
 		glScalef (1., -1., 1.);
@@ -510,9 +506,7 @@ static void _post_render_folding_opengl (CairoDock *pDock, double fOffset)
 		glMatrixMode(GL_MODELVIEW);
 	}
 	
-	//glLoadIdentity ();
-	//glTranslatef (iWidth/2, 0., 0.);
-	glTranslatef (0., -iHeight/2, 0.);
+	glTranslatef (0., -iHeight/2, 0.);  // bottom-middle
 	
 	GLfloat coords[NB_POINTS2*1*8];
 	GLfloat vertices[NB_POINTS2*1*12];
@@ -554,7 +548,7 @@ static void _post_render_folding_opengl (CairoDock *pDock, double fOffset)
 	glEnableClientState (GL_TEXTURE_COORD_ARRAY);
 	glEnableClientState (GL_VERTEX_ARRAY);
 	
-	glScalef (iWidth, iHeight, iHeight/6);
+	glScalef (iWidth, iHeight, iHeight/2);
 	glBindTexture (GL_TEXTURE_2D, pDock->iRedirectedTexture);
 	glTexCoordPointer (2, GL_FLOAT, 2 * sizeof(GLfloat), coords);
 	glVertexPointer (3, GL_FLOAT, 3 * sizeof(GLfloat), vertices);
@@ -563,7 +557,7 @@ static void _post_render_folding_opengl (CairoDock *pDock, double fOffset)
 	glDisableClientState (GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState (GL_VERTEX_ARRAY);
 	
-	cairo_dock_set_ortho_view (CAIRO_CONTAINER (pDock));
+	gldi_gl_container_set_ortho_view (CAIRO_CONTAINER (pDock));
 	glPopMatrix ();
 	
 	if (!pDock->container.bIsHorizontal || !pDock->container.bDirectionUp)

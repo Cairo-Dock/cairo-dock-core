@@ -29,7 +29,6 @@
 
 #include "cairo-dock-opengl-font.h"
 
-#include "texture-gradation.h"
 #define RADIAN (G_PI / 180.0)  // Conversion Radian/Degres
 #define DELTA_ROUND_DEGREE 3
 

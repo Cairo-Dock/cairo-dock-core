@@ -247,15 +247,10 @@ static gboolean on_configure_desklet (G_GNUC_UNUSED GtkWidget* pWidget,
 		
 		if (g_bUseOpenGL)
 		{
-			GLsizei w = pEvent->width;
-			GLsizei h = pEvent->height;
-			
 			if (! gldi_gl_container_make_current (CAIRO_CONTAINER (pDesklet)))
 				return FALSE;
 			
-			glViewport(0, 0, w, h);
-			
-			cairo_dock_set_perspective_view (CAIRO_CONTAINER (pDesklet));
+			gldi_gl_container_set_perspective_view (CAIRO_CONTAINER (pDesklet));
 		}
 		
 		if (pDesklet->bNoInput)

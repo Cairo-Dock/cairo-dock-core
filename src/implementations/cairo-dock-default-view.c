@@ -24,7 +24,6 @@
 #include <gtk/gtk.h>
 #include <cairo.h>
 
-#include "texture-blur.h"
 #include "gldi-config.h"
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-backends-manager.h"
@@ -41,21 +40,6 @@
 #include "cairo-dock-style-manager.h"
 #include "cairo-dock-desktop-manager.h"  // gldi_dock_get_screen_width
 #include "cairo-dock-default-view.h"
-
-/**extern gboolean g_bUseOpenGL;
-
-static GLuint s_iFlatSeparatorTexture = 0;
-
-static gboolean cd_default_view_free_data (G_GNUC_UNUSED gpointer pUserData, CairoDock *pDock)  // si la vue 'default' etait dans un plug-in on n'aurait pas besoin de faire ca (on pourrait detruire nos donnees lors du stop_module), si elle etait dans la lib-core on pourrait le faire lors du unload_texture, mais elle est dans le main.
-{
-	if (pDock->bIsMainDock && s_iFlatSeparatorTexture != 0)
-	{
-		//g_print ("%s (%d)\n", __func__, s_iFlatSeparatorTexture);
-		_cairo_dock_delete_texture (s_iFlatSeparatorTexture);
-		s_iFlatSeparatorTexture = 0;
-	}
-	return GLDI_NOTIFICATION_LET_PASS;
-}*/
 
 
 static void cd_calculate_max_dock_size_default (CairoDock *pDock)
@@ -126,9 +110,6 @@ static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 	///else
 		pDock->iMinDockWidth = MAX (1, pDock->fFlatDockWidth);  // fFlatDockWidth peut etre meme negatif avec un dock vide.
 	
-	/**if (g_bUseOpenGL && s_iFlatSeparatorTexture == 0 && myIconsParam.iSeparatorType == CAIRO_DOCK_FLAT_SEPARATOR)
-		s_iFlatSeparatorTexture = cairo_dock_create_texture_from_raw_data (blurTex, 32, 32);*/
-	
 	///pDock->iActiveWidth = pDock->iMaxDockWidth;
 	pDock->iActiveWidth = iMaxDockWidth;
 	pDock->iActiveHeight = pDock->iMaxDockHeight;
@@ -150,10 +131,6 @@ static void _draw_flat_separator (Icon *icon, G_GNUC_UNUSED CairoDock *pDock, ca
 	cairo_set_line_width (pCairoContext, myDocksParam.iDockLineWidth);
 	cairo_rel_line_to (pCairoContext, 0., fSizeY);
 	cairo_stroke (pCairoContext);
-	
-	/*cairo_translate (pCairoContext, icon->fDrawX + .25 * fSizeX, icon->fDrawY + (pDock->container.bDirectionUp ? icon->fHeight * icon->fScale - fSizeY : 0));
-	gldi_style_colors_set_text_color (pCairoContext);
-	cairo_paint_with_alpha (pCairoContext, .6);*/
 }
 
 static void _draw_physical_separator (Icon *icon, CairoDock *pDock, cairo_t *pCairoContext, G_GNUC_UNUSED double fDockMagnitude)
@@ -286,8 +263,6 @@ static void cd_render_default (cairo_t *pCairoContext, CairoDock *pDock)
 		cairo_dock_draw_string (pCairoContext, pDock, myIconsParam.iStringLineWidth, FALSE, FALSE);
 
 	//\____________________ On dessine les icones et les etiquettes, en tenant compte de l'ordre pour dessiner celles en arriere-plan avant celles en avant-plan.
-	///cairo_dock_render_icons_linear (pCairoContext, pDock);
-	
 	GList *pFirstDrawnElement = cairo_dock_get_first_drawn_element_linear (pDock->icons);
 	if (pFirstDrawnElement == NULL)
 		return;
@@ -714,10 +689,4 @@ void cairo_dock_register_default_renderer (void)
 	pDefaultRenderer->cDisplayedName = gettext (CAIRO_DOCK_DEFAULT_RENDERER_NAME);
 	
 	cairo_dock_register_renderer (CAIRO_DOCK_DEFAULT_RENDERER_NAME, pDefaultRenderer);
-	
-	// when and only when the current theme is unloaded, the main dock is destroyed, and we must release our data.
-	/**gldi_object_register_notification (&myDockObjectMgr,
-		NOTIFICATION_DESTROY,  // on ne fait cette fonction qu'une fois, donc on peut s'enregistrer ici.
-		(GldiNotificationFunc) cd_default_view_free_data,
-		GLDI_RUN_AFTER, NULL);*/
 }

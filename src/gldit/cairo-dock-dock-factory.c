@@ -195,72 +195,6 @@ static gboolean _on_expose (G_GNUC_UNUSED GtkWidget *pWidget,
 		cairo_destroy (pCairoContext);
 	}
 	return FALSE;
-	/// TODO: check that it works without the code below...
-	/**
-	//\________________ Cairo optimized rendering
-	if (area.x + area.y != 0)  // x et/ou y sont > 0.
-	{
-		if (! cairo_dock_is_hidden (pDock) || (g_pHidingBackend != NULL && g_pHidingBackend->bCanDisplayHiddenDock))  // if the dock is invisible, we don't use the optimized rendering (for always-visible icons for instance)
-		{
-			cairo_t *pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDock), &area, NULL);
-			
-			if (pDock->fHideOffset != 0 && g_pHidingBackend != NULL && g_pHidingBackend->pre_render)
-				g_pHidingBackend->pre_render (pDock, pDock->fHideOffset, pCairoContext);
-			
-			if (pDock->iFadeCounter != 0 && g_pKeepingBelowBackend != NULL && g_pKeepingBelowBackend->pre_render)
-				g_pKeepingBelowBackend->pre_render (pDock, (double) pDock->iFadeCounter / myBackendsParam.iHideNbSteps, pCairoContext);
-			
-			if (pDock->pRenderer->render_optimized != NULL)
-				pDock->pRenderer->render_optimized (pCairoContext, pDock, &area);
-			else
-				pDock->pRenderer->render (pCairoContext, pDock);
-			
-			if (pDock->fHideOffset != 0 && g_pHidingBackend != NULL && g_pHidingBackend->post_render)
-				g_pHidingBackend->post_render (pDock, pDock->fHideOffset, pCairoContext);
-		
-			if (pDock->iFadeCounter != 0 && g_pKeepingBelowBackend != NULL && g_pKeepingBelowBackend->post_render)
-				g_pKeepingBelowBackend->post_render (pDock, (double) pDock->iFadeCounter / myBackendsParam.iHideNbSteps, pCairoContext);
-			
-			gldi_object_notify (pDock, NOTIFICATION_RENDER, pDock, pCairoContext);
-			
-			cairo_destroy (pCairoContext);
-			return FALSE;
-		}
-		
-	}
-	
-	//\________________ Cairo rendering
-	cairo_t *pCairoContext = cairo_dock_create_drawing_context_on_container (CAIRO_CONTAINER (pDock));
-	
-	if (cairo_dock_is_loading ())  // transparent pendant le chargement.
-	{
-		
-	}
-	else if (cairo_dock_is_hidden (pDock) && (g_pHidingBackend == NULL || !g_pHidingBackend->bCanDisplayHiddenDock))
-	{
-		cairo_dock_render_hidden_dock (pCairoContext, pDock);
-	}
-	else
-	{
-		if (pDock->fHideOffset != 0 && g_pHidingBackend != NULL && g_pHidingBackend->pre_render)
-			g_pHidingBackend->pre_render (pDock, pDock->fHideOffset, pCairoContext);
-		
-		if (pDock->iFadeCounter != 0 && g_pKeepingBelowBackend != NULL && g_pKeepingBelowBackend->pre_render)
-			g_pKeepingBelowBackend->pre_render (pDock, (double) pDock->iFadeCounter / myBackendsParam.iHideNbSteps, pCairoContext);
-		
-		pDock->pRenderer->render (pCairoContext, pDock);
-		
-		if (pDock->fHideOffset != 0 && g_pHidingBackend != NULL && g_pHidingBackend->post_render)
-			g_pHidingBackend->post_render (pDock, pDock->fHideOffset, pCairoContext);
-		
-		if (pDock->iFadeCounter != 0 && g_pKeepingBelowBackend != NULL && g_pKeepingBelowBackend->post_render)
-			g_pKeepingBelowBackend->post_render (pDock, (double) pDock->iFadeCounter / myBackendsParam.iHideNbSteps, pCairoContext);
-		
-		gldi_object_notify (pDock, NOTIFICATION_RENDER, pDock, pCairoContext);
-	}
-	
-	cairo_destroy (pCairoContext);
-	return FALSE;*/
 }
 
 
@@ -1234,7 +1168,7 @@ static gboolean _on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, Ca
 			if (! gldi_gl_container_make_current (CAIRO_CONTAINER (pDock)))
 				return FALSE;
 			
-			cairo_dock_set_ortho_view (CAIRO_CONTAINER (pDock));
+			gldi_gl_container_set_ortho_view (CAIRO_CONTAINER (pDock));
 			
 			glClearAccum (0., 0., 0., 0.);
 			glClear (GL_ACCUM_BUFFER_BIT);

@@ -89,29 +89,43 @@ void gldi_gl_backend_force_indirect_rendering (void);
 */
 gboolean gldi_gl_container_make_current (GldiContainer *pContainer);
 
+/** Start drawing on a Container's OpenGL context.
+*@param pContainer the container
+*@param pArea optional area to clip the drawing (NULL to draw on the whole Container)
+*@param bClear whether to clear the color buffer or not
+*/
 gboolean gldi_gl_container_begin_draw_full (GldiContainer *pContainer, GdkRectangle *pArea, gboolean bClear);
 
+/** Start drawing on a Container's OpenGL context (draw on the whole Container and clear buffers).
+*@param pContainer the container
+*/
 #define gldi_gl_container_begin_draw(pContainer) gldi_gl_container_begin_draw_full (pContainer, NULL, TRUE)
 
-/** Ends the drawing on a Container's OpenGL context (swap buffers).
+/** Ends the drawing on a Container's OpenGL context.
 *@param pContainer the container
 */
 void gldi_gl_container_end_draw (GldiContainer *pContainer);
 
 
-/** Set a perspective view to the current GL context to fit a given ontainer. Perspective view accentuates the depth effect of the scene, but can distort it on the edges, and is difficult to manipulate because the size of objects depends on their position.
+/** Set a perspective view to the current GL context to fit a given Container. You may want to ensure the Container's context is really the current one.
 *@param pContainer the container
 */
-void cairo_dock_set_perspective_view (GldiContainer *pContainer);
+void gldi_gl_container_set_perspective_view (GldiContainer *pContainer);
 
-void cairo_dock_set_perspective_view_for_icon (Icon *pIcon, GldiContainer *pContainer);
+/** Set a perspective view to the current GL context to fit a given Icon (which must be inside a Container). You may want to ensure the Icon's Container's context is really the current one.
+*@param pIcon the icon
+*/
+void gldi_gl_container_set_perspective_view_for_icon (Icon *pIcon);
 
-/** Set an orthogonal view to the current GL context to fit a given ontainer. Orthogonal view is convenient to draw classic 2D, because the objects are not zoomed according to their position. The drawback is a poor depth effect.
+/** Set a orthogonal view to the current GL context to fit a given Container. You may want to ensure the Container's context is really the current one.
 *@param pContainer the container
 */
-void cairo_dock_set_ortho_view (GldiContainer *pContainer);
+void gldi_gl_container_set_ortho_view (GldiContainer *pContainer);
 
-void cairo_dock_set_ortho_view_for_icon (Icon *pIcon, GldiContainer *pContainer);
+/** Set a orthogonal view to the current GL context to fit a given Icon (which must be inside a Container). You may want to ensure the Icon's Container's context is really the current one.
+*@param pIcon the icon
+*/
+void gldi_gl_container_set_ortho_view_for_icon (Icon *pIcon);
 
 /** Set a shared default-initialized GL context on a window.
 *@param pContainer the container, not yet realized.

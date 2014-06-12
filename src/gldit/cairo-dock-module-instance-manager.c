@@ -426,7 +426,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 			{
 				gldi_icon_insert_in_container (pIcon, CAIRO_CONTAINER(pDock), ! cairo_dock_is_loading ());  // animate the icon if it's instanciated by the user, not during the initial loading.
 				
-				// we need to load the icon's buffer before we init the module, because the applet may need it. no ned to do it in desklet mode, since the desklet doesn't have a renderer yet (so buffer can't be loaded).
+				// we need to load the icon's buffer before we init the module, because the applet may need it. no need to do it in desklet mode, since the desklet doesn't have a renderer yet (so buffer can't be loaded).
 				cairo_dock_load_icon_buffers (pIcon, pContainer);  // ne cree rien si w ou h < 0 (par exemple si l'applet est detachee).
 			}
 		}

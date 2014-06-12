@@ -227,7 +227,7 @@ static gboolean on_configure_flying_icon (GtkWidget* pWidget,
 			if (! gldi_gl_container_make_current (CAIRO_CONTAINER (pFlyingContainer)))
 				return FALSE;
 			
-			cairo_dock_set_ortho_view (CAIRO_CONTAINER (pFlyingContainer));
+			gldi_gl_container_set_ortho_view (CAIRO_CONTAINER (pFlyingContainer));
 		}
 	}
 	
