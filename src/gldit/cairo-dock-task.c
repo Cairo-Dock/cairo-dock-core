@@ -120,6 +120,7 @@ static gboolean _cairo_dock_check_for_update (CairoDockTask *pTask)
 			pTask->pThread = NULL;
 		}
 		
+		pTask->iSidTimerUpdate = 0;  // set it before the unlock, as it is accessed in the thread part
 		g_mutex_unlock (pTask->pMutex);
 		
 		// schedule the next iteration if necessary.
@@ -133,7 +134,6 @@ static gboolean _cairo_dock_check_for_update (CairoDockTask *pTask)
 			cairo_dock_schedule_next_iteration (pTask);
 		}
 		pTask->bIsRunning = FALSE;
-		pTask->iSidTimerUpdate = 0;
 		return FALSE;  // the update is now finished, quit.
 	}
 	

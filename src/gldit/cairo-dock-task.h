@@ -103,7 +103,7 @@ void cairo_dock_launch_task_delayed (CairoDockTask *pTask, double fDelay);
 *@param get_data asynchonous function, which carries out the heavy job parallel to the dock; stores the results in the shared memory.
 *@param update synchonous function, which carries out the update of the dock from the result of the previous function. Returns TRUE to continue, FALSE to stop.
 *@param free_data function called when the Task is destroyed, to free the shared memory (optionnal).
-*@param pSharedMemory structure passed as a parameter of the get_data and update functions. Must not be accessed outside of these  functions !
+*@param pSharedMemory structure passed as a parameter of the get_data and update functions. Must not be accessed outside of these functions !
 *@return the newly allocated Task, ready to be launched with #cairo_dock_launch_task. Free it with #cairo_dock_free_task.
 */
 CairoDockTask *cairo_dock_new_task_full (int iPeriod, CairoDockGetDataAsyncFunc get_data, CairoDockUpdateSyncFunc update, GFreeFunc free_data, gpointer pSharedMemory);
@@ -122,7 +122,7 @@ CairoDockTask *cairo_dock_new_task_full (int iPeriod, CairoDockGetDataAsyncFunc 
 */
 void cairo_dock_stop_task (CairoDockTask *pTask);
 
-/** Discard a periodic Task. The asynchronous thread will continue, and the Task will be freed when it ends. Use this function carefully, since you don't know when the free will occur (especially if you've set a free_data callback). The Task should be considered as destroyed after a call to this function.
+/** Discard a periodic Task. The asynchronous thread will continue, and the Task will be freed when it ends. The Task should be considered as destroyed after a call to this function. This function can be used inside the 'update' callback to destroy the Task.
 *@param pTask the periodic Task.
 */
 void cairo_dock_discard_task (CairoDockTask *pTask);
