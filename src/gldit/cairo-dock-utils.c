@@ -379,7 +379,10 @@ gchar * cairo_dock_get_command_with_right_terminal (const gchar *cCommand)
 
 gboolean cairo_dock_property_is_present_on_root (const gchar *cPropertyName)
 {
-	Display *display = gdk_x11_get_default_xdisplay ();
+	GdkDisplay *gdsp = gdk_display_get_default();
+	if (! GDK_IS_X11_DISPLAY(gdsp))
+		return FALSE;
+	Display *display = GDK_DISPLAY_XDISPLAY (gdsp);
 	Atom atom = XInternAtom (display, cPropertyName, False);
 	Window root = DefaultRootWindow (display);
 	int iNbProperties;
@@ -402,7 +405,10 @@ gboolean cairo_dock_check_xrandr (int iMajor, int iMinor)
 	if (!s_bChecked)
 	{
 		s_bChecked = TRUE;
-		Display *display = gdk_x11_get_default_xdisplay ();
+		GdkDisplay *gdsp = gdk_display_get_default();
+		if (! GDK_IS_X11_DISPLAY(gdsp))
+			return FALSE;
+		Display *display = GDK_DISPLAY_XDISPLAY (gdsp);
 		int event_base, error_base;
 		if (! XRRQueryExtension (display, &event_base, &error_base))
 		{
