@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2013-09-29 14:41+0000\n"
+"POT-Creation-Date: 2014-06-13 11:30+0000\n"
+"PO-Revision-Date: 2014-06-13 21:36+0000\n"
 "Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
-"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-30 04:39+0000\n"
-"X-Generator: Launchpad (build 16774)\n"
+"X-Launchpad-Export-Date: 2014-06-14 05:39+0000\n"
+"X-Generator: Launchpad (build 17045)\n"
+"Language: tr\n"
 
 #: ../src/cairo-dock-gui-advanced.c:122 ../src/cairo-dock-widget-plugins.c:172
 #: ../data/messages:267
@@ -105,9 +106,8 @@ msgid "All of the parameters you will never want to tweak."
 msgstr "Kurcalamak istemeyeceğiniz göstergeler."
 
 #: ../src/cairo-dock-gui-advanced.c:1548
-#, fuzzy
 msgid "Configure the global style."
-msgstr "Bu uygulamacığı yapılandır"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1549 ../src/cairo-dock-gui-advanced.c:1550
 #: ../data/messages:113 ../data/messages:115 ../data/messages:459
@@ -118,9 +118,8 @@ msgid "Style"
 msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1557
-#, fuzzy
 msgid "Configure docks appearance."
-msgstr "İletişim baloncuklarının görünüşünü ayarla."
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1558 ../Help/data/messages:79
 msgid "Docks"
@@ -141,9 +140,8 @@ msgid "Configure text bubble appearance."
 msgstr "İletişim baloncuklarının görünüşünü ayarla."
 
 #: ../src/cairo-dock-gui-advanced.c:1577 ../src/cairo-dock-gui-advanced.c:1578
-#, fuzzy
 msgid "Dialog boxes and Menus"
-msgstr "İletişim kutuları"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1585
 msgid "Applets can be displayed on your desktop as widgets."
@@ -304,7 +302,8 @@ msgstr "Bağışta Bulunun"
 #: ../src/cairo-dock-user-menu.c:224 ../src/cairo-dock-user-menu.c:230
 msgid ""
 "Support the people who spend countless hours to bring you the best dock ever."
-msgstr "Size en iyi limanı yapmak için saatlerce çalışan insanları destekleyin"
+msgstr ""
+"Size en iyi limanı yapmak için saatlerce çalışan insanları destekleyin"
 
 #: ../src/cairo-dock-user-menu.c:258
 msgid "Here is a list of the current developers and contributors"
@@ -346,7 +345,7 @@ msgstr ""
 "  Behic CETIN https://launchpad.net/~behiccetin\n"
 "  Erkin Batu Altunbaş https://launchpad.net/~erkin\n"
 "  Fabounet https://launchpad.net/~fabounet03\n"
-"  Fatih Ekin https://launchpad.net/~f-ekin22\n"
+"  Fatih Ekin https://launchpad.net/~f-ekin22-deactivatedaccount\n"
 "  H. Fatih ATASEVER https://launchpad.net/~h-f-atasever\n"
 "  Matthieu Baerts https://launchpad.net/~matttbe\n"
 "  Murat ikilik https://launchpad.net/~muratikilik-q\n"
@@ -354,6 +353,7 @@ msgstr ""
 "  Olcay GÜZEL https://launchpad.net/~olcayguzel-gmail\n"
 "  Serdar Delican https://launchpad.net/~sdelican\n"
 "  Serdar KAHYA https://launchpad.net/~kahyainsaat\n"
+"  Volkan Gezer https://launchpad.net/~volkangezer\n"
 "  Yiğit Ateş https://launchpad.net/~yigitates52\n"
 "  Yunus Kaba https://launchpad.net/~yunuskaba\n"
 "  eraydin https://launchpad.net/~aydin-eraydin\n"
@@ -565,7 +565,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Cairo-Dock'u başlangıçta başlat"
 
 #: ../src/cairo-dock-user-menu.c:1096
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Üçüncü parti uygulamacıklar Pidgin gibi birçok programla entegrasyon sağlar."
 
@@ -615,7 +616,8 @@ msgstr "Kaldır"
 #: ../src/cairo-dock-user-menu.c:1176
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
-msgstr "Bir başlatıcıyı fare ile rıhtımın dışına sürükleyerek silebilirsiniz ."
+msgstr ""
+"Bir başlatıcıyı fare ile rıhtımın dışına sürükleyerek silebilirsiniz ."
 
 #: ../src/cairo-dock-user-menu.c:1185
 msgid "Make it a launcher"
@@ -805,7 +807,8 @@ msgid "Effects:"
 msgstr "Efektler:"
 
 #: ../src/cairo-dock-widget-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Ana rıhtımın parametreleri ana yapılandırma penceresi içinde mevcuttur."
 
@@ -830,7 +833,8 @@ msgid "Category"
 msgstr "Kategori"
 
 #: ../src/cairo-dock-widget-plugins.c:281
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Önizleme ve açıklamalar için uygulamacığın üzerine tıklayın."
 
 #: ../src/cairo-dock-widget-shortkeys.c:123
@@ -949,7 +953,8 @@ msgstr "Rıhtımı bu bu ortamı düşünmesi için zorla - ilgi göster."
 #: ../src/cairo-dock.c:365
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
-msgstr "Bunun yerine emirlere uyuması için rıhtımı zorla ~/.config/cairo-dock."
+msgstr ""
+"Bunun yerine emirlere uyuması için rıhtımı zorla ~/.config/cairo-dock."
 
 #: ../src/cairo-dock.c:368
 msgid ""
@@ -1367,13 +1372,13 @@ msgid ""
 "Hope you will enjoy this soft !\n"
 "  (you can now click on this dialog to close it)"
 msgstr ""
-"Cario-Dock2'ye hoşgeldiniz !\n"
+"Cario-Dock2'ye hoş geldiniz !\n"
 "Bu uygulamacık, size rıhtımı kullanmaya başlamanız için yardımcı olmak için "
-"burada; sadece onun üzerine tıklayın.\n"
-"Eğer herhangi bir sorunuz/talebiniz/yorumunuz var ise, lütfen bizi http://"
-"glx-dock.org adresinde ziyaret edin.\n"
-"Bu yazılımın hoşunuza gideceğini umarız !\n"
-"  (şimdi bu iletişim kutusunun üzerine, onu kapatmak üzere tıklayabilirsiniz)"
+"burada; sadece üzerine tıklayın.\n"
+"Eğer herhangi bir sorunuz/talebiniz/yorumunuz var ise, lütfen bizi "
+"http://glx-dock.org adresinde ziyaret edin.\n"
+"Yazılımın hoşunuza gideceğini ümit ediyoruz!\n"
+"  (artık kapatmak için bu iletişim kutusunun üzerine tıklayabilirsiniz)"
 
 #: ../Help/src/applet-composite.c:165
 msgid "Don't ask me any more"
@@ -1989,8 +1994,9 @@ msgstr ""
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -2038,8 +2044,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
@@ -2628,9 +2634,8 @@ msgstr ""
 
 #: ../data/messages:119 ../data/messages:553 ../data/messages:693
 #: ../data/messages:807 ../data/messages:841 ../data/messages:879
-#, fuzzy
 msgid "Custom"
-msgstr "_Özel simgeler_"
+msgstr ""
 
 #: ../data/messages:121 ../data/messages:747
 msgid "Colour"
@@ -3248,14 +3253,12 @@ msgstr "Kabarcık"
 
 #: ../data/messages:555 ../data/messages:843 ../data/messages:869
 #: ../data/messages:881
-#, fuzzy
 msgid "Background colour"
-msgstr "Arkaplan"
+msgstr ""
 
 #: ../data/messages:559 ../data/messages:847 ../data/messages:867
-#, fuzzy
 msgid "Text colour"
-msgstr "Metin rengi:"
+msgstr ""
 
 #: ../data/messages:565
 msgid "Shape of the bubble:"
@@ -3412,7 +3415,8 @@ msgid "Zoom effect"
 msgstr "Zum efekti"
 
 #: ../data/messages:661
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:663
@@ -3473,9 +3477,8 @@ msgid "Reflections"
 msgstr "Yansımalar"
 
 #: ../data/messages:699
-#, fuzzy
 msgid "Reflection visibility"
-msgstr "Yansımalar"
+msgstr ""
 
 #: ../data/messages:701
 msgid "light"
@@ -3535,9 +3538,8 @@ msgid "Frame"
 msgstr "Çerçeve"
 
 #: ../data/messages:743
-#, fuzzy
 msgid "Fill background"
-msgstr "Arkaplanı doldur:"
+msgstr ""
 
 #: ../data/messages:749
 msgid "Linewidth"
@@ -3608,8 +3610,8 @@ msgstr "daha büyük"
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:783
@@ -3715,9 +3717,8 @@ msgid "Use the same look as the labels?"
 msgstr ""
 
 #: ../data/messages:885
-#, fuzzy
 msgid "Text colour:"
-msgstr "Metin rengi:"
+msgstr ""
 
 #: ../data/messages:917
 msgid "Visibility of the dock"
@@ -3887,8 +3888,8 @@ msgstr ""
 
 #: ../data/messages:1071
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1073
@@ -4006,49 +4007,3 @@ msgstr ""
 #: ../data/messages:1134
 msgid "- If you like the project, please donate :-)"
 msgstr ""
-
-#, fuzzy
-#~ msgid " Frame"
-#~ msgstr "Çerçeve"
-
-#~ msgid "Set a background for your dock."
-#~ msgstr "Rıhtımınız için bir artalan ayarlayın."
-
-#~ msgid "Select a view for each of your docks."
-#~ msgstr "Rıhtımlarınızın her biri için bir görünüm seçin."
-
-#~ msgid "Indicators are additional markers for your icons."
-#~ msgstr "Göstergeler simgelerin üzerindeki ek belirtimlerdir."
-
-#~ msgid "Background colour of the bubble:"
-#~ msgstr "Kabarcığın arkaplan rengi:"
-
-#~ msgid "Text"
-#~ msgstr "Metin"
-
-#~ msgid "If you don't provide any, a default image will be used."
-#~ msgstr "Eğer belirtmezseniz, varsayılan görüntü kullanılacak."
-
-#~ msgid "If you don't provide one, blanks will be used."
-#~ msgstr "Eğer belirtmezseniz, boşluk kullanılacak."
-
-#~ msgid "Colour of the frame :"
-#~ msgstr "Çerçevenin rengi :"
-
-#~ msgid "Set 0 to fill the frame."
-#~ msgstr "Çerçeveyi doldurmak için 0'a ayarlayın."
-
-#~ msgid "Font used for labels :"
-#~ msgstr "Etiketler için kullanılan yazıtipleri :"
-
-#~ msgid "Colour of the label's background :"
-#~ msgstr "Etiketin arkaplan rengi :"
-
-#~ msgid "Start color :"
-#~ msgstr "Başlama rengi :"
-
-#~ msgid "Stop color :"
-#~ msgstr "Durma rengi :"
-
-#~ msgid "Pattern should be vertical?"
-#~ msgstr "Desen dikey mi olmalı?"

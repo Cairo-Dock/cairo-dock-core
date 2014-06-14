@@ -8,16 +8,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.6.2\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2013-07-21 20:11+0000\n"
+"POT-Creation-Date: 2014-06-13 11:30+0000\n"
+"PO-Revision-Date: 2014-06-13 21:42+0000\n"
 "Last-Translator: Daniel Nylander <yeager@ubuntu.com>\n"
 "Language-Team: Swedish\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-12 04:50+0000\n"
-"X-Generator: Launchpad (build 16761)\n"
+"X-Launchpad-Export-Date: 2014-06-14 05:39+0000\n"
+"X-Generator: Launchpad (build 17045)\n"
 "X-Poedit-Country: SWEDEN\n"
+"Language: \n"
 "X-Poedit-Language: Swedish\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -109,9 +110,8 @@ msgid "All of the parameters you will never want to tweak."
 msgstr "Alla de parametrar som du inte kommer att vilja ändra på."
 
 #: ../src/cairo-dock-gui-advanced.c:1548
-#, fuzzy
 msgid "Configure the global style."
-msgstr "Redigera"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1549 ../src/cairo-dock-gui-advanced.c:1550
 #: ../data/messages:113 ../data/messages:115 ../data/messages:459
@@ -122,9 +122,8 @@ msgid "Style"
 msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1557
-#, fuzzy
 msgid "Configure docks appearance."
-msgstr "Ställ in utseendet på dialog-bubblorna."
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1558 ../Help/data/messages:79
 msgid "Docks"
@@ -145,9 +144,8 @@ msgid "Configure text bubble appearance."
 msgstr "Ställ in utseendet på dialog-bubblorna."
 
 #: ../src/cairo-dock-gui-advanced.c:1577 ../src/cairo-dock-gui-advanced.c:1578
-#, fuzzy
 msgid "Dialog boxes and Menus"
-msgstr "Dialogrutor"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1585
 msgid "Applets can be displayed on your desktop as widgets."
@@ -347,11 +345,11 @@ msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Daniel Nylander https://launchpad.net/~yeager\n"
-"  David Bengtsson https://launchpad.net/~jstfaking\n"
 "  Peter Thörnqvist https://launchpad.net/~peter-tornqvist\n"
 "  Sven_Lindahl https://launchpad.net/~sven-lindahl\n"
 "  Teodor Jönsson https://launchpad.net/~teodor-jonsson-sogeti-"
-"deactivatedaccount"
+"deactivatedaccount\n"
+"  jstfaking https://launchpad.net/~jstfaking"
 
 #: ../src/cairo-dock-user-menu.c:283
 msgid "Support"
@@ -456,7 +454,8 @@ msgstr "avgränsare"
 #: ../src/cairo-dock-user-menu.c:631
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
-msgstr "Du håller på att ta bort den här ikonen (%s) från docken. Är du säker?"
+msgstr ""
+"Du håller på att ta bort den här ikonen (%s) från docken. Är du säker?"
 
 #: ../src/cairo-dock-user-menu.c:646
 msgid "Sorry, this icon doesn't have a configuration file."
@@ -515,7 +514,8 @@ msgstr "Konfigurera den här docken"
 
 #: ../src/cairo-dock-user-menu.c:1023
 msgid "Customize the position, visibility and appearance of this main dock."
-msgstr "Anpassa positionen, synligheten och utseendet av den här huvuddocken."
+msgstr ""
+"Anpassa positionen, synligheten och utseendet av den här huvuddocken."
 
 #: ../src/cairo-dock-user-menu.c:1025
 msgid "Delete this dock"
@@ -544,14 +544,16 @@ msgstr "Dölj"
 
 #: ../src/cairo-dock-user-menu.c:1067
 msgid "This will hide the dock until you hover over it with the mouse."
-msgstr "Det här kommer att dölja docken tills du fokuserar över den med musen."
+msgstr ""
+"Det här kommer att dölja docken tills du fokuserar över den med musen."
 
 #: ../src/cairo-dock-user-menu.c:1080
 msgid "Launch Cairo-Dock on startup"
 msgstr "Starta Cairo-Dock vid uppstart"
 
 #: ../src/cairo-dock-user-menu.c:1096
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 
 #: ../src/cairo-dock-user-menu.c:1099 ../Help/src/applet-init.c:28
@@ -788,7 +790,8 @@ msgid "Effects:"
 msgstr "Effekter"
 
 #: ../src/cairo-dock-widget-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-widget-items.c:721
@@ -812,7 +815,8 @@ msgid "Category"
 msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:281
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
 #: ../src/cairo-dock-widget-shortkeys.c:123
@@ -1908,8 +1912,9 @@ msgstr ""
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1957,8 +1962,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
@@ -3116,9 +3121,8 @@ msgstr "i pixlar"
 
 #: ../data/messages:509 ../data/messages:561 ../data/messages:751
 #: ../data/messages:887
-#, fuzzy
 msgid "Corner radius"
-msgstr "Hörnradie:"
+msgstr ""
 
 #: ../data/messages:513 ../data/messages:563 ../data/messages:889
 msgid "Outline width"
@@ -3177,14 +3181,12 @@ msgstr "Bubbla"
 
 #: ../data/messages:555 ../data/messages:843 ../data/messages:869
 #: ../data/messages:881
-#, fuzzy
 msgid "Background colour"
-msgstr "Bakgrund"
+msgstr ""
 
 #: ../data/messages:559 ../data/messages:847 ../data/messages:867
-#, fuzzy
 msgid "Text colour"
-msgstr "Slutfärg:"
+msgstr ""
 
 #: ../data/messages:565
 msgid "Shape of the bubble:"
@@ -3341,7 +3343,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:661
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:663
@@ -3402,9 +3405,8 @@ msgid "Reflections"
 msgstr "Reflektioner"
 
 #: ../data/messages:699
-#, fuzzy
 msgid "Reflection visibility"
-msgstr "Reflektioner"
+msgstr ""
 
 #: ../data/messages:701
 msgid "light"
@@ -3464,9 +3466,8 @@ msgid "Frame"
 msgstr ""
 
 #: ../data/messages:743
-#, fuzzy
 msgid "Fill background"
-msgstr "Bakgrund"
+msgstr ""
 
 #: ../data/messages:749
 msgid "Linewidth"
@@ -3542,8 +3543,8 @@ msgstr ""
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:783
@@ -3649,9 +3650,8 @@ msgid "Use the same look as the labels?"
 msgstr ""
 
 #: ../data/messages:885
-#, fuzzy
 msgid "Text colour:"
-msgstr "Slutfärg:"
+msgstr ""
 
 #: ../data/messages:917
 msgid "Visibility of the dock"
@@ -3825,8 +3825,8 @@ msgstr ""
 
 #: ../data/messages:1071
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1073
@@ -3944,93 +3944,3 @@ msgstr ""
 #: ../data/messages:1134
 msgid "- If you like the project, please donate :-)"
 msgstr ""
-
-#, fuzzy
-#~ msgid " Frame"
-#~ msgstr "Yttre ram"
-
-#~ msgid "Set a background for your dock."
-#~ msgstr "Skapa fond till din dock."
-
-#~ msgid "Select a view for each of your docks."
-#~ msgstr "Välj ett utseende på var och en av dina dockar."
-
-#~ msgid "Indicators are additional markers for your icons."
-#~ msgstr "Indikatorer är extra indikeringar på dina ikoner."
-
-#~ msgid "Linewidth of the external line :"
-#~ msgstr "Bredd på yttre linje:"
-
-#~ msgid "Text"
-#~ msgstr "Text"
-
-#~ msgid "If you don't provide any, a default image will be used."
-#~ msgstr "Om du inte anger något, kommer en standardbild att användas."
-
-#~ msgid ""
-#~ "Any format allowed; leave this field empty if you don't want to use an "
-#~ "image as background."
-#~ msgstr "Alla format stöds: lämna tomt om du vill använda färgtoning."
-
-#~ msgid "Icon size at rest (width x height) :"
-#~ msgstr "Ikonstorlek i vila (bredd x höjd):"
-
-#~ msgid "If you don't provide one, blanks will be used."
-#~ msgstr "Om du inte anger något, kommer blanka att användas."
-
-#~ msgid "Filename of an image to use for separators :"
-#~ msgstr "Bild att använda som avgränsare:"
-
-#~ msgid ""
-#~ "It is its albedo (reflectivity); at 1 the icons reflect to the maximum, "
-#~ "at 0 reflections are not used."
-#~ msgstr "Ikonens albedo: ju högre värde, desto mer reflektion."
-
-#~ msgid "Reflective power of the plane :"
-#~ msgstr "Planets reflektionseffekt:"
-
-#~ msgid "Set transparency to 0 if you don't want to use an indicator."
-#~ msgstr "Ange 0 för genomskinlighet om du inte vill använda en indikator."
-
-#~ msgid "Set 0 to fill the frame."
-#~ msgstr "Ange 0 för att fylla ramen."
-
-#~ msgid "Linewidth of the frame around the active window :"
-#~ msgstr "Bredd på ramen:"
-
-#~ msgid "Corner radius of the frame around the active window :"
-#~ msgstr "Hörnradie för ramen:"
-
-#~ msgid ""
-#~ "the bigger, the more the labels next to the selected icon will be "
-#~ "transparent."
-#~ msgstr "Ju högre värde, desto mer genomskinliga är etiketterna."
-
-#~ msgid "label's visibility threshold :"
-#~ msgstr "Visningströskel för etiketter:"
-
-#~ msgid "Should the labels always be horizontal, even when dock is vertical?"
-#~ msgstr "Visa alltid etiketter horisontellt?"
-
-#~ msgid "It's the first color of the gradation."
-#~ msgstr "Första färg i toningen."
-
-#~ msgid "Start color :"
-#~ msgstr "Startfärg:"
-
-#~ msgid ""
-#~ "It's the second color of the gradation. Set it to the same value as the "
-#~ "first if you don't want to have any gradation."
-#~ msgstr ""
-#~ "Andra färgen i toningen. För att inaktivera toningseffekten, ange samma "
-#~ "färg för start och slut."
-
-#~ msgid ""
-#~ "If checked, the pattern will go from top to bottom, otherwise from left "
-#~ "to right."
-#~ msgstr ""
-#~ "Markera om mönstret ska gå uppifrån och ner, annars från vänster till "
-#~ "höger."
-
-#~ msgid "Pattern should be vertical?"
-#~ msgstr "Vertikal orientering?"

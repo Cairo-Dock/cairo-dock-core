@@ -6,16 +6,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cairo-Dock II\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2013-09-24 20:23+0000\n"
-"Last-Translator: ma$terok <Unknown>\n"
+"POT-Creation-Date: 2014-06-13 11:30+0000\n"
+"PO-Revision-Date: 2014-06-13 21:38+0000\n"
+"Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
 "Language-Team: Ukrainian <kde-i18n-doc@kde.org>\n"
-"Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-25 05:15+0000\n"
-"X-Generator: Launchpad (build 16771)\n"
+"X-Launchpad-Export-Date: 2014-06-14 05:39+0000\n"
+"X-Generator: Launchpad (build 17045)\n"
 "X-Poedit-Country: Ukraine\n"
+"Language: uk\n"
 "X-Poedit-Language: Ukrainian\n"
 
 #: ../src/cairo-dock-gui-advanced.c:122 ../src/cairo-dock-widget-plugins.c:172
@@ -106,9 +107,8 @@ msgid "All of the parameters you will never want to tweak."
 msgstr "Не змінюйте ці параметри без особливої потреби."
 
 #: ../src/cairo-dock-gui-advanced.c:1548
-#, fuzzy
 msgid "Configure the global style."
-msgstr "Налаштувати додаток"
+msgstr "Налаштування глобального стилю."
 
 #: ../src/cairo-dock-gui-advanced.c:1549 ../src/cairo-dock-gui-advanced.c:1550
 #: ../data/messages:113 ../data/messages:115 ../data/messages:459
@@ -116,12 +116,11 @@ msgstr "Налаштувати додаток"
 #: ../data/messages:803 ../data/messages:837 ../data/messages:871
 #: ../data/messages:875
 msgid "Style"
-msgstr ""
+msgstr "Зовнішній вигляд"
 
 #: ../src/cairo-dock-gui-advanced.c:1557
-#, fuzzy
 msgid "Configure docks appearance."
-msgstr "Налаштуйте зовнішній вигляд хмарок нагадувань."
+msgstr "Налаштування зовнішнього вигляду панелі."
 
 #: ../src/cairo-dock-gui-advanced.c:1558 ../Help/data/messages:79
 msgid "Docks"
@@ -142,9 +141,8 @@ msgid "Configure text bubble appearance."
 msgstr "Налаштуйте зовнішній вигляд хмарок нагадувань."
 
 #: ../src/cairo-dock-gui-advanced.c:1577 ../src/cairo-dock-gui-advanced.c:1578
-#, fuzzy
 msgid "Dialog boxes and Menus"
-msgstr "Діалоги"
+msgstr "Діалогові вікна і меню"
 
 #: ../src/cairo-dock-gui-advanced.c:1585
 msgid "Applets can be displayed on your desktop as widgets."
@@ -550,7 +548,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Запускати Cairo-Dock при старті системи"
 
 #: ../src/cairo-dock-user-menu.c:1096
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Додатки третіх сторін забезпечують інтеграцію з різноманітними програмами, "
 "наприклад Pidgin"
@@ -792,7 +791,8 @@ msgid "Effects:"
 msgstr "Ефекти:"
 
 #: ../src/cairo-dock-widget-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Параметри головної панелі можна налаштувати в головному вікні налаштувань."
 
@@ -817,7 +817,8 @@ msgid "Category"
 msgstr "Категорія"
 
 #: ../src/cairo-dock-widget-plugins.c:281
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Клацніть на додатку, щоб переглянути його опис та приблизний вигляд."
 
 #: ../src/cairo-dock-widget-shortkeys.c:123
@@ -1141,7 +1142,7 @@ msgstr ""
 #: ../data/messages:551 ../data/messages:691 ../data/messages:733
 #: ../data/messages:805 ../data/messages:839
 msgid "Automatic"
-msgstr ""
+msgstr "Автоматичний"
 
 #: ../src/gldit/cairo-dock-desklet-manager.c:819
 msgid "_custom decoration_"
@@ -1367,8 +1368,8 @@ msgid ""
 msgstr ""
 "Ласкаво просимо до Cairo-Dock !\n"
 "Цей додаток допоможе в освоєнні панелі.\n"
-"Якщо у вас виникають питання/побажання, завітайте на сайт http://glx-dock."
-"org.\n"
+"Якщо у вас виникають питання/побажання, завітайте на сайт http://glx-"
+"dock.org.\n"
 "Сподіваємося, що вам сподобається ця програма!\n"
 "  (щоб закрити цей діалог клацніть по ньому)"
 
@@ -1618,8 +1619,9 @@ msgid ""
 msgstr ""
 "Ви можете додати розділювач між значками правим клацанням на панелі -> "
 "додати -> розділювач.\n"
-"Також, якщо включена опція розділення значків за типами (запуск/програми/"
-"аплети), розділювач буде з’являтися автоматично між цими групами.\n"
+"Також, якщо включена опція розділення значків за типами "
+"(запуск/програми/аплети), розділювач буде з’являтися автоматично між цими "
+"групами.\n"
 "В \"панельному\" виді розділювачі показуються як розрив між значками."
 
 #: ../Help/data/messages:43
@@ -1859,8 +1861,8 @@ msgid ""
 msgstr ""
 "Активувати додаток Годинник.\n"
 "При натисканні на нього з’явиться календар.\n"
-"Подвійне клацання знизу викличе список завдань. Тут ви можете додавати/"
-"видаляти ваші завдання.\n"
+"Подвійне клацання знизу викличе список завдань. Тут ви можете "
+"додавати/видаляти ваші завдання.\n"
 "Коли задача пройшла або запланувалася, додаток попереджатиме вас (за 15 "
 "хвилин до початку події чи заходу, а також за 1 день у випадку дня "
 "народження)."
@@ -2114,8 +2116,8 @@ msgid ""
 "You can even name each of them."
 msgstr ""
 "Активувати додаток \"Перемикання стільниць\".\n"
-"Клацання правої кнопки миші -> \"Додати стільницю\" або \"Видалити стільницю"
-"\".\n"
+"Клацання правої кнопки миші -> \"Додати стільницю\" або \"Видалити "
+"стільницю\".\n"
 "Можна надати ім’я кожній стільниці."
 
 #: ../Help/data/messages:173
@@ -2154,16 +2156,17 @@ msgstr "Повне видалення gnome-panel"
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Завантажте gconf-editor, відредагуйте ключ /desktop/gnome/session/"
-"required_components/panel, замінивши його значення  на \"cairo-dock\". Потім "
-"перезапустіть сеанс: панель Gnome більше не з’являтиметься, замість неї "
-"повинна запуститися cairo-dock (якщо цього не сталося, то додайте її в "
-"програми автозапуску)."
+"Завантажте gconf-editor, відредагуйте ключ "
+"/desktop/gnome/session/required_components/panel, замінивши його значення  "
+"на \"cairo-dock\". Потім перезапустіть сеанс: панель Gnome більше не "
+"з’являтиметься, замість неї повинна запуститися cairo-dock (якщо цього не "
+"сталося, то додайте її в програми автозапуску)."
 
 #: ../Help/data/messages:187
 msgid ""
@@ -2216,16 +2219,16 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Вам потрібно включити композитність. Для цього ви можете запустити Compiz "
 "або xcmpmgr.\n"
 "Якщо ви використовуєте XFCE або KDE, то можете просто задіяти композитність "
 "в налаштуваннях менеджера вікон.\n"
 "Якщо ж ви користуєтеся Gnome, то можете задіяти Metacity таким чином:\n"
-"Відкрийте gconf-editor, встановіть ключ '/apps/metacity/general/"
-"compositing_manager' в значення 'true'."
+"Відкрийте gconf-editor, встановіть ключ "
+"'/apps/metacity/general/compositing_manager' в значення 'true'."
 
 #: ../Help/data/messages:207
 msgid ""
@@ -2403,8 +2406,8 @@ msgstr ""
 "можна поліпшити,\n"
 "або якщо ви тільки-но отримали свою мрію у вигляді панелі для задач, "
 "завітайте до нас на glx-dock.org.\n"
-"Ми будемо раді вітати англомовних (і не тільки) друзів, так що не "
-"соромтеся! ;-)\n"
+"Ми будемо раді вітати англомовних (і не тільки) друзів, так що не соромтеся! "
+";-)\n"
 "\n"
 "Якщо ви зробили нову тему для нашої панелі або новий додаток, і хочете "
 "поділитися ними, ми будемо раді додати їх на наш сервер!"
@@ -2412,7 +2415,8 @@ msgstr ""
 #: ../Help/data/messages:253
 msgid ""
 "If you wish to develop an applet, a complete documentation is available here."
-msgstr "Якщо ви хочете розробити додаток, повну документацію можна знайти тут."
+msgstr ""
+"Якщо ви хочете розробити додаток, повну документацію можна знайти тут."
 
 #: ../Help/data/messages:255
 msgid "Documentation"
@@ -2653,7 +2657,8 @@ msgstr "Оформлення"
 
 #: ../Help/data/messages:361
 msgid "Choose 'Custom decorations' to define your own decorations below."
-msgstr "Виберіть нижче 'Власне оформлення', щоб налаштувати власне оформлення."
+msgstr ""
+"Виберіть нижче 'Власне оформлення', щоб налаштувати власне оформлення."
 
 #: ../Help/data/messages:363
 msgid "Choose a decoration theme for this desklet:"
@@ -2918,9 +2923,8 @@ msgstr "Випадковий"
 
 #: ../data/messages:119 ../data/messages:553 ../data/messages:693
 #: ../data/messages:807 ../data/messages:841 ../data/messages:879
-#, fuzzy
 msgid "Custom"
-msgstr "_Змінити значки_"
+msgstr "Власний"
 
 #: ../data/messages:121 ../data/messages:747
 msgid "Colour"
@@ -3426,7 +3430,8 @@ msgstr "Порт :"
 #: ../data/messages:449 ../data/messages:453
 msgid ""
 "Let empty if you don't need to log-in to the proxy with a user/password."
-msgstr "Залиште порожнім, якщо використовуєте авторизований вхід через проксі."
+msgstr ""
+"Залиште порожнім, якщо використовуєте авторизований вхід через проксі."
 
 #: ../data/messages:451
 msgid "User :"
@@ -3512,18 +3517,15 @@ msgstr "в пікселях."
 
 #: ../data/messages:509 ../data/messages:561 ../data/messages:751
 #: ../data/messages:887
-#, fuzzy
 msgid "Corner radius"
-msgstr "Радіус закруглення кутів:"
+msgstr "Кутовий радіус"
 
 #: ../data/messages:513 ../data/messages:563 ../data/messages:889
-#, fuzzy
 msgid "Outline width"
-msgstr "Колір контуру"
+msgstr "Товщина контуру"
 
 #: ../data/messages:515 ../data/messages:557 ../data/messages:813
 #: ../data/messages:845 ../data/messages:883
-#, fuzzy
 msgid "Outline colour"
 msgstr "Колір контуру"
 
@@ -3577,14 +3579,12 @@ msgstr "Хмарка повідомлень"
 
 #: ../data/messages:555 ../data/messages:843 ../data/messages:869
 #: ../data/messages:881
-#, fuzzy
 msgid "Background colour"
-msgstr "Колір тла:"
+msgstr "Колір тла"
 
 #: ../data/messages:559 ../data/messages:847 ../data/messages:867
-#, fuzzy
 msgid "Text colour"
-msgstr "Колір тексту:"
+msgstr "Колір тексту"
 
 #: ../data/messages:565
 msgid "Shape of the bubble:"
@@ -3747,7 +3747,8 @@ msgid "Zoom effect"
 msgstr "Ефект наближення"
 
 #: ../data/messages:661
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Встановіть значення 1, якщо не бажаєте щоб значки збільшувалися при "
 "наведенні на них."
@@ -3815,9 +3816,8 @@ msgid "Reflections"
 msgstr "Відображення"
 
 #: ../data/messages:699
-#, fuzzy
 msgid "Reflection visibility"
-msgstr "Видимість підпису"
+msgstr "Видимість відображення"
 
 #: ../data/messages:701
 msgid "light"
@@ -3882,13 +3882,12 @@ msgid "Frame"
 msgstr "Рамка"
 
 #: ../data/messages:743
-#, fuzzy
 msgid "Fill background"
-msgstr "Заповнення тла:"
+msgstr "Заповнити тло"
 
 #: ../data/messages:749
 msgid "Linewidth"
-msgstr ""
+msgstr "Ширина лінії"
 
 #: ../data/messages:753 ../data/messages:785
 msgid "Draw indicator above the icon?"
@@ -3968,8 +3967,8 @@ msgstr "більше"
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Використовуйте, щоб орієнтувати індикатор відносно положення панелі (згори, "
 "знизу, справа, зліва)."
@@ -4047,17 +4046,16 @@ msgid "On all icons"
 msgstr "На всіх значках"
 
 #: ../data/messages:829
-#, fuzzy
 msgid "Neighbouring labels visibility:"
-msgstr "Видимість підпису"
+msgstr "Видимість сусідніх міток:"
 
 #: ../data/messages:831
 msgid "more visible"
-msgstr ""
+msgstr "більш помітні"
 
 #: ../data/messages:833
 msgid "less visible"
-msgstr ""
+msgstr "менш помітні"
 
 #: ../data/messages:849
 msgid "Draw the outline of the text?"
@@ -4069,7 +4067,8 @@ msgstr "Обрамлення довкола тексту (в пікселях):"
 
 #: ../data/messages:861
 msgid "Quick-info are short information drawn on the icons."
-msgstr "Швидка інформація - це коротка інформація, яка з’являється на значку."
+msgstr ""
+"Швидка інформація - це коротка інформація, яка з’являється на значку."
 
 #: ../data/messages:863
 msgid "Quick-info"
@@ -4080,7 +4079,6 @@ msgid "Use the same look as the labels?"
 msgstr "Використовувати такий же вигляд як в підписах?"
 
 #: ../data/messages:885
-#, fuzzy
 msgid "Text colour:"
 msgstr "Колір тексту:"
 
@@ -4247,7 +4245,8 @@ msgstr "Назва представлення, що використовуєть
 
 #: ../data/messages:1053
 msgid "If '0' the container will be displayed on every viewport."
-msgstr "Якщо '0' то контейнер буде відображатися на кожній області перегляду."
+msgstr ""
+"Якщо '0' то контейнер буде відображатися на кожній області перегляду."
 
 #: ../data/messages:1055 ../data/messages:1091
 msgid "Only show in this specific viewport:"
@@ -4263,8 +4262,8 @@ msgstr "Ім'я кнопки запуску:"
 
 #: ../data/messages:1071
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 "Наприклад: nautilus --no-desktop, gedit і т.д. Ви також можете призначити "
 "комбінації клавіш, наприклад: <Alt>F1, <Ctrl>c, <Ctrl>v, тощо."
@@ -4412,137 +4411,3 @@ msgstr "- Величезний перезапис основних об’єкт
 #: ../data/messages:1134
 msgid "- If you like the project, please donate :-)"
 msgstr "- Якщо вам подобається проект, будь-ласка, жертвуйте :)"
-
-#, fuzzy
-#~ msgid " Frame"
-#~ msgstr "Рамка"
-
-#~ msgid "Set a background for your dock."
-#~ msgstr "Виберіть тло для вашої панелі."
-
-#~ msgid "Select a view for each of your docks."
-#~ msgstr "Можете вибрати окремий вигляд для кожної панелі."
-
-#~ msgid "Indicators are additional markers for your icons."
-#~ msgstr "Індикатори відображають додаткову інформацію на значках."
-
-#~ msgid "Animate the launcher until the corresponding application opens"
-#~ msgstr "Анімувати значок запуску доки програма запускається"
-
-#~ msgid "Linewidth of the external line :"
-#~ msgstr "Ширина лінії зовнішньої границі:"
-
-#~ msgid "Colour of the external line:"
-#~ msgstr "Колір зовнішньої границі:"
-
-#~ msgid "Background colour of the bubble:"
-#~ msgstr "Колір тла хмарки повідомлень:"
-
-#~ msgid "Text"
-#~ msgstr "Текст"
-
-#~ msgid "If you don't provide any, a default image will be used."
-#~ msgstr "Якщо нічого не вкажете, то буде використано типове зображення."
-
-#~ msgid ""
-#~ "Any format allowed; leave this field empty if you don't want to use an "
-#~ "image as background."
-#~ msgstr ""
-#~ "Можете використовувати будь-який формат; залиште поле порожнім, щоб не "
-#~ "використовувати зображення на тлі."
-
-#~ msgid "Icon size at rest (width x height) :"
-#~ msgstr "Розмір значка в стані спокою (ширина х висота):"
-
-#~ msgid "If you don't provide one, blanks will be used."
-#~ msgstr "Якщо ви нічого не надаєте, буде використовуватися чистий."
-
-#~ msgid "Filename of an image to use for separators :"
-#~ msgstr "Зображення для розділювача:"
-
-#~ msgid ""
-#~ "It is its albedo (reflectivity); at 1 the icons reflect to the maximum, "
-#~ "at 0 reflections are not used."
-#~ msgstr ""
-#~ "Коефіцієнт відображення; при значенні 1, значки будуть повністю "
-#~ "відображатися на площину, при значенні 0, не буде використовуватися."
-
-#~ msgid "Reflective power of the plane :"
-#~ msgstr "Сила відображення на площину:"
-
-#~ msgid "Type of indicator:"
-#~ msgstr "Тип індикатору:"
-
-#~ msgid "Set transparency to 0 if you don't want to use an indicator."
-#~ msgstr "Встановіть прозорість в 0, щоб не використовувати індикатор."
-
-#~ msgid "Colour of the frame :"
-#~ msgstr "Колір рамки:"
-
-#~ msgid "Set 0 to fill the frame."
-#~ msgstr "Встановіть 0, щоб залити рамку."
-
-#~ msgid "Linewidth of the frame around the active window :"
-#~ msgstr "Товщина лінії рамки довкола активного вікна:"
-
-#~ msgid "Corner radius of the frame around the active window :"
-#~ msgstr "Радіус округлення рамки довкола активного вікна:"
-
-#~ msgid "Draw outline"
-#~ msgstr "Малювати контур"
-
-#~ msgid ""
-#~ "the bigger, the more the labels next to the selected icon will be "
-#~ "transparent."
-#~ msgstr ""
-#~ "чим більше значення, тим прозорішими будуть підписи поряд з наведеним "
-#~ "значком."
-
-#~ msgid "label's visibility threshold :"
-#~ msgstr "Поріг видимості підписів:"
-
-#~ msgid "Should the labels always be horizontal, even when dock is vertical?"
-#~ msgstr ""
-#~ "Завжди показувати горизонтальні підписи, навіть якщо панель вертикальна?"
-
-#~ msgid "Use a custom font for labels?"
-#~ msgstr "Використовувати спеціальний шрифт для підписів?"
-
-#~ msgid "Font used for labels :"
-#~ msgstr "Шрифт для підписів:"
-
-#~ msgid ""
-#~ "If you set it to fully transparent, there will be no background for the "
-#~ "text, but the margin around the text will still be in effect."
-#~ msgstr ""
-#~ "Якщо встановити повну прозорість, то тла у підписів не буде, але "
-#~ "обрамлення довкола тексту все ще буде видно."
-
-#~ msgid "Colour of the label's background :"
-#~ msgstr "Колір тла підпису:"
-
-#~ msgid "It's the first color of the gradation."
-#~ msgstr "Початковий колір градації."
-
-#~ msgid "Start color :"
-#~ msgstr "Початковий колір:"
-
-#~ msgid ""
-#~ "It's the second color of the gradation. Set it to the same value as the "
-#~ "first if you don't want to have any gradation."
-#~ msgstr ""
-#~ "Це кінцевий колір градації. Встановіть його таким самим, як і початковий, "
-#~ "щоб не використовувати градацію."
-
-#~ msgid "Stop color :"
-#~ msgstr "Кінцевий колір:"
-
-#~ msgid ""
-#~ "If checked, the pattern will go from top to bottom, otherwise from left "
-#~ "to right."
-#~ msgstr ""
-#~ "Якщо відмічено, шаблон буде створюватися згори донизу, інакше зліва "
-#~ "направо."
-
-#~ msgid "Pattern should be vertical?"
-#~ msgstr "Шаблон повинен бути вертикальним?"

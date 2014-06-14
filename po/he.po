@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2013-03-05 00:01+0000\n"
+"POT-Creation-Date: 2014-06-13 11:30+0000\n"
+"PO-Revision-Date: 2014-06-13 21:48+0000\n"
 "Last-Translator: Yaron <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
-"Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-12 04:48+0000\n"
-"X-Generator: Launchpad (build 16761)\n"
+"X-Launchpad-Export-Date: 2014-06-14 05:37+0000\n"
+"X-Generator: Launchpad (build 17045)\n"
+"Language: he\n"
 
 #: ../src/cairo-dock-gui-advanced.c:122 ../src/cairo-dock-widget-plugins.c:172
 #: ../data/messages:267
@@ -105,9 +106,8 @@ msgid "All of the parameters you will never want to tweak."
 msgstr "כל ההגדרות לרבות כאלו שאפילו אי אפשר לדמיין."
 
 #: ../src/cairo-dock-gui-advanced.c:1548
-#, fuzzy
 msgid "Configure the global style."
-msgstr "הגדר יישומון זה"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1549 ../src/cairo-dock-gui-advanced.c:1550
 #: ../data/messages:113 ../data/messages:115 ../data/messages:459
@@ -118,9 +118,8 @@ msgid "Style"
 msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1557
-#, fuzzy
 msgid "Configure docks appearance."
-msgstr "הגדרת הופעת תיאורי טקסט קופצים."
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1558 ../Help/data/messages:79
 msgid "Docks"
@@ -141,9 +140,8 @@ msgid "Configure text bubble appearance."
 msgstr "הגדרת הופעת תיאורי טקסט קופצים."
 
 #: ../src/cairo-dock-gui-advanced.c:1577 ../src/cairo-dock-gui-advanced.c:1578
-#, fuzzy
 msgid "Dialog boxes and Menus"
-msgstr "תיבות דו־שיח"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1585
 msgid "Applets can be displayed on your desktop as widgets."
@@ -537,7 +535,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "הפעל את cairo-dock עם הכניסה למערכת"
 
 #: ../src/cairo-dock-user-menu.c:1096
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr "יישומונים חיצוניים מספקים תמיכה עם תוכנות נוספות, כמו pidgin"
 
 #: ../src/cairo-dock-user-menu.c:1099 ../Help/src/applet-init.c:28
@@ -775,7 +774,8 @@ msgid "Effects:"
 msgstr "אפקטים:"
 
 #: ../src/cairo-dock-widget-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr "הגדרות הפאנל הראשי נגישות דרך חלון ההגדרות"
 
 #: ../src/cairo-dock-widget-items.c:721
@@ -799,7 +799,8 @@ msgid "Category"
 msgstr "קטגוריה"
 
 #: ../src/cairo-dock-widget-plugins.c:281
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "לחץ על יישומון כדי לקבל תצוגה מקדימה ותיאור שלו."
 
 #: ../src/cairo-dock-widget-shortkeys.c:123
@@ -1357,8 +1358,8 @@ msgstr ""
 "בכדי לבטל את הריבוע השחור מסביב ללוח עליך להפעיל מנהל שזירה.\n"
 "הפעלת אפקטים של שולחן העבודה, הרצת compiz או הפעלת אפשרות השזירה של "
 "metacity.\n"
-"אם אין לך מנהל שזירה,cairo-dock יכול לדמות אותו. אפשרות זו נמצאת תחת \"מערכת"
-"\" בהגדרות של cairo-dock."
+"אם אין לך מנהל שזירה,cairo-dock יכול לדמות אותו. אפשרות זו נמצאת תחת "
+"\"מערכת\" בהגדרות של cairo-dock."
 
 #: ../Help/src/applet-init.c:31
 msgid ""
@@ -1949,8 +1950,9 @@ msgstr "מחיקת הלוח של גנום"
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1998,8 +2000,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
@@ -2596,9 +2598,8 @@ msgstr "אקראי"
 
 #: ../data/messages:119 ../data/messages:553 ../data/messages:693
 #: ../data/messages:807 ../data/messages:841 ../data/messages:879
-#, fuzzy
 msgid "Custom"
-msgstr "_Custom Icons_"
+msgstr ""
 
 #: ../data/messages:121 ../data/messages:747
 msgid "Colour"
@@ -3212,9 +3213,8 @@ msgstr ""
 
 #: ../data/messages:555 ../data/messages:843 ../data/messages:869
 #: ../data/messages:881
-#, fuzzy
 msgid "Background colour"
-msgstr "רקע"
+msgstr ""
 
 #: ../data/messages:559 ../data/messages:847 ../data/messages:867
 msgid "Text colour"
@@ -3375,7 +3375,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:661
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:663
@@ -3497,9 +3498,8 @@ msgid "Frame"
 msgstr ""
 
 #: ../data/messages:743
-#, fuzzy
 msgid "Fill background"
-msgstr "רקע"
+msgstr ""
 
 #: ../data/messages:749
 msgid "Linewidth"
@@ -3570,8 +3570,8 @@ msgstr ""
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:783
@@ -3848,8 +3848,8 @@ msgstr ""
 
 #: ../data/messages:1071
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1073
@@ -3967,12 +3967,3 @@ msgstr ""
 #: ../data/messages:1134
 msgid "- If you like the project, please donate :-)"
 msgstr ""
-
-#~ msgid "Set a background for your dock."
-#~ msgstr "הגדרת רקע ללוח."
-
-#~ msgid "Select a view for each of your docks."
-#~ msgstr "ניתן לבחור בתצוגה עבור כל אחד מהלוחות שלך."
-
-#~ msgid "Indicators are additional markers for your icons."
-#~ msgstr "מחוונים הם סימנים נוספים לסמלים שלך."

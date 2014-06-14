@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2012-09-30 17:33+0000\n"
+"POT-Creation-Date: 2014-06-13 11:30+0000\n"
+"PO-Revision-Date: 2014-06-13 21:43+0000\n"
 "Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
 "Language-Team: Faroese <fo@li.org>\n"
-"Language: fo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-12 04:47+0000\n"
-"X-Generator: Launchpad (build 16761)\n"
+"X-Launchpad-Export-Date: 2014-06-14 05:37+0000\n"
+"X-Generator: Launchpad (build 17045)\n"
+"Language: fo\n"
 
 #: ../src/cairo-dock-gui-advanced.c:122 ../src/cairo-dock-widget-plugins.c:172
 #: ../data/messages:267
@@ -102,9 +103,8 @@ msgid "All of the parameters you will never want to tweak."
 msgstr "Øll bundnatøl ið tú vil neystilla."
 
 #: ../src/cairo-dock-gui-advanced.c:1548
-#, fuzzy
 msgid "Configure the global style."
-msgstr "Samanset hesa dokk"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1549 ../src/cairo-dock-gui-advanced.c:1550
 #: ../data/messages:113 ../data/messages:115 ../data/messages:459
@@ -115,9 +115,8 @@ msgid "Style"
 msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1557
-#, fuzzy
 msgid "Configure docks appearance."
-msgstr "Samanset hesa dokk"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1558 ../Help/data/messages:79
 msgid "Docks"
@@ -138,9 +137,8 @@ msgid "Configure text bubble appearance."
 msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1577 ../src/cairo-dock-gui-advanced.c:1578
-#, fuzzy
 msgid "Dialog boxes and Menus"
-msgstr "Samrøðukassar"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1585
 msgid "Applets can be displayed on your desktop as widgets."
@@ -504,7 +502,8 @@ msgstr "Umsit temur"
 #: ../src/cairo-dock-user-menu.c:1040
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
-msgstr "Víl ímillum mangar temur á ambætaranum, ella goym títt núverandi tema."
+msgstr ""
+"Víl ímillum mangar temur á ambætaranum, ella goym títt núverandi tema."
 
 #: ../src/cairo-dock-user-menu.c:1052
 msgid "Lock icons position"
@@ -528,7 +527,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Koyr Cairo-Dock við byrjan"
 
 #: ../src/cairo-dock-user-menu.c:1096
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 
 #: ../src/cairo-dock-user-menu.c:1099 ../Help/src/applet-init.c:28
@@ -764,7 +764,8 @@ msgid "Effects:"
 msgstr ""
 
 #: ../src/cairo-dock-widget-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-widget-items.c:721
@@ -788,7 +789,8 @@ msgid "Category"
 msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:281
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
 #: ../src/cairo-dock-widget-shortkeys.c:123
@@ -1877,8 +1879,9 @@ msgstr ""
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1926,8 +1929,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
@@ -3133,14 +3136,12 @@ msgstr ""
 
 #: ../data/messages:555 ../data/messages:843 ../data/messages:869
 #: ../data/messages:881
-#, fuzzy
 msgid "Background colour"
-msgstr "Bakgrund"
+msgstr ""
 
 #: ../data/messages:559 ../data/messages:847 ../data/messages:867
-#, fuzzy
 msgid "Text colour"
-msgstr "Tekstlitur:"
+msgstr ""
 
 #: ../data/messages:565
 msgid "Shape of the bubble:"
@@ -3297,7 +3298,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:661
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:663
@@ -3358,9 +3360,8 @@ msgid "Reflections"
 msgstr "Endurskyn"
 
 #: ../data/messages:699
-#, fuzzy
 msgid "Reflection visibility"
-msgstr "Endurskyn"
+msgstr ""
 
 #: ../data/messages:701
 msgid "light"
@@ -3420,9 +3421,8 @@ msgid "Frame"
 msgstr "Ramma"
 
 #: ../data/messages:743
-#, fuzzy
 msgid "Fill background"
-msgstr "Fyll bakgrundina við:"
+msgstr ""
 
 #: ../data/messages:749
 msgid "Linewidth"
@@ -3493,8 +3493,8 @@ msgstr "størri"
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:783
@@ -3600,9 +3600,8 @@ msgid "Use the same look as the labels?"
 msgstr ""
 
 #: ../data/messages:885
-#, fuzzy
 msgid "Text colour:"
-msgstr "Tekstlitur:"
+msgstr ""
 
 #: ../data/messages:917
 msgid "Visibility of the dock"
@@ -3772,8 +3771,8 @@ msgstr ""
 
 #: ../data/messages:1071
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1073
@@ -3891,44 +3890,3 @@ msgstr ""
 #: ../data/messages:1134
 msgid "- If you like the project, please donate :-)"
 msgstr ""
-
-#, fuzzy
-#~ msgid " Frame"
-#~ msgstr "Ramma"
-
-#~ msgid "Set a background for your dock."
-#~ msgstr "Set eina bakgrund til tína dokk."
-
-#~ msgid "Text"
-#~ msgstr "Tekstur"
-
-#~ msgid "Colour of the frame :"
-#~ msgstr "Laturin á rammuni :"
-
-#~ msgid "Set 0 to fill the frame."
-#~ msgstr "Set 0 fyri at fylla rammuna."
-
-#~ msgid "Use a custom font for labels?"
-#~ msgstr "Nýt eitt serligt stavasnið til spjødur?"
-
-#~ msgid "Font used for labels :"
-#~ msgstr "Stavasnið nýtt til spjøldur :"
-
-#~ msgid "Colour of the label's background :"
-#~ msgstr "Bakgrundslitur á spjaldrinum :"
-
-#~ msgid "Start color :"
-#~ msgstr "Byrjunarlitur :"
-
-#~ msgid "Stop color :"
-#~ msgstr "Endalitur :"
-
-#~ msgid ""
-#~ "If checked, the pattern will go from top to bottom, otherwise from left "
-#~ "to right."
-#~ msgstr ""
-#~ "Um tú setur valmerki, ferð mynstrið at fara frá ovast til niðast, annars "
-#~ "úr vinstru til høgru."
-
-#~ msgid "Pattern should be vertical?"
-#~ msgstr "Skal mynstrið vera loddrætt?"

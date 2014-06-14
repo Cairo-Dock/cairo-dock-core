@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2013-09-29 14:37+0000\n"
+"POT-Creation-Date: 2014-06-13 11:30+0000\n"
+"PO-Revision-Date: 2014-06-13 21:31+0000\n"
 "Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
 "Language-Team: Slovak <sk@li.org>\n"
-"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-30 04:38+0000\n"
-"X-Generator: Launchpad (build 16774)\n"
+"X-Launchpad-Export-Date: 2014-06-14 05:39+0000\n"
+"X-Generator: Launchpad (build 17045)\n"
+"Language: sk\n"
 
 #: ../src/cairo-dock-gui-advanced.c:122 ../src/cairo-dock-widget-plugins.c:172
 #: ../data/messages:267
@@ -105,9 +106,8 @@ msgid "All of the parameters you will never want to tweak."
 msgstr "Všetky parametre už nikdy nebudete chcieť vyladiť."
 
 #: ../src/cairo-dock-gui-advanced.c:1548
-#, fuzzy
 msgid "Configure the global style."
-msgstr "Konfigurovať tento applet"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1549 ../src/cairo-dock-gui-advanced.c:1550
 #: ../data/messages:113 ../data/messages:115 ../data/messages:459
@@ -118,9 +118,8 @@ msgid "Style"
 msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1557
-#, fuzzy
 msgid "Configure docks appearance."
-msgstr "Konfigurovať vzhľad dialógov v bublinách."
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1558 ../Help/data/messages:79
 msgid "Docks"
@@ -141,9 +140,8 @@ msgid "Configure text bubble appearance."
 msgstr "Konfigurovať vzhľad dialógov v bublinách."
 
 #: ../src/cairo-dock-gui-advanced.c:1577 ../src/cairo-dock-gui-advanced.c:1578
-#, fuzzy
 msgid "Dialog boxes and Menus"
-msgstr "Dialógy"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1585
 msgid "Applets can be displayed on your desktop as widgets."
@@ -548,7 +546,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Spustiť Cairo-dock pri štarte"
 
 #: ../src/cairo-dock-user-menu.c:1096
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Aplety tretej strany poskytujú integráciu do mnohých programov, ako je Pidgin"
 
@@ -789,8 +788,10 @@ msgid "Effects:"
 msgstr "Efekty:"
 
 #: ../src/cairo-dock-widget-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
-msgstr "Parametre hlavného panelu sú k dispozícii v hlavnom okne konfigurácie."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
+msgstr ""
+"Parametre hlavného panelu sú k dispozícii v hlavnom okne konfigurácie."
 
 #: ../src/cairo-dock-widget-items.c:721
 msgid "Remove this item"
@@ -813,7 +814,8 @@ msgid "Category"
 msgstr "Kategória"
 
 #: ../src/cairo-dock-widget-plugins.c:281
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Kliknite na applet, a získate náhľad a jeho popis."
 
 #: ../src/cairo-dock-widget-shortkeys.c:123
@@ -1985,13 +1987,15 @@ msgstr "Úplne odstrániť gnome panel"
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Otvorte gconf-editor, upravte kľúč /desktop/gnome/sesion/required_components/"
-"panel, a nahradte jeho obsah s \"cairo-dock\".\n"
+"Otvorte gconf-editor, upravte kľúč "
+"/desktop/gnome/sesion/required_components/panel, a nahradte jeho obsah s "
+"\"cairo-dock\".\n"
 "Reštartujte sedenie: gnome-panel sa nespustí, a panel bude spustený (ak nie, "
 "pridajte do programov po spustení)."
 
@@ -2043,15 +2047,15 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Musíte zapnúť kompozíciu. Napríklad, môžete spustiť Compiz alebo xcompmgr. \n"
 "Ak používate XFCE alebo KDE, stačí povoliť kompozície v nastavení správcu "
 "okien.\n"
 "Ak používate Gnome, môžete to povoliť v Metacity týmto spôsobom:\n"
-" Otvorte gconf-editor, upravte kľúč '/apps/metacity/general/"
-"compositing_manager' a nastavte na 'true'."
+" Otvorte gconf-editor, upravte kľúč "
+"'/apps/metacity/general/compositing_manager' a nastavte na 'true'."
 
 #: ../Help/data/messages:207
 msgid ""
@@ -2713,9 +2717,8 @@ msgstr "Náhodne"
 
 #: ../data/messages:119 ../data/messages:553 ../data/messages:693
 #: ../data/messages:807 ../data/messages:841 ../data/messages:879
-#, fuzzy
 msgid "Custom"
-msgstr "_Vlastné ikony_"
+msgstr ""
 
 #: ../data/messages:121 ../data/messages:747
 msgid "Colour"
@@ -3303,20 +3306,17 @@ msgstr "v pixeloch."
 
 #: ../data/messages:509 ../data/messages:561 ../data/messages:751
 #: ../data/messages:887
-#, fuzzy
 msgid "Corner radius"
-msgstr "Rohový rádius:"
+msgstr ""
 
 #: ../data/messages:513 ../data/messages:563 ../data/messages:889
-#, fuzzy
 msgid "Outline width"
-msgstr "Farba obrysu"
+msgstr ""
 
 #: ../data/messages:515 ../data/messages:557 ../data/messages:813
 #: ../data/messages:845 ../data/messages:883
-#, fuzzy
 msgid "Outline colour"
-msgstr "Farba obrysu"
+msgstr ""
 
 #: ../data/messages:519
 msgid "Margin between the frame and the icons or their reflects :"
@@ -3368,14 +3368,12 @@ msgstr "Bublina"
 
 #: ../data/messages:555 ../data/messages:843 ../data/messages:869
 #: ../data/messages:881
-#, fuzzy
 msgid "Background colour"
-msgstr "Farba pozadia:"
+msgstr ""
 
 #: ../data/messages:559 ../data/messages:847 ../data/messages:867
-#, fuzzy
 msgid "Text colour"
-msgstr "Farba textu :"
+msgstr ""
 
 #: ../data/messages:565
 msgid "Shape of the bubble:"
@@ -3538,7 +3536,8 @@ msgid "Zoom effect"
 msgstr "Efekt priblíženia"
 
 #: ../data/messages:661
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "nastavený na hodnotu 1, ak nechcete zväčšujúce sa ikony, keď  nad nimi "
 "podržíte kurzor."
@@ -3604,9 +3603,8 @@ msgid "Reflections"
 msgstr "Odrazy"
 
 #: ../data/messages:699
-#, fuzzy
 msgid "Reflection visibility"
-msgstr "Viditeľnosť štítka"
+msgstr ""
 
 #: ../data/messages:701
 msgid "light"
@@ -3669,9 +3667,8 @@ msgid "Frame"
 msgstr "Rám"
 
 #: ../data/messages:743
-#, fuzzy
 msgid "Fill background"
-msgstr "Vyplniť pozadie s :"
+msgstr ""
 
 #: ../data/messages:749
 msgid "Linewidth"
@@ -3749,8 +3746,8 @@ msgstr "väčší"
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:783
@@ -3826,9 +3823,8 @@ msgid "On all icons"
 msgstr "Na všetkých ikonách"
 
 #: ../data/messages:829
-#, fuzzy
 msgid "Neighbouring labels visibility:"
-msgstr "Viditeľnosť štítka"
+msgstr ""
 
 #: ../data/messages:831
 msgid "more visible"
@@ -3859,9 +3855,8 @@ msgid "Use the same look as the labels?"
 msgstr "Použiť rovnaký vzhľad ako štítky?"
 
 #: ../data/messages:885
-#, fuzzy
 msgid "Text colour:"
-msgstr "Farba textu :"
+msgstr ""
 
 #: ../data/messages:917
 msgid "Visibility of the dock"
@@ -4040,8 +4035,8 @@ msgstr "Názov spúšťača:"
 
 #: ../data/messages:1071
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 "Príklad: nautilus --no-desktop, gedit, atď Môžete dokonca zadávať skratky, "
 "ako <Alt> F1, <Ctrl> c, <Ctrl> v, atď"
@@ -4163,129 +4158,3 @@ msgstr ""
 #: ../data/messages:1134
 msgid "- If you like the project, please donate :-)"
 msgstr ""
-
-#, fuzzy
-#~ msgid " Frame"
-#~ msgstr "Rám"
-
-#~ msgid "Set a background for your dock."
-#~ msgstr "Nastaviť pozadie pre váš dock."
-
-#~ msgid "Select a view for each of your docks."
-#~ msgstr "Vyberte zobrazenie pre každý zo svojich dockov."
-
-#~ msgid "Indicators are additional markers for your icons."
-#~ msgstr "Ukazovatele sú ďaľšie údaje o vašich ikonách."
-
-#~ msgid "Linewidth of the external line :"
-#~ msgstr "Šírka vonkajšej linky:"
-
-#~ msgid "Colour of the external line:"
-#~ msgstr "Farba vonkajšej linky:"
-
-#~ msgid "Background colour of the bubble:"
-#~ msgstr "Farba pozadia bubliny :"
-
-#~ msgid "Text"
-#~ msgstr "Text"
-
-#~ msgid "If you don't provide any, a default image will be used."
-#~ msgstr "Ak nemáte žiadne, bude použitý predvolený obrázok."
-
-#~ msgid ""
-#~ "Any format allowed; leave this field empty if you don't want to use an "
-#~ "image as background."
-#~ msgstr ""
-#~ "Ľubovoľný formát; nechajte toto pole prázdne, ak nechcete použiť obrázok "
-#~ "ako pozadie"
-
-#~ msgid "Icon size at rest (width x height) :"
-#~ msgstr "Veľkosť ikony v kľude (šírka x výška):"
-
-#~ msgid "If you don't provide one, blanks will be used."
-#~ msgstr "Ak nie je poskytnutá, bude použitá prázdna."
-
-#~ msgid "Filename of an image to use for separators :"
-#~ msgstr "Názov súboru obrázku použitého ako oddeľovače :"
-
-#~ msgid ""
-#~ "It is its albedo (reflectivity); at 1 the icons reflect to the maximum, "
-#~ "at 0 reflections are not used."
-#~ msgstr ""
-#~ "To je jeho albedo (zrkadlenie); pri nastavení na 1 sa ikony odrážajú na "
-#~ "maximum, pri 0 odrazy nie sú používané."
-
-#~ msgid "Reflective power of the plane :"
-#~ msgstr "Sila odrážania na rovine :"
-
-#~ msgid "Type of indicator:"
-#~ msgstr "Typ indikátora:"
-
-#~ msgid "Set transparency to 0 if you don't want to use an indicator."
-#~ msgstr "Nastaviť priehľadnosť na 0, ak nechcete používať indikátor."
-
-#~ msgid "Colour of the frame :"
-#~ msgstr "Farba rámčeku :"
-
-#~ msgid "Set 0 to fill the frame."
-#~ msgstr "Nastaviť 0 pre vyplnenie rámu."
-
-#~ msgid "Linewidth of the frame around the active window :"
-#~ msgstr "Šírka rámu okolo aktívneho okna :"
-
-#~ msgid "Corner radius of the frame around the active window :"
-#~ msgstr "Polomer uhlu rámika okolo aktívneho okna:"
-
-#~ msgid "Draw outline"
-#~ msgstr "Vykresliť obrys"
-
-#~ msgid ""
-#~ "the bigger, the more the labels next to the selected icon will be "
-#~ "transparent."
-#~ msgstr "Čím väčšie, tým viac štítkov bude pri vybranej ikone priehľadných."
-
-#~ msgid "label's visibility threshold :"
-#~ msgstr "Prah viditeľnosti štítkov:"
-
-#~ msgid "Should the labels always be horizontal, even when dock is vertical?"
-#~ msgstr "Mali by byť štítky vždy vodorovne, aj keď je dok zvisle?"
-
-#~ msgid "Use a custom font for labels?"
-#~ msgstr "Použiť vlastné ísmo re štítok ?"
-
-#~ msgid "Font used for labels :"
-#~ msgstr "Písmo použité pre štítok :"
-
-#~ msgid ""
-#~ "If you set it to fully transparent, there will be no background for the "
-#~ "text, but the margin around the text will still be in effect."
-#~ msgstr ""
-#~ "Ak nastavíte, ako plne priehľadné, nebudete mať pozadie pre text, ale "
-#~ "rozpätie okolo textu bude stále v platnosti."
-
-#~ msgid "Colour of the label's background :"
-#~ msgstr "Farba pozadia štítkov:"
-
-#~ msgid "It's the first color of the gradation."
-#~ msgstr "To je prvá farba stupňovania."
-
-#~ msgid "Start color :"
-#~ msgstr "Počiatočná farba :"
-
-#~ msgid ""
-#~ "It's the second color of the gradation. Set it to the same value as the "
-#~ "first if you don't want to have any gradation."
-#~ msgstr ""
-#~ "To je druhý stupeň farby. Nastavte ju na rovnakú hodnotu ako prvý, ak "
-#~ "nechcete mať žiadne stupňovanie farieb."
-
-#~ msgid "Stop color :"
-#~ msgstr "Konečná farba :"
-
-#~ msgid ""
-#~ "If checked, the pattern will go from top to bottom, otherwise from left "
-#~ "to right."
-#~ msgstr "Ak je začiarknuté, vzor pôjde zhora nadol, inak zľava doprava."
-
-#~ msgid "Pattern should be vertical?"
-#~ msgstr "Vzorka by mala byť zvisle?"

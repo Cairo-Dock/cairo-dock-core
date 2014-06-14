@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2013-09-29 14:48+0000\n"
+"POT-Creation-Date: 2014-06-13 11:30+0000\n"
+"PO-Revision-Date: 2014-06-13 21:45+0000\n"
 "Last-Translator: MiSi <kettis@volny.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
-"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-30 04:37+0000\n"
-"X-Generator: Launchpad (build 16774)\n"
+"X-Launchpad-Export-Date: 2014-06-14 05:36+0000\n"
+"X-Generator: Launchpad (build 17045)\n"
+"Language: cs\n"
 
 #: ../src/cairo-dock-gui-advanced.c:122 ../src/cairo-dock-widget-plugins.c:172
 #: ../data/messages:267
@@ -105,9 +106,8 @@ msgid "All of the parameters you will never want to tweak."
 msgstr "Parametry, které nikdy nebudete chtít upravovat."
 
 #: ../src/cairo-dock-gui-advanced.c:1548
-#, fuzzy
 msgid "Configure the global style."
-msgstr "Nastavit tento applet"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1549 ../src/cairo-dock-gui-advanced.c:1550
 #: ../data/messages:113 ../data/messages:115 ../data/messages:459
@@ -118,9 +118,8 @@ msgid "Style"
 msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1557
-#, fuzzy
 msgid "Configure docks appearance."
-msgstr "Nastavení vzhledu textových bublin."
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1558 ../Help/data/messages:79
 msgid "Docks"
@@ -141,9 +140,8 @@ msgid "Configure text bubble appearance."
 msgstr "Nastavení vzhledu textových bublin."
 
 #: ../src/cairo-dock-gui-advanced.c:1577 ../src/cairo-dock-gui-advanced.c:1578
-#, fuzzy
 msgid "Dialog boxes and Menus"
-msgstr "Dialogová okna"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1585
 msgid "Applets can be displayed on your desktop as widgets."
@@ -550,7 +548,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Spustit Cairo-Dock při startu systému"
 
 #: ../src/cairo-dock-user-menu.c:1096
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Applety třetích stran zajišťují integraci s mnoha programy, například s "
 "Pidginem."
@@ -562,7 +561,8 @@ msgstr "Nápověda"
 
 #: ../src/cairo-dock-user-menu.c:1104
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
-msgstr "Není tu žádný problém, jsou zde jen řešení (a spoustu užitečných rad.)"
+msgstr ""
+"Není tu žádný problém, jsou zde jen řešení (a spoustu užitečných rad.)"
 
 #: ../src/cairo-dock-user-menu.c:1108
 msgid "About"
@@ -791,7 +791,8 @@ msgid "Effects:"
 msgstr "Efekty:"
 
 #: ../src/cairo-dock-widget-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr "Základní parametry panelu jsou dostupné v hlavním konfiguračním okně"
 
 #: ../src/cairo-dock-widget-items.c:721
@@ -815,7 +816,8 @@ msgid "Category"
 msgstr "Kategorie"
 
 #: ../src/cairo-dock-widget-plugins.c:281
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Klikněte na applet pro zobrazení jeho náhledu a popisu."
 
 #: ../src/cairo-dock-widget-shortkeys.c:123
@@ -1013,7 +1015,8 @@ msgstr ""
 msgid ""
 "For debugging purpose only. The crash manager will not be started to hunt "
 "down the bugs."
-msgstr "Pouze pro ladící účly. Crash manager se pro zachycení chyby nespustí."
+msgstr ""
+"Pouze pro ladící účly. Crash manager se pro zachycení chyby nespustí."
 
 #: ../src/cairo-dock.c:414
 msgid ""
@@ -1586,8 +1589,9 @@ msgid ""
 msgstr ""
 "Mezi ikony můžete přidat oddělovač pravým klikem na  dok -> přidat -> "
 "oddělovač.\n"
-"Také když povolíte volbu odělovat ikony rozdílného typu (spouštěče/alikace/"
-"aplety), a oddělovač bude vložen automaticky mezi každou skupinu.\n"
+"Také když povolíte volbu odělovat ikony rozdílného typu "
+"(spouštěče/alikace/aplety), a oddělovač bude vložen automaticky mezi každou "
+"skupinu.\n"
 "V panelovém pohledu jsou oddělovače zobrazovány jako přerušovaná čára mezi "
 "ikonami."
 
@@ -2042,13 +2046,14 @@ msgstr "Kompletní odebrání gnome-panelu"
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Spusťte gconf-editor, upravte: klíč /desktop/gnome/session/"
-"required_components/panel, nahraďte: \"cairo-dock\".\n"
+"Spusťte gconf-editor, upravte: klíč "
+"/desktop/gnome/session/required_components/panel, nahraďte: \"cairo-dock\".\n"
 "Potom restartujet svoje sezení : gnome-panel by se neměl spustit, měl by se "
 "spustit dock (pokud ne, můžete ho přidat do programů spouštěných při startu)."
 
@@ -2097,8 +2102,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
@@ -2111,7 +2116,8 @@ msgstr ""
 
 #: ../Help/data/messages:209
 msgid "My machine is too old to run a composite manager."
-msgstr "Můj počítač je příliš starý na to, aby na něm běžel composite manager."
+msgstr ""
+"Můj počítač je příliš starý na to, aby na něm běžel composite manager."
 
 #: ../Help/data/messages:211
 msgid ""
@@ -2772,9 +2778,8 @@ msgstr "Náhodně"
 
 #: ../data/messages:119 ../data/messages:553 ../data/messages:693
 #: ../data/messages:807 ../data/messages:841 ../data/messages:879
-#, fuzzy
 msgid "Custom"
-msgstr "_Vlastní ikony_"
+msgstr ""
 
 #: ../data/messages:121 ../data/messages:747
 msgid "Colour"
@@ -3255,7 +3260,8 @@ msgstr "Vynutit IPv4 ?"
 
 #: ../data/messages:441
 msgid "Use this option if you connect to the Internet through a proxy."
-msgstr "Použijte toto nastavení, pokud se k internetu připojujete přes proxy."
+msgstr ""
+"Použijte toto nastavení, pokud se k internetu připojujete přes proxy."
 
 #: ../data/messages:443
 msgid "Are you behind a proxy ?"
@@ -3327,7 +3333,8 @@ msgstr "Úhel přechodu:"
 
 #: ../data/messages:493
 msgid "If not nul, it will form stripes."
-msgstr "Pokud je parametr nenulový, zobrazí se zadaný počet pruhů s přechodem."
+msgstr ""
+"Pokud je parametr nenulový, zobrazí se zadaný počet pruhů s přechodem."
 
 #: ../data/messages:495
 msgid "Repeat the gradation this number of times:"
@@ -3360,9 +3367,8 @@ msgstr "v bodech."
 
 #: ../data/messages:509 ../data/messages:561 ../data/messages:751
 #: ../data/messages:887
-#, fuzzy
 msgid "Corner radius"
-msgstr "Zaoblení rohů:"
+msgstr ""
 
 #: ../data/messages:513 ../data/messages:563 ../data/messages:889
 msgid "Outline width"
@@ -3370,9 +3376,8 @@ msgstr ""
 
 #: ../data/messages:515 ../data/messages:557 ../data/messages:813
 #: ../data/messages:845 ../data/messages:883
-#, fuzzy
 msgid "Outline colour"
-msgstr "Koncová barva"
+msgstr ""
 
 #: ../data/messages:519
 msgid "Margin between the frame and the icons or their reflects :"
@@ -3424,14 +3429,12 @@ msgstr "Bublina"
 
 #: ../data/messages:555 ../data/messages:843 ../data/messages:869
 #: ../data/messages:881
-#, fuzzy
 msgid "Background colour"
-msgstr "Barva pozadí:"
+msgstr ""
 
 #: ../data/messages:559 ../data/messages:847 ../data/messages:867
-#, fuzzy
 msgid "Text colour"
-msgstr "Barva textu:"
+msgstr ""
 
 #: ../data/messages:565
 msgid "Shape of the bubble:"
@@ -3594,8 +3597,10 @@ msgid "Zoom effect"
 msgstr "Efekt zvětšení"
 
 #: ../data/messages:661
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
-msgstr "Nastavte na 1, pokud nechcete, aby se ikony po najetí myší zvětšovaly."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
+msgstr ""
+"Nastavte na 1, pokud nechcete, aby se ikony po najetí myší zvětšovaly."
 
 #: ../data/messages:663
 msgid "Maximum zoom of the icons :"
@@ -3659,9 +3664,8 @@ msgid "Reflections"
 msgstr "Zrcadlení"
 
 #: ../data/messages:699
-#, fuzzy
 msgid "Reflection visibility"
-msgstr "Viditelnost popisku"
+msgstr ""
 
 #: ../data/messages:701
 msgid "light"
@@ -3724,9 +3728,8 @@ msgid "Frame"
 msgstr "Rámeček"
 
 #: ../data/messages:743
-#, fuzzy
 msgid "Fill background"
-msgstr "Pozadí vyplnit:"
+msgstr ""
 
 #: ../data/messages:749
 msgid "Linewidth"
@@ -3810,11 +3813,11 @@ msgstr "větší"
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
-"Zvolte, pokud má indikátor následovat orientaci doku (nahoře/dole/vlevo/"
-"vpravo)."
+"Zvolte, pokud má indikátor následovat orientaci doku "
+"(nahoře/dole/vlevo/vpravo)."
 
 #: ../data/messages:783
 msgid "Rotate the indicator with dock?"
@@ -3889,9 +3892,8 @@ msgid "On all icons"
 msgstr "U všech ikon"
 
 #: ../data/messages:829
-#, fuzzy
 msgid "Neighbouring labels visibility:"
-msgstr "Viditelnost popisku"
+msgstr ""
 
 #: ../data/messages:831
 msgid "more visible"
@@ -3922,9 +3924,8 @@ msgid "Use the same look as the labels?"
 msgstr ""
 
 #: ../data/messages:885
-#, fuzzy
 msgid "Text colour:"
-msgstr "Barva textu:"
+msgstr ""
 
 #: ../data/messages:917
 msgid "Visibility of the dock"
@@ -4104,8 +4105,8 @@ msgstr "Jméno spouštěče:"
 
 #: ../data/messages:1071
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 "Například: nautilus --no-desktop, gedit, apod. Dokonce můžete použít "
 "klávesové zkratky, např. <Alt>F1, <Ctrl>c,  <Ctrl>v, apod."
@@ -4227,128 +4228,3 @@ msgstr ""
 #: ../data/messages:1134
 msgid "- If you like the project, please donate :-)"
 msgstr ""
-
-#, fuzzy
-#~ msgid " Frame"
-#~ msgstr "Rámeček"
-
-#~ msgid "Set a background for your dock."
-#~ msgstr "Nastavte pozadí pro svůj dok."
-
-#~ msgid "Select a view for each of your docks."
-#~ msgstr "Vyberte zobrazení pro každý dok."
-
-#~ msgid "Indicators are additional markers for your icons."
-#~ msgstr "Indikátory jsou doplňkové značky pro vaše ikony."
-
-#~ msgid "Linewidth of the external line :"
-#~ msgstr "Síla vnějšího rámečku:"
-
-#~ msgid "Colour of the external line:"
-#~ msgstr "Barva vnějšího rámečku:"
-
-#~ msgid "Background colour of the bubble:"
-#~ msgstr "Barva pozadí bubliny:"
-
-#~ msgid "Text"
-#~ msgstr "Text"
-
-#~ msgid "If you don't provide any, a default image will be used."
-#~ msgstr "Pokud žádné nezadáte, bude použit obrázek výchozí."
-
-#~ msgid ""
-#~ "Any format allowed; leave this field empty if you don't want to use an "
-#~ "image as background."
-#~ msgstr ""
-#~ "Můžete použít libovolný formát. Nechte pole prázdné, pokud nechcete "
-#~ "použít žádný obrázek jako pozadí."
-
-#~ msgid "Icon size at rest (width x height) :"
-#~ msgstr "Velikost ikony při při nečinnosti (šířka x výška):"
-
-#~ msgid "If you don't provide one, blanks will be used."
-#~ msgstr "Pokud žádný nezvolíte, bude použito prázdné místo."
-
-#~ msgid "Filename of an image to use for separators :"
-#~ msgstr "Jméno souboru, nebo obrázku pro oddělovače:"
-
-#~ msgid ""
-#~ "It is its albedo (reflectivity); at 1 the icons reflect to the maximum, "
-#~ "at 0 reflections are not used."
-#~ msgstr ""
-#~ "Albedo (součinitel odrazu). Nastavením 1 je zrcadlení maximální, 0 "
-#~ "znamená žádné zrcadlení."
-
-#~ msgid "Reflective power of the plane :"
-#~ msgstr "Odrazivost panelu:"
-
-#~ msgid "Type of indicator:"
-#~ msgstr "Typ indikátoru:"
-
-#~ msgid "Set transparency to 0 if you don't want to use an indicator."
-#~ msgstr "Nastavte průhlednost na 0, pokud nechcete žádný indikátor."
-
-#~ msgid "Colour of the frame :"
-#~ msgstr "Barva rámečku:"
-
-#~ msgid "Set 0 to fill the frame."
-#~ msgstr "Nastavte na 0 pro vyplnění rámečku."
-
-#~ msgid "Linewidth of the frame around the active window :"
-#~ msgstr "Šířka linky rámečku kolem aktivního okna:"
-
-#~ msgid "Corner radius of the frame around the active window :"
-#~ msgstr "Poloměr zaoblení rámečku kolem aktivního okna:"
-
-#~ msgid ""
-#~ "the bigger, the more the labels next to the selected icon will be "
-#~ "transparent."
-#~ msgstr "čím větší, tím průhlednější budou sousední popisky ikon."
-
-#~ msgid "label's visibility threshold :"
-#~ msgstr "Práh viditelnosti popisků:"
-
-#~ msgid "Should the labels always be horizontal, even when dock is vertical?"
-#~ msgstr "Mají být popisky vodorovné, i při vertikální pozici doku?"
-
-#~ msgid "Use a custom font for labels?"
-#~ msgstr "Použít vlastní písmo?"
-
-#~ msgid "Font used for labels :"
-#~ msgstr "Písmo popisků:"
-
-#~ msgid ""
-#~ "If you set it to fully transparent, there will be no background for the "
-#~ "text, but the margin around the text will still be in effect."
-#~ msgstr ""
-#~ "Pokud nastavíte maximální průhlednost, nebude mít text žádné pozadí, ale "
-#~ "okraj kolem textu bude stále aktivní."
-
-#~ msgid "Colour of the label's background :"
-#~ msgstr "Barva pozadí popisku:"
-
-#~ msgid "It's the first color of the gradation."
-#~ msgstr "Toto je první barva přechodu."
-
-#~ msgid "Start color :"
-#~ msgstr "První barva:"
-
-#~ msgid ""
-#~ "It's the second color of the gradation. Set it to the same value as the "
-#~ "first if you don't want to have any gradation."
-#~ msgstr ""
-#~ "Druhá barva přechodu. Pokud nastavíte stejnou barvu, jako první, nebude "
-#~ "žádný přechod."
-
-#~ msgid "Stop color :"
-#~ msgstr "Druhá barva:"
-
-#~ msgid ""
-#~ "If checked, the pattern will go from top to bottom, otherwise from left "
-#~ "to right."
-#~ msgstr ""
-#~ "Pokud je zaškrtnuto, barevný přechod bude mít směr odshora dolů, v "
-#~ "opačném případě zleva doprava."
-
-#~ msgid "Pattern should be vertical?"
-#~ msgstr "Vertikální barevný přechod?"

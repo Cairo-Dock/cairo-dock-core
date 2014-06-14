@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2014-06-13 13:20+0200\n"
-"PO-Revision-Date: 2013-09-29 14:38+0000\n"
+"POT-Creation-Date: 2014-06-13 11:30+0000\n"
+"PO-Revision-Date: 2014-06-13 21:32+0000\n"
 "Last-Translator: Anthony Harrington <untaintableangel@ubuntu.com>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-30 04:39+0000\n"
-"X-Generator: Launchpad (build 16774)\n"
+"X-Launchpad-Export-Date: 2014-06-14 05:39+0000\n"
+"X-Generator: Launchpad (build 17045)\n"
+"Language: \n"
 
 #: ../src/cairo-dock-gui-advanced.c:122 ../src/cairo-dock-widget-plugins.c:172
 #: ../data/messages:267
@@ -106,9 +106,8 @@ msgid "All of the parameters you will never want to tweak."
 msgstr "All of the parameters you will never want to tweak."
 
 #: ../src/cairo-dock-gui-advanced.c:1548
-#, fuzzy
 msgid "Configure the global style."
-msgstr "Configure this applet"
+msgstr "Configure the global style."
 
 #: ../src/cairo-dock-gui-advanced.c:1549 ../src/cairo-dock-gui-advanced.c:1550
 #: ../data/messages:113 ../data/messages:115 ../data/messages:459
@@ -116,12 +115,11 @@ msgstr "Configure this applet"
 #: ../data/messages:803 ../data/messages:837 ../data/messages:871
 #: ../data/messages:875
 msgid "Style"
-msgstr ""
+msgstr "Style"
 
 #: ../src/cairo-dock-gui-advanced.c:1557
-#, fuzzy
 msgid "Configure docks appearance."
-msgstr "Configure text bubble appearance."
+msgstr "Configure dock's appearance."
 
 #: ../src/cairo-dock-gui-advanced.c:1558 ../Help/data/messages:79
 msgid "Docks"
@@ -142,9 +140,8 @@ msgid "Configure text bubble appearance."
 msgstr "Configure text bubble appearance."
 
 #: ../src/cairo-dock-gui-advanced.c:1577 ../src/cairo-dock-gui-advanced.c:1578
-#, fuzzy
 msgid "Dialog boxes and Menus"
-msgstr "Dialogue boxes"
+msgstr "Dialogue boxes and Menus"
 
 #: ../src/cairo-dock-gui-advanced.c:1585
 msgid "Applets can be displayed on your desktop as widgets."
@@ -558,7 +555,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Launch Cairo-Dock on startup"
 
 #: ../src/cairo-dock-user-menu.c:1096
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Third-party applets provide integration with many programs, like Pidgin"
 
@@ -799,8 +797,10 @@ msgid "Effects:"
 msgstr "Effects:"
 
 #: ../src/cairo-dock-widget-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
-msgstr "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
+msgstr ""
+"Main dock's parameters are available in the main configuration window."
 
 #: ../src/cairo-dock-widget-items.c:721
 msgid "Remove this item"
@@ -823,7 +823,8 @@ msgid "Category"
 msgstr "Category"
 
 #: ../src/cairo-dock-widget-plugins.c:281
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Click on an applet in order to have a preview and a description for it."
 
@@ -1144,7 +1145,7 @@ msgstr ""
 #: ../data/messages:551 ../data/messages:691 ../data/messages:733
 #: ../data/messages:805 ../data/messages:839
 msgid "Automatic"
-msgstr ""
+msgstr "Automatic"
 
 #: ../src/gldit/cairo-dock-desklet-manager.c:819
 msgid "_custom decoration_"
@@ -2165,13 +2166,15 @@ msgstr "Removing completely the gnome-panel"
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 
@@ -2222,16 +2225,16 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "You need to turn on compositing. For instance, you can run Compiz or "
 "xcompmgr. \n"
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way:\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 
 #: ../Help/data/messages:207
 msgid ""
@@ -2299,7 +2302,8 @@ msgstr ""
 
 #: ../Help/data/messages:223
 msgid "I don't have any themes in the Theme Manager, except the default one."
-msgstr "I don't have any themes in the Theme Manager, except the default one."
+msgstr ""
+"I don't have any themes in the Theme Manager, except the default one."
 
 #: ../Help/data/messages:225
 msgid "Hint : Up to version 2.1.1-2, wget was used."
@@ -2919,9 +2923,8 @@ msgstr "Random"
 
 #: ../data/messages:119 ../data/messages:553 ../data/messages:693
 #: ../data/messages:807 ../data/messages:841 ../data/messages:879
-#, fuzzy
 msgid "Custom"
-msgstr "_Custom Icons_"
+msgstr "Custom"
 
 #: ../data/messages:121 ../data/messages:747
 msgid "Colour"
@@ -3515,18 +3518,15 @@ msgstr "in pixels."
 
 #: ../data/messages:509 ../data/messages:561 ../data/messages:751
 #: ../data/messages:887
-#, fuzzy
 msgid "Corner radius"
-msgstr "Corner radius:"
+msgstr "Corner radius"
 
 #: ../data/messages:513 ../data/messages:563 ../data/messages:889
-#, fuzzy
 msgid "Outline width"
-msgstr "Outline colour"
+msgstr "Outline width"
 
 #: ../data/messages:515 ../data/messages:557 ../data/messages:813
 #: ../data/messages:845 ../data/messages:883
-#, fuzzy
 msgid "Outline colour"
 msgstr "Outline colour"
 
@@ -3580,14 +3580,12 @@ msgstr "Bubble"
 
 #: ../data/messages:555 ../data/messages:843 ../data/messages:869
 #: ../data/messages:881
-#, fuzzy
 msgid "Background colour"
-msgstr "Background colour:"
+msgstr "Background colour"
 
 #: ../data/messages:559 ../data/messages:847 ../data/messages:867
-#, fuzzy
 msgid "Text colour"
-msgstr "Text colour:"
+msgstr "Text colour"
 
 #: ../data/messages:565
 msgid "Shape of the bubble:"
@@ -3750,8 +3748,10 @@ msgid "Zoom effect"
 msgstr "Zoom effect"
 
 #: ../data/messages:661
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
-msgstr "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
+msgstr ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 
 #: ../data/messages:663
 msgid "Maximum zoom of the icons :"
@@ -3816,9 +3816,8 @@ msgid "Reflections"
 msgstr "Reflections"
 
 #: ../data/messages:699
-#, fuzzy
 msgid "Reflection visibility"
-msgstr "Label visibility"
+msgstr "Reflection visibility"
 
 #: ../data/messages:701
 msgid "light"
@@ -3883,13 +3882,12 @@ msgid "Frame"
 msgstr "Frame"
 
 #: ../data/messages:743
-#, fuzzy
 msgid "Fill background"
-msgstr "Fill the background with:"
+msgstr "Fill background"
 
 #: ../data/messages:749
 msgid "Linewidth"
-msgstr ""
+msgstr "Linewidth"
 
 #: ../data/messages:753 ../data/messages:785
 msgid "Draw indicator above the icon?"
@@ -3971,11 +3969,11 @@ msgstr "bigger"
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 
 #: ../data/messages:783
 msgid "Rotate the indicator with dock?"
@@ -4050,17 +4048,16 @@ msgid "On all icons"
 msgstr "On all icons"
 
 #: ../data/messages:829
-#, fuzzy
 msgid "Neighbouring labels visibility:"
-msgstr "Label visibility"
+msgstr "Visibility of neighbouring labels:"
 
 #: ../data/messages:831
 msgid "more visible"
-msgstr ""
+msgstr "more visible"
 
 #: ../data/messages:833
 msgid "less visible"
-msgstr ""
+msgstr "less visible"
 
 #: ../data/messages:849
 msgid "Draw the outline of the text?"
@@ -4083,7 +4080,6 @@ msgid "Use the same look as the labels?"
 msgstr "Use the same look as the labels?"
 
 #: ../data/messages:885
-#, fuzzy
 msgid "Text colour:"
 msgstr "Text colour:"
 
@@ -4264,11 +4260,11 @@ msgstr "Launcher's name:"
 
 #: ../data/messages:1071
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 
 #: ../data/messages:1073
 msgid "Command to launch on click:"
@@ -4413,136 +4409,3 @@ msgstr "- A huge rewrite of the core using Objects"
 #: ../data/messages:1134
 msgid "- If you like the project, please donate :-)"
 msgstr "- If you like the project, please donate :-)"
-
-#, fuzzy
-#~ msgid " Frame"
-#~ msgstr "Frame"
-
-#~ msgid "Set a background for your dock."
-#~ msgstr "Set a background for your dock."
-
-#~ msgid "Select a view for each of your docks."
-#~ msgstr "Select a view for each of your docks."
-
-#~ msgid "Indicators are additional markers for your icons."
-#~ msgstr "Indicators are additional markers for your icons."
-
-#~ msgid "Animate the launcher until the corresponding application opens"
-#~ msgstr "Animate the launcher until the corresponding application opens"
-
-#~ msgid "Linewidth of the external line :"
-#~ msgstr "Linewidth of the external line:"
-
-#~ msgid "Colour of the external line:"
-#~ msgstr "Colour of the external line:"
-
-#~ msgid "Background colour of the bubble:"
-#~ msgstr "Background colour of the bubble:"
-
-#~ msgid "Text"
-#~ msgstr "Text"
-
-#~ msgid "If you don't provide any, a default image will be used."
-#~ msgstr "If you don't provide any, a default image will be used."
-
-#~ msgid ""
-#~ "Any format allowed; leave this field empty if you don't want to use an "
-#~ "image as background."
-#~ msgstr ""
-#~ "Any format allowed; leave this field empty if you don't want to use an "
-#~ "image as background."
-
-#~ msgid "Icon size at rest (width x height) :"
-#~ msgstr "Icon size at rest (width x height):"
-
-#~ msgid "If you don't provide one, blanks will be used."
-#~ msgstr "If you don't provide one, blanks will be used."
-
-#~ msgid "Filename of an image to use for separators :"
-#~ msgstr "Filename of an image to use for separators:"
-
-#~ msgid ""
-#~ "It is its albedo (reflectivity); at 1 the icons reflect to the maximum, "
-#~ "at 0 reflections are not used."
-#~ msgstr ""
-#~ "It is its albedo (reflectivity); at 1 the icons reflect to the maximum, "
-#~ "at 0 reflections are not used."
-
-#~ msgid "Reflective power of the plane :"
-#~ msgstr "Reflective power of the plane:"
-
-#~ msgid "Type of indicator:"
-#~ msgstr "Type of indicator:"
-
-#~ msgid "Set transparency to 0 if you don't want to use an indicator."
-#~ msgstr "Set transparency to 0 if you don't want to use an indicator."
-
-#~ msgid "Colour of the frame :"
-#~ msgstr "Colour of the frame:"
-
-#~ msgid "Set 0 to fill the frame."
-#~ msgstr "Set 0 to fill the frame."
-
-#~ msgid "Linewidth of the frame around the active window :"
-#~ msgstr "Linewidth of the frame around the active window:"
-
-#~ msgid "Corner radius of the frame around the active window :"
-#~ msgstr "Corner radius of the frame around the active window:"
-
-#~ msgid "Draw outline"
-#~ msgstr "Draw outline"
-
-#~ msgid ""
-#~ "the bigger, the more the labels next to the selected icon will be "
-#~ "transparent."
-#~ msgstr ""
-#~ "the bigger, the more the labels next to the selected icon will be "
-#~ "transparent."
-
-#~ msgid "label's visibility threshold :"
-#~ msgstr "label's visibility threshold:"
-
-#~ msgid "Should the labels always be horizontal, even when dock is vertical?"
-#~ msgstr "Should the labels always be horizontal, even when dock is vertical?"
-
-#~ msgid "Use a custom font for labels?"
-#~ msgstr "Use a custom font for labels?"
-
-#~ msgid "Font used for labels :"
-#~ msgstr "Font used for labels:"
-
-#~ msgid ""
-#~ "If you set it to fully transparent, there will be no background for the "
-#~ "text, but the margin around the text will still be in effect."
-#~ msgstr ""
-#~ "If you set it to fully transparent, there will be no background for the "
-#~ "text, but the margin around the text will still be in effect."
-
-#~ msgid "Colour of the label's background :"
-#~ msgstr "Colour of the label's background:"
-
-#~ msgid "It's the first color of the gradation."
-#~ msgstr "It's the first colour of the gradation."
-
-#~ msgid "Start color :"
-#~ msgstr "Start colour:"
-
-#~ msgid ""
-#~ "It's the second color of the gradation. Set it to the same value as the "
-#~ "first if you don't want to have any gradation."
-#~ msgstr ""
-#~ "It's the second colour of the gradation. Set it to the same value as the "
-#~ "first, if you don't want to have any gradation."
-
-#~ msgid "Stop color :"
-#~ msgstr "Stop colour:"
-
-#~ msgid ""
-#~ "If checked, the pattern will go from top to bottom, otherwise from left "
-#~ "to right."
-#~ msgstr ""
-#~ "If checked, the pattern will go from top to bottom, otherwise from left "
-#~ "to right."
-
-#~ msgid "Pattern should be vertical?"
-#~ msgstr "Pattern should be vertical?"

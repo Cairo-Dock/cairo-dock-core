@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2013-09-29 14:36+0000\n"
+"POT-Creation-Date: 2014-06-13 11:30+0000\n"
+"PO-Revision-Date: 2014-06-13 21:23+0000\n"
 "Last-Translator: Alexander Mackinnon Jansen <alexander.jansen@hesbynett.no>\n"
 "Language-Team: Norwegian Nynorsk <nn@li.org>\n"
-"Language: nn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-30 04:38+0000\n"
-"X-Generator: Launchpad (build 16774)\n"
+"X-Launchpad-Export-Date: 2014-06-14 05:38+0000\n"
+"X-Generator: Launchpad (build 17045)\n"
+"Language: nn\n"
 
 #: ../src/cairo-dock-gui-advanced.c:122 ../src/cairo-dock-widget-plugins.c:172
 #: ../data/messages:267
@@ -105,9 +106,8 @@ msgid "All of the parameters you will never want to tweak."
 msgstr "Alle innstillingane du aldri vil tilpasse."
 
 #: ../src/cairo-dock-gui-advanced.c:1548
-#, fuzzy
 msgid "Configure the global style."
-msgstr "Tilpass dette miniprogrammet"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1549 ../src/cairo-dock-gui-advanced.c:1550
 #: ../data/messages:113 ../data/messages:115 ../data/messages:459
@@ -118,9 +118,8 @@ msgid "Style"
 msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1557
-#, fuzzy
 msgid "Configure docks appearance."
-msgstr "Vel utsjånad for tekstboble."
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1558 ../Help/data/messages:79
 msgid "Docks"
@@ -141,9 +140,8 @@ msgid "Configure text bubble appearance."
 msgstr "Vel utsjånad for tekstboble."
 
 #: ../src/cairo-dock-gui-advanced.c:1577 ../src/cairo-dock-gui-advanced.c:1578
-#, fuzzy
 msgid "Dialog boxes and Menus"
-msgstr "Dialogvindauge"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1585
 msgid "Applets can be displayed on your desktop as widgets."
@@ -449,7 +447,8 @@ msgstr "skillelinje"
 #: ../src/cairo-dock-user-menu.c:631
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
-msgstr "Du er i ferd med å fjerne dette ikonet (%s) frå panelet. Er du sikker?"
+msgstr ""
+"Du er i ferd med å fjerne dette ikonet (%s) frå panelet. Er du sikker?"
 
 #: ../src/cairo-dock-user-menu.c:646
 msgid "Sorry, this icon doesn't have a configuration file."
@@ -526,7 +525,8 @@ msgstr "Handsam draktar"
 #: ../src/cairo-dock-user-menu.c:1040
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
-msgstr "Vel mellom dei mange draktene på tenaren eller lagre drakta du har no."
+msgstr ""
+"Vel mellom dei mange draktene på tenaren eller lagre drakta du har no."
 
 #: ../src/cairo-dock-user-menu.c:1052
 msgid "Lock icons position"
@@ -549,7 +549,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Køyr Cairo-Dock ved oppstart"
 
 #: ../src/cairo-dock-user-menu.c:1096
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Tredjeparts-miniprogram tilbyd samanslåing med mange program, som Pidgin"
 
@@ -789,7 +790,8 @@ msgid "Effects:"
 msgstr "Effektar:"
 
 #: ../src/cairo-dock-widget-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Innstillingane for hovudpanelet er tilbode i hovudvindauget til "
 "innstillingane."
@@ -815,7 +817,8 @@ msgid "Category"
 msgstr "Kategori"
 
 #: ../src/cairo-dock-widget-plugins.c:281
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Klikk på eit av miniprogramma for å få ei førehandsvising og ei skildring av "
 "henne."
@@ -965,7 +968,8 @@ msgstr ""
 
 #: ../src/cairo-dock.c:377
 msgid "Exclude a given plug-in from activating (it is still loaded though)."
-msgstr "Utelat eit gitt tillegg frå å aktivere (men det blir framleis lasta)."
+msgstr ""
+"Utelat eit gitt tillegg frå å aktivere (men det blir framleis lasta)."
 
 #: ../src/cairo-dock.c:380
 msgid "Don't load any plug-ins."
@@ -1071,8 +1075,8 @@ msgid ""
 "dock.org"
 msgstr ""
 "«%s»-modulen har vorte slådd av sia han kan ha skapa nokre problem.\n"
-"Du kan starte han på nytt, viss dette skjer att kan du melde det på http://"
-"glx-dock.org"
+"Du kan starte han på nytt, viss dette skjer att kan du melde det på "
+"http://glx-dock.org"
 
 #: ../src/cairo-dock.c:731
 msgid "< Maintenance mode >"
@@ -1670,7 +1674,8 @@ msgstr "Å køyre eit program fleire gonger"
 msgid ""
 "You can launch an application several times by SHIFT+clicking on its icon "
 "(or from the menu)."
-msgstr "Du kan køyre eit program med shift+klikke på ikonet (eller frå menyen)"
+msgstr ""
+"Du kan køyre eit program med shift+klikke på ikonet (eller frå menyen)"
 
 #: ../Help/data/messages:59
 msgid "Switching between the windows of a same application"
@@ -2144,13 +2149,15 @@ msgstr "Å fjerne gnome-panelet heilt"
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Opne gconf-editor, endre nøkkelen /desktop/gnome/session/required_components/"
-"panel, og erstatt innhaldet med «cairo-dock».\n"
+"Opne gconf-editor, endre nøkkelen "
+"/desktop/gnome/session/required_components/panel, og erstatt innhaldet med "
+"«cairo-dock».\n"
 "Så startar du økta på nytt: gnome-panelet er ikkje starta, men dokka er "
 "starta (viss ikkje kan du legge henne til oppstartsprogramma)."
 
@@ -2201,16 +2208,16 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Du må skru på samansetting.  Du kan for eksempel køyre Compiz eller "
 "xcompgr.\n"
 "Viss du køyrer XFCE eller KDE, kan du skru på samansetting i vala for "
 "vindaugehandsamar.\n"
 "Viss du køyrer GNOME kan du skru det på i Metacity:\n"
-" Opne gconf-editor, endre nøkkelen «/apps/metacity/general/"
-"compositing_manager» og still han inn på «true»."
+" Opne gconf-editor, endre nøkkelen "
+"«/apps/metacity/general/compositing_manager» og still han inn på «true»."
 
 #: ../Help/data/messages:207
 msgid ""
@@ -2255,7 +2262,8 @@ msgstr ""
 
 #: ../Help/data/messages:217
 msgid "I don't have these wonderful effects like fire, cube rotating, etc."
-msgstr "Eg har ikkje dei vedunderlige effektane som eld, roterande kube, osb."
+msgstr ""
+"Eg har ikkje dei vedunderlige effektane som eld, roterande kube, osb."
 
 #: ../Help/data/messages:219
 msgid ""
@@ -2892,9 +2900,8 @@ msgstr "Tilfeldig"
 
 #: ../data/messages:119 ../data/messages:553 ../data/messages:693
 #: ../data/messages:807 ../data/messages:841 ../data/messages:879
-#, fuzzy
 msgid "Custom"
-msgstr "_Tilpassa ikon_"
+msgstr ""
 
 #: ../data/messages:121 ../data/messages:747
 msgid "Colour"
@@ -3534,9 +3541,8 @@ msgstr ""
 
 #: ../data/messages:555 ../data/messages:843 ../data/messages:869
 #: ../data/messages:881
-#, fuzzy
 msgid "Background colour"
-msgstr "Bakgrunn"
+msgstr ""
 
 #: ../data/messages:559 ../data/messages:847 ../data/messages:867
 msgid "Text colour"
@@ -3697,7 +3703,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:661
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:663
@@ -3819,9 +3826,8 @@ msgid "Frame"
 msgstr ""
 
 #: ../data/messages:743
-#, fuzzy
 msgid "Fill background"
-msgstr "Bakgrunn"
+msgstr ""
 
 #: ../data/messages:749
 msgid "Linewidth"
@@ -3892,8 +3898,8 @@ msgstr ""
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:783
@@ -4170,8 +4176,8 @@ msgstr ""
 
 #: ../data/messages:1071
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1073
@@ -4289,12 +4295,3 @@ msgstr ""
 #: ../data/messages:1134
 msgid "- If you like the project, please donate :-)"
 msgstr ""
-
-#~ msgid "Set a background for your dock."
-#~ msgstr "Vel ei bakgrunn til panelet ditt."
-
-#~ msgid "Select a view for each of your docks."
-#~ msgstr "Vel ei vising til kvart av panela dine."
-
-#~ msgid "Indicators are additional markers for your icons."
-#~ msgstr "Indikatorar er ekstra merkar til ikona dine."

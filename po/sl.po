@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2013-09-29 14:38+0000\n"
+"POT-Creation-Date: 2014-06-13 11:30+0000\n"
+"PO-Revision-Date: 2014-06-13 21:35+0000\n"
 "Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
-"Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-30 04:38+0000\n"
-"X-Generator: Launchpad (build 16774)\n"
+"X-Launchpad-Export-Date: 2014-06-14 05:39+0000\n"
+"X-Generator: Launchpad (build 17045)\n"
+"Language: sl\n"
 
 #: ../src/cairo-dock-gui-advanced.c:122 ../src/cairo-dock-widget-plugins.c:172
 #: ../data/messages:267
@@ -105,9 +106,8 @@ msgid "All of the parameters you will never want to tweak."
 msgstr "Vsi parametri, ki jih ne boste želeli spreminjati."
 
 #: ../src/cairo-dock-gui-advanced.c:1548
-#, fuzzy
 msgid "Configure the global style."
-msgstr "Upravljaj ta vstavek"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1549 ../src/cairo-dock-gui-advanced.c:1550
 #: ../data/messages:113 ../data/messages:115 ../data/messages:459
@@ -118,9 +118,8 @@ msgid "Style"
 msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1557
-#, fuzzy
 msgid "Configure docks appearance."
-msgstr "Konfigurirajte izgled besedila v balonu."
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1558 ../Help/data/messages:79
 msgid "Docks"
@@ -141,9 +140,8 @@ msgid "Configure text bubble appearance."
 msgstr "Konfigurirajte izgled besedila v balonu."
 
 #: ../src/cairo-dock-gui-advanced.c:1577 ../src/cairo-dock-gui-advanced.c:1578
-#, fuzzy
 msgid "Dialog boxes and Menus"
-msgstr "Pogovorna okna"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1585
 msgid "Applets can be displayed on your desktop as widgets."
@@ -481,7 +479,8 @@ msgstr ""
 #: ../src/cairo-dock-user-menu.c:822
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
-msgstr "Ali ste prepričani, da želite odstraniti ta vtičnik (%s) iz sidrišča?"
+msgstr ""
+"Ali ste prepričani, da želite odstraniti ta vtičnik (%s) iz sidrišča?"
 
 #: ../src/cairo-dock-user-menu.c:891 ../src/gldit/cairo-dock-gui-factory.c:759
 msgid "Pick up an image"
@@ -543,7 +542,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Zaženi Cairo-Dock ob zagonu"
 
 #: ../src/cairo-dock-user-menu.c:1096
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Vtičniki tretjih oseb zagotavljajo še več programov, kot integracijo z "
 "aplikacijo Pidgin"
@@ -782,7 +782,8 @@ msgid "Effects:"
 msgstr "Efekti:"
 
 #: ../src/cairo-dock-widget-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Parametri osnovnega sidrišča so na voljo v osnovnem nastavitvenem oknu."
 
@@ -807,7 +808,8 @@ msgid "Category"
 msgstr ""
 
 #: ../src/cairo-dock-widget-plugins.c:281
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Kliknite na vtičnik za predogled in opis."
 
 #: ../src/cairo-dock-widget-shortkeys.c:123
@@ -1921,8 +1923,9 @@ msgstr ""
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1970,8 +1973,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
@@ -2466,7 +2469,8 @@ msgstr "Vidnost podsirdišč"
 msgid ""
 "they will appear either when you click or when you linger over the icon "
 "pointing on it."
-msgstr "prikazali se bodo ob kliku nanje oziroma ko bo šel kazalec čez le-te."
+msgstr ""
+"prikazali se bodo ob kliku nanje oziroma ko bo šel kazalec čez le-te."
 
 #: ../data/messages:59 ../data/messages:253
 msgid "Appear on mouse over"
@@ -2569,9 +2573,8 @@ msgstr ""
 
 #: ../data/messages:119 ../data/messages:553 ../data/messages:693
 #: ../data/messages:807 ../data/messages:841 ../data/messages:879
-#, fuzzy
 msgid "Custom"
-msgstr "_Poljubne Ikone_"
+msgstr ""
 
 #: ../data/messages:121 ../data/messages:747
 msgid "Colour"
@@ -3056,7 +3059,8 @@ msgstr "Veljavnost IPv4?"
 
 #: ../data/messages:441
 msgid "Use this option if you connect to the Internet through a proxy."
-msgstr "Uporabite to možnost, če ste na splet povezani preko proxy strežnika."
+msgstr ""
+"Uporabite to možnost, če ste na splet povezani preko proxy strežnika."
 
 #: ../data/messages:443
 msgid "Are you behind a proxy ?"
@@ -3161,9 +3165,8 @@ msgstr "v slikovnih pikah."
 
 #: ../data/messages:509 ../data/messages:561 ../data/messages:751
 #: ../data/messages:887
-#, fuzzy
 msgid "Corner radius"
-msgstr "Kot polmera :"
+msgstr ""
 
 #: ../data/messages:513 ../data/messages:563 ../data/messages:889
 msgid "Outline width"
@@ -3224,14 +3227,12 @@ msgstr "Oblaček"
 
 #: ../data/messages:555 ../data/messages:843 ../data/messages:869
 #: ../data/messages:881
-#, fuzzy
 msgid "Background colour"
-msgstr "Ozadje"
+msgstr ""
 
 #: ../data/messages:559 ../data/messages:847 ../data/messages:867
-#, fuzzy
 msgid "Text colour"
-msgstr "Barva besedila:"
+msgstr ""
 
 #: ../data/messages:565
 msgid "Shape of the bubble:"
@@ -3303,7 +3304,8 @@ msgstr "Prosojnost ozadja :"
 
 #: ../data/messages:605
 msgid "in pixels. Use this to adjust the left position of the drawings."
-msgstr "v slikovnih pikah. Uporabite to za prilagoditev levega položaja risb."
+msgstr ""
+"v slikovnih pikah. Uporabite to za prilagoditev levega položaja risb."
 
 #: ../data/messages:607
 msgid "Left offset :"
@@ -3320,7 +3322,8 @@ msgstr "Odmik vrha :"
 
 #: ../data/messages:613
 msgid "in pixels. Use this to adjust the right position of the drawings."
-msgstr "v slikovnih pikah. Uporabite to za prilagoditev desnega položaja risb."
+msgstr ""
+"v slikovnih pikah. Uporabite to za prilagoditev desnega položaja risb."
 
 #: ../data/messages:615
 msgid "Right offset :"
@@ -3396,8 +3399,10 @@ msgid "Zoom effect"
 msgstr "Efekt približevanja"
 
 #: ../data/messages:661
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
-msgstr "nastavite na 1, če ne želite približevanja ikon ob lebdenju nad njimi"
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
+msgstr ""
+"nastavite na 1, če ne želite približevanja ikon ob lebdenju nad njimi"
 
 #: ../data/messages:663
 msgid "Maximum zoom of the icons :"
@@ -3461,9 +3466,8 @@ msgid "Reflections"
 msgstr "Odsevi"
 
 #: ../data/messages:699
-#, fuzzy
 msgid "Reflection visibility"
-msgstr "Vidljivost oznak"
+msgstr ""
 
 #: ../data/messages:701
 msgid "light"
@@ -3526,9 +3530,8 @@ msgid "Frame"
 msgstr "Okvir"
 
 #: ../data/messages:743
-#, fuzzy
 msgid "Fill background"
-msgstr "Zapolni ozadje z:"
+msgstr ""
 
 #: ../data/messages:749
 msgid "Linewidth"
@@ -3611,8 +3614,8 @@ msgstr "večji"
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr "Pokažite kazalniku usmerjenost sidrišča (na vrhu/spodaj/desno/levo)."
 
 #: ../data/messages:783
@@ -3686,9 +3689,8 @@ msgid "On all icons"
 msgstr "Na vseh ikonah"
 
 #: ../data/messages:829
-#, fuzzy
 msgid "Neighbouring labels visibility:"
-msgstr "Vidljivost oznak"
+msgstr ""
 
 #: ../data/messages:831
 msgid "more visible"
@@ -3719,9 +3721,8 @@ msgid "Use the same look as the labels?"
 msgstr ""
 
 #: ../data/messages:885
-#, fuzzy
 msgid "Text colour:"
-msgstr "Barva besedila:"
+msgstr ""
 
 #: ../data/messages:917
 msgid "Visibility of the dock"
@@ -3895,8 +3896,8 @@ msgstr ""
 
 #: ../data/messages:1071
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1073
@@ -4014,128 +4015,3 @@ msgstr ""
 #: ../data/messages:1134
 msgid "- If you like the project, please donate :-)"
 msgstr ""
-
-#, fuzzy
-#~ msgid " Frame"
-#~ msgstr "Okvir"
-
-#~ msgid "Set a background for your dock."
-#~ msgstr "Nastavite ozadje za vaše sidrišče."
-
-#~ msgid "Select a view for each of your docks."
-#~ msgstr "Izberite prikaz vsakega vašega sidrišča."
-
-#~ msgid "Indicators are additional markers for your icons."
-#~ msgstr "Kazalci so dodatni označevalci vaših ikon."
-
-#~ msgid "Linewidth of the external line :"
-#~ msgstr "Širina črte zunanjega okvira:"
-
-#~ msgid "Colour of the external line:"
-#~ msgstr "Barva zunanjega okvira:"
-
-#~ msgid "Background colour of the bubble:"
-#~ msgstr "Barva ozadja oblačka:"
-
-#~ msgid "Text"
-#~ msgstr "Besedilo"
-
-#~ msgid "If you don't provide any, a default image will be used."
-#~ msgstr "Če ne navedete nobene, bo uporabljena privzeta slika."
-
-#~ msgid ""
-#~ "Any format allowed; leave this field empty if you don't want to use an "
-#~ "image as background."
-#~ msgstr ""
-#~ "Katerakoli oblika dovoljena; pustite to polje prazno, če ne želite "
-#~ "uporabiti slike za ozadje."
-
-#~ msgid "Icon size at rest (width x height) :"
-#~ msgstr "Velikost ikon v mirovanju (širina x višina) :"
-
-#~ msgid "If you don't provide one, blanks will be used."
-#~ msgstr "Če ne izberete ene, bo namesto uporabljena praznina."
-
-#~ msgid "Filename of an image to use for separators :"
-#~ msgstr "Ime slike, ki bo uporabljena za ločilo :"
-
-#~ msgid ""
-#~ "It is its albedo (reflectivity); at 1 the icons reflect to the maximum, "
-#~ "at 0 reflections are not used."
-#~ msgstr ""
-#~ "Odbojnost (odseva); pri 1, bo odsev ikon največji, pri 0, odsevov ne bo"
-
-#~ msgid "Reflective power of the plane :"
-#~ msgstr "Moč odboja na ravnini :"
-
-#~ msgid "Type of indicator:"
-#~ msgstr "Vrsta kazalnika:"
-
-#~ msgid "Set transparency to 0 if you don't want to use an indicator."
-#~ msgstr "Nastavite prosojnost na 0, če ne želite uporabljati kazalnika."
-
-#~ msgid "Colour of the frame :"
-#~ msgstr "Barva okvirja :"
-
-#~ msgid "Set 0 to fill the frame."
-#~ msgstr "Nastavite 0 za zapolnitev okvirja."
-
-#~ msgid "Linewidth of the frame around the active window :"
-#~ msgstr "Širina črte okvirja okoli trenutnega okna :"
-
-#~ msgid "Corner radius of the frame around the active window :"
-#~ msgstr "Kot polmera okvirja okoli trenutnega okna :"
-
-#~ msgid ""
-#~ "the bigger, the more the labels next to the selected icon will be "
-#~ "transparent."
-#~ msgstr "večje bo, več oznak izbraih ikon bo opaznih"
-
-#~ msgid "label's visibility threshold :"
-#~ msgstr "stopnja prepoznavnosti oznak :"
-
-#~ msgid "Should the labels always be horizontal, even when dock is vertical?"
-#~ msgstr ""
-#~ "Naj bodo oznake vedno vodoravno, tudi ko bo sidrišče obrnjeno navpično?"
-
-#~ msgid "Use a custom font for labels?"
-#~ msgstr "Uprabim poljubno pisavo za oznake?"
-
-#~ msgid "Font used for labels :"
-#~ msgstr "Uporabljena pisava za oznake :"
-
-#~ msgid ""
-#~ "If you set it to fully transparent, there will be no background for the "
-#~ "text, but the margin around the text will still be in effect."
-#~ msgstr ""
-#~ "Če nastavite popolnoma prosojno, ne bo ozadja za besedilo, vendar bo pri "
-#~ "tem uporabljena le obroba okoli besedila."
-
-#~ msgid "Colour of the label's background :"
-#~ msgstr "Barva ozadja oznake :"
-
-#~ msgid "It's the first color of the gradation."
-#~ msgstr "Prva barva preliva."
-
-#~ msgid "Start color :"
-#~ msgstr "Začetna barva :"
-
-#~ msgid ""
-#~ "It's the second color of the gradation. Set it to the same value as the "
-#~ "first if you don't want to have any gradation."
-#~ msgstr ""
-#~ "Druga barva preliva. Nastavite enako barvo, če ne želite uporabiti "
-#~ "preliva."
-
-#~ msgid "Stop color :"
-#~ msgstr "Končna barva :"
-
-#~ msgid ""
-#~ "If checked, the pattern will go from top to bottom, otherwise from left "
-#~ "to right."
-#~ msgstr ""
-#~ "Po preverjanju, naj bo vzorec obrnjen od zgoraj navzdol ali pa od leve "
-#~ "proti desne."
-
-#~ msgid "Pattern should be vertical?"
-#~ msgstr "Naj bo vzorec navpično?"

@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2013-09-29 14:39+0000\n"
+"POT-Creation-Date: 2014-06-13 11:30+0000\n"
+"PO-Revision-Date: 2014-06-13 21:36+0000\n"
 "Last-Translator: rob <linuxned@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-30 04:38+0000\n"
-"X-Generator: Launchpad (build 16774)\n"
+"X-Launchpad-Export-Date: 2014-06-14 05:36+0000\n"
+"X-Generator: Launchpad (build 17045)\n"
+"Language: \n"
 
 #: ../src/cairo-dock-gui-advanced.c:122 ../src/cairo-dock-widget-plugins.c:172
 #: ../data/messages:267
@@ -105,9 +106,8 @@ msgid "All of the parameters you will never want to tweak."
 msgstr "Alle opties die u nooit wilt wijzigen."
 
 #: ../src/cairo-dock-gui-advanced.c:1548
-#, fuzzy
 msgid "Configure the global style."
-msgstr "Dit applet configureren"
+msgstr "Algemene stijl configureren."
 
 #: ../src/cairo-dock-gui-advanced.c:1549 ../src/cairo-dock-gui-advanced.c:1550
 #: ../data/messages:113 ../data/messages:115 ../data/messages:459
@@ -115,12 +115,11 @@ msgstr "Dit applet configureren"
 #: ../data/messages:803 ../data/messages:837 ../data/messages:871
 #: ../data/messages:875
 msgid "Style"
-msgstr ""
+msgstr "Stijl"
 
 #: ../src/cairo-dock-gui-advanced.c:1557
-#, fuzzy
 msgid "Configure docks appearance."
-msgstr "Configureer het uiterlijk van de dialoogballonnen."
+msgstr "Dock-weergave configureren."
 
 #: ../src/cairo-dock-gui-advanced.c:1558 ../Help/data/messages:79
 msgid "Docks"
@@ -141,9 +140,8 @@ msgid "Configure text bubble appearance."
 msgstr "Configureer het uiterlijk van de dialoogballonnen."
 
 #: ../src/cairo-dock-gui-advanced.c:1577 ../src/cairo-dock-gui-advanced.c:1578
-#, fuzzy
 msgid "Dialog boxes and Menus"
-msgstr "Dialogen"
+msgstr "Dialoogvensters en menu´s"
 
 #: ../src/cairo-dock-gui-advanced.c:1585
 msgid "Applets can be displayed on your desktop as widgets."
@@ -453,7 +451,8 @@ msgstr "scheiding"
 #: ../src/cairo-dock-user-menu.c:631
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
-msgstr "U wilt het pictogram (%s) uit het dock verwijderen. Weet u het zeker ?"
+msgstr ""
+"U wilt het pictogram (%s) uit het dock verwijderen. Weet u het zeker ?"
 
 #: ../src/cairo-dock-user-menu.c:646
 msgid "Sorry, this icon doesn't have a configuration file."
@@ -551,7 +550,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Start Cairo-Dock op tijdens het opstarten"
 
 #: ../src/cairo-dock-user-menu.c:1096
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Applets van derden die integratie bevatten voor vele toepassingen zoals "
 "Pidgin"
@@ -795,7 +795,8 @@ msgid "Effects:"
 msgstr "Effecten:"
 
 #: ../src/cairo-dock-widget-items.c:242
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "De instellingen van het hoof-dock zijn beschikbaar in het "
 "hoofdconfiguratievenster."
@@ -821,7 +822,8 @@ msgid "Category"
 msgstr "Categorie"
 
 #: ../src/cairo-dock-widget-plugins.c:281
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Klik op het applet om een voorbeeld en omschrijving van het applet te "
 "krijgen."
@@ -945,8 +947,8 @@ msgstr ""
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
 msgstr ""
-"Het dock forceren om te laden vanuit deze map, in plaats vanuit de map ~/."
-"config/cairo-dock."
+"Het dock forceren om te laden vanuit deze map, in plaats vanuit de map "
+"~/.config/cairo-dock."
 
 #: ../src/cairo-dock.c:368
 msgid ""
@@ -1005,7 +1007,8 @@ msgstr "Versie tonen en afsluiten."
 
 #: ../src/cairo-dock.c:395
 msgid "Lock the dock so that any modification is impossible for users."
-msgstr "Het dock vergrendelen zodat gebruikers geen aanpassingen kunnen doen."
+msgstr ""
+"Het dock vergrendelen zodat gebruikers geen aanpassingen kunnen doen."
 
 #: ../src/cairo-dock.c:399
 msgid "Keep the dock above other windows whatever."
@@ -1151,7 +1154,7 @@ msgstr ""
 #: ../data/messages:551 ../data/messages:691 ../data/messages:733
 #: ../data/messages:805 ../data/messages:839
 msgid "Automatic"
-msgstr ""
+msgstr "Automatisch"
 
 #: ../src/gldit/cairo-dock-desklet-manager.c:819
 msgid "_custom decoration_"
@@ -1503,9 +1506,9 @@ msgstr ""
 "Om nieuwe applets te activeren, opent u de instellingen (rechtermuisklik -> "
 "Cairo-Dock -> Configureren), gaat naar \"Extra's\" en vinkt het applet aan "
 "dat u wilt gaan gebruiken.\n"
-"Als u meer applets wilt installeren, klikt u op de knop \"Meer applets"
-"\" (hierdoor wordt u verder geleid naar onze applets-website) en kunt "
-"applets installeren door de link van een applet naar uw dock te verslepen."
+"Als u meer applets wilt installeren, klikt u op de knop \"Meer applets\" "
+"(hierdoor wordt u verder geleid naar onze applets-website) en kunt applets "
+"installeren door de link van een applet naar uw dock te verslepen."
 
 #: ../Help/data/messages:13
 msgid "Adding a launcher"
@@ -1740,7 +1743,8 @@ msgstr "Aangepast pictogram instellen voor een toepassing"
 
 #: ../Help/data/messages:69
 msgid "See \"Changing an icon's image\" in the \"Icons\" category."
-msgstr "Zie \"Pictogramafbeelding wijzigen\" in de categorie \"Pictogrammen\"."
+msgstr ""
+"Zie \"Pictogramafbeelding wijzigen\" in de categorie \"Pictogrammen\"."
 
 #: ../Help/data/messages:71
 msgid "Showing windows preview over the icons"
@@ -1760,7 +1764,8 @@ msgstr ""
 #: ../Help/data/messages:285 ../Help/data/messages:289
 #: ../Help/data/messages:295 ../Help/data/messages:299
 msgid "Tip: If this line is grayed, it's because this tip is not for you.)"
-msgstr "Tip: indien deze regel grijs is, dan is deze tip niet voor u bedoeld."
+msgstr ""
+"Tip: indien deze regel grijs is, dan is deze tip niet voor u bedoeld."
 
 #: ../Help/data/messages:77
 msgid "If you're using Compiz, you can click on this button:"
@@ -2197,14 +2202,15 @@ msgstr "Het gnome-paneel in zijn geheel verwijderen"
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Open 'Configuratie-editor', ga dan naar /desktop/gnome/session/"
-"required_components, klik met rechts op 'panel' dan 'Sleutel bewerken' en "
-"vervang de waarde door \"cairo-dock\".\n"
+"Open 'Configuratie-editor', ga dan naar "
+"/desktop/gnome/session/required_components, klik met rechts op 'panel' dan "
+"'Sleutel bewerken' en vervang de waarde door \"cairo-dock\".\n"
 "Herstart daarna uw sessie : het gnome-paneel is nu niet opgestart, maar het "
 "dock is nu wel opgestart (indien niet, dan kunt u het toevoegen aan de "
 "'Opstarttoepassingen')."
@@ -2258,8 +2264,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "U moet composite inschakelen. U kunt bijvoorbeeld Compiz of xcompmgr "
 "draaien.\n"
@@ -2267,8 +2273,9 @@ msgstr ""
 "vensterbeheerder’s opties.\n"
 "Als u Gnome gebruikt, kunt u het in Metacity op de volgende manier "
 "inschakelen :\n"
-" Open de Configuratie-editor, bewerk de sleutel '/apps/metacity/general/"
-"compositing_manager' en vink het vakje onder ´waarde´ aan."
+" Open de Configuratie-editor, bewerk de sleutel "
+"'/apps/metacity/general/compositing_manager' en vink het vakje onder "
+"´waarde´ aan."
 
 #: ../Help/data/messages:207
 msgid ""
@@ -2336,7 +2343,8 @@ msgstr ""
 
 #: ../Help/data/messages:223
 msgid "I don't have any themes in the Theme Manager, except the default one."
-msgstr "Ik heb geen thema's in de Themabeheerder, behalve het standaardthema."
+msgstr ""
+"Ik heb geen thema's in de Themabeheerder, behalve het standaardthema."
 
 #: ../Help/data/messages:225
 msgid "Hint : Up to version 2.1.1-2, wget was used."
@@ -2418,9 +2426,9 @@ msgid ""
 "the \"menus have icons\" and the \"buttons have icons\" options. "
 msgstr ""
 "In Gnome, is er een optie om die van het dock te negeren. Om pictogrammen in "
-"menu's in te schakelen, opent u 'Configuratie-editor', gaat dan naar "
-"Desktop / Gnome / Interface en stelt \"menus have icons (pictogrammen in "
-"menu's weergeven)\" in op 'True' en vinkt u de optie \"buttons have icons "
+"menu's in te schakelen, opent u 'Configuratie-editor', gaat dan naar Desktop "
+"/ Gnome / Interface en stelt \"menus have icons (pictogrammen in menu's "
+"weergeven)\" in op 'True' en vinkt u de optie \"buttons have icons "
 "(pictogrammen op knoppen weergeven)\" aan. "
 
 #: ../Help/data/messages:245
@@ -2448,8 +2456,8 @@ msgstr ""
 "We stellen uw hulp op prijs! Als u een fout ziet of denkt dat er iets "
 "verbeterd kan worden,\\n\n"
 "of hebt gedroomd over het dock, bezoek ons dan op glx-dock.org.\\n\n"
-"Engels sprekende en anderstalige mensen zijn welkom, dus wees niet "
-"verlegen ! ;-)\\n\n"
+"Engels sprekende en anderstalige mensen zijn welkom, dus wees niet verlegen "
+"! ;-)\\n\n"
 "\\n\n"
 "Als u een thema voor het dock heeft gemaakt of een applet en deze wilt "
 "delen, dan zullen wij deze graag toevoegen aan onze server !"
@@ -2496,8 +2504,8 @@ msgstr "Websites"
 #: ../Help/data/messages:265
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
 msgstr ""
-"Een probleem ? Een suggestie ? Wilt u met ons spreken ? U bent altijd "
-"welkom !"
+"Een probleem ? Een suggestie ? Wilt u met ons spreken ? U bent altijd welkom "
+"!"
 
 #: ../Help/data/messages:267
 msgid "Community site"
@@ -2976,9 +2984,8 @@ msgstr "Willekeurig"
 
 #: ../data/messages:119 ../data/messages:553 ../data/messages:693
 #: ../data/messages:807 ../data/messages:841 ../data/messages:879
-#, fuzzy
 msgid "Custom"
-msgstr "_Aangepaste pictogrammen_"
+msgstr "Aangepast"
 
 #: ../data/messages:121 ../data/messages:747
 msgid "Colour"
@@ -3589,20 +3596,17 @@ msgstr "In pixels."
 
 #: ../data/messages:509 ../data/messages:561 ../data/messages:751
 #: ../data/messages:887
-#, fuzzy
 msgid "Corner radius"
-msgstr "Kromming hoeken :"
+msgstr "Kromming hoek"
 
 #: ../data/messages:513 ../data/messages:563 ../data/messages:889
-#, fuzzy
 msgid "Outline width"
-msgstr "Omtrekkleur"
+msgstr "Dikte omlijning"
 
 #: ../data/messages:515 ../data/messages:557 ../data/messages:813
 #: ../data/messages:845 ../data/messages:883
-#, fuzzy
 msgid "Outline colour"
-msgstr "Omtrekkleur"
+msgstr "Kleur omlijning"
 
 #: ../data/messages:519
 msgid "Margin between the frame and the icons or their reflects :"
@@ -3654,14 +3658,12 @@ msgstr "Ballon"
 
 #: ../data/messages:555 ../data/messages:843 ../data/messages:869
 #: ../data/messages:881
-#, fuzzy
 msgid "Background colour"
-msgstr "Achtergrondkleur:"
+msgstr "Achtergrondkleur"
 
 #: ../data/messages:559 ../data/messages:847 ../data/messages:867
-#, fuzzy
 msgid "Text colour"
-msgstr "Tekstkleur :"
+msgstr "Tekstkleur"
 
 #: ../data/messages:565
 msgid "Shape of the bubble:"
@@ -3829,7 +3831,8 @@ msgid "Zoom effect"
 msgstr "Vergrotingseffect"
 
 #: ../data/messages:661
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Stel in op 1 als u niet wilt dat de pictogrammen vergroot worden wanneer u "
 "eroverheen beweegt."
@@ -3887,8 +3890,8 @@ msgid ""
 "Make the separator's image revolve when dock is on top/on the left/on the "
 "right?"
 msgstr ""
-"De afbeelding van de scheiding laten draaien wanneer het dock boven/links/"
-"rechts is ?"
+"De afbeelding van de scheiding laten draaien wanneer het dock "
+"boven/links/rechts is ?"
 
 #: ../data/messages:695
 msgid "Colour of flat separators :"
@@ -3899,9 +3902,8 @@ msgid "Reflections"
 msgstr "Reflecties"
 
 #: ../data/messages:699
-#, fuzzy
 msgid "Reflection visibility"
-msgstr "Zichtbaarheid label"
+msgstr "Reflectiezichtbaarheid"
 
 #: ../data/messages:701
 msgid "light"
@@ -3966,13 +3968,12 @@ msgid "Frame"
 msgstr "Frame"
 
 #: ../data/messages:743
-#, fuzzy
 msgid "Fill background"
-msgstr "Achtergrond vullen met :"
+msgstr "Achtergrond vullen"
 
 #: ../data/messages:749
 msgid "Linewidth"
-msgstr ""
+msgstr "Dikte omlijning"
 
 #: ../data/messages:753 ../data/messages:785
 msgid "Draw indicator above the icon?"
@@ -4055,8 +4056,8 @@ msgstr "Groter"
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Gebruik dit om de indicator de oriëntatie van het dock te laten volgen "
 "(boven/onder/rechts/links)."
@@ -4134,17 +4135,16 @@ msgid "On all icons"
 msgstr "Op alle pictogrammen"
 
 #: ../data/messages:829
-#, fuzzy
 msgid "Neighbouring labels visibility:"
-msgstr "Zichtbaarheid label"
+msgstr "Zichtbaarheid aangrenzende labels:"
 
 #: ../data/messages:831
 msgid "more visible"
-msgstr ""
+msgstr "meer zichtbaar"
 
 #: ../data/messages:833
 msgid "less visible"
-msgstr ""
+msgstr "minder zichtbaar"
 
 #: ../data/messages:849
 msgid "Draw the outline of the text?"
@@ -4167,9 +4167,8 @@ msgid "Use the same look as the labels?"
 msgstr "Zelfde uiterlijk als de labels gebruiken?"
 
 #: ../data/messages:885
-#, fuzzy
 msgid "Text colour:"
-msgstr "Tekstkleur :"
+msgstr "Tekstkleur:"
 
 #: ../data/messages:917
 msgid "Visibility of the dock"
@@ -4349,8 +4348,8 @@ msgstr "Naam starter:"
 
 #: ../data/messages:1071
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 "Bijvoorbeeld : nautilus --no-desktop, gedit, etc. U kunt zelfs een sneltoets "
 "instellen, bijvoorbeeld <Alt>F1, <Ctrl>c, <Ctrl>v, etc"
@@ -4395,7 +4394,7 @@ msgstr "Klasse van deze toepassing:"
 
 #: ../data/messages:1087
 msgid "Run in a terminal?"
-msgstr "Uitvoeren in een terminalvenster?"
+msgstr "Uitvoeren in een terminal?"
 
 #: ../data/messages:1089
 msgid "If '0' the launcher will be displayed on every viewport."
@@ -4500,142 +4499,5 @@ msgstr "- Een groot gedeelte van de kern herschreven door middel van Objects"
 #: ../data/messages:1134
 msgid "- If you like the project, please donate :-)"
 msgstr ""
-"Als het project u bevalt, wilt u dan a.u.b. een donatie doen. Alvast "
-"bedankt :-)"
-
-#, fuzzy
-#~ msgid " Frame"
-#~ msgstr "Frame"
-
-#~ msgid "Set a background for your dock."
-#~ msgstr "Stel een achtergrond in voor uw dock."
-
-#~ msgid "Select a view for each of your docks."
-#~ msgstr "Selecteer een weergave voor elk van uw docks."
-
-#~ msgid "Indicators are additional markers for your icons."
-#~ msgstr "Indicatoren zijn extra indicaties op uw pictogrammen."
-
-#~ msgid "Animate the launcher until the corresponding application opens"
-#~ msgstr "Animeer de starter totdat de corresponderende toepassing zich opent"
-
-#~ msgid "Linewidth of the external line :"
-#~ msgstr "Dikte van de externe lijn :"
-
-#~ msgid "Colour of the external line:"
-#~ msgstr "Kleur van de externe lijn :"
-
-#~ msgid "Background colour of the bubble:"
-#~ msgstr "Achtergrondkleur voor de ballon :"
-
-#~ msgid "Text"
-#~ msgstr "Tekst"
-
-#~ msgid "If you don't provide any, a default image will be used."
-#~ msgstr ""
-#~ "Als u hier niets invoert, zal er een standaardafbeelding gebruikt worden."
-
-#~ msgid ""
-#~ "Any format allowed; leave this field empty if you don't want to use an "
-#~ "image as background."
-#~ msgstr ""
-#~ "Elk formaat is toegestaan; laat dit veld leeg wanneer u geen afbeelding "
-#~ "als achtergrond wilt gebruiken."
-
-#~ msgid "Icon size at rest (width x height) :"
-#~ msgstr "Pictogramgrootte in rust (breedte x hoogte) :"
-
-#~ msgid "If you don't provide one, blanks will be used."
-#~ msgstr "Als u niets invoert, wordt er een lege afbeelding gebruikt."
-
-#~ msgid "Filename of an image to use for separators :"
-#~ msgstr "Bestandsnaam van een afbeelding voor de scheidingen :"
-
-#~ msgid ""
-#~ "It is its albedo (reflectivity); at 1 the icons reflect to the maximum, "
-#~ "at 0 reflections are not used."
-#~ msgstr ""
-#~ "Dit is het reflecteringsniveau; bij 1 reflecteren de pictogrammen "
-#~ "maximaal, bij 0 reflecteren ze helemaal niet."
-
-#~ msgid "Reflective power of the plane :"
-#~ msgstr "Reflecteringsvermogen van het hellend vlak :"
-
-#~ msgid "Type of indicator:"
-#~ msgstr "Soort indicator :"
-
-#~ msgid "Set transparency to 0 if you don't want to use an indicator."
-#~ msgstr ""
-#~ "Stel doorzichtigheid in op 0 wanneer u geen indicator wilt gebruiken."
-
-#~ msgid "Colour of the frame :"
-#~ msgstr "Kleur van het frame :"
-
-#~ msgid "Set 0 to fill the frame."
-#~ msgstr "Stel in op 0 om het frame te vullen."
-
-#~ msgid "Linewidth of the frame around the active window :"
-#~ msgstr "Dikte van het frame rond het actieve venster :"
-
-#~ msgid "Corner radius of the frame around the active window :"
-#~ msgstr "Kromming van de hoeken van het frame rond het actieve venster :"
-
-#~ msgid "Draw outline"
-#~ msgstr "Omtrek tekenen"
-
-#~ msgid ""
-#~ "the bigger, the more the labels next to the selected icon will be "
-#~ "transparent."
-#~ msgstr ""
-#~ "Hoe groter, hoe doorzichtiger de labels naast het aangewezen pictogram "
-#~ "zullen zijn."
-
-#~ msgid "label's visibility threshold :"
-#~ msgstr "Label's zichtbaarheidsdrempel :"
-
-#~ msgid "Should the labels always be horizontal, even when dock is vertical?"
-#~ msgstr ""
-#~ "Wilt u de labels horizontaal houden, ook wanneer het dock verticaal "
-#~ "staat ?"
-
-#~ msgid "Use a custom font for labels?"
-#~ msgstr "Aangepast lettertype voor labels gebruiken ?"
-
-#~ msgid "Font used for labels :"
-#~ msgstr "Lettertype voor labels :"
-
-#~ msgid ""
-#~ "If you set it to fully transparent, there will be no background for the "
-#~ "text, but the margin around the text will still be in effect."
-#~ msgstr ""
-#~ "Wanneer u dit instelt op volledig doorzichtig, zal er geen achtergrond "
-#~ "voor de tekst zijn maar de omlijning van de letters zal dan genoeg zijn."
-
-#~ msgid "Colour of the label's background :"
-#~ msgstr "Kleur van labelachtergrond :"
-
-#~ msgid "It's the first color of the gradation."
-#~ msgstr "Is de eerste kleur van de gradatie."
-
-#~ msgid "Start color :"
-#~ msgstr "Beginkleur :"
-
-#~ msgid ""
-#~ "It's the second color of the gradation. Set it to the same value as the "
-#~ "first if you don't want to have any gradation."
-#~ msgstr ""
-#~ "Is de tweede kleur van de gradatie. Stel in op dezelfde waarde als de "
-#~ "eerste kleur als u geen gradatie wilt."
-
-#~ msgid "Stop color :"
-#~ msgstr "Eindkleur :"
-
-#~ msgid ""
-#~ "If checked, the pattern will go from top to bottom, otherwise from left "
-#~ "to right."
-#~ msgstr ""
-#~ "Wanneer aangevinkt zal het patroon van boven naar beneden gaan, anders "
-#~ "van links naar rechts."
-
-#~ msgid "Pattern should be vertical?"
-#~ msgstr "Patroon verticaal ?"
+"Als het project u bevalt, wilt u dan a.u.b. een donatie doen. Alvast bedankt "
+":-)"
