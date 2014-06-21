@@ -90,20 +90,22 @@ endif ()
 
 ########### dependencies ###############
 
-# check for mendatory dependencies
+# check for mandatory dependencies
 set (packages_required "glib-2.0 gthread-2.0 cairo librsvg-2.0 dbus-1 dbus-glib-1 libxml-2.0 gl glu libcurl")  # for the .pc and to have details
 STRING (REGEX REPLACE " " ";" packages_required_semicolon ${packages_required})  # replace blank space by semicolon => to have more details if a package is missing
 pkg_check_modules ("PACKAGE" REQUIRED "${packages_required_semicolon}")
 
+# check for EGL
 set (with_egl no)  # although EGL can be used with X (replacing GLX), it requires drivers that support DRI2, so most of the time GLX works better; so it's disabled by default for now; later, it will be required for Wayland, and we'll have to decide whether we compile with both, or whether we load one of them as a plug-in at run-time. It may depend on EGL having been built to support a given graphic target.
 if (enable-egl-support)
 	pkg_check_modules ("EGL" "egl")
 	if (EGL_FOUND)
 		set (HAVE_EGL 1)
-		set (with_egl yes)
+		set (with_egl "yes (${EGL_VERSION})")
 	endif()
 endif()
 
+# check for X11
 set (with_x11 no)
 set (with_xentend no)
 enable_if_not_defined (enable-x11-support) # enabled by default
@@ -141,6 +143,21 @@ if (enable-x11-support)
 	endif()
 endif()
 
+# check for Wayland
+set (with_wayland no)
+enable_if_not_defined (enable-wayland-support) # enabled by default
+if (enable-wayland-support)
+	set (wayland_required "wayland-client")  # for the .pc
+	pkg_check_modules ("WAYLAND" ${wayland_required})
+	if (WAYLAND_FOUND)
+		set (HAVE_WAYLAND 1)
+		set (with_wayland "yes (${WAYLAND_VERSION})")
+	else()
+		set (wayland_required)
+	endif()
+endif()
+
+# check for GTK
 if (NOT force-gtk2)  # by default, we use GTK+3 except if we force the use of GTK+2
 	set (gtk_required "gtk+-3.0")  # for the .pc
 	pkg_check_modules ("GTK" "${gtk_required}")  # the check is not set as 'required' because we can use GTK+2 if GTK+3 isn't available
@@ -229,27 +246,28 @@ configure_file (${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in ${CMAKE_CUR
 
 MESSAGE (STATUS)
 MESSAGE (STATUS "Cairo-Dock ${VERSION} will be compiled with the following options:")
-MESSAGE (STATUS " * Installation in    : ${prefix}")
-MESSAGE (STATUS " * Lib directory      : ${libdir}")
-MESSAGE (STATUS " * GTK version        : ${GTK_MAJOR} (${GTK_VERSION})")
-MESSAGE (STATUS " * With X11 support   : ${with_x11}")
-MESSAGE (STATUS " * With X11 extensions: ${with_xentend} (${xextend_required})")
+MESSAGE (STATUS " * Installation in     : ${prefix}")
+MESSAGE (STATUS " * Lib directory       : ${libdir}")
+MESSAGE (STATUS " * GTK version         : ${GTK_MAJOR} (${GTK_VERSION})")
+MESSAGE (STATUS " * With X11 support    : ${with_x11}")
+MESSAGE (STATUS " * With X11 extensions : ${with_xentend} (${xextend_required})")
 if (HAVE_GLX)
-	MESSAGE (STATUS " * With GLX support   : yes")
+	MESSAGE (STATUS " * With GLX support    : yes")
 else()
-	MESSAGE (STATUS " * With GLX support   : no")
+	MESSAGE (STATUS " * With GLX support    : no")
 endif()
-MESSAGE (STATUS " * With EGL support   : ${with_egl}")
+MESSAGE (STATUS " * With Wayland support: ${with_wayland}")
+MESSAGE (STATUS " * With EGL support    : ${with_egl}")
 if (HAVE_LIBCRYPT)
-	MESSAGE (STATUS " * Crypt passwords    : yes")
+	MESSAGE (STATUS " * Crypt passwords     : yes")
 else()
-	MESSAGE (STATUS " * Crypt passwords    : no")
+	MESSAGE (STATUS " * Crypt passwords     : no")
 endif()
 if (enable-desktop-manager)
 	set (with_cd_session "yes")
 else()
 	set (with_cd_session "no (use '-Denable-desktop-manager=ON' to enable it)")
 endif()
-MESSAGE (STATUS " * Cairo-dock session : ${with_cd_session}")
-MESSAGE (STATUS " * Themes directory   : ${CAIRO_DOCK_DISTANT_THEMES_DIR} (on the server)")
+MESSAGE (STATUS " * Cairo-dock session  : ${with_cd_session}")
+MESSAGE (STATUS " * Themes directory    : ${CAIRO_DOCK_DISTANT_THEMES_DIR} (on the server)")
 MESSAGE (STATUS)

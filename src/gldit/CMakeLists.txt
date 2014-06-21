@@ -65,7 +65,6 @@ SET(core_lib_SRCS
 	cairo-dock-style-manager.c 			cairo-dock-style-manager.h
 	cairo-dock-style-facility.c 		cairo-dock-style-facility.h
 	texture-gradation.h
-	texture-blur.h
 )
 
 # Gtk > 3.8
@@ -90,6 +89,7 @@ link_directories(
 	${PACKAGE_LIBRARY_DIRS}
 	${GTK_LIBRARY_DIRS}
 	${EGL_LIBRARY_DIRS}
+	${WAYLAND_LIBRARY_DIRS}
 	${XEXTEND_LIBRARY_DIRS}
 	${XINERAMA_LIBRARY_DIRS})
 
@@ -111,6 +111,7 @@ target_link_libraries("gldi"
 	${PACKAGE_LIBRARIES}
 	${GTK_LIBRARIES}
 	${EGL_LIBRARIES}
+	${WAYLAND_LIBRARIES}
 	${XEXTEND_LIBRARIES}
 	${XINERAMA_LIBRARIES}
 	${LIBCRYPT_LIBS}
@@ -130,6 +131,7 @@ install(FILES cairo-dock.h DESTINATION ${includedir}/cairo-dock)
 install(FILES
 	cairo-dock-struct.h 			cairo-dock-global-variables.h
 	gldi-config.h  # gldi-module-config.h doesn't need to be installed
+	gldi-icon-names.h
 	cairo-dock-core.h			cairo-dock-manager.h
 	cairo-dock-object.h
 	cairo-dock-icon-factory.h		cairo-dock-icon-manager.h

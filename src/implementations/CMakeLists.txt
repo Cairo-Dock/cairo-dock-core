@@ -14,6 +14,7 @@ SET(impl_SRCS
 	cairo-dock-X-utilities.c             cairo-dock-X-utilities.h
 	cairo-dock-glx.c                     cairo-dock-glx.h
 	cairo-dock-egl.c                     cairo-dock-egl.h
+	cairo-dock-wayland-manager.c         cairo-dock-wayland-manager.h
 )
 #if ("${HAVE_X11}")
 #	SET(impl_SRCS ${impl_SRCS}
@@ -28,10 +29,14 @@ add_definitions (-DSHARE_DATA_DIR="${pkgdatadir}")
 
 link_directories(
 	${PACKAGE_LIBRARY_DIRS}
+	${WAYLAND_LIBRARY_DIRS}
+	${EGL_LIBRARY_DIRS}
 	${GTK_LIBRARY_DIRS})
 
 include_directories(
 	${PACKAGE_INCLUDE_DIRS}
+	${WAYLAND_INCLUDE_DIRS}
+	${EGL_INCLUDE_DIRS}
 	${GTK_INCLUDE_DIRS}
 	${CMAKE_SOURCE_DIR}/src/gldit
 	${CMAKE_SOURCE_DIR}/src/implementations)
