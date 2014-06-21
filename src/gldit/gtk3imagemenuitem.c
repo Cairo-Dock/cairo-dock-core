@@ -109,11 +109,11 @@ static void gtk3_image_menu_item_update                     (GtkActivatable     
 static void gtk3_image_menu_item_sync_action_properties     (GtkActivatable       *activatable,
                                                             GtkAction            *action);
 
-
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 G_DEFINE_TYPE_WITH_CODE (Gtk3ImageMenuItem, gtk3_image_menu_item, GTK_TYPE_MENU_ITEM,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
                                                 gtk3_image_menu_item_activatable_interface_init))
-
+G_GNUC_END_IGNORE_DEPRECATIONS;
 
 static void
 gtk3_image_menu_item_class_init (Gtk3ImageMenuItemClass *klass)
@@ -583,9 +583,11 @@ gtk3_image_menu_item_activatable_interface_init (GtkActivatableIface  *iface)
 static gboolean
 activatable_update_gicon (Gtk3ImageMenuItem *image_menu_item, GtkAction *action)
 {
-  GtkWidget   *image;
-  GIcon       *icon = gtk_action_get_gicon (action);
 
+  GtkWidget   *image;
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  GIcon       *icon = gtk_action_get_gicon (action);
+G_GNUC_END_IGNORE_DEPRECATIONS;
   image = gtk3_image_menu_item_get_image (image_menu_item);
 
   if (icon && GTK_IS_IMAGE (image))
@@ -601,7 +603,9 @@ static void
 activatable_update_icon_name (Gtk3ImageMenuItem *image_menu_item, GtkAction *action)
 {
   GtkWidget   *image;
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   const gchar *icon_name = gtk_action_get_icon_name (action);
+G_GNUC_END_IGNORE_DEPRECATIONS;
 
   image = gtk3_image_menu_item_get_image (image_menu_item);
 
@@ -620,19 +624,22 @@ gtk3_image_menu_item_update (GtkActivatable *activatable,
 {
   Gtk3ImageMenuItem *image_menu_item;
   gboolean   use_appearance;
-
   image_menu_item = GTK3_IMAGE_MENU_ITEM (activatable);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   parent_activatable_iface->update (activatable, action, property_name);
 
   use_appearance = gtk_activatable_get_use_action_appearance (activatable);
+G_GNUC_END_IGNORE_DEPRECATIONS;
   if (!use_appearance)
     return;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   if (strcmp (property_name, "gicon") == 0)
     activatable_update_gicon (image_menu_item, action);
   else if (strcmp (property_name, "icon-name") == 0)
     activatable_update_icon_name (image_menu_item, action);
+G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static void
@@ -649,8 +656,9 @@ gtk3_image_menu_item_sync_action_properties (GtkActivatable *activatable,
 
   if (!action)
     return;
-
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   use_appearance = gtk_activatable_get_use_action_appearance (activatable);
+G_GNUC_END_IGNORE_DEPRECATIONS;
   if (!use_appearance)
     return;
 
@@ -668,12 +676,13 @@ gtk3_image_menu_item_sync_action_properties (GtkActivatable *activatable,
       gtk3_image_menu_item_set_image (GTK3_IMAGE_MENU_ITEM (activatable),
                                      image);
     }
-
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   if (!activatable_update_gicon (image_menu_item, action))
     activatable_update_icon_name (image_menu_item, action);
 
   gtk3_image_menu_item_set_always_show_image (image_menu_item,
                                              gtk_action_get_always_show_image (action));
+G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 
