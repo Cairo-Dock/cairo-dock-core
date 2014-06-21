@@ -23,24 +23,12 @@
  */
 
 // Imported from gtk+-3.8.4
-// GtkImageMenuItem has been renamed to Gtk3ImageMenuItem (and all corresponding functions and macros) so that we can test it even when using GTK < 3.10.
+// removed stock features
+// GtkImageMenuItem has been renamed to Gtk3ImageMenuItem (and all corresponding functions and macros) so that we can test it even when using GTK < 3.10, and also because GtkImageMenuItem is still present in GTK even if deprecated.
 
-//#include "config.h"
 
 #include "gtk3imagemenuitem.h"
 
-/*#include "gtkmenuitemprivate.h"
-#include "gtkaccellabel.h"
-#include "gtkstock.h"
-#include "gtkiconfactory.h"
-#include "gtkimage.h"
-#include "gtkmenubar.h"
-#include "gtkcontainer.h"
-#include "gtkwindow.h"
-#include "gtkactivatable.h"
-
-#include "gtkintl.h"
-#include "gtkprivate.h"*/
 #include <string.h>  // strcmp
 #define GTK_PARAM_READWRITE G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB  // from gtkprivate.h
 #define GTK_PARAM_WRITABLE G_PARAM_WRITABLE|G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB  // from gtkprivate.h
@@ -64,15 +52,12 @@ struct _Gtk3ImageMenuItemPrivate
   GtkWidget     *image;
 
   gchar         *label;
-  guint          use_stock         : 1;
   guint          always_show_image : 1;
 };
 
 enum {
   PROP_0,
   PROP_IMAGE,
-  PROP_USE_STOCK,
-  PROP_ACCEL_GROUP,
   PROP_ALWAYS_SHOW_IMAGE
 };
 
@@ -164,21 +149,6 @@ gtk3_image_menu_item_class_init (Gtk3ImageMenuItemClass *klass)
                                                         P_("Child widget to appear next to the menu text"),
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE));
-  /**
-   * Gtk3ImageMenuItem:use-stock:
-   *
-   * If %TRUE, the label set in the menuitem is used as a
-   * stock id to select the stock item for the item.
-   *
-   * Since: 2.16
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_USE_STOCK,
-                                   g_param_spec_boolean ("use-stock",
-                                                         P_("Use stock"),
-                                                         P_("Whether to use the label text to create a stock menu item"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
   /**
    * Gtk3ImageMenuItem:always-show-image:
@@ -199,21 +169,6 @@ gtk3_image_menu_item_class_init (Gtk3ImageMenuItemClass *klass)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
-  /**
-   * Gtk3ImageMenuItem:accel-group:
-   *
-   * The Accel Group to use for stock accelerator keys
-   *
-   * Since: 2.16
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_ACCEL_GROUP,
-                                   g_param_spec_object ("accel-group",
-                                                        P_("Accel Group"),
-                                                        P_("The Accel Group to use for stock accelerator keys"),
-                                                        GTK_TYPE_ACCEL_GROUP,
-                                                        GTK_PARAM_WRITABLE));
-
     g_type_class_add_private (klass, sizeof (Gtk3ImageMenuItemPrivate));
 }
 
@@ -228,7 +183,6 @@ gtk3_image_menu_item_init (Gtk3ImageMenuItem *image_menu_item)
   priv = image_menu_item->priv;
 
   priv->image = NULL;
-  priv->use_stock = FALSE;
   priv->label  = NULL;
 }
 
@@ -256,14 +210,8 @@ gtk3_image_menu_item_set_property (GObject         *object,
     case PROP_IMAGE:
       gtk3_image_menu_item_set_image (image_menu_item, (GtkWidget *) g_value_get_object (value));
       break;
-    case PROP_USE_STOCK:
-      gtk3_image_menu_item_set_use_stock (image_menu_item, g_value_get_boolean (value));
-      break;
     case PROP_ALWAYS_SHOW_IMAGE:
       gtk3_image_menu_item_set_always_show_image (image_menu_item, g_value_get_boolean (value));
-      break;
-    case PROP_ACCEL_GROUP:
-      gtk3_image_menu_item_set_accel_group (image_menu_item, g_value_get_object (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -283,9 +231,6 @@ gtk3_image_menu_item_get_property (GObject         *object,
     {
     case PROP_IMAGE:
       g_value_set_object (value, gtk3_image_menu_item_get_image (image_menu_item));
-      break;
-    case PROP_USE_STOCK:
-      g_value_set_boolean (value, gtk3_image_menu_item_get_use_stock (image_menu_item));
       break;
     case PROP_ALWAYS_SHOW_IMAGE:
       g_value_set_boolean (value, gtk3_image_menu_item_get_always_show_image (image_menu_item));
@@ -381,24 +326,7 @@ static void
 gtk3_image_menu_item_recalculate (Gtk3ImageMenuItem *image_menu_item)
 {
   Gtk3ImageMenuItemPrivate    *priv = image_menu_item->priv;
-  GtkStockItem             stock_item;
-  GtkWidget               *image;
   const gchar             *resolved_label = priv->label;
-
-  if (priv->use_stock && priv->label)
-    {
-
-      if (!priv->image)
-        {
-          image = gtk_image_new_from_stock (priv->label, GTK_ICON_SIZE_MENU);
-          gtk3_image_menu_item_set_image (image_menu_item, image);
-        }
-
-      if (gtk_stock_lookup (priv->label, &stock_item))
-          resolved_label = stock_item.label;
-
-        gtk_menu_item_set_use_underline (GTK_MENU_ITEM (image_menu_item), TRUE);
-    }
 
   GTK_MENU_ITEM_CLASS
     (gtk3_image_menu_item_parent_class)->set_label (GTK_MENU_ITEM (image_menu_item), resolved_label);
@@ -653,34 +581,14 @@ gtk3_image_menu_item_activatable_interface_init (GtkActivatableIface  *iface)
 }
 
 static gboolean
-activatable_update_stock_id (Gtk3ImageMenuItem *image_menu_item, GtkAction *action)
-{
-  GtkWidget   *image;
-  const gchar *stock_id  = gtk_action_get_stock_id (action);
-
-  image = gtk3_image_menu_item_get_image (image_menu_item);
-
-  if (GTK_IS_IMAGE (image) &&
-      stock_id && gtk_icon_factory_lookup_default (stock_id))
-    {
-      gtk_image_set_from_stock (GTK_IMAGE (image), stock_id, GTK_ICON_SIZE_MENU);
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static gboolean
 activatable_update_gicon (Gtk3ImageMenuItem *image_menu_item, GtkAction *action)
 {
   GtkWidget   *image;
   GIcon       *icon = gtk_action_get_gicon (action);
-  const gchar *stock_id = gtk_action_get_stock_id (action);
 
   image = gtk3_image_menu_item_get_image (image_menu_item);
 
-  if (icon && GTK_IS_IMAGE (image) &&
-      !(stock_id && gtk_icon_factory_lookup_default (stock_id)))
+  if (icon && GTK_IS_IMAGE (image))
     {
       gtk_image_set_from_gicon (GTK_IMAGE (image), icon, GTK_ICON_SIZE_MENU);
       return TRUE;
@@ -721,9 +629,7 @@ gtk3_image_menu_item_update (GtkActivatable *activatable,
   if (!use_appearance)
     return;
 
-  if (strcmp (property_name, "stock-id") == 0)
-    activatable_update_stock_id (image_menu_item, action);
-  else if (strcmp (property_name, "gicon") == 0)
+  if (strcmp (property_name, "gicon") == 0)
     activatable_update_gicon (image_menu_item, action);
   else if (strcmp (property_name, "icon-name") == 0)
     activatable_update_icon_name (image_menu_item, action);
@@ -763,8 +669,7 @@ gtk3_image_menu_item_sync_action_properties (GtkActivatable *activatable,
                                      image);
     }
 
-  if (!activatable_update_stock_id (image_menu_item, action) &&
-      !activatable_update_gicon (image_menu_item, action))
+  if (!activatable_update_gicon (image_menu_item, action))
     activatable_update_icon_name (image_menu_item, action);
 
   gtk3_image_menu_item_set_always_show_image (image_menu_item,
@@ -819,85 +724,6 @@ gtk3_image_menu_item_new_with_mnemonic (const gchar *label)
                        "use-underline", TRUE,
                        "label", label,
                        NULL);
-}
-
-/**
- * gtk3_image_menu_item_new_from_stock:
- * @stock_id: the name of the stock item.
- * @accel_group: (allow-none): the #GtkAccelGroup to add the menu items
- *   accelerator to, or %NULL.
- *
- * Creates a new #Gtk3ImageMenuItem containing the image and text from a
- * stock item. Some stock ids have preprocessor macros like #GTK_STOCK_OK
- * and #GTK_STOCK_APPLY.
- *
- * If you want this menu item to have changeable accelerators, then pass in
- * %NULL for accel_group. Next call gtk_menu_item_set_accel_path() with an
- * appropriate path for the menu item, use gtk_stock_lookup() to look up the
- * standard accelerator for the stock item, and if one is found, call
- * gtk_accel_map_add_entry() to register it.
- *
- * Returns: a new #Gtk3ImageMenuItem.
- */
-GtkWidget*
-gtk3_image_menu_item_new_from_stock (const gchar   *stock_id,
-                                    GtkAccelGroup *accel_group)
-{
-  return g_object_new (GTK3_TYPE_IMAGE_MENU_ITEM,
-                       "label", stock_id,
-                       "use-stock", TRUE,
-                       "accel-group", accel_group,
-                       NULL);
-}
-
-/**
- * gtk3_image_menu_item_set_use_stock:
- * @image_menu_item: a #Gtk3ImageMenuItem
- * @use_stock: %TRUE if the menuitem should use a stock item
- *
- * If %TRUE, the label set in the menuitem is used as a
- * stock id to select the stock item for the item.
- *
- * Since: 2.16
- */
-void
-gtk3_image_menu_item_set_use_stock (Gtk3ImageMenuItem *image_menu_item,
-                                   gboolean          use_stock)
-{
-  Gtk3ImageMenuItemPrivate *priv;
-
-  g_return_if_fail (GTK3_IS_IMAGE_MENU_ITEM (image_menu_item));
-
-  priv = image_menu_item->priv;
-
-  if (priv->use_stock != use_stock)
-    {
-      priv->use_stock = use_stock;
-
-      gtk3_image_menu_item_recalculate (image_menu_item);
-
-      g_object_notify (G_OBJECT (image_menu_item), "use-stock");
-    }
-}
-
-/**
- * gtk3_image_menu_item_get_use_stock:
- * @image_menu_item: a #Gtk3ImageMenuItem
- *
- * Checks whether the label set in the menuitem is used as a
- * stock id to select the stock item for the item.
- *
- * Returns: %TRUE if the label set in the menuitem is used as a
- *     stock id to select the stock item for the item
- *
- * Since: 2.16
- */
-gboolean
-gtk3_image_menu_item_get_use_stock (Gtk3ImageMenuItem *image_menu_item)
-{
-  g_return_val_if_fail (GTK3_IS_IMAGE_MENU_ITEM (image_menu_item), FALSE);
-
-  return image_menu_item->priv->use_stock;
 }
 
 /**
@@ -958,51 +784,6 @@ gtk3_image_menu_item_get_always_show_image (Gtk3ImageMenuItem *image_menu_item)
   return image_menu_item->priv->always_show_image;
 }
 
-
-/**
- * gtk3_image_menu_item_set_accel_group:
- * @image_menu_item: a #Gtk3ImageMenuItem
- * @accel_group: the #GtkAccelGroup
- *
- * Specifies an @accel_group to add the menu items accelerator to
- * (this only applies to stock items so a stock item must already
- * be set, make sure to call gtk3_image_menu_item_set_use_stock()
- * and gtk_menu_item_set_label() with a valid stock item first).
- *
- * If you want this menu item to have changeable accelerators then
- * you shouldnt need this (see gtk3_image_menu_item_new_from_stock()).
- *
- * Since: 2.16
- */
-void
-gtk3_image_menu_item_set_accel_group (Gtk3ImageMenuItem *image_menu_item,
-                                     GtkAccelGroup    *accel_group)
-{
-  Gtk3ImageMenuItemPrivate    *priv;
-  GtkStockItem             stock_item;
-
-  /* Silent return for the constructor */
-  if (!accel_group)
-    return;
-
-  g_return_if_fail (GTK3_IS_IMAGE_MENU_ITEM (image_menu_item));
-  g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
-
-  priv = image_menu_item->priv;
-
-  if (priv->use_stock && priv->label && gtk_stock_lookup (priv->label, &stock_item))
-    if (stock_item.keyval)
-      {
-        gtk_widget_add_accelerator (GTK_WIDGET (image_menu_item),
-                                    "activate",
-                                    accel_group,
-                                    stock_item.keyval,
-                                    stock_item.modifier,
-                                    GTK_ACCEL_VISIBLE);
-
-        g_object_notify (G_OBJECT (image_menu_item), "accel-group");
-      }
-}
 
 /**
  * gtk3_image_menu_item_set_image:

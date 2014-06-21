@@ -54,12 +54,6 @@ struct _Gtk3ImageMenuItem
 struct _Gtk3ImageMenuItemClass
 {
   GtkMenuItemClass parent_class;
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
 };
 
 
@@ -67,19 +61,12 @@ GType	   gtk3_image_menu_item_get_type          (void) G_GNUC_CONST;
 GtkWidget* gtk3_image_menu_item_new               (void);
 GtkWidget* gtk3_image_menu_item_new_with_label    (const gchar      *label);
 GtkWidget* gtk3_image_menu_item_new_with_mnemonic (const gchar      *label);
-GtkWidget* gtk3_image_menu_item_new_from_stock    (const gchar      *stock_id,
-                                                  GtkAccelGroup    *accel_group);
 void       gtk3_image_menu_item_set_always_show_image (Gtk3ImageMenuItem *image_menu_item,
                                                       gboolean          always_show);
 gboolean   gtk3_image_menu_item_get_always_show_image (Gtk3ImageMenuItem *image_menu_item);
 void       gtk3_image_menu_item_set_image         (Gtk3ImageMenuItem *image_menu_item,
                                                   GtkWidget        *image);
 GtkWidget* gtk3_image_menu_item_get_image         (Gtk3ImageMenuItem *image_menu_item);
-void       gtk3_image_menu_item_set_use_stock     (Gtk3ImageMenuItem *image_menu_item,
-						  gboolean          use_stock);
-gboolean   gtk3_image_menu_item_get_use_stock     (Gtk3ImageMenuItem *image_menu_item);
-void       gtk3_image_menu_item_set_accel_group   (Gtk3ImageMenuItem *image_menu_item, 
-						  GtkAccelGroup    *accel_group);
 
 G_END_DECLS
 
