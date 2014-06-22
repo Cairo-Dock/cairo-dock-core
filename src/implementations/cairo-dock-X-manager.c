@@ -1113,11 +1113,11 @@ static void _string_free (GString *pString)
 static gboolean _prepare (G_GNUC_UNUSED GSource *source, gint *timeout)
 {
 	*timeout = -1;  // no timeout for poll()
-	return XEventsQueued (s_XDisplay, QueuedAlready);  // if some events are already in the queue, dispatch them, otherwise poll
+	return (g_pPrimaryContainer && XEventsQueued (s_XDisplay, QueuedAlready));  // if some events are already in the queue, dispatch them, otherwise poll; if no container yet (maintenance mode or opengl question), keep the event in the queue for later (otherwise it would block the main loop and prevent gtk to draw the widgets)
 }
 static gboolean _check (G_GNUC_UNUSED GSource *source)
 {
-	return (s_poll_fd.revents & G_IO_IN);  // if the fd has something to tell us, go dispatch the events
+	return (g_pPrimaryContainer && (s_poll_fd.revents & G_IO_IN));  // if the fd has something to tell us, go dispatch the events; if no container yet (maintenance mode or opengl question), keep the message in the socket for later (otherwise it would block the main loop and prevent gtk to draw the widgets)
 }
 static gboolean _dispatch (G_GNUC_UNUSED GSource *source, G_GNUC_UNUSED GSourceFunc callback, G_GNUC_UNUSED gpointer user_data)
 {
@@ -1198,6 +1198,7 @@ static void init (void)
 	s_poll_fd.events = G_IO_IN;
 	g_source_add_poll (source, &s_poll_fd);
 	g_source_attach (source, NULL);  // NULL <-> main context
+	
 	
 	//\__________________ Register backends
 	GldiDesktopManagerBackend dmb;
