@@ -147,7 +147,7 @@ G_BEGIN_DECLS
 
 #define GLDI_ICON_NAME_PASTE "edit-paste"
 
-#define GLDI_ICON_NAME_PREFERENCES "preferences-system&"
+#define GLDI_ICON_NAME_PREFERENCES "preferences-system"
 
 #define GLDI_ICON_NAME_PRINT "document-print"
 

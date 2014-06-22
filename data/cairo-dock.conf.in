@@ -5,7 +5,7 @@
 
 [Position]
 
-#F-[Position on the screen;gtk-fullscreen]
+#F-[Position on the screen;view-fullscreen]
 frame_pos =
 
 #l-[bottom;top;right;left] Choose which border of the screen the dock will be placed on:
@@ -18,7 +18,7 @@ alignment = .5
 #r- Multi-screens
 num_screen = 0
 
-#X-[Offset from the screen's edge;gtk-leave-fullscreen]
+#X-[Offset from the screen's edge;view-restore]
 frame_scr =
 
 #I-[-1000;1000] Lateral offset:
@@ -31,7 +31,7 @@ y gap = 0
 
 [Accessibility]
 
-#F-[Visibility of the main dock;gtk-find]
+#F-[Visibility of the main dock;edit-find]
 frame_visi =
 
 #Y-[Always on top;0;0;Reserve space for the dock;0;0;Keep the dock below;2;2;Hide the dock when it overlaps the current window;1;3;Hide the dock whenever it overlaps any window;1;3;Keep the dock hidden;1;3;Pop-up on shortcut;4;1] Visibility:
@@ -86,7 +86,7 @@ lock all = false
 
 [TaskBar]
 
-#F-[Behaviour;gtk-properties]
+#F-[Behaviour;document-properties]
 frame1 =
 
 #B-[8] Show currently opened applications in the dock?
@@ -121,7 +121,7 @@ group by class = true
 group exception = pidgin;xchat;amsn
 
 
-#F-[Representation;gtk-find]
+#F-[Representation;edit-find]
 frame3 =
 
 #B- Overwrite the X icon with the launchers' icon?
@@ -147,7 +147,7 @@ animation on active window = wobbly
 #{"..." will be added at the end if the name is too long.}
 max name length = 25
 
-#F-[Interaction;gtk-refresh]
+#F-[Interaction;view-refresh]
 frame2 =
 
 #l-[Nothing;Close;Minimize;Launch new;Lower] Action on middle-click on the related application
@@ -210,7 +210,7 @@ move up nb steps = 10
 #I-[4;40;fast;slow] ...
 move down nb steps = 16
 
-#X-[Refresh rate;gtk-execute]
+#X-[Refresh rate;system-run]
 frame_cpu =
 
 #i-[5;40] Refresh rate when mouving cursor into the dock:
@@ -229,7 +229,7 @@ cairo anim freq = 25
 #{The transparency gradation pattern will then be re-calculated in real time. May need more CPU power.}
 dynamic reflection = false
 
-#X-[Connection to the Internet;gtk-network]
+#X-[Connection to the Internet;network-wired]
 frame_conn =
 
 #i-[1;20] Connection timeout :
@@ -271,7 +271,7 @@ modules=
 style = 1
 
 
-#F+[Image;gtk-orientation-portrait]
+#F+[Image;image-x-generic]
 #{Use a background image.}
 frame2 = 
 
@@ -307,7 +307,7 @@ number of stripes = 0
 stripes width = 0.5
 
 
-#F+[Background when hidden;gtk-orientation-portrait]
+#F+[Background when hidden;image-x-generic]
 frame4 = 
 
 #C+ Default background color when the dock is hidden
@@ -393,7 +393,7 @@ sep_bul=
 decorator = comics
 
 
-#F+[Font;gtk-select-font]
+#F+[Font;preferences-desktop-font]
 frame_text =
 
 #B+ Use a custom font for the text?
@@ -425,7 +425,7 @@ icon size = 48
 
 [Desklets]
 
-#F+[Decorations;gtk-paste]
+#F+[Decorations;edit-paste]
 frame_deco =
 
 #O+ Choose a default decoration for all desklets :
@@ -459,7 +459,7 @@ fg desklet =
 #e+[0;1;Transparent;Opaque] Foreground tansparency :
 fg alpha = 1
 
-#F+[Buttons;gtk-close]
+#F+[Buttons;window-close]
 frame_button =
 
 #i+[4;28] Buttons size :
@@ -480,7 +480,7 @@ no input image =
 
 [Icons]
 
-#F+[Icons' themes;gtk-select-color]
+#F+[Icons' themes;preferences-desktop-theme]
 frame_theme=
 
 #w+ Choose an icon theme :
@@ -489,7 +489,7 @@ default icon directory =
 #g+[No background] Image filename to use as a background for icons :
 icons bg =
 
-#F+[Icons size;gtk-zoom-fit]
+#F+[Icons size;zoom-fit-best]
 frame_size =
 
 #j+[10;128] Icons' size at rest (width x height) :
@@ -564,7 +564,7 @@ string color = 0.0; 0.0; 0.8; 0.4
 frame_window =
 
 #Y+[Automatic;2;1;Image;1;1;Frame;2;4] Style
-active style = 1
+active style = 0
 
 #g+ Image file:
 active indicator =
@@ -659,7 +659,7 @@ bar_thickness = 4
 
 [Labels]
 
-#F-[Label visibility;gtk-underline]
+#F-[Label visibility;format-text-underline]
 frame_label =
 
 #Y+[No;0;0;On pointed icon;0;0;On all icons;1;1] Show labels:
@@ -668,7 +668,7 @@ show_labels = 1
 #e-[0;50;more visible;less visible] Neighbouring labels visibility:
 alpha threshold = 20
 
-#F+[Appearance;gtk-orientation-portrait]
+#F+[Appearance;image-x-generic]
 frame_bg =
 
 #Y-[Automatic;0;0;Custom;1;4] Style
@@ -689,7 +689,7 @@ text oulined = false
 #i+[0;20] Margin around the text (in pixels) :
 text margin = 3
 
-#F+[Font;gtk-select-font]
+#F+[Font;preferences-desktop-font]
 frame_font =
 
 #B+ Use a custom font for the text?
@@ -715,7 +715,7 @@ qi bg color = 0;0;0;0.667
 
 [Style]
 
-#F+[Appearance;gtk-orientation-portrait]
+#F+[Appearance;image-x-generic]
 frame_bg =
 
 #Y-[System;0;0;Custom;1;3] Style
@@ -739,7 +739,7 @@ corner=8
 #i+[1;10] Outline width
 linewidth=1
 
-#F+[Font;gtk-select-font]
+#F+[Font;preferences-desktop-font]
 frame_text =
 
 #B+ Use a custom font for the text?

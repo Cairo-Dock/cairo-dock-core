@@ -51,6 +51,7 @@
 #include <gldit/cairo-dock-application-facility.h>
 #include <gldit/cairo-dock-icon-facility.h>
 #include <gldit/cairo-dock-icon-factory.h>
+#include "gldi-icon-names.h"
 // managers.
 #include <gldit/cairo-dock-module-manager.h>
 #include <gldit/cairo-dock-module-instance-manager.h>

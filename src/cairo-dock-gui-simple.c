@@ -26,6 +26,7 @@
 
 #include "config.h"
 #include "gldi-config.h"
+#include "gldi-icon-names.h"
 #include "cairo-dock-module-manager.h"
 #include "cairo-dock-module-instance-manager.h"
 #include "cairo-dock-log.h"
@@ -34,6 +35,7 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-dialog-manager.h"
+#include "cairo-dock-icon-manager.h"  // cairo_dock_search_icon_size
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-desktop-manager.h"  // gldi_desktop_get_width
@@ -51,8 +53,6 @@
 #define CAIRO_DOCK_PREVIEW_HEIGHT 250
 #define CAIRO_DOCK_SIMPLE_PANEL_WIDTH 1200 // matttbe: 800
 #define CAIRO_DOCK_SIMPLE_PANEL_HEIGHT 700 // matttbe: 500
-
-#define CAIRO_DOCK_CATEGORY_ICON_SIZE 32  // a little bit larger than the tab icons (28px)
 
 typedef struct {
 	const gchar *cName;
@@ -89,7 +89,7 @@ static void cairo_dock_select_category (GtkWidget *pMainWindow, CDCategoryEnum i
 static CDCategory s_pCategories[CD_NB_CATEGORIES] = {
 	{
 		N_("Current items"),
-		"icon-all.svg",
+		CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-all.svg",
 		N_("Current items"),
 		_build_items_widget,
 		NULL,
@@ -97,7 +97,7 @@ static CDCategory s_pCategories[CD_NB_CATEGORIES] = {
 		NULL
 	},{
 		N_("Add-ons"),
-		"icon-plug-ins.svg",
+		CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-plug-ins.svg",
 		N_("Add-ons"),
 		_build_plugins_widget,
 		NULL,
@@ -105,7 +105,7 @@ static CDCategory s_pCategories[CD_NB_CATEGORIES] = {
 		NULL
 	},{
 		N_("Configuration"),
-		"gtk-preferences",
+		"preferences-system",
 		N_("Configuration"),
 		_build_config_widget,
 		NULL,
@@ -113,7 +113,7 @@ static CDCategory s_pCategories[CD_NB_CATEGORIES] = {
 		NULL
 	},{
 		N_("Themes"),
-		"icon-appearance.svg",
+		CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-appearance.svg",
 		N_("Themes"),
 		_build_themes_widget,
 		NULL,
@@ -196,7 +196,7 @@ GtkWidget *cairo_dock_build_generic_gui_window2 (const gchar *cTitle, int iWidth
 		FALSE,
 		0);
 	
-	GtkWidget *pQuitButton = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
+	GtkWidget *pQuitButton = gtk_button_new_with_label (_("Close"));
 	g_signal_connect (G_OBJECT (pQuitButton), "clicked", G_CALLBACK(on_click_quit), pMainWindow);
 	gtk_box_pack_end (GTK_BOX (pButtonsHBox),
 		pQuitButton,
@@ -204,7 +204,7 @@ GtkWidget *cairo_dock_build_generic_gui_window2 (const gchar *cTitle, int iWidth
 		FALSE,
 		0);
 	
-	GtkWidget *pApplyButton = gtk_button_new_from_stock (GTK_STOCK_APPLY);
+	GtkWidget *pApplyButton = gtk_button_new_with_label (_("Apply"));
 	g_signal_connect (G_OBJECT (pApplyButton), "clicked", G_CALLBACK(on_click_apply), pMainWindow);
 	gtk_box_pack_end (GTK_BOX (pButtonsHBox),
 		pApplyButton,
@@ -243,12 +243,13 @@ GtkWidget *cairo_dock_build_generic_gui_window2 (const gchar *cTitle, int iWidth
 }
 
 
-static inline GtkWidget *_make_image (const gchar *cImage, int iSize)
+/**static inline GtkWidget *_make_image (const gchar *cImage, int iSize)
 {
 	g_return_val_if_fail (cImage != NULL, NULL);
 	GtkWidget *pImage = NULL;
 	if (strncmp (cImage, "gtk-", 4) == 0)
 	{
+		
 		if (iSize >= 48)
 			iSize = GTK_ICON_SIZE_DIALOG;
 		else if (iSize >= 32)
@@ -278,12 +279,12 @@ static inline GtkWidget *_make_image (const gchar *cImage, int iSize)
 		}
 	}
 	return pImage;
-}
+}*/
 static GtkWidget *_make_notebook_label (const gchar *cLabel, const gchar *cImage, int iSize)
 {
 	GtkWidget *hbox = _gtk_hbox_new (CAIRO_DOCK_FRAME_MARGIN);
 	
-	GtkWidget *pImage = _make_image (cImage, iSize);
+	GtkWidget *pImage = _gtk_image_new_from_file (cImage, iSize);
 	GtkWidget *pAlign = gtk_alignment_new (0.5, 0.5, 0., 1.);
 	gtk_alignment_set_padding (GTK_ALIGNMENT (pAlign), 0, 0, CAIRO_DOCK_FRAME_MARGIN, 0);
 	gtk_container_add (GTK_CONTAINER (pAlign), pImage);
@@ -386,7 +387,7 @@ GtkWidget *cairo_dock_build_simple_gui_window (void)
 		
 		GtkWidget *hbox = _make_notebook_label (gettext (pCategory->cName),
 			pCategory->cIcon,
-			CAIRO_DOCK_CATEGORY_ICON_SIZE);
+			GTK_ICON_SIZE_LARGE_TOOLBAR);
 		gtk_size_group_add_widget (pSizeGroup, hbox);
 		GtkWidget *vbox = _gtk_vbox_new (CAIRO_DOCK_FRAME_MARGIN);
 		gtk_notebook_append_page (GTK_NOTEBOOK (pNoteBook),

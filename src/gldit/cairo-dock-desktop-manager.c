@@ -220,7 +220,8 @@ void gldi_desktop_notify_startup (const gchar *cClass)
 gboolean gldi_desktop_grab_shortkey (guint keycode, guint modifiers, gboolean grab)
 {
 	if (s_backend.grab_shortkey)
-		s_backend.grab_shortkey (keycode, modifiers, grab);
+		return s_backend.grab_shortkey (keycode, modifiers, grab);
+	return FALSE;
 }
 
   //////////////////

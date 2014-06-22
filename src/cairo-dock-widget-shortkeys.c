@@ -18,6 +18,7 @@
 */
 
 #include "config.h"
+#include "gldi-icon-names.h"
 #include "cairo-dock-struct.h"
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-gui-manager.h"
@@ -123,7 +124,7 @@ static void _cairo_dock_initiate_change_shortkey (G_GNUC_UNUSED GtkMenuItem *pMe
 	GtkWidget *pLabel = gtk_label_new (_("Press the shortkey"));
 	gtk_box_pack_start(GTK_BOX (pMainVBox), pLabel, FALSE, FALSE, 0);
 
-	GtkWidget *pCancelButton = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
+	GtkWidget *pCancelButton = gtk_button_new_with_label (_("Cancel"));
 	g_signal_connect (G_OBJECT (pCancelButton), "clicked", G_CALLBACK(on_cancel_shortkey), pInputDialog);
 	gtk_box_pack_start (GTK_BOX (pMainVBox), pCancelButton, FALSE, FALSE, 0);
 
@@ -138,7 +139,7 @@ static gboolean _on_click_shortkey_tree_view (GtkTreeView *pTreeView, GdkEventBu
 		{
 			GtkWidget *pMenu = gtk_menu_new ();
 			
-			cairo_dock_add_in_menu_with_stock_and_data (_("Change the shortkey"), GTK_STOCK_PROPERTIES, G_CALLBACK (_cairo_dock_initiate_change_shortkey), pMenu, pTreeView);
+			cairo_dock_add_in_menu_with_stock_and_data (_("Change the shortkey"), GLDI_ICON_NAME_PROPERTIES, G_CALLBACK (_cairo_dock_initiate_change_shortkey), pMenu, pTreeView);
 			
 			gtk_widget_show_all (pMenu);
 			gtk_menu_popup (GTK_MENU (pMenu),

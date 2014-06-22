@@ -26,6 +26,7 @@
 
 #include "../config.h"
 #include "gldi-config.h"
+#include "gldi-icon-names.h"
 #include "cairo-dock-struct.h"
 #include "cairo-dock-module-manager.h"
 #include "cairo-dock-log.h"
@@ -759,9 +760,9 @@ static void _cairo_dock_pick_a_file (G_GNUC_UNUSED GtkButton *button, gpointer *
 		(iFileType == 0 ? _("Pick up a file") : iFileType == 1 ? _("Pick up a directory") : _("Pick up an image")),
 		pParentWindow,
 		(iFileType == 1 ? GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER : GTK_FILE_CHOOSER_ACTION_OPEN),
-		GTK_STOCK_OK,
+		_("Ok"),
 		GTK_RESPONSE_OK,
-		GTK_STOCK_CANCEL,
+		_("Cancel"),
 		GTK_RESPONSE_CANCEL,
 		NULL);
 
@@ -2231,7 +2232,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				if (iElementType == CAIRO_DOCK_WIDGET_SIZE_INTEGER)
 				{
 					pToggleButton = gtk_toggle_button_new ();
-					GtkWidget *pImage = gtk_image_new_from_stock (GTK_STOCK_MEDIA_PAUSE, GTK_ICON_SIZE_MENU);  // trouver une image...
+					GtkWidget *pImage = gtk_image_new_from_icon_name (GLDI_ICON_NAME_MEDIA_PAUSE, GTK_ICON_SIZE_MENU);  // trouver une image...
 					gtk_button_set_image (GTK_BUTTON (pToggleButton), pImage);
 				}
 				for (k = 0; k < iNbElements; k ++)
@@ -2736,7 +2737,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					cd_warning ("module '%s' not found", pAuthorizedValuesList[0]);
 					cModuleName = g_strdup (pAuthorizedValuesList[0]);  // petite fuite memoire dans ce cas tres rare ...
 				}
-				pOneWidget = gtk_button_new_from_stock (GTK_STOCK_JUMP_TO);
+				pOneWidget = gtk_button_new_from_icon_name (GLDI_ICON_NAME_JUMP_TO, GTK_ICON_SIZE_BUTTON);
 				g_signal_connect (G_OBJECT (pOneWidget),
 					"clicked",
 					G_CALLBACK (_cairo_dock_configure_module),
@@ -2768,7 +2769,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					}
 					g_free (cResult);
 				}
-				pOneWidget = gtk_button_new_from_stock (GTK_STOCK_JUMP_TO);
+				pOneWidget = gtk_button_new_from_icon_name (GLDI_ICON_NAME_JUMP_TO, GTK_ICON_SIZE_BUTTON);
 				g_signal_connect (G_OBJECT (pOneWidget),
 					"clicked",
 					G_CALLBACK (_cairo_dock_widget_launch_command),
@@ -2949,7 +2950,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					pSmallVBox = _gtk_vbox_new (CAIRO_DOCK_GUI_MARGIN);
 					_pack_in_widget_box (pSmallVBox);
 					
-					pButtonUp = gtk_button_new_from_stock (GTK_STOCK_GO_UP);
+					pButtonUp = gtk_button_new_from_icon_name (GLDI_ICON_NAME_GO_UP, GTK_ICON_SIZE_BUTTON);
 					g_signal_connect (G_OBJECT (pButtonUp),
 						"clicked",
 						G_CALLBACK (_cairo_dock_go_up),
@@ -2960,7 +2961,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						FALSE,
 						0);
 					
-					pButtonDown = gtk_button_new_from_stock (GTK_STOCK_GO_DOWN);
+					pButtonDown = gtk_button_new_from_icon_name (GLDI_ICON_NAME_GO_DOWN, GTK_ICON_SIZE_BUTTON);
 					g_signal_connect (G_OBJECT (pButtonDown),
 						"clicked",
 						G_CALLBACK (_cairo_dock_go_down),
@@ -2983,12 +2984,12 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						
 					_allocate_new_buffer;
 					
-					pButtonAdd = gtk_button_new_from_stock (GTK_STOCK_ADD);
+					pButtonAdd = gtk_button_new_from_icon_name (GLDI_ICON_NAME_ADD, GTK_ICON_SIZE_BUTTON);
 					g_signal_connect (G_OBJECT (pButtonAdd),
 						"clicked",
 						G_CALLBACK (_cairo_dock_add),
 						data);
-					pButtonRemove = gtk_button_new_from_stock (GTK_STOCK_REMOVE);
+					pButtonRemove = gtk_button_new_from_icon_name (GLDI_ICON_NAME_REMOVE, GTK_ICON_SIZE_BUTTON);
 					g_signal_connect (G_OBJECT (pButtonRemove),
 						"clicked",
 						G_CALLBACK (_cairo_dock_remove),
@@ -3177,7 +3178,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					else
 						data[1] = GINT_TO_POINTER (0);
 					data[2] = GTK_WINDOW (pMainWindow);
-					pButtonFileChooser = gtk_button_new_from_stock (GTK_STOCK_OPEN);
+					pButtonFileChooser = gtk_button_new_from_icon_name (GLDI_ICON_NAME_OPEN, GTK_ICON_SIZE_BUTTON);
 					g_signal_connect (G_OBJECT (pButtonFileChooser),
 						"clicked",
 						G_CALLBACK (_cairo_dock_pick_a_file),
@@ -3185,7 +3186,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					_pack_in_widget_box (pButtonFileChooser);
 					if (iElementType == CAIRO_DOCK_WIDGET_SOUND_SELECTOR) //Sound Play Button
 					{
-						pButtonPlay = gtk_button_new_from_stock (GTK_STOCK_MEDIA_PLAY); //Outch
+						pButtonPlay = gtk_button_new_from_icon_name (GLDI_ICON_NAME_MEDIA_PLAY, GTK_ICON_SIZE_BUTTON); //Outch
 						g_signal_connect (G_OBJECT (pButtonPlay),
 							"clicked",
 							G_CALLBACK (_cairo_dock_play_a_sound),
@@ -3410,7 +3411,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			if (bAddBackButton && cOriginalConfFilePath != NULL)
 			{
 				pBackButton = gtk_button_new ();
-				GtkWidget *pImage = gtk_image_new_from_stock (GTK_STOCK_CLEAR, GTK_ICON_SIZE_MENU);  // gtk_image_new_from_stock (GTK_STOCK_UNDO, GTK_ICON_SIZE_BUTTON);
+				GtkWidget *pImage = gtk_image_new_from_icon_name (GLDI_ICON_NAME_CLEAR, GTK_ICON_SIZE_MENU);
 				gtk_button_set_image (GTK_BUTTON (pBackButton), pImage);
 				g_signal_connect (G_OBJECT (pBackButton), "clicked", G_CALLBACK(_cairo_dock_set_original_value), pGroupKeyWidget);
 				_pack_in_widget_box (pBackButton);
@@ -3929,17 +3930,14 @@ CairoDockGroupKeyWidget *cairo_dock_gui_find_group_key_widget_in_list (GSList *p
 GtkWidget *_gtk_image_new_from_file (const gchar *cIcon, int iSize)
 {
 	GtkWidget *pImage = NULL;
-	if (*cIcon != '/')  // GTK stock icon
+	if (*cIcon != '/')  // named icon
 	{
-		pImage = gtk_image_new_from_stock (cIcon, iSize);
+		pImage = gtk_image_new_from_icon_name (cIcon, iSize);
 	}
 	else  // path
 	{
+		iSize = cairo_dock_search_icon_size (iSize);
 		pImage = gtk_image_new ();
-		if (iSize == GTK_ICON_SIZE_BUTTON)  /// TODO: find a way to get a correct transposition...
-			iSize = CAIRO_DOCK_TAB_ICON_SIZE;
-		else if (iSize == GTK_ICON_SIZE_MENU)
-			iSize = CAIRO_DOCK_FRAME_ICON_SIZE;
 		GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cIcon, iSize, iSize, NULL);
 		if (pixbuf != NULL)
 		{

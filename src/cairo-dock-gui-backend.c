@@ -24,6 +24,7 @@
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
 
+#include "gldi-icon-names.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-gui-advanced.h"
 #include "cairo-dock-gui-simple.h"
@@ -80,7 +81,7 @@ GtkWidget *cairo_dock_make_switch_gui_button (void)
 	if (s_pMainGuiBackend->cTooltip)
 		gtk_widget_set_tooltip_text (pSwitchButton, s_pMainGuiBackend->cTooltip);
 	
-	GtkWidget *pImage = gtk_image_new_from_stock (GTK_STOCK_JUMP_TO, GTK_ICON_SIZE_BUTTON);
+	GtkWidget *pImage = gtk_image_new_from_icon_name (GLDI_ICON_NAME_JUMP_TO, GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image (GTK_BUTTON (pSwitchButton), pImage);
 	g_signal_connect (G_OBJECT (pSwitchButton), "clicked", G_CALLBACK(on_click_switch_mode), NULL);
 	return pSwitchButton;

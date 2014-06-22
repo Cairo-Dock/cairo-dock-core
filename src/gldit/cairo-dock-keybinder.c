@@ -237,7 +237,7 @@ gboolean cairo_dock_trigger_shortkey (const gchar *cKeyString)  // the idea was 
 	if (accelerator_codes == NULL)
 		return FALSE;
 	
-	// extract the modifiers keysyms first, and then the key (the order of the modifiers doesn't matter, and any shortley is made of N modifiers followed by a single key, so we can fill the array easily)
+	// extract the modifiers keysyms first, and then the key (the order of the modifiers doesn't matter, and any shortkey is made of N modifiers followed by a single key, so we can fill the array easily)
 	int i = 0;
 	if (modifiers & GDK_SHIFT_MASK)
 		pKeySyms[i++] = XStringToKeysym ("Shift_L");

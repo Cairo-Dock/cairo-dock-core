@@ -26,6 +26,7 @@
 #include <glib/gi18n.h>
 
 #include "config.h"
+#include "gldi-icon-names.h"
 #include "cairo-dock-module-manager.h"  // gldi_module_foreach
 #include "cairo-dock-module-instance-manager.h"
 #include "cairo-dock-log.h"
@@ -718,7 +719,7 @@ static gboolean on_button_press_event (GtkWidget *pTreeView,
 		GtkWidget *pMenu = gtk_menu_new ();
 		
 		/// TODO: check that we can actually remove it (ex.: not the main dock), and maybe display the item's name...
-		cairo_dock_add_in_menu_with_stock_and_data (_("Remove this item"), GTK_STOCK_REMOVE, G_CALLBACK (_on_select_remove_item), pMenu, pTreeView);
+		cairo_dock_add_in_menu_with_stock_and_data (_("Remove this item"), GLDI_ICON_NAME_REMOVE, G_CALLBACK (_on_select_remove_item), pMenu, pTreeView);
 		
 		gtk_widget_show_all (pMenu);
 		

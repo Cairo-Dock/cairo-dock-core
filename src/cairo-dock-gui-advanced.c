@@ -25,6 +25,7 @@
 #include <gdk/gdkx.h>  // GDK_WINDOW_XID
 
 #include "config.h"
+#include "gldi-icon-names.h"
 #include "cairo-dock-module-manager.h"
 #include "cairo-dock-module-instance-manager.h"
 #include "cairo-dock-icon-facility.h"
@@ -48,8 +49,6 @@
 #include "cairo-dock-widget.h"
 #include "cairo-dock-gui-advanced.h"
 
-#define CAIRO_DOCK_GROUP_ICON_SIZE 28  // 32  // size of the icon in the buttons
-#define CAIRO_DOCK_CATEGORY_ICON_SIZE 28  // 32  // size of the category icons in the left vertical toolbar.
 #define CAIRO_DOCK_NB_BUTTONS_BY_ROW 4
 #define CAIRO_DOCK_NB_BUTTONS_BY_ROW_MIN 3
 #define CAIRO_DOCK_TABLE_MARGIN 6  // vertical space between 2 category frames.
@@ -98,7 +97,6 @@ static CairoDockCategoryWidgetTable s_pCategoryWidgetTables[CAIRO_DOCK_NB_CATEGO
 static GList *s_pGroupDescriptionList = NULL;
 static GtkWidget *s_pPreviewBox = NULL;
 static GtkWidget *s_pPreviewImage = NULL;
-///static GtkWidget *s_pOkButton = NULL;
 static GtkWidget *s_pApplyButton = NULL;
 static GtkWidget *s_pBackButton = NULL;
 static GtkWidget *s_pMainWindow = NULL;
@@ -119,15 +117,15 @@ static guint s_iSidCheckGroupButton = 0;
 static CDWidget *s_pCurrentGroupWidget2 = NULL;
 
 static const gchar *s_cCategoriesDescription[2*(CAIRO_DOCK_NB_CATEGORY+1)] = {
-	N_("Behaviour"), "icon-behavior.svg",
-	N_("Appearance"), "icon-appearance.svg",
-	N_("Files"), "icon-files.svg",
-	N_("Internet"), "icon-internet.svg",
-	N_("Desktop"), "icon-desktop.svg",
-	N_("Accessories"), "icon-accessories.svg",
-	N_("System"), "icon-system.svg",
-	N_("Fun"), "icon-fun.svg",
-	N_("All"), "icon-all.svg" };
+	N_("Behaviour"), CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-behavior.svg",
+	N_("Appearance"), CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-appearance.svg",
+	N_("Files"), CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-files.svg",
+	N_("Internet"), CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-internet.svg",
+	N_("Desktop"), CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-desktop.svg",
+	N_("Accessories"), CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-accessories.svg",
+	N_("System"), CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-system.svg",
+	N_("Fun"), CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-fun.svg",
+	N_("All"), CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-all.svg" };
 
 static void cairo_dock_enable_apply_button (gboolean bEnable);
 static void _present_group_widget (CairoDockGroupDescription *pGroupDescription, GldiModuleInstance *pModuleInstance);
@@ -1098,7 +1096,6 @@ static void cairo_dock_free_categories (void)
 	
 	s_pPreviewImage = NULL;
 	
-	///s_pOkButton = NULL;
 	s_pApplyButton = NULL;
 	
 	s_pMainWindow = NULL;
@@ -1318,7 +1315,7 @@ static void on_clear_filter (GtkEntry *pEntry, G_GNUC_UNUSED GtkEntryIconPositio
  // WINDOW //
 ////////////
 
-static inline GtkWidget *_make_image (const gchar *cImage, int iSize)
+/**static inline GtkWidget *_make_image (const gchar *cImage, int iSize)
 {
 	GtkWidget *pImage = NULL;
 	if (strncmp (cImage, "gtk-", 4) == 0)
@@ -1352,7 +1349,7 @@ static inline GtkWidget *_make_image (const gchar *cImage, int iSize)
 		}
 	}
 	return pImage;
-}
+}*/
 static GtkToolItem *_make_toolbutton (const gchar *cLabel, const gchar *cImage, int iSize)
 {
 	if (cImage == NULL)
@@ -1361,7 +1358,7 @@ static GtkToolItem *_make_toolbutton (const gchar *cLabel, const gchar *cImage, 
 		gtk_tool_button_set_label (GTK_TOOL_BUTTON (pWidget), cLabel);
 		return pWidget;
 	}
-	GtkWidget *pImage = _make_image (cImage, iSize);
+	GtkWidget *pImage = _gtk_image_new_from_file (cImage, iSize);
 	GtkToolItem *pWidget = gtk_toggle_tool_button_new ();
 	gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (pWidget), pImage);
 	if (cLabel == NULL)
@@ -1396,7 +1393,7 @@ static CairoDockGroupDescription *_add_group_button (const gchar *cGroupName, co
 	pGroupDescription->cDescription = g_strdup (cDescription);
 	pGroupDescription->iCategory = iCategory;
 	pGroupDescription->cPreviewFilePath = g_strdup (cPreviewFilePath);
-	pGroupDescription->cIcon = cairo_dock_get_icon_for_gui (cGroupName, cIcon, cShareDataDir, CAIRO_DOCK_GROUP_ICON_SIZE, FALSE);
+	pGroupDescription->cIcon = cairo_dock_get_icon_for_gui (cGroupName, cIcon, cShareDataDir, cairo_dock_search_icon_size(GTK_ICON_SIZE_BUTTON), FALSE);
 	pGroupDescription->cGettextDomain = cGettextDomain;
 	pGroupDescription->cTitle = cTitle;
 	s_pGroupDescriptionList = g_list_prepend (s_pGroupDescriptionList, pGroupDescription);
@@ -1426,7 +1423,7 @@ static CairoDockGroupDescription *_add_group_button (const gchar *cGroupName, co
 	g_signal_connect (G_OBJECT (pGroupButton), "leave-notify-event", G_CALLBACK(on_leave_group_button), NULL);
 
 	GtkWidget *pButtonHBox = _gtk_hbox_new (CAIRO_DOCK_FRAME_MARGIN);
-	GtkWidget *pImage = _make_image (pGroupDescription->cIcon, CAIRO_DOCK_GROUP_ICON_SIZE);
+	GtkWidget *pImage = _gtk_image_new_from_file (pGroupDescription->cIcon, GTK_ICON_SIZE_BUTTON);
 	gtk_box_pack_start (GTK_BOX (pButtonHBox), pImage, FALSE, FALSE, 0);
 	pGroupDescription->pLabel = gtk_label_new (pGroupDescription->cTitle);
 	gtk_box_pack_start (GTK_BOX (pButtonHBox),
@@ -1771,7 +1768,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 	
 	#if (GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION >= 16)
 	gtk_entry_set_icon_activatable (GTK_ENTRY (s_pFilterEntry), GTK_ENTRY_ICON_SECONDARY, TRUE);
-	gtk_entry_set_icon_from_stock (GTK_ENTRY (s_pFilterEntry), GTK_ENTRY_ICON_SECONDARY, GTK_STOCK_CLEAR);
+	gtk_entry_set_icon_from_icon_name (GTK_ENTRY (s_pFilterEntry), GTK_ENTRY_ICON_SECONDARY, GLDI_ICON_NAME_CLEAR);
 	g_signal_connect (s_pFilterEntry, "icon-press", G_CALLBACK (on_clear_filter), NULL);
 	#endif
 	
@@ -1780,7 +1777,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 	
 	GtkWidget *pFilterOptionButton = gtk_button_new ();
 	gtk_box_pack_end (GTK_BOX (pFilterBox), pFilterOptionButton, FALSE, FALSE, 0);
-	GtkWidget *pFilterButtonImage = gtk_image_new_from_stock (GTK_STOCK_PREFERENCES, GTK_ICON_SIZE_MENU);
+	GtkWidget *pFilterButtonImage = gtk_image_new_from_icon_name (GLDI_ICON_NAME_PREFERENCES, GTK_ICON_SIZE_MENU);
 	gtk_button_set_image (GTK_BUTTON (pFilterOptionButton), pFilterButtonImage);
 
 	// Filter Options Menu
@@ -1831,8 +1828,8 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 	GtkToolItem *pCategoryButton;
 	pCategoryWidget = &s_pCategoryWidgetTables[CAIRO_DOCK_NB_CATEGORY];
 	pCategoryButton = _make_toolbutton (_("All"),
-		"icon-all.svg",
-		CAIRO_DOCK_CATEGORY_ICON_SIZE);
+		CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-all.svg",
+		GTK_ICON_SIZE_BUTTON);
 	gtk_toolbar_insert (GTK_TOOLBAR (s_pToolBar) , pCategoryButton, -1);
 	pCategoryWidget->pCategoryButton = pCategoryButton;
 	gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (pCategoryButton), TRUE);
@@ -1843,7 +1840,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 	{
 		pCategoryButton = _make_toolbutton (gettext (s_cCategoriesDescription[2*i]),
 			s_cCategoriesDescription[2*i+1],
-			CAIRO_DOCK_CATEGORY_ICON_SIZE);
+			GTK_ICON_SIZE_BUTTON);
 		g_signal_connect (G_OBJECT (pCategoryButton), "clicked", G_CALLBACK(on_click_category_button), GINT_TO_POINTER (i));
 		gtk_toolbar_insert (GTK_TOOLBAR (s_pToolBar) , pCategoryButton,-1);
 		pCategoryWidget = &s_pCategoryWidgetTables[i];
@@ -1941,7 +1938,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 		FALSE,
 		0);
 	
-	GtkWidget *pQuitButton = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
+	GtkWidget *pQuitButton = gtk_button_new_with_label (_("Close"));
 	g_signal_connect (G_OBJECT (pQuitButton), "clicked", G_CALLBACK(on_click_quit), s_pMainWindow);
 	gtk_box_pack_end (GTK_BOX (pButtonsHBox),
 		pQuitButton,
@@ -1949,7 +1946,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 		FALSE,
 		0);
 	
-	s_pBackButton = gtk_button_new_from_stock (GTK_STOCK_GO_BACK);
+	s_pBackButton = gtk_button_new_with_label (_("Back"));
 	g_signal_connect (G_OBJECT (s_pBackButton), "clicked", G_CALLBACK(on_click_back_button), NULL);
 	gtk_box_pack_end (GTK_BOX (pButtonsHBox),
 		s_pBackButton,
@@ -1957,15 +1954,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 		FALSE,
 		0);
 	
-	/**s_pOkButton = gtk_button_new_from_stock (GTK_STOCK_OK);
-	g_signal_connect (G_OBJECT (s_pOkButton), "clicked", G_CALLBACK(on_click_ok), s_pMainWindow);
-	gtk_box_pack_end (GTK_BOX (pButtonsHBox),
-		s_pOkButton,
-		FALSE,
-		FALSE,
-		0);*/
-	
-	s_pApplyButton = gtk_button_new_from_stock (GTK_STOCK_APPLY);
+	s_pApplyButton = gtk_button_new_with_label (_("Apply"));
 	g_signal_connect (G_OBJECT (s_pApplyButton), "clicked", G_CALLBACK(on_click_apply), NULL);
 	gtk_box_pack_end (GTK_BOX (pButtonsHBox),
 		s_pApplyButton,
@@ -1983,7 +1972,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 	gchar *cLink = cairo_dock_get_third_party_applets_link ();
 	GtkWidget *pThirdPartyButton = gtk_link_button_new_with_label (cLink, _("More applets"));
 	gtk_widget_set_tooltip_text (pThirdPartyButton, _("Get more applets online !"));
-	GtkWidget *pImage = gtk_image_new_from_stock (GTK_STOCK_ADD, GTK_ICON_SIZE_BUTTON);
+	GtkWidget *pImage = gtk_image_new_from_icon_name (GLDI_ICON_NAME_ADD, GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image (GTK_BUTTON (pThirdPartyButton), pImage);
 	g_free (cLink);
 	gtk_box_pack_start (GTK_BOX (pButtonsHBox),
@@ -2226,12 +2215,10 @@ static void cairo_dock_enable_apply_button (gboolean bEnable)
 	if (bEnable)
 	{
 		gtk_widget_show (s_pApplyButton);
-		///gtk_widget_show (s_pOkButton);
 	}
 	else
 	{
 		gtk_widget_hide (s_pApplyButton);
-		///gtk_widget_hide (s_pOkButton);
 	}
 }
 static void _present_group_widget (CairoDockGroupDescription *pGroupDescription, GldiModuleInstance *pModuleInstance)

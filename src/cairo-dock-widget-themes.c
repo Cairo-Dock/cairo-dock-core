@@ -24,6 +24,7 @@
 #include <glib/gi18n.h>
 
 #include "config.h"
+#include "gldi-icon-names.h"
 #include "cairo-dock-struct.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
@@ -230,7 +231,7 @@ static gboolean _cairo_dock_load_theme (GKeyFile* pKeyFile, ThemesWidget *pTheme
 			G_CALLBACK (on_waiting_dialog_destroyed),
 			pThemesWidget);
 		
-		GtkWidget *pCancelButton = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
+		GtkWidget *pCancelButton = gtk_button_new_with_label (_("Cancel"));
 		g_signal_connect (G_OBJECT (pCancelButton), "clicked", G_CALLBACK(on_cancel_dl), pWaitingDialog);
 		gtk_box_pack_start (GTK_BOX (pMainVBox), pCancelButton, FALSE, FALSE, 0);
 		
@@ -454,7 +455,7 @@ static gboolean _on_click_tree_view (GtkTreeView *pTreeView, GdkEventButton* pBu
 			{
 				GtkWidget *pMenu = gtk_menu_new ();
 				
-				cairo_dock_add_in_menu_with_stock_and_data (_("Delete this theme"), GTK_STOCK_DELETE, G_CALLBACK (_on_delete_theme), pMenu, pThemesWidget);
+				cairo_dock_add_in_menu_with_stock_and_data (_("Delete this theme"), GLDI_ICON_NAME_DELETE, G_CALLBACK (_on_delete_theme), pMenu, pThemesWidget);
 				
 				gtk_widget_show_all (pMenu);
 				gtk_menu_popup (GTK_MENU (pMenu),

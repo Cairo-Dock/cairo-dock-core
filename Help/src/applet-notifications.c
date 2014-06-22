@@ -257,15 +257,15 @@ static gboolean _is_unity_running (void)
 
 CD_APPLET_ON_BUILD_MENU_BEGIN
 	gchar *cLabel = g_strdup_printf ("%s (%s)", D_("Open global settings"), D_("middle-click"));
-	CD_APPLET_ADD_IN_MENU_WITH_STOCK (cLabel, GTK_STOCK_PREFERENCES, _cd_show_config, CD_APPLET_MY_MENU);
+	CD_APPLET_ADD_IN_MENU_WITH_STOCK (cLabel, GLDI_ICON_NAME_PREFERENCES, _cd_show_config, CD_APPLET_MY_MENU);
 	g_free (cLabel);
 	GdkScreen *pScreen = gdk_screen_get_default ();
 	if (! gdk_screen_is_composited (pScreen))
-		CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Activate composite"), GTK_STOCK_EXECUTE, cd_help_enable_composite, CD_APPLET_MY_MENU);
+		CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Activate composite"), GLDI_ICON_NAME_EXECUTE, cd_help_enable_composite, CD_APPLET_MY_MENU);
 	if (_is_gnome_panel_running ())
-		CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Disable the gnome-panel"), GTK_STOCK_REMOVE, _cd_remove_gnome_panel, CD_APPLET_MY_MENU);
+		CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Disable the gnome-panel"), GLDI_ICON_NAME_REMOVE, _cd_remove_gnome_panel, CD_APPLET_MY_MENU);
 	if (_is_unity_running ())
-		CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Disable Unity"), GTK_STOCK_REMOVE, _cd_remove_unity, CD_APPLET_MY_MENU);
-	CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Help"), GTK_STOCK_HELP, _cd_show_help_gui, CD_APPLET_MY_MENU);
-	CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Online help"), GTK_STOCK_HELP, _cd_show_help_online, CD_APPLET_MY_MENU);
+		CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Disable Unity"), GLDI_ICON_NAME_REMOVE, _cd_remove_unity, CD_APPLET_MY_MENU);
+	CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Help"), GLDI_ICON_NAME_HELP, _cd_show_help_gui, CD_APPLET_MY_MENU);
+	CD_APPLET_ADD_IN_MENU_WITH_STOCK (D_("Online help"), GLDI_ICON_NAME_HELP, _cd_show_help_online, CD_APPLET_MY_MENU);
 CD_APPLET_ON_BUILD_MENU_END

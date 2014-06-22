@@ -18,6 +18,7 @@
 */
 
 #include "config.h"
+#include "gldi-icon-names.h"
 #include "cairo-dock-struct.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-module-manager.h"
@@ -101,7 +102,7 @@ static gboolean _on_click_module_tree_view (GtkTreeView *pTreeView, GdkEventButt
 		{
 			GtkWidget *pMenu = gtk_menu_new ();
 			
-			cairo_dock_add_in_menu_with_stock_and_data (_("Configure this applet"), GTK_STOCK_PROPERTIES, G_CALLBACK (_cairo_dock_initiate_config_module), pMenu, pModule);
+			cairo_dock_add_in_menu_with_stock_and_data (_("Configure this applet"), GLDI_ICON_NAME_PROPERTIES, G_CALLBACK (_cairo_dock_initiate_config_module), pMenu, pModule);
 			
 			gtk_widget_show_all (pMenu);
 			gtk_menu_popup (GTK_MENU (pMenu),

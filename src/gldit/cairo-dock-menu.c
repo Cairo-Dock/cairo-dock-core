@@ -953,11 +953,7 @@ GtkWidget *gldi_menu_item_new_full (const gchar *cLabel, const gchar *cImage, gb
 		}
 		else if (*cImage != '\0')
 		{
-			#if GTK_CHECK_VERSION (3, 10, 0)
-			image = gtk_image_new_from_icon_name (cImage, iSize);  /// actually, this will not work until we replace all the gtk-stock names by standard icon names... which is a PITA, and will be done do later
-			#else
-			image = gtk_image_new_from_stock (cImage, iSize);
-			#endif
+			image = gtk_image_new_from_icon_name (cImage, iSize);
 		}
 #endif
 		
