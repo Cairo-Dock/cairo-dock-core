@@ -634,6 +634,7 @@ static void _config_widget_apply (CDWidget *pCdWidget)
 		// make managers use the default style
 		g_key_file_set_integer (pKeyFile, "Background", "style", 0);
 		g_key_file_set_integer (pKeyFile, "Dialogs", "style", 0);
+		g_key_file_set_string (pKeyFile, "Desklets", "decorations", "automatic");
 		g_key_file_set_integer (pKeyFile, "Indicators", "active style", 0);
 		g_key_file_set_integer (pKeyFile, "Indicators", "bar_colors", 0);
 		
@@ -672,9 +673,21 @@ static void _config_widget_apply (CDWidget *pCdWidget)
 			g_free (cConfFilePath);
 		}
 		
-		/// TODO: make the Slide view use the default style too...
-		
-		
+		// make the Slide view use the default style too
+		pModule = gldi_module_get ("dock rendering");
+		if (pModule)
+		{
+			cUserDataDirPath = gldi_module_get_config_dir (pModule);
+			cConfFilePath = g_strdup_printf ("%s/%s", cUserDataDirPath, pModule->pVisitCard->cConfFileName);
+			if (g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
+			{
+				cairo_dock_update_keyfile (cConfFilePath,
+					G_TYPE_INT, "Slide", "style", 0,
+					G_TYPE_INVALID);
+			}
+			g_free (cUserDataDirPath);
+			g_free (cConfFilePath);
+		}
 	}
 	
 	gchar *cIconTheme = g_key_file_get_string (pSimpleKeyFile, "Appearance", "default icon directory", NULL);
@@ -722,6 +735,9 @@ static void _config_widget_apply (CDWidget *pCdWidget)
 		if (pModule)
 			gldi_object_reload (GLDI_OBJECT (pModule), TRUE);
 		pModule = gldi_module_get ("keyboard indicator");
+		if (pModule)
+			gldi_object_reload (GLDI_OBJECT (pModule), TRUE);
+		pModule = gldi_module_get ("dock rendering");
 		if (pModule)
 			gldi_object_reload (GLDI_OBJECT (pModule), TRUE);
 	}
