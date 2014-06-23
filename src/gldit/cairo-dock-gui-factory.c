@@ -97,6 +97,16 @@ typedef struct {
 		G_TYPE_DOUBLE,   /* CAIRO_DOCK_MODEL_SIZE*/\
 		G_TYPE_STRING)   /* CAIRO_DOCK_MODEL_AUTHOR*/
 
+#if ! GTK_CHECK_VERSION(3, 10, 0)
+GtkWidget* gtk_button_new_from_icon_name (const gchar *icon_name, GtkIconSize  size)
+{
+	GtkWidget *image = gtk_image_new_from_icon_name (icon_name, size);
+	return (GtkWidget*)g_object_new (GTK_TYPE_BUTTON,
+		"image", image,
+		NULL);
+}
+#endif
+
 static void _cairo_dock_activate_one_element (G_GNUC_UNUSED GtkCellRendererToggle * cell_renderer, gchar * path, GtkTreeModel * model)
 {
 	GtkTreeIter iter;

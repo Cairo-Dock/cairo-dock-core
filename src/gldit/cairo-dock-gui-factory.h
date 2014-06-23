@@ -189,6 +189,10 @@ struct _CairoDockGroupKeyWidget {
 	};
 
 
+#if ! GTK_CHECK_VERSION(3, 10, 0)
+GtkWidget* gtk_button_new_from_icon_name (const gchar *icon_name, GtkIconSize  size);
+#endif
+
 GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *pOneWidget, gboolean bHorizontalPackaging, int iAddInfoBar, const gchar *cInitialDescription, const gchar *cInitialImage, GPtrArray *pDataGarbage);
 
 void _cairo_dock_set_value_in_pair (GtkSpinButton *pSpinButton, gpointer *data);  // exportee pour pouvoir desactiver la callback.
