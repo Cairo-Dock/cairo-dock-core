@@ -1315,41 +1315,6 @@ static void on_clear_filter (GtkEntry *pEntry, G_GNUC_UNUSED GtkEntryIconPositio
  // WINDOW //
 ////////////
 
-/**static inline GtkWidget *_make_image (const gchar *cImage, int iSize)
-{
-	GtkWidget *pImage = NULL;
-	if (strncmp (cImage, "gtk-", 4) == 0)
-	{
-		if (iSize >= 48)
-			iSize = GTK_ICON_SIZE_DIALOG;
-		else if (iSize >= 32)
-			iSize = GTK_ICON_SIZE_LARGE_TOOLBAR;
-		else
-			iSize = GTK_ICON_SIZE_BUTTON;
-		pImage = gtk_image_new_from_stock (cImage, iSize);
-	}
-	else
-	{
-		gchar *cIconPath = NULL;
-		if (*cImage != '/')
-		{
-			cIconPath = g_strconcat (g_cCairoDockDataDir, "/config-panel/", cImage, NULL);
-			if (!g_file_test (cIconPath, G_FILE_TEST_EXISTS))
-			{
-				g_free (cIconPath);
-				cIconPath = g_strconcat (CAIRO_DOCK_SHARE_DATA_DIR"/icons/", cImage, NULL);
-			}
-		}
-		GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cIconPath ? cIconPath : cImage, iSize, iSize, NULL);
-		g_free (cIconPath);
-		if (pixbuf != NULL)
-		{
-			pImage = gtk_image_new_from_pixbuf (pixbuf);
-			g_object_unref (pixbuf);
-		}
-	}
-	return pImage;
-}*/
 static GtkToolItem *_make_toolbutton (const gchar *cLabel, const gchar *cImage, int iSize)
 {
 	if (cImage == NULL)
@@ -1385,7 +1350,7 @@ static void _add_sub_group_to_group_button (CairoDockGroupDescription *pGroupDes
 	pSubGroup[2] = (gchar*)cTitle;
 	pGroupDescription->pGroups = g_list_append (pGroupDescription->pGroups, pSubGroup);
 }
-static CairoDockGroupDescription *_add_group_button (const gchar *cGroupName, const gchar *cIcon, int iCategory, const gchar *cDescription, const gchar *cPreviewFilePath, int iActivation, gboolean bConfigurable, const gchar *cGettextDomain, const gchar *cTitle, const gchar *cShareDataDir)
+static CairoDockGroupDescription *_add_group_button (const gchar *cGroupName, const gchar *cIcon, int iCategory, const gchar *cDescription, const gchar *cPreviewFilePath, int iActivation, gboolean bConfigurable, const gchar *cGettextDomain, const gchar *cTitle)
 {
 	//\____________ On garde une trace de ses caracteristiques.
 	CairoDockGroupDescription *pGroupDescription = g_new0 (CairoDockGroupDescription, 1);
@@ -1393,7 +1358,7 @@ static CairoDockGroupDescription *_add_group_button (const gchar *cGroupName, co
 	pGroupDescription->cDescription = g_strdup (cDescription);
 	pGroupDescription->iCategory = iCategory;
 	pGroupDescription->cPreviewFilePath = g_strdup (cPreviewFilePath);
-	pGroupDescription->cIcon = cairo_dock_get_icon_for_gui (cGroupName, cIcon, cShareDataDir, cairo_dock_search_icon_size(GTK_ICON_SIZE_BUTTON), FALSE);
+	pGroupDescription->cIcon = cairo_dock_search_icon_s_path (cIcon, cairo_dock_search_icon_size(GTK_ICON_SIZE_LARGE_TOOLBAR));
 	pGroupDescription->cGettextDomain = cGettextDomain;
 	pGroupDescription->cTitle = cTitle;
 	s_pGroupDescriptionList = g_list_prepend (s_pGroupDescriptionList, pGroupDescription);
@@ -1423,7 +1388,7 @@ static CairoDockGroupDescription *_add_group_button (const gchar *cGroupName, co
 	g_signal_connect (G_OBJECT (pGroupButton), "leave-notify-event", G_CALLBACK(on_leave_group_button), NULL);
 
 	GtkWidget *pButtonHBox = _gtk_hbox_new (CAIRO_DOCK_FRAME_MARGIN);
-	GtkWidget *pImage = _gtk_image_new_from_file (pGroupDescription->cIcon, GTK_ICON_SIZE_BUTTON);
+	GtkWidget *pImage = _gtk_image_new_from_file (pGroupDescription->cIcon, GTK_ICON_SIZE_LARGE_TOOLBAR);
 	gtk_box_pack_start (GTK_BOX (pButtonHBox), pImage, FALSE, FALSE, 0);
 	pGroupDescription->pLabel = gtk_label_new (pGroupDescription->cTitle);
 	gtk_box_pack_start (GTK_BOX (pButtonHBox),
@@ -1471,8 +1436,7 @@ static gboolean _cairo_dock_add_one_module_widget (GldiModule *pModule, const gc
 		iActive,
 		pModule->pVisitCard->cConfFileName != NULL,
 		pModule->pVisitCard->cGettextDomain,
-		pModule->pVisitCard->cTitle,
-		pModule->pVisitCard->cShareDataDir);
+		pModule->pVisitCard->cTitle);
 	//g_print ("+ %s : %x;%x\n", cModuleName,pGroupDescription, pGroupDescription->pActivateButton);
 	pGroupDescription->build_widget = _build_module_widget;
 	return TRUE;  // continue.
@@ -1487,14 +1451,13 @@ _add_group_button (cGroupName,\
 		-1,  /* <=> non desactivable*/\
 		TRUE,  /* <=> configurable*/\
 		NULL,  /* domaine de traduction : celui du dock.*/\
-		cTitle,\
-		NULL)
+		cTitle)
 static void _add_main_groups_buttons (void)
 {
 	CairoDockGroupDescription *pGroupDescription;
 	
 	pGroupDescription = _add_one_main_group_button ("Position",
-		"icon-position.svg",
+		CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-position.svg",
 		CAIRO_DOCK_CATEGORY_BEHAVIOR,
 		N_("Set the position of the main dock."),
 		_("Position"));
@@ -1503,7 +1466,7 @@ static void _add_main_groups_buttons (void)
 	pGroupDescription->build_widget = _build_config_group_widget;
 	
 	pGroupDescription = _add_one_main_group_button ("Accessibility",
-		"icon-visibility.svg",
+		CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-visibility.svg",
 		CAIRO_DOCK_CATEGORY_BEHAVIOR,
 		N_("Do you like your dock to be always visible,\n or on the contrary unobtrusive?\nConfigure the way you access your docks and sub-docks!"),
 		_("Visibility"));
@@ -1512,7 +1475,7 @@ static void _add_main_groups_buttons (void)
 	pGroupDescription->build_widget = _build_config_group_widget;
 	
 	pGroupDescription = _add_one_main_group_button ("TaskBar",
-		"icon-taskbar.png",
+		CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-taskbar.png",
 		CAIRO_DOCK_CATEGORY_BEHAVIOR,
 		N_("Display and interact with currently open windows."),
 		_("Taskbar"));
@@ -1521,14 +1484,14 @@ static void _add_main_groups_buttons (void)
 	pGroupDescription->build_widget = _build_config_group_widget;
 	
 	pGroupDescription = _add_one_main_group_button ("Shortkeys",
-		"icon-shortkeys.svg",
+		CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-shortkeys.svg",
 		CAIRO_DOCK_CATEGORY_BEHAVIOR,
 		N_("Define all the keyboard shortcuts currently available."),
 		_("Shortkeys"));
 	pGroupDescription->build_widget = _build_shortkeys_widget;
 	
 	pGroupDescription = _add_one_main_group_button ("System",
-		"icon-system.svg",
+		CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-system.svg",
 		CAIRO_DOCK_CATEGORY_BEHAVIOR,
 		N_("All of the parameters you will never want to tweak."),
 		_("System"));
@@ -1540,7 +1503,7 @@ static void _add_main_groups_buttons (void)
 	pGroupDescription->build_widget = _build_config_group_widget;
 	
 	pGroupDescription = _add_one_main_group_button ("Style",
-		"icon-style.svg",
+		CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-style.svg",
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("Configure the global style."),
 		_("Style"));
@@ -1549,7 +1512,7 @@ static void _add_main_groups_buttons (void)
 	pGroupDescription->build_widget = _build_config_group_widget;
 	
 	pGroupDescription = _add_one_main_group_button ("Background",
-		"icon-docks.svg",
+		CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-docks.svg",
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("Configure docks appearance."),
 		_("Docks"));
@@ -1559,16 +1522,8 @@ static void _add_main_groups_buttons (void)
 	pGroupDescription->pManagers = g_list_prepend (pGroupDescription->pManagers, (gchar*)"Backends");  // -> "dock rendering"
 	pGroupDescription->build_widget = _build_config_group_widget;
 	
-	/**pGroupDescription = _add_one_main_group_button ("Views",
-		"icon-views.svg",
-		CAIRO_DOCK_CATEGORY_THEME,
-		N_("Select a view for each of your docks."),
-		_("Views"));
-	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Backends");  // -> "dock rendering"
-	pGroupDescription->build_widget = _build_config_group_widget;*/
-	
 	pGroupDescription = _add_one_main_group_button ("Dialogs",
-		"icon-dialogs.svg",
+		CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-dialogs.svg",
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("Configure text bubble appearance."),
 		_("Dialog boxes and Menus"));
@@ -1577,7 +1532,7 @@ static void _add_main_groups_buttons (void)
 	pGroupDescription->build_widget = _build_config_group_widget;
 	
 	pGroupDescription = _add_one_main_group_button ("Desklets",
-		"icon-desklets.svg",
+		CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-desklets.svg",
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("Applets can be displayed on your desktop as widgets."),
 		_("Desklets"));
@@ -1586,7 +1541,7 @@ static void _add_main_groups_buttons (void)
 	pGroupDescription->build_widget = _build_config_group_widget;
 	
 	pGroupDescription = _add_one_main_group_button ("Icons",
-		"icon-icons.svg",
+		CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-icons.svg",
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("All about icons:\n size, reflection, icon theme,..."),
 		_("Icons"));
@@ -1596,16 +1551,8 @@ static void _add_main_groups_buttons (void)
 	pGroupDescription->pManagers = g_list_prepend (pGroupDescription->pManagers, (gchar*)"Indicators");  // -> "drop indicator"
 	pGroupDescription->build_widget = _build_config_group_widget;
 	
-	/**pGroupDescription = _add_one_main_group_button ("Indicators",
-		"icon-indicators.svg",
-		CAIRO_DOCK_CATEGORY_THEME,
-		N_("Indicators are additional markers for your icons."),
-		_("Indicators"));
-	pGroupDescription->pManagers = g_list_prepend (NULL, (gchar*)"Indicators");  // -> "drop indicator"
-	pGroupDescription->build_widget = _build_config_group_widget;*/
-	
 	pGroupDescription = _add_one_main_group_button ("Labels",
-		"icon-labels.svg",
+		CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-labels.svg",
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("Define icon caption and quick-info style."),
 		_("Captions"));
@@ -1614,14 +1561,14 @@ static void _add_main_groups_buttons (void)
 	pGroupDescription->build_widget = _build_config_group_widget;
 	
 	pGroupDescription = _add_one_main_group_button ("Themes",
-		"icon-controler.svg",  /// TODO: find an icon...
+		CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-controler.svg",  /// TODO: find an icon...
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("Try new themes and save your theme."),
 		_("Themes"));
 	pGroupDescription->build_widget = _build_themes_widget;
 	
 	pGroupDescription = _add_one_main_group_button ("Items",
-		"icon-all.svg",  /// TODO: find an icon...
+		CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-all.svg",  /// TODO: find an icon...
 		CAIRO_DOCK_CATEGORY_THEME,
 		N_("Current items in your dock(s)."),
 		_("Current items"));
@@ -1829,7 +1776,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 	pCategoryWidget = &s_pCategoryWidgetTables[CAIRO_DOCK_NB_CATEGORY];
 	pCategoryButton = _make_toolbutton (_("All"),
 		CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-all.svg",
-		GTK_ICON_SIZE_BUTTON);
+		GTK_ICON_SIZE_LARGE_TOOLBAR);
 	gtk_toolbar_insert (GTK_TOOLBAR (s_pToolBar) , pCategoryButton, -1);
 	pCategoryWidget->pCategoryButton = pCategoryButton;
 	gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (pCategoryButton), TRUE);
@@ -1840,7 +1787,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 	{
 		pCategoryButton = _make_toolbutton (gettext (s_cCategoriesDescription[2*i]),
 			s_cCategoriesDescription[2*i+1],
-			GTK_ICON_SIZE_BUTTON);
+			GTK_ICON_SIZE_LARGE_TOOLBAR);
 		g_signal_connect (G_OBJECT (pCategoryButton), "clicked", G_CALLBACK(on_click_category_button), GINT_TO_POINTER (i));
 		gtk_toolbar_insert (GTK_TOOLBAR (s_pToolBar) , pCategoryButton,-1);
 		pCategoryWidget = &s_pCategoryWidgetTables[i];

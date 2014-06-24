@@ -101,7 +101,7 @@ typedef struct {
 GtkWidget* gtk_button_new_from_icon_name (const gchar *icon_name, GtkIconSize  size)
 {
 	GtkWidget *image = gtk_image_new_from_icon_name (icon_name, size);
-	return (GtkWidget*)g_object_new (GTK_TYPE_BUTTON,
+	return (GtkWidget*) g_object_new (GTK_TYPE_BUTTON,
 		"image", image,
 		NULL);
 }
@@ -3939,6 +3939,7 @@ CairoDockGroupKeyWidget *cairo_dock_gui_find_group_key_widget_in_list (GSList *p
 
 GtkWidget *_gtk_image_new_from_file (const gchar *cIcon, int iSize)
 {
+	g_return_val_if_fail (cIcon, NULL);
 	GtkWidget *pImage = NULL;
 	if (*cIcon != '/')  // named icon
 	{

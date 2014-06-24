@@ -22,6 +22,7 @@
 #include "cairo-dock-struct.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-module-manager.h"
+#include "cairo-dock-icon-manager.h"  // cairo_dock_search_icon_s_path
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-menu.h"  // cairo_dock_add_in_menu_with_stock_and_data
@@ -32,7 +33,6 @@
 #include "cairo-dock-widget-plugins.h"
 
 #define CAIRO_DOCK_PREVIEW_HEIGHT 250 // matttbe: 200
-#define CAIRO_DOCK_PLUGINS_ICON_SIZE 32
 
 extern gchar *g_cConfFile;
 extern GldiContainer *g_pPrimaryContainer;
@@ -190,12 +190,9 @@ static gboolean _cairo_dock_add_module_to_modele (gchar *cModuleName, GldiModule
 		&& ! gldi_module_is_auto_loaded (pModule))  // don't display modules that can't be disabled
 	{
 		//g_print (" + %s\n",  pModule->pVisitCard->cIconFilePath);
-		gchar *cIcon = cairo_dock_get_icon_for_gui (pModule->pVisitCard->cModuleName,
-			pModule->pVisitCard->cIconFilePath,
-			pModule->pVisitCard->cShareDataDir,
-			CAIRO_DOCK_PLUGINS_ICON_SIZE,
-			TRUE);
-		GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cIcon, CAIRO_DOCK_PLUGINS_ICON_SIZE, CAIRO_DOCK_PLUGINS_ICON_SIZE, NULL);
+		int iSize = cairo_dock_search_icon_size (GTK_ICON_SIZE_LARGE_TOOLBAR);
+		gchar *cIcon = cairo_dock_search_icon_s_path (pModule->pVisitCard->cIconFilePath, iSize);
+		GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cIcon, iSize, iSize, NULL);
 		g_free (cIcon);
 
 		GtkTreeIter iter;

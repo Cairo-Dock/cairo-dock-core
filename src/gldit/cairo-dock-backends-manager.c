@@ -25,7 +25,6 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-gui-factory.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-desklet-manager.h"

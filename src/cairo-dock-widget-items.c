@@ -52,7 +52,7 @@
 #define CAIRO_DOCK_LAUNCHER_PANEL_WIDTH 1200 // matttbe: 800
 #define CAIRO_DOCK_LAUNCHER_PANEL_HEIGHT 700 // matttbe: 500
 #define CAIRO_DOCK_LEFT_PANE_MIN_WIDTH 100
-#define CAIRO_DOCK_LEFT_PANE_DEFAULT_WIDTH 340 // matttbe: 200
+#define CAIRO_DOCK_LEFT_PANE_DEFAULT_WIDTH 300 // matttbe: 200
 #define CAIRO_DOCK_RIGHT_PANE_MIN_WIDTH 800 // matttbe: 500
 
 #define CAIRO_DOCK_ITEM_ICON_SIZE 32
@@ -296,11 +296,12 @@ static void _add_one_icon_to_model (Icon *pIcon, GtkTreeStore *model, GtkTreeIte
 	GdkPixbuf *pixbuf = NULL;
 	gchar *cImagePath = NULL;
 	const gchar *cName;
+	int iSize = cairo_dock_search_icon_size (GTK_ICON_SIZE_LARGE_TOOLBAR);
 	
 	// set an image.
 	if (pIcon->cFileName != NULL)
 	{
-		cImagePath = cairo_dock_search_icon_s_path (pIcon->cFileName, CAIRO_DOCK_ITEM_ICON_SIZE);
+		cImagePath = cairo_dock_search_icon_s_path (pIcon->cFileName, iSize);
 	}
 	if (cImagePath == NULL || ! g_file_test (cImagePath, G_FILE_TEST_EXISTS))
 	{
@@ -312,7 +313,7 @@ static void _add_one_icon_to_model (Icon *pIcon, GtkTreeStore *model, GtkTreeIte
 		}
 		else if (CAIRO_DOCK_IS_APPLET (pIcon))
 		{
-			cImagePath = g_strdup (pIcon->pModuleInstance->pModule->pVisitCard->cIconFilePath);
+			cImagePath = cairo_dock_search_icon_s_path (pIcon->pModuleInstance->pModule->pVisitCard->cIconFilePath, iSize);
 		}
 		else
 		{
@@ -327,7 +328,7 @@ static void _add_one_icon_to_model (Icon *pIcon, GtkTreeStore *model, GtkTreeIte
 	
 	if (cImagePath != NULL)
 	{
-		pixbuf = gdk_pixbuf_new_from_file_at_size (cImagePath, CAIRO_DOCK_ITEM_ICON_SIZE, CAIRO_DOCK_ITEM_ICON_SIZE, &erreur);
+		pixbuf = gdk_pixbuf_new_from_file_at_size (cImagePath, iSize, iSize, &erreur);
 		if (erreur != NULL)
 		{
 			cd_warning (erreur->message);
@@ -408,9 +409,10 @@ static inline void _add_one_module (G_GNUC_UNUSED const gchar *cModuleName, Gldi
 	gtk_tree_store_append (model, &iter, NULL);
 	
 	GdkPixbuf *pixbuf = NULL;
-	gchar *cImagePath = g_strdup (pModuleInstance->pModule->pVisitCard->cIconFilePath);
+	int iSize = cairo_dock_search_icon_size (GTK_ICON_SIZE_LARGE_TOOLBAR);
+	gchar *cImagePath = cairo_dock_search_icon_s_path (pModuleInstance->pModule->pVisitCard->cIconFilePath, iSize);
 	if (cImagePath != NULL)
-		pixbuf = gdk_pixbuf_new_from_file_at_size (cImagePath, CAIRO_DOCK_ITEM_ICON_SIZE, CAIRO_DOCK_ITEM_ICON_SIZE, NULL);
+		pixbuf = gdk_pixbuf_new_from_file_at_size (cImagePath, iSize, iSize, NULL);
 	gtk_tree_store_set (model, &iter,
 		CD_MODEL_NAME, pModuleInstance->pModule->pVisitCard->cTitle,
 		CD_MODEL_PIXBUF, pixbuf,

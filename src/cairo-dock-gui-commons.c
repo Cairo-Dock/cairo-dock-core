@@ -229,10 +229,6 @@ gchar * cairo_dock_get_icon_for_gui (const gchar *cGroupName, const gchar *cIcon
 				cIconPath = g_strdup (cIcon);
 			}
 		}
-		else if (strncmp (cIcon, "gtk-", 4) == 0)
-		{
-			cIconPath = g_strdup (cIcon);
-		}
 		else  // categorie ou module interne.
 		{
 			if (! bFastLoad)

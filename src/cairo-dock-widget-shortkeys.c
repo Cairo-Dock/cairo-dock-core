@@ -21,6 +21,7 @@
 #include "gldi-icon-names.h"
 #include "cairo-dock-struct.h"
 #include "cairo-dock-gui-factory.h"
+#include "cairo-dock-icon-manager.h"  // cairo_dock_search_icon_size
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-log.h"
@@ -183,8 +184,12 @@ static void _cairo_dock_render_shortkey (G_GNUC_UNUSED GtkTreeViewColumn *tree_c
 }
 void cairo_dock_add_shortkey_to_model (GldiShortkey *binding, GtkListStore *pModel)
 {
-	//g_print (" + %s\n",  pModule->pVisitCard->cIconFilePath);
-	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (binding->cIconFilePath, 32, 32, NULL);
+	g_print (" + %s\n",  binding->cIconFilePath);
+	int iSize = cairo_dock_search_icon_size (GTK_ICON_SIZE_LARGE_TOOLBAR);
+	gchar *cIcon = cairo_dock_search_icon_s_path (binding->cIconFilePath,
+		iSize);
+	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cIcon, iSize, iSize, NULL);
+	g_free (cIcon);
 	GtkTreeIter iter;
 	memset (&iter, 0, sizeof (GtkTreeIter));
 	gtk_list_store_append (GTK_LIST_STORE (pModel), &iter);

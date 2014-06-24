@@ -452,7 +452,7 @@ GtkWidget *_add_item_sub_menu (Icon *icon, GtkWidget *pMenu)
 		if (icon->cFileName != NULL)  // if possible, use the actual icon
 			cIconFile = cairo_dock_search_icon_s_path (icon->cFileName, cairo_dock_search_icon_size (GTK_ICON_SIZE_LARGE_TOOLBAR));
 		if (!cIconFile)  // else, use the default applet's icon.
-			cIconFile = g_strdup (icon->pModuleInstance->pModule->pVisitCard->cIconFilePath);
+			cIconFile = cairo_dock_search_icon_s_path (icon->pModuleInstance->pModule->pVisitCard->cIconFilePath, cairo_dock_search_icon_size (GTK_ICON_SIZE_LARGE_TOOLBAR));
 	}
 	else if (CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))
 	{
