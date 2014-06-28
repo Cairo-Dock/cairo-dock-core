@@ -196,8 +196,10 @@ void _init_menu_style (void)
 				background-color: @menuitem_bg_color; \
 				background-image: none; \
 				box-shadow: none; \
-				border-color: transparent; \
-				padding: 2px; \
+				border-image: none; \
+				border-color: @menuitem_child_bg_color; \
+				border-width: 2px; \
+				border-style: solid;padding: 2px; \
 				-unico-focus-outer-stroke-color: transparent; \
 			} \
 			.gldimenuitem .scale, \
