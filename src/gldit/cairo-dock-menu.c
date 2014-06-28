@@ -198,7 +198,7 @@ void _init_menu_style (void)
 				box-shadow: none; \
 				border-image: none; \
 				border-color: @menuitem_child_bg_color; \
-				border-width: 2px; \
+				border-width: 1px; \
 				border-style: solid;padding: 2px; \
 				-unico-focus-outer-stroke-color: transparent; \
 			} \

@@ -48,6 +48,12 @@ struct _GldiMenuItemParams {
 };
 
 
+#if GTK_CHECK_VERSION (3, 10, 0)
+#define GLDI_IS_IMAGE_MENU_ITEM GTK3_IS_IMAGE_MENU_ITEM
+#else
+#define GLDI_IS_IMAGE_MENU_ITEM GTK_IS_IMAGE_MENU_ITEM
+#endif
+
 void _init_menu_style (void);
 
 /** Creates a new menu that will point on a given Icon. If the Icon is NULL, it will be placed under the mouse.
