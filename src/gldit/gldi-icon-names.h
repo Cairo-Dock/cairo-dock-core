@@ -121,6 +121,8 @@ G_BEGIN_DECLS
 
 #define GLDI_ICON_NAME_MISSING_IMAGE "image-missing"
 
+#define GLDI_ICON_NAME_MEDIA_EJECT "media-eject"
+
 #define GLDI_ICON_NAME_MEDIA_FORWARD "media-seek-forward"
 
 #define GLDI_ICON_NAME_MEDIA_NEXT "media-skip-forward"
