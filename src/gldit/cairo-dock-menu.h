@@ -48,12 +48,6 @@ struct _GldiMenuItemParams {
 };
 
 
-#if GTK_CHECK_VERSION (3, 10, 0)
-#define GLDI_IS_IMAGE_MENU_ITEM GTK3_IS_IMAGE_MENU_ITEM
-#else
-#define GLDI_IS_IMAGE_MENU_ITEM GTK_IS_IMAGE_MENU_ITEM
-#endif
-
 void _init_menu_style (void);
 
 /** Creates a new menu that will point on a given Icon. If the Icon is NULL, it will be placed under the mouse.
@@ -159,6 +153,8 @@ GtkWidget *gldi_menu_add_sub_menu_full (GtkWidget *pMenu, const gchar *cLabel, c
  * @param pMenu the menu
  */
 void gldi_menu_add_separator (GtkWidget *pMenu);
+
+gboolean GLDI_IS_IMAGE_MENU_ITEM (GtkWidget *pMenuItem);
 
 G_END_DECLS
 #endif

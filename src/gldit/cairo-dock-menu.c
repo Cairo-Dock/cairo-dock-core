@@ -1067,3 +1067,12 @@ void gldi_menu_add_separator (GtkWidget *pMenu)
 	_init_menu_item (pMenuItem);
 	#endif
 }
+
+gboolean GLDI_IS_IMAGE_MENU_ITEM (GtkWidget *pMenuItem)  // defined as a function to not export gtk3imagemenuitem.h
+{
+	#if GTK_CHECK_VERSION (3, 10, 0)
+	return GTK3_IS_IMAGE_MENU_ITEM (pMenuItem);
+	#else
+	return GTK_IS_IMAGE_MENU_ITEM (pMenuItem);
+	#endif
+}
