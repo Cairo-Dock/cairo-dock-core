@@ -1,6 +1,7 @@
-#3.0.0.0rc1
+#3.3.99.beta1
 
 #[gtk-about]
+
 [Desktop Entry]
 
 #F[Icon]
@@ -23,4 +24,3 @@ Order=12.25
 
 Icon Type=2
 Type=Separator
-Origin=
