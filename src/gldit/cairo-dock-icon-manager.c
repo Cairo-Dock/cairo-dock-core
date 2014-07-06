@@ -772,7 +772,6 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 	if (bSeparatorsNeedReload || bSeparatorNeedRedraw)
 	{
 		gldi_docks_foreach ((GHFunc)_reload_separators, GINT_TO_POINTER(bSeparatorsNeedReload));
-		return;
 	}
 	
 	gboolean bThemeChanged = (g_strcmp0 (pIcons->cIconTheme, pPrevIcons->cIconTheme) != 0);
