@@ -1607,18 +1607,18 @@ static gboolean _on_press_menu_item (GtkWidget* pWidget, GdkEventButton *pEvent,
 		if (x >= xb && x < (xb + alloc.width)
 		&& y >= yb && y < (yb + alloc.height))
 		{
-			gtk_widget_set_state_flags (pButton, GTK_STATE_FLAG_ACTIVE, FALSE);
+			gtk_widget_set_state_flags (pButton, GTK_STATE_FLAG_ACTIVE, TRUE);
 			gtk_widget_set_state_flags (
 				gtk_bin_get_child(GTK_BIN(pButton)),
-				GTK_STATE_FLAG_ACTIVE, FALSE);
+				GTK_STATE_FLAG_ACTIVE, TRUE);
 			gtk_button_clicked (GTK_BUTTON (pButton));
 		}
 		else
 		{
-			gtk_widget_set_state_flags (pButton, GTK_STATE_FLAG_NORMAL, FALSE);
+			gtk_widget_set_state_flags (pButton, GTK_STATE_FLAG_NORMAL, TRUE);
 			gtk_widget_set_state_flags (
 				gtk_bin_get_child(GTK_BIN(pButton)),
-				GTK_STATE_FLAG_NORMAL, FALSE);
+				GTK_STATE_FLAG_NORMAL, TRUE);
 		}
 	}
 	g_list_free (children);
@@ -1652,21 +1652,21 @@ gboolean _on_motion_notify_menu_item (GtkWidget* pWidget,
 		if (x >= xb && x < (xb + alloc.width)
 		&& y >= yb && y < (yb + alloc.height))  // the mouse is inside the button -> select it
 		{
-			gtk_widget_set_state_flags (pButton, GTK_STATE_FLAG_SELECTED, FALSE);
+			gtk_widget_set_state_flags (pButton, GTK_STATE_FLAG_PRELIGHT, TRUE);
 			gtk_widget_set_state_flags (
 				gtk_bin_get_child(GTK_BIN(pButton)),
-				GTK_STATE_FLAG_PRELIGHT, FALSE);
+				GTK_STATE_FLAG_PRELIGHT, TRUE);
 		}
 		else  // else deselect it, in case it was selected
 		{
-			gtk_widget_set_state_flags (pButton, GTK_STATE_FLAG_NORMAL, FALSE);
+			gtk_widget_set_state_flags (pButton, GTK_STATE_FLAG_NORMAL, TRUE);
 			gtk_widget_set_state_flags (
 				gtk_bin_get_child(GTK_BIN(pButton)),
-				GTK_STATE_FLAG_NORMAL, FALSE);
+				GTK_STATE_FLAG_NORMAL, TRUE);
 		}
 	}
 	GtkWidget *pLabel = children->data;  // force the label to be in a normal state
-	gtk_widget_set_state_flags (pLabel, GTK_STATE_FLAG_NORMAL, FALSE);
+	gtk_widget_set_state_flags (pLabel, GTK_STATE_FLAG_NORMAL, TRUE);
 	g_list_free (children);
 	gtk_widget_queue_draw (pWidget);  // and redraw everything
 	return FALSE;
@@ -1682,10 +1682,10 @@ static gboolean _on_leave_menu_item (GtkWidget* pWidget,
 	for (c = children->next; c != NULL; c = c->next)
 	{
 		pButton = GTK_WIDGET(c->data);
-		gtk_widget_set_state_flags (pButton, GTK_STATE_FLAG_NORMAL, FALSE);
+		gtk_widget_set_state_flags (pButton, GTK_STATE_FLAG_NORMAL, TRUE);
 		gtk_widget_set_state_flags(
 			gtk_bin_get_child (GTK_BIN(pButton)),
-			GTK_STATE_FLAG_NORMAL, FALSE);
+			GTK_STATE_FLAG_NORMAL, TRUE);
 	}
 	g_list_free (children);
 	gtk_widget_queue_draw (pWidget);
@@ -1698,13 +1698,14 @@ static gboolean _on_enter_menu_item (GtkWidget* pWidget,
 	GtkWidget *hbox = gtk_bin_get_child (GTK_BIN (pWidget));
 	GList *children = gtk_container_get_children (GTK_CONTAINER (hbox));
 	GtkWidget* pLabel = children->data;  // force the label to be in a normal state
-	gtk_widget_set_state_flags (pLabel, GTK_STATE_FLAG_NORMAL, FALSE);
+	gtk_widget_set_state_flags (pLabel, GTK_STATE_FLAG_NORMAL, TRUE);
 	g_list_free (children);
 	gtk_widget_queue_draw (pWidget);
 	return FALSE;
 }
 static GtkWidget *_add_new_button_to_hbox (const gchar *gtkStock, const gchar *cTooltip, GCallback pFunction, GtkWidget *hbox, gpointer data)
 {
+	g_print ("%s (%s)\n", __func__, gtkStock);
 	GtkWidget *pButton = gtk_button_new ();
 	/*
 		GtkStyleContext *ctx = gtk_widget_get_style_context (pButton);
@@ -1754,12 +1755,10 @@ static GtkWidget *_add_menu_item_with_buttons (GtkWidget *menu)
 		"enter-notify-event",
 		G_CALLBACK (_on_enter_menu_item),
 		NULL);  // to force the label to not highlight (it gets highlighted, even if we overwrite the motion_notify_event callback)
-	//GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (pMenuItem);
-	//widget_class->draw = _draw_menu_item;  // we don't want the whole menu-item to be higlighted, but only the currently pointed button; so we draw the menu-item ourselves.
 	g_signal_connect (G_OBJECT (pMenuItem),
 		"draw",
 		G_CALLBACK (_draw_menu_item),
-		NULL);
+		NULL);  // we don't want the whole menu-item to be higlighted, but only the currently pointed button; so we draw the menu-item ourselves.
 	
 	GtkWidget *hbox = _gtk_hbox_new (1);
 	gtk_container_add (GTK_CONTAINER (pMenuItem), hbox);
