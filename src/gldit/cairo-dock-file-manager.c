@@ -20,6 +20,9 @@
 #include <stdlib.h>      // atoi
 #include <string.h>      // memset
 #include <sys/stat.h>    // stat
+#include <fcntl.h>  // open
+#include <sys/sendfile.h>  // sendfile
+#include <errno.h>  // errno
 
 #include "gldi-config.h"
 #include "cairo-dock-dock-factory.h"
@@ -482,41 +485,53 @@ int cairo_dock_get_file_size (const gchar *cFilePath)
 
 gboolean cairo_dock_copy_file (const gchar *cFilePath, const gchar *cDestPath)
 {
-	GError *error = NULL;
-	gchar *cContent = NULL;
-	gsize length = 0;
-	g_file_get_contents (cFilePath,
-		&cContent,
-		&length,
-		&error);
-	if (error != NULL)
+	gboolean ret = TRUE;
+	// open both files
+	int src_fd = open (cFilePath, O_RDONLY);
+	int dest_fd = open (cDestPath, O_CREAT | O_WRONLY, S_IRUSR|S_IWUSR | S_IRGRP | S_IROTH);  // mode=644
+	struct stat stat;
+	// get data size to be copied
+	if (fstat (src_fd, &stat) < 0)
 	{
-		cd_warning ("couldn't copy file '%s' (%s)", cFilePath, error->message);
-		g_error_free (error);
-		return FALSE;
+		cd_warning ("couldn't get info of file '%s' (%s)", cFilePath, strerror(errno));
+		ret = FALSE;
 	}
-	
-	gchar *cDestFilePath = NULL;
-	if (g_file_test (cDestPath, G_FILE_TEST_IS_DIR))
+	else
 	{
-		gchar *cFileName = g_path_get_basename (cFilePath);
-		cDestFilePath = g_strdup_printf ("%s/%s", cDestPath, cFileName);
-		g_free (cFileName);
+		// perform in-kernel transfer (zero copy to user space)
+		int size;
+		#ifdef __FreeBSD__
+		size = sendfile (src_fd, dest_fd, 0, stat.st_size, NULL, NULL, 0);
+		#else  // Linux >= 2.6.33 for being able to have a regular file as the output socket
+		size = sendfile (dest_fd, src_fd, NULL, stat.st_size);  // note the inversion between both calls ^_^;
+		#endif
+		if (size < 0)  // error, fallback to a read-write method
+		{
+			cd_debug ("couldn't fast-copy file '%s' to '%s' (%s)", cFilePath, cDestPath, strerror(errno));
+			// read data
+			char *buf = g_new (char, stat.st_size);
+			size = read (src_fd, buf, stat.st_size);
+			if (size < 0)
+			{
+				cd_warning ("couldn't read file '%s' (%s)", cFilePath, strerror(errno));
+				ret = FALSE;
+			}
+			else
+			{
+				// copy data
+				size = write (dest_fd, buf, stat.st_size);
+				if (size < 0)
+				{
+					cd_warning ("couldn't write to file '%s' (%s)", cDestPath, strerror(errno));
+					ret = FALSE;
+				}
+			}
+			g_free (buf);
+		}
 	}
-	
-	g_file_set_contents (cDestFilePath?cDestFilePath:cDestPath,
-		cContent,
-		length,
-		&error);
-	g_free (cDestFilePath);
-	g_free (cContent);
-	if (error != NULL)
-	{
-		cd_warning ("couldn't copy file '%s' (%s)", cFilePath, error->message);
-		g_error_free (error);
-		return FALSE;
-	}
-	return TRUE;
+	close (dest_fd);
+	close (src_fd);
+	return ret;
 }
 
 
