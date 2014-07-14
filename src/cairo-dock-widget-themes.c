@@ -216,7 +216,7 @@ static gboolean _cairo_dock_load_theme (GKeyFile* pKeyFile, ThemesWidget *pTheme
 		gtk_window_set_transient_for (GTK_WINDOW (pWaitingDialog), pMainWindow);
 		gtk_window_set_modal (GTK_WINDOW (pWaitingDialog), TRUE);
 
-		GtkWidget *pMainVBox = _gtk_vbox_new (CAIRO_DOCK_FRAME_MARGIN);
+		GtkWidget *pMainVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_FRAME_MARGIN);
 		gtk_container_add (GTK_CONTAINER (pWaitingDialog), pMainVBox);
 		
 		GtkWidget *pLabel = gtk_label_new (_("Please wait while importing the theme..."));
@@ -547,7 +547,7 @@ static void _make_tree_view_for_themes (ThemesWidget *pThemesWidget, GPtrArray *
 	
 	//\______________ add a preview widget next to the treeview
 	GtkWidget *pPreviewBox = cairo_dock_gui_make_preview_box (GTK_WIDGET (pThemesWidget->pMainWindow), pOneWidget, FALSE, 2, NULL, CAIRO_DOCK_SHARE_DATA_DIR"/images/"CAIRO_DOCK_LOGO, pDataGarbage);
-	GtkWidget *pWidgetBox = _gtk_hbox_new (CAIRO_DOCK_GUI_MARGIN);
+	GtkWidget *pWidgetBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_GUI_MARGIN);
 	gtk_box_pack_start (GTK_BOX (pWidgetBox), pScrolledWindow, TRUE, TRUE, 0);
 	gtk_box_pack_start (GTK_BOX (pWidgetBox), pPreviewBox, TRUE, TRUE, 0);
 	
@@ -591,12 +591,12 @@ static void _make_combo_for_user_themes (ThemesWidget *pThemesWidget, GPtrArray 
 	_fill_combo_with_user_themes (pThemesWidget);
 	
 	//\______________ insert the widget.
-	GtkWidget *pHBox = _gtk_hbox_new (CAIRO_DOCK_GUI_MARGIN);
+	GtkWidget *pHBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_GUI_MARGIN);
 	GtkWidget *pLabel = gtk_label_new (_("Save as:"));
 	
 	//\______________ add a preview widget under to the combo
 	GtkWidget *pPreviewBox = cairo_dock_gui_make_preview_box (GTK_WIDGET (pThemesWidget->pMainWindow), pOneWidget, FALSE, 1, NULL, NULL, pDataGarbage);
-	GtkWidget *pWidgetBox = _gtk_vbox_new (CAIRO_DOCK_GUI_MARGIN);
+	GtkWidget *pWidgetBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_GUI_MARGIN);
 	
 	GtkWidget *pAlign = gtk_alignment_new (0, 0, 1, 0);
 	gtk_container_add (GTK_CONTAINER (pAlign), pLabel);

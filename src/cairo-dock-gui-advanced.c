@@ -1302,13 +1302,11 @@ static void on_toggle_hide_others (GtkCheckMenuItem *pMenuItem, G_GNUC_UNUSED gp
 	bHideOther = gtk_check_menu_item_get_active (pMenuItem);
 	_trigger_current_filter ();
 }
-#if (GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION >= 16)
 static void on_clear_filter (GtkEntry *pEntry, G_GNUC_UNUSED GtkEntryIconPosition icon_pos, G_GNUC_UNUSED GdkEvent *event, G_GNUC_UNUSED gpointer data)
 {
 	gtk_entry_set_text (pEntry, "");
 	cairo_dock_apply_current_filter (NULL, FALSE, FALSE, FALSE, FALSE);
 }
-#endif
 
 
   ////////////
@@ -1364,7 +1362,7 @@ static CairoDockGroupDescription *_add_group_button (const gchar *cGroupName, co
 	s_pGroupDescriptionList = g_list_prepend (s_pGroupDescriptionList, pGroupDescription);
 	
 	//\____________ On construit le bouton du groupe.
-	GtkWidget *pGroupHBox = _gtk_hbox_new (CAIRO_DOCK_FRAME_MARGIN);
+	GtkWidget *pGroupHBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_FRAME_MARGIN);
 	pGroupDescription->pGroupHBox = pGroupHBox;
 	
 	pGroupDescription->pActivateButton = gtk_check_button_new ();
@@ -1387,7 +1385,7 @@ static CairoDockGroupDescription *_add_group_button (const gchar *cGroupName, co
 	g_signal_connect (G_OBJECT (pGroupButton), "enter-notify-event", G_CALLBACK(on_enter_group_button), pGroupDescription);
 	g_signal_connect (G_OBJECT (pGroupButton), "leave-notify-event", G_CALLBACK(on_leave_group_button), NULL);
 
-	GtkWidget *pButtonHBox = _gtk_hbox_new (CAIRO_DOCK_FRAME_MARGIN);
+	GtkWidget *pButtonHBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_FRAME_MARGIN);
 	GtkWidget *pImage = _gtk_image_new_from_file (pGroupDescription->cIcon, GTK_ICON_SIZE_LARGE_TOOLBAR);
 	gtk_box_pack_start (GTK_BOX (pButtonHBox), pImage, FALSE, FALSE, 0);
 	pGroupDescription->pLabel = gtk_label_new (pGroupDescription->cTitle);
@@ -1634,7 +1632,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 	gtk_window_set_icon_from_file (GTK_WINDOW (s_pMainWindow), cIconPath, NULL);
 	g_free (cIconPath);
 
-	GtkWidget *pMainHBox = _gtk_hbox_new (0);
+	GtkWidget *pMainHBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_container_add (GTK_CONTAINER (s_pMainWindow), pMainHBox);
 	
 	if (gldi_desktop_get_width() > CAIRO_DOCK_CONF_PANEL_WIDTH)
@@ -1655,7 +1653,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 		s_iNbButtonsByRow = CAIRO_DOCK_NB_BUTTONS_BY_ROW_MIN;
 	}
 
-	GtkWidget *pCategoriesVBox = _gtk_vbox_new (CAIRO_DOCK_FRAME_MARGIN);
+	GtkWidget *pCategoriesVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_FRAME_MARGIN);
 	gtk_widget_set_size_request (pCategoriesVBox, s_iPreviewWidth+2*CAIRO_DOCK_FRAME_MARGIN, CAIRO_DOCK_PREVIEW_HEIGHT);
 	gtk_box_pack_start (GTK_BOX (pMainHBox),
 		pCategoriesVBox,
@@ -1663,13 +1661,13 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 		FALSE,
 		0);
 
-	GtkWidget *pVBox = _gtk_vbox_new (0);
+	GtkWidget *pVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	gtk_box_pack_start (GTK_BOX (pMainHBox),
 		pVBox,
 		TRUE,
 		TRUE,
 		0);
-	s_pGroupsVBox = _gtk_vbox_new (CAIRO_DOCK_TABLE_MARGIN);
+	s_pGroupsVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_TABLE_MARGIN);
 	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	GtkWidget *pViewport = gtk_viewport_new( NULL, NULL );
@@ -1686,7 +1684,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 	//\_____________ Filter.
 	// Empty box to get some space between window border and filter label
 	gtk_box_pack_start (GTK_BOX (pCategoriesVBox),
-		_gtk_hbox_new (CAIRO_DOCK_FRAME_MARGIN / 2),
+		gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_FRAME_MARGIN / 2),
 		FALSE,
 		FALSE,
 		0);
@@ -1699,9 +1697,9 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 		0);
 
 	// text entry
-	GtkWidget *pFilterBoxMargin = _gtk_vbox_new (0);
+	GtkWidget *pFilterBoxMargin = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_add (GTK_CONTAINER (pFilterFrame), pFilterBoxMargin);
-	GtkWidget *pFilterBox = _gtk_hbox_new (CAIRO_DOCK_FRAME_MARGIN);
+	GtkWidget *pFilterBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_FRAME_MARGIN);
 	gtk_box_pack_start (GTK_BOX (pFilterBoxMargin), pFilterBox, TRUE, TRUE, CAIRO_DOCK_FRAME_MARGIN); // Margin around filter box is applied here
 
 	s_pFilterEntry = gtk_entry_new ();
@@ -1712,16 +1710,14 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 		TRUE,
 		0);
 	//~ gtk_container_set_focus_child (GTK_CONTAINER (s_pMainWindow), pFilterBox); /// set focus to filter box
-	
-	#if (GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION >= 16)
+
 	gtk_entry_set_icon_activatable (GTK_ENTRY (s_pFilterEntry), GTK_ENTRY_ICON_SECONDARY, TRUE);
 	gtk_entry_set_icon_from_icon_name (GTK_ENTRY (s_pFilterEntry), GTK_ENTRY_ICON_SECONDARY, GLDI_ICON_NAME_CLEAR);
 	g_signal_connect (s_pFilterEntry, "icon-press", G_CALLBACK (on_clear_filter), NULL);
-	#endif
-	
+
 	// Filter Options Button
 	_reset_filter_state ();
-	
+
 	GtkWidget *pFilterOptionButton = gtk_button_new ();
 	gtk_box_pack_end (GTK_BOX (pFilterBox), pFilterOptionButton, FALSE, FALSE, 0);
 	GtkWidget *pFilterButtonImage = gtk_image_new_from_icon_name (GLDI_ICON_NAME_PREFERENCES, GTK_ICON_SIZE_MENU);
@@ -1755,15 +1751,11 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 		TRUE,  /// FALSE
 		0);
 	
-	GtkWidget *pCategoriesMargin = _gtk_hbox_new (0);
+	GtkWidget *pCategoriesMargin = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_container_add (GTK_CONTAINER (pCategoriesFrame), pCategoriesMargin);
 
 	s_pToolBar = gtk_toolbar_new ();
-	#if (GTK_MAJOR_VERSION < 3 && GTK_MINOR_VERSION < 16)
-	gtk_toolbar_set_orientation (GTK_TOOLBAR (s_pToolBar), GTK_ORIENTATION_VERTICAL);
-	#else
 	gtk_orientable_set_orientation (GTK_ORIENTABLE (s_pToolBar), GTK_ORIENTATION_VERTICAL);
-	#endif
 	gtk_toolbar_set_style (GTK_TOOLBAR (s_pToolBar), GTK_TOOLBAR_BOTH_HORIZ);
 	gtk_toolbar_set_show_arrow (GTK_TOOLBAR (s_pToolBar), TRUE);  /// FALSE
 	//gtk_widget_set (s_pToolBar, "height-request", 300, NULL);
@@ -1793,35 +1785,27 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 		pCategoryWidget = &s_pCategoryWidgetTables[i];
 		pCategoryWidget->pCategoryButton = pCategoryButton;
 	}
-	
+
 	//\_____________ On construit les widgets table de chaque categorie.
 	for (i = 0; i < CAIRO_DOCK_NB_CATEGORY; i ++)
 	{
 		pCategoryWidget = &s_pCategoryWidgetTables[i];
-		
+
 		pCategoryWidget->pFrame = gtk_frame_new (NULL);
 		gtk_container_set_border_width (GTK_CONTAINER (pCategoryWidget->pFrame), CAIRO_DOCK_FRAME_MARGIN);
 		gtk_frame_set_shadow_type (GTK_FRAME (pCategoryWidget->pFrame), GTK_SHADOW_OUT);
-		
+
 		GtkWidget *pLabel = gtk_label_new (NULL);
 		gchar *cLabel = g_strdup_printf ("<big><b>%s</b></big>", gettext (s_cCategoriesDescription[2*i]));
 		gtk_label_set_markup (GTK_LABEL (pLabel), cLabel);
 		g_free (cLabel);
 		gtk_frame_set_label_widget (GTK_FRAME (pCategoryWidget->pFrame), pLabel);
-		
-		#if GTK_CHECK_VERSION (3, 4, 0)
+
 		pCategoryWidget->pTable = gtk_grid_new ();
 		gtk_grid_set_row_spacing (GTK_GRID (pCategoryWidget->pTable), CAIRO_DOCK_FRAME_MARGIN);
 		gtk_grid_set_row_homogeneous (GTK_GRID (pCategoryWidget->pTable), TRUE);
 		///gtk_grid_set_column_spacing (GTK_GRID (pCategoryWidget->pTable), CAIRO_DOCK_FRAME_MARGIN);
 		gtk_grid_set_column_homogeneous (GTK_GRID (pCategoryWidget->pTable), TRUE);
-		#else
-		pCategoryWidget->pTable = gtk_table_new (1,
-			s_iNbButtonsByRow,
-			TRUE);
-		gtk_table_set_row_spacings (GTK_TABLE (pCategoryWidget->pTable), CAIRO_DOCK_FRAME_MARGIN);
-		///gtk_table_set_col_spacings (GTK_TABLE (pCategoryWidget->pTable), CAIRO_DOCK_FRAME_MARGIN);
-		#endif
 		gtk_container_add (GTK_CONTAINER (pCategoryWidget->pFrame),
 			pCategoryWidget->pTable);
 		gtk_box_pack_start (GTK_BOX (s_pGroupsVBox),
@@ -1861,13 +1845,13 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 	s_pActivateButton = gtk_check_button_new_with_label (_("Enable this module"));
 	g_signal_connect (G_OBJECT (s_pActivateButton), "clicked", G_CALLBACK(on_click_activate_current_group), NULL);
 
-	GtkWidget *pActivateButtonMargin = _gtk_hbox_new (0);
+	GtkWidget *pActivateButtonMargin = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_container_add (GTK_CONTAINER (s_pGroupFrame), pActivateButtonMargin);
 	gtk_box_pack_start (GTK_BOX (pActivateButtonMargin), s_pActivateButton, FALSE, FALSE, CAIRO_DOCK_FRAME_MARGIN);
 	gtk_widget_show_all (s_pActivateButton);
 	
 	//\_____________ On ajoute la zone de prevue.
-	s_pPreviewBox = _gtk_vbox_new (CAIRO_DOCK_FRAME_MARGIN);
+	s_pPreviewBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_FRAME_MARGIN);
 	gtk_box_pack_start (GTK_BOX (pCategoriesVBox),
 		s_pPreviewBox,
 		FALSE,
@@ -1878,7 +1862,7 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 	gtk_container_add (GTK_CONTAINER (s_pPreviewBox), s_pPreviewImage);
 	
 	//\_____________ On ajoute les boutons.
-	GtkWidget *pButtonsHBox = _gtk_hbox_new (CAIRO_DOCK_FRAME_MARGIN);
+	GtkWidget *pButtonsHBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_FRAME_MARGIN);
 	gtk_box_pack_end (GTK_BOX (pVBox),
 		pButtonsHBox,
 		FALSE,
@@ -1930,9 +1914,6 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 	
 	//\_____________ On ajoute la barre de status a la fin.
 	s_pStatusBar = gtk_statusbar_new ();
-	#if (GTK_MAJOR_VERSION < 3)
-	gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (s_pStatusBar), FALSE);
-	#endif
 	gtk_box_pack_start (GTK_BOX (pButtonsHBox),
 		s_pStatusBar,
 		TRUE,

@@ -185,11 +185,11 @@ GtkWidget *cairo_dock_build_generic_gui_window2 (const gchar *cTitle, int iWidth
 	if (cTitle != NULL)
 		gtk_window_set_title (GTK_WINDOW (pMainWindow), cTitle);
 	
-	GtkWidget *pMainVBox = _gtk_vbox_new (0*CAIRO_DOCK_FRAME_MARGIN);  // all elements will be packed in a VBox
+	GtkWidget *pMainVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0*CAIRO_DOCK_FRAME_MARGIN);  // all elements will be packed in a VBox
 	gtk_container_add (GTK_CONTAINER (pMainWindow), pMainVBox);
 	
 	//\_____________ add apply/quit buttons.
-	GtkWidget *pButtonsHBox = _gtk_hbox_new (CAIRO_DOCK_FRAME_MARGIN*2);
+	GtkWidget *pButtonsHBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_FRAME_MARGIN*2);
 	gtk_box_pack_end (GTK_BOX (pMainVBox),
 		pButtonsHBox,
 		FALSE,
@@ -222,9 +222,6 @@ GtkWidget *cairo_dock_build_generic_gui_window2 (const gchar *cTitle, int iWidth
 	
 	//\_____________ add a status-bar.
 	GtkWidget *pStatusBar = gtk_statusbar_new ();
-	#if (GTK_MAJOR_VERSION < 3)
-	gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (pStatusBar), FALSE);  // removed in GTK3 (gtk_window_set_has_resize_grip)
-	#endif
 	gtk_box_pack_start (GTK_BOX (pButtonsHBox),  // pMainVBox
 		pStatusBar,
 		FALSE,
@@ -282,7 +279,7 @@ GtkWidget *cairo_dock_build_generic_gui_window2 (const gchar *cTitle, int iWidth
 }*/
 static GtkWidget *_make_notebook_label (const gchar *cLabel, const gchar *cImage, int iSize)
 {
-	GtkWidget *hbox = _gtk_hbox_new (CAIRO_DOCK_FRAME_MARGIN);
+	GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_FRAME_MARGIN);
 	
 	GtkWidget *pImage = _gtk_image_new_from_file (cImage, iSize);
 	GtkWidget *pAlign = gtk_alignment_new (0.5, 0.5, 0., 1.);
@@ -314,14 +311,8 @@ static void _build_category_widget (CDCategory *pCategory)
 	gtk_widget_show_all (pCategory->pCdWidget->pWidget);
 }
 
-#if GTK_CHECK_VERSION (2, 22, 0)
 static void _on_switch_page (G_GNUC_UNUSED GtkNotebook *pNoteBook, GtkWidget *page, guint page_num, G_GNUC_UNUSED gpointer user_data)
 {
-#else
-static void _on_switch_page (GtkNotebook *pNoteBook, G_GNUC_UNUSED GtkNotebookPage *old_page, guint page_num, G_GNUC_UNUSED gpointer user_data)
-{
-	GtkWidget *page = gtk_notebook_get_nth_page (pNoteBook, page_num);
-#endif
 	CDCategory *pCategory = _get_category (page_num);
 	g_return_if_fail (pCategory != NULL);
 	if (pCategory->pCdWidget == NULL)
@@ -389,7 +380,7 @@ GtkWidget *cairo_dock_build_simple_gui_window (void)
 			pCategory->cIcon,
 			GTK_ICON_SIZE_LARGE_TOOLBAR);
 		gtk_size_group_add_widget (pSizeGroup, hbox);
-		GtkWidget *vbox = _gtk_vbox_new (CAIRO_DOCK_FRAME_MARGIN);
+		GtkWidget *vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_FRAME_MARGIN);
 		gtk_notebook_append_page (GTK_NOTEBOOK (pNoteBook),
 			vbox,
 			hbox);

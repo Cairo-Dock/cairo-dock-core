@@ -31,10 +31,6 @@
 #include "cairo-dock-struct.h"
 #include "cairo-dock-manager.h"
 
-#if (GTK_MAJOR_VERSION < 3)
-#include <gdk/gdkkeysyms.h> // GDK_Shift_[LR] for GTK2
-#endif
-
 G_BEGIN_DECLS
 
 /**
@@ -198,43 +194,17 @@ void cairo_dock_set_containers_non_sticky (void);
 
 void cairo_dock_disable_containers_opacity (void);
 
-#if (GTK_MAJOR_VERSION < 3 && GTK_MINOR_VERSION < 14)
-#define gldi_container_get_gdk_window(pContainer) (pContainer)->pWidget->window
-#else
 #define gldi_container_get_gdk_window(pContainer) gtk_widget_get_window ((pContainer)->pWidget)
-#endif
 
 #define gldi_container_get_Xid(pContainer) GDK_WINDOW_XID (gldi_container_get_gdk_window(pContainer))
 
-#if (GTK_MAJOR_VERSION < 3 && GTK_MINOR_VERSION < 18)
-#define gldi_container_is_visible(pContainer) GTK_WIDGET_VISIBLE ((pContainer)->pWidget)
-#else
 #define gldi_container_is_visible(pContainer) gtk_widget_get_visible ((pContainer)->pWidget)
-#endif
 
-#if (GTK_MAJOR_VERSION < 3)
-#define GLDI_KEY(x) GDK_##x
-#else
-#define GLDI_KEY(x) GDK_KEY_##x
-#endif
-
-#if (GTK_MAJOR_VERSION < 3)
-#define gldi_display_get_pointer(xptr, yptr) \
-	gdk_display_get_pointer (gdk_display_get_default(), NULL, xptr, yptr, NULL)
-#else
 #define gldi_display_get_pointer(xptr, yptr) do {\
 	GdkDeviceManager *_dm = gdk_display_get_device_manager (gdk_display_get_default());\
 	GdkDevice *_dev = gdk_device_manager_get_client_pointer (_dm);\
 	gdk_device_get_position (_dev, NULL, xptr, yptr); } while (0)
-#endif
 
-#if (GTK_MAJOR_VERSION < 3)
-#define gldi_container_update_mouse_position(pContainer) do {\
-	if ((pContainer)->bIsHorizontal) \
-		gdk_window_get_pointer (gldi_container_get_gdk_window (pContainer), &pContainer->iMouseX, &pContainer->iMouseY, NULL); \
-	else \
-		gdk_window_get_pointer (gldi_container_get_gdk_window (pContainer), &pContainer->iMouseY, &pContainer->iMouseX, NULL); } while (0)
-#else
 #define gldi_container_update_mouse_position(pContainer) do {\
 	GdkDeviceManager *pManager = gdk_display_get_device_manager (gtk_widget_get_display (pContainer->pWidget)); \
 	GdkDevice *pDevice = gdk_device_manager_get_client_pointer (pManager); \
@@ -242,7 +212,6 @@ void cairo_dock_disable_containers_opacity (void);
 		gdk_window_get_device_position (gldi_container_get_gdk_window (pContainer), pDevice, &pContainer->iMouseX, &pContainer->iMouseY, NULL); \
 	else \
 		gdk_window_get_device_position (gldi_container_get_gdk_window (pContainer), pDevice, &pContainer->iMouseY, &pContainer->iMouseX, NULL); } while (0)
-#endif
 
 
 /** Reserve a space on the screen for a Container; other windows won't overlap this space when maximised.
@@ -346,35 +315,16 @@ gboolean cairo_dock_emit_enter_signal (GldiContainer *pContainer);
 */
 GtkWidget *gldi_container_build_menu (GldiContainer *pContainer, Icon *icon);
 
-#if (GTK_MAJOR_VERSION < 3)
-#define _gtk_hbox_new(m) gtk_hbox_new (FALSE, m)
-#define _gtk_vbox_new(m) gtk_vbox_new (FALSE, m)
-#else
-#define _gtk_hbox_new(m) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, m)
-#define _gtk_vbox_new(m) gtk_box_new (GTK_ORIENTATION_VERTICAL, m)
-#endif
-
 
   /////////////////
  // INPUT SHAPE //
 /////////////////
 
-GldiShape *gldi_container_create_input_shape (GldiContainer *pContainer, int x, int y, int w, int h);
+cairo_region_t *gldi_container_create_input_shape (GldiContainer *pContainer, int x, int y, int w, int h);
 
 // Note: if gdkwindow->shape == NULL, setting a NULL shape will do nothing
-#if (GTK_MAJOR_VERSION < 3)
-#define gldi_container_set_input_shape(pContainer, pShape) \
-gtk_widget_input_shape_combine_mask ((pContainer)->pWidget, pShape, 0, 0)
-#else // GTK3, cairo_region_t
 #define gldi_container_set_input_shape(pContainer, pShape) \
 gtk_widget_input_shape_combine_region ((pContainer)->pWidget, pShape)
-#endif
-
-#if (GTK_MAJOR_VERSION < 3)
-#define gldi_shape_destroy(pShape) g_object_unref (pShape)
-#else
-#define gldi_shape_destroy(pShape) cairo_region_destroy (pShape)
-#endif
 
 
 void gldi_register_containers_manager (void);

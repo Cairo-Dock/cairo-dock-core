@@ -40,11 +40,7 @@ extern GldiContainer *g_pPrimaryContainer;
 static Display *s_XDisplay = NULL;
 static GLXContext s_XContext = 0;
 static XVisualInfo *s_XVisInfo = NULL;
-#if (GTK_MAJOR_VERSION < 3)  // GTK2
-GdkColormap *s_pGdkColormap = NULL;
-#else  // GTK3
 GdkVisual *s_pGdkVisual = NULL;
-#endif
 #define _gldi_container_get_Xid(pContainer) GDK_WINDOW_XID (gldi_container_get_gdk_window(pContainer))
 
 static gboolean _check_client_glx_extension (const char *extName)
@@ -201,13 +197,8 @@ static gboolean _initialize_opengl_backend (gboolean bForceOpenGL)
 	//\_________________ create a colormap based on this visual.
 	GdkScreen *screen = gdk_screen_get_default ();
 	GdkVisual *pGdkVisual = gdk_x11_screen_lookup_visual (screen, pVisInfo->visualid);
-	#if (GTK_MAJOR_VERSION < 3)
-	Colormap XColormap = XCreateColormap (dpy, DefaultRootWindow (dpy), pVisInfo->visual, AllocNone);
-	s_pGdkColormap = gdk_x11_colormap_foreign_new (pGdkVisual, XColormap);
-	#else
 	s_pGdkVisual = pGdkVisual;
 	g_return_val_if_fail (s_pGdkVisual != NULL, FALSE);
-	#endif
 	s_XVisInfo = pVisInfo;
 	/** Note: this is where we can't use gtkglext: gdk_x11_gl_config_new_from_visualid() sets a new colormap on the root window, and Qt doesn't like that
 	cf https://bugzilla.redhat.com/show_bug.cgi?id=440340
@@ -252,11 +243,7 @@ static void _container_end_draw (GldiContainer *pContainer)
 static void _container_init (GldiContainer *pContainer)
 {
 	// Set the visual we found during the init
-	#if (GTK_MAJOR_VERSION < 3)
-	gtk_widget_set_colormap (pContainer->pWidget, s_pGdkColormap);
-	#else
 	gtk_widget_set_visual (pContainer->pWidget, s_pGdkVisual);
-	#endif
 	
 	// create a GL context for this container (this way, we can set the viewport once and for all).
 	Display *dpy = s_XDisplay;
@@ -296,12 +283,8 @@ void gldi_register_glx_backend (void)
 	gmb.container_init = _container_init;
 	gmb.container_finish = _container_finish;
 	gldi_gl_manager_register_backend (&gmb);
-	
-	#if (GTK_MAJOR_VERSION < 3)
-	s_XDisplay = gdk_x11_display_get_xdisplay (gdk_display_get_default ());  /// for an obscur reason, using our own XDisplay here causes the 'gtk_widget_set_colormap' to screw things (invisible dock, or even a crash later). So we keep using the GDK display as we did before 3.3, it should stay ok since GTK2 is frozen.
-	#else
+
 	s_XDisplay = cairo_dock_get_X_display ();  // initialize it once and for all at the beginning; we use this display rather than the GDK one to avoid the GDK X errors check.
-	#endif
 }
 
 #else

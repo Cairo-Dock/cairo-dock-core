@@ -132,7 +132,7 @@ static void _cairo_dock_add_about_page (GtkWidget *pNoteBook, const gchar *cPage
 	GtkWidget *pPageLabel, *pAboutLabel;
 	
 	pPageLabel = gtk_label_new (cPageLabel);
-	pVBox = _gtk_vbox_new (0);
+	pVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	#if GTK_CHECK_VERSION (3, 8, 0)
@@ -186,21 +186,17 @@ static void _cairo_dock_about (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GldiContain
 		G_CALLBACK (gtk_widget_destroy),
 		pDialog);
 
-#if (GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION >= 14)
 	GtkWidget *pContentBox = gtk_dialog_get_content_area (GTK_DIALOG(pDialog));
-#else
-	GtkWidget *pContentBox =  GTK_DIALOG(pDialog)->vbox;
-#endif
-	
+
 	// logo + links
-	GtkWidget *pHBox = _gtk_hbox_new (0);
+	GtkWidget *pHBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start (GTK_BOX (pContentBox), pHBox, FALSE, FALSE, 0);
-	
+
 	const gchar *cImagePath = CAIRO_DOCK_SHARE_DATA_DIR"/images/"CAIRO_DOCK_LOGO;
 	GtkWidget *pImage = gtk_image_new_from_file (cImagePath);
 	gtk_box_pack_start (GTK_BOX (pHBox), pImage, FALSE, FALSE, 0);
 
-	GtkWidget *pVBox = _gtk_vbox_new (0);
+	GtkWidget *pVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	gtk_box_pack_start (GTK_BOX (pHBox), pVBox, FALSE, FALSE, 0);
 	
 	GtkWidget *pLink = gtk_link_button_new_with_label (CAIRO_DOCK_SITE_URL, "Cairo-Dock (2007-2014)\n version "CAIRO_DOCK_VERSION);
@@ -843,8 +839,8 @@ static void _cairo_dock_set_sensitive_quit_menu (G_GNUC_UNUSED GtkWidget *pMenuI
 {
 	// pMenuItem not used because we want to only modify one entry
 	if (pKey->type == GDK_KEY_PRESS &&
-		(pKey->keyval == GLDI_KEY (Shift_L) || 
-		pKey->keyval == GLDI_KEY (Shift_R))) // pressed
+		(pKey->keyval == GDK_KEY_Shift_L || 
+		pKey->keyval == GDK_KEY_Shift_R)) // pressed
 		gtk_widget_set_sensitive (pQuitEntry, TRUE); // unlocked
 	else if (pKey->state & GDK_SHIFT_MASK) // released
 		gtk_widget_set_sensitive (pQuitEntry, FALSE); // locked)
@@ -986,22 +982,22 @@ static void _cairo_dock_remove_custom_appli_icon (G_GNUC_UNUSED GtkMenuItem *pMe
 gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *pUserData, Icon *icon, GldiContainer *pContainer, GtkWidget *menu, G_GNUC_UNUSED gboolean *bDiscardMenu)
 {
 	static gpointer data[3];
-	
+
 	if (CAIRO_DOCK_IS_DESKLET (pContainer) && icon != NULL && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // not on the icons of a desklet, except the applet icon (on a desklet, it's easy to click out of any icon).
 		return GLDI_NOTIFICATION_LET_PASS;
-	
+
 	if (CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->iRefCount > 0)  // not on the sub-docks, except user sub-docks.
 	{
 		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (CAIRO_DOCK (pContainer), NULL);
 		if (pPointingIcon != NULL && ! CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pPointingIcon))
 			return GLDI_NOTIFICATION_LET_PASS;
 	}
-	
+
 	GtkWidget *pMenuItem;
-	
+
 	//\_________________________ First item is the Cairo-Dock sub-menu.
 	GtkWidget *pSubMenu = cairo_dock_create_sub_menu ("Cairo-Dock", menu, CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON);
-	
+
 	// theme settings
 	if (! cairo_dock_is_locked ())
 	{
@@ -1012,7 +1008,7 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
 			pSubMenu,
 			NULL);
 		gtk_widget_set_tooltip_text (pMenuItem, _("Configure behaviour, appearance, and applets."));
-		
+
 		// root dock settings
 		if (CAIRO_DOCK_IS_DOCK (pContainer) && ! CAIRO_DOCK (pContainer)->bIsMainDock && CAIRO_DOCK (pContainer)->iRefCount == 0)
 		{
@@ -1029,7 +1025,7 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
 				pSubMenu,
 				CAIRO_DOCK (pContainer));
 		}
-		
+
 		// themes
 		if (cairo_dock_can_manage_themes ())
 		{
@@ -1040,15 +1036,15 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
 				NULL);
 			gtk_widget_set_tooltip_text (pMenuItem, _("Choose from amongst many themes on the server or save your current theme."));
 		}
-		
+
 		// add new item
 		if (CAIRO_DOCK_IS_DOCK (pContainer))
 		{
 			_add_add_entry (pSubMenu, data);
 		}
-		
+
 		gldi_menu_add_separator (pSubMenu);
-		
+
 		// lock icons position
 		pMenuItem = gtk_check_menu_item_new_with_label (_("Lock icons position"));
 		gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (pMenuItem), myDocksParam.bLockIcons);
@@ -1056,7 +1052,7 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
 		g_signal_connect (G_OBJECT (pMenuItem), "toggled", G_CALLBACK (_cairo_dock_lock_icons), NULL);
 		gtk_widget_set_tooltip_text (pMenuItem, _("This will (un)lock the position of the icons."));
 	}
-	
+
 	// quick-hide
 	if (CAIRO_DOCK_IS_DOCK (pContainer) && ! CAIRO_DOCK (pContainer)->bAutoHide)
 	{
@@ -1067,7 +1063,7 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
 			CAIRO_DOCK (pContainer));
 		gtk_widget_set_tooltip_text (pMenuItem, _("This will hide the dock until you hover over it with the mouse."));
 	}
-	
+
 	const gchar *cDesktopSession = g_getenv ("DESKTOP_SESSION");
 	gboolean bIsCairoDockSession = cDesktopSession && g_str_has_prefix (cDesktopSession, "cairo-dock");
 	if (! g_bLocked)
@@ -1104,7 +1100,7 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
 			NULL);
 		gtk_widget_set_tooltip_text (pMenuItem, _("There are no problems, only solutions (and a lot of useful hints!)"));
 	}
-	
+
 	// About
 	cairo_dock_add_in_menu_with_stock_and_data (_("About"),
 		GLDI_ICON_NAME_ABOUT,
@@ -1130,7 +1126,7 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
 			g_signal_connect (pSubMenu, "key-release-event", G_CALLBACK (_cairo_dock_set_sensitive_quit_menu), pMenuItem);
 		}
 	}
-	
+
 	//\_________________________ Second item is the Icon sub-menu.
 	Icon *pIcon = icon;
 	if (pIcon == NULL && CAIRO_DOCK_IS_DESKLET (pContainer))  // on a desklet, the main applet icon may not be drawn; therefore we add the applet sub-menu if we clicked outside of an icon.
@@ -1140,7 +1136,7 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
 	data[0] = pIcon;
 	data[1] = pContainer;
 	data[2] = menu;
-	
+
 	if (pIcon != NULL && ! CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (pIcon))
 	{
 		GtkWidget *pItemSubMenu = _add_item_sub_menu (pIcon, menu);
@@ -1760,7 +1756,7 @@ static GtkWidget *_add_menu_item_with_buttons (GtkWidget *menu)
 		G_CALLBACK (_draw_menu_item),
 		NULL);  // we don't want the whole menu-item to be higlighted, but only the currently pointed button; so we draw the menu-item ourselves.
 	
-	GtkWidget *hbox = _gtk_hbox_new (1);
+	GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 1);
 	gtk_container_add (GTK_CONTAINER (pMenuItem), hbox);
 	return hbox;
 }
@@ -1959,7 +1955,7 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 		pMenuItem = gtk_separator_menu_item_new ();
 		gtk_menu_shell_append (GTK_MENU_SHELL (pSubMenuOtherActions), pMenuItem);
 
-		_add_entry_in_menu (_("Kill"), GLDI_ICON_NAME_CLOSE	, _cairo_dock_kill_appli, pSubMenuOtherActions);
+		_add_entry_in_menu (_("Kill"), GLDI_ICON_NAME_CLOSE, _cairo_dock_kill_appli, pSubMenuOtherActions);
 	}
 	else if (CAIRO_DOCK_IS_MULTI_APPLI (icon))
 	{

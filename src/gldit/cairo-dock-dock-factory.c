@@ -119,8 +119,8 @@ static gboolean _mouse_is_really_outside (CairoDock *pDock)
 		return TRUE;
 	if (pDock->container.iMouseY < y1
 	|| pDock->container.iMouseY > y2)  // Note: Compiz has a bug: when using the "cube rotation" plug-in, it will reserve 2 pixels for itself on the left and right edges of the screen. So the mouse is not inside the dock when it's at x=0 or x=Ws-1 (no 'enter' event is sent; it's as if the x=0 or x=Ws-1 vertical line of pixels is out of the screen).
-		return TRUE;	
-	
+		return TRUE;
+
 	return FALSE;
 }
 
@@ -129,27 +129,17 @@ void cairo_dock_freeze_docks (gboolean bFreeze)
 	s_bFrozenDock = bFreeze;  /// instead, try to connect to the motion-event and intercept it ...
 }
 
-static gboolean _on_expose (G_GNUC_UNUSED GtkWidget *pWidget,
-#if (GTK_MAJOR_VERSION < 3)
-	GdkEventExpose *pExpose,
-#else
-	cairo_t *ctx,
-#endif
-	CairoDock *pDock)
+static gboolean _on_expose (G_GNUC_UNUSED GtkWidget *pWidget, cairo_t *ctx, CairoDock *pDock)
 {
 	GdkRectangle area;
-	#if (GTK_MAJOR_VERSION < 3)
-	memcpy (&area, &pExpose->area, sizeof (GdkRectangle));
-	#else
 	double x1, x2, y1, y2;
 	cairo_clip_extents (ctx, &x1, &y1, &x2, &y2);
 	area.x = x1;
 	area.y = y1;
 	area.width = x2 - x1;
 	area.height = y2 - y1;  /// or the opposite ?...
-	#endif
 	//g_print ("%s ((%d;%d) %dx%d)\n", __func__, area.x, area.y, area.width, area.height);
-	
+
 	//\________________ OpenGL rendering
 	if (g_bUseOpenGL && pDock->pRenderer->render_opengl != NULL)
 	{
@@ -2190,11 +2180,7 @@ void gldi_dock_init_internals (CairoDock *pDock)
 		GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK);
 	
 	g_signal_connect (G_OBJECT (pWindow),
-		#if (GTK_MAJOR_VERSION < 3)
-		"expose-event",
-		#else
 		"draw",
-		#endif
 		G_CALLBACK (_on_expose),
 		pDock);
 	g_signal_connect (G_OBJECT (pWindow),

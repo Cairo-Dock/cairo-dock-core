@@ -42,11 +42,6 @@ typedef enum {
 	GLDI_NB_COLORS
 	} GldiStyleColors;
 
-#if GTK_MAJOR_VERSION < 3
-	typedef struct {
-		 gdouble red, green, blue, alpha;
-	} GdkRGBA;
-#endif
 struct _GldiColor {
 	GdkRGBA rgba;  /// maybe we'll handle a double color later, to have simple linear patterns...
 	};

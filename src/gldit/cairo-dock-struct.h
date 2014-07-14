@@ -474,12 +474,6 @@ typedef _GldiIconRFunc GldiIconRFunc;
 typedef struct _GldiTextDescription GldiTextDescription;
 typedef struct _GldiColor GldiColor;
 
-#if (GTK_MAJOR_VERSION < 3)
-#define GldiShape GdkBitmap
-#else  // GTK3
-#define GldiShape cairo_region_t
-#endif
-
 
 #define CAIRO_DOCK_NB_DATA_SLOT 12
 

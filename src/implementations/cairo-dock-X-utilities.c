@@ -39,11 +39,7 @@
 #include "cairo-dock-opengl.h"  // for texture_from_pixmap
 #include "cairo-dock-X-utilities.h"
 
-#if (GTK_MAJOR_VERSION >= 3)
 #include <cairo/cairo-xlib.h>  // needed for cairo_xlib_surface_create
-#else
-#include <gdk/gdkx.h>  // gdk_xid_table_lookup (gtk2)
-#endif
 
 extern gboolean g_bEasterEggs;
 extern CairoDockGLConfig g_openglConfig;
@@ -645,43 +641,6 @@ GdkPixbuf *cairo_dock_get_pixbuf_from_pixmap (int XPixmapID, gboolean bAddAlpha)
 	//g_print ("%s (%d) : %ux%ux%u (%d;%d)\n", __func__, XPixmapID, iWidth, iHeight, iDepth, x, y);
 
 	//\__________________ On recupere le drawable associe.
-	#if (GTK_MAJOR_VERSION < 3)
-	GdkDrawable *pGdkDrawable = gdk_xid_table_lookup (XPixmapID);
-	if (pGdkDrawable)
-	{
-		g_object_ref (G_OBJECT (pGdkDrawable));
-	}
-	else
-	{
-		//g_print ("pas d'objet GDK present, on en alloue un nouveau\n");
-		GdkScreen* pScreen = gdk_screen_get_default ();
-		pGdkDrawable = gdk_pixmap_foreign_new_for_screen (pScreen, XPixmapID, iWidth, iHeight, iDepth);
-	}
-
-	//\__________________ On recupere la colormap.
-	GdkColormap* pColormap = gdk_drawable_get_colormap (pGdkDrawable);
-	if (pColormap == NULL && gdk_drawable_get_depth (pGdkDrawable) > 1)  // pour les bitmaps, on laisse la colormap a NULL, ils n'en ont pas besoin.
-	{
-		GdkScreen *pScreen = gdk_drawable_get_screen (GDK_DRAWABLE (pGdkDrawable));
-		if (gdk_drawable_get_depth (pGdkDrawable) == 32)
-			pColormap = gdk_screen_get_rgba_colormap (pScreen);
-		else
-			pColormap = gdk_screen_get_rgb_colormap (pScreen);  // au pire on a un colormap nul.
-		//cd_debug ("  pColormap : %x  (pScreen:%x)", pColormap, pScreen);
-	}
-
-	//\__________________ On recupere le buffer dans un GdkPixbuf.
-	GdkPixbuf *pIconPixbuf = gdk_pixbuf_get_from_drawable (NULL,
-		pGdkDrawable,
-		pColormap,
-		0,
-		0,
-		0,
-		0,
-		iWidth,
-		iHeight);
-	g_object_unref (G_OBJECT (pGdkDrawable));
-	#else
 	cairo_surface_t *surface = cairo_xlib_surface_create (s_XDisplay,
 		XPixmapID,
 		DefaultVisual(s_XDisplay, 0),
@@ -693,7 +652,6 @@ GdkPixbuf *cairo_dock_get_pixbuf_from_pixmap (int XPixmapID, gboolean bAddAlpha)
 		iWidth,
 		iHeight);
 	cairo_surface_destroy(surface);
-	#endif
 	g_return_val_if_fail (pIconPixbuf != NULL, NULL);
 
 	//\__________________ On lui ajoute un canal alpha si necessaire.

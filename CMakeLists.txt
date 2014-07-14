@@ -157,16 +157,9 @@ if (enable-wayland-support)
 	endif()
 endif()
 
-# check for GTK
-if (NOT force-gtk2)  # by default, we use GTK+3 except if we force the use of GTK+2
-	set (gtk_required "gtk+-3.0")  # for the .pc
-	pkg_check_modules ("GTK" "${gtk_required}")  # the check is not set as 'required' because we can use GTK+2 if GTK+3 isn't available
-endif()
-
-if (NOT GTK_FOUND)
-	set (gtk_required "gtk+-2.0")  # for the .pc
-	pkg_check_modules ("GTK" REQUIRED "${gtk_required}")  # the check is requiered this time because we need GTK anyway.
-endif()
+# GTK 3
+set (gtk_required "gtk+-3.0")  # for the .pc
+pkg_check_modules ("GTK" REQUIRED "${gtk_required}")
 
 STRING (REGEX REPLACE "\\..*" "" GTK_MAJOR "${GTK_VERSION}")
 STRING (REGEX REPLACE "[0-9]*\\.([^ ]+)" "\\1" GTK_MINOR "${GTK_VERSION}")  # 3.8.2 => 3.8

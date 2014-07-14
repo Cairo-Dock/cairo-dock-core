@@ -263,7 +263,7 @@ static void _build_plugins_widget (PluginsWidget *pPluginsWidget)
 	pPluginsWidget->pTreeView = _cairo_dock_build_modules_treeview ();
 	
 	//\_____________ On l'ajoute a la fenetre.
-	GtkWidget *pKeyBox = _gtk_hbox_new (CAIRO_DOCK_GUI_MARGIN);
+	GtkWidget *pKeyBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_GUI_MARGIN);
 	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
 	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, gldi_desktop_get_height() - 210), NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
@@ -289,7 +289,7 @@ static void _build_plugins_widget (PluginsWidget *pPluginsWidget)
 	gtk_box_pack_start (GTK_BOX (pKeyBox), pScrolledWindow2, FALSE, FALSE, 0);
 	g_free (cDefaultMessage);
 	
-	GtkWidget *pVBox = _gtk_vbox_new (CAIRO_DOCK_GUI_MARGIN);
+	GtkWidget *pVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_GUI_MARGIN);
 	gtk_box_pack_start (GTK_BOX (pVBox), pKeyBox, TRUE, TRUE, 0);
 	
 	//\______________ Add a link to the third-party applet (Note: it's somewhere around here that we could add a third-party addons selector).

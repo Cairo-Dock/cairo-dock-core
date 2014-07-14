@@ -39,18 +39,15 @@
 
 extern gchar *g_cCurrentThemePath;
 
-#if GTK_MAJOR_VERSION > 2
 static gboolean _draw_menu_item (GtkWidget *widget, cairo_t *cr, G_GNUC_UNUSED gpointer data);
 static gboolean _on_select_menu_item (GtkWidget* pMenuItem, G_GNUC_UNUSED gpointer data);
 static gboolean _on_deselect_menu_item (GtkWidget* pMenuItem, G_GNUC_UNUSED gpointer data);
 static void _on_destroy_menu_item (GtkWidget* pMenuItem, G_GNUC_UNUSED gpointer data);
-#endif
 
   ////////////
  /// MENU ///
 /////////////
 
-#if GTK_MAJOR_VERSION > 2
 
 void _init_menu_style (void)
 {
@@ -396,7 +393,6 @@ static void _set_margin_position (GtkWidget *pMenu, GldiMenuParams *pParams)
 		g_free (css);
 	}
 }
-#endif
 
 GtkWidget *gldi_menu_new (Icon *pIcon)
 {
@@ -426,16 +422,13 @@ static void _on_menu_destroyed (GtkWidget *pMenu, G_GNUC_UNUSED gpointer data)
 			NOTIFICATION_DESTROY,
 			(GldiNotificationFunc) _on_icon_destroyed,
 			pMenu);
-	#if GTK_MAJOR_VERSION > 2
 	if (pParams->cssProvider)
 	{
 		g_object_unref (pParams->cssProvider);  /// need to remove the provider from the style context ?... probably not since the style context will be destroyed and will release its reference on the provider
 	}
 	g_free (pParams);
-	#endif
 }
 
-#if GTK_MAJOR_VERSION > 2
 static void _on_menu_deactivated (GtkMenuShell *pMenu, G_GNUC_UNUSED gpointer data)
 {
 	GldiMenuParams *pParams = g_object_get_data (G_OBJECT (pMenu), "gldi-params");
@@ -450,7 +443,6 @@ static void _on_menu_deactivated (GtkMenuShell *pMenu, G_GNUC_UNUSED gpointer da
 			gtk_widget_queue_draw (pContainer->pWidget);
 	}
 }
-#endif
 
 void gldi_menu_init (GtkWidget *pMenu, Icon *pIcon)
 {
@@ -459,8 +451,7 @@ void gldi_menu_init (GtkWidget *pMenu, Icon *pIcon)
 	#if (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
 	gtk_menu_set_reserve_toggle_size (GTK_MENU(pMenu), TRUE);
 	#endif
-	
-	#if GTK_MAJOR_VERSION > 2
+
 	// connect to 'draw' event to draw the menu (background and items)
 	GtkWidget *pWindow = gtk_widget_get_toplevel (pMenu);
 	cairo_dock_set_default_rgba_visual (pWindow);
@@ -469,10 +460,9 @@ void gldi_menu_init (GtkWidget *pMenu, Icon *pIcon)
 		"draw",
 		G_CALLBACK (_draw_menu),
 		pMenu);
-	
+
 	gtk_style_context_add_class (gtk_widget_get_style_context (pMenu), "gldimenu");
-	#endif
-	
+
 	// set params
 	GldiMenuParams *pParams = g_new0 (GldiMenuParams, 1);
 	g_object_set_data (G_OBJECT (pMenu), "gldi-params", pParams);
@@ -495,7 +485,6 @@ void gldi_menu_init (GtkWidget *pMenu, Icon *pIcon)
 		GldiContainer *pContainer = cairo_dock_get_icon_container (pIcon);
 		if (pContainer != NULL)
 		{
-			#if GTK_MAJOR_VERSION > 2
 			// init the rendering --> align, margin-height
 			CairoDialogDecorator *pDecorator = cairo_dock_get_dialog_decorator (myDialogsParam.cDecoratorName);
 			if (pDecorator)
@@ -531,7 +520,6 @@ void gldi_menu_init (GtkWidget *pMenu, Icon *pIcon)
 				css, -1, NULL);
 			gtk_style_context_add_provider (gtk_widget_get_style_context(pMenu), GTK_STYLE_PROVIDER(cssProvider), GTK_STYLE_PROVIDER_PRIORITY_USER);
 			g_free (css);
-			#endif
 		}
 	}
 }
@@ -541,43 +529,33 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	*push_in = FALSE;
 	GldiMenuParams *pParams = g_object_get_data (G_OBJECT(menu), "gldi-params");
 	g_return_if_fail (pParams != NULL);
-	
+
 	Icon *pIcon = pParams->pIcon;
 	GldiContainer *pContainer = (pIcon ? cairo_dock_get_icon_container (pIcon) : NULL);
 	int x0 = pContainer->iWindowPositionX + pIcon->fDrawX;
 	int y0 = pContainer->iWindowPositionY + pIcon->fDrawY;
 	if (pContainer->bDirectionUp)
 		y0 += pIcon->fHeight * pIcon->fScale - pIcon->image.iHeight;  // the icon might not be maximised yet
-	
+
 	int w, h;  // taille menu
 	GtkRequisition requisition;
-	#if (GTK_MAJOR_VERSION < 3)
-	gtk_widget_size_request (GTK_WIDGET (menu), &requisition);
-	#else
 	gtk_widget_get_preferred_size (GTK_WIDGET (menu), NULL, &requisition);  // retrieve the natural size; Note: before gtk3.10 we used the minimum size but it's now incorrect; the natural size works for prior versions too.
-	#endif
 	w = requisition.width;
 	h = requisition.height;
-	
+
 	/// TODO: use iMarginPosition...
-	#if GTK_MAJOR_VERSION > 2
 	double fAlign = pParams->fAlign;
 	int r = pParams->iRadius;
 	int ah = pParams->iArrowHeight;
 	int w_, h_;
-	#endif
 	int iAimedX, iAimedY;
 	int Hs = (pContainer->bIsHorizontal ? gldi_desktop_get_height() : gldi_desktop_get_width());
 	if (pContainer->bIsHorizontal)
 	{
 		iAimedX = x0 + pIcon->image.iWidth/2;
-		#if GTK_MAJOR_VERSION > 2
 		w_ = w - 2 * r;
 		h_ = h - 2 * r - ah;
 		*x = MAX (0, iAimedX - fAlign * w_ - r);
-		#else
-		*x = iAimedX;
-		#endif
 		if (y0 > Hs/2)  // pContainer->bDirectionUp
 		{
 			*y = y0 - h;
@@ -592,13 +570,9 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	else
 	{
 		iAimedY = x0 + pIcon->image.iWidth/2;
-		#if GTK_MAJOR_VERSION > 2
 		w_ = w - 2 * r - ah;
 		h_ = h - 2 * r;
 		*y = MIN (iAimedY - fAlign * h_ - r, gldi_desktop_get_height() - h);
-		#else
-		*y = MIN (iAimedY, gldi_desktop_get_height() - h);
-		#endif
 		if (y0 > Hs/2)  // pContainer->bDirectionUp
 		{
 			*x = y0 - w;
@@ -614,7 +588,6 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	pParams->iAimedY = iAimedY;
 }
 
-#if GTK_MAJOR_VERSION > 2
 static void _init_menu_item (GtkWidget *pMenuItem)
 {
 	GtkWidget *pSubMenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (pMenuItem));
@@ -654,21 +627,19 @@ static void _init_menu_item (GtkWidget *pMenuItem)
 	if (pSubMenu != NULL)
 		gtk_container_forall (GTK_CONTAINER (pSubMenu), (GtkCallback) _init_menu_item, NULL);
 }
-#endif
 
 static void _popup_menu (GtkWidget *menu, guint32 time)
 {
 	GldiMenuParams *pParams = g_object_get_data (G_OBJECT(menu), "gldi-params");
 	g_return_if_fail (pParams != NULL);
-	
+
 	Icon *pIcon = pParams->pIcon;
 	GldiContainer *pContainer = (pIcon ? cairo_dock_get_icon_container (pIcon) : NULL);
-	
+
 	// setup the menu for the container
 	if (pContainer && pContainer->iface.setup_menu)
 		pContainer->iface.setup_menu (pContainer, pIcon, menu);
-	
-	#if GTK_MAJOR_VERSION > 2
+
 	// init each items (and sub-menus), in case it contains some foreign GtkMenuItems (for instance in case of an indicator menu or the gtk recent files sub-menu, which can have new items at any time)
 	gtk_container_forall (GTK_CONTAINER (menu), (GtkCallback) _init_menu_item, NULL);  // init each menu-item style
 	
@@ -682,10 +653,9 @@ static void _popup_menu (GtkWidget *menu, guint32 time)
 		// ensure margin position is still correct
 		_set_margin_position (menu, pParams);
 	}
-	#endif
-	
+
 	gtk_widget_show_all (GTK_WIDGET (menu));
-	
+
 	gtk_menu_popup (GTK_MENU (menu),
 		NULL,
 		NULL,
@@ -721,7 +691,6 @@ void gldi_menu_popup (GtkWidget *menu)
  /// MENU ITEM ///
 /////////////////
 
-#if GTK_MAJOR_VERSION > 2
 const int N = 10;
 const int dt1 = 20;
 const int dt2 = 30;
@@ -750,11 +719,11 @@ get_arrow_size (GtkWidget *widget,
 	context = gtk_widget_get_pango_context (child);
 
 	metrics = pango_context_get_metrics (context,
-									   pango_context_get_font_description (context),
-									   pango_context_get_language (context));
+	                                     pango_context_get_font_description (context),
+	                                     pango_context_get_language (context));
 
 	*size = (PANGO_PIXELS (pango_font_metrics_get_ascent (metrics) +
-						 pango_font_metrics_get_descent (metrics)));
+	                       pango_font_metrics_get_descent (metrics)));
 
 	pango_font_metrics_unref (metrics);
 
@@ -776,27 +745,27 @@ static gboolean _draw_menu_item (GtkWidget *widget,
 	context = gtk_widget_get_style_context (widget);
 	width = gtk_widget_get_allocated_width (widget);
 	height = gtk_widget_get_allocated_height (widget);
-	
+
 	x = border_width;
 	y = border_width;
 	w = width - border_width * 2;
 	h = height - border_width * 2;
-	
+
 	// draw the background
 	int n = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (widget), "gldi-step"));
 	if (n != 0)  // so we only draw the barkground if the item is or was selected
 	{
 		double a = (double)n/N;
-		
+
 		cairo_save (cr);
-		
+
 		int r=6, l=0;
 		cairo_dock_draw_rounded_rectangle (cr, r, l, w - 2*r, h);
 		cairo_clip (cr);
-		
+
 		gldi_style_colors_set_selected_bg_color (cr);
 		cairo_paint_with_alpha (cr, a);
-		
+
 		cairo_restore (cr);
 	}
 	
@@ -926,7 +895,6 @@ static void _on_destroy_menu_item (GtkWidget* pMenuItem, G_GNUC_UNUSED gpointer 
 		g_object_set_data (G_OBJECT(pMenuItem), "gldi-animation", NULL);
 	}
 }
-#endif
 
 GtkWidget *gldi_menu_item_new_full (const gchar *cLabel, const gchar *cImage, gboolean bUseMnemonic, GtkIconSize iSize)
 {
@@ -978,16 +946,14 @@ GtkWidget *gldi_menu_item_new_full (const gchar *cLabel, const gchar *cImage, gb
 		else
 			pMenuItem = (bUseMnemonic ? gtk_image_menu_item_new_with_mnemonic (cLabel) : gtk_image_menu_item_new_with_label (cLabel));
 		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
-		#if ((CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1) && (GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION >= 16))
+		#if (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
 		gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (pMenuItem), TRUE);
 		#endif
 #endif
 	}
-	
-	#if GTK_MAJOR_VERSION > 2
+
 	_init_menu_item (pMenuItem);
-	#endif
-	
+
 	gtk_widget_show_all (pMenuItem);  // show immediately, so that the menu-item is realized when the menu is popped up
 	
 	return pMenuItem;
@@ -1004,7 +970,7 @@ void gldi_menu_item_set_image (GtkWidget *pMenuItem, GtkWidget *image)
 	#endif
 #else
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
-	#if ((CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1) && (GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION >= 16))
+	#if (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
 	gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (pMenuItem), TRUE);
 	#endif
 #endif
@@ -1063,9 +1029,7 @@ void gldi_menu_add_separator (GtkWidget *pMenu)
 {
 	GtkWidget *pMenuItem = gtk_separator_menu_item_new ();
 	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
-	#if GTK_MAJOR_VERSION > 2
 	_init_menu_item (pMenuItem);
-	#endif
 }
 
 gboolean GLDI_IS_IMAGE_MENU_ITEM (GtkWidget *pMenuItem)  // defined as a function to not export gtk3imagemenuitem.h

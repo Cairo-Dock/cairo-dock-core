@@ -179,13 +179,7 @@ static gboolean _on_render_flying_container_notification (G_GNUC_UNUSED gpointer
 }
 
 
-static gboolean on_expose_flying_icon (G_GNUC_UNUSED GtkWidget *pWidget,
-#if (GTK_MAJOR_VERSION < 3)
-	G_GNUC_UNUSED GdkEventExpose *pExpose,
-#else
-	G_GNUC_UNUSED cairo_t *ctx,
-#endif
-	CairoFlyingContainer *pFlyingContainer)
+static gboolean on_expose_flying_icon (G_GNUC_UNUSED GtkWidget *pWidget, G_GNUC_UNUSED cairo_t *ctx, CairoFlyingContainer *pFlyingContainer)
 {
 	if (g_bUseOpenGL)
 	{
@@ -386,11 +380,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	gtk_window_set_title (GTK_WINDOW(pWindow), "cairo-dock-flying-icon");
 	
 	g_signal_connect (G_OBJECT (pWindow),
-		#if (GTK_MAJOR_VERSION < 3)
-		"expose-event",
-		#else
 		"draw",
-		#endif
 		G_CALLBACK (on_expose_flying_icon),
 		pFlyingContainer);
 	g_signal_connect (G_OBJECT (pWindow),

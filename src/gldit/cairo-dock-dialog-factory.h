@@ -140,7 +140,7 @@ struct _CairoDialog {
 	gboolean bNoInput;// whether the dialog is transparent to mouse input.
 	gboolean bAllowMinimize;  // TRUE to allow the dialog to be minimized once. The flag is reseted to FALSE after the desklet has minimized.
 	GTimer *pUnmapTimer;  // timer to filter 2 consecutive unmap events
-	GldiShape* pShapeBitmap;
+	cairo_region_t* pShapeBitmap;
 	gboolean bPositionForced;
 	gdouble fAppearanceCounter;
 	gboolean bTopBottomDialog;

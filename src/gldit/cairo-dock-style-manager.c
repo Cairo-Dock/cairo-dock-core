@@ -40,7 +40,6 @@ extern gchar *g_cCurrentThemePath;
 extern gboolean g_bUseOpenGL;
 
 // private
-#if GTK_MAJOR_VERSION > 2
 static GtkStyleContext *s_pStyle = NULL;
 static GdkRGBA s_menu_bg_color;
 static cairo_pattern_t *s_menu_bg_pattern = NULL;
@@ -50,10 +49,8 @@ static cairo_pattern_t *s_menuitem_bg_pattern = NULL;
 static GdkRGBA s_text_color;
 static int s_iStyleStamp = 1;
 static gboolean s_bIgnoreStyleChange = FALSE;
-#endif
 
 
-#if GTK_MAJOR_VERSION > 2
 static void _on_style_changed (G_GNUC_UNUSED GtkStyleContext *_style, gpointer data)
 {
 	if (! s_bIgnoreStyleChange)
@@ -125,8 +122,10 @@ static void _on_style_changed (G_GNUC_UNUSED GtkStyleContext *_style, gpointer d
 			gtk_widget_path_free (path);
 			gtk_style_context_add_class (style, GTK_STYLE_CLASS_BACKGROUND);
 			gtk_style_context_add_class (style, GTK_STYLE_CLASS_MENU);
+			#if ! GTK_CHECK_VERSION (3,12,0) // Style contexts are now invalidated automatically.
 			gtk_style_context_invalidate (style);  // force the context to be reconstructed
-			
+			#endif
+
 			gtk_style_context_get_background_color (style, GTK_STATE_FLAG_NORMAL, (GdkRGBA*)&s_menu_bg_color);
 			if (s_menu_bg_color.alpha == 0)
 			{
@@ -163,22 +162,15 @@ static void _on_style_changed (G_GNUC_UNUSED GtkStyleContext *_style, gpointer d
 	}
 	else cd_debug (" style changed ignored");
 }
-#endif
 
 void gldi_style_colors_freeze (void)
 {
-	#if GTK_MAJOR_VERSION > 2
 	s_bIgnoreStyleChange = ! s_bIgnoreStyleChange;
-	#endif
 }
 
 int gldi_style_colors_get_stamp (void)
 {
-	#if GTK_MAJOR_VERSION > 2
 	return s_iStyleStamp;
-	#else
-	return 0;
-	#endif
 }
 
 static void _get_bg_color (GldiColor *pColor)
@@ -204,7 +196,6 @@ void gldi_style_color_get (GldiStyleColors iColorType, GldiColor *pColor)
 			_get_bg_color (pColor);
 		break;
 		case GLDI_COLOR_SELECTED:
-			#if GTK_MAJOR_VERSION > 2
 			if (myStyleParam.bUseSystemColors)
 			{
 				if (s_menuitem_bg_pattern)
@@ -213,13 +204,11 @@ void gldi_style_color_get (GldiStyleColors iColorType, GldiColor *pColor)
 					pColor->rgba = s_menuitem_bg_color;
 			}
 			else
-			#endif
 			{
 				gldi_style_color_shade (&myStyleParam.fBgColor, .2, pColor);
 			}
 		break;
 		case GLDI_COLOR_LINE:
-			#if GTK_MAJOR_VERSION > 2
 			if (myStyleParam.bUseSystemColors)
 			{
 				if (s_menu_bg_pattern)
@@ -231,19 +220,16 @@ void gldi_style_color_get (GldiStyleColors iColorType, GldiColor *pColor)
 				pColor->rgba.alpha = 1.;
 			}
 			else
-			#endif
 			{
 				memcpy (pColor, &myStyleParam.fLineColor, sizeof(GldiColor));
 			}
 		break;
 		case GLDI_COLOR_TEXT:
-			#if GTK_MAJOR_VERSION > 2
 			if (myStyleParam.bUseSystemColors)
 			{
 				pColor->rgba = s_text_color;
 			}
 			else
-			#endif
 			{
 				memcpy (pColor, &myStyleParam.textDescription.fColorStart, sizeof(GldiColor));
 				pColor->rgba.alpha = 1.;
@@ -265,7 +251,6 @@ void gldi_style_color_get (GldiStyleColors iColorType, GldiColor *pColor)
 
 void gldi_style_colors_set_bg_color_full (cairo_t *pCairoContext, gboolean bUseAlpha)
 {
-	#if GTK_MAJOR_VERSION > 2
 	if (myStyleParam.bUseSystemColors)
 	{
 		if (pCairoContext)
@@ -288,7 +273,6 @@ void gldi_style_colors_set_bg_color_full (cairo_t *pCairoContext, gboolean bUseA
 		}
 	}
 	else
-	#endif
 	{
 		if (pCairoContext)
 		{
@@ -301,7 +285,6 @@ void gldi_style_colors_set_bg_color_full (cairo_t *pCairoContext, gboolean bUseA
 
 void gldi_style_colors_set_selected_bg_color (cairo_t *pCairoContext)
 {
-	#if GTK_MAJOR_VERSION > 2
 	if (myStyleParam.bUseSystemColors)
 	{
 		if (pCairoContext)
@@ -317,7 +300,6 @@ void gldi_style_colors_set_selected_bg_color (cairo_t *pCairoContext)
 		}
 	}
 	else
-	#endif
 	{
 		GldiColor color;
 		gldi_style_color_shade (&myStyleParam.fBgColor, .2, &color);
@@ -330,7 +312,6 @@ void gldi_style_colors_set_selected_bg_color (cairo_t *pCairoContext)
 
 void gldi_style_colors_set_line_color (cairo_t *pCairoContext)
 {
-	#if GTK_MAJOR_VERSION > 2
 	if (myStyleParam.bUseSystemColors)
 	{
 		if (pCairoContext)
@@ -346,7 +327,6 @@ void gldi_style_colors_set_line_color (cairo_t *pCairoContext)
 		}
 	}
 	else
-	#endif
 	{
 		if (pCairoContext)
 			gldi_color_set_cairo (pCairoContext, &myStyleParam.fLineColor);
@@ -357,7 +337,6 @@ void gldi_style_colors_set_line_color (cairo_t *pCairoContext)
 
 void gldi_style_colors_set_text_color (cairo_t *pCairoContext)
 {
-	#if GTK_MAJOR_VERSION > 2
 	if (myStyleParam.bUseSystemColors)
 	{
 		if (pCairoContext)
@@ -366,7 +345,6 @@ void gldi_style_colors_set_text_color (cairo_t *pCairoContext)
 			glColor3f (s_text_color.red, s_text_color.green, s_text_color.blue);
 	}
 	else
-	#endif
 	{
 		if (pCairoContext)
 			gldi_color_set_cairo_rgb (pCairoContext, &myStyleParam.textDescription.fColorStart);
@@ -399,7 +377,6 @@ void gldi_style_colors_set_child_color (cairo_t *pCairoContext)
 
 void gldi_style_colors_paint_bg_color_with_alpha (cairo_t *pCairoContext, int iWidth, double fAlpha)
 {
-	#if GTK_MAJOR_VERSION > 2
 	if (fAlpha < 0)  // alpha is not defined => take it from the global style
 	{
 		if (! (myStyleParam.bUseSystemColors && s_menu_bg_pattern))
@@ -428,13 +405,6 @@ void gldi_style_colors_paint_bg_color_with_alpha (cairo_t *pCairoContext, int iW
 	{
 		cairo_paint (pCairoContext);
 	}
-	#else
-	(void)iWidth;
-	if (fAlpha >= 0)
-		cairo_paint_with_alpha (pCairoContext, fAlpha);
-	else
-		cairo_paint (pCairoContext);
-	#endif
 }
 
 
@@ -444,15 +414,13 @@ void gldi_style_colors_paint_bg_color_with_alpha (cairo_t *pCairoContext, int iW
 
 static void init (void)
 {
-	#if GTK_MAJOR_VERSION > 2
 	if (s_pStyle != NULL)
 		return;
-	
+
 	// init a style context
 	s_pStyle = gtk_style_context_new();
 	gtk_style_context_set_screen (s_pStyle, gdk_screen_get_default());
 	g_signal_connect (s_pStyle, "changed", G_CALLBACK(_on_style_changed), GINT_TO_POINTER (TRUE));  // TRUE => throw a notification
-	#endif
 }
 
   //////////////////
@@ -523,10 +491,8 @@ static void reset_config (GldiStyleParam *pStyleParam)
 
 static void load (void)
 {
-	#if GTK_MAJOR_VERSION > 2
 	if (myStyleParam.bUseSystemColors)
 		_on_style_changed (s_pStyle, NULL);  // NULL => don't notify
-	#endif
 }
 
   //////////////
@@ -536,12 +502,10 @@ static void load (void)
 static void reload (GldiStyleParam *pPrevStyleParam, GldiStyleParam *pStyleParam)
 {
 	cd_message ("reload style mgr...");
-	#if GTK_MAJOR_VERSION > 2
 	if (pPrevStyleParam->bUseSystemColors != pStyleParam->bUseSystemColors)
 		_on_style_changed (s_pStyle, NULL);  // load or invalidate the previous style, NULL => don't notify (it's done just after)
 	else
 		s_iStyleStamp ++;  // just invalidate
-	#endif
 	gldi_object_notify (&myStyleMgr, NOTIFICATION_STYLE_CHANGED);
 }
 

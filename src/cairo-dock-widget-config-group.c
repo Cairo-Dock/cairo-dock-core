@@ -110,7 +110,7 @@ static void _add_widget_to_notebook (GtkWidget *pNoteBook, GtkWidget *pWidget, c
 	GtkWidget *pAlign = NULL;
 	if (cIcon != NULL && *cIcon != '\0')
 	{
-		pLabelContainer = _gtk_hbox_new (CAIRO_DOCK_ICON_MARGIN);
+		pLabelContainer = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_ICON_MARGIN);
 		pAlign = gtk_alignment_new (0., 0.5, 0., 0.);
 		gtk_container_add (GTK_CONTAINER (pAlign), pLabelContainer);
 		

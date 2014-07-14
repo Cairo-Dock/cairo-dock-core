@@ -61,13 +61,7 @@ static void _reserve_space_for_desklet (CairoDesklet *pDesklet, gboolean bReserv
  /// SIGNALS ///
 ///////////////
 
-static gboolean on_expose_desklet(G_GNUC_UNUSED GtkWidget *pWidget,
-#if (GTK_MAJOR_VERSION < 3)
-	G_GNUC_UNUSED GdkEventExpose *pExpose,
-#else
-	G_GNUC_UNUSED cairo_t *ctx,
-#endif
-	CairoDesklet *pDesklet)
+static gboolean on_expose_desklet(G_GNUC_UNUSED GtkWidget *pWidget, G_GNUC_UNUSED cairo_t *ctx, CairoDesklet *pDesklet)
 {
 	if (pDesklet->iDesiredWidth != 0 && pDesklet->iDesiredHeight != 0 && (pDesklet->iKnownWidth != pDesklet->iDesiredWidth || pDesklet->iKnownHeight != pDesklet->iDesiredHeight))  // skip the drawing until the desklet has reached its size, only make it transparent.
 	{
@@ -114,7 +108,7 @@ static void _cairo_dock_set_desklet_input_shape (CairoDesklet *pDesklet)
 	
 	if (pDesklet->bNoInput)
 	{
-		GldiShape *pShapeBitmap = gldi_container_create_input_shape (CAIRO_CONTAINER (pDesklet),
+		cairo_region_t *pShapeBitmap = gldi_container_create_input_shape (CAIRO_CONTAINER (pDesklet),
 			pDesklet->container.iWidth - myDeskletsParam.iDeskletButtonSize,
 			pDesklet->container.iHeight - myDeskletsParam.iDeskletButtonSize,
 			myDeskletsParam.iDeskletButtonSize,
@@ -122,7 +116,7 @@ static void _cairo_dock_set_desklet_input_shape (CairoDesklet *pDesklet)
 		
 		gldi_container_set_input_shape (CAIRO_CONTAINER (pDesklet), pShapeBitmap);
 		
-		gldi_shape_destroy (pShapeBitmap);
+		cairo_region_destroy (pShapeBitmap);
 	}
 }
 
@@ -789,11 +783,7 @@ void gldi_desklet_init_internals (CairoDesklet *pDesklet)
 	
 	// connect the signals to the window
 	g_signal_connect (G_OBJECT (pWindow),
-		#if (GTK_MAJOR_VERSION < 3)
-		"expose-event",
-		#else
 		"draw",
-		#endif
 		G_CALLBACK (on_expose_desklet),
 		pDesklet);
 	g_signal_connect (G_OBJECT (pWindow),
@@ -992,7 +982,7 @@ void gldi_desklet_add_interactive_widget_with_margin (CairoDesklet *pDesklet, Gt
 	}
 	
 	//gtk_container_add (GTK_CONTAINER (pDesklet->container.pWidget), pInteractiveWidget);
-	GtkWidget *pHBox = _gtk_hbox_new (0);
+	GtkWidget *pHBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_container_add (GTK_CONTAINER (pDesklet->container.pWidget), pHBox);
 	
 	gtk_box_pack_start (GTK_BOX (pHBox), pInteractiveWidget, TRUE, TRUE, 0);
@@ -1000,7 +990,7 @@ void gldi_desklet_add_interactive_widget_with_margin (CairoDesklet *pDesklet, Gt
 	
 	if (iRightMargin != 0)
 	{
-		GtkWidget *pMarginBox = _gtk_vbox_new (0);
+		GtkWidget *pMarginBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 		g_object_set (pMarginBox, "width-request", iRightMargin, NULL);
 		gtk_box_pack_start (GTK_BOX (pHBox), pMarginBox, FALSE, FALSE, 0);  // a tester ...
 	}
@@ -1025,7 +1015,7 @@ void gldi_desklet_set_margin (CairoDesklet *pDesklet, int iRightMargin)
 			}
 			else  // on rajoute le widget de la marge.
 			{
-				GtkWidget *pMarginBox = _gtk_vbox_new (0);
+				GtkWidget *pMarginBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 				g_object_set (pMarginBox, "width-request", iRightMargin, NULL);
 				gtk_box_pack_start (GTK_BOX (pHBox), pMarginBox, FALSE, FALSE, 0);
 			}
@@ -1185,11 +1175,7 @@ void gldi_desklet_set_sticky (CairoDesklet *pDesklet, gboolean bSticky)
 gboolean gldi_desklet_is_sticky (CairoDesklet *pDesklet)
 {
 	GdkWindow *window = gldi_container_get_gdk_window (CAIRO_CONTAINER (pDesklet));
-	#if (GTK_MAJOR_VERSION >= 3)
 	return ((gdk_window_get_state (window)) & GDK_WINDOW_STATE_STICKY);
-	#else
-	return (((GdkWindowObject*) window)->state & GDK_WINDOW_STATE_STICKY);
-	#endif
 }
 
 void gldi_desklet_lock_position (CairoDesklet *pDesklet, gboolean bPositionLocked)

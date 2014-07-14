@@ -466,7 +466,7 @@ void cairo_dock_move_resize_dock (CairoDock *pDock)
   ///////////////////
  /// INPUT SHAPE ///
 ///////////////////
-static GldiShape *_cairo_dock_create_input_shape (CairoDock *pDock, int w, int h)
+static cairo_region_t *_cairo_dock_create_input_shape (CairoDock *pDock, int w, int h)
 {
  	int W = pDock->iMaxDockWidth;
 	int H = pDock->iMaxDockHeight;
@@ -477,7 +477,7 @@ static GldiShape *_cairo_dock_create_input_shape (CairoDock *pDock, int w, int h
 	
 	double offset = (W - pDock->iActiveWidth) * pDock->fAlign + (pDock->iActiveWidth - w) / 2;
 	
-	GldiShape *pShapeBitmap;
+	cairo_region_t *pShapeBitmap;
 	if (pDock->container.bIsHorizontal)
 	{
 		pShapeBitmap = gldi_container_create_input_shape (CAIRO_CONTAINER (pDock),
@@ -504,17 +504,17 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
 	//\_______________ destroy the current input zones.
 	if (pDock->pShapeBitmap != NULL)
 	{
-		gldi_shape_destroy (pDock->pShapeBitmap);
+		cairo_region_destroy (pDock->pShapeBitmap);
 		pDock->pShapeBitmap = NULL;
 	}
 	if (pDock->pHiddenShapeBitmap != NULL)
 	{
-		gldi_shape_destroy (pDock->pHiddenShapeBitmap);
+		cairo_region_destroy (pDock->pHiddenShapeBitmap);
 		pDock->pHiddenShapeBitmap = NULL;
 	}
 	if (pDock->pActiveShapeBitmap != NULL)
 	{
-		gldi_shape_destroy (pDock->pActiveShapeBitmap);
+		cairo_region_destroy (pDock->pActiveShapeBitmap);
 		pDock->pActiveShapeBitmap = NULL;
 	}
 	

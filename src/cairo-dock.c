@@ -540,15 +540,11 @@ int main (int argc, char** argv)
 				GTK_RESPONSE_NO,
 				NULL);
 			GtkWidget *label = gtk_label_new (_("OpenGL allows you to use the hardware acceleration, reducing the CPU load to the minimum.\nIt also allows some pretty visual effects similar to Compiz.\nHowever, some cards and/or their drivers don't fully support it, which may prevent the dock from running correctly.\nDo you want to activate OpenGL ?\n (To not show this dialog, launch the dock from the Application menu,\n  or with the -o option to force OpenGL and -c to force cairo.)"));
-			#if (GTK_MAJOR_VERSION > 2 || GTK_MINOR_VERSION >= 14)
-				GtkWidget *pContentBox = gtk_dialog_get_content_area (GTK_DIALOG(dialog));
-			#else
-				GtkWidget *pContentBox =  GTK_DIALOG(dialog)->vbox;
-			#endif
+			GtkWidget *pContentBox = gtk_dialog_get_content_area (GTK_DIALOG(dialog));
 
 			gtk_box_pack_start (GTK_BOX (pContentBox), label, FALSE, FALSE, 0);
 
-			GtkWidget *pAskBox = _gtk_hbox_new (3);
+			GtkWidget *pAskBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
 			gtk_box_pack_start (GTK_BOX (pContentBox), pAskBox, FALSE, FALSE, 0);
 			label = gtk_label_new (_("Remember this choice"));
 			GtkWidget *pCheckBox = gtk_check_button_new ();

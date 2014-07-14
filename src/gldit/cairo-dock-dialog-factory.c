@@ -74,13 +74,7 @@ static void _compute_dialog_sizes (CairoDialog *pDialog)
 	pDialog->container.iHeight = pDialog->iComputedHeight;
 }
 
-static gboolean on_expose_dialog (G_GNUC_UNUSED GtkWidget *pWidget,
-#if (GTK_MAJOR_VERSION < 3)
-	GdkEventExpose *pExpose,
-#else
-	cairo_t *ctx,
-#endif
-	CairoDialog *pDialog)
+static gboolean on_expose_dialog (G_GNUC_UNUSED GtkWidget *pWidget, cairo_t *ctx, CairoDialog *pDialog)
 {
 	//g_print ("%s (%dx%d ; %d;%d)\n", __func__, pDialog->container.iWidth, pDialog->container.iHeight, pExpose->area.x, pExpose->area.y);
 	/* int x, y;
@@ -106,16 +100,12 @@ static gboolean on_expose_dialog (G_GNUC_UNUSED GtkWidget *pWidget,
 		cairo_t *pCairoContext;
 		
 		GdkRectangle area;
-		#if (GTK_MAJOR_VERSION < 3)
-		memcpy (&area, &pExpose->area, sizeof (GdkRectangle));
-		#else
 		double x1, x2, y1, y2;
 		cairo_clip_extents (ctx, &x1, &y1, &x2, &y2);
 		area.x = x1;
 		area.y = y1;
 		area.width = x2 - x1;
 		area.height = y2 - y1;  /// or the opposite ?...
-		#endif
 		
 		if (area.x != 0 || area.y != 0)
 		{
@@ -157,7 +147,7 @@ static gboolean on_expose_dialog (G_GNUC_UNUSED GtkWidget *pWidget,
 static void _cairo_dock_set_dialog_input_shape (CairoDialog *pDialog)
 {
 	if (pDialog->pShapeBitmap != NULL)
-		gldi_shape_destroy (pDialog->pShapeBitmap);
+		cairo_region_destroy (pDialog->pShapeBitmap);
 	
 	pDialog->pShapeBitmap = gldi_container_create_input_shape (CAIRO_CONTAINER (pDialog),
 		0,
@@ -191,11 +181,7 @@ static gboolean on_configure_dialog (G_GNUC_UNUSED GtkWidget* pWidget,
 	{
 		int w = pDialog->iInteractiveWidth, h = pDialog->iInteractiveHeight;
 		GtkRequisition requisition;
-		#if (GTK_MAJOR_VERSION < 3)
-		gtk_widget_size_request (pDialog->pInteractiveWidget, &requisition);
-		#else
 		gtk_widget_get_preferred_size (pDialog->pInteractiveWidget, &requisition, NULL);
-		#endif
 		pDialog->iInteractiveWidth = requisition.width;
 		pDialog->iInteractiveHeight = requisition.height;
 		//g_print ("  pInteractiveWidget : %dx%d\n", pDialog->iInteractiveWidth, pDialog->iInteractiveHeight);
@@ -286,7 +272,7 @@ static gboolean on_button_press_widget (G_GNUC_UNUSED GtkWidget *widget,
 
 static GtkWidget *_cairo_dock_add_dialog_internal_box (CairoDialog *pDialog, int iWidth, int iHeight, gboolean bCanResize)
 {
-	GtkWidget *pBox = _gtk_hbox_new (0);
+	GtkWidget *pBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	if (iWidth != 0 && iHeight != 0)
 		g_object_set (pBox, "height-request", iHeight, "width-request", iWidth, NULL);
 	else if (iWidth != 0)
@@ -393,40 +379,6 @@ static gboolean _animation_loop (GldiContainer *pContainer)
 		return TRUE;
 }
 
-#if (GTK_MAJOR_VERSION < 3)
-static void _set_widget_text_color (GtkWidget *pWidget)
-{
-	if (myDialogsParam.bUseDefaultColors)
-	{
-		gtk_widget_modify_fg (pWidget, GTK_STATE_NORMAL, NULL);  // NULL = undo previous modifications
-	}
-	else
-	{
-		static GdkColor color;
-		color.red = myDialogsParam.dialogTextDescription.fColorStart.rgba.red * 65535;
-		color.green = myDialogsParam.dialogTextDescription.fColorStart.rgba.green * 65535;
-		color.blue = myDialogsParam.dialogTextDescription.fColorStart.rgba.blue * 65535;
-		gtk_widget_modify_fg (pWidget, GTK_STATE_NORMAL, &color);
-	}
-}
-
-static void _set_widget_bg_color (GtkWidget *pWidget)
-{
-	if (myDialogsParam.bUseDefaultColors)
-	{
-		gtk_widget_modify_bg (pWidget, GTK_STATE_NORMAL, NULL);  // NULL = undo previous modifications
-	}
-	else
-	{
-		static GdkColor color;
-		color.red = myDialogsParam.fBgColor.rgba.red * 65535;
-		color.green = myDialogsParam.fBgColor.rgba.green * 65535;
-		color.blue = myDialogsParam.fBgColor.rgba.blue * 65535;
-		gtk_widget_modify_bg (pWidget, GTK_STATE_NORMAL, &color);
-	}
-}
-#endif
-
 void gldi_dialog_init_internals (CairoDialog *pDialog, CairoDialogAttr *pAttribute)
 {
 	pDialog->container.iface.animation_loop = _animation_loop;
@@ -472,11 +424,7 @@ void gldi_dialog_init_internals (CairoDialog *pDialog, CairoDialogAttr *pAttribu
 		pDialog->pInteractiveWidget = pAttribute->pInteractiveWidget;
 		
 		GtkRequisition requisition;
-		#if (GTK_MAJOR_VERSION < 3)
-		gtk_widget_size_request (pAttribute->pInteractiveWidget, &requisition);
-		#else
 		gtk_widget_get_preferred_size (pAttribute->pInteractiveWidget, &requisition, NULL);
-		#endif
 		pDialog->iInteractiveWidth = requisition.width;
 		pDialog->iInteractiveHeight = requisition.height;
 	}
@@ -537,9 +485,9 @@ void gldi_dialog_init_internals (CairoDialog *pDialog, CairoDialogAttr *pAttribu
 	pDialog->container.iHeight = pDialog->iBubbleHeight + pDialog->iTopMargin + pDialog->iBottomMargin + pDialog->iMinBottomGap;
 	
 	//\________________ On reserve l'espace pour les decorations.
-	GtkWidget *pMainHBox = _gtk_hbox_new (0);
+	GtkWidget *pMainHBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_container_add (GTK_CONTAINER (pDialog->container.pWidget), pMainHBox);
-	pDialog->pLeftPaddingBox = _gtk_vbox_new (0);
+	pDialog->pLeftPaddingBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	g_object_set (pDialog->pLeftPaddingBox, "width-request", pDialog->iLeftMargin, NULL);
 	gtk_box_pack_start (GTK_BOX (pMainHBox),
 		pDialog->pLeftPaddingBox,
@@ -547,14 +495,14 @@ void gldi_dialog_init_internals (CairoDialog *pDialog, CairoDialogAttr *pAttribu
 		FALSE,
 		0);
 
-	pDialog->pWidgetLayout = _gtk_vbox_new (0);
+	pDialog->pWidgetLayout = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	gtk_box_pack_start (GTK_BOX (pMainHBox),
 		pDialog->pWidgetLayout,
 		FALSE,
 		FALSE,
 		0);
 
-	pDialog->pRightPaddingBox = _gtk_vbox_new (0);
+	pDialog->pRightPaddingBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	g_object_set (pDialog->pRightPaddingBox, "width-request", pDialog->iRightMargin, NULL);
 	gtk_box_pack_start (GTK_BOX (pMainHBox),
 		pDialog->pRightPaddingBox,
@@ -582,13 +530,8 @@ void gldi_dialog_init_internals (CairoDialog *pDialog, CairoDialogAttr *pAttribu
 		gtk_widget_grab_focus (pDialog->pInteractiveWidget);
 		
 		// set a MenuItem style to the dialog, so that the interactive widget can use the style defined for menu-items (either from the GTK theme, or from our own .css), and therefore be well integrated into the dialog, as if it was inside a menu.
-		#if GTK_MAJOR_VERSION > 2
 		GtkStyleContext *ctx = gtk_widget_get_style_context (pDialog->pWidgetLayout);
 		gtk_style_context_add_class (ctx, myDialogsParam.bUseDefaultColors && myStyleParam.bUseSystemColors ? GTK_STYLE_CLASS_MENUITEM : "gldimenuitem");
-		#else
-		_set_widget_bg_color (pDialog->pWidgetLayout);
-		_set_widget_text_color (pDialog->pWidgetLayout);
-		#endif
 	}
 	if (pDialog->pButtons != NULL)
 	{
@@ -609,11 +552,7 @@ void gldi_dialog_init_internals (CairoDialog *pDialog, CairoDialogAttr *pAttribu
 	
 	//\________________ connect the signals to the window
 	g_signal_connect (G_OBJECT (pDialog->container.pWidget),
-		#if (GTK_MAJOR_VERSION < 3)
-		"expose-event",
-		#else
 		"draw",
-		#endif
 		G_CALLBACK (on_expose_dialog),
 		pDialog);
 	g_signal_connect (G_OBJECT (pDialog->container.pWidget),
@@ -732,11 +671,7 @@ static inline GtkWidget *_cairo_dock_make_entry_for_dialog (const gchar *cTextFo
 }
 static inline GtkWidget *_cairo_dock_make_hscale_for_dialog (double fValueForHScale, double fMaxValueForHScale)
 {
-	#if (GTK_MAJOR_VERSION < 3)
-	GtkWidget *pWidget = gtk_hscale_new_with_range (0, fMaxValueForHScale, fMaxValueForHScale / 100.);
-	#else
 	GtkWidget *pWidget = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 0, fMaxValueForHScale, fMaxValueForHScale / 100.);
-	#endif
 	gtk_scale_set_digits (GTK_SCALE (pWidget), 2);
 	gtk_range_set_value (GTK_RANGE (pWidget), fValueForHScale);
 
@@ -1001,16 +936,14 @@ void gldi_dialog_set_message_printf (CairoDialog *pDialog, const gchar *cMessage
 
 void gldi_dialog_reload (CairoDialog *pDialog)
 {
-	#if GTK_MAJOR_VERSION > 2
 	// re-set the GTK style class (global style may have changed between system / custom)
 	GtkStyleContext *ctx = gtk_widget_get_style_context (pDialog->pWidgetLayout);
-	
+
 	gtk_style_context_remove_class (ctx, GTK_STYLE_CLASS_MENUITEM);
 	gtk_style_context_remove_class (ctx, "gldimenuitem");
-	
+
 	gtk_style_context_add_class (ctx, myDialogsParam.bUseDefaultColors && myStyleParam.bUseSystemColors ? GTK_STYLE_CLASS_MENUITEM : "gldimenuitem");
-	#endif
-	
+
 	// reload the text buffer (color or font may have changed)
 	if (pDialog->cText != NULL)
 	{
@@ -1019,7 +952,7 @@ void gldi_dialog_reload (CairoDialog *pDialog)
 		gldi_dialog_set_message (pDialog, cText);
 		g_free (cText);
 	}
-	
+
 	// reload sizes (radius or linewidth may have changed)
 	_compute_dialog_sizes (pDialog);
 }

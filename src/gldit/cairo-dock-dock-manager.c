@@ -169,7 +169,7 @@ static void _make_sub_dock (CairoDock *pDock, CairoDock *pParentDock, const gcha
 	//\__________________ remove any input shape
 	if (pDock->pShapeBitmap != NULL)
 	{
-		gldi_shape_destroy (pDock->pShapeBitmap);
+		cairo_region_destroy (pDock->pShapeBitmap);
 		pDock->pShapeBitmap = NULL;
 		if (pDock->iInputState != CAIRO_DOCK_INPUT_ACTIVE)
 		{
@@ -2093,13 +2093,13 @@ static void reset_object (GldiObject *obj)
 	
 	// free data
 	if (pDock->pShapeBitmap != NULL)
-		gldi_shape_destroy (pDock->pShapeBitmap);
+		cairo_region_destroy (pDock->pShapeBitmap);
 	
 	if (pDock->pHiddenShapeBitmap != NULL)
-		gldi_shape_destroy (pDock->pHiddenShapeBitmap);
+		cairo_region_destroy (pDock->pHiddenShapeBitmap);
 	
 	if (pDock->pActiveShapeBitmap != NULL)
-		gldi_shape_destroy (pDock->pActiveShapeBitmap);
+		cairo_region_destroy (pDock->pActiveShapeBitmap);
 	
 	if (pDock->pRenderer != NULL && pDock->pRenderer->free_data != NULL)
 	{

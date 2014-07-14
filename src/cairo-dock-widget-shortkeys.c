@@ -119,7 +119,7 @@ static void _cairo_dock_initiate_change_shortkey (G_GNUC_UNUSED GtkMenuItem *pMe
 	gtk_widget_add_events (pInputDialog, GDK_KEY_PRESS_MASK);
 	g_signal_connect (GTK_WIDGET(pInputDialog), "key-press-event", G_CALLBACK(_on_key_grab_cb), pTreeView);
 
-	GtkWidget *pMainVBox = _gtk_vbox_new (CAIRO_DOCK_FRAME_MARGIN);
+	GtkWidget *pMainVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_FRAME_MARGIN);
 	gtk_container_add (GTK_CONTAINER (pInputDialog), pMainVBox);
 
 	GtkWidget *pLabel = gtk_label_new (_("Press the shortkey"));

@@ -742,11 +742,7 @@ ItemsWidget *cairo_dock_items_widget_new (GtkWindow *pMainWindow)
 	pItemsWidget->widget.iType = WIDGET_ITEMS;
 	
 	GtkWidget *pLauncherPane;
-	#if (GTK_MAJOR_VERSION < 3)
-	pLauncherPane = gtk_hpaned_new ();
-	#else
 	pLauncherPane = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
-	#endif
 	pItemsWidget->widget.pWidget = pLauncherPane;
 	pItemsWidget->widget.apply = _items_widget_apply;
 	pItemsWidget->widget.reset = _items_widget_reset;

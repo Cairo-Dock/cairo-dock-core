@@ -281,27 +281,19 @@ void cairo_dock_show_tips (void)
 		_cairo_dock_get_next_tip (pTips);
 	
 	// build a list of the available groups.
-	GtkWidget *pInteractiveWidget = _gtk_vbox_new (3);
-	#if (GTK_MAJOR_VERSION < 3 && GTK_MINOR_VERSION < 24)
-	GtkWidget *pComboBox = gtk_combo_box_new_text ();
-	#else
+	GtkWidget *pInteractiveWidget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
 	GtkWidget *pComboBox = gtk_combo_box_text_new ();
-	#endif
 	guint i;
 	for (i = 0; i < iNbGroups; i ++)
 	{
-		#if (GTK_MAJOR_VERSION < 3 && GTK_MINOR_VERSION < 24)
-		gtk_combo_box_append_text (GTK_COMBO_BOX (pComboBox), gettext (pGroupList[i]));
-		#else
 		gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (pComboBox), gettext (pGroupList[i]));
-		#endif
 	}
 	gtk_combo_box_set_active (GTK_COMBO_BOX (pComboBox), pTips->iNumTipGroup);
 	pTips->pCategoryCombo = pComboBox;
 	static gpointer data_combo[2];
 	data_combo[0] = pTips;  // the 2nd data is the dialog, we'll set it after we make it.
 	g_signal_connect (G_OBJECT (pComboBox), "changed", G_CALLBACK(_on_tips_category_changed), data_combo);
-	GtkWidget *pJumpBox = _gtk_hbox_new (3);
+	GtkWidget *pJumpBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
 	GtkWidget *label = gtk_label_new (_("Category"));
 	gldi_dialog_set_widget_text_color (label);
 	gtk_box_pack_end (GTK_BOX (pJumpBox), pComboBox, FALSE, FALSE, 0);

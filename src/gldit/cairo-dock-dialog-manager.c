@@ -263,12 +263,12 @@ static gboolean on_key_press_dialog (G_GNUC_UNUSED GtkWidget *pWidget,
 	{
 		switch (pKey->keyval)
 		{
-			case GLDI_KEY(Return) :
-			case GLDI_KEY(KP_Enter) :
+			case GDK_KEY_Return :
+			case GDK_KEY_KP_Enter :
 				_answer (pDialog, CAIRO_DIALOG_ENTER_KEY);
 				gldi_object_unref (GLDI_OBJECT(pDialog));
 			break ;
-			case GLDI_KEY(Escape) :
+			case GDK_KEY_Escape :
 				_answer (pDialog, CAIRO_DIALOG_ESCAPE_KEY);
 				gldi_object_unref (GLDI_OBJECT(pDialog));
 			break ;
@@ -990,17 +990,15 @@ static void _reload_dialogs (void)
 	for (d = s_pDialogList; d != NULL; d = d->next)
 	{
 		pDialog = d->data;
-		
-		#if GTK_MAJOR_VERSION > 2
+
 		// re-set the GTK style class (global style may have changed between system / custom)
 		GtkStyleContext *ctx = gtk_widget_get_style_context (pDialog->pWidgetLayout);
-		
+
 		gtk_style_context_remove_class (ctx, GTK_STYLE_CLASS_MENUITEM);
 		gtk_style_context_remove_class (ctx, "gldimenuitem");
-		
+
 		gtk_style_context_add_class (ctx, myDialogsParam.bUseDefaultColors && myStyleParam.bUseSystemColors ? GTK_STYLE_CLASS_MENUITEM : "gldimenuitem");
-		#endif
-		
+
 		// reload the text buffer (color or font may have changed)
 		if (pDialog->cText != NULL)
 		{
@@ -1015,15 +1013,13 @@ static void _reload_dialogs (void)
 static gboolean on_style_changed (G_GNUC_UNUSED gpointer data)
 {
 	g_print ("%s (Dialogs, %d)\n", __func__, myDialogsParam.bUseDefaultColors);
-	
-	#if GTK_MAJOR_VERSION > 2
+
 	// init the menu style (create the "gldimenuitem" gtk style class)
 	_init_menu_style ();
-	#endif
-	
+
 	// update existing dialogs
 	_reload_dialogs ();
-	
+
 	return GLDI_NOTIFICATION_LET_PASS;
 }
 
@@ -1182,7 +1178,7 @@ static void reset_object (GldiObject *obj)
 		g_timer_destroy (pDialog->pUnmapTimer);
 	
 	if (pDialog->pShapeBitmap != NULL)
-		gldi_shape_destroy (pDialog->pShapeBitmap);
+		cairo_region_destroy (pDialog->pShapeBitmap);
 	
 	// destroy user data
 	if (pDialog->pUserData != NULL && pDialog->pFreeUserDataFunc != NULL)

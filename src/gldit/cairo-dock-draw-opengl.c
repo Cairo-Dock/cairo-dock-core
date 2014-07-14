@@ -723,11 +723,7 @@ GLuint cairo_dock_create_texture_from_raw_data (const guchar *pTextureRaw, int i
 
 GLuint cairo_dock_create_texture_from_image_full (const gchar *cImageFile, double *fImageWidth, double *fImageHeight)
 {
-	#if (GTK_MAJOR_VERSION < 3 && GTK_MINOR_VERSION < 20)
-	g_return_val_if_fail (GTK_WIDGET_REALIZED (g_pPrimaryContainer->pWidget), 0);
-	#else
 	g_return_val_if_fail (gtk_widget_get_realized (g_pPrimaryContainer->pWidget), 0);
-	#endif
 	double fWidth=0, fHeight=0;
 	if (cImageFile == NULL)
 		return 0;

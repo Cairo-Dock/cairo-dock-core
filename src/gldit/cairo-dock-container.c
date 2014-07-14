@@ -89,20 +89,12 @@ static gboolean _prevent_delete (G_GNUC_UNUSED GtkWidget *pWidget, G_GNUC_UNUSED
 void cairo_dock_set_default_rgba_visual (GtkWidget *pWidget)
 {
 	GdkScreen* pScreen = gtk_widget_get_screen (pWidget);
-	
-	#if (GTK_MAJOR_VERSION < 3)
-	GdkColormap* pColormap = gdk_screen_get_rgba_colormap (pScreen);
-	if (!pColormap)
-		pColormap = gdk_screen_get_rgb_colormap (pScreen);
-	
-	gtk_widget_set_colormap (pWidget, pColormap);
-	#else
+
 	GdkVisual *pGdkVisual = gdk_screen_get_rgba_visual (pScreen);
 	if (pGdkVisual == NULL)
 		pGdkVisual = gdk_screen_get_system_visual (pScreen);
 	
 	gtk_widget_set_visual (pWidget, pGdkVisual);
-	#endif
 }
 
 static gboolean _cairo_default_container_animation_loop (GldiContainer *pContainer)
@@ -134,13 +126,7 @@ static gboolean _cairo_default_container_animation_loop (GldiContainer *pContain
 		return TRUE;
 }
 
-static gboolean _set_opacity (GtkWidget *pWidget,
-#if (GTK_MAJOR_VERSION < 3)
-	G_GNUC_UNUSED GdkEventExpose *pExpose,
-#else
-	G_GNUC_UNUSED cairo_t *ctx,
-#endif
-	GldiContainer *pContainer)
+static gboolean _set_opacity (GtkWidget *pWidget, G_GNUC_UNUSED cairo_t *ctx, GldiContainer *pContainer)
 {
 	if (pContainer->iWidth != 1 ||pContainer->iHeight != 1)
 	{
@@ -157,11 +143,7 @@ static gboolean _set_opacity (GtkWidget *pWidget,
 
 static void _remove_background (G_GNUC_UNUSED GtkWidget *pWidget, GldiContainer *pContainer)
 {
-	#if (GTK_MAJOR_VERSION < 3)
-	gdk_window_set_back_pixmap (gldi_container_get_gdk_window (pContainer), NULL, FALSE);
-	#else
 	gdk_window_set_background_pattern (gldi_container_get_gdk_window (pContainer), NULL);  // window must be realized (shown)
-	#endif
 }
 
 void cairo_dock_redraw_container (GldiContainer *pContainer)
@@ -391,46 +373,14 @@ GtkWidget *gldi_container_build_menu (GldiContainer *pContainer, Icon *icon)
 }
 
 
-GldiShape *gldi_container_create_input_shape (GldiContainer *pContainer, int x, int y, int w, int h)
+cairo_region_t *gldi_container_create_input_shape (GldiContainer *pContainer, int x, int y, int w, int h)
 {
 	if (pContainer->iWidth == 0 || pContainer->iHeight == 0)  // very unlikely to happen, but anyway avoid this case.
 		return NULL;
-	
-	#if (GTK_MAJOR_VERSION < 3)
-	int W, H;
-	if (pContainer->bIsHorizontal)
-	{
-		W = pContainer->iWidth;
-		H = pContainer->iHeight;
-	}
-	else
-	{
-		W = pContainer->iHeight;
-		H = pContainer->iWidth;
-	}
-	GdkBitmap *pShapeBitmap = (GdkBitmap*) gdk_pixmap_new (NULL,
-		W,
-		H,
-		1);
 
-	cairo_t *pCairoContext = gdk_cairo_create (pShapeBitmap);
-	g_return_val_if_fail (pCairoContext != NULL, NULL);  // if no context, abort (https://bugs.launchpad.net/cairo-dock-plug-ins/+bug/861725)
-	cairo_set_source_rgba (pCairoContext, 0.0f, 0.0f, 0.0f, 0.0f);
-	cairo_set_operator (pCairoContext, CAIRO_OPERATOR_SOURCE);
-	cairo_paint (pCairoContext);
-	
-	cairo_set_source_rgba (pCairoContext, 1., 1., 1., 1.);
-	cairo_rectangle (pCairoContext,
-		x,
-		y,
-		w,
-		h);
-	cairo_fill (pCairoContext);
-	cairo_destroy (pCairoContext);
-	#else
 	cairo_rectangle_int_t rect = {x, y, w, h};
 	cairo_region_t *pShapeBitmap = cairo_region_create_rectangle (&rect);  // for a more complex shape, we would need to draw it on a cairo_surface_t, and then make it a region with gdk_cairo_region_from_surface().
-	#endif
+
 	return pShapeBitmap;
 }
 
@@ -571,7 +521,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	}
 	if (pContainer->iAnimationDeltaT == 0)
 		pContainer->iAnimationDeltaT = 30;
-	
+
 	// set the opacity to 0 to avoid seeing grey rectangles until the window is ready to be painted by us.
 	if (s_bInitialOpacity0)
 	{
@@ -581,11 +531,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 		gtk_window_set_opacity (GTK_WINDOW (pWindow), 0.);
 		#endif
 		g_signal_connect (G_OBJECT (pWindow),
-			#if (GTK_MAJOR_VERSION < 3)
-			"expose-event",
-			#else
 			"draw",
-			#endif
 			G_CALLBACK (_set_opacity),
 			pContainer);  // the callback will be removed once it has done its job.
 	}
@@ -593,12 +539,10 @@ static void init_object (GldiObject *obj, gpointer attr)
 		"realize",
 		G_CALLBACK (_remove_background),
 		pContainer);
-	
-	// remove the resize grip added by gtk3 (it's also possible that this grip has been backported to gtk+-2.0 (e.g. in Ubuntu Natty...))
-	#if (GTK_MAJOR_VERSION >= 3 || ENABLE_GTK_GRIP == 1)
+
+	// remove the resize grip added by gtk3
 	gtk_window_set_has_resize_grip (GTK_WINDOW(pWindow), FALSE);
-	#endif
-	
+
 	// make it the primary container if it's the first
 	if (g_pPrimaryContainer == NULL)
 		g_pPrimaryContainer = pContainer;

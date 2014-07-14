@@ -280,11 +280,11 @@ struct _CairoDock {
 	/// state of the input shape (active, at rest, hidden).
 	CairoDockInputState iInputState;
 	/// input shape of the window when the dock is at rest.
-	GldiShape* pShapeBitmap;
+	cairo_region_t* pShapeBitmap;
 	/// input shape of the window when the dock is hidden.
-	GldiShape* pHiddenShapeBitmap;
+	cairo_region_t* pHiddenShapeBitmap;
 	/// input shape of the window when the dock is active (NULL to cover all dock).
-	GldiShape* pActiveShapeBitmap;
+	cairo_region_t* pActiveShapeBitmap;
 	
 	//\_______________ OpenGL.
 	GLuint iRedirectedTexture;

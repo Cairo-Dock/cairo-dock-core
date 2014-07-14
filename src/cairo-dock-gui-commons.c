@@ -149,24 +149,20 @@ GtkRequisition *cairo_dock_get_widget_bottom_position (GtkWidget *pWidget)
 	GtkRequisition *pPosition = g_new (GtkRequisition, 1);
 	gint dx = 0, dy = 0;
 	GtkRequisition req;
-	
+
 	// Top left drawable window coordinates on screen. (inside decorations)
 	// We need to get the toplevel widget origin. 
 	// Otherwise, it would give wrong results if called on the widget in a scrolled area.
 	// (drawable surface origin can even be out of the screen).
 	GtkWidget *pTopLevel = gtk_widget_get_toplevel (pWidget);
 	gdk_window_get_origin (gtk_widget_get_window (pTopLevel), &pPosition->width, &pPosition->height);
-	
+
 	// Widget position inside the window.
 	gtk_widget_translate_coordinates (pWidget, pTopLevel, 0, 0, &dx, &dy);
-	
+
 	// Widget height.
-	#if (GTK_MAJOR_VERSION < 3)
-		gtk_widget_size_request (pWidget, &req);
-	#else
-		gtk_widget_get_preferred_size (pWidget, &req, NULL);
-	#endif
-	
+	gtk_widget_get_preferred_size (pWidget, &req, NULL);
+
 	pPosition->width += dx;
 	pPosition->height += dy + req.height;
 

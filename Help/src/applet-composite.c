@@ -161,7 +161,7 @@ void cd_help_enable_composite (void)
 	// if the WM can handle the composite, ask the user if he wants to enable it.
 	if (s_activate_composite != NULL)  // the WM can activate the composite.
 	{
-		GtkWidget *pAskBox = _gtk_hbox_new (3);
+		GtkWidget *pAskBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
 		GtkWidget *label = gtk_label_new (D_("Don't ask me any more"));
 		gldi_dialog_set_widget_text_color (label);
 		GtkWidget *pCheckBox = gtk_check_button_new ();
