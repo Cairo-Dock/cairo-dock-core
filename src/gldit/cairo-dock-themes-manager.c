@@ -442,21 +442,25 @@ static gchar *_cairo_dock_get_theme_path (const gchar *cThemeName)  // a theme n
 	return cNewThemePath;
 }
 
+static void _launch_cmd (const gchar *cCommand)
+{
+	cd_debug ("%s", cCommand);
+	int r = system (cCommand);
+	if (r < 0)
+		cd_warning ("Not able to launch this command: %s", cCommand);
+}
+
 static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboolean bLoadBehavior, gboolean bLoadLaunchers)
 {
 	g_return_val_if_fail (cNewThemePath != NULL && g_file_test (cNewThemePath, G_FILE_TEST_EXISTS), FALSE);
 	
-	//\___________________ On charge les parametres de comportement globaux et de chaque dock.
+	//\___________________ We load global behaviour parameters for each dock.
 	GString *sCommand = g_string_new ("");
-	int r;
 	cd_message ("Applying changes ...");
 	if (g_pMainDock == NULL || bLoadBehavior)
 	{
 		g_string_printf (sCommand, "cp \"%s\"/*.conf \"%s\"", cNewThemePath, g_cCurrentThemePath);
-		cd_debug ("%s", sCommand->str);
-		r = system (sCommand->str);
-		if (r < 0)
-			cd_warning ("Not able to launch this command: %s", sCommand->str);
+		_launch_cmd (sCommand->str);
 	}
 	else
 	{
@@ -484,136 +488,96 @@ static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboo
 		g_dir_close (dir);
 	}
 	
-	//\___________________ On charge les icones.
+	//\___________________ We load icons
 	if (bLoadLaunchers)
 	{
 		g_string_printf (sCommand, "rm -f \"%s\"/*", g_cCurrentIconsPath);
-		cd_debug ("%s", sCommand->str);
-		r = system (sCommand->str);
-		if (r < 0)
-			cd_warning ("Not able to launch this command: %s", sCommand->str);
+		_launch_cmd (sCommand->str);
 		g_string_printf (sCommand, "rm -f \"%s\"/.*", g_cCurrentIconsPath);
-		cd_debug ("%s", sCommand->str);
-		r = system (sCommand->str);
-		if (r < 0)
-			cd_warning ("Not able to launch this command: %s", sCommand->str);
+		_launch_cmd (sCommand->str);
 		
 		g_string_printf (sCommand, "rm -f \"%s\"/*", g_cCurrentImagesPath);
-		cd_debug ("%s", sCommand->str);
-		r = system (sCommand->str);
-		if (r < 0)
-			cd_warning ("Not able to launch this command: %s", sCommand->str);
+		_launch_cmd (sCommand->str);
 		g_string_printf (sCommand, "rm -f \"%s\"/.*", g_cCurrentImagesPath);
-		cd_debug ("%s", sCommand->str);
-		r = system (sCommand->str);
-		if (r < 0)
-			cd_warning ("Not able to launch this command: %s", sCommand->str);
+		_launch_cmd (sCommand->str);
 	}
 	gchar *cNewLocalIconsPath = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
-	if (! g_file_test (cNewLocalIconsPath, G_FILE_TEST_IS_DIR))  // c'est un ancien theme, on deplace les icones vers le repertoire 'icons'.
+	if (! g_file_test (cNewLocalIconsPath, G_FILE_TEST_IS_DIR))  // it's an old theme: move icons to a new dir 'icons'.
 	{
 		g_string_printf (sCommand, "find \"%s/%s\" -mindepth 1 ! -name '*.desktop' -exec /bin/cp '{}' '%s' \\;", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentIconsPath);
 	}
 	else
 	{
-		g_string_printf (sCommand, "for f in \"%s\"/* ; do rm -f \"%s/`basename \"${f%%.*}\"`\"*; done;", cNewLocalIconsPath, g_cCurrentIconsPath);  // on efface les doublons car sinon on pourrait avoir x.png et x.svg ensemble et le dock ne saurait pas lequel choisir.
-		cd_debug ("%s", sCommand->str);
-		r = system (sCommand->str);
-		if (r < 0)
-			cd_warning ("Not able to launch this command: %s", sCommand->str);
+		g_string_printf (sCommand, "for f in \"%s\"/* ; do rm -f \"%s/`basename \"${f%%.*}\"`\"*; done;", cNewLocalIconsPath, g_cCurrentIconsPath);  // we erase double items because we could have x.png and x.svg and the dock will not know which it has to use.
+		_launch_cmd (sCommand->str);
 		
 		g_string_printf (sCommand, "cp \"%s\"/* \"%s\"", cNewLocalIconsPath, g_cCurrentIconsPath);
 	}
-	cd_debug ("%s", sCommand->str);
-	r = system (sCommand->str);
-	if (r < 0)
-		cd_warning ("Not able to launch this command: %s", sCommand->str);
+	_launch_cmd (sCommand->str);
 	g_free (cNewLocalIconsPath);
 	
-	//\___________________ On charge les extras.
+	//\___________________ We load extras.
 	g_string_printf (sCommand, "%s/%s", cNewThemePath, CAIRO_DOCK_LOCAL_EXTRAS_DIR);
 	if (g_file_test (sCommand->str, G_FILE_TEST_IS_DIR))
 	{
 		g_string_printf (sCommand, "cp -r \"%s/%s\"/* \"%s\"", cNewThemePath, CAIRO_DOCK_LOCAL_EXTRAS_DIR, g_cExtrasDirPath);
-		cd_debug ("%s", sCommand->str);
-		r = system (sCommand->str);
-		if (r < 0)
-			cd_warning ("Not able to launch this command: %s", sCommand->str);
+		_launch_cmd (sCommand->str);
 	}
 	
-	//\___________________ On charge les lanceurs si necessaire, en effacant ceux existants.
+	//\___________________ We load launcher if needed after having removed old ones.
 	if (! g_file_test (g_cCurrentLaunchersPath, G_FILE_TEST_EXISTS))
 	{
 		gchar *command = g_strdup_printf ("mkdir -p \"%s\"", g_cCurrentLaunchersPath);
-		r = system (command);
-		if (r < 0)
-			cd_warning ("Not able to launch this command: %s", command);
+		_launch_cmd (sCommand->str);
 		g_free (command);
 	}
 	if (g_pMainDock == NULL || bLoadLaunchers)
 	{
 		g_string_printf (sCommand, "rm -f \"%s\"/*.desktop", g_cCurrentLaunchersPath);
-		cd_debug ("%s", sCommand->str);
-		r = system (sCommand->str);
-		if (r < 0)
-			cd_warning ("Not able to launch this command: %s", sCommand->str);
+		_launch_cmd (sCommand->str);
 
 		g_string_printf (sCommand, "cp \"%s/%s\"/*.desktop \"%s\"", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentLaunchersPath);
-		cd_debug ("%s", sCommand->str);
-		r = system (sCommand->str);
-		if (r < 0)
-			cd_warning ("Not able to launch this command: %s", sCommand->str);
+		_launch_cmd (sCommand->str);
 	}
 	
-	//\___________________ On remplace tous les autres fichiers par les nouveaux.
-	g_string_printf (sCommand, "find \"%s\" -mindepth 1 -maxdepth 1  ! -name '*.conf' -type f -exec rm -f '{}' \\;", g_cCurrentThemePath);  // efface tous les fichiers du theme mais sans toucher aux lanceurs et aux plug-ins.
-	cd_debug ("%s", sCommand->str);
-	r = system (sCommand->str);
-	if (r < 0)
-		cd_warning ("Not able to launch this command: %s", sCommand->str);
+	//\___________________ We replace all files by the new ones.
+	g_string_printf (sCommand, "find \"%s\" -mindepth 1 -maxdepth 1  ! -name '*.conf' -type f -exec rm -f '{}' \\;", g_cCurrentThemePath);  // remove all ficher of the theme except launchers and plugins.
+	_launch_cmd (sCommand->str);
 
 	if (g_pMainDock == NULL || bLoadBehavior)
 	{
-		g_string_printf (sCommand, "find \"%s\"/* -prune ! -name '*.conf' ! -name %s -exec /bin/cp -r '{}' \"%s\" \\;", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath);  // copie tous les fichiers du nouveau theme sauf les lanceurs et le .conf, dans le repertoire du theme courant. Ecrase les fichiers de memes noms.
-		cd_debug ("%s", sCommand->str);
-		r = system (sCommand->str);
-		if (r < 0)
-			cd_warning ("Not able to launch this command: %s", sCommand->str);
+		g_string_printf (sCommand, "find \"%s\"/* -prune ! -name '*.conf' ! -name %s -exec /bin/cp -r '{}' \"%s\" \\;", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath);  // Copy all files of the new theme except launchers and .conf files in the dir of the current theme. Overwrite files with same names
+		_launch_cmd (sCommand->str);
 	}
 	else
 	{
-		// on copie tous les fichiers du nouveau theme sauf les lanceurs et les .conf (dock et plug-ins).
+		// We copy all files of the new theme except launchers and .conf files (dock and plug-ins).
 		g_string_printf (sCommand, "find \"%s\" -mindepth 1 ! -name '*.conf' ! -path '%s/%s*' ! -type d -exec cp -p {} \"%s\" \\;", cNewThemePath, cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath);
-		cd_debug ("%s", sCommand->str);
-		r = system (sCommand->str);
-		if (r < 0)
-			cd_warning ("Not able to launch this command: %s", sCommand->str);
+		_launch_cmd (sCommand->str);
 		
-		// on parcours les .conf des plug-ins, on les met a jour, et on fusionne avec le theme courant.
-		gchar *cNewPlugInsDir = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_PLUG_INS_DIR);  // repertoire des plug-ins du nouveau theme.
-		GDir *dir = g_dir_open (cNewPlugInsDir, 0, NULL);  // NULL si ce theme n'a pas de repertoire 'plug-ins'.
+		// iterate all .conf files of all plug-ins, then update them and merge them with the current theme.
+		gchar *cNewPlugInsDir = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_PLUG_INS_DIR);  // dir of plug-ins of the new theme.
+		GDir *dir = g_dir_open (cNewPlugInsDir, 0, NULL);  // NULL if this theme doesn't have any 'plug-ins' dir.
 		const gchar* cModuleDirName;
 		gchar *cConfFilePath, *cNewConfFilePath, *cUserDataDirPath, *cConfFileName;
 		do
 		{
-			cModuleDirName = g_dir_read_name (dir);  // nom du repertoire du theme (pas forcement egal au nom du theme)
+			cModuleDirName = g_dir_read_name (dir);  // name of the dir of the theme (maybe != of theme's name)
 			if (cModuleDirName == NULL)
 				break ;
 			
-			// on cree le repertoire du plug-in dans le theme courant.
+			// we create dir of the plug-in of the current theme.
 			cd_debug ("  installing %s's config", cModuleDirName);
-			cUserDataDirPath = g_strdup_printf ("%s/%s", g_cCurrentPlugInsPath, cModuleDirName);  // repertoire du plug-in dans le theme courant.
+			cUserDataDirPath = g_strdup_printf ("%s/%s", g_cCurrentPlugInsPath, cModuleDirName);  // dir of the plug-in in the current theme.
 			if (! g_file_test (cUserDataDirPath, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
 			{
 				cd_debug ("    directory %s doesn't exist, it will be created.", cUserDataDirPath);
 				
 				g_string_printf (sCommand, "mkdir -p \"%s\"", cUserDataDirPath);
-				r = system (sCommand->str);
-				if (r < 0)
-					cd_warning ("Not able to launch this command: %s", sCommand->str);
+				_launch_cmd (sCommand->str);
 			}
 			
-			// on recupere le nom et le chemin du .conf du plug-in dans le nouveau theme.
+			// we find the name and path of the .conf file of the plugin in the new theme.
 			cConfFileName = g_strdup_printf ("%s.conf", cModuleDirName);
 			cNewConfFilePath = g_strdup_printf ("%s/%s/%s", cNewPlugInsDir, cModuleDirName, cConfFileName);
 			if (! g_file_test (cNewConfFilePath, G_FILE_TEST_EXISTS))
@@ -621,7 +585,7 @@ static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboo
 				g_free (cConfFileName);
 				g_free (cNewConfFilePath);
 				GldiModule *pModule = gldi_module_foreach ((GHRFunc) _find_module_from_user_data_dir, (gpointer) cModuleDirName);
-				if (pModule == NULL)  // du coup, dans ce cas-la, on ne charge pas des plug-ins non utilises par l'utilisateur.
+				if (pModule == NULL)  // in this case, we don't load non used plugins.
 				{
 					cd_warning ("couldn't find the module owning '%s', this file will be ignored.");
 					continue;
@@ -629,9 +593,9 @@ static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboo
 				cConfFileName = g_strdup (pModule->pVisitCard->cConfFileName);
 				cNewConfFilePath = g_strdup_printf ("%s/%s/%s", cNewPlugInsDir, cModuleDirName, cConfFileName);
 			}
-			cConfFilePath = g_strdup_printf ("%s/%s", cUserDataDirPath, cConfFileName);  // chemin du .conf dans le theme courant.
+			cConfFilePath = g_strdup_printf ("%s/%s", cUserDataDirPath, cConfFileName);  // path of the .conf file of the current theme.
 			
-			// on fusionne les 2 .conf.
+			// we merge these 2 .conf files.
 			if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 			{
 				cd_debug ("    no conf file %s, we will take the theme's one", cConfFilePath);
@@ -652,15 +616,11 @@ static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboo
 	}
 	
 	g_string_printf (sCommand, "rm -f \"%s/last-modif\"", g_cCurrentThemePath);
-	r = system (sCommand->str);
-	if (r < 0)
-		cd_warning ("Not able to launch this command: %s", sCommand->str);
+	_launch_cmd (sCommand->str);
 	
-	// precaution probablement inutile.
+	// precaution maybe useless.
 	g_string_printf (sCommand, "chmod -R 775 \"%s\"", g_cCurrentThemePath);
-	r = system (sCommand->str);
-	if (r < 0)
-		cd_warning ("Not able to launch this command: %s", sCommand->str);
+	_launch_cmd (sCommand->str);
 	
 	cairo_dock_mark_current_theme_as_modified (FALSE);
 	
