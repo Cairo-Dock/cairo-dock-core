@@ -74,7 +74,7 @@ static void _compute_dialog_sizes (CairoDialog *pDialog)
 	pDialog->container.iHeight = pDialog->iComputedHeight;
 }
 
-static gboolean on_expose_dialog (G_GNUC_UNUSED GtkWidget *pWidget, cairo_t *ctx, CairoDialog *pDialog)
+static gboolean on_expose_dialog (G_GNUC_UNUSED GtkWidget *pWidget, cairo_t *pCairoContext, CairoDialog *pDialog)
 {
 	//g_print ("%s (%dx%d ; %d;%d)\n", __func__, pDialog->container.iWidth, pDialog->container.iHeight, pExpose->area.x, pExpose->area.y);
 	/* int x, y;
@@ -97,24 +97,7 @@ static gboolean on_expose_dialog (G_GNUC_UNUSED GtkWidget *pWidget, cairo_t *ctx
 	}
 	else
 	{*/
-		cairo_t *pCairoContext;
-		
-		GdkRectangle area;
-		double x1, x2, y1, y2;
-		cairo_clip_extents (ctx, &x1, &y1, &x2, &y2);
-		area.x = x1;
-		area.y = y1;
-		area.width = x2 - x1;
-		area.height = y2 - y1;  /// or the opposite ?...
-		
-		if (area.x != 0 || area.y != 0)
-		{
-			pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDialog), &area, NULL);  // pass a NULL color, so that the context is filled with transparency (otherwise, internal widgets can appear).
-		}
-		else
-		{
-			pCairoContext = cairo_dock_create_drawing_context_on_container (CAIRO_CONTAINER (pDialog));
-		}
+		cairo_dock_init_drawing_context_on_container (CAIRO_CONTAINER (pDialog), pCairoContext);
 		
 		if (pDialog->pDecorator != NULL)
 		{
@@ -124,23 +107,25 @@ static gboolean on_expose_dialog (G_GNUC_UNUSED GtkWidget *pWidget, cairo_t *ctx
 		}
 		
 		gldi_object_notify (pDialog, NOTIFICATION_RENDER, pDialog, pCairoContext);
-		
-		if (pDialog->fAppearanceCounter < 1.)
-		{
-			double fAlpha = pDialog->fAppearanceCounter * pDialog->fAppearanceCounter;
-			cairo_rectangle (pCairoContext,
-				0,
-				0,
-				pDialog->container.iWidth,
-				pDialog->container.iHeight);
-			cairo_set_line_width (pCairoContext, 0);
-			cairo_set_operator (pCairoContext, CAIRO_OPERATOR_DEST_OUT);
-			cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, 1. - fAlpha);
-			cairo_fill (pCairoContext);
-		}
-		
-		cairo_destroy (pCairoContext);
 	//}
+	return FALSE;
+}
+
+static gboolean on_expose_dialog_after (G_GNUC_UNUSED GtkWidget *pWidget, cairo_t *pCairoContext, CairoDialog *pDialog)
+{
+	if (pDialog->fAppearanceCounter < 1.)  // modify the opacity after the interaction widget has been drawn by GTK.
+	{
+		double fAlpha = pDialog->fAppearanceCounter * pDialog->fAppearanceCounter;
+		cairo_rectangle (pCairoContext,
+			0,
+			0,
+			pDialog->container.iWidth,
+			pDialog->container.iHeight);
+		cairo_set_line_width (pCairoContext, 0);
+		cairo_set_operator (pCairoContext, CAIRO_OPERATOR_DEST_OUT);
+		cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, 1. - fAlpha);
+		cairo_fill (pCairoContext);
+	}
 	return FALSE;
 }
 
@@ -554,6 +539,10 @@ void gldi_dialog_init_internals (CairoDialog *pDialog, CairoDialogAttr *pAttribu
 	g_signal_connect (G_OBJECT (pDialog->container.pWidget),
 		"draw",
 		G_CALLBACK (on_expose_dialog),
+		pDialog);
+	g_signal_connect_after (G_OBJECT (pDialog->container.pWidget),
+		"draw",
+		G_CALLBACK (on_expose_dialog_after),
 		pDialog);
 	g_signal_connect (G_OBJECT (pDialog->container.pWidget),
 		"configure-event",
