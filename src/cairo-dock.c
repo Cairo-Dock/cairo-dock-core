@@ -112,6 +112,7 @@ static gint s_iGuiMode = 0;  // 0 = simple mode, 1 = advanced mode
 static gint s_iLastYear = 0;
 static gint s_iNbCrashes = 0;
 static gboolean s_bPingServer = TRUE;
+static gboolean s_bCDSessionLaunched = FALSE; // session CD already launched?
 
 
 static void _on_got_server_answer (const gchar *data, G_GNUC_UNUSED gpointer user_data)
@@ -243,10 +244,10 @@ static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
 			g_free (s_cDefaulBackend);
 			s_cDefaulBackend = NULL;
 		}
-		
 		s_iGuiMode = g_key_file_get_integer (pKeyFile, "Gui", "mode", NULL);  // 0 by default
 		s_iLastYear = g_key_file_get_integer (pKeyFile, "Launch", "last year", NULL);  // 0 by default
 		s_bPingServer = g_key_file_get_boolean (pKeyFile, "Launch", "ping server", NULL);  // FALSE by default
+		s_bCDSessionLaunched = g_key_file_get_boolean (pKeyFile, "Launch", "cd session", NULL);  // FALSE by default
 	}
 	else  // first launch or old version, the file doesn't exist yet.
 	{
@@ -744,13 +745,21 @@ int main (int argc, char** argv)
 	
 	//\___________________ load the current theme.
 	cd_message ("loading theme ...");
+	const gchar *cDesktopSessionEnv = g_getenv ("DESKTOP_SESSION");
 	if (! g_file_test (g_cConfFile, G_FILE_TEST_EXISTS))  // no theme yet, copy the default theme first.
 	{
-		const gchar *cDesktopSessionEnv = g_getenv ("DESKTOP_SESSION");
 		const gchar *cThemeName;
-		if (g_strcmp0 (cDesktopSessionEnv, "cairo-dock") == 0
-			|| g_strcmp0 (cDesktopSessionEnv, "cairo-dock-fallback") == 0)
+		if (g_strcmp0 (cDesktopSessionEnv, "cairo-dock") == 0)
+		{
 			cThemeName = "Default-Panel";
+			// We're using the CD session for the first time
+			s_bCDSessionLaunched = TRUE;
+			gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", g_cCairoDockDataDir);
+			cairo_dock_update_conf_file (cConfFilePath,
+				G_TYPE_BOOLEAN, "Launch", "cd session", s_bCDSessionLaunched,
+				G_TYPE_INVALID);
+			g_free (cConfFilePath);
+		}
 		else
 			cThemeName = "Default-Single";
 		gchar *cCommand = g_strdup_printf ("/bin/cp -r \"%s/%s\"/* \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/themes", cThemeName, g_cCurrentThemePath);
@@ -759,6 +768,55 @@ int main (int argc, char** argv)
 		if (r < 0)
 			cd_warning ("Not able to launch this command: %s", cCommand);
 		g_free (cCommand);
+	}
+	/* The first time the Cairo-Dock session is used but not the first time the
+	 *  dock is launched: propose to use the Default-Panel theme if a second
+	 *  dock is not used (case: the user has already launched the dock and he
+	 *  wants to test the Cairo-Dock session: propose a theme with two docks)
+	 */
+	else if (! s_bCDSessionLaunched && g_strcmp0 (cDesktopSessionEnv, "cairo-dock") == 0)
+	{
+		gchar *cSecondDock = g_strdup_printf ("%s/"CAIRO_DOCK_MAIN_DOCK_NAME"-2.conf", g_cCurrentThemePath);
+		if (! g_file_test (cSecondDock, G_FILE_TEST_EXISTS))
+		{
+			GtkWidget *pDialog = gtk_dialog_new_with_buttons (_("You're using our Cairo-Dock session"),
+				NULL,
+				GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+				_("Yes"), GTK_RESPONSE_YES,
+				_("No"), GTK_RESPONSE_NO,
+				NULL);
+			GtkWidget *pLabel = gtk_label_new (_("It can be interesting to use an adapted theme for this session.\n\nDo you want to load our \"Default-Panel\" theme?\n\nNote: your current theme will be saved and can be reimported later from the Themes manager"));
+
+			GtkWidget *pContentBox = gtk_dialog_get_content_area (GTK_DIALOG (pDialog));
+			gtk_box_pack_start (GTK_BOX (pContentBox), pLabel, FALSE, FALSE, 0);
+			gtk_widget_show_all (pDialog);
+
+			gint iAnswer = gtk_dialog_run (GTK_DIALOG (pDialog)); // will block the main loop
+			gtk_widget_destroy (pDialog);
+			if (iAnswer == GTK_RESPONSE_YES)
+			{
+				time_t epoch = (time_t) time (NULL);
+				struct tm currentTime;
+				localtime_r (&epoch, &currentTime);
+				char cDateBuffer[22+1];
+				strftime (cDateBuffer, 22, "Theme_%Y%m%d_%H%M%S", &currentTime);
+
+				cairo_dock_export_current_theme (cDateBuffer, TRUE, TRUE);
+				cairo_dock_import_theme ("Default-Panel", TRUE, TRUE);
+			}
+
+			// Force init script
+			g_timeout_add_seconds (4, _cairo_dock_first_launch_setup, NULL);
+		}
+		g_free (cSecondDock);
+
+		// Update 'cd session' key: we already check that the user is using an adapted theme for this session
+		s_bCDSessionLaunched = TRUE;
+		gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", g_cCairoDockDataDir);
+		cairo_dock_update_conf_file (cConfFilePath,
+			G_TYPE_BOOLEAN, "Launch", "cd session", s_bCDSessionLaunched,
+			G_TYPE_INVALID);
+		g_free (cConfFilePath);
 	}
 	cairo_dock_load_current_theme ();
 	
@@ -772,7 +830,6 @@ int main (int argc, char** argv)
 	if (!bSafeMode && gldi_module_get_nb () <= 1)  // 1 en comptant l'aide
 	{
 		Icon *pIcon = gldi_icons_get_any_without_dialog ();
-		///cairo_dock_ask_question_and_wait (_("No plug-in were found.\nPlug-ins provide most of the functionalities of Cairo-Dock (animations, applets, views, etc).\nSee http://glx-dock.org for more information.\nSince there is almost no meaning in running the dock without them, the application will quit now."), pIcon, CAIRO_CONTAINER (g_pMainDock));
 		gldi_dialog_show_temporary_with_icon (_("No plug-in were found.\nPlug-ins provide most of the functionalities (animations, applets, views, etc).\nSee http://glx-dock.org for more information.\nThere is almost no meaning in running the dock without them and it's probably due to a problem with the installation of these plug-ins.\nBut if you really want to use the dock without these plug-ins, you can launch the dock with the '-f' option to no longer have this message.\n"), pIcon, CAIRO_CONTAINER (g_pMainDock), 0., CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON);
 	}
 	
