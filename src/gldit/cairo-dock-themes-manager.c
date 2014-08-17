@@ -459,6 +459,9 @@ static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboo
 	cd_message ("Applying changes ...");
 	if (g_pMainDock == NULL || bLoadBehavior)
 	{
+		g_string_printf (sCommand, "rm -f \"%s\"/*.conf", g_cCurrentThemePath);
+		_launch_cmd (sCommand->str);
+
 		g_string_printf (sCommand, "cp \"%s\"/*.conf \"%s\"", cNewThemePath, g_cCurrentThemePath);
 		_launch_cmd (sCommand->str);
 	}
