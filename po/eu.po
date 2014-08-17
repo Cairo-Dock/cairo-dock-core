@@ -8,69 +8,68 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2014-06-13 11:30+0000\n"
 "PO-Revision-Date: 2014-06-13 21:46+0000\n"
 "Last-Translator: Ander Elortondo <ander.elor@gmail.com>\n"
 "Language-Team: librezale.org\n"
+"Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2014-06-14 05:36+0000\n"
 "X-Generator: Launchpad (build 17045)\n"
-"Language: eu\n"
 
-#: ../src/cairo-dock-gui-advanced.c:122 ../src/cairo-dock-widget-plugins.c:172
+#: ../src/cairo-dock-gui-advanced.c:120 ../src/cairo-dock-widget-plugins.c:173
 #: ../data/messages:267
 msgid "Behaviour"
 msgstr "Portaera"
 
-#: ../src/cairo-dock-gui-advanced.c:123 ../data/messages:111
+#: ../src/cairo-dock-gui-advanced.c:121 ../data/messages:111
 #: ../data/messages:835 ../data/messages:873 ../data/messages:945
 msgid "Appearance"
 msgstr "Itxura"
 
-#: ../src/cairo-dock-gui-advanced.c:124 ../src/cairo-dock-widget-plugins.c:142
+#: ../src/cairo-dock-gui-advanced.c:122 ../src/cairo-dock-widget-plugins.c:143
 msgid "Files"
 msgstr "Fitxategiak"
 
-#: ../src/cairo-dock-gui-advanced.c:125 ../src/cairo-dock-widget-plugins.c:147
+#: ../src/cairo-dock-gui-advanced.c:123 ../src/cairo-dock-widget-plugins.c:148
 msgid "Internet"
 msgstr "Internet"
 
-#: ../src/cairo-dock-gui-advanced.c:126 ../src/cairo-dock-widget-plugins.c:152
+#: ../src/cairo-dock-gui-advanced.c:124 ../src/cairo-dock-widget-plugins.c:153
 msgid "Desktop"
 msgstr "Mahaigaina"
 
-#: ../src/cairo-dock-gui-advanced.c:127
+#: ../src/cairo-dock-gui-advanced.c:125
 msgid "Accessories"
 msgstr "Gehigarriak"
 
-#: ../src/cairo-dock-gui-advanced.c:128 ../src/cairo-dock-gui-advanced.c:1537
-#: ../src/cairo-dock-gui-advanced.c:1538
-#: ../src/cairo-dock-widget-plugins.c:162 ../data/messages:117
+#: ../src/cairo-dock-gui-advanced.c:126 ../src/cairo-dock-gui-advanced.c:1495
+#: ../src/cairo-dock-gui-advanced.c:1496
+#: ../src/cairo-dock-widget-plugins.c:163 ../data/messages:117
 #: ../data/messages:371 ../data/messages:877
 msgid "System"
 msgstr "Sistema"
 
-#: ../src/cairo-dock-gui-advanced.c:129 ../src/cairo-dock-widget-plugins.c:167
+#: ../src/cairo-dock-gui-advanced.c:127 ../src/cairo-dock-widget-plugins.c:168
 msgid "Fun"
 msgstr "Dibertsioa"
 
-#: ../src/cairo-dock-gui-advanced.c:130 ../src/cairo-dock-gui-advanced.c:1833
-#: ../src/gldit/cairo-dock-gui-factory.c:796
+#: ../src/cairo-dock-gui-advanced.c:128 ../src/cairo-dock-gui-advanced.c:1769
+#: ../src/gldit/cairo-dock-gui-factory.c:798
 msgid "All"
 msgstr "Denak"
 
-#: ../src/cairo-dock-gui-advanced.c:1502
+#: ../src/cairo-dock-gui-advanced.c:1460
 msgid "Set the position of the main dock."
 msgstr "Finkatu dock nagusiaren kokapena"
 
-#: ../src/cairo-dock-gui-advanced.c:1503 ../src/cairo-dock-gui-advanced.c:1504
+#: ../src/cairo-dock-gui-advanced.c:1461 ../src/cairo-dock-gui-advanced.c:1462
 #: ../Help/data/messages:321 ../data/messages:151
 msgid "Position"
 msgstr "Kokapena"
 
-#: ../src/cairo-dock-gui-advanced.c:1511
+#: ../src/cairo-dock-gui-advanced.c:1469
 msgid ""
 "Do you like your dock to be always visible,\n"
 " or on the contrary unobtrusive?\n"
@@ -80,37 +79,37 @@ msgstr ""
 " ala ahalik eta traba gutxien egin dezan?\n"
 "Konfiguratu nola atzitzen dituzun zure dock eta azpidockak!"
 
-#: ../src/cairo-dock-gui-advanced.c:1512 ../src/cairo-dock-gui-advanced.c:1513
-#: ../src/cairo-dock-user-menu.c:2032 ../Help/data/messages:339
+#: ../src/cairo-dock-gui-advanced.c:1470 ../src/cairo-dock-gui-advanced.c:1471
+#: ../src/cairo-dock-user-menu.c:2027 ../Help/data/messages:339
 msgid "Visibility"
 msgstr "Ikusgaitasuna"
 
-#: ../src/cairo-dock-gui-advanced.c:1520
+#: ../src/cairo-dock-gui-advanced.c:1478
 msgid "Display and interact with currently open windows."
 msgstr "Bistaratu eta elkarreragin orain irekitako leihoekin."
 
-#: ../src/cairo-dock-gui-advanced.c:1521 ../src/cairo-dock-gui-advanced.c:1522
+#: ../src/cairo-dock-gui-advanced.c:1479 ../src/cairo-dock-gui-advanced.c:1480
 #: ../Help/data/messages:41 ../data/messages:63
 msgid "Taskbar"
 msgstr "Ataza-barra"
 
-#: ../src/cairo-dock-gui-advanced.c:1529
+#: ../src/cairo-dock-gui-advanced.c:1487
 msgid "Define all the keyboard shortcuts currently available."
 msgstr "Definitu unean eskuragarri dituzun teklatuko laster-tekla guztiak"
 
-#: ../src/cairo-dock-gui-advanced.c:1530 ../data/messages:147
+#: ../src/cairo-dock-gui-advanced.c:1488 ../data/messages:147
 msgid "Shortkeys"
 msgstr "Laster-teklak"
 
-#: ../src/cairo-dock-gui-advanced.c:1536
+#: ../src/cairo-dock-gui-advanced.c:1494
 msgid "All of the parameters you will never want to tweak."
 msgstr "Inoiz berrukitu nahi ez dituzun parametro guztiak."
 
-#: ../src/cairo-dock-gui-advanced.c:1548
+#: ../src/cairo-dock-gui-advanced.c:1506
 msgid "Configure the global style."
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1549 ../src/cairo-dock-gui-advanced.c:1550
+#: ../src/cairo-dock-gui-advanced.c:1507 ../src/cairo-dock-gui-advanced.c:1508
 #: ../data/messages:113 ../data/messages:115 ../data/messages:459
 #: ../data/messages:549 ../data/messages:689 ../data/messages:731
 #: ../data/messages:803 ../data/messages:837 ../data/messages:871
@@ -118,42 +117,42 @@ msgstr ""
 msgid "Style"
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1557
+#: ../src/cairo-dock-gui-advanced.c:1515
 msgid "Configure docks appearance."
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1558 ../Help/data/messages:79
+#: ../src/cairo-dock-gui-advanced.c:1516 ../Help/data/messages:79
 msgid "Docks"
 msgstr "Dockak"
 
-#: ../src/cairo-dock-gui-advanced.c:1559 ../data/messages:457
+#: ../src/cairo-dock-gui-advanced.c:1517 ../data/messages:457
 #: ../data/messages:971
 msgid "Background"
 msgstr "Atzeko planoa"
 
-#: ../src/cairo-dock-gui-advanced.c:1560 ../data/messages:139
+#: ../src/cairo-dock-gui-advanced.c:1518 ../data/messages:139
 #: ../data/messages:525 ../data/messages:965
 msgid "Views"
 msgstr "Ikuspegiak"
 
-#: ../src/cairo-dock-gui-advanced.c:1576
+#: ../src/cairo-dock-gui-advanced.c:1526
 msgid "Configure text bubble appearance."
 msgstr "Konfiguratu elkarrizketa burbuilen itxura."
 
-#: ../src/cairo-dock-gui-advanced.c:1577 ../src/cairo-dock-gui-advanced.c:1578
+#: ../src/cairo-dock-gui-advanced.c:1527 ../src/cairo-dock-gui-advanced.c:1528
 msgid "Dialog boxes and Menus"
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1585
+#: ../src/cairo-dock-gui-advanced.c:1535
 msgid "Applets can be displayed on your desktop as widgets."
 msgstr "Appletak widget gisa ezar daitezke zure mahaigainean."
 
-#: ../src/cairo-dock-gui-advanced.c:1586 ../src/cairo-dock-gui-advanced.c:1587
+#: ../src/cairo-dock-gui-advanced.c:1536 ../src/cairo-dock-gui-advanced.c:1537
 #: ../Help/data/messages:89 ../data/messages:587
 msgid "Desklets"
 msgstr "Deskletak"
 
-#: ../src/cairo-dock-gui-advanced.c:1594
+#: ../src/cairo-dock-gui-advanced.c:1544
 msgid ""
 "All about icons:\n"
 " size, reflection, icon theme,..."
@@ -161,87 +160,103 @@ msgstr ""
 "Ikonoei buruzko guztia:\n"
 " tamaina, ispilatzea, gaia..."
 
-#: ../src/cairo-dock-gui-advanced.c:1595 ../src/cairo-dock-gui-advanced.c:1596
+#: ../src/cairo-dock-gui-advanced.c:1545 ../src/cairo-dock-gui-advanced.c:1546
 #: ../Help/data/messages:11 ../data/messages:123 ../data/messages:643
 #: ../data/messages:947
 msgid "Icons"
 msgstr "Ikonoak"
 
-#: ../src/cairo-dock-gui-advanced.c:1597 ../data/messages:727
+#: ../src/cairo-dock-gui-advanced.c:1547 ../data/messages:727
 msgid "Indicators"
 msgstr "Adierazleak"
 
-#: ../src/cairo-dock-gui-advanced.c:1613
+#: ../src/cairo-dock-gui-advanced.c:1555
 msgid "Define icon caption and quick-info style."
 msgstr "Definitu ikonoen etiketen eta informazio azkarraren estiloa."
 
-#: ../src/cairo-dock-gui-advanced.c:1614 ../src/cairo-dock-gui-advanced.c:1615
+#: ../src/cairo-dock-gui-advanced.c:1556 ../src/cairo-dock-gui-advanced.c:1557
 msgid "Captions"
 msgstr "Etiketak"
 
-#: ../src/cairo-dock-gui-advanced.c:1622
+#: ../src/cairo-dock-gui-advanced.c:1564
 msgid "Try new themes and save your theme."
 msgstr "Probatu gai berriak eta gorde zure gaia."
 
-#: ../src/cairo-dock-gui-advanced.c:1623 ../src/cairo-dock-gui-simple.c:115
+#: ../src/cairo-dock-gui-advanced.c:1565 ../src/cairo-dock-gui-simple.c:115
 #: ../src/cairo-dock-gui-simple.c:117
 msgid "Themes"
 msgstr "Gaiak"
 
-#: ../src/cairo-dock-gui-advanced.c:1629
+#: ../src/cairo-dock-gui-advanced.c:1571
 msgid "Current items in your dock(s)."
 msgstr "Zure docketako uneko elementuak."
 
-#: ../src/cairo-dock-gui-advanced.c:1630 ../src/cairo-dock-gui-simple.c:91
+#: ../src/cairo-dock-gui-advanced.c:1572 ../src/cairo-dock-gui-simple.c:91
 #: ../src/cairo-dock-gui-simple.c:93
 msgid "Current items"
 msgstr "Uneko elementuak"
 
-#: ../src/cairo-dock-gui-advanced.c:1750
+#: ../src/cairo-dock-gui-advanced.c:1692
 msgid "Filter"
 msgstr "Iragazia"
 
-#: ../src/cairo-dock-gui-advanced.c:1791
+#: ../src/cairo-dock-gui-advanced.c:1731
 msgid "All words"
 msgstr "Hitz guztiak"
 
-#: ../src/cairo-dock-gui-advanced.c:1792
+#: ../src/cairo-dock-gui-advanced.c:1732
 msgid "Highlighted words"
 msgstr "Hitz nabarmenduak"
 
-#: ../src/cairo-dock-gui-advanced.c:1793
+#: ../src/cairo-dock-gui-advanced.c:1733
 msgid "Hide others"
 msgstr "Gorde besteak"
 
-#: ../src/cairo-dock-gui-advanced.c:1794
+#: ../src/cairo-dock-gui-advanced.c:1734
 msgid "Search in description"
 msgstr "Bilatu deskribapenean"
 
-#: ../src/cairo-dock-gui-advanced.c:1798
+#: ../src/cairo-dock-gui-advanced.c:1738
 msgid "Hide disabled"
 msgstr "Ezkutatzea desgaituta"
 
-#: ../src/cairo-dock-gui-advanced.c:1807
+#: ../src/cairo-dock-gui-advanced.c:1747
 msgid "Categories"
 msgstr "Kategoriak"
 
-#: ../src/cairo-dock-gui-advanced.c:1917
+#: ../src/cairo-dock-gui-advanced.c:1845
 msgid "Enable this module"
 msgstr "Modulu hau aktibatu"
 
-#: ../src/cairo-dock-gui-advanced.c:1984
+#: ../src/cairo-dock-gui-advanced.c:1872 ../src/cairo-dock-gui-simple.c:199
+#: ../src/cairo-dock-user-menu.c:1837 ../src/cairo-dock-user-menu.c:1839
+#: ../src/cairo-dock-user-menu.c:1912 ../src/cairo-dock-user-menu.c:1914
+#: ../data/messages:343
+msgid "Close"
+msgstr "Itxi"
+
+#: ../src/cairo-dock-gui-advanced.c:1880
+msgid "Back"
+msgstr ""
+
+#: ../src/cairo-dock-gui-advanced.c:1888 ../src/cairo-dock-gui-simple.c:207
+#, fuzzy
+msgid "Apply"
+msgstr "Appleta"
+
+#: ../src/cairo-dock-gui-advanced.c:1904
 msgid "More applets"
 msgstr "Applet gehiago"
 
-#: ../src/cairo-dock-gui-advanced.c:1985
+#: ../src/cairo-dock-gui-advanced.c:1905
 msgid "Get more applets online !"
 msgstr "Eskuratu applet gehiago saretik!"
 
-#: ../src/cairo-dock-gui-advanced.c:2080 ../src/cairo-dock-gui-simple.c:362
+#: ../src/cairo-dock-gui-advanced.c:1997 ../src/cairo-dock-gui-simple.c:354
 msgid "Cairo-Dock configuration"
 msgstr "Cairo-Dock konfigurazioa"
 
-#: ../src/cairo-dock-gui-advanced.c:2667
+#: ../src/cairo-dock-gui-advanced.c:2582
 msgid "Simple Mode"
 msgstr "Modu sinplea"
 
@@ -253,11 +268,11 @@ msgstr "Gehigarriak"
 msgid "Configuration"
 msgstr "Konfigurazioa"
 
-#: ../src/cairo-dock-gui-simple.c:643
+#: ../src/cairo-dock-gui-simple.c:635
 msgid "Advanced Mode"
 msgstr "Modu aurreratua"
 
-#: ../src/cairo-dock-gui-simple.c:644
+#: ../src/cairo-dock-gui-simple.c:636
 msgid ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customise your current theme."
@@ -274,70 +289,70 @@ msgstr ""
 "'Gainidatzi X ikonoak' aukera automatikoki gaitua dago konfigurazioan.\n"
 "'Ataza-barra' moduluan kokatzen da."
 
-#: ../src/cairo-dock-user-menu.c:118
+#: ../src/cairo-dock-user-menu.c:119
 msgid "Delete this dock?"
 msgstr "Ezabatu dock hau?"
 
-#: ../src/cairo-dock-user-menu.c:175
+#: ../src/cairo-dock-user-menu.c:176
 msgid "About Cairo-Dock"
 msgstr "Cairo-Docki buruz"
 
-#: ../src/cairo-dock-user-menu.c:212 ../Help/data/messages:271
+#: ../src/cairo-dock-user-menu.c:209 ../Help/data/messages:271
 msgid "Development site"
 msgstr "Garatzaileen webgunea"
 
-#: ../src/cairo-dock-user-menu.c:213 ../Help/data/messages:269
+#: ../src/cairo-dock-user-menu.c:210 ../Help/data/messages:269
 msgid "Find the latest version of Cairo-Dock here !"
 msgstr "Bilatu Cairo-dock azken bertsioa hemen!."
 
-#: ../src/cairo-dock-user-menu.c:217 ../src/cairo-dock-user-menu.c:1091
-#: ../src/cairo-dock-widget-plugins.c:299
+#: ../src/cairo-dock-user-menu.c:214 ../src/cairo-dock-user-menu.c:1088
+#: ../src/cairo-dock-widget-plugins.c:297
 msgid "Get more applets!"
 msgstr "Lortu applet gehiago!"
 
-#: ../src/cairo-dock-user-menu.c:221 ../src/cairo-dock-user-menu.c:227
+#: ../src/cairo-dock-user-menu.c:218 ../src/cairo-dock-user-menu.c:224
 msgid "Donate"
 msgstr "Diruz lagundu"
 
-#: ../src/cairo-dock-user-menu.c:224 ../src/cairo-dock-user-menu.c:230
+#: ../src/cairo-dock-user-menu.c:221 ../src/cairo-dock-user-menu.c:227
 msgid ""
 "Support the people who spend countless hours to bring you the best dock ever."
 msgstr ""
 "Lagundu orduak eta orduak dockik onena egiten lan egiten duen jendeari."
 
-#: ../src/cairo-dock-user-menu.c:258
+#: ../src/cairo-dock-user-menu.c:255
 msgid "Here is a list of the current developers and contributors"
 msgstr "Hemen dago uneko garatzaile eta laguntzaileen zerrenda."
 
-#: ../src/cairo-dock-user-menu.c:259
+#: ../src/cairo-dock-user-menu.c:256
 msgid "Developers"
 msgstr "Garatzaileak"
 
-#: ../src/cairo-dock-user-menu.c:260
+#: ../src/cairo-dock-user-menu.c:257
 msgid "Main developer and project leader"
 msgstr "Garatzaile nagusia eta proiektuaren liderra"
 
-#: ../src/cairo-dock-user-menu.c:261
+#: ../src/cairo-dock-user-menu.c:258
 msgid "Contributors / Hackers"
 msgstr "Laguntzaileak / Hackerrak"
 
-#: ../src/cairo-dock-user-menu.c:263
+#: ../src/cairo-dock-user-menu.c:260
 msgid "Development"
 msgstr "Garapena"
 
-#: ../src/cairo-dock-user-menu.c:278
+#: ../src/cairo-dock-user-menu.c:275
 msgid "Website"
 msgstr "Webgunea"
 
-#: ../src/cairo-dock-user-menu.c:279
+#: ../src/cairo-dock-user-menu.c:276
 msgid "Beta-testing / Suggestions / Forum animation"
 msgstr "Beta bertsioen probak / Iradokizunak / Foroen animazioa"
 
-#: ../src/cairo-dock-user-menu.c:280
+#: ../src/cairo-dock-user-menu.c:277
 msgid "Translators for this language"
 msgstr "Hizkuntza honen itzultzaileak"
 
-#: ../src/cairo-dock-user-menu.c:281
+#: ../src/cairo-dock-user-menu.c:278
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -345,11 +360,11 @@ msgstr ""
 "  Asier Sarasua Garmendia https://launchpad.net/~asarasuagarmendia\n"
 "  Mendi https://launchpad.net/~benatmendi"
 
-#: ../src/cairo-dock-user-menu.c:283
+#: ../src/cairo-dock-user-menu.c:280
 msgid "Support"
 msgstr "Sostengua"
 
-#: ../src/cairo-dock-user-menu.c:313
+#: ../src/cairo-dock-user-menu.c:310
 msgid ""
 "Thanks to all people that help us to improve the Cairo-Dock project.\n"
 "Thanks to all current, former and future contributors."
@@ -357,47 +372,47 @@ msgstr ""
 "Eskerrik asko Cairo-Dock proiektua hobetzen lagundu diguten guztiei.\n"
 "Eskerrik asko oraingo, lehengo eta etorkizuneko laguntzaileei."
 
-#: ../src/cairo-dock-user-menu.c:315
+#: ../src/cairo-dock-user-menu.c:312
 msgid "How to help us?"
 msgstr "Nola lagundu?"
 
-#: ../src/cairo-dock-user-menu.c:316
+#: ../src/cairo-dock-user-menu.c:313
 msgid "Don't hesitate to join the project, we need you ;)"
 msgstr "Ez izan zalantzarik eta egin bat taldearekin, zure beharra dugu ;)"
 
-#: ../src/cairo-dock-user-menu.c:317
+#: ../src/cairo-dock-user-menu.c:314
 msgid "Former contributors"
 msgstr "Laguntzaile izandakoak"
 
-#: ../src/cairo-dock-user-menu.c:318
+#: ../src/cairo-dock-user-menu.c:315
 msgid "For a complete list, please have a look to BZR logs"
 msgstr "Zerrenda osoa ikusteko, begiratu BZR egunkariak"
 
-#: ../src/cairo-dock-user-menu.c:319
+#: ../src/cairo-dock-user-menu.c:316
 msgid "Users of our forum"
 msgstr "Gure foroaren erabiltzaileak"
 
-#: ../src/cairo-dock-user-menu.c:320
+#: ../src/cairo-dock-user-menu.c:317
 msgid "List of our forum's members"
 msgstr "Gure foroko kideen zerrenda"
 
-#: ../src/cairo-dock-user-menu.c:321
+#: ../src/cairo-dock-user-menu.c:318
 msgid "Artwork"
 msgstr "Artelana"
 
-#: ../src/cairo-dock-user-menu.c:323
+#: ../src/cairo-dock-user-menu.c:320
 msgid "Thanks"
 msgstr "Mila esker"
 
-#: ../src/cairo-dock-user-menu.c:413
+#: ../src/cairo-dock-user-menu.c:410
 msgid "Quit Cairo-Dock?"
 msgstr "Irten Cairo-Docketik?"
 
-#: ../src/cairo-dock-user-menu.c:443 ../src/cairo-dock-user-menu.c:583
+#: ../src/cairo-dock-user-menu.c:440 ../src/cairo-dock-user-menu.c:580
 msgid "Separator"
 msgstr "Bereizlea"
 
-#: ../src/cairo-dock-user-menu.c:546
+#: ../src/cairo-dock-user-menu.c:543
 msgid ""
 "The new dock has been created.\n"
 "Now move some launchers or applets into it by right-clicking on the icon -> "
@@ -407,32 +422,32 @@ msgstr ""
 "Orain sortu abiarazleak edo appletak bertan ikono baten gainean eskuineko "
 "klik egin eta -> eraman beste dock batera"
 
-#: ../src/cairo-dock-user-menu.c:577
+#: ../src/cairo-dock-user-menu.c:574
 msgid "Add"
 msgstr "Gehitu"
 
-#: ../src/cairo-dock-user-menu.c:579
+#: ../src/cairo-dock-user-menu.c:576
 msgid "Sub-dock"
 msgstr "Azpidocka"
 
-#: ../src/cairo-dock-user-menu.c:581
+#: ../src/cairo-dock-user-menu.c:578
 msgid "Main dock"
 msgstr "Dock nagusia"
 
-#: ../src/cairo-dock-user-menu.c:585
+#: ../src/cairo-dock-user-menu.c:582
 msgid "Custom launcher"
 msgstr "Abiarazle pertsonalizatua"
 
-#: ../src/cairo-dock-user-menu.c:586
+#: ../src/cairo-dock-user-menu.c:583
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
 msgstr "Normalean abiarazlea menutik arrastatu eta dockean jaregingo duzu."
 
-#: ../src/cairo-dock-user-menu.c:588
+#: ../src/cairo-dock-user-menu.c:585
 msgid "Applet"
 msgstr "Appleta"
 
-#: ../src/cairo-dock-user-menu.c:605
+#: ../src/cairo-dock-user-menu.c:602
 msgid ""
 "Do you want to re-dispatch the icons contained inside this container into "
 "the dock?\n"
@@ -441,20 +456,20 @@ msgstr ""
 "Edukiontzi honetako ikonoak dockera birbidali nahi dituzu?\n"
 "(bestela deuseztu egingo dira)"
 
-#: ../src/cairo-dock-user-menu.c:627
+#: ../src/cairo-dock-user-menu.c:624
 msgid "separator"
 msgstr "bereizlea"
 
-#: ../src/cairo-dock-user-menu.c:631
+#: ../src/cairo-dock-user-menu.c:628
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
 msgstr "Ikono hau (%s) ezabatzera zoaz. Seguru zaude?"
 
-#: ../src/cairo-dock-user-menu.c:646
+#: ../src/cairo-dock-user-menu.c:643
 msgid "Sorry, this icon doesn't have a configuration file."
 msgstr "Barkatu, ikono honek ez du konfigurazio fitxategirik."
 
-#: ../src/cairo-dock-user-menu.c:686
+#: ../src/cairo-dock-user-menu.c:683
 msgid ""
 "The new dock has been created.\n"
 "You can customize it by right-clicking on it -> cairo-dock -> configure this "
@@ -464,16 +479,16 @@ msgstr ""
 "Hura pertsonalizatzeko, egin klik gainean eskuineko botoiarekin -> cairo-"
 "dock -> konfiguratu dock hau."
 
-#: ../src/cairo-dock-user-menu.c:692
+#: ../src/cairo-dock-user-menu.c:689
 msgid "Move to another dock"
 msgstr "Mugitu beste dock batera"
 
-#: ../src/cairo-dock-user-menu.c:694
-#: ../src/gldit/cairo-dock-gui-factory.c:1238
+#: ../src/cairo-dock-user-menu.c:691
+#: ../src/gldit/cairo-dock-gui-factory.c:1226
 msgid "New main dock"
 msgstr "Dock nagusi berria"
 
-#: ../src/cairo-dock-user-menu.c:775
+#: ../src/cairo-dock-user-menu.c:772
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
@@ -481,99 +496,108 @@ msgstr ""
 "Barkatu, ez da aurkitu hari dagokion deskribapen-fitxategia.\n"
 "Aplikazioen menutik arrastatu eta jaregin ahal duzu abiarazlea."
 
-#: ../src/cairo-dock-user-menu.c:822
+#: ../src/cairo-dock-user-menu.c:819
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr "Applet hau (%s) ezabatzera zoaz docketik. Seguru zaude?"
 
-#: ../src/cairo-dock-user-menu.c:891 ../src/gldit/cairo-dock-gui-factory.c:759
+#: ../src/cairo-dock-user-menu.c:888 ../src/gldit/cairo-dock-gui-factory.c:761
 msgid "Pick up an image"
 msgstr "Hartu irudi bat"
 
-#: ../src/cairo-dock-user-menu.c:908 ../src/gldit/cairo-dock-gui-factory.c:803
+#: ../src/cairo-dock-user-menu.c:891 ../src/gldit/cairo-dock-gui-factory.c:764
+msgid "Ok"
+msgstr ""
+
+#: ../src/cairo-dock-user-menu.c:893 ../src/cairo-dock-widget-shortkeys.c:128
+#: ../src/cairo-dock-widget-themes.c:234
+#: ../src/gldit/cairo-dock-gui-factory.c:766
+msgid "Cancel"
+msgstr ""
+
+#: ../src/cairo-dock-user-menu.c:905 ../src/gldit/cairo-dock-gui-factory.c:805
 #: ../data/messages:463 ../data/messages:469 ../data/messages:735
 #: ../data/messages:977
 msgid "Image"
 msgstr "Irudia"
 
-#: ../src/cairo-dock-user-menu.c:1008
+#: ../src/cairo-dock-user-menu.c:1005
 msgid "Configure"
 msgstr "Konfiguratu"
 
-#: ../src/cairo-dock-user-menu.c:1013
+#: ../src/cairo-dock-user-menu.c:1010
 msgid "Configure behaviour, appearance, and applets."
 msgstr "Konfiguratu portaera, itxura eta appletak"
 
-#: ../src/cairo-dock-user-menu.c:1018
+#: ../src/cairo-dock-user-menu.c:1015
 msgid "Configure this dock"
 msgstr "Ezarri dock hau"
 
-#: ../src/cairo-dock-user-menu.c:1023
+#: ../src/cairo-dock-user-menu.c:1020
 msgid "Customize the position, visibility and appearance of this main dock."
 msgstr "Dock nagusi honen kokapen, ikusgarritasun eta itxura pertsonalizatu"
 
-#: ../src/cairo-dock-user-menu.c:1025
+#: ../src/cairo-dock-user-menu.c:1022
 msgid "Delete this dock"
 msgstr "Ezabatu dock hau"
 
-#: ../src/cairo-dock-user-menu.c:1035
+#: ../src/cairo-dock-user-menu.c:1032
 msgid "Manage themes"
 msgstr "Gaiak kudeatu"
 
-#: ../src/cairo-dock-user-menu.c:1040
+#: ../src/cairo-dock-user-menu.c:1037
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
 msgstr ""
 "Zerbitzarian dauden gai anitzen arteko bat aukeratu, eta uneko zure gaiak "
 "gorde."
 
-#: ../src/cairo-dock-user-menu.c:1052
+#: ../src/cairo-dock-user-menu.c:1049
 msgid "Lock icons position"
 msgstr "blokeatu ikonoen kokapena"
 
-#: ../src/cairo-dock-user-menu.c:1056
+#: ../src/cairo-dock-user-menu.c:1053
 msgid "This will (un)lock the position of the icons."
 msgstr "Honek ikonoen kokapena (des)blokeatzen du."
 
-#: ../src/cairo-dock-user-menu.c:1062
+#: ../src/cairo-dock-user-menu.c:1059
 msgid "Quick-Hide"
 msgstr "Ezkutatze azkarra"
 
-#: ../src/cairo-dock-user-menu.c:1067
+#: ../src/cairo-dock-user-menu.c:1064
 msgid "This will hide the dock until you hover over it with the mouse."
 msgstr "Docka ezkutatuko du saguaz bertan sartu arte."
 
-#: ../src/cairo-dock-user-menu.c:1080
+#: ../src/cairo-dock-user-menu.c:1077
 msgid "Launch Cairo-Dock on startup"
 msgstr "Abiarazi Cairo-Dock abioan"
 
-#: ../src/cairo-dock-user-menu.c:1096
-msgid ""
-"Third-party applets provide integration with many programs, like Pidgin"
+#: ../src/cairo-dock-user-menu.c:1093
+msgid "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Hirugarrenen appletek hainbat programen integrazioa ahalbidetzen dute, "
 "adibidez pidgin"
 
-#: ../src/cairo-dock-user-menu.c:1099 ../Help/src/applet-init.c:28
+#: ../src/cairo-dock-user-menu.c:1096 ../Help/src/applet-init.c:28
 #: ../Help/src/applet-notifications.c:269
 msgid "Help"
 msgstr "Laguntza"
 
-#: ../src/cairo-dock-user-menu.c:1104
+#: ../src/cairo-dock-user-menu.c:1101
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
 msgstr ""
 "Ez dago arazorik, konponbideak bakarrik daude (eta iradokizun erabilgarri "
 "pila bat ! )."
 
-#: ../src/cairo-dock-user-menu.c:1108
+#: ../src/cairo-dock-user-menu.c:1105
 msgid "About"
 msgstr "Honi buruz"
 
-#: ../src/cairo-dock-user-menu.c:1117
+#: ../src/cairo-dock-user-menu.c:1114
 msgid "Quit"
 msgstr "Irten"
 
-#: ../src/cairo-dock-user-menu.c:1127
+#: ../src/cairo-dock-user-menu.c:1123
 msgid ""
 "You're using a Cairo-Dock Session!\n"
 "It's not advised to quit the dock but you can press Shift to unlock this "
@@ -583,204 +607,197 @@ msgstr ""
 "Ez da gomendagarria docketik irtetea, baina Shift sakatu dezakezu menu-"
 "sarrera hau desblokeatzeko."
 
-#: ../src/cairo-dock-user-menu.c:1153 ../src/cairo-dock-user-menu.c:1166
+#: ../src/cairo-dock-user-menu.c:1149 ../src/cairo-dock-user-menu.c:1162
 msgid "Launch a new (Shift+clic)"
 msgstr "Berria abiarazi (Shift+klik)"
 
-#: ../src/cairo-dock-user-menu.c:1158 ../src/cairo-dock-user-menu.c:1239
+#: ../src/cairo-dock-user-menu.c:1154 ../src/cairo-dock-user-menu.c:1235
 msgid "Applet's handbook"
 msgstr "Appleten eskuliburua"
 
-#: ../src/cairo-dock-user-menu.c:1173 ../src/cairo-dock-user-menu.c:1218
+#: ../src/cairo-dock-user-menu.c:1169 ../src/cairo-dock-user-menu.c:1214
 msgid "Edit"
 msgstr "Editatu"
 
-#: ../src/cairo-dock-user-menu.c:1175 ../src/cairo-dock-user-menu.c:1225
+#: ../src/cairo-dock-user-menu.c:1171 ../src/cairo-dock-user-menu.c:1221
 msgid "Remove"
 msgstr "Kendu"
 
-#: ../src/cairo-dock-user-menu.c:1176
+#: ../src/cairo-dock-user-menu.c:1172
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
-msgstr ""
-"Abiarazlea ezabatu dezakezu docketik arrastatu eta kanpoan jareginez."
+msgstr "Abiarazlea ezabatu dezakezu docketik arrastatu eta kanpoan jareginez."
 
-#: ../src/cairo-dock-user-menu.c:1185
+#: ../src/cairo-dock-user-menu.c:1181
 msgid "Make it a launcher"
 msgstr "Abiarazlea egin"
 
-#: ../src/cairo-dock-user-menu.c:1208
+#: ../src/cairo-dock-user-menu.c:1204
 msgid "Remove custom icon"
 msgstr "Ezabatu ikono pertsonalizatua"
 
-#: ../src/cairo-dock-user-menu.c:1212
+#: ../src/cairo-dock-user-menu.c:1208
 msgid "Set a custom icon"
 msgstr "Ezarri ikono pertsonalizatua"
 
-#: ../src/cairo-dock-user-menu.c:1222
+#: ../src/cairo-dock-user-menu.c:1218
 msgid "Detach"
 msgstr "Desatrakatu"
 
-#: ../src/cairo-dock-user-menu.c:1222
+#: ../src/cairo-dock-user-menu.c:1218
 msgid "Return to the dock"
 msgstr "Itzuli dockera"
 
-#: ../src/cairo-dock-user-menu.c:1229
+#: ../src/cairo-dock-user-menu.c:1225
 msgid "Duplicate"
 msgstr "Bikoiztu"
 
-#: ../src/cairo-dock-user-menu.c:1403
+#: ../src/cairo-dock-user-menu.c:1399
 #, c-format
 msgid "Move all to desktop %d - face %d"
 msgstr "Mugitu denak %d mahaigainera  %d aurpegian"
 
-#: ../src/cairo-dock-user-menu.c:1403
+#: ../src/cairo-dock-user-menu.c:1399
 #, c-format
 msgid "Move to desktop %d - face %d"
 msgstr "Mugitu  %d mahaigainera  %d aurpegian"
 
-#: ../src/cairo-dock-user-menu.c:1405
+#: ../src/cairo-dock-user-menu.c:1401
 #, c-format
 msgid "Move all to desktop %d"
 msgstr "Mugitu denak %d mahaigainera"
 
-#: ../src/cairo-dock-user-menu.c:1405
+#: ../src/cairo-dock-user-menu.c:1401
 #, c-format
 msgid "Move to desktop %d"
 msgstr "Mugitu %d mahaigainera"
 
-#: ../src/cairo-dock-user-menu.c:1407
+#: ../src/cairo-dock-user-menu.c:1403
 #, c-format
 msgid "Move all to face %d"
 msgstr "Mugitu denak %d aurpegira"
 
-#: ../src/cairo-dock-user-menu.c:1407
+#: ../src/cairo-dock-user-menu.c:1403
 #, c-format
 msgid "Move to face %d"
 msgstr "Mugitu  %d aurpegira"
 
-#: ../src/cairo-dock-user-menu.c:1836 ../src/cairo-dock-user-menu.c:1887
+#: ../src/cairo-dock-user-menu.c:1831 ../src/cairo-dock-user-menu.c:1882
 msgid "Window"
 msgstr "Leihoa"
 
-#: ../src/cairo-dock-user-menu.c:1842 ../src/cairo-dock-user-menu.c:1844
-#: ../src/cairo-dock-user-menu.c:1917 ../src/cairo-dock-user-menu.c:1919
-#: ../data/messages:343
-msgid "Close"
-msgstr "Itxi"
-
-#: ../src/cairo-dock-user-menu.c:1842 ../src/cairo-dock-user-menu.c:1865
-#: ../src/cairo-dock-user-menu.c:1906 ../src/cairo-dock-user-menu.c:1917
-#: ../src/cairo-dock-user-menu.c:1940 ../src/cairo-dock-user-menu.c:1981
-#: ../src/cairo-dock-user-menu.c:1991 ../Help/src/applet-notifications.c:259
+#: ../src/cairo-dock-user-menu.c:1837 ../src/cairo-dock-user-menu.c:1860
+#: ../src/cairo-dock-user-menu.c:1901 ../src/cairo-dock-user-menu.c:1912
+#: ../src/cairo-dock-user-menu.c:1935 ../src/cairo-dock-user-menu.c:1976
+#: ../src/cairo-dock-user-menu.c:1986 ../Help/src/applet-notifications.c:259
 msgid "middle-click"
 msgstr "erdiko klika"
 
-#: ../src/cairo-dock-user-menu.c:1857 ../src/cairo-dock-user-menu.c:1898
+#: ../src/cairo-dock-user-menu.c:1852 ../src/cairo-dock-user-menu.c:1893
 msgid "Unmaximise"
 msgstr "Desmaximizatu"
 
-#: ../src/cairo-dock-user-menu.c:1857 ../src/cairo-dock-user-menu.c:1898
+#: ../src/cairo-dock-user-menu.c:1852 ../src/cairo-dock-user-menu.c:1893
 msgid "Maximise"
 msgstr "Maximizatu"
 
-#: ../src/cairo-dock-user-menu.c:1865 ../src/cairo-dock-user-menu.c:1867
-#: ../src/cairo-dock-user-menu.c:1906 ../src/cairo-dock-user-menu.c:1908
+#: ../src/cairo-dock-user-menu.c:1860 ../src/cairo-dock-user-menu.c:1862
+#: ../src/cairo-dock-user-menu.c:1901 ../src/cairo-dock-user-menu.c:1903
 msgid "Minimise"
 msgstr "Ikonotu"
 
-#: ../src/cairo-dock-user-menu.c:1882 ../src/cairo-dock-user-menu.c:1892
+#: ../src/cairo-dock-user-menu.c:1877 ../src/cairo-dock-user-menu.c:1887
 msgid "Show"
 msgstr "Bistarazi"
 
-#: ../src/cairo-dock-user-menu.c:1926 ../src/cairo-dock-user-menu.c:2015
+#: ../src/cairo-dock-user-menu.c:1921 ../src/cairo-dock-user-menu.c:2010
 msgid "Other actions"
 msgstr "Beste ekintzak"
 
-#: ../src/cairo-dock-user-menu.c:1929
+#: ../src/cairo-dock-user-menu.c:1924
 msgid "Move to this desktop"
 msgstr "Mahaigain  honetara mugitu"
 
-#: ../src/cairo-dock-user-menu.c:1934
+#: ../src/cairo-dock-user-menu.c:1929
 msgid "Not Fullscreen"
 msgstr "Pantaila osoa ez"
 
-#: ../src/cairo-dock-user-menu.c:1934
+#: ../src/cairo-dock-user-menu.c:1929
 msgid "Fullscreen"
 msgstr "Pantaila osoa"
 
-#: ../src/cairo-dock-user-menu.c:1940 ../src/cairo-dock-user-menu.c:1942
+#: ../src/cairo-dock-user-menu.c:1935 ../src/cairo-dock-user-menu.c:1937
 msgid "Below other windows"
 msgstr "Beste leihoen azpian"
 
-#: ../src/cairo-dock-user-menu.c:1950
+#: ../src/cairo-dock-user-menu.c:1945
 msgid "Don't keep above"
 msgstr "Ez mantendu gainean"
 
-#: ../src/cairo-dock-user-menu.c:1950 ../Help/data/messages:349
+#: ../src/cairo-dock-user-menu.c:1945 ../Help/data/messages:349
 msgid "Keep above"
 msgstr "Mantendu gainean"
 
-#: ../src/cairo-dock-user-menu.c:1954
+#: ../src/cairo-dock-user-menu.c:1949
 msgid "Visible only on this desktop"
 msgstr "Ikusgai mahaigain honetan soilik"
 
-#: ../src/cairo-dock-user-menu.c:1954
+#: ../src/cairo-dock-user-menu.c:1949
 msgid "Visible on all desktops"
 msgstr "Ikusgai mahaigain guztietan"
 
-#: ../src/cairo-dock-user-menu.c:1962
+#: ../src/cairo-dock-user-menu.c:1957
 msgid "Kill"
 msgstr "Hil"
 
-#: ../src/cairo-dock-user-menu.c:1977
+#: ../src/cairo-dock-user-menu.c:1972
 msgid "Windows"
 msgstr "Leihoak"
 
-#: ../src/cairo-dock-user-menu.c:1981 ../src/cairo-dock-user-menu.c:1983
-#: ../src/cairo-dock-user-menu.c:2011
+#: ../src/cairo-dock-user-menu.c:1976 ../src/cairo-dock-user-menu.c:1978
+#: ../src/cairo-dock-user-menu.c:2006
 msgid "Close all"
 msgstr "Itxi denak"
 
-#: ../src/cairo-dock-user-menu.c:1991 ../src/cairo-dock-user-menu.c:1993
-#: ../src/cairo-dock-user-menu.c:2009
+#: ../src/cairo-dock-user-menu.c:1986 ../src/cairo-dock-user-menu.c:1988
+#: ../src/cairo-dock-user-menu.c:2004
 msgid "Minimise all"
 msgstr "Ikonotu denak"
 
-#: ../src/cairo-dock-user-menu.c:2001 ../src/cairo-dock-user-menu.c:2007
+#: ../src/cairo-dock-user-menu.c:1996 ../src/cairo-dock-user-menu.c:2002
 msgid "Show all"
 msgstr "Bistarazi denak"
 
-#: ../src/cairo-dock-user-menu.c:2005
+#: ../src/cairo-dock-user-menu.c:2000
 msgid "Windows management"
 msgstr "Leihoen kudeaketa"
 
-#: ../src/cairo-dock-user-menu.c:2017
+#: ../src/cairo-dock-user-menu.c:2012
 msgid "Move all to this desktop"
 msgstr "Mugitu denak mahaigain honetara"
 
-#: ../src/cairo-dock-user-menu.c:2040 ../Help/data/messages:347
+#: ../src/cairo-dock-user-menu.c:2035 ../Help/data/messages:347
 msgid "Normal"
 msgstr "Normal"
 
-#: ../src/cairo-dock-user-menu.c:2046 ../data/messages:21 ../data/messages:193
+#: ../src/cairo-dock-user-menu.c:2041 ../data/messages:21 ../data/messages:193
 #: ../data/messages:923
 msgid "Always on top"
 msgstr "Beti goian"
 
-#: ../src/cairo-dock-user-menu.c:2053
+#: ../src/cairo-dock-user-menu.c:2048
 msgid "Always below"
 msgstr "Beti behean"
 
-#: ../src/cairo-dock-user-menu.c:2070 ../Help/data/messages:355
+#: ../src/cairo-dock-user-menu.c:2065 ../Help/data/messages:355
 msgid "Reserve space"
 msgstr "Gorde tokia"
 
-#: ../src/cairo-dock-user-menu.c:2077
+#: ../src/cairo-dock-user-menu.c:2072
 msgid "On all desktops"
 msgstr "Mahaigain guztietan"
 
-#: ../src/cairo-dock-user-menu.c:2083
+#: ../src/cairo-dock-user-menu.c:2078
 msgid "Lock position"
 msgstr "Blokeatu kokapena"
 
@@ -788,66 +805,64 @@ msgstr "Blokeatu kokapena"
 msgid "Animation:"
 msgstr "Animazioa:"
 
-#: ../src/cairo-dock-widget-config.c:354
+#: ../src/cairo-dock-widget-config.c:350
 msgid "Effects:"
 msgstr "Efektuak:"
 
-#: ../src/cairo-dock-widget-items.c:242
-msgid ""
-"Main dock's parameters are available in the main configuration window."
+#: ../src/cairo-dock-widget-items.c:243
+msgid "Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Dock nagusiaren parametroak konfigurazio-leiho nagusian daude eskuragarri."
 
-#: ../src/cairo-dock-widget-items.c:721
+#: ../src/cairo-dock-widget-items.c:724
 msgid "Remove this item"
 msgstr "Kendu elementu hau"
 
-#: ../src/cairo-dock-widget-plugins.c:104
+#: ../src/cairo-dock-widget-plugins.c:105
 msgid "Configure this applet"
 msgstr "Konfiguratu applet hau"
 
-#: ../src/cairo-dock-widget-plugins.c:157
+#: ../src/cairo-dock-widget-plugins.c:158
 msgid "Accessory"
 msgstr "Osagarri"
 
-#: ../src/cairo-dock-widget-plugins.c:247
+#: ../src/cairo-dock-widget-plugins.c:245
 msgid "Plug-in"
 msgstr "Plugina"
 
-#: ../src/cairo-dock-widget-plugins.c:253 ../Help/src/applet-tips-dialog.c:305
+#: ../src/cairo-dock-widget-plugins.c:251 ../Help/src/applet-tips-dialog.c:297
 msgid "Category"
 msgstr "Kategoria"
 
-#: ../src/cairo-dock-widget-plugins.c:281
-msgid ""
-"Click on an applet in order to have a preview and a description for it."
+#: ../src/cairo-dock-widget-plugins.c:279
+msgid "Click on an applet in order to have a preview and a description for it."
 msgstr "Klik appletean bere aurrebista eta deskribapena jasotzeko."
 
-#: ../src/cairo-dock-widget-shortkeys.c:123
+#: ../src/cairo-dock-widget-shortkeys.c:125
 msgid "Press the shortkey"
 msgstr "Sakatu laster-tekla"
 
-#: ../src/cairo-dock-widget-shortkeys.c:141
+#: ../src/cairo-dock-widget-shortkeys.c:143
 msgid "Change the shortkey"
 msgstr "Aldatu larter-tekla"
 
-#: ../src/cairo-dock-widget-shortkeys.c:228
+#: ../src/cairo-dock-widget-shortkeys.c:234
 msgid "Origin"
 msgstr "Jatorria"
 
-#: ../src/cairo-dock-widget-shortkeys.c:233
+#: ../src/cairo-dock-widget-shortkeys.c:239
 msgid "Action"
 msgstr "Ekintza"
 
-#: ../src/cairo-dock-widget-shortkeys.c:237
+#: ../src/cairo-dock-widget-shortkeys.c:243
 msgid "Shortkey"
 msgstr "Laster-tekla"
 
-#: ../src/cairo-dock-widget-themes.c:88
+#: ../src/cairo-dock-widget-themes.c:89
 msgid "Could not import the theme."
 msgstr "Ezin da inportatu gaia."
 
-#: ../src/cairo-dock-widget-themes.c:193
+#: ../src/cairo-dock-widget-themes.c:194
 msgid ""
 "You have made some changes to the current theme.\n"
 "You will lose them if you don't save before choosing a new theme. Continue "
@@ -857,70 +872,70 @@ msgstr ""
 "Galdu egingo dituzu ez badituzu gordetzen gai berria aukeratu baino lehen. "
 "Jarraitu edonola ere?"
 
-#: ../src/cairo-dock-widget-themes.c:221
+#: ../src/cairo-dock-widget-themes.c:222
 msgid "Please wait while importing the theme..."
 msgstr "Itxaron gaia inportatu arte..."
 
-#: ../src/cairo-dock-widget-themes.c:280
+#: ../src/cairo-dock-widget-themes.c:281
 msgid "Rate me"
 msgstr "Puntua nazazu"
 
-#: ../src/cairo-dock-widget-themes.c:378 ../src/cairo-dock-widget-themes.c:380
+#: ../src/cairo-dock-widget-themes.c:379 ../src/cairo-dock-widget-themes.c:381
 msgid "You must try the theme before you can rate it."
 msgstr "Gaia frogatu egin behar da iritzia eman aurretik."
 
-#: ../src/cairo-dock-widget-themes.c:427
+#: ../src/cairo-dock-widget-themes.c:428
 msgid "The theme has been deleted"
 msgstr "Gaia ezabatu da"
 
-#: ../src/cairo-dock-widget-themes.c:457
+#: ../src/cairo-dock-widget-themes.c:458
 msgid "Delete this theme"
 msgstr "Ezabatu gai hau"
 
-#: ../src/cairo-dock-widget-themes.c:488
-#: ../src/gldit/cairo-dock-gui-factory.c:2447
+#: ../src/cairo-dock-widget-themes.c:489
+#: ../src/gldit/cairo-dock-gui-factory.c:2379
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr "'%s'n gaiak zerrendatzen..."
 
-#: ../src/cairo-dock-widget-themes.c:511
+#: ../src/cairo-dock-widget-themes.c:512
 msgid "Theme"
 msgstr "Gaia"
 
-#: ../src/cairo-dock-widget-themes.c:524
+#: ../src/cairo-dock-widget-themes.c:525
 msgid "Rating"
 msgstr "balioa"
 
-#: ../src/cairo-dock-widget-themes.c:530
+#: ../src/cairo-dock-widget-themes.c:531
 msgid "Sobriety"
 msgstr "seriotasun"
 
-#: ../src/cairo-dock-widget-themes.c:594
+#: ../src/cairo-dock-widget-themes.c:595
 msgid "Save as:"
 msgstr "Gorde honela:"
 
-#: ../src/cairo-dock-widget-themes.c:674
+#: ../src/cairo-dock-widget-themes.c:675
 msgid "Importing theme ..."
 msgstr "Gaia inportatzen ..."
 
-#: ../src/cairo-dock-widget-themes.c:682
+#: ../src/cairo-dock-widget-themes.c:683
 msgid "Theme has been saved"
 msgstr "Gaia gordea izan da"
 
-#: ../src/cairo-dock.c:147
+#: ../src/cairo-dock.c:148
 #, c-format
 msgid "Happy new year %d !!!"
 msgstr "%d. urte zoriontsua!!!"
 
-#: ../src/cairo-dock.c:350
+#: ../src/cairo-dock.c:351
 msgid "Use Cairo backend."
 msgstr "Erabili Cairo motorra."
 
-#: ../src/cairo-dock.c:353
+#: ../src/cairo-dock.c:354
 msgid "Use OpenGL backend."
 msgstr "Erabili OpenGL motorra."
 
-#: ../src/cairo-dock.c:356
+#: ../src/cairo-dock.c:357
 msgid ""
 "Use OpenGL backend with indirect rendering. There are very few case where "
 "this option should be used."
@@ -928,22 +943,22 @@ msgstr ""
 "Erabili OpenGL motorra zeharkako errendatzearekin. Kasu guxitan erabili "
 "beharko duzu aukera hau."
 
-#: ../src/cairo-dock.c:359
+#: ../src/cairo-dock.c:360
 msgid "Ask again on startup which backend to use."
 msgstr "Galdetu abioan berriro zein motor erabiliko den."
 
-#: ../src/cairo-dock.c:362
+#: ../src/cairo-dock.c:363
 msgid "Force the dock to consider this environnement - use it with care."
 msgstr "Behartu dockak ingurune hau kontuan har dezan - erabili kontuz."
 
-#: ../src/cairo-dock.c:365
+#: ../src/cairo-dock.c:366
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
 msgstr ""
 "Behartu docka direktorio honetatik karga dadin, ~/.config/cairo-dock erabili "
 "ordez."
 
-#: ../src/cairo-dock.c:368
+#: ../src/cairo-dock.c:369
 msgid ""
 "Address of a server containing additional themes. This will overwrite the "
 "default server address."
@@ -951,7 +966,7 @@ msgstr ""
 "Gai gehiago dituen zerbitzari baten helbidea. Honek zerbitzari lehenetsiaren "
 "helbidea gainidatziko du."
 
-#: ../src/cairo-dock.c:371
+#: ../src/cairo-dock.c:372
 msgid ""
 "Wait for N seconds before starting; this is useful if you notice some "
 "problems when the dock starts with the session."
@@ -959,7 +974,7 @@ msgstr ""
 "Itxaron N segundo hasi baino lehen; hau erabilgarria da arazoak sumatzen "
 "badituzu docka saioarekin batera abiarazten denean."
 
-#: ../src/cairo-dock.c:374
+#: ../src/cairo-dock.c:375
 msgid ""
 "Allow to edit the config before the dock is started and show the config "
 "panel on start."
@@ -967,15 +982,15 @@ msgstr ""
 "Utzi konfigurazioa editatzen docka abiarazi baino lehen eta erakutsi "
 "konfigurazio-panela abioan."
 
-#: ../src/cairo-dock.c:377
+#: ../src/cairo-dock.c:378
 msgid "Exclude a given plug-in from activating (it is still loaded though)."
 msgstr "Ez aktibatu plugin jakin bat (hala ere, kargatu egingo da)."
 
-#: ../src/cairo-dock.c:380
+#: ../src/cairo-dock.c:381
 msgid "Don't load any plug-ins."
 msgstr "Ez kargatu pluginik."
 
-#: ../src/cairo-dock.c:383
+#: ../src/cairo-dock.c:384
 msgid ""
 "Work around some bugs in Metacity Window-Manager (invisible dialogs or sub-"
 "docks)"
@@ -983,38 +998,38 @@ msgstr ""
 "Metacity Window-Manager-ek dituen akats batzuk (elkarrizketa-leiho edo "
 "azpidock ikusezinak) saihestu"
 
-#: ../src/cairo-dock.c:386
+#: ../src/cairo-dock.c:387
 msgid ""
 "Log verbosity (debug,message,warning,critical,error); default is warning."
 msgstr ""
 "Egunkariaren jarioa (arazketa, mezua, abisua, errore kritikoa); lehenetsia "
 "abisua da."
 
-#: ../src/cairo-dock.c:389
+#: ../src/cairo-dock.c:390
 msgid "Force to display some output messages with colors."
 msgstr "Behartu irteerako mezu batzuk koloreetan erakuts daitezen."
 
-#: ../src/cairo-dock.c:392
+#: ../src/cairo-dock.c:393
 msgid "Print version and quit."
 msgstr "Inprimatu bertsioa eta irten."
 
-#: ../src/cairo-dock.c:395
+#: ../src/cairo-dock.c:396
 msgid "Lock the dock so that any modification is impossible for users."
 msgstr "Blokeatu docka, erabiltzaileek ezer alda ez dezaten."
 
-#: ../src/cairo-dock.c:399
+#: ../src/cairo-dock.c:400
 msgid "Keep the dock above other windows whatever."
 msgstr "Mantendu docka beste leihoen gainetik."
 
-#: ../src/cairo-dock.c:402
+#: ../src/cairo-dock.c:403
 msgid "Don't make the dock appear on all desktops."
 msgstr "Ez agerrarazi docka mahaigain guztietan."
 
-#: ../src/cairo-dock.c:405 ../src/cairo-dock.c:465
+#: ../src/cairo-dock.c:406 ../src/cairo-dock.c:466
 msgid "Cairo-Dock makes anything, including coffee !"
 msgstr "Cairo-Dockek edozer egiten du, baita kafea ere!"
 
-#: ../src/cairo-dock.c:408
+#: ../src/cairo-dock.c:409
 msgid ""
 "Ask the dock to load additionnal modules contained in this directory (though "
 "it is unsafe for your dock to load unnofficial modules)."
@@ -1022,7 +1037,7 @@ msgstr ""
 "Eskatu dockari direktorio honetan dauden gainerako moduluak kargatzea "
 "(kontuz, ez da segurua ofizialak ez diren moduluak dockean kargatzea)."
 
-#: ../src/cairo-dock.c:411
+#: ../src/cairo-dock.c:412
 msgid ""
 "For debugging purpose only. The crash manager will not be started to hunt "
 "down the bugs."
@@ -1030,7 +1045,7 @@ msgstr ""
 "Arazketarako soilik. Kraskaduren kudeatzailea ez da abiaraziko akatsak "
 "ehizatzeko."
 
-#: ../src/cairo-dock.c:414
+#: ../src/cairo-dock.c:415
 msgid ""
 "For debugging purpose only. Some hidden and still unstable options will be "
 "activated."
@@ -1038,11 +1053,19 @@ msgstr ""
 "Arazketarako soilik. Ezkutuan daudene ta oraindik ezegonkorrak diren zenbait "
 "aukera aktibatuko dira."
 
-#: ../src/cairo-dock.c:534
+#: ../src/cairo-dock.c:535
 msgid "Use OpenGL in Cairo-Dock"
 msgstr "OpenGL erabili nahi Cairo-Docken?"
 
-#: ../src/cairo-dock.c:542
+#: ../src/cairo-dock.c:538 ../src/cairo-dock.c:785
+msgid "Yes"
+msgstr ""
+
+#: ../src/cairo-dock.c:540 ../src/cairo-dock.c:786 ../data/messages:823
+msgid "No"
+msgstr "Ez"
+
+#: ../src/cairo-dock.c:543
 msgid ""
 "OpenGL allows you to use the hardware acceleration, reducing the CPU load to "
 "the minimum.\n"
@@ -1065,11 +1088,11 @@ msgstr ""
 "  edo -o aukera erabiliz OpenGL erabiltzera behartzeko eta -c Cairo "
 "erabiltzera behartzeko.)"
 
-#: ../src/cairo-dock.c:553
+#: ../src/cairo-dock.c:550
 msgid "Remember this choice"
 msgstr "Gogoratu aukera hau"
 
-#: ../src/cairo-dock.c:719 ../src/cairo-dock.c:855
+#: ../src/cairo-dock.c:716 ../src/cairo-dock.c:908
 #, c-format
 msgid ""
 "The module '%s' has been deactivated because it may have caused some "
@@ -1079,18 +1102,32 @@ msgid ""
 msgstr ""
 "'%s' modulua desaktibatu egin da, zenbait arazo sortu dituela susmatzen "
 "delako.\n"
-"Berriro aktiba dezakezu, berriro gertatzen bada jakinarazi http://glx-"
-"dock.org helbidean"
+"Berriro aktiba dezakezu, berriro gertatzen bada jakinarazi http://glx-dock."
+"org helbidean"
 
-#: ../src/cairo-dock.c:731
+#: ../src/cairo-dock.c:728
 msgid "< Maintenance mode >"
 msgstr "< Mantzentze era>"
 
-#: ../src/cairo-dock.c:733
+#: ../src/cairo-dock.c:730
 msgid "Something went wrong with this applet:"
 msgstr "Zerbait gaizki joan da applet honekin:"
 
-#: ../src/cairo-dock.c:780
+#: ../src/cairo-dock.c:782
+msgid "You're using our Cairo-Dock session"
+msgstr ""
+
+#: ../src/cairo-dock.c:788
+msgid ""
+"It can be interesting to use an adapted theme for this session.\n"
+"\n"
+"Do you want to load our \"Default-Panel\" theme?\n"
+"\n"
+"Note: your current theme will be saved and can be reimported later from the "
+"Themes manager"
+msgstr ""
+
+#: ../src/cairo-dock.c:833
 msgid ""
 "No plug-in were found.\n"
 "Plug-ins provide most of the functionalities (animations, applets, views, "
@@ -1110,7 +1147,7 @@ msgstr ""
 "Hala ere, docka benetan plugin horiek gabe erabili nahi baduzu, -f' aukera "
 "erabiliz abiaraz dezakezu, mezu hau berriro ager ez dadin.\n"
 
-#: ../src/cairo-dock.c:853
+#: ../src/cairo-dock.c:906
 #, c-format
 msgid ""
 "The module '%s' may have encountered a problem.\n"
@@ -1150,7 +1187,7 @@ msgstr ""
 msgid "_custom decoration_"
 msgstr "_dekorazio pertsonalizatua_"
 
-#: ../src/gldit/cairo-dock-dock-factory.c:1356
+#: ../src/gldit/cairo-dock-dock-factory.c:1337
 msgid "Sorry but the dock is locked"
 msgstr "Barkatu, docka blokeatuta dago"
 
@@ -1175,86 +1212,86 @@ msgstr "Ezkerreko docak"
 msgid "Pop up the main dock"
 msgstr "Bultzatu gora leiho nagusia"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:250
+#: ../src/gldit/cairo-dock-gui-factory.c:256
 #, c-format
 msgid "by %s"
 msgstr "%s(e)k"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:262
+#: ../src/gldit/cairo-dock-gui-factory.c:268
 msgid "kB"
 msgstr "kB"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:264
+#: ../src/gldit/cairo-dock-gui-factory.c:270
 msgid "MB"
 msgstr "MB"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:273
+#: ../src/gldit/cairo-dock-gui-factory.c:279
 msgid "Local"
 msgstr "Lokala"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:274
+#: ../src/gldit/cairo-dock-gui-factory.c:280
 msgid "User"
 msgstr "Erabiltzailea"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:275
+#: ../src/gldit/cairo-dock-gui-factory.c:281
 msgid "Net"
 msgstr "Sarea"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:276
+#: ../src/gldit/cairo-dock-gui-factory.c:282
 msgid "New"
 msgstr "Berria"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:277
+#: ../src/gldit/cairo-dock-gui-factory.c:283
 msgid "Updated"
 msgstr "Eguneratua"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:759
+#: ../src/gldit/cairo-dock-gui-factory.c:761
 msgid "Pick up a file"
 msgstr "Hartu fitxategi bat"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:759
+#: ../src/gldit/cairo-dock-gui-factory.c:761
 msgid "Pick up a directory"
 msgstr "Hartu direktorio bat"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1061
+#: ../src/gldit/cairo-dock-gui-factory.c:1049
 msgid "_Custom Icons_"
 msgstr "_Ikono pertsonalizatuak_"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1078
-#: ../src/gldit/cairo-dock-gui-factory.c:1123
+#: ../src/gldit/cairo-dock-gui-factory.c:1066
+#: ../src/gldit/cairo-dock-gui-factory.c:1111
 msgid "Use all screens"
 msgstr "Erabili pantaila guztiak"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1100 ../data/messages:13
+#: ../src/gldit/cairo-dock-gui-factory.c:1088 ../data/messages:13
 #: ../data/messages:163 ../data/messages:169 ../data/messages:909
 msgid "left"
 msgstr "ezkerrean"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1102 ../data/messages:11
+#: ../src/gldit/cairo-dock-gui-factory.c:1090 ../data/messages:11
 #: ../data/messages:161 ../data/messages:171 ../data/messages:907
 msgid "right"
 msgstr "eskuinean"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1104
-#: ../src/gldit/cairo-dock-gui-factory.c:1114
+#: ../src/gldit/cairo-dock-gui-factory.c:1092
+#: ../src/gldit/cairo-dock-gui-factory.c:1102
 msgid "middle"
 msgstr "erdian"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1110 ../data/messages:9
+#: ../src/gldit/cairo-dock-gui-factory.c:1098 ../data/messages:9
 #: ../data/messages:159 ../data/messages:905
 msgid "top"
 msgstr "goian"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1112 ../data/messages:7
+#: ../src/gldit/cairo-dock-gui-factory.c:1100 ../data/messages:7
 #: ../data/messages:157 ../data/messages:903
 msgid "bottom"
 msgstr "behean"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1117
+#: ../src/gldit/cairo-dock-gui-factory.c:1105
 msgid "Screen"
 msgstr "Pantaila"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1411
+#: ../src/gldit/cairo-dock-gui-factory.c:1399
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -1265,7 +1302,7 @@ msgstr ""
 "Ziurtatu dockaren bertsio bera instalatu duzula ezaugarri horiek erabili "
 "ahal izateko."
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1420
+#: ../src/gldit/cairo-dock-gui-factory.c:1408
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
@@ -1274,11 +1311,11 @@ msgstr ""
 "'%s' plugina ez dago aktibatuta.\n"
 "Orain aktibatu?"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3136
+#: ../src/gldit/cairo-dock-gui-factory.c:3043
 msgid "link"
 msgstr "esteka"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3198
+#: ../src/gldit/cairo-dock-gui-factory.c:3105
 msgid "Grab"
 msgstr "Hartu"
 
@@ -1294,7 +1331,7 @@ msgstr "Abiarazle berria"
 msgid "by"
 msgstr "egilea"
 
-#: ../src/gldit/cairo-dock-struct.h:494 ../data/messages:1067
+#: ../src/gldit/cairo-dock-struct.h:488 ../data/messages:1067
 #: ../data/messages:1075
 msgid "Default"
 msgstr "Lehenetsia"
@@ -1370,8 +1407,8 @@ msgid ""
 msgstr ""
 "Ongi etorri Cairo-Dockera!\n"
 "Applet honek docka erabiltzen hasten lagunduko dizu; egin klik bertan.\n"
-"Edozein galdera/eskari/iradokizun badaukazu, bisita gaitzazu http://glx-"
-"dock.org webgunean.\n"
+"Edozein galdera/eskari/iradokizun badaukazu, bisita gaitzazu http://glx-dock."
+"org webgunean.\n"
 "Software honekin goza dezazula espero dugu!\n"
 "  (orain elkarrizketa-koadro honetan klik egin dezakezu leihoa ixteko)"
 
@@ -1682,8 +1719,8 @@ msgid ""
 "You can launch an application several times by SHIFT+clicking on its icon "
 "(or from the menu)."
 msgstr ""
-"Aplikazio bat behin baino gehiagotan abiaraz dezakezu haren ikonoan "
-"SHIFT+klik eginda (edo menutik)."
+"Aplikazio bat behin baino gehiagotan abiaraz dezakezu haren ikonoan SHIFT"
+"+klik eginda (edo menutik)."
 
 #: ../Help/data/messages:59
 msgid "Switching between the windows of a same application"
@@ -2048,8 +2085,7 @@ msgstr ""
 
 #: ../Help/data/messages:153
 msgid "Quickly opening a recent file with a launcher"
-msgstr ""
-"Azken aldiko fitxategi bat modu azkarrean irekitzea abiarazle batekin"
+msgstr "Azken aldiko fitxategi bat modu azkarrean irekitzea abiarazle batekin"
 
 #: ../Help/data/messages:155
 msgid ""
@@ -2116,8 +2152,8 @@ msgid ""
 msgstr ""
 "Zenbait appletek (Clock, Stack, Weather...) hainbat instantzia eduki "
 "ditzakete aldi berean exekutatzen.\n"
-"Egin eskuineko klik appletaren ikonoan -> \"abiarazi beste instantzia "
-"bat\".\n"
+"Egin eskuineko klik appletaren ikonoan -> \"abiarazi beste instantzia bat"
+"\".\n"
 "Instantzia bakoitza bere aldetik konfigura dezakezu. Modu horretan, adibidez "
 "hiri ezberdinetako uneko ordua eduki dezakezu zure dockean, edo hiri baten "
 "baino gehiagoren eguraldia."
@@ -2133,8 +2169,8 @@ msgid ""
 "You can even name each of them."
 msgstr ""
 "Aktibatu Switcher appleta.\n"
-"Eskuineko klik gainean -> \"gehitu mahaigain bat\" edo \"kendu mahaigain "
-"hau\".\n"
+"Eskuineko klik gainean -> \"gehitu mahaigain bat\" edo \"kendu mahaigain hau"
+"\".\n"
 "Haietako bakoitzari izen ezberdin bat eman diezaiokezu."
 
 #: ../Help/data/messages:173
@@ -2173,9 +2209,8 @@ msgstr "gnome-panel erabat kentzea"
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key "
-"/desktop/gnome/session/required_components/panel, and replace its content "
-"with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
+"panel, and replace its content with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -2234,8 +2269,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key "
-"'/apps/metacity/general/compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key '/apps/metacity/general/"
+"compositing_manager' and set it to 'true'."
 msgstr ""
 "Konposizioa aktibatu behar duzu. Adibidez, Compiz edo xcompmgr exekutatu "
 "behar duzu. \n"
@@ -2394,8 +2429,8 @@ msgid ""
 msgstr ""
 "Gnomen, dockaren aukera hori gainidazteko aukera bat dago. Ikonoak menuetan "
 "gaitzeko, ireki 'gconf-editor', joan Mahaigaina / Gnome / Interfazea "
-"aukerara eta gaitu \"menuek ikonoak dituzte\" eta \"botoiek ikonoak "
-"dituzte\" aukerak. "
+"aukerara eta gaitu \"menuek ikonoak dituzte\" eta \"botoiek ikonoak dituzte"
+"\" aukerak. "
 
 #: ../Help/data/messages:245
 msgid "If you're on Gnome you can click on this button:"
@@ -2619,8 +2654,8 @@ msgid ""
 "left-click.. Negative values are counted from the right/bottom of the screen"
 msgstr ""
 "Zure leiho-kudeatzailearen arabera, horren tamaina aldatu ahal izango duzu "
-"Alt + ezkerreko klik erabiliz. Balio negatiboak pantailaren "
-"eskuin/behealdetik zenbatzen dira."
+"Alt + ezkerreko klik erabiliz. Balio negatiboak pantailaren eskuin/"
+"behealdetik zenbatzen dira."
 
 #: ../Help/data/messages:333
 msgid "Desklet position (x, y):"
@@ -3763,8 +3798,7 @@ msgid "Zoom effect"
 msgstr "Zoom efektua"
 
 #: ../data/messages:661
-msgid ""
-"set to 1 if you don't want the icons to zoom when you hover over them."
+msgid "set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Ezarri 1 balioan ikonoen gainetik pasatzean zoom efekturik ez baduzu nahi."
 
@@ -3775,8 +3809,7 @@ msgstr "Ikonoen zoom maximoa:"
 #: ../data/messages:665
 msgid ""
 "in pixels. Outside of this space (centered on the mouse), there is no zoom."
-msgstr ""
-"pixeletan. Tarte honetatik kanpora (saguan zentratua), ez dago zoomik."
+msgstr "pixeletan. Tarte honetatik kanpora (saguan zentratua), ez dago zoomik."
 
 #: ../data/messages:667
 msgid "Width of the space in which the zoom will be effective :"
@@ -3983,8 +4016,8 @@ msgstr "handiagoa"
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock "
-"(top/bottom/right/left)."
+"Use it to make the indicator follow the orientation of the dock (top/bottom/"
+"right/left)."
 msgstr ""
 "Erabili adierazleak dockaren kokapenari (Goian/Behean/eskuman/ezkerrean) "
 "jarrai diezaion."
@@ -4048,10 +4081,6 @@ msgstr "Etiketaren ikusgarritasuna"
 #: ../data/messages:821
 msgid "Show labels:"
 msgstr "Ikus etiketak:"
-
-#: ../data/messages:823
-msgid "No"
-msgstr "Ez"
 
 #: ../data/messages:825
 msgid "On pointed icon"
@@ -4273,8 +4302,8 @@ msgstr "Abiarazlearen izena:"
 
 #: ../data/messages:1071
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
-"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
+"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 "Adibidea: nautilus --no-desktop, gedit, etab. You can even enter a shortkey, "
 "e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
