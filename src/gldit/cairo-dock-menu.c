@@ -86,9 +86,9 @@ void _init_menu_style (void)
 		GldiColor *text_color = (myDialogsParam.bUseDefaultColors ? &myStyleParam.textDescription.fColorStart : &myDialogsParam.dialogTextDescription.fColorStart);
 		
 		GldiColor rgb;  // menuitem bg color: a little darker/lighter than the menu's bg color; also separator color (with no alpha)
-		gldi_style_color_shade (bg_color, .2, &rgb);
+		gldi_style_color_shade (bg_color, GLDI_COLOR_SHADE_MEDIUM, &rgb);
 		GldiColor rgbb;  // menuitem border color and menuitem's child bg color (for instance, calendar, scale, etc): a little darker/lighter than the menuitem bg color
-		gldi_style_color_shade (bg_color, .3, &rgbb);
+		gldi_style_color_shade (bg_color, GLDI_COLOR_SHADE_STRONG, &rgbb);
 		
 		gchar *cssheader = g_strdup_printf ("@define-color menuitem_bg_color rgba (%d, %d, %d, %f); \n\
 		@define-color menuitem_text_color rgb (%d, %d, %d); \n\
