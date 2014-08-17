@@ -1127,6 +1127,9 @@ static gboolean _dispatch (G_GNUC_UNUSED GSource *source, G_GNUC_UNUSED GSourceF
 
 static void init (void)
 {
+	//\__________________ connect to X
+	s_XDisplay = cairo_dock_initialize_X_desktop_support ();  // renseigne la taille de l'ecran.
+	
 	//\__________________ init internal data
 	s_aNetClientList		= XInternAtom (s_XDisplay, "_NET_CLIENT_LIST_STACKING", False);
 	s_aNetActiveWindow		= XInternAtom (s_XDisplay, "_NET_ACTIVE_WINDOW", False);
@@ -1198,7 +1201,6 @@ static void init (void)
 	s_poll_fd.events = G_IO_IN;
 	g_source_add_poll (source, &s_poll_fd);
 	g_source_attach (source, NULL);  // NULL <-> main context
-	
 	
 	//\__________________ Register backends
 	GldiDesktopManagerBackend dmb;
@@ -1373,9 +1375,6 @@ void gldi_register_X_manager (void)
 	gldi_object_install_notifications (&myXObjectMgr, NB_NOTIFICATIONS_X_MANAGER);
 	// parent object
 	gldi_object_set_manager (GLDI_OBJECT (&myXObjectMgr), &myWindowObjectMgr);
-	
-	// connect to X (now, because other modules may need it for their init)  /// TODO: this should not be needed any more, at least not this way...
-	s_XDisplay = cairo_dock_initialize_X_desktop_support ();  // renseigne la taille de l'ecran.
 }
 
 #else
