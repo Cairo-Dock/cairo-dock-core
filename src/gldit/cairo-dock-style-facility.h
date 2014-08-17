@@ -46,6 +46,13 @@ struct _GldiColor {
 	GdkRGBA rgba;  /// maybe we'll handle a double color later, to have simple linear patterns...
 	};
 
+/// A light shade level (dock background, ...)
+#define GLDI_COLOR_SHADE_LIGHT .12  // 0.12 is barely noticeable, but that's fine
+/// A medium shade level (selected menu-item, widget inside a dialog/menu, separator, ...)
+#define GLDI_COLOR_SHADE_MEDIUM .2
+/// A strong shade level (child widget inside a dialog/menu, ...)
+#define GLDI_COLOR_SHADE_STRONG .3
+
 /** Shade a color, making it darker if it's light, and lighter if it's dark. Note that the opposite behavior can be obtained by passing a negative shade value. Alpha is copied unchanged. Both pointers can be the same.
 *@param icolor input color
 *@param shade amount of light to add/remove, <= 1.
