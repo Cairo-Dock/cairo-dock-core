@@ -18,6 +18,7 @@
 */
 
 #include <stdlib.h>
+#include <math.h>
 
 #include "cairo-dock-log.h"
 #include "cairo-dock-file-manager.h"  // CairoDockDesktopEnv
@@ -27,6 +28,8 @@
 
 extern CairoDockDesktopEnv g_iDesktopEnv;
 extern GldiStyleParam myStyleParam;
+
+#define NORMALIZE_CHROMA
 
 static double hue2rgb (double p, double q, double t)
 {
@@ -45,26 +48,35 @@ static void hslToRgb (double h, double s, double l, double *r, double *g, double
 	}
 	else
 	{
+		#ifdef NORMALIZE_CHROMA
 		double q = (l < 0.5 ? l * (1 + s) : l + s - l * s);
+		#else
+		double q = -s/2 + l + s;
+		#endif
 		double p = 2 * l - q;
 		*r = hue2rgb(p, q, h + 1./3);
 		*g = hue2rgb(p, q, h);
 		*b = hue2rgb(p, q, h - 1./3);
 	}
 }
-static void rgbToHsl (double r, double g, double b, double *h_, double *s_, double *l_)
+static void rgbToHsl (double r, double g, double b, double *h_, double *s_, double *l_, double *a_)
 {
 	double max = MAX (MAX (r, g), b), min = MIN (MIN (r, g), b);
-	double h, s, l = (max + min) / 2;
+	double h, s, l = (max + min) / 2, a;
 	
 	if(max == min)  // achromatic
 	{
 		h = s = 0;
+		a = 1;
 	}
 	else
 	{
-		double d = max - min;
-		s = (l > 0.5 ? d / (2 - max - min) : d / (max + min));
+		double d = max - min;  // chroma
+		#ifdef NORMALIZE_CHROMA
+		s = (l > 0.5 ? d / (2 - max - min) : d / (max + min));  // normalize the chroma by dividing by (1 - |2l-1|)
+		#else
+		s = d;
+		#endif
 		if (max == r)
 			h = (g - b) / d + (g < b ? 6 : 0);
 		else if (max == g)
@@ -72,16 +84,22 @@ static void rgbToHsl (double r, double g, double b, double *h_, double *s_, doub
 		else
 			h = (r - g) / d + 4;
 		h /= 6;
+		
+		// normalizing the chroma makes the function s(min, max) not continuous around (0;0) and (1;1) (it tends to 1) which reinforces a lot the dominant color, even if it's only dominant by a tiny amount; to reduce this effect, we attenuate the shade.
+		a = ((1-s)*(1-s) * (s*s) * 8 + .5);  // attenuation of the shade
 	}
 	
 	*h_ = h;
 	*s_ = s;
 	*l_ = l;
+	*a_ = a;
 }
 void gldi_style_color_shade (GldiColor *icolor, double shade, GldiColor *ocolor)
 {
-	double h, s, l;
-	rgbToHsl (icolor->rgba.red, icolor->rgba.green, icolor->rgba.blue, &h, &s, &l);
+	double h, s, l, a;
+	rgbToHsl (icolor->rgba.red, icolor->rgba.green, icolor->rgba.blue, &h, &s, &l, &a);
+	
+	shade *= a;
 	
 	if (l > .5)
 		l -= shade;
