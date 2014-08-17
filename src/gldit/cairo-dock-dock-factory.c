@@ -24,7 +24,7 @@
 #include "cairo-dock-separator-manager.h"  // gldi_auto_separator_icon_new
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw-opengl.h"  // for the redirected texture
-#include "cairo-dock-data-renderer.h"  // cairo_dock_reload_data_renderer_on_icon
+#include "cairo-dock-data-renderer.h"  // cairo_dock_reload_data_renderer_on_icon/cairo_dock_refresh_data_renderer
 #include "cairo-dock-windows-manager.h"  // gldi_windows_get_active
 #include "cairo-dock-indicator-manager.h"  // myIndicators.bUseClassIndic
 #include "cairo-dock-draw.h"
@@ -51,7 +51,6 @@
 #include "cairo-dock-class-manager.h"  // cairo_dock_check_class_subdock_is_empty
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-windows-manager.h"  // gldi_windows_get_active
-#include "cairo-dock-data-renderer.h"  // cairo_dock_refresh_data_renderer
 #include "cairo-dock-dock-factory.h"
 
 // dependencies
@@ -129,20 +128,18 @@ void cairo_dock_freeze_docks (gboolean bFreeze)
 	s_bFrozenDock = bFreeze;  /// instead, try to connect to the motion-event and intercept it ...
 }
 
-static gboolean _on_expose (G_GNUC_UNUSED GtkWidget *pWidget, cairo_t *ctx, CairoDock *pDock)
+static gboolean _on_expose (G_GNUC_UNUSED GtkWidget *pWidget, cairo_t *pCairoContext, CairoDock *pDock)
 {
-	GdkRectangle area;
-	double x1, x2, y1, y2;
-	cairo_clip_extents (ctx, &x1, &y1, &x2, &y2);
-	area.x = x1;
-	area.y = y1;
-	area.width = x2 - x1;
-	area.height = y2 - y1;  /// or the opposite ?...
-	//g_print ("%s ((%d;%d) %dx%d)\n", __func__, area.x, area.y, area.width, area.height);
-
-	//\________________ OpenGL rendering
-	if (g_bUseOpenGL && pDock->pRenderer->render_opengl != NULL)
+	if (g_bUseOpenGL && pDock->pRenderer->render_opengl != NULL)  // OpenGL rendering
 	{
+		GdkRectangle area;
+		double x1, x2, y1, y2;
+		cairo_clip_extents (pCairoContext, &x1, &y1, &x2, &y2);
+		area.x = x1;
+		area.y = y1;
+		area.width = x2 - x1;
+		area.height = y2 - y1;
+		
 		if (! gldi_gl_container_begin_draw_full (CAIRO_CONTAINER (pDock), area.x + area.y != 0 ? &area : NULL, TRUE))
 			return FALSE;
 		
@@ -161,13 +158,9 @@ static gboolean _on_expose (G_GNUC_UNUSED GtkWidget *pWidget, cairo_t *ctx, Cair
 		
 		gldi_gl_container_end_draw (CAIRO_CONTAINER (pDock));
 	}
-	else if (! g_bUseOpenGL && pDock->pRenderer->render != NULL)
+	else if (! g_bUseOpenGL && pDock->pRenderer->render != NULL)  // cairo rendering
 	{
-		cairo_t *pCairoContext;
-		if (area.x + area.y != 0)
-			pCairoContext = cairo_dock_create_drawing_context_on_area (CAIRO_CONTAINER (pDock), &area, NULL);
-		else
-			pCairoContext = cairo_dock_create_drawing_context_on_container (CAIRO_CONTAINER (pDock));
+		cairo_dock_init_drawing_context_on_container (CAIRO_CONTAINER (pDock), pCairoContext);
 		
 		if (cairo_dock_is_loading ())
 		{
@@ -181,8 +174,6 @@ static gboolean _on_expose (G_GNUC_UNUSED GtkWidget *pWidget, cairo_t *ctx, Cair
 		{
 			gldi_object_notify (pDock, NOTIFICATION_RENDER, pDock, pCairoContext);
 		}
-	
-		cairo_destroy (pCairoContext);
 	}
 	return FALSE;
 }
