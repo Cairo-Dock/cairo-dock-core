@@ -316,7 +316,7 @@
  *
  * \subsection tasks I have heavy treatments to do, how can I make them without slowing the dock ?
  * 
- * Say for instance you want to download a file on the Net, it is likely to take some amount of time, during which the dock will be frozen, waiting for you. To avoid such a situation, Cairo-Dock defines \ref _CairoDockTask "Tasks". They perform their job <b>asynchronously</b>, and can be <b>periodic</b>. See cairo-dock-task.h for a quick explanation on how a Task works.
+ * Say for instance you want to download a file on the Net, it is likely to take some amount of time, during which the dock will be frozen, waiting for you. To avoid such a situation, Cairo-Dock defines \ref _GldiTask "Tasks". They perform their job <b>asynchronously</b>, and can be <b>periodic</b>. See cairo-dock-task.h for a quick explanation on how a Task works.
  * 
  * You create a Task with \ref cairo_dock_new_task, launch it with \ref cairo_dock_launch_task, and either cancel it with \ref cairo_dock_discard_task or destroy it with \ref cairo_dock_free_task.
  * 
@@ -428,8 +428,6 @@ typedef struct _CairoIconContainerRenderer CairoIconContainerRenderer;
 
 typedef struct _CairoDockTransition CairoDockTransition;
 
-typedef struct _CairoDockTask CairoDockTask;
-
 typedef struct _CairoDockPackage CairoDockPackage;
 
 typedef struct _CairoDockGroupKeyWidget CairoDockGroupKeyWidget;
@@ -443,6 +441,8 @@ typedef struct _CairoDockGLPath CairoDockGLPath;
 typedef struct _CairoDockImageBuffer CairoDockImageBuffer;
 
 typedef struct _CairoOverlay CairoOverlay;
+
+typedef struct _GldiTask GldiTask;
 
 typedef struct _GldiShortkey GldiShortkey;
 

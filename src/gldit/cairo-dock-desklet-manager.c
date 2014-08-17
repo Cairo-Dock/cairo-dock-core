@@ -29,8 +29,8 @@
 #include <math.h>
 #include <time.h>
 
-#include <GL/gl.h> 
-#include <GL/glu.h> 
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 #include "gldi-config.h"
 #include "cairo-dock-module-manager.h"

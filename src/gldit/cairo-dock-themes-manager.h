@@ -93,7 +93,7 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
  * @param data data to be passed to the callback.
  * @return the Task that is doing the job. Keep it and use \ref cairo_dock_discard_task if you want to discard the download before it's completed (for instance if the user cancels it), or \ref cairo_dock_free_task inside your callback.
  */
-CairoDockTask *cairo_dock_import_theme_async (const gchar *cThemeName, gboolean bLoadBehavior, gboolean bLoadLaunchers, GFunc pCallback, gpointer data);
+GldiTask *cairo_dock_import_theme_async (const gchar *cThemeName, gboolean bLoadBehavior, gboolean bLoadLaunchers, GFunc pCallback, gpointer data);
 
 /** Define the paths of themes. Do it just after 'gldi_init'.
 *@param cRootDataDirPath path to the root folder of libgldi

@@ -281,15 +281,15 @@ static void _free_dl (gpointer *pSharedMemory)
 	g_free (pSharedMemory[4]);
 	g_free (pSharedMemory);
 }
-CairoDockTask *cairo_dock_download_file_async (const gchar *cURL, const gchar *cLocalPath, GFunc pCallback, gpointer data)
+GldiTask *cairo_dock_download_file_async (const gchar *cURL, const gchar *cLocalPath, GFunc pCallback, gpointer data)
 {
 	gpointer *pSharedMemory = g_new0 (gpointer, 5);
 	pSharedMemory[0] = g_strdup (cURL);
 	pSharedMemory[1] = g_strdup (cLocalPath);
 	pSharedMemory[2] = pCallback;
 	pSharedMemory[3] = data;
-	CairoDockTask *pTask = cairo_dock_new_task_full (0, (CairoDockGetDataAsyncFunc) _dl_file, (CairoDockUpdateSyncFunc) _finish_dl, (GFreeFunc) _free_dl, pSharedMemory);
-	cairo_dock_launch_task (pTask);
+	GldiTask *pTask = gldi_task_new_full (0, (GldiGetDataAsyncFunc) _dl_file, (GldiUpdateSyncFunc) _finish_dl, (GFreeFunc) _free_dl, pSharedMemory);
+	gldi_task_launch (pTask);
 	return pTask;
 }
 
@@ -387,14 +387,14 @@ static void _free_dl_content (gpointer *pSharedMemory)
 	g_free (pSharedMemory[3]);
 	g_free (pSharedMemory);
 }
-CairoDockTask *cairo_dock_get_url_data_async (const gchar *cURL, GFunc pCallback, gpointer data)
+GldiTask *cairo_dock_get_url_data_async (const gchar *cURL, GFunc pCallback, gpointer data)
 {
 	gpointer *pSharedMemory = g_new0 (gpointer, 6);
 	pSharedMemory[0] = g_strdup (cURL);
 	pSharedMemory[1] = pCallback;
 	pSharedMemory[2] = data;
-	CairoDockTask *pTask = cairo_dock_new_task_full (0, (CairoDockGetDataAsyncFunc) _dl_file_content, (CairoDockUpdateSyncFunc) _finish_dl_content, (GFreeFunc) _free_dl_content, pSharedMemory);
-	cairo_dock_launch_task (pTask);
+	GldiTask *pTask = gldi_task_new_full (0, (GldiGetDataAsyncFunc) _dl_file_content, (GldiUpdateSyncFunc) _finish_dl_content, (GFreeFunc) _free_dl_content, pSharedMemory);
+	gldi_task_launch (pTask);
 	return pTask;
 }
 
@@ -740,7 +740,7 @@ static void _discard_list_packages (gpointer *pSharedMemory)
 		g_hash_table_unref (pSharedMemory[5]);
 	g_free (pSharedMemory);
 }
-CairoDockTask *cairo_dock_list_packages_async (const gchar *cSharePackagesDir, const gchar *cUserPackagesDir, const gchar *cDistantPackagesDir, CairoDockGetPackagesFunc pCallback, gpointer data, GHashTable *pTable)
+GldiTask *cairo_dock_list_packages_async (const gchar *cSharePackagesDir, const gchar *cUserPackagesDir, const gchar *cDistantPackagesDir, CairoDockGetPackagesFunc pCallback, gpointer data, GHashTable *pTable)
 {
 	gpointer *pSharedMemory = g_new0 (gpointer, 6);
 	pSharedMemory[0] = g_strdup (cSharePackagesDir);
@@ -749,8 +749,8 @@ CairoDockTask *cairo_dock_list_packages_async (const gchar *cSharePackagesDir, c
 	pSharedMemory[3] = pCallback;
 	pSharedMemory[4] = data;
 	pSharedMemory[5] = pTable;  // can be NULL
-	CairoDockTask *pTask = cairo_dock_new_task_full (0, (CairoDockGetDataAsyncFunc) _list_packages, (CairoDockUpdateSyncFunc) _finish_list_packages, (GFreeFunc) _discard_list_packages, pSharedMemory);
-	cairo_dock_launch_task (pTask);
+	GldiTask *pTask = gldi_task_new_full (0, (GldiGetDataAsyncFunc)_list_packages, (GldiUpdateSyncFunc)_finish_list_packages, (GFreeFunc) _discard_list_packages, pSharedMemory);
+	gldi_task_launch (pTask);
 	return pTask;
 }
 

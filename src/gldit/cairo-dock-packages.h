@@ -136,7 +136,7 @@ gchar *cairo_dock_download_archive (const gchar *cURL, const gchar *cExtractTo);
 *@param data data to be passed to the callback.
 *@return the Task that is doing the job. Keep it and use \ref cairo_dock_discard_task whenever you want to discard the download (for instance if the user cancels it), or \ref cairo_dock_free_task inside your callback.
 */
-CairoDockTask *cairo_dock_download_file_async (const gchar *cURL, const gchar *cLocalPath, GFunc pCallback, gpointer data);
+GldiTask *cairo_dock_download_file_async (const gchar *cURL, const gchar *cLocalPath, GFunc pCallback, gpointer data);
 
 /** Retrieve the response of a POST request to a server.
 *@param cURL the URL request
@@ -161,7 +161,7 @@ gchar *cairo_dock_get_url_data_with_post (const gchar *cURL, gboolean bGetOutput
 *@param data data to be passed to the callback.
 *@return the Task that is doing the job. Keep it and use \ref cairo_dock_discard_task whenever you want to discard the download (for instance if the user cancels it), or \ref cairo_dock_free_task inside your callback.
 */
-CairoDockTask *cairo_dock_get_url_data_async (const gchar *cURL, GFunc pCallback, gpointer data);
+GldiTask *cairo_dock_get_url_data_async (const gchar *cURL, GFunc pCallback, gpointer data);
 
 
   ////////////////
@@ -195,7 +195,7 @@ GHashTable *cairo_dock_list_packages (const gchar *cSharePackagesDir, const gcha
 *@param pTable a table of packages previously retrieved, or NULL.
 *@return the Task that is doing the job. Keep it and use \ref cairo_dock_discard_task whenever you want to discard the download (for instance if the user cancels it), or \ref cairo_dock_free_task inside your callback.
 */
-CairoDockTask *cairo_dock_list_packages_async (const gchar *cSharePackagesDir, const gchar *cUserPackagesDir, const gchar *cDistantPackagesDir, CairoDockGetPackagesFunc pCallback, gpointer data, GHashTable *pTable);
+GldiTask *cairo_dock_list_packages_async (const gchar *cSharePackagesDir, const gchar *cUserPackagesDir, const gchar *cDistantPackagesDir, CairoDockGetPackagesFunc pCallback, gpointer data, GHashTable *pTable);
 
 
 /** Look for a package with a given name into differente sources. If the package is found on the server and is not present on the disk, or is not up to date, then it is downloaded and the local path is returned.

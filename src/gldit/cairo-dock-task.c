@@ -23,13 +23,6 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-task.h"
 
-/* create task
- * launch -> try-lock mutex or skip, run = 1, new thread or cond_signal
- * thread -> calc -> idle-update -> periodic ? cond_wait (mutex-released) ---> run ? run again : unlock mutex, exit
- *                                           : unlock, unref self, exit
- * update-idle -> update -> while try-lock -> unlock, periodic ? timer to launch again : unref thread, thread = NULL
- */
-
 #ifndef GLIB_VERSION_2_32
 #define G_MUTEX_INIT(a)  a = g_mutex_new ()
 #define G_COND_INIT(a)   a = g_cond_new ()
@@ -44,24 +37,16 @@
 #define G_THREAD_UNREF(t) if (t) g_thread_unref (t)
 #endif
 
-#define cairo_dock_schedule_next_iteration(pTask) do {\
+#define _schedule_next_iteration(pTask) do {\
 	if (pTask->iSidTimer == 0 && pTask->iPeriod)\
-		pTask->iSidTimer = g_timeout_add_seconds (pTask->iPeriod, (GSourceFunc) _cairo_dock_timer, pTask); } while (0)
+		pTask->iSidTimer = g_timeout_add_seconds (pTask->iPeriod, (GSourceFunc) _launch_task_timer, pTask); } while (0)
 
-#define cairo_dock_cancel_next_iteration(pTask) do {\
+#define _cancel_next_iteration(pTask) do {\
 	if (pTask->iSidTimer != 0) {\
 		g_source_remove (pTask->iSidTimer);\
 		pTask->iSidTimer = 0; } } while (0)
 
-#define cairo_dock_perform_task_update(pTask) do {\
-	gboolean bContinue = pTask->update (pTask->pSharedMemory);\
-	if (! bContinue) {\
-		cairo_dock_cancel_next_iteration (pTask); }\
-	else {\
-		pTask->iFrequencyState = CAIRO_DOCK_FREQUENCY_NORMAL;\
-		cairo_dock_schedule_next_iteration (pTask); } } while (0)
-
-#define cairo_dock_set_elapsed_time(pTask) do {\
+#define _set_elapsed_time(pTask) do {\
 	pTask->fElapsedTime = g_timer_elapsed (pTask->pClock, NULL);\
 	g_timer_start (pTask->pClock); } while (0)
 
@@ -75,12 +60,12 @@
 	G_THREAD_UNREF (pTask->pThread);\
 	g_free (pTask); } while (0)
 
-static gboolean _cairo_dock_timer (CairoDockTask *pTask)
+static gboolean _launch_task_timer (GldiTask *pTask)
 {
-	cairo_dock_launch_task (pTask);
+	gldi_task_launch (pTask);
 	return TRUE;
 }
-static gboolean _cairo_dock_check_for_update (CairoDockTask *pTask)
+static gboolean _check_for_update_idle (GldiTask *pTask)
 {
 	// process the data (we don't need to wait that the thread is over, so do it now, it will let more time for the thread to finish, and therfore often save a 'usleep').
 	if (pTask->bNeedsUpdate)  // data are ready to be processed -> perform the update
@@ -120,18 +105,18 @@ static gboolean _cairo_dock_check_for_update (CairoDockTask *pTask)
 			pTask->pThread = NULL;
 		}
 		
-		pTask->iSidTimerUpdate = 0;  // set it before the unlock, as it is accessed in the thread part
+		pTask->iSidUpdateIdle = 0;  // set it before the unlock, as it is accessed in the thread part
 		g_mutex_unlock (pTask->pMutex);
 		
 		// schedule the next iteration if necessary.
 		if (! pTask->bContinue)
 		{
-			cairo_dock_cancel_next_iteration (pTask);
+			_cancel_next_iteration (pTask);
 		}
 		else
 		{
-			pTask->iFrequencyState = CAIRO_DOCK_FREQUENCY_NORMAL;
-			cairo_dock_schedule_next_iteration (pTask);
+			pTask->iFrequencyState = GLDI_TASK_FREQUENCY_NORMAL;
+			_schedule_next_iteration (pTask);
 		}
 		pTask->bIsRunning = FALSE;
 		return FALSE;  // the update is now finished, quit.
@@ -141,21 +126,21 @@ static gboolean _cairo_dock_check_for_update (CairoDockTask *pTask)
 	g_usleep (1);  // we don't want to block the main loop until the thread is over; so just sleep 1ms to give it a chance to terminate. so it's a kind of 'sched_yield()' wihout blocking the main loop.
 	return TRUE;
 }
-static gpointer _cairo_dock_threaded_calculation (CairoDockTask *pTask)
+static gpointer _get_data_threaded (GldiTask *pTask)
 {
 	g_mutex_lock (pTask->pMutex);
 	_run_thread:  // at this point the mutex is locked, either by the first execution of this function, or by 'g_cond_wait'
 	
 	//\_______________________ get the data
-	cairo_dock_set_elapsed_time (pTask);
+	_set_elapsed_time (pTask);
 	pTask->get_data (pTask->pSharedMemory);
 	
 	// and signal that data are ready to be processed.
 	pTask->bNeedsUpdate = TRUE;  // this is only accessed by the update fonction, which is triggered just after, so no need to protect this variable.
 	
 	//\_______________________ call the update function from the main loop
-	if (pTask->iSidTimerUpdate == 0)
-		pTask->iSidTimerUpdate = g_idle_add ((GSourceFunc) _cairo_dock_check_for_update, pTask);  // note that 'iSidTimerUpdate' can actually be set after the 'update' is called. that's why the 'update' have to wait for 'iThreadIsRunning == 0' to finish its job.
+	if (pTask->iSidUpdateIdle == 0)
+		pTask->iSidUpdateIdle = g_idle_add ((GSourceFunc) _check_for_update_idle, pTask);  // note that 'iSidUpdateIdle' can actually be set after the 'update' is called. that's why the 'update' have to wait for the mutex to finish its job.
 	
 	// sleep until the next iteration or just leave.
 	if (pTask->pCond)  // periodic task -> block until the condition becomes TRUE again.
@@ -170,13 +155,22 @@ static gpointer _cairo_dock_threaded_calculation (CairoDockTask *pTask)
 	g_thread_exit (NULL);
 	return NULL;
 }
-void cairo_dock_launch_task (CairoDockTask *pTask)
+void gldi_task_launch (GldiTask *pTask)
 {
 	g_return_if_fail (pTask != NULL);
-	if (pTask->get_data == NULL)  // no asynchronous work
+	if (pTask->get_data == NULL)  // no asynchronous work -> just call the 'update' and directly schedule the next iteration
 	{
-		cairo_dock_set_elapsed_time (pTask);
-		cairo_dock_perform_task_update (pTask);
+		_set_elapsed_time (pTask);
+		pTask->bContinue = pTask->update (pTask->pSharedMemory);
+		if (! pTask->bContinue)
+		{
+			_cancel_next_iteration (pTask);
+		}
+		else
+		{
+			pTask->iFrequencyState = GLDI_TASK_FREQUENCY_NORMAL;
+			_schedule_next_iteration (pTask);
+		}
 	}
 	else  // launch the asynchronous work in a thread
 	{
@@ -185,9 +179,9 @@ void cairo_dock_launch_task (CairoDockTask *pTask)
 			pTask->bIsRunning = TRUE;
 			GError *erreur = NULL;
 			#ifndef GLIB_VERSION_2_32
-			pTask->pThread = g_thread_create ((GThreadFunc) _cairo_dock_threaded_calculation, pTask, TRUE, &erreur);  // TRUE <=> joinable
+			pTask->pThread = g_thread_create ((GThreadFunc) _get_data_threaded, pTask, TRUE, &erreur);  // TRUE <=> joinable
 			#else
-			pTask->pThread = g_thread_try_new ("Cairo-Dock Task", (GThreadFunc) _cairo_dock_threaded_calculation, pTask, &erreur);
+			pTask->pThread = g_thread_try_new ("Cairo-Dock Task", (GThreadFunc) _get_data_threaded, pTask, &erreur);
 			#endif
 			if (erreur != NULL)  // on n'a pas pu lancer le thread.
 			{
@@ -199,7 +193,7 @@ void cairo_dock_launch_task (CairoDockTask *pTask)
 		else  // thread already exists; it's either running or sleeping or finished with a pending update
 		if (pTask->pCond && g_mutex_trylock (pTask->pMutex))  // it's a periodic thread, and it's not currently running...
 		{
-			if (pTask->iSidTimerUpdate == 0)  // ...and it doesn't have a pending update -> awake it and run it again.
+			if (pTask->iSidUpdateIdle == 0)  // ...and it doesn't have a pending update -> awake it and run it again.
 			{
 				pTask->bRunThread = TRUE;
 				pTask->bIsRunning = TRUE;
@@ -211,25 +205,25 @@ void cairo_dock_launch_task (CairoDockTask *pTask)
 }
 
 
-static gboolean _cairo_dock_one_shot_timer (CairoDockTask *pTask)
+static gboolean _one_shot_timer (GldiTask *pTask)
 {
 	pTask->iSidTimer = 0;
-	cairo_dock_launch_task (pTask);
+	gldi_task_launch (pTask);
 	return FALSE;
 }
-void cairo_dock_launch_task_delayed (CairoDockTask *pTask, double fDelay)
+void gldi_task_launch_delayed (GldiTask *pTask, double fDelay)
 {
-	cairo_dock_cancel_next_iteration (pTask);
+	_cancel_next_iteration (pTask);
 	if (fDelay == 0)
-		pTask->iSidTimer = g_idle_add ((GSourceFunc) _cairo_dock_one_shot_timer, pTask);
+		pTask->iSidTimer = g_idle_add ((GSourceFunc) _one_shot_timer, pTask);
 	else
-		pTask->iSidTimer = g_timeout_add (fDelay, (GSourceFunc) _cairo_dock_one_shot_timer, pTask);
+		pTask->iSidTimer = g_timeout_add (fDelay, (GSourceFunc) _one_shot_timer, pTask);
 }
 
 
-CairoDockTask *cairo_dock_new_task_full (int iPeriod, CairoDockGetDataAsyncFunc get_data, CairoDockUpdateSyncFunc update, GFreeFunc free_data, gpointer pSharedMemory)
+GldiTask *gldi_task_new_full (int iPeriod, GldiGetDataAsyncFunc get_data, GldiUpdateSyncFunc update, GFreeFunc free_data, gpointer pSharedMemory)
 {
-	CairoDockTask *pTask = g_new0 (CairoDockTask, 1);
+	GldiTask *pTask = g_new0 (GldiTask, 1);
 	pTask->iPeriod = iPeriod;
 	pTask->get_data = get_data;
 	pTask->update = update;
@@ -245,14 +239,14 @@ CairoDockTask *cairo_dock_new_task_full (int iPeriod, CairoDockGetDataAsyncFunc 
 }
 
 
-void cairo_dock_stop_task (CairoDockTask *pTask)
+void gldi_task_stop (GldiTask *pTask)
 {
 	if (pTask == NULL)
 		return ;
 	
-	cairo_dock_cancel_next_iteration (pTask);
+	_cancel_next_iteration (pTask);
 	
-	if (cairo_dock_task_is_running (pTask))
+	if (gldi_task_is_running (pTask))
 	{
 		if (pTask->pThread)
 		{
@@ -270,10 +264,10 @@ void cairo_dock_stop_task (CairoDockTask *pTask)
 			pTask->pThread = NULL;
 			g_atomic_int_set (&pTask->bDiscard, 0);
 		}
-		if (pTask->iSidTimerUpdate != 0)  // do it after the thread has possibly scheduled the 'update'
+		if (pTask->iSidUpdateIdle != 0)  // do it after the thread has possibly scheduled the 'update'
 		{
-			g_source_remove (pTask->iSidTimerUpdate);
-			pTask->iSidTimerUpdate = 0;
+			g_source_remove (pTask->iSidUpdateIdle);
+			pTask->iSidUpdateIdle = 0;
 		}
 		pTask->bIsRunning = FALSE;  // since we didn't go through the 'update'
 	}
@@ -293,12 +287,12 @@ void cairo_dock_stop_task (CairoDockTask *pTask)
 }
 
 
-void cairo_dock_discard_task (CairoDockTask *pTask)
+void gldi_task_discard (GldiTask *pTask)
 {
 	if (pTask == NULL)
 		return ;
 	
-	cairo_dock_cancel_next_iteration (pTask);
+	_cancel_next_iteration (pTask);
 	// mark the task as 'discarded'
 	g_atomic_int_set (&pTask->bDiscard, 1);
 	
@@ -306,7 +300,7 @@ void cairo_dock_discard_task (CairoDockTask *pTask)
 	//   if we're inside the thread, it will trigger the 'update' anyway, which will destroy the task.
 	//   if we're waiting for the 'update', same as above
 	//   if we're inside the 'update' user callback, the task will be destroyed in the 2nd stage of the function (the user callback is called in the 1st stage).
-	if (! cairo_dock_task_is_running (pTask))  // we can free the task immediately.
+	if (! gldi_task_is_running (pTask))  // we can free the task immediately.
 	{
 		if (pTask->pThread && pTask->pCond && g_mutex_trylock (pTask->pMutex))  // the thread is sleeping, awake it and let it exit before we can free everything
 		{
@@ -320,65 +314,65 @@ void cairo_dock_discard_task (CairoDockTask *pTask)
 	}
 }
 
-void cairo_dock_free_task (CairoDockTask *pTask)
+void gldi_task_free (GldiTask *pTask)
 {
 	if (pTask == NULL)
 		return ;
 	
-	cairo_dock_stop_task (pTask);
+	gldi_task_stop (pTask);
 	_free_task (pTask);
 }
 
-gboolean cairo_dock_task_is_active (CairoDockTask *pTask)
+gboolean gldi_task_is_active (GldiTask *pTask)
 {
 	return (pTask != NULL && pTask->iSidTimer != 0);
 }
 
-gboolean cairo_dock_task_is_running (CairoDockTask *pTask)
+gboolean gldi_task_is_running (GldiTask *pTask)
 {
 	return (pTask != NULL && pTask->bIsRunning);
 }
 
-static void _cairo_dock_restart_timer_with_frequency (CairoDockTask *pTask, int iNewPeriod)
+static void _restart_timer_with_frequency (GldiTask *pTask, int iNewPeriod)
 {
 	gboolean bNeedsRestart = (pTask->iSidTimer != 0);
-	cairo_dock_cancel_next_iteration (pTask);
+	_cancel_next_iteration (pTask);
 	
 	if (bNeedsRestart && iNewPeriod != 0)
-		pTask->iSidTimer = g_timeout_add_seconds (iNewPeriod, (GSourceFunc) _cairo_dock_timer, pTask);
+		pTask->iSidTimer = g_timeout_add_seconds (iNewPeriod, (GSourceFunc) _launch_task_timer, pTask);
 }
 
-void cairo_dock_change_task_frequency (CairoDockTask *pTask, int iNewPeriod)
+void gldi_task_change_frequency (GldiTask *pTask, int iNewPeriod)
 {
 	g_return_if_fail (pTask != NULL && pTask->iPeriod != 0 && iNewPeriod != 0);
 	pTask->iPeriod = iNewPeriod;
 	
-	_cairo_dock_restart_timer_with_frequency (pTask, iNewPeriod);
+	_restart_timer_with_frequency (pTask, iNewPeriod);
 }
 
-void cairo_dock_relaunch_task_immediately (CairoDockTask *pTask, int iNewPeriod)
+void gldi_task_change_frequency_and_relaunch (GldiTask *pTask, int iNewPeriod)
 {
-	cairo_dock_stop_task (pTask);  // on stoppe avant car on ne veut pas attendre la prochaine iteration.
+	gldi_task_stop (pTask);  // on stoppe avant car on ne veut pas attendre la prochaine iteration.
 	if (iNewPeriod >= 0)  // sinon valeur inchangee.
-		cairo_dock_change_task_frequency (pTask, iNewPeriod); // nouvelle frequence.
-	cairo_dock_launch_task (pTask);  // mesure immediate.
+		gldi_task_change_frequency (pTask, iNewPeriod); // nouvelle frequence.
+	gldi_task_launch (pTask);  // mesure immediate.
 }
 
-void cairo_dock_downgrade_task_frequency (CairoDockTask *pTask)
+void gldi_task_downgrade_frequency (GldiTask *pTask)
 {
-	if (pTask->iFrequencyState < CAIRO_DOCK_FREQUENCY_SLEEP)
+	if (pTask->iFrequencyState < GLDI_TASK_FREQUENCY_SLEEP)
 	{
 		pTask->iFrequencyState ++;
 		int iNewPeriod;
 		switch (pTask->iFrequencyState)
 		{
-			case CAIRO_DOCK_FREQUENCY_LOW :
+			case GLDI_TASK_FREQUENCY_LOW :
 				iNewPeriod = 2 * pTask->iPeriod;
 			break ;
-			case CAIRO_DOCK_FREQUENCY_VERY_LOW :
+			case GLDI_TASK_FREQUENCY_VERY_LOW :
 				iNewPeriod = 4 * pTask->iPeriod;
 			break ;
-			case CAIRO_DOCK_FREQUENCY_SLEEP :
+			case GLDI_TASK_FREQUENCY_SLEEP :
 				iNewPeriod = 10 * pTask->iPeriod;
 			break ;
 			default :  // ne doit pas arriver.
@@ -386,16 +380,16 @@ void cairo_dock_downgrade_task_frequency (CairoDockTask *pTask)
 			break ;
 		}
 		
-		cd_message ("degradation de la mesure (etat <- %d/%d)", pTask->iFrequencyState, CAIRO_DOCK_NB_FREQUENCIES-1);
-		_cairo_dock_restart_timer_with_frequency (pTask, iNewPeriod);
+		cd_message ("degradation de la mesure (etat <- %d/%d)", pTask->iFrequencyState, GLDI_TASK_NB_FREQUENCIES-1);
+		_restart_timer_with_frequency (pTask, iNewPeriod);
 	}
 }
 
-void cairo_dock_set_normal_task_frequency (CairoDockTask *pTask)
+void gldi_task_set_normal_frequency (GldiTask *pTask)
 {
-	if (pTask->iFrequencyState != CAIRO_DOCK_FREQUENCY_NORMAL)
+	if (pTask->iFrequencyState != GLDI_TASK_FREQUENCY_NORMAL)
 	{
-		pTask->iFrequencyState = CAIRO_DOCK_FREQUENCY_NORMAL;
-		_cairo_dock_restart_timer_with_frequency (pTask, pTask->iPeriod);
+		pTask->iFrequencyState = GLDI_TASK_FREQUENCY_NORMAL;
+		_restart_timer_with_frequency (pTask, pTask->iPeriod);
 	}
 }

@@ -32,8 +32,8 @@ struct _ThemesWidget {
 	CDWidget widget;  // base class
 	gchar *cInitConfFile;  // conf file used to build the widget
 	GtkWindow *pMainWindow;  // main window, needed to make the waiting dialog modal
-	CairoDockTask *pImportTask;  // task to import a theme from the server
-	CairoDockTask *pListTask;  // task to list the themes on the server
+	GldiTask *pImportTask;  // task to import a theme from the server
+	GldiTask *pListTask;  // task to list the themes on the server
 	GtkWidget *pTreeView;  // tree view for the complete themes list
 	GtkWidget *pCombo;  // combo for the user themes
 	GtkWidget *pWaitingDialog;  // modal dialog to show a progress bar during importation

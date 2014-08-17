@@ -46,32 +46,15 @@
 #include "cairo-dock-applet-facility.h"
 
 extern gchar *g_cExtrasDirPath;
-///extern CairoDockImageBuffer g_pIconBackgroundBuffer;
 
 extern gboolean g_bUseOpenGL;
 
 
 void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *pSurface, double fScale, double fAlpha, Icon *pIcon)
 {
-	///g_return_if_fail (cairo_status (pIconContext) == CAIRO_STATUS_SUCCESS);
+	//\________________ On efface l'ancienne image.
 	if (! cairo_dock_begin_draw_icon_cairo (pIcon, 0, pIconContext))  // 0 <=> erase
 		return;
-	
-	//\________________ On efface l'ancienne image.
-	/**cairo_dock_erase_cairo_context (pIconContext);
-	
-	//\________________ On met le background de l'icone si necessaire
-	if (pIcon != NULL &&
-		pIcon->image.pSurface != NULL &&
-		g_pIconBackgroundBuffer.pSurface != NULL &&
-		(! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (pIcon)))
-	{
-		//cd_message (">>> %s prendra un fond d'icone", pIcon->cName);
-		int iWidth, iHeight;
-		cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
-		cairo_dock_apply_image_buffer_surface_at_size (&g_pIconBackgroundBuffer, pIconContext, iWidth, iHeight, 0, 0, 1);
-		pIcon->bNeedApplyBackground = FALSE;
-	}*/
 	
 	//\________________ On applique la nouvelle image.
 	if (pSurface != NULL && fScale > 0)
@@ -98,8 +81,6 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 		cairo_restore (pIconContext);
 	}
 	cairo_dock_end_draw_icon_cairo (pIcon);
-	/**if (g_bUseOpenGL)
-		cairo_dock_update_icon_texture (pIcon);*/
 }
 
 

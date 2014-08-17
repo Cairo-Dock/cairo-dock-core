@@ -711,7 +711,7 @@ static void _discard_import (gpointer *pSharedMemory)
 	g_free (pSharedMemory[0]);
 	g_free (pSharedMemory);
 }
-CairoDockTask *cairo_dock_import_theme_async (const gchar *cThemeName, gboolean bLoadBehavior, gboolean bLoadLaunchers, GFunc pCallback, gpointer data)
+GldiTask *cairo_dock_import_theme_async (const gchar *cThemeName, gboolean bLoadBehavior, gboolean bLoadLaunchers, GFunc pCallback, gpointer data)
 {
 	gpointer *pSharedMemory = g_new0 (gpointer, 5);
 	pSharedMemory[0] = g_strdup (cThemeName);
@@ -719,8 +719,8 @@ CairoDockTask *cairo_dock_import_theme_async (const gchar *cThemeName, gboolean 
 	pSharedMemory[2] = GINT_TO_POINTER (bLoadLaunchers);
 	pSharedMemory[3] = pCallback;
 	pSharedMemory[4] = data;
-	CairoDockTask *pTask = cairo_dock_new_task_full (0, (CairoDockGetDataAsyncFunc) _import_theme, (CairoDockUpdateSyncFunc) _finish_import, (GFreeFunc) _discard_import, pSharedMemory);
-	cairo_dock_launch_task (pTask);
+	GldiTask *pTask = gldi_task_new_full (0, (GldiGetDataAsyncFunc) _import_theme, (GldiUpdateSyncFunc) _finish_import, (GFreeFunc) _discard_import, pSharedMemory);
+	gldi_task_launch (pTask);
 	return pTask;
 }
 

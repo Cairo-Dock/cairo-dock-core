@@ -89,7 +89,7 @@ static void _load_theme (gboolean bSuccess, ThemesWidget *pThemesWidget)
 		cairo_dock_set_status_message (NULL, _("Could not import the theme."));
 	gtk_widget_destroy (pThemesWidget->pWaitingDialog);
 	pThemesWidget->pWaitingDialog = NULL;
-	cairo_dock_discard_task (pThemesWidget->pImportTask);
+	gldi_task_discard (pThemesWidget->pImportTask);
 	pThemesWidget->pImportTask = NULL;
 }
 
@@ -135,7 +135,7 @@ static gchar * _cairo_dock_save_current_theme (GKeyFile* pKeyFile)
 
 static void on_cancel_dl (G_GNUC_UNUSED GtkButton *button, ThemesWidget *pThemesWidget)
 {
-	cairo_dock_discard_task (pThemesWidget->pImportTask);
+	gldi_task_discard (pThemesWidget->pImportTask);
 	pThemesWidget->pImportTask = NULL;
 	gtk_widget_destroy (pThemesWidget->pWaitingDialog);  // stop the pulse too
 	pThemesWidget->pWaitingDialog = NULL;
@@ -181,7 +181,7 @@ static gboolean _cairo_dock_load_theme (GKeyFile* pKeyFile, ThemesWidget *pTheme
 	
 	if (pThemesWidget->pImportTask != NULL)
 	{
-		cairo_dock_discard_task (pThemesWidget->pImportTask);
+		gldi_task_discard (pThemesWidget->pImportTask);
 		pThemesWidget->pImportTask = NULL;
 	}
 	//\___________________ On regarde si le theme courant est modifie.
@@ -395,7 +395,7 @@ static void _got_themes_list (GHashTable *pThemeTable, ThemesWidget *pThemesWidg
 	else
 		cairo_dock_set_status_message (GTK_WIDGET (pThemesWidget->pMainWindow), "");
 	
-	cairo_dock_discard_task (pThemesWidget->pListTask);
+	gldi_task_discard (pThemesWidget->pListTask);
 	pThemesWidget->pListTask = NULL;
 	
 	GtkListStore *pModel = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (pThemesWidget->pTreeView)));
@@ -701,7 +701,7 @@ static void _themes_widget_reset (CDWidget *pCdWidget)
 	g_remove (pThemesWidget->cInitConfFile);
 	g_free (pThemesWidget->cInitConfFile);
 	
-	cairo_dock_discard_task (pThemesWidget->pImportTask);
+	gldi_task_discard (pThemesWidget->pImportTask);
 	
 	if (pThemesWidget->iSidPulse != 0)
 		g_source_remove (pThemesWidget->iSidPulse);

@@ -1701,7 +1701,6 @@ static gboolean _on_enter_menu_item (GtkWidget* pWidget,
 }
 static GtkWidget *_add_new_button_to_hbox (const gchar *gtkStock, const gchar *cTooltip, GCallback pFunction, GtkWidget *hbox, gpointer data)
 {
-	g_print ("%s (%s)\n", __func__, gtkStock);
 	GtkWidget *pButton = gtk_button_new ();
 	/*
 		GtkStyleContext *ctx = gtk_widget_get_style_context (pButton);

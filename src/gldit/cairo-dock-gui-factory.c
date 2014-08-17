@@ -307,10 +307,10 @@ static GdkPixbuf* _cairo_dock_gui_get_package_state_icon (gint iState)
 static gboolean on_delete_async_widget (GtkWidget *pWidget, G_GNUC_UNUSED GdkEvent *event, G_GNUC_UNUSED gpointer data)
 {
 	cd_debug ("%s ()", __func__);
-	CairoDockTask *pTask = g_object_get_data (G_OBJECT (pWidget), "cd-task");
+	GldiTask *pTask = g_object_get_data (G_OBJECT (pWidget), "cd-task");
 	if (pTask != NULL)
 	{
-		cairo_dock_discard_task (pTask);
+		gldi_task_discard (pTask);
 		g_object_set_data (G_OBJECT (pWidget), "cd-task", NULL);
 	}
 	return FALSE;  // propagate event
@@ -358,11 +358,11 @@ static void _on_got_readme (const gchar *cDescription, GtkWidget *pDescriptionLa
 	else
 		gtk_label_set_markup (GTK_LABEL (pDescriptionLabel), cDescription);
 	
-	CairoDockTask *pTask = g_object_get_data (G_OBJECT (pDescriptionLabel), "cd-task");
+	GldiTask *pTask = g_object_get_data (G_OBJECT (pDescriptionLabel), "cd-task");
 	if (pTask != NULL)
 	{
 		//g_print ("remove the task\n");
-		cairo_dock_discard_task (pTask);  // pas de cairo_dock_free_task dans la callback de la tache.
+		gldi_task_discard (pTask);  // pas de gldi_task_free dans la callback de la tache.
 		g_object_set_data (G_OBJECT (pDescriptionLabel), "cd-task", NULL);
 	}
 }
@@ -377,10 +377,10 @@ static void _on_got_preview_file (const gchar *cPreviewFilePath, gpointer *data)
 		_set_preview_image (cPreviewFilePath, GTK_IMAGE (pPreviewImage), pImageFrame);
 		g_remove (cPreviewFilePath);
 	}
-	CairoDockTask *pTask = g_object_get_data (G_OBJECT (pPreviewImage), "cd-task");
+	GldiTask *pTask = g_object_get_data (G_OBJECT (pPreviewImage), "cd-task");
 	if (pTask != NULL)
 	{
-		cairo_dock_discard_task (pTask);
+		gldi_task_discard (pTask);
 		g_object_set_data (G_OBJECT (pPreviewImage), "cd-task", NULL);
 	}
 }
@@ -472,11 +472,11 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 	// get or fill the readme.
 	if (cDescriptionFilePath != NULL)
 	{
-		CairoDockTask *pTask = g_object_get_data (G_OBJECT (pDescriptionLabel), "cd-task");
+		GldiTask *pTask = g_object_get_data (G_OBJECT (pDescriptionLabel), "cd-task");
 		//g_print ("prev task : %x\n", pTask);
 		if (pTask != NULL)
 		{
-			cairo_dock_discard_task (pTask);
+			gldi_task_discard (pTask);
 			g_object_set_data (G_OBJECT (pDescriptionLabel), "cd-task", NULL);
 		}
 		
@@ -517,10 +517,10 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 	// get or fill the preview image.
 	if (cPreviewFilePath != NULL)
 	{
-		CairoDockTask *pTask = g_object_get_data (G_OBJECT (pPreviewImage), "cd-task");
+		GldiTask *pTask = g_object_get_data (G_OBJECT (pPreviewImage), "cd-task");
 		if (pTask != NULL)
 		{
-			cairo_dock_discard_task (pTask);
+			gldi_task_discard (pTask);
 			g_object_set_data (G_OBJECT (pPreviewImage), "cd-task", NULL);
 		}
 		
@@ -1008,7 +1008,7 @@ static void _list_icon_theme_in_dir (const gchar *cDirPath, GHashTable *pHashTab
 	GDir *dir = g_dir_open (cDirPath, 0, &erreur);
 	if (erreur != NULL)
 	{
-		cd_warning ("%s\n", erreur->message);
+		cd_message ("%s\n", erreur->message);  // ~/.icons might not exist, don't make a fuss
 		g_error_free (erreur);
 		return ;
 	}
@@ -1356,12 +1356,12 @@ static void _got_themes_combo_list (GHashTable *pThemeTable, gpointer *data)
 	GtkWidget *pCombo = data[0];
 	gchar *cValue = data[2];
 	gchar *cHint = data[3];
-	CairoDockTask *pTask = g_object_get_data (G_OBJECT (pCombo), "cd-task");
+	GldiTask *pTask = g_object_get_data (G_OBJECT (pCombo), "cd-task");
 	
 	if (pTask != NULL)
 	{
 		//g_print ("remove the task\n");
-		cairo_dock_discard_task (pTask);  // pas de cairo_dock_free_task dans la callback de la tache.
+		gldi_task_discard (pTask);  // pas de gldi_task_free dans la callback de la tache.
 		g_object_set_data (G_OBJECT (pCombo), "cd-task", NULL);
 	}
 	
@@ -2379,7 +2379,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						cairo_dock_set_status_message_printf (pMainWindow, _("Listing themes in '%s' ..."), cDistantThemesDir);
 						data[2] = g_key_file_get_string (pKeyFile, cGroupName, cKeyName, NULL);  // freed in the callback '_got_themes_combo_list'.
 						data[3] = g_strdup (cHint);
-						CairoDockTask *pTask = cairo_dock_list_packages_async (NULL, NULL, cDistantThemesDir, (CairoDockGetPackagesFunc) _got_themes_combo_list, data, pThemeTable);  // the table will be freed along with the task.
+						GldiTask *pTask = cairo_dock_list_packages_async (NULL, NULL, cDistantThemesDir, (CairoDockGetPackagesFunc) _got_themes_combo_list, data, pThemeTable);  // the table will be freed along with the task.
 						g_object_set_data (G_OBJECT (pOneWidget), "cd-task", pTask);
 						g_signal_connect (G_OBJECT (pOneWidget), "destroy", G_CALLBACK (on_delete_async_widget), NULL);
 					}
