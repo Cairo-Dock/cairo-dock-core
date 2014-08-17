@@ -61,7 +61,7 @@ static void _reserve_space_for_desklet (CairoDesklet *pDesklet, gboolean bReserv
  /// SIGNALS ///
 ///////////////
 
-static gboolean on_expose_desklet(G_GNUC_UNUSED GtkWidget *pWidget, G_GNUC_UNUSED cairo_t *ctx, CairoDesklet *pDesklet)
+static gboolean on_expose_desklet(G_GNUC_UNUSED GtkWidget *pWidget, G_GNUC_UNUSED cairo_t *pCairoContext, CairoDesklet *pDesklet)
 {
 	if (pDesklet->iDesiredWidth != 0 && pDesklet->iDesiredHeight != 0 && (pDesklet->iKnownWidth != pDesklet->iDesiredWidth || pDesklet->iKnownHeight != pDesklet->iDesiredHeight))  // skip the drawing until the desklet has reached its size, only make it transparent.
 	{
@@ -75,8 +75,7 @@ static gboolean on_expose_desklet(G_GNUC_UNUSED GtkWidget *pWidget, G_GNUC_UNUSE
 		}
 		else
 		{
-			cairo_t *pCairoContext = cairo_dock_create_drawing_context_on_container (CAIRO_CONTAINER (pDesklet));
-			cairo_destroy (pCairoContext);
+			cairo_dock_init_drawing_context_on_container (CAIRO_CONTAINER (pDesklet), pCairoContext);
 		}
 		return FALSE;
 	}
@@ -92,11 +91,9 @@ static gboolean on_expose_desklet(G_GNUC_UNUSED GtkWidget *pWidget, G_GNUC_UNUSE
 	}
 	else
 	{
-		cairo_t *pCairoContext = cairo_dock_create_drawing_context_on_container (CAIRO_CONTAINER (pDesklet));
+		cairo_dock_init_drawing_context_on_container (CAIRO_CONTAINER (pDesklet), pCairoContext);
 		
 		gldi_object_notify (pDesklet, NOTIFICATION_RENDER, pDesklet, pCairoContext);
-		
-		cairo_destroy (pCairoContext);
 	}
 	
 	return FALSE;
