@@ -205,7 +205,7 @@ void gldi_style_color_get (GldiStyleColors iColorType, GldiColor *pColor)
 			}
 			else
 			{
-				gldi_style_color_shade (&myStyleParam.fBgColor, .2, pColor);
+				gldi_style_color_shade (&myStyleParam.fBgColor, GLDI_COLOR_SHADE_MEDIUM, pColor);
 			}
 		break;
 		case GLDI_COLOR_LINE:
@@ -237,12 +237,12 @@ void gldi_style_color_get (GldiStyleColors iColorType, GldiColor *pColor)
 		break;
 		case GLDI_COLOR_SEPARATOR:
 			_get_bg_color (pColor);
-			gldi_style_color_shade (pColor, .2, pColor);
+			gldi_style_color_shade (pColor, GLDI_COLOR_SHADE_MEDIUM, pColor);
 			pColor->rgba.alpha = 1.;
 		break;
 		case GLDI_COLOR_CHILD:
 			_get_bg_color (pColor);
-			gldi_style_color_shade (pColor, .3, pColor);
+			gldi_style_color_shade (pColor, GLDI_COLOR_SHADE_STRONG, pColor);
 		break;
 		default:
 		break;
@@ -302,7 +302,7 @@ void gldi_style_colors_set_selected_bg_color (cairo_t *pCairoContext)
 	else
 	{
 		GldiColor color;
-		gldi_style_color_shade (&myStyleParam.fBgColor, .2, &color);
+		gldi_style_color_shade (&myStyleParam.fBgColor, GLDI_COLOR_SHADE_MEDIUM, &color);
 		if (pCairoContext)
 			gldi_color_set_cairo (pCairoContext, &color);
 		else
@@ -357,7 +357,7 @@ void gldi_style_colors_set_separator_color (cairo_t *pCairoContext)
 {
 	GldiColor color;
 	_get_bg_color (&color);
-	gldi_style_color_shade (&color, .2, &color);
+	gldi_style_color_shade (&color, GLDI_COLOR_SHADE_MEDIUM, &color);
 	if (pCairoContext)
 		gldi_color_set_cairo_rgb (pCairoContext, &color);  // alpha set to 1
 	else
@@ -368,7 +368,7 @@ void gldi_style_colors_set_child_color (cairo_t *pCairoContext)
 {
 	GldiColor color;
 	_get_bg_color (&color);
-	gldi_style_color_shade (&color, .3, &color);
+	gldi_style_color_shade (&color, GLDI_COLOR_SHADE_STRONG, &color);
 	if (pCairoContext)
 		gldi_color_set_cairo (pCairoContext, &color);
 	else

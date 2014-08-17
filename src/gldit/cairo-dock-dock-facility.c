@@ -1275,7 +1275,7 @@ static void _cairo_dock_load_default_background (CairoDockImageBuffer *pImage, i
 		// at the top is the original color, which connects nicely with other items (labels, menus, dialogs).
 		GldiColor bg_color, bg_color2;
 		gldi_style_color_get (GLDI_COLOR_BG, &bg_color);
-		gldi_style_color_shade (&bg_color, .12, &bg_color2);  // 0.12 is barely noticeable, but that's fine
+		gldi_style_color_shade (&bg_color, GLDI_COLOR_SHADE_LIGHT, &bg_color2);
 		
 		cairo_pattern_t *pattern = cairo_pattern_create_linear (0, 0, 0, iHeight);
 		cairo_pattern_set_extend (pattern, CAIRO_EXTEND_NONE);
