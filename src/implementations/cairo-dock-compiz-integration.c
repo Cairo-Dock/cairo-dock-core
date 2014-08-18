@@ -37,6 +37,8 @@
 static DBusGProxy *s_pScaleProxy = NULL;
 static DBusGProxy *s_pExposeProxy = NULL;
 static DBusGProxy *s_pWidgetLayerProxy = NULL;
+static DBusGProxy *s_pHSizeProxy = NULL;
+static DBusGProxy *s_pVSizeProxy = NULL;
 
 #ifdef HAVE_X11
 static inline Window _get_root_Xid (void)
@@ -302,6 +304,52 @@ static gboolean set_on_widget_layer (GldiContainer *pContainer, gboolean bOnWidg
 	#endif
 }
 
+/* Only add workspaces with Compiz: We shouldn't add desktops when using Compiz
+ * and with this method, Compiz saves the new state
+ */
+static gboolean set_nb_desktops (int iNbDesktops, int iNbViewportX, int iNbViewportY)
+{
+	gboolean bSuccess = FALSE;
+	if (s_pHSizeProxy != NULL && s_pVSizeProxy != NULL)
+	{
+		// We can receive (-1, >0, >0) or (2, -1, -1)
+		int X, Y;
+		if (iNbDesktops > 0)
+		{
+			X = iNbDesktops;
+			Y = 1;
+		}
+		else
+		{
+			X = iNbViewportX > 0 ? iNbViewportX : 1;
+			Y = iNbViewportY > 0 ? iNbViewportY : 1;
+		}
+
+		GError *error = NULL;
+		bSuccess = dbus_g_proxy_call (s_pHSizeProxy, "set", &error,
+			G_TYPE_INT, X,
+			G_TYPE_INVALID, G_TYPE_INVALID);
+		if (error)
+		{
+			cd_warning ("compiz HSize error: %s", error->message);
+			g_error_free (error);
+			error = NULL;
+			bSuccess = FALSE;
+		}
+		error = NULL;
+		bSuccess &= dbus_g_proxy_call (s_pVSizeProxy, "set", &error,
+			G_TYPE_INT, Y,
+			G_TYPE_INVALID, G_TYPE_INVALID);
+		if (error)
+		{
+			cd_warning ("compiz VSize error: %s", error->message);
+			g_error_free (error);
+			bSuccess = FALSE;
+		}
+	}
+	return bSuccess;
+}
+
 
 static void _register_compiz_backend (void)
 {
@@ -312,6 +360,7 @@ static void _register_compiz_backend (void)
 	p->present_desktops = present_desktops;
 	p->show_widget_layer = show_widget_layer;
 	p->set_on_widget_layer = set_on_widget_layer;
+	p->set_nb_desktops = set_nb_desktops;
 	
 	gldi_desktop_manager_register_backend (p);
 }
@@ -377,6 +426,20 @@ static void _on_compiz_owner_changed (G_GNUC_UNUSED const gchar *cName, gboolean
 				CD_COMPIZ_OBJECT"/widget/allscreens/toggle_button",
 			CD_COMPIZ_INTERFACE);
 		
+		s_pHSizeProxy = cairo_dock_create_new_session_proxy (
+			CD_COMPIZ_BUS,
+			bNewCompiz ?
+				CD_COMPIZ_OBJECT"/core/screen0/hsize":
+				CD_COMPIZ_OBJECT"/core/allscreens/hsize",
+			CD_COMPIZ_INTERFACE);
+		
+		s_pVSizeProxy = cairo_dock_create_new_session_proxy (
+			CD_COMPIZ_BUS,
+			bNewCompiz ?
+				CD_COMPIZ_OBJECT"/core/screen0/vsize":
+				CD_COMPIZ_OBJECT"/core/allscreens/vsize",
+			CD_COMPIZ_INTERFACE);
+		
 		_register_compiz_backend ();
 	}
 	else if (s_pScaleProxy != NULL)
@@ -387,6 +450,10 @@ static void _on_compiz_owner_changed (G_GNUC_UNUSED const gchar *cName, gboolean
 		s_pExposeProxy = NULL;
 		g_object_unref (s_pWidgetLayerProxy);
 		s_pWidgetLayerProxy = NULL;
+		g_object_unref (s_pHSizeProxy);
+		s_pHSizeProxy = NULL;
+		g_object_unref (s_pVSizeProxy);
+		s_pVSizeProxy = NULL;
 		
 		_unregister_compiz_backend ();
 	}
