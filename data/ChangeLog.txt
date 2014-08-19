@@ -1,8 +1,6 @@
 # Recent changelog (see ChangeLog-history.txt for the previous ones)
 [ChangeLog]
 
-3.2.0 = <b>New version: <span color='red'>GLX-Dock 3.2</span>!</b>\n - Multi-screen support has been improved\n - New applet : Screenshot\n - New plug-in: Sound-Effects\n - Added Gnome-Shell support \n - Added GDM support for user switching\n - Added Systemd support for the session management (Fedora, Arch, ...)\n - Added support for all the Unity indicators\n - Countless bug-fixes and improvements\n - If you like the project, please donate :-)
-
 3.3.1 = <b>New version: <span color='red'>GLX-Dock 3.3</span>!</b>
 3.3.1.0 = - Added a search entry in the <b>Applications Menu</b>.\n    It allows to rapidly look for programs from their name or their description
 3.3.1.1 = - Added support of <b>logind</b> in the Logout applet
@@ -12,3 +10,13 @@
 3.3.1.5 = - Upgraded the <b>Dbus API</b> to be even more powerful
 3.3.1.6 = - A huge rewrite of the core using Objects
 3.3.1.7 = - If you like the project, please donate :-)
+
+3.4.0 = <b>New version: <span color='red'>GLX-Dock 3.4</span>!</b>
+3.4.0.0 = - <b>Menu<s/b>: added the possibility to customise them
+3.4.0.1 = - <b>Style</b>: unified the style of all components of the dock
+3.4.0.2 = - Better integration with <b>Compiz</b> (e.g. when using the <b>Cairo-Dock session</b>) and Cinnamon
+3.4.0.3 = - <b>Applications Menu</b> and <b>Logout</b> applets will wait the end of an update before displaying notifications
+3.4.0.4 = - Various improvements for <b>Applications Menu</b>, <b>Shortcuts</b>, <b>Status-Notifier</b> and <b>Terminal</b> applets
+3.4.0.5 = - Start working on <b>EGL</b> and <b>Wayland</b> support
+3.4.0.6 = - And as always ... various bug fixes and improvements!
+3.4.0.7 = If you like the project, please donate and/or contribute :-)
