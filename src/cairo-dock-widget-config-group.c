@@ -208,7 +208,8 @@ ConfigGroupWidget *cairo_dock_config_group_widget_new (GList *pGroups, GList *pM
 		{
 			cModuleName = e->data;
 			pModule = gldi_module_get (cModuleName);
-			if (!pModule)
+			// check if the module is found and has an instances' list (cairo-dock -m) 
+			if (!pModule || !pModule->pInstancesList)
 				continue;
 			
 			pExtraInstance = pModule->pInstancesList->data;
