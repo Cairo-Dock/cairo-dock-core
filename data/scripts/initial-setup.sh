@@ -81,7 +81,7 @@ if test -n "`which compiz`"; then
 				for i in dbus scale expo; do
 					if test `echo $plugins | grep -c $i` -eq 0; then
 						echo "GConf: Enable '$i' plugin"
-						plugins=${plugins:0:-1},$i]
+						plugins="${plugins:0:${#plugins}-1},$i]"
 						gconftool-2 -s /apps/compiz-1/general/screen0/options/active_plugins --type=list --list-type=string "$plugins"
 					fi
 				done
@@ -95,7 +95,7 @@ if test -n "`which compiz`"; then
 					fi
 				done
 				if test -z "$switcher"; then
-					plugins=${plugins:0:-1},staticswitcher]
+					plugins="${plugins:0:${#plugins}-1},staticswitcher]"
 					echo "GConf: Enable 'staticswitcher' plugin"
 					gconftool-2 -s /apps/compiz-1/general/screen0/options/active_plugins --type=list --list-type=string "$plugins"
 				fi
@@ -125,7 +125,7 @@ if test -n "`which compiz`"; then
 				for i in dbus scale expo; do
 					if test `echo $plugins | grep -c "'$i'"` -eq 0; then
 						echo "GSettings: Enable '$i' plugin for '$p' profile"
-						plugins="${plugins:0:-1}, '$i']" # remove last char (']') and add the new plugin between quotes + ']'
+						plugins="${plugins:0:${#plugins}-1}, '$i']" # remove last char (']') and add the new plugin between quotes + ']'
 						gsettings set org.compiz.core:/org/compiz/profiles/$p/plugins/core/ active-plugins "$plugins"
 					fi
 				done
@@ -139,7 +139,7 @@ if test -n "`which compiz`"; then
 					fi
 				done
 				if test -z "$switcher"; then
-					plugins="${plugins:0:-1}, 'staticswitcher']"
+					plugins="${plugins:0:${#plugins}-1}, 'staticswitcher']"
 					echo "GSettings: Enable 'staticswitcher' plugin for '$p' profile"
 					gsettings set org.compiz.core:/org/compiz/profiles/$p/plugins/core/ active-plugins "$plugins"
 				fi
