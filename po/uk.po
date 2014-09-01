@@ -4364,34 +4364,10 @@ msgid "Multi-purpose Dock and Desklets"
 msgstr "Багатоцільова панель та віжети."
 
 #: ../data/messages:1116
-msgid ""
-"<b>New version: <span color='red'>GLX-Dock 3.2</span>!</b>\n"
-" - Multi-screen support has been improved\n"
-" - New applet : Screenshot\n"
-" - New plug-in: Sound-Effects\n"
-" - Added Gnome-Shell support \n"
-" - Added GDM support for user switching\n"
-" - Added Systemd support for the session management (Fedora, Arch, ...)\n"
-" - Added support for all the Unity indicators\n"
-" - Countless bug-fixes and improvements\n"
-" - If you like the project, please donate :-)"
-msgstr ""
-"<b>Нова версія: <span color='red'>GLX-Dock 3.2</span>!</b>\n"
-" - покращена підтримка мультиекранів\n"
-" - Новий додаток : Скріншот\n"
-" - Новий плагін: Звукові ефекти\n"
-" - Додано підтримку Gnome-Shell\n"
-" - Додана підтримка GDM для перемикання користувачів\n"
-" - Додана підтримка Systemd для керування сесіями (Fedora, Arch, ...)\n"
-" - Додана підтримка індикаторів Unity\n"
-" - Незліченна кількість покращень і виправлень помилок\n"
-" - Якщо вам подобається наш проект, можете допомогти нам фінансово :-)"
-
-#: ../data/messages:1118
 msgid "<b>New version: <span color='red'>GLX-Dock 3.3</span>!</b>"
 msgstr "<b>Нова версія: <span color='red'>GLX-Dock 3.3</span>!</b>"
 
-#: ../data/messages:1120
+#: ../data/messages:1118
 msgid ""
 "- Added a search entry in the <b>Applications Menu</b>.\n"
 "    It allows to rapidly look for programs from their name or their "
@@ -4400,15 +4376,15 @@ msgstr ""
 "- Додано пошук в  <b>Меню додатків</b>.\n"
 "    Це дозволяє швидко шукати програми по імені або їхньому опису"
 
-#: ../data/messages:1122
+#: ../data/messages:1120
 msgid "- Added support of <b>logind</b> in the Logout applet"
 msgstr "- Додана підтримка <b>logind</b> в додаток \"Вийти\""
 
-#: ../data/messages:1124
+#: ../data/messages:1122
 msgid "- Better integration in the Cinnamon desktop"
 msgstr "- Покращена інтеграція з оточенням Cinnamon"
 
-#: ../data/messages:1126
+#: ../data/messages:1124
 msgid ""
 "- Added support of the <b>StartupNotification</b> protocol.\n"
 "    It allows launchers to be animated until the application opens and "
@@ -4418,7 +4394,7 @@ msgstr ""
 "    Це дозволяє анімувати значок запуску, доки програма запускається, що "
 "допомагає уникати подвійних запусків"
 
-#: ../data/messages:1128
+#: ../data/messages:1126
 msgid ""
 "- Added an new third-party applet: <b>Notification History</b> to never miss "
 "a notification"
@@ -4426,14 +4402,81 @@ msgstr ""
 "- Додано новий сторонній додаток <b>Історія сповіщень</b>, щоб ви не "
 "пропустили важливого сповіщення"
 
-#: ../data/messages:1130
+#: ../data/messages:1128
 msgid "- Upgraded the <b>Dbus API</b> to be even more powerful"
 msgstr "- Оновлено <b>Dbus API</b>, щоб бути ще потужнішим"
 
-#: ../data/messages:1132
+#: ../data/messages:1130
 msgid "- A huge rewrite of the core using Objects"
 msgstr "- Величезний перезапис основних об’єктів використання"
 
-#: ../data/messages:1134
+#: ../data/messages:1132
 msgid "- If you like the project, please donate :-)"
 msgstr "- Якщо вам подобається проект, будь-ласка, жертвуйте :)"
+
+#: ../data/messages:1134
+#, fuzzy
+msgid "<b>New version: <span color='red'>GLX-Dock 3.4</span>!</b>"
+msgstr "<b>Нова версія: <span color='red'>GLX-Dock 3.3</span>!</b>"
+
+#: ../data/messages:1136
+msgid "- <b>Menu<s/b>: added the possibility to customise them"
+msgstr ""
+
+#: ../data/messages:1138
+msgid "- <b>Style</b>: unified the style of all components of the dock"
+msgstr ""
+
+#: ../data/messages:1140
+msgid ""
+"- Better integration with <b>Compiz</b> (e.g. when using the <b>Cairo-Dock "
+"session</b>) and Cinnamon"
+msgstr ""
+
+#: ../data/messages:1142
+msgid ""
+"- <b>Applications Menu</b> and <b>Logout</b> applets will wait the end of an "
+"update before displaying notifications"
+msgstr ""
+
+#: ../data/messages:1144
+msgid ""
+"- Various improvements for <b>Applications Menu</b>, <b>Shortcuts</b>, "
+"<b>Status-Notifier</b> and <b>Terminal</b> applets"
+msgstr ""
+
+#: ../data/messages:1146
+msgid "- Start working on <b>EGL</b> and <b>Wayland</b> support"
+msgstr ""
+
+#: ../data/messages:1148
+msgid "- And as always ... various bug fixes and improvements!"
+msgstr ""
+
+#: ../data/messages:1150
+#, fuzzy
+msgid "If you like the project, please donate and/or contribute :-)"
+msgstr "- Якщо вам подобається проект, будь-ласка, жертвуйте :)"
+
+#~ msgid ""
+#~ "<b>New version: <span color='red'>GLX-Dock 3.2</span>!</b>\n"
+#~ " - Multi-screen support has been improved\n"
+#~ " - New applet : Screenshot\n"
+#~ " - New plug-in: Sound-Effects\n"
+#~ " - Added Gnome-Shell support \n"
+#~ " - Added GDM support for user switching\n"
+#~ " - Added Systemd support for the session management (Fedora, Arch, ...)\n"
+#~ " - Added support for all the Unity indicators\n"
+#~ " - Countless bug-fixes and improvements\n"
+#~ " - If you like the project, please donate :-)"
+#~ msgstr ""
+#~ "<b>Нова версія: <span color='red'>GLX-Dock 3.2</span>!</b>\n"
+#~ " - покращена підтримка мультиекранів\n"
+#~ " - Новий додаток : Скріншот\n"
+#~ " - Новий плагін: Звукові ефекти\n"
+#~ " - Додано підтримку Gnome-Shell\n"
+#~ " - Додана підтримка GDM для перемикання користувачів\n"
+#~ " - Додана підтримка Systemd для керування сесіями (Fedora, Arch, ...)\n"
+#~ " - Додана підтримка індикаторів Unity\n"
+#~ " - Незліченна кількість покращень і виправлень помилок\n"
+#~ " - Якщо вам подобається наш проект, можете допомогти нам фінансово :-)"

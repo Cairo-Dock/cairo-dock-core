@@ -4369,59 +4369,87 @@ msgid "Multi-purpose Dock and Desklets"
 msgstr ""
 
 #: ../data/messages:1116
-msgid ""
-"<b>New version: <span color='red'>GLX-Dock 3.2</span>!</b>\n"
-" - Multi-screen support has been improved\n"
-" - New applet : Screenshot\n"
-" - New plug-in: Sound-Effects\n"
-" - Added Gnome-Shell support \n"
-" - Added GDM support for user switching\n"
-" - Added Systemd support for the session management (Fedora, Arch, ...)\n"
-" - Added support for all the Unity indicators\n"
-" - Countless bug-fixes and improvements\n"
-" - If you like the project, please donate :-)"
-msgstr ""
-
-#: ../data/messages:1118
 msgid "<b>New version: <span color='red'>GLX-Dock 3.3</span>!</b>"
 msgstr ""
 
-#: ../data/messages:1120
+#: ../data/messages:1118
 msgid ""
 "- Added a search entry in the <b>Applications Menu</b>.\n"
 "    It allows to rapidly look for programs from their name or their "
 "description"
 msgstr ""
 
-#: ../data/messages:1122
+#: ../data/messages:1120
 msgid "- Added support of <b>logind</b> in the Logout applet"
 msgstr ""
 
-#: ../data/messages:1124
+#: ../data/messages:1122
 msgid "- Better integration in the Cinnamon desktop"
 msgstr ""
 
-#: ../data/messages:1126
+#: ../data/messages:1124
 msgid ""
 "- Added support of the <b>StartupNotification</b> protocol.\n"
 "    It allows launchers to be animated until the application opens and "
 "avoids accidental double launches"
 msgstr ""
 
-#: ../data/messages:1128
+#: ../data/messages:1126
 msgid ""
 "- Added an new third-party applet: <b>Notification History</b> to never miss "
 "a notification"
 msgstr ""
 
-#: ../data/messages:1130
+#: ../data/messages:1128
 msgid "- Upgraded the <b>Dbus API</b> to be even more powerful"
 msgstr ""
 
-#: ../data/messages:1132
+#: ../data/messages:1130
 msgid "- A huge rewrite of the core using Objects"
 msgstr ""
 
-#: ../data/messages:1134
+#: ../data/messages:1132
 msgid "- If you like the project, please donate :-)"
+msgstr ""
+
+#: ../data/messages:1134
+msgid "<b>New version: <span color='red'>GLX-Dock 3.4</span>!</b>"
+msgstr ""
+
+#: ../data/messages:1136
+msgid "- <b>Menu<s/b>: added the possibility to customise them"
+msgstr ""
+
+#: ../data/messages:1138
+msgid "- <b>Style</b>: unified the style of all components of the dock"
+msgstr ""
+
+#: ../data/messages:1140
+msgid ""
+"- Better integration with <b>Compiz</b> (e.g. when using the <b>Cairo-Dock "
+"session</b>) and Cinnamon"
+msgstr ""
+
+#: ../data/messages:1142
+msgid ""
+"- <b>Applications Menu</b> and <b>Logout</b> applets will wait the end of an "
+"update before displaying notifications"
+msgstr ""
+
+#: ../data/messages:1144
+msgid ""
+"- Various improvements for <b>Applications Menu</b>, <b>Shortcuts</b>, "
+"<b>Status-Notifier</b> and <b>Terminal</b> applets"
+msgstr ""
+
+#: ../data/messages:1146
+msgid "- Start working on <b>EGL</b> and <b>Wayland</b> support"
+msgstr ""
+
+#: ../data/messages:1148
+msgid "- And as always ... various bug fixes and improvements!"
+msgstr ""
+
+#: ../data/messages:1150
+msgid "If you like the project, please donate and/or contribute :-)"
 msgstr ""
