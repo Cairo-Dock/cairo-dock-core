@@ -4488,7 +4488,7 @@ msgid "<b>New version: <span color='red'>GLX-Dock 3.4</span>!</b>"
 msgstr "<b>Nuova versione: <span color='red'>GLX-Dock 3.3</span>!</b>"
 
 #: ../data/messages:1136
-msgid "- <b>Menu<s/b>: added the possibility to customise them"
+msgid "- <b>Menus</b>: added the possibility to customise them"
 msgstr ""
 
 #: ../data/messages:1138

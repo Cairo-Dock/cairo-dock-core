@@ -12,7 +12,7 @@
 3.3.1.7 = - If you like the project, please donate :-)
 
 3.4.0 = <b>New version: <span color='red'>GLX-Dock 3.4</span>!</b>
-3.4.0.0 = - <b>Menu<s/b>: added the possibility to customise them
+3.4.0.0 = - <b>Menus</b>: added the possibility to customise them
 3.4.0.1 = - <b>Style</b>: unified the style of all components of the dock
 3.4.0.2 = - Better integration with <b>Compiz</b> (e.g. when using the <b>Cairo-Dock session</b>) and Cinnamon
 3.4.0.3 = - <b>Applications Menu</b> and <b>Logout</b> applets will wait the end of an update before displaying notifications
