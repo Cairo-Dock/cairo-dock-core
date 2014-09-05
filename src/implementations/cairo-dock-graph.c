@@ -297,36 +297,32 @@ static inline cairo_surface_t *_cairo_dock_create_graph_background (double fWidt
 	cairo_destroy (pCairoContext);
 	return  pBackgroundSurface;
 }
-static cairo_pattern_t *_cairo_dock_create_graph_pattern (Graph *pGraph, gdouble *fLowColor, gdouble *fHighColor, int iCurrentGraph, double fOffsetY)
+static cairo_pattern_t *_cairo_dock_create_graph_pattern (Graph *pGraph, gdouble *fLowColor, gdouble *fHighColor)
 {
 	cairo_pattern_t *pGradationPattern = NULL;
 	if (fLowColor[0] != fHighColor[0] || fLowColor[1] != fHighColor[1] || fLowColor[2] != fHighColor[2])  // un degrade existe.
 	{
-		int iHeight, iMargin = pGraph->iMargin;
+		int iMargin = pGraph->iMargin;
 		double fWidth = pGraph->dataRenderer.iWidth - 2*iMargin;
 		double fHeight = pGraph->dataRenderer.iHeight - 2*iMargin;
-		fHeight /= (pGraph->dataRenderer.data.iNbValues / pGraph->dataRenderer.iRank);
+		double fHeightPerValue = fHeight / (pGraph->dataRenderer.data.iNbValues / pGraph->dataRenderer.iRank);
 		
 		if (pGraph->iType == CAIRO_DOCK_GRAPH_CIRCLE || pGraph->iType == CAIRO_DOCK_GRAPH_CIRCLE_PLAIN)
 		{
-			double radius = MIN (fWidth, fHeight)/2.;
+			double radius = MIN (fWidth, fHeightPerValue)/2.;
 			pGradationPattern = cairo_pattern_create_radial (fWidth/2,
-				iMargin + radius + fOffsetY,
+				iMargin + radius,
 				0.,
 				fWidth/2,
-				iMargin + radius + fOffsetY,
+				iMargin + radius,
 				radius);
 		}
 		else
 		{
-			if (pGraph->bMixGraphs) 
-				iCurrentGraph = 0;
-			iHeight = floor ((iCurrentGraph + 1) * fHeight) - floor (iCurrentGraph * fHeight);
-			
 			pGradationPattern = cairo_pattern_create_linear (0.,
-				iHeight + fOffsetY,
+				floor (pGraph->bMixGraphs ? fHeight : fHeightPerValue),
 				0.,
-				fOffsetY);
+				0.);
 		}
 		g_return_val_if_fail (cairo_pattern_status (pGradationPattern) == CAIRO_STATUS_SUCCESS, NULL);	
 		
@@ -442,30 +438,28 @@ static void load (Graph *pGraph, G_GNUC_UNUSED Icon *pIcon, CairoGraphAttribute 
 	int iWidth = pRenderer->iWidth, iHeight = pRenderer->iHeight;
 	if (iWidth == 0 || iHeight == 0)
 		return ;
-	
+
 	int iNbValues = cairo_data_renderer_get_nb_values (pRenderer);
 	pGraph->iType = pAttribute->iType;
 	pGraph->bMixGraphs = pAttribute->bMixGraphs;
 	pRenderer->iRank = (pAttribute->bMixGraphs ? iNbValues : 1);
-	
+
 	pGraph->fHighColor = g_new0 (double, 3 * iNbValues);
-	if (pAttribute->fHighColor != NULL)
-		memcpy (pGraph->fHighColor, pAttribute->fHighColor, 3 * iNbValues * sizeof (double));
 	pGraph->fLowColor = g_new0 (double, 3 * iNbValues);
-	if (pAttribute->fLowColor != NULL)
-		memcpy (pGraph->fLowColor, pAttribute->fLowColor, 3 * iNbValues * sizeof (double));
 
 	int i;
 	pGraph->pGradationPatterns = g_new (cairo_pattern_t *, iNbValues);
 	for (i = 0; i < iNbValues; i ++)
 	{
+		if (pAttribute->fHighColor != NULL)
+			memcpy (&pGraph->fHighColor[3*i], pAttribute->fHighColor, 3 * sizeof (double));
+		if (pAttribute->fLowColor != NULL)
+			memcpy (&pGraph->fLowColor[3*i], pAttribute->fLowColor, 3 * sizeof (double));
 		pGraph->pGradationPatterns[i] = _cairo_dock_create_graph_pattern (pGraph,
 			&pGraph->fLowColor[3*i],
-			&pGraph->fHighColor[3*i],
-			i,
-			0.);
+			&pGraph->fHighColor[3*i]);
 	}
-	
+
 	pGraph->iMargin = floor (MIN (iWidth, iHeight) / 32);
 
 	if (pAttribute->fBackGroundColor != NULL)
@@ -505,7 +499,9 @@ static void reload (Graph *pGraph)
 	{
 		if (pGraph->pGradationPatterns[i] != NULL)
 			cairo_pattern_destroy (pGraph->pGradationPatterns[i]);
-		pGraph->pGradationPatterns[i] = _cairo_dock_create_graph_pattern (pGraph, &pGraph->fLowColor[3*i], &pGraph->fHighColor[3*i], i, 0.);
+		pGraph->pGradationPatterns[i] = _cairo_dock_create_graph_pattern (pGraph,
+			&pGraph->fLowColor[3*i],
+			&pGraph->fHighColor[3*i]);
 	}
 	
 	// on re-complete le data-renderer.
