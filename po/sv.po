@@ -4000,3 +4000,9 @@ msgstr ""
 #: ../data/messages:1150
 msgid "If you like the project, please donate and/or contribute :-)"
 msgstr ""
+
+#: ../data/messages:1152
+msgid ""
+"Note: We're switching from Bzr to Git on Github, feel free to fork! https://"
+"github.com/Cairo-Dock"
+msgstr ""

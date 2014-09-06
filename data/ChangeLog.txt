@@ -20,3 +20,4 @@
 3.4.0.5 = - Start working on <b>EGL</b> and <b>Wayland</b> support
 3.4.0.6 = - And as always ... various bug fixes and improvements!
 3.4.0.7 = If you like the project, please donate and/or contribute :-)
+3.4.0.8 = Note: We're switching from Bzr to Git on Github, feel free to fork! https://github.com/Cairo-Dock

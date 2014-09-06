@@ -4575,6 +4575,12 @@ msgstr ""
 "- Si vous aimez le projet, merci d'y contribuer et pourquoi pas grâce à des "
 "dons :-)"
 
+#: ../data/messages:1152
+msgid ""
+"Note: We're switching from Bzr to Git on Github, feel free to fork! https://"
+"github.com/Cairo-Dock"
+msgstr ""
+
 #~ msgid ""
 #~ "<b>New version: <span color='red'>GLX-Dock 3.2</span>!</b>\n"
 #~ " - Multi-screen support has been improved\n"
