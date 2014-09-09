@@ -1121,13 +1121,13 @@ gchar *cairo_dock_get_xwindow_class (Window Xid, gchar **cWMClass)
 			cClass = g_ascii_strdown (pClassHint->res_name, -1);
 		}
 		// chromium web apps (not the browser): same remark as for wine apps
-		else if ((strcmp (pClassHint->res_class, "Chromium-browser") == 0  // on Debian, etc.
-		          || strcmp (pClassHint->res_class, "Chromium") == 0       // on Arch, etc.
-		          || strcmp (pClassHint->res_class, "Google-chrome") == 0) // from Google
-		         && pClassHint->res_name
-		         && strcmp (pClassHint->res_name, "chromium-browser") != 0
-		         && strcmp (pClassHint->res_name, "chromium") != 0
-		         && strcmp (pClassHint->res_name, "google-chrome") != 0)
+		else if (pClassHint->res_name && pClassHint->res_name[0] != '\0' && pClassHint->res_class[0] != '\0'
+		         && (strcmp (pClassHint->res_class, "Chromium-browser") == 0 // on Debian, etc.
+		          || strcmp (pClassHint->res_class, "Chromium") == 0         // on Arch, etc.
+		          || strcmp (pClassHint->res_class, "Google-chrome") == 0    // from Google
+		          || strcmp (pClassHint->res_class, "Google-chrome-beta") == 0
+		          || strcmp (pClassHint->res_class, "Google-chrome-unstable") == 0)
+		         && strcmp (pClassHint->res_class+1, pClassHint->res_name+1) != 0) // skip first letter (upper/lowercase)
 		{
 			cd_debug ("  chromium application detected, changing the class '%s' to '%s'", pClassHint->res_class, pClassHint->res_name);
 			cClass = g_ascii_strdown (pClassHint->res_name, -1);
