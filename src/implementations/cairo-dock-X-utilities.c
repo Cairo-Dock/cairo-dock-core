@@ -1129,8 +1129,24 @@ gchar *cairo_dock_get_xwindow_class (Window Xid, gchar **cWMClass)
 		          || strcmp (pClassHint->res_class, "Google-chrome-unstable") == 0)
 		         && strcmp (pClassHint->res_class+1, pClassHint->res_name+1) != 0) // skip first letter (upper/lowercase)
 		{
-			cd_debug ("  chromium application detected, changing the class '%s' to '%s'", pClassHint->res_class, pClassHint->res_name);
 			cClass = g_ascii_strdown (pClassHint->res_name, -1);
+
+			/* Remove spaces. Why do they add spaces here?
+			 * (e.g.: Google-chrome-unstable (/home/$USER/.config/google-chrome-unstable))
+			 */
+			gchar *str = strchr (cClass, ' ');
+			if (str != NULL)
+				*str = '\0';
+
+			/* Replace '.' to '_' (e.g.: www.google.com__calendar). It's to not
+			 * just have 'www' as class (we will drop the rest just here after)
+			 */
+			for (int i = 0; cClass[i] != '\0'; i++)
+			{
+				if (cClass[i] == '.')
+					cClass[i] = '_';
+			}
+			cd_debug ("  chromium application detected, changing the class '%s' to '%s'", pClassHint->res_class, cClass);
 		}
 		else if (*pClassHint->res_class == '/' && (g_str_has_suffix (pClassHint->res_class, ".exe") || g_str_has_suffix (pClassHint->res_name, ".EXE")))  // case of Mono applications like tomboy ...
 		{
@@ -1144,12 +1160,12 @@ gchar *cairo_dock_get_xwindow_class (Window Xid, gchar **cWMClass)
 		}
 		else
 		{
-			cClass = g_ascii_strdown (pClassHint->res_class, -1);  // on la passe en minuscule, car certaines applis ont la bonne idee de donner des classes avec une majuscule ou non suivant les fenetres.
+			cClass = g_ascii_strdown (pClassHint->res_class, -1);  // down case because some apps change the case depending of their windows...
 		}
-		
-		cairo_dock_remove_version_from_string (cClass);  // on enleve les numeros de version (Openoffice.org-3.1)
-		
-		gchar *str = strchr (cClass, '.');  // on vire les .xxx, sinon on ne sait pas detecter l'absence d'extension quand on cherche l'icone (openoffice.org), ou tout simplement ca empeche de trouver l'icone (jbrout.py).
+
+		cairo_dock_remove_version_from_string (cClass);  // we remore number of version (e.g. Openoffice.org-3.1)
+
+		gchar *str = strchr (cClass, '.');  // we remove all .xxx otherwise we can't detect the lack of extension when looking for an icon (openoffice.org) or it's a problem when looking for an icon (jbrout.py).
 		if (str != NULL)
 			*str = '\0';
 		cd_debug ("got an application with class '%s'", cClass);
