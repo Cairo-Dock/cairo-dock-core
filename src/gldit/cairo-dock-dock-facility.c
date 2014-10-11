@@ -838,37 +838,15 @@ void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock)
 	gboolean bMouseInsideDock = (x_abs >= 0 && x_abs <= pDock->fFlatDockWidth && iMouseX > 0 && iMouseX < iWidth);
 	//g_print ("bMouseInsideDock : %d (%d;%d/%.2f)\n", bMouseInsideDock, pDock->container.bInside, x_abs, pDock->fFlatDockWidth);
 
-	if (! bMouseInsideDock)  // hors du dock par les cotes.
-	{
-		if (/*cairo_dock_is_extended_dock (pDock) && */pDock->bAutoHide)  // c'est penible de sortir du dock trop facilement avec l'auto-hide.
-		{
-			if (iMouseY >= 0 && iMouseY < iHeight)
-				iMousePositionType = CAIRO_DOCK_MOUSE_ON_THE_EDGE;
-			else
-				iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
-		}
+	if (iMouseY >= 0 && iMouseY < iHeight) { // inside in the Y axis
+		if (! bMouseInsideDock)  // outside of the dock but on the edge.
+			iMousePositionType = CAIRO_DOCK_MOUSE_ON_THE_EDGE;
 		else
-		{
-			/**double fSideMargin = fabs (pDock->fAlign - .5) * (iWidth - pDock->fFlatDockWidth);
-			if (x_abs < - fSideMargin || x_abs > pDock->fFlatDockWidth + fSideMargin)
-				iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
-			else
-				iMousePositionType = CAIRO_DOCK_MOUSE_ON_THE_EDGE;*/
-			if (iMouseY >= 0 && iMouseY < iHeight)
-				iMousePositionType = CAIRO_DOCK_MOUSE_ON_THE_EDGE;
-			else
-				iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
-		}
-	}
-	else if (iMouseY >= 0 && iMouseY < iHeight)  // et en plus on est dedans en y.  //  && pPointedIcon != NULL
-	{
-		//g_print ("on est dedans en x et en y (iMouseX=%d => x_abs=%d ; iMouseY=%d/%d)\n", iMouseX, x_abs, iMouseY, iHeight);
-		//pDock->container.bInside = TRUE;
-		iMousePositionType = CAIRO_DOCK_MOUSE_INSIDE;
+			iMousePositionType = CAIRO_DOCK_MOUSE_INSIDE;
 	}
 	else
 		iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
-	
+
 	pDock->iMousePositionType = iMousePositionType;
 }
 
