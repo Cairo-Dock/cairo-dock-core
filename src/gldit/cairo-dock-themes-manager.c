@@ -530,9 +530,8 @@ static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboo
 	//\___________________ We load launcher if needed after having removed old ones.
 	if (! g_file_test (g_cCurrentLaunchersPath, G_FILE_TEST_EXISTS))
 	{
-		gchar *command = g_strdup_printf ("mkdir -p \"%s\"", g_cCurrentLaunchersPath);
+		g_string_printf (sCommand, "mkdir -p \"%s\"", g_cCurrentLaunchersPath);
 		_launch_cmd (sCommand->str);
-		g_free (command);
 	}
 	if (g_pMainDock == NULL || bLoadLaunchers)
 	{
