@@ -886,7 +886,7 @@ static void unload (void)
 
 static gboolean on_style_changed (G_GNUC_UNUSED gpointer data)
 {
-	g_print ("%s (Icons, %d)\n", __func__, myIconsParam.iconTextDescription.bUseDefaultColors);
+	cd_debug ("Icons: style changed to %d", myIconsParam.iconTextDescription.bUseDefaultColors);
 	
 	if (myIconsParam.iconTextDescription.cFont == NULL)  // default font -> reload our text description
 	{
@@ -896,7 +896,7 @@ static gboolean on_style_changed (G_GNUC_UNUSED gpointer data)
 	
 	if (myIconsParam.iconTextDescription.bUseDefaultColors || myIconsParam.iconTextDescription.cFont == NULL)  // reload labels and quick-info
 	{
-		g_print (" reload labels...\n");
+		cd_debug ("reload labels...");
 		gldi_icons_foreach ((GldiIconFunc) _reload_one_label, NULL);
 	}
 	
@@ -909,7 +909,7 @@ static gboolean on_style_changed (G_GNUC_UNUSED gpointer data)
 		: 0);
 	if (iLabelSize != myIconsParam.iLabelSize)
 	{
-		g_print ("myIconsParam.iLabelSize: %d -> %d (%d)\n", myIconsParam.iLabelSize, iLabelSize, myIconsParam.iconTextDescription.iSize);
+		cd_debug ("myIconsParam.iLabelSize: %d -> %d (%d)", myIconsParam.iLabelSize, iLabelSize, myIconsParam.iconTextDescription.iSize);
 		myIconsParam.iLabelSize = iLabelSize;
 		gldi_docks_foreach ((GHFunc) _cairo_dock_resize_one_dock, NULL);
 	}

@@ -78,7 +78,7 @@ static void _output_geometry_cb (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct 
 	G_GNUC_UNUSED int32_t physical_width, G_GNUC_UNUSED int32_t physical_height,
 	G_GNUC_UNUSED int32_t subpixel, G_GNUC_UNUSED const char *make, G_GNUC_UNUSED const char *model, G_GNUC_UNUSED int32_t output_transform)
 {
-	g_print (" %s (%d;%d)\n", __func__, x, y);
+	cd_debug ("Geometry: %d;%d", x, y);
 	g_desktopGeometry.iNbScreens ++;
 	if (!g_desktopGeometry.pScreens)
 		g_desktopGeometry.pScreens = g_new0 (GtkAllocation, 1);
@@ -93,7 +93,7 @@ static void _output_geometry_cb (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct 
 static void _output_mode_cb (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct wl_output *wl_output,
 	uint32_t flags, int32_t width, int32_t height, G_GNUC_UNUSED int32_t refresh)
 {
-	g_print (" %s (%dx%d, %d)\n", __func__, width, height, flags);
+	cd_debug ("Output mode: %dx%d, %d", width, height, flags);
 	if (flags & WL_OUTPUT_MODE_CURRENT)  // not the current one -> don't bother
 	{
 		g_desktopGeometry.pScreens[g_desktopGeometry.iNbScreens-1].width = width;
@@ -111,14 +111,14 @@ static void _output_mode_cb (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct wl_o
 
 static void _output_done_cb (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct wl_output *wl_output)
 {
-	g_print (" output done\n");
+	cd_debug ("output done");
 	s_bInitializing = TRUE;
 }
 
 static void _output_scale_cb (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct wl_output *wl_output,
 	int32_t factor)
 {
-	g_print (" output scaled : %d\n", factor);
+	cd_debug ("output scaled : %d", factor);
 	s_bInitializing = TRUE;
 }
 
@@ -131,7 +131,7 @@ static const struct wl_output_listener output_listener = {
 
 static void _registry_global_cb (G_GNUC_UNUSED void *data, struct wl_registry *registry, uint32_t id, const char *interface, G_GNUC_UNUSED uint32_t version)
 {
-	g_print ("got a new global object, instance of %s, id=%d\n", interface, id);
+	cd_debug ("got a new global object, instance of %s, id=%d", interface, id);
 	if (!strcmp (interface, "wl_shell"))
 	{
 		// this is the global that should give us info and signals about the desktop, but currently it's pretty useless ...
@@ -152,7 +152,7 @@ static void _registry_global_cb (G_GNUC_UNUSED void *data, struct wl_registry *r
 
 static void _registry_global_remove_cb (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct wl_registry *registry, uint32_t id)
 {
-	g_print ("got a global object has disappeared: id=%d\n", id);
+	cd_debug ("got a global object has disappeared: id=%d", id);
 	/// TODO: find it and destroy it...
 	
 	/// TODO: and if it was a wl_output for instance, update the desktop geometry...

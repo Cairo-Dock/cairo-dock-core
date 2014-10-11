@@ -741,15 +741,15 @@ static void unload (void)
 
 static gboolean on_style_changed (G_GNUC_UNUSED gpointer data)
 {
-	g_print ("%s (Indic, %d)\n", __func__, myIndicatorsParam.bBarUseDefaultColors);
+	cd_debug ("Indic: style changed to %d", myIndicatorsParam.bBarUseDefaultColors);
 	if (myIndicatorsParam.bBarUseDefaultColors)  // reload progress bars
 	{
-		g_print (" reload indicators...\n");
+		cd_debug ("reload indicators...");
 		gldi_icons_foreach ((GldiIconFunc) _reload_progress_bar, NULL);
 	}
 	if (myIndicatorsParam.bActiveUseDefaultColors)  // reload active indicator
 	{
-		g_print (" reload active indicator...\n");
+		cd_debug ("reload active indicator...");
 		double fMaxScale = 1 + myIconsParam.fAmplitude;
 		_load_active_window_indicator (myIndicatorsParam.cActiveIndicatorImagePath, fMaxScale, myIndicatorsParam.iActiveCornerRadius, myIndicatorsParam.iActiveLineWidth, &myIndicatorsParam.fActiveColor, myIndicatorsParam.bActiveUseDefaultColors, myIndicatorsParam.bActiveFillFrame);
 	}

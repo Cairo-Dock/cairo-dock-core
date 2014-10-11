@@ -1012,7 +1012,7 @@ static void _reload_dialogs (void)
 }
 static gboolean on_style_changed (G_GNUC_UNUSED gpointer data)
 {
-	g_print ("%s (Dialogs, %d)\n", __func__, myDialogsParam.bUseDefaultColors);
+	cd_debug ("Dialogs: , %d", myDialogsParam.bUseDefaultColors);
 
 	// init the menu style (create the "gldimenuitem" gtk style class)
 	_init_menu_style ();

@@ -1855,10 +1855,10 @@ static void unload (void)
 
 static gboolean on_style_changed (G_GNUC_UNUSED gpointer data)
 {
-	g_print ("%s (Docks, %d)\n", __func__, myDocksParam.bUseDefaultColors);
+	cd_debug ("Docks: style change to %d", myDocksParam.bUseDefaultColors);
 	if (myDocksParam.bUseDefaultColors)  // reload bg
 	{
-		g_print (" reload dock's bg...\n");
+		cd_debug (" reload dock's bg...");
 		
 		gboolean bNeedUpdateSize = (myDocksParam.iDockLineWidth != myStyleParam.iLineWidth);  // frame size changed
 		myDocksParam.iDockRadius = myStyleParam.iCornerRadius;

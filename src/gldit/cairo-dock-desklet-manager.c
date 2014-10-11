@@ -899,7 +899,7 @@ static void unload (void)
 
 static gboolean on_style_changed (G_GNUC_UNUSED gpointer data)
 {
-	g_print ("%s (Desklets, %s)\n", __func__, myDeskletsParam.cDeskletDecorationsName);
+	cd_debug ("Desklets: style change to %s", myDeskletsParam.cDeskletDecorationsName);
 	gboolean bUseDefaultColors = (!myDeskletsParam.cDeskletDecorationsName || strcmp (myDeskletsParam.cDeskletDecorationsName, "automatic") == 0);
 	
 	CairoDeskletDecoration * pDecoration = cairo_dock_get_desklet_decoration ("automatic");
@@ -914,7 +914,7 @@ static gboolean on_style_changed (G_GNUC_UNUSED gpointer data)
 		if ( ((pDesklet->cDecorationTheme == NULL || strcmp (pDesklet->cDecorationTheme, "default") == 0) && bUseDefaultColors)
 		|| strcmp (pDesklet->cDecorationTheme, "automatic") == 0)
 		{
-			g_print (" reload desklet's bg...\n");
+			cd_debug ("Reload desklet's bg...");
 			gldi_desklet_load_desklet_decorations (pDesklet);
 			cairo_dock_redraw_container (CAIRO_CONTAINER (pDesklet));
 		}

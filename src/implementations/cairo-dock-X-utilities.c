@@ -304,7 +304,7 @@ static GtkAllocation *_get_screens_geometry (int *pNbScreens)
 	int i;
 	for (i = 0; i < iBufferNbElements/4; i ++)
 	{
-		g_print ("work area : (%d;%d) %dx%d\n", pXWorkArea[4*i], pXWorkArea[4*i+1], pXWorkArea[4*i+2], pXWorkArea[4*i+3]);
+		// g_print ("work area : (%d;%d) %dx%d\n", pXWorkArea[4*i], pXWorkArea[4*i+1], pXWorkArea[4*i+2], pXWorkArea[4*i+3]);
 	}
 	XFree (pXWorkArea);*/
 	

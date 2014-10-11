@@ -125,7 +125,7 @@ static gboolean _initialize_opengl_backend (gboolean bForceOpenGL)
 	
 	// check some texture abilities
 	g_openglConfig.bTextureFromPixmapAvailable = _check_client_egl_extension ("EGL_EXT_texture_from_pixmap");
-	g_print ("bTextureFromPixmapAvailable: %d\n", g_openglConfig.bTextureFromPixmapAvailable);
+	cd_debug ("bTextureFromPixmapAvailable: %d", g_openglConfig.bTextureFromPixmapAvailable);
 	if (g_openglConfig.bTextureFromPixmapAvailable)
 	{
 		g_openglConfig.bindTexImage = (gpointer)eglGetProcAddress ("eglBindTexImageEXT");

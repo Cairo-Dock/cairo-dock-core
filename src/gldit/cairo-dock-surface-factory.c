@@ -737,7 +737,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, G
 	//\_________________ get the font description
 	PangoFontDescription *pDesc = gldi_text_description_get_description (pTextDescription);
 	if (!pDesc)
-		g_print ("no text desc for '%s'\n", cText);
+		cd_debug ("no text desc for '%s'", cText);
 	int iSize = gldi_text_description_get_size (pTextDescription);
 	pango_font_description_set_absolute_size (pDesc, fMaxScale * iSize * PANGO_SCALE);
 	

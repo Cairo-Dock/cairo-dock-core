@@ -526,7 +526,6 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 			}  // end of PropertyNotify on root.
 			else if (event.type == KeyPress)
 			{
-				g_print ("X key pressed (%d; %d)\n", event.xkey.keycode, event.xkey.state);
 				guint event_mods = event.xkey.state & ~(num_lock_mask | caps_lock_mask | scroll_lock_mask);  // remove the lock masks
 				gldi_object_notify (&myDesktopMgr, NOTIFICATION_SHORTKEY_PRESSED, event.xkey.keycode, event_mods);
 			}

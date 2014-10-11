@@ -184,7 +184,7 @@ static void _cairo_dock_render_shortkey (G_GNUC_UNUSED GtkTreeViewColumn *tree_c
 }
 void cairo_dock_add_shortkey_to_model (GldiShortkey *binding, GtkListStore *pModel)
 {
-	g_print (" + %s\n",  binding->cIconFilePath);
+	cd_debug ("Add shortkey with image: ",  binding->cIconFilePath);
 	int iSize = cairo_dock_search_icon_size (GTK_ICON_SIZE_LARGE_TOOLBAR);
 	gchar *cIcon = cairo_dock_search_icon_s_path (binding->cIconFilePath,
 		iSize);

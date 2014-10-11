@@ -800,8 +800,7 @@ static gboolean _draw_menu_item (GtkWidget *widget,
 		gboolean wide_separators;
 		gint     separator_height;
 		GtkBorder padding;
-		
-		g_print ("SEPARATOR\n");
+
 		gtk_style_context_get_padding (context, 0, &padding);
 		gtk_widget_style_get (widget,
 			"wide-separators",    &wide_separators,
