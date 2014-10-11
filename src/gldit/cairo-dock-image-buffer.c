@@ -517,13 +517,13 @@ gboolean cairo_dock_begin_draw_image_buffer_opengl (CairoDockImageBuffer *pImage
 	{
 		// on attache la texture au FBO.
 		///if (pContainer->iWidth == 1 && pContainer->iHeight == 1)  // container not yet fully resized
+		if (pContainer == NULL)
+			pContainer = g_pPrimaryContainer;
 		if (pContainer->iWidth < pImage->iWidth || pContainer->iHeight < pImage->iHeight)
 		{
 			return FALSE;
 		}
 		iWidth = pImage->iWidth, iHeight = pImage->iHeight;
-		if (pContainer == NULL)
-			pContainer = g_pPrimaryContainer;
 		if (! gldi_gl_container_make_current (pContainer))
 		{
 			cd_warning ("couldn't set the opengl context");

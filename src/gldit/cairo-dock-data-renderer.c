@@ -628,9 +628,9 @@ static gboolean _render_delayed (Icon *pIcon)
 	g_return_val_if_fail (pRenderer != NULL, FALSE);
 	
 	GldiContainer *pContainer = pIcon->pContainer;
-	cd_debug ("Render delayed: (%s, %dx%d)", pIcon->cName, pContainer->iWidth, pContainer->iHeight);
 	if (pContainer)
 	{
+		cd_debug ("Render delayed: (%s, %dx%d)", pIcon->cName, pContainer->iWidth, pContainer->iHeight);
 		if (pContainer->iWidth == 1 && pContainer->iHeight == 1)  // container not yet resized, retry later
 			return TRUE;
 	
