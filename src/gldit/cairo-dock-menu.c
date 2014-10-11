@@ -39,10 +39,12 @@
 
 extern gchar *g_cCurrentThemePath;
 
+/*
 static gboolean _draw_menu_item (GtkWidget *widget, cairo_t *cr, G_GNUC_UNUSED gpointer data);
 static gboolean _on_select_menu_item (GtkWidget* pMenuItem, G_GNUC_UNUSED gpointer data);
 static gboolean _on_deselect_menu_item (GtkWidget* pMenuItem, G_GNUC_UNUSED gpointer data);
 static void _on_destroy_menu_item (GtkWidget* pMenuItem, G_GNUC_UNUSED gpointer data);
+*/
 
   ////////////
  /// MENU ///
@@ -695,6 +697,7 @@ const int N = 10;
 const int dt1 = 20;
 const int dt2 = 30;
 
+/*
 static void
 get_arrow_size (GtkWidget *widget,
                 GtkWidget *child,
@@ -729,6 +732,7 @@ get_arrow_size (GtkWidget *widget,
 
 	*size = *size * arrow_scaling;
 }
+
 static gboolean _draw_menu_item (GtkWidget *widget,
 	cairo_t *cr,
 	G_GNUC_UNUSED gpointer data)
@@ -894,6 +898,7 @@ static void _on_destroy_menu_item (GtkWidget* pMenuItem, G_GNUC_UNUSED gpointer 
 		g_object_set_data (G_OBJECT(pMenuItem), "gldi-animation", NULL);
 	}
 }
+*/
 
 GtkWidget *gldi_menu_item_new_full (const gchar *cLabel, const gchar *cImage, gboolean bUseMnemonic, GtkIconSize iSize)
 {
