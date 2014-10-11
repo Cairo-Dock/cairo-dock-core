@@ -515,7 +515,7 @@ gboolean cairo_dock_begin_draw_image_buffer_opengl (CairoDockImageBuffer *pImage
 	}
 	else if (s_iFboId != 0)
 	{
-		// on attache la texture au FBO.
+		// we attach the texture to the FBO.
 		///if (pContainer->iWidth == 1 && pContainer->iHeight == 1)  // container not yet fully resized
 		if (pContainer == NULL)
 			pContainer = g_pPrimaryContainer;
@@ -529,7 +529,7 @@ gboolean cairo_dock_begin_draw_image_buffer_opengl (CairoDockImageBuffer *pImage
 			cd_warning ("couldn't set the opengl context");
 			return FALSE;
 		}
-		glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, s_iFboId);  // on redirige sur notre FBO.
+		glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, s_iFboId);  // we redirect on our FBO.
 		s_bRedirected = (iRenderingMode == 2);
 		glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT,
 			GL_COLOR_ATTACHMENT0_EXT,
@@ -563,7 +563,7 @@ gboolean cairo_dock_begin_draw_image_buffer_opengl (CairoDockImageBuffer *pImage
 	}
 	else
 	{
-		gldi_gl_container_set_ortho_view (pContainer);  // au demarrage, le contexte n'a pas encore de vue.
+		gldi_gl_container_set_ortho_view (pContainer);  // at startup, the context doesn't have any view yet.
 	}
 	
 	glLoadIdentity ();
@@ -590,13 +590,13 @@ void cairo_dock_end_draw_image_buffer_opengl (CairoDockImageBuffer *pImage, Gldi
 	
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))
 	{
-		// copie dans notre texture
+		// copy in our texture
 		_cairo_dock_enable_texture ();
 		_cairo_dock_set_blend_source ();
 		_cairo_dock_set_alpha (1.);
 		glBindTexture (GL_TEXTURE_2D, pImage->iTexture);
 		
-		int iWidth, iHeight;  // taille de la texture
+		int iWidth, iHeight;  // texture' size
 		iWidth = pImage->iWidth, iHeight = pImage->iHeight;
 		int x = (pContainer->iWidth - iWidth)/2;
 		int y = (pContainer->iHeight - iHeight)/2;
@@ -606,17 +606,17 @@ void cairo_dock_end_draw_image_buffer_opengl (CairoDockImageBuffer *pImage, Gldi
 	}
 	else if (s_iFboId != 0)
 	{
-		if (s_bRedirected)  // copie dans notre texture
+		if (s_bRedirected)  // copy in our texture
 		{
 			glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT,
 				GL_COLOR_ATTACHMENT0_EXT,
 				GL_TEXTURE_2D,
 				pImage->iTexture,
-				0);  // maintenant on dessine dans la texture de l'icone.
+				0);  // now we draw in icon's texture.
 			_cairo_dock_enable_texture ();
 			_cairo_dock_set_blend_source ();
 			
-			int iWidth, iHeight;  // taille de la texture
+			int iWidth, iHeight;  // texture' size
 			iWidth = pImage->iWidth, iHeight = pImage->iHeight;
 			
 			glLoadIdentity ();
@@ -631,8 +631,8 @@ void cairo_dock_end_draw_image_buffer_opengl (CairoDockImageBuffer *pImage, Gldi
 			GL_COLOR_ATTACHMENT0_EXT,
 			GL_TEXTURE_2D,
 			0,
-			0);  // on detache la texture (precaution).
-		//glGenerateMipmapEXT(GL_TEXTURE_2D);  // si on utilise les mipmaps, il faut les generer explicitement avec les FBO.
+			0);  // we detach the texture (precaution).
+		//glGenerateMipmapEXT(GL_TEXTURE_2D);  // if we use mipmaps, we need to explicitely generate them when using FBO.
 	}
 	
 	if (pContainer && s_bSetPerspective)
@@ -705,7 +705,7 @@ GdkPixbuf *cairo_dock_image_buffer_to_pixbuf (CairoDockImageBuffer *pImage, int 
 		guchar *d, *data = cairo_image_surface_get_data (surface);
 		int r = cairo_image_surface_get_stride (surface);
 		
-		// on la convertit en un pixbuf.
+		// we convert it in a pixbuf.
 		pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB,
 			TRUE,
 			8,
