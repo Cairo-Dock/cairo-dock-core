@@ -44,7 +44,7 @@ static int _compare_z_order (GldiWindowActor *actor1, GldiWindowActor *actor2)
 {
 	if (actor1->iStackOrder < actor2->iStackOrder)
 		return -1;
-	else if (actor1->iStackOrder < actor2->iStackOrder)
+	else if (actor1->iStackOrder > actor2->iStackOrder)
 		return 1;
 	else
 		return 0;
@@ -54,7 +54,7 @@ static int _compare_age (GldiWindowActor *actor1, GldiWindowActor *actor2)
 {
 	if (actor1->iAge < actor2->iAge)
 		return -1;
-	else if (actor1->iAge < actor2->iAge)
+	else if (actor1->iAge > actor2->iAge)
 		return 1;
 	else
 		return 0;
