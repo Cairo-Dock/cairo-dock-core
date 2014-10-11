@@ -243,7 +243,6 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName, gint iDesiredIconS
 	const gchar *cSuffixTab[4] = {".svg", ".png", ".xpm", NULL};
 	gboolean bHasSuffix=FALSE, bFileFound=FALSE, bHasVersion=FALSE;
 	GtkIconInfo* pIconInfo = NULL;
-	int j;
 	gchar *str = strrchr (cFileName, '.');
 	bHasSuffix = (str != NULL && g_ascii_isalpha (*(str+1)));  // exemple : "firefox.svg", but not "firefox-3.0"
 	bHasVersion = (str != NULL && g_ascii_isdigit (*(str+1)) && g_ascii_isdigit (*(str-1)) && str-1 != cFileName);  // doit finir par x.y, x et y ayant autant de chiffres que l'on veut.
@@ -253,7 +252,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName, gint iDesiredIconS
 	{
 		if (! bHasSuffix)  // test all the suffix one by one.
 		{
-			j = 0;
+			int j = 0;
 			while (cSuffixTab[j] != NULL)
 			{
 				g_string_printf (sIconPath, "%s/%s%s", g_cCurrentIconsPath, cFileName, cSuffixTab[j]);

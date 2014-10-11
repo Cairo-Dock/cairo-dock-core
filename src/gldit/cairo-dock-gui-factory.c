@@ -841,7 +841,6 @@ static void _cairo_dock_set_original_value (G_GNUC_UNUSED GtkButton *button, Cai
 	cd_debug ("%s (%s, %s, %s)", __func__, cGroupName, cKeyName, cOriginalConfFilePath);
 	
 	GSList *pList;
-	gsize i = 0;
 	GtkWidget *pOneWidget = pSubWidgetList->data;
 	GError *erreur = NULL;
 	gsize length = 0;
@@ -858,6 +857,7 @@ static void _cairo_dock_set_original_value (G_GNUC_UNUSED GtkButton *button, Cai
 	
 	if (GTK_IS_SPIN_BUTTON (pOneWidget) || GTK_IS_SCALE (pOneWidget))
 	{
+		gsize i = 0;
 		gboolean bIsSpin = GTK_IS_SPIN_BUTTON (pOneWidget);
 		double *fValuesList = g_key_file_get_double_list (pKeyFile, cGroupName, cKeyName, &length, &erreur);
 		
@@ -1724,9 +1724,9 @@ GtkWidget *cairo_dock_widget_handbook_new (GldiModule *pModule)
 	// ModuleImage
 	int iPreviewWidth, iPreviewHeight;
 	GdkPixbuf *pPreviewPixbuf = NULL;
-	int w=200, h=200;
 	if (gdk_pixbuf_get_file_info (pModule->pVisitCard->cPreviewFilePath, &iPreviewWidth, &iPreviewHeight) != NULL)  // The return value is owned by GdkPixbuf and should not be freed.
 	{
+		int w = 200, h = 200;
 		if (iPreviewWidth > w)
 		{
 			iPreviewHeight *= 1.*w/iPreviewWidth;

@@ -192,7 +192,6 @@ void cairo_dock_render_overlays_to_texture (CairoDataRenderer *pRenderer, int iN
 	if (pRenderer->bWriteValues && pRenderer->bCanRenderValueAsText)
 	{
 		CairoDataRendererTextParam *pText;
-		int w, h, dw, dh;
 		pText = &pRenderer->pValuesText[iNumValue];
 		if (pText->fWidth != 0 && pText->fHeight != 0)
 		{
@@ -202,10 +201,10 @@ void cairo_dock_render_overlays_to_texture (CairoDataRenderer *pRenderer, int iN
 			glColor3f (pText->pColor[0], pText->pColor[1], pText->pColor[2]);
 			glPushMatrix ();
 			
-			w = pText->fWidth * pRenderer->iWidth;
-			h = pText->fHeight * pRenderer->iHeight;
-			dw = w & 1;
-			dh = h & 1;
+			int w = pText->fWidth * pRenderer->iWidth;
+			int h = pText->fHeight * pRenderer->iHeight;
+			int dw = w & 1;
+			int dh = h & 1;
 			cairo_dock_draw_gl_text_at_position_in_area ((guchar *) pRenderer->cFormatBuffer,
 				pFont,
 				floor (pText->fX * iWidth) + .5*dw,

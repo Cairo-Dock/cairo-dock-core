@@ -1417,11 +1417,10 @@ static gboolean _on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint x,
 		Y = x;
 		X = y - pDock->container.iWidth/2;
 	}
-	int w, h;
 	if (pDock->iInputState == CAIRO_DOCK_INPUT_AT_REST)
 	{
-		w = pDock->iMinDockWidth;
-		h = pDock->iMinDockHeight;
+		int w = pDock->iMinDockWidth;
+		int h = pDock->iMinDockHeight;
 		
 		if (X <= -w/2 || X >= w/2)
 			return FALSE;  // on n'accepte pas le drop.
