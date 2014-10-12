@@ -438,18 +438,9 @@ void cairo_dock_get_window_position_at_balance (CairoDock *pDock, int iNewWidth,
 		iWindowPositionY = - pDock->iMaxIconHeight;
 	else if (iWindowPositionY > H - iNewHeight + pDock->iMaxIconHeight)
 		iWindowPositionY = H - iNewHeight + pDock->iMaxIconHeight;
-	
-	int iScreenOffsetX = gldi_dock_get_screen_offset_x (pDock), iScreenOffsetY = gldi_dock_get_screen_offset_y (pDock);
-	if (pDock->container.bIsHorizontal)
-	{
-		*iNewPositionX = iWindowPositionX + iScreenOffsetX;
-		*iNewPositionY = iWindowPositionY + iScreenOffsetY;
-	}
-	else
-	{
-		*iNewPositionX = iWindowPositionX + iScreenOffsetX;
-		*iNewPositionY = iWindowPositionY + iScreenOffsetY;
-	}
+
+	*iNewPositionX = iWindowPositionX + gldi_dock_get_screen_offset_x (pDock);
+	*iNewPositionY = iWindowPositionY + gldi_dock_get_screen_offset_y (pDock);
 	//g_print ("POSITION : %d+%d ; %d+%d\n", iWindowPositionX, pDock->iScreenOffsetX, iWindowPositionY, pDock->iScreenOffsetY);
 }
 
