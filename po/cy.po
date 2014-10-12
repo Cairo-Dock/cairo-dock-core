@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"POT-Creation-Date: 2014-09-06 17:12+0000\n"
 "PO-Revision-Date: 2014-06-13 21:40+0000\n"
 "Last-Translator: Fabounet <fabounet03@gmail.com>\n"
 "Language-Team: Welsh <cy@li.org>\n"
-"Language: cy\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-06-14 05:39+0000\n"
-"X-Generator: Launchpad (build 17045)\n"
+"X-Launchpad-Export-Date: 2014-09-07 05:59+0000\n"
+"X-Generator: Launchpad (build 17196)\n"
+"Language: cy\n"
 
 #: ../src/cairo-dock-gui-advanced.c:120 ../src/cairo-dock-widget-plugins.c:173
 #: ../data/messages:267
@@ -547,7 +548,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr ""
 
 #: ../src/cairo-dock-user-menu.c:1093
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 
 #: ../src/cairo-dock-user-menu.c:1096 ../Help/src/applet-init.c:28
@@ -777,7 +779,8 @@ msgid "Effects:"
 msgstr ""
 
 #: ../src/cairo-dock-widget-items.c:243
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 
 #: ../src/cairo-dock-widget-items.c:724
@@ -801,7 +804,8 @@ msgid "Category"
 msgstr "Categori"
 
 #: ../src/cairo-dock-widget-plugins.c:279
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 
 #: ../src/cairo-dock-widget-shortkeys.c:125
@@ -1904,8 +1908,9 @@ msgstr ""
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -1953,8 +1958,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
@@ -3321,7 +3326,8 @@ msgid "Zoom effect"
 msgstr ""
 
 #: ../data/messages:661
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:663
@@ -3515,8 +3521,8 @@ msgstr ""
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:783
@@ -3789,8 +3795,8 @@ msgstr ""
 
 #: ../data/messages:1071
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1073
@@ -3939,6 +3945,6 @@ msgstr ""
 
 #: ../data/messages:1152
 msgid ""
-"Note: We're switching from Bzr to Git on Github, feel free to fork! https://"
-"github.com/Cairo-Dock"
+"Note: We're switching from Bzr to Git on Github, feel free to fork! "
+"https://github.com/Cairo-Dock"
 msgstr ""

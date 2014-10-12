@@ -4,19 +4,21 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
 # ferran <ferro66@ya.com>, 2010.
 # ferran <traductor@ferrranroig.com>, 2010.
+# JoanColl <jcoll2@gmail.com>, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2014-06-13 21:43+0000\n"
-"Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
+"POT-Creation-Date: 2014-09-06 17:12+0000\n"
+"PO-Revision-Date: 2014-06-15 06:51+0000\n"
+"Last-Translator: JoanColl <Unknown>\n"
 "Language-Team: Catalan <ca@li.org>\n"
-"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-06-14 05:36+0000\n"
-"X-Generator: Launchpad (build 17045)\n"
+"X-Launchpad-Export-Date: 2014-09-07 05:54+0000\n"
+"X-Generator: Launchpad (build 17196)\n"
+"Language: ca\n"
 
 #: ../src/cairo-dock-gui-advanced.c:120 ../src/cairo-dock-widget-plugins.c:173
 #: ../data/messages:267
@@ -62,7 +64,7 @@ msgstr "Tot"
 
 #: ../src/cairo-dock-gui-advanced.c:1460
 msgid "Set the position of the main dock."
-msgstr "Estableix la posició de la barra."
+msgstr "Estableix la posició de la barra acoblada principal."
 
 #: ../src/cairo-dock-gui-advanced.c:1461 ../src/cairo-dock-gui-advanced.c:1462
 #: ../Help/data/messages:321 ../data/messages:151
@@ -75,9 +77,9 @@ msgid ""
 " or on the contrary unobtrusive?\n"
 "Configure the way you access your docks and sub-docks!"
 msgstr ""
-"Voleu que la barra sigui sempre visible,\n"
+"Voleu que la barra acoblada sigui sempre visible,\n"
 "o que tingui una presència més discreta?\n"
-"Configureu la manera d'accedir a les barres i a les barres secundàries"
+"Configureu la forma d'accedir a les barres acoblades principals i secundàries"
 
 #: ../src/cairo-dock-gui-advanced.c:1470 ../src/cairo-dock-gui-advanced.c:1471
 #: ../src/cairo-dock-user-menu.c:2027 ../Help/data/messages:339
@@ -119,11 +121,11 @@ msgstr "Estil"
 
 #: ../src/cairo-dock-gui-advanced.c:1515
 msgid "Configure docks appearance."
-msgstr "Configurar l'aspecte de les barres"
+msgstr "Configurar l'aspecte de les barres acoblades"
 
 #: ../src/cairo-dock-gui-advanced.c:1516 ../Help/data/messages:79
 msgid "Docks"
-msgstr "Barres"
+msgstr "Barres acoblades"
 
 #: ../src/cairo-dock-gui-advanced.c:1517 ../data/messages:457
 #: ../data/messages:971
@@ -190,7 +192,7 @@ msgstr "Temes"
 
 #: ../src/cairo-dock-gui-advanced.c:1571
 msgid "Current items in your dock(s)."
-msgstr "Elements de la vostra/les vostres barres"
+msgstr "Elements en les seves barres acoblades."
 
 #: ../src/cairo-dock-gui-advanced.c:1572 ../src/cairo-dock-gui-simple.c:91
 #: ../src/cairo-dock-gui-simple.c:93
@@ -241,9 +243,8 @@ msgid "Back"
 msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1888 ../src/cairo-dock-gui-simple.c:207
-#, fuzzy
 msgid "Apply"
-msgstr "Miniaplicació"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1904
 msgid "More applets"
@@ -278,8 +279,8 @@ msgid ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customise your current theme."
 msgstr ""
-"El mode avançat us permet ajustar tots els paràmetres de la barra. És una "
-"bona eina per personalitzar el tema actual."
+"El mode avançat us permet ajustar tots els paràmetres de la barra acoblada. "
+"És una bona eina per personalitzar el tema actual."
 
 #: ../src/cairo-dock-user-interaction.c:417
 msgid ""
@@ -292,7 +293,7 @@ msgstr ""
 
 #: ../src/cairo-dock-user-menu.c:119
 msgid "Delete this dock?"
-msgstr "Suprimireu aquesta barra?"
+msgstr "Suprimireu aquesta barra acoblada?"
 
 #: ../src/cairo-dock-user-menu.c:176
 msgid "About Cairo-Dock"
@@ -320,7 +321,7 @@ msgid ""
 "Support the people who spend countless hours to bring you the best dock ever."
 msgstr ""
 "Ajudeu la gent que passa moltes hores treballant per proporcionar-vos la "
-"millor barra que hi ha."
+"millor barra acoblada que hi ha."
 
 #: ../src/cairo-dock-user-menu.c:255
 msgid "Here is a list of the current developers and contributors"
@@ -427,7 +428,7 @@ msgid ""
 "Now move some launchers or applets into it by right-clicking on the icon -> "
 "move to another dock"
 msgstr ""
-"S'ha creat una barra.\n"
+"S'ha creat una barra acoblada.\n"
 "Ara podeu moure-ni alguns llançadors o miniaplicacions fent un clic dret i "
 "aplicant l'opció Mou cap a una altra barra"
 
@@ -437,11 +438,11 @@ msgstr "Afegeix"
 
 #: ../src/cairo-dock-user-menu.c:576
 msgid "Sub-dock"
-msgstr "Barra secundària"
+msgstr "Barra acoblada secundària"
 
 #: ../src/cairo-dock-user-menu.c:578
 msgid "Main dock"
-msgstr "Barra principal"
+msgstr "Barra acoblada principal"
 
 #: ../src/cairo-dock-user-menu.c:582
 msgid "Custom launcher"
@@ -451,7 +452,8 @@ msgstr "Carregador personalitzat"
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
 msgstr ""
-"Normalment podreu arrossegar un llançador del menú i afegir-lo a la barra."
+"Normalment podreu arrossegar un llançador del menú i afegir-lo a la barra "
+"acoblada."
 
 #: ../src/cairo-dock-user-menu.c:585
 msgid "Applet"
@@ -463,7 +465,7 @@ msgid ""
 "the dock?\n"
 "(otherwise they will be destroyed)"
 msgstr ""
-"Voleu redistribuir les icones d'aquest contenidor a la barra?\n"
+"Voleu redistribuir les icones d'aquest contenidor a la barra acoblada?\n"
 "(en cas contrari les perdreu)"
 
 #: ../src/cairo-dock-user-menu.c:624
@@ -474,8 +476,8 @@ msgstr "separador"
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
 msgstr ""
-"Esteu a punt d'eliminar aquesta icona (%s) de la barra; segur que voleu "
-"continuar?"
+"Esteu a punt d'eliminar aquesta icona (%s) de la barra acoblada; segur que "
+"voleu continuar?"
 
 #: ../src/cairo-dock-user-menu.c:643
 msgid "Sorry, this icon doesn't have a configuration file."
@@ -487,17 +489,17 @@ msgid ""
 "You can customize it by right-clicking on it -> cairo-dock -> configure this "
 "dock."
 msgstr ""
-"S'ha creat una altra barra.\n"
+"S'ha creat una altra barra acoblada.\n"
 "Podeu personalitzar-la amb un clic dret -> Cairo-dock -> Configuració"
 
 #: ../src/cairo-dock-user-menu.c:689
 msgid "Move to another dock"
-msgstr "Mou a una altra barra"
+msgstr "Mou a una altra barra acoblada"
 
 #: ../src/cairo-dock-user-menu.c:691
 #: ../src/gldit/cairo-dock-gui-factory.c:1226
 msgid "New main dock"
-msgstr "Barra principal nova"
+msgstr "Nova barra acoblada principal"
 
 #: ../src/cairo-dock-user-menu.c:772
 msgid ""
@@ -511,8 +513,8 @@ msgstr ""
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr ""
-"Esteu a punt d'eliminar aquesta  miniaplicació (%s) de la barra. Voleu "
-"continuar?"
+"Esteu a punt d'eliminar aquesta  miniaplicació (%s) de la barra acoblada. "
+"Voleu continuar?"
 
 #: ../src/cairo-dock-user-menu.c:888 ../src/gldit/cairo-dock-gui-factory.c:761
 msgid "Pick up an image"
@@ -544,17 +546,17 @@ msgstr "Configura el comportament, l'aparença i les miniaplicacions"
 
 #: ../src/cairo-dock-user-menu.c:1015
 msgid "Configure this dock"
-msgstr "Configuració d'aquesta barra"
+msgstr "Configuració d'aquesta barra acoblada"
 
 #: ../src/cairo-dock-user-menu.c:1020
 msgid "Customize the position, visibility and appearance of this main dock."
 msgstr ""
 "Personalització de la posició, visibilitat i aparença d'aquesta barra "
-"principal."
+"acoblada principal."
 
 #: ../src/cairo-dock-user-menu.c:1022
 msgid "Delete this dock"
-msgstr "Suprimeix aquesta barra"
+msgstr "Suprimeix aquesta barra acoblada"
 
 #: ../src/cairo-dock-user-menu.c:1032
 msgid "Manage themes"
@@ -579,14 +581,15 @@ msgstr "Oculta automàticament"
 
 #: ../src/cairo-dock-user-menu.c:1064
 msgid "This will hide the dock until you hover over it with the mouse."
-msgstr "S'amagarà la barra fins que hi passeu amb el ratolí."
+msgstr "S'amagarà la barra acoblada fins que hi passeu amb el ratolí."
 
 #: ../src/cairo-dock-user-menu.c:1077
 msgid "Launch Cairo-Dock on startup"
 msgstr "Executa Cairo-Dock a l'inici"
 
 #: ../src/cairo-dock-user-menu.c:1093
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Miniaplicacions de tercers proporcionen la integració amb altres programes, "
 "com ara el Pidgin"
@@ -637,7 +640,9 @@ msgstr "Suprimeix"
 #: ../src/cairo-dock-user-menu.c:1172
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
-msgstr "Podeu eliminar un llançador arrossegant-lo fora de la barra."
+msgstr ""
+"Podeu suprimir un llançador arrossegant-lo fora de la barra acoblada amb el "
+"ratolí."
 
 #: ../src/cairo-dock-user-menu.c:1181
 msgid "Make it a launcher"
@@ -821,10 +826,11 @@ msgid "Effects:"
 msgstr "Efectes:"
 
 #: ../src/cairo-dock-widget-items.c:243
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
-"Els paràmetres de la barra principal es troben a la finestra de configuració "
-"principal."
+"Els paràmetres de la barra acoblada principal es troben a la finestra de "
+"configuració principal."
 
 #: ../src/cairo-dock-widget-items.c:724
 msgid "Remove this item"
@@ -847,7 +853,8 @@ msgid "Category"
 msgstr "Categoria"
 
 #: ../src/cairo-dock-widget-plugins.c:279
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Cliqueu sobre una miniaplicació per previsualitzar-la i llegir-ne una "
 "descripció."
@@ -962,14 +969,15 @@ msgstr "Torna a preguntar a l'iniciar quin motor s'utilitzarà."
 
 #: ../src/cairo-dock.c:363
 msgid "Force the dock to consider this environnement - use it with care."
-msgstr "Força la barra a considerar aquest entorn - utilitzi amb precaució."
+msgstr ""
+"Força la barra acoblada a considerar aquest entorn - utilitzi amb precaució."
 
 #: ../src/cairo-dock.c:366
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
 msgstr ""
-"Força la barra a carregar des d'aquest directori, enlloc de ~/.config/cairo-"
-"dock."
+"Força la barra acoblada a carregar des d'aquest directori, enlloc de "
+"~/.config/cairo-dock."
 
 #: ../src/cairo-dock.c:369
 msgid ""
@@ -985,19 +993,19 @@ msgid ""
 "problems when the dock starts with the session."
 msgstr ""
 "Espera N segonds abans d'iniciar; útil quan es detecten problemes quan la "
-"barra s'inicia amb la sessió."
+"barra acoblada s'inicia amb la sessió."
 
 #: ../src/cairo-dock.c:375
 msgid ""
 "Allow to edit the config before the dock is started and show the config "
 "panel on start."
 msgstr ""
-"Permet editar la configuració abans que la barra s'hagi iniciat i mostra el "
-"tauler de configuració a l'inici."
+"Permet editar la configuració abans que la barra acoblada s'hagi iniciat i "
+"mostra el tauler de configuració a l'inici."
 
 #: ../src/cairo-dock.c:378
 msgid "Exclude a given plug-in from activating (it is still loaded though)."
-msgstr ""
+msgstr "Exclou l'activació d'un connector (es carrega igualment)"
 
 #: ../src/cairo-dock.c:381
 msgid "Don't load any plug-ins."
@@ -1009,7 +1017,7 @@ msgid ""
 "docks)"
 msgstr ""
 "Treball al voltant d'alguns errors al gestor de finestres Metacity (diàlegs "
-"invisibles o barres secundaries)"
+"invisibles o barres acoblades secundaries)"
 
 #: ../src/cairo-dock.c:387
 msgid ""
@@ -1029,15 +1037,16 @@ msgstr "Mostra versió i surt."
 #: ../src/cairo-dock.c:396
 msgid "Lock the dock so that any modification is impossible for users."
 msgstr ""
-"Bloqueja la barra per tal de que els usuaris no puguin fer cap modificació."
+"Bloqueja la barra acoblada per tal de que els usuaris no puguin fer cap "
+"modificació."
 
 #: ../src/cairo-dock.c:400
 msgid "Keep the dock above other windows whatever."
-msgstr "Manté la barra damunr de qualsevol finestra."
+msgstr "Manté la barra acoblada damunt de qualsevol finestra."
 
 #: ../src/cairo-dock.c:403
 msgid "Don't make the dock appear on all desktops."
-msgstr "No facis que la barra apareixi a tots els escriptoris."
+msgstr "No facis que la barra acoblada apareixi a tots els escriptoris."
 
 #: ../src/cairo-dock.c:406 ../src/cairo-dock.c:466
 msgid "Cairo-Dock makes anything, including coffee !"
@@ -1048,8 +1057,9 @@ msgid ""
 "Ask the dock to load additionnal modules contained in this directory (though "
 "it is unsafe for your dock to load unnofficial modules)."
 msgstr ""
-"Fer que la barra carregui mòduls adicionals que hi ha en aquest directori "
-"(encara que sigui insegur per la barra carregar mòduls no oficials)"
+"Fer que la barra acoblada carregui mòduls adicionals que hi ha en aquest "
+"directori (encara que sigui insegur per la barra acoblada carregar mòduls no "
+"oficials)"
 
 #: ../src/cairo-dock.c:412
 msgid ""
@@ -1077,7 +1087,7 @@ msgstr ""
 
 #: ../src/cairo-dock.c:540 ../src/cairo-dock.c:786 ../data/messages:823
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: ../src/cairo-dock.c:543
 msgid ""
@@ -1094,7 +1104,8 @@ msgstr ""
 "l'ús de la CPU.\n"
 "També permet utilitzar bonics efectes visuals semblants als de Compiz.\n"
 "Tanmateix, algunes targes i/o els seus controladors no el suporten "
-"completament, cosa que pot provocar que la barra no funcioni correctament.\n"
+"completament, cosa que pot provocar que la barra acoblada no funcioni "
+"correctament.\n"
 "Vols activar OpenGL?\n"
 " (Per no mostrar aquest quadre de diàleg, executa la barra des del menú "
 "d'Aplicacions.\n"
@@ -1113,7 +1124,7 @@ msgid ""
 "dock.org"
 msgstr ""
 "El mòdul '%s' ha estat desactivat ja que pot haver causat alguns problemes.\n"
-"El pot tornar a acctivar, si li torna a passar li agrairem que enviï un "
+"El pot tornar a activar, si li torna a passar li agrairem que enviï un "
 "informe a http://glx-dock.org"
 
 #: ../src/cairo-dock.c:728
@@ -1192,7 +1203,7 @@ msgstr ""
 #: ../data/messages:551 ../data/messages:691 ../data/messages:733
 #: ../data/messages:805 ../data/messages:839
 msgid "Automatic"
-msgstr ""
+msgstr "Automàtic"
 
 #: ../src/gldit/cairo-dock-desklet-manager.c:819
 msgid "_custom decoration_"
@@ -1200,28 +1211,28 @@ msgstr "_decoració personalitzada_"
 
 #: ../src/gldit/cairo-dock-dock-factory.c:1337
 msgid "Sorry but the dock is locked"
-msgstr "Disculpi però la barra està bloquejada"
+msgstr "Disculpi però la barra acoblada està bloquejada"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:236
 msgid "Bottom dock"
-msgstr "Barra inferior"
+msgstr "Barra acoblada inferior"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:238
 msgid "Top dock"
-msgstr "Barra superior"
+msgstr "Barra acoblada superior"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:243
 msgid "Right dock"
-msgstr "Barra dreta"
+msgstr "Barra acoblada dreta"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:245
 msgid "Left dock"
-msgstr "Barra esquerra"
+msgstr "Barra acoblada esquerra"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:1692
 #: ../src/gldit/cairo-dock-dock-manager.c:1792
 msgid "Pop up the main dock"
-msgstr "Mostra la barra principal"
+msgstr "Mostra la barra acoblada principal"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:256
 #, c-format
@@ -1310,7 +1321,7 @@ msgid ""
 "features."
 msgstr ""
 "No s'ha trobat el mòdul '%s'.\n"
-"Comproveu que sigui per a la mateixa versió de la barra que teniu "
+"Comproveu que sigui per a la mateixa versió de la barra acoblada que teniu "
 "instal·lada per gaudir de les seves característiques."
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1408
@@ -1354,11 +1365,11 @@ msgstr "Voleu sobreescriure el tema %s?"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:265
 msgid "Last modification on:"
-msgstr ""
+msgstr "Darrera modificació:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:336
 msgid "Your theme should now be available in this directory:"
-msgstr ""
+msgstr "El tema hauria d'estar disponible ara en aquest directori:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:341
 msgid "Error when launching 'cairo-dock-package-theme' script"
@@ -1417,7 +1428,7 @@ msgstr ""
 
 #: ../Help/src/applet-composite.c:165
 msgid "Don't ask me any more"
-msgstr ""
+msgstr "No m'ho demanis més"
 
 #: ../Help/src/applet-composite.c:171
 msgid ""
@@ -1425,12 +1436,17 @@ msgid ""
 "composite manager.\n"
 "Do you want to activate it now?"
 msgstr ""
+"Per eliminar el rectangle negre que hi ha al voltant de la barra acoblada, "
+"ha d'activar el gestor de composició.\n"
+"Vol activar-lo ara?"
 
 #: ../Help/src/applet-composite.c:182
 msgid ""
 "Do you want to keep this setting?\n"
 "In 15 seconds, the previous setting will be restored."
 msgstr ""
+"Vol mantenir aquesta configuració?\n"
+"Es restaurarà la configuració anterior després de 15 segons."
 
 #: ../Help/src/applet-composite.c:198
 msgid ""
@@ -1442,8 +1458,8 @@ msgid ""
 "option is in the 'System' module of the configuration, at the bottom of the "
 "page."
 msgstr ""
-"Per eliminar el rectangle negre al voltant del Dock, cal que activeu un "
-"gestor de composició.\n"
+"Per eliminar el rectangle negre al voltant de la barra acoblada, cal que "
+"activeu un gestor de composició.\n"
 "Per exemple, podeu fer-ho activant els Efectes d'escriptori, executant el "
 "Compiz, o bé activant la composició en el Metacity.\n"
 "Si el vostre ordinador no ofereix composició, Cairo-Dock pot emular-ho. "
@@ -1461,35 +1477,35 @@ msgstr ""
 
 #: ../Help/src/applet-notifications.c:259
 msgid "Open global settings"
-msgstr ""
+msgstr "Obre paràmetres globals"
 
 #: ../Help/src/applet-notifications.c:264
 msgid "Activate composite"
-msgstr ""
+msgstr "Activa composició"
 
 #: ../Help/src/applet-notifications.c:266
 msgid "Disable the gnome-panel"
-msgstr ""
+msgstr "Desactiva el tauler gnome"
 
 #: ../Help/src/applet-notifications.c:268
 msgid "Disable Unity"
-msgstr ""
+msgstr "Desactiva Unity"
 
 #: ../Help/src/applet-notifications.c:270
 msgid "Online help"
-msgstr ""
+msgstr "Ajuda en línia"
 
 #: ../Help/src/applet-tips-dialog.c:152
 msgid "Tips and Tricks"
-msgstr ""
+msgstr "Consells i suggeriments"
 
 #: ../Help/data/messages:1
 msgid "General"
-msgstr ""
+msgstr "General"
 
 #: ../Help/data/messages:3
 msgid "Using the dock"
-msgstr ""
+msgstr "Utilitza la barra acoblada"
 
 #: ../Help/data/messages:5
 msgid ""
@@ -1502,7 +1518,7 @@ msgstr ""
 
 #: ../Help/data/messages:7
 msgid "Adding features"
-msgstr ""
+msgstr "Afegint característiques"
 
 #: ../Help/data/messages:9
 msgid ""
@@ -1517,7 +1533,7 @@ msgstr ""
 
 #: ../Help/data/messages:13
 msgid "Adding a launcher"
-msgstr ""
+msgstr "Afengint un llançador"
 
 #: ../Help/data/messages:15
 msgid ""
@@ -1529,7 +1545,7 @@ msgstr ""
 
 #: ../Help/data/messages:17
 msgid "Removing a launcher"
-msgstr ""
+msgstr "Suprimint un llançador"
 
 #: ../Help/data/messages:19
 msgid ""
@@ -1539,7 +1555,7 @@ msgstr ""
 
 #: ../Help/data/messages:21
 msgid "Grouping icons into a sub-dock"
-msgstr ""
+msgstr "Agrupa icones en una barra acoblable secundària"
 
 #: ../Help/data/messages:23
 msgid ""
@@ -1551,7 +1567,7 @@ msgstr ""
 
 #: ../Help/data/messages:25
 msgid "Moving icons"
-msgstr ""
+msgstr "Movent icones"
 
 #: ../Help/data/messages:27
 msgid ""
@@ -1564,7 +1580,7 @@ msgstr ""
 
 #: ../Help/data/messages:29
 msgid "Changing an icon's image"
-msgstr ""
+msgstr "Canviant una imatge d'icona"
 
 #: ../Help/data/messages:31
 msgid ""
@@ -1582,7 +1598,7 @@ msgstr ""
 
 #: ../Help/data/messages:33
 msgid "Resizing icons"
-msgstr ""
+msgstr "Canviant mida de les icones"
 
 #: ../Help/data/messages:35
 msgid ""
@@ -1597,7 +1613,7 @@ msgstr ""
 
 #: ../Help/data/messages:37
 msgid "Separating icons"
-msgstr ""
+msgstr "Separant icones"
 
 #: ../Help/data/messages:39
 msgid ""
@@ -1608,16 +1624,17 @@ msgid ""
 "between each group.\n"
 "In the \"panel\" view, separators are represented as gap between icons."
 msgstr ""
-"Podeu afegir separadors entre les icones amb un clic dret a la barra -> "
-"afegeix -> separador.\n"
+"Podeu afegir separadors entre les icones amb un clic dret a la barra "
+"acoblada -> afegeix -> separador.\n"
 "A més, si teniu activa l'opció de separar les icones de tipus diferents "
 "(llançadors/aplicacions/miniaplicacions), s'afegirà un separador "
 "automàticament entre cada grup.\n"
-"A la  barra, els separadors es veuen com una esquerda entre les icones."
+"A la  barra acoblada, els separadors es veuen com una esquerda entre les "
+"icones."
 
 #: ../Help/data/messages:43
 msgid "Using the dock as a taskbar"
-msgstr ""
+msgstr "Utilitza la barra acoblable com a barra de tasques"
 
 #: ../Help/data/messages:45
 msgid ""
@@ -1632,16 +1649,18 @@ msgstr ""
 
 #: ../Help/data/messages:47
 msgid "Closing a window"
-msgstr ""
+msgstr "Tancant una finestra"
 
 #: ../Help/data/messages:49
 msgid ""
 "You can close a window by middle-clicking on its icon (or from the menu)."
 msgstr ""
+"Per tancar una finestra faci clic amb el botó del mig a la seva icona (o des "
+"del menú)"
 
 #: ../Help/data/messages:51
 msgid "Minimizing / restauring a window"
-msgstr ""
+msgstr "Minimitzant / restaurant una finestra"
 
 #: ../Help/data/messages:53
 msgid ""
@@ -1651,7 +1670,7 @@ msgstr ""
 
 #: ../Help/data/messages:55
 msgid "Launching an application several times"
-msgstr ""
+msgstr "Llança una aplicació més d'una vegada"
 
 #: ../Help/data/messages:57
 msgid ""
@@ -1683,15 +1702,15 @@ msgstr ""
 
 #: ../Help/data/messages:67
 msgid "Setting a custom icon for an application"
-msgstr ""
+msgstr "Configura una icona personalitzada per una aplicació"
 
 #: ../Help/data/messages:69
 msgid "See \"Changing an icon's image\" in the \"Icons\" category."
-msgstr ""
+msgstr "Miri \"Canviï una imatge d'icona\" a la categoria \"Icones\""
 
 #: ../Help/data/messages:71
 msgid "Showing windows preview over the icons"
-msgstr ""
+msgstr "Mostra vista prèvia de la finestra damunt de les icones"
 
 #: ../Help/data/messages:73
 msgid ""
@@ -1749,12 +1768,12 @@ msgid ""
 msgstr ""
 "Les miniaplicacions poden residir en zones independents: finestretes que es "
 "poden desplaçar a qualsevol punt de l'escriptori.\n"
-"Per desvincular una miniaplicació de la barra, només cal que l'arrossegueu "
-"enfora."
+"Per desvincular una miniaplicació de la barra acoblable, només cal que "
+"l'arrossegueu enfora."
 
 #: ../Help/data/messages:95
 msgid "Moving desklets"
-msgstr ""
+msgstr "Mou miniescriptoris"
 
 #: ../Help/data/messages:97
 msgid ""
@@ -1767,7 +1786,7 @@ msgstr ""
 
 #: ../Help/data/messages:99
 msgid "Placing desklets"
-msgstr ""
+msgstr "Posiciona miniescriptoris"
 
 #: ../Help/data/messages:101
 msgid ""
@@ -1793,7 +1812,7 @@ msgstr ""
 
 #: ../Help/data/messages:107
 msgid "Useful Features"
-msgstr ""
+msgstr "Característiques útils"
 
 #: ../Help/data/messages:109
 msgid "Having a calendar with tasks"
@@ -1838,7 +1857,7 @@ msgstr ""
 
 #: ../Help/data/messages:117
 msgid "Showing all the desktops"
-msgstr ""
+msgstr "Mostra tots els escriptoris"
 
 #: ../Help/data/messages:119
 msgid ""
@@ -1852,7 +1871,7 @@ msgstr ""
 
 #: ../Help/data/messages:121
 msgid "Changing the screen resolution"
-msgstr ""
+msgstr "Canvi de la resolució de pantalla"
 
 #: ../Help/data/messages:123
 msgid ""
@@ -1864,7 +1883,7 @@ msgstr ""
 
 #: ../Help/data/messages:125
 msgid "Locking your session"
-msgstr ""
+msgstr "Bloqueig de sessió"
 
 #: ../Help/data/messages:127
 msgid ""
@@ -1891,8 +1910,8 @@ msgstr ""
 "Activa la miniaplicació del Menú d'aplicacions.\n"
 "Un clic central, o un clic dret -> \"Executa el programa\".\n"
 "Podeu vincular una drecera de teclat per a aquesta acció.\n"
-"El text tendeix a completar-se automàticament (per exemple, si escriviu \"fir"
-"\", veureu que es completa a \"firefox\")."
+"El text tendeix a completar-se automàticament (per exemple, si escriviu "
+"\"fir\", veureu que es completa a \"firefox\")."
 
 #: ../Help/data/messages:133
 msgid "Turning Composite OFF during games"
@@ -1988,7 +2007,7 @@ msgstr ""
 
 #: ../Help/data/messages:157
 msgid "Accessing disks"
-msgstr ""
+msgstr "Accés als discs"
 
 #: ../Help/data/messages:159
 msgid ""
@@ -2000,7 +2019,7 @@ msgstr ""
 
 #: ../Help/data/messages:161
 msgid "Accessing folder bookmarks"
-msgstr ""
+msgstr "Accés a la carpeta de les adreces d'interès"
 
 #: ../Help/data/messages:163
 msgid ""
@@ -2038,7 +2057,7 @@ msgstr ""
 
 #: ../Help/data/messages:173
 msgid "Controling the sound volume"
-msgstr ""
+msgstr "Ajusta el volum del so"
 
 #: ../Help/data/messages:175
 msgid ""
@@ -2050,7 +2069,7 @@ msgstr ""
 
 #: ../Help/data/messages:177
 msgid "Controling the screen brightness"
-msgstr ""
+msgstr "Ajusta la brillantor de la pantalla"
 
 #: ../Help/data/messages:179
 msgid ""
@@ -2065,8 +2084,9 @@ msgstr ""
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -2079,7 +2099,7 @@ msgstr ""
 
 #: ../Help/data/messages:189
 msgid "Troubleshooting"
-msgstr ""
+msgstr "Solució de problemes"
 
 #: ../Help/data/messages:191
 msgid "If you have any question, don't hesitate to ask on our forum."
@@ -2087,7 +2107,7 @@ msgstr ""
 
 #: ../Help/data/messages:193
 msgid "Forum"
-msgstr ""
+msgstr "Fòrum"
 
 #: ../Help/data/messages:195
 msgid "Our wiki can also help you, it is more complete on some points."
@@ -2095,7 +2115,7 @@ msgstr ""
 
 #: ../Help/data/messages:197
 msgid "Wiki"
-msgstr ""
+msgstr "Wiki"
 
 #: ../Help/data/messages:199
 msgid "I have a black background around my dock."
@@ -2114,8 +2134,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
@@ -2233,11 +2253,11 @@ msgstr ""
 
 #: ../Help/data/messages:247
 msgid "The Project"
-msgstr ""
+msgstr "El projecte"
 
 #: ../Help/data/messages:249
 msgid "Join the project!"
-msgstr ""
+msgstr "Afegeix-te al projecte!"
 
 #: ../Help/data/messages:251
 msgid ""
@@ -2257,7 +2277,7 @@ msgstr ""
 
 #: ../Help/data/messages:255
 msgid "Documentation"
-msgstr ""
+msgstr "Documentació"
 
 #: ../Help/data/messages:257
 msgid ""
@@ -2268,7 +2288,7 @@ msgstr ""
 
 #: ../Help/data/messages:259
 msgid "DBus API"
-msgstr ""
+msgstr "API DBus"
 
 #: ../Help/data/messages:261
 msgid ""
@@ -2279,11 +2299,12 @@ msgstr ""
 
 #: ../Help/data/messages:263
 msgid "Websites"
-msgstr ""
+msgstr "Llocs web"
 
 #: ../Help/data/messages:265
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
-msgstr "Problemes? Suggeriments? Només voleu parlar amb nosaltres? Aquí estem!"
+msgstr ""
+"Problemes? Suggeriments? Només voleu parlar amb nosaltres? Aquí estem!"
 
 #: ../Help/data/messages:267
 msgid "Community site"
@@ -2299,7 +2320,7 @@ msgstr "Connectors extra per el Cairo-Dock"
 
 #: ../Help/data/messages:277
 msgid "Repositories"
-msgstr ""
+msgstr "Repositoris"
 
 #: ../Help/data/messages:279
 msgid ""
@@ -2310,11 +2331,11 @@ msgstr ""
 
 #: ../Help/data/messages:281
 msgid "Debian/Ubuntu"
-msgstr ""
+msgstr "Debian/Ubuntu"
 
 #: ../Help/data/messages:283
 msgid "Ubuntu"
-msgstr ""
+msgstr "Ubuntu"
 
 #: ../Help/data/messages:287
 msgid ""
@@ -2334,7 +2355,7 @@ msgstr ""
 
 #: ../Help/data/messages:293
 msgid "Debian"
-msgstr ""
+msgstr "Debian"
 
 #: ../Help/data/messages:297
 msgid ""
@@ -2355,7 +2376,7 @@ msgstr ""
 #: ../Help/data/messages:303 ../Help/data/messages:305 ../data/messages:1029
 #: ../data/messages:1061 ../data/messages:1097
 msgid "Icon"
-msgstr ""
+msgstr "Icona"
 
 #: ../Help/data/messages:307
 msgid "Name of the dock it belongs to:"
@@ -2371,7 +2392,7 @@ msgstr ""
 
 #: ../Help/data/messages:313
 msgid "Image filename:"
-msgstr ""
+msgstr "Nom del fitxer d'imatge:"
 
 #: ../Help/data/messages:315
 msgid "Set to 0 to use the default applet size"
@@ -2393,7 +2414,7 @@ msgstr ""
 
 #: ../Help/data/messages:325
 msgid "Lock position?"
-msgstr ""
+msgstr "Fixa la posició?"
 
 #: ../Help/data/messages:327
 msgid ""
@@ -2413,7 +2434,7 @@ msgstr ""
 
 #: ../Help/data/messages:333
 msgid "Desklet position (x, y):"
-msgstr ""
+msgstr "Posició miniescriptori (x, y):"
 
 #: ../Help/data/messages:335
 msgid ""
@@ -2423,7 +2444,7 @@ msgstr ""
 
 #: ../Help/data/messages:337
 msgid "Rotation:"
-msgstr ""
+msgstr "Rotació:"
 
 #: ../Help/data/messages:341
 msgid "Is detached from the dock"
@@ -2442,7 +2463,7 @@ msgstr "Visibilitat:"
 
 #: ../Help/data/messages:351
 msgid "Keep below"
-msgstr ""
+msgstr "Manté a sota"
 
 #: ../Help/data/messages:353
 msgid "Keep on widget layer"
@@ -2454,7 +2475,7 @@ msgstr ""
 
 #: ../Help/data/messages:359 ../data/messages:589
 msgid "Decorations"
-msgstr ""
+msgstr "Decoracions"
 
 #: ../Help/data/messages:361
 msgid "Choose 'Custom decorations' to define your own decorations below."
@@ -2471,11 +2492,11 @@ msgstr ""
 
 #: ../Help/data/messages:367
 msgid "Background image:"
-msgstr ""
+msgstr "Imatge del fons:"
 
 #: ../Help/data/messages:369
 msgid "Background transparency:"
-msgstr ""
+msgstr "Transparència del fons:"
 
 #: ../Help/data/messages:371
 msgid "in pixels. Use this to adjust the left position of drawings."
@@ -2483,7 +2504,7 @@ msgstr ""
 
 #: ../Help/data/messages:373
 msgid "Left offset:"
-msgstr ""
+msgstr "Desplaçament esquerra:"
 
 #: ../Help/data/messages:375
 msgid "in pixels. Use this to adjust the top position of drawings."
@@ -2491,7 +2512,7 @@ msgstr ""
 
 #: ../Help/data/messages:377
 msgid "Top offset:"
-msgstr ""
+msgstr "Desplaçament superior:"
 
 #: ../Help/data/messages:379
 msgid "in pixels. Use this to adjust the right position of drawings."
@@ -2499,7 +2520,7 @@ msgstr ""
 
 #: ../Help/data/messages:381
 msgid "Right offset:"
-msgstr ""
+msgstr "Desplaçament dreta:"
 
 #: ../Help/data/messages:383
 msgid "in pixels. Use this to adjust the bottom position of drawings."
@@ -2507,7 +2528,7 @@ msgstr ""
 
 #: ../Help/data/messages:385
 msgid "Bottom offset:"
-msgstr ""
+msgstr "Desplaçament inferior:"
 
 #: ../Help/data/messages:387
 msgid ""
@@ -2517,11 +2538,11 @@ msgstr ""
 
 #: ../Help/data/messages:389
 msgid "Foreground image:"
-msgstr ""
+msgstr "Imatge del fons:"
 
 #: ../Help/data/messages:391
 msgid "Foreground tansparency:"
-msgstr ""
+msgstr "Transparència del fons:"
 
 #: ../data/messages:1 ../data/messages:897
 msgid "Behavior"
@@ -2533,11 +2554,12 @@ msgstr "Posició a la pantalla"
 
 #: ../data/messages:5 ../data/messages:155 ../data/messages:901
 msgid "Choose which border of the screen the dock will be placed on:"
-msgstr "Trieu quin contorn de superfície del Dock voleu col·locar a:"
+msgstr ""
+"Trieu quin contorn de superfície per la barra acoblable voleu posar a:"
 
 #: ../data/messages:15 ../data/messages:187
 msgid "Visibility of the main dock"
-msgstr "Visibilitat del Dock principal"
+msgstr "Visibilitat de la barra acoblable principal"
 
 #: ../data/messages:17 ../data/messages:189 ../data/messages:919
 msgid ""
@@ -2554,11 +2576,11 @@ msgstr ""
 
 #: ../data/messages:25 ../data/messages:197 ../data/messages:927
 msgid "Keep the dock below"
-msgstr ""
+msgstr "Manté la barra acoblable a sota"
 
 #: ../data/messages:27 ../data/messages:199 ../data/messages:929
 msgid "Hide the dock when it overlaps the current window"
-msgstr "Amaga el Dock quan tingui la finestra activa per sobre"
+msgstr "Amaga la barra acoblable quan tingui la finestra activa damunt"
 
 #: ../data/messages:29 ../data/messages:201 ../data/messages:931
 msgid "Hide the dock whenever it overlaps any window"
@@ -2574,7 +2596,7 @@ msgstr "Emergents sobre les dreceres"
 
 #: ../data/messages:35 ../data/messages:207
 msgid "Effect used to hide the dock:"
-msgstr "Efecte per amagar el Dock:"
+msgstr "Efecte per amagar la barra acoblable:"
 
 #: ../data/messages:37 ../data/messages:69 ../data/messages:209
 msgid "None"
@@ -2589,11 +2611,11 @@ msgstr ""
 
 #: ../data/messages:51 ../data/messages:245
 msgid "Keyboard shortcut to pop-up the dock:"
-msgstr "Drecera de teclat per emergir el Dock:"
+msgstr "Drecera de teclat per mostrar la barra acoblable:"
 
 #: ../data/messages:53
 msgid "Visibility of sub-docks"
-msgstr "Visibilitat dels sub-docks"
+msgstr "Visibilitat de les barres acoblables secundàries"
 
 #: ../data/messages:55 ../data/messages:249
 msgid ""
@@ -2634,27 +2656,27 @@ msgstr ""
 
 #: ../data/messages:75
 msgid "Separated"
-msgstr ""
+msgstr "Separat"
 
 #: ../data/messages:77 ../data/messages:281
 msgid "Place new icons"
-msgstr ""
+msgstr "Posa noves icones"
 
 #: ../data/messages:79 ../data/messages:283
 msgid "At the beginning of the dock"
-msgstr ""
+msgstr "A l'inici de la barra acoblable"
 
 #: ../data/messages:81 ../data/messages:285
 msgid "Before the launchers"
-msgstr ""
+msgstr "Abans dels llançadors"
 
 #: ../data/messages:83 ../data/messages:287
 msgid "After the launchers"
-msgstr ""
+msgstr "Després dels llançadors"
 
 #: ../data/messages:85 ../data/messages:289
 msgid "At the end of the dock"
-msgstr ""
+msgstr "Al final de la barra acoblable"
 
 #: ../data/messages:87 ../data/messages:291
 msgid "After a given icon"
@@ -2682,32 +2704,32 @@ msgstr ""
 
 #: ../data/messages:99
 msgid "Evaporate"
-msgstr ""
+msgstr "Evapora"
 
 #: ../data/messages:103
 msgid "Explode"
-msgstr ""
+msgstr "Explota"
 
 #: ../data/messages:105
 msgid "Break"
-msgstr ""
+msgstr "Divideix"
 
 #: ../data/messages:107
 msgid "Black Hole"
-msgstr ""
+msgstr "Forat negre"
 
 #: ../data/messages:109
 msgid "Random"
-msgstr ""
+msgstr "Aleatori"
 
 #: ../data/messages:119 ../data/messages:553 ../data/messages:693
 #: ../data/messages:807 ../data/messages:841 ../data/messages:879
 msgid "Custom"
-msgstr ""
+msgstr "Personalitzada"
 
 #: ../data/messages:121 ../data/messages:747
 msgid "Colour"
-msgstr ""
+msgstr "Color"
 
 #: ../data/messages:125
 msgid "Choose a theme of icons :"
@@ -2739,15 +2761,16 @@ msgstr "Molt grans"
 
 #: ../data/messages:141 ../data/messages:529
 msgid "Choose the default view for main docks :"
-msgstr "Trieu la vista per defecte del Dock principal :"
+msgstr "Trieu la vista per defecte per les barres acoblables principals :"
 
 #: ../data/messages:143 ../data/messages:533
 msgid "You can overwrite this parameter for each sub-dock."
-msgstr "Podeu sobreescriure aquesst paràmetre per a cada sub-dock."
+msgstr ""
+"Podeu sobreescriure aquesst paràmetre per a cada barra secundària acoblable"
 
 #: ../data/messages:145 ../data/messages:535
 msgid "Choose the default view for sub-docks :"
-msgstr "Trieu la vista per defecte dels sub-docks :"
+msgstr "Trieu la vista per defecte de les barres acoblables secundàries :"
 
 #: ../data/messages:149
 msgid ""
@@ -2765,11 +2788,11 @@ msgid ""
 "vertical. When set to 0.5, it will position itself relative to the middle of "
 "the screen's edge."
 msgstr ""
-"Si s'estableix en 0 el Dock s'ubicarà en relació a la cantonada esquerra si "
-"és horitzontal, o a la cantonada superior si és vertical. Si s'estableix en "
-"1 s'ubicarà en relació a la cantonada dreta si és horitzontal, o a la "
-"cantonada inferior si és vertical. Si s'estableix en 0.5 s'ubicarà en "
-"relació al centre dels marges de la pantalla."
+"Si s'estableix en 0 la barra acoblable s'ubicarà en relació a la cantonada "
+"esquerra si és horitzontal, o a la cantonada superior si és vertical. Si "
+"s'estableix en 1 s'ubicarà en relació a la cantonada dreta si és "
+"horitzontal, o a la cantonada inferior si és vertical. Si s'estableix en 0.5 "
+"s'ubicarà en relació al centre dels marges de la pantalla."
 
 #: ../data/messages:167 ../data/messages:913
 msgid "Relative alignment:"
@@ -2777,7 +2800,7 @@ msgstr "Alineació relativa:"
 
 #: ../data/messages:173 ../data/messages:915
 msgid "Multi-screens"
-msgstr ""
+msgstr "Pantalles múltiples"
 
 #: ../data/messages:175 ../data/messages:935
 msgid "Offset from the screen's edge"
@@ -2789,8 +2812,8 @@ msgid ""
 "move the dock by holding the ALT or CTRL key and the left mouse button."
 msgstr ""
 "Espai entre la posició absoluta al marge de la pantalla, en píxels. Podeu "
-"també moure el Dock amb el botó esquerra del ratolí mentre manteniu premudes "
-"les tecles ALT i CTRL."
+"també moure la barra acoblable amb el botó esquerra del ratolí mentre "
+"manteniu premudes les tecles ALT i CTRL."
 
 #: ../data/messages:179 ../data/messages:939
 msgid "Lateral offset:"
@@ -2801,8 +2824,8 @@ msgid ""
 "in pixels. You can also move the dock by holding the ALT or CTRL key and the "
 "left mouse button."
 msgstr ""
-"en píxels. Podeu també moure el Dock amb el botó esquerra del ratolí mentre "
-"manteniu premudes les tecles ALT i CTRL."
+"en píxels. Podeu també moure la barra acoblable amb el botó esquerra del "
+"ratolí mentre manteniu premudes les tecles ALT i CTRL."
 
 #: ../data/messages:183 ../data/messages:943
 msgid "Distance to the screen edge:"
@@ -2818,15 +2841,15 @@ msgstr ""
 
 #: ../data/messages:223
 msgid "Callback sensitivity:"
-msgstr ""
+msgstr "Sensibilitat de la crida:"
 
 #: ../data/messages:225
 msgid "high"
-msgstr ""
+msgstr "alt"
 
 #: ../data/messages:227
 msgid "low"
-msgstr ""
+msgstr "baix"
 
 #: ../data/messages:229
 msgid "How to call the dock back:"
@@ -2846,11 +2869,11 @@ msgstr ""
 
 #: ../data/messages:237
 msgid "Hit a zone"
-msgstr ""
+msgstr "Toca una zona"
 
 #: ../data/messages:239
 msgid "Size of the zone :"
-msgstr ""
+msgstr "Tamany de la zona:"
 
 #: ../data/messages:241
 msgid "Image to display on the zone :"
@@ -2858,7 +2881,7 @@ msgstr ""
 
 #: ../data/messages:247
 msgid "Sub-docks' visibility"
-msgstr "Visibilitat dels sub-docs"
+msgstr "Visibilitat de les barres acoblables secundàries"
 
 #: ../data/messages:257 ../data/messages:261
 msgid "in ms."
@@ -2866,11 +2889,11 @@ msgstr "en ms."
 
 #: ../data/messages:259
 msgid "Delay before displaying a sub-dock:"
-msgstr "Retard abans de mostrar un sub-dock:"
+msgstr "Retard abans de mostrar una barra acoblable secundària:"
 
 #: ../data/messages:263
 msgid "Delay before leaving a sub-dock takes effect:"
-msgstr "Retard després de sortir d'un sub-dock:"
+msgstr "Retard després de sortir d'una barra secundària acoblable:"
 
 #: ../data/messages:265
 msgid "TaskBar"
@@ -2886,7 +2909,7 @@ msgstr ""
 
 #: ../data/messages:271
 msgid "Show currently opened applications in the dock?"
-msgstr "Voleu mostrar en el Dock les aplicacions obertes?"
+msgstr "Voleu mostrar en la barra acoblable les aplicacions obertes?"
 
 #: ../data/messages:273
 msgid ""
@@ -2912,20 +2935,21 @@ msgstr "Mostra només les icones de finestres minimitzades"
 
 #: ../data/messages:295
 msgid "Automatically add a separator"
-msgstr ""
+msgstr "Afegeix un separador automàticament"
 
 #: ../data/messages:297
 msgid ""
 "This allows you to group all the windows of a given application into a "
 "unique sub-dock, and to act on all of the windows at the same time."
 msgstr ""
-"Això us permet agrupar totes les finestres d'una aplicació en un sol sub-"
-"dock, i actuar en totes les finestres al mateix temps."
+"Això us permet agrupar totes les finestres d'una aplicació en una sola barra "
+"acoblable secundària, i actuar en totes les finestres al mateix temps."
 
 #: ../data/messages:299
 msgid "Group windows from the same application in a sub-dock ?"
 msgstr ""
-"Voleu agrupar en un sol sub-dock les finestres d'una mateixa aplicació?"
+"Voleu agrupar en una sola barra acoblable secundària les finestres d'una "
+"mateixa aplicació?"
 
 #: ../data/messages:301 ../data/messages:311
 msgid "Enter the class of the applications, separated by a semi-colon ';'"
@@ -3014,11 +3038,11 @@ msgstr ""
 
 #: ../data/messages:341
 msgid "Nothing"
-msgstr ""
+msgstr "Cap"
 
 #: ../data/messages:345
 msgid "Minimize"
-msgstr ""
+msgstr "Minimitza"
 
 #: ../data/messages:347
 msgid "Launch new"
@@ -3026,7 +3050,7 @@ msgstr "Llançador nou"
 
 #: ../data/messages:349
 msgid "Lower"
-msgstr ""
+msgstr "Més baixa"
 
 #: ../data/messages:351
 msgid "This is the default behaviour of most taskbars."
@@ -3077,7 +3101,7 @@ msgstr ""
 
 #: ../data/messages:373
 msgid "Animations speed"
-msgstr ""
+msgstr "Velocitat de les animacions"
 
 #: ../data/messages:375
 msgid "Animate sub-docks when they appear"
@@ -3091,7 +3115,7 @@ msgstr ""
 
 #: ../data/messages:379
 msgid "Animation unfolding duration:"
-msgstr ""
+msgstr "Durada de l'animació del desplegament de la carpeta:"
 
 #: ../data/messages:381 ../data/messages:389 ../data/messages:393
 #: ../data/messages:401 ../data/messages:405
@@ -3117,7 +3141,7 @@ msgstr ""
 
 #: ../data/messages:409
 msgid "Refresh rate"
-msgstr ""
+msgstr "Freqüència de refresc"
 
 #: ../data/messages:411 ../data/messages:415 ../data/messages:419
 msgid "in Hz. This is to adjust behaviour relative to your CPU power."
@@ -3147,7 +3171,7 @@ msgstr ""
 
 #: ../data/messages:427
 msgid "Connection to the Internet"
-msgstr ""
+msgstr "Connexió a Internet"
 
 #: ../data/messages:429
 msgid ""
@@ -3158,7 +3182,7 @@ msgstr ""
 
 #: ../data/messages:431
 msgid "Connection timeout :"
-msgstr ""
+msgstr "Temps d'espera de la connexió :"
 
 #: ../data/messages:433
 msgid ""
@@ -3176,7 +3200,7 @@ msgstr ""
 
 #: ../data/messages:439
 msgid "Force IPv4 ?"
-msgstr ""
+msgstr "Força IPv4 ?"
 
 #: ../data/messages:441
 msgid "Use this option if you connect to the Internet through a proxy."
@@ -3188,11 +3212,11 @@ msgstr ""
 
 #: ../data/messages:445
 msgid "Proxy name :"
-msgstr ""
+msgstr "Nom del servidor intermediari :"
 
 #: ../data/messages:447
 msgid "Port :"
-msgstr ""
+msgstr "Port :"
 
 #: ../data/messages:449 ../data/messages:453
 msgid ""
@@ -3201,28 +3225,28 @@ msgstr ""
 
 #: ../data/messages:451
 msgid "User :"
-msgstr ""
+msgstr "Usuari :"
 
 #: ../data/messages:455
 msgid "Password :"
-msgstr ""
+msgstr "Contrasenya :"
 
 #: ../data/messages:465 ../data/messages:483 ../data/messages:979
 msgid "Colour gradation"
-msgstr ""
+msgstr "Gradació de color"
 
 #: ../data/messages:467
 msgid "Use a background image."
-msgstr ""
+msgstr "Utilitza una imatge de fons"
 
 #: ../data/messages:471 ../data/messages:685 ../data/messages:739
 #: ../data/messages:759 ../data/messages:797
 msgid "Image file:"
-msgstr ""
+msgstr "Fitxer d'imatge:"
 
 #: ../data/messages:473
 msgid "Image's transparency :"
-msgstr ""
+msgstr "Transparència de la imatge :"
 
 #: ../data/messages:479 ../data/messages:985
 msgid "Repeat image as a pattern to fill background?"
@@ -3234,11 +3258,11 @@ msgstr ""
 
 #: ../data/messages:485 ../data/messages:987
 msgid "Bright colour:"
-msgstr ""
+msgstr "Color brillant:"
 
 #: ../data/messages:487 ../data/messages:989
 msgid "Dark colour:"
-msgstr ""
+msgstr "Color fosc:"
 
 #: ../data/messages:489
 msgid "In degrees, in relation to the vertical"
@@ -3246,7 +3270,7 @@ msgstr ""
 
 #: ../data/messages:491
 msgid "Angle of the gradation :"
-msgstr ""
+msgstr "Angle de gradació :"
 
 #: ../data/messages:493
 msgid "If not nul, it will form stripes."
@@ -3274,26 +3298,26 @@ msgstr ""
 
 #: ../data/messages:505
 msgid "External Frame"
-msgstr ""
+msgstr "Marc extern:"
 
 #: ../data/messages:507 ../data/messages:511 ../data/messages:517
 #: ../data/messages:577 ../data/messages:655
 msgid "in pixels."
-msgstr ""
+msgstr "en píxels."
 
 #: ../data/messages:509 ../data/messages:561 ../data/messages:751
 #: ../data/messages:887
 msgid "Corner radius"
-msgstr ""
+msgstr "Radi de les cantonades"
 
 #: ../data/messages:513 ../data/messages:563 ../data/messages:889
 msgid "Outline width"
-msgstr ""
+msgstr "Amplada de la vora"
 
 #: ../data/messages:515 ../data/messages:557 ../data/messages:813
 #: ../data/messages:845 ../data/messages:883
 msgid "Outline colour"
-msgstr ""
+msgstr "Color vora"
 
 #: ../data/messages:519
 msgid "Margin between the frame and the icons or their reflects :"
@@ -3305,15 +3329,15 @@ msgstr ""
 
 #: ../data/messages:523 ../data/messages:991
 msgid "Stretch the dock to always fill the screen"
-msgstr "Eixampla sempre el Dock fins abastar la pantalla"
+msgstr "Eixampla sempre la barra acoblable fins omplir la pantalla"
 
 #: ../data/messages:527
 msgid "Main Dock"
-msgstr ""
+msgstr "Barra acoblable principal"
 
 #: ../data/messages:531
 msgid "Sub-Docks"
-msgstr ""
+msgstr "Barres acoblables secundàries"
 
 #: ../data/messages:537
 msgid ""
@@ -3327,11 +3351,11 @@ msgstr ""
 
 #: ../data/messages:541 ../data/messages:777
 msgid "smaller"
-msgstr ""
+msgstr "més petit"
 
 #: ../data/messages:543
 msgid "larger"
-msgstr ""
+msgstr "més gran"
 
 #: ../data/messages:545
 msgid "Dialogs"
@@ -3339,24 +3363,24 @@ msgstr "Diàlegs"
 
 #: ../data/messages:547
 msgid "Bubble"
-msgstr ""
+msgstr "Bombolla"
 
 #: ../data/messages:555 ../data/messages:843 ../data/messages:869
 #: ../data/messages:881
 msgid "Background colour"
-msgstr ""
+msgstr "Color de fons"
 
 #: ../data/messages:559 ../data/messages:847 ../data/messages:867
 msgid "Text colour"
-msgstr ""
+msgstr "Color de text"
 
 #: ../data/messages:565
 msgid "Shape of the bubble:"
-msgstr ""
+msgstr "Ombra de la bombolla:"
 
 #: ../data/messages:567 ../data/messages:853 ../data/messages:891
 msgid "Font"
-msgstr ""
+msgstr "Tipus de lletra"
 
 #: ../data/messages:569 ../data/messages:855
 msgid "Otherwise the default's system one will be used."
@@ -3368,11 +3392,11 @@ msgstr ""
 
 #: ../data/messages:573 ../data/messages:859 ../data/messages:895
 msgid "Text font:"
-msgstr ""
+msgstr "Tipus de lletra del text:"
 
 #: ../data/messages:575 ../data/messages:631
 msgid "Buttons"
-msgstr ""
+msgstr "Botons"
 
 #: ../data/messages:579
 msgid "Size of buttons in the info-bubbles (width x height) :"
@@ -3408,11 +3432,11 @@ msgstr ""
 
 #: ../data/messages:597
 msgid "Background image :"
-msgstr ""
+msgstr "Imatge del fons :"
 
 #: ../data/messages:599
 msgid "Background transparency :"
-msgstr ""
+msgstr "Transparència del fons :"
 
 #: ../data/messages:605
 msgid "in pixels. Use this to adjust the left position of the drawings."
@@ -3420,7 +3444,7 @@ msgstr ""
 
 #: ../data/messages:607
 msgid "Left offset :"
-msgstr ""
+msgstr "Desplaçament esquerra :"
 
 #: ../data/messages:609
 msgid "in pixels. Use this to adjust the top position of the drawings."
@@ -3428,7 +3452,7 @@ msgstr ""
 
 #: ../data/messages:611
 msgid "Top offset :"
-msgstr ""
+msgstr "Desplaçament superior :"
 
 #: ../data/messages:613
 msgid "in pixels. Use this to adjust the right position of the drawings."
@@ -3436,7 +3460,7 @@ msgstr ""
 
 #: ../data/messages:615
 msgid "Right offset :"
-msgstr ""
+msgstr "Desplaçament dret :"
 
 #: ../data/messages:617
 msgid "in pixels. Use this to adjust the bottom position of the drawings."
@@ -3444,7 +3468,7 @@ msgstr ""
 
 #: ../data/messages:619
 msgid "Bottom offset :"
-msgstr ""
+msgstr "Desplaçament inferior :"
 
 #: ../data/messages:621
 msgid ""
@@ -3454,15 +3478,15 @@ msgstr ""
 
 #: ../data/messages:623
 msgid "Foreground image :"
-msgstr ""
+msgstr "Imatge del fons :"
 
 #: ../data/messages:625
 msgid "Foreground tansparency :"
-msgstr ""
+msgstr "Transparència del fons :"
 
 #: ../data/messages:633
 msgid "Buttons size :"
-msgstr ""
+msgstr "Mida del botons :"
 
 #: ../data/messages:635 ../data/messages:641
 msgid "Name of an image to use for the 'rotate' button :"
@@ -3478,11 +3502,11 @@ msgstr ""
 
 #: ../data/messages:645
 msgid "Icons' themes"
-msgstr ""
+msgstr "Temes d'icones"
 
 #: ../data/messages:647
 msgid "Choose an icon theme :"
-msgstr ""
+msgstr "Sleccioni un tema d'icones :"
 
 #: ../data/messages:649
 msgid "Image filename to use as a background for icons :"
@@ -3490,7 +3514,7 @@ msgstr ""
 
 #: ../data/messages:651
 msgid "Icons size"
-msgstr ""
+msgstr "Tamany icones"
 
 #: ../data/messages:653 ../data/messages:671
 msgid "Icons' size at rest (width x height) :"
@@ -3498,14 +3522,15 @@ msgstr ""
 
 #: ../data/messages:657
 msgid "Space between icons :"
-msgstr ""
+msgstr "Espai entre icones :"
 
 #: ../data/messages:659
 msgid "Zoom effect"
-msgstr ""
+msgstr "Efecte d'ampliació"
 
 #: ../data/messages:661
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 
 #: ../data/messages:663
@@ -3523,7 +3548,7 @@ msgstr ""
 
 #: ../data/messages:669
 msgid "Separators"
-msgstr ""
+msgstr "Separadors"
 
 #: ../data/messages:673
 msgid "Force separator's image size to stay constant?"
@@ -3537,19 +3562,19 @@ msgstr ""
 
 #: ../data/messages:677
 msgid "How to draw the separators?"
-msgstr ""
+msgstr "Com dibuixar el separadors?"
 
 #: ../data/messages:679
 msgid "Use an image."
-msgstr ""
+msgstr "Utilitza una imatge."
 
 #: ../data/messages:681
 msgid "Flat separator"
-msgstr ""
+msgstr "Separador pla"
 
 #: ../data/messages:683
 msgid "Physical separator"
-msgstr ""
+msgstr "Separador físic"
 
 #: ../data/messages:687
 msgid ""
@@ -3563,19 +3588,19 @@ msgstr ""
 
 #: ../data/messages:697
 msgid "Reflections"
-msgstr ""
+msgstr "Reflexos"
 
 #: ../data/messages:699
 msgid "Reflection visibility"
-msgstr ""
+msgstr "Visibilitat del reflex"
 
 #: ../data/messages:701
 msgid "light"
-msgstr ""
+msgstr "llum"
 
 #: ../data/messages:703
 msgid "strong"
-msgstr ""
+msgstr "fort"
 
 #: ../data/messages:705
 msgid ""
@@ -3585,15 +3610,15 @@ msgstr ""
 
 #: ../data/messages:707
 msgid "Height of the reflection:"
-msgstr ""
+msgstr "Alçada del reflex:"
 
 #: ../data/messages:709
 msgid "small"
-msgstr ""
+msgstr "petit"
 
 #: ../data/messages:711
 msgid "tall"
-msgstr ""
+msgstr "alt"
 
 #: ../data/messages:713
 msgid ""
@@ -3620,19 +3645,19 @@ msgstr ""
 
 #: ../data/messages:729
 msgid "Indicator of the active window"
-msgstr ""
+msgstr "Indicador de la finestra activa"
 
 #: ../data/messages:737 ../data/messages:741 ../data/messages:745
 msgid "Frame"
-msgstr ""
+msgstr "Marc"
 
 #: ../data/messages:743
 msgid "Fill background"
-msgstr ""
+msgstr "Omple el fons"
 
 #: ../data/messages:749
 msgid "Linewidth"
-msgstr ""
+msgstr "Amplada de línia"
 
 #: ../data/messages:753 ../data/messages:785
 msgid "Draw indicator above the icon?"
@@ -3670,7 +3695,7 @@ msgstr ""
 
 #: ../data/messages:767
 msgid "Vertical offset :"
-msgstr ""
+msgstr "Desplaçament vertical:"
 
 #: ../data/messages:769
 msgid ""
@@ -3693,16 +3718,16 @@ msgstr ""
 
 #: ../data/messages:775
 msgid "Indicator size ratio :"
-msgstr ""
+msgstr "Indicador de mida proporcional :"
 
 #: ../data/messages:779
 msgid "bigger"
-msgstr ""
+msgstr "més gran"
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 
 #: ../data/messages:783
@@ -3719,7 +3744,7 @@ msgstr ""
 
 #: ../data/messages:791
 msgid "Draw an emblem"
-msgstr ""
+msgstr "Dibuixa un distintiu"
 
 #: ../data/messages:793
 msgid "Draw the sub-dock's icons as a stack"
@@ -3737,19 +3762,19 @@ msgstr ""
 
 #: ../data/messages:801
 msgid "Progress bars"
-msgstr ""
+msgstr "Barres de progrés"
 
 #: ../data/messages:809
 msgid "Start color"
-msgstr ""
+msgstr "Color inici"
 
 #: ../data/messages:811
 msgid "End color"
-msgstr ""
+msgstr "Color final"
 
 #: ../data/messages:815
 msgid "Bar thickness"
-msgstr ""
+msgstr "Amplada de la barra"
 
 #: ../data/messages:817
 msgid "Labels"
@@ -3757,19 +3782,19 @@ msgstr "Etiquetes"
 
 #: ../data/messages:819
 msgid "Label visibility"
-msgstr ""
+msgstr "Visibilitat etiqueta"
 
 #: ../data/messages:821
 msgid "Show labels:"
-msgstr ""
+msgstr "Mostra etiquetes:"
 
 #: ../data/messages:825
 msgid "On pointed icon"
-msgstr ""
+msgstr "En la icona marcada"
 
 #: ../data/messages:827
 msgid "On all icons"
-msgstr ""
+msgstr "En totes les icones"
 
 #: ../data/messages:829
 msgid "Neighbouring labels visibility:"
@@ -3777,15 +3802,15 @@ msgstr ""
 
 #: ../data/messages:831
 msgid "more visible"
-msgstr ""
+msgstr "més visible"
 
 #: ../data/messages:833
 msgid "less visible"
-msgstr ""
+msgstr "menys visible"
 
 #: ../data/messages:849
 msgid "Draw the outline of the text?"
-msgstr ""
+msgstr "Dibuixar el contorn del text?"
 
 #: ../data/messages:851
 msgid "Margin around the text (in pixels) :"
@@ -3797,7 +3822,7 @@ msgstr ""
 
 #: ../data/messages:863
 msgid "Quick-info"
-msgstr ""
+msgstr "Informació breu:"
 
 #: ../data/messages:865
 msgid "Use the same look as the labels?"
@@ -3805,11 +3830,11 @@ msgstr ""
 
 #: ../data/messages:885
 msgid "Text colour:"
-msgstr ""
+msgstr "Color de text:"
 
 #: ../data/messages:917
 msgid "Visibility of the dock"
-msgstr ""
+msgstr "Visibilitat de la barra acoblable"
 
 #: ../data/messages:951 ../data/messages:975
 msgid "Same as main dock"
@@ -3817,19 +3842,21 @@ msgstr ""
 
 #: ../data/messages:953
 msgid "Tiny"
-msgstr ""
+msgstr "Molt petit"
 
 #: ../data/messages:967
 msgid "Leave it empty to use the same view as the main dock."
-msgstr "Deixeu-ho buit per usar la mateixa vista que el Dock principal."
+msgstr ""
+"Deixeu-ho buit per utilitzar la mateixa vista que la barra acoblable "
+"principal."
 
 #: ../data/messages:969
 msgid "Choose the view for this dock :/"
-msgstr "Tria la vista per aquest Dock:/"
+msgstr "Tria la vista per aquesta barra acoblable :/"
 
 #: ../data/messages:973
 msgid "Fill the background with:"
-msgstr ""
+msgstr "Omple el fons de pantalla amb:"
 
 #: ../data/messages:981
 msgid ""
@@ -3843,7 +3870,7 @@ msgstr ""
 
 #: ../data/messages:993
 msgid "Load theme"
-msgstr ""
+msgstr "Carrega tema"
 
 #: ../data/messages:995
 msgid "You can even paste an internet URL."
@@ -3855,7 +3882,7 @@ msgstr "...o bé arrossegar cap aquí un paquet de tema:"
 
 #: ../data/messages:999
 msgid "Theme loading options"
-msgstr ""
+msgstr "Opcions de la càrrega de temes"
 
 #: ../data/messages:1001
 msgid ""
@@ -3877,8 +3904,8 @@ msgid ""
 "position, behavioural settings such as auto-hide, using taskbar or not, etc."
 msgstr ""
 "En cas contrari es conservarà el comportament actual. Això defineix la "
-"posició del Dock, configuració del comporament com l'auto-amagat, us o no de "
-"la barra de tasques, etc."
+"posició de la barra acoblable, configuració del comportament com l'auto-"
+"amagat, ús o no de la barra de tasques, etc."
 
 #: ../data/messages:1007
 msgid "Use the new theme's behaviour?"
@@ -3917,7 +3944,7 @@ msgstr ""
 #: ../data/messages:1023 ../data/messages:1025 ../data/messages:1027
 #: ../data/messages:1059 ../data/messages:1095
 msgid "Desktop Entry"
-msgstr ""
+msgstr "Entrada escriptori"
 
 #: ../data/messages:1031 ../data/messages:1063 ../data/messages:1099
 msgid "Name of the container it belongs to:"
@@ -3925,7 +3952,7 @@ msgstr ""
 
 #: ../data/messages:1033
 msgid "Sub-dock's name:"
-msgstr ""
+msgstr "Nom de la barra acoblable secundària:"
 
 #: ../data/messages:1035
 msgid "New sub-dock"
@@ -3937,7 +3964,7 @@ msgstr ""
 
 #: ../data/messages:1039
 msgid "Use an image"
-msgstr ""
+msgstr "Utilitza una imatge"
 
 #: ../data/messages:1041
 msgid "Draw sub-dock's content as emblems"
@@ -3957,7 +3984,7 @@ msgstr ""
 
 #: ../data/messages:1049 ../data/messages:1077 ../data/messages:1103
 msgid "Extra parameters"
-msgstr ""
+msgstr "Paràmetres extres"
 
 #: ../data/messages:1051
 msgid "Name of the view used for the sub-dock:"
@@ -3977,17 +4004,17 @@ msgstr ""
 
 #: ../data/messages:1065
 msgid "Launcher's name:"
-msgstr ""
+msgstr "Nom del llançador:"
 
 #: ../data/messages:1071
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 
 #: ../data/messages:1073
 msgid "Command to launch on click:"
-msgstr ""
+msgstr "Ordre a executar en fer clic:"
 
 #: ../data/messages:1079
 msgid ""
@@ -4011,11 +4038,11 @@ msgstr ""
 
 #: ../data/messages:1085
 msgid "Class of the program:"
-msgstr ""
+msgstr "Classe de programa:"
 
 #: ../data/messages:1087
 msgid "Run in a terminal?"
-msgstr ""
+msgstr "Executa en un terminal?"
 
 #: ../data/messages:1089
 msgid "If '0' the launcher will be displayed on every viewport."
@@ -4131,6 +4158,6 @@ msgstr ""
 
 #: ../data/messages:1152
 msgid ""
-"Note: We're switching from Bzr to Git on Github, feel free to fork! https://"
-"github.com/Cairo-Dock"
+"Note: We're switching from Bzr to Git on Github, feel free to fork! "
+"https://github.com/Cairo-Dock"
 msgstr ""

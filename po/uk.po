@@ -6,16 +6,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cairo-Dock II\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2014-06-13 21:38+0000\n"
-"Last-Translator: Matthieu Baerts <matttbe@gmail.com>\n"
+"POT-Creation-Date: 2014-09-06 17:12+0000\n"
+"PO-Revision-Date: 2014-09-09 21:53+0000\n"
+"Last-Translator: ma$terok <Unknown>\n"
 "Language-Team: Ukrainian <kde-i18n-doc@kde.org>\n"
-"Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-06-14 05:39+0000\n"
-"X-Generator: Launchpad (build 17045)\n"
+"X-Launchpad-Export-Date: 2014-09-10 06:05+0000\n"
+"X-Generator: Launchpad (build 17196)\n"
 "X-Poedit-Country: Ukraine\n"
+"Language: uk\n"
 "X-Poedit-Language: Ukrainian\n"
 
 #: ../src/cairo-dock-gui-advanced.c:120 ../src/cairo-dock-widget-plugins.c:173
@@ -237,12 +238,11 @@ msgstr "Закрити"
 
 #: ../src/cairo-dock-gui-advanced.c:1880
 msgid "Back"
-msgstr ""
+msgstr "Назад"
 
 #: ../src/cairo-dock-gui-advanced.c:1888 ../src/cairo-dock-gui-simple.c:207
-#, fuzzy
 msgid "Apply"
-msgstr "Додаток"
+msgstr "Застосувати"
 
 #: ../src/cairo-dock-gui-advanced.c:1904
 msgid "More applets"
@@ -509,13 +509,13 @@ msgstr "Вкажіть зображення"
 
 #: ../src/cairo-dock-user-menu.c:891 ../src/gldit/cairo-dock-gui-factory.c:764
 msgid "Ok"
-msgstr ""
+msgstr "Гаразд"
 
 #: ../src/cairo-dock-user-menu.c:893 ../src/cairo-dock-widget-shortkeys.c:128
 #: ../src/cairo-dock-widget-themes.c:234
 #: ../src/gldit/cairo-dock-gui-factory.c:766
 msgid "Cancel"
-msgstr ""
+msgstr "Скасувати"
 
 #: ../src/cairo-dock-user-menu.c:905 ../src/gldit/cairo-dock-gui-factory.c:805
 #: ../data/messages:463 ../data/messages:469 ../data/messages:735
@@ -573,7 +573,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Запускати Cairo-Dock при старті системи"
 
 #: ../src/cairo-dock-user-menu.c:1093
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Додатки третіх сторін забезпечують інтеграцію з різноманітними програмами, "
 "наприклад Pidgin"
@@ -809,7 +810,8 @@ msgid "Effects:"
 msgstr "Ефекти:"
 
 #: ../src/cairo-dock-widget-items.c:243
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Параметри головної панелі можна налаштувати в головному вікні налаштувань."
 
@@ -834,7 +836,8 @@ msgid "Category"
 msgstr "Категорія"
 
 #: ../src/cairo-dock-widget-plugins.c:279
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Клацніть на додатку, щоб переглянути його опис та приблизний вигляд."
 
 #: ../src/cairo-dock-widget-shortkeys.c:125
@@ -1058,7 +1061,7 @@ msgstr "Використовувати OpenGL в Cairo-Dock?"
 
 #: ../src/cairo-dock.c:538 ../src/cairo-dock.c:785
 msgid "Yes"
-msgstr ""
+msgstr "Так"
 
 #: ../src/cairo-dock.c:540 ../src/cairo-dock.c:786 ../data/messages:823
 msgid "No"
@@ -1113,7 +1116,7 @@ msgstr "Щось не гаразд з цим додатком:"
 
 #: ../src/cairo-dock.c:782
 msgid "You're using our Cairo-Dock session"
-msgstr ""
+msgstr "Ви використовуєте сесію Cairo-Dock"
 
 #: ../src/cairo-dock.c:788
 msgid ""
@@ -1124,6 +1127,12 @@ msgid ""
 "Note: your current theme will be saved and can be reimported later from the "
 "Themes manager"
 msgstr ""
+"Вам може бути цікаво використати адаптовану тему для цієї сесії.\n"
+"\n"
+"Бажаєте завантажити тему \"Default-Panel\" ?\n"
+"\n"
+"Примітка: ваша поточна тема буде збережена і може бути пізніше повторно "
+"імпортована через менеджера тем."
 
 #: ../src/cairo-dock.c:833
 msgid ""
@@ -1406,8 +1415,8 @@ msgid ""
 msgstr ""
 "Ласкаво просимо до Cairo-Dock !\n"
 "Цей додаток допоможе в освоєнні панелі.\n"
-"Якщо у вас виникають питання/побажання, завітайте на сайт http://glx-dock."
-"org.\n"
+"Якщо у вас виникають питання/побажання, завітайте на сайт http://glx-"
+"dock.org.\n"
 "Сподіваємося, що вам сподобається ця програма!\n"
 "  (щоб закрити цей діалог клацніть по ньому)"
 
@@ -1657,8 +1666,9 @@ msgid ""
 msgstr ""
 "Ви можете додати розділювач між значками правим клацанням на панелі -> "
 "додати -> розділювач.\n"
-"Також, якщо включена опція розділення значків за типами (запуск/програми/"
-"аплети), розділювач буде з’являтися автоматично між цими групами.\n"
+"Також, якщо включена опція розділення значків за типами "
+"(запуск/програми/аплети), розділювач буде з’являтися автоматично між цими "
+"групами.\n"
 "В \"панельному\" виді розділювачі показуються як розрив між значками."
 
 #: ../Help/data/messages:43
@@ -1898,8 +1908,8 @@ msgid ""
 msgstr ""
 "Активувати додаток Годинник.\n"
 "При натисканні на нього з’явиться календар.\n"
-"Подвійне клацання знизу викличе список завдань. Тут ви можете додавати/"
-"видаляти ваші завдання.\n"
+"Подвійне клацання знизу викличе список завдань. Тут ви можете "
+"додавати/видаляти ваші завдання.\n"
 "Коли задача пройшла або запланувалася, додаток попереджатиме вас (за 15 "
 "хвилин до початку події чи заходу, а також за 1 день у випадку дня "
 "народження)."
@@ -2153,8 +2163,8 @@ msgid ""
 "You can even name each of them."
 msgstr ""
 "Активувати додаток \"Перемикання стільниць\".\n"
-"Клацання правої кнопки миші -> \"Додати стільницю\" або \"Видалити стільницю"
-"\".\n"
+"Клацання правої кнопки миші -> \"Додати стільницю\" або \"Видалити "
+"стільницю\".\n"
 "Можна надати ім’я кожній стільниці."
 
 #: ../Help/data/messages:173
@@ -2193,16 +2203,17 @@ msgstr "Повне видалення gnome-panel"
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Завантажте gconf-editor, відредагуйте ключ /desktop/gnome/session/"
-"required_components/panel, замінивши його значення  на \"cairo-dock\". Потім "
-"перезапустіть сеанс: панель Gnome більше не з’являтиметься, замість неї "
-"повинна запуститися cairo-dock (якщо цього не сталося, то додайте її в "
-"програми автозапуску)."
+"Завантажте gconf-editor, відредагуйте ключ "
+"/desktop/gnome/session/required_components/panel, замінивши його значення  "
+"на \"cairo-dock\". Потім перезапустіть сеанс: панель Gnome більше не "
+"з’являтиметься, замість неї повинна запуститися cairo-dock (якщо цього не "
+"сталося, то додайте її в програми автозапуску)."
 
 #: ../Help/data/messages:187
 msgid ""
@@ -2255,16 +2266,16 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Вам потрібно включити композитність. Для цього ви можете запустити Compiz "
 "або xcmpmgr.\n"
 "Якщо ви використовуєте XFCE або KDE, то можете просто задіяти композитність "
 "в налаштуваннях менеджера вікон.\n"
 "Якщо ж ви користуєтеся Gnome, то можете задіяти Metacity таким чином:\n"
-"Відкрийте gconf-editor, встановіть ключ '/apps/metacity/general/"
-"compositing_manager' в значення 'true'."
+"Відкрийте gconf-editor, встановіть ключ "
+"'/apps/metacity/general/compositing_manager' в значення 'true'."
 
 #: ../Help/data/messages:207
 msgid ""
@@ -2442,8 +2453,8 @@ msgstr ""
 "можна поліпшити,\n"
 "або якщо ви тільки-но отримали свою мрію у вигляді панелі для задач, "
 "завітайте до нас на glx-dock.org.\n"
-"Ми будемо раді вітати англомовних (і не тільки) друзів, так що не "
-"соромтеся! ;-)\n"
+"Ми будемо раді вітати англомовних (і не тільки) друзів, так що не соромтеся! "
+";-)\n"
 "\n"
 "Якщо ви зробили нову тему для нашої панелі або новий додаток, і хочете "
 "поділитися ними, ми будемо раді додати їх на наш сервер!"
@@ -2451,7 +2462,8 @@ msgstr ""
 #: ../Help/data/messages:253
 msgid ""
 "If you wish to develop an applet, a complete documentation is available here."
-msgstr "Якщо ви хочете розробити додаток, повну документацію можна знайти тут."
+msgstr ""
+"Якщо ви хочете розробити додаток, повну документацію можна знайти тут."
 
 #: ../Help/data/messages:255
 msgid "Documentation"
@@ -2692,7 +2704,8 @@ msgstr "Оформлення"
 
 #: ../Help/data/messages:361
 msgid "Choose 'Custom decorations' to define your own decorations below."
-msgstr "Виберіть нижче 'Власне оформлення', щоб налаштувати власне оформлення."
+msgstr ""
+"Виберіть нижче 'Власне оформлення', щоб налаштувати власне оформлення."
 
 #: ../Help/data/messages:363
 msgid "Choose a decoration theme for this desklet:"
@@ -3464,7 +3477,8 @@ msgstr "Порт :"
 #: ../data/messages:449 ../data/messages:453
 msgid ""
 "Let empty if you don't need to log-in to the proxy with a user/password."
-msgstr "Залиште порожнім, якщо використовуєте авторизований вхід через проксі."
+msgstr ""
+"Залиште порожнім, якщо використовуєте авторизований вхід через проксі."
 
 #: ../data/messages:451
 msgid "User :"
@@ -3780,7 +3794,8 @@ msgid "Zoom effect"
 msgstr "Ефект наближення"
 
 #: ../data/messages:661
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Встановіть значення 1, якщо не бажаєте щоб значки збільшувалися при "
 "наведенні на них."
@@ -3999,8 +4014,8 @@ msgstr "більше"
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
 "Використовуйте, щоб орієнтувати індикатор відносно положення панелі (згори, "
 "знизу, справа, зліва)."
@@ -4095,7 +4110,8 @@ msgstr "Обрамлення довкола тексту (в пікселях):"
 
 #: ../data/messages:861
 msgid "Quick-info are short information drawn on the icons."
-msgstr "Швидка інформація - це коротка інформація, яка з’являється на значку."
+msgstr ""
+"Швидка інформація - це коротка інформація, яка з’являється на значку."
 
 #: ../data/messages:863
 msgid "Quick-info"
@@ -4272,7 +4288,8 @@ msgstr "Назва представлення, що використовуєть
 
 #: ../data/messages:1053
 msgid "If '0' the container will be displayed on every viewport."
-msgstr "Якщо '0' то контейнер буде відображатися на кожній області перегляду."
+msgstr ""
+"Якщо '0' то контейнер буде відображатися на кожній області перегляду."
 
 #: ../data/messages:1055 ../data/messages:1091
 msgid "Only show in this specific viewport:"
@@ -4288,8 +4305,8 @@ msgstr "Ім'я кнопки запуску:"
 
 #: ../data/messages:1071
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 "Наприклад: nautilus --no-desktop, gedit і т.д. Ви також можете призначити "
 "комбінації клавіш, наприклад: <Alt>F1, <Ctrl>c, <Ctrl>v, тощо."
@@ -4415,74 +4432,60 @@ msgid "- If you like the project, please donate :-)"
 msgstr "- Якщо вам подобається проект, будь-ласка, жертвуйте :)"
 
 #: ../data/messages:1134
-#, fuzzy
 msgid "<b>New version: <span color='red'>GLX-Dock 3.4</span>!</b>"
-msgstr "<b>Нова версія: <span color='red'>GLX-Dock 3.3</span>!</b>"
+msgstr "<b>Нова версія: <span color='red'>GLX-Dock 3.4</span>!</b>"
 
 #: ../data/messages:1136
 msgid "- <b>Menus</b>: added the possibility to customise them"
-msgstr ""
+msgstr "- <b>Меню</b>: додана можливість їх налаштування"
 
 #: ../data/messages:1138
 msgid "- <b>Style</b>: unified the style of all components of the dock"
 msgstr ""
+"- <b>Зовнішній вигляд</b>: єдиний стиль для всіх компонентів на панелі"
 
 #: ../data/messages:1140
 msgid ""
 "- Better integration with <b>Compiz</b> (e.g. when using the <b>Cairo-Dock "
 "session</b>) and Cinnamon"
 msgstr ""
+"- Покращена інтеграція з <b>Compiz</b> (наприклад при використанні  <b>сесії "
+"Cairo-Dock</b>) і Cinnamon"
 
 #: ../data/messages:1142
 msgid ""
 "- <b>Applications Menu</b> and <b>Logout</b> applets will wait the end of an "
 "update before displaying notifications"
 msgstr ""
+"- додатки <b>Меню програм</b> і <b>Вийти</b> будуть очікувати закінчення "
+"оновлення перед показом сповіщення"
 
 #: ../data/messages:1144
 msgid ""
 "- Various improvements for <b>Applications Menu</b>, <b>Shortcuts</b>, "
 "<b>Status-Notifier</b> and <b>Terminal</b> applets"
 msgstr ""
+"- Різні поліпшення для додатків <b>Меню програм</b>, <b>Ярлики</b>, "
+"<b>Сповіщення</b> і <b>Термінал</b>"
 
 #: ../data/messages:1146
 msgid "- Start working on <b>EGL</b> and <b>Wayland</b> support"
-msgstr ""
+msgstr "- Розпочато роботу по підтримці <b>EGL</b> і<b>Wayland</b>"
 
 #: ../data/messages:1148
 msgid "- And as always ... various bug fixes and improvements!"
-msgstr ""
+msgstr "- І як завжди... багато виправлень та поліпшень!"
 
 #: ../data/messages:1150
-#, fuzzy
 msgid "If you like the project, please donate and/or contribute :-)"
-msgstr "- Якщо вам подобається проект, будь-ласка, жертвуйте :)"
+msgstr ""
+"Якщо вам подобається проект, то ви можете допомогти фінансово або/і якось ще "
+":)"
 
 #: ../data/messages:1152
 msgid ""
-"Note: We're switching from Bzr to Git on Github, feel free to fork! https://"
-"github.com/Cairo-Dock"
+"Note: We're switching from Bzr to Git on Github, feel free to fork! "
+"https://github.com/Cairo-Dock"
 msgstr ""
-
-#~ msgid ""
-#~ "<b>New version: <span color='red'>GLX-Dock 3.2</span>!</b>\n"
-#~ " - Multi-screen support has been improved\n"
-#~ " - New applet : Screenshot\n"
-#~ " - New plug-in: Sound-Effects\n"
-#~ " - Added Gnome-Shell support \n"
-#~ " - Added GDM support for user switching\n"
-#~ " - Added Systemd support for the session management (Fedora, Arch, ...)\n"
-#~ " - Added support for all the Unity indicators\n"
-#~ " - Countless bug-fixes and improvements\n"
-#~ " - If you like the project, please donate :-)"
-#~ msgstr ""
-#~ "<b>Нова версія: <span color='red'>GLX-Dock 3.2</span>!</b>\n"
-#~ " - покращена підтримка мультиекранів\n"
-#~ " - Новий додаток : Скріншот\n"
-#~ " - Новий плагін: Звукові ефекти\n"
-#~ " - Додано підтримку Gnome-Shell\n"
-#~ " - Додана підтримка GDM для перемикання користувачів\n"
-#~ " - Додана підтримка Systemd для керування сесіями (Fedora, Arch, ...)\n"
-#~ " - Додана підтримка індикаторів Unity\n"
-#~ " - Незліченна кількість покращень і виправлень помилок\n"
-#~ " - Якщо вам подобається наш проект, можете допомогти нам фінансово :-)"
+"Примітка: Ми перейшли з Bzr на Git з Github, не соромтеся розщедритися! "
+"https://github.com/Cairo-Dock"

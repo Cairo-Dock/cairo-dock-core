@@ -8,15 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2014-06-12 07:53+0000\n"
+"POT-Creation-Date: 2014-09-06 17:12+0000\n"
+"PO-Revision-Date: 2014-09-06 20:48+0000\n"
 "Last-Translator: Learner <muzaffar.habibullayev@yandex.ru>\n"
 "Language-Team: узбекский <>\n"
-"Language: uzbek\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-06-14 05:39+0000\n"
-"X-Generator: Launchpad (build 17045)\n"
+"X-Launchpad-Export-Date: 2014-09-07 05:59+0000\n"
+"X-Generator: Launchpad (build 17196)\n"
+"Language: uzbek\n"
 
 #: ../src/cairo-dock-gui-advanced.c:120 ../src/cairo-dock-widget-plugins.c:173
 #: ../data/messages:267
@@ -240,9 +241,8 @@ msgid "Back"
 msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1888 ../src/cairo-dock-gui-simple.c:207
-#, fuzzy
 msgid "Apply"
-msgstr "Апплет"
+msgstr ""
 
 #: ../src/cairo-dock-gui-advanced.c:1904
 msgid "More applets"
@@ -576,7 +576,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Cairo-Dock ни Тизимга киришда Ишга тушириш"
 
 #: ../src/cairo-dock-user-menu.c:1093
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Учинчи тараф апплетлари турли дастурлар, масалан Pidgin кабилар билан "
 "интеграцияни таъминлайди."
@@ -812,7 +813,8 @@ msgid "Effects:"
 msgstr "Эффектлар:"
 
 #: ../src/cairo-dock-widget-items.c:243
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr "Асосий док параметрлари асосий созлаш ойнасида мавжуд."
 
 #: ../src/cairo-dock-widget-items.c:724
@@ -836,7 +838,8 @@ msgid "Category"
 msgstr "Категория"
 
 #: ../src/cairo-dock-widget-plugins.c:279
-msgid "Click on an applet in order to have a preview and a description for it."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
 msgstr "Апплетга оид маълумотлар ва тасвирлашни кўриш учун устига босинг."
 
 #: ../src/cairo-dock-widget-shortkeys.c:125
@@ -1152,8 +1155,8 @@ msgid ""
 "at http://glx-dock.org"
 msgstr ""
 "'%s' модули бирор муаммони келтириб чиқарган бўлиши мумкин.\n"
-"У муваффақиятли қайта тикланди, лекин агар ҳолат қайтарилса, марҳамат http://"
-"glx-dock.org да хабар қолдиринг"
+"У муваффақиятли қайта тикланди, лекин агар ҳолат қайтарилса, марҳамат "
+"http://glx-dock.org да хабар қолдиринг"
 
 #: ../src/gldit/cairo-dock-applet-facility.h:254
 msgid ""
@@ -1665,9 +1668,9 @@ msgid ""
 msgstr ""
 "Нишончалар орасига ажратувчи қўшиш учун док устига ўнг тугмани босиш -> "
 "қўшиш -> ажратувчи.\n"
-"Шунингдек, агар турли хилдаги нишончаларни(ишга туширгичлар/қўлланмалар/"
-"апплетлар) ажратиш хоссасини йўлга қўйган бўлсангиз, ажратувчи автоматик "
-"тарзда ҳар бир гуруҳ ўртасига қўшилади.\n"
+"Шунингдек, агар турли хилдаги нишончаларни(ишга "
+"туширгичлар/қўлланмалар/апплетлар) ажратиш хоссасини йўлга қўйган бўлсангиз, "
+"ажратувчи автоматик тарзда ҳар бир гуруҳ ўртасига қўшилади.\n"
 "\"Панел\" кўринишида ажратувчилар нишончалар орасидаги бўшлиқ сифатида "
 "намойиш қилинади."
 
@@ -1752,8 +1755,8 @@ msgid ""
 msgstr ""
 "Қўлланма бир неча ойналарга эга бўлганда ҳар бир ойна учун бир нишонча докда "
 "пайдо бўлади; улар биргаликда док-ичида-докка гуруҳланади.\n"
-"Асосий нишонча устига босиш қўлланманинг барча ойналарини ёнма-ён кўрсатади."
-"(Агар Ойна Бошқарувчиси бунга қодир бўлса)."
+"Асосий нишонча устига босиш қўлланманинг барча ойналарини ёнма-ён "
+"кўрсатади.(Агар Ойна Бошқарувчиси бунга қодир бўлса)."
 
 #: ../Help/data/messages:67
 msgid "Setting a custom icon for an application"
@@ -1876,8 +1879,8 @@ msgid ""
 msgstr ""
 "Менюдан (ўнг тугма -> кўрсатилиш) уни бошқа ойналар устида сақлаш ёки Виджет "
 "Қатламида (агар Compizдан фойдаланаётган бўлсангиз), ёки уларни экраннинг "
-"четига қўйиб \"жойлашувни заҳира қилиш\"ни танлаш орқали \"десклет панели"
-"\"ни ҳосил қилишингиз мумкин.\n"
+"четига қўйиб \"жойлашувни заҳира қилиш\"ни танлаш орқали \"десклет "
+"панели\"ни ҳосил қилишингиз мумкин.\n"
 "Мулоқотни талаб қилмайдиган десклетлар (соат каби) қуйи ўнг тугмани босиш "
 "орқали сичқонча учун шаффоф қилиб ўрнатилиши мумкин (яъни унинг орқасидаги "
 "нарсани босишингиз мумкин)"
@@ -1982,7 +1985,8 @@ msgstr ""
 
 #: ../Help/data/messages:129
 msgid "Quick-launching a program from keyboard (replacing ALT+F2)"
-msgstr "Дастурни клавиатура ёрдамида тезкор ишга тушириш (ALT+F2ни алмаштириш)"
+msgstr ""
+"Дастурни клавиатура ёрдамида тезкор ишга тушириш (ALT+F2ни алмаштириш)"
 
 #: ../Help/data/messages:131
 msgid ""
@@ -2167,8 +2171,8 @@ msgid ""
 "You can even name each of them."
 msgstr ""
 "Алмаштирувчи апплетини фаоллаштиринг.\n"
-"Устига ўнг тугма -> \"иш столини қўшиш\" ёки \"ушбу иш столини олиб ташлаш"
-"\".\n"
+"Устига ўнг тугма -> \"иш столини қўшиш\" ёки \"ушбу иш столини олиб "
+"ташлаш\".\n"
 "Ҳатто ҳар бири учун ном танлашингиз мумкин."
 
 #: ../Help/data/messages:173
@@ -2208,8 +2212,9 @@ msgstr "Gnome-panel ни тўлиқ олиб ташлаш"
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
@@ -2267,8 +2272,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Сиздан композитни ёқиш талаб этилади.Масалан, Compiz ёки xcompmgr ни "
 "бажаришингиз керак. \n"
@@ -3773,7 +3778,8 @@ msgstr "Нишонча мавзусини танланг:"
 
 #: ../data/messages:649
 msgid "Image filename to use as a background for icons :"
-msgstr "Нишончалар учун орқа фон сифатида фойдаланиладиган тасвир файли номи :"
+msgstr ""
+"Нишончалар учун орқа фон сифатида фойдаланиладиган тасвир файли номи :"
 
 #: ../data/messages:651
 msgid "Icons size"
@@ -3792,7 +3798,8 @@ msgid "Zoom effect"
 msgstr "Яқинлаштириш эффекти"
 
 #: ../data/messages:661
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Агар устига келганда нишончалар яқинлаштирилмаслигини хоҳласангиз 1 га "
 "ўрнатинг."
@@ -4004,11 +4011,11 @@ msgstr "каттароқ"
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr ""
-"Бундан нишонча док ориентациясига эргашиши учун фойдаланинг (юқори/паст/ўнг/"
-"чап)."
+"Бундан нишонча док ориентациясига эргашиши учун фойдаланинг "
+"(юқори/паст/ўнг/чап)."
 
 #: ../data/messages:783
 msgid "Rotate the indicator with dock?"
@@ -4290,8 +4297,8 @@ msgstr "Ишга туширгичнинг номи:"
 
 #: ../data/messages:1071
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 "Намуна:  nautilus --no-desktop, gedit, ва ҳоказо. Сиз ҳатто тезкор чақирув "
 "тугмасини ҳам киритишингиз мумкин, масалан <Alt>F1, <Ctrl>c,  <Ctrl>v, ва "
@@ -4406,16 +4413,16 @@ msgstr "Янада кучлироқ бўлиш учун <b>Dbus API</b> янги
 
 #: ../data/messages:1130
 msgid "- A huge rewrite of the core using Objects"
-msgstr "Асосий қисмдан фойдаланувчи Объектларнинг улкан миқёсда қайта ёзилиши"
+msgstr ""
+"Асосий қисмдан фойдаланувчи Объектларнинг улкан миқёсда қайта ёзилиши"
 
 #: ../data/messages:1132
 msgid "- If you like the project, please donate :-)"
 msgstr "- Агар лойиҳа сизга манзур бўлса, хайрия қилишингиз мумкин :-)"
 
 #: ../data/messages:1134
-#, fuzzy
 msgid "<b>New version: <span color='red'>GLX-Dock 3.4</span>!</b>"
-msgstr "<b>Янги версия: <span color='red'>GLX-Dock 3.3</span>!</b>"
+msgstr ""
 
 #: ../data/messages:1136
 msgid "- <b>Menus</b>: added the possibility to customise them"
@@ -4452,36 +4459,11 @@ msgid "- And as always ... various bug fixes and improvements!"
 msgstr ""
 
 #: ../data/messages:1150
-#, fuzzy
 msgid "If you like the project, please donate and/or contribute :-)"
-msgstr "- Агар лойиҳа сизга манзур бўлса, хайрия қилишингиз мумкин :-)"
+msgstr ""
 
 #: ../data/messages:1152
 msgid ""
-"Note: We're switching from Bzr to Git on Github, feel free to fork! https://"
-"github.com/Cairo-Dock"
+"Note: We're switching from Bzr to Git on Github, feel free to fork! "
+"https://github.com/Cairo-Dock"
 msgstr ""
-
-#~ msgid ""
-#~ "<b>New version: <span color='red'>GLX-Dock 3.2</span>!</b>\n"
-#~ " - Multi-screen support has been improved\n"
-#~ " - New applet : Screenshot\n"
-#~ " - New plug-in: Sound-Effects\n"
-#~ " - Added Gnome-Shell support \n"
-#~ " - Added GDM support for user switching\n"
-#~ " - Added Systemd support for the session management (Fedora, Arch, ...)\n"
-#~ " - Added support for all the Unity indicators\n"
-#~ " - Countless bug-fixes and improvements\n"
-#~ " - If you like the project, please donate :-)"
-#~ msgstr ""
-#~ "<b>Янги версия: <span color='red'>GLX-Dock 3.2</span>!</b>\n"
-#~ " - Кўп-экран қўллаб қувватланиши яхшиланди\n"
-#~ " - Янги апплет : Экранни расмга олиш\n"
-#~ " - Янги плагин: Товуш-Эффектлари\n"
-#~ " - Gnome-Shell қўллаб қувватланиши қўшилди \n"
-#~ " - Фойдаланувчини алмаштириш учун GDM қўллаб қувватланиши қўшилди\n"
-#~ " - Сеанс бошқаруви учун Systemd қўллаб қувватланиши қўшилди (Fedora, "
-#~ "Arch, ...)\n"
-#~ " - Барча Unity индикаторлари қўллаб қувватланиши қўшилди\n"
-#~ " - Саноқсиз хато тузатилишлари ва яхшиланишлар\n"
-#~ " - Агар лойиҳа сизга манзур бўлса, хайрия қилишингиз мумкин :-)"

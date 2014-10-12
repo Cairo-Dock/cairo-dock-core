@@ -5,15 +5,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2014-06-13 21:47+0000\n"
+"POT-Creation-Date: 2014-09-06 17:12+0000\n"
+"PO-Revision-Date: 2014-09-06 20:44+0000\n"
 "Last-Translator: Саша Петровић <salepetronije@gmail.com>\n"
 "Language-Team: српски <српски <xfce-i18n@xfce.org>>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-06-14 05:38+0000\n"
-"X-Generator: Launchpad (build 17045)\n"
+"X-Launchpad-Export-Date: 2014-09-07 05:58+0000\n"
+"X-Generator: Launchpad (build 17196)\n"
+"Language: \n"
 
 #: ../src/cairo-dock-gui-advanced.c:120 ../src/cairo-dock-widget-plugins.c:173
 #: ../data/messages:267
@@ -234,12 +235,11 @@ msgstr "Затвори"
 
 #: ../src/cairo-dock-gui-advanced.c:1880
 msgid "Back"
-msgstr ""
+msgstr "Назад"
 
 #: ../src/cairo-dock-gui-advanced.c:1888 ../src/cairo-dock-gui-simple.c:207
-#, fuzzy
 msgid "Apply"
-msgstr "програмче"
+msgstr "Примени"
 
 #: ../src/cairo-dock-gui-advanced.c:1904
 msgid "More applets"
@@ -439,7 +439,8 @@ msgstr "прилагођени покретач"
 #: ../src/cairo-dock-user-menu.c:583
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
-msgstr "Обично је потребно превући покретач са изборника и пустити га на док."
+msgstr ""
+"Обично је потребно превући покретач са изборника и пустити га на док."
 
 #: ../src/cairo-dock-user-menu.c:585
 msgid "Applet"
@@ -504,13 +505,13 @@ msgstr "Одаберите слику"
 
 #: ../src/cairo-dock-user-menu.c:891 ../src/gldit/cairo-dock-gui-factory.c:764
 msgid "Ok"
-msgstr ""
+msgstr "У реду"
 
 #: ../src/cairo-dock-user-menu.c:893 ../src/cairo-dock-widget-shortkeys.c:128
 #: ../src/cairo-dock-widget-themes.c:234
 #: ../src/gldit/cairo-dock-gui-factory.c:766
 msgid "Cancel"
-msgstr ""
+msgstr "Откажи"
 
 #: ../src/cairo-dock-user-menu.c:905 ../src/gldit/cairo-dock-gui-factory.c:805
 #: ../data/messages:463 ../data/messages:469 ../data/messages:735
@@ -570,7 +571,8 @@ msgid "Launch Cairo-Dock on startup"
 msgstr "Покрени Каиро-док при покретању система"
 
 #: ../src/cairo-dock-user-menu.c:1093
-msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgid ""
+"Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Програмчићи треће стране омогућавају сарађивање са многим програмима, на "
 "пример Пиџином"
@@ -805,7 +807,8 @@ msgid "Effects:"
 msgstr "Утисци:"
 
 #: ../src/cairo-dock-widget-items.c:243
-msgid "Main dock's parameters are available in the main configuration window."
+msgid ""
+"Main dock's parameters are available in the main configuration window."
 msgstr "Одреднице главног дока су доступне у главном прозору поставки."
 
 #: ../src/cairo-dock-widget-items.c:724
@@ -829,8 +832,10 @@ msgid "Category"
 msgstr "Врста"
 
 #: ../src/cairo-dock-widget-plugins.c:279
-msgid "Click on an applet in order to have a preview and a description for it."
-msgstr "Да би добили преглед и објашњење у вези програмчета, кликните у њега."
+msgid ""
+"Click on an applet in order to have a preview and a description for it."
+msgstr ""
+"Да би добили преглед и објашњење у вези програмчета, кликните у њега."
 
 #: ../src/cairo-dock-widget-shortkeys.c:125
 msgid "Press the shortkey"
@@ -1052,7 +1057,7 @@ msgstr "Користи ОпенГЛ у Каиро-доку"
 
 #: ../src/cairo-dock.c:538 ../src/cairo-dock.c:785
 msgid "Yes"
-msgstr ""
+msgstr "Да"
 
 #: ../src/cairo-dock.c:540 ../src/cairo-dock.c:786 ../data/messages:823
 msgid "No"
@@ -1763,7 +1768,8 @@ msgstr ""
 #: ../Help/data/messages:285 ../Help/data/messages:289
 #: ../Help/data/messages:295 ../Help/data/messages:299
 msgid "Tip: If this line is grayed, it's because this tip is not for you.)"
-msgstr "Савет: Ако је ова линија сива, то значи да се савет не односи на вас.)"
+msgstr ""
+"Савет: Ако је ова линија сива, то значи да се савет не односи на вас.)"
 
 #: ../Help/data/messages:77
 msgid "If you're using Compiz, you can click on this button:"
@@ -1891,8 +1897,8 @@ msgid ""
 msgstr ""
 "Покрените програмче сат.\n"
 "клик на њега ће покренути календар.\n"
-"На двоструки клик на дан ће искочити уредник задатака. Овде можете додати/"
-"уклонити задатке.\n"
+"На двоструки клик на дан ће искочити уредник задатака. Овде можете "
+"додати/уклонити задатке.\n"
 "Кад је задатак заказан, програмче ће вас упозорити (15mn пре догађаја, и "
 "такође 1 дан пре у случају годишњице)."
 
@@ -2184,13 +2190,15 @@ msgstr "Потпуно уклањање Гном полице"
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key /desktop/gnome/session/required_components/"
-"panel, and replace its content with \"cairo-dock\".\n"
+"Open gconf-editor, edit the key "
+"/desktop/gnome/session/required_components/panel, and replace its content "
+"with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
-"Отворите gconf-editor, уредите кључ /desktop/gnome/session/"
-"required_components/panel и замените његов садржај са „cairo-dock“.\n"
+"Отворите gconf-editor, уредите кључ "
+"/desktop/gnome/session/required_components/panel и замените његов садржај са "
+"„cairo-dock“.\n"
 "Онда поново покрените сесију : Гном полица није покренута, а док је покренут "
 "(уколико није, можете га додати у почетне програме)."
 
@@ -2218,7 +2226,8 @@ msgstr "Форум"
 
 #: ../Help/data/messages:195
 msgid "Our wiki can also help you, it is more complete on some points."
-msgstr "Наша Вики страница може такође помоћи, у неким деловима је потпунија."
+msgstr ""
+"Наша Вики страница може такође помоћи, у неким деловима је потпунија."
 
 #: ../Help/data/messages:197
 msgid "Wiki"
@@ -2243,16 +2252,16 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/"
-"compositing_manager' and set it to 'true'."
+" Open gconf-editor, edit the key "
+"'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
 "Треба покренути слагање приказа. На пример, можете користити Компиз или "
 "Икскомпмгр.\n"
 "Ако користите ИксФЦЕ или КДЕ, можете омогућити слагање приказа у "
 "подешавањима Управника прозора.\n"
 "Ако користите Гном, можете га омогућити у Метаситију на овај начин:\n"
-"Отворите gconf-editor, уредите кључ „/apps/metacity/general/"
-"compositing_manager“ и поставите га на „true“."
+"Отворите gconf-editor, уредите кључ "
+"„/apps/metacity/general/compositing_manager“ и поставите га на „true“."
 
 #: ../Help/data/messages:207
 msgid ""
@@ -2344,7 +2353,8 @@ msgstr ""
 
 #: ../Help/data/messages:229
 msgid "The «netspeed» applet displays 0 even when I'm downloading something"
-msgstr "Програмче «брзина нета» показује 0 чак и када преузимам неку датотеку"
+msgstr ""
+"Програмче «брзина нета» показује 0 чак и када преузимам неку датотеку"
 
 #: ../Help/data/messages:231
 msgid ""
@@ -2387,7 +2397,8 @@ msgstr ""
 #: ../Help/data/messages:239
 msgid ""
 "There is no icon in the Applications Menu even though I enable the option."
-msgstr "Нема иконица у Програмском изборнику, иако сам означио ову могућност."
+msgstr ""
+"Нема иконица у Програмском изборнику, иако сам означио ову могућност."
 
 #: ../Help/data/messages:241
 msgid ""
@@ -2424,8 +2435,8 @@ msgstr ""
 "Ми ценимо Вашу помоћ. Ако видите грешку, или мислите да да нешто може бити "
 "побољшано,\n"
 "или ако само сањате и доку, посетите нас на glx-dock.org.\n"
-"Енглески (и други!) говорници су добродошли, зато немојте бити "
-"стидиви ! ;-)\n"
+"Енглески (и други!) говорници су добродошли, зато немојте бити стидиви ! ;-"
+")\n"
 "\n"
 "Ако направите тему за док или неки од програмчића, и желите да је поделите, "
 "бићемо срећни да је поставимо на нашег даваоца услуга !"
@@ -3354,7 +3365,8 @@ msgstr "Број корака при оживљавању приближавањ
 
 #: ../data/messages:399
 msgid "Number of steps in the auto-hide animation (move up/move down):"
-msgstr "Број корака при оживљавању самоскривања (померање горе/померање доле):"
+msgstr ""
+"Број корака при оживљавању самоскривања (померање горе/померање доле):"
 
 #: ../data/messages:409
 msgid "Refresh rate"
@@ -3764,7 +3776,8 @@ msgid "Zoom effect"
 msgstr "Утисци увећавања"
 
 #: ../data/messages:661
-msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgid ""
+"set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "поставите на 1 ако не желите да иконице буду увећаване када је миш изнад њих."
 
@@ -3979,8 +3992,8 @@ msgstr "веће"
 
 #: ../data/messages:781
 msgid ""
-"Use it to make the indicator follow the orientation of the dock (top/bottom/"
-"right/left)."
+"Use it to make the indicator follow the orientation of the dock "
+"(top/bottom/right/left)."
 msgstr "Користи се да указивач прати усмерење дока (горе/доле/лево/десно)."
 
 #: ../data/messages:783
@@ -4264,8 +4277,8 @@ msgstr "Име покретача:"
 
 #: ../data/messages:1071
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
+"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 "Пример: nautilus --no-desktop, gedit, итд. Можете чак унети пречицу, нпр. "
 "<Alt>F1, <Ctrl>c,  <Ctrl>v, итд"
@@ -4390,9 +4403,8 @@ msgid "- If you like the project, please donate :-)"
 msgstr "- Ако Вам се свиђа пројекат, приложите :-)"
 
 #: ../data/messages:1134
-#, fuzzy
 msgid "<b>New version: <span color='red'>GLX-Dock 3.4</span>!</b>"
-msgstr "<b>Ново издање: <span color='red'>GLX-Dock 3.3</span>!</b>"
+msgstr ""
 
 #: ../data/messages:1136
 msgid "- <b>Menus</b>: added the possibility to customise them"
@@ -4429,35 +4441,11 @@ msgid "- And as always ... various bug fixes and improvements!"
 msgstr ""
 
 #: ../data/messages:1150
-#, fuzzy
 msgid "If you like the project, please donate and/or contribute :-)"
-msgstr "- Ако Вам се свиђа пројекат, приложите :-)"
+msgstr ""
 
 #: ../data/messages:1152
 msgid ""
-"Note: We're switching from Bzr to Git on Github, feel free to fork! https://"
-"github.com/Cairo-Dock"
+"Note: We're switching from Bzr to Git on Github, feel free to fork! "
+"https://github.com/Cairo-Dock"
 msgstr ""
-
-#~ msgid ""
-#~ "<b>New version: <span color='red'>GLX-Dock 3.2</span>!</b>\n"
-#~ " - Multi-screen support has been improved\n"
-#~ " - New applet : Screenshot\n"
-#~ " - New plug-in: Sound-Effects\n"
-#~ " - Added Gnome-Shell support \n"
-#~ " - Added GDM support for user switching\n"
-#~ " - Added Systemd support for the session management (Fedora, Arch, ...)\n"
-#~ " - Added support for all the Unity indicators\n"
-#~ " - Countless bug-fixes and improvements\n"
-#~ " - If you like the project, please donate :-)"
-#~ msgstr ""
-#~ "<b>Ново издање: <span color='red'>ГЛИкс-Док 3.2</span>!</b>\n"
-#~ " - Подршка за више екрана је побољшана\n"
-#~ " - Ново програмче : Снимак екрана\n"
-#~ " - Нови прикључак: Звучни утисци\n"
-#~ " - Додата подршка за Гномову шкољку \n"
-#~ " - Додата подршка за промену корисника преко ГДМ\n"
-#~ " - Додата подршка за управљање сесијом (Федора, Арч,...)\n"
-#~ " - Додата подршка за све указиваче Јединства\n"
-#~ " - Безбројне исправке буба и побољшања\n"
-#~ " - Ако Вам се свиђа пројекат, молимо, приложите:-)"
