@@ -557,8 +557,7 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReadConfig, GKeyFile 
 	pInstance->pDock = NULL;
 	CairoDesklet *pCurrentDesklet = pInstance->pDesklet;
 	pInstance->pDesklet = NULL;
-	gchar *cCurrentSubDockName = NULL;
-	
+
 	GldiContainer *pNewContainer = NULL;
 	CairoDock *pNewDock = NULL;
 	CairoDesklet *pNewDesklet = NULL;
@@ -579,8 +578,7 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReadConfig, GKeyFile 
 			{
 				if (pCurrentDock && ! pIcon->pContainer)  // icon already detached (by drag and drop)
 					pCurrentDock = NULL;
-				cCurrentSubDockName = g_strdup (pIcon->cName);
-				
+
 				// on gere le changement de nom de son sous-dock.
 				if (pIcon->cName != NULL && pIcon->pSubDock != NULL && g_strcmp0 (pIcon->cName, pMinimalConfig->cLabel) != 0)
 				{
@@ -708,8 +706,7 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReadConfig, GKeyFile 
 		gldi_object_unref (GLDI_OBJECT(pIcon->pSubDock));
 		pIcon->pSubDock = NULL;
 	}  // no need to destroy the dock where the applet was, it will be done automatically
-	g_free (cCurrentSubDockName);
-	
+
 	if (! bReadConfig && cairo_dock_get_icon_data_renderer (pIcon) != NULL)  // reload the data-renderer at the new size
 		cairo_dock_reload_data_renderer_on_icon (pIcon, pNewContainer);
 	
