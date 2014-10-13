@@ -441,16 +441,39 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 						if (quoted)
 							str ++;
 						gchar *id_end = str+1;
-						while (*id_end != ' ' && *id_end != '\0' && (!quoted || *id_end != '"')) id_end ++;
-						*id_end = '\0';
+						// We can have: ID="gldi-atom\ shell-2", with a whitespace... yes
+						if (quoted)
+						{
+							// we need to remove '\' and '"'
+							gchar *withoutChar = id_end;
+							while (*id_end != '\0' && *id_end != '"')
+							{
+								*withoutChar = *id_end;
+								if (*withoutChar != '\\')
+									withoutChar ++;
+								id_end ++;
+							}
+							/* id_end should be at the '"' char but because we
+							 * have moved all char if we found '\', the new end
+							 * is at the position of withoutChar
+							 */
+							*withoutChar = '\0';
+						}
+						else
+						{
+							while (*id_end != '\0' && *id_end != ' ')
+								id_end ++;
+							*id_end = '\0';
+						}
 						cd_debug (" => ID: %s", str);
-						
+
 						// extract the class if it's one of our ID
 						if (strncmp (str, "gldi-", 5) == 0)  // we built this ID => it has the class inside
 						{
 							str += 5;
 							id_end = strrchr (str, '-');
-							*id_end = '\0';
+							if (id_end)
+								*id_end = '\0';
 							cd_debug (" => class: %s", str);
 							// notify the class about the end of the launching
 							gldi_class_startup_notify_end (str);
