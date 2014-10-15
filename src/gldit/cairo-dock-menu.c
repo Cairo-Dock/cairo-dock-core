@@ -415,9 +415,14 @@ static gboolean _on_icon_destroyed (GtkWidget *pMenu, G_GNUC_UNUSED Icon *pIcon)
 
 static void _on_menu_destroyed (GtkWidget *pMenu, G_GNUC_UNUSED gpointer data)
 {
-	GldiMenuParams *pParams = g_object_get_data (G_OBJECT (pMenu), "gldi-params");
+	/* Steal data: with GTK 3.14, we receive two 'popup' signals and for the
+	 * second one, a 'destroy' signal has already been sent! Then, 'pParams'
+	 * will not be correct... https://bugzilla.gnome.org/738537
+	 */
+	GldiMenuParams *pParams = g_object_steal_data (G_OBJECT (pMenu), "gldi-params");
 	if (!pParams)
 		return;
+
 	Icon *pIcon = pParams->pIcon;
 	if (pIcon)
 		gldi_object_remove_notification (pIcon,
