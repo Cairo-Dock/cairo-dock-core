@@ -203,7 +203,7 @@ set (CAIRO_DOCK_SHARE_THEMES_DIR ${pkgdatadir}/themes)
 #set (CAIRO_DOCK_MODULES_DIR ${libdir}/cairo-dock)
 set (CAIRO_DOCK_LOCALE_DIR "${prefix}/${CMAKE_INSTALL_LOCALEDIR}")
 set (CAIRO_DOCK_THEMES_DIR "themes")  # folder name where themes are saved locally, relatively to the root folder of Cairo-Dock.
-set (CAIRO_DOCK_DISTANT_THEMES_DIR "themes3.3")  # folder name where themes are on the server, relatively to the root folder of the server files.
+set (CAIRO_DOCK_DISTANT_THEMES_DIR "themes3.4")  # folder name where themes are on the server, relatively to the root folder of the server files.
 set (CAIRO_DOCK_GETTEXT_PACKAGE ${GETTEXT_PACKAGE})
 
 set (GLDI_GETTEXT_PACKAGE ${GETTEXT_PACKAGE})
