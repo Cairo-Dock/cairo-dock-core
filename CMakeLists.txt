@@ -148,7 +148,7 @@ set (with_wayland no)
 enable_if_not_defined (enable-wayland-support) # enabled by default
 if (enable-wayland-support)
 	set (wayland_required "wayland-client")  # for the .pc
-	pkg_check_modules ("WAYLAND" ${wayland_required})
+	pkg_check_modules ("WAYLAND" ${wayland_required}>=1.0.0)
 	if (WAYLAND_FOUND)
 		set (HAVE_WAYLAND 1)
 		set (with_wayland "yes (${WAYLAND_VERSION})")
