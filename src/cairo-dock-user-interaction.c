@@ -370,15 +370,17 @@ gboolean cairo_dock_notification_drop_data (G_GNUC_UNUSED gpointer pUserData, co
 			{
 				if (icon->cCommand == NULL)
 					return GLDI_NOTIFICATION_LET_PASS;
-				gchar *cPath = NULL;
+				gchar *cCommand;
 				if (strncmp (cReceivedData, "file://", 7) == 0)  // tous les programmes ne gerent pas les URI; pour parer au cas ou il ne le gererait pas, dans le cas d'un fichier local, on convertit en un chemin
 				{
-					cPath = g_filename_from_uri (cReceivedData, NULL, NULL);
+					gchar *cPath = g_filename_from_uri (cReceivedData, NULL, NULL);
+					cCommand = g_strdup_printf ("%s \"%s\"", icon->cCommand, cPath);
+					g_free (cPath);
 				}
-				gchar *cCommand = g_strdup_printf ("%s \"%s\"", icon->cCommand, cPath ? cPath : cReceivedData);
+				else 
+					cCommand = g_strdup_printf ("%s \"%s\"", icon->cCommand, cReceivedData);
 				cd_message ("will open the file with the command '%s'...", cCommand);
 				g_spawn_command_line_async (cCommand, NULL);
-				g_free (cPath);
 				g_free (cCommand);
 				gldi_icon_request_animation (icon, "blink", 2);
 				return GLDI_NOTIFICATION_INTERCEPT;
