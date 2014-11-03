@@ -1584,7 +1584,7 @@ static void _cairo_dock_lock_position (GtkMenuItem *pMenuItem, gpointer *data)
  /// BUILD ICON MENU NOTIFICATION ///
 ////////////////////////////////////
 
-#if (GTK_MAJOR_VERSION >= 3)  // stuff for the buttons inside a menu-item
+// stuff for the buttons inside a menu-item
 static gboolean _on_press_menu_item (GtkWidget* pWidget, GdkEventButton *pEvent, G_GNUC_UNUSED gpointer data)
 {
 	GtkWidget *hbox = gtk_bin_get_child (GTK_BIN (pWidget));
@@ -1759,7 +1759,7 @@ static GtkWidget *_add_menu_item_with_buttons (GtkWidget *menu)
 	gtk_container_add (GTK_CONTAINER (pMenuItem), hbox);
 	return hbox;
 }
-#endif
+
 gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserData, Icon *icon, GldiContainer *pContainer, GtkWidget *menu)
 {
 	static gpointer data[3];
@@ -1825,7 +1825,6 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 		gldi_window_can_minimize_maximize_close (pAppli, &bCanMinimize, &bCanMaximize, &bCanClose);
 
 		//\_________________________ Window Management
-		#if (GTK_MAJOR_VERSION >= 3)
 		GtkWidget *hbox = _add_menu_item_with_buttons (menu);
 		
 		GtkWidget *pLabel = gtk_label_new (_("Window"));
@@ -1878,44 +1877,6 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 				G_CALLBACK(_cairo_dock_show_appli),
 				hbox, data);
 		}
-		#else  // GTK2 - sorry guys, you get the old code :-)
-		GtkWidget *pSubMenuWindowManagement = cairo_dock_create_sub_menu (_("Window"), menu, NULL);
-		if (pAppli
-			&& (pAppli->bIsHidden
-			 || pAppli != gldi_windows_get_active ()
-			 || !gldi_window_is_on_current_desktop (pAppli)))
-			_add_entry_in_menu (_("Show"), GLDI_ICON_NAME_FIND, _cairo_dock_show_appli, pSubMenuWindowManagement);
-		
-		if (! pAppli->bIsHidden)
-		{
-			if (bCanMaximize)
-			{
-				_add_entry_in_menu (pAppli->bIsMaximized ? _("Unmaximise") : _("Maximise"),
-					pAppli->bIsMaximized ? CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-restore.svg" : CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-maximize.svg",
-					_cairo_dock_maximize_appli, pSubMenuWindowManagement);
-			}
-
-			if (bCanMinimize)
-			{
-				if (myTaskbarParam.iActionOnMiddleClick == 2 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // minimize
-					cLabel = g_strdup_printf ("%s (%s)", _("Minimise"), _("middle-click"));
-				else
-					cLabel = g_strdup (_("Minimise"));
-				_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-minimize.svg", _cairo_dock_minimize_appli, pSubMenuWindowManagement);
-				g_free (cLabel);
-			}
-		}
-
-		if (bCanClose)
-		{
-			if (myTaskbarParam.iActionOnMiddleClick == 1 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // close
-				cLabel = g_strdup_printf ("%s (%s)", _("Close"), _("middle-click"));
-			else
-				cLabel = g_strdup (_("Close"));
-			_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-close.svg", _cairo_dock_close_appli, pSubMenuWindowManagement);
-			g_free (cLabel);
-		}
-		#endif
 		
 		//\_________________________ Other actions
 		GtkWidget *pSubMenuOtherActions = cairo_dock_create_sub_menu (_("Other actions"), menu, NULL);
@@ -1966,7 +1927,6 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 		bAddSeparator = TRUE;
 
 		//\_________________________ Window Management
-		#if (GTK_MAJOR_VERSION >= 3)
 		GtkWidget *hbox = _add_menu_item_with_buttons (menu);
 		
 		GtkWidget *pLabel = gtk_label_new (_("Windows"));
@@ -1996,15 +1956,6 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 			_("Show all"),
 			G_CALLBACK(_cairo_dock_show_class),
 			hbox, data);
-		#else
-		GtkWidget *pSubMenuWindowManagement = cairo_dock_create_sub_menu (_("Windows management"), menu, NULL);
-		
-		_add_entry_in_menu (_("Show all"), GLDI_ICON_NAME_FIND, _cairo_dock_show_class, pSubMenuWindowManagement);
-
-		_add_entry_in_menu (_("Minimise all"), CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-minimize.svg", _cairo_dock_minimize_class, pSubMenuWindowManagement);
-		
-		_add_entry_in_menu (_("Close all"), CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-close.svg", _cairo_dock_close_class, pSubMenuWindowManagement);
-		#endif
 		
 		//\_________________________ Other actions
 		GtkWidget *pSubMenuOtherActions = cairo_dock_create_sub_menu (_("Other actions"), menu, NULL);
