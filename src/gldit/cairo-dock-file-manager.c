@@ -146,11 +146,14 @@ gboolean cairo_dock_fm_launch_uri (const gchar *cURI)
 		
 		// add it to the recent files.
 		GtkRecentManager *rm = gtk_recent_manager_get_default () ;
-		gchar *cValidURI = NULL;
 		if (*cURI == '/')  // not an URI, this is now needed for gtk-recent.
-			cValidURI = g_filename_to_uri (cURI, NULL, NULL);
-		gtk_recent_manager_add_item (rm, cValidURI ? cValidURI : cURI);
-		g_free (cValidURI);
+		{
+			gchar *cValidURI = g_filename_to_uri (cURI, NULL, NULL);
+			gtk_recent_manager_add_item (rm, cValidURI);
+			g_free (cValidURI);
+		}
+		else
+			gtk_recent_manager_add_item (rm, cURI);
 		
 		return TRUE;
 	}
