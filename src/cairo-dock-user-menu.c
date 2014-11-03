@@ -1867,10 +1867,9 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 			}
 		}
 		
-		if (pAppli
-			&& (pAppli->bIsHidden
-			 || pAppli != gldi_windows_get_active ()
-			 || !gldi_window_is_on_current_desktop (pAppli)))
+		if (pAppli->bIsHidden
+		    || pAppli != gldi_windows_get_active ()
+		    || !gldi_window_is_on_current_desktop (pAppli))
 		{
 			_add_new_button_to_hbox (GLDI_ICON_NAME_FIND,
 				_("Show"),
@@ -1883,7 +1882,7 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 
 		// Move
 		pMenuItem = _add_entry_in_menu (_("Move to this desktop"), GLDI_ICON_NAME_JUMP_TO, _cairo_dock_move_appli_to_current_desktop, pSubMenuOtherActions);
-		if (pAppli && gldi_window_is_on_current_desktop (pAppli))
+		if (gldi_window_is_on_current_desktop (pAppli))
 			gtk_widget_set_sensitive (pMenuItem, FALSE);
 
 		// Fullscreen
