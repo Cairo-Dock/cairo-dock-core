@@ -1359,8 +1359,8 @@ static void reset_object (GldiObject *obj)
 void gldi_register_X_manager (void)
 {
 	// check if we're in an X session
-	GdkDisplay *dsp = gdk_display_get_default ();  // let's GDK do the guess
 	#ifdef GDK_WINDOWING_X11  // if GTK doesn't support X, there is no point in trying
+	GdkDisplay *dsp = gdk_display_get_default ();  // let's GDK do the guess
 	if (! GDK_IS_X11_DISPLAY (dsp))  // if not an X session
 	#endif
 	{
