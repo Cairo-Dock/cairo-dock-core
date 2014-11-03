@@ -276,11 +276,14 @@ static inline void _render_rating (GtkCellRenderer *cell, GtkTreeModel *model, G
 	}
 	else
 	{
-		gchar *cRateMe = NULL;
 		if (iColumnIndex == CAIRO_DOCK_MODEL_ORDER)  // note, peut etre changee (la sobriete ne peut pas).
-			cRateMe = g_strconcat ("<small><i>", _("Rate me"), "</i></small>", NULL);
-		g_object_set (cell, "markup", cRateMe ? cRateMe : "   -", NULL);  // pour la sobriete d'un theme utilisateur, plutot que d'avoir une case vide, on met un tiret dedans.
-		g_free (cRateMe);
+		{
+			gchar *cRateMe = g_strconcat ("<small><i>", _("Rate me"), "</i></small>", NULL);
+			g_object_set (cell, "markup", cRateMe, NULL);
+			g_free (cRateMe);
+		}
+		else 
+			g_object_set (cell, "markup", "   -", NULL);  // pour la sobriete d'un theme utilisateur, plutot que d'avoir une case vide, on met un tiret dedans.
 	}
 }
 static void _cairo_dock_render_sobriety (G_GNUC_UNUSED GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *model,GtkTreeIter *iter, G_GNUC_UNUSED gpointer data)
