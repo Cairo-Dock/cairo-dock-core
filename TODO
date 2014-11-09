@@ -14,6 +14,7 @@ For each new version:
 	* Update doc on doc.glx-dock.org
 	* Update translations: cd po/misc && ./update-translations.sh -cpt
 	* Update desktop-files: cd po/misc && ./update-desktop-files.sh
+	* Update list.conf file from third-party dir.
 
 
 ====================================================
