@@ -226,7 +226,7 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 			
 			//\___________________ On traite tous le reste.
 			/// TODO : traiter les .conf des applets comme celui du dock...
-			g_string_printf (sCommand, "find \"%s\" -mindepth 1 -maxdepth 1  ! -name '%s' ! -name \"%s\" -exec /bin/cp -r '{}' \"%s\" \\;", g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE, CAIRO_DOCK_LAUNCHERS_DIR, cNewThemePathEscaped);
+			g_string_printf (sCommand, "find \"%s\" -mindepth 1 -maxdepth 1  ! -name '%s' ! -name \"%s\" -exec cp -r '{}' \"%s\" \\;", g_cCurrentThemePath, CAIRO_DOCK_CONF_FILE, CAIRO_DOCK_LAUNCHERS_DIR, cNewThemePathEscaped);
 			cd_message ("%s", sCommand->str);
 			r = system (sCommand->str);
 			if (r < 0)
@@ -507,7 +507,7 @@ static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboo
 	gchar *cNewLocalIconsPath = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
 	if (! g_file_test (cNewLocalIconsPath, G_FILE_TEST_IS_DIR))  // it's an old theme: move icons to a new dir 'icons'.
 	{
-		g_string_printf (sCommand, "find \"%s/%s\" -mindepth 1 ! -name '*.desktop' -exec /bin/cp '{}' '%s' \\;", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentIconsPath);
+		g_string_printf (sCommand, "find \"%s/%s\" -mindepth 1 ! -name '*.desktop' -exec cp '{}' '%s' \\;", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentIconsPath);
 	}
 	else
 	{
@@ -548,7 +548,7 @@ static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboo
 
 	if (g_pMainDock == NULL || bLoadBehavior)
 	{
-		g_string_printf (sCommand, "find \"%s\"/* -prune ! -name '*.conf' ! -name %s -exec /bin/cp -r '{}' \"%s\" \\;", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath);  // Copy all files of the new theme except launchers and .conf files in the dir of the current theme. Overwrite files with same names
+		g_string_printf (sCommand, "find \"%s\"/* -prune ! -name '*.conf' ! -name %s -exec cp -r '{}' \"%s\" \\;", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR, g_cCurrentThemePath);  // Copy all files of the new theme except launchers and .conf files in the dir of the current theme. Overwrite files with same names
 		_launch_cmd (sCommand->str);
 	}
 	else

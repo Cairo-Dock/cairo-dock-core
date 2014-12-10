@@ -762,7 +762,7 @@ int main (int argc, char** argv)
 		}
 		else
 			cThemeName = "Default-Single";
-		gchar *cCommand = g_strdup_printf ("/bin/cp -r \"%s/%s\"/* \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/themes", cThemeName, g_cCurrentThemePath);
+		gchar *cCommand = g_strdup_printf ("cp -r \"%s/%s\"/* \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/themes", cThemeName, g_cCurrentThemePath);
 		cd_message (cCommand);
 		int r = system (cCommand);
 		if (r < 0)

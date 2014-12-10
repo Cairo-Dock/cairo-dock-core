@@ -105,7 +105,7 @@ import_file_full()
 	if test ${f:0:1} = "/" -o ${f:0:1} = "~"; then
 		echo " to import"
 		if test ${f:0:35} != "~/.config/cairo-dock/current_theme/"; then
-			/bin/cp -v "$f" "$3"
+			cp -v "$f" "$3"
 		fi
 		local_file=${f##*/}
 		if test "$4" = "1"; then
@@ -156,7 +156,7 @@ _import_theme()
 				if test "x$theme_path" != "x"; then
 					echo "We copy $theme_path to "`pwd`"/extras/$3/$THEME_NAME"
 					mkdir -p "extras/$3"
-					/bin/cp -r "$theme_path" "extras/$3/$THEME_NAME"
+					cp -r "$theme_path" "extras/$3/$THEME_NAME"
 					set_value "$1" "$2" "$THEME_NAME"
 				fi
 			fi

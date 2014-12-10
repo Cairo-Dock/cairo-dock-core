@@ -43,7 +43,7 @@ import_file()
 	if test ${file:0:1} = "/" -o ${file:0:1} = "~"; then
 		static local_file=${file##*/}
 		echo "  => $local_file"
-		/bin/cp "$file" "$3"
+		cp "$file" "$3"
 		set_value "Accessibility" "callback image" "$local_file"
 	fi
 }
@@ -75,7 +75,7 @@ _import_theme()
 				if test "x$theme_path" != "x"; then
 					echo "on importe $theme_path dans "`pwd`"/extras/$3/$THEME_NAME"
 					mkdir "extras/$3"
-					/bin/cp -r "$theme_path" "extras/$3/$THEME_NAME"
+					cp -r "$theme_path" "extras/$3/$THEME_NAME"
 					set_value "$1" "$2" "$THEME_NAME"
 				fi
 			fi
