@@ -397,7 +397,7 @@ int main (int argc, char** argv)
 		// below options are probably useless for most of people.
 		{"keep-above", 'a', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bKeepAbove,
-			_("Keep the dock above other windows whatever."), NULL},
+			_("Keep the dock above other windows."), NULL},
 		{"no-sticky", 's', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bNoSticky,
 			_("Don't make the dock appear on all desktops."), NULL},
