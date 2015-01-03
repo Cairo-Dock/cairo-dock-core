@@ -1,4 +1,4 @@
 [GNOME Session]
 Name=Cairo-Dock
-RequiredComponents=gnome-settings-daemon;compiz;cairo-dock;
+RequiredComponents=@SETTINGS_DAEMON@-settings-daemon;compiz;cairo-dock;
 DesktopName=@DESKTOP_NAME@

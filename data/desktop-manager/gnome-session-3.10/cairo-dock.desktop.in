@@ -5,3 +5,4 @@ Exec=gnome-session --session=cairo-dock
 TryExec=gnome-session
 Icon=
 Type=Application
+DesktopNames=@DESKTOP_NAME@
