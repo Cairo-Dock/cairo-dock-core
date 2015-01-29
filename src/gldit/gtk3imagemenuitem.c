@@ -593,6 +593,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
   if (icon && GTK_IS_IMAGE (image))
     {
       gtk_image_set_from_gicon (GTK_IMAGE (image), icon, GTK_ICON_SIZE_MENU);
+      gtk_image_set_pixel_size (GTK_IMAGE (image), GTK_ICON_SIZE_MENU); // force size
       return TRUE;
     }
 
