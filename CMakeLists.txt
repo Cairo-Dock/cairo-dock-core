@@ -47,7 +47,7 @@ endif()
 set (CPACK_SOURCE_GENERATOR "TGZ")
 set (CPACK_SOURCE_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${VERSION}")
 set (CPACK_SOURCE_IGNORE_FILES 
-	"/build/;/.bzr/;bzrignore$;/config.h$;/gldi-module-config.h$;/gldi-config.h$;/doc/;/misc/;~$;/TODO$;.pyc$;${CPACK_SOURCE_IGNORE_FILES}")
+	"/build/;/.bzr/;/.bzrignore$;/.git/;/.gitignore$;/config.h$;/gldi-module-config.h$;/gldi-config.h$;/doc/;/misc/;~$;/TODO$;.pyc$;${CPACK_SOURCE_IGNORE_FILES}")
 include (CPack)
 
 add_custom_target( dist
