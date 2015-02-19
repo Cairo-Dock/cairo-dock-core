@@ -5,15 +5,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2014-09-06 17:12+0000\n"
-"PO-Revision-Date: 2014-09-06 20:44+0000\n"
+"POT-Creation-Date: 2014-10-19 00:21+0000\n"
+"PO-Revision-Date: 2014-11-16 00:50+0000\n"
 "Last-Translator: Саша Петровић <salepetronije@gmail.com>\n"
 "Language-Team: српски <српски <xfce-i18n@xfce.org>>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-09-07 05:58+0000\n"
-"X-Generator: Launchpad (build 17196)\n"
+"X-Launchpad-Export-Date: 2014-11-17 05:35+0000\n"
+"X-Generator: Launchpad (build 17241)\n"
 "Language: \n"
 
 #: ../src/cairo-dock-gui-advanced.c:120 ../src/cairo-dock-widget-plugins.c:173
@@ -1109,7 +1109,7 @@ msgstr "Нешто није било у реду са овим програмч�
 
 #: ../src/cairo-dock.c:782
 msgid "You're using our Cairo-Dock session"
-msgstr ""
+msgstr "Користите сесију Каиро фока"
 
 #: ../src/cairo-dock.c:788
 msgid ""
@@ -1120,6 +1120,12 @@ msgid ""
 "Note: your current theme will be saved and can be reimported later from the "
 "Themes manager"
 msgstr ""
+"Биће занимљиво да се користи тема прилагођена за ову сесију.\n"
+"\n"
+"Да ли желите да учитам тему „Подразумевана-полица“?\n"
+"\n"
+"Примедба: тренутна тема ће бити сачувана и може касније да се увезе из "
+"управника тема"
 
 #: ../src/cairo-dock.c:833
 msgid ""
@@ -3551,12 +3557,12 @@ msgstr "Полупречник угла"
 
 #: ../data/messages:513 ../data/messages:563 ../data/messages:889
 msgid "Outline width"
-msgstr ""
+msgstr "Ширина обода"
 
 #: ../data/messages:515 ../data/messages:557 ../data/messages:813
 #: ../data/messages:845 ../data/messages:883
 msgid "Outline colour"
-msgstr ""
+msgstr "Боја обода"
 
 #: ../data/messages:519
 msgid "Margin between the frame and the icons or their reflects :"
@@ -4404,48 +4410,56 @@ msgstr "- Ако Вам се свиђа пројекат, приложите :-)
 
 #: ../data/messages:1134
 msgid "<b>New version: <span color='red'>GLX-Dock 3.4</span>!</b>"
-msgstr ""
+msgstr "<b>Ново издање: <span color='red'>ГЛИкс-Дока 3.4</span>!</b>"
 
 #: ../data/messages:1136
 msgid "- <b>Menus</b>: added the possibility to customise them"
-msgstr ""
+msgstr "- <b>Изборници</b>: додата је могућност да се прилагођавају"
 
 #: ../data/messages:1138
 msgid "- <b>Style</b>: unified the style of all components of the dock"
-msgstr ""
+msgstr "- <b>Начин</b>: начин приказа свих чиниоца дока је једнообразан"
 
 #: ../data/messages:1140
 msgid ""
 "- Better integration with <b>Compiz</b> (e.g. when using the <b>Cairo-Dock "
 "session</b>) and Cinnamon"
 msgstr ""
+"- Боља усклађеност са  <b>Компизом</b> (нпр. приликом коришћења <b>сесије "
+"Каиро дока</b>) и Цимета"
 
 #: ../data/messages:1142
 msgid ""
 "- <b>Applications Menu</b> and <b>Logout</b> applets will wait the end of an "
 "update before displaying notifications"
 msgstr ""
+"- програмчићи <b>Изборника програма</b> и <b>Одјаве</b> ће чекати на "
+"завршетак надоградње пре приказа обавештења"
 
 #: ../data/messages:1144
 msgid ""
 "- Various improvements for <b>Applications Menu</b>, <b>Shortcuts</b>, "
 "<b>Status-Notifier</b> and <b>Terminal</b> applets"
 msgstr ""
+"- Бројна побољшања  <b>Изборника програма</b>, <b>Пречица</b>, <b>Обавештења "
+"о стању</b> и програмчета <b>Терминал</b>"
 
 #: ../data/messages:1146
 msgid "- Start working on <b>EGL</b> and <b>Wayland</b> support"
-msgstr ""
+msgstr "- Почетак рада на ЕГЛ и подршци за <b>Вејленд</b>"
 
 #: ../data/messages:1148
 msgid "- And as always ... various bug fixes and improvements!"
-msgstr ""
+msgstr "- Као и увек ... бројне исправке грешака и унапређења!"
 
 #: ../data/messages:1150
 msgid "If you like the project, please donate and/or contribute :-)"
-msgstr ""
+msgstr "Ако Вам се пројекат свиђа, молим, приложите или допринесите :-)"
 
 #: ../data/messages:1152
 msgid ""
 "Note: We're switching from Bzr to Git on Github, feel free to fork! "
 "https://github.com/Cairo-Dock"
 msgstr ""
+"Примедба: Прелазимо са Бзр на Гит на  Гитнабу, слободно гранајте пројекат! "
+"https://github.com/Cairo-Dock"
