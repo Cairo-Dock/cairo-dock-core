@@ -290,9 +290,13 @@ void _init_menu_style (void)
 				background-color: @menu_bg_color; \
 				background-image: none; \
 				color: @menuitem_text_color; \
+			} \
+			.window-frame { \
+				box-shadow: none; \
 			}",
 			NULL);  // we also define ".menu", so that custom widgets (like in the SoundMenu) can get our colors. Note that we don't redefine Gtk's menuitem, because we want to keep normal menus for GUI
 			// for "entry", using "background-color" will not affect entries inside another widget (like a box), we actually have to use "background" ... (TBC with gtk > 3.6)
+			// for ".window-frame": remove shadow added by some WMs (Marco/Metacity) to the menu (LP #1407880)
 		}
 		
 		gldi_style_colors_freeze ();
