@@ -9,17 +9,15 @@ msgstr ""
 "Project-Id-Version: 1.6.2\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
 "POT-Creation-Date: 2014-10-19 00:21+0000\n"
-"PO-Revision-Date: 2014-06-14 23:53+0000\n"
-"Last-Translator: Daniel Nylander <yeager@ubuntu.com>\n"
+"PO-Revision-Date: 2016-01-31 09:20+0000\n"
+"Last-Translator: Påvel Nicklasson <Unknown>\n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-10-20 05:57+0000\n"
-"X-Generator: Launchpad (build 17196)\n"
-"X-Poedit-Country: SWEDEN\n"
-"Language: \n"
-"X-Poedit-Language: Swedish\n"
+"X-Launchpad-Export-Date: 2016-02-01 05:09+0000\n"
+"X-Generator: Launchpad (build 17908)\n"
+"Language: sv_SE\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: ../src/cairo-dock-gui-advanced.c:120 ../src/cairo-dock-widget-plugins.c:173
@@ -57,7 +55,7 @@ msgstr "System"
 
 #: ../src/cairo-dock-gui-advanced.c:127 ../src/cairo-dock-widget-plugins.c:168
 msgid "Fun"
-msgstr "Fun"
+msgstr "Rolig"
 
 #: ../src/cairo-dock-gui-advanced.c:128 ../src/cairo-dock-gui-advanced.c:1769
 #: ../src/gldit/cairo-dock-gui-factory.c:798
@@ -66,7 +64,7 @@ msgstr "Allt"
 
 #: ../src/cairo-dock-gui-advanced.c:1460
 msgid "Set the position of the main dock."
-msgstr "Ställ in position av huvuddocken."
+msgstr "Ställ in huvuddockans placering."
 
 # #################################
 # ########### cairo-dock.conf #############
@@ -82,6 +80,9 @@ msgid ""
 " or on the contrary unobtrusive?\n"
 "Configure the way you access your docks and sub-docks!"
 msgstr ""
+"Vill du att din docka alltid ska synas,\n"
+"eller tvärtom diskret?\n"
+"Ställ in hur du kommer åt dina dockor och underdockor!"
 
 #: ../src/cairo-dock-gui-advanced.c:1470 ../src/cairo-dock-gui-advanced.c:1471
 #: ../src/cairo-dock-user-menu.c:2027 ../Help/data/messages:339
@@ -99,19 +100,19 @@ msgstr "Aktivitetsfält"
 
 #: ../src/cairo-dock-gui-advanced.c:1487
 msgid "Define all the keyboard shortcuts currently available."
-msgstr ""
+msgstr "Ange alla tillgängliga kortkommandon."
 
 #: ../src/cairo-dock-gui-advanced.c:1488 ../data/messages:147
 msgid "Shortkeys"
-msgstr ""
+msgstr "Kortkommandon"
 
 #: ../src/cairo-dock-gui-advanced.c:1494
 msgid "All of the parameters you will never want to tweak."
-msgstr "Alla de parametrar som du inte kommer att vilja ändra på."
+msgstr "Alla parametrar som du aldrig kommer att vilja förändra."
 
 #: ../src/cairo-dock-gui-advanced.c:1506
 msgid "Configure the global style."
-msgstr ""
+msgstr "Ange övergripande stil."
 
 #: ../src/cairo-dock-gui-advanced.c:1507 ../src/cairo-dock-gui-advanced.c:1508
 #: ../data/messages:113 ../data/messages:115 ../data/messages:459
@@ -119,15 +120,15 @@ msgstr ""
 #: ../data/messages:803 ../data/messages:837 ../data/messages:871
 #: ../data/messages:875
 msgid "Style"
-msgstr ""
+msgstr "Stil"
 
 #: ../src/cairo-dock-gui-advanced.c:1515
 msgid "Configure docks appearance."
-msgstr ""
+msgstr "Ställ in dockornas utseende."
 
 #: ../src/cairo-dock-gui-advanced.c:1516 ../Help/data/messages:79
 msgid "Docks"
-msgstr ""
+msgstr "Dockor"
 
 #: ../src/cairo-dock-gui-advanced.c:1517 ../data/messages:457
 #: ../data/messages:971
@@ -137,24 +138,24 @@ msgstr "Bakgrund"
 #: ../src/cairo-dock-gui-advanced.c:1518 ../data/messages:139
 #: ../data/messages:525 ../data/messages:965
 msgid "Views"
-msgstr "Utseende"
+msgstr "Vyer"
 
 #: ../src/cairo-dock-gui-advanced.c:1526
 msgid "Configure text bubble appearance."
-msgstr "Ställ in utseendet på dialog-bubblorna."
+msgstr "Ställ in utseendet på dialogbubblorna."
 
 #: ../src/cairo-dock-gui-advanced.c:1527 ../src/cairo-dock-gui-advanced.c:1528
 msgid "Dialog boxes and Menus"
-msgstr ""
+msgstr "Dialogrutor och menyer"
 
 #: ../src/cairo-dock-gui-advanced.c:1535
 msgid "Applets can be displayed on your desktop as widgets."
-msgstr "Dessa programstartare kan placeras på skrivbordet som ikoner"
+msgstr "Applets kan visas på ditt skrivbord som widgets."
 
 #: ../src/cairo-dock-gui-advanced.c:1536 ../src/cairo-dock-gui-advanced.c:1537
 #: ../Help/data/messages:89 ../data/messages:587
 msgid "Desklets"
-msgstr ""
+msgstr "Desklets"
 
 #: ../src/cairo-dock-gui-advanced.c:1544
 msgid ""
@@ -162,7 +163,7 @@ msgid ""
 " size, reflection, icon theme,..."
 msgstr ""
 "Allt om ikoner:\n"
-" storlek, reflexer, ikon teman, ..."
+" storlek, reflektion, ikontema,..."
 
 #: ../src/cairo-dock-gui-advanced.c:1545 ../src/cairo-dock-gui-advanced.c:1546
 #: ../Help/data/messages:11 ../data/messages:123 ../data/messages:643
@@ -176,15 +177,15 @@ msgstr "Indikatorer"
 
 #: ../src/cairo-dock-gui-advanced.c:1555
 msgid "Define icon caption and quick-info style."
-msgstr "Definiera stilart på ikonetiketter och snabb-info."
+msgstr "Definiera ikon bildtext och snabb-info stil."
 
 #: ../src/cairo-dock-gui-advanced.c:1556 ../src/cairo-dock-gui-advanced.c:1557
 msgid "Captions"
-msgstr "Etiketter"
+msgstr "Bildtexter"
 
 #: ../src/cairo-dock-gui-advanced.c:1564
 msgid "Try new themes and save your theme."
-msgstr ""
+msgstr "Prova nya teman och spara ditt tema."
 
 # #################################
 # ########### themes.conf #############
@@ -196,12 +197,12 @@ msgstr "Teman"
 
 #: ../src/cairo-dock-gui-advanced.c:1571
 msgid "Current items in your dock(s)."
-msgstr ""
+msgstr "Nuvarande objekt i din(a) dock(or)."
 
 #: ../src/cairo-dock-gui-advanced.c:1572 ../src/cairo-dock-gui-simple.c:91
 #: ../src/cairo-dock-gui-simple.c:93
 msgid "Current items"
-msgstr ""
+msgstr "Nuvarande objekt"
 
 #: ../src/cairo-dock-gui-advanced.c:1692
 msgid "Filter"
@@ -213,7 +214,7 @@ msgstr "Alla ord"
 
 #: ../src/cairo-dock-gui-advanced.c:1732
 msgid "Highlighted words"
-msgstr ""
+msgstr "Markerade ord"
 
 #: ../src/cairo-dock-gui-advanced.c:1733
 msgid "Hide others"
@@ -225,7 +226,7 @@ msgstr "Sök i beskrivning"
 
 #: ../src/cairo-dock-gui-advanced.c:1738
 msgid "Hide disabled"
-msgstr ""
+msgstr "Dölj inaktiverade"
 
 #: ../src/cairo-dock-gui-advanced.c:1747
 msgid "Categories"
@@ -244,27 +245,27 @@ msgstr "Stäng"
 
 #: ../src/cairo-dock-gui-advanced.c:1880
 msgid "Back"
-msgstr ""
+msgstr "Tillbaka"
 
 #: ../src/cairo-dock-gui-advanced.c:1888 ../src/cairo-dock-gui-simple.c:207
 msgid "Apply"
-msgstr ""
+msgstr "Tillämpa"
 
 #: ../src/cairo-dock-gui-advanced.c:1904
 msgid "More applets"
-msgstr "Mer appar"
+msgstr "Fler applets"
 
 #: ../src/cairo-dock-gui-advanced.c:1905
 msgid "Get more applets online !"
-msgstr "Hitta fler appar online!"
+msgstr "Hitta fler applets online !"
 
 #: ../src/cairo-dock-gui-advanced.c:1997 ../src/cairo-dock-gui-simple.c:354
 msgid "Cairo-Dock configuration"
-msgstr "Konfiguration av Cairo-Dock"
+msgstr "Cairo-Dock inställning"
 
 #: ../src/cairo-dock-gui-advanced.c:2582
 msgid "Simple Mode"
-msgstr "Grundläggande läge"
+msgstr "Enkelt läge"
 
 #: ../src/cairo-dock-gui-simple.c:99 ../src/cairo-dock-gui-simple.c:101
 msgid "Add-ons"
@@ -272,7 +273,7 @@ msgstr "Tillägg"
 
 #: ../src/cairo-dock-gui-simple.c:107 ../src/cairo-dock-gui-simple.c:109
 msgid "Configuration"
-msgstr ""
+msgstr "Inställning"
 
 #: ../src/cairo-dock-gui-simple.c:635
 msgid "Advanced Mode"
@@ -283,8 +284,8 @@ msgid ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customise your current theme."
 msgstr ""
-"Det avancerade läget låter dig ändra varenda liten parameter av docken. Det "
-"är ett kraftfullt verktyg för att anpassa ditt nuvarande tema."
+"Det avancerade läget låter dig ändra varenda parameter av dockan. Det är ett "
+"kraftfullt verktyg för att anpassa ditt aktiva tema."
 
 #: ../src/cairo-dock-user-interaction.c:417
 msgid ""
@@ -292,52 +293,57 @@ msgid ""
 "config.\n"
 "It is located in the 'Taskbar' module."
 msgstr ""
+"Alternativet 'overwrite X icons' har aktiverats automatiskt i "
+"inställningen.\n"
+"Det finns i \"Aktivitetsfältsmodulen'."
 
 #: ../src/cairo-dock-user-menu.c:119
 msgid "Delete this dock?"
-msgstr ""
+msgstr "Ta bort denna docka?"
 
 #: ../src/cairo-dock-user-menu.c:176
 msgid "About Cairo-Dock"
-msgstr ""
+msgstr "Om Cairo-Dock"
 
 #: ../src/cairo-dock-user-menu.c:209 ../Help/data/messages:271
 msgid "Development site"
-msgstr "Utvecklarnas hemsida"
+msgstr "Utvecklarnas webbplats"
 
 #: ../src/cairo-dock-user-menu.c:210 ../Help/data/messages:269
 msgid "Find the latest version of Cairo-Dock here !"
-msgstr "Hitta den senaste versionen av Cairo-Dock här!"
+msgstr "Hitta den senaste versionen av Cairo-Dock här !"
 
 #: ../src/cairo-dock-user-menu.c:214 ../src/cairo-dock-user-menu.c:1088
 #: ../src/cairo-dock-widget-plugins.c:297
 msgid "Get more applets!"
-msgstr "Hitta fler tillägg"
+msgstr "Hitta fler applets"
 
 #: ../src/cairo-dock-user-menu.c:218 ../src/cairo-dock-user-menu.c:224
 msgid "Donate"
-msgstr ""
+msgstr "Donera"
 
 #: ../src/cairo-dock-user-menu.c:221 ../src/cairo-dock-user-menu.c:227
 msgid ""
 "Support the people who spend countless hours to bring you the best dock ever."
 msgstr ""
+"Stöd personerna som ägnar oräkneliga timmar för att ge dig den bästa dockan "
+"någonsin."
 
 #: ../src/cairo-dock-user-menu.c:255
 msgid "Here is a list of the current developers and contributors"
-msgstr ""
+msgstr "Här är en lista över nuvarande utvecklare och bidragsgivare"
 
 #: ../src/cairo-dock-user-menu.c:256
 msgid "Developers"
-msgstr ""
+msgstr "Utvecklare"
 
 #: ../src/cairo-dock-user-menu.c:257
 msgid "Main developer and project leader"
-msgstr ""
+msgstr "Huvudutvecklare och projektledare"
 
 #: ../src/cairo-dock-user-menu.c:258
 msgid "Contributors / Hackers"
-msgstr ""
+msgstr "Bidragsgivare / hackare"
 
 #: ../src/cairo-dock-user-menu.c:260
 msgid "Development"
@@ -345,15 +351,15 @@ msgstr "Utveckling"
 
 #: ../src/cairo-dock-user-menu.c:275
 msgid "Website"
-msgstr ""
+msgstr "Webbsida"
 
 #: ../src/cairo-dock-user-menu.c:276
 msgid "Beta-testing / Suggestions / Forum animation"
-msgstr ""
+msgstr "Beta-testning / Förslag / Forumupplivning"
 
 #: ../src/cairo-dock-user-menu.c:277
 msgid "Translators for this language"
-msgstr ""
+msgstr "Översättare för detta språk"
 
 #: ../src/cairo-dock-user-menu.c:278
 msgid "translator-credits"
@@ -361,6 +367,8 @@ msgstr ""
 "Launchpad Contributions:\n"
 "  Daniel Nylander https://launchpad.net/~yeager\n"
 "  Peter Thörnqvist https://launchpad.net/~peter-tornqvist\n"
+"  Påvel Nicklasson https://launchpad.net/~pavelnicklasson\n"
+"  Påvel Nicklasson https://launchpad.net/~paveu\n"
 "  Sven_Lindahl https://launchpad.net/~sven-lindahl\n"
 "  Teodor Jönsson https://launchpad.net/~teodor-jonsson-sogeti-"
 "deactivatedaccount\n"
@@ -375,38 +383,40 @@ msgid ""
 "Thanks to all people that help us to improve the Cairo-Dock project.\n"
 "Thanks to all current, former and future contributors."
 msgstr ""
+"Tack till alla personer som hjälper oss att förbättra Cairo-Dock projektet.\n"
+"Tack till alla nuvarande, tidigare och framtida bidragsgivare."
 
 #: ../src/cairo-dock-user-menu.c:312
 msgid "How to help us?"
-msgstr ""
+msgstr "Hur hjälper du oss?"
 
 #: ../src/cairo-dock-user-menu.c:313
 msgid "Don't hesitate to join the project, we need you ;)"
-msgstr ""
+msgstr "Tveka inte att gå med i projektet, vi behöver dig ;)"
 
 #: ../src/cairo-dock-user-menu.c:314
 msgid "Former contributors"
-msgstr ""
+msgstr "Tidigare bidragsgivare"
 
 #: ../src/cairo-dock-user-menu.c:315
 msgid "For a complete list, please have a look to BZR logs"
-msgstr ""
+msgstr "För en komplett lista, se BZR-loggar"
 
 #: ../src/cairo-dock-user-menu.c:316
 msgid "Users of our forum"
-msgstr ""
+msgstr "Användare på vårt forum"
 
 #: ../src/cairo-dock-user-menu.c:317
 msgid "List of our forum's members"
-msgstr ""
+msgstr "Lista över våra forummedlemmar"
 
 #: ../src/cairo-dock-user-menu.c:318
 msgid "Artwork"
-msgstr "Konstverk"
+msgstr "Utsmyckningar"
 
 #: ../src/cairo-dock-user-menu.c:320
 msgid "Thanks"
-msgstr ""
+msgstr "Tack"
 
 #: ../src/cairo-dock-user-menu.c:410
 msgid "Quit Cairo-Dock?"
@@ -414,7 +424,7 @@ msgstr "Avsluta Cairo-Dock?"
 
 #: ../src/cairo-dock-user-menu.c:440 ../src/cairo-dock-user-menu.c:580
 msgid "Separator"
-msgstr ""
+msgstr "Avgränsare"
 
 #: ../src/cairo-dock-user-menu.c:543
 msgid ""
@@ -422,9 +432,9 @@ msgid ""
 "Now move some launchers or applets into it by right-clicking on the icon -> "
 "move to another dock"
 msgstr ""
-"Den nya docken har skapats.\n"
-"Flytta nu några programstartare eller panelprogram till den genom att "
-"högerklicka på ikonen -> flytta till en annan dock"
+"Den nya dockan har skapats.\n"
+"Flytta nu några programstartare eller applets till den genom att högerklicka "
+"på ikonen -> flytta till en annan docka"
 
 #: ../src/cairo-dock-user-menu.c:574
 msgid "Add"
@@ -432,26 +442,26 @@ msgstr "Lägg till"
 
 #: ../src/cairo-dock-user-menu.c:576
 msgid "Sub-dock"
-msgstr ""
+msgstr "Underdocka"
 
 #: ../src/cairo-dock-user-menu.c:578
 msgid "Main dock"
-msgstr ""
+msgstr "Huvuddocka"
 
 #: ../src/cairo-dock-user-menu.c:582
 msgid "Custom launcher"
-msgstr ""
+msgstr "Anpassad programstartare"
 
 #: ../src/cairo-dock-user-menu.c:583
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
 msgstr ""
 "Vanligtvis skulle du dra en programstartare från menyn och släppa den på "
-"docken."
+"dockan."
 
 #: ../src/cairo-dock-user-menu.c:585
 msgid "Applet"
-msgstr ""
+msgstr "Applet"
 
 #: ../src/cairo-dock-user-menu.c:602
 msgid ""
@@ -459,7 +469,7 @@ msgid ""
 "the dock?\n"
 "(otherwise they will be destroyed)"
 msgstr ""
-"Vill du återplacera ikonerna inuti den här behållaren på docken?\n"
+"Vill du återplacera ikonerna inuti den här behållaren på dockan?\n"
 "(annars kommer de att förstöras)"
 
 #: ../src/cairo-dock-user-menu.c:624
@@ -470,11 +480,11 @@ msgstr "avgränsare"
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
 msgstr ""
-"Du håller på att ta bort den här ikonen (%s) från docken. Är du säker?"
+"Du håller på att ta bort den här ikonen (%s) från dockan. Är du säker?"
 
 #: ../src/cairo-dock-user-menu.c:643
 msgid "Sorry, this icon doesn't have a configuration file."
-msgstr "Tyvärr, denna ikon har inte någon konfigurations fil"
+msgstr "Tyvärr, denna ikon har ingen inställningsfil."
 
 #: ../src/cairo-dock-user-menu.c:683
 msgid ""
@@ -482,69 +492,71 @@ msgid ""
 "You can customize it by right-clicking on it -> cairo-dock -> configure this "
 "dock."
 msgstr ""
+"Den nya dockan har skapats.\n"
+"Du kan anpassa den genom att högerklicka på den -> cairo-dock -> anpassa "
+"denna docka."
 
 #: ../src/cairo-dock-user-menu.c:689
 msgid "Move to another dock"
-msgstr "Flytta till en annan dock"
+msgstr "Flytta till en annan docka"
 
 #: ../src/cairo-dock-user-menu.c:691
 #: ../src/gldit/cairo-dock-gui-factory.c:1226
 msgid "New main dock"
-msgstr "Ny huvuddock"
+msgstr "Ny huvuddocka"
 
 #: ../src/cairo-dock-user-menu.c:772
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
 msgstr ""
-"Tyvärr, kunde inte hitta motsvarande beskrivningsfil.\n"
-"Överväg Drag-och-släpp av programstartaren från menyn Program."
+"Tyvärr, Det gick inte att hitta tillhörande beskrivningsfil.\n"
+"Överväg Dra-och-släpp programstartaren från Programmenyn."
 
 #: ../src/cairo-dock-user-menu.c:819
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
-msgstr "Programstartaren (%s) kommer att tas bort från docken. Är du säker?"
+msgstr "Du håller på att ta bort denna applet (%s) från dockan. Är du säker?"
 
 #: ../src/cairo-dock-user-menu.c:888 ../src/gldit/cairo-dock-gui-factory.c:761
 msgid "Pick up an image"
-msgstr ""
+msgstr "Plocka upp en bild"
 
 #: ../src/cairo-dock-user-menu.c:891 ../src/gldit/cairo-dock-gui-factory.c:764
 msgid "Ok"
-msgstr ""
+msgstr "Ok"
 
 #: ../src/cairo-dock-user-menu.c:893 ../src/cairo-dock-widget-shortkeys.c:128
 #: ../src/cairo-dock-widget-themes.c:234
 #: ../src/gldit/cairo-dock-gui-factory.c:766
 msgid "Cancel"
-msgstr ""
+msgstr "Avbryt"
 
 #: ../src/cairo-dock-user-menu.c:905 ../src/gldit/cairo-dock-gui-factory.c:805
 #: ../data/messages:463 ../data/messages:469 ../data/messages:735
 #: ../data/messages:977
 msgid "Image"
-msgstr ""
+msgstr "Bild"
 
 #: ../src/cairo-dock-user-menu.c:1005
 msgid "Configure"
-msgstr "Inställningar"
+msgstr "Ställ in"
 
 #: ../src/cairo-dock-user-menu.c:1010
 msgid "Configure behaviour, appearance, and applets."
-msgstr "Ändra beteende, utseende och tillägg"
+msgstr "Ställ in beteende, utseende, och applets."
 
 #: ../src/cairo-dock-user-menu.c:1015
 msgid "Configure this dock"
-msgstr "Konfigurera den här docken"
+msgstr "Ställ in denna docka"
 
 #: ../src/cairo-dock-user-menu.c:1020
 msgid "Customize the position, visibility and appearance of this main dock."
-msgstr ""
-"Anpassa positionen, synligheten och utseendet av den här huvuddocken."
+msgstr "Anpassa placering, synlighet och utseende på denna huvuddocka."
 
 #: ../src/cairo-dock-user-menu.c:1022
 msgid "Delete this dock"
-msgstr ""
+msgstr "Ta bort denna docka"
 
 #: ../src/cairo-dock-user-menu.c:1032
 msgid "Manage themes"
@@ -553,33 +565,33 @@ msgstr "Hantera teman"
 #: ../src/cairo-dock-user-menu.c:1037
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
-msgstr ""
+msgstr "Välj bland många teman på servern eller spara ditt nuvarande tema."
 
 #: ../src/cairo-dock-user-menu.c:1049
 msgid "Lock icons position"
-msgstr ""
+msgstr "Lås ikonplacering"
 
 #: ../src/cairo-dock-user-menu.c:1053
 msgid "This will (un)lock the position of the icons."
-msgstr "Detta kommer låsa (upp) ikonernas position"
+msgstr "Detta kommer låsa (upp) ikonernas placering."
 
 #: ../src/cairo-dock-user-menu.c:1059
 msgid "Quick-Hide"
-msgstr "Dölj"
+msgstr "Snabbdöljning"
 
 #: ../src/cairo-dock-user-menu.c:1064
 msgid "This will hide the dock until you hover over it with the mouse."
-msgstr ""
-"Det här kommer att dölja docken tills du fokuserar över den med musen."
+msgstr "Detta kommer att dölja dockan tills du svävar med musen över den."
 
 #: ../src/cairo-dock-user-menu.c:1077
 msgid "Launch Cairo-Dock on startup"
-msgstr "Starta Cairo-Dock vid uppstart"
+msgstr "Starta Cairo-Dock vid start"
 
 #: ../src/cairo-dock-user-menu.c:1093
 msgid ""
 "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
+"Tredjehands-applets tillhandahåller integration med många program, som Pidgin"
 
 #: ../src/cairo-dock-user-menu.c:1096 ../Help/src/applet-init.c:28
 #: ../Help/src/applet-notifications.c:269
@@ -588,15 +600,15 @@ msgstr "Hjälp"
 
 #: ../src/cairo-dock-user-menu.c:1101
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
-msgstr "Det finns inga problem, bara lösningar (och många hjälpsamma tips)"
+msgstr "Det finns inga problem, bara lösningar (och många användbara tips!)"
 
 #: ../src/cairo-dock-user-menu.c:1105
 msgid "About"
-msgstr "Om programmet"
+msgstr "Om"
 
 #: ../src/cairo-dock-user-menu.c:1114
 msgid "Quit"
-msgstr "Avsluta?"
+msgstr "Avsluta"
 
 #: ../src/cairo-dock-user-menu.c:1123
 msgid ""
@@ -604,57 +616,61 @@ msgid ""
 "It's not advised to quit the dock but you can press Shift to unlock this "
 "menu entry."
 msgstr ""
+"Du kör en Cairo-Dock session!\n"
+"Det är inte tillrådligt att avsluta dockan men du kan trycka SKIFT för att "
+"låsa upp detta menyalternativ."
 
 #: ../src/cairo-dock-user-menu.c:1149 ../src/cairo-dock-user-menu.c:1162
 msgid "Launch a new (Shift+clic)"
-msgstr ""
+msgstr "Starta en ny (Skift+klick)"
 
 #: ../src/cairo-dock-user-menu.c:1154 ../src/cairo-dock-user-menu.c:1235
 msgid "Applet's handbook"
-msgstr ""
+msgstr "Applets handbok"
 
 #: ../src/cairo-dock-user-menu.c:1169 ../src/cairo-dock-user-menu.c:1214
 msgid "Edit"
-msgstr ""
+msgstr "Redigera"
 
 #: ../src/cairo-dock-user-menu.c:1171 ../src/cairo-dock-user-menu.c:1221
 msgid "Remove"
-msgstr ""
+msgstr "Ta bort"
 
 #: ../src/cairo-dock-user-menu.c:1172
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
 msgstr ""
-"Du kan ta bort en programstartare genom att dra ut den från docken med musen."
+"Du kan ta bort en programstartare genom att dra bort den från dockan med "
+"musen."
 
 #: ../src/cairo-dock-user-menu.c:1181
 msgid "Make it a launcher"
-msgstr ""
+msgstr "Gör den till en programstartare"
 
 #: ../src/cairo-dock-user-menu.c:1204
 msgid "Remove custom icon"
-msgstr ""
+msgstr "Ta bort anpassad ikon"
 
 #: ../src/cairo-dock-user-menu.c:1208
 msgid "Set a custom icon"
-msgstr ""
+msgstr "Ange en anpassad ikon"
 
 #: ../src/cairo-dock-user-menu.c:1218
 msgid "Detach"
-msgstr ""
+msgstr "Lossa"
 
 #: ../src/cairo-dock-user-menu.c:1218
 msgid "Return to the dock"
-msgstr ""
+msgstr "Återför till dockan"
 
 #: ../src/cairo-dock-user-menu.c:1225
 msgid "Duplicate"
-msgstr ""
+msgstr "Duplicera"
 
 #: ../src/cairo-dock-user-menu.c:1399
 #, c-format
 msgid "Move all to desktop %d - face %d"
-msgstr "Flytta allt till skrivbord %d - yta %d"
+msgstr "Flytta alla till skrivbord %d - yta %d"
 
 #: ../src/cairo-dock-user-menu.c:1399
 #, c-format
@@ -664,37 +680,37 @@ msgstr "Flytta till skrivbord %d - yta %d"
 #: ../src/cairo-dock-user-menu.c:1401
 #, c-format
 msgid "Move all to desktop %d"
-msgstr "Flytta allt till skrivbordet %d"
+msgstr "Flytta alla till skrivbord %d"
 
 #: ../src/cairo-dock-user-menu.c:1401
 #, c-format
 msgid "Move to desktop %d"
-msgstr "Flytta till skrivbordet %d"
+msgstr "Flytta till skrivbord %d"
 
 #: ../src/cairo-dock-user-menu.c:1403
 #, c-format
 msgid "Move all to face %d"
-msgstr ""
+msgstr "Flytta alla till yta %d"
 
 #: ../src/cairo-dock-user-menu.c:1403
 #, c-format
 msgid "Move to face %d"
-msgstr ""
+msgstr "Flytta till yta %d"
 
 #: ../src/cairo-dock-user-menu.c:1831 ../src/cairo-dock-user-menu.c:1882
 msgid "Window"
-msgstr ""
+msgstr "Fönster"
 
 #: ../src/cairo-dock-user-menu.c:1837 ../src/cairo-dock-user-menu.c:1860
 #: ../src/cairo-dock-user-menu.c:1901 ../src/cairo-dock-user-menu.c:1912
 #: ../src/cairo-dock-user-menu.c:1935 ../src/cairo-dock-user-menu.c:1976
 #: ../src/cairo-dock-user-menu.c:1986 ../Help/src/applet-notifications.c:259
 msgid "middle-click"
-msgstr ""
+msgstr "mittenklick"
 
 #: ../src/cairo-dock-user-menu.c:1852 ../src/cairo-dock-user-menu.c:1893
 msgid "Unmaximise"
-msgstr "Återställ"
+msgstr "Avmaximera"
 
 #: ../src/cairo-dock-user-menu.c:1852 ../src/cairo-dock-user-menu.c:1893
 msgid "Maximise"
@@ -711,7 +727,7 @@ msgstr "Visa"
 
 #: ../src/cairo-dock-user-menu.c:1921 ../src/cairo-dock-user-menu.c:2010
 msgid "Other actions"
-msgstr "Andra aktiviteter"
+msgstr "Andra åtgärder"
 
 #: ../src/cairo-dock-user-menu.c:1924
 msgid "Move to this desktop"
@@ -719,31 +735,31 @@ msgstr "Flytta till detta skrivbord"
 
 #: ../src/cairo-dock-user-menu.c:1929
 msgid "Not Fullscreen"
-msgstr "Lämmna helskärm"
+msgstr "Lämna helskärmsläge"
 
 #: ../src/cairo-dock-user-menu.c:1929
 msgid "Fullscreen"
-msgstr "Helskärm"
+msgstr "Helskärmsläge"
 
 #: ../src/cairo-dock-user-menu.c:1935 ../src/cairo-dock-user-menu.c:1937
 msgid "Below other windows"
-msgstr ""
+msgstr "Under andra fönster"
 
 #: ../src/cairo-dock-user-menu.c:1945
 msgid "Don't keep above"
-msgstr "Placera inte överst"
+msgstr "Behåll inte över"
 
 #: ../src/cairo-dock-user-menu.c:1945 ../Help/data/messages:349
 msgid "Keep above"
-msgstr "Placera överst"
+msgstr "Behåll över"
 
 #: ../src/cairo-dock-user-menu.c:1949
 msgid "Visible only on this desktop"
-msgstr ""
+msgstr "Synlig endast på detta skrivbord"
 
 #: ../src/cairo-dock-user-menu.c:1949
 msgid "Visible on all desktops"
-msgstr ""
+msgstr "Synlig på alla skrivbord"
 
 #: ../src/cairo-dock-user-menu.c:1957
 msgid "Kill"
@@ -751,17 +767,17 @@ msgstr "Döda"
 
 #: ../src/cairo-dock-user-menu.c:1972
 msgid "Windows"
-msgstr ""
+msgstr "Fönster"
 
 #: ../src/cairo-dock-user-menu.c:1976 ../src/cairo-dock-user-menu.c:1978
 #: ../src/cairo-dock-user-menu.c:2006
 msgid "Close all"
-msgstr "Stäng allt"
+msgstr "Stäng alla"
 
 #: ../src/cairo-dock-user-menu.c:1986 ../src/cairo-dock-user-menu.c:1988
 #: ../src/cairo-dock-user-menu.c:2004
 msgid "Minimise all"
-msgstr "Minimera allt"
+msgstr "Minimera alla"
 
 #: ../src/cairo-dock-user-menu.c:1996 ../src/cairo-dock-user-menu.c:2002
 msgid "Show all"
@@ -769,11 +785,11 @@ msgstr "Visa alla"
 
 #: ../src/cairo-dock-user-menu.c:2000
 msgid "Windows management"
-msgstr ""
+msgstr "Fönsterhantering"
 
 #: ../src/cairo-dock-user-menu.c:2012
 msgid "Move all to this desktop"
-msgstr "Flytta allt till detta skrivbord"
+msgstr "Flytta alla till detta skrivbord"
 
 #: ../src/cairo-dock-user-menu.c:2035 ../Help/data/messages:347
 msgid "Normal"
@@ -790,7 +806,7 @@ msgstr "Alltid under"
 
 #: ../src/cairo-dock-user-menu.c:2065 ../Help/data/messages:355
 msgid "Reserve space"
-msgstr ""
+msgstr "Reservera utrymme"
 
 #: ../src/cairo-dock-user-menu.c:2072
 msgid "On all desktops"
@@ -806,61 +822,63 @@ msgstr "Animering:"
 
 #: ../src/cairo-dock-widget-config.c:350
 msgid "Effects:"
-msgstr "Effekter"
+msgstr "Effekter:"
 
 #: ../src/cairo-dock-widget-items.c:243
 msgid ""
 "Main dock's parameters are available in the main configuration window."
-msgstr ""
+msgstr "Huvuddockans parametrar är tillgängliga i huvudinställningsfönstret."
 
 #: ../src/cairo-dock-widget-items.c:724
 msgid "Remove this item"
-msgstr ""
+msgstr "Ta bort detta objekt"
 
 #: ../src/cairo-dock-widget-plugins.c:105
 msgid "Configure this applet"
-msgstr "Redigera"
+msgstr "Ställ in denna applet"
 
 #: ../src/cairo-dock-widget-plugins.c:158
 msgid "Accessory"
-msgstr ""
+msgstr "Tillbehör"
 
 #: ../src/cairo-dock-widget-plugins.c:245
 msgid "Plug-in"
-msgstr ""
+msgstr "Insticksprogram"
 
 #: ../src/cairo-dock-widget-plugins.c:251 ../Help/src/applet-tips-dialog.c:297
 msgid "Category"
-msgstr ""
+msgstr "Kategori"
 
 #: ../src/cairo-dock-widget-plugins.c:279
 msgid ""
 "Click on an applet in order to have a preview and a description for it."
 msgstr ""
+"Klicka på en applet för att få en förhandsgranskning och en beskrivning av "
+"den."
 
 #: ../src/cairo-dock-widget-shortkeys.c:125
 msgid "Press the shortkey"
-msgstr ""
+msgstr "Tryck genvägen"
 
 #: ../src/cairo-dock-widget-shortkeys.c:143
 msgid "Change the shortkey"
-msgstr ""
+msgstr "Ändra genvägen"
 
 #: ../src/cairo-dock-widget-shortkeys.c:234
 msgid "Origin"
-msgstr ""
+msgstr "Ursprung"
 
 #: ../src/cairo-dock-widget-shortkeys.c:239
 msgid "Action"
-msgstr ""
+msgstr "Åtgärd"
 
 #: ../src/cairo-dock-widget-shortkeys.c:243
 msgid "Shortkey"
-msgstr ""
+msgstr "Genväg"
 
 #: ../src/cairo-dock-widget-themes.c:89
 msgid "Could not import the theme."
-msgstr "Kunde inte importera temat"
+msgstr "Det gick inte att importera temat"
 
 #: ../src/cairo-dock-widget-themes.c:194
 msgid ""
@@ -868,34 +886,35 @@ msgid ""
 "You will lose them if you don't save before choosing a new theme. Continue "
 "anyway?"
 msgstr ""
-"Du kommer att förlora ändringarna i det aktuella temat\n"
-"om du inte sparar dem innan du väljer ett nytt tema. Vill du fortsätta ändå?"
+"Du har gjort en del ändringar i det aktiva temat\n"
+"Du kommer att förlora dem om du inte sparar innan du väljer ett nytt tema. "
+"Fortsätta ändå?"
 
 #: ../src/cairo-dock-widget-themes.c:222
 msgid "Please wait while importing the theme..."
-msgstr ""
+msgstr "Vänta medan temat importeras..."
 
 #: ../src/cairo-dock-widget-themes.c:281
 msgid "Rate me"
-msgstr ""
+msgstr "Betygsätt mig"
 
 #: ../src/cairo-dock-widget-themes.c:379 ../src/cairo-dock-widget-themes.c:381
 msgid "You must try the theme before you can rate it."
-msgstr ""
+msgstr "Du måste prova temat innan du kan betygssätta det."
 
 #: ../src/cairo-dock-widget-themes.c:428
 msgid "The theme has been deleted"
-msgstr ""
+msgstr "Temat har tagit bort"
 
 #: ../src/cairo-dock-widget-themes.c:458
 msgid "Delete this theme"
-msgstr ""
+msgstr "Ta bort detta tema"
 
 #: ../src/cairo-dock-widget-themes.c:489
 #: ../src/gldit/cairo-dock-gui-factory.c:2379
 #, c-format
 msgid "Listing themes in '%s' ..."
-msgstr ""
+msgstr "Lista teman i '%s' ..."
 
 #: ../src/cairo-dock-widget-themes.c:512
 msgid "Theme"
@@ -907,7 +926,7 @@ msgstr "Betyg"
 
 #: ../src/cairo-dock-widget-themes.c:531
 msgid "Sobriety"
-msgstr "avhållsamhet"
+msgstr "Måttfullhet"
 
 #: ../src/cairo-dock-widget-themes.c:595
 msgid "Save as:"
@@ -915,134 +934,156 @@ msgstr "Spara som:"
 
 #: ../src/cairo-dock-widget-themes.c:675
 msgid "Importing theme ..."
-msgstr ""
+msgstr "Importerar tema ..."
 
 #: ../src/cairo-dock-widget-themes.c:683
 msgid "Theme has been saved"
-msgstr ""
+msgstr "Tema har sparats"
 
 #: ../src/cairo-dock.c:148
 #, c-format
 msgid "Happy new year %d !!!"
-msgstr ""
+msgstr "Gott Nytt År %d !!!"
 
 #: ../src/cairo-dock.c:351
 msgid "Use Cairo backend."
-msgstr ""
+msgstr "Använd Cairo-bakände."
 
 #: ../src/cairo-dock.c:354
 msgid "Use OpenGL backend."
-msgstr ""
+msgstr "Använd OpenGL-bakände."
 
 #: ../src/cairo-dock.c:357
 msgid ""
 "Use OpenGL backend with indirect rendering. There are very few case where "
 "this option should be used."
 msgstr ""
+"Använd OpenGL med indirekt rendering. Det finns få fall då detta alternativ "
+"bör användas."
 
 #: ../src/cairo-dock.c:360
 msgid "Ask again on startup which backend to use."
-msgstr ""
+msgstr "Fråga igen vid start vilken bakände som ska användas."
 
 #: ../src/cairo-dock.c:363
 msgid "Force the dock to consider this environnement - use it with care."
-msgstr ""
+msgstr "Tvinga dockan att överväga denna omgivning - använd den försiktigt."
 
 #: ../src/cairo-dock.c:366
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
 msgstr ""
+"Tvinga dockan att läsas in från denna katalog, istället för ~/.config/cairo-"
+"dock."
 
 #: ../src/cairo-dock.c:369
 msgid ""
 "Address of a server containing additional themes. This will overwrite the "
 "default server address."
 msgstr ""
+"Adress till en server som innehåller ytterligare teman. Denna kommer att "
+"skriva över standardserveradressen."
 
 #: ../src/cairo-dock.c:372
 msgid ""
 "Wait for N seconds before starting; this is useful if you notice some "
 "problems when the dock starts with the session."
 msgstr ""
+"Vänta i N sekunder innan start; detta är användbart om du lägger märke till "
+"problem då dockan startar med sessionen."
 
 #: ../src/cairo-dock.c:375
 msgid ""
 "Allow to edit the config before the dock is started and show the config "
 "panel on start."
 msgstr ""
+"Tillåt redigering av inställningar innan dockan startar och visa "
+"inställningspanelen vid start."
 
 #: ../src/cairo-dock.c:378
 msgid "Exclude a given plug-in from activating (it is still loaded though)."
 msgstr ""
+"Uteslut ett angivet insticksprogram från aktivering (det läses dock "
+"fortfarande in)."
 
 #: ../src/cairo-dock.c:381
 msgid "Don't load any plug-ins."
-msgstr ""
+msgstr "Läs inte in några insticksprogram."
 
 #: ../src/cairo-dock.c:384
 msgid ""
 "Work around some bugs in Metacity Window-Manager (invisible dialogs or sub-"
 "docks)"
 msgstr ""
+"Komma runt en del buggar i Metacity-fönsterhanteraren (osynliga dialogrutor "
+"eller underdockor)"
 
 #: ../src/cairo-dock.c:387
 msgid ""
 "Log verbosity (debug,message,warning,critical,error); default is warning."
 msgstr ""
+"Logginformationsnivå (debug,message,warning,critical,error); standard är "
+"warning."
 
 #: ../src/cairo-dock.c:390
 msgid "Force to display some output messages with colors."
-msgstr ""
+msgstr "Tvinga att visa en del utdatameddelanden med färger."
 
 #: ../src/cairo-dock.c:393
 msgid "Print version and quit."
-msgstr ""
+msgstr "Skriv version och avsluta."
 
 #: ../src/cairo-dock.c:396
 msgid "Lock the dock so that any modification is impossible for users."
-msgstr ""
+msgstr "Lås dockan så att all modifiering av användare är omöjlig."
 
 #: ../src/cairo-dock.c:400
 msgid "Keep the dock above other windows whatever."
-msgstr ""
+msgstr "Behåll dockan över andra fönster oavsett."
 
 #: ../src/cairo-dock.c:403
 msgid "Don't make the dock appear on all desktops."
-msgstr ""
+msgstr "Gör så att dockan inte visas på alla skrivbord."
 
 #: ../src/cairo-dock.c:406 ../src/cairo-dock.c:466
 msgid "Cairo-Dock makes anything, including coffee !"
-msgstr ""
+msgstr "Cairo-Dock fixar allt, inklusive kaffe !"
 
 #: ../src/cairo-dock.c:409
 msgid ""
 "Ask the dock to load additionnal modules contained in this directory (though "
 "it is unsafe for your dock to load unnofficial modules)."
 msgstr ""
+"Be dockan att läsa in ytterligare moduler som finns i denna katalog (även om "
+"det är osäkert för din docka att läsa in inofficiella moduler)."
 
 #: ../src/cairo-dock.c:412
 msgid ""
 "For debugging purpose only. The crash manager will not be started to hunt "
 "down the bugs."
 msgstr ""
+"Endast för felsökning. Kraschhanteraren kommer inte att startas för att "
+"spåra buggar."
 
 #: ../src/cairo-dock.c:415
 msgid ""
 "For debugging purpose only. Some hidden and still unstable options will be "
 "activated."
 msgstr ""
+"Endast för felsökning. Några dolda och fortfarande instabila alternativ "
+"kommer att aktiveras."
 
 #: ../src/cairo-dock.c:535
 msgid "Use OpenGL in Cairo-Dock"
-msgstr "Använd OpenGL för Cairo-Dock?"
+msgstr "Använd OpenGL för Cairo-Dock"
 
 #: ../src/cairo-dock.c:538 ../src/cairo-dock.c:785
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: ../src/cairo-dock.c:540 ../src/cairo-dock.c:786 ../data/messages:823
 msgid "No"
-msgstr ""
+msgstr "Nej"
 
 #: ../src/cairo-dock.c:543
 msgid ""
@@ -1055,20 +1096,18 @@ msgid ""
 " (To not show this dialog, launch the dock from the Application menu,\n"
 "  or with the -o option to force OpenGL and -c to force cairo.)"
 msgstr ""
-"OpenGL gör hårdvarubaserad grafikacceleration möjlig, vilket avsevärt "
-"reducerar processorns belastning.\n"
-"Det medger också en del visuella effekter liknande de som uppnås med "
-"Compiz.\n"
-"Men, vissa grafikkort och/eller drivrutiner saknar support för OpenGL, "
-"vilket då kan förhindra Cairo-Dock från att fungera korrekt.\n"
+"OpenGL låter dig använda hårdvarubaserad grafikacceleration, vilket "
+"reducerar CPU-belastningen till ett minimum.\n"
+"Det tillåter också en del snygga visuella effekter liknande Compiz.\n"
+"Men, vissa grafikkort och/eller drivrutiner stödjer det inte fullt ut, "
+"vilket kan förhindra Cairo-Dock från att fungera korrekt.\n"
 "Vill du aktivera OpenGL?\n"
-" (För att undvika att denna dialog visas, starta Cairo-Dock från menyn "
-"Program\n"
-"  eller med flaggan -o för OpenGL eller -c utan OpenGL.)"
+" (För att inte visa denna dialogruta, starta dockan från Programmenyn\n"
+"  eller med flaggan -o för att tvinga OpenGL eller -c för att tvinga cairo.)"
 
 #: ../src/cairo-dock.c:550
 msgid "Remember this choice"
-msgstr "Kom ihåg mitt svar"
+msgstr "Kom ihåg detta val"
 
 #: ../src/cairo-dock.c:716 ../src/cairo-dock.c:908
 #, c-format
@@ -1078,6 +1117,10 @@ msgid ""
 "You can reactivate it, if it happens again thanks to report it at http://glx-"
 "dock.org"
 msgstr ""
+"Modulen '%s' har avaktiverats på grund av att den kan ha förorsakat "
+"problem.\n"
+"Du kan återaktivera den, om det händer igen rapportera gärna till http://glx-"
+"dock.org"
 
 #: ../src/cairo-dock.c:728
 msgid "< Maintenance mode >"
@@ -1085,11 +1128,11 @@ msgstr "< Underhållsläge >"
 
 #: ../src/cairo-dock.c:730
 msgid "Something went wrong with this applet:"
-msgstr ""
+msgstr "Något gick fel med denna applet:"
 
 #: ../src/cairo-dock.c:782
 msgid "You're using our Cairo-Dock session"
-msgstr ""
+msgstr "Du använder vår Cairo-Dock session"
 
 #: ../src/cairo-dock.c:788
 msgid ""
@@ -1100,6 +1143,12 @@ msgid ""
 "Note: your current theme will be saved and can be reimported later from the "
 "Themes manager"
 msgstr ""
+"Det kan vara intressant att använda ett anpassat tema för denna session.\n"
+"\n"
+"Vill du läsa in vårt \"Standardpanel\"-tema?\n"
+"\n"
+"Observera: Ditt nuvarande tema kommer att sparas och kan återimporteras "
+"senare från Temahanteraren"
 
 #: ../src/cairo-dock.c:833
 msgid ""
@@ -1112,6 +1161,14 @@ msgid ""
 "But if you really want to use the dock without these plug-ins, you can "
 "launch the dock with the '-f' option to no longer have this message.\n"
 msgstr ""
+"Inga insticksprogram hittades.\n"
+"Insticksprogram tillhandahåller de flesta funktioner (animeringar, applets, "
+"utseenden, etc).\n"
+"Se: http://glx-dock.org för mer information.\n"
+"Det är nästan meningslöst att köra dockan utan dem och det beror förmodligen "
+"på ett installationsfel av dessa insticksprogram.\n"
+"Men om du verkligen vill använda dockan utan dessa insticksprogram, kan du "
+"starta dockan med alternativet '-f' för att slippa detta meddelande.\n"
 
 #: ../src/cairo-dock.c:906
 #, c-format
@@ -1120,6 +1177,9 @@ msgid ""
 "It has been restored successfully, but if it happens again, please report it "
 "at http://glx-dock.org"
 msgstr ""
+"Modulen '%s' kan ha stött på ett problem.\n"
+"Den har återställts, men om det händer igen, rapportera det gärna på "
+"http://glx-dock.org"
 
 #: ../src/gldit/cairo-dock-applet-facility.h:254
 msgid ""
@@ -1127,6 +1187,9 @@ msgid ""
 " You can change this by opening the configuration of this module. Do you "
 "want to do it now?"
 msgstr ""
+"Temat kunde inte hittas; standardtemat kommer att användas istället.\n"
+"Du kan ändra detta genom att öppna denna moduls inställningar. Vill du göra "
+"det nu?"
 
 #: ../src/gldit/cairo-dock-applet-facility.h:270
 msgid ""
@@ -1134,41 +1197,45 @@ msgid ""
 "You can change this by opening the configuration of this module. Do you want "
 "to do it now?"
 msgstr ""
+"Mätartemat kunde inte hittas; en standardmätare kommer att användas "
+"istället.\n"
+"Du kan ändra detta genom att öppna denna moduls inställningar. Vill du göra "
+"det nu?"
 
 #: ../src/gldit/cairo-dock-desklet-manager.c:806 ../data/messages:461
 #: ../data/messages:551 ../data/messages:691 ../data/messages:733
 #: ../data/messages:805 ../data/messages:839
 msgid "Automatic"
-msgstr ""
+msgstr "Automatiskt"
 
 #: ../src/gldit/cairo-dock-desklet-manager.c:819
 msgid "_custom decoration_"
-msgstr ""
+msgstr "_anpassad dekoration_"
 
 #: ../src/gldit/cairo-dock-dock-factory.c:1337
 msgid "Sorry but the dock is locked"
-msgstr ""
+msgstr "Ursäkta men dockan är låst"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:236
 msgid "Bottom dock"
-msgstr ""
+msgstr "Bottendocka"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:238
 msgid "Top dock"
-msgstr ""
+msgstr "Toppdocka"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:243
 msgid "Right dock"
-msgstr ""
+msgstr "Högerdocka"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:245
 msgid "Left dock"
-msgstr ""
+msgstr "Vänsterdocka"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:1692
 #: ../src/gldit/cairo-dock-dock-manager.c:1792
 msgid "Pop up the main dock"
-msgstr ""
+msgstr "Visa huvuddockan"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:256
 #, c-format
@@ -1193,7 +1260,7 @@ msgstr "Användare"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:281
 msgid "Net"
-msgstr ""
+msgstr "Nät"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:282
 msgid "New"
@@ -1205,49 +1272,49 @@ msgstr "Uppdaterad"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:761
 msgid "Pick up a file"
-msgstr ""
+msgstr "Plocka upp en fil"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:761
 msgid "Pick up a directory"
-msgstr ""
+msgstr "Plocka upp en katalog"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1049
 msgid "_Custom Icons_"
-msgstr ""
+msgstr "_Anpassade ikoner_"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1066
 #: ../src/gldit/cairo-dock-gui-factory.c:1111
 msgid "Use all screens"
-msgstr ""
+msgstr "Använd alla skärmar"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1088 ../data/messages:13
 #: ../data/messages:163 ../data/messages:169 ../data/messages:909
 msgid "left"
-msgstr "västerkant"
+msgstr "vänster"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1090 ../data/messages:11
 #: ../data/messages:161 ../data/messages:171 ../data/messages:907
 msgid "right"
-msgstr "högerkant"
+msgstr "höger"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1092
 #: ../src/gldit/cairo-dock-gui-factory.c:1102
 msgid "middle"
-msgstr ""
+msgstr "mitten"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1098 ../data/messages:9
 #: ../data/messages:159 ../data/messages:905
 msgid "top"
-msgstr "ovankant"
+msgstr "topp"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1100 ../data/messages:7
 #: ../data/messages:157 ../data/messages:903
 msgid "bottom"
-msgstr "nederkant"
+msgstr "botten"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1105
 msgid "Screen"
-msgstr ""
+msgstr "Skärm"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1399
 #, c-format
@@ -1256,9 +1323,9 @@ msgid ""
 "Be sure to install it with the same version as the dock to enjoy these "
 "features."
 msgstr ""
-"Modulen '%s' kunde inte hittas.\n"
-"Se till att installera samma version som Cairo-Dock har för att medge dessa "
-"egenskaper."
+"Det gick inte att hitta modulen '%s'.\n"
+"Se till att installera den med samma version som dockan för att använda "
+"dessa funktioner."
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1408
 #, c-format
@@ -1266,6 +1333,8 @@ msgid ""
 "The '%s' plug-in is not active.\n"
 "Activate it now?"
 msgstr ""
+"Insticksprogrammet '%s' är inte aktiv.\n"
+"Aktivera det nu?"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:3043
 msgid "link"
@@ -1273,19 +1342,19 @@ msgstr "länk"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:3105
 msgid "Grab"
-msgstr "greppa"
+msgstr "Fånga"
 
 #: ../src/gldit/cairo-dock-launcher-manager.c:328
 msgid "Enter a command"
-msgstr ""
+msgstr "Ange ett kommando"
 
 #: ../src/gldit/cairo-dock-launcher-manager.c:329
 msgid "New launcher"
-msgstr ""
+msgstr "Ny programstartare"
 
 #: ../src/gldit/cairo-dock-module-instance-manager.c:310
 msgid "by"
-msgstr ""
+msgstr "av"
 
 #: ../src/gldit/cairo-dock-struct.h:488 ../data/messages:1067
 #: ../data/messages:1075
@@ -1299,15 +1368,15 @@ msgstr "Är du säker på att du vill skriva över tema %s?"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:265
 msgid "Last modification on:"
-msgstr ""
+msgstr "Senast ändrad den:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:336
 msgid "Your theme should now be available in this directory:"
-msgstr ""
+msgstr "Ditt tema bör nu finnas tillgängligt i denna katalog:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:341
 msgid "Error when launching 'cairo-dock-package-theme' script"
-msgstr ""
+msgstr "Fel då skriptet 'cairo-dock-package-theme' startades"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:362
 #, c-format
@@ -1315,15 +1384,17 @@ msgid ""
 "Could not access remote file %s. Maybe the server is down.\n"
 "Please retry later or contact us at glx-dock.org."
 msgstr ""
+"Det gick inte att få tillgång till fjärrfilen %s. Servern är kanske nere.\n"
+"Försök igen senare eller kontakta oss på glx-dock.org."
 
 #: ../src/gldit/cairo-dock-themes-manager.c:376
 #, c-format
 msgid "Are you sure you want to delete theme %s?"
-msgstr "Är du säker på att du vill radera temat %s?"
+msgstr "Är du säker på att du vill radera tema %s?"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:378
 msgid "Are you sure you want to delete these themes?"
-msgstr "Är du säker på att du vill radera dessa teman?"
+msgstr "Är du säker på att du vill ta bort dessa teman?"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:576 ../data/messages:39
 #: ../data/messages:211
@@ -1338,7 +1409,7 @@ msgstr "Tona bort"
 #: ../src/implementations/cairo-dock-hiding-effect.c:592 ../data/messages:43
 #: ../data/messages:215
 msgid "Semi transparent"
-msgstr ""
+msgstr "Halvtransparent"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:601 ../data/messages:45
 #: ../data/messages:217
@@ -1348,7 +1419,7 @@ msgstr "Zooma ut"
 #: ../src/implementations/cairo-dock-hiding-effect.c:609 ../data/messages:47
 #: ../data/messages:219
 msgid "Folding"
-msgstr ""
+msgstr "Hopvikbar"
 
 #: ../Help/src/applet-composite.c:71
 msgid ""
@@ -1359,6 +1430,13 @@ msgid ""
 "Hope you will enjoy this soft !\n"
 "  (you can now click on this dialog to close it)"
 msgstr ""
+"Välkommen till Cairo-Dock !\n"
+"Denna applet finns för att hjälpa dig att börja använda dockan; bara klicka "
+"på den.\n"
+"Om du har frågor/önskemål/anmärkningar, besök oss gärna på http://glx-"
+"dock.org.\n"
+"Hoppas du kommer att trivas med det här programmet !\n"
+" (Du kan nu klicka på dialogrutan för att stänga den)"
 
 #: ../Help/src/applet-composite.c:165
 msgid "Don't ask me any more"
@@ -1370,12 +1448,17 @@ msgid ""
 "composite manager.\n"
 "Do you want to activate it now?"
 msgstr ""
+"För att ta bort den svarta rektangeln runt dockan, måste du aktivera "
+"komposithanteraren.\n"
+"Vill du aktivera den nu?"
 
 #: ../Help/src/applet-composite.c:182
 msgid ""
 "Do you want to keep this setting?\n"
 "In 15 seconds, the previous setting will be restored."
 msgstr ""
+"Vill du behålla denna inställning?\n"
+"om 15 sekunder, kommer den föregående inställningen att återställas."
 
 #: ../Help/src/applet-composite.c:198
 msgid ""
@@ -1387,6 +1470,13 @@ msgid ""
 "option is in the 'System' module of the configuration, at the bottom of the "
 "page."
 msgstr ""
+"För att ta bort den svarta rektangeln runt dockan, måste du aktivera "
+"komposithanteraren.\n"
+"Detta kan till exempel göras genom att aktivera skrivbordseffekter, starta "
+"Compiz, eller aktivera kompositeffekter i Metacity.\n"
+"Om din maskin inte stöder kompositeffekter, kan Cairo-Dock efterlikna dem. "
+"Detta alternativ finns i inställningarnas \"System\"-modul, längst ned på "
+"sidan."
 
 #: ../Help/src/applet-init.c:31
 msgid ""
@@ -1396,38 +1486,43 @@ msgid ""
 "Middle-click to open the configuration window.\n"
 "Right-click to access some troubleshooting actions."
 msgstr ""
+"Denna applet är gjord för att hjälpa dig.\n"
+"Klicka på dess ikon för att visa användbara tips om Cairo-Docks "
+"möjligheter.\n"
+"Mittenklicka för att öppna inställningsfönstret.\n"
+"Högerklicka för att komma åt några felsökningsåtgärder."
 
 #: ../Help/src/applet-notifications.c:259
 msgid "Open global settings"
-msgstr ""
+msgstr "Öppna globala inställningar"
 
 #: ../Help/src/applet-notifications.c:264
 msgid "Activate composite"
-msgstr ""
+msgstr "Aktivera kompositeffekter"
 
 #: ../Help/src/applet-notifications.c:266
 msgid "Disable the gnome-panel"
-msgstr ""
+msgstr "Inaktivera gnomepanelen"
 
 #: ../Help/src/applet-notifications.c:268
 msgid "Disable Unity"
-msgstr ""
+msgstr "Inaktivera Unity"
 
 #: ../Help/src/applet-notifications.c:270
 msgid "Online help"
-msgstr ""
+msgstr "Onlinehjälp"
 
 #: ../Help/src/applet-tips-dialog.c:152
 msgid "Tips and Tricks"
-msgstr ""
+msgstr "Tips och tricks"
 
 #: ../Help/data/messages:1
 msgid "General"
-msgstr ""
+msgstr "Allmänt"
 
 #: ../Help/data/messages:3
 msgid "Using the dock"
-msgstr ""
+msgstr "Använda dockan"
 
 #: ../Help/data/messages:5
 msgid ""
@@ -1437,10 +1532,15 @@ msgid ""
 "Some applets let you bind a shortkey to an action, and decide which action "
 "sould be on middle-click."
 msgstr ""
+"De flesta ikoner i dockan har flera åtgärder: den primära åtgärden vid "
+"vänsterklick, en sekundär åtgärd vid mittenklick, och ytterligare åtgärder "
+"vid högerklick (på menyn).\n"
+"En del applets låter dig binda ett kortkommando till en åtgärd, och bestämma "
+"vilken åtgärd som ska finnas vid mittenklick."
 
 #: ../Help/data/messages:7
 msgid "Adding features"
-msgstr ""
+msgstr "Lägga till funktioner"
 
 #: ../Help/data/messages:9
 msgid ""
@@ -1452,10 +1552,17 @@ msgid ""
 "the \"More applets\" button (which will lead you to our applets web page) "
 "and then just drag-and-drop the link of an applet into your dock."
 msgstr ""
+"Cairo-Dock har många applets. Applets är små program som lever inuti dockan, "
+"till exempel en klocka eller en utloggningsknapp.\n"
+"För att aktivera nya applets, öppna inställningar (högerklick -> Cairo-Dock -"
+"> inställningar), gå till \"Tillägg\", och bocka för den applet du vill ha.\n"
+"Fler applets kan enkelt installeras; i inställningsfönstret, klicka på "
+"\"Fler applets\"-knappen (som för dig till vår applet-webbsida) och därefter "
+"bara dra-och-släpp länken till en applet på din docka."
 
 #: ../Help/data/messages:13
 msgid "Adding a launcher"
-msgstr ""
+msgstr "Lägg till en programstartare"
 
 #: ../Help/data/messages:15
 msgid ""
@@ -1464,20 +1571,26 @@ msgid ""
 "Alternatively, if an application is already opened, you can right-click on "
 "its icon and select \"make it a launcher\"."
 msgstr ""
+"Du kan lägga till en programstartare genom att dra-och-släppa den från "
+"Programmenyn på dockan. En animerad pil visas då du kan släppa.\n"
+"Alternativt, om ett program redan är öppet, kan du högerklicka på dess ikon "
+"och välja \"gör den till en programstartare\"."
 
 #: ../Help/data/messages:17
 msgid "Removing a launcher"
-msgstr ""
+msgstr "Ta bort en programstartare"
 
 #: ../Help/data/messages:19
 msgid ""
 "You can remove a launcher by drag-and-dropping it outside the dock. A "
 "\"delete\" emblem will appear on it when you can drop it."
 msgstr ""
+"Du kan ta bort en programstartare genom dra-och-släppa den utanför dockan. "
+"Ett \"ta bort\"-märke visas när du kan släppa den."
 
 #: ../Help/data/messages:21
 msgid "Grouping icons into a sub-dock"
-msgstr ""
+msgstr "Gruppera ikoner i en underdocka"
 
 #: ../Help/data/messages:23
 msgid ""
@@ -1486,10 +1599,15 @@ msgid ""
 "To move an icon into the sub-dock, right-click on an icon -> move to another "
 "dock -> select the sub-dock's name."
 msgstr ""
+"Du kan gruppera ikoner i en \"underdocka\".\n"
+"För att lägga till en underdocka, högerklicka på dockan -> lägg till -> en "
+"underdocka.\n"
+"För att flytta en ikon till underdockan, högerklicka på en ikon -> flytta "
+"till en annan docka -> välj underdockans namn."
 
 #: ../Help/data/messages:25
 msgid "Moving icons"
-msgstr ""
+msgstr "Flytta ikoner"
 
 #: ../Help/data/messages:27
 msgid ""
@@ -1499,10 +1617,15 @@ msgid ""
 "If you select \"a new main dock\", a main dock will be created with this "
 "icon inside."
 msgstr ""
+"Du kan dra en ikon till en ny plats inuti dess docka.\n"
+"Du kan flytta en ikon till en annan docka genom att högerklicka på den -> "
+"flytta till en annan docka -> välj den docka du vill.\n"
+"Om du väljer \"en ny huvuddocka\", kommer en ny huvuddocka att skapas med "
+"denna ikon i."
 
 #: ../Help/data/messages:29
 msgid "Changing an icon's image"
-msgstr ""
+msgstr "Ändra en ikons bild"
 
 #: ../Help/data/messages:31
 msgid ""
@@ -1517,10 +1640,20 @@ msgid ""
 "of them to be used instead of the default icon theme, in the global config "
 "window."
 msgstr ""
+"För en programstartare eller applet:\n"
+"Öppna ikonens inställningar, och ställ in en sökväg till en bild.\n"
+"- För en programmikon:\n"
+"Högerklicka på ikonen -> \"Andra åtgärder\" -> \"Ställ in en anpassad "
+"ikon\", och välj en bild. För att ta bort den anpassade bilden, högerklicka "
+"på ikonen -> \"Andra åtgärder\" -> \"ta bort anpassad ikon\".\n"
+"\n"
+"Om du har installerat några ikonteman på din PC, kan du också välja att "
+"använda ett av dem istället för standardikontemat, i fönstret med globala "
+"inställningar."
 
 #: ../Help/data/messages:33
 msgid "Resizing icons"
-msgstr ""
+msgstr "Ändra storlek på ikoner"
 
 #: ../Help/data/messages:35
 msgid ""
@@ -1532,10 +1665,17 @@ msgid ""
 "Also, you can define the size of each applet independently in their own "
 "settings."
 msgstr ""
+"Du kan göra ikonerna och zooeffekten mindre eller kraftigare. Öppna "
+"inställningarna (högerklicka -> Cairo-Dock -> ställ in) och gå till Utseende "
+"(eller Ikoner i avancerat läge).\n"
+"Observera att om det finns för många ikoner inuti dockan, kommer de att "
+"zoomas ut för att passa på skärmen.\n"
+"Dessutom, kan du bestämma varje applets storlek oberoende i deras egna "
+"inställningar."
 
 #: ../Help/data/messages:37
 msgid "Separating icons"
-msgstr ""
+msgstr "Skilja ikoner"
 
 #: ../Help/data/messages:39
 msgid ""
@@ -1546,10 +1686,16 @@ msgid ""
 "between each group.\n"
 "In the \"panel\" view, separators are represented as gap between icons."
 msgstr ""
+"Du kan lägga till avgränsare mellan ikoner genom att högerklicka på dockan -"
+"> lägg till -> en avgränsare.\n"
+"Dessutom, om du aktiverade alternativet att separera ikoner av olika typ "
+"(programstartare/program/applets), kommer en avgränsare att läggas till "
+"automatiskt mellan varje grupp.\n"
+"I \"panel\" vyn, representeras avgränsare som mellanrum mellan ikoner."
 
 #: ../Help/data/messages:43
 msgid "Using the dock as a taskbar"
-msgstr ""
+msgstr "Använda dockan som ett aktivitetsfält"
 
 #: ../Help/data/messages:45
 msgid ""
@@ -1561,49 +1707,63 @@ msgid ""
 "the windows of the current desktop, only the hidden windows, separated from "
 "the launcher, etc."
 msgstr ""
+"När ett program är igång, kommer en tillhörande ikon att visas i dockan.\n"
+"Om programmet redan har en startare, kommer ikonen inte att visas, istället "
+"kommer dess ikon att ha en liten indikator.\n"
+"Observera att du kan bestämma vilka program som ska visas i dockan: endast "
+"fönstren från det aktiva skrivbordet, endast de dolda fönstren, separerade "
+"från programstartaren, etc."
 
 #: ../Help/data/messages:47
 msgid "Closing a window"
-msgstr ""
+msgstr "Stänga ett fönster"
 
 #: ../Help/data/messages:49
 msgid ""
 "You can close a window by middle-clicking on its icon (or from the menu)."
 msgstr ""
+"Du kan stänga ett fönster genom att mittenklicka på dess ikon (eller från "
+"menyn)."
 
 #: ../Help/data/messages:51
 msgid "Minimizing / restauring a window"
-msgstr ""
+msgstr "Minimera / återställa ett fönster"
 
 #: ../Help/data/messages:53
 msgid ""
 "Clicking on its icon will bring the window on top.\n"
 "When the window has the focus, clicking on its icon will minimize the window."
 msgstr ""
+"Genom att klicka på dess ikon flyttar ett fönster överst.\n"
+"När fönstret har fokus, kommer klick på dess ikon att minimera fönstret."
 
 #: ../Help/data/messages:55
 msgid "Launching an application several times"
-msgstr ""
+msgstr "Starta ett program flera gånger"
 
 #: ../Help/data/messages:57
 msgid ""
 "You can launch an application several times by SHIFT+clicking on its icon "
 "(or from the menu)."
 msgstr ""
+"Du kan starta ett program flera gånger genom SKIFT+klicka på dess ikon "
+"(eller från menyn)."
 
 #: ../Help/data/messages:59
 msgid "Switching between the windows of a same application"
-msgstr ""
+msgstr "Växla mellan fönster från samma program"
 
 #: ../Help/data/messages:61
 msgid ""
 "With your mouse, scroll up/down on one of the icons of the application. Each "
 "time you scroll, the next/previous window will be presented to you."
 msgstr ""
+"Med din mus, rulla upp/ned på en av programmets ikoner. Varje gång du "
+"rullar, kommer nästa/senaste fönstret att visas för dig."
 
 #: ../Help/data/messages:63
 msgid "Grouping windows of a given application"
-msgstr ""
+msgstr "Gruppera fönster från ett visst program"
 
 #: ../Help/data/messages:65
 msgid ""
@@ -1612,24 +1772,30 @@ msgid ""
 "Clicking on the main icon will display all the windows of the application "
 "side-by-side (if your Window Manager is able to do that)."
 msgstr ""
+"Då ett program har flera fönster, kommer en ikon för vart och ett ett att "
+"visas i dockan; de kommer att grupperas tillsammans i en underdocka.\n"
+"Att klicka på huvudikonen kommer att visa alla programmets fönster bredvid "
+"varandra (om din fönsterhanterare klarar av att göra detta)."
 
 #: ../Help/data/messages:67
 msgid "Setting a custom icon for an application"
-msgstr ""
+msgstr "Ställa in en anpassad ikon för ett program"
 
 #: ../Help/data/messages:69
 msgid "See \"Changing an icon's image\" in the \"Icons\" category."
-msgstr ""
+msgstr "Se \"Ändra en ikons bild\" i kategorin \"Ikoner\""
 
 #: ../Help/data/messages:71
 msgid "Showing windows preview over the icons"
-msgstr ""
+msgstr "Visa förhandsgranskning av fönster över ikonerna"
 
 #: ../Help/data/messages:73
 msgid ""
 "You need to run Compiz, and enable the \"Window Preview\" plug-in in Compiz. "
 "Install \"ccsm\" to be able to configure Compiz."
 msgstr ""
+"Du måste köra Compiz, och aktivera insticksprogrammet \"Window Preview\" i "
+"Compiz. Installera \"ccsm\" för att ställa in Compiz."
 
 #: ../Help/data/messages:75 ../Help/data/messages:185
 #: ../Help/data/messages:205 ../Help/data/messages:243
@@ -1637,14 +1803,15 @@ msgstr ""
 #: ../Help/data/messages:295 ../Help/data/messages:299
 msgid "Tip: If this line is grayed, it's because this tip is not for you.)"
 msgstr ""
+"Tips: Om denna rad är nedtonad, är det för att detta tips inte är för dig.)"
 
 #: ../Help/data/messages:77
 msgid "If you're using Compiz, you can click on this button:"
-msgstr ""
+msgstr "Om du använder Compiz, kan du klicka på denna knapp:"
 
 #: ../Help/data/messages:81
 msgid "Positionning the dock on the screen"
-msgstr ""
+msgstr "Placera dockan på skärmen"
 
 #: ../Help/data/messages:83
 msgid ""
@@ -1654,10 +1821,15 @@ msgid ""
 "In the case of a 2nd or 3rd dock, right-click -> Cairo-Dock -> set up this "
 "dock, and then select the position you want."
 msgstr ""
+"Dockan kan placeras var som helst på skärmen.\n"
+"I fallet med huvuddockan, högerklicka -> Cairo-Dock -> ställ in, och välj "
+"därefter placeringen du vill ha.\n"
+"I fallet med en 2:a eller 3:e docka, högerklicka -> Cairo-Dock -> ställ in "
+"denna docka, och välj därefter den placering du vill."
 
 #: ../Help/data/messages:85
 msgid "Hiding the dock to use all the screen"
-msgstr ""
+msgstr "Gömma dockan för att använda hela skärmen"
 
 #: ../Help/data/messages:87
 msgid ""
@@ -1668,10 +1840,16 @@ msgid ""
 "In the case of a 2nd or 3rd dock, right-click -> Cairo-Dock -> set up this "
 "dock, and then select the visibility you want."
 msgstr ""
+"Dockan kan gömma sig själv för att överlåta hela skärmen till program. Men "
+"den kan också alltid synas som en panel.\n"
+"För att ändra detta, högerklicka -> Cairo-Dock -> ställ in, och välj "
+"därefter den synlighet du vill ha.\n"
+"I fallet med en 2:a eller 3:e docka, högerklicka -> Cairo-Dock ställ in "
+"denna docka, och välj därefter den synlighet du vill ha."
 
 #: ../Help/data/messages:91
 msgid "Placing applets on your desktop"
-msgstr ""
+msgstr "Placera applets på ditt skrivbord"
 
 #: ../Help/data/messages:93
 msgid ""
@@ -1679,10 +1857,13 @@ msgid ""
 "wherever on your desktop.\n"
 "To detach an applet from the dock, simply drag and drop it outside the dock."
 msgstr ""
+"Applets kan leva inuti desklets, som är små fönster som kan placeras var som "
+"helst på ditt skrivbord.\n"
+"För att lossa en applet från dockan, bara dra-och-släpp den utanför dockan."
 
 #: ../Help/data/messages:95
 msgid "Moving desklets"
-msgstr ""
+msgstr "Flytta desklets"
 
 #: ../Help/data/messages:97
 msgid ""
@@ -1692,10 +1873,16 @@ msgid ""
 "If you don't want to move it any more, you can lock its position by right-"
 "clicking on it -> \"lock position\". To unlock it, de-select this option."
 msgstr ""
+"Desklets kan enkelt flyttas vartsomhelst med musen.\n"
+"De kan också roteras genom att dra i de små pilarna överst och på "
+"vänstersidorna.\n"
+"Om du inte vill flytta den mer, kan du låsa dess placering genom att "
+"högerklicka på den -> \"lås placering\". Avmarkera detta alternativ för att "
+"låsa upp den."
 
 #: ../Help/data/messages:99
 msgid "Placing desklets"
-msgstr ""
+msgstr "Placera desklets"
 
 #: ../Help/data/messages:101
 msgid ""
@@ -1707,10 +1894,17 @@ msgid ""
 "to the mouse (means you can click on what is behind them), by clicking on "
 "the small bottom-right button."
 msgstr ""
+"Från menyn (högerklick -> synlighet), kan du också bestämma att behålla den "
+"ovanpå andra fönster, eller på Widget-lagret (om du använder Compiz), eller "
+"göra en \"desklet\"-rad genom att placera dem vid en skärmkant och välja "
+"\"reservera utrymme\".\n"
+"Desklets som inte behöver interaktion (som klockan) kan ställas in som "
+"genomskinliga för musen (betyder att du kan klicka på det som finns bakom "
+"dem), genom att klicka på den lilla knappen nere till höger."
 
 #: ../Help/data/messages:103
 msgid "Changing the desklets decorations"
-msgstr ""
+msgstr "Ändra deskletdekorationerna"
 
 #: ../Help/data/messages:105
 msgid ""
@@ -1718,14 +1912,17 @@ msgid ""
 "applet, go to Desklet, and select the decoration you want (you can provide "
 "your own one)."
 msgstr ""
+"Desklets kan ha dekorationer. För att ändra det, öppna applets "
+"inställningar, gå till Desklet, och välj dekorationen du vill ha (du kan "
+"tillhandahålla en egen)."
 
 #: ../Help/data/messages:107
 msgid "Useful Features"
-msgstr ""
+msgstr "Användbara funktioner"
 
 #: ../Help/data/messages:109
 msgid "Having a calendar with tasks"
-msgstr ""
+msgstr "Att ha en kalender med uppgifter"
 
 #: ../Help/data/messages:111
 msgid ""
@@ -1736,10 +1933,16 @@ msgid ""
 "When a task has been or is going to be scheduled, the applet will warn you "
 "(15mn before the event, and also 1 day before in the case of an anniversary)."
 msgstr ""
+"Aktivera klockapplet.\n"
+"Klicka på den visar en kalender.\n"
+"Dubbelklicka på en dag visar en händelseredigerare. Här kan du lägga till/ta "
+"bort händelser.\n"
+"Då en händelse sker eller är nära att inträffa, kommer applet att varna dig "
+"(15 min före händelsen, och också 1 dag i förväg om det är en födelsedag)."
 
 #: ../Help/data/messages:113
 msgid "Having a list of all windows"
-msgstr ""
+msgstr "Ha en lista över alla fönster"
 
 #: ../Help/data/messages:115
 msgid ""
@@ -1750,10 +1953,16 @@ msgid ""
 "to do that.\n"
 "You can bind this action to the middle-click."
 msgstr ""
+"Aktivera växlings-applet.\n"
+"Högerklick på det ger dig tillgång till en lista över alla fönster, sorterad "
+"efter skrivbord.\n"
+"Du kan också visa fönstren bredvid varandra om din fönsterhanterare klarar "
+"av det.\n"
+"Du kan binda denna åtgärd till mittenklick."
 
 #: ../Help/data/messages:117
 msgid "Showing all the desktops"
-msgstr ""
+msgstr "Visa alla skrivborden"
 
 #: ../Help/data/messages:119
 msgid ""
@@ -1761,20 +1970,25 @@ msgid ""
 "Right-click on it -> \"show all the desktop\".\n"
 "You can bind this action to the middle-click."
 msgstr ""
+"Aktivera antingen Växlings-applet eller Visa skrivbordet-applet.\n"
+"Högerklicka på den -> \"visa alla skrivbord\".\n"
+"Du kan binda denna åtgärd till mittenklick."
 
 #: ../Help/data/messages:121
 msgid "Changing the screen resolution"
-msgstr ""
+msgstr "Ändra skärmupplösning"
 
 #: ../Help/data/messages:123
 msgid ""
 "Activate the Show-Desktop applet.\n"
 "Right-click on it -> \"change resolution\" -> select the one you want."
 msgstr ""
+"Aktivera Visa skrivbords-applet.\n"
+"Högerklicka på den -> \"ändra upplösning\" -> välj den du vill ha."
 
 #: ../Help/data/messages:125
 msgid "Locking your session"
-msgstr ""
+msgstr "Låsa din session"
 
 #: ../Help/data/messages:127
 msgid ""
@@ -1782,10 +1996,13 @@ msgid ""
 "Right-click on it -> \"lock screen\".\n"
 "You can bind this action to the middle-click."
 msgstr ""
+"Aktivera utloggnings-applet.\n"
+"Högerklicka på den -> \"lås skärm\".\n"
+"Du kan binda denna åtgärd till mittenklick."
 
 #: ../Help/data/messages:129
 msgid "Quick-launching a program from keyboard (replacing ALT+F2)"
-msgstr ""
+msgstr "Snabbstarta ett program från tangentbord (ersätter ALT+F2)"
 
 #: ../Help/data/messages:131
 msgid ""
@@ -1795,10 +2012,15 @@ msgid ""
 "The text is automatically completed (for instance, typing \"fir\" will be "
 "completed into \"firefox\")."
 msgstr ""
+"Aktivera Programmeny-applet.\n"
+"Mittenklicka på den, eller högerklick -> \"snabbstart\".\n"
+"Du kan skapa ett kortkommando för denna åtgärd.\n"
+"Texten kompletteras automatiskt (till exempel, att skriva \"fir\" "
+"kompletteras till \"firefox\")."
 
 #: ../Help/data/messages:133
 msgid "Turning Composite OFF during games"
-msgstr ""
+msgstr "Stänga av Komposition under spel"
 
 #: ../Help/data/messages:135
 msgid ""
@@ -1807,10 +2029,13 @@ msgid ""
 "smooth.\n"
 "Clicking again on it will enable the Composite."
 msgstr ""
+"Aktivera Komposithanterar-applet\n"
+"Klicka på den inaktiverar Komposition, vilket ofta gör spel mer följsamma.\n"
+"Klicka på den igen aktiverar Komposition."
 
 #: ../Help/data/messages:137
 msgid "Seeing the hourly weather forecast"
-msgstr ""
+msgstr "Se väderprognos timme för timme"
 
 #: ../Help/data/messages:139
 msgid ""
@@ -1821,10 +2046,16 @@ msgid ""
 "Now, double-clicking on a day will lead you to the web page of the hourly "
 "forecast for this day."
 msgstr ""
+"Aktivera Väder-applet.\n"
+"Öppna dess inställningar, gå till Ställ in, och skriv namnet på din stad. "
+"Tryck Enter, och välj din stad från listan som visas.\n"
+"Bekräfta därefter för att stänga inställningsfönstret.\n"
+"Att nu dubbelklicka på en dag, kommer att föra dig till en webbsida med "
+"väderprognos timme för timme för denna dag."
 
 #: ../Help/data/messages:141
 msgid "Adding a file or a web page into the dock"
-msgstr ""
+msgstr "Lägga till en fil eller webbsida i dockan"
 
 #: ../Help/data/messages:143
 msgid ""
@@ -1835,10 +2066,15 @@ msgid ""
 "You can have several Stacks, and you can drop files/links onto a Stack "
 "directly."
 msgstr ""
+"Dra helt enkelt en fil eller en html-länk och släpp den på dockan (en "
+"animerad pil visas då du kan släppa).\n"
+"Den kommer att läggas till i Stacken. Stacken är en underdocka som kan "
+"innehålla filer eller länkar du vill komma åt snabbt.\n"
+"Du kan ha flera Stackar, och du kan släppa filer/länkar på en stack direkt."
 
 #: ../Help/data/messages:145
 msgid "Importing a folder into the dock"
-msgstr ""
+msgstr "Importera en mapp till dockan"
 
 #: ../Help/data/messages:147
 msgid ""
@@ -1846,10 +2082,13 @@ msgid ""
 "appear when you can drop).\n"
 "You can choose to import the folder's files or not."
 msgstr ""
+"Dra helt enkelt mappen och släpp den på dockan (en animerad pil visas då du "
+"kan släppa).\n"
+"Du kan välja att importera mappens filer eller inte."
 
 #: ../Help/data/messages:149
 msgid "Accessing the recent events"
-msgstr ""
+msgstr "Komma åt senaste händelser"
 
 #: ../Help/data/messages:151
 msgid ""
@@ -1860,10 +2099,14 @@ msgid ""
 "and documents you have accessed recently, so that you can access them "
 "quickly."
 msgstr ""
+"Aktivera Senaste händelse-applet.\n"
+"Du behöver ha Zeitgeist-demonen körande. Installera den om den inte finns.\n"
+"Applet kan sedan visa alla filer, mappar, webbsidor, låtar, filmklipp och "
+"dokument som du nyligen har öppnat, så att du kan komma åt dem snabbt."
 
 #: ../Help/data/messages:153
 msgid "Quickly opening a recent file with a launcher"
-msgstr ""
+msgstr "Öppna en nyligen använd fil med en startare"
 
 #: ../Help/data/messages:155
 msgid ""
@@ -1873,10 +2116,14 @@ msgid ""
 "Now when you right-click on a launcher, all the recent files that can be "
 "opened with this launcher will appear in its menu."
 msgstr ""
+"Aktivera Senaste händelse-applet.\n"
+"Du behöver ha Zeitgeist-demonen körande. Installera den om den inte finns.\n"
+"När du nu högerklickar på en startare, kommer alla nyligen använda filer som "
+"kan öppnas med startaren att visas i dess meny."
 
 #: ../Help/data/messages:157
 msgid "Accessing disks"
-msgstr ""
+msgstr "Komma åt diskar"
 
 #: ../Help/data/messages:159
 msgid ""
@@ -1885,10 +2132,14 @@ msgid ""
 "listed in a sub-dock.\n"
 "To unmount a disk before disconnecting it, middle-click on its icon."
 msgstr ""
+"Aktivera Genvägs-applet.\n"
+"Därefter kommer alla diskar (inklusive USB eller externa hårddiskar) att "
+"listas i en underdocka.\n"
+"Mittenklicka på en disks ikon för att avmontera den innan den kopplas bort."
 
 #: ../Help/data/messages:161
 msgid "Accessing folder bookmarks"
-msgstr ""
+msgstr "Komma åt mappbokmärken"
 
 #: ../Help/data/messages:163
 msgid ""
@@ -1898,10 +2149,16 @@ msgid ""
 "To add a bookmark, simply drag-and-drop a folder onto the applet's icon.\n"
 "To remove a bookmark, right-click on its icon -> remove"
 msgstr ""
+"Aktivera genvägs-applet.\n"
+"Då kommer alla mappbokmärken (dem som visas i Nautilus) att listas i en "
+"underdocka.\n"
+"För att lägga till ett bokmärke, dra-och-släpp helt enkelt en mapp på "
+"applets ikon.\n"
+"För att ta bort ett bokmärke, högerklicka på dess ikon -> ta bort"
 
 #: ../Help/data/messages:165
 msgid "Having multiple instances of an applet"
-msgstr ""
+msgstr "Ha flera instanser av en applet"
 
 #: ../Help/data/messages:167
 msgid ""
@@ -1912,10 +2169,15 @@ msgid ""
 "example, to have the current time for different countries in your dock or "
 "the weather in different cities."
 msgstr ""
+"En del applets kan ha flera instanser körande samtidigt: Klocka, Stack, "
+"Väder, ...\n"
+"Högerklicka på applets ikon -> \"starta en annan instans\".\n"
+"Du kan ställa in varje instans oberoende. Detta låter dig, till exempel, att "
+"ha aktuell tid för olika länder i din docka eller vädret i olika städer."
 
 #: ../Help/data/messages:169
 msgid "Adding / removing a desktop"
-msgstr ""
+msgstr "Lägga till / ta bort ett skrivbord"
 
 #: ../Help/data/messages:171
 msgid ""
@@ -1923,10 +2185,14 @@ msgid ""
 "Right-click on it -> \"add a desktop\" or \"remove this desktop\".\n"
 "You can even name each of them."
 msgstr ""
+"Aktivera Växlings-applet.\n"
+"Högerklicka på den -> \"lägg till ett skrivbord\" eller ta bort detta "
+"skrivbord\".\n"
+"Du kan till och med namnge vart och ett av dem."
 
 #: ../Help/data/messages:173
 msgid "Controling the sound volume"
-msgstr ""
+msgstr "Kontrollera ljudvolymen"
 
 #: ../Help/data/messages:175
 msgid ""
@@ -1935,10 +2201,14 @@ msgid ""
 "Alternatively, you can click on the icon and move the scroll bar.\n"
 "Middle-click will mute/unmute."
 msgstr ""
+"Aktivera Ljudvolym-applet.\n"
+"Rulla därefter upp/ner för att öka/dämpa ljudet.\n"
+"Alternativt, kan du klicka på ikonen och flytta rullningslisten.\n"
+"Mittenklick stänger av/sätter på."
 
 #: ../Help/data/messages:177
 msgid "Controling the screen brightness"
-msgstr ""
+msgstr "Kontrollera skärmens ljusstyrka"
 
 #: ../Help/data/messages:179
 msgid ""
@@ -1946,10 +2216,13 @@ msgid ""
 "Then scroll up/down to increase/decrease the brightness.\n"
 "Alternatively, you can click on the icon and move the scroll bar."
 msgstr ""
+"Aktivera Skärmljusstyrke-applet.\n"
+"Rulla därefter upp ner för att öka/minska ljusstyrkan.\n"
+"Alternativt, kan du klicka på ikonen och flytta rullningslisten."
 
 #: ../Help/data/messages:181
 msgid "Removing completely the gnome-panel"
-msgstr ""
+msgstr "Ta bort gnome-panelen helt"
 
 #: ../Help/data/messages:183
 msgid ""
@@ -1959,42 +2232,51 @@ msgid ""
 "Then restart your session : the gnome-panel has not been started, and the "
 "dock has been started (if not, you can add it to the startup programs)."
 msgstr ""
+"Öppna gconf-editor, redigera nyckeln "
+"/desktop/gnome/session/required_components/panel, och ersätt dess innehåll "
+"med \"cairo-dock\".\n"
+"Starta sedan om din session : gnome-panel har inte startats, och dockan har "
+"startats (om inte, kan du lägga till den till startprogrammen)."
 
 #: ../Help/data/messages:187
 msgid ""
 "If you are on Gnome, you can click on this button in order to automatically "
 "modify this key:"
 msgstr ""
+"Om du kör Gnome, kan du klicka på denna knapp för att automatiskt modifiera "
+"denna nyckel:"
 
 #: ../Help/data/messages:189
 msgid "Troubleshooting"
-msgstr ""
+msgstr "Problemlösning"
 
 #: ../Help/data/messages:191
 msgid "If you have any question, don't hesitate to ask on our forum."
-msgstr ""
+msgstr "Om du har frågor, tveka inte att ställa dem på vårt forum."
 
 #: ../Help/data/messages:193
 msgid "Forum"
-msgstr ""
+msgstr "Forum"
 
 #: ../Help/data/messages:195
 msgid "Our wiki can also help you, it is more complete on some points."
-msgstr ""
+msgstr "Vår wiki kan också hjälpa dig, den är på vissa punkter mer komplett."
 
 #: ../Help/data/messages:197
 msgid "Wiki"
-msgstr ""
+msgstr "Wiki"
 
 #: ../Help/data/messages:199
 msgid "I have a black background around my dock."
-msgstr ""
+msgstr "Jag har en svart bakgrund runt min docka."
 
 #: ../Help/data/messages:201
 msgid ""
 "Hint : If you have an ATI or an Intel card, you should try without OpenGL "
 "first, because their drivers are not yet perfect."
 msgstr ""
+"Tips : Om du har ett ATI eller Intel-kort, ska du prova utan OpenGL först, "
+"eftersom deras drivrutiner ännu inte är perfekta."
 
 #: ../Help/data/messages:203
 msgid ""
@@ -2006,16 +2288,24 @@ msgid ""
 " Open gconf-editor, edit the key "
 "'/apps/metacity/general/compositing_manager' and set it to 'true'."
 msgstr ""
+"Du måste sätta på komposition. Du kan till exempel, köra Compiz eller "
+"xcompmgr.\n"
+"Om du använder XFCE eller KDE, kan du bara aktivera komposition i "
+"fönsterhanterarens alternativ.\n"
+"Om du använder Gnome, kan du aktivera det i Metacity på detta sätt :\n"
+" Öppna gconf-editor, redigera nyckeln "
+"'/apps/metacity/general/compositing_manager' och sätt den till 'sann'."
 
 #: ../Help/data/messages:207
 msgid ""
 "If you're on Gnome with Metacity (without Compiz), you can click on this "
 "button:"
 msgstr ""
+"Om du kör Gnome med Metacity (utan Compiz), kan du klicka på denna knapp:"
 
 #: ../Help/data/messages:209
 msgid "My machine is too old to run a composite manager."
-msgstr ""
+msgstr "Min maskin är för gammal för att köra en komposithanterare."
 
 #: ../Help/data/messages:211
 msgid ""
@@ -2023,10 +2313,13 @@ msgid ""
 "To get rid of the black background, simply enable the corresponding option "
 "in the end of the «System» module"
 msgstr ""
+"Ta det lugnt, Cairo-Dock kan efterlikna genomskinligheten.\n"
+"För att bli av med den svarta bakgrunden, aktivera helt enkelt motsvarande "
+"alternativ i slutet av \"System\"-modulen"
 
 #: ../Help/data/messages:213
 msgid "The dock is horribly slow when I move the mouse into it."
-msgstr ""
+msgstr "Dockan är fruktansvärt långsam då jag flyttar musen till den."
 
 #: ../Help/data/messages:215
 msgid ""
@@ -2037,16 +2330,24 @@ msgid ""
 "If the dock is running with OpenGL, try to disable it by launching the dock "
 "with «cairo-dock -c»."
 msgstr ""
+"Om du har ett Nvidia GeForce8 grafikkort, installera den senaste "
+"drivrutinen, eftersom de första var riktigt buggiga.\n"
+"Om dockan körs utan OpenGL, försök att reducera antalet ikoner i "
+"huvuddockan, eller försök reducera dess storlek.\n"
+"Om dockan körs med OpenGL, försök att inaktivera det genom att starta dockan "
+"med \"cairo-dock -c\"."
 
 #: ../Help/data/messages:217
 msgid "I don't have these wonderful effects like fire, cube rotating, etc."
-msgstr ""
+msgstr "Jag har inte dessa underbara effekter som eld, roterande kub, etc."
 
 #: ../Help/data/messages:219
 msgid ""
 "Tip: You can force OpenGL by launching the dock with «cairo-dock -o».but you "
 "might get a lot of visual artifacts."
 msgstr ""
+"Tips: Du kan tvinga OpenGL genom att starta dockan med \"cairo-dock -o\", "
+"men du kan få en massa visuella artefakter."
 
 #: ../Help/data/messages:221
 msgid ""
@@ -2054,14 +2355,17 @@ msgid ""
 "cards can do this, as can more and more Intel cards. Most ATI cards do not "
 "support OpenGL2.0."
 msgstr ""
+"Du behöver ett grafikkort som stödjer OpenGL2.0. De flesta Nvidia-kort gör "
+"detta, liksom allt fler Intel-kort. De flesta ATI-kort stödjer inte "
+"OpenGL2.0."
 
 #: ../Help/data/messages:223
 msgid "I don't have any themes in the Theme Manager, except the default one."
-msgstr ""
+msgstr "Jag har inga teman i Temahanteraren, förutom standardtemat."
 
 #: ../Help/data/messages:225
 msgid "Hint : Up to version 2.1.1-2, wget was used."
-msgstr ""
+msgstr "Tips : Upp till version 2.1.1-2, wget användes."
 
 #: ../Help/data/messages:227
 msgid ""
@@ -2072,16 +2376,24 @@ msgid ""
 "search on the web how to do it (basically, you have to set up the "
 "\"http_proxy\" environment variable)."
 msgstr ""
+"Försäkra dig om att du är ansluten till Nätet.\n"
+"Om din anslutning är mycket långsam, kan du öka anslutnings-timeouten i "
+"\"System\"-modulen.\n"
+"Om du är bakom en proxy, måste du ställa in \"curl\" för att använda det; "
+"sök på Nätet för hur man gör det (i princip, måste du ställa in "
+"\"http_proxy\" miljövariabeln)."
 
 #: ../Help/data/messages:229
 msgid "The «netspeed» applet displays 0 even when I'm downloading something"
-msgstr ""
+msgstr "Näthastighets-applet visar 0 även då jag laddar ner något"
 
 #: ../Help/data/messages:231
 msgid ""
 "Tip: you can run several instances of this applet if you wish to monitor "
 "several interfaces."
 msgstr ""
+"Tips: Du kan köra flera instanser av denna applet om du vill övervaka flera "
+"uppkopplingar."
 
 #: ../Help/data/messages:233
 msgid ""
@@ -2091,10 +2403,15 @@ msgid ""
 "«ifconfig» in a terminal, and ignore the «loop» interface. It's probably "
 "something like «eth1», «ath0», or «wifi0».."
 msgstr ""
+"Du måste tala om för applet, vilken uppkoppling du använder för att ansluta "
+"till Nätet (som standard är detta \"eth0\").\n"
+"Redigera bara dess inställningar, och ange uppkopplingens namn. För att "
+"hitta det, skriv \"ifconfig\" i en terminal, och ignorera \"loop\"-"
+"uppkopplingen. Den är troligen något som \"eth1\", \"ath0\" eller wifi0\"."
 
 #: ../Help/data/messages:235
 msgid "The dustbin remains empty even when I delete a file."
-msgstr ""
+msgstr "Papperskorgen förblir tom även då jag tar bort en fil."
 
 #: ../Help/data/messages:237
 msgid ""
@@ -2103,11 +2420,16 @@ msgid ""
 "probably «~/.locale/share/Trash/files». Be very careful when typing a path "
 "here!!! (do not insert spaces or some invisible caracters)."
 msgstr ""
+"Om du kör KDE, kan du behöva specificera sökvägen till papperskorgen.\n"
+"Redigera bara applets inställning, och fyll i papperskorgens sökväg; den är "
+"förmodligen \"~/.locale/share/Trash/files\" Var mycket noga då du skriver in "
+"sökvägen här!!! (sätt inte in blanksteg eller osynliga tecken)."
 
 #: ../Help/data/messages:239
 msgid ""
 "There is no icon in the Applications Menu even though I enable the option."
 msgstr ""
+"Det finns ingen ikon i Programmenyn, trots att jag aktiverar alternativet."
 
 #: ../Help/data/messages:241
 msgid ""
@@ -2115,18 +2437,21 @@ msgid ""
 "in menus, open 'gconf-editor', go to Desktop / Gnome / Interface and enable "
 "the \"menus have icons\" and the \"buttons have icons\" options. "
 msgstr ""
+"I Gnome, finns ett alternativ som åsidosätter dockans. För att aktivera "
+"ikoner i menyer, öppna \"gconf-editor\", gå till Desktop / Gnome / Interface "
+"och aktivera alternativen \"menus have icons\" och \"buttons have icons\". "
 
 #: ../Help/data/messages:245
 msgid "If you're on Gnome you can click on this button:"
-msgstr ""
+msgstr "Om du använder Gnome kan du klicka på denna knapp:"
 
 #: ../Help/data/messages:247
 msgid "The Project"
-msgstr ""
+msgstr "Projektet"
 
 #: ../Help/data/messages:249
 msgid "Join the project!"
-msgstr ""
+msgstr "Gå med i projektet!"
 
 #: ../Help/data/messages:251
 msgid ""
@@ -2138,15 +2463,24 @@ msgid ""
 "If you made a theme for the dock or one of the applet, and want to share it, "
 "we’ll be happy to integrate it on our server !"
 msgstr ""
+"Vi värdesätter din hjälp! Om du ser en bugg, om du tycker att något kan "
+"förbättras,\n"
+"eller om du bara har en dröm om dockan, besök oss på glx-dock.org.\n"
+"Engelskspråkiga (och andra!) är välkomna, så var inte blyg ! ;-)\n"
+"\n"
+"Om du har gjort ett tema för dockan eller för en applet, och vill dela med "
+"dig, integrerar vi det gärna på vår server !"
 
 #: ../Help/data/messages:253
 msgid ""
 "If you wish to develop an applet, a complete documentation is available here."
 msgstr ""
+"Om du vill utveckla en applet, finns en komplett dokumentation tillgänglig "
+"här."
 
 #: ../Help/data/messages:255
 msgid "Documentation"
-msgstr ""
+msgstr "Dokumentation"
 
 #: ../Help/data/messages:257
 msgid ""
@@ -2154,10 +2488,13 @@ msgid ""
 "or to interact with the dock in any kind of way, a full DBus API is "
 "described here."
 msgstr ""
+"Om du vill utveckla en applet i Python, Perl eller något annat språk,\n"
+"eller interagera med dockan på något sätt, finns en komplett DBus API "
+"beskrivning här."
 
 #: ../Help/data/messages:259
 msgid "DBus API"
-msgstr ""
+msgstr "DBus API"
 
 #: ../Help/data/messages:261
 msgid ""
@@ -2165,14 +2502,17 @@ msgid ""
 "\n"
 "The Cairo-Dock Team"
 msgstr ""
+"\n"
+"\n"
+"Cairo-Dock gruppen"
 
 #: ../Help/data/messages:263
 msgid "Websites"
-msgstr ""
+msgstr "Webbsidor"
 
 #: ../Help/data/messages:265
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
-msgstr "Problem?Förslag?Eller bara prata? Kom hit!"
+msgstr "Problem? Förslag? Eller bara prata? Kom hit!"
 
 #: ../Help/data/messages:267
 msgid "Community site"
@@ -2180,15 +2520,15 @@ msgstr "Webbplats för gemenskap"
 
 #: ../Help/data/messages:273
 msgid "More applets available online!"
-msgstr ""
+msgstr "Fler applets finns tillgängliga online!"
 
 #: ../Help/data/messages:275
 msgid "Cairo-Dock-Plug-ins-Extras"
-msgstr "Extra Cairo-Dock-instick"
+msgstr "Cairo-Dock-Insticksprogram-Tillbehör"
 
 #: ../Help/data/messages:277
 msgid "Repositories"
-msgstr ""
+msgstr "Förråd"
 
 #: ../Help/data/messages:279
 msgid ""
@@ -2196,14 +2536,18 @@ msgid ""
 " One for stable releases and another which is updated weekly (unstable "
 "version)"
 msgstr ""
+"Vi underhåller två förråd för Debian, Ubuntu och andra Debian-"
+"avknoppningar:\n"
+"Ett för stabila versioner och ett annat som uppdateras varje vecka (instabil "
+"version)"
 
 #: ../Help/data/messages:281
 msgid "Debian/Ubuntu"
-msgstr ""
+msgstr "Debian/Ubuntu"
 
 #: ../Help/data/messages:283
 msgid "Ubuntu"
-msgstr ""
+msgstr "Ubuntu"
 
 #: ../Help/data/messages:287
 msgid ""
@@ -2212,6 +2556,10 @@ msgid ""
 " After that, you can launch your update manager in order to install the "
 "latest stable version."
 msgstr ""
+"Om du kör Ubuntu, kan du lägga till \"stable\" förrådet genom att klicka på "
+"denna knapp:\n"
+" Efter det, kan du starta uppdateringshanteraren för att installera den "
+"senaste stabila versionen."
 
 #: ../Help/data/messages:291
 msgid ""
@@ -2220,10 +2568,14 @@ msgid ""
 " After that, you can launch your update manager in order to install the "
 "latest weekly version."
 msgstr ""
+"Om du kör Ubuntu, kan du också lägga till vår \"weekly\" ppa (kan vara "
+"instabil) genom att klicka på denna knapp:\n"
+" Efter det, kan du starta uppdateringshanteraren för att installera den "
+"senaste veckans version."
 
 #: ../Help/data/messages:293
 msgid "Debian"
-msgstr ""
+msgstr "Debian"
 
 #: ../Help/data/messages:297
 msgid ""
@@ -2232,6 +2584,10 @@ msgid ""
 " After that, you can purge all 'cairo-dock*' packages, update the your "
 "system and reinstall 'cairo-dock' package."
 msgstr ""
+"Om du kör Debian Stable, kan du lägga till vårt \"stable\" förråd genom att "
+"klicka på denna knapp:\n"
+" Efter det, kan du rensa alla \"cairo-dock*\" paket, uppdatera systemet och "
+"installera om paketet \"cairo-dock\"."
 
 #: ../Help/data/messages:301
 msgid ""
@@ -2240,89 +2596,103 @@ msgid ""
 " After that, you can purge all 'cairo-dock*' packages, update the your "
 "system and reinstall 'cairo-dock' package."
 msgstr ""
+"Om du kör Debian Unstable, kan du lägga till vårt \"stabila\" förråd genom "
+"att klicka på denna knapp:\n"
+" Efter det, kan du rensa bort alla \"cairo-dock*\" paket, uppdatera ditt "
+"system och installera om paketet \"cairo-dock\"."
 
 #: ../Help/data/messages:303 ../Help/data/messages:305 ../data/messages:1029
 #: ../data/messages:1061 ../data/messages:1097
 msgid "Icon"
-msgstr ""
+msgstr "Ikon"
 
 #: ../Help/data/messages:307
 msgid "Name of the dock it belongs to:"
-msgstr ""
+msgstr "Namnet på dockan den tillhör:"
 
 #: ../Help/data/messages:309
 msgid "Name of the icon as it will appear in its caption in the dock:"
-msgstr ""
+msgstr "Ikonnamnet så som det kommer att visas i dess titel i dockan:"
 
 #: ../Help/data/messages:311
 msgid "Leave empty to use the default one."
-msgstr ""
+msgstr "Lämna tomt för att använda standardalternativet."
 
 #: ../Help/data/messages:313
 msgid "Image filename:"
-msgstr ""
+msgstr "Bildfilnamn:"
 
 #: ../Help/data/messages:315
 msgid "Set to 0 to use the default applet size"
-msgstr ""
+msgstr "Sätt till 0 för att använda standard-applet-storlek"
 
 #: ../Help/data/messages:317
 msgid "Desired icon size for this applet"
-msgstr ""
+msgstr "Önskad ikonstorlek för denna applet"
 
 #: ../Help/data/messages:319
 msgid "Desklet"
-msgstr ""
+msgstr "Desklet"
 
 #: ../Help/data/messages:323
 msgid ""
 "If locked, the desklet cannot be moved by simply dragging it with the left "
 "mouse button. It can still be moved with ALT + left-click."
 msgstr ""
+"Om låst, kan inte deskleten flyttas bara genom att dra den med vänster "
+"musknapp. Den kan fortfarande flyttas med ALT - vänsterklick."
 
 #: ../Help/data/messages:325
 msgid "Lock position?"
-msgstr ""
+msgstr "Lås placering?"
 
 #: ../Help/data/messages:327
 msgid ""
 "Depending on your WindowManager, you may be able to resize this with ALT + "
 "middle-click or ALT + left-click."
 msgstr ""
+"Beroende på din fönsterhanterare, kan du kanske ändra storlek på denna med "
+"ALT + mittenklick eller ALT + vänsterklick."
 
 #: ../Help/data/messages:329
 msgid "Desklet dimensions (width x height):"
-msgstr ""
+msgstr "Desklet-storlek (bredd x höjd)"
 
 #: ../Help/data/messages:331
 msgid ""
 "Depending on your WindowManager, you may be able to move this with ALT + "
 "left-click.. Negative values are counted from the right/bottom of the screen"
 msgstr ""
+"Beroende på den fönsterhanterare, kan du kanske flytta denna med ALT + "
+"vänsterklick... Negativa värden räknas från högra/nedre skärmkanten."
 
 #: ../Help/data/messages:333
 msgid "Desklet position (x, y):"
-msgstr ""
+msgstr "Desklet-placering (x, y):"
 
 #: ../Help/data/messages:335
 msgid ""
 "You can quickly rotate the desklet with the mouse, by dragging the little "
 "buttons on its left and top sides."
 msgstr ""
+"Du kan snabbt rotera deskleten med musen, genom att dra de små knapparna på "
+"dess cänstra och övre sidor."
 
 #: ../Help/data/messages:337
 msgid "Rotation:"
-msgstr ""
+msgstr "Rotation:"
 
 #: ../Help/data/messages:341
 msgid "Is detached from the dock"
-msgstr ""
+msgstr "Är frånkopplad från dockan"
 
 #: ../Help/data/messages:343
 msgid ""
 "for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
 "(class=Cairo-dock & type=Utility)"
 msgstr ""
+"för CompizFusions \"widget-lager\", ställ in beteendet i Compiz till: "
+"(class=Cairo-dock & type=Utility)"
 
 #: ../Help/data/messages:345 ../data/messages:19 ../data/messages:57
 #: ../data/messages:191 ../data/messages:251 ../data/messages:921
@@ -2331,86 +2701,92 @@ msgstr "Synlighet:"
 
 #: ../Help/data/messages:351
 msgid "Keep below"
-msgstr ""
+msgstr "Behåll under"
 
 #: ../Help/data/messages:353
 msgid "Keep on widget layer"
-msgstr ""
+msgstr "Behåll på widget-lager"
 
 #: ../Help/data/messages:357
 msgid "Should be visible on all desktops?"
-msgstr ""
+msgstr "Ska synas på alla skrivbord?"
 
 #: ../Help/data/messages:359 ../data/messages:589
 msgid "Decorations"
-msgstr ""
+msgstr "Dekorationer"
 
 #: ../Help/data/messages:361
 msgid "Choose 'Custom decorations' to define your own decorations below."
 msgstr ""
+"Välj \"Anpassade dekorationer\" för att definiera dina egna dekorationer "
+"nedan."
 
 #: ../Help/data/messages:363
 msgid "Choose a decoration theme for this desklet:"
-msgstr ""
+msgstr "Välj ett dekorationstema för denna desklet:"
 
 #: ../Help/data/messages:365
 msgid ""
 "Image to be displayed below drawings, e.g. a frame. Leave empty for no image."
 msgstr ""
+"Bild som visas under ritningar, till exempel en ram. Lämna tomt för ingen "
+"bild."
 
 #: ../Help/data/messages:367
 msgid "Background image:"
-msgstr ""
+msgstr "Bakgrundsbild:"
 
 #: ../Help/data/messages:369
 msgid "Background transparency:"
-msgstr ""
+msgstr "Bakgrundsgenomskinlighet:"
 
 #: ../Help/data/messages:371
 msgid "in pixels. Use this to adjust the left position of drawings."
-msgstr ""
+msgstr "i pixlar. Använd detta för att justera uppritningar till vänster."
 
 #: ../Help/data/messages:373
 msgid "Left offset:"
-msgstr ""
+msgstr "Vänsterjustering:"
 
 #: ../Help/data/messages:375
 msgid "in pixels. Use this to adjust the top position of drawings."
-msgstr ""
+msgstr "i pixlar. Använd detta för att justera uppritningar uppåt."
 
 #: ../Help/data/messages:377
 msgid "Top offset:"
-msgstr ""
+msgstr "Uppåtjustering:"
 
 #: ../Help/data/messages:379
 msgid "in pixels. Use this to adjust the right position of drawings."
-msgstr ""
+msgstr "i pixlar. Använd detta för att justera uppritningar till höger."
 
 #: ../Help/data/messages:381
 msgid "Right offset:"
-msgstr ""
+msgstr "Högerjustering:"
 
 #: ../Help/data/messages:383
 msgid "in pixels. Use this to adjust the bottom position of drawings."
-msgstr ""
+msgstr "i pixlar. Använd detta för att justera uppritningar nedåt."
 
 #: ../Help/data/messages:385
 msgid "Bottom offset:"
-msgstr ""
+msgstr "Bottenjustering:"
 
 #: ../Help/data/messages:387
 msgid ""
 "Image to be displayed above the drawings, e.g. a reflection. Leave empty for "
 "no image."
 msgstr ""
+"Bild som visas ovanpå ritningar, till exempel en reflektion. Lämna tomt för "
+"ingen bild."
 
 #: ../Help/data/messages:389
 msgid "Foreground image:"
-msgstr ""
+msgstr "Förgrundsbild:"
 
 #: ../Help/data/messages:391
 msgid "Foreground tansparency:"
-msgstr ""
+msgstr "Förgrundstransparens:"
 
 #: ../data/messages:1 ../data/messages:897
 msgid "Behavior"
@@ -2422,11 +2798,11 @@ msgstr "Placering på skärmen"
 
 #: ../data/messages:5 ../data/messages:155 ../data/messages:901
 msgid "Choose which border of the screen the dock will be placed on:"
-msgstr "Välj vilken skärmkant docken ska placeras på:"
+msgstr "Välj vid vilken skärmkant dockan ska placeras:"
 
 #: ../data/messages:15 ../data/messages:187
 msgid "Visibility of the main dock"
-msgstr "Synlighet av huvuddocken"
+msgstr "Huvuddockans synlighet"
 
 #: ../data/messages:17 ../data/messages:189 ../data/messages:919
 msgid ""
@@ -2436,34 +2812,39 @@ msgid ""
 "When the dock pops up on shortcut, it will appear at the position of your "
 "mouse. The rest of the time, it stays invisible, thus acting like a menu."
 msgstr ""
+"Lägen sorteras från det mest påträngande till mindre påträngande.\n"
+"När dockan är dold eller under ett fönster, placera musen vid skärmkanten "
+"för att kalla den tillbaka.\n"
+"När dockan dyker upp med genväg visas den vid musens läge. Resten av tiden, "
+"stannar den osynlig och uppträder sålunda som en meny."
 
 #: ../data/messages:23 ../data/messages:195 ../data/messages:925
 msgid "Reserve space for the dock"
-msgstr "Reservera utrymme för docken"
+msgstr "Reservera utrymme för dockan"
 
 #: ../data/messages:25 ../data/messages:197 ../data/messages:927
 msgid "Keep the dock below"
-msgstr "Behåll docken under"
+msgstr "Behåll dockan under"
 
 #: ../data/messages:27 ../data/messages:199 ../data/messages:929
 msgid "Hide the dock when it overlaps the current window"
-msgstr "Dölj docken när den överlappar det aktuella fönstret"
+msgstr "Dölj dockan när den överlappar aktivt fönster"
 
 #: ../data/messages:29 ../data/messages:201 ../data/messages:931
 msgid "Hide the dock whenever it overlaps any window"
-msgstr "Dölj docken när den överlappar något fönster"
+msgstr "Dölj dockan när den överlappar något fönster"
 
 #: ../data/messages:31 ../data/messages:203 ../data/messages:933
 msgid "Keep the dock hidden"
-msgstr "Behåll docken döljd"
+msgstr "Behåll dockan dold"
 
 #: ../data/messages:33 ../data/messages:205
 msgid "Pop-up on shortcut"
-msgstr ""
+msgstr "visa med genväg"
 
 #: ../data/messages:35 ../data/messages:207
 msgid "Effect used to hide the dock:"
-msgstr "Effekt som används för att dölja docken:"
+msgstr "Effekt som används för att dölja dockan:"
 
 #: ../data/messages:37 ../data/messages:69 ../data/messages:209
 msgid "None"
@@ -2475,31 +2856,32 @@ msgid ""
 "your mouse. The rest of the time, it stays invisible, thus acting like a "
 "menu."
 msgstr ""
-"När du trycker tangentgenvägen, kommer docken att visa sig vid din "
-"musposition. Resten av tiden förblir den osynlig, alltså agerar den som en "
-"meny."
+"När du trycker kortkommandot, kommer dockan att visa sig vid din "
+"musposition. Annars förblir den osynlig, den beter sig alltså som en meny."
 
 #: ../data/messages:51 ../data/messages:245
 msgid "Keyboard shortcut to pop-up the dock:"
-msgstr "Tangentbordsgenväg för att docken ska visa sig:"
+msgstr "Kortkommando för pop-up docka:"
 
 #: ../data/messages:53
 msgid "Visibility of sub-docks"
-msgstr "Synlighet av underdockar."
+msgstr "Underdockors synlighet:"
 
 #: ../data/messages:55 ../data/messages:249
 msgid ""
 "they will appear either when you click or when you linger over the icon "
 "pointing on it."
 msgstr ""
+"de kommer att visas antingen då du klickar eller du dröjer över ikonen som "
+"pekar på den."
 
 #: ../data/messages:59 ../data/messages:253
 msgid "Appear on mouse over"
-msgstr ""
+msgstr "Visas då musen är över"
 
 #: ../data/messages:61 ../data/messages:255
 msgid "Appear on click"
-msgstr ""
+msgstr "Visas vid klick"
 
 #: ../data/messages:65
 msgid ""
@@ -2511,103 +2893,110 @@ msgid ""
 "Separated   : Separate the taskbar from the launchers and only show windows "
 "that are on the current desktop."
 msgstr ""
+"Ingen\t: Visa inte öppnade fönster i dockan.\n"
+"Minimalistisk: Blanda program med dess startare, visa andra fönster endast "
+"om de är minimerade (som i MacOSX).\n"
+"Integrerad  : Blanda program med dess startare, visa alla andra fönster och "
+"gruppfönster tillsammans i underdockor (standard).\n"
+"Separerade  : Separera aktivitetsfältet från startarna och visa endast "
+"fönster som finns på nuvarande skrivbord."
 
 #: ../data/messages:67
 msgid "Behaviour of the Taskbar:"
-msgstr ""
+msgstr "Aktivitetsfältets beteende:"
 
 #: ../data/messages:71
 msgid "Minimalistic"
-msgstr ""
+msgstr "Minimalistisk"
 
 #: ../data/messages:73
 msgid "Integrated"
-msgstr ""
+msgstr "Integrerad"
 
 #: ../data/messages:75
 msgid "Separated"
-msgstr ""
+msgstr "Separerad"
 
 #: ../data/messages:77 ../data/messages:281
 msgid "Place new icons"
-msgstr ""
+msgstr "Placera nya ikoner"
 
 #: ../data/messages:79 ../data/messages:283
 msgid "At the beginning of the dock"
-msgstr ""
+msgstr "Vid dockans början"
 
 #: ../data/messages:81 ../data/messages:285
 msgid "Before the launchers"
-msgstr ""
+msgstr "Före programstartarna"
 
 #: ../data/messages:83 ../data/messages:287
 msgid "After the launchers"
-msgstr ""
+msgstr "Efter programstartarna"
 
 #: ../data/messages:85 ../data/messages:289
 msgid "At the end of the dock"
-msgstr ""
+msgstr "Vid dockans slut"
 
 #: ../data/messages:87 ../data/messages:291
 msgid "After a given icon"
-msgstr ""
+msgstr "Efter en viss ikon"
 
 #: ../data/messages:89 ../data/messages:293
 msgid "Place new icons after this one"
-msgstr ""
+msgstr "Placera nya ikoner efter denna"
 
 #: ../data/messages:91
 msgid "Icons' animations and effects"
-msgstr ""
+msgstr "Ikonanimeringar och effekter"
 
 #: ../data/messages:93
 msgid "On mouse hover:"
-msgstr "När musen vilar över:"
+msgstr "När musen svävar över:"
 
 #: ../data/messages:95
 msgid "On click:"
-msgstr ""
+msgstr "Vid klick:"
 
 #: ../data/messages:97
 msgid "On appearance/disappearance:"
-msgstr ""
+msgstr "Vid framträdande/försvinnande"
 
 #: ../data/messages:99
 msgid "Evaporate"
-msgstr ""
+msgstr "Gå upp i rök"
 
 #: ../data/messages:103
 msgid "Explode"
-msgstr ""
+msgstr "Explodera"
 
 #: ../data/messages:105
 msgid "Break"
-msgstr ""
+msgstr "Gå sönder"
 
 #: ../data/messages:107
 msgid "Black Hole"
-msgstr ""
+msgstr "Svart hål"
 
 #: ../data/messages:109
 msgid "Random"
-msgstr ""
+msgstr "Slumpmässig"
 
 #: ../data/messages:119 ../data/messages:553 ../data/messages:693
 #: ../data/messages:807 ../data/messages:841 ../data/messages:879
 msgid "Custom"
-msgstr ""
+msgstr "Anpassad"
 
 #: ../data/messages:121 ../data/messages:747
 msgid "Colour"
-msgstr ""
+msgstr "Färg"
 
 #: ../data/messages:125
 msgid "Choose a theme of icons :"
-msgstr ""
+msgstr "Välj ett ikontema :"
 
 #: ../data/messages:127 ../data/messages:949
 msgid "Icons size:"
-msgstr ""
+msgstr "Ikonstorlek:"
 
 #: ../data/messages:129 ../data/messages:955
 msgid "Very small"
@@ -2631,15 +3020,15 @@ msgstr "Mycket stor"
 
 #: ../data/messages:141 ../data/messages:529
 msgid "Choose the default view for main docks :"
-msgstr "Välj standardutseendet för huvuddockar:"
+msgstr "Välj huvuddockans standardutseende :"
 
 #: ../data/messages:143 ../data/messages:533
 msgid "You can overwrite this parameter for each sub-dock."
-msgstr "Du kan skriva över den här parametern för varje underdock."
+msgstr "Du kan skriva över den här parametern för varje underdocka."
 
 #: ../data/messages:145 ../data/messages:535
 msgid "Choose the default view for sub-docks :"
-msgstr "Välj standardutseende för underdockar:"
+msgstr "Välj underdockornas standardutseende :"
 
 #: ../data/messages:149
 msgid ""
@@ -2648,6 +3037,10 @@ msgid ""
 "Double-click on a line, and press the shortkey you want to use for the "
 "corresponding action."
 msgstr ""
+"Många applets tillhandahåller kortkommandon för sina åtgärder. Så snart en "
+"applet är aktiverad, blir dess kortkommando tillgängliga.\n"
+"Dubbelklicka på en rad, och tryck på det kortkommando du vill använda för "
+"motsvarande åtgärd."
 
 #: ../data/messages:165 ../data/messages:911
 msgid ""
@@ -2657,10 +3050,11 @@ msgid ""
 "vertical. When set to 0.5, it will position itself relative to the middle of "
 "the screen's edge."
 msgstr ""
-"Vid 0 kommer dockan att placera sig i förhållande till vänsterkanten vid "
-"horisontell placering och ovankant i vertikal placering. Vid 1 kommer dockan "
-"att placera sig i förhållande till högerkanten vid horisontell placering och "
-"i förhållande till underkant vid vertikal placering."
+"När den är satt till 0 kommer dockan att positionera sig i förhållande till "
+"det vänstra hörnet om den är horisontell och övre hörnet vertikalt. När den "
+"är satt till 1 kommer den att positionera sig i förhållande till det högra "
+"hörnet om det är horisontellt och nedre hörnet om vertikalt. När satt till "
+"0,5, kommer det att positionera sig i förhållande till skärmkantens mitt."
 
 #: ../data/messages:167 ../data/messages:913
 msgid "Relative alignment:"
@@ -2668,35 +3062,35 @@ msgstr "Relativ justering:"
 
 #: ../data/messages:173 ../data/messages:915
 msgid "Multi-screens"
-msgstr ""
+msgstr "Flera bildskärmar"
 
 #: ../data/messages:175 ../data/messages:935
 msgid "Offset from the screen's edge"
-msgstr ""
+msgstr "Justering från skärmkanten"
 
 #: ../data/messages:177 ../data/messages:937
 msgid ""
 "Gap from the absolute position on the screen's edge, in pixels. You can also "
 "move the dock by holding the ALT or CTRL key and the left mouse button."
 msgstr ""
-"Avstånd i pixlar från vald skärmkant. Du kan också flytta fönstret genom att "
-"trycka CTRL eller ALT och sedan dra fönstret med musen."
+"Gap från den absoluta position vid skärmkanten, i pixlar. Du kan också "
+"flytta dockan genom att hålla ALT eller CTRL-tangenten och vänster musknapp."
 
 #: ../data/messages:179 ../data/messages:939
 msgid "Lateral offset:"
-msgstr ""
+msgstr "Förskjutning i sidled:"
 
 #: ../data/messages:181 ../data/messages:941
 msgid ""
 "in pixels. You can also move the dock by holding the ALT or CTRL key and the "
 "left mouse button."
 msgstr ""
-"Avstånd i pixlar från vald skärmkant. Du kan också flytta fönstret genom att "
-"trycka CTRL eller ALT och sedan dra fönstret med musen."
+"i pixlar. Du kan också flytta dockan genom att hålla ALT eller CTRL-"
+"tangenten och vänster musknapp."
 
 #: ../data/messages:183 ../data/messages:943
 msgid "Distance to the screen edge:"
-msgstr "Vinkelrät avstånd:"
+msgstr "Avstånd till skärmkanten:"
 
 #: ../data/messages:185
 msgid "Accessibility"
@@ -2704,51 +3098,51 @@ msgstr "Tillgänglighet"
 
 #: ../data/messages:221
 msgid "The higher, the faster the dock will appear"
-msgstr ""
+msgstr "Ju högre, desto snabbare kommer dockan att visas"
 
 #: ../data/messages:223
 msgid "Callback sensitivity:"
-msgstr ""
+msgstr "Kalla tillbaka känslighet:"
 
 #: ../data/messages:225
 msgid "high"
-msgstr ""
+msgstr "hög"
 
 #: ../data/messages:227
 msgid "low"
-msgstr ""
+msgstr "låg"
 
 #: ../data/messages:229
 msgid "How to call the dock back:"
-msgstr ""
+msgstr "Hur dockan ska kallas tillbaka:"
 
 #: ../data/messages:231
 msgid "Hit the screen's border"
-msgstr ""
+msgstr "Träffa skärmkanten"
 
 #: ../data/messages:233
 msgid "Hit where the dock is"
-msgstr ""
+msgstr "Träffa där dockan är"
 
 #: ../data/messages:235
 msgid "Hit the screen's corner"
-msgstr ""
+msgstr "Träffa skärmhörnet"
 
 #: ../data/messages:237
 msgid "Hit a zone"
-msgstr ""
+msgstr "Träffa ett område"
 
 #: ../data/messages:239
 msgid "Size of the zone :"
-msgstr ""
+msgstr "Områdets storlek :"
 
 #: ../data/messages:241
 msgid "Image to display on the zone :"
-msgstr ""
+msgstr "Bild som visas på området :"
 
 #: ../data/messages:247
 msgid "Sub-docks' visibility"
-msgstr ""
+msgstr "Underdockors synlighet"
 
 #: ../data/messages:257 ../data/messages:261
 msgid "in ms."
@@ -2756,11 +3150,11 @@ msgstr "i ms."
 
 #: ../data/messages:259
 msgid "Delay before displaying a sub-dock:"
-msgstr "Fördröjning innan sub-dockor visas:"
+msgstr "Fördröjning innan en underdocka visas:"
 
 #: ../data/messages:263
 msgid "Delay before leaving a sub-dock takes effect:"
-msgstr ""
+msgstr "Fördröjning innan du lämnar en underdocka träder i kraft:"
 
 #: ../data/messages:265
 msgid "TaskBar"
@@ -2771,10 +3165,12 @@ msgid ""
 "Cairo-Dock will then act as your taskbar. It is recommended to remove any "
 "other taskbars."
 msgstr ""
+"Cairo-dock kommer därefter att fungera som din aktivitetshanterare. Det "
+"rekommenderas att ta bort andra aktivitetsfält."
 
 #: ../data/messages:271
 msgid "Show currently opened applications in the dock?"
-msgstr ""
+msgstr "Visa för närvarande öppna program i dockan?"
 
 #: ../data/messages:273
 msgid ""
@@ -2787,41 +3183,43 @@ msgstr ""
 
 #: ../data/messages:275
 msgid "Mix launchers and applications"
-msgstr "Blanda startare och program?"
+msgstr "Blanda programstartare och program"
 
 #: ../data/messages:277
 msgid "Only show applications on current desktop"
-msgstr "Visa bara program för aktivt skrivbord?"
+msgstr "Visa endast program på aktivt skrivbord"
 
 #: ../data/messages:279
 msgid "Only show icons whose windows are minimised"
-msgstr "Visa bara ikoner för minimerade program?"
+msgstr "Visa endast ikoner vars fönster är minimerade"
 
 #: ../data/messages:295
 msgid "Automatically add a separator"
-msgstr ""
+msgstr "Lägg automatiskt till en avgränsare"
 
 #: ../data/messages:297
 msgid ""
 "This allows you to group all the windows of a given application into a "
 "unique sub-dock, and to act on all of the windows at the same time."
 msgstr ""
+"Detta låter dig att gruppera alla fönster från ett visst program i en "
+"särskild underdocka, och agera på alla dessa fönster samtidigt."
 
 #: ../data/messages:299
 msgid "Group windows from the same application in a sub-dock ?"
-msgstr ""
+msgstr "Gruppera fönster från samma program i en underdocka ?"
 
 #: ../data/messages:301 ../data/messages:311
 msgid "Enter the class of the applications, separated by a semi-colon ';'"
-msgstr ""
+msgstr "Ange programklasserna, separerade med ett semikolon \";\""
 
 #: ../data/messages:303 ../data/messages:313
 msgid "\t\tExcept the following classes:"
-msgstr ""
+msgstr "\t\tUtom följande klasser:"
 
 #: ../data/messages:305
 msgid "Representation"
-msgstr "Visning"
+msgstr "Represenation"
 
 #: ../data/messages:307
 msgid ""
@@ -2829,60 +3227,64 @@ msgid ""
 "set, the same icon as the corresponding launcher will be used for each "
 "application."
 msgstr ""
-"Om inget anges används ikoner från systemet, annars används samma ikon som "
-"för startaren."
+"Om inte inställt, kommer ikonen från X för varje program att användas. Om "
+"inställt, kommer samma ikon som från motsvarande programstartare att "
+"användas för varje applikation."
 
 #: ../data/messages:309
 msgid "Overwrite the X icon with the launchers' icon?"
-msgstr "Ersätt systemikoner med startarens ikoner?"
+msgstr "Skriv över X-ikonen med programstartarens ikon?"
 
 #: ../data/messages:315
 msgid ""
 "A composite manager is required to display the thumbnail.\n"
 "OpenGL is required to draw the icon bent backwards."
 msgstr ""
+"En komposithanterare krävs för att visa miniatyrbilderna.\n"
+"OpenGL krävs för att rita den bakåtböjda ikonen."
 
 #: ../data/messages:317
 msgid "How to draw minimised windows ?"
-msgstr ""
+msgstr "Hur minimerade fönster ska ritas ?"
 
 #: ../data/messages:319
 msgid "Make the icon transparent"
-msgstr ""
+msgstr "Gör en ikon genomskinlig"
 
 #: ../data/messages:321
 msgid "Show a window's thumbnail"
-msgstr ""
+msgstr "Visa miniatyrbild av fönster"
 
 #: ../data/messages:323
 msgid "Draw it bent backwards"
-msgstr ""
+msgstr "Rita det bakåtböjt"
 
 #: ../data/messages:325
 msgid "Transparency of icons whose window is minimised:"
-msgstr ""
+msgstr "Genomskinlighet för ikoner vars fönster är minimerade:"
 
 #: ../data/messages:327 ../data/messages:477 ../data/messages:603
 #: ../data/messages:629 ../data/messages:719
 msgid "Opaque"
-msgstr ""
+msgstr "Opak"
 
 #: ../data/messages:329 ../data/messages:475 ../data/messages:601
 #: ../data/messages:627 ../data/messages:717
 msgid "Transparent"
-msgstr ""
+msgstr "Genomskinlig"
 
 #: ../data/messages:331
 msgid "Play a short animation of the icon when its window becomes active"
-msgstr "Animera ikonen när fönstret aktiveras?"
+msgstr "Spela upp en kort animering av ikonen då dess fönster blir aktivt"
 
 #: ../data/messages:333
 msgid "\"...\" will be added at the end if the name is too long."
-msgstr "\"...\" läggs till om namnet inte får plats."
+msgstr ""
+"\"...\" kommer att läggas till i slutet av namnet om det är för långt."
 
 #: ../data/messages:335
 msgid "Maximum number of caracters in application name:"
-msgstr "Maximalt antal tecken för programnamn:"
+msgstr "Maximalt antal tecken i programnamn:"
 
 #: ../data/messages:337
 msgid "Interaction"
@@ -2890,11 +3292,11 @@ msgstr "Interaktion"
 
 #: ../data/messages:339
 msgid "Action on middle-click on the related application"
-msgstr ""
+msgstr "Åtgärd vid mittenklick på det relaterade programmet"
 
 #: ../data/messages:341
 msgid "Nothing"
-msgstr ""
+msgstr "Ingenting"
 
 #: ../data/messages:345
 msgid "Minimize"
@@ -2906,127 +3308,137 @@ msgstr "Starta ny"
 
 #: ../data/messages:349
 msgid "Lower"
-msgstr ""
+msgstr "Lägre"
 
 #: ../data/messages:351
 msgid "This is the default behaviour of most taskbars."
-msgstr "Standardbeteende för de flesta aktivitetsfält."
+msgstr "Detta är standardbeteende för de flesta aktivitetsfält."
 
 #: ../data/messages:353
 msgid ""
 "Minimise the window when its icon is clicked, if it was already the active "
 "window ?"
 msgstr ""
+"Minimera fönstret vid klick på dess ikon, om det redan var det aktiva "
+"fönstret ?"
 
 #: ../data/messages:355
 msgid "Only if your Window Manager supports it."
-msgstr ""
+msgstr "Bara om din fönsterhanterare stöder det."
 
 #: ../data/messages:357
 msgid ""
 "Present windows preview on click when several windows are grouped togather"
 msgstr ""
+"Visa förhandsvisning av fönster vid klick då flera fönster är grupperade "
+"tillsammans"
 
 #: ../data/messages:359
 msgid "Highlight applications requiring your attention with a dialog bubble"
-msgstr ""
+msgstr "Markera program som kräver din uppmärksamhet med en dialogbubbla"
 
 #: ../data/messages:361
 msgid "in seconds"
-msgstr ""
+msgstr "i sekunder"
 
 #: ../data/messages:363
 msgid "Duration of the dialog:"
-msgstr ""
+msgstr "Varaktighet för dialogen:"
 
 #: ../data/messages:365
 msgid ""
 "It will notify you even if, for instance, you are watching a movie in full "
 "screen or you are on another desktop.\n"
 msgstr ""
+"Den kommer att notifiera dig även om, du till exempel, tittar på en film i "
+"helskärmsläge eller om du är på ett annat skrivbord.\n"
 
 #: ../data/messages:367
 msgid "Force the following applications to demand your attention"
-msgstr ""
+msgstr "Tvinga följande program att kräva din uppmärksamhet"
 
 #: ../data/messages:369
 msgid "Highlight applications demanding your attention with an animation"
-msgstr "Visa animation när ett program behöver din uppmärksamhet?"
+msgstr "Markera applikationer som kräver din uppmärksamhet med en animering"
 
 #: ../data/messages:373
 msgid "Animations speed"
-msgstr ""
+msgstr "Animeringshastighet"
 
 #: ../data/messages:375
 msgid "Animate sub-docks when they appear"
-msgstr "Animera sub-dockor när de visas?"
+msgstr "Animera underdockor då de visas"
 
 #: ../data/messages:377
 msgid ""
 "Icons will appear folded on themselves and will then unfold until they fill "
 "the whole dock. The smaller this value, the faster this will be."
 msgstr ""
+"Ikoner kommer att visas hopvikta var och en för sig och sedan vikas upp "
+"tills de fyller hela dockan. Ju mindre detta värde är, desto snabbare kommer "
+"det att gå."
 
 #: ../data/messages:379
 msgid "Animation unfolding duration:"
-msgstr ""
+msgstr "Animering utveckling längd:"
 
 #: ../data/messages:381 ../data/messages:389 ../data/messages:393
 #: ../data/messages:401 ../data/messages:405
 msgid "fast"
-msgstr ""
+msgstr "snabb"
 
 #: ../data/messages:383 ../data/messages:391 ../data/messages:395
 #: ../data/messages:403 ../data/messages:407
 msgid "slow"
-msgstr ""
+msgstr "långsam"
 
 #: ../data/messages:385 ../data/messages:397
 msgid "The more there are, the slower it will be"
-msgstr "Ju fler det finns, desto långsammare går det."
+msgstr "Ju mer det finns, desto långsammare blir det."
 
 #: ../data/messages:387
 msgid "Number of steps in the zoom animation (grow/shrink):"
-msgstr ""
+msgstr "Antal steg i zoomanimeringen (väx/krymp):"
 
 #: ../data/messages:399
 msgid "Number of steps in the auto-hide animation (move up/move down):"
-msgstr ""
+msgstr "Antal steg i auto-göm animeringen (flytta upp/flytta ner):"
 
 #: ../data/messages:409
 msgid "Refresh rate"
-msgstr ""
+msgstr "Uppdateringsfrekvens"
 
 #: ../data/messages:411 ../data/messages:415 ../data/messages:419
 msgid "in Hz. This is to adjust behaviour relative to your CPU power."
-msgstr "i Hz. Justera efter processorkraften."
+msgstr "i Hz. Detta är för att justera beteendet efter din processorkraft."
 
 #: ../data/messages:413
 msgid "Refresh rate when mouving cursor into the dock:"
-msgstr ""
+msgstr "Uppdateringsfrekvens då pekaren flyttas till dockan:"
 
 #: ../data/messages:417
 msgid "Animation frequency for the OpenGL backend:"
-msgstr ""
+msgstr "Animeringsfrekvens för OpenGL-bakänden:"
 
 #: ../data/messages:421
 msgid "Animation frequency for the Cairo backend:"
-msgstr ""
+msgstr "Animeringsfrekvens för Cairo-bakänden:"
 
 #: ../data/messages:423
 msgid ""
 "The transparency gradation pattern will then be re-calculated in real time. "
 "May need more CPU power."
 msgstr ""
-"Beräkna reflektionsmönstret i realtid. Detta kan kräva mer processorkraft."
+"Det genomskinliga nyansmönstret kommer då att omräknas i realtid. Kan behöva "
+"mer processorkraft."
 
 #: ../data/messages:425
 msgid "Reflections should be calculated in real-time?"
-msgstr ""
+msgstr "Ska reflektioner beräknas i realtid?"
 
 #: ../data/messages:427
 msgid "Connection to the Internet"
-msgstr ""
+msgstr "Anslutning till Internet"
 
 #: ../data/messages:429
 msgid ""
@@ -3034,122 +3446,129 @@ msgid ""
 "This only limits the connection phase,  once the dock has connected this "
 "option is of no more use."
 msgstr ""
+"Maximal tid i sekunder som du tillåter anslutningen till servern att ta. "
+"Detta begränsar endast anslutningsfasen, när dockan väl har anslutits är "
+"detta alternativ inte längre användbart."
 
 #: ../data/messages:431
 msgid "Connection timeout :"
-msgstr ""
+msgstr "Anslutnings-timeout:"
 
 #: ../data/messages:433
 msgid ""
 "Maximum time in seconds that you allow the whole operation to last. Some "
 "themes can be up to a few MB."
 msgstr ""
+"Maximal tid i sekunder som du tillåter hela operationen att vara. En del "
+"teman kan vara upp till några MB."
 
 #: ../data/messages:435
 msgid "Maximum time to download a file:"
-msgstr ""
+msgstr "Maximal tid för att ladda ner en fil:"
 
 #: ../data/messages:437
 msgid "Use this option if you experience problems to connect."
-msgstr ""
+msgstr "Använd detta alternativ om du upplever anslutningsproblem."
 
 #: ../data/messages:439
 msgid "Force IPv4 ?"
-msgstr ""
+msgstr "Tvinga IPv4 ?"
 
 #: ../data/messages:441
 msgid "Use this option if you connect to the Internet through a proxy."
-msgstr ""
+msgstr "Använd detta alternativ om du ansluter till Internet genom en proxy."
 
 #: ../data/messages:443
 msgid "Are you behind a proxy ?"
-msgstr ""
+msgstr "Finns du bakom en proxy ?"
 
 #: ../data/messages:445
 msgid "Proxy name :"
-msgstr ""
+msgstr "Proxynamn :"
 
 #: ../data/messages:447
 msgid "Port :"
-msgstr ""
+msgstr "Port :"
 
 #: ../data/messages:449 ../data/messages:453
 msgid ""
 "Let empty if you don't need to log-in to the proxy with a user/password."
 msgstr ""
+"Lämna tomt om du inte behöver logga in till proxyn med ett "
+"användarnamn/lösenord."
 
 #: ../data/messages:451
 msgid "User :"
-msgstr ""
+msgstr "Användare :"
 
 #: ../data/messages:455
 msgid "Password :"
-msgstr ""
+msgstr "Lösenord :"
 
 #: ../data/messages:465 ../data/messages:483 ../data/messages:979
 msgid "Colour gradation"
-msgstr ""
+msgstr "Färggradering"
 
 #: ../data/messages:467
 msgid "Use a background image."
-msgstr ""
+msgstr "Använd en bakgrundsbild."
 
 #: ../data/messages:471 ../data/messages:685 ../data/messages:739
 #: ../data/messages:759 ../data/messages:797
 msgid "Image file:"
-msgstr ""
+msgstr "Bildfil:"
 
 #: ../data/messages:473
 msgid "Image's transparency :"
-msgstr "Genomskinlighet för bilden:"
+msgstr "Bildgenomskinlighet :"
 
 #: ../data/messages:479 ../data/messages:985
 msgid "Repeat image as a pattern to fill background?"
-msgstr "Repetera bilden för att fylla hela dockan?"
+msgstr "Upprepa bilden som ett mönster för att fylla bakgrunden?"
 
 #: ../data/messages:481
 msgid "Use a colour gradation."
-msgstr ""
+msgstr "Använd en färggradering."
 
 #: ../data/messages:485 ../data/messages:987
 msgid "Bright colour:"
-msgstr ""
+msgstr "Ljus färg:"
 
 #: ../data/messages:487 ../data/messages:989
 msgid "Dark colour:"
-msgstr ""
+msgstr "Mörk färg:"
 
 #: ../data/messages:489
 msgid "In degrees, in relation to the vertical"
-msgstr ""
+msgstr "I grader, i relation till det vertikala"
 
 #: ../data/messages:491
 msgid "Angle of the gradation :"
-msgstr ""
+msgstr "Vinkel på graderingen :"
 
 #: ../data/messages:493
 msgid "If not nul, it will form stripes."
-msgstr ""
+msgstr "Om inte noll, bildar den ränder."
 
 #: ../data/messages:495
 msgid "Repeat the gradation this number of times:"
-msgstr ""
+msgstr "Upprepa graderingen detta antal gånger:"
 
 #: ../data/messages:497
 msgid "Percentage of the bright colour:"
-msgstr ""
+msgstr "Procent av den ljusa färgen:"
 
 #: ../data/messages:499
 msgid "Background when hidden"
-msgstr ""
+msgstr "Bakgrund när gömd"
 
 #: ../data/messages:501
 msgid "Several applets can be visible even when the dock is hidden"
-msgstr ""
+msgstr "Flera applets kan synas även då dockan är gömd"
 
 #: ../data/messages:503
 msgid "Default background color when the dock is hidden"
-msgstr ""
+msgstr "Standardbakgrundsfärg då dockan är gömd"
 
 #: ../data/messages:505
 msgid "External Frame"
@@ -3158,33 +3577,33 @@ msgstr "Yttre ram"
 #: ../data/messages:507 ../data/messages:511 ../data/messages:517
 #: ../data/messages:577 ../data/messages:655
 msgid "in pixels."
-msgstr "i pixlar"
+msgstr "i pixlar."
 
 #: ../data/messages:509 ../data/messages:561 ../data/messages:751
 #: ../data/messages:887
 msgid "Corner radius"
-msgstr ""
+msgstr "Hörnradie"
 
 #: ../data/messages:513 ../data/messages:563 ../data/messages:889
 msgid "Outline width"
-msgstr ""
+msgstr "Konturbredd"
 
 #: ../data/messages:515 ../data/messages:557 ../data/messages:813
 #: ../data/messages:845 ../data/messages:883
 msgid "Outline colour"
-msgstr ""
+msgstr "Konturfärg"
 
 #: ../data/messages:519
 msgid "Margin between the frame and the icons or their reflects :"
-msgstr "Marginal mellan ramen och ikonen eller deras reflektion:"
+msgstr "Marginal mellan ramen och ikonerna eller deras reflektioner :"
 
 #: ../data/messages:521
 msgid "Are the bottom left and right corners rounded?"
-msgstr "Ska de nedre hörnen avrundas?"
+msgstr "Är de de nedre vänstra och högra hörnen rundade?"
 
 #: ../data/messages:523 ../data/messages:991
 msgid "Stretch the dock to always fill the screen"
-msgstr ""
+msgstr "Sträck ut dockan för att alltid fylla skärmen"
 
 #: ../data/messages:527
 msgid "Main Dock"
@@ -3192,25 +3611,27 @@ msgstr "Huvuddocka"
 
 #: ../data/messages:531
 msgid "Sub-Docks"
-msgstr "Sub-dockor"
+msgstr "Underdockor"
 
 #: ../data/messages:537
 msgid ""
 "You can specify a ratio for the size of the sub-docks' icons, in relation to "
 "the main docks' icons size"
-msgstr "Ange förhållande mellan sub-dockans och huvuddockans ikonstorlek."
+msgstr ""
+"Du kan ange ett förhållande för storleken på underdockans ikoner, i "
+"förhållande till huvuddockans ikonstorlek"
 
 #: ../data/messages:539
 msgid "Ratio for the size of the sub-docks' icons :"
-msgstr "Relativ storlek för sub-dockans ikoner:"
+msgstr "Förhållande för storleken på underdockans ikoner :"
 
 #: ../data/messages:541 ../data/messages:777
 msgid "smaller"
-msgstr ""
+msgstr "mindre"
 
 #: ../data/messages:543
 msgid "larger"
-msgstr ""
+msgstr "större"
 
 #: ../data/messages:545
 msgid "Dialogs"
@@ -3223,31 +3644,31 @@ msgstr "Bubbla"
 #: ../data/messages:555 ../data/messages:843 ../data/messages:869
 #: ../data/messages:881
 msgid "Background colour"
-msgstr ""
+msgstr "Bakgrundsfärg"
 
 #: ../data/messages:559 ../data/messages:847 ../data/messages:867
 msgid "Text colour"
-msgstr ""
+msgstr "Textfärg"
 
 #: ../data/messages:565
 msgid "Shape of the bubble:"
-msgstr ""
+msgstr "Bubblans form:"
 
 #: ../data/messages:567 ../data/messages:853 ../data/messages:891
 msgid "Font"
-msgstr ""
+msgstr "Teckensnitt"
 
 #: ../data/messages:569 ../data/messages:855
 msgid "Otherwise the default's system one will be used."
-msgstr ""
+msgstr "I annat fall kommer systemets standard att användas."
 
 #: ../data/messages:571 ../data/messages:857 ../data/messages:893
 msgid "Use a custom font for the text?"
-msgstr ""
+msgstr "Använd ett anpassat teckensnitt till texten?"
 
 #: ../data/messages:573 ../data/messages:859 ../data/messages:895
 msgid "Text font:"
-msgstr ""
+msgstr "Teckensnitt:"
 
 #: ../data/messages:575 ../data/messages:631
 msgid "Buttons"
@@ -3255,105 +3676,111 @@ msgstr "Knappar"
 
 #: ../data/messages:579
 msgid "Size of buttons in the info-bubbles (width x height) :"
-msgstr "Storlek på knappar i info-bubblor (bredd x höjd):"
+msgstr "Storlek på knappar i info-bubblorna (bredd x höjd) :"
 
 #: ../data/messages:581
 msgid "Name of an image to use for the yes/ok button :"
-msgstr "Bild att använda för Ja/OK knappen:"
+msgstr "Namnet på en bild som ska användas för ja/ok knappen :"
 
 #: ../data/messages:583
 msgid "Name of an image to use for the no/cancel button :"
-msgstr "Bild att använda för Nej/Avbryt knappen:"
+msgstr "Namnet på en bild som ska användas för nej/avbryt knappen :"
 
 #: ../data/messages:585
 msgid "Size of the icon displayed next to the text :"
-msgstr "Storlek på ikon som visas bredvid texten:"
+msgstr "Storlek på ikonen som visas bredvid texten :"
 
 #: ../data/messages:591
 msgid ""
 "This can be customized for each desklet separately.\n"
 "Choose 'Custom decoration' to define your own decorations below"
 msgstr ""
+"Detta kan anpassas separat för varje desklet.\n"
+"Välj \"Anpassad dekoration\" för att definiera dina egna dekorationer nedan"
 
 #: ../data/messages:593
 msgid "Choose a default decoration for all desklets :"
-msgstr ""
+msgstr "Välj en standarddekoration för alla desklets :"
 
 #: ../data/messages:595
 msgid ""
 "It's an image that will be displayed below the drawings, like a frame for "
 "example. Leave empty to not use any."
 msgstr ""
+"Det är en bild som kommer att visas under ritningarna, som till exempel en "
+"ram. Lämna tomt för att inte använda någon."
 
 #: ../data/messages:597
 msgid "Background image :"
-msgstr ""
+msgstr "Bakgrundsbild :"
 
 #: ../data/messages:599
 msgid "Background transparency :"
-msgstr ""
+msgstr "Bakgrundstransparens :"
 
 #: ../data/messages:605
 msgid "in pixels. Use this to adjust the left position of the drawings."
-msgstr ""
+msgstr "i pixlar. Använd detta för att justera ritningarnas vänsterposition."
 
 #: ../data/messages:607
 msgid "Left offset :"
-msgstr ""
+msgstr "Vänsterjustering :"
 
 #: ../data/messages:609
 msgid "in pixels. Use this to adjust the top position of the drawings."
-msgstr ""
+msgstr "i pixlar. Använd detta för att justera ritningarnas topposition."
 
 #: ../data/messages:611
 msgid "Top offset :"
-msgstr ""
+msgstr "Toppjustering :"
 
 #: ../data/messages:613
 msgid "in pixels. Use this to adjust the right position of the drawings."
-msgstr ""
+msgstr "i pixlar. Använd detta för att justera ritningarnas högerposition."
 
 #: ../data/messages:615
 msgid "Right offset :"
-msgstr ""
+msgstr "Högerjustering :"
 
 #: ../data/messages:617
 msgid "in pixels. Use this to adjust the bottom position of the drawings."
-msgstr ""
+msgstr "i pixlar. Använd detta för att justera ritningarnas bottenposition."
 
 #: ../data/messages:619
 msgid "Bottom offset :"
-msgstr ""
+msgstr "Bottenjustering :"
 
 #: ../data/messages:621
 msgid ""
 "It's an image that will be displayed above the drawings, like a reflection "
 "for example. Leave empty to not use any."
 msgstr ""
+"Det är en bild som kommer att visas ovanpå ritningarna, som till exempel en "
+"reflektion. Lämna tomt för att inte använda någon."
 
 #: ../data/messages:623
 msgid "Foreground image :"
-msgstr ""
+msgstr "Förgrundsbild :"
 
 #: ../data/messages:625
 msgid "Foreground tansparency :"
-msgstr ""
+msgstr "Förgrundsgenomskinlighet :"
 
 #: ../data/messages:633
 msgid "Buttons size :"
-msgstr ""
+msgstr "Knappstorlek :"
 
 #: ../data/messages:635 ../data/messages:641
 msgid "Name of an image to use for the 'rotate' button :"
-msgstr ""
+msgstr "Namnet på en bild som ska användas för \"rotera\" knappen :"
 
 #: ../data/messages:637
 msgid "Name of an image to use for the 'reattach' button :"
-msgstr ""
+msgstr "Namnet på en bild som ska användas för \"återfästa\" knappen :"
 
 #: ../data/messages:639
 msgid "Name of an image to use for the 'depth rotate' button :"
-msgstr ""
+msgstr "Namnet på en bild som ska användas för \"djuproterings\" knappen :"
 
 #: ../data/messages:645
 msgid "Icons' themes"
@@ -3361,45 +3788,48 @@ msgstr "Ikonteman"
 
 #: ../data/messages:647
 msgid "Choose an icon theme :"
-msgstr ""
+msgstr "Välj ett ikontema :"
 
 #: ../data/messages:649
 msgid "Image filename to use as a background for icons :"
-msgstr ""
+msgstr "Bildfilnamn att använda som en bakgrund för ikoner :"
 
 #: ../data/messages:651
 msgid "Icons size"
-msgstr ""
+msgstr "Ikonstorlek"
 
 #: ../data/messages:653 ../data/messages:671
 msgid "Icons' size at rest (width x height) :"
-msgstr ""
+msgstr "Ikonstorlek vid vila (bredd x höjd) :"
 
 #: ../data/messages:657
 msgid "Space between icons :"
-msgstr "Avstånd mellan ikoner:"
+msgstr "Avstånd mellan ikoner :"
 
 #: ../data/messages:659
 msgid "Zoom effect"
-msgstr ""
+msgstr "Zoomeffekt"
 
 #: ../data/messages:661
 msgid ""
 "set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
+"sätt till 1 om du inte vill att ikonerna ska zoomas då du för pekaren över "
+"dem."
 
 #: ../data/messages:663
 msgid "Maximum zoom of the icons :"
-msgstr ""
+msgstr "Maximal zoom för ikonerna :"
 
 #: ../data/messages:665
 msgid ""
 "in pixels. Outside of this space (centered on the mouse), there is no zoom."
 msgstr ""
+"i pixlar. Utanför detta område (centrerat på musen), finns ingen zoom."
 
 #: ../data/messages:667
 msgid "Width of the space in which the zoom will be effective :"
-msgstr ""
+msgstr "Bredd på det område inom vilket zoomen kommer att vara effektiv :"
 
 #: ../data/messages:669
 msgid "Separators"
@@ -3407,39 +3837,43 @@ msgstr "Avgränsare"
 
 #: ../data/messages:673
 msgid "Force separator's image size to stay constant?"
-msgstr "Tvinga fast bildstorlek?"
+msgstr "Tvinga avgränsarens bildstorlek att förbli konstant?"
 
 #: ../data/messages:675
 msgid ""
 "Only the default, 3D-plane and curve views support flat and physical "
 "separators. Flat separators are rendered differently according to the view."
 msgstr ""
+"Endast standarden, 3D-plans- och kurvvyer stöder platta och fysiska "
+"avgränsare. Platta avgränsare renderas olika beroende på vyn."
 
 #: ../data/messages:677
 msgid "How to draw the separators?"
-msgstr ""
+msgstr "Hur ska avgränsare ritas?"
 
 #: ../data/messages:679
 msgid "Use an image."
-msgstr ""
+msgstr "Använd en bild."
 
 #: ../data/messages:681
 msgid "Flat separator"
-msgstr ""
+msgstr "Platt avgränsare"
 
 #: ../data/messages:683
 msgid "Physical separator"
-msgstr ""
+msgstr "Fysisk avgränsare"
 
 #: ../data/messages:687
 msgid ""
 "Make the separator's image revolve when dock is on top/on the left/on the "
 "right?"
-msgstr "Rotera bilden när dockan flyttas till andra skärmkanter?"
+msgstr ""
+"Gör att avgränsarens bild roterar när dockan är överst/till vänster/till "
+"höger?"
 
 #: ../data/messages:695
 msgid "Colour of flat separators :"
-msgstr ""
+msgstr "Färg på platta avgränsare :"
 
 #: ../data/messages:697
 msgid "Reflections"
@@ -3447,33 +3881,34 @@ msgstr "Reflektioner"
 
 #: ../data/messages:699
 msgid "Reflection visibility"
-msgstr ""
+msgstr "Reflektionssynlighet"
 
 #: ../data/messages:701
 msgid "light"
-msgstr ""
+msgstr "ljus"
 
 #: ../data/messages:703
 msgid "strong"
-msgstr ""
+msgstr "stark"
 
 #: ../data/messages:705
 msgid ""
 "In percent of the icon's size. This parameter influence the total height of "
 "the dock."
 msgstr ""
+"I procent av ikonstorleken. Denna parameter påverkar dockans totala höjd."
 
 #: ../data/messages:707
 msgid "Height of the reflection:"
-msgstr ""
+msgstr "Höjd på reflektionen:"
 
 #: ../data/messages:709
 msgid "small"
-msgstr ""
+msgstr "liten"
 
 #: ../data/messages:711
 msgid "tall"
-msgstr ""
+msgstr "hög"
 
 #: ../data/messages:713
 msgid ""
@@ -3481,64 +3916,69 @@ msgid ""
 "progressively as the dock grows up. The closer to 0, the more transparent "
 "they will be."
 msgstr ""
+"Det är deras genomskinlighet då dockan är i vila; de kommer att "
+"\"framträda\" stegvis allteftersom dockan växer fram. Ju närmare 0, desto "
+"mer genomskinliga kommer de att vara."
 
 #: ../data/messages:715
 msgid "Icons' transparency at rest :"
-msgstr "Genomskinlighet i vila:"
+msgstr "Ikongenomskinlighet vid vila :"
 
 #: ../data/messages:721
 msgid "Link the icons with a string"
-msgstr "Länka ikoner med snöre"
+msgstr "Länka ikonerna med ett snöre"
 
 #: ../data/messages:723
 msgid "Linewidth of the string, in pixels (0 to not use string) :"
-msgstr "Bredd på snöret, i pixlar (ange 0 för att inaktivera)"
+msgstr "Linjebredd på snöret, i pixlar (0 för att inte använda snöre) :"
 
 #: ../data/messages:725
 msgid "Colour of the string (red, blue, green, alpha) :"
-msgstr ""
+msgstr "Strängens färg (röd, blå, grön, alfa) :"
 
 #: ../data/messages:729
 msgid "Indicator of the active window"
-msgstr "Indikator för aktivt fönster"
+msgstr "Indikator för det aktiva fönstret"
 
 #: ../data/messages:737 ../data/messages:741 ../data/messages:745
 msgid "Frame"
-msgstr ""
+msgstr "Ram"
 
 #: ../data/messages:743
 msgid "Fill background"
-msgstr ""
+msgstr "Fyll bakgrund"
 
 #: ../data/messages:749
 msgid "Linewidth"
-msgstr ""
+msgstr "Linjebredd"
 
 #: ../data/messages:753 ../data/messages:785
 msgid "Draw indicator above the icon?"
-msgstr "Visa indikatorn ovanpå ikonen?"
+msgstr "Rita indikator ovanför ikonen?"
 
 #: ../data/messages:755
 msgid "Indicator of active launcher"
-msgstr "Indikator för aktiv startare"
+msgstr "Indikator för aktiv programstartare"
 
 #: ../data/messages:757
 msgid ""
 "Indicators are drawn on launchers icons to show that they have already been "
 "launched. Leave blank to use the default one."
 msgstr ""
-"Indikatorer visas på ikoner för att ange att programmet redan körs. Lämna "
-"tomt för standardbild."
+"Indikatorer ritas på programstartsikoner för att visa att de redan har "
+"startats. Lämna tom för att använda standard."
 
 #: ../data/messages:761
 msgid ""
 "The indicator is drawn on active launchers, but you may want to display it "
 "on applications too."
 msgstr ""
+"Indikatorn ritas på aktiva startare, men du kanske även vill visa den på "
+"programmen."
 
 #: ../data/messages:763
 msgid "Display an indicator on application icons too ?"
-msgstr ""
+msgstr "Visa en indikator även på programikoner ?"
 
 #: ../data/messages:765
 msgid ""
@@ -3547,10 +3987,14 @@ msgid ""
 "If the indicator is linked to the icon, the offset will be upwards, "
 "otherwise downwards."
 msgstr ""
+"Relativt till ikonernas storlek. Du kan använda denna parameter för att "
+"justera indikatorns vertikala position.\n"
+"Om indikatorn är kopplad till ikonen, blir förskjutningen uppåt, annars "
+"nedåt."
 
 #: ../data/messages:767
 msgid "Vertical offset :"
-msgstr "Vertikal justering:"
+msgstr "Vertikal justering :"
 
 #: ../data/messages:769
 msgid ""
@@ -3559,10 +4003,14 @@ msgid ""
 "Otherwise it will be drawn directly on the dock and the offset will be "
 "downwards."
 msgstr ""
+"Om indikatorn är länkad till ikonen, kommer den att zoomas som ikonen och "
+"justeringen kommer att bli uppåt.\n"
+"I annat fall kommer den att ritas direkt på dockan och justeringen kommer "
+"att bli nedåt."
 
 #: ../data/messages:771
 msgid "Link the indicator with its icon?"
-msgstr "Länka indikatorn till ikonen?"
+msgstr "Länka indikatorn med denna ikon?"
 
 #: ../data/messages:773
 msgid ""
@@ -3570,69 +4018,73 @@ msgid ""
 "bigger the value is, the bigger the indicator is. 1 means the indicator will "
 "have the same size as the icons."
 msgstr ""
-"Indikatorn kan vara större eller mindre än ikonen. Högre värde ger större "
-"indikator i förhållande till ikonen. Ange 1 om indikatorn skall vara lika "
-"stor som ikonen."
+"Du kan välja att göra indikatorn mindre eller större än ikonerna. Ju högre "
+"värdet är, desto större indikator. 1 betyder att indikatorn kommer att ha "
+"samma storlek som ikonerna."
 
 #: ../data/messages:775
 msgid "Indicator size ratio :"
-msgstr "Indikatorns relativa storlek:"
+msgstr "Storleksförhållande för indikator:"
 
 #: ../data/messages:779
 msgid "bigger"
-msgstr ""
+msgstr "större"
 
 #: ../data/messages:781
 msgid ""
 "Use it to make the indicator follow the orientation of the dock "
 "(top/bottom/right/left)."
 msgstr ""
+"Använd detta för att få indikatorn att följa dockans orientering "
+"(topp/botten/höger/vänster):"
 
 #: ../data/messages:783
 msgid "Rotate the indicator with dock?"
-msgstr ""
+msgstr "Rotera indikatorn med docka?"
 
 #: ../data/messages:787
 msgid "Indicator of grouped windows"
-msgstr ""
+msgstr "Indikator för grupperade fönster"
 
 #: ../data/messages:789
 msgid "How to show that several icons are grouped :"
-msgstr ""
+msgstr "Hur ska flera ikoner som är grupperade visas :"
 
 #: ../data/messages:791
 msgid "Draw an emblem"
-msgstr ""
+msgstr "Rita ett emblem"
 
 #: ../data/messages:793
 msgid "Draw the sub-dock's icons as a stack"
-msgstr ""
+msgstr "Rita underdockans ikoner som en stack"
 
 #: ../data/messages:795
 msgid ""
 "It only makes sense if you chose to group the applis of the same class "
 "together. Leave blank to use the default one."
 msgstr ""
+"Detta är bara meningsfullt om du väljer att gruppera program av samma klass "
+"tillsammans. Lämna tomt för att använda standard."
 
 #: ../data/messages:799
 msgid "Zoom the indicator with its icon?"
-msgstr ""
+msgstr "Zooma indikatorn med dess ikon?"
 
 #: ../data/messages:801
 msgid "Progress bars"
-msgstr ""
+msgstr "Förloppsindikatorer"
 
 #: ../data/messages:809
 msgid "Start color"
-msgstr ""
+msgstr "Startfärg"
 
 #: ../data/messages:811
 msgid "End color"
-msgstr ""
+msgstr "Slutfärg"
 
 #: ../data/messages:815
 msgid "Bar thickness"
-msgstr ""
+msgstr "Radtjocklek"
 
 #: ../data/messages:817
 msgid "Labels"
@@ -3640,105 +4092,106 @@ msgstr "Etiketter"
 
 #: ../data/messages:819
 msgid "Label visibility"
-msgstr ""
+msgstr "Etikettsynlighet"
 
 #: ../data/messages:821
 msgid "Show labels:"
-msgstr ""
+msgstr "Visa etiketter:"
 
 #: ../data/messages:825
 msgid "On pointed icon"
-msgstr ""
+msgstr "På spetsiga ikoner"
 
 #: ../data/messages:827
 msgid "On all icons"
-msgstr ""
+msgstr "På alla ikoner"
 
 #: ../data/messages:829
 msgid "Neighbouring labels visibility:"
-msgstr ""
+msgstr "Synlighet för grannetiketter:"
 
 #: ../data/messages:831
 msgid "more visible"
-msgstr ""
+msgstr "mer synlig"
 
 #: ../data/messages:833
 msgid "less visible"
-msgstr ""
+msgstr "mindre synlig"
 
 #: ../data/messages:849
 msgid "Draw the outline of the text?"
-msgstr ""
+msgstr "Rita textens kontur?"
 
 #: ../data/messages:851
 msgid "Margin around the text (in pixels) :"
-msgstr ""
+msgstr "Marginal runt texten (i pixlar) :"
 
 #: ../data/messages:861
 msgid "Quick-info are short information drawn on the icons."
-msgstr ""
+msgstr "Snabbinfo är kort information som ritas på ikonerna."
 
 #: ../data/messages:863
 msgid "Quick-info"
-msgstr ""
+msgstr "Snabbinfo"
 
 #: ../data/messages:865
 msgid "Use the same look as the labels?"
-msgstr ""
+msgstr "Använd samma utseende som etiketterna?"
 
 #: ../data/messages:885
 msgid "Text colour:"
-msgstr ""
+msgstr "Textfärg:"
 
 #: ../data/messages:917
 msgid "Visibility of the dock"
-msgstr ""
+msgstr "Dockans synlighet"
 
 #: ../data/messages:951 ../data/messages:975
 msgid "Same as main dock"
-msgstr ""
+msgstr "Samma som huvuddockan"
 
 #: ../data/messages:953
 msgid "Tiny"
-msgstr ""
+msgstr "Mycket liten"
 
 #: ../data/messages:967
 msgid "Leave it empty to use the same view as the main dock."
-msgstr ""
+msgstr "Lämna tomt för att använda samma vy som huvuddockan."
 
 #: ../data/messages:969
 msgid "Choose the view for this dock :/"
-msgstr ""
+msgstr "Välj vy för denna docka :/"
 
 #: ../data/messages:973
 msgid "Fill the background with:"
-msgstr ""
+msgstr "Fyll bakgrunden med:"
 
 #: ../data/messages:981
 msgid ""
 "Any format allowed; if empty, the colour gradation will be used as a fall "
 "back."
 msgstr ""
+"Alla format tillåtna; om tomt, kommer färggradienten att användas som reserv."
 
 #: ../data/messages:983
 msgid "Image filename to use as a background :"
-msgstr "Bakgrundsbild:"
+msgstr "Bildfilnamn att använda som bakgrund :"
 
 #: ../data/messages:993
 msgid "Load theme"
-msgstr ""
+msgstr "Läs in tema"
 
 #: ../data/messages:995
 msgid "You can even paste an internet URL."
-msgstr ""
+msgstr "Du kan till och med klistra in en Internet-URL."
 
 #: ../data/messages:997
 msgid "...or drag and drop a theme package here :"
-msgstr ""
+msgstr "...eller dra-och-släpp ett temapaket här :"
 
 #: ../data/messages:999
 msgid "Theme loading options"
-msgstr ""
+msgstr "Temaladdningsalternativ"
 
 #: ../data/messages:1001
 msgid ""
@@ -3746,28 +4199,30 @@ msgid ""
 "ones provided in the new theme. Otherwise the current launchers will be "
 "kept, only icons will be replaced."
 msgstr ""
-"Markera för att ersätta alla aktuella startare med temats inbyggda. "
-"Avmarkera för att endast ersätta ikonerna."
+"Om du markerar denna ruta så kommer dina programstartare att tas bort och "
+"ersättas med dem som tillhandahålls i det nya temat. Annars kommer nuvarande "
+"programstartare att behållas, endast ikoner kommer att bytas ut."
 
 #: ../data/messages:1003
 msgid "Use the new theme's launchers?"
-msgstr "Använd temats startare?"
+msgstr "Använd det nya temats programstartare?"
 
 #: ../data/messages:1005
 msgid ""
 "Otherwise the current behaviour will be kept. This defines the dock's "
 "position, behavioural settings such as auto-hide, using taskbar or not, etc."
 msgstr ""
-"Markera för att ersätta alla aktuella beteenden med temats inbyggda. "
-"Avmarkera för att behålla aktuella beteenden."
+"Annars kommer nuvarande beteende att behållas. Detta definierar dockors "
+"position, beteendeinställningar såsom automatisk dölja, användning av "
+"Aktivitetsfält eller inte, etc."
 
 #: ../data/messages:1007
 msgid "Use the new theme's behaviour?"
-msgstr "Använd temats beteenden?"
+msgstr "Använd det nya temats beteende?"
 
 #: ../data/messages:1009
 msgid "Save"
-msgstr ""
+msgstr "Spara"
 
 #: ../data/messages:1011
 msgid "You will then be able to re-open it at any time."
@@ -3775,100 +4230,104 @@ msgstr "Du kan sedan öppna dem igen när som helst."
 
 #: ../data/messages:1013
 msgid "Save current behaviour also?"
-msgstr "Spara beteenden också?"
+msgstr "Spara nuvarande beteende också?"
 
 #: ../data/messages:1015
 msgid "Save current launchers also?"
-msgstr "Spara startare också?"
+msgstr "Spara nuvarande programstartare också?"
 
 #: ../data/messages:1017
 msgid ""
 "The dock will build a complete tarball of your current theme, allowing you "
 "to easily exchange it with other people."
 msgstr ""
+"Dockan kommer att bygga en komplett tarball av ditt nuvarande tema, så att "
+"du enkelt kan byta det med andra."
 
 #: ../data/messages:1019
 msgid "Build a package of the theme?"
-msgstr ""
+msgstr "Bygg ett paket med temat?"
 
 #: ../data/messages:1021
 msgid "Directory in which the package will be saved:"
-msgstr ""
+msgstr "Katalog där paketet kommer att sparas:"
 
 #: ../data/messages:1023 ../data/messages:1025 ../data/messages:1027
 #: ../data/messages:1059 ../data/messages:1095
 msgid "Desktop Entry"
-msgstr "Skrivbord"
+msgstr "Skrivbordspost"
 
 #: ../data/messages:1031 ../data/messages:1063 ../data/messages:1099
 msgid "Name of the container it belongs to:"
-msgstr ""
+msgstr "Namnet på containern den tillhör:"
 
 #: ../data/messages:1033
 msgid "Sub-dock's name:"
-msgstr ""
+msgstr "Underdockans namn:"
 
 #: ../data/messages:1035
 msgid "New sub-dock"
-msgstr ""
+msgstr "Ny underdocka"
 
 #: ../data/messages:1037
 msgid "How to render the icon:"
-msgstr ""
+msgstr "Hur ikonen ska renderas:"
 
 #: ../data/messages:1039
 msgid "Use an image"
-msgstr ""
+msgstr "Använd en bild"
 
 #: ../data/messages:1041
 msgid "Draw sub-dock's content as emblems"
-msgstr ""
+msgstr "Rita underdockans innehåll som emblem"
 
 #: ../data/messages:1043
 msgid "Draw sub-dock's content as stack"
-msgstr ""
+msgstr "Rita underdockans innehåll som stack"
 
 #: ../data/messages:1045
 msgid "Draw sub-dock's content inside a box"
-msgstr ""
+msgstr "Rita underdockans innehåll inuti en låda"
 
 #: ../data/messages:1047 ../data/messages:1069
 msgid "Image's name or path:"
-msgstr ""
+msgstr "Bildens namn eller sökväg:"
 
 #: ../data/messages:1049 ../data/messages:1077 ../data/messages:1103
 msgid "Extra parameters"
-msgstr ""
+msgstr "Extra parametrar"
 
 #: ../data/messages:1051
 msgid "Name of the view used for the sub-dock:"
-msgstr ""
+msgstr "Namnet på vyn som används för underdockan:"
 
 #: ../data/messages:1053
 msgid "If '0' the container will be displayed on every viewport."
-msgstr ""
+msgstr "Om \"0\" kommer containern att visas i alla visningslägen."
 
 #: ../data/messages:1055 ../data/messages:1091
 msgid "Only show in this specific viewport:"
-msgstr ""
+msgstr "Visa endast i detta specifika visningsläge:"
 
 #: ../data/messages:1057 ../data/messages:1093 ../data/messages:1105
 msgid "Order you want for this launcher among the others:"
-msgstr ""
+msgstr "Ordningen du vill ha för denna startare bland de andra:"
 
 #: ../data/messages:1065
 msgid "Launcher's name:"
-msgstr ""
+msgstr "Startarens namn:"
 
 #: ../data/messages:1071
 msgid ""
 "Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
 "e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
+"Exempel: nautilus --no-desktop, gedit, etc. Du kan till och med ange ett "
+"kortkommando, t. ex. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 
 #: ../data/messages:1073
 msgid "Command to launch on click:"
-msgstr ""
+msgstr "Kommando att starta vid klick:"
 
 #: ../data/messages:1079
 msgid ""
@@ -3877,10 +4336,14 @@ msgid ""
 "launcher that launches a script in a terminal, but you don't want it to "
 "steal the terminal's icon from the taskbar."
 msgstr ""
+"Om du väljer att blanda startare och program, kommer detta alternativ att "
+"avaktivera detta beteende endast för denna startare. Det kan vara användbart "
+"exempelvis för en startare som startar ett skript i en terminal, men som du "
+"inte vill ska stjäla terminalikonen i aktivitetsfältet."
 
 #: ../data/messages:1081
 msgid "Don't link the launcher with its window"
-msgstr ""
+msgstr "Länka inte startaren till dess fönster"
 
 #: ../data/messages:1083
 msgid ""
@@ -3889,44 +4352,51 @@ msgid ""
 "nearly sure that you shouldn't touch it. It defines the class of the "
 "program, which is useful to link the application with its launcher."
 msgstr ""
+"Den enda anledningen till att du kanske skulle vilja ändra denna parameter "
+"är om du gjort denna startare för hand. Om du släppte den i dockan från "
+"menyn, är det nästan säkert att du inte ska röra den. Den definierar "
+"programmets klass, som är användbar för att länka programmet till sin "
+"startare."
 
 #: ../data/messages:1085
 msgid "Class of the program:"
-msgstr ""
+msgstr "Programmets klass:"
 
 #: ../data/messages:1087
 msgid "Run in a terminal?"
-msgstr ""
+msgstr "Kör i en terminal?"
 
 #: ../data/messages:1089
 msgid "If '0' the launcher will be displayed on every viewport."
-msgstr ""
+msgstr "Om \"0\" kommer startaren att visas i alla visningslägen."
 
 #: ../data/messages:1101
 msgid "Separators' appearance is defined in the global configuration."
-msgstr ""
+msgstr "Avgränsarnas utseende definieras i de globala inställningarna."
 
 #: ../data/messages:1108
 msgid ""
 "<b>The basic 2D view of Cairo-Dock</b>\n"
 "Perfect if you want to make the dock look like a panel."
 msgstr ""
+"<b>Den grundläggande 2D-vyn i Cairo-Dock</ b>\n"
+"Perfekt om du vill få dockan att se ut som en panel."
 
 #: ../data/messages:1110
 msgid "Cairo-Dock (Fallback Mode)"
-msgstr ""
+msgstr "Cairo-Dock (Reservläge)"
 
 #: ../data/messages:1112
 msgid "A light and eye-candy dock and desklets for your desktop."
-msgstr ""
+msgstr "En ljus ögongodisdocka och desklets för ditt skrivbord."
 
 #: ../data/messages:1114
 msgid "Multi-purpose Dock and Desklets"
-msgstr ""
+msgstr "Mångsidig docka och desklets"
 
 #: ../data/messages:1116
 msgid "<b>New version: <span color='red'>GLX-Dock 3.3</span>!</b>"
-msgstr ""
+msgstr "<b>Ny version: <span color='red'>GLX-Dock 3.3</span>!</b>"
 
 #: ../data/messages:1118
 msgid ""
@@ -3934,14 +4404,16 @@ msgid ""
 "    It allows to rapidly look for programs from their name or their "
 "description"
 msgstr ""
+"- Lade till en sökpost i <b>Programmenyn</b>.\n"
+" Den tillåter snabbsökning efter program utifrån namn eller beskrivning"
 
 #: ../data/messages:1120
 msgid "- Added support of <b>logind</b> in the Logout applet"
-msgstr ""
+msgstr "- Lade till stöd för <b>logind</b> i Utloggnings-applet"
 
 #: ../data/messages:1122
 msgid "- Better integration in the Cinnamon desktop"
-msgstr ""
+msgstr "- Bättre integration med Cinnamon-skrivbordet"
 
 #: ../data/messages:1124
 msgid ""
@@ -3949,69 +4421,82 @@ msgid ""
 "    It allows launchers to be animated until the application opens and "
 "avoids accidental double launches"
 msgstr ""
+"- Lade till stöd för <b>Startnotifierings</b>protokollet.\n"
+" Det tillåter startare att animeras tills programmet öppnas och undviker "
+"oavsiktliga dubbelstarter"
 
 #: ../data/messages:1126
 msgid ""
 "- Added an new third-party applet: <b>Notification History</b> to never miss "
 "a notification"
 msgstr ""
+"- Lade till en ny tredjeparts applet: <b>Notifieringshistorik</b> för att "
+"aldrig missa en notifiering"
 
 #: ../data/messages:1128
 msgid "- Upgraded the <b>Dbus API</b> to be even more powerful"
-msgstr ""
+msgstr "- uppdaterade <b>Dbus API</b> för att bli ännu kraftfullare"
 
 #: ../data/messages:1130
 msgid "- A huge rewrite of the core using Objects"
-msgstr ""
+msgstr "- En stor omskrivning av kärnan med objekt"
 
 #: ../data/messages:1132
 msgid "- If you like the project, please donate :-)"
-msgstr ""
+msgstr "- Om du gillar projektet, donera gärna :-)"
 
 #: ../data/messages:1134
 msgid "<b>New version: <span color='red'>GLX-Dock 3.4</span>!</b>"
-msgstr ""
+msgstr "<b>Ny version: <span color='red'>GLX-Dock 3.4</span>!</b>"
 
 #: ../data/messages:1136
 msgid "- <b>Menus</b>: added the possibility to customise them"
-msgstr ""
+msgstr "- <b>Menyer</b>: lade till möjligheten att anpassa dem"
 
 #: ../data/messages:1138
 msgid "- <b>Style</b>: unified the style of all components of the dock"
-msgstr ""
+msgstr "- <b>Stil</b>: gjorde stilen på alla komponenter i dockan enhetliga"
 
 #: ../data/messages:1140
 msgid ""
 "- Better integration with <b>Compiz</b> (e.g. when using the <b>Cairo-Dock "
 "session</b>) and Cinnamon"
 msgstr ""
+"- Bättre integration med <b>Compiz</b> (till exempel vid användning av "
+"<b>Cairo-Dock session</b>) och Cinnamon"
 
 #: ../data/messages:1142
 msgid ""
 "- <b>Applications Menu</b> and <b>Logout</b> applets will wait the end of an "
 "update before displaying notifications"
 msgstr ""
+"- <b>Programmeny</b> och <b>Utloggnings</b> applets kommer att vänta till "
+"slutet av en uppdatering innan de visar notifieringar"
 
 #: ../data/messages:1144
 msgid ""
 "- Various improvements for <b>Applications Menu</b>, <b>Shortcuts</b>, "
 "<b>Status-Notifier</b> and <b>Terminal</b> applets"
 msgstr ""
+"- Diverse förbättringar för <b>Programmenyn</b>, <b>Genvägar</b>, "
+"<b>Statusnotifieraren</b> och <b>Terminal</b> applets"
 
 #: ../data/messages:1146
 msgid "- Start working on <b>EGL</b> and <b>Wayland</b> support"
-msgstr ""
+msgstr "- Börja arbeta på stöd för <b>EGL</b> och <b>Wayland</b>"
 
 #: ../data/messages:1148
 msgid "- And as always ... various bug fixes and improvements!"
-msgstr ""
+msgstr "- Och som vanligt ... diverse felrättningar och förbättringar!"
 
 #: ../data/messages:1150
 msgid "If you like the project, please donate and/or contribute :-)"
-msgstr ""
+msgstr "Om du gillar projektet, donera gärna och/eller bidra  :-)"
 
 #: ../data/messages:1152
 msgid ""
 "Note: We're switching from Bzr to Git on Github, feel free to fork! "
 "https://github.com/Cairo-Dock"
 msgstr ""
+"Observera vi går över från Bzr till Git på Github, du är välkommen att "
+"forka! https://github.com/Cairo-Dock"

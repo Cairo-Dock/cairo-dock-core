@@ -10,15 +10,23 @@ msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
 "POT-Creation-Date: 2014-10-19 00:21+0000\n"
-"PO-Revision-Date: 2014-06-15 06:51+0000\n"
-"Last-Translator: JoanColl <Unknown>\n"
+"PO-Revision-Date: 2015-11-03 11:00+0000\n"
+"Last-Translator: Adolfo Jayme <fitoschido@gmail.com>\n"
 "Language-Team: Catalan <ca@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-10-20 05:54+0000\n"
-"X-Generator: Launchpad (build 17196)\n"
+"X-Launchpad-Export-Date: 2015-11-04 05:14+0000\n"
+"X-Generator: Launchpad (build 17838)\n"
 "Language: ca\n"
+
+#: ../src/cairo-dock-widget-shortkeys.c:243
+msgid "Shortkey"
+msgstr "Tecla Curta"
+
+#: ../src/cairo-dock-widget-themes.c:89
+msgid "Could not import the theme."
+msgstr "No s'hi pot importar el tema."
 
 #: ../src/cairo-dock-gui-advanced.c:120 ../src/cairo-dock-widget-plugins.c:173
 #: ../data/messages:267
@@ -359,6 +367,7 @@ msgstr "Traductors per a aquesta llengua"
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
+"  Adolfo Jayme https://launchpad.net/~fitojb\n"
 "  Albert Milian https://launchpad.net/~mln-gmx\n"
 "  Cesc Llagostera https://launchpad.net/~cescllp\n"
 "  Fabounet https://launchpad.net/~fabounet03\n"
@@ -873,15 +882,7 @@ msgstr "Orígen"
 
 #: ../src/cairo-dock-widget-shortkeys.c:239
 msgid "Action"
-msgstr "Acciò"
-
-#: ../src/cairo-dock-widget-shortkeys.c:243
-msgid "Shortkey"
-msgstr "Tecla Curta"
-
-#: ../src/cairo-dock-widget-themes.c:89
-msgid "Could not import the theme."
-msgstr "No s'hi pot importar el tema."
+msgstr "Acció"
 
 #: ../src/cairo-dock-widget-themes.c:194
 msgid ""
@@ -940,7 +941,7 @@ msgstr "Important tema ..."
 
 #: ../src/cairo-dock-widget-themes.c:683
 msgid "Theme has been saved"
-msgstr "El tema s'ha salvat"
+msgstr "S’ha desat el tema"
 
 #: ../src/cairo-dock.c:148
 #, c-format

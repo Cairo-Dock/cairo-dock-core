@@ -7,14 +7,14 @@ msgstr ""
 "Project-Id-Version: 2.1.0-alpha\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
 "POT-Creation-Date: 2014-10-19 00:21+0000\n"
-"PO-Revision-Date: 2014-09-06 20:46+0000\n"
-"Last-Translator: pedro jorge oliveira <pedrojorgeoliveira93@gmail.com>\n"
+"PO-Revision-Date: 2015-03-13 13:46+0000\n"
+"Last-Translator: Gmood <Unknown>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-10-20 05:56+0000\n"
-"X-Generator: Launchpad (build 17196)\n"
+"X-Launchpad-Export-Date: 2015-03-14 05:10+0000\n"
+"X-Generator: Launchpad (build 17389)\n"
 "Language: \n"
 
 #: ../src/cairo-dock-gui-advanced.c:120 ../src/cairo-dock-widget-plugins.c:173
@@ -74,9 +74,9 @@ msgid ""
 " or on the contrary unobtrusive?\n"
 "Configure the way you access your docks and sub-docks!"
 msgstr ""
-"Pretende que a doca esteja sempre visível,\n"
-" ou que não o incomode?\n"
-"Configure o método de acesso às docas e subdocas!"
+"Deseja a sua doca sempre visível,\n"
+" ou pelo contrário, discreta?\n"
+"Configure a forma de ter acesso às suas docas e sub-docas!"
 
 #: ../src/cairo-dock-gui-advanced.c:1470 ../src/cairo-dock-gui-advanced.c:1471
 #: ../src/cairo-dock-user-menu.c:2027 ../Help/data/messages:339
@@ -102,11 +102,11 @@ msgstr "Atalhos"
 
 #: ../src/cairo-dock-gui-advanced.c:1494
 msgid "All of the parameters you will never want to tweak."
-msgstr "Todos os parâmetros que não ajustará."
+msgstr "Todos os parâmetros que nunca desejará ajustar."
 
 #: ../src/cairo-dock-gui-advanced.c:1506
 msgid "Configure the global style."
-msgstr "Configurar estilo global"
+msgstr "Configurar estilo global."
 
 #: ../src/cairo-dock-gui-advanced.c:1507 ../src/cairo-dock-gui-advanced.c:1508
 #: ../data/messages:113 ../data/messages:115 ../data/messages:459
@@ -118,7 +118,7 @@ msgstr "Estilo"
 
 #: ../src/cairo-dock-gui-advanced.c:1515
 msgid "Configure docks appearance."
-msgstr "Configurar aparência das docas"
+msgstr "Configurar aparência das docas."
 
 #: ../src/cairo-dock-gui-advanced.c:1516 ../Help/data/messages:79
 msgid "Docks"
@@ -136,7 +136,7 @@ msgstr "Visualizações"
 
 #: ../src/cairo-dock-gui-advanced.c:1526
 msgid "Configure text bubble appearance."
-msgstr "Configure a aparência das caixas de diálogo."
+msgstr "Configure a aparência dos balões de texto."
 
 #: ../src/cairo-dock-gui-advanced.c:1527 ../src/cairo-dock-gui-advanced.c:1528
 msgid "Dialog boxes and Menus"
@@ -159,7 +159,7 @@ msgid ""
 " size, reflection, icon theme,..."
 msgstr ""
 "Tudo sobre ícones:\n"
-" tamanho, reflexão, ícones..."
+" tamanho, reflexo, tema,..."
 
 #: ../src/cairo-dock-gui-advanced.c:1545 ../src/cairo-dock-gui-advanced.c:1546
 #: ../Help/data/messages:11 ../data/messages:123 ../data/messages:643
@@ -173,15 +173,15 @@ msgstr "Indicadores"
 
 #: ../src/cairo-dock-gui-advanced.c:1555
 msgid "Define icon caption and quick-info style."
-msgstr "Defina o estilo do texto dos ícones e das informações rápidas."
+msgstr "Defina o estilo das legendas dos ícones e das informações rápidas."
 
 #: ../src/cairo-dock-gui-advanced.c:1556 ../src/cairo-dock-gui-advanced.c:1557
 msgid "Captions"
-msgstr "Texto"
+msgstr "Legendas"
 
 #: ../src/cairo-dock-gui-advanced.c:1564
 msgid "Try new themes and save your theme."
-msgstr "Experimente novos temas e guardar o seu tema."
+msgstr "Experimente novos temas e guarde o seu tema."
 
 #: ../src/cairo-dock-gui-advanced.c:1565 ../src/cairo-dock-gui-simple.c:115
 #: ../src/cairo-dock-gui-simple.c:117
@@ -238,11 +238,11 @@ msgstr "Fechar"
 
 #: ../src/cairo-dock-gui-advanced.c:1880
 msgid "Back"
-msgstr ""
+msgstr "Retroceder"
 
 #: ../src/cairo-dock-gui-advanced.c:1888 ../src/cairo-dock-gui-simple.c:207
 msgid "Apply"
-msgstr ""
+msgstr "Aplicar"
 
 #: ../src/cairo-dock-gui-advanced.c:1904
 msgid "More applets"
@@ -277,8 +277,8 @@ msgid ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customise your current theme."
 msgstr ""
-"O modo avançado permite-lhe ajustar cada parâmetro da sua \"dock\". É uma "
-"ferramenta poderosa para personalizar o tema atual."
+"O modo avançado permite-lhe ajustar cada parâmetro da doca. É uma ferramenta "
+"poderosa para personalizar o seu atual tema."
 
 #: ../src/cairo-dock-user-interaction.c:417
 msgid ""
@@ -303,7 +303,7 @@ msgstr "Página de desenvolvimento"
 
 #: ../src/cairo-dock-user-menu.c:210 ../Help/data/messages:269
 msgid "Find the latest version of Cairo-Dock here !"
-msgstr "Encontre a nova versão do Cairo-Dock aqui !"
+msgstr "Encontre a última versão do Cairo-Dock aqui !"
 
 #: ../src/cairo-dock-user-menu.c:214 ../src/cairo-dock-user-menu.c:1088
 #: ../src/cairo-dock-widget-plugins.c:297
@@ -318,12 +318,12 @@ msgstr "Fazer um donativo"
 msgid ""
 "Support the people who spend countless hours to bring you the best dock ever."
 msgstr ""
-"Ajude as pessoas que investem incontáveis horas para trazer a melhor doca já "
-"feita."
+"Ajude as pessoas que investem horas incontáveis para lhe disponibilizar a "
+"melhor doca de sempre."
 
 #: ../src/cairo-dock-user-menu.c:255
 msgid "Here is a list of the current developers and contributors"
-msgstr "Esta é a lista actual de desenvolvedores e contribuidores"
+msgstr "Esta é a lista actual de programadores e contribuidores"
 
 #: ../src/cairo-dock-user-menu.c:256
 msgid "Developers"
@@ -331,7 +331,7 @@ msgstr "Programadores"
 
 #: ../src/cairo-dock-user-menu.c:257
 msgid "Main developer and project leader"
-msgstr "Desenvolvedor principal e líder de projeto"
+msgstr "Programador principal e líder de projeto"
 
 #: ../src/cairo-dock-user-menu.c:258
 msgid "Contributors / Hackers"
@@ -361,6 +361,7 @@ msgstr ""
 "  Cairo-Dock Devs https://launchpad.net/~cairo-dock-team\n"
 "  Eduardo Mucelli Rezende Oliveira https://launchpad.net/~eduardo-mucelli\n"
 "  Fabounet https://launchpad.net/~fabounet03\n"
+"  Gmood https://launchpad.net/~jaleixo70\n"
 "  Pedro Cunha https://launchpad.net/~pedro-01\n"
 "  Sérgio Marques https://launchpad.net/~sergio+marques\n"
 "  Tiago S. https://launchpad.net/~tiagosdot\n"
@@ -378,17 +379,16 @@ msgid ""
 "Thanks to all people that help us to improve the Cairo-Dock project.\n"
 "Thanks to all current, former and future contributors."
 msgstr ""
-"Obrigado a todas as pessoas que nos ajudaram a melhorar o projeto Cairo-"
-"Dock.\n"
-"Obrigado a todos aqueles que contribuem, contribuiram, ou contribuirão."
+"Obrigado a todos os que nos ajudaram a melhorar o projeto Cairo-Dock.\n"
+"Obrigado a todos os atuais, antigos e futuros contribuidores."
 
 #: ../src/cairo-dock-user-menu.c:312
 msgid "How to help us?"
-msgstr "Como ajudar?"
+msgstr "Como nos ajudar?"
 
 #: ../src/cairo-dock-user-menu.c:313
 msgid "Don't hesitate to join the project, we need you ;)"
-msgstr "Não hesite em entrar no projeto, a gente precisa de si ;)"
+msgstr "Não hesite em abraçar o projeto, precisamos de si ;)"
 
 #: ../src/cairo-dock-user-menu.c:314
 msgid "Former contributors"
@@ -396,7 +396,7 @@ msgstr "Contribuições anteriores"
 
 #: ../src/cairo-dock-user-menu.c:315
 msgid "For a complete list, please have a look to BZR logs"
-msgstr "Para uma lista completa, dê uma olhada nos registos to BZR"
+msgstr "Para uma lista completa, verifique os registos do BZR"
 
 #: ../src/cairo-dock-user-menu.c:316
 msgid "Users of our forum"
@@ -428,9 +428,9 @@ msgid ""
 "Now move some launchers or applets into it by right-clicking on the icon -> "
 "move to another dock"
 msgstr ""
-"A nova \"dock\" foi criada.\n"
-"Agora mova alguns lançadores ou \"applets\" para a nova \"dock\" utilizando "
-"o botão direito do rato sobre o ícone->mover para outra \"dock\""
+"A nova doca foi criada.\n"
+"Agora mova alguns lançadores ou \"applets\" para a nova doca clicando o "
+"botão direito do rato sobre o ícone->mover para outra doca"
 
 #: ../src/cairo-dock-user-menu.c:574
 msgid "Add"
@@ -438,26 +438,26 @@ msgstr "Adicionar"
 
 #: ../src/cairo-dock-user-menu.c:576
 msgid "Sub-dock"
-msgstr "\"Sub-dock\""
+msgstr "Sub-doca"
 
 #: ../src/cairo-dock-user-menu.c:578
 msgid "Main dock"
-msgstr "\"Dock\" principal"
+msgstr "Doca principal"
 
 #: ../src/cairo-dock-user-menu.c:582
 msgid "Custom launcher"
-msgstr "Iniciador presonalizado"
+msgstr "Lançador personalizado"
 
 #: ../src/cairo-dock-user-menu.c:583
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
 msgstr ""
-"Normalmente, pode arrastar e largar na \"dock\" o lançador da aplicação "
-"existente no menu"
+"Geralmente pode arrastar o lançador da aplicação existente no menu e largá-"
+"lo na doca"
 
 #: ../src/cairo-dock-user-menu.c:585
 msgid "Applet"
-msgstr "Miniaplicativo"
+msgstr "Applet"
 
 #: ../src/cairo-dock-user-menu.c:602
 msgid ""
@@ -465,9 +465,8 @@ msgid ""
 "the dock?\n"
 "(otherwise they will be destroyed)"
 msgstr ""
-"Deseja que os ícones existentes neste contentor sejam re-enviados para "
-"dentro da \"dock\"?\n"
-" (caso contrário eles serão destruídos)"
+"Deseja reenviar os ícones existentes neste contentor para a doca?\n"
+" (caso contrário serão destruídos)"
 
 #: ../src/cairo-dock-user-menu.c:624
 msgid "separator"
@@ -476,8 +475,7 @@ msgstr "separador"
 #: ../src/cairo-dock-user-menu.c:628
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
-msgstr ""
-"Você está prestes a remover o ícone (%s) da \"dock\". Tem a certeza ?"
+msgstr "Você está prestes a remover o ícone (%s) da doca. Tem a certeza ?"
 
 #: ../src/cairo-dock-user-menu.c:643
 msgid "Sorry, this icon doesn't have a configuration file."
@@ -489,18 +487,18 @@ msgid ""
 "You can customize it by right-clicking on it -> cairo-dock -> configure this "
 "dock."
 msgstr ""
-"A nova \"dock\" foi criada.\n"
-"Pode personaliza-la utilizando o botão direito do rato em cima da \"dock\" -"
-"> cairo-dock -> configurar esta \"dock\"."
+"A nova doca foi criada.\n"
+"Pode personalizá-la clicando o botão direito do rato em cima dela -> cairo-"
+"dock -> configurar esta doca."
 
 #: ../src/cairo-dock-user-menu.c:689
 msgid "Move to another dock"
-msgstr "Mover para outra \"dock\""
+msgstr "Mover para outra doca"
 
 #: ../src/cairo-dock-user-menu.c:691
 #: ../src/gldit/cairo-dock-gui-factory.c:1226
 msgid "New main dock"
-msgstr "Nova \"dock\" principal"
+msgstr "Nova doca principal"
 
 #: ../src/cairo-dock-user-menu.c:772
 msgid ""
@@ -514,7 +512,7 @@ msgstr ""
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr ""
-"Você está prestes a remover o \"applet\" (%s) da \"dock\". Tem a certeza ?"
+"Você está prestes a remover o \"applet\" (%s) da doca. Tem a certeza ?"
 
 #: ../src/cairo-dock-user-menu.c:888 ../src/gldit/cairo-dock-gui-factory.c:761
 msgid "Pick up an image"
@@ -522,13 +520,13 @@ msgstr "Escolha uma imagem"
 
 #: ../src/cairo-dock-user-menu.c:891 ../src/gldit/cairo-dock-gui-factory.c:764
 msgid "Ok"
-msgstr ""
+msgstr "Ok"
 
 #: ../src/cairo-dock-user-menu.c:893 ../src/cairo-dock-widget-shortkeys.c:128
 #: ../src/cairo-dock-widget-themes.c:234
 #: ../src/gldit/cairo-dock-gui-factory.c:766
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #: ../src/cairo-dock-user-menu.c:905 ../src/gldit/cairo-dock-gui-factory.c:805
 #: ../data/messages:463 ../data/messages:469 ../data/messages:735
@@ -546,11 +544,11 @@ msgstr "Configurar o comportamento, aparência e os \"applets\"."
 
 #: ../src/cairo-dock-user-menu.c:1015
 msgid "Configure this dock"
-msgstr "Configurar esta \"dock\""
+msgstr "Configurar esta doca"
 
 #: ../src/cairo-dock-user-menu.c:1020
 msgid "Customize the position, visibility and appearance of this main dock."
-msgstr "Personalizar a posição, visibilidade e a aparência desta \"dock\"."
+msgstr "Personalizar a posição, visibilidade e a aparência desta doca."
 
 #: ../src/cairo-dock-user-menu.c:1022
 msgid "Delete this dock"
@@ -568,7 +566,7 @@ msgstr ""
 
 #: ../src/cairo-dock-user-menu.c:1049
 msgid "Lock icons position"
-msgstr "Bloquear as posições dos ícones"
+msgstr "Bloquear a posição dos ícones"
 
 #: ../src/cairo-dock-user-menu.c:1053
 msgid "This will (un)lock the position of the icons."
@@ -580,8 +578,7 @@ msgstr "Ocultar rapidamente"
 
 #: ../src/cairo-dock-user-menu.c:1064
 msgid "This will hide the dock until you hover over it with the mouse."
-msgstr ""
-"Isto irá ocultar a \"dock\" até que você passe por cima dela com o rato."
+msgstr "Isto irá ocultar a doca até que você passe por cima dela com o rato."
 
 #: ../src/cairo-dock-user-menu.c:1077
 msgid "Launch Cairo-Dock on startup"
@@ -601,7 +598,7 @@ msgstr "Ajuda"
 
 #: ../src/cairo-dock-user-menu.c:1101
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
-msgstr "Não existem problemas, apenas soluções (e bastantes dicas úteis!)"
+msgstr "Não existem problemas, apenas soluções (e muitas dicas úteis!)"
 
 #: ../src/cairo-dock-user-menu.c:1105
 msgid "About"
@@ -640,9 +637,7 @@ msgstr "Remover"
 #: ../src/cairo-dock-user-menu.c:1172
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
-msgstr ""
-"Pode remover o lançador da aplicação arrastando-o com o rato para fora da "
-"\"dock\"."
+msgstr "Pode remover um lançador arrastando-o com o rato para fora da doca."
 
 #: ../src/cairo-dock-user-menu.c:1181
 msgid "Make it a launcher"
@@ -662,7 +657,7 @@ msgstr "Separar"
 
 #: ../src/cairo-dock-user-menu.c:1218
 msgid "Return to the dock"
-msgstr "Retornar à \"dock\""
+msgstr "Retornar à doca"
 
 #: ../src/cairo-dock-user-menu.c:1225
 msgid "Duplicate"
@@ -671,7 +666,7 @@ msgstr "Duplicado"
 #: ../src/cairo-dock-user-menu.c:1399
 #, c-format
 msgid "Move all to desktop %d - face %d"
-msgstr "Mover todos para o ambiente de trabalho %d - frente %d"
+msgstr "Mover tudo para o ambiente de trabalho %d - frente %d"
 
 #: ../src/cairo-dock-user-menu.c:1399
 #, c-format
@@ -681,7 +676,7 @@ msgstr "Mover para o ambiente de trabalho %d - frente %d"
 #: ../src/cairo-dock-user-menu.c:1401
 #, c-format
 msgid "Move all to desktop %d"
-msgstr "Mover todos para o ambiente de trabalho %d"
+msgstr "Mover tudo para o ambiente de trabalho %d"
 
 #: ../src/cairo-dock-user-menu.c:1401
 #, c-format
@@ -691,7 +686,7 @@ msgstr "Mover para o ambiente de trabalho %d"
 #: ../src/cairo-dock-user-menu.c:1403
 #, c-format
 msgid "Move all to face %d"
-msgstr "Mover todos para frente %d"
+msgstr "Mover tudo para frente %d"
 
 #: ../src/cairo-dock-user-menu.c:1403
 #, c-format
@@ -707,7 +702,7 @@ msgstr "Janela"
 #: ../src/cairo-dock-user-menu.c:1935 ../src/cairo-dock-user-menu.c:1976
 #: ../src/cairo-dock-user-menu.c:1986 ../Help/src/applet-notifications.c:259
 msgid "middle-click"
-msgstr "Carregue com o botão do meio"
+msgstr "Clique com o botão do meio"
 
 #: ../src/cairo-dock-user-menu.c:1852 ../src/cairo-dock-user-menu.c:1893
 msgid "Unmaximise"
@@ -773,16 +768,16 @@ msgstr "Janelas"
 #: ../src/cairo-dock-user-menu.c:1976 ../src/cairo-dock-user-menu.c:1978
 #: ../src/cairo-dock-user-menu.c:2006
 msgid "Close all"
-msgstr "Fechar todos"
+msgstr "Fechar tudo"
 
 #: ../src/cairo-dock-user-menu.c:1986 ../src/cairo-dock-user-menu.c:1988
 #: ../src/cairo-dock-user-menu.c:2004
 msgid "Minimise all"
-msgstr "Minimizar todos"
+msgstr "Minimizar tudo"
 
 #: ../src/cairo-dock-user-menu.c:1996 ../src/cairo-dock-user-menu.c:2002
 msgid "Show all"
-msgstr "Mostrar todos"
+msgstr "Mostrar tudo"
 
 #: ../src/cairo-dock-user-menu.c:2000
 msgid "Windows management"
@@ -790,7 +785,7 @@ msgstr "Gestor de Janelas"
 
 #: ../src/cairo-dock-user-menu.c:2012
 msgid "Move all to this desktop"
-msgstr "Mover todos para este ambiente de trabalho"
+msgstr "Mover tudo para este ambiente de trabalho"
 
 #: ../src/cairo-dock-user-menu.c:2035 ../Help/data/messages:347
 msgid "Normal"
@@ -829,8 +824,8 @@ msgstr "Efeitos:"
 msgid ""
 "Main dock's parameters are available in the main configuration window."
 msgstr ""
-"Principais parâmetros da estação de emparelhamento estão disponíveis na "
-"janela de configuração principal."
+"Parâmetros da doca principal estão disponíveis na janela de configuração "
+"principal."
 
 #: ../src/cairo-dock-widget-items.c:724
 msgid "Remove this item"
@@ -855,11 +850,11 @@ msgstr "Categoria"
 #: ../src/cairo-dock-widget-plugins.c:279
 msgid ""
 "Click on an applet in order to have a preview and a description for it."
-msgstr "Clique no \"applet\" para uma pré-visualização e uma descrição."
+msgstr "Clique neste \"applet\" para ter uma previsão e descrição do mesmo."
 
 #: ../src/cairo-dock-widget-shortkeys.c:125
 msgid "Press the shortkey"
-msgstr "Pressione o atalho"
+msgstr "Clique no atalho"
 
 #: ../src/cairo-dock-widget-shortkeys.c:143
 msgid "Change the shortkey"
@@ -888,8 +883,8 @@ msgid ""
 "anyway?"
 msgstr ""
 "Você fez algumas alterações ao tema atual.\n"
-"As alterações serão perdidas se você não as guardar antes de escolher um "
-"novo tema. Continuar assim mesmo ?"
+"As alterações serão perdidas se não as guardar antes de escolher um novo "
+"tema. Continuar assim mesmo ?"
 
 #: ../src/cairo-dock-widget-themes.c:222
 msgid "Please wait while importing the theme..."
@@ -901,7 +896,7 @@ msgstr "Avaliar"
 
 #: ../src/cairo-dock-widget-themes.c:379 ../src/cairo-dock-widget-themes.c:381
 msgid "You must try the theme before you can rate it."
-msgstr "Deve experimentar o tema antes de avaliar"
+msgstr "Deve testar o tema antes de avaliar."
 
 #: ../src/cairo-dock-widget-themes.c:428
 msgid "The theme has been deleted"
@@ -931,7 +926,7 @@ msgstr "Sobriedade"
 
 #: ../src/cairo-dock-widget-themes.c:595
 msgid "Save as:"
-msgstr "Salvar como :"
+msgstr "Guardar como:"
 
 #: ../src/cairo-dock-widget-themes.c:675
 msgid "Importing theme ..."
@@ -1078,7 +1073,7 @@ msgstr "Utilizar OpenGL no Cairo-Dock ?"
 
 #: ../src/cairo-dock.c:538 ../src/cairo-dock.c:785
 msgid "Yes"
-msgstr ""
+msgstr "Sim"
 
 #: ../src/cairo-dock.c:540 ../src/cairo-dock.c:786 ../data/messages:823
 msgid "No"
@@ -1132,7 +1127,7 @@ msgstr "Algo de errado aconteceu com a miniaplicação:"
 
 #: ../src/cairo-dock.c:782
 msgid "You're using our Cairo-Dock session"
-msgstr ""
+msgstr "Está a usar a nossa sessão Cairo-Dock"
 
 #: ../src/cairo-dock.c:788
 msgid ""
@@ -1143,6 +1138,12 @@ msgid ""
 "Note: your current theme will be saved and can be reimported later from the "
 "Themes manager"
 msgstr ""
+"Pode ser interessante usar um tema adaptado a esta sessão.\n"
+"\n"
+"Deseja carregar o nosso tema \"Default-Panel\"?\n"
+"\n"
+"Nota: o seu tema atual será guardado e pode ser recarregado mais tarde a "
+"partir do gestor de temas"
 
 #: ../src/cairo-dock.c:833
 msgid ""
@@ -4463,48 +4464,56 @@ msgstr "- Se gostar deste projecto, por favor doe :-)"
 
 #: ../data/messages:1134
 msgid "<b>New version: <span color='red'>GLX-Dock 3.4</span>!</b>"
-msgstr ""
+msgstr "<b>Nova versão: <span color='red'>GLX-Dock 3.4</span>!</b>"
 
 #: ../data/messages:1136
 msgid "- <b>Menus</b>: added the possibility to customise them"
-msgstr ""
+msgstr "- <b>Menus</b>: adicionada a opção de os personalizar"
 
 #: ../data/messages:1138
 msgid "- <b>Style</b>: unified the style of all components of the dock"
-msgstr ""
+msgstr "- <b>Style</b>: unificado o estilo de todos os componentes da doca"
 
 #: ../data/messages:1140
 msgid ""
 "- Better integration with <b>Compiz</b> (e.g. when using the <b>Cairo-Dock "
 "session</b>) and Cinnamon"
 msgstr ""
+"- Melhor integração com <b>Compiz</b> (e.g. usando <b>Cairo-Dock "
+"session</b>) e Cinnamon"
 
 #: ../data/messages:1142
 msgid ""
 "- <b>Applications Menu</b> and <b>Logout</b> applets will wait the end of an "
 "update before displaying notifications"
 msgstr ""
+"- \"Applets\" <b>Menu Aplicações</b> e <b>Sair</b> irão esperar pelo fim da "
+"actualização antes de apresentar notificações"
 
 #: ../data/messages:1144
 msgid ""
 "- Various improvements for <b>Applications Menu</b>, <b>Shortcuts</b>, "
 "<b>Status-Notifier</b> and <b>Terminal</b> applets"
 msgstr ""
+"- Vários melhoramentos em <b>Menu Aplicações</b>, <b>Atalhos</b>, <b>Status-"
+"Notifier</b> e \"applets\" <b>Terminal</b>"
 
 #: ../data/messages:1146
 msgid "- Start working on <b>EGL</b> and <b>Wayland</b> support"
-msgstr ""
+msgstr "- Trabalhe em <b>EGL</b> e suporte <b>Wayland</b>"
 
 #: ../data/messages:1148
 msgid "- And as always ... various bug fixes and improvements!"
-msgstr ""
+msgstr "- E como sempre ... várias correções de bugs e melhoramentos!"
 
 #: ../data/messages:1150
 msgid "If you like the project, please donate and/or contribute :-)"
-msgstr ""
+msgstr "Se gosta do projeto, por favor faça uma doação e/ou participe :-)"
 
 #: ../data/messages:1152
 msgid ""
 "Note: We're switching from Bzr to Git on Github, feel free to fork! "
 "https://github.com/Cairo-Dock"
 msgstr ""
+"Nota: Estamos a transitar de Bzr para Git no Github, sinta-se à vontade para "
+"fazer fork! https://github.com/Cairo-Dock"
