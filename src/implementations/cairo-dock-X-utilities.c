@@ -1123,7 +1123,7 @@ gchar *cairo_dock_get_xwindow_class (Window Xid, gchar **cWMClass)
 		// chromium web apps (not the browser): same remark as for wine apps
 		else if (pClassHint->res_name && pClassHint->res_name[0] != '\0' && pClassHint->res_class[0] != '\0'
 		         && (strcmp (pClassHint->res_class, "Chromium-browser") == 0 // on Debian, etc.
-		          || strcmp (pClassHint->res_class, "Chromium") == 0         // on Arch, etc.
+		          || strcmp (pClassHint->res_class, "chromium") == 0         // on Arch, etc.
 		          || strcmp (pClassHint->res_class, "Google-chrome") == 0    // from Google
 		          || strcmp (pClassHint->res_class, "Google-chrome-beta") == 0
 		          || strcmp (pClassHint->res_class, "Google-chrome-unstable") == 0)
