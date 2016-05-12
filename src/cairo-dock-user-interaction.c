@@ -291,7 +291,8 @@ gboolean cairo_dock_notification_middle_click_icon (G_GNUC_UNUSED gpointer pUser
 			case 3:  // launch new
 				if (icon->cCommand != NULL)
 				{
-					gldi_object_notify (pDock, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
+					if (! gldi_class_is_starting (icon->cClass) && ! gldi_icon_is_launching (icon))  // do not launch it twice
+						gldi_object_notify (pDock, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
 				}
 			break;
 		}
