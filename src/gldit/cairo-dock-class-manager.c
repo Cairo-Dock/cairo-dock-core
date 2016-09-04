@@ -928,6 +928,22 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 	return FALSE;
 }
 
+static void _cairo_dock_update_class_subdock_name (G_GNUC_UNUSED gchar *cClass, CairoDockClassAppli *pClassAppli, gconstpointer *data)
+{
+	const CairoDock *pDock = data[0];
+	const gchar *cNewName = data[1];
+	if (g_strcmp0 (pClassAppli->cDockName, pDock->cDockName) == 0)  // this class uses this dock
+	{
+		g_free (pClassAppli->cDockName);
+		pClassAppli->cDockName = g_strdup (cNewName);
+	}
+}
+void cairo_dock_update_class_subdock_name (const CairoDock *pDock, const gchar *cNewName)  // update the subdock name of the class that holds 'pDock' as its class subdock
+{
+	gconstpointer data[2] = {pDock, cNewName};
+	g_hash_table_foreach (s_hClassTable, (GHFunc) _cairo_dock_update_class_subdock_name, data);
+}
+
 
 static void _cairo_dock_reset_overwrite_exceptions (G_GNUC_UNUSED gchar *cClass, CairoDockClassAppli *pClassAppli, G_GNUC_UNUSED gpointer data)
 {

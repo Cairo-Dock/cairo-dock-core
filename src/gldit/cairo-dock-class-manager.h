@@ -175,6 +175,8 @@ Icon *cairo_dock_get_classmate (Icon *pIcon);
 
 gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar *cClass);
 
+void cairo_dock_update_class_subdock_name (const CairoDock *pDock, const gchar *cNewName);
+
 
 void cairo_dock_set_overwrite_exceptions (const gchar *cExceptions);
 

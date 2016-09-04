@@ -37,6 +37,7 @@
 #include "cairo-dock-applet-manager.h"
 #include "cairo-dock-stack-icon-manager.h"
 #include "cairo-dock-class-icon-manager.h"
+#include "cairo-dock-class-manager.h"  // cairo_dock_update_class_subdock_name
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-log.h"
@@ -324,6 +325,10 @@ void gldi_dock_rename (CairoDock *pDock, const gchar *cNewName)
 	// ensure everything is ok
 	g_return_if_fail (pDock != NULL && cNewName != NULL);
 	g_return_if_fail (g_hash_table_lookup (s_hDocksTable, cNewName) == NULL);
+	cd_debug("%s (%s -> %s)", __func__, pDock->cDockName, cNewName);
+	
+	// if it's a class subdock, first update the dock name in the class
+	cairo_dock_update_class_subdock_name (pDock, cNewName);
 	
 	// rename in the hash table
 	g_hash_table_remove (s_hDocksTable, pDock->cDockName);
