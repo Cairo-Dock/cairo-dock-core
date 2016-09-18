@@ -1832,7 +1832,7 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 
 		if (bCanClose)
 		{
-			if (myTaskbarParam.iActionOnMiddleClick == 1 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // close
+			if (myTaskbarParam.iActionOnMiddleClick == CAIRO_APPLI_ACTION_CLOSE && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // close
 				cLabel = g_strdup_printf ("%s (%s)", _("Close"), _("middle-click"));
 			else
 				cLabel = g_strdup (_("Close"));
@@ -1855,7 +1855,7 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 
 			if (bCanMinimize)
 			{
-				if (myTaskbarParam.iActionOnMiddleClick == 2 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // minimize
+				if (myTaskbarParam.iActionOnMiddleClick == CAIRO_APPLI_ACTION_MINIMISE && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // minimize
 					cLabel = g_strdup_printf ("%s (%s)", _("Minimise"), _("middle-click"));
 				else
 					cLabel = g_strdup (_("Minimise"));
@@ -1891,7 +1891,7 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 		// Below
 		if (! pAppli->bIsHidden)  // this could be a button in the menu, if we find an icon that doesn't look too much like the "minimise" one
 		{
-			if (myTaskbarParam.iActionOnMiddleClick == 4 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // lower
+			if (myTaskbarParam.iActionOnMiddleClick == CAIRO_APPLI_ACTION_LOWER && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // lower
 				cLabel = g_strdup_printf ("%s (%s)", _("Below other windows"), _("middle-click"));
 			else
 				cLabel = g_strdup (_("Below other windows"));
@@ -1931,7 +1931,7 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 		GtkWidget *pLabel = gtk_label_new (_("Windows"));
 		gtk_box_pack_start (GTK_BOX (hbox), pLabel, FALSE, FALSE, 0);
 		
-		if (myTaskbarParam.iActionOnMiddleClick == 1 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // close
+		if (myTaskbarParam.iActionOnMiddleClick == CAIRO_APPLI_ACTION_CLOSE && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // close
 			cLabel = g_strdup_printf ("%s (%s)", _("Close all"), _("middle-click"));
 		else
 			cLabel = g_strdup (_("Close all"));
@@ -1941,7 +1941,7 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 			hbox, data);
 		g_free (cLabel);
 		
-		if (myTaskbarParam.iActionOnMiddleClick == 2 && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // minimize
+		if (myTaskbarParam.iActionOnMiddleClick == CAIRO_APPLI_ACTION_MINIMISE && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // minimize
 			cLabel = g_strdup_printf ("%s (%s)", _("Minimise all"), _("middle-click"));
 		else
 			cLabel = g_strdup (_("Minimise all"));

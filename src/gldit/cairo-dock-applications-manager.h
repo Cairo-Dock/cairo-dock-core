@@ -48,6 +48,15 @@ typedef enum {
 	CAIRO_APPLI_NB_PLACEMENTS
 } CairoTaskbarPlacement;
 
+typedef enum {
+	CAIRO_APPLI_ACTION_NONE,
+	CAIRO_APPLI_ACTION_CLOSE,
+	CAIRO_APPLI_ACTION_MINIMISE,
+	CAIRO_APPLI_ACTION_LAUNCH_NEW,
+	CAIRO_APPLI_ACTION_LOWER,
+	CAIRO_APPLI_ACTION_NB_ACTIONS
+} CairoTaskbarAction;
+
 // params
 struct _CairoTaskbarParam {
 	gboolean bShowAppli;
@@ -55,7 +64,7 @@ struct _CairoTaskbarParam {
 	gint iAppliMaxNameLength;
 	gboolean bMinimizeOnClick;
 	gboolean bPresentClassOnClick;
-	gint iActionOnMiddleClick;
+	CairoTaskbarAction iActionOnMiddleClick;
 	gboolean bHideVisibleApplis;
 	gdouble fVisibleAppliAlpha;
 	gboolean bAppliOnCurrentDesktopOnly;

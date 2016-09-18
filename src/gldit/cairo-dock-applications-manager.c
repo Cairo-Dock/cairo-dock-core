@@ -791,7 +791,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoTaskbarParam *pTaskBar)
 		pTaskBar->iAppliMaxNameLength = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "max name length", &bFlushConfFileNeeded, 25, "Applications", NULL);
 		
 		// interaction
-		pTaskBar->iActionOnMiddleClick = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "action on middle click", &bFlushConfFileNeeded, 1, NULL, NULL);
+		pTaskBar->iActionOnMiddleClick = cairo_dock_get_integer_key_value (pKeyFile, "TaskBar", "action on middle click", &bFlushConfFileNeeded, CAIRO_APPLI_ACTION_CLOSE, NULL, NULL);
 		pTaskBar->bMinimizeOnClick = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "minimize on click", &bFlushConfFileNeeded, TRUE, "Applications", NULL);
 		
 		pTaskBar->bPresentClassOnClick = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "present class on click", &bFlushConfFileNeeded, TRUE, NULL, NULL);

@@ -181,6 +181,9 @@ static gboolean _launch_icon_command (Icon *icon)
 	if (icon->cCommand == NULL)
 		return GLDI_NOTIFICATION_LET_PASS;
 	
+	if (gldi_class_is_starting (icon->cClass) || gldi_icon_is_launching (icon))  // do not launch it twice (avoid wrong double click); so we can't launch an app several times rapidly (must wait until it's launched), but it's probably not a useful feature anyway
+		return GLDI_NOTIFICATION_INTERCEPT;
+	
 	gboolean bSuccess = FALSE;
 	if (*icon->cCommand == '<')  // shortkey
 	{
@@ -258,8 +261,7 @@ gboolean cairo_dock_notification_click_icon (G_GNUC_UNUSED gpointer pUserData, I
 	}
 	else if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon))  // finally, launcher being none of the previous cases -> launch the command
 	{
-		if (! gldi_class_is_starting (icon->cClass) && ! gldi_icon_is_launching (icon))  // do not launch it twice (avoid wrong double click) => if we want to launch it 2 times in a row, we have to use Shift + Click
-			_launch_icon_command (icon);
+		_launch_icon_command (icon);
 	}
 	else  // for applets and their sub-icons, let the module-instance handles the click; for separators, no action.
 	{
@@ -275,43 +277,47 @@ gboolean cairo_dock_notification_middle_click_icon (G_GNUC_UNUSED gpointer pUser
 		return GLDI_NOTIFICATION_LET_PASS;
 	CairoDock *pDock = CAIRO_DOCK (pContainer);
 	
-	if (CAIRO_DOCK_IS_APPLI (icon) && ! CAIRO_DOCK_IS_APPLET (icon) && myTaskbarParam.iActionOnMiddleClick != 0)
+	if (CAIRO_DOCK_IS_APPLI (icon) && ! CAIRO_DOCK_IS_APPLET (icon) && myTaskbarParam.iActionOnMiddleClick != CAIRO_APPLI_ACTION_NONE)
 	{
 		switch (myTaskbarParam.iActionOnMiddleClick)
 		{
-			case 1:  // close
+			case CAIRO_APPLI_ACTION_CLOSE:  // close
 				gldi_window_close (icon->pAppli);
 			break;
-			case 2:  // minimise
+			case CAIRO_APPLI_ACTION_MINIMISE:  // minimise
 				if (! icon->pAppli->bIsHidden)
 				{
 					gldi_window_minimize (icon->pAppli);
 				}
 			break;
-			case 3:  // launch new
+			case CAIRO_APPLI_ACTION_LAUNCH_NEW:  // launch new
 				if (icon->cCommand != NULL)
 				{
-					gldi_object_notify (pDock, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
+					gldi_object_notify (pDock, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // emulate a shift+left click
 				}
+			break;
+			default:  // nothing
 			break;
 		}
 		return GLDI_NOTIFICATION_INTERCEPT;
 	}
-	else if (CAIRO_DOCK_IS_MULTI_APPLI (icon) && myTaskbarParam.iActionOnMiddleClick != 0)
+	else if (CAIRO_DOCK_IS_MULTI_APPLI (icon) && myTaskbarParam.iActionOnMiddleClick != CAIRO_APPLI_ACTION_NONE)
 	{
 		switch (myTaskbarParam.iActionOnMiddleClick)
 		{
-			case 1:  // close
+			case CAIRO_APPLI_ACTION_CLOSE:  // close
 				_cairo_dock_close_all_in_class_subdock (icon);
 			break;
-			case 2:  // minimise
+			case CAIRO_APPLI_ACTION_MINIMISE:  // minimise
 				_cairo_dock_hide_show_in_class_subdock (icon);
 			break;
-			case 3:  // launch new
+			case CAIRO_APPLI_ACTION_LAUNCH_NEW:  // launch new
 				if (icon->cCommand != NULL)
 				{
-					gldi_object_notify (CAIRO_CONTAINER (pDock), NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
+					gldi_object_notify (CAIRO_CONTAINER (pDock), NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // emulate a shift+left click
 				}
+			break;
+			default:  // nothing
 			break;
 		}
 		
@@ -323,7 +329,7 @@ gboolean cairo_dock_notification_middle_click_icon (G_GNUC_UNUSED gpointer pUser
 
 gboolean cairo_dock_notification_scroll_icon (G_GNUC_UNUSED gpointer pUserData, Icon *icon, G_GNUC_UNUSED GldiContainer *pContainer, int iDirection)
 {
-	if (CAIRO_DOCK_IS_MULTI_APPLI (icon) || CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon))  // on emule un alt+tab sur la liste des applis du sous-dock.
+	if (CAIRO_DOCK_IS_MULTI_APPLI (icon) || CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon))  // emulate an alt+tab on the list of applis of the sub-dock
 	{
 		_cairo_dock_show_prev_next_in_subdock (icon, iDirection == GDK_SCROLL_DOWN);
 	}
