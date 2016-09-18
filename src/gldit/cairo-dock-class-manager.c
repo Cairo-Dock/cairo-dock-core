@@ -2065,6 +2065,13 @@ void gldi_class_startup_notify_end (const gchar *cClass)
 		icon = ic->data;
 		gldi_icon_stop_marking_as_launching (icon);
 	}
+	if (pClassAppli->cDockName != NULL)  // also unset the class-icon, if any
+	{
+		CairoDock *pClassSubDock = gldi_dock_get (pClassAppli->cDockName);
+		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pClassSubDock, NULL);
+		if (pPointingIcon != NULL)
+			gldi_icon_stop_marking_as_launching (pPointingIcon);
+	}
 
 	// unset the class as launching and stop a timeout
 	pClassAppli->bIsLaunching = FALSE;
