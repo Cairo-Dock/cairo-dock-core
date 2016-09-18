@@ -36,6 +36,19 @@ static void _load_image (Icon *icon)
 	int iWidth = icon->iAllocatedWidth;
 	int iHeight = icon->iAllocatedWidth;
 	cairo_surface_t *pSurface = NULL;
+	
+	//\__________________ register the class to get its attributes, if it was not done yet (can happen if the icon was created on starting, by duplicating an icon that was not loaded yet (the class is loaded on icon's loading, not on its creation))
+	if (icon->cClass && !icon->pMimeTypes && !icon->cCommand)
+	{
+		gchar *cClass = cairo_dock_register_class_full (NULL, icon->cClass, icon->cWmClass);
+		if (cClass != NULL)
+		{
+			g_free (cClass);
+			icon->cCommand = g_strdup (cairo_dock_get_class_command (icon->cClass));
+			icon->pMimeTypes = g_strdupv ((gchar**)cairo_dock_get_class_mimetypes (icon->cClass));
+		}
+	}
+	
 	if (icon->pSubDock != NULL && !myIndicatorsParam.bUseClassIndic)  // icone de sous-dock avec un rendu specifique, on le redessinera lorsque les icones du sous-dock auront ete chargees.
 	{
 		pSurface = cairo_dock_create_blank_surface (iWidth, iHeight);
@@ -92,6 +105,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	pIcon->cCommand = g_strdup (pSameClassIcon->cCommand);
 	pIcon->pMimeTypes = g_strdupv (pSameClassIcon->pMimeTypes);
 	pIcon->cClass = g_strdup (pSameClassIcon->cClass);
+	pIcon->cWmClass = g_strdup (pSameClassIcon->cWmClass);
 	pIcon->fOrder = pSameClassIcon->fOrder;
 	pIcon->bHasIndicator = pSameClassIcon->bHasIndicator;
 	
