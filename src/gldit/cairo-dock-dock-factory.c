@@ -873,7 +873,11 @@ static gboolean _check_mouse_outside (CairoDock *pDock)  // ce test est principa
 }
 static gboolean _on_button_press (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventButton* pButton, CairoDock *pDock)
 {
-	//g_print ("+ %s (%d/%d, %x)\n", __func__, pButton->type, pButton->button, pWidget);
+	//g_print ("+ %s (%d/%d, %x, %d)\n", __func__, pButton->type, pButton->button, pWidget, pButton->time);
+	static s_iLastTime = 0;  // time of the last event, in ms
+	if (s_iLastTime != 0 && pButton->time == s_iLastTime)  // for some reason, with latest GTK3, we get all events twice; filter them
+		return TRUE;  // discard and don't propagate
+	s_iLastTime = pButton->time;
 	if (pDock->container.bIsHorizontal)  // utile ?
 	{
 		pDock->container.iMouseX = (int) pButton->x;
