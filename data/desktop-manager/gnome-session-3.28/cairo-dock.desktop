@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=GNOME/Cairo-Dock (Compiz)
 Comment=This session logs you into GNOME Flashback with Cairo-Dock and Compiz
-Exec=/usr/lib/gnome-session/run-systemd-session gnome-session-flashback.target
+Exec=gnome-session --session=cairo-dock
 TryExec=compiz
 Type=Application
 DesktopNames=GNOME-Flashback;GNOME;
