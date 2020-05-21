@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=GNOME/Cairo-Dock (Metacity)
+Comment=This session logs you into GNOME Flashback with Cairo-Dock and Compiz
+Exec=/usr/lib/gnome-session/run-systemd-session gnome-session-flashback.target
+TryExec=metacity
+Type=Application
+DesktopNames=GNOME-Flashback;GNOME;
+X-Ubuntu-Gettext-Domain=gnome-flashback

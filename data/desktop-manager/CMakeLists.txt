@@ -3,8 +3,10 @@ if (${GTK_MAJOR} LESS 3 OR (${GTK_MAJOR} EQUAL 3 AND ${GTK_MINOR} LESS 8)) # GTK
 	add_subdirectory(gnome-session-3.0)
 elseif(${GTK_MAJOR} EQUAL 3 AND ${GTK_MINOR} EQUAL 8)
 	add_subdirectory(gnome-session-3.8)
-else()
+elseif(${GTK_MAJOR} EQUAL 3 AND ${GTK_MINOR} LESS 22)
 	add_subdirectory(gnome-session-3.10)
+else()
+	add_subdirectory(gnome-session-3.28)
 endif()
 
 install (FILES cairo-dock-session
