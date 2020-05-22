@@ -408,7 +408,7 @@ static void cairo_dock_select_category (GtkWidget *pMainWindow, CDCategoryEnum i
 {
 	GtkNotebook *pNoteBook = g_object_get_data (G_OBJECT (pMainWindow), "notebook");
 	gtk_notebook_set_current_page (pNoteBook, iCategory);  // will first emit a 'switch-page' signal, which will build the widget if necessary.
-	///g_signal_emit_by_name (pNoteBook, "switch-page", gtk_notebook_get_nth_page(pNoteBook, iCategory), iCategory, NULL);  // see the comment on the previous line ? well, it's not true anymore...
+	g_signal_emit_by_name (pNoteBook, "switch-page", gtk_notebook_get_nth_page(pNoteBook, iCategory), iCategory, NULL);  // see the comment on the previous line ? well, it's not true anymore...
 }
 
 
