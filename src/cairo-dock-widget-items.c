@@ -917,6 +917,7 @@ static void _items_widget_apply (CDWidget *pCdWidget)
 
 void cairo_dock_items_widget_select_item (ItemsWidget *pItemsWidget, Icon *pIcon, GldiContainer *pContainer, GldiModuleInstance *pModuleInstance, int iNotebookPage)
 {
+	g_return_if_fail(pItemsWidget != NULL);
 	_delete_current_launcher_widget (pItemsWidget);  // pItemsWidget->pCurrentLauncherWidget <- 0
 	
 	_select_item (pItemsWidget, pIcon, pContainer, pModuleInstance);  // set pItemsWidget->pCurrentLauncherWidget
