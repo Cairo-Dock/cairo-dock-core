@@ -177,6 +177,13 @@ static void _on_detect_gs (gboolean bPresent, G_GNUC_UNUSED gpointer data)
 }
 void cd_init_gnome_shell_backend (void)
 {
+	// discard the Gnome-Flashback session
+	// it provides org.gnome.Shell, but actually relies on Metacity or Compiz, not GnomeShell
+	const gchar *session = g_getenv("XDG_SESSION_DESKTOP");
+	if (session && g_str_has_prefix (session, "gnome-flashback"))
+		return;
+	
+	// detect GnomeShell
 	cairo_dock_dbus_detect_application_async (CD_GS_BUS,
 		(CairoDockOnAppliPresentOnDbus) _on_detect_gs,
 		NULL);
