@@ -1,0 +1,34 @@
+[Unit]
+Description=GNOME/Cairo-Dock Session
+OnFailure=gnome-session-failed.target
+OnFailureJobMode=replace
+DefaultDependencies=no
+RefuseManualStart=no
+
+Conflicts=shutdown.target gnome-session-shutdown.target
+PartOf=graphical-session.target
+
+# Pull in all X11-specific services the session might depend on
+Requires=gnome-session-x11-services.target
+
+BindsTo=gnome-session@.target
+After=gnome-session@.target
+
+BindsTo=gnome-flashback.target
+After=gnome-flashback.target
+
+BindsTo=gnome-session.target
+After=gnome-session.target
+
+Requires=indicators-pre.target
+
+# here we list the indicators that we want to load
+Wants=indicator-application.service
+Wants=indicator-bluetooth.service
+Wants=indicator-datetime.service
+Wants=indicator-keyboard.service
+Wants=indicator-messages.service
+Wants=indicator-power.service
+Wants=indicator-printers.service
+Wants=indicator-session.service
+Wants=indicator-sound.service
