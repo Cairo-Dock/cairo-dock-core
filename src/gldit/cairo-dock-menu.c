@@ -168,7 +168,6 @@ void _init_menu_style (void)
 				color: @menuitem_text_color; \
 				border-radius: 5px; \
 				border-style: solid; \
-				border-width: 1px; \
 				border-color: @menuitem_child_bg_color; \
 				-unico-inner-stroke-color: transparent; \
 			} \
