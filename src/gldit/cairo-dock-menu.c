@@ -310,6 +310,9 @@ static gboolean _draw_menu (GtkWidget *pWidget,
 	cairo_t *pCairoContext,
 	G_GNUC_UNUSED GtkWidget *menu)
 {
+	// reset the clip set by GTK, to allow us draw in the margin of the widget
+	cairo_reset_clip(pCairoContext);
+	
 	// erase the default background
 	cairo_dock_erase_cairo_context (pCairoContext);
 	
@@ -359,7 +362,10 @@ static void _set_margin_position (GtkWidget *pMenu, GldiMenuParams *pParams)
 		// store the value
 		pParams->iMarginPosition = iMarginPosition;
 		
-		// get/add a css (gtk_widget_set_margin_xxx doesn't work as expected :-/)
+		// get/add a css
+		// actually gtk_widget_set_margin_xxx works, but then GTK adds a translation to the cairo_context, forcing each renderer to offset its drawing by gtk_widget_get_margin_xxx()
+		// also, gtk_widget_get_allocation() doesn't take into account the margin, forcing each renderer to add it
+		// so in the end it's better not to use it
 		GtkCssProvider *cssProvider = pParams->cssProvider;
 		if (cssProvider)  // unfortunately, GTK doesn't update correctly a css provider if we load some new data inside (the previous padding values are kept, along with the new ones, although 'gtk_css_provider_load_from_data' is supposed to "clear any previously loaded information"), so we have to remove/add it :-/
 		{
@@ -387,12 +393,12 @@ static void _set_margin_position (GtkWidget *pMenu, GldiMenuParams *pParams)
 			case 3: l = ah; break;
 			default: break;
 		}
-		css = g_strdup_printf ("GtkMenu { \
+		css = g_strdup_printf ("GtkMenu,menu { \
 			padding-bottom: %dpx; \
 			padding-top: %dpx; \
 			padding-right: %dpx; \
 			padding-left: %dpx; \
-		}", b, t, r, l);  // we must define all the paddings, else if the margin position changes, clearing the css won't make the padding disappear :-/
+		}", b, t, r, l);  // we must define all the paddings, else if the margin position changes, clearing the css won't make the padding disappear; also, 'GtkMenu' is old
 		gtk_css_provider_load_from_data (cssProvider,
 			css, -1, NULL);
 		g_free (css);
