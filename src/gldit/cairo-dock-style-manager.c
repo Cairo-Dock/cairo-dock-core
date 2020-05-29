@@ -215,7 +215,7 @@ void gldi_style_color_get (GldiStyleColors iColorType, GldiColor *pColor)
 					_get_color_from_pattern (s_menu_bg_pattern, pColor);
 				else
 				{
-					pColor->rgba = s_menu_bg_color;  /// shade a little, maybe in negative ?...
+					gldi_style_color_shade (&s_menu_bg_color, -GLDI_COLOR_SHADE_LIGHT, pColor);
 				}
 				pColor->rgba.alpha = 1.;
 			}
@@ -319,11 +319,17 @@ void gldi_style_colors_set_line_color (cairo_t *pCairoContext)
 			if (s_menu_bg_pattern)
 				cairo_set_source (pCairoContext, s_menu_bg_pattern);
 			else
-				cairo_set_source_rgb (pCairoContext, s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue);  /// shade a little ?...
+			{
+				GldiColor color;
+				gldi_style_color_shade (&s_menu_bg_color, -GLDI_COLOR_SHADE_LIGHT, &color);
+				cairo_set_source_rgb (pCairoContext, color.rgba.red, color.rgba.green, color.rgba.blue);
+			}
 		}
 		else
 		{
-			glColor3f (s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue);  /// shade a little ?...
+			GldiColor color;
+			gldi_style_color_shade (&s_menu_bg_color, -GLDI_COLOR_SHADE_LIGHT, &color);
+			glColor3f (color.rgba.red, color.rgba.green, color.rgba.blue);
 		}
 	}
 	else
