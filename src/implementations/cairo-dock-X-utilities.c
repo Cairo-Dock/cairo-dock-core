@@ -892,7 +892,9 @@ void cairo_dock_show_xwindow (Window Xid)
 
 	//\______________ On se deplace sur le bureau de la fenetre a afficher (autrement Metacity deplacera la fenetre sur le bureau actuel).
 	int iDesktopNumber = cairo_dock_get_xwindow_desktop (Xid);
-	cairo_dock_set_current_desktop (iDesktopNumber);
+	gboolean bIsSticky = cairo_dock_xwindow_is_sticky (Xid);
+	if (iDesktopNumber >= 0 && !bIsSticky)  // don't move if the window is sticky, since it is on every desktops
+		cairo_dock_set_current_desktop (iDesktopNumber);
 
 	//\______________ On active la fenetre.
 	//XMapRaised (s_XDisplay, Xid);  // on la mappe, pour les cas ou elle etait en zone de notification. Malheuresement, la zone de notif de gnome est bugguee, et reduit la fenetre aussitot qu'on l'a mappee :-(
