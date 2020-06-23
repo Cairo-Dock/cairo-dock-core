@@ -683,8 +683,7 @@ static gboolean _draw_menu_item (GtkWidget *widget,
 	cairo_t *cr,
 	G_GNUC_UNUSED gpointer data)
 {
-	GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
-	if (child)  // not a separator => skip drawing anything and let GTK handle it
+	if (! GTK_IS_SEPARATOR_MENU_ITEM(widget))  // not a separator => skip drawing anything and let GTK handle it
 		return FALSE;
 	
 	// get menu's geometry
