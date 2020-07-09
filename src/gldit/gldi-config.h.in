@@ -17,6 +17,9 @@
 /* Defined if we can use Wayland. */
 #cmakedefine HAVE_WAYLAND @HAVE_WAYLAND@
 
+/* Defined if we can use gtk-layer-shell. */
+#cmakedefine HAVE_GTK_LAYER_SHELL @HAVE_GTK_LAYER_SHELL@
+
 /* Defined if we can use EGL. */
 #cmakedefine HAVE_EGL @HAVE_EGL@
 

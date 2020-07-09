@@ -43,6 +43,13 @@
 #define _MANAGER_DEF_
 #include "cairo-dock-wayland-manager.h"
 
+#include "gldi-config.h"
+#ifdef HAVE_GTK_LAYER_SHELL
+#include <gtk-layer-shell.h>
+static gboolean s_bHave_Layer_Shell = FALSE;
+#endif
+
+
 // public (manager, config, data)
 GldiManager myWaylandMgr;
 GldiObjectManager myWaylandObjectMgr;
@@ -147,6 +154,12 @@ static void _registry_global_cb (G_GNUC_UNUSED void *data, struct wl_registry *r
 			&output_listener,
 			NULL);
 	}
+#ifdef HAVE_GTK_LAYER_SHELL
+	else if (!strcmp (interface, "zwlr_layer_shell_v1"))
+	{
+		s_bHave_Layer_Shell = TRUE;
+	}
+#endif
 	s_bInitializing = TRUE;
 }
 
@@ -165,6 +178,67 @@ static const struct wl_registry_listener registry_listener = {
 };
 
 
+#ifdef HAVE_GTK_LAYER_SHELL
+/// reserve space for the dock; note: most parameters are ignored, only a size is calculated based on coordinates
+static void _layer_shell_reserve_space (GldiContainer *pContainer, int left, int right, int top, int bottom,
+		G_GNUC_UNUSED int left_start_y, G_GNUC_UNUSED int left_end_y, G_GNUC_UNUSED int right_start_y, G_GNUC_UNUSED int right_end_y,
+		G_GNUC_UNUSED int top_start_x, G_GNUC_UNUSED int top_end_x, G_GNUC_UNUSED int bottom_start_x, G_GNUC_UNUSED int bottom_end_x)
+{
+	GtkWindow* window = GTK_WINDOW (pContainer->pWidget);
+	gint r = (pContainer->bIsHorizontal) ? (top - bottom) : (right - left);
+	if (r < 0) {
+		r *= -1;
+	}
+	gtk_layer_set_exclusive_zone (window, r);
+}
+
+static void _set_layer_shell_anchor (GldiContainer *pContainer, CairoDockPositionType iScreenBorder)
+{
+	GtkWindow* window = GTK_WINDOW (pContainer->pWidget);
+	// Reset old anchors
+	gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_BOTTOM, FALSE);
+	gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_TOP, FALSE);
+	gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_RIGHT, FALSE);
+	gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_LEFT, FALSE);
+	// Set new anchor
+	switch (iScreenBorder)
+	{
+		case CAIRO_DOCK_BOTTOM :
+			gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_BOTTOM, TRUE);
+		break;
+		case CAIRO_DOCK_TOP :
+			gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_TOP, TRUE);
+		break;
+		case CAIRO_DOCK_RIGHT :
+			gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_RIGHT, TRUE);
+		break;
+		case CAIRO_DOCK_LEFT :
+			gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_LEFT, TRUE);
+		break;
+		case CAIRO_DOCK_INSIDE_SCREEN :
+		case CAIRO_DOCK_NB_POSITIONS :
+		break;
+	}
+}
+
+void _set_layer_shell_layer (GldiContainer *pContainer, GldiContainerLayer iLayer)
+{
+	GtkWindow* window = GTK_WINDOW (pContainer->pWidget);
+	gtk_layer_set_layer (window, iLayer == CAIRO_DOCK_LAYER_TOP ? 	
+		GTK_LAYER_SHELL_LAYER_TOP : GTK_LAYER_SHELL_LAYER_BOTTOM);
+}
+
+void _layer_shell_init_for_window (GldiContainer *pContainer)
+{
+	GtkWindow* window = GTK_WINDOW (pContainer->pWidget);
+	gtk_layer_init_for_window (window);
+	gtk_layer_set_namespace (window, "cairo-dock");
+//	gtk_layer_set_layer (window, GTK_LAYER_SHELL_LAYER_TOP);
+//	gtk_layer_auto_exclusive_zone_enable (window);
+}
+#endif
+
+
 static void init (void)
 {
 	//\__________________ listen for Wayland events
@@ -181,6 +255,19 @@ static void init (void)
 		wl_display_roundtrip (s_pDisplay);
 	}
 	while (s_bInitializing);
+	
+#ifdef HAVE_GTK_LAYER_SHELL
+	if (s_bHave_Layer_Shell)
+	{
+		GldiContainerManagerBackend cmb;
+		memset (&cmb, 0, sizeof (GldiContainerManagerBackend));
+		cmb.reserve_space = _layer_shell_reserve_space;
+		cmb.set_anchor = _set_layer_shell_anchor;
+		cmb.set_layer = _set_layer_shell_layer;
+		cmb.init_layer = _layer_shell_init_for_window;
+		gldi_container_manager_register_backend (&cmb);
+	}
+#endif
 	
 	gldi_register_egl_backend ();
 }

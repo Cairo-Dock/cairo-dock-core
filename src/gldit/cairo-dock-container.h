@@ -166,6 +166,21 @@ struct _GldiContainer {
 };
 
 
+/// Which "layer" a container should appear on. Bottom is below any normal windows, top is above
+typedef enum {
+	CAIRO_DOCK_LAYER_BOTTOM = 0,
+	CAIRO_DOCK_LAYER_TOP
+} GldiContainerLayer;
+
+typedef enum {
+	CAIRO_DOCK_BOTTOM = 0,
+	CAIRO_DOCK_TOP,
+	CAIRO_DOCK_RIGHT,
+	CAIRO_DOCK_LEFT,
+	CAIRO_DOCK_INSIDE_SCREEN,
+	CAIRO_DOCK_NB_POSITIONS
+	} CairoDockPositionType;
+
 /// Definition of the Container backend. It defines some operations that should be, but are not, provided by GTK.
 struct _GldiContainerManagerBackend {
 	void (*reserve_space) (GldiContainer *pContainer, int left, int right, int top, int bottom, int left_start_y, int left_end_y, int right_start_y, int right_end_y, int top_start_x, int top_end_x, int bottom_start_x, int bottom_end_x);
@@ -173,6 +188,13 @@ struct _GldiContainerManagerBackend {
 	void (*move) (GldiContainer *pContainer, int iNumDesktop, int iAbsolutePositionX, int iAbsolutePositionY);
 	gboolean (*is_active) (GldiContainer *pContainer);
 	void (*present) (GldiContainer *pContainer);
+	/// extra functionality for Wayland / gtk_layer_shell
+	/// Initialize layer-shell additions -- need to be called before mapping window first
+	void (*init_layer) (GldiContainer *pContainer);
+	/// Anchor this container to a screen edge (this is used instead of regular positioning)
+	void (*set_anchor) (GldiContainer *pContainer, CairoDockPositionType iScreenBorder);
+	/// Set on which layer should this container appear
+	void (*set_layer) (GldiContainer *pContainer, GldiContainerLayer iLayer);
 };
 
 
@@ -247,6 +269,18 @@ gboolean gldi_container_is_active (GldiContainer *pContainer);
 */
 void gldi_container_present (GldiContainer *pContainer);
 
+/** Make this container a layer-shell surface. This can be used to properly position a dock on the screen on wlroots-based Wayland compositors
+ *@param pContainer the container
+ * 
+ * See here for more details: https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-layer-shell-unstable-v1.xml
+ * 
+ * Below functions provide basic functionality to position the dock and place it above / below other windows.
+ */
+void gldi_container_init_layer (GldiContainer *pContainer);
+/// Anchor this container to a screen edge (this is used instead of regular positioning)
+void gldi_container_set_anchor (GldiContainer *pContainer, CairoDockPositionType iScreenBorder);
+/// Set on which layer should this container appear
+void gldi_container_set_layer (GldiContainer *pContainer, GldiContainerLayer iLayer);
 
 void gldi_container_manager_register_backend (GldiContainerManagerBackend *pBackend);
 
