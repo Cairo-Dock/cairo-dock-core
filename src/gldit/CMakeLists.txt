@@ -116,6 +116,7 @@ target_link_libraries("gldi"
 	${XINERAMA_LIBRARIES}
 	${LIBCRYPT_LIBS}
 	implementations
+	${GTKLAYERSHELL_LIBRARIES}
 	${LIBDL_LIBRARIES})
 
 

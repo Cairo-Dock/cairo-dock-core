@@ -336,6 +336,25 @@ void gldi_container_present (GldiContainer *pContainer)
 		s_backend.present (pContainer);
 }
 
+void gldi_container_init_layer (GldiContainer *pContainer)
+{
+	if (s_backend.init_layer)
+		s_backend.init_layer (pContainer);
+}
+
+void gldi_container_set_anchor (GldiContainer *pContainer, CairoDockPositionType iScreenBorder)
+{
+	if (s_backend.set_anchor)
+		s_backend.set_anchor (pContainer, iScreenBorder);
+}
+
+void gldi_container_set_layer (GldiContainer *pContainer, GldiContainerLayer iLayer)
+{
+	if (s_backend.set_layer)
+		s_backend.set_layer (pContainer, iLayer);
+}
+
+
 void gldi_container_manager_register_backend (GldiContainerManagerBackend *pBackend)
 {
 	gpointer *ptr = (gpointer*)&s_backend;
