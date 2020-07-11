@@ -18,6 +18,9 @@ SET(impl_SRCS
 	cairo-dock-egl-X.c
 	cairo-dock-egl-wayland.c
 	cairo-dock-wayland-manager.c         cairo-dock-wayland-manager.h
+	cairo-dock-foreign-toplevel.c        cairo-dock-foreign-toplevel.h
+	wlr-foreign-toplevel-management-unstable-v1-client-protocol.h
+	wlr-foreign-toplevel-management-unstable-v1-protocol.c
 )
 #if ("${HAVE_X11}")
 #	SET(impl_SRCS ${impl_SRCS}
