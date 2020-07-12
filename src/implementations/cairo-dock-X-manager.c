@@ -123,11 +123,11 @@ static GldiXWindowActor *_make_new_actor (Window Xid)
 	gboolean bNormalWindow = FALSE;
 	Window iTransientFor = None;
 	gchar *cClass = NULL, *cWmClass = NULL;
-	gboolean bIsHidden = FALSE, bIsFullScreen = FALSE, bIsMaximized = FALSE, bDemandsAttention = FALSE;
+	gboolean bIsHidden = FALSE, bIsFullScreen = FALSE, bIsMaximized = FALSE, bDemandsAttention = FALSE, bIsSticky = FALSE;
 	
 	//\__________________ see if we should skip it
 	// check its 'skip taskbar' property
-	bShowInTaskbar = cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Xid, &bIsFullScreen, &bIsHidden, &bIsMaximized, &bDemandsAttention);
+	bShowInTaskbar = cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Xid, &bIsFullScreen, &bIsHidden, &bIsMaximized, &bDemandsAttention, &bIsSticky);
 	
 	if (bShowInTaskbar)
 	{
@@ -169,6 +169,7 @@ static GldiXWindowActor *_make_new_actor (Window Xid)
 		actor->bIsMaximized = bIsMaximized;
 		actor->bIsFullScreen = bIsFullScreen;
 		actor->bDemandsAttention = bDemandsAttention;
+		actor->bIsSticky = bIsSticky;
 	}
 	else  // make a dumy actor, so that we don't try to check it any more
 	{
@@ -569,8 +570,8 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 				else if (event.xproperty.atom == s_aNetWmState)
 				{
 					// get current state
-					gboolean bIsFullScreen, bIsHidden, bIsMaximized, bDemandsAttention;
-					gboolean bSkipTaskbar = ! cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Xid, &bIsFullScreen, &bIsHidden, &bIsMaximized, &bDemandsAttention);
+					gboolean bIsFullScreen, bIsHidden, bIsMaximized, bDemandsAttention, bIsSticky;
+					gboolean bSkipTaskbar = ! cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Xid, &bIsFullScreen, &bIsHidden, &bIsMaximized, &bDemandsAttention, &bIsSticky);
 					
 					// special case where a window enters/leaves the taskbar
 					if (bSkipTaskbar != xactor->bIgnored)
@@ -608,6 +609,12 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 					else
 						_unset_demand_attention (xactor, X_DEMANDS_ATTENTION);  // -> NOTIFICATION_WINDOW_ATTENTION_CHANGED
 					gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_STATE_CHANGED, actor, bHiddenChanged, bMaximizedChanged, bFullScreenChanged);
+					
+					if (actor->bIsSticky != bIsSticky)  // a change in stickyness can be seen as a change in the desktop position
+					{
+						actor->bIsSticky = bIsSticky;
+						gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESKTOP_CHANGED, actor);
+					}
 				}
 				else if (event.xproperty.atom == s_aNetWmDesktop)
 				{
@@ -1008,12 +1015,6 @@ static void _is_above_or_below (GldiWindowActor *actor, gboolean *bIsAbove, gboo
 	cairo_dock_xwindow_is_above_or_below (xactor->Xid, bIsAbove, bIsBelow);
 }
 
-static gboolean _is_sticky (GldiWindowActor *actor)
-{
-	GldiXWindowActor *xactor = (GldiXWindowActor *)actor;
-	return cairo_dock_xwindow_is_sticky (xactor->Xid);
-}
-
 static void _set_sticky (GldiWindowActor *actor, gboolean bSticky)
 {
 	GldiXWindowActor *xactor = (GldiXWindowActor *)actor;
@@ -1259,7 +1260,6 @@ static void init (void)
 	wmb.get_texture = _get_texture;
 	wmb.get_transient_for = _get_transient_for;
 	wmb.is_above_or_below = _is_above_or_below;
-	wmb.is_sticky = _is_sticky;
 	wmb.set_sticky = _set_sticky;
 	wmb.can_minimize_maximize_close = _can_minimize_maximize_close;
 	wmb.get_id = _get_id;

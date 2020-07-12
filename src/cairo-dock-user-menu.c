@@ -1908,7 +1908,8 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 		gboolean bIsSticky = gldi_window_is_sticky (pAppli);
 		_add_entry_in_menu (bIsSticky ? _("Visible only on this desktop") : _("Visible on all desktops"), GLDI_ICON_NAME_JUMP_TO, _cairo_dock_change_window_sticky, pSubMenuOtherActions);
 
-		_add_desktops_entry (pSubMenuOtherActions, FALSE, data);
+		if (!bIsSticky)  // if the window is sticky, it's on all desktops/viewports, so you can't move it to another
+			_add_desktops_entry (pSubMenuOtherActions, FALSE, data);
 		
 		// add separator
 		pMenuItem = gtk_separator_menu_item_new ();

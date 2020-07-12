@@ -1285,7 +1285,7 @@ void cairo_dock_xwindow_is_above_or_below (Window Xid, gboolean *bIsAbove, gbool
 	XFree (pXStateBuffer);
 }
 
-gboolean cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Window Xid, gboolean *bIsFullScreen, gboolean *bIsHidden, gboolean *bIsMaximized, gboolean *bDemandsAttention)
+gboolean cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Window Xid, gboolean *bIsFullScreen, gboolean *bIsHidden, gboolean *bIsMaximized, gboolean *bDemandsAttention, gboolean *bIsSticky)
 {
 	g_return_val_if_fail (Xid > 0, FALSE);
 	//cd_debug ("%s (%d)", __func__, Xid);
@@ -1301,6 +1301,8 @@ gboolean cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Window Xid, gb
 	*bIsMaximized = FALSE;
 	if (bDemandsAttention != NULL)
 		*bDemandsAttention = FALSE;
+	if (bIsSticky != NULL)
+		*bIsSticky = FALSE;
 	if (iBufferNbElements > 0)
 	{
 		guint i, iNbMaximizedDimensions = 0;
@@ -1330,6 +1332,10 @@ gboolean cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Window Xid, gb
 			{
 				*bDemandsAttention = TRUE;
 			}
+			else if (pXStateBuffer[i] == s_aNetWmSticky && bIsSticky != NULL)
+			{
+				*bIsSticky = TRUE;
+			}
 			
 			else if (pXStateBuffer[i] == s_aNetWmSkipTaskbar)
 			{
@@ -1341,8 +1347,7 @@ gboolean cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Window Xid, gb
 	
 	XFree (pXStateBuffer);
 	return bValid;
-}  // Note: for stickyness, dont use _NET_WM_STATE_STICKY; prefer "cairo_dock_get_xwindow_desktop (Xid) == -1"
-   //  but it doesn't work with compiz and its viewport...
+}
 
 void cairo_dock_xwindow_can_minimize_maximized_close (Window Xid, gboolean *bCanMinimize, gboolean *bCanMaximize, gboolean *bCanClose)
 {

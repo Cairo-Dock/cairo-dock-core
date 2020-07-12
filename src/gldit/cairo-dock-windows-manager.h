@@ -73,7 +73,6 @@ struct _GldiWindowManagerBackend {
 	GLuint (*get_texture) (GldiWindowActor *actor);
 	GldiWindowActor* (*get_transient_for) (GldiWindowActor *actor);
 	void (*is_above_or_below) (GldiWindowActor *actor, gboolean *bIsAbove, gboolean *bIsBelow);
-	gboolean (*is_sticky) (GldiWindowActor *actor);
 	void (*set_sticky) (GldiWindowActor *actor, gboolean bSticky);
 	void (*can_minimize_maximize_close) (GldiWindowActor *actor, gboolean *bCanMinimize, gboolean *bCanMaximize, gboolean *bCanClose);
 	guint (*get_id) (GldiWindowActor *actor);
@@ -98,6 +97,7 @@ struct _GldiWindowActor {
 	gchar *cLastAttentionDemand;
 	gint iAge;  // age of the window (a mere growing integer).
 	gboolean bIsTransientFor;  // TRUE if the window is transient (for a parent window).
+	gboolean bIsSticky;
 	};
 
 

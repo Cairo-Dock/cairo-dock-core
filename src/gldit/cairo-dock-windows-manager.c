@@ -248,9 +248,7 @@ void gldi_window_is_above_or_below (GldiWindowActor *actor, gboolean *bIsAbove, 
 
 gboolean gldi_window_is_sticky (GldiWindowActor *actor)
 {
-	if (s_backend.is_sticky)
-		return s_backend.is_sticky (actor);
-	return FALSE;
+	return actor->bIsSticky;
 }
 
 void gldi_window_set_sticky (GldiWindowActor *actor, gboolean bSticky)
@@ -307,12 +305,15 @@ static inline gboolean _window_is_on_current_desktop (GtkAllocation *pWindowGeom
 gboolean gldi_window_is_on_current_desktop (GldiWindowActor *actor)
 {
 	///return (actor->iNumDesktop == -1 || actor->iNumDesktop == g_desktopGeometry.iCurrentDesktop) && actor->iViewPortX == g_desktopGeometry.iCurrentViewportX && actor->iViewPortY == g_desktopGeometry.iCurrentViewportY;  /// TODO: check that it works
-	return _window_is_on_current_desktop (&actor->windowGeometry, actor->iNumDesktop);
+	return actor->bIsSticky || _window_is_on_current_desktop (&actor->windowGeometry, actor->iNumDesktop);
 }
 
 
 gboolean gldi_window_is_on_desktop (GldiWindowActor *pAppli, int iNumDesktop, int iNumViewportX, int iNumViewportY)
 {
+	g_print (" %s: %d\n", pAppli->cName, pAppli->bIsSticky);
+	if (pAppli->bIsSticky || pAppli->iNumDesktop == -1)  // a sticky window is by definition on all desktops/viewports
+		return TRUE;
 	// On calcule les coordonnees en repere absolu.
 	int x = pAppli->windowGeometry.x;  // par rapport au viewport courant.
 	x += g_desktopGeometry.iCurrentViewportX * gldi_desktop_get_width();  // repere absolu
