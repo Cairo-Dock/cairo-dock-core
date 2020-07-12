@@ -39,6 +39,7 @@
 #include "cairo-dock-class-manager.h"  // gldi_class_startup_notify_end
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-container.h"  // GldiContainerManagerBackend
+#include "cairo-dock-foreign-toplevel.h"
 #include "cairo-dock-egl.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-wayland-manager.h"
@@ -129,13 +130,17 @@ static const struct wl_output_listener output_listener = {
 	_output_scale_cb
 };
 
-static void _registry_global_cb (G_GNUC_UNUSED void *data, struct wl_registry *registry, uint32_t id, const char *interface, G_GNUC_UNUSED uint32_t version)
+static void _registry_global_cb (G_GNUC_UNUSED void *data, struct wl_registry *registry, uint32_t id, const char *interface, uint32_t version)
 {
 	cd_debug ("got a new global object, instance of %s, id=%d", interface, id);
 	if (!strcmp (interface, "wl_shell"))
 	{
 		// this is the global that should give us info and signals about the desktop, but currently it's pretty useless ...
 		
+	}
+	else if (gldi_zwlr_foreign_toplevel_manager_try_bind (registry, id, interface, version))
+	{
+		cd_debug("Found foreign-toplevel-manager");
 	}
 	else if (!strcmp (interface, "wl_output"))  // global object "wl_output" is now available, create a proxy for it
 	{
@@ -168,7 +173,6 @@ static const struct wl_registry_listener registry_listener = {
 static void init (void)
 {
 	//\__________________ listen for Wayland events
-	s_pDisplay = wl_display_connect (NULL);
 	
 	g_desktopGeometry.iNbDesktops = g_desktopGeometry.iNbViewportX = g_desktopGeometry.iNbViewportY = 1;
 	
@@ -183,13 +187,18 @@ static void init (void)
 	while (s_bInitializing);
 	
 	gldi_register_egl_backend ();
+	gldi_zwlr_foreign_toplevel_manager_init();
 }
 
 void gldi_register_wayland_manager (void)
 {
 	#ifdef GDK_WINDOWING_WAYLAND  // if GTK doesn't support Wayland, there is no point in trying
 	GdkDisplay *dsp = gdk_display_get_default ();  // let's GDK do the guess
-	if (! GDK_IS_WAYLAND_DISPLAY (dsp))  // if not an Wayland session
+	if (GDK_IS_WAYLAND_DISPLAY (dsp))
+	{
+		s_pDisplay = gdk_wayland_display_get_wl_display(dsp);
+	}
+	if (!s_pDisplay)  // if not an Wayland session
 	#endif
 	{
 		cd_message ("Not an Wayland session");
