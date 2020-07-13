@@ -42,6 +42,12 @@ else()
 	add_definitions (-DCAIRO_DOCK_FORCE_ICON_IN_MENUS=0)
 endif()
 
+if (use-new-positioning-on-x11) # new positioning code should work on both X11 and Wayland, but, by default, it is used only on Wayland -- use this cmake options to enable it on X11 as well for testing it
+	add_definitions (-DCAIRO_DOCK_USE_NEW_POSITIONING_ON_X11=1)
+else()
+	add_definitions (-DCAIRO_DOCK_USE_NEW_POSITIONING_ON_X11=0)
+endif()
+
 ############ sources tarball ############
 
 set (CPACK_SOURCE_GENERATOR "TGZ")
@@ -197,6 +203,7 @@ endif()
 
 # check for gtk-layer-shell
 set (with_gtk_layer_shell no)
+enable_if_not_defined (enable-gtk-layer-shell) # enabled by default
 if (enable-gtk-layer-shell)
 	if (HAVE_WAYLAND)
 		pkg_check_modules ("GTKLAYERSHELL" "gtk-layer-shell-0")

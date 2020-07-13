@@ -63,6 +63,7 @@ struct _GldiContainersParam{
 
 struct _GldiContainerAttr {
 	gboolean bNoOpengl;
+	gboolean bIsPopup;
 };
 
 /// signals
@@ -162,7 +163,9 @@ struct _GldiContainer {
 	GldiContainerInterface iface;
 	
 	gboolean bIgnoreNextReleaseEvent;
-	gpointer reserved[4];
+	
+	void *pMoveToRect; // data for gldi_container_move_to_rect() callback if needed
+	gpointer reserved[3];
 };
 
 
@@ -195,6 +198,7 @@ struct _GldiContainerManagerBackend {
 	void (*set_anchor) (GldiContainer *pContainer, CairoDockPositionType iScreenBorder);
 	/// Set on which layer should this container appear
 	void (*set_layer) (GldiContainer *pContainer, GldiContainerLayer iLayer);
+	gboolean (*is_wayland) ();
 };
 
 
@@ -281,9 +285,47 @@ void gldi_container_init_layer (GldiContainer *pContainer);
 void gldi_container_set_anchor (GldiContainer *pContainer, CairoDockPositionType iScreenBorder);
 /// Set on which layer should this container appear
 void gldi_container_set_layer (GldiContainer *pContainer, GldiContainerLayer iLayer);
+/// determine if the display server is Wayland; this can be used by e.g. positioning
+/// code that needs to work differently under Wayland; ideally, code that needs to
+/// depend on this could be moved to the backends, but for now, that seems too complicated
+gboolean gldi_container_is_wayland_backend ();
 
 void gldi_container_manager_register_backend (GldiContainerManagerBackend *pBackend);
 
+
+/** Wrapper around gdk_window_move_to_rect() that can be called anytime.
+ * 	Originally, gdk_window_move_to_rect() can only be called after
+ * 	the container's window has been realized (has been associated with a
+ * 	GdkWindow). On the other hand, on Wayland with layer-shell, this needs
+ * 	to be set up before the container's window is mapped (it is not possible
+ * 	to move a popup after it was mapped).
+ *  See https://developer.gnome.org/gdk3/stable/gdk3-Windows.html#gdk-window-move-to-rect
+ * 	for the description of the parameters used. */
+void gldi_container_move_to_rect (GldiContainer *pContainer,
+									const GdkRectangle *rect,
+									GdkGravity rect_anchor,
+									GdkGravity window_anchor,
+									GdkAnchorHints anchor_hints,
+									gint rect_anchor_dx,
+									gint rect_anchor_dy);
+
+/** Calculate the parameters to pass to gldi_container_move_to_rect() to
+ * 	poisition a child container on the given pContainer, pointing to pPointedIcon.
+ * 	This can be used for subdocks, dialogs and menus. */
+void gldi_container_calculate_rect (const GldiContainer* pContainer, const Icon* pPointedIcon,
+			GdkRectangle *rect, GdkGravity* rect_anchor, GdkGravity* window_anchor);
+
+/** Calculate the aimed point of sub-containers (menus and dialogs), based on
+ * 	relative positioning. This can be used to point an arrow to the corresponding
+ * 	icon. Works for menus (both X11 and Wayland) and dialogs (only Wayland).
+ * Parameters:
+ * 	pIcon            -- the icon that is pointed by the newly placed container
+ * 	w, h             -- with and height of the new container
+ * 	iMarginPosition  -- which side the margin (and the arrow) should be: 0: bottom; 1: top; 2: right; 3: left
+ * 	iAimedX, iAimedY -- result is stored here; it is always in relative coordinates (to the new container); on X, this should be adjusted by the caller to use global coordinates
+ */
+void gldi_container_calculate_aimed_point (const Icon* pIcon, int w, int h,
+	int iMarginPosition, int* iAimedX, int* iAimedY);
 
 
   ////////////

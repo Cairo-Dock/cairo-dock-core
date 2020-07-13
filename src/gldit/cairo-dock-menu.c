@@ -347,17 +347,41 @@ static void _set_margin_position (GtkWidget *pMenu, GldiMenuParams *pParams)
 	
 	// define where the menu will point
 	int iMarginPosition;  // b, t, r, l
-	int y0 = pContainer->iWindowPositionY + pIcon->fDrawY;
-	if (pContainer->bDirectionUp)
-		y0 += pIcon->fHeight * pIcon->fScale - pIcon->image.iHeight;  // the icon might not be maximised yet
-	int Hs = (pContainer->bIsHorizontal ? gldi_desktop_get_height() : gldi_desktop_get_width());
-	if (pContainer->bIsHorizontal)
+	// new positioning code should work on both X11 and Wayland, but, by default, it is used
+	// only on Wayland, unless it is specifically requested in the cmake configuration
+	gboolean use_new_positioning = FALSE;
+	#if (CAIRO_DOCK_USE_NEW_POSITIONING_ON_X11 == 1)
+		use_new_positioning = TRUE;
+	#else
+		use_new_positioning = gldi_container_is_wayland_backend ();
+	#endif
+	if (use_new_positioning)
 	{
-		iMarginPosition = (y0 > Hs/2 ? 0 : 1);
+		if (pContainer->bIsHorizontal)
+		{
+			if (pContainer->bDirectionUp) iMarginPosition = 0;
+			else iMarginPosition = 1;
+		}
+		else
+		{
+			if (pContainer->bDirectionUp) iMarginPosition = 2;
+			else iMarginPosition = 3;
+		}
 	}
 	else
 	{
-		iMarginPosition = (y0 > Hs/2 ? 2 : 3);
+		int y0 = pContainer->iWindowPositionY + pIcon->fDrawY;
+		if (pContainer->bDirectionUp)
+			y0 += pIcon->fHeight * pIcon->fScale - pIcon->image.iHeight;  // the icon might not be maximised yet
+		int Hs = (pContainer->bIsHorizontal ? gldi_desktop_get_height() : gldi_desktop_get_width());
+		if (pContainer->bIsHorizontal)
+		{
+			iMarginPosition = (y0 > Hs/2 ? 0 : 1);
+		}
+		else
+		{
+			iMarginPosition = (y0 > Hs/2 ? 2 : 3);
+		}
 	}
 	
 	// store the result, and allocate some space to draw the arrow
@@ -519,8 +543,39 @@ void gldi_menu_init (GtkWidget *pMenu, Icon *pIcon)
 				"deactivate",
 				G_CALLBACK (_on_menu_deactivated),
 				NULL);
+			
+			// set transient for (parent relationship; needed for positioning on Wayland)
+			// note: it is an error to try to map (and position) a popup
+			// relative to a window that is not mapped; we need to take care of this
+			GtkWindow *tmp = GTK_WINDOW (pContainer->pWidget);
+			while (tmp && !gtk_widget_get_mapped (GTK_WIDGET(tmp)))
+				tmp = gtk_window_get_transient_for (tmp);
+			gtk_window_set_transient_for (GTK_WINDOW (pWindow), tmp);
 		}
 	}
+}
+
+
+static void _menu_realized_cb (GtkWidget *widget, gpointer user_data)
+{
+	GldiMenuParams *pParams = (GldiMenuParams*)user_data;
+	g_return_if_fail (pParams != NULL);
+	
+	int w, h;  // taille menu
+	GtkRequisition requisition;
+	gtk_widget_get_preferred_size (widget, NULL, &requisition);  // retrieve the natural size; Note: before gtk3.10 we used the minimum size but it's now incorrect; the natural size works for prior versions too.
+	w = requisition.width;
+	h = requisition.height;
+	
+	Icon *pIcon = pParams->pIcon;
+	
+	gldi_container_calculate_aimed_point (pIcon, w, h, pParams->iMarginPosition, &(pParams->iAimedX), &(pParams->iAimedY));
+	
+	gint menuX, menuY;
+	gtk_window_get_position (GTK_WINDOW (gtk_widget_get_toplevel (widget)), &menuX, &menuY);
+	// g_print ("menu aimed at: %d, %d; position: %d, %d\n", pParams->iAimedX, pParams->iAimedY, menuX, menuY);
+	pParams->iAimedX += menuX;
+	pParams->iAimedY += menuY;
 }
 
 static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push_in, G_GNUC_UNUSED gpointer data)
@@ -615,6 +670,7 @@ static void _init_menu_item (GtkWidget *pMenuItem)
 		gtk_container_forall (GTK_CONTAINER (pSubMenu), (GtkCallback) _init_menu_item, NULL);
 }
 
+
 static void _popup_menu (GtkWidget *menu, guint32 time)
 {
 	GldiMenuParams *pParams = g_object_get_data (G_OBJECT(menu), "gldi-params");
@@ -640,16 +696,48 @@ static void _popup_menu (GtkWidget *menu, guint32 time)
 		// ensure margin position is still correct
 		_set_margin_position (menu, pParams);
 	}
-
+	
+	// new positioning code should work on both X11 and Wayland, but, by default, it is used
+	// only on Wayland, unless it is specifically requested in the cmake configuration
+	gboolean use_new_positioning = FALSE;
+	#if (CAIRO_DOCK_USE_NEW_POSITIONING_ON_X11 == 1)
+		use_new_positioning = TRUE;
+	#else
+		use_new_positioning = gldi_container_is_wayland_backend ();
+	#endif
+	
+	if (use_new_positioning)
+		g_signal_connect (GTK_WIDGET (menu), "realize",
+			G_CALLBACK (_menu_realized_cb), pParams);
+	
 	gtk_widget_show_all (GTK_WIDGET (menu));
-
-	gtk_menu_popup (GTK_MENU (menu),
-		NULL,
-		NULL,
-		pIcon != NULL && pContainer != NULL ? _place_menu_on_icon : NULL,
-		NULL,
-		0,
-		time);
+	
+	if (use_new_positioning)
+	{
+		if (pContainer && pIcon)
+		{
+			GdkRectangle rect = {0, 0, 1, 1};
+			GdkGravity rect_anchor = GDK_GRAVITY_NORTH;
+			GdkGravity menu_anchor = GDK_GRAVITY_SOUTH;
+			gldi_container_calculate_rect (pContainer, pIcon, &rect, &rect_anchor, &menu_anchor);
+			gtk_menu_popup_at_rect (GTK_MENU (menu), gtk_widget_get_window (pContainer->pWidget),
+				&rect, rect_anchor, menu_anchor, NULL);
+		}
+		else
+		{
+			gtk_menu_popup_at_pointer (GTK_MENU (menu), NULL);
+		}
+	}
+	else
+	{
+		gtk_menu_popup (GTK_MENU (menu),
+			NULL,
+			NULL,
+			pIcon != NULL && pContainer != NULL ? _place_menu_on_icon : NULL,
+			NULL,
+			0,
+			time);
+	}
 }
 static gboolean _popup_menu_delayed (GtkWidget *menu)
 {

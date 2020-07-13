@@ -1940,7 +1940,10 @@ static void init (void)
 		(GldiNotificationFunc) on_style_changed,
 		GLDI_RUN_AFTER, NULL);
 	
-	gldi_docks_visibility_start ();
+	// Avoid checking visibility on Wayland, since we do not have window
+	// positions. This will avoid a dock being hidden by accident.
+	if (!gldi_container_is_wayland_backend ())
+		gldi_docks_visibility_start ();
 }
 
 
@@ -1962,7 +1965,14 @@ static void init_object (GldiObject *obj, gpointer attr)
 		return;
 	}
 
-	//\__________________ init layer-shell (if enabled); needs to happen before window is mapped
+	//\__________________ init layer-shell (if enabled) and also set parent; needs to happen before window is mapped
+	if (dattr->bSubDock)
+	{
+		CairoDock *pParentDock = dattr->pParentDock;
+		if (pParentDock == NULL)
+			pParentDock = g_pMainDock;
+		gtk_window_set_transient_for (GTK_WINDOW (pDock->container.pWidget), GTK_WINDOW (pParentDock->container.pWidget));
+	}
 	gldi_container_init_layer (&(pDock->container));
 	
 	//\__________________ init internals

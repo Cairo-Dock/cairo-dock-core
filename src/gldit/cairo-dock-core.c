@@ -61,6 +61,9 @@
 extern GldiContainer *g_pPrimaryContainer;
 int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;  // version de la lib.
 
+gboolean g_bForceWayland = FALSE;
+gboolean g_bForceX11 = FALSE;
+
 static void _gldi_register_core_managers (void)
 {
 	gldi_register_managers_manager ();  // must be first, since all managers derive from it
@@ -89,8 +92,8 @@ static void _gldi_register_core_managers (void)
 	gldi_register_data_renderers_manager ();
 	gldi_register_desktop_environment_manager ();
 	gldi_register_style_manager ();  // get config before other manager that could use this manager
-	gldi_register_X_manager ();
-	gldi_register_wayland_manager ();
+	if (!g_bForceWayland) gldi_register_X_manager ();
+	if (!g_bForceX11) gldi_register_wayland_manager ();
 }
 
 void gldi_init (GldiRenderingMethod iRendering)

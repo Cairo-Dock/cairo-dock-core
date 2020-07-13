@@ -459,11 +459,13 @@ static gboolean _move_resize_dock (CairoDock *pDock)
 
 	if (pDock->container.bIsHorizontal)
 	{
-		gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)),
-			iNewPositionX,
-			iNewPositionY,
-			iNewWidth,
-			iNewHeight);
+		if (gldi_container_is_wayland_backend ())
+			gdk_window_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)), iNewWidth, iNewHeight);
+		else gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)),
+				iNewPositionX,
+				iNewPositionY,
+				iNewWidth,
+				iNewHeight);
 		/* When we have two gdk_window_move_resize in a row, Compiz will
 		 * disturbed and it will block the draw of the dock. It seems Compiz
 		 * sends too much 'configure' compare to Metacity. 
@@ -471,11 +473,13 @@ static gboolean _move_resize_dock (CairoDock *pDock)
 	}
 	else
 	{
-		gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)),
-			iNewPositionY,
-			iNewPositionX,
-			iNewHeight,
-			iNewWidth);
+		if (gldi_container_is_wayland_backend ())
+			gdk_window_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)), iNewHeight, iNewWidth);
+		else gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)),
+				iNewPositionY,
+				iNewPositionX,
+				iNewHeight,
+				iNewWidth);		
 	}
 	pDock->iSidMoveResize = 0;
 	return FALSE;
@@ -1041,32 +1045,64 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 	
 	int iNewWidth = pSubDock->iMaxDockWidth;
 	int iNewHeight = pSubDock->iMaxDockHeight;
-	int iNewPositionX, iNewPositionY;
-	cairo_dock_get_window_position_at_balance (pSubDock, iNewWidth, iNewHeight, &iNewPositionX, &iNewPositionY);
 	
-	gtk_window_present (GTK_WINDOW (pSubDock->container.pWidget));
+	// new positioning code should work on both X11 and Wayland, but, by default, it is used
+	// only on Wayland, unless it is specifically requested in the cmake configuration
+	gboolean use_new_positioning = FALSE;
+	#if (CAIRO_DOCK_USE_NEW_POSITIONING_ON_X11 == 1)
+		use_new_positioning = TRUE;
+	#else
+		use_new_positioning = gldi_container_is_wayland_backend ();
+	#endif
 	
-	if (pSubDock->container.bIsHorizontal)
+	if (use_new_positioning)
 	{
-		gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pSubDock)),
-			iNewPositionX,
-			iNewPositionY,
-			iNewWidth,
-			iNewHeight);
+		if (pSubDock->container.bIsHorizontal)
+			gdk_window_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pSubDock)),
+				iNewWidth, iNewHeight);
+        else gdk_window_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pSubDock)),
+				iNewHeight, iNewWidth);
+
+
+		GdkRectangle rect = {0, 0, 1, 1};
+		GdkGravity rect_anchor = GDK_GRAVITY_NORTH;
+		GdkGravity subdock_anchor = GDK_GRAVITY_SOUTH;
+		gldi_container_calculate_rect (CAIRO_CONTAINER (pParentDock), pPointedIcon,
+			&rect, &rect_anchor, &subdock_anchor);
+		gldi_container_move_to_rect (CAIRO_CONTAINER (pSubDock),
+			&rect, rect_anchor, subdock_anchor, GDK_ANCHOR_SLIDE, 0, 0);
 	}
 	else
 	{
-		gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pSubDock)),
-			iNewPositionY,
-			iNewPositionX,
-			iNewHeight,
-			iNewWidth);
-		/* in this case, the sub-dock is over the label, so this one is drawn
-		 * with a low transparency, so we trigger the redraw.
-		 */
-		gtk_widget_queue_draw (pParentDock->container.pWidget);
+		int iNewPositionX, iNewPositionY;
+		cairo_dock_get_window_position_at_balance (
+			pSubDock, iNewWidth, iNewHeight, &iNewPositionX, &iNewPositionY);
+		if (pSubDock->container.bIsHorizontal)
+		{
+			gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pSubDock)),
+				iNewPositionX,
+				iNewPositionY,
+				iNewWidth,
+				iNewHeight);
+		}
+		else
+		{
+			gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pSubDock)),
+				iNewPositionY,
+				iNewPositionX,
+				iNewHeight,
+				iNewWidth);
+			/* in this case, the sub-dock is over the label, so this one is drawn
+			 * with a low transparency, so we trigger the redraw.
+			 */
+			gtk_widget_queue_draw (pParentDock->container.pWidget);
+		}
 	}
 	
+	// note: when using gtk-layer-shell (the parent dock is layer surface),
+	// showing the window has to happen after (relative) positioning
+	gtk_window_present (GTK_WINDOW (pSubDock->container.pWidget));
+		
 	// animate it
 	if (myDocksParam.bAnimateSubDock && pSubDock->icons != NULL)
 	{
