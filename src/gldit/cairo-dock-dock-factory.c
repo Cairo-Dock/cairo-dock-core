@@ -2254,6 +2254,7 @@ CairoDock *gldi_subdock_new (const gchar *cDockName, const gchar *cRendererName,
 	attr.cRendererName = cRendererName;
 	attr.pParentDock = pParentDock;
 	attr.pIconList = pIconList;
+	attr.cattr.bIsPopup = TRUE;
 	return (CairoDock*)gldi_object_new (&myDockObjectMgr, &attr);
 }
 

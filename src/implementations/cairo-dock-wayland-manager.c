@@ -47,6 +47,9 @@
 #ifdef HAVE_GTK_LAYER_SHELL
 #include <gtk-layer-shell.h>
 static gboolean s_bHave_Layer_Shell = FALSE;
+
+gboolean g_bDisableLayerShell = FALSE;
+
 #endif
 
 
@@ -157,7 +160,8 @@ static void _registry_global_cb (G_GNUC_UNUSED void *data, struct wl_registry *r
 #ifdef HAVE_GTK_LAYER_SHELL
 	else if (!strcmp (interface, "zwlr_layer_shell_v1"))
 	{
-		s_bHave_Layer_Shell = TRUE;
+		if (!g_bDisableLayerShell)
+			s_bHave_Layer_Shell = TRUE;
 	}
 #endif
 	s_bInitializing = TRUE;
@@ -231,13 +235,34 @@ void _set_layer_shell_layer (GldiContainer *pContainer, GldiContainerLayer iLaye
 void _layer_shell_init_for_window (GldiContainer *pContainer)
 {
 	GtkWindow* window = GTK_WINDOW (pContainer->pWidget);
-	gtk_layer_init_for_window (window);
-	gtk_layer_set_namespace (window, "cairo-dock");
-//	gtk_layer_set_layer (window, GTK_LAYER_SHELL_LAYER_TOP);
-//	gtk_layer_auto_exclusive_zone_enable (window);
+	if (gtk_window_get_transient_for (window))
+	{
+		// subdock or other surface with a parent
+		// we need to call gdk_move_to_rect(), but specifically
+		// (1) before the window is mapped, but (2) during it is realized
+		// A dummy call to gdk_window_move_to_rect() causes the gtk-layer-shell
+		// internals related to this window to be initialized properly (note:
+		// this is important if the parent is a "proper" layer-shell window).
+		// This _has_ to happen before the GtkWindow is mapped first, but also
+		// has to happen after some initial setup. Doing this as a response to
+		// a "realize" signal seems to be a good way, but there should be some
+		// less hacky solution for this as well. Maybe I'm missing something here?
+		// g_signal_connect (window, "realize", G_CALLBACK (sublayer_realize_cb), NULL);
+		
+		// gldi_container_move_to_rect() will ensure this
+		GdkRectangle rect = {0, 0, 1, 1};
+		gldi_container_move_to_rect (pContainer, &rect, GDK_GRAVITY_SOUTH,
+			GDK_GRAVITY_NORTH_WEST, GDK_ANCHOR_SLIDE, 0, 0);
+	}
+	else
+	{
+		gtk_layer_init_for_window (window);
+		gtk_layer_set_namespace (window, "cairo-dock");
+	}
 }
 #endif
 
+static gboolean _is_wayland() { return TRUE; }
 
 static void init (void)
 {
@@ -256,18 +281,19 @@ static void init (void)
 	}
 	while (s_bInitializing);
 	
+	GldiContainerManagerBackend cmb;
+	memset (&cmb, 0, sizeof (GldiContainerManagerBackend));	
 #ifdef HAVE_GTK_LAYER_SHELL
 	if (s_bHave_Layer_Shell)
 	{
-		GldiContainerManagerBackend cmb;
-		memset (&cmb, 0, sizeof (GldiContainerManagerBackend));
 		cmb.reserve_space = _layer_shell_reserve_space;
 		cmb.set_anchor = _set_layer_shell_anchor;
 		cmb.set_layer = _set_layer_shell_layer;
 		cmb.init_layer = _layer_shell_init_for_window;
-		gldi_container_manager_register_backend (&cmb);
 	}
 #endif
+	cmb.is_wayland = _is_wayland;
+	gldi_container_manager_register_backend (&cmb);
 	
 	gldi_register_egl_backend ();
 }

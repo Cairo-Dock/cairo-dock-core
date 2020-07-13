@@ -98,11 +98,18 @@ extern CairoDockGLConfig g_openglConfig;
 extern gboolean g_bUseOpenGL;
 extern gboolean g_bEasterEggs;
 
+#ifdef HAVE_GTK_LAYER_SHELL
+extern gboolean g_bDisableLayerShell;
+#endif
+
 extern GldiModuleInstance *g_pCurrentModule;
 extern GtkWidget *cairo_dock_build_simple_gui_window (void);
 
 gboolean g_bForceCairo = FALSE;
 gboolean g_bLocked;
+
+extern gboolean g_bForceWayland;
+extern gboolean g_bForceX11;
 
 static gboolean s_bSucessfulLaunch = FALSE;
 static GString *s_pLaunchCommand = NULL;
@@ -330,8 +337,6 @@ int main (int argc, char** argv)
 
 	dbus_g_thread_init (); // it's a wrapper: it will use dbus_threads_init_default ();
 	
-	gtk_init (&argc, &argv);
-	
 	GError *erreur = NULL;
 	
 	//\___________________ internationalize the app.
@@ -413,6 +418,17 @@ int main (int argc, char** argv)
 		{"easter-eggs", 'E', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bEasterEggs,
 			_("For debugging purpose only. Some hidden and still unstable options will be activated."), NULL},
+		{"wayland", 'L', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&g_bForceWayland,
+			_("Force using the Wayland backends (disable X11 backends)."), NULL},
+		{"x11", 'X', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&g_bForceX11,
+			_("Force using the X11 backend (disable any Wayland functionality)."), NULL},
+#ifdef HAVE_GTK_LAYER_SHELL
+		{"no-layer-shell", 0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&g_bDisableLayerShell,
+			_("For debugging purpose only. Disable gtk-layer-shell support."), NULL},
+#endif
 		{NULL, 0, 0, 0,
 			NULL,
 			NULL, NULL}
@@ -426,6 +442,17 @@ int main (int argc, char** argv)
 		cd_error ("ERROR in options: %s", erreur->message);
 		return 1;
 	}
+	if (g_bForceWayland && g_bForceX11)
+	{
+		cd_error ("Both Wayland and X11 backends cannot be requested (use only one of the -L and -X options)!\n");
+		return 1;
+	}
+	if (g_bForceWayland)
+		gdk_set_allowed_backends ("wayland");
+	if (g_bForceX11)
+		gdk_set_allowed_backends ("x11");
+	
+	gtk_init (&argc, &argv);
 	
 	if (bPrintVersion)
 	{

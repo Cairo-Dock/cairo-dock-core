@@ -143,11 +143,45 @@ static void _cairo_dock_set_dialog_input_shape (CairoDialog *pDialog)
 	gldi_container_set_input_shape (CAIRO_CONTAINER (pDialog), pDialog->pShapeBitmap);
 }
 
+static void _calculate_aimed_point_new (CairoDialog* pDialog)
+{
+	int w = pDialog->container.iWidth;
+	int h = pDialog->container.iHeight;
+	int iMarginPosition = 0;
+	Icon *pIcon = pDialog->pIcon;
+	GldiContainer *pContainer = (pIcon ? cairo_dock_get_icon_container (pIcon) : NULL);
+	if (pContainer)
+	{
+		if (pContainer->bIsHorizontal)
+		{
+			if (pContainer->bDirectionUp) iMarginPosition = 0;
+			else iMarginPosition = 1;
+		}
+		else
+		{
+			if (pContainer->bDirectionUp) iMarginPosition = 2;
+			else iMarginPosition = 3;
+		}
+	}
+	gldi_container_calculate_aimed_point (pDialog->pIcon, w, h, iMarginPosition, &(pDialog->iAimedX), &(pDialog->iAimedY));
+	
+	// adjust point in global coordinates (matters on X only)
+	pDialog->iAimedX += pDialog->container.iWindowPositionX;
+	pDialog->iAimedY += pDialog->container.iWindowPositionY;
+	// g_print ("dialog position: %d, %d; aimed point: %d, %d\n", pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY, pDialog->iAimedX, pDialog->iAimedY);
+}
+
+static void _on_realize_dialog (G_GNUC_UNUSED GtkWidget* pWidget, CairoDialog *pDialog)
+{
+	gtk_window_get_position (GTK_WINDOW (gtk_widget_get_toplevel (pWidget)), &(pDialog->container.iWindowPositionX), &(pDialog->container.iWindowPositionY));
+	_calculate_aimed_point_new (pDialog);
+}
+
 static gboolean on_configure_dialog (G_GNUC_UNUSED GtkWidget* pWidget,
 	GdkEventConfigure* pEvent,
 	CairoDialog *pDialog)
 {
-	//g_print ("%s (%dx%d, %d;%d) [%d]\n", __func__, pEvent->width, pEvent->height, pEvent->x, pEvent->y, pDialog->bPositionForced);
+	// g_print ("%s (%dx%d, %d;%d) [%d]\n", __func__, pEvent->width, pEvent->height, pEvent->x, pEvent->y, pDialog->bPositionForced);
 	if (pEvent->width <= CAIRO_DIALOG_MIN_SIZE && pEvent->height <= CAIRO_DIALOG_MIN_SIZE && ! pDialog->bNoInput)
 	{
 		pDialog->container.bInside = FALSE;
@@ -203,6 +237,9 @@ static gboolean on_configure_dialog (G_GNUC_UNUSED GtkWidget* pWidget,
 		*/pDialog->bPositionForced ++;
 	}
 	
+	//\____________ compute aimed point (for new positioning)
+	if (gldi_dialog_use_new_positioning (pDialog)) _calculate_aimed_point_new (pDialog);
+	
 	gtk_widget_queue_draw (pDialog->container.pWidget);  // les widgets internes peuvent avoir changer de taille sans que le dialogue n'en ait change, il faut donc redessiner tout le temps.
 
 	return FALSE;
@@ -212,7 +249,8 @@ static gboolean on_unmap_dialog (GtkWidget* pWidget,
 	G_GNUC_UNUSED GdkEvent *pEvent,
 	CairoDialog *pDialog)
 {
-	//g_print ("unmap dialog (bAllowMinimize:%d, visible:%d)\n", pDialog->bAllowMinimize, GTK_WIDGET_VISIBLE (pWidget));
+	//g_print ("unmap dialog (bAllowMinimize:%d, visible:%d)\n", pDialog->bAllowMinimize, gtk_widget_get_mapped (pWidget));
+	pDialog->container.bInside = FALSE;
 	if (! pDialog->bAllowMinimize)  // it's an unexpected unmap event
 	{
 		if (pDialog->pUnmapTimer)  // see if it happened just after an event that we expected
@@ -222,7 +260,9 @@ static gboolean on_unmap_dialog (GtkWidget* pWidget,
 			if (fElapsedTime < .2)  // it's a 2nd unmap event just after the first one, ignore it, it's just some noise from the WM
 				return TRUE;
 		}
-		gtk_window_present (GTK_WINDOW (pWidget));  // counter it, we don't want dialogs to be hidden
+		// destroy the dialog
+		gldi_object_unref (GLDI_OBJECT(pDialog));
+		// gtk_window_present (GTK_WINDOW (pWidget));  // counter it, we don't want dialogs to be hidden
 	}
 	else  // expected event, it's an unmap that we triggered with 'gldi_dialog_hide', so let pass it
 	{
@@ -527,8 +567,6 @@ void gldi_dialog_init_internals (CairoDialog *pDialog, CairoDialogAttr *pAttribu
 	else
 		pDialog->pTopWidget = _cairo_dock_add_dialog_internal_box (pDialog, 0, pDialog->iTopMargin, TRUE);
 	
-	gtk_widget_show_all (pDialog->container.pWidget);
-	
 	//\________________ load the input shape.
 	if (pDialog->bNoInput)
 	{
@@ -561,6 +599,15 @@ void gldi_dialog_init_internals (CairoDialog *pDialog, CairoDialogAttr *pAttribu
 			"button-press-event",
 			G_CALLBACK (on_button_press_widget),
 			pDialog);
+	if (gldi_dialog_use_new_positioning (pDialog))
+	{
+		if (gtk_widget_get_realized (pDialog->container.pWidget))
+			_calculate_aimed_point_new (pDialog);
+		else g_signal_connect_after (G_OBJECT (pDialog->container.pWidget),
+			"realize",
+			G_CALLBACK (_on_realize_dialog),
+			pDialog);
+	}
 	
 	cairo_dock_launch_animation (CAIRO_CONTAINER (pDialog));
 }
