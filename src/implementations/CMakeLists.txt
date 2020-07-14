@@ -1,5 +1,6 @@
 
 SET(impl_SRCS
+	gdk-move-to-rect-hack.c            	 gdk-move-to-rect-hack.h
 	cairo-dock-gauge.c                   cairo-dock-gauge.h
 	cairo-dock-graph.c                   cairo-dock-graph.h
 	cairo-dock-progressbar.c             cairo-dock-progressbar.h
