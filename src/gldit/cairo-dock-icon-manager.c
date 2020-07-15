@@ -244,8 +244,20 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName, gint iDesiredIconS
 	gboolean bHasSuffix=FALSE, bFileFound=FALSE, bHasVersion=FALSE;
 	GtkIconInfo* pIconInfo = NULL;
 	gchar *str = strrchr (cFileName, '.');
-	bHasSuffix = (str != NULL && g_ascii_isalpha (*(str+1)));  // exemple : "firefox.svg", but not "firefox-3.0"
-	bHasVersion = (str != NULL && g_ascii_isdigit (*(str+1)) && g_ascii_isdigit (*(str-1)) && str-1 != cFileName);  // doit finir par x.y, x et y ayant autant de chiffres que l'on veut.
+	if (str)
+	{
+		int j = 0;
+		while (cSuffixTab[j] != NULL)
+		{
+			if (strcmp(str+1, cSuffixTab[j]) == 0)  // exemple : "firefox.svg", but not "firefox-3.0" or "org.gnome.Calculator"
+			{
+				bHasSuffix = TRUE;
+				break;
+			}
+			j ++;
+		}
+		bHasVersion = (g_ascii_isdigit (*(str+1)) && g_ascii_isdigit (*(str-1)) && str-1 != cFileName);  // doit finir par x.y, x et y ayant autant de chiffres que l'on veut.
+	}
 	
 	//\_______________________ search in the local icons folder if enabled.
 	if (s_bUseLocalIcons)
