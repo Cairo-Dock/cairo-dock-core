@@ -667,12 +667,13 @@ static void _cairo_dock_load_icon_textures (void)
 	
 	cairo_dock_foreach_icon_container_renderer ((GHFunc)_load_renderer, NULL);
 }
-static void _reload_in_desklet (CairoDesklet *pDesklet, G_GNUC_UNUSED gpointer data)
+static gboolean _reload_in_desklet (CairoDesklet *pDesklet, G_GNUC_UNUSED gpointer data)
 {
 	if (CAIRO_DOCK_IS_APPLET (pDesklet->pIcon))
 	{
 		gldi_object_reload (GLDI_OBJECT(pDesklet->pIcon->pModuleInstance), FALSE);
 	}
+	return FALSE;
 }
 static gboolean _on_icon_theme_changed_idle (G_GNUC_UNUSED gpointer data)
 {
