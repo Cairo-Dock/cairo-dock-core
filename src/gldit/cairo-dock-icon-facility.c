@@ -498,7 +498,7 @@ void cairo_dock_normalize_icons_order (GList *pIconList, CairoDockIconGroup iGro
 void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2)  // move icon1 after icon2,or at the beginning of the dock/group if icon2 is NULL.
 {
 	//g_print ("%s (%s, %.2f, %x)\n", __func__, icon1->cName, icon1->fOrder, icon2);
-	if ((icon2 != NULL) && fabs (cairo_dock_get_icon_order (icon1) - cairo_dock_get_icon_order (icon2)) > 1)
+	if ((icon2 != NULL) && abs ((int)cairo_dock_get_icon_order (icon1) - (int)cairo_dock_get_icon_order (icon2)) > 1)  // cast to int because enums can be unsigned (depending on the compiler)
 		return ;
 	//\_________________ On change l'ordre de l'icone.
 	gboolean bForceUpdate = FALSE;
