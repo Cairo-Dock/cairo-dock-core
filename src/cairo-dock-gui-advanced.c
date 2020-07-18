@@ -1032,15 +1032,16 @@ static gboolean on_leave_group_button (GtkButton *button, GdkEventCrossing *pEve
 		GtkAllocation allocation;
 		gtk_widget_get_allocation (GTK_WIDGET (button), &allocation);
 		int x, y;
-		#if GTK_CHECK_VERSION (3, 4, 0)
+		#if GTK_CHECK_VERSION (3, 20, 0)
+		GdkSeat *pSeat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (button)));
+		GdkDevice *pDevice = gdk_seat_get_pointer (pSeat);
+		#else
 		GdkDevice *pDevice = gdk_device_manager_get_client_pointer (
 			gdk_display_get_device_manager (gtk_widget_get_display (GTK_WIDGET (button))));
+		#endif
 		gdk_window_get_device_position (gtk_widget_get_window (GTK_WIDGET (button)), pDevice, &x, &y, NULL);
 		x -= allocation.x;
 		y -= allocation.y;
-		#else
-		gtk_widget_get_pointer (GTK_WIDGET (button), &x, &y);
-		#endif
 		if (x >= 0 && x < allocation.width && y >= 0 && y < allocation.height)  // we are actually still inside the button, ignore the event, we'll get an 'enter' event as soon as the dialog's input shape is ready.
 		{
 			s_iSidCheckGroupButton = g_timeout_add (1000, _check_group_button, NULL);  // check in a moment if we left the button because of the dialog or because of another window (alt+tab).

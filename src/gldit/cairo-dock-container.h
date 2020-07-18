@@ -200,18 +200,9 @@ void cairo_dock_disable_containers_opacity (void);
 
 #define gldi_container_is_visible(pContainer) gtk_widget_get_visible ((pContainer)->pWidget)
 
-#define gldi_display_get_pointer(xptr, yptr) do {\
-	GdkDeviceManager *_dm = gdk_display_get_device_manager (gdk_display_get_default());\
-	GdkDevice *_dev = gdk_device_manager_get_client_pointer (_dm);\
-	gdk_device_get_position (_dev, NULL, xptr, yptr); } while (0)
+void gldi_display_get_pointer (int *xptr, int *yptr);
 
-#define gldi_container_update_mouse_position(pContainer) do {\
-	GdkDeviceManager *pManager = gdk_display_get_device_manager (gtk_widget_get_display (pContainer->pWidget)); \
-	GdkDevice *pDevice = gdk_device_manager_get_client_pointer (pManager); \
-	if ((pContainer)->bIsHorizontal) \
-		gdk_window_get_device_position (gldi_container_get_gdk_window (pContainer), pDevice, &pContainer->iMouseX, &pContainer->iMouseY, NULL); \
-	else \
-		gdk_window_get_device_position (gldi_container_get_gdk_window (pContainer), pDevice, &pContainer->iMouseY, &pContainer->iMouseX, NULL); } while (0)
+void gldi_container_update_mouse_position (GldiContainer *pContainer);
 
 
 /** Reserve a space on the screen for a Container; other windows won't overlap this space when maximised.
