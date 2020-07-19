@@ -41,12 +41,13 @@ extern gboolean g_bUseOpenGL;
 
 // private
 static GtkStyleContext *s_pStyle = NULL;
-static GdkRGBA s_menu_bg_color;
+static GdkRGBA s_menu_bg_color = {0};
 static cairo_pattern_t *s_menu_bg_pattern = NULL;
 static GLuint s_menu_bg_texture = 0;
-static GdkRGBA s_menuitem_bg_color;
+static GdkRGBA s_menuitem_bg_color = {0};
 static cairo_pattern_t *s_menuitem_bg_pattern = NULL;
-static GdkRGBA s_text_color;
+static GdkRGBA s_text_color = {0};
+static GdkRGBA s_menu_line_color = {0};
 static int s_iStyleStamp = 1;
 static gboolean s_bIgnoreStyleChange = FALSE;
 
@@ -76,65 +77,68 @@ static void _on_style_changed (G_GNUC_UNUSED GtkStyleContext *_style, gpointer d
 		
 		if (myStyleParam.bUseSystemColors)
 		{
-			GtkStyleContext *style = gtk_style_context_new();
+			// grab a style context
+			// grabing one from an actual menu widget proves to be the most reliable way
+			// actually building a context and querying the properties just doesn't work for all themes :-/
+			GtkWidget *pMenu = gtk_menu_new ();
+			GtkWidget *pMenuItem = gtk_menu_item_new ();
+			gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
+			GtkStyleContext *style = gtk_widget_get_style_context(pMenuItem);  // owned by GTK
+			GdkRGBA *c;
+			/*GtkStyleContext *style = gtk_style_context_new();
 			gtk_style_context_set_screen (style, gdk_screen_get_default());
-			GtkWidgetPath *path;
 			int pos;
-			
-			// get text color
-			path = gtk_widget_path_new();
+			GtkWidgetPath *path = gtk_widget_path_new();
 			pos = gtk_widget_path_append_type (path, GTK_TYPE_MENU);
 			gtk_widget_path_iter_add_class (path, pos, GTK_STYLE_CLASS_MENU);
 			pos = gtk_widget_path_append_type (path, GTK_TYPE_MENU_ITEM);
 			gtk_widget_path_iter_add_class (path, pos, GTK_STYLE_CLASS_MENUITEM);
+			gtk_widget_path_iter_add_class(path, pos, GTK_STYLE_CLASS_BACKGROUND);
 			gtk_style_context_set_path (style, path);
-			gtk_widget_path_free (path);
-			gtk_style_context_add_class (style, GTK_STYLE_CLASS_MENU);
-			gtk_style_context_add_class (style, GTK_STYLE_CLASS_MENUITEM);
+			gtk_widget_path_free (path);*/
 			
+			// get text color
 			gtk_style_context_get_color (style, GTK_STATE_FLAG_NORMAL, &s_text_color);
 			cd_debug ("text color: %.2f;%.2f;%.2f;%.2f", s_text_color.red, s_text_color.green, s_text_color.blue, s_text_color.alpha);
 			
 			// get selected bg color
-			gtk_style_context_get_background_color (style, GTK_STATE_PRELIGHT, (GdkRGBA*)&s_menuitem_bg_color);
-			if (s_menuitem_bg_color.alpha == 0)
+			c = NULL;
+			gtk_style_context_get (style, GTK_STATE_FLAG_PRELIGHT,
+				GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &c,
+				GTK_STYLE_PROPERTY_BACKGROUND_IMAGE, &s_menuitem_bg_pattern,
+				NULL);
+			if (c)
 			{
-				gtk_style_context_get (style, GTK_STATE_FLAG_PRELIGHT,
-					GTK_STYLE_PROPERTY_BACKGROUND_IMAGE, &s_menuitem_bg_pattern,
-					NULL);
+				s_menuitem_bg_color = *c;
+				gdk_rgba_free (c);
+			}
+			else
+			{
 				if (s_menuitem_bg_pattern == NULL)
 				{
-					s_menuitem_bg_color.red = s_menuitem_bg_color.green = s_menuitem_bg_color.blue = s_menuitem_bg_color.alpha = 1.;
+					gtk_style_context_lookup_color (style, "selected_bg_color", &s_menuitem_bg_color);  // workaround, that can work if the theme actually uses a color named 'selected_bg_color'
 				}
 			}
 			cd_debug ("menuitem color: %.2f;%.2f;%.2f;%.2f; %p", s_menuitem_bg_color.red, s_menuitem_bg_color.green, s_menuitem_bg_color.blue, s_menuitem_bg_color.alpha, s_menuitem_bg_pattern);
 			
-			gtk_style_context_remove_class (style, GTK_STYLE_CLASS_MENUITEM);
-			gtk_style_context_remove_class (style, GTK_STYLE_CLASS_MENU);
+			style = gtk_widget_get_style_context(pMenu);  // owned by GTK
 			
 			// get bg color
-			path = gtk_widget_path_new();
-			pos = gtk_widget_path_append_type (path, GTK_TYPE_WINDOW);
-			gtk_widget_path_iter_add_class (path, pos, GTK_STYLE_CLASS_BACKGROUND);
-			pos = gtk_widget_path_append_type (path, GTK_TYPE_MENU);
-			gtk_widget_path_iter_add_class (path, pos, GTK_STYLE_CLASS_MENU);
-			gtk_style_context_set_path (style, path);
-			gtk_widget_path_free (path);
-			gtk_style_context_add_class (style, GTK_STYLE_CLASS_BACKGROUND);
-			gtk_style_context_add_class (style, GTK_STYLE_CLASS_MENU);
-			#if ! GTK_CHECK_VERSION (3,12,0) // Style contexts are now invalidated automatically.
-			gtk_style_context_invalidate (style);  // force the context to be reconstructed
-			#endif
-
-			gtk_style_context_get_background_color (style, GTK_STATE_FLAG_NORMAL, (GdkRGBA*)&s_menu_bg_color);
-			if (s_menu_bg_color.alpha == 0)
+			c = NULL;
+			gtk_style_context_get (style, GTK_STATE_FLAG_NORMAL, 
+				GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &c,
+				GTK_STYLE_PROPERTY_BACKGROUND_IMAGE, &s_menu_bg_pattern,
+				NULL);
+			if (c)
 			{
-				gtk_style_context_get (style, GTK_STATE_NORMAL,
-					GTK_STYLE_PROPERTY_BACKGROUND_IMAGE, &s_menu_bg_pattern,
-					NULL);
+				s_menu_bg_color = *c;
+				gdk_rgba_free (c);
+			}
+			else
+			{
 				if (s_menu_bg_pattern == NULL)
 				{
-					s_menu_bg_color.red = s_menu_bg_color.green = s_menu_bg_color.blue = s_menu_bg_color.alpha = 1.;  // shouldn't happen
+					s_menu_bg_color.alpha = 1.;  // black, but shouldn't happen
 				}
 				else if (g_bUseOpenGL)
 				{
@@ -150,10 +154,23 @@ static void _on_style_changed (G_GNUC_UNUSED GtkStyleContext *_style, gpointer d
 			}
 			cd_debug ("menu color: %.2f;%.2f;%.2f;%.2f; %p", s_menu_bg_color.red, s_menu_bg_color.green, s_menu_bg_color.blue, s_menu_bg_color.alpha, s_menu_bg_pattern);
 			
-			gtk_style_context_remove_class (style, GTK_STYLE_CLASS_MENU);
-			gtk_style_context_remove_class (style, GTK_STYLE_CLASS_BACKGROUND);
+			// get line color
+			c = NULL;
+			gtk_style_context_get (style, GTK_STATE_FLAG_NORMAL, 
+				GTK_STYLE_PROPERTY_BORDER_COLOR, &c,
+				NULL);
+			if (c)
+			{
+				s_menu_line_color = *c;
+				gdk_rgba_free (c);
+			}
+			else
+			{
+				s_menu_line_color.alpha = 1.;
+			}
+			cd_debug ("line color: %.2f;%.2f;%.2f;%.2f", s_menu_line_color.red, s_menu_line_color.green, s_menu_bg_color.blue, s_menu_line_color.alpha);
 			
-			g_object_unref (style);
+			gtk_widget_destroy(pMenu);  // also destroys pMenuItem
 			
 			gboolean bNotify = GPOINTER_TO_INT(data);
 			if (bNotify && ! cairo_dock_is_loading())
@@ -211,13 +228,16 @@ void gldi_style_color_get (GldiStyleColors iColorType, GldiColor *pColor)
 		case GLDI_COLOR_LINE:
 			if (myStyleParam.bUseSystemColors)
 			{
-				if (s_menu_bg_pattern)
-					_get_color_from_pattern (s_menu_bg_pattern, pColor);
+				if (s_menu_line_color.alpha != 0)
+				{
+					pColor->rgba = s_menu_line_color;
+				}
 				else
 				{
-					gldi_style_color_shade (&s_menu_bg_color, -GLDI_COLOR_SHADE_LIGHT, pColor);
+					_get_bg_color (pColor);
+					gldi_style_color_shade (pColor, -GLDI_COLOR_SHADE_LIGHT, pColor);
+					pColor->rgba.alpha = 1.;
 				}
-				pColor->rgba.alpha = 1.;
 			}
 			else
 			{
@@ -312,69 +332,38 @@ void gldi_style_colors_set_selected_bg_color (cairo_t *pCairoContext)
 
 void gldi_style_colors_set_line_color (cairo_t *pCairoContext)
 {
-	if (myStyleParam.bUseSystemColors)
-	{
-		if (pCairoContext)
-		{
-			if (s_menu_bg_pattern)
-				cairo_set_source (pCairoContext, s_menu_bg_pattern);
-			else
-			{
-				GldiColor color;
-				gldi_style_color_shade (&s_menu_bg_color, -GLDI_COLOR_SHADE_LIGHT, &color);
-				cairo_set_source_rgb (pCairoContext, color.rgba.red, color.rgba.green, color.rgba.blue);
-			}
-		}
-		else
-		{
-			GldiColor color;
-			gldi_style_color_shade (&s_menu_bg_color, -GLDI_COLOR_SHADE_LIGHT, &color);
-			glColor3f (color.rgba.red, color.rgba.green, color.rgba.blue);
-		}
-	}
+	GldiColor color;
+	gldi_style_color_get (GLDI_COLOR_LINE, &color);
+	if (pCairoContext)
+		gldi_color_set_cairo (pCairoContext, &color);
 	else
-	{
-		if (pCairoContext)
-			gldi_color_set_cairo (pCairoContext, &myStyleParam.fLineColor);
-		else
-			gldi_color_set_opengl (&myStyleParam.fLineColor);
-	}
+		gldi_color_set_opengl (&color);
 }
 
 void gldi_style_colors_set_text_color (cairo_t *pCairoContext)
 {
-	if (myStyleParam.bUseSystemColors)
-	{
-		if (pCairoContext)
-			cairo_set_source_rgb (pCairoContext, s_text_color.red, s_text_color.green, s_text_color.blue);
-		else
-			glColor3f (s_text_color.red, s_text_color.green, s_text_color.blue);
-	}
+	GldiColor color;
+	gldi_style_color_get (GLDI_COLOR_TEXT, &color);
+	if (pCairoContext)
+		gldi_color_set_cairo (pCairoContext, &color);
 	else
-	{
-		if (pCairoContext)
-			gldi_color_set_cairo_rgb (pCairoContext, &myStyleParam.textDescription.fColorStart);
-		else
-			gldi_color_set_opengl_rgb (&myStyleParam.textDescription.fColorStart);
-	}
+		gldi_color_set_opengl (&color);
 }
 
 void gldi_style_colors_set_separator_color (cairo_t *pCairoContext)
 {
 	GldiColor color;
-	_get_bg_color (&color);
-	gldi_style_color_shade (&color, GLDI_COLOR_SHADE_MEDIUM, &color);
+	gldi_style_color_get (GLDI_COLOR_SEPARATOR, &color);
 	if (pCairoContext)
-		gldi_color_set_cairo_rgb (pCairoContext, &color);  // alpha set to 1
+		gldi_color_set_cairo (pCairoContext, &color);
 	else
-		gldi_color_set_opengl_rgb (&color);
+		gldi_color_set_opengl (&color);
 }
 
 void gldi_style_colors_set_child_color (cairo_t *pCairoContext)
 {
 	GldiColor color;
-	_get_bg_color (&color);
-	gldi_style_color_shade (&color, GLDI_COLOR_SHADE_STRONG, &color);
+	gldi_style_color_get (GLDI_COLOR_CHILD, &color);
 	if (pCairoContext)
 		gldi_color_set_cairo (pCairoContext, &color);
 	else

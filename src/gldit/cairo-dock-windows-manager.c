@@ -311,7 +311,6 @@ gboolean gldi_window_is_on_current_desktop (GldiWindowActor *actor)
 
 gboolean gldi_window_is_on_desktop (GldiWindowActor *pAppli, int iNumDesktop, int iNumViewportX, int iNumViewportY)
 {
-	g_print (" %s: %d\n", pAppli->cName, pAppli->bIsSticky);
 	if (pAppli->bIsSticky || pAppli->iNumDesktop == -1)  // a sticky window is by definition on all desktops/viewports
 		return TRUE;
 	// On calcule les coordonnees en repere absolu.
