@@ -616,9 +616,26 @@ gboolean cairo_dock_fm_monitor_pid (const gchar *cProcessName, gboolean bCheckSa
  /// INIT ///
 ////////////
 
-static inline CairoDockDesktopEnv _guess_environment (void)
+static CairoDockDesktopEnv _guess_environment (void)
 {
-	const gchar * cEnv = g_getenv ("GNOME_DESKTOP_SESSION_ID");  // this value is now deprecated, but has been maintained for compatibility, so let's keep using it (Note: a possible alternative would be to check for org.gnome.SessionManager on Dbus)
+	// first, let's try out with XDG_CURRENT_DESKTOP
+	const gchar *cEnv = g_getenv ("XDG_CURRENT_DESKTOP");
+	if (cEnv != NULL)
+	{
+		if (strstr(cEnv, "GNOME") != NULL)
+			return CAIRO_DOCK_GNOME;
+		else if (strstr(cEnv, "XFCE") != NULL)
+			return CAIRO_DOCK_XFCE;
+		else if (strstr(cEnv, "KDE") != NULL)
+			return CAIRO_DOCK_KDE;
+		else
+		{
+			cd_debug ("couldn't interpret XDG_CURRENT_DESKTOP=%s", cEnv);
+		}
+	}
+	
+	// else, fall back to some old (less reliable) methods
+	cEnv = g_getenv ("GNOME_DESKTOP_SESSION_ID");  // this value is now deprecated, but has been maintained for compatibility, so let's keep using it (Note: a possible alternative would be to check for org.gnome.SessionManager on Dbus)
 	if (cEnv != NULL && *cEnv != '\0')
 		return CAIRO_DOCK_GNOME;
 	
@@ -649,6 +666,11 @@ static inline CairoDockDesktopEnv _guess_environment (void)
 static void init (void)
 {
 	g_iDesktopEnv = _guess_environment ();
+	cd_message ("We found this desktop environment: %s",
+		g_iDesktopEnv == CAIRO_DOCK_GNOME ? "GNOME" :
+		g_iDesktopEnv == CAIRO_DOCK_XFCE ? "XFCE" :
+		g_iDesktopEnv == CAIRO_DOCK_KDE ? "KDE" :
+		"unknown");
 }
 
 
