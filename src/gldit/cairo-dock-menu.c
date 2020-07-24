@@ -691,11 +691,10 @@ static gboolean _draw_menu_item (GtkWidget *widget,
 	gint width = gtk_widget_get_allocated_width (widget);
 	gint height = gtk_widget_get_allocated_height (widget);
 
-	gint x, y, w, h;
+	gint x, y, w;
 	x = border_width;
 	y = border_width;
 	w = width - border_width * 2;
-	h = height - border_width * 2;
 
 	// get the line color of the menu
 	GldiColor rgb;
@@ -746,8 +745,11 @@ GtkWidget *gldi_menu_item_new_full (const gchar *cLabel, const gchar *cImage, gb
 			int size;
 			gtk_icon_size_lookup (iSize, &size, NULL);
 			GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cImage, size, size, NULL);
-			image = gtk_image_new_from_pixbuf (pixbuf);
-			g_object_unref (pixbuf);
+			if (pixbuf)
+			{
+				image = gtk_image_new_from_pixbuf (pixbuf);
+				g_object_unref (pixbuf);
+			}
 		}
 		else if (*cImage != '\0')
 		{
