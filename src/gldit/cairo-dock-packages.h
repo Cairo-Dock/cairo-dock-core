@@ -155,6 +155,8 @@ gchar *cairo_dock_get_url_data_with_post (const gchar *cURL, gboolean bGetOutput
 */
 #define cairo_dock_get_url_data(cURL, erreur) cairo_dock_get_url_data_with_post (cURL, FALSE, erreur, NULL)
 
+gchar *cairo_dock_get_url_data_with_headers (const gchar *cURL, gboolean bGetOutputHeaders, GError **erreur, const gchar *cFirstProperty, ...);
+
 /** Asynchronously retrieve the content of a distant URL. This function is non-blocking, you'll get a CairoTask that you can discard at any time, and you'll get the content of the downloaded file as the first argument of the callback (the second being the data you passed to this function).
 *@param cURL distant adress to get data from.
 *@param pCallback function called when the download is finished. It takes the content of the downloaded file (it belongs to the task so don't free it) and the data you've set here.

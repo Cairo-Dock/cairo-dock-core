@@ -149,7 +149,7 @@ static inline CURL *_init_curl_connection (const gchar *cURL)
 	curl_easy_setopt (handle, CURLOPT_CONNECTTIMEOUT, myConnectionParam.iConnectionTimeout);
 	curl_easy_setopt (handle, CURLOPT_NOSIGNAL, 1);  // With CURLOPT_NOSIGNAL set non-zero, curl will not use any signals; sinon curl se vautre apres le timeout, meme si le download s'est bien passe !
 	curl_easy_setopt (handle, CURLOPT_FOLLOWLOCATION , 1);  // follow redirection
-	curl_easy_setopt (handle, CURLOPT_USERAGENT , "a/5.0 (X11; Linux x86_64; rv:2.0b11) Gecko/20100101 Firefox/4.0b11");
+	///curl_easy_setopt (handle, CURLOPT_USERAGENT , "a/5.0 (X11; Linux x86_64; rv:2.0b11) Gecko/20100101 Firefox/4.0b11");
 	return handle;
 }
 
@@ -320,7 +320,7 @@ gchar *cairo_dock_get_url_data_with_post (const gchar *cURL, gboolean bGetOutput
 			cData = va_arg (args, gchar *);
 			if (!cData)
 				break;
-				if (cEncodedData != NULL)  // we don't access the pointer, we just want to know if we have already looped once or not.
+			if (cEncodedData != NULL)  // we don't access the pointer, we just want to know if we have already looped once or not.
 				g_string_append_c (sPostData, '&');
 			cEncodedData = curl_easy_escape (handle, cData, 0);
 			g_string_append_printf (sPostData, "%s=%s", cProperty, cEncodedData);
@@ -364,6 +364,67 @@ gchar *cairo_dock_get_url_data_with_post (const gchar *cURL, gboolean bGetOutput
 	return cContent;
 }
 
+gchar *cairo_dock_get_url_data_with_headers (const gchar *cURL, gboolean bGetOutputHeaders, GError **erreur, const gchar *cFirstProperty, ...)
+{
+	//\_______________ init a CURL context
+	cd_debug ("getting data from '%s' ...", cURL);
+	CURL *handle = _init_curl_connection (cURL);
+	
+	//\_______________ set the custom headers
+	struct curl_slist *headers = NULL;
+	if (cFirstProperty != NULL)
+	{
+		const gchar *cProperty = cFirstProperty;
+		gchar *cData;
+		va_list args;
+		va_start (args, cFirstProperty);
+		do
+		{
+			cData = va_arg (args, gchar *);
+			if (!cData)
+				break;
+			
+			gchar *header = g_strdup_printf ("%s: %s", cProperty, cData);
+			headers = curl_slist_append (headers, header);
+			g_free (header);
+			cProperty = va_arg (args, gchar *);
+		}
+		while (cProperty != NULL);
+		va_end (args);
+		curl_easy_setopt (handle, CURLOPT_HTTPHEADER, headers);
+	}
+	
+	//\_______________ set the callback
+	if (bGetOutputHeaders)
+		curl_easy_setopt (handle, CURLOPT_HEADER, 1);
+	
+	curl_easy_setopt (handle, CURLOPT_WRITEFUNCTION, (curl_write_callback)_write_data_to_buffer);
+	GString *buffer = g_string_sized_new (1024);
+	curl_easy_setopt (handle, CURLOPT_WRITEDATA, buffer);
+	
+	//\_______________ perform the request
+	CURLcode r = curl_easy_perform (handle);
+	
+	if (r != CURLE_OK)
+	{
+		g_set_error (erreur, 1, 1, "Couldn't download file '%s' (%s)", cURL, curl_easy_strerror (r));
+		g_string_free (buffer, TRUE);
+		buffer = NULL;
+	}
+	
+	curl_slist_free_all (headers);
+	curl_easy_cleanup (handle);
+	
+	//\_______________ On recupere les donnees.
+	gchar *cContent = NULL;
+	if (buffer != NULL)
+	{
+		cContent = buffer->str;
+		g_string_free (buffer, FALSE);
+	}
+	
+	return cContent;
+}
 
 static void _dl_file_content (gpointer *pSharedMemory)
 {
