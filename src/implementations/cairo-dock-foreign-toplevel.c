@@ -26,6 +26,7 @@
 #include <gdk/gdkwayland.h>
 #include "wlr-foreign-toplevel-management-unstable-v1-client-protocol.h"
 #include "cairo-dock-windows-manager.h"
+#include "cairo-dock-desktop-manager.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-utils.h"
@@ -221,7 +222,9 @@ static void _new_toplevel ( G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct zwlr_
 	actor->bIsMaximized = bIsMaximized;
 	actor->bIsFullScreen = bIsFullScreen;
 	actor->bDemandsAttention = bDemandsAttention;
-	// hack required for minimize on click to work -- it messes up hiding the dock though
+	// hack required for minimize on click to work -- "pretend" that the window is in the middle of the screen
+	actor->windowGeometry.x = cairo_dock_get_screen_width (0) / 2;
+	actor->windowGeometry.y = cairo_dock_get_screen_height (0) / 2;
 	actor->windowGeometry.width = 1;
 	actor->windowGeometry.height = 1;
 	
