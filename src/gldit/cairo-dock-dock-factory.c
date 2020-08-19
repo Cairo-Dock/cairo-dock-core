@@ -80,6 +80,8 @@ static void cairo_dock_stop_icon_glide (CairoDock *pDock);
 
 static gboolean _mouse_is_really_outside (CairoDock *pDock)
 {
+	if (gldi_container_is_wayland_backend ())
+		return pDock->iMousePositionType == CAIRO_DOCK_MOUSE_OUTSIDE;
 	int x1, x2, y1, y2;
 	if (pDock->iInputState == CAIRO_DOCK_INPUT_ACTIVE)
 	{
@@ -502,7 +504,7 @@ static gboolean _hide_child_docks (CairoDock *pDock)
 
 static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	//g_print ("%s (bInside:%d; iState:%d; iRefCount:%d)\n", __func__, pDock->container.bInside, pDock->iInputState, pDock->iRefCount);
+	// g_print ("%s (bIsMainDock : %d; bInside:%d; iState:%d; iRefCount:%d, pEvent: %p)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iRefCount, pEvent);
 	//\_______________ On tire le dock => on ignore le signal.
 	if (pEvent != NULL && (pEvent->state & GDK_MOD1_MASK) && (pEvent->state & GDK_BUTTON1_MASK))
 	{
@@ -529,6 +531,11 @@ static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 	{
 		//g_print (" forced leave event: %d;%d\n", pDock->container.iMouseX, pDock->container.iMouseY);
 	}
+
+	/// no global mouse position on Wayland, the below check and later checks for mouse position will not work
+	if (gldi_container_is_wayland_backend () && pEvent)
+		pDock->iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
+
 	if (/**pEvent && */!_mouse_is_really_outside(pDock))  // check that the mouse is really outside (the request might not come from the Window Manager, for instance if we deactivate the menu; this also works around buggy WM like KWin).
 	{
 		//g_print (" not really outside (%d;%d ; %d/%d)\n", pDock->container.iMouseX, pDock->container.iMouseY, pDock->iMaxDockHeight, pDock->iMinDockHeight);
@@ -674,15 +681,27 @@ static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 	return TRUE;
 }
 
+static gboolean _on_dock_unmap (GtkWidget* pWidget, G_GNUC_UNUSED GdkEvent* pEvent, CairoDock *pDock)
+{
+	// this event is only necessary on Wayland
+	// g_print ("_on_dock_unmap() for dock: %p (bIsMainDock : %d; bInside:%d)\n", pDock, pDock->bIsMainDock, pDock->container.bInside);
+	pDock->iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
+	_on_leave_notify (pWidget, NULL, pDock);
+	return FALSE;
+}
+
 static gboolean _on_enter_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	//g_print ("%s (bIsMainDock : %d; bInside:%d; state:%d; iMagnitudeIndex:%d; input shape:%p; event:%p)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iMagnitudeIndex, pDock->pShapeBitmap, pEvent);
+	// g_print ("%s (bIsMainDock : %d; bInside:%d; state:%d; iMagnitudeIndex:%d; input shape:%p; event:%p)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iMagnitudeIndex, pDock->pShapeBitmap, pEvent);
 	if (! cairo_dock_entrance_is_allowed (pDock))
 	{
 		cd_message ("* entree non autorisee");
 		return FALSE;
 	}
 	
+	if (gldi_container_is_wayland_backend ())
+		pDock->iMousePositionType = CAIRO_DOCK_MOUSE_INSIDE;
+
 	// stop les timers.
 	if (pDock->iSidLeaveDemand != 0)
 	{
@@ -2228,6 +2247,12 @@ void gldi_dock_init_internals (CairoDock *pDock)
 		"drag-drop",
 		G_CALLBACK (_on_drag_drop),
 		pDock);*/
+	// connect unmap signal -- on Wayland, the compositor might close the dock at any time
+	if (gldi_container_is_wayland_backend ())
+		g_signal_connect (G_OBJECT (pWindow),
+			"unmap-event",
+			G_CALLBACK (_on_dock_unmap),
+			pDock);
 	
 	gtk_widget_show_all (pDock->container.pWidget);
 }

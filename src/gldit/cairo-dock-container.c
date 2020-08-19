@@ -98,6 +98,12 @@ inline void gldi_display_get_pointer (int *xptr, int *yptr)
 
 inline void gldi_container_update_mouse_position (GldiContainer *pContainer)
 {
+	if (gldi_container_is_wayland_backend())
+	{
+		// this seems to not work at all on Wayland and other parts of
+		// the code will expect us not to mess with the positions
+		return;
+	}
 	#if GTK_CHECK_VERSION (3, 20, 0)
 	GdkSeat *pSeat = gdk_display_get_default_seat (gdk_display_get_default());
 	GdkDevice *pDevice = gdk_seat_get_pointer (pSeat);
