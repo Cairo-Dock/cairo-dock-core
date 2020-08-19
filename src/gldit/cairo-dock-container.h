@@ -226,8 +226,11 @@ void cairo_dock_disable_containers_opacity (void);
 
 #define gldi_container_is_visible(pContainer) gtk_widget_get_visible ((pContainer)->pWidget)
 
+
 void gldi_display_get_pointer (int *xptr, int *yptr);
 
+/* NOTE: this does nothing on Wayland (no global mouse position, we need
+ * to rely on the motion notify and leave / enter events) */
 void gldi_container_update_mouse_position (GldiContainer *pContainer);
 
 
