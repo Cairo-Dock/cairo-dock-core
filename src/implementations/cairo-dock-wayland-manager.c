@@ -187,7 +187,6 @@ static void init (void)
 	while (s_bInitializing);
 	
 	gldi_register_egl_backend ();
-	gldi_zwlr_foreign_toplevel_manager_init();
 }
 
 void gldi_register_wayland_manager (void)

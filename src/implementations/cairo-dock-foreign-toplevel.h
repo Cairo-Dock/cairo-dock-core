@@ -28,7 +28,6 @@
 #include <stdint.h>
 
 gboolean gldi_zwlr_foreign_toplevel_manager_try_bind (struct wl_registry *registry, uint32_t id, const char *interface, uint32_t version);
-void gldi_zwlr_foreign_toplevel_manager_init ();
 
 #endif
 
