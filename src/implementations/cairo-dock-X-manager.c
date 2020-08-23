@@ -960,13 +960,13 @@ static void _set_above (GldiWindowActor *actor, gboolean bAbove)
 	cairo_dock_set_xwindow_above (xactor->Xid, bAbove);
 }
 
-static void _set_minimize_position (GldiWindowActor *actor, int x, int y)
+static void _set_minimize_position (GldiWindowActor *actor, G_GNUC_UNUSED GtkWidget* pContainerWidget, int x, int y)
 {
 	GldiXWindowActor *xactor = (GldiXWindowActor *)actor;
 	cairo_dock_set_xicon_geometry (xactor->Xid, x, y, 1, 1);
 }
 
-static void _set_thumbnail_area (GldiWindowActor *actor, int x, int y, int w, int h)
+static void _set_thumbnail_area (GldiWindowActor *actor, G_GNUC_UNUSED GtkWidget* pContainerWidget, int x, int y, int w, int h)
 {
 	GldiXWindowActor *xactor = (GldiXWindowActor *)actor;
 	cairo_dock_set_xicon_geometry (xactor->Xid, x, y, w, h);

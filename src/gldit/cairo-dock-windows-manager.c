@@ -176,18 +176,18 @@ void gldi_window_set_above (GldiWindowActor *actor, gboolean bAbove)
 		s_backend.set_above (actor, bAbove);
 }
 
-void gldi_window_set_minimize_position (GldiWindowActor *actor, int x, int y)
+void gldi_window_set_minimize_position (GldiWindowActor *actor, GtkWidget* pContainerWidget, int x, int y)
 {
 	g_return_if_fail (actor != NULL);
 	if (s_backend.set_minimize_position)
-		s_backend.set_minimize_position (actor, x, y);
+		s_backend.set_minimize_position (actor, pContainerWidget, x, y);
 }
 
-void gldi_window_set_thumbnail_area (GldiWindowActor *actor, int x, int y, int w, int h)
+void gldi_window_set_thumbnail_area (GldiWindowActor *actor, GtkWidget* pContainerWidget, int x, int y, int w, int h)
 {
 	g_return_if_fail (actor != NULL);
 	if (s_backend.set_thumbnail_area)
-		s_backend.set_thumbnail_area (actor, x, y, w, h);
+		s_backend.set_thumbnail_area (actor, pContainerWidget, x, y, w, h);
 }
 
 GldiWindowActor *gldi_windows_get_active (void)

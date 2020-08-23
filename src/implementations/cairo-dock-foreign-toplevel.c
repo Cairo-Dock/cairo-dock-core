@@ -90,6 +90,35 @@ static void _can_minimize_maximize_close ( G_GNUC_UNUSED GldiWindowActor *actor,
 	*bCanClose = TRUE;
 }
 
+/// TODO: which one of these two are really used? In cairo-dock-X-manager.c,
+/// they seem to do the same thing
+static void _set_minimize_position (GldiWindowActor *actor, GtkWidget* pContainerWidget, int x, int y)
+{
+	if ( ! (actor && pContainerWidget) ) return;
+	if ( x < 0 || y < 0 ) return;
+	GldiWFTWindowActor *wactor = (GldiWFTWindowActor *)actor;
+	GdkWindow* window = gtk_widget_get_window (pContainerWidget);
+	if (!window) return;
+	struct wl_surface* surface = gdk_wayland_window_get_wl_surface (window);
+	if (!surface) return;
+	
+	zwlr_foreign_toplevel_handle_v1_set_rectangle(wactor->handle, surface, x, y, 1, 1);
+}
+
+static void _set_thumbnail_area (GldiWindowActor *actor, GtkWidget* pContainerWidget, int x, int y, int w, int h)
+{
+	if ( ! (actor && pContainerWidget) ) return;
+	if ( x < 0 || y < 0 || w < 0 || h < 0 ) return;
+	GldiWFTWindowActor *wactor = (GldiWFTWindowActor *)actor;
+	GdkWindow* window = gtk_widget_get_window (pContainerWidget);
+	if (!window) return;
+	struct wl_surface* surface = gdk_wayland_window_get_wl_surface (window);
+	if (!surface) return;
+	
+	zwlr_foreign_toplevel_handle_v1_set_rectangle(wactor->handle, surface, x, y, w, h);
+}
+
+
 
 // callbacks 
 void _gldi_toplevel_title_cb (void *data, G_GNUC_UNUSED wfthandle *handle, const char *title)
@@ -265,8 +294,8 @@ static void gldi_zwlr_foreign_toplevel_manager_init ()
 	wmb.maximize = _maximize;
 	// wmb.set_fullscreen = _set_fullscreen;
 	// wmb.set_above = _set_above;
-	// wmb.set_minimize_position = _set_minimize_position;
-	// wmb.set_thumbnail_area = _set_thumbnail_area;
+	wmb.set_minimize_position = _set_minimize_position;
+	wmb.set_thumbnail_area = _set_thumbnail_area;
 	// wmb.set_window_border = _set_window_border;
 	// wmb.get_icon_surface = _get_icon_surface;
 	// wmb.get_thumbnail_surface = _get_thumbnail_surface;
@@ -275,7 +304,7 @@ static void gldi_zwlr_foreign_toplevel_manager_init ()
 	// wmb.is_above_or_below = _is_above_or_below;
 	// wmb.is_sticky = _is_sticky;
 	// wmb.set_sticky = _set_sticky;
-	// wmb.can_minimize_maximize_close = _can_minimize_maximize_close;
+	wmb.can_minimize_maximize_close = _can_minimize_maximize_close;
 	// wmb.get_id = _get_id;
 	// wmb.pick_window = _pick_window;
 	gldi_windows_manager_register_backend (&wmb);
