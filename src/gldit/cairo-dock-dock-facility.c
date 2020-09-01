@@ -1077,6 +1077,13 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 			gtk_widget_queue_draw (pParentDock->container.pWidget);
 		}
 	}
+	if (g_bUseOpenGL)
+	{
+		// note: this is a no-op on X11, only needed on Wayland + EGL
+		if (pSubDock->container.bIsHorizontal)
+			gldi_gl_container_resized (CAIRO_CONTAINER (pSubDock), iNewWidth, iNewHeight);
+		else gldi_gl_container_resized (CAIRO_CONTAINER (pSubDock), iNewHeight, iNewWidth);
+	}
 	
 	// note: when using gtk-layer-shell (the parent dock is layer surface),
 	// showing the window has to happen after (relative) positioning

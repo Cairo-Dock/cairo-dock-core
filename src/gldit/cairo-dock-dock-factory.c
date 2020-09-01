@@ -1169,6 +1169,8 @@ static gboolean _on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, Ca
 		// update the GL context
 		if (g_bUseOpenGL)
 		{
+			if (bSizeUpdated) gldi_gl_container_resized (CAIRO_CONTAINER (pDock), pEvent->width, pEvent->height);
+			
 			if (! gldi_gl_container_make_current (CAIRO_CONTAINER (pDock)))
 				return FALSE;
 			

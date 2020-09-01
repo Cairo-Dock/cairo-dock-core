@@ -15,6 +15,8 @@ SET(impl_SRCS
 	cairo-dock-X-utilities.c             cairo-dock-X-utilities.h
 	cairo-dock-glx.c                     cairo-dock-glx.h
 	cairo-dock-egl.c                     cairo-dock-egl.h
+	cairo-dock-egl-X.c
+	cairo-dock-egl-wayland.c
 	cairo-dock-wayland-manager.c         cairo-dock-wayland-manager.h
 )
 #if ("${HAVE_X11}")

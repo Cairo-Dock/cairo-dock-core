@@ -101,8 +101,25 @@ set (packages_required "glib-2.0 gthread-2.0 cairo librsvg-2.0 dbus-1 dbus-glib-
 STRING (REGEX REPLACE " " ";" packages_required_semicolon ${packages_required})  # replace blank space by semicolon => to have more details if a package is missing
 pkg_check_modules ("PACKAGE" REQUIRED "${packages_required_semicolon}")
 
+# check for Wayland
+set (with_wayland no)
+enable_if_not_defined (enable-wayland-support) # enabled by default
+if (enable-wayland-support)
+	set (wayland_required "wayland-client")  # for the .pc
+	pkg_check_modules ("WAYLAND" ${wayland_required}>=1.0.0)
+	if (WAYLAND_FOUND)
+		set (HAVE_WAYLAND 1)
+		set (with_wayland "yes (${WAYLAND_VERSION})")
+	else()
+		set (wayland_required)
+	endif()
+endif()
+
 # check for EGL
 set (with_egl no)  # although EGL can be used with X (replacing GLX), it requires drivers that support DRI2, so most of the time GLX works better; so it's disabled by default for now; later, it will be required for Wayland, and we'll have to decide whether we compile with both, or whether we load one of them as a plug-in at run-time. It may depend on EGL having been built to support a given graphic target.
+if (HAVE_WAYLAND)
+	enable_if_not_defined (enable-egl-support) # enabled by default if compiling for Wayland
+endif()
 if (enable-egl-support)
 	pkg_check_modules ("EGL" "egl")
 	if (EGL_FOUND)
@@ -146,20 +163,6 @@ if (enable-x11-support)
 		endif()
 	else()
 		set (xextend_required)
-	endif()
-endif()
-
-# check for Wayland
-set (with_wayland no)
-enable_if_not_defined (enable-wayland-support) # enabled by default
-if (enable-wayland-support)
-	set (wayland_required "wayland-client")  # for the .pc
-	pkg_check_modules ("WAYLAND" ${wayland_required}>=1.0.0)
-	if (WAYLAND_FOUND)
-		set (HAVE_WAYLAND 1)
-		set (with_wayland "yes (${WAYLAND_VERSION})")
-	else()
-		set (wayland_required)
 	endif()
 endif()
 
