@@ -336,6 +336,14 @@ void gldi_container_present (GldiContainer *pContainer)
 		s_backend.present (pContainer);
 }
 
+void gldi_container_set_input_shape(GldiContainer *pContainer, cairo_region_t *pShape)
+{
+	gtk_widget_input_shape_combine_region ((pContainer)->pWidget, pShape);
+	if (s_backend.set_input_shape)
+		s_backend.set_input_shape (pContainer, pShape);
+}
+	
+
 void gldi_container_manager_register_backend (GldiContainerManagerBackend *pBackend)
 {
 	gpointer *ptr = (gpointer*)&s_backend;

@@ -455,7 +455,7 @@ static gboolean _move_resize_dock (CairoDock *pDock)
 	 * themselves (remove + insert of one icon). We need 2 configure otherwise
 	 * the size will be blocked to the value of the first 'configure'
 	 */
-	//g_print (" -> %dx%d, %d;%d\n", iNewWidth, iNewHeight, iNewPositionX, iNewPositionY);
+	// g_print (" -> %dx%d (%dx%d), %d;%d\n", iNewWidth, iNewHeight, pDock->container.iWidth, pDock->container.iHeight, iNewPositionX, iNewPositionY);
 
 	if (pDock->container.bIsHorizontal)
 	{
@@ -468,6 +468,7 @@ static gboolean _move_resize_dock (CairoDock *pDock)
 		 * disturbed and it will block the draw of the dock. It seems Compiz
 		 * sends too much 'configure' compare to Metacity. 
 		 */
+		if (g_bUseOpenGL) gldi_gl_container_resized (CAIRO_CONTAINER (pDock), iNewWidth, iNewHeight);
 	}
 	else
 	{
@@ -476,6 +477,7 @@ static gboolean _move_resize_dock (CairoDock *pDock)
 			iNewPositionX,
 			iNewHeight,
 			iNewWidth);
+		if (g_bUseOpenGL) gldi_gl_container_resized (CAIRO_CONTAINER (pDock), iNewHeight, iNewWidth);
 	}
 	pDock->iSidMoveResize = 0;
 	return FALSE;
@@ -1053,6 +1055,7 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 			iNewPositionY,
 			iNewWidth,
 			iNewHeight);
+		if (g_bUseOpenGL) gldi_gl_container_resized (CAIRO_CONTAINER (pSubDock), iNewWidth, iNewHeight);
 	}
 	else
 	{
@@ -1061,6 +1064,7 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 			iNewPositionX,
 			iNewHeight,
 			iNewWidth);
+		if (g_bUseOpenGL) gldi_gl_container_resized (CAIRO_CONTAINER (pSubDock), iNewHeight, iNewWidth);
 		/* in this case, the sub-dock is over the label, so this one is drawn
 		 * with a low transparency, so we trigger the redraw.
 		 */

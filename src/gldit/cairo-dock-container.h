@@ -27,6 +27,9 @@
 #endif
 #ifdef HAVE_EGL
 #include <EGL/egl.h>  // EGLContext, EGLSurface
+#ifdef HAVE_WAYLAND
+#include <wayland-egl.h> // wl_egl_window
+#endif
 #endif
 #include "cairo-dock-struct.h"
 #include "cairo-dock-manager.h"
@@ -162,7 +165,14 @@ struct _GldiContainer {
 	GldiContainerInterface iface;
 	
 	gboolean bIgnoreNextReleaseEvent;
-	gpointer reserved[4];
+	
+	#if defined(HAVE_EGL) && defined(HAVE_WAYLAND)
+	struct wl_egl_window* eglwindow;
+	#else
+	void* unused2;
+	#endif
+	
+	gpointer reserved[3];
 };
 
 
@@ -173,6 +183,8 @@ struct _GldiContainerManagerBackend {
 	void (*move) (GldiContainer *pContainer, int iNumDesktop, int iAbsolutePositionX, int iAbsolutePositionY);
 	gboolean (*is_active) (GldiContainer *pContainer);
 	void (*present) (GldiContainer *pContainer);
+	/// set input shape on a window (Wayland + EGL needs special treatment)
+	void (*set_input_shape) (GldiContainer *pContainer, cairo_region_t *pShape);
 };
 
 
@@ -314,8 +326,7 @@ GtkWidget *gldi_container_build_menu (GldiContainer *pContainer, Icon *icon);
 cairo_region_t *gldi_container_create_input_shape (GldiContainer *pContainer, int x, int y, int w, int h);
 
 // Note: if gdkwindow->shape == NULL, setting a NULL shape will do nothing
-#define gldi_container_set_input_shape(pContainer, pShape) \
-gtk_widget_input_shape_combine_region ((pContainer)->pWidget, pShape)
+void gldi_container_set_input_shape(GldiContainer *pContainer, cairo_region_t *pShape);
 
 
 void gldi_register_containers_manager (void);

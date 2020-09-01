@@ -57,6 +57,7 @@ struct _GldiGLManagerBackend {
 	void (*container_end_draw) (GldiContainer *pContainer);
 	void (*container_init) (GldiContainer *pContainer);
 	void (*container_finish) (GldiContainer *pContainer);
+	void (*container_resized) (GldiContainer *pContainer, int iWidth, int iHeight);
 };
 	
 
@@ -131,6 +132,12 @@ void gldi_gl_container_set_ortho_view_for_icon (Icon *pIcon);
 *@param pContainer the container, not yet realized.
 */
 void gldi_gl_container_init (GldiContainer *pContainer);
+
+/** Should be called when the window is resized so that the
+ *  associated EGL surface can be resized -- needed on Wayland,
+ * 	pContainer->iWidth and iHeight should be set to the desired
+ *  new size */
+void gldi_gl_container_resized (GldiContainer *pContainer, int iWidth, int iHeight);
 
 void gldi_gl_container_finish (GldiContainer *pContainer);
 

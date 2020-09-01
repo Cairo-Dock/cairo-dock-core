@@ -362,6 +362,12 @@ void gldi_gl_container_init (GldiContainer *pContainer)
 		pContainer);
 }
 
+void gldi_gl_container_resized (GldiContainer *pContainer, int iWidth, int iHeight)
+{
+	if (g_bUseOpenGL && s_backend.container_resized)
+		s_backend.container_resized (pContainer, iWidth, iHeight);
+}
+
 void gldi_gl_container_finish (GldiContainer *pContainer)
 {
 	if (g_bUseOpenGL && s_backend.container_finish)

@@ -29,6 +29,21 @@ G_BEGIN_DECLS
 
 void gldi_register_egl_backend (void);
 
+#ifdef HAVE_EGL
+#include <gdk/gdk.h>
+#include <gtk/gtk.h>
+#include <EGL/egl.h>
+
+/* backend-specific code to get the proper EGLDisplay */
+EGLDisplay* egl_get_display_x11(GdkDisplay* dsp);
+EGLDisplay* egl_get_display_wayland(GdkDisplay* dsp);
+
+void egl_init_surface_X11 (GldiContainer *pContainer, EGLDisplay* dpy, EGLConfig conf);
+void egl_init_surface_wayland (GldiContainer *pContainer, EGLDisplay* dpy, EGLConfig conf);
+
+void egl_window_resize_wayland (GldiContainer* pContainer, int iWidth, int iHeight);
 
 G_END_DECLS
 #endif
+#endif
+
