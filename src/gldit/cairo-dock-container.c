@@ -562,6 +562,14 @@ void gldi_container_set_keep_below (GldiContainer *pContainer, gboolean bKeepBel
 		s_backend.set_keep_below (pContainer, bKeepBelow);
 }
 
+void gldi_container_set_input_shape(GldiContainer *pContainer, cairo_region_t *pShape)
+{
+	gtk_widget_input_shape_combine_region ((pContainer)->pWidget, pShape);
+	if (s_backend.set_input_shape)
+		s_backend.set_input_shape (pContainer, pShape);
+}
+
+
 void gldi_container_manager_register_backend (GldiContainerManagerBackend *pBackend)
 {
 	gpointer *ptr = (gpointer*)&s_backend;
