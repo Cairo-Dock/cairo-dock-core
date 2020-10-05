@@ -46,6 +46,10 @@ struct _GldiWFTWindowActor {
 	// foreign-toplevel specific
 	// handle to toplevel object
 	wfthandle *handle;
+	// store parent handle, if supplied
+	// NOTE: windows with parent are ignored (not shown in the taskbar)
+	wfthandle *parent;
+	gboolean init_done;
 };
 typedef struct _GldiWFTWindowActor GldiWFTWindowActor;
 
@@ -127,7 +131,7 @@ void _gldi_toplevel_title_cb (void *data, G_GNUC_UNUSED wfthandle *handle, const
 	GldiWindowActor* actor = (GldiWindowActor*)wactor;
 	g_free (actor->cName);
 	actor->cName = g_strdup ((gchar *)title);
-	if (actor->cClass) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_NAME_CHANGED, actor);
+	if (wactor->init_done && !wactor->parent) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_NAME_CHANGED, actor);
 }
 
 void _gldi_toplevel_appid_cb (void *data, G_GNUC_UNUSED wfthandle *handle, const char *app_id)
@@ -140,16 +144,13 @@ void _gldi_toplevel_appid_cb (void *data, G_GNUC_UNUSED wfthandle *handle, const
 	{
 		char* cOldClass = actor->cClass;
 		actor->cClass = g_strdup ((gchar *)app_id);
-		if (!cOldClass)
+		if (cOldClass)
 		{
-			actor->bDisplayed = TRUE;
-			gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_CREATED, actor);
-		}
-		else
-		{
-			gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_CLASS_CHANGED, actor, cOldClass, NULL);
 			g_free (cOldClass);
 		}
+		if (actor->cClass && !wactor->parent) actor->bDisplayed = TRUE;
+		else actor->bDisplayed = FALSE;
+		if (wactor->init_done && !wactor->parent) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_CLASS_CHANGED, actor, cOldClass, NULL);
 	}
 }
 
@@ -182,7 +183,7 @@ void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED wfthandle *handle, struc
 	if (activated)
 	{
 		s_pActiveWindow = actor;
-		if (actor->cClass) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ACTIVATED, actor);
+		if (wactor->init_done && !wactor->parent) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ACTIVATED, actor);
 	}
 	gboolean bHiddenChanged     = (minimized != actor->bIsHidden);
 	gboolean bMaximizedChanged  = (maximized != actor->bIsMaximized);
@@ -191,22 +192,54 @@ void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED wfthandle *handle, struc
 	actor->bIsMaximized  = maximized;
 					
 	if (bHiddenChanged || bMaximizedChanged)
-		if (actor->cClass) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_STATE_CHANGED, actor, bHiddenChanged, bMaximizedChanged, bFullScreenChanged);
+		if (wactor->init_done && !wactor->parent) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_STATE_CHANGED, actor, bHiddenChanged, bMaximizedChanged, bFullScreenChanged);
 }
 
-void _gldi_toplevel_done_cb ( G_GNUC_UNUSED void *data, G_GNUC_UNUSED wfthandle *handle)
+void _gldi_toplevel_done_cb ( void *data, G_GNUC_UNUSED wfthandle *handle)
 {
-	
+	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
+	GldiWindowActor* actor = (GldiWindowActor*)wactor;
+	gboolean created = FALSE;
+	if (!wactor->init_done)
+	{
+		wactor->init_done = TRUE;
+		created = TRUE;
+		if (!wactor->parent)
+		{
+			gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_CREATED, actor);
+		}
+	}
 }
 
 void _gldi_toplevel_closed_cb (void *data, G_GNUC_UNUSED wfthandle *handle)
 {
 	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
 	GldiWindowActor* actor = (GldiWindowActor*)wactor;
-	if (actor->cClass) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESTROYED, actor);
+	if (wactor->init_done && !wactor->parent) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESTROYED, actor);
 	gldi_object_unref (GLDI_OBJECT(actor));
 }
 
+void _gldi_toplevel_parent_cb (void* data, wfthandle *handle, wfthandle *parent)
+{
+	// fprintf(stderr,"Parent for toplevel: %p -> %p\n", handle, parent);
+	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
+	GldiWindowActor* actor = (GldiWindowActor*)wactor;
+	if (parent) {
+		actor->bDisplayed = FALSE;
+		if (!wactor->parent && wactor->init_done)
+		{
+			gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESTROYED, actor);
+		}
+	}
+	else {
+		if (actor->cClass) actor->bDisplayed = TRUE;
+		if (wactor->parent && wactor->init_done)
+		{
+			gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_CREATED, actor);
+		}
+	}
+	wactor->parent = parent;
+}
 
 struct zwlr_foreign_toplevel_handle_v1_listener gldi_toplevel_handle_interface = {
     .title        = _gldi_toplevel_title_cb,
@@ -215,7 +248,8 @@ struct zwlr_foreign_toplevel_handle_v1_listener gldi_toplevel_handle_interface =
     .output_leave = _gldi_toplevel_output_leave_cb,
     .state        = _gldi_toplevel_state_cb,
     .done         = _gldi_toplevel_done_cb,
-    .closed       = _gldi_toplevel_closed_cb 
+    .closed       = _gldi_toplevel_closed_cb,
+    .parent       = _gldi_toplevel_parent_cb
 };
 
 
@@ -227,6 +261,8 @@ static void init_object (GldiObject *obj, gpointer attr)
 {
 	GldiWFTWindowActor* actor = (GldiWFTWindowActor*)obj;
 	actor->handle = (wfthandle*)attr;
+	actor->parent = NULL;
+	actor->init_done = FALSE;
 }
 
 static void reset_object (GldiObject* obj)
@@ -239,6 +275,8 @@ static void reset_object (GldiObject* obj)
 static void _new_toplevel ( G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct zwlr_foreign_toplevel_manager_v1 *manager,
 	wfthandle *handle)
 {
+	// fprintf(stderr,"New toplevel: %p\n", handle);
+	
 	gboolean bIsHidden = FALSE, bIsFullScreen = FALSE, bIsMaximized = FALSE, bDemandsAttention = FALSE;
 	
 	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)gldi_object_new (&myWFTObjectMgr, handle);

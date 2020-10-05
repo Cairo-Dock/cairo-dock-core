@@ -226,7 +226,16 @@ enum zwlr_foreign_toplevel_handle_v1_state {
 	 * the toplevel is active
 	 */
 	ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_STATE_ACTIVATED = 2,
+	/**
+	 * the toplevel is fullscreen
+	 * @since 2
+	 */
+	ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_STATE_FULLSCREEN = 3,
 };
+/**
+ * @ingroup iface_zwlr_foreign_toplevel_handle_v1
+ */
+#define ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_STATE_FULLSCREEN_SINCE_VERSION 2
 #endif /* ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_STATE_ENUM */
 
 #ifndef ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_ERROR_ENUM
@@ -316,6 +325,16 @@ struct zwlr_foreign_toplevel_handle_v1_listener {
 	 */
 	void (*closed)(void *data,
 		       struct zwlr_foreign_toplevel_handle_v1 *zwlr_foreign_toplevel_handle_v1);
+	/**
+	 * parent change
+	 *
+	 * This event is emitted whenever the parent of the toplevel
+	 * changes.
+	 * @since 3
+	 */
+	void (*parent)(void *data,
+		       struct zwlr_foreign_toplevel_handle_v1 *zwlr_foreign_toplevel_handle_v1,
+		       struct zwlr_foreign_toplevel_handle_v1 *parent);
 };
 
 /**
@@ -337,6 +356,8 @@ zwlr_foreign_toplevel_handle_v1_add_listener(struct zwlr_foreign_toplevel_handle
 #define ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_CLOSE 5
 #define ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_SET_RECTANGLE 6
 #define ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_DESTROY 7
+#define ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_SET_FULLSCREEN 8
+#define ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_UNSET_FULLSCREEN 9
 
 /**
  * @ingroup iface_zwlr_foreign_toplevel_handle_v1
@@ -366,6 +387,10 @@ zwlr_foreign_toplevel_handle_v1_add_listener(struct zwlr_foreign_toplevel_handle
  * @ingroup iface_zwlr_foreign_toplevel_handle_v1
  */
 #define ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_CLOSED_SINCE_VERSION 1
+/**
+ * @ingroup iface_zwlr_foreign_toplevel_handle_v1
+ */
+#define ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_PARENT_SINCE_VERSION 3
 
 /**
  * @ingroup iface_zwlr_foreign_toplevel_handle_v1
@@ -399,6 +424,14 @@ zwlr_foreign_toplevel_handle_v1_add_listener(struct zwlr_foreign_toplevel_handle
  * @ingroup iface_zwlr_foreign_toplevel_handle_v1
  */
 #define ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_DESTROY_SINCE_VERSION 1
+/**
+ * @ingroup iface_zwlr_foreign_toplevel_handle_v1
+ */
+#define ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_SET_FULLSCREEN_SINCE_VERSION 2
+/**
+ * @ingroup iface_zwlr_foreign_toplevel_handle_v1
+ */
+#define ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_UNSET_FULLSCREEN_SINCE_VERSION 2
 
 /** @ingroup iface_zwlr_foreign_toplevel_handle_v1 */
 static inline void
@@ -540,6 +573,38 @@ zwlr_foreign_toplevel_handle_v1_destroy(struct zwlr_foreign_toplevel_handle_v1 *
 			 ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_DESTROY);
 
 	wl_proxy_destroy((struct wl_proxy *) zwlr_foreign_toplevel_handle_v1);
+}
+
+/**
+ * @ingroup iface_zwlr_foreign_toplevel_handle_v1
+ *
+ * Requests that the toplevel be fullscreened on the given output. If the
+ * fullscreen state and/or the outputs the toplevel is visible on actually
+ * change, this will be indicated by the state and output_enter/leave
+ * events.
+ *
+ * The output parameter is only a hint to the compositor. Also, if output
+ * is NULL, the compositor should decide which output the toplevel will be
+ * fullscreened on, if at all.
+ */
+static inline void
+zwlr_foreign_toplevel_handle_v1_set_fullscreen(struct zwlr_foreign_toplevel_handle_v1 *zwlr_foreign_toplevel_handle_v1, struct wl_output *output)
+{
+	wl_proxy_marshal((struct wl_proxy *) zwlr_foreign_toplevel_handle_v1,
+			 ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_SET_FULLSCREEN, output);
+}
+
+/**
+ * @ingroup iface_zwlr_foreign_toplevel_handle_v1
+ *
+ * Requests that the toplevel be unfullscreened. If the fullscreen state
+ * actually changes, this will be indicated by the state event.
+ */
+static inline void
+zwlr_foreign_toplevel_handle_v1_unset_fullscreen(struct zwlr_foreign_toplevel_handle_v1 *zwlr_foreign_toplevel_handle_v1)
+{
+	wl_proxy_marshal((struct wl_proxy *) zwlr_foreign_toplevel_handle_v1,
+			 ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_UNSET_FULLSCREEN);
 }
 
 #ifdef  __cplusplus

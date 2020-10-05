@@ -55,6 +55,8 @@ static const struct wl_interface *wlr_foreign_toplevel_management_unstable_v1_ty
 	NULL,
 	&wl_output_interface,
 	&wl_output_interface,
+	&wl_output_interface,
+	&zwlr_foreign_toplevel_handle_v1_interface,
 };
 
 static const struct wl_message zwlr_foreign_toplevel_manager_v1_requests[] = {
@@ -67,7 +69,7 @@ static const struct wl_message zwlr_foreign_toplevel_manager_v1_events[] = {
 };
 
 WL_PRIVATE const struct wl_interface zwlr_foreign_toplevel_manager_v1_interface = {
-	"zwlr_foreign_toplevel_manager_v1", 1,
+	"zwlr_foreign_toplevel_manager_v1", 3,
 	1, zwlr_foreign_toplevel_manager_v1_requests,
 	2, zwlr_foreign_toplevel_manager_v1_events,
 };
@@ -81,21 +83,24 @@ static const struct wl_message zwlr_foreign_toplevel_handle_v1_requests[] = {
 	{ "close", "", wlr_foreign_toplevel_management_unstable_v1_types + 0 },
 	{ "set_rectangle", "oiiii", wlr_foreign_toplevel_management_unstable_v1_types + 3 },
 	{ "destroy", "", wlr_foreign_toplevel_management_unstable_v1_types + 0 },
+	{ "set_fullscreen", "2?o", wlr_foreign_toplevel_management_unstable_v1_types + 8 },
+	{ "unset_fullscreen", "2", wlr_foreign_toplevel_management_unstable_v1_types + 0 },
 };
 
 static const struct wl_message zwlr_foreign_toplevel_handle_v1_events[] = {
 	{ "title", "s", wlr_foreign_toplevel_management_unstable_v1_types + 0 },
 	{ "app_id", "s", wlr_foreign_toplevel_management_unstable_v1_types + 0 },
-	{ "output_enter", "o", wlr_foreign_toplevel_management_unstable_v1_types + 8 },
-	{ "output_leave", "o", wlr_foreign_toplevel_management_unstable_v1_types + 9 },
+	{ "output_enter", "o", wlr_foreign_toplevel_management_unstable_v1_types + 9 },
+	{ "output_leave", "o", wlr_foreign_toplevel_management_unstable_v1_types + 10 },
 	{ "state", "a", wlr_foreign_toplevel_management_unstable_v1_types + 0 },
 	{ "done", "", wlr_foreign_toplevel_management_unstable_v1_types + 0 },
 	{ "closed", "", wlr_foreign_toplevel_management_unstable_v1_types + 0 },
+	{ "parent", "3?o", wlr_foreign_toplevel_management_unstable_v1_types + 11 },
 };
 
 WL_PRIVATE const struct wl_interface zwlr_foreign_toplevel_handle_v1_interface = {
-	"zwlr_foreign_toplevel_handle_v1", 1,
-	8, zwlr_foreign_toplevel_handle_v1_requests,
-	7, zwlr_foreign_toplevel_handle_v1_events,
+	"zwlr_foreign_toplevel_handle_v1", 3,
+	10, zwlr_foreign_toplevel_handle_v1_requests,
+	8, zwlr_foreign_toplevel_handle_v1_events,
 };
 
