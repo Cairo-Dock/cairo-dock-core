@@ -81,7 +81,22 @@ static void _maximize (GldiWindowActor *actor, gboolean bMaximize)
 	if (bMaximize) zwlr_foreign_toplevel_handle_v1_set_maximized (wactor->handle);
 	else zwlr_foreign_toplevel_handle_v1_unset_maximized (wactor->handle);
 }
+
+static GldiWindowActor* _get_transient_for(GldiWindowActor* actor)
+{
+	GldiWFTWindowActor *wactor = (GldiWFTWindowActor *)actor;
+	wfthandle* parent = wactor->parent;
+	if (!parent) return NULL;
+	GldiWFTWindowActor *pactor = zwlr_foreign_toplevel_handle_v1_get_user_data (parent);
+	return (GldiWindowActor*)pactor;
+}
+
+/* current active window -- last one to receive activated signal */
 static GldiWindowActor* s_pActiveWindow = NULL;
+/* maybe new active window -- this is set if the activated signal is
+ * received for a window that is not "created" yet, i.e. has not done
+ * the initial init yet or has a parent */
+static GldiWindowActor* s_pMaybeActiveWindow = NULL;
 static GldiWindowActor* _get_active_window (void)
 {
 	return s_pActiveWindow;
@@ -182,8 +197,26 @@ void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED wfthandle *handle, struc
 	}
 	if (activated)
 	{
-		s_pActiveWindow = actor;
-		if (wactor->init_done && !wactor->parent) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ACTIVATED, actor);
+		s_pMaybeActiveWindow = actor;
+		if (wactor->init_done && !wactor->parent && s_pActiveWindow != actor)
+		{
+			s_pActiveWindow = actor;
+			gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ACTIVATED, actor);
+		}
+		else if (wactor->init_done && wactor->parent)
+		{
+			GldiWFTWindowActor* pwactor = wactor;
+			do {
+				pwactor = zwlr_foreign_toplevel_handle_v1_get_user_data(pwactor->parent);
+			} while (pwactor->parent);
+			GldiWindowActor* pactor = (GldiWindowActor*)pwactor;
+			if (!pwactor->init_done) s_pMaybeActiveWindow = pactor;
+			else if (s_pActiveWindow != pactor)
+			{
+				s_pActiveWindow = pactor;
+				gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ACTIVATED, pactor);
+			}
+		}
 	}
 	gboolean bHiddenChanged     = (minimized != actor->bIsHidden);
 	gboolean bMaximizedChanged  = (maximized != actor->bIsMaximized);
@@ -199,14 +232,17 @@ void _gldi_toplevel_done_cb ( void *data, G_GNUC_UNUSED wfthandle *handle)
 {
 	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
 	GldiWindowActor* actor = (GldiWindowActor*)wactor;
-	gboolean created = FALSE;
 	if (!wactor->init_done)
 	{
 		wactor->init_done = TRUE;
-		created = TRUE;
 		if (!wactor->parent)
 		{
 			gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_CREATED, actor);
+			if (actor == s_pMaybeActiveWindow)
+			{
+				s_pActiveWindow = actor;
+				gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ACTIVATED, actor);
+			}
 		}
 	}
 }
@@ -219,7 +255,7 @@ void _gldi_toplevel_closed_cb (void *data, G_GNUC_UNUSED wfthandle *handle)
 	gldi_object_unref (GLDI_OBJECT(actor));
 }
 
-void _gldi_toplevel_parent_cb (void* data, wfthandle *handle, wfthandle *parent)
+void _gldi_toplevel_parent_cb (void* data, G_GNUC_UNUSED wfthandle *handle, wfthandle *parent)
 {
 	// fprintf(stderr,"Parent for toplevel: %p -> %p\n", handle, parent);
 	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
@@ -236,6 +272,11 @@ void _gldi_toplevel_parent_cb (void* data, wfthandle *handle, wfthandle *parent)
 		if (wactor->parent && wactor->init_done)
 		{
 			gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_CREATED, actor);
+			if (actor == s_pMaybeActiveWindow)
+			{
+				s_pActiveWindow = actor;
+				gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ACTIVATED, actor);
+			}
 		}
 	}
 	wactor->parent = parent;
@@ -338,7 +379,7 @@ static void gldi_zwlr_foreign_toplevel_manager_init ()
 	// wmb.get_icon_surface = _get_icon_surface;
 	// wmb.get_thumbnail_surface = _get_thumbnail_surface;
 	// wmb.get_texture = _get_texture;
-	// wmb.get_transient_for = _get_transient_for;
+	wmb.get_transient_for = _get_transient_for;
 	// wmb.is_above_or_below = _is_above_or_below;
 	// wmb.is_sticky = _is_sticky;
 	// wmb.set_sticky = _set_sticky;
