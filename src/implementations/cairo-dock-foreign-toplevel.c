@@ -331,13 +331,6 @@ static void _new_toplevel ( G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct zwlr_
 	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)gldi_object_new (&myWFTObjectMgr, handle);
 	zwlr_foreign_toplevel_handle_v1_set_user_data (handle, wactor);
 	GldiWindowActor *actor = (GldiWindowActor*)wactor;
-	actor->bDisplayed = FALSE; // we do not try to display this window until we have an app_id / cClass
-	actor->cClass = NULL;
-	actor->cWmClass = NULL;
-	actor->bIsHidden = FALSE;
-	actor->bIsMaximized = FALSE;
-	actor->bIsFullScreen = FALSE;
-	actor->bDemandsAttention = FALSE;
 	// hack required for minimize on click to work -- "pretend" that the window is in the middle of the screen
 	actor->windowGeometry.x = cairo_dock_get_screen_width (0) / 2;
 	actor->windowGeometry.y = cairo_dock_get_screen_height (0) / 2;
