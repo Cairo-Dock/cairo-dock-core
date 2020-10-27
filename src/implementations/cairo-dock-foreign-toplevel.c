@@ -49,7 +49,9 @@ struct _GldiWFTWindowActor {
 	// store parent handle, if supplied
 	// NOTE: windows with parent are ignored (not shown in the taskbar)
 	wfthandle *parent;
-	gboolean init_done;
+	gchar* cOldClass; // save the old window class in case it is changed
+	gboolean init_done; // set to true after the first done event
+	gboolean class_changed; // true if the app ID was changed
 };
 typedef struct _GldiWFTWindowActor GldiWFTWindowActor;
 
@@ -154,19 +156,22 @@ void _gldi_toplevel_appid_cb (void *data, G_GNUC_UNUSED wfthandle *handle, const
 	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
 	GldiWindowActor* actor = (GldiWindowActor*)wactor;
 	
-	if (!app_id) return;
-	else
+	if (!wactor->cOldClass)
 	{
-		char* cOldClass = actor->cClass;
-		actor->cClass = g_strdup ((gchar *)app_id);
-		if (cOldClass)
-		{
-			g_free (cOldClass);
-		}
-		if (actor->cClass && !wactor->parent) actor->bDisplayed = TRUE;
-		else actor->bDisplayed = FALSE;
-		if (wactor->init_done && !wactor->parent) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_CLASS_CHANGED, actor, cOldClass, NULL);
+		wactor->cOldClass = actor->cClass;
 	}
+	else {
+		g_free (actor->cClass);
+	}
+	actor->cClass = g_strdup ((gchar *)app_id);
+	// if (actor->cClass && !wactor->parent) actor->bDisplayed = TRUE;
+	// else actor->bDisplayed = FALSE;
+	// we note that this actor's window class (app ID) has changed
+	// we don't send the notification about it here, since this
+	// change could be grouped with other changes that should be
+	// applied atomically
+	wactor->class_changed = TRUE;
+	// if (wactor->init_done && !wactor->parent) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_CLASS_CHANGED, actor, cOldClass, NULL);
 }
 
 void _gldi_toplevel_output_enter_cb ( G_GNUC_UNUSED void *data, G_GNUC_UNUSED wfthandle *handle, G_GNUC_UNUSED struct wl_output *output)
@@ -198,7 +203,7 @@ void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED wfthandle *handle, struc
 	if (activated)
 	{
 		s_pMaybeActiveWindow = actor;
-		if (wactor->init_done && !wactor->parent && s_pActiveWindow != actor)
+		if (actor->bDisplayed && s_pActiveWindow != actor)
 		{
 			s_pActiveWindow = actor;
 			gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ACTIVATED, actor);
@@ -211,7 +216,7 @@ void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED wfthandle *handle, struc
 			} while (pwactor->parent);
 			GldiWindowActor* pactor = (GldiWindowActor*)pwactor;
 			if (!pwactor->init_done) s_pMaybeActiveWindow = pactor;
-			else if (s_pActiveWindow != pactor)
+			else if (pactor->bDisplayed && s_pActiveWindow != pactor)
 			{
 				s_pActiveWindow = pactor;
 				gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ACTIVATED, pactor);
@@ -225,33 +230,57 @@ void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED wfthandle *handle, struc
 	actor->bIsMaximized  = maximized;
 					
 	if (bHiddenChanged || bMaximizedChanged)
-		if (wactor->init_done && !wactor->parent) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_STATE_CHANGED, actor, bHiddenChanged, bMaximizedChanged, bFullScreenChanged);
+		if (actor->bDisplayed) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_STATE_CHANGED, actor, bHiddenChanged, bMaximizedChanged, bFullScreenChanged);
 }
 
 void _gldi_toplevel_done_cb ( void *data, G_GNUC_UNUSED wfthandle *handle)
 {
 	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
 	GldiWindowActor* actor = (GldiWindowActor*)wactor;
-	if (!wactor->init_done)
+	gchar* cOldWmClass = NULL;
+	if (wactor->class_changed)
 	{
-		wactor->init_done = TRUE;
-		if (!wactor->parent)
+		cOldWmClass = actor->cWmClass;
+		actor->cWmClass = actor->cClass;
+		actor->cClass = gldi_window_parse_class (actor->cWmClass, actor->cName);
+	}
+	gboolean new_displayed = FALSE;
+
+	if (!wactor->parent && actor->cClass) {
+		new_displayed = TRUE;
+	}
+
+	if (!actor->bDisplayed && new_displayed)
+	{
+		actor->bDisplayed = TRUE;
+		gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_CREATED, actor);
+		if (actor == s_pMaybeActiveWindow)
 		{
-			gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_CREATED, actor);
-			if (actor == s_pMaybeActiveWindow)
-			{
-				s_pActiveWindow = actor;
-				gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ACTIVATED, actor);
-			}
+			s_pActiveWindow = actor;
+			gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ACTIVATED, actor);
 		}
 	}
+	else if (actor->bDisplayed && !new_displayed)
+	{
+		actor->bDisplayed = FALSE;
+		gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESTROYED, actor);
+	}
+	else if (actor->bDisplayed && new_displayed && wactor->class_changed) {
+		gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_CLASS_CHANGED, actor, wactor->cOldClass, cOldWmClass);
+	}
+
+	g_free (cOldWmClass);
+	g_free (wactor->cOldClass);
+	wactor->cOldClass = NULL;
+	wactor->class_changed = FALSE;
+	wactor->init_done = TRUE;
 }
 
 void _gldi_toplevel_closed_cb (void *data, G_GNUC_UNUSED wfthandle *handle)
 {
 	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
 	GldiWindowActor* actor = (GldiWindowActor*)wactor;
-	if (wactor->init_done && !wactor->parent) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESTROYED, actor);
+	if (actor->bDisplayed) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESTROYED, actor);
 	gldi_object_unref (GLDI_OBJECT(actor));
 }
 
@@ -259,26 +288,6 @@ void _gldi_toplevel_parent_cb (void* data, G_GNUC_UNUSED wfthandle *handle, wfth
 {
 	// fprintf(stderr,"Parent for toplevel: %p -> %p\n", handle, parent);
 	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
-	GldiWindowActor* actor = (GldiWindowActor*)wactor;
-	if (parent) {
-		actor->bDisplayed = FALSE;
-		if (!wactor->parent && wactor->init_done)
-		{
-			gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESTROYED, actor);
-		}
-	}
-	else {
-		if (actor->cClass) actor->bDisplayed = TRUE;
-		if (wactor->parent && wactor->init_done)
-		{
-			gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_CREATED, actor);
-			if (actor == s_pMaybeActiveWindow)
-			{
-				s_pActiveWindow = actor;
-				gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ACTIVATED, actor);
-			}
-		}
-	}
 	wactor->parent = parent;
 }
 
@@ -309,6 +318,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 static void reset_object (GldiObject* obj)
 {
 	GldiWFTWindowActor* actor = (GldiWFTWindowActor*)obj;
+	g_free(actor->cOldClass);
 	if (obj && actor->handle) zwlr_foreign_toplevel_handle_v1_destroy(actor->handle);
 }
 
@@ -318,18 +328,16 @@ static void _new_toplevel ( G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct zwlr_
 {
 	// fprintf(stderr,"New toplevel: %p\n", handle);
 	
-	gboolean bIsHidden = FALSE, bIsFullScreen = FALSE, bIsMaximized = FALSE, bDemandsAttention = FALSE;
-	
 	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)gldi_object_new (&myWFTObjectMgr, handle);
 	zwlr_foreign_toplevel_handle_v1_set_user_data (handle, wactor);
 	GldiWindowActor *actor = (GldiWindowActor*)wactor;
-	actor->bDisplayed = FALSE; // we do not try to display this window until we can app_id / cClass
+	actor->bDisplayed = FALSE; // we do not try to display this window until we have an app_id / cClass
 	actor->cClass = NULL;
 	actor->cWmClass = NULL;
-	actor->bIsHidden = bIsHidden;
-	actor->bIsMaximized = bIsMaximized;
-	actor->bIsFullScreen = bIsFullScreen;
-	actor->bDemandsAttention = bDemandsAttention;
+	actor->bIsHidden = FALSE;
+	actor->bIsMaximized = FALSE;
+	actor->bIsFullScreen = FALSE;
+	actor->bDemandsAttention = FALSE;
 	// hack required for minimize on click to work -- "pretend" that the window is in the middle of the screen
 	actor->windowGeometry.x = cairo_dock_get_screen_width (0) / 2;
 	actor->windowGeometry.y = cairo_dock_get_screen_height (0) / 2;

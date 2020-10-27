@@ -175,6 +175,16 @@ guint gldi_window_get_id (GldiWindowActor *pAppli);
 GldiWindowActor *gldi_window_pick (void);
 
 
+/* utility for parsing special cases in the window class / app ID;
+ * used by both the X and Wayland backends
+ * 
+ * res_class and res_name should be the window class / app ID and window
+ * name / title as reported by the windowing system; the return value is
+ * a parsed class with some special cases handled; the caller should
+ * free it when it is done using it
+ * */
+gchar* gldi_window_parse_class(const gchar* res_class, const gchar* res_name);
+
 void gldi_register_windows_manager (void);
 
 G_END_DECLS
