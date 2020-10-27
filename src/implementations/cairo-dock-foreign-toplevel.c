@@ -142,7 +142,7 @@ static void _set_thumbnail_area (GldiWindowActor *actor, GtkWidget* pContainerWi
 
 
 // callbacks 
-void _gldi_toplevel_title_cb (void *data, G_GNUC_UNUSED wfthandle *handle, const char *title)
+static void _gldi_toplevel_title_cb (void *data, G_GNUC_UNUSED wfthandle *handle, const char *title)
 {
 	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
 	GldiWindowActor* actor = (GldiWindowActor*)wactor;
@@ -151,7 +151,7 @@ void _gldi_toplevel_title_cb (void *data, G_GNUC_UNUSED wfthandle *handle, const
 	if (wactor->init_done && !wactor->parent) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_NAME_CHANGED, actor);
 }
 
-void _gldi_toplevel_appid_cb (void *data, G_GNUC_UNUSED wfthandle *handle, const char *app_id)
+static void _gldi_toplevel_appid_cb (void *data, G_GNUC_UNUSED wfthandle *handle, const char *app_id)
 {
 	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
 	GldiWindowActor* actor = (GldiWindowActor*)wactor;
@@ -174,16 +174,16 @@ void _gldi_toplevel_appid_cb (void *data, G_GNUC_UNUSED wfthandle *handle, const
 	// if (wactor->init_done && !wactor->parent) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_CLASS_CHANGED, actor, cOldClass, NULL);
 }
 
-void _gldi_toplevel_output_enter_cb ( G_GNUC_UNUSED void *data, G_GNUC_UNUSED wfthandle *handle, G_GNUC_UNUSED struct wl_output *output)
+static void _gldi_toplevel_output_enter_cb ( G_GNUC_UNUSED void *data, G_GNUC_UNUSED wfthandle *handle, G_GNUC_UNUSED struct wl_output *output)
 {
 	/* TODO -- or maybe we don't care about this? */
 }
-void _gldi_toplevel_output_leave_cb ( G_GNUC_UNUSED void *data, G_GNUC_UNUSED wfthandle *handle, G_GNUC_UNUSED struct wl_output *output)
+static void _gldi_toplevel_output_leave_cb ( G_GNUC_UNUSED void *data, G_GNUC_UNUSED wfthandle *handle, G_GNUC_UNUSED struct wl_output *output)
 {
 	
 }
 
-void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED wfthandle *handle, struct wl_array *state)
+static void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED wfthandle *handle, struct wl_array *state)
 {
 	if (!data) return;
 	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
@@ -233,7 +233,7 @@ void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED wfthandle *handle, struc
 		if (actor->bDisplayed) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_STATE_CHANGED, actor, bHiddenChanged, bMaximizedChanged, bFullScreenChanged);
 }
 
-void _gldi_toplevel_done_cb ( void *data, G_GNUC_UNUSED wfthandle *handle)
+static void _gldi_toplevel_done_cb ( void *data, G_GNUC_UNUSED wfthandle *handle)
 {
 	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
 	GldiWindowActor* actor = (GldiWindowActor*)wactor;
@@ -276,7 +276,7 @@ void _gldi_toplevel_done_cb ( void *data, G_GNUC_UNUSED wfthandle *handle)
 	wactor->init_done = TRUE;
 }
 
-void _gldi_toplevel_closed_cb (void *data, G_GNUC_UNUSED wfthandle *handle)
+static void _gldi_toplevel_closed_cb (void *data, G_GNUC_UNUSED wfthandle *handle)
 {
 	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
 	GldiWindowActor* actor = (GldiWindowActor*)wactor;
@@ -284,7 +284,7 @@ void _gldi_toplevel_closed_cb (void *data, G_GNUC_UNUSED wfthandle *handle)
 	gldi_object_unref (GLDI_OBJECT(actor));
 }
 
-void _gldi_toplevel_parent_cb (void* data, G_GNUC_UNUSED wfthandle *handle, wfthandle *parent)
+static void _gldi_toplevel_parent_cb (void* data, G_GNUC_UNUSED wfthandle *handle, wfthandle *parent)
 {
 	// fprintf(stderr,"Parent for toplevel: %p -> %p\n", handle, parent);
 	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
