@@ -235,7 +235,7 @@ static void _on_change_nb_desktops (void)
 	gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_GEOMETRY_CHANGED, FALSE);
 }
 
-static void _on_change_desktop_geometry (void)
+static void _on_change_desktop_geometry (gboolean bIsNetDesktopGeometry)
 {
 	// check if the resolution has changed
 	gboolean bSizeChanged = cairo_dock_update_screen_geometry ();
@@ -245,7 +245,9 @@ static void _on_change_desktop_geometry (void)
 	_cairo_dock_retrieve_current_desktop_and_viewport ();  // au cas ou on enleve le viewport courant.
 	
 	// notify everybody
-	gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_GEOMETRY_CHANGED, bSizeChanged);
+	// according to LP1901507, the dock ends up on the wrong screen after the screens go to energy-save/off mode (dual-screen/nvidia).
+	// as a workaround, we force the flag to true when it's a NetDesktopGeometry message, even if the size hasn't really changed
+	gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_GEOMETRY_CHANGED, bSizeChanged || bIsNetDesktopGeometry);
 }
 
 static void _update_backing_pixmap (GldiXWindowActor *actor)
@@ -529,7 +531,7 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 				}
 				else if (event.xproperty.atom == s_aNetDesktopGeometry || event.xproperty.atom == s_aNetWorkarea)  // check s_aNetWorkarea too, to workaround a bug in Compiz (or X?) : when down-sizing the screen, the _NET_DESKTOP_GEOMETRY atom is not received  (up-sizing is ok though, and changing the viewport makes the atom to be received); but _NET_WORKAREA is correctly sent; since it's only sent when the resolution is changed, or the dock's height (if space is reserved), it's not a big overload to check it too.
 				{
-					_on_change_desktop_geometry ();  // -> NOTIFICATION_DESKTOP_GEOMETRY_CHANGED
+					_on_change_desktop_geometry (event.xproperty.atom == s_aNetDesktopGeometry);  // -> NOTIFICATION_DESKTOP_GEOMETRY_CHANGED
 				}
 				else if (event.xproperty.atom == s_aRootMapID)
 				{
