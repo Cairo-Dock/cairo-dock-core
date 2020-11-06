@@ -408,7 +408,10 @@ gboolean gldi_zwlr_foreign_toplevel_manager_try_bind (struct wl_registry *regist
 {
 	if (!strcmp(interface, zwlr_foreign_toplevel_manager_v1_interface.name))
     {
-		if (version > 1u) version = 1u;
+		if (version > zwlr_foreign_toplevel_manager_v1_interface.version)
+		{
+			version = zwlr_foreign_toplevel_manager_v1_interface.version;
+		}
         s_ptoplevel_manager = wl_registry_bind (registry, id, &zwlr_foreign_toplevel_manager_v1_interface, version);
 		if (s_ptoplevel_manager)
 		{
