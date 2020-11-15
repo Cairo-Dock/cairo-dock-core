@@ -116,7 +116,6 @@ static void _can_minimize_maximize_close ( G_GNUC_UNUSED GldiWindowActor *actor,
 static void _set_minimize_position (GldiWindowActor *actor, GtkWidget* pContainerWidget, int x, int y)
 {
 	if ( ! (actor && pContainerWidget) ) return;
-	if ( x < 0 || y < 0 ) return;
 	GldiWFTWindowActor *wactor = (GldiWFTWindowActor *)actor;
 	GdkWindow* window = gtk_widget_get_window (pContainerWidget);
 	if (!window) return;
@@ -129,7 +128,7 @@ static void _set_minimize_position (GldiWindowActor *actor, GtkWidget* pContaine
 static void _set_thumbnail_area (GldiWindowActor *actor, GtkWidget* pContainerWidget, int x, int y, int w, int h)
 {
 	if ( ! (actor && pContainerWidget) ) return;
-	if ( x < 0 || y < 0 || w < 0 || h < 0 ) return;
+	if (w < 0 || h < 0) return;
 	GldiWFTWindowActor *wactor = (GldiWFTWindowActor *)actor;
 	GdkWindow* window = gtk_widget_get_window (pContainerWidget);
 	if (!window) return;
