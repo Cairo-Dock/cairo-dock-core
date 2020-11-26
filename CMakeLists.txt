@@ -206,7 +206,7 @@ set (with_gtk_layer_shell no)
 enable_if_not_defined (enable-gtk-layer-shell) # enabled by default
 if (enable-gtk-layer-shell)
 	if (HAVE_WAYLAND)
-		pkg_check_modules ("GTKLAYERSHELL" "gtk-layer-shell-0")
+		pkg_check_modules ("GTKLAYERSHELL" "gtk-layer-shell-0>=0.6.0")
 		if (GTKLAYERSHELL_FOUND)
 			set (HAVE_GTK_LAYER_SHELL 1)
 			set (with_gtk_layer_shell yes)

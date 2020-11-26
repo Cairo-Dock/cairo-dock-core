@@ -257,6 +257,16 @@ void _layer_shell_init_for_window (GldiContainer *pContainer)
 	else
 	{
 		gtk_layer_init_for_window (window);
+		// Note: to enable receiving any keyboard events, we need both the compositor
+		// and gtk-layer-shell to support version >= 4 of the layer-shell protocol.
+		// Here we test if we are compiling against a version of gtk-layer-shell that
+		// has this functionality. Setting keyboard interactivity may still fail at
+		// runtime if the compositor does not support this. In this case, the dock
+		// will not receive keyboard events at all.
+		// TODO: make this optional, so that cairo-dock can be compiled targeting an
+		// older version of gtk-layer-shell (even if a newer version is installed;
+		// since versions are ABI compatible, this is possible)
+		gtk_layer_set_keyboard_mode (window, GTK_LAYER_SHELL_KEYBOARD_MODE_ON_DEMAND);
 		gtk_layer_set_namespace (window, "cairo-dock");
 	}
 }
