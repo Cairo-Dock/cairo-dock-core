@@ -99,6 +99,9 @@ static GldiWindowActor* s_pActiveWindow = NULL;
  * received for a window that is not "created" yet, i.e. has not done
  * the initial init yet or has a parent */
 static GldiWindowActor* s_pMaybeActiveWindow = NULL;
+/* our own config window -- will only work if the docks themselves are not
+ * reported */
+static GldiWindowActor* s_pSelf = NULL;
 static GldiWindowActor* _get_active_window (void)
 {
 	return s_pActiveWindow;
@@ -139,6 +142,10 @@ static void _set_thumbnail_area (GldiWindowActor *actor, GtkWidget* pContainerWi
 }
 
 
+// extra callback for when a new app is activated
+// this is useful for e.g. interactively selecting a window
+void (*s_activated_callback)(GldiWFTWindowActor* wactor, void* data) = NULL;
+void* s_activated_callback_data = NULL;
 
 // callbacks 
 static void _gldi_toplevel_title_cb (void *data, G_GNUC_UNUSED wfthandle *handle, const char *title)
@@ -206,6 +213,7 @@ static void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED wfthandle *handle
 		{
 			s_pActiveWindow = actor;
 			gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ACTIVATED, actor);
+			if (s_activated_callback) s_activated_callback(wactor, s_activated_callback_data);
 		}
 		else if (wactor->init_done && wactor->parent)
 		{
@@ -219,6 +227,7 @@ static void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED wfthandle *handle
 			{
 				s_pActiveWindow = pactor;
 				gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ACTIVATED, pactor);
+				if (s_activated_callback) s_activated_callback(pwactor, s_activated_callback_data);
 			}
 		}
 	}
@@ -257,15 +266,20 @@ static void _gldi_toplevel_done_cb ( void *data, G_GNUC_UNUSED wfthandle *handle
 		{
 			s_pActiveWindow = actor;
 			gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ACTIVATED, actor);
+			if (s_activated_callback) s_activated_callback(wactor, s_activated_callback_data);
 		}
+		if (!strcmp(actor->cClass, "cairo-dock")) s_pSelf = actor;
 	}
 	else if (actor->bDisplayed && !new_displayed)
 	{
 		actor->bDisplayed = FALSE;
 		gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESTROYED, actor);
+		if (actor == s_pSelf) s_pSelf = NULL;
 	}
 	else if (actor->bDisplayed && new_displayed && wactor->class_changed) {
 		gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_CLASS_CHANGED, actor, wactor->cOldClass, cOldWmClass);
+		if (actor == s_pSelf) s_pSelf = NULL;
+		else if (!strcmp(actor->cClass, "cairo-dock")) s_pSelf = actor;
 	}
 
 	g_free (cOldWmClass);
@@ -280,6 +294,7 @@ static void _gldi_toplevel_closed_cb (void *data, G_GNUC_UNUSED wfthandle *handl
 	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
 	GldiWindowActor* actor = (GldiWindowActor*)wactor;
 	if (actor->bDisplayed) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESTROYED, actor);
+	if (actor == s_pSelf) s_pSelf = NULL;
 	gldi_object_unref (GLDI_OBJECT(actor));
 }
 
@@ -355,6 +370,47 @@ static struct zwlr_foreign_toplevel_manager_v1_listener gldi_toplevel_manager = 
 
 static struct zwlr_foreign_toplevel_manager_v1* s_ptoplevel_manager = NULL;
 
+
+/* Facility to ask the user to pick a window */
+struct wft_pick_window_response {
+	GldiWFTWindowActor* wactor;
+	GtkDialog* dialog;
+	gboolean first_activation;
+};
+
+static void _pick_window_cb (GldiWFTWindowActor* wactor, void* data)
+{
+	struct wft_pick_window_response* res = (struct wft_pick_window_response*)data;
+	if(!res->first_activation) {
+		if(!strcmp(wactor->actor.cClass, "cairo-dock")) {
+			res->first_activation = TRUE;
+			return;
+		}
+	}
+	res->wactor = wactor;
+	gtk_dialog_response(res->dialog, 0);
+}
+
+static GldiWindowActor* _pick_window (GtkWindow *pParentWindow)
+{
+	struct wft_pick_window_response res;
+	GtkWidget* dialog = gtk_message_dialog_new(pParentWindow,
+		GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CANCEL,
+		_("Select an open window by clicking on it or choosing it from the taskbar"));
+	res.dialog = GTK_DIALOG(dialog);
+	res.wactor = NULL;
+	res.first_activation = FALSE;
+	s_activated_callback = _pick_window_cb;
+	s_activated_callback_data = &res;
+	gtk_dialog_run(GTK_DIALOG(dialog));
+	s_activated_callback = NULL;
+	s_activated_callback_data = NULL;
+	gtk_widget_destroy(dialog);
+	if (s_pSelf) _show(s_pSelf);
+	return (GldiWindowActor*)res.wactor;
+}
+
+
 static void gldi_zwlr_foreign_toplevel_manager_init ()
 {
 	if (!s_ptoplevel_manager) return;
@@ -385,7 +441,7 @@ static void gldi_zwlr_foreign_toplevel_manager_init ()
 	// wmb.set_sticky = _set_sticky;
 	wmb.can_minimize_maximize_close = _can_minimize_maximize_close;
 	// wmb.get_id = _get_id;
-	// wmb.pick_window = _pick_window;
+	wmb.pick_window = _pick_window;
 	gldi_windows_manager_register_backend (&wmb);
 	
 	

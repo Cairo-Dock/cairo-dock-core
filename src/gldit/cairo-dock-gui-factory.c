@@ -939,13 +939,13 @@ static void _cairo_dock_key_grab_clicked (G_GNUC_UNUSED GtkButton *button, gpoin
 static void _cairo_dock_key_grab_class (G_GNUC_UNUSED GtkButton *button, gpointer *data)
 {
 	GtkEntry *pEntry = data[0];
-	// GtkWindow *pParentWindow = data[1];
+	GtkWindow *pParentWindow = data[1];
 
 	cd_debug ("clicked");
 	gtk_widget_set_sensitive (GTK_WIDGET(pEntry), FALSE);  // lock the widget during the grab (it makes it more comprehensive).
 	
 	const gchar *cResult = NULL;
-	GldiWindowActor *actor = gldi_window_pick ();
+	GldiWindowActor *actor = gldi_window_pick (pParentWindow);
 	
 	if (actor && actor->bIsTransientFor)
 		actor = gldi_window_get_transient_for (actor);

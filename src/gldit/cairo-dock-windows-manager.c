@@ -277,10 +277,10 @@ guint gldi_window_get_id (GldiWindowActor *actor)
 	return 0;
 }
 
-GldiWindowActor *gldi_window_pick (void)
+GldiWindowActor *gldi_window_pick (GtkWindow *pParentWindow)
 {
 	if (s_backend.pick_window)
-		return s_backend.pick_window ();
+		return s_backend.pick_window (pParentWindow);
 	return NULL;
 }
 

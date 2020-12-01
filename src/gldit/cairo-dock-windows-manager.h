@@ -76,7 +76,7 @@ struct _GldiWindowManagerBackend {
 	void (*set_sticky) (GldiWindowActor *actor, gboolean bSticky);
 	void (*can_minimize_maximize_close) (GldiWindowActor *actor, gboolean *bCanMinimize, gboolean *bCanMaximize, gboolean *bCanClose);
 	guint (*get_id) (GldiWindowActor *actor);
-	GldiWindowActor* (*pick_window) (void);  // grab the mouse, wait for a click, then get the clicked window and returns its actor
+	GldiWindowActor* (*pick_window) (GtkWindow *pParentWindow);  // grab the mouse, wait for a click, then get the clicked window and returns its actor
 	} ;
 
 /// Definition of a window actor.
@@ -172,7 +172,7 @@ void gldi_window_move_to_current_desktop (GldiWindowActor *pAppli);
 
 guint gldi_window_get_id (GldiWindowActor *pAppli);
 
-GldiWindowActor *gldi_window_pick (void);
+GldiWindowActor *gldi_window_pick (GtkWindow *pParentWindow);
 
 
 /* utility for parsing special cases in the window class / app ID;

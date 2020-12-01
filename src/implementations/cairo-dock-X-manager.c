@@ -1035,7 +1035,7 @@ static guint _get_id (GldiWindowActor *actor)
 	return xactor->Xid;
 }
 
-static GldiWindowActor *_pick_window (void)
+static GldiWindowActor *_pick_window (G_GNUC_UNUSED GtkWindow *pParentWindow)
 {
 	GldiWindowActor *actor = NULL;
 	
