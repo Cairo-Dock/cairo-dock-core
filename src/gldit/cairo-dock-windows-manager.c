@@ -19,6 +19,7 @@
 
 #include "cairo-dock-log.h"
 #include "cairo-dock-desktop-manager.h"  // g_desktopGeometry
+#include "cairo-dock-utils.h"  // cairo_dock_remove_version_from_string
 #define _MANAGER_DEF_
 #include "cairo-dock-windows-manager.h"
 
@@ -176,18 +177,18 @@ void gldi_window_set_above (GldiWindowActor *actor, gboolean bAbove)
 		s_backend.set_above (actor, bAbove);
 }
 
-void gldi_window_set_minimize_position (GldiWindowActor *actor, int x, int y)
+void gldi_window_set_minimize_position (GldiWindowActor *actor, GtkWidget* pContainerWidget, int x, int y)
 {
 	g_return_if_fail (actor != NULL);
 	if (s_backend.set_minimize_position)
-		s_backend.set_minimize_position (actor, x, y);
+		s_backend.set_minimize_position (actor, pContainerWidget, x, y);
 }
 
-void gldi_window_set_thumbnail_area (GldiWindowActor *actor, int x, int y, int w, int h)
+void gldi_window_set_thumbnail_area (GldiWindowActor *actor, GtkWidget* pContainerWidget, int x, int y, int w, int h)
 {
 	g_return_if_fail (actor != NULL);
 	if (s_backend.set_thumbnail_area)
-		s_backend.set_thumbnail_area (actor, x, y, w, h);
+		s_backend.set_thumbnail_area (actor, pContainerWidget, x, y, w, h);
 }
 
 GldiWindowActor *gldi_windows_get_active (void)
@@ -276,10 +277,10 @@ guint gldi_window_get_id (GldiWindowActor *actor)
 	return 0;
 }
 
-GldiWindowActor *gldi_window_pick (void)
+GldiWindowActor *gldi_window_pick (GtkWindow *pParentWindow)
 {
 	if (s_backend.pick_window)
-		return s_backend.pick_window ();
+		return s_backend.pick_window (pParentWindow);
 	return NULL;
 }
 
@@ -338,6 +339,70 @@ void gldi_window_move_to_current_desktop (GldiWindowActor *pAppli)
 		g_desktopGeometry.iCurrentDesktop,
 		g_desktopGeometry.iCurrentViewportX,
 		g_desktopGeometry.iCurrentViewportY);  // on ne veut pas decaler son viewport par rapport a nous.
+}
+
+
+gchar* gldi_window_parse_class(const gchar* res_class, const gchar* res_name) {
+	gchar *cClass = NULL, *cWmClass = NULL;
+	if (res_class)
+	{
+		cd_debug ("  res_name : %s(%x); res_class : %s(%x)", res_name, res_name, res_class, res_class);
+		if (strcmp (res_class, "Wine") == 0 && res_name && (g_str_has_suffix (res_name, ".exe") || g_str_has_suffix (res_name, ".EXE")))  // wine application: use the name instead, because we don't want to group all wine apps togather
+		{
+			cd_debug ("  wine application detected, changing the class '%s' to '%s'", res_class, res_name);
+			cClass = g_ascii_strdown (res_name, -1);
+		}
+		// chromium web apps (not the browser): same remark as for wine apps
+		else if (res_name && res_name[0] != '\0' && res_class[0] != '\0'
+		         && (
+		          ((res_class[0] == 'c' || res_class[0] == 'C') && (strcmp(res_class+1, "hromium-browser") == 0 || strcmp(res_class+1, "hromium") == 0))
+		          || strcmp (res_class, "Google-chrome") == 0    // from Google
+		          || strcmp (res_class, "Google-chrome-beta") == 0
+		          || strcmp (res_class, "Google-chrome-unstable") == 0)
+		         && strcmp (res_class+1, res_name+1) != 0) // skip first letter (upper/lowercase)
+		{
+			cClass = g_ascii_strdown (res_name, -1);
+
+			/* Remove spaces. Why do they add spaces here?
+			 * (e.g.: Google-chrome-unstable (/home/$USER/.config/google-chrome-unstable))
+			 */
+			gchar *str = strchr (cClass, ' ');
+			if (str != NULL)
+				*str = '\0';
+
+			/* Replace '.' to '_' (e.g.: www.google.com__calendar). It's to not
+			 * just have 'www' as class (we will drop the rest just here after)
+			 */
+			for (int i = 0; cClass[i] != '\0'; i++)
+			{
+				if (cClass[i] == '.')
+					cClass[i] = '_';
+			}
+			cd_debug ("  chromium application detected, changing the class '%s' to '%s'", res_class, cClass);
+		}
+		else if (*res_class == '/' && (g_str_has_suffix (res_class, ".exe") || g_str_has_suffix (res_name, ".EXE")))  // case of Mono applications like tomboy ...
+		{
+			gchar *str = strrchr (res_class, '/');
+			if (str)
+				str ++;
+			else
+				str = res_class;
+			cClass = g_ascii_strdown (str, -1);
+			cClass[strlen (cClass) - 4] = '\0';
+		}
+		else
+		{
+			cClass = g_ascii_strdown (res_class, -1);  // down case because some apps change the case depending of their windows...
+		}
+
+		cairo_dock_remove_version_from_string (cClass);  // we remore number of version (e.g. Openoffice.org-3.1)
+
+		gchar *str = strchr (cClass, '.');  // we remove all .xxx otherwise we can't detect the lack of extension when looking for an icon (openoffice.org) or it's a problem when looking for an icon (jbrout.py).
+		if (str != NULL)
+			*str = '\0';
+		cd_debug ("got an application with class '%s'", cClass);
+	}
+	return cClass;
 }
 
 
