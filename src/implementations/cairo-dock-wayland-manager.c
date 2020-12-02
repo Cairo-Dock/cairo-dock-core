@@ -41,6 +41,7 @@
 #include "cairo-dock-container.h"  // GldiContainerManagerBackend
 #include "cairo-dock-dock-factory.h" // struct _CairoDock
 #include "cairo-dock-opengl.h"
+#include "cairo-dock-foreign-toplevel.h"
 #include "cairo-dock-egl.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-wayland-manager.h"
@@ -154,7 +155,7 @@ CairoDockPositionType gldi_wayland_get_edge_for_dock (const CairoDock *pDock)
 	return pos;
 }
 
-static void _registry_global_cb (G_GNUC_UNUSED void *data, struct wl_registry *registry, uint32_t id, const char *interface, G_GNUC_UNUSED uint32_t version)
+static void _registry_global_cb (G_GNUC_UNUSED void *data, struct wl_registry *registry, uint32_t id, const char *interface, uint32_t version)
 {
 	cd_debug ("got a new global object, instance of %s, id=%d", interface, id);
 	if (!strcmp (interface, "wl_shell"))
@@ -165,6 +166,10 @@ static void _registry_global_cb (G_GNUC_UNUSED void *data, struct wl_registry *r
 	else if (!strcmp (interface, wl_compositor_interface.name))
 	{
 		s_pCompositor = wl_registry_bind(registry, id, &wl_compositor_interface, 1);
+	}
+	else if (gldi_zwlr_foreign_toplevel_manager_try_bind (registry, id, interface, version))
+	{
+		cd_debug("Found foreign-toplevel-manager");
 	}
 	else if (!strcmp (interface, "wl_output"))  // global object "wl_output" is now available, create a proxy for it
 	{

@@ -38,6 +38,7 @@
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-opengl.h"  // for texture_from_pixmap
 #include "cairo-dock-X-utilities.h"
+#include "cairo-dock-windows-manager.h" // gldi_window_parse_class
 
 #include <cairo/cairo-xlib.h>  // needed for cairo_xlib_surface_create
 
@@ -1111,75 +1112,15 @@ gchar *cairo_dock_get_xwindow_name (Window Xid, gboolean bSearchWmName)
 gchar *cairo_dock_get_xwindow_class (Window Xid, gchar **cWMClass)
 {
 	XClassHint *pClassHint = XAllocClassHint ();
-	gchar *cClass = NULL, *cWmClass = NULL;
+	gchar *cClass = NULL;
 	if (XGetClassHint (s_XDisplay, Xid, pClassHint) != 0 && pClassHint->res_class)
 	{
-		cWmClass = g_strdup (pClassHint->res_class);
-		
-		cd_debug ("  res_name : %s(%x); res_class : %s(%x)", pClassHint->res_name, pClassHint->res_name, pClassHint->res_class, pClassHint->res_class);
-		if (strcmp (pClassHint->res_class, "Wine") == 0 && pClassHint->res_name && (g_str_has_suffix (pClassHint->res_name, ".exe") || g_str_has_suffix (pClassHint->res_name, ".EXE")))  // wine application: use the name instead, because we don't want to group all wine apps togather
-		{
-			cd_debug ("  wine application detected, changing the class '%s' to '%s'", pClassHint->res_class, pClassHint->res_name);
-			cClass = g_ascii_strdown (pClassHint->res_name, -1);
-		}
-		// chromium web apps (not the browser): same remark as for wine apps
-		else if (pClassHint->res_name && pClassHint->res_name[0] != '\0' && pClassHint->res_class[0] != '\0'
-		         && (
-		          ((pClassHint->res_class[0] == 'c' || pClassHint->res_class[0] == 'C') && (strcmp(pClassHint->res_class+1, "hromium-browser") == 0 || strcmp(pClassHint->res_class+1, "hromium") == 0))
-		          || strcmp (pClassHint->res_class, "Google-chrome") == 0    // from Google
-		          || strcmp (pClassHint->res_class, "Google-chrome-beta") == 0
-		          || strcmp (pClassHint->res_class, "Google-chrome-unstable") == 0)
-		         && strcmp (pClassHint->res_class+1, pClassHint->res_name+1) != 0) // skip first letter (upper/lowercase)
-		{
-			cClass = g_ascii_strdown (pClassHint->res_name, -1);
-
-			/* Remove spaces. Why do they add spaces here?
-			 * (e.g.: Google-chrome-unstable (/home/$USER/.config/google-chrome-unstable))
-			 */
-			gchar *str = strchr (cClass, ' ');
-			if (str != NULL)
-				*str = '\0';
-
-			/* Replace '.' to '_' (e.g.: www.google.com__calendar). It's to not
-			 * just have 'www' as class (we will drop the rest just here after)
-			 */
-			for (int i = 0; cClass[i] != '\0'; i++)
-			{
-				if (cClass[i] == '.')
-					cClass[i] = '_';
-			}
-			cd_debug ("  chromium application detected, changing the class '%s' to '%s'", pClassHint->res_class, cClass);
-		}
-		else if (*pClassHint->res_class == '/' && (g_str_has_suffix (pClassHint->res_class, ".exe") || g_str_has_suffix (pClassHint->res_name, ".EXE")))  // case of Mono applications like tomboy ...
-		{
-			gchar *str = strrchr (pClassHint->res_class, '/');
-			if (str)
-				str ++;
-			else
-				str = pClassHint->res_class;
-			cClass = g_ascii_strdown (str, -1);
-			cClass[strlen (cClass) - 4] = '\0';
-		}
-		else
-		{
-			cClass = g_ascii_strdown (pClassHint->res_class, -1);  // down case because some apps change the case depending of their windows...
-		}
-
-		cairo_dock_remove_version_from_string (cClass);  // we remore number of version (e.g. Openoffice.org-3.1)
-
-		gchar *str = strchr (cClass, '.');  // we remove all .xxx otherwise we can't detect the lack of extension when looking for an icon (openoffice.org) or it's a problem when looking for an icon (jbrout.py).
-		if (str != NULL)
-			*str = '\0';
-		cd_debug ("got an application with class '%s'", cClass);
-		
+		cClass = gldi_window_parse_class(pClassHint->res_class, pClassHint->res_name);
+		if (cWMClass) *cWMClass = g_strdup (pClassHint->res_class);
 		XFree (pClassHint->res_name);
 		XFree (pClassHint->res_class);
 		XFree (pClassHint);
 	}
-	if (cWMClass)
-		*cWMClass = cWmClass;
-	else
-		g_free (cWmClass);
 	return cClass;
 }
 

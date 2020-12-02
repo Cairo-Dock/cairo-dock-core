@@ -2005,7 +2005,7 @@ static void _detach_icon (GldiContainer *pContainer, Icon *icon)
 	if (icon->pAppli != NULL)
 	{
 		//cd_debug ("on desactive la miniature de %s (Xid : %lx)", icon->cName, icon->Xid);
-		gldi_window_set_thumbnail_area (icon->pAppli, 0, 0, 0, 0);
+		gldi_window_set_thumbnail_area (icon->pAppli, pContainer->pWidget, 0, 0, 0, 0);
 	}
 	
 	//\___________________ On l'enleve de la liste.

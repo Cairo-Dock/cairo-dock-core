@@ -355,9 +355,9 @@ void gldi_appli_icon_set_geometry_for_window_manager (Icon *icon, CairoDock *pDo
 	iHeight = icon->fHeight + 2 * dh;  // on elargit en haut et en bas, pour gerer les cas ou l'icone grossirait vers le haut ou vers le bas.
 	
 	if (pDock->container.bIsHorizontal)
-		gldi_window_set_thumbnail_area (icon->pAppli, iX, iY - dh, iWidth, iHeight);
+		gldi_window_set_thumbnail_area (icon->pAppli, pDock->container.pWidget, iX, iY - dh, iWidth, iHeight);
 	else
-		gldi_window_set_thumbnail_area (icon->pAppli, iY - dh, iX, iHeight, iWidth);
+		gldi_window_set_thumbnail_area (icon->pAppli, pDock->container.pWidget, iY - dh, iX, iHeight, iWidth);
 }
 
 void gldi_appli_reserve_geometry_for_window_manager (GldiWindowActor *pAppli, Icon *icon, CairoDock *pMainDock)
@@ -439,9 +439,9 @@ void gldi_appli_reserve_geometry_for_window_manager (GldiWindowActor *pAppli, Ic
 			}
 			//g_print (" - %s en (%d;%d)\n", icon->cName, x, y);
 			if (pMainDock->container.bIsHorizontal)
-				gldi_window_set_minimize_position (pAppli, x, y);
+				gldi_window_set_minimize_position (pAppli, NULL, x, y);
 			else
-				gldi_window_set_minimize_position (pAppli, y, x);
+				gldi_window_set_minimize_position (pAppli, NULL, y, x);
 		}
 		else
 		{

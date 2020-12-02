@@ -65,8 +65,8 @@ struct _GldiWindowManagerBackend {
 	void (*maximize) (GldiWindowActor *actor, gboolean bMaximize);
 	void (*set_fullscreen) (GldiWindowActor *actor, gboolean bFullScreen);
 	void (*set_above) (GldiWindowActor *actor, gboolean bAbove);
-	void (*set_minimize_position) (GldiWindowActor *actor, int x, int y);
-	void (*set_thumbnail_area) (GldiWindowActor *actor, int x, int y, int w, int h);
+	void (*set_minimize_position) (GldiWindowActor *actor, GtkWidget* pContainerWidget, int x, int y);
+	void (*set_thumbnail_area) (GldiWindowActor *actor, GtkWidget* pContainerWidget, int x, int y, int w, int h);
 	void (*set_window_border) (GldiWindowActor *actor, gboolean bWithBorder);
 	cairo_surface_t* (*get_icon_surface) (GldiWindowActor *actor, int iWidth, int iHeight);
 	cairo_surface_t* (*get_thumbnail_surface) (GldiWindowActor *actor, int iWidth, int iHeight);
@@ -76,7 +76,7 @@ struct _GldiWindowManagerBackend {
 	void (*set_sticky) (GldiWindowActor *actor, gboolean bSticky);
 	void (*can_minimize_maximize_close) (GldiWindowActor *actor, gboolean *bCanMinimize, gboolean *bCanMaximize, gboolean *bCanClose);
 	guint (*get_id) (GldiWindowActor *actor);
-	GldiWindowActor* (*pick_window) (void);  // grab the mouse, wait for a click, then get the clicked window and returns its actor
+	GldiWindowActor* (*pick_window) (GtkWindow *pParentWindow);  // grab the mouse, wait for a click, then get the clicked window and returns its actor
 	} ;
 
 /// Definition of a window actor.
@@ -137,9 +137,13 @@ void gldi_window_maximize (GldiWindowActor *actor, gboolean bMaximize);
 void gldi_window_set_fullscreen (GldiWindowActor *actor, gboolean bFullScreen);
 void gldi_window_set_above (GldiWindowActor *actor, gboolean bAbove);
 
-void gldi_window_set_minimize_position (GldiWindowActor *actor, int x, int y);
+/// note: on Wayland, coordinates are relative to the passed widget's main surface (the wl_surface corresponding to its GdkWindow)
+/// on X11, pContainerWidget is ignored
+void gldi_window_set_minimize_position (GldiWindowActor *actor, GtkWidget* pContainerWidget, int x, int y);
 
-void gldi_window_set_thumbnail_area (GldiWindowActor *actor, int x, int y, int w, int h);
+/// note: on Wayland, coordinates are relative to the passed widget's main surface (the wl_surface corresponding to its GdkWindow)
+/// on X11, pContainerWidget is ignored
+void gldi_window_set_thumbnail_area (GldiWindowActor *actor, GtkWidget* pContainerWidget, int x, int y, int w, int h);
 
 void gldi_window_set_border (GldiWindowActor *actor, gboolean bWithBorder);
 
@@ -168,8 +172,18 @@ void gldi_window_move_to_current_desktop (GldiWindowActor *pAppli);
 
 guint gldi_window_get_id (GldiWindowActor *pAppli);
 
-GldiWindowActor *gldi_window_pick (void);
+GldiWindowActor *gldi_window_pick (GtkWindow *pParentWindow);
 
+
+/* utility for parsing special cases in the window class / app ID;
+ * used by both the X and Wayland backends
+ * 
+ * res_class and res_name should be the window class / app ID and window
+ * name / title as reported by the windowing system; the return value is
+ * a parsed class with some special cases handled; the caller should
+ * free it when it is done using it
+ * */
+gchar* gldi_window_parse_class(const gchar* res_class, const gchar* res_name);
 
 void gldi_register_windows_manager (void);
 
