@@ -334,6 +334,12 @@ void gldi_container_move (GldiContainer *pContainer, int iNumDesktop, int iAbsol
 		s_backend.move (pContainer, iNumDesktop, iAbsolutePositionX, iAbsolutePositionY);
 }
 
+void gldi_container_set_screen (GldiContainer* pContainer, int iNumScreen)
+{
+	if (s_backend.set_monitor)
+		s_backend.set_monitor (pContainer, iNumScreen);
+}
+
 
 struct GldiContainerMoveToRectData {
 	gulong signal_connected;
