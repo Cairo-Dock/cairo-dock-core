@@ -717,7 +717,7 @@ static void _reposition_one_root_dock (G_GNUC_UNUSED const gchar *cDockName, Cai
 	{
 		if (!pDock->bIsMainDock)
 			_get_root_dock_config (pDock);  // relit toute la conf.
-		
+		gldi_container_set_screen (CAIRO_CONTAINER (pDock), pDock->iNumScreen);
 		cairo_dock_update_dock_size (pDock);  // la taille max du dock depend de la taille de l'ecran, donc on recalcule son ratio.
 		cairo_dock_move_resize_dock (pDock);
 		gtk_widget_show (pDock->container.pWidget);
@@ -1761,6 +1761,7 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 	
 	if (pPosition->iNumScreen != pPrevPosition->iNumScreen)
 	{
+		gldi_container_set_screen (CAIRO_CONTAINER (pDock), pDock->iNumScreen);
 		_reposition_root_docks (TRUE);  // on replace tous les docks racines sauf le main dock, puisque c'est fait apres.
 	}
 	

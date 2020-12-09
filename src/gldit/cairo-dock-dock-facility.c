@@ -332,7 +332,8 @@ void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 				if (_has_multiple_screens_and_on_one_screen (pDock->iNumScreen)
 					&& cairo_dock_get_screen_position_y (pDock->iNumScreen) // y offset
 						+ cairo_dock_get_screen_height (pDock->iNumScreen)  // height of the current screen
-						< gldi_desktop_get_height ()) // total height
+						< gldi_desktop_get_height () // total height
+					&& !gldi_container_is_wayland_backend ())
 					cd_warning (CANT_RESERVE_SPACE_WARNING);
 				else
 				{
@@ -346,7 +347,8 @@ void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 				if (_has_multiple_screens_and_on_one_screen (pDock->iNumScreen)
 					&& cairo_dock_get_screen_position_x (pDock->iNumScreen) // x offset
 						+ cairo_dock_get_screen_width (pDock->iNumScreen)  // width of the current screen
-						< gldi_desktop_get_width ()) // total width
+						< gldi_desktop_get_width () // total width
+					&& !gldi_container_is_wayland_backend ())
 					cd_warning (CANT_RESERVE_SPACE_WARNING);
 				else
 				{
@@ -361,7 +363,8 @@ void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 			if (pDock->container.bIsHorizontal)
 			{
 				if (_has_multiple_screens_and_on_one_screen (pDock->iNumScreen)
-					&& cairo_dock_get_screen_position_y (pDock->iNumScreen) > 0)
+					&& cairo_dock_get_screen_position_y (pDock->iNumScreen) > 0
+					&& !gldi_container_is_wayland_backend ())
 					cd_warning (CANT_RESERVE_SPACE_WARNING);
 				else
 				{
@@ -373,7 +376,8 @@ void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 			else
 			{
 				if (_has_multiple_screens_and_on_one_screen (pDock->iNumScreen)
-					&& cairo_dock_get_screen_position_x (pDock->iNumScreen) > 0)
+					&& cairo_dock_get_screen_position_x (pDock->iNumScreen) > 0
+					&& !gldi_container_is_wayland_backend ())
 					cd_warning (CANT_RESERVE_SPACE_WARNING);
 				else
 				{
