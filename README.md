@@ -3,7 +3,7 @@ Cairo-Dock
 
 Cairo-Dock is a pretty, light and convenient interface to your desktop, able to replace advantageously your system panel!
 
-This repository contains an experimental fork that adds support for running on Wayland, under compositors that support the [layer shell](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-layer-shell-unstable-v1.xml) protocol.
+This repository contains an experimental fork that adds support for running on Wayland, under compositors that support the [layer shell](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-layer-shell-unstable-v1.xml) protocol. Main mainly targeting [Wayfire](https://github.com/WayfireWM/wayfire), but possibly others, such as [KWin](https://invent.kde.org/plasma/kwin).
 
 Note that this repository is not affiliated in any way with the Cairo-Dock project. Official releases of Cairo-Dock are available in the following repositories:
 
@@ -17,11 +17,12 @@ Requirements
 
  - Please see the original [guide](https://www.glx-dock.org/ww_page.php?p=By%20compiling&lang=en) for required dependencies. The following assumes that you are able to compile the official Git version of Cairo-Dock.
  - [gtk-layer-shell](https://github.com/wmww/gtk-layer-shell/) (recommended at least version 0.6 to support keyboard events)
- - GTK version at least 3.22.
- - Compositor support for the [layer-shell](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-layer-shell-unstable-v1.xml) protocol (recommended at least version 4 to allow the dock to receive keyboard events). See e.g. [here](https://github.com/swaywm/wlroots/wiki/Projects-which-use-wlroots) and [here](https://github.com/solarkraft/awesome-wlroots#compositors) for candidates. Also, [KWin](https://invent.kde.org/plasma/kwin) version 5.20 and later is supported.
- - (Optionally) compositor support for the [foreign-toplevel-management](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-foreign-toplevel-management-unstable-v1.xml) or the [plasma-window-management](https://invent.kde.org/libraries/plasma-wayland-protocols/-/blob/master/src/protocols/plasma-window-management.xml) protocol; this is needed for taskbar functionality.
+ - GTK version at least 3.22 (also tested with version 3.24).
+ - Compositor support for the [layer-shell](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-layer-shell-unstable-v1.xml) protocol (recommended at least version 4 to allow the dock to receive keyboard events). See e.g. [here](https://gitlab.freedesktop.org/wlroots/wlroots/-/wikis/Projects-which-use-wlroots) and [here](https://github.com/solarkraft/awesome-wlroots#compositors) for candidates. Also, [KWin](https://invent.kde.org/plasma/kwin) version 5.20 and later is supported.
+ - Optionally (but highly recommended) compositor support for the [foreign-toplevel-management](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-foreign-toplevel-management-unstable-v1.xml) or the [plasma-window-management](https://invent.kde.org/libraries/plasma-wayland-protocols/-/blob/master/src/protocols/plasma-window-management.xml) protocol; this is needed for taskbar functionality.
+ - Optionally, if using Wayfire, [this plugin](https://github.com/dkondor/wayfire-scale-ipc) for some additional functionality.
 
-Tested on Ubuntu 18.04 with [Wayfire](https://github.com/WayfireWM/wayfire), [sway](https://github.com/swaywm/sway/) and [wlroots](https://github.com/swaywm/wlroots/) compiled from recent git. Also tested with [KWin 5.20](https://invent.kde.org/plasma/kwin) (only works without OpenGL; only tested without Plasma shell).
+Tested on Ubuntu 18.04, 20.04 and 22.04 with recent versions of [Wayfire](https://github.com/WayfireWM/wayfire) (0.7.0 and 0.8.0), [sway](https://github.com/swaywm/sway/) and [wlroots](https://gitlab.freedesktop.org/wlroots/wlroots/) (0.16.2). Also tested with [KWin 5.20](https://invent.kde.org/plasma/kwin) (only works without OpenGL; only tested without Plasma shell).
 
 
 Compilation
@@ -57,7 +58,7 @@ Known issues:
  - Multi-monitor support is very limited (the dock will show up on whichever output it thinks is the main one when starting; behavior is buggy when trying to set another output for it).
  - Tracking virtual desktops / workspaces is not supported.
  - Dialogs flicker sometimes (although this seems to happen on X11 too in some cases).
- - EGL rendering under Wayland relies on an officially unsupported interface in GTK (i.e. it uses [gtk_widget_set_double_buffered()](https://developer.gnome.org/gtk3/stable/GtkWidget.html#gtk-widget-set-double-buffered) which is only supported on X11); in practice it works well at least with GTK 3.22.30 on Wayfire and Sway.
+ - EGL rendering under Wayland relies on an officially unsupported interface in GTK (i.e. it uses [gtk_widget_set_double_buffered()](https://developer.gnome.org/gtk3/stable/GtkWidget.html#gtk-widget-set-double-buffered) which is only supported on X11); in practice it works well at least with GTK versions 3.22.30 and 3.24.33 on Wayfire and Sway.
  - EGL / OpenGL does not work on KWin (complains about some layer-shell surfaces having a zero size set; this might be related to the above point), run the dock with the `-c` switch.
  - On KWin, clicking on the active app to minimize it does not work most of the time (minimizing from the menu works).
  - Wayland protocols should not be included directly as header files, but should be created dynamically by running `wayland-scanner` as part of the build process. I don't know how to do this with CMake.

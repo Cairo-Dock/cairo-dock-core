@@ -25,6 +25,7 @@
 #include "cairo-dock-kwin-integration.h"
 #include "cairo-dock-gnome-shell-integration.h"
 #include "cairo-dock-cinnamon-integration.h"
+#include "cairo-dock-wayfire-integration.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-desktop-manager.h"
 
@@ -362,6 +363,7 @@ static void init (void)
 	cd_init_kwin_backend ();
 	cd_init_gnome_shell_backend ();
 	cd_init_cinnamon_backend ();
+	cd_init_wayfire_backend ();
 }
 
 
