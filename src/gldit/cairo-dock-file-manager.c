@@ -491,7 +491,18 @@ gboolean cairo_dock_copy_file (const gchar *cFilePath, const gchar *cDestPath)
 	gboolean ret = TRUE;
 	// open both files
 	int src_fd = open (cFilePath, O_RDONLY);
-	int dest_fd = open (cDestPath, O_CREAT | O_WRONLY, S_IRUSR|S_IWUSR | S_IRGRP | S_IROTH);  // mode=644
+	int dest_fd;
+	if (g_file_test (cDestPath, G_FILE_TEST_IS_DIR))
+	{
+		const gchar *cFileName = strrchr(cFilePath, '/');
+		gchar *cFileDest = g_strdup_printf("%s/%s", cDestPath, cFileName ? cFileName : cFilePath);
+		dest_fd = open (cFileDest, O_CREAT | O_WRONLY, S_IRUSR|S_IWUSR | S_IRGRP | S_IROTH);  // mode=644
+		g_free(cFileDest);
+	}
+	else
+	{
+		dest_fd = open (cDestPath, O_CREAT | O_WRONLY, S_IRUSR|S_IWUSR | S_IRGRP | S_IROTH);  // mode=644
+	}
 	struct stat stat;
 	// get data size to be copied
 	if (fstat (src_fd, &stat) < 0)
