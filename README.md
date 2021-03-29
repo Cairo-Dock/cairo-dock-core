@@ -1,61 +1,68 @@
 Cairo-Dock
 ==========
 
-Cairo-Dock is a pretty, light and convenient interface to your desktop, able to replace advantageously your system panel! It features multi-docks, taskbar, launchers and a lot of useful applets. Applets can be detached from the dock to act as desktop widgets. Numerous ready-to-use themes are available in 1 click, and can be easily customized at your convenience. It can use hardware acceleration to be very fast and low on CPU.
+Cairo-Dock is a pretty, light and convenient interface to your desktop, able to replace advantageously your system panel!
 
-[![Preview](http://download.tuxfamily.org/glxdock/communication/images/3.3/cd-panel-mix-600.jpg)](http://download.tuxfamily.org/glxdock/communication/images/3.3/cd-panel-mix.png)
-Other screenshots are available at [Glx-Dock.org](http://www.glx-dock.org/mc_album.php?a=3).
+This repository contains an experimental fork that adds support for running on Wayland, under compositors that support the [layer shell](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-layer-shell-unstable-v1.xml) protocol.
 
-This project is split in 3 parts:
+Note that this repository is not affiliated in any way with the Cairo-Dock project. Official releases of Cairo-Dock are available in the following repositories:
 
   - Cairo-Dock-Core (the minimal - https://github.com/Cairo-Dock/cairo-dock-core)
   - Cairo-Dock-Plug-ins (a collection of views, applets, animations, effects, etc. - https://github.com/Cairo-Dock/cairo-dock-plug-ins)
   - Cairo-Dock-Plug-ins-Extras (a collection of third-party applets written in any language - https://github.com/Cairo-Dock/cairo-dock-plug-ins-extras)
 
-The Cairo-Dock-Session project aims to provide an easy way to install a session that is desktop agnostic and uses Cairo-Dock as a Shell (the main interface).
 
-
-Installation
+Requirements
 ------------
 
-Please see our [Wiki at Glx-Dock.org](http://www.glx-dock.org/ww_page.php?p=By%20distributions&lang=en) for an excellent installation guide.
+ - Please see the original [guide](https://www.glx-dock.org/ww_page.php?p=By%20compiling&lang=en) for required dependencies. The following assumes that you are able to compile the official Git version of Cairo-Dock.
+ - [gtk-layer-shell](https://github.com/wmww/gtk-layer-shell/) (recommended at least version 0.6 to support keyboard events)
+ - GTK version at least 3.22.
+ - Compositor support for the [layer-shell](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-layer-shell-unstable-v1.xml) protocol (recommended at least version 4 to allow the dock to receive keyboard events). See e.g. [here](https://github.com/swaywm/wlroots/wiki/Projects-which-use-wlroots) and [here](https://github.com/solarkraft/awesome-wlroots#compositors) for candidates. Also, [KWin](https://invent.kde.org/plasma/kwin) version 5.20 and later is supported.
+ - (Optionally) compositor support for the [foreign-toplevel-management](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-foreign-toplevel-management-unstable-v1.xml) or the [plasma-window-management](https://invent.kde.org/libraries/plasma-wayland-protocols/-/blob/master/src/protocols/plasma-window-management.xml) protocol; this is needed for taskbar functionality.
 
-Tarballs of the sources are available at: https://launchpad.net/cairo-dock-core and https://launchpad.net/cairo-dock-plug-ins
-
-A stable **PPA** is available here : https://launchpad.net/~cairo-dock-team/+archive/ppa
-
-
-Need some help?
----------------
-
-See our wiki! http://www.glx-dock.org/ww_page.php
-
-You can find: how to launch the dock at startup, how to customise it, how to resolve some recurrent problems (black background, messages at startup, etc.), how to help us, who we are, etc.
-A useful tutorial is also available to help you customize your dock: http://www.glx-dock.org/ww_page.php?p=Tutorial-Customisation&lang=en
-
-If you have other questions not solved on our wiki you can post them on our forum (in English or French): http://www.glx-dock.org/bg_forumlist.php
+Tested on Ubuntu 18.04 with [Wayfire](https://github.com/WayfireWM/wayfire), [sway](https://github.com/swaywm/sway/) and [wlroots](https://github.com/swaywm/wlroots/) compiled from recent git. Also tested with [KWin 5.20](https://invent.kde.org/plasma/kwin) (only works without OpenGL; only tested without Plasma shell).
 
 
-Join the project
-----------------
-
-* Want to **HACK** into the dock or write an **APPLET**? see the complete C API here: http://doc.glx-dock.org
-* You don't like C and still want to write an **APPLET** for the dock or **CONTROL** it from a script or the terminal? see its powerful DBus API here: http://www.glx-dock.org/ww_page.php?p=Control_your_dock_with_DBus&lang=en
-* You have some **IDEAS / PROPOSITIONS**? You need some help to develop an applet? Feel free post a topic on our forum! We'll be happy to answer you!
-* You want to **TRANSLATE** Cairo-Dock in your language? Use the 'Translations' tab in Launchpad, it's very simple to use it and helpful for us!
-
-
-Bug reports
+Compilation
 -----------
 
-You can report bugs in **Launchpad** under the '[Bugs](https://bugs.launchpad.net/cairo-dock)' section. If possible:
+See the original [guide](https://www.glx-dock.org/ww_page.php?p=By%20compiling&lang=en) for the steps to compile and install Cario-Dock; replace the cairo-dock-core repository with this branch. Note that plug-ins should be ABI compatible with Cairo-Dock compiled from this branch. This means that a recent version of the plug-ins from the [official repository](https://github.com/Cairo-Dock/cairo-dock-plug-ins) will work well.
 
-* Read our wiki specially the '[Recurring Problems](http://www.glx-dock.org/ww_page.php?p=Recurrents%20problems&lang=en)' section which can help you to resolve some bugs like a black background, messages at startup, etc.
-* Please include also some information like your distribution, your achitecture (32/64bits), your Desktop Manager (Gnome, KDE, XFCE,...) your Window Manager (Compiz, Metacity, Kwin, etc.), if you use Cairo-Dock with or without OpenGL, with which theme, etc.
-* Include the method to reproduce the bug (which actions, which options activated)
-* Run the dock with the command
-          cairo-dock -l debug > debug.txt
-reproduce the bug and join the content of debug.txt.
-* If it's a crash, please give us a backtrace of it with GDB. It's easy thanks to this [wiki page](http://wiki.glx-dock.org/?p=ddd).
+Additional things to consider:
+ - The cmake configuration summary will report if gtk-layer-shell is enabled, i.e. you should see `* With gtk-layer-shell: yes` in the output of cmake. If not, check that the gtk-layer-shell library is properly installed.
+ - The `enable-gtk-layer-shell` cmake option can be used to manually disable / enable layer-shell support.
+ - The `use-new-positioning-on-x11` cmake option can be used to change to some new code paths under X11 as well. This is useful to test for regressions.
+ - To use hardware acceleration on Wayland, EGL support should be enabled and GLX support should be disabled. If this is not the case, check that the EGL libraries are available.
 
-Thank you for your help!
+
+Running
+-------
+
+The `WAYLAND_DISPLAY` environment variable needs to be set when running on Wayland (typically `wayland-1` on recent wlroots or `wayland-0` on KWin). Cairo-Dock can be forced to try to use the Wayland or X11 backend with the `-L` and `-X` command line switch resepctively. Also, the `-c` switch can be used to disable OpenGL, and the `-o` switch to try to force it. These can be useful especially when running in a nested compositor.
+
+
+What works:
+ - Dock positioning along a screen edge and keeping above / below and reserving space with the layer-shell protocol.
+ - Proper positioning of subdocks, menus and dialogs.
+ - Hardware acceleration with EGL.
+ - Taskbar (if the compositor supports the [foreign-toplevel-management](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-foreign-toplevel-management-unstable-v1.xml) or [plasma-window-management](https://invent.kde.org/libraries/plasma-wayland-protocols/-/blob/master/src/protocols/plasma-window-management.xml) protocol).
+
+Known issues:
+ - Subdocks disappear when an app is activated (this is a limitation of using xdg-popups).
+ - Hiding / showing the dock does not work (hiding works, but there is no way to recall the dock).
+ - Tracking visibility does not work, i.e. it is not detected if the dock overlaps with open windows.
+ - Crashes in some situations which I believe are caused by a [bug in wlroots](https://github.com/swaywm/wlroots/issues/2543). [This patch](https://github.com/swaywm/wlroots/pull/2551) should solve it.
+ - Multi-monitor support is very limited (the dock will show up on whichever output it thinks is the main one when starting; behavior is buggy when trying to set another output for it).
+ - Tracking virtual desktops / workspaces is not supported.
+ - Dialogs flicker sometimes (although this seems to happen on X11 too in some cases).
+ - EGL rendering under Wayland relies on an officially unsupported interface in GTK (i.e. it uses [gtk_widget_set_double_buffered()](https://developer.gnome.org/gtk3/stable/GtkWidget.html#gtk-widget-set-double-buffered) which is only supported on X11); in practice it works well at least with GTK 3.22.30 on Wayfire and Sway.
+ - EGL / OpenGL does not work on KWin (complains about some layer-shell surfaces having a zero size set; this might be related to the above point), run the dock with the `-c` switch.
+ - On KWin, clicking on the active app to minimize it does not work most of the time (minimizing from the menu works).
+ - Wayland protocols should not be included directly as header files, but should be created dynamically by running `wayland-scanner` as part of the build process. I don't know how to do this with CMake.
+
+
+Other resources
+---------------
+
+Please see the original [repository](https://github.com/Cairo-Dock/cairo-dock-core) and [homepage](https://www.glx-dock.org). Please do not report bugs from this branch there.
