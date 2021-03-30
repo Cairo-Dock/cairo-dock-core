@@ -1,21 +1,12 @@
 
 [Desktop Entry]
 Type=Application
-Exec=cairo-dock -A
+Exec=@CMAKE_INSTALL_PREFIX@/bin/cairo-dock
 Icon=cairo-dock
 Terminal=false
+X-KDE-Wayland-Interfaces=org_kde_plasma_window_management
 
-Name=Cairo-Dock (Fallback Mode)
-Name[de]=Cairo-Dock (Fallback-Modus)
-Name[fr]=Cairo-Dock (Mode Restreint)
-Name[it]=Cairo-Dock (Modalità Fallback)
-Name[nl]=Cairo-Dock (terugval-modus)
-Name[pt]=Cairo-Dock (Modo de Fallback)
-Name[pt_BR]=Cairo-Dock (Modo de Fallback)
-Name[sr]=Каиро док (заменски начин рада)
-Name[sr@latin]=Каиро док (заменски начин рада)
-Name[uk]=Cairo-Dock (Режим Fallback)
-Name[uz]=Cairo-Dock (Аппарат Тезланиши Режими)
+Name=Cairo-Dock
 
 Comment=A light and eye-candy dock and desklets for your desktop.
 Comment[de]=Ein schlankes und hübsches Dock mit Desklets für Ihren Schreibtisch.
