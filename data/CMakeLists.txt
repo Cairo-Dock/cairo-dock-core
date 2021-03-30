@@ -20,6 +20,9 @@ configure_file (${CMAKE_CURRENT_SOURCE_DIR}/container.desktop.in ${CMAKE_CURRENT
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/separator.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/separator.desktop)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/themes.conf.in ${CMAKE_CURRENT_BINARY_DIR}/themes.conf)
 
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/cairo-dock.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/cairo-dock.desktop)
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/cairo-dock-cairo.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/cairo-dock-cairo.desktop)
+
 
 ########### install files ###############
 
@@ -50,6 +53,6 @@ install (FILES
 
 # appli desktop file
 install (FILES
-	cairo-dock.desktop
-	cairo-dock-cairo.desktop
+	${CMAKE_CURRENT_BINARY_DIR}/cairo-dock.desktop
+	${CMAKE_CURRENT_BINARY_DIR}/cairo-dock-cairo.desktop
 	DESTINATION ${datadir}/applications)
