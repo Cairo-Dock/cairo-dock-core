@@ -203,6 +203,11 @@ struct _GldiContainerManagerBackend {
 	void (*set_input_shape) (GldiContainer *pContainer, cairo_region_t *pShape);
 	/// set the monitor (screen) this container should appear -- required on Wayland
 	void (*set_monitor) (GldiContainer *pContainer, int iNumScreen);
+	/// recall hidden dock if the mouse is close to a screen edge
+	/// start looking at the screen edges (for any edge necessary)
+	void (*start_polling_screen_edge) ();
+	/// stop looking at all screen edges
+	void (*stop_polling_screen_edge) ();
 };
 
 
@@ -336,6 +341,10 @@ void gldi_container_calculate_rect (const GldiContainer* pContainer, const Icon*
 void gldi_container_calculate_aimed_point (const Icon* pIcon, int w, int h,
 	int iMarginPosition, int* iAimedX, int* iAimedY);
 
+/// start looking at the screen edges (for any edge necessary)
+void gldi_container_start_polling_screen_edge (void);
+/// stop looking at all screen edges
+void gldi_container_stop_polling_screen_edge (void);
 
 /// Set to keep the container's GtkWindow below or above other windows.
 /// On X11, this calls gtk_window_set_keep_below(); on Wayland, this tries to adjust the

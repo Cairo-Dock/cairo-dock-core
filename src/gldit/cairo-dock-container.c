@@ -575,6 +575,18 @@ void gldi_container_set_input_shape(GldiContainer *pContainer, cairo_region_t *p
 		s_backend.set_input_shape (pContainer, pShape);
 }
 
+void gldi_container_start_polling_screen_edge (void)
+{
+	if (s_backend.start_polling_screen_edge)
+		s_backend.start_polling_screen_edge ();
+}
+
+void gldi_container_stop_polling_screen_edge (void)
+{
+	if (s_backend.stop_polling_screen_edge)
+		s_backend.stop_polling_screen_edge ();
+}
+
 
 void gldi_container_manager_register_backend (GldiContainerManagerBackend *pBackend)
 {
