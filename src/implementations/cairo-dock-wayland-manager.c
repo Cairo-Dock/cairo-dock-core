@@ -43,6 +43,7 @@
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-foreign-toplevel.h"
 #include "cairo-dock-plasma-window-manager.h"
+#include "cairo-dock-wayfire-shell.h"
 #include "cairo-dock-egl.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-wayland-manager.h"
@@ -252,6 +253,7 @@ GdkMonitor *const *gldi_wayland_get_monitors (int *iNumMonitors)
 
 static gboolean s_bInitializing = TRUE;  // each time a callback is called on startup, it will set this to TRUE, and we'll make a roundtrip to the server until no callback is called.
 static gboolean s_bWindowManagerFound = FALSE; // limit to only try to bind either wlr or plasma window maneger interface
+static gboolean s_bWfShellFound = FALSE; // true if we have wayfire-shell
 
 CairoDockPositionType gldi_wayland_get_edge_for_dock (const CairoDock *pDock)
 {
@@ -275,6 +277,11 @@ static void _registry_global_cb (G_GNUC_UNUSED void *data, struct wl_registry *r
 	else if (!strcmp (interface, wl_compositor_interface.name))
 	{
 		s_pCompositor = wl_registry_bind(registry, id, &wl_compositor_interface, 1);
+	}
+	else if (gldi_zwf_shell_try_bind (registry, id, interface, version))
+	{
+		cd_debug("Found wayfire-shell");
+		s_bWfShellFound = TRUE;
 	}
 	else if (!s_bWindowManagerFound && gldi_zwlr_foreign_toplevel_manager_try_bind (registry, id, interface, version))
 	{
@@ -472,6 +479,26 @@ static void _move_resize_dock (CairoDock *pDock)
 #endif
 }
 
+// wayfire-shell functions for hotspots
+static int s_iNbPolls = 0;
+
+static void _start_polling_screen_edge (void)
+{
+	s_iNbPolls ++;
+	gldi_zwf_shell_update_hotspots ();
+}
+
+static void _stop_polling_screen_edge (void)
+{
+	s_iNbPolls --;
+	if (s_iNbPolls <= 0)
+	{
+		gldi_zwf_manager_stop ();  // remove all hotspots
+		s_iNbPolls = 0;
+	}
+	else gldi_zwf_shell_update_hotspots (); // in this case, we only update hotspots
+}
+
 static gboolean _is_wayland() { return TRUE; }
 
 static void init (void)
@@ -497,6 +524,11 @@ static void init (void)
 		cmb.set_monitor = _layer_shell_move_to_monitor;
 	}
 #endif
+	if (s_bWfShellFound)
+	{
+		cmb.start_polling_screen_edge = _start_polling_screen_edge;
+		cmb.stop_polling_screen_edge = _stop_polling_screen_edge;
+	}
 	cmb.set_input_shape = _set_input_shape;
 	cmb.is_wayland = _is_wayland;
 	cmb.move_resize_dock = _move_resize_dock;
