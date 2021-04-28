@@ -23,6 +23,7 @@
 #include "cairo-dock-struct.h"
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-dock-factory.h"
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
@@ -32,11 +33,28 @@ G_BEGIN_DECLS
 * The Wayland manager handles signals from Wayland and dispatch them to the Windows manager and the Desktop manager.
 */
 
+#ifndef _MANAGER_DEF_
+extern GldiManager myWaylandMgr;
+#endif
+
+typedef enum {
+	/// notification called when a new monitor was added, data : the GdkMonitor added
+	NOTIFICATION_WAYLAND_MONITOR_ADDED = NB_NOTIFICATIONS_OBJECT,
+	/// notification called when a monitor was removed, data : the GdkMonitor removed
+	NOTIFICATION_WAYLAND_MONITOR_REMOVED,
+	NB_NOTIFICATIONS_WAYLAND_DESKTOP
+	} CairoWaylandDesktopNotifications;
 
 void gldi_register_wayland_manager (void);
 
 /// Get the screen edge this dock should be anchored to
 CairoDockPositionType gldi_wayland_get_edge_for_dock (const CairoDock *pDock);
+
+/// Get the GdkMonitor a given dock is on as managed by this class
+GdkMonitor *gldi_dock_wayland_get_monitor (CairoDock *pDock);
+
+/// Get the list of monitors currently managed -- caller should not modify the GdkMonitor* pointers stored here
+GdkMonitor *const *gldi_wayland_get_monitors (int *iNumMonitors);
 
 G_END_DECLS
 #endif

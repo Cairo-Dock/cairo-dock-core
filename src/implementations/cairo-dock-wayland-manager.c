@@ -136,24 +136,22 @@ static void _monitor_added (GdkDisplay *display, GdkMonitor* monitor, gpointer u
 		s_pPrimaryMonitor = monitor;
 	_calculate_xscreen ();
 	if (user_data) gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_GEOMETRY_CHANGED, FALSE);
+	
+	// we always send notification on the Wayland manager object
+	gldi_object_notify (&myWaylandMgr, NOTIFICATION_WAYLAND_MONITOR_ADDED, monitor);
 }
 
 // handle if a monitor was removed
 static void _monitor_removed (GdkDisplay* display, GdkMonitor* monitor, G_GNUC_UNUSED gpointer user_data)
 {
-	int iNumScreen = -1;
 	if (!(g_desktopGeometry.pScreens && s_pMonitors && g_desktopGeometry.iNbScreens > 0))
 		cd_warning ("_monitor_removed() inconsistent state of screens / monitors\n");
 	else
 	{
 		int i;
 		for (i = 0; i < g_desktopGeometry.iNbScreens; i++)
-			if (s_pMonitors[i] == monitor) 
-			{
-				iNumScreen = i;
-				break;
-			}
-		if (iNumScreen == -1)
+			if (s_pMonitors[i] == monitor) break;
+		if (i == g_desktopGeometry.iNbScreens)
 		{
 			cd_warning ("_monitor_removed() inconsistent state of screens / monitors\n");
 			return;
@@ -170,6 +168,9 @@ static void _monitor_removed (GdkDisplay* display, GdkMonitor* monitor, G_GNUC_U
 		g_desktopGeometry.pScreens = g_renew (GtkAllocation, g_desktopGeometry.pScreens, g_desktopGeometry.iNbScreens);
 		_calculate_xscreen ();
 		gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_GEOMETRY_CHANGED, FALSE);
+		
+		// we always send notification on the Wayland manager object
+		gldi_object_notify (&myWaylandMgr, NOTIFICATION_WAYLAND_MONITOR_REMOVED, monitor);
 	}
 }
 
@@ -191,7 +192,9 @@ static void _refresh_monitors (GdkScreen *screen, gpointer user_data)
 	if (iNumScreen != g_desktopGeometry.iNbScreens)
 	{
 		// we don't try to guess what has changed, just refresh all monitors
-		g_free (s_pMonitors);
+		GdkMonitor **tmp = s_pMonitors;
+		s_pMonitors = NULL;
+		int iNumOld = g_desktopGeometry.iNbScreens;
 		g_free (g_desktopGeometry.pScreens);
 		g_desktopGeometry.iNbScreens = iNumScreen;
 		s_pMonitors = g_renew (GdkMonitor*, s_pMonitors, g_desktopGeometry.iNbScreens);
@@ -206,10 +209,46 @@ static void _refresh_monitors (GdkScreen *screen, gpointer user_data)
 		if (!s_pPrimaryMonitor) s_pPrimaryMonitor = s_pMonitors[0];
 		_calculate_xscreen ();
 		if (user_data) gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_GEOMETRY_CHANGED, FALSE);
+		
+		// figure out if any monitors were added / removed and emit the Wayland-specific notifications
+		for (i = 0; i < iNumScreen; i++)
+		{
+			int j;
+			GdkMonitor *mon = s_pMonitors[i];
+			for (j = 0; j < iNumOld; j++) if (tmp[j] == mon) break;
+			if (j < iNumOld)
+			{
+				// this monitor was present before
+				if (j + 1 < iNumOld) tmp[j] = tmp[iNumOld - 1];
+				iNumOld--;
+			}
+			else gldi_object_notify (&myWaylandMgr, NOTIFICATION_WAYLAND_MONITOR_ADDED, mon);
+		}
+		// send notifications for monitors
+		for (i = 0; i < iNumOld; i++) gldi_object_notify (&myWaylandMgr, NOTIFICATION_WAYLAND_MONITOR_REMOVED, tmp[i]);
+		
+		g_free(tmp);
 	}
 	else _refresh_monitors_size (screen, user_data);
 }
 
+static GdkMonitor* _get_monitor (int iNumScreen)
+{
+	GdkMonitor *monitor = (iNumScreen >= 0 && iNumScreen < g_desktopGeometry.iNbScreens) ?
+		s_pMonitors[iNumScreen] : s_pPrimaryMonitor;
+	return monitor;
+}
+
+GdkMonitor* gldi_dock_wayland_get_monitor (CairoDock *pDock)
+{
+	return _get_monitor (pDock->iNumScreen);
+}
+
+GdkMonitor *const *gldi_wayland_get_monitors (int *iNumMonitors)
+{
+	*iNumMonitors = g_desktopGeometry.iNbScreens;
+	return s_pMonitors;
+}
 
 static gboolean s_bInitializing = TRUE;  // each time a callback is called on startup, it will set this to TRUE, and we'll make a roundtrip to the server until no callback is called.
 static gboolean s_bWindowManagerFound = FALSE; // limit to only try to bind either wlr or plasma window maneger interface
@@ -335,7 +374,7 @@ static void _set_keep_below (GldiContainer *pContainer, gboolean bKeepBelow)
 	gtk_layer_set_layer (window, bKeepBelow ? GTK_LAYER_SHELL_LAYER_BOTTOM : GTK_LAYER_SHELL_LAYER_TOP);
 }
 
-void _layer_shell_init_for_window (GldiContainer *pContainer)
+static void _layer_shell_init_for_window (GldiContainer *pContainer)
 {
 	GtkWindow* window = GTK_WINDOW (pContainer->pWidget);
 	if (gtk_window_get_transient_for (window))
@@ -374,13 +413,12 @@ void _layer_shell_init_for_window (GldiContainer *pContainer)
 	}
 }
 
-void _layer_shell_move_to_monitor (GldiContainer *pContainer, int iNumScreen)
+static void _layer_shell_move_to_monitor (GldiContainer *pContainer, int iNumScreen)
 {
 	GtkWindow *window = GTK_WINDOW (pContainer->pWidget);
 	// this only works for parent windows, not popups
 	if (gtk_window_get_transient_for (window)) return;
-	GdkMonitor *monitor = (iNumScreen >= 0 && iNumScreen < g_desktopGeometry.iNbScreens) ?
-		s_pMonitors[iNumScreen] : s_pPrimaryMonitor;
+	GdkMonitor *monitor = _get_monitor (iNumScreen);
 	if (monitor) gtk_layer_set_monitor (window, monitor);
 }
 #endif
@@ -498,6 +536,8 @@ void gldi_register_wayland_manager (void)
 	// data
 	myWaylandMgr.iSizeOfData = 0;
 	myWaylandMgr.pData = (GldiManagerDataPtr)NULL;
+	//!! TODO: is it OK to add notifications before init??
+	gldi_object_install_notifications (&myWaylandMgr, NB_NOTIFICATIONS_WAYLAND_DESKTOP);
 	// register
 	gldi_object_init (GLDI_OBJECT(&myWaylandMgr), &myManagerObjectMgr, NULL);
 	
