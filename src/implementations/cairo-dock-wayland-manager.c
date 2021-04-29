@@ -39,6 +39,7 @@
 #include "cairo-dock-class-manager.h"  // gldi_class_startup_notify_end
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-container.h"  // GldiContainerManagerBackend
+#include "cairo-dock-dock-factory.h" // struct _CairoDock
 #include "cairo-dock-egl.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-wayland-manager.h"
@@ -132,12 +133,24 @@ static void _output_scale_cb (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct wl_
 	s_bInitializing = TRUE;
 }
 
+
 static const struct wl_output_listener output_listener = {
 	_output_geometry_cb,
 	_output_mode_cb,
 	_output_done_cb,
 	_output_scale_cb
 };
+
+CairoDockPositionType gldi_wayland_get_edge_for_dock (const CairoDock *pDock)
+{
+	CairoDockPositionType pos;
+	if (pDock->container.bIsHorizontal == CAIRO_DOCK_HORIZONTAL)
+		pos = pDock->container.bDirectionUp ? CAIRO_DOCK_BOTTOM : CAIRO_DOCK_TOP;
+	else if (pDock->container.bIsHorizontal == CAIRO_DOCK_VERTICAL)
+		pos = pDock->container.bDirectionUp ? CAIRO_DOCK_RIGHT : CAIRO_DOCK_LEFT;
+	else pos = CAIRO_DOCK_INSIDE_SCREEN;
+	return pos;
+}
 
 static void _registry_global_cb (G_GNUC_UNUSED void *data, struct wl_registry *registry, uint32_t id, const char *interface, G_GNUC_UNUSED uint32_t version)
 {
@@ -196,35 +209,6 @@ static void _layer_shell_reserve_space (GldiContainer *pContainer, int left, int
 	gtk_layer_set_exclusive_zone (window, r);
 }
 
-static void _set_layer_shell_anchor (GldiContainer *pContainer, CairoDockPositionType iScreenBorder)
-{
-	GtkWindow* window = GTK_WINDOW (pContainer->pWidget);
-	// Reset old anchors
-	gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_BOTTOM, FALSE);
-	gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_TOP, FALSE);
-	gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_RIGHT, FALSE);
-	gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_LEFT, FALSE);
-	// Set new anchor
-	switch (iScreenBorder)
-	{
-		case CAIRO_DOCK_BOTTOM :
-			gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_BOTTOM, TRUE);
-		break;
-		case CAIRO_DOCK_TOP :
-			gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_TOP, TRUE);
-		break;
-		case CAIRO_DOCK_RIGHT :
-			gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_RIGHT, TRUE);
-		break;
-		case CAIRO_DOCK_LEFT :
-			gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_LEFT, TRUE);
-		break;
-		case CAIRO_DOCK_INSIDE_SCREEN :
-		case CAIRO_DOCK_NB_POSITIONS :
-		break;
-	}
-}
-
 static void _set_keep_below (GldiContainer *pContainer, gboolean bKeepBelow)
 {
 	GtkWindow* window = GTK_WINDOW (pContainer->pWidget);
@@ -271,6 +255,53 @@ void _layer_shell_init_for_window (GldiContainer *pContainer)
 }
 #endif
 
+static void _move_resize_dock (CairoDock *pDock)
+{
+	int iNewWidth = pDock->iMaxDockWidth;
+	int iNewHeight = pDock->iMaxDockHeight;
+	
+	if (pDock->container.bIsHorizontal)
+	{
+		gdk_window_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)), iNewWidth, iNewHeight);
+	}
+	else
+	{
+		gdk_window_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)), iNewHeight, iNewWidth);
+	}
+
+#ifdef HAVE_GTK_LAYER_SHELL
+	if (s_bHave_Layer_Shell)
+	{
+		GtkWindow* window = GTK_WINDOW (pDock->container.pWidget);
+		// Reset old anchors
+		gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_BOTTOM, FALSE);
+		gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_TOP, FALSE);
+		gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_RIGHT, FALSE);
+		gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_LEFT, FALSE);
+		// Set new anchor
+		CairoDockPositionType iScreenBorder = gldi_wayland_get_edge_for_dock (pDock);
+		switch (iScreenBorder)
+		{
+			case CAIRO_DOCK_BOTTOM :
+				gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_BOTTOM, TRUE);
+			break;
+			case CAIRO_DOCK_TOP :
+				gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_TOP, TRUE);
+			break;
+			case CAIRO_DOCK_RIGHT :
+				gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_RIGHT, TRUE);
+			break;
+			case CAIRO_DOCK_LEFT :
+				gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_LEFT, TRUE);
+			break;
+			case CAIRO_DOCK_INSIDE_SCREEN :
+			case CAIRO_DOCK_NB_POSITIONS :
+			break;
+		}
+	}
+#endif
+}
+
 static gboolean _is_wayland() { return TRUE; }
 
 static void init (void)
@@ -296,12 +327,12 @@ static void init (void)
 	if (s_bHave_Layer_Shell)
 	{
 		cmb.reserve_space = _layer_shell_reserve_space;
-		cmb.set_anchor = _set_layer_shell_anchor;
 		cmb.init_layer = _layer_shell_init_for_window;
 		cmb.set_keep_below = _set_keep_below;
 	}
 #endif
 	cmb.is_wayland = _is_wayland;
+	cmb.move_resize_dock = _move_resize_dock;
 	gldi_container_manager_register_backend (&cmb);
 	
 	gldi_register_egl_backend ();

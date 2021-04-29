@@ -22,6 +22,8 @@
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-windows-manager.h"
+#include "cairo-dock-dock-factory.h"
+
 G_BEGIN_DECLS
 
 /*
@@ -32,6 +34,9 @@ G_BEGIN_DECLS
 
 
 void gldi_register_wayland_manager (void);
+
+/// Get the screen edge this dock should be anchored to
+CairoDockPositionType gldi_wayland_get_edge_for_dock (const CairoDock *pDock);
 
 G_END_DECLS
 #endif

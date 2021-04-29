@@ -47,6 +47,8 @@
 #include "cairo-dock-class-manager.h"  // gldi_class_startup_notify_end
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-container.h"  // GldiContainerManagerBackend
+#include "cairo-dock-dock-factory.h"
+#include "cairo-dock-dock-facility.h"
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-task.h"
 #include "cairo-dock-glx.h"
@@ -1130,6 +1132,40 @@ static void _set_keep_below (GldiContainer *pContainer, gboolean bKeepBelow)
 	gtk_window_set_keep_below (GTK_WINDOW (pContainer->pWidget), bKeepBelow);
 }
 
+static void _move_resize_dock (CairoDock *pDock)
+{
+	int iNewWidth = pDock->iMaxDockWidth;
+	int iNewHeight = pDock->iMaxDockHeight;
+	int iNewPositionX, iNewPositionY;
+	cairo_dock_get_window_position_at_balance (pDock, iNewWidth, iNewHeight, &iNewPositionX, &iNewPositionY);
+	/* We can't intercept the case where the new dimensions == current ones
+	 * because we can have 2 resizes at the "same" time and they will cancel
+	 * themselves (remove + insert of one icon). We need 2 configure otherwise
+	 * the size will be blocked to the value of the first 'configure'
+	 */
+	// g_print (" -> %dx%d (%dx%d), %d;%d\n", iNewWidth, iNewHeight, pDock->container.iWidth, pDock->container.iHeight, iNewPositionX, iNewPositionY);
+
+	if (pDock->container.bIsHorizontal)
+	{
+		gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)),
+				iNewPositionX,
+				iNewPositionY,
+				iNewWidth,
+				iNewHeight);
+		/* When we have two gdk_window_move_resize in a row, Compiz will
+		 * disturbed and it will block the draw of the dock. It seems Compiz
+		 * sends too much 'configure' compare to Metacity. 
+		 */
+	}
+	else
+	{
+		gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)),
+				iNewPositionY,
+				iNewPositionX,
+				iNewHeight,
+				iNewWidth);
+	}
+}
 
   ////////////
  /// INIT ///
@@ -1281,6 +1317,7 @@ static void init (void)
 	cmb.is_active = _is_active;
 	cmb.present = _present;
 	cmb.set_keep_below = _set_keep_below;
+	cmb.move_resize_dock = _move_resize_dock;
 	gldi_container_manager_register_backend (&cmb);
 	
 	gldi_register_glx_backend ();  // actually one of them is a nop

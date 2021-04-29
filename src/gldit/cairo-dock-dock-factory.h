@@ -42,6 +42,14 @@ G_BEGIN_DECLS
 * A dock can be either a main-dock (not linked to any icon) or a sub-dock (linked to an icon of another dock), and there can be as many docks of each sort as you want.
 */
 
+typedef enum {
+	CAIRO_DOCK_BOTTOM = 0,
+	CAIRO_DOCK_TOP,
+	CAIRO_DOCK_RIGHT,
+	CAIRO_DOCK_LEFT,
+	CAIRO_DOCK_INSIDE_SCREEN,
+	CAIRO_DOCK_NB_POSITIONS
+	} CairoDockPositionType;
 
 #define CAIRO_DOCK_ANIMATE_ICON TRUE
 #define CAIRO_DOCK_INSERT_SEPARATOR TRUE
