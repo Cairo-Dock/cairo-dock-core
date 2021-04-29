@@ -1188,14 +1188,6 @@ void gldi_dock_set_visibility (CairoDock *pDock, CairoDockVisibility iVisibility
 		_stop_polling_screen_edge ();
 	else if (!bIsPolling && bShouldPoll)
 		_start_polling_screen_edge ();
-		
-	//\_______________ layer shell additions
-	GldiContainerLayer layer = CAIRO_DOCK_LAYER_BOTTOM;
-	if (iVisibility == CAIRO_DOCK_VISI_KEEP_ABOVE || iVisibility == CAIRO_DOCK_VISI_RESERVE)
-	{
-		layer = CAIRO_DOCK_LAYER_TOP;
-	}
-	gldi_container_set_layer ( &(pDock->container), layer);
 }
 
 

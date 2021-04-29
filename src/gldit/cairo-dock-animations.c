@@ -50,7 +50,7 @@ static gboolean _update_fade_out_dock (G_GNUC_UNUSED gpointer pUserData, CairoDo
 	{
 		pDock->bFadeInOut = FALSE;
 		//g_print ("set below\n");
-		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
+		gldi_container_set_keep_below (CAIRO_CONTAINER (pDock), TRUE);
 		// si fenetre maximisee, on met direct iFadeCounter a 0.
 		// malheureusement X met du temps a faire passer le dock derriere, et ca donne un "sursaut" :-/
 	}
@@ -84,7 +84,7 @@ void cairo_dock_pop_up (CairoDock *pDock)
 		pDock->iFadeCounter = 0;
 		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
 		//g_print ("set above\n");
-		gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), FALSE);  // keep above
+		gldi_container_set_keep_below (CAIRO_CONTAINER (pDock), FALSE);  // keep above
 		pDock->bIsBelow = FALSE;
 	}
 }
@@ -109,7 +109,7 @@ void cairo_dock_pop_down (CairoDock *pDock)
 		else
 		{
 			//g_print ("set below\n");
-			gtk_window_set_keep_below (GTK_WINDOW (pDock->container.pWidget), TRUE);
+			gldi_container_set_keep_below (CAIRO_CONTAINER (pDock), TRUE);
 		}
 		pDock->bIsBelow = TRUE;
 	}

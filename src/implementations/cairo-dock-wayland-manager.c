@@ -225,11 +225,10 @@ static void _set_layer_shell_anchor (GldiContainer *pContainer, CairoDockPositio
 	}
 }
 
-void _set_layer_shell_layer (GldiContainer *pContainer, GldiContainerLayer iLayer)
+static void _set_keep_below (GldiContainer *pContainer, gboolean bKeepBelow)
 {
 	GtkWindow* window = GTK_WINDOW (pContainer->pWidget);
-	gtk_layer_set_layer (window, iLayer == CAIRO_DOCK_LAYER_TOP ? 	
-		GTK_LAYER_SHELL_LAYER_TOP : GTK_LAYER_SHELL_LAYER_BOTTOM);
+	gtk_layer_set_layer (window, bKeepBelow ? GTK_LAYER_SHELL_LAYER_BOTTOM : GTK_LAYER_SHELL_LAYER_TOP);
 }
 
 void _layer_shell_init_for_window (GldiContainer *pContainer)
@@ -298,8 +297,8 @@ static void init (void)
 	{
 		cmb.reserve_space = _layer_shell_reserve_space;
 		cmb.set_anchor = _set_layer_shell_anchor;
-		cmb.set_layer = _set_layer_shell_layer;
 		cmb.init_layer = _layer_shell_init_for_window;
+		cmb.set_keep_below = _set_keep_below;
 	}
 #endif
 	cmb.is_wayland = _is_wayland;
