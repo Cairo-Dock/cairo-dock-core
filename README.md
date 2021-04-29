@@ -47,10 +47,11 @@ What works:
  - Proper positioning of subdocks, menus and dialogs.
  - Hardware acceleration with EGL.
  - Taskbar (if the compositor supports the [foreign-toplevel-management](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-foreign-toplevel-management-unstable-v1.xml) or [plasma-window-management](https://invent.kde.org/libraries/plasma-wayland-protocols/-/blob/master/src/protocols/plasma-window-management.xml) protocol).
+ - Hiding and recalling docks hidden or kept below only on Wayfire (using the [wayfire-shell](https://github.com/WayfireWM/wayfire/blob/master/proto/wayfire-shell-unstable-v2.xml) protocol).
 
 Known issues:
  - Subdocks disappear when an app is activated (this is a limitation of using xdg-popups).
- - Hiding / showing the dock does not work (hiding works, but there is no way to recall the dock).
+ - Recalling a hidden dock (e.g. by the mouse hitting the screen edge) only works on Wayfire.
  - Tracking visibility does not work, i.e. it is not detected if the dock overlaps with open windows.
  - Crashes in some situations which I believe are caused by a [bug in wlroots](https://github.com/swaywm/wlroots/issues/2543). [This patch](https://github.com/swaywm/wlroots/pull/2551) should solve it.
  - Multi-monitor support is very limited (the dock will show up on whichever output it thinks is the main one when starting; behavior is buggy when trying to set another output for it).
