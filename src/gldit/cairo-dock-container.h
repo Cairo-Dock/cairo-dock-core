@@ -168,13 +168,6 @@ struct _GldiContainer {
 	gpointer reserved[3];
 };
 
-
-/// Which "layer" a container should appear on. Bottom is below any normal windows, top is above
-typedef enum {
-	CAIRO_DOCK_LAYER_BOTTOM = 0,
-	CAIRO_DOCK_LAYER_TOP
-} GldiContainerLayer;
-
 typedef enum {
 	CAIRO_DOCK_BOTTOM = 0,
 	CAIRO_DOCK_TOP,
@@ -196,9 +189,12 @@ struct _GldiContainerManagerBackend {
 	void (*init_layer) (GldiContainer *pContainer);
 	/// Anchor this container to a screen edge (this is used instead of regular positioning)
 	void (*set_anchor) (GldiContainer *pContainer, CairoDockPositionType iScreenBorder);
-	/// Set on which layer should this container appear
-	void (*set_layer) (GldiContainer *pContainer, GldiContainerLayer iLayer);
+	/// return if running on Wayland
 	gboolean (*is_wayland) ();
+	/// Set to keep the container's GtkWindow below or above other windows.
+	/// On X11, this calls gtk_window_set_keep_below(); on Wayland, this tries to adjust the
+	/// layer the window appears on.
+	void (*set_keep_below) (GldiContainer *pContainer, gboolean bKeepBelow);
 };
 
 
@@ -286,8 +282,6 @@ void gldi_container_present (GldiContainer *pContainer);
 void gldi_container_init_layer (GldiContainer *pContainer);
 /// Anchor this container to a screen edge (this is used instead of regular positioning)
 void gldi_container_set_anchor (GldiContainer *pContainer, CairoDockPositionType iScreenBorder);
-/// Set on which layer should this container appear
-void gldi_container_set_layer (GldiContainer *pContainer, GldiContainerLayer iLayer);
 /// determine if the display server is Wayland; this can be used by e.g. positioning
 /// code that needs to work differently under Wayland; ideally, code that needs to
 /// depend on this could be moved to the backends, but for now, that seems too complicated
@@ -330,6 +324,11 @@ void gldi_container_calculate_rect (const GldiContainer* pContainer, const Icon*
 void gldi_container_calculate_aimed_point (const Icon* pIcon, int w, int h,
 	int iMarginPosition, int* iAimedX, int* iAimedY);
 
+
+/// Set to keep the container's GtkWindow below or above other windows.
+/// On X11, this calls gtk_window_set_keep_below(); on Wayland, this tries to adjust the
+/// layer the window appears on.
+void gldi_container_set_keep_below (GldiContainer *pContainer, gboolean bKeepBelow);
 
   ////////////
  // REDRAW //

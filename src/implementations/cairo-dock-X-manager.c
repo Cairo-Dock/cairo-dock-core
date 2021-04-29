@@ -1125,6 +1125,11 @@ static void _present (GldiContainer *pContainer)
 	//gtk_window_present_with_time (GTK_WINDOW ((pContainer)->pWidget), gdk_x11_get_server_time (gldi_container_get_gdk_window(pContainer)))  // to avoid the focus steal prevention.
 }
 
+static void _set_keep_below (GldiContainer *pContainer, gboolean bKeepBelow)
+{
+	gtk_window_set_keep_below (GTK_WINDOW (pContainer->pWidget), bKeepBelow);
+}
+
 
   ////////////
  /// INIT ///
@@ -1275,6 +1280,7 @@ static void init (void)
 	cmb.move = _move;
 	cmb.is_active = _is_active;
 	cmb.present = _present;
+	cmb.set_keep_below = _set_keep_below;
 	gldi_container_manager_register_backend (&cmb);
 	
 	gldi_register_glx_backend ();  // actually one of them is a nop
