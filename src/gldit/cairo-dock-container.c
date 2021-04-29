@@ -543,10 +543,10 @@ void gldi_container_init_layer (GldiContainer *pContainer)
 		s_backend.init_layer (pContainer);
 }
 
-void gldi_container_set_anchor (GldiContainer *pContainer, CairoDockPositionType iScreenBorder)
+void gldi_container_move_resize_dock (CairoDock *pDock)
 {
-	if (s_backend.set_anchor)
-		s_backend.set_anchor (pContainer, iScreenBorder);
+	if (s_backend.move_resize_dock)
+		s_backend.move_resize_dock (pDock);
 }
 
 gboolean gldi_container_is_wayland_backend ()

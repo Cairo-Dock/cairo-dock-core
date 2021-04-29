@@ -168,14 +168,7 @@ struct _GldiContainer {
 	gpointer reserved[3];
 };
 
-typedef enum {
-	CAIRO_DOCK_BOTTOM = 0,
-	CAIRO_DOCK_TOP,
-	CAIRO_DOCK_RIGHT,
-	CAIRO_DOCK_LEFT,
-	CAIRO_DOCK_INSIDE_SCREEN,
-	CAIRO_DOCK_NB_POSITIONS
-	} CairoDockPositionType;
+struct CairoDock; // forward definition needed in for the following
 
 /// Definition of the Container backend. It defines some operations that should be, but are not, provided by GTK.
 struct _GldiContainerManagerBackend {
@@ -187,14 +180,15 @@ struct _GldiContainerManagerBackend {
 	/// extra functionality for Wayland / gtk_layer_shell
 	/// Initialize layer-shell additions -- need to be called before mapping window first
 	void (*init_layer) (GldiContainer *pContainer);
-	/// Anchor this container to a screen edge (this is used instead of regular positioning)
-	void (*set_anchor) (GldiContainer *pContainer, CairoDockPositionType iScreenBorder);
 	/// return if running on Wayland
 	gboolean (*is_wayland) ();
 	/// Set to keep the container's GtkWindow below or above other windows.
 	/// On X11, this calls gtk_window_set_keep_below(); on Wayland, this tries to adjust the
 	/// layer the window appears on.
 	void (*set_keep_below) (GldiContainer *pContainer, gboolean bKeepBelow);
+	/// Move and resize a root dock. On X11, this uses gdk_window_move_resize ().
+	/// On Wayland, this uses gdk_window_resize () and layer-shell anchors based on the dock's orientation.
+	void (*move_resize_dock) (CairoDock *pDock);
 };
 
 
@@ -280,12 +274,13 @@ void gldi_container_present (GldiContainer *pContainer);
  * Below functions provide basic functionality to position the dock and place it above / below other windows.
  */
 void gldi_container_init_layer (GldiContainer *pContainer);
-/// Anchor this container to a screen edge (this is used instead of regular positioning)
-void gldi_container_set_anchor (GldiContainer *pContainer, CairoDockPositionType iScreenBorder);
 /// determine if the display server is Wayland; this can be used by e.g. positioning
 /// code that needs to work differently under Wayland; ideally, code that needs to
 /// depend on this could be moved to the backends, but for now, that seems too complicated
 gboolean gldi_container_is_wayland_backend ();
+/// Move and resize a root dock. On X11, this uses gdk_window_move_resize ().
+/// On Wayland, this uses gdk_window_resize () and layer-shell anchors based on the dock's orientation.
+void gldi_container_move_resize_dock (CairoDock *pDock);
 
 void gldi_container_manager_register_backend (GldiContainerManagerBackend *pBackend);
 

@@ -446,41 +446,7 @@ void cairo_dock_get_window_position_at_balance (CairoDock *pDock, int iNewWidth,
 
 static gboolean _move_resize_dock (CairoDock *pDock)
 {
-	int iNewWidth = pDock->iMaxDockWidth;
-	int iNewHeight = pDock->iMaxDockHeight;
-	int iNewPositionX, iNewPositionY;
-	cairo_dock_get_window_position_at_balance (pDock, iNewWidth, iNewHeight, &iNewPositionX, &iNewPositionY);
-	/* We can't intercept the case where the new dimensions == current ones
-	 * because we can have 2 resizes at the "same" time and they will cancel
-	 * themselves (remove + insert of one icon). We need 2 configure otherwise
-	 * the size will be blocked to the value of the first 'configure'
-	 */
-	//g_print (" -> %dx%d, %d;%d\n", iNewWidth, iNewHeight, iNewPositionX, iNewPositionY);
-
-	if (pDock->container.bIsHorizontal)
-	{
-		if (gldi_container_is_wayland_backend ())
-			gdk_window_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)), iNewWidth, iNewHeight);
-		else gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)),
-				iNewPositionX,
-				iNewPositionY,
-				iNewWidth,
-				iNewHeight);
-		/* When we have two gdk_window_move_resize in a row, Compiz will
-		 * disturbed and it will block the draw of the dock. It seems Compiz
-		 * sends too much 'configure' compare to Metacity. 
-		 */
-	}
-	else
-	{
-		if (gldi_container_is_wayland_backend ())
-			gdk_window_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)), iNewHeight, iNewWidth);
-		else gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)),
-				iNewPositionY,
-				iNewPositionX,
-				iNewHeight,
-				iNewWidth);		
-	}
+	gldi_container_move_resize_dock (pDock);
 	pDock->iSidMoveResize = 0;
 	return FALSE;
 }

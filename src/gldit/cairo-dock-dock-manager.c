@@ -795,7 +795,6 @@ static void _set_dock_orientation (CairoDock *pDock, CairoDockPositionType iScre
 		break;
 	}
 	
-	gldi_container_set_anchor ( &(pDock->container), iScreenBorder);
 	_synchronize_sub_docks_orientation (pDock, FALSE);
 }
 
