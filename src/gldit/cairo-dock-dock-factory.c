@@ -564,7 +564,7 @@ static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 				}
 				else if (pDock->bAutoHide)
 				{
-					const int delay = 0;  // 250
+					const int delay = 250;  // 0
 					if (delay != 0)  /// maybe try to see if we left the dock frankly, or just by a few pixels...
 					{
 						//g_print (" delay the leave event by %dms\n", delay);
