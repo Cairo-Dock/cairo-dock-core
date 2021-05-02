@@ -504,7 +504,7 @@ static gboolean _hide_child_docks (CairoDock *pDock)
 
 static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	// g_print ("%s (bIsMainDock : %d; bInside:%d; iState:%d; iRefCount:%d, pEvent: %p)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iRefCount, pEvent);
+	g_print ("%s (bIsMainDock : %d; bInside:%d; iState:%d; iRefCount:%d, pEvent: %p)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iRefCount, pEvent);
 	//\_______________ On tire le dock => on ignore le signal.
 	if (pEvent != NULL && (pEvent->state & GDK_MOD1_MASK) && (pEvent->state & GDK_BUTTON1_MASK))
 	{
@@ -533,8 +533,19 @@ static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 	}
 
 	/// no global mouse position on Wayland, the below check and later checks for mouse position will not work
-	if (gldi_container_is_wayland_backend () && pEvent)
-		pDock->iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
+	if (gldi_container_is_wayland_backend ())
+	{
+		if (pEvent) pDock->iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
+		else
+		{
+			GdkSeat *pSeat = gdk_display_get_default_seat (gdk_display_get_default());
+			GdkDevice *pDevice = gdk_seat_get_pointer (pSeat);
+			int tmpx, tmpy;
+			GdkWindow *win = gdk_device_get_window_at_position (pDevice, &tmpx, &tmpy);
+			if (win != gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)))
+				pDock->iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
+		}
+	}
 
 	if (/**pEvent && */!_mouse_is_really_outside(pDock))  // check that the mouse is really outside (the request might not come from the Window Manager, for instance if we deactivate the menu; this also works around buggy WM like KWin).
 	{
@@ -692,7 +703,7 @@ static gboolean _on_dock_unmap (GtkWidget* pWidget, G_GNUC_UNUSED GdkEvent* pEve
 
 static gboolean _on_enter_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	// g_print ("%s (bIsMainDock : %d; bInside:%d; state:%d; iMagnitudeIndex:%d; input shape:%p; event:%p)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iMagnitudeIndex, pDock->pShapeBitmap, pEvent);
+	g_print ("%s (bIsMainDock : %d; bInside:%d; state:%d; iMagnitudeIndex:%d; input shape:%p; event:%p)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iMagnitudeIndex, pDock->pShapeBitmap, pEvent);
 	if (! cairo_dock_entrance_is_allowed (pDock))
 	{
 		cd_message ("* entree non autorisee");
@@ -1894,7 +1905,7 @@ static gboolean _cairo_dock_dock_animation_loop (GldiContainer *pContainer)
 static gboolean _on_dock_destroyed (GtkWidget *menu, GldiContainer *pContainer);
 static void _on_menu_deactivated (G_GNUC_UNUSED GtkMenuShell *menu, CairoDock *pDock)
 {
-	//g_print ("\n+++ %s ()\n\n", __func__);
+	g_print ("\n+++ %s ()\n\n", __func__);
 	g_return_if_fail (CAIRO_DOCK_IS_DOCK (pDock));
 	if (pDock->bHasModalWindow)  // don't send the signal if the menu was already deactivated.
 	{
@@ -1904,7 +1915,7 @@ static void _on_menu_deactivated (G_GNUC_UNUSED GtkMenuShell *menu, CairoDock *p
 }
 static void _on_menu_destroyed (GtkWidget *menu, CairoDock *pDock)
 {
-	//g_print ("\n+++ %s ()\n\n", __func__);
+	g_print ("\n+++ %s ()\n\n", __func__);
 	gldi_object_remove_notification (pDock,
 		NOTIFICATION_DESTROY,
 		(GldiNotificationFunc) _on_dock_destroyed,
