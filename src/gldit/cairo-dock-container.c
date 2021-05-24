@@ -98,23 +98,8 @@ inline void gldi_display_get_pointer (int *xptr, int *yptr)
 
 inline void gldi_container_update_mouse_position (GldiContainer *pContainer)
 {
-	if (gldi_container_is_wayland_backend())
-	{
-		// this seems to not work at all on Wayland and other parts of
-		// the code will expect us not to mess with the positions
-		return;
-	}
-	#if GTK_CHECK_VERSION (3, 20, 0)
-	GdkSeat *pSeat = gdk_display_get_default_seat (gdk_display_get_default());
-	GdkDevice *pDevice = gdk_seat_get_pointer (pSeat);
-	#else
-	GdkDeviceManager *pManager = gdk_display_get_device_manager (gtk_widget_get_display (pContainer->pWidget));
-	GdkDevice *pDevice = gdk_device_manager_get_client_pointer (pManager);
-	#endif
-	if ((pContainer)->bIsHorizontal)
-		gdk_window_get_device_position (gldi_container_get_gdk_window (pContainer), pDevice, &pContainer->iMouseX, &pContainer->iMouseY, NULL);
-	else
-		gdk_window_get_device_position (gldi_container_get_gdk_window (pContainer), pDevice, &pContainer->iMouseY, &pContainer->iMouseX, NULL);
+	if (s_backend.update_mouse_position)
+		s_backend.update_mouse_position (pContainer);
 }
 
 static gboolean _prevent_delete (G_GNUC_UNUSED GtkWidget *pWidget, G_GNUC_UNUSED GdkEvent *event, G_GNUC_UNUSED gpointer data)
@@ -471,7 +456,9 @@ void gldi_container_calculate_aimed_point (const Icon* pIcon, int w, int h,
 			break;
 	}
 	
-	// g_print ("aimed point: %d, %d\n", *iAimedX, *iAimedY);
+	if (s_backend.adjust_aimed_point)
+		s_backend.adjust_aimed_point(pIcon, w, h, iMarginPosition, iAimedX, iAimedY);
+	
 	
 	GldiContainer *pContainer = (pIcon ? cairo_dock_get_icon_container (pIcon) : NULL);
 	if (! (pIcon && pContainer) ) return;
@@ -585,6 +572,25 @@ void gldi_container_stop_polling_screen_edge (void)
 {
 	if (s_backend.stop_polling_screen_edge)
 		s_backend.stop_polling_screen_edge ();
+}
+
+gboolean gldi_container_dock_handle_leave (CairoDock *pDock, GdkEventCrossing *pEvent)
+{
+	if (s_backend.dock_handle_leave)
+		return s_backend.dock_handle_leave (pDock, pEvent);
+	return TRUE; // default return value is true -- it means there is no need for further checks
+}
+
+void gldi_container_dock_handle_enter (CairoDock *pDock, GdkEventCrossing *pEvent)
+{
+	if (s_backend.dock_handle_enter)
+		s_backend.dock_handle_enter (pDock, pEvent);
+}
+
+void gldi_container_dock_check_if_mouse_inside_linear (CairoDock *pDock)
+{
+	if (s_backend.dock_check_if_mouse_inside_linear)
+		s_backend.dock_check_if_mouse_inside_linear (pDock);
 }
 
 

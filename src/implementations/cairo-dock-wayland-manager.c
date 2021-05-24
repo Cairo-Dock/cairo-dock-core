@@ -40,6 +40,8 @@
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-container.h"  // GldiContainerManagerBackend
 #include "cairo-dock-dock-factory.h" // struct _CairoDock
+#include "cairo-dock-dock-manager.h" // myDockObjectMgr, needed for CAIRO_DOCK_IS_DOCK
+#include "cairo-dock-icon-facility.h" // cairo_dock_get_icon_container
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-foreign-toplevel.h"
 #include "cairo-dock-plasma-window-manager.h"
@@ -499,6 +501,59 @@ static void _stop_polling_screen_edge (void)
 	else gldi_zwf_shell_update_hotspots (); // in this case, we only update hotspots
 }
 
+static gboolean _dock_handle_leave (CairoDock *pDock, GdkEventCrossing *pEvent)
+{
+	if (pEvent) pDock->iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
+	else
+	{
+		GdkSeat *pSeat = gdk_display_get_default_seat (gdk_display_get_default());
+		GdkDevice *pDevice = gdk_seat_get_pointer (pSeat);
+		int tmpx, tmpy;
+		GdkWindow *win = gdk_device_get_window_at_position (pDevice, &tmpx, &tmpy);
+		if (win != gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)))
+			pDock->iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
+	}
+	return (pDock->iMousePositionType == CAIRO_DOCK_MOUSE_OUTSIDE);
+}
+
+static void _dock_handle_enter (CairoDock *pDock, G_GNUC_UNUSED GdkEventCrossing *pEvent)
+{
+	pDock->iMousePositionType = CAIRO_DOCK_MOUSE_INSIDE;
+}
+
+static void _adjust_aimed_point (const Icon* pIcon, int w, int h,
+	int iMarginPosition, int* iAimedX, int* iAimedY)
+{
+	GldiContainer *pContainer = (pIcon ? cairo_dock_get_icon_container (pIcon) : NULL);
+	if (! (pIcon && pContainer) ) return;
+	if (!CAIRO_DOCK_IS_DOCK (pContainer)) return;
+	
+	CairoDock* pDock = (CairoDock*)pContainer;
+	int W = cairo_dock_get_screen_width (pDock->iNumScreen);
+	int H = cairo_dock_get_screen_height (pDock->iNumScreen);
+	int dockX = 0;
+	gint dockW, dockH;
+	gtk_window_get_size (GTK_WINDOW (pContainer->pWidget), &dockW, &dockH);
+	
+	if (pContainer->bIsHorizontal) dockX = (W - dockW) / 2;
+	else dockX = (H - dockH) / 2;
+	if (dockX < 0) dockX = 0;
+	
+	// see if the new container is likely to be slided and adjust aimed points
+	if (iMarginPosition == 0 || iMarginPosition == 1)
+	{
+		int x0 = dockX + pIcon->fDrawX + pIcon->fWidth * pIcon->fScale / 2.0;
+		if (x0 < w / 2) *iAimedX = x0;
+		else if (W - x0 < w / 2) *iAimedX += w / 2 - (W - x0);
+	}
+	else
+	{
+		int y0 = dockX + pIcon->fDrawX + pIcon->fWidth * pIcon->fScale / 2.0;
+		if (y0 < h / 2) *iAimedY = y0;
+		else if (y0 > H - h / 2) *iAimedY += y0 - (H - h / 2);
+	}
+}
+
 static gboolean _is_wayland() { return TRUE; }
 
 static void init (void)
@@ -532,6 +587,9 @@ static void init (void)
 	cmb.set_input_shape = _set_input_shape;
 	cmb.is_wayland = _is_wayland;
 	cmb.move_resize_dock = _move_resize_dock;
+	cmb.dock_handle_leave = _dock_handle_leave;
+	cmb.dock_handle_enter = _dock_handle_enter;
+	cmb.adjust_aimed_point = _adjust_aimed_point;
 	gldi_container_manager_register_backend (&cmb);
 	gldi_register_egl_backend ();
 }

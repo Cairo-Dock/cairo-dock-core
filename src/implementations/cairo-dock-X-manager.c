@@ -50,6 +50,7 @@
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-manager.h" // gldi_docks_foreach_root
 #include "cairo-dock-dock-facility.h" // gldi_dock_get_screen_offset_y
+#include "cairo-dock-icon-facility.h" // cairo_dock_get_icon_container
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-task.h"
 #include "cairo-dock-glx.h"
@@ -1353,6 +1354,137 @@ static void _stop_polling_screen_edge (void)
 	}
 }
 
+static void _update_mouse_position (GldiContainer *pContainer)
+{
+	#if GTK_CHECK_VERSION (3, 20, 0)
+	GdkSeat *pSeat = gdk_display_get_default_seat (gdk_display_get_default());
+	GdkDevice *pDevice = gdk_seat_get_pointer (pSeat);
+	#else
+	GdkDeviceManager *pManager = gdk_display_get_device_manager (gtk_widget_get_display (pContainer->pWidget));
+	GdkDevice *pDevice = gdk_device_manager_get_client_pointer (pManager);
+	#endif
+	if ((pContainer)->bIsHorizontal)
+		gdk_window_get_device_position (gldi_container_get_gdk_window (pContainer), pDevice, &pContainer->iMouseX, &pContainer->iMouseY, NULL);
+	else
+		gdk_window_get_device_position (gldi_container_get_gdk_window (pContainer), pDevice, &pContainer->iMouseY, &pContainer->iMouseX, NULL);
+}
+
+static gboolean _dock_handle_leave (CairoDock *pDock, G_GNUC_UNUSED GdkEventCrossing *pEvent)
+{
+	// this function is just the _mouse_is_really_outside () function from cairo-dock-dock-factory.c
+	// this check only makes sense on X11
+	int x1, x2, y1, y2;
+	if (pDock->iInputState == CAIRO_DOCK_INPUT_ACTIVE)
+	{
+		x1 = (pDock->container.iWidth - pDock->iActiveWidth) * pDock->fAlign;
+		x2 = x1 + pDock->iActiveWidth;
+		if (pDock->container.bDirectionUp)
+		{
+			y1 = pDock->container.iHeight - pDock->iActiveHeight + 1;
+			y2 = pDock->container.iHeight;
+		}
+		else
+		{
+			y1 = 0;
+			y2 = pDock->iActiveHeight - 1;
+		}
+	}
+	else if (pDock->iInputState == CAIRO_DOCK_INPUT_AT_REST)
+	{
+		x1 = (pDock->container.iWidth - pDock->iMinDockWidth) * pDock->fAlign;
+		x2 = x1 + pDock->iMinDockWidth;
+		if (pDock->container.bDirectionUp)
+		{
+			y1 = pDock->container.iHeight - pDock->iMinDockHeight + 1;
+			y2 = pDock->container.iHeight;
+		}
+		else
+		{
+			y1 = 0;
+			y2 = pDock->iMinDockHeight - 1;
+		}		
+	}
+	else  // hidden
+		return TRUE;
+	if (pDock->container.iMouseX <= x1
+	|| pDock->container.iMouseX >= x2)
+		return TRUE;
+	if (pDock->container.iMouseY < y1
+	|| pDock->container.iMouseY > y2)  // Note: Compiz has a bug: when using the "cube rotation" plug-in, it will reserve 2 pixels for itself on the left and right edges of the screen. So the mouse is not inside the dock when it's at x=0 or x=Ws-1 (no 'enter' event is sent; it's as if the x=0 or x=Ws-1 vertical line of pixels is out of the screen).
+		return TRUE;
+
+	return FALSE;
+}
+
+// check if the mouse is inside the dock and update iMousePositionType
+// moved from cairo-dock-dock-facility.c
+void _dock_check_if_mouse_inside_linear (CairoDock *pDock)
+{
+	CairoDockMousePositionType iMousePositionType;
+	int iWidth = pDock->container.iWidth;
+	///int iHeight = (pDock->fMagnitudeMax != 0 ? pDock->container.iHeight : pDock->iMinDockHeight);
+	int iHeight = pDock->iActiveHeight;
+	///int iExtraHeight = (pDock->bAtBottom ? 0 : myIconsParam.iLabelSize);
+	// int iExtraHeight = 0;  /// we should check if we have a sub-dock or a dialogue on top of it :-/
+	int iMouseX = pDock->container.iMouseX;
+	int iMouseY = (pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->container.iMouseY : pDock->container.iMouseY);
+	//g_print ("%s (%dx%d, %dx%d, %f)\n", __func__, iMouseX, iMouseY, iWidth, iHeight, pDock->fFoldingFactor);
+
+	//\_______________ We check if the cursor is in the dock and we change icons size according to that.
+	double offset = (iWidth - pDock->iActiveWidth) * pDock->fAlign + (pDock->iActiveWidth - pDock->fFlatDockWidth) / 2;
+	int x_abs = pDock->container.iMouseX - offset;
+	///int x_abs = pDock->container.iMouseX + (pDock->fFlatDockWidth - iWidth) * pDock->fAlign;  // abscisse par rapport a la gauche du dock minimal plat.
+	gboolean bMouseInsideDock = (x_abs >= 0 && x_abs <= pDock->fFlatDockWidth && iMouseX > 0 && iMouseX < iWidth);
+	//g_print ("bMouseInsideDock : %d (%d;%d/%.2f)\n", bMouseInsideDock, pDock->container.bInside, x_abs, pDock->fFlatDockWidth);
+
+	if (iMouseY >= 0 && iMouseY < iHeight) { // inside in the Y axis
+		if (! bMouseInsideDock)  // outside of the dock but on the edge.
+			iMousePositionType = CAIRO_DOCK_MOUSE_ON_THE_EDGE;
+		else
+			iMousePositionType = CAIRO_DOCK_MOUSE_INSIDE;
+	}
+	else
+		iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
+
+	pDock->iMousePositionType = iMousePositionType;
+}
+
+static void _adjust_aimed_point (const Icon* pIcon, int w, int h,
+	int iMarginPosition, int* iAimedX, int* iAimedY)
+{
+	GldiContainer *pContainer = (pIcon ? cairo_dock_get_icon_container (pIcon) : NULL);
+	if (! (pIcon && pContainer) ) return;
+	
+	int dockX = pContainer->iWindowPositionX;
+	int W, H;
+	if (CAIRO_DOCK_IS_DOCK (pContainer))
+	{
+		// TODO: should we use the desktop withd / height here as well?
+		CairoDock* pDock = (CairoDock*)pContainer;
+		W = cairo_dock_get_screen_width (pDock->iNumScreen);
+		H = cairo_dock_get_screen_height (pDock->iNumScreen);
+	}
+	else
+	{
+		// TODO! How to get which screen we are?
+		W = gldi_desktop_get_width ();
+		H = gldi_desktop_get_height ();
+	}
+	
+	// see if the new container is likely to be slided and adjust aimed points
+	if (iMarginPosition == 0 || iMarginPosition == 1)
+	{
+		int x0 = dockX + pIcon->fDrawX + pIcon->fWidth * pIcon->fScale / 2.0;
+		if (x0 < w / 2) *iAimedX = x0;
+		else if (W - x0 < w / 2) *iAimedX += w / 2 - (W - x0);
+	}
+	else
+	{
+		int y0 = dockX + pIcon->fDrawX + pIcon->fWidth * pIcon->fScale / 2.0;
+		if (y0 < h / 2) *iAimedY = y0;
+		else if (y0 > H - h / 2) *iAimedY += y0 - (H - h / 2);
+	}
+}
 
   ////////////
  /// INIT ///
@@ -1507,6 +1639,10 @@ static void init (void)
 	cmb.move_resize_dock = _move_resize_dock;
 	cmb.start_polling_screen_edge = _start_polling_screen_edge;
 	cmb.stop_polling_screen_edge = _stop_polling_screen_edge;
+	cmb.update_mouse_position = _update_mouse_position;
+	cmb.dock_handle_leave = _dock_handle_leave;
+	cmb.dock_check_if_mouse_inside_linear = _dock_check_if_mouse_inside_linear;
+	cmb.adjust_aimed_point = _adjust_aimed_point;
 	gldi_container_manager_register_backend (&cmb);
 	
 	gldi_register_glx_backend ();  // actually one of them is a nop

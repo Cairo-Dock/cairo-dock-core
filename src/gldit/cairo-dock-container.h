@@ -208,6 +208,22 @@ struct _GldiContainerManagerBackend {
 	void (*start_polling_screen_edge) ();
 	/// stop looking at all screen edges
 	void (*stop_polling_screen_edge) ();
+	/// extras
+	/// update the mouse position based on global coordinates -- only supported on X11
+	void (*update_mouse_position) (GldiContainer *pContainer);
+	/// backend-specific handling of leave / enter events on a dock
+	/// on Wayland, these update iMousePositionType (this is the only place we can do this)
+	/// the leave event handler should return if the mouse is really outside the dock
+	gboolean (*dock_handle_leave) (CairoDock *pDock, GdkEventCrossing *pEvent);
+	void (*dock_handle_enter) (CairoDock *pDock, GdkEventCrossing *pEvent);
+	/// check if the mouse is inside the dock (basic case) and update iMousePositionType
+	/// only supported on X11
+	void (*dock_check_if_mouse_inside_linear) (CairoDock *pDock);
+	/// adjust the aimed point (pointed to by a subdock, menu or dialog)
+	/// AimedX and AimedY is already set by the caller to the midpoint on the
+	/// pointed edge; it only needs to be corrected if it should slide to the side
+	void (*adjust_aimed_point) (const Icon* pIcon, int w, int h,
+		int iMarginPosition, int* iAimedX, int* iAimedY);
 };
 
 
@@ -350,6 +366,18 @@ void gldi_container_stop_polling_screen_edge (void);
 /// On X11, this calls gtk_window_set_keep_below(); on Wayland, this tries to adjust the
 /// layer the window appears on.
 void gldi_container_set_keep_below (GldiContainer *pContainer, gboolean bKeepBelow);
+
+
+/// extras required for tracking mouse position:
+/// backend-specific handling of leave / enter events on a dock
+/// on Wayland, these update iMousePositionType (this is the only place we can do this)
+/// the leave event handler should return if the mouse is really outside the dock
+gboolean gldi_container_dock_handle_leave (CairoDock *pDock, GdkEventCrossing *pEvent);
+void gldi_container_dock_handle_enter (CairoDock *pDock, GdkEventCrossing *pEvent);
+
+/// check if the mouse is inside the dock (basic case) and update iMousePositionType
+/// only supported on X11
+void gldi_container_dock_check_if_mouse_inside_linear (CairoDock *pDock);
 
   ////////////
  // REDRAW //

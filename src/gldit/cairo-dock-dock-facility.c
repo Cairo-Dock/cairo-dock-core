@@ -836,39 +836,8 @@ double cairo_dock_get_current_dock_width_linear (CairoDock *pDock)
 
 void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock)
 {
-	/// no global mouse position on Wayland, this is managed by the
-	/// leave / enter notification
-	if (gldi_container_is_wayland_backend ()) return;
-
-	CairoDockMousePositionType iMousePositionType;
-	int iWidth = pDock->container.iWidth;
-	///int iHeight = (pDock->fMagnitudeMax != 0 ? pDock->container.iHeight : pDock->iMinDockHeight);
-	int iHeight = pDock->iActiveHeight;
-	///int iExtraHeight = (pDock->bAtBottom ? 0 : myIconsParam.iLabelSize);
-	// int iExtraHeight = 0;  /// we should check if we have a sub-dock or a dialogue on top of it :-/
-	int iMouseX = pDock->container.iMouseX;
-	int iMouseY = (pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->container.iMouseY : pDock->container.iMouseY);
-	//g_print ("%s (%dx%d, %dx%d, %f)\n", __func__, iMouseX, iMouseY, iWidth, iHeight, pDock->fFoldingFactor);
-
-	//\_______________ We check if the cursor is in the dock and we change icons size according to that.
-	double offset = (iWidth - pDock->iActiveWidth) * pDock->fAlign + (pDock->iActiveWidth - pDock->fFlatDockWidth) / 2;
-	int x_abs = pDock->container.iMouseX - offset;
-	///int x_abs = pDock->container.iMouseX + (pDock->fFlatDockWidth - iWidth) * pDock->fAlign;  // abscisse par rapport a la gauche du dock minimal plat.
-	gboolean bMouseInsideDock = (x_abs >= 0 && x_abs <= pDock->fFlatDockWidth && iMouseX > 0 && iMouseX < iWidth);
-	//g_print ("bMouseInsideDock : %d (%d;%d/%.2f)\n", bMouseInsideDock, pDock->container.bInside, x_abs, pDock->fFlatDockWidth);
-
-	if (iMouseY >= 0 && iMouseY < iHeight) { // inside in the Y axis
-		if (! bMouseInsideDock)  // outside of the dock but on the edge.
-			iMousePositionType = CAIRO_DOCK_MOUSE_ON_THE_EDGE;
-		else
-			iMousePositionType = CAIRO_DOCK_MOUSE_INSIDE;
-	}
-	else
-		iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
-
-	pDock->iMousePositionType = iMousePositionType;
+	gldi_container_dock_check_if_mouse_inside_linear (pDock);
 }
-
 
 #define make_icon_avoid_mouse(icon, sens) do { \
 	cairo_dock_mark_icon_as_avoiding_mouse (icon);\
