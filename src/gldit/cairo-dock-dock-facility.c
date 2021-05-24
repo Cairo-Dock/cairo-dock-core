@@ -309,10 +309,6 @@ Icon *cairo_dock_calculate_dock_icons (CairoDock *pDock)
  /// WINDOW SIZE AND POSITION ///
 ////////////////////////////////
 
-#define CANT_RESERVE_SPACE_WARNING "It's only possible to reserve space from the edge of the screen and not on the middle of two screens."
-
-#define _has_multiple_screens_and_on_one_screen(iNumScreen) (g_desktopGeometry.iNbScreens > 1 && iNumScreen > -1)
-
 void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 {
 	int left=0, right=0, top=0, bottom=0;
@@ -320,36 +316,24 @@ void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 	
 	if (bReserve)
 	{
-		int w = pDock->iMinDockWidth;
-		int h = pDock->iMinDockHeight;
-		int x, y;  // position that should have dock's window if it has a minimum size.
-		cairo_dock_get_window_position_at_balance (pDock, w, h, &x, &y);
-
-		if (pDock->container.bDirectionUp)
+		if (!gldi_container_can_reserve_space (pDock->iNumScreen,
+			pDock->container.bDirectionUp, pDock->container.bIsHorizontal))
+				cd_warning ("It's only possible to reserve space from the edge of the screen and not on the middle of two screens.");
+		else
 		{
-			if (pDock->container.bIsHorizontal)
+			int w = pDock->iMinDockWidth;
+			int h = pDock->iMinDockHeight;
+			int x, y;  // position that should have dock's window if it has a minimum size.
+			cairo_dock_get_window_position_at_balance (pDock, w, h, &x, &y);
+
+			if (pDock->container.bDirectionUp)
 			{
-				if (_has_multiple_screens_and_on_one_screen (pDock->iNumScreen)
-					&& cairo_dock_get_screen_position_y (pDock->iNumScreen) // y offset
-						+ cairo_dock_get_screen_height (pDock->iNumScreen)  // height of the current screen
-						< gldi_desktop_get_height () // total height
-					&& !gldi_container_is_wayland_backend ())
-					cd_warning (CANT_RESERVE_SPACE_WARNING);
-				else
+				if (pDock->container.bIsHorizontal)
 				{
 					bottom = h + pDock->iGapY;
 					bottom_start_x = x;
 					bottom_end_x = x + w;
 				}
-			}
-			else
-			{
-				if (_has_multiple_screens_and_on_one_screen (pDock->iNumScreen)
-					&& cairo_dock_get_screen_position_x (pDock->iNumScreen) // x offset
-						+ cairo_dock_get_screen_width (pDock->iNumScreen)  // width of the current screen
-						< gldi_desktop_get_width () // total width
-					&& !gldi_container_is_wayland_backend ())
-					cd_warning (CANT_RESERVE_SPACE_WARNING);
 				else
 				{
 					right = h + pDock->iGapY;
@@ -357,28 +341,14 @@ void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 					right_end_y = x + w;
 				}
 			}
-		}
-		else
-		{
-			if (pDock->container.bIsHorizontal)
+			else
 			{
-				if (_has_multiple_screens_and_on_one_screen (pDock->iNumScreen)
-					&& cairo_dock_get_screen_position_y (pDock->iNumScreen) > 0
-					&& !gldi_container_is_wayland_backend ())
-					cd_warning (CANT_RESERVE_SPACE_WARNING);
-				else
+				if (pDock->container.bIsHorizontal)
 				{
 					top = h + pDock->iGapY;
 					top_start_x = x;
 					top_end_x = x + w;
 				}
-			}
-			else
-			{
-				if (_has_multiple_screens_and_on_one_screen (pDock->iNumScreen)
-					&& cairo_dock_get_screen_position_x (pDock->iNumScreen) > 0
-					&& !gldi_container_is_wayland_backend ())
-					cd_warning (CANT_RESERVE_SPACE_WARNING);
 				else
 				{
 					left = h + pDock->iGapY;
@@ -978,6 +948,7 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 		// on Wayland, we cannot get the pointer position until as long
 		// as it is outside; need to set these to sane defaults so that
 		// leave / enter events will work properly
+		// TODO: this code should be OK to run on X11 as well
 		pSubDock->iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
 		pSubDock->container.iMouseX = -1;
 		pSubDock->container.iMouseY = -1;
