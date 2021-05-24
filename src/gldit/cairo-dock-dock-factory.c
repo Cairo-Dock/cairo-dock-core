@@ -78,53 +78,6 @@ static void cairo_dock_stop_icon_glide (CairoDock *pDock);
  /// CALLBACKS ///
 /////////////////
 
-static gboolean _mouse_is_really_outside (CairoDock *pDock)
-{
-	if (gldi_container_is_wayland_backend ())
-		return pDock->iMousePositionType == CAIRO_DOCK_MOUSE_OUTSIDE;
-	int x1, x2, y1, y2;
-	if (pDock->iInputState == CAIRO_DOCK_INPUT_ACTIVE)
-	{
-		x1 = (pDock->container.iWidth - pDock->iActiveWidth) * pDock->fAlign;
-		x2 = x1 + pDock->iActiveWidth;
-		if (pDock->container.bDirectionUp)
-		{
-			y1 = pDock->container.iHeight - pDock->iActiveHeight + 1;
-			y2 = pDock->container.iHeight;
-		}
-		else
-		{
-			y1 = 0;
-			y2 = pDock->iActiveHeight - 1;
-		}
-	}
-	else if (pDock->iInputState == CAIRO_DOCK_INPUT_AT_REST)
-	{
-		x1 = (pDock->container.iWidth - pDock->iMinDockWidth) * pDock->fAlign;
-		x2 = x1 + pDock->iMinDockWidth;
-		if (pDock->container.bDirectionUp)
-		{
-			y1 = pDock->container.iHeight - pDock->iMinDockHeight + 1;
-			y2 = pDock->container.iHeight;
-		}
-		else
-		{
-			y1 = 0;
-			y2 = pDock->iMinDockHeight - 1;
-		}		
-	}
-	else  // hidden
-		return TRUE;
-	if (pDock->container.iMouseX <= x1
-	|| pDock->container.iMouseX >= x2)
-		return TRUE;
-	if (pDock->container.iMouseY < y1
-	|| pDock->container.iMouseY > y2)  // Note: Compiz has a bug: when using the "cube rotation" plug-in, it will reserve 2 pixels for itself on the left and right edges of the screen. So the mouse is not inside the dock when it's at x=0 or x=Ws-1 (no 'enter' event is sent; it's as if the x=0 or x=Ws-1 vertical line of pixels is out of the screen).
-		return TRUE;
-
-	return FALSE;
-}
-
 void cairo_dock_freeze_docks (gboolean bFreeze)
 {
 	s_bFrozenDock = bFreeze;  /// instead, try to connect to the motion-event and intercept it ...
@@ -531,23 +484,9 @@ static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 	{
 		//g_print (" forced leave event: %d;%d\n", pDock->container.iMouseX, pDock->container.iMouseY);
 	}
-
-	/// no global mouse position on Wayland, the below check and later checks for mouse position will not work
-	if (gldi_container_is_wayland_backend ())
-	{
-		if (pEvent) pDock->iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
-		else
-		{
-			GdkSeat *pSeat = gdk_display_get_default_seat (gdk_display_get_default());
-			GdkDevice *pDevice = gdk_seat_get_pointer (pSeat);
-			int tmpx, tmpy;
-			GdkWindow *win = gdk_device_get_window_at_position (pDevice, &tmpx, &tmpy);
-			if (win != gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)))
-				pDock->iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
-		}
-	}
-
-	if (/**pEvent && */!_mouse_is_really_outside(pDock))  // check that the mouse is really outside (the request might not come from the Window Manager, for instance if we deactivate the menu; this also works around buggy WM like KWin).
+	
+	// if (/**pEvent && */!_mouse_is_really_outside(pDock))  // check that the mouse is really outside (the request might not come from the Window Manager, for instance if we deactivate the menu; this also works around buggy WM like KWin).
+	if (!gldi_container_dock_handle_leave (pDock, pEvent))
 	{
 		//g_print (" not really outside (%d;%d ; %d/%d)\n", pDock->container.iMouseX, pDock->container.iMouseY, pDock->iMaxDockHeight, pDock->iMinDockHeight);
 		if (pDock->iSidTestMouseOutside == 0 && pEvent && ! pDock->bHasModalWindow)  // si l'action induit un changement de bureau, ou une appli qui bloque le focus (gksu), X envoit un signal de sortie alors qu'on est encore dans le dock, et donc n'en n'envoit plus lorsqu'on en sort reellement. On teste donc pendant qques secondes apres l'evenement. C'est ausi vrai pour l'affichage d'un menu/dialogue interactif, mais comme on envoie nous-meme un signal de sortie lorsque le menu disparait, il est inutile de le faire ici.
@@ -661,7 +600,7 @@ static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 		//	return ;
 		
 		CairoDock *pOriginDock = CAIRO_DOCK(cairo_dock_get_icon_container (s_pIconClicked));
-		if (pOriginDock == pDock && _mouse_is_really_outside (pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
+		if (pOriginDock == pDock /* && _mouse_is_really_outside (pDock) */ )  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
 		{
 			cd_debug (" on detache l'icone");
 			pOriginDock->bIconIsFlyingAway = TRUE;
@@ -710,8 +649,7 @@ static gboolean _on_enter_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 		return FALSE;
 	}
 	
-	if (gldi_container_is_wayland_backend ())
-		pDock->iMousePositionType = CAIRO_DOCK_MOUSE_INSIDE;
+	gldi_container_dock_handle_enter (pDock, pEvent);
 
 	// stop les timers.
 	if (pDock->iSidLeaveDemand != 0)
