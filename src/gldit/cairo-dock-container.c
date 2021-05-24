@@ -574,6 +574,13 @@ void gldi_container_stop_polling_screen_edge (void)
 		s_backend.stop_polling_screen_edge ();
 }
 
+gboolean gldi_container_can_reserve_space (int iNumScreen, gboolean bDirectionUp, gboolean bIsHorizontal)
+{
+	if (s_backend.can_reserve_space)
+		return s_backend.can_reserve_space (iNumScreen, bDirectionUp, bIsHorizontal);
+	return TRUE;
+}
+
 gboolean gldi_container_dock_handle_leave (CairoDock *pDock, GdkEventCrossing *pEvent)
 {
 	if (s_backend.dock_handle_leave)

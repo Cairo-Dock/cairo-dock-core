@@ -1354,6 +1354,45 @@ static void _stop_polling_screen_edge (void)
 	}
 }
 
+static inline gboolean _has_multiple_screens_and_on_one_screen(iNumScreen) {
+	return (g_desktopGeometry.iNbScreens > 1) && (iNumScreen > -1);
+}
+
+static gboolean _can_reserve_space (int iNumScreen, gboolean bDirectionUp, gboolean bIsHorizontal)
+{
+	// code moved here from cairo-dock-dock-facility.c, since it is only relevant in the X11 case
+	if (!_has_multiple_screens_and_on_one_screen (iNumScreen)) return TRUE;
+	if (bDirectionUp)
+	{
+		if (bIsHorizontal)
+		{
+			if (cairo_dock_get_screen_position_y (iNumScreen) // y offset
+					+ cairo_dock_get_screen_height (iNumScreen)  // height of the current screen
+					< gldi_desktop_get_height ())
+				return FALSE;
+		}
+		else
+		{
+			if (cairo_dock_get_screen_position_x (iNumScreen) // x offset
+					+ cairo_dock_get_screen_width (iNumScreen)  // width of the current screen
+					< gldi_desktop_get_width ()) // total width
+				return FALSE;
+		}
+	}
+	else
+	{
+		if (bIsHorizontal)
+		{
+			if (cairo_dock_get_screen_position_y (iNumScreen) > 0) return FALSE;
+		}
+		else
+		{
+			if (cairo_dock_get_screen_position_x (iNumScreen) > 0) return FALSE;
+		}
+	}
+	return TRUE;
+}
+
 static void _update_mouse_position (GldiContainer *pContainer)
 {
 	#if GTK_CHECK_VERSION (3, 20, 0)
@@ -1639,6 +1678,7 @@ static void init (void)
 	cmb.move_resize_dock = _move_resize_dock;
 	cmb.start_polling_screen_edge = _start_polling_screen_edge;
 	cmb.stop_polling_screen_edge = _stop_polling_screen_edge;
+	cmb.can_reserve_space = _can_reserve_space;
 	cmb.update_mouse_position = _update_mouse_position;
 	cmb.dock_handle_leave = _dock_handle_leave;
 	cmb.dock_check_if_mouse_inside_linear = _dock_check_if_mouse_inside_linear;

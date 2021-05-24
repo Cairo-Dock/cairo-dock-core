@@ -208,7 +208,8 @@ struct _GldiContainerManagerBackend {
 	void (*start_polling_screen_edge) ();
 	/// stop looking at all screen edges
 	void (*stop_polling_screen_edge) ();
-	/// extras
+	/// determines if it is possible to reserve space for a dock on a given screen with a given orientation; returns TRUE by default
+	gboolean (*can_reserve_space) (int iNumScreen, gboolean bDirectionUp, gboolean bIsHorizontal);
 	/// update the mouse position based on global coordinates -- only supported on X11
 	void (*update_mouse_position) (GldiContainer *pContainer);
 	/// backend-specific handling of leave / enter events on a dock
@@ -275,6 +276,9 @@ void gldi_container_update_mouse_position (GldiContainer *pContainer);
 *@param bottom_end_x 
 */
 void gldi_container_reserve_space (GldiContainer *pContainer, int left, int right, int top, int bottom, int left_start_y, int left_end_y, int right_start_y, int right_end_y, int top_start_x, int top_end_x, int bottom_start_x, int bottom_end_x);
+
+/// determines if it is possible to reserve space for a dock on a given screen with a given orientation
+gboolean gldi_container_can_reserve_space (int iNumScreen, gboolean bDirectionUp, gboolean bIsHorizontal);
 
 /** Get the desktop and viewports a Container is placed on.
 *@param pContainer the container
