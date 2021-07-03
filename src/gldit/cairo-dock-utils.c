@@ -39,10 +39,12 @@ gchar *cairo_dock_generate_unique_filename (const gchar *cBaseName, const gchar 
 	} while (iPrefixNumber < 99 && g_file_test (sFileName->str, G_FILE_TEST_EXISTS));
 
 	g_string_free (sFileName, TRUE);
-	if (iPrefixNumber == 99)
+	if (iPrefixNumber < 100)
+		return g_strdup_printf ("%02d%s", iPrefixNumber, cBaseName);
+	if (iPrefixNumber == 1000)
 		return NULL;
 	else
-		return g_strdup_printf ("%02d%s", iPrefixNumber, cBaseName);
+		return g_strdup_printf ("%03d%s", iPrefixNumber, cBaseName);
 }
 
 
