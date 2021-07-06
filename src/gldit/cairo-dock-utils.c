@@ -35,8 +35,12 @@ gchar *cairo_dock_generate_unique_filename (const gchar *cBaseName, const gchar 
 	do
 	{
 		iPrefixNumber ++;
-		g_string_printf (sFileName, "%s/%02d%s", cCairoDockDataDir, iPrefixNumber, cBaseName);
-	} while (iPrefixNumber < 99 && g_file_test (sFileName->str, G_FILE_TEST_EXISTS));
+		if (iPrefixNumber < 100)
+			g_string_printf (sFileName, "%s/%02d%s", cCairoDockDataDir, iPrefixNumber, cBaseName);
+		else
+			g_string_printf (sFileName, "%s/%03d%s", cCairoDockDataDir, iPrefixNumber, cBaseName);
+
+	} while (iPrefixNumber < 1000 && g_file_test (sFileName->str, G_FILE_TEST_EXISTS));
 
 	g_string_free (sFileName, TRUE);
 	if (iPrefixNumber < 100)
