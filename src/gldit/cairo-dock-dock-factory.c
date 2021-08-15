@@ -2198,9 +2198,9 @@ void gldi_dock_init_internals (CairoDock *pDock)
 		"drag-drop",
 		G_CALLBACK (_on_drag_drop),
 		pDock);*/
-	// connect unmap signal -- on Wayland, the compositor might close the dock at any time
-	if (gldi_container_is_wayland_backend ())
-		g_signal_connect (G_OBJECT (pWindow),
+	// connect unmap signal -- on Wayland, the compositor might close
+	// the dock at any time, so we need to handle this possibility
+	g_signal_connect (G_OBJECT (pWindow),
 			"unmap-event",
 			G_CALLBACK (_on_dock_unmap),
 			pDock);
