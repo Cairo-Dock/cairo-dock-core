@@ -459,60 +459,6 @@ void gldi_container_calculate_aimed_point (const Icon* pIcon, int w, int h,
 	if (s_backend.adjust_aimed_point)
 		s_backend.adjust_aimed_point(pIcon, w, h, iMarginPosition, iAimedX, iAimedY);
 	
-	
-	GldiContainer *pContainer = (pIcon ? cairo_dock_get_icon_container (pIcon) : NULL);
-	if (! (pIcon && pContainer) ) return;
-	gboolean bIsDock = CAIRO_DOCK_IS_DOCK (pContainer);
-	if (bIsDock || !gldi_container_is_wayland_backend ())
-	{
-		int dockX = pContainer->iWindowPositionX;
-		int W, H;
-		if (bIsDock)
-		{
-			CairoDock* pDock = (CairoDock*)pContainer;
-			W = cairo_dock_get_screen_width (pDock->iNumScreen);
-			H = cairo_dock_get_screen_height (pDock->iNumScreen);
-			
-			if (gldi_container_is_wayland_backend ())
-			{
-				// in this case, dockX is zero (no global window position)
-				if (pContainer->bIsHorizontal && dockX == 0)
-				{
-					gint dockW, dockH;
-					gtk_window_get_size (GTK_WINDOW (pContainer->pWidget), &dockW, &dockH);
-					dockX = (W - dockW) / 2;
-					if (dockX < 0) dockX = 0;
-				}
-				if (!pContainer->bIsHorizontal && dockX == 0)
-				{
-					gint dockW, dockH;
-					gtk_window_get_size (GTK_WINDOW (pContainer->pWidget), &dockW, &dockH);
-					dockX = (H - dockH) / 2;
-					if (dockX < 0) dockX = 0;
-				}
-			}
-		}
-		else
-		{
-			// TODO! How to get which screen we are?
-			W = cairo_dock_get_screen_width (0);
-			H = cairo_dock_get_screen_height (0);
-		}
-		
-		// see if the new container is likely to be slided and adjust aimed points
-		if (iMarginPosition == 0 || iMarginPosition == 1)
-		{
-			int x0 = dockX + pIcon->fDrawX + pIcon->fWidth * pIcon->fScale / 2.0;
-			if (x0 < w / 2) *iAimedX = x0;
-			else if (W - x0 < w / 2) *iAimedX += w / 2 - (W - x0);
-		}
-		else
-		{
-			int y0 = dockX + pIcon->fDrawX + pIcon->fWidth * pIcon->fScale / 2.0;
-			if (y0 < h / 2) *iAimedY = y0;
-			else if (y0 > H - h / 2) *iAimedY += y0 - (H - h / 2);
-		}
-	}
 	// g_print ("aimed point: %d, %d\n", *iAimedX, *iAimedY);
 }
 
