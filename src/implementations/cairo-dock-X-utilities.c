@@ -89,7 +89,7 @@ static Atom s_aUtf8String;
 static Atom s_aString;
 static unsigned char error_code = Success;
 
-static GtkAllocation *_get_screens_geometry (int *pNbScreens);
+static GldiScreenInfo *_get_screens_geometry (int *pNbScreens);
 
 static gboolean cairo_dock_support_X_extension (void);
 
@@ -185,14 +185,14 @@ unsigned char cairo_dock_get_X_error_code (void)
 	return error_code;
 }
 
-static GtkAllocation *_get_screens_geometry (int *pNbScreens)
+static GldiScreenInfo *_get_screens_geometry (int *pNbScreens)
 {
-	GtkAllocation *pScreens = NULL;
-	GtkAllocation *pScreen;
+	GldiScreenInfo *pScreens = NULL;
+	GldiScreenInfo *pScreen;
 	int iNbScreens = 0;
 	/*Unit Tests
 	iNbScreens = 2;
-	pScreens = g_new0 (GtkAllocation, iNbScreens);
+	pScreens = g_new0 (GldiScreenInfo, iNbScreens);
 	pScreens[0].x = 0;
 	pScreens[0].y = 0;
 	pScreens[0].width = 1000;
@@ -213,7 +213,7 @@ static GtkAllocation *_get_screens_geometry (int *pNbScreens)
 		{
 			int n = res->ncrtc;
 			cd_debug (" number of screen(s): %d", n);
-			pScreens = g_new0 (GtkAllocation, n);
+			pScreens = g_new0 (GldiScreenInfo, n);
 			int i;
 			for (i = 0; i < n; i++)
 			{
@@ -256,7 +256,7 @@ static GtkAllocation *_get_screens_geometry (int *pNbScreens)
 		if (scr != NULL)
 		{
 			cd_debug (" number of screen(s): %d", n);
-			pScreens = g_new0 (GtkAllocation, n);
+			pScreens = g_new0 (GldiScreenInfo, n);
 			int i;
 			for (i = 0; i < n; i++)
 			{
@@ -286,7 +286,7 @@ static GtkAllocation *_get_screens_geometry (int *pNbScreens)
 		#endif
 		
 		iNbScreens = 1;
-		pScreens = g_new0 (GtkAllocation, iNbScreens);
+		pScreens = g_new0 (GldiScreenInfo, iNbScreens);
 		pScreen = &pScreens[0];
 		pScreen->x = 0;
 		pScreen->y = 0;
@@ -335,7 +335,7 @@ gboolean cairo_dock_update_screen_geometry (void)
 	}
 	
 	// get the size and position of each screen (they could have changed even though the X screen has not changed, for instance if you swap 2 screens).
-	GtkAllocation *pScreens = g_desktopGeometry.pScreens;
+	GldiScreenInfo *pScreens = g_desktopGeometry.pScreens;
 	int iNbScreens = g_desktopGeometry.iNbScreens;
 	g_desktopGeometry.pScreens = _get_screens_geometry (&g_desktopGeometry.iNbScreens);
 	
@@ -347,7 +347,7 @@ gboolean cairo_dock_update_screen_geometry (void)
 			int i;
 			for (i = 0; i < MIN (iNbScreens, g_desktopGeometry.iNbScreens); i ++)
 			{
-				if (memcmp (&pScreens[i], &g_desktopGeometry.pScreens[i], sizeof (GtkAllocation)) != 0)
+				if (memcmp (&pScreens[i], &g_desktopGeometry.pScreens[i], sizeof (GldiScreenInfo)) != 0)
 				{
 					bNewSize = TRUE;
 					break;
