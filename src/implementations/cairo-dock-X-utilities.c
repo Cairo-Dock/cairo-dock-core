@@ -1167,9 +1167,9 @@ gchar *cairo_dock_get_xwindow_class (Window Xid, gchar **cWMClass)
 
 		cairo_dock_remove_version_from_string (cClass);  // we remore number of version (e.g. Openoffice.org-3.1)
 
-		gchar *str = strchr (cClass, '.');  // we remove all .xxx otherwise we can't detect the lack of extension when looking for an icon (openoffice.org) or it's a problem when looking for an icon (jbrout.py).
-		if (str != NULL)
-			*str = '\0';
+//		gchar *str = strchr (cClass, '.');  // we remove all .xxx otherwise we can't detect the lack of extension when looking for an icon (openoffice.org) or it's a problem when looking for an icon (jbrout.py).
+//		if (str != NULL)
+//			*str = '\0';
 		cd_debug ("got an application with class '%s'", cClass);
 		
 		XFree (pClassHint->res_name);
