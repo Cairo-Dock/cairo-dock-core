@@ -1616,23 +1616,33 @@ static gchar *_search_desktop_file (const gchar *cDesktopFile)  // file, path or
 	g_string_printf (sDesktopFilePath, "/usr/share/applications/%s", cFileName);
 	if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
 	{
-		g_string_printf (sDesktopFilePath, "/usr/share/applications/%c%s", g_ascii_toupper (*cFileName), cFileName+1);  // handle stupid cases like Thunar.desktop
+		const gchar *cFileNameLower = g_ascii_strdown (cFileName, -1);
+		g_string_printf (sDesktopFilePath, "/usr/share/applications/%s", cFileNameLower);
 		if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
 		{
-			g_string_printf (sDesktopFilePath, "/usr/share/applications/xfce4/%s", cFileName);
+			g_string_printf (sDesktopFilePath, "/usr/share/applications/%c%s", g_ascii_toupper (*cFileNameLower), cFileNameLower+1);  // handle stupid cases like Thunar.desktop
 			if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
 			{
-				g_string_printf (sDesktopFilePath, "/usr/share/applications/kde4/%s", cFileName);
+				g_string_printf (sDesktopFilePath, "/usr/share/applications/org.gnome.%c%s", g_ascii_toupper (*cFileNameLower), cFileNameLower+1);  // handle stupid cases like org.gnome.Evince.desktop
 				if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
 				{
-					g_string_printf (sDesktopFilePath, "%s/.local/share/applications/%s", g_getenv ("HOME"), cFileName);
+					g_string_printf (sDesktopFilePath, "/usr/share/applications/xfce4/%s", cFileNameLower);
 					if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
 					{
-						bFound = FALSE;
+						g_string_printf (sDesktopFilePath, "/usr/share/applications/kde4/%s", cFileNameLower);
+						if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
+						{
+							g_string_printf (sDesktopFilePath, "%s/.local/share/applications/%s", g_getenv ("HOME"), cFileNameLower);
+							if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
+							{
+								bFound = FALSE;
+							}
+						}
 					}
 				}
 			}
 		}
+		g_free (cFileNameLower);
 	}
 	g_free (cDesktopFileName);
 
