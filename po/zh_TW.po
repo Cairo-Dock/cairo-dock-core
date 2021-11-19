@@ -3031,7 +3031,7 @@ msgid "in Hz. This is to adjust behaviour relative to your CPU power."
 msgstr "以HZ為單位，這可以調整關於您的 CPU 资源。"
 
 #: ../data/messages:413
-msgid "Refresh rate when mouving cursor into the dock:"
+msgid "Refresh rate when moving cursor into the dock:"
 msgstr ""
 
 #: ../data/messages:417

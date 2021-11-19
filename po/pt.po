@@ -3428,7 +3428,7 @@ msgstr ""
 "em Hz. Deve ajustar o comportamento em relação à frequência do seu CPU."
 
 #: ../data/messages:413
-msgid "Refresh rate when mouving cursor into the dock:"
+msgid "Refresh rate when moving cursor into the dock:"
 msgstr "Taxa de actualização ao mover o cursor pela doca:"
 
 #: ../data/messages:417

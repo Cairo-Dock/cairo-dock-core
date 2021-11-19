@@ -3397,7 +3397,7 @@ msgid "in Hz. This is to adjust behaviour relative to your CPU power."
 msgstr "у Гц. Залежить від потужності вашого процесора."
 
 #: ../data/messages:413
-msgid "Refresh rate when mouving cursor into the dock:"
+msgid "Refresh rate when moving cursor into the dock:"
 msgstr "Частота оновлення при переміщенні курсора по панелі:"
 
 #: ../data/messages:417
