@@ -39,9 +39,20 @@
 #include "cairo-dock-class-manager.h"  // gldi_class_startup_notify_end
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-container.h"  // GldiContainerManagerBackend
+#include "cairo-dock-dock-factory.h" // struct _CairoDock
 #include "cairo-dock-egl.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-wayland-manager.h"
+
+#include "gldi-config.h"
+#ifdef HAVE_GTK_LAYER_SHELL
+#include <gtk-layer-shell.h>
+static gboolean s_bHave_Layer_Shell = FALSE;
+
+gboolean g_bDisableLayerShell = FALSE;
+
+#endif
+
 
 // public (manager, config, data)
 GldiManager myWaylandMgr;
@@ -122,12 +133,24 @@ static void _output_scale_cb (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct wl_
 	s_bInitializing = TRUE;
 }
 
+
 static const struct wl_output_listener output_listener = {
 	_output_geometry_cb,
 	_output_mode_cb,
 	_output_done_cb,
 	_output_scale_cb
 };
+
+CairoDockPositionType gldi_wayland_get_edge_for_dock (const CairoDock *pDock)
+{
+	CairoDockPositionType pos;
+	if (pDock->container.bIsHorizontal == CAIRO_DOCK_HORIZONTAL)
+		pos = pDock->container.bDirectionUp ? CAIRO_DOCK_BOTTOM : CAIRO_DOCK_TOP;
+	else if (pDock->container.bIsHorizontal == CAIRO_DOCK_VERTICAL)
+		pos = pDock->container.bDirectionUp ? CAIRO_DOCK_RIGHT : CAIRO_DOCK_LEFT;
+	else pos = CAIRO_DOCK_INSIDE_SCREEN;
+	return pos;
+}
 
 static void _registry_global_cb (G_GNUC_UNUSED void *data, struct wl_registry *registry, uint32_t id, const char *interface, G_GNUC_UNUSED uint32_t version)
 {
@@ -147,6 +170,13 @@ static void _registry_global_cb (G_GNUC_UNUSED void *data, struct wl_registry *r
 			&output_listener,
 			NULL);
 	}
+#ifdef HAVE_GTK_LAYER_SHELL
+	else if (!strcmp (interface, "zwlr_layer_shell_v1"))
+	{
+		if (!g_bDisableLayerShell)
+			s_bHave_Layer_Shell = TRUE;
+	}
+#endif
 	s_bInitializing = TRUE;
 }
 
@@ -165,6 +195,115 @@ static const struct wl_registry_listener registry_listener = {
 };
 
 
+#ifdef HAVE_GTK_LAYER_SHELL
+/// reserve space for the dock; note: most parameters are ignored, only a size is calculated based on coordinates
+static void _layer_shell_reserve_space (GldiContainer *pContainer, int left, int right, int top, int bottom,
+		G_GNUC_UNUSED int left_start_y, G_GNUC_UNUSED int left_end_y, G_GNUC_UNUSED int right_start_y, G_GNUC_UNUSED int right_end_y,
+		G_GNUC_UNUSED int top_start_x, G_GNUC_UNUSED int top_end_x, G_GNUC_UNUSED int bottom_start_x, G_GNUC_UNUSED int bottom_end_x)
+{
+	GtkWindow* window = GTK_WINDOW (pContainer->pWidget);
+	gint r = (pContainer->bIsHorizontal) ? (top - bottom) : (right - left);
+	if (r < 0) {
+		r *= -1;
+	}
+	gtk_layer_set_exclusive_zone (window, r);
+}
+
+static void _set_keep_below (GldiContainer *pContainer, gboolean bKeepBelow)
+{
+	GtkWindow* window = GTK_WINDOW (pContainer->pWidget);
+	gtk_layer_set_layer (window, bKeepBelow ? GTK_LAYER_SHELL_LAYER_BOTTOM : GTK_LAYER_SHELL_LAYER_TOP);
+}
+
+void _layer_shell_init_for_window (GldiContainer *pContainer)
+{
+	GtkWindow* window = GTK_WINDOW (pContainer->pWidget);
+	if (gtk_window_get_transient_for (window))
+	{
+		// subdock or other surface with a parent
+		// we need to call gdk_move_to_rect(), but specifically
+		// (1) before the window is mapped, but (2) during it is realized
+		// A dummy call to gdk_window_move_to_rect() causes the gtk-layer-shell
+		// internals related to this window to be initialized properly (note:
+		// this is important if the parent is a "proper" layer-shell window).
+		// This _has_ to happen before the GtkWindow is mapped first, but also
+		// has to happen after some initial setup. Doing this as a response to
+		// a "realize" signal seems to be a good way, but there should be some
+		// less hacky solution for this as well. Maybe I'm missing something here?
+		// g_signal_connect (window, "realize", G_CALLBACK (sublayer_realize_cb), NULL);
+		
+		// gldi_container_move_to_rect() will ensure this
+		GdkRectangle rect = {0, 0, 1, 1};
+		gldi_container_move_to_rect (pContainer, &rect, GDK_GRAVITY_SOUTH,
+			GDK_GRAVITY_NORTH_WEST, GDK_ANCHOR_SLIDE, 0, 0);
+	}
+	else
+	{
+		gtk_layer_init_for_window (window);
+		// Note: to enable receiving any keyboard events, we need both the compositor
+		// and gtk-layer-shell to support version >= 4 of the layer-shell protocol.
+		// Here we test if we are compiling against a version of gtk-layer-shell that
+		// has this functionality. Setting keyboard interactivity may still fail at
+		// runtime if the compositor does not support this. In this case, the dock
+		// will not receive keyboard events at all.
+		// TODO: make this optional, so that cairo-dock can be compiled targeting an
+		// older version of gtk-layer-shell (even if a newer version is installed;
+		// since versions are ABI compatible, this is possible)
+		gtk_layer_set_keyboard_mode (window, GTK_LAYER_SHELL_KEYBOARD_MODE_ON_DEMAND);
+		gtk_layer_set_namespace (window, "cairo-dock");
+	}
+}
+#endif
+
+static void _move_resize_dock (CairoDock *pDock)
+{
+	int iNewWidth = pDock->iMaxDockWidth;
+	int iNewHeight = pDock->iMaxDockHeight;
+	
+	if (pDock->container.bIsHorizontal)
+	{
+		gdk_window_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)), iNewWidth, iNewHeight);
+	}
+	else
+	{
+		gdk_window_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)), iNewHeight, iNewWidth);
+	}
+
+#ifdef HAVE_GTK_LAYER_SHELL
+	if (s_bHave_Layer_Shell)
+	{
+		GtkWindow* window = GTK_WINDOW (pDock->container.pWidget);
+		// Reset old anchors
+		gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_BOTTOM, FALSE);
+		gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_TOP, FALSE);
+		gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_RIGHT, FALSE);
+		gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_LEFT, FALSE);
+		// Set new anchor
+		CairoDockPositionType iScreenBorder = gldi_wayland_get_edge_for_dock (pDock);
+		switch (iScreenBorder)
+		{
+			case CAIRO_DOCK_BOTTOM :
+				gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_BOTTOM, TRUE);
+			break;
+			case CAIRO_DOCK_TOP :
+				gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_TOP, TRUE);
+			break;
+			case CAIRO_DOCK_RIGHT :
+				gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_RIGHT, TRUE);
+			break;
+			case CAIRO_DOCK_LEFT :
+				gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_LEFT, TRUE);
+			break;
+			case CAIRO_DOCK_INSIDE_SCREEN :
+			case CAIRO_DOCK_NB_POSITIONS :
+			break;
+		}
+	}
+#endif
+}
+
+static gboolean _is_wayland() { return TRUE; }
+
 static void init (void)
 {
 	//\__________________ listen for Wayland events
@@ -181,6 +320,20 @@ static void init (void)
 		wl_display_roundtrip (s_pDisplay);
 	}
 	while (s_bInitializing);
+	
+	GldiContainerManagerBackend cmb;
+	memset (&cmb, 0, sizeof (GldiContainerManagerBackend));	
+#ifdef HAVE_GTK_LAYER_SHELL
+	if (s_bHave_Layer_Shell)
+	{
+		cmb.reserve_space = _layer_shell_reserve_space;
+		cmb.init_layer = _layer_shell_init_for_window;
+		cmb.set_keep_below = _set_keep_below;
+	}
+#endif
+	cmb.is_wayland = _is_wayland;
+	cmb.move_resize_dock = _move_resize_dock;
+	gldi_container_manager_register_backend (&cmb);
 	
 	gldi_register_egl_backend ();
 }

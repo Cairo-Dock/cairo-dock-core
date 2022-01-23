@@ -1,5 +1,6 @@
 
 SET(impl_SRCS
+	gdk-move-to-rect-hack.c            	 gdk-move-to-rect-hack.h
 	cairo-dock-gauge.c                   cairo-dock-gauge.h
 	cairo-dock-graph.c                   cairo-dock-graph.h
 	cairo-dock-progressbar.c             cairo-dock-progressbar.h
@@ -30,12 +31,14 @@ add_definitions (-DSHARE_DATA_DIR="${pkgdatadir}")
 link_directories(
 	${PACKAGE_LIBRARY_DIRS}
 	${WAYLAND_LIBRARY_DIRS}
+	${GTKLAYERSHELL_LIBRARY_DIRS}
 	${EGL_LIBRARY_DIRS}
 	${GTK_LIBRARY_DIRS})
 
 include_directories(
 	${PACKAGE_INCLUDE_DIRS}
 	${WAYLAND_INCLUDE_DIRS}
+	${GTKLAYERSHELL_INCLUDE_DIRS}
 	${EGL_INCLUDE_DIRS}
 	${GTK_INCLUDE_DIRS}
 	${CMAKE_SOURCE_DIR}/src/gldit

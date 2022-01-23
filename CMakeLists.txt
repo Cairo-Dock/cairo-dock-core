@@ -42,6 +42,12 @@ else()
 	add_definitions (-DCAIRO_DOCK_FORCE_ICON_IN_MENUS=0)
 endif()
 
+if (use-new-positioning-on-x11) # new positioning code should work on both X11 and Wayland, but, by default, it is used only on Wayland -- use this cmake options to enable it on X11 as well for testing it
+	add_definitions (-DCAIRO_DOCK_USE_NEW_POSITIONING_ON_X11=1)
+else()
+	add_definitions (-DCAIRO_DOCK_USE_NEW_POSITIONING_ON_X11=0)
+endif()
+
 ############ sources tarball ############
 
 set (CPACK_SOURCE_GENERATOR "TGZ")
@@ -195,6 +201,18 @@ if (HAVE_LIBINTL)  # on BSD, we have to link to libintl to be able to use gettex
 	set (LIBINTL_LIBRARIES "intl")
 endif()
 
+# check for gtk-layer-shell
+set (with_gtk_layer_shell no)
+enable_if_not_defined (enable-gtk-layer-shell) # enabled by default
+if (enable-gtk-layer-shell)
+	if (HAVE_WAYLAND)
+		pkg_check_modules ("GTKLAYERSHELL" "gtk-layer-shell-0>=0.6.0")
+		if (GTKLAYERSHELL_FOUND)
+			set (HAVE_GTK_LAYER_SHELL 1)
+			set (with_gtk_layer_shell yes)
+		endif()
+	endif()
+endif()
 
 ########### variables defined at compil time ###############
 
@@ -250,6 +268,7 @@ else()
 	MESSAGE (STATUS " * With GLX support    : no")
 endif()
 MESSAGE (STATUS " * With Wayland support: ${with_wayland}")
+MESSAGE (STATUS " * With gtk-layer-shell: ${with_gtk_layer_shell}")
 MESSAGE (STATUS " * With EGL support    : ${with_egl}")
 if (HAVE_LIBCRYPT)
 	MESSAGE (STATUS " * Crypt passwords     : yes")

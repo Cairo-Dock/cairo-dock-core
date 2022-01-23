@@ -126,6 +126,7 @@ static gboolean on_leave_dialog (G_GNUC_UNUSED GtkWidget* pWidget,
 	{
 		iMouseX = pEvent->x_root;
 		iMouseY = pEvent->y_root;
+		if (gldi_container_is_wayland_backend ()) pDialog->container.bInside = FALSE;
 	}
 	else
 	{
@@ -214,7 +215,8 @@ static gboolean on_button_press_dialog (G_GNUC_UNUSED GtkWidget* pWidget,
 				if (pDialog->bHideOnClick)
 					gldi_dialog_hide (pDialog);
 				else
-					gldi_object_unref (GLDI_OBJECT(pDialog));
+					pDialog->uFlags.f |= CAIRO_DIALOG_FLAGS_PENDING_CLOSE; // wait until the release event before closing
+					// gldi_object_unref (GLDI_OBJECT(pDialog));
 			}
 			else if (pButton->button == 1)  // left click on a button.
 			{
@@ -228,6 +230,11 @@ static gboolean on_button_press_dialog (G_GNUC_UNUSED GtkWidget* pWidget,
 		}
 		else if (pButton->type == GDK_BUTTON_RELEASE)
 		{
+			if (pDialog->uFlags.f & CAIRO_DIALOG_FLAGS_PENDING_CLOSE)
+			{
+				gldi_object_unref (GLDI_OBJECT(pDialog));
+				return FALSE;
+			}
 			if (pDialog->pButtons != NULL && pButton->button == 1)  // release left click with buttons present
 			{
 				int iButton = _cairo_dock_find_clicked_button_in_dialog (pButton, pDialog);
@@ -611,7 +618,12 @@ static void _set_dialog_orientation (CairoDialog *pDialog, GldiContainer *pConta
 {
 	if (pContainer != NULL/* && pDialog->pIcon != NULL*/)
 	{
-		_cairo_dock_dialog_calculate_aimed_point (pDialog->pIcon, pContainer, &pDialog->iAimedX, &pDialog->iAimedY, &pDialog->bRight, &pDialog->bTopBottomDialog, &pDialog->container.bDirectionUp, pDialog->fAlign);
+		if (gldi_dialog_use_new_positioning (pDialog))
+		{
+			pDialog->container.bDirectionUp = pContainer->bDirectionUp;
+			pDialog->bTopBottomDialog = pContainer->bIsHorizontal;
+		}
+		else _cairo_dock_dialog_calculate_aimed_point (pDialog->pIcon, pContainer, &pDialog->iAimedX, &pDialog->iAimedY, &pDialog->bRight, &pDialog->bTopBottomDialog, &pDialog->container.bDirectionUp, pDialog->fAlign);
 		//g_print ("%s (%d,%d %d %d %d)\n", __func__, pDialog->iAimedX, pDialog->iAimedY, pDialog->bRight, pDialog->bTopBottomDialog, pDialog->container.bDirectionUp);
 	}
 	else
@@ -622,7 +634,7 @@ static void _set_dialog_orientation (CairoDialog *pDialog, GldiContainer *pConta
 
 static void _place_dialog (CairoDialog *pDialog, GldiContainer *pContainer)
 {
-	//g_print ("%s (%x;%d, %s)\n", __func__, pDialog->pIcon, pContainer, pDialog->pIcon?pDialog->pIcon->cParentDockName:"none");
+	//g_print ("%s (%p;%p, %s)\n", __func__, pDialog->pIcon, pContainer, pDialog->pIcon?pDialog->pIcon->cParentDockName:"none");
 	if (pDialog->container.bInside && ! (pDialog->pInteractiveWidget || pDialog->action_on_answer))  // in the case of a modal dialog, the dialog takes the dock's events, including the "enter-event" one. So we are inside the dialog as soon as we enter the dock, and consequently, the dialog is not replaced when the dock unhides itself.
 		return;
 	
@@ -631,21 +643,23 @@ static void _place_dialog (CairoDialog *pDialog, GldiContainer *pContainer)
 	{
 		_set_dialog_orientation (pDialog, pContainer);
 		
-		if (pDialog->bTopBottomDialog)
+		if (!gldi_dialog_use_new_positioning (pDialog))
 		{
-			pDialog->iComputedPositionY = (pDialog->container.bDirectionUp ? pDialog->iAimedY - pDialog->iComputedHeight : pDialog->iAimedY);
-			_cairo_dock_dialog_find_optimal_placement (pDialog);
+			if (pDialog->bTopBottomDialog)
+			{
+				pDialog->iComputedPositionY = (pDialog->container.bDirectionUp ? pDialog->iAimedY - pDialog->iComputedHeight : pDialog->iAimedY);
+				_cairo_dock_dialog_find_optimal_placement (pDialog);
+			}
+			else  // dialogue lie a un dock vertical, on ne cherche pas a optimiser le placement.
+			{
+				/**int tmp = pDialog->iAimedX;
+				pDialog->iAimedX = pDialog->iAimedY;
+				pDialog->iAimedY = tmp;*/
+				
+				pDialog->iComputedPositionX = (pDialog->bRight ? MAX (0, pDialog->iAimedX - pDialog->container.iWidth) : pDialog->iAimedX);
+				pDialog->iComputedPositionY = (pDialog->container.bDirectionUp ? MAX (0, pDialog->iAimedY - pDialog->iComputedHeight) : pDialog->iAimedY + pDialog->iMinBottomGap);  // on place la bulle (et non pas la fenetre) sans faire d'optimisation.
+			}
 		}
-		else  // dialogue lie a un dock vertical, on ne cherche pas a optimiser le placement.
-		{
-			/**int tmp = pDialog->iAimedX;
-			pDialog->iAimedX = pDialog->iAimedY;
-			pDialog->iAimedY = tmp;*/
-			
-			pDialog->iComputedPositionX = (pDialog->bRight ? MAX (0, pDialog->iAimedX - pDialog->container.iWidth) : pDialog->iAimedX);
-			pDialog->iComputedPositionY = (pDialog->container.bDirectionUp ? MAX (0, pDialog->iAimedY - pDialog->iComputedHeight) : pDialog->iAimedY + pDialog->iMinBottomGap);  // on place la bulle (et non pas la fenetre) sans faire d'optimisation.
-		}
-		
 		/*if (pDialog->bRight)
 		{
 			if (pDialog->container.bDirectionUp)
@@ -664,18 +678,45 @@ static void _place_dialog (CairoDialog *pDialog, GldiContainer *pContainer)
 	else  // dialogue lie a aucun container => au milieu de l'ecran courant.
 	{
 		pDialog->container.bDirectionUp = TRUE;
-		pDialog->iComputedPositionX = (gldi_desktop_get_width() - pDialog->container.iWidth) / 2;  // we don't know if the container is set on a given screen or not, so take the X screen.
-		pDialog->iComputedPositionY = (gldi_desktop_get_height() - pDialog->container.iHeight) / 2;
-		
+		if (!gldi_dialog_use_new_positioning (pDialog))
+		{
+			pDialog->iComputedPositionX = (gldi_desktop_get_width() - pDialog->container.iWidth) / 2;  // we don't know if the container is set on a given screen or not, so take the X screen.
+			pDialog->iComputedPositionY = (gldi_desktop_get_height() - pDialog->container.iHeight) / 2;
+		}
 		// iGravity = GDK_GRAVITY_CENTER;
 	}
 	
 	pDialog->bPositionForced = FALSE;
 	///gtk_window_set_gravity (GTK_WINDOW (pDialog->container.pWidget), iGravity);
 	//g_print (" => move to (%d;%d) %dx%d\n", pDialog->iComputedPositionX, pDialog->iComputedPositionY, pDialog->iComputedWidth, pDialog->iComputedHeight);
-	gtk_window_move (GTK_WINDOW (pDialog->container.pWidget),
-		pDialog->iComputedPositionX,
-		pDialog->iComputedPositionY);
+	if (gldi_dialog_use_new_positioning (pDialog))
+	{
+		Icon* pPointedIcon = pDialog->pIcon;
+		if (pPointedIcon && pContainer)
+		{
+			GdkRectangle rect = {0, 0, 1, 1};
+			GdkGravity rect_anchor = GDK_GRAVITY_NORTH, dialog_anchor = GDK_GRAVITY_SOUTH;
+			gldi_container_calculate_rect (pContainer, pPointedIcon, &rect, &rect_anchor, &dialog_anchor);
+			
+			// note: moving a dialog will only work if it is not mapped yet;
+			// if it is already shown, we need to hide and re-show it
+			GtkWidget *gtk_window = pDialog->container.pWidget;
+			gboolean bMapped = gtk_widget_get_mapped (gtk_window) && gldi_container_is_wayland_backend ();
+			if (bMapped) {
+				pDialog->bAllowMinimize = TRUE;
+				gtk_widget_hide (gtk_window);
+			}
+			gldi_container_move_to_rect (CAIRO_CONTAINER (pDialog), &rect,
+				rect_anchor, dialog_anchor, GDK_ANCHOR_SLIDE, 0, 0);
+			if (bMapped) gtk_widget_show_all (gtk_window);
+		}
+	}
+	else
+	{
+		gtk_window_move (GTK_WINDOW (pDialog->container.pWidget),
+			pDialog->iComputedPositionX,
+			pDialog->iComputedPositionY);
+	}
 }
 
 void _refresh_all_dialogs (gboolean bReplace)
@@ -741,7 +782,7 @@ static void _trigger_replace_all_dialogs (void)
 
 void gldi_dialog_hide (CairoDialog *pDialog)
 {
-	cd_debug ("%s ()", __func__);
+	//g_print ("%s ()", __func__);
 	if (gldi_container_is_visible (CAIRO_CONTAINER (pDialog)))
 	{
 		pDialog->bAllowMinimize = TRUE;
@@ -775,7 +816,7 @@ void gldi_dialog_hide (CairoDialog *pDialog)
 
 void gldi_dialog_unhide (CairoDialog *pDialog)
 {
-	cd_debug ("%s ()", __func__);
+	//g_print ("%s ()", __func__);
 	if (! gldi_container_is_visible (CAIRO_CONTAINER (pDialog)))
 	{
 		if (pDialog->pInteractiveWidget != NULL)
@@ -1047,6 +1088,24 @@ static void init_object (GldiObject *obj, gpointer attr)
 {
 	CairoDialog *pDialog = (CairoDialog*)obj;
 	CairoDialogAttr *pAttribute = (CairoDialogAttr*)attr;
+		
+	// set parent -- note: on Wayland, it is an error to try to map (and position) a popup
+	// relative to a window that is not mapped; we need to take care of this
+	{
+		GtkWindow *tmp = GTK_WINDOW (pAttribute->pContainer->pWidget);
+		while (tmp && !gtk_widget_get_mapped (GTK_WIDGET(tmp)))
+			tmp = gtk_window_get_transient_for (tmp);
+		gtk_window_set_transient_for (GTK_WINDOW (pDialog->container.pWidget), tmp);
+		gldi_container_init_layer (&(pDialog->container));
+	}
+	
+	pDialog->uFlags.f = 0;
+	#if (CAIRO_DOCK_USE_NEW_POSITIONING_ON_X11 == 1)
+		pDialog->uFlags.f = CAIRO_DIALOG_FLAGS_USE_NEW_POSITIONING;
+	#else
+		if (gldi_container_is_wayland_backend ())
+			pDialog->uFlags.f = CAIRO_DIALOG_FLAGS_USE_NEW_POSITIONING;
+	#endif
 	
 	//\________________ set up its orientation (do it now, as we need bDirectionUp to place the internal widgets)
 	pDialog->pIcon = pAttribute->pIcon;
@@ -1077,8 +1136,14 @@ static void init_object (GldiObject *obj, gpointer attr)
 	if (pDialog->iNbButtons != 0 && (s_pButtonOkSurface == NULL || s_pButtonCancelSurface == NULL))
 		_load_dialog_buttons (myDialogsParam.cButtonOkImage, myDialogsParam.cButtonCancelImage);
 	
+	// On Wayland, _place_dialog() should happen before showing the dialog; on X, it is the opposite
+	if (!gldi_container_is_wayland_backend ()) gtk_widget_show_all (pDialog->container.pWidget);
+	
 	//\________________ on le place parmi les autres.
 	_place_dialog (pDialog, pContainer);  // renseigne aussi bDirectionUp, bIsHorizontal, et iHeight.
+	
+	//\________________ On Wayland, we need to first set position before showing the dialog.
+	if (gldi_container_is_wayland_backend ()) gtk_widget_show_all (pDialog->container.pWidget);
 	
 	//\________________ On connecte les signaux utiles.
 	g_signal_connect (G_OBJECT (pDialog->container.pWidget),
@@ -1140,6 +1205,8 @@ static void reset_object (GldiObject *obj)
 				gtk_widget_queue_draw (pContainer->pWidget);
 		}
 	}
+	
+	// gtk_window_set_modal (GTK_WINDOW (pDialog->container.pWidget), FALSE);
 	
 	// stop the timer
 	if (pDialog->iSidTimer > 0)
