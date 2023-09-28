@@ -32,6 +32,8 @@ include_directories(
 link_directories(
 	${PACKAGE_LIBRARY_DIRS}
 	${GTK_LIBRARY_DIRS}
+	${WAYLAND_LIBRARY_DIRS}
+	${GTKLAYERSHELL_LIBRARY_DIRS}
 	${CMAKE_SOURCE_DIR}/src/gldit)
 
 # Add executable that is built from the source files.
