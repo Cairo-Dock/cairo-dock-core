@@ -1783,10 +1783,11 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 	}
 	else
 	{
-		cResult = g_ascii_strdown (cStartupWMClass, -1);
+		cResult = g_strdup (cStartupWMClass);
+/*		cResult = g_ascii_strdown (cStartupWMClass, -1);
 		gchar *str = strchr (cResult, '.');  // we remove all .xxx otherwise we can't detect the lack of extension when looking for an icon (openoffice.org) or it's a problem when looking for an icon (jbrout.py).
 		if (str != NULL)
-			*str = '\0';
+			*str = '\0'; */
 	}
 	cairo_dock_remove_version_from_string (cResult);
 	cd_debug (" -> '%s'", cResult);
@@ -1875,6 +1876,8 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 
 	//\__________________ search the desktop file's path.
 	gchar *cDesktopFilePath = _search_desktop_file (cDesktopFile?cDesktopFile:cClass);
+	if (cDesktopFilePath == NULL && cWmClass != NULL)
+		cDesktopFilePath = _search_desktop_file (cWmClass);
 	if (cDesktopFilePath == NULL)  // couldn't find the .desktop
 	{
 		if (cClass != NULL)  // make a class anyway to store the few info we have.
