@@ -457,7 +457,7 @@ static gboolean _hide_child_docks (CairoDock *pDock)
 
 static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	g_print ("%s (bIsMainDock : %d; bInside:%d; iState:%d; iRefCount:%d, pEvent: %p)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iRefCount, pEvent);
+	// g_print ("%s (bIsMainDock : %d; bInside:%d; iState:%d; iRefCount:%d, pEvent: %p)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iRefCount, pEvent);
 	//\_______________ On tire le dock => on ignore le signal.
 	if (pEvent != NULL && (pEvent->state & GDK_MOD1_MASK) && (pEvent->state & GDK_BUTTON1_MASK))
 	{
@@ -642,7 +642,7 @@ static gboolean _on_dock_unmap (GtkWidget* pWidget, G_GNUC_UNUSED GdkEvent* pEve
 
 static gboolean _on_enter_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	g_print ("%s (bIsMainDock : %d; bInside:%d; state:%d; iMagnitudeIndex:%d; input shape:%p; event:%p)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iMagnitudeIndex, pDock->pShapeBitmap, pEvent);
+	// g_print ("%s (bIsMainDock : %d; bInside:%d; state:%d; iMagnitudeIndex:%d; input shape:%p; event:%p)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iMagnitudeIndex, pDock->pShapeBitmap, pEvent);
 	if (! cairo_dock_entrance_is_allowed (pDock))
 	{
 		cd_message ("* entree non autorisee");
