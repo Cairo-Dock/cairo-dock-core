@@ -141,6 +141,14 @@ static void _set_thumbnail_area (GldiWindowActor *actor, GtkWidget* pContainerWi
 	zwlr_foreign_toplevel_handle_v1_set_rectangle(wactor->handle, surface, x, y, w, h);
 }
 
+static void _set_fullscreen (GldiWindowActor *actor, gboolean bFullScreen)
+{
+	if (!actor) return;
+	GldiWFTWindowActor *wactor = (GldiWFTWindowActor *)actor;
+	if (bFullScreen) zwlr_foreign_toplevel_handle_v1_set_fullscreen (wactor->handle, NULL);
+	else zwlr_foreign_toplevel_handle_v1_unset_fullscreen (wactor->handle);
+}
+
 
 // extra callback for when a new app is activated
 // this is useful for e.g. interactively selecting a window
@@ -194,17 +202,19 @@ static void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED wfthandle *handle
 	if (!data) return;
 	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
 	GldiWindowActor* actor = (GldiWindowActor*)wactor;
-	gboolean activated = FALSE, maximized = FALSE, minimized = FALSE;
+	gboolean activated = FALSE, maximized = FALSE, minimized = FALSE, fullscreen = FALSE;
 	int i;
 	uint32_t* stdata = (uint32_t*)state->data;
 	for (i = 0; i*sizeof(uint32_t) < state->size; i++)
 	{
 		if (stdata[i] == ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_STATE_ACTIVATED)
-            activated = TRUE;
-        else if (stdata[i] == ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_STATE_MAXIMIZED)
-            maximized = TRUE;
-        else if (stdata[i] == ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_STATE_MINIMIZED)
-            minimized = TRUE;
+			activated = TRUE;
+		else if (stdata[i] == ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_STATE_MAXIMIZED)
+			maximized = TRUE;
+		else if (stdata[i] == ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_STATE_MINIMIZED)
+			minimized = TRUE;
+		else if (stdata[i] == ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_STATE_FULLSCREEN)
+			fullscreen = TRUE;
 	}
 	if (activated)
 	{
@@ -233,11 +243,12 @@ static void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED wfthandle *handle
 	}
 	gboolean bHiddenChanged     = (minimized != actor->bIsHidden);
 	gboolean bMaximizedChanged  = (maximized != actor->bIsMaximized);
-	gboolean bFullScreenChanged = FALSE;
+	gboolean bFullScreenChanged = (fullscreen != actor->bIsFullScreen);
 	actor->bIsHidden     = minimized;
 	actor->bIsMaximized  = maximized;
-					
-	if (bHiddenChanged || bMaximizedChanged)
+	actor->bIsFullScreen = fullscreen;
+	
+	if (bHiddenChanged || bMaximizedChanged || bFullScreenChanged)
 		if (actor->bDisplayed) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_STATE_CHANGED, actor, bHiddenChanged, bMaximizedChanged, bFullScreenChanged);
 }
 
@@ -427,7 +438,7 @@ static void gldi_zwlr_foreign_toplevel_manager_init ()
 	wmb.minimize = _minimize;
 	// wmb.lower = _lower;
 	wmb.maximize = _maximize;
-	// wmb.set_fullscreen = _set_fullscreen;
+	wmb.set_fullscreen = _set_fullscreen;
 	// wmb.set_above = _set_above;
 	wmb.set_minimize_position = _set_minimize_position;
 	wmb.set_thumbnail_area = _set_thumbnail_area;
