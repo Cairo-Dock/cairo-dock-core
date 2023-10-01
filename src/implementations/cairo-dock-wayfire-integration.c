@@ -36,6 +36,7 @@
 static const char expo_toggle[] = "{\"method\": \"expo/toggle\", \"data\": {}}";
 static const char scale_toggle[] = "{\"method\": \"scale/toggle\", \"data\": {}}";
 static const char scale_filter_base[] = "{\"method\": \"scale_ipc_filter/activate_appid\", \"data\": {\"all_workspaces\": true, \"app_id\": \"%s\"}}";
+static const char toggle_showdesktop[] = "{\"method\": \"wm-actions/toggle_showdesktop\", \"data\": {}}";
 static const char default_socket[] = "/tmp/wayfire-wayland-1.socket";
 
 int wayfire_socket = -1; // socket connection to Wayfire
@@ -246,6 +247,12 @@ static gboolean _present_desktops() {
 	return _call_ipc(expo_toggle, strlen(scale_toggle));
 }
 
+/* Toggle show destop functionality (i.e. minimize / unminimize all views).
+ * Note: bShow argument is ignored, we don't know if the desktop is shown / hidden */
+static gboolean _show_hide_desktop(G_GNUC_UNUSED gboolean bShow) {
+	return _call_ipc(toggle_showdesktop, strlen(toggle_showdesktop));
+}
+
 /*
 static gboolean _set_current_desktop(G_GNUC_UNUSED int iDesktopNumber, int iViewportNumberX, int iViewportNumberY) {
 	// note: iDesktopNumber is always ignored, we only have one desktop
@@ -294,6 +301,7 @@ void cd_init_wayfire_backend() {
 	p.present_class = _present_class;
 	p.present_windows = _present_windows;
 	p.present_desktops = _present_desktops;
+	p.show_hide_desktop = _show_hide_desktop;
 	// p.set_current_desktop = _set_current_desktop;
 	
 	gldi_desktop_manager_register_backend (&p);
