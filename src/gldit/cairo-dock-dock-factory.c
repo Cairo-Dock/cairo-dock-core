@@ -1843,7 +1843,7 @@ static gboolean _cairo_dock_dock_animation_loop (GldiContainer *pContainer)
 static gboolean _on_dock_destroyed (GtkWidget *menu, GldiContainer *pContainer);
 static void _on_menu_deactivated (G_GNUC_UNUSED GtkMenuShell *menu, CairoDock *pDock)
 {
-	g_print ("\n+++ %s ()\n\n", __func__);
+	// g_print ("\n+++ %s ()\n\n", __func__);
 	g_return_if_fail (CAIRO_DOCK_IS_DOCK (pDock));
 	if (pDock->bHasModalWindow)  // don't send the signal if the menu was already deactivated.
 	{
@@ -1853,7 +1853,7 @@ static void _on_menu_deactivated (G_GNUC_UNUSED GtkMenuShell *menu, CairoDock *p
 }
 static void _on_menu_destroyed (GtkWidget *menu, CairoDock *pDock)
 {
-	g_print ("\n+++ %s ()\n\n", __func__);
+	// g_print ("\n+++ %s ()\n\n", __func__);
 	gldi_object_remove_notification (pDock,
 		NOTIFICATION_DESTROY,
 		(GldiNotificationFunc) _on_dock_destroyed,
@@ -1861,7 +1861,7 @@ static void _on_menu_destroyed (GtkWidget *menu, CairoDock *pDock)
 }
 static gboolean _on_dock_destroyed (GtkWidget *menu, GldiContainer *pContainer)
 {
-	//g_print ("\n+++ %s ()\n\n", __func__);
+	// g_print ("\n+++ %s ()\n\n", __func__);
 	g_signal_handlers_disconnect_matched
 		(menu,
 		G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
