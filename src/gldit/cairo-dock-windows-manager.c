@@ -392,8 +392,8 @@ gchar* gldi_window_parse_class(const gchar* res_class, const gchar* res_name) {
 		}
 		else
 		{
-			// cClass = g_ascii_strdown (res_class, -1);  // down case because some apps change the case depending of their windows...
-			cClass = g_strdup (res_class);
+			cClass = g_ascii_strdown (res_class, -1);  // down case because some apps change the case depending of their windows...
+			// cClass = g_strdup (res_class);
 		}
 
 		cairo_dock_remove_version_from_string (cClass);  // we remore number of version (e.g. Openoffice.org-3.1)
