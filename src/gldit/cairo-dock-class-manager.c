@@ -1595,6 +1595,25 @@ const CairoDockImageBuffer *cairo_dock_get_class_image_buffer (const gchar *cCla
 }
 
 
+static gboolean _check_desktop_file_exists(GString *sDesktopFilePath, const gchar *cFileName, const char *prefix)
+{
+	// TODO: use XDG_DATA_DIRS instead of hard-coded values!
+	if (prefix) g_string_printf (sDesktopFilePath, "/usr/share/applications/%s%s", prefix, cFileName);
+	else g_string_printf (sDesktopFilePath, "/usr/share/applications/%s", cFileName);
+	if (g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS)) return TRUE;
+	
+	if(prefix) g_string_printf (sDesktopFilePath, "/usr/local/share/applications/%s%s", prefix, cFileName);
+	else g_string_printf (sDesktopFilePath, "/usr/local/share/applications/%s", cFileName);
+	if (g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS)) return TRUE;
+	
+	if(prefix) g_string_printf (sDesktopFilePath, "%s/.local/share/applications/%s%s", g_getenv ("HOME"), prefix, cFileName);
+	else g_string_printf (sDesktopFilePath, "%s/.local/share/applications/%s", g_getenv ("HOME"), cFileName);
+	if (g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS)) return TRUE;
+	
+	return FALSE;
+}
+
+
 static gchar *_search_desktop_file (const gchar *cDesktopFile)  // file, path or even class
 {
 	if (cDesktopFile == NULL)
@@ -1611,39 +1630,38 @@ static gchar *_search_desktop_file (const gchar *cDesktopFile)  // file, path or
 		cDesktopFileName = g_strdup_printf ("%s.desktop", cDesktopFile);
 
 	const gchar *cFileName = (cDesktopFileName ? cDesktopFileName : cDesktopFile);
-	gboolean bFound = TRUE;
+	gboolean bFound;
 	GString *sDesktopFilePath = g_string_new ("");
-	g_string_printf (sDesktopFilePath, "/usr/share/applications/%s", cFileName);
-	if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
+	gchar *cFileNameLower = NULL;
+	
+	bFound = _check_desktop_file_exists (sDesktopFilePath, cFileName, NULL);
+	
+	if (! bFound)
 	{
-		const gchar *cFileNameLower = g_ascii_strdown (cFileName, -1);
-		g_string_printf (sDesktopFilePath, "/usr/share/applications/%s", cFileNameLower);
-		if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
-		{
-			g_string_printf (sDesktopFilePath, "/usr/share/applications/%c%s", g_ascii_toupper (*cFileNameLower), cFileNameLower+1);  // handle stupid cases like Thunar.desktop
-			if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
-			{
-				g_string_printf (sDesktopFilePath, "/usr/share/applications/org.gnome.%c%s", g_ascii_toupper (*cFileNameLower), cFileNameLower+1);  // handle stupid cases like org.gnome.Evince.desktop
-				if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
-				{
-					g_string_printf (sDesktopFilePath, "/usr/share/applications/xfce4/%s", cFileNameLower);
-					if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
-					{
-						g_string_printf (sDesktopFilePath, "/usr/share/applications/kde4/%s", cFileNameLower);
-						if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
-						{
-							g_string_printf (sDesktopFilePath, "%s/.local/share/applications/%s", g_getenv ("HOME"), cFileNameLower);
-							if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
-							{
-								bFound = FALSE;
-							}
-						}
-					}
-				}
-			}
-		}
-		g_free (cFileNameLower);
+		cFileNameLower = g_ascii_strdown (cFileName, -1);
+		bFound = _check_desktop_file_exists (sDesktopFilePath, cFileNameLower, NULL);
 	}
+	if (! bFound)
+	{
+		const char *prefices[] = {"org.gnome.", "org.kde.", "org.freedesktop.", "xfce4/", "kde4/", NULL};
+		int i, j;
+		for (i = 0; i < 3; i++)
+		{
+			/* note: third iteration is to handle very stupid cases such as
+			 * org.gnome.Evince.desktop with app-id == "evince" (happens for
+			 * version 42.3 that is on Ubuntu 22.04) */
+			if (i == 2) cFileNameLower[0] = g_ascii_toupper (cFileNameLower[0]);
+			const gchar *tmp = i ? cFileNameLower : cFileName;
+			for (j = 0; prefices[j]; j++)
+			{
+				bFound = _check_desktop_file_exists (sDesktopFilePath, tmp, prefices[j]);
+				if (bFound) break;
+			}
+			if (bFound) break;
+		}
+	}
+	
+	g_free (cFileNameLower);
 	g_free (cDesktopFileName);
 
 	gchar *cResult;
