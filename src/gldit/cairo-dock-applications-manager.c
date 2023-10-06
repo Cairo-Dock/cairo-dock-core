@@ -989,6 +989,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	
 	icon->cName = g_strdup (actor->cName ? actor->cName : actor->cClass);
 	icon->cClass = g_strdup (actor->cClass);  // we'll register the class during the loading of the icon, since it can take some time, and we don't really need the class params right now.
+	icon->cWmClass = g_strdup (actor->cWmClass);
 	
 	icon->iface.load_image           = _load_appli;
 	icon->iface.action_on_drag_hover = _show_appli_for_drop;
