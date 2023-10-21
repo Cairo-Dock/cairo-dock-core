@@ -19,6 +19,7 @@ SET(impl_SRCS
 	cairo-dock-egl-X.c
 	cairo-dock-egl-wayland.c
 	cairo-dock-wayland-manager.c         cairo-dock-wayland-manager.h
+	cairo-dock-wayland-wm.c              cairo-dock-wayland-wm.h
 	cairo-dock-foreign-toplevel.c        cairo-dock-foreign-toplevel.h
 	cairo-dock-plasma-window-manager.c   cairo-dock-plasma-window-manager.h
 	cairo-dock-wayfire-shell.c           cairo-dock-wayfire-shell.h
