@@ -22,7 +22,7 @@ Requirements
  - Optionally (but highly recommended) compositor support for the [foreign-toplevel-management](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-foreign-toplevel-management-unstable-v1.xml) or the [plasma-window-management](https://invent.kde.org/libraries/plasma-wayland-protocols/-/blob/master/src/protocols/plasma-window-management.xml) protocol; this is needed for taskbar functionality.
  - Optionally, if using Wayfire, [this plugin](https://github.com/dkondor/wayfire-scale-ipc) for some additional functionality.
 
-Tested on Ubuntu 18.04, 20.04 and 22.04 with recent versions of [Wayfire](https://github.com/WayfireWM/wayfire) (0.7.0 and 0.8.0), [sway](https://github.com/swaywm/sway/) and [wlroots](https://gitlab.freedesktop.org/wlroots/wlroots/) (0.16.2). Also tested with [KWin 5.20](https://invent.kde.org/plasma/kwin) (only works without OpenGL; only tested without Plasma shell).
+Tested on Ubuntu 18.04, 20.04 and 22.04 with recent versions of [Wayfire](https://github.com/WayfireWM/wayfire) (0.7.0 and 0.8.0), [sway](https://github.com/swaywm/sway/) and [wlroots](https://gitlab.freedesktop.org/wlroots/wlroots/) (0.16.2). Also tested with recent versions of [KWin](https://invent.kde.org/plasma/kwin) (5.20 and 5.24; only tested without the Plasma shell).
 
 
 Compilation
@@ -51,7 +51,7 @@ What works:
  - Hiding and recalling docks hidden or kept below only on Wayfire (using the [wayfire-shell](https://github.com/WayfireWM/wayfire/blob/master/proto/wayfire-shell-unstable-v2.xml) protocol).
 
 Known issues:
- - Subdocks disappear when an app is activated (this is a limitation of using xdg-popups).
+ - Subdocks disappear when an app is activated (this is a limitation of using xdg-popups; seems not the be an issue on KWin).
  - Recalling a hidden dock (e.g. by the mouse hitting the screen edge) only works on Wayfire.
  - Tracking visibility does not work, i.e. it is not detected if the dock overlaps with open windows.
  - Crashes in some situations which I believe are caused by a [bug in wlroots](https://github.com/swaywm/wlroots/issues/2543). [This patch](https://github.com/swaywm/wlroots/pull/2551) should solve it.
@@ -59,8 +59,7 @@ Known issues:
  - Tracking virtual desktops / workspaces is not supported.
  - Dialogs flicker sometimes (although this seems to happen on X11 too in some cases).
  - EGL rendering under Wayland relies on an officially unsupported interface in GTK (i.e. it uses [gtk_widget_set_double_buffered()](https://developer.gnome.org/gtk3/stable/GtkWidget.html#gtk-widget-set-double-buffered) which is only supported on X11); in practice it works well at least with GTK versions 3.22.30 and 3.24.33 on Wayfire and Sway.
- - EGL / OpenGL does not work on KWin (complains about some layer-shell surfaces having a zero size set; this might be related to the above point), run the dock with the `-c` switch.
- - On KWin, clicking on the active app to minimize it does not work most of the time (minimizing from the menu works).
+ - EGL / OpenGL does not work on older KWin versions (5.20). An error message complains about some layer-shell surfaces having a zero size set; this might be related to the above point. Run the dock with the `-c` switch.
  - Wayland protocols should not be included directly as header files, but should be created dynamically by running `wayland-scanner` as part of the build process. I don't know how to do this with CMake.
 
 
