@@ -4,7 +4,7 @@
  * Interact with Wayland clients via the zwlr_foreign_toplevel_manager
  * protocol. See e.g. https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-foreign-toplevel-management-unstable-v1.xml
  * 
- * Copyright 2020 Daniel Kondor <kondor.dani@gmail.com>
+ * Copyright 2020-2023 Daniel Kondor <kondor.dani@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,28 +36,63 @@
 #include <stdio.h>
 
 
-static GldiObjectManager myWFTObjectMgr;
-
 typedef struct zwlr_foreign_toplevel_handle_v1 wfthandle;
-
 
 struct _GldiWFTWindowActor {
 	GldiWindowActor actor;
-	// foreign-toplevel specific
-	// handle to toplevel object
+	// foreign-toplevel specific handle to toplevel object
 	wfthandle *handle;
 	// store parent handle, if supplied
 	// NOTE: windows with parent are ignored (not shown in the taskbar)
 	wfthandle *parent;
-	gchar* cOldClass; // save the old window class in case it is changed
-	gboolean init_done; // set to true after the first done event
-	gboolean class_changed; // true if the app ID was changed
+	
+	gchar* cClassPending; // new app_id received
+	gchar* cTitlePending; // new title received
+	
+	gboolean maximized_pending; // maximized state received
+	gboolean minimized_pending; // minimized state received
+	gboolean fullscreen_pending; // fullscreen state received
+	gboolean close_pending; // this window has been closed
+	
+	gboolean in_queue; // this actor has been added to the s_pending_queue
 };
 typedef struct _GldiWFTWindowActor GldiWFTWindowActor;
 
 
+/********************************************************************
+ * static variables used                                            */
 
-// window manager interface
+static GldiObjectManager myWFTObjectMgr;
+
+static struct zwlr_foreign_toplevel_manager_v1* s_ptoplevel_manager = NULL;
+
+/* current active window -- last one to receive activated signal */
+static GldiWindowActor* s_pActiveWindow = NULL;
+/* maybe new active window -- this is set if the activated signal is
+ * received for a window that is not "created" yet, i.e. has not done
+ * the initial init yet or has a parent */
+static GldiWindowActor* s_pMaybeActiveWindow = NULL;
+/* our own config window -- will only work if the docks themselves are not
+ * reported */
+static GldiWindowActor* s_pSelf = NULL;
+
+// extra callback for when a new app is activated
+// this is useful for e.g. interactively selecting a window
+static void (*s_activated_callback)(GldiWFTWindowActor* wactor, void* data) = NULL;
+static void* s_activated_callback_data = NULL;
+
+/* Facilities for the reentrant processing of events.
+ * This is needed as we might receive events while a notification from
+ * us is processed by other components of Cairo-Dock (by GTK / GDK
+ * functions that initiate a roundtrip to the compositor).
+ * However, handling of window creation is not reentrant, so we have to
+ * take care to not send nested notifications. */
+GQueue s_pending_queue = G_QUEUE_INIT;
+GldiWFTWindowActor* s_pCurrent = NULL;
+
+
+/**********************************************************************
+ * window manager interface                                           */
 
 static void _show (GldiWindowActor *actor)
 {
@@ -93,15 +128,6 @@ static GldiWindowActor* _get_transient_for(GldiWindowActor* actor)
 	return (GldiWindowActor*)pactor;
 }
 
-/* current active window -- last one to receive activated signal */
-static GldiWindowActor* s_pActiveWindow = NULL;
-/* maybe new active window -- this is set if the activated signal is
- * received for a window that is not "created" yet, i.e. has not done
- * the initial init yet or has a parent */
-static GldiWindowActor* s_pMaybeActiveWindow = NULL;
-/* our own config window -- will only work if the docks themselves are not
- * reported */
-static GldiWindowActor* s_pSelf = NULL;
 static GldiWindowActor* _get_active_window (void)
 {
 	return s_pActiveWindow;
@@ -150,238 +176,6 @@ static void _set_fullscreen (GldiWindowActor *actor, gboolean bFullScreen)
 }
 
 
-// extra callback for when a new app is activated
-// this is useful for e.g. interactively selecting a window
-static void (*s_activated_callback)(GldiWFTWindowActor* wactor, void* data) = NULL;
-static void* s_activated_callback_data = NULL;
-
-// callbacks 
-static void _gldi_toplevel_title_cb (void *data, G_GNUC_UNUSED wfthandle *handle, const char *title)
-{
-	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
-	GldiWindowActor* actor = (GldiWindowActor*)wactor;
-	g_free (actor->cName);
-	actor->cName = g_strdup ((gchar *)title);
-	if (wactor->init_done && !wactor->parent) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_NAME_CHANGED, actor);
-}
-
-static void _gldi_toplevel_appid_cb (void *data, G_GNUC_UNUSED wfthandle *handle, const char *app_id)
-{
-	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
-	GldiWindowActor* actor = (GldiWindowActor*)wactor;
-	
-	if (!wactor->cOldClass)
-	{
-		wactor->cOldClass = actor->cClass;
-	}
-	else {
-		g_free (actor->cClass);
-	}
-	actor->cClass = g_strdup ((gchar *)app_id);
-	// if (actor->cClass && !wactor->parent) actor->bDisplayed = TRUE;
-	// else actor->bDisplayed = FALSE;
-	// we note that this actor's window class (app ID) has changed
-	// we don't send the notification about it here, since this
-	// change could be grouped with other changes that should be
-	// applied atomically
-	wactor->class_changed = TRUE;
-	// if (wactor->init_done && !wactor->parent) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_CLASS_CHANGED, actor, cOldClass, NULL);
-}
-
-static void _gldi_toplevel_output_enter_cb ( G_GNUC_UNUSED void *data, G_GNUC_UNUSED wfthandle *handle, G_GNUC_UNUSED struct wl_output *output)
-{
-	/* TODO -- or maybe we don't care about this? */
-}
-static void _gldi_toplevel_output_leave_cb ( G_GNUC_UNUSED void *data, G_GNUC_UNUSED wfthandle *handle, G_GNUC_UNUSED struct wl_output *output)
-{
-	
-}
-
-static void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED wfthandle *handle, struct wl_array *state)
-{
-	if (!data) return;
-	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
-	GldiWindowActor* actor = (GldiWindowActor*)wactor;
-	gboolean activated = FALSE, maximized = FALSE, minimized = FALSE, fullscreen = FALSE;
-	int i;
-	uint32_t* stdata = (uint32_t*)state->data;
-	for (i = 0; i*sizeof(uint32_t) < state->size; i++)
-	{
-		if (stdata[i] == ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_STATE_ACTIVATED)
-			activated = TRUE;
-		else if (stdata[i] == ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_STATE_MAXIMIZED)
-			maximized = TRUE;
-		else if (stdata[i] == ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_STATE_MINIMIZED)
-			minimized = TRUE;
-		else if (stdata[i] == ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_STATE_FULLSCREEN)
-			fullscreen = TRUE;
-	}
-	if (activated)
-	{
-		s_pMaybeActiveWindow = actor;
-		if (actor->bDisplayed && s_pActiveWindow != actor)
-		{
-			s_pActiveWindow = actor;
-			gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ACTIVATED, actor);
-			if (s_activated_callback) s_activated_callback(wactor, s_activated_callback_data);
-		}
-		else if (wactor->init_done && wactor->parent)
-		{
-			GldiWFTWindowActor* pwactor = wactor;
-			do {
-				pwactor = zwlr_foreign_toplevel_handle_v1_get_user_data(pwactor->parent);
-			} while (pwactor->parent);
-			GldiWindowActor* pactor = (GldiWindowActor*)pwactor;
-			if (!pwactor->init_done) s_pMaybeActiveWindow = pactor;
-			else if (pactor->bDisplayed && s_pActiveWindow != pactor)
-			{
-				s_pActiveWindow = pactor;
-				gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ACTIVATED, pactor);
-				if (s_activated_callback) s_activated_callback(pwactor, s_activated_callback_data);
-			}
-		}
-	}
-	gboolean bHiddenChanged     = (minimized != actor->bIsHidden);
-	gboolean bMaximizedChanged  = (maximized != actor->bIsMaximized);
-	gboolean bFullScreenChanged = (fullscreen != actor->bIsFullScreen);
-	actor->bIsHidden     = minimized;
-	actor->bIsMaximized  = maximized;
-	actor->bIsFullScreen = fullscreen;
-	
-	if (bHiddenChanged || bMaximizedChanged || bFullScreenChanged)
-		if (actor->bDisplayed) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_STATE_CHANGED, actor, bHiddenChanged, bMaximizedChanged, bFullScreenChanged);
-}
-
-static void _gldi_toplevel_done_cb ( void *data, G_GNUC_UNUSED wfthandle *handle)
-{
-	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
-	GldiWindowActor* actor = (GldiWindowActor*)wactor;
-	gchar* cOldWmClass = NULL;
-	if (wactor->class_changed)
-	{
-		cOldWmClass = actor->cWmClass;
-		actor->cWmClass = actor->cClass;
-		actor->cClass = gldi_window_parse_class (actor->cWmClass, actor->cName);
-	}
-	gboolean new_displayed = FALSE;
-
-	if (!wactor->parent && actor->cClass) {
-		new_displayed = TRUE;
-	}
-
-	if (!actor->bDisplayed && new_displayed)
-	{
-		actor->bDisplayed = TRUE;
-		gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_CREATED, actor);
-		if (actor == s_pMaybeActiveWindow)
-		{
-			s_pActiveWindow = actor;
-			gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ACTIVATED, actor);
-			if (s_activated_callback) s_activated_callback(wactor, s_activated_callback_data);
-		}
-		if (!strcmp(actor->cClass, "cairo-dock")) s_pSelf = actor;
-	}
-	else if (actor->bDisplayed && !new_displayed)
-	{
-		actor->bDisplayed = FALSE;
-		gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESTROYED, actor);
-		if (actor == s_pSelf) s_pSelf = NULL;
-	}
-	else if (actor->bDisplayed && new_displayed && wactor->class_changed) {
-		gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_CLASS_CHANGED, actor, wactor->cOldClass, cOldWmClass);
-		if (actor == s_pSelf) s_pSelf = NULL;
-		else if (!strcmp(actor->cClass, "cairo-dock")) s_pSelf = actor;
-	}
-
-	g_free (cOldWmClass);
-	g_free (wactor->cOldClass);
-	wactor->cOldClass = NULL;
-	wactor->class_changed = FALSE;
-	wactor->init_done = TRUE;
-}
-
-static void _gldi_toplevel_closed_cb (void *data, G_GNUC_UNUSED wfthandle *handle)
-{
-	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
-	GldiWindowActor* actor = (GldiWindowActor*)wactor;
-	if (actor->bDisplayed) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESTROYED, actor);
-	if (actor == s_pSelf) s_pSelf = NULL;
-	gldi_object_unref (GLDI_OBJECT(actor));
-}
-
-static void _gldi_toplevel_parent_cb (void* data, G_GNUC_UNUSED wfthandle *handle, wfthandle *parent)
-{
-	// fprintf(stderr,"Parent for toplevel: %p -> %p\n", handle, parent);
-	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
-	wactor->parent = parent;
-}
-
-static struct zwlr_foreign_toplevel_handle_v1_listener gldi_toplevel_handle_interface = {
-    .title        = _gldi_toplevel_title_cb,
-    .app_id       = _gldi_toplevel_appid_cb,
-    .output_enter = _gldi_toplevel_output_enter_cb,
-    .output_leave = _gldi_toplevel_output_leave_cb,
-    .state        = _gldi_toplevel_state_cb,
-    .done         = _gldi_toplevel_done_cb,
-    .closed       = _gldi_toplevel_closed_cb,
-    .parent       = _gldi_toplevel_parent_cb
-};
-
-
-typedef enum {
-	NB_NOTIFICATIONS_WFT_MANAGER = NB_NOTIFICATIONS_WINDOWS
-	} CairoWFTManagerNotifications;
-
-static void init_object (GldiObject *obj, gpointer attr)
-{
-	GldiWFTWindowActor* actor = (GldiWFTWindowActor*)obj;
-	actor->handle = (wfthandle*)attr;
-	actor->parent = NULL;
-	actor->init_done = FALSE;
-}
-
-static void reset_object (GldiObject* obj)
-{
-	GldiWFTWindowActor* actor = (GldiWFTWindowActor*)obj;
-	g_free(actor->cOldClass);
-	if (obj && actor->handle) zwlr_foreign_toplevel_handle_v1_destroy(actor->handle);
-}
-
-/* register new toplevel */
-static void _new_toplevel ( G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct zwlr_foreign_toplevel_manager_v1 *manager,
-	wfthandle *handle)
-{
-	// fprintf(stderr,"New toplevel: %p\n", handle);
-	
-	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)gldi_object_new (&myWFTObjectMgr, handle);
-	zwlr_foreign_toplevel_handle_v1_set_user_data (handle, wactor);
-	GldiWindowActor *actor = (GldiWindowActor*)wactor;
-	// hack required for minimize on click to work -- "pretend" that the window is in the middle of the screen
-	actor->windowGeometry.x = cairo_dock_get_screen_width (0) / 2;
-	actor->windowGeometry.y = cairo_dock_get_screen_height (0) / 2;
-	actor->windowGeometry.width = 1;
-	actor->windowGeometry.height = 1;
-	
-	/* note: we cannot do anything as long as we get app_id */
-	zwlr_foreign_toplevel_handle_v1_add_listener (handle, &gldi_toplevel_handle_interface, wactor);
-}
-
-/* sent when toplevel management is no longer available -- maybe unload this module? */
-static void _toplevel_manager_finished ( G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct zwlr_foreign_toplevel_manager_v1 *manager)
-{
-    cd_message ("Toplevel manager exited, taskbar will not be available!");
-}
-
-
-
-static struct zwlr_foreign_toplevel_manager_v1_listener gldi_toplevel_manager = {
-    .toplevel = _new_toplevel,
-    .finished = _toplevel_manager_finished,
-};
-
-static struct zwlr_foreign_toplevel_manager_v1* s_ptoplevel_manager = NULL;
-
-
 /* Facility to ask the user to pick a window */
 struct wft_pick_window_response {
 	GldiWFTWindowActor* wactor;
@@ -421,6 +215,310 @@ static GldiWindowActor* _pick_window (GtkWindow *pParentWindow)
 	return (GldiWindowActor*)res.wactor;
 }
 
+
+
+/**********************************************************************
+ * callbacks                                                          */
+
+static void _gldi_toplevel_title_cb (void *data, G_GNUC_UNUSED wfthandle *handle, const char *title)
+{
+	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
+	g_free (wactor->cTitlePending);
+	wactor->cTitlePending = g_strdup ((gchar *)title);
+}
+
+static void _gldi_toplevel_appid_cb (void *data, G_GNUC_UNUSED wfthandle *handle, const char *app_id)
+{
+	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
+	g_free (wactor->cClassPending);
+	wactor->cClassPending = g_strdup ((gchar *)app_id);
+}
+
+static void _gldi_toplevel_output_enter_cb ( G_GNUC_UNUSED void *data, G_GNUC_UNUSED wfthandle *handle, G_GNUC_UNUSED struct wl_output *output)
+{
+	/* TODO -- or maybe we don't care about this? */
+}
+static void _gldi_toplevel_output_leave_cb ( G_GNUC_UNUSED void *data, G_GNUC_UNUSED wfthandle *handle, G_GNUC_UNUSED struct wl_output *output)
+{
+	
+}
+
+static void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED wfthandle *handle, struct wl_array *state)
+{
+	if (!data) return;
+	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
+	wactor->maximized_pending = FALSE;
+	wactor->minimized_pending = FALSE;
+	wactor->fullscreen_pending = FALSE;
+	int i;
+	uint32_t* stdata = (uint32_t*)state->data;
+	for (i = 0; i*sizeof(uint32_t) < state->size; i++)
+	{
+		if (stdata[i] == ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_STATE_ACTIVATED)
+			s_pMaybeActiveWindow = (GldiWindowActor*)wactor;
+		else if (stdata[i] == ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_STATE_MAXIMIZED)
+			wactor->maximized_pending = TRUE;
+		else if (stdata[i] == ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_STATE_MINIMIZED)
+			wactor->minimized_pending = TRUE;
+		else if (stdata[i] == ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_STATE_FULLSCREEN)
+			wactor->fullscreen_pending = TRUE;
+	}
+}
+
+/* Process pending updates for a window's title and send a notification
+ * if notify == TRUE. Return whether the title has in fact changed. */
+static gboolean _update_title (GldiWFTWindowActor* wactor, gboolean notify)
+{
+	if (wactor->cTitlePending)
+	{
+		GldiWindowActor* actor = (GldiWindowActor*)wactor;
+		g_free(actor->cName);
+		actor->cName = wactor->cTitlePending;
+		wactor->cTitlePending = NULL;
+		if (notify) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_NAME_CHANGED, actor);
+		return TRUE;
+	}
+	return FALSE;
+}
+
+/* Process changes in the window state (minimized, maximized, fullscreen)
+ * and send a notification about any change if notify == TRUE. Returns
+ * whether any of the properties have changed. */
+static gboolean _update_state (GldiWFTWindowActor* wactor, gboolean notify)
+{
+	GldiWindowActor* actor = (GldiWindowActor*)wactor;
+	
+	gboolean bHiddenChanged = (wactor->minimized_pending != actor->bIsHidden);
+	if (bHiddenChanged) actor->bIsHidden = wactor->minimized_pending;
+	gboolean bMaximizedChanged = (wactor->maximized_pending != actor->bIsMaximized);
+	if (bMaximizedChanged) actor->bIsMaximized  = wactor->maximized_pending;
+	gboolean bFullScreenChanged = (wactor->fullscreen_pending != actor->bIsFullScreen);
+	if (bFullScreenChanged) actor->bIsFullScreen = wactor->fullscreen_pending;
+	
+	gboolean any_change = (bHiddenChanged || bMaximizedChanged || bFullScreenChanged);
+	
+	if (notify && any_change)
+		gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_STATE_CHANGED, actor, bHiddenChanged, bMaximizedChanged, bFullScreenChanged);
+	
+	return any_change;
+}
+
+static void _gldi_toplevel_done_cb ( void *data, G_GNUC_UNUSED wfthandle *handle)
+{
+	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
+	
+	if(s_pCurrent) {
+		/* We are being called in a nested way, avoid sending
+		 * notifications by queuing them for later.
+		 * 
+		 * This is necessary, since:
+		 * 1. If we call gldi_object_notify(), it may initiate a roundtrip with
+		 * 		the Wayland server, resulting in more data arriving on the
+		 * 		foreign-toplevel protocol as well, so we may end up in this
+		 * 		function in a reentrant way.
+		 * 2. At the same time, the WM functions are not reentrant, so we should
+		 * 		NOT call gldi_object_notify() with WM-related stuff again.
+		 * 		Specifically, this could result in subdock objects and / or icons
+		 * 		being duplicated (for newly created windows).
+		 * 
+		 * To avoid this, we defer any processing until gldi_object_notify()
+		 * returns. This can result in some events being missed (e.g. minimize
+		 * immediately followed by unminimize, or two title / app_id changes in
+		 * quick succession), but these cases are not a serious problem. */
+		if (wactor != s_pCurrent && !wactor->in_queue)
+		{
+			g_queue_push_tail(&s_pending_queue, wactor); // add to queue
+			wactor->in_queue = TRUE;
+		}
+		return;
+	}
+	
+	do {
+		// Set that we are already potentially processing a notification for this actor.
+		s_pCurrent = wactor;
+		wactor->in_queue = FALSE;
+		
+		GldiWindowActor* actor = (GldiWindowActor*)wactor;
+		gchar* cOldClass = NULL;
+		gchar* cOldWmClass = NULL;
+		
+		while(1) {
+			// free possible leftover values from the previous iteration
+			g_free(cOldClass);
+			g_free(cOldWmClass);
+			cOldClass = NULL;
+			cOldWmClass = NULL;
+			
+			// Process all possible fields
+			if(wactor->close_pending) {
+				// this window was closed, just notify the taskbar and free it
+				if (actor->bDisplayed) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESTROYED, actor);
+				if (actor == s_pSelf) s_pSelf = NULL;
+				if (actor == s_pActiveWindow) s_pActiveWindow = NULL;
+				if (actor == s_pMaybeActiveWindow) s_pMaybeActiveWindow = NULL;
+				gldi_object_unref (GLDI_OBJECT(actor));
+				break;
+			}
+			
+			gboolean class_changed = FALSE;
+			if (wactor->cClassPending)
+			{
+				/* we have a new class; this might mean a change or that we
+				 * newly display (or hide) this window in the taskbar */
+				class_changed = TRUE;
+				cOldClass = actor->cClass;
+				cOldWmClass = actor->cWmClass;
+				actor->cWmClass = wactor->cClassPending;
+				actor->cClass = gldi_window_parse_class (actor->cWmClass, actor->cName);
+				wactor->cClassPending = NULL;
+			}
+			gboolean displayed = FALSE; // whether this window should be displayed
+			if (!wactor->parent && actor->cClass) displayed = TRUE;
+			
+			if (!actor->bDisplayed && !displayed)
+			{
+				// not displaying this actor, but we can still update its properties without sending notifications
+				_update_title(wactor, FALSE);
+				_update_state(wactor, FALSE);
+				break; 
+			}
+			if (!actor->bDisplayed && displayed)
+			{
+				// this actor was not displayed so far but should be
+				actor->bDisplayed = TRUE;
+				// we also process additional changes, but no need to send notifications
+				_update_title(wactor, FALSE);
+				_update_state(wactor, FALSE);
+				
+				gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_CREATED, actor);
+				continue; /* check for other changes that might have happened while processing the above */
+			}
+			if (actor->bDisplayed && !displayed)
+			{
+				// should hide this actor
+				actor->bDisplayed = FALSE;
+				// we also process additional changes, but no need to send notifications
+				_update_title(wactor, FALSE);
+				_update_state(wactor, FALSE);
+				
+				gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESTROYED, actor);
+				if (actor == s_pSelf) s_pSelf = NULL;
+				if (actor == s_pActiveWindow) s_pActiveWindow = NULL;
+				continue;
+			}
+			
+			if (class_changed)
+			{
+				if (actor == s_pSelf) s_pSelf = NULL;
+				if (!strcmp(actor->cClass, "cairo-dock")) s_pSelf = actor;
+				gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_CLASS_CHANGED, actor, cOldClass, cOldWmClass);
+				continue;
+			}
+			
+			// check if the title changed (and send a notification if it did)
+			if (_update_title (wactor, TRUE)) continue;
+			// check if other properties have changed (and send a notification)
+			if (_update_state (wactor, TRUE)) continue;
+			
+			if (actor == s_pMaybeActiveWindow)
+			{
+				s_pActiveWindow = actor;
+				s_pMaybeActiveWindow = NULL;
+				gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ACTIVATED, actor);
+				if (s_activated_callback) s_activated_callback(wactor, s_activated_callback_data);
+				continue;
+			}
+			
+			break;
+		}
+		
+		/* possible leftover values from the last iteration */
+		g_free(cOldClass);
+		g_free(cOldWmClass);
+		
+		s_pCurrent = NULL;
+		wactor = g_queue_pop_head(&s_pending_queue); // note: it is OK to call this on an empty queue
+	} while (wactor);
+}
+
+static void _gldi_toplevel_closed_cb (void *data, G_GNUC_UNUSED wfthandle *handle)
+{
+	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
+	wactor->close_pending = TRUE;
+	// this will process this event immediately, or add to the queue of possible events
+	// (no done event will be sent for this window)
+	_gldi_toplevel_done_cb(wactor, NULL);
+}
+
+static void _gldi_toplevel_parent_cb (void* data, G_GNUC_UNUSED wfthandle *handle, wfthandle *parent)
+{
+	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)data;
+	wactor->parent = parent;
+}
+
+/**********************************************************************
+ * interface and object manager definitions                           */
+
+static struct zwlr_foreign_toplevel_handle_v1_listener gldi_toplevel_handle_interface = {
+    .title        = _gldi_toplevel_title_cb,
+    .app_id       = _gldi_toplevel_appid_cb,
+    .output_enter = _gldi_toplevel_output_enter_cb,
+    .output_leave = _gldi_toplevel_output_leave_cb,
+    .state        = _gldi_toplevel_state_cb,
+    .done         = _gldi_toplevel_done_cb,
+    .closed       = _gldi_toplevel_closed_cb,
+    .parent       = _gldi_toplevel_parent_cb
+};
+
+typedef enum {
+	NB_NOTIFICATIONS_WFT_MANAGER = NB_NOTIFICATIONS_WINDOWS
+} CairoWFTManagerNotifications;
+
+static void init_object (GldiObject *obj, gpointer attr)
+{
+	GldiWFTWindowActor* actor = (GldiWFTWindowActor*)obj;
+	actor->handle = (wfthandle*)attr;
+}
+
+static void reset_object (GldiObject* obj)
+{
+	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)obj;
+	
+	if (wactor)
+	{
+		g_free(wactor->cClassPending);
+		g_free(wactor->cTitlePending);
+		if (wactor->handle) zwlr_foreign_toplevel_handle_v1_destroy(wactor->handle);
+	}
+}
+
+/* register new toplevel */
+static void _new_toplevel ( G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct zwlr_foreign_toplevel_manager_v1 *manager,
+	wfthandle *handle)
+{
+	GldiWFTWindowActor* wactor = (GldiWFTWindowActor*)gldi_object_new (&myWFTObjectMgr, handle);
+	zwlr_foreign_toplevel_handle_v1_set_user_data (handle, wactor);
+	GldiWindowActor *actor = (GldiWindowActor*)wactor;
+	// hack required for minimize on click to work -- "pretend" that the window is in the middle of the screen
+	actor->windowGeometry.x = cairo_dock_get_screen_width (0) / 2;
+	actor->windowGeometry.y = cairo_dock_get_screen_height (0) / 2;
+	actor->windowGeometry.width = 1;
+	actor->windowGeometry.height = 1;
+	
+	/* note: we cannot do anything as long as we get app_id */
+	zwlr_foreign_toplevel_handle_v1_add_listener (handle, &gldi_toplevel_handle_interface, wactor);
+}
+
+/* sent when toplevel management is no longer available -- maybe unload this module? */
+static void _toplevel_manager_finished ( G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct zwlr_foreign_toplevel_manager_v1 *manager)
+{
+    cd_message ("Toplevel manager exited, taskbar will not be available!");
+}
+
+static struct zwlr_foreign_toplevel_manager_v1_listener gldi_toplevel_manager = {
+    .toplevel = _new_toplevel,
+    .finished = _toplevel_manager_finished,
+};
 
 static void gldi_zwlr_foreign_toplevel_manager_init ()
 {
