@@ -101,7 +101,8 @@ static void init_object (GldiObject *obj, gpointer attr)
 	pIcon->iface.load_image = _load_image;
 	pIcon->iGroup = pSameClassIcon->iGroup;
 	
-	pIcon->cName = g_strdup (pSameClassIcon->cClass);
+	const gchar *cClassName = cairo_dock_get_class_name(pSameClassIcon->cClass);
+	pIcon->cName = g_strdup (cClassName ? cClassName : pSameClassIcon->cClass);
 	pIcon->cCommand = g_strdup (pSameClassIcon->cCommand);
 	pIcon->pMimeTypes = g_strdupv (pSameClassIcon->pMimeTypes);
 	pIcon->cClass = g_strdup (pSameClassIcon->cClass);
