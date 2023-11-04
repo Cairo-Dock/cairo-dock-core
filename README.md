@@ -3,7 +3,7 @@ Cairo-Dock
 
 Cairo-Dock is a pretty, light and convenient interface to your desktop, able to replace advantageously your system panel!
 
-This repository contains an experimental fork that adds support for running on Wayland, under compositors that support the [layer shell](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-layer-shell-unstable-v1.xml) protocol. Main mainly targeting [Wayfire](https://github.com/WayfireWM/wayfire), but possibly others, such as [KWin](https://invent.kde.org/plasma/kwin).
+This repository contains an experimental fork that adds support for running on Wayland, under compositors that support the [layer shell](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-layer-shell-unstable-v1.xml) protocol. Mainly targeting [Wayfire](https://github.com/WayfireWM/wayfire), but possibly others as well, such as [labwc](https://github.com/labwc/labwc) or [KWin](https://invent.kde.org/plasma/kwin).
 
 Note that this repository is not affiliated in any way with the Cairo-Dock project. Official releases of Cairo-Dock are available in the following repositories:
 
@@ -22,7 +22,7 @@ Requirements
  - Optionally (but highly recommended) compositor support for the [foreign-toplevel-management](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-foreign-toplevel-management-unstable-v1.xml) or the [plasma-window-management](https://invent.kde.org/libraries/plasma-wayland-protocols/-/blob/master/src/protocols/plasma-window-management.xml) protocol; this is needed for taskbar functionality.
  - Optionally, if using Wayfire, [this plugin](https://github.com/dkondor/wayfire-scale-ipc) for some additional functionality.
 
-Tested on Ubuntu 18.04, 20.04 and 22.04 with recent versions of [Wayfire](https://github.com/WayfireWM/wayfire) (0.7.0 and 0.8.0), [sway](https://github.com/swaywm/sway/) and [wlroots](https://gitlab.freedesktop.org/wlroots/wlroots/) (0.16.2). Also tested with recent versions of [KWin](https://invent.kde.org/plasma/kwin) (5.20 and 5.24; only tested without the Plasma shell).
+Tested on Ubuntu 18.04, 20.04 and 22.04 with recent versions of [Wayfire](https://github.com/WayfireWM/wayfire) (0.7.0 and 0.8.0), [labwc](https://github.com/labwc/labwc) (0.6.5), [sway](https://github.com/swaywm/sway/) and [wlroots](https://gitlab.freedesktop.org/wlroots/wlroots/) (0.16.2). Also tested with recent versions of [KWin](https://invent.kde.org/plasma/kwin) (5.20 and 5.24; only tested without the Plasma shell).
 
 
 Compilation
@@ -54,7 +54,7 @@ Known issues:
  - Subdocks disappear when an app is activated (this is a limitation of using xdg-popups; seems not the be an issue on KWin).
  - Recalling a hidden dock (e.g. by the mouse hitting the screen edge) only works on Wayfire.
  - Tracking visibility does not work, i.e. it is not detected if the dock overlaps with open windows.
- - Crashes in some situations which I believe are caused by a [bug in wlroots](https://github.com/swaywm/wlroots/issues/2543). [This patch](https://github.com/swaywm/wlroots/pull/2551) should solve it.
+ - Crashes in some situations which I believe are caused by a [bug in wlroots](https://gitlab.freedesktop.org/wlroots/wlroots/-/issues/2543). This is fixed in recent wlroots versions (0.17). For older wlroots versions (0.16), [this](https://github.com/dkondor/wlroots/commit/ed74e3ae4d96196737eb41e9b0756b5fa15379d8) or [this](https://github.com/swaywm/wlroots/pull/2551) patch should solve it.
  - Multi-monitor support is very limited (the dock will show up on whichever output it thinks is the main one when starting; behavior is buggy when trying to set another output for it).
  - Tracking virtual desktops / workspaces is not supported.
  - Dialogs flicker sometimes (although this seems to happen on X11 too in some cases).
