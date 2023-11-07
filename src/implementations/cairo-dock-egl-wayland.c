@@ -23,18 +23,29 @@ EGLDisplay* egl_get_display_wayland(GdkDisplay* dsp)
 void egl_init_surface_wayland (GldiContainer *pContainer, EGLDisplay* dpy, EGLConfig conf)
 {
 	// create an EGL surface for this window
-	struct wl_surface* wls = gdk_wayland_window_get_wl_surface (
-		gldi_container_get_gdk_window (pContainer));
+	GdkWindow* gdkwindow = gldi_container_get_gdk_window (pContainer);
+	gint scale = gdk_window_get_scale_factor (gdkwindow);
+	struct wl_surface* wls = gdk_wayland_window_get_wl_surface (gdkwindow);
 	struct wl_egl_window* wlw = wl_egl_window_create (wls,
-		pContainer->iWidth, pContainer->iHeight);
+		pContainer->iWidth * scale, pContainer->iHeight * scale);
 	pContainer->eglwindow = wlw;
 	pContainer->eglSurface = eglCreateWindowSurface (dpy, conf, wlw, NULL);
+	// Note: for subdocks, GDK "forgets" to set the proper buffer scale, resulting in
+	// surfaces scaled by the compositor, so we need to do this here manually. This is
+	// likely related to gtk_widget_set_double_buffered() (and custom OpenGL rendering)
+	// not being supported on by GDK on Wayland
+	wl_surface_set_buffer_scale(wls, scale);
 }
 
 void egl_window_resize_wayland (GldiContainer* pContainer, int iWidth, int iHeight)
 {
-	if (pContainer->eglwindow) wl_egl_window_resize (
-		pContainer->eglwindow, iWidth, iHeight, 0, 0);
+	if (pContainer->eglwindow) {
+		GdkWindow* gdkwindow = gldi_container_get_gdk_window (pContainer);
+		gint scale = gdk_window_get_scale_factor (gdkwindow);
+		wl_egl_window_resize (pContainer->eglwindow, iWidth * scale, iHeight * scale, 0, 0);
+		struct wl_surface* wls = gdk_wayland_window_get_wl_surface (gdkwindow);
+		wl_surface_set_buffer_scale(wls, scale);
+	}
 }
 
 #else

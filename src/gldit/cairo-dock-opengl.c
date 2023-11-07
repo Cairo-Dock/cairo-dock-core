@@ -98,7 +98,10 @@ void gldi_gl_container_set_perspective_view (GldiContainer *pContainer)
 		w = pContainer->iHeight;
 		h = pContainer->iWidth;
 	}
-	_set_perspective_view (w, h);
+	GdkWindow* gdkwindow = gldi_container_get_gdk_window (pContainer);
+	gint scale = gdk_window_get_scale_factor (gdkwindow);
+	
+	_set_perspective_view (w * scale, h * scale);
 	pContainer->bPerspectiveView = TRUE;
 }
 
@@ -106,7 +109,13 @@ void gldi_gl_container_set_perspective_view_for_icon (Icon *pIcon)
 {
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, &w, &h);
-	_set_perspective_view (w, h);
+	gint scale = 1;
+	if(pIcon->pContainer) {
+		GdkWindow* gdkwindow = gldi_container_get_gdk_window (pIcon->pContainer);
+		scale = gdk_window_get_scale_factor (gdkwindow);
+	}
+	
+	_set_perspective_view (w * scale, h * scale);
 }
 
 static inline void _set_ortho_view (int iWidth, int iHeight)
@@ -136,7 +145,10 @@ void gldi_gl_container_set_ortho_view (GldiContainer *pContainer)
 		w = pContainer->iHeight;
 		h = pContainer->iWidth;
 	}
-	_set_ortho_view (w, h);
+	GdkWindow* gdkwindow = gldi_container_get_gdk_window (pContainer);
+	gint scale = gdk_window_get_scale_factor (gdkwindow);
+	
+	_set_ortho_view (w * scale, h * scale);
 	pContainer->bPerspectiveView = FALSE;
 }
 
@@ -144,7 +156,13 @@ void gldi_gl_container_set_ortho_view_for_icon (Icon *pIcon)
 {
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, &w, &h);
-	_set_ortho_view (w, h);
+	gint scale = 1;
+	if(pIcon->pContainer) {
+		GdkWindow* gdkwindow = gldi_container_get_gdk_window (pIcon->pContainer);
+		scale = gdk_window_get_scale_factor (gdkwindow);
+	}
+	
+	_set_ortho_view (w * scale, h * scale);
 }
 
 
@@ -215,6 +233,9 @@ gboolean gldi_gl_container_begin_draw_full (GldiContainer *pContainer, GdkRectan
 		return FALSE;
 	
 	glLoadIdentity ();
+	GdkWindow* gdkwindow = gldi_container_get_gdk_window (pContainer);
+	gint scale = gdk_window_get_scale_factor (gdkwindow);
+	glScalef (scale, scale, 1.f);
 	
 	if (pArea != NULL)
 	{
