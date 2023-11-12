@@ -21,6 +21,7 @@ Requirements
  - Compositor support for the [layer-shell](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-layer-shell-unstable-v1.xml) protocol (recommended at least version 4 to allow the dock to receive keyboard events). See e.g. [here](https://gitlab.freedesktop.org/wlroots/wlroots/-/wikis/Projects-which-use-wlroots) and [here](https://github.com/solarkraft/awesome-wlroots#compositors) for candidates. Also, [KWin](https://invent.kde.org/plasma/kwin) version 5.20 and later is supported.
  - Optionally (but highly recommended) compositor support for the [foreign-toplevel-management](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-foreign-toplevel-management-unstable-v1.xml) or the [plasma-window-management](https://invent.kde.org/libraries/plasma-wayland-protocols/-/blob/master/src/protocols/plasma-window-management.xml) protocol; this is needed for taskbar functionality.
  - Optionally, if using Wayfire, [this plugin](https://github.com/dkondor/wayfire-scale-ipc) for some additional functionality.
+ - Optionally, if using a HiDPI screen, [this version of the plugins](https://github.com/dkondor/cairo-dock-plug-ins/) might be required for correct rendering (see below and [issue #7](https://github.com/dkondor/cairo-dock-core/issues/7)).
 
 Tested on Ubuntu 18.04, 20.04 and 22.04 with recent versions of [Wayfire](https://github.com/WayfireWM/wayfire) (0.7.0 and 0.8.0), [labwc](https://github.com/labwc/labwc) (0.6.5), [sway](https://github.com/swaywm/sway/) and [wlroots](https://gitlab.freedesktop.org/wlroots/wlroots/) (0.16.2). Also tested with recent versions of [KWin](https://invent.kde.org/plasma/kwin) (5.20 and 5.24; only tested without the Plasma shell).
 
@@ -28,7 +29,7 @@ Tested on Ubuntu 18.04, 20.04 and 22.04 with recent versions of [Wayfire](https:
 Compilation
 -----------
 
-See the original [guide](https://www.glx-dock.org/ww_page.php?p=By%20compiling&lang=en) for the steps to compile and install Cario-Dock; replace the cairo-dock-core repository with this branch. Note that plug-ins should be ABI compatible with Cairo-Dock compiled from this branch. This means that a recent version of the plug-ins from the [official repository](https://github.com/Cairo-Dock/cairo-dock-plug-ins) will work well.
+See the original [guide](https://www.glx-dock.org/ww_page.php?p=By%20compiling&lang=en) for the steps to compile and install Cario-Dock; replace the cairo-dock-core repository with this branch. Note that plug-ins should be ABI compatible with Cairo-Dock compiled from this branch. This means that a recent version of the plug-ins from wither the [official repository](https://github.com/Cairo-Dock/cairo-dock-plug-ins) or from [here](https://github.com/dkondor/cairo-dock-plug-ins/) will work well.
 
 Additional things to consider:
  - The cmake configuration summary will report if gtk-layer-shell is enabled, i.e. you should see `* With gtk-layer-shell: yes` in the output of cmake. If not, check that the gtk-layer-shell library is properly installed.
@@ -60,6 +61,7 @@ Known issues:
  - Dialogs flicker sometimes (although this seems to happen on X11 too in some cases).
  - EGL rendering under Wayland relies on an officially unsupported interface in GTK (i.e. it uses [gtk_widget_set_double_buffered()](https://developer.gnome.org/gtk3/stable/GtkWidget.html#gtk-widget-set-double-buffered) which is only supported on X11); in practice it works well at least with GTK versions 3.22.30 and 3.24.33 on Wayfire and Sway.
  - EGL / OpenGL does not work on older KWin versions (5.20). An error message complains about some layer-shell surfaces having a zero size set; this might be related to the above point. Run the dock with the `-c` switch.
+ - HiDPI support is limited, especially when rendering with EGL (see [here](https://github.com/dkondor/cairo-dock-core/issues/7)). Rendering can be incorrect or blurry. Using the `-c` switch to diable EGL can help.
  - Wayland protocols should not be included directly as header files, but should be created dynamically by running `wayland-scanner` as part of the build process. I don't know how to do this with CMake.
 
 
