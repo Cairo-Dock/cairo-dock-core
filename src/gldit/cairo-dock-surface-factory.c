@@ -200,6 +200,11 @@ cairo_surface_t *cairo_dock_create_blank_surface_full (int iWidth, int iHeight, 
 		double xs = 1.0, ys = 1.0; // take into account the source context scale
 		if (pSourceContext != NULL)
 			cairo_surface_get_device_scale (cairo_get_target (pSourceContext), &xs, &ys);
+		else if (g_pPrimaryContainer != NULL)
+		{
+			GdkWindow* gdkwindow = gldi_container_get_gdk_window (g_pPrimaryContainer);
+			xs = ys = gdk_window_get_scale_factor (gdkwindow);
+		}
 		pSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, (int)ceil(iWidth * xs), (int)ceil(iHeight * ys));
 		cairo_surface_set_device_scale (pSurface, xs, ys);
 	}
