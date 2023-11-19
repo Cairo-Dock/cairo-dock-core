@@ -221,6 +221,8 @@ gint cairo_dock_search_icon_size (GtkIconSize iIconSize)
 	return MAX (iWidth, iHeight);
 }
 
+extern GldiContainer *g_pPrimaryContainer;
+
 gchar *cairo_dock_search_icon_s_path (const gchar *cFileName, gint iDesiredIconSize)
 {
 	g_return_val_if_fail (cFileName != NULL, NULL);
@@ -294,15 +296,24 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName, gint iDesiredIconS
 				*str = '\0';
 		}
 
-		pIconInfo = gtk_icon_theme_lookup_icon (s_pIconTheme,
+		gint scale = 1;
+		if (g_pPrimaryContainer != NULL)
+		{
+			// TODO: better way to determine the scale factor based on which screen this icon will appear !!
+			GdkWindow* gdkwindow = gldi_container_get_gdk_window (g_pPrimaryContainer);
+			scale = gdk_window_get_scale_factor (gdkwindow);
+		}
+		pIconInfo = gtk_icon_theme_lookup_icon_for_scale (s_pIconTheme,
 			sIconPath->str,
 			iDesiredIconSize, // GTK_ICON_LOOKUP_FORCE_SIZE if size < 30 ?? -> icons can be different // a lot of themes now use only svg files.
+			scale,
 			GTK_ICON_LOOKUP_FORCE_SVG);
 		if (pIconInfo == NULL && ! s_bUseLocalIcons && ! bHasVersion)  // if we were not using the default theme and didn't find any icon, let's try with the default theme (for instance gvfs will give us names from the default theme, and they might not exist in our current theme); if it has a version, we'll retry without it.
 		{
-			pIconInfo = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),  // the default theme is mapped in shared memory so it's available at any time.
+			pIconInfo = gtk_icon_theme_lookup_icon_for_scale (gtk_icon_theme_get_default (),  // the default theme is mapped in shared memory so it's available at any time.
 				sIconPath->str,
 				iDesiredIconSize,
+				scale,
 				GTK_ICON_LOOKUP_FORCE_SVG);
 		}
 		if (pIconInfo != NULL)
