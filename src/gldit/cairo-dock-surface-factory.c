@@ -186,23 +186,36 @@ static inline cairo_t *_get_source_context (void)
 	return pSourceContext;  // Note: we can't keep the context alive and reuse it later, because under Wayland it will make the container invisible
 }
 
-cairo_surface_t *cairo_dock_create_blank_surface (int iWidth, int iHeight)
+cairo_surface_t *cairo_dock_create_blank_surface_full (int iWidth, int iHeight, cairo_t *pSourceContext)
 {
-	cairo_t *pSourceContext = NULL;
-	if (! g_bUseOpenGL)
-		pSourceContext = _get_source_context ();
+	cairo_t *tmpContext = NULL;
+	if (!pSourceContext && !g_bUseOpenGL)
+		pSourceContext = tmpContext = _get_source_context ();
 	cairo_surface_t *pSurface;
-	if (pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS)
+	if (pSourceContext != NULL && cairo_status (pSourceContext) != CAIRO_STATUS_SUCCESS)
+		pSourceContext = NULL;
+	if (g_bUseOpenGL || pSourceContext == NULL)
+	{
+		// opengl or invalid context -> create an image that is a mere ARGB buffer that can be mapped into a texture
+		double xs = 1.0, ys = 1.0; // take into account the source context scale
+		if (pSourceContext != NULL)
+			cairo_surface_get_device_scale (cairo_get_target (pSourceContext), &xs, &ys);
+		pSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, (int)ceil(iWidth * xs), (int)ceil(iHeight * ys));
+		cairo_surface_set_device_scale (pSurface, xs, ys);
+	}
+	else
 		pSurface = cairo_surface_create_similar (cairo_get_target (pSourceContext),
 			CAIRO_CONTENT_COLOR_ALPHA,
 			iWidth,
 			iHeight);
-	else  // opengl or invalid context -> create an image that is a mere ARGB buffer that can be mapped into a texture
-		pSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-			iWidth,
-			iHeight);
-	cairo_destroy (pSourceContext);
+		
+	if(tmpContext) cairo_destroy (tmpContext);
 	return pSurface;
+}
+
+cairo_surface_t *cairo_dock_create_blank_surface(int iWidth, int iHeight)
+{
+	return cairo_dock_create_blank_surface_full (iWidth, iHeight, NULL);
 }
 
 static inline void _apply_orientation_and_scale (cairo_t *pCairoContext, CairoDockLoadImageModifier iLoadingModifier, double fImageWidth, double fImageHeight, double fZoomX, double fZoomY, double fUsefulWidth, double fUsefulheight)
@@ -775,9 +788,10 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, G
 	}
 	*iTextHeight = log.height + iOutlineMargin + 2*fLineWidth;
 	
-	cairo_surface_t* pNewSurface = cairo_dock_create_blank_surface (
+	cairo_surface_t* pNewSurface = cairo_dock_create_blank_surface_full (
 		*iTextWidth,
-		*iTextHeight);
+		*iTextHeight,
+		pSourceContext);
 	cairo_t* pCairoContext = cairo_create (pNewSurface);
 	
 	//\_________________ draw the background
