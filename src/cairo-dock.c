@@ -512,7 +512,11 @@ int main (int argc, char** argv)
 	}
 	else
 	{
-		cRootDataDirPath = g_strdup_printf ("%s/.config/%s", getenv("HOME"), CAIRO_DOCK_DATA_DIR);
+		gchar *xdg_config_home = getenv("XDG_CONFIG_HOME");
+		if (xdg_config_home && *xdg_config_home == '/')
+			cRootDataDirPath = g_strdup_printf ("%s/%s", xdg_config_home, CAIRO_DOCK_DATA_DIR);
+		else
+			cRootDataDirPath = g_strdup_printf ("%s/.config/%s", getenv("HOME"), CAIRO_DOCK_DATA_DIR);
 	}
 	bFirstLaunch = ! g_file_test (cRootDataDirPath, G_FILE_TEST_IS_DIR);
 	_cairo_dock_get_global_config (cRootDataDirPath);
