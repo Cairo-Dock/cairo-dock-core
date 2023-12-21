@@ -29,7 +29,7 @@ Tested on Ubuntu 18.04, 20.04 and 22.04 with recent versions of [Wayfire](https:
 Compilation
 -----------
 
-See the original [guide](https://www.glx-dock.org/ww_page.php?p=By%20compiling&lang=en) for the steps to compile and install Cario-Dock; replace the cairo-dock-core repository with this branch. Note that plug-ins should be ABI compatible with Cairo-Dock compiled from this branch. This means that a recent version of the plug-ins from wither the [official repository](https://github.com/Cairo-Dock/cairo-dock-plug-ins) or from [here](https://github.com/dkondor/cairo-dock-plug-ins/) will work well.
+See the original [guide](https://www.glx-dock.org/ww_page.php?p=By%20compiling&lang=en) for the steps to compile and install Cario-Dock; replace the cairo-dock-core repository with this branch. Note that plug-ins should be ABI compatible with Cairo-Dock compiled from this branch. This means that a recent version of the plug-ins from either the [official repository](https://github.com/Cairo-Dock/cairo-dock-plug-ins) or from [here](https://github.com/dkondor/cairo-dock-plug-ins/) will work well.
 
 Additional things to consider:
  - The cmake configuration summary will report if gtk-layer-shell is enabled, i.e. you should see `* With gtk-layer-shell: yes` in the output of cmake. If not, check that the gtk-layer-shell library is properly installed.
@@ -54,14 +54,14 @@ What works:
 Known issues:
  - Subdocks disappear when an app is activated (this is a limitation of using xdg-popups; seems not the be an issue on KWin).
  - Recalling a hidden dock (e.g. by the mouse hitting the screen edge) only works on Wayfire.
- - Tracking visibility does not work, i.e. it is not detected if the dock overlaps with open windows.
+ - Tracking visibility does not work, i.e. it is not detected if the dock overlaps with open windows (should be possible on KWin).
  - Crashes in some situations which I believe are caused by a [bug in wlroots](https://gitlab.freedesktop.org/wlroots/wlroots/-/issues/2543). This is fixed in recent wlroots versions (0.17). For older wlroots versions (0.16), [this](https://github.com/dkondor/wlroots/commit/ed74e3ae4d96196737eb41e9b0756b5fa15379d8) or [this](https://github.com/swaywm/wlroots/pull/2551) patch should solve it.
- - Multi-monitor support is very limited (the dock will show up on whichever output it thinks is the main one when starting; behavior is buggy when trying to set another output for it).
+ - Multi-monitor support is limited: docks can be placed only on a single screen.
  - Tracking virtual desktops / workspaces is not supported.
  - Dialogs flicker sometimes (although this seems to happen on X11 too in some cases).
  - EGL rendering under Wayland relies on an officially unsupported interface in GTK (i.e. it uses [gtk_widget_set_double_buffered()](https://developer.gnome.org/gtk3/stable/GtkWidget.html#gtk-widget-set-double-buffered) which is only supported on X11); in practice it works well at least with GTK versions 3.22.30 and 3.24.33 on Wayfire and Sway.
  - EGL / OpenGL does not work on older KWin versions (5.20). An error message complains about some layer-shell surfaces having a zero size set; this might be related to the above point. Run the dock with the `-c` switch.
- - HiDPI support is limited, especially when rendering with EGL (see [here](https://github.com/dkondor/cairo-dock-core/issues/7)). Rendering can be incorrect or blurry. Using the `-c` switch to diable EGL can help.
+ - For issues with HiDPI monitors see [here](https://github.com/dkondor/cairo-dock-core/issues/7); most functionality should work.
  - Wayland protocols should not be included directly as header files, but should be created dynamically by running `wayland-scanner` as part of the build process. I don't know how to do this with CMake.
 
 
