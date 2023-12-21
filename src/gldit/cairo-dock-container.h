@@ -320,8 +320,8 @@ gboolean gldi_container_is_wayland_backend ();
 /// Move and resize a root dock. On X11, this uses gdk_window_move_resize ().
 /// On Wayland, this uses gdk_window_resize () and layer-shell anchors based on the dock's orientation.
 void gldi_container_move_resize_dock (CairoDock *pDock);
-/// Move the dock to the given screen -- only used on Wayland, I don't quite understand
-/// how this works on X
+/// Move the dock to the given screen -- only used on Wayland. On X11, this is handled by adding an
+/// offset based on a global coordinate system in gldi_container_move_resize_dock ().
 void gldi_container_set_screen (GldiContainer* pContainer, int iNumScreen);
 
 void gldi_container_manager_register_backend (GldiContainerManagerBackend *pBackend);

@@ -1842,6 +1842,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	
 		//\__________________ set additional params from its config file
 		_get_root_dock_config (pDock);
+		gldi_container_set_screen (CAIRO_CONTAINER (pDock), pDock->iNumScreen);
 	}
 	else
 	{
@@ -1999,7 +2000,7 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, G_GNUC_UN
 	CairoDock *pDock = (CairoDock*)obj;
 	
 	if (bReloadConf)  // maybe we should update the parameters that have the global value ?...
-		_get_root_dock_config (pDock);
+		_reposition_one_root_dock (NULL, pDock, TRUE); // will call _get_root_dock_config () as needed
 	
 	cairo_dock_set_default_renderer (pDock);
 	
