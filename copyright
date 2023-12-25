@@ -18,6 +18,45 @@ License: GPL 3+ (See /usr/share/common-licenses/GPL-3 for complete license)
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
+Files:  src/cairo-dock.c
+ src/gldit/cairo-dock-animations.c
+ src/gldit/cairo-dock-application-facility.c
+ src/gldit/cairo-dock-applications-manager.c
+ src/gldit/cairo-dock-application-facility.c
+ src/gldit/cairo-dock-applications-manager.c
+ src/gldit/cairo-dock-class-icon-manager.c
+ src/gldit/cairo-dock-class-manager.c
+ src/gldit/cairo-dock-container.?
+ src/gldit/cairo-dock-core.c
+ src/gldit/cairo-dock-desktop-manager.c
+ src/gldit/cairo-dock-dialog-factory.?
+ src/gldit/cairo-dock-dialog-manager.c
+ src/gldit/cairo-dock-dock-facility.c
+ src/gldit/cairo-dock-dock-factory.c
+ src/gldit/cairo-dock-dock-manager.?
+ src/gldit/cairo-dock-draw-opengl.c
+ src/gldit/cairo-dock-gui-factory.c
+ src/gldit/cairo-dock-icon-manager.c
+ src/gldit/cairo-dock-image-buffer.c
+ src/gldit/cairo-dock-indicator-manager.c
+ src/gldit/cairo-dock-menu.c
+ src/gldit/cairo-dock-opengl.c
+ src/gldit/cairo-dock-opengl.h
+ src/gldit/cairo-dock-surface-factory.?
+ src/gldit/cairo-dock-windows-manager.?
+ src/implementations/cairo-dock-egl-*
+ src/implementations/cairo-dock-wayland-manager.c
+ src/implementations/cairo-dock-wayland-manager.h
+Copyright: 2007-2014 Fabrice Rey <fabounet@glx-dock.org>, 2020-2023 Daniel Kondor <kondor.dani@gmail.com>
+License: GPL 3+ (See /usr/share/common-licenses/GPL-3 for complete license)
+
+Files: src/implementations/cairo-dock-foreign-toplevel.?
+ src/implementations/cairo-dock-plasma-window-manager.?
+ src/implementations/cairo-dock-wayfire-*
+ src/implementations/cairo-dock-wayland-wm.?
+Copyright: 2020-2023 Daniel Kondor <kondor.dani@gmail.com>
+License: GPL 3+ (See /usr/share/common-licenses/GPL-3 for complete license)
+
 Files: 	src/gldit/cairo-dock-dbus.*
 Copyright: Adrien Pilleboue <adrien.pilleboue@gmail.com>
 License: GPL 3+ (See /usr/share/common-licenses/GPL-3 for complete license)
@@ -35,7 +74,7 @@ License: GPL 2+ (See /usr/share/common-licenses/GPL-2 for complete license)
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -56,6 +95,57 @@ License: GPL 3+
 Files: data/default-theme/ data/man/
 Copyright: Matthieu Baerts (matttbe) <matttbe@gmail.com>
 License: LGPL
+
+Files: src/implementations/proto/plasma-window-management.xml
+Copyright: 2013-2014 Pier Luigi Fiorini
+License: LGPL 2.1+
+
+Files: src/implementations/proto/wayfire-shell-unstable-v2.xml
+Copyright: Copyright (c) 2018 Iliya Bozhinov
+License: Expat
+ * Permission is hereby granted, free of charge, to any person 
+ * obtaining a copy of this software and associated documentation 
+ * files (the "Software"), to deal in the Software without 
+ * restriction, including without limitation the rights to use, copy, 
+ * modify, merge, publish, distribute, sublicense, and/or sell copies 
+ * of the Software, and to permit persons to whom the Software is 
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be 
+ * included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS 
+ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN 
+ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
+ * SOFTWARE.
+
+Files: src/implementations/proto/wlr-foreign-toplevel-management-unstable-v1.xml
+Copyright: Copyright (c) 2018 Ilia Bozhinov
+License: MIT (no advertising)
+ * Permission to use, copy, modify, distribute, and sell this
+ * software and its documentation for any purpose is hereby granted
+ * without fee, provided that the above copyright notice appear in
+ * all copies and that both that copyright notice and this permission
+ * notice appear in supporting documentation, and that the name of
+ * the copyright holders not be used in advertising or publicity
+ * pertaining to distribution of the software without specific,
+ * written prior permission.  The copyright holders make no
+ * representations about the suitability of this software for any
+ * purpose.  It is provided "as is" without express or implied
+ * warranty.
+ * 
+ * THE COPYRIGHT HOLDERS DISCLAIM ALL WARRANTIES WITH REGARD TO THIS
+ * SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS, IN NO EVENT SHALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ * SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN
+ * AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
+ * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+ * THIS SOFTWARE.
 
 Files:  debian/*
 Copyright: Copyright (C) Julien Lavergne <julien.lavergne@gmail.com>
