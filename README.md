@@ -15,9 +15,16 @@ Note that this repository is not affiliated in any way with the Cairo-Dock proje
 Requirements
 ------------
 
+Compilation:
  - Please see the original [guide](https://www.glx-dock.org/ww_page.php?p=By%20compiling&lang=en) for required dependencies. The following assumes that you are able to compile the official Git version of Cairo-Dock.
  - [gtk-layer-shell](https://github.com/wmww/gtk-layer-shell/) (recommended at least version 0.6 to support keyboard events)
+ - [extra-cmake-modules](https://invent.kde.org/frameworks/extra-cmake-modules)
+ - wayland-scanner and Wayland development [libraries](https://gitlab.freedesktop.org/wayland/wayland)
  - GTK version at least 3.22 (also tested with version 3.24).
+
+On recent Ubuntu (at least 22.04) and Debian (at least bookworm) versions, these are available by installing the following packages: `libgtk-layer-shell-dev`, `extra-cmake-modules`, `libwayland-dev` and `libwayland-bin`.
+
+Running:
  - Compositor support for the [layer-shell](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-layer-shell-unstable-v1.xml) protocol (recommended at least version 4 to allow the dock to receive keyboard events). See e.g. [here](https://gitlab.freedesktop.org/wlroots/wlroots/-/wikis/Projects-which-use-wlroots) and [here](https://github.com/solarkraft/awesome-wlroots#compositors) for candidates. Also, [KWin](https://invent.kde.org/plasma/kwin) version 5.20 and later is supported.
  - Optionally (but highly recommended) compositor support for the [foreign-toplevel-management](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-foreign-toplevel-management-unstable-v1.xml) or the [plasma-window-management](https://invent.kde.org/libraries/plasma-wayland-protocols/-/blob/master/src/protocols/plasma-window-management.xml) protocol; this is needed for taskbar functionality.
  - Optionally, if using Wayfire, [this plugin](https://github.com/dkondor/wayfire-scale-ipc) for some additional functionality.
@@ -33,6 +40,7 @@ See the original [guide](https://www.glx-dock.org/ww_page.php?p=By%20compiling&l
 
 Additional things to consider:
  - The cmake configuration summary will report if gtk-layer-shell is enabled, i.e. you should see `* With gtk-layer-shell: yes` in the output of cmake. If not, check that the gtk-layer-shell library is properly installed.
+ - It will also output `* With Wayland taskbar: yes` to indicate if Wayland protocols required for taskbar functionality can be built. If not, check that [extra-cmake-modules](https://invent.kde.org/frameworks/extra-cmake-modules) and the `wayland-scanner` program are properly installed.
  - The `enable-gtk-layer-shell` cmake option can be used to manually disable / enable layer-shell support.
  - The `use-new-positioning-on-x11` cmake option can be used to change to some new code paths under X11 as well. This is useful to test for regressions.
  - To use hardware acceleration on Wayland, EGL support should be enabled and GLX support should be disabled. If this is not the case, check that the EGL libraries are available.

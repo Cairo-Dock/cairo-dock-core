@@ -37,7 +37,7 @@
 #ifdef HAVE_WAYLAND
 
 #include <gdk/gdkwayland.h>
-#include "plasma-window-management-client-protocol.h"
+#include "wayland-plasma-window-management-client-protocol.h"
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-log.h"

@@ -43,9 +43,11 @@
 #include "cairo-dock-dock-manager.h" // myDockObjectMgr, needed for CAIRO_DOCK_IS_DOCK
 #include "cairo-dock-icon-facility.h" // cairo_dock_get_icon_container
 #include "cairo-dock-opengl.h"
+#ifdef HAVE_WAYLAND_PROTOCOLS
 #include "cairo-dock-foreign-toplevel.h"
 #include "cairo-dock-plasma-window-manager.h"
 #include "cairo-dock-wayfire-shell.h"
+#endif
 #include "cairo-dock-egl.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-wayland-manager.h"
@@ -280,6 +282,7 @@ static void _registry_global_cb (G_GNUC_UNUSED void *data, struct wl_registry *r
 	{
 		s_pCompositor = wl_registry_bind(registry, id, &wl_compositor_interface, 1);
 	}
+#ifdef HAVE_WAYLAND_PROTOCOLS
 	else if (gldi_zwf_shell_try_bind (registry, id, interface, version))
 	{
 		cd_debug("Found wayfire-shell");
@@ -294,12 +297,6 @@ static void _registry_global_cb (G_GNUC_UNUSED void *data, struct wl_registry *r
 	{
 		cd_debug("Found plasma-window-manager");
 		s_bWindowManagerFound = TRUE;
-	}
-#ifdef HAVE_GTK_LAYER_SHELL
-	else if (!strcmp (interface, "zwlr_layer_shell_v1"))
-	{
-		if (!g_bDisableLayerShell)
-			s_bHave_Layer_Shell = TRUE;
 	}
 #endif
 	s_bInitializing = TRUE;
@@ -481,6 +478,7 @@ static void _move_resize_dock (CairoDock *pDock)
 #endif
 }
 
+#ifdef HAVE_WAYLAND_PROTOCOLS
 // wayfire-shell functions for hotspots
 static int s_iNbPolls = 0;
 
@@ -500,6 +498,7 @@ static void _stop_polling_screen_edge (void)
 	}
 	else gldi_zwf_shell_update_hotspots (); // in this case, we only update hotspots
 }
+#endif
 
 static gboolean _dock_handle_leave (CairoDock *pDock, GdkEventCrossing *pEvent)
 {
@@ -571,6 +570,7 @@ static void init (void)
 	GldiContainerManagerBackend cmb;
 	memset (&cmb, 0, sizeof (GldiContainerManagerBackend));	
 #ifdef HAVE_GTK_LAYER_SHELL
+	s_bHave_Layer_Shell = !g_bDisableLayerShell && gtk_layer_is_supported ();
 	if (s_bHave_Layer_Shell)
 	{
 		cmb.reserve_space = _layer_shell_reserve_space;
@@ -579,11 +579,13 @@ static void init (void)
 		cmb.set_monitor = _layer_shell_move_to_monitor;
 	}
 #endif
+#ifdef HAVE_WAYLAND_PROTOCOLS
 	if (s_bWfShellFound)
 	{
 		cmb.start_polling_screen_edge = _start_polling_screen_edge;
 		cmb.stop_polling_screen_edge = _stop_polling_screen_edge;
 	}
+#endif	
 	cmb.set_input_shape = _set_input_shape;
 	cmb.is_wayland = _is_wayland;
 	cmb.move_resize_dock = _move_resize_dock;
