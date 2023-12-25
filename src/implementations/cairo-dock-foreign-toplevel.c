@@ -24,7 +24,7 @@
 #ifdef HAVE_WAYLAND
 
 #include <gdk/gdkwayland.h>
-#include "wlr-foreign-toplevel-management-unstable-v1-client-protocol.h"
+#include "wayland-wlr-foreign-toplevel-management-client-protocol.h"
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-log.h"

@@ -19,16 +19,6 @@ SET(impl_SRCS
 	cairo-dock-egl-X.c
 	cairo-dock-egl-wayland.c
 	cairo-dock-wayland-manager.c         cairo-dock-wayland-manager.h
-	cairo-dock-wayland-wm.c              cairo-dock-wayland-wm.h
-	cairo-dock-foreign-toplevel.c        cairo-dock-foreign-toplevel.h
-	cairo-dock-plasma-window-manager.c   cairo-dock-plasma-window-manager.h
-	cairo-dock-wayfire-shell.c           cairo-dock-wayfire-shell.h
-	wlr-foreign-toplevel-management-unstable-v1-client-protocol.h
-	wlr-foreign-toplevel-management-unstable-v1-protocol.c
-	plasma-window-management-client-protocol.h
-	plasma-window-management-protocol.c
-	wayfire-shell-client-protocol.h
-	wayfire-shell-protocol.c
 )
 #if ("${HAVE_X11}")
 #	SET(impl_SRCS ${impl_SRCS}
@@ -36,6 +26,29 @@ SET(impl_SRCS
 #		cairo-dock-glx.c                     cairo-dock-glx.h
 #	)
 #endif()
+
+if(WaylandScanner_FOUND)
+	SET(impl_SRCS
+		${impl_SRCS}
+		cairo-dock-wayland-wm.c              cairo-dock-wayland-wm.h
+		cairo-dock-foreign-toplevel.c        cairo-dock-foreign-toplevel.h
+		cairo-dock-plasma-window-manager.c   cairo-dock-plasma-window-manager.h
+		cairo-dock-wayfire-shell.c           cairo-dock-wayfire-shell.h
+	)
+
+	ecm_add_wayland_client_protocol(
+		impl_SRCS
+		PROTOCOL "proto/wayfire-shell-unstable-v2.xml"
+		BASENAME "wayfire-shell")
+	ecm_add_wayland_client_protocol(
+		impl_SRCS
+		PROTOCOL "proto/plasma-window-management.xml"
+		BASENAME "plasma-window-management")
+	ecm_add_wayland_client_protocol(
+		impl_SRCS
+		PROTOCOL "proto/wlr-foreign-toplevel-management-unstable-v1.xml"
+		BASENAME "wlr-foreign-toplevel-management")
+endif()
 
 add_library(implementations STATIC ${impl_SRCS})
 add_definitions (-fPIC)
@@ -55,7 +68,8 @@ include_directories(
 	${EGL_INCLUDE_DIRS}
 	${GTK_INCLUDE_DIRS}
 	${CMAKE_SOURCE_DIR}/src/gldit
-	${CMAKE_SOURCE_DIR}/src/implementations)
+	${CMAKE_SOURCE_DIR}/src/implementations
+	${CMAKE_CURRENT_BINARY_DIR})
 
 ########### install files ###############
 

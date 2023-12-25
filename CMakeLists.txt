@@ -1,6 +1,6 @@
 ########### requirements ###############
 
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.16.0)
 find_package (PkgConfig)
 include (CheckLibraryExists)
 include (CheckIncludeFiles)
@@ -103,6 +103,7 @@ pkg_check_modules ("PACKAGE" REQUIRED "${packages_required_semicolon}")
 
 # check for Wayland
 set (with_wayland no)
+set (WAYLAND_FOUND 0)
 enable_if_not_defined (enable-wayland-support) # enabled by default
 if (enable-wayland-support)
 	set (wayland_required "wayland-client")  # for the .pc
@@ -112,6 +113,27 @@ if (enable-wayland-support)
 		set (with_wayland "yes (${WAYLAND_VERSION})")
 	else()
 		set (wayland_required)
+	endif()
+endif()
+
+if (WAYLAND_FOUND)
+	enable_if_not_defined (enable-wayland-protocols) # enabled by default
+	if (enable-wayland-protocols)
+		find_package(ECM NO_MODULE)
+		if (ECM_FOUND)
+			set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
+			include (FindWaylandScanner)
+			if (WaylandScanner_FOUND)
+				set (with_wayland_taskbar "yes")
+				set (HAVE_WAYLAND_PROTOCOLS 1)
+			else()
+				set (with_wayland_taskbar "no (cannot find wayland-scanner)")
+			endif()
+		else()
+			set (with_wayland_taskbar "no (cannot find extra-cmake-modules)")
+		endif()
+	else()
+		set (with_wayland_taskbar "no (disabled)")
 	endif()
 endif()
 
@@ -271,6 +293,9 @@ else()
 	MESSAGE (STATUS " * With GLX support    : no")
 endif()
 MESSAGE (STATUS " * With Wayland support: ${with_wayland}")
+if (WAYLAND_FOUND)
+	MESSAGE (STATUS " * With Wayland taskbar: ${with_wayland_taskbar}")
+endif()
 MESSAGE (STATUS " * With gtk-layer-shell: ${with_gtk_layer_shell}")
 MESSAGE (STATUS " * With EGL support    : ${with_egl}")
 if (HAVE_LIBCRYPT)
