@@ -70,7 +70,6 @@ Known issues:
  - EGL rendering under Wayland relies on an officially unsupported interface in GTK (i.e. it uses [gtk_widget_set_double_buffered()](https://developer.gnome.org/gtk3/stable/GtkWidget.html#gtk-widget-set-double-buffered) which is only supported on X11); in practice it works well at least with GTK versions 3.22.30 and 3.24.33 on Wayfire and Sway.
  - EGL / OpenGL does not work on older KWin versions (5.20). An error message complains about some layer-shell surfaces having a zero size set; this might be related to the above point. Run the dock with the `-c` switch.
  - For issues with HiDPI monitors see [here](https://github.com/dkondor/cairo-dock-core/issues/7); most functionality should work.
- - Wayland protocols should not be included directly as header files, but should be created dynamically by running `wayland-scanner` as part of the build process. I don't know how to do this with CMake.
 
 
 Other resources
