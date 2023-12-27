@@ -5,6 +5,8 @@ Cairo-Dock is a pretty, light and convenient interface to your desktop, able to 
 
 This repository contains an experimental fork that adds support for running on Wayland, under compositors that support the [layer shell](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-layer-shell-unstable-v1.xml) protocol. Mainly targeting [Wayfire](https://github.com/WayfireWM/wayfire), but possibly others as well, such as [labwc](https://github.com/labwc/labwc) or [KWin](https://invent.kde.org/plasma/kwin).
 
+Binary packages for Ubuntu 22.04 are available [here](https://launchpad.net/~kondor-dani/+archive/ubuntu/ppa-cairo-dock-wayland).
+
 Note that this repository is not affiliated in any way with the Cairo-Dock project. Official releases of Cairo-Dock are available in the following repositories:
 
   - Cairo-Dock-Core (the minimal - https://github.com/Cairo-Dock/cairo-dock-core)
