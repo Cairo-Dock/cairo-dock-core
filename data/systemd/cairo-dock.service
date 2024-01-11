@@ -1,0 +1,12 @@
+[Unit]
+Description=Cairo-Dock
+PartOf=graphical-session.target
+After=graphical-session.target
+Requisite=graphical-session.target
+
+[Service]
+ExecStart=cairo-dock
+BusName=org.cairodock.CairoDock
+
+[Install]
+WantedBy=graphical-session.target
