@@ -8,7 +8,7 @@ add_subdirectory(scripts)
 if (enable-desktop-manager)
 	add_subdirectory(desktop-manager)
 endif()
-
+add_subdirectory(systemd)
 
 ########### file generation ###############
 
