@@ -53,6 +53,10 @@ Running
 
 The `WAYLAND_DISPLAY` environment variable needs to be set when running on Wayland (typically `wayland-1` on recent wlroots or `wayland-0` on KWin). Cairo-Dock can be forced to try to use the Wayland or X11 backend with the `-L` and `-X` command line switch resepctively. Also, the `-c` switch can be used to disable OpenGL, and the `-o` switch to try to force it. These can be useful especially when running in a nested compositor.
 
+When using [systemd](https://systemd.io/), starting Cairo-Dock at login can be enabled via the supplied .service file:
+```
+systemctl --user enable cairo-dock.service
+```
 
 What works:
  - Dock positioning along a screen edge and keeping above / below and reserving space with the layer-shell protocol.
