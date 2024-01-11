@@ -44,8 +44,10 @@ endif()
 
 if (use-new-positioning-on-x11) # new positioning code should work on both X11 and Wayland, but, by default, it is used only on Wayland -- use this cmake options to enable it on X11 as well for testing it
 	add_definitions (-DCAIRO_DOCK_USE_NEW_POSITIONING_ON_X11=1)
+	set (x11_new_code "new")
 else()
 	add_definitions (-DCAIRO_DOCK_USE_NEW_POSITIONING_ON_X11=0)
+	set (x11_new_code "legacy (use -Duse-new-positioning-on-x11=True to change)")
 endif()
 
 ############ sources tarball ############
@@ -239,6 +241,23 @@ if (enable-gtk-layer-shell)
 	endif()
 endif()
 
+# systemd service
+pkg_check_modules ("SYSTEMD" "systemd")
+if (NOT DEFINED enable-systemd-service) # true if not defined
+	set (enable-systemd-service ${SYSTEMD_FOUND})
+	if (enable-systemd-service)
+		set (with_systemd_service "yes (use '-Denable-systemd-service=False' to disable it)")
+	else()
+		set (with_systemd_service "no (use '-Denable-systemd-service=True' to enable it)")
+	endif()
+else()
+	if (enable-systemd-service)
+		set (with_systemd_service "yes")
+	else()
+		set (with_systemd_service "no")
+	endif()
+endif()
+
 ########### variables defined at compil time ###############
 
 set (CAIRO_DOCK_SHARE_DATA_DIR ${pkgdatadir})
@@ -286,6 +305,7 @@ MESSAGE (STATUS " * Installation in     : ${prefix}")
 MESSAGE (STATUS " * Lib directory       : ${libdir}")
 MESSAGE (STATUS " * GTK version         : ${GTK_MAJOR} (${GTK_VERSION})")
 MESSAGE (STATUS " * With X11 support    : ${with_x11}")
+MESSAGE (STATUS " *    positioning code : ${x11_new_code}")
 MESSAGE (STATUS " * With X11 extensions : ${with_xentend} (${xextend_required})")
 if (HAVE_GLX)
 	MESSAGE (STATUS " * With GLX support    : yes")
@@ -306,8 +326,9 @@ endif()
 if (enable-desktop-manager)
 	set (with_cd_session "yes")
 else()
-	set (with_cd_session "no (use '-Denable-desktop-manager=ON' to enable it)")
+	set (with_cd_session "no (use '-Denable-desktop-manager=True' to enable it)")
 endif()
 MESSAGE (STATUS " * Cairo-dock session  : ${with_cd_session}")
+MESSAGE (STATUS " * Systemd service unit: ${with_systemd_service}")
 MESSAGE (STATUS " * Themes directory    : ${CAIRO_DOCK_DISTANT_THEMES_DIR} (on the server)")
 MESSAGE (STATUS)
