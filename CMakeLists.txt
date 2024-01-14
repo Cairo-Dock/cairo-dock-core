@@ -42,14 +42,6 @@ else()
 	add_definitions (-DCAIRO_DOCK_FORCE_ICON_IN_MENUS=0)
 endif()
 
-if (use-new-positioning-on-x11) # new positioning code should work on both X11 and Wayland, but, by default, it is used only on Wayland -- use this cmake options to enable it on X11 as well for testing it
-	add_definitions (-DCAIRO_DOCK_USE_NEW_POSITIONING_ON_X11=1)
-	set (x11_new_code "new")
-else()
-	add_definitions (-DCAIRO_DOCK_USE_NEW_POSITIONING_ON_X11=0)
-	set (x11_new_code "legacy (use -Duse-new-positioning-on-x11=True to change)")
-endif()
-
 ############ sources tarball ############
 
 set (CPACK_SOURCE_GENERATOR "TGZ")
@@ -305,7 +297,6 @@ MESSAGE (STATUS " * Installation in     : ${prefix}")
 MESSAGE (STATUS " * Lib directory       : ${libdir}")
 MESSAGE (STATUS " * GTK version         : ${GTK_MAJOR} (${GTK_VERSION})")
 MESSAGE (STATUS " * With X11 support    : ${with_x11}")
-MESSAGE (STATUS " *    positioning code : ${x11_new_code}")
 MESSAGE (STATUS " * With X11 extensions : ${with_xentend} (${xextend_required})")
 if (HAVE_GLX)
 	MESSAGE (STATUS " * With GLX support    : yes")
