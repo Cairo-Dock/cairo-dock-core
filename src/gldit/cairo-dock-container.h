@@ -383,6 +383,12 @@ void gldi_container_dock_handle_enter (CairoDock *pDock, GdkEventCrossing *pEven
 /// only supported on X11
 void gldi_container_dock_check_if_mouse_inside_linear (CairoDock *pDock);
 
+/// return whether new code (using gdk_window_move_to_rect () and friends) should be
+/// used to position subdocks, menus and dialogs
+/// on Wayland, it always returns TRUE, on X11, it is based on the setting in
+/// System / X11_new_rendering_code
+gboolean gldi_container_use_new_positioning_code ();
+
   ////////////
  // REDRAW //
 ////////////

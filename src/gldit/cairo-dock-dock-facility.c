@@ -968,15 +968,8 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 	int iNewHeight = pSubDock->iMaxDockHeight;
 	
 	// new positioning code should work on both X11 and Wayland, but, by default, it is used
-	// only on Wayland, unless it is specifically requested in the cmake configuration
-	gboolean use_new_positioning = FALSE;
-	#if (CAIRO_DOCK_USE_NEW_POSITIONING_ON_X11 == 1)
-		use_new_positioning = TRUE;
-	#else
-		use_new_positioning = gldi_container_is_wayland_backend ();
-	#endif
-	
-	if (use_new_positioning)
+	// only on Wayland, unless it is specifically requested by the user
+	if (gldi_container_use_new_positioning_code ())
 	{
 		if (pSubDock->container.bIsHorizontal)
 			gdk_window_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pSubDock)),

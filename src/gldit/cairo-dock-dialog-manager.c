@@ -1100,12 +1100,8 @@ static void init_object (GldiObject *obj, gpointer attr)
 	}
 	
 	pDialog->uFlags.f = 0;
-	#if (CAIRO_DOCK_USE_NEW_POSITIONING_ON_X11 == 1)
-		pDialog->uFlags.f = CAIRO_DIALOG_FLAGS_USE_NEW_POSITIONING;
-	#else
-		if (gldi_container_is_wayland_backend ())
-			pDialog->uFlags.f = CAIRO_DIALOG_FLAGS_USE_NEW_POSITIONING;
-	#endif
+	if (gldi_container_use_new_positioning_code ())
+		pDialog->uFlags.f |= CAIRO_DIALOG_FLAGS_USE_NEW_POSITIONING;
 	
 	//\________________ set up its orientation (do it now, as we need bDirectionUp to place the internal widgets)
 	pDialog->pIcon = pAttribute->pIcon;
