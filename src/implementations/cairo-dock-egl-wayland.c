@@ -25,9 +25,11 @@ void egl_init_surface_wayland (GldiContainer *pContainer, EGLDisplay* dpy, EGLCo
 	// create an EGL surface for this window
 	GdkWindow* gdkwindow = gldi_container_get_gdk_window (pContainer);
 	gint scale = gdk_window_get_scale_factor (gdkwindow);
+	gint w, h;
+	if (pContainer->bIsHorizontal) { w = pContainer->iWidth; h = pContainer->iHeight; }
+	else { h = pContainer->iWidth; w = pContainer->iHeight; }
 	struct wl_surface* wls = gdk_wayland_window_get_wl_surface (gdkwindow);
-	struct wl_egl_window* wlw = wl_egl_window_create (wls,
-		pContainer->iWidth * scale, pContainer->iHeight * scale);
+	struct wl_egl_window* wlw = wl_egl_window_create (wls, w * scale, h * scale);
 	pContainer->eglwindow = wlw;
 	pContainer->eglSurface = eglCreateWindowSurface (dpy, conf, wlw, NULL);
 	// Note: for subdocks, GDK "forgets" to set the proper buffer scale, resulting in
