@@ -200,7 +200,11 @@ static void _init_surface (G_GNUC_UNUSED GtkWidget *pWidget, GldiContainer *pCon
 	// create an EGL surface for this window
 	EGLDisplay *dpy = s_eglDisplay;
 	if (s_eglX11) egl_init_surface_X11 (pContainer, dpy, s_eglConfig);
-	if (s_eglWayland) egl_init_surface_wayland (pContainer, dpy, s_eglConfig);
+	if (s_eglWayland) {
+		egl_init_surface_wayland (pContainer, dpy, s_eglConfig);
+		_container_make_current (pContainer);
+		eglSwapInterval (dpy, 0);
+	}
 }
 
 static void _destroy_surface (G_GNUC_UNUSED GtkWidget* pWidget, GldiContainer *pContainer) {
