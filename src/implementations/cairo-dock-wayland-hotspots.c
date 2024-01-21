@@ -107,7 +107,13 @@ static void _dummy (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct zwf_output_v2
 	
 }
 
-static struct zwf_output_v2_listener output_listener = { _dummy, _dummy };
+static void _toggle_menu (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct zwf_output_v2 *zwf_output_v2)
+{
+	gldi_object_notify (&myDesktopMgr, NOTIFICATION_MENU_REQUEST);
+	fprintf(stderr, "wayfire-shell: menu request\n");
+}
+
+static struct zwf_output_v2_listener output_listener = { _dummy, _dummy, _toggle_menu };
 
 static output_hotspots_base *_wf_shell_new_output (GdkMonitor *monitor)
 {

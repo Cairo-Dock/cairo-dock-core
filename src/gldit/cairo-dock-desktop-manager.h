@@ -56,6 +56,8 @@ typedef enum {
 	NOTIFICATION_SHORTKEY_PRESSED,
 	/// notification called when the keymap changed, before and after updating it. data: updated
 	NOTIFICATION_KEYMAP_CHANGED,
+	/// notification when the user requests the desktop menu to be shown
+	NOTIFICATION_MENU_REQUEST,
 	NB_NOTIFICATIONS_DESKTOP
 	} CairoDesktopNotifications;
 

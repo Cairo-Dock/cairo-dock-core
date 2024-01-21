@@ -23,7 +23,7 @@
 	CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 	SOFTWARE.
   </copyright>
-  <interface name="zwf_shell_manager_v2" version="1">
+  <interface name="zwf_shell_manager_v2" version="2">
     <description summary="DE integration">
       This protocol provides additional events and requests for special DE
       clients like panels, docks, etc.
@@ -44,7 +44,7 @@
     </request>
   </interface>
 
-  <interface name="zwf_output_v2" version="1">
+  <interface name="zwf_output_v2" version="2">
     <description summary="A wrapper for wl_output">
       Represents a single output.
       Each output is managed independently from the others.
@@ -110,6 +110,15 @@
       <arg name="timeout" type="uint" summary="minimum time for the mouse to be in the hotspot"/>
       <arg name="id" type="new_id" interface="zwf_hotspot_v2"/>
     </request>
+
+    <!-- Version 2 additions -->
+    <event name="toggle_menu" since="2">
+      <description summary="Toggle menu event">
+        Tells the menu to toggle open or close.
+
+        Emitted using an activator binding.
+      </description>
+    </event>
   </interface>
 
   <interface name="zwf_hotspot_v2" version="1">
