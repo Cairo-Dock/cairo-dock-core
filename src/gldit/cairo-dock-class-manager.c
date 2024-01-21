@@ -1801,7 +1801,6 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 	}
 	else
 	{
-//		cResult = g_strdup (cStartupWMClass);
 		cResult = g_ascii_strdown (cStartupWMClass, -1);
 /*		gchar *str = strchr (cResult, '.');  // we remove all .xxx otherwise we can't detect the lack of extension when looking for an icon (openoffice.org) or it's a problem when looking for an icon (jbrout.py).
 		if (str != NULL)

@@ -181,7 +181,7 @@ static gboolean on_configure_dialog (G_GNUC_UNUSED GtkWidget* pWidget,
 	GdkEventConfigure* pEvent,
 	CairoDialog *pDialog)
 {
-	// g_print ("%s (%dx%d, %d;%d) [%d]\n", __func__, pEvent->width, pEvent->height, pEvent->x, pEvent->y, pDialog->bPositionForced);
+	//g_print ("%s (%dx%d, %d;%d) [%d]\n", __func__, pEvent->width, pEvent->height, pEvent->x, pEvent->y, pDialog->bPositionForced);
 	if (pEvent->width <= CAIRO_DIALOG_MIN_SIZE && pEvent->height <= CAIRO_DIALOG_MIN_SIZE && ! pDialog->bNoInput)
 	{
 		pDialog->container.bInside = FALSE;
@@ -249,7 +249,7 @@ static gboolean on_unmap_dialog (GtkWidget* pWidget,
 	G_GNUC_UNUSED GdkEvent *pEvent,
 	CairoDialog *pDialog)
 {
-	//g_print ("unmap dialog (bAllowMinimize:%d, visible:%d)\n", pDialog->bAllowMinimize, gtk_widget_get_mapped (pWidget));
+	//g_print ("unmap dialog (bAllowMinimize:%d, visible:%d)\n", pDialog->bAllowMinimize, GTK_WIDGET_VISIBLE (pWidget));
 	pDialog->container.bInside = FALSE;
 	if (! pDialog->bAllowMinimize)  // it's an unexpected unmap event
 	{

@@ -58,7 +58,6 @@
 #include "cairo-dock-windows-manager.h"
 
 
-
 // public (manager, config, data)
 CairoDocksParam myDocksParam;
 GldiManager myDocksMgr;
@@ -779,7 +778,6 @@ static void _set_dock_orientation (CairoDock *pDock, CairoDockPositionType iScre
 		case CAIRO_DOCK_NB_POSITIONS :
 		break;
 	}
-	
 	_synchronize_sub_docks_orientation (pDock, FALSE);
 }
 
