@@ -660,6 +660,7 @@ static void _place_dialog (CairoDialog *pDialog, GldiContainer *pContainer)
 				pDialog->iComputedPositionY = (pDialog->container.bDirectionUp ? MAX (0, pDialog->iAimedY - pDialog->iComputedHeight) : pDialog->iAimedY + pDialog->iMinBottomGap);  // on place la bulle (et non pas la fenetre) sans faire d'optimisation.
 			}
 		}
+		
 		/*if (pDialog->bRight)
 		{
 			if (pDialog->container.bDirectionUp)
@@ -782,7 +783,7 @@ static void _trigger_replace_all_dialogs (void)
 
 void gldi_dialog_hide (CairoDialog *pDialog)
 {
-	//g_print ("%s ()", __func__);
+	cd_debug ("%s ()", __func__);
 	if (gldi_container_is_visible (CAIRO_CONTAINER (pDialog)))
 	{
 		pDialog->bAllowMinimize = TRUE;
@@ -816,7 +817,7 @@ void gldi_dialog_hide (CairoDialog *pDialog)
 
 void gldi_dialog_unhide (CairoDialog *pDialog)
 {
-	//g_print ("%s ()", __func__);
+	cd_debug ("%s ()", __func__);
 	if (! gldi_container_is_visible (CAIRO_CONTAINER (pDialog)))
 	{
 		if (pDialog->pInteractiveWidget != NULL)
@@ -1201,8 +1202,6 @@ static void reset_object (GldiObject *obj)
 				gtk_widget_queue_draw (pContainer->pWidget);
 		}
 	}
-	
-	// gtk_window_set_modal (GTK_WINDOW (pDialog->container.pWidget), FALSE);
 	
 	// stop the timer
 	if (pDialog->iSidTimer > 0)

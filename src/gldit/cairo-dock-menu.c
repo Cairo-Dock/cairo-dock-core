@@ -664,7 +664,6 @@ static void _init_menu_item (GtkWidget *pMenuItem)
 		gtk_container_forall (GTK_CONTAINER (pSubMenu), (GtkCallback) _init_menu_item, NULL);
 }
 
-
 static void _popup_menu (GtkWidget *menu, guint32 time)
 {
 	GldiMenuParams *pParams = g_object_get_data (G_OBJECT(menu), "gldi-params");
@@ -690,7 +689,7 @@ static void _popup_menu (GtkWidget *menu, guint32 time)
 		// ensure margin position is still correct
 		_set_margin_position (menu, pParams);
 	}
-	
+
 	// new positioning code should work on both X11 and Wayland, but, by default, it is used
 	// only on Wayland, unless it is specifically requested by the user
 	gboolean use_new_positioning = gldi_container_use_new_positioning_code ();
@@ -700,7 +699,7 @@ static void _popup_menu (GtkWidget *menu, guint32 time)
 			G_CALLBACK (_menu_realized_cb), pParams);
 	
 	gtk_widget_show_all (GTK_WIDGET (menu));
-	
+
 	if (use_new_positioning)
 	{
 		if (pContainer && pIcon)
