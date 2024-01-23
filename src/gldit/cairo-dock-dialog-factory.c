@@ -627,6 +627,7 @@ CairoDialog *gldi_dialog_new (CairoDialogAttr *pAttribute)
 		}
 	}
 	pAttribute->cattr.bNoOpengl = TRUE;
+	if (gldi_container_use_new_positioning_code ()) pAttribute->cattr.bIsPopup = TRUE;
 	cd_debug ("%s (%s, %s, %x, %x, (%p;%p))", __func__, pAttribute->cText, pAttribute->cImageFilePath, pAttribute->pInteractiveWidget, pAttribute->pActionFunc, pAttribute->pIcon, pAttribute->pContainer);
 	return (CairoDialog*)gldi_object_new (&myDialogObjectMgr, pAttribute);
 }
