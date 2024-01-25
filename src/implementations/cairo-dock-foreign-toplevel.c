@@ -4,7 +4,7 @@
  * Interact with Wayland clients via the zwlr_foreign_toplevel_manager
  * protocol. See e.g. https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-foreign-toplevel-management-unstable-v1.xml
  * 
- * Copyright 2020-2023 Daniel Kondor <kondor.dani@gmail.com>
+ * Copyright 2020-2024 Daniel Kondor <kondor.dani@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -268,22 +268,39 @@ static void gldi_zwlr_foreign_toplevel_manager_init ()
 	
 }
 
-gboolean gldi_zwlr_foreign_toplevel_manager_try_bind (struct wl_registry *registry, uint32_t id, const char *interface, uint32_t version)
+static uint32_t protocol_id, protocol_version;
+static gboolean protocol_found = FALSE;
+
+gboolean gldi_wlr_foreign_toplevel_match_protocol (uint32_t id, const char *interface, uint32_t version)
 {
 	if (!strcmp(interface, zwlr_foreign_toplevel_manager_v1_interface.name))
-    {
-		if (version > zwlr_foreign_toplevel_manager_v1_interface.version)
-		{
-			version = zwlr_foreign_toplevel_manager_v1_interface.version;
-		}
-        s_ptoplevel_manager = wl_registry_bind (registry, id, &zwlr_foreign_toplevel_manager_v1_interface, version);
-		if (s_ptoplevel_manager)
-		{
-			gldi_zwlr_foreign_toplevel_manager_init ();
-			return TRUE;
-		}
-		else cd_message ("Could not bind foreign-toplevel-manager!");
-    }
+	{
+		protocol_found = TRUE;
+		protocol_id = id;
+		protocol_version = version;
+		return TRUE;
+	}
+	return FALSE;
+}
+
+
+gboolean gldi_wlr_foreign_toplevel_try_init (struct wl_registry *registry)
+{
+	if (!protocol_found) return FALSE;
+	
+	if (protocol_version > zwlr_foreign_toplevel_manager_v1_interface.version)
+	{
+		protocol_version = zwlr_foreign_toplevel_manager_v1_interface.version;
+	}
+	
+	s_ptoplevel_manager = wl_registry_bind (registry, protocol_id, &zwlr_foreign_toplevel_manager_v1_interface, protocol_version);
+	if (s_ptoplevel_manager)
+	{
+		gldi_zwlr_foreign_toplevel_manager_init ();
+		return TRUE;
+	}
+	
+	cd_error ("Could not bind wlr-foreign-toplevel-manager!");
     return FALSE;
 }
 
