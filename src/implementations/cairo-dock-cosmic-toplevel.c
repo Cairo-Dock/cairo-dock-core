@@ -340,6 +340,7 @@ gboolean gldi_cosmic_toplevel_try_init (struct wl_registry *registry)
 	wmb.can_minimize_maximize_close = _can_minimize_maximize_close;
 	// wmb.get_id = _get_id;
 	wmb.pick_window = gldi_wayland_wm_pick_window;
+	wmb.name = "Cosmic";
 	gldi_windows_manager_register_backend (&wmb);
 	
 	gldi_wayland_wm_init (_destroy);

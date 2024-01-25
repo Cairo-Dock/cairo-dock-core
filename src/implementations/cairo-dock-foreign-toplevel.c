@@ -262,6 +262,7 @@ static void gldi_zwlr_foreign_toplevel_manager_init ()
 	wmb.can_minimize_maximize_close = _can_minimize_maximize_close;
 	// wmb.get_id = _get_id;
 	wmb.pick_window = gldi_wayland_wm_pick_window;
+	wmb.name = "wlr";
 	gldi_windows_manager_register_backend (&wmb);
 	
 	gldi_wayland_wm_init(_destroy);
