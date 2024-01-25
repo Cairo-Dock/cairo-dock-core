@@ -4,7 +4,7 @@
  * Interact with Wayland clients via the plasma-window-management
  * protocol. See e.g. https://invent.kde.org/libraries/plasma-wayland-protocols/-/blob/master/src/protocols/plasma-window-management.xml
  * 
- * Copyright 2021-2023 Daniel Kondor <kondor.dani@gmail.com>
+ * Copyright 2021-2024 Daniel Kondor <kondor.dani@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -290,7 +290,8 @@ static struct org_kde_plasma_window_management_listener gldi_toplevel_manager = 
 };
 
 static struct org_kde_plasma_window_management* s_ptoplevel_manager = NULL;
-
+static uint32_t protocol_id, protocol_version;
+static gboolean protocol_found = FALSE;
 
 static void gldi_plasma_window_manager_init ()
 {
@@ -326,22 +327,36 @@ static void gldi_plasma_window_manager_init ()
 	gldi_wayland_wm_init (_destroy);
 }
 
-gboolean gldi_plasma_window_manager_try_bind (struct wl_registry *registry, uint32_t id, const char *interface, uint32_t version)
+
+gboolean gldi_plasma_window_manager_match_protocol (uint32_t id, const char *interface, uint32_t version)
 {
 	if (!strcmp(interface, org_kde_plasma_window_management_interface.name))
-    {
-		if (version > (uint32_t)org_kde_plasma_window_management_interface.version)
-		{
-			version = org_kde_plasma_window_management_interface.version;
-		}
-        s_ptoplevel_manager = wl_registry_bind (registry, id, &org_kde_plasma_window_management_interface, version);
-		if (s_ptoplevel_manager)
-		{
-			gldi_plasma_window_manager_init ();
-			return TRUE;
-		}
-		else cd_message ("Could not bind plasma-window-manager!");
-    }
+	{
+		protocol_found = TRUE;
+		protocol_id = id;
+		protocol_version = version;
+		return TRUE;
+	}
+	return FALSE;
+}
+
+gboolean gldi_plasma_window_manager_try_init (struct wl_registry *registry)
+{
+	if (!protocol_found) return FALSE;
+	
+	if (protocol_version > (uint32_t)org_kde_plasma_window_management_interface.version)
+	{
+		protocol_version = org_kde_plasma_window_management_interface.version;
+	}
+	
+	s_ptoplevel_manager = wl_registry_bind (registry, protocol_id, &org_kde_plasma_window_management_interface, protocol_version);
+	if (s_ptoplevel_manager)
+	{
+		gldi_plasma_window_manager_init ();
+		return TRUE;
+	}
+	
+	cd_error ("Could not bind plasma-window-manager!");
     return FALSE;
 }
 

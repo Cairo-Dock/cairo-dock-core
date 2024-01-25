@@ -4,7 +4,7 @@
  * Interact with Wayland clients via the zwlr_foreign_toplevel_manager
  * protocol. See e.g. https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-foreign-toplevel-management-unstable-v1.xml
  * 
- * Copyright 2020 Daniel Kondor <kondor.dani@gmail.com>
+ * Copyright 2020-2024 Daniel Kondor <kondor.dani@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,8 @@
 #include <wayland-client.h>
 #include <stdint.h>
 
-gboolean gldi_zwlr_foreign_toplevel_manager_try_bind (struct wl_registry *registry, uint32_t id, const char *interface, uint32_t version);
+gboolean gldi_wlr_foreign_toplevel_match_protocol (uint32_t id, const char *interface, uint32_t version);
+gboolean gldi_wlr_foreign_toplevel_try_init (struct wl_registry *registry);
 
 #endif
 
