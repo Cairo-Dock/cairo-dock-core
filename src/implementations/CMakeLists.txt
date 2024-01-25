@@ -32,6 +32,7 @@ if(WaylandScanner_FOUND)
 		${impl_SRCS}
 		cairo-dock-wayland-wm.c              cairo-dock-wayland-wm.h
 		cairo-dock-foreign-toplevel.c        cairo-dock-foreign-toplevel.h
+		cairo-dock-cosmic-toplevel.c         cairo-dock-cosmic-toplevel.h
 		cairo-dock-plasma-window-manager.c   cairo-dock-plasma-window-manager.h
 		cairo-dock-wayfire-shell.c           cairo-dock-wayfire-shell.h
 	)
@@ -48,6 +49,18 @@ if(WaylandScanner_FOUND)
 		impl_SRCS
 		PROTOCOL "proto/wlr-foreign-toplevel-management-unstable-v1.xml"
 		BASENAME "wlr-foreign-toplevel-management")
+	ecm_add_wayland_client_protocol(
+		impl_SRCS
+		PROTOCOL "proto/cosmic-toplevel-info-unstable-v1.xml"
+		BASENAME "cosmic-toplevel-info")
+	ecm_add_wayland_client_protocol(
+		impl_SRCS
+		PROTOCOL "proto/cosmic-toplevel-management-unstable-v1.xml"
+		BASENAME "cosmic-toplevel-management")
+	ecm_add_wayland_client_protocol(
+		impl_SRCS
+		PROTOCOL "proto/cosmic-workspace-unstable-v1.xml"
+		BASENAME "cosmic-workspace")
 endif()
 
 add_library(implementations STATIC ${impl_SRCS})
