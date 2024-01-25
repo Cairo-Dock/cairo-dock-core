@@ -98,16 +98,26 @@ GldiWindowActor *gldi_windows_find (gboolean (*callback) (GldiWindowActor*, gpoi
 
 void gldi_windows_manager_register_backend (GldiWindowManagerBackend *pBackend)
 {
+	if (s_backend.name)
+	{
+		cd_error ("window manager backend already registered!");
+		return;
+	}
+	
 	gpointer *ptr = (gpointer*)&s_backend;
 	gpointer *src = (gpointer*)pBackend;
 	gpointer *src_end = (gpointer*)(pBackend + 1);
 	while (src != src_end)
 	{
-		if (*src != NULL)
-			*ptr = *src;
+		*ptr = *src;
 		src ++;
 		ptr ++;
 	}
+}
+
+const gchar *gldi_windows_manager_get_name ()
+{
+	return s_backend.name ? s_backend.name : "none";
 }
 
 void gldi_window_move_to_desktop (GldiWindowActor *actor, int iNumDesktop, int iNumViewportX, int iNumViewportY)

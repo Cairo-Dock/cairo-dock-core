@@ -77,6 +77,7 @@ struct _GldiWindowManagerBackend {
 	void (*can_minimize_maximize_close) (GldiWindowActor *actor, gboolean *bCanMinimize, gboolean *bCanMaximize, gboolean *bCanClose);
 	guint (*get_id) (GldiWindowActor *actor);
 	GldiWindowActor* (*pick_window) (GtkWindow *pParentWindow);  // grab the mouse, wait for a click, then get the clicked window and returns its actor
+	gchar *name; // name of the current backend
 	} ;
 
 /// Definition of a window actor.
@@ -105,6 +106,8 @@ struct _GldiWindowActor {
 *@param pBackend a Window Manager backend
 */
 void gldi_windows_manager_register_backend (GldiWindowManagerBackend *pBackend);
+
+const gchar *gldi_windows_manager_get_name ();
 
 /** Run a function on each window actor.
 *@param bOrderedByZ TRUE to sort by z-order, FALSE to sort by age
