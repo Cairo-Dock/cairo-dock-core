@@ -47,6 +47,8 @@ typedef enum {
 
 void gldi_register_wayland_manager (void);
 
+gboolean gldi_wayland_manager_have_layer_shell ();
+
 /// Get the screen edge this dock should be anchored to
 CairoDockPositionType gldi_wayland_get_edge_for_dock (const CairoDock *pDock);
 

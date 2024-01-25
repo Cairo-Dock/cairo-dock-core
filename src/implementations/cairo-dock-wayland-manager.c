@@ -56,10 +56,8 @@
 #include "gldi-config.h"
 #ifdef HAVE_GTK_LAYER_SHELL
 #include <gtk-layer-shell.h>
-static gboolean s_bHave_Layer_Shell = FALSE;
 
 gboolean g_bDisableLayerShell = FALSE;
-
 #endif
 
 
@@ -73,6 +71,7 @@ extern GldiContainer *g_pPrimaryContainer;
 // private
 static struct wl_display *s_pDisplay = NULL;
 static struct wl_compositor* s_pCompositor = NULL;
+static gboolean s_bHave_Layer_Shell = FALSE;
 
 // manage screens -- instead of wl_output, we use GdkDisplay and GdkMonitors
 // list of monitors -- corresponds to pScreens in g_desktopGeometry from
@@ -660,10 +659,19 @@ void gldi_register_wayland_manager (void)
 	g_signal_connect (G_OBJECT (dsp), "monitor-removed", G_CALLBACK (_monitor_removed), (gpointer)TRUE);
 }
 
+gboolean gldi_wayland_manager_have_layer_shell ()
+{
+	return s_bHave_Layer_Shell;
+}
+
 #else
 #include "cairo-dock-log.h"
 void gldi_register_wayland_manager (void)
 {
 	cd_message ("Cairo-Dock was not built with Wayland support");
+}
+gboolean gldi_wayland_manager_have_layer_shell ()
+{
+	return FALSE;
 }
 #endif
