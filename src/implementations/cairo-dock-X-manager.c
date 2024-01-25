@@ -1665,6 +1665,7 @@ static void init (void)
 	wmb.can_minimize_maximize_close = _can_minimize_maximize_close;
 	wmb.get_id = _get_id;
 	wmb.pick_window = _pick_window;
+	wmb.name = "X11";
 	gldi_windows_manager_register_backend (&wmb);
 	
 	GldiContainerManagerBackend cmb;
