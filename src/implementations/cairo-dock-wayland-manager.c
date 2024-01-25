@@ -47,6 +47,7 @@
 #include "cairo-dock-foreign-toplevel.h"
 #include "cairo-dock-plasma-window-manager.h"
 #include "cairo-dock-wayfire-shell.h"
+#include "cairo-dock-cosmic-toplevel.h"
 #endif
 #include "cairo-dock-egl.h"
 #define _MANAGER_DEF_
@@ -256,7 +257,6 @@ GdkMonitor *const *gldi_wayland_get_monitors (int *iNumMonitors)
 }
 
 static gboolean s_bInitializing = TRUE;  // each time a callback is called on startup, it will set this to TRUE, and we'll make a roundtrip to the server until no callback is called.
-static gboolean s_bWindowManagerFound = FALSE; // limit to only try to bind either wlr or plasma window maneger interface
 static gboolean s_bWfShellFound = FALSE; // true if we have wayfire-shell
 
 CairoDockPositionType gldi_wayland_get_edge_for_dock (const CairoDock *pDock)
@@ -288,16 +288,15 @@ static void _registry_global_cb (G_GNUC_UNUSED void *data, struct wl_registry *r
 		cd_debug("Found wayfire-shell");
 		s_bWfShellFound = TRUE;
 	}
-	else if (!s_bWindowManagerFound && gldi_zwlr_foreign_toplevel_manager_try_bind (registry, id, interface, version))
+	else if (gldi_wlr_foreign_toplevel_match_protocol (id, interface, version))
 	{
 		cd_debug("Found foreign-toplevel-manager");
-		s_bWindowManagerFound = TRUE;
 	}
-	else if (!s_bWindowManagerFound && gldi_plasma_window_manager_try_bind (registry, id, interface, version))
+	else if (gldi_plasma_window_manager_match_protocol (id, interface, version))
 	{
 		cd_debug("Found plasma-window-manager");
-		s_bWindowManagerFound = TRUE;
 	}
+	else gldi_cosmic_toplevel_match_protocol (id, interface, version);
 #endif
 	s_bInitializing = TRUE;
 }
@@ -585,6 +584,9 @@ static void init (void)
 		cmb.start_polling_screen_edge = _start_polling_screen_edge;
 		cmb.stop_polling_screen_edge = _stop_polling_screen_edge;
 	}
+	if (!gldi_cosmic_toplevel_try_init (registry))
+		if (!gldi_plasma_window_manager_try_init (registry))
+			gldi_wlr_foreign_toplevel_try_init (registry);
 #endif	
 	cmb.set_input_shape = _set_input_shape;
 	cmb.is_wayland = _is_wayland;
