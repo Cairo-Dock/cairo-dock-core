@@ -39,6 +39,7 @@ extern GldiContainer *g_pPrimaryContainer;
 // private
 static GldiDesktopBackground *s_pDesktopBg = NULL;  // une fois alloue, le pointeur restera le meme tout le temps.
 static GldiDesktopManagerBackend s_backend;
+static gchar *s_registered_backends = NULL;
 
 static void _reload_desktop_background (void);
 
@@ -65,7 +66,7 @@ static gboolean _set_desklets_on_widget_layer (CairoDesklet *pDesklet, G_GNUC_UN
 		gldi_desktop_set_on_widget_layer (CAIRO_CONTAINER (pDesklet), TRUE);
 	return FALSE;  // continue
 }
-void gldi_desktop_manager_register_backend (GldiDesktopManagerBackend *pBackend)
+void gldi_desktop_manager_register_backend (GldiDesktopManagerBackend *pBackend, const gchar *name)
 {
 	gpointer *ptr = (gpointer*)&s_backend;
 	gpointer *src = (gpointer*)pBackend;
@@ -78,11 +79,24 @@ void gldi_desktop_manager_register_backend (GldiDesktopManagerBackend *pBackend)
 		ptr ++;
 	}
 	
+	if (!s_registered_backends) s_registered_backends = g_strdup (name);
+	else
+	{
+		gchar *tmp = s_registered_backends;
+		s_registered_backends = g_strdup_printf ("%s; %s", tmp, name);
+		g_free (tmp);
+	}
+	
 	// since we have a backend, set up the desklets that are supposed to be on the widget layer.
 	if (s_backend.set_on_widget_layer != NULL)
 	{
 		gldi_desklets_foreach ((GldiDeskletForeachFunc) _set_desklets_on_widget_layer, NULL);
 	}
+}
+
+const gchar *gldi_desktop_manager_get_backend_names (void)
+{
+	return s_registered_backends ? s_registered_backends : "none";
 }
 
 gboolean gldi_desktop_present_class (const gchar *cClass)  // scale matching class
