@@ -28,8 +28,6 @@
 
 G_BEGIN_DECLS
 
-extern gboolean g_bUseOpenGL;
-
 /**
 *@file cairo-dock-opengl.h This class manages the OpenGL backend and context.
 */
