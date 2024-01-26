@@ -1639,7 +1639,7 @@ static void init (void)
 	dmb.refresh                = _refresh;
 	dmb.notify_startup         = _notify_startup;
 	dmb.grab_shortkey          = _grab_shortkey;
-	gldi_desktop_manager_register_backend (&dmb);
+	gldi_desktop_manager_register_backend (&dmb, "X11");
 	
 	GldiWindowManagerBackend wmb;
 	memset (&wmb, 0, sizeof (GldiWindowManagerBackend));

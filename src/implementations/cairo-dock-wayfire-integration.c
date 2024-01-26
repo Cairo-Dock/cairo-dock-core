@@ -304,7 +304,7 @@ void cd_init_wayfire_backend() {
 	p.show_hide_desktop = _show_hide_desktop;
 	// p.set_current_desktop = _set_current_desktop;
 	
-	gldi_desktop_manager_register_backend (&p);
+	gldi_desktop_manager_register_backend (&p, "Wayfire");
 }
 
 
