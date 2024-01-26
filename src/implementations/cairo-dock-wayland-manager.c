@@ -428,6 +428,28 @@ static void _move_resize_dock (CairoDock *pDock)
 #endif
 }
 
+void gldi_wayland_grab_keyboard (GldiContainer *pContainer)
+{
+#ifdef HAVE_GTK_LAYER_SHELL
+	GtkWindow* window = GTK_WINDOW (pContainer->pWidget);
+	gtk_layer_set_keyboard_mode (window, GTK_LAYER_SHELL_KEYBOARD_MODE_EXCLUSIVE);
+	wl_surface_commit (gdk_wayland_window_get_wl_surface (
+		gldi_container_get_gdk_window (pContainer)));
+	gtk_layer_set_keyboard_mode (window, GTK_LAYER_SHELL_KEYBOARD_MODE_ON_DEMAND);
+#endif
+}
+
+void gldi_wayland_release_keyboard (GldiContainer *pContainer)
+{
+#ifdef HAVE_GTK_LAYER_SHELL
+	GtkWindow* window = GTK_WINDOW (pContainer->pWidget);
+	gtk_layer_set_keyboard_mode (window, GTK_LAYER_SHELL_KEYBOARD_MODE_NONE);
+	wl_surface_commit (gdk_wayland_window_get_wl_surface (
+		gldi_container_get_gdk_window (pContainer)));
+	gtk_layer_set_keyboard_mode (window, GTK_LAYER_SHELL_KEYBOARD_MODE_ON_DEMAND);
+#endif
+}
+
 static gboolean _dock_handle_leave (CairoDock *pDock, GdkEventCrossing *pEvent)
 {
 	if (pEvent) pDock->iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
@@ -644,4 +666,8 @@ gboolean gldi_wayland_manager_have_layer_shell ()
 {
 	return FALSE;
 }
+
+void gldi_wayland_grab_keyboard ( G_GNUC_UNUSED GldiContainer *pContainer) { }
+void gldi_wayland_release_keyboard ( G_GNUC_UNUSED GldiContainer *pContainer) { }
+
 #endif

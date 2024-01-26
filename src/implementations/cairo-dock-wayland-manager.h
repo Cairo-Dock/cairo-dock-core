@@ -58,5 +58,14 @@ GdkMonitor *gldi_dock_wayland_get_monitor (CairoDock *pDock);
 /// Get the list of monitors currently managed -- caller should not modify the GdkMonitor* pointers stored here
 GdkMonitor *const *gldi_wayland_get_monitors (int *iNumMonitors);
 
+/// Functions to try to grab / ungrab the keyboard
+///  (via setting the corresponding keyboard-interactivity property in wlr-layer-shell)
+/// These are not (yet?) part of the container manager backend, since
+/// these work quite differently from X11 and can result in a disorienting
+/// user experience. This way, these can be used only in situations where
+/// necessary and where their usefulness can be properly tested.
+void gldi_wayland_grab_keyboard (GldiContainer *pContainer);
+void gldi_wayland_release_keyboard (GldiContainer *pContainer);
+
 G_END_DECLS
 #endif
