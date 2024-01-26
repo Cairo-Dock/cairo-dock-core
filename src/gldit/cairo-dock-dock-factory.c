@@ -514,7 +514,7 @@ static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 				}
 				else if (pDock->bAutoHide)
 				{
-					const int delay = 250;  // 0
+					const int delay = gldi_container_use_new_positioning_code() ? 250 : 0;  // original behavior: 0
 					if (delay != 0)  /// maybe try to see if we left the dock frankly, or just by a few pixels...
 					{
 						//g_print (" delay the leave event by %dms\n", delay);
@@ -600,6 +600,8 @@ static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 		//	return ;
 		
 		CairoDock *pOriginDock = CAIRO_DOCK(cairo_dock_get_icon_container (s_pIconClicked));
+		// note: the _mouse_is_really_outside () here was spurious, since is was tested above (line 488) before,
+		// so we cannot get here if it would have returned false (this is the same with the new implementation as well)
 		if (pOriginDock == pDock /* && _mouse_is_really_outside (pDock) */ )  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
 		{
 			cd_debug (" on detache l'icone");
@@ -2200,7 +2202,8 @@ void gldi_dock_init_internals (CairoDock *pDock)
 		pDock);*/
 	// connect unmap signal -- on Wayland, the compositor might close
 	// the dock at any time, so we need to handle this possibility
-	g_signal_connect (G_OBJECT (pWindow),
+	if (gldi_container_use_new_positioning_code ())
+		g_signal_connect (G_OBJECT (pWindow),
 			"unmap-event",
 			G_CALLBACK (_on_dock_unmap),
 			pDock);
@@ -2230,7 +2233,7 @@ CairoDock *gldi_subdock_new (const gchar *cDockName, const gchar *cRendererName,
 	attr.cRendererName = cRendererName;
 	attr.pParentDock = pParentDock;
 	attr.pIconList = pIconList;
-	attr.cattr.bIsPopup = TRUE;
+	if (gldi_container_use_new_positioning_code ()) attr.cattr.bIsPopup = TRUE;
 	return (CairoDock*)gldi_object_new (&myDockObjectMgr, &attr);
 }
 
