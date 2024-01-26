@@ -18,6 +18,7 @@
 */
 
 #include "gldi-config.h"
+
 #ifdef HAVE_WAYLAND
 
 #include <poll.h>
@@ -56,10 +57,8 @@
 #include "gldi-config.h"
 #ifdef HAVE_GTK_LAYER_SHELL
 #include <gtk-layer-shell.h>
-
-gboolean g_bDisableLayerShell = FALSE;
 #endif
-
+gboolean g_bDisableLayerShell = FALSE;
 
 // public (manager, config, data)
 GldiManager myWaylandMgr;
@@ -666,6 +665,7 @@ gboolean gldi_wayland_manager_have_layer_shell ()
 
 #else
 #include "cairo-dock-log.h"
+gboolean g_bDisableLayerShell = FALSE;
 void gldi_register_wayland_manager (void)
 {
 	cd_message ("Cairo-Dock was not built with Wayland support");
