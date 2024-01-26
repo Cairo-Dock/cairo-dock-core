@@ -608,17 +608,14 @@ int main (int argc, char** argv)
 			gldi_gl_backend_deactivate ();
 		}
 	}
+	
+	gchar *msg = gldi_get_diag_msg ();
 	g_print ("\n"
 	" ============================================================================\n"
-	"\tCairo-Dock version : %s\n"
-	"\tCompiled date      : %s %s\n"
-	"\tBuilt with GTK     : %d.%d\n"
-	"\tRunning with OpenGL: %d\n"
+	"%s"
 	" ============================================================================\n\n",
-		CAIRO_DOCK_VERSION,
-		__DATE__, __TIME__,
-		GTK_MAJOR_VERSION, GTK_MINOR_VERSION,
-		g_bUseOpenGL);
+		msg);
+	g_free (msg);
 	
 	//\___________________ load plug-ins (must be done after everything is initialized).
 	if (! bSafeMode)
