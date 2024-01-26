@@ -197,7 +197,9 @@ bWAYLAND_PROTOCOLS = TRUE;
 		" * display backend:              %s\n"
 		"%s"
 		" * OpenGL:                       %s\n"
-		" * taskbar backend:              %s\n",
+		" * taskbar backend:              %s\n"
+		" * desktop manager backend(s):   %s\n"
+		" * detected desktop environment: %s\n",
 		GLDI_VERSION,
 		__DATE__, __TIME__,
 		GTK_MAJOR_VERSION, GTK_MINOR_VERSION,
@@ -210,7 +212,9 @@ bWAYLAND_PROTOCOLS = TRUE;
 		gldi_container_is_wayland_backend () ? "Wayland" : "X11",
 		layer_shell_info ? layer_shell_info : "",
 		g_bUseOpenGL ? "yes" : "no",
-		gldi_windows_manager_get_name ());
+		gldi_windows_manager_get_name (),
+		gldi_desktop_manager_get_backend_names (),
+		cairo_dock_fm_get_desktop_name ());
 
 	g_free (layer_shell_info);
 	
