@@ -991,6 +991,9 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 		int iNewPositionX, iNewPositionY;
 		cairo_dock_get_window_position_at_balance (
 			pSubDock, iNewWidth, iNewHeight, &iNewPositionX, &iNewPositionY);
+		// original behavior: calling present () before moving the subdock to its place
+		gtk_window_present (GTK_WINDOW (pSubDock->container.pWidget));
+		
 		if (pSubDock->container.bIsHorizontal)
 		{
 			gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pSubDock)),
@@ -1022,7 +1025,8 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 	
 	// note: when using gtk-layer-shell (the parent dock is layer surface),
 	// showing the window has to happen after (relative) positioning
-	gtk_window_present (GTK_WINDOW (pSubDock->container.pWidget));
+	if (gldi_container_use_new_positioning_code ())
+		gtk_window_present (GTK_WINDOW (pSubDock->container.pWidget));
 		
 	// animate it
 	if (myDocksParam.bAnimateSubDock && pSubDock->icons != NULL)

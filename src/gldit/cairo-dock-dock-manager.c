@@ -701,7 +701,7 @@ static void _reposition_one_root_dock (G_GNUC_UNUSED const gchar *cDockName, Cai
 	{
 		if (!pDock->bIsMainDock)
 			_get_root_dock_config (pDock);  // relit toute la conf.
-		gldi_container_set_screen (CAIRO_CONTAINER (pDock), pDock->iNumScreen);
+		gldi_container_set_screen (CAIRO_CONTAINER (pDock), pDock->iNumScreen); // this is a no-op on X11 (move_resize_dock () takes care of it below)
 		cairo_dock_update_dock_size (pDock);  // la taille max du dock depend de la taille de l'ecran, donc on recalcule son ratio.
 		cairo_dock_move_resize_dock (pDock);
 		gtk_widget_show (pDock->container.pWidget);
@@ -1778,7 +1778,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	}
 
 	//\__________________ init layer-shell (if enabled) and also set parent; needs to happen before window is mapped
-	if (dattr->bSubDock)
+	if (dattr->bSubDock && gldi_container_use_new_positioning_code ())
 	{
 		CairoDock *pParentDock = dattr->pParentDock;
 		if (pParentDock == NULL)
@@ -1840,7 +1840,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	
 		//\__________________ set additional params from its config file
 		_get_root_dock_config (pDock);
-		gldi_container_set_screen (CAIRO_CONTAINER (pDock), pDock->iNumScreen);
+		gldi_container_set_screen (CAIRO_CONTAINER (pDock), pDock->iNumScreen); // this is a no-op on X11 (absolute coords are used to move the dock)
 	}
 	else
 	{
