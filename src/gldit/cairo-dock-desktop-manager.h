@@ -105,7 +105,9 @@ struct _GldiDesktopBackground {
 /** Register a Desktop Manager backend. NULL functions do not overwrite existing ones.
 *@param pBackend a Desktop Manager backend; can be freeed after.
 */
-void gldi_desktop_manager_register_backend (GldiDesktopManagerBackend *pBackend);
+void gldi_desktop_manager_register_backend (GldiDesktopManagerBackend *pBackend, const gchar *name);
+
+const gchar *gldi_desktop_manager_get_backend_names (void);
 
 /** Present all the windows of a given class.
 *@param cClass the class.
