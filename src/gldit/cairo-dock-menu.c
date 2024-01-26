@@ -541,10 +541,13 @@ void gldi_menu_init (GtkWidget *pMenu, Icon *pIcon)
 			// set transient for (parent relationship; needed for positioning on Wayland)
 			// note: it is an error to try to map (and position) a popup
 			// relative to a window that is not mapped; we need to take care of this
-			GtkWindow *tmp = GTK_WINDOW (pContainer->pWidget);
-			while (tmp && !gtk_widget_get_mapped (GTK_WIDGET(tmp)))
-				tmp = gtk_window_get_transient_for (tmp);
-			gtk_window_set_transient_for (GTK_WINDOW (pWindow), tmp);
+			if (gldi_container_use_new_positioning_code ())
+			{
+				GtkWindow *tmp = GTK_WINDOW (pContainer->pWidget);
+				while (tmp && !gtk_widget_get_mapped (GTK_WIDGET(tmp)))
+					tmp = gtk_window_get_transient_for (tmp);
+				gtk_window_set_transient_for (GTK_WINDOW (pWindow), tmp);
+			}
 		}
 	}
 }
