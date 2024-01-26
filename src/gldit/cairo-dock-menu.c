@@ -36,6 +36,7 @@
 #include "cairo-dock-dialog-manager.h"  // myDialogsParam
 #include "cairo-dock-style-manager.h"
 #include "cairo-dock-menu.h"
+#include "cairo-dock-wayland-manager.h"
 
 extern gchar *g_cCurrentThemePath;
 
@@ -473,12 +474,16 @@ static void _on_menu_deactivated (GtkMenuShell *pMenu, G_GNUC_UNUSED gpointer da
 	if (!pParams)
 		return;
 	Icon *pIcon = pParams->pIcon;
+	GldiContainer *pContainer = cairo_dock_get_icon_container (pIcon);
 	if (pIcon->iHideLabel > 0)
 	{
 		pIcon->iHideLabel --;
-		GldiContainer *pContainer = cairo_dock_get_icon_container (pIcon);
 		if (pIcon->iHideLabel == 0 && pContainer)
 			gtk_widget_queue_draw (pContainer->pWidget);
+	}
+	if (gldi_container_is_wayland_backend ())
+	{
+		gldi_wayland_release_keyboard (pContainer);
 	}
 }
 
