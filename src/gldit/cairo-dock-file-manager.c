@@ -674,14 +674,20 @@ static CairoDockDesktopEnv _guess_environment (void)
 	return CAIRO_DOCK_UNKNOWN_ENV;
 	
 }
+
+const gchar *cairo_dock_fm_get_desktop_name (void)
+{
+	return (g_iDesktopEnv == CAIRO_DOCK_GNOME ? "GNOME" :
+		g_iDesktopEnv == CAIRO_DOCK_XFCE ? "XFCE" :
+		g_iDesktopEnv == CAIRO_DOCK_KDE ? "KDE" :
+		"unknown");
+}
+
 static void init (void)
 {
 	g_iDesktopEnv = _guess_environment ();
 	cd_message ("We found this desktop environment: %s",
-		g_iDesktopEnv == CAIRO_DOCK_GNOME ? "GNOME" :
-		g_iDesktopEnv == CAIRO_DOCK_XFCE ? "XFCE" :
-		g_iDesktopEnv == CAIRO_DOCK_KDE ? "KDE" :
-		"unknown");
+		cairo_dock_fm_get_desktop_name ());
 }
 
 
