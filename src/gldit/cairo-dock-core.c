@@ -64,9 +64,8 @@ int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;  // version de la lib.
 gboolean g_bForceWayland = FALSE;
 gboolean g_bForceX11 = FALSE;
 
-#ifdef HAVE_GTK_LAYER_SHELL
 extern gboolean g_bDisableLayerShell;
-#endif
+extern gboolean g_bUseOpenGL;
 
 static void _gldi_register_core_managers (void)
 {

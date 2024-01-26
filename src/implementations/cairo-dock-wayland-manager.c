@@ -66,6 +66,7 @@ GldiObjectManager myWaylandObjectMgr;
 
 // dependencies
 extern GldiContainer *g_pPrimaryContainer;
+extern gboolean g_bUseOpenGL;
 
 // private
 static struct wl_display *s_pDisplay = NULL;
