@@ -77,6 +77,7 @@
 #include "cairo-dock-gui-backend.h"
 #include "cairo-dock-user-interaction.h"
 #include "cairo-dock-user-menu.h"
+#include "cairo-dock-wayland-manager.h" // gldi_wayland_manager_have_layer_shell
 
 //#define CAIRO_DOCK_THEME_SERVER "http://themes.glx-dock.org"
 #define CAIRO_DOCK_THEME_SERVER "http://download.tuxfamily.org/glxdock/themes"
@@ -98,9 +99,7 @@ extern CairoDockGLConfig g_openglConfig;
 extern gboolean g_bUseOpenGL;
 extern gboolean g_bEasterEggs;
 
-#ifdef HAVE_GTK_LAYER_SHELL
 extern gboolean g_bDisableLayerShell;
-#endif
 
 extern GldiModuleInstance *g_pCurrentModule;
 extern GtkWidget *cairo_dock_build_simple_gui_window (void);
@@ -120,6 +119,7 @@ static gint s_iLastYear = 0;
 static gint s_iNbCrashes = 0;
 static gboolean s_bPingServer = TRUE;
 static gboolean s_bCDSessionLaunched = FALSE; // session CD already launched?
+static gboolean s_bWaylandRunAlready = FALSE;
 
 
 static void _on_got_server_answer (const gchar *data, G_GNUC_UNUSED gpointer user_data)
@@ -255,6 +255,7 @@ static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
 		s_iLastYear = g_key_file_get_integer (pKeyFile, "Launch", "last year", NULL);  // 0 by default
 		s_bPingServer = g_key_file_get_boolean (pKeyFile, "Launch", "ping server", NULL);  // FALSE by default
 		s_bCDSessionLaunched = g_key_file_get_boolean (pKeyFile, "Launch", "cd session", NULL);  // FALSE by default
+		s_bWaylandRunAlready = g_key_file_get_boolean (pKeyFile, "Launch", "started_on_wayland", NULL);  // FALSE by default
 	}
 	else  // first launch or old version, the file doesn't exist yet.
 	{
@@ -424,11 +425,9 @@ int main (int argc, char** argv)
 		{"x11", 'X', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bForceX11,
 			_("Force using the X11 backend (disable any Wayland functionality)."), NULL},
-#ifdef HAVE_GTK_LAYER_SHELL
 		{"no-layer-shell", 0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bDisableLayerShell,
 			_("For debugging purpose only. Disable gtk-layer-shell support."), NULL},
-#endif
 		{NULL, 0, 0, 0,
 			NULL,
 			NULL, NULL}
@@ -859,6 +858,35 @@ int main (int argc, char** argv)
 	{
 		Icon *pIcon = gldi_icons_get_any_without_dialog ();
 		gldi_dialog_show_temporary_with_icon (_("No plug-in were found.\nPlug-ins provide most of the functionalities (animations, applets, views, etc).\nSee http://glx-dock.org for more information.\nThere is almost no meaning in running the dock without them and it's probably due to a problem with the installation of these plug-ins.\nBut if you really want to use the dock without these plug-ins, you can launch the dock with the '-f' option to no longer have this message.\n"), pIcon, CAIRO_CONTAINER (g_pMainDock), 0., CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON);
+	}
+	
+	if (gldi_container_is_wayland_backend ())
+	{
+		/// Display a warning if layer-shell is not available
+		if (!gldi_wayland_manager_have_layer_shell () && !g_bDisableLayerShell)
+		{
+			gboolean layer_shell_supported = FALSE;
+#ifdef HAVE_GTK_LAYER_SHELL
+			layer_shell_supported = TRUE;
+#endif
+			const gchar *msg1 = layer_shell_supported ? _("Cairo-Dock is running in a Wayland session, but the compositor does not seem to support the wlr-layer-shell protocol. This is required for properly positioning the dock on the screen; it is likely that docks will show up in wrong locations. Please check that you are running a Wayland compositor that is compatible with wlr-layer-shell; see the documentation for more information. Please note that neither GNOME Shell nor the Ubuntu Wayland desktop session is supported. If you believe that your compositor should be supported, consider reporting this issue in our bug tracker.\n\n(to disable showing this message, run Cairo-Dock with the '--no-layer-shell' command line option)") : _("Cairo-Dock is running in a Wayland session, but it was not compiled with gtk-layer-shell support. This is required for properly positioning the dock on the screen; it is likely that docks will show up in wrong locations. If you have installed Cairo-Dock from a binary package, please report this issue to the package's maintainer. If you have compiled Cairo-Dock yourself, please ensure that the development libraries for gtk-layer-shell are available; see the documentation for more information.\n\n(to disable showing this message, run Cairo-Dock with the '--no-layer-shell' command line option)");
+			Icon *pIcon = gldi_icons_get_any_without_dialog ();
+			gldi_dialog_show_temporary_with_icon (msg1, pIcon, CAIRO_CONTAINER (g_pMainDock), 0., CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON);
+		}
+		
+		else if (!s_bWaylandRunAlready)
+		{
+			Icon *pIcon = gldi_icons_get_any_without_dialog ();
+			gldi_dialog_show_temporary_with_icon (_("You are running Cairo-Dock in a Wayland session. Please note the support for Wayland is still experimental: not all features and plugins work yet.\nSee the documentation for more information.\nPlease consider reporting any issues you encounter in our bug tracker. Thank you!"), pIcon, CAIRO_CONTAINER (g_pMainDock), 0., CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON);
+			
+			// Update 'started_on_wayland' key: we store that we run the dock on Wayland at least once
+			s_bWaylandRunAlready = TRUE;
+			gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", g_cCairoDockDataDir);
+			cairo_dock_update_conf_file (cConfFilePath,
+				G_TYPE_BOOLEAN, "Launch", "started_on_wayland", s_bWaylandRunAlready,
+				G_TYPE_INVALID);
+			g_free (cConfFilePath);
+		}
 	}
 	
 	//\___________________ display the changelog in case of a new version.

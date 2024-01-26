@@ -26,7 +26,8 @@ SET(cairo_dock_SRCS
 include_directories(
 	${PACKAGE_INCLUDE_DIRS}
 	${GTK_INCLUDE_DIRS}
-	${CMAKE_SOURCE_DIR}/src/gldit)
+	${CMAKE_SOURCE_DIR}/src/gldit
+	${CMAKE_SOURCE_DIR}/src/implementations)
 
 # Make sure the linker can find the libraries.
 link_directories(
