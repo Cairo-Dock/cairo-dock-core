@@ -238,7 +238,7 @@ static gboolean on_configure_dialog (G_GNUC_UNUSED GtkWidget* pWidget,
 	}
 	
 	//\____________ compute aimed point (for new positioning)
-	if (gldi_dialog_use_new_positioning (pDialog)) _calculate_aimed_point_new (pDialog);
+	if (gldi_container_use_new_positioning_code ()) _calculate_aimed_point_new (pDialog);
 	
 	gtk_widget_queue_draw (pDialog->container.pWidget);  // les widgets internes peuvent avoir changer de taille sans que le dialogue n'en ait change, il faut donc redessiner tout le temps.
 
@@ -260,9 +260,9 @@ static gboolean on_unmap_dialog (GtkWidget* pWidget,
 			if (fElapsedTime < .2)  // it's a 2nd unmap event just after the first one, ignore it, it's just some noise from the WM
 				return TRUE;
 		}
-		// destroy the dialog
-		gldi_object_unref (GLDI_OBJECT(pDialog));
-		// gtk_window_present (GTK_WINDOW (pWidget));  // counter it, we don't want dialogs to be hidden
+		
+		if (gldi_container_use_new_positioning_code ()) gldi_object_unref (GLDI_OBJECT(pDialog)); // destroy the dialog
+		else gtk_window_present (GTK_WINDOW (pWidget));  // old behavior: counter it, we don't want dialogs to be hidden
 	}
 	else  // expected event, it's an unmap that we triggered with 'gldi_dialog_hide', so let pass it
 	{
@@ -567,6 +567,9 @@ void gldi_dialog_init_internals (CairoDialog *pDialog, CairoDialogAttr *pAttribu
 	else
 		pDialog->pTopWidget = _cairo_dock_add_dialog_internal_box (pDialog, 0, pDialog->iTopMargin, TRUE);
 	
+	// original behavior: dialog is shown at this point (does not work on Wayland, dialog needs to be positioned first)
+	if (!gldi_container_is_wayland_backend ()) gtk_widget_show_all (pDialog->container.pWidget);
+	
 	//\________________ load the input shape.
 	if (pDialog->bNoInput)
 	{
@@ -599,7 +602,7 @@ void gldi_dialog_init_internals (CairoDialog *pDialog, CairoDialogAttr *pAttribu
 			"button-press-event",
 			G_CALLBACK (on_button_press_widget),
 			pDialog);
-	if (gldi_dialog_use_new_positioning (pDialog))
+	if (gldi_container_use_new_positioning_code ())
 	{
 		if (gtk_widget_get_realized (pDialog->container.pWidget))
 			_calculate_aimed_point_new (pDialog);

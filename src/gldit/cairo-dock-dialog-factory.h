@@ -150,12 +150,12 @@ struct _CairoDialog {
 	gchar *cText;
 	// note: use an union to keep ABI
 	union {
-		// True if new positioning mechanism should be used. This means using gldi_container_move_to_rect()
-		// and setting the aimed point in the configure event handlers in a way that should work on both X
-		// and Wayland.
+		// Flags that can hold additional attributes (currently only using for storing a pending close event).
 		guint f;
 		gpointer reserved[1];
 	} uFlags;
+	
+	gpointer reserved[1];
 };
 
 #define CAIRO_DIALOG_FIRST_BUTTON 0
@@ -170,13 +170,7 @@ struct _CairoDialog {
 #define CAIRO_DIALOG_VGAP 4
 #define CAIRO_DIALOG_BUTTON_GAP 16
 
-#define CAIRO_DIALOG_FLAGS_USE_NEW_POSITIONING 1
-#define CAIRO_DIALOG_FLAGS_PENDING_CLOSE 2
-
-static inline gboolean gldi_dialog_use_new_positioning (CairoDialog *pDialog)
-{
-	return pDialog->uFlags.f & CAIRO_DIALOG_FLAGS_USE_NEW_POSITIONING;
-}
+#define CAIRO_DIALOG_FLAGS_PENDING_CLOSE 1
 
 /** Say if an object is a Dialog.
 *@param obj the object.

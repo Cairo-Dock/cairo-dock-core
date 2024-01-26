@@ -618,7 +618,7 @@ static void _set_dialog_orientation (CairoDialog *pDialog, GldiContainer *pConta
 {
 	if (pContainer != NULL/* && pDialog->pIcon != NULL*/)
 	{
-		if (gldi_dialog_use_new_positioning (pDialog))
+		if (gldi_container_use_new_positioning_code ())
 		{
 			pDialog->container.bDirectionUp = pContainer->bDirectionUp;
 			pDialog->bTopBottomDialog = pContainer->bIsHorizontal;
@@ -643,7 +643,7 @@ static void _place_dialog (CairoDialog *pDialog, GldiContainer *pContainer)
 	{
 		_set_dialog_orientation (pDialog, pContainer);
 		
-		if (!gldi_dialog_use_new_positioning (pDialog))
+		if (!gldi_container_use_new_positioning_code ())
 		{
 			if (pDialog->bTopBottomDialog)
 			{
@@ -679,7 +679,7 @@ static void _place_dialog (CairoDialog *pDialog, GldiContainer *pContainer)
 	else  // dialogue lie a aucun container => au milieu de l'ecran courant.
 	{
 		pDialog->container.bDirectionUp = TRUE;
-		if (!gldi_dialog_use_new_positioning (pDialog))
+		if (!gldi_container_use_new_positioning_code ())
 		{
 			pDialog->iComputedPositionX = (gldi_desktop_get_width() - pDialog->container.iWidth) / 2;  // we don't know if the container is set on a given screen or not, so take the X screen.
 			pDialog->iComputedPositionY = (gldi_desktop_get_height() - pDialog->container.iHeight) / 2;
@@ -690,7 +690,7 @@ static void _place_dialog (CairoDialog *pDialog, GldiContainer *pContainer)
 	pDialog->bPositionForced = FALSE;
 	///gtk_window_set_gravity (GTK_WINDOW (pDialog->container.pWidget), iGravity);
 	//g_print (" => move to (%d;%d) %dx%d\n", pDialog->iComputedPositionX, pDialog->iComputedPositionY, pDialog->iComputedWidth, pDialog->iComputedHeight);
-	if (gldi_dialog_use_new_positioning (pDialog))
+	if (gldi_container_use_new_positioning_code ())
 	{
 		Icon* pPointedIcon = pDialog->pIcon;
 		if (pPointedIcon && pContainer)
@@ -1092,7 +1092,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 		
 	// set parent -- note: on Wayland, it is an error to try to map (and position) a popup
 	// relative to a window that is not mapped; we need to take care of this
-	{
+	if (gldi_container_use_new_positioning_code ()) {
 		GtkWindow *tmp = GTK_WINDOW (pAttribute->pContainer->pWidget);
 		while (tmp && !gtk_widget_get_mapped (GTK_WIDGET(tmp)))
 			tmp = gtk_window_get_transient_for (tmp);
@@ -1101,8 +1101,6 @@ static void init_object (GldiObject *obj, gpointer attr)
 	}
 	
 	pDialog->uFlags.f = 0;
-	if (gldi_container_use_new_positioning_code ())
-		pDialog->uFlags.f |= CAIRO_DIALOG_FLAGS_USE_NEW_POSITIONING;
 	
 	//\________________ set up its orientation (do it now, as we need bDirectionUp to place the internal widgets)
 	pDialog->pIcon = pAttribute->pIcon;
@@ -1133,13 +1131,10 @@ static void init_object (GldiObject *obj, gpointer attr)
 	if (pDialog->iNbButtons != 0 && (s_pButtonOkSurface == NULL || s_pButtonCancelSurface == NULL))
 		_load_dialog_buttons (myDialogsParam.cButtonOkImage, myDialogsParam.cButtonCancelImage);
 	
-	// On Wayland, _place_dialog() should happen before showing the dialog; on X, it is the opposite
-	if (!gldi_container_is_wayland_backend ()) gtk_widget_show_all (pDialog->container.pWidget);
-	
 	//\________________ on le place parmi les autres.
 	_place_dialog (pDialog, pContainer);  // renseigne aussi bDirectionUp, bIsHorizontal, et iHeight.
 	
-	//\________________ On Wayland, we need to first set position before showing the dialog.
+	//\ On Wayland, we show the dialog only after setting its position (on X11, this happens in gldi_dialog_init_internals () above)
 	if (gldi_container_is_wayland_backend ()) gtk_widget_show_all (pDialog->container.pWidget);
 	
 	//\________________ On connecte les signaux utiles.
