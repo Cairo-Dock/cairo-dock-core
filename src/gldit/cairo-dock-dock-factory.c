@@ -1067,16 +1067,36 @@ static gboolean _on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, Ca
 		iNewWidth = pEvent->width;
 		iNewHeight = pEvent->height;
 		
-		iNewX = pEvent->x;
-		iNewY = pEvent->y;
+		if (gldi_container_is_wayland_backend ())
+		{
+			// pEvent->x and pEvent->y are zero in this case, we fake the expected position
+			if (pDock->container.bDirectionUp) iNewY = gldi_dock_get_screen_height (pDock) - iNewHeight;
+			else iNewY = 0;
+			iNewX = 0;
+		}
+		else
+		{
+			iNewX = pEvent->x;
+			iNewY = pEvent->y;
+		}
 	}
 	else
 	{
 		iNewWidth = pEvent->height;
 		iNewHeight = pEvent->width;
 		
-		iNewX = pEvent->y;
-		iNewY = pEvent->x;
+		if (gldi_container_is_wayland_backend ())
+		{
+			// pEvent->x and pEvent->y are zero in this case, we fake the expected position
+			if (pDock->container.bDirectionUp) iNewY = gldi_dock_get_screen_width (pDock) - iNewHeight;
+			else iNewY = 0;
+			iNewX = 0;
+		}
+		else
+		{
+			iNewX = pEvent->y;
+			iNewY = pEvent->x;
+		}
 	}
 	
 	gboolean bSizeUpdated = (iNewWidth != pDock->container.iWidth || iNewHeight != pDock->container.iHeight);
