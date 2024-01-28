@@ -292,7 +292,7 @@ static inline gboolean _window_overlaps_dock (GtkAllocation *pWindowGeometry, gb
 	}
 	else
 	{
-		cd_warning (" unknown window geometry");
+		// cd_warning (" unknown window geometry");
 	}
 	return FALSE;
 }

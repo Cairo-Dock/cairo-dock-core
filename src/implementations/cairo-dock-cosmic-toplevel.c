@@ -263,8 +263,8 @@ static void _new_toplevel ( G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct zcosm
 	// hack required for minimize on click to work -- "pretend" that the window is in the middle of the screen
 	actor->windowGeometry.x = cairo_dock_get_screen_width (0) / 2;
 	actor->windowGeometry.y = cairo_dock_get_screen_height (0) / 2;
-	actor->windowGeometry.width = 1;
-	actor->windowGeometry.height = 1;
+	actor->windowGeometry.width = 0;
+	actor->windowGeometry.height = 0;
 	
 	/* note: we cannot do anything as long as we get app_id */
 	zcosmic_toplevel_handle_v1_add_listener (handle, &gldi_toplevel_handle_interface, wactor);
