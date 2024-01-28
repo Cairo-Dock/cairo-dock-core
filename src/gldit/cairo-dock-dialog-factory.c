@@ -250,7 +250,7 @@ static gboolean on_unmap_dialog (GtkWidget* pWidget,
 	CairoDialog *pDialog)
 {
 	//g_print ("unmap dialog (bAllowMinimize:%d, visible:%d)\n", pDialog->bAllowMinimize, GTK_WIDGET_VISIBLE (pWidget));
-	pDialog->container.bInside = FALSE;
+	if (gldi_container_use_new_positioning_code ()) pDialog->container.bInside = FALSE;
 	if (! pDialog->bAllowMinimize)  // it's an unexpected unmap event
 	{
 		if (pDialog->pUnmapTimer)  // see if it happened just after an event that we expected
