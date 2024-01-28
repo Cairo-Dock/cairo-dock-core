@@ -1752,10 +1752,9 @@ static void init (void)
 		(GldiNotificationFunc) on_style_changed,
 		GLDI_RUN_AFTER, NULL);
 	
-	// Avoid checking visibility on Wayland, since we do not have window
-	// positions. This will avoid a dock being hidden by accident.
-	if (!gldi_container_is_wayland_backend ())
-		gldi_docks_visibility_start ();
+	// On Wayland, this only works on KWin yet (other compositors do not
+	// send us window positions).
+	gldi_docks_visibility_start ();
 }
 
 
