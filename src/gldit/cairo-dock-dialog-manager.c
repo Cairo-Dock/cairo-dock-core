@@ -215,8 +215,10 @@ static gboolean on_button_press_dialog (G_GNUC_UNUSED GtkWidget* pWidget,
 				if (pDialog->bHideOnClick)
 					gldi_dialog_hide (pDialog);
 				else
-					pDialog->uFlags.f |= CAIRO_DIALOG_FLAGS_PENDING_CLOSE; // wait until the release event before closing
-					// gldi_object_unref (GLDI_OBJECT(pDialog));
+				{
+					if (gldi_container_use_new_positioning_code ()) pDialog->uFlags.f |= CAIRO_DIALOG_FLAGS_PENDING_CLOSE; // wait until the release event before closing
+					else gldi_object_unref (GLDI_OBJECT(pDialog));
+				}
 			}
 			else if (pButton->button == 1)  // left click on a button.
 			{
