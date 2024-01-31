@@ -1,9 +1,12 @@
 /*
- * cairo-dock-wayfire-shell.h
+ * cairo-dock-wayland-hotspots.h
  * 
- * Functions to interact with Wayfire for screen edge hotspots.
+ * Functions to monitor screen edges for recalling a hidden dock.
+ * Currently, this supports two cases:
+ *   -- on Wayfire, wf-shell is used 
+ *   -- as a generic case, a transparent layer-shell surface is used
  * 
- * Copyright 2021 Daniel Kondor <kondor.dani@gmail.com>
+ * Copyright 2021-2024 Daniel Kondor <kondor.dani@gmail.com>
  * 
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -26,14 +29,17 @@
 #include <stdint.h>
 #include <glib.h>
 
-/// Try to bind the wayfire shell manager object (should be called for objects in the wl_registry)
-gboolean gldi_zwf_shell_try_bind (struct wl_registry *registry, uint32_t id, const char *interface, uint32_t version);
+/// Try to match Wayland protocols that we need to use
+gboolean gldi_wayland_hotspots_match_protocol (uint32_t id, const char *interface, uint32_t version);
+
+/// Initialize the interface for monitoring hotspots
+gboolean gldi_wayland_hotspots_try_init (struct wl_registry *registry);
 
 /// Update the hotspots we are listening to (based on the configuration of all root docks)
-void gldi_zwf_shell_update_hotspots (void);
+void gldi_wayland_hotspots_update (void);
 
 /// Stop listening to all hotspots
-void gldi_zwf_manager_stop (void);
+void gldi_wayland_hotspots_stop (void);
 
 #endif
 

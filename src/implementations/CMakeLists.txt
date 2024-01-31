@@ -34,7 +34,7 @@ if(WaylandScanner_FOUND)
 		cairo-dock-foreign-toplevel.c        cairo-dock-foreign-toplevel.h
 		cairo-dock-cosmic-toplevel.c         cairo-dock-cosmic-toplevel.h
 		cairo-dock-plasma-window-manager.c   cairo-dock-plasma-window-manager.h
-		cairo-dock-wayfire-shell.c           cairo-dock-wayfire-shell.h
+		cairo-dock-wayland-hotspots.c        cairo-dock-wayland-hotspots.h
 	)
 
 	ecm_add_wayland_client_protocol(

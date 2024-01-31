@@ -47,7 +47,7 @@
 #ifdef HAVE_WAYLAND_PROTOCOLS
 #include "cairo-dock-foreign-toplevel.h"
 #include "cairo-dock-plasma-window-manager.h"
-#include "cairo-dock-wayfire-shell.h"
+#include "cairo-dock-wayland-hotspots.h"
 #include "cairo-dock-cosmic-toplevel.h"
 #endif
 #include "cairo-dock-egl.h"
@@ -255,9 +255,6 @@ GdkMonitor *const *gldi_wayland_get_monitors (int *iNumMonitors)
 	return s_pMonitors;
 }
 
-static gboolean s_bInitializing = TRUE;  // each time a callback is called on startup, it will set this to TRUE, and we'll make a roundtrip to the server until no callback is called.
-static gboolean s_bWfShellFound = FALSE; // true if we have wayfire-shell
-
 CairoDockPositionType gldi_wayland_get_edge_for_dock (const CairoDock *pDock)
 {
 	CairoDockPositionType pos;
@@ -268,51 +265,6 @@ CairoDockPositionType gldi_wayland_get_edge_for_dock (const CairoDock *pDock)
 	else pos = CAIRO_DOCK_INSIDE_SCREEN;
 	return pos;
 }
-
-static void _registry_global_cb (G_GNUC_UNUSED void *data, struct wl_registry *registry, uint32_t id, const char *interface, uint32_t version)
-{
-	cd_debug ("got a new global object, instance of %s, id=%d", interface, id);
-	if (!strcmp (interface, "wl_shell"))
-	{
-		// this is the global that should give us info and signals about the desktop, but currently it's pretty useless ...
-		
-	}
-	else if (!strcmp (interface, wl_compositor_interface.name))
-	{
-		s_pCompositor = wl_registry_bind(registry, id, &wl_compositor_interface, 1);
-	}
-#ifdef HAVE_WAYLAND_PROTOCOLS
-	else if (gldi_zwf_shell_try_bind (registry, id, interface, version))
-	{
-		cd_debug("Found wayfire-shell");
-		s_bWfShellFound = TRUE;
-	}
-	else if (gldi_wlr_foreign_toplevel_match_protocol (id, interface, version))
-	{
-		cd_debug("Found foreign-toplevel-manager");
-	}
-	else if (gldi_plasma_window_manager_match_protocol (id, interface, version))
-	{
-		cd_debug("Found plasma-window-manager");
-	}
-	else gldi_cosmic_toplevel_match_protocol (id, interface, version);
-#endif
-	s_bInitializing = TRUE;
-}
-
-static void _registry_global_remove_cb (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct wl_registry *registry, uint32_t id)
-{
-	cd_debug ("got a global object has disappeared: id=%d", id);
-	/// TODO: find it and destroy it...
-	
-	/// TODO: and if it was a wl_output for instance, update the desktop geometry...
-	
-}
-
-static const struct wl_registry_listener registry_listener = {
-	_registry_global_cb,
-	_registry_global_remove_cb
-};
 
 // Set the input shape directly for the container's wl_surface.
 // This is necessary for some reason on Wayland + EGL.
@@ -483,7 +435,7 @@ static int s_iNbPolls = 0;
 static void _start_polling_screen_edge (void)
 {
 	s_iNbPolls ++;
-	gldi_zwf_shell_update_hotspots ();
+	gldi_wayland_hotspots_update ();
 }
 
 static void _stop_polling_screen_edge (void)
@@ -491,10 +443,10 @@ static void _stop_polling_screen_edge (void)
 	s_iNbPolls --;
 	if (s_iNbPolls <= 0)
 	{
-		gldi_zwf_manager_stop ();  // remove all hotspots
+		gldi_wayland_hotspots_stop ();  // remove all hotspots
 		s_iNbPolls = 0;
 	}
-	else gldi_zwf_shell_update_hotspots (); // in this case, we only update hotspots
+	else gldi_wayland_hotspots_update (); // in this case, we only update hotspots
 }
 #endif
 
@@ -553,6 +505,49 @@ static void _adjust_aimed_point (const Icon* pIcon, int w, int h,
 
 static gboolean _is_wayland() { return TRUE; }
 
+
+static gboolean s_bInitializing = TRUE;  // each time a callback is called on startup, it will set this to TRUE, and we'll make a roundtrip to the server until no callback is called.
+
+static void _registry_global_cb ( G_GNUC_UNUSED void *data, struct wl_registry *registry, uint32_t id, const char *interface, uint32_t version)
+{
+	cd_debug ("got a new global object, instance of %s, id=%d", interface, id);
+	if (!strcmp (interface, wl_compositor_interface.name))
+	{
+		s_pCompositor = wl_registry_bind(registry, id, &wl_compositor_interface, 1);
+	}
+#ifdef HAVE_WAYLAND_PROTOCOLS
+	else if (gldi_wayland_hotspots_match_protocol (id, interface, version))
+	{
+		/* this space is intentionally left blank */
+	}
+	else if (gldi_wlr_foreign_toplevel_match_protocol (id, interface, version))
+	{
+		cd_debug("Found foreign-toplevel-manager");
+	}
+	else if (gldi_plasma_window_manager_match_protocol (id, interface, version))
+	{
+		cd_debug("Found plasma-window-manager");
+	}
+	else gldi_cosmic_toplevel_match_protocol (id, interface, version);
+#endif
+	s_bInitializing = TRUE;
+}
+
+static void _registry_global_remove_cb (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct wl_registry *registry, uint32_t id)
+{
+	cd_debug ("got a global object has disappeared: id=%d", id);
+	/// TODO: find it and destroy it...
+	
+	/// TODO: and if it was a wl_output for instance, update the desktop geometry...
+	
+}
+
+static const struct wl_registry_listener registry_listener = {
+	_registry_global_cb,
+	_registry_global_remove_cb
+};
+
+
 static void init (void)
 {
 	//\__________________ listen for Wayland events
@@ -578,7 +573,7 @@ static void init (void)
 	}
 #endif
 #ifdef HAVE_WAYLAND_PROTOCOLS
-	if (s_bWfShellFound)
+	if (gldi_wayland_hotspots_try_init (registry))
 	{
 		cmb.start_polling_screen_edge = _start_polling_screen_edge;
 		cmb.stop_polling_screen_edge = _stop_polling_screen_edge;
