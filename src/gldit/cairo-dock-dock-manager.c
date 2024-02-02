@@ -821,9 +821,8 @@ void cairo_dock_stop_quick_hide (void)
 	if (s_bQuickHide)
 	{
 		s_bQuickHide = FALSE;
-		gldi_container_stop_polling_screen_edge ();
-		
 		g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_stop_quick_hide_one_root_dock, NULL);
+		gldi_container_stop_polling_screen_edge ();
 	}
 }
 
