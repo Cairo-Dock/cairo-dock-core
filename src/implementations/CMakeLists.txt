@@ -19,6 +19,7 @@ SET(impl_SRCS
 	cairo-dock-egl-X.c
 	cairo-dock-egl-wayland.c
 	cairo-dock-wayland-manager.c         cairo-dock-wayland-manager.h
+	cairo-dock-wayland-hotspots.c        cairo-dock-wayland-hotspots.h
 )
 #if ("${HAVE_X11}")
 #	SET(impl_SRCS ${impl_SRCS}
@@ -34,7 +35,6 @@ if(WaylandScanner_FOUND)
 		cairo-dock-foreign-toplevel.c        cairo-dock-foreign-toplevel.h
 		cairo-dock-cosmic-toplevel.c         cairo-dock-cosmic-toplevel.h
 		cairo-dock-plasma-window-manager.c   cairo-dock-plasma-window-manager.h
-		cairo-dock-wayland-hotspots.c        cairo-dock-wayland-hotspots.h
 	)
 
 	ecm_add_wayland_client_protocol(
