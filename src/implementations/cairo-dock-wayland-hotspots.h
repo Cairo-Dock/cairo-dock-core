@@ -22,9 +22,10 @@
  */
 
 
-#ifndef CAIRO_DOCK_WAYFIRE_SHELL_H
-#define CAIRO_DOCK_WAYFIRE_SHELL_H
+#ifndef CAIRO_DOCK_WAYLAND_HOTSPOTS_H
+#define CAIRO_DOCK_WAYLAND_HOTSPOTS_H
 
+#ifdef HAVE_WAYLAND
 #include <wayland-client.h>
 #include <stdint.h>
 #include <glib.h>
@@ -42,5 +43,5 @@ void gldi_wayland_hotspots_update (void);
 void gldi_wayland_hotspots_stop (void);
 
 #endif
-
+#endif
 
