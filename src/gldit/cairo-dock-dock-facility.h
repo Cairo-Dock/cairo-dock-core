@@ -23,6 +23,7 @@
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-dock-factory.h"
+#include "cairo-dock-desktop-manager.h"
 G_BEGIN_DECLS
 
 /**
