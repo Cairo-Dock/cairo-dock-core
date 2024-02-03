@@ -328,6 +328,9 @@ CairoDock *gldi_dock_new (const gchar *cDockName);
 */
 CairoDock *gldi_subdock_new (const gchar *cDockName, const gchar *cRendererName, CairoDock *pParentDock, GList *pIconList);
 
+/* Deplace et redimensionne un dock a ses position et taille attitrees. Ne change pas la zone d'input (cela doit etre fait par ailleurs), et ne la replace pas (cela est fait lors du configure).
+*/
+void cairo_dock_move_resize_dock (CairoDock *pDock);
 
 /** Remove all icons from a dock (and its sub-docks). If the receiving dock is NULL, the icons are destroyed and removed from the current theme itself.
 *@param pDock a dock.
