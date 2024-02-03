@@ -1621,6 +1621,7 @@ static gboolean _cairo_dock_hide (CairoDock *pDock)
 		if (pDock->fHideOffset > .99)  // fin d'anim.
 		{
 			pDock->fHideOffset = 1;
+			gldi_container_update_polling_screen_edge ();
 			
 			//g_print ("on arrete le cachage\n");
 			gboolean bVisibleIconsPresent = FALSE;
@@ -1683,6 +1684,7 @@ static gboolean _cairo_dock_show (CairoDock *pDock)
 		pDock->fHideOffset = 0;
 		cairo_dock_allow_entrance (pDock);
 		gldi_dialogs_replace_all ();  // we need it here so that a modal dialog is replaced when the dock unhides (else it would stay behind).
+		gldi_container_update_polling_screen_edge ();
 		return FALSE;
 	}
 	return TRUE;

@@ -800,7 +800,7 @@ void cairo_dock_quick_hide_all_docks (void)
 	{
 		s_bQuickHide = TRUE;
 		g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_quick_hide_one_root_dock, NULL);
-		gldi_container_start_polling_screen_edge ();
+		gldi_container_update_polling_screen_edge ();
 	}
 }
 
@@ -822,7 +822,7 @@ void cairo_dock_stop_quick_hide (void)
 	{
 		s_bQuickHide = FALSE;
 		g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_stop_quick_hide_one_root_dock, NULL);
-		gldi_container_stop_polling_screen_edge ();
+		gldi_container_update_polling_screen_edge ();
 	}
 }
 
@@ -851,6 +851,7 @@ void cairo_dock_activate_temporary_auto_hide (CairoDock *pDock)
 		{
 			cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));  // un cairo_dock_start_hiding ne cacherait pas les sous-docks.
 		}
+		gldi_container_update_polling_screen_edge ();
 	}
 }
 
@@ -866,6 +867,7 @@ void cairo_dock_deactivate_temporary_auto_hide (CairoDock *pDock)
 		{
 			cairo_dock_start_showing (pDock);
 		}
+		gldi_container_update_polling_screen_edge ();
 	}
 }
 
@@ -1000,12 +1002,7 @@ void gldi_dock_set_visibility (CairoDock *pDock, CairoDockVisibility iVisibility
 	}
 	
 	//\_______________ on arrete/demarre la scrutation des bords.
-	gboolean bIsPolling = (bAutoHide0 || bAutoHideOnOverlap0 || bAutoHideOnAnyOverlap0 || bKeepBelow0);
-	gboolean bShouldPoll = (bAutoHide || bAutoHideOnOverlap || bAutoHideOnAnyOverlap || bKeepBelow);
-	if (bIsPolling && ! bShouldPoll)
-		gldi_container_stop_polling_screen_edge ();
-	else if (!bIsPolling && bShouldPoll)
-		gldi_container_start_polling_screen_edge ();
+	gldi_container_update_polling_screen_edge ();
 }
 
 
@@ -1676,7 +1673,7 @@ static void unload (void)
 {
 	cairo_dock_unload_image_buffer (&g_pVisibleZoneBuffer);
 	
-	gldi_container_stop_polling_screen_edge ();
+	gldi_container_update_polling_screen_edge ();
 	s_bQuickHide = FALSE;
 	
 	gldi_object_unref (GLDI_OBJECT(s_pPopupBinding));
@@ -1936,7 +1933,11 @@ static void reset_object (GldiObject *obj)
 	|| pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE
 	|| pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW)
 	{
-		gldi_container_stop_polling_screen_edge ();
+		/// this will ensure that screen edge polling will stop for this dock
+		pDock->iVisibility = CAIRO_DOCK_VISI_KEEP_ABOVE;
+		pDock->bAutoHide = FALSE;
+		pDock->bIsBelow = FALSE;
+		gldi_container_update_polling_screen_edge ();
 	}
 	
 	// free data
@@ -1996,7 +1997,7 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, G_GNUC_UN
 	CairoDock *pDock = (CairoDock*)obj;
 	
 	if (bReloadConf)  // maybe we should update the parameters that have the global value ?...
-		_reposition_one_root_dock (NULL, pDock, TRUE); // will call _get_root_dock_config () as needed
+		_reposition_one_root_dock (NULL, pDock, GINT_TO_POINTER (TRUE)); // will call _get_root_dock_config () as needed
 	
 	cairo_dock_set_default_renderer (pDock);
 	
