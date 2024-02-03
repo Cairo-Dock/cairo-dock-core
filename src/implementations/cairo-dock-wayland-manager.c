@@ -428,28 +428,6 @@ static void _move_resize_dock (CairoDock *pDock)
 #endif
 }
 
-#ifdef HAVE_WAYLAND_PROTOCOLS
-// wayfire-shell functions for hotspots
-static int s_iNbPolls = 0;
-
-static void _start_polling_screen_edge (void)
-{
-	s_iNbPolls ++;
-	gldi_wayland_hotspots_update ();
-}
-
-static void _stop_polling_screen_edge (void)
-{
-	s_iNbPolls --;
-	if (s_iNbPolls <= 0)
-	{
-		gldi_wayland_hotspots_stop ();  // remove all hotspots
-		s_iNbPolls = 0;
-	}
-	else gldi_wayland_hotspots_update (); // in this case, we only update hotspots
-}
-#endif
-
 static gboolean _dock_handle_leave (CairoDock *pDock, GdkEventCrossing *pEvent)
 {
 	if (pEvent) pDock->iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
@@ -572,12 +550,9 @@ static void init (void)
 		cmb.set_monitor = _layer_shell_move_to_monitor;
 	}
 #endif
-#ifdef HAVE_WAYLAND_PROTOCOLS
 	if (gldi_wayland_hotspots_try_init (registry))
-	{
-		cmb.start_polling_screen_edge = _start_polling_screen_edge;
-		cmb.stop_polling_screen_edge = _stop_polling_screen_edge;
-	}
+		cmb.update_polling_screen_edge = gldi_wayland_hotspots_update;
+#ifdef HAVE_WAYLAND_PROTOCOLS
 	if (!gldi_cosmic_toplevel_try_init (registry))
 		if (!gldi_plasma_window_manager_try_init (registry))
 			gldi_wlr_foreign_toplevel_try_init (registry);

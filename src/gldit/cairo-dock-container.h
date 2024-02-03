@@ -204,10 +204,8 @@ struct _GldiContainerManagerBackend {
 	/// set the monitor (screen) this container should appear -- required on Wayland
 	void (*set_monitor) (GldiContainer *pContainer, int iNumScreen);
 	/// recall hidden dock if the mouse is close to a screen edge
-	/// start looking at the screen edges (for any edge necessary)
-	void (*start_polling_screen_edge) ();
-	/// stop looking at all screen edges
-	void (*stop_polling_screen_edge) ();
+	/// update if we need to be looking at the screen edges (for any edge necessary)
+	void (*update_polling_screen_edge) ();
 	/// determines if it is possible to reserve space for a dock on a given screen with a given orientation; returns TRUE by default
 	gboolean (*can_reserve_space) (int iNumScreen, gboolean bDirectionUp, gboolean bIsHorizontal);
 	/// update the mouse position based on global coordinates -- only supported on X11
@@ -360,10 +358,10 @@ void gldi_container_calculate_rect (const GldiContainer* pContainer, const Icon*
 void gldi_container_calculate_aimed_point (const Icon* pIcon, int w, int h,
 	int iMarginPosition, int* iAimedX, int* iAimedY);
 
-/// start looking at the screen edges (for any edge necessary)
-void gldi_container_start_polling_screen_edge (void);
-/// stop looking at all screen edges
-void gldi_container_stop_polling_screen_edge (void);
+/// update looking at the screen edges (for any edge necessary)
+void gldi_container_update_polling_screen_edge (void);
+/// check whether we can detect the mouse hitting the screen edges (for the purpose of recalling hidden docks)
+gboolean gldi_container_can_poll_screen_edge (void);
 
 /// Set to keep the container's GtkWindow below or above other windows.
 /// On X11, this calls gtk_window_set_keep_below(); on Wayland, this tries to adjust the

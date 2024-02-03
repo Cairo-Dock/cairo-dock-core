@@ -39,9 +39,6 @@ gboolean gldi_wayland_hotspots_try_init (struct wl_registry *registry);
 /// Update the hotspots we are listening to (based on the configuration of all root docks)
 void gldi_wayland_hotspots_update (void);
 
-/// Stop listening to all hotspots
-void gldi_wayland_hotspots_stop (void);
-
 #endif
 #endif
 

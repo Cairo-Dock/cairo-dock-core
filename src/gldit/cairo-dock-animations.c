@@ -86,6 +86,7 @@ void cairo_dock_pop_up (CairoDock *pDock)
 		//g_print ("set above\n");
 		gldi_container_set_keep_below (CAIRO_CONTAINER (pDock), FALSE);  // keep above
 		pDock->bIsBelow = FALSE;
+		gldi_container_update_polling_screen_edge ();
 	}
 }
 
@@ -112,6 +113,7 @@ void cairo_dock_pop_down (CairoDock *pDock)
 			gldi_container_set_keep_below (CAIRO_CONTAINER (pDock), TRUE);
 		}
 		pDock->bIsBelow = TRUE;
+		gldi_container_update_polling_screen_edge ();
 	}
 }
 

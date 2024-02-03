@@ -400,7 +400,7 @@ static gboolean _monitor_removed (G_GNUC_UNUSED gpointer user_data, GdkMonitor *
 /// Update the hotspots listened to for this dock if needed
 static void _update_dock_hotspots (CairoDock *pDock, G_GNUC_UNUSED gpointer user_data)
 {
-	if (! pDock->bAutoHide && pDock->iVisibility != CAIRO_DOCK_VISI_KEEP_BELOW) return;
+	if (! (pDock->bAutoHide && pDock->fHideOffset > 0.0) && ! pDock->bIsBelow) return;
 	
 	CairoDockPositionType pos = gldi_wayland_get_edge_for_dock (pDock);
 	if (pos == CAIRO_DOCK_INSIDE_SCREEN) return;
@@ -441,14 +441,6 @@ void gldi_wayland_hotspots_update (void)
 		if (outputs[i]->hotspot_height[j] > 0) s_backend.update_hotspot (outputs[i], j);
 		else s_backend.destroy_hotspot (outputs[i], j);
 	}
-}
-
-/// Stop listening to all hotspots
-void gldi_wayland_hotspots_stop (void)
-{
-	int i, j;
-	for (i = 0; i < s_iNumOutputs; i++) for (j = 0; j < 4; j++)
-		s_backend.destroy_hotspot (outputs[i], j);
 }
 
 

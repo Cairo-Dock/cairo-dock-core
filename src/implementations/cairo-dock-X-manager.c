@@ -1324,37 +1324,42 @@ static gboolean _cairo_dock_poll_screen_edge (G_GNUC_UNUSED gpointer data)  // t
 	return TRUE;
 }
 
-static int s_iNbPolls = 0;
 static guint s_iSidPollScreenEdge = 0;
+static gboolean s_bShouldPoll = FALSE;
 
-static void _start_polling_screen_edge (void)
+static void _check_should_poll_screen_edge (CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 {
-	s_iNbPolls ++;
-	cd_debug ("%s (%d)", __func__, s_iNbPolls);
-	if (s_iSidPollScreenEdge == 0)
-		s_iSidPollScreenEdge = g_timeout_add (MOUSE_POLLING_DT, (GSourceFunc) _cairo_dock_poll_screen_edge, NULL);
+	if (pDock->bAutoHide == TRUE) s_bShouldPoll = TRUE;
+	else switch (pDock->iVisibility)
+	{
+		case CAIRO_DOCK_VISI_KEEP_BELOW:
+		case CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP:
+		case CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY:
+		case CAIRO_DOCK_VISI_AUTO_HIDE:
+			s_bShouldPoll = TRUE;
+			break;
+		default:
+			break;
+	}
 }
 
-static void _stop_polling_screen_edge_now (void)
+static void _update_polling_screen_edge (void)
 {
-	if (s_iSidPollScreenEdge != 0)
+	s_bShouldPoll = FALSE;
+	gldi_docks_foreach_root ((GFunc) _check_should_poll_screen_edge, NULL);
+	if (s_bShouldPoll)
+	{
+		if (s_iSidPollScreenEdge == 0)
+			s_iSidPollScreenEdge = g_timeout_add (MOUSE_POLLING_DT, (GSourceFunc) _cairo_dock_poll_screen_edge, NULL);
+	}
+	else
 	{
 		g_source_remove (s_iSidPollScreenEdge);
 		s_iSidPollScreenEdge = 0;
 	}
-	s_iNbPolls = 0;
-}
-static void _stop_polling_screen_edge (void)
-{
-	cd_debug ("%s (%d)", __func__, s_iNbPolls);
-	s_iNbPolls --;
-	if (s_iNbPolls <= 0)
-	{
-		_stop_polling_screen_edge_now ();  // remet tout a 0.
-	}
 }
 
-static inline gboolean _has_multiple_screens_and_on_one_screen(iNumScreen) {
+static inline gboolean _has_multiple_screens_and_on_one_screen(int iNumScreen) {
 	return (g_desktopGeometry.iNbScreens > 1) && (iNumScreen > -1);
 }
 
@@ -1677,8 +1682,7 @@ static void init (void)
 	cmb.present = _present;
 	cmb.set_keep_below = _set_keep_below;
 	cmb.move_resize_dock = _move_resize_dock;
-	cmb.start_polling_screen_edge = _start_polling_screen_edge;
-	cmb.stop_polling_screen_edge = _stop_polling_screen_edge;
+	cmb.update_polling_screen_edge = _update_polling_screen_edge;
 	cmb.can_reserve_space = _can_reserve_space;
 	cmb.update_mouse_position = _update_mouse_position;
 	cmb.dock_handle_leave = _dock_handle_leave;
