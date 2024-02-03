@@ -85,10 +85,6 @@ void cairo_dock_prevent_dock_from_out_of_screen (CairoDock *pDock);  // -> dock-
 */
 void cairo_dock_get_window_position_at_balance (CairoDock *pDock, int iNewWidth, int iNewHeight, int *iNewPositionX, int *iNewPositionY);
 
-/* Deplace et redimensionne un dock a ses position et taille attitrees. Ne change pas la zone d'input (cela doit etre fait par ailleurs), et ne la replace pas (cela est fait lors du configure).
-*/
-void cairo_dock_move_resize_dock (CairoDock *pDock);
-
 /* Met a jour les zones d'input d'un dock.
 */
 void cairo_dock_update_input_shape (CairoDock *pDock);

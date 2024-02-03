@@ -2257,6 +2257,36 @@ CairoDock *gldi_subdock_new (const gchar *cDockName, const gchar *cRendererName,
 	return (CairoDock*)gldi_object_new (&myDockObjectMgr, &attr);
 }
 
+static gboolean _move_resize_dock (CairoDock *pDock)
+{
+	gldi_container_move_resize_dock (pDock);
+	pDock->iSidMoveResize = 0;
+	if (gldi_container_is_wayland_backend ())
+	{
+		/// On Wayland, the compositor is not required to send a configure
+		/// event if the position of a view changes but not its size:
+		/// at least KWin will not send such events when repositioning
+		/// layer-shell surfaces. We simulate a configure event to be
+		/// able to do any adjustments required.
+		GdkEventConfigure event;
+		event.x = 0;
+		event.y = 0;
+		event.width = pDock->container.iWidth;
+		event.height = pDock->container.iHeight;
+		_on_configure (pDock->container.pWidget, &event, pDock);
+	}
+	return FALSE;
+}
+
+void cairo_dock_move_resize_dock (CairoDock *pDock)
+{
+	//g_print ("*********%s (current : %dx%d, %d;%d)\n", __func__, pDock->container.iWidth, pDock->container.iHeight, pDock->container.iWindowPositionX, pDock->container.iWindowPositionY);
+	if (pDock->iSidMoveResize == 0)
+	{
+		pDock->iSidMoveResize = g_idle_add ((GSourceFunc)_move_resize_dock, pDock);
+	}
+	return ;
+}
 
 void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingDock)
 {

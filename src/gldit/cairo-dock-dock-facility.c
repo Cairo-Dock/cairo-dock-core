@@ -418,23 +418,6 @@ void cairo_dock_get_window_position_at_balance (CairoDock *pDock, int iNewWidth,
 	//g_print ("POSITION : %d+%d ; %d+%d\n", iWindowPositionX, pDock->iScreenOffsetX, iWindowPositionY, pDock->iScreenOffsetY);
 }
 
-static gboolean _move_resize_dock (CairoDock *pDock)
-{
-	gldi_container_move_resize_dock (pDock);
-	pDock->iSidMoveResize = 0;
-	return FALSE;
-}
-
-void cairo_dock_move_resize_dock (CairoDock *pDock)
-{
-	//g_print ("*********%s (current : %dx%d, %d;%d)\n", __func__, pDock->container.iWidth, pDock->container.iHeight, pDock->container.iWindowPositionX, pDock->container.iWindowPositionY);
-	if (pDock->iSidMoveResize == 0)
-	{
-		pDock->iSidMoveResize = g_idle_add ((GSourceFunc)_move_resize_dock, pDock);
-	}
-	return ;
-}
-
 
   ///////////////////
  /// INPUT SHAPE ///
