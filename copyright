@@ -47,15 +47,20 @@ Files:  src/cairo-dock.c
  src/implementations/cairo-dock-egl-*
  src/implementations/cairo-dock-wayland-manager.c
  src/implementations/cairo-dock-wayland-manager.h
-Copyright: 2007-2014 Fabrice Rey <fabounet@glx-dock.org>, 2020-2023 Daniel Kondor <kondor.dani@gmail.com>
+Copyright: 2007-2014 Fabrice Rey <fabounet@glx-dock.org>, 2020-2024 Daniel Kondor <kondor.dani@gmail.com>
 License: GPL 3+ (See /usr/share/common-licenses/GPL-3 for complete license)
 
 Files: src/implementations/cairo-dock-foreign-toplevel.?
  src/implementations/cairo-dock-plasma-window-manager.?
  src/implementations/cairo-dock-wayfire-*
  src/implementations/cairo-dock-wayland-wm.?
-Copyright: 2020-2023 Daniel Kondor <kondor.dani@gmail.com>
+ src/implementations/cairo-dock-wayland-hotspots.?
+Copyright: 2020-2024 Daniel Kondor <kondor.dani@gmail.com>
 License: GPL 3+ (See /usr/share/common-licenses/GPL-3 for complete license)
+
+Files: src/implementations/gdk-move-to-rect-hack.?
+Copyright: 2020 Sophie Winter, 2020 Daniel Kondor
+License: MIT
 
 Files: 	src/gldit/cairo-dock-dbus.*
 Copyright: Adrien Pilleboue <adrien.pilleboue@gmail.com>
@@ -125,7 +130,7 @@ License: Expat
 
 Files: src/implementations/proto/wlr-foreign-toplevel-management-unstable-v1.xml
 Copyright: Copyright (c) 2018 Ilia Bozhinov
-License: MIT (no advertising)
+License: MIT-no-advertising
  * Permission to use, copy, modify, distribute, and sell this
  * software and its documentation for any purpose is hereby granted
  * without fee, provided that the above copyright notice appear in
@@ -146,6 +151,18 @@ License: MIT (no advertising)
  * AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
  * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
  * THIS SOFTWARE.
+
+Files: src/implementations/proto/cosmic-toplevel-info-unstable-v1.xml
+Copyright: 2018 Ilia Bozhinov, 2020 Isaac Freund, 2022 Victoria Brekenfeld
+License: MIT-no-advertising
+
+Files: src/implementations/proto/cosmic-toplevel-management-unstable-v1.xml
+Copyright: 2018 Ilia Bozhinov, 2020 Isaac Freund, 2022 wb9688, 2022 Victoria Brekenfeld
+License: MIT-no-advertising
+
+Files: src/implementations/proto/cosmic-workspace-unstable-v1.xml
+Copyright: 2019 Christopher Billington, 2020 Ilia Bozhinov, 2022 Victoria Brekenfeld
+License: MIT-no-advertising
 
 Files:  debian/*
 Copyright: Copyright (C) Julien Lavergne <julien.lavergne@gmail.com>
