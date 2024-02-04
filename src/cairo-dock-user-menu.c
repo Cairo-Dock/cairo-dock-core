@@ -1081,6 +1081,7 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
 			G_CALLBACK (_cairo_dock_quick_hide),
 			pSubMenu,
 			CAIRO_DOCK (pContainer));
+		gtk_widget_set_sensitive (pMenuItem, gldi_container_can_poll_screen_edge ());
 		gtk_widget_set_tooltip_text (pMenuItem, _("This will hide the dock until you hover over it with the mouse."));
 	}
 

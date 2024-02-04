@@ -918,6 +918,16 @@ void cairo_dock_unhide_dock_delayed (CairoDock *pDock, int iDelay)
 
 void gldi_dock_set_visibility (CairoDock *pDock, CairoDockVisibility iVisibility)
 {
+	// check that our backend supports recalling a hidden dock
+	if (!gldi_container_can_poll_screen_edge ())
+	{
+		// disallow hiding the dock in this case
+		if (iVisibility != CAIRO_DOCK_VISI_RESERVE &&
+			iVisibility != CAIRO_DOCK_VISI_KEEP_BELOW &&
+			iVisibility != CAIRO_DOCK_VISI_KEEP_ABOVE)
+				iVisibility = CAIRO_DOCK_VISI_KEEP_ABOVE;
+	}
+	
 	//\_______________ jeu de parametres.
 	gboolean bReserveSpace = (iVisibility == CAIRO_DOCK_VISI_RESERVE);
 	gboolean bKeepBelow = (iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW);
