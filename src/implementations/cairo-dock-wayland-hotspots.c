@@ -82,7 +82,7 @@ static void _hotspot_hit_cb (CairoDock *pDock, gpointer user_data)
 	CairoDockPositionType pos = gldi_wayland_get_edge_for_dock (pDock);
 	if (pos != hit->pos) return; // we only care if this is the correct edge
 	
-	// fprintf (stderr, "Hotspot hit for dock %s\n", pDock->cDockName);
+	cd_debug ("Hotspot hit for dock %s\n", pDock->cDockName);
 	cairo_dock_unhide_dock_delayed (pDock, 0);
 }
 
@@ -182,7 +182,7 @@ static void _wf_shell_update_dock_hotspots (output_hotspots_base *base, int j)
 			pos2, thres, myDocksParam.iUnhideDockDelay);
 		if (!output->hotspots[j]) return;
 		
-		// fprintf (stderr, "Created hotspot %p for output %p, position %d\n", outputs[i]->hotspots[pos], outputs[i]->output, pos);
+		cd_debug ("Created hotspot %p for output %p, position %d\n", output->hotspots[j], output->output, j);
 		zwf_hotspot_v2_add_listener (output->hotspots[j], &hotspot_listener, base->hit + j);
 	}
 }
@@ -216,7 +216,7 @@ static output_hotspots_base *_layer_shell_new_output (GdkMonitor*)
 
 static void _layer_shell_destroy_hotspot (output_hotspots_base *base, int j)
 {
-	fprintf (stderr, "_layer_shell_destroy_hotspot\n");
+	cd_debug ("_layer_shell_destroy_hotspot\n");
 	layer_shell_hotspots *output = (layer_shell_hotspots*)base;
 	
 	if (base->hit[j].timeout)
@@ -240,7 +240,7 @@ static void _layer_shell_output_removed (output_hotspots_base *output)
 
 static gboolean _layer_shell_hotspot_trigger (hotspot_hit *hit)
 {
-	fprintf (stderr, "_layer_shell_hotspot_trigger\n");
+	cd_debug ("_layer_shell_hotspot_trigger\n");
 	if (hit) gldi_docks_foreach_root ((GFunc)_hotspot_hit_cb, hit);
 	hit->timeout = 0;
 	return FALSE;
@@ -248,7 +248,7 @@ static gboolean _layer_shell_hotspot_trigger (hotspot_hit *hit)
 
 static void _layer_shell_enter (GtkWidget* pWidget, G_GNUC_UNUSED GdkEventCrossing* pEvent, layer_shell_hotspots *output)
 {
-	fprintf (stderr, "_layer_shell_enter\n");
+	cd_debug ("_layer_shell_enter\n");
 	int j;
 	for (j = 0; j < 4; j++) if (output->hotspots[j] == pWidget) break;
 	if (j == 4) return;
@@ -258,7 +258,7 @@ static void _layer_shell_enter (GtkWidget* pWidget, G_GNUC_UNUSED GdkEventCrossi
 
 static void _layer_shell_leave (GtkWidget* pWidget, G_GNUC_UNUSED GdkEventCrossing* pEvent, layer_shell_hotspots *output)
 {
-	fprintf (stderr, "_layer_shell_leave\n");
+	cd_debug ("_layer_shell_leave\n");
 	int j;
 	for (j = 0; j < 4; j++) if (output->hotspots[j] == pWidget) break;
 	if (j == 4) return;
@@ -313,7 +313,7 @@ static void _layer_shell_update_hotspot (output_hotspots_base *base, int j)
 	}
 	else
 	{
-		fprintf (stderr, "creating hotspot (%d, %dx%d)\n", j, W, H);
+		cd_debug ("creating hotspot (%d, %dx%d)\n", j, W, H);
 		
 		GtkWidget *widget = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 		GtkWindow *window = GTK_WINDOW (widget);
@@ -416,7 +416,7 @@ static void _update_dock_hotspots (CairoDock *pDock, G_GNUC_UNUSED gpointer user
 	/// the hotspot area will be the union of individual areas which is
 	/// likely not what we would want
 	uint32_t thres = (myDocksParam.iCallbackMethod == CAIRO_HIT_ZONE) ? 
-		myDocksParam.iZoneHeight : 10;
+		myDocksParam.iZoneHeight : 1;
 	if (thres > outputs[i]->hotspot_height[pos]) outputs[i]->hotspot_height[pos] = thres;
 	thres = (myDocksParam.iCallbackMethod == CAIRO_HIT_ZONE) ? 
 		myDocksParam.iZoneWidth : gldi_dock_get_screen_width(pDock);
