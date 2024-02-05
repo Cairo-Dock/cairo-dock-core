@@ -586,7 +586,7 @@ void gldi_register_wayland_manager (void)
 	
 	// Manager
 	memset (&myWaylandMgr, 0, sizeof (GldiManager));
-	myWaylandMgr.cModuleName   = "X";
+	myWaylandMgr.cModuleName   = "Wayland";
 	myWaylandMgr.init          = init;
 	myWaylandMgr.load          = NULL;
 	myWaylandMgr.unload        = NULL;
@@ -599,7 +599,6 @@ void gldi_register_wayland_manager (void)
 	// data
 	myWaylandMgr.iSizeOfData = 0;
 	myWaylandMgr.pData = (GldiManagerDataPtr)NULL;
-	//!! TODO: is it OK to add notifications before init??
 	gldi_object_install_notifications (&myWaylandMgr, NB_NOTIFICATIONS_WAYLAND_DESKTOP);
 	// register
 	gldi_object_init (GLDI_OBJECT(&myWaylandMgr), &myManagerObjectMgr, NULL);
