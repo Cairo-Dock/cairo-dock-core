@@ -282,10 +282,13 @@ static void _window_cb ( G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct org_kde_
 	/* don't care -- we use the above event with the uuid */
 }
 
+static gboolean s_bDesktopIsVisible = FALSE;
+
 static void _show_desktop_changed_cb ( G_GNUC_UNUSED void *data,
-	G_GNUC_UNUSED  struct org_kde_plasma_window_management *org_kde_plasma_window_management, G_GNUC_UNUSED uint32_t state)
+	G_GNUC_UNUSED  struct org_kde_plasma_window_management *org_kde_plasma_window_management, uint32_t state)
 {
-	/* don't care */
+	s_bDesktopIsVisible = !!state;
+	gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_VISIBILITY_CHANGED);
 }
 
 static void _stacking_order_changed_cb( G_GNUC_UNUSED void *data,
@@ -311,6 +314,14 @@ static struct org_kde_plasma_window_management_listener gldi_toplevel_manager = 
 static struct org_kde_plasma_window_management* s_ptoplevel_manager = NULL;
 static uint32_t protocol_id, protocol_version;
 static gboolean protocol_found = FALSE;
+
+/// Desktop management functions
+static gboolean _desktop_is_visible (void) { return s_bDesktopIsVisible; }
+static gboolean _show_hide_desktop (gboolean bShow)
+{
+	org_kde_plasma_window_management_show_desktop (s_ptoplevel_manager, bShow);
+	return TRUE;
+}
 
 static void gldi_plasma_window_manager_init ()
 {
@@ -343,6 +354,12 @@ static void gldi_plasma_window_manager_init ()
 	wmb.pick_window = gldi_wayland_wm_pick_window;
 	wmb.name = "plasma";
 	gldi_windows_manager_register_backend (&wmb);
+	
+	GldiDesktopManagerBackend dmb;
+	memset (&dmb, 0, sizeof (GldiDesktopManagerBackend));
+	dmb.desktop_is_visible = _desktop_is_visible;
+	dmb.show_hide_desktop = _show_hide_desktop;
+	gldi_desktop_manager_register_backend (&dmb, "plasma-window-management");
 	
 	gldi_wayland_wm_init (_destroy);
 }
