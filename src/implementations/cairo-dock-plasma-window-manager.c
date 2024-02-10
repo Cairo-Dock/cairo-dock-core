@@ -33,9 +33,6 @@
  * 		(this probably needs support for the plasma-virtual-desktop protocol)
  */
 
-#include "gldi-config.h"
-#ifdef HAVE_WAYLAND
-
 #include <gdk/gdkwayland.h>
 #include "wayland-plasma-window-management-client-protocol.h"
 #include "cairo-dock-windows-manager.h"
@@ -43,6 +40,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-plasma-window-manager.h"
 #include "cairo-dock-wayland-wm.h"
+#include "cairo-dock-plasma-virtual-desktop.h"
 
 #include <stdio.h>
 
@@ -51,6 +49,16 @@ typedef struct org_kde_plasma_window pwhandle;
 
 
 // window manager interface
+
+static void _move_to_nth_desktop (GldiWindowActor *actor, int iNumDesktop,
+	G_GNUC_UNUSED int iDeltaViewportX, G_GNUC_UNUSED int iDeltaViewportY)
+{
+	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor *)actor;
+	const char *old_desktop_id = gldi_plasma_virtual_desktop_get_id (actor->iNumDesktop);
+	const char *desktop_id = gldi_plasma_virtual_desktop_get_id (iNumDesktop);
+	if (desktop_id) org_kde_plasma_window_request_enter_virtual_desktop (wactor->handle, desktop_id);
+	if (old_desktop_id) org_kde_plasma_window_request_leave_virtual_desktop (wactor->handle, old_desktop_id);
+}
 
 static void _show (GldiWindowActor *actor)
 {
@@ -190,6 +198,17 @@ static void _gldi_toplevel_virtual_desktop_changed (G_GNUC_UNUSED void* data, G_
 	/* don't care */
 }
 
+static void _virtual_desktop_entered (void *data, G_GNUC_UNUSED pwhandle *handle, const char *desktop_id)
+{
+	GldiWindowActor* actor = (GldiWindowActor*)data;
+	int i = gldi_plasma_virtual_desktop_get_index (desktop_id);
+	if (i >= 0)
+	{
+		actor->iNumDesktop = i;
+		gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESKTOP_CHANGED, actor);
+	}
+}
+
 /* dummy callback shared between all that take a const char* parameter */
 static void _gldi_toplevel_dummy_cb (G_GNUC_UNUSED void* data, G_GNUC_UNUSED pwhandle *handle, G_GNUC_UNUSED const char *name)
 {
@@ -224,7 +243,7 @@ static struct org_kde_plasma_window_listener gldi_toplevel_handle_interface = {
     .geometry = _gldi_toplevel_geometry_cb,
     .icon_changed = _gldi_toplevel_icon_changed_cb,
     .pid_changed = _gldi_toplevel_pid_changed_cb,
-    .virtual_desktop_entered = _gldi_toplevel_dummy_cb,
+    .virtual_desktop_entered = _virtual_desktop_entered,
     .virtual_desktop_left = _gldi_toplevel_dummy_cb,
     .application_menu = _gldi_toplevel_application_menu_cb,
     .activity_entered = _gldi_toplevel_dummy_cb,
@@ -300,7 +319,7 @@ static void gldi_plasma_window_manager_init ()
 	GldiWindowManagerBackend wmb;
 	memset (&wmb, 0, sizeof (GldiWindowManagerBackend));
 	wmb.get_active_window = gldi_wayland_wm_get_active_window;
-	// wmb.move_to_nth_desktop = _move_to_nth_desktop;
+	wmb.move_to_nth_desktop = _move_to_nth_desktop;
 	wmb.show = _show;
 	wmb.close = _close;
 	// wmb.kill = _kill;
@@ -360,7 +379,4 @@ gboolean gldi_plasma_window_manager_try_init (struct wl_registry *registry)
 	cd_error ("Could not bind plasma-window-manager!");
     return FALSE;
 }
-
-
-#endif
 
