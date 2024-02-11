@@ -428,10 +428,9 @@ void gldi_container_calculate_rect (const GldiContainer* pContainer, const Icon*
 	}
 }
 
-void gldi_container_calculate_aimed_point (const Icon* pIcon, int w, int h,
-	int iMarginPosition, int* iAimedX, int* iAimedY)
+void gldi_container_calculate_aimed_point_base (int w, int h, int iMarginPosition,
+	int *iAimedX, int *iAimedY)
 {
-	// default: aimed point is in the middle
 	switch (iMarginPosition)
 	{
 		case 0:
@@ -455,9 +454,48 @@ void gldi_container_calculate_aimed_point (const Icon* pIcon, int w, int h,
 			*iAimedY = h / 2;
 			break;
 	}
+}
+
+void gldi_container_calculate_aimed_point (const Icon *pIcon, GtkWidget *pWidget, int w, int h,
+	int iMarginPosition, int *iAimedX, int *iAimedY)
+{
+	GldiContainer *pContainer = (pIcon ? cairo_dock_get_icon_container (pIcon) : NULL);
+	if (pIcon && pContainer && CAIRO_DOCK_IS_DOCK (pContainer))
+	{
+		// if we have a dock, the position is relative to it
+		int x0 = pIcon->fDrawX + pIcon->fWidth * pIcon->fScale/2;
+		
+		CairoDock *pDock = CAIRO_DOCK (pContainer);
+		int y0, dy;
+		if (pDock->iInputState == CAIRO_DOCK_INPUT_ACTIVE)
+			dy = pContainer->iHeight - pDock->iActiveHeight;
+		else if (cairo_dock_is_hidden (pDock))
+			dy = pContainer->iHeight-1;  // on laisse 1 pixels pour pouvoir sortir du dialogue avant de toucher le bord de l'ecran, et ainsi le faire se replacer, lorsqu'on fait apparaitre un dock en auto-hide.
+		else
+			dy = pContainer->iHeight - pDock->iMinDockHeight;
+		if (pContainer->bDirectionUp)
+			y0 = dy;
+		else y0 = pContainer->iHeight - dy;
+		
+		if (iMarginPosition == 0 || iMarginPosition == 1)
+		{
+			*iAimedX = x0;
+			*iAimedY = y0;
+		}
+		else
+		{
+			*iAimedX = y0;
+			*iAimedY = x0;
+		}
+	}
+	else {
+		// default: aimed point is in the middle of the selected edge,
+		// it is calculated relative to or position
+		gldi_container_calculate_aimed_point_base (w, h, iMarginPosition, iAimedX, iAimedY);
+	}
 	
 	if (s_backend.adjust_aimed_point)
-		s_backend.adjust_aimed_point(pIcon, w, h, iMarginPosition, iAimedX, iAimedY);
+		s_backend.adjust_aimed_point(pIcon, pWidget, w, h, iMarginPosition, iAimedX, iAimedY);
 	
 	// g_print ("aimed point: %d, %d\n", *iAimedX, *iAimedY);
 }

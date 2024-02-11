@@ -219,10 +219,10 @@ struct _GldiContainerManagerBackend {
 	/// only supported on X11
 	void (*dock_check_if_mouse_inside_linear) (CairoDock *pDock);
 	/// adjust the aimed point (pointed to by a subdock, menu or dialog)
-	/// AimedX and AimedY is already set by the caller to the midpoint on the
-	/// pointed edge; it only needs to be corrected if it should slide to the side
-	void (*adjust_aimed_point) (const Icon* pIcon, int w, int h,
-		int iMarginPosition, int* iAimedX, int* iAimedY);
+	/// AimedX and AimedY is already set by the caller to a relative position,
+	/// only corrections need to be done here
+	void (*adjust_aimed_point) (const Icon *pIcon, GtkWidget *pWidget, int w, int h,
+		int iMarginPosition, int *iAimedX, int *iAimedY);
 };
 
 
@@ -348,15 +348,22 @@ void gldi_container_calculate_rect (const GldiContainer* pContainer, const Icon*
 
 /** Calculate the aimed point of sub-containers (menus and dialogs), based on
  * 	relative positioning. This can be used to point an arrow to the corresponding
- * 	icon. Works for menus (both X11 and Wayland) and dialogs (only Wayland).
+ * 	icon. Works for menus and dialogs.
  * Parameters:
  * 	pIcon            -- the icon that is pointed by the newly placed container
+ *  pWidget          -- GtkWidget of the new container
  * 	w, h             -- with and height of the new container
  * 	iMarginPosition  -- which side the margin (and the arrow) should be: 0: bottom; 1: top; 2: right; 3: left
- * 	iAimedX, iAimedY -- result is stored here; it is always in relative coordinates (to the new container); on X, this should be adjusted by the caller to use global coordinates
+ * 	iAimedX, iAimedY -- result is stored here:
+ *        on Wayland, this is relative to the parent container (if exists, otherwise, relative to pWidget)
+ *        on X11, this is in global coordinates
  */
-void gldi_container_calculate_aimed_point (const Icon* pIcon, int w, int h,
-	int iMarginPosition, int* iAimedX, int* iAimedY);
+void gldi_container_calculate_aimed_point (const Icon *pIcon, GtkWidget *pWidget, int w, int h,
+	int iMarginPosition, int *iAimedX, int *iAimedY);
+
+/** Helper for the above, calculates position along the midpoint of the given edge. */
+void gldi_container_calculate_aimed_point_base (int w, int h, int iMarginPosition,
+	int *iAimedX, int *iAimedY);
 
 /// update looking at the screen edges (for any edge necessary)
 void gldi_container_update_polling_screen_edge (void);

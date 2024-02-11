@@ -164,6 +164,17 @@ static void _calculate_aimed_point_new (CairoDialog* pDialog)
 	int iMarginPosition = 0;
 	Icon *pIcon = pDialog->pIcon;
 	GldiContainer *pContainer = (pIcon ? cairo_dock_get_icon_container (pIcon) : NULL);
+	
+	if (pContainer && CAIRO_DOCK_IS_DOCK (pContainer))
+	{
+		CairoDock *pDock = CAIRO_DOCK (pContainer);
+		while (pDock->iRefCount > 0 && ! gldi_container_is_visible (pContainer))  // sous-dock invisible.
+		{
+			pIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pDock);
+			pContainer = CAIRO_CONTAINER (pDock);
+		}
+	}
+	
 	if (pContainer)
 	{
 		if (pContainer->bIsHorizontal)
@@ -177,11 +188,8 @@ static void _calculate_aimed_point_new (CairoDialog* pDialog)
 			else iMarginPosition = 3;
 		}
 	}
-	gldi_container_calculate_aimed_point (pDialog->pIcon, w, h, iMarginPosition, &(pDialog->iAimedX), &(pDialog->iAimedY));
+	gldi_container_calculate_aimed_point (pDialog->pIcon, pDialog->container.pWidget, w, h, iMarginPosition, &(pDialog->iAimedX), &(pDialog->iAimedY));
 	
-	// adjust point in global coordinates (matters on X only)
-	pDialog->iAimedX += pDialog->container.iWindowPositionX;
-	pDialog->iAimedY += pDialog->container.iWindowPositionY;
 	// g_print ("dialog position: %d, %d; aimed point: %d, %d\n", pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY, pDialog->iAimedX, pDialog->iAimedY);
 }
 

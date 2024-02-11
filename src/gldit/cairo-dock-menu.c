@@ -571,13 +571,10 @@ static void _menu_realized_cb (GtkWidget *widget, gpointer user_data)
 	
 	Icon *pIcon = pParams->pIcon;
 	
-	gldi_container_calculate_aimed_point (pIcon, w, h, pParams->iMarginPosition, &(pParams->iAimedX), &(pParams->iAimedY));
+	gldi_container_calculate_aimed_point (pIcon, widget, w, h, pParams->iMarginPosition, &(pParams->iAimedX), &(pParams->iAimedY));
 	
-	gint menuX, menuY;
-	gtk_window_get_position (GTK_WINDOW (gtk_widget_get_toplevel (widget)), &menuX, &menuY);
+	// gtk_window_get_position (GTK_WINDOW (gtk_widget_get_toplevel (widget)), &menuX, &menuY);
 	// g_print ("menu aimed at: %d, %d; position: %d, %d\n", pParams->iAimedX, pParams->iAimedY, menuX, menuY);
-	pParams->iAimedX += menuX;
-	pParams->iAimedY += menuY;
 }
 
 static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push_in, G_GNUC_UNUSED gpointer data)

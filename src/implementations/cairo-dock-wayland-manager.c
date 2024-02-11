@@ -466,9 +466,13 @@ static void _dock_handle_enter (CairoDock *pDock, G_GNUC_UNUSED GdkEventCrossing
 	pDock->iMousePositionType = CAIRO_DOCK_MOUSE_INSIDE;
 }
 
-static void _adjust_aimed_point (const Icon* pIcon, int w, int h,
-	int iMarginPosition, int* iAimedX, int* iAimedY)
+static void _adjust_aimed_point (const Icon *pIcon, G_GNUC_UNUSED GtkWidget *pWidget, int w, int h,
+	int iMarginPosition, int *iAimedX, int *iAimedY)
 {
+	// gtk-layer-shell < 8.2.0: no relative position is available, we use
+	// heuristics to decide if the container was slided on the screen
+	gldi_container_calculate_aimed_point_base (w, h, iMarginPosition, iAimedX, iAimedY);
+	
 	GldiContainer *pContainer = (pIcon ? cairo_dock_get_icon_container (pIcon) : NULL);
 	if (! (pIcon && pContainer) ) return;
 	if (!CAIRO_DOCK_IS_DOCK (pContainer)) return;
@@ -570,6 +574,14 @@ static void init (void)
 		cmb.init_layer = _layer_shell_init_for_window;
 		cmb.set_keep_below = _set_keep_below;
 		cmb.set_monitor = _layer_shell_move_to_monitor;
+		guint major = gtk_layer_get_major_version ();
+		if (!major)
+		{
+			guint minor = gtk_layer_get_minor_version ();
+			guint micro = gtk_layer_get_micro_version ();
+			if (minor < 8 || (minor == 8 && micro < 2))
+				cmb.adjust_aimed_point = _adjust_aimed_point;
+		}
 	}
 #endif
 	if (gldi_wayland_hotspots_try_init (registry))
@@ -585,7 +597,6 @@ static void init (void)
 	cmb.move_resize_dock = _move_resize_dock;
 	cmb.dock_handle_leave = _dock_handle_leave;
 	cmb.dock_handle_enter = _dock_handle_enter;
-	cmb.adjust_aimed_point = _adjust_aimed_point;
 	gldi_container_manager_register_backend (&cmb);
 	gldi_register_egl_backend ();
 }

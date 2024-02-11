@@ -1493,40 +1493,32 @@ void _dock_check_if_mouse_inside_linear (CairoDock *pDock)
 	pDock->iMousePositionType = iMousePositionType;
 }
 
-static void _adjust_aimed_point (const Icon* pIcon, int w, int h,
-	int iMarginPosition, int* iAimedX, int* iAimedY)
+static void _adjust_aimed_point (const Icon *pIcon, GtkWidget *pWidget, int w, int h,
+	int iMarginPosition, int *iAimedX, int *iAimedY)
 {
+	// we adjust iAimedX and iAimedY to use global coordinates
 	GldiContainer *pContainer = (pIcon ? cairo_dock_get_icon_container (pIcon) : NULL);
-	if (! (pIcon && pContainer) ) return;
-	
-	int dockX = pContainer->iWindowPositionX;
-	int W, H;
-	if (CAIRO_DOCK_IS_DOCK (pContainer))
+	if (pIcon && pContainer && CAIRO_DOCK_IS_DOCK (pContainer))
 	{
-		// TODO: should we use the desktop withd / height here as well?
-		CairoDock* pDock = (CairoDock*)pContainer;
-		W = cairo_dock_get_screen_width (pDock->iNumScreen);
-		H = cairo_dock_get_screen_height (pDock->iNumScreen);
+		// in this case, position is relative to pContainer
+		if (pContainer->bIsHorizontal)
+		{
+			*iAimedX += pContainer->iWindowPositionX;
+			*iAimedY += pContainer->iWindowPositionY;
+		}
+		else
+		{
+			*iAimedX += pContainer->iWindowPositionY;
+			*iAimedY += pContainer->iWindowPositionX;
+		}
 	}
 	else
 	{
-		// TODO! How to get which screen we are?
-		W = gldi_desktop_get_width ();
-		H = gldi_desktop_get_height ();
-	}
-	
-	// see if the new container is likely to be slided and adjust aimed points
-	if (iMarginPosition == 0 || iMarginPosition == 1)
-	{
-		int x0 = dockX + pIcon->fDrawX + pIcon->fWidth * pIcon->fScale / 2.0;
-		if (x0 < w / 2) *iAimedX = x0;
-		else if (W - x0 < w / 2) *iAimedX += w / 2 - (W - x0);
-	}
-	else
-	{
-		int y0 = dockX + pIcon->fDrawX + pIcon->fWidth * pIcon->fScale / 2.0;
-		if (y0 < h / 2) *iAimedY = y0;
-		else if (y0 > H - h / 2) *iAimedY += y0 - (H - h / 2);
+		// in this case, position is relative to pWidget
+		int x, y;
+		gdk_window_get_position (gtk_widget_get_window (gtk_widget_get_toplevel (pWidget)), &x, &y);
+		*iAimedX += x;
+		*iAimedY += y;
 	}
 }
 
