@@ -97,6 +97,20 @@ static gboolean on_expose_dialog (G_GNUC_UNUSED GtkWidget *pWidget, cairo_t *pCa
 	}
 	else
 	{*/
+		// Try to update our position if needed:
+		// Wayland + gtk-layer-shell >= 0.8.2: no configure event, and no position 
+		// available in the realize event, but position (relative to parent window)
+		// is available here
+		int newX, newY;
+		gdk_window_get_position (gtk_widget_get_window (pDialog->container.pWidget), &newX, &newY);
+		if (newX != pDialog->container.iWindowPositionX || newY != pDialog->container.iWindowPositionY)
+		{
+			cd_debug ("Dialog position changed: (%d;%d) -> (%d;%d)\n", pDialog->container.iWindowPositionX,
+				pDialog->container.iWindowPositionY, newX, newY);
+			pDialog->container.iWindowPositionX = newX;
+			pDialog->container.iWindowPositionY = newY;
+		}
+	
 		cairo_dock_init_drawing_context_on_container (CAIRO_CONTAINER (pDialog), pCairoContext);
 		
 		if (pDialog->pDecorator != NULL)
@@ -171,9 +185,10 @@ static void _calculate_aimed_point_new (CairoDialog* pDialog)
 	// g_print ("dialog position: %d, %d; aimed point: %d, %d\n", pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY, pDialog->iAimedX, pDialog->iAimedY);
 }
 
-static void _on_realize_dialog (G_GNUC_UNUSED GtkWidget* pWidget, CairoDialog *pDialog)
+static void _on_realize_dialog (GtkWidget* pWidget, CairoDialog *pDialog)
 {
-	gtk_window_get_position (GTK_WINDOW (gtk_widget_get_toplevel (pWidget)), &(pDialog->container.iWindowPositionX), &(pDialog->container.iWindowPositionY));
+	gdk_window_get_position (gtk_widget_get_window (gtk_widget_get_toplevel (pWidget)), &(pDialog->container.iWindowPositionX), &(pDialog->container.iWindowPositionY));
+	// gtk_window_get_position (GTK_WINDOW (gtk_widget_get_toplevel (pWidget)), &(pDialog->container.iWindowPositionX), &(pDialog->container.iWindowPositionY));
 	_calculate_aimed_point_new (pDialog);
 }
 
