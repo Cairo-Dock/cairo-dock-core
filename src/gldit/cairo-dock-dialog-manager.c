@@ -622,8 +622,25 @@ static void _set_dialog_orientation (CairoDialog *pDialog, GldiContainer *pConta
 	{
 		if (gldi_container_use_new_positioning_code ())
 		{
-			pDialog->container.bDirectionUp = pContainer->bDirectionUp;
-			pDialog->bTopBottomDialog = pContainer->bIsHorizontal;
+			if (pContainer->bIsHorizontal == CAIRO_DOCK_HORIZONTAL)
+				pDialog->container.bDirectionUp = pContainer->bDirectionUp;
+			else
+			{
+				pDialog->container.bDirectionUp = TRUE;
+				if (pDialog->pIcon && CAIRO_DOCK_IS_DOCK (pContainer))
+				{
+					CairoDock *pDock = CAIRO_DOCK (pContainer);
+					Icon *pIcon = pDialog->pIcon;
+					while (pDock->iRefCount > 0 && ! gldi_container_is_visible (pContainer))  // sous-dock invisible.
+					{
+						pIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pDock);
+						pContainer = CAIRO_CONTAINER (pDock);
+					}
+					if (pIcon->fXAtRest < pDock->fFlatDockWidth / 2) pDialog->container.bDirectionUp = FALSE;
+					pDialog->bRight = !pDock->container.bDirectionUp;
+				}
+			}
+			// pDialog->bTopBottomDialog = pContainer->bIsHorizontal; -- not used
 		}
 		else _cairo_dock_dialog_calculate_aimed_point (pDialog->pIcon, pContainer, &pDialog->iAimedX, &pDialog->iAimedY, &pDialog->bRight, &pDialog->bTopBottomDialog, &pDialog->container.bDirectionUp, pDialog->fAlign);
 		//g_print ("%s (%d,%d %d %d %d)\n", __func__, pDialog->iAimedX, pDialog->iAimedY, pDialog->bRight, pDialog->bTopBottomDialog, pDialog->container.bDirectionUp);
@@ -700,6 +717,21 @@ static void _place_dialog (CairoDialog *pDialog, GldiContainer *pContainer)
 			GdkRectangle rect = {0, 0, 1, 1};
 			GdkGravity rect_anchor = GDK_GRAVITY_NORTH, dialog_anchor = GDK_GRAVITY_SOUTH;
 			gldi_container_calculate_rect (pContainer, pPointedIcon, &rect, &rect_anchor, &dialog_anchor);
+			
+			if (pContainer->bIsHorizontal == CAIRO_DOCK_VERTICAL)
+			{
+				gboolean bTopHalf = pDialog->container.bDirectionUp;
+				if (rect_anchor == GDK_GRAVITY_WEST)
+				{
+					rect_anchor = bTopHalf ? GDK_GRAVITY_NORTH_WEST : GDK_GRAVITY_SOUTH_WEST;
+					dialog_anchor = bTopHalf ? GDK_GRAVITY_SOUTH_EAST : GDK_GRAVITY_NORTH_EAST;
+				}
+				else
+				{
+					rect_anchor = bTopHalf ? GDK_GRAVITY_NORTH_EAST : GDK_GRAVITY_SOUTH_EAST;
+					dialog_anchor = bTopHalf ? GDK_GRAVITY_SOUTH_WEST : GDK_GRAVITY_NORTH_WEST;
+				}
+			}
 			
 			// note: moving a dialog will only work if it is not mapped yet;
 			// if it is already shown, we need to hide and re-show it
