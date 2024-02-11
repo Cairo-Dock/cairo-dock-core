@@ -188,7 +188,7 @@ static void _calculate_aimed_point_new (CairoDialog* pDialog)
 			else iMarginPosition = 3;
 		}
 	}
-	gldi_container_calculate_aimed_point (pDialog->pIcon, pDialog->container.pWidget, w, h, iMarginPosition, &(pDialog->iAimedX), &(pDialog->iAimedY));
+	gldi_container_calculate_aimed_point (pDialog->pIcon, pDialog->container.pWidget, w, h, iMarginPosition, pDialog->fAlign, &(pDialog->iAimedX), &(pDialog->iAimedY));
 	
 	// g_print ("dialog position: %d, %d; aimed point: %d, %d\n", pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY, pDialog->iAimedX, pDialog->iAimedY);
 }

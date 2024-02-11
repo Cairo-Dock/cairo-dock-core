@@ -571,8 +571,47 @@ static void _menu_realized_cb (GtkWidget *widget, gpointer user_data)
 	
 	Icon *pIcon = pParams->pIcon;
 	
-	gldi_container_calculate_aimed_point (pIcon, widget, w, h, pParams->iMarginPosition, &(pParams->iAimedX), &(pParams->iAimedY));
+	// try to shift the menu
+	gdouble fAlign = pParams->fAlign;
+	gint dx = 0, dy = 0;
+	switch (pParams->iMarginPosition)
+	{
+		case 0: // bottom
+		case 1: // top
+		{
+			dx = w / 2 - w * fAlign;
+			g_object_set (G_OBJECT (widget), "rect-anchor-dx", dx, NULL);
+			break;
+		}
+		case 2: // right
+		case 3: // left
+		{
+			dy = h / 2 - h * fAlign;
+			g_object_set (G_OBJECT (widget), "rect-anchor-dy", dy, NULL);
+			break;
+		}
+	}
 	
+	GdkWindow *window = gtk_widget_get_window (gtk_widget_get_toplevel (widget));
+	if (window)
+	{
+		Icon *pIcon = pParams->pIcon;
+		GldiContainer *pContainer = (pIcon ? cairo_dock_get_icon_container (pIcon) : NULL);
+		if (pIcon && pContainer)
+		{
+			GdkRectangle rect = {0, 0, 1, 1};
+			GdkGravity rect_anchor = GDK_GRAVITY_NORTH;
+			GdkGravity menu_anchor = GDK_GRAVITY_SOUTH;
+			gldi_container_calculate_rect (pContainer, pIcon, &rect, &rect_anchor, &menu_anchor);
+			gtk_menu_popup_at_rect (GTK_MENU (widget), gtk_widget_get_window (pContainer->pWidget),
+				&rect, rect_anchor, menu_anchor, NULL);
+			// gdk_window_move_to_rect (window, &rect, rect_anchor, menu_anchor, GDK_ANCHOR_SLIDE_X | GDK_ANCHOR_SLIDE_Y, dx, dy);
+		}
+	}
+	
+	gldi_container_calculate_aimed_point (pIcon, widget, w, h, pParams->iMarginPosition, fAlign, &(pParams->iAimedX), &(pParams->iAimedY));
+	
+	// int menuX, menuY;
 	// gtk_window_get_position (GTK_WINDOW (gtk_widget_get_toplevel (widget)), &menuX, &menuY);
 	// g_print ("menu aimed at: %d, %d; position: %d, %d\n", pParams->iAimedX, pParams->iAimedY, menuX, menuY);
 }

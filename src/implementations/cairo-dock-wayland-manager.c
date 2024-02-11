@@ -467,11 +467,11 @@ static void _dock_handle_enter (CairoDock *pDock, G_GNUC_UNUSED GdkEventCrossing
 }
 
 static void _adjust_aimed_point (const Icon *pIcon, G_GNUC_UNUSED GtkWidget *pWidget, int w, int h,
-	int iMarginPosition, int *iAimedX, int *iAimedY)
+	int iMarginPosition, gdouble fAlign, int *iAimedX, int *iAimedY)
 {
 	// gtk-layer-shell < 8.2.0: no relative position is available, we use
 	// heuristics to decide if the container was slided on the screen
-	gldi_container_calculate_aimed_point_base (w, h, iMarginPosition, iAimedX, iAimedY);
+	gldi_container_calculate_aimed_point_base (w, h, iMarginPosition, fAlign, iAimedX, iAimedY);
 	
 	GldiContainer *pContainer = (pIcon ? cairo_dock_get_icon_container (pIcon) : NULL);
 	if (! (pIcon && pContainer) ) return;

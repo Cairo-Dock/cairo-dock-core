@@ -1494,7 +1494,7 @@ void _dock_check_if_mouse_inside_linear (CairoDock *pDock)
 }
 
 static void _adjust_aimed_point (const Icon *pIcon, GtkWidget *pWidget, int w, int h,
-	int iMarginPosition, int *iAimedX, int *iAimedY)
+	int iMarginPosition, G_GNUC_UNUSED gdouble fAlign, int *iAimedX, int *iAimedY)
 {
 	// we adjust iAimedX and iAimedY to use global coordinates
 	GldiContainer *pContainer = (pIcon ? cairo_dock_get_icon_container (pIcon) : NULL);

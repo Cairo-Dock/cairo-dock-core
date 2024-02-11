@@ -222,7 +222,7 @@ struct _GldiContainerManagerBackend {
 	/// AimedX and AimedY is already set by the caller to a relative position,
 	/// only corrections need to be done here
 	void (*adjust_aimed_point) (const Icon *pIcon, GtkWidget *pWidget, int w, int h,
-		int iMarginPosition, int *iAimedX, int *iAimedY);
+		int iMarginPosition, gdouble fAlign, int *iAimedX, int *iAimedY);
 };
 
 
@@ -359,11 +359,11 @@ void gldi_container_calculate_rect (const GldiContainer* pContainer, const Icon*
  *        on X11, this is in global coordinates
  */
 void gldi_container_calculate_aimed_point (const Icon *pIcon, GtkWidget *pWidget, int w, int h,
-	int iMarginPosition, int *iAimedX, int *iAimedY);
+	int iMarginPosition, gdouble fAlign, int *iAimedX, int *iAimedY);
 
 /** Helper for the above, calculates position along the midpoint of the given edge. */
 void gldi_container_calculate_aimed_point_base (int w, int h, int iMarginPosition,
-	int *iAimedX, int *iAimedY);
+	gdouble fAlign, int *iAimedX, int *iAimedY);
 
 /// update looking at the screen edges (for any edge necessary)
 void gldi_container_update_polling_screen_edge (void);
