@@ -73,31 +73,97 @@ struct desktop
 };
 static gboolean s_bInitializing = TRUE;  // each time a callback is called on startup, it will set this to TRUE, and we'll make a roundtrip to the server until no callback is called.
 
-static void _output_geometry_cb (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct wl_output *wl_output,
+static int get_position_gldi_screeninfo_by_id (GldiScreenInfo *array_screens, int iNbScreens, uint32_t obj_id)
+{
+	int i_screen;
+	GldiScreenInfo *p_screen = array_screens;
+	for (i_screen = 0; i_screen < iNbScreens; i_screen++)
+	{
+		if (p_screen->wloutput.id == obj_id)
+		{
+			return i_screen;
+		}
+		p_screen++;
+	}
+
+	return -1;
+}
+
+static GldiScreenInfo *append_gldi_screeninfo(GldiScreenInfo **ref_array_screens, int *ref_iNbScreens)
+{
+	int iNbScreens_old = *ref_iNbScreens;
+	int iNbScreens_new = iNbScreens_old + 1;
+	GldiScreenInfo *p_new_screeninfo;
+
+	if (!*ref_array_screens)
+		*ref_array_screens = g_new(GldiScreenInfo, 1);
+	else
+		*ref_array_screens = g_realloc(*ref_array_screens, iNbScreens_new * sizeof (**ref_array_screens));
+	if (!*ref_array_screens) abort();
+
+	p_new_screeninfo = *ref_array_screens + (iNbScreens_new - 1);
+	*ref_iNbScreens = iNbScreens_new;
+
+	return p_new_screeninfo;
+}
+
+static void remove_gldi_screeninfo_by_id(GldiScreenInfo **ref_array_screens, int *ref_iNbScreens, uint32_t obj_id)
+{
+	int iNbScreens_old = *ref_iNbScreens;
+	int pos_screen;
+	GldiScreenInfo *p_screen;
+
+	if (iNbScreens_old <= 1) return; // Keep at least one information for now
+
+	pos_screen = get_position_gldi_screeninfo_by_id(*ref_array_screens, *ref_iNbScreens, obj_id);
+	if (pos_screen < 0) return;
+
+	p_screen = *ref_array_screens + pos_screen;
+#ifdef WL_OUTPUT_RELEASE_SINCE_VERSION
+	if (p_screen->wloutput.id >= WL_OUTPUT_RELEASE_SINCE_VERSION)
+	{
+		wl_output_release(p_screen->wloutput.output);
+	} else
+#endif
+	{
+		wl_output_destroy(p_screen->wloutput.output);
+	}
+
+	if (iNbScreens_old > pos_screen + 1)
+	{
+		memmove(
+			p_screen, p_screen + 1,
+			(iNbScreens_old - pos_screen - 1) * sizeof (**ref_array_screens)
+		);
+	}
+
+	(*ref_iNbScreens)--;
+}
+
+static void _output_geometry_cb (void *data, G_GNUC_UNUSED struct wl_output *wl_output,
 	int32_t x, int32_t y,
 	G_GNUC_UNUSED int32_t physical_width, G_GNUC_UNUSED int32_t physical_height,
 	G_GNUC_UNUSED int32_t subpixel, G_GNUC_UNUSED const char *make, G_GNUC_UNUSED const char *model, G_GNUC_UNUSED int32_t output_transform)
 {
+	GldiScreenInfo *p_screeninfo = (GldiScreenInfo *)data;
 	cd_debug ("Geometry: %d;%d", x, y);
-	g_desktopGeometry.iNbScreens ++;
-	if (!g_desktopGeometry.pScreens)
-		g_desktopGeometry.pScreens = g_new0 (GtkAllocation, 1);
-	else
-		g_desktopGeometry.pScreens = g_realloc (g_desktopGeometry.pScreens, g_desktopGeometry.iNbScreens * sizeof(GtkAllocation));
+	cd_debug ("id: %u", (unsigned int)p_screeninfo->wloutput.id);
 	
-	g_desktopGeometry.pScreens[g_desktopGeometry.iNbScreens-1].x = x;
-	g_desktopGeometry.pScreens[g_desktopGeometry.iNbScreens-1].y = y;
+	p_screeninfo->x = x;
+	p_screeninfo->y = y;
 	s_bInitializing = TRUE;
 }
 
-static void _output_mode_cb (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct wl_output *wl_output,
+static void _output_mode_cb (void *data, G_GNUC_UNUSED struct wl_output *wl_output,
 	uint32_t flags, int32_t width, int32_t height, G_GNUC_UNUSED int32_t refresh)
 {
+	GldiScreenInfo *p_screeninfo = (GldiScreenInfo *)data;
 	cd_debug ("Output mode: %dx%d, %d", width, height, flags);
+	cd_debug ("id: %u", (unsigned int)p_screeninfo->wloutput.id);
 	if (flags & WL_OUTPUT_MODE_CURRENT)  // not the current one -> don't bother
 	{
-		g_desktopGeometry.pScreens[g_desktopGeometry.iNbScreens-1].width = width;
-		g_desktopGeometry.pScreens[g_desktopGeometry.iNbScreens-1].height = height;
+		p_screeninfo->width = width;
+		p_screeninfo->height = height;
 		g_desktopGeometry.Xscreen.width = width;
 		g_desktopGeometry.Xscreen.height = height;
 	}
@@ -124,14 +190,29 @@ static void _output_scale_cb (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct wl_
 
 static const struct wl_output_listener output_listener = {
 	_output_geometry_cb,
-	_output_mode_cb,
+	_output_mode_cb
+#ifdef WL_OUTPUT_SCALE_SINCE_VERSION
+	,
 	_output_done_cb,
 	_output_scale_cb
+#endif
 };
 
-static void _registry_global_cb (G_GNUC_UNUSED void *data, struct wl_registry *registry, uint32_t id, const char *interface, G_GNUC_UNUSED uint32_t version)
+static void _registry_global_cb (G_GNUC_UNUSED void *data, struct wl_registry *registry, uint32_t id, const char *interface, uint32_t version)
 {
-	cd_debug ("got a new global object, instance of %s, id=%d", interface, id);
+	cd_debug ("got a new global object, instance of %s, id=%d, version=%u", interface, id, version);
+	uint32_t wl_output_version =
+#if defined(WL_OUTPUT_RELEASE_SINCE_VERSION)
+		WL_OUTPUT_RELEASE_SINCE_VERSION;
+#elif defined(WL_OUTPUT_SCALE_SINCE_VERSION)
+		WL_OUTPUT_SCALE_SINCE_VERSION;
+#else
+		1;
+#endif
+	// server side may not support newer version, in such case suppress the version to use
+	if (wl_output_version > version)
+		wl_output_version = version;
+
 	if (!strcmp (interface, "wl_shell"))
 	{
 		// this is the global that should give us info and signals about the desktop, but currently it's pretty useless ...
@@ -142,10 +223,26 @@ static void _registry_global_cb (G_GNUC_UNUSED void *data, struct wl_registry *r
 		struct wl_output *output = wl_registry_bind (registry,
 			id,
 			&wl_output_interface,
-			1);
+			wl_output_version);
+
+		GldiScreenInfo *p_screeninfo = NULL;
+		int screen_num = get_position_gldi_screeninfo_by_id(g_desktopGeometry.pScreens, g_desktopGeometry.iNbScreens, id);
+		if (screen_num >= 0)
+			p_screeninfo = g_desktopGeometry.pScreens + screen_num;
+		else
+			p_screeninfo = append_gldi_screeninfo(&g_desktopGeometry.pScreens, &g_desktopGeometry.iNbScreens);
+
+		{
+			// register new wl_output
+			GldiWlOutput *p_wloutput = &p_screeninfo->wloutput;
+			p_wloutput->output = output;
+			p_wloutput->id = id;
+			p_wloutput->ver = wl_output_version;
+		}
+
 		wl_output_add_listener (output,
 			&output_listener,
-			NULL);
+			p_screeninfo);
 	}
 	s_bInitializing = TRUE;
 }
@@ -153,7 +250,7 @@ static void _registry_global_cb (G_GNUC_UNUSED void *data, struct wl_registry *r
 static void _registry_global_remove_cb (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct wl_registry *registry, uint32_t id)
 {
 	cd_debug ("got a global object has disappeared: id=%d", id);
-	/// TODO: find it and destroy it...
+	remove_gldi_screeninfo_by_id(&g_desktopGeometry.pScreens, &g_desktopGeometry.iNbScreens, id);
 	
 	/// TODO: and if it was a wl_output for instance, update the desktop geometry...
 	
@@ -171,6 +268,9 @@ static void init (void)
 	s_pDisplay = wl_display_connect (NULL);
 	
 	g_desktopGeometry.iNbDesktops = g_desktopGeometry.iNbViewportX = g_desktopGeometry.iNbViewportY = 1;
+	// Explicitly initialize below for readability
+	g_desktopGeometry.pScreens = NULL;
+	g_desktopGeometry.iNbScreens = 0;
 	
 	
 	struct wl_registry *registry = wl_display_get_registry (s_pDisplay);

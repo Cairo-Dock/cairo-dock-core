@@ -59,10 +59,21 @@ typedef enum {
 	NB_NOTIFICATIONS_DESKTOP
 	} CairoDesktopNotifications;
 
+typedef struct GldiWlOutput {
+	struct wl_output *output;
+	uint32_t id, ver;
+} GldiWlOutput;
+
+typedef struct GldiScreenInfo {
+	int x, y;
+	int width, height;
+	GldiWlOutput wloutput; // wl_registry object identifier (in wayland session)
+} GldiScreenInfo;
+
 // data
 struct _GldiDesktopGeometry {
 	int iNbScreens;
-	GtkAllocation *pScreens;  // liste of all screen devices.
+	GldiScreenInfo *pScreens;  // liste of all screen devices.
 	GtkAllocation Xscreen;  // logical screen, possibly made of several screen devices.
 	int iNbDesktops;
 	int iNbViewportX, iNbViewportY;
