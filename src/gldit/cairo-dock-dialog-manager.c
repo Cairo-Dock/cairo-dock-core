@@ -717,6 +717,7 @@ static void _place_dialog (CairoDialog *pDialog, GldiContainer *pContainer)
 			GdkRectangle rect = {0, 0, 1, 1};
 			GdkGravity rect_anchor = GDK_GRAVITY_NORTH, dialog_anchor = GDK_GRAVITY_SOUTH;
 			gldi_container_calculate_rect (pContainer, pPointedIcon, &rect, &rect_anchor, &dialog_anchor);
+			gdouble fAlignX = 0.0;
 			
 			if (pContainer->bIsHorizontal == CAIRO_DOCK_VERTICAL)
 			{
@@ -732,6 +733,7 @@ static void _place_dialog (CairoDialog *pDialog, GldiContainer *pContainer)
 					dialog_anchor = bTopHalf ? GDK_GRAVITY_SOUTH_WEST : GDK_GRAVITY_NORTH_WEST;
 				}
 			}
+			else fAlignX = 0.5 - pDialog->fAlign;
 			
 			// note: moving a dialog will only work if it is not mapped yet;
 			// if it is already shown, we need to hide and re-show it
@@ -742,7 +744,7 @@ static void _place_dialog (CairoDialog *pDialog, GldiContainer *pContainer)
 				gtk_widget_hide (gtk_window);
 			}
 			gldi_container_move_to_rect (CAIRO_CONTAINER (pDialog), &rect,
-				rect_anchor, dialog_anchor, GDK_ANCHOR_SLIDE, 0, 0);
+				rect_anchor, dialog_anchor, GDK_ANCHOR_SLIDE, fAlignX, 0);
 			if (bMapped) gtk_widget_show_all (gtk_window);
 		}
 	}

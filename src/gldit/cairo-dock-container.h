@@ -331,14 +331,16 @@ void gldi_container_manager_register_backend (GldiContainerManagerBackend *pBack
  * 	to be set up before the container's window is mapped (it is not possible
  * 	to move a popup after it was mapped).
  *  See https://developer.gnome.org/gdk3/stable/gdk3-Windows.html#gdk-window-move-to-rect
- * 	for the description of the parameters used. */
+ * 	for the description of the parameters used, except for the anchors which
+ *  are interpreted as relative values compared to the width and height of
+ *  the corresponding GdkWindow. */
 void gldi_container_move_to_rect (GldiContainer *pContainer,
 									const GdkRectangle *rect,
 									GdkGravity rect_anchor,
 									GdkGravity window_anchor,
 									GdkAnchorHints anchor_hints,
-									gint rect_anchor_dx,
-									gint rect_anchor_dy);
+									gdouble rel_anchor_dx,
+									gdouble rel_anchor_dy);
 
 /** Calculate the parameters to pass to gldi_container_move_to_rect() to
  * 	poisition a child container on the given pContainer, pointing to pPointedIcon.

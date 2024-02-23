@@ -332,8 +332,8 @@ struct GldiContainerMoveToRectData {
 	GdkGravity rect_anchor;
 	GdkGravity window_anchor;
 	GdkAnchorHints anchor_hints;
-	gint rect_anchor_dx;
-	gint rect_anchor_dy;
+	gdouble rel_anchor_dx;
+	gdouble rel_anchor_dy;
 };
 
 static void _move_to_rect (GtkWidget *widget, gpointer data)
@@ -344,20 +344,26 @@ static void _move_to_rect (GtkWidget *widget, gpointer data)
 	GldiContainer *pContainer = (GldiContainer*)data;
 	struct GldiContainerMoveToRectData *p = (struct GldiContainerMoveToRectData*)pContainer->pMoveToRect;
 	if(!p) return;
-	gdk_window_move_to_rect (gtk_widget_get_window (widget), &p->rect, p->rect_anchor,
-		p->window_anchor, p->anchor_hints, p->rect_anchor_dx, p->rect_anchor_dy);
-	// TODO: should we disconnect this signal / free the data?
+	GdkWindow *window = gtk_widget_get_window (widget);
+	gint dx = 0, dy = 0;
+	if (p->rel_anchor_dx != 0.0) dx = p->rel_anchor_dx * gdk_window_get_width (window);
+	if (p->rel_anchor_dy != 0.0) dy = p->rel_anchor_dy * gdk_window_get_height (window);
+	gdk_window_move_to_rect (window, &p->rect, p->rect_anchor,
+		p->window_anchor, p->anchor_hints, dx, dy);
 }
 
 void gldi_container_move_to_rect (GldiContainer *pContainer, const GdkRectangle *rect,
 	GdkGravity rect_anchor, GdkGravity window_anchor, GdkAnchorHints anchor_hints,
-	gint rect_anchor_dx, gint rect_anchor_dy)
+	gdouble rel_anchor_dx, gdouble rel_anchor_dy)
 {
 	GdkWindow* gdk_window = gldi_container_get_gdk_window (pContainer);
 	if (gdk_window)
 	{
+		gint dx = 0, dy = 0;
+		if (rel_anchor_dx != 0.0) dx = rel_anchor_dx * gdk_window_get_width (gdk_window);
+		if (rel_anchor_dy != 0.0) dy = rel_anchor_dy * gdk_window_get_height (gdk_window);
 		gdk_window_move_to_rect (gdk_window, rect, rect_anchor, window_anchor,
-			anchor_hints, rect_anchor_dx, rect_anchor_dy);
+			anchor_hints, dx, dy);
 		// disconnect any existing signal
 		if (pContainer->pMoveToRect)
 		{
@@ -380,8 +386,8 @@ void gldi_container_move_to_rect (GldiContainer *pContainer, const GdkRectangle 
 		p->rect_anchor = rect_anchor;
 		p->window_anchor = window_anchor;
 		p->anchor_hints = anchor_hints;
-		p->rect_anchor_dx = rect_anchor_dx;
-		p->rect_anchor_dy = rect_anchor_dy;
+		p->rel_anchor_dx = rel_anchor_dx;
+		p->rel_anchor_dy = rel_anchor_dy;
 		if (!p->signal_connected)
 			p->signal_connected = g_signal_connect (pContainer->pWidget, "realize", G_CALLBACK (_move_to_rect), pContainer);
 	}
