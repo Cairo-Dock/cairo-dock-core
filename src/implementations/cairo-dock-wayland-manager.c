@@ -440,7 +440,7 @@ void gldi_wayland_grab_keyboard (GldiContainer *pContainer)
 #endif
 }
 
-void gldi_wayland_release_keyboard (GldiContainer *pContainer)
+void gldi_wayland_release_keyboard ( G_GNUC_UNUSED GldiContainer *pContainer)
 {
 	GldiWindowActor *actor = gldi_windows_get_active ();
 	if (actor) gldi_window_show (actor);
@@ -492,14 +492,14 @@ static void _adjust_aimed_point (const Icon *pIcon, G_GNUC_UNUSED GtkWidget *pWi
 	if (iMarginPosition == 0 || iMarginPosition == 1)
 	{
 		int x0 = dockX + pIcon->fDrawX + pIcon->fWidth * pIcon->fScale / 2.0;
-		if (x0 < w / 2) *iAimedX = x0;
-		else if (W - x0 < w / 2) *iAimedX += w / 2 - (W - x0);
+		if (x0 < w * fAlign) *iAimedX = x0;
+		else if (W - x0 < w * (1 - fAlign)) *iAimedX = w - (W - x0);
 	}
 	else
 	{
 		int y0 = dockX + pIcon->fDrawX + pIcon->fWidth * pIcon->fScale / 2.0;
-		if (y0 < h / 2) *iAimedY = y0;
-		else if (y0 > H - h / 2) *iAimedY += y0 - (H - h / 2);
+		if (y0 < h * fAlign) *iAimedY = y0;
+		else if (y0 > H - h * (1 - fAlign)) *iAimedY += y0 - (H - h / 2);
 	}
 }
 
