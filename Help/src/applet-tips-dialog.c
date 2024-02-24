@@ -40,7 +40,7 @@ static void _cairo_dock_get_next_tip (CDTipsData *pTips)
 {
 	pTips->iNumTipKey ++;  // skip the current expander to go to the current label, which will be skipped in the first iteration.
 	const gchar *cGroupName = pTips->pGroupList[pTips->iNumTipGroup];
-	gboolean bOk;
+	gboolean bOk = FALSE;
 	do
 	{
 		pTips->iNumTipKey ++;
@@ -77,8 +77,13 @@ static void _cairo_dock_get_next_tip (CDTipsData *pTips)
 		// check if the key is an expander widget.
 		const gchar *cKeyName = pTips->pKeyList[pTips->iNumTipKey];
 		gchar *cKeyComment =  g_key_file_get_comment (pTips->pKeyFile, cGroupName, cKeyName, NULL);
-		bOk = (cKeyComment && *cKeyComment == CAIRO_DOCK_WIDGET_EXPANDER);  // whether it's an expander.
-		g_free (cKeyComment);
+		if (cKeyComment)
+		{
+			gchar *tmp = cKeyComment;
+			while (*tmp == '\t' || *tmp == '\n' || *tmp == ' ') ++tmp;
+			bOk = (*tmp == CAIRO_DOCK_WIDGET_EXPANDER);  // whether it's an expander.
+			g_free (cKeyComment);
+		}
 	} while (!bOk);
 }
 
@@ -87,7 +92,7 @@ static void _cairo_dock_get_previous_tip (CDTipsData *pTips)
 	pTips->iNumTipKey --;
 	
 	const gchar *cGroupName = pTips->pGroupList[pTips->iNumTipGroup];
-	gboolean bOk;
+	gboolean bOk = FALSE;
 	do
 	{
 		pTips->iNumTipKey --;
@@ -125,7 +130,13 @@ static void _cairo_dock_get_previous_tip (CDTipsData *pTips)
 		// check if the key is an expander widget.
 		const gchar *cKeyName = pTips->pKeyList[pTips->iNumTipKey];
 		gchar *cKeyComment =  g_key_file_get_comment (pTips->pKeyFile, cGroupName, cKeyName, NULL);
-		bOk = (cKeyComment && *cKeyComment == CAIRO_DOCK_WIDGET_EXPANDER);  // whether it's an expander.
+		if (cKeyComment)
+		{
+			gchar *tmp = cKeyComment;
+			while (*tmp == '\t' || *tmp == '\n' || *tmp == ' ') ++tmp;
+			bOk = (*tmp == CAIRO_DOCK_WIDGET_EXPANDER);  // whether it's an expander.
+			g_free (cKeyComment);
+		}
 	} while (!bOk);
 }
 
