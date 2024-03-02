@@ -100,6 +100,7 @@ extern gboolean g_bUseOpenGL;
 extern gboolean g_bEasterEggs;
 
 extern gboolean g_bDisableLayerShell;
+extern gboolean g_bNoWaylandExclude;
 
 extern GldiModuleInstance *g_pCurrentModule;
 extern GtkWidget *cairo_dock_build_simple_gui_window (void);
@@ -428,6 +429,9 @@ int main (int argc, char** argv)
 		{"no-layer-shell", 0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bDisableLayerShell,
 			_("For debugging purpose only. Disable gtk-layer-shell support."), NULL},
+		{"no-exclude-modules", 0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&g_bNoWaylandExclude,
+			_("For debugging purpose only. Do not blacklist incompatible plugins on Wayland."), NULL},
 		{NULL, 0, 0, 0,
 			NULL,
 			NULL, NULL}

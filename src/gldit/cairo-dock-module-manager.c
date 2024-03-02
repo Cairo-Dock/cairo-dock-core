@@ -44,6 +44,8 @@ GldiObjectManager myModuleObjectMgr;
 
 GldiModuleInstance *g_pCurrentModule = NULL;  // only used to trace a possible crash in one of the modules.
 
+gboolean g_bNoWaylandExclude = FALSE;
+
 // dependancies
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
@@ -212,6 +214,22 @@ discard:
 	return NULL;
 }
 
+static const char * const s_cWaylandExclude[] = {
+	"libcd-systray.so",
+	"libcd-Screenshot.so",
+	"libcd-Composite-Manager.so",
+	"libcd-Xgamma.so",
+	"libcd-keyboard-indicator.so",
+	NULL
+};
+
+static gboolean _exclude_module (const gchar *mod)
+{
+	for (const char * const *tmp = s_cWaylandExclude; *tmp; ++tmp)
+		if (g_strcmp0(*tmp, mod) == 0) return TRUE;
+	return FALSE;
+}
+
 void gldi_modules_new_from_directory (const gchar *cModuleDirPath, GError **erreur)
 {
 	if (cModuleDirPath == NULL)
@@ -226,6 +244,8 @@ void gldi_modules_new_from_directory (const gchar *cModuleDirPath, GError **erre
 		return ;
 	}
 
+	gboolean bWayland = gldi_container_is_wayland_backend ();
+
 	const gchar *cFileName;
 	GString *sFilePath = g_string_new ("");
 	do
@@ -233,6 +253,8 @@ void gldi_modules_new_from_directory (const gchar *cModuleDirPath, GError **erre
 		cFileName = g_dir_read_name (dir);
 		if (cFileName == NULL)
 			break ;
+		
+		if (bWayland && !g_bNoWaylandExclude && _exclude_module (cFileName)) continue;
 		
 		if (g_str_has_suffix (cFileName, ".so"))
 		{
@@ -376,13 +398,18 @@ void gldi_module_activate (GldiModule *module)
 	}
 }
 
+static void _module_unref (void *obj, void*)
+{
+	gldi_object_unref ((GldiObject*)obj);
+}
+
 void gldi_module_deactivate (GldiModule *module)  // stop all instances of a module
 {
 	g_return_if_fail (module != NULL);
 	cd_debug ("%s (%s, %s)", __func__, module->pVisitCard->cModuleName, module->cConfFilePath);
 	GList *pInstances = module->pInstancesList;
 	module->pInstancesList = NULL;  // set to NULL already so that notifications don't get fooled. This can probably be avoided...
-	g_list_foreach (pInstances, (GFunc)gldi_object_unref, NULL);
+	g_list_foreach (pInstances, (GFunc)_module_unref, NULL);
 	g_list_free (pInstances);
 	gldi_object_notify (module, NOTIFICATION_MODULE_ACTIVATED, module->pVisitCard->cModuleName, FALSE);  // throw it since the list was NULL when the instances were destroyed
 	gldi_modules_write_active ();  // same
