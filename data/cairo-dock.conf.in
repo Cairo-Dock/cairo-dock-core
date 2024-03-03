@@ -182,6 +182,10 @@ animation on demands attention = rotate
 
 [System]
 
+#B- Experimental drawing code (X11)
+#{Enable new code paths on X11 to test for regressions.}
+X11_new_rendering_code=false
+
 #X-[Animations speed;@pkgdatadir@/icons/icon-movment.png]
 frame_mov =
 
