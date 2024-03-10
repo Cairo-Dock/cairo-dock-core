@@ -20,15 +20,4 @@ After=gnome-flashback.target
 BindsTo=gnome-session.target
 After=gnome-session.target
 
-Requires=indicators-pre.target
-
-# here we list the indicators that we want to load
-Wants=indicator-application.service
-Wants=indicator-bluetooth.service
-Wants=indicator-datetime.service
-Wants=indicator-keyboard.service
-Wants=indicator-messages.service
-Wants=indicator-power.service
-Wants=indicator-printers.service
-Wants=indicator-session.service
-Wants=indicator-sound.service
+Wants=ayatana-indicators.target
