@@ -399,7 +399,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 	&& (icon->bPointed || (icon->fScale > 1.01 && ! myIconsParam.bLabelForPointedIconOnly)))  // 1.01 car sin(pi) = 1+epsilon :-/  //  && icon->iAnimationState < CAIRO_DOCK_STATE_CLICKED
 	{
 		glPushMatrix ();
-		glLoadIdentity ();
+		// glLoadIdentity ();
 		
 		_cairo_dock_enable_texture ();
 		_cairo_dock_set_blend_over ();  // _cairo_dock_set_blend_alpha() makes the outline look bad when they have a light color :-/

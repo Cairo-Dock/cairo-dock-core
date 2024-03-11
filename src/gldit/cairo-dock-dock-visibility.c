@@ -267,7 +267,7 @@ void gldi_dock_hide_if_any_window_overlap_or_show (CairoDock *pDock)
 
 static inline gboolean _window_overlaps_dock (GtkAllocation *pWindowGeometry, gboolean bIsHidden, CairoDock *pDock)
 {
-	if (pWindowGeometry->width != 0 && pWindowGeometry->height != 0)
+	if (!bIsHidden && pWindowGeometry->width != 0 && pWindowGeometry->height != 0)
 	{
 		int iDockX, iDockY, iDockWidth, iDockHeight;
 		if (pDock->container.bIsHorizontal)
@@ -285,20 +285,20 @@ static inline gboolean _window_overlaps_dock (GtkAllocation *pWindowGeometry, gb
 			iDockY = pDock->container.iWindowPositionX + (pDock->container.iWidth - iDockHeight)/2;
 		}
 		
-		if (! bIsHidden && pWindowGeometry->x < iDockX + iDockWidth && pWindowGeometry->x + pWindowGeometry->width > iDockX && pWindowGeometry->y < iDockY + iDockHeight && pWindowGeometry->y + pWindowGeometry->height > iDockY)
+		if (pWindowGeometry->x < iDockX + iDockWidth && pWindowGeometry->x + pWindowGeometry->width > iDockX && pWindowGeometry->y < iDockY + iDockHeight && pWindowGeometry->y + pWindowGeometry->height > iDockY)
 		{
 			return TRUE;
 		}
 	}
 	else
 	{
-		cd_warning (" unknown window geometry");
+		// cd_warning (" unknown window geometry");
 	}
 	return FALSE;
 }
 gboolean gldi_dock_overlaps_window (CairoDock *pDock, GldiWindowActor *actor)
 {
-	return _window_overlaps_dock (&actor->windowGeometry, actor->bIsHidden, pDock);
+	return _window_overlaps_dock (&actor->windowGeometry, actor->bIsHidden || !actor->bDisplayed, pDock);
 }
 
 static gboolean _window_is_overlapping_dock (GldiWindowActor *actor, gpointer data)

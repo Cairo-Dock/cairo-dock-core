@@ -277,6 +277,7 @@ int cairo_dock_fm_get_pid (const gchar *cProcessName);
  */
 gboolean cairo_dock_fm_monitor_pid (const gchar *cProcessName, gboolean bCheckSameProcess, GSourceFunc pCallback, gboolean bAlwaysLaunch, gpointer pUserData);
 
+const gchar *cairo_dock_fm_get_desktop_name (void);
 
 void gldi_register_desktop_environment_manager (void);
 

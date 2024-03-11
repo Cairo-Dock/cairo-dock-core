@@ -78,51 +78,6 @@ static void cairo_dock_stop_icon_glide (CairoDock *pDock);
  /// CALLBACKS ///
 /////////////////
 
-static gboolean _mouse_is_really_outside (CairoDock *pDock)
-{
-	int x1, x2, y1, y2;
-	if (pDock->iInputState == CAIRO_DOCK_INPUT_ACTIVE)
-	{
-		x1 = (pDock->container.iWidth - pDock->iActiveWidth) * pDock->fAlign;
-		x2 = x1 + pDock->iActiveWidth;
-		if (pDock->container.bDirectionUp)
-		{
-			y1 = pDock->container.iHeight - pDock->iActiveHeight + 1;
-			y2 = pDock->container.iHeight;
-		}
-		else
-		{
-			y1 = 0;
-			y2 = pDock->iActiveHeight - 1;
-		}
-	}
-	else if (pDock->iInputState == CAIRO_DOCK_INPUT_AT_REST)
-	{
-		x1 = (pDock->container.iWidth - pDock->iMinDockWidth) * pDock->fAlign;
-		x2 = x1 + pDock->iMinDockWidth;
-		if (pDock->container.bDirectionUp)
-		{
-			y1 = pDock->container.iHeight - pDock->iMinDockHeight + 1;
-			y2 = pDock->container.iHeight;
-		}
-		else
-		{
-			y1 = 0;
-			y2 = pDock->iMinDockHeight - 1;
-		}		
-	}
-	else  // hidden
-		return TRUE;
-	if (pDock->container.iMouseX <= x1
-	|| pDock->container.iMouseX >= x2)
-		return TRUE;
-	if (pDock->container.iMouseY < y1
-	|| pDock->container.iMouseY > y2)  // Note: Compiz has a bug: when using the "cube rotation" plug-in, it will reserve 2 pixels for itself on the left and right edges of the screen. So the mouse is not inside the dock when it's at x=0 or x=Ws-1 (no 'enter' event is sent; it's as if the x=0 or x=Ws-1 vertical line of pixels is out of the screen).
-		return TRUE;
-
-	return FALSE;
-}
-
 void cairo_dock_freeze_docks (gboolean bFreeze)
 {
 	s_bFrozenDock = bFreeze;  /// instead, try to connect to the motion-event and intercept it ...
@@ -502,7 +457,7 @@ static gboolean _hide_child_docks (CairoDock *pDock)
 
 static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
-	//g_print ("%s (bInside:%d; iState:%d; iRefCount:%d)\n", __func__, pDock->container.bInside, pDock->iInputState, pDock->iRefCount);
+	//g_print ("%s (bIsMainDock : %d; bInside:%d; iState:%d; iRefCount:%d, pEvent: %p)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iRefCount, pEvent);
 	//\_______________ On tire le dock => on ignore le signal.
 	if (pEvent != NULL && (pEvent->state & GDK_MOD1_MASK) && (pEvent->state & GDK_BUTTON1_MASK))
 	{
@@ -529,7 +484,9 @@ static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 	{
 		//g_print (" forced leave event: %d;%d\n", pDock->container.iMouseX, pDock->container.iMouseY);
 	}
-	if (/**pEvent && */!_mouse_is_really_outside(pDock))  // check that the mouse is really outside (the request might not come from the Window Manager, for instance if we deactivate the menu; this also works around buggy WM like KWin).
+	
+	// if (/**pEvent && */!_mouse_is_really_outside(pDock))  // check that the mouse is really outside (the request might not come from the Window Manager, for instance if we deactivate the menu; this also works around buggy WM like KWin).
+	if (!gldi_container_dock_handle_leave (pDock, pEvent))
 	{
 		//g_print (" not really outside (%d;%d ; %d/%d)\n", pDock->container.iMouseX, pDock->container.iMouseY, pDock->iMaxDockHeight, pDock->iMinDockHeight);
 		if (pDock->iSidTestMouseOutside == 0 && pEvent && ! pDock->bHasModalWindow)  // si l'action induit un changement de bureau, ou une appli qui bloque le focus (gksu), X envoit un signal de sortie alors qu'on est encore dans le dock, et donc n'en n'envoit plus lorsqu'on en sort reellement. On teste donc pendant qques secondes apres l'evenement. C'est ausi vrai pour l'affichage d'un menu/dialogue interactif, mais comme on envoie nous-meme un signal de sortie lorsque le menu disparait, il est inutile de le faire ici.
@@ -557,7 +514,7 @@ static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 				}
 				else if (pDock->bAutoHide)
 				{
-					const int delay = 0;  // 250
+					const int delay = gldi_container_use_new_positioning_code() ? 250 : 0;  // original behavior: 0
 					if (delay != 0)  /// maybe try to see if we left the dock frankly, or just by a few pixels...
 					{
 						//g_print (" delay the leave event by %dms\n", delay);
@@ -643,7 +600,9 @@ static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 		//	return ;
 		
 		CairoDock *pOriginDock = CAIRO_DOCK(cairo_dock_get_icon_container (s_pIconClicked));
-		if (pOriginDock == pDock && _mouse_is_really_outside (pDock))  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
+		// note: the _mouse_is_really_outside () here was spurious, since is was tested above (line 488) before,
+		// so we cannot get here if it would have returned false (this is the same with the new implementation as well)
+		if (pOriginDock == pDock /* && _mouse_is_really_outside (pDock) */ )  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
 		{
 			cd_debug (" on detache l'icone");
 			pOriginDock->bIconIsFlyingAway = TRUE;
@@ -674,6 +633,15 @@ static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 	return TRUE;
 }
 
+static gboolean _on_dock_unmap (GtkWidget* pWidget, G_GNUC_UNUSED GdkEvent* pEvent, CairoDock *pDock)
+{
+	// this event is only necessary on Wayland
+	// g_print ("_on_dock_unmap() for dock: %p (bIsMainDock : %d; bInside:%d)\n", pDock, pDock->bIsMainDock, pDock->container.bInside);
+	pDock->iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
+	_on_leave_notify (pWidget, NULL, pDock);
+	return FALSE;
+}
+
 static gboolean _on_enter_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
 	//g_print ("%s (bIsMainDock : %d; bInside:%d; state:%d; iMagnitudeIndex:%d; input shape:%p; event:%p)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iMagnitudeIndex, pDock->pShapeBitmap, pEvent);
@@ -683,6 +651,8 @@ static gboolean _on_enter_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 		return FALSE;
 	}
 	
+	gldi_container_dock_handle_enter (pDock, pEvent);
+
 	// stop les timers.
 	if (pDock->iSidLeaveDemand != 0)
 	{
@@ -1097,16 +1067,36 @@ static gboolean _on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, Ca
 		iNewWidth = pEvent->width;
 		iNewHeight = pEvent->height;
 		
-		iNewX = pEvent->x;
-		iNewY = pEvent->y;
+		if (gldi_container_is_wayland_backend ())
+		{
+			// pEvent->x and pEvent->y are zero in this case, we fake the expected position
+			if (pDock->container.bDirectionUp) iNewY = gldi_dock_get_screen_height (pDock) - iNewHeight;
+			else iNewY = 0;
+			iNewX = 0;
+		}
+		else
+		{
+			iNewX = pEvent->x;
+			iNewY = pEvent->y;
+		}
 	}
 	else
 	{
 		iNewWidth = pEvent->height;
 		iNewHeight = pEvent->width;
 		
-		iNewX = pEvent->y;
-		iNewY = pEvent->x;
+		if (gldi_container_is_wayland_backend ())
+		{
+			// pEvent->x and pEvent->y are zero in this case, we fake the expected position
+			if (pDock->container.bDirectionUp) iNewY = gldi_dock_get_screen_width (pDock) - iNewHeight;
+			else iNewY = 0;
+			iNewX = 0;
+		}
+		else
+		{
+			iNewX = pEvent->y;
+			iNewY = pEvent->x;
+		}
 	}
 	
 	gboolean bSizeUpdated = (iNewWidth != pDock->container.iWidth || iNewHeight != pDock->container.iHeight);
@@ -1150,6 +1140,8 @@ static gboolean _on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, Ca
 		// update the GL context
 		if (g_bUseOpenGL)
 		{
+			if (bSizeUpdated) gldi_gl_container_resized (CAIRO_CONTAINER (pDock), pEvent->width, pEvent->height);
+			
 			if (! gldi_gl_container_make_current (CAIRO_CONTAINER (pDock)))
 				return FALSE;
 			
@@ -1629,6 +1621,7 @@ static gboolean _cairo_dock_hide (CairoDock *pDock)
 		if (pDock->fHideOffset > .99)  // fin d'anim.
 		{
 			pDock->fHideOffset = 1;
+			gldi_container_update_polling_screen_edge ();
 			
 			//g_print ("on arrete le cachage\n");
 			gboolean bVisibleIconsPresent = FALSE;
@@ -1691,6 +1684,7 @@ static gboolean _cairo_dock_show (CairoDock *pDock)
 		pDock->fHideOffset = 0;
 		cairo_dock_allow_entrance (pDock);
 		gldi_dialogs_replace_all ();  // we need it here so that a modal dialog is replaced when the dock unhides (else it would stay behind).
+		gldi_container_update_polling_screen_edge ();
 		return FALSE;
 	}
 	return TRUE;
@@ -1984,7 +1978,7 @@ static void _detach_icon (GldiContainer *pContainer, Icon *icon)
 	if (icon->pAppli != NULL)
 	{
 		//cd_debug ("on desactive la miniature de %s (Xid : %lx)", icon->cName, icon->Xid);
-		gldi_window_set_thumbnail_area (icon->pAppli, 0, 0, 0, 0);
+		gldi_window_set_thumbnail_area (icon->pAppli, pContainer->pWidget, 0, 0, 0, 0);
 	}
 	
 	//\___________________ On l'enleve de la liste.
@@ -2228,6 +2222,13 @@ void gldi_dock_init_internals (CairoDock *pDock)
 		"drag-drop",
 		G_CALLBACK (_on_drag_drop),
 		pDock);*/
+	// connect unmap signal -- on Wayland, the compositor might close
+	// the dock at any time, so we need to handle this possibility
+	if (gldi_container_use_new_positioning_code ())
+		g_signal_connect (G_OBJECT (pWindow),
+			"unmap-event",
+			G_CALLBACK (_on_dock_unmap),
+			pDock);
 	
 	gtk_widget_show_all (pDock->container.pWidget);
 }
@@ -2254,9 +2255,40 @@ CairoDock *gldi_subdock_new (const gchar *cDockName, const gchar *cRendererName,
 	attr.cRendererName = cRendererName;
 	attr.pParentDock = pParentDock;
 	attr.pIconList = pIconList;
+	if (gldi_container_use_new_positioning_code ()) attr.cattr.bIsPopup = TRUE;
 	return (CairoDock*)gldi_object_new (&myDockObjectMgr, &attr);
 }
 
+static gboolean _move_resize_dock (CairoDock *pDock)
+{
+	gldi_container_move_resize_dock (pDock);
+	pDock->iSidMoveResize = 0;
+	if (gldi_container_is_wayland_backend ())
+	{
+		/// On Wayland, the compositor is not required to send a configure
+		/// event if the position of a view changes but not its size:
+		/// at least KWin will not send such events when repositioning
+		/// layer-shell surfaces. We simulate a configure event to be
+		/// able to do any adjustments required.
+		GdkEventConfigure event;
+		event.x = 0;
+		event.y = 0;
+		event.width = pDock->container.iWidth;
+		event.height = pDock->container.iHeight;
+		_on_configure (pDock->container.pWidget, &event, pDock);
+	}
+	return FALSE;
+}
+
+void cairo_dock_move_resize_dock (CairoDock *pDock)
+{
+	//g_print ("*********%s (current : %dx%d, %d;%d)\n", __func__, pDock->container.iWidth, pDock->container.iHeight, pDock->container.iWindowPositionX, pDock->container.iWindowPositionY);
+	if (pDock->iSidMoveResize == 0)
+	{
+		pDock->iSidMoveResize = g_idle_add ((GSourceFunc)_move_resize_dock, pDock);
+	}
+	return ;
+}
 
 void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingDock)
 {

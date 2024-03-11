@@ -148,6 +148,13 @@ struct _CairoDialog {
 	guint iButtonPressTime;
 	gboolean bInAnswer;
 	gchar *cText;
+	// note: use an union to keep ABI
+	union {
+		// Flags that can hold additional attributes (currently only using for storing a pending close event).
+		guint f;
+		gpointer reserved[1];
+	} uFlags;
+	
 	gpointer reserved[1];
 };
 
@@ -162,6 +169,8 @@ struct _CairoDialog {
 #define CAIRO_DIALOG_BUTTON_OFFSET 3
 #define CAIRO_DIALOG_VGAP 4
 #define CAIRO_DIALOG_BUTTON_GAP 16
+
+#define CAIRO_DIALOG_FLAGS_PENDING_CLOSE 1
 
 /** Say if an object is a Dialog.
 *@param obj the object.

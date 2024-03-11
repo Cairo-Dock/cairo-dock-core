@@ -567,6 +567,9 @@ gboolean cairo_dock_begin_draw_image_buffer_opengl (CairoDockImageBuffer *pImage
 	}
 	
 	glLoadIdentity ();
+	GdkWindow* gdkwindow = gldi_container_get_gdk_window (pContainer);
+	gint scale = gdk_window_get_scale_factor (gdkwindow);
+	glScalef (scale, scale, 1.f);
 	
 	if (s_bRedirected)  // adapt to the size of the redirected texture
 	{

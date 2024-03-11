@@ -353,16 +353,17 @@ static gboolean set_nb_desktops (int iNbDesktops, int iNbViewportX, int iNbViewp
 
 static void _register_compiz_backend (void)
 {
-	GldiDesktopManagerBackend *p = g_new0 (GldiDesktopManagerBackend, 1);
+	GldiDesktopManagerBackend p;
+	memset(&p, 0, sizeof (GldiDesktopManagerBackend));
 	
-	p->present_class = present_class;
-	p->present_windows = present_windows;
-	p->present_desktops = present_desktops;
-	p->show_widget_layer = show_widget_layer;
-	p->set_on_widget_layer = set_on_widget_layer;
-	p->set_nb_desktops = set_nb_desktops;
+	p.present_class = present_class;
+	p.present_windows = present_windows;
+	p.present_desktops = present_desktops;
+	p.show_widget_layer = show_widget_layer;
+	p.set_on_widget_layer = set_on_widget_layer;
+	p.set_nb_desktops = set_nb_desktops;
 	
-	gldi_desktop_manager_register_backend (p);
+	gldi_desktop_manager_register_backend (&p, "Compiz");
 }
 
 static void _unregister_compiz_backend (void)

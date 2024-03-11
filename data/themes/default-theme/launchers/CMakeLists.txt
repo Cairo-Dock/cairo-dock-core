@@ -3,7 +3,7 @@
 
 install(FILES
 	01firefox.desktop
-	01gcalctool.desktop
+	01gnome-calculator.desktop
 	01gimp.desktop
 	01gnome-terminal.desktop
 	01ooo-writer.desktop

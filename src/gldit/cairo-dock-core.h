@@ -40,6 +40,10 @@ void gldi_init (GldiRenderingMethod iRendering);
 
 void gldi_free_all (void);
 
+/// Get some basic info about the features supported by Cairo-Dock and
+/// detected at runtime. Returns a dynamically allocated string that
+/// should be freed by the caller after using it.
+gchar *gldi_get_diag_msg (void);
 
 G_END_DECLS
 #endif

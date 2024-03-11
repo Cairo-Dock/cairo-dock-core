@@ -24,6 +24,8 @@ Tarballs of the sources are available at: https://launchpad.net/cairo-dock-core 
 
 A stable **PPA** is available here : https://launchpad.net/~cairo-dock-team/+archive/ppa
 
+Additional information specific to compiling Cairo-Dock to run under Wayland is available [here](README_Wayland.md).
+
 
 Need some help?
 ---------------
@@ -34,6 +36,8 @@ You can find: how to launch the dock at startup, how to customise it, how to res
 A useful tutorial is also available to help you customize your dock: http://www.glx-dock.org/ww_page.php?p=Tutorial-Customisation&lang=en
 
 If you have other questions not solved on our wiki you can post them on our forum (in English or French): http://www.glx-dock.org/bg_forumlist.php
+
+Additional information specific to running Cairo-Dock under Wayland is available [here](README_Wayland.md).
 
 
 Join the project
@@ -51,7 +55,7 @@ Bug reports
 You can report bugs in **Launchpad** under the '[Bugs](https://bugs.launchpad.net/cairo-dock)' section. If possible:
 
 * Read our wiki specially the '[Recurring Problems](http://www.glx-dock.org/ww_page.php?p=Recurrents%20problems&lang=en)' section which can help you to resolve some bugs like a black background, messages at startup, etc.
-* Please include also some information like your distribution, your achitecture (32/64bits), your Desktop Manager (Gnome, KDE, XFCE,...) your Window Manager (Compiz, Metacity, Kwin, etc.), if you use Cairo-Dock with or without OpenGL, with which theme, etc.
+* Please include also some information like your distribution, your achitecture (32/64bits), your Desktop Manager (Gnome, KDE, XFCE,...) your Window Manager (Compiz, Metacity, Kwin, etc.) or Wayland compositor (Wayfire, Kwin, Labwc, etc.), if you use Cairo-Dock with or without OpenGL, with which theme, etc. You can copy the "Technical info" page from the About dialog (right click on the dock -> Cairo-Dock -> About) which covers the most important details.
 * Include the method to reproduce the bug (which actions, which options activated)
 * Run the dock with the command
           cairo-dock -l debug > debug.txt

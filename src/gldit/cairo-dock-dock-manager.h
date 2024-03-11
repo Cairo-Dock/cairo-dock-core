@@ -231,6 +231,8 @@ void cairo_dock_deactivate_temporary_auto_hide (CairoDock *pDock);
 #define cairo_dock_is_temporary_hidden(pDock) (pDock)->bTemporaryHidden
 void gldi_subdock_synchronize_orientation (CairoDock *pSubDock, CairoDock *pDock, gboolean bUpdateDockSize);
 
+/// Unhide the dock after the given delay, or instantly if iDelay == 0
+void cairo_dock_unhide_dock_delayed (CairoDock *pDock, int iDelay);
 
 /** Set the visibility of a root dock. Perform all the necessary actions.
 *@param pDock a root dock.

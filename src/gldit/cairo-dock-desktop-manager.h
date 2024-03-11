@@ -56,6 +56,8 @@ typedef enum {
 	NOTIFICATION_SHORTKEY_PRESSED,
 	/// notification called when the keymap changed, before and after updating it. data: updated
 	NOTIFICATION_KEYMAP_CHANGED,
+	/// notification when the user requests the desktop menu to be shown
+	NOTIFICATION_MENU_REQUEST,
 	NB_NOTIFICATIONS_DESKTOP
 	} CairoDesktopNotifications;
 
@@ -105,7 +107,9 @@ struct _GldiDesktopBackground {
 /** Register a Desktop Manager backend. NULL functions do not overwrite existing ones.
 *@param pBackend a Desktop Manager backend; can be freeed after.
 */
-void gldi_desktop_manager_register_backend (GldiDesktopManagerBackend *pBackend);
+void gldi_desktop_manager_register_backend (GldiDesktopManagerBackend *pBackend, const gchar *name);
+
+const gchar *gldi_desktop_manager_get_backend_names (void);
 
 /** Present all the windows of a given class.
 *@param cClass the class.

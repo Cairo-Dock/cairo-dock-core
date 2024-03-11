@@ -115,15 +115,14 @@ static gboolean present_class (const gchar *cClass)
 
 static void _register_gs_backend (void)
 {
-	GldiDesktopManagerBackend *p = g_new0 (GldiDesktopManagerBackend, 1);
+	GldiDesktopManagerBackend p;
+	memset(&p, 0, sizeof (GldiDesktopManagerBackend));
 	
-	p->present_class = present_class;
-	p->present_windows = present_overview;
-	p->present_desktops = present_overview;
-	p->show_widget_layer = NULL;
-	p->set_on_widget_layer = NULL;
+	p.present_class = present_class;
+	p.present_windows = present_overview;
+	p.present_desktops = present_overview;
 	
-	gldi_desktop_manager_register_backend (p);
+	gldi_desktop_manager_register_backend (&p, "GNOME Shell");
 }
 
 static void _unregister_gs_backend (void)
