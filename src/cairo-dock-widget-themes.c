@@ -210,7 +210,8 @@ static gboolean _cairo_dock_load_theme (GKeyFile* pKeyFile, ThemesWidget *pTheme
 	{
 		GtkWidget *pWaitingDialog = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 		pThemesWidget->pWaitingDialog = pWaitingDialog;
-		gtk_window_set_decorated (GTK_WINDOW (pWaitingDialog), FALSE);
+		if (!gldi_container_is_wayland_backend ()) // gtk_window_set_decorated is broken on Wayland
+			gtk_window_set_decorated (GTK_WINDOW (pWaitingDialog), FALSE);
 		gtk_window_set_skip_taskbar_hint (GTK_WINDOW (pWaitingDialog), TRUE);
 		gtk_window_set_skip_pager_hint (GTK_WINDOW (pWaitingDialog), TRUE);
 		gtk_window_set_transient_for (GTK_WINDOW (pWaitingDialog), pMainWindow);
