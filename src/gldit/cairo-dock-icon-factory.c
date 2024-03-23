@@ -125,6 +125,9 @@ void cairo_dock_load_icon_image (Icon *icon, G_GNUC_UNUSED GldiContainer *pConta
 	if ((icon->image.pSurface == pPrevSurface || icon->image.pSurface == NULL)
 	&& (icon->image.iTexture == iPrevTexture || icon->image.iTexture == 0))
 	{
+		// if the reason is that the icon is already being removed, we don't care
+		if (cairo_dock_icon_is_being_removed (icon)) return;
+		
 		gchar *cIconPath = cairo_dock_search_image_s_path (CAIRO_DOCK_DEFAULT_ICON_NAME);
 		if (cIconPath == NULL)  // fichier non trouve.
 		{
