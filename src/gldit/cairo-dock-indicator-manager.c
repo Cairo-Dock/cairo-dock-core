@@ -357,7 +357,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIndicatorsParam *pIndicator
 		g_free (cIndicatorImageName);
 		cIndicatorImageName = NULL;
 	}
-	else
+	if (pIndicators->cIndicatorImagePath == NULL)
 		pIndicators->cIndicatorImagePath = g_strdup (GLDI_SHARE_DATA_DIR"/icons/default-indicator.png");
 	
 	pIndicators->bIndicatorAbove = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "indicator above", &bFlushConfFileNeeded, FALSE, "Icons", NULL);
