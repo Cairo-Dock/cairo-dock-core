@@ -36,6 +36,7 @@
 #include "cairo-dock-animations.h"  // cairo_dock_animation_will_be_visible
 #include "cairo-dock-desktop-manager.h"  // gldi_desktop_get_width
 #include "cairo-dock-menu.h"  // gldi_menu_new
+#include "cdwindow.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-container.h"
 
@@ -778,7 +779,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	pContainer->bDirectionUp = TRUE;
 	
 	// create a window
-	GtkWidget* pWindow = gtk_window_new (cattr->bIsPopup ? GTK_WINDOW_POPUP : GTK_WINDOW_TOPLEVEL);
+	GtkWidget* pWindow = cd_window_new (cattr->bIsPopup ? GTK_WINDOW_POPUP : GTK_WINDOW_TOPLEVEL);
 	pContainer->pWidget = pWindow;
 	gtk_window_set_default_size (GTK_WINDOW (pWindow), 1, 1);  // this should prevent having grey rectangles during the loading, when the window is mapped and rendered by the WM but not yet by us.
 	gtk_window_resize (GTK_WINDOW (pWindow), 1, 1);
