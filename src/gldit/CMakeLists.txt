@@ -64,6 +64,7 @@ SET(core_lib_SRCS
 	cairo-dock-menu.c 					cairo-dock-menu.h
 	cairo-dock-style-manager.c 			cairo-dock-style-manager.h
 	cairo-dock-style-facility.c 		cairo-dock-style-facility.h
+	cdwindow.c                          cdwindow.h
 	texture-gradation.h
 )
 
