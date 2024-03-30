@@ -60,7 +60,7 @@ extern CairoDock *g_pMainDock;  // for the default dock visibility when composit
 
 // private
 static gboolean s_bSticky = TRUE;
-static gboolean s_bInitialOpacity0 = TRUE;  // set initial window opacity to 0, to avoid grey rectangles.
+static gboolean s_bInitialOpacity0 = FALSE;  // set initial window opacity to 0, to avoid grey rectangles.
 static gboolean s_bNoComposite = FALSE;
 static GldiContainerManagerBackend s_backend;
 static gboolean s_bNewPositioning = FALSE;
@@ -75,14 +75,14 @@ void cairo_dock_set_containers_non_sticky (void)
 	s_bSticky = FALSE;
 }
 
-void cairo_dock_disable_containers_opacity (void)
+void cairo_dock_enable_containers_opacity (void)
 {
 	if (g_pPrimaryContainer != NULL)
 	{
 		cd_warning ("this function has to be called before any container is created.");
 		return;
 	}
-	s_bInitialOpacity0 = FALSE;
+	s_bInitialOpacity0 = TRUE;
 }
 
 inline void gldi_display_get_pointer (int *xptr, int *yptr)

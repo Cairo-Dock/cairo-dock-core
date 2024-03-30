@@ -242,7 +242,7 @@ struct _GldiContainerManagerBackend {
 
 void cairo_dock_set_containers_non_sticky (void);
 
-void cairo_dock_disable_containers_opacity (void);
+void cairo_dock_enable_containers_opacity (void);
 
 #define gldi_container_get_gdk_window(pContainer) gtk_widget_get_window ((pContainer)->pWidget)
 
