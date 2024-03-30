@@ -1170,8 +1170,8 @@ static void init_object (GldiObject *obj, gpointer attr)
 	//\________________ on le place parmi les autres.
 	_place_dialog (pDialog, pContainer);  // renseigne aussi bDirectionUp, bIsHorizontal, et iHeight.
 	
-	//\ On Wayland, we show the dialog only after setting its position (on X11, this happens in gldi_dialog_init_internals () above)
-	if (gldi_container_is_wayland_backend ()) gtk_widget_show_all (pDialog->container.pWidget);
+	//\ Finally show the dialog
+	gtk_widget_show_all (pDialog->container.pWidget);
 	
 	//\________________ On connecte les signaux utiles.
 	g_signal_connect (G_OBJECT (pDialog->container.pWidget),

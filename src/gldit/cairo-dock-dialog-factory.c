@@ -590,9 +590,6 @@ void gldi_dialog_init_internals (CairoDialog *pDialog, CairoDialogAttr *pAttribu
 	else
 		pDialog->pTopWidget = _cairo_dock_add_dialog_internal_box (pDialog, 0, pDialog->iTopMargin, TRUE);
 	
-	// original behavior: dialog is shown at this point (does not work on Wayland, dialog needs to be positioned first)
-	if (!gldi_container_is_wayland_backend ()) gtk_widget_show_all (pDialog->container.pWidget);
-	
 	//\________________ load the input shape.
 	if (pDialog->bNoInput)
 	{
