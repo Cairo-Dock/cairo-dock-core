@@ -410,8 +410,9 @@ static void _container_init (GldiContainer *pContainer)
 			"map",
 			G_CALLBACK (_init_surface),
 			pContainer);
+		// our own signal, emitted before the associated wl_surface is destroyed
 		g_signal_connect (G_OBJECT (pContainer->pWidget),
-			"unmap",
+			"pending-unmap",
 			G_CALLBACK (_destroy_surface),
 			pContainer);
 	}
