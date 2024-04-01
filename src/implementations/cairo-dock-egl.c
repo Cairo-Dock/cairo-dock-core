@@ -324,14 +324,20 @@ static void _init_surface (GtkWidget *pWidget, GldiContainer *pContainer)
 		// not being supported on by GDK on Wayland
 		wl_surface_set_buffer_scale(wls, scale);
 		
-		// set a zero swapinterval to avoid deadlock if the surface is closed at the wrong time
-		_container_make_current (pContainer);
-		eglSwapInterval (dpy, 0);
-		
 		// possible debug output
 		// g_print ("surface: %p, window: %p, window->priv: %p, window->destroy_callback: %p\n", pContainer->eglSurface, wlw, wlw->driver_private, wlw->destroy_window_callback);
 	}
 #endif
+	
+	// make the container current to perform additional initialization
+	if (!_container_make_current (pContainer))
+	{
+		cd_warning ("Cannot make container current!");
+		return;
+	}
+	// set a zero swapinterval to avoid deadlock if the surface is closed at the wrong time (only needed on Wayland)
+	if (s_eglWayland) eglSwapInterval (dpy, 0);
+	gldi_gl_init_opengl_context ();
 }
 
 static void _destroy_surface (GtkWidget* pWidget, GldiContainer *pContainer) {

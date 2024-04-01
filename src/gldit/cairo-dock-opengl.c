@@ -264,10 +264,10 @@ void gldi_gl_container_end_draw (GldiContainer *pContainer)
 }
 
 
-static void _init_opengl_context (G_GNUC_UNUSED GtkWidget* pWidget, GldiContainer *pContainer)
+static void _post_initialize_opengl_backend (void);  // initialisation necessitant un contexte opengl.
+void gldi_gl_init_opengl_context ()
 {
-	if (! gldi_gl_container_make_current (pContainer))
-		return;
+	if (!s_bInitialized) _post_initialize_opengl_backend ();
 	
 	//g_print ("INIT OPENGL ctx\n");
 	glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
@@ -314,13 +314,8 @@ static gboolean _check_gl_extension (const char *extName)
 	return cairo_dock_string_contains (glExtensions, extName, " ");
 }
 
-static void _post_initialize_opengl_backend (G_GNUC_UNUSED GtkWidget *pWidget, GldiContainer *pContainer)  // initialisation necessitant un contexte opengl.
+static void _post_initialize_opengl_backend (void)  // initialisation necessitant un contexte opengl.
 {
-	g_return_if_fail (!s_bInitialized);
-	
-	if (! gldi_gl_container_make_current (pContainer))
-		return ;
-	
 	s_bInitialized = TRUE;
 	g_openglConfig.bNonPowerOfTwoAvailable = _check_gl_extension ("GL_ARB_texture_non_power_of_two");
 	g_openglConfig.bFboAvailable = _check_gl_extension ("GL_EXT_framebuffer_object");
@@ -368,19 +363,6 @@ void gldi_gl_container_init (GldiContainer *pContainer)
 {
 	if (g_bUseOpenGL && s_backend.container_init)
 		s_backend.container_init (pContainer);
-	
-	// finish the initialisation of the opengl backend, now that we have a window we can bind context to.
-	if (! s_bInitialized)
-		g_signal_connect (G_OBJECT (pContainer->pWidget),
-			"realize",
-			G_CALLBACK (_post_initialize_opengl_backend),
-			pContainer);
-	
-	// when the window will be realised, initialise its GL context.
-	g_signal_connect (G_OBJECT (pContainer->pWidget),
-		"realize",
-		G_CALLBACK (_init_opengl_context),
-		pContainer);
 }
 
 void gldi_gl_container_resized (GldiContainer *pContainer, int iWidth, int iHeight)

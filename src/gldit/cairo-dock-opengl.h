@@ -79,6 +79,12 @@ void gldi_gl_backend_deactivate (void);
 */
 void gldi_gl_backend_force_indirect_rendering (void);
 
+/** Callback from the backends to perform common initialization for a container
+ *  after a context is available. The context must be made current before
+ *  calling this function.
+ */
+void gldi_gl_init_opengl_context (void);
+
 
   ///////////////
  // CONTAINER //
