@@ -251,16 +251,6 @@ static gboolean _initialize_opengl_backend (gboolean bForceOpenGL)
 		return FALSE;
 	}
 	
-	// check some texture abilities
-	g_openglConfig.bTextureFromPixmapAvailable = _check_client_egl_extension ("EGL_EXT_texture_from_pixmap");
-	cd_debug ("bTextureFromPixmapAvailable: %d", g_openglConfig.bTextureFromPixmapAvailable);
-	if (g_openglConfig.bTextureFromPixmapAvailable)
-	{
-		g_openglConfig.bindTexImage = (gpointer)eglGetProcAddress ("eglBindTexImageEXT");
-		g_openglConfig.releaseTexImage = (gpointer)eglGetProcAddress ("eglReleaseTexImageEXT");
-		g_openglConfig.bTextureFromPixmapAvailable = (g_openglConfig.bindTexImage && g_openglConfig.releaseTexImage);
-	}
-	
 	return TRUE;
 }
 
