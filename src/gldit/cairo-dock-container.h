@@ -178,7 +178,6 @@ struct _GldiContainer {
 	gpointer reserved[2];
 };
 
-struct CairoDock; // forward definition needed in for the following
 
 /// Definition of the Container backend. It defines some operations that should be, but are not, provided by GTK.
 struct _GldiContainerManagerBackend {
