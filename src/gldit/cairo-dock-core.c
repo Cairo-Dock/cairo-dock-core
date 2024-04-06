@@ -146,7 +146,7 @@ gchar *gldi_get_diag_msg (void)
 {
 	
 	gboolean bX11 = FALSE, bWAYLAND = FALSE, bGLX = FALSE, bEGL = FALSE;
-	gboolean bGTK_LAYER_SHELL = FALSE, bWAYLAND_PROTOCOLS = FALSE;
+	gboolean bGTK_LAYER_SHELL = FALSE, bWAYLAND_PROTOCOLS = FALSE, bWAYFIRE = FALSE;
 #ifdef HAVE_X11
 bX11 = TRUE;
 #endif
@@ -164,6 +164,9 @@ bGTK_LAYER_SHELL = TRUE;
 #endif
 #ifdef HAVE_WAYLAND_PROTOCOLS
 bWAYLAND_PROTOCOLS = TRUE;
+#endif
+#ifdef HAVE_JSON
+bWAYFIRE = TRUE;
 #endif
 	
 	gchar *layer_shell_info = NULL;
@@ -191,7 +194,8 @@ bWAYLAND_PROTOCOLS = TRUE;
 		" * GLX:                          %s\n"
 		" * EGL:                          %s\n"
 		" * gtk-layer-shell:              %s\n"
-		" * additional Wayland protocols: %s\n\n"
+		" * additional Wayland protocols: %s\n"
+		" * Wayfire IPC:                  %s\n\n"
 		"Cairo-Dock is currently running with:\n"
 		" * display backend:              %s\n"
 		"%s"
@@ -208,6 +212,7 @@ bWAYLAND_PROTOCOLS = TRUE;
 		bEGL ? "yes" : "no",
 		bGTK_LAYER_SHELL ? "yes" : "no",
 		bWAYLAND_PROTOCOLS ? "yes" : "no",
+		bWAYFIRE ? "yes" : "no",
 		gldi_container_is_wayland_backend () ? "Wayland" : "X11",
 		layer_shell_info ? layer_shell_info : "",
 		g_bUseOpenGL ? "yes" : "no",
