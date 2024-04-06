@@ -17,26 +17,27 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "gldi-config.h"
+#include "cairo-dock-wayfire-integration.h"
+#include "cairo-dock-log.h"
+
+#ifdef HAVE_JSON
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <nlohmann/json.hpp>
 
-#include "cairo-dock-log.h"
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-windows-manager.h"  // bIsHidden
 #include "cairo-dock-icon-factory.h"  // pAppli
 #include "cairo-dock-container.h"  // gldi_container_get_gdk_window
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-utils.h"  // cairo_dock_launch_command_sync
-#include "cairo-dock-wayfire-integration.h"
 
-static const char expo_toggle[] = "{\"method\": \"expo/toggle\", \"data\": {}}";
-static const char scale_toggle[] = "{\"method\": \"scale/toggle\", \"data\": {}}";
-static const char scale_filter_base[] = "{\"method\": \"scale_ipc_filter/activate_appid\", \"data\": {\"all_workspaces\": true, \"app_id\": \"%s\"}}";
-static const char toggle_showdesktop[] = "{\"method\": \"wm-actions/toggle_showdesktop\", \"data\": {}}";
 static const char default_socket[] = "/tmp/wayfire-wayland-1.socket";
 
 int wayfire_socket = -1; // socket connection to Wayfire
@@ -47,7 +48,7 @@ static int _read_data(char* buf, size_t n) {
 	do {
 		ssize_t tmp = read(wayfire_socket, buf + s, n);
 		if(tmp < 0) {
-			// read error -- TODO: error message
+			cd_warning("Error reading data from Wayfire's IPC socket!");
 			close(wayfire_socket);
 			wayfire_socket = -1;
 			return -1;
@@ -63,7 +64,7 @@ static int _write_data(const char* buf, size_t n) {
 	do {
 		ssize_t tmp = write(wayfire_socket, buf + s, n);
 		if(tmp < 0) {
-			// TODO: error message
+			cd_warning("Error writing data to Wayfire's IPC socket!");
 			close(wayfire_socket);
 			wayfire_socket = -1;
 			return -1;
@@ -92,7 +93,7 @@ static char* _read_msg(uint32_t* out_len)
 	uint32_t msg_len;
 	memcpy(&msg_len, header, header_size);
 	char* msg = (char*)malloc(msg_len + 1);
-	if(msg_len) if(_read_data(msg, msg_len) < 0) return NULL;
+	if(msg_len) if(_read_data(msg, msg_len) < 0) { free(msg); return NULL; }
 	msg[msg_len] = 0;
 	if(out_len) *out_len = msg_len;
 	return msg;
@@ -109,148 +110,41 @@ static int _send_msg(const char* msg, uint32_t len) {
 	return _write_data(msg, len);
 }
 
-
-/* Very simple check for the content of a JSON response.
- * TODO: use a proper parser library here! */
-
-static size_t _skip_space(const char* x, size_t i, size_t len) {
-	for(; i < len; i++) {
-		if(! (x[i] == ' ' || x[i] == '\t' || x[i] == '\n' || x[i] == '\r') ) break;
-	}
-	return i;
-}
-
-static gboolean _check_json_simple(const char* json, const char* key, const char* value, size_t len) {
-	gboolean found = FALSE;
-	size_t i = 0;
-	int quote = 0;
-	int escape = 0;
-	int key_next = 0;
-	int key_found = 0;
-	
-	i = _skip_space(json, i, len);
-	if(i == len || json[i] != '{') return FALSE;
-	i = _skip_space(json, i + 1, len);
-	if(i >= len) return FALSE;
-	key_next = 1;
-	
-	while(i < len) {
-		if(json[i] == 0) return FALSE;
-		if(key_next) {
-			/* we expect a json key, which is a string enclosed by double quotes */
-			if(json[i] != '"') return FALSE;
-			i++;
-			size_t j = i;
-			for(; j < len; j++) {
-				if(json[j] == 0) return FALSE;
-				if(escape) escape = 0;
-				else if(json[j] == '\\') escape = 1;
-				else if(json[j] == '"') break;
-			}
-			if(j == len) return FALSE;
-			if(!found && strncmp(json + i, key, j - i) == 0) key_found = 1;
-			i = _skip_space(json, j + 1, len);
-			if(i + 1 >= len || json[i] != ':') return FALSE;
-			key_next = 0;
-		}
-		else {
-			/* we expect a value or we are skipping stuff */
-			if(json[i] == '{' || json[i] == '[') {
-				char c = json[i];
-				char c2 = (c == '{') ? '}' : ']';
-				int tmplevel = 1;
-				for(i++; i < len; i++) {
-					if(json[i] == 0) return FALSE;
-					if(quote) {
-						if(escape) escape = 0;
-						else if(json[i] == '\\') escape = 1;
-						else if(json[i] == '"') quote = 0;
-					}
-					else if(json[i] == '"') quote = 1;
-					else if(json[i] == c) tmplevel++;
-					else if(json[i] == c2) {
-						tmplevel--;
-						if(tmplevel == 0) break;
-					}
-				}
-				i = _skip_space(json, i+1, len);
-				if(i >= len) return FALSE;
-			}
-			else if(json[i] == '"') {
-				/* string */
-				i++;
-				size_t j = i;
-				for(; j < len; j++) {
-					if(json[j] == 0) return FALSE;
-					if(escape) escape = 0;
-					else if(json[j] == '\\') escape = 1;
-					else if(json[j] == '"') break;
-				}
-				if(j == len) return FALSE;
-				if(key_found && strncmp(json + i, value, j - i) == 0) found = TRUE;
-				i = j + 1;
-			}
-			else {
-				/* skip everything */
-				for(; i < len; i++) {
-					if(json[i] == 0) return FALSE;
-					if(json[i] == ',') break;
-					if(json[i] == '"') return FALSE; /* invalid */
-				}
-			}
-			key_found = 0;
-			if(!key_next) {
-				i = _skip_space(json, i, len);
-				if(i == len) return FALSE;
-				if(json[i] == 0) return FALSE;
-				if(json[i] == '}') break; /* we are at the first level here */
-				if(json[i] != ',') return FALSE;
-				key_next = 1;
-			}
-		}
-		i = _skip_space(json, i + 1, len);
-	}
-	return found;
-}
-
 /* Call a Wayfire IPC method and try to check if it was successful. */
-static gboolean _call_ipc(const char* msg, size_t len) {
-	if(_send_msg(msg, len) < 0) return FALSE;
-	size_t len2 = 0;
-	char* tmp = _read_msg(&len2);
-	if(!tmp) return FALSE;
-	gboolean res = _check_json_simple(tmp, "result", "ok", len2);
-	free(tmp);
-	return res;
+static gboolean _call_ipc(const nlohmann::json& data) {
+	std::string tmp = data.dump();
+	if(_send_msg(tmp.c_str(), tmp.length()) < 0) return FALSE;
+	
+	uint32_t len2 = 0;
+	char* tmp2 = _read_msg(&len2);
+	if(!tmp2) return FALSE;
+	
+	nlohmann::json res = nlohmann::json::parse(tmp2, nullptr, false);
+	free(tmp2);
+	
+	if(!res.contains("result")) return FALSE;
+	return (res["result"] == "ok");
 }
 
 /* Start scale on the current workspace */
 static gboolean _present_windows() {
-	return _call_ipc(scale_toggle, strlen(scale_toggle));
+	return _call_ipc({{"method", "scale/toggle"}, {"data", {}}});
 }
 
 /* Start scale including all views of the given class */
 static gboolean _present_class(const gchar *cClass) {
-	size_t l1 = strlen(scale_filter_base);
-	size_t l2 = strlen(cClass);
-	size_t s = l1 + l2 + 1;
-	char* msg = (char*)malloc(s);
-	if(!msg) return FALSE;
-	s = snprintf(msg, s, scale_filter_base, cClass);
-	gboolean res = _call_ipc(msg, s);
-	free(msg);
-	return res;
+	return _call_ipc({{"method", "scale_ipc_filter/activate_appid"}, {"data", {{"all_workspaces", true}, {"app_id", cClass}}}});
 }
 
 /* Start expo on the current output */
 static gboolean _present_desktops() {
-	return _call_ipc(expo_toggle, strlen(scale_toggle));
+	return _call_ipc({{"method", "expo/toggle"}, {"data", {}}});
 }
 
 /* Toggle show destop functionality (i.e. minimize / unminimize all views).
  * Note: bShow argument is ignored, we don't know if the desktop is shown / hidden */
 static gboolean _show_hide_desktop(G_GNUC_UNUSED gboolean bShow) {
-	return _call_ipc(toggle_showdesktop, strlen(toggle_showdesktop));
+	return _call_ipc({{"method", "wm-actions/toggle_showdesktop"}, {"data", {}}});
 }
 
 /*
@@ -307,4 +201,11 @@ void cd_init_wayfire_backend() {
 	gldi_desktop_manager_register_backend (&p, "Wayfire");
 }
 
+#else
+
+void cd_init_wayfire_backend() {
+	cd_message("Cairo-Dock was not built with Wayfire IPC support");
+}
+
+#endif
 
