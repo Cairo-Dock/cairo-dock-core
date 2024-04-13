@@ -680,6 +680,13 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	pParams->iAimedY = iAimedY;
 }
 
+
+static void _init_menu_item (GtkWidget *pMenuItem);
+static void _init_menu_item2 (GtkWidget *menu, gpointer)
+{
+	_init_menu_item (menu);
+}
+
 static void _init_menu_item (GtkWidget *pMenuItem)
 {
 	GtkWidget *pSubMenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (pMenuItem));
@@ -705,7 +712,7 @@ static void _init_menu_item (GtkWidget *pMenuItem)
 	
 	// iterate on sub-menu's items
 	if (pSubMenu != NULL)
-		gtk_container_forall (GTK_CONTAINER (pSubMenu), (GtkCallback) _init_menu_item, NULL);
+		gtk_container_forall (GTK_CONTAINER (pSubMenu), (GtkCallback) _init_menu_item2, NULL);
 }
 
 static void _popup_menu (GtkWidget *menu, guint32 time)
@@ -721,7 +728,7 @@ static void _popup_menu (GtkWidget *menu, guint32 time)
 		pContainer->iface.setup_menu (pContainer, pIcon, menu);
 
 	// init each items (and sub-menus), in case it contains some foreign GtkMenuItems (for instance in case of an indicator menu or the gtk recent files sub-menu, which can have new items at any time)
-	gtk_container_forall (GTK_CONTAINER (menu), (GtkCallback) _init_menu_item, NULL);  // init each menu-item style
+	gtk_container_forall (GTK_CONTAINER (menu), (GtkCallback) _init_menu_item2, NULL);  // init each menu-item style
 	
 	if (pIcon && pContainer)
 	{
