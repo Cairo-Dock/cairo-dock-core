@@ -346,6 +346,20 @@ void gldi_docks_foreach_root (GFunc pFunction, gpointer data)
 	g_list_foreach (s_pRootDockList, pFunction, data);
 }
 
+typedef void (*CairoDockSimpleCallback) (CairoDock *pDock);
+
+void _simple_cb (void *obj, void *data)
+{
+	CairoDock *pDock = (CairoDock*)obj;
+	CairoDockSimpleCallback fun = (CairoDockSimpleCallback)data;
+	fun (pDock);
+}
+
+void _gldi_docks_foreach_root_no_data (CairoDockSimpleCallback pFunction)
+{
+	g_list_foreach (s_pRootDockList, _simple_cb, (void*)pFunction);
+}
+
 static void _gldi_icons_foreach_in_dock (G_GNUC_UNUSED gchar *cDockName, CairoDock *pDock, gpointer *data)
 {
 	GldiIconFunc pFunction = data[0];
@@ -691,7 +705,7 @@ gchar *gldi_dock_add_conf_file (void)
 
 void gldi_docks_redraw_all_root (void)
 {
-	gldi_docks_foreach_root ((GFunc)cairo_dock_redraw_container, NULL);
+	_gldi_docks_foreach_root_no_data ((CairoDockSimpleCallback)cairo_dock_redraw_container);
 }
 
 
@@ -1707,7 +1721,7 @@ static gboolean on_style_changed (G_GNUC_UNUSED gpointer data)
 		myDocksParam.iDockLineWidth = myStyleParam.iLineWidth;
 		
 		if (bNeedUpdateSize)  // update docks size and background
-			gldi_docks_foreach_root ((GFunc)cairo_dock_update_dock_size, NULL);
+			_gldi_docks_foreach_root_no_data (cairo_dock_update_dock_size);
 		else  // update docks background for color change
 			gldi_docks_foreach_root ((GFunc)_reload_bg, NULL);
 	}
