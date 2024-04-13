@@ -146,10 +146,18 @@ static void __load_needle (GaugeIndicator *pGaugeIndicator, int iWidth, int iHei
 	g_return_if_fail (pSvgHandle != NULL);
 	
 	// get the SVG dimensions.
-	RsvgDimensionData SizeInfo;
-	rsvg_handle_get_dimensions (pSvgHandle, &SizeInfo);
-	int sizeX = SizeInfo.width;
-	int sizeY = SizeInfo.height;
+	gdouble W, H;
+	int sizeX, sizeY;
+	if (rsvg_handle_get_intrinsic_size_in_pixels (pSvgHandle, &W, &H))
+	{
+		sizeX = (int)ceil (W);
+		sizeY = (int)ceil (H);
+	}
+	else
+	{
+		sizeX = 1;
+		sizeY = 1;
+	}
 	
 	// guess the needle size and offset if not specified.
 	if (pGaugeIndicator->iNeedleRealHeight == 0)
