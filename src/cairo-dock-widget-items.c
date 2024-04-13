@@ -663,8 +663,7 @@ static void _on_select_remove_item (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GtkWid
 	if (! gtk_tree_model_get_iter (pModel, &iter, path))
 		return;
 	
-	g_list_foreach (paths, (GFunc)gtk_tree_path_free, NULL);
-	g_list_free (paths);
+	g_list_free_full (paths, (GDestroyNotify)gtk_tree_path_free);
 	
 	// get the corresponding item, and the next line.
 	Icon *pIcon = NULL;
@@ -1056,6 +1055,6 @@ void cairo_dock_items_widget_reload_current_widget (ItemsWidget *pItemsWidget, G
 		gtk_notebook_set_current_page (GTK_NOTEBOOK (pItemsWidget->pCurrentLauncherWidget), iNotebookPage);
 	}
 	
-	g_list_foreach (paths, (GFunc)gtk_tree_path_free, NULL);
-	g_list_free (paths);
+	g_list_free_full (paths, (GDestroyNotify)gtk_tree_path_free);
 }
+

@@ -948,10 +948,11 @@ static void _cairo_dock_free_gauge_image (GaugeImage *pGaugeImage, gboolean bFre
 	if (bFree)
 		g_free (pGaugeImage);
 }
-static void _cairo_dock_free_gauge_indicator(GaugeIndicator *pGaugeIndicator)
+static void _cairo_dock_free_gauge_indicator(void *ptr)
 {
-	if (pGaugeIndicator == NULL)
+	if (ptr == NULL)
 		return ;
+	GaugeIndicator *pGaugeIndicator = (GaugeIndicator*)ptr;
 	
 	int i;
 	for (i = 0; i < pGaugeIndicator->iNbImages; i ++)
@@ -973,8 +974,7 @@ static void unload (Gauge *pGauge)
 	_cairo_dock_free_gauge_image(pGauge->pImageBackground, TRUE);
 	_cairo_dock_free_gauge_image(pGauge->pImageForeground, TRUE);
 	
-	g_list_foreach (pGauge->pIndicatorList, (GFunc)_cairo_dock_free_gauge_indicator, NULL);
-	g_list_free (pGauge->pIndicatorList);
+	g_list_free_full (pGauge->pIndicatorList, _cairo_dock_free_gauge_indicator);
 }
 
 

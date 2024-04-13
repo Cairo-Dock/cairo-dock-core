@@ -72,8 +72,7 @@ static void cairo_dock_free_class_appli (CairoDockClassAppli *pClassAppli)
 	g_free (pClassAppli->cWorkingDirectory);
 	if (pClassAppli->pMimeTypes)
 		g_strfreev (pClassAppli->pMimeTypes);
-	g_list_foreach (pClassAppli->pMenuItems, (GFunc)g_strfreev, NULL);
-	g_list_free (pClassAppli->pMenuItems);
+	g_list_free_full (pClassAppli->pMenuItems, (GDestroyNotify)g_strfreev);
 	if (pClassAppli->iSidOpeningTimeout != 0)
 		g_source_remove (pClassAppli->iSidOpeningTimeout);
 	g_free (pClassAppli);

@@ -148,8 +148,7 @@ void cairo_dock_destroy_icon_overlays (Icon *pIcon)
 {
 	GList *pOverlays = pIcon->pOverlays;
 	pIcon->pOverlays = NULL;  // nullify the list to avoid unnecessary roundtrips.
-	g_list_foreach (pOverlays, (GFunc)gldi_object_unref, NULL);
-	g_list_free (pOverlays);
+	g_list_free_full (pOverlays, (GDestroyNotify)gldi_object_unref);
 }
 
 

@@ -892,9 +892,10 @@ static void on_click_back_button (G_GNUC_UNUSED GtkButton *button, G_GNUC_UNUSED
 	_show_group_or_category (pPrevPlace);
 }
 
-static void _on_group_dialog_destroyed (G_GNUC_UNUSED gpointer data)
+static gboolean _on_group_dialog_destroyed (G_GNUC_UNUSED gpointer data)
 {
 	s_pDialog = NULL;
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription)
 {
@@ -1090,8 +1091,7 @@ static void cairo_dock_free_categories (void)
 {
 	memset (s_pCategoryWidgetTables, 0, sizeof (s_pCategoryWidgetTables));  // les widgets a l'interieur sont detruits avec la fenetre.
 	
-	g_list_foreach (s_pGroupDescriptionList, (GFunc)_cairo_dock_free_group_description, NULL);
-	g_list_free (s_pGroupDescriptionList);
+	g_list_free_full (s_pGroupDescriptionList, (GDestroyNotify)_cairo_dock_free_group_description);
 	s_pGroupDescriptionList = NULL;
 	s_pCurrentGroup = NULL;
 	

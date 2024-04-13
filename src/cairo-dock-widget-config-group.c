@@ -98,8 +98,7 @@ static void _config_group_widget_reset (CDWidget *pCdWidget)
 {
 	ConfigGroupWidget *pConfigGroupWidget = CONFIG_GROUP_WIDGET (pCdWidget);
 	//g_free (pConfigGroupWidget->cGroupName);
-	g_slist_foreach (pConfigGroupWidget->pExtraWidgets, (GFunc)cairo_dock_free_generated_widget_list, NULL);
-	g_slist_free (pConfigGroupWidget->pExtraWidgets);
+	g_slist_free_full (pConfigGroupWidget->pExtraWidgets, (GDestroyNotify)cairo_dock_free_generated_widget_list);
 	memset (pCdWidget+1, 0, sizeof (ConfigGroupWidget) - sizeof (CDWidget));  // reset all our parameters.
 }
 

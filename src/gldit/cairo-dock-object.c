@@ -92,8 +92,7 @@ void gldi_object_unref (GldiObject *pObject)
 		for (i = 0; i < pNotificationsTab->len; i ++)
 		{
 			GSList *pNotificationRecordList = g_ptr_array_index (pNotificationsTab, i);
-			g_slist_foreach (pNotificationRecordList, (GFunc)g_free, NULL);
-			g_slist_free (pNotificationRecordList);
+			g_slist_free_full (pNotificationRecordList, g_free);
 		}
 		g_ptr_array_free (pNotificationsTab, TRUE);
 		
