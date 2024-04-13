@@ -248,8 +248,8 @@ static struct zcosmic_toplevel_handle_v1_listener gldi_toplevel_handle_interface
     .done         = _gldi_toplevel_done_cb,
     .closed       = _gldi_toplevel_closed_cb,
 //    .parent       = _gldi_toplevel_parent_cb,
-    .workspace_enter = _dummy,
-    .workspace_leave = _dummy
+    .workspace_enter = (void (*)(void*, struct zcosmic_toplevel_handle_v1*, struct zcosmic_workspace_handle_v1*))_dummy,
+    .workspace_leave = (void (*)(void*, struct zcosmic_toplevel_handle_v1*, struct zcosmic_workspace_handle_v1*))_dummy
 };
 
 /* register new toplevel */
@@ -290,9 +290,9 @@ gboolean gldi_cosmic_toplevel_try_init (struct wl_registry *registry)
 {
 	if (!(manager_found && info_found)) return FALSE;
 	
-	if (info_version > zcosmic_toplevel_info_v1_interface.version)
+	if (info_version > (uint32_t)zcosmic_toplevel_info_v1_interface.version)
 		info_version = zcosmic_toplevel_info_v1_interface.version;
-	if (manager_version > zcosmic_toplevel_manager_v1_interface.version)
+	if (manager_version > (uint32_t)zcosmic_toplevel_manager_v1_interface.version)
 		manager_version = zcosmic_toplevel_manager_v1_interface.version;
 	
 	s_ptoplevel_manager = wl_registry_bind (registry, manager_id, &zcosmic_toplevel_manager_v1_interface, manager_version);

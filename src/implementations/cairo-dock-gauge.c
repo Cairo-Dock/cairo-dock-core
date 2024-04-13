@@ -749,7 +749,7 @@ static void _draw_gauge_image_opengl (Gauge *pGauge, GaugeIndicator *pGaugeIndic
 
 			case CD_GAUGE_EFFECT_FADE :
 				_cairo_dock_set_alpha(fValue); // no break, we need the default texture draw
-
+				// fallthrough
 			default :
 				_cairo_dock_apply_current_texture_at_size (iWidth, iHeight);
 			break;

@@ -289,7 +289,7 @@ gboolean gldi_wlr_foreign_toplevel_try_init (struct wl_registry *registry)
 {
 	if (!protocol_found) return FALSE;
 	
-	if (protocol_version > zwlr_foreign_toplevel_manager_v1_interface.version)
+	if (protocol_version > (uint32_t)zwlr_foreign_toplevel_manager_v1_interface.version)
 	{
 		protocol_version = zwlr_foreign_toplevel_manager_v1_interface.version;
 	}
