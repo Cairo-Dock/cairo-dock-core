@@ -553,7 +553,7 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, GldiContainer *pCont
 		pAttribute->iNbValues = MAX (1, pAttribute->iNbValues);
 		if (pRenderer && cairo_data_renderer_get_nb_values (pRenderer) == pAttribute->iNbValues)
 		{
-			pData = g_memdup (&pRenderer->data, sizeof (CairoDataToRenderer));
+			pData = g_memdup2 (&pRenderer->data, sizeof (CairoDataToRenderer));
 			memset (&pRenderer->data, 0, sizeof (CairoDataToRenderer));
 			
 			pAttribute->iMemorySize = MAX (2, pAttribute->iMemorySize);

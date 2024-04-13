@@ -78,7 +78,7 @@ static void _gldi_manager_reload_from_keyfile (GldiManager *pManager, GKeyFile *
 	// get new config
 	if (pManager->iSizeOfConfig != 0 && pManager->pConfig != NULL && pManager->get_config != NULL)
 	{
-		pPrevConfig = g_memdup (pManager->pConfig, pManager->iSizeOfConfig);
+		pPrevConfig = g_memdup2 (pManager->pConfig, pManager->iSizeOfConfig);
 		memset (pManager->pConfig, 0, pManager->iSizeOfConfig);
 		
 		pManager->get_config (pKeyFile, pManager->pConfig);
