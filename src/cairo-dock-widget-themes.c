@@ -74,8 +74,10 @@ static gchar *_cairo_dock_build_temporary_themes_conf_file (void)
 	return cTmpConfFile;
 }
 
-static void _load_theme (gboolean bSuccess, ThemesWidget *pThemesWidget)
+static void _load_theme (gboolean bSuccess, gpointer data)
 {
+	ThemesWidget *pThemesWidget = (ThemesWidget*)data;
+	
 	if (bSuccess)
 	{
 		cairo_dock_load_current_theme ();
@@ -239,7 +241,7 @@ static gboolean _cairo_dock_load_theme (GKeyFile* pKeyFile, ThemesWidget *pTheme
 		gtk_widget_show_all (pWaitingDialog);
 		
 		cd_debug ("start importation...");
-		pThemesWidget->pImportTask = cairo_dock_import_theme_async (cNewThemeName, bLoadBehavior, bLoadLaunchers, (GFunc)_load_theme, pThemesWidget);  // if 'pThemesWidget' is destroyed, the 'reset' callback will be called and will cancel the task.
+		pThemesWidget->pImportTask = cairo_dock_import_theme_async (cNewThemeName, bLoadBehavior, bLoadLaunchers, _load_theme, pThemesWidget);  // if 'pThemesWidget' is destroyed, the 'reset' callback will be called and will cancel the task.
 	}
 	else  // if the theme is already local and uptodate, there is really no need to show a progressbar, because only the download/unpacking is done asynchonously (and the copy of the files is fast enough).
 	{
