@@ -779,21 +779,21 @@ static void init_object (GldiObject *obj, gpointer attr)
 	pContainer->bDirectionUp = TRUE;
 	
 	// create a window
-	GtkWidget* pWindow = cd_window_new (cattr->bIsPopup ? GTK_WINDOW_POPUP : GTK_WINDOW_TOPLEVEL);
-	pContainer->pWidget = pWindow;
-	gtk_window_set_default_size (GTK_WINDOW (pWindow), 1, 1);  // this should prevent having grey rectangles during the loading, when the window is mapped and rendered by the WM but not yet by us.
-	gtk_window_resize (GTK_WINDOW (pWindow), 1, 1);
-	gtk_widget_set_app_paintable (pWindow, TRUE);
-	gtk_window_set_decorated (GTK_WINDOW (pWindow), FALSE);
-	gtk_window_set_skip_pager_hint (GTK_WINDOW(pWindow), TRUE);
-	gtk_window_set_skip_taskbar_hint (GTK_WINDOW(pWindow), TRUE);
+	GtkWindow* pWindow = (GtkWindow*) cd_window_new (cattr->bIsPopup ? GTK_WINDOW_POPUP : GTK_WINDOW_TOPLEVEL);
+	pContainer->pWidget = GTK_WIDGET (pWindow);
+	gtk_window_set_default_size (pWindow, 1, 1);  // this should prevent having grey rectangles during the loading, when the window is mapped and rendered by the WM but not yet by us.
+	gtk_window_resize (pWindow, 1, 1);
+	gtk_widget_set_app_paintable (GTK_WIDGET (pWindow), TRUE);
+	gtk_window_set_decorated (pWindow, FALSE);
+	gtk_window_set_skip_pager_hint (pWindow, TRUE);
+	gtk_window_set_skip_taskbar_hint (pWindow, TRUE);
 	if (s_bSticky)
-		gtk_window_stick (GTK_WINDOW (pWindow));
+		gtk_window_stick (pWindow);
 	g_signal_connect (G_OBJECT (pWindow),
 		"delete-event",
 		G_CALLBACK (_prevent_delete),
 		NULL);
-	gtk_window_get_size (GTK_WINDOW (pWindow), &pContainer->iWidth, &pContainer->iHeight);  // it's only the initial size allocated by GTK.
+	gtk_window_get_size (pWindow, &pContainer->iWidth, &pContainer->iHeight);  // it's only the initial size allocated by GTK.
 	
 	// set an RGBA visual for cairo or opengl
 	if (g_bUseOpenGL && ! cattr->bNoOpengl)
@@ -803,7 +803,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	}
 	else
 	{
-		cairo_dock_set_default_rgba_visual (pWindow);
+		cairo_dock_set_default_rgba_visual (GTK_WIDGET (pWindow));
 		pContainer->iAnimationDeltaT = myContainersParam.iCairoAnimationDeltaT;
 	}
 	if (pContainer->iAnimationDeltaT == 0)
@@ -813,9 +813,9 @@ static void init_object (GldiObject *obj, gpointer attr)
 	if (s_bInitialOpacity0)
 	{
 		#if GTK_CHECK_VERSION (3, 8, 0)
-		gtk_widget_set_opacity (pWindow, 0.);
+		gtk_widget_set_opacity (GTK_WIDGET (pWindow), 0.);
 		#else
-		gtk_window_set_opacity (GTK_WINDOW (pWindow), 0.);
+		gtk_window_set_opacity (pWindow, 0.);
 		#endif
 		g_signal_connect (G_OBJECT (pWindow),
 			"draw",
@@ -827,8 +827,10 @@ static void init_object (GldiObject *obj, gpointer attr)
 		G_CALLBACK (_remove_background),
 		pContainer);
 
-	// remove the resize grip added by gtk3
-	gtk_window_set_has_resize_grip (GTK_WINDOW(pWindow), FALSE);
+	// remove the resize grip present between GTK versions 3.0 -- 3.14
+	#if !GTK_CHECK_VERSION (3, 14, 0)
+	gtk_window_set_has_resize_grip (pWindow, FALSE);
+	#endif
 
 	// make it the primary container if it's the first
 	if (g_pPrimaryContainer == NULL)
