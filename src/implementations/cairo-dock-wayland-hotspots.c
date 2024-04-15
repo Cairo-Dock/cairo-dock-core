@@ -330,14 +330,7 @@ static void _layer_shell_update_hotspot (output_hotspots_base *base, int j)
 		gtk_widget_set_size_request(widget, W, H);
 		gtk_widget_set_app_paintable (widget, TRUE);
 		gtk_window_set_decorated (window, FALSE);
-		#if GTK_CHECK_VERSION (3, 8, 0) // not sure if this is needed (by default, the window is transparent?)
-		gtk_widget_set_opacity (widget, 0.);
-		#else
-		gtk_window_set_opacity (window, 0.);
-		#endif
-		#if !GTK_CHECK_VERSION (3, 14, 0)
-		gtk_window_set_has_resize_grip (window, FALSE);
-		#endif
+		gtk_widget_set_opacity (widget, 0.); // not sure if this is needed (by default, the window is transparent?)
 		
 		gtk_layer_set_keyboard_mode (window, GTK_LAYER_SHELL_KEYBOARD_MODE_NONE);
 		gtk_layer_set_namespace (window, "cairo-dock-edge-hotspot");

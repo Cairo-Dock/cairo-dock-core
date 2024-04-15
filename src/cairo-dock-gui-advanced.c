@@ -728,20 +728,11 @@ static void _add_module_to_grid (CairoDockCategoryWidgetTable *pCategoryWidget, 
 		pCategoryWidget->iNbItemsInCurrentRow = 0;
 		pCategoryWidget->iNbRows ++;
 	}
-	#if GTK_CHECK_VERSION (3, 4, 0)
 	gtk_grid_attach (GTK_GRID (pCategoryWidget->pTable),
 		pWidget,
 		pCategoryWidget->iNbItemsInCurrentRow+1,
 		pCategoryWidget->iNbRows+1,
 		1, 1);
-	#else
-	gtk_table_attach_defaults (GTK_TABLE (pCategoryWidget->pTable),
-		pWidget,
-		pCategoryWidget->iNbItemsInCurrentRow,
-		pCategoryWidget->iNbItemsInCurrentRow+1,
-		pCategoryWidget->iNbRows,
-		pCategoryWidget->iNbRows+1);
-	#endif
 	pCategoryWidget->iNbItemsInCurrentRow ++;
 }
 
@@ -784,17 +775,11 @@ static void on_click_toggle_activated (GtkButton *button, G_GNUC_UNUSED gpointer
 		pCategoryWidget->iNbItemsInCurrentRow = 0;
 		
 		gtk_widget_destroy(pCategoryWidget->pTable);
-		#if GTK_CHECK_VERSION (3, 4, 0)
 		pCategoryWidget->pTable = gtk_grid_new ();
 		gtk_grid_set_row_spacing (GTK_GRID (pCategoryWidget->pTable), CAIRO_DOCK_FRAME_MARGIN);
 		gtk_grid_set_row_homogeneous (GTK_GRID (pCategoryWidget->pTable), TRUE);
 		gtk_grid_set_column_spacing (GTK_GRID (pCategoryWidget->pTable), CAIRO_DOCK_FRAME_MARGIN);
 		gtk_grid_set_column_homogeneous (GTK_GRID (pCategoryWidget->pTable), TRUE);
-		#else
-		pCategoryWidget->pTable = gtk_table_new (1, s_iNbButtonsByRow, TRUE);
-		gtk_table_set_row_spacings (GTK_TABLE (pCategoryWidget->pTable), CAIRO_DOCK_FRAME_MARGIN);
-		gtk_table_set_col_spacings (GTK_TABLE (pCategoryWidget->pTable), CAIRO_DOCK_FRAME_MARGIN);
-		#endif
 		gtk_container_add (GTK_CONTAINER (pCategoryWidget->pFrame), pCategoryWidget->pTable);
 	}
 
@@ -1033,13 +1018,8 @@ static gboolean on_leave_group_button (GtkButton *button, GdkEventCrossing *pEve
 		GtkAllocation allocation;
 		gtk_widget_get_allocation (GTK_WIDGET (button), &allocation);
 		int x, y;
-		#if GTK_CHECK_VERSION (3, 20, 0)
 		GdkSeat *pSeat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (button)));
 		GdkDevice *pDevice = gdk_seat_get_pointer (pSeat);
-		#else
-		GdkDevice *pDevice = gdk_device_manager_get_client_pointer (
-			gdk_display_get_device_manager (gtk_widget_get_display (GTK_WIDGET (button))));
-		#endif
 		gdk_window_get_device_position (gtk_widget_get_window (GTK_WIDGET (button)), pDevice, &x, &y, NULL);
 		x -= allocation.x;
 		y -= allocation.y;

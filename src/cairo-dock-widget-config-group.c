@@ -123,11 +123,7 @@ static void _add_widget_to_notebook (GtkWidget *pNoteBook, GtkWidget *pWidget, c
 	
 	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);  // add scrollbars on the widget before putting it into the notebook.
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-	#if GTK_CHECK_VERSION (3, 8, 0)
 	gtk_container_add (GTK_CONTAINER (pScrolledWindow), pWidget);
-	#else
-	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pWidget);
-	#endif
 	
 	gtk_notebook_append_page (GTK_NOTEBOOK (pNoteBook), pScrolledWindow, (pAlign != NULL ? pAlign : pLabel));
 }

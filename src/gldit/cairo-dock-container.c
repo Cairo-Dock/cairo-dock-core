@@ -87,13 +87,8 @@ void cairo_dock_enable_containers_opacity (void)
 
 inline void gldi_display_get_pointer (int *xptr, int *yptr)
 {
-	#if GTK_CHECK_VERSION (3, 20, 0)
 	GdkSeat *pSeat = gdk_display_get_default_seat (gdk_display_get_default());
 	GdkDevice *pDevice = gdk_seat_get_pointer (pSeat);
-	#else
-	GdkDeviceManager *_dm = gdk_display_get_device_manager (gdk_display_get_default());
-	GdkDevice *pDevice = gdk_device_manager_get_client_pointer (_dm);
-	#endif
 	gdk_device_get_position (pDevice, NULL, xptr, yptr);
 } 
 
@@ -155,11 +150,7 @@ static gboolean _set_opacity (GtkWidget *pWidget, G_GNUC_UNUSED cairo_t *ctx, Gl
 	{
 		g_signal_handlers_disconnect_by_func (pWidget, _set_opacity, pContainer);  // we'll never need to pass here any more, so simply disconnect ourselves.
 		//g_print ("____OPACITY 1 (%dx%d)\n", pContainer->iWidth, pContainer->iHeight);
-		#if GTK_CHECK_VERSION (3, 8, 0)
 		gtk_widget_set_opacity (pWidget, 1.);
-		#else
-		gtk_window_set_opacity (GTK_WINDOW (pWidget), 1.);
-		#endif
 	}
 	return FALSE ;
 }
@@ -812,11 +803,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	// set the opacity to 0 to avoid seeing grey rectangles until the window is ready to be painted by us.
 	if (s_bInitialOpacity0)
 	{
-		#if GTK_CHECK_VERSION (3, 8, 0)
 		gtk_widget_set_opacity (GTK_WIDGET (pWindow), 0.);
-		#else
-		gtk_window_set_opacity (pWindow, 0.);
-		#endif
 		g_signal_connect (G_OBJECT (pWindow),
 			"draw",
 			G_CALLBACK (_set_opacity),
@@ -826,11 +813,6 @@ static void init_object (GldiObject *obj, gpointer attr)
 		"realize",
 		G_CALLBACK (_remove_background),
 		pContainer);
-
-	// remove the resize grip present between GTK versions 3.0 -- 3.14
-	#if !GTK_CHECK_VERSION (3, 14, 0)
-	gtk_window_set_has_resize_grip (pWindow, FALSE);
-	#endif
 
 	// make it the primary container if it's the first
 	if (g_pPrimaryContainer == NULL)

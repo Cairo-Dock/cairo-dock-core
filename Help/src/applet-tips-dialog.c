@@ -322,11 +322,7 @@ void cairo_dock_show_tips (void)
 	attr.pUserData = pTips;
 	attr.pFreeDataFunc = (GFreeFunc)_on_free_tips_dialog;
 	/// GTK_STOCK is now deprecated, here is a temporary fix to avoid compilation errors
-	#if GTK_CHECK_VERSION(3, 9, 8)
 	const gchar *cButtons[] = {"cancel", "gtk-go-forward-rtl", "gtk-go-forward-ltr", NULL};
-	#else
-	const gchar *cButtons[] = {"cancel", GTK_STOCK_GO_FORWARD"-rtl", GTK_STOCK_GO_FORWARD"-ltr", NULL};
-	#endif
 	attr.cButtonsImage = cButtons;
 	attr.bUseMarkup = TRUE;
 	attr.pIcon = myIcon;

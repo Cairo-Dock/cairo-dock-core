@@ -92,16 +92,6 @@ typedef struct {
 		G_TYPE_DOUBLE,   /* CAIRO_DOCK_MODEL_SIZE*/\
 		G_TYPE_STRING)   /* CAIRO_DOCK_MODEL_AUTHOR*/
 
-#if ! GTK_CHECK_VERSION(3, 10, 0)
-GtkWidget* gtk_button_new_from_icon_name (const gchar *icon_name, GtkIconSize  size)
-{
-	GtkWidget *image = gtk_image_new_from_icon_name (icon_name, size);
-	return (GtkWidget*) g_object_new (GTK_TYPE_BUTTON,
-		"image", image,
-		NULL);
-}
-#endif
-
 static void _cairo_dock_activate_one_element (G_GNUC_UNUSED GtkCellRendererToggle * cell_renderer, gchar * path, GtkTreeModel * model)
 {
 	GtkTreeIter iter;
@@ -2869,11 +2859,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					k = 1;
 				g_object_set (pScrolledWindow, "height-request", (iElementType == CAIRO_DOCK_WIDGET_TREE_VIEW_SORT_AND_MODIFY ? 100 : MIN (100, k * 25)), NULL);
 				gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-				#if GTK_CHECK_VERSION (3, 8, 0)
 				gtk_container_add (GTK_CONTAINER (pScrolledWindow), pOneWidget);
-				#else
-				gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
-				#endif
 				_pack_in_widget_box (pScrolledWindow);
 				
 				if (iElementType != CAIRO_DOCK_WIDGET_TREE_VIEW_MULTI_CHOICE)
@@ -3393,11 +3379,7 @@ GtkWidget *cairo_dock_build_key_file_widget_full (GKeyFile* pKeyFile, const gcha
 		
 		GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
 		gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-		#if GTK_CHECK_VERSION (3, 8, 0)
 		gtk_container_add (GTK_CONTAINER (pScrolledWindow), pGroupWidget);
-		#else
-		gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pGroupWidget);
-		#endif
 		
 		gtk_notebook_append_page (GTK_NOTEBOOK (pNoteBook), pScrolledWindow, (pAlign != NULL ? pAlign : pLabel));
 	}

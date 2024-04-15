@@ -1400,13 +1400,8 @@ static gboolean _can_reserve_space (int iNumScreen, gboolean bDirectionUp, gbool
 
 static void _update_mouse_position (GldiContainer *pContainer)
 {
-	#if GTK_CHECK_VERSION (3, 20, 0)
 	GdkSeat *pSeat = gdk_display_get_default_seat (gdk_display_get_default());
 	GdkDevice *pDevice = gdk_seat_get_pointer (pSeat);
-	#else
-	GdkDeviceManager *pManager = gdk_display_get_device_manager (gtk_widget_get_display (pContainer->pWidget));
-	GdkDevice *pDevice = gdk_device_manager_get_client_pointer (pManager);
-	#endif
 	if ((pContainer)->bIsHorizontal)
 		gdk_window_get_device_position (gldi_container_get_gdk_window (pContainer), pDevice, &pContainer->iMouseX, &pContainer->iMouseY, NULL);
 	else

@@ -320,11 +320,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName, gint iDesiredIconS
 		{
 			g_string_assign (sIconPath, gtk_icon_info_get_filename (pIconInfo));
 			bFileFound = TRUE;
-			#if GTK_CHECK_VERSION (3, 8, 0)
 			g_object_unref (G_OBJECT (pIconInfo));
-			#else
-			gtk_icon_info_free (pIconInfo);
-			#endif
 		}
 	}
 	
