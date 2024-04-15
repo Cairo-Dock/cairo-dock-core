@@ -66,12 +66,8 @@ SET(core_lib_SRCS
 	cairo-dock-style-facility.c 		cairo-dock-style-facility.h
 	cdwindow.c                          cdwindow.h
 	texture-gradation.h
+	gtk3imagemenuitem.c 				gtk3imagemenuitem.h
 )
-
-# Gtk > 3.8
-if (${GTK_MAJOR} GREATER 3 OR (${GTK_MAJOR} EQUAL 3 AND ${GTK_MINOR} GREATER 8))
-	LIST(APPEND core_lib_SRCS gtk3imagemenuitem.c gtk3imagemenuitem.h)
-endif()
 
 ########### compilation ###############
 

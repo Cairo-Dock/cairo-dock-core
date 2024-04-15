@@ -189,11 +189,9 @@ endif()
 
 # GTK 3
 set (gtk_required "gtk+-3.0")  # for the .pc
-pkg_check_modules ("GTK" REQUIRED "${gtk_required}>=3.4.0")
+pkg_check_modules ("GTK" REQUIRED "${gtk_required}>=3.22.0")
 
 STRING (REGEX REPLACE "\\..*" "" GTK_MAJOR "${GTK_VERSION}")
-STRING (REGEX REPLACE "[0-9]*\\.([^ ]+)" "\\1" GTK_MINOR "${GTK_VERSION}")  # 3.8.2 => 3.8
-STRING (REGEX REPLACE "\\.[0-9]*" "" GTK_MINOR "${GTK_MINOR}") # 3.8 => 8
 
 # add_definitions (-DGTK_DISABLE_DEPRECATED="1")
 # add_definitions (-DG_DISABLE_DEPRECATED="1")
