@@ -77,7 +77,13 @@ static void _cairo_dock_get_next_tip (CDTipsData *pTips)
 		// check if the key is an expander widget.
 		const gchar *cKeyName = pTips->pKeyList[pTips->iNumTipKey];
 		gchar *cKeyComment =  g_key_file_get_comment (pTips->pKeyFile, cGroupName, cKeyName, NULL);
-		bOk = (cKeyComment && *cKeyComment == CAIRO_DOCK_WIDGET_EXPANDER);  // whether it's an expander.
+		gchar *cUsefulComment = cKeyComment;
+		if (cUsefulComment)
+		{
+			while (*cUsefulComment == ' ' || *cUsefulComment == '\n')
+				cUsefulComment ++;
+		}
+		bOk = (cUsefulComment && *cUsefulComment == CAIRO_DOCK_WIDGET_EXPANDER);  // whether it's an expander.
 		g_free (cKeyComment);
 	} while (!bOk);
 }
@@ -125,7 +131,14 @@ static void _cairo_dock_get_previous_tip (CDTipsData *pTips)
 		// check if the key is an expander widget.
 		const gchar *cKeyName = pTips->pKeyList[pTips->iNumTipKey];
 		gchar *cKeyComment =  g_key_file_get_comment (pTips->pKeyFile, cGroupName, cKeyName, NULL);
-		bOk = (cKeyComment && *cKeyComment == CAIRO_DOCK_WIDGET_EXPANDER);  // whether it's an expander.
+		gchar *cUsefulComment = cKeyComment;
+		if (cUsefulComment)
+		{
+			while (*cUsefulComment == ' ' || *cUsefulComment == '\n')
+				cUsefulComment ++;
+		}
+		bOk = (cUsefulComment && *cUsefulComment == CAIRO_DOCK_WIDGET_EXPANDER);  // whether it's an expander.
+		g_free(cKeyComment);
 	} while (!bOk);
 }
 
@@ -276,10 +289,6 @@ void cairo_dock_show_tips (void)
 	pTips->iNumTipGroup = iNumTipGroup;
 	pTips->iNumTipKey = iNumTipKey;
 	
-	// update to the next tip.
-	if (myData.iLastTipGroup >= 0 && myData.iLastTipKey >= 0)  // a previous tip exist => take the next one;
-		_cairo_dock_get_next_tip (pTips);
-	
 	// build a list of the available groups.
 	GtkWidget *pInteractiveWidget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
 	GtkWidget *pComboBox = gtk_combo_box_text_new ();
@@ -290,6 +299,11 @@ void cairo_dock_show_tips (void)
 	}
 	gtk_combo_box_set_active (GTK_COMBO_BOX (pComboBox), pTips->iNumTipGroup);
 	pTips->pCategoryCombo = pComboBox;
+	
+	// update to the next tip.
+	if (myData.iLastTipGroup >= 0 && myData.iLastTipKey >= 0)  // a previous tip exist => take the next one;
+		_cairo_dock_get_next_tip (pTips);
+
 	static gpointer data_combo[2];
 	data_combo[0] = pTips;  // the 2nd data is the dialog, we'll set it after we make it.
 	g_signal_connect (G_OBJECT (pComboBox), "changed", G_CALLBACK(_on_tips_category_changed), data_combo);
