@@ -181,6 +181,7 @@ static inline cairo_t *_get_source_context (void)
 	if (g_pPrimaryContainer != NULL)
 	{
 		gtk_widget_realize (g_pPrimaryContainer->pWidget);  // ensure the widget is realized
+		// this is deprecated, but it is a convenient way to get a cairo context whose properties we can use when creating our surfaces
 		pSourceContext = gdk_cairo_create (gldi_container_get_gdk_window(g_pPrimaryContainer));
 	}
 	return pSourceContext;  // Note: we can't keep the context alive and reuse it later, because under Wayland it will make the container invisible

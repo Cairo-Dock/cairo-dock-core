@@ -353,7 +353,7 @@ void gldi_window_move_to_current_desktop (GldiWindowActor *pAppli)
 
 
 gchar* gldi_window_parse_class(const gchar* res_class, const gchar* res_name) {
-	gchar *cClass = NULL, *cWmClass = NULL;
+	gchar *cClass = NULL;
 	if (res_class)
 	{
 		cd_debug ("  res_name : %s(%x); res_class : %s(%x)", res_name, res_name, res_class, res_class);
@@ -392,7 +392,7 @@ gchar* gldi_window_parse_class(const gchar* res_class, const gchar* res_name) {
 		}
 		else if (*res_class == '/' && (g_str_has_suffix (res_class, ".exe") || g_str_has_suffix (res_name, ".EXE")))  // case of Mono applications like tomboy ...
 		{
-			gchar *str = strrchr (res_class, '/');
+			const gchar *str = strrchr (res_class, '/');
 			if (str)
 				str ++;
 			else
