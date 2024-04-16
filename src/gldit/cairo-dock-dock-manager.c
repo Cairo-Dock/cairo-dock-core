@@ -348,14 +348,14 @@ void gldi_docks_foreach_root (GFunc pFunction, gpointer data)
 
 typedef void (*CairoDockSimpleCallback) (CairoDock *pDock);
 
-void _simple_cb (void *obj, void *data)
+static void _simple_cb (void *obj, void *data)
 {
 	CairoDock *pDock = (CairoDock*)obj;
 	CairoDockSimpleCallback fun = (CairoDockSimpleCallback)data;
 	fun (pDock);
 }
 
-void _gldi_docks_foreach_root_no_data (CairoDockSimpleCallback pFunction)
+static void _gldi_docks_foreach_root_no_data (CairoDockSimpleCallback pFunction)
 {
 	g_list_foreach (s_pRootDockList, _simple_cb, (void*)pFunction);
 }
