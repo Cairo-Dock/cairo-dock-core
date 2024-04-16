@@ -398,19 +398,13 @@ void gldi_module_activate (GldiModule *module)
 	}
 }
 
-static void _module_unref (void *obj, void*)
-{
-	gldi_object_unref ((GldiObject*)obj);
-}
-
 void gldi_module_deactivate (GldiModule *module)  // stop all instances of a module
 {
 	g_return_if_fail (module != NULL);
 	cd_debug ("%s (%s, %s)", __func__, module->pVisitCard->cModuleName, module->cConfFilePath);
 	GList *pInstances = module->pInstancesList;
 	module->pInstancesList = NULL;  // set to NULL already so that notifications don't get fooled. This can probably be avoided...
-	g_list_foreach (pInstances, (GFunc)_module_unref, NULL);
-	g_list_free (pInstances);
+	g_list_free_full (pInstances, (GDestroyNotify)gldi_object_unref);
 	gldi_object_notify (module, NOTIFICATION_MODULE_ACTIVATED, module->pVisitCard->cModuleName, FALSE);  // throw it since the list was NULL when the instances were destroyed
 	gldi_modules_write_active ();  // same
 }
