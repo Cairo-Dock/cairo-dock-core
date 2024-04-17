@@ -98,7 +98,7 @@ void gldi_task_launch (GldiTask *pTask);
 *@param pTask the periodic Task.
 *@param fDelay delay in ms.
 */
-void gldi_task_launch_delayed (GldiTask *pTask, double fDelay);
+void gldi_task_launch_delayed (GldiTask *pTask, guint delay);
 
 /** Create a periodic Task.
 *@param iPeriod time between 2 iterations, possibly nul for a Task to be executed once only.

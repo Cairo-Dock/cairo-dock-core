@@ -211,13 +211,13 @@ static gboolean _one_shot_timer (GldiTask *pTask)
 	gldi_task_launch (pTask);
 	return FALSE;
 }
-void gldi_task_launch_delayed (GldiTask *pTask, double fDelay)
+void gldi_task_launch_delayed (GldiTask *pTask, guint delay)
 {
 	_cancel_next_iteration (pTask);
-	if (fDelay == 0)
+	if (delay == 0)
 		pTask->iSidTimer = g_idle_add ((GSourceFunc) _one_shot_timer, pTask);
 	else
-		pTask->iSidTimer = g_timeout_add (fDelay, (GSourceFunc) _one_shot_timer, pTask);
+		pTask->iSidTimer = g_timeout_add (delay, (GSourceFunc) _one_shot_timer, pTask);
 }
 
 
