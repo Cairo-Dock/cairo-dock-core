@@ -284,7 +284,15 @@ static gboolean on_unmap_dialog (GtkWidget* pWidget,
 				return TRUE;
 		}
 		
-		if (gldi_container_use_new_positioning_code ()) gldi_object_unref (GLDI_OBJECT(pDialog)); // destroy the dialog
+		if (gldi_container_use_new_positioning_code ())
+		{
+			// new behavior: we accept that the WM can close our dialogs any time
+			if (pDialog->bHideOnClick) {
+				gtk_widget_hide (pDialog->container.pWidget);
+				gldi_dialog_leave (pDialog); // notify that the dialog is hidden
+			}
+			else gldi_object_unref (GLDI_OBJECT(pDialog)); // destroy the dialog
+		}
 		else gtk_window_present (GTK_WINDOW (pWidget));  // old behavior: counter it, we don't want dialogs to be hidden
 	}
 	else  // expected event, it's an unmap that we triggered with 'gldi_dialog_hide', so let pass it

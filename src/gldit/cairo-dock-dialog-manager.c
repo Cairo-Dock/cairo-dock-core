@@ -816,6 +816,29 @@ static void _trigger_replace_all_dialogs (void)
 	}
 }
 
+void gldi_dialog_leave (CairoDialog *pDialog)
+{
+	Icon *pIcon = pDialog->pIcon;
+	if (pIcon != NULL)
+	{
+		GldiContainer *pContainer = cairo_dock_get_icon_container (pIcon);
+		//g_print ("leave from container %x\n", pContainer);
+		if (pContainer)
+		{
+			if (CAIRO_DOCK_IS_DOCK (pContainer) && gtk_window_get_modal (GTK_WINDOW (pDialog->container.pWidget)))
+			{
+				CAIRO_DOCK (pContainer)->bHasModalWindow = FALSE;
+				cairo_dock_emit_leave_signal (pContainer);
+			}
+		}
+		if (pIcon->iHideLabel > 0)
+		{
+			pIcon->iHideLabel --;
+			if (pIcon->iHideLabel == 0 && pContainer)
+				gtk_widget_queue_draw (pContainer->pWidget);
+		}
+	}
+}
 
 void gldi_dialog_hide (CairoDialog *pDialog)
 {
@@ -828,26 +851,7 @@ void gldi_dialog_hide (CairoDialog *pDialog)
 		
 		_trigger_replace_all_dialogs ();
 		
-		Icon *pIcon = pDialog->pIcon;
-		if (pIcon != NULL)
-		{
-			GldiContainer *pContainer = cairo_dock_get_icon_container (pIcon);
-			//g_print ("leave from container %x\n", pContainer);
-			if (pContainer)
-			{
-				if (CAIRO_DOCK_IS_DOCK (pContainer) && gtk_window_get_modal (GTK_WINDOW (pDialog->container.pWidget)))
-				{
-					CAIRO_DOCK (pContainer)->bHasModalWindow = FALSE;
-					cairo_dock_emit_leave_signal (pContainer);
-				}
-			}
-			if (pIcon->iHideLabel > 0)
-			{
-				pIcon->iHideLabel --;
-				if (pIcon->iHideLabel == 0 && pContainer)
-					gtk_widget_queue_draw (pContainer->pWidget);
-			}
-		}
+		gldi_dialog_leave (pDialog);
 	}
 }
 
@@ -1211,28 +1215,7 @@ static void reset_object (GldiObject *obj)
 {
 	CairoDialog *pDialog = (CairoDialog*)obj;
 	
-	Icon *pIcon = pDialog->pIcon;
-	if (pIcon != NULL)
-	{
-		// leave from the container if the dialog was modal (because it stole its events)
-		GldiContainer *pContainer = cairo_dock_get_icon_container (pIcon);
-		if (pContainer)
-		{
-			if (CAIRO_DOCK_IS_DOCK (pContainer) && gtk_window_get_modal (GTK_WINDOW (pDialog->container.pWidget)))
-			{
-				CAIRO_DOCK (pContainer)->bHasModalWindow = FALSE;
-				cairo_dock_emit_leave_signal (pContainer);
-			}
-		}
-		
-		// unhide the label if we hide it
-		if (pIcon->iHideLabel > 0)
-		{
-			pIcon->iHideLabel --;
-			if (pIcon->iHideLabel == 0 && pContainer)
-				gtk_widget_queue_draw (pContainer->pWidget);
-		}
-	}
+	gldi_dialog_leave (pDialog);
 	
 	// stop the timer
 	if (pDialog->iSidTimer > 0)
