@@ -715,7 +715,7 @@ static void _init_menu_item (GtkWidget *pMenuItem)
 		gtk_container_forall (GTK_CONTAINER (pSubMenu), (GtkCallback) _init_menu_item2, NULL);
 }
 
-static void _popup_menu (GtkWidget *menu, guint32 time)
+static void _popup_menu (GtkWidget *menu, const GdkEvent *event)
 {
 	GldiMenuParams *pParams = g_object_get_data (G_OBJECT(menu), "gldi-params");
 	g_return_if_fail (pParams != NULL);
@@ -760,11 +760,11 @@ static void _popup_menu (GtkWidget *menu, guint32 time)
 			GdkGravity menu_anchor = GDK_GRAVITY_SOUTH;
 			gldi_container_calculate_rect (pContainer, pIcon, &rect, &rect_anchor, &menu_anchor);
 			gtk_menu_popup_at_rect (GTK_MENU (menu), gtk_widget_get_window (pContainer->pWidget),
-				&rect, rect_anchor, menu_anchor, NULL);
+				&rect, rect_anchor, menu_anchor, event);
 		}
 		else
 		{
-			gtk_menu_popup_at_pointer (GTK_MENU (menu), NULL);
+			gtk_menu_popup_at_pointer (GTK_MENU (menu), event);
 		}
 	}
 	else
@@ -775,29 +775,35 @@ static void _popup_menu (GtkWidget *menu, guint32 time)
 			pIcon != NULL && pContainer != NULL ? _place_menu_on_icon : NULL,
 			NULL,
 			0,
-			time);
+			gdk_event_get_time (event)); // note: event can be NULL, in this case, the current time is used
 	}
 }
 static gboolean _popup_menu_delayed (GtkWidget *menu)
 {
-	_popup_menu (menu, 0);
+	_popup_menu (menu, NULL);
 	return FALSE;
 }
-void gldi_menu_popup (GtkWidget *menu)
+void gldi_menu_popup_full (GtkWidget *menu, const GdkEvent *event)
 {
 	if (menu == NULL)
 		return;
 	
-	guint32 t = gtk_get_current_event_time();
-	cd_debug ("gtk_get_current_event_time: %d", t);
-	if (t > 0)
+	GdkEvent *currentEvent = NULL;
+	if (!event) event = currentEvent = gtk_get_current_event ();
+	
+	if (event)
 	{
-		_popup_menu (menu, t);
+		_popup_menu (menu, event);
+		if (currentEvent) gdk_event_free (currentEvent);
 	}
 	else  // 'gtk_menu_popup' is buggy and doesn't work if not triggered directly by an X event :-/ so in this case, we run it with a delay (200ms is the minimal value that always works).
 	{
 		g_timeout_add (250, (GSourceFunc)_popup_menu_delayed, menu);
 	}
+}
+void gldi_menu_popup (GtkWidget *menu)
+{
+	gldi_menu_popup_full (menu, NULL);
 }
 
 

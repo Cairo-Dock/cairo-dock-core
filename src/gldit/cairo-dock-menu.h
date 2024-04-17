@@ -66,8 +66,10 @@ void gldi_menu_init (GtkWidget *pMenu, Icon *pIcon);
 
 /** Pop-up a menu. The menu is placed above the icon, or above the container, or above the mouse, depending on how it has been initialized.
 *@param menu the menu.
+*@param event an event to which the menu is popped up in response (NULL to use the current GTK event)
 */
 void gldi_menu_popup (GtkWidget *menu);
+void gldi_menu_popup_full (GtkWidget *menu, const GdkEvent *event);
 
 
 /** Creates a menu-item, with a label and an image. The child widget of the menu-item is a gtk-label.
