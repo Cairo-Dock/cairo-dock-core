@@ -219,11 +219,6 @@ cairo_surface_t *cairo_dock_create_blank_surface_full (int iWidth, int iHeight, 
 	return pSurface;
 }
 
-cairo_surface_t *cairo_dock_create_blank_surface(int iWidth, int iHeight)
-{
-	return cairo_dock_create_blank_surface_full (iWidth, iHeight, NULL);
-}
-
 static inline void _apply_orientation_and_scale (cairo_t *pCairoContext, CairoDockLoadImageModifier iLoadingModifier, double fImageWidth, double fImageHeight, double fZoomX, double fZoomY, double fUsefulWidth, double fUsefulheight)
 {
 	int iOrientation = iLoadingModifier & CAIRO_DOCK_ORIENTATION_MASK;
