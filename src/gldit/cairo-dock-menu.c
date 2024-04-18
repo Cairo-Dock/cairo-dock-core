@@ -801,10 +801,6 @@ void gldi_menu_popup_full (GtkWidget *menu, const GdkEvent *event)
 		g_timeout_add (250, (GSourceFunc)_popup_menu_delayed, menu);
 	}
 }
-void gldi_menu_popup (GtkWidget *menu)
-{
-	gldi_menu_popup_full (menu, NULL);
-}
 
 
   /////////////////

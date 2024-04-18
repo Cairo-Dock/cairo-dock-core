@@ -68,8 +68,8 @@ void gldi_menu_init (GtkWidget *pMenu, Icon *pIcon);
 *@param menu the menu.
 *@param event an event to which the menu is popped up in response (NULL to use the current GTK event)
 */
-void gldi_menu_popup (GtkWidget *menu);
 void gldi_menu_popup_full (GtkWidget *menu, const GdkEvent *event);
+#define gldi_menu_popup(menu) gldi_menu_popup_full (menu, NULL)
 
 
 /** Creates a menu-item, with a label and an image. The child widget of the menu-item is a gtk-label.
