@@ -376,7 +376,7 @@ static void _destroy_surface (GtkWidget* pWidget, GldiContainer *pContainer) {
 		// possible debug output
 		// struct wl_egl_window *window = (struct wl_egl_window*)pContainer->eglwindow;
 		// g_print ("window: %p, window->priv: %p, window->destroy_callback: %p\n", window, window->driver_private, window->destroy_window_callback);
-		wl_egl_window_destroy (pContainer->eglwindow);
+		wl_egl_window_destroy ((struct wl_egl_window*)pContainer->eglwindow);
 		pContainer->eglwindow = NULL;
 	}
 	#endif
@@ -433,7 +433,7 @@ static void _egl_window_resize_wayland (GldiContainer* pContainer, int iWidth, i
 	{
 		GdkWindow* gdkwindow = gldi_container_get_gdk_window (pContainer);
 		gint scale = gdk_window_get_scale_factor (gdkwindow);
-		wl_egl_window_resize (pContainer->eglwindow, iWidth * scale, iHeight * scale, 0, 0);
+		wl_egl_window_resize ((struct wl_egl_window*)pContainer->eglwindow, iWidth * scale, iHeight * scale, 0, 0);
 		struct wl_surface* wls = gdk_wayland_window_get_wl_surface (gdkwindow);
 		wl_surface_set_buffer_scale(wls, scale);
 	}

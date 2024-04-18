@@ -167,13 +167,8 @@ struct _GldiContainer {
 	
 	gboolean bIgnoreNextReleaseEvent;
 	
-
 	void *pMoveToRect; // data for gldi_container_move_to_rect() callback if needed
-	#if defined(HAVE_EGL) && defined(HAVE_WAYLAND)
-	struct wl_egl_window* eglwindow;
-	#else
-	void* unused2;
-	#endif
+	void* eglwindow; // a wl_egl_window (needed on Wayland)
 	
 	gpointer reserved[2];
 };
