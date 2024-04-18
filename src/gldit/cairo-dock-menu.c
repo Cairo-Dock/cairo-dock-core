@@ -767,12 +767,14 @@ static void _popup_menu (GtkWidget *menu, const GdkEvent *event)
 	}
 	else
 	{
+		guint button;
+		if ( !(event && gdk_event_get_button (event, &button))) button = 0;
 		gtk_menu_popup (GTK_MENU (menu),
 			NULL,
 			NULL,
 			pIcon != NULL && pContainer != NULL ? _place_menu_on_icon : NULL,
 			NULL,
-			0,
+			button,
 			gdk_event_get_time (event)); // note: event can be NULL, in this case, the current time is used
 	}
 }
@@ -964,3 +966,4 @@ gboolean GLDI_IS_IMAGE_MENU_ITEM (GtkWidget *pMenuItem)  // defined as a functio
 {
 	return GTK3_IS_IMAGE_MENU_ITEM (pMenuItem);
 }
+
