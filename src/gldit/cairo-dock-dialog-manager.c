@@ -216,7 +216,7 @@ static gboolean on_button_press_dialog (G_GNUC_UNUSED GtkWidget* pWidget,
 					gldi_dialog_hide (pDialog);
 				else
 				{
-					if (gldi_container_use_new_positioning_code ()) pDialog->uFlags.f |= CAIRO_DIALOG_FLAGS_PENDING_CLOSE; // wait until the release event before closing
+					if (gldi_container_use_new_positioning_code ()) pDialog->bPendingClose = TRUE; // wait until the release event before closing
 					else gldi_object_unref (GLDI_OBJECT(pDialog));
 				}
 			}
@@ -232,7 +232,7 @@ static gboolean on_button_press_dialog (G_GNUC_UNUSED GtkWidget* pWidget,
 		}
 		else if (pButton->type == GDK_BUTTON_RELEASE)
 		{
-			if (pDialog->uFlags.f & CAIRO_DIALOG_FLAGS_PENDING_CLOSE)
+			if (pDialog->bPendingClose)
 			{
 				gldi_object_unref (GLDI_OBJECT(pDialog));
 				return FALSE;
@@ -1139,8 +1139,6 @@ static void init_object (GldiObject *obj, gpointer attr)
 		gtk_window_set_transient_for (GTK_WINDOW (pDialog->container.pWidget), tmp);
 		gldi_container_init_layer (&(pDialog->container));
 	}
-	
-	pDialog->uFlags.f = 0;
 	
 	//\________________ set up its orientation (do it now, as we need bDirectionUp to place the internal widgets)
 	pDialog->pIcon = pAttribute->pIcon;
