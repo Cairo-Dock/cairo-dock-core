@@ -22,9 +22,7 @@
 
 #include <cairo.h>
 #include <gtk/gtk.h>
-#if GTK_CHECK_VERSION (3, 10, 0)
 #include "gtk3imagemenuitem.h"
-#endif
 
 #include "cairo-dock-container.h"
 #include "cairo-dock-icon-factory.h"
@@ -857,18 +855,12 @@ GtkWidget *gldi_menu_item_new_full (const gchar *cLabel, const gchar *cImage, gb
 	if (iSize == 0)
 		iSize = GTK_ICON_SIZE_MENU;
 	
+	(void)cImage; // avoid warnings if CAIRO_DOCK_FORCE_ICON_IN_MENUS == 0
 	GtkWidget *pMenuItem;
-	if (! cImage)
-	{
-		if (! cLabel)
-			pMenuItem = gtk_menu_item_new ();
-		else
-			pMenuItem =  (bUseMnemonic ? gtk_menu_item_new_with_mnemonic (cLabel) : gtk_menu_item_new_with_label (cLabel));
-	}
-	else
+#if (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
+	if (cImage)
 	{
 		GtkWidget *image = NULL;
-#if (! GTK_CHECK_VERSION (3, 10, 0)) || (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
 		if (*cImage == '/')
 		{
 			int size;
@@ -884,31 +876,19 @@ GtkWidget *gldi_menu_item_new_full (const gchar *cLabel, const gchar *cImage, gb
 		{
 			image = gtk_image_new_from_icon_name (cImage, iSize);
 		}
-#endif
-		
-#if GTK_CHECK_VERSION (3, 10, 0)
-		#if (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
 		if (! cLabel)
 			pMenuItem = gtk3_image_menu_item_new ();
 		else
 			pMenuItem = (bUseMnemonic ? gtk3_image_menu_item_new_with_mnemonic (cLabel) : gtk3_image_menu_item_new_with_label (cLabel));
 		gtk3_image_menu_item_set_image (GTK3_IMAGE_MENU_ITEM (pMenuItem), image);
-		#else
+	}
+	else
+#endif
+	{
 		if (! cLabel)
 			pMenuItem = gtk_menu_item_new ();
 		else
 			pMenuItem = (bUseMnemonic ? gtk_menu_item_new_with_mnemonic (cLabel) : gtk_menu_item_new_with_label (cLabel));
-		#endif
-#else
-		if (! cLabel)
-			pMenuItem = gtk_image_menu_item_new ();
-		else
-			pMenuItem = (bUseMnemonic ? gtk_image_menu_item_new_with_mnemonic (cLabel) : gtk_image_menu_item_new_with_label (cLabel));
-		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
-		#if (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
-		gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (pMenuItem), TRUE);
-		#endif
-#endif
 	}
 
 	_init_menu_item (pMenuItem);
@@ -921,27 +901,16 @@ GtkWidget *gldi_menu_item_new_full (const gchar *cLabel, const gchar *cImage, gb
 
 void gldi_menu_item_set_image (GtkWidget *pMenuItem, GtkWidget *image)
 {
-#if GTK_CHECK_VERSION (3, 10, 0)
-	#if (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
+#if (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
 	gtk3_image_menu_item_set_image (GTK3_IMAGE_MENU_ITEM (pMenuItem), image);
-	#else
-	g_object_unref (image);
-	#endif
 #else
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
-	#if (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
-	gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (pMenuItem), TRUE);
-	#endif
+	g_object_unref (image);
 #endif
 }
 
 GtkWidget *gldi_menu_item_get_image (GtkWidget *pMenuItem)
 {
-	#if GTK_CHECK_VERSION (3, 10, 0)
 	return gtk3_image_menu_item_get_image (GTK3_IMAGE_MENU_ITEM (pMenuItem));
-	#else
-	return gtk_image_menu_item_get_image (GTK_IMAGE_MENU_ITEM (pMenuItem));
-	#endif
 }
 
 GtkWidget *gldi_menu_item_new_with_action (const gchar *cLabel, const gchar *cImage, GCallback pFunction, gpointer pData)
@@ -993,9 +962,5 @@ void gldi_menu_add_separator (GtkWidget *pMenu)
 
 gboolean GLDI_IS_IMAGE_MENU_ITEM (GtkWidget *pMenuItem)  // defined as a function to not export gtk3imagemenuitem.h
 {
-	#if GTK_CHECK_VERSION (3, 10, 0)
 	return GTK3_IS_IMAGE_MENU_ITEM (pMenuItem);
-	#else
-	return GTK_IS_IMAGE_MENU_ITEM (pMenuItem);
-	#endif
 }
