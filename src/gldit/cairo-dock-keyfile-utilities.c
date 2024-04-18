@@ -71,10 +71,6 @@ void cairo_dock_write_keys_to_file_full (GKeyFile *pKeyFile, const gchar *cConfF
 	}
 	g_free (cNewConfFileContent);
 }
-void cairo_dock_write_keys_to_file (GKeyFile *pKeyFile, const gchar *cConfFilePath)
-{
-	cairo_dock_write_keys_to_file_full (pKeyFile, cConfFilePath, FALSE);
-}
 
 
 // pOriginalKeyFile is an up-to-date key-file
