@@ -78,9 +78,11 @@ void gldi_menu_popup_full (GtkWidget *menu, const GdkEvent *event);
  * @param cImage the image path or name, or NULL
  * @param bUseMnemonic whether to use the mnemonic inside the label or not
  * @param iSize size of the image, or 0 to use the default size
+ * @param bUseStyle whether to use our custom style to draw this menu item
  * @return the new menu-item.
  */
-GtkWidget *gldi_menu_item_new_full (const gchar *cLabel, const gchar *cImage, gboolean bUseMnemonic, GtkIconSize iSize);
+GtkWidget *gldi_menu_item_new_full2 (const gchar *cLabel, const gchar *cImage, gboolean bUseMnemonic, GtkIconSize iSize, gboolean bUseStyle);
+#define gldi_menu_item_new_full(cLabel, cImage, bUseMnemonic, iSize) gldi_menu_item_new_full2 (cLabel, cImage, bUseMnemonic, iSize, TRUE)
 
 /** A convenient function to create a menu-item with a label and an image.
  * @param cLabel the label, or NULL

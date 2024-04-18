@@ -850,7 +850,7 @@ static gboolean _draw_menu_item (GtkWidget *widget,
 	return TRUE;  // intercept
 }
 
-GtkWidget *gldi_menu_item_new_full (const gchar *cLabel, const gchar *cImage, gboolean bUseMnemonic, GtkIconSize iSize)
+GtkWidget *gldi_menu_item_new_full2 (const gchar *cLabel, const gchar *cImage, gboolean bUseMnemonic, GtkIconSize iSize, gboolean bUseStyle)
 {
 	if (iSize == 0)
 		iSize = GTK_ICON_SIZE_MENU;
@@ -891,7 +891,7 @@ GtkWidget *gldi_menu_item_new_full (const gchar *cLabel, const gchar *cImage, gb
 			pMenuItem = (bUseMnemonic ? gtk_menu_item_new_with_mnemonic (cLabel) : gtk_menu_item_new_with_label (cLabel));
 	}
 
-	_init_menu_item (pMenuItem);
+	if (bUseStyle) _init_menu_item (pMenuItem);
 
 	gtk_widget_show_all (pMenuItem);  // show immediately, so that the menu-item is realized when the menu is popped up
 	
