@@ -906,7 +906,9 @@ void gldi_menu_item_set_image (GtkWidget *pMenuItem, GtkWidget *image)
 #if (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
 	gtk3_image_menu_item_set_image (GTK3_IMAGE_MENU_ITEM (pMenuItem), image);
 #else
-	g_object_unref (image);
+	(void)pMenuItem; // avoid warnings
+	g_object_ref_sink (image); // image will typically be newly allocated and have a floating reference
+	g_object_unref (image); // it is taken over here and freed in this case
 #endif
 }
 
