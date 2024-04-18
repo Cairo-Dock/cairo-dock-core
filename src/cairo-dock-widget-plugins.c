@@ -25,7 +25,6 @@
 #include "cairo-dock-icon-manager.h"  // cairo_dock_search_icon_s_path
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-menu.h"  // cairo_dock_add_in_menu_with_stock_and_data
 #include "cairo-dock-desktop-manager.h"  // gldi_desktop_get_width
 #include "cairo-dock-gui-manager.h"  // cairo_dock_show_module_instance_gui
 #include "cairo-dock-gui-backend.h"  // cairo_dock_show_module_gui
@@ -101,7 +100,7 @@ static gboolean _on_click_module_tree_view (GtkTreeView *pTreeView, GdkEventButt
 		if (pButton->button == 3)
 		{
 			GtkWidget *pMenu = gtk_menu_new ();
-			cairo_dock_add_in_menu_with_stock_and_data (_("Configure this applet"), GLDI_ICON_NAME_PROPERTIES, G_CALLBACK (_cairo_dock_initiate_config_module), pMenu, pModule);
+			cairo_dock_gui_menu_item_add (pMenu, _("Configure this applet"), GLDI_ICON_NAME_PROPERTIES, G_CALLBACK (_cairo_dock_initiate_config_module), pModule);
 			gtk_widget_show_all (pMenu);
 			gtk_menu_popup_at_pointer (GTK_MENU (pMenu), NULL);
 		}

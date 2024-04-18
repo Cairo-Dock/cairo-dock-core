@@ -25,7 +25,6 @@
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-menu.h"  // cairo_dock_add_in_menu_with_stock_and_data
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file
@@ -139,7 +138,7 @@ static gboolean _on_click_shortkey_tree_view (GtkTreeView *pTreeView, GdkEventBu
 		if (pButton->button == 3)
 		{
 			GtkWidget *pMenu = gtk_menu_new ();
-			cairo_dock_add_in_menu_with_stock_and_data (_("Change the shortkey"), GLDI_ICON_NAME_PROPERTIES, G_CALLBACK (_cairo_dock_initiate_change_shortkey), pMenu, pTreeView);
+			cairo_dock_gui_menu_item_add (pMenu, _("Change the shortkey"), GLDI_ICON_NAME_PROPERTIES, G_CALLBACK (_cairo_dock_initiate_change_shortkey), pTreeView);
 			gtk_widget_show_all (pMenu);
 			gtk_menu_popup_at_pointer (GTK_MENU (pMenu), NULL);
 		}

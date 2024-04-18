@@ -39,7 +39,6 @@
 #include "cairo-dock-applications-manager.h"  // cairo_dock_get_current_active_icon
 #include "cairo-dock-themes-manager.h"  // cairo_dock_export_current_theme
 #include "cairo-dock-config.h"  // cairo_dock_load_current_theme
-#include "cairo-dock-menu.h"  // cairo_dock_add_in_menu_with_stock_and_data
 #include "cairo-dock-gui-manager.h"  // cairo_dock_set_status_message
 #include "cairo-dock-gui-backend.h"
 #include "cairo-dock-widget-themes.h"
@@ -460,7 +459,7 @@ static gboolean _on_click_tree_view (GtkTreeView *pTreeView, GdkEventButton* pBu
 			if (iType == CAIRO_DOCK_USER_PACKAGE || iType == CAIRO_DOCK_UPDATED_PACKAGE)
 			{
 				GtkWidget *pMenu = gtk_menu_new ();
-				cairo_dock_add_in_menu_with_stock_and_data (_("Delete this theme"), GLDI_ICON_NAME_DELETE, G_CALLBACK (_on_delete_theme), pMenu, pThemesWidget);
+				cairo_dock_gui_menu_item_add (pMenu, _("Delete this theme"), GLDI_ICON_NAME_DELETE, G_CALLBACK (_on_delete_theme), pThemesWidget);
 				gtk_widget_show_all (pMenu);
 				gtk_menu_popup_at_pointer (GTK_MENU (pMenu), NULL);
 			}

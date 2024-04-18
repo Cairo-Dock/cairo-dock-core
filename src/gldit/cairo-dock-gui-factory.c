@@ -51,6 +51,7 @@
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-launcher-manager.h" // cairo_dock_launch_command_sync
 #include "cairo-dock-separator-manager.h" // GLDI_OBJECT_IS_SEPARATOR_ICON
+#include "cairo-dock-menu.h" // gldi_menu_item_new_full2
 #include "cairo-dock-gui-factory.h"
 
 #define CAIRO_DOCK_ICON_MARGIN 6
@@ -3800,3 +3801,14 @@ GtkWidget *_gtk_image_new_from_file (const gchar *cIcon, int iSize)
 	}
 	return pImage;
 }
+
+
+GtkWidget *cairo_dock_gui_menu_item_add (GtkWidget *pMenu, const gchar *cLabel, const gchar *cImage, GCallback pFunction, gpointer pData)
+{
+	GtkWidget *pMenuItem = gldi_menu_item_new_full2 (cLabel, cImage, FALSE, 0, FALSE);
+	if (pFunction)
+		g_signal_connect (G_OBJECT (pMenuItem), "activate", G_CALLBACK (pFunction), pData);
+	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
+	return pMenuItem;
+}
+
