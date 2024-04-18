@@ -718,19 +718,10 @@ static gboolean on_button_press_event (GtkWidget *pTreeView,
 	if (pButton->button == 3)  // clic droit.
 	{
 		GtkWidget *pMenu = gtk_menu_new ();
-		
 		/// TODO: check that we can actually remove it (ex.: not the main dock), and maybe display the item's name...
 		cairo_dock_add_in_menu_with_stock_and_data (_("Remove this item"), GLDI_ICON_NAME_REMOVE, G_CALLBACK (_on_select_remove_item), pMenu, pTreeView);
-		
 		gtk_widget_show_all (pMenu);
-		
-		gtk_menu_popup (GTK_MENU (pMenu),
-			NULL,
-			NULL,
-			NULL,
-			NULL,
-			pButton->button,
-			gtk_get_current_event_time ());
+		gtk_menu_popup_at_pointer (GTK_MENU (pMenu), NULL);
 	}
 	return FALSE;
 }

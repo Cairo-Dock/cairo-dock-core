@@ -460,17 +460,9 @@ static gboolean _on_click_tree_view (GtkTreeView *pTreeView, GdkEventButton* pBu
 			if (iType == CAIRO_DOCK_USER_PACKAGE || iType == CAIRO_DOCK_UPDATED_PACKAGE)
 			{
 				GtkWidget *pMenu = gtk_menu_new ();
-				
 				cairo_dock_add_in_menu_with_stock_and_data (_("Delete this theme"), GLDI_ICON_NAME_DELETE, G_CALLBACK (_on_delete_theme), pMenu, pThemesWidget);
-				
 				gtk_widget_show_all (pMenu);
-				gtk_menu_popup (GTK_MENU (pMenu),
-					NULL,
-					NULL,
-					NULL,
-					NULL,
-					1,
-					gtk_get_current_event_time ());
+				gtk_menu_popup_at_pointer (GTK_MENU (pMenu), NULL);
 			}
 		}
 		else  // load the theme

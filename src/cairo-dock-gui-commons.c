@@ -140,68 +140,12 @@ gchar *cairo_dock_get_third_party_applets_link (void)
 
 
 /**
- * Return absolute position of the bottom left corner of a widget to place a menu.
- * use with @see cairo_dock_place_menu_at_position
- * see @see cairo_dock_popup_menu_under_widget for an example
- */
-GtkRequisition *cairo_dock_get_widget_bottom_position (GtkWidget *pWidget)
-{
-	GtkRequisition *pPosition = g_new (GtkRequisition, 1);
-	gint dx = 0, dy = 0;
-	GtkRequisition req;
-
-	// Top left drawable window coordinates on screen. (inside decorations)
-	// We need to get the toplevel widget origin. 
-	// Otherwise, it would give wrong results if called on the widget in a scrolled area.
-	// (drawable surface origin can even be out of the screen).
-	GtkWidget *pTopLevel = gtk_widget_get_toplevel (pWidget);
-	gdk_window_get_origin (gtk_widget_get_window (pTopLevel), &pPosition->width, &pPosition->height);
-
-	// Widget position inside the window.
-	gtk_widget_translate_coordinates (pWidget, pTopLevel, 0, 0, &dx, &dy);
-
-	// Widget height.
-	gtk_widget_get_preferred_size (pWidget, &req, NULL);
-
-	pPosition->width += dx;
-	pPosition->height += dy + req.height;
-
-	return pPosition;
-}
-
-
-/**
- * Convenient GtkMenuPositionFunc callback function to position menu.
- * use with @see cairo_dock_get_widget_bottom_position
- */
-void cairo_dock_place_menu_at_position (G_GNUC_UNUSED GtkMenu *menu, gint *x, gint *y, gboolean *push_in, GtkRequisition *pPosition)
-{
-	*push_in = TRUE;
-	if (pPosition != NULL)
-	{
-		*x = pPosition->width;
-		*y = pPosition->height;
-	}
-}
-
-
-/**
  * Callback for the button-press-event that popup the given menu.
  */
 void cairo_dock_popup_menu_under_widget (GtkWidget *pWidget, GtkMenu *pMenu)
 {
-	GtkRequisition *pPosition = pWidget == NULL ? NULL : cairo_dock_get_widget_bottom_position (pWidget);
-	
-	gtk_menu_popup (pMenu,
-		NULL,
-		NULL,
-		(GtkMenuPositionFunc) cairo_dock_place_menu_at_position,
-		pPosition,
-		0, // pEventButton->button
-		gtk_get_current_event_time ()); // pEventButton->time
-	
-	if (pPosition != NULL)
-		g_free (pPosition);
+	if (pWidget) gtk_menu_popup_at_widget (pMenu, pWidget, GDK_GRAVITY_SOUTH_WEST, GDK_GRAVITY_NORTH_WEST, NULL);
+	else gtk_menu_popup_at_pointer (pMenu, NULL);
 }
 
 /**
