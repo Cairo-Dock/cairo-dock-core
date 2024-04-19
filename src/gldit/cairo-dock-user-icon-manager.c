@@ -38,21 +38,17 @@ GldiObjectManager myUserIconObjectMgr;
 extern gchar *g_cCurrentLaunchersPath;
 
 // private
-
-
-Icon *gldi_user_icon_new (const gchar *cConfFile)
+static gboolean _user_icon_conf_open (const gchar *cConfFile, GldiUserIconAttr *attr)
 {
 	gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cConfFile);
 	GKeyFile* pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
-	g_return_val_if_fail (pKeyFile != NULL, NULL);
-	
-	Icon *pIcon = NULL;
+	g_free (cDesktopFilePath);
+	g_return_val_if_fail (pKeyFile != NULL, FALSE);
 	
 	//\__________________ get the type of the icon
-	int iType;
 	if (g_key_file_has_key (pKeyFile, "Desktop Entry", "Icon Type", NULL))
 	{
-		iType = g_key_file_get_integer (pKeyFile, "Desktop Entry", "Icon Type", NULL);
+		attr->iType = g_key_file_get_integer (pKeyFile, "Desktop Entry", "Icon Type", NULL);
 	}
 	else  // old desktop file
 	{
@@ -67,23 +63,31 @@ Icon *gldi_user_icon_new (const gchar *cConfFile)
 		
 		if (bIsContainer)
 		{
-			iType = GLDI_USER_ICON_TYPE_STACK;
+			attr->iType = GLDI_USER_ICON_TYPE_STACK;
 		}
 		else if (cCommand == NULL || *cCommand == '\0')
 		{
-			iType = GLDI_USER_ICON_TYPE_SEPARATOR;
+			attr->iType = GLDI_USER_ICON_TYPE_SEPARATOR;
 		}
 		else
 		{
-			iType = GLDI_USER_ICON_TYPE_LAUNCHER;
+			attr->iType = GLDI_USER_ICON_TYPE_LAUNCHER;
 		}
-		g_key_file_set_integer (pKeyFile, "Desktop Entry", "Icon Type", iType);  // the specialized manager will update the conf-file because the version has changed.
+		g_key_file_set_integer (pKeyFile, "Desktop Entry", "Icon Type", attr->iType);  // the specialized manager will update the conf-file because the version has changed.
 		g_free (cCommand);
 	}
 	
+	attr->pKeyFile = pKeyFile;
+	attr->cConfFileName = cConfFile;
+	
+	return TRUE;
+}
+
+static Icon *_user_icon_create (GldiUserIconAttr *attr)
+{
 	//\__________________ make an icon for the given type
 	GldiObjectManager *pMgr = NULL;
-	switch (iType)
+	switch (attr->iType)
 	{
 		case GLDI_USER_ICON_TYPE_LAUNCHER:
 			pMgr = &myLauncherObjectMgr;
@@ -95,21 +99,46 @@ Icon *gldi_user_icon_new (const gchar *cConfFile)
 			pMgr = &mySeparatorIconObjectMgr;
 		break;
 		default:
-			cd_warning ("unknown user icon type for file %s", cDesktopFilePath);
-		return NULL;
+			cd_warning ("unknown user icon type for file %s", attr->cConfFileName);
+			g_key_file_free (attr->pKeyFile);
+			return NULL;
 	}
 	
-	GldiUserIconAttr attr;
-	memset (&attr, 0, sizeof (attr));
-	attr.cConfFileName = (gchar*)cConfFile;
-	attr.pKeyFile = pKeyFile;
-	pIcon = (Icon*)gldi_object_new (pMgr, &attr);
-	
-	g_free (cDesktopFilePath);
-	g_key_file_free (pKeyFile);
+	Icon *pIcon = (Icon*)gldi_object_new (pMgr, attr);
+	g_key_file_free (attr->pKeyFile);
 	return pIcon;
 }
 
+Icon *gldi_user_icon_new (const gchar *cConfFile)
+{
+	GldiUserIconAttr attr;
+	if (! _user_icon_conf_open (cConfFile, &attr)) return NULL;
+	return _user_icon_create (&attr);
+}
+
+
+static void _load_one_icon (gpointer pAttr, gpointer)
+{
+	GldiUserIconAttr *attr = (GldiUserIconAttr*)pAttr;
+	
+	Icon *icon = _user_icon_create (attr);
+	if (icon == NULL || icon->cDesktopFileName == NULL)  // if the icon couldn't be loaded, remove it from the theme (it's useless to try and fail to load it each time).
+	{
+		if (icon)
+			gldi_object_unref (GLDI_OBJECT(icon));
+		gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, attr->cConfFileName);
+		cd_warning ("Unable to load a valid icon from '%s'; the file is either unreadable, invalid or does not correspond to any installed program, and will be deleted", cDesktopFilePath);
+		cairo_dock_delete_conf_file (cDesktopFilePath);
+		g_free (cDesktopFilePath);
+		return;
+	}
+	
+	CairoDock *pParentDock = gldi_dock_get (icon->cParentDockName);
+	if (pParentDock != NULL)  // a priori toujours vrai.
+	{
+		gldi_icon_insert_in_container (icon, CAIRO_CONTAINER(pParentDock), ! CAIRO_DOCK_ANIMATE_ICON);
+	}
+}
 
 void gldi_user_icons_new_from_directory (const gchar *cDirectory)
 {
@@ -117,34 +146,34 @@ void gldi_user_icons_new_from_directory (const gchar *cDirectory)
 	GDir *dir = g_dir_open (cDirectory, 0, NULL);
 	g_return_if_fail (dir != NULL);
 	
-	Icon* icon;
 	const gchar *cFileName;
-	CairoDock *pParentDock;
+	GPtrArray *array = g_ptr_array_new_full (10, g_free);
 
 	while ((cFileName = g_dir_read_name (dir)) != NULL)
 	{
 		if (g_str_has_suffix (cFileName, ".desktop"))
 		{
-			icon = gldi_user_icon_new (cFileName);
-			if (icon == NULL || icon->cDesktopFileName == NULL)  // if the icon couldn't be loaded, remove it from the theme (it's useless to try and fail to load it each time).
+			GldiUserIconAttr *attr = g_new0 (GldiUserIconAttr, 1);
+			gboolean bRead = _user_icon_conf_open (cFileName, attr);
+			if (bRead)
 			{
-				if (icon)
-					gldi_object_unref (GLDI_OBJECT(icon));
-				cd_warning ("Unable to load a valid icon from '%s/%s'; the file is either unreadable, unvalid or does not correspond to any installed program, and will be deleted", g_cCurrentLaunchersPath, cFileName);
-				gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cFileName);
-				cairo_dock_delete_conf_file (cDesktopFilePath);
-				g_free (cDesktopFilePath);
-				continue;
+				if (attr->iType == GLDI_USER_ICON_TYPE_STACK)
+				{
+					// this is a subdock, create it now
+					_load_one_icon (attr, NULL);
+					g_free (attr);
+				}
+				// this is a launcher or separator, save it for later, after all subdocks have been created
+				else g_ptr_array_add (array, attr);
 			}
-			
-			pParentDock = gldi_dock_get (icon->cParentDockName);
-			if (pParentDock != NULL)  // a priori toujours vrai.
-			{
-				gldi_icon_insert_in_container (icon, CAIRO_CONTAINER(pParentDock), ! CAIRO_DOCK_ANIMATE_ICON);
-			}
+			else g_free (attr);
 		}
 	}
 	g_dir_close (dir);
+	
+	// we have created all subdock, load launchers and separators now
+	g_ptr_array_foreach (array, _load_one_icon, NULL);
+	g_ptr_array_free (array, TRUE);
 }
 
 
@@ -183,7 +212,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	CairoDock *pParentDock = gldi_dock_get (icon->cParentDockName);
 	if (pParentDock == NULL)
 	{
-		cd_message ("The parent dock (%s) doesn't exist: we create it", icon->cParentDockName);
+		cd_warning ("The parent dock (%s) doesn't exist: we create it", icon->cParentDockName);
 		pParentDock = gldi_dock_new (icon->cParentDockName);
 	}
 }

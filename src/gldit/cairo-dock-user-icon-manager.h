@@ -39,8 +39,9 @@ extern GldiObjectManager myUserIconObjectMgr;
 #endif
 
 struct _GldiUserIconAttr {
-	gchar *cConfFileName;
+	const gchar *cConfFileName;
 	GKeyFile *pKeyFile;
+	int iType; // GldiUserIconType
 };
 
 // signals
