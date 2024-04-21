@@ -32,7 +32,7 @@
 #ifdef HAVE_WAYLAND
 #include <gdk/gdkwayland.h>
 #include <wayland-egl.h>
-#include <wayland-egl-backend.h>
+// #include <wayland-egl-backend.h>
 #endif
 
 #include "cairo-dock-log.h"
@@ -314,7 +314,7 @@ static void _init_surface (GtkWidget *pWidget, GldiContainer *pContainer)
 		// not being supported on by GDK on Wayland
 		wl_surface_set_buffer_scale(wls, scale);
 		
-		// possible debug output
+		// possible debug output -- needs wayland-egl-backend.h
 		// g_print ("surface: %p, window: %p, window->priv: %p, window->destroy_callback: %p\n", pContainer->eglSurface, wlw, wlw->driver_private, wlw->destroy_window_callback);
 	}
 #endif
@@ -373,7 +373,7 @@ static void _destroy_surface (GtkWidget* pWidget, GldiContainer *pContainer) {
 	#ifdef HAVE_WAYLAND
 	if (pContainer->eglwindow)
 	{
-		// possible debug output
+		// possible debug output -- needs wayland-egl-backend.h
 		// struct wl_egl_window *window = (struct wl_egl_window*)pContainer->eglwindow;
 		// g_print ("window: %p, window->priv: %p, window->destroy_callback: %p\n", window, window->driver_private, window->destroy_window_callback);
 		wl_egl_window_destroy ((struct wl_egl_window*)pContainer->eglwindow);
