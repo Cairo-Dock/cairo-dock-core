@@ -38,6 +38,9 @@ GldiObjectManager myUserIconObjectMgr;
 extern gchar *g_cCurrentLaunchersPath;
 
 // private
+
+/// Try to open a config file corresponding to a launcher, separator or subdock.
+/// Stores a reference to the opened key file and a copy of cConfFile in attr if successful.
 static gboolean _user_icon_conf_open (const gchar *cConfFile, GldiUserIconAttr *attr)
 {
 	gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cConfFile);
@@ -78,11 +81,13 @@ static gboolean _user_icon_conf_open (const gchar *cConfFile, GldiUserIconAttr *
 	}
 	
 	attr->pKeyFile = pKeyFile;
-	attr->cConfFileName = cConfFile;
+	attr->cConfFileName = g_strdup(cConfFile);
 	
 	return TRUE;
 }
 
+/// Create a new icon from a previously opened config file and return if (or NULL on failure).
+/// Calling this function frees the elements in attr.
 static Icon *_user_icon_create (GldiUserIconAttr *attr)
 {
 	//\__________________ make an icon for the given type
@@ -101,11 +106,13 @@ static Icon *_user_icon_create (GldiUserIconAttr *attr)
 		default:
 			cd_warning ("unknown user icon type for file %s", attr->cConfFileName);
 			g_key_file_free (attr->pKeyFile);
+			g_free (attr->cConfFileName);
 			return NULL;
 	}
 	
 	Icon *pIcon = (Icon*)gldi_object_new (pMgr, attr);
 	g_key_file_free (attr->pKeyFile);
+	g_free (attr->cConfFileName);
 	return pIcon;
 }
 
@@ -212,7 +219,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	CairoDock *pParentDock = gldi_dock_get (icon->cParentDockName);
 	if (pParentDock == NULL)
 	{
-		cd_warning ("The parent dock (%s) doesn't exist: we create it", icon->cParentDockName);
+		cd_message ("The parent dock (%s) doesn't exist: we create it", icon->cParentDockName);
 		pParentDock = gldi_dock_new (icon->cParentDockName);
 	}
 }
