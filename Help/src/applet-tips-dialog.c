@@ -77,7 +77,13 @@ static void _cairo_dock_get_next_tip (CDTipsData *pTips)
 		// check if the key is an expander widget.
 		const gchar *cKeyName = pTips->pKeyList[pTips->iNumTipKey];
 		gchar *cKeyComment =  g_key_file_get_comment (pTips->pKeyFile, cGroupName, cKeyName, NULL);
-		bOk = (cKeyComment && *cKeyComment == CAIRO_DOCK_WIDGET_EXPANDER);  // whether it's an expander.
+		gchar *cUsefulComment = cKeyComment;
+		if (cUsefulComment)
+		{
+			while (*cUsefulComment == ' ' || *cUsefulComment == '\n')
+				cUsefulComment ++;
+		}
+		bOk = (cUsefulComment && *cUsefulComment == CAIRO_DOCK_WIDGET_EXPANDER);  // whether it's an expander.
 		g_free (cKeyComment);
 	} while (!bOk);
 }
@@ -125,7 +131,14 @@ static void _cairo_dock_get_previous_tip (CDTipsData *pTips)
 		// check if the key is an expander widget.
 		const gchar *cKeyName = pTips->pKeyList[pTips->iNumTipKey];
 		gchar *cKeyComment =  g_key_file_get_comment (pTips->pKeyFile, cGroupName, cKeyName, NULL);
-		bOk = (cKeyComment && *cKeyComment == CAIRO_DOCK_WIDGET_EXPANDER);  // whether it's an expander.
+		gchar *cUsefulComment = cKeyComment;
+		if (cUsefulComment)
+		{
+			while (*cUsefulComment == ' ' || *cUsefulComment == '\n')
+				cUsefulComment ++;
+		}
+		bOk = (cUsefulComment && *cUsefulComment == CAIRO_DOCK_WIDGET_EXPANDER);  // whether it's an expander.
+		g_free(cKeyComment);
 	} while (!bOk);
 }
 
