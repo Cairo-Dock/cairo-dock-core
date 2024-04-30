@@ -11,7 +11,7 @@ include ("${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/GNUInstallDirs.cmake")
 ########### project ###############
 
 project ("cairo-dock")
-set (VERSION "3.5.99.alpha2") # no dash, only numbers, dots and maybe alpha/beta/rc, e.g.: 3.3.1 or 3.3.99.alpha1
+set (VERSION "3.5.99.beta1") # no dash, only numbers, dots and maybe alpha/beta/rc, e.g.: 3.3.1 or 3.3.99.alpha1
 
 add_compile_options ($<$<COMPILE_LANGUAGE:C>:-std=c99> -Wall -Wextra $<$<COMPILE_LANGUAGE:C>:-Werror-implicit-function-declaration>) # -Wextra -Wwrite-strings -Wuninitialized -Werror-implicit-function-declaration -Wstrict-prototypes -Wreturn-type -Wparentheses -Warray-bounds)
 if (NOT DEFINED CMAKE_BUILD_TYPE)
