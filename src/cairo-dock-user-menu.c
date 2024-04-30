@@ -65,8 +65,8 @@
 #define CAIRO_DOCK_CONF_PANEL_HEIGHT 600
 #define CAIRO_DOCK_ABOUT_WIDTH 400
 #define CAIRO_DOCK_ABOUT_HEIGHT 500
-#define CAIRO_DOCK_FILE_HOST_URL "https://launchpad.net/cairo-dock"  // https://developer.berlios.de/project/showfiles.php?group_id=8724
-#define CAIRO_DOCK_SITE_URL "http://glx-dock.org"  // http://cairo-dock.vef.fr
+#define CAIRO_DOCK_FILE_HOST_URL "https://github.com/Cairo-Dock/cairo-dock-core" // "https://launchpad.net/cairo-dock"  // https://developer.berlios.de/project/showfiles.php?group_id=8724
+#define CAIRO_DOCK_SITE_URL "https://github.com/Cairo-Dock/cairo-dock-core" // "http://glx-dock.org"  // http://cairo-dock.vef.fr
 #define CAIRO_DOCK_FORUM_URL "http://forum.glx-dock.org"  // http://cairo-dock.vef.fr/bg_forumlist.php
 #define CAIRO_DOCK_PAYPAL_URL "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=UWQ3VVRB2ZTZS&lc=GB&item_name=Support%20Cairo%2dDock&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted"
 #define CAIRO_DOCK_FLATTR_URL "http://flattr.com/thing/370779/Support-Cairo-Dock-development"
@@ -200,7 +200,7 @@ static void _cairo_dock_about (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GldiContain
 	GtkWidget *pVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	gtk_box_pack_start (GTK_BOX (pHBox), pVBox, FALSE, FALSE, 0);
 	
-	GtkWidget *pLink = gtk_link_button_new_with_label (CAIRO_DOCK_SITE_URL, "Cairo-Dock (2007-2014)\n version "CAIRO_DOCK_VERSION);
+	GtkWidget *pLink = gtk_link_button_new_with_label (CAIRO_DOCK_SITE_URL, "Cairo-Dock (2007-2024)\n version "CAIRO_DOCK_VERSION);
 	gtk_box_pack_start (GTK_BOX (pVBox), pLink, FALSE, FALSE, 0);
 	
 	//~ pLink = gtk_link_button_new_with_label (CAIRO_DOCK_FORUM_URL, _("Community site"));
@@ -248,7 +248,8 @@ static void _cairo_dock_about (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GldiContain
 	"<span size=\"larger\" weight=\"bold\">%s</span>\n\n"
 		"  Fabounet (Fabrice Rey)\n"
 		"\t<span size=\"smaller\">%s</span>\n\n"
-		"  Matttbe (Matthieu Baerts)\n"
+		"  Matttbe (Matthieu Baerts)\n\n"
+		"  Daniel Kondor\n"
 		"\n\n<span size=\"larger\" weight=\"bold\">%s</span>\n\n"
 		"  Eduardo Mucelli\n"
 		"  Jesuisbenjamin\n"
