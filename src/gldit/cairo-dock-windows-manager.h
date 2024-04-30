@@ -77,7 +77,7 @@ struct _GldiWindowManagerBackend {
 	void (*can_minimize_maximize_close) (GldiWindowActor *actor, gboolean *bCanMinimize, gboolean *bCanMaximize, gboolean *bCanClose);
 	guint (*get_id) (GldiWindowActor *actor);
 	GldiWindowActor* (*pick_window) (GtkWindow *pParentWindow);  // grab the mouse, wait for a click, then get the clicked window and returns its actor
-	gchar *name; // name of the current backend
+	const gchar *name; // name of the current backend
 	} ;
 
 /// Definition of a window actor.

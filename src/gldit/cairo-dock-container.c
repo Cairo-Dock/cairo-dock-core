@@ -62,7 +62,7 @@ extern CairoDock *g_pMainDock;  // for the default dock visibility when composit
 static gboolean s_bSticky = TRUE;
 static gboolean s_bInitialOpacity0 = FALSE;  // set initial window opacity to 0, to avoid grey rectangles.
 static gboolean s_bNoComposite = FALSE;
-static GldiContainerManagerBackend s_backend;
+static GldiContainerManagerBackend s_backend = {0};
 static gboolean s_bNewPositioning = FALSE;
 
 void cairo_dock_set_containers_non_sticky (void)

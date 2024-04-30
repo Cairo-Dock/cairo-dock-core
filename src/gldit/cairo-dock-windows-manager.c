@@ -32,7 +32,7 @@ GldiObjectManager myWindowObjectMgr;
 GList *s_pWindowsList = NULL;  // list of all window actors
 static gboolean s_bSortedByZ = FALSE;  // whether the list is currently sorted by z-order
 static gboolean s_bSortedByAge = FALSE;  // whether the list is currently sorted by age
-static GldiWindowManagerBackend s_backend;
+static GldiWindowManagerBackend s_backend = {0};
 
 
 static gboolean on_zorder_changed (G_GNUC_UNUSED gpointer data)

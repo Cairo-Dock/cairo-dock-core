@@ -38,7 +38,7 @@ extern GldiContainer *g_pPrimaryContainer;
 
 // private
 static GldiDesktopBackground *s_pDesktopBg = NULL;  // une fois alloue, le pointeur restera le meme tout le temps.
-static GldiDesktopManagerBackend s_backend;
+static GldiDesktopManagerBackend s_backend = {0};
 static gchar *s_registered_backends = NULL;
 
 static void _reload_desktop_background (void);
