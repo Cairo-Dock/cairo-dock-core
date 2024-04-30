@@ -62,6 +62,20 @@
 GldiManager myXMgr;
 GldiObjectManager myXObjectMgr;
 
+gboolean g_bX11UseEgl = FALSE;
+static gboolean _prefer_egl (void)
+{
+	#ifndef HAVE_EGL
+		return FALSE;
+	#endif
+	#ifndef HAVE_GLX
+		return TRUE;
+	#endif
+	// the command line option only makes sense if we have compiled both EGL and GLX support
+	return g_bX11UseEgl;
+}
+
+
 // dependencies
 extern GldiContainer *g_pPrimaryContainer;
 //extern int g_iDamageEvent;
@@ -1678,8 +1692,8 @@ static void init (void)
 	cmb.adjust_aimed_point = _adjust_aimed_point;
 	gldi_container_manager_register_backend (&cmb);
 	
-	gldi_register_glx_backend ();  // actually one of them is a nop
-	gldi_register_egl_backend ();
+	if (_prefer_egl ()) gldi_register_egl_backend ();
+	else gldi_register_glx_backend ();
 	
 	//\__________________ get modifiers we want to filter
 	lookup_ignorable_modifiers ();

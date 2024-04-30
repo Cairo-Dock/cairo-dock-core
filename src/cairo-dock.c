@@ -101,6 +101,7 @@ extern gboolean g_bEasterEggs;
 
 extern gboolean g_bDisableLayerShell;
 extern gboolean g_bNoWaylandExclude;
+extern gboolean g_bX11UseEgl;
 
 extern GldiModuleInstance *g_pCurrentModule;
 extern GtkWidget *cairo_dock_build_simple_gui_window (void);
@@ -426,6 +427,9 @@ int main (int argc, char** argv)
 		{"x11", 'X', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bForceX11,
 			_("Force using the X11 backend (disable any Wayland functionality)."), NULL},
+		{"egl", 0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&g_bX11UseEgl,
+			_("Use EGL on X11."), NULL},
 		{"no-layer-shell", 0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bDisableLayerShell,
 			_("For debugging purpose only. Disable gtk-layer-shell support."), NULL},

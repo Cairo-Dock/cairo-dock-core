@@ -215,7 +215,7 @@ bWAYFIRE = TRUE;
 		bWAYFIRE ? "yes" : "no",
 		gldi_container_is_wayland_backend () ? "Wayland" : "X11",
 		layer_shell_info ? layer_shell_info : "",
-		g_bUseOpenGL ? "yes" : "no",
+		g_bUseOpenGL ? gldi_gl_get_backend_name() : "no",
 		gldi_windows_manager_get_name (),
 		gldi_desktop_manager_get_backend_names (),
 		cairo_dock_fm_get_desktop_name ());

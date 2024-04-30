@@ -58,6 +58,7 @@ struct _GldiGLManagerBackend {
 	void (*container_init) (GldiContainer *pContainer);
 	void (*container_finish) (GldiContainer *pContainer);
 	void (*container_resized) (GldiContainer *pContainer, int iWidth, int iHeight);
+	const gchar *name;
 };
 	
 
@@ -147,6 +148,8 @@ void gldi_gl_container_resized (GldiContainer *pContainer, int iWidth, int iHeig
 
 void gldi_gl_container_finish (GldiContainer *pContainer);
 
+
+const gchar *gldi_gl_get_backend_name ();
 
 void gldi_gl_manager_register_backend (GldiGLManagerBackend *pBackend);
 

@@ -136,11 +136,9 @@ if (WAYLAND_FOUND)
 	endif()
 endif()
 
-# check for EGL
-set (with_egl no)  # although EGL can be used with X (replacing GLX), it requires drivers that support DRI2, so most of the time GLX works better; so it's disabled by default for now; later, it will be required for Wayland, and we'll have to decide whether we compile with both, or whether we load one of them as a plug-in at run-time. It may depend on EGL having been built to support a given graphic target.
-if (HAVE_WAYLAND)
-	enable_if_not_defined (enable-egl-support) # enabled by default if compiling for Wayland
-endif()
+# check for EGL -- enabled by default, although on X, we still use GLX by default
+set (with_egl no)
+enable_if_not_defined (enable-egl-support)
 if (enable-egl-support)
 	pkg_check_modules ("EGL" "egl")
 	if (EGL_FOUND)
@@ -164,8 +162,9 @@ if (enable-x11-support)
 		set (x11_required)
 	endif()
 	
-	# check for GLX
-	if (NOT EGL_FOUND)  # currently we only have an X backend so we use either GLX or EGL, not both at once.
+	# check for GLX -- TODO: using 'pkg_check_modules ("GLX" "glx")' should work, or very old versions do not provide glx.pc?
+	enable_if_not_defined (enable-glx-support)
+	if (enable-glx-support)
 		check_library_exists (GL glXMakeCurrent "" HAVE_GLX)  # HAVE_GLX remains undefined if not found, else it's "1"
 	endif()
 	
@@ -308,6 +307,7 @@ if (HAVE_GLX)
 else()
 	MESSAGE (STATUS " * With GLX support    : no")
 endif()
+MESSAGE (STATUS " * With EGL support    : ${with_egl}")
 MESSAGE (STATUS " * With Wayland support: ${with_wayland}")
 if (WAYLAND_FOUND)
 	MESSAGE (STATUS " * With Wayland taskbar: ${with_wayland_taskbar}")
@@ -318,7 +318,6 @@ if (WAYLAND_FOUND)
 	endif()
 endif()
 MESSAGE (STATUS " * With gtk-layer-shell: ${with_gtk_layer_shell}")
-MESSAGE (STATUS " * With EGL support    : ${with_egl}")
 if (HAVE_LIBCRYPT)
 	MESSAGE (STATUS " * Crypt passwords     : yes")
 else()

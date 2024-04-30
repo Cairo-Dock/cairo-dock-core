@@ -147,16 +147,10 @@ struct _GldiContainer {
 	gdouble fRatio;
 	/// TRUE if the container has a reflection power.
 	gboolean bUseReflect;
-	#ifdef HAVE_GLX
-	/// OpenGL context.
-	GLXContext glContext;
-	void *unused;  // keep ABI compatibility
-	#elif defined(HAVE_EGL)
-	/// OpenGL context.
-	EGLContext glContext;
-	/// EGL surface.
-	EGLSurface eglSurface;
-	#endif
+	/// OpenGL context (either a GLXContext or EGLContext -- both are typedef for a pointer).
+	void *glContext;
+	/// EGL surface (not needed for GLX).
+	void *eglSurface;
 	/// whether the GL context is an ortho or a perspective view.
 	gboolean bPerspectiveView;
 	/// TRUE if a slow animation is running.
@@ -167,8 +161,10 @@ struct _GldiContainer {
 	
 	gboolean bIgnoreNextReleaseEvent;
 	
-	void *pMoveToRect; // data for gldi_container_move_to_rect() callback if needed
-	void* eglwindow; // a wl_egl_window (needed on Wayland)
+	/// data for the gldi_container_move_to_rect() callback if needed
+	void *pMoveToRect;
+	/// a wl_egl_window (needed on Wayland + EGL)
+	void *eglwindow;
 	
 	gpointer reserved[2];
 };

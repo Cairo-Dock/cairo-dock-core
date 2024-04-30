@@ -365,10 +365,10 @@ static void _destroy_surface (GtkWidget* pWidget, GldiContainer *pContainer) {
 		}
 	}
 	
-	if (pContainer->eglSurface != 0)
+	if (pContainer->eglSurface != NULL)
 	{
 		eglDestroySurface (dpy, pContainer->eglSurface);
-		pContainer->eglSurface = 0;
+		pContainer->eglSurface = NULL;
 	}
 	#ifdef HAVE_WAYLAND
 	if (pContainer->eglwindow)
@@ -419,10 +419,10 @@ static void _container_finish (GldiContainer *pContainer)
 	EGLDisplay *dpy = s_eglDisplay;
 	if (!dpy) return; // should not happen
 	_destroy_surface (NULL, pContainer);
-	if (pContainer->glContext != 0)
+	if (pContainer->glContext != NULL)
 	{
 		eglDestroyContext (dpy, pContainer->glContext);
-		pContainer->glContext = 0;
+		pContainer->glContext = NULL;
 	}
 }
 
@@ -456,6 +456,7 @@ void gldi_register_egl_backend (void)
 #ifdef HAVE_WAYLAND
 	if (s_eglWayland) gmb.container_resized = _egl_window_resize_wayland;
 #endif
+	gmb.name = "EGL";
 	gldi_gl_manager_register_backend (&gmb);
 }
 

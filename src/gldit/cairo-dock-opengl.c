@@ -38,7 +38,7 @@ extern GldiDesktopBackground *g_pFakeTransparencyDesktopBg;
 extern gboolean g_bEasterEggs;
 
 // private
-static GldiGLManagerBackend s_backend;
+static GldiGLManagerBackend s_backend = {0};
 static gboolean s_bInitialized = FALSE;
 static gboolean s_bForceOpenGL = FALSE;
 
@@ -378,6 +378,10 @@ void gldi_gl_container_finish (GldiContainer *pContainer)
 }
 
 
+const gchar *gldi_gl_get_backend_name ()
+{
+	return s_backend.name ? s_backend.name : "none";
+}
 
 void gldi_gl_manager_register_backend (GldiGLManagerBackend *pBackend)
 {

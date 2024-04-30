@@ -271,7 +271,7 @@ static void _container_init (GldiContainer *pContainer)
 
 static void _container_finish (GldiContainer *pContainer)
 {
-	if (pContainer->glContext != 0)
+	if (pContainer->glContext != NULL)
 	{
 		Display *dpy = s_XDisplay;
 		
@@ -297,6 +297,7 @@ void gldi_register_glx_backend (void)
 	gmb.container_end_draw = _container_end_draw;
 	gmb.container_init = _container_init;
 	gmb.container_finish = _container_finish;
+	gmb.name = "GLX";
 	gldi_gl_manager_register_backend (&gmb);
 
 	s_XDisplay = cairo_dock_get_X_display ();  // initialize it once and for all at the beginning; we use this display rather than the GDK one to avoid the GDK X errors check.
