@@ -146,10 +146,18 @@ static void __load_needle (GaugeIndicator *pGaugeIndicator, int iWidth, int iHei
 	g_return_if_fail (pSvgHandle != NULL);
 	
 	// get the SVG dimensions.
-	RsvgDimensionData SizeInfo;
-	rsvg_handle_get_dimensions (pSvgHandle, &SizeInfo);
-	int sizeX = SizeInfo.width;
-	int sizeY = SizeInfo.height;
+	gdouble W, H;
+	int sizeX, sizeY;
+	if (rsvg_handle_get_intrinsic_size_in_pixels (pSvgHandle, &W, &H))
+	{
+		sizeX = (int)ceil (W);
+		sizeY = (int)ceil (H);
+	}
+	else
+	{
+		sizeX = 1;
+		sizeY = 1;
+	}
 	
 	// guess the needle size and offset if not specified.
 	if (pGaugeIndicator->iNeedleRealHeight == 0)
@@ -741,7 +749,7 @@ static void _draw_gauge_image_opengl (Gauge *pGauge, GaugeIndicator *pGaugeIndic
 
 			case CD_GAUGE_EFFECT_FADE :
 				_cairo_dock_set_alpha(fValue); // no break, we need the default texture draw
-
+				// fallthrough
 			default :
 				_cairo_dock_apply_current_texture_at_size (iWidth, iHeight);
 			break;
@@ -948,10 +956,11 @@ static void _cairo_dock_free_gauge_image (GaugeImage *pGaugeImage, gboolean bFre
 	if (bFree)
 		g_free (pGaugeImage);
 }
-static void _cairo_dock_free_gauge_indicator(GaugeIndicator *pGaugeIndicator)
+static void _cairo_dock_free_gauge_indicator(void *ptr)
 {
-	if (pGaugeIndicator == NULL)
+	if (ptr == NULL)
 		return ;
+	GaugeIndicator *pGaugeIndicator = (GaugeIndicator*)ptr;
 	
 	int i;
 	for (i = 0; i < pGaugeIndicator->iNbImages; i ++)
@@ -973,8 +982,7 @@ static void unload (Gauge *pGauge)
 	_cairo_dock_free_gauge_image(pGauge->pImageBackground, TRUE);
 	_cairo_dock_free_gauge_image(pGauge->pImageForeground, TRUE);
 	
-	g_list_foreach (pGauge->pIndicatorList, (GFunc)_cairo_dock_free_gauge_indicator, NULL);
-	g_list_free (pGauge->pIndicatorList);
+	g_list_free_full (pGauge->pIndicatorList, _cairo_dock_free_gauge_indicator);
 }
 
 

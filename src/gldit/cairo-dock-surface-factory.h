@@ -98,7 +98,8 @@ cairo_surface_t *cairo_dock_create_surface_from_pixbuf (GdkPixbuf *pixbuf, doubl
 *@param iHeight height of the surface.
 *@return the newly allocated surface.
 */
-cairo_surface_t *cairo_dock_create_blank_surface (int iWidth, int iHeight);
+cairo_surface_t *cairo_dock_create_blank_surface_full (int iWidth, int iHeight, cairo_t *pSourceContext);
+#define cairo_dock_create_blank_surface(iWidth, iHeight) cairo_dock_create_blank_surface_full (iWidth, iHeight, NULL)
 
 /** Create a surface from any image.
 *@param cImagePath complete path to the image.

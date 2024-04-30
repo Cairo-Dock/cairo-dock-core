@@ -1,6 +1,6 @@
 ########### requirements ###############
 
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.16.0)
 find_package (PkgConfig)
 include (CheckLibraryExists)
 include (CheckIncludeFiles)
@@ -11,9 +11,9 @@ include ("${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/GNUInstallDirs.cmake")
 ########### project ###############
 
 project ("cairo-dock")
-set (VERSION "3.5.0") # no dash, only numbers, dots and maybe alpha/beta/rc, e.g.: 3.3.1 or 3.3.99.alpha1
+set (VERSION "3.5.99.beta1") # no dash, only numbers, dots and maybe alpha/beta/rc, e.g.: 3.3.1 or 3.3.99.alpha1
 
-add_definitions (-std=c99 -Wall -Wextra -Werror-implicit-function-declaration) # -Wextra -Wwrite-strings -Wuninitialized -Werror-implicit-function-declaration -Wstrict-prototypes -Wreturn-type -Wparentheses -Warray-bounds)
+add_compile_options ($<$<COMPILE_LANGUAGE:C>:-std=c99> -Wall -Wextra $<$<COMPILE_LANGUAGE:C>:-Werror-implicit-function-declaration>) # -Wextra -Wwrite-strings -Wuninitialized -Werror-implicit-function-declaration -Wstrict-prototypes -Wreturn-type -Wparentheses -Warray-bounds)
 if (NOT DEFINED CMAKE_BUILD_TYPE)
 	add_definitions (-O3)
 endif()
@@ -95,8 +95,50 @@ set (packages_required "glib-2.0 gthread-2.0 cairo librsvg-2.0 dbus-1 dbus-glib-
 STRING (REGEX REPLACE " " ";" packages_required_semicolon ${packages_required})  # replace blank space by semicolon => to have more details if a package is missing
 pkg_check_modules ("PACKAGE" REQUIRED "${packages_required_semicolon}")
 
-# check for EGL
-set (with_egl no)  # although EGL can be used with X (replacing GLX), it requires drivers that support DRI2, so most of the time GLX works better; so it's disabled by default for now; later, it will be required for Wayland, and we'll have to decide whether we compile with both, or whether we load one of them as a plug-in at run-time. It may depend on EGL having been built to support a given graphic target.
+# check for Wayland
+set (with_wayland no)
+set (WAYLAND_FOUND 0)
+enable_if_not_defined (enable-wayland-support) # enabled by default
+if (enable-wayland-support)
+	set (wayland_required "wayland-client")  # for the .pc
+	pkg_check_modules ("WAYLAND" ${wayland_required}>=1.0.0)
+	if (WAYLAND_FOUND)
+		set (HAVE_WAYLAND 1)
+		set (with_wayland "yes (${WAYLAND_VERSION})")
+	else()
+		set (wayland_required)
+	endif()
+endif()
+
+if (WAYLAND_FOUND)
+	enable_if_not_defined (enable-wayland-protocols) # enabled by default
+	if (enable-wayland-protocols)
+		find_package(ECM NO_MODULE)
+		if (ECM_FOUND)
+			set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
+			include (FindWaylandScanner)
+			if (WaylandScanner_FOUND)
+				set (with_wayland_taskbar "yes")
+				set (HAVE_WAYLAND_PROTOCOLS 1)
+			else()
+				set (with_wayland_taskbar "no (cannot find wayland-scanner)")
+			endif()
+		else()
+			set (with_wayland_taskbar "no (cannot find extra-cmake-modules)")
+		endif()
+	else()
+		set (with_wayland_taskbar "no (disabled)")
+	endif()
+	# json (for Wayfire IPC interface)
+	pkg_check_modules ("JSON" "nlohmann_json")
+	if (JSON_FOUND)
+		set (HAVE_JSON 1)
+	endif()
+endif()
+
+# check for EGL -- enabled by default, although on X, we still use GLX by default
+set (with_egl no)
+enable_if_not_defined (enable-egl-support)
 if (enable-egl-support)
 	pkg_check_modules ("EGL" "egl")
 	if (EGL_FOUND)
@@ -120,8 +162,9 @@ if (enable-x11-support)
 		set (x11_required)
 	endif()
 	
-	# check for GLX
-	if (NOT EGL_FOUND)  # currently we only have an X backend so we use either GLX or EGL, not both at once.
+	# check for GLX -- TODO: using 'pkg_check_modules ("GLX" "glx")' should work, or very old versions do not provide glx.pc?
+	enable_if_not_defined (enable-glx-support)
+	if (enable-glx-support)
 		check_library_exists (GL glXMakeCurrent "" HAVE_GLX)  # HAVE_GLX remains undefined if not found, else it's "1"
 	endif()
 	
@@ -143,23 +186,9 @@ if (enable-x11-support)
 	endif()
 endif()
 
-# check for Wayland
-set (with_wayland no)
-enable_if_not_defined (enable-wayland-support) # enabled by default
-if (enable-wayland-support)
-	set (wayland_required "wayland-client")  # for the .pc
-	pkg_check_modules ("WAYLAND" ${wayland_required}>=1.0.0)
-	if (WAYLAND_FOUND)
-		set (HAVE_WAYLAND 1)
-		set (with_wayland "yes (${WAYLAND_VERSION})")
-	else()
-		set (wayland_required)
-	endif()
-endif()
-
 # GTK 3
 set (gtk_required "gtk+-3.0")  # for the .pc
-pkg_check_modules ("GTK" REQUIRED "${gtk_required}>=3.4.0")
+pkg_check_modules ("GTK" REQUIRED "${gtk_required}>=3.22.0")
 
 STRING (REGEX REPLACE "\\..*" "" GTK_MAJOR "${GTK_VERSION}")
 STRING (REGEX REPLACE "[0-9]*\\.([^ ]+)" "\\1" GTK_MINOR "${GTK_VERSION}")  # 3.8.2 => 3.8
@@ -195,6 +224,35 @@ if (HAVE_LIBINTL)  # on BSD, we have to link to libintl to be able to use gettex
 	set (LIBINTL_LIBRARIES "intl")
 endif()
 
+# check for gtk-layer-shell
+set (with_gtk_layer_shell no)
+enable_if_not_defined (enable-gtk-layer-shell) # enabled by default
+if (enable-gtk-layer-shell)
+	if (HAVE_WAYLAND)
+		pkg_check_modules ("GTKLAYERSHELL" "gtk-layer-shell-0>=0.6.0")
+		if (GTKLAYERSHELL_FOUND)
+			set (HAVE_GTK_LAYER_SHELL 1)
+			set (with_gtk_layer_shell yes)
+		endif()
+	endif()
+endif()
+
+# systemd service
+pkg_check_modules ("SYSTEMD" "systemd")
+if (NOT DEFINED enable-systemd-service) # true if not defined
+	set (enable-systemd-service ${SYSTEMD_FOUND})
+	if (enable-systemd-service)
+		set (with_systemd_service "yes (use '-Denable-systemd-service=False' to disable it)")
+	else()
+		set (with_systemd_service "no (use '-Denable-systemd-service=True' to enable it)")
+	endif()
+else()
+	if (enable-systemd-service)
+		set (with_systemd_service "yes")
+	else()
+		set (with_systemd_service "no")
+	endif()
+endif()
 
 ########### variables defined at compil time ###############
 
@@ -249,8 +307,17 @@ if (HAVE_GLX)
 else()
 	MESSAGE (STATUS " * With GLX support    : no")
 endif()
-MESSAGE (STATUS " * With Wayland support: ${with_wayland}")
 MESSAGE (STATUS " * With EGL support    : ${with_egl}")
+MESSAGE (STATUS " * With Wayland support: ${with_wayland}")
+if (WAYLAND_FOUND)
+	MESSAGE (STATUS " * With Wayland taskbar: ${with_wayland_taskbar}")
+	if (JSON_FOUND)
+		MESSAGE (STATUS " * With Wayfire IPC    : yes")
+	else()
+		MESSAGE (STATUS " * With Wayfire IPC    : no")
+	endif()
+endif()
+MESSAGE (STATUS " * With gtk-layer-shell: ${with_gtk_layer_shell}")
 if (HAVE_LIBCRYPT)
 	MESSAGE (STATUS " * Crypt passwords     : yes")
 else()
@@ -259,8 +326,9 @@ endif()
 if (enable-desktop-manager)
 	set (with_cd_session "yes")
 else()
-	set (with_cd_session "no (use '-Denable-desktop-manager=ON' to enable it)")
+	set (with_cd_session "no (use '-Denable-desktop-manager=True' to enable it)")
 endif()
 MESSAGE (STATUS " * Cairo-dock session  : ${with_cd_session}")
+MESSAGE (STATUS " * Systemd service unit: ${with_systemd_service}")
 MESSAGE (STATUS " * Themes directory    : ${CAIRO_DOCK_DISTANT_THEMES_DIR} (on the server)")
 MESSAGE (STATUS)

@@ -238,6 +238,8 @@ static gboolean on_configure_desklet (G_GNUC_UNUSED GtkWidget* pWidget,
 		
 		if (g_bUseOpenGL)
 		{
+			gldi_gl_container_resized (CAIRO_CONTAINER (pDesklet), pEvent->width, pEvent->height);
+			
 			if (! gldi_gl_container_make_current (CAIRO_CONTAINER (pDesklet)))
 				return FALSE;
 			
@@ -778,6 +780,17 @@ void gldi_desklet_init_internals (CairoDesklet *pDesklet)
 		GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK);
 	gtk_container_set_border_width(GTK_CONTAINER(pWindow), 1);
 	
+	GtkWidget *box = NULL;
+	if (gldi_container_is_wayland_backend ())
+	{
+		// This is a hack to hide the titlebars, since on Wayland, gtk_window_set_decorated () 
+		// does the opposite of what it says, see e.g.: https://gitlab.gnome.org/GNOME/gtk/-/issues/5479
+		// This is worked around by adding a dummy GtkWidget as the "titlebar" and
+		// then hiding it manually later (at the end of this function)
+		box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+		gtk_window_set_titlebar (GTK_WINDOW(pWindow), box);
+	}
+	
 	// connect the signals to the window
 	g_signal_connect (G_OBJECT (pWindow),
 		"draw",
@@ -826,6 +839,7 @@ void gldi_desklet_init_internals (CairoDesklet *pDesklet)
 	gldi_container_enable_drop (CAIRO_CONTAINER (pDesklet), G_CALLBACK (_on_drag_data_received), pDesklet);
 	
 	gtk_widget_show_all (pWindow);
+	if (box) gtk_widget_hide (box);
 }
 
 
@@ -836,7 +850,7 @@ void gldi_desklet_configure (CairoDesklet *pDesklet, CairoDeskletAttr *pAttribut
 	{
 		pDesklet->iDesiredWidth = pAttribute->iDeskletWidth;
 		pDesklet->iDesiredHeight = pAttribute->iDeskletHeight;
-		gdk_window_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDesklet)),
+		gtk_window_resize (GTK_WINDOW (pDesklet->container.pWidget),
 			pAttribute->iDeskletWidth,
 			pAttribute->iDeskletHeight);
 	}

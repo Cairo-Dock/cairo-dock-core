@@ -59,13 +59,14 @@
 #include "cairo-dock-applet-facility.h"  // cairo_dock_pop_up_about_applet
 #include "cairo-dock-menu.h"
 #include "cairo-dock-user-menu.h"
+#include "cairo-dock-core.h"
 
 #define CAIRO_DOCK_CONF_PANEL_WIDTH 1000
 #define CAIRO_DOCK_CONF_PANEL_HEIGHT 600
 #define CAIRO_DOCK_ABOUT_WIDTH 400
 #define CAIRO_DOCK_ABOUT_HEIGHT 500
-#define CAIRO_DOCK_FILE_HOST_URL "https://launchpad.net/cairo-dock"  // https://developer.berlios.de/project/showfiles.php?group_id=8724
-#define CAIRO_DOCK_SITE_URL "http://glx-dock.org"  // http://cairo-dock.vef.fr
+#define CAIRO_DOCK_FILE_HOST_URL "https://github.com/Cairo-Dock/cairo-dock-core" // "https://launchpad.net/cairo-dock"  // https://developer.berlios.de/project/showfiles.php?group_id=8724
+#define CAIRO_DOCK_SITE_URL "https://github.com/Cairo-Dock/cairo-dock-core" // "http://glx-dock.org"  // http://cairo-dock.vef.fr
 #define CAIRO_DOCK_FORUM_URL "http://forum.glx-dock.org"  // http://cairo-dock.vef.fr/bg_forumlist.php
 #define CAIRO_DOCK_PAYPAL_URL "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=UWQ3VVRB2ZTZS&lc=GB&item_name=Support%20Cairo%2dDock&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted"
 #define CAIRO_DOCK_FLATTR_URL "http://flattr.com/thing/370779/Support-Cairo-Dock-development"
@@ -79,8 +80,7 @@ extern gchar *g_cCurrentThemePath;
 extern gchar *g_cCurrentIconsPath;
 
 extern gboolean g_bLocked;
-extern gboolean g_bForceCairo;
-extern gboolean g_bEasterEggs;
+extern gboolean g_bUseOpenGL;
 
 #define cairo_dock_icons_are_locked(...) (myDocksParam.bLockIcons || myDocksParam.bLockAll || g_bLocked)
 #define cairo_dock_is_locked(...) (myDocksParam.bLockAll || g_bLocked)
@@ -126,32 +126,33 @@ static void _cairo_dock_initiate_theme_management (G_GNUC_UNUSED GtkMenuItem *pM
 	cairo_dock_show_themes ();
 }
 
-static void _cairo_dock_add_about_page (GtkWidget *pNoteBook, const gchar *cPageLabel, const gchar *cAboutText)
+static void _cairo_dock_add_about_page_with_widget (GtkWidget *pNoteBook, const gchar *cPageLabel, GtkWidget *pWidget)
 {
 	GtkWidget *pVBox, *pScrolledWindow;
-	GtkWidget *pPageLabel, *pAboutLabel;
+	GtkWidget *pPageLabel;
 	
 	pPageLabel = gtk_label_new (cPageLabel);
 	pVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-	#if GTK_CHECK_VERSION (3, 8, 0)
 	gtk_container_add (GTK_CONTAINER (pScrolledWindow), pVBox);
-	#else
-	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pVBox);
-	#endif
 	gtk_notebook_append_page (GTK_NOTEBOOK (pNoteBook), pScrolledWindow, pPageLabel);
 	
-	pAboutLabel = gtk_label_new (NULL);
-	gtk_label_set_use_markup (GTK_LABEL (pAboutLabel), TRUE);
-	gtk_misc_set_alignment (GTK_MISC (pAboutLabel), 0.0, 0.0);
-	gtk_misc_set_padding (GTK_MISC (pAboutLabel), 30, 0);
 	gtk_box_pack_start (GTK_BOX (pVBox),
-		pAboutLabel,
+		pWidget,
 		FALSE,
 		FALSE,
 		15);
+}
+
+static void _cairo_dock_add_about_page_with_markup (GtkWidget *pNoteBook, const gchar *cPageLabel, const gchar *cAboutText)
+{
+	GtkWidget *pAboutLabel = gtk_label_new (NULL);
+	gtk_label_set_use_markup (GTK_LABEL (pAboutLabel), TRUE);
+	gtk_misc_set_alignment (GTK_MISC (pAboutLabel), 0.0, 0.0);
+	gtk_misc_set_padding (GTK_MISC (pAboutLabel), 30, 0);
 	gtk_label_set_markup (GTK_LABEL (pAboutLabel), cAboutText);
+	_cairo_dock_add_about_page_with_widget (pNoteBook, cPageLabel, pAboutLabel);
 }
 static void _cairo_dock_lock_icons (G_GNUC_UNUSED GtkMenuItem *pMenuItem, G_GNUC_UNUSED gpointer data)
 {
@@ -199,7 +200,7 @@ static void _cairo_dock_about (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GldiContain
 	GtkWidget *pVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	gtk_box_pack_start (GTK_BOX (pHBox), pVBox, FALSE, FALSE, 0);
 	
-	GtkWidget *pLink = gtk_link_button_new_with_label (CAIRO_DOCK_SITE_URL, "Cairo-Dock (2007-2014)\n version "CAIRO_DOCK_VERSION);
+	GtkWidget *pLink = gtk_link_button_new_with_label (CAIRO_DOCK_SITE_URL, "Cairo-Dock (2007-2024)\n version "CAIRO_DOCK_VERSION);
 	gtk_box_pack_start (GTK_BOX (pVBox), pLink, FALSE, FALSE, 0);
 	
 	//~ pLink = gtk_link_button_new_with_label (CAIRO_DOCK_FORUM_URL, _("Community site"));
@@ -247,7 +248,8 @@ static void _cairo_dock_about (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GldiContain
 	"<span size=\"larger\" weight=\"bold\">%s</span>\n\n"
 		"  Fabounet (Fabrice Rey)\n"
 		"\t<span size=\"smaller\">%s</span>\n\n"
-		"  Matttbe (Matthieu Baerts)\n"
+		"  Matttbe (Matthieu Baerts)\n\n"
+		"  Daniel Kondor\n"
 		"\n\n<span size=\"larger\" weight=\"bold\">%s</span>\n\n"
 		"  Eduardo Mucelli\n"
 		"  Jesuisbenjamin\n"
@@ -256,9 +258,10 @@ static void _cairo_dock_about (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GldiContain
 		_("Developers"),
 		_("Main developer and project leader"),
 		_("Contributors / Hackers"));
-	_cairo_dock_add_about_page (pNoteBook,
+	_cairo_dock_add_about_page_with_markup (pNoteBook,
 		_("Development"),
 		text);
+	g_free (text);
 	// Support
 		text = g_strdup_printf ("<span size=\"larger\" weight=\"bold\">%s</span>\n\n"
 		"  Matttbe\n"
@@ -276,9 +279,10 @@ static void _cairo_dock_about (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GldiContain
 		_("Beta-testing / Suggestions / Forum animation"),
 		_("Translators for this language"),
 		_("translator-credits"));
-	_cairo_dock_add_about_page (pNoteBook,
+	_cairo_dock_add_about_page_with_markup (pNoteBook,
 		_("Support"),
 		text);
+	g_free (text);
 	// Thanks
 		text = g_strdup_printf ("%s\n"
 		"<a href=\"http://glx-dock.org/ww_page.php?p=How to help us\">%s</a>: %s\n\n"
@@ -316,9 +320,22 @@ static void _cairo_dock_about (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GldiContain
 		_("Users of our forum"),
 		_("List of our forum's members"),
 		_("Artwork"));
-	_cairo_dock_add_about_page (pNoteBook,
+	_cairo_dock_add_about_page_with_markup (pNoteBook,
 		_("Thanks"),
 		text);
+	g_free (text);
+
+	text = gldi_get_diag_msg ();
+	GtkTextView *textview = GTK_TEXT_VIEW(gtk_text_view_new ());
+	GtkTextBuffer *textbuffer = gtk_text_view_get_buffer (textview);
+	gtk_text_buffer_set_text (textbuffer, text, -1);
+	gtk_text_view_set_monospace (textview, TRUE);
+	gtk_text_view_set_editable (textview, FALSE);
+
+	_cairo_dock_add_about_page_with_widget (pNoteBook,
+		_("Technical info"),
+		GTK_WIDGET(textview));
+	
 	g_free (text);
 	
 	gtk_window_resize (GTK_WINDOW (pDialog),
@@ -926,7 +943,7 @@ static void _cairo_dock_set_custom_appli_icon (G_GNUC_UNUSED GtkMenuItem *pMenuI
 			}  // apres la boucle, i = nbre d'elements, j = l'element qui a ete enleve.
 			if (j != -1)  // un element a ete enleve.
 			{
-				cd_warning ("The class '%s' was explicitely set up to use the X icon, we'll change this behavior automatically.", icon->cClass);
+				cd_warning ("The class '%s' was explicitly set up to use the X icon, we'll change this behavior automatically.", icon->cClass);
 				if (j < i - 1)  // ce n'est pas le dernier
 				{
 					pExceptions[j] = pExceptions[i-1];
@@ -1061,6 +1078,7 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
 			G_CALLBACK (_cairo_dock_quick_hide),
 			pSubMenu,
 			CAIRO_DOCK (pContainer));
+		gtk_widget_set_sensitive (pMenuItem, gldi_container_can_poll_screen_edge ());
 		gtk_widget_set_tooltip_text (pMenuItem, _("This will hide the dock until you hover over it with the mouse."));
 	}
 

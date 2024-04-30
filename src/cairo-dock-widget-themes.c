@@ -39,7 +39,6 @@
 #include "cairo-dock-applications-manager.h"  // cairo_dock_get_current_active_icon
 #include "cairo-dock-themes-manager.h"  // cairo_dock_export_current_theme
 #include "cairo-dock-config.h"  // cairo_dock_load_current_theme
-#include "cairo-dock-menu.h"  // cairo_dock_add_in_menu_with_stock_and_data
 #include "cairo-dock-gui-manager.h"  // cairo_dock_set_status_message
 #include "cairo-dock-gui-backend.h"
 #include "cairo-dock-widget-themes.h"
@@ -74,8 +73,10 @@ static gchar *_cairo_dock_build_temporary_themes_conf_file (void)
 	return cTmpConfFile;
 }
 
-static void _load_theme (gboolean bSuccess, ThemesWidget *pThemesWidget)
+static void _load_theme (gboolean bSuccess, gpointer data)
 {
+	ThemesWidget *pThemesWidget = (ThemesWidget*)data;
+	
 	if (bSuccess)
 	{
 		cairo_dock_load_current_theme ();
@@ -210,7 +211,8 @@ static gboolean _cairo_dock_load_theme (GKeyFile* pKeyFile, ThemesWidget *pTheme
 	{
 		GtkWidget *pWaitingDialog = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 		pThemesWidget->pWaitingDialog = pWaitingDialog;
-		gtk_window_set_decorated (GTK_WINDOW (pWaitingDialog), FALSE);
+		if (!gldi_container_is_wayland_backend ()) // gtk_window_set_decorated is broken on Wayland
+			gtk_window_set_decorated (GTK_WINDOW (pWaitingDialog), FALSE);
 		gtk_window_set_skip_taskbar_hint (GTK_WINDOW (pWaitingDialog), TRUE);
 		gtk_window_set_skip_pager_hint (GTK_WINDOW (pWaitingDialog), TRUE);
 		gtk_window_set_transient_for (GTK_WINDOW (pWaitingDialog), pMainWindow);
@@ -238,7 +240,7 @@ static gboolean _cairo_dock_load_theme (GKeyFile* pKeyFile, ThemesWidget *pTheme
 		gtk_widget_show_all (pWaitingDialog);
 		
 		cd_debug ("start importation...");
-		pThemesWidget->pImportTask = cairo_dock_import_theme_async (cNewThemeName, bLoadBehavior, bLoadLaunchers, (GFunc)_load_theme, pThemesWidget);  // if 'pThemesWidget' is destroyed, the 'reset' callback will be called and will cancel the task.
+		pThemesWidget->pImportTask = cairo_dock_import_theme_async (cNewThemeName, bLoadBehavior, bLoadLaunchers, _load_theme, pThemesWidget);  // if 'pThemesWidget' is destroyed, the 'reset' callback will be called and will cancel the task.
 	}
 	else  // if the theme is already local and uptodate, there is really no need to show a progressbar, because only the download/unpacking is done asynchonously (and the copy of the files is fast enough).
 	{
@@ -457,17 +459,9 @@ static gboolean _on_click_tree_view (GtkTreeView *pTreeView, GdkEventButton* pBu
 			if (iType == CAIRO_DOCK_USER_PACKAGE || iType == CAIRO_DOCK_UPDATED_PACKAGE)
 			{
 				GtkWidget *pMenu = gtk_menu_new ();
-				
-				cairo_dock_add_in_menu_with_stock_and_data (_("Delete this theme"), GLDI_ICON_NAME_DELETE, G_CALLBACK (_on_delete_theme), pMenu, pThemesWidget);
-				
+				cairo_dock_gui_menu_item_add (pMenu, _("Delete this theme"), GLDI_ICON_NAME_DELETE, G_CALLBACK (_on_delete_theme), pThemesWidget);
 				gtk_widget_show_all (pMenu);
-				gtk_menu_popup (GTK_MENU (pMenu),
-					NULL,
-					NULL,
-					NULL,
-					NULL,
-					1,
-					gtk_get_current_event_time ());
+				gtk_menu_popup_at_pointer (GTK_MENU (pMenu), NULL);
 			}
 		}
 		else  // load the theme
@@ -539,11 +533,7 @@ static void _make_tree_view_for_themes (ThemesWidget *pThemesWidget, GPtrArray *
 	pThemesWidget->pTreeView = pOneWidget;
 	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-	#if GTK_CHECK_VERSION (3, 8, 0)
 	gtk_container_add (GTK_CONTAINER (pScrolledWindow), pOneWidget);
-	#else
-	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
-	#endif
 	// menu
 	g_signal_connect (G_OBJECT (pOneWidget), "button-release-event", G_CALLBACK (_on_click_tree_view), pThemesWidget);
 	g_signal_connect (G_OBJECT (pOneWidget), "button-press-event", G_CALLBACK (_on_click_tree_view), pThemesWidget);

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<protocol name="wayfire_shell_unstable_v2">
+  <copyright>
+    Copyright (c) 2018 Iliya Bozhinov
+    
+	Permission is hereby granted, free of charge, to any person 
+	obtaining a copy of this software and associated documentation 
+	files (the "Software"), to deal in the Software without 
+	restriction, including without limitation the rights to use, copy, 
+	modify, merge, publish, distribute, sublicense, and/or sell copies 
+	of the Software, and to permit persons to whom the Software is 
+	furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be 
+	included in all copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+	EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
+	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
+	NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS 
+	BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN 
+	ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+	CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
+	SOFTWARE.
+  </copyright>
+  <interface name="zwf_shell_manager_v2" version="2">
+    <description summary="DE integration">
+      This protocol provides additional events and requests for special DE
+      clients like panels, docks, etc.
+
+      It is meant as an addition for protocols like wlr-layer-shell.
+    </description>
+
+    <request name="get_wf_output">
+      <description summary="Create a zwf_output_v2 for the given wl_output"/>
+      <arg name="output" type="object" interface="wl_output"/>
+      <arg name="id" type="new_id" interface="zwf_output_v2"/>
+    </request>
+
+    <request name="get_wf_surface">
+      <description summary="Create a zwf_surface_v2 for the given wl_surface"/>
+      <arg name="surface" type="object" interface="wl_surface"/>
+      <arg name="id" type="new_id" interface="zwf_surface_v2"/>
+    </request>
+  </interface>
+
+  <interface name="zwf_output_v2" version="2">
+    <description summary="A wrapper for wl_output">
+      Represents a single output.
+      Each output is managed independently from the others.
+    </description>
+
+    <event name="enter_fullscreen">
+      <description summary="A window was fullscreened">
+        Emitted when a window gets fullscreened on the given output. In this
+        mode, windows in the TOP layer are not visible.
+
+        There will be no two consecutive enter_fullscreen calls, i.e. if
+        fullscreen mode is entered it will be exited before going into this mode
+        again.
+      </description>
+    </event>
+
+    <event name="leave_fullscreen">
+      <description summary="A window was fullscreened">
+        Emitted when the output is no longer in fullscreen mode. Each
+        leave_fullscreen has a corresponding enter_fullscreen before it.
+      </description>
+    </event>
+
+    <request name="inhibit_output">
+      <description summary="Don't render the output">
+        Request the compositor to not render the output, so the output usually
+        is cleared to black color.  To enable output rendering again, call
+        inhibit_output_done.
+      </description>
+    </request>
+
+    <request name="inhibit_output_done">
+      <description summary="Render the output">
+        Stop inhibiting the output. This must be called as many times as
+        inhibit_output was called to actually uninhibit rendering.
+
+        The inhibit/inhibit_done requests can be called multiple times, even
+        from different apps, so don't assume that a call to inhibit_done would
+        always mean actually starting the rendering process.
+      </description>
+    </request>
+
+    <enum name="hotspot_edge">
+      <entry name="top" value="1"/>
+      <entry name="bottom" value="2"/>
+      <entry name="left" value="4"/>
+      <entry name="right" value="8"/>
+    </enum>
+
+    <request name="create_hotspot">
+      <description summary="Create a hotspot on the output">
+        A hotspot on the output is an edge or a corner region of the
+        output where the mouse or touch point has been residing for a given
+        amount of time.
+
+        The hotspot can be used for example for autohiding panels, where the
+        panel is shown when the input hovers on the edge of the output for a
+        specific amount of time.
+      </description>
+
+      <arg name="hotspot" type="uint" summary="bitwise or of the edges the output"/>
+      <arg name="threshold" type="uint" summary="distance from the edge of the output"/>
+      <arg name="timeout" type="uint" summary="minimum time for the mouse to be in the hotspot"/>
+      <arg name="id" type="new_id" interface="zwf_hotspot_v2"/>
+    </request>
+
+    <!-- Version 2 additions -->
+    <event name="toggle_menu" since="2">
+      <description summary="Toggle menu event">
+        Tells the menu to toggle open or close.
+
+        Emitted using an activator binding.
+      </description>
+    </event>
+  </interface>
+
+  <interface name="zwf_hotspot_v2" version="1">
+    <description summary="An edge of the output defined by 1 or 2 edges"/>
+
+    <event name="enter">
+      <description summary="Hotspot was triggered">
+        Means that the mouse and/or touch finger was inside the indicated
+        hotspot for the given amount of time.
+
+        Emitted at most once for each entry of the input inside the hotspot.
+      </description>
+    </event>
+
+    <event name="leave">
+      <description summary="Input left hotspot">
+        This event indicates that the mouse or touch point has left the hotspot
+        area.
+
+        Emitted only once after each enter.
+      </description>
+    </event>
+  </interface>
+
+  <interface name="zwf_surface_v2" version="1">
+    <description summary="A special surface"/>
+    <request name="interactive_move">
+      <description summary="Start an interactive move of the surface"/>
+    </request>
+  </interface>
+
+</protocol>

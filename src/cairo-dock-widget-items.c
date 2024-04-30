@@ -41,7 +41,6 @@
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-container.h"
-#include "cairo-dock-menu.h"  // cairo_dock_add_in_menu_with_stock_and_data
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-desktop-manager.h"
@@ -663,8 +662,7 @@ static void _on_select_remove_item (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GtkWid
 	if (! gtk_tree_model_get_iter (pModel, &iter, path))
 		return;
 	
-	g_list_foreach (paths, (GFunc)gtk_tree_path_free, NULL);
-	g_list_free (paths);
+	g_list_free_full (paths, (GDestroyNotify)gtk_tree_path_free);
 	
 	// get the corresponding item, and the next line.
 	Icon *pIcon = NULL;
@@ -719,19 +717,10 @@ static gboolean on_button_press_event (GtkWidget *pTreeView,
 	if (pButton->button == 3)  // clic droit.
 	{
 		GtkWidget *pMenu = gtk_menu_new ();
-		
 		/// TODO: check that we can actually remove it (ex.: not the main dock), and maybe display the item's name...
-		cairo_dock_add_in_menu_with_stock_and_data (_("Remove this item"), GLDI_ICON_NAME_REMOVE, G_CALLBACK (_on_select_remove_item), pMenu, pTreeView);
-		
+		cairo_dock_gui_menu_item_add (pMenu, _("Remove this item"), GLDI_ICON_NAME_REMOVE, G_CALLBACK (_on_select_remove_item), pTreeView);
 		gtk_widget_show_all (pMenu);
-		
-		gtk_menu_popup (GTK_MENU (pMenu),
-			NULL,
-			NULL,
-			NULL,
-			NULL,
-			pButton->button,
-			gtk_get_current_event_time ());
+		gtk_menu_popup_at_pointer (GTK_MENU (pMenu), NULL);
 	}
 	return FALSE;
 }
@@ -781,11 +770,7 @@ ItemsWidget *cairo_dock_items_widget_new (GtkWindow *pMainWindow)
 	
 	GtkWidget *pLauncherWindow = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pLauncherWindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-	#if GTK_CHECK_VERSION (3, 8, 0)
 	gtk_container_add (GTK_CONTAINER (pLauncherWindow), pItemsWidget->pTreeView);
-	#else
-	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pLauncherWindow), pItemsWidget->pTreeView);
-	#endif
 	gtk_paned_pack1 (GTK_PANED (pLauncherPane), pLauncherWindow, TRUE, FALSE);
 	
 	//\_____________ On essaie de definir une taille correcte.
@@ -1056,6 +1041,6 @@ void cairo_dock_items_widget_reload_current_widget (ItemsWidget *pItemsWidget, G
 		gtk_notebook_set_current_page (GTK_NOTEBOOK (pItemsWidget->pCurrentLauncherWidget), iNotebookPage);
 	}
 	
-	g_list_foreach (paths, (GFunc)gtk_tree_path_free, NULL);
-	g_list_free (paths);
+	g_list_free_full (paths, (GDestroyNotify)gtk_tree_path_free);
 }
+

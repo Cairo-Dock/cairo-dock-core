@@ -22,9 +22,7 @@
 
 #include <cairo.h>
 #include <gtk/gtk.h>
-#if GTK_CHECK_VERSION (3, 10, 0)
 #include "gtk3imagemenuitem.h"
-#endif
 
 #include "cairo-dock-container.h"
 #include "cairo-dock-icon-factory.h"
@@ -36,6 +34,7 @@
 #include "cairo-dock-dialog-manager.h"  // myDialogsParam
 #include "cairo-dock-style-manager.h"
 #include "cairo-dock-menu.h"
+#include "cairo-dock-wayland-manager.h"
 
 extern gchar *g_cCurrentThemePath;
 
@@ -347,17 +346,35 @@ static void _set_margin_position (GtkWidget *pMenu, GldiMenuParams *pParams)
 	
 	// define where the menu will point
 	int iMarginPosition;  // b, t, r, l
-	int y0 = pContainer->iWindowPositionY + pIcon->fDrawY;
-	if (pContainer->bDirectionUp)
-		y0 += pIcon->fHeight * pIcon->fScale - pIcon->image.iHeight;  // the icon might not be maximised yet
-	int Hs = (pContainer->bIsHorizontal ? gldi_desktop_get_height() : gldi_desktop_get_width());
-	if (pContainer->bIsHorizontal)
+	// new positioning code should work on both X11 and Wayland, but, by default, it is used
+	// only on Wayland, unless it is specifically requested by the user
+	if (gldi_container_use_new_positioning_code ())
 	{
-		iMarginPosition = (y0 > Hs/2 ? 0 : 1);
+		if (pContainer->bIsHorizontal)
+		{
+			if (pContainer->bDirectionUp) iMarginPosition = 0;
+			else iMarginPosition = 1;
+		}
+		else
+		{
+			if (pContainer->bDirectionUp) iMarginPosition = 2;
+			else iMarginPosition = 3;
+		}
 	}
 	else
 	{
-		iMarginPosition = (y0 > Hs/2 ? 2 : 3);
+		int y0 = pContainer->iWindowPositionY + pIcon->fDrawY;
+		if (pContainer->bDirectionUp)
+			y0 += pIcon->fHeight * pIcon->fScale - pIcon->image.iHeight;  // the icon might not be maximised yet
+		int Hs = (pContainer->bIsHorizontal ? gldi_desktop_get_height() : gldi_desktop_get_width());
+		if (pContainer->bIsHorizontal)
+		{
+			iMarginPosition = (y0 > Hs/2 ? 0 : 1);
+		}
+		else
+		{
+			iMarginPosition = (y0 > Hs/2 ? 2 : 3);
+		}
 	}
 	
 	// store the result, and allocate some space to draw the arrow
@@ -455,12 +472,16 @@ static void _on_menu_deactivated (GtkMenuShell *pMenu, G_GNUC_UNUSED gpointer da
 	if (!pParams)
 		return;
 	Icon *pIcon = pParams->pIcon;
+	GldiContainer *pContainer = cairo_dock_get_icon_container (pIcon);
 	if (pIcon->iHideLabel > 0)
 	{
 		pIcon->iHideLabel --;
-		GldiContainer *pContainer = cairo_dock_get_icon_container (pIcon);
 		if (pIcon->iHideLabel == 0 && pContainer)
 			gtk_widget_queue_draw (pContainer->pWidget);
+	}
+	if (gldi_container_is_wayland_backend ())
+	{
+		gldi_wayland_release_keyboard (pContainer);
 	}
 }
 
@@ -519,8 +540,78 @@ void gldi_menu_init (GtkWidget *pMenu, Icon *pIcon)
 				"deactivate",
 				G_CALLBACK (_on_menu_deactivated),
 				NULL);
+			
+			// set transient for (parent relationship; needed for positioning on Wayland)
+			// note: it is an error to try to map (and position) a popup
+			// relative to a window that is not mapped; we need to take care of this
+			if (gldi_container_use_new_positioning_code ())
+			{
+				GtkWindow *tmp = GTK_WINDOW (pContainer->pWidget);
+				while (tmp && !gtk_widget_get_mapped (GTK_WIDGET(tmp)))
+					tmp = gtk_window_get_transient_for (tmp);
+				gtk_window_set_transient_for (GTK_WINDOW (pWindow), tmp);
+			}
 		}
 	}
+}
+
+
+static void _menu_realized_cb (GtkWidget *widget, gpointer user_data)
+{
+	GldiMenuParams *pParams = (GldiMenuParams*)user_data;
+	g_return_if_fail (pParams != NULL);
+	
+	int w, h;  // taille menu
+	GtkRequisition requisition;
+	gtk_widget_get_preferred_size (widget, NULL, &requisition);  // retrieve the natural size; Note: before gtk3.10 we used the minimum size but it's now incorrect; the natural size works for prior versions too.
+	w = requisition.width;
+	h = requisition.height;
+	
+	Icon *pIcon = pParams->pIcon;
+	
+	// try to shift the menu
+	gdouble fAlign = pParams->fAlign;
+	gint dx = 0, dy = 0;
+	switch (pParams->iMarginPosition)
+	{
+		case 0: // bottom
+		case 1: // top
+		{
+			dx = w / 2 - w * fAlign;
+			g_object_set (G_OBJECT (widget), "rect-anchor-dx", dx, NULL);
+			break;
+		}
+		case 2: // right
+		case 3: // left
+		{
+			dy = h / 2 - h * fAlign;
+			g_object_set (G_OBJECT (widget), "rect-anchor-dy", dy, NULL);
+			break;
+		}
+	}
+	
+	GdkWindow *window = gtk_widget_get_window (gtk_widget_get_toplevel (widget));
+	if (window)
+	{
+		Icon *pIcon = pParams->pIcon;
+		GldiContainer *pContainer = (pIcon ? cairo_dock_get_icon_container (pIcon) : NULL);
+		if (pIcon && pContainer)
+		{
+			GdkRectangle rect = {0, 0, 1, 1};
+			GdkGravity rect_anchor = GDK_GRAVITY_NORTH;
+			GdkGravity menu_anchor = GDK_GRAVITY_SOUTH;
+			gldi_container_calculate_rect (pContainer, pIcon, &rect, &rect_anchor, &menu_anchor);
+			gtk_menu_popup_at_rect (GTK_MENU (widget), gtk_widget_get_window (pContainer->pWidget),
+				&rect, rect_anchor, menu_anchor, NULL);
+			// gdk_window_move_to_rect (window, &rect, rect_anchor, menu_anchor, GDK_ANCHOR_SLIDE_X | GDK_ANCHOR_SLIDE_Y, dx, dy);
+		}
+	}
+	
+	gldi_container_calculate_aimed_point (pIcon, widget, w, h, pParams->iMarginPosition, fAlign, &(pParams->iAimedX), &(pParams->iAimedY));
+	
+	// int menuX, menuY;
+	// gtk_window_get_position (GTK_WINDOW (gtk_widget_get_toplevel (widget)), &menuX, &menuY);
+	// g_print ("menu aimed at: %d, %d; position: %d, %d\n", pParams->iAimedX, pParams->iAimedY, menuX, menuY);
 }
 
 static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push_in, G_GNUC_UNUSED gpointer data)
@@ -587,6 +678,13 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 	pParams->iAimedY = iAimedY;
 }
 
+
+static void _init_menu_item (GtkWidget *pMenuItem);
+static void _init_menu_item2 (GtkWidget *menu, gpointer)
+{
+	_init_menu_item (menu);
+}
+
 static void _init_menu_item (GtkWidget *pMenuItem)
 {
 	GtkWidget *pSubMenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (pMenuItem));
@@ -612,10 +710,10 @@ static void _init_menu_item (GtkWidget *pMenuItem)
 	
 	// iterate on sub-menu's items
 	if (pSubMenu != NULL)
-		gtk_container_forall (GTK_CONTAINER (pSubMenu), (GtkCallback) _init_menu_item, NULL);
+		gtk_container_forall (GTK_CONTAINER (pSubMenu), (GtkCallback) _init_menu_item2, NULL);
 }
 
-static void _popup_menu (GtkWidget *menu, guint32 time)
+static void _popup_menu (GtkWidget *menu, const GdkEvent *event)
 {
 	GldiMenuParams *pParams = g_object_get_data (G_OBJECT(menu), "gldi-params");
 	g_return_if_fail (pParams != NULL);
@@ -628,7 +726,7 @@ static void _popup_menu (GtkWidget *menu, guint32 time)
 		pContainer->iface.setup_menu (pContainer, pIcon, menu);
 
 	// init each items (and sub-menus), in case it contains some foreign GtkMenuItems (for instance in case of an indicator menu or the gtk recent files sub-menu, which can have new items at any time)
-	gtk_container_forall (GTK_CONTAINER (menu), (GtkCallback) _init_menu_item, NULL);  // init each menu-item style
+	gtk_container_forall (GTK_CONTAINER (menu), (GtkCallback) _init_menu_item2, NULL);  // init each menu-item style
 	
 	if (pIcon && pContainer)
 	{
@@ -641,31 +739,62 @@ static void _popup_menu (GtkWidget *menu, guint32 time)
 		_set_margin_position (menu, pParams);
 	}
 
+	// new positioning code should work on both X11 and Wayland, but, by default, it is used
+	// only on Wayland, unless it is specifically requested by the user
+	gboolean use_new_positioning = gldi_container_use_new_positioning_code ();
+	
+	if (use_new_positioning)
+		g_signal_connect (GTK_WIDGET (menu), "realize",
+			G_CALLBACK (_menu_realized_cb), pParams);
+	
 	gtk_widget_show_all (GTK_WIDGET (menu));
 
-	gtk_menu_popup (GTK_MENU (menu),
-		NULL,
-		NULL,
-		pIcon != NULL && pContainer != NULL ? _place_menu_on_icon : NULL,
-		NULL,
-		0,
-		time);
+	if (use_new_positioning)
+	{
+		if (pContainer && pIcon)
+		{
+			GdkRectangle rect = {0, 0, 1, 1};
+			GdkGravity rect_anchor = GDK_GRAVITY_NORTH;
+			GdkGravity menu_anchor = GDK_GRAVITY_SOUTH;
+			gldi_container_calculate_rect (pContainer, pIcon, &rect, &rect_anchor, &menu_anchor);
+			gtk_menu_popup_at_rect (GTK_MENU (menu), gtk_widget_get_window (pContainer->pWidget),
+				&rect, rect_anchor, menu_anchor, event);
+		}
+		else
+		{
+			gtk_menu_popup_at_pointer (GTK_MENU (menu), event);
+		}
+	}
+	else
+	{
+		guint button;
+		if ( !(event && gdk_event_get_button (event, &button))) button = 0;
+		gtk_menu_popup (GTK_MENU (menu),
+			NULL,
+			NULL,
+			pIcon != NULL && pContainer != NULL ? _place_menu_on_icon : NULL,
+			NULL,
+			button,
+			gdk_event_get_time (event)); // note: event can be NULL, in this case, the current time is used
+	}
 }
 static gboolean _popup_menu_delayed (GtkWidget *menu)
 {
-	_popup_menu (menu, 0);
+	_popup_menu (menu, NULL);
 	return FALSE;
 }
-void gldi_menu_popup (GtkWidget *menu)
+void gldi_menu_popup_full (GtkWidget *menu, const GdkEvent *event)
 {
 	if (menu == NULL)
 		return;
 	
-	guint32 t = gtk_get_current_event_time();
-	cd_debug ("gtk_get_current_event_time: %d", t);
-	if (t > 0)
+	GdkEvent *currentEvent = NULL;
+	if (!event) event = currentEvent = gtk_get_current_event ();
+	
+	if (event)
 	{
-		_popup_menu (menu, t);
+		_popup_menu (menu, event);
+		if (currentEvent) gdk_event_free (currentEvent);
 	}
 	else  // 'gtk_menu_popup' is buggy and doesn't work if not triggered directly by an X event :-/ so in this case, we run it with a delay (200ms is the minimal value that always works).
 	{
@@ -723,23 +852,17 @@ static gboolean _draw_menu_item (GtkWidget *widget,
 	return TRUE;  // intercept
 }
 
-GtkWidget *gldi_menu_item_new_full (const gchar *cLabel, const gchar *cImage, gboolean bUseMnemonic, GtkIconSize iSize)
+GtkWidget *gldi_menu_item_new_full2 (const gchar *cLabel, const gchar *cImage, gboolean bUseMnemonic, GtkIconSize iSize, gboolean bUseStyle)
 {
 	if (iSize == 0)
 		iSize = GTK_ICON_SIZE_MENU;
 	
+	(void)cImage; // avoid warnings if CAIRO_DOCK_FORCE_ICON_IN_MENUS == 0
 	GtkWidget *pMenuItem;
-	if (! cImage)
-	{
-		if (! cLabel)
-			pMenuItem = gtk_menu_item_new ();
-		else
-			pMenuItem =  (bUseMnemonic ? gtk_menu_item_new_with_mnemonic (cLabel) : gtk_menu_item_new_with_label (cLabel));
-	}
-	else
+#if (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
+	if (cImage)
 	{
 		GtkWidget *image = NULL;
-#if (! GTK_CHECK_VERSION (3, 10, 0)) || (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
 		if (*cImage == '/')
 		{
 			int size;
@@ -755,34 +878,22 @@ GtkWidget *gldi_menu_item_new_full (const gchar *cLabel, const gchar *cImage, gb
 		{
 			image = gtk_image_new_from_icon_name (cImage, iSize);
 		}
-#endif
-		
-#if GTK_CHECK_VERSION (3, 10, 0)
-		#if (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
 		if (! cLabel)
 			pMenuItem = gtk3_image_menu_item_new ();
 		else
 			pMenuItem = (bUseMnemonic ? gtk3_image_menu_item_new_with_mnemonic (cLabel) : gtk3_image_menu_item_new_with_label (cLabel));
 		gtk3_image_menu_item_set_image (GTK3_IMAGE_MENU_ITEM (pMenuItem), image);
-		#else
+	}
+	else
+#endif
+	{
 		if (! cLabel)
 			pMenuItem = gtk_menu_item_new ();
 		else
 			pMenuItem = (bUseMnemonic ? gtk_menu_item_new_with_mnemonic (cLabel) : gtk_menu_item_new_with_label (cLabel));
-		#endif
-#else
-		if (! cLabel)
-			pMenuItem = gtk_image_menu_item_new ();
-		else
-			pMenuItem = (bUseMnemonic ? gtk_image_menu_item_new_with_mnemonic (cLabel) : gtk_image_menu_item_new_with_label (cLabel));
-		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
-		#if (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
-		gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (pMenuItem), TRUE);
-		#endif
-#endif
 	}
 
-	_init_menu_item (pMenuItem);
+	if (bUseStyle) _init_menu_item (pMenuItem);
 
 	gtk_widget_show_all (pMenuItem);  // show immediately, so that the menu-item is realized when the menu is popped up
 	
@@ -792,27 +903,18 @@ GtkWidget *gldi_menu_item_new_full (const gchar *cLabel, const gchar *cImage, gb
 
 void gldi_menu_item_set_image (GtkWidget *pMenuItem, GtkWidget *image)
 {
-#if GTK_CHECK_VERSION (3, 10, 0)
-	#if (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
+#if (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
 	gtk3_image_menu_item_set_image (GTK3_IMAGE_MENU_ITEM (pMenuItem), image);
-	#else
-	g_object_unref (image);
-	#endif
 #else
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (pMenuItem), image);
-	#if (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
-	gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (pMenuItem), TRUE);
-	#endif
+	(void)pMenuItem; // avoid warnings
+	g_object_ref_sink (image); // image will typically be newly allocated and have a floating reference
+	g_object_unref (image); // it is taken over here and freed in this case
 #endif
 }
 
 GtkWidget *gldi_menu_item_get_image (GtkWidget *pMenuItem)
 {
-	#if GTK_CHECK_VERSION (3, 10, 0)
 	return gtk3_image_menu_item_get_image (GTK3_IMAGE_MENU_ITEM (pMenuItem));
-	#else
-	return gtk_image_menu_item_get_image (GTK_IMAGE_MENU_ITEM (pMenuItem));
-	#endif
 }
 
 GtkWidget *gldi_menu_item_new_with_action (const gchar *cLabel, const gchar *cImage, GCallback pFunction, gpointer pData)
@@ -864,9 +966,6 @@ void gldi_menu_add_separator (GtkWidget *pMenu)
 
 gboolean GLDI_IS_IMAGE_MENU_ITEM (GtkWidget *pMenuItem)  // defined as a function to not export gtk3imagemenuitem.h
 {
-	#if GTK_CHECK_VERSION (3, 10, 0)
 	return GTK3_IS_IMAGE_MENU_ITEM (pMenuItem);
-	#else
-	return GTK_IS_IMAGE_MENU_ITEM (pMenuItem);
-	#endif
 }
+

@@ -97,6 +97,20 @@ static gboolean on_expose_dialog (G_GNUC_UNUSED GtkWidget *pWidget, cairo_t *pCa
 	}
 	else
 	{*/
+		// Try to update our position if needed:
+		// Wayland + gtk-layer-shell >= 0.8.2: no configure event, and no position 
+		// available in the realize event, but position (relative to parent window)
+		// is available here
+		int newX, newY;
+		gdk_window_get_position (gtk_widget_get_window (pDialog->container.pWidget), &newX, &newY);
+		if (newX != pDialog->container.iWindowPositionX || newY != pDialog->container.iWindowPositionY)
+		{
+			cd_debug ("Dialog position changed: (%d;%d) -> (%d;%d)\n", pDialog->container.iWindowPositionX,
+				pDialog->container.iWindowPositionY, newX, newY);
+			pDialog->container.iWindowPositionX = newX;
+			pDialog->container.iWindowPositionY = newY;
+		}
+	
 		cairo_dock_init_drawing_context_on_container (CAIRO_CONTAINER (pDialog), pCairoContext);
 		
 		if (pDialog->pDecorator != NULL)
@@ -141,6 +155,49 @@ static void _cairo_dock_set_dialog_input_shape (CairoDialog *pDialog)
 		1);  // workaround a bug in X with fully transparent window => let 1 pixel ON.
 
 	gldi_container_set_input_shape (CAIRO_CONTAINER (pDialog), pDialog->pShapeBitmap);
+}
+
+static void _calculate_aimed_point_new (CairoDialog* pDialog)
+{
+	int w = pDialog->container.iWidth;
+	int h = pDialog->container.iHeight;
+	int iMarginPosition = 0;
+	Icon *pIcon = pDialog->pIcon;
+	GldiContainer *pContainer = (pIcon ? cairo_dock_get_icon_container (pIcon) : NULL);
+	
+	if (pContainer && CAIRO_DOCK_IS_DOCK (pContainer))
+	{
+		CairoDock *pDock = CAIRO_DOCK (pContainer);
+		while (pDock->iRefCount > 0 && ! gldi_container_is_visible (pContainer))  // sous-dock invisible.
+		{
+			pIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pDock);
+			pContainer = CAIRO_CONTAINER (pDock);
+		}
+	}
+	
+	if (pContainer)
+	{
+		if (pContainer->bIsHorizontal)
+		{
+			if (pContainer->bDirectionUp) iMarginPosition = 0;
+			else iMarginPosition = 1;
+		}
+		else
+		{
+			if (pContainer->bDirectionUp) iMarginPosition = 2;
+			else iMarginPosition = 3;
+		}
+	}
+	gldi_container_calculate_aimed_point (pDialog->pIcon, pDialog->container.pWidget, w, h, iMarginPosition, pDialog->fAlign, &(pDialog->iAimedX), &(pDialog->iAimedY));
+	
+	// g_print ("dialog position: %d, %d; aimed point: %d, %d\n", pDialog->container.iWindowPositionX, pDialog->container.iWindowPositionY, pDialog->iAimedX, pDialog->iAimedY);
+}
+
+static void _on_realize_dialog (GtkWidget* pWidget, CairoDialog *pDialog)
+{
+	gdk_window_get_position (gtk_widget_get_window (gtk_widget_get_toplevel (pWidget)), &(pDialog->container.iWindowPositionX), &(pDialog->container.iWindowPositionY));
+	// gtk_window_get_position (GTK_WINDOW (gtk_widget_get_toplevel (pWidget)), &(pDialog->container.iWindowPositionX), &(pDialog->container.iWindowPositionY));
+	_calculate_aimed_point_new (pDialog);
 }
 
 static gboolean on_configure_dialog (G_GNUC_UNUSED GtkWidget* pWidget,
@@ -203,6 +260,9 @@ static gboolean on_configure_dialog (G_GNUC_UNUSED GtkWidget* pWidget,
 		*/pDialog->bPositionForced ++;
 	}
 	
+	//\____________ compute aimed point (for new positioning)
+	if (gldi_container_use_new_positioning_code ()) _calculate_aimed_point_new (pDialog);
+	
 	gtk_widget_queue_draw (pDialog->container.pWidget);  // les widgets internes peuvent avoir changer de taille sans que le dialogue n'en ait change, il faut donc redessiner tout le temps.
 
 	return FALSE;
@@ -213,6 +273,7 @@ static gboolean on_unmap_dialog (GtkWidget* pWidget,
 	CairoDialog *pDialog)
 {
 	//g_print ("unmap dialog (bAllowMinimize:%d, visible:%d)\n", pDialog->bAllowMinimize, GTK_WIDGET_VISIBLE (pWidget));
+	if (gldi_container_use_new_positioning_code ()) pDialog->container.bInside = FALSE;
 	if (! pDialog->bAllowMinimize)  // it's an unexpected unmap event
 	{
 		if (pDialog->pUnmapTimer)  // see if it happened just after an event that we expected
@@ -222,7 +283,17 @@ static gboolean on_unmap_dialog (GtkWidget* pWidget,
 			if (fElapsedTime < .2)  // it's a 2nd unmap event just after the first one, ignore it, it's just some noise from the WM
 				return TRUE;
 		}
-		gtk_window_present (GTK_WINDOW (pWidget));  // counter it, we don't want dialogs to be hidden
+		
+		if (gldi_container_use_new_positioning_code ())
+		{
+			// new behavior: we accept that the WM can close our dialogs any time
+			if (pDialog->bHideOnClick) {
+				gtk_widget_hide (pDialog->container.pWidget);
+				gldi_dialog_leave (pDialog); // notify that the dialog is hidden
+			}
+			else gldi_object_unref (GLDI_OBJECT(pDialog)); // destroy the dialog
+		}
+		else gtk_window_present (GTK_WINDOW (pWidget));  // old behavior: counter it, we don't want dialogs to be hidden
 	}
 	else  // expected event, it's an unmap that we triggered with 'gldi_dialog_hide', so let pass it
 	{
@@ -527,8 +598,6 @@ void gldi_dialog_init_internals (CairoDialog *pDialog, CairoDialogAttr *pAttribu
 	else
 		pDialog->pTopWidget = _cairo_dock_add_dialog_internal_box (pDialog, 0, pDialog->iTopMargin, TRUE);
 	
-	gtk_widget_show_all (pDialog->container.pWidget);
-	
 	//\________________ load the input shape.
 	if (pDialog->bNoInput)
 	{
@@ -561,6 +630,15 @@ void gldi_dialog_init_internals (CairoDialog *pDialog, CairoDialogAttr *pAttribu
 			"button-press-event",
 			G_CALLBACK (on_button_press_widget),
 			pDialog);
+	if (gldi_container_use_new_positioning_code ())
+	{
+		if (gtk_widget_get_realized (pDialog->container.pWidget))
+			_calculate_aimed_point_new (pDialog);
+		else g_signal_connect_after (G_OBJECT (pDialog->container.pWidget),
+			"realize",
+			G_CALLBACK (_on_realize_dialog),
+			pDialog);
+	}
 	
 	cairo_dock_launch_animation (CAIRO_CONTAINER (pDialog));
 }
@@ -577,6 +655,7 @@ CairoDialog *gldi_dialog_new (CairoDialogAttr *pAttribute)
 		}
 	}
 	pAttribute->cattr.bNoOpengl = TRUE;
+	if (gldi_container_use_new_positioning_code ()) pAttribute->cattr.bIsPopup = TRUE;
 	cd_debug ("%s (%s, %s, %x, %x, (%p;%p))", __func__, pAttribute->cText, pAttribute->cImageFilePath, pAttribute->pInteractiveWidget, pAttribute->pActionFunc, pAttribute->pIcon, pAttribute->pContainer);
 	return (CairoDialog*)gldi_object_new (&myDialogObjectMgr, pAttribute);
 }

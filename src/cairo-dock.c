@@ -77,6 +77,7 @@
 #include "cairo-dock-gui-backend.h"
 #include "cairo-dock-user-interaction.h"
 #include "cairo-dock-user-menu.h"
+#include "cairo-dock-wayland-manager.h" // gldi_wayland_manager_have_layer_shell
 
 //#define CAIRO_DOCK_THEME_SERVER "http://themes.glx-dock.org"
 #define CAIRO_DOCK_THEME_SERVER "http://download.tuxfamily.org/glxdock/themes"
@@ -98,11 +99,18 @@ extern CairoDockGLConfig g_openglConfig;
 extern gboolean g_bUseOpenGL;
 extern gboolean g_bEasterEggs;
 
+extern gboolean g_bDisableLayerShell;
+extern gboolean g_bNoWaylandExclude;
+extern gboolean g_bX11UseEgl;
+
 extern GldiModuleInstance *g_pCurrentModule;
 extern GtkWidget *cairo_dock_build_simple_gui_window (void);
 
 gboolean g_bForceCairo = FALSE;
 gboolean g_bLocked;
+
+extern gboolean g_bForceWayland;
+extern gboolean g_bForceX11;
 
 static gboolean s_bSucessfulLaunch = FALSE;
 static GString *s_pLaunchCommand = NULL;
@@ -113,6 +121,7 @@ static gint s_iLastYear = 0;
 static gint s_iNbCrashes = 0;
 static gboolean s_bPingServer = TRUE;
 static gboolean s_bCDSessionLaunched = FALSE; // session CD already launched?
+static gboolean s_bWaylandRunAlready = FALSE;
 
 
 static void _on_got_server_answer (const gchar *data, G_GNUC_UNUSED gpointer user_data)
@@ -248,6 +257,7 @@ static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
 		s_iLastYear = g_key_file_get_integer (pKeyFile, "Launch", "last year", NULL);  // 0 by default
 		s_bPingServer = g_key_file_get_boolean (pKeyFile, "Launch", "ping server", NULL);  // FALSE by default
 		s_bCDSessionLaunched = g_key_file_get_boolean (pKeyFile, "Launch", "cd session", NULL);  // FALSE by default
+		s_bWaylandRunAlready = g_key_file_get_boolean (pKeyFile, "Launch", "started_on_wayland", NULL);  // FALSE by default
 	}
 	else  // first launch or old version, the file doesn't exist yet.
 	{
@@ -330,8 +340,6 @@ int main (int argc, char** argv)
 
 	dbus_g_thread_init (); // it's a wrapper: it will use dbus_threads_init_default ();
 	
-	gtk_init (&argc, &argv);
-	
 	GError *erreur = NULL;
 	
 	//\___________________ internationalize the app.
@@ -340,7 +348,7 @@ int main (int argc, char** argv)
 	textdomain (CAIRO_DOCK_GETTEXT_PACKAGE);
 	
 	//\___________________ get app's options.
-	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSticky = FALSE, bCappuccino = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceOpenGL = FALSE, bToggleIndirectRendering = FALSE, bKeepAbove = FALSE, bForceColors = FALSE, bAskBackend = FALSE, bMetacityWorkaround = FALSE;
+	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSticky = FALSE, bCappuccino = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceOpenGL = FALSE, bToggleIndirectRendering = FALSE, bKeepAbove = FALSE, bForceColors = FALSE, bAskBackend = FALSE, bTransparencyWorkaround = FALSE;
 	gchar *cEnvironment = NULL, *cUserDefinedDataDir = NULL, *cVerbosity = 0, *cUserDefinedModuleDir = NULL, *cExcludeModule = NULL, *cThemeServerAdress = NULL;
 	int iDelay = 0;
 	GOptionEntry pOptionsTable[] =
@@ -379,9 +387,9 @@ int main (int argc, char** argv)
 		{"safe-mode", 'f', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bSafeMode,
 			_("Don't load any plug-ins."), NULL},
-		{"metacity-workaround", 'W', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
-			&bMetacityWorkaround,
-			_("Work around some bugs in Metacity Window-Manager (invisible dialogs or sub-docks)"), NULL},
+		{"transparency-workaround", 't', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&bTransparencyWorkaround,
+			_("Work around potential glitches when dialogs or sub-docks appear"), NULL},
 		{"log", 'l', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
 			&cVerbosity,
 			_("Log verbosity (debug,message,warning,critical,error); default is warning."), NULL},
@@ -413,6 +421,21 @@ int main (int argc, char** argv)
 		{"easter-eggs", 'E', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bEasterEggs,
 			_("For debugging purpose only. Some hidden and still unstable options will be activated."), NULL},
+		{"wayland", 'L', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&g_bForceWayland,
+			_("Force using the Wayland backends (disable X11 backends)."), NULL},
+		{"x11", 'X', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&g_bForceX11,
+			_("Force using the X11 backend (disable any Wayland functionality)."), NULL},
+		{"egl", 0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&g_bX11UseEgl,
+			_("Use EGL on X11."), NULL},
+		{"no-layer-shell", 0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&g_bDisableLayerShell,
+			_("For debugging purpose only. Disable gtk-layer-shell support."), NULL},
+		{"no-exclude-modules", 0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&g_bNoWaylandExclude,
+			_("For debugging purpose only. Do not blacklist incompatible plugins on Wayland."), NULL},
 		{NULL, 0, 0, 0,
 			NULL,
 			NULL, NULL}
@@ -426,6 +449,17 @@ int main (int argc, char** argv)
 		cd_error ("ERROR in options: %s", erreur->message);
 		return 1;
 	}
+	if (g_bForceWayland && g_bForceX11)
+	{
+		cd_error ("Both Wayland and X11 backends cannot be requested (use only one of the -L and -X options)!\n");
+		return 1;
+	}
+	if (g_bForceWayland)
+		gdk_set_allowed_backends ("wayland");
+	if (g_bForceX11)
+		gdk_set_allowed_backends ("x11");
+	
+	gtk_init (&argc, &argv);
 	
 	if (bPrintVersion)
 	{
@@ -485,7 +519,11 @@ int main (int argc, char** argv)
 	}
 	else
 	{
-		cRootDataDirPath = g_strdup_printf ("%s/.config/%s", getenv("HOME"), CAIRO_DOCK_DATA_DIR);
+		gchar *xdg_config_home = getenv("XDG_CONFIG_HOME");
+		if (xdg_config_home && *xdg_config_home == '/')
+			cRootDataDirPath = g_strdup_printf ("%s/%s", xdg_config_home, CAIRO_DOCK_DATA_DIR);
+		else
+			cRootDataDirPath = g_strdup_printf ("%s/.config/%s", getenv("HOME"), CAIRO_DOCK_DATA_DIR);
 	}
 	bFirstLaunch = ! g_file_test (cRootDataDirPath, G_FILE_TEST_IS_DIR);
 	_cairo_dock_get_global_config (cRootDataDirPath);
@@ -512,8 +550,8 @@ int main (int argc, char** argv)
 	if (bNoSticky)
 		cairo_dock_set_containers_non_sticky ();
 	
-	if (bMetacityWorkaround)
-		cairo_dock_disable_containers_opacity ();
+	if (bTransparencyWorkaround)
+		cairo_dock_enable_containers_opacity ();
 	
 	if (iDesktopEnv != CAIRO_DOCK_UNKNOWN_ENV)
 		cairo_dock_fm_force_desktop_env (iDesktopEnv);
@@ -577,17 +615,14 @@ int main (int argc, char** argv)
 			gldi_gl_backend_deactivate ();
 		}
 	}
+	
+	gchar *msg = gldi_get_diag_msg ();
 	g_print ("\n"
 	" ============================================================================\n"
-	"\tCairo-Dock version : %s\n"
-	"\tCompiled date      : %s %s\n"
-	"\tBuilt with GTK     : %d.%d\n"
-	"\tRunning with OpenGL: %d\n"
+	"%s"
 	" ============================================================================\n\n",
-		CAIRO_DOCK_VERSION,
-		__DATE__, __TIME__,
-		GTK_MAJOR_VERSION, GTK_MINOR_VERSION,
-		g_bUseOpenGL);
+		msg);
+	g_free (msg);
 	
 	//\___________________ load plug-ins (must be done after everything is initialized).
 	if (! bSafeMode)
@@ -831,6 +866,35 @@ int main (int argc, char** argv)
 	{
 		Icon *pIcon = gldi_icons_get_any_without_dialog ();
 		gldi_dialog_show_temporary_with_icon (_("No plug-in were found.\nPlug-ins provide most of the functionalities (animations, applets, views, etc).\nSee http://glx-dock.org for more information.\nThere is almost no meaning in running the dock without them and it's probably due to a problem with the installation of these plug-ins.\nBut if you really want to use the dock without these plug-ins, you can launch the dock with the '-f' option to no longer have this message.\n"), pIcon, CAIRO_CONTAINER (g_pMainDock), 0., CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON);
+	}
+	
+	if (gldi_container_is_wayland_backend ())
+	{
+		/// Display a warning if layer-shell is not available
+		if (!gldi_wayland_manager_have_layer_shell () && !g_bDisableLayerShell)
+		{
+			gboolean layer_shell_supported = FALSE;
+#ifdef HAVE_GTK_LAYER_SHELL
+			layer_shell_supported = TRUE;
+#endif
+			const gchar *msg1 = layer_shell_supported ? _("Cairo-Dock is running in a Wayland session, but the compositor does not seem to support the wlr-layer-shell protocol. This is required for properly positioning the dock on the screen; it is likely that docks will show up in wrong locations. Please check that you are running a Wayland compositor that is compatible with wlr-layer-shell; see the documentation for more information. Please note that neither GNOME Shell nor the Ubuntu Wayland desktop session is supported. If you believe that your compositor should be supported, consider reporting this issue in our bug tracker.\n\n(to disable showing this message, run Cairo-Dock with the '--no-layer-shell' command line option)") : _("Cairo-Dock is running in a Wayland session, but it was not compiled with gtk-layer-shell support. This is required for properly positioning the dock on the screen; it is likely that docks will show up in wrong locations. If you have installed Cairo-Dock from a binary package, please report this issue to the package's maintainer. If you have compiled Cairo-Dock yourself, please ensure that the development libraries for gtk-layer-shell are available; see the documentation for more information.\n\n(to disable showing this message, run Cairo-Dock with the '--no-layer-shell' command line option)");
+			Icon *pIcon = gldi_icons_get_any_without_dialog ();
+			gldi_dialog_show_temporary_with_icon (msg1, pIcon, CAIRO_CONTAINER (g_pMainDock), 0., CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON);
+		}
+		
+		else if (!s_bWaylandRunAlready)
+		{
+			Icon *pIcon = gldi_icons_get_any_without_dialog ();
+			gldi_dialog_show_temporary_with_icon (_("You are running Cairo-Dock in a Wayland session. Please note the support for Wayland is still experimental: not all features and plugins work yet.\nSee the documentation for more information.\nPlease consider reporting any issues you encounter in our bug tracker. Thank you!"), pIcon, CAIRO_CONTAINER (g_pMainDock), 0., CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON);
+			
+			// Update 'started_on_wayland' key: we store that we run the dock on Wayland at least once
+			s_bWaylandRunAlready = TRUE;
+			gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", g_cCairoDockDataDir);
+			cairo_dock_update_conf_file (cConfFilePath,
+				G_TYPE_BOOLEAN, "Launch", "started_on_wayland", s_bWaylandRunAlready,
+				G_TYPE_INVALID);
+			g_free (cConfFilePath);
+		}
 	}
 	
 	//\___________________ display the changelog in case of a new version.

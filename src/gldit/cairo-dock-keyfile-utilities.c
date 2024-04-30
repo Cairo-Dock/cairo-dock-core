@@ -39,7 +39,7 @@ GKeyFile *cairo_dock_open_key_file (const gchar *cConfFilePath)
 	return pKeyFile;
 }
 
-void cairo_dock_write_keys_to_file (GKeyFile *pKeyFile, const gchar *cConfFilePath)
+void cairo_dock_write_keys_to_file_full (GKeyFile *pKeyFile, const gchar *cConfFilePath, gboolean bAllowEmpty)
 {
 	cd_debug ("%s (%s)", __func__, cConfFilePath);
 	GError *erreur = NULL;
@@ -60,7 +60,7 @@ void cairo_dock_write_keys_to_file (GKeyFile *pKeyFile, const gchar *cConfFilePa
 		g_error_free (erreur);
 		return ;
 	}
-	g_return_if_fail (cNewConfFileContent != NULL && *cNewConfFileContent != '\0');
+	if (! bAllowEmpty) g_return_if_fail (cNewConfFileContent != NULL && *cNewConfFileContent != '\0');
 
 	g_file_set_contents (cConfFilePath, cNewConfFileContent, length, &erreur);
 	if (erreur != NULL)

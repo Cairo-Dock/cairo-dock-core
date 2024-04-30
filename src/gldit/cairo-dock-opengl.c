@@ -38,7 +38,7 @@ extern GldiDesktopBackground *g_pFakeTransparencyDesktopBg;
 extern gboolean g_bEasterEggs;
 
 // private
-static GldiGLManagerBackend s_backend;
+static GldiGLManagerBackend s_backend = {0};
 static gboolean s_bInitialized = FALSE;
 static gboolean s_bForceOpenGL = FALSE;
 
@@ -98,7 +98,10 @@ void gldi_gl_container_set_perspective_view (GldiContainer *pContainer)
 		w = pContainer->iHeight;
 		h = pContainer->iWidth;
 	}
-	_set_perspective_view (w, h);
+	GdkWindow* gdkwindow = gldi_container_get_gdk_window (pContainer);
+	gint scale = gdk_window_get_scale_factor (gdkwindow);
+	
+	_set_perspective_view (w * scale, h * scale);
 	pContainer->bPerspectiveView = TRUE;
 }
 
@@ -106,7 +109,13 @@ void gldi_gl_container_set_perspective_view_for_icon (Icon *pIcon)
 {
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, &w, &h);
-	_set_perspective_view (w, h);
+	gint scale = 1;
+	if(pIcon->pContainer) {
+		GdkWindow* gdkwindow = gldi_container_get_gdk_window (pIcon->pContainer);
+		scale = gdk_window_get_scale_factor (gdkwindow);
+	}
+	
+	_set_perspective_view (w * scale, h * scale);
 }
 
 static inline void _set_ortho_view (int iWidth, int iHeight)
@@ -136,7 +145,10 @@ void gldi_gl_container_set_ortho_view (GldiContainer *pContainer)
 		w = pContainer->iHeight;
 		h = pContainer->iWidth;
 	}
-	_set_ortho_view (w, h);
+	GdkWindow* gdkwindow = gldi_container_get_gdk_window (pContainer);
+	gint scale = gdk_window_get_scale_factor (gdkwindow);
+	
+	_set_ortho_view (w * scale, h * scale);
 	pContainer->bPerspectiveView = FALSE;
 }
 
@@ -144,7 +156,13 @@ void gldi_gl_container_set_ortho_view_for_icon (Icon *pIcon)
 {
 	int w, h;
 	cairo_dock_get_icon_extent (pIcon, &w, &h);
-	_set_ortho_view (w, h);
+	gint scale = 1;
+	if(pIcon->pContainer) {
+		GdkWindow* gdkwindow = gldi_container_get_gdk_window (pIcon->pContainer);
+		scale = gdk_window_get_scale_factor (gdkwindow);
+	}
+	
+	_set_ortho_view (w * scale, h * scale);
 }
 
 
@@ -215,6 +233,9 @@ gboolean gldi_gl_container_begin_draw_full (GldiContainer *pContainer, GdkRectan
 		return FALSE;
 	
 	glLoadIdentity ();
+	GdkWindow* gdkwindow = gldi_container_get_gdk_window (pContainer);
+	gint scale = gdk_window_get_scale_factor (gdkwindow);
+	glScalef (scale, scale, 1.f);
 	
 	if (pArea != NULL)
 	{
@@ -243,10 +264,10 @@ void gldi_gl_container_end_draw (GldiContainer *pContainer)
 }
 
 
-static void _init_opengl_context (G_GNUC_UNUSED GtkWidget* pWidget, GldiContainer *pContainer)
+static void _post_initialize_opengl_backend (void);  // initialisation necessitant un contexte opengl.
+void gldi_gl_init_opengl_context ()
 {
-	if (! gldi_gl_container_make_current (pContainer))
-		return;
+	if (!s_bInitialized) _post_initialize_opengl_backend ();
 	
 	//g_print ("INIT OPENGL ctx\n");
 	glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
@@ -293,13 +314,8 @@ static gboolean _check_gl_extension (const char *extName)
 	return cairo_dock_string_contains (glExtensions, extName, " ");
 }
 
-static void _post_initialize_opengl_backend (G_GNUC_UNUSED GtkWidget *pWidget, GldiContainer *pContainer)  // initialisation necessitant un contexte opengl.
+static void _post_initialize_opengl_backend (void)  // initialisation necessitant un contexte opengl.
 {
-	g_return_if_fail (!s_bInitialized);
-	
-	if (! gldi_gl_container_make_current (pContainer))
-		return ;
-	
 	s_bInitialized = TRUE;
 	g_openglConfig.bNonPowerOfTwoAvailable = _check_gl_extension ("GL_ARB_texture_non_power_of_two");
 	g_openglConfig.bFboAvailable = _check_gl_extension ("GL_EXT_framebuffer_object");
@@ -347,19 +363,12 @@ void gldi_gl_container_init (GldiContainer *pContainer)
 {
 	if (g_bUseOpenGL && s_backend.container_init)
 		s_backend.container_init (pContainer);
-	
-	// finish the initialisation of the opengl backend, now that we have a window we can bind context to.
-	if (! s_bInitialized)
-		g_signal_connect (G_OBJECT (pContainer->pWidget),
-			"realize",
-			G_CALLBACK (_post_initialize_opengl_backend),
-			pContainer);
-	
-	// when the window will be realised, initialise its GL context.
-	g_signal_connect (G_OBJECT (pContainer->pWidget),
-		"realize",
-		G_CALLBACK (_init_opengl_context),
-		pContainer);
+}
+
+void gldi_gl_container_resized (GldiContainer *pContainer, int iWidth, int iHeight)
+{
+	if (g_bUseOpenGL && s_backend.container_resized)
+		s_backend.container_resized (pContainer, iWidth, iHeight);
 }
 
 void gldi_gl_container_finish (GldiContainer *pContainer)
@@ -369,6 +378,10 @@ void gldi_gl_container_finish (GldiContainer *pContainer)
 }
 
 
+const gchar *gldi_gl_get_backend_name ()
+{
+	return s_backend.name ? s_backend.name : "none";
+}
 
 void gldi_gl_manager_register_backend (GldiGLManagerBackend *pBackend)
 {

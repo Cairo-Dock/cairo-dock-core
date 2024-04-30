@@ -4,7 +4,7 @@
 install(FILES
 	01container.desktop
 	01firefox.desktop
-	01gcalctool.desktop
+	01gnome-calculator.desktop
 	01libreoffice-calc.desktop
 	01libreoffice-impress.desktop
 	01libreoffice-writer.desktop

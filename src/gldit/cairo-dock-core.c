@@ -61,6 +61,12 @@
 extern GldiContainer *g_pPrimaryContainer;
 int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;  // version de la lib.
 
+gboolean g_bForceWayland = FALSE;
+gboolean g_bForceX11 = FALSE;
+
+extern gboolean g_bDisableLayerShell;
+extern gboolean g_bUseOpenGL;
+
 static void _gldi_register_core_managers (void)
 {
 	gldi_register_managers_manager ();  // must be first, since all managers derive from it
@@ -89,8 +95,8 @@ static void _gldi_register_core_managers (void)
 	gldi_register_data_renderers_manager ();
 	gldi_register_desktop_environment_manager ();
 	gldi_register_style_manager ();  // get config before other manager that could use this manager
-	gldi_register_X_manager ();
-	gldi_register_wayland_manager ();
+	if (!g_bForceWayland) gldi_register_X_manager ();
+	if (!g_bForceX11) gldi_register_wayland_manager ();
 }
 
 void gldi_init (GldiRenderingMethod iRendering)
@@ -135,3 +141,87 @@ void gldi_free_all (void)
 	
 	cairo_dock_reset_docks_table ();  // detruit tous les docks, vide la table, et met le main-dock a NULL.
 }
+
+gchar *gldi_get_diag_msg (void)
+{
+	
+	gboolean bX11 = FALSE, bWAYLAND = FALSE, bGLX = FALSE, bEGL = FALSE;
+	gboolean bGTK_LAYER_SHELL = FALSE, bWAYLAND_PROTOCOLS = FALSE, bWAYFIRE = FALSE;
+#ifdef HAVE_X11
+bX11 = TRUE;
+#endif
+#ifdef HAVE_WAYLAND
+bWAYLAND = TRUE;
+#endif
+#ifdef HAVE_GLX
+bGLX = TRUE;
+#endif
+#ifdef HAVE_EGL
+bEGL = TRUE;
+#endif
+#ifdef HAVE_GTK_LAYER_SHELL
+bGTK_LAYER_SHELL = TRUE;
+#endif
+#ifdef HAVE_WAYLAND_PROTOCOLS
+bWAYLAND_PROTOCOLS = TRUE;
+#endif
+#ifdef HAVE_JSON
+bWAYFIRE = TRUE;
+#endif
+	
+	gchar *layer_shell_info = NULL;
+	
+#ifdef HAVE_WAYLAND
+#ifdef HAVE_GTK_LAYER_SHELL
+		if (gldi_container_is_wayland_backend ())
+		{
+			layer_shell_info = g_strdup_printf (
+				" * layer-shell:                  %s\n",
+				g_bDisableLayerShell ? "no (disabled on the command line)" :
+				(gldi_wayland_manager_have_layer_shell () ? "yes" : "no (no compositor support)")
+			);
+		}
+#endif
+#endif
+	
+	gchar *text = g_strdup_printf (
+		"Cairo-Dock version: %s\n"
+		"   compiled date: %s %s\n\n"
+		"Cairo-Dock was built with support for:\n"
+		" * GTK version:                  %d.%d\n"
+		" * X11:                          %s\n"
+		" * Wayland:                      %s\n"
+		" * GLX:                          %s\n"
+		" * EGL:                          %s\n"
+		" * gtk-layer-shell:              %s\n"
+		" * additional Wayland protocols: %s\n"
+		" * Wayfire IPC:                  %s\n\n"
+		"Cairo-Dock is currently running with:\n"
+		" * display backend:              %s\n"
+		"%s"
+		" * OpenGL:                       %s\n"
+		" * taskbar backend:              %s\n"
+		" * desktop manager backend(s):   %s\n"
+		" * detected desktop environment: %s\n",
+		GLDI_VERSION,
+		__DATE__, __TIME__,
+		GTK_MAJOR_VERSION, GTK_MINOR_VERSION,
+		bX11 ? "yes" : "no",
+		bWAYLAND ? "yes" : "no",
+		bGLX ? "yes" : "no",
+		bEGL ? "yes" : "no",
+		bGTK_LAYER_SHELL ? "yes" : "no",
+		bWAYLAND_PROTOCOLS ? "yes" : "no",
+		bWAYFIRE ? "yes" : "no",
+		gldi_container_is_wayland_backend () ? "Wayland" : "X11",
+		layer_shell_info ? layer_shell_info : "",
+		g_bUseOpenGL ? gldi_gl_get_backend_name() : "no",
+		gldi_windows_manager_get_name (),
+		gldi_desktop_manager_get_backend_names (),
+		cairo_dock_fm_get_desktop_name ());
+
+	g_free (layer_shell_info);
+	
+	return text;
+}
+

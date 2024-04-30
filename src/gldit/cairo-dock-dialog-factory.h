@@ -148,7 +148,9 @@ struct _CairoDialog {
 	guint iButtonPressTime;
 	gboolean bInAnswer;
 	gchar *cText;
-	gpointer reserved[1];
+	gboolean bPendingClose; // used when we should close the dialog on the next button release event
+	
+	gpointer reserved[2];
 };
 
 #define CAIRO_DIALOG_FIRST_BUTTON 0

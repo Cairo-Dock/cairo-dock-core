@@ -203,7 +203,7 @@ void gldi_text_description_copy (GldiTextDescription *pDestTextDescription, Gldi
 GldiTextDescription *gldi_text_description_duplicate (GldiTextDescription *pTextDescription)
 {
 	g_return_val_if_fail (pTextDescription != NULL, NULL);
-	GldiTextDescription *pTextDescription2 = g_memdup (pTextDescription, sizeof (GldiTextDescription));
+	GldiTextDescription *pTextDescription2 = g_memdup2 (pTextDescription, sizeof (GldiTextDescription));
 	pTextDescription2->cFont = g_strdup (pTextDescription->cFont);
 	pTextDescription2->fd = pango_font_description_copy (pTextDescription->fd);
 	return pTextDescription2;

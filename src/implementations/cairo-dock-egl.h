@@ -29,6 +29,6 @@ G_BEGIN_DECLS
 
 void gldi_register_egl_backend (void);
 
-
 G_END_DECLS
 #endif
+

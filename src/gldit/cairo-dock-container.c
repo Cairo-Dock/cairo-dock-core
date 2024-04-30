@@ -36,8 +36,14 @@
 #include "cairo-dock-animations.h"  // cairo_dock_animation_will_be_visible
 #include "cairo-dock-desktop-manager.h"  // gldi_desktop_get_width
 #include "cairo-dock-menu.h"  // gldi_menu_new
+#include "cdwindow.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-container.h"
+
+#if (GTK_MAJOR_VERSION == 3 && GTK_MINOR_VERSION == 22)
+#include "gdk-move-to-rect-hack.h"
+#endif
+
 
 // public (manager, config, data)
 GldiContainersParam myContainersParam;
@@ -54,10 +60,10 @@ extern CairoDock *g_pMainDock;  // for the default dock visibility when composit
 
 // private
 static gboolean s_bSticky = TRUE;
-static gboolean s_bInitialOpacity0 = TRUE;  // set initial window opacity to 0, to avoid grey rectangles.
+static gboolean s_bInitialOpacity0 = FALSE;  // set initial window opacity to 0, to avoid grey rectangles.
 static gboolean s_bNoComposite = FALSE;
-static GldiContainerManagerBackend s_backend;
-
+static GldiContainerManagerBackend s_backend = {0};
+static gboolean s_bNewPositioning = FALSE;
 
 void cairo_dock_set_containers_non_sticky (void)
 {
@@ -69,41 +75,27 @@ void cairo_dock_set_containers_non_sticky (void)
 	s_bSticky = FALSE;
 }
 
-void cairo_dock_disable_containers_opacity (void)
+void cairo_dock_enable_containers_opacity (void)
 {
 	if (g_pPrimaryContainer != NULL)
 	{
 		cd_warning ("this function has to be called before any container is created.");
 		return;
 	}
-	s_bInitialOpacity0 = FALSE;
+	s_bInitialOpacity0 = TRUE;
 }
 
 inline void gldi_display_get_pointer (int *xptr, int *yptr)
 {
-	#if GTK_CHECK_VERSION (3, 20, 0)
 	GdkSeat *pSeat = gdk_display_get_default_seat (gdk_display_get_default());
 	GdkDevice *pDevice = gdk_seat_get_pointer (pSeat);
-	#else
-	GdkDeviceManager *_dm = gdk_display_get_device_manager (gdk_display_get_default());
-	GdkDevice *pDevice = gdk_device_manager_get_client_pointer (_dm);
-	#endif
 	gdk_device_get_position (pDevice, NULL, xptr, yptr);
 } 
 
 inline void gldi_container_update_mouse_position (GldiContainer *pContainer)
 {
-	#if GTK_CHECK_VERSION (3, 20, 0)
-	GdkSeat *pSeat = gdk_display_get_default_seat (gdk_display_get_default());
-	GdkDevice *pDevice = gdk_seat_get_pointer (pSeat);
-	#else
-	GdkDeviceManager *pManager = gdk_display_get_device_manager (gtk_widget_get_display (pContainer->pWidget));
-	GdkDevice *pDevice = gdk_device_manager_get_client_pointer (pManager);
-	#endif
-	if ((pContainer)->bIsHorizontal)
-		gdk_window_get_device_position (gldi_container_get_gdk_window (pContainer), pDevice, &pContainer->iMouseX, &pContainer->iMouseY, NULL);
-	else
-		gdk_window_get_device_position (gldi_container_get_gdk_window (pContainer), pDevice, &pContainer->iMouseY, &pContainer->iMouseX, NULL);
+	if (s_backend.update_mouse_position)
+		s_backend.update_mouse_position (pContainer);
 }
 
 static gboolean _prevent_delete (G_GNUC_UNUSED GtkWidget *pWidget, G_GNUC_UNUSED GdkEvent *event, G_GNUC_UNUSED gpointer data)
@@ -158,11 +150,7 @@ static gboolean _set_opacity (GtkWidget *pWidget, G_GNUC_UNUSED cairo_t *ctx, Gl
 	{
 		g_signal_handlers_disconnect_by_func (pWidget, _set_opacity, pContainer);  // we'll never need to pass here any more, so simply disconnect ourselves.
 		//g_print ("____OPACITY 1 (%dx%d)\n", pContainer->iWidth, pContainer->iHeight);
-		#if GTK_CHECK_VERSION (3, 8, 0)
 		gtk_widget_set_opacity (pWidget, 1.);
-		#else
-		gtk_window_set_opacity (GTK_WINDOW (pWidget), 1.);
-		#endif
 	}
 	return FALSE ;
 }
@@ -323,6 +311,194 @@ void gldi_container_move (GldiContainer *pContainer, int iNumDesktop, int iAbsol
 		s_backend.move (pContainer, iNumDesktop, iAbsolutePositionX, iAbsolutePositionY);
 }
 
+void gldi_container_set_screen (GldiContainer* pContainer, int iNumScreen)
+{
+	if (s_backend.set_monitor)
+		s_backend.set_monitor (pContainer, iNumScreen);
+}
+
+
+struct GldiContainerMoveToRectData {
+	gulong signal_connected;
+	GdkRectangle rect;
+	GdkGravity rect_anchor;
+	GdkGravity window_anchor;
+	GdkAnchorHints anchor_hints;
+	gdouble rel_anchor_dx;
+	gdouble rel_anchor_dy;
+};
+
+static void _move_to_rect (GtkWidget *widget, gpointer data)
+{
+	// Callback for gdk_window_move_to_rect() that can happen after a
+	// GdkWindow has been associated with the container
+	if(!data) return;
+	GldiContainer *pContainer = (GldiContainer*)data;
+	struct GldiContainerMoveToRectData *p = (struct GldiContainerMoveToRectData*)pContainer->pMoveToRect;
+	if(!p) return;
+	GdkWindow *window = gtk_widget_get_window (widget);
+	gint dx = 0, dy = 0;
+	if (p->rel_anchor_dx != 0.0) dx = p->rel_anchor_dx * gdk_window_get_width (window);
+	if (p->rel_anchor_dy != 0.0) dy = p->rel_anchor_dy * gdk_window_get_height (window);
+	gdk_window_move_to_rect (window, &p->rect, p->rect_anchor,
+		p->window_anchor, p->anchor_hints, dx, dy);
+}
+
+void gldi_container_move_to_rect (GldiContainer *pContainer, const GdkRectangle *rect,
+	GdkGravity rect_anchor, GdkGravity window_anchor, GdkAnchorHints anchor_hints,
+	gdouble rel_anchor_dx, gdouble rel_anchor_dy)
+{
+	GdkWindow* gdk_window = gldi_container_get_gdk_window (pContainer);
+	if (gdk_window)
+	{
+		gint dx = 0, dy = 0;
+		if (rel_anchor_dx != 0.0) dx = rel_anchor_dx * gdk_window_get_width (gdk_window);
+		if (rel_anchor_dy != 0.0) dy = rel_anchor_dy * gdk_window_get_height (gdk_window);
+		gdk_window_move_to_rect (gdk_window, rect, rect_anchor, window_anchor,
+			anchor_hints, dx, dy);
+		// disconnect any existing signal
+		if (pContainer->pMoveToRect)
+		{
+			struct GldiContainerMoveToRectData *p = (struct GldiContainerMoveToRectData*)pContainer->pMoveToRect;
+			if (p->signal_connected > 0) g_signal_handler_disconnect (pContainer->pWidget, p->signal_connected);
+			free (pContainer->pMoveToRect);
+			pContainer->pMoveToRect = NULL;
+		}
+	} else
+	{
+		// cannot directly call move_to_rect(), we need to connect to
+		// the realized signal for its associated window
+		if (!pContainer->pMoveToRect)
+		{
+			pContainer->pMoveToRect = calloc (1, sizeof(struct GldiContainerMoveToRectData));
+			if (!pContainer->pMoveToRect) return;
+		}
+		struct GldiContainerMoveToRectData *p = (struct GldiContainerMoveToRectData*)pContainer->pMoveToRect;
+		p->rect = *rect;
+		p->rect_anchor = rect_anchor;
+		p->window_anchor = window_anchor;
+		p->anchor_hints = anchor_hints;
+		p->rel_anchor_dx = rel_anchor_dx;
+		p->rel_anchor_dy = rel_anchor_dy;
+		if (!p->signal_connected)
+			p->signal_connected = g_signal_connect (pContainer->pWidget, "realize", G_CALLBACK (_move_to_rect), pContainer);
+	}
+}
+
+void gldi_container_calculate_rect (const GldiContainer* pContainer, const Icon* pPointedIcon,
+	GdkRectangle *rect, GdkGravity* rect_anchor, GdkGravity* window_anchor)
+{
+	if (! (pPointedIcon && pContainer) ) return;
+
+	if (pContainer->bIsHorizontal)
+	{
+		rect->x = pPointedIcon->fDrawX;
+		rect->y = pPointedIcon->fDrawY;
+		rect->width = pPointedIcon->fWidth * pPointedIcon->fScale;
+		rect->height = pPointedIcon->fHeight * pPointedIcon->fScale;
+		if (pContainer->bDirectionUp)
+		{
+			*rect_anchor = GDK_GRAVITY_NORTH;
+			*window_anchor = GDK_GRAVITY_SOUTH;
+		}
+		else
+		{
+			*rect_anchor = GDK_GRAVITY_SOUTH;
+			*window_anchor = GDK_GRAVITY_NORTH;
+		}
+	}
+	else
+	{
+		rect->x = pPointedIcon->fDrawY;
+		rect->y = pPointedIcon->fDrawX;
+		rect->width = pPointedIcon->fHeight * pPointedIcon->fScale;
+		rect->height = pPointedIcon->fWidth * pPointedIcon->fScale;
+		if (pContainer->bDirectionUp)
+		{
+			*rect_anchor = GDK_GRAVITY_WEST;
+			*window_anchor = GDK_GRAVITY_EAST;
+		}
+		else
+		{
+			*rect_anchor = GDK_GRAVITY_EAST;
+			*window_anchor = GDK_GRAVITY_WEST;
+		}
+	}
+}
+
+void gldi_container_calculate_aimed_point_base (int w, int h, int iMarginPosition,
+	gdouble fAlign, int *iAimedX, int *iAimedY)
+{
+	switch (iMarginPosition)
+	{
+		case 0:
+			// bottom
+			*iAimedX = w * fAlign;
+			*iAimedY = h;
+			break;
+		case 1:
+			// top
+			*iAimedX = w * fAlign;
+			*iAimedY = 0;
+			break;
+		case 2:
+			// right
+			*iAimedX = w;
+			*iAimedY = h * fAlign;
+			break;
+		case 3:
+			// left
+			*iAimedX = 0;
+			*iAimedY = h * fAlign;
+			break;
+	}
+}
+
+void gldi_container_calculate_aimed_point (const Icon *pIcon, GtkWidget *pWidget, int w, int h,
+	int iMarginPosition, gdouble fAlign, int *iAimedX, int *iAimedY)
+{
+	GldiContainer *pContainer = (pIcon ? cairo_dock_get_icon_container (pIcon) : NULL);
+	if (pIcon && pContainer && CAIRO_DOCK_IS_DOCK (pContainer))
+	{
+		// if we have a dock, the position is relative to it
+		int x0 = pIcon->fDrawX + pIcon->fWidth * pIcon->fScale/2;
+		
+		CairoDock *pDock = CAIRO_DOCK (pContainer);
+		int y0, dy;
+		if (pDock->iInputState == CAIRO_DOCK_INPUT_ACTIVE)
+			dy = pContainer->iHeight - pDock->iActiveHeight;
+		else if (cairo_dock_is_hidden (pDock))
+			dy = pContainer->iHeight-1;  // on laisse 1 pixels pour pouvoir sortir du dialogue avant de toucher le bord de l'ecran, et ainsi le faire se replacer, lorsqu'on fait apparaitre un dock en auto-hide.
+		else
+			dy = pContainer->iHeight - pDock->iMinDockHeight;
+		if (pContainer->bDirectionUp)
+			y0 = dy;
+		else y0 = pContainer->iHeight - dy;
+		
+		if (iMarginPosition == 0 || iMarginPosition == 1)
+		{
+			*iAimedX = x0;
+			*iAimedY = y0;
+		}
+		else
+		{
+			*iAimedX = y0;
+			*iAimedY = x0;
+		}
+	}
+	else {
+		// default: aimed point is in the middle of the selected edge,
+		// it is calculated relative to or position
+		gldi_container_calculate_aimed_point_base (w, h, iMarginPosition, fAlign, iAimedX, iAimedY);
+	}
+	
+	if (s_backend.adjust_aimed_point)
+		s_backend.adjust_aimed_point (pIcon, pWidget, w, h, iMarginPosition, fAlign, iAimedX, iAimedY);
+	
+	// g_print ("aimed point: %d, %d\n", *iAimedX, *iAimedY);
+}
+
+
 gboolean gldi_container_is_active (GldiContainer *pContainer)
 {
 	if (s_backend.is_active)
@@ -334,6 +510,80 @@ void gldi_container_present (GldiContainer *pContainer)
 {
 	if (s_backend.present)
 		s_backend.present (pContainer);
+}
+
+void gldi_container_init_layer (GldiContainer *pContainer)
+{
+	if (s_backend.init_layer)
+		s_backend.init_layer (pContainer);
+}
+
+void gldi_container_move_resize_dock (CairoDock *pDock)
+{
+	if (s_backend.move_resize_dock)
+		s_backend.move_resize_dock (pDock);
+}
+
+gboolean gldi_container_is_wayland_backend ()
+{
+	if (s_backend.is_wayland)
+		return s_backend.is_wayland ();
+	return FALSE;
+}
+
+void gldi_container_set_keep_below (GldiContainer *pContainer, gboolean bKeepBelow)
+{
+	if (s_backend.set_keep_below)
+		s_backend.set_keep_below (pContainer, bKeepBelow);
+}
+
+void gldi_container_set_input_shape(GldiContainer *pContainer, cairo_region_t *pShape)
+{
+	gtk_widget_input_shape_combine_region ((pContainer)->pWidget, pShape);
+	if (s_backend.set_input_shape)
+		s_backend.set_input_shape (pContainer, pShape);
+}
+
+void gldi_container_update_polling_screen_edge (void)
+{
+	if (s_backend.update_polling_screen_edge)
+		s_backend.update_polling_screen_edge ();
+}
+
+gboolean gldi_container_can_poll_screen_edge (void)
+{
+	return (s_backend.update_polling_screen_edge != NULL);
+}
+
+gboolean gldi_container_can_reserve_space (int iNumScreen, gboolean bDirectionUp, gboolean bIsHorizontal)
+{
+	if (s_backend.can_reserve_space)
+		return s_backend.can_reserve_space (iNumScreen, bDirectionUp, bIsHorizontal);
+	return TRUE;
+}
+
+gboolean gldi_container_dock_handle_leave (CairoDock *pDock, GdkEventCrossing *pEvent)
+{
+	if (s_backend.dock_handle_leave)
+		return s_backend.dock_handle_leave (pDock, pEvent);
+	return TRUE; // default return value is true -- it means there is no need for further checks
+}
+
+void gldi_container_dock_handle_enter (CairoDock *pDock, GdkEventCrossing *pEvent)
+{
+	if (s_backend.dock_handle_enter)
+		s_backend.dock_handle_enter (pDock, pEvent);
+}
+
+void gldi_container_dock_check_if_mouse_inside_linear (CairoDock *pDock)
+{
+	if (s_backend.dock_check_if_mouse_inside_linear)
+		s_backend.dock_check_if_mouse_inside_linear (pDock);
+}
+
+gboolean gldi_container_use_new_positioning_code ()
+{
+	return (s_bNewPositioning || gldi_container_is_wayland_backend ());
 }
 
 void gldi_container_manager_register_backend (GldiContainerManagerBackend *pBackend)
@@ -478,6 +728,8 @@ static gboolean get_config (GKeyFile *pKeyFile, GldiContainersParam *pContainers
 	iRefreshFrequency = cairo_dock_get_integer_key_value (pKeyFile, "System", "cairo anim freq", &bFlushConfFileNeeded, 25, NULL, NULL);
 	pContainersParam->iCairoAnimationDeltaT = 1000. / iRefreshFrequency;
 	
+	s_bNewPositioning = cairo_dock_get_boolean_key_value (pKeyFile, "System", "X11_new_rendering_code", &bFlushConfFileNeeded, FALSE, NULL, NULL);
+	
 	return bFlushConfFileNeeded;
 }
 
@@ -518,21 +770,21 @@ static void init_object (GldiObject *obj, gpointer attr)
 	pContainer->bDirectionUp = TRUE;
 	
 	// create a window
-	GtkWidget* pWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	pContainer->pWidget = pWindow;
-	gtk_window_set_default_size (GTK_WINDOW (pWindow), 1, 1);  // this should prevent having grey rectangles during the loading, when the window is mapped and rendered by the WM but not yet by us.
-	gtk_window_resize (GTK_WINDOW (pWindow), 1, 1);
-	gtk_widget_set_app_paintable (pWindow, TRUE);
-	gtk_window_set_decorated (GTK_WINDOW (pWindow), FALSE);
-	gtk_window_set_skip_pager_hint (GTK_WINDOW(pWindow), TRUE);
-	gtk_window_set_skip_taskbar_hint (GTK_WINDOW(pWindow), TRUE);
+	GtkWindow* pWindow = (GtkWindow*) cd_window_new (cattr->bIsPopup ? GTK_WINDOW_POPUP : GTK_WINDOW_TOPLEVEL);
+	pContainer->pWidget = GTK_WIDGET (pWindow);
+	gtk_window_set_default_size (pWindow, 1, 1);  // this should prevent having grey rectangles during the loading, when the window is mapped and rendered by the WM but not yet by us.
+	gtk_window_resize (pWindow, 1, 1);
+	gtk_widget_set_app_paintable (GTK_WIDGET (pWindow), TRUE);
+	gtk_window_set_decorated (pWindow, FALSE);
+	gtk_window_set_skip_pager_hint (pWindow, TRUE);
+	gtk_window_set_skip_taskbar_hint (pWindow, TRUE);
 	if (s_bSticky)
-		gtk_window_stick (GTK_WINDOW (pWindow));
+		gtk_window_stick (pWindow);
 	g_signal_connect (G_OBJECT (pWindow),
 		"delete-event",
 		G_CALLBACK (_prevent_delete),
 		NULL);
-	gtk_window_get_size (GTK_WINDOW (pWindow), &pContainer->iWidth, &pContainer->iHeight);  // it's only the initial size allocated by GTK.
+	gtk_window_get_size (pWindow, &pContainer->iWidth, &pContainer->iHeight);  // it's only the initial size allocated by GTK.
 	
 	// set an RGBA visual for cairo or opengl
 	if (g_bUseOpenGL && ! cattr->bNoOpengl)
@@ -542,7 +794,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	}
 	else
 	{
-		cairo_dock_set_default_rgba_visual (pWindow);
+		cairo_dock_set_default_rgba_visual (GTK_WIDGET (pWindow));
 		pContainer->iAnimationDeltaT = myContainersParam.iCairoAnimationDeltaT;
 	}
 	if (pContainer->iAnimationDeltaT == 0)
@@ -551,11 +803,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	// set the opacity to 0 to avoid seeing grey rectangles until the window is ready to be painted by us.
 	if (s_bInitialOpacity0)
 	{
-		#if GTK_CHECK_VERSION (3, 8, 0)
-		gtk_widget_set_opacity (pWindow, 0.);
-		#else
-		gtk_window_set_opacity (GTK_WINDOW (pWindow), 0.);
-		#endif
+		gtk_widget_set_opacity (GTK_WIDGET (pWindow), 0.);
 		g_signal_connect (G_OBJECT (pWindow),
 			"draw",
 			G_CALLBACK (_set_opacity),
@@ -565,9 +813,6 @@ static void init_object (GldiObject *obj, gpointer attr)
 		"realize",
 		G_CALLBACK (_remove_background),
 		pContainer);
-
-	// remove the resize grip added by gtk3
-	gtk_window_set_has_resize_grip (GTK_WINDOW(pWindow), FALSE);
 
 	// make it the primary container if it's the first
 	if (g_pPrimaryContainer == NULL)
@@ -594,6 +839,9 @@ static void reset_object (GldiObject *obj)
 	
 	if (g_pPrimaryContainer == pContainer)
 		g_pPrimaryContainer = NULL;
+	
+	if (pContainer->pMoveToRect)
+		free(pContainer->pMoveToRect);
 }
 
 void gldi_register_containers_manager (void)

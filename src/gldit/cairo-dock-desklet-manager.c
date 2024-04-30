@@ -967,7 +967,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	Icon *pIcon = pAttributes->pIcon;
 	pDesklet->pIcon = pIcon;
 	cairo_dock_set_icon_container (pIcon, pDesklet);
-	if (CAIRO_DOCK_IS_APPLET (pIcon))
+	if (CAIRO_DOCK_IS_APPLET (pIcon) && !gldi_container_is_wayland_backend ())
 		gtk_window_set_title (GTK_WINDOW (pDesklet->container.pWidget), pIcon->pModuleInstance->pModule->pVisitCard->cModuleName);
 	
 	// configure the desklet
@@ -1019,8 +1019,7 @@ static void reset_object (GldiObject *obj)
 	{
 		GList *icons = pDesklet->icons;
 		pDesklet->icons = NULL;
-		g_list_foreach (icons, (GFunc) gldi_object_unref, NULL);
-		g_list_free (icons);
+		g_list_free_full (icons, (GDestroyNotify)gldi_object_unref);
 	}
 	
 	// free data

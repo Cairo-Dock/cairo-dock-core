@@ -38,7 +38,8 @@ GKeyFile *cairo_dock_open_key_file (const gchar *cConfFilePath);
 
 /** Write a key file on the disk.
 */
-void cairo_dock_write_keys_to_file (GKeyFile *pKeyFile, const gchar *cConfFilePath);
+void cairo_dock_write_keys_to_file_full (GKeyFile *pKeyFile, const gchar *cConfFilePath, gboolean bAllowEmpty);
+#define cairo_dock_write_keys_to_file(pKeyFile, cConfFilePath) cairo_dock_write_keys_to_file_full (pKeyFile, cConfFilePath, FALSE)
 
 /** Merge the values of a conf-file into another one. Keys are filtered by an identifier on the original conf-file.
 *@param cConfFilePath an up-to-date conf-file with old values, that will be updated.

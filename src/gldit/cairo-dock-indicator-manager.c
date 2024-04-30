@@ -322,8 +322,8 @@ static gboolean cairo_dock_render_indicator_notification (G_GNUC_UNUSED gpointer
 		if (icon->bHasIndicator && myIndicatorsParam.bIndicatorAbove)
 		{
 			glPushMatrix ();
-			glLoadIdentity();
-			cairo_dock_translate_on_icon_opengl (icon, CAIRO_CONTAINER (pDock), 1.);
+//			glLoadIdentity();
+//			cairo_dock_translate_on_icon_opengl (icon, CAIRO_CONTAINER (pDock), 1.);
 			_cairo_dock_draw_appli_indicator_opengl (icon, pDock);
 			glPopMatrix ();
 		}
@@ -357,7 +357,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIndicatorsParam *pIndicator
 		g_free (cIndicatorImageName);
 		cIndicatorImageName = NULL;
 	}
-	else
+	if (pIndicators->cIndicatorImagePath == NULL)
 		pIndicators->cIndicatorImagePath = g_strdup (GLDI_SHARE_DATA_DIR"/icons/default-indicator.png");
 	
 	pIndicators->bIndicatorAbove = cairo_dock_get_boolean_key_value (pKeyFile, "Indicators", "indicator above", &bFlushConfFileNeeded, FALSE, "Icons", NULL);

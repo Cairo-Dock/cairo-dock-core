@@ -189,10 +189,6 @@ struct _CairoDockGroupKeyWidget {
 	};
 
 
-#if ! GTK_CHECK_VERSION(3, 10, 0)
-GtkWidget* gtk_button_new_from_icon_name (const gchar *icon_name, GtkIconSize  size);
-#endif
-
 GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *pOneWidget, gboolean bHorizontalPackaging, int iAddInfoBar, const gchar *cInitialDescription, const gchar *cInitialImage, GPtrArray *pDataGarbage);
 
 void _cairo_dock_set_value_in_pair (GtkSpinButton *pSpinButton, gpointer *data);  // exportee pour pouvoir desactiver la callback.
@@ -243,6 +239,18 @@ CairoDockGroupKeyWidget *cairo_dock_gui_find_group_key_widget_in_list (GSList *p
 #define cairo_dock_gui_get_widgets(pGroupKeyWidget) (pGroupKeyWidget)->pSubWidgetList
 #define cairo_dock_gui_get_first_widget(pGroupKeyWidget) ((pGroupKeyWidget)->pSubWidgetList ? (pGroupKeyWidget)->pSubWidgetList->data : NULL)
 #define cairo_dock_gui_add_widget(pGroupKeyWidget, pOneWidget) (pGroupKeyWidget)->pSubWidgetList = g_slist_append ((pGroupKeyWidget)->pSubWidgetList, pOneWidget)
+
+/** Add a new item in a menu. Adapted from cairo-dock-menu.h and does the same
+ *  as gldi_menu_add_item () / cairo_dock_add_in_menu_with_stock_and_data (),
+ *  but does not add the custom styling used for menus belonging to docks.
+ * @param pMenu the menu
+ * @param cLabel the label, or NULL
+ * @param cImage the image path or name, or NULL
+ * @param pFunction the callback
+ * @param pData the data passed to the callback
+ * @return the new menu-entry that has been added.
+ */
+GtkWidget *cairo_dock_gui_menu_item_add (GtkWidget *pMenu, const gchar *cLabel, const gchar *cImage, GCallback pFunction, gpointer pData);
 
 GtkWidget *_gtk_image_new_from_file (const gchar *cIcon, int iSize);
 

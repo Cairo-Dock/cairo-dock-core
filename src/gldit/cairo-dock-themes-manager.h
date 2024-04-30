@@ -84,6 +84,7 @@ gboolean cairo_dock_delete_themes (gchar **cThemesList);
  */
 gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavior, gboolean bLoadLaunchers);
 
+typedef void (*CairoDockImportThemeCB) (gboolean, gpointer);
 /** Asynchronously import a theme, which can be : a local theme, a user theme, a distant theme, or even the path to a packaged theme. This function is non-blocking, you'll get a CairoTask that you can discard at any time, and you'll get the result of the import as the first argument of the callback (the second being the data you passed to this function).
  * Note that only downloading or unpacking the theme is done asynchronously, actually copying the files in the current theme folder is not (because it couldn't be cancelled without first making a backup).
  * @param cThemeName name of the theme to import.
@@ -93,7 +94,7 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
  * @param data data to be passed to the callback.
  * @return the Task that is doing the job. Keep it and use \ref cairo_dock_discard_task if you want to discard the download before it's completed (for instance if the user cancels it), or \ref cairo_dock_free_task inside your callback.
  */
-GldiTask *cairo_dock_import_theme_async (const gchar *cThemeName, gboolean bLoadBehavior, gboolean bLoadLaunchers, GFunc pCallback, gpointer data);
+GldiTask *cairo_dock_import_theme_async (const gchar *cThemeName, gboolean bLoadBehavior, gboolean bLoadLaunchers, CairoDockImportThemeCB pCallback, gpointer data);
 
 /** Define the paths of themes. Do it just after 'gldi_init'.
 *@param cRootDataDirPath path to the root folder of libgldi

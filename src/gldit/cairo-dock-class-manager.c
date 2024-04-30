@@ -57,6 +57,7 @@ extern CairoDock *g_pMainDock;
 extern CairoDockDesktopEnv g_iDesktopEnv;
 
 static GHashTable *s_hClassTable = NULL;
+static GHashTable *s_hAltClass = NULL; // we store alternative class / app-ids here
 
 
 static void cairo_dock_free_class_appli (CairoDockClassAppli *pClassAppli)
@@ -71,8 +72,7 @@ static void cairo_dock_free_class_appli (CairoDockClassAppli *pClassAppli)
 	g_free (pClassAppli->cWorkingDirectory);
 	if (pClassAppli->pMimeTypes)
 		g_strfreev (pClassAppli->pMimeTypes);
-	g_list_foreach (pClassAppli->pMenuItems, (GFunc)g_strfreev, NULL);
-	g_list_free (pClassAppli->pMenuItems);
+	g_list_free_full (pClassAppli->pMenuItems, (GDestroyNotify)g_strfreev);
 	if (pClassAppli->iSidOpeningTimeout != 0)
 		g_source_remove (pClassAppli->iSidOpeningTimeout);
 	g_free (pClassAppli);
@@ -80,7 +80,13 @@ static void cairo_dock_free_class_appli (CairoDockClassAppli *pClassAppli)
 
 static inline CairoDockClassAppli *_cairo_dock_lookup_class_appli (const gchar *cClass)
 {
-	return (cClass != NULL ? g_hash_table_lookup (s_hClassTable, cClass) : NULL);
+	gpointer ret = NULL;
+	if (cClass)
+	{
+		ret = g_hash_table_lookup (s_hClassTable, cClass);
+		if (!ret) ret = g_hash_table_lookup (s_hAltClass, cClass);
+	}
+	return ret;
 }
 
 
@@ -106,6 +112,11 @@ void cairo_dock_initialize_class_manager (void)
 			g_str_equal,
 			g_free,
 			(GDestroyNotify) cairo_dock_free_class_appli);
+	if (s_hAltClass == NULL)
+		s_hAltClass = g_hash_table_new_full (g_str_hash,
+			g_str_equal,
+			g_free,
+			NULL);
 	// register to events to detect the ending of a launching
 	gldi_object_register_notification (&myWindowObjectMgr,
 		NOTIFICATION_WINDOW_CREATED,
@@ -616,6 +627,7 @@ void cairo_dock_remove_all_applis_from_class_table (void)  // for the stop_appli
 void cairo_dock_reset_class_table (void)
 {
 	g_hash_table_remove_all (s_hClassTable);
+	g_hash_table_remove_all (s_hAltClass);
 }
 
 
@@ -1177,6 +1189,7 @@ static inline double _get_first_appli_order (CairoDock *pDock, GList *first_laun
 				break;
 			}  // else don't break, and go to the 'CAIRO_APPLI_AFTER_LAST_LAUNCHER' case, which will be the fallback.
 		}
+		/* fall through */
 
 		case CAIRO_APPLI_AFTER_LAST_LAUNCHER:
 		default:
@@ -1595,6 +1608,25 @@ const CairoDockImageBuffer *cairo_dock_get_class_image_buffer (const gchar *cCla
 }
 
 
+static gboolean _check_desktop_file_exists(GString *sDesktopFilePath, const gchar *cFileName, const char *prefix)
+{
+	// TODO: use XDG_DATA_DIRS instead of hard-coded values!
+	if (prefix) g_string_printf (sDesktopFilePath, "/usr/share/applications/%s%s", prefix, cFileName);
+	else g_string_printf (sDesktopFilePath, "/usr/share/applications/%s", cFileName);
+	if (g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS)) return TRUE;
+	
+	if(prefix) g_string_printf (sDesktopFilePath, "/usr/local/share/applications/%s%s", prefix, cFileName);
+	else g_string_printf (sDesktopFilePath, "/usr/local/share/applications/%s", cFileName);
+	if (g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS)) return TRUE;
+	
+	if(prefix) g_string_printf (sDesktopFilePath, "%s/.local/share/applications/%s%s", g_getenv ("HOME"), prefix, cFileName);
+	else g_string_printf (sDesktopFilePath, "%s/.local/share/applications/%s", g_getenv ("HOME"), cFileName);
+	if (g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS)) return TRUE;
+	
+	return FALSE;
+}
+
+
 static gchar *_search_desktop_file (const gchar *cDesktopFile)  // file, path or even class
 {
 	if (cDesktopFile == NULL)
@@ -1611,29 +1643,38 @@ static gchar *_search_desktop_file (const gchar *cDesktopFile)  // file, path or
 		cDesktopFileName = g_strdup_printf ("%s.desktop", cDesktopFile);
 
 	const gchar *cFileName = (cDesktopFileName ? cDesktopFileName : cDesktopFile);
-	gboolean bFound = TRUE;
+	gboolean bFound;
 	GString *sDesktopFilePath = g_string_new ("");
-	g_string_printf (sDesktopFilePath, "/usr/share/applications/%s", cFileName);
-	if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
+	gchar *cFileNameLower = NULL;
+	
+	bFound = _check_desktop_file_exists (sDesktopFilePath, cFileName, NULL);
+	
+	if (! bFound)
 	{
-		g_string_printf (sDesktopFilePath, "/usr/share/applications/%c%s", g_ascii_toupper (*cFileName), cFileName+1);  // handle stupid cases like Thunar.desktop
-		if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
+		cFileNameLower = g_ascii_strdown (cFileName, -1);
+		bFound = _check_desktop_file_exists (sDesktopFilePath, cFileNameLower, NULL);
+	}
+	if (! bFound)
+	{
+		const char *prefices[] = {"org.gnome.", "org.kde.", "org.freedesktop.", "xfce4/", "kde4/", NULL};
+		int i, j;
+		for (i = 0; i < 3; i++)
 		{
-			g_string_printf (sDesktopFilePath, "/usr/share/applications/xfce4/%s", cFileName);
-			if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
+			/* note: third iteration is to handle very stupid cases such as
+			 * org.gnome.Evince.desktop with app-id == "evince" (happens for
+			 * version 42.3 that is on Ubuntu 22.04) */
+			if (i == 2) cFileNameLower[0] = g_ascii_toupper (cFileNameLower[0]);
+			const gchar *tmp = i ? cFileNameLower : cFileName;
+			for (j = 0; prefices[j]; j++)
 			{
-				g_string_printf (sDesktopFilePath, "/usr/share/applications/kde4/%s", cFileName);
-				if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
-				{
-					g_string_printf (sDesktopFilePath, "%s/.local/share/applications/%s", g_getenv ("HOME"), cFileName);
-					if (! g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS))
-					{
-						bFound = FALSE;
-					}
-				}
+				bFound = _check_desktop_file_exists (sDesktopFilePath, tmp, prefices[j]);
+				if (bFound) break;
 			}
+			if (bFound) break;
 		}
 	}
+	
+	g_free (cFileNameLower);
 	g_free (cDesktopFileName);
 
 	gchar *cResult;
@@ -1774,9 +1815,9 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 	else
 	{
 		cResult = g_ascii_strdown (cStartupWMClass, -1);
-		gchar *str = strchr (cResult, '.');  // we remove all .xxx otherwise we can't detect the lack of extension when looking for an icon (openoffice.org) or it's a problem when looking for an icon (jbrout.py).
+/*		gchar *str = strchr (cResult, '.');  // we remove all .xxx otherwise we can't detect the lack of extension when looking for an icon (openoffice.org) or it's a problem when looking for an icon (jbrout.py).
 		if (str != NULL)
-			*str = '\0';
+			*str = '\0'; */
 	}
 	cairo_dock_remove_version_from_string (cResult);
 	cd_debug (" -> '%s'", cResult);
@@ -1865,6 +1906,8 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 
 	//\__________________ search the desktop file's path.
 	gchar *cDesktopFilePath = _search_desktop_file (cDesktopFile?cDesktopFile:cClass);
+	if (cDesktopFilePath == NULL && cWmClass != NULL)
+		cDesktopFilePath = _search_desktop_file (cWmClass);
 	if (cDesktopFilePath == NULL)  // couldn't find the .desktop
 	{
 		if (cClass != NULL)  // make a class anyway to store the few info we have.
@@ -1896,19 +1939,132 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 		g_free (cStartupWMClass);
 		cStartupWMClass = NULL;
 	}
-	if (cClass == NULL)
-		cClass = cairo_dock_guess_class (cCommand, cStartupWMClass);
+	/* We have three potential sources for the "class" of an application:
+	 * (1) cClassName -- the app-id / class reported for an open app -> cClass variable here
+	 * (2) the basename of the desktop file from cDesktopFilePath
+	 * (3) the StartupWMClass key from the desktop file
+	 * Obviously, if we are loading a launcher, (1) is not available.
+	 * 
+	 * On X11, (1) and (3) should be the same (if (3) is given). On
+	 * Wayland, (1) and (2) should be the same. However, there are
+	 * exceptions. Also, running XWayland apps can complicate things. In
+	 * theory, having three different values is possible if running the
+	 * app-id / class does not match the StartupWMClass, but also does
+	 * not match the desktop file name because it does not include the
+	 * reverse DNS of the publisher, which was however correctly guessed
+	 * by us (see _search_desktop_file () above).
+	 * We deal with this by storing one of the above as the "class" in
+	 * s_hClassTable, and the others in s_hAltClass, so no matter how an
+	 * app identifies itself, it will be matched to its icon. */
+	gchar *cAltClass = NULL; // (2)
+	gchar *cAltClass2 = NULL; // (3)
+	if (cDesktopFilePath)
+	{
+		gchar *tmp = g_path_get_basename (cDesktopFilePath);
+		if (g_str_has_suffix (tmp, ".desktop"))
+		{
+			int len = strlen (tmp);
+			tmp[len - 8] = 0; // here, len >= 8
+		}
+		cAltClass = g_ascii_strdown (tmp, -1);
+		g_free (tmp);
+	}
 	if (cClass == NULL)
 	{
-		cd_debug ("couldn't guess the class for %s", cDesktopFile);
-		g_free (cDesktopFilePath);
-		g_free (cCommand);
-		g_free (cStartupWMClass);
-		return NULL;
+		/* No class given, this means that we are loading a launcher.
+		 * In this case, we try to guess the "class" from the desktop
+		 * file or the command name. */
+		cClass = cairo_dock_guess_class (cCommand, cStartupWMClass);
+		
+		if (cClass == NULL)
+		{
+			if (cAltClass)
+			{
+				cClass = cAltClass;
+				cAltClass = NULL;
+			}
+			else
+			{
+				cd_debug ("couldn't guess the class for %s", cDesktopFile);
+				g_free (cDesktopFilePath);
+				g_free (cCommand);
+				g_free (cStartupWMClass);
+				return NULL;
+			}
+		}
+	}
+	else if (cStartupWMClass) 
+	{
+		/* this will return lower case of cStartupWMClass, except for the
+		 * case of Wine when it is not used */
+		cAltClass2 = cairo_dock_guess_class (NULL, cStartupWMClass);
+		if (cAltClass2)
+		if(!strcmp (cClass, cAltClass2) || (cAltClass && !strcmp(cAltClass, cAltClass2)))
+		{
+			g_free (cAltClass2);
+			cAltClass2 = NULL;
+		}
+	}
+	if (cAltClass && !strcmp (cClass, cAltClass))
+	{
+		g_free (cAltClass);
+		cAltClass = NULL;
+	}
+	if (!cAltClass && cAltClass2)
+	{
+		cAltClass = cAltClass2;
+		cAltClass2 = NULL;
 	}
 
 	//\__________________ make a new class or get the existing one.
-	pClassAppli = cairo_dock_get_class (cClass);
+	pClassAppli = _cairo_dock_lookup_class_appli (cClass);
+	{
+		CairoDockClassAppli *pAltClassAppli = cAltClass ? _cairo_dock_lookup_class_appli (cAltClass) : NULL;
+		CairoDockClassAppli *pAltClass2Appli = cAltClass2 ? _cairo_dock_lookup_class_appli (cAltClass2) : NULL;
+		
+		if (pAltClassAppli || pAltClass2Appli)
+		{
+			if (pAltClassAppli && pAltClass2Appli && (pAltClassAppli != pAltClass2Appli))
+				cd_warning ("multiple classes exist for appli: %s, %s !", cAltClass, cAltClass2);
+			if(pClassAppli)
+			{
+				if (pAltClassAppli && pAltClassAppli != pClassAppli)
+					cd_warning ("multiple classes exist for appli: %s, %s !", cClass, cAltClass);
+				if (pAltClass2Appli && pAltClass2Appli != pClassAppli)
+					cd_warning ("multiple classes exist for appli: %s, %s !", cClass, cAltClass2);
+			}
+			else
+			{
+				// here pClassAppli == NULL, only the cAltClass name exists already,
+				// so we store cClass as alternative
+				pClassAppli = pAltClassAppli ? pAltClassAppli : pAltClass2Appli;
+				g_hash_table_insert (s_hAltClass, g_strdup (cClass), pClassAppli);
+			}
+			if (cAltClass)
+			{
+				if (!pAltClassAppli) g_hash_table_insert (s_hAltClass, cAltClass, pClassAppli);
+				else g_free (cAltClass);
+			}
+			if (cAltClass2)
+			{
+				if (!pAltClass2Appli) g_hash_table_insert (s_hAltClass, cAltClass2, pClassAppli);
+				else g_free (cAltClass2);
+			}
+		}
+		else
+		{
+			if (!pClassAppli)
+			{
+				// neither name exists, we create a new class and store it
+				pClassAppli = g_new0 (CairoDockClassAppli, 1);
+				g_hash_table_insert (s_hClassTable, g_strdup (cClass), pClassAppli);
+			}
+			// main name already exists, alternate name does not
+			if (cAltClass) g_hash_table_insert (s_hAltClass, cAltClass, pClassAppli);
+			if (cAltClass2) g_hash_table_insert (s_hAltClass, cAltClass2, pClassAppli);
+		}
+	}
+	
 	g_return_val_if_fail (pClassAppli!= NULL, NULL);
 
 	//\__________________ if we already searched and found the attributes beforehand, quit.

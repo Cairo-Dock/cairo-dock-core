@@ -40,7 +40,7 @@ static void _cairo_dock_get_next_tip (CDTipsData *pTips)
 {
 	pTips->iNumTipKey ++;  // skip the current expander to go to the current label, which will be skipped in the first iteration.
 	const gchar *cGroupName = pTips->pGroupList[pTips->iNumTipGroup];
-	gboolean bOk;
+	gboolean bOk = FALSE;
 	do
 	{
 		pTips->iNumTipKey ++;
@@ -77,8 +77,13 @@ static void _cairo_dock_get_next_tip (CDTipsData *pTips)
 		// check if the key is an expander widget.
 		const gchar *cKeyName = pTips->pKeyList[pTips->iNumTipKey];
 		gchar *cKeyComment =  g_key_file_get_comment (pTips->pKeyFile, cGroupName, cKeyName, NULL);
-		bOk = (cKeyComment && *cKeyComment == CAIRO_DOCK_WIDGET_EXPANDER);  // whether it's an expander.
-		g_free (cKeyComment);
+		if (cKeyComment)
+		{
+			gchar *tmp = cKeyComment;
+			while (*tmp == '\t' || *tmp == '\n' || *tmp == ' ') ++tmp;
+			bOk = (*tmp == CAIRO_DOCK_WIDGET_EXPANDER);  // whether it's an expander.
+			g_free (cKeyComment);
+		}
 	} while (!bOk);
 }
 
@@ -87,7 +92,7 @@ static void _cairo_dock_get_previous_tip (CDTipsData *pTips)
 	pTips->iNumTipKey --;
 	
 	const gchar *cGroupName = pTips->pGroupList[pTips->iNumTipGroup];
-	gboolean bOk;
+	gboolean bOk = FALSE;
 	do
 	{
 		pTips->iNumTipKey --;
@@ -125,7 +130,13 @@ static void _cairo_dock_get_previous_tip (CDTipsData *pTips)
 		// check if the key is an expander widget.
 		const gchar *cKeyName = pTips->pKeyList[pTips->iNumTipKey];
 		gchar *cKeyComment =  g_key_file_get_comment (pTips->pKeyFile, cGroupName, cKeyName, NULL);
-		bOk = (cKeyComment && *cKeyComment == CAIRO_DOCK_WIDGET_EXPANDER);  // whether it's an expander.
+		if (cKeyComment)
+		{
+			gchar *tmp = cKeyComment;
+			while (*tmp == '\t' || *tmp == '\n' || *tmp == ' ') ++tmp;
+			bOk = (*tmp == CAIRO_DOCK_WIDGET_EXPANDER);  // whether it's an expander.
+			g_free (cKeyComment);
+		}
 	} while (!bOk);
 }
 
@@ -311,11 +322,7 @@ void cairo_dock_show_tips (void)
 	attr.pUserData = pTips;
 	attr.pFreeDataFunc = (GFreeFunc)_on_free_tips_dialog;
 	/// GTK_STOCK is now deprecated, here is a temporary fix to avoid compilation errors
-	#if GTK_CHECK_VERSION(3, 9, 8)
 	const gchar *cButtons[] = {"cancel", "gtk-go-forward-rtl", "gtk-go-forward-ltr", NULL};
-	#else
-	const gchar *cButtons[] = {"cancel", GTK_STOCK_GO_FORWARD"-rtl", GTK_STOCK_GO_FORWARD"-ltr", NULL};
-	#endif
 	attr.cButtonsImage = cButtons;
 	attr.bUseMarkup = TRUE;
 	attr.pIcon = myIcon;

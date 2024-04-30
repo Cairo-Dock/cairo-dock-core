@@ -25,7 +25,6 @@
 #include "cairo-dock-icon-manager.h"  // cairo_dock_search_icon_s_path
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-menu.h"  // cairo_dock_add_in_menu_with_stock_and_data
 #include "cairo-dock-desktop-manager.h"  // gldi_desktop_get_width
 #include "cairo-dock-gui-manager.h"  // cairo_dock_show_module_instance_gui
 #include "cairo-dock-gui-backend.h"  // cairo_dock_show_module_gui
@@ -101,17 +100,9 @@ static gboolean _on_click_module_tree_view (GtkTreeView *pTreeView, GdkEventButt
 		if (pButton->button == 3)
 		{
 			GtkWidget *pMenu = gtk_menu_new ();
-			
-			cairo_dock_add_in_menu_with_stock_and_data (_("Configure this applet"), GLDI_ICON_NAME_PROPERTIES, G_CALLBACK (_cairo_dock_initiate_config_module), pMenu, pModule);
-			
+			cairo_dock_gui_menu_item_add (pMenu, _("Configure this applet"), GLDI_ICON_NAME_PROPERTIES, G_CALLBACK (_cairo_dock_initiate_config_module), pModule);
 			gtk_widget_show_all (pMenu);
-			gtk_menu_popup (GTK_MENU (pMenu),
-				NULL,
-				NULL,
-				NULL,
-				NULL,
-				1,
-				gtk_get_current_event_time ());
+			gtk_menu_popup_at_pointer (GTK_MENU (pMenu), NULL);
 		}
 		else
 		{
@@ -267,11 +258,7 @@ static void _build_plugins_widget (PluginsWidget *pPluginsWidget)
 	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
 	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, gldi_desktop_get_height() - 210), NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-	#if GTK_CHECK_VERSION (3, 8, 0)
 	gtk_container_add (GTK_CONTAINER (pScrolledWindow), pPluginsWidget->pTreeView);
-	#else
-	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pPluginsWidget->pTreeView);
-	#endif
 	gtk_box_pack_start (GTK_BOX (pKeyBox), pScrolledWindow, TRUE, TRUE, 0);
 	
 	//\______________ On construit le widget de prevue et on le rajoute a la suite.
@@ -281,11 +268,7 @@ static void _build_plugins_widget (PluginsWidget *pPluginsWidget)
 	GtkWidget *pScrolledWindow2 = gtk_scrolled_window_new (NULL, NULL);
 	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, gldi_desktop_get_height() - 210), NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow2), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-	#if GTK_CHECK_VERSION (3, 8, 0)
 	gtk_container_add (GTK_CONTAINER (pScrolledWindow2), pPreviewBox);
-	#else
-	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow2), pPreviewBox);
-	#endif
 	gtk_box_pack_start (GTK_BOX (pKeyBox), pScrolledWindow2, FALSE, FALSE, 0);
 	g_free (cDefaultMessage);
 	

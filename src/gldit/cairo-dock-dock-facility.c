@@ -309,10 +309,6 @@ Icon *cairo_dock_calculate_dock_icons (CairoDock *pDock)
  /// WINDOW SIZE AND POSITION ///
 ////////////////////////////////
 
-#define CANT_RESERVE_SPACE_WARNING "It's only possible to reserve space from the edge of the screen and not on the middle of two screens."
-
-#define _has_multiple_screens_and_on_one_screen(iNumScreen) (g_desktopGeometry.iNbScreens > 1 && iNumScreen > -1)
-
 void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 {
 	int left=0, right=0, top=0, bottom=0;
@@ -320,34 +316,24 @@ void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 	
 	if (bReserve)
 	{
-		int w = pDock->iMinDockWidth;
-		int h = pDock->iMinDockHeight;
-		int x, y;  // position that should have dock's window if it has a minimum size.
-		cairo_dock_get_window_position_at_balance (pDock, w, h, &x, &y);
-
-		if (pDock->container.bDirectionUp)
+		if (!gldi_container_can_reserve_space (pDock->iNumScreen,
+			pDock->container.bDirectionUp, pDock->container.bIsHorizontal))
+				cd_warning ("It's only possible to reserve space from the edge of the screen and not on the middle of two screens.");
+		else
 		{
-			if (pDock->container.bIsHorizontal)
+			int w = pDock->iMinDockWidth;
+			int h = pDock->iMinDockHeight;
+			int x, y;  // position that should have dock's window if it has a minimum size.
+			cairo_dock_get_window_position_at_balance (pDock, w, h, &x, &y);
+
+			if (pDock->container.bDirectionUp)
 			{
-				if (_has_multiple_screens_and_on_one_screen (pDock->iNumScreen)
-					&& cairo_dock_get_screen_position_y (pDock->iNumScreen) // y offset
-						+ cairo_dock_get_screen_height (pDock->iNumScreen)  // height of the current screen
-						< gldi_desktop_get_height ()) // total height
-					cd_warning (CANT_RESERVE_SPACE_WARNING);
-				else
+				if (pDock->container.bIsHorizontal)
 				{
 					bottom = h + pDock->iGapY;
 					bottom_start_x = x;
 					bottom_end_x = x + w;
 				}
-			}
-			else
-			{
-				if (_has_multiple_screens_and_on_one_screen (pDock->iNumScreen)
-					&& cairo_dock_get_screen_position_x (pDock->iNumScreen) // x offset
-						+ cairo_dock_get_screen_width (pDock->iNumScreen)  // width of the current screen
-						< gldi_desktop_get_width ()) // total width
-					cd_warning (CANT_RESERVE_SPACE_WARNING);
 				else
 				{
 					right = h + pDock->iGapY;
@@ -355,26 +341,14 @@ void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 					right_end_y = x + w;
 				}
 			}
-		}
-		else
-		{
-			if (pDock->container.bIsHorizontal)
+			else
 			{
-				if (_has_multiple_screens_and_on_one_screen (pDock->iNumScreen)
-					&& cairo_dock_get_screen_position_y (pDock->iNumScreen) > 0)
-					cd_warning (CANT_RESERVE_SPACE_WARNING);
-				else
+				if (pDock->container.bIsHorizontal)
 				{
 					top = h + pDock->iGapY;
 					top_start_x = x;
 					top_end_x = x + w;
 				}
-			}
-			else
-			{
-				if (_has_multiple_screens_and_on_one_screen (pDock->iNumScreen)
-					&& cairo_dock_get_screen_position_x (pDock->iNumScreen) > 0)
-					cd_warning (CANT_RESERVE_SPACE_WARNING);
 				else
 				{
 					left = h + pDock->iGapY;
@@ -442,53 +416,6 @@ void cairo_dock_get_window_position_at_balance (CairoDock *pDock, int iNewWidth,
 	*iNewPositionX = iWindowPositionX + gldi_dock_get_screen_offset_x (pDock);
 	*iNewPositionY = iWindowPositionY + gldi_dock_get_screen_offset_y (pDock);
 	//g_print ("POSITION : %d+%d ; %d+%d\n", iWindowPositionX, pDock->iScreenOffsetX, iWindowPositionY, pDock->iScreenOffsetY);
-}
-
-static gboolean _move_resize_dock (CairoDock *pDock)
-{
-	int iNewWidth = pDock->iMaxDockWidth;
-	int iNewHeight = pDock->iMaxDockHeight;
-	int iNewPositionX, iNewPositionY;
-	cairo_dock_get_window_position_at_balance (pDock, iNewWidth, iNewHeight, &iNewPositionX, &iNewPositionY);
-	/* We can't intercept the case where the new dimensions == current ones
-	 * because we can have 2 resizes at the "same" time and they will cancel
-	 * themselves (remove + insert of one icon). We need 2 configure otherwise
-	 * the size will be blocked to the value of the first 'configure'
-	 */
-	//g_print (" -> %dx%d, %d;%d\n", iNewWidth, iNewHeight, iNewPositionX, iNewPositionY);
-
-	if (pDock->container.bIsHorizontal)
-	{
-		gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)),
-			iNewPositionX,
-			iNewPositionY,
-			iNewWidth,
-			iNewHeight);
-		/* When we have two gdk_window_move_resize in a row, Compiz will
-		 * disturbed and it will block the draw of the dock. It seems Compiz
-		 * sends too much 'configure' compare to Metacity. 
-		 */
-	}
-	else
-	{
-		gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)),
-			iNewPositionY,
-			iNewPositionX,
-			iNewHeight,
-			iNewWidth);
-	}
-	pDock->iSidMoveResize = 0;
-	return FALSE;
-}
-
-void cairo_dock_move_resize_dock (CairoDock *pDock)
-{
-	//g_print ("*********%s (current : %dx%d, %d;%d)\n", __func__, pDock->container.iWidth, pDock->container.iHeight, pDock->container.iWindowPositionX, pDock->container.iWindowPositionY);
-	if (pDock->iSidMoveResize == 0)
-	{
-		pDock->iSidMoveResize = g_idle_add ((GSourceFunc)_move_resize_dock, pDock);
-	}
-	return ;
 }
 
 
@@ -862,35 +789,8 @@ double cairo_dock_get_current_dock_width_linear (CairoDock *pDock)
 
 void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock)
 {
-	CairoDockMousePositionType iMousePositionType;
-	int iWidth = pDock->container.iWidth;
-	///int iHeight = (pDock->fMagnitudeMax != 0 ? pDock->container.iHeight : pDock->iMinDockHeight);
-	int iHeight = pDock->iActiveHeight;
-	///int iExtraHeight = (pDock->bAtBottom ? 0 : myIconsParam.iLabelSize);
-	// int iExtraHeight = 0;  /// we should check if we have a sub-dock or a dialogue on top of it :-/
-	int iMouseX = pDock->container.iMouseX;
-	int iMouseY = (pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->container.iMouseY : pDock->container.iMouseY);
-	//g_print ("%s (%dx%d, %dx%d, %f)\n", __func__, iMouseX, iMouseY, iWidth, iHeight, pDock->fFoldingFactor);
-
-	//\_______________ We check if the cursor is in the dock and we change icons size according to that.
-	double offset = (iWidth - pDock->iActiveWidth) * pDock->fAlign + (pDock->iActiveWidth - pDock->fFlatDockWidth) / 2;
-	int x_abs = pDock->container.iMouseX - offset;
-	///int x_abs = pDock->container.iMouseX + (pDock->fFlatDockWidth - iWidth) * pDock->fAlign;  // abscisse par rapport a la gauche du dock minimal plat.
-	gboolean bMouseInsideDock = (x_abs >= 0 && x_abs <= pDock->fFlatDockWidth && iMouseX > 0 && iMouseX < iWidth);
-	//g_print ("bMouseInsideDock : %d (%d;%d/%.2f)\n", bMouseInsideDock, pDock->container.bInside, x_abs, pDock->fFlatDockWidth);
-
-	if (iMouseY >= 0 && iMouseY < iHeight) { // inside in the Y axis
-		if (! bMouseInsideDock)  // outside of the dock but on the edge.
-			iMousePositionType = CAIRO_DOCK_MOUSE_ON_THE_EDGE;
-		else
-			iMousePositionType = CAIRO_DOCK_MOUSE_INSIDE;
-	}
-	else
-		iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
-
-	pDock->iMousePositionType = iMousePositionType;
+	gldi_container_dock_check_if_mouse_inside_linear (pDock);
 }
-
 
 #define make_icon_avoid_mouse(icon, sens) do { \
 	cairo_dock_mark_icon_as_avoiding_mouse (icon);\
@@ -1026,6 +926,14 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 	cd_debug ("we show the child dock");
 	CairoDock *pSubDock = pPointedIcon->pSubDock;
 	g_return_if_fail (pSubDock != NULL);
+
+	// set sane defaults for mouse position; this is needed since we
+	// cannot get the real position on Wayland when it is outside, but
+	// will get notified when it enters; on X11, it will be updated
+	// anyway when the dock is shown
+	pSubDock->iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
+	pSubDock->container.iMouseX = -1;
+	pSubDock->container.iMouseY = -1;
 	
 	if (gldi_container_is_visible (CAIRO_CONTAINER (pSubDock)))  // already visible.
 	{
@@ -1041,32 +949,68 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 	
 	int iNewWidth = pSubDock->iMaxDockWidth;
 	int iNewHeight = pSubDock->iMaxDockHeight;
-	int iNewPositionX, iNewPositionY;
-	cairo_dock_get_window_position_at_balance (pSubDock, iNewWidth, iNewHeight, &iNewPositionX, &iNewPositionY);
 	
-	gtk_window_present (GTK_WINDOW (pSubDock->container.pWidget));
-	
-	if (pSubDock->container.bIsHorizontal)
+	// new positioning code should work on both X11 and Wayland, but, by default, it is used
+	// only on Wayland, unless it is specifically requested by the user
+	if (gldi_container_use_new_positioning_code ())
 	{
-		gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pSubDock)),
-			iNewPositionX,
-			iNewPositionY,
-			iNewWidth,
-			iNewHeight);
+		if (pSubDock->container.bIsHorizontal)
+			gdk_window_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pSubDock)),
+				iNewWidth, iNewHeight);
+        else gdk_window_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pSubDock)),
+				iNewHeight, iNewWidth);
+
+
+		GdkRectangle rect = {0, 0, 1, 1};
+		GdkGravity rect_anchor = GDK_GRAVITY_NORTH;
+		GdkGravity subdock_anchor = GDK_GRAVITY_SOUTH;
+		gldi_container_calculate_rect (CAIRO_CONTAINER (pParentDock), pPointedIcon,
+			&rect, &rect_anchor, &subdock_anchor);
+		gldi_container_move_to_rect (CAIRO_CONTAINER (pSubDock),
+			&rect, rect_anchor, subdock_anchor, GDK_ANCHOR_SLIDE, 0, 0);
 	}
 	else
 	{
-		gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pSubDock)),
-			iNewPositionY,
-			iNewPositionX,
-			iNewHeight,
-			iNewWidth);
-		/* in this case, the sub-dock is over the label, so this one is drawn
-		 * with a low transparency, so we trigger the redraw.
-		 */
-		gtk_widget_queue_draw (pParentDock->container.pWidget);
+		int iNewPositionX, iNewPositionY;
+		cairo_dock_get_window_position_at_balance (
+			pSubDock, iNewWidth, iNewHeight, &iNewPositionX, &iNewPositionY);
+		// original behavior: calling present () before moving the subdock to its place
+		gtk_window_present (GTK_WINDOW (pSubDock->container.pWidget));
+		
+		if (pSubDock->container.bIsHorizontal)
+		{
+			gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pSubDock)),
+				iNewPositionX,
+				iNewPositionY,
+				iNewWidth,
+				iNewHeight);
+		}
+		else
+		{
+			gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pSubDock)),
+				iNewPositionY,
+				iNewPositionX,
+				iNewHeight,
+				iNewWidth);
+			/* in this case, the sub-dock is over the label, so this one is drawn
+			 * with a low transparency, so we trigger the redraw.
+			 */
+			gtk_widget_queue_draw (pParentDock->container.pWidget);
+		}
+	}
+	if (g_bUseOpenGL)
+	{
+		// note: this is a no-op on X11, only needed on Wayland + EGL
+		if (pSubDock->container.bIsHorizontal)
+			gldi_gl_container_resized (CAIRO_CONTAINER (pSubDock), iNewWidth, iNewHeight);
+		else gldi_gl_container_resized (CAIRO_CONTAINER (pSubDock), iNewHeight, iNewWidth);
 	}
 	
+	// note: when using gtk-layer-shell (the parent dock is layer surface),
+	// showing the window has to happen after (relative) positioning
+	if (gldi_container_use_new_positioning_code ())
+		gtk_window_present (GTK_WINDOW (pSubDock->container.pWidget));
+		
 	// animate it
 	if (myDocksParam.bAnimateSubDock && pSubDock->icons != NULL)
 	{

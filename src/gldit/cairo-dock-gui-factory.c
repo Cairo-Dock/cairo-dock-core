@@ -51,6 +51,7 @@
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-launcher-manager.h" // cairo_dock_launch_command_sync
 #include "cairo-dock-separator-manager.h" // GLDI_OBJECT_IS_SEPARATOR_ICON
+#include "cairo-dock-menu.h" // gldi_menu_item_new_full2
 #include "cairo-dock-gui-factory.h"
 
 #define CAIRO_DOCK_ICON_MARGIN 6
@@ -91,16 +92,6 @@ typedef struct {
 		G_TYPE_INT,      /* CAIRO_DOCK_MODEL_STATE*/\
 		G_TYPE_DOUBLE,   /* CAIRO_DOCK_MODEL_SIZE*/\
 		G_TYPE_STRING)   /* CAIRO_DOCK_MODEL_AUTHOR*/
-
-#if ! GTK_CHECK_VERSION(3, 10, 0)
-GtkWidget* gtk_button_new_from_icon_name (const gchar *icon_name, GtkIconSize  size)
-{
-	GtkWidget *image = gtk_image_new_from_icon_name (icon_name, size);
-	return (GtkWidget*) g_object_new (GTK_TYPE_BUTTON,
-		"image", image,
-		NULL);
-}
-#endif
 
 static void _cairo_dock_activate_one_element (G_GNUC_UNUSED GtkCellRendererToggle * cell_renderer, gchar * path, GtkTreeModel * model)
 {
@@ -939,13 +930,13 @@ static void _cairo_dock_key_grab_clicked (G_GNUC_UNUSED GtkButton *button, gpoin
 static void _cairo_dock_key_grab_class (G_GNUC_UNUSED GtkButton *button, gpointer *data)
 {
 	GtkEntry *pEntry = data[0];
-	// GtkWindow *pParentWindow = data[1];
+	GtkWindow *pParentWindow = data[1];
 
 	cd_debug ("clicked");
 	gtk_widget_set_sensitive (GTK_WIDGET(pEntry), FALSE);  // lock the widget during the grab (it makes it more comprehensive).
 	
 	const gchar *cResult = NULL;
-	GldiWindowActor *actor = gldi_window_pick ();
+	GldiWindowActor *actor = gldi_window_pick (pParentWindow);
 	
 	if (actor && actor->bIsTransientFor)
 		actor = gldi_window_get_transient_for (actor);
@@ -2869,11 +2860,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					k = 1;
 				g_object_set (pScrolledWindow, "height-request", (iElementType == CAIRO_DOCK_WIDGET_TREE_VIEW_SORT_AND_MODIFY ? 100 : MIN (100, k * 25)), NULL);
 				gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-				#if GTK_CHECK_VERSION (3, 8, 0)
 				gtk_container_add (GTK_CONTAINER (pScrolledWindow), pOneWidget);
-				#else
-				gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pOneWidget);
-				#endif
 				_pack_in_widget_box (pScrolledWindow);
 				
 				if (iElementType != CAIRO_DOCK_WIDGET_TREE_VIEW_MULTI_CHOICE)
@@ -3393,11 +3380,7 @@ GtkWidget *cairo_dock_build_key_file_widget_full (GKeyFile* pKeyFile, const gcha
 		
 		GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
 		gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-		#if GTK_CHECK_VERSION (3, 8, 0)
 		gtk_container_add (GTK_CONTAINER (pScrolledWindow), pGroupWidget);
-		#else
-		gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pGroupWidget);
-		#endif
 		
 		gtk_notebook_append_page (GTK_NOTEBOOK (pNoteBook), pScrolledWindow, (pAlign != NULL ? pAlign : pLabel));
 	}
@@ -3818,3 +3801,14 @@ GtkWidget *_gtk_image_new_from_file (const gchar *cIcon, int iSize)
 	}
 	return pImage;
 }
+
+
+GtkWidget *cairo_dock_gui_menu_item_add (GtkWidget *pMenu, const gchar *cLabel, const gchar *cImage, GCallback pFunction, gpointer pData)
+{
+	GtkWidget *pMenuItem = gldi_menu_item_new_full2 (cLabel, cImage, FALSE, 0, FALSE);
+	if (pFunction)
+		g_signal_connect (G_OBJECT (pMenuItem), "activate", G_CALLBACK (pFunction), pData);
+	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
+	return pMenuItem;
+}
+

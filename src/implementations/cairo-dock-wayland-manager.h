@@ -22,6 +22,9 @@
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-windows-manager.h"
+#include "cairo-dock-dock-factory.h"
+#include <gdk/gdk.h>
+
 G_BEGIN_DECLS
 
 /*
@@ -30,8 +33,39 @@ G_BEGIN_DECLS
 * The Wayland manager handles signals from Wayland and dispatch them to the Windows manager and the Desktop manager.
 */
 
+#ifndef _MANAGER_DEF_
+extern GldiManager myWaylandMgr;
+#endif
+
+typedef enum {
+	/// notification called when a new monitor was added, data : the GdkMonitor added
+	NOTIFICATION_WAYLAND_MONITOR_ADDED = NB_NOTIFICATIONS_OBJECT,
+	/// notification called when a monitor was removed, data : the GdkMonitor removed
+	NOTIFICATION_WAYLAND_MONITOR_REMOVED,
+	NB_NOTIFICATIONS_WAYLAND_DESKTOP
+	} CairoWaylandDesktopNotifications;
 
 void gldi_register_wayland_manager (void);
+
+gboolean gldi_wayland_manager_have_layer_shell ();
+
+/// Get the screen edge this dock should be anchored to
+CairoDockPositionType gldi_wayland_get_edge_for_dock (const CairoDock *pDock);
+
+/// Get the GdkMonitor a given dock is on as managed by this class
+GdkMonitor *gldi_dock_wayland_get_monitor (CairoDock *pDock);
+
+/// Get the list of monitors currently managed -- caller should not modify the GdkMonitor* pointers stored here
+GdkMonitor *const *gldi_wayland_get_monitors (int *iNumMonitors);
+
+/// Functions to try to grab / ungrab the keyboard
+///  (via setting the corresponding keyboard-interactivity property in wlr-layer-shell)
+/// These are not (yet?) part of the container manager backend, since
+/// these work quite differently from X11 and can result in a disorienting
+/// user experience. This way, these can be used only in situations where
+/// necessary and where their usefulness can be properly tested.
+void gldi_wayland_grab_keyboard (GldiContainer *pContainer);
+void gldi_wayland_release_keyboard (GldiContainer *pContainer);
 
 G_END_DECLS
 #endif

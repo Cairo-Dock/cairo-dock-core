@@ -196,15 +196,16 @@ static gboolean _on_enter_icon (gpointer pUserData, Icon *pIcon, CairoDock *pDoc
 */
 static void _register_kwin_backend (void)
 {
-	GldiDesktopManagerBackend *p = g_new0 (GldiDesktopManagerBackend, 1);
+	GldiDesktopManagerBackend p;
+	memset(&p, 0, sizeof (GldiDesktopManagerBackend));
 	
-	p->present_class = present_class;
-	p->present_windows = present_windows;
-	p->present_desktops = present_desktops;
-	p->show_widget_layer = show_widget_layer;
-	p->set_on_widget_layer = NULL;  // the Dashboard is not a real widget layer :-/
+	p.present_class = present_class;
+	p.present_windows = present_windows;
+	p.present_desktops = present_desktops;
+	p.show_widget_layer = show_widget_layer;
+	p.set_on_widget_layer = NULL;  // the Dashboard is not a real widget layer :-/
 	
-	gldi_desktop_manager_register_backend (p);
+	gldi_desktop_manager_register_backend (&p, "KWin");
 	
 	/*gldi_object_register_notification (&myContainerObjectMgr,
 		NOTIFICATION_ENTER_ICON,

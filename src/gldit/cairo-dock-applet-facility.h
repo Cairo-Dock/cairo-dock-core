@@ -339,8 +339,10 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 
 /** Pop-up a menu on the applet's icon.
 *@param pMenu menu to show
+*@param pEvent GTK event which is the trigger (if not the currently processed event)
 */
 #define CD_APPLET_POPUP_MENU_ON_MY_ICON(pMenu) gldi_menu_popup (pMenu)
+#define CD_APPLET_POPUP_MENU_ON_MY_ICON_WITH_EVENT(pMenu, pEvent) gldi_menu_popup_full (pMenu, pEvent)
 
 /** Reload the config panel of the applet. This is useful if you have custom widgets inside your conf file, and need to reload them.
 */

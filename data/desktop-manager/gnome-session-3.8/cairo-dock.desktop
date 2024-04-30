@@ -1,7 +1,0 @@
-[Desktop Entry]
-Name=Cairo-Dock (GNOME)
-Comment=This session logs you into GNOME with Cairo-Dock
-Exec=gnome-session --session=cairo-dock
-TryExec=gnome-session
-Icon=
-Type=Application

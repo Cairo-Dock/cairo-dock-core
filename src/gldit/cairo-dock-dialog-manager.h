@@ -136,7 +136,12 @@ void gldi_dialog_unhide (CairoDialog *pDialog);
 *@param pDialog the dialog.
 */
 void gldi_dialog_toggle_visibility (CairoDialog *pDialog);
-
+/** Notify the dialog's dock that the dialog is hidden or destroyed.
+ *  This generates a "leave" event for the mouse and "unfreezes" the
+ *  dock as well.
+ *@param pDialog the dialog being hidden or destroyed.
+ */
+void gldi_dialog_leave (CairoDialog *pDialog);
 
 void gldi_register_dialogs_manager (void);
 

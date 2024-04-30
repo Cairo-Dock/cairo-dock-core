@@ -240,6 +240,16 @@ static void _container_end_draw (GldiContainer *pContainer)
 	glXSwapBuffers (dpy, Xid);
 }
 
+static void _init_opengl_context (GtkWidget*, GldiContainer *pContainer)
+{
+	if (!_container_make_current (pContainer))
+	{
+		cd_warning ("Cannot make container current!");
+		return;
+	}
+	gldi_gl_init_opengl_context ();
+}
+
 static void _container_init (GldiContainer *pContainer)
 {
 	// Set the visual we found during the init
@@ -252,11 +262,16 @@ static void _container_init (GldiContainer *pContainer)
 	
 	// handle the double buffer manually.
 	gtk_widget_set_double_buffered (pContainer->pWidget, FALSE);
+	
+	g_signal_connect (G_OBJECT (pContainer->pWidget),
+		"realize",
+		G_CALLBACK (_init_opengl_context),
+		pContainer);
 }
 
 static void _container_finish (GldiContainer *pContainer)
 {
-	if (pContainer->glContext != 0)
+	if (pContainer->glContext != NULL)
 	{
 		Display *dpy = s_XDisplay;
 		
@@ -282,6 +297,7 @@ void gldi_register_glx_backend (void)
 	gmb.container_end_draw = _container_end_draw;
 	gmb.container_init = _container_init;
 	gmb.container_finish = _container_finish;
+	gmb.name = "GLX";
 	gldi_gl_manager_register_backend (&gmb);
 
 	s_XDisplay = cairo_dock_get_X_display ();  // initialize it once and for all at the beginning; we use this display rather than the GDK one to avoid the GDK X errors check.
@@ -291,6 +307,6 @@ void gldi_register_glx_backend (void)
 #include "cairo-dock-log.h"
 void gldi_register_glx_backend (void)
 {
-	cd_warning ("Cairo-Dock was not built with GLX support, OpenGL will not be available");  // if we're here, we already have X support, so not having GLX is probably an error.
+	cd_warning ("Cairo-Dock was not built with GLX support");
 }
 #endif

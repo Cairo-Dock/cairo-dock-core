@@ -25,7 +25,6 @@
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-menu.h"  // cairo_dock_add_in_menu_with_stock_and_data
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file
@@ -139,17 +138,9 @@ static gboolean _on_click_shortkey_tree_view (GtkTreeView *pTreeView, GdkEventBu
 		if (pButton->button == 3)
 		{
 			GtkWidget *pMenu = gtk_menu_new ();
-			
-			cairo_dock_add_in_menu_with_stock_and_data (_("Change the shortkey"), GLDI_ICON_NAME_PROPERTIES, G_CALLBACK (_cairo_dock_initiate_change_shortkey), pMenu, pTreeView);
-			
+			cairo_dock_gui_menu_item_add (pMenu, _("Change the shortkey"), GLDI_ICON_NAME_PROPERTIES, G_CALLBACK (_cairo_dock_initiate_change_shortkey), pTreeView);
 			gtk_widget_show_all (pMenu);
-			gtk_menu_popup (GTK_MENU (pMenu),
-				NULL,
-				NULL,
-				NULL,
-				NULL,
-				1,
-				gtk_get_current_event_time ());
+			gtk_menu_popup_at_pointer (GTK_MENU (pMenu), NULL);
 		}
 		else
 		{
@@ -260,11 +251,7 @@ ShortkeysWidget *cairo_dock_shortkeys_widget_new (void)
 	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
 	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, gldi_desktop_get_height() - 175), NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-	#if GTK_CHECK_VERSION (3, 8, 0)
 	gtk_container_add (GTK_CONTAINER (pScrolledWindow), pShortkeysWidget->pShortKeysTreeView);
-	#else
-	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (pScrolledWindow), pShortkeysWidget->pShortKeysTreeView);
-	#endif
 	
 	pShortkeysWidget->widget.pWidget = pScrolledWindow;
 	

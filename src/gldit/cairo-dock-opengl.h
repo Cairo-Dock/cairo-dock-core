@@ -57,6 +57,8 @@ struct _GldiGLManagerBackend {
 	void (*container_end_draw) (GldiContainer *pContainer);
 	void (*container_init) (GldiContainer *pContainer);
 	void (*container_finish) (GldiContainer *pContainer);
+	void (*container_resized) (GldiContainer *pContainer, int iWidth, int iHeight);
+	const gchar *name;
 };
 	
 
@@ -77,6 +79,12 @@ void gldi_gl_backend_deactivate (void);
 /* Toggle on/off the indirect rendering mode (for cards like Radeon 35xx).
 */
 void gldi_gl_backend_force_indirect_rendering (void);
+
+/** Callback from the backends to perform common initialization for a container
+ *  after a context is available. The context must be made current before
+ *  calling this function.
+ */
+void gldi_gl_init_opengl_context (void);
 
 
   ///////////////
@@ -132,8 +140,16 @@ void gldi_gl_container_set_ortho_view_for_icon (Icon *pIcon);
 */
 void gldi_gl_container_init (GldiContainer *pContainer);
 
+/** Should be called when the window is resized so that the
+ *  associated EGL surface can be resized -- needed on Wayland,
+ * 	pContainer->iWidth and iHeight should be set to the desired
+ *  new size */
+void gldi_gl_container_resized (GldiContainer *pContainer, int iWidth, int iHeight);
+
 void gldi_gl_container_finish (GldiContainer *pContainer);
 
+
+const gchar *gldi_gl_get_backend_name ();
 
 void gldi_gl_manager_register_backend (GldiGLManagerBackend *pBackend);
 

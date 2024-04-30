@@ -47,6 +47,10 @@
 #include "cairo-dock-class-manager.h"  // gldi_class_startup_notify_end
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-container.h"  // GldiContainerManagerBackend
+#include "cairo-dock-dock-factory.h"
+#include "cairo-dock-dock-manager.h" // gldi_docks_foreach_root
+#include "cairo-dock-dock-facility.h" // gldi_dock_get_screen_offset_y
+#include "cairo-dock-icon-facility.h" // cairo_dock_get_icon_container
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-task.h"
 #include "cairo-dock-glx.h"
@@ -57,6 +61,20 @@
 // public (manager, config, data)
 GldiManager myXMgr;
 GldiObjectManager myXObjectMgr;
+
+gboolean g_bX11UseEgl = FALSE;
+static gboolean _prefer_egl (void)
+{
+	#ifndef HAVE_EGL
+		return FALSE;
+	#endif
+	#ifndef HAVE_GLX
+		return TRUE;
+	#endif
+	// the command line option only makes sense if we have compiled both EGL and GLX support
+	return g_bX11UseEgl;
+}
+
 
 // dependencies
 extern GldiContainer *g_pPrimaryContainer;
@@ -581,7 +599,7 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 						if (xactor->bIgnored)  // was ignored, simply recreate it
 						{
 							// remove it from the table, so that the XEvent loop detects it again
-							g_hash_table_remove (s_hXWindowTable, &Xid);  // remove it explicitely, because the 'unref' might not free it
+							g_hash_table_remove (s_hXWindowTable, &Xid);  // remove it explicitly, because the 'unref' might not free it
 							xactor->iLastCheckTime = -1;
 							_delete_actor (xactor);  // unref it since we don't need it anymore
 						}
@@ -960,13 +978,13 @@ static void _set_above (GldiWindowActor *actor, gboolean bAbove)
 	cairo_dock_set_xwindow_above (xactor->Xid, bAbove);
 }
 
-static void _set_minimize_position (GldiWindowActor *actor, int x, int y)
+static void _set_minimize_position (GldiWindowActor *actor, G_GNUC_UNUSED GtkWidget* pContainerWidget, int x, int y)
 {
 	GldiXWindowActor *xactor = (GldiXWindowActor *)actor;
 	cairo_dock_set_xicon_geometry (xactor->Xid, x, y, 1, 1);
 }
 
-static void _set_thumbnail_area (GldiWindowActor *actor, int x, int y, int w, int h)
+static void _set_thumbnail_area (GldiWindowActor *actor, G_GNUC_UNUSED GtkWidget* pContainerWidget, int x, int y, int w, int h)
 {
 	GldiXWindowActor *xactor = (GldiXWindowActor *)actor;
 	cairo_dock_set_xicon_geometry (xactor->Xid, x, y, w, h);
@@ -1035,7 +1053,7 @@ static guint _get_id (GldiWindowActor *actor)
 	return xactor->Xid;
 }
 
-static GldiWindowActor *_pick_window (void)
+static GldiWindowActor *_pick_window (G_GNUC_UNUSED GtkWindow *pParentWindow)
 {
 	GldiWindowActor *actor = NULL;
 	
@@ -1125,6 +1143,394 @@ static void _present (GldiContainer *pContainer)
 	//gtk_window_present_with_time (GTK_WINDOW ((pContainer)->pWidget), gdk_x11_get_server_time (gldi_container_get_gdk_window(pContainer)))  // to avoid the focus steal prevention.
 }
 
+static void _set_keep_below (GldiContainer *pContainer, gboolean bKeepBelow)
+{
+	gtk_window_set_keep_below (GTK_WINDOW (pContainer->pWidget), bKeepBelow);
+}
+
+static void _move_resize_dock (CairoDock *pDock)
+{
+	int iNewWidth = pDock->iMaxDockWidth;
+	int iNewHeight = pDock->iMaxDockHeight;
+	int iNewPositionX, iNewPositionY;
+	cairo_dock_get_window_position_at_balance (pDock, iNewWidth, iNewHeight, &iNewPositionX, &iNewPositionY);
+	/* We can't intercept the case where the new dimensions == current ones
+	 * because we can have 2 resizes at the "same" time and they will cancel
+	 * themselves (remove + insert of one icon). We need 2 configure otherwise
+	 * the size will be blocked to the value of the first 'configure'
+	 */
+	// g_print (" -> %dx%d (%dx%d), %d;%d\n", iNewWidth, iNewHeight, pDock->container.iWidth, pDock->container.iHeight, iNewPositionX, iNewPositionY);
+
+	if (pDock->container.bIsHorizontal)
+	{
+		gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)),
+				iNewPositionX,
+				iNewPositionY,
+				iNewWidth,
+				iNewHeight);
+		/* When we have two gdk_window_move_resize in a row, Compiz will
+		 * disturbed and it will block the draw of the dock. It seems Compiz
+		 * sends too much 'configure' compare to Metacity. 
+		 */
+	}
+	else
+	{
+		gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)),
+				iNewPositionY,
+				iNewPositionX,
+				iNewHeight,
+				iNewWidth);
+	}
+}
+
+typedef struct {
+	gboolean bUpToDate;
+	gint x;
+	gint y;
+	gboolean bNoMove;
+	gdouble dx;
+	gdouble dy;
+} CDMousePolling;
+
+#define MOUSE_POLLING_DT 150  // mouse polling delay in ms
+
+static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, CDMousePolling *pMouse)
+{
+	if (! pDock->bAutoHide && pDock->iVisibility != CAIRO_DOCK_VISI_KEEP_BELOW)
+		return;
+	
+	int iScreenWidth = gldi_dock_get_screen_width (pDock);
+	int iScreenHeight = gldi_dock_get_screen_height (pDock);
+	int iScreenX = gldi_dock_get_screen_offset_x (pDock);
+	int iScreenY = gldi_dock_get_screen_offset_y (pDock);
+	
+	//\________________ On recupere la position du pointeur.
+	gint x, y;
+	if (! pMouse->bUpToDate)  // pas encore recupere le pointeur.
+	{
+		pMouse->bUpToDate = TRUE;
+		gldi_display_get_pointer (&x, &y);
+		if (x == pMouse->x && y == pMouse->y)  // le pointeur n'a pas bouge, on quitte.
+		{
+			pMouse->bNoMove = TRUE;
+			return ;
+		}
+		pMouse->bNoMove = FALSE;
+		pMouse->dx = (x - pMouse->x);
+		pMouse->dy = (y - pMouse->y);
+		double d = sqrt (pMouse->dx * pMouse->dx + pMouse->dy * pMouse->dy);
+		pMouse->dx /= d;
+		pMouse->dy /= d;
+		pMouse->x = x;
+		pMouse->y = y;
+	}
+	else  // le pointeur a ete recupere auparavant.
+	{
+		if (pMouse->bNoMove)  // position inchangee.
+			return;
+		x = pMouse->x;
+		y = pMouse->y;
+	}
+	
+	if (!pDock->container.bIsHorizontal)
+	{
+		x = pMouse->y;
+		y = pMouse->x;
+	}
+	y -= iScreenY;  // relative to the border of the dock's screen.
+	if (pDock->container.bDirectionUp)
+	{
+		y = iScreenHeight - 1 - y;
+		
+	}
+	
+	//\________________ On verifie les conditions.
+	int x1, x2;  // coordinates range on the X screen edge.
+	gboolean bShow = FALSE;
+	int Ws = (pDock->container.bIsHorizontal ? gldi_desktop_get_width() : gldi_desktop_get_height());
+	switch (myDocksParam.iCallbackMethod)
+	{
+		case CAIRO_HIT_SCREEN_BORDER:
+		default:
+			if (y != 0)
+				break;
+			if (x < iScreenX || x > iScreenX + iScreenWidth - 1)  // only check the border of the dock's screen.
+				break ;
+			bShow = TRUE;
+		break;
+		case CAIRO_HIT_DOCK_PLACE:
+			
+			if (y != 0)
+				break;
+			x1 = pDock->container.iWindowPositionX + (pDock->container.iWidth - pDock->iActiveWidth) * pDock->fAlign;
+			x2 = x1 + pDock->iActiveWidth;
+			if (x1 < 8)  // avoid corners, since this is actually the purpose of this option (corners can be used by the WM to trigger actions).
+				x1 = 8;
+			if (x2 > Ws - 8)
+				x2 = Ws - 8;
+			if (x < x1 || x > x2)
+				break;
+			bShow = TRUE;
+		break;
+		case CAIRO_HIT_SCREEN_CORNER:
+			if (y != 0)
+				break;
+			if (x > 0 && x < Ws - 1)  // avoid the corners of the X screen (since we can't actually hit the corner of a screen that would be inside the X screen).
+				break ;
+			bShow = TRUE;
+		break;
+		case CAIRO_HIT_ZONE:
+			if (y > myDocksParam.iZoneHeight)
+				break;
+			x1 = pDock->container.iWindowPositionX + (pDock->container.iWidth - myDocksParam.iZoneWidth) * pDock->fAlign;
+			x2 = x1 + myDocksParam.iZoneWidth;
+			if (x < x1 || x > x2)
+				break;
+			bShow = TRUE;
+		break;
+	}
+	if (! bShow)
+	{
+		if (pDock->iSidUnhideDelayed != 0)
+		{
+			g_source_remove (pDock->iSidUnhideDelayed);
+			pDock->iSidUnhideDelayed = 0;
+		}
+		return;
+	}
+	
+	//\________________ On montre ou on programme le montrage du dock.
+	int nx, ny;  // normal vector to the screen edge.
+	double cost;  // cos (teta), where teta = angle between mouse vector and dock's normal
+	double f = 1.;  // delay factor
+	if (pDock->container.bIsHorizontal)
+	{
+		nx = 0;
+		ny = (pDock->container.bDirectionUp ? -1 : 1);
+	}
+	else
+	{
+		ny = 0;
+		nx = (pDock->container.bDirectionUp ? -1 : 1);
+	}
+	cost = nx * pMouse->dx + ny * pMouse->dy;
+	f = 2 + cost;  // so if cost = -1, we arrive straight onto the screen edge, and f = 1, => normal delay. if cost = 0, f = 2 and we have a bigger delay.
+	
+	int iDelay = f * myDocksParam.iUnhideDockDelay;
+	//g_print (" dock will be shown in %dms (%.2f, %d)\n", iDelay, f, pDock->bIsMainDock);
+	cairo_dock_unhide_dock_delayed (pDock, iDelay);
+}
+
+
+static gboolean _cairo_dock_poll_screen_edge (G_GNUC_UNUSED gpointer data)  // thanks to Smidgey for the pop-up patch !
+{
+	static CDMousePolling mouse;
+	
+	// if the active window is full screen, avoid showing the docks on edge hit
+	// some WM will show the dock on top of fullscreen windows, and it's a problem in case of games, for instance
+	GldiWindowActor *actor = gldi_windows_get_active();
+	if (actor && actor->bIsFullScreen)
+		return TRUE;
+
+	mouse.bUpToDate = FALSE;  // mouse position will be updated by the first hidden dock.
+	gldi_docks_foreach_root ((GFunc) _cairo_dock_unhide_root_dock_on_mouse_hit, &mouse);
+	
+	return TRUE;
+}
+
+static guint s_iSidPollScreenEdge = 0;
+static gboolean s_bShouldPoll = FALSE;
+
+static void _check_should_poll_screen_edge (CairoDock *pDock, G_GNUC_UNUSED gpointer data)
+{
+	if (pDock->bAutoHide == TRUE) s_bShouldPoll = TRUE;
+	else switch (pDock->iVisibility)
+	{
+		case CAIRO_DOCK_VISI_KEEP_BELOW:
+		case CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP:
+		case CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY:
+		case CAIRO_DOCK_VISI_AUTO_HIDE:
+			s_bShouldPoll = TRUE;
+			break;
+		default:
+			break;
+	}
+}
+
+static void _update_polling_screen_edge (void)
+{
+	s_bShouldPoll = FALSE;
+	gldi_docks_foreach_root ((GFunc) _check_should_poll_screen_edge, NULL);
+	if (s_bShouldPoll)
+	{
+		if (s_iSidPollScreenEdge == 0)
+			s_iSidPollScreenEdge = g_timeout_add (MOUSE_POLLING_DT, (GSourceFunc) _cairo_dock_poll_screen_edge, NULL);
+	}
+	else
+	{
+		g_source_remove (s_iSidPollScreenEdge);
+		s_iSidPollScreenEdge = 0;
+	}
+}
+
+static inline gboolean _has_multiple_screens_and_on_one_screen(int iNumScreen) {
+	return (g_desktopGeometry.iNbScreens > 1) && (iNumScreen > -1);
+}
+
+static gboolean _can_reserve_space (int iNumScreen, gboolean bDirectionUp, gboolean bIsHorizontal)
+{
+	// code moved here from cairo-dock-dock-facility.c, since it is only relevant in the X11 case
+	if (!_has_multiple_screens_and_on_one_screen (iNumScreen)) return TRUE;
+	if (bDirectionUp)
+	{
+		if (bIsHorizontal)
+		{
+			if (cairo_dock_get_screen_position_y (iNumScreen) // y offset
+					+ cairo_dock_get_screen_height (iNumScreen)  // height of the current screen
+					< gldi_desktop_get_height ())
+				return FALSE;
+		}
+		else
+		{
+			if (cairo_dock_get_screen_position_x (iNumScreen) // x offset
+					+ cairo_dock_get_screen_width (iNumScreen)  // width of the current screen
+					< gldi_desktop_get_width ()) // total width
+				return FALSE;
+		}
+	}
+	else
+	{
+		if (bIsHorizontal)
+		{
+			if (cairo_dock_get_screen_position_y (iNumScreen) > 0) return FALSE;
+		}
+		else
+		{
+			if (cairo_dock_get_screen_position_x (iNumScreen) > 0) return FALSE;
+		}
+	}
+	return TRUE;
+}
+
+static void _update_mouse_position (GldiContainer *pContainer)
+{
+	GdkSeat *pSeat = gdk_display_get_default_seat (gdk_display_get_default());
+	GdkDevice *pDevice = gdk_seat_get_pointer (pSeat);
+	if ((pContainer)->bIsHorizontal)
+		gdk_window_get_device_position (gldi_container_get_gdk_window (pContainer), pDevice, &pContainer->iMouseX, &pContainer->iMouseY, NULL);
+	else
+		gdk_window_get_device_position (gldi_container_get_gdk_window (pContainer), pDevice, &pContainer->iMouseY, &pContainer->iMouseX, NULL);
+}
+
+static gboolean _dock_handle_leave (CairoDock *pDock, G_GNUC_UNUSED GdkEventCrossing *pEvent)
+{
+	// this function is just the _mouse_is_really_outside () function from cairo-dock-dock-factory.c
+	// this check only makes sense on X11
+	int x1, x2, y1, y2;
+	if (pDock->iInputState == CAIRO_DOCK_INPUT_ACTIVE)
+	{
+		x1 = (pDock->container.iWidth - pDock->iActiveWidth) * pDock->fAlign;
+		x2 = x1 + pDock->iActiveWidth;
+		if (pDock->container.bDirectionUp)
+		{
+			y1 = pDock->container.iHeight - pDock->iActiveHeight + 1;
+			y2 = pDock->container.iHeight;
+		}
+		else
+		{
+			y1 = 0;
+			y2 = pDock->iActiveHeight - 1;
+		}
+	}
+	else if (pDock->iInputState == CAIRO_DOCK_INPUT_AT_REST)
+	{
+		x1 = (pDock->container.iWidth - pDock->iMinDockWidth) * pDock->fAlign;
+		x2 = x1 + pDock->iMinDockWidth;
+		if (pDock->container.bDirectionUp)
+		{
+			y1 = pDock->container.iHeight - pDock->iMinDockHeight + 1;
+			y2 = pDock->container.iHeight;
+		}
+		else
+		{
+			y1 = 0;
+			y2 = pDock->iMinDockHeight - 1;
+		}		
+	}
+	else  // hidden
+		return TRUE;
+	if (pDock->container.iMouseX <= x1
+	|| pDock->container.iMouseX >= x2)
+		return TRUE;
+	if (pDock->container.iMouseY < y1
+	|| pDock->container.iMouseY > y2)  // Note: Compiz has a bug: when using the "cube rotation" plug-in, it will reserve 2 pixels for itself on the left and right edges of the screen. So the mouse is not inside the dock when it's at x=0 or x=Ws-1 (no 'enter' event is sent; it's as if the x=0 or x=Ws-1 vertical line of pixels is out of the screen).
+		return TRUE;
+
+	return FALSE;
+}
+
+// check if the mouse is inside the dock and update iMousePositionType
+// moved from cairo-dock-dock-facility.c
+void _dock_check_if_mouse_inside_linear (CairoDock *pDock)
+{
+	CairoDockMousePositionType iMousePositionType;
+	int iWidth = pDock->container.iWidth;
+	///int iHeight = (pDock->fMagnitudeMax != 0 ? pDock->container.iHeight : pDock->iMinDockHeight);
+	int iHeight = pDock->iActiveHeight;
+	///int iExtraHeight = (pDock->bAtBottom ? 0 : myIconsParam.iLabelSize);
+	// int iExtraHeight = 0;  /// we should check if we have a sub-dock or a dialogue on top of it :-/
+	int iMouseX = pDock->container.iMouseX;
+	int iMouseY = (pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->container.iMouseY : pDock->container.iMouseY);
+	//g_print ("%s (%dx%d, %dx%d, %f)\n", __func__, iMouseX, iMouseY, iWidth, iHeight, pDock->fFoldingFactor);
+
+	//\_______________ We check if the cursor is in the dock and we change icons size according to that.
+	double offset = (iWidth - pDock->iActiveWidth) * pDock->fAlign + (pDock->iActiveWidth - pDock->fFlatDockWidth) / 2;
+	int x_abs = pDock->container.iMouseX - offset;
+	///int x_abs = pDock->container.iMouseX + (pDock->fFlatDockWidth - iWidth) * pDock->fAlign;  // abscisse par rapport a la gauche du dock minimal plat.
+	gboolean bMouseInsideDock = (x_abs >= 0 && x_abs <= pDock->fFlatDockWidth && iMouseX > 0 && iMouseX < iWidth);
+	//g_print ("bMouseInsideDock : %d (%d;%d/%.2f)\n", bMouseInsideDock, pDock->container.bInside, x_abs, pDock->fFlatDockWidth);
+
+	if (iMouseY >= 0 && iMouseY < iHeight) { // inside in the Y axis
+		if (! bMouseInsideDock)  // outside of the dock but on the edge.
+			iMousePositionType = CAIRO_DOCK_MOUSE_ON_THE_EDGE;
+		else
+			iMousePositionType = CAIRO_DOCK_MOUSE_INSIDE;
+	}
+	else
+		iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
+
+	pDock->iMousePositionType = iMousePositionType;
+}
+
+static void _adjust_aimed_point (const Icon *pIcon, GtkWidget *pWidget,
+	G_GNUC_UNUSED int w, G_GNUC_UNUSED int h, G_GNUC_UNUSED int iMarginPosition,
+	G_GNUC_UNUSED gdouble fAlign, int *iAimedX, int *iAimedY)
+{
+	// we adjust iAimedX and iAimedY to use global coordinates
+	GldiContainer *pContainer = (pIcon ? cairo_dock_get_icon_container (pIcon) : NULL);
+	if (pIcon && pContainer && CAIRO_DOCK_IS_DOCK (pContainer))
+	{
+		// in this case, position is relative to pContainer
+		if (pContainer->bIsHorizontal)
+		{
+			*iAimedX += pContainer->iWindowPositionX;
+			*iAimedY += pContainer->iWindowPositionY;
+		}
+		else
+		{
+			*iAimedX += pContainer->iWindowPositionY;
+			*iAimedY += pContainer->iWindowPositionX;
+		}
+	}
+	else
+	{
+		// in this case, position is relative to pWidget
+		int x, y;
+		gdk_window_get_position (gtk_widget_get_window (gtk_widget_get_toplevel (pWidget)), &x, &y);
+		*iAimedX += x;
+		*iAimedY += y;
+	}
+}
 
   ////////////
  /// INIT ///
@@ -1240,7 +1646,7 @@ static void init (void)
 	dmb.refresh                = _refresh;
 	dmb.notify_startup         = _notify_startup;
 	dmb.grab_shortkey          = _grab_shortkey;
-	gldi_desktop_manager_register_backend (&dmb);
+	gldi_desktop_manager_register_backend (&dmb, "X11");
 	
 	GldiWindowManagerBackend wmb;
 	memset (&wmb, 0, sizeof (GldiWindowManagerBackend));
@@ -1266,6 +1672,7 @@ static void init (void)
 	wmb.can_minimize_maximize_close = _can_minimize_maximize_close;
 	wmb.get_id = _get_id;
 	wmb.pick_window = _pick_window;
+	wmb.name = "X11";
 	gldi_windows_manager_register_backend (&wmb);
 	
 	GldiContainerManagerBackend cmb;
@@ -1275,10 +1682,18 @@ static void init (void)
 	cmb.move = _move;
 	cmb.is_active = _is_active;
 	cmb.present = _present;
+	cmb.set_keep_below = _set_keep_below;
+	cmb.move_resize_dock = _move_resize_dock;
+	cmb.update_polling_screen_edge = _update_polling_screen_edge;
+	cmb.can_reserve_space = _can_reserve_space;
+	cmb.update_mouse_position = _update_mouse_position;
+	cmb.dock_handle_leave = _dock_handle_leave;
+	cmb.dock_check_if_mouse_inside_linear = _dock_check_if_mouse_inside_linear;
+	cmb.adjust_aimed_point = _adjust_aimed_point;
 	gldi_container_manager_register_backend (&cmb);
 	
-	gldi_register_glx_backend ();  // actually one of them is a nop
-	gldi_register_egl_backend ();
+	if (_prefer_egl ()) gldi_register_egl_backend ();
+	else gldi_register_glx_backend ();
 	
 	//\__________________ get modifiers we want to filter
 	lookup_ignorable_modifiers ();

@@ -76,30 +76,15 @@ extern CairoDockGLConfig g_openglConfig;
 // private
 static GHashTable *s_hDocksTable = NULL;  // table des docks existant.
 static GList *s_pRootDockList = NULL;
-static guint s_iSidPollScreenEdge = 0;
-static int s_iNbPolls = 0;
 static gboolean s_bQuickHide = FALSE;
 static gboolean s_bKeepAbove = FALSE;
 static GldiShortkey *s_pPopupBinding = NULL;  // option 'pop up on shortkey'
 static gboolean s_bResetAll = FALSE;
 
-#define MOUSE_POLLING_DT 150  // mouse polling delay in ms
-
 static gboolean _get_root_dock_config (CairoDock *pDock);
-static void _start_polling_screen_edge (void);
-static void _stop_polling_screen_edge (void);
 static void _synchronize_sub_docks_orientation (CairoDock *pDock, gboolean bUpdateDockSize);
 static void _set_dock_orientation (CairoDock *pDock, CairoDockPositionType iScreenBorder);
 static void _remove_root_dock_config (const gchar *cDockName);
-
-typedef struct {
-	gboolean bUpToDate;
-	gint x;
-	gint y;
-	gboolean bNoMove;
-	gdouble dx;
-	gdouble dy;
-} CDMousePolling;
 
   /////////////
  // MANAGER //
@@ -359,6 +344,20 @@ void gldi_docks_foreach (GHFunc pFunction, gpointer data)
 void gldi_docks_foreach_root (GFunc pFunction, gpointer data)
 {
 	g_list_foreach (s_pRootDockList, pFunction, data);
+}
+
+typedef void (*CairoDockSimpleCallback) (CairoDock *pDock);
+
+static void _simple_cb (void *obj, void *data)
+{
+	CairoDock *pDock = (CairoDock*)obj;
+	CairoDockSimpleCallback fun = (CairoDockSimpleCallback)data;
+	fun (pDock);
+}
+
+static void _gldi_docks_foreach_root_no_data (CairoDockSimpleCallback pFunction)
+{
+	g_list_foreach (s_pRootDockList, _simple_cb, (void*)pFunction);
 }
 
 static void _gldi_icons_foreach_in_dock (G_GNUC_UNUSED gchar *cDockName, CairoDock *pDock, gpointer *data)
@@ -706,7 +705,7 @@ gchar *gldi_dock_add_conf_file (void)
 
 void gldi_docks_redraw_all_root (void)
 {
-	gldi_docks_foreach_root ((GFunc)cairo_dock_redraw_container, NULL);
+	_gldi_docks_foreach_root_no_data ((CairoDockSimpleCallback)cairo_dock_redraw_container);
 }
 
 
@@ -716,7 +715,7 @@ static void _reposition_one_root_dock (G_GNUC_UNUSED const gchar *cDockName, Cai
 	{
 		if (!pDock->bIsMainDock)
 			_get_root_dock_config (pDock);  // relit toute la conf.
-		
+		gldi_container_set_screen (CAIRO_CONTAINER (pDock), pDock->iNumScreen); // this is a no-op on X11 (move_resize_dock () takes care of it below)
 		cairo_dock_update_dock_size (pDock);  // la taille max du dock depend de la taille de l'ecran, donc on recalcule son ratio.
 		cairo_dock_move_resize_dock (pDock);
 		gtk_widget_show (pDock->container.pWidget);
@@ -815,7 +814,7 @@ void cairo_dock_quick_hide_all_docks (void)
 	{
 		s_bQuickHide = TRUE;
 		g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_quick_hide_one_root_dock, NULL);
-		_start_polling_screen_edge ();
+		gldi_container_update_polling_screen_edge ();
 	}
 }
 
@@ -836,9 +835,8 @@ void cairo_dock_stop_quick_hide (void)
 	if (s_bQuickHide)
 	{
 		s_bQuickHide = FALSE;
-		_stop_polling_screen_edge ();
-		
 		g_hash_table_foreach (s_hDocksTable, (GHFunc) _cairo_dock_stop_quick_hide_one_root_dock, NULL);
+		gldi_container_update_polling_screen_edge ();
 	}
 }
 
@@ -867,6 +865,7 @@ void cairo_dock_activate_temporary_auto_hide (CairoDock *pDock)
 		{
 			cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));  // un cairo_dock_start_hiding ne cacherait pas les sous-docks.
 		}
+		gldi_container_update_polling_screen_edge ();
 	}
 }
 
@@ -882,6 +881,7 @@ void cairo_dock_deactivate_temporary_auto_hide (CairoDock *pDock)
 		{
 			cairo_dock_start_showing (pDock);
 		}
+		gldi_container_update_polling_screen_edge ();
 	}
 }
 
@@ -916,130 +916,9 @@ static gboolean _cairo_dock_unhide_dock_delayed (CairoDock *pDock)
 	pDock->iSidUnhideDelayed = 0;
 	return FALSE;
 }
-static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, CDMousePolling *pMouse)
+
+void cairo_dock_unhide_dock_delayed (CairoDock *pDock, int iDelay)
 {
-	if (! pDock->bAutoHide && pDock->iVisibility != CAIRO_DOCK_VISI_KEEP_BELOW)
-		return;
-	
-	int iScreenWidth = gldi_dock_get_screen_width (pDock);
-	int iScreenHeight = gldi_dock_get_screen_height (pDock);
-	int iScreenX = gldi_dock_get_screen_offset_x (pDock);
-	int iScreenY = gldi_dock_get_screen_offset_y (pDock);
-	
-	//\________________ On recupere la position du pointeur.
-	gint x, y;
-	if (! pMouse->bUpToDate)  // pas encore recupere le pointeur.
-	{
-		pMouse->bUpToDate = TRUE;
-		gldi_display_get_pointer (&x, &y);
-		if (x == pMouse->x && y == pMouse->y)  // le pointeur n'a pas bouge, on quitte.
-		{
-			pMouse->bNoMove = TRUE;
-			return ;
-		}
-		pMouse->bNoMove = FALSE;
-		pMouse->dx = (x - pMouse->x);
-		pMouse->dy = (y - pMouse->y);
-		double d = sqrt (pMouse->dx * pMouse->dx + pMouse->dy * pMouse->dy);
-		pMouse->dx /= d;
-		pMouse->dy /= d;
-		pMouse->x = x;
-		pMouse->y = y;
-	}
-	else  // le pointeur a ete recupere auparavant.
-	{
-		if (pMouse->bNoMove)  // position inchangee.
-			return;
-		x = pMouse->x;
-		y = pMouse->y;
-	}
-	
-	if (!pDock->container.bIsHorizontal)
-	{
-		x = pMouse->y;
-		y = pMouse->x;
-	}
-	y -= iScreenY;  // relative to the border of the dock's screen.
-	if (pDock->container.bDirectionUp)
-	{
-		y = iScreenHeight - 1 - y;
-		
-	}
-	
-	//\________________ On verifie les conditions.
-	int x1, x2;  // coordinates range on the X screen edge.
-	gboolean bShow = FALSE;
-	int Ws = (pDock->container.bIsHorizontal ? gldi_desktop_get_width() : gldi_desktop_get_height());
-	switch (myDocksParam.iCallbackMethod)
-	{
-		case CAIRO_HIT_SCREEN_BORDER:
-		default:
-			if (y != 0)
-				break;
-			if (x < iScreenX || x > iScreenX + iScreenWidth - 1)  // only check the border of the dock's screen.
-				break ;
-			bShow = TRUE;
-		break;
-		case CAIRO_HIT_DOCK_PLACE:
-			
-			if (y != 0)
-				break;
-			x1 = pDock->container.iWindowPositionX + (pDock->container.iWidth - pDock->iActiveWidth) * pDock->fAlign;
-			x2 = x1 + pDock->iActiveWidth;
-			if (x1 < 8)  // avoid corners, since this is actually the purpose of this option (corners can be used by the WM to trigger actions).
-				x1 = 8;
-			if (x2 > Ws - 8)
-				x2 = Ws - 8;
-			if (x < x1 || x > x2)
-				break;
-			bShow = TRUE;
-		break;
-		case CAIRO_HIT_SCREEN_CORNER:
-			if (y != 0)
-				break;
-			if (x > 0 && x < Ws - 1)  // avoid the corners of the X screen (since we can't actually hit the corner of a screen that would be inside the X screen).
-				break ;
-			bShow = TRUE;
-		break;
-		case CAIRO_HIT_ZONE:
-			if (y > myDocksParam.iZoneHeight)
-				break;
-			x1 = pDock->container.iWindowPositionX + (pDock->container.iWidth - myDocksParam.iZoneWidth) * pDock->fAlign;
-			x2 = x1 + myDocksParam.iZoneWidth;
-			if (x < x1 || x > x2)
-				break;
-			bShow = TRUE;
-		break;
-	}
-	if (! bShow)
-	{
-		if (pDock->iSidUnhideDelayed != 0)
-		{
-			g_source_remove (pDock->iSidUnhideDelayed);
-			pDock->iSidUnhideDelayed = 0;
-		}
-		return;
-	}
-	
-	//\________________ On montre ou on programme le montrage du dock.
-	int nx, ny;  // normal vector to the screen edge.
-	double cost;  // cos (teta), where teta = angle between mouse vector and dock's normal
-	double f = 1.;  // delay factor
-	if (pDock->container.bIsHorizontal)
-	{
-		nx = 0;
-		ny = (pDock->container.bDirectionUp ? -1 : 1);
-	}
-	else
-	{
-		ny = 0;
-		nx = (pDock->container.bDirectionUp ? -1 : 1);
-	}
-	cost = nx * pMouse->dx + ny * pMouse->dy;
-	f = 2 + cost;  // so if cost = -1, we arrive straight onto the screen edge, and f = 1, => normal delay. if cost = 0, f = 2 and we have a bigger delay.
-	
-	int iDelay = f * myDocksParam.iUnhideDockDelay;
-	//g_print (" dock will be shown in %dms (%.2f, %d)\n", iDelay, f, pDock->bIsMainDock);
 	if (iDelay != 0)  // on programme une apparition.
 	{
 		if (pDock->iSidUnhideDelayed == 0)
@@ -1051,50 +930,18 @@ static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, CDMouse
 	}
 }
 
-static gboolean _cairo_dock_poll_screen_edge (G_GNUC_UNUSED gpointer data)  // thanks to Smidgey for the pop-up patch !
-{
-	static CDMousePolling mouse;
-	
-	// if the active window is full screen, avoid showing the docks on edge hit
-	// some WM will show the dock on top of fullscreen windows, and it's a problem in case of games, for instance
-	GldiWindowActor *actor = gldi_windows_get_active();
-	if (actor && actor->bIsFullScreen)
-		return TRUE;
-
-	mouse.bUpToDate = FALSE;  // mouse position will be updated by the first hidden dock.
-	g_list_foreach (s_pRootDockList, (GFunc) _cairo_dock_unhide_root_dock_on_mouse_hit, &mouse);
-	
-	return TRUE;
-}
-static void _start_polling_screen_edge (void)
-{
-	s_iNbPolls ++;
-	cd_debug ("%s (%d)", __func__, s_iNbPolls);
-	if (s_iSidPollScreenEdge == 0)
-		s_iSidPollScreenEdge = g_timeout_add (MOUSE_POLLING_DT, (GSourceFunc) _cairo_dock_poll_screen_edge, NULL);
-}
-
-static void _stop_polling_screen_edge_now (void)
-{
-	if (s_iSidPollScreenEdge != 0)
-	{
-		g_source_remove (s_iSidPollScreenEdge);
-		s_iSidPollScreenEdge = 0;
-	}
-	s_iNbPolls = 0;
-}
-static void _stop_polling_screen_edge (void)
-{
-	cd_debug ("%s (%d)", __func__, s_iNbPolls);
-	s_iNbPolls --;
-	if (s_iNbPolls <= 0)
-	{
-		_stop_polling_screen_edge_now ();  // remet tout a 0.
-	}
-}
-
 void gldi_dock_set_visibility (CairoDock *pDock, CairoDockVisibility iVisibility)
 {
+	// check that our backend supports recalling a hidden dock
+	if (!gldi_container_can_poll_screen_edge ())
+	{
+		// disallow hiding the dock in this case
+		if (iVisibility != CAIRO_DOCK_VISI_RESERVE &&
+			iVisibility != CAIRO_DOCK_VISI_KEEP_BELOW &&
+			iVisibility != CAIRO_DOCK_VISI_KEEP_ABOVE)
+				iVisibility = CAIRO_DOCK_VISI_KEEP_ABOVE;
+	}
+	
 	//\_______________ jeu de parametres.
 	gboolean bReserveSpace = (iVisibility == CAIRO_DOCK_VISI_RESERVE);
 	gboolean bKeepBelow = (iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW);
@@ -1179,12 +1026,7 @@ void gldi_dock_set_visibility (CairoDock *pDock, CairoDockVisibility iVisibility
 	}
 	
 	//\_______________ on arrete/demarre la scrutation des bords.
-	gboolean bIsPolling = (bAutoHide0 || bAutoHideOnOverlap0 || bAutoHideOnAnyOverlap0 || bKeepBelow0);
-	gboolean bShouldPoll = (bAutoHide || bAutoHideOnOverlap || bAutoHideOnAnyOverlap || bKeepBelow);
-	if (bIsPolling && ! bShouldPoll)
-		_stop_polling_screen_edge ();
-	else if (!bIsPolling && bShouldPoll)
-		_start_polling_screen_edge ();
+	gldi_container_update_polling_screen_edge ();
 }
 
 
@@ -1759,6 +1601,7 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 	
 	if (pPosition->iNumScreen != pPrevPosition->iNumScreen)
 	{
+		gldi_container_set_screen (CAIRO_CONTAINER (pDock), pDock->iNumScreen);
 		_reposition_root_docks (TRUE);  // on replace tous les docks racines sauf le main dock, puisque c'est fait apres.
 	}
 	
@@ -1854,7 +1697,7 @@ static void unload (void)
 {
 	cairo_dock_unload_image_buffer (&g_pVisibleZoneBuffer);
 	
-	_stop_polling_screen_edge_now ();
+	gldi_container_update_polling_screen_edge ();
 	s_bQuickHide = FALSE;
 	
 	gldi_object_unref (GLDI_OBJECT(s_pPopupBinding));
@@ -1878,7 +1721,7 @@ static gboolean on_style_changed (G_GNUC_UNUSED gpointer data)
 		myDocksParam.iDockLineWidth = myStyleParam.iLineWidth;
 		
 		if (bNeedUpdateSize)  // update docks size and background
-			gldi_docks_foreach_root ((GFunc)cairo_dock_update_dock_size, NULL);
+			_gldi_docks_foreach_root_no_data (cairo_dock_update_dock_size);
 		else  // update docks background for color change
 			gldi_docks_foreach_root ((GFunc)_reload_bg, NULL);
 	}
@@ -1929,6 +1772,8 @@ static void init (void)
 		(GldiNotificationFunc) on_style_changed,
 		GLDI_RUN_AFTER, NULL);
 	
+	// On Wayland, this only works on KWin yet (other compositors do not
+	// send us window positions).
 	gldi_docks_visibility_start ();
 }
 
@@ -1950,6 +1795,16 @@ static void init_object (GldiObject *obj, gpointer attr)
 		cd_warning ("a dock with the name '%s' is already registered", dattr->cDockName);
 		return;
 	}
+
+	//\__________________ init layer-shell (if enabled) and also set parent; needs to happen before window is mapped
+	if (dattr->bSubDock && gldi_container_use_new_positioning_code ())
+	{
+		CairoDock *pParentDock = dattr->pParentDock;
+		if (pParentDock == NULL)
+			pParentDock = g_pMainDock;
+		gtk_window_set_transient_for (GTK_WINDOW (pDock->container.pWidget), GTK_WINDOW (pParentDock->container.pWidget));
+	}
+	gldi_container_init_layer (&(pDock->container));
 	
 	//\__________________ init internals
 	gldi_dock_init_internals (pDock);
@@ -2004,6 +1859,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	
 		//\__________________ set additional params from its config file
 		_get_root_dock_config (pDock);
+		gldi_container_set_screen (CAIRO_CONTAINER (pDock), pDock->iNumScreen); // this is a no-op on X11 (absolute coords are used to move the dock)
 	}
 	else
 	{
@@ -2101,7 +1957,11 @@ static void reset_object (GldiObject *obj)
 	|| pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE
 	|| pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW)
 	{
-		_stop_polling_screen_edge ();
+		/// this will ensure that screen edge polling will stop for this dock
+		pDock->iVisibility = CAIRO_DOCK_VISI_KEEP_ABOVE;
+		pDock->bAutoHide = FALSE;
+		pDock->bIsBelow = FALSE;
+		gldi_container_update_polling_screen_edge ();
 	}
 	
 	// free data
@@ -2161,7 +2021,7 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, G_GNUC_UN
 	CairoDock *pDock = (CairoDock*)obj;
 	
 	if (bReloadConf)  // maybe we should update the parameters that have the global value ?...
-		_get_root_dock_config (pDock);
+		_reposition_one_root_dock (NULL, pDock, GINT_TO_POINTER (TRUE)); // will call _get_root_dock_config () as needed
 	
 	cairo_dock_set_default_renderer (pDock);
 	
