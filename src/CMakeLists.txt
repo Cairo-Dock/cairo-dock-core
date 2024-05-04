@@ -41,6 +41,8 @@ link_directories(
 add_executable (${PROJECT_NAME}
 	${cairo_dock_SRCS} )
 
+set_target_properties (${PROJECT_NAME} PROPERTIES ENABLE_EXPORTS True)
+
 # Link the executable to the librairies.
 target_link_libraries (${PROJECT_NAME}
 	${PACKAGE_LIBRARIES}
