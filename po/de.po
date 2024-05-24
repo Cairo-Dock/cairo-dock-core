@@ -3546,7 +3546,7 @@ msgstr ""
 "Geschwindigkeit gedacht."
 
 #: ../data/messages:413
-msgid "Refresh rate when mouving cursor into the dock:"
+msgid "Refresh rate when moving cursor into the dock:"
 msgstr "Auffrischfrequenz, wenn der Mauszeiger auf das Dock bewegt wird:"
 
 #: ../data/messages:417

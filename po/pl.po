@@ -3392,7 +3392,7 @@ msgstr ""
 "w Hercach (Hz). Dla dostosowania zachowania w stosunku do możliwości CPU."
 
 #: ../data/messages:413
-msgid "Refresh rate when mouving cursor into the dock:"
+msgid "Refresh rate when moving cursor into the dock:"
 msgstr ""
 
 #: ../data/messages:417

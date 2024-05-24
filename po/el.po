@@ -3231,7 +3231,7 @@ msgid "in Hz. This is to adjust behaviour relative to your CPU power."
 msgstr "σε Hz. Η διευθέτησή του εξαρτάται από την ισχύ του επεξεργαστή σας."
 
 #: ../data/messages:413
-msgid "Refresh rate when mouving cursor into the dock:"
+msgid "Refresh rate when moving cursor into the dock:"
 msgstr ""
 
 #: ../data/messages:417
