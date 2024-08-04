@@ -287,9 +287,7 @@ gchar *cairo_dock_get_unique_dock_name (const gchar *cPrefix)
 		i ++;
 	}
 	
-	gchar *cUniqueName = sNameString->str;
-	g_string_free (sNameString, FALSE);
-	return cUniqueName;
+	return g_string_free_and_steal (sNameString);
 }
 
 gboolean cairo_dock_check_unique_subdock_name (Icon *pIcon)

@@ -22,7 +22,7 @@ Please see our [Wiki at Glx-Dock.org](http://www.glx-dock.org/ww_page.php?p=By%2
 
 Tarballs of the sources are available at: https://launchpad.net/cairo-dock-core and https://launchpad.net/cairo-dock-plug-ins
 
-A stable **PPA** is available here : https://launchpad.net/~cairo-dock-team/+archive/ppa
+Binary packages of the development version for Ubuntu 22.04 and 24.04 are available here : https://launchpad.net/~cairo-dock-team/+archive/ubuntu/weekly
 
 Additional information specific to compiling Cairo-Dock to run under Wayland is available [here](README_Wayland.md).
 

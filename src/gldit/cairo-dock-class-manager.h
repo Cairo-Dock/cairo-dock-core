@@ -43,6 +43,7 @@ struct _CairoDockClassAppli {
 	gchar *cDesktopFile;
 	gchar **pMimeTypes;
 	gchar *cCommand;
+	/// Class of the app as reported by the WM / compositor without parsing or any changes to it
 	gchar *cStartupWMClass;
 	gchar *cIcon;
 	gchar *cName;

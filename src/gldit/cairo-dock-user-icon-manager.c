@@ -106,13 +106,13 @@ static Icon *_user_icon_create (GldiUserIconAttr *attr)
 		default:
 			cd_warning ("unknown user icon type for file %s", attr->cConfFileName);
 			g_key_file_free (attr->pKeyFile);
-			g_free (attr->cConfFileName);
+			g_free ((void*)attr->cConfFileName);
 			return NULL;
 	}
 	
 	Icon *pIcon = (Icon*)gldi_object_new (pMgr, attr);
 	g_key_file_free (attr->pKeyFile);
-	g_free (attr->cConfFileName);
+	g_free ((void*)attr->cConfFileName);
 	return pIcon;
 }
 
