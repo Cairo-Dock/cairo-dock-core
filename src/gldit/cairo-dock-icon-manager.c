@@ -355,9 +355,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName, gint iDesiredIconS
 		return NULL;
 	}
 	
-	gchar *cIconPath = sIconPath->str;
-	g_string_free (sIconPath, FALSE);
-	return cIconPath;
+	return g_string_free_and_steal (sIconPath);
 }
 
 void cairo_dock_add_path_to_icon_theme (const gchar *cThemePath)

@@ -113,9 +113,7 @@ static gchar *_gldi_module_list_active (void)
 	if (pString->len > 0)
 		pString->str[pString->len-1] = '\0';
 	
-	gchar *cModuleNames = pString->str;
-	g_string_free (pString, FALSE);
-	return cModuleNames;
+	return g_string_free_and_steal (pString);
 }
 
 static gboolean _write_modules_idle (G_GNUC_UNUSED gpointer data)

@@ -1677,17 +1677,9 @@ static gchar *_search_desktop_file (const gchar *cDesktopFile)  // file, path or
 	g_free (cFileNameLower);
 	g_free (cDesktopFileName);
 
-	gchar *cResult;
-	if (bFound)
-	{
-		cResult = sDesktopFilePath->str;
-		g_string_free (sDesktopFilePath, FALSE);
-	}
-	else
-	{
-		cResult = NULL;
-		g_string_free (sDesktopFilePath, TRUE);
-	}
+	gchar *cResult = NULL;
+	if (bFound) cResult = g_string_free_and_steal (sDesktopFilePath);
+	else g_string_free (sDesktopFilePath, TRUE);
 	return cResult;
 }
 
