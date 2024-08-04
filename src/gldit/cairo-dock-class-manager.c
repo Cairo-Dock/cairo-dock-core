@@ -1898,7 +1898,7 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	if (pClassAppli != NULL && pClassAppli->bSearchedAttributes && pClassAppli->cDesktopFile)  // we already searched this class, and we did find its .desktop file, so let's end here.
 	{
 		//g_print ("class %s already known (%s)\n", cClass?cClass:cDesktopFile, pClassAppli->cDesktopFile);
-		if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)  // if the cStartupWMClass was not defined in the .desktop file, store it now.
+		if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)  // if the cStartupWMClass was not stored before, do it now.
 			pClassAppli->cStartupWMClass = g_strdup (cWmClass);
 		//g_print ("%s --> %s\n", cClass, pClassAppli->cStartupWMClass);
 		return (cClass?cClass:g_strdup (cDesktopFile));
@@ -1941,6 +1941,8 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	}
 	/* We have three potential sources for the "class" of an application:
 	 * (1) cClassName -- the app-id / class reported for an open app -> cClass variable here
+	 * 		(this is already parsed by gldi_window_parse_class () as opposed to the
+	 * 		 cWmClass variable which is the "raw" value reported by the WM)
 	 * (2) the basename of the desktop file from cDesktopFilePath
 	 * (3) the StartupWMClass key from the desktop file
 	 * Obviously, if we are loading a launcher, (1) is not available.
@@ -2015,6 +2017,7 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 		cAltClass = cAltClass2;
 		cAltClass2 = NULL;
 	}
+	g_free (cStartupWMClass); // not used later
 
 	//\__________________ make a new class or get the existing one.
 	pClassAppli = _cairo_dock_lookup_class_appli (cClass);
@@ -2066,12 +2069,17 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	}
 	
 	g_return_val_if_fail (pClassAppli!= NULL, NULL);
+	
+	// we store the WM class (class or app_id as reported by the WM) if
+	// it was not stored before (note: this is always the class we get from
+	// the WM and NOT the StartupWMClass in the .desktop file as that might
+	// not match what we have in reality
+	if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)
+		pClassAppli->cStartupWMClass = g_strdup (cWmClass);
 
 	//\__________________ if we already searched and found the attributes beforehand, quit.
 	if (pClassAppli->bSearchedAttributes && pClassAppli->cDesktopFile)
 	{
-		if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)  // we already searched this class before, but we couldn't have its WM class.
-			pClassAppli->cStartupWMClass = g_strdup (cWmClass);
 		//g_print ("%s ----> %s\n", cClass, pClassAppli->cStartupWMClass);
 		g_free (cDesktopFilePath);
 		g_free (cCommand);
@@ -2106,10 +2114,6 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 		}
 	}
 	pClassAppli->cCommand = cCommand;
-
-	if (pClassAppli->cStartupWMClass == NULL)
-		pClassAppli->cStartupWMClass = (cStartupWMClass ? cStartupWMClass : g_strdup (cWmClass));
-	//g_print ("%s -> pClassAppli->cStartupWMClass: %s\n", cClass, pClassAppli->cStartupWMClass);
 
 	pClassAppli->cIcon = g_key_file_get_string (pKeyFile, "Desktop Entry", "Icon", NULL);
 	if (pClassAppli->cIcon != NULL && *pClassAppli->cIcon != '/')  // remove any extension.
