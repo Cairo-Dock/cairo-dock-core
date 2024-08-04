@@ -1,29 +1,16 @@
-X-Source-Downloaded-From: https://launchpad.net/cairo-dock
-X-Upstream-Author: Fabrice Rey <fabounet@glx-dock.org>.
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: cairo-dock
+Source: https://github.com/Cairo-Dock/cairo-dock-core
 
-Files: 	*/*
+Files: */*
+ *
 Copyright: 2007-2014 Fabrice Rey <fabounet@glx-dock.org>
-License: GPL 3+ (See /usr/share/common-licenses/GPL-3 for complete license)
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+License: GPL-3+
 
 Files:  src/cairo-dock.c
  src/gldit/cairo-dock-animations.c
- src/gldit/cairo-dock-application-facility.c
- src/gldit/cairo-dock-applications-manager.c
- src/gldit/cairo-dock-application-facility.c
- src/gldit/cairo-dock-applications-manager.c
+ src/gldit/cairo-dock-application-facility.?
+ src/gldit/cairo-dock-applications-manager.?
  src/gldit/cairo-dock-class-icon-manager.c
  src/gldit/cairo-dock-class-manager.c
  src/gldit/cairo-dock-container.?
@@ -44,127 +31,233 @@ Files:  src/cairo-dock.c
  src/gldit/cairo-dock-opengl.h
  src/gldit/cairo-dock-surface-factory.?
  src/gldit/cairo-dock-windows-manager.?
- src/implementations/cairo-dock-egl-*
+ src/implementations/cairo-dock-egl.?
  src/implementations/cairo-dock-wayland-manager.c
  src/implementations/cairo-dock-wayland-manager.h
-Copyright: 2007-2014 Fabrice Rey <fabounet@glx-dock.org>, 2020-2024 Daniel Kondor <kondor.dani@gmail.com>
-License: GPL 3+ (See /usr/share/common-licenses/GPL-3 for complete license)
+Copyright: 2007-2014 Fabrice Rey <fabounet@glx-dock.org>
+           2020-2024 Daniel Kondor <kondor.dani@gmail.com>
+License: GPL-3+
 
 Files: src/implementations/cairo-dock-foreign-toplevel.?
- src/implementations/cairo-dock-plasma-window-manager.?
+ src/implementations/cairo-dock-plasma-*
+ src/implementations/cairo-dock-cosmic-*
  src/implementations/cairo-dock-wayfire-*
  src/implementations/cairo-dock-wayland-wm.?
  src/implementations/cairo-dock-wayland-hotspots.?
+ README_Wayland.md
 Copyright: 2020-2024 Daniel Kondor <kondor.dani@gmail.com>
-License: GPL 3+ (See /usr/share/common-licenses/GPL-3 for complete license)
+License: GPL-3+
 
 Files: src/implementations/gdk-move-to-rect-hack.?
-Copyright: 2020 Sophie Winter, 2020 Daniel Kondor
-License: MIT
+Copyright: 2020 Sophie Winter
+           2020 Daniel Kondor
+License: Expat
 
-Files: 	src/gldit/cairo-dock-dbus.*
+Files: src/gldit/cairo-dock-dbus.*
 Copyright: Adrien Pilleboue <adrien.pilleboue@gmail.com>
-License: GPL 3+ (See /usr/share/common-licenses/GPL-3 for complete license)
+License: GPL-3+
 
-Files: 	src/gldit/cairo-dock-desklet.*,
-	src/gldit/cairo-dock-keybinder.*,
-	src/gldit/cairo-dock-log.*
-Copyright: Copyright (C) 2008 Cedric GESTES
-License: GPL 3+ (See /usr/share/common-licenses/GPL-3 for complete license)
+Files: data/scripts/cairo-dock-package-theme.sh
+Copyright: 2009 Fabrice Rey <fabounet@glx-dock.org>
+License: GPL-2+
 
-Files: 	src/gldit/egg*
-Copyright: Copyright (C) 2002  Red Hat, Inc.; Copyright 1998, 2001 Tim Janik
-License: GPL 2+ (See /usr/share/common-licenses/GPL-2 for complete license)
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+Files: src/gldit/cairo-dock-desklet*
+       src/gldit/cairo-dock-keybinder*
+       src/gldit/cairo-dock-log*
+Copyright: 2008 Cedric GESTES
+License: GPL-3+
 
-Files: 	src/gldit/texture-gradation.h
-Copyright: Copyright (C) 2007  Gimp dev.
-License: GPL 2+ (See /usr/share/common-licenses/GPL-2 for complete license)
+Files: src/gldit/gtk3imagemenuitem.*
+Copyright: 2001 Red Hat Inc
+License: LGPL-2.0+
 
-Files: data/*.svg, data/*.png
+Files: src/gldit/texture-gradation.h
+Copyright: 2007 Gimp dev.
+License: GPL-2+
+
+Files: data/*.svg
+       data/*.png
 Copyright: Humanity devs (some of them modified by Matthieu Baerts)
-License: GPL 3+
+License: GPL-3+
 
-Files: data/default-theme/ data/man/
+Files: data/themes/default-*
+       data/man/*
 Copyright: Matthieu Baerts (matttbe) <matttbe@gmail.com>
-License: LGPL
+License: LGPL-3
+
+Files: po/*
+Copyright: 2007, 2008 Cairo-Dock project
+           2009, 2010, 2011, 2012 Rosetta Contributors and Canonical Ltd
+License: GPL-3+
+
+Files: debian/*
+Copyright: Copyright (C) Julien Lavergne <julien.lavergne@gmail.com>
+		   2009-2013 Nobuhiro Iwamatsu <iwamatsu@debian.org>
+           2009-2015 Youhei SASAKI <uwabami@gfd-dennou.org>
+           Updated by Matthieu Baerts for new releases.
+           2024 Daniel Kondor <kondor.dani@gmail.com>
+License: GPL-3+
 
 Files: src/implementations/proto/plasma-window-management.xml
 Copyright: 2013-2014 Pier Luigi Fiorini
-License: LGPL 2.1+
+License: LGPL-2.1+
 
 Files: src/implementations/proto/wayfire-shell-unstable-v2.xml
 Copyright: Copyright (c) 2018 Iliya Bozhinov
 License: Expat
- * Permission is hereby granted, free of charge, to any person 
- * obtaining a copy of this software and associated documentation 
- * files (the "Software"), to deal in the Software without 
- * restriction, including without limitation the rights to use, copy, 
- * modify, merge, publish, distribute, sublicense, and/or sell copies 
- * of the Software, and to permit persons to whom the Software is 
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be 
- * included in all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS 
- * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN 
- * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
- * SOFTWARE.
 
 Files: src/implementations/proto/wlr-foreign-toplevel-management-unstable-v1.xml
 Copyright: Copyright (c) 2018 Ilia Bozhinov
 License: MIT-no-advertising
- * Permission to use, copy, modify, distribute, and sell this
- * software and its documentation for any purpose is hereby granted
- * without fee, provided that the above copyright notice appear in
- * all copies and that both that copyright notice and this permission
- * notice appear in supporting documentation, and that the name of
- * the copyright holders not be used in advertising or publicity
- * pertaining to distribution of the software without specific,
- * written prior permission.  The copyright holders make no
- * representations about the suitability of this software for any
- * purpose.  It is provided "as is" without express or implied
- * warranty.
- * 
- * THE COPYRIGHT HOLDERS DISCLAIM ALL WARRANTIES WITH REGARD TO THIS
- * SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
- * FITNESS, IN NO EVENT SHALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY
- * SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
- * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN
- * AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
- * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
- * THIS SOFTWARE.
 
 Files: src/implementations/proto/cosmic-toplevel-info-unstable-v1.xml
-Copyright: 2018 Ilia Bozhinov, 2020 Isaac Freund, 2022 Victoria Brekenfeld
+Copyright: 2018 Ilia Bozhinov
+           2020 Isaac Freund
+           2022 Victoria Brekenfeld
 License: MIT-no-advertising
 
 Files: src/implementations/proto/cosmic-toplevel-management-unstable-v1.xml
-Copyright: 2018 Ilia Bozhinov, 2020 Isaac Freund, 2022 wb9688, 2022 Victoria Brekenfeld
+Copyright: 2018 Ilia Bozhinov
+           2020 Isaac Freund
+           2022 wb9688
+           2022 Victoria Brekenfeld
 License: MIT-no-advertising
 
 Files: src/implementations/proto/cosmic-workspace-unstable-v1.xml
-Copyright: 2019 Christopher Billington, 2020 Ilia Bozhinov, 2022 Victoria Brekenfeld
+Copyright: 2019 Christopher Billington
+           2020 Ilia Bozhinov
+           2022 Victoria Brekenfeld
 License: MIT-no-advertising
 
-Files:  debian/*
-Copyright: Copyright (C) Julien Lavergne <julien.lavergne@gmail.com>
-License: GPL 2+ (See /usr/share/common-licenses/GPL-2 for complete license)
-Updated by Matthieu Baerts for new releases.
+Files: LICENSE
+ LGPL-2
+Copyright: Copyright (C) 1991, 2007 Free Software Foundation, Inc.
+License: FSF-no-changes
+
+License: GPL-3+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 3 of the License, or
+ (at your option) any later version.
+ .
+ On Debian systems, the complete text of the latest version of the GNU
+ General Public License can be found in `/usr/share/common-licenses/GPL-3'.
+ .
+ The complete text of version 3 of the GNU General Public License can be
+ found in `/usr/share/common-licenses/GPL-3'.
+
+License: GPL-2+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301
+ USA.
+ .
+ On Debian systems, the full text of the GNU General Public
+ License version 2 can be found in the file
+ `/usr/share/common-licenses/GPL-2'.
+
+License: LGPL-2.0+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2 of the License, or (at your option) any later version.
+ .
+ This package is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <http://www.gnu.org/licenses/>.
+ .
+ On Debian systems, the complete text of the GNU Lesser General
+ Public License can be found in "/usr/share/common-licenses/LGPL-2".
+
+License: LGPL-2.1+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+ .
+ This package is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <http://www.gnu.org/licenses/>.
+ .
+ On Debian systems, the complete text of the GNU Lesser General
+ Public License can be found in "/usr/share/common-licenses/LGPL-2.1".
+
+License: LGPL-3
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License, version 3, as published by the Free Software Foundation.
+ .
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301
+ USA.
+ .
+ On Debian systems, full text of the LGPL 3 can be found in
+ `/usr/share/common-licenses/LGPL-3'.
+
+License: Expat
+ Permission is hereby granted, free of charge, to any person obtaining 
+ a copy of this software and associated documentation files (the 
+ "Software"), to deal in the Software without restriction, including 
+ without limitation the rights to use, copy, modify, merge, publish, 
+ distribute, sublicense, and/or sell copies of the Software, and to 
+ permit persons to whom the Software is furnished to do so, subject to 
+ the following conditions:
+ .
+ The above copyright notice and this permission notice shall be 
+ included in all copies or substantial portions of the Software.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+ EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
+ MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
+ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
+ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
+ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+License: MIT-no-advertising
+ Permission to use, copy, modify, distribute, and sell this software 
+ and its documentation for any purpose is hereby granted without fee, 
+ provided that the above copyright notice appear in all copies and that 
+ both that copyright notice and this permission notice appear in 
+ supporting documentation, and that the name of the copyright holders 
+ not be used in advertising or publicity pertaining to distribution of 
+ the software without specific, written prior permission.  The 
+ copyright holders make no representations about the suitability of 
+ this software for any purpose.  It is provided "as is" without express 
+ or implied warranty.
+ .
+ THE COPYRIGHT HOLDERS DISCLAIM ALL WARRANTIES WITH REGARD TO THIS 
+ SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND 
+ FITNESS, IN NO EVENT SHALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY 
+ SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER 
+ RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF 
+ CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN 
+ CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+License: FSF-no-changes
+ Everyone is permitted to copy and distribute verbatim copies
+ of this license document, but changing it is not allowed.
