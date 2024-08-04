@@ -283,7 +283,7 @@ void gldi_register_launchers_manager (void)
 
 Icon *gldi_launcher_new (const gchar *cConfFile, GKeyFile *pKeyFile)
 {
-	GldiLauncherIconAttr attr = {.cConfFileName = cConfFile, .pKeyFile = pKeyFile};
+	GldiLauncherIconAttr attr = {.cConfFileName = cConfFile, .pKeyFile = pKeyFile, GLDI_USER_ICON_TYPE_LAUNCHER};
 	return (Icon*)gldi_object_new (&myLauncherObjectMgr, &attr);
 }
 

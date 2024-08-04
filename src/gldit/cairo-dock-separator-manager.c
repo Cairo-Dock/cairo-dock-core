@@ -78,13 +78,13 @@ static void _load_image (Icon *icon)
 
 Icon *gldi_separator_icon_new (const gchar *cConfFile, GKeyFile *pKeyFile)
 {
-	GldiSeparatorIconAttr attr = {(gchar*)cConfFile, pKeyFile};
+	GldiSeparatorIconAttr attr = {(gchar*)cConfFile, pKeyFile, GLDI_USER_ICON_TYPE_SEPARATOR};
 	return (Icon*)gldi_object_new (&mySeparatorIconObjectMgr, &attr);
 }
 
 Icon *gldi_auto_separator_icon_new (Icon *pPrevIcon, Icon *pNextIcon)
 {
-	GldiSeparatorIconAttr attr = {NULL, NULL};
+	GldiSeparatorIconAttr attr = {NULL, NULL, GLDI_USER_ICON_TYPE_SEPARATOR};
 	Icon *icon = (Icon*)gldi_object_new (&mySeparatorIconObjectMgr, &attr);
 	
 	icon->iGroup = cairo_dock_get_icon_order (pPrevIcon) +
