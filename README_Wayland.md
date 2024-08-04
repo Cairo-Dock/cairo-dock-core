@@ -3,7 +3,7 @@ Wayland support
 
 This version of Cairo-Dock includes support for running on Wayland, under compositors that support the [layer shell](https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-layer-shell-unstable-v1.xml) protocol. Mainly targeting [Wayfire](https://github.com/WayfireWM/wayfire), but possibly others as well, such as [labwc](https://github.com/labwc/labwc), [KWin](https://invent.kde.org/plasma/kwin) or [Cosmic](https://github.com/pop-os/cosmic-comp). Note that GNOME Shell / Mutter, including the default Ubuntu desktop, is unfortunately not supported.
 
-Binary packages for Ubuntu 22.04 are available [here](https://launchpad.net/~kondor-dani/+archive/ubuntu/ppa-cairo-dock-wayland).
+Binary packages for Ubuntu 22.04 and 24.04 are available [here](https://launchpad.net/~cairo-dock-team/+archive/ubuntu/weekly).
 
 
 Requirements
