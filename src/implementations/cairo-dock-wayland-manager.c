@@ -47,10 +47,10 @@
 #ifdef HAVE_WAYLAND_PROTOCOLS
 #include "cairo-dock-foreign-toplevel.h"
 #include "cairo-dock-plasma-window-manager.h"
-#include "cairo-dock-wayland-hotspots.h"
 #include "cairo-dock-cosmic-toplevel.h"
 #include "cairo-dock-plasma-virtual-desktop.h"
 #endif
+#include "cairo-dock-wayland-hotspots.h"
 #include "cairo-dock-egl.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-wayland-manager.h"
