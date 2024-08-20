@@ -669,6 +669,8 @@ gboolean gldi_wayland_manager_have_layer_shell ()
 
 #else
 #include "cairo-dock-log.h"
+#include "cairo-dock-container.h"
+
 gboolean g_bDisableLayerShell = FALSE;
 void gldi_register_wayland_manager (void)
 {
