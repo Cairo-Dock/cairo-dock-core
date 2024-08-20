@@ -33,6 +33,7 @@
 #include "cairo-dock-task.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-utils.h" // gldi_string_free_and_steal
 #define _MANAGER_DEF_
 #include "cairo-dock-packages.h"
 
@@ -355,7 +356,7 @@ gchar *cairo_dock_get_url_data_with_post (const gchar *cURL, gboolean bGetOutput
 	
 	//\_______________ On recupere les donnees.
 	gchar *cContent = NULL;
-	if (buffer != NULL) cContent = g_string_free_and_steal (buffer);
+	if (buffer != NULL) cContent = gldi_string_free_and_steal (buffer);
 	return cContent;
 }
 
@@ -412,7 +413,7 @@ gchar *cairo_dock_get_url_data_with_headers (const gchar *cURL, gboolean bGetOut
 	
 	//\_______________ On recupere les donnees.
 	gchar *cContent = NULL;
-	if (buffer != NULL) cContent = g_string_free_and_steal (buffer);
+	if (buffer != NULL) cContent = gldi_string_free_and_steal (buffer);
 	return cContent;
 }
 
