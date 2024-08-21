@@ -132,6 +132,8 @@ static gboolean _initialize_opengl_backend (gboolean bForceOpenGL)
 	// open a connection (= Display) to the graphic server
 	EGLDisplay *dpy = NULL;
 	
+#ifdef HAVE_WAYLAND
+#ifdef GDK_WINDOWING_WAYLAND
 	if (s_eglWayland)
 	{
 		if ( ! (cairo_dock_string_contains (eglExtensions, "EGL_EXT_platform_wayland", " ") ||
@@ -140,13 +142,15 @@ static gboolean _initialize_opengl_backend (gboolean bForceOpenGL)
 			cd_warning("Cannot find EGL platform functions, OpenGL will not be available");
 			return FALSE;
 		}
-		struct wl_display* wdpy = NULL;
-#ifdef GDK_WINDOWING_WAYLAND
-		wdpy = gdk_wayland_display_get_wl_display (s_gdkDisplay);
-#endif
+		struct wl_display* wdpy = gdk_wayland_display_get_wl_display (s_gdkDisplay);
 		// EGL_PLATFORM_WAYLAND_EXT == EGL_PLATFORM_WAYLAND_KHR == 0x31D8
 		if (wdpy) dpy = s_eglDisplay = s_eglGetPlatformDisplay (0x31D8, wdpy, NULL);
 	}
+#endif
+#endif
+
+#ifdef HAVE_X11
+#ifdef GDK_WINDOWING_X11
 	if (s_eglX11)
 	{
 		if ( ! (cairo_dock_string_contains (eglExtensions, "EGL_EXT_platform_x11", " ") ||
@@ -155,14 +159,13 @@ static gboolean _initialize_opengl_backend (gboolean bForceOpenGL)
 			cd_warning("Cannot find EGL platform functions, OpenGL will not be available");
 			return FALSE;
 		}
-		Display* xdpy = NULL;
-#ifdef GDK_WINDOWING_X11
-		xdpy = gdk_x11_display_get_xdisplay (s_gdkDisplay);
-#endif
+		Display* xdpy = gdk_x11_display_get_xdisplay (s_gdkDisplay);
 		// EGL_PLATFORM_X11_EXT == EGL_PLATFORM_X11_KHR == 0x31D5
 		if (xdpy) dpy = s_eglDisplay = s_eglGetPlatformDisplay (0x31D5, xdpy, NULL);
 	}
-	
+#endif
+#endif
+
 	int major, minor;
 	if (! (dpy && eglInitialize (dpy, &major, &minor)))
 	{

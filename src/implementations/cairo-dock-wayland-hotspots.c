@@ -454,6 +454,11 @@ gboolean gldi_wayland_hotspots_match_protocol (uint32_t id, const char *interfac
 		wf_shell_found = TRUE;
 		return TRUE;
 	}
+#else
+	// avoid warnings for unused variables
+	(void)id;
+	(void)interface;
+	(void)version;
 #endif
 	return FALSE;
 }
@@ -481,6 +486,9 @@ gboolean gldi_wayland_hotspots_try_init (struct wl_registry *registry)
 		}
 		else cd_message ("Could not bind zwf-shell!");
     }
+#else
+	// avoid warning for unused variable
+	(void)registry;
 #endif
 
 #ifdef HAVE_GTK_LAYER_SHELL

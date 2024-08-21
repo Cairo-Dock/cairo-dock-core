@@ -34,6 +34,7 @@
 #include "cairo-dock-animations.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-module-instance-manager.h"
+#include "cairo-dock-utils.h" // gldi_string_free_and_steal
 #define _MANAGER_DEF_
 #include "cairo-dock-module-manager.h"
 
@@ -113,7 +114,7 @@ static gchar *_gldi_module_list_active (void)
 	if (pString->len > 0)
 		pString->str[pString->len-1] = '\0';
 	
-	return g_string_free_and_steal (pString);
+	return gldi_string_free_and_steal (pString);
 }
 
 static gboolean _write_modules_idle (G_GNUC_UNUSED gpointer data)
