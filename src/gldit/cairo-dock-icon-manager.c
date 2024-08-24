@@ -49,7 +49,6 @@
 #include "cairo-dock-applet-manager.h"  // GLDI_OBJECT_IS_APPLET_ICON
 #include "cairo-dock-backends-manager.h"  // cairo_dock_foreach_icon_container_renderer
 #include "cairo-dock-style-manager.h"
-#include "cairo-dock-utils.h" // gldi_string_free_and_steal
 #define _MANAGER_DEF_
 #include "cairo-dock-icon-manager.h"
 
@@ -356,7 +355,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName, gint iDesiredIconS
 		return NULL;
 	}
 	
-	return gldi_string_free_and_steal (sIconPath);
+	return g_string_free (sIconPath, FALSE);
 }
 
 void cairo_dock_add_path_to_icon_theme (const gchar *cThemePath)

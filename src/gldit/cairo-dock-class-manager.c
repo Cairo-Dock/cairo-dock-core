@@ -28,7 +28,7 @@
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-utils.h"  // cairo_dock_remove_version_from_string, gldi_string_free_and_steal
+#include "cairo-dock-utils.h"  // cairo_dock_remove_version_from_string
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-applet-manager.h"
 #include "cairo-dock-launcher-manager.h"
@@ -1678,7 +1678,7 @@ static gchar *_search_desktop_file (const gchar *cDesktopFile)  // file, path or
 	g_free (cDesktopFileName);
 
 	gchar *cResult = NULL;
-	if (bFound) cResult = gldi_string_free_and_steal (sDesktopFilePath);
+	if (bFound) cResult = g_string_free (sDesktopFilePath, FALSE);
 	else g_string_free (sDesktopFilePath, TRUE);
 	return cResult;
 }
