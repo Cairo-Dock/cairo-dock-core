@@ -106,13 +106,11 @@ static Icon *_user_icon_create (GldiUserIconAttr *attr)
 		default:
 			cd_warning ("unknown user icon type for file %s", attr->cConfFileName);
 			g_key_file_free (attr->pKeyFile);
-			g_free ((void*)attr->cConfFileName);
 			return NULL;
 	}
 	
 	Icon *pIcon = (Icon*)gldi_object_new (pMgr, attr);
 	g_key_file_free (attr->pKeyFile);
-	g_free ((void*)attr->cConfFileName);
 	return pIcon;
 }
 
@@ -120,7 +118,9 @@ Icon *gldi_user_icon_new (const gchar *cConfFile)
 {
 	GldiUserIconAttr attr;
 	if (! _user_icon_conf_open (cConfFile, &attr)) return NULL;
-	return _user_icon_create (&attr);
+	Icon *icon = _user_icon_create (&attr);
+	g_free ((void*)attr.cConfFileName);
+	return icon;
 }
 
 
@@ -137,14 +137,16 @@ static void _load_one_icon (gpointer pAttr, gpointer)
 		cd_warning ("Unable to load a valid icon from '%s'; the file is either unreadable, invalid or does not correspond to any installed program, and will be deleted", cDesktopFilePath);
 		cairo_dock_delete_conf_file (cDesktopFilePath);
 		g_free (cDesktopFilePath);
-		return;
 	}
-	
-	CairoDock *pParentDock = gldi_dock_get (icon->cParentDockName);
-	if (pParentDock != NULL)  // a priori toujours vrai.
+	else
 	{
-		gldi_icon_insert_in_container (icon, CAIRO_CONTAINER(pParentDock), ! CAIRO_DOCK_ANIMATE_ICON);
+		CairoDock *pParentDock = gldi_dock_get (icon->cParentDockName);
+		if (pParentDock != NULL)  // a priori toujours vrai.
+		{
+			gldi_icon_insert_in_container (icon, CAIRO_CONTAINER(pParentDock), ! CAIRO_DOCK_ANIMATE_ICON);
+		}
 	}
+	g_free ((void*)attr->cConfFileName);
 }
 
 void gldi_user_icons_new_from_directory (const gchar *cDirectory)
