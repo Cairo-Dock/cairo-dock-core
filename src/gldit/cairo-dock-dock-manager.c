@@ -56,7 +56,6 @@
 #include "cairo-dock-dock-visibility.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-windows-manager.h"
-#include "cairo-dock-utils.h" // gldi_string_free_and_steal
 
 
 // public (manager, config, data)
@@ -288,7 +287,7 @@ gchar *cairo_dock_get_unique_dock_name (const gchar *cPrefix)
 		i ++;
 	}
 	
-	return gldi_string_free_and_steal (sNameString);
+	return g_string_free (sNameString, FALSE);
 }
 
 gboolean cairo_dock_check_unique_subdock_name (Icon *pIcon)

@@ -19,9 +19,6 @@
 
 #ifndef __CAIRO_DOCK_UTILS__
 #define  __CAIRO_DOCK_UTILS__
-
-#include <glib.h> // GLIB_CHECK_VERSION
-
 G_BEGIN_DECLS
 
 /**
@@ -82,13 +79,6 @@ gchar * cairo_dock_get_command_with_right_terminal (const gchar *cCommand);
 #define gldi_strings_differ(s1, s2) (!s1 ? s2 != NULL : !s2 ? s1 != NULL : strcmp(s1, s2) != 0)
 #define cairo_dock_strings_differ gldi_strings_differ
 
-/** provide g_string_free_and_steal () for older glib versions
- *  (avoids warnings when compiling on newer versions) */
-#if GLIB_CHECK_VERSION(2, 76, 0)
-#define gldi_string_free_and_steal g_string_free_and_steal
-#else
-#define gldi_string_free_and_steal(s1) g_string_free(s1, FALSE)
-#endif
 
 #include "gldi-config.h"
 #ifdef HAVE_X11
