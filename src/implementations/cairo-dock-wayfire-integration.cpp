@@ -134,8 +134,10 @@ static gboolean _present_windows() {
 /* Start scale including all views of the given class */
 static gboolean _present_class(const gchar *cClass) {
 	const gchar *cWmClass = cairo_dock_get_class_wm_class (cClass);
-	return _call_ipc({{"method", "scale_ipc_filter/activate_appid"}, {"data", {{"all_workspaces", true}, {"app_id", cWmClass}}}});
+	if (cWmClass) return _call_ipc({{"method", "scale_ipc_filter/activate_appid"}, {"data", {{"all_workspaces", true}, {"app_id", cWmClass}}}});
+	else return FALSE;
 }
+
 
 /* Start expo on the current output */
 static gboolean _present_desktops() {

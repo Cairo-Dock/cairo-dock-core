@@ -227,7 +227,7 @@ gboolean cairo_dock_notification_click_icon (G_GNUC_UNUSED gpointer pUserData, I
 		if (myTaskbarParam.bPresentClassOnClick // if we want to use this feature
 		&& (!myDocksParam.bShowSubDockOnClick  // if sub-docks are shown on mouse over
 			|| gldi_container_is_visible (CAIRO_CONTAINER (icon->pSubDock)))  // or this sub-dock is already visible
-		&& gldi_desktop_present_class (icon->cClass)) // we use the scale plugin if it's possible
+		&& gldi_desktop_present_class (icon->cClass, pContainer)) // we use the scale plugin if it's possible
 		{
 			_show_all_windows (icon->pSubDock->icons); // show all windows
 			// in case the dock is visible or about to be visible, hide it, as it would confuse the user to have both.

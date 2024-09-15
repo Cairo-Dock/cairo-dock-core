@@ -113,9 +113,10 @@ const gchar *gldi_desktop_manager_get_backend_names (void);
 
 /** Present all the windows of a given class.
 *@param cClass the class.
+*@param pContainer currently active container which might need to be unfocused
 *@return TRUE on success
 */
-gboolean gldi_desktop_present_class (const gchar *cClass);
+gboolean gldi_desktop_present_class (const gchar *cClass, GldiContainer *pContainer);
 
 /** Present all the windows of the current desktop.
 *@return TRUE on success

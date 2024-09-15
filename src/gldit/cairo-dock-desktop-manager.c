@@ -26,6 +26,7 @@
 #include "cairo-dock-gnome-shell-integration.h"
 #include "cairo-dock-cinnamon-integration.h"
 #include "cairo-dock-wayfire-integration.h"
+#include "cairo-dock-wayland-manager.h" // gldi_wayland_release_keyboard (needed on Wayfire)
 #define _MANAGER_DEF_
 #include "cairo-dock-desktop-manager.h"
 
@@ -99,11 +100,12 @@ const gchar *gldi_desktop_manager_get_backend_names (void)
 	return s_registered_backends ? s_registered_backends : "none";
 }
 
-gboolean gldi_desktop_present_class (const gchar *cClass)  // scale matching class
+gboolean gldi_desktop_present_class (const gchar *cClass, GldiContainer *pContainer)  // scale matching class
 {
 	g_return_val_if_fail (cClass != NULL, FALSE);
 	if (s_backend.present_class != NULL)
 	{
+		gldi_wayland_release_keyboard (pContainer);
 		return s_backend.present_class (cClass);
 	}
 	return FALSE;
