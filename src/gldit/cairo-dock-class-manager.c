@@ -51,6 +51,7 @@
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-windows-manager.h"
+#include "cairo-dock-desktop-file-db.h"
 #include "cairo-dock-class-manager.h"
 
 extern CairoDock *g_pMainDock;
@@ -107,6 +108,7 @@ static gboolean _on_window_activated (G_GNUC_UNUSED gpointer data, GldiWindowAct
 }
 void cairo_dock_initialize_class_manager (void)
 {
+	gldi_desktop_file_db_init ();
 	if (s_hClassTable == NULL)
 		s_hClassTable = g_hash_table_new_full (g_str_hash,
 			g_str_equal,
@@ -628,6 +630,7 @@ void cairo_dock_reset_class_table (void)
 {
 	g_hash_table_remove_all (s_hClassTable);
 	g_hash_table_remove_all (s_hAltClass);
+	gldi_desktop_file_db_stop ();
 }
 
 
@@ -1608,79 +1611,56 @@ const CairoDockImageBuffer *cairo_dock_get_class_image_buffer (const gchar *cCla
 }
 
 
-static gboolean _check_desktop_file_exists(GString *sDesktopFilePath, const gchar *cFileName, const char *prefix)
-{
-	// TODO: use XDG_DATA_DIRS instead of hard-coded values!
-	if (prefix) g_string_printf (sDesktopFilePath, "/usr/share/applications/%s%s", prefix, cFileName);
-	else g_string_printf (sDesktopFilePath, "/usr/share/applications/%s", cFileName);
-	if (g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS)) return TRUE;
-	
-	if(prefix) g_string_printf (sDesktopFilePath, "/usr/local/share/applications/%s%s", prefix, cFileName);
-	else g_string_printf (sDesktopFilePath, "/usr/local/share/applications/%s", cFileName);
-	if (g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS)) return TRUE;
-	
-	if(prefix) g_string_printf (sDesktopFilePath, "%s/.local/share/applications/%s%s", g_getenv ("HOME"), prefix, cFileName);
-	else g_string_printf (sDesktopFilePath, "%s/.local/share/applications/%s", g_getenv ("HOME"), cFileName);
-	if (g_file_test (sDesktopFilePath->str, G_FILE_TEST_EXISTS)) return TRUE;
-	
-	return FALSE;
-}
-
-
 static gchar *_search_desktop_file (const gchar *cDesktopFile)  // file, path or even class
 {
 	if (cDesktopFile == NULL)
 		return NULL;
-	if (*cDesktopFile == '/' && g_file_test (cDesktopFile, G_FILE_TEST_EXISTS))  // it's a path and it exists.
+	if (*cDesktopFile == '/') 
 	{
-		return g_strdup (cDesktopFile);
+		if (g_file_test (cDesktopFile, G_FILE_TEST_EXISTS))  // it's a path and it exists.
+			return g_strdup (cDesktopFile);
+		return NULL; // if we got an absolute path, we require it to be correct
 	}
 
-	gchar *cDesktopFileName = NULL;
-	if (*cDesktopFile == '/')
-		cDesktopFileName = g_path_get_basename (cDesktopFile);
-	else if (! g_str_has_suffix (cDesktopFile, ".desktop"))
-		cDesktopFileName = g_strdup_printf ("%s.desktop", cDesktopFile);
-
-	const gchar *cFileName = (cDesktopFileName ? cDesktopFileName : cDesktopFile);
-	gboolean bFound;
-	GString *sDesktopFilePath = g_string_new ("");
-	gchar *cFileNameLower = NULL;
+	// note: cDesktopFile will already by lowercase if it is an app-id / class
+	gchar *cDesktopFileName = g_ascii_strdown (cDesktopFile, -1);
+	// remove the .desktop suffix if it is present
+	gchar *tmp = g_strrstr (cDesktopFileName, ".desktop");
+	if (tmp) *tmp = 0;
 	
-	bFound = _check_desktop_file_exists (sDesktopFilePath, cFileName, NULL);
+	// normal case: we have the correct name
+	const gchar *res = gldi_desktop_file_db_lookup (cDesktopFileName);
 	
-	if (! bFound)
+	if (!res)
 	{
-		cFileNameLower = g_ascii_strdown (cFileName, -1);
-		bFound = _check_desktop_file_exists (sDesktopFilePath, cFileNameLower, NULL);
-	}
-	if (! bFound)
-	{
-		const char *prefices[] = {"org.gnome.", "org.kde.", "org.freedesktop.", "xfce4/", "kde4/", NULL};
-		int i, j;
-		for (i = 0; i < 3; i++)
+		// handle potential partial matches
+		GString *sID = g_string_new (NULL);
+		
+		// #1: add common prefices
+		// e.g. org.gnome.Evince.desktop, but app-id is only evince on Ubuntu 22.04
+		const char *prefices[] = {"org.gnome.", "org.kde.", "org.freedesktop.", NULL};
+		int j;
+		
+		for (j = 0; prefices[j]; j++)
 		{
-			/* note: third iteration is to handle very stupid cases such as
-			 * org.gnome.Evince.desktop with app-id == "evince" (happens for
-			 * version 42.3 that is on Ubuntu 22.04) */
-			if (i == 2) cFileNameLower[0] = g_ascii_toupper (cFileNameLower[0]);
-			const gchar *tmp = i ? cFileNameLower : cFileName;
-			for (j = 0; prefices[j]; j++)
-			{
-				bFound = _check_desktop_file_exists (sDesktopFilePath, tmp, prefices[j]);
-				if (bFound) break;
-			}
-			if (bFound) break;
+			g_string_printf (sID, "%s%s", prefices[j], cDesktopFileName);
+			res = gldi_desktop_file_db_lookup (sID->str);
+			if (res) break;
 		}
+		
+		if (!res)
+		{
+			// #2: snap "namespaced" names -- these could be anything, we just handle the "common" case where
+			// simply the app-id is duplicated (e.g. "firefox_firefox.desktop" as on Ubuntu 22.04)
+			g_string_printf (sID, "%s_%s", cDesktopFileName, cDesktopFileName);
+			res = gldi_desktop_file_db_lookup (sID->str);
+		}
+		
+		g_string_free(sID, TRUE);
 	}
 	
-	g_free (cFileNameLower);
 	g_free (cDesktopFileName);
-
-	gchar *cResult = NULL;
-	if (bFound) cResult = g_string_free (sDesktopFilePath, FALSE);
-	else g_string_free (sDesktopFilePath, TRUE);
-	return cResult;
+	return res ? g_strdup (res) : NULL;
 }
 
 gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMClass)
