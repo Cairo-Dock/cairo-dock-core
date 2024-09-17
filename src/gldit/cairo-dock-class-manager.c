@@ -1826,13 +1826,15 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 		g_free (cDefaultClass);
 	}
 	else
-	{
 		cResult = g_ascii_strdown (cStartupWMClass, -1);
-/*		gchar *str = strchr (cResult, '.');  // we remove all .xxx otherwise we can't detect the lack of extension when looking for an icon (openoffice.org) or it's a problem when looking for an icon (jbrout.py).
-		if (str != NULL)
-			*str = '\0'; */
+	
+	if (cResult)
+	{
+		// remove some suffices that can be problematic: .exe, .py (note: cResult is already lowercase here)
+		if (g_str_has_suffix (cResult, ".exe")) cResult[strlen (cResult) - 4] = 0;
+		else if (g_str_has_suffix (cResult, ".py")) cResult[strlen (cResult) - 3] = 0;
+		cairo_dock_remove_version_from_string (cResult);
 	}
-	cairo_dock_remove_version_from_string (cResult);
 	cd_debug (" -> '%s'", cResult);
 
 	return cResult;
