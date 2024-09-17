@@ -1746,22 +1746,61 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 		}
 		else
 		{
-			while (*cClass == ' ')  // by security, remove extra whitespaces.
-				cClass ++;
-			str = strchr (cClass, ' ');  // first whitespace.
-			if (str != NULL)  // remove everything after that
-				*str = '\0';
-			str = strrchr (cClass, '/');  // last '/'.
-			if (str != NULL)  // we take after that.
-				cClass = str + 1;
-			str = strchr (cClass, '.');  // we remove all .xxx otherwise we can't detect the lack of extension when looking for an icon (openoffice.org) or it's a problem when looking for an icon (jbrout.py).
-			if (str != NULL && str != cClass)
-				*str = '\0';
+			if (!strncmp (cClass, "env ", 4))
+			{
+				// e.g. env BAMF_DESKTOP_FILE_HINT=/var/lib/snapd/desktop/applications/firefox_firefox.desktop /snap/bin/firefox %u
+				// we want to extract "firefox" from this
+				gint argc;
+				gchar **argv = NULL;
+				gboolean parsed = g_shell_parse_argv (cClass, &argc, &argv, NULL);
+				cClass = NULL;
+				
+				if (parsed)
+				{
+					int i;
+					gboolean have_var = FALSE;
+					for (i = 1; i < argc; i++)
+					{
+						if (strchr (argv[i], '=')) {
+							// first argument that is likely actually setting an environment variable
+							if (argv[i][0] != '-') have_var = TRUE;
+						}
+						else if (have_var)
+						{
+							// first argument which is not an environment variable
+							// and likely not a command line option
+							g_free (cDefaultClass);
+							cDefaultClass = g_strdup (argv[i]);
+							cClass = cDefaultClass;
+							break;
+						}
+					}
+				}
+				
+				g_strfreev (argv);
+			}
+			
+			// TODO: handle sh -c cases as well?
+			
+			if (cClass)
+			{
+				while (*cClass == ' ')  // by security, remove extra whitespaces.
+					cClass ++;
+				str = strchr (cClass, ' ');  // first whitespace.
+				if (str != NULL)  // remove everything after that
+					*str = '\0';
+				str = strrchr (cClass, '/');  // last '/'.
+				if (str != NULL)  // we take after that.
+					cClass = str + 1;
+				str = strchr (cClass, '.');  // we remove all .xxx otherwise we can't detect the lack of extension when looking for an icon (openoffice.org) or it's a problem when looking for an icon (jbrout.py).
+				if (str != NULL && str != cClass)
+					*str = '\0';
+			}
 		}
 
-		// handle the cases of programs where command != class.
-		if (*cClass != '\0')
+		if (cClass && *cClass != '\0')
 		{
+			// handle the cases of programs where command != class.
 			if (strncmp (cClass, "oo", 2) == 0)
 			{
 				if (strcmp (cClass, "ooffice") == 0 || strcmp (cClass, "oowriter") == 0 || strcmp (cClass, "oocalc") == 0 || strcmp (cClass, "oodraw") == 0 || strcmp (cClass, "ooimpress") == 0)  // openoffice poor design: there is no way to bind its windows to the launcher without this trick.
@@ -1780,6 +1819,8 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 					cClass = cDefaultClass;  // "libreoffice-writer"
 				}
 			}
+			
+			// final result
 			cResult = g_strdup (cClass);
 		}
 		g_free (cDefaultClass);
