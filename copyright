@@ -38,7 +38,8 @@ Copyright: 2007-2014 Fabrice Rey <fabounet@glx-dock.org>
            2020-2024 Daniel Kondor <kondor.dani@gmail.com>
 License: GPL-3+
 
-Files: src/implementations/cairo-dock-foreign-toplevel.?
+Files: src/gldit/cairo-dock-desktop-file-db.?
+ src/implementations/cairo-dock-foreign-toplevel.?
  src/implementations/cairo-dock-plasma-*
  src/implementations/cairo-dock-cosmic-*
  src/implementations/cairo-dock-wayfire-*
