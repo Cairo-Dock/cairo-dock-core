@@ -101,6 +101,9 @@ extern gboolean g_bEasterEggs;
 
 extern gboolean g_bDisableLayerShell;
 extern gboolean g_bNoWaylandExclude;
+extern gboolean g_bDisableAllModules;
+extern gboolean g_bNoCheckModuleVersion;
+extern gchar **g_cExcludedModules;
 extern gboolean g_bX11UseEgl;
 
 extern GldiModuleInstance *g_pCurrentModule;
@@ -433,9 +436,18 @@ int main (int argc, char** argv)
 		{"no-layer-shell", 0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bDisableLayerShell,
 			_("For debugging purpose only. Disable gtk-layer-shell support."), NULL},
-		{"no-exclude-modules", 0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+		{"no-exclude-modules-wayland", 0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bNoWaylandExclude,
 			_("For debugging purpose only. Do not blacklist incompatible plugins on Wayland."), NULL},
+		{"disable-module", 'D', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING_ARRAY,
+			&g_cExcludedModules,
+			_("For debugging purposes. Fail loading the specified plugin module after opening it. Multiple modules can be specified by repeating this option multiple times."), NULL},
+		{"fail-module-loading", 0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&g_bDisableAllModules,
+			_("For debugging purposes only. Fail loading all plugin modules (after opening)."), NULL},
+		{"no-module-version-check", 0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&g_bNoCheckModuleVersion,
+			_("For debugging purposes only. Do not check version compatibility after loading a plugin module."), NULL},
 		{NULL, 0, 0, 0,
 			NULL,
 			NULL, NULL}

@@ -44,7 +44,10 @@ GldiObjectManager myModuleObjectMgr;
 
 GldiModuleInstance *g_pCurrentModule = NULL;  // only used to trace a possible crash in one of the modules.
 
-gboolean g_bNoWaylandExclude = FALSE;
+gboolean g_bNoWaylandExclude = FALSE; // do not exclude modules on Wayland that are known to crash
+gboolean g_bDisableAllModules = FALSE; // fail loading any module (for debugging only)
+gboolean g_bNoCheckModuleVersion = FALSE; // do not check module version compatibility (similar to bEasterEggs, but only applies here)
+gchar **g_cExcludedModules = NULL; // specific modules to exclude (try loading them but fail, for debugging)
 
 // dependancies
 extern gchar *g_cConfFile;
@@ -182,20 +185,40 @@ GldiModule *gldi_module_new_from_so_file (const gchar *cSoFilePath)
 		goto discard;
 	}
 	
-	// check module compatibility
-	if (! g_bEasterEggs &&
-		(pVisitCard->iMajorVersionNeeded > g_iMajorVersion
-		|| (pVisitCard->iMajorVersionNeeded == g_iMajorVersion && pVisitCard->iMinorVersionNeeded > g_iMinorVersion)
-		|| (pVisitCard->iMajorVersionNeeded == g_iMajorVersion && pVisitCard->iMinorVersionNeeded == g_iMinorVersion && pVisitCard->iMicroVersionNeeded > g_iMicroVersion)))
+	if (!g_bNoCheckModuleVersion)
 	{
-		cd_warning ("this module ('%s') needs at least Cairo-Dock v%d.%d.%d, but Cairo-Dock is in v%d.%d.%d (%s)\n  It will be ignored", cSoFilePath, pVisitCard->iMajorVersionNeeded, pVisitCard->iMinorVersionNeeded, pVisitCard->iMicroVersionNeeded, g_iMajorVersion, g_iMinorVersion, g_iMicroVersion, GLDI_VERSION);
-		goto discard;
-	}
-	if (! g_bEasterEggs
-	&& pVisitCard->cDockVersionOnCompilation != NULL && strcmp (pVisitCard->cDockVersionOnCompilation, GLDI_VERSION) != 0)  // separation des versions en easter egg.
-	{
-		cd_warning ("this module ('%s') was compiled with Cairo-Dock v%s, but Cairo-Dock is in v%s\n  It will be ignored", cSoFilePath, pVisitCard->cDockVersionOnCompilation, GLDI_VERSION);
-		goto discard;
+		// check module compatibility
+		
+		if (g_bDisableAllModules)
+			goto discard;
+		if (g_cExcludedModules)
+		{
+			gchar **tmp;
+			for (tmp = g_cExcludedModules; *tmp; ++tmp)
+			{
+				const gchar *tmp2 = strrchr (cSoFilePath, '/');
+				if (tmp2) tmp2++;
+				else tmp2 = cSoFilePath;
+				if (!strcmp (*tmp, tmp2)) goto discard;
+				size_t x = strlen (tmp2); // compare without the .so extension
+				if (x > 3 && !strncmp (*tmp, tmp2, x - 3)) goto discard;
+			}
+		}
+		
+		if (! g_bEasterEggs &&
+			(pVisitCard->iMajorVersionNeeded > g_iMajorVersion
+			|| (pVisitCard->iMajorVersionNeeded == g_iMajorVersion && pVisitCard->iMinorVersionNeeded > g_iMinorVersion)
+			|| (pVisitCard->iMajorVersionNeeded == g_iMajorVersion && pVisitCard->iMinorVersionNeeded == g_iMinorVersion && pVisitCard->iMicroVersionNeeded > g_iMicroVersion)))
+		{
+			cd_warning ("this module ('%s') needs at least Cairo-Dock v%d.%d.%d, but Cairo-Dock is in v%d.%d.%d (%s)\n  It will be ignored", cSoFilePath, pVisitCard->iMajorVersionNeeded, pVisitCard->iMinorVersionNeeded, pVisitCard->iMicroVersionNeeded, g_iMajorVersion, g_iMinorVersion, g_iMicroVersion, GLDI_VERSION);
+			goto discard;
+		}
+		if (! g_bEasterEggs
+		&& pVisitCard->cDockVersionOnCompilation != NULL && strcmp (pVisitCard->cDockVersionOnCompilation, GLDI_VERSION) != 0)  // separation des versions en easter egg.
+		{
+			cd_warning ("this module ('%s') was compiled with Cairo-Dock v%s, but Cairo-Dock is in v%s\n  It will be ignored", cSoFilePath, pVisitCard->cDockVersionOnCompilation, GLDI_VERSION);
+			goto discard;
+		}
 	}
 	
 	// create a new module with these info
