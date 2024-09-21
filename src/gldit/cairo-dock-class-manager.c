@@ -1959,8 +1959,14 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	 * 		(this is already parsed by gldi_window_parse_class () as opposed to the
 	 * 		 cWmClass variable which is the "raw" value reported by the WM)
 	 * (2) the basename of the desktop file from cDesktopFilePath
-	 * (3) the StartupWMClass key from the desktop file
+	 * 		always available if we are here (either from cDesktopFile
+	 * 		or matched above)
+	 * (3) the StartupWMClass or Exec key from the desktop file -- note:
+	 * 		this is not necessarily unique, multiple desktop files can
+	 * 		have the same key or command
 	 * Obviously, if we are loading a launcher, (1) is not available.
+	 * Note: all of these will be lowercase ((1) and (3) converted when
+	 * parsing, (2) converted below).
 	 * 
 	 * On X11, (1) and (3) should be the same (if (3) is given). On
 	 * Wayland, (1) and (2) should be the same. However, there are
@@ -1970,125 +1976,123 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	 * not match the desktop file name because it does not include the
 	 * reverse DNS of the publisher, which was however correctly guessed
 	 * by us (see _search_desktop_file () above).
-	 * We deal with this by storing one of the above as the "class" in
+	 * We deal with this by storing (1) or (2) as the "class" in
 	 * s_hClassTable, and the others in s_hAltClass, so no matter how an
-	 * app identifies itself, it will be matched to its icon. */
-	gchar *cAltClass = NULL; // (2)
+	 * app identifies itself, it will be matched to its icon.
+	 * Note: (3) is always put in s_hAltClass since it can be non-unique
+	 * and it is ignored if it is already present when registering a new
+	 * app that has (1) or (2) not matching a previously registered app. */
+	gchar *cDesktopFileID = NULL; // (2)
 	gchar *cAltClass2 = NULL; // (3)
-	if (cDesktopFilePath)
 	{
 		gchar *tmp = g_path_get_basename (cDesktopFilePath);
-		if (g_str_has_suffix (tmp, ".desktop"))
-		{
-			int len = strlen (tmp);
-			tmp[len - 8] = 0; // here, len >= 8
-		}
-		cAltClass = g_ascii_strdown (tmp, -1);
+		gchar *tmp2 = g_ascii_strdown (tmp, -1);
 		g_free (tmp);
-	}
-	if (cClass == NULL)
-	{
-		/* No class given, this means that we are loading a launcher.
-		 * In this case, we try to guess the "class" from the desktop
-		 * file or the command name. */
-		cClass = cairo_dock_guess_class (cCommand, cStartupWMClass);
-		
-		if (cClass == NULL)
+		if (g_str_has_suffix (tmp2, ".desktop"))
 		{
-			if (cAltClass)
-			{
-				cClass = cAltClass;
-				cAltClass = NULL;
-			}
-			else
-			{
-				cd_debug ("couldn't guess the class for %s", cDesktopFile);
-				g_free (cDesktopFilePath);
-				g_free (cCommand);
-				g_free (cStartupWMClass);
-				return NULL;
-			}
+			int len = strlen (tmp2);
+			tmp2[len - 8] = 0; // here, len >= 8
 		}
+		cDesktopFileID = tmp2;
 	}
-	else if (cStartupWMClass) 
+	// potential "class" from the desktop file (3)
+	if (cCommand || cStartupWMClass)
+		cAltClass2 = cairo_dock_guess_class (cCommand, cStartupWMClass);
+	// take care of duplicates
+	if (cAltClass2 && !strcmp(cDesktopFileID, cAltClass2))
 	{
-		/* this will return lower case of cStartupWMClass, except for the
-		 * case of Wine when it is not used */
-		cAltClass2 = cairo_dock_guess_class (NULL, cStartupWMClass);
-		if (cAltClass2)
-		if(!strcmp (cClass, cAltClass2) || (cAltClass && !strcmp(cAltClass, cAltClass2)))
+		g_free (cAltClass2);
+		cAltClass2 = NULL;
+	}
+	if (cClass)
+	{
+		// cDesktopFileID != NULL here
+		if (!strcmp (cClass, cDesktopFileID))
+		{
+			g_free (cDesktopFileID);
+			cDesktopFileID = NULL;
+		}
+		if (cAltClass2 && !strcmp (cClass, cAltClass2))
 		{
 			g_free (cAltClass2);
 			cAltClass2 = NULL;
 		}
 	}
-	if (cAltClass && !strcmp (cClass, cAltClass))
+	else
 	{
-		g_free (cAltClass);
-		cAltClass = NULL;
+		cClass = cDesktopFileID;
+		cDesktopFileID = NULL;
 	}
-	if (!cAltClass && cAltClass2)
-	{
-		cAltClass = cAltClass2;
-		cAltClass2 = NULL;
-	}
+	
 	g_free (cStartupWMClass); // not used later
 
 	//\__________________ make a new class or get the existing one.
-	pClassAppli = _cairo_dock_lookup_class_appli (cClass);
+	pClassAppli = cClass ? _cairo_dock_lookup_class_appli (cClass) : NULL;
 	{
-		CairoDockClassAppli *pAltClassAppli = cAltClass ? _cairo_dock_lookup_class_appli (cAltClass) : NULL;
-		CairoDockClassAppli *pAltClass2Appli = cAltClass2 ? _cairo_dock_lookup_class_appli (cAltClass2) : NULL;
+		CairoDockClassAppli *pDesktopIDAppli = cDesktopFileID ? _cairo_dock_lookup_class_appli (cDesktopFileID) : NULL;
 		
-		if (pAltClassAppli || pAltClass2Appli)
+		/*
+		 * Note: here cClass != NULL (it was replaced by cDesktopFileID if it was NULL).
+		 * If cClass is already found (i.e. pClassAppli != NULL at this point),
+		 * it must be an incomplete case (bSearchedAttributes == FALSE, otherwise
+		 * we would return earlier). If pDesktopIDAppli != NULL, it can be a
+		 * complete case if the desktop file name does not match exactly cClass,
+		 * this will be handled later.
+		 */
+		
+		if (pClassAppli)
 		{
-			if (pAltClassAppli && pAltClass2Appli && (pAltClassAppli != pAltClass2Appli))
-				cd_warning ("multiple classes exist for appli: %s, %s !", cAltClass, cAltClass2);
-			if(pClassAppli)
+			if (pDesktopIDAppli)
 			{
-				if (pAltClassAppli && pAltClassAppli != pClassAppli)
-					cd_warning ("multiple classes exist for appli: %s, %s !", cClass, cAltClass);
-				if (pAltClass2Appli && pAltClass2Appli != pClassAppli)
-					cd_warning ("multiple classes exist for appli: %s, %s !", cClass, cAltClass2);
+				if(pClassAppli != pDesktopIDAppli)
+					cd_error ("multiple classes exist for appli: %s, %s !", cClass, cDesktopFileID);
+				g_free (cDesktopFileID); // not needed anymore
 			}
-			else
+			else if (cDesktopFileID)
 			{
-				// here pClassAppli == NULL, only the cAltClass name exists already,
-				// so we store cClass as alternative
-				pClassAppli = pAltClassAppli ? pAltClassAppli : pAltClass2Appli;
-				g_hash_table_insert (s_hAltClass, g_strdup (cClass), pClassAppli);
-			}
-			if (cAltClass)
-			{
-				if (!pAltClassAppli) g_hash_table_insert (s_hAltClass, cAltClass, pClassAppli);
-				else g_free (cAltClass);
-			}
-			if (cAltClass2)
-			{
-				if (!pAltClass2Appli) g_hash_table_insert (s_hAltClass, cAltClass2, pClassAppli);
-				else g_free (cAltClass2);
+				// add the desktop ID as an alternate key to find this class
+				g_hash_table_insert (s_hAltClass, cDesktopFileID, pClassAppli);
 			}
 		}
 		else
 		{
-			if (!pClassAppli)
+			if (pDesktopIDAppli)
 			{
-				// neither name exists, we create a new class and store it
+				pClassAppli = pDesktopIDAppli;
+				g_hash_table_insert (s_hAltClass, g_strdup(cClass), pClassAppli);
+				g_free (cDesktopFileID);
+			}
+			else
+			{
+				// need to create a new class
 				pClassAppli = g_new0 (CairoDockClassAppli, 1);
 				g_hash_table_insert (s_hClassTable, g_strdup (cClass), pClassAppli);
+				if (cDesktopFileID) g_hash_table_insert (s_hAltClass, cDesktopFileID, pClassAppli);
 			}
-			// main name already exists, alternate name does not
-			if (cAltClass) g_hash_table_insert (s_hAltClass, cAltClass, pClassAppli);
-			if (cAltClass2) g_hash_table_insert (s_hAltClass, cAltClass2, pClassAppli);
 		}
+		
+		
+		/* here, pClassAppli != NULL
+		 * 
+		 * We need to check cAltClass2 which can only be stored in s_hAltClass
+		 * (it is only potentially added here). If it is found, it is likely a
+		 * spurious match for another app that has the same command line or the
+		 * same StartupWMClass key, we can ignore it. If it is not found, we
+		 * add as a potential alternative ID for this app.
+		 */
+		if (cAltClass2 && !g_hash_table_contains (s_hAltClass, cAltClass2))
+			g_hash_table_insert (s_hAltClass, cAltClass2, pClassAppli);
+		else g_free (cAltClass2);
+		
+		// by here, we freed or added as a hash table key both
+		// cAltClass2 and cDesktopFileID
 	}
 	
-	g_return_val_if_fail (pClassAppli!= NULL, NULL);
-	
-	// we store the WM class (class or app_id as reported by the WM) if
-	// it was not stored before (note: this is always the class we get from
-	// the WM and NOT the StartupWMClass in the .desktop file as that might
-	// not match what we have in reality
+	// we store the WM class (class or app_id as reported by the WM without
+	// any processing) if it was not stored before
+	// (note: this is always the class we get from the WM and NOT the
+	// StartupWMClass in the .desktop file as that might
+	// not match what we have in reality)
 	if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)
 		pClassAppli->cStartupWMClass = g_strdup (cWmClass);
 
@@ -2098,7 +2102,6 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 		//g_print ("%s ----> %s\n", cClass, pClassAppli->cStartupWMClass);
 		g_free (cDesktopFilePath);
 		g_free (cCommand);
-		g_free (cStartupWMClass);
 		return cClass;
 	}
 	pClassAppli->bSearchedAttributes = TRUE;
