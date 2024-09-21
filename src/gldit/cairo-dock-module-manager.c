@@ -157,7 +157,7 @@ GldiModule *gldi_module_new_from_so_file (const gchar *cSoFilePath)
 	
 	// open the .so file
 	///GModule *module = g_module_open (pGldiModule->cSoFilePath, G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
-	gpointer handle = dlopen (cSoFilePath, RTLD_LAZY | RTLD_LOCAL);
+	gpointer handle = dlopen (cSoFilePath, RTLD_NOW | RTLD_LOCAL);
 	if (! handle)
 	{
 		cd_warning ("while opening module '%s' : (%s)", cSoFilePath, dlerror());
