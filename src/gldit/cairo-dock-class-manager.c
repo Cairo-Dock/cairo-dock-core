@@ -1622,7 +1622,7 @@ static gchar *_search_desktop_file (const gchar *cDesktopFile)  // file, path or
 		return NULL; // if we got an absolute path, we require it to be correct
 	}
 
-	// note: cDesktopFile will already by lowercase if it is an app-id / class
+	// note: cDesktopFile will already be lowercase if it is an app-id / class
 	gchar *cDesktopFileName = g_ascii_strdown (cDesktopFile, -1);
 	// remove the .desktop suffix if it is present
 	gchar *tmp = g_strrstr (cDesktopFileName, ".desktop");
@@ -1636,8 +1636,16 @@ static gchar *_search_desktop_file (const gchar *cDesktopFile)  // file, path or
 		// handle potential partial matches
 		GString *sID = g_string_new (NULL);
 		
-		// #1: add common prefices
-		// e.g. org.gnome.Evince.desktop, but app-id is only evince on Ubuntu 22.04
+		/* #1: add common prefices
+		 * e.g. org.gnome.Evince.desktop, but app-id is only evince on Ubuntu 22.04 and 24.04
+		 * More generally, this can happen with GTK+3 apps that have only "partially" migrated
+		 * to using the "new" (reverse DNS style) .desktop format.
+		 * See e.g.
+		 * https://gitlab.gnome.org/GNOME/gtk/-/issues/2822
+		 * https://gitlab.gnome.org/GNOME/gtk/-/issues/2034
+		 * https://honk.sigxcpu.org/con/GTK__and_the_application_id.html
+		 * https://docs.gtk.org/gtk4/migrating-3to4.html#set-a-proper-application-id
+		 */
 		const char *prefices[] = {"org.gnome.", "org.kde.", "org.freedesktop.", NULL};
 		int j;
 		
@@ -1651,7 +1659,7 @@ static gchar *_search_desktop_file (const gchar *cDesktopFile)  // file, path or
 		if (!res)
 		{
 			// #2: snap "namespaced" names -- these could be anything, we just handle the "common" case where
-			// simply the app-id is duplicated (e.g. "firefox_firefox.desktop" as on Ubuntu 22.04)
+			// simply the app-id is duplicated (e.g. "firefox_firefox.desktop" as on Ubuntu 22.04 and 24.04)
 			g_string_printf (sID, "%s_%s", cDesktopFileName, cDesktopFileName);
 			res = gldi_desktop_file_db_lookup (sID->str);
 		}
