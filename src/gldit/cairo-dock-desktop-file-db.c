@@ -80,28 +80,33 @@ static void _process_app (gpointer data, gpointer user_data)
 		id_lower = g_ascii_strdown (id, tmp - id);
 	else id_lower = g_ascii_strdown (id, -1);
 	
-	// process commandline and / or wm class (note: this will always return lower case as well)
-	char *alt_id = cairo_dock_guess_class (cmdline, wmclass);
-	if (alt_id && !strcmp (alt_id, id))
-	{
-		g_free (alt_id);
-		alt_id = NULL;
-	}
-	
-	// check if this app is already present in our table -- we cannot do much in this case
-	if (g_hash_table_contains (db->class_table, id_lower) || g_hash_table_contains(db->alt_class_table, id_lower) ||
-		(alt_id && (g_hash_table_contains (db->class_table, alt_id) ||
-			g_hash_table_contains(db->alt_class_table, alt_id))))
+	// check if this ID exists (desktop file names should be unique, so there is no use adding in that case)
+	if (g_hash_table_contains (db->class_table, id_lower))
 	{
 		g_free (id_lower);
+		return;
+	}
+	
+	// add the app ID to the (main) hash table
+	char *fn_dup = g_strdup (fn);
+	g_hash_table_insert (db->class_table, id_lower, fn_dup);
+	
+	// process commandline and / or wm class (note: this will always return lower case as well)
+	char *alt_id = cairo_dock_guess_class (cmdline, wmclass);
+	if (!alt_id) return;
+	if (!strcmp (alt_id, id_lower))
+	{
 		g_free (alt_id);
 		return;
 	}
 	
-	// valid app, add to the hash table
-	char *fn_dup = g_strdup (fn);
-	g_hash_table_insert (db->class_table, id_lower, fn_dup);
-	if (alt_id) g_hash_table_insert (db->alt_class_table, alt_id, fn_dup);
+	// only add the alternate ID if it does not exist yet
+	if (g_hash_table_contains (db->class_table, alt_id) || g_hash_table_contains(db->alt_class_table, alt_id))
+	{
+		g_free (alt_id);
+		return;
+	}
+	g_hash_table_insert (db->alt_class_table, alt_id, fn_dup);
 }
 
 static gpointer _thread_func (gpointer)
