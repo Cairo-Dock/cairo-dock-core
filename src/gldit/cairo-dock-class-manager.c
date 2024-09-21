@@ -1931,6 +1931,10 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	gchar *cDesktopFilePath = _search_desktop_file (cDesktopFile?cDesktopFile:cClass);
 	if (cDesktopFilePath == NULL && cWmClass != NULL)
 		cDesktopFilePath = _search_desktop_file (cWmClass);
+	// special handling for Gnome Terminal, required at least on Ubuntu 22.04 and 24.04
+	// (should be fixed in newer versions, see e.g. here: https://gitlab.gnome.org/GNOME/gnome-terminal/-/issues/8033)
+	if (cDesktopFilePath == NULL && !strcmp (cClass, "gnome-terminal-server"))
+		cDesktopFilePath = _search_desktop_file ("org.gnome.terminal");
 	if (cDesktopFilePath == NULL)  // couldn't find the .desktop
 	{
 		if (cClass != NULL)  // make a class anyway to store the few info we have.
