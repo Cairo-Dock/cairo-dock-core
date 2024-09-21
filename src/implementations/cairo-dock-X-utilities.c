@@ -1165,11 +1165,9 @@ gchar *cairo_dock_get_xwindow_class (Window Xid, gchar **cWMClass)
 			cClass = g_ascii_strdown (pClassHint->res_class, -1);  // down case because some apps change the case depending of their windows...
 		}
 
+		if (g_str_has_suffix (cClass, ".exe")) cClass[strlen (cClass) - 4] = 0;
+		else if (g_str_has_suffix (cClass, ".py")) cClass[strlen (cClass) - 3] = 0;
 		cairo_dock_remove_version_from_string (cClass);  // we remore number of version (e.g. Openoffice.org-3.1)
-
-		gchar *str = strchr (cClass, '.');  // we remove all .xxx otherwise we can't detect the lack of extension when looking for an icon (openoffice.org) or it's a problem when looking for an icon (jbrout.py).
-		if (str != NULL)
-			*str = '\0';
 		cd_debug ("got an application with class '%s'", cClass);
 		
 		XFree (pClassHint->res_name);
@@ -1581,7 +1579,7 @@ cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, int iWidth,
 	GdkPixbuf *pPixbuf = cairo_dock_get_pixbuf_from_pixmap (Xid, TRUE);
 	if (pPixbuf == NULL)
 	{
-		cd_warning ("No thumbnail available.\nEither the WM doesn't support this functionnality, or the window was minimized when the dock has been launched.");
+		cd_warning ("No thumbnail available.\nEither the WM doesn't support this explicitly, or the window was minimized when the dock has been launched.");
 		return NULL;
 	}
 	

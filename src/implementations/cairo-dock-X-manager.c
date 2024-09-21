@@ -581,7 +581,7 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 						if (xactor->bIgnored)  // was ignored, simply recreate it
 						{
 							// remove it from the table, so that the XEvent loop detects it again
-							g_hash_table_remove (s_hXWindowTable, &Xid);  // remove it explicitely, because the 'unref' might not free it
+							g_hash_table_remove (s_hXWindowTable, &Xid);  // remove it explicitly, because the 'unref' might not free it
 							xactor->iLastCheckTime = -1;
 							_delete_actor (xactor);  // unref it since we don't need it anymore
 						}
