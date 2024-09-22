@@ -100,11 +100,11 @@ typedef enum {
 struct _GldiVisitCard {
 	// nom du module qui servira a l'identifier.
 	const gchar *cModuleName;
-	// numero de version majeure de cairo-dock necessaire au bon fonctionnement du module.
+	// minimum major version needed for this module (if <= 3), or indicator of new API / ABI (if == 4)
 	gint iMajorVersionNeeded;
-	// numero de version mineure de cairo-dock necessaire au bon fonctionnement du module.
+	// minimum minor version needed for this module (if major version <= 3), or exact ABI version needed if major version == 4
 	gint iMinorVersionNeeded;
-	// numero de version micro de cairo-dock necessaire au bon fonctionnement du module.
+	// numero de version micro de cairo-dock necessaire au bon fonctionnement du module (not used if major version == 4)
 	gint iMicroVersionNeeded;
 	// chemin d'une image de previsualisation.
 	const gchar *cPreviewFilePath;
@@ -144,7 +144,10 @@ struct _GldiVisitCard {
 	gboolean bAllowEmptyTitle;
 	// if TRUE and the applet inhibites a class, then appli icons will be placed after the applet icon.
 	gboolean bActAsLauncher;
-	gpointer reserved[2];
+	// function called after the module has been successfully loaded; use this to register functionality that should always be active
+	// only available if iMajorVersionNeeded == 4
+	void (* postLoad) (GldiVisitCard *pVisitCard);
+	gpointer reserved;
 };
 
 /// Definition of the interface of a module.

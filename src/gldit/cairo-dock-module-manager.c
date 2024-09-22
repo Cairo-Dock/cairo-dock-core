@@ -213,6 +213,8 @@ GldiModule *gldi_module_new_from_so_file (const gchar *cSoFilePath)
 				cd_warning ("this module ('%s') was compiled for Cairo-Dock ABI version %d, but currently running Cairo-Dock with ABI version %d\n  It will be ignored", pVisitCard->iMinorVersionNeeded, GLDI_ABI_VERSION);
 				goto discard;
 			}
+			if (pVisitCard->postLoad)
+				pVisitCard->postLoad (pVisitCard);
 		}
 		else
 		{
