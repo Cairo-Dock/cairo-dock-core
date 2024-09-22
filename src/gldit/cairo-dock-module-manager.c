@@ -185,7 +185,7 @@ GldiModule *gldi_module_new_from_so_file (const gchar *cSoFilePath)
 		goto discard;
 	}
 	
-	if (!g_bNoCheckModuleVersion)
+	if (!g_bNoCheckModuleVersion && !g_bEasterEggs)
 	{
 		// check module compatibility
 		
@@ -205,19 +205,29 @@ GldiModule *gldi_module_new_from_so_file (const gchar *cSoFilePath)
 			}
 		}
 		
-		if (! g_bEasterEggs &&
-			(pVisitCard->iMajorVersionNeeded > g_iMajorVersion
-			|| (pVisitCard->iMajorVersionNeeded == g_iMajorVersion && pVisitCard->iMinorVersionNeeded > g_iMinorVersion)
-			|| (pVisitCard->iMajorVersionNeeded == g_iMajorVersion && pVisitCard->iMinorVersionNeeded == g_iMinorVersion && pVisitCard->iMicroVersionNeeded > g_iMicroVersion)))
+		if (pVisitCard->iMajorVersionNeeded == 4)
 		{
-			cd_warning ("this module ('%s') needs at least Cairo-Dock v%d.%d.%d, but Cairo-Dock is in v%d.%d.%d (%s)\n  It will be ignored", cSoFilePath, pVisitCard->iMajorVersionNeeded, pVisitCard->iMinorVersionNeeded, pVisitCard->iMicroVersionNeeded, g_iMajorVersion, g_iMinorVersion, g_iMicroVersion, GLDI_VERSION);
-			goto discard;
+			// new version matching, based on ABI versions instead of release versions
+			if (pVisitCard->iMinorVersionNeeded != GLDI_ABI_VERSION)
+			{
+				cd_warning ("this module ('%s') was compiled for Cairo-Dock ABI version %d, but currently running Cairo-Dock with ABI version %d\n  It will be ignored", pVisitCard->iMinorVersionNeeded, GLDI_ABI_VERSION);
+				goto discard;
+			}
 		}
-		if (! g_bEasterEggs
-		&& pVisitCard->cDockVersionOnCompilation != NULL && strcmp (pVisitCard->cDockVersionOnCompilation, GLDI_VERSION) != 0)  // separation des versions en easter egg.
+		else
 		{
-			cd_warning ("this module ('%s') was compiled with Cairo-Dock v%s, but Cairo-Dock is in v%s\n  It will be ignored", cSoFilePath, pVisitCard->cDockVersionOnCompilation, GLDI_VERSION);
-			goto discard;
+			if (pVisitCard->iMajorVersionNeeded > g_iMajorVersion
+				|| (pVisitCard->iMajorVersionNeeded == g_iMajorVersion && pVisitCard->iMinorVersionNeeded > g_iMinorVersion)
+				|| (pVisitCard->iMajorVersionNeeded == g_iMajorVersion && pVisitCard->iMinorVersionNeeded == g_iMinorVersion && pVisitCard->iMicroVersionNeeded > g_iMicroVersion))
+			{
+				cd_warning ("this module ('%s') needs at least Cairo-Dock v%d.%d.%d, but Cairo-Dock is in v%d.%d.%d (%s)\n  It will be ignored", cSoFilePath, pVisitCard->iMajorVersionNeeded, pVisitCard->iMinorVersionNeeded, pVisitCard->iMicroVersionNeeded, g_iMajorVersion, g_iMinorVersion, g_iMicroVersion, GLDI_VERSION);
+				goto discard;
+			}
+			if (pVisitCard->cDockVersionOnCompilation != NULL && strcmp (pVisitCard->cDockVersionOnCompilation, GLDI_VERSION) != 0)  // separation des versions en easter egg.
+			{
+				cd_warning ("this module ('%s') was compiled with Cairo-Dock v%s, but Cairo-Dock is in v%s\n  It will be ignored", cSoFilePath, pVisitCard->cDockVersionOnCompilation, GLDI_VERSION);
+				goto discard;
+			}
 		}
 	}
 	

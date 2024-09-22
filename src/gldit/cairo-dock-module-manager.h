@@ -36,6 +36,16 @@ G_BEGIN_DECLS
 * Each instance holds a set of data: the icon and its container, the config structure and its conf file, the data structure and a slot to plug datas into containers and icons. All these data are optionnal; a module that has an icon is also called an applet.
 */
 
+/**
+ * Define the current ABI version. Used by the new plugin loader interface
+ * to check compatibility. This version should be incremented if the layout
+ * or size of public structures changes, function parameters change, or
+ * a macro is converted to a function or vice versa.
+ * It is not required the change this when adding a function to the
+ * public API (loading the module will fail if it refers to an
+ * unresolved symbol anyway). */
+#define GLDI_ABI_VERSION 20240921
+
 // manager
 typedef struct _GldiModulesParam GldiModulesParam;
 typedef struct _GldiModuleAttr GldiModuleAttr;
