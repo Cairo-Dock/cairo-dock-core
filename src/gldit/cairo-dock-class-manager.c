@@ -2057,7 +2057,7 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 			if (pDesktopIDAppli)
 			{
 				if(pClassAppli != pDesktopIDAppli)
-					cd_error ("multiple classes exist for appli: %s, %s !", cClass, cDesktopFileID);
+					cd_critical ("multiple classes exist for appli: %s, %s !", cClass, cDesktopFileID);
 				g_free (cDesktopFileID); // not needed anymore
 			}
 			else if (cDesktopFileID)
