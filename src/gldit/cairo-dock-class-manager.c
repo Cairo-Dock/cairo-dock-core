@@ -1914,9 +1914,18 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 
 	//\__________________ if the class is already registered and filled, quit.
 	gchar *cClass = NULL;
+	CairoDockClassAppli *pClassAppli = NULL;
 	if (cClassName != NULL)
 		cClass = cairo_dock_guess_class (NULL, cClassName);
-	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass?cClass:cDesktopFile);
+	// note: in many cases, this will be non-NULL (if we encountered cClass before but did not register it)
+	if (cClass) pClassAppli = _cairo_dock_lookup_class_appli (cClass);
+	else
+	{
+		pClassAppli = _cairo_dock_lookup_class_appli (cDesktopFile);
+		if (pClassAppli != NULL)
+			cClass = g_strdup (cDesktopFile);
+			// in this case, cDesktopFile in reality was a "class"
+	}
 
 	if (pClassAppli != NULL && pClassAppli->bSearchedAttributes && pClassAppli->cDesktopFile)  // we already searched this class, and we did find its .desktop file, so let's end here.
 	{
@@ -2057,7 +2066,7 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 			if (pDesktopIDAppli)
 			{
 				if(pClassAppli != pDesktopIDAppli)
-					cd_error ("multiple classes exist for appli: %s, %s !", cClass, cDesktopFileID);
+					cd_critical ("multiple classes exist for appli: %s, %s !", cClass, cDesktopFileID);
 				g_free (cDesktopFileID); // not needed anymore
 			}
 			else if (cDesktopFileID)
