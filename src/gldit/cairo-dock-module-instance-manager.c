@@ -18,6 +18,7 @@
 */
 
 
+#include <stddef.h>
 #include "gldi-config.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-desklet-manager.h"
@@ -37,6 +38,13 @@
 #define _MANAGER_DEF_
 #include "cairo-dock-module-instance-manager.h"
 
+#ifdef max_align_t
+#define MAX_ALIGN_T max_align_t
+#else
+#define MAX_ALIGN_T long double
+#endif
+#define CEIL_ALIGNED_SIZE(size) (((size) + sizeof(MAX_ALIGN_T) - 1) / sizeof(MAX_ALIGN_T) * sizeof(MAX_ALIGN_T))
+
 // public (manager, config, data)
 GldiObjectManager myModuleInstanceObjectMgr;
 
@@ -53,7 +61,7 @@ GldiModuleInstance *gldi_module_instance_new (GldiModule *pModule, gchar *cConfF
 {
 	GldiModuleInstanceAttr attr = {pModule, cConfFilePah};
 	
-	GldiModuleInstance *pInstance = g_malloc0 (sizeof (GldiModuleInstance) + pModule->pVisitCard->iSizeOfConfig + pModule->pVisitCard->iSizeOfData);  // we allocate everything at once, since config and data will anyway live as long as the instance itself.
+	GldiModuleInstance *pInstance = g_malloc0 (CEIL_ALIGNED_SIZE(sizeof (GldiModuleInstance)) + CEIL_ALIGNED_SIZE(pModule->pVisitCard->iSizeOfConfig) + pModule->pVisitCard->iSizeOfData);  // we allocate everything at once, since config and data will anyway live as long as the instance itself.
 	gldi_object_init (GLDI_OBJECT(pInstance), &myModuleInstanceObjectMgr, &attr);
 	return pInstance;
 }
@@ -70,7 +78,7 @@ static void _read_module_config (GKeyFile *pKeyFile, GldiModuleInstance *pInstan
 		if (pInterface->reset_config != NULL)
 			pInterface->reset_config (pInstance);
 		if (pVisitCard->iSizeOfConfig != 0)
-			memset (((gpointer)pInstance)+sizeof(GldiModuleInstance), 0, pVisitCard->iSizeOfConfig);
+			memset (((gpointer)pInstance)+CEIL_ALIGNED_SIZE(sizeof(GldiModuleInstance)), 0, pVisitCard->iSizeOfConfig);
 		
 		bFlushConfFileNeeded = pInterface->read_conf_file (pInstance, pKeyFile);
 	}
@@ -380,9 +388,9 @@ static void init_object (GldiObject *obj, gpointer attr)
 	pInstance->pModule = mattr->pModule;
 	pInstance->cConfFilePath = mattr->cConfFilePath;
 	if (pInstance->pModule->pVisitCard->iSizeOfConfig > 0)
-		pInstance->pConfig = ( ((gpointer)pInstance) + sizeof(GldiModuleInstance) );
+		pInstance->pConfig = ( ((gpointer)pInstance) + CEIL_ALIGNED_SIZE(sizeof(GldiModuleInstance)) );
 	if (pInstance->pModule->pVisitCard->iSizeOfData > 0)
-		pInstance->pData = ( ((gpointer)pInstance) + sizeof(GldiModuleInstance) + pInstance->pModule->pVisitCard->iSizeOfConfig);
+		pInstance->pData = ( ((gpointer)pInstance) + CEIL_ALIGNED_SIZE(sizeof(GldiModuleInstance)) + CEIL_ALIGNED_SIZE(pInstance->pModule->pVisitCard->iSizeOfConfig));
 	
 	//\____________________ open the conf file.
 	CairoDockMinimalAppletConfig *pMinimalConfig = g_new0 (CairoDockMinimalAppletConfig, 1);
