@@ -23,15 +23,23 @@
 
 #define myDrawContext myApplet->pDrawContext
 
-#define CD_APPLET_DEFINE_BEGIN(cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, cDescription, cAuthor) \
+#define CD_APPLET_SINGLE_INSTANCE_STATIC_VARS \
 GldiModuleInstance *myApplet = NULL; \
 Icon *myIcon; \
 GldiContainer *myContainer; \
 CairoDock *myDock; \
 CairoDesklet *myDesklet; \
 AppletConfig *myConfigPtr = NULL; \
-AppletData *myDataPtr = NULL; \
+AppletData *myDataPtr = NULL;
+
+#define CD_APPLET_DEFINE_BEGIN(cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, cDescription, cAuthor) \
+CD_APPLET_SINGLE_INSTANCE_STATIC_VARS \
 CD_APPLET_DEFINE_ALL_BEGIN (cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, cDescription, cAuthor) \
+pVisitCard->bMultiInstance = FALSE;
+
+#define CD_APPLET_DEFINE2_BEGIN(cName, iFlags, _iAppletCategory, _cDescription, _cAuthor) \
+CD_APPLET_SINGLE_INSTANCE_STATIC_VARS \
+CD_APPLET_DEFINE2_ALL_BEGIN (cName, iFlags, _iAppletCategory, _cDescription, _cAuthor) \
 pVisitCard->bMultiInstance = FALSE;
 
 #define CD_APPLET_INIT_BEGIN \
