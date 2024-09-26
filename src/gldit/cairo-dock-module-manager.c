@@ -207,14 +207,30 @@ GldiModule *gldi_module_new_from_so_file (const gchar *cSoFilePath)
 		
 		if (pVisitCard->iMajorVersionNeeded == 4)
 		{
-			// new version matching, based on ABI versions instead of release versions
+			// new version matching, based on ABI versions (stored in iMinorVersionNeeded) instead of release versions
 			if (pVisitCard->iMinorVersionNeeded != GLDI_ABI_VERSION)
 			{
-				cd_warning ("this module ('%s') was compiled for Cairo-Dock ABI version %d, but currently running Cairo-Dock with ABI version %d\n  It will be ignored", pVisitCard->iMinorVersionNeeded, GLDI_ABI_VERSION);
+				cd_warning ("this module ('%s') was compiled for Cairo-Dock ABI version %d, but currently running Cairo-Dock with ABI version %d\n  It will be ignored", cSoFilePath, pVisitCard->iMinorVersionNeeded, GLDI_ABI_VERSION);
+				goto discard;
+			}
+			// test compatibility with the windowing system backend in use (X11 or Wayland)
+			// note: iMicroVersionNeeded stores additional module flags in this case
+			if (gldi_container_is_wayland_backend ())
+			{
+				if (! (pVisitCard->iMicroVersionNeeded & CAIRO_DOCK_MODULE_SUPPORTS_WAYLAND))
+				{
+					cd_message ("Not loading module ('%s') as it does not support Wayland\n", cSoFilePath);
+					goto discard;
+				}
+			}
+			else if (! (pVisitCard->iMicroVersionNeeded & CAIRO_DOCK_MODULE_SUPPORTS_X11))
+			{
+				cd_message ("Not loading module ('%s') as it does not support X11\n", cSoFilePath);
 				goto discard;
 			}
 			if (pVisitCard->postLoad)
-				pVisitCard->postLoad (pVisitCard);
+				if (!pVisitCard->postLoad (pVisitCard, pInterface, NULL))
+					goto discard; // this module does not want to be loaded (can happen to xxx-integration or icon-effect for instance)
 		}
 		else
 		{

@@ -96,6 +96,13 @@ typedef enum {
 	CAIRO_DOCK_MODULE_CAN_OTHERS 	= 1<<2
 	} GldiModuleContainerType;
 
+typedef enum {
+	CAIRO_DOCK_MODULE_SUPPORTS_X11 = 1<<0,
+	CAIRO_DOCK_MODULE_SUPPORTS_WAYLAND = 1<<1,
+} GldiModuleFlags;
+
+#define CAIRO_DOCK_MODULE_DEFAULT_FLAGS (CAIRO_DOCK_MODULE_SUPPORTS_X11 | CAIRO_DOCK_MODULE_SUPPORTS_WAYLAND)
+
 /// Definition of the visit card of a module. Contains everything that is statically defined for a module.
 struct _GldiVisitCard {
 	// nom du module qui servira a l'identifier.
@@ -104,7 +111,8 @@ struct _GldiVisitCard {
 	gint iMajorVersionNeeded;
 	// minimum minor version needed for this module (if major version <= 3), or exact ABI version needed if major version == 4
 	gint iMinorVersionNeeded;
-	// numero de version micro de cairo-dock necessaire au bon fonctionnement du module (not used if major version == 4)
+	// numero de version micro de cairo-dock necessaire au bon fonctionnement du module (if major version <= 3)
+	//   or flags (if major version == 4)
 	gint iMicroVersionNeeded;
 	// chemin d'une image de previsualisation.
 	const gchar *cPreviewFilePath;
@@ -145,8 +153,10 @@ struct _GldiVisitCard {
 	// if TRUE and the applet inhibites a class, then appli icons will be placed after the applet icon.
 	gboolean bActAsLauncher;
 	// function called after the module has been successfully loaded; use this to register functionality that should always be active
+	// return FALSE to unload the module (in this case, care should be taken to not register any functions / callbacks / signals, to not crash later)
+	// members of pVisitCard and pInterface can be filled out / updated here if it was not done in pre_init already
 	// only available if iMajorVersionNeeded == 4
-	void (* postLoad) (GldiVisitCard *pVisitCard);
+	gboolean (* postLoad) (GldiVisitCard *pVisitCard, GldiModuleInterface *pInterface, gpointer reserved);
 	gpointer reserved;
 };
 
