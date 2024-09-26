@@ -217,7 +217,8 @@ GldiModule *gldi_module_new_from_so_file (const gchar *cSoFilePath)
 			// note: iMicroVersionNeeded stores additional module flags in this case
 			if (gldi_container_is_wayland_backend ())
 			{
-				if (! (pVisitCard->iMicroVersionNeeded & CAIRO_DOCK_MODULE_SUPPORTS_WAYLAND))
+				if (! (pVisitCard->iMicroVersionNeeded & CAIRO_DOCK_MODULE_SUPPORTS_WAYLAND) &&
+					!g_bNoWaylandExclude)
 				{
 					cd_message ("Not loading module ('%s') as it does not support Wayland\n", cSoFilePath);
 					goto discard;
@@ -263,22 +264,6 @@ discard:
 	return NULL;
 }
 
-static const char * const s_cWaylandExclude[] = {
-	"libcd-systray.so",
-	"libcd-Screenshot.so",
-	"libcd-Composite-Manager.so",
-	"libcd-Xgamma.so",
-	"libcd-keyboard-indicator.so",
-	NULL
-};
-
-static gboolean _exclude_module (const gchar *mod)
-{
-	for (const char * const *tmp = s_cWaylandExclude; *tmp; ++tmp)
-		if (g_strcmp0(*tmp, mod) == 0) return TRUE;
-	return FALSE;
-}
-
 void gldi_modules_new_from_directory (const gchar *cModuleDirPath, GError **erreur)
 {
 	if (cModuleDirPath == NULL)
@@ -293,8 +278,6 @@ void gldi_modules_new_from_directory (const gchar *cModuleDirPath, GError **erre
 		return ;
 	}
 
-	gboolean bWayland = gldi_container_is_wayland_backend ();
-
 	const gchar *cFileName;
 	GString *sFilePath = g_string_new ("");
 	do
@@ -302,8 +285,6 @@ void gldi_modules_new_from_directory (const gchar *cModuleDirPath, GError **erre
 		cFileName = g_dir_read_name (dir);
 		if (cFileName == NULL)
 			break ;
-		
-		if (bWayland && !g_bNoWaylandExclude && _exclude_module (cFileName)) continue;
 		
 		if (g_str_has_suffix (cFileName, ".so"))
 		{
