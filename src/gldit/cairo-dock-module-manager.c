@@ -54,6 +54,7 @@ extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
 extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 extern gboolean g_bEasterEggs;
+extern gboolean g_bUseOpenGL;
 
 // private
 static GHashTable *s_hModuleTable = NULL;
@@ -227,6 +228,12 @@ GldiModule *gldi_module_new_from_so_file (const gchar *cSoFilePath)
 			else if (! (pVisitCard->iMicroVersionNeeded & CAIRO_DOCK_MODULE_SUPPORTS_X11))
 			{
 				cd_message ("Not loading module ('%s') as it does not support X11\n", cSoFilePath);
+				goto discard;
+			}
+			// test if module requires OpenGL
+			if ((pVisitCard->iMicroVersionNeeded & CAIRO_DOCK_MODULE_REQUIRES_OPENGL) && !g_bUseOpenGL)
+			{
+				cd_message ("Not loading module ('%s') as it requires OpenGL\n", cSoFilePath);
 				goto discard;
 			}
 			if (pVisitCard->postLoad)
