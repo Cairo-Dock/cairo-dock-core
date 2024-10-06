@@ -38,6 +38,7 @@ typedef struct _AppletData AppletData;
 
 //\_________________________________ FUNCTIONS NAMES
 #define CD_APPLET_DEFINE_FUNC pre_init
+#define CD_APPLET_POST_LOAD_FUNC post_load
 #define CD_APPLET_INIT_FUNC init
 #define CD_APPLET_STOP_FUNC stop
 #define CD_APPLET_RELOAD_FUNC reload
@@ -57,6 +58,8 @@ typedef struct _AppletData AppletData;
 //\_________________________________ PROTO
 #define CD_APPLET_DEFINE_PROTO \
 gboolean CD_APPLET_DEFINE_FUNC (GldiVisitCard *pVisitCard, GldiModuleInterface *pInterface)
+#define CD_APPLET_POST_LOAD_PROTO \
+gboolean CD_APPLET_POST_LOAD_FUNC (GldiVisitCard *pVisitCard, GldiModuleInterface *pInterface, gpointer)
 #define CD_APPLET_INIT_PROTO(pApplet) \
 void CD_APPLET_INIT_FUNC (GldiModuleInstance *pApplet, G_GNUC_UNUSED GKeyFile *pKeyFile)
 #define CD_APPLET_STOP_PROTO \
@@ -178,6 +181,27 @@ CD_APPLET_DEFINE_PROTO \
 CD_APPLET_DEFINE_BEGIN (cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, cDescription, cAuthor) \
 CD_APPLET_DEFINE_COMMON_APPLET_INTERFACE \
 CD_APPLET_DEFINE_END
+
+
+/** New type of applet definition. Uses the pre_init function only for filling out the visit card and
+ *  the post_load function for all other init. */
+#define CD_APPLET_DEFINE2_ALL_BEGIN(cName, iFlags, _iAppletCategory, _cDescription, _cAuthor) \
+static CD_APPLET_POST_LOAD_PROTO; \
+CD_APPLET_DEFINE_ALL_BEGIN (cName, 4, GLDI_ABI_VERSION, iFlags, _iAppletCategory, _cDescription, _cAuthor) \
+	pVisitCard->postLoad = CD_APPLET_POST_LOAD_FUNC; \
+CD_APPLET_DEFINE_END \
+CD_APPLET_POST_LOAD_PROTO \
+{
+
+#define CD_APPLET_DEFINE2_END \
+	return TRUE; \
+}
+
+#define CD_APPLET_DEFINITION2(cName, iFlags, iAppletCategory, cDescription, cAuthor) \
+CD_APPLET_DEFINE2_BEGIN (cName, iFlags, iAppletCategory, cDescription, cAuthor) \
+CD_APPLET_DEFINE_COMMON_APPLET_INTERFACE \
+CD_APPLET_DEFINE2_END
+
 
 
 #define CD_APPLET_EXTEND_MANAGER(cManagerName) gldi_manager_extend (pVisitCard, cManagerName)

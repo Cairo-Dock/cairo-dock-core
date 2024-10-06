@@ -44,13 +44,17 @@ GldiObjectManager myModuleObjectMgr;
 
 GldiModuleInstance *g_pCurrentModule = NULL;  // only used to trace a possible crash in one of the modules.
 
-gboolean g_bNoWaylandExclude = FALSE;
+gboolean g_bNoWaylandExclude = FALSE; // do not exclude modules on Wayland that are known to crash
+gboolean g_bDisableAllModules = FALSE; // fail loading any module (for debugging only)
+gboolean g_bNoCheckModuleVersion = FALSE; // do not check module version compatibility (similar to bEasterEggs, but only applies here)
+gchar **g_cExcludedModules = NULL; // specific modules to exclude (try loading them but fail, for debugging)
 
 // dependancies
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
 extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
 extern gboolean g_bEasterEggs;
+extern gboolean g_bUseOpenGL;
 
 // private
 static GHashTable *s_hModuleTable = NULL;
@@ -154,7 +158,7 @@ GldiModule *gldi_module_new_from_so_file (const gchar *cSoFilePath)
 	
 	// open the .so file
 	///GModule *module = g_module_open (pGldiModule->cSoFilePath, G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
-	gpointer handle = dlopen (cSoFilePath, RTLD_LAZY | RTLD_LOCAL);
+	gpointer handle = dlopen (cSoFilePath, RTLD_NOW | RTLD_LOCAL);
 	if (! handle)
 	{
 		cd_warning ("while opening module '%s' : (%s)", cSoFilePath, dlerror());
@@ -182,20 +186,75 @@ GldiModule *gldi_module_new_from_so_file (const gchar *cSoFilePath)
 		goto discard;
 	}
 	
-	// check module compatibility
-	if (! g_bEasterEggs &&
-		(pVisitCard->iMajorVersionNeeded > g_iMajorVersion
-		|| (pVisitCard->iMajorVersionNeeded == g_iMajorVersion && pVisitCard->iMinorVersionNeeded > g_iMinorVersion)
-		|| (pVisitCard->iMajorVersionNeeded == g_iMajorVersion && pVisitCard->iMinorVersionNeeded == g_iMinorVersion && pVisitCard->iMicroVersionNeeded > g_iMicroVersion)))
+	if (!g_bNoCheckModuleVersion && !g_bEasterEggs)
 	{
-		cd_warning ("this module ('%s') needs at least Cairo-Dock v%d.%d.%d, but Cairo-Dock is in v%d.%d.%d (%s)\n  It will be ignored", cSoFilePath, pVisitCard->iMajorVersionNeeded, pVisitCard->iMinorVersionNeeded, pVisitCard->iMicroVersionNeeded, g_iMajorVersion, g_iMinorVersion, g_iMicroVersion, GLDI_VERSION);
-		goto discard;
-	}
-	if (! g_bEasterEggs
-	&& pVisitCard->cDockVersionOnCompilation != NULL && strcmp (pVisitCard->cDockVersionOnCompilation, GLDI_VERSION) != 0)  // separation des versions en easter egg.
-	{
-		cd_warning ("this module ('%s') was compiled with Cairo-Dock v%s, but Cairo-Dock is in v%s\n  It will be ignored", cSoFilePath, pVisitCard->cDockVersionOnCompilation, GLDI_VERSION);
-		goto discard;
+		// check module compatibility
+		
+		if (g_bDisableAllModules)
+			goto discard;
+		if (g_cExcludedModules)
+		{
+			gchar **tmp;
+			for (tmp = g_cExcludedModules; *tmp; ++tmp)
+			{
+				const gchar *tmp2 = strrchr (cSoFilePath, '/');
+				if (tmp2) tmp2++;
+				else tmp2 = cSoFilePath;
+				if (!strcmp (*tmp, tmp2)) goto discard;
+				size_t x = strlen (tmp2); // compare without the .so extension
+				if (x > 3 && !strncmp (*tmp, tmp2, x - 3)) goto discard;
+			}
+		}
+		
+		if (pVisitCard->iMajorVersionNeeded == 4)
+		{
+			// new version matching, based on ABI versions (stored in iMinorVersionNeeded) instead of release versions
+			if (pVisitCard->iMinorVersionNeeded != GLDI_ABI_VERSION)
+			{
+				cd_warning ("this module ('%s') was compiled for Cairo-Dock ABI version %d, but currently running Cairo-Dock with ABI version %d\n  It will be ignored", cSoFilePath, pVisitCard->iMinorVersionNeeded, GLDI_ABI_VERSION);
+				goto discard;
+			}
+			// test compatibility with the windowing system backend in use (X11 or Wayland)
+			// note: iMicroVersionNeeded stores additional module flags in this case
+			if (gldi_container_is_wayland_backend ())
+			{
+				if (! (pVisitCard->iMicroVersionNeeded & CAIRO_DOCK_MODULE_SUPPORTS_WAYLAND) &&
+					!g_bNoWaylandExclude)
+				{
+					cd_message ("Not loading module ('%s') as it does not support Wayland\n", cSoFilePath);
+					goto discard;
+				}
+			}
+			else if (! (pVisitCard->iMicroVersionNeeded & CAIRO_DOCK_MODULE_SUPPORTS_X11))
+			{
+				cd_message ("Not loading module ('%s') as it does not support X11\n", cSoFilePath);
+				goto discard;
+			}
+			// test if module requires OpenGL
+			if ((pVisitCard->iMicroVersionNeeded & CAIRO_DOCK_MODULE_REQUIRES_OPENGL) && !g_bUseOpenGL)
+			{
+				cd_message ("Not loading module ('%s') as it requires OpenGL\n", cSoFilePath);
+				goto discard;
+			}
+			if (pVisitCard->postLoad)
+				if (!pVisitCard->postLoad (pVisitCard, pInterface, NULL))
+					goto discard; // this module does not want to be loaded (can happen to xxx-integration or icon-effect for instance)
+		}
+		else
+		{
+			if (pVisitCard->iMajorVersionNeeded > g_iMajorVersion
+				|| (pVisitCard->iMajorVersionNeeded == g_iMajorVersion && pVisitCard->iMinorVersionNeeded > g_iMinorVersion)
+				|| (pVisitCard->iMajorVersionNeeded == g_iMajorVersion && pVisitCard->iMinorVersionNeeded == g_iMinorVersion && pVisitCard->iMicroVersionNeeded > g_iMicroVersion))
+			{
+				cd_warning ("this module ('%s') needs at least Cairo-Dock v%d.%d.%d, but Cairo-Dock is in v%d.%d.%d (%s)\n  It will be ignored", cSoFilePath, pVisitCard->iMajorVersionNeeded, pVisitCard->iMinorVersionNeeded, pVisitCard->iMicroVersionNeeded, g_iMajorVersion, g_iMinorVersion, g_iMicroVersion, GLDI_VERSION);
+				goto discard;
+			}
+			if (pVisitCard->cDockVersionOnCompilation != NULL && strcmp (pVisitCard->cDockVersionOnCompilation, GLDI_VERSION) != 0)  // separation des versions en easter egg.
+			{
+				cd_warning ("this module ('%s') was compiled with Cairo-Dock v%s, but Cairo-Dock is in v%s\n  It will be ignored", cSoFilePath, pVisitCard->cDockVersionOnCompilation, GLDI_VERSION);
+				goto discard;
+			}
+		}
 	}
 	
 	// create a new module with these info
@@ -212,22 +271,6 @@ discard:
 	return NULL;
 }
 
-static const char * const s_cWaylandExclude[] = {
-	"libcd-systray.so",
-	"libcd-Screenshot.so",
-	"libcd-Composite-Manager.so",
-	"libcd-Xgamma.so",
-	"libcd-keyboard-indicator.so",
-	NULL
-};
-
-static gboolean _exclude_module (const gchar *mod)
-{
-	for (const char * const *tmp = s_cWaylandExclude; *tmp; ++tmp)
-		if (g_strcmp0(*tmp, mod) == 0) return TRUE;
-	return FALSE;
-}
-
 void gldi_modules_new_from_directory (const gchar *cModuleDirPath, GError **erreur)
 {
 	if (cModuleDirPath == NULL)
@@ -242,8 +285,6 @@ void gldi_modules_new_from_directory (const gchar *cModuleDirPath, GError **erre
 		return ;
 	}
 
-	gboolean bWayland = gldi_container_is_wayland_backend ();
-
 	const gchar *cFileName;
 	GString *sFilePath = g_string_new ("");
 	do
@@ -251,8 +292,6 @@ void gldi_modules_new_from_directory (const gchar *cModuleDirPath, GError **erre
 		cFileName = g_dir_read_name (dir);
 		if (cFileName == NULL)
 			break ;
-		
-		if (bWayland && !g_bNoWaylandExclude && _exclude_module (cFileName)) continue;
 		
 		if (g_str_has_suffix (cFileName, ".so"))
 		{

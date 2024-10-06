@@ -26,6 +26,10 @@
 	CD_APPLET_DEFINE_ALL_BEGIN (cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, cDescription, cAuthor) \
 	pVisitCard->bMultiInstance = TRUE;
 
+#define CD_APPLET_DEFINE2_BEGIN(cName, iFlags, _iAppletCategory, _cDescription, _cAuthor) \
+	CD_APPLET_DEFINE2_ALL_BEGIN (cName, iFlags, _iAppletCategory, _cDescription, _cAuthor) \
+	pVisitCard->bMultiInstance = TRUE;
+
 
 #define CD_APPLET_INIT_BEGIN CD_APPLET_INIT_ALL_BEGIN (myApplet)
 

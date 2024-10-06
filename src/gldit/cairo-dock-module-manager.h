@@ -36,6 +36,16 @@ G_BEGIN_DECLS
 * Each instance holds a set of data: the icon and its container, the config structure and its conf file, the data structure and a slot to plug datas into containers and icons. All these data are optionnal; a module that has an icon is also called an applet.
 */
 
+/**
+ * Define the current ABI version. Used by the new plugin loader interface
+ * to check compatibility. This version should be incremented if the layout
+ * or size of public structures changes, function parameters change, or
+ * a macro is converted to a function or vice versa.
+ * It is not required the change this when adding a function to the
+ * public API (loading the module will fail if it refers to an
+ * unresolved symbol anyway). */
+#define GLDI_ABI_VERSION 20240921
+
 // manager
 typedef struct _GldiModulesParam GldiModulesParam;
 typedef struct _GldiModuleAttr GldiModuleAttr;
@@ -86,15 +96,24 @@ typedef enum {
 	CAIRO_DOCK_MODULE_CAN_OTHERS 	= 1<<2
 	} GldiModuleContainerType;
 
+typedef enum {
+	CAIRO_DOCK_MODULE_SUPPORTS_X11 = 1<<0,
+	CAIRO_DOCK_MODULE_SUPPORTS_WAYLAND = 1<<1,
+	CAIRO_DOCK_MODULE_REQUIRES_OPENGL = 1<<2
+} GldiModuleFlags;
+
+#define CAIRO_DOCK_MODULE_DEFAULT_FLAGS (CAIRO_DOCK_MODULE_SUPPORTS_X11 | CAIRO_DOCK_MODULE_SUPPORTS_WAYLAND)
+
 /// Definition of the visit card of a module. Contains everything that is statically defined for a module.
 struct _GldiVisitCard {
 	// nom du module qui servira a l'identifier.
 	const gchar *cModuleName;
-	// numero de version majeure de cairo-dock necessaire au bon fonctionnement du module.
+	// minimum major version needed for this module (if <= 3), or indicator of new API / ABI (if == 4)
 	gint iMajorVersionNeeded;
-	// numero de version mineure de cairo-dock necessaire au bon fonctionnement du module.
+	// minimum minor version needed for this module (if major version <= 3), or exact ABI version needed if major version == 4
 	gint iMinorVersionNeeded;
-	// numero de version micro de cairo-dock necessaire au bon fonctionnement du module.
+	// numero de version micro de cairo-dock necessaire au bon fonctionnement du module (if major version <= 3)
+	//   or flags (if major version == 4)
 	gint iMicroVersionNeeded;
 	// chemin d'une image de previsualisation.
 	const gchar *cPreviewFilePath;
@@ -134,7 +153,12 @@ struct _GldiVisitCard {
 	gboolean bAllowEmptyTitle;
 	// if TRUE and the applet inhibites a class, then appli icons will be placed after the applet icon.
 	gboolean bActAsLauncher;
-	gpointer reserved[2];
+	// function called after the module has been successfully loaded; use this to register functionality that should always be active
+	// return FALSE to unload the module (in this case, care should be taken to not register any functions / callbacks / signals, to not crash later)
+	// members of pVisitCard and pInterface can be filled out / updated here if it was not done in pre_init already
+	// only available if iMajorVersionNeeded == 4
+	gboolean (* postLoad) (GldiVisitCard *pVisitCard, GldiModuleInterface *pInterface, gpointer reserved);
+	gpointer reserved;
 };
 
 /// Definition of the interface of a module.
