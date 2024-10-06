@@ -1615,15 +1615,21 @@ static gchar *_search_desktop_file (const gchar *cDesktopFile)  // file, path or
 {
 	if (cDesktopFile == NULL)
 		return NULL;
+	gchar *cDesktopFileName = NULL;
 	if (*cDesktopFile == '/') 
 	{
 		if (g_file_test (cDesktopFile, G_FILE_TEST_EXISTS))  // it's a path and it exists.
 			return g_strdup (cDesktopFile);
-		return NULL; // if we got an absolute path, we require it to be correct
+		// if not found, try searching based on the basename
+		char *tmp = g_path_get_basename (cDesktopFile);
+		cDesktopFileName = g_ascii_strdown (tmp, -1);
+		g_free (tmp);
 	}
-
-	// note: cDesktopFile will already be lowercase if it is an app-id / class
-	gchar *cDesktopFileName = g_ascii_strdown (cDesktopFile, -1);
+	else
+	{
+		// note: cDesktopFile will already be lowercase if it is an app-id / class
+		cDesktopFileName = g_ascii_strdown (cDesktopFile, -1);
+	}
 	// remove the .desktop suffix if it is present
 	gchar *tmp = g_strrstr (cDesktopFileName, ".desktop");
 	if (tmp) *tmp = 0;
