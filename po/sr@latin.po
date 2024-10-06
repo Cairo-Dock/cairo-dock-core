@@ -3104,7 +3104,7 @@ msgstr ""
 "u Hz. Ovo je u vezi podašavanja ponašanja u odnosu na snagu procesora."
 
 #: ../data/messages:413
-msgid "Refresh rate when mouving cursor into the dock:"
+msgid "Refresh rate when moving cursor into the dock:"
 msgstr ""
 
 #: ../data/messages:417
