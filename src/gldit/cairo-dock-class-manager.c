@@ -203,6 +203,8 @@ static void cairo_dock_destroy_class_subdock (const gchar *cClass)
 	pClassAppli->cDockName = NULL;
 }
 
+static gchar *_search_desktop_file (const gchar *cDesktopFile, gboolean bReturnKey);
+
 gboolean cairo_dock_add_appli_icon_to_class (Icon *pIcon)
 {
 	g_return_val_if_fail (CAIRO_DOCK_ICON_TYPE_IS_APPLI (pIcon) && pIcon->pAppli, FALSE);
@@ -213,8 +215,59 @@ gboolean cairo_dock_add_appli_icon_to_class (Icon *pIcon)
 		cd_message (" %s doesn't have any class, not good!", pIcon->cName);
 		return FALSE;
 	}
+
 	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (pIcon->cClass);
-	g_return_val_if_fail (pClassAppli != NULL, FALSE);
+	if (pClassAppli == NULL && pIcon->cWmClass)
+		pClassAppli = _cairo_dock_lookup_class_appli (pIcon->cWmClass);
+	if (pClassAppli == NULL)
+	{
+		/**
+		 * We really want to find a valid class, so we check what .desktop file
+		 * this class could map to and if that has been already registered.
+		 * This can happen if we have a launcher for this app, the .desktop file
+		 * is not an exact match (due to prefices, Snap name mangling, etc.),
+		 * but can be discovered using our heuristics, but, at the same time,
+		 * it does not contain other useful info for matching the app (neither
+		 * the Exec= nor the StartupWMClass= fields are usable).
+		 * 
+		 * Concrete example: Firefox Snap version 131 on Ubuntu 24.04, with
+		 *   app-id / class: firefox,
+		 *   file name: firefox_firefox.desktop (matched in _search_desktop_file()),
+		 *   and StartupWMClass=firefox-release
+		 * Note: the Exec= field could be matched in this case (contains firefox),
+		 * but our logic prefers using only StartupWMClass. This could be changed,
+		 * but there could also be other cases where Exec= is also unusable / too
+		 * hard to parse.
+		 */
+		gchar *cKey = _search_desktop_file (pIcon->cClass, TRUE);
+		if (cKey)
+		{
+			pClassAppli = _cairo_dock_lookup_class_appli (cKey);
+			g_free (cKey);
+		}
+		if (pClassAppli)
+		{
+			// need to store as an alternative name for this app
+			g_hash_table_insert (s_hAltClass, g_strdup(pIcon->cClass), pClassAppli);
+		}
+	}
+	if (pClassAppli == NULL && pIcon->cWmClass)
+	{
+		gchar *cKey = _search_desktop_file (pIcon->cWmClass, TRUE);
+		if (cKey)
+		{
+			pClassAppli = _cairo_dock_lookup_class_appli (cKey);
+			g_free (cKey);
+		}
+		if (pClassAppli)
+		{
+			// need to store as an alternative name for this app
+			g_hash_table_insert (s_hAltClass, g_strdup(pIcon->cClass), pClassAppli);
+		}
+	}
+
+	// finally, create a new class if not found above
+	if (pClassAppli == NULL) pClassAppli = cairo_dock_get_class (pIcon->cClass);
 
 	///if (pClassAppli->iAge == 0)  // age is > 0, so it means we have never set it yet.
 	if (pClassAppli->pAppliOfClass == NULL)  // the first appli of a class defines the age of the class.
@@ -1609,7 +1662,19 @@ const CairoDockImageBuffer *cairo_dock_get_class_image_buffer (const gchar *cCla
 }
 
 
-static gchar *_search_desktop_file (const gchar *cDesktopFile)  // file, path or even class
+/**
+ * Attempt to find a desktop file for an app given its app-id, class, or desktop file path.
+ * 
+ * If cDesktopFile is a valid path, just return (a copy) of it.
+ * Alternatively, search our database of system-wide .desktop files,
+ * including workarounds for several known inconsistencies (by adding
+ * prefices). All comparisons are case-insensitive.
+ * 
+ * If bReturnKey == TRUE, returns the key which was found in our DB;
+ * otherwise, return the associated value. In both cases, the return
+ * value is a newly allocated string and must be freed by the caller.
+ */
+static gchar *_search_desktop_file (const gchar *cDesktopFile, gboolean bReturnKey)  // file, path or even class
 {
 	if (cDesktopFile == NULL)
 		return NULL;
@@ -1634,45 +1699,55 @@ static gchar *_search_desktop_file (const gchar *cDesktopFile)  // file, path or
 	
 	// normal case: we have the correct name
 	const gchar *res = gldi_desktop_file_db_lookup (cDesktopFileName);
+	if (res)
+	{
+		if (bReturnKey) return cDesktopFileName;
+		else
+		{
+			g_free (cDesktopFileName);
+			return g_strdup (res);
+		}
+	}
+	
+	// handle potential partial matches
+	GString *sID = g_string_new (NULL);
+	
+	/* #1: add common prefices
+	 * e.g. org.gnome.Evince.desktop, but app-id is only evince on Ubuntu 22.04 and 24.04
+	 * More generally, this can happen with GTK+3 apps that have only "partially" migrated
+	 * to using the "new" (reverse DNS style) .desktop format.
+	 * See e.g.
+	 * https://gitlab.gnome.org/GNOME/gtk/-/issues/2822
+	 * https://gitlab.gnome.org/GNOME/gtk/-/issues/2034
+	 * https://honk.sigxcpu.org/con/GTK__and_the_application_id.html
+	 * https://docs.gtk.org/gtk4/migrating-3to4.html#set-a-proper-application-id
+	 */
+	const char *prefices[] = {"org.gnome.", "org.kde.", "org.freedesktop.", NULL};
+	int j;
+	
+	for (j = 0; prefices[j]; j++)
+	{
+		g_string_printf (sID, "%s%s", prefices[j], cDesktopFileName);
+		res = gldi_desktop_file_db_lookup (sID->str);
+		if (res) break;
+	}
 	
 	if (!res)
 	{
-		// handle potential partial matches
-		GString *sID = g_string_new (NULL);
-		
-		/* #1: add common prefices
-		 * e.g. org.gnome.Evince.desktop, but app-id is only evince on Ubuntu 22.04 and 24.04
-		 * More generally, this can happen with GTK+3 apps that have only "partially" migrated
-		 * to using the "new" (reverse DNS style) .desktop format.
-		 * See e.g.
-		 * https://gitlab.gnome.org/GNOME/gtk/-/issues/2822
-		 * https://gitlab.gnome.org/GNOME/gtk/-/issues/2034
-		 * https://honk.sigxcpu.org/con/GTK__and_the_application_id.html
-		 * https://docs.gtk.org/gtk4/migrating-3to4.html#set-a-proper-application-id
-		 */
-		const char *prefices[] = {"org.gnome.", "org.kde.", "org.freedesktop.", NULL};
-		int j;
-		
-		for (j = 0; prefices[j]; j++)
-		{
-			g_string_printf (sID, "%s%s", prefices[j], cDesktopFileName);
-			res = gldi_desktop_file_db_lookup (sID->str);
-			if (res) break;
-		}
-		
-		if (!res)
-		{
-			// #2: snap "namespaced" names -- these could be anything, we just handle the "common" case where
-			// simply the app-id is duplicated (e.g. "firefox_firefox.desktop" as on Ubuntu 22.04 and 24.04)
-			g_string_printf (sID, "%s_%s", cDesktopFileName, cDesktopFileName);
-			res = gldi_desktop_file_db_lookup (sID->str);
-		}
-		
-		g_string_free(sID, TRUE);
+		// #2: snap "namespaced" names -- these could be anything, we just handle the "common" case where
+		// simply the app-id is duplicated (e.g. "firefox_firefox.desktop" as on Ubuntu 22.04 and 24.04)
+		g_string_printf (sID, "%s_%s", cDesktopFileName, cDesktopFileName);
+		res = gldi_desktop_file_db_lookup (sID->str);
 	}
 	
 	g_free (cDesktopFileName);
-	return res ? g_strdup (res) : NULL;
+	
+	if (res && bReturnKey) return g_string_free(sID, FALSE);
+	else
+	{
+		g_string_free (sID, TRUE);
+		return res ? g_strdup (res) : NULL;
+	}
 }
 
 gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMClass)
@@ -1941,13 +2016,13 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	}
 
 	//\__________________ search the desktop file's path.
-	gchar *cDesktopFilePath = _search_desktop_file (cDesktopFile?cDesktopFile:cClass);
+	gchar *cDesktopFilePath = _search_desktop_file (cDesktopFile?cDesktopFile:cClass, FALSE);
 	if (cDesktopFilePath == NULL && cWmClass != NULL)
-		cDesktopFilePath = _search_desktop_file (cWmClass);
+		cDesktopFilePath = _search_desktop_file (cWmClass, FALSE);
 	// special handling for Gnome Terminal, required at least on Ubuntu 22.04 and 24.04
 	// (should be fixed in newer versions, see e.g. here: https://gitlab.gnome.org/GNOME/gnome-terminal/-/issues/8033)
 	if (cDesktopFilePath == NULL && cClass && !strcmp (cClass, "gnome-terminal-server"))
-		cDesktopFilePath = _search_desktop_file ("org.gnome.terminal");
+		cDesktopFilePath = _search_desktop_file ("org.gnome.terminal", FALSE);
 	if (cDesktopFilePath == NULL)  // couldn't find the .desktop
 	{
 		if (cClass != NULL)  // make a class anyway to store the few info we have.
