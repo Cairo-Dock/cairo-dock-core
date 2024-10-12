@@ -1366,6 +1366,18 @@ static gboolean _on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint x,
 {
 	cd_debug ("%s (%d;%d, %d)", __func__, x, y, time);
 	
+	//\_________________ Update the mouse position (will be needed later).
+	if (pDock->container.bIsHorizontal)
+	{
+		pDock->container.iMouseX = (int) x;
+		pDock->container.iMouseY = (int) y;
+	}
+	else
+	{
+		pDock->container.iMouseX = (int) y;
+		pDock->container.iMouseY = (int) x;
+	}
+	
 	//\_________________ On simule les evenements souris habituels.
 	if (! pDock->bIsDragging)
 	{
