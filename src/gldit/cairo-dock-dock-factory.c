@@ -396,10 +396,8 @@ static gboolean _on_motion_notify (GtkWidget* pWidget,
 	else  // cas d'un drag and drop.
 	{
 		//g_print ("motion on drag\n");
-		//\_______________ On recupere la position de la souris.
-		gldi_container_update_mouse_position (CAIRO_CONTAINER (pDock));
-		
 		//\_______________ On recalcule toutes les icones et on redessine.
+		// (note: mouse position has already been updated in _on_drag_motion ())
 		pPointedIcon = cairo_dock_calculate_dock_icons (pDock);
 		gtk_widget_queue_draw (pWidget);
 		
@@ -762,19 +760,21 @@ static gboolean _on_enter_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 	// start growing up (do it before calculating icons, so that we don't seem to be in an anormal state, where we're inside a dock that doesn't grow).
 	cairo_dock_start_growing (pDock);
 	
-	// since we've just entered the dock, the pointed icon has changed from none to the current one.
-	if (pEvent != NULL && ! bWasInside)
-	{
-		// update the mouse coordinates
-		if (pDock->container.bIsHorizontal)
+	// if we've just entered the dock, the pointed icon has changed from none to the current one.
+	if (!bWasInside) {
+		if (pEvent != NULL)
 		{
-			pDock->container.iMouseX = (int) pEvent->x;
-			pDock->container.iMouseY = (int) pEvent->y;
-		}
-		else
-		{
-			pDock->container.iMouseX = (int) pEvent->y;
-			pDock->container.iMouseY = (int) pEvent->x;
+			// first, update the mouse coordinates
+			if (pDock->container.bIsHorizontal)
+			{
+				pDock->container.iMouseX = (int) pEvent->x;
+				pDock->container.iMouseY = (int) pEvent->y;
+			}
+			else
+			{
+				pDock->container.iMouseX = (int) pEvent->y;
+				pDock->container.iMouseY = (int) pEvent->x;
+			}
 		}
 		// then compute the icons (especially the pointed one).
 		Icon *icon = cairo_dock_calculate_dock_icons (pDock);  // returns the pointed icon
