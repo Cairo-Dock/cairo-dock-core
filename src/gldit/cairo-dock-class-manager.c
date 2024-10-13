@@ -1679,6 +1679,7 @@ static gchar *_search_desktop_file (const gchar *cDesktopFile, gboolean bReturnK
 	if (cDesktopFile == NULL)
 		return NULL;
 	gchar *cDesktopFileName = NULL;
+	gboolean bPath = FALSE;
 	if (*cDesktopFile == '/') 
 	{
 		if (g_file_test (cDesktopFile, G_FILE_TEST_EXISTS))  // it's a path and it exists.
@@ -1687,6 +1688,7 @@ static gchar *_search_desktop_file (const gchar *cDesktopFile, gboolean bReturnK
 		char *tmp = g_path_get_basename (cDesktopFile);
 		cDesktopFileName = g_ascii_strdown (tmp, -1);
 		g_free (tmp);
+		bPath = TRUE;
 	}
 	else
 	{
@@ -1707,6 +1709,14 @@ static gchar *_search_desktop_file (const gchar *cDesktopFile, gboolean bReturnK
 			g_free (cDesktopFileName);
 			return g_strdup (res);
 		}
+	}
+	else if (bPath)
+	{
+		// if the query was an absolute path, we don't try the heuristics
+		// (we are only interested if the exact same file is found in
+		//  some other location)
+		g_free (cDesktopFileName);
+		return NULL;
 	}
 	
 	// handle potential partial matches
