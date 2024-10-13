@@ -586,7 +586,7 @@ static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, GldiContainer
 				*iX = pContainer->iWindowPositionX +
 					pDock->iMaxDockWidth/2
 					- pDock->fFlatDockWidth/2
-					+ pIcon->fXAtRest + pIcon->fWidth/2;
+					+ (pIcon ? pIcon->fXAtRest + pIcon->fWidth/2 : 0);
 					///(pIcon ? (pIcon->fXAtRest + pIcon->fWidth/2) / pDock->fFlatDockWidth * pDock->iMaxDockWidth : 0);
 			}
 			else

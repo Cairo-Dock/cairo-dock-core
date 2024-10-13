@@ -155,8 +155,8 @@ static CairoDockClassAppli *cairo_dock_get_class (const gchar *cClass)
 
 static gboolean _cairo_dock_add_inhibitor_to_class (const gchar *cClass, Icon *pIcon)
 {
-	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
-	g_return_val_if_fail (pClassAppli!= NULL, FALSE);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
+	g_return_val_if_fail (pClassAppli != NULL, FALSE);
 
 	g_return_val_if_fail (g_list_find (pClassAppli->pIconsOfClass, pIcon) == NULL, TRUE);
 	pClassAppli->pIconsOfClass = g_list_prepend (pClassAppli->pIconsOfClass, pIcon);
@@ -166,16 +166,16 @@ static gboolean _cairo_dock_add_inhibitor_to_class (const gchar *cClass, Icon *p
 
 CairoDock *cairo_dock_get_class_subdock (const gchar *cClass)
 {
-	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
-	g_return_val_if_fail (pClassAppli!= NULL, NULL);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
+	g_return_val_if_fail (pClassAppli != NULL, NULL);
 
 	return gldi_dock_get (pClassAppli->cDockName);
 }
 
 CairoDock* cairo_dock_create_class_subdock (const gchar *cClass, CairoDock *pParentDock)
 {
-	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
-	g_return_val_if_fail (pClassAppli!= NULL, NULL);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
+	g_return_val_if_fail (pClassAppli != NULL, NULL);
 
 	CairoDock *pDock = gldi_dock_get (pClassAppli->cDockName);
 	if (pDock == NULL)  // cDockName not yet defined, or previous class subdock no longer exists
@@ -190,8 +190,8 @@ CairoDock* cairo_dock_create_class_subdock (const gchar *cClass, CairoDock *pPar
 
 static void cairo_dock_destroy_class_subdock (const gchar *cClass)
 {
-	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
-	g_return_if_fail (pClassAppli!= NULL);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
+	g_return_if_fail (pClassAppli != NULL);
 
 	CairoDock *pDock = gldi_dock_get (pClassAppli->cDockName);
 	if (pDock)
@@ -203,6 +203,8 @@ static void cairo_dock_destroy_class_subdock (const gchar *cClass)
 	pClassAppli->cDockName = NULL;
 }
 
+static gchar *_search_desktop_file (const gchar *cDesktopFile, gboolean bReturnKey);
+
 gboolean cairo_dock_add_appli_icon_to_class (Icon *pIcon)
 {
 	g_return_val_if_fail (CAIRO_DOCK_ICON_TYPE_IS_APPLI (pIcon) && pIcon->pAppli, FALSE);
@@ -213,8 +215,59 @@ gboolean cairo_dock_add_appli_icon_to_class (Icon *pIcon)
 		cd_message (" %s doesn't have any class, not good!", pIcon->cName);
 		return FALSE;
 	}
-	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (pIcon->cClass);
-	g_return_val_if_fail (pClassAppli!= NULL, FALSE);
+
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (pIcon->cClass);
+	if (pClassAppli == NULL && pIcon->cWmClass)
+		pClassAppli = _cairo_dock_lookup_class_appli (pIcon->cWmClass);
+	if (pClassAppli == NULL)
+	{
+		/**
+		 * We really want to find a valid class, so we check what .desktop file
+		 * this class could map to and if that has been already registered.
+		 * This can happen if we have a launcher for this app, the .desktop file
+		 * is not an exact match (due to prefices, Snap name mangling, etc.),
+		 * but can be discovered using our heuristics, but, at the same time,
+		 * it does not contain other useful info for matching the app (neither
+		 * the Exec= nor the StartupWMClass= fields are usable).
+		 * 
+		 * Concrete example: Firefox Snap version 131 on Ubuntu 24.04, with
+		 *   app-id / class: firefox,
+		 *   file name: firefox_firefox.desktop (matched in _search_desktop_file()),
+		 *   and StartupWMClass=firefox-release
+		 * Note: the Exec= field could be matched in this case (contains firefox),
+		 * but our logic prefers using only StartupWMClass. This could be changed,
+		 * but there could also be other cases where Exec= is also unusable / too
+		 * hard to parse.
+		 */
+		gchar *cKey = _search_desktop_file (pIcon->cClass, TRUE);
+		if (cKey)
+		{
+			pClassAppli = _cairo_dock_lookup_class_appli (cKey);
+			g_free (cKey);
+		}
+		if (pClassAppli)
+		{
+			// need to store as an alternative name for this app
+			g_hash_table_insert (s_hAltClass, g_strdup(pIcon->cClass), pClassAppli);
+		}
+	}
+	if (pClassAppli == NULL && pIcon->cWmClass)
+	{
+		gchar *cKey = _search_desktop_file (pIcon->cWmClass, TRUE);
+		if (cKey)
+		{
+			pClassAppli = _cairo_dock_lookup_class_appli (cKey);
+			g_free (cKey);
+		}
+		if (pClassAppli)
+		{
+			// need to store as an alternative name for this app
+			g_hash_table_insert (s_hAltClass, g_strdup(pIcon->cClass), pClassAppli);
+		}
+	}
+
+	// finally, create a new class if not found above
+	if (pClassAppli == NULL) pClassAppli = cairo_dock_get_class (pIcon->cClass);
 
 	///if (pClassAppli->iAge == 0)  // age is > 0, so it means we have never set it yet.
 	if (pClassAppli->pAppliOfClass == NULL)  // the first appli of a class defines the age of the class.
@@ -231,8 +284,8 @@ gboolean cairo_dock_remove_appli_from_class (Icon *pIcon)
 	g_return_val_if_fail (pIcon!= NULL, FALSE);
 	cd_debug ("%s (%s, %s)", __func__, pIcon->cClass, pIcon->cName);
 
-	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (pIcon->cClass);
-	g_return_val_if_fail (pClassAppli!= NULL, FALSE);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (pIcon->cClass);
+	g_return_val_if_fail (pClassAppli != NULL, FALSE);
 
 	pClassAppli->pAppliOfClass = g_list_remove (pClassAppli->pAppliOfClass, pIcon);
 
@@ -241,8 +294,8 @@ gboolean cairo_dock_remove_appli_from_class (Icon *pIcon)
 
 gboolean cairo_dock_set_class_use_xicon (const gchar *cClass, gboolean bUseXIcon)
 {
-	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
-	g_return_val_if_fail (pClassAppli!= NULL, FALSE);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
+	g_return_val_if_fail (pClassAppli != NULL, FALSE);
 
 	if (pClassAppli->bUseXIcon == bUseXIcon)  // nothing to do.
 		return FALSE;
@@ -638,7 +691,7 @@ cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, int 
 {
 	cd_debug ("%s (%s)", __func__, cClass);
 	// first we try to get an icon from one of the inhibitor.
-	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
 	if (pClassAppli != NULL)
 	{
 		cd_debug ("bUseXIcon:%d", pClassAppli->bUseXIcon);
@@ -717,7 +770,7 @@ cairo_surface_t *cairo_dock_create_surface_from_class (const gchar *cClass, int 
 /**
 void cairo_dock_update_visibility_on_inhibitors (const gchar *cClass, GldiWindowActor *pAppli, gboolean bIsHidden)
 {
-	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
 	if (pClassAppli != NULL)
 	{
 		GList *pElement;
@@ -741,7 +794,7 @@ void cairo_dock_update_visibility_on_inhibitors (const gchar *cClass, GldiWindow
 
 void cairo_dock_update_activity_on_inhibitors (const gchar *cClass, GldiWindowActor *pAppli)
 {
-	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
 	if (pClassAppli != NULL)
 	{
 		GList *pElement;
@@ -763,7 +816,7 @@ void cairo_dock_update_activity_on_inhibitors (const gchar *cClass, GldiWindowAc
 
 void cairo_dock_update_inactivity_on_inhibitors (const gchar *cClass, GldiWindowActor *pAppli)
 {
-	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
 	if (pClassAppli != NULL)
 	{
 		GList *pElement;
@@ -782,7 +835,7 @@ void cairo_dock_update_inactivity_on_inhibitors (const gchar *cClass, GldiWindow
 
 void cairo_dock_update_name_on_inhibitors (const gchar *cClass, GldiWindowActor *actor, gchar *cNewName)
 {
-	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
 	if (pClassAppli != NULL)
 	{
 		GList *pElement;
@@ -815,7 +868,7 @@ void cairo_dock_update_name_on_inhibitors (const gchar *cClass, GldiWindowActor 
 */
 void gldi_window_foreach_inhibitor (GldiWindowActor *actor, GldiIconRFunc callback, gpointer data)
 {
-	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (actor->cClass);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (actor->cClass);
 	if (pClassAppli != NULL)
 	{
 		Icon *pInhibitorIcon;
@@ -836,9 +889,8 @@ void gldi_window_foreach_inhibitor (GldiWindowActor *actor, GldiIconRFunc callba
 Icon *cairo_dock_get_classmate (Icon *pIcon)  // gets an icon of the same class, that is inside a dock (or will be for an inhibitor), but not inside the class sub-dock
 {
 	cd_debug ("%s (%s)", __func__, pIcon->cClass);
-	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (pIcon->cClass);
-	if (pClassAppli == NULL)
-		return NULL;
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (pIcon->cClass);
+	g_return_val_if_fail (pClassAppli != NULL, NULL);
 
 	Icon *pFriendIcon = NULL;
 	GList *pElement;
@@ -980,8 +1032,8 @@ void cairo_dock_set_overwrite_exceptions (const gchar *cExceptions)
 	int i;
 	for (i = 0; cClassList[i] != NULL; i ++)
 	{
-		pClassAppli = cairo_dock_get_class (cClassList[i]);
-		pClassAppli->bUseXIcon = TRUE;
+		pClassAppli = _cairo_dock_lookup_class_appli (cClassList[i]);
+		if (pClassAppli) pClassAppli->bUseXIcon = TRUE;
 	}
 
 	g_strfreev (cClassList);
@@ -1007,8 +1059,8 @@ void cairo_dock_set_group_exceptions (const gchar *cExceptions)
 	int i;
 	for (i = 0; cClassList[i] != NULL; i ++)
 	{
-		pClassAppli = cairo_dock_get_class (cClassList[i]);
-		pClassAppli->bExpand = TRUE;
+		pClassAppli = _cairo_dock_lookup_class_appli (cClassList[i]);
+		if (pClassAppli) pClassAppli->bExpand = TRUE;
 	}
 
 	g_strfreev (cClassList);
@@ -1029,9 +1081,8 @@ Icon *cairo_dock_get_prev_next_classmate_icon (Icon *pIcon, gboolean bNext)
 
 	//\________________ We are looking in the class of the active window and take the next or previous one.
 	Icon *pNextIcon = NULL;
-	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (pIcon->cClass);
-	if (pClassAppli == NULL)
-		return NULL;
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (pIcon->cClass);
+	g_return_val_if_fail (pClassAppli != NULL, NULL);
 
 	//\________________ We are looking in icons of apps.
 	Icon *pClassmateIcon;
@@ -1091,7 +1142,7 @@ Icon *cairo_dock_get_prev_next_classmate_icon (Icon *pIcon, gboolean bNext)
 
 Icon *cairo_dock_get_inhibitor (Icon *pIcon, gboolean bOnlyInDock)
 {
-	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (pIcon->cClass);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (pIcon->cClass);
 	if (pClassAppli != NULL)
 	{
 		GList *pElement;
@@ -1226,7 +1277,7 @@ static inline int _get_class_age (CairoDockClassAppli *pClassAppli)
 void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 {
 	//g_print ("%s (%s, %d)\n", __func__, pIcon->cClass, pIcon->iAge);
-	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (pIcon->cClass);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (pIcon->cClass);
 	g_return_if_fail (pClassAppli != NULL);
 
 	// Look for an icon of the same class in the dock, to place ourself relatively to it.
@@ -1400,7 +1451,7 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock)
 
 void cairo_dock_set_class_order_amongst_applis (Icon *pIcon, CairoDock *pDock)  // set the order of an appli amongst the other applis of a given dock (class sub-dock or main dock).
 {
-	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (pIcon->cClass);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (pIcon->cClass);
 	g_return_if_fail (pClassAppli != NULL);
 
 	// place the icon amongst the other appli icons of this class, or after the last appli if none.
@@ -1611,64 +1662,102 @@ const CairoDockImageBuffer *cairo_dock_get_class_image_buffer (const gchar *cCla
 }
 
 
-static gchar *_search_desktop_file (const gchar *cDesktopFile)  // file, path or even class
+/**
+ * Attempt to find a desktop file for an app given its app-id, class, or desktop file path.
+ * 
+ * If cDesktopFile is a valid path, just return (a copy) of it.
+ * Alternatively, search our database of system-wide .desktop files,
+ * including workarounds for several known inconsistencies (by adding
+ * prefices). All comparisons are case-insensitive.
+ * 
+ * If bReturnKey == TRUE, returns the key which was found in our DB;
+ * otherwise, return the associated value. In both cases, the return
+ * value is a newly allocated string and must be freed by the caller.
+ */
+static gchar *_search_desktop_file (const gchar *cDesktopFile, gboolean bReturnKey)  // file, path or even class
 {
 	if (cDesktopFile == NULL)
 		return NULL;
+	gchar *cDesktopFileName = NULL;
+	gboolean bPath = FALSE;
 	if (*cDesktopFile == '/') 
 	{
 		if (g_file_test (cDesktopFile, G_FILE_TEST_EXISTS))  // it's a path and it exists.
 			return g_strdup (cDesktopFile);
-		return NULL; // if we got an absolute path, we require it to be correct
+		// if not found, try searching based on the basename
+		char *tmp = g_path_get_basename (cDesktopFile);
+		cDesktopFileName = g_ascii_strdown (tmp, -1);
+		g_free (tmp);
+		bPath = TRUE;
 	}
-
-	// note: cDesktopFile will already be lowercase if it is an app-id / class
-	gchar *cDesktopFileName = g_ascii_strdown (cDesktopFile, -1);
+	else
+	{
+		// note: cDesktopFile will already be lowercase if it is an app-id / class
+		cDesktopFileName = g_ascii_strdown (cDesktopFile, -1);
+	}
 	// remove the .desktop suffix if it is present
 	gchar *tmp = g_strrstr (cDesktopFileName, ".desktop");
 	if (tmp) *tmp = 0;
 	
 	// normal case: we have the correct name
 	const gchar *res = gldi_desktop_file_db_lookup (cDesktopFileName);
+	if (res)
+	{
+		if (bReturnKey) return cDesktopFileName;
+		else
+		{
+			g_free (cDesktopFileName);
+			return g_strdup (res);
+		}
+	}
+	else if (bPath)
+	{
+		// if the query was an absolute path, we don't try the heuristics
+		// (we are only interested if the exact same file is found in
+		//  some other location)
+		g_free (cDesktopFileName);
+		return NULL;
+	}
+	
+	// handle potential partial matches
+	GString *sID = g_string_new (NULL);
+	
+	/* #1: add common prefices
+	 * e.g. org.gnome.Evince.desktop, but app-id is only evince on Ubuntu 22.04 and 24.04
+	 * More generally, this can happen with GTK+3 apps that have only "partially" migrated
+	 * to using the "new" (reverse DNS style) .desktop format.
+	 * See e.g.
+	 * https://gitlab.gnome.org/GNOME/gtk/-/issues/2822
+	 * https://gitlab.gnome.org/GNOME/gtk/-/issues/2034
+	 * https://honk.sigxcpu.org/con/GTK__and_the_application_id.html
+	 * https://docs.gtk.org/gtk4/migrating-3to4.html#set-a-proper-application-id
+	 */
+	const char *prefices[] = {"org.gnome.", "org.kde.", "org.freedesktop.", NULL};
+	int j;
+	
+	for (j = 0; prefices[j]; j++)
+	{
+		g_string_printf (sID, "%s%s", prefices[j], cDesktopFileName);
+		res = gldi_desktop_file_db_lookup (sID->str);
+		if (res) break;
+	}
 	
 	if (!res)
 	{
-		// handle potential partial matches
-		GString *sID = g_string_new (NULL);
-		
-		/* #1: add common prefices
-		 * e.g. org.gnome.Evince.desktop, but app-id is only evince on Ubuntu 22.04 and 24.04
-		 * More generally, this can happen with GTK+3 apps that have only "partially" migrated
-		 * to using the "new" (reverse DNS style) .desktop format.
-		 * See e.g.
-		 * https://gitlab.gnome.org/GNOME/gtk/-/issues/2822
-		 * https://gitlab.gnome.org/GNOME/gtk/-/issues/2034
-		 * https://honk.sigxcpu.org/con/GTK__and_the_application_id.html
-		 * https://docs.gtk.org/gtk4/migrating-3to4.html#set-a-proper-application-id
-		 */
-		const char *prefices[] = {"org.gnome.", "org.kde.", "org.freedesktop.", NULL};
-		int j;
-		
-		for (j = 0; prefices[j]; j++)
-		{
-			g_string_printf (sID, "%s%s", prefices[j], cDesktopFileName);
-			res = gldi_desktop_file_db_lookup (sID->str);
-			if (res) break;
-		}
-		
-		if (!res)
-		{
-			// #2: snap "namespaced" names -- these could be anything, we just handle the "common" case where
-			// simply the app-id is duplicated (e.g. "firefox_firefox.desktop" as on Ubuntu 22.04 and 24.04)
-			g_string_printf (sID, "%s_%s", cDesktopFileName, cDesktopFileName);
-			res = gldi_desktop_file_db_lookup (sID->str);
-		}
-		
-		g_string_free(sID, TRUE);
+		// #2: snap "namespaced" names -- these could be anything, we just handle the "common" case where
+		// simply the app-id is duplicated (e.g. "firefox_firefox.desktop" as on Ubuntu 22.04 and 24.04)
+		g_string_printf (sID, "%s_%s", cDesktopFileName, cDesktopFileName);
+		res = gldi_desktop_file_db_lookup (sID->str);
 	}
 	
 	g_free (cDesktopFileName);
-	return res ? g_strdup (res) : NULL;
+	
+	if (res && bReturnKey) return g_string_free(sID, FALSE);
+	else
+	{
+		g_string_free (sID, TRUE);
+		return res ? g_strdup (res) : NULL;
+	}
 }
 
 gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMClass)
@@ -1937,13 +2026,13 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	}
 
 	//\__________________ search the desktop file's path.
-	gchar *cDesktopFilePath = _search_desktop_file (cDesktopFile?cDesktopFile:cClass);
+	gchar *cDesktopFilePath = _search_desktop_file (cDesktopFile?cDesktopFile:cClass, FALSE);
 	if (cDesktopFilePath == NULL && cWmClass != NULL)
-		cDesktopFilePath = _search_desktop_file (cWmClass);
+		cDesktopFilePath = _search_desktop_file (cWmClass, FALSE);
 	// special handling for Gnome Terminal, required at least on Ubuntu 22.04 and 24.04
 	// (should be fixed in newer versions, see e.g. here: https://gitlab.gnome.org/GNOME/gnome-terminal/-/issues/8033)
 	if (cDesktopFilePath == NULL && cClass && !strcmp (cClass, "gnome-terminal-server"))
-		cDesktopFilePath = _search_desktop_file ("org.gnome.terminal");
+		cDesktopFilePath = _search_desktop_file ("org.gnome.terminal", FALSE);
 	if (cDesktopFilePath == NULL)  // couldn't find the .desktop
 	{
 		if (cClass != NULL)  // make a class anyway to store the few info we have.
@@ -2219,7 +2308,7 @@ void cairo_dock_set_data_from_class (const gchar *cClass, Icon *pIcon)
 
 static gboolean _stop_opening_timeout (const gchar *cClass)
 {
-	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
 	g_return_val_if_fail (pClassAppli != NULL, FALSE);
 	pClassAppli->iSidOpeningTimeout = 0;
 	gldi_class_startup_notify_end (cClass);
@@ -2228,7 +2317,7 @@ static gboolean _stop_opening_timeout (const gchar *cClass)
 void gldi_class_startup_notify (Icon *pIcon)
 {
 	const gchar *cClass = pIcon->cClass;
-	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
 	if (! pClassAppli || pClassAppli->bIsLaunching)
 		return;
 
