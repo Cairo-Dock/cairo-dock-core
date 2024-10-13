@@ -419,6 +419,9 @@ void cairo_dock_allow_widget_to_receive_data (GtkWidget *pWidget, GCallback pCal
 
 void gldi_container_disable_drop (GldiContainer *pContainer);
 
+/// Get the GdkAtom used internally from dragging icons between docks
+GdkAtom gldi_container_icon_dnd_atom (void);
+
 /** Notify everybody that a drop has just occured.
 * @param cReceivedData the dropped data.
 * @param pPointedIcon the icon which was pointed when the drop occured.
