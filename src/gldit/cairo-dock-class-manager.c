@@ -683,7 +683,7 @@ void cairo_dock_reset_class_table (void)
 {
 	g_hash_table_remove_all (s_hClassTable);
 	g_hash_table_remove_all (s_hAltClass);
-	gldi_desktop_file_db_stop ();
+	// gldi_desktop_file_db_stop (); -- TODO: call this when exiting, but not when loading a new theme !!
 }
 
 
