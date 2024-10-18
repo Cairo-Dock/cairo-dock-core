@@ -77,7 +77,7 @@ struct _GldiModuleInstance {
 	union {
 		gboolean bIsActive;
 		gpointer reserved;
-	} uActive;	
+	} uActive;
 	gpointer reserved;
 };
 

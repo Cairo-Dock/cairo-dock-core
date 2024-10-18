@@ -455,6 +455,10 @@ void cairo_dock_load_current_theme (void)
 	//\___________________ Get all managers config.
 	gldi_managers_get_config (g_cConfFile, GLDI_VERSION);  /// en fait, CAIRO_DOCK_VERSION ...
 	
+	//\___________________ Load config for auto-loaded modules (these represent core modules,
+	//  including dock-rendering, whose config is needed in the next step).
+	gldi_modules_load_auto_config ();
+	
 	//\___________________ Create the primary container (needed to have a cairo/opengl context).
 	CairoDock *pMainDock = gldi_dock_new (CAIRO_DOCK_MAIN_DOCK_NAME);
 	
