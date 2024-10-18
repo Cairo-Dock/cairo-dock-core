@@ -216,7 +216,7 @@ struct _CairoDockMinimalAppletConfig {
  // MODULE LOADER //
 ///////////////////
 
-#define gldi_module_is_auto_loaded(pModule) (pModule->pInterface->initModule == NULL || pModule->pInterface->stopModule == NULL || pModule->pVisitCard->cInternalModule != NULL)
+#define gldi_module_is_auto_loaded(pModule) ((pModule->pInterface->initModule == NULL || pModule->pInterface->stopModule == NULL || pModule->pVisitCard->cInternalModule != NULL) && pModule->pVisitCard->iContainerType == CAIRO_DOCK_MODULE_IS_PLUGIN)
 
 /** Create a new module. The module takes ownership of the 2 arguments, unless an error occured.
 * @param pVisitCard the visit card of the module
@@ -271,6 +271,9 @@ void gldi_modules_write_active (void);
   ///////////////////////
  // MODULES HIGH LEVEL//
 ///////////////////////
+
+/** Load the config of all auto-loaded modules without activating them. */
+void gldi_modules_load_auto_config (void);
 
 /** Create and initialize all the instances of a module.
 *@param module the module to activate.

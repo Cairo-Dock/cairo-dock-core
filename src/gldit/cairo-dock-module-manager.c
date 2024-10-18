@@ -342,7 +342,7 @@ void cairo_dock_free_visit_card (GldiVisitCard *pVisitCard)
  /// MODULES HIGH LEVEL///
 /////////////////////////
 
-void gldi_module_activate (GldiModule *module)
+static void _gldi_module_load_config_and_activate (GldiModule *module, gboolean bActivate)
 {
 	g_return_if_fail (module != NULL && module->pVisitCard != NULL);
 	cd_debug ("%s (%s)", __func__, module->pVisitCard->cModuleName);
@@ -390,7 +390,7 @@ void gldi_module_activate (GldiModule *module)
 				if (*(str+5) != '-' && *(str+5) != '\0')  // xxx.conf or xxx.conf-i
 					continue;
 				cInstanceFilePath = g_strdup_printf ("%s/%s", cUserDataDirPath, cFileName);
-				gldi_module_instance_new (module, cInstanceFilePath);  // takes ownership of 'cInstanceFilePath'.
+				gldi_module_instance_new_full (module, cInstanceFilePath, bActivate);  // takes ownership of 'cInstanceFilePath'.
 				n ++;
 			}
 			g_dir_close (dir);
@@ -400,7 +400,7 @@ void gldi_module_activate (GldiModule *module)
 			gchar *cConfFilePath = g_strdup_printf ("%s/%s", cUserDataDirPath, module->pVisitCard->cConfFileName);
 			if (g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))
 			{
-				gldi_module_instance_new (module, cConfFilePath);
+				gldi_module_instance_new_full (module, cConfFilePath, bActivate);
 				n = 1;
 			}
 			else
@@ -423,7 +423,7 @@ void gldi_module_activate (GldiModule *module)
 			}
 			else
 			{
-				gldi_module_instance_new (module, cConfFilePath);
+				gldi_module_instance_new_full (module, cConfFilePath, bActivate);
 			}
 		}
 		
@@ -431,8 +431,13 @@ void gldi_module_activate (GldiModule *module)
 	}
 	else  // the module has no conf file, just instanciate it once.
 	{
-		gldi_module_instance_new (module, NULL);
+		gldi_module_instance_new_full (module, NULL, bActivate);
 	}
+}
+
+void gldi_module_activate (GldiModule *module)
+{
+	_gldi_module_load_config_and_activate (module, TRUE);
 }
 
 void gldi_module_deactivate (GldiModule *module)  // stop all instances of a module
@@ -447,6 +452,20 @@ void gldi_module_deactivate (GldiModule *module)  // stop all instances of a mod
 }
 
 
+void gldi_modules_load_auto_config (void)
+{
+	GldiModule *pModule;
+	GList *m;
+	for (m = s_AutoLoadedModules; m != NULL; m = m->next)
+	{
+		pModule = m->data;
+		if (pModule->pInstancesList == NULL)  // not yet active
+		{
+			_gldi_module_load_config_and_activate (pModule, FALSE);
+		}
+	}
+}
+
 void gldi_modules_activate_from_list (gchar **cActiveModuleList)
 {
 	//\_______________ On active les modules auto-charges en premier.
@@ -459,6 +478,17 @@ void gldi_modules_activate_from_list (gchar **cActiveModuleList)
 		if (pModule->pInstancesList == NULL)  // not yet active
 		{
 			gldi_module_activate (pModule);
+		}
+		else
+		{
+			// note: auto-loaded modules only have a single instance
+			GldiModuleInstance *pInstance = pModule->pInstancesList->data;
+			if (pInstance && !pInstance->uActive.bIsActive)
+			{
+				if (pModule->pInterface->initModule)
+					pModule->pInterface->initModule (pInstance, NULL);
+				pInstance->uActive.bIsActive = TRUE;
+			}
 		}
 	}
 	

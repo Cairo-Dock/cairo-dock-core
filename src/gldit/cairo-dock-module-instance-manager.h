@@ -73,12 +73,18 @@ struct _GldiModuleInstance {
 	gpointer pConfig;
 	/// pointer to a structure containing the data of the applet.
 	gpointer pData;
-	gpointer reserved[2];
+	/// indicator whether the module instance has already been activated (init function has been called)
+	union {
+		gboolean bIsActive;
+		gpointer reserved;
+	} uActive;	
+	gpointer reserved;
 };
 
 struct _GldiModuleInstanceAttr {
 	GldiModule *pModule;
 	gchar *cConfFilePath;
+	gboolean bActivate;
 };
 
 
@@ -89,7 +95,9 @@ struct _GldiModuleInstanceAttr {
 #define GLDI_OBJECT_IS_MODULE_INSTANCE(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), &myModuleInstanceObjectMgr)
 
 
-GldiModuleInstance *gldi_module_instance_new (GldiModule *pModule, gchar *cConfFilePah);
+/** Create a new instance of a module. Only activates it if bActivate == TRUE (FALSE is only valid for auto-loaded modules). */
+GldiModuleInstance *gldi_module_instance_new (GldiModule *pModule, gchar *cConfFilePath);
+GldiModuleInstance *gldi_module_instance_new_full (GldiModule *pModule, gchar *cConfFilePath, gboolean bActivate);
 
 GKeyFile *gldi_module_instance_open_conf_file (GldiModuleInstance *pInstance, CairoDockMinimalAppletConfig *pMinimalConfig);
 
