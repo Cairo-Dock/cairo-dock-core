@@ -1719,7 +1719,20 @@ static gchar *_search_desktop_file (const gchar *cDesktopFile, gboolean bReturnK
 		return NULL;
 	}
 	
-	// handle potential partial matches
+	// handle potential partial matches and special cases
+	// #0: special casing for Gnome Terminal, required at least on Ubuntu 22.04 and 24.04
+	// (should be fixed in newer versions, see e.g. here: https://gitlab.gnome.org/GNOME/gnome-terminal/-/issues/8033)
+	if (!strcmp (cDesktopFileName, "gnome-terminal-server"))
+	{
+		const char *tmpkey = "org.gnome.terminal";
+		res = gldi_desktop_file_db_lookup (tmpkey);
+		if (res)
+		{
+			g_free (cDesktopFileName);
+			return g_strdup (bReturnKey ? tmpkey : res);
+		}
+	}
+	
 	GString *sID = g_string_new (NULL);
 	
 	/* #1: add common prefices
@@ -2029,10 +2042,6 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 	gchar *cDesktopFilePath = _search_desktop_file (cDesktopFile?cDesktopFile:cClass, FALSE);
 	if (cDesktopFilePath == NULL && cWmClass != NULL)
 		cDesktopFilePath = _search_desktop_file (cWmClass, FALSE);
-	// special handling for Gnome Terminal, required at least on Ubuntu 22.04 and 24.04
-	// (should be fixed in newer versions, see e.g. here: https://gitlab.gnome.org/GNOME/gnome-terminal/-/issues/8033)
-	if (cDesktopFilePath == NULL && cClass && !strcmp (cClass, "gnome-terminal-server"))
-		cDesktopFilePath = _search_desktop_file ("org.gnome.terminal", FALSE);
 	if (cDesktopFilePath == NULL)  // couldn't find the .desktop
 	{
 		if (cClass != NULL)  // make a class anyway to store the few info we have.
