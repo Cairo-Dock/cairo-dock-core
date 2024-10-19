@@ -78,6 +78,11 @@ void gldi_windows_foreach (gboolean bOrderedByZ, GFunc callback, gpointer data)
 	g_list_foreach (s_pWindowsList, callback, data);
 }
 
+void gldi_windows_foreach_unordered (GFunc callback, gpointer data)
+{
+	g_list_foreach (s_pWindowsList, callback, data);
+}
+
 GldiWindowActor *gldi_windows_find (gboolean (*callback) (GldiWindowActor*, gpointer), gpointer data)
 {
 	GldiWindowActor *actor;
@@ -128,6 +133,8 @@ void gldi_window_move_to_desktop (GldiWindowActor *actor, int iNumDesktop, int i
 			iNumDesktop,
 			(iNumViewportX - g_desktopGeometry.iCurrentViewportX) * gldi_desktop_get_width(),
 			(iNumViewportY - g_desktopGeometry.iCurrentViewportY) * gldi_desktop_get_height());
+	else if (s_backend.move_to_viewport_abs)
+		s_backend.move_to_viewport_abs (actor, iNumDesktop, iNumViewportX, iNumViewportY);
 }
 
 void gldi_window_show (GldiWindowActor *actor)
@@ -315,8 +322,14 @@ static inline gboolean _window_is_on_current_desktop (GtkAllocation *pWindowGeom
 }
 gboolean gldi_window_is_on_current_desktop (GldiWindowActor *actor)
 {
-	///return (actor->iNumDesktop == -1 || actor->iNumDesktop == g_desktopGeometry.iCurrentDesktop) && actor->iViewPortX == g_desktopGeometry.iCurrentViewportX && actor->iViewPortY == g_desktopGeometry.iCurrentViewportY;  /// TODO: check that it works
-	return actor->bIsSticky || _window_is_on_current_desktop (&actor->windowGeometry, actor->iNumDesktop);
+	if (GPOINTER_TO_INT (s_backend.flags) & GLDI_WM_GEOM_REL_TO_VIEWPORT
+			|| GPOINTER_TO_INT (s_backend.flags) & GLDI_WM_NO_VIEWPORT_OVERLAP)
+		return gldi_window_is_on_desktop (actor, g_desktopGeometry.iCurrentDesktop,
+			g_desktopGeometry.iCurrentViewportX, g_desktopGeometry.iCurrentViewportY);
+	
+	if (actor->bIsSticky || actor->iNumDesktop == -1) return TRUE;
+	
+	return _window_is_on_current_desktop (&actor->windowGeometry, actor->iNumDesktop);
 }
 
 
@@ -324,15 +337,24 @@ gboolean gldi_window_is_on_desktop (GldiWindowActor *pAppli, int iNumDesktop, in
 {
 	if (pAppli->bIsSticky || pAppli->iNumDesktop == -1)  // a sticky window is by definition on all desktops/viewports
 		return TRUE;
+	
+	if (GPOINTER_TO_INT (s_backend.flags) & GLDI_WM_NO_VIEWPORT_OVERLAP)
+		return (pAppli->iNumDesktop == iNumDesktop && pAppli->iViewPortX == iNumViewportX
+			&& pAppli->iViewPortY == iNumViewportY);
+	
 	// On calcule les coordonnees en repere absolu.
-	int x = pAppli->windowGeometry.x;  // par rapport au viewport courant.
-	x += g_desktopGeometry.iCurrentViewportX * gldi_desktop_get_width();  // repere absolu
+	int x = pAppli->windowGeometry.x;  // par rapport au viewport courant (or self, depending on the backend)
+	if (GPOINTER_TO_INT (s_backend.flags) & GLDI_WM_GEOM_REL_TO_VIEWPORT) x += pAppli->iViewPortX * gldi_desktop_get_width();  // repere absolu
+	else x += g_desktopGeometry.iCurrentViewportX * gldi_desktop_get_width();
 	if (x < 0)
 		x += g_desktopGeometry.iNbViewportX * gldi_desktop_get_width();
+	
 	int y = pAppli->windowGeometry.y;
-	y += g_desktopGeometry.iCurrentViewportY * gldi_desktop_get_height();
+	if (GPOINTER_TO_INT (s_backend.flags) & GLDI_WM_GEOM_REL_TO_VIEWPORT) y += pAppli->iViewPortY * gldi_desktop_get_height();
+	else y += g_desktopGeometry.iCurrentViewportY * gldi_desktop_get_height();
 	if (y < 0)
 		y += g_desktopGeometry.iNbViewportY * gldi_desktop_get_height();
+	
 	int w = pAppli->windowGeometry.width, h = pAppli->windowGeometry.height;
 	
 	// test d'intersection avec le viewport donne.
@@ -351,6 +373,10 @@ void gldi_window_move_to_current_desktop (GldiWindowActor *pAppli)
 		g_desktopGeometry.iCurrentViewportY);  // on ne veut pas decaler son viewport par rapport a nous.
 }
 
+gboolean gldi_window_manager_is_position_relative_to_current_viewport (void)
+{
+	return !(GPOINTER_TO_INT (s_backend.flags) & GLDI_WM_GEOM_REL_TO_VIEWPORT);
+}
 
 gchar* gldi_window_parse_class(const gchar* res_class, const gchar* res_name) {
 	gchar *cClass = NULL;
