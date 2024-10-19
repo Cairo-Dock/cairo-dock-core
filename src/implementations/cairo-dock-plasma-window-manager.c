@@ -39,6 +39,7 @@
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-plasma-window-manager.h"
+#include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-wayland-wm.h"
 #include "cairo-dock-plasma-virtual-desktop.h"
 
@@ -50,12 +51,16 @@ typedef struct org_kde_plasma_window pwhandle;
 
 // window manager interface
 
-static void _move_to_nth_desktop (GldiWindowActor *actor, int iNumDesktop,
-	G_GNUC_UNUSED int iDeltaViewportX, G_GNUC_UNUSED int iDeltaViewportY)
+static void _move_to_nth_desktop (GldiWindowActor *actor, G_GNUC_UNUSED int iNumDesktop,
+	int iDeltaViewportX, int iDeltaViewportY)
 {
 	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor *)actor;
-	const char *old_desktop_id = gldi_plasma_virtual_desktop_get_id (actor->iNumDesktop);
-	const char *desktop_id = gldi_plasma_virtual_desktop_get_id (iNumDesktop);
+	unsigned int old_id = actor->iViewPortY * g_desktopGeometry.iNbViewportX + actor->iViewPortX;
+	unsigned int new_id = iDeltaViewportY * g_desktopGeometry.iNbViewportX + iDeltaViewportX;
+	if (old_id == new_id) return; // avoid a no-op which could end up removing the window
+	
+	const char *old_desktop_id = gldi_plasma_virtual_desktop_get_id (old_id);
+	const char *desktop_id = gldi_plasma_virtual_desktop_get_id (new_id);
 	if (desktop_id) org_kde_plasma_window_request_enter_virtual_desktop (wactor->handle, desktop_id);
 	if (old_desktop_id) org_kde_plasma_window_request_leave_virtual_desktop (wactor->handle, old_desktop_id);
 }
@@ -204,7 +209,9 @@ static void _virtual_desktop_entered (void *data, G_GNUC_UNUSED pwhandle *handle
 	int i = gldi_plasma_virtual_desktop_get_index (desktop_id);
 	if (i >= 0)
 	{
-		actor->iNumDesktop = i;
+		actor->iNumDesktop = 0;
+		actor->iViewPortY = i / g_desktopGeometry.iNbViewportX;
+		actor->iViewPortX = i % g_desktopGeometry.iNbViewportX;
 		gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESKTOP_CHANGED, actor);
 	}
 }
@@ -330,7 +337,7 @@ static void gldi_plasma_window_manager_init ()
 	GldiWindowManagerBackend wmb;
 	memset (&wmb, 0, sizeof (GldiWindowManagerBackend));
 	wmb.get_active_window = gldi_wayland_wm_get_active_window;
-	wmb.move_to_nth_desktop = _move_to_nth_desktop;
+	wmb.move_to_viewport_abs = _move_to_nth_desktop;
 	wmb.show = _show;
 	wmb.close = _close;
 	// wmb.kill = _kill;
@@ -352,6 +359,7 @@ static void gldi_plasma_window_manager_init ()
 	wmb.can_minimize_maximize_close = _can_minimize_maximize_close;
 	// wmb.get_id = _get_id;
 	wmb.pick_window = gldi_wayland_wm_pick_window;
+	wmb.flags = GINT_TO_POINTER (GLDI_WM_NO_VIEWPORT_OVERLAP | GLDI_WM_GEOM_REL_TO_VIEWPORT);
 	wmb.name = "plasma";
 	gldi_windows_manager_register_backend (&wmb);
 	
