@@ -163,12 +163,37 @@ struct _GldiVisitCard {
 
 /// Definition of the interface of a module.
 struct _GldiModuleInterface {
+	/** Function called when the module is activated (e.g. enabled by the user or when loading a theme);
+	 *  normal functionality should be set up here (e.g. signals / callbacks).
+	 *  Note: pKeyFile should NOT be used as it can be NULL (this is currently the case for auto-loaded
+	 *  modules). All config should be read in read_conf_file () or reloadModule () below.
+	 *  -> CD_APPLET_INIT_BEGIN in standard applets */
 	void		(* initModule)			(GldiModuleInstance *pInstance, GKeyFile *pKeyFile);
+	/** Function called when a module is deactivated (e.g. disabled by the user or when changing a theme);
+	 *  this should stop all functions of the module and also free all resources.
+	 *  -> CD_APPLET_STOP_BEGIN in standard applets */
 	void		(* stopModule)			(GldiModuleInstance *pInstance);
+	/** Function called when important configuration has changed (either for the module or for the dock that
+	 *  could affect this module, e.g. icon theme or icon size).
+	 *  pKeyFile != NULL <=> the configuration of this module has changed (use CD_APPLET_MY_CONFIG_CHANGED)
+	 *  -> CD_APPLET_RELOAD_BEGIN in standard applets */
 	gboolean	(* reloadModule)		(GldiModuleInstance *pInstance, GldiContainer *pOldContainer, GKeyFile *pKeyFile);
+	/** Function called to read (all of) a module's config before it is initialized.
+	 *  Normally, this should only read values from the supplied file and store them to be used later (ideally
+	 *  in the instance provided). Accessing other internals (e.g. rendering interface elements based on the 
+	 *  config) is not recommended. For auto-loaded modules, this is called before any dock (and thus
+	 *  rendering context) is created.
+	 *  -> CD_APPLET_GET_CONFIG_BEGIN in standard applets */
 	gboolean	(* read_conf_file)		(GldiModuleInstance *pInstance, GKeyFile *pKeyFile);
+	/** Function called after the module has been stopped and should free any data (e.g. strings) in the
+	 *  module's configuration.
+	 *  -> CD_APPLET_RESET_CONFIG_BEGIN in standard applets */
 	void		(* reset_config)		(GldiModuleInstance *pInstance);
+	/** Function called after to module has been stopped to free any data used by it. Note: there is not much
+	 *  difference between using this and the stopModule () function above.
+	 *  -> CD_APPLET_RESET_DATA_BEGIN in standard applets */
 	void		(* reset_data)			(GldiModuleInstance *pInstance);
+	/** Functions used for defining custom widgets for configuring the module. */
 	void		(* load_custom_widget)	(GldiModuleInstance *pInstance, GKeyFile *pKeyFile, GSList *pWidgetList);
 	void		(* save_custom_widget)	(GldiModuleInstance *pInstance, GKeyFile *pKeyFile, GSList *pWidgetList);
 };
