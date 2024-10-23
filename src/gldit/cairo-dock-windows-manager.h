@@ -53,6 +53,11 @@ typedef enum {
 
 // data
 
+typedef enum {
+	GLDI_WM_GEOM_REL_TO_VIEWPORT = 1, // if present, windows' geometry is relative to the viewport they are present on (and not to the current viewport)
+	GLDI_WM_NO_VIEWPORT_OVERLAP = 2 // if present, windows cannot span multiple viewports
+	} GldiWMBackendFlags;
+
 /// Definition of the Windows Manager backend.
 struct _GldiWindowManagerBackend {
 	GldiWindowActor* (*get_active_window) (void);
@@ -78,6 +83,8 @@ struct _GldiWindowManagerBackend {
 	guint (*get_id) (GldiWindowActor *actor);
 	GldiWindowActor* (*pick_window) (GtkWindow *pParentWindow);  // grab the mouse, wait for a click, then get the clicked window and returns its actor
 	const gchar *name; // name of the current backend
+	void (*move_to_viewport_abs) (GldiWindowActor *actor, int iNumDesktop, int iViewportX, int iViewportY); // like move_to_nth_desktop, but use absolute viewport coordinates
+	gpointer flags; // GldiWMBackendFlags, cast to pointer
 	} ;
 
 /// Definition of a window actor.
@@ -115,6 +122,7 @@ const gchar *gldi_windows_manager_get_name ();
 *@param data user data
 */
 void gldi_windows_foreach (gboolean bOrderedByZ, GFunc callback, gpointer data);
+void gldi_windows_foreach_unordered (GFunc callback, gpointer data);
 
 /** Run a function on each window actor.
 *@param callback the callback (takes the actor and the data, returns TRUE to stop)
@@ -177,6 +185,7 @@ guint gldi_window_get_id (GldiWindowActor *pAppli);
 
 GldiWindowActor *gldi_window_pick (GtkWindow *pParentWindow);
 
+gboolean gldi_window_manager_is_position_relative_to_current_viewport (void);
 
 /* utility for parsing special cases in the window class / app ID;
  * used by both the X and Wayland backends
