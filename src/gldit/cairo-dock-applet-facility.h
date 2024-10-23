@@ -116,6 +116,12 @@ void cairo_dock_resize_applet (GldiModuleInstance *pInstance, int w, int h);
  // CONFIG //
 ////////////
 
+/**
+ * The following macros provide a convenient way to read configuration options for applets. They should only
+ * be used within the CD_APPLET_GET_CONFIG_BEGIN / CD_APPLET_GET_CONFIG_END section of an applet (usually
+ * defined in applet-config.c).
+ */
+
 /** Get the value of a 'boolean' from the conf file.
 *@param cGroupName name of the group in the conf file.
 *@param cKeyName name of the key in the conf file.

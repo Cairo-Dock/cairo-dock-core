@@ -57,15 +57,19 @@ static int s_iNbUsedSlots = 0;
 static GldiModuleInstance *s_pUsedSlots[CAIRO_DOCK_NB_DATA_SLOT+1];
 
 
-GldiModuleInstance *gldi_module_instance_new (GldiModule *pModule, gchar *cConfFilePah)  // The module-instance takes ownership of the path
+GldiModuleInstance *gldi_module_instance_new_full (GldiModule *pModule, gchar *cConfFilePath, gboolean bActivate)  // The module-instance takes ownership of the path
 {
-	GldiModuleInstanceAttr attr = {pModule, cConfFilePah};
+	GldiModuleInstanceAttr attr = {pModule, cConfFilePath, bActivate};
 	
 	GldiModuleInstance *pInstance = g_malloc0 (CEIL_ALIGNED_SIZE(sizeof (GldiModuleInstance)) + CEIL_ALIGNED_SIZE(pModule->pVisitCard->iSizeOfConfig) + pModule->pVisitCard->iSizeOfData);  // we allocate everything at once, since config and data will anyway live as long as the instance itself.
 	gldi_object_init (GLDI_OBJECT(pInstance), &myModuleInstanceObjectMgr, &attr);
 	return pInstance;
 }
 
+GldiModuleInstance *gldi_module_instance_new (GldiModule *pModule, gchar *cConfFilePath)  // The module-instance takes ownership of the path
+{
+	return gldi_module_instance_new_full (pModule, cConfFilePath, TRUE);
+}
 
 static void _read_module_config (GKeyFile *pKeyFile, GldiModuleInstance *pInstance)
 {
@@ -454,8 +458,11 @@ static void init_object (GldiObject *obj, gpointer attr)
 	if (pKeyFile)
 		_read_module_config (pKeyFile, pInstance);
 	
-	if (pModule->pInterface->initModule)
+	if (mattr->bActivate && pModule->pInterface->initModule)
+	{
 		pModule->pInterface->initModule (pInstance, pKeyFile);
+		pInstance->uActive.bIsActive = TRUE;
+	}
 	
 	if (pDesklet && pDesklet->iDesiredWidth == 0 && pDesklet->iDesiredHeight == 0)  // can happen if the desklet has already resized itself before the init.
 		gtk_widget_queue_draw (pDesklet->container.pWidget);

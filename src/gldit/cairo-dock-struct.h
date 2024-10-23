@@ -220,7 +220,7 @@
  * 
  * \subsection first_steps First steps
  * 
- * Edit the file <i>src/applet-inic.c</i>; the macro \ref CD_APPLET_DEFINITION is a convenient way to define an applet: just fill its name, its category, a brief description, and your name.
+ * Edit the file <i>src/applet-inic.c</i>; the macro \ref CD_APPLET_DEFINITION2 is a convenient way to define an applet: just fill its name, its category, a brief description, and your name.
  * 
  * In the section CD_APPLET_INIT_BEGIN/CD_APPLET_INIT_END, write the code that will run on startup.
  * 
@@ -231,7 +231,7 @@
  *   - when something else changed (\ref CD_APPLET_MY_CONFIG_CHANGED is FALSE, for instance when the icon theme is changed, or the icon size is changed); in this case, most of the time you have nothing to do, except if you loaded some ressources yourself.
  * 
  * Edit the file <i>src/applet-config.c</i>;
- * In the section CD_APPLET_GET_CONFIG_BEGIN/CD_APPLET_GET_CONFIG_END, get all your config parameters (don't forget to define them in applet-struct.h).
+ * In the section CD_APPLET_GET_CONFIG_BEGIN/CD_APPLET_GET_CONFIG_END, get all your config parameters (don't forget to define them in applet-struct.h). Use the CD_CONFIG_GET_* macros (defined in cairo-dock-applet-facility.h) to do so conveniently.
  * 
  * In the section  CD_APPLET_RESET_CONFIG_BEGIN/CD_APPLET_RESET_CONFIG_END, free any config parameter that was allocated (for instance, strings).
  * 
@@ -295,7 +295,7 @@
  * There are 3 cases :
  * - your applet just has a static icon; there is nothing to take into account, the common functions to set an image or a surface on an icon already handle the texture mapping.
  * - you draw dynamically on your icon with libcairo (using myDrawContext), but you don't want to bother with OpenGL; all you have to do is to call /ref cairo_dock_update_icon_texture to update your icon's texture after you drawn your surface. This can be done for occasional drawings, like Switcher redrawing its icon each time a window is moved.
- * - you draw your icon differently whether the dock is in OpenGL mode or not; in this case, you just need to put all the OpenGL commands into a CD_APPLET_START_DRAWING_MY_ICON/CD_APPLET_FINISH_DRAWING_MY_ICON section inside your code.
+ * - you draw your icon differently whether the dock is in OpenGL mode or not; in this case, you just need to put all the OpenGL commands into a CD_APPLET_START_DRAWING_MY_ICON/CD_APPLET_FINISH_DRAWING_MY_ICON section inside your code. If your applet relies on OpenGL for its core function, such that it does not make sense to use it without (e.g. it adds OpenGL effects to the dock or icons etc.), add CAIRO_DOCK_MODULE_REQUIRES_OPENGL to the flags (second argument) in CD_APPLET_DEFINITION2. This will result in the applet not loaded at all if OpenGL is not available.
  * 
  * There are also a lot of convenient functions you can use to draw in OpenGL. See cairo-dock-draw-opengl.h for loading and drawing textures and paths, and cairo-dock-particle-system.h for an easy way to draw particle systems.
  * 
@@ -344,7 +344,7 @@
  * 
  * Cairo-Dock can build itself the config panel of your applet from the config file. Moreover, it can do the opposite : update the conf file from the config panel. However, it is limited to the widgets it knows, and there are some cases it is not enough.
  * Because of that, Cairo-Dock offers 2 hooks in the process of building/reading the config panel : 
- * when defining your applet in the CD_APPLET_DEFINE_BEGIN/CD_APPLET_DEFINE_END section, add to the interface the 2 functions pInterface->load_custom_widget and pInterface->save_custom_widget.
+ * when defining your applet in the CD_APPLET_DEFINE2_BEGIN/CD_APPLET_DEFINE2_END section (see below), add to the interface the 2 functions pInterface->load_custom_widget and pInterface->save_custom_widget.
  * They will be respectively called when the config panel of your applet is raised, and when it is validated.
  * 
  * If you want to modify the content of an existing widget, you can grab it with \ref cairo_dock_gui_find_group_key_widget_in_list.
@@ -381,6 +381,27 @@
  * 
  * Say you want to draw directly on your container, like <i>CairoPenguin</i> or <i>ShowMouse</i> do. This can be achieved easily by registering to the \ref NOTIFICATION_RENDER notification. You will then be notified eash time a Dock or a Desklet is drawn. Register AFTER so that you will draw after the view.
  * 
+ * 
+ * \subsection system_applet Applets providing core functionality
+ * 
+ * Some applets that provide essential functionality for the dock (e.g. renderers, desktop environment integration, etc.) need more control over their life-cycle. In this case, instead of defining the applet with CD_APPLET_DEFINITION2, use the macro pair CD_APPLET_DEFINE2_BEGIN / CD_APPLET_DEFINE2_END and
+ * - Add early initialization steps between these; this will be run when the applet is first opened (loaded from disk), regardless wether it is enabled yet. Be careful that the applet's instance variable (myApplet) and configuration (myConfig) are not available at this point (so you will need to use static variables to save any state). Also, no docks, cairo or OpenGL contexts exist, and the current theme has not been loaded at this point as well. It is thus recommended to keep things here absolute minimal.
+ * - Also you have to manually define the applet's interface here (load, stop, config functions, etc.); see the GldiModuleInterface struct from cairo-dock-module-manager.h for a description of each function and what it does.
+ * 
+ * 
+ * \subsection auto_load Auto-loaded applets
+ * 
+ * A special class of applets is considered "auto-loaded": this means that the applet is always enabled and cannot be disabled by the user. Note that the init() and stop() functions are still called as normal whenever Cairo-Dock reloads its full configuration (i.e. when changing the current theme). However, there are slight differences:
+ * - The configuration of auto-loaded applets is read (CD_APPLET_GET_CONFIG_BEGIN / read_conf_file ()) earlier than for normal applets. Specifically, this happens before creating any of the docks, but after Cairo-Dock's core configuration has been loaded. This means that such applets should not rely on the existence of any docks, or their drawing context when reading their configuration (this is not recommended anyway for normal applets). On the other hand, such applets can provide parameters when creating docks (e.g. dock-rendering is an example of this).
+ * - Initialization of such applets (CD_APPLET_INIT_BEGIN / initModule ()) happens earlier than for normal applets. Specifically, this is done after the main dock has been created and core functionality has started, but before adding any launchers (normal applets' init happens after loading launchers).
+ * - Auto-loaded applets are stopped after regular ones.
+ * 
+ * An applet is defined as auto-loaded if it's type is CAIRO_DOCK_MODULE_IS_PLUGIN and at least one of the following is true:
+ * - it does not have an initModule () function
+ * - it does not have a stopModule () function
+ * - it extends a core functionality ("manager") of Cairo-Dock: this is achieved by using the CD_APPLET_EXTEND_MANAGER macro when the module is read
+ * 
+ * Note: all of the above need to be defined by using CD_APPLET_DEFINE2_BEGIN / CD_APPLET_DEFINE2_END
  * 
  */
 
