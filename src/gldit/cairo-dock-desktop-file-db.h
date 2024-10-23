@@ -25,11 +25,31 @@
 
 G_BEGIN_DECLS
 
+/**
+*@file cairo-dock-desktop-file-db.h Functions to maintain and query a database of all apps that are installed
+* on a system.
+*/
+
+
+/**
+ * Start the desktop file DB manager. This will run a background thread to populate the DB with all apps
+ * installed on the system. */
 void gldi_desktop_file_db_init (void);
 
+/**
+ * Stop the desktop file DB manager. This will delete all apps in the DB and free all memory. */
 void gldi_desktop_file_db_stop (void);
 
-const char *gldi_desktop_file_db_lookup (const char *class);
+/**
+ * Try to look up an installed app. This function can block the first time it's called if the DB has not been
+ * fully populated yet.
+ * @param class Dektop file ID, class or app-id of an app to look up (matching is based on the basename of
+ * 	its .desktop file, and the content of the StartupWMClass and Exec keys in it).
+ * @param bOnlyDesktopID if TRUE, only the .desktop file name is used for matching (can be useful if looking
+ * 	for a known .desktop file).
+ * @return full path of the .desktop file if found, or NULL
+*/
+const char *gldi_desktop_file_db_lookup (const char *class, gboolean bOnlyDesktopID);
 
 G_END_DECLS
 

@@ -1700,7 +1700,8 @@ static gchar *_search_desktop_file (const gchar *cDesktopFile, gboolean bReturnK
 	if (tmp) *tmp = 0;
 	
 	// normal case: we have the correct name
-	const gchar *res = gldi_desktop_file_db_lookup (cDesktopFileName);
+	// (if bPath == FALSE, we want to match a class, which can happen based on the .desktop file contents)
+	const gchar *res = gldi_desktop_file_db_lookup (cDesktopFileName, bPath);
 	if (res)
 	{
 		if (bReturnKey) return cDesktopFileName;
@@ -1725,7 +1726,7 @@ static gchar *_search_desktop_file (const gchar *cDesktopFile, gboolean bReturnK
 	if (!strcmp (cDesktopFileName, "gnome-terminal-server"))
 	{
 		const char *tmpkey = "org.gnome.terminal";
-		res = gldi_desktop_file_db_lookup (tmpkey);
+		res = gldi_desktop_file_db_lookup (tmpkey, TRUE); // we want exact match for org.gnome.terminal.desktop
 		if (res)
 		{
 			g_free (cDesktopFileName);
@@ -1751,7 +1752,7 @@ static gchar *_search_desktop_file (const gchar *cDesktopFile, gboolean bReturnK
 	for (j = 0; prefices[j]; j++)
 	{
 		g_string_printf (sID, "%s%s", prefices[j], cDesktopFileName);
-		res = gldi_desktop_file_db_lookup (sID->str);
+		res = gldi_desktop_file_db_lookup (sID->str, TRUE); // we want exact match for the file name
 		if (res) break;
 	}
 	
@@ -1760,7 +1761,7 @@ static gchar *_search_desktop_file (const gchar *cDesktopFile, gboolean bReturnK
 		// #2: snap "namespaced" names -- these could be anything, we just handle the "common" case where
 		// simply the app-id is duplicated (e.g. "firefox_firefox.desktop" as on Ubuntu 22.04 and 24.04)
 		g_string_printf (sID, "%s_%s", cDesktopFileName, cDesktopFileName);
-		res = gldi_desktop_file_db_lookup (sID->str);
+		res = gldi_desktop_file_db_lookup (sID->str, TRUE); // we want exact match for the file name
 	}
 	
 	g_free (cDesktopFileName);

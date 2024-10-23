@@ -202,7 +202,7 @@ void gldi_desktop_file_db_stop (void)
 	error = FALSE;
 }
 
-const char *gldi_desktop_file_db_lookup (const char *class)
+const char *gldi_desktop_file_db_lookup (const char *class, gboolean bOnlyDesktopID)
 {
 	if (!db_current || g_atomic_pointer_get (&db_pending))
 	{
@@ -237,7 +237,7 @@ const char *gldi_desktop_file_db_lookup (const char *class)
 	}
 	
 	const char *ret = g_hash_table_lookup (db_current->class_table, class);
-	if (!ret) ret = g_hash_table_lookup (db_current->alt_class_table, class);
+	if (!ret && !bOnlyDesktopID) ret = g_hash_table_lookup (db_current->alt_class_table, class);
 	
 	return ret;
 }
