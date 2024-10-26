@@ -215,13 +215,6 @@ gboolean gldi_desktop_set_current (int iDesktopNumber, int iViewportNumberX, int
 	return FALSE;
 }
 
-gboolean gldi_desktop_set_nb_desktops (int iNbDesktops, int iNbViewportX, int iNbViewportY)
-{
-	if (s_backend.set_nb_desktops)
-		return s_backend.set_nb_desktops (iNbDesktops, iNbViewportX, iNbViewportY);
-	return FALSE;
-}
-
 void gldi_desktop_add_workspace (void)
 {
 	if (s_backend.add_workspace) s_backend.add_workspace ();

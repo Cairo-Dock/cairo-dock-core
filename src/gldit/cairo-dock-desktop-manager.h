@@ -155,7 +155,6 @@ struct _GldiDesktopManagerBackend {
 	gboolean (*set_desktops_names) (gchar **cNames);
 	cairo_surface_t* (*get_desktop_bg_surface) (void);
 	gboolean (*set_current_desktop) (int iDesktopNumber, int iViewportNumberX, int iViewportNumberY);
-	gboolean (*set_nb_desktops) (int iNbDesktops, int iNbViewportX, int iNbViewportY);
 	void (*refresh) (void);
 	void (*notify_startup) (const gchar *cClass);
 	gboolean (*grab_shortkey) (guint keycode, guint modifiers, gboolean grab);
@@ -223,7 +222,6 @@ gboolean gldi_desktop_is_visible (void);
 gchar** gldi_desktop_get_names (void);
 gboolean gldi_desktop_set_names (gchar **cNames);
 gboolean gldi_desktop_set_current (int iDesktopNumber, int iViewportNumberX, int iViewportNumberY);
-gboolean gldi_desktop_set_nb_desktops (int iNbDesktops, int iNbViewportX, int iNbViewportY);
 
 /** Adds a new workspace, desktop or viewport in an implementation-defined manner.
  * Typically this can mean adding one more workspace / desktop as the "last" one.
