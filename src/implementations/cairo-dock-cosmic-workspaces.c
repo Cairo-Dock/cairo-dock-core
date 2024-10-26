@@ -84,14 +84,14 @@ static void _update_desktop_layout ()
 		guint x = desktops[i]->x;
 		guint y = desktops[i]->y;
 		
-		if (x == (guint)-1) have_invalid_x = TRUE;
+		if (x == INVALID_COORD) have_invalid_x = TRUE;
 		else 
 		{
 			if (x > cols) cols = x;
 			if (x < s_iXOffset) s_iXOffset = x;
 		}
 		
-		if (y == (guint)-1) have_invalid_y = TRUE;
+		if (y == INVALID_COORD) have_invalid_y = TRUE;
 		else {
 			all_invalid_y = FALSE;
 			if (y > rows) rows = y;
@@ -142,15 +142,14 @@ static void _update_current_desktop (void)
 	}
 }
 
-static void _name (void *data, struct zcosmic_workspace_handle_v1* handle, const char *name)
+static void _name (void *data, struct zcosmic_workspace_handle_v1*, const char *name)
 {
-	cd_warning ("workspace name: %p, %s", handle, name ? name : "(null)");
 	CosmicWS *desktop = (CosmicWS*)data;
 	g_free (desktop->pending_name);
 	desktop->pending_name = g_strdup ((gchar *)name);
 }
 
-static void _coordinates (void *data, struct zcosmic_workspace_handle_v1* handle, struct wl_array *coords)
+static void _coordinates (void *data, struct zcosmic_workspace_handle_v1*, struct wl_array *coords)
 {
 	CosmicWS *desktop = (CosmicWS*)data;
 	uint32_t *cdata = (uint32_t*)coords->data;
@@ -158,36 +157,34 @@ static void _coordinates (void *data, struct zcosmic_workspace_handle_v1* handle
 	if (size > 2*sizeof(uint32_t) || size < sizeof(uint32_t))
 	{
 		// too many or no coordinates, we cannot use them
-		desktop->pending_x = (guint)-1;
-		desktop->pending_y = (guint)-1;
+		desktop->pending_x = INVALID_COORD;
+		desktop->pending_y = INVALID_COORD;
 	}
 	else
 	{
 		// we have at least one coordinate
 		desktop->pending_x = cdata[0];
 		if (size == 2*sizeof(uint32_t)) desktop->pending_y = cdata[1];
-		else desktop->pending_y = (guint)-1;
+		else desktop->pending_y = INVALID_COORD;
 	}
-	cd_warning ("workspace coordinates: %p, size: %lu, x: %u, y: %u", handle, size, desktop->pending_x, desktop->pending_y);
 }
 
-static void _state (void *data, struct zcosmic_workspace_handle_v1* handle, struct wl_array *state)
+static void _state (void *data, struct zcosmic_workspace_handle_v1*, struct wl_array *state)
 {
 	gboolean bActivated = FALSE;
-	gboolean bUrgent = FALSE;
-	gboolean bHidden = FALSE;
+/*	gboolean bUrgent = FALSE; -- we do not care about these
+	gboolean bHidden = FALSE; */
 	int i;
 	uint32_t* stdata = (uint32_t*)state->data;
 	for (i = 0; i*sizeof(uint32_t) < state->size; i++)
 	{
 		if (stdata[i] == ZCOSMIC_WORKSPACE_HANDLE_V1_STATE_ACTIVE)
 			bActivated = TRUE;
-		else if (stdata[i] == ZCOSMIC_WORKSPACE_HANDLE_V1_STATE_URGENT)
+/*		else if (stdata[i] == ZCOSMIC_WORKSPACE_HANDLE_V1_STATE_URGENT)
 			bUrgent = TRUE;
 		else if (stdata[i] == ZCOSMIC_WORKSPACE_HANDLE_V1_STATE_HIDDEN)
-			bHidden = TRUE;
+			bHidden = TRUE; */
 	}
-	cd_warning ("workspace state: %p, activated: %d, urgent: %d, hidden: %d", handle, !!bActivated, !!bUrgent, !!bHidden);
 	
 	if (bActivated)
 	{
@@ -203,9 +200,9 @@ static void _state (void *data, struct zcosmic_workspace_handle_v1* handle, stru
 	}
 }
 
-static void _capabilities (void*, struct zcosmic_workspace_handle_v1* handle, struct wl_array* cap)
+static void _capabilities (void*, G_GNUC_UNUSED struct zcosmic_workspace_handle_v1* handle, G_GNUC_UNUSED struct wl_array* cap)
 {
-	uint32_t* capdata = (uint32_t*)cap->data;
+/*	uint32_t* capdata = (uint32_t*)cap->data;
 	cd_warning ("workspace capabilities: %p", handle);
 	int i;
 	for (i = 0; i*sizeof(uint32_t) < cap->size; i++)
@@ -220,12 +217,11 @@ static void _capabilities (void*, struct zcosmic_workspace_handle_v1* handle, st
 			g_print ("workspace can be renamed\n");
 		else if (capdata[i] == ZCOSMIC_WORKSPACE_HANDLE_V1_ZCOSMIC_WORKSPACE_CAPABILITIES_V1_SET_TILING_STATE)
 			g_print ("workspace can set tiling state\n");
-	}
+	} */
 }
 
-static void _removed (void *data, struct zcosmic_workspace_handle_v1 *handle)
+static void _removed (void *data, struct zcosmic_workspace_handle_v1*)
 {
-	cd_warning ("workspace removed: %p", handle);
 	CosmicWS *desktop = (CosmicWS*)data;
 	desktop->bRemoved = TRUE;
 }
@@ -255,16 +251,16 @@ static const struct zcosmic_workspace_handle_v1_listener desktop_listener = {
 };
 
 
-static void _group_capabilities (void*, struct zcosmic_workspace_group_handle_v1* handle, struct wl_array* cap)
+static void _group_capabilities (void*, G_GNUC_UNUSED struct zcosmic_workspace_group_handle_v1* handle, G_GNUC_UNUSED struct wl_array* cap)
 {
 	/* don't care */
-	uint32_t* capdata = (uint32_t*)cap->data;
+/*	uint32_t* capdata = (uint32_t*)cap->data;
 	int i;
 	for (i = 0; i*sizeof(uint32_t) < cap->size; i++)
 	{
 		if (capdata[i] == ZCOSMIC_WORKSPACE_GROUP_HANDLE_V1_CREATE_WORKSPACE)
 			cd_warning ("workspace group can be add workspaces: %p\n", handle);
-	}
+	} */
 }
 
 static void _output_enter (void*, struct zcosmic_workspace_group_handle_v1* handle, struct wl_output* output)
@@ -280,7 +276,6 @@ static void _output_leave (void*, struct zcosmic_workspace_group_handle_v1* hand
 static void _desktop_created (void*, struct zcosmic_workspace_group_handle_v1 *manager,
 	struct zcosmic_workspace_handle_v1 *new_workspace)
 {
-	cd_warning ("new workspace: %p, %p", manager, new_workspace);
 	if (manager != s_pWSGroup)
 	{
 		// this is not "our" manager, we don't care
@@ -296,7 +291,7 @@ static void _desktop_created (void*, struct zcosmic_workspace_group_handle_v1 *m
 	if (s_iNumDesktops >= s_iDesktopCap)
 	{
 		desktops = g_renew (CosmicWS*, desktops, s_iNumDesktops + 16);
-		s_iDesktopCap = s_iNumDesktops + 1;
+		s_iDesktopCap = s_iNumDesktops + 16;
 	}
 	desktops[s_iNumDesktops] = desktop;
 	s_iNumDesktops++;
@@ -308,7 +303,6 @@ static void _desktop_created (void*, struct zcosmic_workspace_group_handle_v1 *m
 
 static void _group_removed (void*, struct zcosmic_workspace_group_handle_v1 *handle)
 {
-	cd_warning ("workspace group removed: %p", handle);
 	if (handle == s_pWSGroup)
 	{
 		
@@ -344,7 +338,6 @@ static const struct zcosmic_workspace_group_handle_v1_listener group_listener = 
 
 static void _new_workspace_group (void*, struct zcosmic_workspace_manager_v1*, struct zcosmic_workspace_group_handle_v1 *new_group)
 {
-	cd_warning ("new workspace group: %p", new_group);
 	if (s_pWSGroup)
 	{
 		cd_warning ("cosmic-workspaces: multiple workspace groups are not supported!\n");
@@ -360,7 +353,6 @@ static void _new_workspace_group (void*, struct zcosmic_workspace_manager_v1*, s
 
 static void _done (void*, struct zcosmic_workspace_manager_v1*)
 {
-	cd_warning ("workspace manager done");
 	gboolean bRemoved = FALSE; // if any workspace was removed
 	gboolean bCoords = FALSE; // any of the coordinates changed
 	gboolean bName = FALSE; // any of the names changed
@@ -422,7 +414,6 @@ static void _done (void*, struct zcosmic_workspace_manager_v1*)
 
 static void _finished (void*, struct zcosmic_workspace_manager_v1 *handle)
 {
-	cd_warning ("workspace manager finished");
 	zcosmic_workspace_manager_v1_destroy (handle);
 }
 
