@@ -1672,6 +1672,8 @@ static void init (void)
 	wmb.can_minimize_maximize_close = _can_minimize_maximize_close;
 	wmb.get_id = _get_id;
 	wmb.pick_window = _pick_window;
+	//!! TODO: figure out GLDI_WM_NO_VIEWPORT_OVERLAP flag (depends on the WM, needs to be done in *-integration.c) !!
+	wmb.flags = GINT_TO_POINTER (GLDI_WM_HAVE_WINDOW_GEOMETRY | GLDI_WM_HAVE_WORKSPACES);
 	wmb.name = "X11";
 	gldi_windows_manager_register_backend (&wmb);
 	

@@ -359,7 +359,7 @@ static void gldi_plasma_window_manager_init ()
 	wmb.can_minimize_maximize_close = _can_minimize_maximize_close;
 	// wmb.get_id = _get_id;
 	wmb.pick_window = gldi_wayland_wm_pick_window;
-	wmb.flags = GINT_TO_POINTER (GLDI_WM_NO_VIEWPORT_OVERLAP | GLDI_WM_GEOM_REL_TO_VIEWPORT);
+	wmb.flags = GINT_TO_POINTER (GLDI_WM_NO_VIEWPORT_OVERLAP | GLDI_WM_GEOM_REL_TO_VIEWPORT | GLDI_WM_HAVE_WINDOW_GEOMETRY | GLDI_WM_HAVE_WORKSPACES);
 	wmb.name = "plasma";
 	gldi_windows_manager_register_backend (&wmb);
 	
