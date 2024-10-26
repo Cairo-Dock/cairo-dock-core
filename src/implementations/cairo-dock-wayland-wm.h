@@ -49,6 +49,9 @@ struct _GldiWaylandWindowActor {
 };
 typedef struct _GldiWaylandWindowActor GldiWaylandWindowActor;
 
+// manager for the above, can be extended by more specific implementations
+extern GldiObjectManager myWaylandWMObjectMgr;
+
 
 // functions to update the state of a toplevel and potentially signal
 // the taskbar of the changes
@@ -73,6 +76,12 @@ GldiWindowActor* gldi_wayland_wm_get_active_window ();
 
 GldiWindowActor* gldi_wayland_wm_pick_window (GtkWindow *pParentWindow);
 
+/** Change the stacking order such that actor is on top. Does not send
+ *  a notification; the user should do that manually, or call one of
+ *  the above functions with notify == TRUE.
+ *@param actor  The window to put on top.
+ */
+void gldi_wayland_wm_stack_on_top (GldiWindowActor *actor);
 
 typedef void (*GldiWaylandWMHandleDestroyFunc)(gpointer handle);
 void gldi_wayland_wm_init (GldiWaylandWMHandleDestroyFunc destroy_cb);
