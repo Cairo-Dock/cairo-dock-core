@@ -32,6 +32,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-cosmic-toplevel.h"
 #include "cairo-dock-wayland-wm.h"
+#include "cairo-dock-cosmic-workspaces.h"
 
 #include <stdio.h>
 
@@ -58,6 +59,16 @@ static uint32_t manager_id, info_id, manager_version, info_version;
 
 /**********************************************************************
  * window manager interface -- toplevel manager                       */
+
+static void _move_to_nth_desktop (GldiWindowActor *actor, G_GNUC_UNUSED int iNumDesktop,
+	int x, int y)
+{
+	if (!s_ws_output) return;
+	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor *)actor;
+	struct zcosmic_workspace_handle_v1 *ws = gldi_cosmic_workspaces_get_handle (x, y);
+	//!! TODO: we need a valid wl_output here !!
+	if (ws) zcosmic_toplevel_manager_v1_move_to_workspace (s_ptoplevel_manager, wactor->handle, ws, s_ws_output);
+}
 
 static void _show (GldiWindowActor *actor)
 {
@@ -227,10 +238,20 @@ static void _gldi_toplevel_parent_cb (void* data, G_GNUC_UNUSED wfthandle *handl
 }
 */
 
+
+static void _workspace_entered (void *data, G_GNUC_UNUSED wfthandle *handle, struct zcosmic_workspace_handle_v1 *wshandle)
+{
+	cd_warning ("%p -- workspace: %p", handle, wshandle);
+	gldi_cosmic_workspaces_update_window ((GldiWindowActor*)data, wshandle);
+	gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESKTOP_CHANGED, data);
+}
+
 static void _dummy (G_GNUC_UNUSED void *data, G_GNUC_UNUSED wfthandle *handle, G_GNUC_UNUSED void *workspace)
 {
 	
 }
+
+
 
 /**********************************************************************
  * interface and object manager definitions                           */
@@ -248,7 +269,7 @@ static struct zcosmic_toplevel_handle_v1_listener gldi_toplevel_handle_interface
     .done         = _gldi_toplevel_done_cb,
     .closed       = _gldi_toplevel_closed_cb,
 //    .parent       = _gldi_toplevel_parent_cb,
-    .workspace_enter = (void (*)(void*, struct zcosmic_toplevel_handle_v1*, struct zcosmic_workspace_handle_v1*))_dummy,
+    .workspace_enter = _workspace_entered,
     .workspace_leave = (void (*)(void*, struct zcosmic_toplevel_handle_v1*, struct zcosmic_workspace_handle_v1*))_dummy
 };
 
@@ -318,6 +339,7 @@ gboolean gldi_cosmic_toplevel_try_init (struct wl_registry *registry)
 	GldiWindowManagerBackend wmb;
 	memset (&wmb, 0, sizeof (GldiWindowManagerBackend));
 	wmb.get_active_window = gldi_wayland_wm_get_active_window;
+	wmb.move_to_viewport_abs = _move_to_nth_desktop;
 	// wmb.move_to_nth_desktop = _move_to_nth_desktop;
 	wmb.show = _show;
 	wmb.close = _close;
@@ -340,6 +362,7 @@ gboolean gldi_cosmic_toplevel_try_init (struct wl_registry *registry)
 	wmb.can_minimize_maximize_close = _can_minimize_maximize_close;
 	// wmb.get_id = _get_id;
 	wmb.pick_window = gldi_wayland_wm_pick_window;
+	wmb.flags = GINT_TO_POINTER (GLDI_WM_NO_VIEWPORT_OVERLAP | GLDI_WM_GEOM_REL_TO_VIEWPORT | GLDI_WM_HAVE_WORKSPACES);
 	wmb.name = "Cosmic";
 	gldi_windows_manager_register_backend (&wmb);
 	
