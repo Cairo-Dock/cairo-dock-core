@@ -327,6 +327,9 @@ void gldi_docks_visibility_start (void)
 {
 	static gboolean first = TRUE;
 	
+	if (! (gldi_window_manager_have_coordinates () && gldi_window_manager_can_track_workspaces ()) )
+		return;
+	
 	// register to events
 	if (first)
 	{
