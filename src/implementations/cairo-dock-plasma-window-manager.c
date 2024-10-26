@@ -62,6 +62,7 @@ struct _GldiPlasmaWindowActor {
 //	char *themed_icon_name; -- supplied as a separate event, not sure if we need it
 	unsigned int pid; // pid of the process associated with this window
 	unsigned int sigkill_timeout; // set to an event source if the user requested to kill this process
+	unsigned int cap_and_state; // capabilites and state that is not stored elsewhere
 };
 typedef struct _GldiPlasmaWindowActor GldiPlasmaWindowActor;
 
@@ -107,6 +108,17 @@ static void _minimize (GldiWindowActor *actor)
 		ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_MINIMIZED,
 		ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_MINIMIZED);
 }
+/* does not work this way, would need to use timeout
+static void _lower (GldiWindowActor *actor)
+{
+	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor *)actor;
+	org_kde_plasma_window_set_state (wactor->handle,
+		ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_KEEP_BELOW,
+		ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_KEEP_BELOW);
+	org_kde_plasma_window_set_state (wactor->handle,
+		ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_KEEP_BELOW, 0);
+}
+*/
 static void _maximize (GldiWindowActor *actor, gboolean bMaximize)
 {
 	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor *)actor;
@@ -121,6 +133,13 @@ static void _fullscreen (GldiWindowActor *actor, gboolean bFullScreen)
 		ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_FULLSCREEN,
 		bFullScreen ? ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_FULLSCREEN : 0);
 }
+static void _set_above (GldiWindowActor *actor, gboolean bAbove)
+{
+	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor *)actor;
+	org_kde_plasma_window_set_state (wactor->handle,
+		ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_KEEP_ABOVE,
+		bAbove ? ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_KEEP_ABOVE : 0);
+}
 
 static GldiWindowActor* _get_transient_for(GldiWindowActor* actor)
 {
@@ -131,12 +150,28 @@ static GldiWindowActor* _get_transient_for(GldiWindowActor* actor)
 	return (GldiWindowActor*)pactor;
 }
 
+static void _is_above_or_below (GldiWindowActor *actor, gboolean *bIsAbove, gboolean *bIsBelow)
+{
+	GldiPlasmaWindowActor *pactor = (GldiPlasmaWindowActor *)actor;
+	*bIsAbove = !!(pactor->cap_and_state & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_KEEP_ABOVE);
+	*bIsBelow = !!(pactor->cap_and_state & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_KEEP_BELOW);
+}
+
+static void _set_sticky (GldiWindowActor *actor, gboolean bSticky)
+{
+	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor *)actor;
+	// note: this seems to do nothing
+	org_kde_plasma_window_set_state (wactor->handle,
+		ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_ON_ALL_DESKTOPS,
+		bSticky ? ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_ON_ALL_DESKTOPS : 0);
+}
+
 static void _can_minimize_maximize_close ( G_GNUC_UNUSED GldiWindowActor *actor, gboolean *bCanMinimize, gboolean *bCanMaximize, gboolean *bCanClose)
 {
-	// we don't know, set everything to true
-	*bCanMinimize = TRUE;
-	*bCanMaximize = TRUE;
-	*bCanClose = TRUE;
+	GldiPlasmaWindowActor *pactor = (GldiPlasmaWindowActor *)actor;
+	*bCanMinimize = !!(pactor->cap_and_state & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_MINIMIZABLE);
+	*bCanMaximize = !!(pactor->cap_and_state & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_MAXIMIZABLE);
+	*bCanClose    = !!(pactor->cap_and_state & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_CLOSEABLE);
 }
 
 /// TODO: which one of these two are really used? In cairo-dock-X-manager.c,
@@ -199,13 +234,18 @@ static void _gldi_toplevel_appid_cb (void *data, G_GNUC_UNUSED pwhandle *handle,
 static void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED pwhandle *handle, uint32_t flags)
 {
 	if (!data) return;
-	GldiWaylandWindowActor* wactor = (GldiWaylandWindowActor*)data;
+	GldiPlasmaWindowActor* pactor = (GldiPlasmaWindowActor*)data;
 	
+	// save the flags that contains other useful info (keep above / below, capabilities)
+	pactor->cap_and_state = flags;
+	
+	GldiWaylandWindowActor* wactor = (GldiWaylandWindowActor*)data;
 	gldi_wayland_wm_maximized_changed (wactor, !!(flags & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_MAXIMIZED), FALSE);
 	gldi_wayland_wm_minimized_changed (wactor, !!(flags & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_MINIMIZED), FALSE);
 	gldi_wayland_wm_fullscreen_changed (wactor, !!(flags & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_FULLSCREEN), FALSE);
 	gldi_wayland_wm_attention_changed (wactor, !!(flags & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_DEMANDS_ATTENTION), FALSE);
 	gldi_wayland_wm_skip_changed (wactor, !!(flags & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_SKIPTASKBAR), FALSE);
+	gldi_wayland_wm_sticky_changed (wactor, !!(flags & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_ON_ALL_DESKTOPS), FALSE);
 	if (flags & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_ACTIVE)
 	{
 		gldi_wayland_wm_activated (wactor, FALSE);
@@ -437,7 +477,7 @@ static void gldi_plasma_window_manager_init ()
 	// wmb.lower = _lower;
 	wmb.maximize = _maximize;
 	wmb.set_fullscreen = _fullscreen;
-	// wmb.set_above = _set_above;
+	wmb.set_above = _set_above;
 	wmb.set_minimize_position = _set_minimize_position;
 	wmb.set_thumbnail_area = _set_thumbnail_area;
 	// wmb.set_window_border = _set_window_border;
@@ -445,9 +485,8 @@ static void gldi_plasma_window_manager_init ()
 	// wmb.get_thumbnail_surface = _get_thumbnail_surface;
 	// wmb.get_texture = _get_texture;
 	wmb.get_transient_for = _get_transient_for;
-	// wmb.is_above_or_below = _is_above_or_below;
-	// wmb.is_sticky = _is_sticky;
-	// wmb.set_sticky = _set_sticky;
+	wmb.is_above_or_below = _is_above_or_below;
+	wmb.set_sticky = _set_sticky;
 	wmb.can_minimize_maximize_close = _can_minimize_maximize_close;
 	// wmb.get_id = _get_id;
 	wmb.pick_window = gldi_wayland_wm_pick_window;

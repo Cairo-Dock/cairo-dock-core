@@ -42,6 +42,7 @@ struct _GldiWaylandWindowActor {
 	gboolean fullscreen_pending; // fullscreen state received
 	gboolean attention_pending; // needs-attention state received (only KDE)
 	gboolean skip_taskbar; // should not be shown in taskbar (only KDE)
+	gboolean sticky_pending; // sticky state received (only KDE)
 	gboolean close_pending; // this window has been closed
 	
 	gboolean init_done; // initial state has been configured
@@ -66,6 +67,7 @@ void gldi_wayland_wm_minimized_changed (GldiWaylandWindowActor *wactor, gboolean
 void gldi_wayland_wm_fullscreen_changed (GldiWaylandWindowActor *wactor, gboolean fullscreen, gboolean notify);
 void gldi_wayland_wm_attention_changed (GldiWaylandWindowActor *wactor, gboolean attention, gboolean notify);
 void gldi_wayland_wm_skip_changed (GldiWaylandWindowActor *wactor, gboolean skip, gboolean notify);
+void gldi_wayland_wm_sticky_changed (GldiWaylandWindowActor *wactor, gboolean sticky, gboolean notify);
 void gldi_wayland_wm_activated (GldiWaylandWindowActor *wactor, gboolean notify);
 
 void gldi_wayland_wm_closed (GldiWaylandWindowActor *wactor, gboolean notify);

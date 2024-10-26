@@ -151,6 +151,12 @@ void gldi_wayland_wm_skip_changed (GldiWaylandWindowActor *wactor, gboolean skip
 	if (notify) gldi_wayland_wm_done (wactor);
 }
 
+void gldi_wayland_wm_sticky_changed (GldiWaylandWindowActor *wactor, gboolean sticky, gboolean notify)
+{
+	wactor->sticky_pending = sticky;
+	if (notify) gldi_wayland_wm_done (wactor);
+}
+
 void gldi_wayland_wm_closed (GldiWaylandWindowActor *wactor, gboolean notify)
 {
 	wactor->close_pending = TRUE;
@@ -208,6 +214,16 @@ static gboolean _update_attention (GldiWaylandWindowActor *wactor, gboolean noti
 	gboolean changed = (wactor->attention_pending != actor->bDemandsAttention);
 	if (changed) actor->bDemandsAttention = wactor->attention_pending;
 	if (notify && changed) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ATTENTION_CHANGED, actor);
+	return changed;
+}
+
+static gboolean _update_sticky (GldiWaylandWindowActor *wactor, gboolean notify)
+{
+	GldiWindowActor* actor = (GldiWindowActor*)wactor;
+	gboolean changed = (wactor->sticky_pending != actor->bIsSticky);
+	if (changed) actor->bIsSticky = wactor->sticky_pending;
+	// a change in stickyness can be seen as a change in the desktop position
+	if (notify && changed) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESKTOP_CHANGED, actor);
 	return changed;
 }
 
@@ -353,8 +369,10 @@ void gldi_wayland_wm_done (GldiWaylandWindowActor *wactor)
 			// check if other properties have changed (and send a notification)
 			if (_update_state (wactor, TRUE)) continue;
 			// update the needs-attention property
-			if (_update_attention(wactor, TRUE)) continue;
-				
+			if (_update_attention (wactor, TRUE)) continue;
+			// update the sticky property
+			if (_update_sticky (wactor, TRUE)) continue;
+			
 			if (actor == s_pMaybeActiveWindow)
 			{
 				s_pActiveWindow = actor;

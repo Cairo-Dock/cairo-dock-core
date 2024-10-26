@@ -255,7 +255,7 @@ GldiWindowActor *gldi_window_get_transient_for (GldiWindowActor *actor)
 
 void gldi_window_is_above_or_below (GldiWindowActor *actor, gboolean *bIsAbove, gboolean *bIsBelow)
 {
-	if (s_backend.set_window_border)
+	if (s_backend.is_above_or_below)
 		s_backend.is_above_or_below (actor, bIsAbove, bIsBelow);
 	else
 	{
