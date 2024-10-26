@@ -61,6 +61,7 @@ struct _GldiPlasmaWindowActor {
 	char *uuid;
 //	char *themed_icon_name; -- supplied as a separate event, not sure if we need it
 	unsigned int pid; // pid of the process associated with this window
+	unsigned int sigkill_timeout; // set to an event source if the user requested to kill this process
 };
 typedef struct _GldiPlasmaWindowActor GldiPlasmaWindowActor;
 
@@ -159,6 +160,29 @@ static void _set_minimize_position (GldiWindowActor *actor, GtkWidget* pContaine
 }
 
 
+gboolean _send_sigkill (void *data)
+{
+	GldiPlasmaWindowActor *pactor = (GldiPlasmaWindowActor*)data;
+	if (pactor->pid) kill (pactor->pid, SIGKILL);
+	pactor->sigkill_timeout = 0;
+	return G_SOURCE_REMOVE;
+}
+
+// kill the process corresponding to a window
+// note that this depends on the pid provided by KWin and is thus
+// inherently racy, if the pid is reused between the process exit and
+// KWin sending the unmapped event
+static void _kill (GldiWindowActor *actor)
+{
+	GldiPlasmaWindowActor *pactor = (GldiPlasmaWindowActor*)actor;
+	if (!pactor->pid) return;
+	// 1. we try sigterm, so that the app has a chance to shut down gracefully
+	kill (pactor->pid, SIGTERM);
+	// 2. after 2s, we send sigkill (if the window is still not closed)
+	pactor->sigkill_timeout = g_timeout_add (2000, _send_sigkill, pactor);
+}
+
+
 /**  callbacks  **/
 static void _gldi_toplevel_title_cb (void *data, G_GNUC_UNUSED pwhandle *handle, const char *title)
 {
@@ -205,6 +229,12 @@ static void _gldi_toplevel_done_cb ( void *data, G_GNUC_UNUSED pwhandle *handle)
 
 static void _gldi_toplevel_closed_cb (void *data, G_GNUC_UNUSED pwhandle *handle)
 {
+	GldiPlasmaWindowActor *pactor = (GldiPlasmaWindowActor*)data;
+	if (pactor->sigkill_timeout)
+	{
+		g_source_remove (pactor->sigkill_timeout);
+		pactor->sigkill_timeout = 0;
+	}
 	gldi_wayland_wm_closed (data, TRUE);
 }
 
@@ -402,7 +432,7 @@ static void gldi_plasma_window_manager_init ()
 	wmb.move_to_viewport_abs = _move_to_nth_desktop;
 	wmb.show = _show;
 	wmb.close = _close;
-	// wmb.kill = _kill;
+	wmb.kill = _kill;
 	wmb.minimize = _minimize;
 	// wmb.lower = _lower;
 	wmb.maximize = _maximize;
