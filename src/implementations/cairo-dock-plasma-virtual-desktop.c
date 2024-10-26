@@ -271,10 +271,25 @@ static gboolean _set_current_desktop (G_GNUC_UNUSED int iDesktopNumber, int iVie
 	return FALSE;
 }
 
+static struct org_kde_plasma_virtual_desktop_management* s_pmanager = NULL;
+
+static void _add_workspace (void)
+{
+	if (!s_pmanager) return;
+	char *name = g_strdup_printf ("Workspace %u", s_iNumDesktops + 1);
+	org_kde_plasma_virtual_desktop_management_request_create_virtual_desktop (s_pmanager, name, s_iNumDesktops);
+	g_free (name);
+}
+
+static void _remove_workspace (void)
+{
+	if (s_iNumDesktops <= 1 || !s_pmanager) return;
+	org_kde_plasma_virtual_desktop_management_request_remove_virtual_desktop (s_pmanager, desktops[s_iNumDesktops - 1]->id);
+}
+
 
 static uint32_t protocol_id, protocol_version;
 static gboolean protocol_found = FALSE;
-static struct org_kde_plasma_virtual_desktop_management* s_pmanager = NULL;
 
 gboolean gldi_plasma_virtual_desktop_match_protocol (uint32_t id, const char *interface, uint32_t version)
 {
@@ -298,8 +313,10 @@ gboolean gldi_plasma_virtual_desktop_try_init (struct wl_registry *registry)
 	
 	GldiDesktopManagerBackend dmb;
 	memset (&dmb, 0, sizeof (GldiDesktopManagerBackend));
-	dmb.set_current_desktop = _set_current_desktop;
-	dmb.get_desktops_names = _get_desktops_names;
+	dmb.set_current_desktop   = _set_current_desktop;
+	dmb.get_desktops_names    = _get_desktops_names;
+	dmb.add_workspace         = _add_workspace;
+	dmb.remove_last_workspace = _remove_workspace;
 	gldi_desktop_manager_register_backend (&dmb, "plasma-virtual-desktop");
 	
 	org_kde_plasma_virtual_desktop_management_add_listener (s_pmanager, &manager_listener, NULL);
