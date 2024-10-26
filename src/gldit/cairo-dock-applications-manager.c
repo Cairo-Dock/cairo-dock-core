@@ -62,7 +62,7 @@ extern gboolean g_bUseOpenGL;
 
 // private
 static GHashTable *s_hAppliIconsTable = NULL;  // table des fenetres affichees dans le dock.
-static int s_bAppliManagerIsRunning = FALSE;
+static gboolean s_bAppliManagerIsRunning = FALSE;
 static GldiWindowActor *s_pCurrentActiveWindow = NULL;
 
 static void cairo_dock_unregister_appli (Icon *icon);
@@ -88,6 +88,7 @@ static Icon *_get_appli_icon (GldiWindowActor *actor)
 
 static gboolean _on_window_created (G_GNUC_UNUSED gpointer data, GldiWindowActor *actor)
 {
+	if (!s_bAppliManagerIsRunning) return GLDI_NOTIFICATION_LET_PASS;
 	Icon *pIcon = _get_appli_icon (actor);
 	g_return_val_if_fail (pIcon == NULL, GLDI_NOTIFICATION_LET_PASS);
 	
