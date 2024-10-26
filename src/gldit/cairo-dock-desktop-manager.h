@@ -159,6 +159,8 @@ struct _GldiDesktopManagerBackend {
 	void (*refresh) (void);
 	void (*notify_startup) (const gchar *cClass);
 	gboolean (*grab_shortkey) (guint keycode, guint modifiers, gboolean grab);
+	void (*add_workspace) (void); // gldi_desktop_add_workspace ()
+	void (*remove_last_workspace) (void); // gldi_desktop_remove_last_workspace ()
 	};
 
 /// Definition of a Desktop Background Buffer. It has a reference count so that it can be shared across all the lib.
@@ -222,6 +224,25 @@ gchar** gldi_desktop_get_names (void);
 gboolean gldi_desktop_set_names (gchar **cNames);
 gboolean gldi_desktop_set_current (int iDesktopNumber, int iViewportNumberX, int iViewportNumberY);
 gboolean gldi_desktop_set_nb_desktops (int iNbDesktops, int iNbViewportX, int iNbViewportY);
+
+/** Adds a new workspace, desktop or viewport in an implementation-defined manner.
+ * Typically this can mean adding one more workspace / desktop as the "last" one.
+ * On X11, this will resize the desktop geometry, and could result in adding
+ * multiple viewports.
+ * Might not suceed, depending on the capabilities of the backend
+ * (NOTIFICATION_DESKTOP_GEOMETRY_CHANGED will be emitted if successful).
+ */
+void gldi_desktop_add_workspace (void);
+
+/** Remove the "last" workspace desktop or viewport, according to the
+ * internal ordering of workspaces. The actual number of workspaces can
+ * be > 1, depending on the backend (on X11, if viewports are arranged
+ * in a square).
+ * Might not suceed, depending on the capabilities of the backend
+ * (NOTIFICATION_DESKTOP_GEOMETRY_CHANGED will be emitted if successful).
+ */
+void gldi_desktop_remove_last_workspace (void);
+
 
 void gldi_desktop_refresh (void);
 

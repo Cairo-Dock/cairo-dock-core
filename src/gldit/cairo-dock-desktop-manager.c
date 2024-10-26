@@ -222,6 +222,18 @@ gboolean gldi_desktop_set_nb_desktops (int iNbDesktops, int iNbViewportX, int iN
 	return FALSE;
 }
 
+void gldi_desktop_add_workspace (void)
+{
+	if (s_backend.add_workspace) s_backend.add_workspace ();
+}
+
+void gldi_desktop_remove_last_workspace (void)
+{
+	if (s_backend.remove_last_workspace) s_backend.remove_last_workspace ();
+}
+
+
+
 void gldi_desktop_refresh (void)
 {
 	if (s_backend.refresh)
