@@ -798,6 +798,44 @@ static gboolean _set_nb_desktops (int iNbDesktops, int iNbViewportX, int iNbView
 	return TRUE;
 }
 
+static void _change_viewports (int iDeltaNbDesktops)
+{
+	// taken from the switcher applet
+	int iNewX, iNewY;
+	// Try to keep a square: (delta > 0 && X <= Y) || (delta < 0 && X > Y)
+	if ((iDeltaNbDesktops > 0) == (g_desktopGeometry.iNbViewportX <= g_desktopGeometry.iNbViewportY))
+	{
+		iNewX = g_desktopGeometry.iNbViewportX + iDeltaNbDesktops;
+		if (iNewX <= 0) return; // cannot remove the last viewport
+		iNewY = g_desktopGeometry.iNbViewportY;
+	}
+	else
+	{
+		iNewX = g_desktopGeometry.iNbViewportX;
+		iNewY = g_desktopGeometry.iNbViewportY + iDeltaNbDesktops;
+		if (iNewY <= 0) return; // cannot remove the last viewport
+	}
+	cairo_dock_set_nb_viewports (iNewX, iNewY);
+}
+
+static void _add_workspace (void)
+{
+	if (g_desktopGeometry.iNbViewportX == 1 && g_desktopGeometry.iNbViewportY == 1)
+		cairo_dock_set_nb_desktops (g_desktopGeometry.iNbDesktops + 1);
+	else _change_viewports (1);
+}
+
+static void _remove_workspace (void)
+{
+	if (g_desktopGeometry.iNbViewportX == 1 && g_desktopGeometry.iNbViewportY == 1)
+	{
+		// note: do not attempt to remove the last desktop
+		if (g_desktopGeometry.iNbDesktops > 1)
+			cairo_dock_set_nb_desktops (g_desktopGeometry.iNbDesktops - 1);
+	}
+	else _change_viewports (-1);
+}
+
 static cairo_surface_t *_get_desktop_bg_surface (void)  // attention : fonction lourde.
 {
 	//g_print ("+++ %s ()\n", __func__);
@@ -1646,6 +1684,8 @@ static void init (void)
 	dmb.refresh                = _refresh;
 	dmb.notify_startup         = _notify_startup;
 	dmb.grab_shortkey          = _grab_shortkey;
+	dmb.add_workspace          = _add_workspace;
+	dmb.remove_last_workspace  = _remove_workspace;
 	gldi_desktop_manager_register_backend (&dmb, "X11");
 	
 	GldiWindowManagerBackend wmb;
