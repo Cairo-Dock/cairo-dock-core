@@ -63,7 +63,7 @@ static uint32_t manager_id, info_id, manager_version, info_version;
 static void _move_to_nth_desktop (GldiWindowActor *actor, G_GNUC_UNUSED int iNumDesktop,
 	int x, int y)
 {
-	if (!s_ws_output) return;
+	if (!(s_ws_output && can_move_workspace)) return;
 	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor *)actor;
 	struct zcosmic_workspace_handle_v1 *ws = gldi_cosmic_workspaces_get_handle (x, y);
 	//!! TODO: we need a valid wl_output here !!
@@ -206,7 +206,10 @@ static void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED wfthandle *handle
 	for (i = 0; i*sizeof(uint32_t) < state->size; i++)
 	{
 		if (stdata[i] == ZCOSMIC_TOPLEVEL_HANDLE_V1_STATE_ACTIVATED)
+		{
 			gldi_wayland_wm_activated (wactor, FALSE);
+			gldi_wayland_wm_stack_on_top ((GldiWindowActor*)wactor);
+		}
 		else if (stdata[i] == ZCOSMIC_TOPLEVEL_HANDLE_V1_STATE_MAXIMIZED)
 			maximized_pending = TRUE;
 		else if (stdata[i] == ZCOSMIC_TOPLEVEL_HANDLE_V1_STATE_MINIMIZED)
