@@ -49,6 +49,7 @@
 #include "cairo-dock-plasma-window-manager.h"
 #include "cairo-dock-cosmic-toplevel.h"
 #include "cairo-dock-plasma-virtual-desktop.h"
+#include "cairo-dock-cosmic-workspaces.h"
 #endif
 #include "cairo-dock-wayland-hotspots.h"
 #include "cairo-dock-egl.h"
@@ -532,7 +533,14 @@ static void _registry_global_cb ( G_GNUC_UNUSED void *data, struct wl_registry *
 	{
 		cd_debug("Found plasma-virtual-desktop-manager");
 	}
-	else gldi_cosmic_toplevel_match_protocol (id, interface, version);
+	else if (gldi_cosmic_toplevel_match_protocol (id, interface, version))
+	{
+		cd_debug("Found cosmic-toplevel-manager");
+	}
+	else if (gldi_cosmic_workspaces_match_protocol (id, interface, version))
+	{
+		cd_debug("Found cosmic-workspace-manager");
+	}
 #endif
 	s_bInitializing = TRUE;
 }
@@ -587,10 +595,19 @@ static void init (void)
 	if (gldi_wayland_hotspots_try_init (registry))
 		cmb.update_polling_screen_edge = gldi_wayland_hotspots_update;
 #ifdef HAVE_WAYLAND_PROTOCOLS
-	if (!gldi_cosmic_toplevel_try_init (registry))
-		if (!gldi_plasma_window_manager_try_init (registry))
+	gboolean bCosmic = gldi_cosmic_toplevel_try_init (registry);
+	if (!bCosmic) if (!gldi_plasma_window_manager_try_init (registry))
 			gldi_wlr_foreign_toplevel_try_init (registry);
-	gldi_plasma_virtual_desktop_try_init (registry);
+	if (bCosmic)
+	{
+		if (!gldi_cosmic_workspaces_try_init (registry))
+			gldi_plasma_virtual_desktop_try_init (registry);
+	}
+	else
+	{
+		if (!gldi_plasma_virtual_desktop_try_init (registry))
+			gldi_cosmic_workspaces_try_init (registry);
+	}
 #endif	
 	cmb.set_input_shape = _set_input_shape;
 	cmb.is_wayland = _is_wayland;

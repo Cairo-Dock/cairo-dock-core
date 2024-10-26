@@ -34,6 +34,7 @@ if(WaylandScanner_FOUND)
 		cairo-dock-cosmic-toplevel.c         cairo-dock-cosmic-toplevel.h
 		cairo-dock-plasma-window-manager.c   cairo-dock-plasma-window-manager.h
 		cairo-dock-plasma-virtual-desktop.c  cairo-dock-plasma-virtual-desktop.h
+		cairo-dock-cosmic-workspaces.c       cairo-dock-cosmic-workspaces.h
 	)
 
 	ecm_add_wayland_client_protocol(
