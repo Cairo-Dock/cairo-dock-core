@@ -746,7 +746,9 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoTaskbarParam *pTaskBar)
 	
 	if (pTaskBar->bShowAppli)
 	{
-		pTaskBar->bAppliOnCurrentDesktopOnly = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "current desktop only", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
+		// current desktop only option only makes sense if we are actually able to track which desktop a window is on
+		pTaskBar->bAppliOnCurrentDesktopOnly = gldi_window_manager_can_track_workspaces ()
+			&& cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "current desktop only", &bFlushConfFileNeeded, FALSE, "Applications", NULL);
 		
 		pTaskBar->bMixLauncherAppli = cairo_dock_get_boolean_key_value (pKeyFile, "TaskBar", "mix launcher appli", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 
