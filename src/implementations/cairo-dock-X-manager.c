@@ -789,40 +789,11 @@ static gboolean _set_current_desktop (int iDesktopNumber, int iViewportNumberX, 
 	return TRUE;
 }
 
-static gboolean _set_nb_desktops (int iNbDesktops, int iNbViewportX, int iNbViewportY)
-{
-	if (iNbDesktops > 0)
-		cairo_dock_set_nb_desktops (iNbDesktops);
-	if (iNbViewportX > 0 && iNbViewportY > 0)
-		cairo_dock_set_nb_viewports (iNbViewportX, iNbViewportY);
-	return TRUE;
-}
-
-static void _change_viewports (int iDeltaNbDesktops)
-{
-	// taken from the switcher applet
-	int iNewX, iNewY;
-	// Try to keep a square: (delta > 0 && X <= Y) || (delta < 0 && X > Y)
-	if ((iDeltaNbDesktops > 0) == (g_desktopGeometry.iNbViewportX <= g_desktopGeometry.iNbViewportY))
-	{
-		iNewX = g_desktopGeometry.iNbViewportX + iDeltaNbDesktops;
-		if (iNewX <= 0) return; // cannot remove the last viewport
-		iNewY = g_desktopGeometry.iNbViewportY;
-	}
-	else
-	{
-		iNewX = g_desktopGeometry.iNbViewportX;
-		iNewY = g_desktopGeometry.iNbViewportY + iDeltaNbDesktops;
-		if (iNewY <= 0) return; // cannot remove the last viewport
-	}
-	cairo_dock_set_nb_viewports (iNewX, iNewY);
-}
-
 static void _add_workspace (void)
 {
 	if (g_desktopGeometry.iNbViewportX == 1 && g_desktopGeometry.iNbViewportY == 1)
 		cairo_dock_set_nb_desktops (g_desktopGeometry.iNbDesktops + 1);
-	else _change_viewports (1);
+	else cairo_dock_change_nb_viewports (1, cairo_dock_set_nb_viewports);
 }
 
 static void _remove_workspace (void)
@@ -833,7 +804,7 @@ static void _remove_workspace (void)
 		if (g_desktopGeometry.iNbDesktops > 1)
 			cairo_dock_set_nb_desktops (g_desktopGeometry.iNbDesktops - 1);
 	}
-	else _change_viewports (-1);
+	else cairo_dock_change_nb_viewports (-1, cairo_dock_set_nb_viewports);
 }
 
 static cairo_surface_t *_get_desktop_bg_surface (void)  // attention : fonction lourde.
@@ -1680,7 +1651,6 @@ static void init (void)
 	dmb.set_desktops_names     = _set_desktops_names;
 	dmb.get_desktop_bg_surface = _get_desktop_bg_surface;
 	dmb.set_current_desktop    = _set_current_desktop;
-	dmb.set_nb_desktops        = _set_nb_desktops;
 	dmb.refresh                = _refresh;
 	dmb.notify_startup         = _notify_startup;
 	dmb.grab_shortkey          = _grab_shortkey;

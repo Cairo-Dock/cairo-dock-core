@@ -69,6 +69,17 @@ GdkPixbuf *cairo_dock_get_pixbuf_from_pixmap (int XPixmapID, gboolean bAddAlpha)
 void cairo_dock_set_nb_viewports (int iNbViewportX, int iNbViewportY);
 void cairo_dock_set_nb_desktops (gulong iNbDesktops);
 
+typedef void (*GldiChangeViewportFunc) (int iNbViewportX, int iNbViewportY);
+
+/** Change the number of viewports while keeping the total workarea as a rectangle.
+ *  The new dimensions are calculated to keep it close to a square. The actual change
+ *  is carried out by the callback given as the second argument.
+ * @param iDeltaNbDesktops should be +1 or -1 to indicate whether to add or remove viewports
+ * @param cb a function carrying out the actual change, taking two integer parameters
+ *  which are the new X and Y dimensions
+ */
+void cairo_dock_change_nb_viewports (int iDeltaNbDesktops, GldiChangeViewportFunc cb);
+
 
   ////////////
  // WINDOW //

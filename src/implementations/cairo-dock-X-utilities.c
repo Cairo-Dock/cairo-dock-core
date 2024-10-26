@@ -719,6 +719,26 @@ void cairo_dock_set_nb_desktops (gulong iNbDesktops)
 	XFlush (s_XDisplay);
 }
 
+void cairo_dock_change_nb_viewports (int iDeltaNbDesktops, GldiChangeViewportFunc cb)
+{
+	// taken from the switcher applet
+	int iNewX, iNewY;
+	// Try to keep a square: (delta > 0 && X <= Y) || (delta < 0 && X > Y)
+	if ((iDeltaNbDesktops > 0) == (g_desktopGeometry.iNbViewportX <= g_desktopGeometry.iNbViewportY))
+	{
+		iNewX = g_desktopGeometry.iNbViewportX + iDeltaNbDesktops;
+		if (iNewX <= 0) return; // cannot remove the last viewport
+		iNewY = g_desktopGeometry.iNbViewportY;
+	}
+	else
+	{
+		iNewX = g_desktopGeometry.iNbViewportX;
+		iNewY = g_desktopGeometry.iNbViewportY + iDeltaNbDesktops;
+		if (iNewY <= 0) return; // cannot remove the last viewport
+	}
+	cb (iNewX, iNewY);
+}
+
 
 static gboolean cairo_dock_support_X_extension (void)
 {
