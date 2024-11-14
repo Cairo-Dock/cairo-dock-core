@@ -244,7 +244,6 @@ static void _gldi_toplevel_parent_cb (void* data, G_GNUC_UNUSED wfthandle *handl
 
 static void _workspace_entered (void *data, G_GNUC_UNUSED wfthandle *handle, struct zcosmic_workspace_handle_v1 *wshandle)
 {
-	cd_warning ("%p -- workspace: %p", handle, wshandle);
 	gldi_cosmic_workspaces_update_window ((GldiWindowActor*)data, wshandle);
 	gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESKTOP_CHANGED, data);
 }
