@@ -444,7 +444,12 @@ void gldi_wayland_grab_keyboard (GldiContainer *pContainer)
 void gldi_wayland_release_keyboard ( G_GNUC_UNUSED GldiContainer *pContainer)
 {
 	GldiWindowActor *actor = gldi_windows_get_active ();
-	if (actor && !actor->bIsHidden) gldi_window_show (actor);
+	if (actor && !actor->bIsHidden) {
+		if (gldi_window_manager_can_track_workspaces () && !gldi_window_is_on_current_desktop (actor))
+			return;
+		// TODO: avoid activating a window not on the current workspace in other cases!
+		gldi_window_show (actor);
+	}
 }
 
 static gboolean _dock_handle_leave (CairoDock *pDock, GdkEventCrossing *pEvent)
