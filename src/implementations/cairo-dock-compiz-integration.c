@@ -307,34 +307,29 @@ static gboolean set_on_widget_layer (GldiContainer *pContainer, gboolean bOnWidg
 /* Only add workspaces with Compiz: We shouldn't add desktops when using Compiz
  * and with this method, Compiz saves the new state
  */
-static gboolean _compiz_set_nb_viewports (int X, int Y)
+static void _compiz_set_nb_viewports (int X, int Y)
 {
-	gboolean bSuccess = FALSE;
 	if (s_pHSizeProxy != NULL && s_pVSizeProxy != NULL)
 	{
 		GError *error = NULL;
-		bSuccess = dbus_g_proxy_call (s_pHSizeProxy, "set", &error,
+		dbus_g_proxy_call (s_pHSizeProxy, "set", &error,
 			G_TYPE_INT, X,
 			G_TYPE_INVALID, G_TYPE_INVALID);
 		if (error)
 		{
 			cd_warning ("compiz HSize error: %s", error->message);
 			g_error_free (error);
-			error = NULL;
-			bSuccess = FALSE;
 		}
 		error = NULL;
-		bSuccess &= dbus_g_proxy_call (s_pVSizeProxy, "set", &error,
+		dbus_g_proxy_call (s_pVSizeProxy, "set", &error,
 			G_TYPE_INT, Y,
 			G_TYPE_INVALID, G_TYPE_INVALID);
 		if (error)
 		{
 			cd_warning ("compiz VSize error: %s", error->message);
 			g_error_free (error);
-			bSuccess = FALSE;
 		}
 	}
-	return bSuccess;
 }
 
 static void _add_workspace (void)
