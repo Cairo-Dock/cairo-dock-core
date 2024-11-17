@@ -240,8 +240,6 @@ void cairo_dock_enable_containers_opacity (void);
 
 #define gldi_container_is_visible(pContainer) gtk_widget_get_visible ((pContainer)->pWidget)
 
-void gldi_display_get_pointer (int *xptr, int *yptr);
-
 /* NOTE: this does nothing on Wayland (no global mouse position, we need
  * to rely on the motion notify and leave / enter events) */
 void gldi_container_update_mouse_position (GldiContainer *pContainer);
@@ -418,6 +416,9 @@ void cairo_dock_allow_widget_to_receive_data (GtkWidget *pWidget, GCallback pCal
 #define gldi_container_enable_drop(pContainer, pCallBack, data) cairo_dock_allow_widget_to_receive_data (pContainer->pWidget, pCallBack, data)
 
 void gldi_container_disable_drop (GldiContainer *pContainer);
+
+/// Get the GdkAtom used internally from dragging icons between docks
+GdkAtom gldi_container_icon_dnd_atom (void);
 
 /** Notify everybody that a drop has just occured.
 * @param cReceivedData the dropped data.

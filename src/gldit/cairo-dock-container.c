@@ -64,6 +64,7 @@ static gboolean s_bInitialOpacity0 = FALSE;  // set initial window opacity to 0,
 static gboolean s_bNoComposite = FALSE;
 static GldiContainerManagerBackend s_backend = {0};
 static gboolean s_bNewPositioning = FALSE;
+static GdkAtom s_dnd_atom = GDK_NONE;
 
 void cairo_dock_set_containers_non_sticky (void)
 {
@@ -84,13 +85,6 @@ void cairo_dock_enable_containers_opacity (void)
 	}
 	s_bInitialOpacity0 = TRUE;
 }
-
-inline void gldi_display_get_pointer (int *xptr, int *yptr)
-{
-	GdkSeat *pSeat = gdk_display_get_default_seat (gdk_display_get_default());
-	GdkDevice *pDevice = gdk_seat_get_pointer (pSeat);
-	gdk_device_get_position (pDevice, NULL, xptr, yptr);
-} 
 
 inline void gldi_container_update_mouse_position (GldiContainer *pContainer)
 {
@@ -233,8 +227,13 @@ void cairo_dock_allow_widget_to_receive_data (GtkWidget *pWidget, GCallback pCal
 		NULL,
 		0,
 		GDK_ACTION_COPY | GDK_ACTION_MOVE);  // le 'GDK_ACTION_MOVE' c'est pour KDE.
-	gtk_drag_dest_add_uri_targets (pWidget);
-	gtk_drag_dest_add_text_targets (pWidget);
+	
+	GtkTargetList *targets = gtk_target_list_new (NULL, 0);
+	gtk_target_list_add (targets, gldi_container_icon_dnd_atom (), GTK_TARGET_SAME_APP, 0);
+	gtk_target_list_add_text_targets (targets, 0);
+	gtk_target_list_add_uri_targets (targets, 0);
+	gtk_drag_dest_set_target_list (pWidget, targets);
+	gtk_target_list_unref (targets); // above function should take ref
 	
 	g_signal_connect (G_OBJECT (pWidget),
 		"drag_data_received",
@@ -245,6 +244,13 @@ void cairo_dock_allow_widget_to_receive_data (GtkWidget *pWidget, GCallback pCal
 void gldi_container_disable_drop (GldiContainer *pContainer)
 {
 	gtk_drag_dest_set_target_list (pContainer->pWidget, NULL);
+}
+
+GdkAtom gldi_container_icon_dnd_atom (void)
+{
+	if (s_dnd_atom == GDK_NONE)
+		s_dnd_atom = gdk_atom_intern_static_string ("cairo-dock/icon");
+	return s_dnd_atom;
 }
 
 void gldi_container_notify_drop_data (GldiContainer *pContainer, gchar *cReceivedData, Icon *pPointedIcon, double fOrder)

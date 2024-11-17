@@ -70,6 +70,7 @@ static CairoFlyingContainer *s_pFlyingContainer = NULL;
 static int s_iFirstClickX=0, s_iFirstClickY=0;  // for double-click.
 static gboolean s_bFrozenDock = FALSE;
 static gboolean s_bIconDragged = FALSE;
+static Icon *s_pDndIcon = NULL;
 static gboolean _check_mouse_outside (CairoDock *pDock);
 static void cairo_dock_stop_icon_glide (CairoDock *pDock);
 #define CD_CLICK_ZONE 5
@@ -607,7 +608,19 @@ static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 			gldi_icon_detach (s_pIconClicked);
 			cairo_dock_stop_icon_glide (pOriginDock);
 			
-			s_pFlyingContainer = gldi_flying_container_new (s_pIconClicked, pOriginDock);
+			if (gldi_container_use_new_positioning_code ())
+			{
+				// use GTK DnD (works on Wayland as well, but no custom effects so far)
+				s_pDndIcon = s_pIconClicked;
+				GtkTargetList *targets = gtk_target_list_new (NULL, 0);
+				gtk_target_list_add (targets, gldi_container_icon_dnd_atom (), GTK_TARGET_SAME_APP, 0);
+				GdkDragContext *context = gtk_drag_begin_with_coordinates (pDock->container.pWidget,
+					targets, GDK_ACTION_COPY, 1, (GdkEvent*)pEvent, -1, -1);
+				gtk_target_list_unref (targets);
+				gtk_drag_set_icon_surface (context, s_pIconClicked->image.pSurface);
+			}
+			// "old" method: use a flying container (only works reliably on X11)
+			else s_pFlyingContainer = gldi_flying_container_new (s_pIconClicked, pOriginDock);
 			//g_print ("- s_pIconClicked <- NULL\n");
 			s_pIconClicked = NULL;
 			if (pDock->iRefCount > 0 || pDock->bAutoHide)  // pour garder le dock visible.
@@ -1254,9 +1267,31 @@ static gboolean s_bCouldDrop = FALSE;
 
 void _on_drag_data_received (G_GNUC_UNUSED GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, GtkSelectionData *selection_data, G_GNUC_UNUSED guint info, guint time, CairoDock *pDock)
 {
-	cd_debug ("%s (%dx%d, %d, %d)", __func__, x, y, time, pDock->container.bInside);
+	// cd_warning ("%s (%dx%d, %d, %d)", __func__, x, y, time, pDock->container.bInside);
 	if (cairo_dock_is_hidden (pDock))  // X ne semble pas tenir compte de la zone d'input pour dropper les trucs...
 		return ;
+	
+	if (gtk_selection_data_get_data_type (selection_data) == gldi_container_icon_dnd_atom ())
+	{
+		if (!s_pDndIcon)
+		{
+			cd_warning ("no dragged icon set!");
+			return;
+		}
+		
+		// reinsert the icon where it was dropped, not at its original position.
+		Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);  // get the pointed icon before we insert the icon, since the inserted icon will be the pointed one!
+		//g_print (" pointed icon: %s\n", icon?icon->cName:"none");
+		gldi_icon_insert_in_container (s_pDndIcon, CAIRO_CONTAINER(pDock), CAIRO_DOCK_ANIMATE_ICON);
+		gldi_theme_icon_write_container_name_in_conf_file (s_pDndIcon, gldi_dock_get_name (pDock));
+		if (icon != NULL /* && cairo_dock_get_icon_order (icon) == cairo_dock_get_icon_order (pFlyingIcon) */)
+		{
+			cairo_dock_move_icon_after_icon (pDock, s_pDndIcon, icon);
+		}
+		s_pDndIcon = NULL;
+		return;
+	}
+	
 	//\_________________ On recupere l'URI.
 	gchar *cReceivedData = (gchar *)gtk_selection_data_get_data (selection_data);  // the data are actually 'const guchar*', but since we only allowed text and urls, it will be a string
 	g_return_if_fail (cReceivedData != NULL);
@@ -1364,7 +1399,7 @@ void _on_drag_data_received (G_GNUC_UNUSED GtkWidget *pWidget, GdkDragContext *d
 
 static gboolean _on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, guint time, CairoDock *pDock)
 {
-	cd_debug ("%s (%d;%d, %d)", __func__, x, y, time);
+	// cd_warning ("%s (%d;%d, %d)", __func__, x, y, time);
 	
 	//\_________________ Update the mouse position (will be needed later).
 	if (pDock->container.bIsHorizontal)
@@ -1455,7 +1490,7 @@ static gboolean _on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint x,
 
 void _on_drag_leave (GtkWidget *pWidget, G_GNUC_UNUSED GdkDragContext *dc, G_GNUC_UNUSED guint time, CairoDock *pDock)
 {
-	//g_print ("stop dragging 1\n");
+	// g_print ("stop dragging 1\n");
 	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
 	if ((icon && icon->pSubDock) || pDock->iRefCount > 0)  // on retarde l'evenement, car il arrive avant le leave-event, et donc le sous-dock se cache avant qu'on puisse y entrer.
 	{
@@ -1481,6 +1516,46 @@ void _on_drag_leave (GtkWidget *pWidget, G_GNUC_UNUSED GdkDragContext *dc, G_GNU
 	_on_motion_notify (pWidget, NULL, pDock);
 }
 
+static void _on_drag_data_get (G_GNUC_UNUSED GtkWidget *widget, G_GNUC_UNUSED GdkDragContext *context, GtkSelectionData *data,
+		G_GNUC_UNUSED guint info, G_GNUC_UNUSED guint time, G_GNUC_UNUSED gpointer user_data)
+{
+	guchar tmp = 0; // we don't pass any data (use the s_pDndIcon variable instead)
+	gtk_selection_data_set (data, gldi_container_icon_dnd_atom (), 8, &tmp, 1);
+}
+
+static gboolean _on_drag_failed (G_GNUC_UNUSED GtkWidget *widget, G_GNUC_UNUSED GdkDragContext *context,
+		G_GNUC_UNUSED GtkDragResult result, gpointer)
+{
+	if (!s_pDndIcon) return FALSE;
+	
+	//!! TODO: check if the result could be parsed (currently it is always GTK_DRAG_RESULT_ERROR)
+	// only handle the below cases, as these are likely when the user intentionally released the icon outside the dock
+//	if ( !(result == GTK_DRAG_RESULT_NO_TARGET || result == GTK_DRAG_RESULT_USER_CANCELLED) )
+//		return FALSE;
+	
+	// dnd ended outside of a dock, need to erase the icon involved
+	Icon *pIcon = s_pDndIcon;
+	s_pDndIcon = NULL;
+	cairo_dock_set_icon_container (pIcon, NULL);
+	
+	// destroy it, or place it in a desklet.
+	if (pIcon->cDesktopFileName != NULL)  // a launcher/sub-dock/separator, that is part of the theme
+	{
+		gldi_object_delete (GLDI_OBJECT(pIcon));
+	}
+	else if (CAIRO_DOCK_IS_APPLET(pIcon))  /// faire une fonction dans la factory ...
+	{
+		cd_debug ("le module %s devient un desklet", pIcon->pModuleInstance->cConfFilePath);
+		int x, y;
+		GdkSeat *pSeat = gdk_display_get_default_seat (gdk_display_get_default());
+		GdkDevice *pDevice = gdk_seat_get_pointer (pSeat);
+		gdk_device_get_position (pDevice, NULL, &x, &y); // will only work on X11
+		gldi_module_instance_detach_at_position (pIcon->pModuleInstance, x, y); // on Wayland we will end up with a random position anyway
+	}
+	
+	//!! TODO: animation? (likely not possible with GTK DnD)
+	return TRUE;
+}
 
   ///////////////////////
  /// CONTAINER IFACE ///
@@ -2229,6 +2304,14 @@ void gldi_dock_init_internals (CairoDock *pDock)
 	g_signal_connect (G_OBJECT (pWindow),
 		"drag-leave",
 		G_CALLBACK (_on_drag_leave),
+		pDock);
+	g_signal_connect (G_OBJECT (pWindow),
+		"drag_data_get",
+		G_CALLBACK (_on_drag_data_get),
+		pDock);
+	g_signal_connect (G_OBJECT (pWindow),
+		"drag-failed",
+		G_CALLBACK (_on_drag_failed),
 		pDock);
 	/*g_signal_connect (G_OBJECT (pWindow),
 		"drag-drop",
