@@ -604,18 +604,23 @@ static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 		if (pOriginDock == pDock /* && _mouse_is_really_outside (pDock) */ )  // ce test est la pour parer aux WM deficients mentaux comme KWin qui nous font sortir/rentrer lors d'un clic.
 		{
 			cd_debug (" on detache l'icone");
-			pOriginDock->bIconIsFlyingAway = TRUE; //!!
+			pOriginDock->bIconIsFlyingAway = TRUE;
 			gldi_icon_detach (s_pIconClicked);
-			s_pDndIcon = s_pIconClicked;
 			cairo_dock_stop_icon_glide (pOriginDock);
 			
-			GtkTargetList *targets = gtk_target_list_new (NULL, 0);
-			gtk_target_list_add (targets, gldi_container_icon_dnd_atom (), GTK_TARGET_SAME_APP, 0);
-			
-			GdkDragContext *context = gtk_drag_begin (pDock->container.pWidget, targets, GDK_ACTION_COPY, 1, pEvent);
-			gtk_drag_set_icon_surface (context, s_pIconClicked->image.pSurface);
-			
-			// s_pFlyingContainer = gldi_flying_container_new (s_pIconClicked, pOriginDock);
+			if (gldi_container_use_new_positioning_code ())
+			{
+				// use GTK DnD (works on Wayland as well, but no custom effects so far)
+				s_pDndIcon = s_pIconClicked;
+				GtkTargetList *targets = gtk_target_list_new (NULL, 0);
+				gtk_target_list_add (targets, gldi_container_icon_dnd_atom (), GTK_TARGET_SAME_APP, 0);
+				GdkDragContext *context = gtk_drag_begin_with_coordinates (pDock->container.pWidget,
+					targets, GDK_ACTION_COPY, 1, (GdkEvent*)pEvent, -1, -1);
+				gtk_target_list_unref (targets);
+				gtk_drag_set_icon_surface (context, s_pIconClicked->image.pSurface);
+			}
+			// "old" method: use a flying container (only works reliably on X11)
+			else s_pFlyingContainer = gldi_flying_container_new (s_pIconClicked, pOriginDock);
 			//g_print ("- s_pIconClicked <- NULL\n");
 			s_pIconClicked = NULL;
 			if (pDock->iRefCount > 0 || pDock->bAutoHide)  // pour garder le dock visible.
@@ -1262,12 +1267,18 @@ static gboolean s_bCouldDrop = FALSE;
 
 void _on_drag_data_received (G_GNUC_UNUSED GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, GtkSelectionData *selection_data, G_GNUC_UNUSED guint info, guint time, CairoDock *pDock)
 {
-	cd_warning ("%s (%dx%d, %d, %d)", __func__, x, y, time, pDock->container.bInside);
+	// cd_warning ("%s (%dx%d, %d, %d)", __func__, x, y, time, pDock->container.bInside);
 	if (cairo_dock_is_hidden (pDock))  // X ne semble pas tenir compte de la zone d'input pour dropper les trucs...
 		return ;
 	
 	if (gtk_selection_data_get_data_type (selection_data) == gldi_container_icon_dnd_atom ())
 	{
+		if (!s_pDndIcon)
+		{
+			cd_warning ("no dragged icon set!");
+			return;
+		}
+		
 		// reinsert the icon where it was dropped, not at its original position.
 		Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);  // get the pointed icon before we insert the icon, since the inserted icon will be the pointed one!
 		//g_print (" pointed icon: %s\n", icon?icon->cName:"none");
@@ -1479,7 +1490,7 @@ static gboolean _on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint x,
 
 void _on_drag_leave (GtkWidget *pWidget, G_GNUC_UNUSED GdkDragContext *dc, G_GNUC_UNUSED guint time, CairoDock *pDock)
 {
-	g_print ("stop dragging 1\n");
+	// g_print ("stop dragging 1\n");
 	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);
 	if ((icon && icon->pSubDock) || pDock->iRefCount > 0)  // on retarde l'evenement, car il arrive avant le leave-event, et donc le sous-dock se cache avant qu'on puisse y entrer.
 	{
@@ -1505,13 +1516,15 @@ void _on_drag_leave (GtkWidget *pWidget, G_GNUC_UNUSED GdkDragContext *dc, G_GNU
 	_on_motion_notify (pWidget, NULL, pDock);
 }
 
-static void _on_drag_data_get (GtkWidget *widget, G_GNUC_UNUSED GdkDragContext *context, GtkSelectionData *data,
+static void _on_drag_data_get (G_GNUC_UNUSED GtkWidget *widget, G_GNUC_UNUSED GdkDragContext *context, GtkSelectionData *data,
 		G_GNUC_UNUSED guint info, G_GNUC_UNUSED guint time, G_GNUC_UNUSED gpointer user_data)
 {
-	gtk_selection_data_set (data, gtk_selection_data_get_target (data), 8, "drag_example", 14);
+	guchar tmp = 0; // we don't pass any data (use the s_pDndIcon variable instead)
+	gtk_selection_data_set (data, gldi_container_icon_dnd_atom (), 8, &tmp, 1);
 }
 
-static gboolean _on_drag_failed (G_GNUC_UNUSED GtkWidget *widget, G_GNUC_UNUSED GdkDragContext *context, GtkDragResult result, gpointer)
+static gboolean _on_drag_failed (G_GNUC_UNUSED GtkWidget *widget, G_GNUC_UNUSED GdkDragContext *context,
+		G_GNUC_UNUSED GtkDragResult result, gpointer)
 {
 	if (!s_pDndIcon) return FALSE;
 	
