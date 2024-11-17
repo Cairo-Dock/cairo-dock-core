@@ -86,13 +86,6 @@ void cairo_dock_enable_containers_opacity (void)
 	s_bInitialOpacity0 = TRUE;
 }
 
-inline void gldi_display_get_pointer (int *xptr, int *yptr)
-{
-	GdkSeat *pSeat = gdk_display_get_default_seat (gdk_display_get_default());
-	GdkDevice *pDevice = gdk_seat_get_pointer (pSeat);
-	gdk_device_get_position (pDevice, NULL, xptr, yptr);
-} 
-
 inline void gldi_container_update_mouse_position (GldiContainer *pContainer)
 {
 	if (s_backend.update_mouse_position)
