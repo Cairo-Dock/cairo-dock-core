@@ -80,7 +80,7 @@ Questions / issues:
   - Unsure if for any WM / DE, we can have both iNbDesktops > 1 and multiple viewports. In theory, on Wayland
       this will be possible with the ext-workspace protocol if there are multiple workspace groups. On X11,
       this is explicitly supported by the standards, but likely not implemented by WMs.
-  - Are there X11 WM that provides multipe desktops and arranges them in 2D? In theory, this is possible using
+  - Are there X11 WMs that provide multipe desktops and arranges them in 2D? In theory, this is possible using
       _NET_DESKTOP_LAYOUT, however Cairo-Dock currently does not handle this. Note: according to the
       specification, this is set by the "pager", which is possibly a separate entity from the WM:
       https://specifications.freedesktop.org/wm-spec/latest/ar01s03.html
@@ -107,8 +107,8 @@ Minimal changes for Wayland:
       supported, converted to 1D)
   - update the switcher applet to display desktops / workspace groups more independently
   - change APIs to add / remove individual workspaces, take care to handle to case of X11 rectangular
-      viewports though
-  - move GldiWMBackendFlags and the related capabilities here?
+      viewports though -> partly done
+  - move GldiWMBackendFlags and the related capabilities here? -> no, better in window manager
   - X11: special case WMs where desktops can be arranged in 2D? (but has to be no viewports)
       -> "desktops" would be interpreted as independent viewports in this case
 
@@ -124,8 +124,8 @@ Plan for a new API:
   - vieports can be overlapping (a window can span multiple), flag / setting for this that is set by the backend
 
 Next steps:
-  - change API for adding removing "workspaces", these are handled by a backend-specific way (move some of the
-      logic from the switcher plugin to core)
+  - change API for adding and removing "workspaces", these are handled by a backend-specific way (move some of the
+      logic from the switcher plugin to core) -> done
   - make the number of viewports per desktop independent, use this to implement the ext-workspace /
       cosmic-workspace protocol
   - implement support for _NET_DESKTOP_LAYOUT for arranging desktops in a 2D grid on X11
