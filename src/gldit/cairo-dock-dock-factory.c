@@ -1533,9 +1533,11 @@ static gboolean _on_drag_failed (G_GNUC_UNUSED GtkWidget *widget, G_GNUC_UNUSED 
 	else if (CAIRO_DOCK_IS_APPLET(pIcon))  /// faire une fonction dans la factory ...
 	{
 		cd_debug ("le module %s devient un desklet", pIcon->pModuleInstance->cConfFilePath);
-		gldi_module_instance_detach_at_position (pIcon->pModuleInstance, 0, 0); //!! TODO: use correct icon position on X11 (on Wayland it would not work anyway) !!
-			//~ pFlyingContainer->container.iWindowPositionX + pFlyingContainer->container.iWidth/2,
-			//~ pFlyingContainer->container.iWindowPositionY + pFlyingContainer->container.iHeight/2);
+		int x, y;
+		GdkSeat *pSeat = gdk_display_get_default_seat (gdk_display_get_default());
+		GdkDevice *pDevice = gdk_seat_get_pointer (pSeat);
+		gdk_device_get_position (pDevice, NULL, &x, &y); // will only work on X11
+		gldi_module_instance_detach_at_position (pIcon->pModuleInstance, x, y); // on Wayland we will end up with a random position anyway
 	}
 	
 	//!! TODO: animation? (likely not possible with GTK DnD)
