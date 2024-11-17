@@ -28,7 +28,7 @@
 #include "applet-composite.h"
 #include "applet-notifications.h"
 
-#define CAIRO_DOCK_WIKI_URL "http://wiki.glx-dock.org" // it's in French if the locale is FR with Firefox. If not, the user can choose its language.
+#define CAIRO_DOCK_WIKI_URL "https://github.com/Cairo-Dock/cairo-dock-core/wiki" // new Wiki
 #define CD_UNITY_COMPIZ_PLUGIN "unityshell"
 
 
