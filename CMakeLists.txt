@@ -279,7 +279,7 @@ add_subdirectory (po)
 # this is actually a plug-in for cairo-dock, not for gldi
 # it uses some functions of cairo-dock (they are binded dynamically), that's why it can't go with other plug-ins
 set (GETTEXT_HELP ${GETTEXT_PACKAGE})
-set (VERSION_HELP "0.9.994")
+set (VERSION_HELP "0.10.0")
 set (PACKAGE_HELP "cd-Help")
 set (helpdatadir "${pluginsdatadir}/Help")
 set (dock_version "${VERSION}")
