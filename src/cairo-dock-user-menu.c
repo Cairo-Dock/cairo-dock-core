@@ -1405,6 +1405,8 @@ static void _add_desktops_entry (GtkWidget *pMenu, gboolean bAll, gpointer *data
 	static gpointer *s_pDesktopData = NULL;
 	GtkWidget *pMenuItem;
 	
+	if (!gldi_window_manager_can_move_to_desktop ()) return;
+	
 	if (g_desktopGeometry.iNbDesktops > 1 || g_desktopGeometry.iNbViewportX > 1 || g_desktopGeometry.iNbViewportY > 1)
 	{
 		// add separator
@@ -1900,7 +1902,8 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 
 		// Move
 		pMenuItem = _add_entry_in_menu (_("Move to this desktop"), GLDI_ICON_NAME_JUMP_TO, _cairo_dock_move_appli_to_current_desktop, pSubMenuOtherActions);
-		if (gldi_window_is_on_current_desktop (pAppli))
+		// if it is not possible to move the window, we still keep this menu item, but make it inactive
+		if (!gldi_window_manager_can_move_to_desktop () || gldi_window_is_on_current_desktop (pAppli))
 			gtk_widget_set_sensitive (pMenuItem, FALSE);
 
 		// Fullscreen
@@ -1978,7 +1981,11 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 		//\_________________________ Other actions
 		GtkWidget *pSubMenuOtherActions = cairo_dock_create_sub_menu (_("Other actions"), menu, NULL);
 		
-		_add_entry_in_menu (_("Move all to this desktop"), GLDI_ICON_NAME_JUMP_TO, _cairo_dock_move_class_to_current_desktop, pSubMenuOtherActions);
+		pMenuItem = _add_entry_in_menu (_("Move all to this desktop"), GLDI_ICON_NAME_JUMP_TO, _cairo_dock_move_class_to_current_desktop, pSubMenuOtherActions);
+		// if it is not possible to move the windows, we still keep this menu item, but make it inactive
+		if (!gldi_window_manager_can_move_to_desktop ())
+			gtk_widget_set_sensitive (pMenuItem, FALSE);
+
 		
 		_add_desktops_entry (pSubMenuOtherActions, TRUE, data);
 	}

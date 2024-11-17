@@ -30,7 +30,7 @@
 
 extern CairoDock* g_pMainDock;
 
-static GldiObjectManager myWaylandWMObjectMgr;
+GldiObjectManager myWaylandWMObjectMgr;
 
 static void (*s_handle_destroy_cb)(gpointer handle) = NULL;
 
@@ -43,6 +43,10 @@ static GldiWindowActor* s_pMaybeActiveWindow = NULL;
 /* our own config window -- will only work if the docks themselves are not
  * reported */
 static GldiWindowActor* s_pSelf = NULL;
+/* internal counter for updating windows' stacking order */
+static int s_iStackCounter = 0;
+/* there was a change in windows' stacking order that needs to be signaled */
+static gboolean s_bStackChange = FALSE;
 
 // extra callback for when a new app is activated
 // this is useful for e.g. interactively selecting a window
@@ -147,6 +151,12 @@ void gldi_wayland_wm_skip_changed (GldiWaylandWindowActor *wactor, gboolean skip
 	if (notify) gldi_wayland_wm_done (wactor);
 }
 
+void gldi_wayland_wm_sticky_changed (GldiWaylandWindowActor *wactor, gboolean sticky, gboolean notify)
+{
+	wactor->sticky_pending = sticky;
+	if (notify) gldi_wayland_wm_done (wactor);
+}
+
 void gldi_wayland_wm_closed (GldiWaylandWindowActor *wactor, gboolean notify)
 {
 	wactor->close_pending = TRUE;
@@ -204,6 +214,16 @@ static gboolean _update_attention (GldiWaylandWindowActor *wactor, gboolean noti
 	gboolean changed = (wactor->attention_pending != actor->bDemandsAttention);
 	if (changed) actor->bDemandsAttention = wactor->attention_pending;
 	if (notify && changed) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ATTENTION_CHANGED, actor);
+	return changed;
+}
+
+static gboolean _update_sticky (GldiWaylandWindowActor *wactor, gboolean notify)
+{
+	GldiWindowActor* actor = (GldiWindowActor*)wactor;
+	gboolean changed = (wactor->sticky_pending != actor->bIsSticky);
+	if (changed) actor->bIsSticky = wactor->sticky_pending;
+	// a change in stickyness can be seen as a change in the desktop position
+	if (notify && changed) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESKTOP_CHANGED, actor);
 	return changed;
 }
 
@@ -349,8 +369,10 @@ void gldi_wayland_wm_done (GldiWaylandWindowActor *wactor)
 			// check if other properties have changed (and send a notification)
 			if (_update_state (wactor, TRUE)) continue;
 			// update the needs-attention property
-			if (_update_attention(wactor, TRUE)) continue;
-				
+			if (_update_attention (wactor, TRUE)) continue;
+			// update the sticky property
+			if (_update_sticky (wactor, TRUE)) continue;
+			
 			if (actor == s_pMaybeActiveWindow)
 			{
 				s_pActiveWindow = actor;
@@ -370,6 +392,36 @@ void gldi_wayland_wm_done (GldiWaylandWindowActor *wactor)
 		s_pCurrent = NULL;
 		wactor = g_queue_pop_head(&s_pending_queue); // note: it is OK to call this on an empty queue
 	} while (wactor);
+	
+	if (s_bStackChange)
+	{
+		gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_Z_ORDER_CHANGED, NULL);
+		s_bStackChange = FALSE;
+	}
+}
+
+static void _restack_windows (void* ptr, void*)
+{
+	GldiWindowActor *actor = (GldiWindowActor*)ptr;
+	actor->iStackOrder = s_iStackCounter;
+	s_iStackCounter++;
+}
+
+void gldi_wayland_wm_stack_on_top (GldiWindowActor *actor)
+{
+	s_bStackChange = TRUE;
+	
+	if (s_iStackCounter < INT_MAX)
+	{
+		s_iStackCounter++;
+		actor->iStackOrder = s_iStackCounter;
+		return;
+	}
+	
+	// our counter would overflow, reset the order for all windows
+	s_iStackCounter = 0;
+	gldi_windows_foreach (TRUE, _restack_windows, NULL);
+	actor->iStackOrder = s_iStackCounter; // counter was incremented in the callback
 }
 
 GldiWindowActor* gldi_wayland_wm_get_active_window ()

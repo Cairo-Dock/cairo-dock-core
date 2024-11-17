@@ -255,7 +255,7 @@ GldiWindowActor *gldi_window_get_transient_for (GldiWindowActor *actor)
 
 void gldi_window_is_above_or_below (GldiWindowActor *actor, gboolean *bIsAbove, gboolean *bIsBelow)
 {
-	if (s_backend.set_window_border)
+	if (s_backend.is_above_or_below)
 		s_backend.is_above_or_below (actor, bIsAbove, bIsBelow);
 	else
 	{
@@ -322,12 +322,21 @@ static inline gboolean _window_is_on_current_desktop (GtkAllocation *pWindowGeom
 }
 gboolean gldi_window_is_on_current_desktop (GldiWindowActor *actor)
 {
-	if (GPOINTER_TO_INT (s_backend.flags) & GLDI_WM_GEOM_REL_TO_VIEWPORT
-			|| GPOINTER_TO_INT (s_backend.flags) & GLDI_WM_NO_VIEWPORT_OVERLAP)
+	const int flags = GPOINTER_TO_INT (s_backend.flags);
+	if (! (flags & GLDI_WM_HAVE_WORKSPACES))
+		return FALSE; // if we don't track workspaces, there is no point
+	
+	if (actor->bIsSticky || actor->iNumDesktop == -1)  // a sticky window is by definition on all desktops/viewports
+		return TRUE;
+	
+	if ( !(flags & GLDI_WM_HAVE_WINDOW_GEOMETRY) || (flags & GLDI_WM_NO_VIEWPORT_OVERLAP))
+		return (actor->iNumDesktop == g_desktopGeometry.iCurrentDesktop
+			&& actor->iViewPortX == g_desktopGeometry.iCurrentViewportX
+			&& actor->iViewPortY == g_desktopGeometry.iCurrentViewportY);
+		
+	if (flags & GLDI_WM_GEOM_REL_TO_VIEWPORT)
 		return gldi_window_is_on_desktop (actor, g_desktopGeometry.iCurrentDesktop,
 			g_desktopGeometry.iCurrentViewportX, g_desktopGeometry.iCurrentViewportY);
-	
-	if (actor->bIsSticky || actor->iNumDesktop == -1) return TRUE;
 	
 	return _window_is_on_current_desktop (&actor->windowGeometry, actor->iNumDesktop);
 }
@@ -335,22 +344,26 @@ gboolean gldi_window_is_on_current_desktop (GldiWindowActor *actor)
 
 gboolean gldi_window_is_on_desktop (GldiWindowActor *pAppli, int iNumDesktop, int iNumViewportX, int iNumViewportY)
 {
+	const int flags = GPOINTER_TO_INT (s_backend.flags);
+	if (! (flags & GLDI_WM_HAVE_WORKSPACES))
+		return FALSE; // if we don't track workspaces, there is no point
+	
 	if (pAppli->bIsSticky || pAppli->iNumDesktop == -1)  // a sticky window is by definition on all desktops/viewports
 		return TRUE;
 	
-	if (GPOINTER_TO_INT (s_backend.flags) & GLDI_WM_NO_VIEWPORT_OVERLAP)
+	if ( !(flags & GLDI_WM_HAVE_WINDOW_GEOMETRY) || (flags & GLDI_WM_NO_VIEWPORT_OVERLAP))
 		return (pAppli->iNumDesktop == iNumDesktop && pAppli->iViewPortX == iNumViewportX
 			&& pAppli->iViewPortY == iNumViewportY);
 	
 	// On calcule les coordonnees en repere absolu.
 	int x = pAppli->windowGeometry.x;  // par rapport au viewport courant (or self, depending on the backend)
-	if (GPOINTER_TO_INT (s_backend.flags) & GLDI_WM_GEOM_REL_TO_VIEWPORT) x += pAppli->iViewPortX * gldi_desktop_get_width();  // repere absolu
+	if (flags & GLDI_WM_GEOM_REL_TO_VIEWPORT) x += pAppli->iViewPortX * gldi_desktop_get_width();  // repere absolu
 	else x += g_desktopGeometry.iCurrentViewportX * gldi_desktop_get_width();
 	if (x < 0)
 		x += g_desktopGeometry.iNbViewportX * gldi_desktop_get_width();
 	
 	int y = pAppli->windowGeometry.y;
-	if (GPOINTER_TO_INT (s_backend.flags) & GLDI_WM_GEOM_REL_TO_VIEWPORT) y += pAppli->iViewPortY * gldi_desktop_get_height();
+	if (flags & GLDI_WM_GEOM_REL_TO_VIEWPORT) y += pAppli->iViewPortY * gldi_desktop_get_height();
 	else y += g_desktopGeometry.iCurrentViewportY * gldi_desktop_get_height();
 	if (y < 0)
 		y += g_desktopGeometry.iNbViewportY * gldi_desktop_get_height();
@@ -377,6 +390,22 @@ gboolean gldi_window_manager_is_position_relative_to_current_viewport (void)
 {
 	return !(GPOINTER_TO_INT (s_backend.flags) & GLDI_WM_GEOM_REL_TO_VIEWPORT);
 }
+
+gboolean gldi_window_manager_have_coordinates (void)
+{
+	return (GPOINTER_TO_INT (s_backend.flags) & GLDI_WM_HAVE_WINDOW_GEOMETRY);
+}
+
+gboolean gldi_window_manager_can_track_workspaces (void)
+{
+	return (GPOINTER_TO_INT (s_backend.flags) & GLDI_WM_HAVE_WORKSPACES);
+}
+
+gboolean gldi_window_manager_can_move_to_desktop (void)
+{
+	return (s_backend.move_to_nth_desktop || s_backend.move_to_viewport_abs);
+}
+
 
 gchar* gldi_window_parse_class(const gchar* res_class, const gchar* res_name) {
 	gchar *cClass = NULL;

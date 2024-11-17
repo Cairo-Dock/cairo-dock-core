@@ -42,12 +42,16 @@ struct _GldiWaylandWindowActor {
 	gboolean fullscreen_pending; // fullscreen state received
 	gboolean attention_pending; // needs-attention state received (only KDE)
 	gboolean skip_taskbar; // should not be shown in taskbar (only KDE)
+	gboolean sticky_pending; // sticky state received (only KDE)
 	gboolean close_pending; // this window has been closed
 	
 	gboolean init_done; // initial state has been configured
 	gboolean in_queue; // this actor has been added to the s_pending_queue
 };
 typedef struct _GldiWaylandWindowActor GldiWaylandWindowActor;
+
+// manager for the above, can be extended by more specific implementations
+extern GldiObjectManager myWaylandWMObjectMgr;
 
 
 // functions to update the state of a toplevel and potentially signal
@@ -63,6 +67,7 @@ void gldi_wayland_wm_minimized_changed (GldiWaylandWindowActor *wactor, gboolean
 void gldi_wayland_wm_fullscreen_changed (GldiWaylandWindowActor *wactor, gboolean fullscreen, gboolean notify);
 void gldi_wayland_wm_attention_changed (GldiWaylandWindowActor *wactor, gboolean attention, gboolean notify);
 void gldi_wayland_wm_skip_changed (GldiWaylandWindowActor *wactor, gboolean skip, gboolean notify);
+void gldi_wayland_wm_sticky_changed (GldiWaylandWindowActor *wactor, gboolean sticky, gboolean notify);
 void gldi_wayland_wm_activated (GldiWaylandWindowActor *wactor, gboolean notify);
 
 void gldi_wayland_wm_closed (GldiWaylandWindowActor *wactor, gboolean notify);
@@ -73,6 +78,12 @@ GldiWindowActor* gldi_wayland_wm_get_active_window ();
 
 GldiWindowActor* gldi_wayland_wm_pick_window (GtkWindow *pParentWindow);
 
+/** Change the stacking order such that actor is on top. Does not send
+ *  a notification; the user should do that manually, or call one of
+ *  the above functions with notify == TRUE.
+ *@param actor  The window to put on top.
+ */
+void gldi_wayland_wm_stack_on_top (GldiWindowActor *actor);
 
 typedef void (*GldiWaylandWMHandleDestroyFunc)(gpointer handle);
 void gldi_wayland_wm_init (GldiWaylandWMHandleDestroyFunc destroy_cb);

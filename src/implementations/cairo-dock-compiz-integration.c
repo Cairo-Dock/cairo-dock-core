@@ -31,7 +31,7 @@
 #include "cairo-dock-container.h"  // gldi_container_get_gdk_window
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-utils.h"  // cairo_dock_launch_command_sync
-#include "cairo-dock-X-utilities.h"  // cairo_dock_get_X_display
+#include "cairo-dock-X-utilities.h"  // cairo_dock_get_X_display, cairo_dock_change_nb_viewports
 #include "cairo-dock-compiz-integration.h"
 
 static DBusGProxy *s_pScaleProxy = NULL;
@@ -307,24 +307,11 @@ static gboolean set_on_widget_layer (GldiContainer *pContainer, gboolean bOnWidg
 /* Only add workspaces with Compiz: We shouldn't add desktops when using Compiz
  * and with this method, Compiz saves the new state
  */
-static gboolean set_nb_desktops (int iNbDesktops, int iNbViewportX, int iNbViewportY)
+static gboolean _compiz_set_nb_viewports (int X, int Y)
 {
 	gboolean bSuccess = FALSE;
 	if (s_pHSizeProxy != NULL && s_pVSizeProxy != NULL)
 	{
-		// We can receive (-1, >0, >0) or (2, -1, -1)
-		int X, Y;
-		if (iNbDesktops > 0)
-		{
-			X = iNbDesktops;
-			Y = 1;
-		}
-		else
-		{
-			X = iNbViewportX > 0 ? iNbViewportX : 1;
-			Y = iNbViewportY > 0 ? iNbViewportY : 1;
-		}
-
 		GError *error = NULL;
 		bSuccess = dbus_g_proxy_call (s_pHSizeProxy, "set", &error,
 			G_TYPE_INT, X,
@@ -350,6 +337,16 @@ static gboolean set_nb_desktops (int iNbDesktops, int iNbViewportX, int iNbViewp
 	return bSuccess;
 }
 
+static void _add_workspace (void)
+{
+	cairo_dock_change_nb_viewports (1, _compiz_set_nb_viewports);
+}
+
+static void _remove_workspace (void)
+{
+	cairo_dock_change_nb_viewports (-1, _compiz_set_nb_viewports);
+}
+
 
 static void _register_compiz_backend (void)
 {
@@ -361,7 +358,9 @@ static void _register_compiz_backend (void)
 	p.present_desktops = present_desktops;
 	p.show_widget_layer = show_widget_layer;
 	p.set_on_widget_layer = set_on_widget_layer;
-	p.set_nb_desktops = set_nb_desktops;
+	p.add_workspace = _add_workspace;
+	p.remove_last_workspace = _remove_workspace;
+	
 	
 	gldi_desktop_manager_register_backend (&p, "Compiz");
 }

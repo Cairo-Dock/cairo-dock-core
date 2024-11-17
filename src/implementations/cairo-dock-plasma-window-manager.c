@@ -33,6 +33,8 @@
  * 		(this probably needs support for the plasma-virtual-desktop protocol)
  */
 
+#define _GNU_SOURCE
+
 #include <gdk/gdkwayland.h>
 #include "wayland-plasma-window-management-client-protocol.h"
 #include "cairo-dock-windows-manager.h"
@@ -44,10 +46,32 @@
 #include "cairo-dock-plasma-virtual-desktop.h"
 
 #include <stdio.h>
+#include <string.h>
 
 
 typedef struct org_kde_plasma_window pwhandle;
 
+
+static GldiObjectManager myPlasmaWindowObjectMgr;
+
+struct _GldiPlasmaWindowActor {
+	GldiWaylandWindowActor wactor;
+	
+	// uuid, can be used to identify windows, e.g. when updating the stacking order
+	char *uuid;
+//	char *themed_icon_name; -- supplied as a separate event, not sure if we need it
+	unsigned int pid; // pid of the process associated with this window
+	unsigned int sigkill_timeout; // set to an event source if the user requested to kill this process
+	unsigned int cap_and_state; // capabilites and state that is not stored elsewhere
+};
+typedef struct _GldiPlasmaWindowActor GldiPlasmaWindowActor;
+
+typedef enum {
+	NB_NOTIFICATIONS_PLASMA_WINDOW_MANAGER = NB_NOTIFICATIONS_WINDOWS
+} CairoPlasmaWMNotifications;
+
+static uint32_t protocol_version = 0;
+static GHashTable *s_hIDTable = NULL;
 
 // window manager interface
 
@@ -84,6 +108,17 @@ static void _minimize (GldiWindowActor *actor)
 		ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_MINIMIZED,
 		ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_MINIMIZED);
 }
+/* does not work this way, would need to use timeout
+static void _lower (GldiWindowActor *actor)
+{
+	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor *)actor;
+	org_kde_plasma_window_set_state (wactor->handle,
+		ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_KEEP_BELOW,
+		ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_KEEP_BELOW);
+	org_kde_plasma_window_set_state (wactor->handle,
+		ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_KEEP_BELOW, 0);
+}
+*/
 static void _maximize (GldiWindowActor *actor, gboolean bMaximize)
 {
 	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor *)actor;
@@ -98,6 +133,13 @@ static void _fullscreen (GldiWindowActor *actor, gboolean bFullScreen)
 		ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_FULLSCREEN,
 		bFullScreen ? ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_FULLSCREEN : 0);
 }
+static void _set_above (GldiWindowActor *actor, gboolean bAbove)
+{
+	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor *)actor;
+	org_kde_plasma_window_set_state (wactor->handle,
+		ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_KEEP_ABOVE,
+		bAbove ? ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_KEEP_ABOVE : 0);
+}
 
 static GldiWindowActor* _get_transient_for(GldiWindowActor* actor)
 {
@@ -108,12 +150,28 @@ static GldiWindowActor* _get_transient_for(GldiWindowActor* actor)
 	return (GldiWindowActor*)pactor;
 }
 
+static void _is_above_or_below (GldiWindowActor *actor, gboolean *bIsAbove, gboolean *bIsBelow)
+{
+	GldiPlasmaWindowActor *pactor = (GldiPlasmaWindowActor *)actor;
+	*bIsAbove = !!(pactor->cap_and_state & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_KEEP_ABOVE);
+	*bIsBelow = !!(pactor->cap_and_state & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_KEEP_BELOW);
+}
+
+static void _set_sticky (GldiWindowActor *actor, gboolean bSticky)
+{
+	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor *)actor;
+	// note: this seems to do nothing
+	org_kde_plasma_window_set_state (wactor->handle,
+		ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_ON_ALL_DESKTOPS,
+		bSticky ? ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_ON_ALL_DESKTOPS : 0);
+}
+
 static void _can_minimize_maximize_close ( G_GNUC_UNUSED GldiWindowActor *actor, gboolean *bCanMinimize, gboolean *bCanMaximize, gboolean *bCanClose)
 {
-	// we don't know, set everything to true
-	*bCanMinimize = TRUE;
-	*bCanMaximize = TRUE;
-	*bCanClose = TRUE;
+	GldiPlasmaWindowActor *pactor = (GldiPlasmaWindowActor *)actor;
+	*bCanMinimize = !!(pactor->cap_and_state & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_MINIMIZABLE);
+	*bCanMaximize = !!(pactor->cap_and_state & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_MAXIMIZABLE);
+	*bCanClose    = !!(pactor->cap_and_state & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_CLOSEABLE);
 }
 
 /// TODO: which one of these two are really used? In cairo-dock-X-manager.c,
@@ -137,6 +195,29 @@ static void _set_minimize_position (GldiWindowActor *actor, GtkWidget* pContaine
 }
 
 
+gboolean _send_sigkill (void *data)
+{
+	GldiPlasmaWindowActor *pactor = (GldiPlasmaWindowActor*)data;
+	if (pactor->pid) kill (pactor->pid, SIGKILL);
+	pactor->sigkill_timeout = 0;
+	return G_SOURCE_REMOVE;
+}
+
+// kill the process corresponding to a window
+// note that this depends on the pid provided by KWin and is thus
+// inherently racy, if the pid is reused between the process exit and
+// KWin sending the unmapped event
+static void _kill (GldiWindowActor *actor)
+{
+	GldiPlasmaWindowActor *pactor = (GldiPlasmaWindowActor*)actor;
+	if (!pactor->pid) return;
+	// 1. we try sigterm, so that the app has a chance to shut down gracefully
+	kill (pactor->pid, SIGTERM);
+	// 2. after 2s, we send sigkill (if the window is still not closed)
+	pactor->sigkill_timeout = g_timeout_add (2000, _send_sigkill, pactor);
+}
+
+
 /**  callbacks  **/
 static void _gldi_toplevel_title_cb (void *data, G_GNUC_UNUSED pwhandle *handle, const char *title)
 {
@@ -153,14 +234,27 @@ static void _gldi_toplevel_appid_cb (void *data, G_GNUC_UNUSED pwhandle *handle,
 static void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED pwhandle *handle, uint32_t flags)
 {
 	if (!data) return;
-	GldiWaylandWindowActor* wactor = (GldiWaylandWindowActor*)data;
+	GldiPlasmaWindowActor* pactor = (GldiPlasmaWindowActor*)data;
 	
+	// save the flags that contains other useful info (keep above / below, capabilities)
+	pactor->cap_and_state = flags;
+	
+	GldiWaylandWindowActor* wactor = (GldiWaylandWindowActor*)data;
 	gldi_wayland_wm_maximized_changed (wactor, !!(flags & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_MAXIMIZED), FALSE);
 	gldi_wayland_wm_minimized_changed (wactor, !!(flags & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_MINIMIZED), FALSE);
 	gldi_wayland_wm_fullscreen_changed (wactor, !!(flags & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_FULLSCREEN), FALSE);
 	gldi_wayland_wm_attention_changed (wactor, !!(flags & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_DEMANDS_ATTENTION), FALSE);
 	gldi_wayland_wm_skip_changed (wactor, !!(flags & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_SKIPTASKBAR), FALSE);
-	if (flags & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_ACTIVE) gldi_wayland_wm_activated (wactor, FALSE);
+	gldi_wayland_wm_sticky_changed (wactor, !!(flags & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_ON_ALL_DESKTOPS), FALSE);
+	if (flags & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_ACTIVE)
+	{
+		gldi_wayland_wm_activated (wactor, FALSE);
+		// versions >= 12 and < 17 have stacking_order_uuid_changed which
+		// is handled separately below; for versions >= 17, we would need
+		// to support stacking_order_changed_2
+		if (protocol_version < 12 || protocol_version >= 17)
+			gldi_wayland_wm_stack_on_top ((GldiWindowActor*)wactor);
+	}
 	if (wactor->init_done) gldi_wayland_wm_done (wactor);
 }
 	
@@ -175,6 +269,12 @@ static void _gldi_toplevel_done_cb ( void *data, G_GNUC_UNUSED pwhandle *handle)
 
 static void _gldi_toplevel_closed_cb (void *data, G_GNUC_UNUSED pwhandle *handle)
 {
+	GldiPlasmaWindowActor *pactor = (GldiPlasmaWindowActor*)data;
+	if (pactor->sigkill_timeout)
+	{
+		g_source_remove (pactor->sigkill_timeout);
+		pactor->sigkill_timeout = 0;
+	}
 	gldi_wayland_wm_closed (data, TRUE);
 }
 
@@ -187,7 +287,6 @@ static void _gldi_toplevel_parent_cb (void* data, G_GNUC_UNUSED pwhandle *handle
 
 static void _gldi_toplevel_geometry_cb (void* data, G_GNUC_UNUSED pwhandle *handle, int32_t x, int32_t y, uint32_t w, uint32_t h)
 {
-	//!! TODO !!
 	GldiWaylandWindowActor* wactor = (GldiWaylandWindowActor*)data;
 	GldiWindowActor* actor = (GldiWindowActor*)wactor;
 	actor->windowGeometry.width = w;
@@ -227,9 +326,10 @@ static void _gldi_toplevel_icon_changed_cb (G_GNUC_UNUSED void* data, G_GNUC_UNU
 	/* don't care */
 }
 
-static void _gldi_toplevel_pid_changed_cb (G_GNUC_UNUSED void* data, G_GNUC_UNUSED pwhandle *handle, G_GNUC_UNUSED uint32_t pid)
+static void _gldi_toplevel_pid_changed_cb (void* data, G_GNUC_UNUSED pwhandle *handle, uint32_t pid)
 {
-	/* don't care */
+	GldiPlasmaWindowActor *pactor = (GldiPlasmaWindowActor*)data;
+	if (pactor) pactor->pid = pid;
 }
 
 static void _gldi_toplevel_application_menu_cb (G_GNUC_UNUSED void* data, G_GNUC_UNUSED pwhandle *handle,
@@ -258,19 +358,18 @@ static struct org_kde_plasma_window_listener gldi_toplevel_handle_interface = {
 };
 
 
-static void _destroy (gpointer obj)
-{
-	org_kde_plasma_window_destroy((pwhandle*)obj);
-}
-
 /* register new toplevel */
 static void _new_toplevel ( G_GNUC_UNUSED void *data, struct org_kde_plasma_window_management *manager,
 	G_GNUC_UNUSED uint32_t id, const char *uuid)
 {
-	// fprintf(stderr,"New toplevel: %p\n", handle);
+	if (!uuid) return; // sanity check
+	
 	pwhandle* handle = org_kde_plasma_window_management_get_window_by_uuid (manager, uuid);
 	
-	GldiWaylandWindowActor* wactor = gldi_wayland_wm_new_toplevel (handle);
+	GldiPlasmaWindowActor *pactor = (GldiPlasmaWindowActor*)gldi_object_new (&myPlasmaWindowObjectMgr, handle);
+	pactor->uuid = g_strdup (uuid);
+	g_hash_table_insert (s_hIDTable, pactor->uuid, pactor);
+	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor*)pactor;
 	org_kde_plasma_window_set_user_data (handle, wactor);
 	GldiWindowActor *actor = (GldiWindowActor*)wactor;
 	// set initial position to something sensible in case we don't get it updated
@@ -305,9 +404,26 @@ static void _stacking_order_changed_cb( G_GNUC_UNUSED void *data,
 }
 
 static void _stacking_order_uuid_changed_cb ( G_GNUC_UNUSED void *data,
-	G_GNUC_UNUSED struct org_kde_plasma_window_management *org_kde_plasma_window_management, G_GNUC_UNUSED const char *uuids)
+	G_GNUC_UNUSED struct org_kde_plasma_window_management *org_kde_plasma_window_management, const char *uuids)
 {
-	/* don't care */
+	int i = 0;
+	GString *str = NULL;
+	do {
+		const char *next = strchrnul (uuids, ';');
+		if (!str) str = g_string_sized_new (next - uuids + 1);
+		g_string_overwrite_len (str, 0, uuids, next - uuids);
+		void *ptr = g_hash_table_lookup (s_hIDTable, str->str);
+		if (ptr)
+		{
+			GldiWindowActor *actor = (GldiWindowActor*)ptr;
+			actor->iStackOrder = i;
+			i++;
+		}
+		uuids = next;
+		if (*uuids) uuids++; // skip the trailing ';'
+	} while (*uuids);
+	if (str) g_string_free (str, TRUE);
+	gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_Z_ORDER_CHANGED, NULL);
 }
 
 static struct org_kde_plasma_window_management_listener gldi_toplevel_manager = {
@@ -319,7 +435,7 @@ static struct org_kde_plasma_window_management_listener gldi_toplevel_manager = 
 };
 
 static struct org_kde_plasma_window_management* s_ptoplevel_manager = NULL;
-static uint32_t protocol_id, protocol_version;
+static uint32_t protocol_id;
 static gboolean protocol_found = FALSE;
 
 /// Desktop management functions
@@ -330,8 +446,24 @@ static gboolean _show_hide_desktop (gboolean bShow)
 	return TRUE;
 }
 
+void _reset_object (GldiObject* obj)
+{
+	GldiPlasmaWindowActor* pactor = (GldiPlasmaWindowActor*)obj;
+	if (pactor)
+	{
+		g_hash_table_remove (s_hIDTable, pactor->uuid);
+		g_free (pactor->uuid);
+		org_kde_plasma_window_destroy((pwhandle*)pactor->wactor.handle);
+	}
+}
+
 static void gldi_plasma_window_manager_init ()
 {
+	// hash table to map uuids to windows
+	// note: no free functions, the keys are the uuids stored in (and owned by)
+	//  the GldiPlasmaWindowActor, they are freed together
+	s_hIDTable = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, NULL);
+	
 	org_kde_plasma_window_management_add_listener(s_ptoplevel_manager, &gldi_toplevel_manager, NULL);
 	// register window manager
 	GldiWindowManagerBackend wmb;
@@ -340,12 +472,12 @@ static void gldi_plasma_window_manager_init ()
 	wmb.move_to_viewport_abs = _move_to_nth_desktop;
 	wmb.show = _show;
 	wmb.close = _close;
-	// wmb.kill = _kill;
+	wmb.kill = _kill;
 	wmb.minimize = _minimize;
 	// wmb.lower = _lower;
 	wmb.maximize = _maximize;
 	wmb.set_fullscreen = _fullscreen;
-	// wmb.set_above = _set_above;
+	wmb.set_above = _set_above;
 	wmb.set_minimize_position = _set_minimize_position;
 	wmb.set_thumbnail_area = _set_thumbnail_area;
 	// wmb.set_window_border = _set_window_border;
@@ -353,13 +485,12 @@ static void gldi_plasma_window_manager_init ()
 	// wmb.get_thumbnail_surface = _get_thumbnail_surface;
 	// wmb.get_texture = _get_texture;
 	wmb.get_transient_for = _get_transient_for;
-	// wmb.is_above_or_below = _is_above_or_below;
-	// wmb.is_sticky = _is_sticky;
-	// wmb.set_sticky = _set_sticky;
+	wmb.is_above_or_below = _is_above_or_below;
+	wmb.set_sticky = _set_sticky;
 	wmb.can_minimize_maximize_close = _can_minimize_maximize_close;
 	// wmb.get_id = _get_id;
 	wmb.pick_window = gldi_wayland_wm_pick_window;
-	wmb.flags = GINT_TO_POINTER (GLDI_WM_NO_VIEWPORT_OVERLAP | GLDI_WM_GEOM_REL_TO_VIEWPORT);
+	wmb.flags = GINT_TO_POINTER (GLDI_WM_NO_VIEWPORT_OVERLAP | GLDI_WM_GEOM_REL_TO_VIEWPORT | GLDI_WM_HAVE_WINDOW_GEOMETRY | GLDI_WM_HAVE_WORKSPACES);
 	wmb.name = "plasma";
 	gldi_windows_manager_register_backend (&wmb);
 	
@@ -369,7 +500,19 @@ static void gldi_plasma_window_manager_init ()
 	dmb.show_hide_desktop = _show_hide_desktop;
 	gldi_desktop_manager_register_backend (&dmb, "plasma-window-management");
 	
-	gldi_wayland_wm_init (_destroy);
+	gldi_wayland_wm_init (NULL);
+	
+	// extend the generic Wayland toplevel object manager
+	memset (&myPlasmaWindowObjectMgr, 0, sizeof (GldiObjectManager));
+	myPlasmaWindowObjectMgr.cName        = "plasma-window-manager";
+	myPlasmaWindowObjectMgr.iObjectSize  = sizeof (GldiPlasmaWindowActor);
+	// interface
+	myPlasmaWindowObjectMgr.init_object  = NULL;
+	myPlasmaWindowObjectMgr.reset_object = _reset_object;
+	// signals
+	gldi_object_install_notifications (&myPlasmaWindowObjectMgr, NB_NOTIFICATIONS_PLASMA_WINDOW_MANAGER);
+	// parent object
+	gldi_object_set_manager (GLDI_OBJECT (&myPlasmaWindowObjectMgr), &myWaylandWMObjectMgr);
 }
 
 

@@ -55,7 +55,9 @@ typedef enum {
 
 typedef enum {
 	GLDI_WM_GEOM_REL_TO_VIEWPORT = 1, // if present, windows' geometry is relative to the viewport they are present on (and not to the current viewport)
-	GLDI_WM_NO_VIEWPORT_OVERLAP = 2 // if present, windows cannot span multiple viewports
+	GLDI_WM_NO_VIEWPORT_OVERLAP = 2, // if present, windows cannot span multiple viewports
+	GLDI_WM_HAVE_WINDOW_GEOMETRY = 4, // the WM provides valid window geometry information (in _GldiWindowActor::windowGeometry)
+	GLDI_WM_HAVE_WORKSPACES = 8 // the WM tracks which workspace (desktop, viewport) a window is on (in iNumDesktop, iViewPortX, iViewPortY)
 	} GldiWMBackendFlags;
 
 /// Definition of the Windows Manager backend.
@@ -185,7 +187,37 @@ guint gldi_window_get_id (GldiWindowActor *pAppli);
 
 GldiWindowActor *gldi_window_pick (GtkWindow *pParentWindow);
 
+
+/* WM capabilities -- use cases outside of cairo-dock-windows-manager.c (especially plugins)
+ * should check these before using the corresponding fields */
+
+/** Check whether we can track windows' position.
+ *@return whether GldiWindowActor::windowGeometry contains the actual
+ * window position; if FALSE, this should not be used
+ */
+gboolean gldi_window_manager_have_coordinates (void);
+
+/** Check whether we can track which workspace / viewport / desktop
+ *  windows are present on.
+ *@return whether GldiWindowActor::iNumDesktop, iViewPortX and iViewPortY
+ * contains valid information; if FALSE, these should not be used
+ */
+gboolean gldi_window_manager_can_track_workspaces (void);
+
+/** Check how window position coordinates should be interpreted. Result is only
+ *  valud if gldi_window_manager_have_coordinates () == TRUE as well.
+ *@return whether window coordinates should be interpreted relative to the
+ * currently active workspace / viewport; if false, coordinates are relative
+ * to the workspace / viewport that the window is currently on
+ */
 gboolean gldi_window_manager_is_position_relative_to_current_viewport (void);
+
+/** Check whether it is possible to move a window to another desktop / viewport.
+ *@return TRUE if it is possible to move a window; if FALSE,
+ * gldi_window_move_to_current_desktop () and gldi_window_move_to_desktop ()
+ * will do nothing
+ */
+gboolean gldi_window_manager_can_move_to_desktop (void);
 
 /* utility for parsing special cases in the window class / app ID;
  * used by both the X and Wayland backends

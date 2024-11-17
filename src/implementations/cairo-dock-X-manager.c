@@ -789,13 +789,22 @@ static gboolean _set_current_desktop (int iDesktopNumber, int iViewportNumberX, 
 	return TRUE;
 }
 
-static gboolean _set_nb_desktops (int iNbDesktops, int iNbViewportX, int iNbViewportY)
+static void _add_workspace (void)
 {
-	if (iNbDesktops > 0)
-		cairo_dock_set_nb_desktops (iNbDesktops);
-	if (iNbViewportX > 0 && iNbViewportY > 0)
-		cairo_dock_set_nb_viewports (iNbViewportX, iNbViewportY);
-	return TRUE;
+	if (g_desktopGeometry.iNbViewportX == 1 && g_desktopGeometry.iNbViewportY == 1)
+		cairo_dock_set_nb_desktops (g_desktopGeometry.iNbDesktops + 1);
+	else cairo_dock_change_nb_viewports (1, cairo_dock_set_nb_viewports);
+}
+
+static void _remove_workspace (void)
+{
+	if (g_desktopGeometry.iNbViewportX == 1 && g_desktopGeometry.iNbViewportY == 1)
+	{
+		// note: do not attempt to remove the last desktop
+		if (g_desktopGeometry.iNbDesktops > 1)
+			cairo_dock_set_nb_desktops (g_desktopGeometry.iNbDesktops - 1);
+	}
+	else cairo_dock_change_nb_viewports (-1, cairo_dock_set_nb_viewports);
 }
 
 static cairo_surface_t *_get_desktop_bg_surface (void)  // attention : fonction lourde.
@@ -1642,10 +1651,11 @@ static void init (void)
 	dmb.set_desktops_names     = _set_desktops_names;
 	dmb.get_desktop_bg_surface = _get_desktop_bg_surface;
 	dmb.set_current_desktop    = _set_current_desktop;
-	dmb.set_nb_desktops        = _set_nb_desktops;
 	dmb.refresh                = _refresh;
 	dmb.notify_startup         = _notify_startup;
 	dmb.grab_shortkey          = _grab_shortkey;
+	dmb.add_workspace          = _add_workspace;
+	dmb.remove_last_workspace  = _remove_workspace;
 	gldi_desktop_manager_register_backend (&dmb, "X11");
 	
 	GldiWindowManagerBackend wmb;
@@ -1672,6 +1682,8 @@ static void init (void)
 	wmb.can_minimize_maximize_close = _can_minimize_maximize_close;
 	wmb.get_id = _get_id;
 	wmb.pick_window = _pick_window;
+	//!! TODO: figure out GLDI_WM_NO_VIEWPORT_OVERLAP flag (depends on the WM, needs to be done in *-integration.c) !!
+	wmb.flags = GINT_TO_POINTER (GLDI_WM_HAVE_WINDOW_GEOMETRY | GLDI_WM_HAVE_WORKSPACES);
 	wmb.name = "X11";
 	gldi_windows_manager_register_backend (&wmb);
 	
