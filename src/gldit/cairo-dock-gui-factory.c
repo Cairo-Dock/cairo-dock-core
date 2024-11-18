@@ -1408,14 +1408,6 @@ static void _cairo_dock_configure_module (G_GNUC_UNUSED GtkButton *button, const
 	g_free (cMessage);
 }
 
-static void _cairo_dock_widget_launch_command (G_GNUC_UNUSED GtkButton *button, const gchar *cCommandToLaunch)
-{
-	gchar *cResult = cairo_dock_launch_command_sync (cCommandToLaunch);
-	if (cResult != NULL)
-		cd_debug ("%s: %s => %s", __func__, cCommandToLaunch, cResult);
-	g_free (cResult);
-}
-
 static void _on_text_changed (GtkWidget *pEntry, gchar *cDefaultValue);
 static void _set_default_text (GtkWidget *pEntry, gchar *cDefaultValue)
 {
@@ -2669,34 +2661,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			
 			case CAIRO_DOCK_WIDGET_LAUNCH_COMMAND :
 			case CAIRO_DOCK_WIDGET_LAUNCH_COMMAND_IF_CONDITION :
-				if (pAuthorizedValuesList == NULL || pAuthorizedValuesList[0] == NULL || *pAuthorizedValuesList[0] == '\0')
-					break ;
-				gchar *cFirstCommand = NULL;
-				cFirstCommand = pAuthorizedValuesList[0];
-				if (iElementType == CAIRO_DOCK_WIDGET_LAUNCH_COMMAND_IF_CONDITION)
-				{
-					if (pAuthorizedValuesList[1] == NULL)
-					{ // condition without condition...
-						gtk_widget_set_sensitive (pLabel, FALSE);
-						break ;
-					}
-					gchar *cSecondCommand = pAuthorizedValuesList[1];
-					gchar *cResult = cairo_dock_launch_command_sync (cSecondCommand);
-					cd_debug ("%s: %s => %s", __func__, cSecondCommand, cResult);
-					if (cResult == NULL || *cResult == '0' || *cResult == '\0')  // result is 'fail'
-					{
-						gtk_widget_set_sensitive (pLabel, FALSE);
-						g_free (cResult);
-						break ;
-					}
-					g_free (cResult);
-				}
-				pOneWidget = gtk_button_new_from_icon_name (GLDI_ICON_NAME_JUMP_TO, GTK_ICON_SIZE_BUTTON);
-				g_signal_connect (G_OBJECT (pOneWidget),
-					"clicked",
-					G_CALLBACK (_cairo_dock_widget_launch_command),
-					g_strdup (cFirstCommand));
-				_pack_subwidget (pOneWidget);
+				cd_warning ("GUI elements launching commands are deprecated!");
 			break ;
 			
 			case CAIRO_DOCK_WIDGET_LIST :  // a list of strings.
