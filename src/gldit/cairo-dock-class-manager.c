@@ -2248,9 +2248,6 @@ void gldi_class_startup_notify (Icon *pIcon)
 		pClassAppli->iSidOpeningTimeout = g_timeout_add_seconds (15,  // 15 seconds, for applications that take a really long time to start
 		(GSourceFunc) _stop_opening_timeout, g_strdup (cClass));  /// TODO: there is a memory leak here...
 
-	// notify about the startup
-	gldi_desktop_notify_startup (cClass);
-
 	// mark the icon as launching (this is just for convenience for the animations)
 	gldi_icon_mark_as_launching (pIcon);
 }
