@@ -282,21 +282,17 @@ static GtkWidget *_make_notebook_label (const gchar *cLabel, const gchar *cImage
 	GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_FRAME_MARGIN);
 	
 	GtkWidget *pImage = _gtk_image_new_from_file (cImage, iSize);
-	GtkWidget *pAlign = gtk_alignment_new (0.5, 0.5, 0., 1.);
-	gtk_alignment_set_padding (GTK_ALIGNMENT (pAlign), 0, 0, CAIRO_DOCK_FRAME_MARGIN, 0);
-	gtk_container_add (GTK_CONTAINER (pAlign), pImage);
+	gtk_widget_set_margin_start (pImage, CAIRO_DOCK_FRAME_MARGIN);
 	gtk_box_pack_start (GTK_BOX (hbox),
-		pAlign,
+		pImage,
 		FALSE,
 		FALSE,
 		0);
 	
 	GtkWidget *pLabel = gtk_label_new (cLabel);
-	pAlign = gtk_alignment_new (0.5, 0.5, 0., 1.);
-	gtk_alignment_set_padding (GTK_ALIGNMENT (pAlign), 0, 0, CAIRO_DOCK_FRAME_MARGIN, 0);
-	gtk_container_add (GTK_CONTAINER (pAlign), pLabel);
+	gtk_widget_set_margin_start (pLabel, CAIRO_DOCK_FRAME_MARGIN);
 	gtk_box_pack_start (GTK_BOX (hbox),
-		pAlign,
+		pLabel,
 		FALSE,
 		FALSE,
 		0);	

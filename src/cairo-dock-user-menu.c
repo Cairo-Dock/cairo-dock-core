@@ -149,8 +149,9 @@ static void _cairo_dock_add_about_page_with_markup (GtkWidget *pNoteBook, const 
 {
 	GtkWidget *pAboutLabel = gtk_label_new (NULL);
 	gtk_label_set_use_markup (GTK_LABEL (pAboutLabel), TRUE);
-	gtk_misc_set_alignment (GTK_MISC (pAboutLabel), 0.0, 0.0);
-	gtk_misc_set_padding (GTK_MISC (pAboutLabel), 30, 0);
+	gtk_widget_set_halign (pAboutLabel, GTK_ALIGN_START);
+	gtk_widget_set_valign (pAboutLabel, GTK_ALIGN_START);
+	gtk_widget_set_margin_start (pAboutLabel, 30);
 	gtk_label_set_markup (GTK_LABEL (pAboutLabel), cAboutText);
 	_cairo_dock_add_about_page_with_widget (pNoteBook, cPageLabel, pAboutLabel);
 }
@@ -177,7 +178,7 @@ static void _cairo_dock_about (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GldiContain
 	GtkWidget *pDialog = gtk_dialog_new_with_buttons (_("About Cairo-Dock"),
 		GTK_WINDOW (pContainer->pWidget),
 		GTK_DIALOG_DESTROY_WITH_PARENT,
-		GLDI_ICON_NAME_CLOSE,
+		_("Close"),
 		GTK_RESPONSE_CLOSE,
 		NULL);
 

@@ -591,9 +591,8 @@ static void _make_combo_for_user_themes (ThemesWidget *pThemesWidget, GPtrArray 
 	GtkWidget *pPreviewBox = cairo_dock_gui_make_preview_box (GTK_WIDGET (pThemesWidget->pMainWindow), pOneWidget, FALSE, 1, NULL, NULL, pDataGarbage);
 	GtkWidget *pWidgetBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_GUI_MARGIN);
 	
-	GtkWidget *pAlign = gtk_alignment_new (0, 0, 1, 0);
-	gtk_container_add (GTK_CONTAINER (pAlign), pLabel);
-	gtk_box_pack_start (GTK_BOX (pHBox), pAlign, FALSE, FALSE, 0);
+	gtk_widget_set_valign (pLabel, GTK_ALIGN_START);
+	gtk_box_pack_start (GTK_BOX (pHBox), pLabel, FALSE, FALSE, 0);
 	gtk_box_pack_end (GTK_BOX (pHBox), pWidgetBox, FALSE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (pWidgetBox), pOneWidget, FALSE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (pWidgetBox), pPreviewBox, FALSE, FALSE, 0);

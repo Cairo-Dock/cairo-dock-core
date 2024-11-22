@@ -106,13 +106,9 @@ static void _add_widget_to_notebook (GtkWidget *pNoteBook, GtkWidget *pWidget, c
 {
 	GtkWidget *pLabel = gtk_label_new (cTitle);
 	GtkWidget *pLabelContainer = NULL;
-	GtkWidget *pAlign = NULL;
 	if (cIcon != NULL && *cIcon != '\0')
 	{
 		pLabelContainer = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_ICON_MARGIN);
-		pAlign = gtk_alignment_new (0., 0.5, 0., 0.);
-		gtk_container_add (GTK_CONTAINER (pAlign), pLabelContainer);
-		
 		gchar *icon = cairo_dock_get_icon_for_gui (NULL, cIcon, NULL, CAIRO_DOCK_GROUP_ICON_SIZE, FALSE);
 		GtkWidget *pImage = _gtk_image_new_from_file (icon, GTK_ICON_SIZE_BUTTON);
 		gtk_container_add (GTK_CONTAINER (pLabelContainer), pImage);
@@ -125,7 +121,7 @@ static void _add_widget_to_notebook (GtkWidget *pNoteBook, GtkWidget *pWidget, c
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_container_add (GTK_CONTAINER (pScrolledWindow), pWidget);
 	
-	gtk_notebook_append_page (GTK_NOTEBOOK (pNoteBook), pScrolledWindow, (pAlign != NULL ? pAlign : pLabel));
+	gtk_notebook_append_page (GTK_NOTEBOOK (pNoteBook), pScrolledWindow, pLabelContainer ? pLabelContainer : pLabel);
 }
 static GtkWidget *_make_notebook (void)
 {
