@@ -736,6 +736,7 @@ static void _cairo_dock_make_launcher_from_appli (G_GNUC_UNUSED GtkMenuItem *pMe
 	// look for the .desktop file of the program
 	cd_debug ("%s (%s)", __func__, icon->cClass);
 	const gchar *cDesktopFilePath = cairo_dock_get_class_desktop_file (icon->cClass);
+	Icon *result = NULL;
 	
 	// make a new launcher from this desktop file
 	if (cDesktopFilePath != NULL)
@@ -764,9 +765,10 @@ static void _cairo_dock_make_launcher_from_appli (G_GNUC_UNUSED GtkMenuItem *pMe
 			else
 				fOrder = pIcon->fOrder + 1;
 		}
-		gldi_launcher_add_new (cDesktopFilePath, g_pMainDock, fOrder);  // add in the main dock
+		// add in the main dock
+		result = gldi_launcher_add_new_full (cDesktopFilePath, g_pMainDock, fOrder, TRUE);
 	}
-	else
+	if (!result)
 	{
 		// if a .desktop file has not been found so far, we cannot create a launcher
 		// (no point in searching and getting inconsistent results, all "heuristics" for
