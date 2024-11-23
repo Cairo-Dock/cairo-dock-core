@@ -274,24 +274,42 @@ Icon *gldi_launcher_new (const gchar *cConfFile, GKeyFile *pKeyFile)
 }
 
 
-gchar *gldi_launcher_add_conf_file (const gchar *cOrigin, const gchar *cDockName, double fOrder)
+gchar *gldi_launcher_add_conf_file (const gchar *cOrigin, const gchar *cDockName, double fOrder, gboolean bValidate)
 {
-	//\__________________ open the template.
-	const gchar *cTemplateFile = GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_LAUNCHER_CONF_FILE;	
-	GKeyFile *pKeyFile = cairo_dock_open_key_file (cTemplateFile);
-	g_return_val_if_fail (pKeyFile != NULL, NULL);
-	
-	//\__________________ fill the parameters
+	//\__________________ process the origin file path or name
 	gchar *cFilePath = NULL;
 	if (cOrigin != NULL && *cOrigin != '/')  // transform the origin URI into a path or a file name.
 	{
 		if (strncmp (cOrigin, "application://", 14) == 0)  // Ubuntu >= 11.04: it's now an "app" URI
 			cFilePath = g_strdup (cOrigin + 14);  // in this case we don't have the actual path of the .desktop, but that doesn't matter.
 		else
+			// try to process as a file:// URI
 			cFilePath = g_filename_from_uri (cOrigin, NULL, NULL);
 	}
-	else  // no origin or already a path.
+	if (!cFilePath)  // no origin, already a path, or possibly a .desktop ID.
 		cFilePath = g_strdup (cOrigin);
+	
+	if (bValidate)
+	{
+		if (!cFilePath) return NULL;
+		GDesktopAppInfo *app = NULL;
+		if (*cFilePath == '/')
+			app = g_desktop_app_info_new_from_filename (cFilePath);
+		else app = g_desktop_app_info_new (cFilePath);
+		if (!app)
+		{
+			g_free (cFilePath);
+			return NULL;
+		}
+		g_object_unref (app); // will be re-read later, this could be optimized
+	}
+	
+	//\__________________ open the template.
+	const gchar *cTemplateFile = GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_LAUNCHER_CONF_FILE;	
+	GKeyFile *pKeyFile = cairo_dock_open_key_file (cTemplateFile);
+	g_return_val_if_fail (pKeyFile != NULL, NULL);
+	
+	//\__________________ fill the parameters
 	g_key_file_set_string (pKeyFile, "Desktop Entry", "Origin", cFilePath?cFilePath:"");
 	
 	g_key_file_set_double (pKeyFile, "Desktop Entry", "Order", fOrder);
@@ -343,7 +361,7 @@ gchar *gldi_launcher_add_conf_file (const gchar *cOrigin, const gchar *cDockName
 }
 
 
-Icon *gldi_launcher_add_new (const gchar *cURI, CairoDock *pDock, double fOrder)
+Icon *gldi_launcher_add_new_full (const gchar *cURI, CairoDock *pDock, double fOrder, gboolean bValidate)
 {
 	//\_________________ add a launcher in the current theme
 	const gchar *cDockName = gldi_dock_get_name (pDock);
@@ -352,7 +370,7 @@ Icon *gldi_launcher_add_new (const gchar *cURI, CairoDock *pDock, double fOrder)
 		Icon *pLastIcon = cairo_dock_get_last_launcher (pDock->icons);
 		fOrder = (pLastIcon ? pLastIcon->fOrder + 1 : 1);
 	}
-	gchar *cNewDesktopFileName = gldi_launcher_add_conf_file (cURI, cDockName, fOrder);
+	gchar *cNewDesktopFileName = gldi_launcher_add_conf_file (cURI, cDockName, fOrder, bValidate);
 	g_return_val_if_fail (cNewDesktopFileName != NULL, NULL);
 	
 	//\_________________ load the new icon
@@ -364,3 +382,9 @@ Icon *gldi_launcher_add_new (const gchar *cURI, CairoDock *pDock, double fOrder)
 	
 	return pNewIcon;
 }
+
+Icon *gldi_launcher_add_new (const gchar *cURI, CairoDock *pDock, double fOrder)
+{
+	return gldi_launcher_add_new_full (cURI, pDock, fOrder, FALSE);
+}
+

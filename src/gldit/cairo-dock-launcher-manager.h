@@ -54,9 +54,18 @@ typedef enum {
 Icon *gldi_launcher_new (const gchar *cConfFile, GKeyFile *pKeyFile);
 
 
-gchar *gldi_launcher_add_conf_file (const gchar *cURI, const gchar *cDockName, double fOrder);
+gchar *gldi_launcher_add_conf_file (const gchar *cURI, const gchar *cDockName, double fOrder, gboolean bValidate);
 
-
+/** Add a new launcher from a .desktop file or a blank one.
+*@param cURI absolute path of the .desktop file to add, a "application://" URI or NULL to create a blank launcher
+*@param pDock the dock to add the launcher to
+*@param fOrder where to add the launcher
+*@param bValidate whether to check if the .desktop file supplied as cURI actually exists. If this is TRUE and the .desktop file cannot be found, this function will fail.
+*@return the icon corresponding to the new launcher
+*/
+Icon *gldi_launcher_add_new_full (const gchar *cURI, CairoDock *pDock, double fOrder, gboolean bValidate);
+/** Add a new launcher from a .desktop file or a blank one. This is the same as gldi_launcher_add_new_full () with bValidate == FALSE.
+ */
 Icon *gldi_launcher_add_new (const gchar *cURI, CairoDock *pDock, double fOrder);
 
 
