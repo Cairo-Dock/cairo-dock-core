@@ -651,6 +651,7 @@ GtkWidget *gldi_container_build_menu (GldiContainer *pContainer, Icon *icon)
 	
 	s_pMenu = menu;
 	g_object_add_weak_pointer (G_OBJECT (menu), (gpointer*)&s_pMenu);  // will nullify 's_pMenu' as soon as the menu is destroyed.
+	// TODO: it would make sense to destroy the menu as soon as it is closed, since it will not be reused
 	return menu;
 }
 

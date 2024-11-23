@@ -88,6 +88,7 @@ typedef enum {
 	/// notification called when the mouse enters a dock while dragging an object.
 	NOTIFICATION_START_DRAG_DATA,
 	/// notification called when something is dropped inside a container. data : {gchar*, Icon, double*, CairoDock}
+	/// only called if the below NOTIFICATION_DROP_DATA_SELECTION was not handled
 	NOTIFICATION_DROP_DATA,
 	/// notification called when the mouse has moved inside a container.
 	NOTIFICATION_MOUSE_MOVED,
@@ -99,6 +100,9 @@ typedef enum {
 	NOTIFICATION_UPDATE_SLOW,
 	/// notification called when a container is rendered.
 	NOTIFICATION_RENDER,
+	/// notification called when something is dropped, using the original data received
+	/// data: GtkSelectionData*, Icon, double*, CairoDock, gboolean* bHandled
+	NOTIFICATION_DROP_DATA_SELECTION,
 	NB_NOTIFICATIONS_CONTAINER
 	} GldiContainerNotifications;
 
