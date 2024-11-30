@@ -820,7 +820,6 @@ static gboolean _draw_menu_item (GtkWidget *widget,
 	// get menu's geometry
 	guint border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 	gint width = gtk_widget_get_allocated_width (widget);
-	gint height = gtk_widget_get_allocated_height (widget);
 
 	gint x, y, w;
 	x = border_width;
