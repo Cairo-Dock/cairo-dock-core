@@ -113,7 +113,6 @@ static inline CairoDockClassAppli *_cairo_dock_lookup_class_appli (const gchar *
 	return ret;
 }
 
-
 static gboolean _on_window_created (G_GNUC_UNUSED gpointer data, GldiWindowActor *actor)
 {
 	gldi_class_startup_notify_end (actor->cClass);
@@ -2226,13 +2225,12 @@ void cairo_dock_set_data_from_class (const gchar *cClass, Icon *pIcon)
 }
 
 
+static void _gldi_class_appli_startup_notify_end (CairoDockClassAppli *pClassAppli);
 
-static gboolean _stop_opening_timeout (const gchar *cClass)
+static gboolean _stop_opening_timeout (CairoDockClassAppli *pClassAppli)
 {
-	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
-	g_return_val_if_fail (pClassAppli != NULL, FALSE);
 	pClassAppli->iSidOpeningTimeout = 0;
-	gldi_class_startup_notify_end (cClass);
+	_gldi_class_appli_startup_notify_end (pClassAppli);
 	return FALSE;
 }
 void gldi_class_startup_notify (Icon *pIcon)
@@ -2246,18 +2244,14 @@ void gldi_class_startup_notify (Icon *pIcon)
 	pClassAppli->bIsLaunching = TRUE;
 	if (pClassAppli->iSidOpeningTimeout == 0)
 		pClassAppli->iSidOpeningTimeout = g_timeout_add_seconds (15,  // 15 seconds, for applications that take a really long time to start
-		(GSourceFunc) _stop_opening_timeout, g_strdup (cClass));  /// TODO: there is a memory leak here...
+		(GSourceFunc) _stop_opening_timeout, pClassAppli);  // we can give pClassAppli as parameter, as we would remove the timeout if it is destroyed
 
 	// mark the icon as launching (this is just for convenience for the animations)
 	gldi_icon_mark_as_launching (pIcon);
 }
 
-void gldi_class_startup_notify_end (const gchar *cClass)
+static void _gldi_class_appli_startup_notify_end (CairoDockClassAppli *pClassAppli)
 {
-	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
-	if (! pClassAppli || ! pClassAppli->bIsLaunching)
-		return;
-
 	// unset the icons as launching
 	GList* ic;
 	Icon *icon;
@@ -2287,6 +2281,15 @@ void gldi_class_startup_notify_end (const gchar *cClass)
 		pClassAppli->iSidOpeningTimeout = 0;
 	}
 }
+
+void gldi_class_startup_notify_end (const gchar *cClass)
+{
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
+	if (! pClassAppli || ! pClassAppli->bIsLaunching)
+		return;
+	_gldi_class_appli_startup_notify_end (pClassAppli);
+}
+
 
 gboolean gldi_class_is_starting (const gchar *cClass)
 {
