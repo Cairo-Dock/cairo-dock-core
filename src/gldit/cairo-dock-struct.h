@@ -426,7 +426,6 @@ typedef struct _GldiVisitCard GldiVisitCard;
 typedef struct _GldiModuleInstance GldiModuleInstance;
 typedef struct _CairoDockMinimalAppletConfig CairoDockMinimalAppletConfig;
 typedef struct _CairoDockDesktopEnvBackend CairoDockDesktopEnvBackend;
-typedef struct _CairoDockClassAppli CairoDockClassAppli;
 typedef struct _CairoDialogAttribute CairoDialogAttribute;
 typedef struct _CairoDeskletAttribute CairoDeskletAttribute;
 typedef struct _CairoDialogButton CairoDialogButton;

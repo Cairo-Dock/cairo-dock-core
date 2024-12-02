@@ -57,6 +57,38 @@
 extern CairoDock *g_pMainDock;
 extern CairoDockDesktopEnv g_iDesktopEnv;
 
+
+
+/// Definition of a Class of application.
+struct _CairoDockClassAppli {
+	/// TRUE if the appli must use the icon provided by X instead the one from the theme.
+	gboolean bUseXIcon;
+	/// TRUE if the appli doesn't group togather with its class.
+	gboolean bExpand;
+	/// List of the inhibitors of the class.
+	GList *pIconsOfClass;
+	/// List of the appli icons of this class.
+	GList *pAppliOfClass;
+	gboolean bSearchedAttributes;
+	gchar *cDesktopFile;
+	gchar **pMimeTypes;
+	gchar *cCommand;
+	/// Class of the app as reported by the WM / compositor without parsing or any changes to it
+	gchar *cStartupWMClass;
+	gchar *cIcon;
+	gchar *cName;
+	gchar *cWorkingDirectory;
+	GList *pMenuItems;
+	gint iAge;  // age of the first created window of this class
+	gchar *cDockName;  // unique name of the class sub-dock
+	guint iSidOpeningTimeout;  // timeout to stop the launching, if not stopped by the application before
+	gboolean bIsLaunching;  // flag to mark a class as being launched
+	gboolean bHasStartupNotify;  // TRUE if the application sends a "remove" event when its launch is complete (not used yet)
+};
+
+typedef struct _CairoDockClassAppli CairoDockClassAppli;
+
+
 static GHashTable *s_hClassTable = NULL;
 static GHashTable *s_hAltClass = NULL; // we store alternative class / app-ids here
 
