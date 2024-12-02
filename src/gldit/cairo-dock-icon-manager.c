@@ -1016,16 +1016,14 @@ static void reset_object (GldiObject *obj)
 	g_free (icon->cName);
 	g_free (icon->cInitialName);
 	g_free (icon->cCommand);
-	g_free (icon->cWorkingDirectory);
 	g_free (icon->cBaseURI);
 	g_free (icon->cParentDockName);  // on ne liberera pas le sous-dock ici sous peine de se mordre la queue, donc il faut l'avoir fait avant.
 	g_free (icon->cClass);
-	g_free (icon->cWmClass);
 	g_free (icon->cQuickInfo);
 	///g_free (icon->cLastAttentionDemand);
 	g_free (icon->pHiddenBgColor);
-	if (icon->pMimeTypes)
-		g_strfreev (icon->pMimeTypes);
+	if (icon->pClassApp) g_object_unref (icon->pClassApp);
+	if (icon->pCustomLauncher) g_object_unref (icon->pCustomLauncher);
 	
 	cairo_dock_unload_image_buffer (&icon->image);
 	

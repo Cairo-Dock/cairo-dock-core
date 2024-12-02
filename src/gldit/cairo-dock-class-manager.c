@@ -308,6 +308,9 @@ gboolean cairo_dock_add_appli_icon_to_class (Icon *pIcon)
 	///if (pClassAppli->iAge == 0)  // age is > 0, so it means we have never set it yet.
 	if (pClassAppli->pAppliOfClass == NULL)  // the first appli of a class defines the age of the class.
 		pClassAppli->iAge = pIcon->pAppli->iAge;
+	
+	if (!pIcon->pClassApp) pIcon->pClassApp = app;
+	else if (app) g_object_unref (app);
 
 	g_return_val_if_fail (g_list_find (pClassAppli->pAppliOfClass, pIcon) == NULL, TRUE);
 	pClassAppli->pAppliOfClass = g_list_prepend (pClassAppli->pAppliOfClass, pIcon);
@@ -2212,6 +2215,14 @@ void cairo_dock_set_data_from_class (const gchar *cClass, Icon *pIcon)
 
 	if (pIcon->cFileName == NULL)
 		pIcon->cFileName = g_strdup (pClassAppli->cIcon);
+	
+	if (pIcon->pClassApp)
+	{
+		// should not happen, this function is only called for newly created icons
+		cd_warning ("app corresponding to this icon was already set!");
+		g_object_unref (pIcon->pClassApp);
+	}
+	pIcon->pClassApp = pClassAppli->app ? g_object_ref (pClassAppli->app) : NULL;
 }
 
 

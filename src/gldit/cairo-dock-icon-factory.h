@@ -21,6 +21,7 @@
 #define  __CAIRO_DOCK_ICON_FACTORY__
 
 #include <glib.h>
+#include <gio/gdesktopappinfo.h>
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-image-buffer.h"
@@ -112,13 +113,14 @@ struct _Icon {
 	
 	// Launcher.
 	gchar *cDesktopFileName;  // nom (et non pas chemin) du fichier .desktop
-	gchar *cCommand;
-	gchar *cWorkingDirectory;
-	gchar *cBaseURI;
+	gchar *cCommand; // used by plugins to store a custom command or other data; NOT used by core
+	gchar *cBaseURI; // used by shortcuts
 	gint iVolumeID;
-	gchar **pMimeTypes;
-	gchar *cWmClass;
-	gchar *cInitialName;
+	gchar *cInitialName; // original name replaced by e.g. the actual app title matched to a launcher
+	// GAppInfo(s) that are used to launch the app corresponding to this icon (if it is a launcher or appli)
+	// These are only set on creation and do not change during the lifetime of the icon.
+	GDesktopAppInfo *pClassApp; // GAppInfo corresponding to the .desktop file installed on the system
+	GDesktopAppInfo *pCustomLauncher; // GAppInfo with custom launch command (if set)
 	
 	// Appli.
 	GldiWindowActor *pAppli;

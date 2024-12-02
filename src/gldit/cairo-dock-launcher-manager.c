@@ -73,11 +73,11 @@ static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 		icon->cName = NULL;
 	}
 	
-	icon->cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", NULL);
-	if (icon->cCommand != NULL && *icon->cCommand == '\0')
+	char *cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", NULL);
+	if (cCommand != NULL && *cCommand != '\0')
 	{
-		g_free (icon->cCommand);
-		icon->cCommand = NULL;
+		icon->pCustomLauncher = g_desktop_app_info_new_from_keyfile (pKeyFile);
+		g_free (cCommand);
 	}
 	
 	gchar *cStartupWMClass = g_key_file_get_string (pKeyFile, "Desktop Entry", "StartupWMClass", NULL);
@@ -109,9 +109,12 @@ static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 
 	// if no origin class could be found, try to guess the class
 	gchar *cFallbackClass = NULL;
-	if (cClass == NULL)  // no class found, maybe an old launcher or a custom one, try to guess from the info in the user desktop file.
+	if (cClass == NULL && icon->pCustomLauncher)  // no class found, maybe an old launcher or a custom one, try to guess from the info in the user desktop file.
 	{
-		cFallbackClass = cairo_dock_guess_class (icon->cCommand, cStartupWMClass);
+		// note: we only process the command line, since we already tried with cStartupWMClass before
+		// and it did not work
+		cFallbackClass = cairo_dock_guess_class (g_app_info_get_commandline (
+			G_APP_INFO (icon->pCustomLauncher)), NULL);
 		cClass = cairo_dock_register_class_full (cFallbackClass, cStartupWMClass, NULL);
 	}
 	
@@ -121,6 +124,7 @@ static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 	{
 		icon->cClass = cClass;
 		g_free (cFallbackClass);
+		// this sets the display name, the icon filename and the GAppInfo used to launch the app
 		cairo_dock_set_data_from_class (cClass, icon);
 		if (iNumOrigin != 0)  // it's not the first origin that gave us the correct class, so let's write it down to avoid searching the next time.
 		{
@@ -128,30 +132,10 @@ static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 			bNeedUpdate = TRUE;
 		}
 	}
-	else  // no class found, it's maybe an old launcher, take the remaining common params from the user desktop file.
+	else
 	{
+		// no class found, it's maybe an old launcher, take the remaining common params from the user desktop file.
 		icon->cClass = cFallbackClass;
-		gsize length = 0;
-		icon->pMimeTypes = g_key_file_get_string_list (pKeyFile, "Desktop Entry", "MimeType", &length, NULL);
-		
-		if (icon->cCommand != NULL)
-		{
-			icon->cWorkingDirectory = g_key_file_get_string (pKeyFile, "Desktop Entry", "Path", NULL);
-			if (icon->cWorkingDirectory != NULL && *icon->cWorkingDirectory == '\0')
-			{
-				g_free (icon->cWorkingDirectory);
-				icon->cWorkingDirectory = NULL;
-			}
-		}
-	}
-	
-	// take into account the execution in a terminal.
-	gboolean bExecInTerminal = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "Terminal", NULL);
-	if (bExecInTerminal)  // on le fait apres la classe puisqu'on change la commande.
-	{
-		gchar *cOldCommand = icon->cCommand;
-		icon->cCommand = cairo_dock_get_command_with_right_terminal (cOldCommand);
-		g_free (cOldCommand);
 	}
 	
 	gboolean bPreventFromInhibiting = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "prevent inhibate", NULL);  // FALSE by default
@@ -185,7 +169,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	GKeyFile *pKeyFile = pAttributes->pKeyFile;
 	gboolean bNeedUpdate = _get_launcher_params (icon, pKeyFile);
 	
-	if (icon->cCommand == NULL)  // no command could be found for this launcher -> mark it as invalid
+	if ( !(icon->pClassApp || icon->pCustomLauncher))  // no command could be found for this launcher -> mark it as invalid
 	{
 		g_free (icon->cDesktopFileName);
 		icon->cDesktopFileName = NULL;  // we use this as a way to tell the UserIcon manager that the icon is invalid; we could add a boolean in the GldiUserIcon structure, but it's not that necessary
@@ -223,15 +207,17 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, GKeyFile 
 	icon->cName = NULL;
 	g_free (icon->cFileName);
 	icon->cFileName = NULL;
-	g_free (icon->cCommand);
-	icon->cCommand = NULL;
-	if (icon->pMimeTypes != NULL)
+	// need to set the appinfos to NULL to not confuse _get_launcher_params ()
+	if (icon->pCustomLauncher)
 	{
-		g_strfreev (icon->pMimeTypes);
-		icon->pMimeTypes = NULL;
+		g_object_unref (icon->pCustomLauncher);
+		icon->pCustomLauncher = NULL;
 	}
-	g_free (icon->cWorkingDirectory);
-	icon->cWorkingDirectory = NULL;
+	if (icon->pClassApp)
+	{
+		g_object_unref (icon->pClassApp);
+		icon->pClassApp = NULL;
+	}
 	
 	//\__________________ get parameters
 	_get_launcher_params (icon, pKeyFile);
