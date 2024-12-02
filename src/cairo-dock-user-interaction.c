@@ -178,26 +178,10 @@ static void _show_all_windows (GList *pIcons)
 
 static gboolean _launch_icon_command (Icon *icon)
 {
-	if (icon->cCommand == NULL)
-		return GLDI_NOTIFICATION_LET_PASS;
-	
 	if (gldi_class_is_starting (icon->cClass) || gldi_icon_is_launching (icon))  // do not launch it twice (avoid wrong double click); so we can't launch an app several times rapidly (must wait until it's launched), but it's probably not a useful feature anyway
 		return GLDI_NOTIFICATION_INTERCEPT;
 	
-	gboolean bSuccess = FALSE;
-	if (*icon->cCommand == '<')  // shortkey
-	{
-		bSuccess = cairo_dock_trigger_shortkey (icon->cCommand);
-		if (!bSuccess)
-			bSuccess = gldi_icon_launch_command (icon);
-	}
-	else  // normal command
-	{
-		bSuccess = gldi_icon_launch_command (icon);
-		if (! bSuccess)
-			bSuccess = cairo_dock_trigger_shortkey (icon->cCommand);
-	}
-	if (! bSuccess)
+	if (! gldi_icon_launch_command (icon))
 	{
 		gldi_icon_request_animation (icon, "blink", 1);  // 1 blink if fail.
 	}
@@ -291,7 +275,7 @@ gboolean cairo_dock_notification_middle_click_icon (G_GNUC_UNUSED gpointer pUser
 				}
 			break;
 			case CAIRO_APPLI_ACTION_LAUNCH_NEW:  // launch new
-				if (icon->cCommand != NULL)
+				if (icon->pClassApp || icon->pCustomLauncher)
 				{
 					gldi_object_notify (pDock, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // emulate a shift+left click
 				}
@@ -312,7 +296,7 @@ gboolean cairo_dock_notification_middle_click_icon (G_GNUC_UNUSED gpointer pUser
 				_cairo_dock_hide_show_in_class_subdock (icon);
 			break;
 			case CAIRO_APPLI_ACTION_LAUNCH_NEW:  // launch new
-				if (icon->cCommand != NULL)
+				if (icon->pClassApp || icon->pCustomLauncher)
 				{
 					gldi_object_notify (CAIRO_CONTAINER (pDock), NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // emulate a shift+left click
 				}
@@ -374,20 +358,16 @@ gboolean cairo_dock_notification_drop_data (G_GNUC_UNUSED gpointer pUserData, co
 			|| CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon)
 			|| CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (icon)) // launcher/appli -> fire the command with this file.
 			{
-				if (icon->cCommand == NULL)
-					return GLDI_NOTIFICATION_LET_PASS;
-				gchar *cCommand;
-				if (strncmp (cReceivedData, "file://", 7) == 0)  // tous les programmes ne gerent pas les URI; pour parer au cas ou il ne le gererait pas, dans le cas d'un fichier local, on convertit en un chemin
-				{
-					gchar *cPath = g_filename_from_uri (cReceivedData, NULL, NULL);
-					cCommand = g_strdup_printf ("%s \"%s\"", icon->cCommand, cPath);
-					g_free (cPath);
-				}
-				else 
-					cCommand = g_strdup_printf ("%s \"%s\"", icon->cCommand, cReceivedData);
-				cd_message ("will open the file with the command '%s'...", cCommand);
-				g_spawn_command_line_async (cCommand, NULL);
-				g_free (cCommand);
+				GDesktopAppInfo *app = icon->pClassApp ? icon->pClassApp : icon->pCustomLauncher;
+				if (!app) return GLDI_NOTIFICATION_LET_PASS;
+				// GdkAppLaunchContext will automatically use startup notify / xdg-activation,
+				// allowing e.g. the app to raise itself if necessary
+				GdkAppLaunchContext *context = gdk_display_get_app_launch_context (gdk_display_get_default ());
+				GList *uris = g_list_append (NULL, (gpointer)cReceivedData);
+				g_app_info_launch_uris (G_APP_INFO (app), uris, G_APP_LAUNCH_CONTEXT (context), NULL);
+				g_list_free (uris);
+				g_object_unref (context); // will be kept by GIO if necessary (and we don't care about the "launched" signal in this case)
+				
 				gldi_icon_request_animation (icon, "blink", 2);
 				return GLDI_NOTIFICATION_INTERCEPT;
 			}

@@ -734,26 +734,7 @@ static void _cairo_dock_make_launcher_from_appli (G_GNUC_UNUSED GtkMenuItem *pMe
 	
 	// look for the .desktop file of the program
 	cd_debug ("%s (%s)", __func__, icon->cClass);
-	gchar *cDesktopFilePath = g_strdup (cairo_dock_get_class_desktop_file (icon->cClass));
-	if (cDesktopFilePath == NULL)  // empty class
-	{
-		gchar *cCommand = g_strdup_printf ("find /usr/share/applications /usr/local/share/applications -iname \"*%s*.desktop\"", icon->cClass);  // look for a desktop file from their file name
-		gchar *cResult = cairo_dock_launch_command_sync (cCommand);
-		if (cResult == NULL || *cResult == '\0')  // no luck, search harder
-		{
-			g_free (cCommand);
-			cCommand = g_strdup_printf ("find /usr/share/applications /usr/local/share/applications -name \"*.desktop\" -exec grep -qi '%s' {} \\; -print", icon->cClass);  // look for a desktop file from their content
-			cResult = cairo_dock_launch_command_sync (cCommand);
-		}
-		if (cResult != NULL && *cResult != '\0')
-		{
-			gchar *str = strchr (cResult, '\n');  // remove the trailing linefeed, and only take the first result
-			if (str)
-				*str = '\0';
-			cDesktopFilePath = cResult;
-		}
-		g_free (cCommand);
-	}
+	const gchar *cDesktopFilePath = cairo_dock_get_class_desktop_file (icon->cClass);
 	
 	// make a new launcher from this desktop file
 	if (cDesktopFilePath != NULL)
@@ -786,9 +767,11 @@ static void _cairo_dock_make_launcher_from_appli (G_GNUC_UNUSED GtkMenuItem *pMe
 	}
 	else
 	{
+		// if a .desktop file has not been found so far, we cannot create a launcher
+		// (no point in searching and getting inconsistent results, all "heuristics" for
+		// finding .desktop files should be in cairo-dock-class-manager.c)
 		gldi_dialog_show_temporary_with_default_icon (_("Sorry, couldn't find the corresponding description file.\nConsider dragging and dropping the launcher from the Applications Menu."), icon, CAIRO_CONTAINER (pDock), 8000);
 	}
-	g_free (cDesktopFilePath);
 }
 
   //////////////////////////////////////////////////////////////////
@@ -867,7 +850,7 @@ static void _cairo_dock_launch_new (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpoint
 {
 	Icon *icon = data[0];
 	CairoDock *pDock = data[1];
-	if (icon->cCommand != NULL)
+	if (icon->pClassApp || icon->pCustomLauncher)
 	{
 		gldi_object_notify (CAIRO_CONTAINER (pDock), NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
 	}
@@ -1162,7 +1145,8 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
 		if (cairo_dock_is_locked ())
 		{
 			gboolean bSensitive = FALSE;
-			if (CAIRO_DOCK_IS_APPLI (icon) && icon->cCommand != NULL)
+			if ( (CAIRO_DOCK_IS_APPLI (icon) || CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pIcon))
+				&& (icon->pClassApp || icon->pCustomLauncher))
 			{
 				_add_entry_in_menu (_("Launch a new (Shift+clic)"), GLDI_ICON_NAME_ADD, _cairo_dock_launch_new, pItemSubMenu);
 				bSensitive = TRUE;
@@ -1176,7 +1160,8 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
 		}
 		else
 		{
-			if (CAIRO_DOCK_IS_APPLI (icon) && icon->cCommand != NULL)
+			if ( (CAIRO_DOCK_IS_APPLI (icon) || CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pIcon))
+					&& (icon->pClassApp || icon->pCustomLauncher))
 				_add_entry_in_menu (_("Launch a new (Shift+clic)"), GLDI_ICON_NAME_ADD, _cairo_dock_launch_new, pItemSubMenu);
 			
 			if ((CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)
@@ -1462,9 +1447,17 @@ static void _add_desktops_entry (GtkWidget *pMenu, gboolean bAll, gpointer *data
  ///////////// LES OPERATIONS SUR LES CLASSES //////////////////
 ///////////////////////////////////////////////////////////////
 
-static void _cairo_dock_launch_class_action (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gchar *cCommand)
+static GDesktopAppInfo *s_pCurrentApp = NULL;
+static void _cairo_dock_launch_class_action (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gchar *cAction)
 {
-	cairo_dock_launch_command (cCommand);
+	if (s_pCurrentApp && cAction)
+	{
+		// GdkAppLaunchContext will automatically use startup notify / xdg-activation,
+		// allowing e.g. the app to raise itself if necessary
+		GdkAppLaunchContext *context = gdk_display_get_app_launch_context (gdk_display_get_default ());
+		g_desktop_app_info_launch_action (s_pCurrentApp, cAction, G_APP_LAUNCH_CONTEXT (context));
+		g_object_unref (context); // will be kept by GIO if necessary (and we don't care about the "launched" signal in this case)
+	}
 }
 
 static void _cairo_dock_show_class (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpointer *data)
@@ -1810,21 +1803,27 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 	//\_________________________ class actions.
 	if (icon && icon->cClass != NULL && ! icon->bIgnoreQuicklist)
 	{
-		const GList *pClassMenuItems = cairo_dock_get_class_menu_items (icon->cClass);
-		if (pClassMenuItems != NULL)
+		GDesktopAppInfo *app = cairo_dock_get_class_app_info (icon->cClass);
+		if (app != NULL)
 		{
-			if (bAddSeparator)
+			const gchar* const* actions = g_desktop_app_info_list_actions (app);
+			if (actions && *actions)
 			{
-				pMenuItem = gtk_separator_menu_item_new ();
-				gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
-			}
-			bAddSeparator = TRUE;
-			gchar **pClassItem;
-			const GList *m;
-			for (m = pClassMenuItems; m != NULL; m = m->next)
-			{
-				pClassItem = m->data;
-				pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (pClassItem[0], pClassItem[2], G_CALLBACK (_cairo_dock_launch_class_action), menu, pClassItem[1]);
+				s_pCurrentApp = app;
+				if (bAddSeparator)
+				{
+					pMenuItem = gtk_separator_menu_item_new ();
+					gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
+				}
+				bAddSeparator = TRUE;
+				for (; *actions; ++actions)
+				{
+					gchar *name = g_desktop_app_info_get_action_name (app, *actions);
+					// TODO: no way to retrieve the icon for this?
+					pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (name, NULL,
+						G_CALLBACK (_cairo_dock_launch_class_action),
+						menu, (gpointer)*actions);
+				}
 			}
 		}
 	}

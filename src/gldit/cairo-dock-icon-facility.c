@@ -24,6 +24,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
+#include <gio/gdesktopappinfo.h>
 
 #include <cairo.h>
 
@@ -728,14 +729,17 @@ gboolean gldi_icon_launch_command (Icon *pIcon)
 	// notify startup
 	gldi_class_startup_notify (pIcon);
 
-	// launch command
-	const gchar *cCommand = pIcon->cCommand;
-	const gchar *cWorkingDirectory = pIcon->cWorkingDirectory;
-	if (! cCommand)
-		cCommand = cairo_dock_get_class_command (pIcon->cClass);
-
-	gboolean bSuccess = cairo_dock_launch_command_full (cCommand, cWorkingDirectory);
-	if (! bSuccess)
-		gldi_class_startup_notify_end (pIcon->cClass);
-	return bSuccess;
+	GDesktopAppInfo *app = pIcon->pCustomLauncher ? pIcon->pCustomLauncher : pIcon->pClassApp;
+	if (app)
+	{
+		cd_warning ("launching app from desktop file info: %s", pIcon->cClass);
+		// GdkAppLaunchContext will automatically use startup notify / xdg-activation
+		GdkAppLaunchContext *context = gdk_display_get_app_launch_context (gdk_display_get_default ());
+		gboolean ret = g_app_info_launch (G_APP_INFO (app), NULL, G_APP_LAUNCH_CONTEXT(context), NULL);
+		g_object_unref (context); // will be kept by GIO if necessary
+		return ret;
+		//!! TODO: use the "launched" and / or "launch-failed" signal to end our startup animation
+	}
+	cd_warning ("cannot launch icon with no app associated to it!");
+	return FALSE;
 }
