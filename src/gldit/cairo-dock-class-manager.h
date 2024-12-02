@@ -21,6 +21,7 @@
 #ifndef __CAIRO_DOCK_CLASS_MANAGER__
 #define  __CAIRO_DOCK_CLASS_MANAGER__
 
+#include <gio/gdesktopappinfo.h>
 #include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
@@ -99,12 +100,6 @@ gboolean cairo_dock_class_is_expanded (const gchar *cClass);
 gboolean cairo_dock_prevent_inhibited_class (Icon *pIcon);
 
 /*
-* Enleve un inhibiteur de la classe donnee.
-* @param pInhibitorIcon l'icone inhibitrice.
-* @return TRUE ssi la classe est encore inhibee après l'enlèvement, FALSE sinon.
-*/
-//gboolean cairo_dock_remove_icon_from_class (Icon *pInhibitorIcon);
-/*
 * Empeche une icone d'inhiber sa classe; l'icone est enlevee de sa classe, son controle sur une appli est desactive, sa classe remise a 0, et l'appli controlee est inseree dans le dock.
 * @param cClass la classe.
 * @param pInhibitorIcon l'icone inhibitrice.
@@ -167,19 +162,15 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock);
 void cairo_dock_set_class_order_amongst_applis (Icon *pIcon, CairoDock *pDock);
 
 
-const gchar *cairo_dock_get_class_command (const gchar *cClass);
-
 const gchar *cairo_dock_get_class_name (const gchar *cClass);
-
-const gchar **cairo_dock_get_class_mimetypes (const gchar *cClass);
 
 const gchar *cairo_dock_get_class_desktop_file (const gchar *cClass);
 
 const gchar *cairo_dock_get_class_icon (const gchar *cClass);
 
-const GList *cairo_dock_get_class_menu_items (const gchar *cClass);
-
 const gchar *cairo_dock_get_class_wm_class (const gchar *cClass);
+
+GDesktopAppInfo *cairo_dock_get_class_app_info (const gchar *cClass);
 
 const CairoDockImageBuffer *cairo_dock_get_class_image_buffer (const gchar *cClass);
 
