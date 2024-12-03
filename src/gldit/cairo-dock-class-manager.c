@@ -161,20 +161,6 @@ const GList *cairo_dock_list_existing_appli_with_class (const gchar *cClass)
 	return (pClassAppli != NULL ? pClassAppli->pAppliOfClass : NULL);
 }
 
-
-static CairoDockClassAppli *cairo_dock_get_class (const gchar *cClass)
-{
-	g_return_val_if_fail (cClass != NULL, NULL);
-
-	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
-	if (pClassAppli == NULL)
-	{
-		pClassAppli = g_new0 (CairoDockClassAppli, 1);
-		g_hash_table_insert (s_hClassTable, g_strdup (cClass), pClassAppli);
-	}
-	return pClassAppli;
-}
-
 static gboolean _cairo_dock_add_inhibitor_to_class (const gchar *cClass, Icon *pIcon)
 {
 	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
@@ -238,78 +224,27 @@ gboolean cairo_dock_add_appli_icon_to_class (Icon *pIcon)
 		return FALSE;
 	}
 
-	GDesktopAppInfo *app = NULL;
 	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (pIcon->cClass);
 	if (pClassAppli == NULL && pIcon->pAppli->cWmClass)
 		pClassAppli = _cairo_dock_lookup_class_appli (pIcon->pAppli->cWmClass);
-	if (pClassAppli)
+	if (!pClassAppli)
 	{
-		app = pClassAppli->app; // should be not null
-		g_object_ref (app); // will add app to pIcon
-	}
-	else
-	{
-		/**
-		 * We really want to find a valid class, so we check what .desktop file
-		 * this class could map to and if that has been already registered.
-		 * This can happen if we have a launcher for this app, the .desktop file
-		 * is not an exact match (due to prefices, Snap name mangling, etc.),
-		 * but can be discovered using our heuristics, but, at the same time,
-		 * it does not contain other useful info for matching the app (neither
-		 * the Exec= nor the StartupWMClass= fields are usable).
-		 * 
-		 * Concrete example: Firefox Snap version 131 on Ubuntu 24.04, with
-		 *   app-id / class: firefox,
-		 *   file name: firefox_firefox.desktop (matched in _search_desktop_file()),
-		 *   and StartupWMClass=firefox-release
-		 * Note: the Exec= field could be matched in this case (contains firefox),
-		 * but our logic prefers using only StartupWMClass. This could be changed,
-		 * but there could also be other cases where Exec= is also unusable / too
-		 * hard to parse.
-		 */
-		gchar *cKey = NULL;
-		app = _search_desktop_file (pIcon->cClass, &cKey);
-		if (app)
+		// not seen before, register this class
+		char *cClass = cairo_dock_register_class_full (NULL, pIcon->cClass, pIcon->pAppli->cWmClass);
+		if (cClass)
 		{
-			pClassAppli = _cairo_dock_lookup_class_appli (cKey);
-			g_free (cKey);
+			//!! TODO: ensure we always get non-NULL result from above !!
+			pClassAppli = _cairo_dock_lookup_class_appli (pIcon->cClass);
+			g_free (cClass);
 		}
-		if (pClassAppli)
-		{
-			// need to store as an alternative name for this app
-			g_hash_table_insert (s_hAltClass, g_strdup(pIcon->cClass), pClassAppli);
-		}
-	}
-	if (pClassAppli == NULL && pIcon->pAppli->cWmClass)
-	{
-		if (app) g_object_unref (app); // can happen if the class was not registered before?
-		gchar *cKey = NULL;
-		app = _search_desktop_file (pIcon->pAppli->cWmClass, &cKey);
-		if (app)
-		{
-			pClassAppli = _cairo_dock_lookup_class_appli (cKey);
-			g_free (cKey);
-		}
-		if (pClassAppli)
-		{
-			// need to store as an alternative name for this app
-			g_hash_table_insert (s_hAltClass, g_strdup(pIcon->cClass), pClassAppli);
-		}
+		if (!pClassAppli) return FALSE; // should not happen
 	}
 
-	// finally, create a new class if not found above
-	if (pClassAppli == NULL)
-	{
-		pClassAppli = cairo_dock_get_class (pIcon->cClass);
-		if (app) pClassAppli->app = app;
-	}
+	if (pIcon->pClassApp) g_object_unref (pIcon->pClassApp);
+	pIcon->pClassApp = g_object_ref (pClassAppli->app); // should be not null
 
-	///if (pClassAppli->iAge == 0)  // age is > 0, so it means we have never set it yet.
 	if (pClassAppli->pAppliOfClass == NULL)  // the first appli of a class defines the age of the class.
 		pClassAppli->iAge = pIcon->pAppli->iAge;
-	
-	if (!pIcon->pClassApp) pIcon->pClassApp = app;
-	else if (app) g_object_unref (app);
 
 	g_return_val_if_fail (g_list_find (pClassAppli->pAppliOfClass, pIcon) == NULL, TRUE);
 	pClassAppli->pAppliOfClass = g_list_prepend (pClassAppli->pAppliOfClass, pIcon);
@@ -1635,7 +1570,8 @@ const CairoDockImageBuffer *cairo_dock_get_class_image_buffer (const gchar *cCla
 {
 	static CairoDockImageBuffer image;
 	g_return_val_if_fail (cClass != NULL, NULL);
-	CairoDockClassAppli *pClassAppli = cairo_dock_get_class (cClass);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
+	g_return_val_if_fail (pClassAppli != NULL, NULL);
 	Icon *pIcon;
 	GList *ic;
 	for (ic = pClassAppli->pIconsOfClass; ic != NULL; ic = ic->next)
@@ -2007,17 +1943,17 @@ gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *c
 		if (cClass != NULL)  // make a class anyway to store the few info we have.
 		{
 			if (pClassAppli == NULL)
-				pClassAppli = cairo_dock_get_class (cClass);
-			if (pClassAppli != NULL)
 			{
-				if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)
-					pClassAppli->cStartupWMClass = g_strdup (cWmClass);
-				//g_print ("%s ---> %s\n", cClass, pClassAppli->cStartupWMClass);
-				pClassAppli->bSearchedAttributes = TRUE;
-			}
+				pClassAppli = g_new0 (CairoDockClassAppli, 1);
+				g_hash_table_insert (s_hClassTable, g_strdup (cClass), pClassAppli);
+			}			
+			if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)
+				pClassAppli->cStartupWMClass = g_strdup (cWmClass);
+			//g_print ("%s ---> %s\n", cClass, pClassAppli->cStartupWMClass);
+			pClassAppli->bSearchedAttributes = TRUE;
 		}
 		cd_debug ("couldn't find the desktop file %s", cDesktopFile?cDesktopFile:cClass);
-		return cClass;  /// NULL
+		return cClass;  /// can be NULL
 	}
 
 	//\__________________ open it.

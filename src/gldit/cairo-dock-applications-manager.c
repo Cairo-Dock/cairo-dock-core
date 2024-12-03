@@ -336,14 +336,7 @@ static gboolean _on_window_class_changed (G_GNUC_UNUSED gpointer data, GldiWindo
 	}
 	icon->cClass = g_strdup (actor->cClass);
 
-	// ensure that the new class is also registered
-	gchar *cClass = cairo_dock_register_class_full (NULL, icon->cClass, actor->cWmClass);
-	if (!cClass) cd_warning ("no class found for app: %s (%s)!", icon->cClass, actor->cWmClass);
-	else {
-		icon->pClassApp = cairo_dock_get_class_app_info (cClass);
-		if (icon->pClassApp) g_object_ref (icon->pClassApp);
-		g_free (cClass);
-	}
+	// add to the new class (will call cairo_dock_register_class_full() if necessary)
 	cairo_dock_add_appli_icon_to_class (icon);
 	
 	// re-insert the icon
@@ -465,19 +458,6 @@ static gboolean _on_active_window_changed (G_GNUC_UNUSED gpointer data, GldiWind
   ///////////////////////////
  // Applis manager : core //
 ///////////////////////////
-
-static void cairo_dock_register_appli (Icon *icon)
-{
-	if (CAIRO_DOCK_IS_APPLI (icon))
-	{
-		cd_debug ("%s (%p ; %s)", __func__, icon->pAppli, icon->cName);
-		// add to table
-		g_hash_table_insert (s_hAppliIconsTable, icon->pAppli, icon);
-		
-		// add to class
-		cairo_dock_add_appli_icon_to_class (icon);
-	}
-}
 
 static void cairo_dock_unregister_appli (Icon *icon)
 {
@@ -988,19 +968,13 @@ static void init_object (GldiObject *obj, gpointer attr)
 	
 	icon->cName = g_strdup (actor->cName ? actor->cName : actor->cClass);
 	icon->cClass = g_strdup (actor->cClass); 
-	// ensure that the corresponding class is known (given that the lookup of apps should be fast now, we might do it right away)
-	// note: the cClass returned here should be the same as icon->cClass, since that has gone through
-	// gldi_window_parse_class () before and the same transformations (lowercase, remove suffix, etc.)
-	// are done here
+
+	// add to class, also ensuring that the corresponding class is known (this calls
+	// cairo_dock_register_class_full() if needed)
+	// note: given that the lookup of apps should be fast now, it is better to do it right away
 	//!! TODO: consider merging gldi_window_parse_class () and cairo_dock_guess_class () !!
-	gchar *cClass = cairo_dock_register_class_full (NULL, icon->cClass, actor->cWmClass);
-	if (!cClass) cd_warning ("no class found for app: %s (%s)!", icon->cClass, actor->cWmClass);
-	else {
-		icon->pClassApp = cairo_dock_get_class_app_info (cClass);
-		if (icon->pClassApp) g_object_ref (icon->pClassApp);
-		g_free (cClass);
-	}
-	
+	cairo_dock_add_appli_icon_to_class (icon);
+
 	icon->iface.load_image           = _load_appli;
 	icon->iface.action_on_drag_hover = _show_appli_for_drop;
 	
@@ -1010,8 +984,8 @@ static void init_object (GldiObject *obj, gpointer attr)
 	else
 		icon->iGroup = CAIRO_DOCK_LAUNCHER;
 	
-	//\____________ register it.
-	cairo_dock_register_appli (icon);
+	//\____________ register it by adding it to our table
+	g_hash_table_insert (s_hAppliIconsTable, icon->pAppli, icon);
 }
 
 static void reset_object (GldiObject *obj)
