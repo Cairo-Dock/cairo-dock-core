@@ -732,7 +732,7 @@ gboolean gldi_icon_launch_command (Icon *pIcon)
 	GDesktopAppInfo *app = pIcon->pCustomLauncher ? pIcon->pCustomLauncher : pIcon->pClassApp;
 	if (app)
 	{
-		cd_warning ("launching app from desktop file info: %s", pIcon->cClass);
+		cd_debug ("launching app from desktop file info: %s", pIcon->cClass);
 		// GdkAppLaunchContext will automatically use startup notify / xdg-activation
 		GdkAppLaunchContext *context = gdk_display_get_app_launch_context (gdk_display_get_default ());
 		gboolean ret = g_app_info_launch (G_APP_INFO (app), NULL, G_APP_LAUNCH_CONTEXT(context), NULL);
