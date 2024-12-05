@@ -2129,7 +2129,7 @@ static gchar *_cairo_dock_register_class_full (const gchar *cDesktopFile, const 
 	pClassAppli->bSearchedAttributes = TRUE;
 
 	//\__________________ get the attributes.
-	pClassAppli->cName = g_strdup (g_app_info_get_name (G_APP_INFO (app))); //!! TODO: check if this is localized !!
+	pClassAppli->cName = g_strdup (g_app_info_get_name (G_APP_INFO (app)));
 
 	// TODO: use g_app_info_get_icon () instead of this?
 	pClassAppli->cIcon = g_desktop_app_info_get_string (app, "Icon");
