@@ -571,49 +571,9 @@ static void _menu_realized_cb (GtkWidget *widget, gpointer user_data)
 	
 	Icon *pIcon = pParams->pIcon;
 	
-	// try to shift the menu
 	gdouble fAlign = pParams->fAlign;
-	gint dx = 0, dy = 0;
-	switch (pParams->iMarginPosition)
-	{
-		case 0: // bottom
-		case 1: // top
-		{
-			dx = w / 2 - w * fAlign;
-			g_object_set (G_OBJECT (widget), "rect-anchor-dx", dx, NULL);
-			break;
-		}
-		case 2: // right
-		case 3: // left
-		{
-			dy = h / 2 - h * fAlign;
-			g_object_set (G_OBJECT (widget), "rect-anchor-dy", dy, NULL);
-			break;
-		}
-	}
-	
-	GdkWindow *window = gtk_widget_get_window (gtk_widget_get_toplevel (widget));
-	if (window)
-	{
-		Icon *pIcon = pParams->pIcon;
-		GldiContainer *pContainer = (pIcon ? cairo_dock_get_icon_container (pIcon) : NULL);
-		if (pIcon && pContainer)
-		{
-			GdkRectangle rect = {0, 0, 1, 1};
-			GdkGravity rect_anchor = GDK_GRAVITY_NORTH;
-			GdkGravity menu_anchor = GDK_GRAVITY_SOUTH;
-			gldi_container_calculate_rect (pContainer, pIcon, &rect, &rect_anchor, &menu_anchor);
-			gtk_menu_popup_at_rect (GTK_MENU (widget), gtk_widget_get_window (pContainer->pWidget),
-				&rect, rect_anchor, menu_anchor, NULL);
-			// gdk_window_move_to_rect (window, &rect, rect_anchor, menu_anchor, GDK_ANCHOR_SLIDE_X | GDK_ANCHOR_SLIDE_Y, dx, dy);
-		}
-	}
-	
+
 	gldi_container_calculate_aimed_point (pIcon, widget, w, h, pParams->iMarginPosition, fAlign, &(pParams->iAimedX), &(pParams->iAimedY));
-	
-	// int menuX, menuY;
-	// gtk_window_get_position (GTK_WINDOW (gtk_widget_get_toplevel (widget)), &menuX, &menuY);
-	// g_print ("menu aimed at: %d, %d; position: %d, %d\n", pParams->iAimedX, pParams->iAimedY, menuX, menuY);
 }
 
 static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push_in, G_GNUC_UNUSED gpointer data)
@@ -715,6 +675,27 @@ static void _init_menu_item (GtkWidget *pMenuItem)
 		gtk_container_forall (GTK_CONTAINER (pSubMenu), (GtkCallback) _init_menu_item2, NULL);
 }
 
+static void _adjust_anchor (GdkGravity *anchor, gboolean bLeft)
+{
+	switch (*anchor)
+	{
+		case GDK_GRAVITY_SOUTH:
+			*anchor = bLeft ? GDK_GRAVITY_SOUTH_WEST : GDK_GRAVITY_SOUTH_EAST;
+			break;
+		case GDK_GRAVITY_NORTH:
+			*anchor = bLeft ? GDK_GRAVITY_NORTH_WEST : GDK_GRAVITY_NORTH_EAST;
+			break;
+		case GDK_GRAVITY_EAST:
+			*anchor = bLeft ? GDK_GRAVITY_NORTH_EAST : GDK_GRAVITY_SOUTH_EAST;
+			break;
+		case GDK_GRAVITY_WEST:
+			*anchor = bLeft ? GDK_GRAVITY_NORTH_WEST : GDK_GRAVITY_SOUTH_WEST;
+			break;
+		default:
+			break;
+	}
+}
+
 static void _popup_menu (GtkWidget *menu, const GdkEvent *event)
 {
 	GldiMenuParams *pParams = g_object_get_data (G_OBJECT(menu), "gldi-params");
@@ -759,6 +740,31 @@ static void _popup_menu (GtkWidget *menu, const GdkEvent *event)
 			GdkGravity rect_anchor = GDK_GRAVITY_NORTH;
 			GdkGravity menu_anchor = GDK_GRAVITY_SOUTH;
 			gldi_container_calculate_rect (pContainer, pIcon, &rect, &rect_anchor, &menu_anchor);
+			
+			if (pParams->fAlign == 0.0 || pParams->fAlign == 1.0)
+			{
+				// adjust anchors
+				_adjust_anchor (&rect_anchor, (pParams->fAlign == 0.0));
+				_adjust_anchor (&menu_anchor, (pParams->fAlign == 0.0));
+			}
+			else
+			{
+				// add an offset -- unfortunately, we can only add an absolute offset, but we do not know our size
+				// by the time we get the size on _menu_realized_cb (), setting an offset does not have an effect
+				const double dummy_width = 240.0;
+				const double dummy_height = 120.0;
+				if (pContainer->bIsHorizontal)
+				{
+					int dx = (int) (dummy_width * (0.5 - pParams->fAlign));
+					g_object_set (G_OBJECT (menu), "rect-anchor-dx", dx, NULL);
+				}
+				else
+				{
+					int dy = (int) (dummy_height * (0.5 - pParams->fAlign));
+					g_object_set (G_OBJECT (menu), "rect-anchor-dy", dy, NULL);
+				}
+			}
+			
 			gtk_menu_popup_at_rect (GTK_MENU (menu), gtk_widget_get_window (pContainer->pWidget),
 				&rect, rect_anchor, menu_anchor, event);
 		}
