@@ -440,6 +440,8 @@ static gboolean _on_icon_destroyed (GtkWidget *pMenu, G_GNUC_UNUSED Icon *pIcon)
 	GldiMenuParams *pParams = g_object_get_data (G_OBJECT (pMenu), "gldi-params");
 	if (pParams)
 		pParams->pIcon = NULL;
+	// no sense in keeping the menu (and it might hold more stale references to pIcon)
+	gtk_widget_destroy (pMenu);
 	return GLDI_NOTIFICATION_LET_PASS;
 }
 
@@ -818,7 +820,6 @@ static gboolean _draw_menu_item (GtkWidget *widget,
 	// get menu's geometry
 	guint border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 	gint width = gtk_widget_get_allocated_width (widget);
-	gint height = gtk_widget_get_allocated_height (widget);
 
 	gint x, y, w;
 	x = border_width;

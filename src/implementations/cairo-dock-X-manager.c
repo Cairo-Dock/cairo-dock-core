@@ -886,14 +886,6 @@ static void _refresh (void)
 	cd_debug ("desktop refresh -> %dx%dx%d", g_desktopGeometry.iNbDesktops, g_desktopGeometry.iNbViewportX, g_desktopGeometry.iNbViewportY);
 }
 
-static void _notify_startup (const gchar *cClass)
-{
-	static int seq = 0;
-	gchar cDesktopId[128];
-	snprintf (cDesktopId, 128, "gldi-%s-%d", cClass, seq++);
-	g_setenv ("DESKTOP_STARTUP_ID", cDesktopId, TRUE);  // TRUE = overwrite; this will be passed to the launched application, which will in return send a _NET_STARTUP_INFO "remove" ClientMessage when it's completely started
-}
-
 static gboolean _grab_shortkey (guint keycode, guint modifiers, gboolean grab)
 {
 	Window root = DefaultRootWindow (s_XDisplay);
@@ -1654,7 +1646,6 @@ static void init (void)
 	dmb.get_desktop_bg_surface = _get_desktop_bg_surface;
 	dmb.set_current_desktop    = _set_current_desktop;
 	dmb.refresh                = _refresh;
-	dmb.notify_startup         = _notify_startup;
 	dmb.grab_shortkey          = _grab_shortkey;
 	dmb.add_workspace          = _add_workspace;
 	dmb.remove_last_workspace  = _remove_workspace;

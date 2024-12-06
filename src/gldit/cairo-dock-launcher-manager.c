@@ -73,11 +73,11 @@ static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 		icon->cName = NULL;
 	}
 	
-	icon->cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", NULL);
-	if (icon->cCommand != NULL && *icon->cCommand == '\0')
+	char *cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", NULL);
+	if (cCommand != NULL && *cCommand != '\0')
 	{
-		g_free (icon->cCommand);
-		icon->cCommand = NULL;
+		icon->pCustomLauncher = g_desktop_app_info_new_from_keyfile (pKeyFile);
+		g_free (cCommand);
 	}
 	
 	gchar *cStartupWMClass = g_key_file_get_string (pKeyFile, "Desktop Entry", "StartupWMClass", NULL);
@@ -97,7 +97,7 @@ static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 		int i;
 		for (i = 0; pOrigins[i] != NULL; i++)
 		{
-			cClass = cairo_dock_register_class_full (pOrigins[i], cStartupWMClass, NULL);
+			cClass = cairo_dock_register_class2 (pOrigins[i], cStartupWMClass, FALSE);
 			if (cClass != NULL)  // neat, this origin is a valid one, let's use it from now.
 			{
 				iNumOrigin = i;
@@ -109,49 +109,41 @@ static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 
 	// if no origin class could be found, try to guess the class
 	gchar *cFallbackClass = NULL;
-	if (cClass == NULL)  // no class found, maybe an old launcher or a custom one, try to guess from the info in the user desktop file.
+	if (!cClass && icon->pCustomLauncher)  // no class found, maybe an old launcher or a custom one, try to guess from the info in the user desktop file.
 	{
-		cFallbackClass = cairo_dock_guess_class (icon->cCommand, cStartupWMClass);
-		cClass = cairo_dock_register_class_full (cFallbackClass, cStartupWMClass, NULL);
+		// we try the StartupWMClass and the command line as fallbacks
+		cFallbackClass = cairo_dock_guess_class (g_app_info_get_commandline (
+			G_APP_INFO (icon->pCustomLauncher)), NULL);
+			
+		if (cStartupWMClass)
+		{
+			// first try based on the commandline (but fail if not found)
+			cClass = cairo_dock_register_class2 (cFallbackClass, cStartupWMClass, FALSE);
+			if (!cClass)
+			{
+				// re-try based on the WMClass below
+				g_free (cFallbackClass);
+				cFallbackClass = cairo_dock_guess_class (NULL, cStartupWMClass);
+			}
+		}
+		
+		// last attempt, register the class even if no info is found
+		if (!cClass)
+			cClass = cairo_dock_register_class2 (cFallbackClass, cStartupWMClass, TRUE);
 	}
-	
+
 	// get common data from the class
-	g_free (icon->cClass);
 	if (cClass != NULL)
 	{
 		icon->cClass = cClass;
 		g_free (cFallbackClass);
+		// this sets the display name, the icon filename and the GAppInfo used to launch the app
 		cairo_dock_set_data_from_class (cClass, icon);
 		if (iNumOrigin != 0)  // it's not the first origin that gave us the correct class, so let's write it down to avoid searching the next time.
 		{
 			g_key_file_set_string (pKeyFile, "Desktop Entry", "Origin", cairo_dock_get_class_desktop_file (cClass));
 			bNeedUpdate = TRUE;
 		}
-	}
-	else  // no class found, it's maybe an old launcher, take the remaining common params from the user desktop file.
-	{
-		icon->cClass = cFallbackClass;
-		gsize length = 0;
-		icon->pMimeTypes = g_key_file_get_string_list (pKeyFile, "Desktop Entry", "MimeType", &length, NULL);
-		
-		if (icon->cCommand != NULL)
-		{
-			icon->cWorkingDirectory = g_key_file_get_string (pKeyFile, "Desktop Entry", "Path", NULL);
-			if (icon->cWorkingDirectory != NULL && *icon->cWorkingDirectory == '\0')
-			{
-				g_free (icon->cWorkingDirectory);
-				icon->cWorkingDirectory = NULL;
-			}
-		}
-	}
-	
-	// take into account the execution in a terminal.
-	gboolean bExecInTerminal = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "Terminal", NULL);
-	if (bExecInTerminal)  // on le fait apres la classe puisqu'on change la commande.
-	{
-		gchar *cOldCommand = icon->cCommand;
-		icon->cCommand = cairo_dock_get_command_with_right_terminal (cOldCommand);
-		g_free (cOldCommand);
 	}
 	
 	gboolean bPreventFromInhibiting = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "prevent inhibate", NULL);  // FALSE by default
@@ -185,7 +177,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	GKeyFile *pKeyFile = pAttributes->pKeyFile;
 	gboolean bNeedUpdate = _get_launcher_params (icon, pKeyFile);
 	
-	if (icon->cCommand == NULL)  // no command could be found for this launcher -> mark it as invalid
+	if ( !(icon->pClassApp || icon->pCustomLauncher))  // no command could be found for this launcher -> mark it as invalid
 	{
 		g_free (icon->cDesktopFileName);
 		icon->cDesktopFileName = NULL;  // we use this as a way to tell the UserIcon manager that the icon is invalid; we could add a boolean in the GldiUserIcon structure, but it's not that necessary
@@ -223,25 +215,46 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, GKeyFile 
 	icon->cName = NULL;
 	g_free (icon->cFileName);
 	icon->cFileName = NULL;
-	g_free (icon->cCommand);
-	icon->cCommand = NULL;
-	if (icon->pMimeTypes != NULL)
+	// need to set the appinfos to NULL to not confuse _get_launcher_params ()
+	if (icon->pCustomLauncher)
 	{
-		g_strfreev (icon->pMimeTypes);
-		icon->pMimeTypes = NULL;
+		g_object_unref (icon->pCustomLauncher);
+		icon->pCustomLauncher = NULL;
 	}
-	g_free (icon->cWorkingDirectory);
-	icon->cWorkingDirectory = NULL;
+	if (icon->pClassApp)
+	{
+		g_object_unref (icon->pClassApp);
+		icon->pClassApp = NULL;
+	}
 	
 	//\__________________ get parameters
 	_get_launcher_params (icon, pKeyFile);
+	
+	//\_____________ update the initial name if needed
+	gboolean bNameChanged = FALSE;
+	gboolean bUseInitialName = FALSE;
+	if (icon->cInitialName)
+	{
+		bUseInitialName = !!g_strcmp0 (icon->cInitialName, cName);
+		g_free (icon->cInitialName);
+	}
+	if (bUseInitialName)
+	{
+		icon->cInitialName = icon->cName;
+		icon->cName = cName;
+	}
+	else
+	{
+		icon->cInitialName = NULL;
+		bNameChanged = !!g_strcmp0 (cName, icon->cName);
+		g_free (cName);
+	}
 	
 	//\_____________ reload icon's buffers
 	GldiContainer *pNewContainer = cairo_dock_get_icon_container (icon);
 	cairo_dock_load_icon_image (icon, pNewContainer);
 	
-	if (g_strcmp0 (cName, icon->cName) != 0)
-		cairo_dock_load_icon_text (icon);
+	if (bNameChanged) cairo_dock_load_icon_text (icon);
 	
 	//\_____________ handle class inhibition.
 	gchar *cNowClass = icon->cClass;
@@ -259,7 +272,6 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, GKeyFile 
 	cairo_dock_redraw_icon (icon);
 	
 	g_free (cClass);
-	g_free (cName);
 	
 	return pKeyFile;
 }
@@ -288,24 +300,42 @@ Icon *gldi_launcher_new (const gchar *cConfFile, GKeyFile *pKeyFile)
 }
 
 
-gchar *gldi_launcher_add_conf_file (const gchar *cOrigin, const gchar *cDockName, double fOrder)
+gchar *gldi_launcher_add_conf_file (const gchar *cOrigin, const gchar *cDockName, double fOrder, gboolean bValidate)
 {
-	//\__________________ open the template.
-	const gchar *cTemplateFile = GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_LAUNCHER_CONF_FILE;	
-	GKeyFile *pKeyFile = cairo_dock_open_key_file (cTemplateFile);
-	g_return_val_if_fail (pKeyFile != NULL, NULL);
-	
-	//\__________________ fill the parameters
+	//\__________________ process the origin file path or name
 	gchar *cFilePath = NULL;
 	if (cOrigin != NULL && *cOrigin != '/')  // transform the origin URI into a path or a file name.
 	{
 		if (strncmp (cOrigin, "application://", 14) == 0)  // Ubuntu >= 11.04: it's now an "app" URI
 			cFilePath = g_strdup (cOrigin + 14);  // in this case we don't have the actual path of the .desktop, but that doesn't matter.
 		else
+			// try to process as a file:// URI
 			cFilePath = g_filename_from_uri (cOrigin, NULL, NULL);
 	}
-	else  // no origin or already a path.
+	if (!cFilePath)  // no origin, already a path, or possibly a .desktop ID.
 		cFilePath = g_strdup (cOrigin);
+	
+	if (bValidate)
+	{
+		if (!cFilePath) return NULL;
+		GDesktopAppInfo *app = NULL;
+		if (*cFilePath == '/')
+			app = g_desktop_app_info_new_from_filename (cFilePath);
+		else app = g_desktop_app_info_new (cFilePath);
+		if (!app)
+		{
+			g_free (cFilePath);
+			return NULL;
+		}
+		g_object_unref (app); // will be re-read later, this could be optimized
+	}
+	
+	//\__________________ open the template.
+	const gchar *cTemplateFile = GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_LAUNCHER_CONF_FILE;	
+	GKeyFile *pKeyFile = cairo_dock_open_key_file (cTemplateFile);
+	g_return_val_if_fail (pKeyFile != NULL, NULL);
+	
+	//\__________________ fill the parameters
 	g_key_file_set_string (pKeyFile, "Desktop Entry", "Origin", cFilePath?cFilePath:"");
 	
 	g_key_file_set_double (pKeyFile, "Desktop Entry", "Order", fOrder);
@@ -357,7 +387,7 @@ gchar *gldi_launcher_add_conf_file (const gchar *cOrigin, const gchar *cDockName
 }
 
 
-Icon *gldi_launcher_add_new (const gchar *cURI, CairoDock *pDock, double fOrder)
+Icon *gldi_launcher_add_new_full (const gchar *cURI, CairoDock *pDock, double fOrder, gboolean bValidate)
 {
 	//\_________________ add a launcher in the current theme
 	const gchar *cDockName = gldi_dock_get_name (pDock);
@@ -366,7 +396,7 @@ Icon *gldi_launcher_add_new (const gchar *cURI, CairoDock *pDock, double fOrder)
 		Icon *pLastIcon = cairo_dock_get_last_launcher (pDock->icons);
 		fOrder = (pLastIcon ? pLastIcon->fOrder + 1 : 1);
 	}
-	gchar *cNewDesktopFileName = gldi_launcher_add_conf_file (cURI, cDockName, fOrder);
+	gchar *cNewDesktopFileName = gldi_launcher_add_conf_file (cURI, cDockName, fOrder, bValidate);
 	g_return_val_if_fail (cNewDesktopFileName != NULL, NULL);
 	
 	//\_________________ load the new icon
@@ -378,3 +408,9 @@ Icon *gldi_launcher_add_new (const gchar *cURI, CairoDock *pDock, double fOrder)
 	
 	return pNewIcon;
 }
+
+Icon *gldi_launcher_add_new (const gchar *cURI, CairoDock *pDock, double fOrder)
+{
+	return gldi_launcher_add_new_full (cURI, pDock, fOrder, FALSE);
+}
+

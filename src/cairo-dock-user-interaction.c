@@ -178,26 +178,10 @@ static void _show_all_windows (GList *pIcons)
 
 static gboolean _launch_icon_command (Icon *icon)
 {
-	if (icon->cCommand == NULL)
-		return GLDI_NOTIFICATION_LET_PASS;
-	
 	if (gldi_class_is_starting (icon->cClass) || gldi_icon_is_launching (icon))  // do not launch it twice (avoid wrong double click); so we can't launch an app several times rapidly (must wait until it's launched), but it's probably not a useful feature anyway
 		return GLDI_NOTIFICATION_INTERCEPT;
 	
-	gboolean bSuccess = FALSE;
-	if (*icon->cCommand == '<')  // shortkey
-	{
-		bSuccess = cairo_dock_trigger_shortkey (icon->cCommand);
-		if (!bSuccess)
-			bSuccess = gldi_icon_launch_command (icon);
-	}
-	else  // normal command
-	{
-		bSuccess = gldi_icon_launch_command (icon);
-		if (! bSuccess)
-			bSuccess = cairo_dock_trigger_shortkey (icon->cCommand);
-	}
-	if (! bSuccess)
+	if (! gldi_icon_launch_command (icon))
 	{
 		gldi_icon_request_animation (icon, "blink", 1);  // 1 blink if fail.
 	}
@@ -291,7 +275,7 @@ gboolean cairo_dock_notification_middle_click_icon (G_GNUC_UNUSED gpointer pUser
 				}
 			break;
 			case CAIRO_APPLI_ACTION_LAUNCH_NEW:  // launch new
-				if (icon->cCommand != NULL)
+				if (icon->pClassApp || icon->pCustomLauncher)
 				{
 					gldi_object_notify (pDock, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // emulate a shift+left click
 				}
@@ -312,7 +296,7 @@ gboolean cairo_dock_notification_middle_click_icon (G_GNUC_UNUSED gpointer pUser
 				_cairo_dock_hide_show_in_class_subdock (icon);
 			break;
 			case CAIRO_APPLI_ACTION_LAUNCH_NEW:  // launch new
-				if (icon->cCommand != NULL)
+				if (icon->pClassApp || icon->pCustomLauncher)
 				{
 					gldi_object_notify (CAIRO_CONTAINER (pDock), NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // emulate a shift+left click
 				}
@@ -343,67 +327,113 @@ gboolean cairo_dock_notification_scroll_icon (G_GNUC_UNUSED gpointer pUserData, 
 }
 
 
-gboolean cairo_dock_notification_drop_data (G_GNUC_UNUSED gpointer pUserData, const gchar *cReceivedData, Icon *icon, double fOrder, GldiContainer *pContainer)
+gboolean cairo_dock_notification_drop_data_selection (G_GNUC_UNUSED gpointer pUserData,
+		GtkSelectionData *selection_data, Icon *icon, double fOrder, GldiContainer *pContainer,
+		gboolean *bHandled)
 {
-	cd_debug ("take the drop");
 	if (! CAIRO_DOCK_IS_DOCK (pContainer))
 		return GLDI_NOTIFICATION_LET_PASS;
-	
 	CairoDock *pDock = CAIRO_DOCK (pContainer);
-	CairoDock *pReceivingDock = pDock;
-	if (g_str_has_suffix (cReceivedData, ".desktop"))  // .desktop -> add a new launcher if dropped on or amongst launchers. 
+	
+	gboolean bUris = FALSE;
+	gchar **data = NULL;
+	
+	data = gtk_selection_data_get_uris (selection_data);
+	if (data)
 	{
-		cd_debug (" dropped a .desktop");
-		if (! myTaskbarParam.bMixLauncherAppli && CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon))
-			return GLDI_NOTIFICATION_LET_PASS;
-		cd_debug (" add it");
-		if (fOrder == CAIRO_DOCK_LAST_ORDER && CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon) && icon->pSubDock != NULL)  // drop onto a container icon.
+		bUris = TRUE;
+		cd_debug ("got URIs");
+	}
+	else
+	{
+		guchar *tmp = gtk_selection_data_get_text (selection_data);
+		if (!tmp) return GLDI_NOTIFICATION_LET_PASS;
+		cd_debug ("got text");
+		// we will interpret the data as a list of filenames, so we always split by newline
+		data = g_strsplit ((gchar*)tmp, "\n", -1);
+		g_free (tmp);
+		// remove empty entries
+		unsigned int i, j = 0;
+		for (i = 0; data[i]; i++)
+		{
+			gboolean bIsSpace = TRUE;
+			gchar *tmp2 = data[i];
+			for(; *tmp2; ++tmp2)
+				if (! (*tmp2 == ' ' || *tmp2 == '\t' || *tmp2 == '\r'))
+				{
+					bIsSpace = FALSE;
+					break;
+				}
+			if (bIsSpace) g_free (data[i]);
+			else
+			{
+				if (i != j) data[j] = data[i];
+				j++;
+			}
+		}
+		for (; data[j]; j++) data[j] = NULL;
+	}
+	
+	gboolean ret = GLDI_NOTIFICATION_LET_PASS;
+	gboolean bAllDesktop = TRUE;
+	{
+		gchar **tmp;
+		for (tmp = data; *tmp; ++tmp)
+			if (! g_str_has_suffix (*tmp, ".desktop"))
+			{
+				bAllDesktop = FALSE;
+				break;
+			}
+	}
+	if (bAllDesktop)
+	{
+		// all are .desktop files, add as launchers
+		CairoDock *pReceivingDock = pDock;
+		if (fOrder == CAIRO_DOCK_LAST_ORDER && icon && CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon)
+				&& icon->pSubDock != NULL)  // drop onto a container icon.
 		{
 			pReceivingDock = icon->pSubDock;  // -> add into the pointed sub-dock.
 		}
-	}
-	else  // file.
-	{
-		if (icon != NULL && fOrder == CAIRO_DOCK_LAST_ORDER)  // dropped on an icon
+		gchar **tmp;
+		for (tmp = data; *tmp; ++tmp)
 		{
-			if (CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon))  // sub-dock -> propagate to the sub-dock.
-			{
-				pReceivingDock = icon->pSubDock;
-			}
-			else if (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon)
-			|| CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon)
-			|| CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (icon)) // launcher/appli -> fire the command with this file.
-			{
-				if (icon->cCommand == NULL)
-					return GLDI_NOTIFICATION_LET_PASS;
-				gchar *cCommand;
-				if (strncmp (cReceivedData, "file://", 7) == 0)  // tous les programmes ne gerent pas les URI; pour parer au cas ou il ne le gererait pas, dans le cas d'un fichier local, on convertit en un chemin
-				{
-					gchar *cPath = g_filename_from_uri (cReceivedData, NULL, NULL);
-					cCommand = g_strdup_printf ("%s \"%s\"", icon->cCommand, cPath);
-					g_free (cPath);
-				}
-				else 
-					cCommand = g_strdup_printf ("%s \"%s\"", icon->cCommand, cReceivedData);
-				cd_message ("will open the file with the command '%s'...", cCommand);
-				g_spawn_command_line_async (cCommand, NULL);
-				g_free (cCommand);
-				gldi_icon_request_animation (icon, "blink", 2);
-				return GLDI_NOTIFICATION_INTERCEPT;
-			}
-			else  // skip any other case.
-			{
-				return GLDI_NOTIFICATION_LET_PASS;
-			}
-		}  // else: dropped between 2 icons -> try to add it (for instance a script).
+			// only add launchers if we got a valid .desktop file
+			gldi_launcher_add_new_full (*tmp, pReceivingDock, fOrder, TRUE);
+		}
+		ret = GLDI_NOTIFICATION_INTERCEPT;
+		*bHandled = TRUE;
 	}
-
-	if (g_bLocked || myDocksParam.bLockAll)
-		return GLDI_NOTIFICATION_LET_PASS;
-	
-	Icon *pNewIcon = gldi_launcher_add_new (cReceivedData, pReceivingDock, fOrder);
-	
-	return (pNewIcon ? GLDI_NOTIFICATION_INTERCEPT : GLDI_NOTIFICATION_LET_PASS);
+	else if (icon && (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon)
+			|| CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon)
+			|| CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (icon)))
+	{
+		GDesktopAppInfo *app = icon->pClassApp ? icon->pClassApp : icon->pCustomLauncher;
+		if (app)
+		{
+			// GdkAppLaunchContext will automatically use startup notify / xdg-activation,
+			// allowing e.g. the app to raise itself if necessary
+			GList *list = NULL;
+			gchar **tmp;
+			GdkAppLaunchContext *context = gdk_display_get_app_launch_context (gdk_display_get_default ());
+			if (bUris)
+			{
+				for (tmp = data; *tmp; ++tmp) list = g_list_append (list, *tmp);
+				g_app_info_launch_uris (G_APP_INFO (app), list, G_APP_LAUNCH_CONTEXT (context), NULL);
+				g_list_free (list);
+			}
+			else
+			{
+				for (tmp = data; *tmp; ++tmp) list = g_list_append (list, g_file_new_for_path (*tmp));
+				g_app_info_launch (G_APP_INFO (app), list, G_APP_LAUNCH_CONTEXT (context), NULL);
+				g_list_free_full (list, g_object_unref);
+			}
+			g_object_unref (context); // will be kept by GIO if necessary (and we don't care about the "launched" signal in this case)
+			ret = GLDI_NOTIFICATION_INTERCEPT;
+			*bHandled = TRUE;
+		}
+	}
+	g_strfreev (data);
+	return ret;
 }
 
 

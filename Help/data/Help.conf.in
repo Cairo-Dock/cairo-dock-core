@@ -113,12 +113,8 @@ _Setting a custom icon for an application =
 
 #X[Showing windows preview over the icons]
 Showing windows preview =
-#>You need to run Compiz, and enable the "Window Preview" plug-in in Compiz. Install "ccsm" to be able to configure Compiz.
+#>You need to run Compiz, and enable the "Thumbnail Window Previews" plug-in in Compiz. Install "ccsm" to be able to configure Compiz.
 _Showing windows preview =
-preview_compiz =
-#G [bash '@pkgdatadir@/scripts/help_scripts.sh' compiz_plugin thumbnail && dbus-send --session --dest=org.freedesktop.compiz /org/freedesktop/compiz/thumbnail/screen0/current_viewport org.freedesktop.compiz.set boolean:false;sh -c "ps aux | grep -v grep | grep -c 'compiz'"]If you're using Compiz, you can click on this button:
-#{Tip: If this line is grayed, it's because this tip is not for you.)
-preview_compiz_button=
 
 
 #[@pkgdatadir@/icons/icon-background.svg]
@@ -316,34 +312,22 @@ Controling the screen brightness =
 #Alternatively, you can click on the icon and move the scroll bar.
 _Controling the screen brightness =
 
-#X [Removing completely the gnome-panel]
-Xremove=
-#> Open gconf-editor, edit the key /desktop/gnome/session/required_components/panel, and replace its content with "cairo-dock".
-#Then restart your session : the gnome-panel has not been started, and the dock has been started (if not, you can add it to the startup programs).
-remove=
-#G [sh -c "gconftool-2 --type string --set /desktop/gnome/session/required_components/panel '(cairo-dock'";sh -c "ps aux | grep -v grep | grep -c 'gnome-settings-daemon'"]If you are on Gnome, you can click on this button in order to automatically modify this key:
-#{Tip: If this line is grayed, it's because this tip is not for you.)
-widget_compiz=
-
 
 #[@pkgdatadir@/icons/icon-behavior.svg]
 [Troubleshooting]
 #W[Forum] If you have any question, don't hesitate to ask on our forum.
 forum=http://forum.glx-dock.org
 #W[Wiki] Our wiki can also help you, it is more complete on some points.
-wiki=http://wiki.glx-dock.org
+wiki=https://github.com/Cairo-Dock/cairo-dock-core/wiki
 
 #X [I have a black background around my dock.] 
 Xblack=
 #> You need to turn on compositing. For instance, you can run Compiz or xcompmgr. 
 #If you're using XFCE or KDE, you can just enable compositing in the window manager options.
 #If you're using Gnome, you can enable it in Metacity in this way :
-# Open gconf-editor, edit the key '/apps/metacity/general/compositing_manager' and set it to 'true'.
-#{Hint : If you have an ATI or an Intel card, you should try without OpenGL first, because their drivers are not yet perfect.}
+# Open dconf-editor, edit the key 'org.gnome.metacity.compositing-manager' and set it to 'true'.
 black=
-#G [gconftool-2 --type bool --set /apps/metacity/general/compositing_manager true;sh -c "ps aux | grep -v grep | grep -c 'metacity'"]If you're on Gnome with Metacity (without Compiz), you can click on this button:
-#{Tip: If this line is grayed, it's because this tip is not for you.)
-blackMetacity=
+
 #X [My machine is too old to run a composite manager.] 
 Xfake=
 #> Don't panic, Cairo-Dock can emulate the transparency.
@@ -380,13 +364,6 @@ Xdustbin=
 #> if you're using KDE, you may have to specify the path to the trash folder.
 #Just edit the applet's configuration, and fill in the Trash path; it is probably «~/.locale/share/Trash/files». Be very careful when typing a path here!!! (do not insert spaces or some invisible caracters).
 dustbin=
-#X [There is no icon in the Applications Menu even though I enable the option.]
-XMenu=
-#> In Gnome, there is an option that override the dock's one. To enable icons in menus, open 'gconf-editor', go to Desktop / Gnome / Interface and enable the "menus have icons" and the "buttons have icons" options. 
-Menu=
-#G [sh -c "gconftool-2 --type bool --set /desktop/gnome/interface/menus_have_icons true && gconftool-2 --type bool --set /desktop/gnome/interface/buttons_have_icons true; gsettings set org.gnome.desktop.interface buttons-have-icons true && gsettings set org.gnome.desktop.interface menus-have-icons true";sh -c "ps aux | grep -v grep | grep -c 'gnome-settings-daemon'"]If you're on Gnome you can click on this button:
-#{Tip: If this line is grayed, it's because this tip is not for you.)
-MenuGnome=
 
 
 #[@pkgdatadir@/cairo-dock.svg]
@@ -415,39 +392,19 @@ frame_website=
 #W[Community site] Problems? Suggestions? Just want to talk to us? Come on over!
 community_site=http://glx-dock.org
 #W[Development site] Find the latest version of Cairo-Dock here !
-dev_site=https://launchpad.net/cairo-dock
+dev_site=https://github.com/Cairo-Dock/cairo-dock-core
 #W[Cairo-Dock-Plug-ins-Extras] More applets available online!
 extras_site=http://extras.glx-dock.org
 
 #F [Repositories]
 frame_repositories=
-#W[Debian/Ubuntu] We maintain two repositories for Debian, Ubuntu and other Debian-forked:
-# One for stable releases and another which is updated weekly (unstable version)
-reposit_wiki_site=http://www.glx-dock.org/ww_page.php?p=From the repository&lang=en
-#X [Ubuntu]
-#> If you on (x/k/l)Ubuntu, you can easily add our repositories with these buttons
-#  (if you're using a fork of Ubuntu like Linux Mint, please have a look at our wiki).
-ubuntu=
-#G [gksu "sh '@pkgdatadir@/scripts/help_scripts.sh' repository no";sh -c "lsb_release -i | grep -c Ubuntu"]If you're on Ubuntu, you can add our 'stable' repository by clicking on this button:
-# After that, you can launch your update manager in order to install the latest stable version.
-#{Tip: If this line is grayed, it's because this tip is not for you.)
-addUbuntuRepo=
-#G [gksu "sh '@pkgdatadir@/scripts/help_scripts.sh' weekly no";sh -c "lsb_release -i | grep -c Ubuntu"]If you're on Ubuntu, you can also add our 'weekly' ppa (can be unstable) by clicking on this button:
-# After that, you can launch your update manager in order to install the latest weekly version.
-#{Tip: If this line is grayed, it's because this tip is not for you.)
-addWeeklyRepo=
-#X [Debian]
-#> If you on Debian, you can easily add our repositories with these buttons
-#  (Please check if you're using the Stable or the Unstable version of Debian).
-debian=
-#G [gksu "sh '@pkgdatadir@/scripts/help_scripts.sh' debian_stable no";sh -c "grep -c ^Debian /etc/issue"]If you're on Debian Stable, you can add our 'stable' repository by clicking on this button:
-# After that, you can purge all 'cairo-dock*' packages, update the your system and reinstall 'cairo-dock' package.
-#{Tip: If this line is grayed, it's because this tip is not for you.)
-addDebianStableRepo=
-#G [gksu "sh '@pkgdatadir@/scripts/help_scripts.sh' debian_unstable no";sh -c "grep -c ^Debian /etc/issue"]If you're on Debian Unstable, you can add our 'stable' repository by clicking on this button:
-# After that, you can purge all 'cairo-dock*' packages, update the your system and reinstall 'cairo-dock' package.
-#{Tip: If this line is grayed, it's because this tip is not for you.)
-addDebianUnStableRepo=
+#> We maintain repositories for Ubuntu and derivatives on Launchpad for the stable and development versions of Cairo-Dock:
+repos1=
+#W[https://launchpad.net/~cairo-dock-team/+archive/ubuntu/ppa] Stable
+repository_stable=https://launchpad.net/~cairo-dock-team/+archive/ubuntu/ppa
+#W[https://launchpad.net/~cairo-dock-team/+archive/ubuntu/weekly] Development
+repository_dev=https://launchpad.net/~cairo-dock-team/+archive/ubuntu/weekly
+
 
 
 #[gtk-about]

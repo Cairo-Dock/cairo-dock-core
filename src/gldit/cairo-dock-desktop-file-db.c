@@ -22,7 +22,6 @@
 #include <string.h>
 #include <gio/gio.h>
 #include <gmodule.h>
-#include <gio/gdesktopappinfo.h>
 #include "cairo-dock-desktop-file-db.h"
 #include "cairo-dock-class-manager.h" // cairo_dock_guess_class
 #include "cairo-dock-log.h" // cd_error
@@ -30,8 +29,9 @@
 static GAppInfoMonitor *monitor = NULL;
 
 typedef struct _desktop_db {
-	GHashTable *class_table; // main table mapping desktop file IDs (without the extension) to file paths
-	GHashTable *alt_class_table; // alternative mapping based on the StartupWMClass (if exists) or command line
+	// hash tables store GDesktopAppInfo
+	GHashTable *class_table; // main table mapping desktop file IDs (without the extension)
+	GHashTable *alt_class_table; // alternative mapping based on the StartupWMClass (if exists)
 } desktop_db;
 
 static desktop_db *db_current = NULL; // current database (used for lookups)
@@ -88,8 +88,8 @@ static void _process_app (gpointer data, gpointer user_data)
 	}
 	
 	// add the app ID to the (main) hash table
-	char *fn_dup = g_strdup (fn);
-	g_hash_table_insert (db->class_table, id_lower, fn_dup);
+	g_object_ref (desktop_app);
+	g_hash_table_insert (db->class_table, id_lower, desktop_app);
 	
 	// process commandline and / or wm class (note: this will always return lower case as well)
 	char *alt_id = cairo_dock_guess_class (cmdline, wmclass);
@@ -106,7 +106,8 @@ static void _process_app (gpointer data, gpointer user_data)
 		g_free (alt_id);
 		return;
 	}
-	g_hash_table_insert (db->alt_class_table, alt_id, fn_dup);
+	g_object_ref (desktop_app);
+	g_hash_table_insert (db->alt_class_table, alt_id, desktop_app);
 }
 
 static gpointer _thread_func (gpointer)
@@ -120,10 +121,11 @@ static gpointer _thread_func (gpointer)
 		{
 			db = g_malloc (sizeof(desktop_db));
 			db->class_table = g_hash_table_new_full (g_str_hash, g_str_equal,
-				g_free, g_free);
+				g_free, g_object_unref);
 			db->alt_class_table = g_hash_table_new_full (g_str_hash, g_str_equal,
-				g_free, NULL);
+				g_free, g_object_unref);
 			g_list_foreach (list, _process_app, db);
+			// note: apps added to the hash table were ref'd in _process_app ()
 			g_list_free_full (list, g_object_unref);
 		}
 		
@@ -202,7 +204,7 @@ void gldi_desktop_file_db_stop (void)
 	error = FALSE;
 }
 
-const char *gldi_desktop_file_db_lookup (const char *class, gboolean bOnlyDesktopID)
+GDesktopAppInfo *gldi_desktop_file_db_lookup (const char *class, gboolean bOnlyDesktopID)
 {
 	if (!db_current || g_atomic_pointer_get (&db_pending))
 	{
@@ -236,10 +238,10 @@ const char *gldi_desktop_file_db_lookup (const char *class, gboolean bOnlyDeskto
 		g_mutex_unlock (&mutex);
 	}
 	
-	const char *ret = g_hash_table_lookup (db_current->class_table, class);
-	if (!ret && !bOnlyDesktopID) ret = g_hash_table_lookup (db_current->alt_class_table, class);
+	void *tmp = g_hash_table_lookup (db_current->class_table, class);
+	if (!tmp && !bOnlyDesktopID) tmp = g_hash_table_lookup (db_current->alt_class_table, class);
 	
-	return ret;
+	return (GDesktopAppInfo*)tmp;
 }
 
 

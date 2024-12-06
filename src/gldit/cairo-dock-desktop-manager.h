@@ -156,7 +156,6 @@ struct _GldiDesktopManagerBackend {
 	cairo_surface_t* (*get_desktop_bg_surface) (void);
 	gboolean (*set_current_desktop) (int iDesktopNumber, int iViewportNumberX, int iViewportNumberY);
 	void (*refresh) (void);
-	void (*notify_startup) (const gchar *cClass);
 	gboolean (*grab_shortkey) (guint keycode, guint modifiers, gboolean grab);
 	void (*add_workspace) (void); // gldi_desktop_add_workspace ()
 	void (*remove_last_workspace) (void); // gldi_desktop_remove_last_workspace ()
@@ -243,8 +242,6 @@ void gldi_desktop_remove_last_workspace (void);
 
 
 void gldi_desktop_refresh (void);
-
-void gldi_desktop_notify_startup (const gchar *cClass);
 
 gboolean gldi_desktop_grab_shortkey (guint keycode, guint modifiers, gboolean grab);
 

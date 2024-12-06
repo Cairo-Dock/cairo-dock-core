@@ -21,6 +21,7 @@
 #ifndef __CAIRO_DOCK_CLASS_MANAGER__
 #define  __CAIRO_DOCK_CLASS_MANAGER__
 
+#include <gio/gdesktopappinfo.h>
 #include "cairo-dock-struct.h"
 G_BEGIN_DECLS
 
@@ -28,33 +29,6 @@ G_BEGIN_DECLS
 *@file cairo-dock-class-manager.h This class handles the managment of the applications classes.
 * Classes are used to group the windows of a same program, and to bind a launcher to the launched application.
 */
-
-/// Definition of a Class of application.
-struct _CairoDockClassAppli {
-	/// TRUE if the appli must use the icon provided by X instead the one from the theme.
-	gboolean bUseXIcon;
-	/// TRUE if the appli doesn't group togather with its class.
-	gboolean bExpand;
-	/// List of the inhibitors of the class.
-	GList *pIconsOfClass;
-	/// List of the appli icons of this class.
-	GList *pAppliOfClass;
-	gboolean bSearchedAttributes;
-	gchar *cDesktopFile;
-	gchar **pMimeTypes;
-	gchar *cCommand;
-	/// Class of the app as reported by the WM / compositor without parsing or any changes to it
-	gchar *cStartupWMClass;
-	gchar *cIcon;
-	gchar *cName;
-	gchar *cWorkingDirectory;
-	GList *pMenuItems;
-	gint iAge;  // age of the first created window of this class
-	gchar *cDockName;  // unique name of the class sub-dock
-	guint iSidOpeningTimeout;  // timeout to stop the launching, if not stopped by the application before
-	gboolean bIsLaunching;  // flag to mark a class as being launched
-	gboolean bHasStartupNotify;  // TRUE if the application sends a "remove" event when its launch is complete (not used yet)
-};
 
 /*
 * Initialise le gestionnaire de classes. Ne fait rien la 2eme fois.
@@ -126,12 +100,6 @@ gboolean cairo_dock_class_is_expanded (const gchar *cClass);
 gboolean cairo_dock_prevent_inhibited_class (Icon *pIcon);
 
 /*
-* Enleve un inhibiteur de la classe donnee.
-* @param pInhibitorIcon l'icone inhibitrice.
-* @return TRUE ssi la classe est encore inhibee après l'enlèvement, FALSE sinon.
-*/
-//gboolean cairo_dock_remove_icon_from_class (Icon *pInhibitorIcon);
-/*
 * Empeche une icone d'inhiber sa classe; l'icone est enlevee de sa classe, son controle sur une appli est desactive, sa classe remise a 0, et l'appli controlee est inseree dans le dock.
 * @param cClass la classe.
 * @param pInhibitorIcon l'icone inhibitrice.
@@ -194,32 +162,63 @@ void cairo_dock_set_class_order_in_dock (Icon *pIcon, CairoDock *pDock);
 void cairo_dock_set_class_order_amongst_applis (Icon *pIcon, CairoDock *pDock);
 
 
-const gchar *cairo_dock_get_class_command (const gchar *cClass);
-
 const gchar *cairo_dock_get_class_name (const gchar *cClass);
-
-const gchar **cairo_dock_get_class_mimetypes (const gchar *cClass);
 
 const gchar *cairo_dock_get_class_desktop_file (const gchar *cClass);
 
 const gchar *cairo_dock_get_class_icon (const gchar *cClass);
 
-const GList *cairo_dock_get_class_menu_items (const gchar *cClass);
-
 const gchar *cairo_dock_get_class_wm_class (const gchar *cClass);
+
+GDesktopAppInfo *cairo_dock_get_class_app_info (const gchar *cClass);
 
 const CairoDockImageBuffer *cairo_dock_get_class_image_buffer (const gchar *cClass);
 
 
 gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMClass);
 
-gchar *cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *cClassName, const gchar *cWmClass);
 
-/** Register a class corresponding to a desktop file. Launchers can then derive from the class.
-* @param cDesktopFile the desktop file path or name; if it's a name or if the path couldn't be found, it will be searched in the common directories.
-* @return the class ID in a newly allocated string.
+/** Register an application class from apps installed on the system or find an already registered one.
+* @param cSearchTerm query to search for among installed apps (see below for details).
+* @param cWmClass StartupWMClass key from a custom launcher to add as an additional key to find this class later.
+* @param bCreateAlways if TRUE, a new class is always created with cSearchTerm as its key.
+* @return the class ID in a newly allocated string (can be used to retrieve class properties later).
+* 
+* The cSearchTerm supplied to this function should be either:
+*  - a desktop file path which is opened if it exists; if not, the file basename is searched among the
+*    desktop IDs of installed apps in a case-insensitive way, but no other heuristics is attempted
+*  - a desktop file ID (i.e. a string not starting with "/" and ending with ".desktop"); it is searched
+*    among the desktop IDs of installed apps (case-insensitive); if not found, a heuristic search is
+*    also attempted
+*  - a class name / app-id (from the StartupWMClass key of a launcher) or a command name; this is assumed
+*    to be already lowercase, and it is searched among installed apps using heuristics
+* 
+* Heuristics applied to search are the following:
+*  - search among desktop file IDs by applying common suffices (org.gnome., org.kde., org.freedesktop)
+*  - duplicating the name (e.g. "firefox" -> "firefox_firefox.desktop", required for Snap)
+*  - searching the content of the StartupWMClass or the Exec key (if StartupWMClass is not present)
+*    in the .desktop file
+* 
+* The cWmClass parameter is not used for searching among installed apps, but it is added without any
+* modification as an additional key for this class for later retrieval (so it is useful if the app
+* uses a WMClass / app-id that is not possible to find with our heuristics).
+* 
+* The bCreateAlways controls whether cSearchTerm is always used to create a class:
+*  - if bCreateAlways == FALSE, and no result is found, no class is created and NULL is returned
+*  - if bCreateAlways == TRUE, and an app is found, a class is created as normal, but it is also ensured
+*    that cSearchTerm is added as a key for retrieval (in this case, the return value will be cSearchTerm)
+*  - if bCreateAlways == TRUE, and no result is found, a "dummy" class is created and registered; this
+*    should be used as a last resort to ensure that a launcher has a class registered
 */
-#define cairo_dock_register_class(cDesktopFile) cairo_dock_register_class_full (cDesktopFile, NULL, NULL)
+gchar *cairo_dock_register_class2 (const gchar *cSearchTerm, const gchar *cWmClass, gboolean bCreateAlways);
+
+/** Register an application class from apps installed on the system.
+* @param cSearchTerm query to search for among installed apps
+* @return the class ID in a newly allocated string (can be used to retrieve class properties later).
+* 
+* This function behaves as cairo_dock_register_class2(cSearchTerm, NULL, FALSE).
+*/
+gchar *cairo_dock_register_class (const gchar *cSearchTerm);
 
 /** Make a launcher derive from a class. Parameters of the icon that are not NULL are not overwritten.
 * @param cClass the class name

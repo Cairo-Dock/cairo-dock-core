@@ -618,7 +618,7 @@ static void _cairo_dock_select_one_item_in_control_combo (GtkComboBox *widget, g
 	{
 		w = c->data;
 		//g_print (" %d/%d -> %d\n", i, iNbWidgets, i == iNumItem);
-		if (GTK_IS_ALIGNMENT (w))
+		if (GTK_IS_SEPARATOR (w))
 			continue;
 		if (GTK_IS_EXPANDER (w))
 		{
@@ -643,8 +643,8 @@ static GList *_activate_sub_widgets (GList *children, int iNbControlledWidgets, 
 	while (c != NULL && i < iNbControlledWidgets)
 	{
 		w = c->data;
-		//g_print ("%d in ]%d;%d[ ; %d\n", i, iOrder1, iOrder1 + iOrder2, GTK_IS_ALIGNMENT (w));
-		if (GTK_IS_ALIGNMENT (w))  // les separateurs sont dans un alignement.
+		//g_print ("%d in ]%d;%d[ ; %d\n", i, iOrder1, iOrder1 + iOrder2, GTK_IS_SEPARATOR (w));
+		if (GTK_IS_SEPARATOR (w))  // skip separators
 			continue;
 		gtk_widget_set_sensitive (w, bSensitive);
 		
@@ -692,8 +692,8 @@ static void _cairo_dock_select_one_item_in_control_combo_selective (GtkComboBox 
 	while (c != NULL && i < iNbWidgets)
 	{
 		w = c->data;
-		//g_print (" %d in [%d;%d] ; %d\n", i, iOrder1-1, iOrder1 + iOrder2-1, GTK_IS_ALIGNMENT (w));
-		if (GTK_IS_ALIGNMENT (w))  // les separateurs sont dans un alignement.
+		//g_print (" %d in [%d;%d] ; %d\n", i, iOrder1-1, iOrder1 + iOrder2-1, GTK_IS_SEPARATOR (w));
+		if (GTK_IS_SEPARATOR (w))  // skip separators
 		{
 			c = c->next;
 			continue;
@@ -1408,57 +1408,6 @@ static void _cairo_dock_configure_module (G_GNUC_UNUSED GtkButton *button, const
 	g_free (cMessage);
 }
 
-static void _cairo_dock_widget_launch_command (G_GNUC_UNUSED GtkButton *button, const gchar *cCommandToLaunch)
-{
-	gchar *cResult = cairo_dock_launch_command_sync (cCommandToLaunch);
-	if (cResult != NULL)
-		cd_debug ("%s: %s => %s", __func__, cCommandToLaunch, cResult);
-	g_free (cResult);
-}
-
-static void _on_text_changed (GtkWidget *pEntry, gchar *cDefaultValue);
-static void _set_default_text (GtkWidget *pEntry, gchar *cDefaultValue)
-{
-	g_signal_handlers_block_by_func (G_OBJECT(pEntry), G_CALLBACK(_on_text_changed), cDefaultValue);
-	gtk_entry_set_text (GTK_ENTRY (pEntry), cDefaultValue);
-	g_signal_handlers_unblock_by_func (G_OBJECT(pEntry), G_CALLBACK(_on_text_changed), cDefaultValue);
-
-	g_object_set_data (G_OBJECT (pEntry), "ignore-value", GINT_TO_POINTER (TRUE));
-
-	GdkRGBA color;
-	color.red = DEFAULT_TEXT_COLOR;
-	color.green = DEFAULT_TEXT_COLOR;
-	color.blue = DEFAULT_TEXT_COLOR;
-	color.alpha = 1.;
-	gtk_widget_override_color (pEntry, GTK_STATE_FLAG_NORMAL, &color);
-}
-static void _on_text_changed (GtkWidget *pEntry, G_GNUC_UNUSED gchar *cDefaultValue)
-{
-	// if the text has changed, it means the user has modified it (because we block this callback when we set the default value) -> mark the value as 'valid' and reset the color to the normal style.
-	g_object_set_data (G_OBJECT (pEntry), "ignore-value", GINT_TO_POINTER (FALSE));
-
-	gtk_widget_override_color (pEntry, GTK_STATE_FLAG_NORMAL, NULL);
-}
-static gboolean on_text_focus_in (GtkWidget *pEntry, G_GNUC_UNUSED GdkEventFocus *event, gchar *cDefaultValue)  // user takes the focus
-{
-	if (g_object_get_data (G_OBJECT (pEntry), "ignore-value") != NULL)  // the current value is the default text => erase it
-	{
-		g_signal_handlers_block_by_func (G_OBJECT(pEntry), G_CALLBACK(_on_text_changed), cDefaultValue);
-		gtk_entry_set_text (GTK_ENTRY (pEntry), "");
-		g_signal_handlers_unblock_by_func (G_OBJECT(pEntry), G_CALLBACK(_on_text_changed), cDefaultValue);
-	}
-	return FALSE;
-}
-static gboolean on_text_focus_out (GtkWidget *pEntry, G_GNUC_UNUSED GdkEventFocus *event, gchar *cDefaultValue)  // user leaves the entry
-{
-	const gchar *cText = gtk_entry_get_text (GTK_ENTRY (pEntry));
-	if (! cText || *cText == '\0')
-	{
-		_set_default_text (pEntry, cDefaultValue);
-	}
-	return FALSE;
-}
-
 #define _allocate_new_buffer\
 	data = g_new0 (gconstpointer, 8); \
 	if (pDataGarbage) g_ptr_array_add (pDataGarbage, data);
@@ -1759,16 +1708,12 @@ GtkWidget *cairo_dock_widget_handbook_new (GldiModule *pModule)
 	if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[0] != NULL && pAuthorizedValuesList[1] != NULL && pAuthorizedValuesList[2] != NULL && pAuthorizedValuesList[3] != NULL) {\
 		pExtendedWidget = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);\
 		GtkWidget *label = gtk_label_new (dgettext (cGettextDomain, pAuthorizedValuesList[2]));\
-		GtkWidget *pAlign = gtk_alignment_new (1., 1., 0., 0.);\
-		gtk_container_add (GTK_CONTAINER (pAlign), label);\
-		gtk_box_pack_start (GTK_BOX (pExtendedWidget), pAlign, FALSE, FALSE, 0);\
+		gtk_box_pack_start (GTK_BOX (pExtendedWidget), label, FALSE, FALSE, 0);\
 		gtk_box_pack_start (GTK_BOX (pExtendedWidget), pSubWidget, FALSE, FALSE, 0);\
 		label = gtk_label_new (dgettext (cGettextDomain, pAuthorizedValuesList[3]));\
-		pAlign = gtk_alignment_new (1., 1., 0., 0.);\
-		gtk_container_add (GTK_CONTAINER (pAlign), label);\
-		gtk_box_pack_start (GTK_BOX (pExtendedWidget), pAlign, FALSE, FALSE, 0); }\
+		gtk_box_pack_start (GTK_BOX (pExtendedWidget), label, FALSE, FALSE, 0); }\
 	else {\
-		pExtendedWidget = pOneWidget; }\
+		pExtendedWidget = pSubWidget; }\
 	pSubWidgetList = g_slist_append (pSubWidgetList, pSubWidget);\
 	_pack_in_widget_box (pExtendedWidget); } while (0)
 
@@ -2083,10 +2028,9 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			}
 			if (pLabel != NULL)
 			{
-				GtkWidget *pAlign = gtk_alignment_new (0., 0.5, 0., 0.);
-				gtk_container_add (GTK_CONTAINER (pAlign), pLabel);
+				gtk_label_set_xalign (GTK_LABEL (pLabel), 0.0f);
 				gtk_box_pack_start (GTK_BOX (pKeyBox),
-					pAlign,
+					pLabel,
 					FALSE,
 					FALSE,
 					0);
@@ -2669,34 +2613,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			
 			case CAIRO_DOCK_WIDGET_LAUNCH_COMMAND :
 			case CAIRO_DOCK_WIDGET_LAUNCH_COMMAND_IF_CONDITION :
-				if (pAuthorizedValuesList == NULL || pAuthorizedValuesList[0] == NULL || *pAuthorizedValuesList[0] == '\0')
-					break ;
-				gchar *cFirstCommand = NULL;
-				cFirstCommand = pAuthorizedValuesList[0];
-				if (iElementType == CAIRO_DOCK_WIDGET_LAUNCH_COMMAND_IF_CONDITION)
-				{
-					if (pAuthorizedValuesList[1] == NULL)
-					{ // condition without condition...
-						gtk_widget_set_sensitive (pLabel, FALSE);
-						break ;
-					}
-					gchar *cSecondCommand = pAuthorizedValuesList[1];
-					gchar *cResult = cairo_dock_launch_command_sync (cSecondCommand);
-					cd_debug ("%s: %s => %s", __func__, cSecondCommand, cResult);
-					if (cResult == NULL || *cResult == '0' || *cResult == '\0')  // result is 'fail'
-					{
-						gtk_widget_set_sensitive (pLabel, FALSE);
-						g_free (cResult);
-						break ;
-					}
-					g_free (cResult);
-				}
-				pOneWidget = gtk_button_new_from_icon_name (GLDI_ICON_NAME_JUMP_TO, GTK_ICON_SIZE_BUTTON);
-				g_signal_connect (G_OBJECT (pOneWidget),
-					"clicked",
-					G_CALLBACK (_cairo_dock_widget_launch_command),
-					g_strdup (cFirstCommand));
-				_pack_subwidget (pOneWidget);
+				cd_warning ("GUI elements launching commands are deprecated!");
 			break ;
 			
 			case CAIRO_DOCK_WIDGET_LIST :  // a list of strings.
@@ -3113,23 +3030,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				
 				if (pAuthorizedValuesList != NULL && pAuthorizedValuesList[0] != NULL)  // default displayed value when empty
 				{
-					gchar *cDefaultText = g_strdup (dgettext (cGettextDomain, pAuthorizedValuesList[0]));
-					if (cValue == NULL || *cValue == '\0')  // currently the entry is empty.
-					{
-						gtk_entry_set_text (GTK_ENTRY (pOneWidget), cDefaultText);
-						g_object_set_data (G_OBJECT (pOneWidget), "ignore-value", GINT_TO_POINTER (TRUE));
-
-						GdkRGBA color;
-						color.red = DEFAULT_TEXT_COLOR;
-						color.green = DEFAULT_TEXT_COLOR;
-						color.blue = DEFAULT_TEXT_COLOR;
-						color.alpha = 1.;
-						gtk_widget_override_color (pOneWidget, GTK_STATE_FLAG_NORMAL, &color);
-					}
-					g_signal_connect (pOneWidget, "changed", G_CALLBACK (_on_text_changed), cDefaultText);
-					g_signal_connect (pOneWidget, "focus-in-event", G_CALLBACK (on_text_focus_in), cDefaultText);
-					g_signal_connect (pOneWidget, "focus-out-event", G_CALLBACK (on_text_focus_out), cDefaultText);
-					g_object_set_data (G_OBJECT (pOneWidget), "default-text", cDefaultText);
+					gtk_entry_set_placeholder_text (GTK_ENTRY (pOneWidget),
+						dgettext (cGettextDomain, pAuthorizedValuesList[0]));
 				}
 				g_free (cValue);
 			break;
@@ -3261,12 +3163,9 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 
 			case CAIRO_DOCK_WIDGET_SEPARATOR :  // separateur.
 			{
-				GtkWidget *pAlign = gtk_alignment_new (.5, .5, 0.8, 1.);
-				g_object_set (pAlign, "height-request", 12, NULL);
 				pOneWidget = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-				gtk_container_add (GTK_CONTAINER (pAlign), pOneWidget);
 				gtk_box_pack_start (GTK_BOX (pFrameVBox != NULL ? pFrameVBox : pGroupBox),
-					pAlign,
+					pOneWidget,
 					FALSE,
 					FALSE,
 					0);
@@ -3329,7 +3228,7 @@ GtkWidget *cairo_dock_build_key_file_widget_full (GKeyFile* pKeyFile, const gcha
 		g_object_set (G_OBJECT (pNoteBook), "tab-pos", GTK_POS_TOP, NULL);
 	}
 	
-	GtkWidget *pGroupWidget, *pLabel, *pLabelContainer, *pAlign;
+	GtkWidget *pGroupWidget, *pLabel, *pLabelContainer;
 	gchar *cGroupName, *cGroupComment, *cIcon, *cDisplayedGroupName;
 	int i;
 	for (i = 0; pGroupList[i] != NULL; i++)
@@ -3361,13 +3260,9 @@ GtkWidget *cairo_dock_build_key_file_widget_full (GKeyFile* pKeyFile, const gcha
 		//\____________ On construit son widget.
 		pLabel = gtk_label_new (dgettext (cGettextDomain, cDisplayedGroupName ? cDisplayedGroupName : cGroupName));
 		pLabelContainer = NULL;
-		pAlign = NULL;
 		if (cIcon != NULL)
 		{
 			pLabelContainer = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_ICON_MARGIN);
-			pAlign = gtk_alignment_new (0., 0.5, 0., 0.);
-			gtk_container_add (GTK_CONTAINER (pAlign), pLabelContainer);
-
 			GtkWidget *pImage = _gtk_image_new_from_file (cIcon, GTK_ICON_SIZE_BUTTON);
 			gtk_container_add (GTK_CONTAINER (pLabelContainer),
 				pImage);
@@ -3382,7 +3277,7 @@ GtkWidget *cairo_dock_build_key_file_widget_full (GKeyFile* pKeyFile, const gcha
 		gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 		gtk_container_add (GTK_CONTAINER (pScrolledWindow), pGroupWidget);
 		
-		gtk_notebook_append_page (GTK_NOTEBOOK (pNoteBook), pScrolledWindow, (pAlign != NULL ? pAlign : pLabel));
+		gtk_notebook_append_page (GTK_NOTEBOOK (pNoteBook), pScrolledWindow, pLabelContainer ? pLabelContainer : pLabel);
 	}
 	
 	g_strfreev (pGroupList);
@@ -3484,8 +3379,9 @@ static void _cairo_dock_get_each_widget_value (CairoDockGroupKeyWidget *pGroupKe
 	}
 	else if (GTK_IS_FONT_BUTTON (pOneWidget))
 	{
-		const gchar *cFontName = gtk_font_button_get_font_name (GTK_FONT_BUTTON (pOneWidget));
+		gchar *cFontName = gtk_font_chooser_get_font (GTK_FONT_CHOOSER (pOneWidget));
 		g_key_file_set_string (pKeyFile, cGroupName, cKeyName, cFontName);
+		g_free (cFontName);
 	}
 	else if (GTK_IS_COLOR_BUTTON (pOneWidget))
 	{

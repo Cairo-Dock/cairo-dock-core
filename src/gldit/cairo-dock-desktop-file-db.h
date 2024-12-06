@@ -22,6 +22,7 @@
 #define CAIRO_DOCK_DESKTOP_FILE_DB_H
 
 #include <glib.h>
+#include <gio/gdesktopappinfo.h>
 
 G_BEGIN_DECLS
 
@@ -47,9 +48,10 @@ void gldi_desktop_file_db_stop (void);
  * 	its .desktop file, and the content of the StartupWMClass and Exec keys in it).
  * @param bOnlyDesktopID if TRUE, only the .desktop file name is used for matching (can be useful if looking
  * 	for a known .desktop file).
- * @return full path of the .desktop file if found, or NULL
+ * @return GDesktopAppInfo corresponding to the app if found. The return value is owned by the DB, the
+ *  caller should call g_object_ref () on it if it wants to keep it.
 */
-const char *gldi_desktop_file_db_lookup (const char *class, gboolean bOnlyDesktopID);
+GDesktopAppInfo *gldi_desktop_file_db_lookup (const char *class, gboolean bOnlyDesktopID);
 
 G_END_DECLS
 

@@ -33,11 +33,11 @@ static void _set_metacity_composite (gboolean bActive)
 {
 	int r;
 	if (bActive)
-		r = system ("if test -n \"`dconf read /org/gnome/metacity/compositing-manager`\"; then dconf write /org/gnome/metacity/compositing-manager true; metacity --replace& else gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool true; fi");  // metacity's new feature : now uses Dconf and crashes after activating the composite
+		r = system ("if test -n \"`dconf read /org/gnome/metacity/compositing-manager`\"; then dconf write /org/gnome/metacity/compositing-manager true; metacity --replace& else gsettings set org.gnome.metacity compositing-manager true; fi");  // metacity's new feature : now uses Dconf and crashes after activating the composite
 	else
-		r = system ("if test -n \"`dconf read /org/gnome/metacity/compositing-manager`\"; then dconf write /org/gnome/metacity/compositing-manager false; metacity --replace& else gconftool-2 -s '/apps/metacity/general/compositing_manager' --type bool false; fi");
+		r = system ("if test -n \"`dconf read /org/gnome/metacity/compositing-manager`\"; then dconf write /org/gnome/metacity/compositing-manager false; metacity --replace& else gsettings set org.gnome.metacity compositing-manager false; fi");
 	if (r < 0)
-		cd_warning ("Not able to launch this command: gconftool-2");
+		cd_warning ("Not able to change Metacity compositioning setting");
 }
 
 static void _set_xfwm_composite (gboolean bActive)
@@ -48,7 +48,7 @@ static void _set_xfwm_composite (gboolean bActive)
 	else
 		r = system ("xfconf-query -c xfwm4 -p '/general/use_compositing' -t 'bool' -s 'false'");
 	if (r < 0)
-		cd_warning ("Not able to launch this command: gconftool-2");
+		cd_warning ("Not able to launch this command: xfconf-query");
 }
 
 static void _set_kwin_composite (gboolean bActive)
@@ -59,7 +59,7 @@ static void _set_kwin_composite (gboolean bActive)
 	else
 		r = system ("[ \"$(qdbus org.kde.kwin /KWin compositingActive)\" == \"true\" ] && qdbus org.kde.kwin /KWin toggleCompositing");  // active, so deactivating
 	if (r < 0)
-		cd_warning ("Not able to launch this command: gconftool-2");
+		cd_warning ("Not able to launch this command: qdbus");
 }
 
   ///////////////////////

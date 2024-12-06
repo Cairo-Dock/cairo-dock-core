@@ -1313,10 +1313,10 @@ static GtkToolItem *_make_toolbutton (const gchar *cLabel, const gchar *cImage, 
 	gtk_label_set_markup (GTK_LABEL (pLabel), cLabel2);
 	g_free (cLabel2);
 	
-	GtkWidget *pAlign = gtk_alignment_new (0., 0.5, 0., 1.);
-	gtk_alignment_set_padding (GTK_ALIGNMENT (pAlign), 0, 0, CAIRO_DOCK_FRAME_MARGIN, 0);
-	gtk_container_add (GTK_CONTAINER (pAlign), pLabel);
-	gtk_tool_button_set_label_widget (GTK_TOOL_BUTTON (pWidget), pAlign);
+	GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+	gtk_widget_set_margin_start (box, CAIRO_DOCK_FRAME_MARGIN);
+	gtk_box_pack_start (GTK_BOX (box), pLabel, FALSE, FALSE, 0);
+	gtk_tool_button_set_label_widget (GTK_TOOL_BUTTON (pWidget), box);
 	
 	return pWidget;
 }

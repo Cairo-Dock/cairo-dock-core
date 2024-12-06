@@ -233,12 +233,6 @@ void gldi_desktop_refresh (void)
 		s_backend.refresh ();
 }
 
-void gldi_desktop_notify_startup (const gchar *cClass)
-{
-	if (s_backend.notify_startup)
-		s_backend.notify_startup (cClass);
-}
-
 gboolean gldi_desktop_grab_shortkey (guint keycode, guint modifiers, gboolean grab)
 {
 	if (s_backend.grab_shortkey)

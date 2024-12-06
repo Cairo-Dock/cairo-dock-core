@@ -1262,7 +1262,6 @@ static gboolean _on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, Ca
 
 
 
-static gboolean s_bWaitForData = FALSE;
 static gboolean s_bCouldDrop = FALSE;
 
 void _on_drag_data_received (G_GNUC_UNUSED GtkWidget *pWidget, GdkDragContext *dc, gint x, gint y, GtkSelectionData *selection_data, G_GNUC_UNUSED guint info, guint time, CairoDock *pDock)
@@ -1271,68 +1270,13 @@ void _on_drag_data_received (G_GNUC_UNUSED GtkWidget *pWidget, GdkDragContext *d
 	if (cairo_dock_is_hidden (pDock))  // X ne semble pas tenir compte de la zone d'input pour dropper les trucs...
 		return ;
 	
-	if (gtk_selection_data_get_data_type (selection_data) == gldi_container_icon_dnd_atom ())
-	{
-		if (!s_pDndIcon)
-		{
-			cd_warning ("no dragged icon set!");
-			return;
-		}
-		
-		// reinsert the icon where it was dropped, not at its original position.
-		Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);  // get the pointed icon before we insert the icon, since the inserted icon will be the pointed one!
-		//g_print (" pointed icon: %s\n", icon?icon->cName:"none");
-		gldi_icon_insert_in_container (s_pDndIcon, CAIRO_CONTAINER(pDock), CAIRO_DOCK_ANIMATE_ICON);
-		gldi_theme_icon_write_container_name_in_conf_file (s_pDndIcon, gldi_dock_get_name (pDock));
-		if (icon != NULL /* && cairo_dock_get_icon_order (icon) == cairo_dock_get_icon_order (pFlyingIcon) */)
-		{
-			cairo_dock_move_icon_after_icon (pDock, s_pDndIcon, icon);
-		}
-		s_pDndIcon = NULL;
-		return;
-	}
-	
-	//\_________________ On recupere l'URI.
-	gchar *cReceivedData = (gchar *)gtk_selection_data_get_data (selection_data);  // the data are actually 'const guchar*', but since we only allowed text and urls, it will be a string
-	g_return_if_fail (cReceivedData != NULL);
-	int length = strlen (cReceivedData);
-	if (cReceivedData[length-1] == '\n')
-		cReceivedData[--length] = '\0';  // on vire le retour chariot final.
-	if (cReceivedData[length-1] == '\r')
-		cReceivedData[--length] = '\0';
-	
-	if (s_bWaitForData)
-	{
-		s_bWaitForData = FALSE;
-		gdk_drag_status (dc, GDK_ACTION_COPY, time);
-		cd_debug ("drag info : <%s>", cReceivedData);
-		pDock->iAvoidingMouseIconType = CAIRO_DOCK_LAUNCHER;
-		if (g_str_has_suffix (cReceivedData, ".desktop")/** || g_str_has_suffix (cReceivedData, ".sh")*/)
-			pDock->fAvoidingMouseMargin = .5;  // on ne sera jamais dessus.
-		else
-			pDock->fAvoidingMouseMargin = .25;
-		return ;
-	}
-	
-	//\_________________ On arrete l'animation.
-	//cairo_dock_stop_marking_icons (pDock);
-	pDock->iAvoidingMouseIconType = -1;
-	pDock->fAvoidingMouseMargin = 0;
-	
-	//\_________________ On arrete le timer.
-	if (s_iSidActionOnDragHover != 0)
-	{
-		//cd_debug ("on annule la demande de montrage d'appli");
-		g_source_remove (s_iSidActionOnDragHover);
-		s_iSidActionOnDragHover = 0;
-	}
-	
 	//\_________________ On calcule la position a laquelle on l'a lache.
-	cd_debug (">>> cReceivedData : '%s' (%d/%d)", cReceivedData, s_bCouldDrop, pDock->bCanDrop);
+	cd_debug (">>> cReceivedData : (%d/%d)", s_bCouldDrop, pDock->bCanDrop);
 	/* icon => drop on icon
 	no icon => if order undefined: drop on dock; else: drop between 2 icons.*/
 	Icon *pPointedIcon = NULL;
 	double fOrder;
+	gboolean bMaybeUpdateOrder = FALSE;
 	if (s_bCouldDrop)  // can drop on the dock
 	{
 		cd_debug ("drop between icons");
@@ -1360,6 +1304,7 @@ void _on_drag_data_received (G_GNUC_UNUSED GtkWidget *pWidget, GdkDragContext *d
 					pNeighboorIcon = (ic->next != NULL ? ic->next->data : NULL);
 					fOrder = (pNeighboorIcon != NULL ? (icon->fOrder + pNeighboorIcon->fOrder) / 2 : icon->fOrder + 1);
 				}
+				if (fabs (fOrder - icon->fOrder) < 1e-2) bMaybeUpdateOrder = TRUE;
 				break;
 			}
 		}
@@ -1374,16 +1319,70 @@ void _on_drag_data_received (G_GNUC_UNUSED GtkWidget *pWidget, GdkDragContext *d
 	{
 		pPointedIcon = cairo_dock_get_pointed_icon (pDock->icons);
 		fOrder = CAIRO_DOCK_LAST_ORDER;
-		if (pPointedIcon == NULL && ! g_str_has_suffix (cReceivedData, ".desktop"))  // no icon => abort, but .desktop are always added
+	}
+	cd_debug ("drop on %s (%.2f)", pPointedIcon?pPointedIcon->cName:"dock", fOrder);
+	
+	
+	if (gtk_selection_data_get_data_type (selection_data) == gldi_container_icon_dnd_atom ())
+	{
+		if (!s_pDndIcon)
+		{
+			cd_warning ("no dragged icon set!");
+			gtk_drag_finish (dc, FALSE, FALSE, time);
+			return;
+		}
+		
+		// reinsert the icon where it was dropped, not at its original position.
+		if (pPointedIcon == NULL) s_pDndIcon->fOrder = fOrder;
+		gldi_icon_insert_in_container (s_pDndIcon, CAIRO_CONTAINER(pDock), CAIRO_DOCK_ANIMATE_ICON);
+		gldi_theme_icon_write_container_name_in_conf_file (s_pDndIcon, gldi_dock_get_name (pDock));
+		if (pPointedIcon == NULL) {
+			gldi_theme_icon_write_order_in_conf_file (s_pDndIcon, s_pDndIcon->fOrder);
+			if (bMaybeUpdateOrder) cairo_dock_normalize_icons_order (pDock->icons, s_pDndIcon->iGroup);
+		}
+		else cairo_dock_move_icon_after_icon (pDock, s_pDndIcon, pPointedIcon);
+		s_pDndIcon = NULL;
+		gtk_drag_finish (dc, TRUE, FALSE, time);
+		return;
+	}
+	
+	//\_________________ On arrete l'animation.
+	//cairo_dock_stop_marking_icons (pDock);
+	pDock->iAvoidingMouseIconType = -1;
+	pDock->fAvoidingMouseMargin = 0;
+	
+	//\_________________ On arrete le timer.
+	if (s_iSidActionOnDragHover != 0)
+	{
+		//cd_debug ("on annule la demande de montrage d'appli");
+		g_source_remove (s_iSidActionOnDragHover);
+		s_iSidActionOnDragHover = 0;
+	}
+	
+	
+	gboolean bHandled = FALSE;
+	gldi_object_notify (CAIRO_CONTAINER (pDock), NOTIFICATION_DROP_DATA_SELECTION, selection_data,
+		pPointedIcon, fOrder, CAIRO_CONTAINER (pDock), &bHandled);
+	if (!bHandled)
+	{
+		if (! (pPointedIcon || s_bCouldDrop))
 		{
 			cd_debug ("drop nowhere");
 			gtk_drag_finish (dc, FALSE, FALSE, time);
 			return;
 		}
+		
+		//\_________________ On recupere l'URI.
+		gchar *cReceivedData = (gchar *)gtk_selection_data_get_data (selection_data);  // the data are actually 'const guchar*', but since we only allowed text and urls, it will be a string
+		g_return_if_fail (cReceivedData != NULL);
+		int length = strlen (cReceivedData);
+		if (cReceivedData[length-1] == '\n')
+			cReceivedData[--length] = '\0';  // on vire le retour chariot final.
+		if (cReceivedData[length-1] == '\r')
+			cReceivedData[--length] = '\0';
+		
+		gldi_container_notify_drop_data (CAIRO_CONTAINER (pDock), cReceivedData, pPointedIcon, fOrder);
 	}
-	cd_debug ("drop on %s (%.2f)", pPointedIcon?pPointedIcon->cName:"dock", fOrder);
-	
-	gldi_container_notify_drop_data (CAIRO_CONTAINER (pDock), cReceivedData, pPointedIcon, fOrder);
 	
 	gtk_drag_finish (dc, TRUE, FALSE, time);
 }
@@ -1428,18 +1427,6 @@ static gboolean _on_drag_motion (GtkWidget *pWidget, GdkDragContext *dc, gint x,
 		gldi_object_notify (pDock, NOTIFICATION_START_DRAG_DATA, pDock, &bStartAnimation);
 		if (bStartAnimation)
 			cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
-		
-		/*pDock->iAvoidingMouseIconType = -1;
-		
-		GdkAtom target = gtk_drag_dest_find_target (pWidget, dc, NULL);
-		if (target == GDK_NONE)
-			gdk_drag_status (dc, 0, time);
-		else
-		{
-			gtk_drag_get_data (pWidget, dc, target, time);
-			s_bWaitForData = TRUE;
-			cd_debug ("get-data envoye\n");
-		}*/
 		
 		_on_enter_notify (pWidget, NULL, pDock);  // ne sera effectif que la 1ere fois a chaque entree dans un dock.
 	}
@@ -1500,7 +1487,6 @@ void _on_drag_leave (GtkWidget *pWidget, G_GNUC_UNUSED GdkDragContext *dc, G_GNU
 		cd_debug (">>> pDock->container.bInside : %d", pDock->container.bInside);
 	}
 	//g_print ("stop dragging 2\n");
-	s_bWaitForData = FALSE;
 	pDock->bIsDragging = FALSE;
 	s_bCouldDrop = pDock->bCanDrop;
 	pDock->bCanDrop = FALSE;

@@ -666,8 +666,8 @@ int main (int argc, char** argv)
 	
 	//\___________________ register to the useful notifications.
 	gldi_object_register_notification (&myContainerObjectMgr,
-		NOTIFICATION_DROP_DATA,
-		(GldiNotificationFunc) cairo_dock_notification_drop_data,
+		NOTIFICATION_DROP_DATA_SELECTION,
+		(GldiNotificationFunc) cairo_dock_notification_drop_data_selection,
 		GLDI_RUN_AFTER, NULL);
 	gldi_object_register_notification (&myContainerObjectMgr,
 		NOTIFICATION_CLICK_ICON,
