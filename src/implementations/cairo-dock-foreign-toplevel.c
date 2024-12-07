@@ -145,6 +145,7 @@ static void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED wfthandle *handle
 {
 	if (!data) return;
 	GldiWaylandWindowActor* wactor = (GldiWaylandWindowActor*)data;
+	gboolean activated_pending = FALSE;
 	gboolean maximized_pending = FALSE;
 	gboolean minimized_pending = FALSE;
 	gboolean fullscreen_pending = FALSE;
@@ -153,7 +154,7 @@ static void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED wfthandle *handle
 	for (i = 0; i*sizeof(uint32_t) < state->size; i++)
 	{
 		if (stdata[i] == ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_STATE_ACTIVATED)
-			gldi_wayland_wm_activated (wactor, FALSE);
+			activated_pending = TRUE;
 		else if (stdata[i] == ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_STATE_MAXIMIZED)
 			maximized_pending = TRUE;
 		else if (stdata[i] == ZWLR_FOREIGN_TOPLEVEL_HANDLE_V1_STATE_MINIMIZED)
@@ -162,6 +163,7 @@ static void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED wfthandle *handle
 			fullscreen_pending = TRUE;
 	}
 	
+	gldi_wayland_wm_activated (wactor, activated_pending, FALSE);
 	gldi_wayland_wm_maximized_changed (wactor, maximized_pending, FALSE);
 	gldi_wayland_wm_minimized_changed (wactor, minimized_pending, FALSE);
 	gldi_wayland_wm_fullscreen_changed (wactor, fullscreen_pending, FALSE);

@@ -44,6 +44,7 @@ struct _GldiWaylandWindowActor {
 	gboolean skip_taskbar; // should not be shown in taskbar (only KDE)
 	gboolean sticky_pending; // sticky state received (only KDE)
 	gboolean close_pending; // this window has been closed
+	gboolean unfocused_pending; // this window has lost focus
 	
 	gboolean init_done; // initial state has been configured
 	gboolean in_queue; // this actor has been added to the s_pending_queue
@@ -68,7 +69,7 @@ void gldi_wayland_wm_fullscreen_changed (GldiWaylandWindowActor *wactor, gboolea
 void gldi_wayland_wm_attention_changed (GldiWaylandWindowActor *wactor, gboolean attention, gboolean notify);
 void gldi_wayland_wm_skip_changed (GldiWaylandWindowActor *wactor, gboolean skip, gboolean notify);
 void gldi_wayland_wm_sticky_changed (GldiWaylandWindowActor *wactor, gboolean sticky, gboolean notify);
-void gldi_wayland_wm_activated (GldiWaylandWindowActor *wactor, gboolean notify);
+void gldi_wayland_wm_activated (GldiWaylandWindowActor *wactor, gboolean activated, gboolean notify);
 
 void gldi_wayland_wm_closed (GldiWaylandWindowActor *wactor, gboolean notify);
 
