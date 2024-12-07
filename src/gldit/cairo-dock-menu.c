@@ -483,7 +483,7 @@ static void _on_menu_deactivated (GtkMenuShell *pMenu, G_GNUC_UNUSED gpointer da
 	}
 	if (gldi_container_is_wayland_backend ())
 	{
-		gldi_wayland_release_keyboard (pContainer);
+		gldi_wayland_release_keyboard (pContainer, GLDI_KEYBOARD_RELEASE_MENU_CLOSED);
 	}
 }
 

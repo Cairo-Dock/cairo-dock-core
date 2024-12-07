@@ -105,7 +105,7 @@ gboolean gldi_desktop_present_class (const gchar *cClass, GldiContainer *pContai
 	g_return_val_if_fail (cClass != NULL, FALSE);
 	if (s_backend.present_class != NULL)
 	{
-		gldi_wayland_release_keyboard (pContainer);
+		gldi_wayland_release_keyboard (pContainer, GLDI_KEYBOARD_RELEASE_PRESENT_WINDOWS);
 		return s_backend.present_class (cClass);
 	}
 	return FALSE;
