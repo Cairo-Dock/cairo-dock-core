@@ -64,8 +64,17 @@ GdkMonitor *const *gldi_wayland_get_monitors (int *iNumMonitors);
 /// these work quite differently from X11 and can result in a disorienting
 /// user experience. This way, these can be used only in situations where
 /// necessary and where their usefulness can be properly tested.
+
+typedef enum {
+	GLDI_KEYBOARD_RELEASE_MENU_CLOSED,
+	GLDI_KEYBOARD_RELEASE_PRESENT_WINDOWS
+} GldiWaylandReleaseKeyboardReason;
+
 void gldi_wayland_grab_keyboard (GldiContainer *pContainer);
-void gldi_wayland_release_keyboard (GldiContainer *pContainer);
+void gldi_wayland_release_keyboard (GldiContainer *pContainer, GldiWaylandReleaseKeyboardReason reason);
+
+/// Get the name of the Wayland compositor that was detected
+const gchar *gldi_wayland_get_detected_compositor (void);
 
 G_END_DECLS
 #endif

@@ -75,6 +75,36 @@ static struct wl_display *s_pDisplay = NULL;
 static struct wl_compositor* s_pCompositor = NULL;
 static gboolean s_bHave_Layer_Shell = FALSE;
 
+
+// detect and store the compositor that we are running under
+// this can be used to handle quirks
+typedef enum {
+	WAYLAND_COMPOSITOR_NONE, // we are not running under Wayland
+	WAYLAND_COMPOSITOR_UNKNOWN, // unable to detect compositor
+	WAYLAND_COMPOSITOR_GENERIC, // compositor which does not require specific quirks (functionally same as UNKNOWN)
+	WAYLAND_COMPOSITOR_WAYFIRE,
+	WAYLAND_COMPOSITOR_KWIN
+} GldiWaylandCompositorType;
+
+static GldiWaylandCompositorType s_CompositorType = WAYLAND_COMPOSITOR_NONE;
+
+
+static void _try_detect_compositor (void)
+{
+	const char *dmb_names = gldi_desktop_manager_get_backend_names ();
+	if (dmb_names)
+	{
+		if (strstr (dmb_names, "Wayfire"))
+			s_CompositorType = WAYLAND_COMPOSITOR_WAYFIRE;
+		else if (strstr (dmb_names, "plasma"))
+			s_CompositorType = WAYLAND_COMPOSITOR_KWIN;
+		else if (strstr (dmb_names, "KWin"))
+			s_CompositorType = WAYLAND_COMPOSITOR_KWIN;
+		else if (strstr (dmb_names, "cosmic")) // will also match Labwc which implements the cosmic workspaces protocols
+			s_CompositorType = WAYLAND_COMPOSITOR_GENERIC;
+	}
+}
+
 // manage screens -- instead of wl_output, we use GdkDisplay and GdkMonitors
 // list of monitors -- corresponds to pScreens in g_desktopGeometry from
 // cairo-dock-desktop-manager.c, and kept in sync with that
@@ -441,14 +471,53 @@ void gldi_wayland_grab_keyboard (GldiContainer *pContainer)
 #endif
 }
 
-void gldi_wayland_release_keyboard ( G_GNUC_UNUSED GldiContainer *pContainer)
+
+static void _release_keyboard_activate (void)
 {
 	GldiWindowActor *actor = gldi_windows_get_active ();
 	if (actor && !actor->bIsHidden) {
 		if (gldi_window_manager_can_track_workspaces () && !gldi_window_is_on_current_desktop (actor))
 			return;
-		// TODO: avoid activating a window not on the current workspace in other cases!
 		gldi_window_show (actor);
+	}
+}
+
+static void _release_keyboard_layer_shell (GldiContainer *pContainer)
+{
+#ifdef HAVE_GTK_LAYER_SHELL
+	GtkWindow* window = GTK_WINDOW (pContainer->pWidget);
+	gtk_layer_set_keyboard_mode (window, GTK_LAYER_SHELL_KEYBOARD_MODE_NONE);
+	wl_surface_commit (gdk_wayland_window_get_wl_surface (
+		gldi_container_get_gdk_window (pContainer)));
+	gtk_layer_set_keyboard_mode (window, GTK_LAYER_SHELL_KEYBOARD_MODE_ON_DEMAND);
+#endif	
+}
+
+void gldi_wayland_release_keyboard (GldiContainer *pContainer, GldiWaylandReleaseKeyboardReason reason)
+{
+	if (s_CompositorType == WAYLAND_COMPOSITOR_NONE)
+		return; // not a Wayland session
+	
+	if (s_CompositorType == WAYLAND_COMPOSITOR_UNKNOWN)
+		_try_detect_compositor ();
+	
+	if (s_CompositorType != WAYLAND_COMPOSITOR_WAYFIRE && reason == GLDI_KEYBOARD_RELEASE_PRESENT_WINDOWS)
+		return; // extra keyboard release in this case is only needed on Wayfire
+	
+	switch (s_CompositorType)
+	{
+		// note: NONE is handled above already
+		case WAYLAND_COMPOSITOR_WAYFIRE:
+			if (reason == GLDI_KEYBOARD_RELEASE_PRESENT_WINDOWS)
+				_release_keyboard_layer_shell (pContainer); // depends on https://github.com/WayfireWM/wayfire/pull/2530
+			break; // no need to do anything when closing menus
+		case WAYLAND_COMPOSITOR_KWIN:
+			_release_keyboard_activate ();
+			break;
+		default: // generic and unknown
+			//!! TODO: Cosmic also needs the activate method?
+			_release_keyboard_layer_shell (pContainer);
+			break;
 	}
 }
 
@@ -597,19 +666,33 @@ static void init (void)
 		}
 	}
 #endif
-	if (gldi_wayland_hotspots_try_init (registry))
+	GldiWaylandHotspotsType hotspots_type = gldi_wayland_hotspots_try_init (registry);
+
+	if (hotspots_type != GLDI_WAYLAND_HOTSPOTS_NONE)
+	{
 		cmb.update_polling_screen_edge = gldi_wayland_hotspots_update;
+		if (hotspots_type == GLDI_WAYLAND_HOTSPOTS_WAYFIRE)
+			s_CompositorType = WAYLAND_COMPOSITOR_WAYFIRE;
+	}
 #ifdef HAVE_WAYLAND_PROTOCOLS
 	gboolean bCosmic = gldi_cosmic_toplevel_try_init (registry);
-	if (!bCosmic) if (!gldi_plasma_window_manager_try_init (registry))
-			gldi_wlr_foreign_toplevel_try_init (registry);
 	if (bCosmic)
 	{
+		if (s_CompositorType != WAYLAND_COMPOSITOR_UNKNOWN)
+			cd_warning ("inconsistent compositor types detected!");
+		s_CompositorType = WAYLAND_COMPOSITOR_GENERIC; // Cosmic is treated as generic for now
 		if (!gldi_cosmic_workspaces_try_init (registry))
 			gldi_plasma_virtual_desktop_try_init (registry);
 	}
 	else
 	{
+		if (gldi_plasma_window_manager_try_init (registry))
+		{
+			if (s_CompositorType != WAYLAND_COMPOSITOR_UNKNOWN)
+				cd_warning ("inconsistent compositor types detected!");
+			s_CompositorType = WAYLAND_COMPOSITOR_KWIN;
+		}
+		else gldi_wlr_foreign_toplevel_try_init (registry);
 		if (!gldi_plasma_virtual_desktop_try_init (registry))
 			gldi_cosmic_workspaces_try_init (registry);
 	}
@@ -638,6 +721,7 @@ void gldi_register_wayland_manager (void)
 		return;
 	}
 	
+	s_CompositorType = WAYLAND_COMPOSITOR_UNKNOWN;
 	g_desktopGeometry.iNbDesktops = g_desktopGeometry.iNbViewportX = g_desktopGeometry.iNbViewportY = 1;
 	
 	// Manager
@@ -689,6 +773,28 @@ gboolean gldi_wayland_manager_have_layer_shell ()
 	return s_bHave_Layer_Shell;
 }
 
+const gchar *gldi_wayland_get_detected_compositor (void)
+{
+	switch (s_CompositorType)
+	{
+		case WAYLAND_COMPOSITOR_NONE:
+			return "none";
+		case WAYLAND_COMPOSITOR_KWIN:
+			return "KWin";
+		case WAYLAND_COMPOSITOR_WAYFIRE:
+			return "Wayfire";
+		case WAYLAND_COMPOSITOR_GENERIC:
+			return "generic";
+		case WAYLAND_COMPOSITOR_UNKNOWN:
+			// try to detect based on the desktop manager backend
+			_try_detect_compositor ();
+			if (s_CompositorType != WAYLAND_COMPOSITOR_UNKNOWN)
+				return gldi_wayland_get_detected_compositor ();
+			break;
+	}
+	return "unknown";
+}
+
 #else
 #include "cairo-dock-log.h"
 #include "cairo-dock-container.h"
@@ -703,7 +809,12 @@ gboolean gldi_wayland_manager_have_layer_shell ()
 	return FALSE;
 }
 
-void gldi_wayland_grab_keyboard ( G_GNUC_UNUSED GldiContainer *pContainer) { }
-void gldi_wayland_release_keyboard ( G_GNUC_UNUSED GldiContainer *pContainer) { }
+void gldi_wayland_grab_keyboard (GldiContainer*) { }
+void gldi_wayland_release_keyboard (GldiContainer*, GldiWaylandReleaseKeyboardReason) { }
+
+const gchar *gldi_wayland_get_detected_compositor (void)
+{
+	return "none";
+}
 
 #endif

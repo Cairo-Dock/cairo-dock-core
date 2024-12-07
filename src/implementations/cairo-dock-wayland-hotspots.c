@@ -464,9 +464,9 @@ gboolean gldi_wayland_hotspots_match_protocol (uint32_t id, const char *interfac
 }
 
 /// Try to init based on the protocols found
-gboolean gldi_wayland_hotspots_try_init (struct wl_registry *registry)
+GldiWaylandHotspotsType gldi_wayland_hotspots_try_init (struct wl_registry *registry)
 {
-	gboolean can_init = FALSE;
+	GldiWaylandHotspotsType type = GLDI_WAYLAND_HOTSPOTS_NONE;
 	
 #ifdef HAVE_WAYLAND_PROTOCOLS
 	if (wf_shell_found)
@@ -482,7 +482,7 @@ gboolean gldi_wayland_hotspots_try_init (struct wl_registry *registry)
 			s_backend.output_removed = _wf_shell_output_removed;
 			s_backend.update_hotspot = _wf_shell_update_dock_hotspots;
 			s_backend.destroy_hotspot = _wf_shell_destroy_hotspot;
-			can_init = TRUE;
+			type = GLDI_WAYLAND_HOTSPOTS_WAYFIRE;
 		}
 		else cd_message ("Could not bind zwf-shell!");
     }
@@ -492,17 +492,17 @@ gboolean gldi_wayland_hotspots_try_init (struct wl_registry *registry)
 #endif
 
 #ifdef HAVE_GTK_LAYER_SHELL
-    if (!can_init && !g_bDisableLayerShell && gtk_layer_is_supported ())
+    if (type == GLDI_WAYLAND_HOTSPOTS_NONE && !g_bDisableLayerShell && gtk_layer_is_supported ())
     {
 		s_backend.new_output = _layer_shell_new_output;
 		s_backend.output_removed = _layer_shell_output_removed;
 		s_backend.update_hotspot = _layer_shell_update_hotspot;
 		s_backend.destroy_hotspot = _layer_shell_destroy_hotspot;
-		can_init = TRUE;
+		type = GLDI_WAYLAND_HOTSPOTS_LAYER_SHELL;
 	}
 #endif
 	
-    if (can_init)
+    if (type != GLDI_WAYLAND_HOTSPOTS_NONE)
     {
 		gldi_object_register_notification (&myWaylandMgr, NOTIFICATION_WAYLAND_MONITOR_ADDED, (GldiNotificationFunc)_monitor_added, GLDI_RUN_FIRST, NULL);
 		gldi_object_register_notification (&myWaylandMgr, NOTIFICATION_WAYLAND_MONITOR_REMOVED, (GldiNotificationFunc)_monitor_removed, GLDI_RUN_FIRST, NULL);
@@ -512,7 +512,7 @@ gboolean gldi_wayland_hotspots_try_init (struct wl_registry *registry)
 		int i;
 		for (i = 0; i < iNumMonitors; i++) _monitor_added (NULL, monitors[i]);
 	}
-    return can_init;
+    return type;
 }
 
 #endif // HAVE_WAYLAND

@@ -33,8 +33,14 @@
 /// Try to match Wayland protocols that we need to use
 gboolean gldi_wayland_hotspots_match_protocol (uint32_t id, const char *interface, uint32_t version);
 
+typedef enum {
+	GLDI_WAYLAND_HOTSPOTS_NONE, // we could not init support for hotspots
+	GLDI_WAYLAND_HOTSPOTS_LAYER_SHELL, // we use a 1 pixel tall layer shell windows at the screen edges
+	GLDI_WAYLAND_HOTSPOTS_WAYFIRE // we use wf-shell
+} GldiWaylandHotspotsType;
+
 /// Initialize the interface for monitoring hotspots
-gboolean gldi_wayland_hotspots_try_init (struct wl_registry *registry);
+GldiWaylandHotspotsType gldi_wayland_hotspots_try_init (struct wl_registry *registry);
 
 /// Update the hotspots we are listening to (based on the configuration of all root docks)
 void gldi_wayland_hotspots_update (void);
