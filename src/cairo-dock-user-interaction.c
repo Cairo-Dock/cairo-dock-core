@@ -229,7 +229,8 @@ gboolean cairo_dock_notification_click_icon (G_GNUC_UNUSED gpointer pUserData, I
 	else if (CAIRO_DOCK_IS_APPLI (icon) && ! CAIRO_DOCK_IS_APPLET (icon))  // icon holding an appli, but not being an applet -> show/hide the window.
 	{
 		GldiWindowActor *pAppli = icon->pAppli;
-		if (gldi_windows_get_active () == pAppli && myTaskbarParam.bMinimizeOnClick && ! pAppli->bIsHidden && gldi_window_is_on_current_desktop (pAppli))  // ne marche que si le dock est une fenêtre de type 'dock', sinon il prend le focus.
+		if (gldi_windows_get_active () == pAppli && myTaskbarParam.bMinimizeOnClick && ! pAppli->bIsHidden &&
+				(!gldi_window_manager_can_track_workspaces () || gldi_window_is_on_current_desktop (pAppli)))  // ne marche que si le dock est une fenêtre de type 'dock', sinon il prend le focus.
 			gldi_window_minimize (pAppli);
 		else
 			gldi_window_show (pAppli);
