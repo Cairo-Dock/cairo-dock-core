@@ -48,7 +48,8 @@ target_link_libraries (${PROJECT_NAME}
 	${PACKAGE_LIBRARIES}
 	${GTK_LIBRARIES}
 	gldi
-	${LIBINTL_LIBRARIES})
+	${LIBINTL_LIBRARIES}
+	${JSON_LIBRARIES})
 
 # install the program once it is built.
 install(
