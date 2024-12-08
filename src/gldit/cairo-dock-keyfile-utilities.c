@@ -19,6 +19,8 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <glib/gstdio.h>
+#include <gio/gunixoutputstream.h>
 
 #include "cairo-dock-log.h"
 #include "cairo-dock-keyfile-utilities.h"
@@ -70,6 +72,88 @@ void cairo_dock_write_keys_to_file_full (GKeyFile *pKeyFile, const gchar *cConfF
 		return ;
 	}
 	g_free (cNewConfFileContent);
+}
+
+gchar *cairo_dock_write_keys_to_new_file (GKeyFile *pKeyFile, const gchar *cConfFilePath)
+{
+	GError *erreur = NULL;
+	GOutputStream *out = NULL;
+	gchar *cTemplate = NULL;
+
+	gsize length = 0;
+	// note: g_key_file_to_data () never reports errors
+	gchar *cNewConfFileContent = g_key_file_to_data (pKeyFile, &length, NULL);
+	if ( !(cNewConfFileContent && length && *cNewConfFileContent) )
+	{
+		cd_warning ("Error while fetching data for keyfile");
+		return NULL;
+	}
+
+	gchar *cDirectory = g_path_get_dirname (cConfFilePath);
+	if (! g_file_test (cDirectory, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_EXECUTABLE))
+	{
+		g_mkdir_with_parents (cDirectory, 7*8*8+7*8+5);
+	}
+	g_free (cDirectory);
+
+	GFile *file = g_file_new_for_path (cConfFilePath);
+	out = G_OUTPUT_STREAM (g_file_create (file, G_FILE_CREATE_NONE, NULL, NULL));
+	g_object_unref (file);
+	if (out) cTemplate = g_strdup (cConfFilePath);
+	else
+	{
+		size_t len = strlen (cConfFilePath);
+		if (g_str_has_suffix (cConfFilePath, ".desktop")) len -= 8;
+		GString *sTemplate = g_string_sized_new (len + 16); // suffix + _XXXXXX.desktop + 0-terminator
+		g_string_append_len (sTemplate, cConfFilePath, len);
+		g_string_append (sTemplate, "_XXXXXX.desktop");
+		cTemplate = g_string_free (sTemplate, FALSE);
+
+		gint fd = g_mkstemp (cTemplate);
+		if (fd == -1)
+		{
+			cd_warning ("Error creating new launcher for template: %s", cConfFilePath);
+			g_free (cTemplate);
+			g_free (cNewConfFileContent);
+			return NULL; // cannot create new file
+		}
+		out = g_unix_output_stream_new (fd, TRUE);
+		if (!out)
+		{
+			// should not happen at this point
+			g_free (cTemplate);
+			g_free (cNewConfFileContent);
+			close (fd);
+			return NULL;
+		}
+	}
+
+	gboolean res = g_output_stream_write_all (out, cNewConfFileContent, length, NULL, NULL, &erreur);
+	if (!res)
+	{
+		cd_warning ("Error while writing data to %s : %s", cTemplate, erreur->message);
+		g_error_free (erreur);
+		erreur = NULL;
+	}
+
+	if (!g_output_stream_close (out, NULL, &erreur))
+	{
+		if (res) // otherwise we already printed a warning above
+			cd_warning ("Error while writing data to %s : %s", cTemplate, erreur->message);
+		g_error_free (erreur);
+		erreur = NULL;
+		res = FALSE;
+	}
+	g_object_unref (out);
+	g_free (cNewConfFileContent);
+
+	if (!res)
+	{
+		g_unlink (cTemplate);
+		g_free (cTemplate);
+		cTemplate = NULL;
+	}
+	return cTemplate;
 }
 
 

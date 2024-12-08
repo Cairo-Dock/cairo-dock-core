@@ -165,6 +165,14 @@ void cairo_dock_write_keys_to_conf_file (GKeyFile *pKeyFile, const gchar *cConfF
 	cairo_dock_mark_current_theme_as_modified (TRUE);
 }
 
+gchar *cairo_dock_write_keys_to_new_conf_file (GKeyFile *pKeyFile, const gchar *cConfFilePath)
+{
+	gchar *ret = cairo_dock_write_keys_to_new_file (pKeyFile, cConfFilePath);
+	
+	if (ret) cairo_dock_mark_current_theme_as_modified (TRUE);
+	return ret;
+}
+
 
 gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean bSaveBehavior, gboolean bSaveLaunchers)
 {
