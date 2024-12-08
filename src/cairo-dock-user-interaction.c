@@ -229,7 +229,8 @@ gboolean cairo_dock_notification_click_icon (G_GNUC_UNUSED gpointer pUserData, I
 	else if (CAIRO_DOCK_IS_APPLI (icon) && ! CAIRO_DOCK_IS_APPLET (icon))  // icon holding an appli, but not being an applet -> show/hide the window.
 	{
 		GldiWindowActor *pAppli = icon->pAppli;
-		if (gldi_windows_get_active () == pAppli && myTaskbarParam.bMinimizeOnClick && ! pAppli->bIsHidden && gldi_window_is_on_current_desktop (pAppli))  // ne marche que si le dock est une fenêtre de type 'dock', sinon il prend le focus.
+		if (gldi_windows_get_active () == pAppli && myTaskbarParam.bMinimizeOnClick && ! pAppli->bIsHidden &&
+				(!gldi_window_manager_can_track_workspaces () || gldi_window_is_on_current_desktop (pAppli)))  // ne marche que si le dock est une fenêtre de type 'dock', sinon il prend le focus.
 			gldi_window_minimize (pAppli);
 		else
 			gldi_window_show (pAppli);
@@ -335,15 +336,9 @@ gboolean cairo_dock_notification_drop_data_selection (G_GNUC_UNUSED gpointer pUs
 		return GLDI_NOTIFICATION_LET_PASS;
 	CairoDock *pDock = CAIRO_DOCK (pContainer);
 	
-	gboolean bUris = FALSE;
 	gchar **data = NULL;
-	
 	data = gtk_selection_data_get_uris (selection_data);
-	if (data)
-	{
-		bUris = TRUE;
-		cd_debug ("got URIs");
-	}
+	if (data) cd_debug ("got URIs");
 	else
 	{
 		guchar *tmp = gtk_selection_data_get_text (selection_data);
@@ -415,18 +410,11 @@ gboolean cairo_dock_notification_drop_data_selection (G_GNUC_UNUSED gpointer pUs
 			GList *list = NULL;
 			gchar **tmp;
 			GdkAppLaunchContext *context = gdk_display_get_app_launch_context (gdk_display_get_default ());
-			if (bUris)
-			{
-				for (tmp = data; *tmp; ++tmp) list = g_list_append (list, *tmp);
-				g_app_info_launch_uris (G_APP_INFO (app), list, G_APP_LAUNCH_CONTEXT (context), NULL);
-				g_list_free (list);
-			}
-			else
-			{
-				for (tmp = data; *tmp; ++tmp) list = g_list_append (list, g_file_new_for_path (*tmp));
-				g_app_info_launch (G_APP_INFO (app), list, G_APP_LAUNCH_CONTEXT (context), NULL);
-				g_list_free_full (list, g_object_unref);
-			}
+			// we always treat the parameters as URIs, this will work for apps that expect URIs (most cases)
+			// and GIO will anyway try to convert to files (and potentially mess things up) for apps that only expect files
+			for (tmp = data; *tmp; ++tmp) list = g_list_append (list, *tmp);
+			g_app_info_launch_uris (G_APP_INFO (app), list, G_APP_LAUNCH_CONTEXT (context), NULL);
+			g_list_free (list);
 			g_object_unref (context); // will be kept by GIO if necessary (and we don't care about the "launched" signal in this case)
 			ret = GLDI_NOTIFICATION_INTERCEPT;
 			*bHandled = TRUE;
