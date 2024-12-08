@@ -178,10 +178,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	gboolean bNeedUpdate = _get_launcher_params (icon, pKeyFile);
 	
 	if ( !(icon->pClassApp || icon->pCustomLauncher))  // no command could be found for this launcher -> mark it as invalid
-	{
-		g_free (icon->cDesktopFileName);
-		icon->cDesktopFileName = NULL;  // we use this as a way to tell the UserIcon manager that the icon is invalid; we could add a boolean in the GldiUserIcon structure, but it's not that necessary
-	}
+		icon->reserved[0] = (gpointer)-1; // we use this as a way to tell the UserIcon manager that the icon is invalid (should add a new flag, but that would break ABI)
 	
 	//\____________ Make it an inhibator for its class.
 	cd_message ("+ %s/%s", icon->cName, icon->cClass);
