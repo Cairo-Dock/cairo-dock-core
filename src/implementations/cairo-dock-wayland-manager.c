@@ -83,7 +83,8 @@ typedef enum {
 	WAYLAND_COMPOSITOR_UNKNOWN, // unable to detect compositor
 	WAYLAND_COMPOSITOR_GENERIC, // compositor which does not require specific quirks (functionally same as UNKNOWN)
 	WAYLAND_COMPOSITOR_WAYFIRE,
-	WAYLAND_COMPOSITOR_KWIN
+	WAYLAND_COMPOSITOR_KWIN,
+	WAYLAND_COMPOSITOR_COSMIC
 } GldiWaylandCompositorType;
 
 static GldiWaylandCompositorType s_CompositorType = WAYLAND_COMPOSITOR_NONE;
@@ -499,10 +500,10 @@ void gldi_wayland_release_keyboard (GldiContainer *pContainer, GldiWaylandReleas
 				_release_keyboard_layer_shell (pContainer); // depends on https://github.com/WayfireWM/wayfire/pull/2530
 			break; // no need to do anything when closing menus
 		case WAYLAND_COMPOSITOR_KWIN:
+		case WAYLAND_COMPOSITOR_COSMIC:
 			_release_keyboard_activate ();
 			break;
 		default: // generic and unknown
-			//!! TODO: Cosmic also needs the activate method?
 			_release_keyboard_layer_shell (pContainer);
 			break;
 	}
@@ -667,7 +668,7 @@ static void init (void)
 	{
 		if (s_CompositorType != WAYLAND_COMPOSITOR_UNKNOWN)
 			cd_warning ("inconsistent compositor types detected!");
-		s_CompositorType = WAYLAND_COMPOSITOR_GENERIC; // Cosmic is treated as generic for now
+		s_CompositorType = WAYLAND_COMPOSITOR_COSMIC;
 		if (!gldi_cosmic_workspaces_try_init (registry))
 			gldi_plasma_virtual_desktop_try_init (registry);
 	}
@@ -758,6 +759,8 @@ const gchar *gldi_wayland_get_detected_compositor (void)
 			return "KWin";
 		case WAYLAND_COMPOSITOR_WAYFIRE:
 			return "Wayfire";
+		case WAYLAND_COMPOSITOR_COSMIC:
+			return "Cosmic";
 		case WAYLAND_COMPOSITOR_GENERIC:
 			return "generic";
 		case WAYLAND_COMPOSITOR_UNKNOWN:
