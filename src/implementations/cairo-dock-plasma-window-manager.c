@@ -549,3 +549,13 @@ gboolean gldi_plasma_window_manager_try_init (struct wl_registry *registry)
     return FALSE;
 }
 
+const char *gldi_plasma_window_manager_get_uuid (GldiWindowActor *actor)
+{
+	if (gldi_object_is_manager_child (GLDI_OBJECT(actor), &myPlasmaWindowObjectMgr))
+	{
+		GldiPlasmaWindowActor *pactor = (GldiPlasmaWindowActor*)actor;
+		return pactor->uuid;
+	}
+	return NULL;
+}
+

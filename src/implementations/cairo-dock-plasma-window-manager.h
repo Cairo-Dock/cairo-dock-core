@@ -31,4 +31,6 @@
 gboolean gldi_plasma_window_manager_match_protocol (uint32_t id, const char *interface, uint32_t version);
 gboolean gldi_plasma_window_manager_try_init (struct wl_registry *registry);
 
+const char *gldi_plasma_window_manager_get_uuid (GldiWindowActor *actor);
+
 #endif
