@@ -34,16 +34,23 @@
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-icon-manager.h"  // myIconsParam.fAmplitude
 #include "cairo-dock-kwin-integration.h"
+#include "cairo-dock-plasma-window-manager.h" // gldi_plasma_window_manager_get_uuid
+#include "cairo-dock-X-manager.h" // gldi_X_manager_get_window_xid
 
 static DBusGProxy *s_pKwinAccelProxy = NULL;
 static DBusGProxy *s_pPlasmaAccelProxy = NULL;
+static DBusGProxy *s_pWindowViewProxy = NULL;
 
-#define CD_KWIN_BUS "org.kde.kwin"
 #define CD_KGLOBALACCEL_BUS "org.kde.kglobalaccel"
 #define CD_KGLOBALACCEL_KWIN_OBJECT "/component/kwin"
-#define CD_KGLOBALACCEL_PLASMA_OBJECT "/component/plasma_desktop"
+#define CD_KGLOBALACCEL_PLASMA_OBJECT "/component/plasmashell"
 #define CD_KGLOBALACCEL_INTERFACE "org.kde.kglobalaccel.Component"
 
+#define CD_WINDOWVIEW_OBJECT "/org/kde/KWin/Effect/WindowView1"
+#define CD_WINDOWVIEW_BUS "org.kde.KWin.Effect.WindowView1"
+#define CD_WINDOWVIEW_INTERFACE "org.kde.KWin.Effect.WindowView1"
+
+static gboolean bRegistered = FALSE;
 
 static gboolean present_windows (void)
 {
@@ -67,34 +74,49 @@ static gboolean present_windows (void)
 
 static gboolean present_class (const gchar *cClass)
 {
-	#ifdef HAVE_X11
-	cd_debug ("%s (%s)", __func__, cClass);
-	GList *pIcons = (GList*)cairo_dock_list_existing_appli_with_class (cClass);
-	if (pIcons == NULL)
-		return FALSE;
-	Display *dpy = cairo_dock_get_X_display ();
-	if (! dpy)
-		return FALSE;
+	gboolean bIsWayland = gldi_container_is_wayland_backend ();
 	
-	Atom aPresentWindows = XInternAtom (dpy, "_KDE_PRESENT_WINDOWS_GROUP", False);
-	Window *data = g_new0 (Window, g_list_length (pIcons));
-	Icon *pOneIcon;
-	GldiWindowActor *xactor;
-	GList *ic;
-	int i = 0;
-	for (ic = pIcons; ic != NULL; ic = ic->next)
+	gboolean bSuccess = FALSE;
+	if (s_pWindowViewProxy != NULL)
 	{
-		pOneIcon = ic->data;
-		xactor = (GldiWindowActor*)pOneIcon->pAppli;
-		data[i++] = gldi_window_get_id (xactor);
+		GError *erreur = NULL;
+		
+		const GList *pIcons = cairo_dock_list_existing_appli_with_class (cClass);
+		unsigned int len = g_list_length ((GList*)pIcons); //!! TODO: why does this not take a const GList ??
+		const char **uuids = g_new0 (const char*, len + 1);
+		
+		unsigned int i;
+		for (i = 0; pIcons; pIcons = pIcons->next)
+		{
+			Icon *pOneIcon = pIcons->data;
+			if (bIsWayland) uuids[i] = gldi_plasma_window_manager_get_uuid (pOneIcon->pAppli);
+			else
+			{
+				unsigned long xid = gldi_X_manager_get_window_xid (pOneIcon->pAppli);
+				if (xid) uuids[i] = g_strdup_printf ("%lu", xid);
+			}
+			if (uuids[i]) i++;
+		}
+		
+		if (!i)
+			cd_warning ("No uuids found for class: %s", cClass);
+		else
+		{
+			bSuccess = dbus_g_proxy_call (s_pWindowViewProxy, "activate", &erreur,
+				G_TYPE_STRV, uuids,
+				G_TYPE_INVALID,
+				G_TYPE_INVALID);
+			if (erreur)
+			{
+				cd_warning ("Kwin ExposeAll error: %s", erreur->message);
+				g_error_free (erreur);
+				bSuccess = FALSE;
+			}
+		}
+		if (bIsWayland) g_free (uuids);
+		else g_strfreev ((char**)uuids);
 	}
-	XChangeProperty(dpy, data[0], aPresentWindows, aPresentWindows, 32, PropModeReplace, (unsigned char *)data, i);
-	g_free (data);
-	return TRUE;
-	#else
-	(void)cClass;  // avoid unused parameter
-	return FALSE;
-	#endif
+	return bSuccess;
 }
 
 static gboolean present_desktops (void)
@@ -124,7 +146,7 @@ static gboolean show_widget_layer (void)
 	{
 		GError *erreur = NULL;
 		bSuccess = dbus_g_proxy_call (s_pPlasmaAccelProxy, "invokeShortcut", &erreur,
-			G_TYPE_STRING, "Show Dashboard",
+			G_TYPE_STRING, "show dashboard",
 			G_TYPE_INVALID,
 			G_TYPE_INVALID);
 		if (erreur)
@@ -137,65 +159,11 @@ static gboolean show_widget_layer (void)
 	return bSuccess;
 }
 
-#define x_icon_geometry(icon, pDock) (pDock->container.iWindowPositionX + icon->fXAtRest + (pDock->container.iWidth - pDock->fFlatDockWidth) / 2 + (pDock->iOffsetForExtend * (pDock->fAlign - .5) * 2))
-#define y_icon_geometry(icon, pDock) (pDock->container.iWindowPositionY + icon->fDrawY - icon->fHeight * myIconsParam.fAmplitude * pDock->fMagnitudeMax)
-/* Not used
-static void _set_one_icon_geometry_for_window_manager (Icon *icon, CairoDock *pDock)
-{
-	cd_debug ("%s (%s)", __func__, icon?icon->cName:"none");
-	long data[1+6];
-	if (icon != NULL)
-	{
-		data[0] = 1;  // 1 preview.
-		data[1+0] = 5;  // 5 elements for the current preview: X id, x, y, w, h
-		data[1+1] = icon->Xid;
-		
-		int iX, iY;
-		iX = x_icon_geometry (icon, pDock);
-		iY = y_icon_geometry (icon, pDock);  // il faudrait un fYAtRest ...
-		// iWidth = icon->fWidth;
-		// iHeight = icon->fHeight * (1. + 2*myIconsParam.fAmplitude * pDock->fMagnitudeMax);  // on elargit en haut et en bas, pour gerer les cas ou l'icone grossirait vers le haut ou vers le bas.
-		
-		if (pDock->container.bIsHorizontal)
-		{
-			data[1+2] = iX;
-			data[1+3] = (pDock->container.bDirectionUp ? -50 - 200: 50 + 200);
-		}
-		else
-		{
-			data[1+2] = iY;
-			data[1+3] = iX - 200/2;
-		}
-		data[1+4] = 200;
-		data[1+5] = 200;
-	}
-	else
-	{
-		data[0] = 0;
-		
-	}
-	
-	Atom atom = XInternAtom (gdk_x11_get_default_xdisplay(), "_KDE_WINDOW_PREVIEW", False);
-	Window Xid = gldi_container_get_Xid (CAIRO_CONTAINER (pDock));
-	XChangeProperty (gdk_x11_get_default_xdisplay(), Xid, atom, atom, 32, PropModeReplace, (const unsigned char*)data, 1+6);
-}
-*/
-/* Not used
-static gboolean _on_enter_icon (gpointer pUserData, Icon *pIcon, CairoDock *pDock, gboolean *bStartAnimation)
-{
-	if (CAIRO_DOCK_IS_APPLI (pIcon))
-	{
-		_set_one_icon_geometry_for_window_manager (pIcon, pDock);
-	}
-	else
-	{
-		_set_one_icon_geometry_for_window_manager (NULL, pDock);
-	}
-	return GLDI_NOTIFICATION_LET_PASS;
-}
-*/
 static void _register_kwin_backend (void)
 {
+	// only register once, we do not unregister anyway
+	if (bRegistered) return;
+	bRegistered = TRUE;
 	GldiDesktopManagerBackend p;
 	memset(&p, 0, sizeof (GldiDesktopManagerBackend));
 	
@@ -206,19 +174,11 @@ static void _register_kwin_backend (void)
 	p.set_on_widget_layer = NULL;  // the Dashboard is not a real widget layer :-/
 	
 	gldi_desktop_manager_register_backend (&p, "KWin");
-	
-	/*gldi_object_register_notification (&myContainerObjectMgr,
-		NOTIFICATION_ENTER_ICON,
-		(GldiNotificationFunc) _on_enter_icon,
-		GLDI_RUN_FIRST, NULL);*/
 }
 
 static void _unregister_kwin_backend (void)
 {
 	//cairo_dock_wm_register_backend (NULL);
-	/*gldi_object_remove_notification (&myContainerObjectMgr,
-		NOTIFICATION_ENTER_ICON,
-		(GldiNotificationFunc) _on_enter_icon, NULL);*/
 }
 
 static void _on_kwin_owner_changed (G_GNUC_UNUSED const gchar *cName, gboolean bOwned, G_GNUC_UNUSED gpointer data)
@@ -241,10 +201,18 @@ static void _on_kwin_owner_changed (G_GNUC_UNUSED const gchar *cName, gboolean b
 		
 		_register_kwin_backend ();
 	}
-	else if (s_pKwinAccelProxy != NULL)
+	else
 	{
-		g_object_unref (s_pKwinAccelProxy);
-		s_pKwinAccelProxy = NULL;
+		if (s_pKwinAccelProxy)
+		{
+			g_object_unref (s_pKwinAccelProxy);
+			s_pKwinAccelProxy = NULL;
+		}
+		if (s_pPlasmaAccelProxy)
+		{
+			g_object_unref (s_pPlasmaAccelProxy);
+			s_pPlasmaAccelProxy = NULL;
+		}
 		
 		_unregister_kwin_backend ();
 	}
@@ -254,15 +222,59 @@ static void _on_detect_kwin (gboolean bPresent, G_GNUC_UNUSED gpointer data)
 	cd_debug ("Kwin is present: %d", bPresent);
 	if (bPresent)
 	{
-		_on_kwin_owner_changed (CD_KWIN_BUS, TRUE, NULL);
+		_on_kwin_owner_changed (CD_KGLOBALACCEL_BUS, TRUE, NULL);
 	}
-	cairo_dock_watch_dbus_name_owner (CD_KWIN_BUS,
+	cairo_dock_watch_dbus_name_owner (CD_KGLOBALACCEL_BUS,
 		(CairoDockDbusNameOwnerChangedFunc) _on_kwin_owner_changed,
 		NULL);
 }
-void cd_init_kwin_backend (void)
+
+static void _on_windowview_owner_changed (G_GNUC_UNUSED const gchar *cName, gboolean bOwned, G_GNUC_UNUSED gpointer data)
 {
-	cairo_dock_dbus_detect_application_async (CD_KWIN_BUS,
-		(CairoDockOnAppliPresentOnDbus) _on_detect_kwin,
+	cd_debug ("Kwin is on the bus (%d)", bOwned);
+	
+	if (bOwned)  // set up the proxies
+	{
+		g_return_if_fail (s_pWindowViewProxy == NULL);
+		
+		s_pWindowViewProxy = cairo_dock_create_new_session_proxy (
+			CD_WINDOWVIEW_BUS,
+			CD_WINDOWVIEW_OBJECT,
+			CD_WINDOWVIEW_INTERFACE);
+		
+		_register_kwin_backend ();
+	}
+	else
+	{
+		if (s_pWindowViewProxy)
+		{
+			g_object_unref (s_pWindowViewProxy);
+			s_pWindowViewProxy = NULL;
+		}
+		
+		//!! TODO: this is a no-op, do not call it
+		_unregister_kwin_backend ();
+	}
+}
+static void _on_detect_windowview (gboolean bPresent, G_GNUC_UNUSED gpointer data)
+{
+	cd_debug ("KWin.Effect.WindowView1 is present: %d", bPresent);
+	if (bPresent)
+	{
+		_on_windowview_owner_changed (CD_WINDOWVIEW_BUS, TRUE, NULL);
+	}
+	cairo_dock_watch_dbus_name_owner (CD_WINDOWVIEW_BUS,
+		(CairoDockDbusNameOwnerChangedFunc) _on_windowview_owner_changed,
 		NULL);
 }
+
+void cd_init_kwin_backend (void)
+{
+	cairo_dock_dbus_detect_application_async (CD_KGLOBALACCEL_BUS,
+		(CairoDockOnAppliPresentOnDbus) _on_detect_kwin,
+		NULL);
+	cairo_dock_dbus_detect_application_async (CD_WINDOWVIEW_BUS,
+		(CairoDockOnAppliPresentOnDbus) _on_detect_windowview,
+		NULL);
+}
+
