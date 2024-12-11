@@ -32,5 +32,7 @@ G_BEGIN_DECLS
 
 void gldi_register_X_manager (void);
 
+unsigned long gldi_X_manager_get_window_xid (GldiWindowActor *actor);
+
 G_END_DECLS
 #endif

@@ -1535,6 +1535,16 @@ static void _adjust_aimed_point (const Icon *pIcon, GtkWidget *pWidget,
 	}
 }
 
+unsigned long gldi_X_manager_get_window_xid (GldiWindowActor *actor)
+{
+	if (gldi_object_is_manager_child (GLDI_OBJECT(actor), &myXObjectMgr))
+	{
+		GldiXWindowActor *xactor = (GldiXWindowActor*)actor;
+		return xactor->Xid; // Window defined as unsigned long or unsigned int in X.h or Xmd.h
+	}
+	return 0; // None
+}
+
   ////////////
  /// INIT ///
 ////////////
