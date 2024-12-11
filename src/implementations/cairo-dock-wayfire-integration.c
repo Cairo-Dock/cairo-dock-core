@@ -29,7 +29,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <nlohmann/json.hpp>
+#include <json.h>
 
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-windows-manager.h"  // bIsHidden
@@ -111,43 +111,75 @@ static int _send_msg(const char* msg, uint32_t len) {
 }
 
 /* Call a Wayfire IPC method and try to check if it was successful. */
-static gboolean _call_ipc(const nlohmann::json& data) {
-	std::string tmp = data.dump();
-	if(_send_msg(tmp.c_str(), tmp.length()) < 0) return FALSE;
+static gboolean _call_ipc(struct json_object* data) {
+	size_t len;
+	const char *tmp = json_object_to_json_string_length (data, JSON_C_TO_STRING_SPACED, &len);
+	if (!(tmp && len)) return FALSE;
+	
+	if(_send_msg(tmp, len) < 0) return FALSE;
 	
 	uint32_t len2 = 0;
 	char* tmp2 = _read_msg(&len2);
 	if(!tmp2) return FALSE;
 	
-	nlohmann::json res = nlohmann::json::parse(tmp2, nullptr, false);
+	struct json_object *res = json_tokener_parse (tmp2);
+	struct json_object *result = json_object_object_get (res, "result");
+	gboolean ret = FALSE;
+	if (result)
+	{
+		const char *value = json_object_get_string (result);
+		if (value && !strcmp(value, "ok")) ret = TRUE;
+	}
+	
+	json_object_put (res);
 	free(tmp2);
 	
-	if(!res.contains("result")) return FALSE;
-	return (res["result"] == "ok");
+	return ret;
+}
+
+static gboolean _call_ipc_method_no_data (const char *method)
+{
+	struct json_object *obj = json_object_new_object ();
+	json_object_object_add (obj, "method", json_object_new_string (method));
+	json_object_object_add (obj, "data", json_object_new_object ());
+	gboolean ret = _call_ipc (obj);
+	json_object_put (obj);
+	return ret;
 }
 
 /* Start scale on the current workspace */
 static gboolean _present_windows() {
-	return _call_ipc({{"method", "scale/toggle"}, {"data", {}}});
+	return _call_ipc_method_no_data ("scale/toggle");
 }
 
 /* Start scale including all views of the given class */
 static gboolean _present_class(const gchar *cClass) {
 	const gchar *cWmClass = cairo_dock_get_class_wm_class (cClass);
-	if (cWmClass) return _call_ipc({{"method", "scale_ipc_filter/activate_appid"}, {"data", {{"all_workspaces", true}, {"app_id", cWmClass}}}});
+	if (cWmClass) 
+	{
+		struct json_object *obj = json_object_new_object ();
+		json_object_object_add (obj, "method", json_object_new_string ("scale_ipc_filter/activate_appid"));
+		struct json_object *data = json_object_new_object ();
+		json_object_object_add (data, "all_workspaces", json_object_new_boolean (1));
+		json_object_object_add (data, "app_id", json_object_new_string (cWmClass));
+		json_object_object_add (obj, "data", data);
+		gboolean ret = _call_ipc (obj);
+		json_object_put (obj);
+		return ret;
+	}
 	else return FALSE;
 }
 
 
 /* Start expo on the current output */
 static gboolean _present_desktops() {
-	return _call_ipc({{"method", "expo/toggle"}, {"data", {}}});
+	return _call_ipc_method_no_data ("expo/toggle");
 }
 
 /* Toggle show destop functionality (i.e. minimize / unminimize all views).
  * Note: bShow argument is ignored, we don't know if the desktop is shown / hidden */
 static gboolean _show_hide_desktop(G_GNUC_UNUSED gboolean bShow) {
-	return _call_ipc({{"method", "wm-actions/toggle_showdesktop"}, {"data", {}}});
+	return _call_ipc_method_no_data ("wm-actions/toggle_showdesktop");
 }
 
 /*
