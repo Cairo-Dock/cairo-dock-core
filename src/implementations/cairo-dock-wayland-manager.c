@@ -51,6 +51,7 @@
 #include "cairo-dock-plasma-virtual-desktop.h"
 #include "cairo-dock-cosmic-workspaces.h"
 #endif
+#include "cairo-dock-wayland-wm.h"
 #include "cairo-dock-wayland-hotspots.h"
 #include "cairo-dock-egl.h"
 #define _MANAGER_DEF_
@@ -64,7 +65,6 @@ gboolean g_bDisableLayerShell = FALSE;
 
 // public (manager, config, data)
 GldiManager myWaylandMgr;
-GldiObjectManager myWaylandObjectMgr;
 
 // dependencies
 extern GldiContainer *g_pPrimaryContainer;
@@ -111,19 +111,6 @@ static void _try_detect_compositor (void)
 GdkMonitor **s_pMonitors = NULL;
 // we keep track of the primary monitor
 GdkMonitor *s_pPrimaryMonitor = NULL;
-
-// signals
-typedef enum {
-	NB_NOTIFICATIONS_WAYLAND_MANAGER = NB_NOTIFICATIONS_WINDOWS
-	} CairoWaylandManagerNotifications;
-
-// data
-typedef struct _GldiWaylandWindowActor GldiWaylandWindowActor;
-struct _GldiWaylandWindowActor {
-	GldiWindowActor actor;
-	// Wayland-specific
-	struct wl_shell_surface *shell_surface;
-};
 
 // refresh s_desktopGeometry.xscreen
 static void _calculate_xscreen ()
@@ -474,7 +461,7 @@ void gldi_wayland_grab_keyboard (GldiContainer *pContainer)
 
 static void _release_keyboard_activate (void)
 {
-	GldiWindowActor *actor = gldi_windows_get_active ();
+	GldiWindowActor *actor = gldi_wayland_wm_get_last_active_window ();
 	if (actor && !actor->bIsHidden) {
 		if (gldi_window_manager_can_track_workspaces () && !gldi_window_is_on_current_desktop (actor))
 			return;
@@ -742,18 +729,6 @@ void gldi_register_wayland_manager (void)
 	gldi_object_install_notifications (&myWaylandMgr, NB_NOTIFICATIONS_WAYLAND_DESKTOP);
 	// register
 	gldi_object_init (GLDI_OBJECT(&myWaylandMgr), &myManagerObjectMgr, NULL);
-	
-	// Object Manager
-	memset (&myWaylandObjectMgr, 0, sizeof (GldiObjectManager));
-	myWaylandObjectMgr.cName   = "Wayland";
-	myWaylandObjectMgr.iObjectSize    = sizeof (GldiWaylandWindowActor);
-	// interface
-	///myWaylandObjectMgr.init_object    = init_object;
-	///myWaylandObjectMgr.reset_object   = reset_object;
-	// signals
-	gldi_object_install_notifications (&myWaylandObjectMgr, NB_NOTIFICATIONS_WAYLAND_MANAGER);
-	// parent object
-	gldi_object_set_manager (GLDI_OBJECT (&myWaylandObjectMgr), &myWindowObjectMgr);
 	
 	// get the properties of screens / monitors, set up signals
 	g_desktopGeometry.iNbScreens = 0;

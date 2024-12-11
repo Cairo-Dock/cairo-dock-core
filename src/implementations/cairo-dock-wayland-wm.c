@@ -34,8 +34,10 @@ GldiObjectManager myWaylandWMObjectMgr;
 
 static void (*s_handle_destroy_cb)(gpointer handle) = NULL;
 
-/* current active window -- last one to receive activated signal */
+/* current active window */
 static GldiWindowActor* s_pActiveWindow = NULL;
+/* last window to receive activated signal, might have been deactivated by now */
+static GldiWindowActor* s_pLastActiveWindow = NULL;
 /* maybe new active window -- this is set if the activated signal is
  * received for a window that is not "created" yet, i.e. has not done
  * the initial init yet or has a parent */
@@ -307,6 +309,7 @@ void gldi_wayland_wm_done (GldiWaylandWindowActor *wactor)
 				if (actor->bDisplayed) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESTROYED, actor);
 				if (actor == s_pSelf) s_pSelf = NULL;
 				if (actor == s_pActiveWindow) s_pActiveWindow = NULL;
+				if (actor == s_pLastActiveWindow) s_pLastActiveWindow = NULL;
 				if (actor == s_pMaybeActiveWindow) s_pMaybeActiveWindow = NULL;
 				gldi_object_unref (GLDI_OBJECT(actor));
 				break;
@@ -368,6 +371,7 @@ void gldi_wayland_wm_done (GldiWaylandWindowActor *wactor)
 				gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESTROYED, actor);
 				if (actor == s_pSelf) s_pSelf = NULL;
 				if (actor == s_pActiveWindow) s_pActiveWindow = NULL;
+				if (actor == s_pLastActiveWindow) s_pLastActiveWindow = NULL;
 				if (actor == s_pMaybeActiveWindow) s_pMaybeActiveWindow = NULL;
 				continue;
 			}
@@ -407,6 +411,7 @@ void gldi_wayland_wm_done (GldiWaylandWindowActor *wactor)
 				if (s_pActiveWindow != actor)
 				{
 					s_pActiveWindow = actor;
+					s_pLastActiveWindow = actor;
 					bUnfocused = FALSE;
 					gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ACTIVATED, actor);
 				}
@@ -473,6 +478,11 @@ void gldi_wayland_wm_stack_on_top (GldiWindowActor *actor)
 GldiWindowActor* gldi_wayland_wm_get_active_window ()
 {
 	return s_pActiveWindow;
+}
+
+GldiWindowActor* gldi_wayland_wm_get_last_active_window ()
+{
+	return s_pLastActiveWindow;
 }
 
 GldiWaylandWindowActor* gldi_wayland_wm_new_toplevel (gpointer handle)

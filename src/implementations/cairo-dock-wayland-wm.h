@@ -77,6 +77,8 @@ void gldi_wayland_wm_done (GldiWaylandWindowActor *wactor);
 
 GldiWindowActor* gldi_wayland_wm_get_active_window ();
 
+GldiWindowActor* gldi_wayland_wm_get_last_active_window ();
+
 GldiWindowActor* gldi_wayland_wm_pick_window (GtkWindow *pParentWindow);
 
 /** Change the stacking order such that actor is on top. Does not send
