@@ -115,7 +115,6 @@ gboolean gldi_desktop_present_windows (void)  // scale
 {
 	if (s_backend.present_windows != NULL)
 	{
-		gldi_wayland_release_keyboard (pContainer, GLDI_KEYBOARD_RELEASE_PRESENT_WINDOWS);
 		return s_backend.present_windows ();
 	}
 	return FALSE;
