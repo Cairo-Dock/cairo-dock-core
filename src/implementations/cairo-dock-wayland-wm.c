@@ -34,8 +34,10 @@ GldiObjectManager myWaylandWMObjectMgr;
 
 static void (*s_handle_destroy_cb)(gpointer handle) = NULL;
 
-/* current active window -- last one to receive activated signal */
+/* current active window */
 static GldiWindowActor* s_pActiveWindow = NULL;
+/* last window to receive activated signal, might have been deactivated by now */
+static GldiWindowActor* s_pLastActiveWindow = NULL;
 /* maybe new active window -- this is set if the activated signal is
  * received for a window that is not "created" yet, i.e. has not done
  * the initial init yet or has a parent */
@@ -60,8 +62,9 @@ static void* s_activated_callback_data = NULL;
  * functions that initiate a roundtrip to the compositor).
  * However, handling of window creation is not reentrant, so we have to
  * take care to not send nested notifications. */
-GQueue s_pending_queue = G_QUEUE_INIT;
-GldiWaylandWindowActor* s_pCurrent = NULL;
+static GQueue s_pending_queue = G_QUEUE_INIT;
+static GldiWaylandWindowActor* s_pCurrent = NULL;
+static gboolean s_bProcessing = FALSE;
 
 static guint s_iIdle = 0;
 
@@ -163,9 +166,20 @@ void gldi_wayland_wm_closed (GldiWaylandWindowActor *wactor, gboolean notify)
 	if (notify) gldi_wayland_wm_done (wactor);
 }
 
-void gldi_wayland_wm_activated (GldiWaylandWindowActor *wactor, gboolean notify)
+void gldi_wayland_wm_activated (GldiWaylandWindowActor *wactor, gboolean activated, gboolean notify)
 {
-	s_pMaybeActiveWindow = (GldiWindowActor*)wactor;
+	if (activated)
+	{
+		s_pMaybeActiveWindow = (GldiWindowActor*)wactor;
+		wactor->unfocused_pending = FALSE;
+		if (s_activated_callback) s_activated_callback(wactor, s_activated_callback_data);
+	}
+	else
+	{
+		wactor->unfocused_pending = TRUE;
+		if (s_pMaybeActiveWindow == (GldiWindowActor*)wactor)
+			s_pMaybeActiveWindow = NULL;
+	}
 	if (notify) gldi_wayland_wm_done (wactor);
 }
 
@@ -240,7 +254,7 @@ static gboolean _idle_done (G_GNUC_UNUSED gpointer data)
 
 void gldi_wayland_wm_done (GldiWaylandWindowActor *wactor)
 {
-	if(s_pCurrent || !g_pMainDock) {
+	if(s_bProcessing || !g_pMainDock) {
 		/* We are being called in a nested way, avoid sending
 		 * notifications by queuing them for later.
 		 * 
@@ -270,6 +284,9 @@ void gldi_wayland_wm_done (GldiWaylandWindowActor *wactor)
 		return;
 	}
 	
+	s_bProcessing = TRUE;
+	gboolean bUnfocused = FALSE; // whether the current active window lost focus
+	
 	do {
 		// Set that we are already potentially processing a notification for this actor.
 		s_pCurrent = wactor;
@@ -292,6 +309,7 @@ void gldi_wayland_wm_done (GldiWaylandWindowActor *wactor)
 				if (actor->bDisplayed) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESTROYED, actor);
 				if (actor == s_pSelf) s_pSelf = NULL;
 				if (actor == s_pActiveWindow) s_pActiveWindow = NULL;
+				if (actor == s_pLastActiveWindow) s_pLastActiveWindow = NULL;
 				if (actor == s_pMaybeActiveWindow) s_pMaybeActiveWindow = NULL;
 				gldi_object_unref (GLDI_OBJECT(actor));
 				break;
@@ -353,6 +371,8 @@ void gldi_wayland_wm_done (GldiWaylandWindowActor *wactor)
 				gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESTROYED, actor);
 				if (actor == s_pSelf) s_pSelf = NULL;
 				if (actor == s_pActiveWindow) s_pActiveWindow = NULL;
+				if (actor == s_pLastActiveWindow) s_pLastActiveWindow = NULL;
+				if (actor == s_pMaybeActiveWindow) s_pMaybeActiveWindow = NULL;
 				continue;
 			}
 			
@@ -373,12 +393,29 @@ void gldi_wayland_wm_done (GldiWaylandWindowActor *wactor)
 			// update the sticky property
 			if (_update_sticky (wactor, TRUE)) continue;
 			
+			// either one of the following two conditions will hold
+			if (wactor->unfocused_pending)
+			{
+				// we set that we have no active window, but we do not send a notification
+				// since another window might be activated as well
+				if (s_pActiveWindow == actor)
+				{
+					s_pActiveWindow = NULL;
+					bUnfocused = TRUE;
+				}
+				wactor->unfocused_pending = FALSE;
+			}
+			
 			if (actor == s_pMaybeActiveWindow)
 			{
-				s_pActiveWindow = actor;
+				if (s_pActiveWindow != actor)
+				{
+					s_pActiveWindow = actor;
+					s_pLastActiveWindow = actor;
+					bUnfocused = FALSE;
+					gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ACTIVATED, actor);
+				}
 				s_pMaybeActiveWindow = NULL;
-				gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ACTIVATED, actor);
-				if (s_activated_callback) s_activated_callback(wactor, s_activated_callback_data);
 				continue;
 			}
 			
@@ -390,14 +427,28 @@ void gldi_wayland_wm_done (GldiWaylandWindowActor *wactor)
 		g_free(cOldWmClass);
 		
 		s_pCurrent = NULL;
-		wactor = g_queue_pop_head(&s_pending_queue); // note: it is OK to call this on an empty queue
+		wactor = g_queue_pop_head (&s_pending_queue); // note: it is OK to call this on an empty queue
+		
+		if (!wactor)
+		{
+			// notify if the active window has been unfocused
+			if (bUnfocused && !s_pActiveWindow)
+				gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ACTIVATED, NULL);
+			bUnfocused = FALSE;
+			
+			// notify if the stacking order has changed
+			if (s_bStackChange)
+			{
+				gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_Z_ORDER_CHANGED, NULL);
+				s_bStackChange = FALSE;
+			}
+			
+			// re-check the queue in case we added more toplevels during the above notifications
+			wactor = g_queue_pop_head (&s_pending_queue);
+		}
 	} while (wactor);
 	
-	if (s_bStackChange)
-	{
-		gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_Z_ORDER_CHANGED, NULL);
-		s_bStackChange = FALSE;
-	}
+	s_bProcessing = FALSE;
 }
 
 static void _restack_windows (void* ptr, void*)
@@ -427,6 +478,11 @@ void gldi_wayland_wm_stack_on_top (GldiWindowActor *actor)
 GldiWindowActor* gldi_wayland_wm_get_active_window ()
 {
 	return s_pActiveWindow;
+}
+
+GldiWindowActor* gldi_wayland_wm_get_last_active_window ()
+{
+	return s_pLastActiveWindow;
 }
 
 GldiWaylandWindowActor* gldi_wayland_wm_new_toplevel (gpointer handle)

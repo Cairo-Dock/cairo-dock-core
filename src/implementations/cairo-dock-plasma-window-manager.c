@@ -248,16 +248,17 @@ static void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED pwhandle *handle,
 	gldi_wayland_wm_sticky_changed (wactor, !!(flags & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_ON_ALL_DESKTOPS), FALSE);
 	if (flags & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_ACTIVE)
 	{
-		gldi_wayland_wm_activated (wactor, FALSE);
+		gldi_wayland_wm_activated (wactor, TRUE, FALSE);
 		// versions >= 12 and < 17 have stacking_order_uuid_changed which
 		// is handled separately below; for versions >= 17, we would need
 		// to support stacking_order_changed_2
 		if (protocol_version < 12 || protocol_version >= 17)
 			gldi_wayland_wm_stack_on_top ((GldiWindowActor*)wactor);
 	}
+	else gldi_wayland_wm_activated (wactor, FALSE, FALSE);
 	if (wactor->init_done) gldi_wayland_wm_done (wactor);
 }
-	
+
 
 /* this is sent after the initial state has been sent, i.e. only once */
 static void _gldi_toplevel_done_cb ( void *data, G_GNUC_UNUSED pwhandle *handle)

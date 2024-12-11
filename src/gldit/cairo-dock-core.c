@@ -183,6 +183,10 @@ bWAYFIRE = TRUE;
 		}
 #endif
 #endif
+
+	gboolean bIsWayland = gldi_container_is_wayland_backend ();
+	gchar *compositor_type = "";
+	if (bIsWayland) compositor_type = g_strdup_printf (" * detected Wayland compositor:  %s\n", gldi_wayland_get_detected_compositor ());
 	
 	gchar *text = g_strdup_printf (
 		"Cairo-Dock version: %s\n"
@@ -202,7 +206,8 @@ bWAYFIRE = TRUE;
 		" * OpenGL:                       %s\n"
 		" * taskbar backend:              %s\n"
 		" * desktop manager backend(s):   %s\n"
-		" * detected desktop environment: %s\n",
+		" * detected desktop environment: %s\n"
+		"%s",
 		GLDI_VERSION,
 		__DATE__, __TIME__,
 		GTK_MAJOR_VERSION, GTK_MINOR_VERSION,
@@ -213,12 +218,13 @@ bWAYFIRE = TRUE;
 		bGTK_LAYER_SHELL ? "yes" : "no",
 		bWAYLAND_PROTOCOLS ? "yes" : "no",
 		bWAYFIRE ? "yes" : "no",
-		gldi_container_is_wayland_backend () ? "Wayland" : "X11",
+		bIsWayland ? "Wayland" : "X11",
 		layer_shell_info ? layer_shell_info : "",
 		g_bUseOpenGL ? gldi_gl_get_backend_name() : "no",
 		gldi_windows_manager_get_name (),
 		gldi_desktop_manager_get_backend_names (),
-		cairo_dock_fm_get_desktop_name ());
+		cairo_dock_fm_get_desktop_name (),
+		compositor_type);
 
 	g_free (layer_shell_info);
 	
