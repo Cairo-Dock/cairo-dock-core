@@ -139,7 +139,7 @@ static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 		g_free (cFallbackClass);
 		// this sets the display name, the icon filename and the GAppInfo used to launch the app
 		cairo_dock_set_data_from_class (cClass, icon);
-		if (iNumOrigin != 0)  // it's not the first origin that gave us the correct class, so let's write it down to avoid searching the next time.
+		if (iNumOrigin > 0)  // it's not the first origin that gave us the correct class, so let's write it down to avoid searching the next time.
 		{
 			g_key_file_set_string (pKeyFile, "Desktop Entry", "Origin", cairo_dock_get_class_desktop_file (cClass));
 			bNeedUpdate = TRUE;
