@@ -1835,6 +1835,13 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 				
 				g_strfreev (argv);
 			}
+			else if (!strncmp (cClass, "python3 ", 8) || !strncmp (cClass, "python ", 7))
+			{
+				cClass += 7;
+				while (*cClass == ' ') cClass++;
+				if (*cClass == 0 || *cClass == '-')
+					cClass = NULL; // we cannot parse Python's arguments, do not attempt to do so
+			}
 			
 			// TODO: handle sh -c cases as well?
 			
