@@ -111,10 +111,11 @@ gboolean gldi_desktop_present_class (const gchar *cClass, GldiContainer *pContai
 	return FALSE;
 }
 
-gboolean gldi_desktop_present_windows (void)  // scale
+gboolean gldi_desktop_present_windows (GldiContainer *pContainer)  // scale
 {
 	if (s_backend.present_windows != NULL)
 	{
+		gldi_wayland_release_keyboard (pContainer, GLDI_KEYBOARD_RELEASE_PRESENT_WINDOWS);
 		return s_backend.present_windows ();
 	}
 	return FALSE;

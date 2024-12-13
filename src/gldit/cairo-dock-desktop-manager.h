@@ -191,7 +191,7 @@ gboolean gldi_desktop_present_class (const gchar *cClass, GldiContainer *pContai
 /** Present all the windows of the current desktop.
 *@return TRUE on success
 */
-gboolean gldi_desktop_present_windows (void);
+gboolean gldi_desktop_present_windows (GldiContainer *pContainer);
 
 /** Present all the desktops.
 *@return TRUE on success
