@@ -27,25 +27,6 @@
 
 extern CairoDockDesktopEnv g_iDesktopEnv;
 
-gchar *cairo_dock_generate_unique_filename (const gchar *cBaseName, const gchar *cCairoDockDataDir)
-{
-	int iPrefixNumber = 0;
-	GString *sFileName = g_string_new ("");
-
-	do
-	{
-		iPrefixNumber ++;
-		g_string_printf (sFileName, "%s/%02d%s", cCairoDockDataDir, iPrefixNumber, cBaseName);
-	} while (iPrefixNumber < 99 && g_file_test (sFileName->str, G_FILE_TEST_EXISTS));
-
-	g_string_free (sFileName, TRUE);
-	if (iPrefixNumber == 99)
-		return NULL;
-	else
-		return g_strdup_printf ("%02d%s", iPrefixNumber, cBaseName);
-}
-
-
 gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters)  // gere l'UTF-8
 {
 	g_return_val_if_fail (cString != NULL, NULL);

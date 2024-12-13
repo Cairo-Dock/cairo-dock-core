@@ -139,7 +139,7 @@ static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 		g_free (cFallbackClass);
 		// this sets the display name, the icon filename and the GAppInfo used to launch the app
 		cairo_dock_set_data_from_class (cClass, icon);
-		if (iNumOrigin != 0)  // it's not the first origin that gave us the correct class, so let's write it down to avoid searching the next time.
+		if (iNumOrigin > 0)  // it's not the first origin that gave us the correct class, so let's write it down to avoid searching the next time.
 		{
 			g_key_file_set_string (pKeyFile, "Desktop Entry", "Origin", cairo_dock_get_class_desktop_file (cClass));
 			bNeedUpdate = TRUE;
@@ -360,24 +360,21 @@ gchar *gldi_launcher_add_conf_file (const gchar *cOrigin, const gchar *cDockName
 	gchar *cBaseName = (cFilePath ?
 		*cFilePath == '/' ?
 			g_path_get_basename (cFilePath) :
-			g_strdup (cFilePath) :
+			g_steal_pointer (&cFilePath) :
 		g_path_get_basename (cTemplateFile));
 
+	gchar *cNewDesktopFilePath;
 	if (! g_str_has_suffix (cBaseName, ".desktop")) // if we have a script (.sh file) => add '.desktop'
-	{
-		gchar *cTmpBaseName = g_strdup_printf ("%s.desktop", cBaseName);
-		g_free (cBaseName);
-		cBaseName = cTmpBaseName;
-	}
-
-	gchar *cNewDesktopFileName = cairo_dock_generate_unique_filename (cBaseName, g_cCurrentLaunchersPath);
+		cNewDesktopFilePath = g_strdup_printf ("%s/%s.desktop", g_cCurrentLaunchersPath, cBaseName);
+	else cNewDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cBaseName);
 	g_free (cBaseName);
 	
 	//\__________________ write the keys.
-	gchar *cNewDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cNewDesktopFileName);
-	cairo_dock_write_keys_to_conf_file (pKeyFile, cNewDesktopFilePath);
-	g_free (cNewDesktopFilePath);
+	gchar *cResultPath = cairo_dock_write_keys_to_new_conf_file (pKeyFile, cNewDesktopFilePath);
+	gchar *cNewDesktopFileName = g_path_get_basename (cResultPath);
 	
+	g_free (cNewDesktopFilePath);
+	g_free (cResultPath);
 	g_free (cFilePath);
 	g_key_file_free (pKeyFile);
 	return cNewDesktopFileName;

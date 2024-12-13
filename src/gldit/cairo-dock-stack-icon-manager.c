@@ -74,11 +74,15 @@ gchar *gldi_stack_icon_add_conf_file (const gchar *cDockName, double fOrder)
 	g_key_file_set_double (pKeyFile, "Desktop Entry", "Order", fOrder);
 	g_key_file_set_string (pKeyFile, "Desktop Entry", "Container", cDockName);
 	
-	gchar *cNewDesktopFileName = cairo_dock_generate_unique_filename ("container.desktop", g_cCurrentLaunchersPath);
-	
 	//\__________________ write the keys.
-	gchar *cNewDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cNewDesktopFileName);
-	cairo_dock_write_keys_to_conf_file (pKeyFile, cNewDesktopFilePath);
+	gchar *cNewDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, CAIRO_DOCK_CONTAINER_CONF_FILE);
+	gchar *cNewDesktopFileName = cairo_dock_write_keys_to_new_conf_file (pKeyFile, cNewDesktopFilePath);
+	if (cNewDesktopFileName)
+	{
+		gchar *tmp = g_path_get_basename (cNewDesktopFileName);
+		g_free (cNewDesktopFileName);
+		cNewDesktopFileName = tmp;
+	}
 	g_free (cNewDesktopFilePath);
 	g_key_file_free (pKeyFile);
 	return cNewDesktopFileName;

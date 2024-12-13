@@ -25,9 +25,6 @@ G_BEGIN_DECLS
 *@file cairo-dock-utils.h Some helper functions.
 */
 
-
-gchar *cairo_dock_generate_unique_filename (const gchar *cBaseName, const gchar *cCairoDockDataDir);
-
 gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters);;
 
 /** Remove the version number from a string. Directly modifies the string.
