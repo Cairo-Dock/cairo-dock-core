@@ -472,6 +472,7 @@ static void _release_keyboard_activate (void)
 
 static void _release_keyboard_layer_shell (GldiContainer *pContainer)
 {
+	if (!pContainer) return;
 #ifdef HAVE_GTK_LAYER_SHELL
 	GtkWindow* window = GTK_WINDOW (pContainer->pWidget);
 	gtk_layer_set_keyboard_mode (window, GTK_LAYER_SHELL_KEYBOARD_MODE_NONE);
