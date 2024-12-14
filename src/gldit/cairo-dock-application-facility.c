@@ -34,7 +34,6 @@
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-indicator-manager.h"  // myIndicatorsParam.bUseClassIndic
 #include "cairo-dock-class-icon-manager.h"  // gldi_class_icon_new
-#include "cairo-dock-utils.h"  // cairo_dock_launch_command_full
 #include "cairo-dock-application-facility.h"
 
 extern CairoDock *g_pMainDock;
