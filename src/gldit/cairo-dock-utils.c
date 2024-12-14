@@ -218,6 +218,40 @@ gboolean cairo_dock_string_contains (const char *cNames, const gchar *cName, con
 	return FALSE;
 }
 
+gchar *cairo_dock_launch_command_argv_sync_with_stderr (const gchar * const * argv, gboolean bPrintStdErr)
+{
+	gchar *standard_output=NULL, *standard_error=NULL;
+	gint exit_status=0;
+	GError *erreur = NULL;
+	// note: g_spawn_sync expects char** as argv, but does not modify it and casts it to const char * const *
+	// see here: https://gitlab.gnome.org/GNOME/glib/-/blob/main/glib/gspawn-posix.c?ref_type=heads#L233
+	gboolean r = g_spawn_sync (NULL, (gchar**) argv, NULL,
+		G_SPAWN_SEARCH_PATH | G_SPAWN_CLOEXEC_PIPES | (bPrintStdErr ? 0 : G_SPAWN_STDERR_TO_DEV_NULL),
+		NULL, NULL, &standard_output,
+		bPrintStdErr ? &standard_error : NULL,
+		&exit_status, &erreur);
+	if (erreur != NULL || !r)
+	{
+		cd_warning (erreur->message);
+		g_error_free (erreur);
+		g_free (standard_error);
+		g_free (standard_output);
+		return NULL;
+	}
+	if (bPrintStdErr && standard_error != NULL && *standard_error != '\0')
+	{
+		cd_warning (standard_error);
+	}
+	g_free (standard_error);
+	if (standard_output != NULL && *standard_output == '\0')
+	{
+		g_free (standard_output);
+		return NULL;
+	}
+	if (standard_output[strlen (standard_output) - 1] == '\n')
+		standard_output[strlen (standard_output) - 1] ='\0';
+	return standard_output;
+}
 
 gchar *cairo_dock_launch_command_sync_with_stderr (const gchar *cCommand, gboolean bPrintStdErr)
 {
@@ -264,59 +298,85 @@ gboolean cairo_dock_launch_command_printf (const gchar *cCommandFormat, const gc
 	return r;
 }
 
-static gpointer _cairo_dock_launch_threaded (gchar *cCommand)
+static void _child_watch_dummy (GPid pid, gint, gpointer)
 {
-	int r;
-	r = system (cCommand);
-	if (r != 0)
-		cd_warning ("couldn't launch this command (%s)", cCommand);
-	g_free (cCommand);
-	return NULL;
+	g_spawn_close_pid (pid); // note: this is a no-op
 }
 gboolean cairo_dock_launch_command_full (const gchar *cCommand, const gchar *cWorkingDirectory)
 {
 	g_return_val_if_fail (cCommand != NULL, FALSE);
 	cd_debug ("%s (%s , %s)", __func__, cCommand, cWorkingDirectory);
 	
-	gchar *cBGCommand = NULL;
-	if (cCommand[strlen (cCommand)-1] != '&')
-		cBGCommand = g_strconcat (cCommand, " &", NULL);
-	
-	gchar *cCommandFull = NULL;
-	if (cWorkingDirectory != NULL)
-	{
-		cCommandFull = g_strdup_printf ("cd \"%s\" && %s", cWorkingDirectory, cBGCommand ? cBGCommand : cCommand);
-		g_free (cBGCommand);
-		cBGCommand = NULL;
-	}
-	else if (cBGCommand != NULL)
-	{
-		cCommandFull = cBGCommand;
-		cBGCommand = NULL;
-	}
-	
-	if (cCommandFull == NULL)
-		cCommandFull = g_strdup (cCommand);
-
+	gchar **args = NULL;
 	GError *erreur = NULL;
-	#if (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32)
-	GThread* pThread = g_thread_create ((GThreadFunc) _cairo_dock_launch_threaded, cCommandFull, FALSE, &erreur);
-	#else
-	// The name can be useful for discriminating threads in a debugger.
-	// Some systems restrict the length of name to 16 bytes. 
-	gchar *cThreadName = g_strndup (cCommand, 15);
-	GThread* pThread = g_thread_try_new (cThreadName, (GThreadFunc) _cairo_dock_launch_threaded, cCommandFull, &erreur);
-	g_thread_unref (pThread);
-	g_free (cThreadName);
-	#endif
-	if (erreur != NULL)
+	if (!g_shell_parse_argv (cCommand, NULL, &args, &erreur))
 	{
-		cd_warning ("couldn't launch this command (%s : %s)", cCommandFull, erreur->message);
+		cd_warning ("couldn't launch this command (%s : %s)", cCommand, erreur->message);
 		g_error_free (erreur);
-		g_free (cCommandFull);
+		if (args) g_strfreev (args);
 		return FALSE;
 	}
-	return TRUE;
+
+	gboolean r = cairo_dock_launch_command_argv_full ((const gchar * const *)args, cWorkingDirectory, FALSE);
+	g_strfreev (args);
+	return r;
+}
+
+gboolean cairo_dock_launch_command_argv_full (const gchar * const * args, const gchar *cWorkingDirectory, gboolean bGraphicalApp)
+{
+	g_return_val_if_fail (args != NULL && args[0] != NULL, FALSE);
+	GError *erreur = NULL;
+	GPid pid;
+	char **envp = NULL;
+	
+	if (bGraphicalApp)
+	{
+		// this is a hack, and is actually ignored at least on Wayland
+		GAppInfo *info = g_app_info_create_from_commandline(args[0], args[0], G_APP_INFO_CREATE_SUPPORTS_STARTUP_NOTIFICATION, NULL);
+		if (info) {
+			GdkAppLaunchContext *ctx = gdk_display_get_app_launch_context(gdk_display_get_default());
+			char *startup_id = g_app_launch_context_get_startup_notify_id(G_APP_LAUNCH_CONTEXT(ctx), info, NULL);
+			if (startup_id) {
+				envp = g_get_environ();
+				envp = g_environ_setenv(envp, "DESKTOP_STARTUP_ID", startup_id, TRUE);
+				envp = g_environ_setenv(envp, "XDG_ACTIVATION_TOKEN", startup_id, TRUE);
+				g_free (startup_id);
+			}
+			g_object_unref(ctx);
+			g_object_unref (info);
+		}
+	}
+	
+	// note: args are expected as gchar**, but not modified (casted back to const immediately)
+	gboolean ret =  g_spawn_async (cWorkingDirectory, (gchar**)args, envp,
+		G_SPAWN_SEARCH_PATH |
+		// note: posix_spawn (and clone on Linux) will be used if we include the following
+		// two flags, but this requires to later add a child watch and also adds a risk of
+		// fd leakage (although it has not been an issue before with system() as well)
+		G_SPAWN_DO_NOT_REAP_CHILD | G_SPAWN_LEAVE_DESCRIPTORS_OPEN |
+		G_SPAWN_STDOUT_TO_DEV_NULL | G_SPAWN_STDERR_TO_DEV_NULL | G_SPAWN_STDIN_FROM_DEV_NULL,
+		NULL, NULL,
+		&pid, &erreur);
+	if (!ret)
+	{
+		cd_warning ("couldn't launch this command (%s : %s)", args[0], erreur->message);
+		g_error_free (erreur);
+	}
+	else g_child_watch_add (pid, _child_watch_dummy, NULL);
+	if (envp) g_strfreev (envp);
+	return ret;
+}
+
+gboolean cairo_dock_launch_command_single (const gchar *cExec)
+{
+	const gchar * const args[] = {cExec, NULL};
+	return cairo_dock_launch_command_argv (args);
+}
+
+gboolean cairo_dock_launch_command_single_gui (const gchar *cExec)
+{
+	const gchar * const args[] = {cExec, NULL};
+	return cairo_dock_launch_command_argv_full (args, NULL, TRUE);
 }
 
 const gchar * cairo_dock_get_default_terminal (void)
