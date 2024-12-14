@@ -174,7 +174,7 @@ static gboolean _cairo_dock_successful_launch (gpointer data)
 }
 static gboolean _cairo_dock_first_launch_setup (G_GNUC_UNUSED gpointer data)
 {
-	cairo_dock_launch_command (CAIRO_DOCK_SHARE_DATA_DIR"/scripts/initial-setup.sh");
+	cairo_dock_launch_command_single (CAIRO_DOCK_SHARE_DATA_DIR"/scripts/initial-setup.sh");
 	return FALSE;
 }
 static void _cairo_dock_quit (G_GNUC_UNUSED int signal)

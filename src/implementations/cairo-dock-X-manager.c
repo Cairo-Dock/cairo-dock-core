@@ -1059,7 +1059,8 @@ static GldiWindowActor *_pick_window (G_GNUC_UNUSED GtkWindow *pParentWindow)
 	GldiWindowActor *actor = NULL;
 	
 	// let the user grab the window, and get the result.
-	gchar *cProp = cairo_dock_launch_command_sync ("xwininfo");
+	const char * const args[] = {"xwininfo", NULL};
+	gchar *cProp = cairo_dock_launch_command_argv_sync_with_stderr (args, TRUE);
 	
 	// get the corresponding actor
 	// look for the window ID in this chain: xwininfo: Window id: 0xc00009 "name-of-the-window"

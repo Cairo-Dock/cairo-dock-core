@@ -208,20 +208,25 @@ void cairo_dock_play_sound (const gchar *cSoundPath)
 		return;
 	}
 	
-	gchar *cSoundCommand = NULL;
+	const gchar *args[] = {NULL, NULL, NULL, NULL};
 	if (g_file_test ("/usr/bin/paplay", G_FILE_TEST_EXISTS))
-		cSoundCommand = g_strdup_printf("paplay --client-name=cairo-dock \"%s\"", cSoundPath);
-
+	{
+		args[0] = "/usr/bin/paplay";
+		args[1] = "--client-name=cairo-dock";
+		args[2] = cSoundPath;
+	}
 	else if (g_file_test ("/usr/bin/aplay", G_FILE_TEST_EXISTS))
-		cSoundCommand = g_strdup_printf("aplay \"%s\"", cSoundPath);
-
+	{
+		args[0] = "/usr/bin/aplay";
+		args[1] = cSoundPath;
+	}
 	else if (g_file_test ("/usr/bin/play", G_FILE_TEST_EXISTS))
-		cSoundCommand = g_strdup_printf("play \"%s\"", cSoundPath);
+	{
+		args[0] = "/usr/bin/play";
+		args[1] = cSoundPath;
+	}
 	
-	
-	cairo_dock_launch_command (cSoundCommand);
-	
-	g_free (cSoundCommand);
+	if (args[0]) cairo_dock_launch_command_argv (args);
 }
 
 // should be in gnome-integration if needed...
