@@ -35,7 +35,6 @@
 #include "cairo-dock-module-instance-manager.h"  // GldiModuleInstance
 #include "cairo-dock-dock-facility.h"
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-utils.h"  // cairo_dock_launch_command_full
 #include "cairo-dock-class-manager.h"  // gldi_class_startup_notify
 #include "cairo-dock-indicator-manager.h"
 #include "cairo-dock-applications-manager.h"  // GLDI_OBJECT_IS_APPLI_ICON

@@ -17,6 +17,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#define _POSIX_C_SOURCE 200809L // needed for O_CLOEXEC
 #include <stdlib.h>      // atoi
 #include <string.h>      // memset
 #include <sys/stat.h>    // stat
@@ -37,6 +38,7 @@
 #include "cairo-dock-container.h"
 #include "cairo-dock-utils.h"  // cairo_dock_launch_command_sync, cairo_dock_property_is_present_on_root
 #include "cairo-dock-icon-manager.h"  // cairo_dock_free_icon
+#include "cairo-dock-menu.h" // gldi_menu_add_item
 #define _MANAGER_DEF_
 #include "cairo-dock-file-manager.h"
 
@@ -490,18 +492,18 @@ gboolean cairo_dock_copy_file (const gchar *cFilePath, const gchar *cDestPath)
 {
 	gboolean ret = TRUE;
 	// open both files
-	int src_fd = open (cFilePath, O_RDONLY);
+	int src_fd = open (cFilePath, O_RDONLY | O_CLOEXEC);
 	int dest_fd;
 	if (g_file_test (cDestPath, G_FILE_TEST_IS_DIR))
 	{
 		const gchar *cFileName = strrchr(cFilePath, '/');
 		gchar *cFileDest = g_strdup_printf("%s/%s", cDestPath, cFileName ? cFileName : cFilePath);
-		dest_fd = open (cFileDest, O_CREAT | O_WRONLY, S_IRUSR|S_IWUSR | S_IRGRP | S_IROTH);  // mode=644
+		dest_fd = open (cFileDest, O_CREAT | O_WRONLY | O_CLOEXEC, S_IRUSR|S_IWUSR | S_IRGRP | S_IROTH);  // mode=644
 		g_free(cFileDest);
 	}
 	else
 	{
-		dest_fd = open (cDestPath, O_CREAT | O_WRONLY, S_IRUSR|S_IWUSR | S_IRGRP | S_IROTH);  // mode=644
+		dest_fd = open (cDestPath, O_CREAT | O_WRONLY | O_CLOEXEC, S_IRUSR|S_IWUSR | S_IRGRP | S_IROTH);  // mode=644
 	}
 	struct stat stat;
 	// get data size to be copied
@@ -549,6 +551,85 @@ gboolean cairo_dock_copy_file (const gchar *cFilePath, const gchar *cDestPath)
 }
 
 
+struct _submenu_data {
+	GList *data_list; // struct _launch_with_data
+	gchar *cPath;
+	gpointer user_data;
+	CairoDockFMOpenedWithCallback pCallback;
+};
+struct _launch_with_data {
+	GAppInfo *app;
+	struct _submenu_data *data;
+};
+
+static void _free_submenu_data_item (gpointer ptr)
+{
+	struct _launch_with_data *data = (struct _launch_with_data*)ptr;
+	g_object_unref (data->app);
+	g_free (data);
+}
+static void _free_submenu_data (gpointer ptr, GObject*)
+{
+	struct _submenu_data *data = (struct _submenu_data*)ptr;
+	g_list_free_full (data->data_list, _free_submenu_data_item);
+	g_free (data->cPath);
+	g_free (data);
+}
+
+static void _submenu_launch_with (GtkMenuItem*, gpointer ptr)
+{
+	struct _launch_with_data *data = (struct _launch_with_data*)ptr;
+	gchar *cURI = g_filename_to_uri(data->data->cPath, NULL, NULL);
+	if (!cURI) return;
+	
+	GdkAppLaunchContext *context = gdk_display_get_app_launch_context (gdk_display_get_default ());
+	GList *list = g_list_append (NULL, cURI);
+	g_app_info_launch_uris (data->app, list, G_APP_LAUNCH_CONTEXT (context), NULL); // will handle the case of paths as well
+	g_object_unref (context);
+	g_list_free_full (list, g_free);
+	
+	if (data->data->pCallback) data->data->pCallback (data->data->user_data);
+}
+
+gboolean cairo_dock_fm_add_open_with_submenu (GList *pAppList, const gchar *cPath, GtkWidget *pMenu, const gchar *cLabel,
+	const gchar *cImage, CairoDockFMOpenedWithCallback pCallback, gpointer user_data)
+{
+	if (! (pAppList && cPath) ) return FALSE;
+	struct _submenu_data *data = g_new0 (struct _submenu_data, 1);
+	data->cPath = g_strdup (cPath);
+	data->user_data = user_data;
+	data->pCallback = pCallback;
+	
+	GtkWidget *pSubMenu = gldi_menu_add_sub_menu (pMenu, cLabel, cImage);
+	g_object_weak_ref (G_OBJECT (pSubMenu), _free_submenu_data, data);
+	
+	GAppInfo *pAppInfo;
+	GList *a;
+	for (a = pAppList; a != NULL; a = a->next)
+	{
+		pAppInfo = a->data;
+
+		gchar *cIconPath = NULL;
+		GIcon *pIcon = g_app_info_get_icon (pAppInfo);
+		if (pIcon)
+		{
+			gchar *tmp = g_icon_to_string (pIcon);
+			cIconPath = cairo_dock_search_icon_s_path (tmp, cairo_dock_search_icon_size (GTK_ICON_SIZE_MENU));
+			g_free (tmp);
+		}
+
+		struct _launch_with_data *app_data = g_new (struct _launch_with_data, 1);
+		app_data->data = data;
+		app_data->app = g_object_ref (pAppInfo);
+		data->data_list = g_list_prepend (data->data_list, app_data); // save a reference to the app info
+
+		gldi_menu_add_item (pSubMenu, g_app_info_get_name (pAppInfo), cIconPath, G_CALLBACK(_submenu_launch_with), app_data);
+		g_free (cIconPath);
+	}
+	return TRUE;
+}
+
+
   ///////////
  /// PID ///
 ///////////
@@ -556,14 +637,13 @@ gboolean cairo_dock_copy_file (const gchar *cFilePath, const gchar *cDestPath)
 int cairo_dock_fm_get_pid (const gchar *cProcessName)
 {
 	int iPID = -1;
-	gchar *cCommand = g_strdup_printf ("pidof %s", cProcessName);
-	gchar *cPID = cairo_dock_launch_command_sync (cCommand);
+	const char * const args[] = {"pidof", cProcessName, NULL};
+	gchar *cPID = cairo_dock_launch_command_argv_sync_with_stderr (args, TRUE);
 
 	if (cPID != NULL && *cPID != '\0')
 		iPID = atoi (cPID);
 
 	g_free (cPID);
-	g_free (cCommand);
 
 	return iPID;
 }
@@ -663,7 +743,8 @@ static CairoDockDesktopEnv _guess_environment (void)
 		return CAIRO_DOCK_XFCE;
 	#endif
 	
-	gchar *cKWin = cairo_dock_launch_command_sync ("pgrep kwin");
+	const char * const args[] = {"pgrep", "kwin", NULL}; // will also match kwin_wayland, kwin_x11, etc.
+	gchar *cKWin = cairo_dock_launch_command_argv_sync_with_stderr (args, FALSE);
 	if (cKWin != NULL && *cKWin != '\0')
 	{
 		g_free (cKWin);

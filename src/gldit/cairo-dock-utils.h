@@ -56,12 +56,17 @@ gboolean cairo_dock_string_is_address (const gchar *cString);
 gboolean cairo_dock_string_contains (const char *cNames, const gchar *cName, const gchar *separators);
 
 
+gchar *cairo_dock_launch_command_argv_sync_with_stderr (const gchar * const * argv, gboolean bPrintStdErr);
 gchar *cairo_dock_launch_command_sync_with_stderr (const gchar *cCommand, gboolean bPrintStdErr);
 #define cairo_dock_launch_command_sync(cCommand) cairo_dock_launch_command_sync_with_stderr (cCommand, TRUE)
 
 gboolean cairo_dock_launch_command_printf (const gchar *cCommandFormat, const gchar *cWorkingDirectory, ...) G_GNUC_PRINTF (1, 3);
 gboolean cairo_dock_launch_command_full (const gchar *cCommand, const gchar *cWorkingDirectory);
 #define cairo_dock_launch_command(cCommand) cairo_dock_launch_command_full (cCommand, NULL)
+gboolean cairo_dock_launch_command_argv_full (const gchar * const * args, const gchar *cWorkingDirectory, gboolean bGraphicalApp);
+#define cairo_dock_launch_command_argv(argv) cairo_dock_launch_command_argv_full (argv, NULL, FALSE);
+gboolean cairo_dock_launch_command_single (const gchar *cExec);
+gboolean cairo_dock_launch_command_single_gui (const gchar *cExec);
 
 /** Get the command to launch the default terminal
  */

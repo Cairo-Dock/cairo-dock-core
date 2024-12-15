@@ -119,16 +119,13 @@ gchar *_get_default_system_font (void)
 	{
 		if (g_iDesktopEnv == CAIRO_DOCK_GNOME)
 		{
-			s_cFontName = cairo_dock_launch_command_sync ("gconftool-2 -g /desktop/gnome/interface/font_name");  // GTK2
-			if (! s_cFontName)
+			const char * const args[] = {"gsettings", "get", "org.gnome.desktop.interface", "font-name", NULL};
+			s_cFontName = cairo_dock_launch_command_argv_sync_with_stderr (args, FALSE);  // GTK3
+			cd_debug ("s_cFontName: %s", s_cFontName);
+			if (s_cFontName && *s_cFontName == '\'')  // the value may be between quotes... get rid of them!
 			{
-				s_cFontName = cairo_dock_launch_command_sync ("gsettings get org.gnome.desktop.interface font-name");  // GTK3
-				cd_debug ("s_cFontName: %s", s_cFontName);
-				if (s_cFontName && *s_cFontName == '\'')  // the value may be between quotes... get rid of them!
-				{
-					s_cFontName ++;  // s_cFontName is never freeed
-					s_cFontName[strlen(s_cFontName) - 1] = '\0';
-				}
+				s_cFontName ++;  // s_cFontName is never freeed
+				s_cFontName[strlen(s_cFontName) - 1] = '\0';
 			}
 		}
 		if (! s_cFontName)

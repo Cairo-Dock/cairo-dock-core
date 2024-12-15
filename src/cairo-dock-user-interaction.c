@@ -362,7 +362,17 @@ gboolean cairo_dock_notification_drop_data_selection (G_GNUC_UNUSED gpointer pUs
 			if (bIsSpace) g_free (data[i]);
 			else
 			{
-				if (i != j) data[j] = data[i];
+				gchar *tmp3 = NULL;
+				if (data[i][0] == '/')
+				{
+					// convert absolute paths to URI style (if it is not an
+					// absolute path, we cannot do much, just hope that the
+					// app can interpret it as a command line argument)
+					tmp3 = data[i];
+					data[j] = g_strdup_printf ("file://%s", tmp3);
+					g_free (tmp3);
+				}
+				else if (i != j) data[j] = data[i];
 				j++;
 			}
 		}

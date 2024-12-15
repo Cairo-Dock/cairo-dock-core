@@ -30,7 +30,7 @@
 #include "cairo-dock-icon-factory.h"  // pAppli
 #include "cairo-dock-container.h"  // gldi_container_get_gdk_window
 #include "cairo-dock-class-manager.h"
-#include "cairo-dock-utils.h"  // cairo_dock_launch_command_sync
+#include "cairo-dock-utils.h"  // cairo_dock_launch_command_argv_sync_with_stderr
 #include "cairo-dock-X-utilities.h"  // cairo_dock_get_X_display, cairo_dock_change_nb_viewports
 #include "cairo-dock-compiz-integration.h"
 
@@ -221,9 +221,8 @@ static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, 
 		{
 			gchar *cPluginsList = g_strjoinv (",", plugins2);
 			cd_debug ("Compiz Plugins List: %s", cPluginsList);
-			cairo_dock_launch_command_printf ("bash "SHARE_DATA_DIR"/scripts/help_scripts.sh \"compiz_new_replace_list_plugins\" \"%s\"",
-				NULL,
-				cPluginsList);
+			const gchar * const args[] = {SHARE_DATA_DIR"/scripts/help_scripts.sh", "compiz_new_replace_list_plugins", cPluginsList, NULL};
+			cairo_dock_launch_command_argv (args);
 			g_free (cPluginsList);
 		}
 		else
@@ -372,7 +371,8 @@ gboolean cd_is_the_new_compiz (void)
 	if (!s_bHasBeenChecked)
 	{
 		s_bHasBeenChecked = TRUE;
-		gchar *cVersion = cairo_dock_launch_command_sync ("compiz --version");
+		const char * const args[] = {"compiz", "--version", NULL};
+		gchar *cVersion = cairo_dock_launch_command_argv_sync_with_stderr (args, FALSE);
 		if (cVersion != NULL)
 		{
 			gchar *str = strchr (cVersion, ' ');  // "compiz 0.8.6"

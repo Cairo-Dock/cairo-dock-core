@@ -30,7 +30,6 @@
 #include "cairo-dock-struct.h"
 #include "cairo-dock-module-manager.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-utils.h"  // cairo_dock_launch_command_sync
 #include "cairo-dock-animations.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-icon-facility.h"  // gldi_icons_get_any_without_dialog
@@ -49,7 +48,6 @@
 #include "cairo-dock-task.h"
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-desktop-manager.h"
-#include "cairo-dock-launcher-manager.h" // cairo_dock_launch_command_sync
 #include "cairo-dock-separator-manager.h" // GLDI_OBJECT_IS_SEPARATOR_ICON
 #include "cairo-dock-menu.h" // gldi_menu_item_new_full2
 #include "cairo-dock-gui-factory.h"

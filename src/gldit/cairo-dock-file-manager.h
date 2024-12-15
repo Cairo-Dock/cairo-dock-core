@@ -202,7 +202,7 @@ gboolean cairo_dock_fm_move_file (const gchar *cURI, const gchar *cDirectoryURI)
 */
 gboolean cairo_dock_fm_create_file (const gchar *cURI, gboolean bDirectory);
 
-/** Get the list of applications that can open a given file. Returns a list of strings arrays : {name, command, icon}.
+/** Get the list of applications that can open a given file. Returns a list of GAppInfo
 */
 GList *cairo_dock_fm_list_apps_for_file (const gchar *cURI);
 
@@ -280,6 +280,26 @@ gboolean cairo_dock_fm_monitor_pid (const gchar *cProcessName, gboolean bCheckSa
 const gchar *cairo_dock_fm_get_desktop_name (void);
 
 void gldi_register_desktop_environment_manager (void);
+
+typedef void (*CairoDockFMOpenedWithCallback) (gpointer ptr);
+/** Create a submenu for presenting options to open a file and add it to the given menu.
+ * @param pAppList a list with GAppInfo elements to add to the submenu (e.g. the return
+ *        value of cairo_dock_fm_list_apps_for_file ()). Owned by the caller, but apps
+ *        added to the menu will be refed, so can be freed.
+ * @param cPath path of the file to open
+ * @param pMenu menu to add a submenu to
+ * @param cLabel label of the submenu item
+ * @param cImage stock image to use with the label
+ * @param pCallback an optional callback function to call when the app was launched (can be NULL)
+ * @param user_data data to pass to pCallback
+ * @return TRUE if the submenu was successfully created and added to pMenu
+ * 
+ * Note: the created submenu is managed internally and will be freed when the menu is destroyed. If given,
+ * user_data should remain valid while the menu is open. The callback function is only called if the app
+ * is launched, so it is possible that it is never called.
+ */
+gboolean cairo_dock_fm_add_open_with_submenu (GList *pAppList, const gchar *cPath, GtkWidget *pMenu, const gchar *cLabel,
+	const gchar *cImage, CairoDockFMOpenedWithCallback pCallback, gpointer user_data);
 
 G_END_DECLS
 #endif
