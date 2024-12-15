@@ -749,8 +749,17 @@ static void _popup_menu (GtkWidget *menu, const GdkEvent *event)
 			}
 			else
 			{
-				// add an offset -- unfortunately, we can only add an absolute offset, but we do not know our size
-				// by the time we get the size on _menu_realized_cb (), setting an offset does not have an effect
+				/* add an offset -- unfortunately, we can only add an absolute offset, but we
+				 * do not know our size, and by the time we get it in _menu_realized_cb (),
+				 * setting an offset does not have an effect
+				 * see e.g. (links to the latest GTK+3 release when writing this):
+https://gitlab.gnome.org/GNOME/gtk/-/blob/e1d664da630ee32c4068c8ead4101bce94e7e24a/gtk/gtkmenu.c#L5218
+https://gitlab.gnome.org/GNOME/gtk/-/blob/e1d664da630ee32c4068c8ead4101bce94e7e24a/gtk/gtkmenu.c#L5303
+https://gitlab.gnome.org/GNOME/gtk/-/blob/e1d664da630ee32c4068c8ead4101bce94e7e24a/gtk/gtkmenu.c#L5325
+				 * so we just use a dummy size that works in most cases (note: this is only
+				 * used by the "modern" renderer, all others have fAlign == 0.0, 0.5 or 1.0
+				 * which is handled correctly by setting anchors)
+				 */
 				const double dummy_width = 240.0;
 				const double dummy_height = 120.0;
 				if (pContainer->bIsHorizontal)
