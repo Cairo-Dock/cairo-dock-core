@@ -17,9 +17,12 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#define _GNU_SOURCE
 #include <string.h>
 #include <math.h>
 #include <pango/pango.h>
+#include <fcntl.h>
+#include <stdio.h>
 
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw.h"
@@ -442,6 +445,14 @@ cairo_surface_t *cairo_dock_create_surface_from_pixbuf (GdkPixbuf *pixbuf, doubl
 }
 
 
+static cairo_status_t _cairo_read_func (void *ptr, unsigned char *data, unsigned int length)
+{
+	FILE *f = (FILE*)ptr;
+	size_t res = fread (data, 1, length, f);
+	if (res == (size_t)length) return CAIRO_STATUS_SUCCESS;
+	return CAIRO_STATUS_READ_ERROR;
+}
+
 cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, double fMaxScale, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fImageWidth, double *fImageHeight, double *fZoomX, double *fZoomY)
 {
 	//g_print ("%s (%s, %dx%dx%.2f, %d)\n", __func__, cImagePath, iWidthConstraint, iHeightConstraint, fMaxScale, iLoadingModifier);
@@ -449,7 +460,7 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 	GError *erreur = NULL;
 	RsvgDimensionData rsvg_dimension_data;
 	RsvgHandle *rsvg_handle = NULL;
-	cairo_surface_t* surface_ini;
+	cairo_surface_t* surface_ini = NULL;
 	cairo_surface_t* pNewSurface = NULL;
 	cairo_t* pCairoContext = NULL;
 	double fIconWidthSaturationFactor = 1.;
@@ -457,11 +468,12 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 	
 	//\_______________ On cherche a determiner le type de l'image. En effet, les SVG et les PNG sont charges differemment des autres.
 	gboolean bIsSVG = FALSE, bIsPNG = FALSE, bIsXPM = FALSE;
-	FILE *fd = fopen (cImagePath, "r");
-	if (fd != NULL)
+	int fd = open (cImagePath, O_RDONLY | O_CLOEXEC);
+	if (fd >= 0)
 	{
+		FILE *tmpf = fdopen (fd, "r");
 		char buffer[8];
-		if (fgets (buffer, 7, fd) != NULL)
+		if (fgets (buffer, 7, tmpf) != NULL)
 		{
 			if (strncmp (buffer+2, "xml", 3) == 0)
 				bIsSVG = TRUE;
@@ -471,7 +483,7 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 				bIsXPM = TRUE;
 			//cd_debug ("  format : %d;%d;%d", bIsSVG, bIsPNG, bIsXPM);
 		}
-		fclose (fd);
+		fclose (tmpf); // will close fd as well
 	}
 	else
 	{
@@ -534,8 +546,12 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 	}
 	else if (bIsPNG)
 	{
-		surface_ini = cairo_image_surface_create_from_png (cImagePath);  // cree un fond noir :-(
-		if (cairo_surface_status (surface_ini) == CAIRO_STATUS_SUCCESS)
+		int fd = open (cImagePath, O_RDONLY | O_CLOEXEC);
+		FILE *file = (fd >= 0) ? fdopen (fd, "r") : NULL;
+		if (file) surface_ini = cairo_image_surface_create_from_png_stream (
+			_cairo_read_func, (void*)file);
+		if (file) fclose (file); // will close fd as well
+		if (surface_ini && cairo_surface_status (surface_ini) == CAIRO_STATUS_SUCCESS)
 		{
 			int w = cairo_image_surface_get_width (surface_ini);
 			int h = cairo_image_surface_get_height (surface_ini);
@@ -570,11 +586,22 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 			cairo_paint (pCairoContext);
 			cairo_destroy (pCairoContext);
 		}
-		cairo_surface_destroy (surface_ini);
+		if (surface_ini) cairo_surface_destroy (surface_ini);
 	}
 	else  // le code suivant permet de charger tout type d'image, mais en fait c'est un peu idiot d'utiliser des icones n'ayant pas de transparence.
 	{
-		GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file (cImagePath, &erreur);  // semble se baser sur l'extension pour definir le type !
+		// note: g_file_read sets O_CLOEXEC by default, but gdk_pixbuf_new_from_file () does not
+		GFile *file = g_file_new_for_path (cImagePath);
+		GInputStream *istream = G_INPUT_STREAM (g_file_read (file, NULL, &erreur));
+		GdkPixbuf *pixbuf = NULL;
+		if (istream)
+		{
+			// type is detected automatically
+			pixbuf = gdk_pixbuf_new_from_stream (istream, NULL, &erreur);
+			g_object_unref (istream);
+		}
+		g_object_unref (file);
+
 		if (erreur != NULL)
 		{
 			cd_warning (erreur->message);
