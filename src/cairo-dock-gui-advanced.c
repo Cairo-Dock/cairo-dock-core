@@ -930,11 +930,25 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 	
 	// show the module's description
 	gldi_object_unref (GLDI_OBJECT(s_pDialog));
+	s_pDialog = NULL;
+	
+	// if we are running on Wayland and our window is not active, the dialog could get hidden soon
+	// (in on_leave_group_button()), so let's not show it
+	if (gldi_container_is_wayland_backend () && !gtk_window_is_active (GTK_WINDOW (s_pMainWindow)))
+		return FALSE;
 	
 	Icon *pIcon = cairo_dock_get_current_active_icon ();  // most probably the appli-icon representing the config window.
 	if (pIcon == NULL || cairo_dock_get_icon_container(pIcon) == NULL || cairo_dock_icon_is_being_removed (pIcon))
 		pIcon = gldi_icons_get_any_without_dialog ();
 	GldiContainer *pContainer = (pIcon != NULL ? cairo_dock_get_icon_container (pIcon) : NULL);
+	if (pContainer && GLDI_OBJECT_IS_DOCK (pContainer))
+	{
+		// ensure that this is not a subdock (which will likely be hidden)
+		CairoDock *pDock = CAIRO_DOCK (pContainer);
+		while (pDock->iRefCount > 0)
+			pIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pDock);
+		pContainer = CAIRO_CONTAINER (pDock);
+	}
 	
 	CairoDialogAttr attr;
 	memset (&attr, 0, sizeof (CairoDialogAttr));
