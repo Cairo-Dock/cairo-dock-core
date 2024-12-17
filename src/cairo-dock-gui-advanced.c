@@ -930,11 +930,25 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 	
 	// show the module's description
 	gldi_object_unref (GLDI_OBJECT(s_pDialog));
+	s_pDialog = NULL;
+	
+	// if we are running on Wayland and our window is not active, the dialog could get hidden soon
+	// (in on_leave_group_button()), so let's not show it
+	if (gldi_container_is_wayland_backend () && !gtk_window_is_active (GTK_WINDOW (s_pMainWindow)))
+		return FALSE;
 	
 	Icon *pIcon = cairo_dock_get_current_active_icon ();  // most probably the appli-icon representing the config window.
 	if (pIcon == NULL || cairo_dock_get_icon_container(pIcon) == NULL || cairo_dock_icon_is_being_removed (pIcon))
 		pIcon = gldi_icons_get_any_without_dialog ();
 	GldiContainer *pContainer = (pIcon != NULL ? cairo_dock_get_icon_container (pIcon) : NULL);
+	if (pContainer && GLDI_OBJECT_IS_DOCK (pContainer))
+	{
+		// ensure that this is not a subdock (which will likely be hidden)
+		CairoDock *pDock = CAIRO_DOCK (pContainer);
+		while (pDock->iRefCount > 0)
+			pIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pDock);
+		pContainer = CAIRO_CONTAINER (pDock);
+	}
 	
 	CairoDialogAttr attr;
 	memset (&attr, 0, sizeof (CairoDialogAttr));
@@ -984,6 +998,7 @@ static gboolean on_enter_group_button (GtkButton *button, G_GNUC_UNUSED GdkEvent
 static gboolean _check_group_button (G_GNUC_UNUSED gpointer data)
 {
 	GldiWindowActor *pActiveWindow = gldi_windows_get_active ();
+	// this function is only called on X11
 	Window Xid = GDK_WINDOW_XID (gtk_widget_get_window (s_pMainWindow));
 	if (gldi_window_get_id (pActiveWindow) != Xid)  // we're not the active window any more, so the 'leave' event was probably due to an Alt+Tab -> the mouse is really out of the button.
 	{
@@ -1015,18 +1030,25 @@ static gboolean on_leave_group_button (GtkButton *button, GdkEventCrossing *pEve
 	// check that we are really outside of the button (this may be false if the dialog is appearing under the mouse and has not yet its input shape (X lag)).
 	if (pEvent->detail != GDK_NOTIFY_ANCESTOR)  // a LeaveNotify event not within the same window (ie, either an Alt+Tab or the dialog that spawned under the cursor)
 	{
-		GtkAllocation allocation;
-		gtk_widget_get_allocation (GTK_WIDGET (button), &allocation);
-		int x, y;
-		GdkSeat *pSeat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (button)));
-		GdkDevice *pDevice = gdk_seat_get_pointer (pSeat);
-		gdk_window_get_device_position (gtk_widget_get_window (GTK_WIDGET (button)), pDevice, &x, &y, NULL);
-		x -= allocation.x;
-		y -= allocation.y;
-		if (x >= 0 && x < allocation.width && y >= 0 && y < allocation.height)  // we are actually still inside the button, ignore the event, we'll get an 'enter' event as soon as the dialog's input shape is ready.
+		if (gldi_container_is_wayland_backend ())
 		{
-			s_iSidCheckGroupButton = g_timeout_add (1000, _check_group_button, NULL);  // check in a moment if we left the button because of the dialog or because of another window (alt+tab).
-			return FALSE;
+			if (gtk_window_is_active (GTK_WINDOW (s_pMainWindow))) return FALSE;
+		}
+		else
+		{
+			GtkAllocation allocation;
+			gtk_widget_get_allocation (GTK_WIDGET (button), &allocation);
+			int x, y;
+			GdkSeat *pSeat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (button)));
+			GdkDevice *pDevice = gdk_seat_get_pointer (pSeat);
+			gdk_window_get_device_position (gtk_widget_get_window (GTK_WIDGET (button)), pDevice, &x, &y, NULL);
+			x -= allocation.x;
+			y -= allocation.y;
+			if (x >= 0 && x < allocation.width && y >= 0 && y < allocation.height)  // we are actually still inside the button, ignore the event, we'll get an 'enter' event as soon as the dialog's input shape is ready.
+			{
+				s_iSidCheckGroupButton = g_timeout_add (1000, _check_group_button, NULL);  // check in a moment if we left the button because of the dialog or because of another window (alt+tab).
+				return FALSE;
+			}
 		}
 	}
 	

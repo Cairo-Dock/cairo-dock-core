@@ -883,7 +883,7 @@ GtkWidget *gldi_menu_item_new_full2 (const gchar *cLabel, const gchar *cImage, g
 		{
 			int size;
 			gtk_icon_size_lookup (iSize, &size, NULL);
-			GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cImage, size, size, NULL);
+			GdkPixbuf *pixbuf = cairo_dock_load_gdk_pixbuf (cImage, size, size);
 			if (pixbuf)
 			{
 				image = gtk_image_new_from_pixbuf (pixbuf);
