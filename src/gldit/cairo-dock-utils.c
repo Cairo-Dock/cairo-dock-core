@@ -354,7 +354,7 @@ gboolean cairo_dock_launch_command_argv_full (const gchar * const * args, const 
 		// two flags, but this requires to later add a child watch and also adds a risk of
 		// fd leakage (although it has not been an issue before with system() as well)
 		G_SPAWN_DO_NOT_REAP_CHILD | G_SPAWN_LEAVE_DESCRIPTORS_OPEN |
-		G_SPAWN_STDOUT_TO_DEV_NULL | G_SPAWN_STDERR_TO_DEV_NULL | G_SPAWN_STDIN_FROM_DEV_NULL,
+		G_SPAWN_STDOUT_TO_DEV_NULL | G_SPAWN_STDERR_TO_DEV_NULL,
 		NULL, NULL,
 		&pid, &erreur);
 	if (!ret)
