@@ -288,7 +288,7 @@ static GdkPixbuf* _cairo_dock_gui_get_package_state_icon (gint iState)
 		default: 							cType = NULL; break;
 	}
 	gchar *cStateIcon = g_strconcat (GLDI_SHARE_DATA_DIR"/", cType, NULL);
-	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cStateIcon, 24, 24, NULL);
+	GdkPixbuf *pixbuf = cairo_dock_load_gdk_pixbuf (cStateIcon, 24, 24);
 	g_free (cStateIcon);
 	return pixbuf;
 }
@@ -729,7 +729,7 @@ static void _cairo_dock_show_image_preview (GtkFileChooser *pFileChooser, GtkIma
 	gchar *cFileName = gtk_file_chooser_get_preview_filename (pFileChooser);
 	if (cFileName == NULL)
 		return ;
-	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cFileName, 64, 64, NULL);
+	GdkPixbuf *pixbuf = cairo_dock_load_gdk_pixbuf (cFileName, 64, 64);
 	g_free (cFileName);
 	if (pixbuf != NULL)
 	{
@@ -2529,7 +2529,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						//g_print (" + %s\n", cImagePath);
 						if (cImagePath != NULL)
 						{
-							pixbuf = gdk_pixbuf_new_from_file_at_size (cImagePath, iDesiredIconSize, iDesiredIconSize, NULL);
+							pixbuf = cairo_dock_load_gdk_pixbuf (cImagePath, iDesiredIconSize, iDesiredIconSize);
 						}
 						//g_print (" -> %p\n", pixbuf);
 						
@@ -3686,7 +3686,7 @@ GtkWidget *_gtk_image_new_from_file (const gchar *cIcon, int iSize)
 	{
 		iSize = cairo_dock_search_icon_size (iSize);
 		pImage = gtk_image_new ();
-		GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cIcon, iSize, iSize, NULL);
+		GdkPixbuf *pixbuf = cairo_dock_load_gdk_pixbuf (cIcon, iSize, iSize);
 		if (pixbuf != NULL)
 		{
 			gtk_image_set_from_pixbuf (GTK_IMAGE (pImage), pixbuf);

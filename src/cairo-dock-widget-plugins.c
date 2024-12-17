@@ -183,7 +183,7 @@ static gboolean _cairo_dock_add_module_to_modele (gchar *cModuleName, GldiModule
 		//g_print (" + %s\n",  pModule->pVisitCard->cIconFilePath);
 		int iSize = cairo_dock_search_icon_size (GTK_ICON_SIZE_LARGE_TOOLBAR);
 		gchar *cIcon = cairo_dock_search_icon_s_path (pModule->pVisitCard->cIconFilePath, iSize);
-		GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cIcon, iSize, iSize, NULL);
+		GdkPixbuf *pixbuf = cairo_dock_load_gdk_pixbuf (cIcon, iSize, iSize);
 		g_free (cIcon);
 
 		GtkTreeIter iter;

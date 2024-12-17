@@ -891,7 +891,7 @@ static void _show_image_preview (GtkFileChooser *pFileChooser, GtkImage *pPrevie
 	gchar *cFileName = gtk_file_chooser_get_preview_filename (pFileChooser);
 	if (cFileName == NULL)
 		return ;
-	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cFileName, 64, 64, NULL);
+	GdkPixbuf *pixbuf = cairo_dock_load_gdk_pixbuf (cFileName, 64, 64);
 	g_free (cFileName);
 	if (pixbuf != NULL)
 	{
@@ -1784,12 +1784,13 @@ static GtkWidget *_add_new_button_to_hbox (const gchar *gtkStock, const gchar *c
 		if (*gtkStock == '/')
 		{
 			int size = cairo_dock_search_icon_size (GTK_ICON_SIZE_MENU);
-			GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (gtkStock, size, size, NULL);
+			GdkPixbuf *pixbuf = cairo_dock_load_gdk_pixbuf (gtkStock, size, size);
 			pImage = gtk_image_new_from_pixbuf (pixbuf);
 			g_object_unref (pixbuf);
 		}
 		else
 		{
+			//!! TODO: uses GdkPixbuf internally !!
 			pImage = gtk_image_new_from_icon_name (gtkStock, GTK_ICON_SIZE_MENU);
 		}
 		gtk_button_set_image (GTK_BUTTON (pButton), pImage);  // don't unref the image

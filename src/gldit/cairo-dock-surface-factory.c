@@ -445,6 +445,32 @@ cairo_surface_t *cairo_dock_create_surface_from_pixbuf (GdkPixbuf *pixbuf, doubl
 }
 
 
+GdkPixbuf *cairo_dock_load_gdk_pixbuf (const gchar *cImagePath, int iWidth, int iHeight)
+{
+	GError *erreur = NULL;
+	// note: g_file_read sets O_CLOEXEC by default, but gdk_pixbuf_new_from_file () does not
+	GFile *file = g_file_new_for_path (cImagePath);
+	GInputStream *istream = G_INPUT_STREAM (g_file_read (file, NULL, &erreur));
+	GdkPixbuf *pixbuf = NULL;
+	if (istream)
+	{
+		// type is detected automatically
+		if (iWidth >= 0 || iHeight >= 0)
+			pixbuf = gdk_pixbuf_new_from_stream_at_scale (istream, iWidth, iHeight, TRUE, NULL, &erreur);
+		else pixbuf = gdk_pixbuf_new_from_stream (istream, NULL, &erreur);
+		g_object_unref (istream);
+	}
+	g_object_unref (file);
+	
+	if (erreur != NULL)
+	{
+		cd_warning (erreur->message);
+		g_error_free (erreur);
+		return NULL;
+	}
+	return pixbuf;
+}
+
 static cairo_status_t _cairo_read_func (void *ptr, unsigned char *data, unsigned int length)
 {
 	FILE *f = (FILE*)ptr;
@@ -590,24 +616,9 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 	}
 	else  // le code suivant permet de charger tout type d'image, mais en fait c'est un peu idiot d'utiliser des icones n'ayant pas de transparence.
 	{
-		// note: g_file_read sets O_CLOEXEC by default, but gdk_pixbuf_new_from_file () does not
-		GFile *file = g_file_new_for_path (cImagePath);
-		GInputStream *istream = G_INPUT_STREAM (g_file_read (file, NULL, &erreur));
-		GdkPixbuf *pixbuf = NULL;
-		if (istream)
-		{
-			// type is detected automatically
-			pixbuf = gdk_pixbuf_new_from_stream (istream, NULL, &erreur);
-			g_object_unref (istream);
-		}
-		g_object_unref (file);
+		GdkPixbuf *pixbuf = cairo_dock_load_gdk_pixbuf (cImagePath, -1, -1);
+		if (! pixbuf) return NULL; // warning message already printed above
 
-		if (erreur != NULL)
-		{
-			cd_warning (erreur->message);
-			g_error_free (erreur);
-			return NULL;
-		}
 		pNewSurface = cairo_dock_create_surface_from_pixbuf (pixbuf,
 			fMaxScale,
 			iWidthConstraint,

@@ -101,6 +101,16 @@ cairo_surface_t *cairo_dock_create_surface_from_pixbuf (GdkPixbuf *pixbuf, doubl
 cairo_surface_t *cairo_dock_create_blank_surface_full (int iWidth, int iHeight, cairo_t *pSourceContext);
 #define cairo_dock_create_blank_surface(iWidth, iHeight) cairo_dock_create_blank_surface_full (iWidth, iHeight, NULL)
 
+/** Simple helper to read an image into a GdkPixbuf.
+*@param cImagePath complete path to the image.
+*@param iWidth desired width.
+*@param iHeight desired height.
+*@return the image loaded into a GdkPixbuf.
+* 
+* If both iWidth and iHeight are -1, the image is loaded at its natural size, otherwise it's scaled (preserving the aspect ratio).
+*/
+GdkPixbuf *cairo_dock_load_gdk_pixbuf (const gchar *cImagePath, int iWidth, int iHeight);
+
 /** Create a surface from any image.
 *@param cImagePath complete path to the image.
 *@param fMaxScale maximum zoom of the icon.
