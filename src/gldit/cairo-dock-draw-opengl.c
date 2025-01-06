@@ -488,6 +488,7 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 {
 	//g_print ("%s (%d, %x)\n", __func__, pDock->bIsMainDock, g_pVisibleZoneSurface);
 	//\_____________________ on dessine la zone de rappel.
+	_cairo_dock_set_alpha (1.0);
 	if (g_pVisibleZoneBuffer.iTexture != 0)
 	{
 		_cairo_dock_enable_texture ();

@@ -286,14 +286,22 @@ static gboolean on_key_press_dialog (G_GNUC_UNUSED GtkWidget *pWidget,
 	return FALSE;
 }
 
-static gboolean _cairo_dock_dialog_auto_delete (CairoDialog *pDialog)
+static void _cairo_dock_dialog_delete (CairoDialog *pDialog)
 {
 	if (pDialog != NULL)
 	{
 		if (pDialog->action_on_answer != NULL)
 			pDialog->action_on_answer (CAIRO_DIALOG_ESCAPE_KEY, pDialog->pInteractiveWidget, pDialog->pUserData, pDialog);
-		pDialog->iSidTimer = 0;
 		gldi_object_unref (GLDI_OBJECT(pDialog));  // on pourrait eventuellement faire un fondu avant.
+	}
+}
+
+static gboolean _cairo_dock_dialog_auto_delete (CairoDialog *pDialog)
+{
+	if (pDialog != NULL)
+	{
+		pDialog->iSidTimer = 0;
+		_cairo_dock_dialog_delete (pDialog);  // on pourrait eventuellement faire un fondu avant.
 	}
 	return FALSE;
 }
@@ -756,6 +764,8 @@ static void _place_dialog (CairoDialog *pDialog, GldiContainer *pContainer)
 	}
 }
 
+
+static gboolean s_bInRefreshDialogs = FALSE;
 void _refresh_all_dialogs (gboolean bReplace)
 {
 	//g_print ("%s ()\n", __func__);
@@ -766,6 +776,40 @@ void _refresh_all_dialogs (gboolean bReplace)
 
 	if (s_pDialogList == NULL)
 		return ;
+
+	if (gldi_container_use_new_positioning_code ())
+	{
+		// delete any dialog that does not have a parent anymore
+		GSList *next, *to_delete = NULL;
+		GSList dummy;
+		dummy.next = s_pDialogList;
+		ic = &dummy;
+		
+		while (ic && ic->next)
+		{
+			// in this case, the dialog in ic has a visible parent (or is the dummy), we need to check ic->next
+			next = ic->next;
+			pDialog = next->data;
+			pIcon = pDialog->pIcon;
+			pContainer = cairo_dock_get_icon_container (pIcon);
+			if (pContainer && !gldi_container_is_visible (pContainer))
+			{
+				// remove next from the list
+				ic->next = next->next;
+				next->next = to_delete;
+				to_delete = next;
+			}
+			else ic = next;
+		}
+		s_pDialogList = dummy.next; // in case we removed the first element in the list
+		
+		if (to_delete)
+		{
+			s_bInRefreshDialogs = TRUE;
+			g_slist_free_full (to_delete, (GDestroyNotify)_cairo_dock_dialog_delete);
+			s_bInRefreshDialogs = FALSE;
+		}
+	}
 
 	for (ic = s_pDialogList; ic != NULL; ic = ic->next)
 	{
@@ -1258,10 +1302,13 @@ static void reset_object (GldiObject *obj)
 	if (pDialog->pUserData != NULL && pDialog->pFreeUserDataFunc != NULL)
 		pDialog->pFreeUserDataFunc (pDialog->pUserData);
 	
-	// unregister the dialog
-	s_pDialogList = g_slist_remove (s_pDialogList, pDialog);
-	
-	_trigger_replace_all_dialogs ();
+	if (!s_bInRefreshDialogs)
+	{
+		// unregister the dialog (note: if this function is called from refresh_dialogs, it was already removed from the list)
+		s_pDialogList = g_slist_remove (s_pDialogList, pDialog);
+		
+		_trigger_replace_all_dialogs ();
+	}
 }
 
 void gldi_register_dialogs_manager (void)
