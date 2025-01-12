@@ -21,6 +21,9 @@
 #define  __CAIRO_DOCK_UTILS__
 G_BEGIN_DECLS
 
+#include <glib.h>
+#include <gio/gdesktopappinfo.h>
+
 /**
 *@file cairo-dock-utils.h Some helper functions.
 */
@@ -64,7 +67,7 @@ gboolean cairo_dock_launch_command_printf (const gchar *cCommandFormat, const gc
 gboolean cairo_dock_launch_command_full (const gchar *cCommand, const gchar *cWorkingDirectory);
 #define cairo_dock_launch_command(cCommand) cairo_dock_launch_command_full (cCommand, NULL)
 gboolean cairo_dock_launch_command_argv_full (const gchar * const * args, const gchar *cWorkingDirectory, gboolean bGraphicalApp);
-#define cairo_dock_launch_command_argv(argv) cairo_dock_launch_command_argv_full (argv, NULL, FALSE);
+#define cairo_dock_launch_command_argv(argv) cairo_dock_launch_command_argv_full (argv, NULL, FALSE)
 gboolean cairo_dock_launch_command_single (const gchar *cExec);
 gboolean cairo_dock_launch_command_single_gui (const gchar *cExec);
 
@@ -76,11 +79,37 @@ const gchar * cairo_dock_get_default_terminal (void);
  */
 gchar * cairo_dock_get_command_with_right_terminal (const gchar *cCommand);
 
+
+/** Launch an app with optionally a list of URIs provided as the argument.
+ * @param appinfo  app to launch
+ * @param uris  list of const char* with the URIs to open or NULL
+ */
+gboolean cairo_dock_launch_app_info_with_uris (GDesktopAppInfo* appinfo, GList* uris);
+#define cairo_dock_launch_app_info(appinfo) cairo_dock_launch_app_info_with_uris (appinfo, NULL)
+
 /* Like g_strcmp0, but saves a function call.
 */
 #define gldi_strings_differ(s1, s2) (!s1 ? s2 != NULL : !s2 ? s1 != NULL : strcmp(s1, s2) != 0)
 #define cairo_dock_strings_differ gldi_strings_differ
 
+
+/** Simple "backend" for managing processes launched by us. Mainly needed to put
+ * newly launched apps in their own systemd scope / cgroup. */
+struct _GldiChildProcessManagerBackend {
+	/** Handle a newly launched child process, performing any system-specific setup functions.
+	 * This should also eventually call waitpid() or similar to clean up the child process.
+	 *
+	 *@param id  an identifier for the newly launched process, containing only "safe" characters
+	 *           (currently this means only characters valid in systemd unit names: ASCII letters, digits, ":", "-", "_", ".", and "\")
+	 *@param desc  a description suitable to display to the user
+	 *@param pid  process id of the newly launched process; the caller should not use waitpid()
+	 *            or similar facility to avoid race condition
+	 */
+	void (*new_app_launched) (const char *id, const char *desc, GPid pid);
+};
+typedef struct _GldiChildProcessManagerBackend GldiChildProcessManagerBackend;
+
+void gldi_register_process_manager_backend (GldiChildProcessManagerBackend *backend);
 
 #include "gldi-config.h"
 #ifdef HAVE_X11
