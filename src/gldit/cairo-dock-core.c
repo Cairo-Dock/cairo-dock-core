@@ -39,6 +39,7 @@
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-wayland-manager.h"
+#include "cairo-dock-systemd-integration.h"
 #include "cairo-dock-module-manager.h"
 #include "cairo-dock-module-instance-manager.h"
 #include "cairo-dock-packages.h"
@@ -97,6 +98,7 @@ static void _gldi_register_core_managers (void)
 	gldi_register_style_manager ();  // get config before other manager that could use this manager
 	if (!g_bForceWayland) gldi_register_X_manager ();
 	if (!g_bForceX11) gldi_register_wayland_manager ();
+	cairo_dock_systemd_integration_init ();
 }
 
 void gldi_init (GldiRenderingMethod iRendering)
