@@ -558,7 +558,7 @@ struct _submenu_data {
 	CairoDockFMOpenedWithCallback pCallback;
 };
 struct _launch_with_data {
-	GAppInfo *app;
+	GDesktopAppInfo *app;
 	struct _submenu_data *data;
 };
 
@@ -582,10 +582,8 @@ static void _submenu_launch_with (GtkMenuItem*, gpointer ptr)
 	gchar *cURI = g_filename_to_uri(data->data->cPath, NULL, NULL);
 	if (!cURI) return;
 	
-	GdkAppLaunchContext *context = gdk_display_get_app_launch_context (gdk_display_get_default ());
 	GList *list = g_list_append (NULL, cURI);
-	g_app_info_launch_uris (data->app, list, G_APP_LAUNCH_CONTEXT (context), NULL); // will handle the case of paths as well
-	g_object_unref (context);
+	cairo_dock_launch_app_info_with_uris (data->app, list); // will handle the case of paths as well
 	g_list_free_full (list, g_free);
 	
 	if (data->data->pCallback) data->data->pCallback (data->data->user_data);
@@ -603,14 +601,20 @@ gboolean cairo_dock_fm_add_open_with_submenu (GList *pAppList, const gchar *cPat
 	GtkWidget *pSubMenu = gldi_menu_add_sub_menu (pMenu, cLabel, cImage);
 	g_object_weak_ref (G_OBJECT (pSubMenu), _free_submenu_data, data);
 	
-	GAppInfo *pAppInfo;
 	GList *a;
 	for (a = pAppList; a != NULL; a = a->next)
 	{
-		pAppInfo = a->data;
+		GAppInfo *app_info = a->data;
+		GDesktopAppInfo *desktop_app = G_DESKTOP_APP_INFO (app_info);
+		if (!desktop_app)
+		{
+			// should not happen, GDesktopAppInfo is the only implementation
+			cd_warning ("Unknown GAppInfo type!");
+			continue;
+		}
 
 		gchar *cIconPath = NULL;
-		GIcon *pIcon = g_app_info_get_icon (pAppInfo);
+		GIcon *pIcon = g_app_info_get_icon (app_info);
 		if (pIcon)
 		{
 			gchar *tmp = g_icon_to_string (pIcon);
@@ -620,10 +624,10 @@ gboolean cairo_dock_fm_add_open_with_submenu (GList *pAppList, const gchar *cPat
 
 		struct _launch_with_data *app_data = g_new (struct _launch_with_data, 1);
 		app_data->data = data;
-		app_data->app = g_object_ref (pAppInfo);
+		app_data->app = g_object_ref (desktop_app);
 		data->data_list = g_list_prepend (data->data_list, app_data); // save a reference to the app info
 
-		gldi_menu_add_item (pSubMenu, g_app_info_get_name (pAppInfo), cIconPath, G_CALLBACK(_submenu_launch_with), app_data);
+		gldi_menu_add_item (pSubMenu, g_app_info_get_name (app_info), cIconPath, G_CALLBACK(_submenu_launch_with), app_data);
 		g_free (cIconPath);
 	}
 	return TRUE;

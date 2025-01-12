@@ -45,6 +45,7 @@
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-animations.h"  // CairoDockHidingEffect
+#include "cairo-dock-utils.h"  // cairo_dock_launch_app_info
 #include "cairo-dock-icon-facility.h"
 
 extern gchar *g_cCurrentLaunchersPath;
@@ -732,12 +733,7 @@ gboolean gldi_icon_launch_command (Icon *pIcon)
 	if (app)
 	{
 		cd_debug ("launching app from desktop file info: %s", pIcon->cClass);
-		// GdkAppLaunchContext will automatically use startup notify / xdg-activation
-		GdkAppLaunchContext *context = gdk_display_get_app_launch_context (gdk_display_get_default ());
-		gboolean ret = g_app_info_launch (G_APP_INFO (app), NULL, G_APP_LAUNCH_CONTEXT(context), NULL);
-		g_object_unref (context); // will be kept by GIO if necessary
-		return ret;
-		//!! TODO: use the "launched" and / or "launch-failed" signal to end our startup animation
+		return cairo_dock_launch_app_info (app);;
 	}
 	cd_warning ("cannot launch icon with no app associated to it!");
 	return FALSE;

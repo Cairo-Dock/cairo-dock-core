@@ -415,17 +415,13 @@ gboolean cairo_dock_notification_drop_data_selection (G_GNUC_UNUSED gpointer pUs
 		GDesktopAppInfo *app = icon->pClassApp ? icon->pClassApp : icon->pCustomLauncher;
 		if (app)
 		{
-			// GdkAppLaunchContext will automatically use startup notify / xdg-activation,
-			// allowing e.g. the app to raise itself if necessary
 			GList *list = NULL;
 			gchar **tmp;
-			GdkAppLaunchContext *context = gdk_display_get_app_launch_context (gdk_display_get_default ());
 			// we always treat the parameters as URIs, this will work for apps that expect URIs (most cases)
 			// and GIO will anyway try to convert to files (and potentially mess things up) for apps that only expect files
 			for (tmp = data; *tmp; ++tmp) list = g_list_append (list, *tmp);
-			g_app_info_launch_uris (G_APP_INFO (app), list, G_APP_LAUNCH_CONTEXT (context), NULL);
+			cairo_dock_launch_app_info_with_uris (app, list);
 			g_list_free (list);
-			g_object_unref (context); // will be kept by GIO if necessary (and we don't care about the "launched" signal in this case)
 			ret = GLDI_NOTIFICATION_INTERCEPT;
 			*bHandled = TRUE;
 		}

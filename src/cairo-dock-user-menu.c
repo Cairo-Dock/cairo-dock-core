@@ -1500,6 +1500,7 @@ static void _cairo_dock_launch_class_action (G_GNUC_UNUSED GtkMenuItem *pMenuIte
 	// GdkAppLaunchContext will automatically use startup notify / xdg-activation,
 	// allowing e.g. the app to raise itself if necessary
 	GdkAppLaunchContext *context = gdk_display_get_app_launch_context (gdk_display_get_default ());
+	//!! TODO: port this to _launch_as_manager () case (no equivalent API currently)
 	g_desktop_app_info_launch_action (pAction->app, pAction->action, G_APP_LAUNCH_CONTEXT (context));
 	g_object_unref (context); // will be kept by GIO if necessary (and we don't care about the "launched" signal in this case)
 }
