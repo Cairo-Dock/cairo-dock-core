@@ -63,11 +63,23 @@ gchar *cairo_dock_launch_command_argv_sync_with_stderr (const gchar * const * ar
 gchar *cairo_dock_launch_command_sync_with_stderr (const gchar *cCommand, gboolean bPrintStdErr);
 #define cairo_dock_launch_command_sync(cCommand) cairo_dock_launch_command_sync_with_stderr (cCommand, TRUE)
 
-gboolean cairo_dock_launch_command_printf (const gchar *cCommandFormat, const gchar *cWorkingDirectory, ...) G_GNUC_PRINTF (1, 3);
-gboolean cairo_dock_launch_command_full (const gchar *cCommand, const gchar *cWorkingDirectory);
-#define cairo_dock_launch_command(cCommand) cairo_dock_launch_command_full (cCommand, NULL)
-gboolean cairo_dock_launch_command_argv_full (const gchar * const * args, const gchar *cWorkingDirectory, gboolean bGraphicalApp);
-#define cairo_dock_launch_command_argv(argv) cairo_dock_launch_command_argv_full (argv, NULL, FALSE)
+
+/** Flags given to cairo_dock_launch_command_argv_full() */
+typedef enum {
+	GLDI_LAUNCH_DEFAULT = 0,
+	/// This is a GUI app, use GdkAppLaunchContext to create an activation token for it
+	GLDI_LAUNCH_GUI = 1<<0,
+	/// This is a potentially long-lived app, try to put it in a separate process accounting
+	/// group with the session manager. Currently, this means putting the app in a separate
+	/// slice if running with systemd. This has the effect that e.g. resource use is accounted
+	/// separately, and the app is not automatically killed if cairo-dock exits.
+	GLDI_LAUNCH_SLICE = 1<<1
+} GldiLaunchFlags;
+
+gboolean cairo_dock_launch_command_full (const gchar *cCommand, const gchar *cWorkingDirectory, GldiLaunchFlags flags);
+#define cairo_dock_launch_command(cCommand) cairo_dock_launch_command_full (cCommand, NULL, GLDI_LAUNCH_DEFAULT)
+gboolean cairo_dock_launch_command_argv_full (const gchar * const * args, const gchar *cWorkingDirectory, GldiLaunchFlags flags);
+#define cairo_dock_launch_command_argv(argv) cairo_dock_launch_command_argv_full (argv, NULL, GLDI_LAUNCH_DEFAULT)
 gboolean cairo_dock_launch_command_single (const gchar *cExec);
 gboolean cairo_dock_launch_command_single_gui (const gchar *cExec);
 

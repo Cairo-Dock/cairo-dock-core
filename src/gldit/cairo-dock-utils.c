@@ -304,7 +304,7 @@ static void _child_watch_dummy (GPid pid, gint, gpointer)
 {
 	g_spawn_close_pid (pid); // note: this is a no-op
 }
-gboolean cairo_dock_launch_command_full (const gchar *cCommand, const gchar *cWorkingDirectory)
+gboolean cairo_dock_launch_command_full (const gchar *cCommand, const gchar *cWorkingDirectory, GldiLaunchFlags flags)
 {
 	g_return_val_if_fail (cCommand != NULL, FALSE);
 	cd_debug ("%s (%s , %s)", __func__, cCommand, cWorkingDirectory);
@@ -319,19 +319,19 @@ gboolean cairo_dock_launch_command_full (const gchar *cCommand, const gchar *cWo
 		return FALSE;
 	}
 
-	gboolean r = cairo_dock_launch_command_argv_full ((const gchar * const *)args, cWorkingDirectory, FALSE);
+	gboolean r = cairo_dock_launch_command_argv_full ((const gchar * const *)args, cWorkingDirectory, flags);
 	g_strfreev (args);
 	return r;
 }
 
-gboolean cairo_dock_launch_command_argv_full (const gchar * const * args, const gchar *cWorkingDirectory, gboolean bGraphicalApp)
+gboolean cairo_dock_launch_command_argv_full (const gchar * const * args, const gchar *cWorkingDirectory, GldiLaunchFlags flags)
 {
 	g_return_val_if_fail (args != NULL && args[0] != NULL, FALSE);
 	GError *erreur = NULL;
 	GPid pid;
 	char **envp = NULL;
 	
-	if (bGraphicalApp)
+	if (flags & GLDI_LAUNCH_GUI)
 	{
 		// this is a hack, and is actually ignored at least on Wayland
 		GAppInfo *info = g_app_info_create_from_commandline(args[0], args[0], G_APP_INFO_CREATE_SUPPORTS_STARTUP_NOTIFICATION, NULL);
@@ -364,7 +364,22 @@ gboolean cairo_dock_launch_command_argv_full (const gchar * const * args, const 
 		cd_warning ("couldn't launch this command (%s : %s)", args[0], erreur->message);
 		g_error_free (erreur);
 	}
-	else g_child_watch_add (pid, _child_watch_dummy, NULL);
+	else
+	{
+		if ((flags & GLDI_LAUNCH_SLICE) && s_backend.new_app_launched)
+		{
+			char *tmp = g_uri_escape_string (args[0], NULL, FALSE);
+			if (tmp)
+			{
+				// note: the above does not remove '~' which is also not allowed
+				char *tmp2;
+				for (tmp2 = tmp; *tmp2; ++tmp2) if (*tmp2 == '~') *tmp2 = '-';
+			}
+			s_backend.new_app_launched (tmp ? tmp : "unknown", args[0], pid);
+			g_free (tmp);
+		}
+		else g_child_watch_add (pid, _child_watch_dummy, NULL);
+	}
 	if (envp) g_strfreev (envp);
 	return ret;
 }
@@ -378,7 +393,7 @@ gboolean cairo_dock_launch_command_single (const gchar *cExec)
 gboolean cairo_dock_launch_command_single_gui (const gchar *cExec)
 {
 	const gchar * const args[] = {cExec, NULL};
-	return cairo_dock_launch_command_argv_full (args, NULL, TRUE);
+	return cairo_dock_launch_command_argv_full (args, NULL, GLDI_LAUNCH_GUI | GLDI_LAUNCH_SLICE);
 }
 
 const gchar * cairo_dock_get_default_terminal (void)
