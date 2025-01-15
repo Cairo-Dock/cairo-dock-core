@@ -287,19 +287,6 @@ gchar *cairo_dock_launch_command_sync_with_stderr (const gchar *cCommand, gboole
 	return standard_output;
 }
 
-gboolean cairo_dock_launch_command_printf (const gchar *cCommandFormat, const gchar *cWorkingDirectory, ...)
-{
-	va_list args;
-	va_start (args, cWorkingDirectory);
-	gchar *cCommand = g_strdup_vprintf (cCommandFormat, args);
-	va_end (args);
-	
-	gboolean r = cairo_dock_launch_command_full (cCommand, cWorkingDirectory);
-	g_free (cCommand);
-	
-	return r;
-}
-
 static void _child_watch_dummy (GPid pid, gint, gpointer)
 {
 	g_spawn_close_pid (pid); // note: this is a no-op
