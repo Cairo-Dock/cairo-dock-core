@@ -276,7 +276,7 @@ gboolean cairo_dock_notification_middle_click_icon (G_GNUC_UNUSED gpointer pUser
 				}
 			break;
 			case CAIRO_APPLI_ACTION_LAUNCH_NEW:  // launch new
-				if (icon->pClassApp || icon->pCustomLauncher)
+				if (icon->pAppInfo || icon->pCustomLauncher)
 				{
 					gldi_object_notify (pDock, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // emulate a shift+left click
 				}
@@ -297,7 +297,7 @@ gboolean cairo_dock_notification_middle_click_icon (G_GNUC_UNUSED gpointer pUser
 				_cairo_dock_hide_show_in_class_subdock (icon);
 			break;
 			case CAIRO_APPLI_ACTION_LAUNCH_NEW:  // launch new
-				if (icon->pClassApp || icon->pCustomLauncher)
+				if (icon->pAppInfo || icon->pCustomLauncher)
 				{
 					gldi_object_notify (CAIRO_CONTAINER (pDock), NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // emulate a shift+left click
 				}
@@ -412,7 +412,9 @@ gboolean cairo_dock_notification_drop_data_selection (G_GNUC_UNUSED gpointer pUs
 			|| CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon)
 			|| CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (icon)))
 	{
-		GDesktopAppInfo *app = icon->pClassApp ? icon->pClassApp : icon->pCustomLauncher;
+		GDesktopAppInfo *app = NULL;
+		if (icon->pAppInfo && icon->pAppInfo->app) app = icon->pAppInfo->app;
+		else app = icon->pCustomLauncher; // TODO: prefer pCustomLauncher if available?
 		if (app)
 		{
 			GList *list = NULL;
