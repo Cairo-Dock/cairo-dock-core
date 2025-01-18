@@ -23,12 +23,28 @@
 
 #include <gio/gdesktopappinfo.h>
 #include "cairo-dock-struct.h"
+#include "cairo-dock-object.h"
 G_BEGIN_DECLS
 
 /**
 *@file cairo-dock-class-manager.h This class handles the managment of the applications classes.
 * Classes are used to group the windows of a same program, and to bind a launcher to the launched application.
 */
+
+
+/** Helper object for launching desktop file actions.
+ * This is needed since g_desktop_app_info_launch_action() does not provide
+ * all of the functionality of g_desktop_app_info_launch_uris_as_manager
+ */
+struct _GldiAppInfo {
+	GldiObject object;
+	GDesktopAppInfo *app; // the desktop app info -- this object holds one reference to it
+	const gchar* const *actions; // additional actions supported by this app (belongs to app, no need to free)
+	gchar ***action_args; // parsed Exec key to launch actions
+};
+
+void gldi_app_info_launch_action (GldiAppInfo *app, const gchar *cAction);
+
 
 /*
 * Initialise le gestionnaire de classes. Ne fait rien la 2eme fois.
@@ -174,6 +190,8 @@ GDesktopAppInfo *cairo_dock_get_class_app_info (const gchar *cClass);
 
 const CairoDockImageBuffer *cairo_dock_get_class_image_buffer (const gchar *cClass);
 
+const gchar* const *cairo_dock_get_class_actions (const gchar *cClass);
+
 
 gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMClass);
 
@@ -227,12 +245,13 @@ gchar *cairo_dock_register_class (const gchar *cSearchTerm);
 void cairo_dock_set_data_from_class (const gchar *cClass, Icon *pIcon);
 
 
-
 void gldi_class_startup_notify (Icon *pIcon);
 
 void gldi_class_startup_notify_end (const gchar *cClass);
 
 gboolean gldi_class_is_starting (const gchar *cClass);
+
+void gldi_register_class_manager (void);
 
 G_END_DECLS
 #endif
