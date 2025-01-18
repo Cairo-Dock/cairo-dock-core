@@ -329,10 +329,10 @@ static gboolean _on_window_class_changed (G_GNUC_UNUSED gpointer data, GldiWindo
 	
 	// set the new class
 	g_free (icon->cClass);
-	if (icon->pClassApp)
+	if (icon->pAppInfo)
 	{
-		g_object_unref (icon->pClassApp);
-		icon->pClassApp = NULL;
+		gldi_object_unref (GLDI_OBJECT (icon->pAppInfo));
+		icon->pAppInfo = NULL;
 	}
 	icon->cClass = g_strdup (actor->cClass);
 

@@ -729,11 +729,12 @@ gboolean gldi_icon_launch_command (Icon *pIcon)
 	// notify startup
 	gldi_class_startup_notify (pIcon);
 
-	GDesktopAppInfo *app = pIcon->pCustomLauncher ? pIcon->pCustomLauncher : pIcon->pClassApp;
+	GDesktopAppInfo *app = pIcon->pCustomLauncher;
+	if (!app && pIcon->pAppInfo) app = pIcon->pAppInfo->app;
 	if (app)
 	{
 		cd_debug ("launching app from desktop file info: %s", pIcon->cClass);
-		return cairo_dock_launch_app_info (app);;
+		return cairo_dock_launch_app_info (app);
 	}
 	cd_warning ("cannot launch icon with no app associated to it!");
 	return FALSE;

@@ -177,7 +177,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	GKeyFile *pKeyFile = pAttributes->pKeyFile;
 	gboolean bNeedUpdate = _get_launcher_params (icon, pKeyFile);
 	
-	if ( !(icon->pClassApp || icon->pCustomLauncher))  // no command could be found for this launcher -> mark it as invalid
+	if ( !(icon->pAppInfo || icon->pCustomLauncher))  // no command could be found for this launcher -> mark it as invalid
 		icon->reserved[0] = (gpointer)-1; // we use this as a way to tell the UserIcon manager that the icon is invalid (should add a new flag, but that would break ABI)
 	
 	//\____________ Make it an inhibator for its class.
@@ -218,10 +218,10 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, GKeyFile 
 		g_object_unref (icon->pCustomLauncher);
 		icon->pCustomLauncher = NULL;
 	}
-	if (icon->pClassApp)
+	if (icon->pAppInfo)
 	{
-		g_object_unref (icon->pClassApp);
-		icon->pClassApp = NULL;
+		gldi_object_unref (GLDI_OBJECT (icon->pAppInfo));
+		icon->pAppInfo = NULL;
 	}
 	
 	//\__________________ get parameters
