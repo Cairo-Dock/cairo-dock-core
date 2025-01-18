@@ -71,6 +71,7 @@ struct _CairoDockClassAppli {
 	GList *pAppliOfClass;
 	gboolean bSearchedAttributes;
 	/// Class of the app as reported by the WM / compositor without parsing or any changes to it
+	/// or alternatively, the custom class set for our launchers
 	gchar *cStartupWMClass;
 	gchar *cIcon;
 	gchar *cName;
@@ -1956,7 +1957,7 @@ static gchar *_cairo_dock_register_class_full (const gchar *cDesktopFile, const 
 	if (cWmClass)
 	{
 		pClassAppli = _cairo_dock_lookup_class_appli (cWmClass);
-		if (pClassAppli)
+		if (pClassAppli && pClassAppli->app)
 		{
 			if (pResult) *pResult = pClassAppli;
 			return g_strdup (cWmClass);
@@ -1971,8 +1972,12 @@ static gchar *_cairo_dock_register_class_full (const gchar *cDesktopFile, const 
 	{
 		if (cClass != NULL)  // make a class anyway to store the few info we have.
 		{
-			pClassAppli = g_new0 (CairoDockClassAppli, 1);
-			g_hash_table_insert (s_hClassTable, g_strdup (cClass), pClassAppli);
+			if (!pClassAppli)
+			{
+				pClassAppli = g_new0 (CairoDockClassAppli, 1);
+				g_hash_table_insert (s_hClassTable, g_strdup (cClass), pClassAppli);
+			}
+			else g_hash_table_insert (s_hAltClass, g_strdup (cClass), pClassAppli);
 
 			if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)
 				pClassAppli->cStartupWMClass = g_strdup (cWmClass);
@@ -1985,7 +1990,7 @@ static gchar *_cairo_dock_register_class_full (const gchar *cDesktopFile, const 
 		cd_debug ("couldn't find the desktop file %s", cDesktopFile?cDesktopFile:cClass);
 		return cClass;  /// can be NULL
 	}
-
+	
 	//\__________________ open it. -- TODO: use g_app_info_get_id () instead?
 	const gchar *cDesktopFilePath = g_desktop_app_info_get_filename (app);
 	cd_debug ("+ parsing class desktop file %s...", cDesktopFilePath);
@@ -1996,16 +2001,20 @@ static gchar *_cairo_dock_register_class_full (const gchar *cDesktopFile, const 
 	if (cStartupWMClass && *cStartupWMClass == '\0')
 		cStartupWMClass = NULL;
 
-	/* We have three potential sources for the "class" of an application:
+	/* We have four potential sources for the "class" of an application:
 	 * (1) cClassName -- the app-id / class reported for an open app -> cClass variable here
 	 * 		(this is already parsed by gldi_window_parse_class () as opposed to the
-	 * 		 cWmClass variable which is the "raw" value reported by the WM)
+	 * 		 cWmClass variable which is the "raw" value reported by the WM
+	 * 		 or the StartupWMClass key read from our own config file)
 	 * (2) the basename of the desktop file from cDesktopFilePath
 	 * 		always available if we are here (either from cDesktopFile
 	 * 		or matched above)
 	 * (3) the StartupWMClass or Exec key from the desktop file -- note:
 	 * 		this is not necessarily unique, multiple desktop files can
 	 * 		have the same key or command
+	 * (4) the StartupWMClass key in a launcher's .desktop file -> this
+	 * 		is given here as the cWmClass variable if bUseWmClass == TRUE
+	 * 		and cClassName == NULL => cClass == NULL
 	 * Obviously, if we are loading a launcher, (1) is not available.
 	 * Note: all of these will be lowercase ((1) and (3) converted when
 	 * parsing, (2) converted below).
@@ -2069,7 +2078,7 @@ static gchar *_cairo_dock_register_class_full (const gchar *cDesktopFile, const 
 		 * Note: here cDesktopFileID != NULL, while cClass can be NULL.
 		 * If cClass != NULL, it was searched before and not found.
 		 * pDesktopIDAppli can be non-NULL if this app was found before; in this
-		 * case, it will have bSearchedAttributed == TRUE
+		 * case, it will have bSearchedAttributed == TRUE.
 		 */
 		
 		if (pDesktopIDAppli)
@@ -2124,8 +2133,13 @@ static gchar *_cairo_dock_register_class_full (const gchar *cDesktopFile, const 
 	// (note: this is always the class we get from the WM and NOT the
 	// StartupWMClass in the .desktop file as that might
 	// not match what we have in reality)
-	if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)
+	if (cWmClass != NULL &&
+			(pClassAppli->cStartupWMClass == NULL || // no class was stored before
+			cDesktopFile != NULL)) // or, we are reading a launcher and there was a custom StartupWMClass set
+	{
+		g_free (pClassAppli->cStartupWMClass);
 		pClassAppli->cStartupWMClass = g_strdup (cWmClass);
+	}
 
 	//\__________________ if we already searched and found the attributes beforehand, quit.
 	if (pClassAppli->bSearchedAttributes)

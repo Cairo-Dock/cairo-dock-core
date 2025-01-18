@@ -264,7 +264,6 @@ static void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED pwhandle *handle,
 static void _gldi_toplevel_done_cb ( void *data, G_GNUC_UNUSED pwhandle *handle)
 {
 	GldiWaylandWindowActor* wactor = (GldiWaylandWindowActor*)data;
-	wactor->init_done = TRUE;
 	gldi_wayland_wm_done (wactor);
 }
 

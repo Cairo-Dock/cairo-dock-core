@@ -172,7 +172,7 @@ void gldi_wayland_wm_activated (GldiWaylandWindowActor *wactor, gboolean activat
 	{
 		s_pMaybeActiveWindow = (GldiWindowActor*)wactor;
 		wactor->unfocused_pending = FALSE;
-		if (s_activated_callback) s_activated_callback(wactor, s_activated_callback_data);
+		if (wactor->init_done && s_activated_callback) s_activated_callback (wactor, s_activated_callback_data);
 	}
 	else
 	{
@@ -291,6 +291,9 @@ void gldi_wayland_wm_done (GldiWaylandWindowActor *wactor)
 		// Set that we are already potentially processing a notification for this actor.
 		s_pCurrent = wactor;
 		wactor->in_queue = FALSE;
+		
+		// mark that we received all initial info about this window
+		wactor->init_done = TRUE;
 		
 		GldiWindowActor* actor = (GldiWindowActor*)wactor;
 		gchar* cOldClass = NULL;

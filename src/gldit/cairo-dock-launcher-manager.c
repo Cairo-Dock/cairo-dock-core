@@ -264,7 +264,11 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, GKeyFile 
 	}
 	if (myTaskbarParam.bMixLauncherAppli && cNowClass != NULL && (cClass == NULL || strcmp (cNowClass, cClass) != 0))  // la classe a change, on inhibe la nouvelle.
 		cairo_dock_inhibite_class (cNowClass, icon);
-
+	
+	//\_____________ do the same with the WmClass if it was / is set
+	const gchar *cNewWmClass = cairo_dock_get_class_wm_class (cClass);
+	if (cNewWmClass) cairo_dock_inhibite_class (cNewWmClass, icon);
+	
 	//\_____________ redraw dock.
 	cairo_dock_redraw_icon (icon);
 	
