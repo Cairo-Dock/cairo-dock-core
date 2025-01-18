@@ -86,10 +86,6 @@ gboolean cairo_dock_launch_command_single_gui (const gchar *cExec);
 /** Get the command to launch the default terminal
  */
 const gchar * cairo_dock_get_default_terminal (void);
-/** Get the command to launch another one from a terminal
- * @param cCommand command to launch from a terminal
- */
-gchar * cairo_dock_get_command_with_right_terminal (const gchar *cCommand);
 
 
 /** Launch an app with optionally a list of URIs provided as the argument.
