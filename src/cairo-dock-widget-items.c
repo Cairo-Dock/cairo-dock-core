@@ -745,7 +745,6 @@ ItemsWidget *cairo_dock_items_widget_new (GtkWindow *pMainWindow)
 	pItemsWidget->pTreeView = gtk_tree_view_new_with_model (model);
 	g_object_unref (model);
 	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (pItemsWidget->pTreeView), FALSE);
-	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (pItemsWidget->pTreeView), TRUE);
 	gtk_tree_view_set_reorderable (GTK_TREE_VIEW (pItemsWidget->pTreeView), TRUE);  // enables drag and drop of rows -> row-inserted and row-deleted signals
 	g_signal_connect (G_OBJECT (pItemsWidget->pTreeView),
 		"button-release-event",  // on release, so that the clicked line is already selected
