@@ -423,6 +423,5 @@ rm -rf "$CURRENT_WORKING_DIR"
 
 echo ""
 echo "The theme has been packaged. It is available in ${SAVE_LOCATION} dir."
-sleep 3
 
 exit 0
