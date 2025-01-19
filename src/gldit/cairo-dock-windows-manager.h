@@ -87,6 +87,7 @@ struct _GldiWindowManagerBackend {
 	const gchar *name; // name of the current backend
 	void (*move_to_viewport_abs) (GldiWindowActor *actor, int iNumDesktop, int iViewportX, int iViewportY); // like move_to_nth_desktop, but use absolute viewport coordinates
 	gpointer flags; // GldiWMBackendFlags, cast to pointer
+	void (*get_menu_address) (GldiWindowActor *actor, char **service_name, char **object_path);
 	} ;
 
 /// Definition of a window actor.
@@ -184,6 +185,15 @@ gboolean gldi_window_is_on_desktop (GldiWindowActor *pAppli, int iNumDesktop, in
 void gldi_window_move_to_current_desktop (GldiWindowActor *pAppli);
 
 guint gldi_window_get_id (GldiWindowActor *pAppli);
+
+/** Get the object path at which this window's app might export its global menus if supported by the backend.
+ *@param actor the window whose menu is requested
+ *@param service_name return location for the dbus service name
+ *@param object_path return location for the object path
+ * Note: the returned values in service_name and object_path point to strings owned by this window
+ * actor instance and should not be modified or freed by the caller.
+ */
+void gldi_window_get_menu_address (GldiWindowActor *actor, char **service_name, char **object_path);
 
 GldiWindowActor *gldi_window_pick (GtkWindow *pParentWindow);
 
