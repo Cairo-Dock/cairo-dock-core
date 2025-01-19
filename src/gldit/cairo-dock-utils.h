@@ -21,6 +21,9 @@
 #define  __CAIRO_DOCK_UTILS__
 G_BEGIN_DECLS
 
+#include <glib.h>
+#include <gio/gdesktopappinfo.h>
+
 /**
 *@file cairo-dock-utils.h Some helper functions.
 */
@@ -60,27 +63,61 @@ gchar *cairo_dock_launch_command_argv_sync_with_stderr (const gchar * const * ar
 gchar *cairo_dock_launch_command_sync_with_stderr (const gchar *cCommand, gboolean bPrintStdErr);
 #define cairo_dock_launch_command_sync(cCommand) cairo_dock_launch_command_sync_with_stderr (cCommand, TRUE)
 
-gboolean cairo_dock_launch_command_printf (const gchar *cCommandFormat, const gchar *cWorkingDirectory, ...) G_GNUC_PRINTF (1, 3);
-gboolean cairo_dock_launch_command_full (const gchar *cCommand, const gchar *cWorkingDirectory);
-#define cairo_dock_launch_command(cCommand) cairo_dock_launch_command_full (cCommand, NULL)
-gboolean cairo_dock_launch_command_argv_full (const gchar * const * args, const gchar *cWorkingDirectory, gboolean bGraphicalApp);
-#define cairo_dock_launch_command_argv(argv) cairo_dock_launch_command_argv_full (argv, NULL, FALSE);
+
+/** Flags given to cairo_dock_launch_command_argv_full() */
+typedef enum {
+	GLDI_LAUNCH_DEFAULT = 0,
+	/// This is a GUI app, use GdkAppLaunchContext to create an activation token for it
+	GLDI_LAUNCH_GUI = 1<<0,
+	/// This is a potentially long-lived app, try to put it in a separate process accounting
+	/// group with the session manager. Currently, this means putting the app in a separate
+	/// slice if running with systemd. This has the effect that e.g. resource use is accounted
+	/// separately, and the app is not automatically killed if cairo-dock exits.
+	GLDI_LAUNCH_SLICE = 1<<1
+} GldiLaunchFlags;
+
+gboolean cairo_dock_launch_command_full (const gchar *cCommand, const gchar *cWorkingDirectory, GldiLaunchFlags flags);
+#define cairo_dock_launch_command(cCommand) cairo_dock_launch_command_full (cCommand, NULL, GLDI_LAUNCH_DEFAULT)
+gboolean cairo_dock_launch_command_argv_full (const gchar * const * args, const gchar *cWorkingDirectory, GldiLaunchFlags flags);
+#define cairo_dock_launch_command_argv(argv) cairo_dock_launch_command_argv_full (argv, NULL, GLDI_LAUNCH_DEFAULT)
 gboolean cairo_dock_launch_command_single (const gchar *cExec);
 gboolean cairo_dock_launch_command_single_gui (const gchar *cExec);
 
 /** Get the command to launch the default terminal
  */
 const gchar * cairo_dock_get_default_terminal (void);
-/** Get the command to launch another one from a terminal
- * @param cCommand command to launch from a terminal
+
+
+/** Launch an app with optionally a list of URIs provided as the argument.
+ * @param appinfo  app to launch
+ * @param uris  list of const char* with the URIs to open or NULL
  */
-gchar * cairo_dock_get_command_with_right_terminal (const gchar *cCommand);
+gboolean cairo_dock_launch_app_info_with_uris (GDesktopAppInfo* appinfo, GList* uris);
+#define cairo_dock_launch_app_info(appinfo) cairo_dock_launch_app_info_with_uris (appinfo, NULL)
 
 /* Like g_strcmp0, but saves a function call.
 */
 #define gldi_strings_differ(s1, s2) (!s1 ? s2 != NULL : !s2 ? s1 != NULL : strcmp(s1, s2) != 0)
 #define cairo_dock_strings_differ gldi_strings_differ
 
+
+/** Simple "backend" for managing processes launched by us. Mainly needed to put
+ * newly launched apps in their own systemd scope / cgroup. */
+struct _GldiChildProcessManagerBackend {
+	/** Handle a newly launched child process, performing any system-specific setup functions.
+	 * This should also eventually call waitpid() or similar to clean up the child process.
+	 *
+	 *@param id  an identifier for the newly launched process, containing only "safe" characters
+	 *           (currently this means only characters valid in systemd unit names: ASCII letters, digits, ":", "-", "_", ".", and "\")
+	 *@param desc  a description suitable to display to the user
+	 *@param pid  process id of the newly launched process; the caller should not use waitpid()
+	 *            or similar facility to avoid race condition
+	 */
+	void (*new_app_launched) (const char *id, const char *desc, GPid pid);
+};
+typedef struct _GldiChildProcessManagerBackend GldiChildProcessManagerBackend;
+
+void gldi_register_process_manager_backend (GldiChildProcessManagerBackend *backend);
 
 #include "gldi-config.h"
 #ifdef HAVE_X11

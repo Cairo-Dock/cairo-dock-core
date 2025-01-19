@@ -276,7 +276,7 @@ gboolean cairo_dock_notification_middle_click_icon (G_GNUC_UNUSED gpointer pUser
 				}
 			break;
 			case CAIRO_APPLI_ACTION_LAUNCH_NEW:  // launch new
-				if (icon->pClassApp || icon->pCustomLauncher)
+				if (icon->pAppInfo || icon->pCustomLauncher)
 				{
 					gldi_object_notify (pDock, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // emulate a shift+left click
 				}
@@ -297,7 +297,7 @@ gboolean cairo_dock_notification_middle_click_icon (G_GNUC_UNUSED gpointer pUser
 				_cairo_dock_hide_show_in_class_subdock (icon);
 			break;
 			case CAIRO_APPLI_ACTION_LAUNCH_NEW:  // launch new
-				if (icon->pClassApp || icon->pCustomLauncher)
+				if (icon->pAppInfo || icon->pCustomLauncher)
 				{
 					gldi_object_notify (CAIRO_CONTAINER (pDock), NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // emulate a shift+left click
 				}
@@ -412,20 +412,18 @@ gboolean cairo_dock_notification_drop_data_selection (G_GNUC_UNUSED gpointer pUs
 			|| CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon)
 			|| CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (icon)))
 	{
-		GDesktopAppInfo *app = icon->pClassApp ? icon->pClassApp : icon->pCustomLauncher;
+		GDesktopAppInfo *app = NULL;
+		if (icon->pAppInfo && icon->pAppInfo->app) app = icon->pAppInfo->app;
+		else app = icon->pCustomLauncher; // TODO: prefer pCustomLauncher if available?
 		if (app)
 		{
-			// GdkAppLaunchContext will automatically use startup notify / xdg-activation,
-			// allowing e.g. the app to raise itself if necessary
 			GList *list = NULL;
 			gchar **tmp;
-			GdkAppLaunchContext *context = gdk_display_get_app_launch_context (gdk_display_get_default ());
 			// we always treat the parameters as URIs, this will work for apps that expect URIs (most cases)
 			// and GIO will anyway try to convert to files (and potentially mess things up) for apps that only expect files
 			for (tmp = data; *tmp; ++tmp) list = g_list_append (list, *tmp);
-			g_app_info_launch_uris (G_APP_INFO (app), list, G_APP_LAUNCH_CONTEXT (context), NULL);
+			cairo_dock_launch_app_info_with_uris (app, list);
 			g_list_free (list);
-			g_object_unref (context); // will be kept by GIO if necessary (and we don't care about the "launched" signal in this case)
 			ret = GLDI_NOTIFICATION_INTERCEPT;
 			*bHandled = TRUE;
 		}

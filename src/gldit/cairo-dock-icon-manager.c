@@ -1022,7 +1022,7 @@ static void reset_object (GldiObject *obj)
 	g_free (icon->cQuickInfo);
 	///g_free (icon->cLastAttentionDemand);
 	g_free (icon->pHiddenBgColor);
-	if (icon->pClassApp) g_object_unref (icon->pClassApp);
+	if (icon->pAppInfo) gldi_object_unref (GLDI_OBJECT (icon->pAppInfo));
 	if (icon->pCustomLauncher) g_object_unref (icon->pCustomLauncher);
 	
 	cairo_dock_unload_image_buffer (&icon->image);

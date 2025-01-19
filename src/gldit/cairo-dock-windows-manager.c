@@ -294,6 +294,12 @@ guint gldi_window_get_id (GldiWindowActor *actor)
 	return 0;
 }
 
+void gldi_window_get_menu_address (GldiWindowActor *actor, char **service_name, char **object_path)
+{
+	if (actor && s_backend.get_menu_address)
+		s_backend.get_menu_address (actor, service_name, object_path);
+}
+
 GldiWindowActor *gldi_window_pick (GtkWindow *pParentWindow)
 {
 	if (s_backend.pick_window)

@@ -119,7 +119,7 @@ struct _Icon {
 	gchar *cInitialName; // original name replaced by e.g. the actual app title matched to a launcher
 	// GAppInfo(s) that are used to launch the app corresponding to this icon (if it is a launcher or appli)
 	// These are only set on creation and do not change during the lifetime of the icon.
-	GDesktopAppInfo *pClassApp; // GAppInfo corresponding to the .desktop file installed on the system
+	GldiAppInfo *pAppInfo; // app info from a .desktop file installed on the system
 	GDesktopAppInfo *pCustomLauncher; // GAppInfo with custom launch command (if set)
 	
 	// Appli.

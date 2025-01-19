@@ -57,7 +57,7 @@
 extern CairoDock *g_pMainDock;
 extern CairoDockDesktopEnv g_iDesktopEnv;
 
-
+static GldiObjectManager myAppInfoObjectMgr;
 
 /// Definition of a Class of application.
 struct _CairoDockClassAppli {
@@ -80,7 +80,7 @@ struct _CairoDockClassAppli {
 	guint iSidOpeningTimeout;  // timeout to stop the launching, if not stopped by the application before
 	gboolean bIsLaunching;  // flag to mark a class as being launched
 	gboolean bHasStartupNotify;  // TRUE if the application sends a "remove" event when its launch is complete (not used yet)
-	GDesktopAppInfo *app; // desktop file opened by us
+	GldiAppInfo *app; // contains the desktop file opened by us
 };
 
 typedef struct _CairoDockClassAppli CairoDockClassAppli;
@@ -90,7 +90,7 @@ static GHashTable *s_hClassTable = NULL;
 static GHashTable *s_hAltClass = NULL; // we store alternative class / app-ids here
 
 
-static void cairo_dock_free_class_appli (CairoDockClassAppli *pClassAppli)
+static void _cairo_dock_free_class_appli (CairoDockClassAppli *pClassAppli)
 {
 	g_list_free (pClassAppli->pIconsOfClass);
 	g_list_free (pClassAppli->pAppliOfClass);
@@ -99,7 +99,7 @@ static void cairo_dock_free_class_appli (CairoDockClassAppli *pClassAppli)
 	g_free (pClassAppli->cStartupWMClass);
 	if (pClassAppli->iSidOpeningTimeout != 0)
 		g_source_remove (pClassAppli->iSidOpeningTimeout);
-	if (pClassAppli->app) g_object_unref (pClassAppli->app);
+	if (pClassAppli->app) gldi_object_unref (GLDI_OBJECT (pClassAppli->app));
 	g_free (pClassAppli);
 }
 
@@ -129,6 +129,104 @@ static gboolean _on_window_activated (G_GNUC_UNUSED gpointer data, GldiWindowAct
 
 	return GLDI_NOTIFICATION_LET_PASS;
 }
+
+static void _init_appinfo (GldiObject *obj, gpointer attr)
+{
+	GldiAppInfo *info = (GldiAppInfo*)obj;
+	info->app = (GDesktopAppInfo*)attr;
+	g_object_ref (info->app);
+	
+	//\__________________ check for the additional actions supported by this app
+	info->actions = g_desktop_app_info_list_actions (info->app);
+	if (info->actions)
+	{
+		// potentially parse the command lines to launch this app if not DBus activated
+		// (these are needed since g_desktop_app_info_launch_action() is limited in not returning the PID)
+		if (! g_desktop_app_info_get_boolean (info->app, "DBusActivatable"))
+		{
+			const char *cDesktopFilePath = g_desktop_app_info_get_filename (info->app);
+			GKeyFile *keyfile = g_key_file_new ();
+			GError *err = NULL;
+			if (!g_key_file_load_from_file (keyfile, cDesktopFilePath, G_KEY_FILE_NONE, &err))
+			{
+				cd_warning ("cannot read extra actions from desktop file: %s (%s)\n", cDesktopFilePath, err->message);
+				g_error_free (err);
+				info->actions = NULL;
+			}
+			else
+			{
+				unsigned int i, n_actions = g_strv_length ((gchar**)info->actions);
+				info->action_args = g_new0 (gchar**, n_actions + 1);
+				
+				for (i = 0; i < n_actions; i++)
+				{
+					gchar *group = g_strdup_printf ("Desktop Action %s", info->actions[i]);
+					gchar *exec  = g_key_file_get_string (keyfile, group, "Exec", &err);
+					g_free (group);
+					if (!exec)
+					{
+						cd_warning ("cannot read extra action \"%s\" from desktop file: %s (%s)\n",
+							info->actions[i], cDesktopFilePath, err->message);
+						g_error_free (err);
+						info->actions = NULL;
+						break;
+					}
+					
+					int args_len;
+					gboolean res = g_shell_parse_argv (exec, &args_len, info->action_args + i, &err);
+					g_free (exec);
+					if (!res)
+					{
+						cd_warning ("cannot read extra action \"%s\" from desktop file: %s (%s)\n",
+							info->actions[i], cDesktopFilePath, err->message);
+						g_error_free (err);
+						info->actions = NULL;
+						break;
+					}
+					
+					// remove all substitutions
+					int j = 0, k = 0;
+					gchar **tmp = info->action_args[i];
+					for (; j < args_len; j++)
+					{
+						if (tmp[j] && tmp[j][0] == '%' && tmp[j][1] && tmp[j][1] != '%')
+						{
+							// delete this arg
+							g_free (tmp[j]);
+						}
+						else
+						{
+							if (j != k) tmp[k] = tmp[j];
+							k++;
+						}
+					}
+					if (!k)
+					{
+						// no valid argument
+						cd_warning ("cannot read extra action \"%s\" from desktop file: %s (empty or invalid command)\n",
+							info->actions[i], cDesktopFilePath);
+						info->actions = NULL;
+						break;
+					}
+					for (; k < args_len; k++) tmp[k] = NULL;
+				}
+			}
+		}
+	}
+}
+
+static void _reset_appinfo (GldiObject *obj)
+{
+	GldiAppInfo *info = (GldiAppInfo*)obj;
+	g_object_unref (info->app);
+	if (info->action_args)
+	{
+		gchar ***tmp = info->action_args;
+		for (; *tmp; ++tmp) g_strfreev (*tmp);
+		g_free (info->action_args);
+	}
+}
+
 void cairo_dock_initialize_class_manager (void)
 {
 	gldi_desktop_file_db_init ();
@@ -136,7 +234,7 @@ void cairo_dock_initialize_class_manager (void)
 		s_hClassTable = g_hash_table_new_full (g_str_hash,
 			g_str_equal,
 			g_free,
-			(GDestroyNotify) cairo_dock_free_class_appli);
+			(GDestroyNotify) _cairo_dock_free_class_appli);
 	if (s_hAltClass == NULL)
 		s_hAltClass = g_hash_table_new_full (g_str_hash,
 			g_str_equal,
@@ -152,7 +250,6 @@ void cairo_dock_initialize_class_manager (void)
 		(GldiNotificationFunc) _on_window_activated,
 		GLDI_RUN_AFTER, NULL);  // some applications don't open a new window, but rather take the focus; 
 }
-
 
 const GList *cairo_dock_list_existing_appli_with_class (const gchar *cClass)
 {
@@ -241,8 +338,9 @@ gboolean cairo_dock_add_appli_icon_to_class (Icon *pIcon)
 		if (!pClassAppli) return FALSE; // should not happen
 	}
 
-	if (pIcon->pClassApp) g_object_unref (pIcon->pClassApp);
-	pIcon->pClassApp = g_object_ref (pClassAppli->app); // should be not null
+	if (pIcon->pAppInfo) gldi_object_unref (GLDI_OBJECT (pIcon->pAppInfo));
+	pIcon->pAppInfo = pClassAppli->app; // should be not null
+	gldi_object_ref (GLDI_OBJECT (pIcon->pAppInfo));
 	//!! TODO: handle pCustomLauncher here? (or in applications-facility?)
 	//!! this is needed for shift + click and similar to use the correct command if 
 	//!! multiple icons are added (if only one, the launcher icon will take over)
@@ -1537,8 +1635,8 @@ const gchar *cairo_dock_get_class_desktop_file (const gchar *cClass)
 {
 	g_return_val_if_fail (cClass != NULL, NULL);
 	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
-	return (pClassAppli && pClassAppli->app) ?
-		g_desktop_app_info_get_filename (pClassAppli->app) : NULL;
+	return (pClassAppli && pClassAppli->app && pClassAppli->app->app) ?
+		g_desktop_app_info_get_filename (pClassAppli->app->app) : NULL;
 }
 
 const gchar *cairo_dock_get_class_icon (const gchar *cClass)
@@ -1577,7 +1675,39 @@ GDesktopAppInfo *cairo_dock_get_class_app_info (const gchar *cClass)
 {
 	g_return_val_if_fail (cClass != NULL, NULL);
 	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
-	return pClassAppli ? pClassAppli->app : NULL;
+	return (pClassAppli && pClassAppli->app) ? pClassAppli->app->app : NULL;
+}
+
+const gchar* const *cairo_dock_get_class_actions (const gchar *cClass)
+{
+	g_return_val_if_fail (cClass != NULL, NULL);
+	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
+	return (pClassAppli && pClassAppli->app) ? pClassAppli->app->actions : NULL;
+}
+
+void gldi_app_info_launch_action (GldiAppInfo *app, const gchar *cAction)
+{
+	g_return_if_fail (app && app->actions && cAction);
+	if (app->action_args)
+	{
+		// find the action and launch ourselves
+		unsigned int i;
+		for (i = 0; app->actions[i] && app->action_args[i]; i++)
+		{
+			if (!strcmp (app->actions[i], cAction))
+			{
+				cairo_dock_launch_command_argv_full ((const gchar * const*)app->action_args[i], NULL, GLDI_LAUNCH_GUI | GLDI_LAUNCH_SLICE);
+				break;
+			}
+		}
+	}
+	else
+	{
+		// this app supports DBus activation, use it directly
+		GdkAppLaunchContext *context = gdk_display_get_app_launch_context (gdk_display_get_default ());
+		g_desktop_app_info_launch_action (app->app, cAction, G_APP_LAUNCH_CONTEXT (context));
+		g_object_unref (context);
+	}
 }
 
 const CairoDockImageBuffer *cairo_dock_get_class_image_buffer (const gchar *cClass)
@@ -2100,8 +2230,7 @@ static gchar *_cairo_dock_register_class_full (const gchar *cDesktopFile, const 
 			}
 			// need to create a new class
 			pClassAppli = g_new0 (CairoDockClassAppli, 1);
-			g_object_ref (app); // will call g_object_unref() below
-			pClassAppli->app = app;
+			pClassAppli->app = (GldiAppInfo*) gldi_object_new (&myAppInfoObjectMgr, app); // will ref app
 			g_hash_table_insert (s_hClassTable, g_strdup (cClass), pClassAppli);
 			if (cDesktopFileID) g_hash_table_insert (s_hAltClass, cDesktopFileID, pClassAppli);
 		}
@@ -2160,7 +2289,7 @@ static gchar *_cairo_dock_register_class_full (const gchar *cDesktopFile, const 
 		if (str && (strcmp (str+1, "png") == 0 || strcmp (str+1, "svg") == 0 || strcmp (str+1, "xpm") == 0))
 			*str = '\0';
 	}
-
+	
 	cd_debug (" -> class '%s'", cClass);
 	return cClass;
 }
@@ -2197,13 +2326,18 @@ void cairo_dock_set_data_from_class (const gchar *cClass, Icon *pIcon)
 	if (pIcon->cFileName == NULL)
 		pIcon->cFileName = g_strdup (pClassAppli->cIcon);
 	
-	if (pIcon->pClassApp)
+	if (pIcon->pAppInfo)
 	{
 		// should not happen, this function is only called for newly created icons
 		cd_warning ("app corresponding to this icon was already set!");
-		g_object_unref (pIcon->pClassApp);
+		gldi_object_unref (GLDI_OBJECT (pIcon->pAppInfo));
 	}
-	pIcon->pClassApp = pClassAppli->app ? g_object_ref (pClassAppli->app) : NULL;
+	if (pClassAppli->app)
+	{
+		pIcon->pAppInfo = pClassAppli->app;
+		gldi_object_ref (GLDI_OBJECT (pIcon->pAppInfo));
+	}
+	else pIcon->pAppInfo = NULL;
 }
 
 
@@ -2278,3 +2412,18 @@ gboolean gldi_class_is_starting (const gchar *cClass)
 	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
 	return (pClassAppli != NULL && pClassAppli->iSidOpeningTimeout != 0);
 }
+
+
+void gldi_register_class_manager (void)
+{
+	// Object Manager
+	memset (&myAppInfoObjectMgr, 0, sizeof (GldiObjectManager));
+	myAppInfoObjectMgr.cName          = "AppInfo";
+	myAppInfoObjectMgr.iObjectSize    = sizeof (GldiAppInfo);
+	// interface
+	myAppInfoObjectMgr.init_object    = _init_appinfo;
+	myAppInfoObjectMgr.reset_object   = _reset_appinfo;
+	// signals
+	gldi_object_install_notifications (GLDI_OBJECT (&myAppInfoObjectMgr), NB_NOTIFICATIONS_OBJECT);
+}
+

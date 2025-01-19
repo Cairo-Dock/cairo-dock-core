@@ -317,24 +317,27 @@ gboolean cairo_dock_package_current_theme (const gchar *cThemeName, const gchar 
 	gboolean bScriptFound = g_file_test (cPackageBuilderPath, G_FILE_TEST_EXISTS);
 	if (bScriptFound)
 	{
-		int r;
-		gchar *cCommand = g_strdup_printf ("%s '%s' '%s'",
-			cPackageBuilderPath, cNewThemeName, cDirPath);
-		gchar *cFullCommand = cairo_dock_get_command_with_right_terminal (cCommand);
-		r = system (cFullCommand); // we need to wait...
-		if (r != 0)
+		// note: not const as g_spawn_sync() expects gchar** argument, but will not modify it
+		gchar* args[] = {(gchar*)cPackageBuilderPath, cNewThemeName, (gchar*)cDirPath, NULL};
+		GError *err = NULL;
+		gint wait_status;
+		bSuccess = g_spawn_sync (NULL, args, NULL, G_SPAWN_LEAVE_DESCRIPTORS_OPEN |
+			G_SPAWN_STDOUT_TO_DEV_NULL | G_SPAWN_STDERR_TO_DEV_NULL,
+			NULL, NULL, NULL, NULL, &wait_status, &err);
+		if (!bSuccess)
 		{
-			cd_warning ("Not able to launch this command: %s, retry without external terminal", cFullCommand);
-			r = system (cCommand); // relaunch it without the terminal and wait
-			if (r != 0)
-				cd_warning ("Not able to launch this command: %s", cCommand);
-			else
-				bSuccess = TRUE;
+			cd_warning ("Not able to launch %s (%s)", cPackageBuilderPath, err->message);
+			g_error_free (err);
 		}
 		else
-			bSuccess = TRUE;
-		g_free (cCommand);
-		g_free (cFullCommand);
+		{
+			bSuccess = g_spawn_check_wait_status (wait_status, &err);
+			if (!bSuccess)
+			{
+				cd_warning ("Error running %s: %s", cPackageBuilderPath, err->message);
+				g_error_free (err);
+			}
+		}
 	}
 	else
 		cd_warning ("the package builder script was not found !");

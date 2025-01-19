@@ -413,6 +413,7 @@ typedef struct _CairoDialogDecorator CairoDialogDecorator;
 
 typedef struct _IconInterface IconInterface;
 typedef struct _Icon Icon;
+typedef struct _GldiAppInfo GldiAppInfo;
 typedef struct _GldiContainer GldiContainer;
 typedef struct _GldiContainerInterface GldiContainerInterface;
 typedef struct _CairoDock CairoDock;

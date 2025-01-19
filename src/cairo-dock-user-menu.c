@@ -874,7 +874,7 @@ static void _cairo_dock_launch_new (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpoint
 {
 	struct _MenuParams *params = (struct _MenuParams*) data;
 	Icon *icon = params->pIcon;
-	if (icon->pClassApp || icon->pCustomLauncher)
+	if (icon->pAppInfo || icon->pCustomLauncher)
 	{
 		gldi_object_notify (params->pContainer, NOTIFICATION_CLICK_ICON, icon,
 			params->pContainer, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
@@ -1176,7 +1176,7 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
 		{
 			gboolean bSensitive = FALSE;
 			if ( (CAIRO_DOCK_IS_APPLI (icon) || CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pIcon))
-				&& (icon->pClassApp || icon->pCustomLauncher))
+				&& (icon->pAppInfo || icon->pCustomLauncher))
 			{
 				_add_entry_in_menu (_("Launch a new (Shift+clic)"), GLDI_ICON_NAME_ADD, _cairo_dock_launch_new, pItemSubMenu, params);
 				bSensitive = TRUE;
@@ -1191,7 +1191,7 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
 		else
 		{
 			if ( (CAIRO_DOCK_IS_APPLI (icon) || CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pIcon))
-					&& (icon->pClassApp || icon->pCustomLauncher))
+					&& (icon->pAppInfo || icon->pCustomLauncher))
 				_add_entry_in_menu (_("Launch a new (Shift+clic)"), GLDI_ICON_NAME_ADD, _cairo_dock_launch_new, pItemSubMenu, params);
 			
 			if ((CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)
@@ -1477,7 +1477,7 @@ static void _add_desktops_entry (GtkWidget *pMenu, gboolean bAll, struct _MenuPa
 
 
 struct _AppAction {
-	GDesktopAppInfo *app;
+	GldiAppInfo *app;
 	const gchar *action;
 	gchar *action_name;
 };
@@ -1488,6 +1488,7 @@ static void _menu_item_destroyed (gpointer data, GObject*)
 	{
 		struct _AppAction *pAction = (struct _AppAction*)data;
 		if (pAction->action_name) g_free (pAction->action_name);
+		if (pAction->app) gldi_object_unref (GLDI_OBJECT (pAction->app));
 		g_free (pAction);
 	}
 }
@@ -1497,11 +1498,7 @@ static void _cairo_dock_launch_class_action (G_GNUC_UNUSED GtkMenuItem *pMenuIte
 	if (!data) return;
 	struct _AppAction *pAction = (struct _AppAction*)data;
 	
-	// GdkAppLaunchContext will automatically use startup notify / xdg-activation,
-	// allowing e.g. the app to raise itself if necessary
-	GdkAppLaunchContext *context = gdk_display_get_app_launch_context (gdk_display_get_default ());
-	g_desktop_app_info_launch_action (pAction->app, pAction->action, G_APP_LAUNCH_CONTEXT (context));
-	g_object_unref (context); // will be kept by GIO if necessary (and we don't care about the "launched" signal in this case)
+	gldi_app_info_launch_action (pAction->app, pAction->action);
 }
 
 static void _cairo_dock_show_class (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpointer *data)
@@ -1860,33 +1857,30 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 	//\_________________________ class actions.
 	if (icon && icon->cClass != NULL && ! icon->bIgnoreQuicklist)
 	{
-		GDesktopAppInfo *app = icon->pClassApp;
-		if (app != NULL)
+		GldiAppInfo *app = icon->pAppInfo;
+		if (app && app->actions)
 		{
-			const gchar* const* actions = g_desktop_app_info_list_actions (app);
-			if (actions && *actions)
+			if (bAddSeparator)
 			{
-				if (bAddSeparator)
-				{
-					pMenuItem = gtk_separator_menu_item_new ();
-					gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
-				}
-				bAddSeparator = TRUE;
-				for (; *actions; ++actions)
-				{
-					struct _AppAction *pAction = g_new0 (struct _AppAction, 1);
-					pAction->app = app;
-					pAction->action = *actions;
-					pAction->action_name = g_desktop_app_info_get_action_name (app, *actions);
-					
-					// note: app is guaranteed to live as long as icon (it holds a ref to it)
-					// and our menu is destroyed with the icon, so we can use the strings here directly
-					pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (pAction->action_name,
-						NULL,
-						G_CALLBACK (_cairo_dock_launch_class_action),
-						menu, (gpointer)pAction);
-					g_object_weak_ref (G_OBJECT (pMenuItem), _menu_item_destroyed, (gpointer)pAction);
-				}
+				pMenuItem = gtk_separator_menu_item_new ();
+				gtk_menu_shell_append (GTK_MENU_SHELL (menu), pMenuItem);
+			}
+			bAddSeparator = TRUE;
+			
+			const gchar* const *actions = app->actions;
+			for (; *actions; ++actions)
+			{
+				struct _AppAction *pAction = g_new0 (struct _AppAction, 1);
+				gldi_object_ref (GLDI_OBJECT (app));
+				pAction->app = app;
+				pAction->action = *actions;
+				pAction->action_name = g_desktop_app_info_get_action_name (app->app, *actions);
+				
+				pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (pAction->action_name,
+					NULL,
+					G_CALLBACK (_cairo_dock_launch_class_action),
+					menu, (gpointer)pAction);
+				g_object_weak_ref (G_OBJECT (pMenuItem), _menu_item_destroyed, (gpointer)pAction);
 			}
 		}
 	}

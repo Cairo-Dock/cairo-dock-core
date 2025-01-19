@@ -91,8 +91,11 @@ static void init_object (GldiObject *obj, gpointer attr)
 	
 	const gchar *cClassName = cairo_dock_get_class_name(pSameClassIcon->cClass);
 	pIcon->cName = g_strdup (cClassName ? cClassName : pSameClassIcon->cClass);
-	if (pSameClassIcon->pClassApp)
-		pIcon->pClassApp = g_object_ref (pSameClassIcon->pClassApp);
+	if (pSameClassIcon->pAppInfo)
+	{
+		pIcon->pAppInfo = pSameClassIcon->pAppInfo;
+		gldi_object_ref (GLDI_OBJECT (pIcon->pAppInfo));
+	}
 	if (pSameClassIcon->pCustomLauncher)
 		pIcon->pCustomLauncher = g_object_ref (pSameClassIcon->pCustomLauncher);
 	pIcon->cClass = g_strdup (pSameClassIcon->cClass);

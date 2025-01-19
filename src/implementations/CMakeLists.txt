@@ -12,6 +12,7 @@ SET(impl_SRCS
 	cairo-dock-gnome-shell-integration.c cairo-dock-gnome-shell-integration.h
 	cairo-dock-cinnamon-integration.c    cairo-dock-cinnamon-integration.h
 	cairo-dock-wayfire-integration.c     cairo-dock-wayfire-integration.h
+	cairo-dock-systemd-integration.c     cairo-dock-systemd-integration.h
 	cairo-dock-X-manager.c               cairo-dock-X-manager.h
 	cairo-dock-X-utilities.c             cairo-dock-X-utilities.h
 	cairo-dock-glx.c                     cairo-dock-glx.h

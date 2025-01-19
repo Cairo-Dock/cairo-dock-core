@@ -8,11 +8,14 @@ Copyright: 2007-2014 Fabrice Rey <fabounet@glx-dock.org>
 License: GPL-3+
 
 Files:  src/cairo-dock.c
+ src/cairo-dock-user-interaction.c
+ src/cairo-dock-user-menu.c
  src/gldit/cairo-dock-animations.c
+ src/gldit/cairo-dock-applet-canvas.h
  src/gldit/cairo-dock-application-facility.?
  src/gldit/cairo-dock-applications-manager.?
  src/gldit/cairo-dock-class-icon-manager.c
- src/gldit/cairo-dock-class-manager.c
+ src/gldit/cairo-dock-class-manager.?
  src/gldit/cairo-dock-container.?
  src/gldit/cairo-dock-core.c
  src/gldit/cairo-dock-desktop-manager.c
@@ -22,37 +25,49 @@ Files:  src/cairo-dock.c
  src/gldit/cairo-dock-dock-factory.c
  src/gldit/cairo-dock-dock-manager.?
  src/gldit/cairo-dock-draw-opengl.c
+ src/gldit/cairo-dock-file-manager.?
  src/gldit/cairo-dock-gui-factory.c
- src/gldit/cairo-dock-icon-manager.c
+ src/gldit/cairo-dock-icon-facility.c
+ src/gldit/cairo-dock-icon-factory.h
+ src/gldit/cairo-dock-icon-manager.?
  src/gldit/cairo-dock-image-buffer.c
  src/gldit/cairo-dock-indicator-manager.c
+ src/gldit/cairo-dock-launcher-manager.?
  src/gldit/cairo-dock-menu.c
- src/gldit/cairo-dock-opengl.c
- src/gldit/cairo-dock-opengl.h
+ src/gldit/cairo-dock-module-manager.?
+ src/gldit/cairo-dock-opengl.?
  src/gldit/cairo-dock-surface-factory.?
+ src/gldit/cairo-dock-user-icon-manager.?
+ src/gldit/cairo-dock-utils.?
  src/gldit/cairo-dock-windows-manager.?
+ src/gldit/cdwindow.*
  src/implementations/cairo-dock-egl.?
  src/implementations/cairo-dock-wayland-manager.c
  src/implementations/cairo-dock-wayland-manager.h
 Copyright: 2007-2014 Fabrice Rey <fabounet@glx-dock.org>
-           2020-2024 Daniel Kondor <kondor.dani@gmail.com>
+           2020-2025 Daniel Kondor <kondor.dani@gmail.com>
 License: GPL-3+
 
 Files: src/gldit/cairo-dock-desktop-file-db.?
  src/implementations/cairo-dock-foreign-toplevel.?
  src/implementations/cairo-dock-plasma-*
  src/implementations/cairo-dock-cosmic-*
+ src/implementations/cairo-dock-systemd-integration.?
  src/implementations/cairo-dock-wayfire-*
  src/implementations/cairo-dock-wayland-wm.?
  src/implementations/cairo-dock-wayland-hotspots.?
  README_Wayland.md
-Copyright: 2020-2024 Daniel Kondor <kondor.dani@gmail.com>
+Copyright: 2020-2025 Daniel Kondor <kondor.dani@gmail.com>
 License: GPL-3+
 
 Files: src/implementations/gdk-move-to-rect-hack.?
 Copyright: 2020 Sophie Winter
            2020 Daniel Kondor
 License: Expat
+
+Files: data/systemd/*
+Copyright: 2024 Daniel Kondor <kondor.dani@gmail.com>
+License: MIT-no-advertising
 
 Files: src/gldit/cairo-dock-dbus.*
 Copyright: Adrien Pilleboue <adrien.pilleboue@gmail.com>

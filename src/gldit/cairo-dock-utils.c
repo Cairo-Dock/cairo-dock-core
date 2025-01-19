@@ -27,6 +27,8 @@
 
 extern CairoDockDesktopEnv g_iDesktopEnv;
 
+static GldiChildProcessManagerBackend s_backend = { 0 };
+
 gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters)  // gere l'UTF-8
 {
 	g_return_val_if_fail (cString != NULL, NULL);
@@ -285,24 +287,11 @@ gchar *cairo_dock_launch_command_sync_with_stderr (const gchar *cCommand, gboole
 	return standard_output;
 }
 
-gboolean cairo_dock_launch_command_printf (const gchar *cCommandFormat, const gchar *cWorkingDirectory, ...)
-{
-	va_list args;
-	va_start (args, cWorkingDirectory);
-	gchar *cCommand = g_strdup_vprintf (cCommandFormat, args);
-	va_end (args);
-	
-	gboolean r = cairo_dock_launch_command_full (cCommand, cWorkingDirectory);
-	g_free (cCommand);
-	
-	return r;
-}
-
 static void _child_watch_dummy (GPid pid, gint, gpointer)
 {
 	g_spawn_close_pid (pid); // note: this is a no-op
 }
-gboolean cairo_dock_launch_command_full (const gchar *cCommand, const gchar *cWorkingDirectory)
+gboolean cairo_dock_launch_command_full (const gchar *cCommand, const gchar *cWorkingDirectory, GldiLaunchFlags flags)
 {
 	g_return_val_if_fail (cCommand != NULL, FALSE);
 	cd_debug ("%s (%s , %s)", __func__, cCommand, cWorkingDirectory);
@@ -317,19 +306,19 @@ gboolean cairo_dock_launch_command_full (const gchar *cCommand, const gchar *cWo
 		return FALSE;
 	}
 
-	gboolean r = cairo_dock_launch_command_argv_full ((const gchar * const *)args, cWorkingDirectory, FALSE);
+	gboolean r = cairo_dock_launch_command_argv_full ((const gchar * const *)args, cWorkingDirectory, flags);
 	g_strfreev (args);
 	return r;
 }
 
-gboolean cairo_dock_launch_command_argv_full (const gchar * const * args, const gchar *cWorkingDirectory, gboolean bGraphicalApp)
+gboolean cairo_dock_launch_command_argv_full (const gchar * const * args, const gchar *cWorkingDirectory, GldiLaunchFlags flags)
 {
 	g_return_val_if_fail (args != NULL && args[0] != NULL, FALSE);
 	GError *erreur = NULL;
 	GPid pid;
 	char **envp = NULL;
 	
-	if (bGraphicalApp)
+	if (flags & GLDI_LAUNCH_GUI)
 	{
 		// this is a hack, and is actually ignored at least on Wayland
 		GAppInfo *info = g_app_info_create_from_commandline(args[0], args[0], G_APP_INFO_CREATE_SUPPORTS_STARTUP_NOTIFICATION, NULL);
@@ -362,7 +351,22 @@ gboolean cairo_dock_launch_command_argv_full (const gchar * const * args, const 
 		cd_warning ("couldn't launch this command (%s : %s)", args[0], erreur->message);
 		g_error_free (erreur);
 	}
-	else g_child_watch_add (pid, _child_watch_dummy, NULL);
+	else
+	{
+		if ((flags & GLDI_LAUNCH_SLICE) && s_backend.new_app_launched)
+		{
+			char *tmp = g_uri_escape_string (args[0], NULL, FALSE);
+			if (tmp)
+			{
+				// note: the above does not remove '~' which is also not allowed
+				char *tmp2;
+				for (tmp2 = tmp; *tmp2; ++tmp2) if (*tmp2 == '~') *tmp2 = '-';
+			}
+			s_backend.new_app_launched (tmp ? tmp : "unknown", args[0], pid);
+			g_free (tmp);
+		}
+		else g_child_watch_add (pid, _child_watch_dummy, NULL);
+	}
 	if (envp) g_strfreev (envp);
 	return ret;
 }
@@ -376,7 +380,7 @@ gboolean cairo_dock_launch_command_single (const gchar *cExec)
 gboolean cairo_dock_launch_command_single_gui (const gchar *cExec)
 {
 	const gchar * const args[] = {cExec, NULL};
-	return cairo_dock_launch_command_argv_full (args, NULL, TRUE);
+	return cairo_dock_launch_command_argv_full (args, NULL, GLDI_LAUNCH_GUI | GLDI_LAUNCH_SLICE);
 }
 
 const gchar * cairo_dock_get_default_terminal (void)
@@ -396,18 +400,54 @@ const gchar * cairo_dock_get_default_terminal (void)
 		return "xterm";
 }
 
-gchar * cairo_dock_get_command_with_right_terminal (const gchar *cCommand)
+
+static void _pid_callback (GDesktopAppInfo* appinfo, GPid pid, gpointer)
 {
-	const gchar *cTerm = cairo_dock_get_default_terminal ();
-	/* Very very strange, an exception for KDE! :-)
-	 * From konsole's man: -e <command> [ arguments ]
-	 */
-	if (strncmp (cTerm, "konsole", 7) == 0)
-		return g_strdup_printf ("%s -e %s", cTerm, cCommand);
-	else
-		return g_strdup_printf ("%s -e \"%s\"", cTerm, cCommand);
+	cd_debug ("Launched process for app: %s (pid: %d)\n", g_app_info_get_display_name (G_APP_INFO (appinfo)), pid);
+	if (s_backend.new_app_launched)
+	{
+		char *desc = g_strdup_printf ("%s - %s", g_app_info_get_display_name (G_APP_INFO (appinfo)), g_app_info_get_description (G_APP_INFO (appinfo)));
+		s_backend.new_app_launched (g_app_info_get_id (G_APP_INFO (appinfo)), desc, pid);
+		g_free (desc);
+	}
+	else g_child_watch_add (pid, _child_watch_dummy, NULL);
 }
 
+gboolean cairo_dock_launch_app_info_with_uris (GDesktopAppInfo* appinfo, GList* uris)
+{
+	GdkAppLaunchContext *context = gdk_display_get_app_launch_context (gdk_display_get_default ());
+	GError *erreur = NULL;
+	
+	gboolean ret = g_desktop_app_info_launch_uris_as_manager (appinfo, uris, G_APP_LAUNCH_CONTEXT (context),
+		G_SPAWN_DO_NOT_REAP_CHILD | G_SPAWN_LEAVE_DESCRIPTORS_OPEN |
+		G_SPAWN_STDOUT_TO_DEV_NULL | G_SPAWN_STDERR_TO_DEV_NULL, // spawn flags
+		NULL, NULL, // user_setup and user_data
+		_pid_callback, NULL, // pid callback and pid data
+		&erreur);
+	g_object_unref (context); // will be kept by GIO if necessary (and we don't care about the "launched" signal in this case)
+	
+	if (!ret)
+	{
+		cd_warning ("Cannot launch app: %s (%s)", g_app_info_get_id (G_APP_INFO (appinfo)), erreur->message);
+		g_error_free (erreur);
+	}
+	
+	return ret;
+}
+
+
+void gldi_register_process_manager_backend (GldiChildProcessManagerBackend *backend)
+{
+	gpointer *ptr = (gpointer*)&s_backend;
+	gpointer *src = (gpointer*)backend;
+	gpointer *src_end = (gpointer*)(backend + 1);
+	while (src != src_end)
+	{
+		*ptr = *src;
+		src ++;
+		ptr ++;
+	}
+}
 
 #ifdef HAVE_X11
 
