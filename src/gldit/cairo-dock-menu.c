@@ -474,6 +474,7 @@ static void _on_menu_deactivated (GtkMenuShell *pMenu, G_GNUC_UNUSED gpointer da
 	if (!pParams)
 		return;
 	Icon *pIcon = pParams->pIcon;
+	if (!pIcon) return;
 	GldiContainer *pContainer = cairo_dock_get_icon_container (pIcon);
 	if (pIcon->iHideLabel > 0)
 	{
