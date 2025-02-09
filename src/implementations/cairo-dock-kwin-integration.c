@@ -34,7 +34,9 @@
 #include "cairo-dock-class-manager.h"
 #include "cairo-dock-icon-manager.h"  // myIconsParam.fAmplitude
 #include "cairo-dock-kwin-integration.h"
+#ifdef HAVE_WAYLAND_PROTOCOLS
 #include "cairo-dock-plasma-window-manager.h" // gldi_plasma_window_manager_get_uuid
+#endif
 #include "cairo-dock-X-manager.h" // gldi_X_manager_get_window_xid
 
 static DBusGProxy *s_pKwinAccelProxy = NULL;
@@ -74,7 +76,9 @@ static gboolean present_windows (void)
 
 static gboolean present_class (const gchar *cClass)
 {
+#ifdef HAVE_WAYLAND_PROTOCOLS
 	gboolean bIsWayland = gldi_container_is_wayland_backend ();
+#endif
 	
 	gboolean bSuccess = FALSE;
 	if (s_pWindowViewProxy != NULL)
@@ -89,8 +93,10 @@ static gboolean present_class (const gchar *cClass)
 		for (i = 0; pIcons; pIcons = pIcons->next)
 		{
 			Icon *pOneIcon = pIcons->data;
+#ifdef HAVE_WAYLAND_PROTOCOLS
 			if (bIsWayland) uuids[i] = gldi_plasma_window_manager_get_uuid (pOneIcon->pAppli);
 			else
+#endif
 			{
 				unsigned long xid = gldi_X_manager_get_window_xid (pOneIcon->pAppli);
 				if (xid) uuids[i] = g_strdup_printf ("%lu", xid);
@@ -113,8 +119,11 @@ static gboolean present_class (const gchar *cClass)
 				bSuccess = FALSE;
 			}
 		}
+#ifdef HAVE_WAYLAND_PROTOCOLS
 		if (bIsWayland) g_free (uuids);
-		else g_strfreev ((char**)uuids);
+		else
+#endif
+			g_strfreev ((char**)uuids);
 	}
 	return bSuccess;
 }
