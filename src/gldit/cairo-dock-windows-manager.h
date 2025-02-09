@@ -102,9 +102,10 @@ struct _GldiWindowActor {
 	gint iNumDesktop;  // can be -1
 	gint iViewPortX, iViewPortY;
 	gint iStackOrder;
-	gchar *cClass;
-	gchar *cWmClass;
-	gchar *cName;
+	gchar *cClass; // parsed class of this window (i.e. the result of gldi_window_parse_class ())
+	gchar *cWmClass; // original class as reported by the WM (needed in some cases to match it)
+	gchar *cName; // window title, displayed as label
+	gchar *cWmName; // only used on X11, res_name part of XClassHint (i.e. the first string in WM_CLASS), not parsed
 	gchar *cLastAttentionDemand;
 	gint iAge;  // age of the window (a mere growing integer).
 	gboolean bIsTransientFor;  // TRUE if the window is transient (for a parent window).

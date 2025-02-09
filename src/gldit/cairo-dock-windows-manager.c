@@ -493,6 +493,7 @@ static void reset_object (GldiObject *obj)
 	g_free (actor->cName);
 	g_free (actor->cClass);
 	g_free (actor->cWmClass);
+	g_free (actor->cWmName);
 	g_free (actor->cLastAttentionDemand);
 	s_pWindowsList = g_list_remove (s_pWindowsList, actor);
 }
