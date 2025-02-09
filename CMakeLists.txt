@@ -145,6 +145,10 @@ if (enable-egl-support)
 		set (HAVE_EGL 1)
 		set (with_egl "yes (${EGL_VERSION})")
 	endif()
+	if (WAYLAND_FOUND)
+		# check separately for libwayland-egl1, which is used in this case
+		pkg_check_modules ("WAYLAND_EGL" REQUIRED "wayland-egl")
+	endif()
 endif()
 
 # check for X11
