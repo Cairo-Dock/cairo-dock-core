@@ -140,7 +140,7 @@ static GldiXWindowActor *_make_new_actor (Window Xid)
 	gboolean bShowInTaskbar = FALSE;
 	gboolean bNormalWindow = FALSE;
 	Window iTransientFor = None;
-	gchar *cClass = NULL, *cWmClass = NULL;
+	gchar *cClass = NULL, *cWmClass = NULL, *cWmName = NULL;
 	gboolean bIsHidden = FALSE, bIsFullScreen = FALSE, bIsMaximized = FALSE, bDemandsAttention = FALSE, bIsSticky = FALSE;
 	
 	//\__________________ see if we should skip it
@@ -154,7 +154,7 @@ static GldiXWindowActor *_make_new_actor (Window Xid)
 		if (bNormalWindow || iTransientFor != None)
 		{
 			// check get its class
-			cClass = cairo_dock_get_xwindow_class (Xid, &cWmClass);
+			cClass = cairo_dock_get_xwindow_class (Xid, &cWmClass, &cWmName);
 			if (cClass == NULL)
 			{
 				gchar *cName = cairo_dock_get_xwindow_name (Xid, TRUE);
@@ -183,6 +183,7 @@ static GldiXWindowActor *_make_new_actor (Window Xid)
 		actor->bDisplayed = bNormalWindow;
 		actor->cClass = cClass;
 		actor->cWmClass = cWmClass;
+		actor->cWmName = cWmName;
 		actor->bIsHidden = bIsHidden;
 		actor->bIsMaximized = bIsMaximized;
 		actor->bIsFullScreen = bIsFullScreen;
@@ -696,11 +697,18 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 					// update the actor
 					gchar *cOldClass = actor->cClass, *cOldWmClass = actor->cWmClass;
 					gchar *cWmClass = NULL;
-					gchar *cNewClass = cairo_dock_get_xwindow_class (Xid, &cWmClass);
+					gchar *cWmName = NULL;
+					gchar *cNewClass = cairo_dock_get_xwindow_class (Xid, &cWmClass, &cWmName);
 					if (! cNewClass || g_strcmp0 (cNewClass, cOldClass) == 0)
+					{
+						g_free (cWmClass);
+						g_free (cWmName);
 						continue;
+					}
 					actor->cClass = cNewClass;
 					actor->cWmClass = cWmClass;
+					g_free (actor->cWmName);
+					actor->cWmName = cWmName;
 					
 					// notify everybody
 					gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_CLASS_CHANGED, actor, cOldClass, cOldWmClass);
