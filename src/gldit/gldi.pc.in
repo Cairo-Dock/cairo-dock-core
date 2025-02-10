@@ -9,6 +9,6 @@ gtkversion = @GTK_MAJOR@
 Name: gldi
 Description: openGL Desktop Interface. A library to build advanced interfaces for the desktop (dock, panel, desklet, dialog, ...); it supports both cairo and openGL.
 Requires: @gtk_required@ @packages_required@ @xextend_required@ @x11_required@ @wayland_required@
-Libs: -L${libdir} -lgldi
+Libs: -L${libdir} -lgldi @lm_required@
 Cflags: -I${includedir}/cairo-dock -I${includedir}/cairo-dock/gldit -I${includedir}/cairo-dock/implementations
 Version: @VERSION@

@@ -462,12 +462,14 @@ void gldi_wayland_grab_keyboard (GldiContainer *pContainer)
 
 static void _release_keyboard_activate (void)
 {
+#ifdef HAVE_WAYLAND_PROTOCOLS
 	GldiWindowActor *actor = gldi_wayland_wm_get_last_active_window ();
 	if (actor && !actor->bIsHidden) {
 		if (gldi_window_manager_can_track_workspaces () && !gldi_window_is_on_current_desktop (actor))
 			return;
 		gldi_window_show (actor);
 	}
+#endif
 }
 
 static void _release_keyboard_layer_shell (GldiContainer *pContainer)
@@ -604,6 +606,8 @@ static void _registry_global_cb ( G_GNUC_UNUSED void *data, struct wl_registry *
 	{
 		cd_debug("Found cosmic-workspace-manager");
 	}
+#else
+	(void)version; // avoid warning
 #endif
 	s_bInitializing = TRUE;
 }
@@ -774,9 +778,12 @@ const gchar *gldi_wayland_get_detected_compositor (void)
 	return "unknown";
 }
 
-#else
+#else // HAVE_WAYLAND
+
 #include "cairo-dock-log.h"
 #include "cairo-dock-container.h"
+#define _MANAGER_DEF_
+#include "cairo-dock-wayland-manager.h"
 
 gboolean g_bDisableLayerShell = FALSE;
 void gldi_register_wayland_manager (void)
