@@ -94,6 +94,14 @@ endif ()
 set (packages_required "glib-2.0 gthread-2.0 cairo librsvg-2.0 dbus-1 dbus-glib-1 libxml-2.0 gl glu libcurl")  # for the .pc and to have details
 STRING (REGEX REPLACE " " ";" packages_required_semicolon ${packages_required})  # replace blank space by semicolon => to have more details if a package is missing
 pkg_check_modules ("PACKAGE" REQUIRED "${packages_required_semicolon}")
+find_library(MLIB m)
+if (MLIB)
+  set (PACKAGE_LIBRARIES ${PACKAGE_LIBRARIES} ${MLIB})
+  set (lm_required "-lm") # for the .pc -- note: this might result in an error if -lm is not the correct flag
+else()
+  set (lm_required "")
+endif()
+
 
 # check for Wayland
 set (with_wayland no)
