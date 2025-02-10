@@ -1129,14 +1129,18 @@ gchar *cairo_dock_get_xwindow_name (Window Xid, gboolean bSearchWmName)
 	return cName;
 }
 
-gchar *cairo_dock_get_xwindow_class (Window Xid, gchar **cWMClass)
+gchar *cairo_dock_get_xwindow_class (Window Xid, gchar **cWMClass, gchar **cWMName)
 {
 	XClassHint *pClassHint = XAllocClassHint ();
 	gchar *cClass = NULL;
 	if (XGetClassHint (s_XDisplay, Xid, pClassHint) != 0 && pClassHint->res_class)
 	{
 		cClass = gldi_window_parse_class(pClassHint->res_class, pClassHint->res_name);
-		if (cWMClass) *cWMClass = g_strdup (pClassHint->res_class);
+		if (cClass)
+		{
+			if (cWMClass) *cWMClass = g_strdup (pClassHint->res_class);
+			if (pClassHint->res_name && cWMName) *cWMName = g_ascii_strdown (pClassHint->res_name, -1);
+		}
 		XFree (pClassHint->res_name);
 		XFree (pClassHint->res_class);
 		XFree (pClassHint);
