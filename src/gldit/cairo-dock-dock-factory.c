@@ -674,6 +674,13 @@ static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 	return TRUE;
 }
 
+void gldi_dock_leave_synthetic (CairoDock *pDock)
+{
+	// actualize the coordinates of the pointer, since they are most probably out-dated (because the mouse has left the dock, or because a right-click generates an event with (0;0) coordinates)
+	gldi_container_update_mouse_position (&pDock->container);
+	_on_leave_notify (NULL, NULL, pDock);
+}
+
 static gboolean _on_enter_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
 	//g_print ("%s (bIsMainDock : %d; bInside:%d; state:%d; iMagnitudeIndex:%d; input shape:%p; event:%p)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iMagnitudeIndex, pDock->pShapeBitmap, pEvent);
@@ -816,6 +823,11 @@ static gboolean _on_enter_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 	}
 	
 	return TRUE;
+}
+
+void gldi_dock_enter_synthetic (CairoDock *pDock)
+{
+	_on_enter_notify (NULL, NULL, pDock);
 }
 
 
