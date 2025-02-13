@@ -644,6 +644,13 @@ static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 	return TRUE;
 }
 
+void gldi_dock_leave_synthetic (CairoDock *pDock)
+{
+	// actualize the coordinates of the pointer, since they are most probably out-dated (because the mouse has left the dock, or because a right-click generates an event with (0;0) coordinates)
+	gldi_container_update_mouse_position (&pDock->container);
+	_on_leave_notify (NULL, NULL, pDock);
+}
+
 static gboolean _on_dock_unmap (GtkWidget* pWidget, G_GNUC_UNUSED GdkEvent* pEvent, CairoDock *pDock)
 {
 	// this event is only necessary on Wayland
@@ -799,6 +806,11 @@ static gboolean _on_enter_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 	}
 	
 	return TRUE;
+}
+
+void gldi_dock_enter_synthetic (CairoDock *pDock)
+{
+	_on_enter_notify (NULL, NULL, pDock);
 }
 
 
