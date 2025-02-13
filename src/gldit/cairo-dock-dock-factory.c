@@ -138,7 +138,7 @@ static gboolean _on_expose (G_GNUC_UNUSED GtkWidget *pWidget, cairo_t *pCairoCon
 static gboolean _emit_leave_signal_delayed (CairoDock *pDock)
 {
 	//g_print ("%s(%d)\n", __func__, pDock->iRefCount);
-	cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
+	gldi_dock_leave_synthetic (pDock);
 	pDock->iSidLeaveDemand = 0;
 	return FALSE;
 }
@@ -1602,7 +1602,7 @@ static void _hide_parent_dock (CairoDock *pDock)
 	{
 		if (pParentDock->iRefCount == 0)
 		{
-			cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pParentDock));
+			gldi_dock_leave_synthetic (pParentDock);
 		}
 		else
 		{
@@ -1957,7 +1957,7 @@ static void _on_menu_deactivated (G_GNUC_UNUSED GtkMenuShell *menu, CairoDock *p
 	if (pDock->bHasModalWindow)  // don't send the signal if the menu was already deactivated.
 	{
 		pDock->bHasModalWindow = FALSE;
-		cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
+		gldi_dock_leave_synthetic (pDock);
 	}
 }
 static void _on_menu_destroyed (GtkWidget *menu, CairoDock *pDock)

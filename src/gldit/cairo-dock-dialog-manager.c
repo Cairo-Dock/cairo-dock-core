@@ -872,7 +872,7 @@ void gldi_dialog_leave (CairoDialog *pDialog)
 			if (CAIRO_DOCK_IS_DOCK (pContainer) && gtk_window_get_modal (GTK_WINDOW (pDialog->container.pWidget)))
 			{
 				CAIRO_DOCK (pContainer)->bHasModalWindow = FALSE;
-				cairo_dock_emit_leave_signal (pContainer);
+				gldi_dock_leave_synthetic (CAIRO_DOCK (pContainer));
 			}
 		}
 		if (pIcon->iHideLabel > 0)
@@ -953,7 +953,7 @@ static gboolean on_icon_removed (G_GNUC_UNUSED gpointer pUserData, Icon *pIcon, 
 				if (pDialog->pIcon == pIcon && gtk_window_get_modal (GTK_WINDOW (pDialog->container.pWidget)))
 				{
 					pDock->bHasModalWindow = FALSE;
-					cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
+					gldi_dock_leave_synthetic (pDock);
 					break;  // there can only be 1 modal window at a time.
 				}
 			}
@@ -1198,7 +1198,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 		if (CAIRO_DOCK_IS_DOCK (pContainer))
 		{
 			CAIRO_DOCK (pContainer)->bHasModalWindow = TRUE;
-			cairo_dock_emit_enter_signal (pContainer);  // to prevent the dock from hiding. We want to see it while the dialog is visible (a leave event will be emited when it disappears).
+			gldi_dock_enter_synthetic (CAIRO_DOCK (pContainer));  // to prevent the dock from hiding. We want to see it while the dialog is visible (a leave event will be emited when it disappears).
 		}
 	}
 	pDialog->bHideOnClick = pAttribute->bHideOnClick;

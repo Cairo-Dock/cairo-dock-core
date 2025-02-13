@@ -203,7 +203,7 @@ void cairo_dock_trigger_update_dock_size (CairoDock *pDock)
 
 static gboolean _emit_leave_signal_delayed (CairoDock *pDock)
 {
-	cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
+	gldi_dock_leave_synthetic (pDock);
 	pDock->iSidLeaveDemand = 0;
 	return FALSE;
 }
@@ -251,7 +251,7 @@ static void cairo_dock_manage_mouse_position (CairoDock *pDock)
 				    */
 				{
 					//g_print ("  we emulate a re-entry (pDock->iMagnitudeIndex:%d)\n", pDock->iMagnitudeIndex);
-					cairo_dock_emit_enter_signal (CAIRO_CONTAINER (pDock));
+					gldi_dock_enter_synthetic (pDock);
 				}
 				else // we settle for growing icons
 				{
