@@ -803,7 +803,7 @@ static void _cairo_dock_quick_hide_one_root_dock (G_GNUC_UNUSED const gchar *cDo
 	if (pDock->iRefCount == 0)
 	{
 		pDock->bAutoHide = TRUE;
-		cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));
+		gldi_dock_leave_synthetic (pDock);
 	}
 }
 void cairo_dock_quick_hide_all_docks (void)
@@ -861,7 +861,7 @@ void cairo_dock_activate_temporary_auto_hide (CairoDock *pDock)
 		pDock->bTemporaryHidden = TRUE;
 		if (!pDock->container.bInside)  // on ne declenche pas le cachage lorsque l'on change par exemple de bureau via le switcher ou un clic sur une appli.
 		{
-			cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pDock));  // un cairo_dock_start_hiding ne cacherait pas les sous-docks.
+			gldi_dock_leave_synthetic (pDock);  // un cairo_dock_start_hiding ne cacherait pas les sous-docks.
 		}
 		gldi_container_update_polling_screen_edge ();
 	}
@@ -1110,7 +1110,7 @@ static gboolean _on_new_dialog (G_GNUC_UNUSED gpointer data, CairoDialog *pDialo
 	
 	if (pIcon->pSubDock)  // un sous-dock par-dessus le dialogue est tres genant.
 	{
-		cairo_dock_emit_leave_signal (CAIRO_CONTAINER (pIcon->pSubDock));
+		gldi_dock_leave_synthetic (pIcon->pSubDock);
 	}
 	
 	GldiContainer *pContainer = cairo_dock_get_icon_container (pIcon);

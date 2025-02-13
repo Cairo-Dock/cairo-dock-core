@@ -215,7 +215,7 @@ gboolean cairo_dock_notification_click_icon (G_GNUC_UNUSED gpointer pUserData, I
 		{
 			_show_all_windows (icon->pSubDock->icons); // show all windows
 			// in case the dock is visible or about to be visible, hide it, as it would confuse the user to have both.
-			cairo_dock_emit_leave_signal (CAIRO_CONTAINER (icon->pSubDock));
+			gldi_dock_leave_synthetic (icon->pSubDock);
 			return GLDI_NOTIFICATION_INTERCEPT;
 		}
 	}
