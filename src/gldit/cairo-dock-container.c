@@ -359,13 +359,15 @@ gboolean cairo_dock_emit_signal_on_container (GldiContainer *pContainer, const g
 }
 gboolean cairo_dock_emit_leave_signal (GldiContainer *pContainer)
 {
-	// actualize the coordinates of the pointer, since they are most probably out-dated (because the mouse has left the dock, or because a right-click generates an event with (0;0) coordinates)
-	gldi_container_update_mouse_position (pContainer);
-	return cairo_dock_emit_signal_on_container (pContainer, "leave-notify-event");
+	if (CAIRO_DOCK_IS_DOCK (pContainer))
+		gldi_dock_leave_synthetic (CAIRO_DOCK (pContainer));
+	return FALSE;
 }
 gboolean cairo_dock_emit_enter_signal (GldiContainer *pContainer)
 {
-	return cairo_dock_emit_signal_on_container (pContainer, "enter-notify-event");
+	if (CAIRO_DOCK_IS_DOCK (pContainer))
+		gldi_dock_enter_synthetic (CAIRO_DOCK (pContainer));
+	return FALSE;
 }
 
 

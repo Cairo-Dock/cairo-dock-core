@@ -341,5 +341,21 @@ void cairo_dock_set_icon_size_in_dock (CairoDock *pDock, Icon *icon);
 
 void cairo_dock_create_redirect_texture_for_dock (CairoDock *pDock);
 
+/** Notify pDock that the mouse has possibly left it, just as if it
+*  received the "leave-notify-event" signal from GTK. Use this e.g.
+*  when a subdock, dialog or menu is closed and the dock should shrink
+*  down if the mouse is not over it.
+*@param pDock a dock.
+*/
+void gldi_dock_leave_synthetic (CairoDock *pDock);
+
+/** Notify pDock that the mouse has possibly entered it, just as if it
+*  received the "enter-notify-event" signal from GTK. Use this e.g.
+*  when a dialog is shown to prevent the dock from hiding.
+*@param pDock a dock.
+*/
+void gldi_dock_enter_synthetic (CairoDock *pDock);
+
+
 G_END_DECLS
 #endif
