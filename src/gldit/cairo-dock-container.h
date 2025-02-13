@@ -433,10 +433,6 @@ GdkAtom gldi_container_icon_dnd_atom (void);
 void gldi_container_notify_drop_data (GldiContainer *pContainer, gchar *cReceivedData, Icon *pPointedIcon, double fOrder);
 
 
-gboolean cairo_dock_emit_signal_on_container (GldiContainer *pContainer, const gchar *cSignal);
-gboolean cairo_dock_emit_leave_signal (GldiContainer *pContainer);
-gboolean cairo_dock_emit_enter_signal (GldiContainer *pContainer);
-
 /** Build the main menu of a Container.
 *@param icon the icon that was left-clicked, or NULL if none.
 *@param pContainer the container that was left-clicked.

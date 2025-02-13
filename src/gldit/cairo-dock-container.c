@@ -607,26 +607,6 @@ void gldi_container_manager_register_backend (GldiContainerManagerBackend *pBack
 }
 
 
-gboolean cairo_dock_emit_signal_on_container (GldiContainer *pContainer, const gchar *cSignal)
-{
-	static gboolean bReturn;
-	g_signal_emit_by_name (pContainer->pWidget, cSignal, NULL, &bReturn);
-	return FALSE;
-}
-gboolean cairo_dock_emit_leave_signal (GldiContainer *pContainer)
-{
-	if (CAIRO_DOCK_IS_DOCK (pContainer))
-		gldi_dock_leave_synthetic (CAIRO_DOCK (pContainer));
-	return FALSE;
-}
-gboolean cairo_dock_emit_enter_signal (GldiContainer *pContainer)
-{
-	if (CAIRO_DOCK_IS_DOCK (pContainer))
-		gldi_dock_enter_synthetic (CAIRO_DOCK (pContainer));
-	return FALSE;
-}
-
-
 static GtkWidget *s_pMenu = NULL;  // right-click menu
 GtkWidget *gldi_container_build_menu (GldiContainer *pContainer, Icon *icon)
 {
