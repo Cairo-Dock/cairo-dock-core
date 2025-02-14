@@ -1,16 +1,18 @@
 ########### requirements ###############
 
 cmake_minimum_required (VERSION 3.16.0)
+
+project ("cairo-dock" C)
+
 find_package (PkgConfig)
 include (CheckLibraryExists)
 include (CheckIncludeFiles)
 include (CheckFunctionExists)
 include (CheckSymbolExists)
-include ("${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/GNUInstallDirs.cmake")
+include (GNUInstallDirs)
 
 ########### project ###############
 
-project ("cairo-dock")
 set (VERSION "3.5.99.rc2") # no dash, only numbers, dots and maybe alpha/beta/rc, e.g.: 3.3.1 or 3.3.99.alpha1
 
 add_compile_options (-std=c99 -Wall -Wextra -Werror-implicit-function-declaration) # -Wextra -Wwrite-strings -Wuninitialized -Wstrict-prototypes -Wreturn-type -Wparentheses -Warray-bounds)
