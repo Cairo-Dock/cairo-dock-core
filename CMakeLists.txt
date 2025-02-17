@@ -90,6 +90,8 @@ if (NOT DEFINED install-pc-path)
 	set (install-pc-path "${libdir}/pkgconfig")  # it can be different (for example ${CMAKE_INSTALL_PREFIX}/libdata/pkgconfig on BSD)
 endif ()
 
+list(APPEND CMAKE_INSTALL_RPATH ${libdir})
+
 ########### dependencies ###############
 
 # check for mandatory dependencies
