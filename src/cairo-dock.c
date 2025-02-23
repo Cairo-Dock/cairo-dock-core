@@ -78,9 +78,8 @@
 #include "cairo-dock-user-interaction.h"
 #include "cairo-dock-user-menu.h"
 
-//#define CAIRO_DOCK_THEME_SERVER "http://themes.glx-dock.org"
-#define CAIRO_DOCK_THEME_SERVER "http://download.tuxfamily.org/glxdock/themes"
-#define CAIRO_DOCK_BACKUP_THEME_SERVER "http://fabounet03.free.fr"
+#define CAIRO_DOCK_THEME_SERVER "https://raw.githubusercontent.com/Cairo-Dock/glxdock-repository/refs/heads/main/themes"
+// #define CAIRO_DOCK_THEME_SERVER "http://download.tuxfamily.org/glxdock/themes"
 // Nom du repertoire racine du theme courant.
 #define CAIRO_DOCK_CURRENT_THEME_NAME "current_theme"
 // Nom du repertoire des themes extras.
@@ -114,7 +113,7 @@ static gint s_iNbCrashes = 0;
 static gboolean s_bPingServer = TRUE;
 static gboolean s_bCDSessionLaunched = FALSE; // session CD already launched?
 
-
+/*
 static void _on_got_server_answer (const gchar *data, G_GNUC_UNUSED gpointer user_data)
 {
 	if (data != NULL)
@@ -126,7 +125,7 @@ static void _on_got_server_answer (const gchar *data, G_GNUC_UNUSED gpointer use
 			G_TYPE_INVALID);
 		g_free (cConfFilePath);
 	}
-}
+} */
 static gboolean _cairo_dock_successful_launch (gpointer data)
 {
 	s_bSucessfulLaunch = TRUE;
@@ -152,11 +151,12 @@ static gboolean _cairo_dock_successful_launch (gpointer data)
 		g_free (cMessage);
 	}
 	
+	/* Github does not log accesses, no need to ping
 	if (! s_bPingServer && g_str_has_suffix (g_cCairoDockDataDir, CAIRO_DOCK_DATA_DIR))  // the server (which hosts themes, third-party applets and packages) has never been accessed yet, ping it once
 	{
 		s_bPingServer = TRUE;
 		cairo_dock_get_url_data_async (CAIRO_DOCK_THEME_SERVER"/ping.txt", (GFunc)_on_got_server_answer, NULL);
-	}
+	} */
 	
 	return FALSE;
 }
