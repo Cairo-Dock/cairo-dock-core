@@ -480,7 +480,8 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 			g_object_set_data (G_OBJECT (pDescriptionLabel), "cd-task", NULL);
 		}
 		
-		if (strncmp (cDescriptionFilePath, "http://", 7) == 0)  // fichier distant.
+		if ( (strncmp (cDescriptionFilePath, "http://", 7) == 0)
+			|| (strncmp (cDescriptionFilePath, "https://", 8) == 0) ) // fichier distant.
 		{
 			cd_debug ("fichier readme distant (%s)", cDescriptionFilePath);
 			
@@ -524,7 +525,8 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 			g_object_set_data (G_OBJECT (pPreviewImage), "cd-task", NULL);
 		}
 		
-		if (strncmp (cPreviewFilePath, "http://", 7) == 0)  // fichier distant.
+		if ( (strncmp (cPreviewFilePath, "http://", 7) == 0)
+			|| (strncmp (cPreviewFilePath, "https://", 8) == 0) ) // fichier distant.
 		{
 			cd_debug ("fichier preview distant (%s)", cPreviewFilePath);
 			gtk_image_set_from_pixbuf (pPreviewImage, NULL);  // set blank image while downloading.
