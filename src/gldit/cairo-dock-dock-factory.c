@@ -870,9 +870,19 @@ static gboolean _on_button_press (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventButt
 {
 	//g_print ("+ %s (%d/%d, %x, %d)\n", __func__, pButton->type, pButton->button, pWidget, pButton->time);
 	static guint32 s_iLastTime = 0;  // time of the last event, in ms
-	if (s_iLastTime != 0 && pButton->time == s_iLastTime)  // for some reason, with latest GTK3, we get all events twice; filter them
+	static guint s_iLastButton = 0;  // button pressed in the last event
+	static GdkEventType s_eLastType = GDK_NOTHING; // type of last delivered event
+	// for some reason, with latest GTK3, we get all events twice; filter them
+	if (s_iLastTime != 0 && pButton->time == s_iLastTime &&
+		s_iLastButton != 0 && pButton->button == s_iLastButton &&
+		s_eLastType != GDK_NOTHING && pButton->type == s_eLastType)
+	{
 		return TRUE;  // discard and don't propagate
+	}
+
 	s_iLastTime = pButton->time;
+	s_iLastButton = pButton->button;
+	s_eLastType = pButton->type;
 	if (pDock->container.bIsHorizontal)  // utile ?
 	{
 		pDock->container.iMouseX = (int) pButton->x;
