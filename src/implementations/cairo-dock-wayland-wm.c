@@ -338,7 +338,7 @@ void gldi_wayland_wm_done (GldiWaylandWindowActor *wactor)
 					// we don't display our own desklets (note: no general "skip taskbar"
 					// hint, so we have to recognize them based on the app_id and title)
 					const gchar *tmp = wactor->cTitlePending ? wactor->cTitlePending : actor->cName;
-					if (tmp && !strcmp (tmp, "cairo-dock-desklet")) displayed = FALSE;
+					if (tmp && !strncmp (tmp, "cairo-dock-desklet", 18)) displayed = FALSE;
 				}
 			}
 			
