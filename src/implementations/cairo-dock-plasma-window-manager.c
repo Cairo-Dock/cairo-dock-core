@@ -72,7 +72,7 @@ typedef enum {
 	NB_NOTIFICATIONS_PLASMA_WINDOW_MANAGER = NB_NOTIFICATIONS_WINDOWS
 } CairoPlasmaWMNotifications;
 
-static uint32_t protocol_version = 0;
+static uint32_t server_protocol_version = 0;
 static GHashTable *s_hIDTable = NULL;
 
 // window manager interface
@@ -261,7 +261,7 @@ static void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED pwhandle *handle,
 		// versions >= 12 and < 17 have stacking_order_uuid_changed which
 		// is handled separately below; for versions >= 17, we would need
 		// to support stacking_order_changed_2
-		if (protocol_version < 12 || protocol_version >= 17)
+		if (server_protocol_version < 12 || server_protocol_version >= 17)
 			gldi_wayland_wm_stack_on_top ((GldiWindowActor*)wactor);
 	}
 	else gldi_wayland_wm_activated (wactor, FALSE, FALSE);
@@ -539,7 +539,7 @@ gboolean gldi_plasma_window_manager_match_protocol (uint32_t id, const char *int
 	{
 		protocol_found = TRUE;
 		protocol_id = id;
-		protocol_version = version;
+		server_protocol_version = version;
 		return TRUE;
 	}
 	return FALSE;
@@ -549,6 +549,7 @@ gboolean gldi_plasma_window_manager_try_init (struct wl_registry *registry)
 {
 	if (!protocol_found) return FALSE;
 	
+	uint32_t protocol_version = server_protocol_version;
 	if (protocol_version > (uint32_t)org_kde_plasma_window_management_interface.version)
 	{
 		protocol_version = org_kde_plasma_window_management_interface.version;
