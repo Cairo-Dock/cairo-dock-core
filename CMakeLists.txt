@@ -72,6 +72,7 @@ set (exec_prefix ${prefix})
 set (datadir "${prefix}/${CMAKE_INSTALL_DATAROOTDIR}")  # (...)/share
 set (pkgdatadir "${datadir}/${CMAKE_PROJECT_NAME}")  # (...)/cairo-dock
 set (mandir "${prefix}/${CMAKE_INSTALL_MANDIR}")  # (...)/man
+set (unitdir "${prefix}/lib/systemd/user") # for systemd units (if enabled)
 
 if( CMAKE_SIZEOF_VOID_P EQUAL 8 AND (force-lib64 OR "${FORCE_LIB64}" STREQUAL "yes"))  # 64bits and force install in lib64
 	set (libdir "${prefix}/lib64")
