@@ -255,9 +255,16 @@ if (enable-gtk-layer-shell)
 endif()
 
 # systemd service
-pkg_check_modules ("SYSTEMD" "systemd")
-if (NOT DEFINED enable-systemd-service) # true if not defined
-	set (enable-systemd-service ${SYSTEMD_FOUND})
+if (NOT DEFINED enable-systemd-service)
+	# detect if system is running systemd
+	set (enable-systemd-service FALSE)
+	find_program(SYSTEMD_COMMAND systemd-notify)
+	if(SYSTEMD_COMMAND)
+		execute_process(COMMAND ${SYSTEMD_COMMAND} --booted RESULT_VARIABLE SYSTEMD_RUNNING)
+		if (SYSTEMD_RUNNING EQUAL 0)
+			set (enable-systemd-service TRUE)
+		endif()
+	endif()
 	if (enable-systemd-service)
 		set (with_systemd_service "yes (use '-Denable-systemd-service=False' to disable it)")
 	else()
