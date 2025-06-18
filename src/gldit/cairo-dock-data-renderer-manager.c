@@ -117,6 +117,13 @@ GHashTable *cairo_dock_list_available_themes_for_data_renderer (const gchar *cRe
 	gchar *cGaugeUserDir = g_strdup_printf ("%s/%s", g_cExtrasDirPath, pRecord->cThemeDirName);
 	GHashTable *pGaugeTable = cairo_dock_list_packages (cGaugeShareDir, cGaugeUserDir, pRecord->cDistantThemeDirName, NULL);
 	
+#ifdef GLDI_PLUGINS_DATA_ROOT
+	// case when plugins are installed under a separate prefix -- they can provide additional themes as well
+	g_free (cGaugeShareDir);
+	cGaugeShareDir = g_strdup_printf ("%s/%s", GLDI_PLUGINS_DATA_ROOT, pRecord->cThemeDirName);
+	pGaugeTable = cairo_dock_list_packages (cGaugeShareDir, NULL, NULL, pGaugeTable);
+#endif
+
 	g_free (cGaugeShareDir);
 	g_free (cGaugeUserDir);
 	return pGaugeTable;
