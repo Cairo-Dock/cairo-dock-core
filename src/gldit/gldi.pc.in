@@ -4,6 +4,7 @@ libdir = @libdir@
 includedir = @includedir@
 pluginsdir = @pluginsdir@
 pluginsdatadir = @pluginsdatadir@
+plugins_prefix = @plugins-prefix@
 gtkversion = @GTK_MAJOR@
 
 Name: gldi
