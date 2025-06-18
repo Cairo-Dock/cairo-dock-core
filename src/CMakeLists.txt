@@ -27,6 +27,8 @@ include_directories(
 	${PACKAGE_INCLUDE_DIRS}
 	${GTK_INCLUDE_DIRS}
 	${CMAKE_SOURCE_DIR}/src/gldit
+	${CMAKE_BINARY_DIR}/src/gldit
+	${CMAKE_BINARY_DIR}/src
 	${CMAKE_SOURCE_DIR}/src/implementations)
 
 # Make sure the linker can find the libraries.
