@@ -132,7 +132,7 @@ install (FILES  ${CMAKE_CURRENT_BINARY_DIR}/libgldi.so.${SOVERSION} DESTINATION 
 install(FILES cairo-dock.h DESTINATION ${includedir}/cairo-dock)
 install(FILES
 	cairo-dock-struct.h 			cairo-dock-global-variables.h
-	gldi-config.h  # gldi-module-config.h doesn't need to be installed
+	${CMAKE_CURRENT_BINARY_DIR}/gldi-config.h  # gldi-module-config.h doesn't need to be installed
 	gldi-icon-names.h
 	cairo-dock-core.h			cairo-dock-manager.h
 	cairo-dock-object.h
