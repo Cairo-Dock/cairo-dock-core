@@ -85,8 +85,13 @@ endif()
 set (includedir "${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")  # (...)/include
 set (bindir "${prefix}/${CMAKE_INSTALL_BINDIR}")  # (...)/bin
 
-set (pluginsdir "${libdir}/cairo-dock")
-set (pluginsdatadir "${pkgdatadir}/plug-ins")
+## !! TODO: Help plugin is already installed in this prefix, would need to move to our own one !!
+if (NOT DEFINED plugins-prefix)
+	set (plugins-prefix "${prefix}")
+endif()
+set (pluginsdir "${plugins-prefix}/${CMAKE_INSTALL_LIBDIR}/cairo-dock")
+set (pluginsdatadir "${plugins-prefix}/${CMAKE_INSTALL_DATAROOTDIR}/${CMAKE_PROJECT_NAME}/plug-ins")
+
 if (NOT DEFINED install-pc-path)
 	set (install-pc-path "${libdir}/pkgconfig")  # it can be different (for example ${CMAKE_INSTALL_PREFIX}/libdata/pkgconfig on BSD)
 endif ()
