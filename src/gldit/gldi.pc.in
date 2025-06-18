@@ -3,8 +3,9 @@ exec_prefix = @exec_prefix@
 libdir = @libdir@
 includedir = @includedir@
 pluginsdir = @pluginsdir@
-pluginsdatadir = @pluginsdatadir@
+pluginsdatarootdir = @pluginsdatarootdir@
 plugins_prefix = @plugins-prefix@
+plugins_locale = @plugins-locale@
 gtkversion = @GTK_MAJOR@
 
 Name: gldi
