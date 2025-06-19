@@ -348,6 +348,9 @@ int main (int argc, char** argv)
 	//\___________________ internationalize the app.
 	bindtextdomain (CAIRO_DOCK_GETTEXT_PACKAGE, CAIRO_DOCK_LOCALE_DIR);
 	bind_textdomain_codeset (CAIRO_DOCK_GETTEXT_PACKAGE, "UTF-8");
+	bindtextdomain (CAIRO_DOCK_PLUGINS_GETTEXT_PACKAGE, CAIRO_DOCK_PLUGINS_LOCALE_DIR);
+	bind_textdomain_codeset (CAIRO_DOCK_PLUGINS_GETTEXT_PACKAGE, "UTF-8");
+	
 	textdomain (CAIRO_DOCK_GETTEXT_PACKAGE);
 	
 	//\___________________ get app's options.

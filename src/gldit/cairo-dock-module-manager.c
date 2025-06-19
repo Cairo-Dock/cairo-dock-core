@@ -271,12 +271,10 @@ discard:
 	return NULL;
 }
 
-void gldi_modules_new_from_directory (const gchar *cModuleDirPath, GError **erreur)
+/* Load modules from cModuleDirPath which must be non-NULL */
+static void _gldi_modules_new_from_directory2 (const gchar *cModuleDirPath, GError **erreur)
 {
-	if (cModuleDirPath == NULL)
-		cModuleDirPath = GLDI_MODULES_DIR;
 	cd_message ("%s (%s)", __func__, cModuleDirPath);
-	
 	GError *tmp_erreur = NULL;
 	GDir *dir = g_dir_open (cModuleDirPath, 0, &tmp_erreur);
 	if (tmp_erreur != NULL)
@@ -302,6 +300,20 @@ void gldi_modules_new_from_directory (const gchar *cModuleDirPath, GError **erre
 	while (1);
 	g_string_free (sFilePath, TRUE);
 	g_dir_close (dir);
+}
+
+/* Load modules from cModuleDirPath or from the default paths if it is NULL */
+void gldi_modules_new_from_directory (const gchar *cModuleDirPath, GError **erreur)
+{
+	if (cModuleDirPath == NULL)
+	{
+		_gldi_modules_new_from_directory2 (GLDI_MODULES_DIR, erreur);
+#ifdef GLDI_MODULES_DIR_CORE
+		// only if plugins are installed in a separate prefix
+		_gldi_modules_new_from_directory2 (GLDI_MODULES_DIR_CORE, erreur);
+#endif
+	}
+	else _gldi_modules_new_from_directory2 (cModuleDirPath, erreur);
 }
 
 gchar *gldi_module_get_config_dir (GldiModule *pModule)

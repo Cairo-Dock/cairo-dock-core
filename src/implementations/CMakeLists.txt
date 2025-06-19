@@ -90,6 +90,7 @@ include_directories(
 	${GTK_INCLUDE_DIRS}
 	${JSON_INCLUDE_DIRS}
 	${CMAKE_SOURCE_DIR}/src/gldit
+	${CMAKE_BINARY_DIR}/src/gldit
 	${CMAKE_SOURCE_DIR}/src/implementations
 	${CMAKE_CURRENT_BINARY_DIR})
 
