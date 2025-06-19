@@ -91,6 +91,7 @@ endif()
 set (pluginsdir "${plugins-prefix}/${CMAKE_INSTALL_LIBDIR}/cairo-dock")
 set (pluginsdatarootdir "${plugins-prefix}/${CMAKE_INSTALL_DATAROOTDIR}/${CMAKE_PROJECT_NAME}")
 set (plugins-locale "${plugins-prefix}/${CMAKE_INSTALL_LOCALEDIR}")
+set (plugins-gettext "cairo-dock-plugins") # gettext domain used by plugins
 
 if (NOT DEFINED install-pc-path)
 	set (install-pc-path "${libdir}/pkgconfig")  # it can be different (for example ${CMAKE_INSTALL_PREFIX}/libdata/pkgconfig on BSD)
@@ -289,9 +290,11 @@ set (CAIRO_DOCK_SHARE_DATA_DIR ${pkgdatadir})
 set (CAIRO_DOCK_SHARE_THEMES_DIR ${pkgdatadir}/themes)
 #set (CAIRO_DOCK_MODULES_DIR ${libdir}/cairo-dock)
 set (CAIRO_DOCK_LOCALE_DIR "${prefix}/${CMAKE_INSTALL_LOCALEDIR}")
+set (CAIRO_DOCK_PLUGINS_LOCALE_DIR "${plugins-locale}")
 set (CAIRO_DOCK_THEMES_DIR "themes")  # folder name where themes are saved locally, relatively to the root folder of Cairo-Dock.
 set (CAIRO_DOCK_DISTANT_THEMES_DIR "themes3.4")  # folder name where themes are on the server, relatively to the root folder of the server files.
 set (CAIRO_DOCK_GETTEXT_PACKAGE ${GETTEXT_PACKAGE})
+set (CAIRO_DOCK_PLUGINS_GETTEXT_PACKAGE "${plugins-gettext}")
 
 set (GLDI_GETTEXT_PACKAGE ${GETTEXT_PACKAGE})
 set (GLDI_SHARE_DATA_DIR ${pkgdatadir})

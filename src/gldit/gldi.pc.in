@@ -6,6 +6,7 @@ pluginsdir = @pluginsdir@
 pluginsdatarootdir = @pluginsdatarootdir@
 plugins_prefix = @plugins-prefix@
 plugins_locale = @plugins-locale@
+plugins_gettext = @plugins-gettext@
 gtkversion = @GTK_MAJOR@
 
 Name: gldi
