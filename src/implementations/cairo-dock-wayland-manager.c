@@ -106,174 +106,6 @@ static void _try_detect_compositor (void)
 	}
 }
 
-// manage screens -- instead of wl_output, we use GdkDisplay and GdkMonitors
-// list of monitors -- corresponds to pScreens in g_desktopGeometry from
-// cairo-dock-desktop-manager.c, and kept in sync with that
-GdkMonitor **s_pMonitors = NULL;
-// we keep track of the primary monitor
-GdkMonitor *s_pPrimaryMonitor = NULL;
-
-// refresh s_desktopGeometry.xscreen
-static void _calculate_xscreen ()
-{
-	int i;
-	g_desktopGeometry.Xscreen.x = 0;
-	g_desktopGeometry.Xscreen.y = 0;
-	g_desktopGeometry.Xscreen.width = 0;
-	g_desktopGeometry.Xscreen.height = 0;
-	
-	if (g_desktopGeometry.iNbScreens >= 0)
-		for (i = 0; i < g_desktopGeometry.iNbScreens; i++)
-		{
-			int tmpwidth = g_desktopGeometry.pScreens[i].x + g_desktopGeometry.pScreens[i].width;
-			int tmpheight = g_desktopGeometry.pScreens[i].y + g_desktopGeometry.pScreens[i].height;
-			if (tmpwidth > g_desktopGeometry.Xscreen.width)
-				g_desktopGeometry.Xscreen.width = tmpwidth;
-			if (tmpheight > g_desktopGeometry.Xscreen.height)
-				g_desktopGeometry.Xscreen.height = tmpheight;
-		}
-}
-
-// handle changes in screen / monitor configuration -- note: user_data is a boolean that determines if we should emit a signal
-static void _monitor_added (GdkDisplay *display, GdkMonitor* monitor, gpointer user_data)
-{
-	int iNumScreen = 0;
-	if (!(g_desktopGeometry.pScreens && s_pMonitors && g_desktopGeometry.iNbScreens))
-	{
-		if (g_desktopGeometry.iNbScreens || g_desktopGeometry.pScreens || s_pMonitors)
-			cd_warning ("_monitor_added() inconsistent state of screens / monitors\n");
-		g_desktopGeometry.iNbScreens = 1;
-		g_free (s_pMonitors);
-		g_free (g_desktopGeometry.pScreens);
-		s_pMonitors = g_new0 (GdkMonitor*, g_desktopGeometry.iNbScreens);
-		g_desktopGeometry.pScreens = g_new0 (GtkAllocation, g_desktopGeometry.iNbScreens);
-	}
-	else
-	{
-		iNumScreen = g_desktopGeometry.iNbScreens++;
-		s_pMonitors = g_renew (GdkMonitor*, s_pMonitors, g_desktopGeometry.iNbScreens);
-		g_desktopGeometry.pScreens = g_renew (GtkAllocation, g_desktopGeometry.pScreens, g_desktopGeometry.iNbScreens);
-	}
-	s_pMonitors[iNumScreen] = monitor;
-	// note: GtkAllocation is the same as GdkRectangle
-	gdk_monitor_get_geometry (monitor, g_desktopGeometry.pScreens + iNumScreen);
-	if (monitor == gdk_display_get_primary_monitor (display))
-		s_pPrimaryMonitor = monitor;
-	_calculate_xscreen ();
-	if (user_data) gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_GEOMETRY_CHANGED, FALSE);
-	
-	// we always send notification on the Wayland manager object
-	gldi_object_notify (&myWaylandMgr, NOTIFICATION_WAYLAND_MONITOR_ADDED, monitor);
-}
-
-// handle if a monitor was removed
-static void _monitor_removed (GdkDisplay* display, GdkMonitor* monitor, G_GNUC_UNUSED gpointer user_data)
-{
-	if (!(g_desktopGeometry.pScreens && s_pMonitors && g_desktopGeometry.iNbScreens > 0))
-		cd_warning ("_monitor_removed() inconsistent state of screens / monitors\n");
-	else
-	{
-		int i;
-		for (i = 0; i < g_desktopGeometry.iNbScreens; i++)
-			if (s_pMonitors[i] == monitor) break;
-		if (i == g_desktopGeometry.iNbScreens)
-		{
-			cd_warning ("_monitor_removed() inconsistent state of screens / monitors\n");
-			return;
-		}
-		for (; i +1 < g_desktopGeometry.iNbScreens; i++)
-		{
-			s_pMonitors[i] = s_pMonitors[i+1];
-			g_desktopGeometry.pScreens[i] = g_desktopGeometry.pScreens[i+1];
-		}
-		s_pPrimaryMonitor = gdk_display_get_primary_monitor (display);
-		if (!s_pPrimaryMonitor) s_pPrimaryMonitor = s_pMonitors[0];
-		g_desktopGeometry.iNbScreens--;
-		s_pMonitors = g_renew (GdkMonitor*, s_pMonitors, g_desktopGeometry.iNbScreens);
-		g_desktopGeometry.pScreens = g_renew (GtkAllocation, g_desktopGeometry.pScreens, g_desktopGeometry.iNbScreens);
-		_calculate_xscreen ();
-		gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_GEOMETRY_CHANGED, FALSE);
-		
-		// we always send notification on the Wayland manager object
-		gldi_object_notify (&myWaylandMgr, NOTIFICATION_WAYLAND_MONITOR_REMOVED, monitor);
-	}
-}
-
-// refresh the size of all monitors -- note: user_data is a boolean that determines if we should emit a signal
-static void _refresh_monitors_size(G_GNUC_UNUSED GdkScreen *screen, gpointer user_data)
-{
-	int i;
-	for (i = 0; i < g_desktopGeometry.iNbScreens; i++)
-		gdk_monitor_get_geometry (s_pMonitors[i], g_desktopGeometry.pScreens + i);
-	_calculate_xscreen ();
-	if (user_data) gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_GEOMETRY_CHANGED, FALSE);
-}
-
-// refresh all monitors (if needed) -- note: user_data is a boolean that determines if we should emit a signal
-static void _refresh_monitors (GdkScreen *screen, gpointer user_data)
-{
-	GdkDisplay *display = gdk_screen_get_display (screen);
-	int iNumScreen = gdk_display_get_n_monitors (display);
-	if (iNumScreen != g_desktopGeometry.iNbScreens)
-	{
-		// we don't try to guess what has changed, just refresh all monitors
-		GdkMonitor **tmp = s_pMonitors;
-		s_pMonitors = NULL;
-		int iNumOld = g_desktopGeometry.iNbScreens;
-		g_free (g_desktopGeometry.pScreens);
-		g_desktopGeometry.iNbScreens = iNumScreen;
-		s_pMonitors = g_renew (GdkMonitor*, s_pMonitors, g_desktopGeometry.iNbScreens);
-		g_desktopGeometry.pScreens = g_renew (GtkAllocation, g_desktopGeometry.pScreens, g_desktopGeometry.iNbScreens);
-		int i;
-		for (i = 0; i < iNumScreen; i++)
-		{
-			s_pMonitors[i] = gdk_display_get_monitor (display, i);
-			gdk_monitor_get_geometry (s_pMonitors[i], g_desktopGeometry.pScreens + i);
-		}
-		s_pPrimaryMonitor = gdk_display_get_primary_monitor (display);
-		if (!s_pPrimaryMonitor) s_pPrimaryMonitor = s_pMonitors[0];
-		_calculate_xscreen ();
-		if (user_data) gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_GEOMETRY_CHANGED, FALSE);
-		
-		// figure out if any monitors were added / removed and emit the Wayland-specific notifications
-		for (i = 0; i < iNumScreen; i++)
-		{
-			int j;
-			GdkMonitor *mon = s_pMonitors[i];
-			for (j = 0; j < iNumOld; j++) if (tmp[j] == mon) break;
-			if (j < iNumOld)
-			{
-				// this monitor was present before
-				if (j + 1 < iNumOld) tmp[j] = tmp[iNumOld - 1];
-				iNumOld--;
-			}
-			else gldi_object_notify (&myWaylandMgr, NOTIFICATION_WAYLAND_MONITOR_ADDED, mon);
-		}
-		// send notifications for monitors
-		for (i = 0; i < iNumOld; i++) gldi_object_notify (&myWaylandMgr, NOTIFICATION_WAYLAND_MONITOR_REMOVED, tmp[i]);
-		
-		g_free(tmp);
-	}
-	else _refresh_monitors_size (screen, user_data);
-}
-
-static GdkMonitor* _get_monitor (int iNumScreen)
-{
-	GdkMonitor *monitor = (iNumScreen >= 0 && iNumScreen < g_desktopGeometry.iNbScreens) ?
-		s_pMonitors[iNumScreen] : s_pPrimaryMonitor;
-	return monitor;
-}
-
-GdkMonitor* gldi_dock_wayland_get_monitor (CairoDock *pDock)
-{
-	return _get_monitor (pDock->iNumScreen);
-}
-
-GdkMonitor *const *gldi_wayland_get_monitors (int *iNumMonitors)
-{
-	*iNumMonitors = g_desktopGeometry.iNbScreens;
-	return s_pMonitors;
-}
 
 CairoDockPositionType gldi_wayland_get_edge_for_dock (const CairoDock *pDock)
 {
@@ -391,11 +223,15 @@ static void _layer_shell_init_for_window (GldiContainer *pContainer)
 
 static void _layer_shell_move_to_monitor (GldiContainer *pContainer, int iNumScreen)
 {
+	if (iNumScreen < 0) return;
 	GtkWindow *window = GTK_WINDOW (pContainer->pWidget);
 	// this only works for parent windows, not popups
 	if (gtk_window_get_transient_for (window)) return;
-	GdkMonitor *monitor = _get_monitor (iNumScreen);
-	if (monitor) gtk_layer_set_monitor (window, monitor);
+	
+	int iNumMonitors = 0;
+	GdkMonitor *const *pMonitors = gldi_desktop_get_monitors (&iNumMonitors);
+	if (iNumScreen >= iNumMonitors) return;
+	gtk_layer_set_monitor (window, pMonitors[iNumScreen]);
 }
 #endif
 
@@ -735,18 +571,6 @@ void gldi_register_wayland_manager (void)
 	gldi_object_install_notifications (&myWaylandMgr, NB_NOTIFICATIONS_WAYLAND_DESKTOP);
 	// register
 	gldi_object_init (GLDI_OBJECT(&myWaylandMgr), &myManagerObjectMgr, NULL);
-	
-	// get the properties of screens / monitors, set up signals
-	g_desktopGeometry.iNbScreens = 0;
-	g_desktopGeometry.pScreens = NULL;
-	GdkScreen *screen = gdk_display_get_default_screen (dsp);
-	// fill out the list of screens / monitors
-	_refresh_monitors (screen, (gpointer)FALSE);
-	// set up notifications for screens added / removed
-	g_signal_connect (G_OBJECT (screen), "monitors-changed", G_CALLBACK (_refresh_monitors), (gpointer)TRUE);
-	g_signal_connect (G_OBJECT (screen), "size-changed", G_CALLBACK (_refresh_monitors_size), (gpointer)TRUE);
-	g_signal_connect (G_OBJECT (dsp), "monitor-added", G_CALLBACK (_monitor_added), (gpointer)TRUE);
-	g_signal_connect (G_OBJECT (dsp), "monitor-removed", G_CALLBACK (_monitor_removed), (gpointer)TRUE);
 }
 
 gboolean gldi_wayland_manager_have_layer_shell ()
