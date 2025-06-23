@@ -90,8 +90,6 @@ static Atom s_aUtf8String;
 static Atom s_aString;
 static unsigned char error_code = Success;
 
-static GtkAllocation *_get_screens_geometry (int *pNbScreens);
-
 static gboolean cairo_dock_support_X_extension (void);
 
 typedef struct {
@@ -160,13 +158,6 @@ Display *cairo_dock_initialize_X_desktop_support (void)
     s_aUtf8String               = XInternAtom (s_XDisplay, "UTF8_STRING", False);
     s_aString                   = XInternAtom (s_XDisplay, "STRING", False);
 	
-	Screen *XScreen = XDefaultScreenOfDisplay (s_XDisplay);
-	
-	g_desktopGeometry.Xscreen.width = WidthOfScreen (XScreen); // x and y are nul.
-	g_desktopGeometry.Xscreen.height = HeightOfScreen (XScreen);
-	
-	g_desktopGeometry.pScreens = _get_screens_geometry (&g_desktopGeometry.iNbScreens);
-	
 	return s_XDisplay;
 }
 
@@ -185,182 +176,6 @@ unsigned char cairo_dock_get_X_error_code (void)
 {
 	return error_code;
 }
-
-static GtkAllocation *_get_screens_geometry (int *pNbScreens)
-{
-	GtkAllocation *pScreens = NULL;
-	GtkAllocation *pScreen;
-	int iNbScreens = 0;
-	/*Unit Tests
-	iNbScreens = 2;
-	pScreens = g_new0 (GtkAllocation, iNbScreens);
-	pScreens[0].x = 0;
-	pScreens[0].y = 0;
-	pScreens[0].width = 1000;
-	pScreens[0].height = 1050;
-	pScreens[1].x = 1000;
-	pScreens[1].y = 0;
-	pScreens[1].width = 680;
-	pScreens[1].height = 1050;
-	*pNbScreens = iNbScreens;
-	return pScreens;*/
-	
-	#ifdef HAVE_XEXTEND
-	if (s_bUseXrandr)  // we place Xrandr first to get more tests :) (and also because it will deprecate Xinerama).
-	{
-		cd_debug ("Using Xrandr to determine the screen's position and size ...");
-		XRRScreenResources *res = XRRGetScreenResources (s_XDisplay, DefaultRootWindow (s_XDisplay));  // Xrandr >= 1.3
-		if (res != NULL)
-		{
-			int n = res->ncrtc;
-			cd_debug (" number of screen(s): %d", n);
-			pScreens = g_new0 (GtkAllocation, n);
-			int i;
-			for (i = 0; i < n; i++)
-			{
-				XRRCrtcInfo *info = XRRGetCrtcInfo (s_XDisplay, res, res->crtcs[i]);
-				if (info == NULL)
-				{
-					cd_warning ("This screen (%d) has no info, skip it.", i);
-					continue;
-				}
-				
-				if (info->width == 0 || info->height == 0)
-				{
-					cd_debug ("This screen (%d) has a null dimensions, skip it.", i);  // seems normal behaviour of xrandr, so no warning
-					XRRFreeCrtcInfo (info);
-					continue;
-				}
-				
-				pScreen = &pScreens[iNbScreens];
-				pScreen->x = info->x;
-				pScreen->y = info->y;
-				pScreen->width = info->width;
-				pScreen->height = info->height;
-				cd_message (" * screen %d(%d) => (%d;%d) %dx%d", iNbScreens, i, pScreen->x, pScreen->y, pScreen->width, pScreen->height);
-				
-				XRRFreeCrtcInfo (info);
-				iNbScreens ++;
-			}
-			XRRFreeScreenResources (res);
-		}
-		else
-			cd_warning ("No screen found from Xrandr, is it really active ?");
-	}
-	
-	#ifdef HAVE_XINERAMA
-	if (iNbScreens == 0 && s_bUseXinerama && XineramaIsActive (s_XDisplay))
-	{
-		cd_debug ("Using Xinerama to determine the screen's position and size ...");
-		int n;
-		XineramaScreenInfo *scr = XineramaQueryScreens (s_XDisplay, &n);
-		if (scr != NULL)
-		{
-			cd_debug (" number of screen(s): %d", n);
-			pScreens = g_new0 (GtkAllocation, n);
-			int i;
-			for (i = 0; i < n; i++)
-			{
-				pScreen = &pScreens[i];
-				pScreen->x = scr[i].x_org;
-				pScreen->y = scr[i].y_org;
-				pScreen->width = scr[i].width;
-				pScreen->height = scr[i].height;
-				cd_message (" * screen %d(%d) => (%d;%d) %dx%d", iNbScreens, i, pScreen->x, pScreen->y, pScreen->width, pScreen->height);
-				
-				iNbScreens ++;
-			}
-			XFree (scr);
-		}
-		else
-			cd_warning ("No screen found from Xinerama, is it really active ?");
-	}
-	#endif  // HAVE_XINERAMA
-	#endif  // HAVE_XEXTEND
-	
-	if (iNbScreens == 0)
-	{
-		#ifdef HAVE_XEXTEND
-		cd_warning ("Xrandr and Xinerama are not available, assume there is only 1 screen.");
-		#else
-		cd_warning ("The dock was not compiled with the support of Xinerama/Xrandr, assume there is only 1 screen.");
-		#endif
-		
-		iNbScreens = 1;
-		pScreens = g_new0 (GtkAllocation, iNbScreens);
-		pScreen = &pScreens[0];
-		pScreen->x = 0;
-		pScreen->y = 0;
-		pScreen->width = gldi_desktop_get_width();
-		pScreen->height = gldi_desktop_get_height();
-	}
-	
-	/*Window root = DefaultRootWindow (s_XDisplay);
-	Atom aNetWorkArea = XInternAtom (s_XDisplay, "_NET_WORKAREA", False);
-	Atom aReturnedType = 0;
-	int aReturnedFormat = 0;
-	unsigned long iLeftBytes, iBufferNbElements = 0;
-	gulong *pXWorkArea = NULL;
-	XGetWindowProperty (s_XDisplay, root, aNetWorkArea, 0, G_MAXULONG, False, XA_CARDINAL, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pXWorkArea);
-	int i;
-	for (i = 0; i < iBufferNbElements/4; i ++)
-	{
-		// g_print ("work area : (%d;%d) %dx%d\n", pXWorkArea[4*i], pXWorkArea[4*i+1], pXWorkArea[4*i+2], pXWorkArea[4*i+3]);
-	}
-	XFree (pXWorkArea);*/
-	
-	*pNbScreens = iNbScreens;
-	return pScreens;
-}
-
-gboolean cairo_dock_update_screen_geometry (void)
-{
-	// get the geometry of the root window (the virtual X screen) from the server.
-	Window root = DefaultRootWindow (s_XDisplay);
-	Window root_return;
-	int x_return=1, y_return=1;
-	unsigned int width_return, height_return, border_width_return, depth_return;
-	XGetGeometry (s_XDisplay, root,
-		&root_return,
-		&x_return, &y_return,
-		&width_return, &height_return,
-		&border_width_return, &depth_return);
-	cd_debug (">>>>>   screen resolution: %dx%d -> %dx%d", gldi_desktop_get_width(), gldi_desktop_get_height(), width_return, height_return);
-	gboolean bNewSize = FALSE;
-	if ((int)width_return != gldi_desktop_get_width() || (int)height_return != gldi_desktop_get_height())  // on n'utilise pas WidthOfScreen() et HeightOfScreen() car leurs valeurs ne sont pas mises a jour immediatement apres les changements de resolution.
-	{
-		g_desktopGeometry.Xscreen.width = width_return;
-		g_desktopGeometry.Xscreen.height = height_return;
-		cd_debug ("new screen size : %dx%d", gldi_desktop_get_width(), gldi_desktop_get_height());
-		bNewSize = TRUE;
-	}
-	
-	// get the size and position of each screen (they could have changed even though the X screen has not changed, for instance if you swap 2 screens).
-	GtkAllocation *pScreens = g_desktopGeometry.pScreens;
-	int iNbScreens = g_desktopGeometry.iNbScreens;
-	g_desktopGeometry.pScreens = _get_screens_geometry (&g_desktopGeometry.iNbScreens);
-	
-	if (! bNewSize)  // if the X screen has not changed, check if real screens have changed.
-	{
-		bNewSize = (iNbScreens != g_desktopGeometry.iNbScreens);
-		if (! bNewSize)
-		{
-			int i;
-			for (i = 0; i < MIN (iNbScreens, g_desktopGeometry.iNbScreens); i ++)
-			{
-				if (memcmp (&pScreens[i], &g_desktopGeometry.pScreens[i], sizeof (GtkAllocation)) != 0)
-				{
-					bNewSize = TRUE;
-					break;
-				}
-			}
-		}
-	}
-	
-	g_free (pScreens);
-	return bNewSize;
-}
-
 
 gchar **cairo_dock_get_desktops_names (void)
 {

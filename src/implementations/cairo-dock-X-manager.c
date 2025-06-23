@@ -256,9 +256,6 @@ static void _on_change_nb_desktops (void)
 
 static void _on_change_desktop_geometry (gboolean bIsNetDesktopGeometry)
 {
-	// check if the resolution has changed
-	gboolean bSizeChanged = cairo_dock_update_screen_geometry ();
-	
 	// check if the number of viewports has changed.
 	cairo_dock_get_nb_viewports (&g_desktopGeometry.iNbViewportX, &g_desktopGeometry.iNbViewportY);
 	_cairo_dock_retrieve_current_desktop_and_viewport ();  // au cas ou on enleve le viewport courant.
@@ -266,7 +263,7 @@ static void _on_change_desktop_geometry (gboolean bIsNetDesktopGeometry)
 	// notify everybody
 	// according to LP1901507, the dock ends up on the wrong screen after the screens go to energy-save/off mode (dual-screen/nvidia).
 	// as a workaround, we force the flag to true when it's a NetDesktopGeometry message, even if the size hasn't really changed
-	gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_GEOMETRY_CHANGED, bSizeChanged || bIsNetDesktopGeometry);
+	gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_GEOMETRY_CHANGED, bIsNetDesktopGeometry);
 }
 
 static void _update_backing_pixmap (GldiXWindowActor *actor)
