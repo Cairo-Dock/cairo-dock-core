@@ -13,7 +13,7 @@ include (GNUInstallDirs)
 
 ########### project ###############
 
-set (VERSION "3.5.99.rc2") # no dash, only numbers, dots and maybe alpha/beta/rc, e.g.: 3.3.1 or 3.3.99.alpha1
+set (VERSION "3.5.99.rc3") # no dash, only numbers, dots and maybe alpha/beta/rc, e.g.: 3.3.1 or 3.3.99.alpha1
 
 add_compile_options (-std=c99 -Wall -Wextra -Werror-implicit-function-declaration) # -Wextra -Wwrite-strings -Wuninitialized -Wstrict-prototypes -Wreturn-type -Wparentheses -Warray-bounds)
 if (NOT DEFINED CMAKE_BUILD_TYPE)
@@ -85,8 +85,14 @@ endif()
 set (includedir "${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")  # (...)/include
 set (bindir "${prefix}/${CMAKE_INSTALL_BINDIR}")  # (...)/bin
 
-set (pluginsdir "${libdir}/cairo-dock")
-set (pluginsdatadir "${pkgdatadir}/plug-ins")
+if (NOT DEFINED plugins-prefix)
+	set (plugins-prefix "${prefix}")
+endif()
+set (pluginsdir "${plugins-prefix}/${CMAKE_INSTALL_LIBDIR}/cairo-dock")
+set (pluginsdatarootdir "${plugins-prefix}/${CMAKE_INSTALL_DATAROOTDIR}/${CMAKE_PROJECT_NAME}")
+set (plugins-locale "${plugins-prefix}/${CMAKE_INSTALL_LOCALEDIR}")
+set (plugins-gettext "cairo-dock-plugins") # gettext domain used by plugins
+
 if (NOT DEFINED install-pc-path)
 	set (install-pc-path "${libdir}/pkgconfig")  # it can be different (for example ${CMAKE_INSTALL_PREFIX}/libdata/pkgconfig on BSD)
 endif ()
@@ -284,13 +290,21 @@ set (CAIRO_DOCK_SHARE_DATA_DIR ${pkgdatadir})
 set (CAIRO_DOCK_SHARE_THEMES_DIR ${pkgdatadir}/themes)
 #set (CAIRO_DOCK_MODULES_DIR ${libdir}/cairo-dock)
 set (CAIRO_DOCK_LOCALE_DIR "${prefix}/${CMAKE_INSTALL_LOCALEDIR}")
+set (CAIRO_DOCK_PLUGINS_LOCALE_DIR "${plugins-locale}")
 set (CAIRO_DOCK_THEMES_DIR "themes")  # folder name where themes are saved locally, relatively to the root folder of Cairo-Dock.
 set (CAIRO_DOCK_DISTANT_THEMES_DIR "themes3.4")  # folder name where themes are on the server, relatively to the root folder of the server files.
 set (CAIRO_DOCK_GETTEXT_PACKAGE ${GETTEXT_PACKAGE})
+set (CAIRO_DOCK_PLUGINS_GETTEXT_PACKAGE "${plugins-gettext}")
 
 set (GLDI_GETTEXT_PACKAGE ${GETTEXT_PACKAGE})
 set (GLDI_SHARE_DATA_DIR ${pkgdatadir})
+if (NOT "${pluginsdatarootdir}" STREQUAL "${pkgdatadir}")
+	set (GLDI_PLUGINS_DATA_ROOT "${pluginsdatarootdir}")
+endif()
 set (GLDI_MODULES_DIR ${pluginsdir})
+if (NOT "${pluginsdir}" STREQUAL "${libdir}/cairo-dock")
+	set (GLDI_MODULES_DIR_CORE "${libdir}/cairo-dock")
+endif()
 set (GLDI_BIN_DIR ${bindir})
 
 ########### next steps ###############
@@ -305,16 +319,16 @@ add_subdirectory (po)
 set (GETTEXT_HELP ${GETTEXT_PACKAGE})
 set (VERSION_HELP "0.10.0")
 set (PACKAGE_HELP "cd-Help")
-set (helpdatadir "${pluginsdatadir}/Help")
+set (helpdatadir "${pkgdatadir}/plug-ins/Help")
 set (dock_version "${VERSION}")
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/Help/data/Help.conf.in ${CMAKE_CURRENT_BINARY_DIR}/Help/data/Help.conf)
 add_subdirectory (Help)
 
 ########### file generation ###############
 
-configure_file (${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake.in ${CMAKE_CURRENT_SOURCE_DIR}/src/config.h)
-configure_file (${CMAKE_CURRENT_SOURCE_DIR}/src/gldit/gldi-config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/src/gldit/gldi-config.h)
-configure_file (${CMAKE_CURRENT_SOURCE_DIR}/src/gldit/gldi-module-config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/src/gldit/gldi-module-config.h)  # separated from gldi-config.h because it's architecture-dependant (it contains $libdir), so it can't be installed in /usr/include without causing a conflict between 32 and 64 bits packages.
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/src/config.h)
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/src/gldit/gldi-config.h.in ${CMAKE_CURRENT_BINARY_DIR}/src/gldit/gldi-config.h)
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/src/gldit/gldi-module-config.h.in ${CMAKE_CURRENT_BINARY_DIR}/src/gldit/gldi-module-config.h)  # separated from gldi-config.h because it's architecture-dependant (it contains $libdir), so it can't be installed in /usr/include without causing a conflict between 32 and 64 bits packages.
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake IMMEDIATE @ONLY)
 
 ################# Summary #################

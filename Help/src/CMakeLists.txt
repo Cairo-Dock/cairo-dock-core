@@ -30,6 +30,8 @@ include_directories (
 	${PACKAGE_INCLUDE_DIRS}
 	${GTK_INCLUDE_DIRS}
 	${CMAKE_SOURCE_DIR}/src
+	${CMAKE_BINARY_DIR}/src
+	${CMAKE_BINARY_DIR}/src/gldit
 	${CMAKE_SOURCE_DIR}/src/gldit
 	${CMAKE_SOURCE_DIR}/src/implementations)
 
@@ -43,4 +45,4 @@ target_link_libraries (${PACKAGE_HELP}
 
 ########### install files ###############
 
-install(TARGETS ${PACKAGE_HELP} DESTINATION ${pluginsdir})
+install(TARGETS ${PACKAGE_HELP} DESTINATION "${libdir}/cairo-dock")

@@ -75,6 +75,7 @@
  * -  \ref tasks
  * -  \ref key_binding
  * -  \ref sub_icons
+ * -  \ref translations
  * 
  * \ref advanced_sec
  * -  \ref advanced_config
@@ -82,7 +83,8 @@
  * -  \ref data_renderer
  * -  \ref multi
  * -  \ref render_container
- * 
+ * -  \ref system_applet
+ * -  \ref auto_load
  * 
  * 
  * \n
@@ -337,6 +339,11 @@
  * You can get the list of icons with \ref CD_APPLET_MY_ICONS_LIST and to their container with \ref CD_APPLET_MY_ICONS_LIST_CONTAINER.
  * 
  * 
+ * \subsection translations How do I provide translations (internationalization) for my applet ?
+ * 
+ * Cairo-Dock uses the standard gettext library to provide translated strings in its user interface. Specifically, the dgettext() function is used when creating menus, the configuration interface, etc. For plugins that are part of the official plugins package, the "cairo-dock-plugins" message domain is used and this is set by default when loading a plugin. For external plugins, it is recommended to define your own message domain and install translations accordingly (after compiling them with msgfmt). Within the plugin code, use dgettext() when displaying text to the user. To ensure that translation of configuration options work, you should provide the message domain also when your plugin is loaded. This is achieved by using the CD_APPLET_DEFINE2_BEGIN macro (see \ref system_applet) and setting pVisitCard->cGettextDomain to the message domain of your plugin. You should also call the bindtextdomain() function at this point to supply where translations are installed.
+ * 
+ * 
  * \n
  * \section advanced_sec Advanced functionnalities
  * 
@@ -382,11 +389,11 @@
  * Say you want to draw directly on your container, like <i>CairoPenguin</i> or <i>ShowMouse</i> do. This can be achieved easily by registering to the \ref NOTIFICATION_RENDER notification. You will then be notified eash time a Dock or a Desklet is drawn. Register AFTER so that you will draw after the view.
  * 
  * 
- * \subsection system_applet Applets providing core functionality
+ * \subsection system_applet Applets with advanced initialization steps or providing core functionality
  * 
- * Some applets that provide essential functionality for the dock (e.g. renderers, desktop environment integration, etc.) need more control over their life-cycle. In this case, instead of defining the applet with CD_APPLET_DEFINITION2, use the macro pair CD_APPLET_DEFINE2_BEGIN / CD_APPLET_DEFINE2_END and
+ * Some applets need more control over their life-cycle. Beyond applets that define their own message domain for internationalization (see \ref translations), this typically relates to applets that provide some essential functionality for the dock (e.g. renderers, desktop environment integration, etc.). In this case, instead of defining the applet with CD_APPLET_DEFINITION2, use the macro pair CD_APPLET_DEFINE2_BEGIN / CD_APPLET_DEFINE2_END and
  * - Add early initialization steps between these; this will be run when the applet is first opened (loaded from disk), regardless wether it is enabled yet. Be careful that the applet's instance variable (myApplet) and configuration (myConfig) are not available at this point (so you will need to use static variables to save any state). Also, no docks, cairo or OpenGL contexts exist, and the current theme has not been loaded at this point as well. It is thus recommended to keep things here absolute minimal.
- * - Also you have to manually define the applet's interface here (load, stop, config functions, etc.); see the GldiModuleInterface struct from cairo-dock-module-manager.h for a description of each function and what it does.
+ * - Also you have to manually define the applet's interface here (load, stop, config functions, etc.); see the GldiModuleInterface struct from cairo-dock-module-manager.h for a description of each function and what it does, or use the CD_APPLET_DEFINE_COMMON_APPLET_INTERFACE macro that defines these with the usual function names thus you can use the same macros as you would with CD_APPLET_DEFINITION2.
  * 
  * 
  * \subsection auto_load Auto-loaded applets
