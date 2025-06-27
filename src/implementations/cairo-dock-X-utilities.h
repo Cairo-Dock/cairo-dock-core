@@ -80,6 +80,7 @@ typedef void (*GldiChangeViewportFunc) (int iNbViewportX, int iNbViewportY);
  */
 void cairo_dock_change_nb_viewports (int iDeltaNbDesktops, GldiChangeViewportFunc cb);
 
+extern int cairo_dock_X_display_scale;
 
   ////////////
  // WINDOW //

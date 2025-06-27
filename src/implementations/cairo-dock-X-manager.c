@@ -231,8 +231,6 @@ static inline void _cairo_dock_retrieve_current_desktop_and_viewport (void)
 {
 	g_desktopGeometry.iCurrentDesktop = cairo_dock_get_current_desktop ();
 	cairo_dock_get_current_viewport (&g_desktopGeometry.iCurrentViewportX, &g_desktopGeometry.iCurrentViewportY);
-	g_desktopGeometry.iCurrentViewportX /= gldi_desktop_get_width();
-	g_desktopGeometry.iCurrentViewportY /= gldi_desktop_get_height();
 }
 
 static gboolean _on_change_current_desktop_viewport (void)
@@ -722,10 +720,10 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 				int x = event.xconfigure.x, y = event.xconfigure.y;
 				int w = event.xconfigure.width, h = event.xconfigure.height;
 				cairo_dock_get_xwindow_geometry (Xid, &x, &y, &w, &h);
-				actor->windowGeometry.width = w;
-				actor->windowGeometry.height = h;
-				actor->windowGeometry.x = x;
-				actor->windowGeometry.y = y;
+				actor->windowGeometry.width = w / cairo_dock_X_display_scale;
+				actor->windowGeometry.height = h / cairo_dock_X_display_scale;
+				actor->windowGeometry.x = x / cairo_dock_X_display_scale;
+				actor->windowGeometry.y = y / cairo_dock_X_display_scale;
 				
 				actor->iViewPortX = x / gldi_desktop_get_width() + g_desktopGeometry.iCurrentViewportX;
 				actor->iViewPortY = y / gldi_desktop_get_height() + g_desktopGeometry.iCurrentViewportY;
@@ -1110,12 +1108,12 @@ static int _get_current_desktop_index (GldiContainer *pContainer)
 	int iGlobalPositionX, iGlobalPositionY, iWidthExtent, iHeightExtent;
 	cairo_dock_get_xwindow_geometry (Xid, &iGlobalPositionX, &iGlobalPositionY, &iWidthExtent, &iHeightExtent);  // relative to the current viewport
 	if (iGlobalPositionX < 0)
-		iGlobalPositionX += g_desktopGeometry.iNbViewportX * gldi_desktop_get_width();
+		iGlobalPositionX += g_desktopGeometry.iNbViewportX * gldi_desktop_get_width() * cairo_dock_X_display_scale;
 	if (iGlobalPositionY < 0)
-		iGlobalPositionY += g_desktopGeometry.iNbViewportY * gldi_desktop_get_height();
+		iGlobalPositionY += g_desktopGeometry.iNbViewportY * gldi_desktop_get_height() * cairo_dock_X_display_scale;
 	
-	int iViewportX = iGlobalPositionX / gldi_desktop_get_width();
-	int iViewportY = iGlobalPositionY / gldi_desktop_get_height();
+	int iViewportX = iGlobalPositionX / (gldi_desktop_get_width() * cairo_dock_X_display_scale);
+	int iViewportY = iGlobalPositionY / (gldi_desktop_get_height() * cairo_dock_X_display_scale);
 	
 	int iCurrentDesktop, iCurrentViewportX, iCurrentViewportY;
 	gldi_desktop_get_current (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
@@ -1134,7 +1132,9 @@ static int _get_current_desktop_index (GldiContainer *pContainer)
 static void _move (GldiContainer *pContainer, int iNumDesktop, int iAbsolutePositionX, int iAbsolutePositionY)
 {
 	Window Xid = _gldi_container_get_Xid (pContainer);
-	cairo_dock_move_xwindow_to_absolute_position (Xid, iNumDesktop, iAbsolutePositionX, iAbsolutePositionY);
+	cairo_dock_move_xwindow_to_absolute_position (Xid, iNumDesktop,
+		iAbsolutePositionX * cairo_dock_X_display_scale,
+		iAbsolutePositionY * cairo_dock_X_display_scale);
 }
 
 static gboolean _is_active (GldiContainer *pContainer)
@@ -1741,13 +1741,16 @@ static void init_object (GldiObject *obj, gpointer attr)
 	int iLocalPositionX=0, iLocalPositionY=0, iWidthExtent=0, iHeightExtent=0;
 	cairo_dock_get_xwindow_geometry (Xid, &iLocalPositionX, &iLocalPositionY, &iWidthExtent, &iHeightExtent);
 	
+	iLocalPositionX /= cairo_dock_X_display_scale;
+	iLocalPositionY /= cairo_dock_X_display_scale;
+	
 	actor->iViewPortX = iLocalPositionX / g_desktopGeometry.Xscreen.width + g_desktopGeometry.iCurrentViewportX;
 	actor->iViewPortY = iLocalPositionY / g_desktopGeometry.Xscreen.height + g_desktopGeometry.iCurrentViewportY;
 	
 	actor->windowGeometry.x = iLocalPositionX;
 	actor->windowGeometry.y = iLocalPositionY;
-	actor->windowGeometry.width = iWidthExtent;
-	actor->windowGeometry.height = iHeightExtent;
+	actor->windowGeometry.width = iWidthExtent / cairo_dock_X_display_scale;
+	actor->windowGeometry.height = iHeightExtent / cairo_dock_X_display_scale;
 	
 	actor->iAge = s_iNumWindow ++;
 	
