@@ -45,6 +45,8 @@
 extern gboolean g_bEasterEggs;
 extern CairoDockGLConfig g_openglConfig;
 
+int cairo_dock_X_display_scale = 1;
+
 static gboolean s_bUseXComposite = TRUE;
 static gboolean s_bUseXinerama = TRUE;
 static gboolean s_bUseXrandr = TRUE;
@@ -91,6 +93,7 @@ static Atom s_aString;
 static unsigned char error_code = Success;
 
 static gboolean cairo_dock_support_X_extension (void);
+static int _get_scale_factor (void);
 
 typedef struct {
     unsigned long flags;
@@ -116,6 +119,9 @@ Display *cairo_dock_initialize_X_desktop_support (void)
 		return s_XDisplay;
 	s_XDisplay = XOpenDisplay (0);
 	g_return_val_if_fail (s_XDisplay != NULL, NULL);
+	
+	// retrieve the display scale factor (from GDK, initialized already in desktop-manager)
+	cairo_dock_X_display_scale = _get_scale_factor ();
 	
 	XSetErrorHandler (_cairo_dock_xerror_handler);
 	
@@ -257,8 +263,39 @@ int cairo_dock_get_current_desktop (void)
 	return iDesktopNumber;
 }
 
+/* Get the current scale factor of the screen.
+ * Note: this assumes that all monitors have the same scale factor which seems to be
+ * the case under X11 with GTK3. */
+static int _get_scale_factor (void)
+{
+	int n = 0;
+	GdkMonitor *const *monitors = gldi_desktop_get_monitors (&n);
+	if (!n) return 1; // default
+	
+	int scale = gdk_monitor_get_scale_factor (monitors[0]);
+	int i;
+	for (i = 1; i < n; i++)
+	{
+		int x = gdk_monitor_get_scale_factor (monitors[i]);
+		if (x != scale) 
+		{
+			cd_warning ("Inconsistent scale factors among monitors (%d != %d)", x, scale);
+			if (x > scale) scale = x;
+		}
+	}
+	
+	if (scale <= 0)
+	{
+		cd_warning ("Invalid scale factor: %d", scale);
+		scale = 1;
+	}
+	return scale;
+}
+
 void cairo_dock_get_current_viewport (int *iCurrentViewPortX, int *iCurrentViewPortY)
 {
+	// update display scale factor (might have changed since last call)
+	cairo_dock_X_display_scale = _get_scale_factor ();
 	Window root = DefaultRootWindow (s_XDisplay);
 	
 	Window root_return;
@@ -279,8 +316,8 @@ void cairo_dock_get_current_viewport (int *iCurrentViewPortX, int *iCurrentViewP
 	XGetWindowProperty (s_XDisplay, root, s_aNetDesktopViewport, 0, G_MAXULONG, False, XA_CARDINAL, &aReturnedType, &aReturnedFormat, &iBufferNbElements, &iLeftBytes, (guchar **)&pViewportsXY);
 	if (iBufferNbElements > 0)
 	{
-		*iCurrentViewPortX = pViewportsXY[0];
-		*iCurrentViewPortY = pViewportsXY[1];
+		*iCurrentViewPortX = pViewportsXY[0] / (gldi_desktop_get_width() * cairo_dock_X_display_scale);
+		*iCurrentViewPortY = pViewportsXY[1] / (gldi_desktop_get_height() * cairo_dock_X_display_scale);
 		XFree (pViewportsXY);
 	}
 	
@@ -306,6 +343,8 @@ int cairo_dock_get_nb_desktops (void)
 
 void cairo_dock_get_nb_viewports (int *iNbViewportX, int *iNbViewportY)
 {
+	// update display scale factor (might have changed since last call)
+	cairo_dock_X_display_scale = _get_scale_factor ();
 	Window root = DefaultRootWindow (s_XDisplay);
 	Atom aReturnedType = 0;
 	int aReturnedFormat = 0;
@@ -315,8 +354,8 @@ void cairo_dock_get_nb_viewports (int *iNbViewportX, int *iNbViewportY)
 	if (iBufferNbElements > 0)
 	{
 		cd_debug ("pVirtualScreenSizeBuffer : %dx%d ; screen : %dx%d", pVirtualScreenSizeBuffer[0], pVirtualScreenSizeBuffer[1], gldi_desktop_get_width(), gldi_desktop_get_height());
-		*iNbViewportX = pVirtualScreenSizeBuffer[0] / gldi_desktop_get_width();
-		*iNbViewportY = pVirtualScreenSizeBuffer[1] / gldi_desktop_get_height();
+		*iNbViewportX = pVirtualScreenSizeBuffer[0] / (gldi_desktop_get_width() * cairo_dock_X_display_scale);
+		*iNbViewportY = pVirtualScreenSizeBuffer[1] / (gldi_desktop_get_height() * cairo_dock_X_display_scale);
 		XFree (pVirtualScreenSizeBuffer);
 	}
 }
@@ -392,7 +431,8 @@ static void cairo_dock_move_current_viewport_to (int iDesktopViewportX, int iDes
 }
 void cairo_dock_set_current_viewport (int iViewportNumberX, int iViewportNumberY)
 {
-	cairo_dock_move_current_viewport_to (iViewportNumberX * gldi_desktop_get_width(), iViewportNumberY * gldi_desktop_get_height());
+	cairo_dock_move_current_viewport_to (iViewportNumberX * gldi_desktop_get_width() * cairo_dock_X_display_scale,
+		iViewportNumberY * gldi_desktop_get_height() * cairo_dock_X_display_scale);
 }
 void cairo_dock_set_current_desktop (int iDesktopNumber)
 {
@@ -494,8 +534,8 @@ void cairo_dock_set_nb_viewports (int iNbViewportX, int iNbViewportY)
 	xClientMessage.xclient.window = root;
 	xClientMessage.xclient.message_type = s_aNetDesktopGeometry;
 	xClientMessage.xclient.format = 32;
-	xClientMessage.xclient.data.l[0] = iNbViewportX * gldi_desktop_get_width();
-	xClientMessage.xclient.data.l[1] = iNbViewportY * gldi_desktop_get_height();
+	xClientMessage.xclient.data.l[0] = iNbViewportX * gldi_desktop_get_width() * cairo_dock_X_display_scale;
+	xClientMessage.xclient.data.l[1] = iNbViewportY * gldi_desktop_get_height() * cairo_dock_X_display_scale;
 	xClientMessage.xclient.data.l[2] = 0;
 	xClientMessage.xclient.data.l[3] = 2;
 	xClientMessage.xclient.data.l[4] = 0;
@@ -872,14 +912,17 @@ static void cairo_dock_get_xwindow_position_on_its_viewport (Window Xid, int *iR
 	int iLocalPositionX, iLocalPositionY, iWidthExtent=1, iHeightExtent=1;  // we don't care wbout the size
 	cairo_dock_get_xwindow_geometry (Xid, &iLocalPositionX, &iLocalPositionY, &iWidthExtent, &iHeightExtent);
 	
+	int w = gldi_desktop_get_width() * cairo_dock_X_display_scale;
+	int h = gldi_desktop_get_height() * cairo_dock_X_display_scale;
+	
 	while (iLocalPositionX < 0)  // on passe au referentiel du viewport de la fenetre; inutile de connaitre sa position, puisqu'ils ont tous la meme taille.
-		iLocalPositionX += gldi_desktop_get_width();
-	while (iLocalPositionX >= gldi_desktop_get_width())
-		iLocalPositionX -= gldi_desktop_get_width();
+		iLocalPositionX += w;
+	while (iLocalPositionX >= w)
+		iLocalPositionX -= w;
 	while (iLocalPositionY < 0)
-		iLocalPositionY += gldi_desktop_get_height();
-	while (iLocalPositionY >= gldi_desktop_get_height())
-		iLocalPositionY -= gldi_desktop_get_height();
+		iLocalPositionY += h;
+	while (iLocalPositionY >= h)
+		iLocalPositionY -= h;
 	
 	*iRelativePositionX = iLocalPositionX;
 	*iRelativePositionY = iLocalPositionY;
@@ -891,7 +934,9 @@ void cairo_dock_move_xwindow_to_nth_desktop (Window Xid, int iDesktopNumber, int
 	int iRelativePositionX, iRelativePositionY;
 	cairo_dock_get_xwindow_position_on_its_viewport (Xid, &iRelativePositionX, &iRelativePositionY);
 	
-	cairo_dock_move_xwindow_to_absolute_position (Xid, iDesktopNumber, iDesktopViewportX + iRelativePositionX, iDesktopViewportY + iRelativePositionY);
+	cairo_dock_move_xwindow_to_absolute_position (Xid, iDesktopNumber,
+		iDesktopViewportX * cairo_dock_X_display_scale + iRelativePositionX,
+		iDesktopViewportY * cairo_dock_X_display_scale + iRelativePositionY);
 }
 
 void cairo_dock_set_xwindow_border (Window Xid, gboolean bWithBorder)
