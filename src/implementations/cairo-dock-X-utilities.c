@@ -427,7 +427,8 @@ static void cairo_dock_move_current_viewport_to (int iDesktopViewportX, int iDes
 }
 void cairo_dock_set_current_viewport (int iViewportNumberX, int iViewportNumberY)
 {
-	cairo_dock_move_current_viewport_to (iViewportNumberX * gldi_desktop_get_width(), iViewportNumberY * gldi_desktop_get_height());
+	cairo_dock_move_current_viewport_to (iViewportNumberX * gldi_desktop_get_width() * cairo_dock_X_display_scale,
+		iViewportNumberY * gldi_desktop_get_height() * cairo_dock_X_display_scale);
 }
 void cairo_dock_set_current_desktop (int iDesktopNumber)
 {
