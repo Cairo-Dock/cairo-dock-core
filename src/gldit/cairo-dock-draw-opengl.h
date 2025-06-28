@@ -58,7 +58,20 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock);
   //////////////////
  // LOAD TEXTURE //
 //////////////////
-/** Load a cairo surface into an OpenGL texture. The surface can be destroyed after that if you don't need it. The texture will have the same size as the surface.
+/** Load a cairo surface into an OpenGL texture. The surface can be destroyed after that if you don't need it.
+ *  The texture will have the same (physical) size as the surface, but potentially rounded up to the nearest
+ *  power of 2 if needed.
+*@param pImageSurface the surface, created with one of the 'cairo_dock_create_surface_xxx' functions.
+*@param pWidth if not NULL, return the actual width of the newly allocated texture here
+*@param pHeight if not NULL, return the actual width of the newly allocated texture here
+*@return the newly allocated texture, to be destroyed with _cairo_dock_delete_texture.
+*/
+GLuint cairo_dock_create_texture_from_surface_full (cairo_surface_t *pImageSurface, int *pWidth, int *pHeight);
+
+/** Load a cairo surface into an OpenGL texture. The surface can be destroyed after that if you don't need it.
+ *  The texture will have the same (physical) size as the surface, but potentially rounded up to the nearest
+ *  power of 2 if needed. This function is the same as cairo_dock_create_texture_from_surface_full () but does
+ *  not returm the size of the new texture.
 *@param pImageSurface the surface, created with one of the 'cairo_dock_create_surface_xxx' functions.
 *@return the newly allocated texture, to be destroyed with _cairo_dock_delete_texture.
 */
