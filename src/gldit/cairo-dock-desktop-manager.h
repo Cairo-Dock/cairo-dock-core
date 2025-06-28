@@ -58,6 +58,10 @@ typedef enum {
 	NOTIFICATION_KEYMAP_CHANGED,
 	/// notification when the user requests the desktop menu to be shown
 	NOTIFICATION_MENU_REQUEST,
+	/// notification called when a new monitor was added, data : the GdkMonitor added
+	NOTIFICATION_DESKTOP_MONITOR_ADDED,
+	/// notification called when a monitor was removed, data : the GdkMonitor removed
+	NOTIFICATION_DESKTOP_MONITOR_REMOVED,
 	NB_NOTIFICATIONS_DESKTOP
 	} CairoDesktopNotifications;
 
@@ -264,6 +268,9 @@ void gldi_desktop_get_current (int *iCurrentDesktop, int *iCurrentViewportX, int
 #define cairo_dock_get_nth_screen(i) (i >= 0 && i < g_desktopGeometry.iNbScreens ? &g_desktopGeometry.pScreens[i] : &g_desktopGeometry.Xscreen)
 #define gldi_desktop_get_width() g_desktopGeometry.Xscreen.width
 #define gldi_desktop_get_height() g_desktopGeometry.Xscreen.height
+
+/// Get the list of monitors currently managed -- caller should not modify the GdkMonitor* pointers stored here
+GdkMonitor *const *gldi_desktop_get_monitors (int *iNumMonitors);
 
   ////////////////////////
  // Desktop background //

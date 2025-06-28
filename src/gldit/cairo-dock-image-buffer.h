@@ -52,6 +52,8 @@ struct _CairoDockImageBuffer {
 	gdouble iCurrentFrame; // current frame, the decimal part indicates we are between 2 frames.
 	gdouble fDeltaFrame;  // duration of 1 frame
 	struct timeval time;  // time the current frame has been set
+	gint iTexWidth; // real width of the texture (will be different from iWidth if the display has scale factor > 1)
+	gint iTexHeight; // real height of the texture
 	} ;
 
 /** Find the path of an image. '~' is handled, as well as the 'images' folder of the current theme. Use \ref cairo_dock_search_icon_s_path to search theme icons.
