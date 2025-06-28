@@ -480,10 +480,13 @@ static Icon *_cairo_dock_pick_icon_on_opengl_desklet (CairoDesklet *pDesklet)
 	glInitNames();
 	glPushName(0);
 	
+	GdkWindow* gdkwindow = gldi_container_get_gdk_window (CAIRO_CONTAINER(pDesklet));
+	gint scale = gdk_window_get_scale_factor (gdkwindow);
+	
 	glMatrixMode (GL_PROJECTION);
 	glPushMatrix ();
 	glLoadIdentity ();
-	gluPickMatrix ((GLdouble) pDesklet->container.iMouseX, (GLdouble) (viewport[3] - pDesklet->container.iMouseY), 2.0, 2.0, viewport);
+	gluPickMatrix ((GLdouble) pDesklet->container.iMouseX * scale, (GLdouble) (viewport[3] - pDesklet->container.iMouseY * scale), 2.0, 2.0, viewport);
 	gluPerspective (60.0, 1.0*(GLfloat)pDesklet->container.iWidth/(GLfloat)pDesklet->container.iHeight, 1., 4*pDesklet->container.iHeight);
 	
 	glMatrixMode (GL_MODELVIEW);
