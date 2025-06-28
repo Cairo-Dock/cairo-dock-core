@@ -150,7 +150,8 @@ void cairo_dock_load_image_buffer_full (CairoDockImageBuffer *pImage, const gcha
 	}
 	
 	if (g_bUseOpenGL)
-		pImage->iTexture = cairo_dock_create_texture_from_surface (pImage->pSurface);
+		pImage->iTexture = cairo_dock_create_texture_from_surface_full (pImage->pSurface,
+			&pImage->iTexWidth, &pImage->iTexHeight);
 	
 	g_free (cImagePath);
 }
@@ -168,7 +169,8 @@ void cairo_dock_load_image_buffer_from_surface (CairoDockImageBuffer *pImage, ca
 	pImage->fZoomX = 1.;
 	pImage->fZoomY = 1.;
 	if (g_bUseOpenGL)
-		pImage->iTexture = cairo_dock_create_texture_from_surface (pImage->pSurface);
+		pImage->iTexture = cairo_dock_create_texture_from_surface_full (pImage->pSurface,
+			&pImage->iTexWidth, &pImage->iTexHeight);
 }
 
 void cairo_dock_load_image_buffer_from_texture (CairoDockImageBuffer *pImage, GLuint iTexture, int iWidth, int iHeight)
@@ -600,9 +602,9 @@ void cairo_dock_end_draw_image_buffer_opengl (CairoDockImageBuffer *pImage, Gldi
 		glBindTexture (GL_TEXTURE_2D, pImage->iTexture);
 		
 		int iWidth, iHeight;  // texture' size
-		iWidth = pImage->iWidth, iHeight = pImage->iHeight;
-		int x = (pContainer->iWidth - iWidth)/2;
-		int y = (pContainer->iHeight - iHeight)/2;
+		iWidth = pImage->iTexWidth, iHeight = pImage->iTexHeight;
+		int x = 0; // (pContainer->iWidth - iWidth)/2;
+		int y = 0; // (pContainer->iHeight - iHeight)/2;
 		glCopyTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, x, y, iWidth, iHeight, 0);  // target, num mipmap, format, x,y, w,h, border.
 		
 		_cairo_dock_disable_texture ();
@@ -649,7 +651,8 @@ void cairo_dock_image_buffer_update_texture (CairoDockImageBuffer *pImage)
 {
 	if (pImage->iTexture == 0)
 	{
-		pImage->iTexture = cairo_dock_create_texture_from_surface (pImage->pSurface);
+		pImage->iTexture = cairo_dock_create_texture_from_surface_full (pImage->pSurface,
+			&pImage->iTexWidth, &pImage->iTexHeight);
 	}
 	else
 	{
