@@ -303,6 +303,9 @@ static inline void _set_desklet_matrix (CairoDesklet *pDesklet)
 static void _render_desklet_opengl (CairoDesklet *pDesklet)
 {
 	gboolean bUseDefaultColors = pDesklet->bUseDefaultColors;
+	// note: this is called after gldi_gl_container_begin_draw_full() which called glScalef() with the 
+	// display scale factor; however, for some reason this is not necessary in this case, so we reset it
+	glLoadIdentity ();
 	glPushMatrix ();
 	///glTranslatef (0*pDesklet->container.iWidth/2, 0*pDesklet->container.iHeight/2, 0.);  // avec une perspective ortho.
 	///glTranslatef (0*pDesklet->container.iWidth/2, 0*pDesklet->container.iHeight/2, -pDesklet->container.iWidth*(1.87 +.35*fabs (sin(pDesklet->fDepthRotationY))));  // avec 30 deg de perspective
