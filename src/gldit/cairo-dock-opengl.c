@@ -69,12 +69,12 @@ void gldi_gl_backend_force_indirect_rendering (void)
 }
 
 
-static inline void _set_perspective_view (int iWidth, int iHeight)
+static inline void _set_perspective_view (int iWidth, int iHeight, int scale)
 {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(60.0, 1.0*(GLfloat)iWidth/(GLfloat)iHeight, 1., 4*iHeight);
-	glViewport(0, 0, iWidth, iHeight);
+	glViewport(0, 0, iWidth * scale, iHeight * scale);
 	glMatrixMode (GL_MODELVIEW);
 	
 	glLoadIdentity ();
@@ -101,7 +101,7 @@ void gldi_gl_container_set_perspective_view (GldiContainer *pContainer)
 	GdkWindow* gdkwindow = gldi_container_get_gdk_window (pContainer);
 	gint scale = gdk_window_get_scale_factor (gdkwindow);
 	
-	_set_perspective_view (w * scale, h * scale);
+	_set_perspective_view (w, h, scale);
 	pContainer->bPerspectiveView = TRUE;
 }
 
@@ -115,7 +115,7 @@ void gldi_gl_container_set_perspective_view_for_icon (Icon *pIcon)
 		scale = gdk_window_get_scale_factor (gdkwindow);
 	}
 	
-	_set_perspective_view (w * scale, h * scale);
+	_set_perspective_view (w, h, scale);
 }
 
 static inline void _set_ortho_view (int iWidth, int iHeight)

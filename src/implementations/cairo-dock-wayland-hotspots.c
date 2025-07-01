@@ -3,7 +3,7 @@
  * 
  * Functions to monitor screen edges for recalling a hidden dock.
  * 
- * Copyright 2021-2024 Daniel Kondor <kondor.dani@gmail.com>
+ * Copyright 2021-2025 Daniel Kondor <kondor.dani@gmail.com>
  * 
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -72,13 +72,22 @@ static int s_iOutputsSize = 0; // size of the above array
 
 
 
+static GdkMonitor* _get_monitor_for_dock (CairoDock *pDock)
+{
+	int iNumScreen = pDock->iNumScreen;
+	if (iNumScreen < 0) return NULL;
+	int iNumMonitors = 0;
+	GdkMonitor *const *pMonitors = gldi_desktop_get_monitors (&iNumMonitors);
+	return (iNumScreen < iNumMonitors) ? pMonitors[iNumScreen] : NULL;
+}
+
 static void _hotspot_hit_cb (CairoDock *pDock, gpointer user_data)
 {
 	if (! pDock->bAutoHide && pDock->iVisibility != CAIRO_DOCK_VISI_KEEP_BELOW) return;
 	
 	const hotspot_hit *hit = (const hotspot_hit*)user_data;
-	GdkMonitor *mon = gldi_dock_wayland_get_monitor (pDock);
-	if (mon != hit->monitor) return; // we only care if this dock is on this monitor
+	GdkMonitor *mon = _get_monitor_for_dock (pDock);
+	if (!mon || mon != hit->monitor) return; // we only care if this dock is on this monitor
 	CairoDockPositionType pos = gldi_wayland_get_edge_for_dock (pDock);
 	if (pos != hit->pos) return; // we only care if this is the correct edge
 	
@@ -404,7 +413,7 @@ static void _update_dock_hotspots (CairoDock *pDock, G_GNUC_UNUSED gpointer user
 	CairoDockPositionType pos = gldi_wayland_get_edge_for_dock (pDock);
 	if (pos == CAIRO_DOCK_INSIDE_SCREEN) return;
 	
-	GdkMonitor *mon = gldi_dock_wayland_get_monitor (pDock);
+	GdkMonitor *mon = _get_monitor_for_dock (pDock);
 	if (!mon) return;
 	
 	int i;
@@ -504,11 +513,11 @@ GldiWaylandHotspotsType gldi_wayland_hotspots_try_init (struct wl_registry *regi
 	
     if (type != GLDI_WAYLAND_HOTSPOTS_NONE)
     {
-		gldi_object_register_notification (&myWaylandMgr, NOTIFICATION_WAYLAND_MONITOR_ADDED, (GldiNotificationFunc)_monitor_added, GLDI_RUN_FIRST, NULL);
-		gldi_object_register_notification (&myWaylandMgr, NOTIFICATION_WAYLAND_MONITOR_REMOVED, (GldiNotificationFunc)_monitor_removed, GLDI_RUN_FIRST, NULL);
+		gldi_object_register_notification (&myDesktopMgr, NOTIFICATION_DESKTOP_MONITOR_ADDED, (GldiNotificationFunc)_monitor_added, GLDI_RUN_FIRST, NULL);
+		gldi_object_register_notification (&myDesktopMgr, NOTIFICATION_DESKTOP_MONITOR_REMOVED, (GldiNotificationFunc)_monitor_removed, GLDI_RUN_FIRST, NULL);
 		
 		int iNumMonitors = 0;
-		GdkMonitor *const *monitors = gldi_wayland_get_monitors (&iNumMonitors);
+		GdkMonitor *const *monitors = gldi_desktop_get_monitors (&iNumMonitors);
 		int i;
 		for (i = 0; i < iNumMonitors; i++) _monitor_added (NULL, monitors[i]);
 	}

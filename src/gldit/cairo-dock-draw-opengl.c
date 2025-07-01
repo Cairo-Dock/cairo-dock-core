@@ -597,7 +597,7 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 }
 
 
-GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
+GLuint cairo_dock_create_texture_from_surface_full (cairo_surface_t *pImageSurface, int *pWidth, int *pHeight)
 {
 	if (! g_bUseOpenGL || pImageSurface == NULL)
 		return 0;
@@ -666,7 +666,14 @@ GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface)
 		cairo_surface_destroy (pPowerOfwoSurface);
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_BLEND);
+	
+	if (pWidth) *pWidth = w;
+	if (pHeight) *pHeight = h;
 	return iTexture;
+}
+
+GLuint cairo_dock_create_texture_from_surface (cairo_surface_t *pImageSurface) {
+	return cairo_dock_create_texture_from_surface_full (pImageSurface, NULL, NULL);
 }
 
 GLuint cairo_dock_create_texture_from_raw_data (const guchar *pTextureRaw, int iWidth, int iHeight)
@@ -707,6 +714,8 @@ GLuint cairo_dock_create_texture_from_raw_data (const guchar *pTextureRaw, int i
 		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	
+	/** !! TODO: this might fail if g_openglConfig.bNonPowerOfTwoAvailable == FALSE
+	 * (although this is not expected on modern graphic cards) !! */
 	if (g_bEasterEggs && pTextureRaw)
 		gluBuild2DMipmaps (GL_TEXTURE_2D,
 			4,
