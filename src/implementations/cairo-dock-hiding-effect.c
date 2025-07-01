@@ -107,9 +107,13 @@ static void _post_render_move_down_opengl (CairoDock *pDock, double fOffset)
 	int iWidth, iHeight;  // taille de la texture
 	iWidth = pDock->container.iWidth;
 	iHeight = pDock->container.iHeight;
-	
+
+	GdkWindow* gdkwindow = gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock));
+	gint scale = gdk_window_get_scale_factor (gdkwindow);
+
 	glPushMatrix ();
 	glLoadIdentity ();
+	glScalef (scale, scale, 1.0);
 	if (!pDock->container.bIsHorizontal)
 	{
 		glTranslatef (iHeight/2, iWidth/2, 0.);
@@ -251,8 +255,12 @@ static void _post_render_fade_out_opengl (CairoDock *pDock, double fOffset)
 			iHeight = pDock->container.iWidth;
 		}
 		
+		GdkWindow* gdkwindow = gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock));
+		gint scale = gdk_window_get_scale_factor (gdkwindow);
+		
 		glPushMatrix ();
 		glLoadIdentity ();
+		glScalef (scale, scale, 1.0);
 		glTranslatef (iWidth/2, iHeight/2, -1.);
 		glScalef (1., -1., 1.);
 		_cairo_dock_apply_texture_at_size_with_alpha (pDock->iRedirectedTexture, iWidth, iHeight, fAlpha);
@@ -313,8 +321,12 @@ static void _post_render_semi_transparent_opengl (CairoDock *pDock, double fOffs
 			iHeight = pDock->container.iWidth;
 		}
 		
+		GdkWindow* gdkwindow = gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock));
+		gint scale = gdk_window_get_scale_factor (gdkwindow);
+		
 		glPushMatrix ();
 		glLoadIdentity ();
+		glScalef (scale, scale, 1.0);
 		glTranslatef (iWidth/2, iHeight/2, -1.);
 		glScalef (1., -1., 1.);
 		_cairo_dock_apply_texture_at_size_with_alpha (pDock->iRedirectedTexture, iWidth, iHeight, fAlpha);
@@ -390,9 +402,13 @@ static void _post_render_zoom_opengl (CairoDock *pDock, double fOffset)
 	_cairo_dock_enable_texture ();
 	_cairo_dock_set_blend_source ();
 	
+	GdkWindow* gdkwindow = gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock));
+	gint scale = gdk_window_get_scale_factor (gdkwindow);
+	
 	double z = _compute_zoom (pDock, fOffset);
 	glPushMatrix ();
 	glLoadIdentity ();
+	glScalef (scale, scale, 1.0);
 	
 	int iWidth, iHeight;  // taille de la texture
 	if (pDock->container.bIsHorizontal)
