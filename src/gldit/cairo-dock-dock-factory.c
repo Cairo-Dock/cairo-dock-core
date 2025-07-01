@@ -1188,7 +1188,10 @@ static gboolean _on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, Ca
 			if (pDock->iRedirectedTexture != 0)
 			{
 				_cairo_dock_delete_texture (pDock->iRedirectedTexture);
-				pDock->iRedirectedTexture = cairo_dock_create_texture_from_raw_data (NULL, pEvent->width, pEvent->height);
+				GdkWindow* gdkwindow = gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock));
+				gint scale = gdk_window_get_scale_factor (gdkwindow);
+				pDock->iRedirectedTexture = cairo_dock_create_texture_from_raw_data (NULL,
+					pEvent->width * scale, pEvent->height * scale);
 			}
 		}
 		
@@ -2560,9 +2563,11 @@ void cairo_dock_create_redirect_texture_for_dock (CairoDock *pDock)
 		return ;
 	if (pDock->iRedirectedTexture == 0)
 	{
+		GdkWindow* gdkwindow = gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock));
+		gint scale = gdk_window_get_scale_factor (gdkwindow);
 		pDock->iRedirectedTexture = cairo_dock_create_texture_from_raw_data (NULL,
-			(pDock->container.bIsHorizontal ? pDock->container.iWidth : pDock->container.iHeight),
-			(pDock->container.bIsHorizontal ? pDock->container.iHeight : pDock->container.iWidth));
+			scale * (pDock->container.bIsHorizontal ? pDock->container.iWidth : pDock->container.iHeight),
+			scale * (pDock->container.bIsHorizontal ? pDock->container.iHeight : pDock->container.iWidth));
 	}
 	if (pDock->iFboId == 0)
 		glGenFramebuffersEXT(1, &pDock->iFboId);
