@@ -316,6 +316,7 @@ void gldi_wayland_wm_done (GldiWaylandWindowActor *wactor)
 				if (actor == s_pMaybeActiveWindow) s_pMaybeActiveWindow = NULL;
 				gldi_object_unref (GLDI_OBJECT(actor));
 				s_bStackChange = TRUE;
+				bUnfocused = TRUE;
 				break;
 			}
 			
