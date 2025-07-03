@@ -33,11 +33,12 @@
 #include "cairo-dock-backends-manager.h"  // cairo_dock_get_dialog_decorator
 #include "cairo-dock-dialog-manager.h"  // myDialogsParam
 #include "cairo-dock-style-manager.h"
+#include "cairo-dock-icon-manager.h" // cairo_dock_search_icon_s_path
 #include "cairo-dock-menu.h"
 #include "cairo-dock-wayland-manager.h"
 
 extern gchar *g_cCurrentThemePath;
-
+extern GldiContainer *g_pPrimaryContainer;
 
 static gboolean _draw_menu_item (GtkWidget *widget, cairo_t *cr, G_GNUC_UNUSED gpointer data);
 
@@ -872,7 +873,7 @@ static gboolean _draw_menu_item (GtkWidget *widget,
 GtkWidget *gldi_menu_item_new_full2 (const gchar *cLabel, const gchar *cImage, gboolean bUseMnemonic, GtkIconSize iSize, gboolean bUseStyle)
 {
 	if (iSize == 0)
-		iSize = GTK_ICON_SIZE_MENU;
+		iSize = GTK_ICON_SIZE_MENU; // 16x16
 	
 	(void)cImage; // avoid warnings if CAIRO_DOCK_FORCE_ICON_IN_MENUS == 0
 	GtkWidget *pMenuItem;
@@ -880,20 +881,41 @@ GtkWidget *gldi_menu_item_new_full2 (const gchar *cLabel, const gchar *cImage, g
 	if (cImage)
 	{
 		GtkWidget *image = NULL;
+		int size, scale = 1;
+		gtk_icon_size_lookup (iSize, &size, NULL);
+		GdkPixbuf *pixbuf = NULL;
+		// TODO: try to get the scale factor based on which screen the menu will appear
+		// (although very likely the same as our primary container)
+		GdkWindow* gdkwindow = gldi_container_get_gdk_window (g_pPrimaryContainer);
+		if (gdkwindow) scale = gdk_window_get_scale_factor (gdkwindow);
+		
 		if (*cImage == '/')
-		{
-			int size;
-			gtk_icon_size_lookup (iSize, &size, NULL);
-			GdkPixbuf *pixbuf = cairo_dock_load_gdk_pixbuf (cImage, size, size);
-			if (pixbuf)
-			{
-				image = gtk_image_new_from_pixbuf (pixbuf);
-				g_object_unref (pixbuf);
-			}
-		}
+			pixbuf = cairo_dock_load_gdk_pixbuf (cImage, size * scale, size * scale);
 		else if (*cImage != '\0')
 		{
-			image = gtk_image_new_from_icon_name (cImage, iSize);
+			// note: this function will also automatically look up the scale factor to use
+			// (so it will select an image suitable for a pixel size of (scale * size);
+			// we could add an option to explicitly give it the scale factor)
+			gchar *path = cairo_dock_search_icon_s_path (cImage, size);
+			if (path)
+			{
+				pixbuf = cairo_dock_load_gdk_pixbuf (path, size * scale, size * scale);
+				g_free (path);
+			}
+		}
+		if (pixbuf)
+		{
+			// Note: our GdkPixbuf does not care about scale factor, it loads an image with an
+			// exact pixel size of (scale * size). GtkImage implicitly stores a scale factor,
+			// but does not provide a direct API to set it, so this will always be 1 if
+			// using gtk_image_new_from_pixbuf () or gtk_image_new_from_file ()
+			// (see e.g. https://gitlab.gnome.org/GNOME/gtk/-/issues/483). This will result
+			// in too large (and still blurry) rendering if scale > 1. By creating a cairo
+			// surface first, we are able to set the proper scale factor though.
+			cairo_surface_t *surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale, NULL);
+			image = gtk_image_new_from_surface (surface);
+			g_object_unref (pixbuf);
+			cairo_surface_destroy (surface); // note: this does not destroy the surface, only unrefs it
 		}
 		if (! cLabel)
 			pMenuItem = gtk3_image_menu_item_new ();
@@ -946,7 +968,7 @@ GtkWidget *gldi_menu_item_new_with_submenu (const gchar *cLabel, const gchar *cI
 {
 	GtkIconSize iSize;
 	if (cImage && (*cImage == '/' || *cImage == '\0'))  // for icons that are not stock-icons, we choose a bigger size; the reason is that these icons usually don't have a 16x16 version, and don't scale very well to such a small size (most of the time, it's the icon of an application, or the cairo-dock or recent-documents icon (note: for these 2, we could make a small version)). it's a workaround and a better solution may exist ^^
-		iSize = GTK_ICON_SIZE_LARGE_TOOLBAR;
+		iSize = GTK_ICON_SIZE_LARGE_TOOLBAR; // 24x24
 	else
 		iSize = 0;
 	GtkWidget *pMenuItem = gldi_menu_item_new_full (cLabel, cImage, FALSE, iSize);
