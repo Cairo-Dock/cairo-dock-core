@@ -230,8 +230,7 @@ static void _layer_shell_move_to_monitor (GldiContainer *pContainer, int iNumScr
 	
 	int iNumMonitors = 0;
 	GdkMonitor *const *pMonitors = gldi_desktop_get_monitors (&iNumMonitors);
-	if (iNumScreen >= iNumMonitors) return;
-	gtk_layer_set_monitor (window, pMonitors[iNumScreen]);
+	gtk_layer_set_monitor (window, (iNumScreen < iNumMonitors) ? pMonitors[iNumScreen] : NULL);
 }
 #endif
 
