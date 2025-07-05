@@ -21,16 +21,8 @@
  */
 
 /** TODO
- * - Support for other states (sticky, set above / below)
+ * - Support for other states (sticky, set above / below) -> partially done
  * - Support for using the supplied icon (icon_changed and themed_icon_name_changed events)
- * - Support for killing a process (via the supplied pid)
- * - Keeping track whether it is possible to minimize / maximize / fullscreen a window
- * 		(part of state, should be reported by the _can_minimize_maximize_close() function
- * 		TODO: what to do if a change in this is reported via the state_changed event?
- * 		Is there a need to send a notification about this?)
- * - Use the reported location of windows, working together with cairo-dock-dock-visibility functionality
- * - Keeping track which virtual desktop / workspace each window is on, support sending to other one
- * 		(this probably needs support for the plasma-virtual-desktop protocol)
  */
 
 #define _GNU_SOURCE
@@ -63,6 +55,7 @@ struct _GldiPlasmaWindowActor {
 	unsigned int pid; // pid of the process associated with this window
 	unsigned int sigkill_timeout; // set to an event source if the user requested to kill this process
 	unsigned int cap_and_state; // capabilites and state that is not stored elsewhere
+	int stack_tmp; // temporarily store stacking order while receiving org_kde_plasma_stacking_order events
 	char *service_name; // appmenu service name
 	char *object_path; // appmenu object path
 };
@@ -74,6 +67,7 @@ typedef enum {
 
 static uint32_t server_protocol_version = 0;
 static GHashTable *s_hIDTable = NULL;
+static int s_iStackTmp = 0;
 
 // window manager interface
 
@@ -258,11 +252,10 @@ static void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED pwhandle *handle,
 	if (flags & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_ACTIVE)
 	{
 		gldi_wayland_wm_activated (wactor, TRUE, FALSE);
-		// versions >= 12 and < 17 have stacking_order_uuid_changed which
-		// is handled separately below; for versions >= 17, we would need
-		// to support stacking_order_changed_2
-		if (server_protocol_version < 12 || server_protocol_version >= 17)
-			gldi_wayland_wm_stack_on_top ((GldiWindowActor*)wactor);
+		// versions >= 12 and < 17 have stacking_order_uuid_changed which is handled
+		// separately below; versions >= 17, have stacking_order_changed_2 which is
+		// also handled separately
+		if (server_protocol_version < 12) gldi_wayland_wm_stack_on_top ((GldiWindowActor*)wactor);
 	}
 	else gldi_wayland_wm_activated (wactor, FALSE, FALSE);
 	if (wactor->init_done) gldi_wayland_wm_done (wactor);
@@ -440,12 +433,66 @@ static void _stacking_order_uuid_changed_cb ( G_GNUC_UNUSED void *data,
 	gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_Z_ORDER_CHANGED, NULL);
 }
 
+
+// current stacking order object that is being listened to
+static struct org_kde_plasma_stacking_order *s_pStack = NULL;
+
+static void _stacking_order_window ( G_GNUC_UNUSED void *data,
+	struct org_kde_plasma_stacking_order *stack, const char *uuid)
+{
+	if (stack != s_pStack) return;
+	void *ptr = g_hash_table_lookup (s_hIDTable, uuid);
+	if (ptr)
+	{
+		GldiPlasmaWindowActor *actor = (GldiPlasmaWindowActor*)ptr;
+		actor->stack_tmp = s_iStackTmp;
+		s_iStackTmp++;
+	}
+}
+
+
+void _stacking_order_window_update (void*, void *ptr, void*)
+{
+	GldiPlasmaWindowActor *pactor = (GldiPlasmaWindowActor*)ptr;
+	pactor->wactor.actor.iStackOrder = pactor->stack_tmp;
+}
+
+static void _stacking_order_done ( G_GNUC_UNUSED void *data,
+	struct org_kde_plasma_stacking_order *stack)
+{
+	org_kde_plasma_stacking_order_destroy (stack);
+	if (stack != s_pStack) return;
+	
+	s_pStack = NULL;
+	g_hash_table_foreach (s_hIDTable, _stacking_order_window_update, NULL);
+	gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_Z_ORDER_CHANGED, NULL);
+}
+
+static struct org_kde_plasma_stacking_order_listener gldi_plasma_stacking_order_interface = {
+	.window = _stacking_order_window,
+	.done = _stacking_order_done
+};
+
+static void _stacking_order_changed_2 ( G_GNUC_UNUSED void *data,
+	struct org_kde_plasma_window_management *manager)
+{
+	if (s_pStack) {
+		org_kde_plasma_stacking_order_destroy (s_pStack);
+		s_pStack = NULL;
+	}
+	
+	s_iStackTmp = 0;
+	s_pStack = org_kde_plasma_window_management_get_stacking_order (manager);
+	org_kde_plasma_stacking_order_add_listener (s_pStack, &gldi_plasma_stacking_order_interface, NULL);
+}
+
 static struct org_kde_plasma_window_management_listener gldi_toplevel_manager = {
     .show_desktop_changed = _show_desktop_changed_cb,
     .window = _window_cb,
     .stacking_order_changed = _stacking_order_changed_cb,
     .stacking_order_uuid_changed = _stacking_order_uuid_changed_cb,
     .window_with_uuid = _new_toplevel,
+    .stacking_order_changed_2 = _stacking_order_changed_2
 };
 
 static struct org_kde_plasma_window_management* s_ptoplevel_manager = NULL;
@@ -467,7 +514,7 @@ void _reset_object (GldiObject* obj)
 	{
 		g_hash_table_remove (s_hIDTable, pactor->uuid);
 		g_free (pactor->uuid);
-		org_kde_plasma_window_destroy((pwhandle*)pactor->wactor.handle);
+		org_kde_plasma_window_destroy ((pwhandle*)pactor->wactor.handle);
 		g_free (pactor->service_name);
 		g_free (pactor->object_path);
 	}
