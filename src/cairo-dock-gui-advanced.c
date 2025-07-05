@@ -889,28 +889,33 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 	GtkWidget *pPreviewImage = s_pPreviewImage;
 	if (pGroupDescription->cPreviewFilePath != NULL && strcmp (pGroupDescription->cPreviewFilePath, "none") != 0)
 	{
+		int scale = 1;
+		GdkWindow* gdkwindow = gldi_container_get_gdk_window (CAIRO_CONTAINER (g_pMainDock));
+		if (gdkwindow) scale = gdk_window_get_scale_factor (gdkwindow);
+		
 		//g_print ("on recupere la prevue de %s\n", pGroupDescription->cPreviewFilePath);
 		int iPreviewWidth, iPreviewHeight;
 		GdkPixbuf *pPreviewPixbuf = NULL;
 		if (gdk_pixbuf_get_file_info (pGroupDescription->cPreviewFilePath, &iPreviewWidth, &iPreviewHeight) != NULL)
 		{
-			if (iPreviewWidth > CAIRO_DOCK_PREVIEW_WIDTH)
+			if (iPreviewWidth > CAIRO_DOCK_PREVIEW_WIDTH * scale)
 			{
-				iPreviewHeight *= (double)CAIRO_DOCK_PREVIEW_WIDTH/iPreviewWidth;
-				iPreviewWidth = CAIRO_DOCK_PREVIEW_WIDTH;
+				iPreviewHeight *= ((double)CAIRO_DOCK_PREVIEW_WIDTH * scale)/iPreviewWidth;
+				iPreviewWidth = CAIRO_DOCK_PREVIEW_WIDTH * scale;
 			}
-			if (iPreviewHeight > CAIRO_DOCK_PREVIEW_HEIGHT)
+			if (iPreviewHeight > CAIRO_DOCK_PREVIEW_HEIGHT * scale)
 			{
-				iPreviewWidth *= (double)CAIRO_DOCK_PREVIEW_HEIGHT/iPreviewHeight;
-				iPreviewHeight = CAIRO_DOCK_PREVIEW_HEIGHT;
+				iPreviewWidth *= ((double)CAIRO_DOCK_PREVIEW_HEIGHT * scale)/iPreviewHeight;
+				iPreviewHeight = CAIRO_DOCK_PREVIEW_HEIGHT * scale;
 			}
-			if (iPreviewWidth > iPreviewWidgetWidth)
+			if (iPreviewWidth > iPreviewWidgetWidth * scale)
 			{
-				iPreviewHeight *= (double)iPreviewWidgetWidth/iPreviewWidth;
-				iPreviewWidth = iPreviewWidgetWidth;
+				iPreviewHeight *= ((double)iPreviewWidgetWidth * scale)/iPreviewWidth;
+				iPreviewWidth = iPreviewWidgetWidth * scale;
 			}
 			//g_print ("preview : %dx%d\n", iPreviewWidth, iPreviewHeight);
-			pPreviewPixbuf = gdk_pixbuf_new_from_file_at_size (pGroupDescription->cPreviewFilePath, iPreviewWidth, iPreviewHeight, NULL);
+			pPreviewPixbuf = cairo_dock_load_gdk_pixbuf (pGroupDescription->cPreviewFilePath,
+				iPreviewWidth, iPreviewHeight);
 		}
 		if (pPreviewPixbuf == NULL)
 		{
@@ -924,7 +929,9 @@ static gboolean _show_group_dialog (CairoDockGroupDescription *pGroupDescription
 		else 
 			gtk_widget_show (s_pPreviewBox);
 
-		gtk_image_set_from_pixbuf (GTK_IMAGE (pPreviewImage), pPreviewPixbuf);
+		cairo_surface_t *surface = gdk_cairo_surface_create_from_pixbuf (pPreviewPixbuf, scale, NULL);
+		gtk_image_set_from_surface (GTK_IMAGE (pPreviewImage), surface);
+		cairo_surface_destroy (surface);
 		g_object_unref (pPreviewPixbuf);
 	}
 	
