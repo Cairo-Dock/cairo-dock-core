@@ -694,6 +694,25 @@ void cairo_dock_image_buffer_update_texture (CairoDockImageBuffer *pImage)
 }
 
 
+cairo_surface_t *cairo_dock_image_buffer_copy_scale (CairoDockImageBuffer *pImage, int iWidth, int iHeight)
+{
+	if (iWidth <= 0 || iHeight <= 0) return NULL;
+	if (pImage->iWidth > 0 && pImage->iHeight > 0 && pImage->pSurface != NULL)
+	{
+		// note: this will use iWidth and iHeight as a logical size and use the same
+		// device scale factor as our surface
+		cairo_surface_t *surface = cairo_surface_create_similar (pImage->pSurface,
+			CAIRO_CONTENT_COLOR_ALPHA, iWidth, iHeight);
+		cairo_t *pCairoContext = cairo_create (surface);
+		cairo_scale (pCairoContext, (double)iWidth/pImage->iWidth, (double)iHeight/pImage->iHeight);
+		cairo_set_source_surface (pCairoContext, pImage->pSurface, 0., 0.);
+		cairo_paint (pCairoContext);
+		cairo_destroy (pCairoContext);
+		return surface;
+	}
+	else return NULL;
+}
+
 GdkPixbuf *cairo_dock_image_buffer_to_pixbuf (CairoDockImageBuffer *pImage, int iWidth, int iHeight)
 {
 	GdkPixbuf *pixbuf = NULL;
