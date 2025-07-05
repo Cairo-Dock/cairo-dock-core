@@ -252,7 +252,12 @@ CairoDockGroupKeyWidget *cairo_dock_gui_find_group_key_widget_in_list (GSList *p
  */
 GtkWidget *cairo_dock_gui_menu_item_add (GtkWidget *pMenu, const gchar *cLabel, const gchar *cImage, GCallback pFunction, gpointer pData);
 
-GtkWidget *_gtk_image_new_from_file (const gchar *cIcon, int iSize);
+/** Find and load an icon image at the given GtkIconSize and the default scale factor if possible.
+ * @param cIcon name or full path of the image file to load
+ * @param iSize the GtkIconSize to use
+ * @return a GtkImage that contains the desired icon if found or an empty GtkImage otherwise or NULL if cIcon was NULL.
+ */
+GtkWidget *cairo_dock_gui_image_from_file (const gchar *cIcon, int iSize);
 
 G_END_DECLS
 #endif

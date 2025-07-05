@@ -3080,7 +3080,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					if (cSmallIcon != NULL)
 					{
 						pLabelContainer = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_ICON_MARGIN/2);
-						GtkWidget *pImage = _gtk_image_new_from_file (cSmallIcon, GTK_ICON_SIZE_MENU);
+						GtkWidget *pImage = cairo_dock_gui_image_from_file (cSmallIcon, GTK_ICON_SIZE_MENU);
 						gtk_container_add (GTK_CONTAINER (pLabelContainer),
 							pImage);
 						
@@ -3263,7 +3263,7 @@ GtkWidget *cairo_dock_build_key_file_widget_full (GKeyFile* pKeyFile, const gcha
 		if (cIcon != NULL)
 		{
 			pLabelContainer = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_ICON_MARGIN);
-			GtkWidget *pImage = _gtk_image_new_from_file (cIcon, GTK_ICON_SIZE_BUTTON);
+			GtkWidget *pImage = cairo_dock_gui_image_from_file (cIcon, GTK_ICON_SIZE_BUTTON);
 			gtk_container_add (GTK_CONTAINER (pLabelContainer),
 				pImage);
 			gtk_container_add (GTK_CONTAINER (pLabelContainer), pLabel);
@@ -3675,29 +3675,19 @@ CairoDockGroupKeyWidget *cairo_dock_gui_find_group_key_widget_in_list (GSList *p
 	return pElement->data;
 }
 
-
-GtkWidget *_gtk_image_new_from_file (const gchar *cIcon, int iSize)
+GtkWidget *cairo_dock_gui_image_from_file (const gchar *cIcon, int iSize)
 {
 	g_return_val_if_fail (cIcon, NULL);
-	GtkWidget *pImage = NULL;
-	if (*cIcon != '/')  // named icon
+	int size = cairo_dock_search_icon_size (iSize);
+	cairo_surface_t *surface = cairo_dock_create_surface_from_icon (cIcon, size, size);
+	if (surface)
 	{
-		pImage = gtk_image_new_from_icon_name (cIcon, iSize);
+		GtkWidget *pImage = gtk_image_new_from_surface (surface);
+		cairo_surface_destroy (surface);
+		return pImage;
 	}
-	else  // path
-	{
-		iSize = cairo_dock_search_icon_size (iSize);
-		pImage = gtk_image_new ();
-		GdkPixbuf *pixbuf = cairo_dock_load_gdk_pixbuf (cIcon, iSize, iSize);
-		if (pixbuf != NULL)
-		{
-			gtk_image_set_from_pixbuf (GTK_IMAGE (pImage), pixbuf);
-			g_object_unref (pixbuf);
-		}
-	}
-	return pImage;
+	else return gtk_image_new ();
 }
-
 
 GtkWidget *cairo_dock_gui_menu_item_add (GtkWidget *pMenu, const gchar *cLabel, const gchar *cImage, GCallback pFunction, gpointer pData)
 {
