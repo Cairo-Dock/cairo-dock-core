@@ -43,6 +43,8 @@ static void _load_image (Icon *icon)
 {
 	int iWidth = cairo_dock_icon_get_allocated_width (icon);
 	int iHeight = cairo_dock_icon_get_allocated_height (icon);
+	if (iWidth <= 0 || iHeight <= 0) return;
+	
 	cairo_surface_t *pSurface = NULL;
 	
 	if (icon->pSubDock != NULL && icon->iSubdockViewType != 0)  // a stack rendering is specified, we'll draw it when the sub-icons will be loaded

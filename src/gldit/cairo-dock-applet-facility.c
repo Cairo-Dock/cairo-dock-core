@@ -91,6 +91,8 @@ gboolean cairo_dock_set_image_on_icon (cairo_t *pIconContext, const gchar *cIcon
 	// load the image in a surface.
 	int iWidth, iHeight;
 	cairo_dock_get_icon_extent (pIcon, &iWidth, &iHeight);
+	if (iWidth <= 0 || iHeight <= 0) return FALSE;
+	
 	cairo_surface_t *pImageSurface = cairo_dock_create_surface_from_icon (cIconName,
 		iWidth,
 		iHeight);

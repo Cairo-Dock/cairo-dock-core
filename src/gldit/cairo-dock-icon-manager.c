@@ -957,6 +957,7 @@ static void _load_image (Icon *icon)
 {
 	int iWidth = cairo_dock_icon_get_allocated_width (icon);
 	int iHeight = cairo_dock_icon_get_allocated_height (icon);
+	if (iWidth <= 0 || iHeight <= 0) return;
 	cairo_surface_t *pSurface = NULL;
 	
 	if (icon->cFileName)
