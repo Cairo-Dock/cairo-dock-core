@@ -34,6 +34,9 @@ void gldi_dock_hide_show_if_current_window_is_on_our_way (CairoDock *pDock);
 
 void gldi_dock_hide_if_any_window_overlap_or_show (CairoDock *pDock);
 
+/** Re-check if the given dock should be shown given its visibility settings */
+void gldi_dock_visibility_refresh (CairoDock *pDock);
+
 gboolean gldi_dock_overlaps_window (CairoDock *pDock, GldiWindowActor *actor);
 
 
