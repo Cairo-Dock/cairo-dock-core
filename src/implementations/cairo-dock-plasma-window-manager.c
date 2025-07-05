@@ -345,6 +345,11 @@ static void _gldi_toplevel_application_menu_cb (void* data, G_GNUC_UNUSED pwhand
 	cd_debug ("got app menu address: %s %s", service_name, object_path);
 }
 
+static void _gldi_toplevel_client_geometry_cb (void*, pwhandle*, int32_t, int32_t, uint32_t, uint32_t)
+{
+	/* don't care */
+}
+
 static struct org_kde_plasma_window_listener gldi_toplevel_handle_interface = {
     .title_changed        = _gldi_toplevel_title_cb,
     .app_id_changed       = _gldi_toplevel_appid_cb,
@@ -361,7 +366,9 @@ static struct org_kde_plasma_window_listener gldi_toplevel_handle_interface = {
     .virtual_desktop_left = _gldi_toplevel_dummy_cb,
     .application_menu = _gldi_toplevel_application_menu_cb,
     .activity_entered = _gldi_toplevel_dummy_cb,
-    .activity_left = _gldi_toplevel_dummy_cb
+    .activity_left = _gldi_toplevel_dummy_cb,
+    .resource_name_changed = _gldi_toplevel_dummy_cb,
+    .client_geometry = _gldi_toplevel_client_geometry_cb
 };
 
 
