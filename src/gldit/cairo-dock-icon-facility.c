@@ -616,13 +616,6 @@ void gldi_icon_set_quick_info_printf (Icon *pIcon, const gchar *cQuickInfoFormat
 }
 
 
-GdkPixbuf *cairo_dock_icon_buffer_to_pixbuf (Icon *icon)
-{
-	g_return_val_if_fail (icon != NULL, NULL);
-	
-	return cairo_dock_image_buffer_to_pixbuf (&icon->image, 24, 24);
-}
-
 cairo_surface_t *cairo_dock_icon_buffer_to_cairo (Icon *icon, int iWidth, int iHeight)
 {
 	g_return_val_if_fail (icon != NULL, NULL);
