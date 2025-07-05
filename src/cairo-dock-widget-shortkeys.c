@@ -17,6 +17,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <cairo/cairo-gobject.h>
+
 #include "config.h"
 #include "gldi-icon-names.h"
 #include "cairo-dock-struct.h"
@@ -38,7 +40,7 @@ static void _shortkeys_widget_reload (CDWidget *pCdWidget);
 typedef enum {
 	CD_SHORTKEY_MODEL_NAME = 0,  // demander
 	CD_SHORTKEY_MODEL_DESCRIPTION,  // description
-	CD_SHORTKEY_MODEL_PIXBUF,  // icon image
+	CD_SHORTKEY_MODEL_SURFACE,  // icon image
 	CD_SHORTKEY_MODEL_SHORTKEY,  // shortkey
 	CD_SHORTKEY_MODEL_STATE,  // grabbed or not
 	CD_SHORTKEY_MODEL_BINDING,  // the binding
@@ -177,10 +179,8 @@ void cairo_dock_add_shortkey_to_model (GldiShortkey *binding, GtkListStore *pMod
 {
 	cd_debug ("Add shortkey with image: ",  binding->cIconFilePath);
 	int iSize = cairo_dock_search_icon_size (GTK_ICON_SIZE_LARGE_TOOLBAR);
-	gchar *cIcon = cairo_dock_search_icon_s_path (binding->cIconFilePath,
-		iSize);
-	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size (cIcon, iSize, iSize, NULL);
-	g_free (cIcon);
+	cairo_surface_t *surface = cairo_dock_create_surface_from_icon (binding->cIconFilePath,
+		iSize, iSize);
 	GtkTreeIter iter;
 	memset (&iter, 0, sizeof (GtkTreeIter));
 	gtk_list_store_append (GTK_LIST_STORE (pModel), &iter);
@@ -189,18 +189,18 @@ void cairo_dock_add_shortkey_to_model (GldiShortkey *binding, GtkListStore *pMod
 		CD_SHORTKEY_MODEL_NAME, binding->cDemander,
 		CD_SHORTKEY_MODEL_SHORTKEY, binding->keystring,
 		CD_SHORTKEY_MODEL_DESCRIPTION, binding->cDescription,
-		CD_SHORTKEY_MODEL_PIXBUF, pixbuf,
+		CD_SHORTKEY_MODEL_SURFACE, surface,
 		CD_SHORTKEY_MODEL_STATE, binding->bSuccess,
 		CD_SHORTKEY_MODEL_BINDING, binding, -1);
-	g_object_unref (pixbuf);
+	if (surface) cairo_surface_destroy (surface);
 }
-static GtkWidget *cairo_dock_build_shortkeys_widget (void)
+static GtkWidget *_cairo_dock_build_shortkeys_widget (void)
 {
 	// fill the model
 	GtkListStore *pModel = gtk_list_store_new (CD_SHORTKEY_MODEL_NB_COLUMNS,
 		G_TYPE_STRING,  // demander
 		G_TYPE_STRING,  // description
-		GDK_TYPE_PIXBUF,  // icon
+		CAIRO_GOBJECT_TYPE_SURFACE,  // icon
 		G_TYPE_STRING,  // shortkey
 		G_TYPE_BOOLEAN,  // grabbed or not
 		G_TYPE_POINTER);  // binding
@@ -219,7 +219,7 @@ static GtkWidget *cairo_dock_build_shortkeys_widget (void)
 	GtkCellRenderer *rend;
 	// icon
 	rend = gtk_cell_renderer_pixbuf_new ();
-	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pOneWidget), -1, NULL, rend, "pixbuf", CD_SHORTKEY_MODEL_PIXBUF, NULL);
+	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pOneWidget), -1, NULL, rend, "surface", CD_SHORTKEY_MODEL_SURFACE, NULL);
 	// demander
 	rend = gtk_cell_renderer_text_new ();
 	col = gtk_tree_view_column_new_with_attributes (_("Origin"), rend, "text", CD_SHORTKEY_MODEL_NAME, NULL);
@@ -246,7 +246,7 @@ ShortkeysWidget *cairo_dock_shortkeys_widget_new (void)
 	pShortkeysWidget->widget.iType = WIDGET_SHORTKEYS;
 	pShortkeysWidget->widget.reload = _shortkeys_widget_reload;
 	
-	pShortkeysWidget->pShortKeysTreeView = cairo_dock_build_shortkeys_widget ();
+	pShortkeysWidget->pShortKeysTreeView = _cairo_dock_build_shortkeys_widget ();
 	
 	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
 	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, gldi_desktop_get_height() - 175), NULL);

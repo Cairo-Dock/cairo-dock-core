@@ -182,9 +182,8 @@ static gboolean _cairo_dock_add_module_to_modele (gchar *cModuleName, GldiModule
 	{
 		//g_print (" + %s\n",  pModule->pVisitCard->cIconFilePath);
 		int iSize = cairo_dock_search_icon_size (GTK_ICON_SIZE_LARGE_TOOLBAR);
-		gchar *cIcon = cairo_dock_search_icon_s_path (pModule->pVisitCard->cIconFilePath, iSize);
-		GdkPixbuf *pixbuf = cairo_dock_load_gdk_pixbuf (cIcon, iSize, iSize);
-		g_free (cIcon);
+		cairo_surface_t *surface = cairo_dock_create_surface_from_icon (
+			pModule->pVisitCard->cIconFilePath, iSize, iSize);
 
 		GtkTreeIter iter;
 		memset (&iter, 0, sizeof (GtkTreeIter));
@@ -194,10 +193,10 @@ static gboolean _cairo_dock_add_module_to_modele (gchar *cModuleName, GldiModule
 			CAIRO_DOCK_MODEL_RESULT, cModuleName,
 			CAIRO_DOCK_MODEL_DESCRIPTION_FILE, dgettext (pModule->pVisitCard->cGettextDomain, pModule->pVisitCard->cDescription),
 			CAIRO_DOCK_MODEL_IMAGE, pModule->pVisitCard->cPreviewFilePath,
-			CAIRO_DOCK_MODEL_ICON, pixbuf,
+			CAIRO_DOCK_MODEL_ICON, surface,
 			CAIRO_DOCK_MODEL_STATE, pModule->pVisitCard->iCategory,
 			CAIRO_DOCK_MODEL_ACTIVE, (pModule->pInstancesList != NULL), -1);
-		g_object_unref (pixbuf);
+		cairo_surface_destroy (surface);
 	}
 	return FALSE;
 }
@@ -230,7 +229,7 @@ static GtkWidget *_cairo_dock_build_modules_treeview (void)
 	g_signal_connect (G_OBJECT (rend), "toggled", (GCallback) _cairo_dock_activate_one_module, pModel);
 	// icone
 	rend = gtk_cell_renderer_pixbuf_new ();
-	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pOneWidget), -1, NULL, rend, "pixbuf", CAIRO_DOCK_MODEL_ICON, NULL);
+	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pOneWidget), -1, NULL, rend, "surface", CAIRO_DOCK_MODEL_ICON, NULL);
 	// nom
 	rend = gtk_cell_renderer_text_new ();
 	col = gtk_tree_view_column_new_with_attributes (_("Plug-in"), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
