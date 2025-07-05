@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
+#include <cairo/cairo-gobject.h>
 
 #include "../config.h"
 #include "gldi-config.h"
@@ -86,7 +87,7 @@ typedef struct {
 		G_TYPE_BOOLEAN,  /* CAIRO_DOCK_MODEL_ACTIVE*/\
 		G_TYPE_INT,      /* CAIRO_DOCK_MODEL_ORDER*/\
 		G_TYPE_INT,      /* CAIRO_DOCK_MODEL_ORDER2*/\
-		GDK_TYPE_PIXBUF, /* CAIRO_DOCK_MODEL_ICON*/\
+		CAIRO_GOBJECT_TYPE_SURFACE, /* CAIRO_DOCK_MODEL_ICON*/\
 		G_TYPE_INT,      /* CAIRO_DOCK_MODEL_STATE*/\
 		G_TYPE_DOUBLE,   /* CAIRO_DOCK_MODEL_SIZE*/\
 		G_TYPE_STRING)   /* CAIRO_DOCK_MODEL_AUTHOR*/
@@ -275,7 +276,7 @@ static const gchar* _cairo_dock_gui_get_package_state (gint iState)
 	return cState;
 }
 
-static GdkPixbuf* _cairo_dock_gui_get_package_state_icon (gint iState)
+static cairo_surface_t* _cairo_dock_gui_get_package_state_icon (gint iState)
 {
 	const gchar *cType;
 	switch (iState)
@@ -288,9 +289,9 @@ static GdkPixbuf* _cairo_dock_gui_get_package_state_icon (gint iState)
 		default: 							cType = NULL; break;
 	}
 	gchar *cStateIcon = g_strconcat (GLDI_SHARE_DATA_DIR"/", cType, NULL);
-	GdkPixbuf *pixbuf = cairo_dock_load_gdk_pixbuf (cStateIcon, 24, 24);
+	cairo_surface_t *surface = cairo_dock_create_surface_from_icon (cStateIcon, 24, 24);
 	g_free (cStateIcon);
-	return pixbuf;
+	return surface;
 }
 
 static gboolean on_delete_async_widget (GtkWidget *pWidget, G_GNUC_UNUSED GdkEvent *event, G_GNUC_UNUSED gpointer data)
@@ -312,16 +313,16 @@ static inline void _set_preview_image (const gchar *cPreviewFilePath, GtkImage *
 	gtk_widget_get_preferred_size (GTK_WIDGET (pPreviewImage), &requisition, NULL);
 	requisition.width = CAIRO_DOCK_PREVIEW_WIDTH;
 	requisition.height = CAIRO_DOCK_PREVIEW_HEIGHT;
+	
+	int scale = 1;
+	GdkWindow* gdkwindow = gldi_container_get_gdk_window (CAIRO_CONTAINER (g_pMainDock));
+	if (gdkwindow) scale = gdk_window_get_scale_factor (gdkwindow);
 
 	GdkPixbuf *pPreviewPixbuf = NULL;
 	if (gdk_pixbuf_get_file_info (cPreviewFilePath, &iPreviewWidth, &iPreviewHeight) != NULL)
 	{
-		iPreviewWidth = MIN (iPreviewWidth, CAIRO_DOCK_PREVIEW_WIDTH);
-		if (requisition.width > 1 && iPreviewWidth > requisition.width)
-			iPreviewWidth = requisition.width;
-		iPreviewHeight = MIN (iPreviewHeight, CAIRO_DOCK_PREVIEW_HEIGHT);
-		if (requisition.height > 1 && iPreviewHeight > requisition.height)
-			iPreviewHeight = requisition.height;
+		iPreviewWidth = MIN (iPreviewWidth, CAIRO_DOCK_PREVIEW_WIDTH * scale);
+		iPreviewHeight = MIN (iPreviewHeight, CAIRO_DOCK_PREVIEW_HEIGHT * scale);
 		cd_debug ("preview : %dx%d => %dx%d", requisition.width, requisition.height, iPreviewWidth, iPreviewHeight);
 		pPreviewPixbuf = gdk_pixbuf_new_from_file_at_size (cPreviewFilePath, iPreviewWidth, iPreviewHeight, NULL);
 	}
@@ -336,7 +337,9 @@ static inline void _set_preview_image (const gchar *cPreviewFilePath, GtkImage *
 	else if (pPreviewImageFrame) // We have an image, display border.
 		gtk_frame_set_shadow_type (GTK_FRAME (pPreviewImageFrame), GTK_SHADOW_ETCHED_IN);
 
-	gtk_image_set_from_pixbuf (pPreviewImage, pPreviewPixbuf);
+	cairo_surface_t *surface = gdk_cairo_surface_create_from_pixbuf (pPreviewPixbuf, scale, NULL);
+	gtk_image_set_from_surface (pPreviewImage, surface);
+	cairo_surface_destroy (surface);
 	g_object_unref (pPreviewPixbuf);
 }
 
@@ -420,13 +423,13 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 	gchar *cDescriptionFilePath = NULL, *cPreviewFilePath = NULL, *cName = NULL, *cAuthor = NULL;
 	gint iState = 0;
 	double fSize = 0.;
-	GdkPixbuf *pixbuf = NULL;
+	cairo_surface_t *surface = NULL;
 	gtk_tree_model_get (model, &iter,
 		CAIRO_DOCK_MODEL_DESCRIPTION_FILE, &cDescriptionFilePath,
 		CAIRO_DOCK_MODEL_IMAGE, &cPreviewFilePath,
 		CAIRO_DOCK_MODEL_NAME, &cName,
 		CAIRO_DOCK_MODEL_AUTHOR, &cAuthor,
-		CAIRO_DOCK_MODEL_ICON, &pixbuf,
+		CAIRO_DOCK_MODEL_ICON, &surface,
 		CAIRO_DOCK_MODEL_SIZE, &fSize,
 		CAIRO_DOCK_MODEL_STATE, &iState, -1);
 	cd_debug ("line selected (%s; %s; %f)", cDescriptionFilePath, cPreviewFilePath, fSize);
@@ -456,7 +459,7 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 		g_free (cSize);
 	}
 	if (pStateIcon)
-		gtk_image_set_from_pixbuf (GTK_IMAGE (pStateIcon), pixbuf);
+		gtk_image_set_from_surface (GTK_IMAGE (pStateIcon), surface);
 	
 	// get or fill the readme.
 	if (cDescriptionFilePath != NULL)
@@ -531,8 +534,8 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 	g_free (cPreviewFilePath);
 	g_free (cName);
 	g_free (cAuthor);
-	if (pixbuf)
-		g_object_unref (pixbuf);
+	if (surface)
+		cairo_surface_destroy (surface);
 }
 
 static void _cairo_dock_select_custom_item_in_combo (GtkComboBox *widget, gpointer *data)
@@ -2275,7 +2278,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				{
 					rend = gtk_cell_renderer_pixbuf_new ();
 					gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (pOneWidget), rend, FALSE);
-					gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (pOneWidget), rend, "pixbuf", CAIRO_DOCK_MODEL_ICON, NULL);
+					gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (pOneWidget), rend, "surface", CAIRO_DOCK_MODEL_ICON, NULL);
 					gtk_cell_layout_reorder (GTK_CELL_LAYOUT (pOneWidget), rend, 0);
 				}
 				
@@ -2463,7 +2466,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				pOneWidget = gtk_combo_box_new_with_model (GTK_TREE_MODEL (modele));
 				rend = gtk_cell_renderer_pixbuf_new ();
 				gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (pOneWidget), rend, FALSE);
-				gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (pOneWidget), rend, "pixbuf", CAIRO_DOCK_MODEL_ICON, NULL);
+				gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (pOneWidget), rend, "surface", CAIRO_DOCK_MODEL_ICON, NULL);
 				rend = gtk_cell_renderer_text_new ();
 				gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (pOneWidget), rend, FALSE);
 				gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (pOneWidget), rend, "text", CAIRO_DOCK_MODEL_NAME, NULL);
@@ -2483,7 +2486,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				Icon *pIcon;
 				gchar *cImagePath, *cID;
 				const gchar *cName;
-				GdkPixbuf *pixbuf;
+				cairo_surface_t *surface;
 				GList *ic;
 				for (ic = pDock->icons; ic != NULL; ic = ic->next)
 				{
@@ -2491,7 +2494,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					if (pIcon->cDesktopFileName != NULL
 					|| pIcon->pModuleInstance != NULL)
 					{
-						pixbuf = NULL;
+						surface = NULL;
 						cImagePath = NULL;
 						cName = NULL;
 						
@@ -2531,9 +2534,9 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						//g_print (" + %s\n", cImagePath);
 						if (cImagePath != NULL)
 						{
-							pixbuf = cairo_dock_load_gdk_pixbuf (cImagePath, iDesiredIconSize, iDesiredIconSize);
+							surface = cairo_dock_create_surface_from_image_simple (cImagePath,
+								iDesiredIconSize, iDesiredIconSize);
 						}
-						//g_print (" -> %p\n", pixbuf);
 						
 						// get the name
 						if (CAIRO_DOCK_IS_USER_SEPARATOR (pIcon))  // separator
@@ -2549,10 +2552,10 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						gtk_list_store_set (GTK_LIST_STORE (modele), &iter,
 							CAIRO_DOCK_MODEL_NAME, cName,
 							CAIRO_DOCK_MODEL_RESULT, cID,
-							CAIRO_DOCK_MODEL_ICON, pixbuf, -1);
+							CAIRO_DOCK_MODEL_ICON, surface, -1);
 						g_free (cImagePath);
-						if (pixbuf)
-							g_object_unref (pixbuf);
+						if (surface)
+							cairo_surface_destroy (surface);
 						
 						if (cValue && strcmp (cValue, cID) == 0)
 							gtk_combo_box_set_active_iter (GTK_COMBO_BOX (pOneWidget), &iter);
@@ -3470,7 +3473,7 @@ static void _fill_model_with_one_theme (const gchar *cThemeName, CairoDockPackag
 		gchar *cPreviewPath = g_strdup_printf ("%s/preview", pTheme->cPackagePath);
 		gchar *cResult = g_strdup_printf ("%s[%d]", cThemeName, pTheme->iType);
 
-		GdkPixbuf *pixbuf = _cairo_dock_gui_get_package_state_icon (pTheme->iType);
+		cairo_surface_t *surface = _cairo_dock_gui_get_package_state_icon (pTheme->iType);
 		gtk_list_store_set (GTK_LIST_STORE (pModele), &iter,
 			CAIRO_DOCK_MODEL_NAME, pTheme->cDisplayedName,
 			CAIRO_DOCK_MODEL_RESULT, cResult,
@@ -3480,12 +3483,12 @@ static void _fill_model_with_one_theme (const gchar *cThemeName, CairoDockPackag
 			CAIRO_DOCK_MODEL_ORDER2, pTheme->iSobriety,
 			CAIRO_DOCK_MODEL_STATE, pTheme->iType,
 			CAIRO_DOCK_MODEL_SIZE, pTheme->fSize,
-			CAIRO_DOCK_MODEL_ICON, pixbuf,
+			CAIRO_DOCK_MODEL_ICON, surface,
 			CAIRO_DOCK_MODEL_AUTHOR, pTheme->cAuthor, -1);
 		g_free (cReadmePath);
 		g_free (cPreviewPath);
 		g_free (cResult);
-		g_object_unref (pixbuf);
+		cairo_surface_destroy (surface);
 	}
 }
 void cairo_dock_fill_model_with_themes (GtkListStore *pModel, GHashTable *pThemeTable, const gchar *cHint)
