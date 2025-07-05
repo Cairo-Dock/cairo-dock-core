@@ -265,8 +265,17 @@ void gldi_dock_hide_if_any_window_overlap_or_show (CairoDock *pDock)
 	_hide_if_any_overlap_or_show (pDock, NULL);
 }
 
+void gldi_dock_visibility_refresh (CairoDock *pDock)
+{
+	if (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY)
+		_hide_if_any_overlap_or_show (pDock, NULL);
+	else if (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP)
+		gldi_dock_hide_show_if_current_window_is_on_our_way (pDock);
+}
+
 static inline gboolean _window_overlaps_dock (GtkAllocation *pWindowGeometry, gboolean bIsHidden, CairoDock *pDock)
 {
+	//!! TODO: Wayland (KDE) and multiple monitors !!
 	if (!bIsHidden && pWindowGeometry->width != 0 && pWindowGeometry->height != 0)
 	{
 		int iDockX, iDockY, iDockWidth, iDockHeight;
