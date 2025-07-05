@@ -694,62 +694,22 @@ void cairo_dock_image_buffer_update_texture (CairoDockImageBuffer *pImage)
 }
 
 
-GdkPixbuf *cairo_dock_image_buffer_to_pixbuf (CairoDockImageBuffer *pImage, int iWidth, int iHeight)
+cairo_surface_t *cairo_dock_image_buffer_copy_scale (CairoDockImageBuffer *pImage, int iWidth, int iHeight)
 {
-	GdkPixbuf *pixbuf = NULL;
-	int w = iWidth, h = iHeight;
+	if (iWidth <= 0 || iHeight <= 0) return NULL;
 	if (pImage->iWidth > 0 && pImage->iHeight > 0 && pImage->pSurface != NULL)
 	{
-		cairo_surface_t *surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24,
-			w,
-			h);
+		// note: this will use iWidth and iHeight as a logical size and use the same
+		// device scale factor as our surface
+		cairo_surface_t *surface = cairo_surface_create_similar (pImage->pSurface,
+			CAIRO_CONTENT_COLOR_ALPHA, iWidth, iHeight);
 		cairo_t *pCairoContext = cairo_create (surface);
-		cairo_scale (pCairoContext, (double)w/pImage->iWidth, (double)h/pImage->iHeight);
+		cairo_scale (pCairoContext, (double)iWidth/pImage->iWidth, (double)iHeight/pImage->iHeight);
 		cairo_set_source_surface (pCairoContext, pImage->pSurface, 0., 0.);
 		cairo_paint (pCairoContext);
 		cairo_destroy (pCairoContext);
-		guchar *d, *data = cairo_image_surface_get_data (surface);
-		int r = cairo_image_surface_get_stride (surface);
-		
-		// we convert it in a pixbuf.
-		pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB,
-			TRUE,
-			8,
-			w,
-			h);
-		guchar *p, *pixels = gdk_pixbuf_get_pixels (pixbuf);
-		int iNbChannels = gdk_pixbuf_get_n_channels (pixbuf);
-		int iRowstride = gdk_pixbuf_get_rowstride (pixbuf);
-		
-		int x, y;
-		int red, green, blue;
-		float fAlphaFactor;
-		for (y = 0; y < h; y ++)
-		{
-			for (x = 0; x < w; x ++)
-			{
-				p = pixels + y * iRowstride + x * iNbChannels;
-				d = data + y * r + x * 4;
-				
-				fAlphaFactor = (float) d[3] / 255;
-				if (fAlphaFactor != 0)
-				{
-					red = d[0] / fAlphaFactor;
-					green = d[1] / fAlphaFactor;
-					blue = d[2] / fAlphaFactor;
-				}
-				else
-				{
-					red = blue = green = 0;
-				}
-				p[0] = blue;
-				p[1] = green;
-				p[2] = red;
-				p[3] = d[3];
-			}
-		}
-		
-		cairo_surface_destroy (surface);
+		return surface;
 	}
-	return pixbuf;
+	else return NULL;
 }
+

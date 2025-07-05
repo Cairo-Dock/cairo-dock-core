@@ -195,8 +195,8 @@ void cairo_dock_end_draw_image_buffer_opengl (CairoDockImageBuffer *pImage, Gldi
 
 void cairo_dock_image_buffer_update_texture (CairoDockImageBuffer *pImage);
 
-
-GdkPixbuf *cairo_dock_image_buffer_to_pixbuf (CairoDockImageBuffer *pImage, int iWidth, int iHeight);
+/** Create a scaled copy of an image as Cairo surface suitable for e.g. using in menus. */
+cairo_surface_t *cairo_dock_image_buffer_copy_scale (CairoDockImageBuffer *pImage, int iWidth, int iHeight);
 
 G_END_DECLS
 #endif
