@@ -496,21 +496,22 @@ GtkWidget *_add_item_sub_menu (Icon *icon, GtkWidget *pMenu)
 	}
 	
 	GtkWidget *pItemSubMenu;
-	GdkPixbuf *pixbuf = NULL;
+	cairo_surface_t *surface = NULL;
 	
 	if (!cIconFile)  // no icon file (for instance a class that has no icon defined in its desktop file, like gnome-setting-daemon) => use its buffer directly.
 	{
-		pixbuf = cairo_dock_icon_buffer_to_pixbuf (icon);
+		int size = cairo_dock_search_icon_size (GTK_ICON_SIZE_LARGE_TOOLBAR);
+		surface = cairo_dock_icon_buffer_to_cairo (icon, size, size);
 	}
 	
-	if (pixbuf)
+	if (surface)
 	{
 		GtkWidget *pMenuItem = NULL;
 		pItemSubMenu = gldi_menu_add_sub_menu_full (pMenu, cName, "", &pMenuItem);
 		
-		GtkWidget *image = gtk_image_new_from_pixbuf (pixbuf);
+		GtkWidget *image = gtk_image_new_from_surface (surface);
 		gldi_menu_item_set_image (pMenuItem, image);
-		g_object_unref (pixbuf);
+		cairo_surface_destroy (surface);
 	}
 	else
 	{
