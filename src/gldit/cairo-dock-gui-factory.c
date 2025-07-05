@@ -324,7 +324,7 @@ static inline void _set_preview_image (const gchar *cPreviewFilePath, GtkImage *
 		iPreviewWidth = MIN (iPreviewWidth, CAIRO_DOCK_PREVIEW_WIDTH * scale);
 		iPreviewHeight = MIN (iPreviewHeight, CAIRO_DOCK_PREVIEW_HEIGHT * scale);
 		cd_debug ("preview : %dx%d => %dx%d", requisition.width, requisition.height, iPreviewWidth, iPreviewHeight);
-		pPreviewPixbuf = gdk_pixbuf_new_from_file_at_size (cPreviewFilePath, iPreviewWidth, iPreviewHeight, NULL);
+		pPreviewPixbuf = cairo_dock_load_gdk_pixbuf (cPreviewFilePath, iPreviewWidth, iPreviewHeight);
 	}
 	if (pPreviewPixbuf == NULL)
 	{
@@ -1669,7 +1669,11 @@ GtkWidget *cairo_dock_widget_handbook_new (GldiModule *pModule)
 	GdkPixbuf *pPreviewPixbuf = NULL;
 	if (gdk_pixbuf_get_file_info (pModule->pVisitCard->cPreviewFilePath, &iPreviewWidth, &iPreviewHeight) != NULL)  // The return value is owned by GdkPixbuf and should not be freed.
 	{
-		int w = 200, h = 200;
+		int scale = 1;
+		GdkWindow* gdkwindow = gldi_container_get_gdk_window (CAIRO_CONTAINER (g_pMainDock));
+		if (gdkwindow) scale = gdk_window_get_scale_factor (gdkwindow);
+		
+		int w = 200 * scale, h = 200 * scale;
 		if (iPreviewWidth > w)
 		{
 			iPreviewHeight *= 1.*w/iPreviewWidth;
@@ -1680,7 +1684,7 @@ GtkWidget *cairo_dock_widget_handbook_new (GldiModule *pModule)
 			iPreviewWidth *= 1.*h/iPreviewHeight;
 			iPreviewHeight = h;
 		}
-		pPreviewPixbuf = gdk_pixbuf_new_from_file_at_size (pModule->pVisitCard->cPreviewFilePath, iPreviewWidth, iPreviewHeight, NULL);
+		pPreviewPixbuf = cairo_dock_load_gdk_pixbuf (pModule->pVisitCard->cPreviewFilePath, iPreviewWidth, iPreviewHeight);
 		if (pPreviewPixbuf != NULL)
 		{
 			// ImageBox : Align the image on top.
@@ -1688,8 +1692,9 @@ GtkWidget *cairo_dock_widget_handbook_new (GldiModule *pModule)
 			gtk_box_pack_end (GTK_BOX (pTopHBox), pImageBox, FALSE, FALSE, CAIRO_DOCK_GUI_MARGIN);
 			
 			// Image Widget.
-			GtkWidget *pModuleImage = gtk_image_new_from_pixbuf (NULL);
-			gtk_image_set_from_pixbuf (GTK_IMAGE (pModuleImage), pPreviewPixbuf);
+			cairo_surface_t *surface = gdk_cairo_surface_create_from_pixbuf (pPreviewPixbuf, scale, NULL);
+			GtkWidget *pModuleImage = gtk_image_new_from_surface (surface);
+			cairo_surface_destroy (surface);
 			g_object_unref (pPreviewPixbuf);
 			
 			// Add a frame around the image.
