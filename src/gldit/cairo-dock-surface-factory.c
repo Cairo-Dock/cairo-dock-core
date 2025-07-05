@@ -493,7 +493,7 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 	double fIconHeightSaturationFactor = 1.;
 	
 	//\_______________ On cherche a determiner le type de l'image. En effet, les SVG et les PNG sont charges differemment des autres.
-	gboolean bIsSVG = FALSE, bIsPNG = FALSE, bIsXPM = FALSE;
+	gboolean bIsSVG = FALSE, bIsPNG = FALSE, bIsXPM = FALSE, bIsResource = FALSE;
 	int fd = open (cImagePath, O_RDONLY | O_CLOEXEC);
 	if (fd >= 0)
 	{
@@ -513,10 +513,20 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 	}
 	else
 	{
-		cd_warning ("This file (%s) doesn't exist or is not readable.", cImagePath);
-		return NULL;
+		if (strncmp (cImagePath, "/org/gtk", 8) == 0)
+		{
+			// This is a GDK / GTK resource (typically for a stock icon), but GTK "forgot"
+			// to include the resource:// prefix in the filename; see e.g.
+			// https://gitlab.gnome.org/GNOME/gtk/-/issues/4983
+			bIsResource = TRUE;
+		}
+		else
+		{
+			cd_warning ("This file (%s) doesn't exist or is not readable.", cImagePath);
+			return NULL;
+		}
 	}
-	if (! bIsSVG && ! bIsPNG && ! bIsXPM)  // sinon en desespoir de cause on se base sur l'extension.
+	if (! bIsSVG && ! bIsPNG && ! bIsXPM && ! bIsResource)  // sinon en desespoir de cause on se base sur l'extension.
 	{
 		//cd_debug ("  on se base sur l'extension en desespoir de cause.");
 		if (g_str_has_suffix (cImagePath, ".svg"))
@@ -616,7 +626,16 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 	}
 	else  // le code suivant permet de charger tout type d'image, mais en fait c'est un peu idiot d'utiliser des icones n'ayant pas de transparence.
 	{
-		GdkPixbuf *pixbuf = cairo_dock_load_gdk_pixbuf (cImagePath, -1, -1);
+		GdkPixbuf *pixbuf = NULL;
+		if (bIsResource)
+		{
+			pixbuf = gdk_pixbuf_new_from_resource (cImagePath, &erreur);
+			if (erreur) {
+				cd_warning (erreur->message);
+				g_error_free (erreur);
+			}
+		}
+		else pixbuf = cairo_dock_load_gdk_pixbuf (cImagePath, -1, -1);
 		if (! pixbuf) return NULL; // warning message already printed above
 
 		pNewSurface = cairo_dock_create_surface_from_pixbuf (pixbuf,
