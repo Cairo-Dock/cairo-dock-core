@@ -623,6 +623,13 @@ GdkPixbuf *cairo_dock_icon_buffer_to_pixbuf (Icon *icon)
 	return cairo_dock_image_buffer_to_pixbuf (&icon->image, 24, 24);
 }
 
+cairo_surface_t *cairo_dock_icon_buffer_to_cairo (Icon *icon, int iWidth, int iHeight)
+{
+	g_return_val_if_fail (icon != NULL, NULL);
+	
+	return cairo_dock_image_buffer_copy_scale (&icon->image, iWidth, iHeight);
+}
+
 cairo_t *cairo_dock_begin_draw_icon_cairo (Icon *pIcon, gint iRenderingMode, cairo_t *pCairoContext)
 {
 	/*if (pIcon->pContainer)
