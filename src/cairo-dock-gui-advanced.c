@@ -1324,7 +1324,7 @@ static GtkToolItem *_make_toolbutton (const gchar *cLabel, const gchar *cImage, 
 		gtk_tool_button_set_label (GTK_TOOL_BUTTON (pWidget), cLabel);
 		return pWidget;
 	}
-	GtkWidget *pImage = _gtk_image_new_from_file (cImage, iSize);
+	GtkWidget *pImage = cairo_dock_gui_image_from_file (cImage, iSize);
 	GtkToolItem *pWidget = gtk_toggle_tool_button_new ();
 	gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (pWidget), pImage);
 	if (cLabel == NULL)
@@ -1389,7 +1389,7 @@ static CairoDockGroupDescription *_add_group_button (const gchar *cGroupName, co
 	g_signal_connect (G_OBJECT (pGroupButton), "leave-notify-event", G_CALLBACK(on_leave_group_button), NULL);
 
 	GtkWidget *pButtonHBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_FRAME_MARGIN);
-	GtkWidget *pImage = _gtk_image_new_from_file (pGroupDescription->cIcon, GTK_ICON_SIZE_LARGE_TOOLBAR);
+	GtkWidget *pImage = cairo_dock_gui_image_from_file (pGroupDescription->cIcon, GTK_ICON_SIZE_LARGE_TOOLBAR);
 	gtk_box_pack_start (GTK_BOX (pButtonHBox), pImage, FALSE, FALSE, 0);
 	pGroupDescription->pLabel = gtk_label_new (pGroupDescription->cTitle);
 	gtk_box_pack_start (GTK_BOX (pButtonHBox),
