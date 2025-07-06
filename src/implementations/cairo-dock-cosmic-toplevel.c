@@ -27,13 +27,14 @@
 #include <gdk/gdkwayland.h>
 #include "wayland-cosmic-toplevel-management-client-protocol.h"
 #include "wayland-cosmic-toplevel-info-client-protocol.h"
+#include "wayland-cosmic-workspace-client-protocol.h"
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-container.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-cosmic-toplevel.h"
 #include "cairo-dock-wayland-wm.h"
-#include "cairo-dock-cosmic-workspaces.h"
+#include "cairo-dock-ext-workspaces.h"
 
 #include <stdio.h>
 
@@ -66,9 +67,9 @@ static void _move_to_nth_desktop (GldiWindowActor *actor, G_GNUC_UNUSED int iNum
 {
 	if (!(s_ws_output && can_move_workspace)) return;
 	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor *)actor;
-	struct zcosmic_workspace_handle_v1 *ws = gldi_cosmic_workspaces_get_handle (x, y);
+/*	struct zcosmic_workspace_handle_v1 *ws = gldi_cosmic_workspaces_get_handle (x, y);
 	//!! TODO: we need a valid wl_output here !!
-	if (ws) zcosmic_toplevel_manager_v1_move_to_workspace (s_ptoplevel_manager, wactor->handle, ws, s_ws_output);
+	if (ws) zcosmic_toplevel_manager_v1_move_to_workspace (s_ptoplevel_manager, wactor->handle, ws, s_ws_output); */
 }
 
 static void _show (GldiWindowActor *actor)
@@ -247,11 +248,11 @@ static void _gldi_toplevel_parent_cb (void* data, G_GNUC_UNUSED wfthandle *handl
 
 static void _workspace_entered (void *data, G_GNUC_UNUSED wfthandle *handle, struct zcosmic_workspace_handle_v1 *wshandle)
 {
-	gldi_cosmic_workspaces_update_window ((GldiWindowActor*)data, wshandle);
-	gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESKTOP_CHANGED, data);
+/*	gldi_cosmic_workspaces_update_window ((GldiWindowActor*)data, wshandle);
+	gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESKTOP_CHANGED, data); */
 }
 
-static void _dummy (G_GNUC_UNUSED void *data, G_GNUC_UNUSED wfthandle *handle, G_GNUC_UNUSED void *workspace)
+static void _workspace_left (void*, wfthandle*, struct zcosmic_workspace_handle_v1*)
 {
 	
 }
@@ -275,7 +276,7 @@ static struct zcosmic_toplevel_handle_v1_listener gldi_toplevel_handle_interface
     .closed       = _gldi_toplevel_closed_cb,
 //    .parent       = _gldi_toplevel_parent_cb,
     .workspace_enter = _workspace_entered,
-    .workspace_leave = (void (*)(void*, struct zcosmic_toplevel_handle_v1*, struct zcosmic_workspace_handle_v1*))_dummy
+    .workspace_leave = _workspace_left
 };
 
 /* register new toplevel */
