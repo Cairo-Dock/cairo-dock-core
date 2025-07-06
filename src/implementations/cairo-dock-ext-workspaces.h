@@ -1,8 +1,8 @@
 /*
- * cairo-dock-cosmic-workspaces.h -- desktop / workspace management
- *  facilities for Cosmic and compatible
+ * cairo-dock-ext-workspaces.h -- desktop / workspace management
+ *  facilities based on the ext-workspace Wayland protocol
  * 
- * Copyright 2024 Daniel Kondor <kondor.dani@gmail.com>
+ * Copyright 2024-2025 Daniel Kondor <kondor.dani@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,19 +18,19 @@
  * 
  */
 
-#ifndef CAIRO_DOCK_COSMIC_WORKSPACES_H
-#define CAIRO_DOCK_COSMIC_WORKSPACES_H
+#ifndef CAIRO_DOCK_EXT_WORKSPACES_H
+#define CAIRO_DOCK_EXT_WORKSPACES_H
 
 #include <wayland-client.h>
 #include <stdint.h>
-#include "wayland-cosmic-workspace-client-protocol.h"
+#include "wayland-ext-workspace-client-protocol.h"
 
 extern struct wl_output *s_ws_output;
 
-gboolean gldi_cosmic_workspaces_match_protocol (uint32_t id, const char *interface, uint32_t version);
-gboolean gldi_cosmic_workspaces_try_init (struct wl_registry *registry);
-struct zcosmic_workspace_handle_v1 *gldi_cosmic_workspaces_get_handle (int x, int y);
-void gldi_cosmic_workspaces_update_window (GldiWindowActor *actor, struct zcosmic_workspace_handle_v1 *handle);
+gboolean gldi_ext_workspaces_match_protocol (uint32_t id, const char *interface, uint32_t version);
+gboolean gldi_ext_workspaces_try_init (struct wl_registry *registry);
+struct ext_workspace_handle_v1 *gldi_ext_workspaces_get_handle (int x, int y);
+void gldi_ext_workspaces_update_window (GldiWindowActor *actor, struct ext_workspace_handle_v1 *handle);
 
 #endif
 
