@@ -24,6 +24,7 @@
 #include <sys/time.h>
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
+#include <cairo/cairo-gobject.h>
 
 #include "config.h"
 #include "gldi-icon-names.h"
@@ -68,7 +69,7 @@ static void _items_widget_reload (CDWidget *pCdWidget);
 
 typedef enum {
 	CD_MODEL_NAME = 0,  // displayed name
-	CD_MODEL_PIXBUF,  // icon image
+	CD_MODEL_SURFACE, // icon image
 	CD_MODEL_ICON,  // Icon (for launcher/separator/sub-dock/applet)
 	CD_MODEL_CONTAINER,  // GldiContainer (for main docks)
 	CD_MODEL_MODULE,  // GldiModuleInstance (for plug-ins with no icon)
@@ -291,8 +292,7 @@ static void _add_one_icon_to_model (Icon *pIcon, GtkTreeStore *model, GtkTreeIte
 		return;
 	
 	GtkTreeIter iter;
-	GError *erreur = NULL;
-	GdkPixbuf *pixbuf = NULL;
+	cairo_surface_t *surface = NULL;
 	gchar *cImagePath = NULL;
 	const gchar *cName;
 	int iSize = cairo_dock_search_icon_size (GTK_ICON_SIZE_LARGE_TOOLBAR);
@@ -326,15 +326,7 @@ static void _add_one_icon_to_model (Icon *pIcon, GtkTreeStore *model, GtkTreeIte
 	}
 	
 	if (cImagePath != NULL)
-	{
-		pixbuf = gdk_pixbuf_new_from_file_at_size (cImagePath, iSize, iSize, &erreur);
-		if (erreur != NULL)
-		{
-			cd_warning (erreur->message);
-			g_error_free (erreur);
-			erreur = NULL;
-		}
-	}
+		surface = cairo_dock_create_surface_from_image_simple (cImagePath, iSize, iSize);
 	
 	// set a name
 	if (CAIRO_DOCK_IS_USER_SEPARATOR (pIcon))  // separator
@@ -348,7 +340,7 @@ static void _add_one_icon_to_model (Icon *pIcon, GtkTreeStore *model, GtkTreeIte
 	gtk_tree_store_append (model, &iter, pParentIter);
 	gtk_tree_store_set (model, &iter,
 		CD_MODEL_NAME, cName,
-		CD_MODEL_PIXBUF, pixbuf,
+		CD_MODEL_SURFACE, surface,
 		CD_MODEL_ICON, pIcon,
 		-1);
 	
@@ -360,8 +352,8 @@ static void _add_one_icon_to_model (Icon *pIcon, GtkTreeStore *model, GtkTreeIte
 	
 	// reset all.
 	g_free (cImagePath);
-	if (pixbuf)
-		g_object_unref (pixbuf);
+	if (surface)
+		cairo_surface_destroy (surface);
 }
 static void _add_one_dock_to_model (CairoDock *pDock, GtkTreeStore *model, GtkTreeIter *pParentIter)
 {
@@ -407,19 +399,16 @@ static inline void _add_one_module (G_GNUC_UNUSED const gchar *cModuleName, Gldi
 	GtkTreeIter iter;
 	gtk_tree_store_append (model, &iter, NULL);
 	
-	GdkPixbuf *pixbuf = NULL;
 	int iSize = cairo_dock_search_icon_size (GTK_ICON_SIZE_LARGE_TOOLBAR);
-	gchar *cImagePath = cairo_dock_search_icon_s_path (pModuleInstance->pModule->pVisitCard->cIconFilePath, iSize);
-	if (cImagePath != NULL)
-		pixbuf = gdk_pixbuf_new_from_file_at_size (cImagePath, iSize, iSize, NULL);
+	cairo_surface_t *surface = cairo_dock_create_surface_from_icon (
+		pModuleInstance->pModule->pVisitCard->cIconFilePath, iSize, iSize);
 	gtk_tree_store_set (model, &iter,
 		CD_MODEL_NAME, pModuleInstance->pModule->pVisitCard->cTitle,
-		CD_MODEL_PIXBUF, pixbuf,
+		CD_MODEL_SURFACE, surface,
 		CD_MODEL_MODULE, pModuleInstance,
 		-1);
-	g_free (cImagePath);
-	if (pixbuf)
-		g_object_unref (pixbuf);
+	if (surface)
+		cairo_surface_destroy (surface);
 }
 static gboolean _add_one_module_to_model (const gchar *cModuleName, GldiModule *pModule, GtkTreeStore *model)
 {
@@ -466,7 +455,7 @@ static GtkTreeModel *_build_tree_model (ItemsWidget *pItemsWidget)
 {
 	GtkTreeStore *model = gtk_tree_store_new (CD_MODEL_NB_COLUMNS,
 		G_TYPE_STRING,  // displayed name
-		GDK_TYPE_PIXBUF,  // displayed icon
+		CAIRO_GOBJECT_TYPE_SURFACE, // displayed icon
 		G_TYPE_POINTER,  // Icon
 		G_TYPE_POINTER,  // Container
 		G_TYPE_POINTER);  // Module
@@ -762,7 +751,7 @@ ItemsWidget *cairo_dock_items_widget_new (GtkWindow *pMainWindow)
 	GtkCellRenderer *rend;
 	// column icon
 	rend = gtk_cell_renderer_pixbuf_new ();
-	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pItemsWidget->pTreeView), -1, NULL, rend, "pixbuf", 1, NULL);
+	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pItemsWidget->pTreeView), -1, NULL, rend, "surface", CD_MODEL_SURFACE, NULL);
 	// column name
 	rend = gtk_cell_renderer_text_new ();
 	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (pItemsWidget->pTreeView), -1, NULL, rend, "text", 0, NULL);

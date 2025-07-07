@@ -310,7 +310,8 @@ void gldi_icon_set_quick_info_printf (Icon *pIcon, const gchar *cQuickInfoFormat
 		(pIcon)->iNbDoubleClickListeners --; } while (0)
 
 
-GdkPixbuf *cairo_dock_icon_buffer_to_pixbuf (Icon *icon);
+/** Create a copy of the icon's image, scaled to the desired size, preserving the correct device scale. */
+cairo_surface_t *cairo_dock_icon_buffer_to_cairo (Icon *icon, int iWidth, int iHeight);
 
 
 cairo_t *cairo_dock_begin_draw_icon_cairo (Icon *pIcon, gint iRenderingMode, cairo_t *pCairoContext);

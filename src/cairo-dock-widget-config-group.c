@@ -110,7 +110,7 @@ static void _add_widget_to_notebook (GtkWidget *pNoteBook, GtkWidget *pWidget, c
 	{
 		pLabelContainer = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, CAIRO_DOCK_ICON_MARGIN);
 		gchar *icon = cairo_dock_get_icon_for_gui (NULL, cIcon, NULL, CAIRO_DOCK_GROUP_ICON_SIZE, FALSE);
-		GtkWidget *pImage = _gtk_image_new_from_file (icon, GTK_ICON_SIZE_BUTTON);
+		GtkWidget *pImage = cairo_dock_gui_image_from_file (icon, GTK_ICON_SIZE_BUTTON);
 		gtk_container_add (GTK_CONTAINER (pLabelContainer), pImage);
 		gtk_container_add (GTK_CONTAINER (pLabelContainer), pLabel);
 		gtk_widget_show_all (pLabelContainer);

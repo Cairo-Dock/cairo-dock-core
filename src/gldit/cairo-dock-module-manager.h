@@ -44,7 +44,7 @@ G_BEGIN_DECLS
  * It is not required the change this when adding a function to the
  * public API (loading the module will fail if it refers to an
  * unresolved symbol anyway). */
-#define GLDI_ABI_VERSION 20250629
+#define GLDI_ABI_VERSION 20250705
 
 // manager
 typedef struct _GldiModulesParam GldiModulesParam;
