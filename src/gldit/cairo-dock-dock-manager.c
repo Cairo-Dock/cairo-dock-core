@@ -982,24 +982,17 @@ void gldi_dock_set_visibility (CairoDock *pDock, CairoDockVisibility iVisibility
 			pDock->bAutoHide = TRUE;
 			cairo_dock_start_hiding (pDock);
 		}
-		else if (bAutoHideOnAnyOverlap)
+		else if (bAutoHideOnAnyOverlap || bAutoHideOnOverlap)
 		{
 			pDock->bTemporaryHidden = pDock->bAutoHide;  // needed to use the following function
-			gldi_dock_hide_if_any_window_overlap_or_show (pDock);
+			gldi_dock_visibility_refresh (pDock);
 		}
 		else
 		{
-			if (! bAutoHideOnOverlap)
-			{
-				pDock->bTemporaryHidden = FALSE;
-				pDock->bAutoHide = FALSE;
-				cairo_dock_start_showing (pDock);
-			}
-			if (bAutoHideOnOverlap)
-			{
-				pDock->bTemporaryHidden = pDock->bAutoHide;  // needed to use the following function
-				gldi_dock_hide_show_if_current_window_is_on_our_way (pDock);
-			}
+			// all three are false, we should show the dock now
+			pDock->bTemporaryHidden = FALSE;
+			pDock->bAutoHide = FALSE;
+			cairo_dock_start_showing (pDock);
 		}
 	}
 	
