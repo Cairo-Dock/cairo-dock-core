@@ -1205,6 +1205,7 @@ static gboolean _on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, Ca
 		{
 			Icon *icon;
 			GList *ic;
+			gboolean bAnyDamaged = FALSE;
 			for (ic = pDock->icons; ic != NULL; ic = ic->next)
 			{
 				icon = ic->data;
@@ -1217,12 +1218,9 @@ static gboolean _on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, Ca
 				if (bDamaged)
 				{
 					//g_print ("This icon %s is damaged (%d)\n", icon->cName, icon->iSubdockViewType);
+					bAnyDamaged = TRUE;
 					icon->bDamaged = FALSE;
-					if (cairo_dock_get_icon_data_renderer (icon) != NULL)
-					{
-						cairo_dock_refresh_data_renderer (icon, CAIRO_CONTAINER (pDock));
-					}
-					else if (icon->iSubdockViewType != 0
+					if (icon->iSubdockViewType != 0
 					|| (icon->cClass != NULL && ! myIndicatorsParam.bUseClassIndic && (CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (icon) || GLDI_OBJECT_IS_LAUNCHER_ICON (icon))))
 					{
 						cairo_dock_draw_subdock_content_on_icon (icon, pDock);
@@ -1235,10 +1233,14 @@ static gboolean _on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, Ca
 					{
 						cairo_dock_load_icon_image (icon, CAIRO_CONTAINER (pDock));
 					}
-					if (pDock->iRefCount != 0)  // now that the icon image is correct, redraw the pointing icon if needed
-						cairo_dock_trigger_redraw_subdock_content (pDock);
+					if (cairo_dock_get_icon_data_renderer (icon) != NULL)
+					{
+						cairo_dock_refresh_data_renderer (icon, CAIRO_CONTAINER (pDock));
+					}
 				}
 			}
+			if (pDock->iRefCount != 0 && bAnyDamaged)  // now that the icon image is correct, redraw the pointing icon if needed
+				cairo_dock_trigger_redraw_subdock_content (pDock);
 		}
 	}
 	else if (bPositionUpdated)  // changement de position.
