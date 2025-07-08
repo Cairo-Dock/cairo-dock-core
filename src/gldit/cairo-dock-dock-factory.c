@@ -45,7 +45,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-menu.h"  // gldi_menu_popup
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-dock-visibility.h"  // gldi_dock_search_overlapping_window
+#include "cairo-dock-dock-visibility.h"  // gldi_dock_visibility_refresh
 #include "cairo-dock-flying-container.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-class-manager.h"  // cairo_dock_check_class_subdock_is_empty
@@ -1252,35 +1252,7 @@ static gboolean _on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, Ca
 	}
 	
 	if (pDock->iRefCount == 0 && (bSizeUpdated || bPositionUpdated))
-	{
-		if (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP)
-		{
-			GldiWindowActor *pActiveAppli = gldi_windows_get_active ();
-			if (_gldi_window_is_on_our_way (pActiveAppli, pDock))  // la fenetre active nous gene.
-			{
-				if (!cairo_dock_is_temporary_hidden (pDock))
-					cairo_dock_activate_temporary_auto_hide (pDock);
-			}
-			else
-			{
-				if (cairo_dock_is_temporary_hidden (pDock))
-					cairo_dock_deactivate_temporary_auto_hide (pDock);
-			}
-		}
-		else if (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY)
-		{
-			if (gldi_dock_search_overlapping_window (pDock) != NULL)
-			{
-				if (!cairo_dock_is_temporary_hidden (pDock))
-					cairo_dock_activate_temporary_auto_hide (pDock);
-			}
-			else
-			{
-				if (cairo_dock_is_temporary_hidden (pDock))
-					cairo_dock_deactivate_temporary_auto_hide (pDock);
-			}
-		}
-	}
+		gldi_dock_visibility_refresh (pDock);
 	
 	gtk_widget_queue_draw (pWidget);
 	
