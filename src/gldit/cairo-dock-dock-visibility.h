@@ -28,17 +28,8 @@ G_BEGIN_DECLS
 *@file cairo-dock-dock-visibility.h This class manages the visibility of Docks.
 */
 
-#define _gldi_window_is_on_our_way(pAppli, pDock) (pAppli != NULL && gldi_window_is_on_current_desktop (pAppli) &&  pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP && gldi_dock_overlaps_window (pDock, pAppli))
-
-void gldi_dock_hide_show_if_current_window_is_on_our_way (CairoDock *pDock);
-
-void gldi_dock_hide_if_any_window_overlap_or_show (CairoDock *pDock);
-
 /** Re-check if the given dock should be shown given its visibility settings */
 void gldi_dock_visibility_refresh (CairoDock *pDock);
-
-gboolean gldi_dock_overlaps_window (CairoDock *pDock, GldiWindowActor *actor);
-
 
 /** Get the application whose window overlaps a dock, or NULL if none.
 *@param pDock the dock to test.

@@ -32,6 +32,10 @@
  // Dock visibility //
 /////////////////////
 
+#define _gldi_window_is_on_our_way(pAppli, pDock) (pAppli != NULL && gldi_window_is_on_current_desktop (pAppli) &&  pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP && gldi_dock_overlaps_window (pDock, pAppli))
+
+static gboolean gldi_dock_overlaps_window (CairoDock *pDock, GldiWindowActor *actor);
+
 static void _show_if_no_overlapping_window (CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 {
 	if (pDock->iVisibility != CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY)
@@ -254,15 +258,10 @@ static gboolean _on_active_window_changed (G_GNUC_UNUSED gpointer data, GldiWind
  // Utilities //
 ///////////////
 
-void gldi_dock_hide_show_if_current_window_is_on_our_way (CairoDock *pDock)
+static void gldi_dock_hide_show_if_current_window_is_on_our_way (CairoDock *pDock)
 {
 	GldiWindowActor *pCurrentAppli = gldi_windows_get_active ();
 	_hide_show_if_on_our_way (pDock, pCurrentAppli);
-}
-
-void gldi_dock_hide_if_any_window_overlap_or_show (CairoDock *pDock)
-{
-	_hide_if_any_overlap_or_show (pDock, NULL);
 }
 
 void gldi_dock_visibility_refresh (CairoDock *pDock)
@@ -305,7 +304,7 @@ static inline gboolean _window_overlaps_dock (GtkAllocation *pWindowGeometry, gb
 	}
 	return FALSE;
 }
-gboolean gldi_dock_overlaps_window (CairoDock *pDock, GldiWindowActor *actor)
+static gboolean gldi_dock_overlaps_window (CairoDock *pDock, GldiWindowActor *actor)
 {
 	return _window_overlaps_dock (&actor->windowGeometry, actor->bIsHidden || !actor->bDisplayed, pDock);
 }
