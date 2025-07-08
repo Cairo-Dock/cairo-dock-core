@@ -719,6 +719,7 @@ static void _reposition_one_root_dock (G_GNUC_UNUSED const gchar *cDockName, Cai
 		gtk_widget_show (pDock->container.pWidget);
 		gtk_widget_queue_draw (pDock->container.pWidget);
 		_synchronize_sub_docks_orientation (pDock, TRUE);
+		gldi_dock_visibility_refresh (pDock);
 	}
 }
 static void _reposition_root_docks (gboolean bExceptMainDock)
