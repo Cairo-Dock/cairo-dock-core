@@ -339,9 +339,10 @@ CairoDock * gldi_appli_icon_detach (Icon *pIcon)
 	return pParentDock;
 }
 
-#define x_icon_geometry(icon, pDock) (pDock->container.iWindowPositionX + icon->fXAtRest + (pDock->container.iWidth - pDock->iActiveWidth) * pDock->fAlign + (pDock->iActiveWidth - pDock->fFlatDockWidth) / 2)
+#define x_icon_geometry(icon, pDock) (icon->fXAtRest + (pDock->container.iWidth - pDock->iActiveWidth) * pDock->fAlign + (pDock->iActiveWidth - pDock->fFlatDockWidth) / 2)
 ///#define y_icon_geometry(icon, pDock) (pDock->container.iWindowPositionY + icon->fDrawY - icon->fHeight * myIconsParam.fAmplitude * pDock->fMagnitudeMax)
-#define y_icon_geometry(icon, pDock) (pDock->container.iWindowPositionY + icon->fDrawY)
+//!! TODO: is this sensible? on Wayland, the position should be relative to the window -- maybe we need to change the API to take the container?
+#define y_icon_geometry(icon, pDock) (icon->fDrawY)
 void gldi_appli_icon_set_geometry_for_window_manager (Icon *icon, CairoDock *pDock)
 {
 	//g_print ("%s (%s)\n", __func__, icon->cName);
@@ -354,9 +355,9 @@ void gldi_appli_icon_set_geometry_for_window_manager (Icon *icon, CairoDock *pDo
 	iHeight = icon->fHeight + 2 * dh;  // on elargit en haut et en bas, pour gerer les cas ou l'icone grossirait vers le haut ou vers le bas.
 	
 	if (pDock->container.bIsHorizontal)
-		gldi_window_set_thumbnail_area (icon->pAppli, pDock->container.pWidget, iX, iY - dh, iWidth, iHeight);
+		gldi_window_set_thumbnail_area (icon->pAppli, &pDock->container, iX, iY - dh, iWidth, iHeight);
 	else
-		gldi_window_set_thumbnail_area (icon->pAppli, pDock->container.pWidget, iY - dh, iX, iHeight, iWidth);
+		gldi_window_set_thumbnail_area (icon->pAppli, &pDock->container, iY - dh, iX, iHeight, iWidth);
 }
 
 void gldi_appli_reserve_geometry_for_window_manager (GldiWindowActor *pAppli, Icon *icon, CairoDock *pMainDock)
@@ -364,6 +365,7 @@ void gldi_appli_reserve_geometry_for_window_manager (GldiWindowActor *pAppli, Ic
 	if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_get_icon_container(icon) == NULL)  // a detached appli
 	{
 		/// TODO: use the same algorithm as the class-manager to find the future position of the icon ...
+		CairoDock *pIconDock = pMainDock;
 		
 		Icon *pInhibitor = cairo_dock_get_inhibitor (icon, FALSE);  // FALSE <=> meme en-dehors d'un dock
 		if (pInhibitor == NULL)  // cette icone n'est pas inhibee, donc se minimisera dans le dock en une nouvelle icone.
@@ -382,6 +384,7 @@ void gldi_appli_reserve_geometry_for_window_manager (GldiWindowActor *pAppli, Ic
 				{
 					y = y_icon_geometry (pClassmate, pClassmateDock);
 				}
+				pIconDock = pClassmateDock;
 			}
 			else if (myTaskbarParam.bMixLauncherAppli && pClassmate != NULL && pClassmateDock != NULL)  // on va se placer a cote.
 			{
@@ -394,6 +397,7 @@ void gldi_appli_reserve_geometry_for_window_manager (GldiWindowActor *pAppli, Ic
 				{
 					y = y_icon_geometry (pClassmate, pClassmateDock);
 				}
+				pIconDock = pClassmateDock;
 			}
 			else  // on va se placer a la fin de la barre des taches.
 			{
@@ -416,7 +420,7 @@ void gldi_appli_reserve_geometry_for_window_manager (GldiWindowActor *pAppli, Ic
 					x = x_icon_geometry (pLastLauncher, pMainDock) + pLastLauncher->fWidth/2;
 					if (cairo_dock_is_hidden (pMainDock))
 					{
-						y = (pMainDock->container.bDirectionUp ? 0 : gldi_desktop_get_height());
+						y = (pMainDock->container.bDirectionUp ? 0 : pMainDock->iActiveHeight);
 					}
 					else
 					{
@@ -425,22 +429,22 @@ void gldi_appli_reserve_geometry_for_window_manager (GldiWindowActor *pAppli, Ic
 				}
 				else  // aucune icone avant notre groupe, on sera insere en 1er.
 				{
-					x = pMainDock->container.iWindowPositionX + 0 + (pMainDock->container.iWidth - pMainDock->fFlatDockWidth) / 2;
+					x = (pMainDock->container.iWidth - pMainDock->fFlatDockWidth) / 2;
 					if (cairo_dock_is_hidden (pMainDock))
 					{
-						y = (pMainDock->container.bDirectionUp ? 0 : gldi_desktop_get_height());
+						y = (pMainDock->container.bDirectionUp ? 0 : pMainDock->iActiveHeight);
 					}
 					else
 					{
-						y = pMainDock->container.iWindowPositionY;
+						y = 0;
 					}
 				}
 			}
 			//g_print (" - %s en (%d;%d)\n", icon->cName, x, y);
 			if (pMainDock->container.bIsHorizontal)
-				gldi_window_set_minimize_position (pAppli, NULL, x, y);
+				gldi_window_set_minimize_position (pAppli, &pIconDock->container, x, y);
 			else
-				gldi_window_set_minimize_position (pAppli, NULL, y, x);
+				gldi_window_set_minimize_position (pAppli, &pIconDock->container, y, x);
 		}
 		else
 		{
