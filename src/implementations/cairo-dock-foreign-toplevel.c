@@ -27,6 +27,7 @@
 #include "wayland-wlr-foreign-toplevel-management-client-protocol.h"
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-windows-manager.h"
+#include "cairo-dock-container.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-foreign-toplevel.h"
 #include "cairo-dock-wayland-wm.h"
@@ -90,12 +91,12 @@ static void _can_minimize_maximize_close ( G_GNUC_UNUSED GldiWindowActor *actor,
 
 /// TODO: which one of these two are really used? In cairo-dock-X-manager.c,
 /// they seem to do the same thing
-static void _set_thumbnail_area (GldiWindowActor *actor, GtkWidget* pContainerWidget, int x, int y, int w, int h)
+static void _set_thumbnail_area (GldiWindowActor *actor, GldiContainer* pContainer, int x, int y, int w, int h)
 {
-	if ( ! (actor && pContainerWidget) ) return;
+	if ( ! (actor && pContainer) ) return;
 	if (w < 0 || h < 0) return;
 	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor *)actor;
-	GdkWindow* window = gtk_widget_get_window (pContainerWidget);
+	GdkWindow* window = gldi_container_get_gdk_window (pContainer);
 	if (!window) return;
 	struct wl_surface* surface = gdk_wayland_window_get_wl_surface (window);
 	if (!surface) return;
@@ -103,9 +104,9 @@ static void _set_thumbnail_area (GldiWindowActor *actor, GtkWidget* pContainerWi
 	zwlr_foreign_toplevel_handle_v1_set_rectangle(wactor->handle, surface, x, y, w, h);
 }
 
-static void _set_minimize_position (GldiWindowActor *actor, GtkWidget* pContainerWidget, int x, int y)
+static void _set_minimize_position (GldiWindowActor *actor, GldiContainer* pContainer, int x, int y)
 {
-	_set_thumbnail_area (actor, pContainerWidget, x, y, 1, 1);
+	_set_thumbnail_area (actor, pContainer, x, y, 1, 1);
 }
 
 static void _set_fullscreen (GldiWindowActor *actor, gboolean bFullScreen)

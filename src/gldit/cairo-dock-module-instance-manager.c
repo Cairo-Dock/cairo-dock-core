@@ -697,6 +697,10 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReadConfig, GKeyFile 
 			 * desklet mode, since the desklet doesn't have a renderer yet (so
 			 * buffer can't be loaded).
 			 */
+			 if (pIcon->pSubDock && gldi_container_use_new_positioning_code ())
+			 {
+				 gtk_window_set_transient_for (GTK_WINDOW (pIcon->pSubDock->container.pWidget), GTK_WINDOW (pNewDock->container.pWidget));
+			 }
 		}
 		else  // same dock, just update its size.
 		{

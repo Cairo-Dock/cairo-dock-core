@@ -593,30 +593,14 @@ void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock)
 		return ;
 	//g_print ("%s (main:%d, ref:%d)\n", __func__, pDock->bIsMainDock, pDock->iRefCount);
 	
-	/*long *data = g_new0 (long, 1+6*g_list_length (pDock->icons));
-	int i = 0;*/
 	Icon *icon;
 	GList *ic;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
 		if (CAIRO_DOCK_IS_APPLI (icon))
-		{
 			gldi_appli_icon_set_geometry_for_window_manager (icon, pDock);
-			/*data[1+6*i+0] = 5;
-			data[1+6*i+1] = icon->Xid;
-			data[1+6*i+2] = pDock->container.iWindowPositionX + icon->fXAtRest;
-			data[1+6*i+3] = 0;
-			data[1+6*i+4] = icon->fWidth;
-			data[1+6*i+5] = icon->fHeight;
-			i ++;*/
-		}
 	}
-	
-	/*data[0] = i;
-	Atom atom = XInternAtom (gdk_x11_get_default_xdisplay(), "_KDE_WINDOW_PREVIEW", False);
-	Window Xid = GDK_WINDOW_XID (pDock->container.pWidget->window);
-	XChangeProperty(gdk_x11_get_default_xdisplay(), Xid, atom, atom, 32, PropModeReplace, data, 1+6*i);*/
 	
 	if (pDock->bIsMainDock && myTaskbarParam.bHideVisibleApplis)  // on complete avec les applis pas dans le dock, pour que l'effet de minimisation pointe (a peu pres) au bon endroit quand on la minimisera.
 	{

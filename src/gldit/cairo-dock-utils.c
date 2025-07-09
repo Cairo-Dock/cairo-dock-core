@@ -407,7 +407,9 @@ static void _pid_callback (GDesktopAppInfo* appinfo, GPid pid, gpointer)
 	if (s_backend.new_app_launched)
 	{
 		char *desc = g_strdup_printf ("%s - %s", g_app_info_get_display_name (G_APP_INFO (appinfo)), g_app_info_get_description (G_APP_INFO (appinfo)));
-		s_backend.new_app_launched (g_app_info_get_id (G_APP_INFO (appinfo)), desc, pid);
+		const char *id = g_app_info_get_id (G_APP_INFO (appinfo));
+		if (!id) id = "unknown"; // ID does not matter but should not be NULL
+		s_backend.new_app_launched (id, desc, pid);
 		g_free (desc);
 	}
 	else g_child_watch_add (pid, _child_watch_dummy, NULL);

@@ -72,8 +72,8 @@ struct _GldiWindowManagerBackend {
 	void (*maximize) (GldiWindowActor *actor, gboolean bMaximize);
 	void (*set_fullscreen) (GldiWindowActor *actor, gboolean bFullScreen);
 	void (*set_above) (GldiWindowActor *actor, gboolean bAbove);
-	void (*set_minimize_position) (GldiWindowActor *actor, GtkWidget* pContainerWidget, int x, int y);
-	void (*set_thumbnail_area) (GldiWindowActor *actor, GtkWidget* pContainerWidget, int x, int y, int w, int h);
+	void (*set_minimize_position) (GldiWindowActor *actor, GldiContainer* pContainer, int x, int y);
+	void (*set_thumbnail_area) (GldiWindowActor *actor, GldiContainer* pContainer, int x, int y, int w, int h);
 	void (*set_window_border) (GldiWindowActor *actor, gboolean bWithBorder);
 	cairo_surface_t* (*get_icon_surface) (GldiWindowActor *actor, int iWidth, int iHeight);
 	cairo_surface_t* (*get_thumbnail_surface) (GldiWindowActor *actor, int iWidth, int iHeight);
@@ -152,13 +152,11 @@ void gldi_window_maximize (GldiWindowActor *actor, gboolean bMaximize);
 void gldi_window_set_fullscreen (GldiWindowActor *actor, gboolean bFullScreen);
 void gldi_window_set_above (GldiWindowActor *actor, gboolean bAbove);
 
-/// note: on Wayland, coordinates are relative to the passed widget's main surface (the wl_surface corresponding to its GdkWindow)
-/// on X11, pContainerWidget is ignored
-void gldi_window_set_minimize_position (GldiWindowActor *actor, GtkWidget* pContainerWidget, int x, int y);
+/// note: coordinates are relative to the passed container's main surface
+void gldi_window_set_minimize_position (GldiWindowActor *actor, GldiContainer* pContainer, int x, int y);
 
-/// note: on Wayland, coordinates are relative to the passed widget's main surface (the wl_surface corresponding to its GdkWindow)
-/// on X11, pContainerWidget is ignored
-void gldi_window_set_thumbnail_area (GldiWindowActor *actor, GtkWidget* pContainerWidget, int x, int y, int w, int h);
+/// note: coordinates are relative to the passed container's main surface
+void gldi_window_set_thumbnail_area (GldiWindowActor *actor, GldiContainer* pContainer, int x, int y, int w, int h);
 
 void gldi_window_set_border (GldiWindowActor *actor, gboolean bWithBorder);
 

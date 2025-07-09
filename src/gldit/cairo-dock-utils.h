@@ -107,8 +107,9 @@ struct _GldiChildProcessManagerBackend {
 	/** Handle a newly launched child process, performing any system-specific setup functions.
 	 * This should also eventually call waitpid() or similar to clean up the child process.
 	 *
-	 *@param id  an identifier for the newly launched process, containing only "safe" characters
-	 *           (currently this means only characters valid in systemd unit names: ASCII letters, digits, ":", "-", "_", ".", and "\")
+	 *@param id  a non-NULL identifier for the newly launched process, containing only "safe" characters
+	 *           (currently this means only characters valid in systemd unit names: ASCII letters, digits, ":", "-", "_", ".", and "\");
+	 * 			 does not need to be unique
 	 *@param desc  a description suitable to display to the user
 	 *@param pid  process id of the newly launched process; the caller should not use waitpid()
 	 *            or similar facility to avoid race condition
