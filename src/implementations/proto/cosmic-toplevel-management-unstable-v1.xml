@@ -4,7 +4,7 @@
     Copyright © 2018 Ilia Bozhinov
     Copyright © 2020 Isaac Freund
     Copyright © 2022 wb9688
-    Copyright © 2022 Victoria Brekenfeld
+    Copyright © 2024 Victoria Brekenfeld
 
     Permission to use, copy, modify, distribute, and sell this
     software and its documentation for any purpose is hereby granted
@@ -28,7 +28,7 @@
     THIS SOFTWARE.
   </copyright>
 
-  <interface name="zcosmic_toplevel_manager_v1" version="2">
+  <interface name="zcosmic_toplevel_manager_v1" version="4">
     <description summary="control open apps">
       This protocol allows clients such as a taskbar to request the compositor
       to preform typical actions on open toplevels. The compositor is in all
@@ -50,6 +50,8 @@
       <entry name="minimize" value="4" summary="set_minimized and unset_minimized requests are available"/>
       <entry name="fullscreen" value="5" summary="set_fullscreen and unset_fullscreen requests are available"/>
       <entry name="move_to_workspace" value="6" since="2" summary="move_to_workspace request is available"/>
+      <entry name="sticky" value="7" since="3" summary="set_sticky and unset_sticky requests are available"/>
+      <entry name="move_to_ext_workspace" value="8" since="4" summary="move_to_ext_workspace request is available"/>
     </enum>
 
     <event name="capabilities">
@@ -168,12 +170,37 @@
       <arg name="height" type="int"/>
     </request>
 
-    <request name = "move_to_workspace" since="2">
+    <request name = "move_to_workspace" since="2"  deprecated-since="4">
       <description summary="move toplevel to workspace">
         Move window to workspace, on given output.
       </description>
       <arg name="toplevel" type="object" interface="zcosmic_toplevel_handle_v1"/>
       <arg name="workspace" type="object" interface="zcosmic_workspace_handle_v1"/>
+      <arg name="output" type="object" interface="wl_output"/>
+    </request>
+
+    <request name="set_sticky" since="3">
+      <description summary="request that a toplevel be made sticky">
+        If the compositor honors this request, the
+        zcosmic_toplevel_handle_v1.state event will be sent.
+      </description>
+      <arg name="toplevel" type="object" interface="zcosmic_toplevel_handle_v1"/>
+    </request>
+
+    <request name="unset_sticky" since="3">
+      <description summary="request that a toplevel be removed of the sticky status">
+        If the compositor honors this request, the
+        zcosmic_toplevel_handle_v1.state event will be sent.
+      </description>
+      <arg name="toplevel" type="object" interface="zcosmic_toplevel_handle_v1"/>
+    </request>
+
+    <request name = "move_to_ext_workspace" since="4">
+      <description summary="move toplevel to workspace">
+        Move window to workspace, on given output.
+      </description>
+      <arg name="toplevel" type="object" interface="zcosmic_toplevel_handle_v1"/>
+      <arg name="workspace" type="object" interface="ext_workspace_handle_v1"/>
       <arg name="output" type="object" interface="wl_output"/>
     </request>
 

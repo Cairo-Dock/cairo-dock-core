@@ -49,7 +49,7 @@
 #include "cairo-dock-plasma-window-manager.h"
 #include "cairo-dock-cosmic-toplevel.h"
 #include "cairo-dock-plasma-virtual-desktop.h"
-#include "cairo-dock-cosmic-workspaces.h"
+#include "cairo-dock-ext-workspaces.h"
 #endif
 #include "cairo-dock-wayland-wm.h"
 #include "cairo-dock-wayland-hotspots.h"
@@ -101,7 +101,7 @@ static void _try_detect_compositor (void)
 			s_CompositorType = WAYLAND_COMPOSITOR_KWIN;
 		else if (strstr (dmb_names, "KWin"))
 			s_CompositorType = WAYLAND_COMPOSITOR_KWIN;
-		else if (strstr (dmb_names, "cosmic")) // will also match Labwc which implements the cosmic workspaces protocols
+		else if (strstr (dmb_names, "ext")) // will also match Labwc which implements the ext workspaces protocols
 			s_CompositorType = WAYLAND_COMPOSITOR_GENERIC;
 	}
 }
@@ -437,9 +437,9 @@ static void _registry_global_cb ( G_GNUC_UNUSED void *data, struct wl_registry *
 	{
 		cd_debug("Found cosmic-toplevel-manager");
 	}
-	else if (gldi_cosmic_workspaces_match_protocol (id, interface, version))
+	else if (gldi_ext_workspaces_match_protocol (id, interface, version))
 	{
-		cd_debug("Found cosmic-workspace-manager");
+		cd_debug("Found ext-workspace-manager");
 	}
 #else
 	(void)version; // avoid warning
@@ -451,9 +451,6 @@ static void _registry_global_remove_cb (G_GNUC_UNUSED void *data, G_GNUC_UNUSED 
 {
 	cd_debug ("got a global object has disappeared: id=%d", id);
 	/// TODO: find it and destroy it...
-	
-	/// TODO: and if it was a wl_output for instance, update the desktop geometry...
-	
 }
 
 static const struct wl_registry_listener registry_listener = {
@@ -509,7 +506,7 @@ static void init (void)
 		if (s_CompositorType != WAYLAND_COMPOSITOR_UNKNOWN)
 			cd_warning ("inconsistent compositor types detected!");
 		s_CompositorType = WAYLAND_COMPOSITOR_COSMIC;
-		if (!gldi_cosmic_workspaces_try_init (registry))
+		if (!gldi_ext_workspaces_try_init (registry))
 			gldi_plasma_virtual_desktop_try_init (registry);
 	}
 	else
@@ -522,7 +519,7 @@ static void init (void)
 		}
 		else gldi_wlr_foreign_toplevel_try_init (registry);
 		if (!gldi_plasma_virtual_desktop_try_init (registry))
-			gldi_cosmic_workspaces_try_init (registry);
+			gldi_ext_workspaces_try_init (registry);
 	}
 #endif	
 	cmb.set_input_shape = _set_input_shape;
