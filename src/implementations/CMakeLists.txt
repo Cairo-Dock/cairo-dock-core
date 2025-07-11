@@ -78,6 +78,14 @@ if(WaylandScanner_FOUND)
 		impl_SRCS
 		PROTOCOL "proto/plasma-virtual-desktop.xml"
 		BASENAME "plasma-virtual-desktop")
+	ecm_add_wayland_client_protocol(
+		impl_SRCS
+		PROTOCOL "proto/wlr-layer-shell-unstable-v1.xml"
+		BASENAME "layer-shell")
+	ecm_add_wayland_client_protocol(
+		impl_SRCS
+		PROTOCOL "proto/xdg-shell.xml"
+		BASENAME "xdg-shell")
 endif()
 
 add_library(implementations STATIC ${impl_SRCS})
