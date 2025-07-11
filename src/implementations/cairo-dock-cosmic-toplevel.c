@@ -28,10 +28,18 @@
 #include "wayland-cosmic-toplevel-management-client-protocol.h"
 #include "wayland-cosmic-toplevel-info-client-protocol.h"
 #include "wayland-cosmic-workspace-client-protocol.h"
+#ifdef HAVE_GTK_LAYER_SHELL
+#include "wayland-xdg-shell-client-protocol.h"
+#include "wayland-layer-shell-client-protocol.h"
+#endif
+#include "wayland-cosmic-overlap-notify-client-protocol.h"
 #include "wayland-ext-toplevel-list-client-protocol.h"
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-container.h"
+#include "cairo-dock-dock-factory.h"
+#include "cairo-dock-dock-manager.h"
+#include "cairo-dock-dock-visibility.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-cosmic-toplevel.h"
 #include "cairo-dock-wayland-wm.h"
@@ -39,6 +47,10 @@
 
 #include <stdio.h>
 
+#ifdef HAVE_GTK_LAYER_SHELL
+#include <gtk-layer-shell.h>
+extern gboolean g_bDisableLayerShell; // from wayland-manager
+#endif
 
 typedef struct ext_foreign_toplevel_handle_v1 ext_handle;
 typedef struct zcosmic_toplevel_handle_v1 cosmic_handle;
@@ -61,6 +73,7 @@ typedef enum {
 static struct ext_foreign_toplevel_list_v1 *s_ptoplevel_list = NULL;
 static struct zcosmic_toplevel_info_v1* s_ptoplevel_info = NULL;
 static struct zcosmic_toplevel_manager_v1* s_ptoplevel_manager = NULL;
+static struct zcosmic_overlap_notify_v1* s_poverlap_manager = NULL;
 
 static gboolean can_close = FALSE;
 static gboolean can_activate = FALSE;
@@ -72,7 +85,10 @@ static gboolean can_move_workspace = FALSE;
 static gboolean list_found = FALSE;
 static gboolean manager_found = FALSE;
 static gboolean info_found = FALSE;
-static uint32_t list_id, manager_id, info_id, list_version, manager_version, info_version;
+static gboolean overlap_found = FALSE;
+static uint32_t list_id, manager_id, info_id, overlap_id, list_version, manager_version, info_version, overlap_version;
+
+static void _vis_active_window_changed (GldiWaylandWindowActor *wactor);
 
 /**********************************************************************
  * window manager interface -- toplevel manager                       */
@@ -216,7 +232,8 @@ static void _gldi_toplevel_output_leave_cb ( G_GNUC_UNUSED void *data, G_GNUC_UN
 static void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED cosmic_handle *handle, struct wl_array *state)
 {
 	if (!data) return;
-	GldiWaylandWindowActor* wactor = (GldiWaylandWindowActor*)data;
+	GldiWaylandWindowActor *old_active = (GldiWaylandWindowActor*)gldi_wayland_wm_get_active_window ();
+	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor*)data;
 	gboolean activated_pending = FALSE;
 	gboolean maximized_pending = FALSE;
 	gboolean minimized_pending = FALSE;
@@ -243,6 +260,9 @@ static void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED cosmic_handle *ha
 	gldi_wayland_wm_maximized_changed (wactor, maximized_pending, FALSE);
 	gldi_wayland_wm_minimized_changed (wactor, minimized_pending, FALSE);
 	gldi_wayland_wm_fullscreen_changed (wactor, fullscreen_pending, FALSE);
+	
+	if (activated_pending) _vis_active_window_changed (wactor);
+	else if (wactor == old_active) _vis_active_window_changed (NULL);
 }
 
 static void _gldi_toplevel_done_cb (void *data, G_GNUC_UNUSED ext_handle *handle)
@@ -397,6 +417,283 @@ static void _reset_object (GldiObject* obj)
 	}
 }
 
+
+/***********************************************************************
+ * dock visibility backend -- only usable if we compile with layer-shell
+ * (which should be required for basic usability anyway) */
+
+#ifdef HAVE_GTK_LAYER_SHELL
+
+/// info needed to store with each dock where the backend is active
+typedef struct _CosmicVis {
+	struct zcosmic_overlap_notification_v1 *pNotify; // listener for overlap events
+	GHashTable *hOverlap; // hash table of currently overlapping toplevel handles mapping them to their overlap rectangles
+	gulong sig_id; // signal handler ID for the unmap signal from the dock's widget
+	guint idle_id; // source ID for showing / hiding the dock when idle
+	gboolean bShouldHide; // whether we should hide this dock based on our last check
+} CosmicVis;
+
+static void _idle_show_hide (void *ptr)
+{
+	CairoDock *pDock = (CairoDock*)ptr;
+	CosmicVis *info = (CosmicVis*)pDock->pVisibilityData; // should be non-NULL
+	if (info->bShouldHide)
+	{
+		if (! cairo_dock_is_temporary_hidden (pDock))
+			cairo_dock_activate_temporary_auto_hide (pDock);
+	}
+	else if (cairo_dock_is_temporary_hidden (pDock))
+		cairo_dock_deactivate_temporary_auto_hide (pDock);
+	info->idle_id = 0;
+}
+
+static void _set_idle_show_hide (CairoDock *pDock)
+{
+	CosmicVis *info = (CosmicVis*)pDock->pVisibilityData; // should be non-NULL
+	if (!info->idle_id) info->idle_id = g_idle_add_once (_idle_show_hide, pDock);
+}
+
+static void _vis_window_unmap (GtkWidget* pWindow, void *ptr)
+{
+	CairoDock *pDock = (CairoDock*)ptr;
+	if (!pDock->pVisibilityData)
+	{
+		cd_critical ("visibility data already destroyed!");
+		return;
+	}
+	
+	CosmicVis *info = (CosmicVis*)pDock->pVisibilityData;
+	g_hash_table_unref (info->hOverlap);
+	zcosmic_overlap_notification_v1_destroy (info->pNotify);
+	// disconnect ourselves, no need to keep it (will be connected when mapping next)
+	if (info->sig_id) g_signal_handler_disconnect (G_OBJECT (pWindow), info->sig_id);
+	if (info->idle_id) g_source_remove (info->idle_id);
+	g_free (info);
+	pDock->pVisibilityData = NULL;
+}
+
+static inline gboolean _dock_overlaps_area (const CairoDock *pDock, const GtkAllocation *pArea)
+{
+	// check the extent of overlap with the dock
+	// pArea is relative to our surface
+	int dx, dy, dw, dh;
+	if (pDock->container.bIsHorizontal)
+	{
+		dw = pDock->iMinDockWidth;
+		dh = pDock->iMinDockHeight;
+		dx = (pDock->container.iWidth - pDock->iMinDockWidth)/2;
+		dy = (pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iMinDockHeight : 0);
+	}
+	else
+	{
+		dw = pDock->iMinDockHeight;
+		dh = pDock->iMinDockWidth;
+		dx = (pDock->container.bDirectionUp ? pDock->container.iHeight - pDock->iMinDockHeight : 0);
+		dy = (pDock->container.iWidth - pDock->iMinDockWidth)/2;
+	}
+	
+	return (pArea->x < dx + dw && pArea->x + pArea->width > dx &&
+		pArea->y < dy + dh && pArea->y + pArea->height > dy);
+}
+
+static gboolean _check_overlap (void*, void *val, void *ptr)
+{
+	return _dock_overlaps_area ((CairoDock*)ptr, (GtkAllocation*)val);
+}
+
+static gboolean _dock_has_overlap_window (CairoDock *pDock)
+{
+	if (pDock->pVisibilityData)
+	{
+		CosmicVis *info = (CosmicVis*)pDock->pVisibilityData;
+		return (g_hash_table_find (info->hOverlap, _check_overlap, pDock) != NULL);
+	}
+	return FALSE;
+}
+
+static void _toplevel_enter (void *data, struct zcosmic_overlap_notification_v1*,
+	struct ext_foreign_toplevel_handle_v1* toplevel, int x, int y, int width, int height) //!! TODO: use parameters to decide on overlap !!
+{
+	if (!data) return;
+	CairoDock *pDock = (CairoDock*)data;
+	if (!pDock->pVisibilityData)
+	{
+		cd_critical ("Enter event for a dock without visibility data!");
+		return;
+	}
+	
+	// update the window's position
+	CosmicVis *info = (CosmicVis*)pDock->pVisibilityData;
+	GtkAllocation *pArea = g_new (GtkAllocation, 1);
+	pArea->x = x; pArea->y = y; pArea->width = width; pArea->height = height;
+	g_hash_table_insert (info->hOverlap, toplevel, pArea); // will update any existing value
+	
+	if (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP)
+	{
+		// check if toplevel is the currently active window (no need to do anything if not)
+		GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor*)gldi_windows_get_active ();
+		if (!wactor || wactor->handle != toplevel) return;
+	}
+	
+	gboolean bOverlap = _dock_overlaps_area (pDock, pArea);
+	if (bOverlap == info->bShouldHide) return; // no change, return
+	
+	if (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY &&
+		!bOverlap)
+	{
+		// need to recheck overlap with all other windows since it is
+		// possible that only the currently moved window was overlapping
+		bOverlap = _dock_has_overlap_window (pDock);
+	}
+	
+	info->bShouldHide = bOverlap;
+	_set_idle_show_hide (pDock);
+}
+
+static void _toplevel_leave (void *data, struct zcosmic_overlap_notification_v1*,
+	struct ext_foreign_toplevel_handle_v1* toplevel)
+{
+	if (!data) return;
+	CairoDock *pDock = (CairoDock*)data;
+	if (!pDock->pVisibilityData)
+	{
+		cd_critical ("Leave event for a dock without visibility data!");
+		return;
+	}
+	CosmicVis *info = (CosmicVis*)pDock->pVisibilityData;
+	if (!g_hash_table_remove (info->hOverlap, toplevel))
+		cd_warning ("Toplevel not marked as overlapping!");
+	
+	if (info->bShouldHide)
+	{
+		if (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY)
+		{
+			// have to check all remaining windows (could optimize a bit: first check if the current window was even overlapping)
+			info->bShouldHide = _dock_has_overlap_window (pDock);
+		}
+		else // CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP
+		{
+			// check if toplevel is the currently active window
+			GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor*)gldi_windows_get_active ();
+			if (wactor->handle == toplevel)
+				info->bShouldHide = FALSE;
+		}
+		
+		if (!info->bShouldHide) _set_idle_show_hide (pDock);
+	}
+}
+
+static void _layer_enter (void*, struct zcosmic_overlap_notification_v1*, const char*, const char*,
+	unsigned int, unsigned int, int, int, int, int)
+{
+	/* don't care */
+}
+
+static void _layer_leave (void*, struct zcosmic_overlap_notification_v1*, const char*)
+{
+	/* don't care */
+}
+
+struct zcosmic_overlap_notification_v1_listener vis_notify_listener = {
+	.toplevel_enter = _toplevel_enter,
+	.toplevel_leave = _toplevel_leave,
+	.layer_enter    = _layer_enter,
+	.layer_leave    = _layer_leave
+};
+
+
+static gboolean _dock_overlaps_window (const CairoDock *pDock, const GldiWaylandWindowActor *wactor)
+{
+	if (!pDock->pVisibilityData)
+	{
+		cd_warning ("Checking overlap for a dock without visibility data!");
+		return FALSE;
+	}
+	const CosmicVis *info = (const CosmicVis*)pDock->pVisibilityData;
+	const GtkAllocation *pArea = (const GtkAllocation*)g_hash_table_lookup (info->hOverlap, wactor->handle);
+	return (pArea && _dock_overlaps_area (pDock, pArea));
+}
+
+static void _check_dock_active (CairoDock *pDock, gpointer data)
+{
+	if (pDock->iVisibility != CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP) return;
+	if (!pDock->pVisibilityData) return;
+	
+	gboolean bOverlap = data && _dock_overlaps_window (pDock, data);
+	CosmicVis *info = (CosmicVis*)pDock->pVisibilityData;
+	if (bOverlap != info->bShouldHide)
+	{
+		info->bShouldHide = bOverlap;
+		_set_idle_show_hide (pDock);
+	}
+}
+
+static void _vis_active_window_changed (GldiWaylandWindowActor *wactor)
+{
+	gldi_docks_foreach_root ((GFunc)_check_dock_active, wactor);
+}
+
+static void _visibility_refresh (CairoDock *pDock)
+{
+	if (!s_poverlap_manager) return;
+	gboolean bListening = (pDock->pVisibilityData != NULL);
+	gboolean bShouldListen = (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP ||
+		pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY);
+	
+	GtkWindow *pWindow = GTK_WINDOW (pDock->container.pWidget);
+	
+	if (bShouldListen)
+	{
+		if (! (pWindow && gtk_layer_is_layer_window (pWindow)))
+			bShouldListen = FALSE;
+	}
+	
+	if (! (bListening || bShouldListen) ) return;
+	
+	if (bShouldListen && !bListening)
+	{
+		// create a new listener and store with our dock
+		CosmicVis *info = g_new0 (CosmicVis, 1);
+		pDock->pVisibilityData = info;
+		info->hOverlap = g_hash_table_new_full (NULL, NULL, NULL, g_free);
+		info->pNotify = zcosmic_overlap_notify_v1_notify_on_overlap (s_poverlap_manager, gtk_layer_get_zwlr_layer_surface_v1 (pWindow));
+		zcosmic_overlap_notification_v1_add_listener (info->pNotify, &vis_notify_listener, pDock);
+		// listen to notification about pWindow being unmapped so that we can destroy the listener
+		info->sig_id = g_signal_connect (G_OBJECT (pWindow), "unmap", G_CALLBACK (_vis_window_unmap), pDock);
+		
+		// we might already be hidden, in this case, we should schedule an unhide as we don't know if we will need to be hidden
+		if (cairo_dock_is_temporary_hidden (pDock))	_set_idle_show_hide (pDock);
+		return;
+	}
+	
+	if (bListening && !bShouldListen)
+	{
+		_vis_window_unmap (GTK_WIDGET (pWindow), pDock); // this is just a simple way to free pDock->pVisibilityData
+		return; // dock will be shown by the caller
+	}
+	
+	// here bListening and bShouldListen are both TRUE, we need re-check if the dock should be shown
+	CosmicVis *info = (CosmicVis*)pDock->pVisibilityData;
+	if (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP)
+	{
+		GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor*)gldi_wayland_wm_get_active_window();
+		info->bShouldHide = wactor && _dock_overlaps_window (pDock, wactor);
+	}
+	else info->bShouldHide = _dock_has_overlap_window (pDock);
+	
+	if (info->bShouldHide != cairo_dock_is_temporary_hidden (pDock))
+		_set_idle_show_hide (pDock);
+}
+
+
+#else // no layer shell
+static void _vis_active_window_changed (GldiWaylandWindowActor *wactor)
+{
+	(void)wactor;
+}
+#endif
+
+
 gboolean gldi_cosmic_toplevel_try_init (struct wl_registry *registry)
 {
 	if (!(manager_found && info_found && list_found)) return FALSE;
@@ -493,6 +790,26 @@ gboolean gldi_cosmic_toplevel_try_init (struct wl_registry *registry)
 	// parent object
 	gldi_object_set_manager (GLDI_OBJECT (&myCosmicWindowObjectMgr), &myWaylandWMObjectMgr);
 	
+	GldiDockVisibilityBackend dvb = {0};
+#ifdef HAVE_GTK_LAYER_SHELL
+	if (overlap_found)
+	{
+		if (overlap_version > (uint32_t)zcosmic_overlap_notify_v1_interface.version)
+			overlap_version = zcosmic_overlap_notify_v1_interface.version;
+		s_poverlap_manager = wl_registry_bind (registry, overlap_id, &zcosmic_overlap_notify_v1_interface, overlap_version);
+		if (!s_poverlap_manager)
+			cd_error ("Cannot bind cosmic_overlap_notify!\n");
+	}
+	if (s_poverlap_manager)
+	{
+		dvb.refresh = _visibility_refresh;
+		dvb.has_overlapping_window = _dock_has_overlap_window;
+	}
+#endif
+	// note: we register our dock visibility backend interface anyway since we don't want the default backend to run
+	dvb.name = s_poverlap_manager ? "cosmic" : "cosmic (error)";
+	gldi_dock_visibility_register_backend (&dvb);
+	
 	return TRUE;
 }
 
@@ -520,6 +837,15 @@ gboolean gldi_cosmic_toplevel_match_protocol (uint32_t id, const char *interface
 		list_version = version;
 		return TRUE;
 	}
+#ifdef HAVE_GTK_LAYER_SHELL
+	if (!g_bDisableLayerShell && !strcmp (interface, zcosmic_overlap_notify_v1_interface.name))
+	{
+		overlap_found = TRUE;
+		overlap_id = id;
+		overlap_version = version;
+		return TRUE;
+	}
+#endif
 	return FALSE;
 }
 
