@@ -31,7 +31,7 @@
 #include "cairo-dock-dialog-manager.h"  // gldi_dialogs_replace_all
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-applications-manager.h"  // myTaskbarParam.cAnimationOnDemandsAttention
-#include "cairo-dock-dock-visibility.h"  // gldi_dock_search_overlapping_window
+#include "cairo-dock-dock-visibility.h"  // gldi_dock_has_overlapping_window
 #include "cairo-dock-log.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-container.h"
@@ -95,7 +95,7 @@ void cairo_dock_pop_down (CairoDock *pDock)
 	//g_print ("%s (%d, %d)\n", __func__, pDock->bIsBelow, pDock->container.bInside);
 	if (! pDock->bIsBelow && pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW && ! pDock->container.bInside)
 	{
-		if (gldi_dock_search_overlapping_window (pDock) != NULL)
+		if (gldi_dock_has_overlapping_window (pDock))
 		{
 			pDock->iFadeCounter = 0;
 			pDock->bFadeInOut = TRUE;

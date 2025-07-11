@@ -35,7 +35,7 @@
 
 static inline gboolean _window_overlaps_area (const GldiWindowActor *actor, const GtkAllocation *pArea);
 static inline gboolean _window_overlaps_dock (const GldiWindowActor *actor, const CairoDock *pDock);
-static inline GldiWindowActor *_search_overlapping_window (GtkAllocation *pArea);
+static inline gboolean _dock_has_overlapping_window (GtkAllocation *pArea);
 
 
 static void _get_dock_geometry (const CairoDock *pDock, GtkAllocation *pArea)
@@ -99,7 +99,7 @@ static void _show_if_no_overlapping_window (CairoDock *pDock, G_GNUC_UNUSED gpoi
 		return ;
 	if (cairo_dock_is_temporary_hidden (pDock))
 	{
-		if (gldi_dock_search_overlapping_window (pDock) == NULL)
+		if (!gldi_dock_has_overlapping_window (pDock))
 		{
 			cairo_dock_deactivate_temporary_auto_hide (pDock);
 		}
@@ -112,7 +112,7 @@ static void _hide_if_any_overlap (CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 		return ;
 	if (!cairo_dock_is_temporary_hidden (pDock))
 	{
-		if (gldi_dock_search_overlapping_window (pDock) != NULL)
+		if (gldi_dock_has_overlapping_window (pDock))
 		{
 			cairo_dock_activate_temporary_auto_hide (pDock);
 		}
@@ -149,7 +149,7 @@ static void _hide_if_overlap_or_show_if_no_overlapping_window (CairoDock *pDock,
 	{
 		if (cairo_dock_is_temporary_hidden (pDock))
 		{
-			if (_search_overlapping_window (&area) == NULL)
+			if (!_dock_has_overlapping_window (&area))
 			{
 				cairo_dock_deactivate_temporary_auto_hide (pDock);
 			}
@@ -203,14 +203,14 @@ static void _hide_if_any_overlap_or_show (CairoDock *pDock, G_GNUC_UNUSED gpoint
 		return ;
 	if (cairo_dock_is_temporary_hidden (pDock))
 	{
-		if (gldi_dock_search_overlapping_window (pDock) == NULL)
+		if (!gldi_dock_has_overlapping_window (pDock))
 		{
 			cairo_dock_deactivate_temporary_auto_hide (pDock);
 		}
 	}
 	else
 	{
-		if (gldi_dock_search_overlapping_window (pDock) != NULL)
+		if (gldi_dock_has_overlapping_window (pDock))
 		{
 			cairo_dock_activate_temporary_auto_hide (pDock);
 		}
@@ -234,7 +234,7 @@ static gboolean _on_window_created (G_GNUC_UNUSED gpointer data, GldiWindowActor
 static gboolean _on_window_destroyed (G_GNUC_UNUSED gpointer data, GldiWindowActor *actor)
 {
 	// docks visibility on overlap any
-	gboolean bIsHidden = actor->bIsHidden;  // the window is already destroyed, but the actor is still valid (it represents the last state of the window); temporarily make it hidden so that it doesn't overlap the dock (that's a bit tricky, we could also add an "except-this-window" parameter to 'gldi_dock_search_overlapping_window()')
+	gboolean bIsHidden = actor->bIsHidden;  // the window is already destroyed, but the actor is still valid (it represents the last state of the window); temporarily make it hidden so that it doesn't overlap the dock (that's a bit tricky, we could also add an "except-this-window" parameter to 'gldi_dock_has_overlapping_window()')
 	actor->bIsHidden = TRUE;
 	gldi_docks_foreach_root ((GFunc)_show_if_no_overlapping_window, NULL);
 	actor->bIsHidden = bIsHidden;
@@ -359,16 +359,16 @@ static gboolean _window_is_overlapping_dock (GldiWindowActor *actor, gpointer da
 	return FALSE;
 }
 
-static inline GldiWindowActor *_search_overlapping_window (GtkAllocation *pArea)
+static inline gboolean _dock_has_overlapping_window (GtkAllocation *pArea)
 {
-	return gldi_windows_find (_window_is_overlapping_dock, pArea);
+	return (gldi_windows_find (_window_is_overlapping_dock, pArea) != NULL);
 }
 
-GldiWindowActor *gldi_dock_search_overlapping_window (CairoDock *pDock)
+gboolean gldi_dock_has_overlapping_window (CairoDock *pDock)
 {
 	GtkAllocation area;
 	_get_dock_geometry (pDock, &area);
-	return gldi_windows_find (_window_is_overlapping_dock, &area);
+	return (gldi_windows_find (_window_is_overlapping_dock, &area) != NULL);
 }
 
 

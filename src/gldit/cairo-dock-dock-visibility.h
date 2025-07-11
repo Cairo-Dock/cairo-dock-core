@@ -31,11 +31,11 @@ G_BEGIN_DECLS
 /** Re-check if the given dock should be shown given its visibility settings */
 void gldi_dock_visibility_refresh (CairoDock *pDock);
 
-/** Get the application whose window overlaps a dock, or NULL if none.
+/** Get the whether any application window overlaps the given dock.
 *@param pDock the dock to test.
-*@return the window actor, or NULL if none has been found.
+*@return whether an overlapping window has been found.
 */
-GldiWindowActor *gldi_dock_search_overlapping_window (CairoDock *pDock);
+gboolean gldi_dock_has_overlapping_window (CairoDock *pDock);
 
 
 void gldi_docks_visibility_start (void);
