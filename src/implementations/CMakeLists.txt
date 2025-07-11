@@ -60,6 +60,10 @@ if(WaylandScanner_FOUND)
 		BASENAME "cosmic-toplevel-management")
 	ecm_add_wayland_client_protocol(
 		impl_SRCS
+		PROTOCOL "proto/cosmic-overlap-notify-unstable-v1.xml"
+		BASENAME "cosmic-overlap-notify")
+	ecm_add_wayland_client_protocol(
+		impl_SRCS
 		PROTOCOL "proto/cosmic-workspace-unstable-v1.xml"
 		BASENAME "cosmic-workspace")
 	ecm_add_wayland_client_protocol(
