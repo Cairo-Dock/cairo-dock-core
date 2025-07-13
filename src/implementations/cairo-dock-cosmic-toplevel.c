@@ -738,10 +738,6 @@ gboolean gldi_cosmic_toplevel_try_init (struct wl_registry *registry)
 		return FALSE;
 	}
 	
-	ext_foreign_toplevel_list_v1_add_listener (s_ptoplevel_list, &ext_toplevel_list_interface, NULL);
-	zcosmic_toplevel_manager_v1_add_listener (s_ptoplevel_manager, &cosmic_manager_interface, NULL);
-	zcosmic_toplevel_info_v1_add_listener (s_ptoplevel_info, &cosmic_info_interface, NULL);
-	
 	// register window manager
 	GldiWindowManagerBackend wmb;
 	memset (&wmb, 0, sizeof (GldiWindowManagerBackend));
@@ -789,6 +785,11 @@ gboolean gldi_cosmic_toplevel_try_init (struct wl_registry *registry)
 	gldi_object_install_notifications (&myCosmicWindowObjectMgr, NB_NOTIFICATIONS_COSMIC_WINDOW_MANAGER);
 	// parent object
 	gldi_object_set_manager (GLDI_OBJECT (&myCosmicWindowObjectMgr), &myWaylandWMObjectMgr);
+	
+	// add our listeners (now that we registered our object, so we can handle events)
+	ext_foreign_toplevel_list_v1_add_listener (s_ptoplevel_list, &ext_toplevel_list_interface, NULL);
+	zcosmic_toplevel_manager_v1_add_listener (s_ptoplevel_manager, &cosmic_manager_interface, NULL);
+	zcosmic_toplevel_info_v1_add_listener (s_ptoplevel_info, &cosmic_info_interface, NULL);
 	
 	GldiDockVisibilityBackend dvb = {0};
 #ifdef HAVE_GTK_LAYER_SHELL
