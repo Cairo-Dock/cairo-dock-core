@@ -35,7 +35,7 @@ if(WaylandScanner_FOUND)
 		cairo-dock-cosmic-toplevel.c         cairo-dock-cosmic-toplevel.h
 		cairo-dock-plasma-window-manager.c   cairo-dock-plasma-window-manager.h
 		cairo-dock-plasma-virtual-desktop.c  cairo-dock-plasma-virtual-desktop.h
-		cairo-dock-cosmic-workspaces.c       cairo-dock-cosmic-workspaces.h
+		cairo-dock-ext-workspaces.c          cairo-dock-ext-workspaces.h
 	)
 
 	ecm_add_wayland_client_protocol(
@@ -60,12 +60,32 @@ if(WaylandScanner_FOUND)
 		BASENAME "cosmic-toplevel-management")
 	ecm_add_wayland_client_protocol(
 		impl_SRCS
+		PROTOCOL "proto/cosmic-overlap-notify-unstable-v1.xml"
+		BASENAME "cosmic-overlap-notify")
+	ecm_add_wayland_client_protocol(
+		impl_SRCS
 		PROTOCOL "proto/cosmic-workspace-unstable-v1.xml"
 		BASENAME "cosmic-workspace")
 	ecm_add_wayland_client_protocol(
 		impl_SRCS
+		PROTOCOL "proto/ext-workspace-v1.xml"
+		BASENAME "ext-workspace")
+	ecm_add_wayland_client_protocol(
+		impl_SRCS
+		PROTOCOL "proto/ext-foreign-toplevel-list-v1.xml"
+		BASENAME "ext-toplevel-list")
+	ecm_add_wayland_client_protocol(
+		impl_SRCS
 		PROTOCOL "proto/plasma-virtual-desktop.xml"
 		BASENAME "plasma-virtual-desktop")
+	ecm_add_wayland_client_protocol(
+		impl_SRCS
+		PROTOCOL "proto/wlr-layer-shell-unstable-v1.xml"
+		BASENAME "layer-shell")
+	ecm_add_wayland_client_protocol(
+		impl_SRCS
+		PROTOCOL "proto/xdg-shell.xml"
+		BASENAME "xdg-shell")
 endif()
 
 add_library(implementations STATIC ${impl_SRCS})

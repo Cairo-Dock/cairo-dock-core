@@ -28,6 +28,7 @@
 #include "cairo-dock-stack-icon-manager.h"
 #include "cairo-dock-class-icon-manager.h"
 #include "cairo-dock-dock-manager.h"
+#include "cairo-dock-dock-visibility.h"
 #include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-container.h"
@@ -189,7 +190,7 @@ bWAYFIRE = TRUE;
 #endif
 
 	gboolean bIsWayland = gldi_container_is_wayland_backend ();
-	gchar *compositor_type = "";
+	gchar *compositor_type = NULL;
 	if (bIsWayland) compositor_type = g_strdup_printf (" * detected Wayland compositor:  %s\n", gldi_wayland_get_detected_compositor ());
 	
 	gchar *text = g_strdup_printf (
@@ -210,6 +211,7 @@ bWAYFIRE = TRUE;
 		" * OpenGL:                       %s\n"
 		" * taskbar backend:              %s\n"
 		" * desktop manager backend(s):   %s\n"
+		" * dock visibility backend:      %s\n"
 		" * detected desktop environment: %s\n"
 		"%s",
 		GLDI_VERSION,
@@ -227,10 +229,12 @@ bWAYFIRE = TRUE;
 		g_bUseOpenGL ? gldi_gl_get_backend_name() : "no",
 		gldi_windows_manager_get_name (),
 		gldi_desktop_manager_get_backend_names (),
+		gldi_dock_visbility_get_backend_name (),
 		cairo_dock_fm_get_desktop_name (),
-		compositor_type);
+		compositor_type ? compositor_type : "");
 
 	g_free (layer_shell_info);
+	g_free (compositor_type);
 	
 	return text;
 }

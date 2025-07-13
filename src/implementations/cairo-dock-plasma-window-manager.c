@@ -515,7 +515,7 @@ static gboolean _show_hide_desktop (gboolean bShow)
 	return TRUE;
 }
 
-void _reset_object (GldiObject* obj)
+static void _reset_object (GldiObject* obj)
 {
 	GldiPlasmaWindowActor* pactor = (GldiPlasmaWindowActor*)obj;
 	if (pactor)

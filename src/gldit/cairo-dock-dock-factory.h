@@ -290,7 +290,10 @@ struct _CairoDock {
 	GLuint iRedirectedTexture;
 	GLuint iFboId;
 	
-	gpointer reserved[4];
+	/// any data necessary for the dock visibility backend to work -- managed by the backend
+	gpointer pVisibilityData;
+	
+	gpointer reserved[3];
 };
 
 
