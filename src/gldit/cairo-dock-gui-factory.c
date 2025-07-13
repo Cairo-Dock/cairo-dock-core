@@ -2584,8 +2584,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				gldi_object_register_notification (&myDesktopMgr,
 					NOTIFICATION_DESKTOP_GEOMETRY_CHANGED,
 					(GldiNotificationFunc) _on_screen_modified,
-					GLDI_RUN_AFTER, pScreensListStore);
-				g_signal_connect (pOneWidget, "destroy", G_CALLBACK (_on_list_destroyed), pScreensListStore);
+					GLDI_RUN_AFTER, pOneWidget);
+				g_signal_connect (pOneWidget, "destroy", G_CALLBACK (_on_list_destroyed), pOneWidget);
 				
 				if (g_desktopGeometry.iNbScreens <= 1)
 					gtk_widget_set_sensitive (pOneWidget, FALSE);
