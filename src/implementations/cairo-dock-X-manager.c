@@ -1756,7 +1756,9 @@ static void init_object (GldiObject *obj, gpointer attr)
 	actor->windowGeometry.width = iWidthExtent / cairo_dock_X_display_scale;
 	actor->windowGeometry.height = iHeightExtent / cairo_dock_X_display_scale;
 	
-	actor->iAge = s_iNumWindow ++;
+	actor->iAge = s_iNumWindow;
+	if (s_iNumWindow == INT_MAX) s_iNumWindow = 1;
+	else s_iNumWindow++;
 	
 	// get window thumbnail
 	#ifdef HAVE_XEXTEND
