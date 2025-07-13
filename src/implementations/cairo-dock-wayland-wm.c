@@ -49,6 +49,7 @@ static GldiWindowActor* s_pSelf = NULL;
 static int s_iStackCounter = 0;
 /* there was a change in windows' stacking order that needs to be signaled */
 static gboolean s_bStackChange = FALSE;
+static int s_iNumWindow = 1;  // used to order appli icons by age (=creation date).
 
 // extra callback for when a new app is activated
 // this is useful for e.g. interactively selecting a window
@@ -502,8 +503,12 @@ typedef enum {
 
 static void _init_object (GldiObject *obj, gpointer attr)
 {
-	GldiWaylandWindowActor* actor = (GldiWaylandWindowActor*)obj;
-	actor->handle = attr;
+	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor*)obj;
+	wactor->handle = attr;
+	GldiWindowActor *actor = (GldiWindowActor*)wactor;
+	actor->iAge = s_iNumWindow;
+	if (s_iNumWindow == INT_MAX) s_iNumWindow = 1;
+	else s_iNumWindow++;
 }
 
 static void _reset_object (GldiObject* obj)
