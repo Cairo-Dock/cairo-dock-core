@@ -496,10 +496,6 @@ GldiWaylandWindowActor* gldi_wayland_wm_new_toplevel (gpointer handle)
 }
 
 
-typedef enum {
-	NB_NOTIFICATIONS_WAYLAND_WM_MANAGER = NB_NOTIFICATIONS_WINDOWS
-} CairoWaylandWMManagerNotifications;
-
 static void _init_object (GldiObject *obj, gpointer attr)
 {
 	GldiWaylandWindowActor* actor = (GldiWaylandWindowActor*)obj;

@@ -63,7 +63,7 @@ struct _GldiPlasmaWindowActor {
 typedef struct _GldiPlasmaWindowActor GldiPlasmaWindowActor;
 
 typedef enum {
-	NB_NOTIFICATIONS_PLASMA_WINDOW_MANAGER = NB_NOTIFICATIONS_WINDOWS
+	NB_NOTIFICATIONS_PLASMA_WINDOW_MANAGER = NB_NOTIFICATIONS_WAYLAND_WM_MANAGER
 } CairoPlasmaWMNotifications;
 
 static uint32_t server_protocol_version = 0;

@@ -64,7 +64,7 @@ struct _GldiCosmicWindowActor {
 typedef struct _GldiCosmicWindowActor GldiCosmicWindowActor;
 
 typedef enum {
-	NB_NOTIFICATIONS_COSMIC_WINDOW_MANAGER = NB_NOTIFICATIONS_WINDOWS
+	NB_NOTIFICATIONS_COSMIC_WINDOW_MANAGER = NB_NOTIFICATIONS_WAYLAND_WM_MANAGER
 } CairoCosmicWMNotifications;
 
 /**********************************************************************
