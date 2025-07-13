@@ -999,11 +999,6 @@ static void _set_thumbnail_area (GldiWindowActor *actor, GldiContainer* pContain
 	cairo_dock_set_xicon_geometry (xactor->Xid, x, y, w, h);
 }
 
-static void _set_minimize_position (GldiWindowActor *actor, GldiContainer* pContainer, int x, int y)
-{
-	_set_thumbnail_area (actor, pContainer, x, y, 1, 1);
-}
-
 static GldiWindowActor* _get_active_window (void)
 {
 	if (s_iCurrentActiveWindow == 0)
@@ -1689,7 +1684,6 @@ static void init (void)
 	wmb.maximize = _maximize;
 	wmb.set_fullscreen = _set_fullscreen;
 	wmb.set_above = _set_above;
-	wmb.set_minimize_position = _set_minimize_position;
 	wmb.set_thumbnail_area = _set_thumbnail_area;
 	wmb.set_window_border = _set_window_border;
 	wmb.get_icon_surface = _get_icon_surface;
