@@ -364,13 +364,12 @@ void gldi_appli_reserve_geometry_for_window_manager (GldiWindowActor *pAppli, Ic
 {
 	if (CAIRO_DOCK_IS_APPLI (icon) && cairo_dock_get_icon_container(icon) == NULL)  // a detached appli
 	{
-		/// TODO: use the same algorithm as the class-manager to find the future position of the icon ...
-		CairoDock *pIconDock = pMainDock;
+		CairoDock *pIconDock = NULL;
 		
 		Icon *pInhibitor = cairo_dock_get_inhibitor (icon, FALSE);  // FALSE <=> meme en-dehors d'un dock
 		if (pInhibitor == NULL)  // cette icone n'est pas inhibee, donc se minimisera dans le dock en une nouvelle icone.
 		{
-			int x, y;
+			int x, y, w, h;
 			Icon *pClassmate = cairo_dock_get_classmate (icon);
 			CairoDock *pClassmateDock = (pClassmate ? CAIRO_DOCK(cairo_dock_get_icon_container (pClassmate)) : NULL);
 			if (myTaskbarParam.bGroupAppliByClass && pClassmate != NULL && pClassmateDock != NULL)  // on va se grouper avec cette icone.
@@ -385,6 +384,8 @@ void gldi_appli_reserve_geometry_for_window_manager (GldiWindowActor *pAppli, Ic
 					y = y_icon_geometry (pClassmate, pClassmateDock);
 				}
 				pIconDock = pClassmateDock;
+				w = pClassmate->fWidth;
+				h = pClassmate->fHeight;
 			}
 			else if (myTaskbarParam.bMixLauncherAppli && pClassmate != NULL && pClassmateDock != NULL)  // on va se placer a cote.
 			{
@@ -398,9 +399,24 @@ void gldi_appli_reserve_geometry_for_window_manager (GldiWindowActor *pAppli, Ic
 					y = y_icon_geometry (pClassmate, pClassmateDock);
 				}
 				pIconDock = pClassmateDock;
+				w = pClassmate->fWidth;
+				h = pClassmate->fHeight;
 			}
 			else  // on va se placer a la fin de la barre des taches.
 			{
+				pIconDock = pMainDock;
+				cairo_dock_set_class_order_amongst_applis (icon, pMainDock);
+				
+				if (! pIconDock->bGlobalIconSize && pIconDock->iIconSize != 0)
+				{
+					w = h = pIconDock->iIconSize;
+				}
+				else
+				{
+					w = myIconsParam.iIconWidth;
+					h = myIconsParam.iIconHeight;
+				}
+				
 				Icon *pIcon, *pLastLauncher = NULL;
 				GList *ic;
 				for (ic = pMainDock->icons; ic != NULL; ic = ic->next)
@@ -409,15 +425,17 @@ void gldi_appli_reserve_geometry_for_window_manager (GldiWindowActor *pAppli, Ic
 					if (GLDI_OBJECT_IS_LAUNCHER_ICON (pIcon)  // launcher, even without class
 					|| GLDI_OBJECT_IS_STACK_ICON (pIcon)  // container icon (likely to contain some launchers)
 					|| (GLDI_OBJECT_IS_APPLET_ICON (pIcon) && pIcon->cClass != NULL)  // applet acting like a launcher
-					|| (GLDI_OBJECT_IS_SEPARATOR_ICON (pIcon)))  // separator (user or auto).
+					|| (GLDI_OBJECT_IS_SEPARATOR_ICON (pIcon))  // separator (user or auto).
+					|| CAIRO_DOCK_ICON_TYPE_IS_APPLI (pIcon) || CAIRO_DOCK_IS_MULTI_APPLI (pIcon) ) 
 					{
+						if (pIcon->fOrder > icon->fOrder) break;
 						pLastLauncher = pIcon;
 					}
 				}
-						
+				
 				if (pLastLauncher != NULL)  // on se placera juste apres.
 				{
-					x = x_icon_geometry (pLastLauncher, pMainDock) + pLastLauncher->fWidth/2;
+					x = x_icon_geometry (pLastLauncher, pMainDock) + pLastLauncher->fWidth - w / 2;
 					if (cairo_dock_is_hidden (pMainDock))
 					{
 						y = (pMainDock->container.bDirectionUp ? 0 : pMainDock->iActiveHeight);
@@ -441,10 +459,11 @@ void gldi_appli_reserve_geometry_for_window_manager (GldiWindowActor *pAppli, Ic
 				}
 			}
 			//g_print (" - %s en (%d;%d)\n", icon->cName, x, y);
+
 			if (pMainDock->container.bIsHorizontal)
-				gldi_window_set_minimize_position (pAppli, &pIconDock->container, x, y);
+				gldi_window_set_thumbnail_area (pAppli, &pIconDock->container, x, y, w, h);
 			else
-				gldi_window_set_minimize_position (pAppli, &pIconDock->container, y, x);
+				gldi_window_set_thumbnail_area (pAppli, &pIconDock->container, y, x, h, w);
 		}
 		else
 		{
