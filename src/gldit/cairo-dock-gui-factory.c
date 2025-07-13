@@ -1275,12 +1275,12 @@ static gboolean _on_screen_modified (GtkWidget *pCombo)
 	g_hash_table_destroy (pHashTable);
 	return GLDI_NOTIFICATION_LET_PASS;
 }
-static void _on_list_destroyed (G_GNUC_UNUSED gpointer data)
+static void _on_list_destroyed (GtkWidget*, gpointer data)
 {
 	gldi_object_remove_notification (&myDesktopMgr,
 		NOTIFICATION_DESKTOP_GEOMETRY_CHANGED,
 		(GldiNotificationFunc) _on_screen_modified,
-		GLDI_RUN_AFTER);
+		data);
 }
 
 static gboolean _test_one_name (GtkTreeModel *model, G_GNUC_UNUSED GtkTreePath *path, GtkTreeIter *iter, gpointer *data)
@@ -2584,8 +2584,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				gldi_object_register_notification (&myDesktopMgr,
 					NOTIFICATION_DESKTOP_GEOMETRY_CHANGED,
 					(GldiNotificationFunc) _on_screen_modified,
-					GLDI_RUN_AFTER, pScreensListStore);
-				g_signal_connect (pOneWidget, "destroy", G_CALLBACK (_on_list_destroyed), NULL);
+					GLDI_RUN_AFTER, pOneWidget);
+				g_signal_connect (pOneWidget, "destroy", G_CALLBACK (_on_list_destroyed), pOneWidget);
 				
 				if (g_desktopGeometry.iNbScreens <= 1)
 					gtk_widget_set_sensitive (pOneWidget, FALSE);

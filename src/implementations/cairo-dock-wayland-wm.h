@@ -54,6 +54,10 @@ typedef struct _GldiWaylandWindowActor GldiWaylandWindowActor;
 // manager for the above, can be extended by more specific implementations
 extern GldiObjectManager myWaylandWMObjectMgr;
 
+// notifications (no additional ones beyond the WM notifications)
+typedef enum {
+	NB_NOTIFICATIONS_WAYLAND_WM_MANAGER = NB_NOTIFICATIONS_WINDOWS
+} CairoWaylandWMManagerNotifications;
 
 // functions to update the state of a toplevel and potentially signal
 // the taskbar of the changes

@@ -64,7 +64,7 @@ struct _GldiCosmicWindowActor {
 typedef struct _GldiCosmicWindowActor GldiCosmicWindowActor;
 
 typedef enum {
-	NB_NOTIFICATIONS_COSMIC_WINDOW_MANAGER = NB_NOTIFICATIONS_WINDOWS
+	NB_NOTIFICATIONS_COSMIC_WINDOW_MANAGER = NB_NOTIFICATIONS_WAYLAND_WM_MANAGER
 } CairoCosmicWMNotifications;
 
 /**********************************************************************
@@ -428,7 +428,7 @@ typedef struct _CosmicVis {
 	gboolean bShouldHide; // whether we should hide this dock based on our last check
 } CosmicVis;
 
-static void _idle_show_hide (void *ptr)
+static gboolean _idle_show_hide (void *ptr)
 {
 	CairoDock *pDock = (CairoDock*)ptr;
 	CosmicVis *info = (CosmicVis*)pDock->pVisibilityData; // should be non-NULL
@@ -440,12 +440,13 @@ static void _idle_show_hide (void *ptr)
 	else if (cairo_dock_is_temporary_hidden (pDock))
 		cairo_dock_deactivate_temporary_auto_hide (pDock);
 	info->idle_id = 0;
+	return FALSE; // remove this source
 }
 
 static void _set_idle_show_hide (CairoDock *pDock)
 {
 	CosmicVis *info = (CosmicVis*)pDock->pVisibilityData; // should be non-NULL
-	if (!info->idle_id) info->idle_id = g_idle_add_once (_idle_show_hide, pDock);
+	if (!info->idle_id) info->idle_id = g_idle_add (_idle_show_hide, pDock);
 }
 
 static void _vis_window_unmap (GtkWidget* pWindow, void *ptr)
