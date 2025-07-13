@@ -72,7 +72,6 @@ struct _GldiWindowManagerBackend {
 	void (*maximize) (GldiWindowActor *actor, gboolean bMaximize);
 	void (*set_fullscreen) (GldiWindowActor *actor, gboolean bFullScreen);
 	void (*set_above) (GldiWindowActor *actor, gboolean bAbove);
-	void (*set_minimize_position) (GldiWindowActor *actor, GldiContainer* pContainer, int x, int y);
 	void (*set_thumbnail_area) (GldiWindowActor *actor, GldiContainer* pContainer, int x, int y, int w, int h);
 	void (*set_window_border) (GldiWindowActor *actor, gboolean bWithBorder);
 	cairo_surface_t* (*get_icon_surface) (GldiWindowActor *actor, int iWidth, int iHeight);
@@ -152,10 +151,8 @@ void gldi_window_maximize (GldiWindowActor *actor, gboolean bMaximize);
 void gldi_window_set_fullscreen (GldiWindowActor *actor, gboolean bFullScreen);
 void gldi_window_set_above (GldiWindowActor *actor, gboolean bAbove);
 
-/// note: coordinates are relative to the passed container's main surface
-void gldi_window_set_minimize_position (GldiWindowActor *actor, GldiContainer* pContainer, int x, int y);
-
-/// note: coordinates are relative to the passed container's main surface
+/** Set the position of this window's icon, to be used by the WM for its minimize animation.
+ * Note: coordinates are relative to the passed container's main surface. */
 void gldi_window_set_thumbnail_area (GldiWindowActor *actor, GldiContainer* pContainer, int x, int y, int w, int h);
 
 void gldi_window_set_border (GldiWindowActor *actor, gboolean bWithBorder);
