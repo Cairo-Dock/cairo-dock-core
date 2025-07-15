@@ -488,6 +488,12 @@ static void _on_menu_deactivated (GtkMenuShell *pMenu, G_GNUC_UNUSED gpointer da
 	}
 }
 
+static void _menu_realized_cb (GtkWidget *widget, gpointer user_data);
+static void _menu_popped_up_cb (GtkWidget *widget, void*, void*, GdkGravity, GdkGravity, gpointer user_data)
+{
+	_menu_realized_cb (widget, user_data);
+}
+
 void gldi_menu_init (GtkWidget *pMenu, Icon *pIcon)
 {
 	g_return_if_fail (g_object_get_data (G_OBJECT (pMenu), "gldi-params") == NULL);
@@ -514,7 +520,18 @@ void gldi_menu_init (GtkWidget *pMenu, Icon *pIcon)
 		"destroy",
 		G_CALLBACK (_on_menu_destroyed),
 		NULL);
-		
+	
+	// handle any adjustments necessary when the menu is first shown
+	if (gldi_container_use_new_positioning_code ())
+	{
+		// This is a bit hacky: if we have an icon (so we are the first-level menu), we connect to the "realized" signal,
+		// which will allow us to resize the menu before it is positioned, leading to better results if it needs to be moved out
+		// of the way from the dock it's pointing at. For submenus, we connect to the "popped-up" signal, to better handle it
+		// opening and closing multiple times.
+		if (pIcon) g_signal_connect (G_OBJECT (pMenu), "realize", G_CALLBACK (_menu_realized_cb), pParams);
+		else g_signal_connect (G_OBJECT (pMenu), "popped-up", G_CALLBACK (_menu_popped_up_cb), pParams);
+	}
+	
 	// init a main menu
 	if (pIcon != NULL)  // the menu points on an icon
 	{
@@ -570,11 +587,39 @@ static void _menu_realized_cb (GtkWidget *widget, gpointer user_data)
 	w = requisition.width;
 	h = requisition.height;
 	
-	Icon *pIcon = pParams->pIcon;
+	// constrain the menu's size to fit within the screen
+	// see https://github.com/wmww/gtk-layer-shell/issues/148
+	// (note: menus created here are always ultimately a child of a layer-shell window)
+	// solution used here is originally by LBCrion (under GPL3):
+	// https://github.com/LBCrion/sfwbar/commit/760e68ef50c540a55c13791876f853d358b4dcaa
+	if (gldi_container_is_wayland_backend () && gldi_wayland_manager_have_layer_shell ())
+	{
+		GdkRectangle area;
+		GdkWindow *window = gtk_widget_get_window (gtk_widget_get_toplevel (widget));
+		if (window)
+		{
+			GdkDisplay *dsp = gdk_window_get_display (window);
+			GdkMonitor *mon = gdk_display_get_monitor_at_window (dsp, window);
+			gdk_monitor_get_workarea (mon, &area);
+			gboolean bResize = FALSE;
+			if (w > area.width)
+			{
+				w = area.width;
+				bResize = TRUE;
+			}
+			if (h > area.height)
+			{
+				h = area.height;
+				bResize = TRUE;
+			}
+			if (bResize) gdk_window_resize (window, w, h);
+		}
+		else cd_warning ("menu has no associated GdkWindow!");
+	}
 	
-	gdouble fAlign = pParams->fAlign;
-
-	gldi_container_calculate_aimed_point (pIcon, widget, w, h, pParams->iMarginPosition, fAlign, &(pParams->iAimedX), &(pParams->iAimedY));
+	if (pParams->pIcon && gldi_container_use_new_positioning_code ())
+		gldi_container_calculate_aimed_point (pParams->pIcon, widget, w, h, pParams->iMarginPosition,
+			pParams->fAlign, &(pParams->iAimedX), &(pParams->iAimedY));
 }
 
 static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push_in, G_GNUC_UNUSED gpointer data)
@@ -723,17 +768,11 @@ static void _popup_menu (GtkWidget *menu, const GdkEvent *event)
 		_set_margin_position (menu, pParams);
 	}
 
-	// new positioning code should work on both X11 and Wayland, but, by default, it is used
-	// only on Wayland, unless it is specifically requested by the user
-	gboolean use_new_positioning = gldi_container_use_new_positioning_code ();
-	
-	if (use_new_positioning)
-		g_signal_connect (GTK_WIDGET (menu), "realize",
-			G_CALLBACK (_menu_realized_cb), pParams);
-	
 	gtk_widget_show_all (GTK_WIDGET (menu));
 
-	if (use_new_positioning)
+	// new positioning code should work on both X11 and Wayland, but, by default, it is used
+	// only on Wayland, unless it is specifically requested by the user
+	if (gldi_container_use_new_positioning_code ())
 	{
 		if (pContainer && pIcon)
 		{
