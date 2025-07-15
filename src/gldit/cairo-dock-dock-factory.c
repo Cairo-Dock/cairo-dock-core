@@ -2353,8 +2353,16 @@ static gboolean _move_resize_dock (CairoDock *pDock)
 		GdkEventConfigure event;
 		event.x = 0;
 		event.y = 0;
-		event.width = pDock->container.iWidth;
-		event.height = pDock->container.iHeight;
+		if (pDock->container.bIsHorizontal)
+		{
+			event.width = pDock->container.iWidth;
+			event.height = pDock->container.iHeight;
+		}
+		else
+		{
+			event.height = pDock->container.iWidth;
+			event.width = pDock->container.iHeight;
+		}
 		_on_configure (pDock->container.pWidget, &event, pDock);
 	}
 	return FALSE;
