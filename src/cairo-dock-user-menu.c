@@ -103,16 +103,38 @@ void _menu_destroy_notify (gpointer data, GObject*)
  /////////// CAIRO-DOCK SUB-MENU //////////////
 //////////////////////////////////////////////
 
-static void _cairo_dock_edit_and_reload_conf (G_GNUC_UNUSED GtkMenuItem *pMenuItem, G_GNUC_UNUSED gpointer data)
+/** Note: opening the config GUI directly in response to the menu item's 
+ * "activated" signal might lead to a crash on Wayland, apparently caused
+ * by GTK trying to re-show the menu item's tooltip after the menu has
+ * already been closed (its xdg_surface has been destroyed). Unsure if this
+ * is actually a bug (and cannot reproduce it in a simpler example), but it
+ * seems to be possible to work this around by only showing the config
+ * window on idle. */
+static guint s_iShowGui = 0;
+
+static gboolean _show_main_gui_idle (void*)
 {
 	cairo_dock_show_main_gui ();
+	s_iShowGui = 0;
+	return G_SOURCE_REMOVE;
+}
+
+static gboolean _show_root_dock_gui_idle (void *ptr)
+{
+	cairo_dock_show_items_gui (NULL, (GldiContainer*)ptr, NULL, 0);
+	s_iShowGui = 0;
+	return G_SOURCE_REMOVE;
+}
+
+static void _cairo_dock_edit_and_reload_conf (G_GNUC_UNUSED GtkMenuItem *pMenuItem, G_GNUC_UNUSED gpointer data)
+{
+	if (!s_iShowGui) s_iShowGui = g_idle_add (_show_main_gui_idle, NULL);
 }
 
 static void _cairo_dock_configure_root_dock (G_GNUC_UNUSED GtkMenuItem *pMenuItem, CairoDock *pDock)
 {
 	g_return_if_fail (pDock->iRefCount == 0 && ! pDock->bIsMainDock);
-	
-	cairo_dock_show_items_gui (NULL, CAIRO_CONTAINER (pDock), NULL, 0);
+	if (!s_iShowGui) s_iShowGui = g_idle_add (_show_root_dock_gui_idle, pDock);
 }
 static void _on_answer_delete_dock (int iClickedButton, G_GNUC_UNUSED GtkWidget *pInteractiveWidget, CairoDock *pDock, G_GNUC_UNUSED CairoDialog *pDialog)
 {
@@ -212,7 +234,7 @@ static void _cairo_dock_about (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GldiContain
 	GtkWidget *pVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	gtk_box_pack_start (GTK_BOX (pHBox), pVBox, FALSE, FALSE, 0);
 	
-	GtkWidget *pLink = gtk_link_button_new_with_label (CAIRO_DOCK_SITE_URL, "Cairo-Dock (2007-2024)\n version "CAIRO_DOCK_VERSION);
+	GtkWidget *pLink = gtk_link_button_new_with_label (CAIRO_DOCK_SITE_URL, "Cairo-Dock (2007-2025)\n version "CAIRO_DOCK_VERSION);
 	gtk_box_pack_start (GTK_BOX (pVBox), pLink, FALSE, FALSE, 0);
 	
 	//~ pLink = gtk_link_button_new_with_label (CAIRO_DOCK_FORUM_URL, _("Community site"));
