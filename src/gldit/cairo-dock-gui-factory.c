@@ -3028,10 +3028,19 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					}
 					else
 					{
+						// shortkey
 						g_signal_connect (G_OBJECT (pGrabKeyButton),
 							"clicked",
 							G_CALLBACK (_cairo_dock_key_grab_clicked),
 							data);
+						if (gldi_container_is_wayland_backend ())
+						{
+							gtk_widget_set_sensitive (pGrabKeyButton, FALSE);
+							gtk_widget_set_sensitive (pOneWidget, FALSE);
+							const char *tmp = _("You are running Cairo-Dock in a Wayland session.\nSetting global keyboard shortcuts is not supported on Wayland yet.");
+							gtk_widget_set_tooltip_text (pGrabKeyButton, tmp);
+							gtk_widget_set_tooltip_text (pOneWidget, tmp);
+						}
 					}
 					_pack_in_widget_box (pGrabKeyButton);
 				}

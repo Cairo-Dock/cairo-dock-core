@@ -253,7 +253,20 @@ ShortkeysWidget *cairo_dock_shortkeys_widget_new (void)
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 	gtk_container_add (GTK_CONTAINER (pScrolledWindow), pShortkeysWidget->pShortKeysTreeView);
 	
-	pShortkeysWidget->widget.pWidget = pScrolledWindow;
+	if (gldi_container_is_wayland_backend ())
+	{
+		GtkWidget *pBoxV = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
+		GtkWidget *pBoxH = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+		GtkWidget *pImg  = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_MENU);
+		GtkWidget *pLbl  = gtk_label_new (_("You are running Cairo-Dock in a Wayland session.\nSetting global keyboard shortcuts is not supported on Wayland yet."));
+		gtk_box_pack_start (GTK_BOX (pBoxH), pImg, FALSE, FALSE, 20);
+		gtk_box_pack_start (GTK_BOX (pBoxH), pLbl, FALSE, FALSE, 0);
+		gtk_container_add (GTK_CONTAINER (pBoxV), pBoxH);
+		gtk_widget_set_sensitive (pShortkeysWidget->pShortKeysTreeView, FALSE);
+		gtk_container_add (GTK_CONTAINER (pBoxV), pScrolledWindow);
+		pShortkeysWidget->widget.pWidget = pBoxV;
+	}
+	else pShortkeysWidget->widget.pWidget = pScrolledWindow;
 	
 	return pShortkeysWidget;
 }
