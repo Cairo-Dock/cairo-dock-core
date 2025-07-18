@@ -97,7 +97,7 @@ static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 		int i;
 		for (i = 0; pOrigins[i] != NULL; i++)
 		{
-			cClass = cairo_dock_register_class2 (pOrigins[i], cStartupWMClass, FALSE);
+			cClass = cairo_dock_register_class2 (pOrigins[i], cStartupWMClass, FALSE, TRUE);
 			if (cClass != NULL)  // neat, this origin is a valid one, let's use it from now.
 			{
 				iNumOrigin = i;
@@ -118,7 +118,7 @@ static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 		if (cStartupWMClass)
 		{
 			// first try based on the commandline (but fail if not found)
-			cClass = cairo_dock_register_class2 (cFallbackClass, cStartupWMClass, FALSE);
+			cClass = cairo_dock_register_class2 (cFallbackClass, cStartupWMClass, FALSE, FALSE);
 			if (!cClass)
 			{
 				// re-try based on the WMClass below
@@ -129,7 +129,7 @@ static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 		
 		// last attempt, register the class even if no info is found
 		if (!cClass)
-			cClass = cairo_dock_register_class2 (cFallbackClass, cStartupWMClass, TRUE);
+			cClass = cairo_dock_register_class2 (cFallbackClass, cStartupWMClass, TRUE, FALSE);
 	}
 
 	// get common data from the class
