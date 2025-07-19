@@ -596,7 +596,7 @@ struct ext_workspace_handle_v1 *gldi_ext_workspaces_get_handle (int x, int y)
 	return NULL;
 }
 
-void gldi_ext_workspaces_update_window (GldiWindowActor *actor, struct ext_workspace_handle_v1 *handle)
+gboolean gldi_ext_workspaces_find (struct ext_workspace_handle_v1 *handle, int *x, int *y)
 {
 	CosmicWS **desktops = (CosmicWS**)s_aDesktops->pdata;
 	unsigned int s_iNumDesktops = s_aDesktops->len;
@@ -606,23 +606,22 @@ void gldi_ext_workspaces_update_window (GldiWindowActor *actor, struct ext_works
 	{
 		if (desktops[i]->handle == handle)
 		{
-			actor->iNumDesktop = 0;
 			if (bValidX)
 			{
-				actor->iViewPortX = desktops[i]->x - s_iXOffset;
-				if (bValidY) actor->iViewPortY = desktops[i]->y - s_iYOffset;
-				else actor->iViewPortY = 0;
+				*x = desktops[i]->x - s_iXOffset;
+				if (bValidY) *y = desktops[i]->y - s_iYOffset;
+				else *y = 0;
 			}
 			else
 			{
-				actor->iViewPortX = i;
-				actor->iViewPortY = 0;
+				*x = i;
+				*y = 0;
 			}
-			gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESKTOP_CHANGED, actor);
-			return;
+			return TRUE;
 		}
 	}
-	cd_warning ("cosmic-workspaces: workspace not found!\n");
+	cd_warning ("ext-workspaces: workspace not found!\n");
+	return FALSE;
 }
 
 
