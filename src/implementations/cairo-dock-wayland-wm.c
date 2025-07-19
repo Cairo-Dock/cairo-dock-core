@@ -32,6 +32,22 @@ extern CairoDock* g_pMainDock;
 
 GldiObjectManager myWaylandWMObjectMgr;
 
+enum NextChange {
+	NC_GEOMETRY,
+	NC_VIEWPORT,
+	NC_ATTENTION,
+	NC_STICKY,
+	NC_TITLE,
+	NC_STATE,
+	NC_NO_CHANGE
+};
+
+static void _set_pending_change (GldiWaylandWindowActor *wactor, enum NextChange ch)
+{
+	if ((int)ch < wactor->next_change_pending)
+		wactor->next_change_pending = ch;
+}
+
 static void (*s_handle_destroy_cb)(gpointer handle) = NULL;
 
 /* current active window */
@@ -118,6 +134,7 @@ void gldi_wayland_wm_title_changed (GldiWaylandWindowActor *wactor, const char *
 {
 	g_free (wactor->cTitlePending);
 	wactor->cTitlePending = g_strdup ((gchar *)title);
+	_set_pending_change (wactor, NC_TITLE);
 	if (notify) gldi_wayland_wm_done (wactor);
 }
 
@@ -132,24 +149,28 @@ void gldi_wayland_wm_appid_changed (GldiWaylandWindowActor *wactor, const char *
 void gldi_wayland_wm_maximized_changed (GldiWaylandWindowActor *wactor, gboolean maximized, gboolean notify)
 {
 	wactor->maximized_pending = maximized;
+	_set_pending_change (wactor, NC_STATE);
 	if (notify) gldi_wayland_wm_done (wactor);
 }
 
 void gldi_wayland_wm_minimized_changed (GldiWaylandWindowActor *wactor, gboolean minimized, gboolean notify)
 {
 	wactor->minimized_pending = minimized;
+	_set_pending_change (wactor, NC_STATE);
 	if (notify) gldi_wayland_wm_done (wactor);
 }
 
 void gldi_wayland_wm_fullscreen_changed (GldiWaylandWindowActor *wactor, gboolean fullscreen, gboolean notify)
 {
 	wactor->fullscreen_pending = fullscreen;
+	_set_pending_change (wactor, NC_STATE);
 	if (notify) gldi_wayland_wm_done (wactor);
 }
 
 void gldi_wayland_wm_attention_changed (GldiWaylandWindowActor *wactor, gboolean attention, gboolean notify)
 {
 	wactor->attention_pending = attention;
+	_set_pending_change (wactor, NC_ATTENTION);
 	if (notify) gldi_wayland_wm_done (wactor);
 }
 
@@ -162,6 +183,7 @@ void gldi_wayland_wm_skip_changed (GldiWaylandWindowActor *wactor, gboolean skip
 void gldi_wayland_wm_sticky_changed (GldiWaylandWindowActor *wactor, gboolean sticky, gboolean notify)
 {
 	wactor->sticky_pending = sticky;
+	_set_pending_change (wactor, NC_STICKY);
 	if (notify) gldi_wayland_wm_done (wactor);
 }
 
@@ -192,18 +214,20 @@ void gldi_wayland_wm_viewport_changed (GldiWaylandWindowActor *wactor, int viewp
 {
 	wactor->pending_viewport_x = viewport_x;
 	wactor->pending_viewport_y = viewport_y;
+	_set_pending_change (wactor, NC_VIEWPORT);
 	if (notify) gldi_wayland_wm_done (wactor);
 }
 
 void gldi_wayland_wm_geometry_changed (GldiWaylandWindowActor *wactor, const GtkAllocation *new_geom, gboolean notify)
 {
 	wactor->pending_window_geometry = *new_geom;
+	_set_pending_change (wactor, NC_GEOMETRY);
 	if (notify) gldi_wayland_wm_done (wactor);
 }
 
 
 /* Process pending updates for a window's title and send a notification
- * if notify == TRUE. Return whether the title has in fact changed. */
+ * if notify == TRUE. Returns whether a notification has been sent. */
 static gboolean _update_title (GldiWaylandWindowActor* wactor, gboolean notify)
 {
 	if (wactor->cTitlePending)
@@ -212,15 +236,18 @@ static gboolean _update_title (GldiWaylandWindowActor* wactor, gboolean notify)
 		g_free(actor->cName);
 		actor->cName = wactor->cTitlePending;
 		wactor->cTitlePending = NULL;
-		if (notify) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_NAME_CHANGED, actor);
-		return TRUE;
+		if (notify)
+		{
+			gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_NAME_CHANGED, actor);
+			return TRUE;
+		}
 	}
 	return FALSE;
 }
 
 /* Process changes in the window state (minimized, maximized, fullscreen)
- * and send a notification about any change if notify == TRUE. Returns
- * whether any of the properties have changed. */
+ * and send a notification about any change if notify == TRUE.
+ * Returns whether any notification has been sent. */
 static gboolean _update_state (GldiWaylandWindowActor* wactor, gboolean notify)
 {
 	GldiWindowActor* actor = (GldiWindowActor*)wactor;
@@ -237,7 +264,7 @@ static gboolean _update_state (GldiWaylandWindowActor* wactor, gboolean notify)
 	if (notify && any_change)
 		gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_STATE_CHANGED, actor, bHiddenChanged, bMaximizedChanged, bFullScreenChanged);
 	
-	return any_change;
+	return (notify && any_change);
 }
 
 static gboolean _update_attention (GldiWaylandWindowActor *wactor, gboolean notify)
@@ -246,7 +273,7 @@ static gboolean _update_attention (GldiWaylandWindowActor *wactor, gboolean noti
 	gboolean changed = (wactor->attention_pending != actor->bDemandsAttention);
 	if (changed) actor->bDemandsAttention = wactor->attention_pending;
 	if (notify && changed) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_ATTENTION_CHANGED, actor);
-	return changed;
+	return (notify && changed);
 }
 
 static gboolean _update_sticky (GldiWaylandWindowActor *wactor, gboolean notify)
@@ -256,7 +283,7 @@ static gboolean _update_sticky (GldiWaylandWindowActor *wactor, gboolean notify)
 	if (changed) actor->bIsSticky = wactor->sticky_pending;
 	// a change in stickyness can be seen as a change in the desktop position
 	if (notify && changed) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESKTOP_CHANGED, actor);
-	return changed;
+	return (notify && changed);
 }
 
 static gboolean _update_viewport (GldiWaylandWindowActor *wactor, gboolean notify)
@@ -274,7 +301,7 @@ static gboolean _update_viewport (GldiWaylandWindowActor *wactor, gboolean notif
 		changed = TRUE;
 	}
 	if (notify && changed) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESKTOP_CHANGED, actor);
-	return changed;
+	return (changed && changed);
 }
 
 static gboolean _update_geometry (GldiWaylandWindowActor *wactor, gboolean notify)
@@ -305,22 +332,75 @@ static gboolean _update_geometry (GldiWaylandWindowActor *wactor, gboolean notif
 		}
 	}
 	if (notify && changed) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_SIZE_POSITION_CHANGED, actor);
-	return changed;
+	return (notify && changed);
 }
+
+
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 202311L)
+#define FALLTHROUGH [[fallthrough]];
+#elif defined(__GNUC__)
+#define FALLTHROUGH __attribute__((fallthrough));
+#else
+#define FALLTHROUGH
+#endif
 
 /** Update the pending state of a window.
  *  If notify == TRUE, the appropriate notifications will be emitted and this function will return TRUE
  *  after the first changed state. */
 static gboolean _update_all_pending_state (GldiWaylandWindowActor *wactor, gboolean notify)
 {
-	if (_update_title(wactor, notify) && notify) return TRUE;
-	if (_update_state(wactor, notify) && notify) return TRUE;
-	if (_update_attention(wactor, notify) && notify) return TRUE;
-	if (_update_sticky (wactor, notify) && notify) return TRUE;
-	if (_update_viewport (wactor, notify) && notify) return TRUE;
-	if (_update_geometry (wactor, notify) && notify) return TRUE;
+	switch (wactor->next_change_pending)
+	{
+		// note: order has to be the same in which the enum members are defined above as
+		// we rely on falling through the cases to check all changes
+		case NC_GEOMETRY:
+			if (_update_geometry (wactor, notify))
+			{
+				wactor->next_change_pending = NC_VIEWPORT;
+				return TRUE;
+			}
+			FALLTHROUGH
+		case NC_VIEWPORT:
+			if (_update_viewport (wactor, notify))
+			{
+				wactor->next_change_pending = NC_ATTENTION;
+				return TRUE;
+			}
+			FALLTHROUGH
+		case NC_ATTENTION:
+			if (_update_attention(wactor, notify))
+			{
+				wactor->next_change_pending = NC_STICKY;
+				return TRUE;
+			}
+			FALLTHROUGH
+		case NC_STICKY:
+			if (_update_sticky (wactor, notify))
+			{
+				wactor->next_change_pending = NC_TITLE;
+				return TRUE;
+			}
+			FALLTHROUGH
+		case NC_TITLE:
+			if (_update_title(wactor, notify))
+			{
+				wactor->next_change_pending = NC_STATE;
+				return TRUE;
+			}
+			FALLTHROUGH
+		case NC_STATE:
+			if (_update_state(wactor, notify))
+			{
+				wactor->next_change_pending = NC_NO_CHANGE;
+				return TRUE;
+			}
+	}
+	
+	wactor->next_change_pending = NC_NO_CHANGE; // we processed all changes
 	return FALSE;
 }
+
+#undef FALLTHROUGH
 
 static void _done_internal (void);
 static gboolean _idle_done (G_GNUC_UNUSED gpointer data)
@@ -597,6 +677,7 @@ static void _init_object (GldiObject *obj, gpointer attr)
 {
 	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor*)obj;
 	wactor->handle = attr;
+	wactor->next_change_pending = NC_NO_CHANGE;
 	GldiWindowActor *actor = (GldiWindowActor*)wactor;
 	actor->iAge = s_iNumWindow;
 	if (s_iNumWindow == INT_MAX) s_iNumWindow = 1;
