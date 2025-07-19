@@ -96,6 +96,19 @@ GldiWindowActor *gldi_windows_find (gboolean (*callback) (GldiWindowActor*, gpoi
 	return NULL;
 }
 
+static void _add_to_array (void *actor, void *data)
+{
+	GPtrArray *array = (GPtrArray*)data;
+	g_ptr_array_add (array, actor);
+}
+
+GPtrArray *gldi_window_manager_get_all (void)
+{
+	GPtrArray *ret = g_ptr_array_new ();
+	g_list_foreach (s_pWindowsList, _add_to_array, ret);
+	return ret;
+}
+
 
   ///////////////
  /// BACKEND ///
