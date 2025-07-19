@@ -92,7 +92,7 @@ static void _hotspot_hit_cb (CairoDock *pDock, gpointer user_data)
 	if (pos != hit->pos) return; // we only care if this is the correct edge
 	
 	cd_debug ("Hotspot hit for dock %s\n", pDock->cDockName);
-	cairo_dock_unhide_dock_delayed (pDock, 0);
+	cairo_dock_unhide_dock_delayed (pDock, 0); // will only have effect on idle
 }
 
 /***********************************************************************
@@ -103,6 +103,7 @@ static void _hotspot_hit_cb (CairoDock *pDock, gpointer user_data)
 static struct zwf_shell_manager_v2 *s_pshell_manager = NULL;
 static uint32_t wf_shell_id, wf_shell_version;
 static gboolean wf_shell_found = FALSE;
+static guint s_sidMenu = 0;
 
 typedef struct _wf_hotspots {
 	struct _output_hotspots_base base;
@@ -116,10 +117,17 @@ static void _dummy (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct zwf_output_v2
 	
 }
 
-static void _toggle_menu (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct zwf_output_v2 *zwf_output_v2)
+static gboolean _menu_request (void*)
 {
 	gldi_object_notify (&myDesktopMgr, NOTIFICATION_MENU_REQUEST);
-	fprintf(stderr, "wayfire-shell: menu request\n");
+	s_sidMenu = 0;
+	return FALSE;
+}
+
+static void _toggle_menu (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct zwf_output_v2 *zwf_output_v2)
+{
+	cd_debug ("wayfire-shell: menu request\n");
+	if (!s_sidMenu) s_sidMenu = g_idle_add (_menu_request, NULL);
 }
 
 static struct zwf_output_v2_listener output_listener = { _dummy, _dummy, _toggle_menu };
