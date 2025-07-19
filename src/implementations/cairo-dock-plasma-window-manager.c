@@ -301,14 +301,9 @@ static void _gldi_toplevel_virtual_desktop_changed (G_GNUC_UNUSED void* data, G_
 static void _virtual_desktop_entered (void *data, G_GNUC_UNUSED pwhandle *handle, const char *desktop_id)
 {
 	GldiWaylandWindowActor* wactor = (GldiWaylandWindowActor*)data;
-	int i = gldi_plasma_virtual_desktop_get_index (desktop_id);
-	if (i >= 0)
-	{
-		int x, y;
-		y = i / g_desktopGeometry.iNbViewportX;
-		x = i % g_desktopGeometry.iNbViewportX;
+	int x, y;
+	if (gldi_plasma_virtual_desktop_get_coords (desktop_id, &x, &y))
 		gldi_wayland_wm_viewport_changed (wactor, x, y, wactor->init_done);
-	}
 }
 
 /* dummy callback shared between all that take a const char* parameter */
