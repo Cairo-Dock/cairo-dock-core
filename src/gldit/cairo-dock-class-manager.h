@@ -227,8 +227,10 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 *    that cSearchTerm is added as a key for retrieval (in this case, the return value will be cSearchTerm)
 *  - if bCreateAlways == TRUE, and no result is found, a "dummy" class is created and registered; this
 *    should be used as a last resort to ensure that a launcher has a class registered
+*  - if bIsDesktopFile == TRUE, cSearchTerm is assumed to be the name of a .desktop file and is processed accordingly
+*    (the .desktop suffix removed and converted to lowercase)
 */
-gchar *cairo_dock_register_class2 (const gchar *cSearchTerm, const gchar *cWmClass, gboolean bCreateAlways);
+gchar *cairo_dock_register_class2 (const gchar *cSearchTerm, const gchar *cWmClass, gboolean bCreateAlways, gboolean bIsDesktopFile);
 
 /** Register an application class from apps installed on the system.
 * @param cSearchTerm query to search for among installed apps

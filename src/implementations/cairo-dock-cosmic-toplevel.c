@@ -281,8 +281,9 @@ static void _gldi_toplevel_parent_cb (void* data, G_GNUC_UNUSED wfthandle *handl
 
 static void _ext_workspace_entered (void *data, G_GNUC_UNUSED cosmic_handle *handle, struct ext_workspace_handle_v1 *wshandle)
 {
-	gldi_ext_workspaces_update_window ((GldiWindowActor*)data, wshandle);
-	gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESKTOP_CHANGED, data);
+	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor*)data;
+	int x, y;
+	if (gldi_ext_workspaces_find (wshandle, &x, &y)) gldi_wayland_wm_viewport_changed (wactor, x, y, wactor->init_done);
 }
 
 static void _ext_workspace_left (void*, cosmic_handle*, struct ext_workspace_handle_v1*)
@@ -294,14 +295,14 @@ static void _geometry_cb (void* data, G_GNUC_UNUSED cosmic_handle* handle,
 	G_GNUC_UNUSED struct wl_output *output, int x, int y, int w, int h)
 {
 	GldiWaylandWindowActor* wactor = (GldiWaylandWindowActor*)data;
-	GldiWindowActor* actor = (GldiWindowActor*)wactor;
-	//!! keep track of the output !!
-	actor->windowGeometry.width = w;
-	actor->windowGeometry.height = h;
-	actor->windowGeometry.x = x;
-	actor->windowGeometry.y = y;
-	if (wactor->init_done && actor->bDisplayed)
-		gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_SIZE_POSITION_CHANGED, actor);
+	//!! TODO: keep track of the output !!
+	GtkAllocation geom = {
+		.x = x,
+		.y = y,
+		.width = w,
+		.height = h
+	};
+	gldi_wayland_wm_geometry_changed (wactor, &geom, wactor->init_done);
 }
 
 static void _ws_dummy (void*, cosmic_handle*, struct zcosmic_workspace_handle_v1*)

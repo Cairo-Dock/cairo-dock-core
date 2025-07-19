@@ -23,6 +23,7 @@
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-plasma-virtual-desktop.h"
+#include "cairo-dock-wayland-wm.h"
 
 typedef struct _PlasmaDesktop {
 	struct org_kde_plasma_virtual_desktop *handle; // protocol object representing this desktop
@@ -38,21 +39,56 @@ static unsigned int s_iDesktopCap = 0; // capacity of the above array
 static unsigned int s_iRows = 1; // number of rows the desktops are arranged into
 static unsigned int s_iCurrent = 0; // index into desktops array with the currently active desktop
 
+static GldiDesktopGeometry s_pending_geometry = {0}; // desktop geometry according to the latest info received
+static guint s_sidNotify = 0;
+
+static gboolean _notify_desktop_change (void*)
+{
+	g_desktopGeometry.iNbDesktops = s_pending_geometry.iNbDesktops;
+	g_desktopGeometry.iNbViewportX = s_pending_geometry.iNbViewportX;
+	g_desktopGeometry.iNbViewportY = s_pending_geometry.iNbViewportY;
+	
+	g_desktopGeometry.iCurrentDesktop = s_pending_geometry.iCurrentDesktop;
+	g_desktopGeometry.iCurrentViewportX = s_pending_geometry.iCurrentViewportX;
+	g_desktopGeometry.iCurrentViewportY = s_pending_geometry.iCurrentViewportY;
+	
+	gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_GEOMETRY_CHANGED, FALSE);
+	// note: we might not have a "real" change, but the coordinates likely changed and we need to keep track of these
+	gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_CHANGED);
+	
+	s_sidNotify = 0;
+	return FALSE;
+}
+
+static void _wm_notify (void)
+{
+	if (s_sidNotify) 
+	{
+		g_source_remove (s_sidNotify);
+		_notify_desktop_change (NULL);
+	}
+}
+
+static void _add_notify (void)
+{
+	if (!s_sidNotify) s_sidNotify = g_idle_add (_notify_desktop_change, NULL);
+}
+
 static void _update_desktop_layout ()
 {
 	unsigned int rows = s_iRows;
 	if (!rows) rows = 1;
 	unsigned int cols = s_iNumDesktops / rows + ((s_iNumDesktops % rows) ? 1 : 0);
-	g_desktopGeometry.iNbDesktops = 1;
-	g_desktopGeometry.iNbViewportX = cols;
-	g_desktopGeometry.iNbViewportY = rows;
+	s_pending_geometry.iNbDesktops = 1;
+	s_pending_geometry.iNbViewportX = cols;
+	s_pending_geometry.iNbViewportY = rows;
 }
 
 static void _update_current_desktop ()
 {
-	g_desktopGeometry.iCurrentDesktop = 0;
-	g_desktopGeometry.iCurrentViewportY = s_iCurrent / g_desktopGeometry.iNbViewportX;
-	g_desktopGeometry.iCurrentViewportX = s_iCurrent % g_desktopGeometry.iNbViewportX;
+	s_pending_geometry.iCurrentDesktop = 0;
+	s_pending_geometry.iCurrentViewportY = s_iCurrent / s_pending_geometry.iNbViewportX;
+	s_pending_geometry.iCurrentViewportX = s_iCurrent % s_pending_geometry.iNbViewportX;
 }
 
 typedef struct _update_windows_par
@@ -64,23 +100,18 @@ typedef struct _update_windows_par
 
 static void _update_windows (gpointer ptr, gpointer data)
 {
-	GldiWindowActor *actor = (GldiWindowActor*)ptr;
+	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor*)ptr;
 	update_windows_par *par = (update_windows_par*)data;
 	int cols_old = par->cols_old;
-	int cols_new = g_desktopGeometry.iNbViewportX;
+	int cols_new = s_pending_geometry.iNbViewportX;
 	
-	int ix = actor->iViewPortY * cols_old + actor->iViewPortX;
+	int ix = wactor->pending_viewport_y * cols_old + wactor->pending_viewport_y;
 	// handle the insertion or removal of desktops (which moves the index of desktops beyond it)
 	if (par->desktop_added >= 0 && ix >= par->desktop_added) ix++;
 	else if (par->desktop_removed >= 0 && ix >= par->desktop_removed && ix > 0) ix--;
 	int newY = ix / cols_new;
 	int newX = ix % cols_new;
-	if (newX != actor->iViewPortX || newY != actor->iViewPortY)
-	{
-		actor->iViewPortY = newY;
-		actor->iViewPortX = newX;
-		gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESKTOP_CHANGED, actor);
-	}
+	gldi_wayland_wm_viewport_changed (wactor, newX, newY, wactor->init_done);
 }
 
 
@@ -90,22 +121,32 @@ static void _remove_desktop (unsigned int i)
 	for (j = i + 1; j < s_iNumDesktops; j++) desktops[j - 1] = desktops[j];
 	s_iNumDesktops--;
 	desktops[s_iNumDesktops] = NULL;
-	int cols_old = g_desktopGeometry.iNbViewportX;
+	int cols_old = s_pending_geometry.iNbViewportX;
 	_update_desktop_layout ();
 	_update_current_desktop ();
-	gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_GEOMETRY_CHANGED, FALSE);
-	// note: this is not a "real" change, but the coordinates likely changed and we need to keep track of these
-	gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_CHANGED);
+	_add_notify ();
 	// update windows' position (x and y coordinates have likely changed)
 	update_windows_par par = {.cols_old = cols_old, .desktop_added = -1, .desktop_removed = i};
 	gldi_windows_foreach_unordered (_update_windows, &par);
 }
 
-int gldi_plasma_virtual_desktop_get_index (const char *desktop_id)
+int _desktop_get_index (const char *desktop_id)
 {
 	unsigned int i;
 	for (i = 0; i < s_iNumDesktops; i++) if (!(strcmp(desktops[i]->id, desktop_id))) break;
 	return (i < s_iNumDesktops) ? (int)i : -1;
+}
+
+gboolean gldi_plasma_virtual_desktop_get_coords (const char *desktop_id, int *x, int *y)
+{
+	int i = _desktop_get_index (desktop_id);
+	if (i >= 0)
+	{
+		*y = i / s_pending_geometry.iNbViewportX;
+		*x = i % s_pending_geometry.iNbViewportX;
+		return TRUE;
+	}
+	return FALSE;
 }
 
 const gchar *gldi_plasma_virtual_desktop_get_id (int ix)
@@ -123,13 +164,23 @@ static void _desktop_id (void *data, G_GNUC_UNUSED struct org_kde_plasma_virtual
 		cd_warning ("plasma-virtual-desktop: ID for desktop does not match: expected: %s, got: %s!", desktop->id, desktop_id);
 }
 
+
+guint s_sidNotifyName = 0;
+
+static gboolean _name_notify (void*)
+{
+	gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_NAMES_CHANGED);
+	s_sidNotifyName = 0;
+	return FALSE;
+}
+
 static void _name (void *data, G_GNUC_UNUSED struct org_kde_plasma_virtual_desktop *org_kde_plasma_virtual_desktop,
 	const char *name)
 {
 	PlasmaDesktop *desktop = (PlasmaDesktop*)data;
 	g_free (desktop->name);
 	desktop->name = g_strdup ((gchar *)name);
-	gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_NAMES_CHANGED);
+	if (!s_sidNotifyName) s_sidNotifyName = g_idle_add (_name_notify, NULL);
 }
 
 static void _activated (void *data, G_GNUC_UNUSED struct org_kde_plasma_virtual_desktop *org_kde_plasma_virtual_desktop)
@@ -141,7 +192,7 @@ static void _activated (void *data, G_GNUC_UNUSED struct org_kde_plasma_virtual_
 	{
 		s_iCurrent = i;
 		_update_current_desktop ();
-		gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_CHANGED);
+		_add_notify ();
 	}
 	else cd_critical ("plasma-virtual-desktop: could not find currently activated desktop!");
 }
@@ -182,7 +233,7 @@ static const struct org_kde_plasma_virtual_desktop_listener desktop_listener = {
 static void _desktop_created (G_GNUC_UNUSED void *data, struct org_kde_plasma_virtual_desktop_management *manager,
 	const char *desktop_id, uint32_t position)
 {
-	int cols_old = g_desktopGeometry.iNbViewportX;
+	int cols_old = s_pending_geometry.iNbViewportX;
 	
 	PlasmaDesktop *desktop = g_new0 (PlasmaDesktop, 1);
 	desktop->id = g_strdup (desktop_id);
@@ -205,8 +256,7 @@ static void _desktop_created (G_GNUC_UNUSED void *data, struct org_kde_plasma_vi
 	desktop->handle = org_kde_plasma_virtual_desktop_management_get_virtual_desktop(manager, desktop_id);
 	org_kde_plasma_virtual_desktop_add_listener (desktop->handle, &desktop_listener, desktop);
 	
-	gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_GEOMETRY_CHANGED, FALSE);
-	gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_CHANGED, FALSE);
+	_add_notify ();
 	
 	if (s_iRows > 1)
 	{
@@ -219,7 +269,7 @@ static void _desktop_created (G_GNUC_UNUSED void *data, struct org_kde_plasma_vi
 static void _desktop_removed (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct org_kde_plasma_virtual_desktop_management *manager,
 	const char *desktop_id)
 {
-	int i = gldi_plasma_virtual_desktop_get_index (desktop_id);
+	int i = _desktop_get_index (desktop_id);
 	if (i >= 0) _remove_desktop (i); // i == -1 case if _removed () was already called on the desktop object
 }
 
@@ -232,11 +282,9 @@ static void _desktop_rows (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct org_kd
 	uint32_t rows)
 {
 	s_iRows = rows;
-	int cols_old = g_desktopGeometry.iNbViewportX;
+	int cols_old = s_pending_geometry.iNbViewportX;
 	_update_desktop_layout ();
-	gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_GEOMETRY_CHANGED, FALSE);
-	// note: this is not a "real" change, but the coordinates likely changed and we need to keep track of these
-	gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_CHANGED);
+	_add_notify ();
 	// update windows' position (x and y coordinates have likely changed)
 	update_windows_par par = {.cols_old = cols_old, .desktop_added = -1, .desktop_removed = -1};
 	gldi_windows_foreach_unordered (_update_windows, &par);
@@ -318,6 +366,7 @@ gboolean gldi_plasma_virtual_desktop_try_init (struct wl_registry *registry)
 	dmb.add_workspace         = _add_workspace;
 	dmb.remove_last_workspace = _remove_workspace;
 	gldi_desktop_manager_register_backend (&dmb, "plasma-virtual-desktop");
+	gldi_wayland_wm_set_pre_notify_function (_wm_notify);
 	
 	org_kde_plasma_virtual_desktop_management_add_listener (s_pmanager, &manager_listener, NULL);
 	return TRUE;
