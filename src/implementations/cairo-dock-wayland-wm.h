@@ -50,6 +50,8 @@ struct _GldiWaylandWindowActor {
 	int pending_viewport_x, pending_viewport_y;
 	GtkAllocation pending_window_geometry;
 	
+	int next_change_pending; // indicator of which changes need to be processed (used internally)
+	
 	gboolean init_done; // initial state has been configured
 	gboolean in_queue; // this actor has been added to the s_pending_queue
 };
