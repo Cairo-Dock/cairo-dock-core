@@ -347,8 +347,8 @@ gboolean cairo_dock_add_appli_icon_to_class (Icon *pIcon)
 	}
 
 	if (pIcon->pAppInfo) gldi_object_unref (GLDI_OBJECT (pIcon->pAppInfo));
-	pIcon->pAppInfo = pClassAppli->app; // should be not null
-	gldi_object_ref (GLDI_OBJECT (pIcon->pAppInfo));
+	pIcon->pAppInfo = pClassAppli->app; // can be null if no .desktop file was found
+	if (pIcon->pAppInfo) gldi_object_ref (GLDI_OBJECT (pIcon->pAppInfo));
 	//!! TODO: handle pCustomLauncher here? (or in applications-facility?)
 	//!! this is needed for shift + click and similar to use the correct command if 
 	//!! multiple icons are added (if only one, the launcher icon will take over)
