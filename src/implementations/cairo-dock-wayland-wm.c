@@ -68,6 +68,11 @@ static gboolean s_bProcessing = FALSE;
 
 static guint s_iIdle = 0;
 
+/* Function to call in our idle handler before processing changes to any
+ * window. The main purpose is to let the desktop manager update the
+ * geometry if needed. */
+static void (*s_fNotify)(void) = NULL;
+
 /* Facility to ask the user to pick a window */
 struct wft_pick_window_response {
 	GldiWaylandWindowActor* wactor;
@@ -320,6 +325,7 @@ static gboolean _update_all_pending_state (GldiWaylandWindowActor *wactor, gbool
 static void _done_internal (void);
 static gboolean _idle_done (G_GNUC_UNUSED gpointer data)
 {
+	if (s_fNotify) s_fNotify ();
 	s_iIdle = 0;
 	_done_internal ();
 	return FALSE;
@@ -579,6 +585,11 @@ GldiWindowActor* gldi_wayland_wm_get_last_active_window ()
 GldiWaylandWindowActor* gldi_wayland_wm_new_toplevel (gpointer handle)
 {
 	return (GldiWaylandWindowActor*)gldi_object_new (&myWaylandWMObjectMgr, handle);
+}
+
+void gldi_wayland_wm_set_pre_notify_function (void (*func)(void))
+{
+	s_fNotify = func;
 }
 
 

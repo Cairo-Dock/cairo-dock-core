@@ -106,6 +106,7 @@ void gldi_wayland_wm_init (GldiWaylandWMHandleDestroyFunc destroy_cb);
 
 GldiWaylandWindowActor* gldi_wayland_wm_new_toplevel (gpointer handle);
 
+void gldi_wayland_wm_set_pre_notify_function (void (*func)(void));
 
 
 #endif // CAIRO_DOCK_WAYLAND_WM_H
