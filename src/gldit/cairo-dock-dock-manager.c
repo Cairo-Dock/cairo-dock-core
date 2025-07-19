@@ -925,7 +925,8 @@ void cairo_dock_unhide_dock_delayed (CairoDock *pDock, int iDelay)
 	}
 	else  // on montre le dock tout de suite.
 	{
-		_cairo_dock_unhide_dock_delayed (pDock);
+		if (pDock->iSidUnhideDelayed == 0)
+			pDock->iSidUnhideDelayed = g_idle_add ((GSourceFunc) _cairo_dock_unhide_dock_delayed, (gpointer)pDock);
 	}
 }
 
