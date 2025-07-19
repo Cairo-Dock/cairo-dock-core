@@ -30,7 +30,7 @@ extern struct wl_output *s_ws_output;
 gboolean gldi_ext_workspaces_match_protocol (uint32_t id, const char *interface, uint32_t version);
 gboolean gldi_ext_workspaces_try_init (struct wl_registry *registry);
 struct ext_workspace_handle_v1 *gldi_ext_workspaces_get_handle (int x, int y);
-void gldi_ext_workspaces_update_window (GldiWindowActor *actor, struct ext_workspace_handle_v1 *handle);
+gboolean gldi_ext_workspaces_find (struct ext_workspace_handle_v1 *handle, int *x, int *y);
 
 #endif
 
