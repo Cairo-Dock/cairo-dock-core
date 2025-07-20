@@ -225,7 +225,10 @@ bWAYFIRE = TRUE;
 		bWAYLAND_PROTOCOLS ? "yes" : "no",
 		bWAYFIRE ? "yes" : "no",
 		bIsWayland ? "Wayland" : "X11",
-		layer_shell_info ? layer_shell_info : "",
+		bIsWayland ? (layer_shell_info ? layer_shell_info : "") :
+			(gldi_container_use_new_positioning_code () ?
+				" * window positioning:           new\n" :
+				" * window positioning:           legacy\n"),
 		g_bUseOpenGL ? gldi_gl_get_backend_name() : "no",
 		gldi_windows_manager_get_name (),
 		gldi_desktop_manager_get_backend_names (),
