@@ -689,11 +689,24 @@ void gldi_dock_leave_synthetic (CairoDock *pDock)
 	_on_leave_notify (NULL, NULL, pDock);
 }
 
+static gboolean _hide_dock_idle (void *ptr)
+{
+	CairoDock *pDock = (CairoDock*)ptr;
+	pDock->iSidHideBack = 0;
+	gtk_widget_hide (pDock->container.pWidget);
+	return FALSE;
+}
+
 static gboolean _on_dock_unmap (GtkWidget* pWidget, G_GNUC_UNUSED GdkEvent* pEvent, CairoDock *pDock)
 {
 	// this event is only necessary on Wayland
 	// g_print ("_on_dock_unmap() for dock: %p (bIsMainDock : %d; bInside:%d)\n", pDock, pDock->bIsMainDock, pDock->container.bInside);
 	pDock->iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
+	if (pDock->iRefCount > 0) // this is a subdock
+	{
+		// for some reason we need this to make gtk_widget_is_visible() work
+		if (!pDock->iSidHideBack) pDock->iSidHideBack = g_idle_add (_hide_dock_idle, pDock);
+	}
 	_on_leave_notify (pWidget, NULL, pDock);
 	return FALSE;
 }
