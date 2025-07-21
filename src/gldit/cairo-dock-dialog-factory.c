@@ -113,12 +113,18 @@ static gboolean on_expose_dialog (G_GNUC_UNUSED GtkWidget *pWidget, cairo_t *pCa
 	
 		cairo_dock_init_drawing_context_on_container (CAIRO_CONTAINER (pDialog), pCairoContext);
 		
+		cairo_save (pCairoContext);
 		if (pDialog->pDecorator != NULL)
-		{
-			cairo_save (pCairoContext);
 			pDialog->pDecorator->render (pCairoContext, pDialog);
-			cairo_restore (pCairoContext);
+		else
+		{
+			if (myDialogsParam.bUseDefaultColors)
+				gldi_style_colors_set_bg_color (pCairoContext);
+			else
+				gldi_color_set_cairo (pCairoContext, &myDialogsParam.fBgColor);
+			cairo_paint (pCairoContext);
 		}
+		cairo_restore (pCairoContext);
 		
 		gldi_object_notify (pDialog, NOTIFICATION_RENDER, pDialog, pCairoContext);
 	//}
