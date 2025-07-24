@@ -960,11 +960,8 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 	if (gldi_container_use_new_positioning_code ())
 	{
 		if (pSubDock->container.bIsHorizontal)
-			gdk_window_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pSubDock)),
-				iNewWidth, iNewHeight);
-        else gdk_window_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pSubDock)),
-				iNewHeight, iNewWidth);
-
+			gtk_window_resize (GTK_WINDOW (pSubDock->container.pWidget), iNewWidth, iNewHeight);
+		else gtk_window_resize (GTK_WINDOW (pSubDock->container.pWidget), iNewHeight, iNewWidth);
 
 		GdkRectangle rect = {0, 0, 1, 1};
 		GdkGravity rect_anchor = GDK_GRAVITY_NORTH;
@@ -973,6 +970,12 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 			&rect, &rect_anchor, &subdock_anchor);
 		gldi_container_move_to_rect (CAIRO_CONTAINER (pSubDock),
 			&rect, rect_anchor, subdock_anchor, GDK_ANCHOR_SLIDE, 0, 0);
+		// note: for some reason, we do not receive configure events at least on Wayland,
+		// so we need to set these manually
+		// TODO: we might need to trigger reloading icon images as well? (see dock-factory.c:1245-1282)
+		pSubDock->bNeedSizeUpdate = TRUE;
+		pSubDock->container.iWidth = iNewWidth;
+		pSubDock->container.iHeight = iNewHeight;
 	}
 	else
 	{
