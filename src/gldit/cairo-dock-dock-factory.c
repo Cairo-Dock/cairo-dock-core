@@ -2349,7 +2349,7 @@ void gldi_dock_init_internals (CairoDock *pDock)
 			G_CALLBACK (_on_dock_unmap),
 			pDock);
 	
-	gtk_widget_show_all (pDock->container.pWidget);
+	if (!pDock->iRefCount) gtk_widget_show_all (pDock->container.pWidget);
 }
 
 
