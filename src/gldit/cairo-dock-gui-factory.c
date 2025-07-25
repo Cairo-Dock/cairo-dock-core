@@ -2186,7 +2186,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					if (bDisabled)
 					{
 						gtk_widget_set_sensitive (pOneWidget, FALSE);
-						gtk_widget_set_tooltip_text (pOneWidget, _("You are running Cairo-Dock in a Wayland session.\nSetting a horizontal offset is not supported on Wayland yet."));
+						gtk_widget_set_tooltip_text (pKeyBox, _("You are running Cairo-Dock in a Wayland session.\nSetting a horizontal offset is not supported on Wayland yet."));
 					}
 					pPrevOneWidget = pOneWidget;
 					iPrevValue = iValue;
@@ -3044,8 +3044,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							gtk_widget_set_sensitive (pGrabKeyButton, FALSE);
 							gtk_widget_set_sensitive (pOneWidget, FALSE);
 							const char *tmp = _("You are running Cairo-Dock in a Wayland session.\nSetting global keyboard shortcuts is not supported on Wayland yet.");
-							gtk_widget_set_tooltip_text (pGrabKeyButton, tmp);
-							gtk_widget_set_tooltip_text (pOneWidget, tmp);
+							gtk_widget_set_tooltip_text (pKeyBox, tmp);
 						}
 					}
 					_pack_in_widget_box (pGrabKeyButton);
