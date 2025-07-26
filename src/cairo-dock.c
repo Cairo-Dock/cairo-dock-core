@@ -189,11 +189,8 @@ static void _cairo_dock_quit (G_GNUC_UNUSED int signal)
  */
 static void _cairo_dock_intercept_signal (int signal)
 {
+	// Note: we should not use any stdio in a signal handler -- but it is worth the risk to give some diagnostic at least...
 	cd_warning ("Cairo-Dock has crashed (sig %d).\nIt will be restarted now.\nFeel free to report this bug on glx-dock.org to help improving the dock!", signal);
-	g_print ("info on the system :\n");
-	int r = system ("uname -a");
-	if (r < 0)
-		cd_warning ("Not able to launch this command: uname");
 	
 	// if a module is responsible, expose it to public shame.
 	if (g_pCurrentModule != NULL)
@@ -221,6 +218,7 @@ static void _cairo_dock_intercept_signal (int signal)
 	execl ("/bin/sh", "/bin/sh", "-c", s_pLaunchCommand->str, (char *)NULL);  // on ne revient pas de cette fonction.
 	//execlp ("cairo-dock", "cairo-dock", s_pLaunchCommand->str, (char *)0);
 	cd_warning ("Sorry, couldn't restart the dock");
+	_exit (1);
 }
 static void _cairo_dock_set_signal_interception (void)
 {
