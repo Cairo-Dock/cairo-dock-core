@@ -325,7 +325,8 @@ static gboolean _on_motion_notify (GtkWidget* pWidget,
 	{
 		//g_print ("%s (%d,%d) (%d, %.2fms, bAtBottom:%d; bIsShrinkingDown:%d)\n", __func__, (int) pMotion->x, (int) pMotion->y, pMotion->is_hint, pMotion->time - fLastTime, pDock->bAtBottom, pDock->bIsShrinkingDown);
 		//\_______________ On deplace le dock si ALT est enfoncee.
-		if ((pMotion->state & GDK_MOD1_MASK) && (pMotion->state & GDK_BUTTON1_MASK))
+		if ((pMotion->state & GDK_MOD1_MASK) && (pMotion->state & GDK_BUTTON1_MASK) &&
+			!gldi_container_is_wayland_backend ())
 		{
 			if (pDock->container.bIsHorizontal)
 			{

@@ -255,30 +255,36 @@ static void _move_resize_dock (CairoDock *pDock)
 	{
 		GtkWindow* window = GTK_WINDOW (pDock->container.pWidget);
 		// Reset old anchors
-		gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_BOTTOM, FALSE);
-		gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_TOP, FALSE);
-		gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_RIGHT, FALSE);
-		gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_LEFT, FALSE);
+		gtk_layer_set_anchor (window, GTK_LAYER_SHELL_EDGE_BOTTOM, FALSE);
+		gtk_layer_set_anchor (window, GTK_LAYER_SHELL_EDGE_TOP, FALSE);
+		gtk_layer_set_anchor (window, GTK_LAYER_SHELL_EDGE_RIGHT, FALSE);
+		gtk_layer_set_anchor (window, GTK_LAYER_SHELL_EDGE_LEFT, FALSE);
 		// Set new anchor
 		CairoDockPositionType iScreenBorder = gldi_wayland_get_edge_for_dock (pDock);
+		GtkLayerShellEdge anchor_edge;
 		switch (iScreenBorder)
 		{
 			case CAIRO_DOCK_BOTTOM :
-				gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_BOTTOM, TRUE);
-			break;
+				anchor_edge = GTK_LAYER_SHELL_EDGE_BOTTOM;
+				break;
 			case CAIRO_DOCK_TOP :
-				gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_TOP, TRUE);
-			break;
+				anchor_edge = GTK_LAYER_SHELL_EDGE_TOP;
+				break;
 			case CAIRO_DOCK_RIGHT :
-				gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_RIGHT, TRUE);
-			break;
+				anchor_edge = GTK_LAYER_SHELL_EDGE_RIGHT;
+				break;
 			case CAIRO_DOCK_LEFT :
-				gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_LEFT, TRUE);
-			break;
+				anchor_edge = GTK_LAYER_SHELL_EDGE_LEFT;
+				break;
 			case CAIRO_DOCK_INSIDE_SCREEN :
 			case CAIRO_DOCK_NB_POSITIONS :
-			break;
+			default :
+				cd_warning ("Cannot determine which edge to anchor a dock to!");
+				return;
 		}
+		
+		gtk_layer_set_anchor (window, anchor_edge, TRUE);
+		gtk_layer_set_margin (window, anchor_edge, pDock->iGapY);
 	}
 #endif
 }

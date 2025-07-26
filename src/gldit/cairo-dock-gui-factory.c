@@ -2127,6 +2127,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				}
 				if (iElementType == CAIRO_DOCK_WIDGET_SIZE_INTEGER)
 					iNbElements *= 2;
+				gboolean bDisabled = gldi_container_is_wayland_backend () && !strcmp (cKeyName, "x gap");
 				length = 0;
 				iValueList = g_key_file_get_integer_list (pKeyFile, cGroupName, cKeyName, &length, NULL);
 				GtkWidget *pPrevOneWidget=NULL;
@@ -2181,6 +2182,11 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						data[0] = pOneWidget;
 						data[1] = pToggleButton;
 						g_signal_connect (G_OBJECT (pPrevOneWidget), "value-changed", G_CALLBACK(_cairo_dock_set_value_in_pair), data);
+					}
+					if (bDisabled)
+					{
+						gtk_widget_set_sensitive (pOneWidget, FALSE);
+						gtk_widget_set_tooltip_text (pKeyBox, _("You are running Cairo-Dock in a Wayland session.\nSetting a horizontal offset is not supported on Wayland yet."));
 					}
 					pPrevOneWidget = pOneWidget;
 					iPrevValue = iValue;
@@ -3028,10 +3034,18 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					}
 					else
 					{
+						// shortkey
 						g_signal_connect (G_OBJECT (pGrabKeyButton),
 							"clicked",
 							G_CALLBACK (_cairo_dock_key_grab_clicked),
 							data);
+						if (gldi_container_is_wayland_backend ())
+						{
+							gtk_widget_set_sensitive (pGrabKeyButton, FALSE);
+							gtk_widget_set_sensitive (pOneWidget, FALSE);
+							const char *tmp = _("You are running Cairo-Dock in a Wayland session.\nSetting global keyboard shortcuts is not supported on Wayland yet.");
+							gtk_widget_set_tooltip_text (pKeyBox, tmp);
+						}
 					}
 					_pack_in_widget_box (pGrabKeyButton);
 				}

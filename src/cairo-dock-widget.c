@@ -56,8 +56,11 @@ void cairo_dock_widget_free (CDWidget *pCdWidget)  // doesn't destroy the GTK wi
 	cairo_dock_free_generated_widget_list (pCdWidget->pWidgetList);
 	pCdWidget->pWidgetList = NULL;
 	
-	g_ptr_array_free (pCdWidget->pDataGarbage, TRUE);  /// free each element...
-	pCdWidget->pDataGarbage = NULL;
+	if (pCdWidget->pDataGarbage)
+	{
+		g_ptr_array_free (pCdWidget->pDataGarbage, TRUE);  /// free each element...
+		pCdWidget->pDataGarbage = NULL;
+	}
 	
 	g_free (pCdWidget);
 }
