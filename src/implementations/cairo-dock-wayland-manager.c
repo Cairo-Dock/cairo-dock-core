@@ -254,6 +254,7 @@ static void _move_resize_dock (CairoDock *pDock)
 	if (s_bHave_Layer_Shell)
 	{
 		GtkWindow* window = GTK_WINDOW (pDock->container.pWidget);
+		if (gtk_window_get_transient_for (window)) return; // can only use this for main docks
 		// Reset old anchors
 		gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_BOTTOM, FALSE);
 		gtk_layer_set_anchor(window, GTK_LAYER_SHELL_EDGE_TOP, FALSE);

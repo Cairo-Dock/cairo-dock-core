@@ -1792,6 +1792,8 @@ static void init_object (GldiObject *obj, gpointer attr)
 		if (pParentDock == NULL)
 			pParentDock = g_pMainDock;
 		gtk_window_set_transient_for (GTK_WINDOW (pDock->container.pWidget), GTK_WINDOW (pParentDock->container.pWidget));
+		// need to set now, so that gldi_dock_init_internals () will not try to show this dock
+		pDock->iRefCount = 1;
 	}
 	gldi_container_init_layer (&(pDock->container));
 	
@@ -1853,7 +1855,6 @@ static void init_object (GldiObject *obj, gpointer attr)
 	else
 	{
 		gtk_window_set_title (GTK_WINDOW (pDock->container.pWidget), "cairo-dock-sub");
-		pDock->iRefCount = 1;
 		
 		//\__________________ set additional params from its parent dock.
 		CairoDock *pParentDock = dattr->pParentDock;
@@ -1867,8 +1868,13 @@ static void init_object (GldiObject *obj, gpointer attr)
 		
 		pDock->container.fRatio = myBackendsParam.fSubDockSizeRatio;
 		
-		//\__________________ hide the dock
-		gtk_widget_hide (pDock->container.pWidget);
+		//\__________________ hide the dock if needed
+		if (!gldi_container_use_new_positioning_code ())
+		{
+			// in this case, dock was shown in gldi_dock_init_internals (), we need to hide again
+			pDock->iRefCount = 1;
+			gtk_widget_hide (pDock->container.pWidget);
+		}
 	}
 	
 	//\__________________ set a renderer (got from the conf, or the default one).
