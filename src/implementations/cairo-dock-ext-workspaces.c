@@ -22,6 +22,7 @@
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-ext-workspaces.h"
+#include "cairo-dock-wayland-wm.h"
 
 struct wl_output *s_ws_output = NULL;
 
@@ -61,6 +62,10 @@ static gboolean bValidX = FALSE; // if x coordinates are valid
 static gboolean bValidY = FALSE; // if y coordinates are valid
 static guint s_iXOffset = 0; // offset to add to x coordinates (if they don't start from 0)
 static guint s_iYOffset = 0; // offset to add to x coordinates (if they don't start from 0)
+
+static guint s_sidNotify = 0;
+static guint s_sidNotifyName = 0;
+static gboolean s_bLayoutChanged = FALSE;
 
 // we don't want arbitrarily large coordinates
 #define MAX_DESKTOP_DIM 16
@@ -154,6 +159,34 @@ static void _update_current_desktop (void)
 	}
 }
 
+static gboolean _notify (void*)
+{
+	if (s_bLayoutChanged) _update_desktop_layout ();
+	_update_current_desktop ();
+	if (s_bLayoutChanged) gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_GEOMETRY_CHANGED, FALSE);
+	gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_CHANGED);
+	
+	s_bLayoutChanged = FALSE;
+	s_sidNotify = 0;
+	return FALSE;
+}
+
+static gboolean _notify_name (void*)
+{
+	gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_NAMES_CHANGED);
+	
+	s_sidNotifyName = 0;
+	return FALSE;
+}
+
+static void _wm_notify (void)
+{
+	if (s_sidNotify) 
+	{
+		g_source_remove (s_sidNotify);
+		_notify (NULL);
+	}
+}
 
 /**
  * Workspace events
@@ -288,9 +321,9 @@ static void _group_removed (void*, struct ext_workspace_group_handle_v1 *handle)
 			g_ptr_array_set_size (s_aDesktops, 0); // will call _free_workspace () for each element
 		}
 		
-		_update_desktop_layout ();
-		gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_GEOMETRY_CHANGED, FALSE);
+		s_bLayoutChanged = TRUE;
 		s_pWSGroup = NULL;
+		if (!s_sidNotify) s_sidNotify = g_idle_add (_notify, NULL);
 	}
 	ext_workspace_group_handle_v1_destroy (handle);
 }
@@ -320,7 +353,7 @@ static void _new_workspace_group (void*, struct ext_workspace_manager_v1*, struc
 	}
 }
 
-static void _desktop_created (void*, struct ext_workspace_manager_v1 *manager,
+static void _desktop_created (void*, struct ext_workspace_manager_v1*,
 	struct ext_workspace_handle_v1 *new_workspace)
 {
 	CosmicWS *desktop = g_new0 (CosmicWS, 1);
@@ -446,21 +479,14 @@ static void _done (void*, struct ext_workspace_manager_v1*)
 	if (to_invalid) g_ptr_array_extend_and_steal (s_aInvalid, to_invalid); // this will free to_invalid
 	
 	if (bRemoved || bCoords || bAdded)
+		s_bLayoutChanged = TRUE;
+	if ((s_pCurrent != s_pPending) || bRemoved || bCoords || bAdded)
 	{
 		s_pCurrent = s_pPending;
-		_update_desktop_layout ();
-		_update_current_desktop ();
-		gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_GEOMETRY_CHANGED, FALSE);
-		gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_CHANGED);
-	}
-	else if (s_pCurrent != s_pPending)
-	{
-		s_pCurrent = s_pPending;
-		_update_current_desktop ();
-		gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_CHANGED);
+		if (!s_sidNotify) s_sidNotify = g_idle_add (_notify, NULL);
 	}
 	
-	if (bName) gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_NAMES_CHANGED);
+	if (bName && !s_sidNotifyName) s_sidNotifyName = g_idle_add (_notify_name, NULL);
 }
 
 static void _finished (void*, struct ext_workspace_manager_v1 *handle)
@@ -576,6 +602,7 @@ gboolean gldi_ext_workspaces_try_init (struct wl_registry *registry)
 //	dmb.add_workspace         = _add_workspace;
 //	dmb.remove_last_workspace = _remove_workspace;
 	gldi_desktop_manager_register_backend (&dmb, "ext-workspace-v1");
+	gldi_wayland_wm_set_pre_notify_function (_wm_notify);
 	
 	s_aDesktops = g_ptr_array_new_full (16, _free_workspace2);
 	s_aInvalid = g_ptr_array_new_full (16, _free_workspace2);
@@ -596,7 +623,7 @@ struct ext_workspace_handle_v1 *gldi_ext_workspaces_get_handle (int x, int y)
 	return NULL;
 }
 
-void gldi_ext_workspaces_update_window (GldiWindowActor *actor, struct ext_workspace_handle_v1 *handle)
+gboolean gldi_ext_workspaces_find (struct ext_workspace_handle_v1 *handle, int *x, int *y)
 {
 	CosmicWS **desktops = (CosmicWS**)s_aDesktops->pdata;
 	unsigned int s_iNumDesktops = s_aDesktops->len;
@@ -606,23 +633,22 @@ void gldi_ext_workspaces_update_window (GldiWindowActor *actor, struct ext_works
 	{
 		if (desktops[i]->handle == handle)
 		{
-			actor->iNumDesktop = 0;
 			if (bValidX)
 			{
-				actor->iViewPortX = desktops[i]->x - s_iXOffset;
-				if (bValidY) actor->iViewPortY = desktops[i]->y - s_iYOffset;
-				else actor->iViewPortY = 0;
+				*x = desktops[i]->x - s_iXOffset;
+				if (bValidY) *y = desktops[i]->y - s_iYOffset;
+				else *y = 0;
 			}
 			else
 			{
-				actor->iViewPortX = i;
-				actor->iViewPortY = 0;
+				*x = i;
+				*y = 0;
 			}
-			gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESKTOP_CHANGED, actor);
-			return;
+			return TRUE;
 		}
 	}
-	cd_warning ("cosmic-workspaces: workspace not found!\n");
+	cd_warning ("ext-workspaces: workspace not found!\n");
+	return FALSE;
 }
 
 
