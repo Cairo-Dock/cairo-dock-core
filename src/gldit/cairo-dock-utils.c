@@ -311,6 +311,26 @@ gboolean cairo_dock_launch_command_full (const gchar *cCommand, const gchar *cWo
 	return r;
 }
 
+
+void _sanitize_id (char *id)
+{
+	char *x = id;
+	char *y = id;
+	const char *end;
+	g_utf8_validate (x, -1, &end);
+	while (x < end)
+	{
+		char *tmp = g_utf8_next_char (x);
+		if (tmp == x + 1 && (g_ascii_isalnum (*x) || *x == '-' || *x == '_' || *x == '.'))
+		{
+			if (y != x) *y = *x;
+			y++;
+		}
+		x = tmp;
+	}
+	*y = 0;
+}
+
 gboolean cairo_dock_launch_command_argv_full (const gchar * const * args, const gchar *cWorkingDirectory, GldiLaunchFlags flags)
 {
 	g_return_val_if_fail (args != NULL && args[0] != NULL, FALSE);
@@ -355,15 +375,21 @@ gboolean cairo_dock_launch_command_argv_full (const gchar * const * args, const 
 	{
 		if ((flags & GLDI_LAUNCH_SLICE) && s_backend.new_app_launched)
 		{
-			char *tmp = g_uri_escape_string (args[0], NULL, FALSE);
-			if (tmp)
+			char *id = NULL;
+			const char *tmp = strrchr (args[0], '/');
+			tmp = tmp ? (tmp + 1) : args[0];
+			if (*tmp)
 			{
-				// note: the above does not remove '~' which is also not allowed
-				char *tmp2;
-				for (tmp2 = tmp; *tmp2; ++tmp2) if (*tmp2 == '~') *tmp2 = '-';
+				id = g_strdup (tmp);
+				_sanitize_id (id);
+				if (!*id)
+				{
+					g_free (id);
+					id = NULL;
+				}
 			}
-			s_backend.new_app_launched (tmp ? tmp : "unknown", args[0], pid);
-			g_free (tmp);
+			s_backend.new_app_launched (id ? id : "unknown", args[0], pid);
+			g_free (id);
 		}
 		else g_child_watch_add (pid, _child_watch_dummy, NULL);
 	}
