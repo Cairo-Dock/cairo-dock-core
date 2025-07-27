@@ -1618,9 +1618,12 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 	}
 	s_pMainWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	//gtk_container_set_border_width (s_pMainWindow, CAIRO_DOCK_FRAME_MARGIN);
-	gchar *cIconPath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR, CAIRO_DOCK_ICON);
-	gtk_window_set_icon_from_file (GTK_WINDOW (s_pMainWindow), cIconPath, NULL);
-	g_free (cIconPath);
+	GdkPixbuf *pIconPixbuf = cairo_dock_load_gdk_pixbuf (GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, -1, -1);
+	if (pIconPixbuf)
+	{
+		gtk_window_set_icon (GTK_WINDOW (s_pMainWindow), pIconPixbuf);
+		g_object_unref (pIconPixbuf);
+	}
 
 	GtkWidget *pMainHBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_container_add (GTK_CONTAINER (s_pMainWindow), pMainHBox);
