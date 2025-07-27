@@ -70,8 +70,9 @@ static void cd_help_show_welcome_message (void)
 {
 	gldi_dialog_show (D_("Welcome in Cairo-Dock !\n"
 		"This applet is here to help you start using the dock; just click on it.\n"
-		"If you have any question/request/remark, please pay us a visit at http://glx-dock.org.\n"
-		"Hope you will enjoy this soft !\n"
+		"If you have any question/request/remark, please pay us a visit at\n"
+		"https://github.com/Cairo-Dock/cairo-dock-core.\n"
+		"Hope you will enjoy this software !\n"
 		"  (you can now click on this dialog to close it)"),
 		myIcon, myContainer,
 		0,
