@@ -786,8 +786,8 @@ int main (int argc, char** argv)
 			cd_warning ("Not able to launch this command: %s", cCommand);
 		else
 			cd_warning (_("The module '%s' has been deactivated because it may "
-			"have caused some problems.\nYou can reactivate it, if it happens "
-			"again thanks to report it at http://glx-dock.org"), cExcludeModule);
+			"have caused some problems.\nYou can reactivate it, but if it happens "
+			"again please report it at https://github.com/Cairo-Dock/cairo-dock-core/issues"), cExcludeModule);
 		g_free (cCommand);
 	}
 	
@@ -902,7 +902,7 @@ int main (int argc, char** argv)
 	if (!bSafeMode && gldi_module_get_nb () <= 1)  // 1 en comptant l'aide
 	{
 		Icon *pIcon = gldi_icons_get_any_without_dialog ();
-		gldi_dialog_show_temporary_with_icon (_("No plug-in were found.\nPlug-ins provide most of the functionalities (animations, applets, views, etc).\nSee http://glx-dock.org for more information.\nThere is almost no meaning in running the dock without them and it's probably due to a problem with the installation of these plug-ins.\nBut if you really want to use the dock without these plug-ins, you can launch the dock with the '-f' option to no longer have this message.\n"), pIcon, CAIRO_CONTAINER (g_pMainDock), 0., CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON);
+		gldi_dialog_show_temporary_with_icon (_("No plug-in were found.\nPlug-ins provide most of the functionalities (animations, applets, views, etc).\nSee https://github.com/Cairo-Dock/cairo-dock-core/wiki for more information.\nThere is almost no meaning in running the dock without them and it's probably due to a problem with the installation of these plug-ins.\nBut if you really want to use the dock without these plug-ins, you can launch the dock with the '-f' option to no longer have this message.\n"), pIcon, CAIRO_CONTAINER (g_pMainDock), 0., CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON);
 	}
 	
 	if (gldi_container_is_wayland_backend ())
@@ -1004,9 +1004,9 @@ int main (int argc, char** argv)
 	{
 		gchar *cMessage;
 		if (s_iNbCrashes == 2) // <=> second crash: display a dialogue
-			cMessage = g_strdup_printf (_("The module '%s' may have encountered a problem.\nIt has been restored successfully, but if it happens again, please report it at http://glx-dock.org"), cExcludeModule);
+			cMessage = g_strdup_printf (_("The module '%s' may have encountered a problem.\nIt has been restored successfully, but if it happens again, please report it at https://github.com/Cairo-Dock/cairo-dock-core/issues"), cExcludeModule);
 		else // since the 3th crash: the applet has been disabled
-			cMessage = g_strdup_printf (_("The module '%s' has been deactivated because it may have caused some problems.\nYou can reactivate it, if it happens again thanks to report it at http://glx-dock.org"), cExcludeModule);
+			cMessage = g_strdup_printf (_("The module '%s' has been deactivated because it may have caused some problems.\nYou can reactivate it, but if it happens again please report it at https://github.com/Cairo-Dock/cairo-dock-core/issues"), cExcludeModule);
 		
 		GldiModule *pModule = gldi_module_get (cExcludeModule);
 		Icon *icon = gldi_icons_get_any_without_dialog ();

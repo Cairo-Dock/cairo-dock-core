@@ -370,7 +370,7 @@ gchar *cairo_dock_depackage_theme (const gchar *cPackagePath)
 		cNewThemePath = cairo_dock_download_archive (cPackagePath, g_cThemesDirPath);
 		if (cNewThemePath == NULL)
 		{
-			gldi_dialog_show_temporary_with_icon_printf (_("Could not access remote file %s. Maybe the server is down.\nPlease retry later or contact us at glx-dock.org."), NULL, NULL, 0, NULL, cPackagePath);
+			gldi_dialog_show_temporary_with_icon_printf (_("Could not access remote file %s. Maybe the server is down.\nPlease retry later or contact us at https://github.com/Cairo-Dock/cairo-dock-core/issues"), NULL, NULL, 0, NULL, cPackagePath);
 		}
 	}
 	return cNewThemePath;
