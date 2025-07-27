@@ -1985,12 +1985,12 @@ msgid "Troubleshooting"
 msgstr "Pronalaženje rešenja"
 
 #: ../Help/data/messages:191
-msgid "If you have any question, don't hesitate to ask on our forum."
+msgid "If you have any question, don't hesitate to ask on our Github Page."
 msgstr ""
 "Ako imate bilo koje pitanje, nemojte se ustručavati da pitate na forumu."
 
 #: ../Help/data/messages:193
-msgid "Forum"
+msgid "Discussions"
 msgstr "Forum"
 
 #: ../Help/data/messages:195

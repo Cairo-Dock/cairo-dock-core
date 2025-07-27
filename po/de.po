@@ -2331,13 +2331,13 @@ msgid "Troubleshooting"
 msgstr "Fehlerbehebung"
 
 #: ../Help/data/messages:191
-msgid "If you have any question, don't hesitate to ask on our forum."
+msgid "If you have any question, don't hesitate to ask on our Github Page."
 msgstr ""
 "Wenn Sie irgendeine Frage haben sollten, zögern Sie bitte nicht, in unserem "
 "Forum zu fragen."
 
 #: ../Help/data/messages:193
-msgid "Forum"
+msgid "Discussions"
 msgstr "Forum"
 
 #: ../Help/data/messages:195

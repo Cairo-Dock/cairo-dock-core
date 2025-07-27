@@ -2077,12 +2077,12 @@ msgid "Troubleshooting"
 msgstr "Αντιμετώπιση Προβλημάτων"
 
 #: ../Help/data/messages:191
-msgid "If you have any question, don't hesitate to ask on our forum."
+msgid "If you have any question, don't hesitate to ask on our Github Page."
 msgstr ""
 "Αν έχετε οποιαδήποτε ερώτηση μη διστάσετε να ρωτήσετε στο φόρουμ μας."
 
 #: ../Help/data/messages:193
-msgid "Forum"
+msgid "Discussions"
 msgstr "Φόρουμ"
 
 #: ../Help/data/messages:195

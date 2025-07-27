@@ -2103,11 +2103,11 @@ msgid "Troubleshooting"
 msgstr "Solució de problemes"
 
 #: ../Help/data/messages:191
-msgid "If you have any question, don't hesitate to ask on our forum."
+msgid "If you have any question, don't hesitate to ask on our Github Page."
 msgstr ""
 
 #: ../Help/data/messages:193
-msgid "Forum"
+msgid "Discussions"
 msgstr "Fòrum"
 
 #: ../Help/data/messages:195

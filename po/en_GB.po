@@ -2238,12 +2238,12 @@ msgid "Troubleshooting"
 msgstr "Troubleshooting"
 
 #: ../Help/data/messages:191
-msgid "If you have any question, don't hesitate to ask on our forum."
-msgstr "If you have any question, don't hesitate to ask on our forum."
+msgid "If you have any question, don't hesitate to ask on our Github Page."
+msgstr "If you have any question, don't hesitate to ask on our Github Page."
 
 #: ../Help/data/messages:193
-msgid "Forum"
-msgstr "Forum"
+msgid "Discussions"
+msgstr "Discussions"
 
 #: ../Help/data/messages:195
 msgid "Our wiki can also help you, it is more complete on some points."

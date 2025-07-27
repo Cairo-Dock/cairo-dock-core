@@ -2238,11 +2238,11 @@ msgid "Troubleshooting"
 msgstr "Hibaelhárítás"
 
 #: ../Help/data/messages:191
-msgid "If you have any question, don't hesitate to ask on our forum."
+msgid "If you have any question, don't hesitate to ask on our Github Page."
 msgstr "Ha bármi kérdése van, bátran kérdezzen fórumunkon."
 
 #: ../Help/data/messages:193
-msgid "Forum"
+msgid "Discussions"
 msgstr "Fórum"
 
 #: ../Help/data/messages:195

@@ -1966,11 +1966,11 @@ msgid "Troubleshooting"
 msgstr "疑難排解"
 
 #: ../Help/data/messages:191
-msgid "If you have any question, don't hesitate to ask on our forum."
+msgid "If you have any question, don't hesitate to ask on our Github Page."
 msgstr "假如您有任何的疑問，不要猶豫，請到我們的論壇上面發問。"
 
 #: ../Help/data/messages:193
-msgid "Forum"
+msgid "Discussions"
 msgstr "論壇"
 
 #: ../Help/data/messages:195

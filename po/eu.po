@@ -2239,12 +2239,12 @@ msgid "Troubleshooting"
 msgstr "Arazoen konponketa"
 
 #: ../Help/data/messages:191
-msgid "If you have any question, don't hesitate to ask on our forum."
+msgid "If you have any question, don't hesitate to ask on our Github Page."
 msgstr ""
 "Edozein galdera badaukazu, ez izan zalantzarik eta galdetu gure foroan."
 
 #: ../Help/data/messages:193
-msgid "Forum"
+msgid "Discussions"
 msgstr "Foroa"
 
 #: ../Help/data/messages:195

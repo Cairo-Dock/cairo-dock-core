@@ -2053,11 +2053,11 @@ msgid "Troubleshooting"
 msgstr "Riešenie problémov"
 
 #: ../Help/data/messages:191
-msgid "If you have any question, don't hesitate to ask on our forum."
+msgid "If you have any question, don't hesitate to ask on our Github Page."
 msgstr "Ak máte akékoľvek otázky, neváhajte a opýtajte sa na našom fóre."
 
 #: ../Help/data/messages:193
-msgid "Forum"
+msgid "Discussions"
 msgstr "Fórum"
 
 #: ../Help/data/messages:195

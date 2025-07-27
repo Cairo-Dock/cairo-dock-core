@@ -2221,13 +2221,13 @@ msgid "Troubleshooting"
 msgstr "Проналажење решења"
 
 #: ../Help/data/messages:191
-msgid "If you have any question, don't hesitate to ask on our forum."
+msgid "If you have any question, don't hesitate to ask on our Github Page."
 msgstr ""
 "Ако имате било које питање, немојте се устручавати да поставите питање на "
 "форуму."
 
 #: ../Help/data/messages:193
-msgid "Forum"
+msgid "Discussions"
 msgstr "Форум"
 
 #: ../Help/data/messages:195

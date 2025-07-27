@@ -2067,11 +2067,11 @@ msgid "Troubleshooting"
 msgstr "疑难解答"
 
 #: ../Help/data/messages:191
-msgid "If you have any question, don't hesitate to ask on our forum."
+msgid "If you have any question, don't hesitate to ask on our Github Page."
 msgstr "如果您有任何问题，欢迎前来我们的论坛询问。"
 
 #: ../Help/data/messages:193
-msgid "Forum"
+msgid "Discussions"
 msgstr "论坛"
 
 #: ../Help/data/messages:195

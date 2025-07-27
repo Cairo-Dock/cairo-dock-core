@@ -2229,13 +2229,13 @@ msgid "Troubleshooting"
 msgstr "Пошук і усунення проблем"
 
 #: ../Help/data/messages:191
-msgid "If you have any question, don't hesitate to ask on our forum."
+msgid "If you have any question, don't hesitate to ask on our Github Page."
 msgstr ""
 "Якщо у вас виникають будь-які питання, не соромтеся запитувати про це на "
 "нашому форумі."
 
 #: ../Help/data/messages:193
-msgid "Forum"
+msgid "Discussions"
 msgstr "Форум"
 
 #: ../Help/data/messages:195

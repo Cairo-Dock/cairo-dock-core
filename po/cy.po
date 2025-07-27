@@ -1926,11 +1926,11 @@ msgid "Troubleshooting"
 msgstr "Datrys problemau"
 
 #: ../Help/data/messages:191
-msgid "If you have any question, don't hesitate to ask on our forum."
+msgid "If you have any question, don't hesitate to ask on our Github Page."
 msgstr ""
 
 #: ../Help/data/messages:193
-msgid "Forum"
+msgid "Discussions"
 msgstr "Fforwm"
 
 #: ../Help/data/messages:195

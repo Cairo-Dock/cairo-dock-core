@@ -2215,11 +2215,11 @@ msgid "Troubleshooting"
 msgstr "Feilsøking"
 
 #: ../Help/data/messages:191
-msgid "If you have any question, don't hesitate to ask on our forum."
+msgid "If you have any question, don't hesitate to ask on our Github Page."
 msgstr "Ikkje nøl med å spørje foruma våre viss du lurer på noka."
 
 #: ../Help/data/messages:193
-msgid "Forum"
+msgid "Discussions"
 msgstr "Forum"
 
 #: ../Help/data/messages:195
