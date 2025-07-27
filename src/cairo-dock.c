@@ -115,7 +115,9 @@ extern gboolean g_bForceWayland;
 extern gboolean g_bForceX11;
 
 static gboolean s_bSucessfulLaunch = FALSE;
-static GString *s_pLaunchCommand = NULL;
+static char **s_argv = NULL;
+static int s_argc = 0;
+static int s_argc_max = 0;
 static gchar *s_cLastVersion = NULL;
 static gchar *s_cDefaulBackend = NULL;
 static gint s_iGuiMode = 0;  // 0 = simple mode, 1 = advanced mode
@@ -190,14 +192,20 @@ static void _cairo_dock_quit (G_GNUC_UNUSED int signal)
 static void _cairo_dock_intercept_signal (int signal)
 {
 	// Note: we should not use any stdio in a signal handler -- but it is worth the risk to give some diagnostic at least...
-	cd_warning ("Cairo-Dock has crashed (sig %d).\nIt will be restarted now.\nFeel free to report this bug on glx-dock.org to help improving the dock!", signal);
+	cd_warning ("Cairo-Dock has crashed (sig %d).\nIt will be restarted now.\nFeel free to report this bug on https://github.com/Cairo-Dock/cairo-dock-core/issues to help improving the dock!", signal);
+	
+	char cCounter[12];
 	
 	// if a module is responsible, expose it to public shame.
 	if (g_pCurrentModule != NULL)
 	{
 		g_print ("The applet '%s' may be the culprit", g_pCurrentModule->pModule->pVisitCard->cModuleName);
 		if (! s_bSucessfulLaunch)  // else, be quiet.
-			g_string_append_printf (s_pLaunchCommand, " -x \"%s\"", g_pCurrentModule->pModule->pVisitCard->cModuleName);
+		{
+			s_argv[s_argc] = "-x"; // no need to use g_strdup, we will not return to main ()
+			s_argv[s_argc + 1] = (char*)g_pCurrentModule->pModule->pVisitCard->cModuleName;
+			s_argc += 2;
+		}
 	}
 	else
 	{
@@ -208,15 +216,26 @@ static void _cairo_dock_intercept_signal (int signal)
 	if (! s_bSucessfulLaunch)  // a crash on startup,
 	{
 		if (s_iNbCrashes < 2)  // the first 2 crashes, restart with a delay (in case we were launched too early on startup).
-			g_string_append (s_pLaunchCommand, " -w 2");  // 2s delay.
+		{
+			s_argv[s_argc] = "-w"; // no need to use g_strdup, we will not return to main ()
+			s_argv[s_argc + 1] = "2";
+			s_argc += 2;
+		}
 		else if (g_pCurrentModule == NULL || s_iNbCrashes == 3)  // crash and no culprit or 4th crash => start in maintenance mode.
-			g_string_append (s_pLaunchCommand, " -m");
-		g_string_append_printf (s_pLaunchCommand, " -q %d", s_iNbCrashes + 1);  // increment the first-crash counter.
+		{
+			s_argv[s_argc] = "-m";
+			s_argc++;
+		}
+		
+		// increment the first-crash counter.
+		snprintf (cCounter, sizeof (cCounter), "%d", s_iNbCrashes + 1);
+		s_argv[s_argc] = "-q";
+		s_argv[s_argc + 1] = cCounter;
+		s_argc += 2;
 	}  // else a random crash, respawn quietly.
 	
-	g_print ("restarting with '%s'...\n", s_pLaunchCommand->str);
-	execl ("/bin/sh", "/bin/sh", "-c", s_pLaunchCommand->str, (char *)NULL);  // on ne revient pas de cette fonction.
-	//execlp ("cairo-dock", "cairo-dock", s_pLaunchCommand->str, (char *)0);
+	// g_print ("restarting with '%s'...\n", s_pLaunchCommand->str);
+	execvp (s_argv[0], s_argv);
 	cd_warning ("Sorry, couldn't restart the dock");
 	_exit (1);
 }
@@ -291,7 +310,11 @@ static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
 int main (int argc, char** argv)
 {
 	//\___________________ build the command line used to respawn, and check if we have been launched from another life.
-	s_pLaunchCommand = g_string_new (argv[0]);
+	s_argc_max = argc + 8; // we add maximum 6 new parameters + NULL terminator
+	s_argv = g_new0 (char*, s_argc_max);
+	s_argv[0] = g_strdup (argv[0]);
+	s_argc = 1;
+	
 	int i;
 	for (i = 1; i < argc; i ++)
 	{
@@ -313,7 +336,8 @@ int main (int argc, char** argv)
 		}
 		else  // keep this option in the command line.
 		{
-			g_string_append_printf (s_pLaunchCommand, " %s", argv[i]);
+			s_argv[s_argc] = g_strdup (argv[i]);
+			s_argc++;
 		}
 	}
 	/* Crash: 5th crash: an applet has already been removed and the maintenance
@@ -1009,7 +1033,7 @@ int main (int argc, char** argv)
 	rsvg_term ();
 	#endif
 	xmlCleanupParser ();
-	g_string_free (s_pLaunchCommand, TRUE);
+	g_strfreev (s_argv);
 	
 	cd_message ("Bye bye !");
 	g_print ("\033[0m\n");
