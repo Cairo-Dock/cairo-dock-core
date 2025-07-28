@@ -84,6 +84,37 @@ void cairo_dock_freeze_docks (gboolean bFreeze)
 	s_bFrozenDock = bFreeze;  /// instead, try to connect to the motion-event and intercept it ...
 }
 
+
+void _dock_size_update_opengl (CairoDock *pDock)
+{
+	gldi_gl_container_set_ortho_view (CAIRO_CONTAINER (pDock));
+	
+	glClearAccum (0., 0., 0., 0.);
+	glClear (GL_ACCUM_BUFFER_BIT);
+	
+	if (pDock->iRedirectedTexture != 0)
+	{
+		int w, h;
+		if (pDock->container.bIsHorizontal)
+		{
+			w = pDock->container.iWidth;
+			h = pDock->container.iHeight;
+		}
+		else
+		{
+			w = pDock->container.iHeight;
+			h = pDock->container.iWidth;
+		}
+		_cairo_dock_delete_texture (pDock->iRedirectedTexture);
+		GdkWindow* gdkwindow = gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock));
+		gint scale = gdk_window_get_scale_factor (gdkwindow);
+		pDock->iRedirectedTexture = cairo_dock_create_texture_from_raw_data (NULL,
+			w * scale, h * scale);
+	}
+	
+	pDock->bNeedSizeUpdate = FALSE;
+}
+
 static gboolean _on_expose (G_GNUC_UNUSED GtkWidget *pWidget, cairo_t *pCairoContext, CairoDock *pDock)
 {
 	if (g_bUseOpenGL && pDock->pRenderer->render_opengl != NULL)  // OpenGL rendering
@@ -95,6 +126,13 @@ static gboolean _on_expose (G_GNUC_UNUSED GtkWidget *pWidget, cairo_t *pCairoCon
 		area.y = y1;
 		area.width = x2 - x1;
 		area.height = y2 - y1;
+		
+		if (pDock->bNeedSizeUpdate)
+		{
+			if (! gldi_gl_container_make_current (CAIRO_CONTAINER (pDock)))
+				return FALSE;
+			_dock_size_update_opengl (pDock);
+		}
 		
 		if (! gldi_gl_container_begin_draw_full (CAIRO_CONTAINER (pDock), area.x + area.y != 0 ? &area : NULL, TRUE))
 			return FALSE;
@@ -652,11 +690,24 @@ void gldi_dock_leave_synthetic (CairoDock *pDock)
 	_on_leave_notify (NULL, NULL, pDock);
 }
 
+static gboolean _hide_dock_idle (void *ptr)
+{
+	CairoDock *pDock = (CairoDock*)ptr;
+	pDock->iSidHideBack = 0;
+	gtk_widget_hide (pDock->container.pWidget);
+	return FALSE;
+}
+
 static gboolean _on_dock_unmap (GtkWidget* pWidget, G_GNUC_UNUSED GdkEvent* pEvent, CairoDock *pDock)
 {
 	// this event is only necessary on Wayland
 	// g_print ("_on_dock_unmap() for dock: %p (bIsMainDock : %d; bInside:%d)\n", pDock, pDock->bIsMainDock, pDock->container.bInside);
 	pDock->iMousePositionType = CAIRO_DOCK_MOUSE_OUTSIDE;
+	if (pDock->iRefCount > 0) // this is a subdock
+	{
+		// for some reason we need this to make gtk_widget_is_visible() work
+		if (!pDock->iSidHideBack) pDock->iSidHideBack = g_idle_add (_hide_dock_idle, pDock);
+	}
 	_on_leave_notify (pWidget, NULL, pDock);
 	return FALSE;
 }
@@ -1176,24 +1227,12 @@ static gboolean _on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, Ca
 		// update the GL context
 		if (g_bUseOpenGL)
 		{
-			if (bSizeUpdated) gldi_gl_container_resized (CAIRO_CONTAINER (pDock), pEvent->width, pEvent->height);
+			gldi_gl_container_resized (CAIRO_CONTAINER (pDock), pEvent->width, pEvent->height);
 			
 			if (! gldi_gl_container_make_current (CAIRO_CONTAINER (pDock)))
-				return FALSE;
-			
-			gldi_gl_container_set_ortho_view (CAIRO_CONTAINER (pDock));
-			
-			glClearAccum (0., 0., 0., 0.);
-			glClear (GL_ACCUM_BUFFER_BIT);
-			
-			if (pDock->iRedirectedTexture != 0)
-			{
-				_cairo_dock_delete_texture (pDock->iRedirectedTexture);
-				GdkWindow* gdkwindow = gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock));
-				gint scale = gdk_window_get_scale_factor (gdkwindow);
-				pDock->iRedirectedTexture = cairo_dock_create_texture_from_raw_data (NULL,
-					pEvent->width * scale, pEvent->height * scale);
-			}
+				pDock->bNeedSizeUpdate = TRUE;
+			else
+				_dock_size_update_opengl (pDock);
 		}
 		
 		cairo_dock_calculate_dock_icons (pDock);
@@ -2311,7 +2350,7 @@ void gldi_dock_init_internals (CairoDock *pDock)
 			G_CALLBACK (_on_dock_unmap),
 			pDock);
 	
-	gtk_widget_show_all (pDock->container.pWidget);
+	if (!pDock->iRefCount) gtk_widget_show_all (pDock->container.pWidget);
 }
 
 
@@ -2344,7 +2383,7 @@ static gboolean _move_resize_dock (CairoDock *pDock)
 {
 	gldi_container_move_resize_dock (pDock);
 	pDock->iSidMoveResize = 0;
-	if (gldi_container_is_wayland_backend ())
+	if (gldi_container_is_wayland_backend () && gtk_widget_get_mapped (pDock->container.pWidget))
 	{
 		/// On Wayland, the compositor is not required to send a configure
 		/// event if the position of a view changes but not its size:

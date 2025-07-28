@@ -289,6 +289,7 @@ struct _CairoDock {
 	//\_______________ OpenGL.
 	GLuint iRedirectedTexture;
 	GLuint iFboId;
+	gboolean bNeedSizeUpdate; // set to TRUE whether we could not do size-related updated in the configure handler
 	
 	/// any data necessary for the dock visibility backend to work -- managed by the backend
 	gpointer pVisibilityData;
