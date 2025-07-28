@@ -193,6 +193,11 @@ void gldi_window_get_menu_address (GldiWindowActor *actor, char **service_name, 
 
 GldiWindowActor *gldi_window_pick (GtkWindow *pParentWindow);
 
+/** Get all currently managed windows as mebers of a GPtrArray.
+ *@return a newly allocated GPtrArray with all windows (the order is unspecified); the caller should
+	free this with g_ptr_array_free()
+ */
+GPtrArray *gldi_window_manager_get_all (void);
 
 /* WM capabilities -- use cases outside of cairo-dock-windows-manager.c (especially plugins)
  * should check these before using the corresponding fields */

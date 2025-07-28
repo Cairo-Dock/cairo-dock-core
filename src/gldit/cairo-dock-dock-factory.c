@@ -675,11 +675,14 @@ static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 			return GLDI_NOTIFICATION_INTERCEPT;
 	}*/
 	
-	gboolean bStartAnimation = FALSE;
-	gldi_object_notify (pDock, NOTIFICATION_LEAVE_DOCK, pDock, &bStartAnimation);
-	if (bStartAnimation)
-		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
-	
+	if (gtk_widget_get_mapped (pDock->container.pWidget))
+	{
+		gboolean bStartAnimation = FALSE;
+		gldi_object_notify (pDock, NOTIFICATION_LEAVE_DOCK, pDock, &bStartAnimation);
+		if (bStartAnimation)
+			cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
+	}
+
 	return TRUE;
 }
 

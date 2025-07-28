@@ -309,9 +309,8 @@ static void cairo_dock_destroy_class_subdock (const gchar *cClass)
 	pClassAppli->cDockName = NULL;
 }
 
-
-static gchar *_cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *cClassName,
-	const gchar *cFallbackClass, const gchar *cWmClass, gboolean bUseWmClass, CairoDockClassAppli **pClassAppli);
+static gchar *_cairo_dock_register_class_full (const gchar *cSearchTerm, const gchar *cFallbackClass, const gchar *cWmClass,
+	gboolean bUseWmClass, gboolean bCreateAlways, gboolean bIsDesktopFile, CairoDockClassAppli **pResult);
 
 gboolean cairo_dock_add_appli_icon_to_class (Icon *pIcon)
 {
@@ -341,15 +340,15 @@ gboolean cairo_dock_add_appli_icon_to_class (Icon *pIcon)
 		 * WM_CLASS(STRING) = "io.github.quodlibet.ExFalso", "Exfalso"
 		 * (where the first string is wm_name and corresponds to the correct desktop file ID)
 		 */
-		char *cClass = _cairo_dock_register_class_full (NULL, pIcon->cClass,
-			pIcon->pAppli->cWmName, pIcon->pAppli->cWmClass, FALSE, &pClassAppli);
+		char *cClass = _cairo_dock_register_class_full (pIcon->cClass, pIcon->pAppli->cWmName,
+			pIcon->pAppli->cWmClass, FALSE, TRUE, FALSE, &pClassAppli);
 		if (cClass) g_free (cClass);
 		if (!pClassAppli) return FALSE; // should not happen
 	}
 
 	if (pIcon->pAppInfo) gldi_object_unref (GLDI_OBJECT (pIcon->pAppInfo));
-	pIcon->pAppInfo = pClassAppli->app; // should be not null
-	gldi_object_ref (GLDI_OBJECT (pIcon->pAppInfo));
+	pIcon->pAppInfo = pClassAppli->app; // can be null if no .desktop file was found
+	if (pIcon->pAppInfo) gldi_object_ref (GLDI_OBJECT (pIcon->pAppInfo));
 	//!! TODO: handle pCustomLauncher here? (or in applications-facility?)
 	//!! this is needed for shift + click and similar to use the correct command if 
 	//!! multiple icons are added (if only one, the launcher icon will take over)
@@ -1764,8 +1763,10 @@ const CairoDockImageBuffer *cairo_dock_get_class_image_buffer (const gchar *cCla
  * 
  * If bOnlyExact, only the given string is searched (both among filenames and
  * StartupWMClass keys), and heuristics are not attempted.
+ * 
+ * If bIsDesktopFile, cDekstopFile can be an actual filename and is processed accordingly.
  */
-static GDesktopAppInfo *_search_desktop_file (const gchar *cDesktopFile, gboolean bOnlyExact)
+static GDesktopAppInfo *_search_desktop_file (const gchar *cDesktopFile, gboolean bOnlyExact, gboolean bIsDesktopFile)
 {
 	if (cDesktopFile == NULL)
 		return NULL;
@@ -1773,6 +1774,11 @@ static GDesktopAppInfo *_search_desktop_file (const gchar *cDesktopFile, gboolea
 	gboolean bPath = FALSE;
 	if (*cDesktopFile == '/') 
 	{
+		if (!bIsDesktopFile)
+		{
+			cd_warning ("Got absolute path, but bIsDesktopFile == FALSE!\n");
+			bIsDesktopFile = TRUE;
+		}
 		if (g_file_test (cDesktopFile, G_FILE_TEST_EXISTS))  // it's a path and it exists.
 		{
 			GDesktopAppInfo *app = g_desktop_app_info_new (cDesktopFile);
@@ -1784,16 +1790,19 @@ static GDesktopAppInfo *_search_desktop_file (const gchar *cDesktopFile, gboolea
 		bPath = TRUE;
 	}
 	
-	// remove the .desktop suffix and convert to lower case if it is present
-	// note: if cDesktopFile does not end with ".desktop", then it has been
-	// processed (and converted to lower case) before
-	gchar *suffix = g_strrstr (cDesktopFile, ".desktop");
-	if (suffix)
-	{
-		gchar *to_free2 = tmp_to_free;
-		tmp_to_free = g_ascii_strdown (cDesktopFile, suffix - cDesktopFile);
-		cDesktopFile = tmp_to_free;
-		g_free (to_free2);
+	if (bIsDesktopFile)
+		{
+		// remove the .desktop suffix and convert to lower case if it is present
+		// note: if cDesktopFile does not end with ".desktop", then it has been
+		// processed (and converted to lower case) before
+		gchar *suffix = g_strrstr (cDesktopFile, ".desktop");
+		if (suffix)
+		{
+			gchar *to_free2 = tmp_to_free;
+			tmp_to_free = g_ascii_strdown (cDesktopFile, suffix - cDesktopFile);
+			cDesktopFile = tmp_to_free;
+			g_free (to_free2);
+		}
 	}
 	
 	// normal case: we have the correct name
@@ -2046,15 +2055,16 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 
 
 /** Register an application class from apps installed on the system -- internal version.
-* @param cDesktopFile desktop file path or name to look for.
-* @param cClassName class name or app-id (from the WM) to look for after preprocessing with
-* 	cairo_dock_guess_class () or gldi_window_parse_class () (i.e. should be lowercase and suffices removed).
+* @param cSearchTerm class name to search for; can be desktop file path or class name or app-id;
+* 	preprocessed accordingly with cairo_dock_guess_class () or gldi_window_parse_class ()
 * @param cFallbackClass alternate class name to try looking up if cClassName is not found
 *   (e.g. on X11 the "name" part of WM_CLASS as some apps put the proper desktop file ID there). Should be
 *   converted to lowercase by the caller.
 * @param cWmClass StartupWMClass key from a custom launcher or the class / app-id as reported by the WM
 * 	without any processing
 * @param bUseWmClass if TRUE, and cWmClass != NULL, cWmClass will also added as a key
+* @param bCreateAlways if TRUE, a dummy class will be created if not found
+* @param bIsDesktopFile if TRUE, cSearchTerm is assumed to be the name of a .desktop file (and processed accordingly)
 * @param pResult store the found / created CairoDockClassAppli here for further processing
 * @return the class ID in a newly allocated string (can be used to retrieve class properties later).
 * 
@@ -2069,28 +2079,25 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 * is registered and (a copy of) cClassName is returned. Also, if an app is found, cClassName is always
 * added as a key (so if cClassName != NULL, the return value is always a copy of it).
 */
-static gchar *_cairo_dock_register_class_full (const gchar *cDesktopFile, const gchar *cClassName,
-	const gchar *cFallbackClass, const gchar *cWmClass, gboolean bUseWmClass, CairoDockClassAppli **pResult)
+static gchar *_cairo_dock_register_class_full (const gchar *cSearchTerm, const gchar *cFallbackClass, const gchar *cWmClass,
+	gboolean bUseWmClass, gboolean bCreateAlways, gboolean bIsDesktopFile, CairoDockClassAppli **pResult)
 {
-	g_return_val_if_fail (cDesktopFile != NULL || cClassName != NULL, NULL);
-	//g_print ("%s (%s, %s, %s)\n", __func__, cDesktopFile, cClassName, cWmClass);
-	if (cDesktopFile && cClassName)
-		cd_warning ("both cDesktopFile and cClassName given, only one will be used!");
-
-	//\__________________ if the class is already registered and filled, quit.
-	gchar *cClass = cClassName ? g_strdup (cClassName) : NULL;
+	g_return_val_if_fail (cSearchTerm != NULL, NULL);
+	
+	gchar *cClass = NULL;
 	CairoDockClassAppli *pClassAppli = NULL;
 	
+	//\__________________ if the class is already registered and filled, quit.
 	// note: in many cases, this will be non-NULL (if we encountered cClass before but did not register it)
-	pClassAppli = _cairo_dock_lookup_class_appli (cClass?cClass:cDesktopFile);
+	pClassAppli = _cairo_dock_lookup_class_appli (cSearchTerm);
 	if (!pClassAppli && cFallbackClass)
 	{
 		pClassAppli = _cairo_dock_lookup_class_appli (cFallbackClass);
 		if (pClassAppli)
 		{
 			// save the original class key as well (takes ownership of cClass)
-			g_hash_table_insert (s_hAltClass, cClass ? cClass : g_strdup (cDesktopFile), pClassAppli);
-			// adjust the return value (for line 2101)
+			g_hash_table_insert (s_hAltClass, g_strdup (cSearchTerm), pClassAppli);
+			// adjust the return value (for line 2114)
 			cClass = g_strdup (cFallbackClass);
 		}
 	}
@@ -2104,7 +2111,7 @@ static gchar *_cairo_dock_register_class_full (const gchar *cDesktopFile, const 
 			g_hash_table_insert (s_hAltClass, g_strdup (cWmClass), pClassAppli);
 		//g_print ("%s --> %s\n", cClass, pClassAppli->cStartupWMClass);
 		if (pResult) *pResult = pClassAppli;
-		return cClass ? cClass : g_strdup (cDesktopFile);
+		return cClass ? cClass : g_strdup (cSearchTerm);
 	}
 	
 	if (cWmClass)
@@ -2124,16 +2131,16 @@ static gchar *_cairo_dock_register_class_full (const gchar *cDesktopFile, const 
 	{
 		// in this case, we do a two-stage search: first we try exact matches, then using heuristics
 		// this is to avoid edge cases where cFallbackClass would be an exact match
-		app = _search_desktop_file (cDesktopFile?cDesktopFile:cClass, TRUE);
+		app = _search_desktop_file (cSearchTerm, TRUE, bIsDesktopFile);
 		if (!app)
 		{
-			app = _search_desktop_file (cFallbackClass, TRUE);
+			app = _search_desktop_file (cFallbackClass, TRUE, FALSE);
 			if (!app && cWmClass)
 			{
 				// note: cWmClass can contain upper-case characters, but we only
 				// store lower-case versions
 				gchar *tmp = g_ascii_strdown (cWmClass, -1);
-				app = _search_desktop_file (tmp, TRUE);
+				app = _search_desktop_file (tmp, TRUE, FALSE);
 				g_free (tmp);
 			}
 		}
@@ -2141,18 +2148,20 @@ static gchar *_cairo_dock_register_class_full (const gchar *cDesktopFile, const 
 	
 	if (!app)
 	{
-		app = _search_desktop_file (cDesktopFile?cDesktopFile:cClass, FALSE);
+		//!! TODO: maybe we should not allow heuristics for .desktop file names?
+		/// (e.g. should "terminal.desktop" match "org.gnome.Terminal.desktop" ?)
+		app = _search_desktop_file (cSearchTerm, FALSE, bIsDesktopFile);
 		if (!app)
 		{
 			if (cFallbackClass)
 			{
-				app = _search_desktop_file (cFallbackClass, FALSE);
+				app = _search_desktop_file (cFallbackClass, FALSE, FALSE);
 			}
 			else if (cWmClass)
 			{
 				// if cFallbackClass != NULL, we did this search already above
 				gchar *tmp = g_ascii_strdown (cWmClass, -1);
-				app = _search_desktop_file (tmp, TRUE);
+				app = _search_desktop_file (tmp, TRUE, FALSE);
 				g_free (tmp);
 			}
 		}
@@ -2160,14 +2169,14 @@ static gchar *_cairo_dock_register_class_full (const gchar *cDesktopFile, const 
 	
 	if (!app)  // couldn't find the .desktop
 	{
-		if (cClass != NULL)  // make a class anyway to store the few info we have.
+		if (bCreateAlways)  // make a class anyway to store the few info we have.
 		{
 			if (!pClassAppli)
 			{
 				pClassAppli = g_new0 (CairoDockClassAppli, 1);
-				g_hash_table_insert (s_hClassTable, g_strdup (cClass), pClassAppli);
+				g_hash_table_insert (s_hClassTable, g_strdup (cSearchTerm), pClassAppli);
 			}
-			else g_hash_table_insert (s_hAltClass, g_strdup (cClass), pClassAppli);
+			else g_hash_table_insert (s_hAltClass, g_strdup (cSearchTerm), pClassAppli);
 
 			if (pClassAppli->cStartupWMClass == NULL && cWmClass != NULL)
 				pClassAppli->cStartupWMClass = g_strdup (cWmClass);
@@ -2177,8 +2186,8 @@ static gchar *_cairo_dock_register_class_full (const gchar *cDesktopFile, const 
 				g_hash_table_insert (s_hAltClass, g_strdup (cWmClass), pClassAppli);
 			if (pResult) *pResult = pClassAppli;
 		}
-		cd_debug ("couldn't find the desktop file %s", cDesktopFile?cDesktopFile:cClass);
-		return cClass;  /// can be NULL
+		cd_debug ("couldn't find the desktop file %s", cSearchTerm);
+		return g_strdup (cSearchTerm);
 	}
 	
 	//\__________________ open it. -- TODO: use g_app_info_get_id () instead?
@@ -2192,7 +2201,7 @@ static gchar *_cairo_dock_register_class_full (const gchar *cDesktopFile, const 
 		cStartupWMClass = NULL;
 
 	/* We have four potential sources for the "class" of an application:
-	 * (1) cClassName -- the app-id / class reported for an open app -> cClass variable here
+	 * (1) cSearchTerm -- the app-id / class reported for an open app
 	 * 		(this is already parsed by gldi_window_parse_class () as opposed to the
 	 * 		 cWmClass variable which is the "raw" value reported by the WM
 	 * 		 or the StartupWMClass key read from our own config file)
@@ -2245,18 +2254,21 @@ static gchar *_cairo_dock_register_class_full (const gchar *cDesktopFile, const 
 		g_free (cAltClass2);
 		cAltClass2 = NULL;
 	}
-	if (cClass)
+	if (!bIsDesktopFile)
 	{
 		// cDesktopFileID != NULL here
-		if (!strcmp (cClass, cDesktopFileID))
+		if (!strcmp (cSearchTerm, cDesktopFileID))
 		{
-			g_free (cDesktopFileID);
-			cDesktopFileID = NULL;
+			// nothing to do, cClass can be NULL, we use cDesktopFileID instead
 		}
-		if (cAltClass2 && !strcmp (cClass, cAltClass2))
+		else
 		{
-			g_free (cAltClass2);
-			cAltClass2 = NULL;
+			if (cAltClass2 && !strcmp (cSearchTerm, cAltClass2))
+			{
+				cClass = cAltClass2;
+				cAltClass2 = NULL;
+			}
+			else cClass = g_strdup (cSearchTerm);
 		}
 	}
 	
@@ -2276,7 +2288,7 @@ static gchar *_cairo_dock_register_class_full (const gchar *cDesktopFile, const 
 			pClassAppli = pDesktopIDAppli;
 			if (cClass)
 			{
-				g_hash_table_insert (s_hAltClass, g_strdup(cClass), pClassAppli);
+				g_hash_table_insert (s_hAltClass, g_strdup (cClass), pClassAppli);
 				g_free (cDesktopFileID);
 			}
 			else cClass = cDesktopFileID;
@@ -2324,7 +2336,7 @@ static gchar *_cairo_dock_register_class_full (const gchar *cDesktopFile, const 
 	// not match what we have in reality)
 	if (cWmClass != NULL &&
 			(pClassAppli->cStartupWMClass == NULL || // no class was stored before
-			cDesktopFile != NULL)) // or, we are reading a launcher and there was a custom StartupWMClass set
+			bIsDesktopFile)) // or, we are reading a launcher and there was a custom StartupWMClass set
 	{
 		g_free (pClassAppli->cStartupWMClass);
 		pClassAppli->cStartupWMClass = g_strdup (cWmClass);
@@ -2354,17 +2366,14 @@ static gchar *_cairo_dock_register_class_full (const gchar *cDesktopFile, const 
 	return cClass;
 }
 
-gchar *cairo_dock_register_class2 (const gchar *cSearchTerm, const gchar *cWmClass, gboolean bCreateAlways)
+gchar *cairo_dock_register_class2 (const gchar *cSearchTerm, const gchar *cWmClass, gboolean bCreateAlways, gboolean bIsDesktopFile)
 {
-	if (bCreateAlways)
-		return _cairo_dock_register_class_full (NULL, cSearchTerm, NULL, cWmClass, TRUE, NULL);
-	else
-		return _cairo_dock_register_class_full (cSearchTerm, NULL, NULL, cWmClass, TRUE, NULL);
+	return _cairo_dock_register_class_full (cSearchTerm, NULL, cWmClass, TRUE, bCreateAlways, bIsDesktopFile, NULL);
 }
 
 gchar *cairo_dock_register_class (const gchar *cSearchTerm)
 {
-	return cairo_dock_register_class2 (cSearchTerm, NULL, FALSE);
+	return cairo_dock_register_class2 (cSearchTerm, NULL, FALSE, TRUE); // for compatibility, cSearchTerm can be a .desktop file name
 }
 
 

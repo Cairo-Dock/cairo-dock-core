@@ -46,6 +46,12 @@ struct _GldiWaylandWindowActor {
 	gboolean close_pending; // this window has been closed
 	gboolean unfocused_pending; // this window has lost focus
 	
+	int stacking_order_pending; // pending stacking order (e.g. if it was activated)
+	int pending_viewport_x, pending_viewport_y;
+	GtkAllocation pending_window_geometry;
+	
+	int next_change_pending; // indicator of which changes need to be processed (used internally)
+	
 	gboolean init_done; // initial state has been configured
 	gboolean in_queue; // this actor has been added to the s_pending_queue
 };
@@ -77,6 +83,9 @@ void gldi_wayland_wm_activated (GldiWaylandWindowActor *wactor, gboolean activat
 
 void gldi_wayland_wm_closed (GldiWaylandWindowActor *wactor, gboolean notify);
 
+void gldi_wayland_wm_viewport_changed (GldiWaylandWindowActor *wactor, int viewport_x, int viewport_y, gboolean notify);
+void gldi_wayland_wm_geometry_changed (GldiWaylandWindowActor *wactor, const GtkAllocation *new_geom, gboolean notify);
+
 void gldi_wayland_wm_done (GldiWaylandWindowActor *wactor);
 
 GldiWindowActor* gldi_wayland_wm_get_active_window ();
@@ -85,18 +94,21 @@ GldiWindowActor* gldi_wayland_wm_get_last_active_window ();
 
 GldiWindowActor* gldi_wayland_wm_pick_window (GtkWindow *pParentWindow);
 
-/** Change the stacking order such that actor is on top. Does not send
- *  a notification; the user should do that manually, or call one of
- *  the above functions with notify == TRUE.
+/** Change the stacking order such that actor is on top. Will schedule a
+ * notification (NOTIFICATION_WINDOW_Z_ORDER_CHANGED) that will be emitted
+ * when idle.
  *@param actor  The window to put on top.
  */
 void gldi_wayland_wm_stack_on_top (GldiWindowActor *actor);
+/** Schedule a NOTIFICATION_WINDOW_Z_ORDER_CHANGED notification. */
+void gldi_wayland_wm_notify_stack_change (void);
 
 typedef void (*GldiWaylandWMHandleDestroyFunc)(gpointer handle);
 void gldi_wayland_wm_init (GldiWaylandWMHandleDestroyFunc destroy_cb);
 
 GldiWaylandWindowActor* gldi_wayland_wm_new_toplevel (gpointer handle);
 
+void gldi_wayland_wm_set_pre_notify_function (void (*func)(void));
 
 
 #endif // CAIRO_DOCK_WAYLAND_WM_H

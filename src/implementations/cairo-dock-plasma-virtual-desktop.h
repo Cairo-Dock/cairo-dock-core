@@ -27,9 +27,10 @@
 gboolean gldi_plasma_virtual_desktop_match_protocol (uint32_t id, const char *interface, uint32_t version);
 gboolean gldi_plasma_virtual_desktop_try_init (struct wl_registry *registry);
 
-/// Try to get the index of a virtual desktop with the associated ID
-/// (returns -1 if not found)
-int gldi_plasma_virtual_desktop_get_index (const char *desktop_id);
+/// Try to get the coordinates of a virtual desktop with the associated ID.
+/// Note: this might return coordinates that have not been announced yet,
+/// so use it only to call gldi_wayland_wm_viewport_changed ()
+gboolean gldi_plasma_virtual_desktop_get_coords (const char *desktop_id, int *x, int *y);
 
 /// Get the ID of the virtual desktop with the given index (or NULL if
 /// out of range). The returned string is owned by the virtual desktop
