@@ -119,6 +119,7 @@ gchar *_get_default_system_font (void)
 	{
 		if (g_iDesktopEnv == CAIRO_DOCK_GNOME)
 		{
+			//!! TODO: use GSettings directly !!
 			const char * const args[] = {"gsettings", "get", "org.gnome.desktop.interface", "font-name", NULL};
 			s_cFontName = cairo_dock_launch_command_argv_sync_with_stderr (args, FALSE);  // GTK3
 			cd_debug ("s_cFontName: %s", s_cFontName);

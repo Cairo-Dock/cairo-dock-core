@@ -315,8 +315,8 @@ _Controling the screen brightness =
 
 #[@pkgdatadir@/icons/icon-behavior.svg]
 [Troubleshooting]
-#W[Forum] If you have any question, don't hesitate to ask on our forum.
-forum=http://forum.glx-dock.org
+#W[Discussions] If you have any question, don't hesitate to ask on our Github Page.
+discussions=https://github.com/Cairo-Dock/cairo-dock-core/discussions
 #W[Wiki] Our wiki can also help you, it is more complete on some points.
 wiki=https://github.com/Cairo-Dock/cairo-dock-core/wiki
 
@@ -372,16 +372,16 @@ dustbin=
 frame_project=
 
 #> We value your help! If you see a bug, if you think something could be improved,
-#or if you just made a dream about the dock, pay us a visit on glx-dock.org.
+#or if you just made a dream about the dock, pay us a visit on https://github.com/Cairo-Dock/cairo-dock-core.
 #English (and others!) speakers are welcome, so don’t be shy ! ;-)
 #
 #If you made a theme for the dock or one of the applet, and want to share it, we’ll be happy to integrate it on our server !
 help=
 #W[Documentation] If you wish to develop an applet, a complete documentation is available here.
-doc=http://doc.glx-dock.org
+doc=https://github.com/Cairo-Dock/cairo-dock-core/wiki/Writing-an-applet
 #W[DBus API] If you wish to develop an applet in Python, Perl or any other language,
 #or to interact with the dock in any kind of way, a full DBus API is described here.
-dbus=http://dbus.glx-dock.org
+dbus=https://github.com/Cairo-Dock/cairo-dock-core/wiki/DBus-interface
 #>
 #
 #The Cairo-Dock Team
@@ -390,11 +390,11 @@ team=
 #F [Websites]
 frame_website=
 #W[Community site] Problems? Suggestions? Just want to talk to us? Come on over!
-community_site=http://glx-dock.org
+community_site=https://github.com/Cairo-Dock/cairo-dock-core/discussions
 #W[Development site] Find the latest version of Cairo-Dock here !
 dev_site=https://github.com/Cairo-Dock/cairo-dock-core
 #W[Cairo-Dock-Plug-ins-Extras] More applets available online!
-extras_site=http://extras.glx-dock.org
+extras_site=https://github.com/Cairo-Dock/cairo-dock-plug-ins-extras
 
 #F [Repositories]
 frame_repositories=

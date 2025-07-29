@@ -336,9 +336,11 @@ void gldi_container_move_to_rect (GldiContainer *pContainer,
 
 /** Calculate the parameters to pass to gldi_container_move_to_rect() to
  * 	poisition a child container on the given pContainer, pointing to pPointedIcon.
- * 	This can be used for subdocks, dialogs and menus. */
+ * 	This can be used for subdocks, dialogs and menus.
+ *  The bSkipLabel parameter controls whether to leave space for an icon's label on a horizontal dock
+ *  (should be TRUE for subdocks and dialogs, FALSE for menus). */
 void gldi_container_calculate_rect (const GldiContainer* pContainer, const Icon* pPointedIcon,
-			GdkRectangle *rect, GdkGravity* rect_anchor, GdkGravity* window_anchor);
+			GdkRectangle *rect, GdkGravity* rect_anchor, GdkGravity* window_anchor, gboolean bSkipLabel);
 
 /** Calculate the aimed point of sub-containers (menus and dialogs), based on
  * 	relative positioning. This can be used to point an arrow to the corresponding

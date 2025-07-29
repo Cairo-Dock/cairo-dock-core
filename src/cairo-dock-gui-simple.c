@@ -181,7 +181,12 @@ GtkWidget *cairo_dock_build_generic_gui_window2 (const gchar *cTitle, int iWidth
 {
 	//\_____________ make a new window.
 	GtkWidget *pMainWindow = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_icon_from_file (GTK_WINDOW (pMainWindow), GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, NULL);
+	GdkPixbuf *pIconPixbuf = cairo_dock_load_gdk_pixbuf (GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON, -1, -1);
+	if (pIconPixbuf)
+	{
+		gtk_window_set_icon (GTK_WINDOW (pMainWindow), pIconPixbuf);
+		g_object_unref (pIconPixbuf);
+	}
 	if (cTitle != NULL)
 		gtk_window_set_title (GTK_WINDOW (pMainWindow), cTitle);
 	

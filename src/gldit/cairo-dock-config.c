@@ -17,8 +17,11 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#define _POSIX_C_SOURCE 200809L // needed for O_CLOEXEC
+
 #include <math.h>
 #include <string.h>
+#include <fcntl.h>
 
 #include <gtk/gtk.h>
 
@@ -620,7 +623,15 @@ xmlDocPtr cairo_dock_open_xml_file (const gchar *cDataFilePath, const gchar *cRo
 	}
 	xmlInitParser ();
 	
-	xmlDocPtr doc = xmlParseFile (cDataFilePath);
+	int fd = open (cDataFilePath, O_RDONLY | O_CLOEXEC);
+	if (fd < 0)
+	{
+		g_set_error (erreur, 1, 1, "cannor open file '%s'", cDataFilePath);
+		*root_node = NULL;
+		return NULL;
+	}
+	xmlDocPtr doc = xmlReadFd (fd, cDataFilePath, NULL, 0);
+	close (fd);
 	if (doc == NULL)
 	{
 		g_set_error (erreur, 1, 1, "file '%s' is incorrect", cDataFilePath);

@@ -47,4 +47,4 @@ Order=4
 
 Icon Type=0
 Type=Application
-Origin=/usr/share/applications/gnome-calculator.desktop;kcalc.desktop
+Origin=org.gnome.Calculator.desktop;gnome-calculator.desktop;kcalc.desktop

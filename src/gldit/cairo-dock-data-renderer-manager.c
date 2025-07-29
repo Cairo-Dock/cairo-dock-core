@@ -138,10 +138,18 @@ gchar *cairo_dock_get_data_renderer_theme_path (const gchar *cRendererName, cons
 	if (pRecord->cThemeDirName == NULL && pRecord->cDistantThemeDirName == NULL)
 		return NULL;
 	
-	const gchar *cGaugeShareDir = g_strdup_printf (GLDI_SHARE_DATA_DIR"/%s", pRecord->cThemeDirName);
+	gchar *cThemePath = NULL;
+	gchar *cGaugeShareDir = g_strdup_printf (GLDI_SHARE_DATA_DIR"/%s", pRecord->cThemeDirName);
+#ifdef GLDI_PLUGINS_DATA_ROOT
+	cThemePath = cairo_dock_get_package_path (cThemeName, cGaugeShareDir, NULL, NULL, iType);
+	g_free (cGaugeShareDir);
+	if (cThemePath) return cThemePath;
+	cGaugeShareDir = g_strdup_printf (GLDI_PLUGINS_DATA_ROOT"/%s", pRecord->cThemeDirName);
+#endif
 	gchar *cGaugeUserDir = g_strdup_printf ("%s/%s", g_cExtrasDirPath, pRecord->cThemeDirName);
-	gchar *cThemePath = cairo_dock_get_package_path (cThemeName, cGaugeShareDir, cGaugeUserDir, pRecord->cDistantThemeDirName, iType);
+	cThemePath = cairo_dock_get_package_path (cThemeName, cGaugeShareDir, cGaugeUserDir, pRecord->cDistantThemeDirName, iType);
 	g_free (cGaugeUserDir);
+	g_free (cGaugeShareDir);
 	return cThemePath;
 }
 

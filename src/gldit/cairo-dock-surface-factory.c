@@ -471,6 +471,38 @@ GdkPixbuf *cairo_dock_load_gdk_pixbuf (const gchar *cImagePath, int iWidth, int 
 	return pixbuf;
 }
 
+GdkPixbuf *cairo_dock_load_gdk_pixbuf_with_max_size (const gchar *cImagePath, int iMaxWidth, int iMaxHeight)
+{
+	GdkPixbuf *pPixbuf = cairo_dock_load_gdk_pixbuf (cImagePath, -1, -1);
+	if (!pPixbuf) return NULL;
+	
+	int w = gdk_pixbuf_get_width (pPixbuf);
+	int h = gdk_pixbuf_get_height (pPixbuf);
+	gboolean bScale = FALSE;
+	
+	if (iMaxWidth > 0 && w > iMaxWidth)
+	{
+		h *= ((double)iMaxWidth)/w;
+		w = iMaxWidth;
+		bScale = TRUE;
+	}
+	if (iMaxHeight > 0 && h > iMaxHeight)
+	{
+		w *= ((double)iMaxHeight)/h;
+		h = iMaxHeight;
+		bScale = TRUE;
+	}
+	
+	if (bScale)
+	{
+		GdkPixbuf *tmp = pPixbuf;
+		pPixbuf = gdk_pixbuf_scale_simple (tmp, w, h, GDK_INTERP_BILINEAR);
+		g_object_unref (tmp);
+	}
+	
+	return pPixbuf;
+}
+
 static cairo_status_t _cairo_read_func (void *ptr, unsigned char *data, unsigned int length)
 {
 	FILE *f = (FILE*)ptr;

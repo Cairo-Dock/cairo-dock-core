@@ -93,7 +93,7 @@
  * This documentation presents the core library of Cairo-Dock: <i>libgldi</i> (GL Desktop Interface).
  *
  * It is useful if you want to write a plug-in, add new features in the core, or just love C.\n
- * Note: to write applets in any language very easily, see http://doc.glx-dock.org.
+ * Note: to write applets in any language very easily, see https://github.com/Cairo-Dock/cairo-dock-core/wiki/Writing-an-applet.
  *
  * It has a <b>decentralized conception</b> and is built of several modules: internal modules (\ref managers) and external modules (\ref modules) that can extend it.\n
  * It also has an \ref objects architecture.

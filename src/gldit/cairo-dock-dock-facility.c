@@ -967,7 +967,7 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 		GdkGravity rect_anchor = GDK_GRAVITY_NORTH;
 		GdkGravity subdock_anchor = GDK_GRAVITY_SOUTH;
 		gldi_container_calculate_rect (CAIRO_CONTAINER (pParentDock), pPointedIcon,
-			&rect, &rect_anchor, &subdock_anchor);
+			&rect, &rect_anchor, &subdock_anchor, TRUE);
 		gldi_container_move_to_rect (CAIRO_CONTAINER (pSubDock),
 			&rect, rect_anchor, subdock_anchor, GDK_ANCHOR_SLIDE, 0, 0);
 		// note: for some reason, we do not receive configure events at least on Wayland,

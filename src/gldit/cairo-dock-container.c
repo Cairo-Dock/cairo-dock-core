@@ -24,8 +24,9 @@
 #include <gtk/gtk.h>
 #include <GL/gl.h>
 
-#include "cairo-dock-icon-facility.h"  // cairo_dock_compute_icon_area
-#include "cairo-dock-dock-facility.h"  // cairo_dock_is_hidden
+#include "cairo-dock-icon-facility.h" // cairo_dock_compute_icon_area
+#include "cairo-dock-icon-manager.h"  // myIconsParam
+#include "cairo-dock-dock-facility.h" // cairo_dock_is_hidden
 #include "cairo-dock-dock-manager.h"  // gldi_dock_get
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-log.h"
@@ -392,7 +393,7 @@ void gldi_container_move_to_rect (GldiContainer *pContainer, const GdkRectangle 
 }
 
 void gldi_container_calculate_rect (const GldiContainer* pContainer, const Icon* pPointedIcon,
-	GdkRectangle *rect, GdkGravity* rect_anchor, GdkGravity* window_anchor)
+	GdkRectangle *rect, GdkGravity* rect_anchor, GdkGravity* window_anchor, gboolean bSkipLabel)
 {
 	if (! (pPointedIcon && pContainer) ) return;
 
@@ -406,11 +407,13 @@ void gldi_container_calculate_rect (const GldiContainer* pContainer, const Icon*
 		{
 			*rect_anchor = GDK_GRAVITY_NORTH;
 			*window_anchor = GDK_GRAVITY_SOUTH;
+			if (bSkipLabel) rect->y -= myIconsParam.iLabelSize;
 		}
 		else
 		{
 			*rect_anchor = GDK_GRAVITY_SOUTH;
 			*window_anchor = GDK_GRAVITY_NORTH;
+			if (bSkipLabel) rect->y += myIconsParam.iLabelSize;
 		}
 	}
 	else

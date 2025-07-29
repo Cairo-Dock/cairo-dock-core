@@ -308,7 +308,6 @@ static gboolean on_delete_async_widget (GtkWidget *pWidget, G_GNUC_UNUSED GdkEve
 
 static inline void _set_preview_image (const gchar *cPreviewFilePath, GtkImage *pPreviewImage, GtkWidget *pPreviewImageFrame)
 {
-	int iPreviewWidth, iPreviewHeight;
 	GtkRequisition requisition;
 	gtk_widget_get_preferred_size (GTK_WIDGET (pPreviewImage), &requisition, NULL);
 	requisition.width = CAIRO_DOCK_PREVIEW_WIDTH;
@@ -318,14 +317,8 @@ static inline void _set_preview_image (const gchar *cPreviewFilePath, GtkImage *
 	GdkWindow* gdkwindow = gldi_container_get_gdk_window (CAIRO_CONTAINER (g_pMainDock));
 	if (gdkwindow) scale = gdk_window_get_scale_factor (gdkwindow);
 
-	GdkPixbuf *pPreviewPixbuf = NULL;
-	if (gdk_pixbuf_get_file_info (cPreviewFilePath, &iPreviewWidth, &iPreviewHeight) != NULL)
-	{
-		iPreviewWidth = MIN (iPreviewWidth, CAIRO_DOCK_PREVIEW_WIDTH * scale);
-		iPreviewHeight = MIN (iPreviewHeight, CAIRO_DOCK_PREVIEW_HEIGHT * scale);
-		cd_debug ("preview : %dx%d => %dx%d", requisition.width, requisition.height, iPreviewWidth, iPreviewHeight);
-		pPreviewPixbuf = cairo_dock_load_gdk_pixbuf (cPreviewFilePath, iPreviewWidth, iPreviewHeight);
-	}
+	GdkPixbuf *pPreviewPixbuf = cairo_dock_load_gdk_pixbuf_with_max_size (cPreviewFilePath,
+		CAIRO_DOCK_PREVIEW_WIDTH * scale, CAIRO_DOCK_PREVIEW_HEIGHT * scale);
 	if (pPreviewPixbuf == NULL)
 	{
 		pPreviewPixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB,
@@ -1665,42 +1658,26 @@ GtkWidget *cairo_dock_widget_handbook_new (GldiModule *pModule)
 	gtk_box_pack_start (GTK_BOX (pTextBox), pLabel, FALSE, FALSE, 0);
 
 	// ModuleImage
-	int iPreviewWidth, iPreviewHeight;
-	GdkPixbuf *pPreviewPixbuf = NULL;
-	if (gdk_pixbuf_get_file_info (pModule->pVisitCard->cPreviewFilePath, &iPreviewWidth, &iPreviewHeight) != NULL)  // The return value is owned by GdkPixbuf and should not be freed.
+	int scale = 1;
+	GdkWindow* gdkwindow = gldi_container_get_gdk_window (CAIRO_CONTAINER (g_pMainDock));
+	if (gdkwindow) scale = gdk_window_get_scale_factor (gdkwindow);
+	GdkPixbuf *pPreviewPixbuf = cairo_dock_load_gdk_pixbuf_with_max_size (pModule->pVisitCard->cPreviewFilePath,
+		200 * scale, 200 * scale);
+	if (pPreviewPixbuf != NULL)
 	{
-		int scale = 1;
-		GdkWindow* gdkwindow = gldi_container_get_gdk_window (CAIRO_CONTAINER (g_pMainDock));
-		if (gdkwindow) scale = gdk_window_get_scale_factor (gdkwindow);
+		// ImageBox : Align the image on top.
+		GtkWidget *pImageBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_GUI_MARGIN);
+		gtk_box_pack_end (GTK_BOX (pTopHBox), pImageBox, FALSE, FALSE, CAIRO_DOCK_GUI_MARGIN);
 		
-		int w = 200 * scale, h = 200 * scale;
-		if (iPreviewWidth > w)
-		{
-			iPreviewHeight *= 1.*w/iPreviewWidth;
-			iPreviewWidth = w;
-		}
-		if (iPreviewHeight > h)
-		{
-			iPreviewWidth *= 1.*h/iPreviewHeight;
-			iPreviewHeight = h;
-		}
-		pPreviewPixbuf = cairo_dock_load_gdk_pixbuf (pModule->pVisitCard->cPreviewFilePath, iPreviewWidth, iPreviewHeight);
-		if (pPreviewPixbuf != NULL)
-		{
-			// ImageBox : Align the image on top.
-			GtkWidget *pImageBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_GUI_MARGIN);
-			gtk_box_pack_end (GTK_BOX (pTopHBox), pImageBox, FALSE, FALSE, CAIRO_DOCK_GUI_MARGIN);
-			
-			// Image Widget.
-			cairo_surface_t *surface = gdk_cairo_surface_create_from_pixbuf (pPreviewPixbuf, scale, NULL);
-			GtkWidget *pModuleImage = gtk_image_new_from_surface (surface);
-			cairo_surface_destroy (surface);
-			g_object_unref (pPreviewPixbuf);
-			
-			// Add a frame around the image.
-			GtkWidget *pImageFrame = cairo_dock_widget_image_frame_new (pModuleImage);
-			gtk_box_pack_start (GTK_BOX (pImageBox), pImageFrame, FALSE, FALSE, 0);
-		}
+		// Image Widget.
+		cairo_surface_t *surface = gdk_cairo_surface_create_from_pixbuf (pPreviewPixbuf, scale, NULL);
+		GtkWidget *pModuleImage = gtk_image_new_from_surface (surface);
+		cairo_surface_destroy (surface);
+		g_object_unref (pPreviewPixbuf);
+		
+		// Add a frame around the image.
+		GtkWidget *pImageFrame = cairo_dock_widget_image_frame_new (pModuleImage);
+		gtk_box_pack_start (GTK_BOX (pImageBox), pImageFrame, FALSE, FALSE, 0);
 	}
 	
 	return pFrame;

@@ -47,4 +47,4 @@ Order=2
 
 Icon Type=0
 Type=Application
-Origin=/usr/share/applications/libreoffice-calc.desktop;kspread.desktop;gnumeric.desktop;openoffice.org-calc.desktop
+Origin=libreoffice-calc.desktop;kspread.desktop;gnumeric.desktop;openoffice.org-calc.desktop

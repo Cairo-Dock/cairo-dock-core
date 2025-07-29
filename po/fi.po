@@ -1047,8 +1047,8 @@ msgstr ""
 msgid ""
 "The module '%s' has been deactivated because it may have caused some "
 "problems.\n"
-"You can reactivate it, if it happens again thanks to report it at http://glx-"
-"dock.org"
+"You can reactivate it, but if it happens again please report it at "
+"https://github.com/Cairo-Dock/cairo-dock-core/issues"
 msgstr ""
 
 #: ../src/cairo-dock.c:728
@@ -1078,7 +1078,7 @@ msgid ""
 "No plug-in were found.\n"
 "Plug-ins provide most of the functionalities (animations, applets, views, "
 "etc).\n"
-"See http://glx-dock.org for more information.\n"
+"See https://github.com/Cairo-Dock/cairo-dock-core/wiki for more information.\n"
 "There is almost no meaning in running the dock without them and it's "
 "probably due to a problem with the installation of these plug-ins.\n"
 "But if you really want to use the dock without these plug-ins, you can "
@@ -1090,7 +1090,7 @@ msgstr ""
 msgid ""
 "The module '%s' may have encountered a problem.\n"
 "It has been restored successfully, but if it happens again, please report it "
-"at http://glx-dock.org"
+"at https://github.com/Cairo-Dock/cairo-dock-core/issues"
 msgstr ""
 
 #: ../src/gldit/cairo-dock-applet-facility.h:254
@@ -1282,7 +1282,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Could not access remote file %s. Maybe the server is down.\n"
-"Please retry later or contact us at glx-dock.org."
+"Please retry later or contact us at https://github.com/Cairo-Dock/cairo-dock-core/issues"
 msgstr ""
 
 #: ../src/gldit/cairo-dock-themes-manager.c:376
@@ -1323,9 +1323,9 @@ msgstr ""
 msgid ""
 "Welcome in Cairo-Dock !\n"
 "This applet is here to help you start using the dock; just click on it.\n"
-"If you have any question/request/remark, please pay us a visit at http://glx-"
-"dock.org.\n"
-"Hope you will enjoy this soft !\n"
+"If you have any question/request/remark, please pay us a visit at\n"
+"https://github.com/Cairo-Dock/cairo-dock-core.\n"
+"Hope you will enjoy this software !\n"
 "  (you can now click on this dialog to close it)"
 msgstr ""
 
@@ -1940,11 +1940,11 @@ msgid "Troubleshooting"
 msgstr ""
 
 #: ../Help/data/messages:191
-msgid "If you have any question, don't hesitate to ask on our forum."
+msgid "If you have any question, don't hesitate to ask on our Github Page."
 msgstr ""
 
 #: ../Help/data/messages:193
-msgid "Forum"
+msgid "Discussions"
 msgstr ""
 
 #: ../Help/data/messages:195
@@ -2101,7 +2101,7 @@ msgstr ""
 msgid ""
 "We value your help! If you see a bug, if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on glx-dock.org.\n"
+"or if you just made a dream about the dock, pay us a visit on https://github.com/Cairo-Dock/cairo-dock-core.\n"
 "English (and others!) speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "

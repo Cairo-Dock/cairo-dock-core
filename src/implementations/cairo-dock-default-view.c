@@ -72,7 +72,7 @@ static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 		}
 	}
 	
-	pDock->iMaxDockHeight = (int) ((1 + myIconsParam.fAmplitude) * pDock->iMaxIconHeight * pDock->container.fRatio) + fLineWidth + myDocksParam.iFrameMargin + (pDock->container.bIsHorizontal ? myIconsParam.iLabelSize : 0);
+	pDock->iMaxDockHeight = (int) ceil ((1 + myIconsParam.fAmplitude) * pDock->iMaxIconHeight * pDock->container.fRatio) + fLineWidth + myDocksParam.iFrameMargin + (pDock->container.bIsHorizontal ? myIconsParam.iLabelSize : 0);
 	//g_print ("myIconsParam.iLabelSize : %d => %d\n", myIconsParam.iLabelSize, (int)pDock->iMaxDockHeight);
 
 	pDock->iDecorationsWidth = pDock->iMaxDockWidth;

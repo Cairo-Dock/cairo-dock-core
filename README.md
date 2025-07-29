@@ -3,7 +3,8 @@ Cairo-Dock
 
 Cairo-Dock is a pretty, light and convenient interface to your desktop, able to replace advantageously your system panel! It features multi-docks, taskbar, launchers and a lot of useful applets. Applets can be detached from the dock to act as desktop widgets. Numerous ready-to-use themes are available in 1 click, and can be easily customized at your convenience. It can use hardware acceleration to be very fast and low on CPU.
 
-[![Preview](http://download.tuxfamily.org/glxdock/communication/images/3.3/cd-panel-mix-600.jpg)](http://download.tuxfamily.org/glxdock/communication/images/3.3/cd-panel-mix.png)
+[![Preview](https://github.com/Cairo-Dock/glxdock-repository/blob/72c06bfa5b92b5bc6553d1e4b5f8590c690d713e/communication/images/3.4/cd-3.4.0-4-600.jpg)](https://github.com/Cairo-Dock/glxdock-repository/blob/72c06bfa5b92b5bc6553d1e4b5f8590c690d713e/communication/images/3.4/cd-3.4.0-4.png)
+
 Other screenshots are available at [Glx-Dock.org](http://www.glx-dock.org/mc_album.php?a=3).
 
 This project is split in 3 parts:
@@ -37,7 +38,7 @@ See also the original wiki for a lot of additional useful info: http://www.glx-d
 You can find: how to launch the dock at startup, how to customise it, how to resolve some recurrent problems (black background, messages at startup, etc.), how to help us, who we are, etc.
 A useful tutorial is also available to help you customize your dock: http://www.glx-dock.org/ww_page.php?p=Tutorial-Customisation&lang=en
 
-If you have other questions not solved on our wiki you can post them on our forum (in English or French): http://www.glx-dock.org/bg_forumlist.php
+If you have other questions not solved on our wiki you can post them on our [Github discussions page](https://github.com/Cairo-Dock/cairo-dock-core/discussions).
 
 Additional information specific to running Cairo-Dock under Wayland is available [here](README_Wayland.md).
 
@@ -45,8 +46,8 @@ Additional information specific to running Cairo-Dock under Wayland is available
 Join the project
 ----------------
 
-* Want to **HACK** into the dock or write an **APPLET**? see the complete C API here: http://doc.glx-dock.org
-* You don't like C and still want to write an **APPLET** for the dock or **CONTROL** it from a script or the terminal? see its powerful DBus API here: http://www.glx-dock.org/ww_page.php?p=Control_your_dock_with_DBus&lang=en
+* Want to **HACK** into the dock or write an **APPLET**? see the complete C API [here](https://github.com/Cairo-Dock/glxdock-repository/blob/main/docs/refman.pdf) (or just run the script `doc/generate-doc.sh`)
+* You don't like C and still want to write an **APPLET** for the dock or **CONTROL** it from a script or the terminal? see its powerful DBus API [for plugins](https://github.com/Cairo-Dock/cairo-dock-core/wiki/Writing-an-applet) and [for scripts](https://github.com/Cairo-Dock/cairo-dock-core/wiki/DBus-interface)
 * You have some **IDEAS / PROPOSITIONS**? You need some help to develop an applet? Feel free to use the Github issues or discussions, or post a topic on our forum! We'll be happy to answer you!
 * You want to **TRANSLATE** Cairo-Dock in your language? Use the 'Translations' tab in Launchpad, it's very simple to use it and helpful for us!
 

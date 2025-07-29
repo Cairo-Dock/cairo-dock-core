@@ -724,7 +724,7 @@ static void _place_dialog (CairoDialog *pDialog, GldiContainer *pContainer)
 		{
 			GdkRectangle rect = {0, 0, 1, 1};
 			GdkGravity rect_anchor = GDK_GRAVITY_NORTH, dialog_anchor = GDK_GRAVITY_SOUTH;
-			gldi_container_calculate_rect (pContainer, pPointedIcon, &rect, &rect_anchor, &dialog_anchor);
+			gldi_container_calculate_rect (pContainer, pPointedIcon, &rect, &rect_anchor, &dialog_anchor, TRUE);
 			gdouble fAlignX = 0.0;
 			
 			if (pContainer->bIsHorizontal == CAIRO_DOCK_VERTICAL)

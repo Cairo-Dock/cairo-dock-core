@@ -43,7 +43,7 @@
 #include "cairo-dock-gui-commons.h"
 #include "cairo-dock-icon-manager.h" // cairo_dock_search_icon_s_path
 
-#define CAIRO_DOCK_PLUGINS_EXTRAS_URL "http://extras.glx-dock.org"
+#define CAIRO_DOCK_PLUGINS_EXTRAS_URL "https://github.com/Cairo-Dock/cairo-dock-plug-ins-extras" // "http://extras.glx-dock.org"
 
 extern gchar *g_cCairoDockDataDir;
 
@@ -132,10 +132,11 @@ void cairo_dock_update_is_detached_widget (gboolean bIsDetached, GSList *pWidget
 }
 
 
-#define DISTANT_DIR "3.4.0"
+// #define DISTANT_DIR "3.4.0"
 gchar *cairo_dock_get_third_party_applets_link (void)
 {
-	return g_strdup_printf (CAIRO_DOCK_PLUGINS_EXTRAS_URL"/"DISTANT_DIR);
+	// return g_strdup_printf (CAIRO_DOCK_PLUGINS_EXTRAS_URL"/"DISTANT_DIR);
+	return g_strdup_printf (CAIRO_DOCK_PLUGINS_EXTRAS_URL);
 }
 
 

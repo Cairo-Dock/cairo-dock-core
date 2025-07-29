@@ -779,7 +779,7 @@ static void _popup_menu (GtkWidget *menu, const GdkEvent *event)
 			GdkRectangle rect = {0, 0, 1, 1};
 			GdkGravity rect_anchor = GDK_GRAVITY_NORTH;
 			GdkGravity menu_anchor = GDK_GRAVITY_SOUTH;
-			gldi_container_calculate_rect (pContainer, pIcon, &rect, &rect_anchor, &menu_anchor);
+			gldi_container_calculate_rect (pContainer, pIcon, &rect, &rect_anchor, &menu_anchor, FALSE);
 			
 			if (pParams->fAlign == 0.0 || pParams->fAlign == 1.0)
 			{

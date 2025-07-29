@@ -47,4 +47,4 @@ Order=3
 
 Icon Type=0
 Type=Application
-Origin=/usr/share/applications/libreoffice-impress.desktop;kpresenter.desktop;openoffice.org-impress.desktop;inkscape.desktop;gimp.desktop;krita.desktop;shotwell.desktop;f-spot.desktop;mtpaint.desktop
+Origin=libreoffice-impress.desktop;kpresenter.desktop;openoffice.org-impress.desktop;inkscape.desktop;gimp.desktop;krita.desktop;shotwell.desktop;f-spot.desktop;mtpaint.desktop

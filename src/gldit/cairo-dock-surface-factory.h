@@ -111,6 +111,16 @@ cairo_surface_t *cairo_dock_create_blank_surface_full (int iWidth, int iHeight, 
 */
 GdkPixbuf *cairo_dock_load_gdk_pixbuf (const gchar *cImagePath, int iWidth, int iHeight);
 
+/** Simple helper to read an image into a GdkPixbuf, constraining the maximum size to the given dimentions.
+*@param cImagePath complete path to the image.
+*@param iMaxWidth desired maximum width. If the loaded image is wider than this, it will be scaled to this width.
+*@param iMaxHeight desired maximum height. If the loaded image is taller than this, it will be scaled to this height.
+*@return the image loaded into a GdkPixbuf.
+* 
+* If both iWidth and iHeight are -1, the image is loaded at its natural size, otherwise it's scaled (preserving the aspect ratio).
+*/
+GdkPixbuf *cairo_dock_load_gdk_pixbuf_with_max_size (const gchar *cImagePath, int iMaxWidth, int iMaxHeight);
+
 /** Create a surface from any image.
 *@param cImagePath complete path to the image.
 *@param fMaxScale maximum zoom of the icon.
