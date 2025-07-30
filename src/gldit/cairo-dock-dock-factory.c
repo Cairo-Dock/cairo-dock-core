@@ -883,7 +883,7 @@ static gboolean _on_key_release (G_GNUC_UNUSED GtkWidget *pWidget,
 		//g_print ("release : pKey->keyval = %d\n", pKey->keyval);
 		if ((pKey->state & GDK_MOD1_MASK) && pKey->keyval == 0)  // On relache la touche ALT, typiquement apres avoir fait un ALT + clique gauche + deplacement.
 		{
-			if (pDock->iRefCount == 0 && pDock->iVisibility != CAIRO_DOCK_VISI_SHORTKEY)
+			if (pDock->iRefCount == 0 && pDock->iVisibility != CAIRO_DOCK_VISI_SHORTKEY && !gldi_container_is_wayland_backend ())
 				gldi_rootdock_write_gaps (pDock);
 		}
 	}
@@ -1074,7 +1074,7 @@ static gboolean _on_button_press (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventButt
 				}
 				else
 				{
-					if (pDock->iRefCount == 0 && pDock->iVisibility != CAIRO_DOCK_VISI_SHORTKEY)
+					if (pDock->iRefCount == 0 && pDock->iVisibility != CAIRO_DOCK_VISI_SHORTKEY && !gldi_container_is_wayland_backend ())
 						gldi_rootdock_write_gaps (pDock);
 				}
 				//g_print ("- apres clic : s_pIconClicked <- NULL\n");
