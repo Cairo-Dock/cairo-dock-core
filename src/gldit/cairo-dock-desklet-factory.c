@@ -258,14 +258,20 @@ static gboolean on_configure_desklet (G_GNUC_UNUSED GtkWidget* pWidget,
 	
 	int x = pEvent->x, y = pEvent->y;
 	//g_print ("new desklet position : (%d;%d)", x, y);
-	while (x < 0)  // on passe au referentiel du viewport de la fenetre; inutile de connaitre sa position, puisqu'ils ont tous la meme taille.
-		x += gldi_desktop_get_width();
-	while (x >= gldi_desktop_get_width())
-		x -= gldi_desktop_get_width();
-	while (y < 0)
-		y += gldi_desktop_get_height();
-	while (y >= gldi_desktop_get_height())
-		y -= gldi_desktop_get_height();
+	if (gldi_desktop_get_width () > 0)
+	{
+		while (x < 0)  // on passe au referentiel du viewport de la fenetre; inutile de connaitre sa position, puisqu'ils ont tous la meme taille.
+			x += gldi_desktop_get_width();
+		while (x >= gldi_desktop_get_width())
+			x -= gldi_desktop_get_width();
+	}
+	if (gldi_desktop_get_height () > 0)
+	{
+		while (y < 0)
+			y += gldi_desktop_get_height();
+		while (y >= gldi_desktop_get_height())
+			y -= gldi_desktop_get_height();
+	}
 	//g_print (" => (%d;%d)\n", x, y);
 	if (pDesklet->container.iWindowPositionX != x || pDesklet->container.iWindowPositionY != y)
 	{
