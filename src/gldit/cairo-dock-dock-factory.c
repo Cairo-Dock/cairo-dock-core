@@ -883,7 +883,7 @@ static gboolean _on_key_release (G_GNUC_UNUSED GtkWidget *pWidget,
 		//g_print ("release : pKey->keyval = %d\n", pKey->keyval);
 		if ((pKey->state & GDK_MOD1_MASK) && pKey->keyval == 0)  // On relache la touche ALT, typiquement apres avoir fait un ALT + clique gauche + deplacement.
 		{
-			if (pDock->iRefCount == 0 && pDock->iVisibility != CAIRO_DOCK_VISI_SHORTKEY)
+			if (pDock->iRefCount == 0 && pDock->iVisibility != CAIRO_DOCK_VISI_SHORTKEY && !gldi_container_is_wayland_backend ())
 				gldi_rootdock_write_gaps (pDock);
 		}
 	}
@@ -1074,7 +1074,7 @@ static gboolean _on_button_press (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventButt
 				}
 				else
 				{
-					if (pDock->iRefCount == 0 && pDock->iVisibility != CAIRO_DOCK_VISI_SHORTKEY)
+					if (pDock->iRefCount == 0 && pDock->iVisibility != CAIRO_DOCK_VISI_SHORTKEY && !gldi_container_is_wayland_backend ())
 						gldi_rootdock_write_gaps (pDock);
 				}
 				//g_print ("- apres clic : s_pIconClicked <- NULL\n");
@@ -1160,7 +1160,7 @@ static gboolean _on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, Ca
 		if (gldi_container_is_wayland_backend ())
 		{
 			// pEvent->x and pEvent->y are zero in this case, we fake the expected position
-			if (pDock->container.bDirectionUp) iNewY = gldi_dock_get_screen_height (pDock) - iNewHeight;
+			if (pDock->container.bDirectionUp) iNewY = MAX(0, gldi_dock_get_screen_height (pDock) - iNewHeight);
 			else iNewY = 0;
 			iNewX = 0;
 		}
@@ -1178,7 +1178,7 @@ static gboolean _on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, Ca
 		if (gldi_container_is_wayland_backend ())
 		{
 			// pEvent->x and pEvent->y are zero in this case, we fake the expected position
-			if (pDock->container.bDirectionUp) iNewY = gldi_dock_get_screen_width (pDock) - iNewHeight;
+			if (pDock->container.bDirectionUp) iNewY = MAX(0, gldi_dock_get_screen_width (pDock) - iNewHeight);
 			else iNewY = 0;
 			iNewX = 0;
 		}

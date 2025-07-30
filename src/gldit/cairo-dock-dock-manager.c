@@ -1086,10 +1086,19 @@ static void _raise_from_shortcut (G_GNUC_UNUSED const char *cKeyShortcut, G_GNUC
 	gldi_docks_foreach_root ((GFunc)_show_dock_at_mouse, NULL);
 }
 
+static unsigned int s_sidDesktopGeom = 0;
+
+static gboolean _reposition_root_docks_idle (void*)
+{
+	s_sidDesktopGeom = 0;
+	_reposition_root_docks (FALSE);  // FALSE <=> main dock included
+	return G_SOURCE_REMOVE;
+}
+
 static gboolean _on_screen_geometry_changed (G_GNUC_UNUSED gpointer data, gboolean bSizeHasChanged)
 {
-	if (bSizeHasChanged)
-		_reposition_root_docks (FALSE);  // FALSE <=> main dock included
+	if (bSizeHasChanged && !s_sidDesktopGeom)
+		s_sidDesktopGeom = g_idle_add (_reposition_root_docks_idle, NULL);
 	return GLDI_NOTIFICATION_LET_PASS;
 }
 
