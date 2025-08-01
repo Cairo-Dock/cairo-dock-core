@@ -1875,6 +1875,12 @@ static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 
 static gboolean _cairo_dock_dock_animation_loop (GldiContainer *pContainer)
 {
+	if (!gtk_widget_get_mapped (pContainer->pWidget))
+	{
+		pContainer->iSidGLAnimation = 0;
+		return FALSE;
+	}
+	
 	CairoDock *pDock = CAIRO_DOCK (pContainer);
 	gboolean bContinue = FALSE;
 	gboolean bUpdateSlowAnimation = FALSE;
