@@ -711,6 +711,13 @@ static void _reposition_one_root_dock (G_GNUC_UNUSED const gchar *cDockName, Cai
 {
 	if (pDock->iRefCount == 0 && ! (data && pDock->bIsMainDock))
 	{
+		if (g_desktopGeometry.iNbScreens == 0 || g_desktopGeometry.Xscreen.width == 0 ||
+			g_desktopGeometry.Xscreen.height == 0)
+		{
+			gtk_widget_hide (pDock->container.pWidget);
+			return;
+		}
+		
 		if (!pDock->bIsMainDock)
 			_get_root_dock_config (pDock);  // relit toute la conf.
 		gldi_container_set_screen (CAIRO_CONTAINER (pDock), pDock->iNumScreen); // this is a no-op on X11 (move_resize_dock () takes care of it below)
