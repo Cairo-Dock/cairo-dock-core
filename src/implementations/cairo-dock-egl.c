@@ -287,7 +287,7 @@ static void _container_end_draw (GldiContainer *pContainer)
 
 static void _init_surface (GtkWidget *pWidget, GldiContainer *pContainer)
 {
-	cd_debug ("pWidget: %p, pContainer: %p (%dx%d)", pWidget, pContainer, pContainer->iWidth, pContainer->iHeight);
+	cd_warning ("pWidget: %p, pContainer: %p (%dx%d)", pWidget, pContainer, pContainer->iWidth, pContainer->iHeight);
 	EGLDisplay *dpy = s_eglDisplay;
 	if (!dpy) return; // should not happen
 	// create an EGL surface for this window
@@ -338,7 +338,7 @@ static void _destroy_surface (GtkWidget* pWidget, GldiContainer *pContainer) {
 	if (!dpy) return; // should not happen
 	
 	gboolean bCurrent = (eglGetCurrentContext() == pContainer->glContext);
-	cd_debug ("pWidget: %p, pContainer: %p, surface: %p, is current: %s", pWidget, pContainer, pContainer->eglSurface,
+	cd_warning ("pWidget: %p, pContainer: %p, surface: %p, is current: %s", pWidget, pContainer, pContainer->eglSurface,
 		bCurrent ? "TRUE" : "FALSE");
 	
 	if (bCurrent) {
