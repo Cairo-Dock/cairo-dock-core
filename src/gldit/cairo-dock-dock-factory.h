@@ -150,8 +150,14 @@ struct _CairoDock {
 	gdouble fAlign;  // alignment, between 0 and 1, on the screen's edge.
 	/// visibility.
 	CairoDockVisibility iVisibility;
-	/// number of the screen the dock is placed on (-1 <=> all screen, >0 <=> num screen).
+	/// number of the screen the dock is actually placed on (between 0 and g_desktopGeometry.iNbScreens - 1)
+	/// might differ from iScreenReq if the requested screen is not available; filled out when updating the dock's position
 	gint iNumScreen;
+	/// number of the screen requested by the user
+	gint iScreenReq;
+	/// name of the screen requested by the user -- TODO: not used yet, should implement saving screen names !
+	gchar *cScreenReq;
+	
 	// icons
 	/// icon size, as specified in the config of the dock
 	gint iIconSize;

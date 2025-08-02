@@ -132,6 +132,7 @@ static void _make_sub_dock (CairoDock *pDock, CairoDock *pParentDock, const gcha
 	pDock->container.bIsHorizontal = pParentDock->container.bIsHorizontal;
 	pDock->container.bDirectionUp = pParentDock->container.bDirectionUp;
 	pDock->iNumScreen = pParentDock->iNumScreen;
+	pDock->iScreenReq = pParentDock->iScreenReq;
 	
 	//\__________________ set a renderer
 	cairo_dock_set_renderer (pDock, cRendererName);
@@ -546,7 +547,10 @@ static gboolean _get_root_dock_config (CairoDock *pDock)
 		
 		pDock->fAlign = myDocksParam.fAlign;
 		
-		pDock->iNumScreen = myDocksParam.iNumScreen;
+		pDock->iScreenReq = myDocksParam.iScreenReq;
+		pDock->iNumScreen = pDock->iScreenReq;
+		if (pDock->iNumScreen < 0 || pDock->iNumScreen >= g_desktopGeometry.iNbScreens)
+			pDock->iNumScreen = 0;
 		
 		_set_dock_orientation (pDock, myDocksParam.iScreenBorder);  // do it after all position parameters have been set; it sets the sub-docks orientation too.
 		
@@ -591,7 +595,10 @@ static gboolean _get_root_dock_config (CairoDock *pDock)
 	
 	pDock->fAlign = cairo_dock_get_double_key_value (pKeyFile, "Behavior", "alignment", &bFlushConfFileNeeded, 0.5, "Position", NULL);
 	
-	pDock->iNumScreen = cairo_dock_get_integer_key_value (pKeyFile, "Behavior", "num_screen", &bFlushConfFileNeeded, GLDI_DEFAULT_SCREEN, "Position", NULL);
+	pDock->iScreenReq = cairo_dock_get_integer_key_value (pKeyFile, "Behavior", "num_screen", &bFlushConfFileNeeded, GLDI_DEFAULT_SCREEN, "Position", NULL);
+	pDock->iNumScreen = pDock->iScreenReq;
+	if (pDock->iNumScreen < 0 || pDock->iNumScreen >= g_desktopGeometry.iNbScreens)
+		pDock->iNumScreen = 0;
 	
 	CairoDockPositionType iScreenBorder = cairo_dock_get_integer_key_value (pKeyFile, "Behavior", "screen border", &bFlushConfFileNeeded, 0, "Position", NULL);
 	_set_dock_orientation (pDock, iScreenBorder);  // do it after all position parameters have been set; it sets the sub-docks orientation too.
@@ -684,7 +691,7 @@ void gldi_dock_add_conf_file_for_name (const gchar *cDockName)
 		G_TYPE_INT, "Behavior", "visibility",
 		g_pMainDock->iVisibility,
 		G_TYPE_INT, "Behavior", "num_screen",
-		g_pMainDock->iNumScreen,
+		g_pMainDock->iScreenReq,
 		G_TYPE_INVALID);
 	g_free (cConfFilePath);
 }
@@ -748,6 +755,7 @@ void gldi_subdock_synchronize_orientation (CairoDock *pSubDock, CairoDock *pDock
 		pSubDock->container.bIsHorizontal = pDock->container.bIsHorizontal;
 		bUpdateDockSize = TRUE;
 	}
+	pSubDock->iScreenReq = pDock->iScreenReq;
 	if (pSubDock->iNumScreen != pDock->iNumScreen)
 	{
 		pSubDock->iNumScreen = pDock->iNumScreen;
@@ -1100,6 +1108,13 @@ static unsigned int s_sidDesktopGeom = 0;
 static gboolean _reposition_root_docks_idle (void*)
 {
 	s_sidDesktopGeom = 0;
+	
+	CairoDock *pDock = g_pMainDock;
+	// update which screen the main dock should be shown since its config will not be reloaded
+	pDock->iNumScreen = pDock->iScreenReq;
+	if (pDock->iNumScreen < 0 || pDock->iNumScreen >= g_desktopGeometry.iNbScreens)
+		pDock->iNumScreen = 0;
+	
 	_reposition_root_docks (FALSE);  // FALSE <=> main dock included
 	return G_SOURCE_REMOVE;
 }
@@ -1350,14 +1365,20 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 
 	pPosition->fAlign = cairo_dock_get_double_key_value (pKeyFile, "Position", "alignment", &bFlushConfFileNeeded, 0.5, NULL, NULL);
 	
-	pPosition->iNumScreen = cairo_dock_get_integer_key_value (pKeyFile, "Position", "num_screen", &bFlushConfFileNeeded, GLDI_DEFAULT_SCREEN, NULL, NULL);  // Note: if this screen doesn't exist at this time, we keep this number anyway, in case it is plugged later. Until then, it will point on the X screen.
-	if (g_key_file_has_key (pKeyFile, "Position", "xinerama", NULL))  // "xinerama" and "num screen" old keys
+	pPosition->iScreenReq = GLDI_DEFAULT_SCREEN;
+	if (g_key_file_has_key (pKeyFile, "Position", "num_screen", NULL))  // "num_screen" is the new key
+		pPosition->iScreenReq = g_key_file_get_integer (pKeyFile, "Position", "num_screen", NULL);
+	else
 	{
-		if (g_key_file_get_boolean (pKeyFile," Position", "xinerama", NULL))  // xinerama was used -> set num-screen back
+		if (g_key_file_has_key (pKeyFile, "Position", "xinerama", NULL))  // "xinerama" and "num screen" old keys
 		{
-			pPosition->iNumScreen = g_key_file_get_integer (pKeyFile, "Position", "num screen", NULL); // "num screen" was the old key
-			g_key_file_set_integer (pKeyFile, "Position", "num_screen", pPosition->iNumScreen);
+			if (g_key_file_get_boolean (pKeyFile," Position", "xinerama", NULL))  // xinerama was used -> set num-screen back
+			{
+				pPosition->iScreenReq = g_key_file_get_integer (pKeyFile, "Position", "num screen", NULL); // "num screen" was the old key
+			}
 		}
+		g_key_file_set_integer (pKeyFile, "Position", "num_screen", pPosition->iScreenReq);
+		bFlushConfFileNeeded = TRUE;
 	}
 	
 	//\____________________ Visibilite
@@ -1537,7 +1558,7 @@ static void load (void)
 		g_pMainDock->iGapX = myDocksParam.iGapX;
 		g_pMainDock->iGapY = myDocksParam.iGapY;
 		g_pMainDock->fAlign = myDocksParam.fAlign;
-		g_pMainDock->iNumScreen = myDocksParam.iNumScreen;
+//		g_pMainDock->iNumScreen = myDocksParam.iNumScreen;
 		g_pMainDock->bExtendedMode = myDocksParam.bExtendedMode;
 		
 		_set_dock_orientation (g_pMainDock, myDocksParam.iScreenBorder);
@@ -1605,10 +1626,12 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 	gldi_docks_foreach_root ((GFunc)_reload_bg, NULL);
 	
 	// position
-	pDock->iNumScreen = pPosition->iNumScreen;
-	
-	if (pPosition->iNumScreen != pPrevPosition->iNumScreen)
+	pDock->iScreenReq = pPosition->iScreenReq;
+	if (pPosition->iScreenReq != pPrevPosition->iScreenReq)
 	{
+		pDock->iNumScreen = pDock->iScreenReq;
+		if (pDock->iNumScreen < 0 || pDock->iNumScreen >= g_desktopGeometry.iNbScreens)
+			pDock->iNumScreen = 0;
 		gldi_container_set_screen (CAIRO_CONTAINER (pDock), pDock->iNumScreen);
 		_reposition_root_docks (TRUE);  // on replace tous les docks racines sauf le main dock, puisque c'est fait apres.
 	}
@@ -1624,7 +1647,7 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 	pDock->iGapY = pPosition->iGapY;
 	pDock->fAlign = pPosition->fAlign;
 	
-	if (pPosition->iNumScreen != pPrevPosition->iNumScreen
+	if (pPosition->iScreenReq != pPrevPosition->iScreenReq
 	|| pPosition->iScreenBorder != pPrevPosition->iScreenBorder  // if the orientation or the screen has changed, the available size may have changed too
 	|| pPosition->iGapX != pPrevPosition->iGapX
 	|| pPosition->iGapY != pPrevPosition->iGapY)
@@ -1882,6 +1905,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 		
 		pDock->container.bIsHorizontal = pParentDock->container.bIsHorizontal;
 		pDock->container.bDirectionUp = pParentDock->container.bDirectionUp;
+		pDock->iScreenReq = pParentDock->iScreenReq;
 		pDock->iNumScreen = pParentDock->iNumScreen;
 		pDock->iIconSize = pParentDock->iIconSize;
 		
