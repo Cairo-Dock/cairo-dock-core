@@ -534,6 +534,13 @@ GldiIconSizeEnum cairo_dock_convert_icon_size_to_enum (int iIconSize)
 	return s;
 }
 
+static void _update_dock_screen_num (CairoDock *pDock)
+{
+	pDock->iNumScreen = pDock->iScreenReq;
+	if (pDock->iNumScreen < 0 || pDock->iNumScreen >= g_desktopGeometry.iNbScreens)
+		pDock->iNumScreen = 0;
+}
+
 static gboolean _get_root_dock_config (CairoDock *pDock)
 {
 	g_return_val_if_fail (pDock != NULL, FALSE);
@@ -548,9 +555,7 @@ static gboolean _get_root_dock_config (CairoDock *pDock)
 		pDock->fAlign = myDocksParam.fAlign;
 		
 		pDock->iScreenReq = myDocksParam.iScreenReq;
-		pDock->iNumScreen = pDock->iScreenReq;
-		if (pDock->iNumScreen < 0 || pDock->iNumScreen >= g_desktopGeometry.iNbScreens)
-			pDock->iNumScreen = 0;
+		_update_dock_screen_num (pDock);
 		
 		_set_dock_orientation (pDock, myDocksParam.iScreenBorder);  // do it after all position parameters have been set; it sets the sub-docks orientation too.
 		
@@ -596,9 +601,7 @@ static gboolean _get_root_dock_config (CairoDock *pDock)
 	pDock->fAlign = cairo_dock_get_double_key_value (pKeyFile, "Behavior", "alignment", &bFlushConfFileNeeded, 0.5, "Position", NULL);
 	
 	pDock->iScreenReq = cairo_dock_get_integer_key_value (pKeyFile, "Behavior", "num_screen", &bFlushConfFileNeeded, GLDI_DEFAULT_SCREEN, "Position", NULL);
-	pDock->iNumScreen = pDock->iScreenReq;
-	if (pDock->iNumScreen < 0 || pDock->iNumScreen >= g_desktopGeometry.iNbScreens)
-		pDock->iNumScreen = 0;
+	_update_dock_screen_num (pDock);
 	
 	CairoDockPositionType iScreenBorder = cairo_dock_get_integer_key_value (pKeyFile, "Behavior", "screen border", &bFlushConfFileNeeded, 0, "Position", NULL);
 	_set_dock_orientation (pDock, iScreenBorder);  // do it after all position parameters have been set; it sets the sub-docks orientation too.
@@ -1109,11 +1112,8 @@ static gboolean _reposition_root_docks_idle (void*)
 {
 	s_sidDesktopGeom = 0;
 	
-	CairoDock *pDock = g_pMainDock;
 	// update which screen the main dock should be shown since its config will not be reloaded
-	pDock->iNumScreen = pDock->iScreenReq;
-	if (pDock->iNumScreen < 0 || pDock->iNumScreen >= g_desktopGeometry.iNbScreens)
-		pDock->iNumScreen = 0;
+	_update_dock_screen_num (g_pMainDock);
 	
 	_reposition_root_docks (FALSE);  // FALSE <=> main dock included
 	return G_SOURCE_REMOVE;
@@ -1609,12 +1609,10 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 	gldi_docks_foreach_root ((GFunc)_reload_bg, NULL);
 	
 	// position
-	pDock->iScreenReq = pPosition->iScreenReq;
 	if (pPosition->iScreenReq != pPrevPosition->iScreenReq)
 	{
-		pDock->iNumScreen = pDock->iScreenReq;
-		if (pDock->iNumScreen < 0 || pDock->iNumScreen >= g_desktopGeometry.iNbScreens)
-			pDock->iNumScreen = 0;
+		pDock->iScreenReq = pPosition->iScreenReq;
+		_update_dock_screen_num (pDock);
 		gldi_container_set_screen (CAIRO_CONTAINER (pDock), pDock->iNumScreen);
 		_reposition_root_docks (TRUE);  // on replace tous les docks racines sauf le main dock, puisque c'est fait apres.
 	}
