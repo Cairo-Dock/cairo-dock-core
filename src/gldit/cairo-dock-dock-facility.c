@@ -387,11 +387,6 @@ void cairo_dock_prevent_dock_from_out_of_screen (CairoDock *pDock)
 #define CD_VISIBILITY_MARGIN 20
 void cairo_dock_get_window_position_at_balance (CairoDock *pDock, int iNewWidth, int iNewHeight, int *iNewPositionX, int *iNewPositionY)
 {
-	//!! TODO: will likely result in invalid size if there is more than one screen but pDock->iNumScreen
-	/// is invalid since in this case, these functions return the size of the whole Xscreen (i.e. combined
-	/// of all screens) -- this can happen if e.g. there were 3 screens originally and the one with the dock
-	/// has been removed --> this could be handled by first setting "fallback" screen for the dock and using that
-	/// or using gdk_display_get_monitor_at_window () to get the screen the dock is actually on (at least on Wayland)
 	int W = gldi_dock_get_screen_width (pDock), H = gldi_dock_get_screen_height (pDock);
 	int iWindowPositionX = (W - iNewWidth) * pDock->fAlign + pDock->iGapX;
 	if (pDock->iRefCount == 0 && pDock->fAlign != .5)
