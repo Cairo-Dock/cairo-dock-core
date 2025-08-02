@@ -1552,42 +1552,25 @@ static void load (void)
 	if (g_pKeepingBelowBackend == NULL)  // pas d'option en config pour ca.
 		g_pKeepingBelowBackend = cairo_dock_get_hiding_effect ("Fade out");
 	
-	// the first main dock doesn't have a config file, its parameters are the global ones.
-	if (g_pMainDock)
+	// register a key binding
+	if (myDocksParam.iVisibility == CAIRO_DOCK_VISI_SHORTKEY)  // register a key binding
 	{
-		g_pMainDock->iGapX = myDocksParam.iGapX;
-		g_pMainDock->iGapY = myDocksParam.iGapY;
-		g_pMainDock->fAlign = myDocksParam.fAlign;
-//		g_pMainDock->iNumScreen = myDocksParam.iNumScreen;
-		g_pMainDock->bExtendedMode = myDocksParam.bExtendedMode;
-		
-		_set_dock_orientation (g_pMainDock, myDocksParam.iScreenBorder);
-		cairo_dock_move_resize_dock (g_pMainDock);
-		
-		g_pMainDock->fFlatDockWidth = - myIconsParam.iIconGap;  // car on ne le connaissait pas encore au moment de sa creation.
-		
-		// register a key binding
-		if (myDocksParam.iVisibility == CAIRO_DOCK_VISI_SHORTKEY)  // register a key binding
+		if (s_pPopupBinding == NULL)
 		{
-			if (s_pPopupBinding == NULL)
-			{
-				s_pPopupBinding = gldi_shortkey_new (myDocksParam.cRaiseDockShortcut,
-					"Cairo-Dock",
-					_("Pop up the main dock"),
-					GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON,
-					g_cConfFile,
-					"Accessibility",
-					"raise shortcut",
-					(CDBindkeyHandler) _raise_from_shortcut,
-					NULL);
-			}
-			else
-			{
-				gldi_shortkey_rebind (s_pPopupBinding, myDocksParam.cRaiseDockShortcut, NULL);
-			}
+			s_pPopupBinding = gldi_shortkey_new (myDocksParam.cRaiseDockShortcut,
+				"Cairo-Dock",
+				_("Pop up the main dock"),
+				GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON,
+				g_cConfFile,
+				"Accessibility",
+				"raise shortcut",
+				(CDBindkeyHandler) _raise_from_shortcut,
+				NULL);
 		}
-		
-		gldi_dock_set_visibility (g_pMainDock, myDocksParam.iVisibility);
+		else
+		{
+			gldi_shortkey_rebind (s_pPopupBinding, myDocksParam.cRaiseDockShortcut, NULL);
+		}
 	}
 }
 
