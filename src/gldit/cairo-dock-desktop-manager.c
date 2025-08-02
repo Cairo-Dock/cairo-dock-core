@@ -513,6 +513,9 @@ static void _refresh_monitors (GdkScreen *screen, gpointer user_data)
 		s_pPrimaryMonitor = gdk_display_get_primary_monitor (display);
 		if (!s_pPrimaryMonitor) s_pPrimaryMonitor = s_pMonitors[0];
 		_calculate_xscreen ();
+		cd_warning ("iNbScreens: %d, Xscreen: %dx%d", g_desktopGeometry.iNbScreens,
+			g_desktopGeometry.Xscreen.width, g_desktopGeometry.Xscreen.height);
+		
 		if (user_data) gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_GEOMETRY_CHANGED, TRUE);
 		
 		// figure out if any monitors were added / removed and emit the Wayland-specific notifications
