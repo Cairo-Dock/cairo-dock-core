@@ -49,7 +49,7 @@ extern gboolean g_bUseOpenGL;  // for cairo_dock_make_preview()
 void cairo_dock_update_dock_size (CairoDock *pDock)
 {
 	g_return_if_fail (pDock != NULL);
-	//g_print ("%s (%p, %d)\n", __func__, pDock, pDock->iRefCount);
+	cd_debug ("%p, %d", pDock, pDock->iRefCount);
 	if (pDock->iSidUpdateDockSize != 0)
 	{
 		//g_print (" -> delayed\n");
