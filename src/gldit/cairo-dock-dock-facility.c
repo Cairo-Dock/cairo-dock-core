@@ -960,9 +960,23 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 	// only on Wayland, unless it is specifically requested by the user
 	if (gldi_container_use_new_positioning_code ())
 	{
-		if (pSubDock->container.bIsHorizontal)
-			gtk_window_resize (GTK_WINDOW (pSubDock->container.pWidget), iNewWidth, iNewHeight);
-		else gtk_window_resize (GTK_WINDOW (pSubDock->container.pWidget), iNewHeight, iNewWidth);
+		if (!gtk_widget_get_realized (pSubDock->container.pWidget))
+		{
+			// if we don't have a GDK Window yet, we can set the size on the GTK Window
+			if (pSubDock->container.bIsHorizontal)
+				gtk_window_resize (GTK_WINDOW (pSubDock->container.pWidget), iNewWidth, iNewHeight);
+			else gtk_window_resize (GTK_WINDOW (pSubDock->container.pWidget), iNewHeight, iNewWidth);
+		}
+		else
+		{
+			// otherwise, it's better to directly set the size of the GDK Window to
+			// avoid problems with move_to_rect () later
+			if (pSubDock->container.bIsHorizontal)
+				gdk_window_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pSubDock)),
+					iNewWidth, iNewHeight);
+			else gdk_window_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pSubDock)),
+				iNewHeight, iNewWidth);
+		}
 
 		GdkRectangle rect = {0, 0, 1, 1};
 		GdkGravity rect_anchor = GDK_GRAVITY_NORTH;
@@ -980,32 +994,15 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 	}
 	else
 	{
-		int iNewPositionX, iNewPositionY;
-		cairo_dock_get_window_position_at_balance (
-			pSubDock, iNewWidth, iNewHeight, &iNewPositionX, &iNewPositionY);
 		// original behavior: calling present () before moving the subdock to its place
 		gtk_window_present (GTK_WINDOW (pSubDock->container.pWidget));
+		// will calculate position and do the resize
+		gldi_container_move_resize_dock (pSubDock);
 		
-		if (pSubDock->container.bIsHorizontal)
-		{
-			gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pSubDock)),
-				iNewPositionX,
-				iNewPositionY,
-				iNewWidth,
-				iNewHeight);
-		}
-		else
-		{
-			gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pSubDock)),
-				iNewPositionY,
-				iNewPositionX,
-				iNewHeight,
-				iNewWidth);
-			/* in this case, the sub-dock is over the label, so this one is drawn
-			 * with a low transparency, so we trigger the redraw.
-			 */
+		/* for vertical docks, the sub-dock is over the label, so this one is drawn
+		 * with a low transparency, so we trigger the redraw. */
+		if (!pSubDock->container.bIsHorizontal)
 			gtk_widget_queue_draw (pParentDock->container.pWidget);
-		}
 	}
 	if (g_bUseOpenGL)
 	{
