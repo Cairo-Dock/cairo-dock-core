@@ -1050,7 +1050,6 @@ static GHashTable *_cairo_dock_build_screens_list (void)
 		g_str_equal,
 		g_free,
 		g_free);
-	g_hash_table_insert (pHashTable, g_strdup (_("Use all screens")), g_strdup ("-1"));
 	
 	if (g_desktopGeometry.iNbScreens > 1)
 	{
@@ -1095,7 +1094,7 @@ static GHashTable *_cairo_dock_build_screens_list (void)
 	}
 	else  // if we have only 1 screen, and the screen-number is set to 0 (default value), let's insert a row for it; it's just to not have a blank widget with no line of the combo being selected, since anyway the widget will be unsensitive.
 	{
-		g_hash_table_insert (pHashTable, g_strdup (_("Use all screens")), g_strdup ("0"));
+		g_hash_table_insert (pHashTable, g_strdup_printf ("%s %d", _("Screen"), 0), g_strdup ("0"));
 	}
 	return pHashTable;
 }
