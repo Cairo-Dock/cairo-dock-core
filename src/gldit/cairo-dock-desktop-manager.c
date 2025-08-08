@@ -428,6 +428,10 @@ static void _monitor_added (GdkDisplay *display, GdkMonitor* monitor, gpointer u
 	if (monitor == gdk_display_get_primary_monitor (display))
 		s_pPrimaryMonitor = monitor;
 	_calculate_xscreen ();
+	
+	cd_debug ("iNbScreens: %d, Xscreen: %dx%d", g_desktopGeometry.iNbScreens,
+		g_desktopGeometry.Xscreen.width, g_desktopGeometry.Xscreen.height);
+	
 	if (user_data) gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_GEOMETRY_CHANGED, TRUE);
 	
 	// we always send notification on the desktop manager object
@@ -460,6 +464,10 @@ static void _monitor_removed (GdkDisplay* display, GdkMonitor* monitor, G_GNUC_U
 		s_pMonitors = g_renew (GdkMonitor*, s_pMonitors, g_desktopGeometry.iNbScreens);
 		g_desktopGeometry.pScreens = g_renew (GtkAllocation, g_desktopGeometry.pScreens, g_desktopGeometry.iNbScreens);
 		_calculate_xscreen ();
+		
+		cd_debug ("iNbScreens: %d, Xscreen: %dx%d", g_desktopGeometry.iNbScreens,
+		g_desktopGeometry.Xscreen.width, g_desktopGeometry.Xscreen.height);
+		
 		gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_GEOMETRY_CHANGED, TRUE);
 		
 		// we always send notification on the desktop manager object
@@ -474,6 +482,10 @@ static void _refresh_monitors_size(G_GNUC_UNUSED GdkScreen *screen, gpointer use
 	for (i = 0; i < g_desktopGeometry.iNbScreens; i++)
 		gdk_monitor_get_geometry (s_pMonitors[i], g_desktopGeometry.pScreens + i);
 	_calculate_xscreen ();
+	
+	cd_debug ("iNbScreens: %d, Xscreen: %dx%d", g_desktopGeometry.iNbScreens,
+		g_desktopGeometry.Xscreen.width, g_desktopGeometry.Xscreen.height);
+	
 	if (user_data) gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_GEOMETRY_CHANGED, TRUE);
 }
 
@@ -501,6 +513,9 @@ static void _refresh_monitors (GdkScreen *screen, gpointer user_data)
 		s_pPrimaryMonitor = gdk_display_get_primary_monitor (display);
 		if (!s_pPrimaryMonitor) s_pPrimaryMonitor = s_pMonitors[0];
 		_calculate_xscreen ();
+		cd_debug ("iNbScreens: %d, Xscreen: %dx%d", g_desktopGeometry.iNbScreens,
+			g_desktopGeometry.Xscreen.width, g_desktopGeometry.Xscreen.height);
+		
 		if (user_data) gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_GEOMETRY_CHANGED, TRUE);
 		
 		// figure out if any monitors were added / removed and emit the Wayland-specific notifications

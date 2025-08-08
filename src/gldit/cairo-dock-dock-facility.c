@@ -49,7 +49,7 @@ extern gboolean g_bUseOpenGL;  // for cairo_dock_make_preview()
 void cairo_dock_update_dock_size (CairoDock *pDock)
 {
 	g_return_if_fail (pDock != NULL);
-	//g_print ("%s (%p, %d)\n", __func__, pDock, pDock->iRefCount);
+	cd_debug ("%p, %d", pDock, pDock->iRefCount);
 	if (pDock->iSidUpdateDockSize != 0)
 	{
 		//g_print (" -> delayed\n");
@@ -94,7 +94,8 @@ void cairo_dock_update_dock_size (CairoDock *pDock)
 	double hmax = pDock->iMaxIconHeight;
 	int iMaxAuthorizedWidth = cairo_dock_get_max_authorized_dock_width (pDock);
 	int n = 0;  // counter to ensure we'll not loop forever.
-	do
+	// note: screen width or height can be zero if all monitors are disconnected
+	if (iScreenHeight > 0 && iMaxAuthorizedWidth > 0) do
 	{
 		double fPrevRatio = pDock->container.fRatio;
 		//g_print ("  %s (%d / %d)\n", __func__, (int)pDock->iMaxDockWidth, iMaxAuthorizedWidth);

@@ -711,6 +711,15 @@ static void _reposition_one_root_dock (G_GNUC_UNUSED const gchar *cDockName, Cai
 {
 	if (pDock->iRefCount == 0 && ! (data && pDock->bIsMainDock))
 	{
+		if (g_desktopGeometry.iNbScreens == 0 || g_desktopGeometry.Xscreen.width == 0 ||
+			g_desktopGeometry.Xscreen.height == 0)
+		{
+			cd_debug ("hiding dock: %p", pDock);
+			gtk_widget_hide (pDock->container.pWidget);
+			return;
+		}
+		
+		cd_debug ("showing dock: %p, iNumScreen: %d", pDock, pDock->iNumScreen);
 		if (!pDock->bIsMainDock)
 			_get_root_dock_config (pDock);  // relit toute la conf.
 		gldi_container_set_screen (CAIRO_CONTAINER (pDock), pDock->iNumScreen); // this is a no-op on X11 (move_resize_dock () takes care of it below)
@@ -1086,10 +1095,19 @@ static void _raise_from_shortcut (G_GNUC_UNUSED const char *cKeyShortcut, G_GNUC
 	gldi_docks_foreach_root ((GFunc)_show_dock_at_mouse, NULL);
 }
 
+static unsigned int s_sidDesktopGeom = 0;
+
+static gboolean _reposition_root_docks_idle (void*)
+{
+	s_sidDesktopGeom = 0;
+	_reposition_root_docks (FALSE);  // FALSE <=> main dock included
+	return G_SOURCE_REMOVE;
+}
+
 static gboolean _on_screen_geometry_changed (G_GNUC_UNUSED gpointer data, gboolean bSizeHasChanged)
 {
-	if (bSizeHasChanged)
-		_reposition_root_docks (FALSE);  // FALSE <=> main dock included
+	if (bSizeHasChanged && !s_sidDesktopGeom)
+		s_sidDesktopGeom = g_idle_add (_reposition_root_docks_idle, NULL);
 	return GLDI_NOTIFICATION_LET_PASS;
 }
 

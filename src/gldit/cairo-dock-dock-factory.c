@@ -883,7 +883,7 @@ static gboolean _on_key_release (G_GNUC_UNUSED GtkWidget *pWidget,
 		//g_print ("release : pKey->keyval = %d\n", pKey->keyval);
 		if ((pKey->state & GDK_MOD1_MASK) && pKey->keyval == 0)  // On relache la touche ALT, typiquement apres avoir fait un ALT + clique gauche + deplacement.
 		{
-			if (pDock->iRefCount == 0 && pDock->iVisibility != CAIRO_DOCK_VISI_SHORTKEY)
+			if (pDock->iRefCount == 0 && pDock->iVisibility != CAIRO_DOCK_VISI_SHORTKEY && !gldi_container_is_wayland_backend ())
 				gldi_rootdock_write_gaps (pDock);
 		}
 	}
@@ -1074,7 +1074,7 @@ static gboolean _on_button_press (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventButt
 				}
 				else
 				{
-					if (pDock->iRefCount == 0 && pDock->iVisibility != CAIRO_DOCK_VISI_SHORTKEY)
+					if (pDock->iRefCount == 0 && pDock->iVisibility != CAIRO_DOCK_VISI_SHORTKEY && !gldi_container_is_wayland_backend ())
 						gldi_rootdock_write_gaps (pDock);
 				}
 				//g_print ("- apres clic : s_pIconClicked <- NULL\n");
@@ -1149,7 +1149,7 @@ static gboolean _on_scroll (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventScroll* pS
 
 static gboolean _on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, CairoDock *pDock)
 {
-	//g_print ("%s (%p, main dock : %d) : (%d;%d) (%dx%d)\n", __func__, pDock, pDock->bIsMainDock, pEvent->x, pEvent->y, pEvent->width, pEvent->height);
+	cd_debug ("%p, main dock : %d (%d;%d) (%dx%d)", pDock, pDock->bIsMainDock, pEvent->x, pEvent->y, pEvent->width, pEvent->height);
 	// set the new actual size of the container
 	gint iNewWidth, iNewHeight, iNewX, iNewY;
 	if (pDock->container.bIsHorizontal)
@@ -1160,7 +1160,7 @@ static gboolean _on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, Ca
 		if (gldi_container_is_wayland_backend ())
 		{
 			// pEvent->x and pEvent->y are zero in this case, we fake the expected position
-			if (pDock->container.bDirectionUp) iNewY = gldi_dock_get_screen_height (pDock) - iNewHeight;
+			if (pDock->container.bDirectionUp) iNewY = MAX(0, gldi_dock_get_screen_height (pDock) - iNewHeight);
 			else iNewY = 0;
 			iNewX = 0;
 		}
@@ -1178,7 +1178,7 @@ static gboolean _on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, Ca
 		if (gldi_container_is_wayland_backend ())
 		{
 			// pEvent->x and pEvent->y are zero in this case, we fake the expected position
-			if (pDock->container.bDirectionUp) iNewY = gldi_dock_get_screen_width (pDock) - iNewHeight;
+			if (pDock->container.bDirectionUp) iNewY = MAX(0, gldi_dock_get_screen_width (pDock) - iNewHeight);
 			else iNewY = 0;
 			iNewX = 0;
 		}
@@ -1593,6 +1593,13 @@ static gboolean _cairo_dock_grow_up (CairoDock *pDock)
 {
 	//g_print ("%s (%d ; %2f ; bInside:%d)\n", __func__, pDock->iMagnitudeIndex, pDock->fFoldingFactor, pDock->container.bInside);
 	
+	if (!gtk_widget_get_mapped (pDock->container.pWidget))
+	{
+		// this dock is hidden, stop the animation
+		pDock->bIsGrowingUp = FALSE;
+		return FALSE;
+	}
+	
 	pDock->iMagnitudeIndex += myBackendsParam.iGrowUpInterval;
 	if (pDock->iMagnitudeIndex > CAIRO_DOCK_NB_MAX_ITERATIONS)
 		pDock->iMagnitudeIndex = CAIRO_DOCK_NB_MAX_ITERATIONS;
@@ -1646,6 +1653,14 @@ static void _hide_parent_dock (CairoDock *pDock)
 static gboolean _cairo_dock_shrink_down (CairoDock *pDock)
 {
 	//g_print ("%s (%d, %f, %f)\n", __func__, pDock->iMagnitudeIndex, pDock->fFoldingFactor, pDock->fDecorationsOffsetX);
+	if (!gtk_widget_get_mapped (pDock->container.pWidget))
+	{
+		// the dock has already been hidden, stop the animation
+		pDock->iMagnitudeIndex = 0;
+		pDock->bIsShrinkingDown = FALSE;
+		return FALSE;
+	}
+	
 	//\_________________ On fait decroitre la magnitude du dock.
 	pDock->iMagnitudeIndex -= myBackendsParam.iShrinkDownInterval;
 	if (pDock->iMagnitudeIndex < 0)
@@ -1732,7 +1747,10 @@ static gboolean _cairo_dock_hide (CairoDock *pDock)
 	
 	if (pDock->fHideOffset < 1)  // the hiding animation is running.
 	{
-		pDock->fHideOffset += 1./myBackendsParam.iHideNbSteps;
+		gboolean bMapped = gtk_widget_get_mapped (pDock->container.pWidget);
+		if (bMapped) pDock->fHideOffset += 1./myBackendsParam.iHideNbSteps;
+		else pDock->fHideOffset = 1; // if the dock is already hidden
+
 		if (pDock->fHideOffset > .99)  // fin d'anim.
 		{
 			pDock->fHideOffset = 1;
@@ -1753,7 +1771,7 @@ static gboolean _cairo_dock_hide (CairoDock *pDock)
 						pIcon->fInsertRemoveFactor = - 0.05;
 				}
 				
-				if (! pIcon->bIsDemandingAttention && ! pIcon->bAlwaysVisible && ! pIcon->bIsLaunching)
+				if (! bMapped || (! pIcon->bIsDemandingAttention && ! pIcon->bAlwaysVisible && ! pIcon->bIsLaunching))
 					gldi_icon_stop_animation (pIcon);  // s'il y'a une autre animation en cours, on l'arrete.
 				else
 					bVisibleIconsPresent = TRUE;
@@ -1926,29 +1944,33 @@ static gboolean _cairo_dock_dock_animation_loop (GldiContainer *pContainer)
 		if (myIconsParam.fAlphaAtRest != 1)
 			icon->fAlpha = fDockMagnitude + myIconsParam.fAlphaAtRest * (1 - fDockMagnitude);
 		
-		bIconIsAnimating = FALSE;
-		if (bUpdateSlowAnimation)
+		if (gtk_widget_get_mapped (pContainer->pWidget))
 		{
-			gldi_object_notify (icon, NOTIFICATION_UPDATE_ICON_SLOW, icon, pDock, &bIconIsAnimating);
-			pContainer->bKeepSlowAnimation |= bIconIsAnimating;
-		}
-		gldi_object_notify (icon, NOTIFICATION_UPDATE_ICON, icon, pDock, &bIconIsAnimating);
-		
-		if ((icon->bIsDemandingAttention || icon->bAlwaysVisible) && cairo_dock_is_hidden (pDock))  // animation d'une icone demandant l'attention dans un dock cache => on force le dessin qui normalement ne se fait pas.
-		{
-			gtk_widget_queue_draw (pContainer->pWidget);
-		}
-		
-		bContinue |= bIconIsAnimating;
-		if (! bIconIsAnimating)
-		{
-			icon->iAnimationState = CAIRO_DOCK_STATE_REST;
-			if (icon->bIsDemandingAttention)
+			bIconIsAnimating = FALSE;
+			if (bUpdateSlowAnimation)
 			{
-				icon->bIsDemandingAttention = FALSE;  // the attention animation has finished by itself after the time it was planned for.
-				bNoMoreDemandingAttention = TRUE;
+				gldi_object_notify (icon, NOTIFICATION_UPDATE_ICON_SLOW, icon, pDock, &bIconIsAnimating);
+				pContainer->bKeepSlowAnimation |= bIconIsAnimating;
+			}
+			gldi_object_notify (icon, NOTIFICATION_UPDATE_ICON, icon, pDock, &bIconIsAnimating);
+			
+			if ((icon->bIsDemandingAttention || icon->bAlwaysVisible) && cairo_dock_is_hidden (pDock))  // animation d'une icone demandant l'attention dans un dock cache => on force le dessin qui normalement ne se fait pas.
+			{
+				gtk_widget_queue_draw (pContainer->pWidget);
+			}
+			
+			bContinue |= bIconIsAnimating;
+			if (! bIconIsAnimating)
+			{
+				icon->iAnimationState = CAIRO_DOCK_STATE_REST;
+				if (icon->bIsDemandingAttention)
+				{
+					icon->bIsDemandingAttention = FALSE;  // the attention animation has finished by itself after the time it was planned for.
+					bNoMoreDemandingAttention = TRUE;
+				}
 			}
 		}
+		else gldi_icon_stop_animation (icon);
 	}
 	bContinue |= pContainer->bKeepSlowAnimation;
 	
@@ -2066,7 +2088,7 @@ static gboolean _destroy_empty_dock (CairoDock *pDock)
 static void _detach_icon (GldiContainer *pContainer, Icon *icon)
 {
 	CairoDock *pDock = CAIRO_DOCK (pContainer);
-	cd_debug ("%s (%s)", __func__, icon->cName);
+	cd_debug ("remove %s from %s", icon->cName, gldi_dock_get_name (pDock));
 	
 	//\___________________ On trouve l'icone et ses 2 voisins.
 	GList *prev_ic = NULL, *ic, *next_ic;

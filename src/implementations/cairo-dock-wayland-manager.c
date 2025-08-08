@@ -156,7 +156,6 @@ static void _set_input_shape(GldiContainer *pContainer, cairo_region_t *pShape)
 	}
 	wl_surface_set_input_region (wls, r);
 	wl_surface_commit (wls);
-	wl_display_roundtrip (s_pDisplay);
 	if (r) wl_region_destroy (r);
 #endif
 }
@@ -230,7 +229,8 @@ static void _layer_shell_move_to_monitor (GldiContainer *pContainer, int iNumScr
 	
 	int iNumMonitors = 0;
 	GdkMonitor *const *pMonitors = gldi_desktop_get_monitors (&iNumMonitors);
-	gtk_layer_set_monitor (window, (iNumScreen < iNumMonitors) ? pMonitors[iNumScreen] : NULL);
+	GdkMonitor *monitor = (iNumScreen < iNumMonitors) ? pMonitors[iNumScreen] : NULL;
+	if (monitor != gtk_layer_get_monitor (window)) gtk_layer_set_monitor (window, monitor);
 }
 #endif
 
