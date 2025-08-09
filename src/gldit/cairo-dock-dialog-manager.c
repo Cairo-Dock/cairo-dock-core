@@ -792,14 +792,24 @@ void _refresh_all_dialogs (gboolean bReplace)
 			pDialog = next->data;
 			pIcon = pDialog->pIcon;
 			pContainer = cairo_dock_get_icon_container (pIcon);
+			gboolean bDelete = FALSE;
 			if (pContainer && !gldi_container_is_visible (pContainer))
 			{
-				// remove next from the list
-				ic->next = next->next;
-				next->next = to_delete;
-				to_delete = next;
+				if (pDialog->bHideOnClick)
+				{
+					if (gldi_container_is_visible (CAIRO_CONTAINER (pDialog)))
+						gtk_widget_hide (pDialog->container.pWidget);
+				}
+				else
+				{
+					// remove next from the list
+					ic->next = next->next;
+					next->next = to_delete;
+					to_delete = next;
+					bDelete = TRUE;
+				}
 			}
-			else ic = next;
+			if (!bDelete) ic = next;
 		}
 		s_pDialogList = dummy.next; // in case we removed the first element in the list
 		
