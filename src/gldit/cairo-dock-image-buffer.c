@@ -35,7 +35,6 @@ extern gchar *g_cCurrentImagesPath;
 
 extern gboolean g_bUseOpenGL;
 extern CairoDockGLConfig g_openglConfig;
-extern GldiContainer *g_pPrimaryContainer;
 extern gboolean g_bEasterEggs;
 
 
@@ -504,9 +503,12 @@ void cairo_dock_end_draw_image_buffer_cairo (CairoDockImageBuffer *pImage)
 gboolean cairo_dock_begin_draw_image_buffer_opengl (CairoDockImageBuffer *pImage, GldiContainer *pContainer, gint iRenderingMode)
 {
 	int iWidth, iHeight;
-	// cd_debug ("container: %p (realized: %d)", pContainer, pContainer? gtk_widget_get_realized (pContainer->pWidget) : 0);
+	// cd_debug ("container: %p (realized: %d, size: %dx%d), image size: %dx%d",
+	// 	pContainer, pContainer? gtk_widget_get_realized (pContainer->pWidget) : 0,
+	// 	pContainer ? pContainer->iWidth : 0, pContainer ? pContainer->iHeight : 0,
+	// 	pImage->iWidth, pImage->iHeight);
 	/// TODO: test without FBO and dock when iRenderingMode == 2
-	if (CAIRO_DOCK_IS_DESKLET (pContainer))
+	if (pContainer && CAIRO_DOCK_IS_DESKLET (pContainer))
 	{
 		// printf ("   is_desklet: 1\n");
 		if (! gldi_gl_container_make_current (pContainer))
@@ -521,12 +523,8 @@ gboolean cairo_dock_begin_draw_image_buffer_opengl (CairoDockImageBuffer *pImage
 	}
 	else if (s_iFboId != 0)
 	{
-		if (!(pContainer || g_pPrimaryContainer)) return FALSE;
-		if (pContainer == NULL || !gtk_widget_get_realized (pContainer->pWidget))
-			pContainer = g_pPrimaryContainer;
-		
 		// we attach the texture to the FBO.
-		// we first try to use an offscreen context (supported by EGL);
+		// we first try to use an offscreen context:
 		// this is more flexible, as on Wayland, gldi_gl_container_make_current ()
 		// would fail if the container is not mapped
 		s_bOffscreen = gldi_gl_offscreen_context_make_current ();
@@ -534,11 +532,7 @@ gboolean cairo_dock_begin_draw_image_buffer_opengl (CairoDockImageBuffer *pImage
 		// if this doesn't work (we're using GLX), try using the container's context
 		if (!s_bOffscreen)
 		{
-			if (pContainer->iWidth < pImage->iWidth || pContainer->iHeight < pImage->iHeight)
-			{
-				return FALSE;
-			}
-			if (! gldi_gl_container_make_current (pContainer))
+			if (!pContainer || !gldi_gl_container_make_current (pContainer))
 			{
 				cd_warning ("couldn't set the opengl context");
 				return FALSE;
@@ -605,11 +599,11 @@ gboolean cairo_dock_begin_draw_image_buffer_opengl (CairoDockImageBuffer *pImage
 
 void cairo_dock_end_draw_image_buffer_opengl (CairoDockImageBuffer *pImage, GldiContainer *pContainer)
 {
-	g_return_if_fail (pContainer != NULL && pImage->iTexture != 0);
+	g_return_if_fail (pImage->iTexture != 0);
 	
 	gboolean bResetView = FALSE;
 	
-	if (CAIRO_DOCK_IS_DESKLET (pContainer))
+	if (pContainer && CAIRO_DOCK_IS_DESKLET (pContainer))
 	{
 		// copy in our texture
 		_cairo_dock_enable_texture ();
@@ -660,7 +654,7 @@ void cairo_dock_end_draw_image_buffer_opengl (CairoDockImageBuffer *pImage, Gldi
 		bResetView = !s_bOffscreen;
 	}
 	
-	if (bResetView)
+	if (bResetView && pContainer)
 	{
 		// have to reset the container's view, since we messed it up
 		if (pContainer->bPerspectiveView) gldi_gl_container_set_perspective_view (pContainer);
