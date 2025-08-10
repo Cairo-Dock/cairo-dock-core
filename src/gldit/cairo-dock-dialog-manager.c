@@ -766,7 +766,7 @@ static void _place_dialog (CairoDialog *pDialog, GldiContainer *pContainer)
 
 
 static gboolean s_bInRefreshDialogs = FALSE;
-void _refresh_all_dialogs (gboolean bReplace)
+static void _refresh_all_dialogs (gboolean bReplace)
 {
 	//g_print ("%s ()\n", __func__);
 	GSList *ic;
