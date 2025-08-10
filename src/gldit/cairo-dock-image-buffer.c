@@ -450,7 +450,6 @@ void cairo_dock_apply_image_buffer_texture_with_limit (const CairoDockImageBuffe
 static GLuint s_iFboId = 0;
 static gboolean s_bRedirected = FALSE;
 static GLuint s_iRedirectedTexture = 0;
-static gboolean s_bSetPerspective = FALSE;
 static gint s_iRedirectWidth = 0;
 static gint s_iRedirectHeight = 0;
 
@@ -558,19 +557,17 @@ gboolean cairo_dock_begin_draw_image_buffer_opengl (CairoDockImageBuffer *pImage
 	else
 		return FALSE;
 	
-	if (pContainer->bPerspectiveView)
-	{
-		gldi_gl_container_set_ortho_view (pContainer);
-		s_bSetPerspective = TRUE;
-	}
-	else
-	{
-		gldi_gl_container_set_ortho_view (pContainer);  // at startup, the context doesn't have any view yet.
-	}
-	
-	glLoadIdentity ();
 	GdkWindow* gdkwindow = gldi_container_get_gdk_window (pContainer);
 	gint scale = gdk_window_get_scale_factor (gdkwindow);
+	
+	// set up an ortho view ourselves
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, iWidth * scale, 0, iHeight * scale, 0.0, 500.0);
+	glViewport(0, 0, iWidth * scale, iHeight * scale);
+	
+	glMatrixMode (GL_MODELVIEW);
+	glLoadIdentity ();
 	glScalef (scale, scale, 1.f);
 	
 	if (s_bRedirected)  // adapt to the size of the redirected texture
@@ -640,10 +637,11 @@ void cairo_dock_end_draw_image_buffer_opengl (CairoDockImageBuffer *pImage, Gldi
 		//glGenerateMipmapEXT(GL_TEXTURE_2D);  // if we use mipmaps, we need to explicitely generate them when using FBO.
 	}
 	
-	if (pContainer && s_bSetPerspective)
+	if (pContainer)
 	{
-		gldi_gl_container_set_perspective_view (pContainer);
-		s_bSetPerspective = FALSE;
+		// have to reset the container's view, since we messed it up
+		if (pContainer->bPerspectiveView) gldi_gl_container_set_perspective_view (pContainer);
+		else gldi_gl_container_set_ortho_view (pContainer);
 	}
 }
 
