@@ -174,6 +174,13 @@ gboolean gldi_gl_container_make_current (GldiContainer *pContainer)
 	return FALSE;
 }
 
+gboolean gldi_gl_offscreen_context_make_current (void)
+{
+	if (s_backend.offscreen_make_current)
+		return s_backend.offscreen_make_current ();
+	return FALSE;
+}
+
 static void _apply_desktop_background (GldiContainer *pContainer)
 {
 	if (! g_pFakeTransparencyDesktopBg || g_pFakeTransparencyDesktopBg->iTexture == 0)

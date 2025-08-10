@@ -449,6 +449,7 @@ void cairo_dock_apply_image_buffer_texture_with_limit (const CairoDockImageBuffe
 // to draw on image buffers
 static GLuint s_iFboId = 0;
 static gboolean s_bRedirected = FALSE;
+static gboolean s_bOffscreen = FALSE; // whether we are rendering with an "offscreen" context
 static GLuint s_iRedirectedTexture = 0;
 static gint s_iRedirectWidth = 0;
 static gint s_iRedirectHeight = 0;
@@ -503,11 +504,15 @@ void cairo_dock_end_draw_image_buffer_cairo (CairoDockImageBuffer *pImage)
 gboolean cairo_dock_begin_draw_image_buffer_opengl (CairoDockImageBuffer *pImage, GldiContainer *pContainer, gint iRenderingMode)
 {
 	int iWidth, iHeight;
+	// cd_debug ("container: %p (realized: %d)", pContainer, pContainer? gtk_widget_get_realized (pContainer->pWidget) : 0);
 	/// TODO: test without FBO and dock when iRenderingMode == 2
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))
 	{
+		// printf ("   is_desklet: 1\n");
 		if (! gldi_gl_container_make_current (pContainer))
 		{
+			// for desklets, we render directly to their surface, so we
+			// require to use their OpenGL context
 			return FALSE;
 		}
 		iWidth = pContainer->iWidth;
@@ -516,20 +521,32 @@ gboolean cairo_dock_begin_draw_image_buffer_opengl (CairoDockImageBuffer *pImage
 	}
 	else if (s_iFboId != 0)
 	{
-		// we attach the texture to the FBO.
-		///if (pContainer->iWidth == 1 && pContainer->iHeight == 1)  // container not yet fully resized
-		if (pContainer == NULL)
+		if (!(pContainer || g_pPrimaryContainer)) return FALSE;
+		if (pContainer == NULL || !gtk_widget_get_realized (pContainer->pWidget))
 			pContainer = g_pPrimaryContainer;
-		if (pContainer->iWidth < pImage->iWidth || pContainer->iHeight < pImage->iHeight)
+		
+		// we attach the texture to the FBO.
+		// we first try to use an offscreen context (supported by EGL);
+		// this is more flexible, as on Wayland, gldi_gl_container_make_current ()
+		// would fail if the container is not mapped
+		s_bOffscreen = gldi_gl_offscreen_context_make_current ();
+		
+		// if this doesn't work (we're using GLX), try using the container's context
+		if (!s_bOffscreen)
 		{
-			return FALSE;
+			if (pContainer->iWidth < pImage->iWidth || pContainer->iHeight < pImage->iHeight)
+			{
+				return FALSE;
+			}
+			if (! gldi_gl_container_make_current (pContainer))
+			{
+				cd_warning ("couldn't set the opengl context");
+				return FALSE;
+			}
 		}
+		
 		iWidth = pImage->iWidth, iHeight = pImage->iHeight;
-		if (! gldi_gl_container_make_current (pContainer))
-		{
-			cd_warning ("couldn't set the opengl context");
-			return FALSE;
-		}
+		
 		glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, s_iFboId);  // we redirect on our FBO.
 		s_bRedirected = (iRenderingMode == 2);
 		glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT,
@@ -590,6 +607,8 @@ void cairo_dock_end_draw_image_buffer_opengl (CairoDockImageBuffer *pImage, Gldi
 {
 	g_return_if_fail (pContainer != NULL && pImage->iTexture != 0);
 	
+	gboolean bResetView = FALSE;
+	
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))
 	{
 		// copy in our texture
@@ -605,6 +624,8 @@ void cairo_dock_end_draw_image_buffer_opengl (CairoDockImageBuffer *pImage, Gldi
 		glCopyTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA, x, y, iWidth, iHeight, 0);  // target, num mipmap, format, x,y, w,h, border.
 		
 		_cairo_dock_disable_texture ();
+		
+		bResetView = TRUE;
 	}
 	else if (s_iFboId != 0)
 	{
@@ -635,9 +656,11 @@ void cairo_dock_end_draw_image_buffer_opengl (CairoDockImageBuffer *pImage, Gldi
 			0,
 			0);  // we detach the texture (precaution).
 		//glGenerateMipmapEXT(GL_TEXTURE_2D);  // if we use mipmaps, we need to explicitely generate them when using FBO.
+		
+		bResetView = !s_bOffscreen;
 	}
 	
-	if (pContainer)
+	if (bResetView)
 	{
 		// have to reset the container's view, since we messed it up
 		if (pContainer->bPerspectiveView) gldi_gl_container_set_perspective_view (pContainer);
