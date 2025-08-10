@@ -155,7 +155,6 @@ static void _set_input_shape(GldiContainer *pContainer, cairo_region_t *pShape)
 		}
 	}
 	wl_surface_set_input_region (wls, r);
-	wl_surface_commit (wls);
 	if (r) wl_region_destroy (r);
 #endif
 }
