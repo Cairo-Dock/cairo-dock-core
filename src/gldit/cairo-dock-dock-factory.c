@@ -493,6 +493,8 @@ static gboolean _hide_child_docks (CairoDock *pDock)
 	return TRUE;
 }
 
+static void _hide_parent_dock (CairoDock *pDock);
+
 static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCrossing* pEvent, CairoDock *pDock)
 {
 	//g_print ("%s (bIsMainDock : %d; bInside:%d; iState:%d; iRefCount:%d, pEvent: %p)\n", __func__, pDock->bIsMainDock, pDock->container.bInside, pDock->iInputState, pDock->iRefCount, pEvent);
@@ -681,6 +683,13 @@ static gboolean _on_leave_notify (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventCros
 		gldi_object_notify (pDock, NOTIFICATION_LEAVE_DOCK, pDock, &bStartAnimation);
 		if (bStartAnimation)
 			cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
+	}
+	else if (pDock->iRefCount > 0)
+	{
+		// if this is a child dock, we should still send a leave event
+		// to its parent (for visible docks, this would be done at the
+		// end of the animation)
+		_hide_parent_dock (pDock);
 	}
 
 	return TRUE;
