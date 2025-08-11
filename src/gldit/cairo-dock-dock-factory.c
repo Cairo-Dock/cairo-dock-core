@@ -1206,6 +1206,14 @@ static gboolean _on_configure (GtkWidget* pWidget, GdkEventConfigure* pEvent, Ca
 	pDock->container.iWindowPositionX = iNewX;
 	pDock->container.iWindowPositionY = iNewY;
 	
+	// it is possible that the scale factor changes without the size -- we need to resize our EGLSurface on Wayland to avoid a crash
+	gint scale = gdk_window_get_scale_factor (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)));
+	if (scale != pDock->iScaleFactor)
+	{
+		bSizeUpdated = TRUE;
+		pDock->iScaleFactor = scale;
+	}
+	
 	if (pDock->container.iWidth == 1 && pDock->container.iHeight == 1)  // the X window has not yet reached its size.
 	{
 		return FALSE;
