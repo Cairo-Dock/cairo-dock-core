@@ -1138,12 +1138,15 @@ static gboolean _on_new_dialog (G_GNUC_UNUSED gpointer data, CairoDialog *pDialo
 		gldi_dock_leave_synthetic (pIcon->pSubDock);
 	}
 	
-	GldiContainer *pContainer = cairo_dock_get_icon_container (pIcon);
-	if (CAIRO_DOCK_IS_DOCK (pContainer) && cairo_dock_get_icon_max_scale (pIcon) < 1.01)  // view without zoom, the dialog is stuck to the icon, and therefore is under the label, so hide this one.
+	if (! gldi_container_use_new_positioning_code ())
 	{
-		if (pIcon->iHideLabel == 0)
-			gtk_widget_queue_draw (pContainer->pWidget);
-		pIcon->iHideLabel ++;
+		GldiContainer *pContainer = cairo_dock_get_icon_container (pIcon);
+		if (CAIRO_DOCK_IS_DOCK (pContainer) && cairo_dock_get_icon_max_scale (pIcon) < 1.01)  // view without zoom, the dialog is stuck to the icon, and therefore is under the label, so hide this one.
+		{
+			if (pIcon->iHideLabel == 0)
+				gtk_widget_queue_draw (pContainer->pWidget);
+			pIcon->iHideLabel ++;
+		}
 	}
 	
 	return GLDI_NOTIFICATION_LET_PASS;
