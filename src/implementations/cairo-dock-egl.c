@@ -262,6 +262,7 @@ static void _stop (void)
 	if (s_eglContext != 0)
 	{
 		EGLDisplay *dpy = s_eglDisplay;
+		eglMakeCurrent (dpy, 0, 0, EGL_NO_CONTEXT); // note: s_eglContext might still be current
 		eglDestroyContext (dpy, s_eglContext);
 		s_eglContext = 0;
 		eglTerminate (dpy);
@@ -274,6 +275,15 @@ static gboolean _container_make_current (GldiContainer *pContainer)
 	EGLSurface surface = pContainer->eglSurface;
 	if (!surface) return FALSE; // should not happen
 	EGLBoolean ret = eglMakeCurrent (s_eglDisplay, surface, surface, pContainer->glContext);
+	if (ret) glDrawBuffer(GL_BACK); // see e.g. https://github.com/NVIDIA/egl-wayland/issues/48
+	return ret;
+}
+
+static gboolean _offscreen_make_current (void)
+{
+	if (!s_eglContext) return FALSE;
+	// this should succeed as we tested for EGL_KHR_surfaceless_context above
+	EGLBoolean ret = eglMakeCurrent (s_eglDisplay, 0, 0, s_eglContext);
 	if (ret) glDrawBuffer(GL_BACK); // see e.g. https://github.com/NVIDIA/egl-wayland/issues/48
 	return ret;
 }
@@ -453,6 +463,7 @@ void gldi_register_egl_backend (void)
 	gmb.init = _initialize_opengl_backend;
 	gmb.stop = _stop;
 	gmb.container_make_current = _container_make_current;
+	gmb.offscreen_make_current = _offscreen_make_current;
 	gmb.container_end_draw = _container_end_draw;
 	gmb.container_init = _container_init;
 	gmb.container_finish = _container_finish;

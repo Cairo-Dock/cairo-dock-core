@@ -221,6 +221,7 @@ static void _stop (void)
 	if (s_XContext != 0)
 	{
 		Display *dpy = s_XDisplay;
+		glXMakeCurrent (dpy, 0, NULL); // s_XContext might still be current
 		glXDestroyContext (dpy, s_XContext);
 		s_XContext = 0;
 	}
@@ -231,6 +232,14 @@ static gboolean _container_make_current (GldiContainer *pContainer)
 	Window Xid = _gldi_container_get_Xid (pContainer);
 	Display *dpy = s_XDisplay;
 	return glXMakeCurrent (dpy, Xid, pContainer->glContext);
+}
+
+static gboolean _offscreen_make_current (void)
+{
+	if (! (s_XContext && g_pPrimaryContainer)) return FALSE;
+	Window Xid = _gldi_container_get_Xid (g_pPrimaryContainer);
+	Display *dpy = s_XDisplay;
+	return glXMakeCurrent (dpy, Xid, s_XContext);
 }
 
 static void _container_end_draw (GldiContainer *pContainer)
@@ -294,6 +303,7 @@ void gldi_register_glx_backend (void)
 	gmb.init = _initialize_opengl_backend;
 	gmb.stop = _stop;
 	gmb.container_make_current = _container_make_current;
+	gmb.offscreen_make_current = _offscreen_make_current;
 	gmb.container_end_draw = _container_end_draw;
 	gmb.container_init = _container_init;
 	gmb.container_finish = _container_finish;

@@ -54,6 +54,7 @@ struct _GldiGLManagerBackend {
 	gboolean (*init) (gboolean bForceOpenGL);
 	void (*stop) (void);
 	gboolean (*container_make_current) (GldiContainer *pContainer);
+	gboolean (*offscreen_make_current) (void);
 	void (*container_end_draw) (GldiContainer *pContainer);
 	void (*container_init) (GldiContainer *pContainer);
 	void (*container_finish) (GldiContainer *pContainer);
@@ -96,6 +97,13 @@ void gldi_gl_init_opengl_context (void);
 *@return TRUE if the Container's context is now the current one.
 */
 gboolean gldi_gl_container_make_current (GldiContainer *pContainer);
+
+/** Try to make current an OpenGL context that is not associated with any
+*container, but is suitable for rendering to offscreen targets (i.e. textures).
+*The caller must attach an FBO and a texture before rendering.
+*@return TRUE if a context was successfully set up.
+*/
+gboolean gldi_gl_offscreen_context_make_current (void);
 
 /** Start drawing on a Container's OpenGL context.
 *@param pContainer the container
