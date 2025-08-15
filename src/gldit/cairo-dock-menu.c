@@ -482,10 +482,8 @@ static void _on_menu_deactivated (GtkMenuShell *pMenu, G_GNUC_UNUSED gpointer da
 		if (pIcon->iHideLabel == 0 && pContainer)
 			gtk_widget_queue_draw (pContainer->pWidget);
 	}
-	if (gldi_container_is_wayland_backend ())
-	{
-		gldi_wayland_release_keyboard (pContainer, GLDI_KEYBOARD_RELEASE_MENU_CLOSED);
-	}
+	// no need to test if we're running on Wayland, if not, this is a no-op
+	gldi_wayland_release_keyboard (pContainer, GLDI_KEYBOARD_RELEASE_MENU_CLOSED);
 }
 
 static void _menu_realized_cb (GtkWidget *widget, gpointer user_data);
@@ -592,7 +590,7 @@ static void _menu_realized_cb (GtkWidget *widget, gpointer user_data)
 	// (note: menus created here are always ultimately a child of a layer-shell window)
 	// solution used here is originally by LBCrion (under GPL3):
 	// https://github.com/LBCrion/sfwbar/commit/760e68ef50c540a55c13791876f853d358b4dcaa
-	if (gldi_container_is_wayland_backend () && gldi_wayland_manager_have_layer_shell ())
+	if (gldi_wayland_manager_have_layer_shell ())
 	{
 		GdkRectangle area;
 		GdkWindow *window = gtk_widget_get_window (gtk_widget_get_toplevel (widget));
@@ -972,6 +970,68 @@ GtkWidget *gldi_menu_item_get_image (GtkWidget *pMenuItem)
 	return gtk3_image_menu_item_get_image (GTK3_IMAGE_MENU_ITEM (pMenuItem));
 }
 
+
+// custom data to store with menu items that have a tooltip
+
+typedef struct _GldiMenuItemTooltip {
+	gchar *cText;
+	void (*pFunction)(GtkMenuItem*, gpointer);
+	gpointer pData;
+} GldiMenuItemTooltip;
+
+static void _free_tooltip_data (gpointer ptr, GObject*)
+{
+	if (!ptr) return;
+	GldiMenuItemTooltip *pCustomData = (GldiMenuItemTooltip*)ptr;
+	g_free (pCustomData->cText);
+	g_free (pCustomData);
+	// note: pData is not managed by us
+}
+
+static void _enable_tooltip (GtkWidget* pWidget, gpointer ptr)
+{
+	if (!ptr) return; // should not happen
+	GldiMenuItemTooltip *pCustomData = (GldiMenuItemTooltip*)ptr;
+	gtk_widget_set_tooltip_text (pWidget, pCustomData->cText);
+}
+
+static void _tooltip_activate (GtkMenuItem* pMenuItem, gpointer ptr)
+{
+	gtk_widget_set_tooltip_text (GTK_WIDGET (pMenuItem), NULL);
+	if (!ptr) return; // should not happen
+	GldiMenuItemTooltip *pCustomData = (GldiMenuItemTooltip*)ptr;
+	if (pCustomData->pFunction)
+		(pCustomData->pFunction)(pMenuItem, pCustomData->pData);
+}
+
+static GtkWidget *_menu_item_new_with_action_and_tooltip (const gchar *cLabel, const gchar *cImage, const gchar *cToolTip, void (*pFunction)(GtkMenuItem*, gpointer), gpointer pData)
+{
+	GtkWidget *pMenuItem;
+	gboolean bCustomCallback = ((cToolTip != NULL) && gldi_wayland_manager_have_layer_shell ());
+	
+	if (bCustomCallback)
+	{
+		pMenuItem = gldi_menu_item_new (cLabel, cImage);
+		if (!pMenuItem) return NULL;
+		
+		GldiMenuItemTooltip *pCustomData = g_new0 (GldiMenuItemTooltip, 1);
+		pCustomData->cText = g_strdup (cToolTip);
+		pCustomData->pFunction = pFunction;
+		pCustomData->pData = pData;
+		
+		g_object_weak_ref (G_OBJECT (pMenuItem), _free_tooltip_data, pCustomData);
+		g_signal_connect (G_OBJECT (pMenuItem), "map", G_CALLBACK (_enable_tooltip), pCustomData);
+		g_signal_connect (G_OBJECT (pMenuItem), "activate", G_CALLBACK (_tooltip_activate), pCustomData);
+	}
+	else
+	{
+		pMenuItem = gldi_menu_item_new_with_action (cLabel, cImage, G_CALLBACK (pFunction), pData);
+		if (pMenuItem && cToolTip) gtk_widget_set_tooltip_text (pMenuItem, cToolTip);
+	}
+	return pMenuItem;
+}
+
+
 GtkWidget *gldi_menu_item_new_with_action (const gchar *cLabel, const gchar *cImage, GCallback pFunction, gpointer pData)
 {
 	GtkWidget *pMenuItem = gldi_menu_item_new (cLabel, cImage);
@@ -998,6 +1058,13 @@ GtkWidget *gldi_menu_item_new_with_submenu (const gchar *cLabel, const gchar *cI
 GtkWidget *gldi_menu_add_item (GtkWidget *pMenu, const gchar *cLabel, const gchar *cImage, GCallback pFunction, gpointer pData)
 {
 	GtkWidget *pMenuItem = gldi_menu_item_new_with_action (cLabel, cImage, pFunction, pData);
+	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
+	return pMenuItem;
+}
+
+GtkWidget *gldi_menu_add_item_with_tooltip (GtkWidget *pMenu, const gchar *cLabel, const gchar *cImage, const gchar *cToolTip, void (*pFunction)(GtkMenuItem*, gpointer), gpointer pData)
+{
+	GtkWidget *pMenuItem = _menu_item_new_with_action_and_tooltip (cLabel, cImage, cToolTip, pFunction, pData);
 	gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
 	return pMenuItem;
 }
