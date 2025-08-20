@@ -771,16 +771,12 @@ int main (int argc, char** argv)
 	//\___________________ Disable modules that have crashed
 	if (cExcludeModule != NULL && (s_iNbCrashes > 2 || bMaintenance)) // 3th crash or 4th (with -m)
 	{
-		gchar *cCommand = g_strdup_printf ("sed -i \"/modules/ s/%s//g\" \"%s\"",
-			cExcludeModule, g_cConfFile);
-		int r = system (cCommand);
-		if (r < 0)
-			cd_warning ("Not able to launch this command: %s", cCommand);
-		else
-			cd_warning (_("The module '%s' has been deactivated because it may "
+		// Note: if we are here, then g_cConfFile should already exist, since we got past copying the theme
+		// and to cairo_dock_load_current_theme () below.
+		cairo_dock_add_remove_element_to_key (g_cConfFile, "System", "modules", cExcludeModule, FALSE);
+		cd_warning (_("The module '%s' has been deactivated because it may "
 			"have caused some problems.\nYou can reactivate it, but if it happens "
 			"again please report it at https://github.com/Cairo-Dock/cairo-dock-core/issues"), cExcludeModule);
-		g_free (cCommand);
 	}
 	
 	//\___________________ maintenance mode -> show the main config panel.
