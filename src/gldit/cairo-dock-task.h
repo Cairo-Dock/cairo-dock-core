@@ -63,7 +63,7 @@ struct _GldiTask {
 	GldiGetDataAsyncFunc get_data;
 	// function carrying out the update of the dock. Returns TRUE to continue, FALSE to stop.
 	GldiUpdateSyncFunc update;
-	/// interval of time in seconds, 0 if the Task is to run once.
+	/// interval of time in seconds, 0 if the Task is to run once. Set when creating the task; can change >0 values later, but cannot change between 0 and >0.
 	guint iPeriod;
 	// state of the frequency of the Task.
 	GldiTaskFrequencyState iFrequencyState;
@@ -83,9 +83,9 @@ struct _GldiTask {
 	gboolean bNeedsUpdate;  // TRUE when new data are waiting to be processed.
 	gboolean bContinue;  // result of the 'update' function (TRUE -> continue, FALSE -> stop, if the task is periodic).
 	GThread *pThread;  // the thread that execute the asynchronous 'get_data' callback
-	GCond *pCond;  // condition to awake the thread (if periodic).
+	GCond cond;  // condition to awake the thread (if periodic). Only used if iPeriod > 0
 	gboolean bRunThread;  // condition value: whether to run the thread or exit.
-	GMutex *pMutex;  // mutex associated with the condition.
+	GMutex mutex;  // mutex associated with the condition. Always initialized when creating a task.
 } ;
 
 
