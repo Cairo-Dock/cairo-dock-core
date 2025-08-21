@@ -151,7 +151,7 @@ _Hiding the dock to use all the screen=
 
 
 
-#[@pkgdatadir@/icons/icon-desklets.png]
+#[@pkgdatadir@/icons/icon-desklets.svg]
 [Desklets]
 
 #X[Placing applets on your desktop]

@@ -23,20 +23,6 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-task.h"
 
-#ifndef GLIB_VERSION_2_32
-#define G_MUTEX_INIT(a)  a = g_mutex_new ()
-#define G_COND_INIT(a)   a = g_cond_new ()
-#define G_MUTEX_CLEAR(a) g_mutex_free (a)
-#define G_COND_CLEAR(a)  g_cond_free (a)
-#define G_THREAD_UNREF(t) g_free (t)
-#else
-#define G_MUTEX_INIT(a)  a = g_new (GMutex, 1); g_mutex_init (a)
-#define G_COND_INIT(a)   a = g_new (GCond, 1);  g_cond_init (a)
-#define G_MUTEX_CLEAR(a) g_mutex_clear (a); g_free (a)
-#define G_COND_CLEAR(a)  g_cond_clear (a);  g_free (a)
-#define G_THREAD_UNREF(t) if (t) g_thread_unref (t)
-#endif
-
 #define _schedule_next_iteration(pTask) do {\
 	if (pTask->iSidTimer == 0 && pTask->iPeriod)\
 		pTask->iSidTimer = g_timeout_add_seconds (pTask->iPeriod, (GSourceFunc) _launch_task_timer, pTask); } while (0)
@@ -50,15 +36,16 @@
 	pTask->fElapsedTime = g_timer_elapsed (pTask->pClock, NULL);\
 	g_timer_start (pTask->pClock); } while (0)
 
-#define _free_task(pTask) do {\
-	if (pTask->free_data)\
-		pTask->free_data (pTask->pSharedMemory);\
-	g_timer_destroy (pTask->pClock);\
-	G_MUTEX_CLEAR (pTask->pMutex);\
-	if (pTask->pCond) {\
-		G_COND_CLEAR (pTask->pCond); }\
-	G_THREAD_UNREF (pTask->pThread);\
-	g_free (pTask); } while (0)
+static void _free_task (GldiTask *pTask)
+{
+	if (pTask->free_data)
+		pTask->free_data (pTask->pSharedMemory);
+	g_timer_destroy (pTask->pClock);
+	g_mutex_clear (&pTask->mutex);
+	if (pTask->iPeriod) g_cond_clear (&pTask->cond);
+	if (pTask->pThread) g_thread_unref (pTask->pThread);
+	g_free (pTask);
+}
 
 static gboolean _launch_task_timer (GldiTask *pTask)
 {
@@ -78,35 +65,31 @@ static gboolean _check_for_update_idle (GldiTask *pTask)
 	}
 	
 	// finish the iteration, and possibly schedule the next one (the thread must be finished for this part).
-	if (g_mutex_trylock (pTask->pMutex))  // if the thread is over
+	if (g_mutex_trylock (&pTask->mutex))  // if the thread is over
 	{
 		if (pTask->bDiscard)  // if the task has been discarded, it's the end of the journey for it.
 		{
-			if (pTask->pCond)
+			if (pTask->iPeriod)
 			{
 				pTask->bRunThread = TRUE;
-				g_cond_signal (pTask->pCond);
-				g_mutex_unlock (pTask->pMutex);
+				g_cond_signal (&pTask->cond);
+				g_mutex_unlock (&pTask->mutex);
 				g_thread_join (pTask->pThread); // unref the thread
+				pTask->pThread = NULL;
 			}
-			else
-			{
-				g_mutex_unlock (pTask->pMutex);
-				G_THREAD_UNREF (pTask->pThread);
-			}
-			pTask->pThread = NULL;
+			else g_mutex_unlock (&pTask->mutex);
+
 			_free_task (pTask);
 			return FALSE;
 		}
 		
-		if (! pTask->pCond)  // one-shot thread => the thread is over
+		if (! pTask->iPeriod)  // one-shot thread => the thread is over
 		{
-			G_THREAD_UNREF (pTask->pThread);
-			pTask->pThread = NULL;
+			g_clear_object (&pTask->pThread);
 		}
 		
 		pTask->iSidUpdateIdle = 0;  // set it before the unlock, as it is accessed in the thread part
-		g_mutex_unlock (pTask->pMutex);
+		g_mutex_unlock (&pTask->mutex);
 		
 		// schedule the next iteration if necessary.
 		if (! pTask->bContinue)
@@ -128,7 +111,7 @@ static gboolean _check_for_update_idle (GldiTask *pTask)
 }
 static gpointer _get_data_threaded (GldiTask *pTask)
 {
-	g_mutex_lock (pTask->pMutex);
+	g_mutex_lock (&pTask->mutex);
 	_run_thread:  // at this point the mutex is locked, either by the first execution of this function, or by 'g_cond_wait'
 	
 	//\_______________________ get the data
@@ -143,15 +126,15 @@ static gpointer _get_data_threaded (GldiTask *pTask)
 		pTask->iSidUpdateIdle = g_idle_add ((GSourceFunc) _check_for_update_idle, pTask);  // note that 'iSidUpdateIdle' can actually be set after the 'update' is called. that's why the 'update' have to wait for the mutex to finish its job.
 	
 	// sleep until the next iteration or just leave.
-	if (pTask->pCond)  // periodic task -> block until the condition becomes TRUE again.
+	if (pTask->iPeriod)  // periodic task -> block until the condition becomes TRUE again.
 	{
 		pTask->bRunThread = FALSE;
 		while (! pTask->bRunThread)
-			g_cond_wait (pTask->pCond, pTask->pMutex);  // releases the mutex, then takes it again when awakening.
+			g_cond_wait (&pTask->cond, &pTask->mutex);  // releases the mutex, then takes it again when awakening.
 		if (g_atomic_int_get (&pTask->bDiscard) == 0)
 			goto _run_thread;
 	}
-	g_mutex_unlock (pTask->pMutex);
+	g_mutex_unlock (&pTask->mutex);
 	g_thread_exit (NULL);
 	return NULL;
 }
@@ -178,11 +161,7 @@ void gldi_task_launch (GldiTask *pTask)
 		{
 			pTask->bIsRunning = TRUE;
 			GError *erreur = NULL;
-			#ifndef GLIB_VERSION_2_32
-			pTask->pThread = g_thread_create ((GThreadFunc) _get_data_threaded, pTask, TRUE, &erreur);  // TRUE <=> joinable
-			#else
 			pTask->pThread = g_thread_try_new ("Cairo-Dock Task", (GThreadFunc) _get_data_threaded, pTask, &erreur);
-			#endif
 			if (erreur != NULL)  // on n'a pas pu lancer le thread.
 			{
 				cd_warning (erreur->message);
@@ -191,15 +170,15 @@ void gldi_task_launch (GldiTask *pTask)
 			}
 		}
 		else  // thread already exists; it's either running or sleeping or finished with a pending update
-		if (pTask->pCond && g_mutex_trylock (pTask->pMutex))  // it's a periodic thread, and it's not currently running...
+		if (pTask->iPeriod && g_mutex_trylock (&pTask->mutex))  // it's a periodic thread, and it's not currently running...
 		{
 			if (pTask->iSidUpdateIdle == 0)  // ...and it doesn't have a pending update -> awake it and run it again.
 			{
 				pTask->bRunThread = TRUE;
 				pTask->bIsRunning = TRUE;
-				g_cond_signal (pTask->pCond);
+				g_cond_signal (&pTask->cond);
 			}
-			g_mutex_unlock (pTask->pMutex);
+			g_mutex_unlock (&pTask->mutex);
 		}  // else it's a one-shot thread or it's currently running or has a pending update -> don't launch it. so if the task is periodic, it will skip this iteration.
 	}
 }
@@ -230,10 +209,10 @@ GldiTask *gldi_task_new_full (int iPeriod, GldiGetDataAsyncFunc get_data, GldiUp
 	pTask->free_data = free_data;
 	pTask->pSharedMemory = pSharedMemory;
 	pTask->pClock = g_timer_new ();
-	G_MUTEX_INIT (pTask->pMutex);
+	g_mutex_init (&pTask->mutex);
 	if (iPeriod != 0)
 	{
-		G_COND_INIT (pTask->pCond);
+		g_cond_init (&pTask->cond);
 	}
 	return pTask;
 }
@@ -251,13 +230,13 @@ void gldi_task_stop (GldiTask *pTask)
 		if (pTask->pThread)
 		{
 			g_atomic_int_set (&pTask->bDiscard, 1);  // set the discard flag to help the 'get_data' callback knows that it should stop.
-			if (pTask->pCond)  // the thread might be sleeping, awake it.
+			if (pTask->iPeriod)  // the thread might be sleeping, awake it.
 			{
-				if (g_mutex_trylock (pTask->pMutex))
+				if (g_mutex_trylock (&pTask->mutex))
 				{
 					pTask->bRunThread = TRUE;
-					g_cond_signal (pTask->pCond);
-					g_mutex_unlock (pTask->pMutex);
+					g_cond_signal (&pTask->cond);
+					g_mutex_unlock (&pTask->mutex);
 				}
 			}
 			g_thread_join (pTask->pThread);  // unref the thread
@@ -273,12 +252,12 @@ void gldi_task_stop (GldiTask *pTask)
 	}
 	else
 	{
-		if (pTask->pThread && pTask->pCond && g_mutex_trylock (pTask->pMutex))  // the thread is sleeping, awake it and let it exit.
+		if (pTask->pThread && pTask->iPeriod && g_mutex_trylock (&pTask->mutex))  // the thread is sleeping, awake it and let it exit.
 		{
 			g_atomic_int_set (&pTask->bDiscard, 1);
 			pTask->bRunThread = TRUE;
-			g_cond_signal (pTask->pCond);
-			g_mutex_unlock (pTask->pMutex);
+			g_cond_signal (&pTask->cond);
+			g_mutex_unlock (&pTask->mutex);
 			g_thread_join (pTask->pThread);  // unref the thread
 			pTask->pThread = NULL;
 			g_atomic_int_set (&pTask->bDiscard, 0);
@@ -302,11 +281,11 @@ void gldi_task_discard (GldiTask *pTask)
 	//   if we're inside the 'update' user callback, the task will be destroyed in the 2nd stage of the function (the user callback is called in the 1st stage).
 	if (! gldi_task_is_running (pTask))  // we can free the task immediately.
 	{
-		if (pTask->pThread && pTask->pCond && g_mutex_trylock (pTask->pMutex))  // the thread is sleeping, awake it and let it exit before we can free everything
+		if (pTask->pThread && pTask->iPeriod && g_mutex_trylock (&pTask->mutex))  // the thread is sleeping, awake it and let it exit before we can free everything
 		{
 			pTask->bRunThread = TRUE;
-			g_cond_signal (pTask->pCond);
-			g_mutex_unlock (pTask->pMutex);
+			g_cond_signal (&pTask->cond);
+			g_mutex_unlock (&pTask->mutex);
 			g_thread_join (pTask->pThread);  // unref the thread
 			pTask->pThread = NULL;
 		}

@@ -355,14 +355,6 @@ int main (int argc, char** argv)
 	
 	
 	// init lib
-	#if !defined (GLIB_VERSION_2_36) // no longer needed now... (>= 2.35)
-	g_type_init (); // should initialise threads too on new versions of GLIB (>= 2.24)
-	#endif
-	#if (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 24)
-	if (!g_thread_supported ())
-		g_thread_init (NULL);
-	#endif
-
 	dbus_g_thread_init (); // it's a wrapper: it will use dbus_threads_init_default ();
 	
 	GError *erreur = NULL;
