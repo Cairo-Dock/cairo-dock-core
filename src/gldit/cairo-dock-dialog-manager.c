@@ -879,7 +879,9 @@ void gldi_dialog_leave (CairoDialog *pDialog)
 		//g_print ("leave from container %x\n", pContainer);
 		if (pContainer)
 		{
-			if (CAIRO_DOCK_IS_DOCK (pContainer) && gtk_window_get_modal (GTK_WINDOW (pDialog->container.pWidget)))
+			if (CAIRO_DOCK_IS_DOCK (pContainer) && (
+				gldi_container_use_new_positioning_code () ||
+				gtk_window_get_modal (GTK_WINDOW (pDialog->container.pWidget))))
 			{
 				CAIRO_DOCK (pContainer)->bHasModalWindow = FALSE;
 				gldi_dock_leave_synthetic (CAIRO_DOCK (pContainer));
@@ -928,7 +930,9 @@ void gldi_dialog_unhide (CairoDialog *pDialog)
 					gtk_widget_queue_draw (pContainer->pWidget);
 				pIcon->iHideLabel ++;
 			}
-			if (CAIRO_DOCK_IS_DOCK (pContainer) && gtk_window_get_modal (GTK_WINDOW (pDialog->container.pWidget)))
+			if (CAIRO_DOCK_IS_DOCK (pContainer) && (
+				gldi_container_use_new_positioning_code () ||
+				gtk_window_get_modal (GTK_WINDOW (pDialog->container.pWidget))))
 			{
 				CAIRO_DOCK (pContainer)->bHasModalWindow = TRUE;
 			}
@@ -960,7 +964,9 @@ static gboolean on_icon_removed (G_GNUC_UNUSED gpointer pUserData, Icon *pIcon, 
 			for (d = s_pDialogList; d != NULL; d = d->next)
 			{
 				pDialog = d->data;
-				if (pDialog->pIcon == pIcon && gtk_window_get_modal (GTK_WINDOW (pDialog->container.pWidget)))
+				if (pDialog->pIcon == pIcon && (
+					gldi_container_use_new_positioning_code () ||
+					gtk_window_get_modal (GTK_WINDOW (pDialog->container.pWidget))))
 				{
 					pDock->bHasModalWindow = FALSE;
 					gldi_dock_leave_synthetic (pDock);
@@ -1200,21 +1206,23 @@ static void init_object (GldiObject *obj, gpointer attr)
 	
 	gldi_dialog_init_internals (pDialog, pAttribute);
 	
+	GldiContainer *pContainer = pAttribute->pContainer;
+	
 	//\________________ Interactive dialogs are set modal, to be fixed.
 	if ((pDialog->pInteractiveWidget || pDialog->pButtons || pAttribute->iTimeLength == 0) && ! pDialog->bNoInput)
 	{
 		gtk_window_set_modal (GTK_WINDOW (pDialog->container.pWidget), TRUE);  // Note: there is a bug in Ubuntu version of GTK: gtkscrolledwindow in dialog breaks his modality (http://www.gtkforums.com/viewtopic.php?f=3&t=55727, LP: https://bugs.launchpad.net/ubuntu/+source/overlay-scrollbar/+bug/903302).
-		GldiContainer *pContainer = pAttribute->pContainer;
 		if (CAIRO_DOCK_IS_DOCK (pContainer))
 		{
 			CAIRO_DOCK (pContainer)->bHasModalWindow = TRUE;
 			gldi_dock_enter_synthetic (CAIRO_DOCK (pContainer));  // to prevent the dock from hiding. We want to see it while the dialog is visible (a leave event will be emited when it disappears).
 		}
 	}
+	else if (CAIRO_DOCK_IS_DOCK (pContainer) && gldi_container_use_new_positioning_code ())
+		CAIRO_DOCK (pContainer)->bHasModalWindow = TRUE;
 	pDialog->bHideOnClick = pAttribute->bHideOnClick;
 	
 	Icon *pIcon = pAttribute->pIcon;
-	GldiContainer *pContainer = pAttribute->pContainer;
 	
 	//\________________ register the dialog
 	s_pDialogList = g_slist_prepend (s_pDialogList, pDialog);
