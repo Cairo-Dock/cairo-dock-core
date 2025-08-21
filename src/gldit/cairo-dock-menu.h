@@ -133,6 +133,22 @@ GtkWidget *gldi_menu_item_get_image (GtkWidget *pMenuItem);
 GtkWidget *gldi_menu_add_item (GtkWidget *pMenu, const gchar *cLabel, const gchar *cImage, GCallback pFunction, gpointer pData);
 #define cairo_dock_add_in_menu_with_stock_and_data(cLabel, gtkStock, pFunction, pMenu, pData) gldi_menu_add_item (pMenu, cLabel, gtkStock, pFunction, pData)
 
+/** A convenient function to add an item to a given menu with an optional tooltip to display.
+ * It is recommended to use this function to add a tooltip instead of gtk_widget_set_tooltip_text ()
+ * as on Wayland and gtk-layer-shell there seems to be a race condition with GTK internals that
+ * can result in an attempt to re-show the tooltip after the menu has been closed, that leads to
+ * a protocol error and crash; see https://github.com/wmww/gtk-layer-shell/issues/207.
+ * This function takes care to keep the tooltip hidden when the menu has been closed.
+ * @param pMenu the menu
+ * @param cLabel the label, or NULL
+ * @param cImage the image path or name, or NULL
+ * @param cToolTip the tooltip to display when the user hovers on the menu item or NULL
+ * @param pFunction the callback
+ * @param pData the data passed to the callback
+ * @return the new menu-entry that has been added.
+ */
+GtkWidget *gldi_menu_add_item_with_tooltip (GtkWidget *pMenu, const gchar *cLabel, const gchar *cImage, const gchar *cToolTip, void (*pFunction)(GtkMenuItem*, gpointer), gpointer pData);
+
 /** A convenient function to add a sub-menu to a given menu.
  * @param pMenu the menu
  * @param cLabel the label, or NULL

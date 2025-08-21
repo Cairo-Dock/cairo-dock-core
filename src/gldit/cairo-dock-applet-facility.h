@@ -306,6 +306,20 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 */
 #define CD_APPLET_ADD_SUB_MENU(cLabel, pMenu) CD_APPLET_ADD_SUB_MENU_WITH_IMAGE(cLabel, pMenu, NULL)
 
+/** Create and add an entry to a menu, with an icon and a tooltip.
+ * It is recommended to use this function to add a tooltip instead of gtk_widget_set_tooltip_text ()
+ * as on Wayland and gtk-layer-shell there seems to be a race condition with GTK internals that
+ * can result in an attempt to re-show the tooltip after the menu has been closed, that leads to
+ * a protocol error and crash; see https://github.com/wmww/gtk-layer-shell/issues/207.
+ * This function takes care to keep the tooltip hidden when the menu has been closed.
+*@param cLabel name of the entry.
+*@param gtkStock name of a GTK icon or path to an image.
+*@param pCallBack function called when the user selects this entry.
+*@param pMenu menu to add the entry to.
+*@param pData data passed as parameter of the callback.
+*/
+#define CD_APPLET_ADD_IN_MENU_WITH_TOOLTIP_AND_DATA(cLabel, gtkStock, cToolTip, pCallBack, pMenu, pData) gldi_menu_add_item_with_tooltip (pMenu, cLabel, gtkStock, cToolTip, pCallBack, pData)
+
 /** Create and add an entry to a menu, with an icon.
 *@param cLabel name of the entry.
 *@param gtkStock name of a GTK icon or path to an image.
