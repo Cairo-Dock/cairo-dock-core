@@ -210,7 +210,7 @@ static gchar **_process_cmdline (const gchar *cCmdline, gboolean bKeepFiles, int
 				g_free (tmp[j]);
 				tmp[j] = g_strdup (g_app_info_get_name (app));
 				bKeep = (tmp[j] != NULL); // note: we should always have a name
-				bParsed = FALSE;
+				bParsed = TRUE;
 				break;
 			case 'k':
 				// path to the .desktop file (if available)
@@ -224,7 +224,7 @@ static gchar **_process_cmdline (const gchar *cCmdline, gboolean bKeepFiles, int
 						g_free (tmp[j]);
 						tmp[j] = g_strdup (path);
 						bKeep = TRUE;
-						bParsed = FALSE;
+						bParsed = TRUE;
 					}
 				}
 				break;
