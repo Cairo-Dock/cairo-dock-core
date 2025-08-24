@@ -169,7 +169,7 @@ static void _spawn_app (const gchar * const *args, const gchar *id, const gchar 
 		g_variant_builder_open  (&args_builder, s_string_array_type);
 		for(; *args; ++args) g_variant_builder_add (&args_builder, "s", *args);
 		g_variant_builder_close (&args_builder);
-		g_variant_builder_add   (&args_builder, "b",  g_variant_new_boolean (FALSE));
+		g_variant_builder_add   (&args_builder, "b", FALSE);
 		GVariant *tmp = g_variant_builder_end (&args_builder);
 		g_variant_builder_add   (&var_builder, "(sv)", "ExecStart", g_variant_new_array (NULL, &tmp, 1));
 	}
