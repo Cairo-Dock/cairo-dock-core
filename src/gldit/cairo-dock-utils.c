@@ -368,11 +368,12 @@ gboolean cairo_dock_launch_command_argv_full2 (const gchar * const * args, const
 		
 		if (app_info)
 		{
-			id = g_strdup (g_app_info_get_id (app_info));
-			if (id)
+			const char *tmp = g_app_info_get_id (app_info);
+			const char *suffix = g_strrstr (tmp, ".desktop");
+			if (suffix != tmp) // suffix is NULL (no .desktop ending), or is not equal to the start
 			{
-				char *suffix = g_strrstr (id, ".desktop");
-				if (suffix) *suffix = 0;
+				id = g_strdup (tmp);
+				if (suffix) id[suffix - tmp] = 0; // remove the .desktop ending
 			}
 			desc = g_app_info_get_description (app_info);
 			if (desc && *desc)
