@@ -70,15 +70,36 @@ typedef enum {
 	/// This is a GUI app, use GdkAppLaunchContext to create an activation token for it
 	GLDI_LAUNCH_GUI = 1<<0,
 	/// This is a potentially long-lived app, try to put it in a separate process accounting
-	/// group with the session manager. Currently, this means putting the app in a separate
-	/// slice if running with systemd. This has the effect that e.g. resource use is accounted
-	/// separately, and the app is not automatically killed if cairo-dock exits.
+	/// group with the session manager. Currently, this is only supported on systemd and means
+	/// starting the app as a separate, transient service. This has the effect that e.g. resource
+	/// use is accounted separately, and the app is not automatically killed if cairo-dock exits.
 	GLDI_LAUNCH_SLICE = 1<<1
 } GldiLaunchFlags;
 
 gboolean cairo_dock_launch_command_full (const gchar *cCommand, const gchar *cWorkingDirectory, GldiLaunchFlags flags);
 #define cairo_dock_launch_command(cCommand) cairo_dock_launch_command_full (cCommand, NULL, GLDI_LAUNCH_DEFAULT)
+
+/** Launch the given command asynchronously (i.e. do not wait for it to exit).
+* @param args Argument vector with the executable name and parameters to pass.
+* @param cWorkingDirectory working directory to launch the command in.
+* @param flags Additional options that determine how to launch the command.
+* @return Whether successfully launched the given command. Note: currently, this always returns TRUE if flags includes GLDI_LAUNCH_SLICE;
+*  do not rely on its value in this case.
+*/
 gboolean cairo_dock_launch_command_argv_full (const gchar * const * args, const gchar *cWorkingDirectory, GldiLaunchFlags flags);
+
+/** Launch the given command asynchronously (i.e. do not wait for it to exit).
+* @param args Argument vector with the executable name and parameters to pass.
+* @param cWorkingDirectory working directory to launch the command in.
+* @param flags Additional options that determine how to launch the command.
+* @param app_info An optional GAppInfo that corresponds to the app to be launched. Used to generate a startup notify ID
+*  (if flags includes GLDI_LAUNCH_GUI) and to identify the app to the system service manager (if flags includes GLDI_LAUNCH_SLICE).
+* @return Whether successfully launched the given command. Note: currently, this always returns TRUE if flags includes
+*  GLDI_LAUNCH_SLICE; do not rely on its value in this case.
+*/
+gboolean cairo_dock_launch_command_argv_full2 (const gchar * const * args, const gchar *cWorkingDirectory, GldiLaunchFlags flags,
+	GAppInfo *app_info);
+
 #define cairo_dock_launch_command_argv(argv) cairo_dock_launch_command_argv_full (argv, NULL, GLDI_LAUNCH_DEFAULT)
 gboolean cairo_dock_launch_command_single (const gchar *cExec);
 gboolean cairo_dock_launch_command_single_gui (const gchar *cExec);
@@ -115,6 +136,18 @@ struct _GldiChildProcessManagerBackend {
 	 *            or similar facility to avoid race condition
 	 */
 	void (*new_app_launched) (const char *id, const char *desc, GPid pid);
+	/** Launch a new app based on the given argument vector, performing any system-specific setup necessary.
+	 *
+	 *@param args  argument vector to use
+	 *@param id  a non-NULL identifier for the newly launched process, containing only "safe" characters
+	 *           (currently this means only characters valid in systemd unit names: ASCII letters, digits,
+	 *            ":", "-", "_", ".", and "\"); does not need to be unique
+	 *@param desc  a non-NULL description suitable to display to the user
+	 *@param env  an optional vector of environment variables to set for the launched process; each element
+	 *            should be in the format of "VAR=value"
+	 *@param working_dir  optionally a working directory to set for the newly launched process
+	 */
+	void (*spawn_app) (const gchar * const *args, const gchar *id, const gchar *desc, const gchar * const *env, const gchar *working_dir);
 };
 typedef struct _GldiChildProcessManagerBackend GldiChildProcessManagerBackend;
 

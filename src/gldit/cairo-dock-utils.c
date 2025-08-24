@@ -323,6 +323,7 @@ void _sanitize_id (char *id)
 		char *tmp = g_utf8_next_char (x);
 		if (tmp == x + 1 && (g_ascii_isalnum (*x) || *x == '-' || *x == '_' || *x == '.'))
 		{
+			if (*x == '-') *x = '_';
 			if (y != x) *y = *x;
 			y++;
 		}
@@ -331,70 +332,173 @@ void _sanitize_id (char *id)
 	*y = 0;
 }
 
-gboolean cairo_dock_launch_command_argv_full (const gchar * const * args, const gchar *cWorkingDirectory, GldiLaunchFlags flags)
+
+extern char **environ;
+
+gboolean cairo_dock_launch_command_argv_full2 (const gchar * const * args, const gchar *cWorkingDirectory, GldiLaunchFlags flags,
+	GAppInfo *app_info)
 {
 	g_return_val_if_fail (args != NULL && args[0] != NULL, FALSE);
-	GError *erreur = NULL;
-	GPid pid;
-	char **envp = NULL;
+	char *startup_id = NULL;
+	gboolean ret = TRUE;
 	
 	if (flags & GLDI_LAUNCH_GUI)
 	{
-		// this is a hack, and is actually ignored at least on Wayland
-		GAppInfo *info = g_app_info_create_from_commandline(args[0], args[0], G_APP_INFO_CREATE_SUPPORTS_STARTUP_NOTIFICATION, NULL);
+		GAppInfo *to_free = NULL;
+		GAppInfo *info = app_info;
+		if (!info)
+		{
+			// this is a hack, and the contents are actually ignored at least on Wayland
+			info = g_app_info_create_from_commandline(args[0], args[0], G_APP_INFO_CREATE_SUPPORTS_STARTUP_NOTIFICATION, NULL);
+			to_free = info;
+		}
 		if (info) {
-			GdkAppLaunchContext *ctx = gdk_display_get_app_launch_context(gdk_display_get_default());
-			char *startup_id = g_app_launch_context_get_startup_notify_id(G_APP_LAUNCH_CONTEXT(ctx), info, NULL);
-			if (startup_id) {
-				envp = g_get_environ();
-				envp = g_environ_setenv(envp, "DESKTOP_STARTUP_ID", startup_id, TRUE);
-				envp = g_environ_setenv(envp, "XDG_ACTIVATION_TOKEN", startup_id, TRUE);
-				g_free (startup_id);
-			}
-			g_object_unref(ctx);
-			g_object_unref (info);
+			GdkAppLaunchContext *ctx = gdk_display_get_app_launch_context (gdk_display_get_default ());
+			startup_id = g_app_launch_context_get_startup_notify_id (G_APP_LAUNCH_CONTEXT (ctx), info, NULL);
+			g_object_unref (ctx);
+			if (to_free) g_object_unref (to_free);
 		}
 	}
 	
-	// note: args are expected as gchar**, but not modified (casted back to const immediately)
-	gboolean ret =  g_spawn_async (cWorkingDirectory, (gchar**)args, envp,
-		G_SPAWN_SEARCH_PATH |
-		// note: posix_spawn (and clone on Linux) will be used if we include the following
-		// two flags, but this requires to later add a child watch and also adds a risk of
-		// fd leakage (although it has not been an issue before with system() as well)
-		G_SPAWN_DO_NOT_REAP_CHILD | G_SPAWN_LEAVE_DESCRIPTORS_OPEN |
-		G_SPAWN_STDOUT_TO_DEV_NULL | G_SPAWN_STDERR_TO_DEV_NULL,
-		NULL, NULL,
-		&pid, &erreur);
-	if (!ret)
+	if ((flags & GLDI_LAUNCH_SLICE) && s_backend.spawn_app)
 	{
-		cd_warning ("couldn't launch this command (%s : %s)", args[0], erreur->message);
-		g_error_free (erreur);
+		char *id = NULL;
+		const char *desc = NULL;
+		char *desc_to_free = NULL;
+		
+		if (app_info)
+		{
+			const char *tmp = g_app_info_get_id (app_info);
+			if (tmp)
+			{
+				const char *suffix = g_strrstr (tmp, ".desktop");
+				if (suffix != tmp) // suffix is NULL (no .desktop ending), or is not equal to the start
+				{
+					id = g_strdup (tmp);
+					if (suffix) id[suffix - tmp] = 0; // remove the .desktop ending
+				}
+			}
+			desc = g_app_info_get_description (app_info);
+			if (desc && *desc)
+			{
+				desc_to_free = g_strdup_printf ("%s - %s", g_app_info_get_name (app_info), desc);
+				desc = desc_to_free;
+			}
+			else
+			{
+				desc = g_app_info_get_name (app_info);
+				if (!desc || !*desc) desc = args[0];
+			}
+		}
+		if (!id)
+		{
+			const char *tmp = strrchr (args[0], '/');
+			tmp = tmp ? (tmp + 1) : args[0];
+			// note: tmp will have zero length if args[0] ends with '/' -- this is not valid, but we did not check for it before
+			if (*tmp) id = g_strdup (tmp);
+		}
+		
+		if (id)
+		{
+			_sanitize_id (id);
+			if (!*id)
+			{
+				g_free (id);
+				id = NULL;
+			}
+		}
+		
+		const char *env[] = {NULL, NULL, NULL, NULL, NULL};
+		char *to_free[] = {NULL, NULL};
+		int i = 0;
+		if (startup_id)
+		{
+			to_free[0] = g_strdup_printf ("XDG_ACTIVATION_TOKEN=%s", startup_id);
+			to_free[1] = g_strdup_printf ("DESKTOP_STARTUP_ID=%s", startup_id);
+			env[0] = to_free[0];
+			env[1] = to_free[1];
+			i = 2;
+		}
+		
+		// look up DISPLAY and WAYLAND_DISPLAY and set them to be explicitly inherited by the newly started process
+		// (this is to work around if they are not set in systemd or as a convenience if we're running in a nested session)
+		{
+			const char *display = NULL;
+			const char *wl_display = NULL;
+			// Note: we should not use getenv(), as it might return a statically allocated string that is overwritten
+			// in every call (although in practice it returns the members of environ).
+			// Instead, we directly search in environ. This will crash if another thread calls setenv (), but
+			// that should not happen (libraries should not call setenv () at all for this reason). The same is
+			// true for getenv () and g_get_environ () as well though.
+			char **tmp = environ;
+			for (; *tmp; ++tmp)
+			{
+				const char *tmp2 = strchr (*tmp, '=');
+				if (!tmp2) continue; // should not happen
+				if (!strncmp (*tmp, "DISPLAY", tmp2 - *tmp)) display = *tmp;
+				else if (!strncmp (*tmp, "WAYLAND_DISPLAY", tmp2 - *tmp)) wl_display = *tmp;
+				
+				if (display && wl_display) break;
+			}
+			
+			if (display)
+			{
+				env[i] = display;
+				i++;
+			}
+			if (wl_display)
+			{
+				env[i] = wl_display;
+				i++;
+			}
+		}
+		
+		s_backend.spawn_app (args, id ? id : "unknown", desc,
+			env[0] ? (const char *const *)env : NULL, cWorkingDirectory);
+		
+		g_free (id);
+		g_free (to_free[0]);
+		g_free (to_free[1]);
+		
+		//!! TODO: figure out how to detect and handle errors (or just change the function to be void)
 	}
 	else
 	{
-		if ((flags & GLDI_LAUNCH_SLICE) && s_backend.new_app_launched)
+		char **envp = NULL;
+		GPid pid;
+		GError *erreur = NULL;
+		
+		if (startup_id) {
+			envp = g_get_environ();
+			envp = g_environ_setenv(envp, "DESKTOP_STARTUP_ID", startup_id, TRUE);
+			envp = g_environ_setenv(envp, "XDG_ACTIVATION_TOKEN", startup_id, TRUE);
+		}
+		// note: args are expected as gchar**, but not modified (casted back to const immediately)
+		ret =  g_spawn_async (cWorkingDirectory, (gchar**)args, envp,
+			G_SPAWN_SEARCH_PATH |
+			// note: posix_spawn (and clone on Linux) will be used if we include the following
+			// two flags, but this requires to later add a child watch and also adds a risk of
+			// fd leakage (although it has not been an issue before with system() as well)
+			G_SPAWN_DO_NOT_REAP_CHILD | G_SPAWN_LEAVE_DESCRIPTORS_OPEN |
+			G_SPAWN_STDOUT_TO_DEV_NULL | G_SPAWN_STDERR_TO_DEV_NULL,
+			NULL, NULL,
+			&pid, &erreur);
+		if (!ret)
 		{
-			char *id = NULL;
-			const char *tmp = strrchr (args[0], '/');
-			tmp = tmp ? (tmp + 1) : args[0];
-			if (*tmp)
-			{
-				id = g_strdup (tmp);
-				_sanitize_id (id);
-				if (!*id)
-				{
-					g_free (id);
-					id = NULL;
-				}
-			}
-			s_backend.new_app_launched (id ? id : "unknown", args[0], pid);
-			g_free (id);
+			cd_warning ("couldn't launch this command (%s : %s)", args[0], erreur->message);
+			g_error_free (erreur);
 		}
 		else g_child_watch_add (pid, _child_watch_dummy, NULL);
+		if (envp) g_strfreev (envp);
 	}
-	if (envp) g_strfreev (envp);
+	
+	g_free (startup_id);
 	return ret;
+}
+
+gboolean cairo_dock_launch_command_argv_full (const gchar * const * args, const gchar *cWorkingDirectory, GldiLaunchFlags flags)
+{
+	return cairo_dock_launch_command_argv_full2 (args, cWorkingDirectory, flags, NULL);
 }
 
 gboolean cairo_dock_launch_command_single (const gchar *cExec)
