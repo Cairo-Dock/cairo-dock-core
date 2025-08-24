@@ -36,7 +36,8 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-container.h"
-#include "cairo-dock-utils.h"  // cairo_dock_launch_command_sync, cairo_dock_property_is_present_on_root
+#include "cairo-dock-utils.h"  // cairo_dock_property_is_present_on_root
+#include "cairo-dock-class-manager.h"  // GldiAppInfo functions
 #include "cairo-dock-icon-manager.h"  // cairo_dock_free_icon
 #include "cairo-dock-menu.h" // gldi_menu_add_item
 #define _MANAGER_DEF_
@@ -554,14 +555,14 @@ struct _submenu_data {
 	CairoDockFMOpenedWithCallback pCallback;
 };
 struct _launch_with_data {
-	GDesktopAppInfo *app;
+	GldiAppInfo *app;
 	struct _submenu_data *data;
 };
 
 static void _free_submenu_data_item (gpointer ptr)
 {
 	struct _launch_with_data *data = (struct _launch_with_data*)ptr;
-	g_object_unref (data->app);
+	gldi_object_unref (GLDI_OBJECT (data->app));
 	g_free (data);
 }
 static void _free_submenu_data (gpointer ptr, GObject*)
@@ -575,12 +576,8 @@ static void _free_submenu_data (gpointer ptr, GObject*)
 static void _submenu_launch_with (GtkMenuItem*, gpointer ptr)
 {
 	struct _launch_with_data *data = (struct _launch_with_data*)ptr;
-	gchar *cURI = g_filename_to_uri(data->data->cPath, NULL, NULL);
-	if (!cURI) return;
-	
-	GList *list = g_list_append (NULL, cURI);
-	cairo_dock_launch_app_info_with_uris (data->app, list); // will handle the case of paths as well
-	g_list_free_full (list, g_free);
+	const gchar *cURIs[] = {data->data->cPath, NULL};
+	gldi_app_info_launch (data->app, cURIs);
 	
 	if (data->data->pCallback) data->data->pCallback (data->data->user_data);
 }
@@ -608,6 +605,12 @@ gboolean cairo_dock_fm_add_open_with_submenu (GList *pAppList, const gchar *cPat
 			cd_warning ("Unknown GAppInfo type!");
 			continue;
 		}
+		GldiAppInfo *gldi_app = gldi_app_info_from_desktop_app_info (desktop_app);
+		if (!gldi_app)
+		{
+			// warning already shown in gldi_app_info_from_desktop_app_info ()
+			continue;
+		}
 
 		gchar *cIconPath = NULL;
 		GIcon *pIcon = g_app_info_get_icon (app_info);
@@ -620,7 +623,7 @@ gboolean cairo_dock_fm_add_open_with_submenu (GList *pAppList, const gchar *cPat
 
 		struct _launch_with_data *app_data = g_new (struct _launch_with_data, 1);
 		app_data->data = data;
-		app_data->app = g_object_ref (desktop_app);
+		app_data->app = gldi_app;
 		data->data_list = g_list_prepend (data->data_list, app_data); // save a reference to the app info
 
 		gldi_menu_add_item (pSubMenu, g_app_info_get_name (app_info), cIconPath, G_CALLBACK(_submenu_launch_with), app_data);
