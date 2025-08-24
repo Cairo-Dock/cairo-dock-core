@@ -31,20 +31,84 @@ G_BEGIN_DECLS
 * Classes are used to group the windows of a same program, and to bind a launcher to the launched application.
 */
 
+/**
+*@struct GldiAppInfo Helper object for launching apps, wrapping a GAppInfo.
+* This is needed as unfortunately GDesktopAppInfo does not provide all the
+* functionality we need.
+* 
+* GldiAppInfo derives from GlidObject, so you should use gldi_object_ref () /
+* gldi_object_unref () to manage its lifecycle.
+* 
+* Note: currently, the class-manager automatically creates a GldiAppInfo
+* for all apps registered with it, filling out the corresponding icon's
+* pAppInfo member as it is created, so there is no need to create this
+* object manually. A constructor is provided only to create a GldiAppInfo
+* wrapping a custom commnad to run.
+*/
 
-/** Helper object for launching desktop file actions.
- * This is needed since g_desktop_app_info_launch_action() does not provide
- * all of the functionality of g_desktop_app_info_launch_uris_as_manager
- */
-struct _GldiAppInfo {
-	GldiObject object;
-	GDesktopAppInfo *app; // the desktop app info -- this object holds one reference to it
-	const gchar* const *actions; // additional actions supported by this app (belongs to app, no need to free)
-	gchar ***action_args; // parsed Exec key to launch actions
-};
 
+/** Create a GldiAppInfo that can be used to start the given command.
+*@param cCmdline Command to launch in the format of the XDG Desktop Entry specification.
+*@param cName Descriptive name that is suitable to be displayed to the user.
+*@param cWorkingDir Optionally, a directory where the command should be launched.
+*@param bNeedsTerminal Whether the command should be launched in a terminal. Currently unsupported and ignored.
+*@return the newly created GldiAppInfo or NULL if there was an error parsing cCmdline.
+*/
+GldiAppInfo *gldi_app_info_new_from_commandline (const gchar *cCmdline, const gchar *cName, const gchar *cWorkingDir, gboolean bNeedsTerminal);
+
+/** Launch one of the extra actions supported by this app.
+*@param app a GldiAppInfo corresponding to an installed app.
+*@param cAction one of the additional actions supported by the app. The must
+*  be one of the entries returneed by gldi_app_info_get_desktop_actions ().
+* 
+* Note: if the app supports DBus activation, it will be used instead of
+* directly launching it. See here for more details:
+* https://specifications.freedesktop.org/desktop-entry-spec/latest/dbus.html
+*
+* Apps that do not support DBus activation might be launched directly as a child
+* process of Cairo-Dock, or indirectly via the session manager if available
+* (i.e. systemd on Linux).
+*/
 void gldi_app_info_launch_action (GldiAppInfo *app, const gchar *cAction);
 
+/** Launch the application with an optional list of URIs or files to open.
+*
+*@param app a GldiAppInfo corresponding to an installed app or available command.
+*@param uris a NULL-terminated list of file names or URIs to provide as parameters or NULL.
+*
+* Note: if the app supports DBus activation, it will be used instead of
+* directly launching it. See here for more details:
+* https://specifications.freedesktop.org/desktop-entry-spec/latest/dbus.html
+* 
+* Apps that do not support DBus activation might be launched directly as a child
+* process of Cairo-Dock, or indirectly via the session manager if available
+* (i.e. systemd on Linux).
+*/
+void gldi_app_info_launch (GldiAppInfo *app, const gchar* const *uris);
+
+/** Get a list of additional actions supported by this app. See
+* https://specifications.freedesktop.org/desktop-entry-spec/latest/extra-actions.html
+* for a description of extra actions.
+*
+*@param app a GldiAppInfo corresponding to an installed app.
+*@return The list of additional action names as a NULL-terminated array or
+* NULL if no additional actions are supported. The returned list and its
+* contents are owned by the instance and should not be modified or freed
+* by the caller.
+*/ 
+const gchar * const *gldi_app_info_get_desktop_actions (GldiAppInfo *app);
+
+/** Get the name of an additional action supported by this app that is
+* suitable to display to the user (i.e. translated whenever possible).
+*
+*@param app a GldiAppInfo corresponding to an installed app.
+*@param cAction one of the additional actions supported by the app. The must
+*  be one of the entries returneed by gldi_app_info_get_desktop_actions ().
+*@returns the name of the action in a newly allocated string or NULL of cAction
+* is invalid. The caller takes ownership of the return value and is responsible
+* for freeing it.
+*/
+gchar *gldi_app_info_get_desktop_action_name (GldiAppInfo *app, const gchar *cAction);
 
 /*
 * Initialise le gestionnaire de classes. Ne fait rien la 2eme fois.
@@ -186,7 +250,12 @@ const gchar *cairo_dock_get_class_icon (const gchar *cClass);
 
 const gchar *cairo_dock_get_class_wm_class (const gchar *cClass);
 
-GDesktopAppInfo *cairo_dock_get_class_app_info (const gchar *cClass);
+/** Get the app info associated with this class as a GldiAppInfo object.
+* @param the class name to search for
+* @return The app info or NULL if unknown. The caller should call gldi_object_ref ()
+*   on the return value if it wishes to hang on to it.
+*/
+GldiAppInfo *cairo_dock_get_class_app_info (const gchar *cClass);
 
 const CairoDockImageBuffer *cairo_dock_get_class_image_buffer (const gchar *cClass);
 
