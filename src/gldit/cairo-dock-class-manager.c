@@ -89,6 +89,8 @@ typedef struct _CairoDockClassAppli CairoDockClassAppli;
 static GHashTable *s_hClassTable = NULL;
 static GHashTable *s_hAltClass = NULL; // we store alternative class / app-ids here
 
+static gchar *_cairo_dock_register_class_full (const gchar *cSearchTerm, const gchar *cFallbackClass, const gchar *cWmClass,
+	gboolean bUseWmClass, gboolean bCreateAlways, gboolean bIsDesktopFile, GDesktopAppInfo *app, CairoDockClassAppli **pResult);
 
 static void _cairo_dock_free_class_appli (CairoDockClassAppli *pClassAppli)
 {
@@ -637,6 +639,46 @@ gchar *gldi_app_info_get_desktop_action_name (GldiAppInfo *app, const gchar *cAc
 	return g_desktop_app_info_get_action_name (G_DESKTOP_APP_INFO (app->app), cAction);
 }
 
+const gchar** gldi_app_info_get_supported_types (GldiAppInfo *app)
+{
+	return (app && app->app) ? g_app_info_get_supported_types (app->app) : NULL;
+}
+
+GldiAppInfo *gldi_app_info_from_desktop_app_info (GDesktopAppInfo *pDesktopAppInfo)
+{
+	CairoDockClassAppli *pClass = NULL;
+	gchar* cClass = _cairo_dock_register_class_full (NULL, NULL, NULL, FALSE, FALSE, TRUE, pDesktopAppInfo, &pClass);
+	if (!cClass)
+	{
+		cd_warning ("Error processing desktop app!");
+		return NULL;
+	}
+	
+	if (!pClass->app)
+	{
+		cd_warning ("Class %s already registered, but has no GldiAppInfo");
+	}
+	else gldi_object_ref (GLDI_OBJECT (pClass->app));
+	
+	g_free (cClass); // TODO: find a way to avoid useless alloc and dealloc here
+	return pClass->app;
+}
+
+void gldi_launch_desktop_app_info (GDesktopAppInfo *pDesktopAppInfo, const gchar* const *uris)
+{
+	GldiAppInfo *app = gldi_app_info_from_desktop_app_info (pDesktopAppInfo);
+	if (app)
+	{
+		gldi_app_info_launch (app, uris);
+		gldi_object_unref (GLDI_OBJECT (app));
+	}
+	else
+	{
+		// warning already shown in gldi_app_info_from_desktop_app_info ()
+		// TODO: should we use g_app_info_launch () as a fallback?
+	}
+}
+
 /***********************************************************************
  * rest of class manager */
 void cairo_dock_initialize_class_manager (void)
@@ -721,9 +763,6 @@ static void cairo_dock_destroy_class_subdock (const gchar *cClass)
 	pClassAppli->cDockName = NULL;
 }
 
-static gchar *_cairo_dock_register_class_full (const gchar *cSearchTerm, const gchar *cFallbackClass, const gchar *cWmClass,
-	gboolean bUseWmClass, gboolean bCreateAlways, gboolean bIsDesktopFile, CairoDockClassAppli **pResult);
-
 gboolean cairo_dock_add_appli_icon_to_class (Icon *pIcon)
 {
 	g_return_val_if_fail (CAIRO_DOCK_ICON_TYPE_IS_APPLI (pIcon) && pIcon->pAppli, FALSE);
@@ -753,7 +792,7 @@ gboolean cairo_dock_add_appli_icon_to_class (Icon *pIcon)
 		 * (where the first string is wm_name and corresponds to the correct desktop file ID)
 		 */
 		char *cClass = _cairo_dock_register_class_full (pIcon->cClass, pIcon->pAppli->cWmName,
-			pIcon->pAppli->cWmClass, FALSE, TRUE, FALSE, &pClassAppli);
+			pIcon->pAppli->cWmClass, FALSE, TRUE, FALSE, NULL, &pClassAppli);
 		if (cClass) g_free (cClass);
 		if (!pClassAppli) return FALSE; // should not happen
 	}
@@ -761,7 +800,8 @@ gboolean cairo_dock_add_appli_icon_to_class (Icon *pIcon)
 	if (pIcon->pAppInfo) gldi_object_unref (GLDI_OBJECT (pIcon->pAppInfo));
 	pIcon->pAppInfo = pClassAppli->app; // can be null if no .desktop file was found
 	if (pIcon->pAppInfo) gldi_object_ref (GLDI_OBJECT (pIcon->pAppInfo));
-	//!! TODO: handle pCustomLauncher here? (or in applications-facility?)
+	//!! TODO: handle handle the case when the original pIcon->pAppInfo contained
+	//!! a custom command!
 	//!! this is needed for shift + click and similar to use the correct command if 
 	//!! multiple icons are added (if only one, the launcher icon will take over)
 
@@ -2471,12 +2511,18 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 * added as a key (so if cClassName != NULL, the return value is always a copy of it).
 */
 static gchar *_cairo_dock_register_class_full (const gchar *cSearchTerm, const gchar *cFallbackClass, const gchar *cWmClass,
-	gboolean bUseWmClass, gboolean bCreateAlways, gboolean bIsDesktopFile, CairoDockClassAppli **pResult)
+	gboolean bUseWmClass, gboolean bCreateAlways, gboolean bIsDesktopFile, GDesktopAppInfo *app, CairoDockClassAppli **pResult)
 {
-	g_return_val_if_fail (cSearchTerm != NULL, NULL);
+	g_return_val_if_fail ((cSearchTerm || app), NULL);
 	
 	gchar *cClass = NULL;
 	CairoDockClassAppli *pClassAppli = NULL;
+	
+	if (!cSearchTerm)
+	{
+		cSearchTerm = g_app_info_get_id (G_APP_INFO (app));
+		if (!cSearchTerm) return NULL;
+	}
 	
 	//\__________________ if the class is already registered and filled, quit.
 	// note: in many cases, this will be non-NULL (if we encountered cClass before but did not register it)
@@ -2515,10 +2561,10 @@ static gchar *_cairo_dock_register_class_full (const gchar *cSearchTerm, const g
 		}
 	}
 
+	if (app) g_object_ref (app); // will be unrefed later
+
 	//\__________________ search the desktop file's path.
-	GDesktopAppInfo *app = NULL;
-	
-	if (cFallbackClass)
+	if (!app && cFallbackClass)
 	{
 		// in this case, we do a two-stage search: first we try exact matches, then using heuristics
 		// this is to avoid edge cases where cFallbackClass would be an exact match
@@ -2764,7 +2810,7 @@ static gchar *_cairo_dock_register_class_full (const gchar *cSearchTerm, const g
 
 gchar *cairo_dock_register_class2 (const gchar *cSearchTerm, const gchar *cWmClass, gboolean bCreateAlways, gboolean bIsDesktopFile)
 {
-	return _cairo_dock_register_class_full (cSearchTerm, NULL, cWmClass, TRUE, bCreateAlways, bIsDesktopFile, NULL);
+	return _cairo_dock_register_class_full (cSearchTerm, NULL, cWmClass, TRUE, bCreateAlways, bIsDesktopFile, NULL, NULL);
 }
 
 gchar *cairo_dock_register_class (const gchar *cSearchTerm)

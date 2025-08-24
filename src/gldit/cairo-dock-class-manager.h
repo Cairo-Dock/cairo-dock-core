@@ -71,7 +71,7 @@ GldiAppInfo *gldi_app_info_new_from_commandline (const gchar *cCmdline, const gc
 */
 void gldi_app_info_launch_action (GldiAppInfo *app, const gchar *cAction);
 
-/** Launch the application with an optional list of URIs or files to open.
+/** Launch an application with an optional list of URIs or files to open.
 *
 *@param app a GldiAppInfo corresponding to an installed app or available command.
 *@param uris a NULL-terminated list of file names or URIs to provide as parameters or NULL.
@@ -109,6 +109,35 @@ const gchar * const *gldi_app_info_get_desktop_actions (GldiAppInfo *app);
 * for freeing it.
 */
 gchar *gldi_app_info_get_desktop_action_name (GldiAppInfo *app, const gchar *cAction);
+
+/** Get the list of mime types that this app supports or NULL if unknown. */
+const gchar** gldi_app_info_get_supported_types (GldiAppInfo *app);
+
+/** Get a GldiAppInfo corresponding to the given GDesktopAppInfo. Also registers
+* this app with the class manager if this has not been done before.
+*@param pDesktopAppInfo a GDesktopAppInfo representing an app installed on the system.
+*@return a GldiAppInfo that can be used to launch this app or NULL if pAppInfo is invalid.
+* A reference is added and the caller should call gldi_object_unref () when done using it.
+*/
+GldiAppInfo *gldi_app_info_from_desktop_app_info (GDesktopAppInfo *pDesktopAppInfo);
+
+/** Launch an application given by a GDesktopAppInfo with an optional list of URIs or
+* files to open. The app will be registered with the class manager if it has not been
+* seen yet.
+*
+*@param app a GDesktopAppInfo corresponding to an installed app.
+*@param uris a NULL-terminated list of file names or URIs to provide as parameters or NULL.
+*
+* Note: if the app supports DBus activation, it will be used instead of
+* directly launching it. See here for more details:
+* https://specifications.freedesktop.org/desktop-entry-spec/latest/dbus.html
+* 
+* Apps that do not support DBus activation might be launched directly as a child
+* process of Cairo-Dock, or indirectly via the session manager if available
+* (i.e. systemd on Linux).
+*/
+void gldi_launch_desktop_app_info (GDesktopAppInfo *pDesktopAppInfo, const gchar* const *uris);
+
 
 /*
 * Initialise le gestionnaire de classes. Ne fait rien la 2eme fois.
