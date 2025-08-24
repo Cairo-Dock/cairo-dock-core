@@ -89,6 +89,8 @@ typedef struct _CairoDockClassAppli CairoDockClassAppli;
 static GHashTable *s_hClassTable = NULL;
 static GHashTable *s_hAltClass = NULL; // we store alternative class / app-ids here
 
+static gchar *_cairo_dock_register_class_full (const gchar *cSearchTerm, const gchar *cFallbackClass, const gchar *cWmClass,
+	gboolean bUseWmClass, gboolean bCreateAlways, gboolean bIsDesktopFile, GDesktopAppInfo *app, CairoDockClassAppli **pResult);
 
 static void _cairo_dock_free_class_appli (CairoDockClassAppli *pClassAppli)
 {
@@ -130,21 +132,194 @@ static gboolean _on_window_activated (G_GNUC_UNUSED gpointer data, GldiWindowAct
 	return GLDI_NOTIFICATION_LET_PASS;
 }
 
+
+/***********************************************************************
+ * GldiAppInfo */
+
+/** Helper object for launching apps. This is needed as unfortunately
+ * GDesktopAppInfo does not provide all the functionality we need.
+ * Note: typedefed to GldiAppInfo in cairo-dock-struct.h, but all
+ * fields are private and should be used via accessors.
+ */
+struct _GldiAppInfo {
+	GldiObject object;
+	GAppInfo *app; // the desktop app info -- this object holds one reference to it
+	const gchar* const *actions; // additional actions supported by this app (belongs to app, no need to free)
+	gchar ***action_args; // parsed Exec key to launch actions
+	gchar **args; // parsed Exec key for launching the main app
+	int args_file_pos; // position of files / URIs in args or -1 if not found
+	gchar *cWorkingDir; // working directory to start the app in (need to store here since we cannot grab this from app)
+	gboolean bNeedsTerminal; // whether this app needs to be launched in a terminal
+	//!! TODO: each action can have its own icon
+};
+
+static gchar **_process_cmdline (const gchar *cCmdline, gboolean bKeepFiles, int *pFilePos, GAppInfo *app)
+{
+	int args_len;
+	int file_pos = -1;
+	gchar **tmp = NULL;
+	GError *err = NULL;
+	
+	gboolean res = g_shell_parse_argv (cCmdline, &args_len, &tmp, &err);
+	if (!res)
+	{
+		cd_warning ("cannot parse command line: %s\n", err->message);
+		g_error_free (err);
+		return NULL;
+	}
+	
+	// process useful substitutions and remove the rest
+	int j = 0, k = 0;
+	for (; j < args_len; j++)
+	{
+		gboolean bKeep = TRUE;
+		gboolean bParsed = FALSE;
+		// note: we assume that a useful escape is always preceded by whitespace,
+		// so we need to only check the first character of each argument
+		if (tmp[j][0] == '%' && tmp[j][1] != '%') switch (tmp[j][1])
+		{
+			case 'f':
+			case 'F':
+			case 'u':
+			case 'U':
+				// files or URIs, will be processed when launching the app
+				if (file_pos == -1)
+				{
+					bKeep = bKeepFiles;
+					bParsed = TRUE;
+					file_pos = j;
+				}
+				else bKeep = FALSE; // only one %f / %F / %u / %U argument supported
+				break;
+			case 'd':
+			case 'D':
+			case 'n':
+			case 'N':
+			case 'v':
+			case 'm':
+				// deprecated escapes, we should remove them
+				bKeep = FALSE;
+				break;
+			case 'i':
+				// should expand to two arguments: --icon [iconname],
+				// but does not seem to be used, so maybe it's OK to ignore
+				bKeep = FALSE;
+				break;
+			case 'c':
+				// name of the app
+				g_free (tmp[j]);
+				tmp[j] = g_strdup (g_app_info_get_name (app));
+				bKeep = (tmp[j] != NULL); // note: we should always have a name
+				bParsed = TRUE;
+				break;
+			case 'k':
+				// path to the .desktop file (if available)
+				bKeep = FALSE;
+				if (G_IS_DESKTOP_APP_INFO (app))
+				{
+					GDesktopAppInfo *desktop_app = G_DESKTOP_APP_INFO (app);
+					const gchar *path = g_desktop_app_info_get_filename (desktop_app);
+					if (path)
+					{
+						g_free (tmp[j]);
+						tmp[j] = g_strdup (path);
+						bKeep = TRUE;
+						bParsed = TRUE;
+					}
+				}
+				break;
+			default:
+				// according to the spec, having an unknown field is an error -- we silently remove it
+				bKeep = FALSE;
+				break;
+		}
+		
+		if (bKeep)
+		{
+			if (!bParsed)
+			{
+				// convert "%%" to "%" -- TODO: handle the edge case of %%f or similar which might be confusing when launching the app
+				int x = 0, y = 0;
+				for (; tmp[j][y]; x++, y++)
+				{
+					if (tmp[j][y] == '%' && tmp[j][y+1] == '%') y++;
+					if (x != y) tmp[j][x] = tmp[j][y];
+				}
+				tmp[j][x] = 0;
+			}
+			if (j != k) tmp[k] = tmp[j];
+			k++;
+		}
+		else g_free (tmp[j]); // delete this arg
+	}
+	
+	if (!k)
+	{
+		// no valid argument
+		cd_warning ("cannot parse command line: empty or invalid arguments\n");
+		g_free (tmp); // in this case, all elements in ret were freed or were originally NULL
+		return NULL;
+	}
+	
+	// mark the deleted arguments as NULL
+	for (; k < args_len; k++) tmp[k] = NULL;
+	
+	if (pFilePos) *pFilePos = file_pos;
+	
+	return tmp;
+}
+
+struct _GldiAppInfoAttr {
+	GAppInfo *app;
+	const gchar *cCmdline;
+	gboolean bNeedsTerminal;
+	const gchar *cWorkingDir;
+};
+
 static void _init_appinfo (GldiObject *obj, gpointer attr)
 {
 	GldiAppInfo *info = (GldiAppInfo*)obj;
-	info->app = (GDesktopAppInfo*)attr;
+	struct _GldiAppInfoAttr *params = (struct _GldiAppInfoAttr*)attr;
+	info->app = params->app;
 	g_object_ref (info->app);
 	
+	GDesktopAppInfo *desktop_app = NULL;
+	gboolean bDbusActivatable = FALSE;
+	
 	//\__________________ check for the additional actions supported by this app
-	info->actions = g_desktop_app_info_list_actions (info->app);
-	if (info->actions)
+	if (G_IS_DESKTOP_APP_INFO (info->app))
 	{
-		// potentially parse the command lines to launch this app if not DBus activated
-		// (these are needed since g_desktop_app_info_launch_action() is limited in not returning the PID)
-		if (! g_desktop_app_info_get_boolean (info->app, "DBusActivatable"))
+		desktop_app = G_DESKTOP_APP_INFO (info->app);
+		info->actions = g_desktop_app_info_list_actions (desktop_app);
+		bDbusActivatable = g_desktop_app_info_get_boolean (desktop_app, "DBusActivatable");
+	}
+	
+	if (params->bNeedsTerminal) info->bNeedsTerminal = TRUE;
+	else if (desktop_app) info->bNeedsTerminal = g_desktop_app_info_get_boolean (desktop_app, "Terminal");
+	
+	if (params->cWorkingDir) info->cWorkingDir = g_strdup (params->cWorkingDir);
+	else if (desktop_app) info->cWorkingDir = g_desktop_app_info_get_string (desktop_app, "Path");
+	
+	if (! bDbusActivatable)
+	{
+		// parse the command lines to launch this app if not DBus activated
+		const gchar *cCmdline = params->cCmdline;
+		if (!cCmdline) cCmdline = g_app_info_get_commandline (info->app);
+		info->args = _process_cmdline (cCmdline, TRUE, &(info->args_file_pos), info->app);
+		if (!info->args)
 		{
-			const char *cDesktopFilePath = g_desktop_app_info_get_filename (info->app);
+			// warning already shown in _process_cmdline, just bail out
+			// we mark app as empty for the caller to detect failure
+			g_object_unref (info->app);
+			info->app = NULL;
+			return;
+		}
+		
+		// parse additional actions
+		if (info->actions)
+		{
+			// note: we need to reopen the .desktop file ourselves, as g_desktop_app_info_get_string () does not allow specifying a section
+			const char *cDesktopFilePath = g_desktop_app_info_get_filename (desktop_app); // in this case, desktop_app != NULL
 			GKeyFile *keyfile = g_key_file_new ();
 			GError *err = NULL;
 			if (!g_key_file_load_from_file (keyfile, cDesktopFilePath, G_KEY_FILE_NONE, &err))
@@ -172,43 +347,16 @@ static void _init_appinfo (GldiObject *obj, gpointer attr)
 						break;
 					}
 					
-					int args_len;
-					gboolean res = g_shell_parse_argv (exec, &args_len, info->action_args + i, &err);
+					info->action_args[i] = _process_cmdline (exec, FALSE, NULL, info->app);
 					g_free (exec);
-					if (!res)
+					if (!info->action_args[i])
 					{
-						cd_warning ("cannot read extra action \"%s\" from desktop file: %s (%s)\n",
-							info->actions[i], cDesktopFilePath, err->message);
-						g_error_free (err);
+						// warning was already shown in _process_cmdline
+						// no need to free action_args (it will be done when info is freed),
+						// just mark that we do not have desktop actions
 						info->actions = NULL;
 						break;
 					}
-					
-					// remove all substitutions
-					int j = 0, k = 0;
-					gchar **tmp = info->action_args[i];
-					for (; j < args_len; j++)
-					{
-						if (tmp[j] && tmp[j][0] == '%' && tmp[j][1] && tmp[j][1] != '%')
-						{
-							// delete this arg
-							g_free (tmp[j]);
-						}
-						else
-						{
-							if (j != k) tmp[k] = tmp[j];
-							k++;
-						}
-					}
-					if (!k)
-					{
-						// no valid argument
-						cd_warning ("cannot read extra action \"%s\" from desktop file: %s (empty or invalid command)\n",
-							info->actions[i], cDesktopFilePath);
-						info->actions = NULL;
-						break;
-					}
-					for (; k < args_len; k++) tmp[k] = NULL;
 				}
 			}
 		}
@@ -218,15 +366,223 @@ static void _init_appinfo (GldiObject *obj, gpointer attr)
 static void _reset_appinfo (GldiObject *obj)
 {
 	GldiAppInfo *info = (GldiAppInfo*)obj;
-	g_object_unref (info->app);
+	if (info->app) g_object_unref (info->app);
 	if (info->action_args)
 	{
 		gchar ***tmp = info->action_args;
 		for (; *tmp; ++tmp) g_strfreev (*tmp);
 		g_free (info->action_args);
 	}
+	g_strfreev (info->args);
+	g_free (info->cWorkingDir);
 }
 
+GldiAppInfo *gldi_app_info_new_from_commandline (const gchar *cCmdline, const gchar *name, const gchar *cWorkingDir, gboolean bNeedsTerminal)
+{
+	GError *err = NULL;
+	struct _GldiAppInfoAttr attr;
+	attr.app = g_app_info_create_from_commandline (cCmdline, name, G_APP_INFO_CREATE_SUPPORTS_STARTUP_NOTIFICATION |
+		(bNeedsTerminal ? G_APP_INFO_CREATE_NEEDS_TERMINAL : 0), &err);
+	if (!attr.app)
+	{
+		cd_warning (err->message);
+		g_error_free (err);
+		return NULL;
+	}
+	
+	attr.cCmdline = cCmdline;
+	attr.bNeedsTerminal = bNeedsTerminal;
+	attr.cWorkingDir = cWorkingDir;
+	GldiAppInfo *ret = (GldiAppInfo*) gldi_object_new (&myAppInfoObjectMgr, &attr); // will ref app
+	g_object_unref (attr.app);
+	if (!ret->app)
+	{
+		// failed to parse commandline, return NULL
+		gldi_object_unref (GLDI_OBJECT (ret));
+		return NULL;
+	}
+	return ret;
+}
+
+void gldi_app_info_launch_action (GldiAppInfo *app, const gchar *cAction)
+{
+	g_return_if_fail (app && app->actions && cAction);
+	if (app->action_args)
+	{
+		// find the action and launch ourselves
+		unsigned int i;
+		for (i = 0; app->actions[i] && app->action_args[i]; i++)
+		{
+			if (!strcmp (app->actions[i], cAction))
+			{
+				cairo_dock_launch_command_argv_full2 ((const gchar * const*)app->action_args[i], app->cWorkingDir,
+					GLDI_LAUNCH_GUI | GLDI_LAUNCH_SLICE, app->app);
+				break;
+			}
+		}
+	}
+	else
+	{
+		g_return_if_fail (app->app && G_IS_DESKTOP_APP_INFO (app->app));
+		// this app supports DBus activation, use it directly
+		GdkAppLaunchContext *context = gdk_display_get_app_launch_context (gdk_display_get_default ());
+		g_desktop_app_info_launch_action (G_DESKTOP_APP_INFO (app->app), cAction, G_APP_LAUNCH_CONTEXT (context));
+		g_object_unref (context);
+	}
+}
+
+void gldi_app_info_launch (GldiAppInfo *app, const gchar* const *uris)
+{
+	g_return_if_fail (app && (app->args || app->app));
+	if (app->args)
+	{
+		int n_args = 0;
+		int n_uris = 0;
+		
+		{
+			gchar **tmp1;
+			const gchar * const *tmp2;
+			for (tmp1 = app->args; *tmp1; ++tmp1) ++n_args;
+			if (uris) for (tmp2 = uris; *tmp2; ++tmp2) ++n_uris;
+		}
+		
+		// slight optimization: if the last arg is for files, we do not need to allocate a new array
+		if (n_uris <= 1 && app->args_file_pos > 0 && app->args_file_pos == n_args - 1)
+		{
+			// note: n_args > 0, checked when creating app->args
+			int x = n_args - 1;
+			char *tmp2 = app->args[x];
+			if (uris) app->args[x] = (char*)uris[0];
+			else app->args[x] = NULL;
+			cairo_dock_launch_command_argv_full2 ((const gchar * const*)app->args, app->cWorkingDir,
+				GLDI_LAUNCH_GUI | GLDI_LAUNCH_SLICE, app->app);
+			
+			app->args[x] = tmp2;
+		}
+		else
+		{
+			const char **args = g_new0 (const char*, n_args + n_uris + 1);
+			
+			int i = 0, j;
+			for (j = 0; j < n_args; j++)
+			{
+				gboolean bKeep = TRUE;
+				if (app->args_file_pos > 0 && app->args_file_pos == j)
+				{
+					const gchar *tmp = app->args[j];
+					if (tmp[0] != '%')
+						cd_warning ("Unexpected argument: %s", tmp);
+					else switch (tmp[1])
+					{
+						case 'f':
+						// one filename -- TODO: try to convert URIs to file names
+						case 'u':
+							// one URI
+							if (uris && *uris)
+							{
+								args[i] = *uris;
+								i++;
+								uris++;
+							}
+							bKeep = FALSE;
+							break;
+						case 'F':
+						// all filenames -- TODO: try to convert URIs to file names
+						case 'U':
+							// take all URIs
+							if (uris) for (; *uris; ++uris)
+							{
+								args[i] = *uris;
+								i++;
+							}
+							bKeep = FALSE;
+							break;
+						default:
+							cd_warning ("Unexpected argument: %s", tmp);
+							break;
+					}
+				}
+				if (bKeep)
+				{
+					args[i] = app->args[j];
+					i++;
+				}
+			}
+			
+			// add remaining files / uris at the end
+			if (uris) for (; *uris; ++uris, ++i)
+				args[i] = *uris;
+			// note: there will still be a NULL-terminator left in args
+			cairo_dock_launch_command_argv_full2 (args, app->cWorkingDir, GLDI_LAUNCH_GUI | GLDI_LAUNCH_SLICE, app->app);
+			g_free (args);
+		}
+	}
+	else
+	{
+		// this is a DBus activated app, we can just use the GAppInfo functions for starting it
+		GList *list = NULL;
+		const gchar * const *tmp;
+		if (uris) for (tmp = uris; *tmp; ++tmp) list = g_list_prepend (list, (void*)*tmp); // TODO: should we try to keep the original order? (it should not matter)
+		GdkAppLaunchContext *context = gdk_display_get_app_launch_context (gdk_display_get_default ());
+		g_app_info_launch_uris (app->app, list, G_APP_LAUNCH_CONTEXT (context), NULL);
+		g_list_free (list);
+		g_object_unref (context);
+	}
+}
+
+const gchar * const *gldi_app_info_get_desktop_actions (GldiAppInfo *app)
+{
+	return app ? ((const gchar * const *)app->actions) : NULL;
+}
+
+gchar *gldi_app_info_get_desktop_action_name (GldiAppInfo *app, const gchar *cAction)
+{
+	g_return_val_if_fail (app && app->actions && G_IS_DESKTOP_APP_INFO (app->app), NULL);
+	return g_desktop_app_info_get_action_name (G_DESKTOP_APP_INFO (app->app), cAction);
+}
+
+const gchar** gldi_app_info_get_supported_types (GldiAppInfo *app)
+{
+	return (app && app->app) ? g_app_info_get_supported_types (app->app) : NULL;
+}
+
+GldiAppInfo *gldi_app_info_from_desktop_app_info (GDesktopAppInfo *pDesktopAppInfo)
+{
+	CairoDockClassAppli *pClass = NULL;
+	gchar* cClass = _cairo_dock_register_class_full (NULL, NULL, NULL, FALSE, FALSE, TRUE, pDesktopAppInfo, &pClass);
+	if (!cClass)
+	{
+		cd_warning ("Error processing desktop app!");
+		return NULL;
+	}
+	
+	if (!pClass->app)
+	{
+		cd_warning ("Class %s already registered, but has no GldiAppInfo");
+	}
+	else gldi_object_ref (GLDI_OBJECT (pClass->app));
+	
+	g_free (cClass); // TODO: find a way to avoid useless alloc and dealloc here
+	return pClass->app;
+}
+
+void gldi_launch_desktop_app_info (GDesktopAppInfo *pDesktopAppInfo, const gchar* const *uris)
+{
+	GldiAppInfo *app = gldi_app_info_from_desktop_app_info (pDesktopAppInfo);
+	if (app)
+	{
+		gldi_app_info_launch (app, uris);
+		gldi_object_unref (GLDI_OBJECT (app));
+	}
+	else
+	{
+		// warning already shown in gldi_app_info_from_desktop_app_info ()
+		// TODO: should we use g_app_info_launch () as a fallback?
+	}
+}
+
+/***********************************************************************
+ * rest of class manager */
 void cairo_dock_initialize_class_manager (void)
 {
 	gldi_desktop_file_db_init ();
@@ -309,9 +665,6 @@ static void cairo_dock_destroy_class_subdock (const gchar *cClass)
 	pClassAppli->cDockName = NULL;
 }
 
-static gchar *_cairo_dock_register_class_full (const gchar *cSearchTerm, const gchar *cFallbackClass, const gchar *cWmClass,
-	gboolean bUseWmClass, gboolean bCreateAlways, gboolean bIsDesktopFile, CairoDockClassAppli **pResult);
-
 gboolean cairo_dock_add_appli_icon_to_class (Icon *pIcon)
 {
 	g_return_val_if_fail (CAIRO_DOCK_ICON_TYPE_IS_APPLI (pIcon) && pIcon->pAppli, FALSE);
@@ -341,7 +694,7 @@ gboolean cairo_dock_add_appli_icon_to_class (Icon *pIcon)
 		 * (where the first string is wm_name and corresponds to the correct desktop file ID)
 		 */
 		char *cClass = _cairo_dock_register_class_full (pIcon->cClass, pIcon->pAppli->cWmName,
-			pIcon->pAppli->cWmClass, FALSE, TRUE, FALSE, &pClassAppli);
+			pIcon->pAppli->cWmClass, FALSE, TRUE, FALSE, NULL, &pClassAppli);
 		if (cClass) g_free (cClass);
 		if (!pClassAppli) return FALSE; // should not happen
 	}
@@ -349,7 +702,8 @@ gboolean cairo_dock_add_appli_icon_to_class (Icon *pIcon)
 	if (pIcon->pAppInfo) gldi_object_unref (GLDI_OBJECT (pIcon->pAppInfo));
 	pIcon->pAppInfo = pClassAppli->app; // can be null if no .desktop file was found
 	if (pIcon->pAppInfo) gldi_object_ref (GLDI_OBJECT (pIcon->pAppInfo));
-	//!! TODO: handle pCustomLauncher here? (or in applications-facility?)
+	//!! TODO: handle handle the case when the original pIcon->pAppInfo contained
+	//!! a custom command!
 	//!! this is needed for shift + click and similar to use the correct command if 
 	//!! multiple icons are added (if only one, the launcher icon will take over)
 
@@ -1643,8 +1997,9 @@ const gchar *cairo_dock_get_class_desktop_file (const gchar *cClass)
 {
 	g_return_val_if_fail (cClass != NULL, NULL);
 	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
-	return (pClassAppli && pClassAppli->app && pClassAppli->app->app) ?
-		g_desktop_app_info_get_filename (pClassAppli->app->app) : NULL;
+	if (pClassAppli && pClassAppli->app && G_IS_DESKTOP_APP_INFO (pClassAppli->app->app))
+		return g_desktop_app_info_get_filename (G_DESKTOP_APP_INFO (pClassAppli->app->app));
+	return NULL;
 }
 
 const gchar *cairo_dock_get_class_icon (const gchar *cClass)
@@ -1679,11 +2034,11 @@ const gchar *cairo_dock_get_class_wm_class (const gchar *cClass)
 	return pClassAppli->cStartupWMClass;
 }
 
-GDesktopAppInfo *cairo_dock_get_class_app_info (const gchar *cClass)
+GldiAppInfo *cairo_dock_get_class_app_info (const gchar *cClass)
 {
 	g_return_val_if_fail (cClass != NULL, NULL);
 	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
-	return (pClassAppli && pClassAppli->app) ? pClassAppli->app->app : NULL;
+	return pClassAppli ? pClassAppli->app : NULL;
 }
 
 const gchar* const *cairo_dock_get_class_actions (const gchar *cClass)
@@ -1691,31 +2046,6 @@ const gchar* const *cairo_dock_get_class_actions (const gchar *cClass)
 	g_return_val_if_fail (cClass != NULL, NULL);
 	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
 	return (pClassAppli && pClassAppli->app) ? pClassAppli->app->actions : NULL;
-}
-
-void gldi_app_info_launch_action (GldiAppInfo *app, const gchar *cAction)
-{
-	g_return_if_fail (app && app->actions && cAction);
-	if (app->action_args)
-	{
-		// find the action and launch ourselves
-		unsigned int i;
-		for (i = 0; app->actions[i] && app->action_args[i]; i++)
-		{
-			if (!strcmp (app->actions[i], cAction))
-			{
-				cairo_dock_launch_command_argv_full ((const gchar * const*)app->action_args[i], NULL, GLDI_LAUNCH_GUI | GLDI_LAUNCH_SLICE);
-				break;
-			}
-		}
-	}
-	else
-	{
-		// this app supports DBus activation, use it directly
-		GdkAppLaunchContext *context = gdk_display_get_app_launch_context (gdk_display_get_default ());
-		g_desktop_app_info_launch_action (app->app, cAction, G_APP_LAUNCH_CONTEXT (context));
-		g_object_unref (context);
-	}
 }
 
 const CairoDockImageBuffer *cairo_dock_get_class_image_buffer (const gchar *cClass)
@@ -2080,12 +2410,18 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 * added as a key (so if cClassName != NULL, the return value is always a copy of it).
 */
 static gchar *_cairo_dock_register_class_full (const gchar *cSearchTerm, const gchar *cFallbackClass, const gchar *cWmClass,
-	gboolean bUseWmClass, gboolean bCreateAlways, gboolean bIsDesktopFile, CairoDockClassAppli **pResult)
+	gboolean bUseWmClass, gboolean bCreateAlways, gboolean bIsDesktopFile, GDesktopAppInfo *app, CairoDockClassAppli **pResult)
 {
-	g_return_val_if_fail (cSearchTerm != NULL, NULL);
+	g_return_val_if_fail ((cSearchTerm || app), NULL);
 	
 	gchar *cClass = NULL;
 	CairoDockClassAppli *pClassAppli = NULL;
+	
+	if (!cSearchTerm)
+	{
+		cSearchTerm = g_app_info_get_id (G_APP_INFO (app));
+		if (!cSearchTerm) return NULL;
+	}
 	
 	//\__________________ if the class is already registered and filled, quit.
 	// note: in many cases, this will be non-NULL (if we encountered cClass before but did not register it)
@@ -2125,9 +2461,7 @@ static gchar *_cairo_dock_register_class_full (const gchar *cSearchTerm, const g
 	}
 
 	//\__________________ search the desktop file's path.
-	GDesktopAppInfo *app = NULL;
-	
-	if (cFallbackClass)
+	if (!app && cFallbackClass)
 	{
 		// in this case, we do a two-stage search: first we try exact matches, then using heuristics
 		// this is to avoid edge cases where cFallbackClass would be an exact match
@@ -2302,7 +2636,12 @@ static gchar *_cairo_dock_register_class_full (const gchar *cSearchTerm, const g
 			}
 			// need to create a new class
 			pClassAppli = g_new0 (CairoDockClassAppli, 1);
-			pClassAppli->app = (GldiAppInfo*) gldi_object_new (&myAppInfoObjectMgr, app); // will ref app
+			struct _GldiAppInfoAttr attr;
+			attr.app = G_APP_INFO (app);
+			attr.cCmdline = NULL;
+			attr.bNeedsTerminal = FALSE; // will be looked up from app
+			attr.cWorkingDir = NULL; // will be looked up from app
+			pClassAppli->app = (GldiAppInfo*) gldi_object_new (&myAppInfoObjectMgr, &attr); // will ref app
 			g_hash_table_insert (s_hClassTable, g_strdup (cClass), pClassAppli);
 			if (cDesktopFileID) g_hash_table_insert (s_hAltClass, cDesktopFileID, pClassAppli);
 		}
@@ -2368,7 +2707,7 @@ static gchar *_cairo_dock_register_class_full (const gchar *cSearchTerm, const g
 
 gchar *cairo_dock_register_class2 (const gchar *cSearchTerm, const gchar *cWmClass, gboolean bCreateAlways, gboolean bIsDesktopFile)
 {
-	return _cairo_dock_register_class_full (cSearchTerm, NULL, cWmClass, TRUE, bCreateAlways, bIsDesktopFile, NULL);
+	return _cairo_dock_register_class_full (cSearchTerm, NULL, cWmClass, TRUE, bCreateAlways, bIsDesktopFile, NULL, NULL);
 }
 
 gchar *cairo_dock_register_class (const gchar *cSearchTerm)

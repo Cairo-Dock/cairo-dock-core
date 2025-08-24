@@ -117,10 +117,11 @@ struct _Icon {
 	gchar *cBaseURI; // used by shortcuts
 	gint iVolumeID;
 	gchar *cInitialName; // original name replaced by e.g. the actual app title matched to a launcher
-	// GAppInfo(s) that are used to launch the app corresponding to this icon (if it is a launcher or appli)
-	// These are only set on creation and do not change during the lifetime of the icon.
-	GldiAppInfo *pAppInfo; // app info from a .desktop file installed on the system
-	GDesktopAppInfo *pCustomLauncher; // GAppInfo with custom launch command (if set)
+	// GldiAppInfo that can be used to launch the app corresponding to this icon (if it is a launcher or appli).
+	// This typically wraps a .desktop file of an installed app, but can be custom created for launchers with
+	// custom commands. This is only set on creation and does not change during the lifetime of the icon.
+	GldiAppInfo *pAppInfo;
+	gpointer unused; // previously used for custom command
 	
 	// Appli.
 	GldiWindowActor *pAppli;

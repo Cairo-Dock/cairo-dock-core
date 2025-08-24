@@ -74,10 +74,10 @@ static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 	}
 	
 	char *cCommand = g_key_file_get_string (pKeyFile, "Desktop Entry", "Exec", NULL);
-	if (cCommand != NULL && *cCommand != '\0')
+	if (cCommand != NULL && *cCommand == '\0')
 	{
-		icon->pCustomLauncher = g_desktop_app_info_new_from_keyfile (pKeyFile);
 		g_free (cCommand);
+		cCommand = NULL;
 	}
 	
 	gchar *cStartupWMClass = g_key_file_get_string (pKeyFile, "Desktop Entry", "StartupWMClass", NULL);
@@ -92,6 +92,7 @@ static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 	gsize length = 0;
 	gchar **pOrigins = g_key_file_get_string_list (pKeyFile, "Desktop Entry", "Origin", &length, NULL);
 	int iNumOrigin = -1;
+	gboolean bHaveOrigins = FALSE;
 	if (pOrigins != NULL)  // some origins are provided, try them one by one.
 	{
 		int i;
@@ -105,15 +106,15 @@ static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 			}
 		}
 		g_strfreev (pOrigins);
+		bHaveOrigins = TRUE;
 	}
 
 	// if no origin class could be found, try to guess the class
 	gchar *cFallbackClass = NULL;
-	if (!cClass && icon->pCustomLauncher)  // no class found, maybe an old launcher or a custom one, try to guess from the info in the user desktop file.
+	if (!cClass && cCommand)  // no class found, maybe an old launcher or a custom one, try to guess from the info in the user desktop file.
 	{
 		// we try the StartupWMClass and the command line as fallbacks
-		cFallbackClass = cairo_dock_guess_class (g_app_info_get_commandline (
-			G_APP_INFO (icon->pCustomLauncher)), NULL);
+		cFallbackClass = cairo_dock_guess_class (cCommand, NULL);
 			
 		if (cStartupWMClass)
 		{
@@ -144,6 +145,26 @@ static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 			g_key_file_set_string (pKeyFile, "Desktop Entry", "Origin", cairo_dock_get_class_desktop_file (cClass));
 			bNeedUpdate = TRUE;
 		}
+	}
+	
+	// override the launcher command if necessary
+	if (cCommand != NULL)
+	{
+		GldiAppInfo *app = gldi_app_info_new_from_commandline (cCommand, icon->cName, NULL,
+			g_key_file_get_boolean (pKeyFile, "Desktop Entry", "Terminal", NULL));
+		if (app)
+		{
+			// note: we could try to do better and avoid fully loading pAppInfo in this case
+			if (icon->pAppInfo) gldi_object_unref (GLDI_OBJECT (icon->pAppInfo));
+			icon->pAppInfo = app;
+		}
+		g_free (cCommand);
+	}
+	
+	if (bHaveOrigins && !icon->pAppInfo)
+	{
+		// no desktop file could be found for this launcher -> mark it as invalid
+		icon->reserved[0] = GINT_TO_POINTER(-1); // we use this as a way to tell the UserIcon manager that the icon is invalid (should add a new flag, but that would break ABI)
 	}
 	
 	gboolean bPreventFromInhibiting = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "prevent inhibate", NULL);  // FALSE by default
@@ -177,9 +198,6 @@ static void init_object (GldiObject *obj, gpointer attr)
 	GKeyFile *pKeyFile = pAttributes->pKeyFile;
 	gboolean bNeedUpdate = _get_launcher_params (icon, pKeyFile);
 	
-	if ( !(icon->pAppInfo || icon->pCustomLauncher))  // no command could be found for this launcher -> mark it as invalid
-		icon->reserved[0] = (gpointer)-1; // we use this as a way to tell the UserIcon manager that the icon is invalid (should add a new flag, but that would break ABI)
-	
 	//\____________ Make it an inhibator for its class.
 	cd_message ("+ %s/%s", icon->cName, icon->cClass);
 	if (icon->cClass != NULL)
@@ -212,12 +230,7 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, GKeyFile 
 	icon->cName = NULL;
 	g_free (icon->cFileName);
 	icon->cFileName = NULL;
-	// need to set the appinfos to NULL to not confuse _get_launcher_params ()
-	if (icon->pCustomLauncher)
-	{
-		g_object_unref (icon->pCustomLauncher);
-		icon->pCustomLauncher = NULL;
-	}
+	// need to set the appinfo to NULL to not confuse _get_launcher_params ()
 	if (icon->pAppInfo)
 	{
 		gldi_object_unref (GLDI_OBJECT (icon->pAppInfo));

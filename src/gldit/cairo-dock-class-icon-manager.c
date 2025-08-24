@@ -96,8 +96,6 @@ static void init_object (GldiObject *obj, gpointer attr)
 		pIcon->pAppInfo = pSameClassIcon->pAppInfo;
 		gldi_object_ref (GLDI_OBJECT (pIcon->pAppInfo));
 	}
-	if (pSameClassIcon->pCustomLauncher)
-		pIcon->pCustomLauncher = g_object_ref (pSameClassIcon->pCustomLauncher);
 	pIcon->cClass = g_strdup (pSameClassIcon->cClass);
 	pIcon->fOrder = pSameClassIcon->fOrder;
 	pIcon->bHasIndicator = pSameClassIcon->bHasIndicator;
