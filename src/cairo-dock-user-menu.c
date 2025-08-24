@@ -881,7 +881,7 @@ static void _cairo_dock_launch_new (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpoint
 {
 	struct _MenuParams *params = (struct _MenuParams*) data;
 	Icon *icon = params->pIcon;
-	if (icon->pAppInfo || icon->pCustomLauncher)
+	if (icon->pAppInfo)
 	{
 		gldi_object_notify (params->pContainer, NOTIFICATION_CLICK_ICON, icon,
 			params->pContainer, GDK_SHIFT_MASK);  // on emule un shift+clic gauche .
@@ -1190,8 +1190,7 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
 		if (cairo_dock_is_locked ())
 		{
 			gboolean bSensitive = FALSE;
-			if ( (CAIRO_DOCK_IS_APPLI (icon) || CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pIcon))
-				&& (icon->pAppInfo || icon->pCustomLauncher))
+			if ( (CAIRO_DOCK_IS_APPLI (icon) || CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pIcon)) && icon->pAppInfo)
 			{
 				_add_entry_in_menu (_("Launch a new (Shift+clic)"), GLDI_ICON_NAME_ADD, _cairo_dock_launch_new, pItemSubMenu, params);
 				bSensitive = TRUE;
@@ -1205,8 +1204,7 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
 		}
 		else
 		{
-			if ( (CAIRO_DOCK_IS_APPLI (icon) || CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pIcon))
-					&& (icon->pAppInfo || icon->pCustomLauncher))
+			if ( (CAIRO_DOCK_IS_APPLI (icon) || CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (pIcon)) && icon->pAppInfo)
 				_add_entry_in_menu (_("Launch a new (Shift+clic)"), GLDI_ICON_NAME_ADD, _cairo_dock_launch_new, pItemSubMenu, params);
 			
 			if ((CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (pIcon)
@@ -1933,7 +1931,8 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 	if (icon && icon->cClass != NULL && ! icon->bIgnoreQuicklist)
 	{
 		GldiAppInfo *app = icon->pAppInfo;
-		if (app && app->actions)
+		const gchar* const *actions = app ? gldi_app_info_get_desktop_actions (app) : NULL;
+		if (actions)
 		{
 			if (bAddSeparator)
 			{
@@ -1942,14 +1941,13 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 			}
 			bAddSeparator = TRUE;
 			
-			const gchar* const *actions = app->actions;
 			for (; *actions; ++actions)
 			{
 				struct _AppAction *pAction = g_new0 (struct _AppAction, 1);
 				gldi_object_ref (GLDI_OBJECT (app));
 				pAction->app = app;
 				pAction->action = *actions;
-				pAction->action_name = g_desktop_app_info_get_action_name (app->app, *actions);
+				pAction->action_name = gldi_app_info_get_desktop_action_name (app, *actions);
 				
 				pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (pAction->action_name,
 					NULL,
