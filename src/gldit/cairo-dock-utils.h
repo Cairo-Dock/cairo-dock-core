@@ -117,17 +117,6 @@ const gchar * cairo_dock_get_default_terminal (void);
 /** Simple "backend" for managing processes launched by us. Mainly needed to put
  * newly launched apps in their own systemd scope / cgroup. */
 struct _GldiChildProcessManagerBackend {
-	/** Handle a newly launched child process, performing any system-specific setup functions.
-	 * This should also eventually call waitpid() or similar to clean up the child process.
-	 *
-	 *@param id  a non-NULL identifier for the newly launched process, containing only "safe" characters
-	 *           (currently this means only characters valid in systemd unit names: ASCII letters, digits, ":", "-", "_", ".", and "\");
-	 * 			 does not need to be unique
-	 *@param desc  a description suitable to display to the user
-	 *@param pid  process id of the newly launched process; the caller should not use waitpid()
-	 *            or similar facility to avoid race condition
-	 */
-	void (*new_app_launched) (const char *id, const char *desc, GPid pid);
 	/** Launch a new app based on the given argument vector, performing any system-specific setup necessary.
 	 *
 	 *@param args  argument vector to use
