@@ -83,6 +83,8 @@ struct _CairoDockHidingEffect {
 	
 #define CAIRO_DOCK_MIN_SLOW_DELTA_T 90
 
+#define CAIRO_DOCK_ICON_INSERT_REMOVE_THRESHOLD 0.05078125 // 1/32 + 1/64 + 1/256, so it can be represented without rounding
+
 /** Say if a container is currently animated.
 *@param pContainer a Container
 */

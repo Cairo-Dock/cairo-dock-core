@@ -1783,9 +1783,9 @@ static gboolean _cairo_dock_hide (CairoDock *pDock)
 				if (pIcon->fInsertRemoveFactor != 0)  // on accelere l'animation d'apparition/disparition.
 				{
 					if (pIcon->fInsertRemoveFactor > 0)
-						pIcon->fInsertRemoveFactor = 0.05;
+						pIcon->fInsertRemoveFactor = CAIRO_DOCK_ICON_INSERT_REMOVE_THRESHOLD;
 					else
-						pIcon->fInsertRemoveFactor = - 0.05;
+						pIcon->fInsertRemoveFactor = - CAIRO_DOCK_ICON_INSERT_REMOVE_THRESHOLD;
 				}
 				
 				if (! bMapped || (! pIcon->bIsDemandingAttention && ! pIcon->bAlwaysVisible && ! pIcon->bIsLaunching))
@@ -1848,7 +1848,7 @@ static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 	while (ic != NULL)
 	{
 		pIcon = ic->data;
-		if (pIcon->fInsertRemoveFactor == (gdouble)0.05)  // end of removal animation -> the icon will be detached (at least)
+		if (pIcon->fInsertRemoveFactor == CAIRO_DOCK_ICON_INSERT_REMOVE_THRESHOLD)  // end of removal animation -> the icon will be detached (at least)
 		{
 			GList *prev_ic = ic->prev;
 			Icon *pPrevIcon = (prev_ic ? prev_ic->data : NULL);
@@ -1889,7 +1889,7 @@ static gboolean _cairo_dock_handle_inserting_removing_icons (CairoDock *pDock)
 		}
 		else
 		{
-			if (pIcon->fInsertRemoveFactor == (gdouble)-0.05)  // end of appearance animation
+			if (pIcon->fInsertRemoveFactor == -CAIRO_DOCK_ICON_INSERT_REMOVE_THRESHOLD)  // end of appearance animation
 			{
 				pIcon->fInsertRemoveFactor = 0;  // cela n'arrete pas l'animation, qui peut se poursuivre meme apres que l'icone ait atteint sa taille maximale.
 				bRecalculateIcons = TRUE;
@@ -2282,7 +2282,7 @@ static void _insert_icon (GldiContainer *pContainer, Icon *icon, gboolean bAnima
 		if (cairo_dock_animation_will_be_visible (pDock))
 			icon->fInsertRemoveFactor = - 0.95;
 		else
-			icon->fInsertRemoveFactor = - 0.05;
+			icon->fInsertRemoveFactor = - CAIRO_DOCK_ICON_INSERT_REMOVE_THRESHOLD;
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
 	}
 	else

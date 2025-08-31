@@ -356,7 +356,7 @@ void cairo_dock_trigger_icon_removal_from_dock (Icon *pIcon)
 		if (cairo_dock_animation_will_be_visible (pDock))  // sinon inutile de se taper toute l'animation.
 			pIcon->fInsertRemoveFactor = 1.0;
 		else
-			pIcon->fInsertRemoveFactor = 0.05;
+			pIcon->fInsertRemoveFactor = CAIRO_DOCK_ICON_INSERT_REMOVE_THRESHOLD;
 		gldi_object_notify (pDock, NOTIFICATION_REMOVE_ICON, pIcon, pDock);
 		gldi_icon_start_animation (pIcon);
 	}
