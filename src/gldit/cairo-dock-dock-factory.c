@@ -1953,6 +1953,7 @@ static gboolean _cairo_dock_dock_animation_loop (GldiContainer *pContainer)
 	gboolean bNoMoreDemandingAttention = FALSE;
 	Icon *icon;
 	GList *ic;
+	gboolean bMapped = gtk_widget_get_mapped (pContainer->pWidget);
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
@@ -1961,7 +1962,7 @@ static gboolean _cairo_dock_dock_animation_loop (GldiContainer *pContainer)
 		if (myIconsParam.fAlphaAtRest != 1)
 			icon->fAlpha = fDockMagnitude + myIconsParam.fAlphaAtRest * (1 - fDockMagnitude);
 		
-		if (gtk_widget_get_mapped (pContainer->pWidget))
+		if (bMapped)
 		{
 			bIconIsAnimating = FALSE;
 			if (bUpdateSlowAnimation)
@@ -1987,7 +1988,16 @@ static gboolean _cairo_dock_dock_animation_loop (GldiContainer *pContainer)
 				}
 			}
 		}
-		else gldi_icon_stop_animation (icon);
+		else
+		{
+			if (icon->fInsertRemoveFactor != 0) // the icon is being inserted/removed
+			{
+				// finish the animation -- will be handled by _cairo_dock_handle_inserting_removing_icons () below
+				if (icon->fInsertRemoveFactor > 0) icon->fInsertRemoveFactor = CAIRO_DOCK_ICON_INSERT_REMOVE_THRESHOLD;
+				else icon->fInsertRemoveFactor = -CAIRO_DOCK_ICON_INSERT_REMOVE_THRESHOLD;
+			}
+			gldi_icon_stop_animation (icon);
+		}
 	}
 	bContinue |= pContainer->bKeepSlowAnimation;
 	
