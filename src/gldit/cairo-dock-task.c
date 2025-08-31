@@ -85,7 +85,11 @@ static gboolean _check_for_update_idle (GldiTask *pTask)
 		
 		if (! pTask->iPeriod)  // one-shot thread => the thread is over
 		{
-			g_clear_object (&pTask->pThread);
+			if (pTask->pThread)
+			{
+				g_thread_unref (pTask->pThread);
+				pTask->pThread = NULL;
+			}
 		}
 		
 		pTask->iSidUpdateIdle = 0;  // set it before the unlock, as it is accessed in the thread part
