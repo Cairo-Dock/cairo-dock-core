@@ -160,6 +160,11 @@ static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 		}
 		g_free (cCommand);
 	}
+	else if (icon->pAppInfo)
+	{
+		if (g_key_file_get_boolean (pKeyFile, "Desktop Entry", "Terminal", NULL))
+			gldi_app_info_set_run_in_terminal (icon->pAppInfo, TRUE);
+	}
 	
 	if (bHaveOrigins && !icon->pAppInfo)
 	{

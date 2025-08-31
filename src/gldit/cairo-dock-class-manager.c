@@ -153,6 +153,63 @@ struct _GldiAppInfo {
 	//!! TODO: each action can have its own icon
 };
 
+
+struct _GldiTerminal {
+	const char * const args[3];
+	CairoDockDesktopEnv iDesktopEnv;
+	gboolean bOnlyWayland;
+};
+
+static const struct _GldiTerminal s_vTerminals[] = {
+	{ { "kgx", "-e", NULL }, CAIRO_DOCK_GNOME, FALSE }, // new replacement for gnome-terminal
+	{ { "gnome-terminal", "--", NULL }, CAIRO_DOCK_GNOME, FALSE },
+	{ { "konsole", "-e", NULL }, CAIRO_DOCK_KDE, FALSE },
+	{ { "xfce4-terminal", "-x", NULL }, CAIRO_DOCK_XFCE, FALSE },
+	{ { "mate-terminal", "-x", NULL }, CAIRO_DOCK_GNOME, FALSE }, // note: MATE likely sets desktop environment as GNOME
+	{ { "foot", NULL, NULL }, CAIRO_DOCK_UNKNOWN_ENV, TRUE },
+	{ { "sakura", "-e", NULL }, CAIRO_DOCK_UNKNOWN_ENV, FALSE },
+	{ { "alacritty", "-e", NULL }, CAIRO_DOCK_UNKNOWN_ENV, FALSE },
+	{ { "kitty", NULL, NULL }, CAIRO_DOCK_UNKNOWN_ENV, FALSE },
+	{ { "rxvt", "-e", NULL }, CAIRO_DOCK_UNKNOWN_ENV, FALSE },
+	{ { "xterm", "-e", NULL }, CAIRO_DOCK_UNKNOWN_ENV, FALSE },
+	{ { "x-terminal-emulator", "-e", NULL }, CAIRO_DOCK_UNKNOWN_ENV, FALSE }, // last one, since the "-e" option might not work
+	{ { NULL, NULL, NULL }, CAIRO_DOCK_UNKNOWN_ENV, FALSE }
+};
+
+// which terminal to use when an app needs one, selected the first time it is needed
+// (note: should be made a user-visible setting)
+int s_iTerminal = -1;
+
+static void _choose_terminal (void)
+{
+	if (s_iTerminal >= 0) return;
+	
+	int iFirst = -1; // first valid terminal found, regardless of the desktop env
+	for (s_iTerminal = 0; s_vTerminals[s_iTerminal].args[0] != NULL; ++s_iTerminal)
+	{
+		if (s_vTerminals[s_iTerminal].bOnlyWayland && ! gldi_container_is_wayland_backend ())
+			continue;
+		gchar *tmp = g_find_program_in_path (s_vTerminals[s_iTerminal].args[0]);
+		if (tmp)
+		{
+			g_free (tmp);
+			// if we don't know the environment, we take any terminal
+			if (g_iDesktopEnv == CAIRO_DOCK_UNKNOWN_ENV) break;
+			
+			if (iFirst == -1) iFirst = s_iTerminal;
+			
+			if (s_vTerminals[s_iTerminal].iDesktopEnv == g_iDesktopEnv)
+			{
+				iFirst = -1;
+				break;
+			}
+		}
+	}
+	
+	if (iFirst >= 0) s_iTerminal = iFirst; // reset to the first one found if there is no better match
+}
+
+
 static gchar **_process_cmdline (const gchar *cCmdline, gboolean bKeepFiles, int *pFilePos, GAppInfo *app)
 {
 	int args_len;
@@ -481,6 +538,7 @@ void gldi_app_info_launch (GldiAppInfo *app, const gchar* const *uris)
 	{
 		int n_args = 0;
 		int n_uris = 0;
+		int n_term = 0;
 		
 		{
 			gchar **tmp1;
@@ -489,8 +547,18 @@ void gldi_app_info_launch (GldiAppInfo *app, const gchar* const *uris)
 			if (uris) for (tmp2 = uris; *tmp2; ++tmp2) ++n_uris;
 		}
 		
+		if (app->bNeedsTerminal)
+		{
+			_choose_terminal ();
+			if (s_vTerminals[s_iTerminal].args[0] != NULL)
+			{
+				const char * const *tmp2;
+				for (tmp2 = s_vTerminals[s_iTerminal].args; *tmp2; ++tmp2) n_term++;
+			}
+		}
+		
 		// slight optimization: if the last arg is for files, we do not need to allocate a new array
-		if (n_uris <= 1 && app->args_file_pos > 0 && app->args_file_pos == n_args - 1)
+		if (!n_term && n_uris <= 1 && app->args_file_pos > 0 && app->args_file_pos == n_args - 1)
 		{
 			// note: n_args > 0, checked when creating app->args
 			int x = n_args - 1;
@@ -511,11 +579,14 @@ void gldi_app_info_launch (GldiAppInfo *app, const gchar* const *uris)
 		}
 		else
 		{
-			const char **args = g_new0 (const char*, n_args + n_uris + 1);
+			const char **args = g_new0 (const char*, n_term + n_args + n_uris + 1);
 			char **args_to_free = g_new0 (char*, n_uris + 1);
 			gboolean bConvertUris = FALSE;
 			
 			int i = 0, j, k = 0;
+			for (; i < n_term; i++)
+				args[i] = s_vTerminals[s_iTerminal].args[i];
+			
 			for (j = 0; j < n_args; j++)
 			{
 				gboolean bKeep = TRUE;
@@ -677,6 +748,11 @@ void gldi_launch_desktop_app_info (GDesktopAppInfo *pDesktopAppInfo, const gchar
 		// warning already shown in gldi_app_info_from_desktop_app_info ()
 		// TODO: should we use g_app_info_launch () as a fallback?
 	}
+}
+
+void gldi_app_info_set_run_in_terminal (GldiAppInfo *app, gboolean bNeedsTerminal)
+{
+	app->bNeedsTerminal = bNeedsTerminal;
 }
 
 /***********************************************************************

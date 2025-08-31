@@ -51,7 +51,7 @@ G_BEGIN_DECLS
 *@param cCmdline Command to launch in the format of the XDG Desktop Entry specification.
 *@param cName Descriptive name that is suitable to be displayed to the user.
 *@param cWorkingDir Optionally, a directory where the command should be launched.
-*@param bNeedsTerminal Whether the command should be launched in a terminal. Currently unsupported and ignored.
+*@param bNeedsTerminal Whether the command should be launched in a terminal.
 *@return the newly created GldiAppInfo or NULL if there was an error parsing cCmdline.
 */
 GldiAppInfo *gldi_app_info_new_from_commandline (const gchar *cCmdline, const gchar *cName, const gchar *cWorkingDir, gboolean bNeedsTerminal);
@@ -138,6 +138,8 @@ GldiAppInfo *gldi_app_info_from_desktop_app_info (GDesktopAppInfo *pDesktopAppIn
 */
 void gldi_launch_desktop_app_info (GDesktopAppInfo *pDesktopAppInfo, const gchar* const *uris);
 
+/** Override the setting whether this app needs to run in a terminal. */
+void gldi_app_info_set_run_in_terminal (GldiAppInfo *app, gboolean bNeedsTerminal);
 
 /*
 * Initialise le gestionnaire de classes. Ne fait rien la 2eme fois.
