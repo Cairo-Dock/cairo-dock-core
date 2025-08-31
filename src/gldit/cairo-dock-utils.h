@@ -108,14 +108,6 @@ gboolean cairo_dock_launch_command_single_gui (const gchar *cExec);
  */
 const gchar * cairo_dock_get_default_terminal (void);
 
-
-/** Launch an app with optionally a list of URIs provided as the argument.
- * @param appinfo  app to launch
- * @param uris  list of const char* with the URIs to open or NULL
- */
-gboolean cairo_dock_launch_app_info_with_uris (GDesktopAppInfo* appinfo, GList* uris);
-#define cairo_dock_launch_app_info(appinfo) cairo_dock_launch_app_info_with_uris (appinfo, NULL)
-
 /* Like g_strcmp0, but saves a function call.
 */
 #define gldi_strings_differ(s1, s2) (!s1 ? s2 != NULL : !s2 ? s1 != NULL : strcmp(s1, s2) != 0)

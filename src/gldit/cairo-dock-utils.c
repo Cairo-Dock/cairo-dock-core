@@ -531,43 +531,6 @@ const gchar * cairo_dock_get_default_terminal (void)
 }
 
 
-static void _pid_callback (GDesktopAppInfo* appinfo, GPid pid, gpointer)
-{
-	cd_debug ("Launched process for app: %s (pid: %d)\n", g_app_info_get_display_name (G_APP_INFO (appinfo)), pid);
-	if (s_backend.new_app_launched)
-	{
-		char *desc = g_strdup_printf ("%s - %s", g_app_info_get_display_name (G_APP_INFO (appinfo)), g_app_info_get_description (G_APP_INFO (appinfo)));
-		const char *id = g_app_info_get_id (G_APP_INFO (appinfo));
-		if (!id) id = "unknown"; // ID does not matter but should not be NULL
-		s_backend.new_app_launched (id, desc, pid);
-		g_free (desc);
-	}
-	else g_child_watch_add (pid, _child_watch_dummy, NULL);
-}
-
-gboolean cairo_dock_launch_app_info_with_uris (GDesktopAppInfo* appinfo, GList* uris)
-{
-	GdkAppLaunchContext *context = gdk_display_get_app_launch_context (gdk_display_get_default ());
-	GError *erreur = NULL;
-	
-	gboolean ret = g_desktop_app_info_launch_uris_as_manager (appinfo, uris, G_APP_LAUNCH_CONTEXT (context),
-		G_SPAWN_DO_NOT_REAP_CHILD | G_SPAWN_LEAVE_DESCRIPTORS_OPEN |
-		G_SPAWN_STDOUT_TO_DEV_NULL | G_SPAWN_STDERR_TO_DEV_NULL, // spawn flags
-		NULL, NULL, // user_setup and user_data
-		_pid_callback, NULL, // pid callback and pid data
-		&erreur);
-	g_object_unref (context); // will be kept by GIO if necessary (and we don't care about the "launched" signal in this case)
-	
-	if (!ret)
-	{
-		cd_warning ("Cannot launch app: %s (%s)", g_app_info_get_id (G_APP_INFO (appinfo)), erreur->message);
-		g_error_free (erreur);
-	}
-	
-	return ret;
-}
-
-
 void gldi_register_process_manager_backend (GldiChildProcessManagerBackend *backend)
 {
 	gpointer *ptr = (gpointer*)&s_backend;
