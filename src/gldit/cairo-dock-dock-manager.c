@@ -1222,13 +1222,13 @@ static void _update_removing_inserting_icon_size (Icon *icon)
 	icon->fInsertRemoveFactor *= .85;
 	if (icon->fInsertRemoveFactor > 0)
 	{
-		if (icon->fInsertRemoveFactor < 0.05)
-			icon->fInsertRemoveFactor = 0.05;
+		if (icon->fInsertRemoveFactor < CAIRO_DOCK_ICON_INSERT_REMOVE_THRESHOLD)
+			icon->fInsertRemoveFactor = CAIRO_DOCK_ICON_INSERT_REMOVE_THRESHOLD;
 	}
 	else if (icon->fInsertRemoveFactor < 0)
 	{
-		if (icon->fInsertRemoveFactor > -0.05)
-			icon->fInsertRemoveFactor = -0.05;
+		if (icon->fInsertRemoveFactor > -CAIRO_DOCK_ICON_INSERT_REMOVE_THRESHOLD)
+			icon->fInsertRemoveFactor = -CAIRO_DOCK_ICON_INSERT_REMOVE_THRESHOLD;
 	}
 }
 
@@ -1254,7 +1254,7 @@ static gboolean on_update_inserting_removing_icon (G_GNUC_UNUSED gpointer pUserD
 	if (pIcon->fInsertRemoveFactor != 0) // the icon is being inserted/removed
 	{
 		_update_removing_inserting_icon_size (pIcon);
-		if (fabs (pIcon->fInsertRemoveFactor) > 0.05)  // the animation is not yet finished
+		if (fabs (pIcon->fInsertRemoveFactor) > CAIRO_DOCK_ICON_INSERT_REMOVE_THRESHOLD)  // the animation is not yet finished
 		{
 			cairo_dock_mark_icon_as_inserting_removing (pIcon);
 			*bContinueAnimation = TRUE;

@@ -1061,7 +1061,7 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			{
 				gldi_icon_insert_in_container (pLastClassIcon, CAIRO_CONTAINER(pFakeParentDock), ! CAIRO_DOCK_ANIMATE_ICON);
 			}
-			else  // the last icon is being removed, no need to re-insert it (e.g. when we close all classes in one it)
+			else  // the last icon is being removed, no need to re-insert it (e.g. when we close all classes in one hit)
 			{
 				cd_debug ("no need to re-insert the last icon");
 				gldi_object_unref (GLDI_OBJECT(pLastClassIcon));
@@ -1082,6 +1082,9 @@ gboolean cairo_dock_check_class_subdock_is_empty (CairoDock *pDock, const gchar 
 			}
 			cairo_dock_redraw_icon (pFakeClassIcon);
 		}
+		
+		// trigger a leave event on the parent dock as it might need to shrink down now
+		gldi_dock_leave_synthetic (pFakeParentDock);
 		cd_debug ("no more dock");
 		return TRUE;
 	}
