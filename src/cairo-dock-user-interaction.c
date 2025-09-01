@@ -276,7 +276,7 @@ gboolean cairo_dock_notification_middle_click_icon (G_GNUC_UNUSED gpointer pUser
 				}
 			break;
 			case CAIRO_APPLI_ACTION_LAUNCH_NEW:  // launch new
-				if (icon->pAppInfo || icon->pCustomLauncher)
+				if (icon->pAppInfo)
 				{
 					gldi_object_notify (pDock, NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // emulate a shift+left click
 				}
@@ -297,7 +297,7 @@ gboolean cairo_dock_notification_middle_click_icon (G_GNUC_UNUSED gpointer pUser
 				_cairo_dock_hide_show_in_class_subdock (icon);
 			break;
 			case CAIRO_APPLI_ACTION_LAUNCH_NEW:  // launch new
-				if (icon->pAppInfo || icon->pCustomLauncher)
+				if (icon->pAppInfo)
 				{
 					gldi_object_notify (CAIRO_CONTAINER (pDock), NOTIFICATION_CLICK_ICON, icon, pDock, GDK_SHIFT_MASK);  // emulate a shift+left click
 				}
@@ -355,24 +355,14 @@ gboolean cairo_dock_notification_drop_data_selection (G_GNUC_UNUSED gpointer pUs
 			gchar *tmp2 = data[i];
 			for(; *tmp2; ++tmp2)
 				if (! (*tmp2 == ' ' || *tmp2 == '\t' || *tmp2 == '\r'))
-				{
 					bIsSpace = FALSE;
-					break;
-				}
 			if (bIsSpace) g_free (data[i]);
 			else
 			{
-				gchar *tmp3 = NULL;
-				if (data[i][0] == '/')
-				{
-					// convert absolute paths to URI style (if it is not an
-					// absolute path, we cannot do much, just hope that the
-					// app can interpret it as a command line argument)
-					tmp3 = data[i];
-					data[j] = g_strdup_printf ("file://%s", tmp3);
-					g_free (tmp3);
-				}
-				else if (i != j) data[j] = data[i];
+				size_t len = tmp2 - data[i];
+				// we might get a set of strings delimited by "\r\n"
+				if (data[i][len - 1] == '\r') data[i][len - 1] = 0; // note: len > 0 if bIsSpace == FALSE
+				if (i != j) data[j] = data[i];
 				j++;
 			}
 		}
@@ -408,25 +398,13 @@ gboolean cairo_dock_notification_drop_data_selection (G_GNUC_UNUSED gpointer pUs
 		ret = GLDI_NOTIFICATION_INTERCEPT;
 		*bHandled = TRUE;
 	}
-	else if (icon && (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon)
+	else if (icon && icon->pAppInfo && (CAIRO_DOCK_ICON_TYPE_IS_LAUNCHER (icon)
 			|| CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon)
 			|| CAIRO_DOCK_ICON_TYPE_IS_CLASS_CONTAINER (icon)))
 	{
-		GDesktopAppInfo *app = NULL;
-		if (icon->pAppInfo && icon->pAppInfo->app) app = icon->pAppInfo->app;
-		else app = icon->pCustomLauncher; // TODO: prefer pCustomLauncher if available?
-		if (app)
-		{
-			GList *list = NULL;
-			gchar **tmp;
-			// we always treat the parameters as URIs, this will work for apps that expect URIs (most cases)
-			// and GIO will anyway try to convert to files (and potentially mess things up) for apps that only expect files
-			for (tmp = data; *tmp; ++tmp) list = g_list_append (list, *tmp);
-			cairo_dock_launch_app_info_with_uris (app, list);
-			g_list_free (list);
-			ret = GLDI_NOTIFICATION_INTERCEPT;
-			*bHandled = TRUE;
-		}
+		gldi_app_info_launch (icon->pAppInfo, (const char * const*)data);
+		ret = GLDI_NOTIFICATION_INTERCEPT;
+		*bHandled = TRUE;
 	}
 	g_strfreev (data);
 	return ret;

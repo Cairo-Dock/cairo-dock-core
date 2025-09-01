@@ -45,7 +45,6 @@
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-animations.h"  // CairoDockHidingEffect
-#include "cairo-dock-utils.h"  // cairo_dock_launch_app_info
 #include "cairo-dock-icon-facility.h"
 
 extern gchar *g_cCurrentLaunchersPath;
@@ -729,12 +728,12 @@ gboolean gldi_icon_launch_command (Icon *pIcon)
 	// notify startup
 	gldi_class_startup_notify (pIcon);
 
-	GDesktopAppInfo *app = pIcon->pCustomLauncher;
-	if (!app && pIcon->pAppInfo) app = pIcon->pAppInfo->app;
+	GldiAppInfo *app = pIcon->pAppInfo;
 	if (app)
 	{
 		cd_debug ("launching app from desktop file info: %s", pIcon->cClass);
-		return cairo_dock_launch_app_info (app);
+		gldi_app_info_launch (app, NULL);
+		return TRUE;
 	}
 	cd_warning ("cannot launch icon with no app associated to it!");
 	return FALSE;
