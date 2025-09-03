@@ -88,7 +88,6 @@ static gboolean info_found = FALSE;
 static gboolean overlap_found = FALSE;
 static uint32_t list_id, manager_id, info_id, overlap_id, list_version, manager_version, info_version, overlap_version;
 
-static void _vis_active_window_changed (GldiWaylandWindowActor *wactor);
 
 /**********************************************************************
  * window manager interface -- toplevel manager                       */
@@ -224,10 +223,51 @@ static void _gldi_toplevel_output_leave_cb ( G_GNUC_UNUSED void *data, G_GNUC_UN
 	
 }
 
+
+/** Manage pending activation of windows.
+ * Weirdly, multiple windows can be in the "activated" state, e.g. when moving a window:
+ * 1. consider window A and B open, with A being active
+ * 2. start moving window A
+ *   -> get state event with activated == TRUE for window B
+ * 3. end the move
+ *   -> get state event with activated == FALSE for window B
+ * (no events are received for window A)
+ * This sequence would result in assuming that no window is active anymore.
+ * To work this around, we maintain a hash table with all windows that are in an
+ * "activated" state. We apply the following rules:
+ *   -- if the table has > 1 elements, do nothing (do not signal / update the currently active window)
+ *   -- if the table has 1 element, signal it as the currently active window
+ *   -- if the table has 0 elements, signal that no window is active
+ */
+static GHashTable *s_hPendingActivate = NULL;
+
+static gboolean _find_dummy (gpointer, gpointer, gpointer) { return TRUE; }
+
+static void _update_active (GldiWaylandWindowActor *wactor, gboolean bActive)
+{
+	gboolean bChange = FALSE;
+	if (bActive) bChange = g_hash_table_add (s_hPendingActivate, wactor);
+	else bChange = g_hash_table_remove (s_hPendingActivate, wactor);
+	
+	if (bChange)
+	{
+		// we always signal deactivation as this window might have been the active one
+		// (if this is not the case, this is a harmless no-op)
+		if (!bActive) gldi_wayland_wm_activated (wactor, FALSE, FALSE);
+		
+		if (g_hash_table_size (s_hPendingActivate) == 1)
+		{
+			GldiWaylandWindowActor *new_active;
+			if (bActive) new_active = wactor; // we know this is the newly activated window
+			else new_active = g_hash_table_find (s_hPendingActivate, _find_dummy, NULL);
+			gldi_wayland_wm_activated (new_active, TRUE, FALSE);
+		}
+	}
+}
+
 static void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED cosmic_handle *handle, struct wl_array *state)
 {
 	if (!data) return;
-	GldiWaylandWindowActor *old_active = (GldiWaylandWindowActor*)gldi_wayland_wm_get_active_window ();
 	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor*)data;
 	gboolean activated_pending = FALSE;
 	gboolean maximized_pending = FALSE;
@@ -251,13 +291,12 @@ static void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED cosmic_handle *ha
 		//!! TODO: sticky !!
 	}
 	
-	gldi_wayland_wm_activated (wactor, activated_pending, FALSE);
+	cd_debug ("wactor: %p (%s), activated: %d", wactor, wactor->actor.cName ? wactor->actor.cName : "(no name)", activated_pending);
+	
+	_update_active (wactor, activated_pending);
 	gldi_wayland_wm_maximized_changed (wactor, maximized_pending, FALSE);
 	gldi_wayland_wm_minimized_changed (wactor, minimized_pending, FALSE);
 	gldi_wayland_wm_fullscreen_changed (wactor, fullscreen_pending, FALSE);
-	
-	if (activated_pending) _vis_active_window_changed (wactor);
-	else if (wactor == old_active) _vis_active_window_changed (NULL);
 }
 
 static void _gldi_toplevel_done_cb (void *data, G_GNUC_UNUSED ext_handle *handle)
@@ -280,8 +319,9 @@ static void _check_overlap_closed (void *pDock, void *ptr)
 
 static void _gldi_toplevel_closed_cb (void *data, ext_handle *handle)
 {
+	_update_active ((GldiWaylandWindowActor*)data, FALSE);
 	gldi_wayland_wm_closed (data, TRUE);
-	
+
 #ifdef HAVE_GTK_LAYER_SHELL
 	// need to signal that this window is closed, since we might destroy its
 	// handle before the compositor would send a toplevel_leave event for it
@@ -651,9 +691,12 @@ static void _check_dock_active (CairoDock *pDock, gpointer data)
 	}
 }
 
-static void _vis_active_window_changed (GldiWaylandWindowActor *wactor)
+static int _vis_active_window_changed (void*, GldiWaylandWindowActor *wactor)
 {
+	if (wactor) cd_debug ("wactor: %p (%s)", wactor, wactor->actor.cName ? wactor->actor.cName : "(no name)");
+	else cd_debug ("wactor: NULL");
 	gldi_docks_foreach_root ((GFunc)_check_dock_active, wactor);
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
 static void _visibility_refresh (CairoDock *pDock)
@@ -707,14 +750,7 @@ static void _visibility_refresh (CairoDock *pDock)
 	if (info->bShouldHide != cairo_dock_is_temporary_hidden (pDock))
 		_set_idle_show_hide (pDock);
 }
-
-
-#else // no layer shell
-static void _vis_active_window_changed (GldiWaylandWindowActor *wactor)
-{
-	(void)wactor;
-}
-#endif
+#endif // HAVE_GTK_LAYER_SHELL
 
 
 gboolean gldi_cosmic_toplevel_try_init (struct wl_registry *registry)
@@ -737,7 +773,7 @@ gboolean gldi_cosmic_toplevel_try_init (struct wl_registry *registry)
 	s_ptoplevel_list = wl_registry_bind (registry, list_id, &ext_foreign_toplevel_list_v1_interface, list_version);
 	if (!s_ptoplevel_list)
 	{
-		cd_error ("cannot bind ext_foreign_toplevel_info!");
+		cd_error ("cannot bind ext_foreign_toplevel_list!");
 		return FALSE;
 	}
 	
@@ -795,6 +831,7 @@ gboolean gldi_cosmic_toplevel_try_init (struct wl_registry *registry)
 	gldi_windows_manager_register_backend (&wmb);
 	
 	gldi_wayland_wm_init (NULL);
+	s_hPendingActivate = g_hash_table_new (NULL, NULL);
 	
 	// extend the generic Wayland toplevel object manager
 	memset (&myCosmicWindowObjectMgr, 0, sizeof (GldiObjectManager));
@@ -827,6 +864,10 @@ gboolean gldi_cosmic_toplevel_try_init (struct wl_registry *registry)
 	{
 		dvb.refresh = _visibility_refresh;
 		dvb.has_overlapping_window = _dock_has_overlap_window;
+		gldi_object_register_notification (&myWindowObjectMgr,
+			NOTIFICATION_WINDOW_ACTIVATED,
+			(GldiNotificationFunc) _vis_active_window_changed,
+			GLDI_RUN_FIRST, NULL);
 	}
 #endif
 	// note: we register our dock visibility backend interface anyway since we don't want the default backend to run
