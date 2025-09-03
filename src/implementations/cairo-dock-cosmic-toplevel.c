@@ -265,9 +265,30 @@ static void _gldi_toplevel_done_cb (void *data, G_GNUC_UNUSED ext_handle *handle
 	gldi_wayland_wm_done (data);
 }
 
-static void _gldi_toplevel_closed_cb (void *data, G_GNUC_UNUSED ext_handle *handle)
+#ifdef HAVE_GTK_LAYER_SHELL
+static void _toplevel_leave (void *data, struct zcosmic_overlap_notification_v1* notif,
+	struct ext_foreign_toplevel_handle_v1* toplevel);
+
+static void _check_overlap_closed (void *pDock, void *ptr)
+{
+	ext_handle *handle = (ext_handle*)ptr;
+	// note: setting notif == NULL signals this is not a real event from the compositor
+	_toplevel_leave (pDock, NULL, handle);
+}
+
+#endif
+
+static void _gldi_toplevel_closed_cb (void *data, ext_handle *handle)
 {
 	gldi_wayland_wm_closed (data, TRUE);
+	
+#ifdef HAVE_GTK_LAYER_SHELL
+	// need to signal that this window is closed, since we might destroy its
+	// handle before the compositor would send a toplevel_leave event for it
+	gldi_docks_foreach_root (_check_overlap_closed, handle);
+#else
+	(void)handle;
+#endif
 }
 
 /*
@@ -547,19 +568,24 @@ static void _toplevel_enter (void *data, struct zcosmic_overlap_notification_v1*
 	_set_idle_show_hide (pDock);
 }
 
-static void _toplevel_leave (void *data, struct zcosmic_overlap_notification_v1*,
+static void _toplevel_leave (void *data, struct zcosmic_overlap_notification_v1* notif,
 	struct ext_foreign_toplevel_handle_v1* toplevel)
 {
 	if (!data) return;
 	CairoDock *pDock = (CairoDock*)data;
 	if (!pDock->pVisibilityData)
 	{
-		cd_critical ("Leave event for a dock without visibility data!");
+		// note: notif == FALSE if this is a synthetic event that is sent
+		// for all docks regardless whether we monitor overlap for it
+		if (notif) cd_critical ("Leave event for a dock without visibility data!");
 		return;
 	}
 	CosmicVis *info = (CosmicVis*)pDock->pVisibilityData;
 	if (!g_hash_table_remove (info->hOverlap, toplevel))
-		cd_warning ("Toplevel not marked as overlapping!");
+	{
+		if (notif) cd_warning ("Toplevel not marked as overlapping!");
+		return;
+	}
 	
 	if (info->bShouldHide)
 	{
