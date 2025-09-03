@@ -103,7 +103,7 @@ list(APPEND CMAKE_INSTALL_RPATH ${libdir})
 
 # check for mandatory dependencies
 # for pkg_check_modules -- use semicolon to have more details if a package is missing
-set (packages_required_semicolon "glib-2.0 >= 2.36.0;gthread-2.0;cairo;librsvg-2.0;dbus-1;dbus-glib-1;libxml-2.0;gl;glu;libcurl")
+set (packages_required_semicolon "glib-2.0 >= 2.40.0;gthread-2.0;cairo;librsvg-2.0;dbus-1;dbus-glib-1;libxml-2.0;gl;glu;libcurl")
 # for gldi.pc -- replace semicolons with spaces
 STRING (REPLACE ";" " " packages_required "${packages_required_semicolon}") # note: need to use quotes around ${packages_required_semicolon} for this to work!
 pkg_check_modules ("PACKAGE" REQUIRED ${packages_required_semicolon})
