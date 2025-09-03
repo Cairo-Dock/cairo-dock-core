@@ -423,11 +423,11 @@ static void _new_toplevel ( G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct ext_f
 	ext_foreign_toplevel_handle_v1_set_user_data (handle, cactor);
 	zcosmic_toplevel_handle_v1_set_user_data (cactor->chandle, cactor);
 	GldiWindowActor *actor = (GldiWindowActor*)cactor;
-	// hack required for minimize on click to work -- "pretend" that the window is in the middle of the screen
+	// set initial position to something sensible in case we don't get it updated
 	actor->windowGeometry.x = cairo_dock_get_screen_width (0) / 2;
 	actor->windowGeometry.y = cairo_dock_get_screen_height (0) / 2;
-	actor->windowGeometry.width = 0;
-	actor->windowGeometry.height = 0;
+	actor->windowGeometry.width = 1;
+	actor->windowGeometry.height = 1;
 	
 	/* note: we cannot do anything as long as we get app_id */
 	zcosmic_toplevel_handle_v1_add_listener (cactor->chandle, &gldi_cosmic_handle_interface, cactor);
