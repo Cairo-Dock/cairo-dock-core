@@ -127,28 +127,14 @@ gboolean cairo_dock_fm_launch_uri (const gchar *cURI)
 {
 	if (s_pEnvBackend != NULL && s_pEnvBackend->launch_uri != NULL && cURI != NULL)
 	{
-		// launch the URI in a thread.
-		//s_pEnvBackend->launch_uri (cURI);
-		GError *erreur = NULL;
-		gchar *cThreadURI = g_strdup (cURI);
-		// The name can be useful for discriminating threads in a debugger.
-		// Some systems restrict the length of name to 16 bytes. 
-		gchar *cThreadName = g_strndup (cURI, 15);
-		GThread* pThread = g_thread_try_new (cThreadName, (GThreadFunc) _cairo_dock_fm_launch_uri_threaded, (gpointer) cThreadURI, &erreur);
-		g_thread_unref (pThread);
-		g_free (cThreadName);
-		if (erreur != NULL)
-		{
-			cd_warning (erreur->message);
-			g_error_free (erreur);
-		}
+		s_pEnvBackend->launch_uri (cURI);
 		
 		// add it to the recent files.
 		GtkRecentManager *rm = gtk_recent_manager_get_default () ;
 		if (*cURI == '/')  // not an URI, this is now needed for gtk-recent.
 		{
 			gchar *cValidURI = g_filename_to_uri (cURI, NULL, NULL);
-			gtk_recent_manager_add_item (rm, cValidURI);
+			if (cValidURI) gtk_recent_manager_add_item (rm, cValidURI);
 			g_free (cValidURI);
 		}
 		else
