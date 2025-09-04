@@ -111,7 +111,13 @@ static void _spawn_app (const gchar * const *args, const gchar *id, const gchar 
 		g_variant_builder_add (&var_builder, "(sv)", "Environment", g_variant_builder_end (&env_builder));
 	}
 	if (working_dir) g_variant_builder_add (&var_builder, "(sv)", "WorkingDirectory", working_dir);
+	// fail if systemd cannot exec the process binary
+	g_variant_builder_add   (&var_builder, "(sv)", "Type", g_variant_new_string ("exec"));
+	// clean up failed processes (otherwise, systemd service units remain in the "failed" state)
 	g_variant_builder_add   (&var_builder, "(sv)", "CollectMode", g_variant_new_string ("inactive-or-failed"));
+	// only consider this service to end if all processes spawned by it have exited (otherwise, systemd would
+	// kill any child processes after the main process exited; this is a problem e.g. with cosmic-files)
+	g_variant_builder_add   (&var_builder, "(sv)", "ExitType", g_variant_new_string ("cgroup"));
 	g_variant_builder_close (&var_builder);
 	g_variant_builder_open  (&var_builder, s_aux_type);
 	g_variant_builder_close (&var_builder);
