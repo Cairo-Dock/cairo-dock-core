@@ -384,12 +384,11 @@ gboolean cairo_dock_launch_command_argv_full2 (const gchar * const * args, const
 				desc_to_free = g_strdup_printf ("%s - %s", g_app_info_get_name (app_info), desc);
 				desc = desc_to_free;
 			}
-			else
-			{
-				desc = g_app_info_get_name (app_info);
-				if (!desc || !*desc) desc = args[0];
-			}
+			else desc = g_app_info_get_name (app_info);
 		}
+		
+		if (!desc || !*desc) desc = args[0];
+		
 		if (!id)
 		{
 			const char *tmp = strrchr (args[0], '/');
@@ -459,7 +458,7 @@ gboolean cairo_dock_launch_command_argv_full2 (const gchar * const * args, const
 		g_free (id);
 		g_free (to_free[0]);
 		g_free (to_free[1]);
-		
+		g_free (desc_to_free);
 		//!! TODO: figure out how to detect and handle errors (or just change the function to be void)
 	}
 	else
