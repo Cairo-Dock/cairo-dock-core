@@ -100,10 +100,14 @@ void gldi_container_handle_scroll (GldiContainer *pContainer, Icon *pIcon, GdkEv
 	{
 		case GDK_SCROLL_UP:
 		case GDK_SCROLL_DOWN:
-			gldi_object_notify (pContainer, NOTIFICATION_SCROLL_ICON, pIcon, pContainer, dir, FALSE);
+			// filter out if the same event is delivered both as a "smooth" and "regular" event
+			// see e.g. https://bugzilla.gnome.org/show_bug.cgi?id=726878 however it might not be relevant anymore
+			if (pScroll->time != pContainer->iLastScrollTime)
+				gldi_object_notify (pContainer, NOTIFICATION_SCROLL_ICON, pIcon, pContainer, dir, FALSE);
 			break;
 		case GDK_SCROLL_SMOOTH:
 		{
+			pContainer->iLastScrollTime = pScroll->time;
 			gdouble dx = pScroll->delta_x;
 			gdouble dy = pScroll->delta_y;
 			gldi_object_notify (pContainer, NOTIFICATION_SMOOTH_SCROLL_ICON, pIcon, pContainer, dx, dy);

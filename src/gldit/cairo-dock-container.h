@@ -155,6 +155,8 @@ struct _GldiContainer {
 	gint iMouseY;
 	/// accumulate smooth scroll events to emulate fixed steps
 	gdouble fSmoothScrollAccum;
+	/// time of last smooth scroll event received (to filter potential duplicates)
+	guint iLastScrollTime;
 	/// zoom applied to the container's elements.
 	gdouble fRatio;
 	/// TRUE if the container has a reflection power.
