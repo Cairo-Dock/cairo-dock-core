@@ -289,14 +289,62 @@ static void _move_resize_dock (CairoDock *pDock)
 #endif
 }
 
+#ifdef HAVE_GTK_LAYER_SHELL
+struct _KBData
+{
+	GtkWindow *window;
+	guint iSidTimer;
+};
+
+static void _kb_mode_data_destroy (gpointer ptr, GObject*)
+{
+	if (ptr)
+	{
+		struct _KBData *data = (struct _KBData*)ptr;
+		if (data->iSidTimer) g_source_remove (data->iSidTimer);
+		g_free (data);
+	}
+}
+
+static gboolean _kb_mode_callback (gpointer ptr)
+{
+	if (ptr)
+	{
+		struct _KBData *data = (struct _KBData*)ptr;
+		if (data->window)
+		{
+			gtk_layer_set_keyboard_mode (data->window, GTK_LAYER_SHELL_KEYBOARD_MODE_ON_DEMAND);
+			g_object_weak_unref (G_OBJECT (data->window), _kb_mode_data_destroy, ptr);
+		}
+		g_free (ptr);
+	}
+	return G_SOURCE_REMOVE;
+}
+
+static void _set_kb_mode_callback (GtkWindow *window)
+{
+	struct _KBData *data = g_new0 (struct _KBData, 1);
+	data->window = window;
+	// 100 ms should be enough for GTK to commit our previous change
+	data->iSidTimer = g_timeout_add (100, _kb_mode_callback, data);
+	g_object_weak_ref (G_OBJECT (window), _kb_mode_data_destroy, data);
+}
+#endif
+
 void gldi_wayland_grab_keyboard (GldiContainer *pContainer)
 {
 #ifdef HAVE_GTK_LAYER_SHELL
 	GtkWindow* window = GTK_WINDOW (pContainer->pWidget);
 	gtk_layer_set_keyboard_mode (window, GTK_LAYER_SHELL_KEYBOARD_MODE_EXCLUSIVE);
-	wl_surface_commit (gdk_wayland_window_get_wl_surface (
-		gldi_container_get_gdk_window (pContainer)));
-	gtk_layer_set_keyboard_mode (window, GTK_LAYER_SHELL_KEYBOARD_MODE_ON_DEMAND);
+	/* Note: the above will trigger a commit, but not immediately, while we should
+	 * not commit ourselves as the associated wl_surface might be in an inconsistent state.
+	 * So we set up a callback to reset to GTK_LAYER_SHELL_KEYBOARD_MODE_ON_DEMAND,
+	 * hopefully after this change has been commited. For the complexities involved, see e.g.
+	 * https://github.com/wmww/gtk-layer-shell/issues/51
+	 * https://github.com/wmww/gtk-layer-shell/issues/143
+	 * (this case is less severe as likely no "breaking" change is happening, but we still
+	 * should not commit behing the back of GTK) */
+	_set_kb_mode_callback (window);
 #endif
 }
 
@@ -319,9 +367,8 @@ static void _release_keyboard_layer_shell (GldiContainer *pContainer)
 #ifdef HAVE_GTK_LAYER_SHELL
 	GtkWindow* window = GTK_WINDOW (pContainer->pWidget);
 	gtk_layer_set_keyboard_mode (window, GTK_LAYER_SHELL_KEYBOARD_MODE_NONE);
-	wl_surface_commit (gdk_wayland_window_get_wl_surface (
-		gldi_container_get_gdk_window (pContainer)));
-	gtk_layer_set_keyboard_mode (window, GTK_LAYER_SHELL_KEYBOARD_MODE_ON_DEMAND);
+	// See comment in gldi_wayland_grab_keyboard () above.
+	_set_kb_mode_callback (window);
 #endif	
 }
 
