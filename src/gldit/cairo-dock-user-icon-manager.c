@@ -129,7 +129,7 @@ static void _load_one_icon (gpointer pAttr, gpointer)
 	GldiUserIconAttr *attr = (GldiUserIconAttr*)pAttr;
 	
 	Icon *icon = _user_icon_create (attr);
-	if (icon == NULL || GPOINTER_TO_INT (icon->reserved[0]) == -1)  // if the icon couldn't be loaded, remove it from the theme (it's useless to try and fail to load it each time).
+	if (icon == NULL || icon->bNotFound)  // if the icon couldn't be loaded, remove it from the theme (it's useless to try and fail to load it each time).
 	{
 		if (icon)
 			gldi_object_unref (GLDI_OBJECT(icon));

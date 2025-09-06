@@ -1145,13 +1145,12 @@ static gboolean _on_button_press (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventButt
 
 static gboolean _on_scroll (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventScroll* pScroll, CairoDock *pDock)
 {
-	if (pScroll->direction != GDK_SCROLL_UP && pScroll->direction != GDK_SCROLL_DOWN)  // on degage les scrolls horizontaux.
+	GdkScrollDirection dir = pScroll->direction;
+	if (dir == GDK_SCROLL_UP || dir == GDK_SCROLL_DOWN || dir == GDK_SCROLL_SMOOTH)
 	{
-		return FALSE;
+		Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);  // can be NULL
+		gldi_container_handle_scroll (CAIRO_CONTAINER (pDock), icon, pScroll);
 	}
-	Icon *icon = cairo_dock_get_pointed_icon (pDock->icons);  // can be NULL
-	gldi_object_notify (pDock, NOTIFICATION_SCROLL_ICON, icon, pDock, pScroll->direction);
-	
 	return FALSE;
 }
 

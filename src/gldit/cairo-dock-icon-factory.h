@@ -121,7 +121,7 @@ struct _Icon {
 	// This typically wraps a .desktop file of an installed app, but can be custom created for launchers with
 	// custom commands. This is only set on creation and does not change during the lifetime of the icon.
 	GldiAppInfo *pAppInfo;
-	gpointer unused; // previously used for custom command
+	gboolean bNotFound; // set to TRUE for launchers that could not be loaded, they will be deleted
 	
 	// Appli.
 	GldiWindowActor *pAppli;
