@@ -116,13 +116,6 @@ gboolean cairo_dock_fm_get_file_properties (const gchar *cURI, guint64 *iSize, t
 		return FALSE;
 }
 
-static gpointer _cairo_dock_fm_launch_uri_threaded (gchar *cURI)
-{
-	cd_debug ("%s (%s)", __func__, cURI);
-	s_pEnvBackend->launch_uri (cURI);
-	g_free (cURI);
-	return NULL;
-}
 gboolean cairo_dock_fm_launch_uri (const gchar *cURI)
 {
 	if (s_pEnvBackend != NULL && s_pEnvBackend->launch_uri != NULL && cURI != NULL)
