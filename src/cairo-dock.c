@@ -485,33 +485,29 @@ int main (int argc, char** argv)
 	GOptionContext *context = g_option_context_new ("Cairo-Dock");
 	g_option_context_add_main_entries (context, pOptionsTable, NULL);
 	g_option_context_parse (context, &argc, &argv, &erreur);
-	if (erreur != NULL)
-	{
-		cd_error ("ERROR in options: %s", erreur->message);
-		return 1;
-	}
-	if (g_bForceWayland && g_bForceX11)
-	{
-		cd_error ("Both Wayland and X11 backends cannot be requested (use only one of the -L and -X options)!\n");
-		return 1;
-	}
-	if (g_bForceWayland)
-		gdk_set_allowed_backends ("wayland");
-	if (g_bForceX11)
-		gdk_set_allowed_backends ("x11");
-	if (g_bDisableDbusActivation && g_bGioLaunch)
-		cd_error ("Cannot disable DBus activation if launching apps with GIO (use only one of the --disable-dbus-activation and --force-gio-launch options)!\n");
+	if (erreur != NULL) cd_error ("ERROR in options: %s", erreur->message); // will exit
 	
 	if (bPrintVersion)
 	{
 		g_print ("%s\n", CAIRO_DOCK_VERSION);
 		return 0;
 	}
+	if (bCappuccino)
+	{
+		const gchar *cCappuccino = _("Cairo-Dock makes anything, including coffee !");
+		g_print ("%s\n", cCappuccino);
+		return 0;
+	}
+	if (g_bDisableDbusActivation && g_bGioLaunch)
+		cd_error ("Cannot disable DBus activation if launching apps with GIO (use only one of the --disable-dbus-activation and --force-gio-launch options)!\n");
+	if (g_bForceWayland && g_bForceX11)
+		cd_error ("Both Wayland and X11 backends cannot be requested (use only one of the -L and -X options)!\n");
+	if (g_bForceWayland) gdk_set_allowed_backends ("wayland");
+	if (g_bForceX11) gdk_set_allowed_backends ("x11");
 	
 	gtk_init (&argc, &argv);
 	
-	if (g_bLocked)
-		cd_warning ("Cairo-Dock will be locked.");
+	if (g_bLocked) cd_warning ("Cairo-Dock will be locked.");
 	
 	if (cVerbosity != NULL)
 	{
@@ -536,13 +532,6 @@ int main (int argc, char** argv)
 		else
 			cd_warning ("Unknown environment '%s'", cEnvironment);
 		g_free (cEnvironment);
-	}
-	
-	if (bCappuccino)
-	{
-		const gchar *cCappuccino = _("Cairo-Dock makes anything, including coffee !");
-		g_print ("%s\n", cCappuccino);
-		return 0;
 	}
 	
 	//\___________________ get global config.
