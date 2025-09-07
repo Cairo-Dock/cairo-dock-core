@@ -93,6 +93,37 @@ inline void gldi_container_update_mouse_position (GldiContainer *pContainer)
 		s_backend.update_mouse_position (pContainer);
 }
 
+void gldi_container_handle_scroll (GldiContainer *pContainer, Icon *pIcon, GdkEventScroll* pScroll)
+{
+	GdkScrollDirection dir = pScroll->direction;
+	switch (dir)
+	{
+		case GDK_SCROLL_UP:
+		case GDK_SCROLL_DOWN:
+			// filter out if the same event is delivered both as a "smooth" and "regular" event
+			// see e.g. https://bugzilla.gnome.org/show_bug.cgi?id=726878 however it might not be relevant anymore
+			if (pScroll->time != pContainer->iLastScrollTime)
+				gldi_object_notify (pContainer, NOTIFICATION_SCROLL_ICON, pIcon, pContainer, dir, FALSE);
+			break;
+		case GDK_SCROLL_SMOOTH:
+		{
+			pContainer->iLastScrollTime = pScroll->time;
+			gdouble dx = pScroll->delta_x;
+			gdouble dy = pScroll->delta_y;
+			gldi_object_notify (pContainer, NOTIFICATION_SMOOTH_SCROLL_ICON, pIcon, pContainer, dx, dy);
+			pContainer->fSmoothScrollAccum += dy;
+			for (; pContainer->fSmoothScrollAccum > 1.0; pContainer->fSmoothScrollAccum -= 1.0)
+				gldi_object_notify (pContainer, NOTIFICATION_SCROLL_ICON, pIcon, pContainer, GDK_SCROLL_DOWN, TRUE);
+			for (; pContainer->fSmoothScrollAccum < -1.0; pContainer->fSmoothScrollAccum += 1.0)
+				gldi_object_notify (pContainer, NOTIFICATION_SCROLL_ICON, pIcon, pContainer, GDK_SCROLL_UP, TRUE);
+			break;
+		}
+		default:
+			// GDK_SCROLL_LEFT and GDK_SCROLL_RIGHT are ignored
+			break;
+	}
+}
+
 static gboolean _prevent_delete (G_GNUC_UNUSED GtkWidget *pWidget, G_GNUC_UNUSED GdkEvent *event, G_GNUC_UNUSED gpointer data)
 {
 	cd_debug ("No alt+f4");
@@ -573,9 +604,11 @@ gboolean gldi_container_can_reserve_space (int iNumScreen, gboolean bDirectionUp
 
 gboolean gldi_container_dock_handle_leave (CairoDock *pDock, GdkEventCrossing *pEvent)
 {
+	gboolean ret = TRUE; // default return value is true -- it means there is no need for further checks
 	if (s_backend.dock_handle_leave)
-		return s_backend.dock_handle_leave (pDock, pEvent);
-	return TRUE; // default return value is true -- it means there is no need for further checks
+		ret = s_backend.dock_handle_leave (pDock, pEvent);
+	if (ret) pDock->container.fSmoothScrollAccum = 0.0; // reset scroll events
+	return ret;
 }
 
 void gldi_container_dock_handle_enter (CairoDock *pDock, GdkEventCrossing *pEvent)

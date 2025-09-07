@@ -168,8 +168,9 @@ static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 	
 	if (bHaveOrigins && !icon->pAppInfo)
 	{
-		// no desktop file could be found for this launcher -> mark it as invalid
-		icon->reserved[0] = GINT_TO_POINTER(-1); // we use this as a way to tell the UserIcon manager that the icon is invalid (should add a new flag, but that would break ABI)
+		// no desktop file could be found for this launcher -> mark it as invalid, will be deleted by the UserIcon manager
+		// (note: we do not do this for custom launchers as it would be annoying to have them deleted if e.g. the user made a typo
+		icon->bNotFound = TRUE;
 	}
 	
 	gboolean bPreventFromInhibiting = g_key_file_get_boolean (pKeyFile, "Desktop Entry", "prevent inhibate", NULL);  // FALSE by default

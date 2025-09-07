@@ -30,7 +30,7 @@ gboolean cairo_dock_notification_click_icon (gpointer pUserData, Icon *icon, Gld
 
 gboolean cairo_dock_notification_middle_click_icon (gpointer pUserData, Icon *icon, GldiContainer *pContainer);
 
-gboolean cairo_dock_notification_scroll_icon (gpointer pUserData, Icon *icon, GldiContainer *pContainer, int iDirection);
+gboolean cairo_dock_notification_scroll_icon (gpointer pUserData, Icon *icon, GldiContainer *pContainer, int iDirection, gboolean);
 
 gboolean cairo_dock_notification_drop_data_selection (gpointer pUserData,
 	GtkSelectionData *selection_data, Icon *icon, double fOrder,

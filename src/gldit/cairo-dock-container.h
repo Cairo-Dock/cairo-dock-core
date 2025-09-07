@@ -81,8 +81,14 @@ typedef enum {
 	NOTIFICATION_DOUBLE_CLICK_ICON,
 	/// notification called when the user middle-clicks on an icon. data : {Icon, CairoDock}
 	NOTIFICATION_MIDDLE_CLICK_ICON,
-	/// notification called when the user scrolls on an icon. data : {Icon, CairoDock, int}
+	/// notification called when the user scrolls on a container. data : {Icon, CairoContainer, int iDirection, int bEmulated}
+	/// Note: Icon is the icon under the mouse or can be NULL if the mouse is not over any icon. Currently it is only emitted on docks and desklets.
+	/// iDirection is either GDK_SCROLL_UP or GDK_SCROLL_DOWN; bEmulated is TRUE if this event is synthetized based on
+	/// a series of GDK_SCROLL_SMOOTH events received earlier (so it can be ignored if those were handled)
 	NOTIFICATION_SCROLL_ICON,
+	/// notification called when the user scrolls on a container and a GDK_SCROLL_SMOOTH event was delivered
+	/// data : {Icon, CairoContainer, gdouble delta_x, gdouble delta_y}
+	NOTIFICATION_SMOOTH_SCROLL_ICON,
 	/// notification called when the mouse enters an icon. data : {Icon, CairoDock, gboolean*}
 	NOTIFICATION_ENTER_ICON,
 	/// notification called when the mouse enters a dock while dragging an object.
@@ -147,6 +153,10 @@ struct _GldiContainer {
 	gint iMouseX;
 	/// Y position of the mouse in the container's system of reference.
 	gint iMouseY;
+	/// accumulate smooth scroll events to emulate fixed steps
+	gdouble fSmoothScrollAccum;
+	/// time of last smooth scroll event received (to filter potential duplicates)
+	guint iLastScrollTime;
 	/// zoom applied to the container's elements.
 	gdouble fRatio;
 	/// TRUE if the container has a reflection power.
@@ -248,6 +258,8 @@ void cairo_dock_enable_containers_opacity (void);
  * to rely on the motion notify and leave / enter events) */
 void gldi_container_update_mouse_position (GldiContainer *pContainer);
 
+/* Accumulate smooth scroll events and emit signals (should be private). */
+void gldi_container_handle_scroll (GldiContainer *pContainer, Icon *pIcon, GdkEventScroll* pScroll);
 
 /** Reserve a space on the screen for a Container; other windows won't overlap this space when maximised.
 *@param pContainer the container
