@@ -57,6 +57,10 @@
 extern CairoDock *g_pMainDock;
 extern CairoDockDesktopEnv g_iDesktopEnv;
 
+// global config (for debugging only)
+gboolean g_bDisableDbusActivation = FALSE;
+gboolean g_bGioLaunch = FALSE;
+
 static GldiObjectManager myAppInfoObjectMgr;
 
 /// Definition of a Class of application.
@@ -362,8 +366,10 @@ static void _init_appinfo (GldiObject *obj, gpointer attr)
 	{
 		desktop_app = G_DESKTOP_APP_INFO (info->app);
 		info->actions = g_desktop_app_info_list_actions (desktop_app);
-		bDbusActivatable = g_desktop_app_info_get_boolean (desktop_app, "DBusActivatable");
+		if (!g_bDisableDbusActivation)
+			bDbusActivatable = g_desktop_app_info_get_boolean (desktop_app, "DBusActivatable");
 	}
+	if (g_bGioLaunch) bDbusActivatable = TRUE; // this will skip parsing the command line and force using the Gio function to launch this app
 	
 	if (params->bNeedsTerminal) info->bNeedsTerminal = TRUE;
 	else if (desktop_app) info->bNeedsTerminal = g_desktop_app_info_get_boolean (desktop_app, "Terminal");
