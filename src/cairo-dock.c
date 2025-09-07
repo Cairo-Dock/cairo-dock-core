@@ -104,6 +104,9 @@ extern gboolean g_bDisableAllModules;
 extern gboolean g_bNoCheckModuleVersion;
 extern gchar **g_cExcludedModules;
 extern gboolean g_bX11UseEgl;
+extern gboolean g_bDisableSystemd; // defined in cairo-dock-core.c
+extern gboolean g_bDisableDbusActivation; // defined in cairo-dock-class-manager.c
+extern gboolean g_bGioLaunch; // defined in cairo-dock-class-manager.c
 
 extern GldiModuleInstance *g_pCurrentModule;
 extern GtkWidget *cairo_dock_build_simple_gui_window (void);
@@ -465,6 +468,15 @@ int main (int argc, char** argv)
 		{"no-module-version-check", 0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bNoCheckModuleVersion,
 			_("For debugging purposes only. Do not check version compatibility after loading a plugin module."), NULL},
+		{"disable-systemd", 0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&g_bDisableSystemd,
+			_("For debugging purposes only. Do not use systemd to launch apps."), NULL},
+		{"disable-dbus-activation", 0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&g_bDisableDbusActivation,
+			_("For debugging purposes only. Do not use DBus activation to launch apps."), NULL},
+		{"force-gio-launch", 0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&g_bGioLaunch,
+			_("For debugging purposes only. Rely on GIO to launch apps instead of our own implementation (implies --disable-systemd)."), NULL},
 		{NULL, 0, 0, 0,
 			NULL,
 			NULL, NULL}
@@ -473,31 +485,29 @@ int main (int argc, char** argv)
 	GOptionContext *context = g_option_context_new ("Cairo-Dock");
 	g_option_context_add_main_entries (context, pOptionsTable, NULL);
 	g_option_context_parse (context, &argc, &argv, &erreur);
-	if (erreur != NULL)
-	{
-		cd_error ("ERROR in options: %s", erreur->message);
-		return 1;
-	}
-	if (g_bForceWayland && g_bForceX11)
-	{
-		cd_error ("Both Wayland and X11 backends cannot be requested (use only one of the -L and -X options)!\n");
-		return 1;
-	}
-	if (g_bForceWayland)
-		gdk_set_allowed_backends ("wayland");
-	if (g_bForceX11)
-		gdk_set_allowed_backends ("x11");
-	
-	gtk_init (&argc, &argv);
+	if (erreur != NULL) cd_error ("ERROR in options: %s", erreur->message); // will exit
 	
 	if (bPrintVersion)
 	{
 		g_print ("%s\n", CAIRO_DOCK_VERSION);
 		return 0;
 	}
+	if (bCappuccino)
+	{
+		const gchar *cCappuccino = _("Cairo-Dock makes anything, including coffee !");
+		g_print ("%s\n", cCappuccino);
+		return 0;
+	}
+	if (g_bDisableDbusActivation && g_bGioLaunch)
+		cd_error ("Cannot disable DBus activation if launching apps with GIO (use only one of the --disable-dbus-activation and --force-gio-launch options)!\n");
+	if (g_bForceWayland && g_bForceX11)
+		cd_error ("Both Wayland and X11 backends cannot be requested (use only one of the -L and -X options)!\n");
+	if (g_bForceWayland) gdk_set_allowed_backends ("wayland");
+	if (g_bForceX11) gdk_set_allowed_backends ("x11");
 	
-	if (g_bLocked)
-		cd_warning ("Cairo-Dock will be locked.");
+	gtk_init (&argc, &argv);
+	
+	if (g_bLocked) cd_warning ("Cairo-Dock will be locked.");
 	
 	if (cVerbosity != NULL)
 	{
@@ -522,13 +532,6 @@ int main (int argc, char** argv)
 		else
 			cd_warning ("Unknown environment '%s'", cEnvironment);
 		g_free (cEnvironment);
-	}
-	
-	if (bCappuccino)
-	{
-		const gchar *cCappuccino = _("Cairo-Dock makes anything, including coffee !");
-		g_print ("%s\n", cCappuccino);
-		return 0;
 	}
 	
 	//\___________________ get global config.

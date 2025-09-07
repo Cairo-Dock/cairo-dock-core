@@ -66,6 +66,7 @@ int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;  // version de la lib.
 
 gboolean g_bForceWayland = FALSE;
 gboolean g_bForceX11 = FALSE;
+gboolean g_bDisableSystemd = FALSE;
 
 extern gboolean g_bDisableLayerShell;
 extern gboolean g_bUseOpenGL;
@@ -101,7 +102,7 @@ static void _gldi_register_core_managers (void)
 	gldi_register_style_manager ();  // get config before other manager that could use this manager
 	if (!g_bForceWayland) gldi_register_X_manager ();
 	if (!g_bForceX11) gldi_register_wayland_manager ();
-	cairo_dock_systemd_integration_init ();
+	if (!g_bDisableSystemd) cairo_dock_systemd_integration_init ();
 }
 
 void gldi_init (GldiRenderingMethod iRendering)
