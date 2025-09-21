@@ -1021,7 +1021,7 @@ msgid "Lock the dock so that any modification is impossible for users."
 msgstr "Заблокувати панель від зміни налаштувань користувачами."
 
 #: ../src/cairo-dock.c:400
-msgid "Keep the dock above other windows whatever."
+msgid "Keep the dock above other windows."
 msgstr "Утримувати поверх усіх вікон у будь-якому випадку."
 
 #: ../src/cairo-dock.c:403
@@ -1770,7 +1770,7 @@ msgstr "Ескіз вікон на значках"
 
 #: ../Help/data/messages:73
 msgid ""
-"You need to run Compiz, and enable the \"Window Preview\" plug-in in Compiz. "
+"You need to run Compiz, and enable the \"Thumbnail Window Previews\" plug-in in Compiz. "
 "Install \"ccsm\" to be able to configure Compiz."
 msgstr ""
 "Для цього вам потрібен Compiz та його плагін \"Ескіз вікон\". Встановіть "

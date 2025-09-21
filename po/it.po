@@ -1044,7 +1044,7 @@ msgstr ""
 "Blocca la dock cosicché sia impossibile da modificare per gli utenti."
 
 #: ../src/cairo-dock.c:400
-msgid "Keep the dock above other windows whatever."
+msgid "Keep the dock above other windows."
 msgstr "Lascia la dock  in ogni caso al di sopra delle altre finestre."
 
 #: ../src/cairo-dock.c:403
@@ -1803,7 +1803,7 @@ msgstr "Mostrare l'anteprima finestre sopra le icone"
 
 #: ../Help/data/messages:73
 msgid ""
-"You need to run Compiz, and enable the \"Window Preview\" plug-in in Compiz. "
+"You need to run Compiz, and enable the \"Thumbnail Window Previews\" plug-in in Compiz. "
 "Install \"ccsm\" to be able to configure Compiz."
 msgstr ""
 "Devi attivare Compiz, e abilitare il plugin \"Anteprima Finestre\". Installa "

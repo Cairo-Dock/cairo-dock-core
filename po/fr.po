@@ -1054,7 +1054,7 @@ msgstr ""
 "utilisateurs."
 
 #: ../src/cairo-dock.c:400
-msgid "Keep the dock above other windows whatever."
+msgid "Keep the dock above other windows."
 msgstr ""
 "Garder le dock au-dessus des autres fenêtres dans toutes les situations."
 
@@ -1829,7 +1829,7 @@ msgstr "Afficher les miniatures des fenêtres sur les icônes"
 
 #: ../Help/data/messages:73
 msgid ""
-"You need to run Compiz, and enable the \"Window Preview\" plug-in in Compiz. "
+"You need to run Compiz, and enable the \"Thumbnail Window Previews\" plug-in in Compiz. "
 "Install \"ccsm\" to be able to configure Compiz."
 msgstr ""
 "Vous devez utiliser Compiz, et activer le plug-in « Windows preview ». "

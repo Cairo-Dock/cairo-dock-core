@@ -1019,7 +1019,7 @@ msgid "Lock the dock so that any modification is impossible for users."
 msgstr "锁定dock，使其不能被用户修改"
 
 #: ../src/cairo-dock.c:400
-msgid "Keep the dock above other windows whatever."
+msgid "Keep the dock above other windows."
 msgstr "保持本dock在其它窗口之上"
 
 #: ../src/cairo-dock.c:403
@@ -1696,7 +1696,7 @@ msgstr "鼠标移到图标上时显示窗口预览"
 
 #: ../Help/data/messages:73
 msgid ""
-"You need to run Compiz, and enable the \"Window Preview\" plug-in in Compiz. "
+"You need to run Compiz, and enable the \"Thumbnail Window Previews\" plug-in in Compiz. "
 "Install \"ccsm\" to be able to configure Compiz."
 msgstr "您需要运行 Compiz，并启用 Compiz 中的“窗口预览”插件。安装“ccsm”可配置 Compiz。"
 

@@ -1031,7 +1031,7 @@ msgstr ""
 "elvégzésében."
 
 #: ../src/cairo-dock.c:400
-msgid "Keep the dock above other windows whatever."
+msgid "Keep the dock above other windows."
 msgstr "Dokk ablakok fölött tartása mindenképpen."
 
 #: ../src/cairo-dock.c:403
@@ -1768,7 +1768,7 @@ msgstr "Ablak előnézetek az ikonok fölött"
 
 #: ../Help/data/messages:73
 msgid ""
-"You need to run Compiz, and enable the \"Window Preview\" plug-in in Compiz. "
+"You need to run Compiz, and enable the \"Thumbnail Window Previews\" plug-in in Compiz. "
 "Install \"ccsm\" to be able to configure Compiz."
 msgstr ""
 "Futtatnia kell a Compizt, és engedélyeznie az \"Ablak előnézetek\" "

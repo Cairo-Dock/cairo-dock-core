@@ -1030,7 +1030,7 @@ msgstr ""
 "Het dock vergrendelen zodat gebruikers geen aanpassingen kunnen doen."
 
 #: ../src/cairo-dock.c:400
-msgid "Keep the dock above other windows whatever."
+msgid "Keep the dock above other windows."
 msgstr "Het dock altijd boven andere vensters houden."
 
 #: ../src/cairo-dock.c:403
@@ -1800,10 +1800,10 @@ msgstr "Venstervoorbeeld weergeven op de pictogrammen"
 
 #: ../Help/data/messages:73
 msgid ""
-"You need to run Compiz, and enable the \"Window Preview\" plug-in in Compiz. "
+"You need to run Compiz, and enable the \"Thumbnail Window Previews\" plug-in in Compiz. "
 "Install \"ccsm\" to be able to configure Compiz."
 msgstr ""
-"U moet Compiz draaien en de plug-in \"Window Preview\" in Compiz "
+"U moet Compiz draaien en de plug-in \"Thumbnail Window Previews\" in Compiz "
 "inschakelen. Installeer \"CCSM (Compiz instellingenbeheer)\" om Compiz te "
 "kunnen configureren."
 

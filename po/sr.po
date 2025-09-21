@@ -1016,7 +1016,7 @@ msgid "Lock the dock so that any modification is impossible for users."
 msgstr "Закључај док, тако да нису преправке омогућене корисницима."
 
 #: ../src/cairo-dock.c:400
-msgid "Keep the dock above other windows whatever."
+msgid "Keep the dock above other windows."
 msgstr "Увек држи док изнад осталих прозора."
 
 #: ../src/cairo-dock.c:403
@@ -1763,7 +1763,7 @@ msgstr "Приказ прегледа прозора преко иконица"
 
 #: ../Help/data/messages:73
 msgid ""
-"You need to run Compiz, and enable the \"Window Preview\" plug-in in Compiz. "
+"You need to run Compiz, and enable the \"Thumbnail Window Previews\" plug-in in Compiz. "
 "Install \"ccsm\" to be able to configure Compiz."
 msgstr ""
 "Требате користити Компиз, и омогућити прикључак „Преглед прозора“ у Компизу. "

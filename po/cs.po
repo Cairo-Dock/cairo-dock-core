@@ -1011,7 +1011,7 @@ msgid "Lock the dock so that any modification is impossible for users."
 msgstr "Uzamknout dock tak, aby nebyly možné jakékoliv změny uživateli."
 
 #: ../src/cairo-dock.c:400
-msgid "Keep the dock above other windows whatever."
+msgid "Keep the dock above other windows."
 msgstr "Podržet dock nad všemi ostatními onky."
 
 #: ../src/cairo-dock.c:403
@@ -1726,10 +1726,10 @@ msgstr "Zobrazení náhledů oken přes ikony"
 
 #: ../Help/data/messages:73
 msgid ""
-"You need to run Compiz, and enable the \"Window Preview\" plug-in in Compiz. "
+"You need to run Compiz, and enable the \"Thumbnail Window Previews\" plug-in in Compiz. "
 "Install \"ccsm\" to be able to configure Compiz."
 msgstr ""
-"Musíte spustit Compiz, a povolit \"Window Preview\" plug-in v Compizu. "
+"Musíte spustit Compiz, a povolit \"Thumbnail Window Previews\" plug-in v Compizu. "
 "Instalovat \"ccsm\" aby bylo možno konfigurovat Compiz."
 
 #: ../Help/data/messages:75 ../Help/data/messages:185

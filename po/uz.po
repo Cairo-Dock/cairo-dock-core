@@ -1020,7 +1020,7 @@ msgstr ""
 "Фойдаланувчилар учун докка ҳар қандай ўзгартириш киритишни қулфлаб қўйиш."
 
 #: ../src/cairo-dock.c:400
-msgid "Keep the dock above other windows whatever."
+msgid "Keep the dock above other windows."
 msgstr "Ҳар қандай ҳолатда докни бошқа ойналар устида сақлаш."
 
 #: ../src/cairo-dock.c:403
@@ -1773,7 +1773,7 @@ msgstr "Нишончалар устида аввалдан ойналарни к
 
 #: ../Help/data/messages:73
 msgid ""
-"You need to run Compiz, and enable the \"Window Preview\" plug-in in Compiz. "
+"You need to run Compiz, and enable the \"Thumbnail Window Previews\" plug-in in Compiz. "
 "Install \"ccsm\" to be able to configure Compiz."
 msgstr ""
 "Сиз Compiz ни ишга туширишингиз, ва \"Ойналарни олдиндан кўриш\" плагинини "

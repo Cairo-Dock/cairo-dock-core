@@ -1000,7 +1000,7 @@ msgid "Lock the dock so that any modification is impossible for users."
 msgstr "ドックをロックして、ユーザーによる変更が行えないようにします。"
 
 #: ../src/cairo-dock.c:400
-msgid "Keep the dock above other windows whatever."
+msgid "Keep the dock above other windows."
 msgstr "ドックを常に他のウィンドウより手前に表示します。"
 
 #: ../src/cairo-dock.c:403
@@ -1687,7 +1687,7 @@ msgstr "アイコンの代わりにウィンドウ・プレビューの表示"
 
 #: ../Help/data/messages:73
 msgid ""
-"You need to run Compiz, and enable the \"Window Preview\" plug-in in Compiz. "
+"You need to run Compiz, and enable the \"Thumbnail Window Previews\" plug-in in Compiz. "
 "Install \"ccsm\" to be able to configure Compiz."
 msgstr ""
 "Compiz を実行して、Compiz の”ウィンドウ・プレビュー”プラグインを有効にする必要があります。”CCSM”をインストールすると、Compiz "

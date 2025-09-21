@@ -1042,7 +1042,7 @@ msgstr ""
 "modificació."
 
 #: ../src/cairo-dock.c:400
-msgid "Keep the dock above other windows whatever."
+msgid "Keep the dock above other windows."
 msgstr "Manté la barra acoblada damunt de qualsevol finestra."
 
 #: ../src/cairo-dock.c:403
@@ -1715,7 +1715,7 @@ msgstr "Mostra vista prèvia de la finestra damunt de les icones"
 
 #: ../Help/data/messages:73
 msgid ""
-"You need to run Compiz, and enable the \"Window Preview\" plug-in in Compiz. "
+"You need to run Compiz, and enable the \"Thumbnail Window Previews\" plug-in in Compiz. "
 "Install \"ccsm\" to be able to configure Compiz."
 msgstr ""
 

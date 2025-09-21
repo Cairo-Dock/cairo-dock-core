@@ -1022,7 +1022,7 @@ msgid "Lock the dock so that any modification is impossible for users."
 msgstr "Lås panelet sånn at brukaren ikkje kan endre noka."
 
 #: ../src/cairo-dock.c:400
-msgid "Keep the dock above other windows whatever."
+msgid "Keep the dock above other windows."
 msgstr "Held panelet over andre vindauge kva som helst."
 
 #: ../src/cairo-dock.c:403
@@ -1760,7 +1760,7 @@ msgstr "Førehandssyning av vindauge over ikona"
 
 #: ../Help/data/messages:73
 msgid ""
-"You need to run Compiz, and enable the \"Window Preview\" plug-in in Compiz. "
+"You need to run Compiz, and enable the \"Thumbnail Window Previews\" plug-in in Compiz. "
 "Install \"ccsm\" to be able to configure Compiz."
 msgstr ""
 "Du må køyre Compiz, og slå på «Førehandvising av vindauge»-tillegget i "

@@ -1030,7 +1030,7 @@ msgid "Lock the dock so that any modification is impossible for users."
 msgstr "Zablokuj dok tak żeby modyfikacje były niemożliwe dla użytkowników."
 
 #: ../src/cairo-dock.c:400
-msgid "Keep the dock above other windows whatever."
+msgid "Keep the dock above other windows."
 msgstr "Trzymaj dok pod innymi oknami."
 
 #: ../src/cairo-dock.c:403
@@ -1776,7 +1776,7 @@ msgstr "Pokazywanie podglądu okien nad ikonami"
 
 #: ../Help/data/messages:73
 msgid ""
-"You need to run Compiz, and enable the \"Window Preview\" plug-in in Compiz. "
+"You need to run Compiz, and enable the \"Thumbnail Window Previews\" plug-in in Compiz. "
 "Install \"ccsm\" to be able to configure Compiz."
 msgstr ""
 "Wymagany jest uruchomiony Compiz, oraz aktywna wtyczka \"Podgląd Okien\" w "
