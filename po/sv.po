@@ -53,7 +53,7 @@ msgstr "System"
 
 #: ../src/cairo-dock-gui-advanced.c:127 ../src/cairo-dock-widget-plugins.c:159
 msgid "Fun"
-msgstr "Rolig"
+msgstr "Roligt"
 
 #: ../src/cairo-dock-gui-advanced.c:128 ../src/cairo-dock-gui-advanced.c:1762
 #: ../src/gldit/cairo-dock-gui-factory.c:785
@@ -367,8 +367,7 @@ msgstr ""
 "  Påvel Nicklasson https://launchpad.net/~pavelnicklasson\n"
 "  Påvel Nicklasson https://launchpad.net/~paveu\n"
 "  Sven_Lindahl https://launchpad.net/~sven-lindahl\n"
-"  Teodor Jönsson https://launchpad.net/~teodor-jonsson-sogeti-"
-"deactivatedaccount\n"
+"  Teodor Jönsson https://launchpad.net/~jnsson-deactivatedaccount\n"
 "  jstfaking https://launchpad.net/~jstfaking"
 
 #: ../src/cairo-dock-user-menu.c:299
@@ -3622,7 +3621,7 @@ msgstr "Bubblans form:"
 
 #: ../data/messages:573 ../data/messages:859 ../data/messages:897
 msgid "Font"
-msgstr "Teckensnitt"
+msgstr "Typsnitt"
 
 #: ../data/messages:575 ../data/messages:861
 msgid "Otherwise the default's system one will be used."
@@ -3630,11 +3629,11 @@ msgstr "I annat fall kommer systemets standard att användas."
 
 #: ../data/messages:577 ../data/messages:863 ../data/messages:899
 msgid "Use a custom font for the text?"
-msgstr "Använd ett anpassat teckensnitt till texten?"
+msgstr "Använd ett anpassat typsnittt till texten?"
 
 #: ../data/messages:579 ../data/messages:865 ../data/messages:901
 msgid "Text font:"
-msgstr "Teckensnitt:"
+msgstr "Typsnitt för text"
 
 #: ../data/messages:581 ../data/messages:637
 msgid "Buttons"
