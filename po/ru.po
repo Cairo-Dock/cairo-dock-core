@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cairo-Dock II\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2014-12-08 01:15+0000\n"
+"PO-Revision-Date: 2025-09-08 10:10+0000\n"
 "Last-Translator: Peter Belyaev <kapone2002@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-12-09 05:51+0000\n"
-"X-Generator: Launchpad (build 17283)\n"
+"X-Launchpad-Export-Date: 2025-09-21 14:00+0000\n"
+"X-Generator: Launchpad (build 299e6cec2b88528c8351aab8852cf896cddc6846)\n"
 "X-Poedit-Country: RUSSIAN FEDERATION\n"
 "X-Poedit-Language: Russian\n"
 
@@ -107,7 +107,7 @@ msgstr "Не изменяйте эти параметры без особой н
 
 #: ../src/cairo-dock-gui-advanced.c:1496
 msgid "Configure the global style."
-msgstr ""
+msgstr "Настройка глобального стиля."
 
 #: ../src/cairo-dock-gui-advanced.c:1497 ../src/cairo-dock-gui-advanced.c:1498
 #: ../data/messages:115 ../data/messages:117 ../data/messages:465
@@ -115,11 +115,11 @@ msgstr ""
 #: ../data/messages:809 ../data/messages:843 ../data/messages:877
 #: ../data/messages:881
 msgid "Style"
-msgstr ""
+msgstr "Стиль"
 
 #: ../src/cairo-dock-gui-advanced.c:1505
 msgid "Configure docks appearance."
-msgstr ""
+msgstr "Настройка внешнего вида дока."
 
 #: ../src/cairo-dock-gui-advanced.c:1506 ../Help/data/messages:75
 msgid "Docks"
@@ -141,7 +141,7 @@ msgstr "Настройте внешний вид облачков напомин
 
 #: ../src/cairo-dock-gui-advanced.c:1517 ../src/cairo-dock-gui-advanced.c:1518
 msgid "Dialog boxes and Menus"
-msgstr ""
+msgstr "Окна диалога и меню"
 
 #: ../src/cairo-dock-gui-advanced.c:1525
 msgid "Applets can be displayed on your desktop as widgets."
@@ -194,7 +194,7 @@ msgstr ""
 #: ../src/cairo-dock-gui-advanced.c:1562 ../src/cairo-dock-gui-simple.c:91
 #: ../src/cairo-dock-gui-simple.c:93
 msgid "Current items"
-msgstr ""
+msgstr "Текущие элементы"
 
 #: ../src/cairo-dock-gui-advanced.c:1685
 msgid "Filter"
@@ -236,7 +236,7 @@ msgstr "Закрыть"
 
 #: ../src/cairo-dock-gui-advanced.c:1873
 msgid "Back"
-msgstr ""
+msgstr "Назад"
 
 #: ../src/cairo-dock-gui-advanced.c:1881 ../src/cairo-dock-gui-simple.c:212
 msgid "Apply"
@@ -356,11 +356,12 @@ msgstr ""
 "Launchpad Contributions:\n"
 "  Alex Nikolaenko https://launchpad.net/~ceekay80\n"
 "  Alexander 'FONTER' Zinin https://launchpad.net/~spore-09\n"
-"  Eugene Marshal https://launchpad.net/~lowrider\n"
+"  Eugene Roskin https://launchpad.net/~lowrider\n"
 "  Ivan Akulov https://launchpad.net/~gxoptg\n"
 "  Matthieu Baerts https://launchpad.net/~matttbe\n"
 "  Nikita Putko https://launchpad.net/~ktototam98\n"
 "  Peter Belyaev https://launchpad.net/~upcfrost\n"
+"  Silvara https://launchpad.net/~mistresssilvara\n"
 "  Vitaly Danilovich https://launchpad.net/~danvyr\n"
 "  XPEH https://launchpad.net/~akidyarov\n"
 "  andreylosev https://launchpad.net/~andreylosev\n"
@@ -455,7 +456,7 @@ msgstr "Достаточно просто перетащить значок из
 
 #: ../src/cairo-dock-user-menu.c:624
 msgid "Applet"
-msgstr ""
+msgstr "Апплет"
 
 #: ../src/cairo-dock-user-menu.c:641
 msgid ""
@@ -516,13 +517,13 @@ msgstr "Укажите изображение"
 
 #: ../src/cairo-dock-user-menu.c:925 ../src/gldit/cairo-dock-gui-factory.c:751
 msgid "Ok"
-msgstr ""
+msgstr "ОК"
 
 #: ../src/cairo-dock-user-menu.c:927 ../src/cairo-dock-widget-shortkeys.c:129
 #: ../src/cairo-dock-widget-themes.c:236
 #: ../src/gldit/cairo-dock-gui-factory.c:753
 msgid "Cancel"
-msgstr ""
+msgstr "Отмена"
 
 #: ../src/cairo-dock-user-menu.c:939 ../src/gldit/cairo-dock-gui-factory.c:792
 #: ../data/messages:469 ../data/messages:475 ../data/messages:741
@@ -731,7 +732,7 @@ msgstr "Полноэкранный"
 
 #: ../src/cairo-dock-user-menu.c:2045 ../src/cairo-dock-user-menu.c:2047
 msgid "Below other windows"
-msgstr ""
+msgstr "Под другими окнами"
 
 #: ../src/cairo-dock-user-menu.c:2055
 msgid "Don't keep above"
@@ -743,11 +744,11 @@ msgstr "Держать поверх"
 
 #: ../src/cairo-dock-user-menu.c:2059
 msgid "Visible only on this desktop"
-msgstr ""
+msgstr "Только на этом рабочем столе"
 
 #: ../src/cairo-dock-user-menu.c:2059
 msgid "Visible on all desktops"
-msgstr ""
+msgstr "На всех рабочих столах"
 
 #: ../src/cairo-dock-user-menu.c:2068
 msgid "Kill"
@@ -755,7 +756,7 @@ msgstr "Завершить"
 
 #: ../src/cairo-dock-user-menu.c:2082
 msgid "Windows"
-msgstr ""
+msgstr "Окна"
 
 #: ../src/cairo-dock-user-menu.c:2086 ../src/cairo-dock-user-menu.c:2088
 msgid "Close all"
@@ -824,7 +825,7 @@ msgstr "Аксессуар"
 
 #: ../src/cairo-dock-widget-plugins.c:235
 msgid "Plug-in"
-msgstr ""
+msgstr "Плагин"
 
 #: ../src/cairo-dock-widget-plugins.c:241 ../Help/src/applet-tips-dialog.c:309
 msgid "Category"
@@ -889,11 +890,11 @@ msgstr "Прежде чем ставить рейтинг, вы должны п�
 
 #: ../src/cairo-dock-widget-themes.c:433
 msgid "The theme has been deleted"
-msgstr ""
+msgstr "Тема была удалена"
 
 #: ../src/cairo-dock-widget-themes.c:462
 msgid "Delete this theme"
-msgstr ""
+msgstr "Удалить эту тему"
 
 #: ../src/cairo-dock-widget-themes.c:486
 #: ../src/gldit/cairo-dock-gui-factory.c:2304
@@ -1110,7 +1111,7 @@ msgstr "Использовать OpenGL в Cairo-Dock?"
 
 #: ../src/cairo-dock.c:608 ../src/cairo-dock.c:848
 msgid "Yes"
-msgstr ""
+msgstr "Да"
 
 #: ../src/cairo-dock.c:610 ../src/cairo-dock.c:849 ../data/messages:829
 msgid "No"
@@ -1158,11 +1159,11 @@ msgstr "< Режим обслуживания >"
 
 #: ../src/cairo-dock.c:793
 msgid "Something went wrong with this applet:"
-msgstr ""
+msgstr "С апплетом возникли проблемы:"
 
 #: ../src/cairo-dock.c:845
 msgid "You're using our Cairo-Dock session"
-msgstr ""
+msgstr "Вы используете сеанс Cairo-Dock"
 
 #: ../src/cairo-dock.c:851
 msgid ""
@@ -1259,7 +1260,7 @@ msgstr ""
 #: ../data/messages:557 ../data/messages:697 ../data/messages:739
 #: ../data/messages:811 ../data/messages:845
 msgid "Automatic"
-msgstr ""
+msgstr "Автоматически"
 
 #: ../src/gldit/cairo-dock-desklet-manager.c:825
 msgid "_custom decoration_"
@@ -1409,7 +1410,7 @@ msgstr "Новый значок запуска"
 
 #: ../src/gldit/cairo-dock-module-instance-manager.c:323
 msgid "by"
-msgstr ""
+msgstr "автор:"
 
 #: ../src/gldit/cairo-dock-struct.h:526 ../data/messages:1073
 #: ../data/messages:1081
@@ -1431,7 +1432,7 @@ msgstr ""
 
 #: ../src/gldit/cairo-dock-themes-manager.c:352
 msgid "Error when launching 'cairo-dock-package-theme' script"
-msgstr ""
+msgstr "Ошибка при запуске сценария 'cairo-dock-package-theme'"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:373
 #, c-format
@@ -1442,7 +1443,7 @@ msgid ""
 msgstr ""
 "Не удалось получить доступ к файлу %s. Возможно сервер недоступен.\n"
 "Попробуйте позднее или свяжитесь с нами на https://github.com/Cairo-Dock/"
-"cairo-dock-core/issues"
+"cairo-dock-core/issues."
 
 #: ../src/gldit/cairo-dock-themes-manager.c:387
 #, c-format
@@ -2237,7 +2238,7 @@ msgstr "Если у вас появятся вопросы, не стесняй�
 
 #: ../Help/data/messages:181
 msgid "Discussions"
-msgstr "Форум"
+msgstr ""
 
 #: ../Help/data/messages:183
 msgid "Our wiki can also help you, it is more complete on some points."
@@ -2860,7 +2861,7 @@ msgstr "При щелчке:"
 
 #: ../data/messages:99
 msgid "On appearance/disappearance:"
-msgstr ""
+msgstr "При появлении/исчезновении:"
 
 #: ../data/messages:101
 msgid "Evaporate"
@@ -2880,12 +2881,12 @@ msgstr "Чёрная дыра"
 
 #: ../data/messages:111
 msgid "Random"
-msgstr ""
+msgstr "Случайно"
 
 #: ../data/messages:121 ../data/messages:559 ../data/messages:699
 #: ../data/messages:813 ../data/messages:847 ../data/messages:885
 msgid "Custom"
-msgstr ""
+msgstr "Пользовательский"
 
 #: ../data/messages:123 ../data/messages:753
 msgid "Colour"
@@ -3090,7 +3091,7 @@ msgstr "Показывать значки только минимизирова�
 
 #: ../data/messages:297
 msgid "Automatically add a separator"
-msgstr ""
+msgstr "Автоматически добавлять разделитель"
 
 #: ../data/messages:299
 msgid ""
@@ -3334,7 +3335,7 @@ msgstr ""
 
 #: ../data/messages:431
 msgid "Reflections should be calculated in real-time?"
-msgstr ""
+msgstr "Вычислять отражения в рельном времени?"
 
 #: ../data/messages:433
 msgid "Connection to the Internet"
@@ -3481,16 +3482,16 @@ msgstr "в пикселях."
 #: ../data/messages:515 ../data/messages:567 ../data/messages:757
 #: ../data/messages:893
 msgid "Corner radius"
-msgstr ""
+msgstr "Радиус закругления углов"
 
 #: ../data/messages:519 ../data/messages:569 ../data/messages:895
 msgid "Outline width"
-msgstr ""
+msgstr "Ширина контура"
 
 #: ../data/messages:521 ../data/messages:563 ../data/messages:819
 #: ../data/messages:851 ../data/messages:889
 msgid "Outline colour"
-msgstr ""
+msgstr "Цвет контура"
 
 #: ../data/messages:525
 msgid "Margin between the frame and the icons or their reflects :"
@@ -3543,11 +3544,11 @@ msgstr "Облачко напоминания"
 #: ../data/messages:561 ../data/messages:849 ../data/messages:875
 #: ../data/messages:887
 msgid "Background colour"
-msgstr ""
+msgstr "Цвет фона"
 
 #: ../data/messages:565 ../data/messages:853 ../data/messages:873
 msgid "Text colour"
-msgstr ""
+msgstr "Цвет текста"
 
 #: ../data/messages:571
 msgid "Shape of the bubble:"
@@ -3779,7 +3780,7 @@ msgstr "Отражения"
 
 #: ../data/messages:705
 msgid "Reflection visibility"
-msgstr ""
+msgstr "Видимость отражений"
 
 #: ../data/messages:707
 msgid "light"
@@ -3844,11 +3845,11 @@ msgstr "Рамка"
 
 #: ../data/messages:749
 msgid "Fill background"
-msgstr ""
+msgstr "Заполнять фон"
 
 #: ../data/messages:755
 msgid "Linewidth"
-msgstr ""
+msgstr "Ширина линии"
 
 #: ../data/messages:759 ../data/messages:791
 msgid "Draw indicator above the icon?"
@@ -3970,19 +3971,19 @@ msgstr "Увеличивать индикатор вместе со значко
 
 #: ../data/messages:807
 msgid "Progress bars"
-msgstr ""
+msgstr "Индикаторы прогресса"
 
 #: ../data/messages:815
 msgid "Start color"
-msgstr ""
+msgstr "Начальный цвет"
 
 #: ../data/messages:817
 msgid "End color"
-msgstr ""
+msgstr "Конечный цвет"
 
 #: ../data/messages:821
 msgid "Bar thickness"
-msgstr ""
+msgstr "Ширина панели"
 
 #: ../data/messages:823
 msgid "Labels"
@@ -4006,15 +4007,15 @@ msgstr "На всех значках"
 
 #: ../data/messages:835
 msgid "Neighbouring labels visibility:"
-msgstr ""
+msgstr "Видимость соседних надписей:"
 
 #: ../data/messages:837
 msgid "more visible"
-msgstr ""
+msgstr "более"
 
 #: ../data/messages:839
 msgid "less visible"
-msgstr ""
+msgstr "менее"
 
 #: ../data/messages:855
 msgid "Draw the outline of the text?"
@@ -4038,7 +4039,7 @@ msgstr "Использовать тот же вид, что и на подпис
 
 #: ../data/messages:891
 msgid "Text colour:"
-msgstr ""
+msgstr "Цвет текста:"
 
 #: ../data/messages:923
 msgid "Visibility of the dock"
@@ -4162,7 +4163,7 @@ msgstr ""
 
 #: ../data/messages:1039
 msgid "Sub-dock's name:"
-msgstr ""
+msgstr "Название под-дока:"
 
 #: ../data/messages:1041
 msgid "New sub-dock"
@@ -4194,7 +4195,7 @@ msgstr ""
 
 #: ../data/messages:1055 ../data/messages:1083 ../data/messages:1109
 msgid "Extra parameters"
-msgstr ""
+msgstr "Дополнительные параметры"
 
 #: ../data/messages:1057
 msgid "Name of the view used for the sub-dock:"
@@ -4248,11 +4249,11 @@ msgstr ""
 
 #: ../data/messages:1091
 msgid "Class of the program:"
-msgstr ""
+msgstr "Класс программы:"
 
 #: ../data/messages:1093
 msgid "Run in a terminal?"
-msgstr ""
+msgstr "Запускать в терминале?"
 
 #: ../data/messages:1095
 msgid "If '0' the launcher will be displayed on every viewport."
@@ -4270,7 +4271,7 @@ msgstr ""
 
 #: ../data/messages:1115
 msgid "<b>New version: <span color='red'>GLX-Dock 3.3</span>!</b>"
-msgstr ""
+msgstr "<b>Новая версия: <span color='red'>GLX-Dock 3.3</span>!</b>"
 
 #: ../data/messages:1117
 msgid ""
@@ -4360,6 +4361,12 @@ msgid ""
 "github.com/Cairo-Dock"
 msgstr ""
 
+#~ msgid "Windows management"
+#~ msgstr "Управление окнами"
+
+#~ msgid "Use all screens"
+#~ msgstr "Использоать все экраны"
+
 #~ msgid "Disable the gnome-panel"
 #~ msgstr "Отключить gnome-panel"
 
@@ -4376,12 +4383,12 @@ msgstr ""
 #~ msgstr "Полное удаление gnome-panel"
 
 #~ msgid ""
-#~ "Open dconf-editor, edit the key /desktop/gnome/session/"
+#~ "Open gconf-editor, edit the key /desktop/gnome/session/"
 #~ "required_components/panel, and replace its content with \"cairo-dock\".\n"
 #~ "Then restart your session : the gnome-panel has not been started, and the "
 #~ "dock has been started (if not, you can add it to the startup programs)."
 #~ msgstr ""
-#~ "Запустите dconf-editor, отредактируйте ключ /desktop/gnome/session/"
+#~ "Запустите gconf-editor, отредактируйте ключ /desktop/gnome/session/"
 #~ "required_components/panel, заменив его значение на \"cairo-dock\". Затем "
 #~ "перезапустите сеанс: панель Gnome больше не появится, вместо неё должна "
 #~ "запуститься cairo-dock (если не запуститься, то добавьте её в приложения "
@@ -4393,6 +4400,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Если вы используете Gnome, вы можете щёлкнуть по этой кнопке, чтобы "
 #~ "автоматически отредактировать ключ:"
+
+#~ msgid "Forum"
+#~ msgstr "Форум"
 
 #~ msgid ""
 #~ "Hint : If you have an ATI or an Intel card, you should try without OpenGL "
@@ -4416,12 +4426,12 @@ msgstr ""
 
 #~ msgid ""
 #~ "In Gnome, there is an option that override the dock's one. To enable "
-#~ "icons in menus, open 'dconf-editor', go to Desktop / Gnome / Interface "
+#~ "icons in menus, open 'gconf-editor', go to Desktop / Gnome / Interface "
 #~ "and enable the \"menus have icons\" and the \"buttons have icons\" "
 #~ "options. "
 #~ msgstr ""
 #~ "В Gnome существует параметр, для замещения значков. Чтобы включить "
-#~ "видимость значков откройте 'dconf-editor', перейдите в Desktop / Gnome / "
+#~ "видимость значков откройте 'gconf-editor', перейдите в Desktop / Gnome / "
 #~ "Interface и включите параметры \"menus have icons\" и \"buttons have "
 #~ "icons\". "
 

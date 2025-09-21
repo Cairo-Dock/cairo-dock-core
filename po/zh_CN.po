@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2014-10-27 13:37+0000\n"
-"Last-Translator: TonyChyi <Unknown>\n"
+"PO-Revision-Date: 2025-09-08 10:11+0000\n"
+"Last-Translator: Daniel Kondor <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-10-28 05:45+0000\n"
-"X-Generator: Launchpad (build 17203)\n"
+"X-Launchpad-Export-Date: 2025-09-21 14:00+0000\n"
+"X-Generator: Launchpad (build 299e6cec2b88528c8351aab8852cf896cddc6846)\n"
 
 #: ../src/cairo-dock-gui-advanced.c:120 ../src/cairo-dock-widget-plugins.c:164
 #: ../data/messages:269
@@ -107,7 +107,7 @@ msgstr "所有你永远不想调整的参数"
 
 #: ../src/cairo-dock-gui-advanced.c:1496
 msgid "Configure the global style."
-msgstr ""
+msgstr "配置全局样式。"
 
 #: ../src/cairo-dock-gui-advanced.c:1497 ../src/cairo-dock-gui-advanced.c:1498
 #: ../data/messages:115 ../data/messages:117 ../data/messages:465
@@ -115,11 +115,11 @@ msgstr ""
 #: ../data/messages:809 ../data/messages:843 ../data/messages:877
 #: ../data/messages:881
 msgid "Style"
-msgstr ""
+msgstr "样式"
 
 #: ../src/cairo-dock-gui-advanced.c:1505
 msgid "Configure docks appearance."
-msgstr ""
+msgstr "配置 dock 外观。"
 
 #: ../src/cairo-dock-gui-advanced.c:1506 ../Help/data/messages:75
 msgid "Docks"
@@ -141,7 +141,7 @@ msgstr "配置弹出文本气泡外观"
 
 #: ../src/cairo-dock-gui-advanced.c:1517 ../src/cairo-dock-gui-advanced.c:1518
 msgid "Dialog boxes and Menus"
-msgstr ""
+msgstr "对话框和菜单"
 
 #: ../src/cairo-dock-gui-advanced.c:1525
 msgid "Applets can be displayed on your desktop as widgets."
@@ -180,7 +180,7 @@ msgstr "标签"
 
 #: ../src/cairo-dock-gui-advanced.c:1554
 msgid "Try new themes and save your theme."
-msgstr ""
+msgstr "尝试新主题并保存主题。"
 
 # #################################
 # ########### themes.conf #############
@@ -192,12 +192,12 @@ msgstr "主题"
 
 #: ../src/cairo-dock-gui-advanced.c:1561
 msgid "Current items in your dock(s)."
-msgstr ""
+msgstr "dock 中的当前项目"
 
 #: ../src/cairo-dock-gui-advanced.c:1562 ../src/cairo-dock-gui-simple.c:91
 #: ../src/cairo-dock-gui-simple.c:93
 msgid "Current items"
-msgstr ""
+msgstr "当前项目"
 
 #: ../src/cairo-dock-gui-advanced.c:1685
 msgid "Filter"
@@ -221,7 +221,7 @@ msgstr "在描述中搜索"
 
 #: ../src/cairo-dock-gui-advanced.c:1731
 msgid "Hide disabled"
-msgstr ""
+msgstr "隐藏已禁用"
 
 #: ../src/cairo-dock-gui-advanced.c:1740
 msgid "Categories"
@@ -239,11 +239,11 @@ msgstr "关闭"
 
 #: ../src/cairo-dock-gui-advanced.c:1873
 msgid "Back"
-msgstr ""
+msgstr "后退"
 
 #: ../src/cairo-dock-gui-advanced.c:1881 ../src/cairo-dock-gui-simple.c:212
 msgid "Apply"
-msgstr ""
+msgstr "应用"
 
 #: ../src/cairo-dock-gui-advanced.c:1897
 msgid "More applets"
@@ -267,7 +267,7 @@ msgstr "附加组件"
 
 #: ../src/cairo-dock-gui-simple.c:107 ../src/cairo-dock-gui-simple.c:109
 msgid "Configuration"
-msgstr ""
+msgstr "设置"
 
 #: ../src/cairo-dock-gui-simple.c:637
 msgid "Advanced Mode"
@@ -361,6 +361,7 @@ msgstr ""
 "  Fabounet https://launchpad.net/~fabounet03\n"
 "  GrayWaLL https://launchpad.net/~graywall\n"
 "  Homer Xing https://launchpad.net/~homer-xing\n"
+"  Huang Zhen https://launchpad.net/~huangz986\n"
 "  Matthieu Baerts https://launchpad.net/~matttbe\n"
 "  Rossi Liu https://launchpad.net/~liueigi\n"
 "  Saturn https://launchpad.net/~saturntoad\n"
@@ -375,7 +376,8 @@ msgstr ""
 "  leng https://launchpad.net/~lengjingxu\n"
 "  nevinyu https://launchpad.net/~nevinyu\n"
 "  zhanshime https://launchpad.net/~zhanshime\n"
-"  安 https://launchpad.net/~tooktang"
+"  安 https://launchpad.net/~tooktang\n"
+"  玉堂白鹤 https://launchpad.net/~yjwork-r"
 
 #: ../src/cairo-dock-user-menu.c:299
 msgid "Support"
@@ -466,7 +468,7 @@ msgstr "通常你可以从菜单拖拽一个启动器到 Dock 上。"
 
 #: ../src/cairo-dock-user-menu.c:624
 msgid "Applet"
-msgstr ""
+msgstr "小程序"
 
 #: ../src/cairo-dock-user-menu.c:641
 msgid ""
@@ -526,13 +528,13 @@ msgstr "选取一张图片"
 
 #: ../src/cairo-dock-user-menu.c:925 ../src/gldit/cairo-dock-gui-factory.c:751
 msgid "Ok"
-msgstr ""
+msgstr "确定"
 
 #: ../src/cairo-dock-user-menu.c:927 ../src/cairo-dock-widget-shortkeys.c:129
 #: ../src/cairo-dock-widget-themes.c:236
 #: ../src/gldit/cairo-dock-gui-factory.c:753
 msgid "Cancel"
-msgstr ""
+msgstr "取消"
 
 #: ../src/cairo-dock-user-menu.c:939 ../src/gldit/cairo-dock-gui-factory.c:792
 #: ../data/messages:469 ../data/messages:475 ../data/messages:741
@@ -701,7 +703,7 @@ msgstr "移至面板 %d"
 
 #: ../src/cairo-dock-user-menu.c:1979
 msgid "Window"
-msgstr ""
+msgstr "窗口"
 
 #: ../src/cairo-dock-user-menu.c:1985 ../src/cairo-dock-user-menu.c:2008
 #: ../src/cairo-dock-user-menu.c:2045 ../src/cairo-dock-user-menu.c:2086
@@ -743,7 +745,7 @@ msgstr "全屏"
 
 #: ../src/cairo-dock-user-menu.c:2045 ../src/cairo-dock-user-menu.c:2047
 msgid "Below other windows"
-msgstr ""
+msgstr "在其他窗口下方"
 
 #: ../src/cairo-dock-user-menu.c:2055
 msgid "Don't keep above"
@@ -755,11 +757,11 @@ msgstr "保持在最前面"
 
 #: ../src/cairo-dock-user-menu.c:2059
 msgid "Visible only on this desktop"
-msgstr ""
+msgstr "仅在此桌面上可见"
 
 #: ../src/cairo-dock-user-menu.c:2059
 msgid "Visible on all desktops"
-msgstr ""
+msgstr "在所有桌面上可见"
 
 #: ../src/cairo-dock-user-menu.c:2068
 msgid "Kill"
@@ -767,7 +769,7 @@ msgstr "结束"
 
 #: ../src/cairo-dock-user-menu.c:2082
 msgid "Windows"
-msgstr ""
+msgstr "窗口"
 
 #: ../src/cairo-dock-user-menu.c:2086 ../src/cairo-dock-user-menu.c:2088
 msgid "Close all"
@@ -836,7 +838,7 @@ msgstr "附件"
 
 #: ../src/cairo-dock-widget-plugins.c:235
 msgid "Plug-in"
-msgstr ""
+msgstr "插件"
 
 #: ../src/cairo-dock-widget-plugins.c:241 ../Help/src/applet-tips-dialog.c:309
 msgid "Category"
@@ -900,11 +902,11 @@ msgstr "使用过这个主题才能给它评分。"
 
 #: ../src/cairo-dock-widget-themes.c:433
 msgid "The theme has been deleted"
-msgstr ""
+msgstr "主题已被删除"
 
 #: ../src/cairo-dock-widget-themes.c:462
 msgid "Delete this theme"
-msgstr ""
+msgstr "删除此主题"
 
 #: ../src/cairo-dock-widget-themes.c:486
 #: ../src/gldit/cairo-dock-gui-factory.c:2304
@@ -1105,7 +1107,7 @@ msgstr "在 Cairo-Dock 中使用 OpenGL"
 
 #: ../src/cairo-dock.c:608 ../src/cairo-dock.c:848
 msgid "Yes"
-msgstr ""
+msgstr "确认"
 
 #: ../src/cairo-dock.c:610 ../src/cairo-dock.c:849 ../data/messages:829
 msgid "No"
@@ -1141,6 +1143,9 @@ msgid ""
 "You can reactivate it, but if it happens again please report it at https://"
 "github.com/Cairo-Dock/cairo-dock-core/issues"
 msgstr ""
+"模块“%s”已停用，因为它可能导致了一些问题。\n"
+"你可以重新激活它，如果问题再次发生麻烦在 https://github.com/Cairo-Dock/cairo-"
+"dock-core/issues 报告它"
 
 #: ../src/cairo-dock.c:791
 msgid "< Maintenance mode >"
@@ -1148,11 +1153,11 @@ msgstr "<维护模式>"
 
 #: ../src/cairo-dock.c:793
 msgid "Something went wrong with this applet:"
-msgstr ""
+msgstr "这个小程序出了问题："
 
 #: ../src/cairo-dock.c:845
 msgid "You're using our Cairo-Dock session"
-msgstr ""
+msgstr "您在用我们的 Cairo-Dock 会话"
 
 #: ../src/cairo-dock.c:851
 msgid ""
@@ -1163,6 +1168,11 @@ msgid ""
 "Note: your current theme will be saved and can be reimported later from the "
 "Themes manager"
 msgstr ""
+"在本次会话中使用经过调整的主题可能会很有趣。\n"
+"\n"
+"是否要加载“默认面板”主题？\n"
+"\n"
+"注意：当前主题将被保存，稍后可以从主题管理器重新导入"
 
 #: ../src/cairo-dock.c:896
 msgid ""
@@ -1248,7 +1258,7 @@ msgstr ""
 #: ../data/messages:557 ../data/messages:697 ../data/messages:739
 #: ../data/messages:811 ../data/messages:845
 msgid "Automatic"
-msgstr ""
+msgstr "自动"
 
 #: ../src/gldit/cairo-dock-desklet-manager.c:825
 msgid "_custom decoration_"
@@ -1337,7 +1347,7 @@ msgstr "右边"
 #: ../src/gldit/cairo-dock-gui-factory.c:1078
 #: ../src/gldit/cairo-dock-gui-factory.c:1088
 msgid "middle"
-msgstr ""
+msgstr "中部"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1084 ../data/messages:9
 #: ../data/messages:161 ../data/messages:911
@@ -1352,7 +1362,7 @@ msgstr "底部"
 #: ../src/gldit/cairo-dock-gui-factory.c:1091
 #: ../src/gldit/cairo-dock-gui-factory.c:1097
 msgid "Screen"
-msgstr ""
+msgstr "屏幕"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1385
 #, c-format
@@ -1397,7 +1407,7 @@ msgstr "新的启动器"
 
 #: ../src/gldit/cairo-dock-module-instance-manager.c:323
 msgid "by"
-msgstr ""
+msgstr "来自"
 
 #: ../src/gldit/cairo-dock-struct.h:526 ../data/messages:1073
 #: ../data/messages:1081
@@ -1415,11 +1425,11 @@ msgstr "最后修改时间"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:347
 msgid "Your theme should now be available in this directory:"
-msgstr ""
+msgstr "您的主题现在应位于以下目录中："
 
 #: ../src/gldit/cairo-dock-themes-manager.c:352
 msgid "Error when launching 'cairo-dock-package-theme' script"
-msgstr ""
+msgstr "运行脚本 'cairo-dock-package-theme' 出错"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:373
 #, c-format
@@ -1857,10 +1867,13 @@ msgid ""
 "wherever on your desktop.\n"
 "To detach an applet from the dock, simply drag and drop it outside the dock."
 msgstr ""
+"小程序可以存在于桌面小工具中，桌面小工具是一个小窗口，可以放在桌面上的任何地"
+"方。\n"
+"要从 dock 中分离小程序，只需将其拖放到 dock 外部。"
 
 #: ../Help/data/messages:91
 msgid "Moving desklets"
-msgstr ""
+msgstr "移动桌面小工具"
 
 #: ../Help/data/messages:93
 msgid ""
@@ -1870,10 +1883,14 @@ msgid ""
 "If you don't want to move it any more, you can lock its position by right-"
 "clicking on it -> \"lock position\". To unlock it, de-select this option."
 msgstr ""
+"桌面小工具可以使用鼠标移动到任何地方。\n"
+"也可以通过拖动顶部和左侧的小箭头来旋转它们。\n"
+"如果您不想再移动它，您可以通过右键单击->“锁定位置”来锁定它的位置。要解除锁"
+"定，请取消选择此选项。"
 
 #: ../Help/data/messages:95
 msgid "Placing desklets"
-msgstr ""
+msgstr "放置桌面小工具"
 
 #: ../Help/data/messages:97
 msgid ""
@@ -1885,10 +1902,15 @@ msgid ""
 "to the mouse (means you can click on what is behind them), by clicking on "
 "the small bottom-right button."
 msgstr ""
+"从菜单（右键单击 -> 可见性）中，您还可以决定将其保持在其他窗口上方，或在小部"
+"件层（如果使用 Compiz）上，或通过将其放置在屏幕的一侧并选择“保留空间”来创"
+"建“桌面小工具工具栏”。\n"
+"通过单击右下角的小按钮，可以将不需要交互的桌面小工具 (如时钟) 设置为对鼠标透"
+"明 (意味着您可以单击它们后面的内容) 。"
 
 #: ../Help/data/messages:99
 msgid "Changing the desklets decorations"
-msgstr "正在更改桌面装饰"
+msgstr "正在更改桌面小工具装饰"
 
 #: ../Help/data/messages:101
 msgid ""
@@ -1896,6 +1918,8 @@ msgid ""
 "applet, go to Desklet, and select the decoration you want (you can provide "
 "your own one)."
 msgstr ""
+"桌面小工具可以有装饰。若要更改此设置，请打开小程序的设置，转到桌面小工具，然"
+"后选择所需的装饰 (您可以提供自己的装饰)"
 
 #: ../Help/data/messages:103
 msgid "Useful Features"
@@ -1914,6 +1938,11 @@ msgid ""
 "When a task has been or is going to be scheduled, the applet will warn you "
 "(15mn before the event, and also 1 day before in the case of an anniversary)."
 msgstr ""
+"激活时钟小程序。\n"
+"点击它将显示一个日历。\n"
+"双击一天会弹出一个任务编辑器。在这里您可以添加或删除任务。\n"
+"当一个任务已经或将要被安排时，小程序将向您发出警告 (在事件发生前 15 分钟，如"
+"果是周年纪念日，也会在事件发生前 1 天发出警告)。"
 
 #: ../Help/data/messages:109
 msgid "Having a list of all windows"
@@ -2152,7 +2181,7 @@ msgstr "如果您有任何问题，欢迎前来我们的论坛询问。"
 
 #: ../Help/data/messages:181
 msgid "Discussions"
-msgstr "论坛"
+msgstr ""
 
 #: ../Help/data/messages:183
 msgid "Our wiki can also help you, it is more complete on some points."
@@ -4170,6 +4199,12 @@ msgid ""
 "github.com/Cairo-Dock"
 msgstr ""
 
+#~ msgid "Windows management"
+#~ msgstr "窗口管理"
+
+#~ msgid "Use all screens"
+#~ msgstr "使用所有屏幕"
+
 #~ msgid "Disable the gnome-panel"
 #~ msgstr "禁用 gnome-panel 面板"
 
@@ -4186,7 +4221,7 @@ msgstr ""
 #~ msgstr "完全移除 gnome-panel"
 
 #~ msgid ""
-#~ "Open dconf-editor, edit the key /desktop/gnome/session/"
+#~ "Open gconf-editor, edit the key /desktop/gnome/session/"
 #~ "required_components/panel, and replace its content with \"cairo-dock\".\n"
 #~ "Then restart your session : the gnome-panel has not been started, and the "
 #~ "dock has been started (if not, you can add it to the startup programs)."
@@ -4200,6 +4235,9 @@ msgstr ""
 #~ "If you are on Gnome, you can click on this button in order to "
 #~ "automatically modify this key:"
 #~ msgstr "如果您在 Gnome 下，您可以点击该按钮以自动更改该按键："
+
+#~ msgid "Forum"
+#~ msgstr "论坛"
 
 #~ msgid ""
 #~ "Hint : If you have an ATI or an Intel card, you should try without OpenGL "
@@ -4255,3 +4293,6 @@ msgstr ""
 
 #~ msgid "Debian"
 #~ msgstr "Debian"
+
+#~ msgid "Multi-purpose Dock and Desklets"
+#~ msgstr "多用途 Dock 和桌面小工具"

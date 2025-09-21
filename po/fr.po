@@ -3460,7 +3460,7 @@ msgstr "en Hz. Ceci est à ajuster en fonction de la puissance du processeur."
 #: ../data/messages:419
 msgid "Refresh rate when moving cursor into the dock:"
 msgstr ""
-"Fréquence de rafraîchissement lors du déplacement du curseur dans le dock"
+"Taux de rafraîchissement lorsque le curseur est déplacé dans le dock :"
 
 #: ../data/messages:423
 msgid "Animation frequency for the OpenGL backend:"

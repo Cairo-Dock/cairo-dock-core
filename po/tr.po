@@ -105,7 +105,7 @@ msgstr "Kurcalamak istemeyeceğiniz göstergeler."
 
 #: ../src/cairo-dock-gui-advanced.c:1496
 msgid "Configure the global style."
-msgstr ""
+msgstr "Genel biçimi yapılandırın."
 
 #: ../src/cairo-dock-gui-advanced.c:1497 ../src/cairo-dock-gui-advanced.c:1498
 #: ../data/messages:115 ../data/messages:117 ../data/messages:465
@@ -113,7 +113,7 @@ msgstr ""
 #: ../data/messages:809 ../data/messages:843 ../data/messages:877
 #: ../data/messages:881
 msgid "Style"
-msgstr ""
+msgstr "Biçim"
 
 #: ../src/cairo-dock-gui-advanced.c:1505
 msgid "Configure docks appearance."
@@ -139,7 +139,7 @@ msgstr "İletişim baloncuklarının görünüşünü ayarla."
 
 #: ../src/cairo-dock-gui-advanced.c:1517 ../src/cairo-dock-gui-advanced.c:1518
 msgid "Dialog boxes and Menus"
-msgstr ""
+msgstr "Diyalog kutuları ve Menüler"
 
 #: ../src/cairo-dock-gui-advanced.c:1525
 msgid "Applets can be displayed on your desktop as widgets."
@@ -192,7 +192,7 @@ msgstr "Liman(lar)ınızdaki mallar"
 #: ../src/cairo-dock-gui-advanced.c:1562 ../src/cairo-dock-gui-simple.c:91
 #: ../src/cairo-dock-gui-simple.c:93
 msgid "Current items"
-msgstr ""
+msgstr "Mevcut öğeler"
 
 #: ../src/cairo-dock-gui-advanced.c:1685
 msgid "Filter"
@@ -234,11 +234,11 @@ msgstr "Kapat"
 
 #: ../src/cairo-dock-gui-advanced.c:1873
 msgid "Back"
-msgstr ""
+msgstr "Geri"
 
 #: ../src/cairo-dock-gui-advanced.c:1881 ../src/cairo-dock-gui-simple.c:212
 msgid "Apply"
-msgstr ""
+msgstr "Uygula"
 
 #: ../src/cairo-dock-gui-advanced.c:1897
 msgid "More applets"
@@ -342,7 +342,7 @@ msgstr "Web Sitesi"
 
 #: ../src/cairo-dock-user-menu.c:295
 msgid "Beta-testing / Suggestions / Forum animation"
-msgstr ""
+msgstr "Beta testi / Öneriler / Forum animasyonu"
 
 #: ../src/cairo-dock-user-menu.c:296
 msgid "Translators for this language"
@@ -352,7 +352,7 @@ msgstr "Bu dil için çalışan çevirmenler"
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
-"  Angel Spy https://launchpad.net/~dilara.ekinci\n"
+"  Angel Spy https://launchpad.net/~angel-spy\n"
 "  Behic CETIN https://launchpad.net/~behiccetin\n"
 "  Erkin Batu Altunbaş https://launchpad.net/~erkin\n"
 "  Fabounet https://launchpad.net/~fabounet03\n"
@@ -368,6 +368,7 @@ msgstr ""
 "  Yiğit Ateş https://launchpad.net/~yigitates52\n"
 "  Yunus Kaba https://launchpad.net/~yunuskaba\n"
 "  eraydin https://launchpad.net/~aydin-eraydin\n"
+"  irmak https://launchpad.net/~irmak\n"
 "  kerem korur https://launchpad.net/~keremkorur\n"
 "  kulkke https://launchpad.net/~kulkke\n"
 "  onur kopan https://launchpad.net/~onurkopan\n"
@@ -525,13 +526,13 @@ msgstr "Bir resim seçin"
 
 #: ../src/cairo-dock-user-menu.c:925 ../src/gldit/cairo-dock-gui-factory.c:751
 msgid "Ok"
-msgstr ""
+msgstr "Tamam"
 
 #: ../src/cairo-dock-user-menu.c:927 ../src/cairo-dock-widget-shortkeys.c:129
 #: ../src/cairo-dock-widget-themes.c:236
 #: ../src/gldit/cairo-dock-gui-factory.c:753
 msgid "Cancel"
-msgstr ""
+msgstr "İptal"
 
 #: ../src/cairo-dock-user-menu.c:939 ../src/gldit/cairo-dock-gui-factory.c:792
 #: ../data/messages:469 ../data/messages:475 ../data/messages:741
@@ -1116,7 +1117,7 @@ msgstr "Cario-Dock'ta OpenGL kullan"
 
 #: ../src/cairo-dock.c:608 ../src/cairo-dock.c:848
 msgid "Yes"
-msgstr ""
+msgstr "Evet"
 
 #: ../src/cairo-dock.c:610 ../src/cairo-dock.c:849 ../data/messages:829
 msgid "No"
@@ -1271,7 +1272,7 @@ msgstr ""
 #: ../data/messages:557 ../data/messages:697 ../data/messages:739
 #: ../data/messages:811 ../data/messages:845
 msgid "Automatic"
-msgstr ""
+msgstr "Otomatik"
 
 #: ../src/gldit/cairo-dock-desklet-manager.c:825
 msgid "_custom decoration_"

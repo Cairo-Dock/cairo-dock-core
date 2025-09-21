@@ -7,20 +7,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2014-06-13 21:33+0000\n"
-"Last-Translator: Rami Selin <rami.selin@gmail.com>\n"
+"PO-Revision-Date: 2021-11-04 21:53+0000\n"
+"Last-Translator: Kimmo Kujansuu <Unknown>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-10-20 05:54+0000\n"
-"X-Generator: Launchpad (build 17196)\n"
+"X-Launchpad-Export-Date: 2025-09-21 14:01+0000\n"
+"X-Generator: Launchpad (build 299e6cec2b88528c8351aab8852cf896cddc6846)\n"
 
 #: ../src/cairo-dock-gui-advanced.c:120 ../src/cairo-dock-widget-plugins.c:164
 #: ../data/messages:269
 msgid "Behaviour"
-msgstr "Käyttäytyminen"
+msgstr "Toiminta"
 
 #: ../src/cairo-dock-gui-advanced.c:121 ../data/messages:113
 #: ../data/messages:841 ../data/messages:879 ../data/messages:951
@@ -29,11 +29,11 @@ msgstr "Ulkoasu"
 
 #: ../src/cairo-dock-gui-advanced.c:122 ../src/cairo-dock-widget-plugins.c:134
 msgid "Files"
-msgstr ""
+msgstr "Tiedostot"
 
 #: ../src/cairo-dock-gui-advanced.c:123 ../src/cairo-dock-widget-plugins.c:139
 msgid "Internet"
-msgstr ""
+msgstr "Internet"
 
 #: ../src/cairo-dock-gui-advanced.c:124 ../src/cairo-dock-widget-plugins.c:144
 msgid "Desktop"
@@ -51,7 +51,7 @@ msgstr "Järjestelmä"
 
 #: ../src/cairo-dock-gui-advanced.c:127 ../src/cairo-dock-widget-plugins.c:159
 msgid "Fun"
-msgstr ""
+msgstr "Hupi"
 
 #: ../src/cairo-dock-gui-advanced.c:128 ../src/cairo-dock-gui-advanced.c:1762
 #: ../src/gldit/cairo-dock-gui-factory.c:785
@@ -60,7 +60,7 @@ msgstr "Kaikki"
 
 #: ../src/cairo-dock-gui-advanced.c:1450
 msgid "Set the position of the main dock."
-msgstr "Aseta pää dockin sijainti"
+msgstr "Aseta telakan sijainti"
 
 #: ../src/cairo-dock-gui-advanced.c:1451 ../src/cairo-dock-gui-advanced.c:1452
 #: ../Help/data/messages:281 ../data/messages:153
@@ -73,6 +73,9 @@ msgid ""
 " or on the contrary unobtrusive?\n"
 "Configure the way you access your docks and sub-docks!"
 msgstr ""
+"Haluatko, että telakka on aina näkyvissä,\n"
+" vai päinvastoin huomaamaton?\n"
+"Määritä tapa, miten käytät telakkaa ja alitelakkoja!"
 
 #: ../src/cairo-dock-gui-advanced.c:1460 ../src/cairo-dock-gui-advanced.c:1461
 #: ../src/cairo-dock-user-menu.c:2132 ../Help/data/messages:299
@@ -81,28 +84,28 @@ msgstr "Näkyvyys"
 
 #: ../src/cairo-dock-gui-advanced.c:1468
 msgid "Display and interact with currently open windows."
-msgstr ""
+msgstr "Näytä avoinna olevat ikkunat ja toimi niiden kanssa."
 
 #: ../src/cairo-dock-gui-advanced.c:1469 ../src/cairo-dock-gui-advanced.c:1470
 #: ../Help/data/messages:41 ../data/messages:65
 msgid "Taskbar"
-msgstr ""
+msgstr "Tehtäväpalkki"
 
 #: ../src/cairo-dock-gui-advanced.c:1477
 msgid "Define all the keyboard shortcuts currently available."
-msgstr ""
+msgstr "Määritä kaikki käytettävissä olevat pikanäppäimet."
 
 #: ../src/cairo-dock-gui-advanced.c:1478 ../data/messages:149
 msgid "Shortkeys"
-msgstr ""
+msgstr "Pikanäppäimet"
 
 #: ../src/cairo-dock-gui-advanced.c:1484
 msgid "All of the parameters you will never want to tweak."
-msgstr ""
+msgstr "Kaikki parametrit, joita et koskaan halua säätää."
 
 #: ../src/cairo-dock-gui-advanced.c:1496
 msgid "Configure the global style."
-msgstr ""
+msgstr "Määritä yleinen tyyli."
 
 #: ../src/cairo-dock-gui-advanced.c:1497 ../src/cairo-dock-gui-advanced.c:1498
 #: ../data/messages:115 ../data/messages:117 ../data/messages:465
@@ -110,15 +113,15 @@ msgstr ""
 #: ../data/messages:809 ../data/messages:843 ../data/messages:877
 #: ../data/messages:881
 msgid "Style"
-msgstr ""
+msgstr "Tyyli"
 
 #: ../src/cairo-dock-gui-advanced.c:1505
 msgid "Configure docks appearance."
-msgstr ""
+msgstr "Määritä telakoiden ulkonäkö."
 
 #: ../src/cairo-dock-gui-advanced.c:1506 ../Help/data/messages:75
 msgid "Docks"
-msgstr ""
+msgstr "Telakat"
 
 #: ../src/cairo-dock-gui-advanced.c:1507 ../data/messages:463
 #: ../data/messages:977
@@ -132,26 +135,28 @@ msgstr "Näkymät"
 
 #: ../src/cairo-dock-gui-advanced.c:1516
 msgid "Configure text bubble appearance."
-msgstr "Säädä ilmoitus kuplien ulkonäkyä"
+msgstr "Määritä tekstikuplan ulkonäkö."
 
 #: ../src/cairo-dock-gui-advanced.c:1517 ../src/cairo-dock-gui-advanced.c:1518
 msgid "Dialog boxes and Menus"
-msgstr ""
+msgstr "Valintaikkunat ja valikot"
 
 #: ../src/cairo-dock-gui-advanced.c:1525
 msgid "Applets can be displayed on your desktop as widgets."
-msgstr ""
+msgstr "Sovelma voidaan näyttää työpöydällä."
 
 #: ../src/cairo-dock-gui-advanced.c:1526 ../src/cairo-dock-gui-advanced.c:1527
 #: ../Help/data/messages:85 ../data/messages:593
 msgid "Desklets"
-msgstr "Desklets"
+msgstr "Pöytäsovelma"
 
 #: ../src/cairo-dock-gui-advanced.c:1534
 msgid ""
 "All about icons:\n"
 " size, reflection, icon theme,..."
 msgstr ""
+"Kaikki kuvakkeista:\n"
+" koko, heijastus, teema,..."
 
 #: ../src/cairo-dock-gui-advanced.c:1535 ../src/cairo-dock-gui-advanced.c:1536
 #: ../Help/data/messages:11 ../data/messages:125 ../data/messages:649
@@ -165,7 +170,7 @@ msgstr "Ilmaisimet"
 
 #: ../src/cairo-dock-gui-advanced.c:1545
 msgid "Define icon caption and quick-info style."
-msgstr ""
+msgstr "Määritä kuvakkeen teksti ja tietojen tyyli."
 
 #: ../src/cairo-dock-gui-advanced.c:1546 ../src/cairo-dock-gui-advanced.c:1547
 msgid "Captions"
@@ -173,21 +178,21 @@ msgstr "Selitteet"
 
 #: ../src/cairo-dock-gui-advanced.c:1554
 msgid "Try new themes and save your theme."
-msgstr ""
+msgstr "Kokeile uusia teemoja ja tallenna oma teema."
 
 #: ../src/cairo-dock-gui-advanced.c:1555 ../src/cairo-dock-gui-simple.c:115
 #: ../src/cairo-dock-gui-simple.c:117
 msgid "Themes"
-msgstr ""
+msgstr "Teemat"
 
 #: ../src/cairo-dock-gui-advanced.c:1561
 msgid "Current items in your dock(s)."
-msgstr ""
+msgstr "Nykyiset kohteet telakallasi."
 
 #: ../src/cairo-dock-gui-advanced.c:1562 ../src/cairo-dock-gui-simple.c:91
 #: ../src/cairo-dock-gui-simple.c:93
 msgid "Current items"
-msgstr ""
+msgstr "Nykyiset kohteet"
 
 #: ../src/cairo-dock-gui-advanced.c:1685
 msgid "Filter"
@@ -211,7 +216,7 @@ msgstr "Hae kuvauksesta"
 
 #: ../src/cairo-dock-gui-advanced.c:1731
 msgid "Hide disabled"
-msgstr ""
+msgstr "Piilota pois käytöstä"
 
 #: ../src/cairo-dock-gui-advanced.c:1740
 msgid "Categories"
@@ -219,55 +224,57 @@ msgstr "Aiheet"
 
 #: ../src/cairo-dock-gui-advanced.c:1838
 msgid "Enable this module"
-msgstr "Ota tämä moduuli käyttöön"
+msgstr "Ota moduuli käyttöön"
 
 #: ../src/cairo-dock-gui-advanced.c:1865 ../src/cairo-dock-gui-simple.c:204
 #: ../src/cairo-dock-user-menu.c:196 ../src/cairo-dock-user-menu.c:1985
 #: ../src/cairo-dock-user-menu.c:1987 ../data/messages:345
 msgid "Close"
-msgstr ""
+msgstr "Sulje"
 
 #: ../src/cairo-dock-gui-advanced.c:1873
 msgid "Back"
-msgstr ""
+msgstr "Takaisin"
 
 #: ../src/cairo-dock-gui-advanced.c:1881 ../src/cairo-dock-gui-simple.c:212
 msgid "Apply"
-msgstr ""
+msgstr "Käytä"
 
 #: ../src/cairo-dock-gui-advanced.c:1897
 msgid "More applets"
-msgstr ""
+msgstr "Lisää sovelmia"
 
 #: ../src/cairo-dock-gui-advanced.c:1898
 msgid "Get more applets online !"
-msgstr ""
+msgstr "Hanki lisää sovelmia verkosta !"
 
 #: ../src/cairo-dock-gui-advanced.c:1990 ../src/cairo-dock-gui-simple.c:355
 msgid "Cairo-Dock configuration"
-msgstr "Cairo-Dockin räätälöinti"
+msgstr "Cairo-telakan asetukset"
 
 #: ../src/cairo-dock-gui-advanced.c:2575
 msgid "Simple Mode"
-msgstr ""
+msgstr "Yksinkertainen tila"
 
 #: ../src/cairo-dock-gui-simple.c:99 ../src/cairo-dock-gui-simple.c:101
 msgid "Add-ons"
-msgstr ""
+msgstr "Lisäosat"
 
 #: ../src/cairo-dock-gui-simple.c:107 ../src/cairo-dock-gui-simple.c:109
 msgid "Configuration"
-msgstr ""
+msgstr "Asetukset"
 
 #: ../src/cairo-dock-gui-simple.c:637
 msgid "Advanced Mode"
-msgstr ""
+msgstr "Lisäasetukset"
 
 #: ../src/cairo-dock-gui-simple.c:638
 msgid ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customise your current theme."
 msgstr ""
+"Lisäasetukset tilassa voit säätää telakan jokaista parametria. Se on tehokas "
+"työkalu muokata nykyistä teemaa."
 
 #: ../src/cairo-dock-user-interaction.c:429
 msgid ""
@@ -275,74 +282,81 @@ msgid ""
 "config.\n"
 "It is located in the 'Taskbar' module."
 msgstr ""
+"Vaihtoehto \"korvaa X kuvakkeet\" on määrityksessä automaattisesti "
+"käytössä.\n"
+"Se sijaitsee \"Tehtäväpalkin\" moduulissa."
 
 #: ../src/cairo-dock-user-menu.c:131
 msgid "Delete this dock?"
-msgstr ""
+msgstr "Poistetaanko tämä telakka?"
 
 #: ../src/cairo-dock-user-menu.c:193
 msgid "About Cairo-Dock"
-msgstr ""
+msgstr "Tietoa Cairo-Dock"
 
 #: ../src/cairo-dock-user-menu.c:226 ../Help/data/messages:245
 msgid "Development site"
-msgstr "Kehityssivusto"
+msgstr "Kehityspaikka"
 
 #: ../src/cairo-dock-user-menu.c:227 ../Help/data/messages:243
 msgid "Find the latest version of Cairo-Dock here !"
-msgstr "Löydä viimeisin versio Cairo-Dockista täältä!"
+msgstr "Katso Cairo-Dock uusin versio täältä !"
 
 #: ../src/cairo-dock-user-menu.c:231 ../src/cairo-dock-user-menu.c:1136
 #: ../src/cairo-dock-widget-plugins.c:279
 msgid "Get more applets!"
-msgstr ""
+msgstr "Hae lisää sovelmia!"
 
 #: ../src/cairo-dock-user-menu.c:235 ../src/cairo-dock-user-menu.c:241
 msgid "Donate"
-msgstr ""
+msgstr "Lahjoita"
 
 #: ../src/cairo-dock-user-menu.c:238 ../src/cairo-dock-user-menu.c:244
 msgid ""
 "Support the people who spend countless hours to bring you the best dock ever."
 msgstr ""
+"Tue henkilöitä jotka käyttävät lukemattomia tunteja kehittääkseen parhaan "
+"telakan."
 
 #: ../src/cairo-dock-user-menu.c:273
 msgid "Here is a list of the current developers and contributors"
-msgstr ""
+msgstr "Luettelo nykyisistä kehittäjistä ja avustajista"
 
 #: ../src/cairo-dock-user-menu.c:274
 msgid "Developers"
-msgstr ""
+msgstr "Kehittäjät"
 
 #: ../src/cairo-dock-user-menu.c:275
 msgid "Main developer and project leader"
-msgstr ""
+msgstr "Pääkehittäjä ja hankkeen vetäjä"
 
 #: ../src/cairo-dock-user-menu.c:276
 msgid "Contributors / Hackers"
-msgstr ""
+msgstr "Avustajat / Kooderit"
 
 #: ../src/cairo-dock-user-menu.c:278 ../Help/data/messages:259
 msgid "Development"
-msgstr "Kehitystyökalut"
+msgstr "Ohjelmistokehitys"
 
 #: ../src/cairo-dock-user-menu.c:294
 msgid "Website"
-msgstr ""
+msgstr "Sivusto"
 
 #: ../src/cairo-dock-user-menu.c:295
 msgid "Beta-testing / Suggestions / Forum animation"
-msgstr ""
+msgstr "Testaus / Ehdotukset / Foorumin animaatio"
 
 #: ../src/cairo-dock-user-menu.c:296
 msgid "Translators for this language"
-msgstr ""
+msgstr "Tämän kielen kääntäjät"
 
 #: ../src/cairo-dock-user-menu.c:297
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
+"  Harri Pirinen https://launchpad.net/~harripirinen\n"
 "  Jesse Jaara https://launchpad.net/~huulivoide\n"
+"  Kimmo Kujansuu https://launchpad.net/~mahtiankka\n"
 "  Matthieu Baerts https://launchpad.net/~matttbe\n"
 "  Rami Selin https://launchpad.net/~rami-selin\n"
 "  Tiigon https://launchpad.net/~tiigon\n"
@@ -357,38 +371,40 @@ msgid ""
 "Thanks to all people that help us to improve the Cairo-Dock project.\n"
 "Thanks to all current, former and future contributors."
 msgstr ""
+"Kiitos kaikille, jotka auttavat meitä parantamaan Cairo-Dock hanketta.\n"
+"Kiitos kaikille nykyisille, entisille ja tuleville avustajille."
 
 #: ../src/cairo-dock-user-menu.c:332
 msgid "How to help us?"
-msgstr ""
+msgstr "Miten voit auttaa meitä?"
 
 #: ../src/cairo-dock-user-menu.c:333
 msgid "Don't hesitate to join the project, we need you ;)"
-msgstr ""
+msgstr "Älä epäröi liittyä projektiin, tarvitsemme sinua ;)"
 
 #: ../src/cairo-dock-user-menu.c:334
 msgid "Former contributors"
-msgstr ""
+msgstr "Entiset avustajat"
 
 #: ../src/cairo-dock-user-menu.c:335
 msgid "For a complete list, please have a look to BZR logs"
-msgstr ""
+msgstr "Täydellinen luettelo, katso BZR lokit"
 
 #: ../src/cairo-dock-user-menu.c:336
 msgid "Users of our forum"
-msgstr ""
+msgstr "Käyttäjät meidän foorumilla"
 
 #: ../src/cairo-dock-user-menu.c:337
 msgid "List of our forum's members"
-msgstr ""
+msgstr "Luettelo foorumin jäsenistä"
 
 #: ../src/cairo-dock-user-menu.c:338
 msgid "Artwork"
-msgstr "Teemat"
+msgstr "Kuvamateriaali"
 
 #: ../src/cairo-dock-user-menu.c:340
 msgid "Thanks"
-msgstr ""
+msgstr "Kiitokset"
 
 #: ../src/cairo-dock-user-menu.c:352
 msgid "Technical info"
@@ -400,7 +416,7 @@ msgstr "Lopeta Cairo-Dock?"
 
 #: ../src/cairo-dock-user-menu.c:474 ../src/cairo-dock-user-menu.c:618
 msgid "Separator"
-msgstr ""
+msgstr "Erotin"
 
 #: ../src/cairo-dock-user-menu.c:580
 msgid ""
@@ -408,6 +424,9 @@ msgid ""
 "Now move some launchers or applets into it by right-clicking on the icon -> "
 "move to another dock"
 msgstr ""
+"Uusi telakka on luotu.\n"
+"Siirrä nyt siihen joitain ohjelmia tai sovelmia, napsauttamalla kuvaketta "
+"hiiren kakkospainikkeella -> siirry toiseen telakkaan"
 
 #: ../src/cairo-dock-user-menu.c:612
 msgid "Add"
@@ -415,24 +434,25 @@ msgstr "Lisää"
 
 #: ../src/cairo-dock-user-menu.c:614
 msgid "Sub-dock"
-msgstr ""
+msgstr "Alatelakka"
 
 #: ../src/cairo-dock-user-menu.c:616
 msgid "Main dock"
-msgstr ""
+msgstr "Telakka"
 
 #: ../src/cairo-dock-user-menu.c:620
 msgid "Custom launcher"
-msgstr ""
+msgstr "Oma käynnistin"
 
 #: ../src/cairo-dock-user-menu.c:621
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
 msgstr ""
+"Yleensä vedät käynnistimen kuvakkeen valikosta ja pudotat sen telakkaan."
 
 #: ../src/cairo-dock-user-menu.c:624
 msgid "Applet"
-msgstr ""
+msgstr "Sovelma"
 
 #: ../src/cairo-dock-user-menu.c:641
 msgid ""
@@ -440,19 +460,21 @@ msgid ""
 "the dock?\n"
 "(otherwise they will be destroyed)"
 msgstr ""
+"Haluatko lähettää kuvakkeet telakkaan?\n"
+"(muuten ne tuhotaan)"
 
 #: ../src/cairo-dock-user-menu.c:664
 msgid "separator"
-msgstr ""
+msgstr "erotin"
 
 #: ../src/cairo-dock-user-menu.c:668
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
-msgstr ""
+msgstr "Olet poistamassa kuvaketta (%s) telakasta. Oletko varma?"
 
 #: ../src/cairo-dock-user-menu.c:684
 msgid "Sorry, this icon doesn't have a configuration file."
-msgstr ""
+msgstr "Valitan, tällä kuvakkeella ei ole asetustiedostoa."
 
 #: ../src/cairo-dock-user-menu.c:724
 msgid ""
@@ -460,69 +482,74 @@ msgid ""
 "You can customize it by right-clicking on it -> cairo-dock -> configure this "
 "dock."
 msgstr ""
+"Uusi telakka on luotu.\n"
+"Voit muokata sitä napsauttamalla hiiren kakkospainikkeella -> cairo-dock -> "
+"määritä tämä telakka."
 
 #: ../src/cairo-dock-user-menu.c:730
 msgid "Move to another dock"
-msgstr ""
+msgstr "Siirry toiseen telakkaan"
 
 #: ../src/cairo-dock-user-menu.c:732 ../src/gldit/cairo-dock-gui-factory.c:1212
 msgid "New main dock"
-msgstr ""
+msgstr "Uusi telakka"
 
 #: ../src/cairo-dock-user-menu.c:800
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
 msgstr ""
+"Valitettavasti vastaavaa kuvaukset tiedostoa ei löytynyt.\n"
+"Harkitse telakan vetämistä ja pudottamista Sovellukset-valikosta."
 
 #: ../src/cairo-dock-user-menu.c:849
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
-msgstr ""
+msgstr "Olet poistamassa sovelmaa (%s) telakasta. Oletko ihan varma?"
 
 #: ../src/cairo-dock-user-menu.c:922 ../src/gldit/cairo-dock-gui-factory.c:748
 msgid "Pick up an image"
-msgstr ""
+msgstr "Valitse kuva"
 
 #: ../src/cairo-dock-user-menu.c:925 ../src/gldit/cairo-dock-gui-factory.c:751
 msgid "Ok"
-msgstr ""
+msgstr "Selvä"
 
 #: ../src/cairo-dock-user-menu.c:927 ../src/cairo-dock-widget-shortkeys.c:129
 #: ../src/cairo-dock-widget-themes.c:236
 #: ../src/gldit/cairo-dock-gui-factory.c:753
 msgid "Cancel"
-msgstr ""
+msgstr "Peruuta"
 
 #: ../src/cairo-dock-user-menu.c:939 ../src/gldit/cairo-dock-gui-factory.c:792
 #: ../data/messages:469 ../data/messages:475 ../data/messages:741
 #: ../data/messages:983
 msgid "Image"
-msgstr ""
+msgstr "Kuva"
 
 #: ../src/cairo-dock-user-menu.c:1020 ../src/cairo-dock-user-menu.c:1099
 msgid "This will (un)lock the position of the icons."
-msgstr ""
+msgstr "Tämä hoitaa kuvakkeiden lukitusta."
 
 #: ../src/cairo-dock-user-menu.c:1050
 msgid "Configure"
-msgstr ""
+msgstr "Määritä"
 
 #: ../src/cairo-dock-user-menu.c:1052
 msgid "Configure behaviour, appearance, and applets."
-msgstr "Säädä dockin käyttäytymistä, ulkoasua ja sovelmia."
+msgstr "Määritä toiminta, ulkonäkö ja sovelmat."
 
 #: ../src/cairo-dock-user-menu.c:1060
 msgid "Configure this dock"
-msgstr ""
+msgstr "Määritä tämä telakka"
 
 #: ../src/cairo-dock-user-menu.c:1062
 msgid "Customize the position, visibility and appearance of this main dock."
-msgstr ""
+msgstr "Muokkaa tämän telakan sijaintia, näkyvyyttä ja ulkonäköä."
 
 #: ../src/cairo-dock-user-menu.c:1065
 msgid "Delete this dock"
-msgstr ""
+msgstr "Poista tämä telakka"
 
 #: ../src/cairo-dock-user-menu.c:1076
 msgid "Manage themes"
@@ -531,27 +558,29 @@ msgstr "Määritä teema"
 #: ../src/cairo-dock-user-menu.c:1078
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
-msgstr "Valitse oma teemasi internetisät, ja tallenna se."
+msgstr "Valitse palvelimen monista teemoista tai tallenna nykyinen teema."
 
 #: ../src/cairo-dock-user-menu.c:1092
 msgid "Lock icons position"
-msgstr ""
+msgstr "Lukitse kuvakkeiden sijainti"
 
 #: ../src/cairo-dock-user-menu.c:1106
 msgid "Quick-Hide"
-msgstr ""
+msgstr "Pikapiilo"
 
 #: ../src/cairo-dock-user-menu.c:1108
 msgid "This will hide the dock until you hover over it with the mouse."
-msgstr ""
+msgstr "Tämä piilottaa telakan, kunnes tuot hiiren sen alueelle."
 
 #: ../src/cairo-dock-user-menu.c:1124
 msgid "Launch Cairo-Dock on startup"
-msgstr ""
+msgstr "Käynnistä Cairo-Dock käynnistettäessä"
 
 #: ../src/cairo-dock-user-menu.c:1138
 msgid "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
+"Kolmannen osapuolen sovelmat tarjoavat integroinnin moniin ohjelmiin, kuten "
+"Pidgin"
 
 #: ../src/cairo-dock-user-menu.c:1144 ../Help/src/applet-init.c:28
 #: ../Help/src/applet-notifications.c:101
@@ -566,7 +595,7 @@ msgstr ""
 
 #: ../src/cairo-dock-user-menu.c:1152
 msgid "About"
-msgstr ""
+msgstr "Tietoja"
 
 #: ../src/cairo-dock-user-menu.c:1162
 msgid "Quit"
@@ -578,10 +607,13 @@ msgid ""
 "It's not advised to quit the dock but you can press Shift to unlock this "
 "menu entry."
 msgstr ""
+"Käytät Cairo-Dock istuntoa!\n"
+"Se ei ole suositeltavaa lopettaa telakkaa, mutta voit avata tämän valikon "
+"painamalla Shift."
 
 #: ../src/cairo-dock-user-menu.c:1195 ../src/cairo-dock-user-menu.c:1208
 msgid "Launch a new (Shift+clic)"
-msgstr ""
+msgstr "Käynnistä uusi (Shift+napsautus)"
 
 #: ../src/cairo-dock-user-menu.c:1200 ../src/cairo-dock-user-menu.c:1282
 msgid "Applet's handbook"
@@ -589,92 +621,92 @@ msgstr "Sovelman käsikirja"
 
 #: ../src/cairo-dock-user-menu.c:1215 ../src/cairo-dock-user-menu.c:1261
 msgid "Edit"
-msgstr ""
+msgstr "Muokkaa"
 
 #: ../src/cairo-dock-user-menu.c:1217 ../src/cairo-dock-user-menu.c:1268
 msgid "Remove"
-msgstr ""
+msgstr "Poista"
 
 #: ../src/cairo-dock-user-menu.c:1218
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
-msgstr ""
+msgstr "Voit poistaa käynnistimen vetämällä sen hiirellä pois telakasta."
 
 #: ../src/cairo-dock-user-menu.c:1228
 msgid "Make it a launcher"
-msgstr ""
+msgstr "Tee siitä käynnistin"
 
 #: ../src/cairo-dock-user-menu.c:1251
 msgid "Remove custom icon"
-msgstr ""
+msgstr "Poista oma kuvake"
 
 #: ../src/cairo-dock-user-menu.c:1255
 msgid "Set a custom icon"
-msgstr ""
+msgstr "Aseta oma kuvake"
 
 #: ../src/cairo-dock-user-menu.c:1265
 msgid "Detach"
-msgstr ""
+msgstr "Irrota"
 
 #: ../src/cairo-dock-user-menu.c:1265
 msgid "Return to the dock"
-msgstr ""
+msgstr "Palaa telakkaan"
 
 #: ../src/cairo-dock-user-menu.c:1272
 msgid "Duplicate"
-msgstr ""
+msgstr "Monista"
 
 #: ../src/cairo-dock-user-menu.c:1446
 #, c-format
 msgid "Move all to desktop %d - face %d"
-msgstr ""
+msgstr "Siirrä kaikki työpöydälle %d - pinta %d"
 
 #: ../src/cairo-dock-user-menu.c:1446
 #, c-format
 msgid "Move to desktop %d - face %d"
-msgstr ""
+msgstr "Siirrä työpöydälle %d - pinta %d"
 
 #: ../src/cairo-dock-user-menu.c:1448
 #, c-format
 msgid "Move all to desktop %d"
-msgstr ""
+msgstr "Siirrä kaikki työpöydälle %d"
 
 #: ../src/cairo-dock-user-menu.c:1448
 #, c-format
 msgid "Move to desktop %d"
-msgstr ""
+msgstr "Siirrä työpöydälle %d"
 
 #: ../src/cairo-dock-user-menu.c:1450
 #, c-format
 msgid "Move all to face %d"
-msgstr ""
+msgstr "Siirrä kaikki pintaan %d"
 
 #: ../src/cairo-dock-user-menu.c:1450
 #, c-format
 msgid "Move to face %d"
-msgstr ""
+msgstr "Siirrä pintaan %d"
 
 #: ../src/cairo-dock-user-menu.c:1979
 msgid "Window"
-msgstr ""
+msgstr "Ikkuna"
 
 #: ../src/cairo-dock-user-menu.c:1985 ../src/cairo-dock-user-menu.c:2008
 #: ../src/cairo-dock-user-menu.c:2045 ../src/cairo-dock-user-menu.c:2086
 #: ../src/cairo-dock-user-menu.c:2096 ../Help/src/applet-notifications.c:95
 msgid "middle-click"
-msgstr ""
+msgstr "keskiklikkaus"
 
 #: ../src/cairo-dock-user-menu.c:2000
 msgid "Unmaximise"
-msgstr ""
+msgstr "Poista maksimointi"
 
 #: ../src/cairo-dock-user-menu.c:2000
 msgid "Maximise"
-msgstr ""
+msgstr "Maksimoi"
 
 #: ../src/cairo-dock-user-menu.c:2008 ../src/cairo-dock-user-menu.c:2010
 msgid "Minimise"
-msgstr ""
+msgstr "Minimoi"
 
 #: ../src/cairo-dock-user-menu.c:2024
 msgid "Show"
@@ -682,47 +714,47 @@ msgstr "Näytä"
 
 #: ../src/cairo-dock-user-menu.c:2030 ../src/cairo-dock-user-menu.c:2111
 msgid "Other actions"
-msgstr ""
+msgstr "Muut toiminnot"
 
 #: ../src/cairo-dock-user-menu.c:2033
 msgid "Move to this desktop"
-msgstr ""
+msgstr "Siirä tälle työpöydälle"
 
 #: ../src/cairo-dock-user-menu.c:2039
 msgid "Not Fullscreen"
-msgstr ""
+msgstr "Ei Kokoruutuun"
 
 #: ../src/cairo-dock-user-menu.c:2039
 msgid "Fullscreen"
-msgstr ""
+msgstr "Kokoruutu"
 
 #: ../src/cairo-dock-user-menu.c:2045 ../src/cairo-dock-user-menu.c:2047
 msgid "Below other windows"
-msgstr ""
+msgstr "Muiden ikkunoiden alla"
 
 #: ../src/cairo-dock-user-menu.c:2055
 msgid "Don't keep above"
-msgstr ""
+msgstr "Älä pidä päällä"
 
 #: ../src/cairo-dock-user-menu.c:2055 ../Help/data/messages:309
 msgid "Keep above"
-msgstr ""
+msgstr "Pidä päällä"
 
 #: ../src/cairo-dock-user-menu.c:2059
 msgid "Visible only on this desktop"
-msgstr ""
+msgstr "Näkyvä vain tällä työpöydällä"
 
 #: ../src/cairo-dock-user-menu.c:2059
 msgid "Visible on all desktops"
-msgstr ""
+msgstr "Näkyvä kaikilla työpöydillä"
 
 #: ../src/cairo-dock-user-menu.c:2068
 msgid "Kill"
-msgstr "Tapa"
+msgstr "Lopeta"
 
 #: ../src/cairo-dock-user-menu.c:2082
 msgid "Windows"
-msgstr ""
+msgstr "Ikkunat"
 
 #: ../src/cairo-dock-user-menu.c:2086 ../src/cairo-dock-user-menu.c:2088
 msgid "Close all"
@@ -730,7 +762,7 @@ msgstr "Sulje kaikki"
 
 #: ../src/cairo-dock-user-menu.c:2096 ../src/cairo-dock-user-menu.c:2098
 msgid "Minimise all"
-msgstr ""
+msgstr "Minimoi kaikki"
 
 #: ../src/cairo-dock-user-menu.c:2106
 msgid "Show all"
@@ -738,11 +770,11 @@ msgstr "Näytä kaikki"
 
 #: ../src/cairo-dock-user-menu.c:2113
 msgid "Move all to this desktop"
-msgstr ""
+msgstr "Siirä kaikki tälle töpöydälle"
 
 #: ../src/cairo-dock-user-menu.c:2140 ../Help/data/messages:307
 msgid "Normal"
-msgstr ""
+msgstr "Normaali"
 
 #: ../src/cairo-dock-user-menu.c:2146 ../data/messages:23 ../data/messages:195
 #: ../data/messages:929
@@ -755,7 +787,7 @@ msgstr "Aina alimmaisena"
 
 #: ../src/cairo-dock-user-menu.c:2170 ../Help/data/messages:315
 msgid "Reserve space"
-msgstr ""
+msgstr "Varaa tila"
 
 #: ../src/cairo-dock-user-menu.c:2177
 msgid "On all desktops"
@@ -763,63 +795,63 @@ msgstr "Kaikilla työpöydillä"
 
 #: ../src/cairo-dock-user-menu.c:2183
 msgid "Lock position"
-msgstr ""
+msgstr "Lukitse sijainti"
 
 #: ../src/cairo-dock-widget-config.c:333
 msgid "Animation:"
-msgstr "Animointi:"
+msgstr "Animaatio:"
 
 #: ../src/cairo-dock-widget-config.c:350
 msgid "Effects:"
-msgstr "Efektit:"
+msgstr "Tehoste:"
 
 #: ../src/cairo-dock-widget-items.c:243
 msgid "Main dock's parameters are available in the main configuration window."
-msgstr ""
+msgstr "Telakan parametrit ovat saatavilla \"Asetukset\" ikkunassa."
 
 #: ../src/cairo-dock-widget-items.c:710
 msgid "Remove this item"
-msgstr ""
+msgstr "Poista tämä kohde"
 
 #: ../src/cairo-dock-widget-plugins.c:103
 msgid "Configure this applet"
-msgstr ""
+msgstr "Määritä tämä sovelma"
 
 #: ../src/cairo-dock-widget-plugins.c:149
 msgid "Accessory"
-msgstr ""
+msgstr "Lisävaruste"
 
 #: ../src/cairo-dock-widget-plugins.c:235
 msgid "Plug-in"
-msgstr ""
+msgstr "Lisäosa"
 
 #: ../src/cairo-dock-widget-plugins.c:241 ../Help/src/applet-tips-dialog.c:309
 msgid "Category"
-msgstr ""
+msgstr "Kategoria"
 
 #: ../src/cairo-dock-widget-plugins.c:265
 msgid "Click on an applet in order to have a preview and a description for it."
-msgstr "Paina sovelmaa katsoaksesi kuvankaappauksen ja kuvauksen siitä."
+msgstr "Napsauta sovelmaa saadaksesi siitä esikatselun ja kuvauksen."
 
 #: ../src/cairo-dock-widget-shortkeys.c:126
 msgid "Press the shortkey"
-msgstr ""
+msgstr "Paina pikanäppäintä"
 
 #: ../src/cairo-dock-widget-shortkeys.c:143
 msgid "Change the shortkey"
-msgstr ""
+msgstr "Vaihda pikanäppäintä"
 
 #: ../src/cairo-dock-widget-shortkeys.c:225
 msgid "Origin"
-msgstr ""
+msgstr "Alkuperä"
 
 #: ../src/cairo-dock-widget-shortkeys.c:230
 msgid "Action"
-msgstr ""
+msgstr "Toiminto"
 
 #: ../src/cairo-dock-widget-shortkeys.c:234
 msgid "Shortkey"
-msgstr ""
+msgstr "Pikanäppäin"
 
 #: ../src/cairo-dock-widget-shortkeys.c:261
 #: ../src/gldit/cairo-dock-gui-factory.c:3022
@@ -838,14 +870,16 @@ msgid ""
 "You will lose them if you don't save before choosing a new theme. Continue "
 "anyway?"
 msgstr ""
+"Olet tehnyt joitakin muutoksia nykyiseen teemaan.\n"
+"Menetät ne, jos et tallenna ennen uuden teeman valintaa. Jatkanko silti?"
 
 #: ../src/cairo-dock-widget-themes.c:224
 msgid "Please wait while importing the theme..."
-msgstr ""
+msgstr "Odota teemaa tuotaessa..."
 
 #: ../src/cairo-dock-widget-themes.c:283
 msgid "Rate me"
-msgstr ""
+msgstr "Arvostele"
 
 #: ../src/cairo-dock-widget-themes.c:384 ../src/cairo-dock-widget-themes.c:386
 msgid "You must try the theme before you can rate it."
@@ -853,99 +887,107 @@ msgstr "Sinun on täytyy kokeilla teemaa ennen kuin arvostelet sitä"
 
 #: ../src/cairo-dock-widget-themes.c:433
 msgid "The theme has been deleted"
-msgstr ""
+msgstr "Teema on poistettu"
 
 #: ../src/cairo-dock-widget-themes.c:462
 msgid "Delete this theme"
-msgstr ""
+msgstr "Poista tämä teema"
 
 #: ../src/cairo-dock-widget-themes.c:486
 #: ../src/gldit/cairo-dock-gui-factory.c:2304
 #, c-format
 msgid "Listing themes in '%s' ..."
-msgstr ""
+msgstr "Teemojen listaaminen '%s' ..."
 
 #: ../src/cairo-dock-widget-themes.c:509
 msgid "Theme"
-msgstr "teema"
+msgstr "Teema"
 
 #: ../src/cairo-dock-widget-themes.c:522
 msgid "Rating"
-msgstr "arvosana"
+msgstr "Arvosana"
 
 #: ../src/cairo-dock-widget-themes.c:528
 msgid "Sobriety"
-msgstr "selvyys"
+msgstr "Selvyys"
 
 #: ../src/cairo-dock-widget-themes.c:588
 msgid "Save as:"
-msgstr ""
+msgstr "Tallenna nimellä:"
 
 #: ../src/cairo-dock-widget-themes.c:667
 msgid "Importing theme ..."
-msgstr ""
+msgstr "Tuodaan teemaa ..."
 
 #: ../src/cairo-dock-widget-themes.c:675
 msgid "Theme has been saved"
-msgstr ""
+msgstr "Teema on tallennettu"
 
 #: ../src/cairo-dock.c:164
 #, c-format
 msgid "Happy new year %d !!!"
-msgstr ""
+msgstr "Hyvää uutta vuotta %d !!!"
 
 #: ../src/cairo-dock.c:382
 msgid "Use Cairo backend."
-msgstr ""
+msgstr "Käytä Cairo taustaosaa."
 
 #: ../src/cairo-dock.c:385
 msgid "Use OpenGL backend."
-msgstr ""
+msgstr "Käytä OpenGL taustaosaa."
 
 #: ../src/cairo-dock.c:388
 msgid ""
 "Use OpenGL backend with indirect rendering. There are very few case where "
 "this option should be used."
 msgstr ""
+"Käytä OpenGL taustaosaa epäsuoralla renderöinnillä. On hyvin vähän "
+"tapauksia, joissa tätä vaihtoehtoa pitäisi käyttää."
 
 #: ../src/cairo-dock.c:391
 msgid "Ask again on startup which backend to use."
-msgstr ""
+msgstr "Kysy käynnistyksen yhteydessä, mitä taustaosaa haluat käyttää."
 
 #: ../src/cairo-dock.c:394
 msgid "Force the dock to consider this environnement - use it with care."
-msgstr ""
+msgstr "Pakota telakka käyttämään tätä ympäristöä - käytä varoen."
 
 #: ../src/cairo-dock.c:397
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
-msgstr ""
+msgstr "Pakota telakka lataamaan tästä hakemistosta ~/.config/cairo-dock."
 
 #: ../src/cairo-dock.c:400
 msgid ""
 "Address of a server containing additional themes. This will overwrite the "
 "default server address."
 msgstr ""
+"Lisäteemoja sisältävän palvelimen osoite. Tämä korvaa oletuspalvelimen "
+"osoitteen."
 
 #: ../src/cairo-dock.c:403
 msgid ""
 "Wait for N seconds before starting; this is useful if you notice some "
 "problems when the dock starts with the session."
 msgstr ""
+"Odota N sekuntia ennen käynnistystä; tästä on hyötyä, jos havaitset ongelmia "
+"telakan istunnon käynnistyessä."
 
 #: ../src/cairo-dock.c:406
 msgid ""
 "Allow to edit the config before the dock is started and show the config "
 "panel on start."
 msgstr ""
+"Salli asetusten muokkaaminen ennen telakan käynnistämistä ja näytä "
+"asetuspaneeli."
 
 #: ../src/cairo-dock.c:409
 msgid "Exclude a given plug-in from activating (it is still loaded though)."
-msgstr ""
+msgstr "Jätä tietty lisäosa aktivoimatta (se on silti ladattu)."
 
 #: ../src/cairo-dock.c:412
 msgid "Don't load any plug-ins."
-msgstr ""
+msgstr "Älä lataa mitään lisäosaa."
 
 #: ../src/cairo-dock.c:415
 msgid "Work around potential glitches when dialogs or sub-docks appear"
@@ -955,48 +997,55 @@ msgstr ""
 msgid ""
 "Log verbosity (debug,message,warning,critical,error); default is warning."
 msgstr ""
+"Lokin sisältö (virheenkorjaus, viesti, varoitus, kriittinen ja virhe); "
+"oletus on varoitus."
 
 #: ../src/cairo-dock.c:421
 msgid "Force to display some output messages with colors."
-msgstr ""
+msgstr "Pakota näyttämään ilmoituksia väreissä."
 
 #: ../src/cairo-dock.c:424
 msgid "Print version and quit."
-msgstr ""
+msgstr "Näytä versio ja lopeta."
 
 #: ../src/cairo-dock.c:427
 msgid "Lock the dock so that any modification is impossible for users."
 msgstr ""
+"Lukitse telakka käyttäjiltä niin, että kaikki muutokset ovat mahdottomia."
 
 #: ../src/cairo-dock.c:431
 msgid "Keep the dock above other windows."
-msgstr ""
+msgstr "Pidä telakka muiden ikkunoiden yläpuolella."
 
 #: ../src/cairo-dock.c:434
 msgid "Don't make the dock appear on all desktops."
-msgstr ""
+msgstr "Älä anna telakan näkyä kaikilla näytöillä."
 
 #: ../src/cairo-dock.c:437 ../src/cairo-dock.c:497
 msgid "Cairo-Dock makes anything, including coffee !"
-msgstr ""
+msgstr "Cairo-Dock tekee mitä tahansa, myös kahvia!"
 
 #: ../src/cairo-dock.c:440
 msgid ""
 "Ask the dock to load additionnal modules contained in this directory (though "
 "it is unsafe for your dock to load unnofficial modules)."
 msgstr ""
+"Pyydä telakkaa lataamaan lisää moduuleja tähän kansioon (vaikka telakalle ei "
+"ole turvallista ladata epävirallisia moduuleja)."
 
 #: ../src/cairo-dock.c:443
 msgid ""
 "For debugging purpose only. The crash manager will not be started to hunt "
 "down the bugs."
-msgstr ""
+msgstr "Vain vianetsintää varten. Kaatumisia ei kuitenkaan lähdetä jahtaamaan."
 
 #: ../src/cairo-dock.c:446
 msgid ""
 "For debugging purpose only. Some hidden and still unstable options will be "
 "activated."
 msgstr ""
+"Vain vianetsintää varten. Jotkut piilotetut ja vielä epävakaat valinnat "
+"aktivoidaan."
 
 #: ../src/cairo-dock.c:449
 msgid "Force using the Wayland backends (disable X11 backends)."
@@ -1053,15 +1102,15 @@ msgstr ""
 
 #: ../src/cairo-dock.c:605
 msgid "Use OpenGL in Cairo-Dock"
-msgstr "Käytä OpenGL:lää cairo-dockissa ?"
+msgstr "Käytä Cairo-Dock OpenGL:ää"
 
 #: ../src/cairo-dock.c:608 ../src/cairo-dock.c:848
 msgid "Yes"
-msgstr ""
+msgstr "Kyllä"
 
 #: ../src/cairo-dock.c:610 ../src/cairo-dock.c:849 ../data/messages:829
 msgid "No"
-msgstr ""
+msgstr "Ei"
 
 #: ../src/cairo-dock.c:613
 msgid ""
@@ -1074,20 +1123,19 @@ msgid ""
 " (To not show this dialog, launch the dock from the Application menu,\n"
 "  or with the -o option to force OpenGL and -c to force cairo.)"
 msgstr ""
-"OpenGL antaa sinun käyttää laitteisto pohjaista kiihdytystä, ja näin ollen "
-"vähentää suorittimen käytön minimiin.\n"
-"Tämä mahdollistaa myös hienojen visuaalisten efektion käytön, jollasia "
-"käytetään Compizissa\n"
-"Kutenkin jotkin näyttöohjaimet tai niiden ajurit eivät tue laitteisto "
-"pohjaista kiihdytystä, mikä voi johtaa ohjemna toimimattomuuteen.\n"
-"Haluatko käyttää OpenGLää?\n"
-" (Jos et halu nähdä tätä viestiä, käynnistä telakka sovellus valikosta\n"
-"  tai -o valitsimella pakottaaksesi OpenGln ja -c valitsimella pakottaaksesi "
-"cairon.)"
+"OpenGL käyttää laitteistopohjaista kiihdytystä näytönohjaimella ja näin "
+"vähentää prosessorin käytön minimiin.\n"
+"Tämä mahdollistaa hienot visuaaliset tehosteet, vastaavia kuin Compiz;ssa.\n"
+"Muutamat näyttöohjaimet tai niiden ajurit eivät tue laitteistopohjaista "
+"kiihdytystä, mikä näkyy ohjelman toimimattomuutena.\n"
+"OpenGL, haluatko aktivoida sen?\n"
+" Käynnistä telakka valikosta tai lisäämällä valitsin -o pakotat OpenGL:n "
+"päälle. Valitsimella -c pakotat cairon.\n"
+"  (Et näe tätä viestiä, jos käynnistät valikosta)."
 
 #: ../src/cairo-dock.c:620
 msgid "Remember this choice"
-msgstr ""
+msgstr "Muista tämä valinta"
 
 #: ../src/cairo-dock.c:780 ../src/cairo-dock.c:1000
 #, c-format
@@ -1097,6 +1145,10 @@ msgid ""
 "You can reactivate it, but if it happens again please report it at https://"
 "github.com/Cairo-Dock/cairo-dock-core/issues"
 msgstr ""
+"Moduuli '%s' on poistettu käytöstä, koska se on saattanut aiheuttaa "
+"ongelmia.\n"
+"Voit aktivoida sen uudelleen ja jos ongelma jatkuu, ilmoita siitä https://"
+"github.com/Cairo-Dock/cairo-dock-core/issues"
 
 #: ../src/cairo-dock.c:791
 msgid "< Maintenance mode >"
@@ -1104,11 +1156,11 @@ msgstr "< Huoltotila >"
 
 #: ../src/cairo-dock.c:793
 msgid "Something went wrong with this applet:"
-msgstr ""
+msgstr "Jotain meni pieleen tämän sovelman kanssa:"
 
 #: ../src/cairo-dock.c:845
 msgid "You're using our Cairo-Dock session"
-msgstr ""
+msgstr "Käytät Cairo-Dock-istuntoa"
 
 #: ../src/cairo-dock.c:851
 msgid ""
@@ -1119,6 +1171,12 @@ msgid ""
 "Note: your current theme will be saved and can be reimported later from the "
 "Themes manager"
 msgstr ""
+"Voisi olla mielenkiintoista käyttää tähän istuntoon muokattua teemaa. \n"
+"\n"
+"Haluatko ladata \"Default-Panel\" -teemamme?\n"
+"\n"
+"Huomaa: nykyinen teema tallennetaan ja voidaan palauttaa myöhemmin teemojen "
+"hallinasta"
 
 #: ../src/cairo-dock.c:896
 msgid ""
@@ -1132,6 +1190,14 @@ msgid ""
 "But if you really want to use the dock without these plug-ins, you can "
 "launch the dock with the '-f' option to no longer have this message.\n"
 msgstr ""
+"Laajennuksia ei löytynyt.\n"
+"Laajennukset \"plug-ins\" tarjoavat suurimman osan toiminnoista (animaatiot, "
+"sovelmat, näkymät jne.).\n"
+"Katso lisätietoja https://github.com/Cairo-Dock/cairo-dock-core/wiki\n"
+"Telakka ilman laajennuksia ei merkitse paljoa ja ogelmat johtuu "
+"todennäköisesti näiden asentamiseen liittyvästä ongelmasta.\n"
+"Mutta jos haluat todella käyttää telakkaa ilman laajennuksia, voit "
+"käynnistää sen '-f' -valinan avulla, jotta et enää näe tätä viestiä.\n"
 
 #: ../src/cairo-dock.c:908
 msgid ""
@@ -1178,72 +1244,79 @@ msgid ""
 "It has been restored successfully, but if it happens again, please report it "
 "at https://github.com/Cairo-Dock/cairo-dock-core/issues"
 msgstr ""
+"Moduuli \"%s\" on saattanut kohdata ongelman.\n"
+"Se on palautettu onnistuneesti, mutta jos tämä tapahtuu uudelleen, ilmoita "
+"siitä https://github.com/Cairo-Dock/cairo-dock-core/issues"
 
 #: ../src/gldit/cairo-dock-applet-facility.h:260
 msgid ""
 "The theme could not be found; the default theme will be used instead.\n"
 " You can change this by opening the configuration of this module. Do you "
 "want to do it now?"
-msgstr "teema ei läydetty: oletus teema otetaan käyttöön sen sijaan"
+msgstr ""
+"Teemaa ei löytynyt; sen sijaan käytetään oletusteemaa.\n"
+"Muuta avaamalla tämän moduulin asetukset. Haluatko tehdä sen nyt?"
 
 #: ../src/gldit/cairo-dock-applet-facility.h:276
 msgid ""
 "The gauge theme could not be found; a default gauge will be used instead.\n"
 "You can change this by opening the configuration of this module. Do you want "
 "to do it now?"
-msgstr "teema ei läydetty: oletus teema otetaan käyttöön sen sijaan"
+msgstr ""
+"Mittausteemaa ei löytynyt; sen sijaan käytetään oletusmittaria.\n"
+"Muuta avaamalla tämän moduulin asetukset. Haluatko tehdä sen nyt?"
 
 #: ../src/gldit/cairo-dock-desklet-manager.c:812 ../data/messages:467
 #: ../data/messages:557 ../data/messages:697 ../data/messages:739
 #: ../data/messages:811 ../data/messages:845
 msgid "Automatic"
-msgstr ""
+msgstr "Automaattinen"
 
 #: ../src/gldit/cairo-dock-desklet-manager.c:825
 msgid "_custom decoration_"
-msgstr ""
+msgstr "_oma sisustus_"
 
 #: ../src/gldit/cairo-dock-dock-factory.c:1371
 msgid "Sorry but the dock is locked"
-msgstr ""
+msgstr "Telakka on lukittu"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:225
 msgid "Bottom dock"
-msgstr ""
+msgstr "Telakka alas"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:227
 msgid "Top dock"
-msgstr ""
+msgstr "Telakka ylös"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:232
 msgid "Right dock"
-msgstr ""
+msgstr "Telakka oikea"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:234
 msgid "Left dock"
-msgstr ""
+msgstr "Telakka vasen"
 
 #: ../src/gldit/cairo-dock-dock-manager.c:1565
 #: ../src/gldit/cairo-dock-dock-manager.c:1663
 msgid "Pop up the main dock"
-msgstr ""
+msgstr "Avaa telakka"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:246
 #, c-format
 msgid "by %s"
-msgstr ""
+msgstr "tekijä %s"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:258
 msgid "kB"
-msgstr ""
+msgstr "kt"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:260
 msgid "MB"
-msgstr ""
+msgstr "Mt"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:269
 msgid "Local"
-msgstr "Paikkallis"
+msgstr "Paikallinen"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:270
 msgid "User"
@@ -1263,45 +1336,45 @@ msgstr "Päivitetty"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:748
 msgid "Pick up a file"
-msgstr ""
+msgstr "Poimi tiedosto"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:748
 msgid "Pick up a directory"
-msgstr ""
+msgstr "Poimi hakemisto"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1036
 msgid "_Custom Icons_"
-msgstr ""
+msgstr "_Omat kuvakkeet_"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1074 ../data/messages:13
 #: ../data/messages:165 ../data/messages:171 ../data/messages:915
 msgid "left"
-msgstr ""
+msgstr "vasen"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1076 ../data/messages:11
 #: ../data/messages:163 ../data/messages:173 ../data/messages:913
 msgid "right"
-msgstr ""
+msgstr "oikea"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1078
 #: ../src/gldit/cairo-dock-gui-factory.c:1088
 msgid "middle"
-msgstr ""
+msgstr "keskellä"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1084 ../data/messages:9
 #: ../data/messages:161 ../data/messages:911
 msgid "top"
-msgstr ""
+msgstr "ylös"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1086 ../data/messages:7
 #: ../data/messages:159 ../data/messages:909
 msgid "bottom"
-msgstr ""
+msgstr "alas"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1091
 #: ../src/gldit/cairo-dock-gui-factory.c:1097
 msgid "Screen"
-msgstr ""
+msgstr "Näyttö"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1385
 #, c-format
@@ -1310,6 +1383,9 @@ msgid ""
 "Be sure to install it with the same version as the dock to enjoy these "
 "features."
 msgstr ""
+"Moduulia \"%s \" ei löytynyt.\n"
+"Muista asentaa se samaan versioon kuin telakka käyttääksesi näitä "
+"ominaisuuksia."
 
 #: ../src/gldit/cairo-dock-gui-factory.c:1394
 #, c-format
@@ -1317,6 +1393,8 @@ msgid ""
 "The '%s' plug-in is not active.\n"
 "Activate it now?"
 msgstr ""
+"Laajennus \"%s\" ei ole aktiivinen.\n"
+"Aktivoidaanko se nyt?"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:2165
 msgid ""
@@ -1330,41 +1408,41 @@ msgstr "linkki"
 
 #: ../src/gldit/cairo-dock-gui-factory.c:2999
 msgid "Grab"
-msgstr "tarttua"
+msgstr "Tartu"
 
 #: ../src/gldit/cairo-dock-launcher-manager.c:378
 msgid "Enter a command"
-msgstr ""
+msgstr "Anna komento"
 
 #: ../src/gldit/cairo-dock-launcher-manager.c:379
 msgid "New launcher"
-msgstr ""
+msgstr "Uusi käynnistin"
 
 #: ../src/gldit/cairo-dock-module-instance-manager.c:323
 msgid "by"
-msgstr ""
+msgstr "tekijältä"
 
 #: ../src/gldit/cairo-dock-struct.h:526 ../data/messages:1073
 #: ../data/messages:1081
 msgid "Default"
-msgstr ""
+msgstr "Oletus"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:196
 #, c-format
 msgid "Are you sure you want to overwrite theme %s?"
-msgstr ""
+msgstr "Haluatko varmasti korvata teeman %s?"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:273
 msgid "Last modification on:"
-msgstr ""
+msgstr "Viimeisin muutos:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:347
 msgid "Your theme should now be available in this directory:"
-msgstr ""
+msgstr "Teemasi pitäisi nyt olla tässä hakemistossa:"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:352
 msgid "Error when launching 'cairo-dock-package-theme' script"
-msgstr ""
+msgstr "Virhe käynnistettäessä skriptiä \"cairo-dock-package-theme\""
 
 #: ../src/gldit/cairo-dock-themes-manager.c:373
 #, c-format
@@ -1373,40 +1451,43 @@ msgid ""
 "Please retry later or contact us at https://github.com/Cairo-Dock/cairo-dock-"
 "core/issues"
 msgstr ""
+"Tiedoston %s käyttö epäonnistui. Ehkä palvelin on poissa käytöstä.\n"
+"Yritä myöhemmin uudelleen tai ota yhteyttä osoitteeseen https://github.com/"
+"Cairo-Dock/cairo-dock-core/issues"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:387
 #, c-format
 msgid "Are you sure you want to delete theme %s?"
-msgstr ""
+msgstr "Haluatko varmasti poistaa teeman %s?"
 
 #: ../src/gldit/cairo-dock-themes-manager.c:389
 msgid "Are you sure you want to delete these themes?"
-msgstr ""
+msgstr "Haluatko varmasti poistaa nämä teemat?"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:592 ../data/messages:41
 #: ../data/messages:213
 msgid "Move down"
-msgstr ""
+msgstr "Siirrä alas"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:600 ../data/messages:43
 #: ../data/messages:103 ../data/messages:215
 msgid "Fade out"
-msgstr ""
+msgstr "Häivytä"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:608 ../data/messages:45
 #: ../data/messages:217
 msgid "Semi transparent"
-msgstr ""
+msgstr "Osittain läpinäkyvä"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:617 ../data/messages:47
 #: ../data/messages:219
 msgid "Zoom out"
-msgstr ""
+msgstr "Loitonna"
 
 #: ../src/implementations/cairo-dock-hiding-effect.c:625 ../data/messages:49
 #: ../data/messages:221
 msgid "Folding"
-msgstr ""
+msgstr "Taitettava"
 
 #: ../src/implementations/cairo-dock-wayland-wm.c:117
 msgid "Select an open window by clicking on it or choosing it from the taskbar"
@@ -1421,10 +1502,16 @@ msgid ""
 "Hope you will enjoy this software !\n"
 "  (you can now click on this dialog to close it)"
 msgstr ""
+"Tervetuloa käyttämään Cairo-Dock !\n"
+"Tämä sovelma auttaa sinua aloittamaan telakan käytön; klikkaa sitä.\n"
+"Jos sinulla on kysyttävää/pyyntö/huomautus, ole hyvä ja tee se osoitteessa "
+"https://github.com/Cairo-Dock/cairo-dock-core\n"
+"Toivottavasti nautit tästä ohjelmasta !\n"
+"  (voit nyt klikata ja sulkea ikkunan)"
 
 #: ../Help/src/applet-composite.c:166
 msgid "Don't ask me any more"
-msgstr ""
+msgstr "Älä kysy enää"
 
 #: ../Help/src/applet-composite.c:172
 msgid ""
@@ -1432,12 +1519,17 @@ msgid ""
 "composite manager.\n"
 "Do you want to activate it now?"
 msgstr ""
+"Jos haluat poistaa mustan suorakulmion telakan ympäriltä, sinun on "
+"aktivoitava yhdistelmähallinta.\n"
+"Haluatko aktivoida sen nyt?"
 
 #: ../Help/src/applet-composite.c:183
 msgid ""
 "Do you want to keep this setting?\n"
 "In 15 seconds, the previous setting will be restored."
 msgstr ""
+"Haluatko säilyttää tämän asetuksen?\n"
+"Edellinen asetus palautetaan 15 sekunnin kuluttua."
 
 #: ../Help/src/applet-composite.c:199
 msgid ""
@@ -1449,6 +1541,12 @@ msgid ""
 "option is in the 'System' module of the configuration, at the bottom of the "
 "page."
 msgstr ""
+"Jos haluat poistaa mustan suorakulmion telakan ympäriltä, sinun on "
+"aktivoitava yhdistelmähallinta.\n"
+"Voidaan tehdä esimerkiksi aktivoimalla työpöytätehosteet, käynnistämällä "
+"Compiz tai aktivoimalla koostaminen Metacity:ssä.\n"
+"Jos koneesi ei tue koostamista, Cairo-Dock voi jäljitellä sitä. Tämä valinta "
+"on \"Järjestelmä\" -moduulissa, sivun alareunassa."
 
 #: ../Help/src/applet-init.c:31
 msgid ""
@@ -1458,30 +1556,35 @@ msgid ""
 "Middle-click to open the configuration window.\n"
 "Right-click to access some troubleshooting actions."
 msgstr ""
+"Tämä sovelma on tehty auttamaan sinua.\n"
+"Napsauttamalla kuvaketta saat esiin hyödyllisiä vinkkejä Cairo-Dockin "
+"mahdollisuuksista.\n"
+"Avaa määritysikkuna napsauttamalla keskimmäistä painiketta.\n"
+"Napsauta hiiren kakkospainikkeella päästäksesi vianmääritykseen."
 
 #: ../Help/src/applet-notifications.c:95
 msgid "Open global settings"
-msgstr ""
+msgstr "Avaa yleiset asetukset"
 
 #: ../Help/src/applet-notifications.c:100
 msgid "Activate composite"
-msgstr ""
+msgstr "Aktivoi koostaminen"
 
 #: ../Help/src/applet-notifications.c:102
 msgid "Online help"
-msgstr ""
+msgstr "Apua verkosta"
 
 #: ../Help/src/applet-tips-dialog.c:163
 msgid "Tips and Tricks"
-msgstr ""
+msgstr "Vinkkejä ja vihjeitä"
 
 #: ../Help/data/messages:1
 msgid "General"
-msgstr ""
+msgstr "Yleinen"
 
 #: ../Help/data/messages:3
 msgid "Using the dock"
-msgstr ""
+msgstr "Telakan käyttäminen"
 
 #: ../Help/data/messages:5
 msgid ""
@@ -1491,10 +1594,15 @@ msgid ""
 "Some applets let you bind a shortkey to an action, and decide which action "
 "sould be on middle-click."
 msgstr ""
+"Telakan kuvakkeissa on useita toimintoja: ensisijainen toiminto vasemmalla "
+"napsautuksella, toissijainen keskimmäisellä ja lisätoiminnot hiiren oikealla "
+"(valikossa).\n"
+"Joidenkin sovelmien avulla voit sitoa pikanäppäimen ja päättää, mikä "
+"toiminto suoritetaan keskimmäisellä napsautuksella."
 
 #: ../Help/data/messages:7
 msgid "Adding features"
-msgstr ""
+msgstr "Ominaisuuksien lisääminen"
 
 #: ../Help/data/messages:9
 msgid ""
@@ -1506,10 +1614,19 @@ msgid ""
 "the \"More applets\" button (which will lead you to our applets web page) "
 "and then just drag-and-drop the link of an applet into your dock."
 msgstr ""
+"Cairo-Dock:ssa on paljon sovelmia. Nämä ovat pieniä sovelluksia, jotka "
+"sijaitsevat telakan sisällä, esimerkiksi kello tai painike kirjautumiselle "
+"ulos.\n"
+"Ota uudet sovelmat käyttöön avaamalla asetukset (napsauta hiiren oikea-> "
+"Cairo-Dock-> määritä), siirry kohtaan \"Lisäosat\" ja valitse haluamasi "
+"sovelma.\n"
+"Lisää sovelimia voidaan asentaa helposti: napsauta määritysikkunassa \"Lisää "
+"sovelmia\" (joka johtaa sinut verkkosivullemme) vedä ja pudota sovelman "
+"linkki telakkaan."
 
 #: ../Help/data/messages:13
 msgid "Adding a launcher"
-msgstr ""
+msgstr "Lisää käynnistin"
 
 #: ../Help/data/messages:15
 msgid ""
@@ -1518,20 +1635,26 @@ msgid ""
 "Alternatively, if an application is already opened, you can right-click on "
 "its icon and select \"make it a launcher\"."
 msgstr ""
+"Voit lisätä käynnistimen vetämällä ja pudottamalla sen \"Sovellukset\" -"
+"valikosta telakkaan. Animoitu nuoli tulee näkyviin, kun voit pudottaa.\n"
+"Vaihtoehto, jos sovellus on jo avattu, voit napsauttaa sen kuvaketta hiiren "
+"oikea ja valita \"tee käynnistin\"."
 
 #: ../Help/data/messages:17
 msgid "Removing a launcher"
-msgstr ""
+msgstr "Käynnistimen poistaminen"
 
 #: ../Help/data/messages:19
 msgid ""
 "You can remove a launcher by drag-and-dropping it outside the dock. A "
 "\"delete\" emblem will appear on it when you can drop it."
 msgstr ""
+"Käynnistimen voi poistaa vetämällä ja pudottamalla se telakan ulkopuolelle. "
+"\"Poista\" tunnus ilmestyy, kun voit pudottaa sen."
 
 #: ../Help/data/messages:21
 msgid "Grouping icons into a sub-dock"
-msgstr ""
+msgstr "Kuvakkeiden ryhmittely alatelakkaan"
 
 #: ../Help/data/messages:23
 msgid ""
@@ -1540,10 +1663,15 @@ msgid ""
 "To move an icon into the sub-dock, right-click on an icon -> move to another "
 "dock -> select the sub-dock's name."
 msgstr ""
+"Voit ryhmitellä kuvakkeet \"alatelakkaan\".\n"
+"Lisää alatelakka napsauttamalla telakkaa hiiren oikea -> lisää-> "
+"alatelakka.\n"
+"Jos haluat siirtää kuvakkeen alatelakkaan, napsauta sitä hiiren oikea -> "
+"siirrä toiseen telakkaan -> valitse alatelakan nimi."
 
 #: ../Help/data/messages:25
 msgid "Moving icons"
-msgstr ""
+msgstr "Kuvakkeiden siirtäminen"
 
 #: ../Help/data/messages:27
 msgid ""
@@ -1553,10 +1681,14 @@ msgid ""
 "If you select \"a new main dock\", a main dock will be created with this "
 "icon inside."
 msgstr ""
+"Voit vetää minkä tahansa kuvakkeen uuteen paikkaan sen telakalla.\n"
+"Voit siirtää kuvakkeen toiseen telakkaan napsauttamalla sitä hiiren oikea -> "
+"siirrä toiseen telakkaan -> valitse haluamasi telakka.\n"
+"Jos valitset \"Uusi telakka\", luodaan telakka, jossa on tämä kuvake."
 
 #: ../Help/data/messages:29
 msgid "Changing an icon's image"
-msgstr ""
+msgstr "Kuvakkeen kuvan muuttaminen"
 
 #: ../Help/data/messages:31
 msgid ""
@@ -1571,10 +1703,20 @@ msgid ""
 "of them to be used instead of the default icon theme, in the global config "
 "window."
 msgstr ""
+"Käynnistin tai sovelma:\n"
+"Avaa kuvakkeen asetukset ja määritä kuvan polku.\n"
+"- Sovelluksen kuvake:\n"
+"Napsauta kuvaketta hiiren oikea -> \"Muut toiminnot\" -> \"aseta oma "
+"kuvake\" ja valitse kuva. Voit poistaa kuvan napsauttamalla kuvaketta hiiren "
+"oikea -> \"Muut toiminnot\" -> \"Poista oma kuvake\".\n"
+"\n"
+"Jos olet asentanut joitakin kuvaketeemoja tietokoneellesi, voit myös valita "
+"yhden niistä käytettäväksi oletuskuvaketeeman sijasta yleinen määritysikkuna:"
+"ssa."
 
 #: ../Help/data/messages:33
 msgid "Resizing icons"
-msgstr ""
+msgstr "Kuvakkeiden koon muuttaminen"
 
 #: ../Help/data/messages:35
 msgid ""
@@ -1586,10 +1728,16 @@ msgid ""
 "Also, you can define the size of each applet independently in their own "
 "settings."
 msgstr ""
+"Voit pienentää tai suurentaa kuvakkeita ja skaalaamalla. Avaa asetukset "
+"(napsauta hiiren oikea -> Cairo-Dock -> määritä) ja siirry kohtaan "
+"\"Ulkoasu\" (tai kuvakkeet lisäasetukset tilassa).\n"
+"Huomaa, jos telakan sisällä on liian monta kuvaketta, ne skaalautuu näytölle "
+"sopivaksi.\n"
+"Voit myös määrittää kunkin sovelman koon itsenäisesti omissa asetuksissaan."
 
 #: ../Help/data/messages:37
 msgid "Separating icons"
-msgstr ""
+msgstr "Kuvakkeiden erottaminen"
 
 #: ../Help/data/messages:39
 msgid ""
@@ -1600,10 +1748,16 @@ msgid ""
 "between each group.\n"
 "In the \"panel\" view, separators are represented as gap between icons."
 msgstr ""
+"Voit lisätä erottimia kuvakkeiden väliin napsauttamalla telakkaa hiiren "
+"oikea -> lisää -> erotin.\n"
+"Lisäksi jos otit käyttöön mahdollisuuden erottaa erilaisia kuvakkeita "
+"(käynnistimet/sovellukset/sovelmat), erotin lisätään automaattisesti "
+"jokaisen ryhmän väliin.\n"
+"\"Paneeli\" -näkymässä erotin näkyy kuvakkeiden välisenä aukkona."
 
 #: ../Help/data/messages:43
 msgid "Using the dock as a taskbar"
-msgstr ""
+msgstr "Telakan käyttäminen tehtäväpalkina"
 
 #: ../Help/data/messages:45
 msgid ""
@@ -1615,49 +1769,63 @@ msgid ""
 "the windows of the current desktop, only the hidden windows, separated from "
 "the launcher, etc."
 msgstr ""
+"Kun sovellus on käynnissä, vastaava kuvake ilmestyy telakkaan.\n"
+"Jos sovelluksessa on jo käynnistin, kuvake ei tule näkyviin, vaan sen "
+"ohjelmassa on pieni ilmaisin.\n"
+"Huomaa, voit päättää mitkä sovellukset näkyvät telakassa: vain nykyisen "
+"työpöydän ikkunat, vain piilotetut ikkunat, jotka on erotettu käynnistimellä "
+"jne."
 
 #: ../Help/data/messages:47
 msgid "Closing a window"
-msgstr ""
+msgstr "Ikkunan sulkeminen"
 
 #: ../Help/data/messages:49
 msgid ""
 "You can close a window by middle-clicking on its icon (or from the menu)."
 msgstr ""
+"Voit sulkea ikkunan painamalla hiiren keskipainiketta kuvakkeella (tai "
+"valikossa)."
 
 #: ../Help/data/messages:51
 msgid "Minimizing / restauring a window"
-msgstr ""
+msgstr "Ikkunan pienentäminen / palauttaminen"
 
 #: ../Help/data/messages:53
 msgid ""
 "Clicking on its icon will bring the window on top.\n"
 "When the window has the focus, clicking on its icon will minimize the window."
 msgstr ""
+"Napsauttamalla kuvaketta saat ikkunan eteen.\n"
+"Kun ikkuna on keskittynyt, kuvakkeen napsauttaminen minimoi ikkunan."
 
 #: ../Help/data/messages:55
 msgid "Launching an application several times"
-msgstr ""
+msgstr "Sovelluksen käynnistäminen useita kertoja"
 
 #: ../Help/data/messages:57
 msgid ""
 "You can launch an application several times by SHIFT+clicking on its icon "
 "(or from the menu)."
 msgstr ""
+"Voit käynnistää sovelluksen useita kertoja SHIFT+napsauttamalla kuvaketta "
+"(tai valikossa)."
 
 #: ../Help/data/messages:59
 msgid "Switching between the windows of a same application"
-msgstr ""
+msgstr "Vaihtaminen saman sovelluksen ikkunoiden välillä"
 
 #: ../Help/data/messages:61
 msgid ""
 "With your mouse, scroll up/down on one of the icons of the application. Each "
 "time you scroll, the next/previous window will be presented to you."
 msgstr ""
+"Vieritä hiirellä ylös/alas jonkin sovelluksen kuvakkeista. Joka kerta kun "
+"vierität, seuraava/edellinen ikkuna avautuu sinulle."
 
 #: ../Help/data/messages:63
 msgid "Grouping windows of a given application"
-msgstr ""
+msgstr "Tietyn sovelluksen ikkunoiden ryhmittely"
 
 #: ../Help/data/messages:65
 msgid ""
@@ -1666,28 +1834,35 @@ msgid ""
 "Clicking on the main icon will display all the windows of the application "
 "side-by-side (if your Window Manager is able to do that)."
 msgstr ""
+"Kun sovelluksessa on useita ikkunoita, yksi kuvake kullekin ikkunalle "
+"ilmestyy telakkaan. Nämä ryhmitellään toisiinsa alatelakkaksi.\n"
+"Pääkuvakkeen napsauttaminen näyttää kaikki ikkunat vierekkäin, jos \"Window "
+"Manager\" siihen pystyy."
 
 #: ../Help/data/messages:67
 msgid "Setting a custom icon for an application"
-msgstr ""
+msgstr "Oman kuvakkeen asettaminen sovellukselle"
 
 #: ../Help/data/messages:69
 msgid "See \"Changing an icon's image\" in the \"Icons\" category."
-msgstr ""
+msgstr "Katso \"Kuvakkeen kuvan muuttaminen\" \"Kuvakkeet\" -luokassa."
 
 #: ../Help/data/messages:71
 msgid "Showing windows preview over the icons"
-msgstr ""
+msgstr "Ikkunan esikatselu kuvakkeen päällä"
 
 #: ../Help/data/messages:73
 msgid ""
 "You need to run Compiz, and enable the \"Thumbnail Window Previews\" plug-in "
 "in Compiz. Install \"ccsm\" to be able to configure Compiz."
 msgstr ""
+"Sinun on suoritettava Compiz ja otettava Compizin \"Thumbnail Window "
+"Previews\" -laajennus käyttöön. Asenna \"ccsm\", jotta voit määrittää "
+"Compizin."
 
 #: ../Help/data/messages:77
 msgid "Positionning the dock on the screen"
-msgstr ""
+msgstr "Telakan sijoittaminen näytölle"
 
 #: ../Help/data/messages:79
 msgid ""
@@ -1697,10 +1872,15 @@ msgid ""
 "In the case of a 2nd or 3rd dock, right-click -> Cairo-Dock -> set up this "
 "dock, and then select the position you want."
 msgstr ""
+"Telakka voidaan sijoittaa mihin tahansa näytön kohtaan.\n"
+"Napsauta telakalla hiiren oikea -> Cairo-Dock -> määritä ja valitse sitten "
+"haluamasi sijainti.\n"
+"Jos kyseessä on toinen tai kolmas telakka, napsauta hiiren oikea -> Cairo-"
+"Dock -> aseta tämä telakka ja valitse sitten haluamasi sijainti."
 
 #: ../Help/data/messages:81
 msgid "Hiding the dock to use all the screen"
-msgstr ""
+msgstr "Telakan piilottaminen koko näytön käyttöä varten"
 
 #: ../Help/data/messages:83
 msgid ""
@@ -1711,10 +1891,16 @@ msgid ""
 "In the case of a 2nd or 3rd dock, right-click -> Cairo-Dock -> set up this "
 "dock, and then select the visibility you want."
 msgstr ""
+"Telakka voi piiloua, jotta sovellus saa koko näytön käyttöönsä. Telakka voi "
+"myös olla aina näkyvissä paneelin tavoin.\n"
+"Voit muuttaa tätä napsauttamalla hiiren oikea -> Cairo-Dock -> määritä ja "
+"valitse haluamasi näkyvyys.\n"
+"Jos kyseessä on toinen tai kolmas telakka, napsauta hiiren oikea -> Cairo-"
+"Dock -> määritä tämä telakka ja valitse haluamasi näkyvyys."
 
 #: ../Help/data/messages:87
 msgid "Placing applets on your desktop"
-msgstr ""
+msgstr "Sovelmien sijoittaminen työpöydälle"
 
 #: ../Help/data/messages:89
 msgid ""
@@ -1722,10 +1908,13 @@ msgid ""
 "wherever on your desktop.\n"
 "To detach an applet from the dock, simply drag and drop it outside the dock."
 msgstr ""
+"Sovelmat voivat olla työpöydällä, ovat pieniä ikkunoita, jotka voidaan "
+"sijoittaa mille tahansa työpöydälle.\n"
+"Irrota sovelma telakasta vetämällä ja pudottamalla se telakan ulkopuolelle."
 
 #: ../Help/data/messages:91
 msgid "Moving desklets"
-msgstr ""
+msgstr "Liikkuvat pöytäsovelmat"
 
 #: ../Help/data/messages:93
 msgid ""
@@ -1735,10 +1924,15 @@ msgid ""
 "If you don't want to move it any more, you can lock its position by right-"
 "clicking on it -> \"lock position\". To unlock it, de-select this option."
 msgstr ""
+"Pöytäsovelmat voidaan siirtää minne tahansa hiirellä.\n"
+"Niitä voidaan myös pyörittää vetämällä pieniä nuolia ylös ja vasemmalle "
+"puolelle.\n"
+"Jos et halua siirtää enempää, voit lukita sijainnin napsauttamalla hiiren "
+"oikea -> \"lukitse asento\". Poistamalla tämän avaat lukituksen."
 
 #: ../Help/data/messages:95
 msgid "Placing desklets"
-msgstr ""
+msgstr "Pöytäsovelman sijoittaminen"
 
 #: ../Help/data/messages:97
 msgid ""
@@ -1750,10 +1944,16 @@ msgid ""
 "to the mouse (means you can click on what is behind them), by clicking on "
 "the small bottom-right button."
 msgstr ""
+"Valikossa (napsauta hiiren oikea -> näkyvyys) voit päättää pitää sen muiden "
+"ikkunoiden yläpuolella tai widget-tasossa (Compiz) tai tehdä \"palkin\" "
+"näytön sivuun ja valitsemalla \"varaa tilaa\".\n"
+"Sovelmat, jotka eivät tarvitse vuorovaikutusta (kuten kello), voidaan "
+"asettaa läpinäkyväksi hiirelle (voit klikata, mitä niiden takana on) "
+"napsauttamalla pientä alaoikeaa kulmaa."
 
 #: ../Help/data/messages:99
 msgid "Changing the desklets decorations"
-msgstr ""
+msgstr "Pöytäsovelmien ulkoasun vaihtaminen"
 
 #: ../Help/data/messages:101
 msgid ""
@@ -1761,14 +1961,16 @@ msgid ""
 "applet, go to Desklet, and select the decoration you want (you can provide "
 "your own one)."
 msgstr ""
+"Pöytäsovelmissa voi olla ulkoasuja. Voit muuttaa tätä avaamalla sovelman "
+"asetukset ja valitsemalla haluamasi ulkoasun (voit käyttää myös omia)."
 
 #: ../Help/data/messages:103
 msgid "Useful Features"
-msgstr ""
+msgstr "Hyödyllisiä ominaisuuksia"
 
 #: ../Help/data/messages:105
 msgid "Having a calendar with tasks"
-msgstr ""
+msgstr "Kalenteri, jossa on tehtäviä"
 
 #: ../Help/data/messages:107
 msgid ""
@@ -1779,10 +1981,16 @@ msgid ""
 "When a task has been or is going to be scheduled, the applet will warn you "
 "(15mn before the event, and also 1 day before in the case of an anniversary)."
 msgstr ""
+"Aktivoi sovelma Kello.\n"
+"Näet kalenterin napsauttamalla sitä.\n"
+"Kaksoisnapsauttamalla päivää tulee esiin tehtävien muokkain. Täällä voit "
+"lisätä/poistaa tehtäviä.\n"
+"Kun tehtävä on ajoitettu, sovelma varoittaa sinua (15min ennen tapahtumaa ja "
+"1 päivää ennen vuosipäivää)."
 
 #: ../Help/data/messages:109
 msgid "Having a list of all windows"
-msgstr ""
+msgstr "Luettelo kaikista ikkunoista"
 
 #: ../Help/data/messages:111
 msgid ""
@@ -1793,10 +2001,15 @@ msgid ""
 "to do that.\n"
 "You can bind this action to the middle-click."
 msgstr ""
+"Aktivoi sovelma Valitsin.\n"
+"Napsauttamalla hiiren oikea saat luettelon, joka sisältää kaikki ikkunat "
+"lajiteltuna työpöytien mukaan.\n"
+"Voit myös näyttää ikkunat vierekkäin, jos ikkunanhallinta tukee sitä.\n"
+"Voit kytkeä tämän toiminnon hiiren keskipainikkeeseen."
 
 #: ../Help/data/messages:113
 msgid "Showing all the desktops"
-msgstr ""
+msgstr "Kaikkien työpöytien näyttäminen"
 
 #: ../Help/data/messages:115
 msgid ""
@@ -1804,20 +2017,25 @@ msgid ""
 "Right-click on it -> \"show all the desktop\".\n"
 "You can bind this action to the middle-click."
 msgstr ""
+"Aktivoi sovelma, joko Valitsin tai Näytä työpöytä.\n"
+"Napsauta sitä hiiren oikea -> \"näytä kaikki työpöydät\".\n"
+"Voit kytkeä tämän toiminnon hiiren keskipainikkeeseen."
 
 #: ../Help/data/messages:117
 msgid "Changing the screen resolution"
-msgstr ""
+msgstr "Näytön tarkkuuden muuttaminen"
 
 #: ../Help/data/messages:119
 msgid ""
 "Activate the Show-Desktop applet.\n"
 "Right-click on it -> \"change resolution\" -> select the one you want."
 msgstr ""
+"Aktivoi sovelma Näytä työpytä.\n"
+"Napsauta sitä hiiren oikea -> \"muuta tarkkuutta\" -> valitse haluamasi."
 
 #: ../Help/data/messages:121
 msgid "Locking your session"
-msgstr ""
+msgstr "Istunnon lukitseminen"
 
 #: ../Help/data/messages:123
 msgid ""
@@ -1825,10 +2043,13 @@ msgid ""
 "Right-click on it -> \"lock screen\".\n"
 "You can bind this action to the middle-click."
 msgstr ""
+"Aktivoi sovelma, Uloskirjautuminen.\n"
+"Napsauta sitä hiiren oikea -> \"lukitusnäyttö\".\n"
+"Voit kytkeä tämän toiminnon hiiren keskipainikkeeseen."
 
 #: ../Help/data/messages:125
 msgid "Quick-launching a program from keyboard (replacing ALT+F2)"
-msgstr ""
+msgstr "Ohjelman pikakäynnistys näppäimistöltä (ALT+F2 korvaaminen)"
 
 #: ../Help/data/messages:127
 msgid ""
@@ -1838,10 +2059,15 @@ msgid ""
 "The text is automatically completed (for instance, typing \"fir\" will be "
 "completed into \"firefox\")."
 msgstr ""
+"Aktivoi sovelma, Sovellukset valikko.\n"
+"Napsauta hiiren keskipainike tai hiiren oikea -> \"pikakäynnistys\".\n"
+"Voit tallentaa pikanäppäimen tähän toimintoon.\n"
+"Teksti täytetään automaattisesti (esimerkiksi kirjoittamalla \"fir\" "
+"täydennetään \"firefox\")."
 
 #: ../Help/data/messages:129
 msgid "Turning Composite OFF during games"
-msgstr ""
+msgstr "Koostamisen kytkeminen pois päältä pelien aikana"
 
 #: ../Help/data/messages:131
 msgid ""
@@ -1850,10 +2076,14 @@ msgid ""
 "smooth.\n"
 "Clicking again on it will enable the Composite."
 msgstr ""
+"Aktivoi sovelma, Koostamisen hallinta.\n"
+"Sen napsauttaminen poistaa koostamisen käytöstä, mikä tekee peleistä sulavan "
+"näköisiä.\n"
+"Kun napsautat uudelleen, koostaminen otetaan käyttöön."
 
 #: ../Help/data/messages:133
 msgid "Seeing the hourly weather forecast"
-msgstr ""
+msgstr "Näe tunnin sääennuste"
 
 #: ../Help/data/messages:135
 msgid ""
@@ -1864,10 +2094,16 @@ msgid ""
 "Now, double-clicking on a day will lead you to the web page of the hourly "
 "forecast for this day."
 msgstr ""
+"Aktivoi sovelma, Sääennuste.\n"
+"Avaa asetukset, valitse \"Määritä\" ja kirjoita kaupungin nimi. Paina Enter "
+"ja valitse luettelosta kaupunkisi näkyviin.\n"
+"Vahvista sulkemalla asetusikkuna.\n"
+"Nyt kaksoisnapsauttamalla jotakin päivää, pääset tämän päivän sääennusteen "
+"verkkosivulle."
 
 #: ../Help/data/messages:137
 msgid "Adding a file or a web page into the dock"
-msgstr ""
+msgstr "Tiedoston tai verkkosivun lisääminen telakkaan"
 
 #: ../Help/data/messages:139
 msgid ""
@@ -1878,10 +2114,16 @@ msgid ""
 "You can have several Stacks, and you can drop files/links onto a Stack "
 "directly."
 msgstr ""
+"Vedä ja pudota tiedosto tai html -linkki telakkaan (animoitu nuoli tulee "
+"näkyviin, kun voit pudottaa).\n"
+"Se lisätään pinoon. Pino on alatelakka, joka voi sisältää minkä tahansa "
+"tiedoston tai linkin, jota haluat käyttää nopeasti.\n"
+"Sinulla voi olla useita pinoja ja voit pudottaa tiedostoja/linkkejä suoraan "
+"pinoihin."
 
 #: ../Help/data/messages:141
 msgid "Importing a folder into the dock"
-msgstr ""
+msgstr "Kansion tuominen telakkaan"
 
 #: ../Help/data/messages:143
 msgid ""
@@ -1889,10 +2131,13 @@ msgid ""
 "appear when you can drop).\n"
 "You can choose to import the folder's files or not."
 msgstr ""
+"Vedä kansio ja pudota se telakkaan (animoitu nuoli tulee näkyviin, kun voit "
+"pudottaa).\n"
+"Voit valita, tuodaanko kansion tiedostot vai ei."
 
 #: ../Help/data/messages:145
 msgid "Accessing the recent events"
-msgstr ""
+msgstr "Pääsy viimeaikaisiin tapahtumiin"
 
 #: ../Help/data/messages:147
 msgid ""
@@ -1903,10 +2148,15 @@ msgid ""
 "and documents you have accessed recently, so that you can access them "
 "quickly."
 msgstr ""
+"Aktivoi  Viimeaikaiset sovelma.\n"
+"Tarvitset Zeitgeist -taustapalvelun käyntiin. Asenna se, jos sitä ei ole.\n"
+"Sovelma voi sitten näyttää kaikki tiedostot, kansiot, verkkosivut, "
+"kappaleet, videot ja asiakirjat, joita olet käyttänyt äskettäin, jotta voit "
+"käyttää niitä nopeasti."
 
 #: ../Help/data/messages:149
 msgid "Quickly opening a recent file with a launcher"
-msgstr ""
+msgstr "Viimeaikaisen tiedoston nopea avaaminen käynnistimellä"
 
 #: ../Help/data/messages:151
 msgid ""
@@ -1916,10 +2166,14 @@ msgid ""
 "Now when you right-click on a launcher, all the recent files that can be "
 "opened with this launcher will appear in its menu."
 msgstr ""
+"Aktivoi  Viimeaikaiset sovelma.\n"
+"Tarvitset Zeitgeist -taustapalvelun käyntiin. Asenna se, jos sitä ei ole.\n"
+"Napsauta hiiren oikea käynnistimessä, kaikki viimeisimmät tiedostot, jotka "
+"voidaan avata tällä, näkyvät sen valikossa."
 
 #: ../Help/data/messages:153
 msgid "Accessing disks"
-msgstr ""
+msgstr "Levyjen käyttö"
 
 #: ../Help/data/messages:155
 msgid ""
@@ -1928,10 +2182,15 @@ msgid ""
 "listed in a sub-dock.\n"
 "To unmount a disk before disconnecting it, middle-click on its icon."
 msgstr ""
+"Aktivoi Pikakuvakkeet sovelma.\n"
+"Kaikki levyt (mukaan lukien USB-tikku tai ulkoiset kiintolevyt) listataan "
+"alatelakassa.\n"
+"Voit poistaa levyn napsauttamalla kuvaketta hiiden keskipainikkeella, ennen "
+"sen irrottamista."
 
 #: ../Help/data/messages:157
 msgid "Accessing folder bookmarks"
-msgstr ""
+msgstr "Kansioiden kirjanmerkkien käyttäminen"
 
 #: ../Help/data/messages:159
 msgid ""
@@ -1941,10 +2200,16 @@ msgid ""
 "To add a bookmark, simply drag-and-drop a folder onto the applet's icon.\n"
 "To remove a bookmark, right-click on its icon -> remove"
 msgstr ""
+"Aktivoi Pikakuvakkeet sovelma.\n"
+"Kaikki kansioiden kirjanmerkit (ne, jotka näkyvät Nautiluksessa) listataan "
+"alatelakassa.\n"
+"Lisää kirjanmerkki vetämällä ja pudottamalla kansio sovelman kuvakkeen "
+"päälle.\n"
+"Poista kirjanmerkin, napsauta hiiren oikea kuvakeen päällä -> poista"
 
 #: ../Help/data/messages:161
 msgid "Having multiple instances of an applet"
-msgstr ""
+msgstr "Useita sovelman esiintymiä"
 
 #: ../Help/data/messages:163
 msgid ""
@@ -1955,10 +2220,16 @@ msgid ""
 "example, to have the current time for different countries in your dock or "
 "the weather in different cities."
 msgstr ""
+"Sovelmissa voi olla käynnissä useita esiintymiä samanaikaisesti: Kello, "
+"kalenteri, sää, ...\n"
+"Napsauta hiiren oikeaa sovelman kuvakeella -> \"käynnistä toinen "
+"esiintymä\".\n"
+"Voit määrittää jokaisen esiintymän itsenäisesti. Näin voit esimerkiksi "
+"näyttää eri maiden kellonajan telakassasi tai eri kaupunkien säätä."
 
 #: ../Help/data/messages:165
 msgid "Adding / removing a desktop"
-msgstr ""
+msgstr "Työpöydän lisääminen/poistaminen"
 
 #: ../Help/data/messages:167
 msgid ""
@@ -1966,10 +2237,13 @@ msgid ""
 "Right-click on it -> \"add a desktop\" or \"remove this desktop\".\n"
 "You can even name each of them."
 msgstr ""
+"Aktivoi Vaihtaja sovelma.\n"
+"Napsauta hiiren oikea -> \"Lisää työpöytä\" tai \"Poista tämä työpöytä\".\n"
+"Voit jopa nimetä jokaisen niistä."
 
 #: ../Help/data/messages:169
 msgid "Controling the sound volume"
-msgstr ""
+msgstr "Äänen voimakkuuden säätäminen"
 
 #: ../Help/data/messages:171
 msgid ""
@@ -1978,10 +2252,14 @@ msgid ""
 "Alternatively, you can click on the icon and move the scroll bar.\n"
 "Middle-click will mute/unmute."
 msgstr ""
+"Aktivoi Äänen voimakkuus sovelma.\n"
+"Lisää/vähennä ääntä vierittämällä ylös/alas.\n"
+"Voit myös napsauttaa kuvaketta ja siirtää vierityspalkkia.\n"
+"Keskimmäinen hiiren painike mykistää/poistaa mykistyksen."
 
 #: ../Help/data/messages:173
 msgid "Controling the screen brightness"
-msgstr ""
+msgstr "Näytön kirkkauden säätäminen"
 
 #: ../Help/data/messages:175
 msgid ""
@@ -1989,14 +2267,17 @@ msgid ""
 "Then scroll up/down to increase/decrease the brightness.\n"
 "Alternatively, you can click on the icon and move the scroll bar."
 msgstr ""
+"Aktivoi Taustavalo sovelma.\n"
+"Vieritä ylös/alas lisätäksesi/vähentääksesi kirkkautta.\n"
+"Voit myös napsauttaa kuvaketta ja siirtää vierityspalkkia."
 
 #: ../Help/data/messages:177
 msgid "Troubleshooting"
-msgstr ""
+msgstr "Vianetsintä"
 
 #: ../Help/data/messages:179
 msgid "If you have any question, don't hesitate to ask on our Github Page."
-msgstr ""
+msgstr "Jos sinulla on kysyttävää, älä epäröi kysyä foorumiltamme."
 
 #: ../Help/data/messages:181
 msgid "Discussions"
@@ -2004,15 +2285,15 @@ msgstr ""
 
 #: ../Help/data/messages:183
 msgid "Our wiki can also help you, it is more complete on some points."
-msgstr ""
+msgstr "Wikimme voi myös auttaa sinua, se on täydellisempi joissakin kohdissa."
 
 #: ../Help/data/messages:185
 msgid "Wiki"
-msgstr ""
+msgstr "Wiki"
 
 #: ../Help/data/messages:187
 msgid "I have a black background around my dock."
-msgstr ""
+msgstr "Minulla on musta tausta telakan ympärillä."
 
 #: ../Help/data/messages:189
 msgid ""
@@ -2024,10 +2305,17 @@ msgid ""
 " Open dconf-editor, edit the key 'org.gnome.metacity.compositing-manager' "
 "and set it to 'true'."
 msgstr ""
+"Sinun on otettava koostaminen käyttöön. Voit kayttää esimerkiksi Compiz tai "
+"xcompmgr. \n"
+"Jos käytät XFCE tai KDE, voit ottaa koostamisen käyttöön vain "
+"ikkunanhallinnan asetuksissa.\n"
+"Gnome:ssa, voit ottaa sen käyttöön Metacity:ssä seuraavasti:\n"
+" Avaa dconf-editor, muokkaa avainta \"org.gnome.metacity.compositing-"
+"manager\" ja aseta se arvoon \"true\"."
 
 #: ../Help/data/messages:191
 msgid "My machine is too old to run a composite manager."
-msgstr ""
+msgstr "Koneeni on liian vanha koostamisen suorittamiseen."
 
 #: ../Help/data/messages:193
 msgid ""
@@ -2035,10 +2323,13 @@ msgid ""
 "To get rid of the black background, simply enable the corresponding option "
 "in the end of the «System» module"
 msgstr ""
+"Ei paniikkia, Cairo-Dock voi jäljitellä läpinäkyvyyttä.\n"
+"Pääset eroon mustasta taustasta, otamalla käyttöön vastaava vaihtoehto "
+"lopusta «Järjestelmä» moduuli"
 
 #: ../Help/data/messages:195
 msgid "The dock is horribly slow when I move the mouse into it."
-msgstr ""
+msgstr "Telakka on hirvittävän hidas, kun siirrän hiiren siihen."
 
 #: ../Help/data/messages:197
 msgid ""
@@ -2049,16 +2340,25 @@ msgid ""
 "If the dock is running with OpenGL, try to disable it by launching the dock "
 "with «cairo-dock -c»."
 msgstr ""
+"Jos sinulla on Nvidia GeForce-näytönohjain, asenna uusimmat ajurit, sillä "
+"ensimmäiset olivat todella bugisia.\n"
+"Jos telakka on käynnissä ilman OpenGL:ää, yritä vähentää telakan kuvakkeiden "
+"määrää tai pienentää sen kokoa.\n"
+"Jos telakka on käynnissä OpenGL:llä, yritä poistaa se käytöstä "
+"käynnistämällä komennola \"cairo-dock -c\"."
 
 #: ../Help/data/messages:199
 msgid "I don't have these wonderful effects like fire, cube rotating, etc."
 msgstr ""
+"Minulla ei ole näitä upeita tehosteita, kuten tuli, kuution pyöriminen jne."
 
 #: ../Help/data/messages:201
 msgid ""
 "Tip: You can force OpenGL by launching the dock with «cairo-dock -o».but you "
 "might get a lot of visual artifacts."
 msgstr ""
+"Vinkki: Voit pakottaa OpenGL:n käynnistämällä telakan \"cairo-dock -o\", "
+"mutta saatat saada paljon visuaalista puppua."
 
 #: ../Help/data/messages:203
 msgid ""
@@ -2066,14 +2366,18 @@ msgid ""
 "cards can do this, as can more and more Intel cards. Most ATI cards do not "
 "support OpenGL2.0."
 msgstr ""
+"Tarvitset näytönohjaimen, jonka ajurit tukevat OpenGL 2.0. Useimmat Nvidia-"
+"kortit osaavat tämän, samoin kuin yhä useammat Intel-kortit. ATI-kortit "
+"eivät yleensä tue OpenGL 2.0."
 
 #: ../Help/data/messages:205
 msgid "I don't have any themes in the Theme Manager, except the default one."
 msgstr ""
+"Minulla ei ole teemoja \"Teemojen hallinta\", yhtä oletusta lukuun ottamatta."
 
 #: ../Help/data/messages:207
 msgid "Hint : Up to version 2.1.1-2, wget was used."
-msgstr ""
+msgstr "Vihje: Versioon 2.1.1-2 asti käytettiin wget-ohjelmaa."
 
 #: ../Help/data/messages:209
 msgid ""
@@ -2084,16 +2388,24 @@ msgid ""
 "search on the web how to do it (basically, you have to set up the "
 "\"http_proxy\" environment variable)."
 msgstr ""
+"Varmista, että olet yhteydessä verkkoon.\n"
+" Jos yhteys on hyvin hidas, voit lisätä yhteyden aikakatkaisun "
+"\"Järjestelmä\" -moduulissa.\n"
+" Jos olet välityspalvelimen alla, sinun on määritettävä \"curl\" "
+"käyttääksesi sitä; etsi verkosta miten se tehdään (sinun on määritettävä "
+"\"http_ proxy\" - ympäristömuuttuja)."
 
 #: ../Help/data/messages:211
 msgid "The «netspeed» applet displays 0 even when I'm downloading something"
-msgstr ""
+msgstr "Vaikka latasin jotain «netspeed»  sovelma näyttää 0"
 
 #: ../Help/data/messages:213
 msgid ""
 "Tip: you can run several instances of this applet if you wish to monitor "
 "several interfaces."
 msgstr ""
+"Vinkki: voit käyttää useita tämän sovelman esiintymiä, jos haluat valvoa "
+"useita käyttöliittymiä."
 
 #: ../Help/data/messages:215
 msgid ""
@@ -2103,10 +2415,15 @@ msgid ""
 "«ifconfig» in a terminal, and ignore the «loop» interface. It's probably "
 "something like «eth1», «ath0», or «wifi0».."
 msgstr ""
+"Sinun on kerrottava sovelmalle, mitä liitäntää käytät yhteyden "
+"muodostamiseen verkkoon (oletuksena tämä on «eth0»).\n"
+"Muokaa vain sen kokoonpanoa ja anna käyttöliittymän nimi. Löytääksesi nimen, "
+"kirjoita päätteeseen «ifconfig» ja ohita «loop» liitäntä. Se on luultavasti "
+"\"eth1\", \"ath0\" tai \"wifi0\"."
 
 #: ../Help/data/messages:217
 msgid "The dustbin remains empty even when I delete a file."
-msgstr ""
+msgstr "Roskakori on tyhjä, vaikka poistan tiedoston."
 
 #: ../Help/data/messages:219
 msgid ""
@@ -2115,14 +2432,18 @@ msgid ""
 "probably «~/.locale/share/Trash/files». Be very careful when typing a path "
 "here!!! (do not insert spaces or some invisible caracters)."
 msgstr ""
+"Jos käytät KDE:tä, saatat joutua määrittämään polun roskakorin kansioon.\n"
+"Muokkaa sovelman asetuksia ja täytä roskakorin polku; se luultavasti on \"~/."
+"locale/share/Trash/files\". Ole erittäin varovainen kun kirjoitat polkua "
+"tähän!!! (älä lisää välilyöntejä tai näkymättömiä merkkejä)."
 
 #: ../Help/data/messages:221
 msgid "The Project"
-msgstr ""
+msgstr "Projekti"
 
 #: ../Help/data/messages:223
 msgid "Join the project!"
-msgstr ""
+msgstr "Liity projektiin!"
 
 #: ../Help/data/messages:225
 msgid ""
@@ -2135,15 +2456,23 @@ msgid ""
 "If you made a theme for the dock or one of the applet, and want to share it, "
 "we’ll be happy to integrate it on our server !"
 msgstr ""
+"Arvostamme apuasi! Jos näet virheen, jos uskot, että jotain voisi parantaa,\n"
+"tai unelmoit omasta telakasta, vieraile osoitteessa https://github.com/Cairo-"
+"Dock/cairo-dock-core.\n"
+"Englanti (ja muut!) puhujat ovat tervetulleita, joten älä ujostele ! ;-)\n"
+"\n"
+"Jos teit teeman telakalle tai jollekin sovelmalle ja haluat jakaa sen, "
+"lisäämme sen mielellämme palvelimellemme!"
 
 #: ../Help/data/messages:227
 msgid ""
 "If you wish to develop an applet, a complete documentation is available here."
 msgstr ""
+"Jos haluat kehittää sovelman, täydelliset ohjeet ovat saatavilla täällä."
 
 #: ../Help/data/messages:229
 msgid "Documentation"
-msgstr ""
+msgstr "Ohjeet"
 
 #: ../Help/data/messages:231
 msgid ""
@@ -2151,10 +2480,13 @@ msgid ""
 "or to interact with the dock in any kind of way, a full DBus API is "
 "described here."
 msgstr ""
+"Jos haluat kehittää sovelman Python, Perl tai muulla kielellä, \n"
+"tai toimia telakan kanssa millä tavalla tahansa on täydellinen kuvaus DBus "
+"API:sta tässä."
 
 #: ../Help/data/messages:233
 msgid "DBus API"
-msgstr ""
+msgstr "DBus API"
 
 #: ../Help/data/messages:235
 msgid ""
@@ -2162,14 +2494,17 @@ msgid ""
 "\n"
 "The Cairo-Dock Team"
 msgstr ""
+"\n"
+"\n"
+"Cairo-Dock tiimi"
 
 #: ../Help/data/messages:237
 msgid "Websites"
-msgstr ""
+msgstr "Verkkosivustot"
 
 #: ../Help/data/messages:239
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
-msgstr ""
+msgstr "Ongelmia? Ehdotuksia? Haluatko vain jutella? Tule tänne!"
 
 #: ../Help/data/messages:241
 msgid "Community site"
@@ -2177,15 +2512,15 @@ msgstr "Yhteisösivusto"
 
 #: ../Help/data/messages:247
 msgid "More applets available online!"
-msgstr ""
+msgstr "Lisää sovelmia saatavilla verkossa!"
 
 #: ../Help/data/messages:249
 msgid "Cairo-Dock-Plug-ins-Extras"
-msgstr ""
+msgstr "Cairo-Dock-Plug-ins-Extras"
 
 #: ../Help/data/messages:251
 msgid "Repositories"
-msgstr ""
+msgstr "Asennuslähteet"
 
 #: ../Help/data/messages:253
 msgid ""
@@ -2208,193 +2543,206 @@ msgstr ""
 #: ../Help/data/messages:263 ../Help/data/messages:265 ../data/messages:1035
 #: ../data/messages:1067 ../data/messages:1103
 msgid "Icon"
-msgstr ""
+msgstr "Kuvake"
 
 #: ../Help/data/messages:267
 msgid "Name of the dock it belongs to:"
-msgstr ""
+msgstr "Telakan nimi, jolle se kuuluu:"
 
 #: ../Help/data/messages:269
 msgid "Name of the icon as it will appear in its caption in the dock:"
-msgstr ""
+msgstr "Kuvakkeen nimi sellaisena kuin se näkyy sen kuvatekstinä telakalla:"
 
 #: ../Help/data/messages:271
 msgid "Leave empty to use the default one."
-msgstr ""
+msgstr "Jätä tyhjäksi, jos haluat käyttää oletusta."
 
 #: ../Help/data/messages:273
 msgid "Image filename:"
-msgstr ""
+msgstr "Kuvatiedoston nimi:"
 
 #: ../Help/data/messages:275
 msgid "Set to 0 to use the default applet size"
-msgstr ""
+msgstr "Aseta arvoksi 0 käyttääksesi sovelman oletuskokoa"
 
 #: ../Help/data/messages:277
 msgid "Desired icon size for this applet"
-msgstr ""
+msgstr "Haluttu kuvakkeen koko tälle sovellelle"
 
 #: ../Help/data/messages:279
 msgid "Desklet"
-msgstr ""
+msgstr "Pöytäsovelma"
 
 #: ../Help/data/messages:283
 msgid ""
 "If locked, the desklet cannot be moved by simply dragging it with the left "
 "mouse button. It can still be moved with ALT + left-click."
 msgstr ""
+"Jos pöytäsovelma on lukittu, sitä ei voi siirtää vetämällä ja painamalla "
+"hiiren vasenta painiketta. Sitä voidaan siirtää painamalla ALT+vasen painike."
 
 #: ../Help/data/messages:285
 msgid "Lock position?"
-msgstr ""
+msgstr "Lukitaanko paikka?"
 
 #: ../Help/data/messages:287
 msgid ""
 "Depending on your WindowManager, you may be able to resize this with ALT + "
 "middle-click or ALT + left-click."
 msgstr ""
+"Riippuen ikkunanhallinnasta (WM), voit ehkä muuttaa tämän kokoa painamalla "
+"ALT+keskipainike tai ALT+vasen painike."
 
 #: ../Help/data/messages:289
 msgid "Desklet dimensions (width x height):"
-msgstr ""
+msgstr "Pöytäsovelman mitat (leveys x korkeus):"
 
 #: ../Help/data/messages:291
 msgid ""
 "Depending on your WindowManager, you may be able to move this with ALT + "
 "left-click.. Negative values are counted from the right/bottom of the screen"
 msgstr ""
+"Riippuen Ikkunanhallinnasta (WM) saatat pystyä siirtämään tätä painamalla "
+"ALT+vasen painike. Negatiiviset arvot lasketaan näytön oikeasta/alareunasta."
 
 #: ../Help/data/messages:293
 msgid "Desklet position (x, y):"
-msgstr ""
+msgstr "Pöytäsovelman sijainti (x, y):"
 
 #: ../Help/data/messages:295
 msgid ""
 "You can quickly rotate the desklet with the mouse, by dragging the little "
 "buttons on its left and top sides."
 msgstr ""
+"Voit pyörittää nopeasti pöytäsovelmaa hiirellä vetämällä sen yläreunasta "
+"olevia pieniä painikkeita."
 
 #: ../Help/data/messages:297
 msgid "Rotation:"
-msgstr ""
+msgstr "Pyöritys:"
 
 #: ../Help/data/messages:301
 msgid "Is detached from the dock"
-msgstr ""
+msgstr "Irrotettu telakasta"
 
 #: ../Help/data/messages:303
 msgid ""
 "for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
 "(class=Cairo-dock & type=Utility)"
 msgstr ""
+"määritä Compiz Fusionin \"widget layer\" toiminta Compizissa seuraavasti: "
+"(class=Cairo-dock & type=Utility)"
 
 #: ../Help/data/messages:305 ../data/messages:21 ../data/messages:59
 #: ../data/messages:193 ../data/messages:253 ../data/messages:927
 msgid "Visibility:"
-msgstr ""
+msgstr "Näkyvyys:"
 
 #: ../Help/data/messages:311
 msgid "Keep below"
-msgstr ""
+msgstr "Pidä alla"
 
 #: ../Help/data/messages:313
 msgid "Keep on widget layer"
-msgstr ""
+msgstr "Pidä sovelman tasolla"
 
 #: ../Help/data/messages:317
 msgid "Should be visible on all desktops?"
-msgstr ""
+msgstr "Pitäisikö näkyä kaikilla työpöydillä?"
 
 #: ../Help/data/messages:319 ../data/messages:595
 msgid "Decorations"
-msgstr ""
+msgstr "Ulkoasut"
 
 #: ../Help/data/messages:321
 msgid "Choose 'Custom decorations' to define your own decorations below."
-msgstr ""
+msgstr "Valitse \"Muokatut ulkoasut\" ja määritelle omat ulkoasut alla."
 
 #: ../Help/data/messages:323
 msgid "Choose a decoration theme for this desklet:"
-msgstr ""
+msgstr "Valitse tämän pöytäsovelman ulkoasun teema:"
 
 #: ../Help/data/messages:325
 msgid ""
 "Image to be displayed below drawings, e.g. a frame. Leave empty for no image."
 msgstr ""
+"Piirron alla esitettävä kuva, esim. kehys. Jätä tyhjäksi, jos et halua kuvaa."
 
 #: ../Help/data/messages:327
 msgid "Background image:"
-msgstr ""
+msgstr "Taustakuva:"
 
 #: ../Help/data/messages:329
 msgid "Background transparency:"
-msgstr ""
+msgstr "Taustan läpinäkyvyys:"
 
 #: ../Help/data/messages:331
 msgid "in pixels. Use this to adjust the left position of drawings."
-msgstr ""
+msgstr "pikseleinä. Käytä tätä säätääksesi piirron vasenta sijaintia."
 
 #: ../Help/data/messages:333
 msgid "Left offset:"
-msgstr ""
+msgstr "Siirtymä vasemmalle:"
 
 #: ../Help/data/messages:335
 msgid "in pixels. Use this to adjust the top position of drawings."
-msgstr ""
+msgstr "pikseleinä. Käytä tätä säätääksesi piirron yläsijaintia."
 
 #: ../Help/data/messages:337
 msgid "Top offset:"
-msgstr ""
+msgstr "Siirtymä ylhäälle:"
 
 #: ../Help/data/messages:339
 msgid "in pixels. Use this to adjust the right position of drawings."
-msgstr ""
+msgstr "pikseleinä. Käytä tätä säätääksesi piirron oikeaa sijaintia."
 
 #: ../Help/data/messages:341
 msgid "Right offset:"
-msgstr ""
+msgstr "Siirtymä oikealle:"
 
 #: ../Help/data/messages:343
 msgid "in pixels. Use this to adjust the bottom position of drawings."
-msgstr ""
+msgstr "pikseleinä. Käytä tätä säätääksesi piirron alasijaintia."
 
 #: ../Help/data/messages:345
 msgid "Bottom offset:"
-msgstr ""
+msgstr "Siirtymä alhaalle:"
 
 #: ../Help/data/messages:347
 msgid ""
 "Image to be displayed above the drawings, e.g. a reflection. Leave empty for "
 "no image."
 msgstr ""
+"Piirron yläpuolella näytettävä kuva, esim. heijastus. Jätä tyhjäksi, jos et "
+"halua kuvaa."
 
 #: ../Help/data/messages:349
 msgid "Foreground image:"
-msgstr ""
+msgstr "Edustan kuva:"
 
 #: ../Help/data/messages:351
 msgid "Foreground tansparency:"
-msgstr ""
+msgstr "Edustan läpinäkyvyys:"
 
 #: ../data/messages:1 ../data/messages:903
 msgid "Behavior"
-msgstr ""
+msgstr "Toiminta"
 
 #: ../data/messages:3 ../data/messages:155 ../data/messages:905
 msgid "Position on the screen"
-msgstr ""
+msgstr "Sijainti näytöllä"
 
 #: ../data/messages:5 ../data/messages:157 ../data/messages:907
 msgid "Choose which border of the screen the dock will be placed on:"
-msgstr ""
+msgstr "Valitse, mihin näytön reunaan telakka sijoitetaan:"
 
 #: ../data/messages:15 ../data/messages:175 ../data/messages:921
 msgid "Multi-screens"
-msgstr ""
+msgstr "Useita näyttöjä"
 
 #: ../data/messages:17 ../data/messages:189
 msgid "Visibility of the main dock"
-msgstr ""
+msgstr "Telakan näkyvyys"
 
 #: ../data/messages:19 ../data/messages:191 ../data/messages:925
 msgid ""
@@ -2404,38 +2752,43 @@ msgid ""
 "When the dock pops up on shortcut, it will appear at the position of your "
 "mouse. The rest of the time, it stays invisible, thus acting like a menu."
 msgstr ""
+"Tilat lajitellaan paljon esilllä ja vähemmän esillä.\n"
+"Kun telakka on piilossa tai ikkunan alla, kutsut sen takaisin asettamalla "
+"hiiri näytön reunaan.\n"
+"Kun telakka ponnahtaa esiin pikanäppäimellä, se tulee näkyviin hiiren "
+"kohdalle. Muun ajan se pysyy piilossa, kuin valikko."
 
 #: ../data/messages:25 ../data/messages:197 ../data/messages:931
 msgid "Reserve space for the dock"
-msgstr ""
+msgstr "Varaa tilaa telakalle"
 
 #: ../data/messages:27 ../data/messages:199 ../data/messages:933
 msgid "Keep the dock below"
-msgstr ""
+msgstr "Pidä telakka alla"
 
 #: ../data/messages:29 ../data/messages:201 ../data/messages:935
 msgid "Hide the dock when it overlaps the current window"
-msgstr ""
+msgstr "Piilota telakka, kun se peittää nykyisen ikkunan"
 
 #: ../data/messages:31 ../data/messages:203 ../data/messages:937
 msgid "Hide the dock whenever it overlaps any window"
-msgstr ""
+msgstr "Piilota telakka aina, kun se peittää minkä tahansa ikkunan"
 
 #: ../data/messages:33 ../data/messages:205 ../data/messages:939
 msgid "Keep the dock hidden"
-msgstr ""
+msgstr "Pidä telakka piilossa"
 
 #: ../data/messages:35 ../data/messages:207
 msgid "Pop-up on shortcut"
-msgstr ""
+msgstr "Ponnahdusikkunan pikanäppäin"
 
 #: ../data/messages:37 ../data/messages:209
 msgid "Effect used to hide the dock:"
-msgstr ""
+msgstr "Tehoste telakan piilottamiseen:"
 
 #: ../data/messages:39 ../data/messages:71 ../data/messages:211
 msgid "None"
-msgstr ""
+msgstr "Ei mitään"
 
 #: ../data/messages:51 ../data/messages:245
 msgid ""
@@ -2443,28 +2796,30 @@ msgid ""
 "your mouse. The rest of the time, it stays invisible, thus acting like a "
 "menu."
 msgstr ""
+"Kun painat pikanäppäintä, telakka näyttäytyy hiiren kohdalta. Muun ajan se "
+"pysyy näkymättömänä, toimii kuten valikko."
 
 #: ../data/messages:53 ../data/messages:247
 msgid "Keyboard shortcut to pop-up the dock:"
-msgstr ""
+msgstr "Pikanäppäin telakan avaamiseksi:"
 
 #: ../data/messages:55
 msgid "Visibility of sub-docks"
-msgstr ""
+msgstr "Alatelakan näkyvyys"
 
 #: ../data/messages:57 ../data/messages:251
 msgid ""
 "they will appear either when you click or when you linger over the icon "
 "pointing on it."
-msgstr ""
+msgstr "ne näkyvät joko kun napsautat tai kun viivyt kuvakkeen päällä."
 
 #: ../data/messages:61 ../data/messages:255
 msgid "Appear on mouse over"
-msgstr ""
+msgstr "Näkyy hiirellä"
 
 #: ../data/messages:63 ../data/messages:257
 msgid "Appear on click"
-msgstr ""
+msgstr "Näkyy napsautuksella"
 
 #: ../data/messages:67
 msgid ""
@@ -2476,135 +2831,142 @@ msgid ""
 "Separated   : Separate the taskbar from the launchers and only show windows "
 "that are on the current desktop."
 msgstr ""
+"Ei mitään: Älä näytä avattuja ikkunoita telakassa.\n"
+"Minimaalinen: Sekoita sovelluksia, näytä kaikki muut ikkunat vain, jos ne on "
+"minimoitu (kuten MacOSX).\n"
+"Yhdistetty: Sekoita sovelluksia, näytä kaikki muut ikkunat ja ryhmittele "
+"ikkunat alatelakalla (oletus).\n"
+"Erotettu: Erota tehtäväpalkki käynnistyvistä ohjelmista ja näytä vain "
+"ikkunat, jotka ovat nykyisellä työpöydällä."
 
 #: ../data/messages:69
 msgid "Behaviour of the Taskbar:"
-msgstr ""
+msgstr "Tehtäväpalkin toiminta:"
 
 #: ../data/messages:73
 msgid "Minimalistic"
-msgstr ""
+msgstr "Minimaalinen"
 
 #: ../data/messages:75
 msgid "Integrated"
-msgstr ""
+msgstr "Yhdistetty"
 
 #: ../data/messages:77
 msgid "Separated"
-msgstr ""
+msgstr "Erotettu"
 
 #: ../data/messages:79 ../data/messages:283
 msgid "Place new icons"
-msgstr ""
+msgstr "Aseta uudet kuvakkeet"
 
 #: ../data/messages:81 ../data/messages:285
 msgid "At the beginning of the dock"
-msgstr ""
+msgstr "Telakan alkuun"
 
 #: ../data/messages:83 ../data/messages:287
 msgid "Before the launchers"
-msgstr ""
+msgstr "Ennen käynnistimiä"
 
 #: ../data/messages:85 ../data/messages:289
 msgid "After the launchers"
-msgstr ""
+msgstr "Käynnistimien jälkeen"
 
 #: ../data/messages:87 ../data/messages:291
 msgid "At the end of the dock"
-msgstr ""
+msgstr "Telakan lopussa"
 
 #: ../data/messages:89 ../data/messages:293
 msgid "After a given icon"
-msgstr ""
+msgstr "Annetun kuvakkeen jälkeen"
 
 #: ../data/messages:91 ../data/messages:295
 msgid "Place new icons after this one"
-msgstr ""
+msgstr "Sijoita uudet kuvakkeet tämän jälkeen"
 
 #: ../data/messages:93
 msgid "Icons' animations and effects"
-msgstr ""
+msgstr "Kuvakkeiden animaatiot ja tehosteet"
 
 #: ../data/messages:95
 msgid "On mouse hover:"
-msgstr ""
+msgstr "Hiiren osoittimella:"
 
 #: ../data/messages:97
 msgid "On click:"
-msgstr "Klikattaessa:"
+msgstr "Kun napsautat:"
 
 #: ../data/messages:99
 msgid "On appearance/disappearance:"
-msgstr ""
+msgstr "Saapumisen/katoamisen yhteydessä:"
 
 #: ../data/messages:101
 msgid "Evaporate"
-msgstr ""
+msgstr "Haihtuu"
 
 #: ../data/messages:105
 msgid "Explode"
-msgstr ""
+msgstr "Hajoaa"
 
 #: ../data/messages:107
 msgid "Break"
-msgstr ""
+msgstr "Hajoaa"
 
 #: ../data/messages:109
 msgid "Black Hole"
-msgstr ""
+msgstr "Musta aukko"
 
 #: ../data/messages:111
 msgid "Random"
-msgstr ""
+msgstr "Satunnainen"
 
 #: ../data/messages:121 ../data/messages:559 ../data/messages:699
 #: ../data/messages:813 ../data/messages:847 ../data/messages:885
 msgid "Custom"
-msgstr ""
+msgstr "Mukautettu"
 
 #: ../data/messages:123 ../data/messages:753
 msgid "Colour"
-msgstr ""
+msgstr "Väri"
 
 #: ../data/messages:127
 msgid "Choose a theme of icons :"
-msgstr ""
+msgstr "Valitse kuvakkeiden teema:"
 
 #: ../data/messages:129 ../data/messages:955
 msgid "Icons size:"
-msgstr ""
+msgstr "Kuvakkeiden koko:"
 
 #: ../data/messages:131 ../data/messages:961
 msgid "Very small"
-msgstr ""
+msgstr "Hyvin pieni"
 
 #: ../data/messages:133 ../data/messages:963
 msgid "Small"
-msgstr ""
+msgstr "Pieni"
 
 #: ../data/messages:135 ../data/messages:965
 msgid "Medium"
-msgstr ""
+msgstr "Keskikoko"
 
 #: ../data/messages:137 ../data/messages:967
 msgid "Big"
-msgstr ""
+msgstr "Suuri"
 
 #: ../data/messages:139 ../data/messages:969
 msgid "Very Big"
-msgstr ""
+msgstr "Erittäin suuri"
 
 #: ../data/messages:143 ../data/messages:535
 msgid "Choose the default view for main docks :"
-msgstr ""
+msgstr "Valitse oletusnäkymä telakoille:"
 
 #: ../data/messages:145 ../data/messages:539
 msgid "You can overwrite this parameter for each sub-dock."
-msgstr ""
+msgstr "Voit korvata tämän muuttujan jokaiselle alatelakalle."
 
 #: ../data/messages:147 ../data/messages:541
 msgid "Choose the default view for sub-docks :"
-msgstr ""
+msgstr "Valitse oletusnäkymä alatelakoille:"
 
 #: ../data/messages:151
 msgid ""
@@ -2613,6 +2975,9 @@ msgid ""
 "Double-click on a line, and press the shortkey you want to use for the "
 "corresponding action."
 msgstr ""
+"Monet sovelmat tarjoavat pikanäppäimiä. Heti kun sovelma otetaan käyttöön, "
+"sen pikanäppäimet tulevat saataville.\n"
+"Kaksoisnapsauta riviä ja paina pikanäppäin, jota haluat käyttää."
 
 #: ../data/messages:167 ../data/messages:917
 msgid ""
@@ -2622,112 +2987,122 @@ msgid ""
 "vertical. When set to 0.5, it will position itself relative to the middle of "
 "the screen's edge."
 msgstr ""
+"Kun asetus on 0, telakka sijoittuu suhteessa vasempaan kulmaan vaakasuorassa "
+"ja yläkulmaan, jos se on pystysuora. Kun asetus on 1, se sijoittuu suhteessa "
+"oikeaan kulmaan vaakasuorassa ja alakulmaan, jos se on pystysuora. Kun arvo "
+"on 0,5, se sijoittuu näytöllä reunan keskikohtaan."
 
 #: ../data/messages:169 ../data/messages:919
 msgid "Relative alignment:"
-msgstr ""
+msgstr "Suhteellinen kohdistus:"
 
 #: ../data/messages:177 ../data/messages:941
 msgid "Offset from the screen's edge"
-msgstr ""
+msgstr "Poikkeama näytön reunasta"
 
 #: ../data/messages:179 ../data/messages:943
 msgid ""
 "Gap from the absolute position on the screen's edge, in pixels. You can also "
 "move the dock by holding the ALT or CTRL key and the left mouse button."
 msgstr ""
+"Ero sijainnista koko näytön reunassa pikseleinä. Voit myös siirtää telakkaa "
+"pitämällä ALT- tai CTRL-näppäintä ja painamalla hiiren vasenta painiketta."
 
 #: ../data/messages:181 ../data/messages:945
 msgid "Lateral offset:"
-msgstr ""
+msgstr "Sivusuuntainen poikkeama:"
 
 #: ../data/messages:183 ../data/messages:947
 msgid ""
 "in pixels. You can also move the dock by holding the ALT or CTRL key and the "
 "left mouse button."
 msgstr ""
+"pikseleinä. Voit myös siirtää telakkaa pitämällä ALT- tai CTRL-näppäintä ja "
+"painamalla hiiren vasenta painiketta."
 
 #: ../data/messages:185 ../data/messages:949
 msgid "Distance to the screen edge:"
-msgstr ""
+msgstr "Etäisyys näytön reunaan:"
 
 #: ../data/messages:187
 msgid "Accessibility"
-msgstr ""
+msgstr "Esteettömyys"
 
 #: ../data/messages:223
 msgid "The higher, the faster the dock will appear"
-msgstr ""
+msgstr "Mitä korkeampi, sitä nopeammin telakka tulee näkyviin"
 
 #: ../data/messages:225
 msgid "Callback sensitivity:"
-msgstr ""
+msgstr "Takaisinkutsun herkkyys:"
 
 #: ../data/messages:227
 msgid "high"
-msgstr ""
+msgstr "korkea"
 
 #: ../data/messages:229
 msgid "low"
-msgstr ""
+msgstr "matala"
 
 #: ../data/messages:231
 msgid "How to call the dock back:"
-msgstr ""
+msgstr "Kuinka telakka kutsutaan takaisin:"
 
 #: ../data/messages:233
 msgid "Hit the screen's border"
-msgstr ""
+msgstr "Osuma näytön reunaa"
 
 #: ../data/messages:235
 msgid "Hit where the dock is"
-msgstr ""
+msgstr "Osuma sinne, missä telakka on"
 
 #: ../data/messages:237
 msgid "Hit the screen's corner"
-msgstr ""
+msgstr "Osuma näytön kulmaan"
 
 #: ../data/messages:239
 msgid "Hit a zone"
-msgstr ""
+msgstr "Osuma alueeseen"
 
 #: ../data/messages:241
 msgid "Size of the zone :"
-msgstr ""
+msgstr "Alueen koko:"
 
 #: ../data/messages:243
 msgid "Image to display on the zone :"
-msgstr ""
+msgstr "Alueella näytettävä kuva:"
 
 #: ../data/messages:249
 msgid "Sub-docks' visibility"
-msgstr ""
+msgstr "Alatelakan näkyvyys"
 
 #: ../data/messages:259 ../data/messages:263
 msgid "in ms."
-msgstr ""
+msgstr "ms."
 
 #: ../data/messages:261
 msgid "Delay before displaying a sub-dock:"
-msgstr ""
+msgstr "Viive ennen alatelakan näyttämistä:"
 
 #: ../data/messages:265
 msgid "Delay before leaving a sub-dock takes effect:"
-msgstr ""
+msgstr "Viive ennen poistumista alatelakalta:"
 
 #: ../data/messages:267
 msgid "TaskBar"
-msgstr ""
+msgstr "Tehtäväpalkki"
 
 #: ../data/messages:271
 msgid ""
 "Cairo-Dock will then act as your taskbar. It is recommended to remove any "
 "other taskbars."
 msgstr ""
+"Cairo-Dock toimii sinun tehtäväpalkkina. Suositeltavaa poistaa kaikki muut "
+"tehtäväpalkit."
 
 #: ../data/messages:273
 msgid "Show currently opened applications in the dock?"
-msgstr ""
+msgstr "Näytetäänkö telakassa avoinna olevat sovellukset?"
 
 #: ../data/messages:275
 msgid ""
@@ -2735,44 +3110,49 @@ msgid ""
 "displays a marker on icons to indicate this. You can launch other occurences "
 "of the program with SHIFT+click."
 msgstr ""
+"Sallii käynnistimen toimia sovelluksena, kun ohjelmat ovat käynnissä ja "
+"näyttää merkin kuvakkeissa. Voit käynnistää muita ohjelman esiintymiä "
+"painamalla SHIFT+napsautus."
 
 #: ../data/messages:277
 msgid "Mix launchers and applications"
-msgstr ""
+msgstr "Sekoita käynnistimet ja sovellukset"
 
 #: ../data/messages:279
 msgid "Only show applications on current desktop"
-msgstr ""
+msgstr "Näytä sovellukset vain nykyisellä työpöydällä"
 
 #: ../data/messages:281
 msgid "Only show icons whose windows are minimised"
-msgstr ""
+msgstr "Näytä vain kuvakkeet, joiden ikkunat on pienennetty"
 
 #: ../data/messages:297
 msgid "Automatically add a separator"
-msgstr ""
+msgstr "Lisää erotin automaattisesti"
 
 #: ../data/messages:299
 msgid ""
 "This allows you to group all the windows of a given application into a "
 "unique sub-dock, and to act on all of the windows at the same time."
 msgstr ""
+"Tämän avulla voit ryhmitellä kaikki tietyn sovelluksen ikkunat yksilölliseen "
+"alatelakkaan ja toimia kaikissa ikkunoissa samaan aikaan."
 
 #: ../data/messages:301
 msgid "Group windows from the same application in a sub-dock ?"
-msgstr ""
+msgstr "Ryhmitätkö samasta sovelluksesta ikkunat alatelakkaan?"
 
 #: ../data/messages:303 ../data/messages:313
 msgid "Enter the class of the applications, separated by a semi-colon ';'"
-msgstr ""
+msgstr "Anna sovellusten luokka puolipisteellä erotettuna \";\""
 
 #: ../data/messages:305 ../data/messages:315
 msgid "\t\tExcept the following classes:"
-msgstr ""
+msgstr "\t\tPaitsi seuraavat luokat:"
 
 #: ../data/messages:307
 msgid "Representation"
-msgstr ""
+msgstr "Edustus"
 
 #: ../data/messages:309
 msgid ""
@@ -2780,127 +3160,138 @@ msgid ""
 "set, the same icon as the corresponding launcher will be used for each "
 "application."
 msgstr ""
+"Jos ei ole asetettu, käytetään X:n kullekin sovellukselle antamaa kuvaketta. "
+"Jos asetettu, jokaisessa sovelluksessa käytetään käynnistimen samaa "
+"kuvaketta."
 
 #: ../data/messages:311
 msgid "Overwrite the X icon with the launchers' icon?"
-msgstr ""
+msgstr "Korvataanko X:n kuvake käynnistimen kuvakkeella?"
 
 #: ../data/messages:317
 msgid ""
 "A composite manager is required to display the thumbnail.\n"
 "OpenGL is required to draw the icon bent backwards."
 msgstr ""
+"Koostinta tarvitaan pikkukuvan näyttämiseen.\n"
+"OpenGL vaaditaan taaksepäin taivutetun kuvakkeen piirtämiseen."
 
 #: ../data/messages:319
 msgid "How to draw minimised windows ?"
-msgstr ""
+msgstr "Kuinka piirtää pienennetyt ikkunat?"
 
 #: ../data/messages:321
 msgid "Make the icon transparent"
-msgstr ""
+msgstr "Tee kuvakkeesta läpikuultava"
 
 #: ../data/messages:323
 msgid "Show a window's thumbnail"
-msgstr ""
+msgstr "Näytä ikkunan pikkukuva"
 
 #: ../data/messages:325
 msgid "Draw it bent backwards"
-msgstr ""
+msgstr "Piirrä se taivutettuna taaksepäin"
 
 #: ../data/messages:327
 msgid "Transparency of icons whose window is minimised:"
-msgstr ""
+msgstr "Läpikuultavuus kuvakkeille, joiden ikkuna on minimoitu:"
 
 #: ../data/messages:329 ../data/messages:483 ../data/messages:609
 #: ../data/messages:635 ../data/messages:725
 msgid "Opaque"
-msgstr ""
+msgstr "Läpinäkymätön"
 
 #: ../data/messages:331 ../data/messages:481 ../data/messages:607
 #: ../data/messages:633 ../data/messages:723
 msgid "Transparent"
-msgstr ""
+msgstr "Läpikuultava"
 
 #: ../data/messages:333
 msgid "Play a short animation of the icon when its window becomes active"
-msgstr ""
+msgstr "Toista lyhyt animaatio kuvakkeesta, kun sen ikkuna aktivoituu"
 
 #: ../data/messages:335
 msgid "\"...\" will be added at the end if the name is too long."
-msgstr ""
+msgstr "\"...\" lisätään loppuun, jos nimi on liian pitkä."
 
 #: ../data/messages:337
 msgid "Maximum number of caracters in application name:"
-msgstr ""
+msgstr "Merkkien enimmäismäärä sovelluksen nimessä:"
 
 #: ../data/messages:339
 msgid "Interaction"
-msgstr ""
+msgstr "Vuorovaikutus"
 
 #: ../data/messages:341
 msgid "Action on middle-click on the related application"
-msgstr ""
+msgstr "Toiminta, kun napsautat hiiren keskimmäisellä sovellusta"
 
 #: ../data/messages:343
 msgid "Nothing"
-msgstr ""
+msgstr "Ei mitään"
 
 #: ../data/messages:347
 msgid "Minimize"
-msgstr ""
+msgstr "Minimoi"
 
 #: ../data/messages:349
 msgid "Launch new"
-msgstr ""
+msgstr "Käynnistä uusi"
 
 #: ../data/messages:351
 msgid "Lower"
-msgstr ""
+msgstr "Siirrä taakse"
 
 #: ../data/messages:353
 msgid "This is the default behaviour of most taskbars."
-msgstr ""
+msgstr "Tämä on useimpien tehtäväpalkkien oletus."
 
 #: ../data/messages:355
 msgid ""
 "Minimise the window when its icon is clicked, if it was already the active "
 "window ?"
 msgstr ""
+"Minimoi ikkuna, kun sen kuvaketta napsautetaan, jos se oli jo aktiivinen "
+"ikkuna?"
 
 #: ../data/messages:357
 msgid "Only if your Window Manager supports it."
-msgstr ""
+msgstr "Vain jos ikkunanhallinta (WM) tukee sitä."
 
 #: ../data/messages:359
 msgid ""
 "Present windows preview on click when several windows are grouped togather"
 msgstr ""
+"Näytä ikkunan esikatselu napsauttamalla, kun useita ikkunoita on ryhmitelty "
+"yhteen"
 
 #: ../data/messages:361
 msgid "Highlight applications requiring your attention with a dialog bubble"
-msgstr ""
+msgstr "Korosta huomiotasi vaativat sovellukset valintakuplalla"
 
 #: ../data/messages:363
 msgid "in seconds"
-msgstr ""
+msgstr "sekunneissa"
 
 #: ../data/messages:365
 msgid "Duration of the dialog:"
-msgstr ""
+msgstr "Valintaikkunan kesto:"
 
 #: ../data/messages:367
 msgid ""
 "It will notify you even if, for instance, you are watching a movie in full "
 "screen or you are on another desktop.\n"
 msgstr ""
+"Antaa ilmoituksen, esimerkiksi kun katsot elokuvaa koko näytössä tai olet "
+"toisella työpöydällä.\n"
 
 #: ../data/messages:369
 msgid "Force the following applications to demand your attention"
-msgstr ""
+msgstr "Pakota seuraavat sovellukset vaatimaan huomiotasi"
 
 #: ../data/messages:371
 msgid "Highlight applications demanding your attention with an animation"
-msgstr ""
+msgstr "Korosta huomioasi vaativia sovelluksia animaatiolla"
 
 #: ../data/messages:375
 msgid "Enable new code paths on X11 to test for regressions."
@@ -2912,51 +3303,57 @@ msgstr ""
 
 #: ../data/messages:379
 msgid "Animations speed"
-msgstr ""
+msgstr "Animaation nopeus"
 
 #: ../data/messages:381
 msgid "Animate sub-docks when they appear"
-msgstr ""
+msgstr "Animoi alatelakat, kun ne ilmestyvät"
 
 #: ../data/messages:383
 msgid ""
 "Icons will appear folded on themselves and will then unfold until they fill "
 "the whole dock. The smaller this value, the faster this will be."
 msgstr ""
+"Kuvakkeet ilmestyvät taitettuna ja avautuvat sitten, kunnes ne täyttävät "
+"koko telakan. Mitä pienempi tämä arvo on, sitä nopeampi."
 
 #: ../data/messages:385
 msgid "Animation unfolding duration:"
-msgstr ""
+msgstr "Animaation avautumisen kesto:"
 
 #: ../data/messages:387 ../data/messages:395 ../data/messages:399
 #: ../data/messages:407 ../data/messages:411
 msgid "fast"
-msgstr ""
+msgstr "nopea"
 
 #: ../data/messages:389 ../data/messages:397 ../data/messages:401
 #: ../data/messages:409 ../data/messages:413
 msgid "slow"
-msgstr ""
+msgstr "hidas"
 
 #: ../data/messages:391 ../data/messages:403
 msgid "The more there are, the slower it will be"
-msgstr ""
+msgstr "Mitä enemmän niitä on, sitä hitaampaa"
 
 #: ../data/messages:393
 msgid "Number of steps in the zoom animation (grow/shrink):"
-msgstr ""
+msgstr "Skaavassa animaatiossa olevien vaiheiden määrä (kasvaa/pienenee):"
 
 #: ../data/messages:405
 msgid "Number of steps in the auto-hide animation (move up/move down):"
 msgstr ""
+"Automaattisen piilotuksen animaation vaiheiden määrä (siirrä ylös/siirrä "
+"alas):"
 
 #: ../data/messages:415
 msgid "Refresh rate"
-msgstr ""
+msgstr "Virkistystaajuus"
 
 #: ../data/messages:417 ../data/messages:421 ../data/messages:425
 msgid "in Hz. This is to adjust behaviour relative to your CPU power."
 msgstr ""
+"hertseinä (HZ). Tämän tarkoitus on säätää toiminta suhteessa suorittimen "
+"tehoon."
 
 #: ../data/messages:419
 msgid "Refresh rate when moving cursor into the dock:"
@@ -2964,25 +3361,27 @@ msgstr ""
 
 #: ../data/messages:423
 msgid "Animation frequency for the OpenGL backend:"
-msgstr ""
+msgstr "OpenGL-taustaosan animaation taajuus:"
 
 #: ../data/messages:427
 msgid "Animation frequency for the Cairo backend:"
-msgstr ""
+msgstr "Cario-taustaosan animaation taajuus:"
 
 #: ../data/messages:429
 msgid ""
 "The transparency gradation pattern will then be re-calculated in real time. "
 "May need more CPU power."
 msgstr ""
+"Tämän jälkeen läpinäkyvyyden porrastusmalli lasketaan reaaliaikaisesti "
+"uudelleen. Voi tarvita enemmän suoritintehoa."
 
 #: ../data/messages:431
 msgid "Reflections should be calculated in real-time?"
-msgstr ""
+msgstr "Pitäisikö heijastukset laskea reaaliajassa?"
 
 #: ../data/messages:433
 msgid "Connection to the Internet"
-msgstr ""
+msgstr "Yhteys Internetiin"
 
 #: ../data/messages:435
 msgid ""
@@ -2990,183 +3389,193 @@ msgid ""
 "This only limits the connection phase,  once the dock has connected this "
 "option is of no more use."
 msgstr ""
+"Enimmäisaika sekunteina, jonka sallit yhteyden muodostamiseen. Tämä "
+"rajoittaa vain yhteysvaihetta. Kun telakka on liitetty, tästä ei ole enää "
+"hyötyä."
 
 #: ../data/messages:437
 msgid "Connection timeout :"
-msgstr ""
+msgstr "Yhteyden aikakatkaisu:"
 
 #: ../data/messages:439
 msgid ""
 "Maximum time in seconds that you allow the whole operation to last. Some "
 "themes can be up to a few MB."
 msgstr ""
+"Maksimiaika sekunneissa, jonka annat toiminnon kestää. Jotkut teemat voivat "
+"olla suuria, jopa muutama Mt."
 
 #: ../data/messages:441
 msgid "Maximum time to download a file:"
-msgstr ""
+msgstr "Maksimiaika tiedoston lataamiseen:"
 
 #: ../data/messages:443
 msgid "Use this option if you experience problems to connect."
-msgstr ""
+msgstr "Käytä tätä vaintaa, jos sinulla on ongelmia yhteyden muodostamisessa."
 
 #: ../data/messages:445
 msgid "Force IPv4 ?"
-msgstr ""
+msgstr "Pakota IPv4?"
 
 #: ../data/messages:447
 msgid "Use this option if you connect to the Internet through a proxy."
 msgstr ""
+"Käytä tätä valintaa, jos muodostat yhteyden Internetiin välityspalvelimen "
+"kautta."
 
 #: ../data/messages:449
 msgid "Are you behind a proxy ?"
-msgstr ""
+msgstr "Oletko välityspalvelimen takana?"
 
 #: ../data/messages:451
 msgid "Proxy name :"
-msgstr ""
+msgstr "Välityspalvelimen nimi:"
 
 #: ../data/messages:453
 msgid "Port :"
-msgstr ""
+msgstr "Portti:"
 
 #: ../data/messages:455 ../data/messages:459
 msgid ""
 "Let empty if you don't need to log-in to the proxy with a user/password."
 msgstr ""
+"Jätä tyhjäksi, jos sinun ei tarvitse kirjautua välityspalvelimeen "
+"käyttäjällä/salasanalla."
 
 #: ../data/messages:457
 msgid "User :"
-msgstr ""
+msgstr "Käyttäjä:"
 
 #: ../data/messages:461
 msgid "Password :"
-msgstr ""
+msgstr "Salasana:"
 
 #: ../data/messages:471 ../data/messages:489 ../data/messages:985
 msgid "Colour gradation"
-msgstr ""
+msgstr "Väriasteikko"
 
 #: ../data/messages:473
 msgid "Use a background image."
-msgstr ""
+msgstr "Käytä taustakuvaa."
 
 #: ../data/messages:477 ../data/messages:691 ../data/messages:745
 #: ../data/messages:765 ../data/messages:803
 msgid "Image file:"
-msgstr ""
+msgstr "Kuvatiedosto:"
 
 #: ../data/messages:479
 msgid "Image's transparency :"
-msgstr ""
+msgstr "Kuvan läpinäkyvyys:"
 
 #: ../data/messages:485 ../data/messages:991
 msgid "Repeat image as a pattern to fill background?"
-msgstr ""
+msgstr "Toistetaanko kuva kuviona taustan täyttämiseksi?"
 
 #: ../data/messages:487
 msgid "Use a colour gradation."
-msgstr ""
+msgstr "Käytä väriasteikkoa."
 
 #: ../data/messages:491 ../data/messages:993
 msgid "Bright colour:"
-msgstr ""
+msgstr "Kirkas väri:"
 
 #: ../data/messages:493 ../data/messages:995
 msgid "Dark colour:"
-msgstr ""
+msgstr "Tumma väri:"
 
 #: ../data/messages:495
 msgid "In degrees, in relation to the vertical"
-msgstr ""
+msgstr "Asteina pystysuoraan nähden"
 
 #: ../data/messages:497
 msgid "Angle of the gradation :"
-msgstr ""
+msgstr "Porrastuskulma:"
 
 #: ../data/messages:499
 msgid "If not nul, it will form stripes."
-msgstr ""
+msgstr "Jos se ei ole nolla, muodostaa raitoja."
 
 #: ../data/messages:501
 msgid "Repeat the gradation this number of times:"
-msgstr ""
+msgstr "Toista väriasteikko näin monta kertaa:"
 
 #: ../data/messages:503
 msgid "Percentage of the bright colour:"
-msgstr ""
+msgstr "Prosenttiosuus kirkkaasta väristä:"
 
 #: ../data/messages:505
 msgid "Background when hidden"
-msgstr ""
+msgstr "Tausta piilotettuna"
 
 #: ../data/messages:507
 msgid "Several applets can be visible even when the dock is hidden"
-msgstr ""
+msgstr "Useita sovelmia voi olla näkyvissä, vaikka telakka olisi piilossa"
 
 #: ../data/messages:509
 msgid "Default background color when the dock is hidden"
-msgstr ""
+msgstr "Oletusväri, kun telakka on piilotettu"
 
 #: ../data/messages:511
 msgid "External Frame"
-msgstr ""
+msgstr "Ulkoinen kehys"
 
 #: ../data/messages:513 ../data/messages:517 ../data/messages:523
 #: ../data/messages:583 ../data/messages:661
 msgid "in pixels."
-msgstr ""
+msgstr "pikseleinä."
 
 #: ../data/messages:515 ../data/messages:567 ../data/messages:757
 #: ../data/messages:893
 msgid "Corner radius"
-msgstr ""
+msgstr "Kulman säde"
 
 #: ../data/messages:519 ../data/messages:569 ../data/messages:895
 msgid "Outline width"
-msgstr ""
+msgstr "Ääriviivan paksuus"
 
 #: ../data/messages:521 ../data/messages:563 ../data/messages:819
 #: ../data/messages:851 ../data/messages:889
 msgid "Outline colour"
-msgstr ""
+msgstr "Ääriviivan väri"
 
 #: ../data/messages:525
 msgid "Margin between the frame and the icons or their reflects :"
-msgstr ""
+msgstr "Marginaali kehyksen ja kuvakkeiden tai niiden heijastusten välillä:"
 
 #: ../data/messages:527
 msgid "Are the bottom left and right corners rounded?"
-msgstr ""
+msgstr "Ovatko vasen ja oikea alakulma pyöristetyt?"
 
 #: ../data/messages:529 ../data/messages:997
 msgid "Stretch the dock to always fill the screen"
-msgstr ""
+msgstr "Venytä telakka aina näytön mittaiseksi"
 
 #: ../data/messages:533
 msgid "Main Dock"
-msgstr ""
+msgstr "Päätelakka"
 
 #: ../data/messages:537
 msgid "Sub-Docks"
-msgstr ""
+msgstr "Alatelakka"
 
 #: ../data/messages:543
 msgid ""
 "You can specify a ratio for the size of the sub-docks' icons, in relation to "
 "the main docks' icons size"
 msgstr ""
+"Voit määrittää alatelakan kuvakkeen koon suhteessa päätelakan kuvakkeisiin"
 
 #: ../data/messages:545
 msgid "Ratio for the size of the sub-docks' icons :"
-msgstr ""
+msgstr "Alatelakan kuvakkeiden koon suhde:"
 
 #: ../data/messages:547 ../data/messages:783
 msgid "smaller"
-msgstr ""
+msgstr "pienempi"
 
 #: ../data/messages:549
 msgid "larger"
-msgstr ""
+msgstr "suurempi"
 
 #: ../data/messages:551
 msgid "Dialogs"
@@ -3174,261 +3583,277 @@ msgstr "Valintaikkunat"
 
 #: ../data/messages:553
 msgid "Bubble"
-msgstr ""
+msgstr "Kupla"
 
 #: ../data/messages:561 ../data/messages:849 ../data/messages:875
 #: ../data/messages:887
 msgid "Background colour"
-msgstr ""
+msgstr "Taustan väri"
 
 #: ../data/messages:565 ../data/messages:853 ../data/messages:873
 msgid "Text colour"
-msgstr ""
+msgstr "Tekstin väri"
 
 #: ../data/messages:571
 msgid "Shape of the bubble:"
-msgstr ""
+msgstr "Kuplan muoto:"
 
 #: ../data/messages:573 ../data/messages:859 ../data/messages:897
 msgid "Font"
-msgstr ""
+msgstr "Fontti"
 
 #: ../data/messages:575 ../data/messages:861
 msgid "Otherwise the default's system one will be used."
-msgstr ""
+msgstr "Muussa tapauksessa käytetään järjestelmän oletusta."
 
 #: ../data/messages:577 ../data/messages:863 ../data/messages:899
 msgid "Use a custom font for the text?"
-msgstr ""
+msgstr "Käytätkö mukautettua fonttia tekstiin?"
 
 #: ../data/messages:579 ../data/messages:865 ../data/messages:901
 msgid "Text font:"
-msgstr ""
+msgstr "Tekstin fontti:"
 
 #: ../data/messages:581 ../data/messages:637
 msgid "Buttons"
-msgstr ""
+msgstr "Painikkeet"
 
 #: ../data/messages:585
 msgid "Size of buttons in the info-bubbles (width x height) :"
-msgstr ""
+msgstr "Infokuplien painikkeiden koko (leveys x korkeus):"
 
 #: ../data/messages:587
 msgid "Name of an image to use for the yes/ok button :"
-msgstr ""
+msgstr "Kyllä/ok-painikkeelle käytettävän kuvan nimi:"
 
 #: ../data/messages:589
 msgid "Name of an image to use for the no/cancel button :"
-msgstr ""
+msgstr "Ei/peruuta-painikkeelle käytettävän kuvan nimi:"
 
 #: ../data/messages:591
 msgid "Size of the icon displayed next to the text :"
-msgstr ""
+msgstr "Tekstin vieressä näkyvän kuvakkeen koko:"
 
 #: ../data/messages:597
 msgid ""
 "This can be customized for each desklet separately.\n"
 "Choose 'Custom decoration' to define your own decorations below"
 msgstr ""
+"Tämä voidaan räätälöidä jokaiselle työpöydälle erikseen.\n"
+"Valitse \"Mukautettu ulkoasu\" määrittääksesi alla omat ulkoasut"
 
 #: ../data/messages:599
 msgid "Choose a default decoration for all desklets :"
-msgstr ""
+msgstr "Valitse oletus ulkoasu kaikille työpöydille:"
 
 #: ../data/messages:601
 msgid ""
 "It's an image that will be displayed below the drawings, like a frame for "
 "example. Leave empty to not use any."
 msgstr ""
+"Se on kuva, joka näytetään piirron alla, kuten esimerkiksi kehys. Jätä "
+"tyhjäksi, jos et käytä mitään."
 
 #: ../data/messages:603
 msgid "Background image :"
-msgstr ""
+msgstr "Taustakuva:"
 
 #: ../data/messages:605
 msgid "Background transparency :"
-msgstr ""
+msgstr "Taustan läpinäkyvyys:"
 
 #: ../data/messages:611
 msgid "in pixels. Use this to adjust the left position of the drawings."
-msgstr ""
+msgstr "pikseleinä. Käytä tätä säätääksesi piirron vasenta sijaintia."
 
 #: ../data/messages:613
 msgid "Left offset :"
-msgstr ""
+msgstr "Vasen siirtymä:"
 
 #: ../data/messages:615
 msgid "in pixels. Use this to adjust the top position of the drawings."
-msgstr ""
+msgstr "pikseleinä. Käytä tätä säätääksesi piirron yläsijaintia."
 
 #: ../data/messages:617
 msgid "Top offset :"
-msgstr ""
+msgstr "Yläsiirtymä:"
 
 #: ../data/messages:619
 msgid "in pixels. Use this to adjust the right position of the drawings."
-msgstr ""
+msgstr "pikseleinä. Käytä tätä säätääksesi piirron oikeaa sijaintia."
 
 #: ../data/messages:621
 msgid "Right offset :"
-msgstr ""
+msgstr "Oikea siirtymä:"
 
 #: ../data/messages:623
 msgid "in pixels. Use this to adjust the bottom position of the drawings."
-msgstr ""
+msgstr "pikseleinä. Käytä tätä säätääksesi piirron alakohtaa."
 
 #: ../data/messages:625
 msgid "Bottom offset :"
-msgstr ""
+msgstr "Alasiirtymä :"
 
 #: ../data/messages:627
 msgid ""
 "It's an image that will be displayed above the drawings, like a reflection "
 "for example. Leave empty to not use any."
 msgstr ""
+"Se on kuva, joka näytetään piirron yläpuolella, esimerkiksi heijastuksena. "
+"Jätä tyhjäksi, jos et käytä mitään."
 
 #: ../data/messages:629
 msgid "Foreground image :"
-msgstr ""
+msgstr "Edustakuva:"
 
 #: ../data/messages:631
 msgid "Foreground tansparency :"
-msgstr ""
+msgstr "Edustan läpinäkyvyys:"
 
 #: ../data/messages:639
 msgid "Buttons size :"
-msgstr ""
+msgstr "Painikkeiden koko:"
 
 #: ../data/messages:641 ../data/messages:647
 msgid "Name of an image to use for the 'rotate' button :"
-msgstr ""
+msgstr "Pyöritä-painiketta varten käytettävän kuvan nimi:"
 
 #: ../data/messages:643
 msgid "Name of an image to use for the 'reattach' button :"
-msgstr ""
+msgstr "Kiinnitä-painiketta varten käytettävän kuvan nimi:"
 
 #: ../data/messages:645
 msgid "Name of an image to use for the 'depth rotate' button :"
-msgstr ""
+msgstr "Kuvan nimi \"syvä pyöritys\" painikkeessa:"
 
 #: ../data/messages:651
 msgid "Icons' themes"
-msgstr ""
+msgstr "Kuvakkeiden teemat"
 
 #: ../data/messages:653
 msgid "Choose an icon theme :"
-msgstr ""
+msgstr "Valitse kuvaketeema:"
 
 #: ../data/messages:655
 msgid "Image filename to use as a background for icons :"
-msgstr ""
+msgstr "Kuvatiedoston nimi jota käytetään kuvakkeiden taustana:"
 
 #: ../data/messages:657
 msgid "Icons size"
-msgstr ""
+msgstr "Kuvakkeiden koko"
 
 #: ../data/messages:659 ../data/messages:677
 msgid "Icons' size at rest (width x height) :"
-msgstr ""
+msgstr "Kuvakkeiden koko levossa (leveys x korkeus):"
 
 #: ../data/messages:663
 msgid "Space between icons :"
-msgstr ""
+msgstr "Tila kuvakkeiden välillä:"
 
 #: ../data/messages:665
 msgid "Zoom effect"
-msgstr ""
+msgstr "Skaalauksen tehoste"
 
 #: ../data/messages:667
 msgid "set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
+"aseta arvoksi 1, jos et halua kuvakkeiden skaalautuvan, kun viet hiiren "
+"niiden päälle."
 
 #: ../data/messages:669
 msgid "Maximum zoom of the icons :"
-msgstr ""
+msgstr "Kuvakkeiden suurin skaalaus:"
 
 #: ../data/messages:671
 msgid ""
 "in pixels. Outside of this space (centered on the mouse), there is no zoom."
 msgstr ""
+"pikseleinä. Tämän alueen ulkopuolella (keskitettynä hiireen) ei ole "
+"skaalausta."
 
 #: ../data/messages:673
 msgid "Width of the space in which the zoom will be effective :"
-msgstr ""
+msgstr "Alueen leveys, jossa skaalaus on tehokas:"
 
 #: ../data/messages:675
 msgid "Separators"
-msgstr ""
+msgstr "Erottimet"
 
 #: ../data/messages:679
 msgid "Force separator's image size to stay constant?"
-msgstr ""
+msgstr "Pakotetaanko erottimen kuvan koko pysymään vakiona?"
 
 #: ../data/messages:681
 msgid ""
 "Only the default, 3D-plane and curve views support flat and physical "
 "separators. Flat separators are rendered differently according to the view."
 msgstr ""
+"Oletuksena näkymät, 3D ja käyrät tukevat litteää ja tavallista erotinta. "
+"Litteät erottimet renderöidään eri tavalla näkymän mukaan."
 
 #: ../data/messages:683
 msgid "How to draw the separators?"
-msgstr ""
+msgstr "Miten piirtää erottimet?"
 
 #: ../data/messages:685
 msgid "Use an image."
-msgstr ""
+msgstr "Käytä kuvaa."
 
 #: ../data/messages:687
 msgid "Flat separator"
-msgstr ""
+msgstr "Litteä erottin"
 
 #: ../data/messages:689
 msgid "Physical separator"
-msgstr ""
+msgstr "Erotin"
 
 #: ../data/messages:693
 msgid ""
 "Make the separator's image revolve when dock is on top/on the left/on the "
 "right?"
 msgstr ""
+"Saako erottimien kuvan pyörimään, kun telakka on ylhäällä/vasemmalla/"
+"oikealla?"
 
 #: ../data/messages:701
 msgid "Colour of flat separators :"
-msgstr ""
+msgstr "Litteän erottimien väri:"
 
 #: ../data/messages:703
 msgid "Reflections"
-msgstr ""
+msgstr "Heijastus"
 
 #: ../data/messages:705
 msgid "Reflection visibility"
-msgstr ""
+msgstr "Heijastuksen näkyvyys"
 
 #: ../data/messages:707
 msgid "light"
-msgstr ""
+msgstr "kevyt"
 
 #: ../data/messages:709
 msgid "strong"
-msgstr ""
+msgstr "vahva"
 
 #: ../data/messages:711
 msgid ""
 "In percent of the icon's size. This parameter influence the total height of "
 "the dock."
 msgstr ""
+"Prosentteina kuvakkeen koosta. Tämä parametri vaikuttaa telakan "
+"kokonaiskorkeuteen."
 
 #: ../data/messages:713
 msgid "Height of the reflection:"
-msgstr ""
+msgstr "Heijastuksen korkeus:"
 
 #: ../data/messages:715
 msgid "small"
-msgstr ""
+msgstr "pieni"
 
 #: ../data/messages:717
 msgid "tall"
-msgstr ""
+msgstr "pitkä"
 
 #: ../data/messages:719
 msgid ""
@@ -3436,62 +3861,69 @@ msgid ""
 "progressively as the dock grows up. The closer to 0, the more transparent "
 "they will be."
 msgstr ""
+"Se on niiden läpinäkyvyyttä, kun telakka on levossa; ne "
+"\"materialisoituvat\" vähitellen, kun telakka kasvaa. Mitä lähempänä nollaa, "
+"sitä läpinäkyvämpiä ne ovat."
 
 #: ../data/messages:721
 msgid "Icons' transparency at rest :"
-msgstr ""
+msgstr "Kuvakkeiden läpinäkyvyys levossa:"
 
 #: ../data/messages:727
 msgid "Link the icons with a string"
-msgstr ""
+msgstr "Yhdistä kuvakkeet merkkijonolla"
 
 #: ../data/messages:729
 msgid "Linewidth of the string, in pixels (0 to not use string) :"
-msgstr ""
+msgstr "Merkkijonon viivan leveys pikseleinä (0, jos et käytä merkkijonoa):"
 
 #: ../data/messages:731
 msgid "Colour of the string (red, blue, green, alpha) :"
-msgstr ""
+msgstr "Merkkijonon väri (punainen, sininen, vihreä, alfa):"
 
 #: ../data/messages:735
 msgid "Indicator of the active window"
-msgstr ""
+msgstr "Aktiivisen ikkunan merkkivalo"
 
 #: ../data/messages:743 ../data/messages:747 ../data/messages:751
 msgid "Frame"
-msgstr ""
+msgstr "Kehys"
 
 #: ../data/messages:749
 msgid "Fill background"
-msgstr ""
+msgstr "Täytä tausta"
 
 #: ../data/messages:755
 msgid "Linewidth"
-msgstr ""
+msgstr "Viivan leveys"
 
 #: ../data/messages:759 ../data/messages:791
 msgid "Draw indicator above the icon?"
-msgstr ""
+msgstr "Piirrätkö merkkivalon kuvakkeen yläpuolelle?"
 
 #: ../data/messages:761
 msgid "Indicator of active launcher"
-msgstr ""
+msgstr "Aktiivisen käynnistimen merkkivalo"
 
 #: ../data/messages:763
 msgid ""
 "Indicators are drawn on launchers icons to show that they have already been "
 "launched. Leave blank to use the default one."
 msgstr ""
+"Merkkivalot piirretään käynnistimen kuvakkeisiin osoittamaan, että ne ovat "
+"jo käynnistetty. Jätä tyhjäksi, jos haluat käyttää oletusta."
 
 #: ../data/messages:767
 msgid ""
 "The indicator is drawn on active launchers, but you may want to display it "
 "on applications too."
 msgstr ""
+"Merkkivalo piirretään aktiivisille käynnistimelle, mutta saatat haluta "
+"näyttää sen myös sovelluksissa."
 
 #: ../data/messages:769
 msgid "Display an indicator on application icons too ?"
-msgstr ""
+msgstr "Näytetäänkö merkkivalo myös sovellusen kuvakkeissa?"
 
 #: ../data/messages:771
 msgid ""
@@ -3500,10 +3932,14 @@ msgid ""
 "If the indicator is linked to the icon, the offset will be upwards, "
 "otherwise downwards."
 msgstr ""
+"Suhteutettuna kuvakkeiden kokoon. Voit käyttää parametria säätämään "
+"merkkivalon pystysuoraa sijaintia.\n"
+"Jos merkkivalo on linkitetty kuvakkeeseen, painatus on ylöspäin, muuten "
+"alaspäin."
 
 #: ../data/messages:773
 msgid "Vertical offset :"
-msgstr ""
+msgstr "Pystysuora painatus:"
 
 #: ../data/messages:775
 msgid ""
@@ -3512,10 +3948,13 @@ msgid ""
 "Otherwise it will be drawn directly on the dock and the offset will be "
 "downwards."
 msgstr ""
+"Jos merkkivalo on linkitetty kuvakkeeseen, se skaalataan samalla tavalla "
+"kuin kuvake ja painatus on ylöspäin.\n"
+"Muussa tapauksessa se piirretään suoraan telakkaan ja painatus on alaspäin."
 
 #: ../data/messages:777
 msgid "Link the indicator with its icon?"
-msgstr ""
+msgstr "Linkitetäänkö merkkivalo kuvakkeeseen?"
 
 #: ../data/messages:779
 msgid ""
@@ -3523,172 +3962,181 @@ msgid ""
 "bigger the value is, the bigger the indicator is. 1 means the indicator will "
 "have the same size as the icons."
 msgstr ""
+"Voit valita, haluatko tehdä merkkivalosta pienemmän tai suuremman kuin "
+"kuvakkeet. Mitä suurempi arvo on, sitä suurempi merkkivalo. Arvo 1 "
+"tarkoittaa, että merkkivalon koko on sama kuin kuvakkeen."
 
 #: ../data/messages:781
 msgid "Indicator size ratio :"
-msgstr ""
+msgstr "Merkkivalon koon suhde:"
 
 #: ../data/messages:785
 msgid "bigger"
-msgstr ""
+msgstr "suurempi"
 
 #: ../data/messages:787
 msgid ""
 "Use it to make the indicator follow the orientation of the dock (top/bottom/"
 "right/left)."
 msgstr ""
+"Käytä tätä saadaksesi merkkivalon seuraamaan telakan suuntaa (ylä/ala/oikea/"
+"vasen)."
 
 #: ../data/messages:789
 msgid "Rotate the indicator with dock?"
-msgstr ""
+msgstr "Käännetäänkö merkkivaloa telakalla?"
 
 #: ../data/messages:793
 msgid "Indicator of grouped windows"
-msgstr ""
+msgstr "Ryhmitettyjen ikkunoiden merkkivalo"
 
 #: ../data/messages:795
 msgid "How to show that several icons are grouped :"
-msgstr ""
+msgstr "Miten näytetään, että useita kuvakkeita ryhmitellään:"
 
 #: ../data/messages:797
 msgid "Draw an emblem"
-msgstr ""
+msgstr "Piirrä merkki"
 
 #: ../data/messages:799
 msgid "Draw the sub-dock's icons as a stack"
-msgstr ""
+msgstr "Piirrä alatelakan kuvakkeet pinoksi"
 
 #: ../data/messages:801
 msgid ""
 "It only makes sense if you chose to group the applis of the same class "
 "together. Leave blank to use the default one."
 msgstr ""
+"Järkevää vain, jos päätät ryhmitellä saman luokan sovellukset yhteen. Jätä "
+"tyhjäksi, jos haluat käyttää oletusta."
 
 #: ../data/messages:805
 msgid "Zoom the indicator with its icon?"
-msgstr ""
+msgstr "Skaalataanko merkkivalo kuvakkeella?"
 
 #: ../data/messages:807
 msgid "Progress bars"
-msgstr ""
+msgstr "Edistymispalkit"
 
 #: ../data/messages:815
 msgid "Start color"
-msgstr ""
+msgstr "Aloitusväri"
 
 #: ../data/messages:817
 msgid "End color"
-msgstr ""
+msgstr "Loppuväri"
 
 #: ../data/messages:821
 msgid "Bar thickness"
-msgstr ""
+msgstr "Palkin paksuus"
 
 #: ../data/messages:823
 msgid "Labels"
-msgstr "Selitteet"
+msgstr "Nimilaput"
 
 #: ../data/messages:825
 msgid "Label visibility"
-msgstr ""
+msgstr "Nimilapun näkyvyys"
 
 #: ../data/messages:827
 msgid "Show labels:"
-msgstr ""
+msgstr "Näytä nimilaput:"
 
 #: ../data/messages:831
 msgid "On pointed icon"
-msgstr ""
+msgstr "Osoitetussa kuvakkeessa"
 
 #: ../data/messages:833
 msgid "On all icons"
-msgstr ""
+msgstr "Kaikissa kuvakkeissa"
 
 #: ../data/messages:835
 msgid "Neighbouring labels visibility:"
-msgstr ""
+msgstr "Viereisten nimilappujen näkyvyys:"
 
 #: ../data/messages:837
 msgid "more visible"
-msgstr ""
+msgstr "näkyvämpi"
 
 #: ../data/messages:839
 msgid "less visible"
-msgstr ""
+msgstr "vähemmän näkyvä"
 
 #: ../data/messages:855
 msgid "Draw the outline of the text?"
-msgstr ""
+msgstr "Piirrä tekstin ääriviivat?"
 
 #: ../data/messages:857
 msgid "Margin around the text (in pixels) :"
-msgstr ""
+msgstr "Marginaali tekstin ympärillä (pikseleinä):"
 
 #: ../data/messages:867
 msgid "Quick-info are short information drawn on the icons."
-msgstr ""
+msgstr "Pikatiedot ovat kuvakkeisiin piirrettyjä lyhyitä tietoja."
 
 #: ../data/messages:869
 msgid "Quick-info"
-msgstr ""
+msgstr "Pikatiedot"
 
 #: ../data/messages:871
 msgid "Use the same look as the labels?"
-msgstr ""
+msgstr "Käytätkö samaa ilmettä kuin nimilapuissa?"
 
 #: ../data/messages:891
 msgid "Text colour:"
-msgstr ""
+msgstr "Tekstin väri:"
 
 #: ../data/messages:923
 msgid "Visibility of the dock"
-msgstr ""
+msgstr "Näkyvyys telakalla"
 
 #: ../data/messages:957 ../data/messages:981
 msgid "Same as main dock"
-msgstr ""
+msgstr "Sama kuin telakassa"
 
 #: ../data/messages:959
 msgid "Tiny"
-msgstr ""
+msgstr "Pieni"
 
 #: ../data/messages:973
 msgid "Leave it empty to use the same view as the main dock."
-msgstr ""
+msgstr "Jätä tyhjäksi, jos haluat käyttää samaa näkymää kuin telakassa."
 
 #: ../data/messages:975
 msgid "Choose the view for this dock :/"
-msgstr ""
+msgstr "Valitse tämän telakan näkymä :/"
 
 #: ../data/messages:979
 msgid "Fill the background with:"
-msgstr ""
+msgstr "Täytä tausta:"
 
 #: ../data/messages:987
 msgid ""
 "Any format allowed; if empty, the colour gradation will be used as a fall "
 "back."
 msgstr ""
+"Sallittu mikä tahansa formaatti; jos tyhjä, väriasteikkoa käytetään "
+"varasuunnitelmana."
 
 #: ../data/messages:989
 msgid "Image filename to use as a background :"
-msgstr ""
+msgstr "Taustana käytettävän kuvatiedoston nimi:"
 
 #: ../data/messages:999
 msgid "Load theme"
-msgstr ""
+msgstr "Lataa teema"
 
 #: ../data/messages:1001
 msgid "You can even paste an internet URL."
-msgstr ""
+msgstr "Voit jopa liittää Internet-osoitteen."
 
 #: ../data/messages:1003
 msgid "...or drag and drop a theme package here :"
-msgstr ""
+msgstr "...tai vedä ja pudota teemapaketti tähän:"
 
 #: ../data/messages:1005
 msgid "Theme loading options"
-msgstr ""
+msgstr "Teeman latauksen valinnat"
 
 #: ../data/messages:1007
 msgid ""
@@ -3696,125 +4144,133 @@ msgid ""
 "ones provided in the new theme. Otherwise the current launchers will be "
 "kept, only icons will be replaced."
 msgstr ""
+"Jos rastit tämän ruudun, käynnistimet poistetaan ja korvataan teemassa "
+"olevilla. Muuten nykyiset käynnistimet säilytetään, vain kuvakkeet korvataan."
 
 #: ../data/messages:1009
 msgid "Use the new theme's launchers?"
-msgstr ""
+msgstr "Käytätkö uuden teeman käynnistimiä?"
 
 #: ../data/messages:1011
 msgid ""
 "Otherwise the current behaviour will be kept. This defines the dock's "
 "position, behavioural settings such as auto-hide, using taskbar or not, etc."
 msgstr ""
+"Muuten nykyinen toiminta säilyy. Tämä määrittää telakan sijainnin, "
+"käyttäytymisen, kuten automaattisen piilotuksen, tehtäväpalkin käytön jne."
 
 #: ../data/messages:1013
 msgid "Use the new theme's behaviour?"
-msgstr ""
+msgstr "Käytätkö uuden teeman toimintaa?"
 
 #: ../data/messages:1015
 msgid "Save"
-msgstr ""
+msgstr "Tallenna"
 
 #: ../data/messages:1017
 msgid "You will then be able to re-open it at any time."
-msgstr ""
+msgstr "Sitten voit avata sen uudelleen milloin tahansa."
 
 #: ../data/messages:1019
 msgid "Save current behaviour also?"
-msgstr ""
+msgstr "Tallenna myös nykyinen toiminta?"
 
 #: ../data/messages:1021
 msgid "Save current launchers also?"
-msgstr ""
+msgstr "Tallenna myös nykyiset käynnistimet?"
 
 #: ../data/messages:1023
 msgid ""
 "The dock will build a complete tarball of your current theme, allowing you "
 "to easily exchange it with other people."
 msgstr ""
+"Telakka rakentaa täydellisen paketin nykyisestä teemastasi, jolloin voit "
+"helposti jakaa sen muiden ihmisten kanssa."
 
 #: ../data/messages:1025
 msgid "Build a package of the theme?"
-msgstr ""
+msgstr "Rakennetaanko teemasta paketti?"
 
 #: ../data/messages:1027
 msgid "Directory in which the package will be saved:"
-msgstr ""
+msgstr "Kansio, johon paketti tallennetaan:"
 
 #: ../data/messages:1029 ../data/messages:1031 ../data/messages:1033
 #: ../data/messages:1065 ../data/messages:1101
 msgid "Desktop Entry"
-msgstr ""
+msgstr "Työpöydälle"
 
 #: ../data/messages:1037 ../data/messages:1069 ../data/messages:1105
 msgid "Name of the container it belongs to:"
-msgstr ""
+msgstr "Sen säiliön nimi, johon se kuuluu:"
 
 #: ../data/messages:1039
 msgid "Sub-dock's name:"
-msgstr ""
+msgstr "Alatelakan nimi:"
 
 #: ../data/messages:1041
 msgid "New sub-dock"
-msgstr ""
+msgstr "Uusi alatelakka"
 
 #: ../data/messages:1043
 msgid "How to render the icon:"
-msgstr ""
+msgstr "Kuinka renderöit kuvakkeen:"
 
 #: ../data/messages:1045
 msgid "Use an image"
-msgstr ""
+msgstr "Käytä kuvaa"
 
 #: ../data/messages:1047
 msgid "Draw sub-dock's content as emblems"
-msgstr ""
+msgstr "Piirrä alatelakan sisältö symbooleina"
 
 #: ../data/messages:1049
 msgid "Draw sub-dock's content as stack"
-msgstr ""
+msgstr "Piirrä alatelakan sisältö pinoksi"
 
 #: ../data/messages:1051
 msgid "Draw sub-dock's content inside a box"
-msgstr ""
+msgstr "Piirrä alatelakan sisältö laatikon sisään"
 
 #: ../data/messages:1053 ../data/messages:1075
 msgid "Image's name or path:"
-msgstr ""
+msgstr "Kuvan nimi tai polku:"
 
 #: ../data/messages:1055 ../data/messages:1083 ../data/messages:1109
 msgid "Extra parameters"
-msgstr ""
+msgstr "Ylimääräiset parametrit"
 
 #: ../data/messages:1057
 msgid "Name of the view used for the sub-dock:"
-msgstr ""
+msgstr "Alatelakalle käytetyn näkymän nimi:"
 
 #: ../data/messages:1059
 msgid "If '0' the container will be displayed on every viewport."
-msgstr ""
+msgstr "Jos \"0\" säilö näkyy jokaisessa näkymässä."
 
 #: ../data/messages:1061 ../data/messages:1097
 msgid "Only show in this specific viewport:"
-msgstr ""
+msgstr "Näytä vain tässä tietyssä näkymässä:"
 
 #: ../data/messages:1063 ../data/messages:1099 ../data/messages:1111
 msgid "Order you want for this launcher among the others:"
-msgstr ""
+msgstr "Tilaa, jonka annat tälle käynnistimelle muiden joukossa:"
 
 #: ../data/messages:1071
 msgid "Launcher's name:"
-msgstr ""
+msgstr "Käynnistimen nimi:"
 
 #: ../data/messages:1077
 msgid ""
 "Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
 "g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
+"Esimerkki: nautilus --no-desktop, gedit jne. Voit jopa antaa pikanäppäimen, "
+"esim. <Alt>F1, <Ctrl>c, <Ctrl>v jne"
 
 #: ../data/messages:1079
 msgid "Command to launch on click:"
-msgstr ""
+msgstr "Käynnistyskomento napsautuksella:"
 
 #: ../data/messages:1085
 msgid ""
@@ -3823,10 +4279,14 @@ msgid ""
 "launcher that launches a script in a terminal, but you don't want it to "
 "steal the terminal's icon from the taskbar."
 msgstr ""
+"Jos valitsit yhdistelmän käynnistimiä ja sovelluksia, vaihtoehto poistaa "
+"tämän toiminnan käytöstä vain tässä käynnistimessä. Voi olla hyödyllinen "
+"esimerkiksi käynnistimelle, joka käynnistää komentosarjan päätteessä, mutta "
+"et halua käyttää pääteen kuvaketta tehtäväpalkista."
 
 #: ../data/messages:1087
 msgid "Don't link the launcher with its window"
-msgstr ""
+msgstr "Älä linkitä käynnistintä sen ikkunaan"
 
 #: ../data/messages:1089
 msgid ""
@@ -3835,32 +4295,38 @@ msgid ""
 "nearly sure that you shouldn't touch it. It defines the class of the "
 "program, which is useful to link the application with its launcher."
 msgstr ""
+"Syy, miksi saatat haluta muokata tätä parametria, on se, että olet tehnyt "
+"tämän käynnistimen käsin. Jos pudotit sen telakkaan valikosta, on melkein "
+"varmaa, ettei siihen pidä koskea. Se määrittelee ohjelman luokan, joka on "
+"hyödyllinen linkittäessä sovellusta käynnistimeen."
 
 #: ../data/messages:1091
 msgid "Class of the program:"
-msgstr ""
+msgstr "Ohjelman luokka:"
 
 #: ../data/messages:1093
 msgid "Run in a terminal?"
-msgstr ""
+msgstr "Aja terminaalissa?"
 
 #: ../data/messages:1095
 msgid "If '0' the launcher will be displayed on every viewport."
-msgstr ""
+msgstr "Jos arvo on 0, käynnistin näkyy jokaisessa näkymässä."
 
 #: ../data/messages:1107
 msgid "Separators' appearance is defined in the global configuration."
-msgstr ""
+msgstr "Erottimien ulkonäkö määritellään yleisessä kokoonpanossa."
 
 #: ../data/messages:1114
 msgid ""
 "<b>The basic 2D view of Cairo-Dock</b>\n"
 "Perfect if you want to make the dock look like a panel."
 msgstr ""
+"<b>Cairo-Dock 2D-näkymä</b>\n"
+"Täydellinen, jos haluat saada telakan näyttämään paneelilta."
 
 #: ../data/messages:1115
 msgid "<b>New version: <span color='red'>GLX-Dock 3.3</span>!</b>"
-msgstr ""
+msgstr "<b>Uusi versio: <span color='red'>GLX-Dock 3.3</span>!</b>"
 
 #: ../data/messages:1117
 msgid ""
@@ -3868,14 +4334,17 @@ msgid ""
 "    It allows to rapidly look for programs from their name or their "
 "description"
 msgstr ""
+"- Lisätty hakukenttä <b>Sovellukset-valikkoon</b>.\n"
+"    Sen avulla voit etsiä ohjelmia nopeasti niiden nimen tai kuvauksen "
+"perusteella"
 
 #: ../data/messages:1119
 msgid "- Added support of <b>logind</b> in the Logout applet"
-msgstr ""
+msgstr "- Lisätty tuki <b>logind</b> kirjaudu ulos sovelmassa"
 
 #: ../data/messages:1121
 msgid "- Better integration in the Cinnamon desktop"
-msgstr ""
+msgstr "- Cinnamon-työpöydälle parempi yhteensopivuus"
 
 #: ../data/messages:1123
 msgid ""
@@ -3883,69 +4352,231 @@ msgid ""
 "    It allows launchers to be animated until the application opens and "
 "avoids accidental double launches"
 msgstr ""
+"- Lisätty tuki <b>Käynnistysilmoitus</b> protokollaan.\n"
+"    Se mahdollistaa käynnistimen animaation, kunnes sovellus avautuu ja "
+"estää tahattomat kaksoiskäynnistykset"
 
 #: ../data/messages:1125
 msgid ""
 "- Added an new third-party applet: <b>Notification History</b> to never miss "
 "a notification"
 msgstr ""
+"- Lisätty uusi kolmannen osapuolen sovelma: <b>Ilmoitushistoria</b> et "
+"koskaan missaa ilmoitusta"
 
 #: ../data/messages:1127
 msgid "- Upgraded the <b>Dbus API</b> to be even more powerful"
-msgstr ""
+msgstr "- Päivitetty <b>Dbus API</b> ,joka on entistäkin tehokkaampi"
 
 #: ../data/messages:1129
 msgid "- A huge rewrite of the core using Objects"
-msgstr ""
+msgstr "Valtava uudelleenkirjoitus! Core käyttää objekteja"
 
 #: ../data/messages:1131
 msgid "- If you like the project, please donate :-)"
-msgstr ""
+msgstr "- Jos pidät projektista, tee lahjoitus :-)"
 
 #: ../data/messages:1133
 msgid "<b>New version: <span color='red'>GLX-Dock 3.4</span>!</b>"
-msgstr ""
+msgstr "<b>Uusi versio: <span color='red'>GLX-Dock 3.4</span>!</b>"
 
 #: ../data/messages:1135
 msgid "- <b>Menus</b>: added the possibility to customise them"
-msgstr ""
+msgstr "- <b>Valikot</b>: lisätty muokkausmahdollisuus"
 
 #: ../data/messages:1137
 msgid "- <b>Style</b>: unified the style of all components of the dock"
-msgstr ""
+msgstr "- <b>Tyyli</b>: kaikkien telakan osien yhdistetty tyyli"
 
 #: ../data/messages:1139
 msgid ""
 "- Better integration with <b>Compiz</b> (e.g. when using the <b>Cairo-Dock "
 "session</b>) and Cinnamon"
 msgstr ""
+"- Parempi <b>Compiz</b> yhteensopivuus (esim. kun käytät <b>Cairo-Dock "
+"istuntoa</b>) ja Cinnamonia"
 
 #: ../data/messages:1141
 msgid ""
 "- <b>Applications Menu</b> and <b>Logout</b> applets will wait the end of an "
 "update before displaying notifications"
 msgstr ""
+"- <b>Sovellukset-valikkoa</b> ja <b>Kirjaudu ulos</b> sovelmat odottavat "
+"päivityksen loppuun ennen ilmoitusten näyttämistä"
 
 #: ../data/messages:1143
 msgid ""
 "- Various improvements for <b>Applications Menu</b>, <b>Shortcuts</b>, "
 "<b>Status-Notifier</b> and <b>Terminal</b> applets"
 msgstr ""
+"- Useita parannuksia <b>Sovellukset-valikko</b>, <b>Pikanäppäimet</b>, "
+"<b>Tilailmoitus</b> ja <b>Terminaali</b> sovelmiin"
 
 #: ../data/messages:1145
 msgid "- Start working on <b>EGL</b> and <b>Wayland</b> support"
-msgstr ""
+msgstr "- Aloitettu <b>EGL</b> ja <b>Wayland</b> tuen teko"
 
 #: ../data/messages:1147
 msgid "- And as always ... various bug fixes and improvements!"
-msgstr ""
+msgstr "- Ja kuten aina... erilaisia korjauksia ja parannuksia!"
 
 #: ../data/messages:1149
 msgid "If you like the project, please donate and/or contribute :-)"
-msgstr ""
+msgstr "Jos pidät projektista, tee lahjoitus ja/tai osallistu :-)"
 
 #: ../data/messages:1151
 msgid ""
 "Note: We're switching from Bzr to Git on Github, feel free to fork! https://"
 "github.com/Cairo-Dock"
 msgstr ""
+"Huomaa: vaihdoimme BZR:stä Git:iin GitHub:ssa, vapaasti forkkiin! https://"
+"github.com/Cairo-Dock"
+
+#~ msgid "Windows management"
+#~ msgstr "Ikkuna hallinta"
+
+#~ msgid "Use all screens"
+#~ msgstr "Käytä kaikilla näytöillä"
+
+#~ msgid "Disable the gnome-panel"
+#~ msgstr "Poista gnome-paneeli käytöstä"
+
+#~ msgid "Disable Unity"
+#~ msgstr "Poista Unity käytöstä"
+
+#~ msgid "Tip: If this line is grayed, it's because this tip is not for you.)"
+#~ msgstr ""
+#~ "Vinkki: Jos tämä viiva on harmaa, se johtuu siitä, että tämä vinkki ei "
+#~ "ole sinua varten.)"
+
+#~ msgid "If you're using Compiz, you can click on this button:"
+#~ msgstr "Jos käytät Compizia, voit napsauttaa tätä painiketta:"
+
+#~ msgid "Removing completely the gnome-panel"
+#~ msgstr "Gnome-paneelin poistaminen kokonaan"
+
+#~ msgid ""
+#~ "Open gconf-editor, edit the key /desktop/gnome/session/"
+#~ "required_components/panel, and replace its content with \"cairo-dock\".\n"
+#~ "Then restart your session : the gnome-panel has not been started, and the "
+#~ "dock has been started (if not, you can add it to the startup programs)."
+#~ msgstr ""
+#~ "Avaa gconf-editor, muokkaa /desktop/gnome/session/required_components/"
+#~ "panel ja korvaa sen sisältö \"cairo-dock\".\n"
+#~ "Käynnistä istunto uudelleen : gnome-paneelia ei enää ole ja telakan "
+#~ "tulisi olla näkyvissä (jos ei, lisää se käynnistyviin ohjelmiin)."
+
+#~ msgid ""
+#~ "If you are on Gnome, you can click on this button in order to "
+#~ "automatically modify this key:"
+#~ msgstr ""
+#~ "Jos käytät Gnomea, voit napsauttaa tätä painiketta muokataksesi tätä "
+#~ "avainta automaattisesti:"
+
+#~ msgid "Forum"
+#~ msgstr "Foorumi"
+
+#~ msgid ""
+#~ "Hint : If you have an ATI or an Intel card, you should try without OpenGL "
+#~ "first, because their drivers are not yet perfect."
+#~ msgstr ""
+#~ "Vihje: Jos sinulla on näytönohjain ATI tai Intel, kannattaa kokeilla "
+#~ "ensin ilman OpenGL:ää, koska niiden ajurit eivät ole vielä täydellisiä."
+
+#~ msgid ""
+#~ "If you're on Gnome with Metacity (without Compiz), you can click on this "
+#~ "button:"
+#~ msgstr ""
+#~ "Jos käytät Gnomea Metacityn kanssa (ilman Compizia), voit napsauttaa tätä "
+#~ "painiketta:"
+
+#~ msgid ""
+#~ "There is no icon in the Applications Menu even though I enable the option."
+#~ msgstr ""
+#~ "Sovellukset-valikossa ei ole kuvaketta, vaikka otan vainnan käyttöön."
+
+#~ msgid ""
+#~ "In Gnome, there is an option that override the dock's one. To enable "
+#~ "icons in menus, open 'gconf-editor', go to Desktop / Gnome / Interface "
+#~ "and enable the \"menus have icons\" and the \"buttons have icons\" "
+#~ "options. "
+#~ msgstr ""
+#~ "Gnomessa on valinta, joka ohittaa telakan. Ota kuvakkeet käyttöön "
+#~ "valikoissa avaamalla \"gconf-editor\", menemällä Desktop / Gnome / "
+#~ "Interface ja ota käyttöön \"valikoissa on kuvakkeita\" ja \"painikkeilla "
+#~ "on kuvakkeita\" valinnat. "
+
+#~ msgid "If you're on Gnome you can click on this button:"
+#~ msgstr "Jos käytät Gnomea, voit napsauttaa tätä painiketta:"
+
+#~ msgid ""
+#~ "We maintain two repositories for Debian, Ubuntu and other Debian-forked:\n"
+#~ " One for stable releases and another which is updated weekly (unstable "
+#~ "version)"
+#~ msgstr ""
+#~ "Ylläpidämme kahta asennuslähdettä Debianille, Ubuntulle ja muille Debian-"
+#~ "pohjaisille:\n"
+#~ "  Yksi vakaille julkaisuille ja toinen, joka päivitetään viikoittain "
+#~ "(epävakaa versio)"
+
+#~ msgid "Debian/Ubuntu"
+#~ msgstr "Debian/Ubuntu"
+
+#~ msgid "Ubuntu"
+#~ msgstr "Ubuntu"
+
+#~ msgid ""
+#~ "If you're on Ubuntu, you can add our 'stable' repository by clicking on "
+#~ "this button:\n"
+#~ " After that, you can launch your update manager in order to install the "
+#~ "latest stable version."
+#~ msgstr ""
+#~ "Jos käytät Ubuntua, voit lisätä \"vakaan\" asennuslähteen napsauttamalla "
+#~ "tätä painiketta:\n"
+#~ "  Tämän jälkeen voit käynnistää päivitysten hallinnan asentaaksesi "
+#~ "uusimman vakaan version."
+
+#~ msgid ""
+#~ "If you're on Ubuntu, you can also add our 'weekly' ppa (can be unstable) "
+#~ "by clicking on this button:\n"
+#~ " After that, you can launch your update manager in order to install the "
+#~ "latest weekly version."
+#~ msgstr ""
+#~ "Jos käytät Ubuntua, voit myös lisätä \"weekly\" ppa:n (voi olla epävakaa) "
+#~ "napsauttamalla tätä painiketta:\n"
+#~ "  Tämän jälkeen voit käynnistää päivitysten hallinnan asentaaksesi "
+#~ "uusimman viikoittaisen version."
+
+#~ msgid "Debian"
+#~ msgstr "Debian"
+
+#~ msgid ""
+#~ "If you're on Debian Stable, you can add our 'stable' repository by "
+#~ "clicking on this button:\n"
+#~ " After that, you can purge all 'cairo-dock*' packages, update the your "
+#~ "system and reinstall 'cairo-dock' package."
+#~ msgstr ""
+#~ "Jos käytät Debian vakaata, voit lisätä \"vakaan\" asennuslähteen "
+#~ "napsauttamalla tätä painiketta:\n"
+#~ "  Tämän jälkeen voit purkaa kaikki \"cairo-dock*\"-paketit, päivittää "
+#~ "järjestelmän ja asentaa \"cairo-dock\"-paketin uudelleen."
+
+#~ msgid ""
+#~ "If you're on Debian Unstable, you can add our 'stable' repository by "
+#~ "clicking on this button:\n"
+#~ " After that, you can purge all 'cairo-dock*' packages, update the your "
+#~ "system and reinstall 'cairo-dock' package."
+#~ msgstr ""
+#~ "Jos käytät Debianin epävakaata, voit lisätä \"vakaan\" asennuslähteen "
+#~ "napsauttamalla tätä painiketta:\n"
+#~ "  Tämän jälkeen voit purkaa kaikki \"cairo-dock*\"-paketit, päivittää "
+#~ "järjestelmän ja asentaa \"cairo-dock\"-paketin uudelleen."
+
+#~ msgid "Cairo-Dock (Fallback Mode)"
+#~ msgstr "Cairo-Dock (varatila)"
+
+#~ msgid "A light and eye-candy dock and desklets for your desktop."
+#~ msgstr "Kevyt ja näyttävä telakka työpöydällesi."
+
+#~ msgid "Multi-purpose Dock and Desklets"
+#~ msgstr "Monikäyttöinen telakka ja sovelmat"
