@@ -85,7 +85,7 @@ if test $UPDATE_PLUGINS -gt 0; then
 	echo "extracing the messages of the plug-ins ..."
 	for plugin in *
 	do
-		if test -d $plugin; then
+		if test -d $plugin/data; then
 			cd $plugin
 			if test -e CMakeLists.txt; then  # le Makefile peut etre dans un autre dossier
 				echo "  extracting sentences from $plugin ..."
