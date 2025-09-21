@@ -8,36 +8,35 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2014-10-19 00:21+0000\n"
 "PO-Revision-Date: 2014-06-13 21:46+0000\n"
 "Last-Translator: Ander Elortondo <ander.elor@gmail.com>\n"
 "Language-Team: librezale.org\n"
+"Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2014-10-20 05:53+0000\n"
 "X-Generator: Launchpad (build 17196)\n"
-"Language: eu\n"
 
-#: ../src/cairo-dock-gui-advanced.c:120 ../src/cairo-dock-widget-plugins.c:173
-#: ../data/messages:267
+#: ../src/cairo-dock-gui-advanced.c:120 ../src/cairo-dock-widget-plugins.c:164
+#: ../data/messages:269
 msgid "Behaviour"
 msgstr "Portaera"
 
-#: ../src/cairo-dock-gui-advanced.c:121 ../data/messages:111
-#: ../data/messages:835 ../data/messages:873 ../data/messages:945
+#: ../src/cairo-dock-gui-advanced.c:121 ../data/messages:113
+#: ../data/messages:841 ../data/messages:879 ../data/messages:951
 msgid "Appearance"
 msgstr "Itxura"
 
-#: ../src/cairo-dock-gui-advanced.c:122 ../src/cairo-dock-widget-plugins.c:143
+#: ../src/cairo-dock-gui-advanced.c:122 ../src/cairo-dock-widget-plugins.c:134
 msgid "Files"
 msgstr "Fitxategiak"
 
-#: ../src/cairo-dock-gui-advanced.c:123 ../src/cairo-dock-widget-plugins.c:148
+#: ../src/cairo-dock-gui-advanced.c:123 ../src/cairo-dock-widget-plugins.c:139
 msgid "Internet"
 msgstr "Internet"
 
-#: ../src/cairo-dock-gui-advanced.c:124 ../src/cairo-dock-widget-plugins.c:153
+#: ../src/cairo-dock-gui-advanced.c:124 ../src/cairo-dock-widget-plugins.c:144
 msgid "Desktop"
 msgstr "Mahaigaina"
 
@@ -45,32 +44,31 @@ msgstr "Mahaigaina"
 msgid "Accessories"
 msgstr "Gehigarriak"
 
-#: ../src/cairo-dock-gui-advanced.c:126 ../src/cairo-dock-gui-advanced.c:1495
-#: ../src/cairo-dock-gui-advanced.c:1496
-#: ../src/cairo-dock-widget-plugins.c:163 ../data/messages:117
-#: ../data/messages:371 ../data/messages:877
+#: ../src/cairo-dock-gui-advanced.c:126 ../src/cairo-dock-gui-advanced.c:1485
+#: ../src/cairo-dock-gui-advanced.c:1486 ../src/cairo-dock-widget-plugins.c:154
+#: ../data/messages:119 ../data/messages:373 ../data/messages:883
 msgid "System"
 msgstr "Sistema"
 
-#: ../src/cairo-dock-gui-advanced.c:127 ../src/cairo-dock-widget-plugins.c:168
+#: ../src/cairo-dock-gui-advanced.c:127 ../src/cairo-dock-widget-plugins.c:159
 msgid "Fun"
 msgstr "Dibertsioa"
 
-#: ../src/cairo-dock-gui-advanced.c:128 ../src/cairo-dock-gui-advanced.c:1769
-#: ../src/gldit/cairo-dock-gui-factory.c:798
+#: ../src/cairo-dock-gui-advanced.c:128 ../src/cairo-dock-gui-advanced.c:1762
+#: ../src/gldit/cairo-dock-gui-factory.c:785
 msgid "All"
 msgstr "Denak"
 
-#: ../src/cairo-dock-gui-advanced.c:1460
+#: ../src/cairo-dock-gui-advanced.c:1450
 msgid "Set the position of the main dock."
 msgstr "Finkatu dock nagusiaren kokapena"
 
-#: ../src/cairo-dock-gui-advanced.c:1461 ../src/cairo-dock-gui-advanced.c:1462
-#: ../Help/data/messages:321 ../data/messages:151
+#: ../src/cairo-dock-gui-advanced.c:1451 ../src/cairo-dock-gui-advanced.c:1452
+#: ../Help/data/messages:281 ../data/messages:153
 msgid "Position"
 msgstr "Kokapena"
 
-#: ../src/cairo-dock-gui-advanced.c:1469
+#: ../src/cairo-dock-gui-advanced.c:1459
 msgid ""
 "Do you like your dock to be always visible,\n"
 " or on the contrary unobtrusive?\n"
@@ -80,80 +78,80 @@ msgstr ""
 " ala ahalik eta traba gutxien egin dezan?\n"
 "Konfiguratu nola atzitzen dituzun zure dock eta azpidockak!"
 
-#: ../src/cairo-dock-gui-advanced.c:1470 ../src/cairo-dock-gui-advanced.c:1471
-#: ../src/cairo-dock-user-menu.c:2027 ../Help/data/messages:339
+#: ../src/cairo-dock-gui-advanced.c:1460 ../src/cairo-dock-gui-advanced.c:1461
+#: ../src/cairo-dock-user-menu.c:2132 ../Help/data/messages:299
 msgid "Visibility"
 msgstr "Ikusgaitasuna"
 
-#: ../src/cairo-dock-gui-advanced.c:1478
+#: ../src/cairo-dock-gui-advanced.c:1468
 msgid "Display and interact with currently open windows."
 msgstr "Bistaratu eta elkarreragin orain irekitako leihoekin."
 
-#: ../src/cairo-dock-gui-advanced.c:1479 ../src/cairo-dock-gui-advanced.c:1480
-#: ../Help/data/messages:41 ../data/messages:63
+#: ../src/cairo-dock-gui-advanced.c:1469 ../src/cairo-dock-gui-advanced.c:1470
+#: ../Help/data/messages:41 ../data/messages:65
 msgid "Taskbar"
 msgstr "Ataza-barra"
 
-#: ../src/cairo-dock-gui-advanced.c:1487
+#: ../src/cairo-dock-gui-advanced.c:1477
 msgid "Define all the keyboard shortcuts currently available."
 msgstr "Definitu unean eskuragarri dituzun teklatuko laster-tekla guztiak"
 
-#: ../src/cairo-dock-gui-advanced.c:1488 ../data/messages:147
+#: ../src/cairo-dock-gui-advanced.c:1478 ../data/messages:149
 msgid "Shortkeys"
 msgstr "Laster-teklak"
 
-#: ../src/cairo-dock-gui-advanced.c:1494
+#: ../src/cairo-dock-gui-advanced.c:1484
 msgid "All of the parameters you will never want to tweak."
 msgstr "Inoiz berrukitu nahi ez dituzun parametro guztiak."
 
-#: ../src/cairo-dock-gui-advanced.c:1506
+#: ../src/cairo-dock-gui-advanced.c:1496
 msgid "Configure the global style."
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1507 ../src/cairo-dock-gui-advanced.c:1508
-#: ../data/messages:113 ../data/messages:115 ../data/messages:459
-#: ../data/messages:549 ../data/messages:689 ../data/messages:731
-#: ../data/messages:803 ../data/messages:837 ../data/messages:871
-#: ../data/messages:875
+#: ../src/cairo-dock-gui-advanced.c:1497 ../src/cairo-dock-gui-advanced.c:1498
+#: ../data/messages:115 ../data/messages:117 ../data/messages:465
+#: ../data/messages:555 ../data/messages:695 ../data/messages:737
+#: ../data/messages:809 ../data/messages:843 ../data/messages:877
+#: ../data/messages:881
 msgid "Style"
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1515
+#: ../src/cairo-dock-gui-advanced.c:1505
 msgid "Configure docks appearance."
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1516 ../Help/data/messages:79
+#: ../src/cairo-dock-gui-advanced.c:1506 ../Help/data/messages:75
 msgid "Docks"
 msgstr "Dockak"
 
-#: ../src/cairo-dock-gui-advanced.c:1517 ../data/messages:457
-#: ../data/messages:971
+#: ../src/cairo-dock-gui-advanced.c:1507 ../data/messages:463
+#: ../data/messages:977
 msgid "Background"
 msgstr "Atzeko planoa"
 
-#: ../src/cairo-dock-gui-advanced.c:1518 ../data/messages:139
-#: ../data/messages:525 ../data/messages:965
+#: ../src/cairo-dock-gui-advanced.c:1508 ../data/messages:141
+#: ../data/messages:531 ../data/messages:971
 msgid "Views"
 msgstr "Ikuspegiak"
 
-#: ../src/cairo-dock-gui-advanced.c:1526
+#: ../src/cairo-dock-gui-advanced.c:1516
 msgid "Configure text bubble appearance."
 msgstr "Konfiguratu elkarrizketa burbuilen itxura."
 
-#: ../src/cairo-dock-gui-advanced.c:1527 ../src/cairo-dock-gui-advanced.c:1528
+#: ../src/cairo-dock-gui-advanced.c:1517 ../src/cairo-dock-gui-advanced.c:1518
 msgid "Dialog boxes and Menus"
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1535
+#: ../src/cairo-dock-gui-advanced.c:1525
 msgid "Applets can be displayed on your desktop as widgets."
 msgstr "Appletak widget gisa ezar daitezke zure mahaigainean."
 
-#: ../src/cairo-dock-gui-advanced.c:1536 ../src/cairo-dock-gui-advanced.c:1537
-#: ../Help/data/messages:89 ../data/messages:587
+#: ../src/cairo-dock-gui-advanced.c:1526 ../src/cairo-dock-gui-advanced.c:1527
+#: ../Help/data/messages:85 ../data/messages:593
 msgid "Desklets"
 msgstr "Deskletak"
 
-#: ../src/cairo-dock-gui-advanced.c:1544
+#: ../src/cairo-dock-gui-advanced.c:1534
 msgid ""
 "All about icons:\n"
 " size, reflection, icon theme,..."
@@ -161,102 +159,101 @@ msgstr ""
 "Ikonoei buruzko guztia:\n"
 " tamaina, ispilatzea, gaia..."
 
-#: ../src/cairo-dock-gui-advanced.c:1545 ../src/cairo-dock-gui-advanced.c:1546
-#: ../Help/data/messages:11 ../data/messages:123 ../data/messages:643
-#: ../data/messages:947
+#: ../src/cairo-dock-gui-advanced.c:1535 ../src/cairo-dock-gui-advanced.c:1536
+#: ../Help/data/messages:11 ../data/messages:125 ../data/messages:649
+#: ../data/messages:953
 msgid "Icons"
 msgstr "Ikonoak"
 
-#: ../src/cairo-dock-gui-advanced.c:1547 ../data/messages:727
+#: ../src/cairo-dock-gui-advanced.c:1537 ../data/messages:733
 msgid "Indicators"
 msgstr "Adierazleak"
 
-#: ../src/cairo-dock-gui-advanced.c:1555
+#: ../src/cairo-dock-gui-advanced.c:1545
 msgid "Define icon caption and quick-info style."
 msgstr "Definitu ikonoen etiketen eta informazio azkarraren estiloa."
 
-#: ../src/cairo-dock-gui-advanced.c:1556 ../src/cairo-dock-gui-advanced.c:1557
+#: ../src/cairo-dock-gui-advanced.c:1546 ../src/cairo-dock-gui-advanced.c:1547
 msgid "Captions"
 msgstr "Etiketak"
 
-#: ../src/cairo-dock-gui-advanced.c:1564
+#: ../src/cairo-dock-gui-advanced.c:1554
 msgid "Try new themes and save your theme."
 msgstr "Probatu gai berriak eta gorde zure gaia."
 
-#: ../src/cairo-dock-gui-advanced.c:1565 ../src/cairo-dock-gui-simple.c:115
+#: ../src/cairo-dock-gui-advanced.c:1555 ../src/cairo-dock-gui-simple.c:115
 #: ../src/cairo-dock-gui-simple.c:117
 msgid "Themes"
 msgstr "Gaiak"
 
-#: ../src/cairo-dock-gui-advanced.c:1571
+#: ../src/cairo-dock-gui-advanced.c:1561
 msgid "Current items in your dock(s)."
 msgstr "Zure docketako uneko elementuak."
 
-#: ../src/cairo-dock-gui-advanced.c:1572 ../src/cairo-dock-gui-simple.c:91
+#: ../src/cairo-dock-gui-advanced.c:1562 ../src/cairo-dock-gui-simple.c:91
 #: ../src/cairo-dock-gui-simple.c:93
 msgid "Current items"
 msgstr "Uneko elementuak"
 
-#: ../src/cairo-dock-gui-advanced.c:1692
+#: ../src/cairo-dock-gui-advanced.c:1685
 msgid "Filter"
 msgstr "Iragazia"
 
-#: ../src/cairo-dock-gui-advanced.c:1731
+#: ../src/cairo-dock-gui-advanced.c:1724
 msgid "All words"
 msgstr "Hitz guztiak"
 
-#: ../src/cairo-dock-gui-advanced.c:1732
+#: ../src/cairo-dock-gui-advanced.c:1725
 msgid "Highlighted words"
 msgstr "Hitz nabarmenduak"
 
-#: ../src/cairo-dock-gui-advanced.c:1733
+#: ../src/cairo-dock-gui-advanced.c:1726
 msgid "Hide others"
 msgstr "Gorde besteak"
 
-#: ../src/cairo-dock-gui-advanced.c:1734
+#: ../src/cairo-dock-gui-advanced.c:1727
 msgid "Search in description"
 msgstr "Bilatu deskribapenean"
 
-#: ../src/cairo-dock-gui-advanced.c:1738
+#: ../src/cairo-dock-gui-advanced.c:1731
 msgid "Hide disabled"
 msgstr "Ezkutatzea desgaituta"
 
-#: ../src/cairo-dock-gui-advanced.c:1747
+#: ../src/cairo-dock-gui-advanced.c:1740
 msgid "Categories"
 msgstr "Kategoriak"
 
-#: ../src/cairo-dock-gui-advanced.c:1845
+#: ../src/cairo-dock-gui-advanced.c:1838
 msgid "Enable this module"
 msgstr "Modulu hau aktibatu"
 
-#: ../src/cairo-dock-gui-advanced.c:1872 ../src/cairo-dock-gui-simple.c:199
-#: ../src/cairo-dock-user-menu.c:1837 ../src/cairo-dock-user-menu.c:1839
-#: ../src/cairo-dock-user-menu.c:1912 ../src/cairo-dock-user-menu.c:1914
-#: ../data/messages:343
+#: ../src/cairo-dock-gui-advanced.c:1865 ../src/cairo-dock-gui-simple.c:204
+#: ../src/cairo-dock-user-menu.c:196 ../src/cairo-dock-user-menu.c:1985
+#: ../src/cairo-dock-user-menu.c:1987 ../data/messages:345
 msgid "Close"
 msgstr "Itxi"
 
-#: ../src/cairo-dock-gui-advanced.c:1880
+#: ../src/cairo-dock-gui-advanced.c:1873
 msgid "Back"
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1888 ../src/cairo-dock-gui-simple.c:207
+#: ../src/cairo-dock-gui-advanced.c:1881 ../src/cairo-dock-gui-simple.c:212
 msgid "Apply"
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1904
+#: ../src/cairo-dock-gui-advanced.c:1897
 msgid "More applets"
 msgstr "Applet gehiago"
 
-#: ../src/cairo-dock-gui-advanced.c:1905
+#: ../src/cairo-dock-gui-advanced.c:1898
 msgid "Get more applets online !"
 msgstr "Eskuratu applet gehiago saretik!"
 
-#: ../src/cairo-dock-gui-advanced.c:1997 ../src/cairo-dock-gui-simple.c:354
+#: ../src/cairo-dock-gui-advanced.c:1990 ../src/cairo-dock-gui-simple.c:355
 msgid "Cairo-Dock configuration"
 msgstr "Cairo-Dock konfigurazioa"
 
-#: ../src/cairo-dock-gui-advanced.c:2582
+#: ../src/cairo-dock-gui-advanced.c:2575
 msgid "Simple Mode"
 msgstr "Modu sinplea"
 
@@ -268,11 +265,11 @@ msgstr "Gehigarriak"
 msgid "Configuration"
 msgstr "Konfigurazioa"
 
-#: ../src/cairo-dock-gui-simple.c:635
+#: ../src/cairo-dock-gui-simple.c:637
 msgid "Advanced Mode"
 msgstr "Modu aurreratua"
 
-#: ../src/cairo-dock-gui-simple.c:636
+#: ../src/cairo-dock-gui-simple.c:638
 msgid ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customise your current theme."
@@ -280,7 +277,7 @@ msgstr ""
 "Modu aurreratuan dockaren edozein parametro moldatu ahal izango duzu. Zure "
 "uneko gaia pertsonalizatzeko tresna indartsua da."
 
-#: ../src/cairo-dock-user-interaction.c:417
+#: ../src/cairo-dock-user-interaction.c:429
 msgid ""
 "The option 'overwrite X icons' has been automatically enabled in the "
 "config.\n"
@@ -289,70 +286,70 @@ msgstr ""
 "'Gainidatzi X ikonoak' aukera automatikoki gaitua dago konfigurazioan.\n"
 "'Ataza-barra' moduluan kokatzen da."
 
-#: ../src/cairo-dock-user-menu.c:119
+#: ../src/cairo-dock-user-menu.c:131
 msgid "Delete this dock?"
 msgstr "Ezabatu dock hau?"
 
-#: ../src/cairo-dock-user-menu.c:176
+#: ../src/cairo-dock-user-menu.c:193
 msgid "About Cairo-Dock"
 msgstr "Cairo-Docki buruz"
 
-#: ../src/cairo-dock-user-menu.c:209 ../Help/data/messages:271
+#: ../src/cairo-dock-user-menu.c:226 ../Help/data/messages:245
 msgid "Development site"
 msgstr "Garatzaileen webgunea"
 
-#: ../src/cairo-dock-user-menu.c:210 ../Help/data/messages:269
+#: ../src/cairo-dock-user-menu.c:227 ../Help/data/messages:243
 msgid "Find the latest version of Cairo-Dock here !"
 msgstr "Bilatu Cairo-dock azken bertsioa hemen!."
 
-#: ../src/cairo-dock-user-menu.c:214 ../src/cairo-dock-user-menu.c:1088
-#: ../src/cairo-dock-widget-plugins.c:297
+#: ../src/cairo-dock-user-menu.c:231 ../src/cairo-dock-user-menu.c:1136
+#: ../src/cairo-dock-widget-plugins.c:279
 msgid "Get more applets!"
 msgstr "Lortu applet gehiago!"
 
-#: ../src/cairo-dock-user-menu.c:218 ../src/cairo-dock-user-menu.c:224
+#: ../src/cairo-dock-user-menu.c:235 ../src/cairo-dock-user-menu.c:241
 msgid "Donate"
 msgstr "Diruz lagundu"
 
-#: ../src/cairo-dock-user-menu.c:221 ../src/cairo-dock-user-menu.c:227
+#: ../src/cairo-dock-user-menu.c:238 ../src/cairo-dock-user-menu.c:244
 msgid ""
 "Support the people who spend countless hours to bring you the best dock ever."
 msgstr ""
 "Lagundu orduak eta orduak dockik onena egiten lan egiten duen jendeari."
 
-#: ../src/cairo-dock-user-menu.c:255
+#: ../src/cairo-dock-user-menu.c:273
 msgid "Here is a list of the current developers and contributors"
 msgstr "Hemen dago uneko garatzaile eta laguntzaileen zerrenda."
 
-#: ../src/cairo-dock-user-menu.c:256
+#: ../src/cairo-dock-user-menu.c:274
 msgid "Developers"
 msgstr "Garatzaileak"
 
-#: ../src/cairo-dock-user-menu.c:257
+#: ../src/cairo-dock-user-menu.c:275
 msgid "Main developer and project leader"
 msgstr "Garatzaile nagusia eta proiektuaren liderra"
 
-#: ../src/cairo-dock-user-menu.c:258
+#: ../src/cairo-dock-user-menu.c:276
 msgid "Contributors / Hackers"
 msgstr "Laguntzaileak / Hackerrak"
 
-#: ../src/cairo-dock-user-menu.c:260
+#: ../src/cairo-dock-user-menu.c:278 ../Help/data/messages:259
 msgid "Development"
 msgstr "Garapena"
 
-#: ../src/cairo-dock-user-menu.c:275
+#: ../src/cairo-dock-user-menu.c:294
 msgid "Website"
 msgstr "Webgunea"
 
-#: ../src/cairo-dock-user-menu.c:276
+#: ../src/cairo-dock-user-menu.c:295
 msgid "Beta-testing / Suggestions / Forum animation"
 msgstr "Beta bertsioen probak / Iradokizunak / Foroen animazioa"
 
-#: ../src/cairo-dock-user-menu.c:277
+#: ../src/cairo-dock-user-menu.c:296
 msgid "Translators for this language"
 msgstr "Hizkuntza honen itzultzaileak"
 
-#: ../src/cairo-dock-user-menu.c:278
+#: ../src/cairo-dock-user-menu.c:297
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -360,11 +357,11 @@ msgstr ""
 "  Asier Sarasua Garmendia https://launchpad.net/~asarasuagarmendia\n"
 "  Mendi https://launchpad.net/~benatmendi"
 
-#: ../src/cairo-dock-user-menu.c:280
+#: ../src/cairo-dock-user-menu.c:299
 msgid "Support"
 msgstr "Sostengua"
 
-#: ../src/cairo-dock-user-menu.c:310
+#: ../src/cairo-dock-user-menu.c:330
 msgid ""
 "Thanks to all people that help us to improve the Cairo-Dock project.\n"
 "Thanks to all current, former and future contributors."
@@ -372,47 +369,51 @@ msgstr ""
 "Eskerrik asko Cairo-Dock proiektua hobetzen lagundu diguten guztiei.\n"
 "Eskerrik asko oraingo, lehengo eta etorkizuneko laguntzaileei."
 
-#: ../src/cairo-dock-user-menu.c:312
+#: ../src/cairo-dock-user-menu.c:332
 msgid "How to help us?"
 msgstr "Nola lagundu?"
 
-#: ../src/cairo-dock-user-menu.c:313
+#: ../src/cairo-dock-user-menu.c:333
 msgid "Don't hesitate to join the project, we need you ;)"
 msgstr "Ez izan zalantzarik eta egin bat taldearekin, zure beharra dugu ;)"
 
-#: ../src/cairo-dock-user-menu.c:314
+#: ../src/cairo-dock-user-menu.c:334
 msgid "Former contributors"
 msgstr "Laguntzaile izandakoak"
 
-#: ../src/cairo-dock-user-menu.c:315
+#: ../src/cairo-dock-user-menu.c:335
 msgid "For a complete list, please have a look to BZR logs"
 msgstr "Zerrenda osoa ikusteko, begiratu BZR egunkariak"
 
-#: ../src/cairo-dock-user-menu.c:316
+#: ../src/cairo-dock-user-menu.c:336
 msgid "Users of our forum"
 msgstr "Gure foroaren erabiltzaileak"
 
-#: ../src/cairo-dock-user-menu.c:317
+#: ../src/cairo-dock-user-menu.c:337
 msgid "List of our forum's members"
 msgstr "Gure foroko kideen zerrenda"
 
-#: ../src/cairo-dock-user-menu.c:318
+#: ../src/cairo-dock-user-menu.c:338
 msgid "Artwork"
 msgstr "Artelana"
 
-#: ../src/cairo-dock-user-menu.c:320
+#: ../src/cairo-dock-user-menu.c:340
 msgid "Thanks"
 msgstr "Mila esker"
 
-#: ../src/cairo-dock-user-menu.c:410
+#: ../src/cairo-dock-user-menu.c:352
+msgid "Technical info"
+msgstr ""
+
+#: ../src/cairo-dock-user-menu.c:444
 msgid "Quit Cairo-Dock?"
 msgstr "Irten Cairo-Docketik?"
 
-#: ../src/cairo-dock-user-menu.c:440 ../src/cairo-dock-user-menu.c:580
+#: ../src/cairo-dock-user-menu.c:474 ../src/cairo-dock-user-menu.c:618
 msgid "Separator"
 msgstr "Bereizlea"
 
-#: ../src/cairo-dock-user-menu.c:543
+#: ../src/cairo-dock-user-menu.c:580
 msgid ""
 "The new dock has been created.\n"
 "Now move some launchers or applets into it by right-clicking on the icon -> "
@@ -422,32 +423,32 @@ msgstr ""
 "Orain sortu abiarazleak edo appletak bertan ikono baten gainean eskuineko "
 "klik egin eta -> eraman beste dock batera"
 
-#: ../src/cairo-dock-user-menu.c:574
+#: ../src/cairo-dock-user-menu.c:612
 msgid "Add"
 msgstr "Gehitu"
 
-#: ../src/cairo-dock-user-menu.c:576
+#: ../src/cairo-dock-user-menu.c:614
 msgid "Sub-dock"
 msgstr "Azpidocka"
 
-#: ../src/cairo-dock-user-menu.c:578
+#: ../src/cairo-dock-user-menu.c:616
 msgid "Main dock"
 msgstr "Dock nagusia"
 
-#: ../src/cairo-dock-user-menu.c:582
+#: ../src/cairo-dock-user-menu.c:620
 msgid "Custom launcher"
 msgstr "Abiarazle pertsonalizatua"
 
-#: ../src/cairo-dock-user-menu.c:583
+#: ../src/cairo-dock-user-menu.c:621
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
 msgstr "Normalean abiarazlea menutik arrastatu eta dockean jaregingo duzu."
 
-#: ../src/cairo-dock-user-menu.c:585
+#: ../src/cairo-dock-user-menu.c:624
 msgid "Applet"
 msgstr "Appleta"
 
-#: ../src/cairo-dock-user-menu.c:602
+#: ../src/cairo-dock-user-menu.c:641
 msgid ""
 "Do you want to re-dispatch the icons contained inside this container into "
 "the dock?\n"
@@ -456,20 +457,20 @@ msgstr ""
 "Edukiontzi honetako ikonoak dockera birbidali nahi dituzu?\n"
 "(bestela deuseztu egingo dira)"
 
-#: ../src/cairo-dock-user-menu.c:624
+#: ../src/cairo-dock-user-menu.c:664
 msgid "separator"
 msgstr "bereizlea"
 
-#: ../src/cairo-dock-user-menu.c:628
+#: ../src/cairo-dock-user-menu.c:668
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
 msgstr "Ikono hau (%s) ezabatzera zoaz. Seguru zaude?"
 
-#: ../src/cairo-dock-user-menu.c:643
+#: ../src/cairo-dock-user-menu.c:684
 msgid "Sorry, this icon doesn't have a configuration file."
 msgstr "Barkatu, ikono honek ez du konfigurazio fitxategirik."
 
-#: ../src/cairo-dock-user-menu.c:683
+#: ../src/cairo-dock-user-menu.c:724
 msgid ""
 "The new dock has been created.\n"
 "You can customize it by right-clicking on it -> cairo-dock -> configure this "
@@ -479,16 +480,15 @@ msgstr ""
 "Hura pertsonalizatzeko, egin klik gainean eskuineko botoiarekin -> cairo-"
 "dock -> konfiguratu dock hau."
 
-#: ../src/cairo-dock-user-menu.c:689
+#: ../src/cairo-dock-user-menu.c:730
 msgid "Move to another dock"
 msgstr "Mugitu beste dock batera"
 
-#: ../src/cairo-dock-user-menu.c:691
-#: ../src/gldit/cairo-dock-gui-factory.c:1226
+#: ../src/cairo-dock-user-menu.c:732 ../src/gldit/cairo-dock-gui-factory.c:1212
 msgid "New main dock"
 msgstr "Dock nagusi berria"
 
-#: ../src/cairo-dock-user-menu.c:772
+#: ../src/cairo-dock-user-menu.c:800
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
@@ -496,109 +496,108 @@ msgstr ""
 "Barkatu, ez da aurkitu hari dagokion deskribapen-fitxategia.\n"
 "Aplikazioen menutik arrastatu eta jaregin ahal duzu abiarazlea."
 
-#: ../src/cairo-dock-user-menu.c:819
+#: ../src/cairo-dock-user-menu.c:849
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr "Applet hau (%s) ezabatzera zoaz docketik. Seguru zaude?"
 
-#: ../src/cairo-dock-user-menu.c:888 ../src/gldit/cairo-dock-gui-factory.c:761
+#: ../src/cairo-dock-user-menu.c:922 ../src/gldit/cairo-dock-gui-factory.c:748
 msgid "Pick up an image"
 msgstr "Hartu irudi bat"
 
-#: ../src/cairo-dock-user-menu.c:891 ../src/gldit/cairo-dock-gui-factory.c:764
+#: ../src/cairo-dock-user-menu.c:925 ../src/gldit/cairo-dock-gui-factory.c:751
 msgid "Ok"
 msgstr ""
 
-#: ../src/cairo-dock-user-menu.c:893 ../src/cairo-dock-widget-shortkeys.c:128
-#: ../src/cairo-dock-widget-themes.c:234
-#: ../src/gldit/cairo-dock-gui-factory.c:766
+#: ../src/cairo-dock-user-menu.c:927 ../src/cairo-dock-widget-shortkeys.c:129
+#: ../src/cairo-dock-widget-themes.c:236
+#: ../src/gldit/cairo-dock-gui-factory.c:753
 msgid "Cancel"
 msgstr ""
 
-#: ../src/cairo-dock-user-menu.c:905 ../src/gldit/cairo-dock-gui-factory.c:805
-#: ../data/messages:463 ../data/messages:469 ../data/messages:735
-#: ../data/messages:977
+#: ../src/cairo-dock-user-menu.c:939 ../src/gldit/cairo-dock-gui-factory.c:792
+#: ../data/messages:469 ../data/messages:475 ../data/messages:741
+#: ../data/messages:983
 msgid "Image"
 msgstr "Irudia"
 
-#: ../src/cairo-dock-user-menu.c:1005
+#: ../src/cairo-dock-user-menu.c:1020 ../src/cairo-dock-user-menu.c:1099
+msgid "This will (un)lock the position of the icons."
+msgstr "Honek ikonoen kokapena (des)blokeatzen du."
+
+#: ../src/cairo-dock-user-menu.c:1050
 msgid "Configure"
 msgstr "Konfiguratu"
 
-#: ../src/cairo-dock-user-menu.c:1010
+#: ../src/cairo-dock-user-menu.c:1052
 msgid "Configure behaviour, appearance, and applets."
 msgstr "Konfiguratu portaera, itxura eta appletak"
 
-#: ../src/cairo-dock-user-menu.c:1015
+#: ../src/cairo-dock-user-menu.c:1060
 msgid "Configure this dock"
 msgstr "Ezarri dock hau"
 
-#: ../src/cairo-dock-user-menu.c:1020
+#: ../src/cairo-dock-user-menu.c:1062
 msgid "Customize the position, visibility and appearance of this main dock."
 msgstr "Dock nagusi honen kokapen, ikusgarritasun eta itxura pertsonalizatu"
 
-#: ../src/cairo-dock-user-menu.c:1022
+#: ../src/cairo-dock-user-menu.c:1065
 msgid "Delete this dock"
 msgstr "Ezabatu dock hau"
 
-#: ../src/cairo-dock-user-menu.c:1032
+#: ../src/cairo-dock-user-menu.c:1076
 msgid "Manage themes"
 msgstr "Gaiak kudeatu"
 
-#: ../src/cairo-dock-user-menu.c:1037
+#: ../src/cairo-dock-user-menu.c:1078
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
 msgstr ""
 "Zerbitzarian dauden gai anitzen arteko bat aukeratu, eta uneko zure gaiak "
 "gorde."
 
-#: ../src/cairo-dock-user-menu.c:1049
+#: ../src/cairo-dock-user-menu.c:1092
 msgid "Lock icons position"
 msgstr "blokeatu ikonoen kokapena"
 
-#: ../src/cairo-dock-user-menu.c:1053
-msgid "This will (un)lock the position of the icons."
-msgstr "Honek ikonoen kokapena (des)blokeatzen du."
-
-#: ../src/cairo-dock-user-menu.c:1059
+#: ../src/cairo-dock-user-menu.c:1106
 msgid "Quick-Hide"
 msgstr "Ezkutatze azkarra"
 
-#: ../src/cairo-dock-user-menu.c:1064
+#: ../src/cairo-dock-user-menu.c:1108
 msgid "This will hide the dock until you hover over it with the mouse."
 msgstr "Docka ezkutatuko du saguaz bertan sartu arte."
 
-#: ../src/cairo-dock-user-menu.c:1077
+#: ../src/cairo-dock-user-menu.c:1124
 msgid "Launch Cairo-Dock on startup"
 msgstr "Abiarazi Cairo-Dock abioan"
 
-#: ../src/cairo-dock-user-menu.c:1093
-msgid ""
-"Third-party applets provide integration with many programs, like Pidgin"
+#: ../src/cairo-dock-user-menu.c:1138
+msgid "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Hirugarrenen appletek hainbat programen integrazioa ahalbidetzen dute, "
 "adibidez pidgin"
 
-#: ../src/cairo-dock-user-menu.c:1096 ../Help/src/applet-init.c:28
-#: ../Help/src/applet-notifications.c:269
+#: ../src/cairo-dock-user-menu.c:1144 ../Help/src/applet-init.c:28
+#: ../Help/src/applet-notifications.c:101
 msgid "Help"
 msgstr "Laguntza"
 
-#: ../src/cairo-dock-user-menu.c:1101
+#: ../src/cairo-dock-user-menu.c:1146
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
 msgstr ""
 "Ez dago arazorik, konponbideak bakarrik daude (eta iradokizun erabilgarri "
 "pila bat ! )."
 
-#: ../src/cairo-dock-user-menu.c:1105
+#: ../src/cairo-dock-user-menu.c:1152
 msgid "About"
 msgstr "Honi buruz"
 
-#: ../src/cairo-dock-user-menu.c:1114
+#: ../src/cairo-dock-user-menu.c:1162
 msgid "Quit"
 msgstr "Irten"
 
-#: ../src/cairo-dock-user-menu.c:1123
+#: ../src/cairo-dock-user-menu.c:1164
 msgid ""
 "You're using a Cairo-Dock Session!\n"
 "It's not advised to quit the dock but you can press Shift to unlock this "
@@ -608,198 +607,189 @@ msgstr ""
 "Ez da gomendagarria docketik irtetea, baina Shift sakatu dezakezu menu-"
 "sarrera hau desblokeatzeko."
 
-#: ../src/cairo-dock-user-menu.c:1149 ../src/cairo-dock-user-menu.c:1162
+#: ../src/cairo-dock-user-menu.c:1195 ../src/cairo-dock-user-menu.c:1208
 msgid "Launch a new (Shift+clic)"
 msgstr "Berria abiarazi (Shift+klik)"
 
-#: ../src/cairo-dock-user-menu.c:1154 ../src/cairo-dock-user-menu.c:1235
+#: ../src/cairo-dock-user-menu.c:1200 ../src/cairo-dock-user-menu.c:1282
 msgid "Applet's handbook"
 msgstr "Appleten eskuliburua"
 
-#: ../src/cairo-dock-user-menu.c:1169 ../src/cairo-dock-user-menu.c:1214
+#: ../src/cairo-dock-user-menu.c:1215 ../src/cairo-dock-user-menu.c:1261
 msgid "Edit"
 msgstr "Editatu"
 
-#: ../src/cairo-dock-user-menu.c:1171 ../src/cairo-dock-user-menu.c:1221
+#: ../src/cairo-dock-user-menu.c:1217 ../src/cairo-dock-user-menu.c:1268
 msgid "Remove"
 msgstr "Kendu"
 
-#: ../src/cairo-dock-user-menu.c:1172
+#: ../src/cairo-dock-user-menu.c:1218
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
-msgstr ""
-"Abiarazlea ezabatu dezakezu docketik arrastatu eta kanpoan jareginez."
+msgstr "Abiarazlea ezabatu dezakezu docketik arrastatu eta kanpoan jareginez."
 
-#: ../src/cairo-dock-user-menu.c:1181
+#: ../src/cairo-dock-user-menu.c:1228
 msgid "Make it a launcher"
 msgstr "Abiarazlea egin"
 
-#: ../src/cairo-dock-user-menu.c:1204
+#: ../src/cairo-dock-user-menu.c:1251
 msgid "Remove custom icon"
 msgstr "Ezabatu ikono pertsonalizatua"
 
-#: ../src/cairo-dock-user-menu.c:1208
+#: ../src/cairo-dock-user-menu.c:1255
 msgid "Set a custom icon"
 msgstr "Ezarri ikono pertsonalizatua"
 
-#: ../src/cairo-dock-user-menu.c:1218
+#: ../src/cairo-dock-user-menu.c:1265
 msgid "Detach"
 msgstr "Desatrakatu"
 
-#: ../src/cairo-dock-user-menu.c:1218
+#: ../src/cairo-dock-user-menu.c:1265
 msgid "Return to the dock"
 msgstr "Itzuli dockera"
 
-#: ../src/cairo-dock-user-menu.c:1225
+#: ../src/cairo-dock-user-menu.c:1272
 msgid "Duplicate"
 msgstr "Bikoiztu"
 
-#: ../src/cairo-dock-user-menu.c:1399
+#: ../src/cairo-dock-user-menu.c:1446
 #, c-format
 msgid "Move all to desktop %d - face %d"
 msgstr "Mugitu denak %d mahaigainera  %d aurpegian"
 
-#: ../src/cairo-dock-user-menu.c:1399
+#: ../src/cairo-dock-user-menu.c:1446
 #, c-format
 msgid "Move to desktop %d - face %d"
 msgstr "Mugitu  %d mahaigainera  %d aurpegian"
 
-#: ../src/cairo-dock-user-menu.c:1401
+#: ../src/cairo-dock-user-menu.c:1448
 #, c-format
 msgid "Move all to desktop %d"
 msgstr "Mugitu denak %d mahaigainera"
 
-#: ../src/cairo-dock-user-menu.c:1401
+#: ../src/cairo-dock-user-menu.c:1448
 #, c-format
 msgid "Move to desktop %d"
 msgstr "Mugitu %d mahaigainera"
 
-#: ../src/cairo-dock-user-menu.c:1403
+#: ../src/cairo-dock-user-menu.c:1450
 #, c-format
 msgid "Move all to face %d"
 msgstr "Mugitu denak %d aurpegira"
 
-#: ../src/cairo-dock-user-menu.c:1403
+#: ../src/cairo-dock-user-menu.c:1450
 #, c-format
 msgid "Move to face %d"
 msgstr "Mugitu  %d aurpegira"
 
-#: ../src/cairo-dock-user-menu.c:1831 ../src/cairo-dock-user-menu.c:1882
+#: ../src/cairo-dock-user-menu.c:1979
 msgid "Window"
 msgstr "Leihoa"
 
-#: ../src/cairo-dock-user-menu.c:1837 ../src/cairo-dock-user-menu.c:1860
-#: ../src/cairo-dock-user-menu.c:1901 ../src/cairo-dock-user-menu.c:1912
-#: ../src/cairo-dock-user-menu.c:1935 ../src/cairo-dock-user-menu.c:1976
-#: ../src/cairo-dock-user-menu.c:1986 ../Help/src/applet-notifications.c:259
+#: ../src/cairo-dock-user-menu.c:1985 ../src/cairo-dock-user-menu.c:2008
+#: ../src/cairo-dock-user-menu.c:2045 ../src/cairo-dock-user-menu.c:2086
+#: ../src/cairo-dock-user-menu.c:2096 ../Help/src/applet-notifications.c:95
 msgid "middle-click"
 msgstr "erdiko klika"
 
-#: ../src/cairo-dock-user-menu.c:1852 ../src/cairo-dock-user-menu.c:1893
+#: ../src/cairo-dock-user-menu.c:2000
 msgid "Unmaximise"
 msgstr "Desmaximizatu"
 
-#: ../src/cairo-dock-user-menu.c:1852 ../src/cairo-dock-user-menu.c:1893
+#: ../src/cairo-dock-user-menu.c:2000
 msgid "Maximise"
 msgstr "Maximizatu"
 
-#: ../src/cairo-dock-user-menu.c:1860 ../src/cairo-dock-user-menu.c:1862
-#: ../src/cairo-dock-user-menu.c:1901 ../src/cairo-dock-user-menu.c:1903
+#: ../src/cairo-dock-user-menu.c:2008 ../src/cairo-dock-user-menu.c:2010
 msgid "Minimise"
 msgstr "Ikonotu"
 
-#: ../src/cairo-dock-user-menu.c:1877 ../src/cairo-dock-user-menu.c:1887
+#: ../src/cairo-dock-user-menu.c:2024
 msgid "Show"
 msgstr "Bistarazi"
 
-#: ../src/cairo-dock-user-menu.c:1921 ../src/cairo-dock-user-menu.c:2010
+#: ../src/cairo-dock-user-menu.c:2030 ../src/cairo-dock-user-menu.c:2111
 msgid "Other actions"
 msgstr "Beste ekintzak"
 
-#: ../src/cairo-dock-user-menu.c:1924
+#: ../src/cairo-dock-user-menu.c:2033
 msgid "Move to this desktop"
 msgstr "Mahaigain  honetara mugitu"
 
-#: ../src/cairo-dock-user-menu.c:1929
+#: ../src/cairo-dock-user-menu.c:2039
 msgid "Not Fullscreen"
 msgstr "Pantaila osoa ez"
 
-#: ../src/cairo-dock-user-menu.c:1929
+#: ../src/cairo-dock-user-menu.c:2039
 msgid "Fullscreen"
 msgstr "Pantaila osoa"
 
-#: ../src/cairo-dock-user-menu.c:1935 ../src/cairo-dock-user-menu.c:1937
+#: ../src/cairo-dock-user-menu.c:2045 ../src/cairo-dock-user-menu.c:2047
 msgid "Below other windows"
 msgstr "Beste leihoen azpian"
 
-#: ../src/cairo-dock-user-menu.c:1945
+#: ../src/cairo-dock-user-menu.c:2055
 msgid "Don't keep above"
 msgstr "Ez mantendu gainean"
 
-#: ../src/cairo-dock-user-menu.c:1945 ../Help/data/messages:349
+#: ../src/cairo-dock-user-menu.c:2055 ../Help/data/messages:309
 msgid "Keep above"
 msgstr "Mantendu gainean"
 
-#: ../src/cairo-dock-user-menu.c:1949
+#: ../src/cairo-dock-user-menu.c:2059
 msgid "Visible only on this desktop"
 msgstr "Ikusgai mahaigain honetan soilik"
 
-#: ../src/cairo-dock-user-menu.c:1949
+#: ../src/cairo-dock-user-menu.c:2059
 msgid "Visible on all desktops"
 msgstr "Ikusgai mahaigain guztietan"
 
-#: ../src/cairo-dock-user-menu.c:1957
+#: ../src/cairo-dock-user-menu.c:2068
 msgid "Kill"
 msgstr "Hil"
 
-#: ../src/cairo-dock-user-menu.c:1972
+#: ../src/cairo-dock-user-menu.c:2082
 msgid "Windows"
 msgstr "Leihoak"
 
-#: ../src/cairo-dock-user-menu.c:1976 ../src/cairo-dock-user-menu.c:1978
-#: ../src/cairo-dock-user-menu.c:2006
+#: ../src/cairo-dock-user-menu.c:2086 ../src/cairo-dock-user-menu.c:2088
 msgid "Close all"
 msgstr "Itxi denak"
 
-#: ../src/cairo-dock-user-menu.c:1986 ../src/cairo-dock-user-menu.c:1988
-#: ../src/cairo-dock-user-menu.c:2004
+#: ../src/cairo-dock-user-menu.c:2096 ../src/cairo-dock-user-menu.c:2098
 msgid "Minimise all"
 msgstr "Ikonotu denak"
 
-#: ../src/cairo-dock-user-menu.c:1996 ../src/cairo-dock-user-menu.c:2002
+#: ../src/cairo-dock-user-menu.c:2106
 msgid "Show all"
 msgstr "Bistarazi denak"
 
-#: ../src/cairo-dock-user-menu.c:2000
-msgid "Windows management"
-msgstr "Leihoen kudeaketa"
-
-#: ../src/cairo-dock-user-menu.c:2012
+#: ../src/cairo-dock-user-menu.c:2113
 msgid "Move all to this desktop"
 msgstr "Mugitu denak mahaigain honetara"
 
-#: ../src/cairo-dock-user-menu.c:2035 ../Help/data/messages:347
+#: ../src/cairo-dock-user-menu.c:2140 ../Help/data/messages:307
 msgid "Normal"
 msgstr "Normal"
 
-#: ../src/cairo-dock-user-menu.c:2041 ../data/messages:21 ../data/messages:193
-#: ../data/messages:923
+#: ../src/cairo-dock-user-menu.c:2146 ../data/messages:23 ../data/messages:195
+#: ../data/messages:929
 msgid "Always on top"
 msgstr "Beti goian"
 
-#: ../src/cairo-dock-user-menu.c:2048
+#: ../src/cairo-dock-user-menu.c:2153
 msgid "Always below"
 msgstr "Beti behean"
 
-#: ../src/cairo-dock-user-menu.c:2065 ../Help/data/messages:355
+#: ../src/cairo-dock-user-menu.c:2170 ../Help/data/messages:315
 msgid "Reserve space"
 msgstr "Gorde tokia"
 
-#: ../src/cairo-dock-user-menu.c:2072
+#: ../src/cairo-dock-user-menu.c:2177
 msgid "On all desktops"
 msgstr "Mahaigain guztietan"
 
-#: ../src/cairo-dock-user-menu.c:2078
+#: ../src/cairo-dock-user-menu.c:2183
 msgid "Lock position"
 msgstr "Blokeatu kokapena"
 
@@ -812,37 +802,35 @@ msgid "Effects:"
 msgstr "Efektuak:"
 
 #: ../src/cairo-dock-widget-items.c:243
-msgid ""
-"Main dock's parameters are available in the main configuration window."
+msgid "Main dock's parameters are available in the main configuration window."
 msgstr ""
 "Dock nagusiaren parametroak konfigurazio-leiho nagusian daude eskuragarri."
 
-#: ../src/cairo-dock-widget-items.c:724
+#: ../src/cairo-dock-widget-items.c:710
 msgid "Remove this item"
 msgstr "Kendu elementu hau"
 
-#: ../src/cairo-dock-widget-plugins.c:105
+#: ../src/cairo-dock-widget-plugins.c:103
 msgid "Configure this applet"
 msgstr "Konfiguratu applet hau"
 
-#: ../src/cairo-dock-widget-plugins.c:158
+#: ../src/cairo-dock-widget-plugins.c:149
 msgid "Accessory"
 msgstr "Osagarri"
 
-#: ../src/cairo-dock-widget-plugins.c:245
+#: ../src/cairo-dock-widget-plugins.c:235
 msgid "Plug-in"
 msgstr "Plugina"
 
-#: ../src/cairo-dock-widget-plugins.c:251 ../Help/src/applet-tips-dialog.c:297
+#: ../src/cairo-dock-widget-plugins.c:241 ../Help/src/applet-tips-dialog.c:309
 msgid "Category"
 msgstr "Kategoria"
 
-#: ../src/cairo-dock-widget-plugins.c:279
-msgid ""
-"Click on an applet in order to have a preview and a description for it."
+#: ../src/cairo-dock-widget-plugins.c:265
+msgid "Click on an applet in order to have a preview and a description for it."
 msgstr "Klik appletean bere aurrebista eta deskribapena jasotzeko."
 
-#: ../src/cairo-dock-widget-shortkeys.c:125
+#: ../src/cairo-dock-widget-shortkeys.c:126
 msgid "Press the shortkey"
 msgstr "Sakatu laster-tekla"
 
@@ -850,23 +838,30 @@ msgstr "Sakatu laster-tekla"
 msgid "Change the shortkey"
 msgstr "Aldatu larter-tekla"
 
-#: ../src/cairo-dock-widget-shortkeys.c:234
+#: ../src/cairo-dock-widget-shortkeys.c:225
 msgid "Origin"
 msgstr "Jatorria"
 
-#: ../src/cairo-dock-widget-shortkeys.c:239
+#: ../src/cairo-dock-widget-shortkeys.c:230
 msgid "Action"
 msgstr "Ekintza"
 
-#: ../src/cairo-dock-widget-shortkeys.c:243
+#: ../src/cairo-dock-widget-shortkeys.c:234
 msgid "Shortkey"
 msgstr "Laster-tekla"
 
-#: ../src/cairo-dock-widget-themes.c:89
+#: ../src/cairo-dock-widget-shortkeys.c:261
+#: ../src/gldit/cairo-dock-gui-factory.c:3022
+msgid ""
+"You are running Cairo-Dock in a Wayland session.\n"
+"Setting global keyboard shortcuts is not supported on Wayland yet."
+msgstr ""
+
+#: ../src/cairo-dock-widget-themes.c:90
 msgid "Could not import the theme."
 msgstr "Ezin da inportatu gaia."
 
-#: ../src/cairo-dock-widget-themes.c:194
+#: ../src/cairo-dock-widget-themes.c:195
 msgid ""
 "You have made some changes to the current theme.\n"
 "You will lose them if you don't save before choosing a new theme. Continue "
@@ -876,70 +871,70 @@ msgstr ""
 "Galdu egingo dituzu ez badituzu gordetzen gai berria aukeratu baino lehen. "
 "Jarraitu edonola ere?"
 
-#: ../src/cairo-dock-widget-themes.c:222
+#: ../src/cairo-dock-widget-themes.c:224
 msgid "Please wait while importing the theme..."
 msgstr "Itxaron gaia inportatu arte..."
 
-#: ../src/cairo-dock-widget-themes.c:281
+#: ../src/cairo-dock-widget-themes.c:283
 msgid "Rate me"
 msgstr "Puntua nazazu"
 
-#: ../src/cairo-dock-widget-themes.c:379 ../src/cairo-dock-widget-themes.c:381
+#: ../src/cairo-dock-widget-themes.c:384 ../src/cairo-dock-widget-themes.c:386
 msgid "You must try the theme before you can rate it."
 msgstr "Gaia frogatu egin behar da iritzia eman aurretik."
 
-#: ../src/cairo-dock-widget-themes.c:428
+#: ../src/cairo-dock-widget-themes.c:433
 msgid "The theme has been deleted"
 msgstr "Gaia ezabatu da"
 
-#: ../src/cairo-dock-widget-themes.c:458
+#: ../src/cairo-dock-widget-themes.c:462
 msgid "Delete this theme"
 msgstr "Ezabatu gai hau"
 
-#: ../src/cairo-dock-widget-themes.c:489
-#: ../src/gldit/cairo-dock-gui-factory.c:2379
+#: ../src/cairo-dock-widget-themes.c:486
+#: ../src/gldit/cairo-dock-gui-factory.c:2304
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr "'%s'n gaiak zerrendatzen..."
 
-#: ../src/cairo-dock-widget-themes.c:512
+#: ../src/cairo-dock-widget-themes.c:509
 msgid "Theme"
 msgstr "Gaia"
 
-#: ../src/cairo-dock-widget-themes.c:525
+#: ../src/cairo-dock-widget-themes.c:522
 msgid "Rating"
 msgstr "balioa"
 
-#: ../src/cairo-dock-widget-themes.c:531
+#: ../src/cairo-dock-widget-themes.c:528
 msgid "Sobriety"
 msgstr "seriotasun"
 
-#: ../src/cairo-dock-widget-themes.c:595
+#: ../src/cairo-dock-widget-themes.c:588
 msgid "Save as:"
 msgstr "Gorde honela:"
 
-#: ../src/cairo-dock-widget-themes.c:675
+#: ../src/cairo-dock-widget-themes.c:667
 msgid "Importing theme ..."
 msgstr "Gaia inportatzen ..."
 
-#: ../src/cairo-dock-widget-themes.c:683
+#: ../src/cairo-dock-widget-themes.c:675
 msgid "Theme has been saved"
 msgstr "Gaia gordea izan da"
 
-#: ../src/cairo-dock.c:148
+#: ../src/cairo-dock.c:164
 #, c-format
 msgid "Happy new year %d !!!"
 msgstr "%d. urte zoriontsua!!!"
 
-#: ../src/cairo-dock.c:351
+#: ../src/cairo-dock.c:382
 msgid "Use Cairo backend."
 msgstr "Erabili Cairo motorra."
 
-#: ../src/cairo-dock.c:354
+#: ../src/cairo-dock.c:385
 msgid "Use OpenGL backend."
 msgstr "Erabili OpenGL motorra."
 
-#: ../src/cairo-dock.c:357
+#: ../src/cairo-dock.c:388
 msgid ""
 "Use OpenGL backend with indirect rendering. There are very few case where "
 "this option should be used."
@@ -947,22 +942,22 @@ msgstr ""
 "Erabili OpenGL motorra zeharkako errendatzearekin. Kasu guxitan erabili "
 "beharko duzu aukera hau."
 
-#: ../src/cairo-dock.c:360
+#: ../src/cairo-dock.c:391
 msgid "Ask again on startup which backend to use."
 msgstr "Galdetu abioan berriro zein motor erabiliko den."
 
-#: ../src/cairo-dock.c:363
+#: ../src/cairo-dock.c:394
 msgid "Force the dock to consider this environnement - use it with care."
 msgstr "Behartu dockak ingurune hau kontuan har dezan - erabili kontuz."
 
-#: ../src/cairo-dock.c:366
+#: ../src/cairo-dock.c:397
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
 msgstr ""
 "Behartu docka direktorio honetatik karga dadin, ~/.config/cairo-dock erabili "
 "ordez."
 
-#: ../src/cairo-dock.c:369
+#: ../src/cairo-dock.c:400
 msgid ""
 "Address of a server containing additional themes. This will overwrite the "
 "default server address."
@@ -970,7 +965,7 @@ msgstr ""
 "Gai gehiago dituen zerbitzari baten helbidea. Honek zerbitzari lehenetsiaren "
 "helbidea gainidatziko du."
 
-#: ../src/cairo-dock.c:372
+#: ../src/cairo-dock.c:403
 msgid ""
 "Wait for N seconds before starting; this is useful if you notice some "
 "problems when the dock starts with the session."
@@ -978,7 +973,7 @@ msgstr ""
 "Itxaron N segundo hasi baino lehen; hau erabilgarria da arazoak sumatzen "
 "badituzu docka saioarekin batera abiarazten denean."
 
-#: ../src/cairo-dock.c:375
+#: ../src/cairo-dock.c:406
 msgid ""
 "Allow to edit the config before the dock is started and show the config "
 "panel on start."
@@ -986,54 +981,50 @@ msgstr ""
 "Utzi konfigurazioa editatzen docka abiarazi baino lehen eta erakutsi "
 "konfigurazio-panela abioan."
 
-#: ../src/cairo-dock.c:378
+#: ../src/cairo-dock.c:409
 msgid "Exclude a given plug-in from activating (it is still loaded though)."
 msgstr "Ez aktibatu plugin jakin bat (hala ere, kargatu egingo da)."
 
-#: ../src/cairo-dock.c:381
+#: ../src/cairo-dock.c:412
 msgid "Don't load any plug-ins."
 msgstr "Ez kargatu pluginik."
 
-#: ../src/cairo-dock.c:384
-msgid ""
-"Work around some bugs in Metacity Window-Manager (invisible dialogs or sub-"
-"docks)"
+#: ../src/cairo-dock.c:415
+msgid "Work around potential glitches when dialogs or sub-docks appear"
 msgstr ""
-"Metacity Window-Manager-ek dituen akats batzuk (elkarrizketa-leiho edo "
-"azpidock ikusezinak) saihestu"
 
-#: ../src/cairo-dock.c:387
+#: ../src/cairo-dock.c:418
 msgid ""
 "Log verbosity (debug,message,warning,critical,error); default is warning."
 msgstr ""
 "Egunkariaren jarioa (arazketa, mezua, abisua, errore kritikoa); lehenetsia "
 "abisua da."
 
-#: ../src/cairo-dock.c:390
+#: ../src/cairo-dock.c:421
 msgid "Force to display some output messages with colors."
 msgstr "Behartu irteerako mezu batzuk koloreetan erakuts daitezen."
 
-#: ../src/cairo-dock.c:393
+#: ../src/cairo-dock.c:424
 msgid "Print version and quit."
 msgstr "Inprimatu bertsioa eta irten."
 
-#: ../src/cairo-dock.c:396
+#: ../src/cairo-dock.c:427
 msgid "Lock the dock so that any modification is impossible for users."
 msgstr "Blokeatu docka, erabiltzaileek ezer alda ez dezaten."
 
-#: ../src/cairo-dock.c:400
+#: ../src/cairo-dock.c:431
 msgid "Keep the dock above other windows."
 msgstr "Mantendu docka beste leihoen gainetik."
 
-#: ../src/cairo-dock.c:403
+#: ../src/cairo-dock.c:434
 msgid "Don't make the dock appear on all desktops."
 msgstr "Ez agerrarazi docka mahaigain guztietan."
 
-#: ../src/cairo-dock.c:406 ../src/cairo-dock.c:466
+#: ../src/cairo-dock.c:437 ../src/cairo-dock.c:497
 msgid "Cairo-Dock makes anything, including coffee !"
 msgstr "Cairo-Dockek edozer egiten du, baita kafea ere!"
 
-#: ../src/cairo-dock.c:409
+#: ../src/cairo-dock.c:440
 msgid ""
 "Ask the dock to load additionnal modules contained in this directory (though "
 "it is unsafe for your dock to load unnofficial modules)."
@@ -1041,7 +1032,7 @@ msgstr ""
 "Eskatu dockari direktorio honetan dauden gainerako moduluak kargatzea "
 "(kontuz, ez da segurua ofizialak ez diren moduluak dockean kargatzea)."
 
-#: ../src/cairo-dock.c:412
+#: ../src/cairo-dock.c:443
 msgid ""
 "For debugging purpose only. The crash manager will not be started to hunt "
 "down the bugs."
@@ -1049,7 +1040,7 @@ msgstr ""
 "Arazketarako soilik. Kraskaduren kudeatzailea ez da abiaraziko akatsak "
 "ehizatzeko."
 
-#: ../src/cairo-dock.c:415
+#: ../src/cairo-dock.c:446
 msgid ""
 "For debugging purpose only. Some hidden and still unstable options will be "
 "activated."
@@ -1057,19 +1048,72 @@ msgstr ""
 "Arazketarako soilik. Ezkutuan daudene ta oraindik ezegonkorrak diren zenbait "
 "aukera aktibatuko dira."
 
-#: ../src/cairo-dock.c:535
+#: ../src/cairo-dock.c:449
+msgid "Force using the Wayland backends (disable X11 backends)."
+msgstr ""
+
+#: ../src/cairo-dock.c:452
+msgid "Force using the X11 backend (disable any Wayland functionality)."
+msgstr ""
+
+#: ../src/cairo-dock.c:455
+msgid "Use EGL on X11."
+msgstr ""
+
+#: ../src/cairo-dock.c:458
+msgid "For debugging purpose only. Disable gtk-layer-shell support."
+msgstr ""
+
+#: ../src/cairo-dock.c:461
+msgid ""
+"For debugging purpose only. Do not blacklist incompatible plugins on Wayland."
+msgstr ""
+
+#: ../src/cairo-dock.c:464
+msgid ""
+"For debugging purposes. Fail loading the specified plugin module after "
+"opening it. Multiple modules can be specified by repeating this option "
+"multiple times."
+msgstr ""
+
+#: ../src/cairo-dock.c:467
+msgid ""
+"For debugging purposes only. Fail loading all plugin modules (after opening)."
+msgstr ""
+
+#: ../src/cairo-dock.c:470
+msgid ""
+"For debugging purposes only. Do not check version compatibility after "
+"loading a plugin module."
+msgstr ""
+
+#: ../src/cairo-dock.c:473
+msgid "For debugging purposes only. Do not use systemd to launch apps."
+msgstr ""
+
+#: ../src/cairo-dock.c:476
+msgid "For debugging purposes only. Do not use DBus activation to launch apps."
+msgstr ""
+
+#: ../src/cairo-dock.c:479
+msgid ""
+"For debugging purposes only. Rely on GIO to launch apps instead of our own "
+"implementation (implies --disable-systemd)."
+msgstr ""
+
+#: ../src/cairo-dock.c:605
 msgid "Use OpenGL in Cairo-Dock"
 msgstr "OpenGL erabili nahi Cairo-Docken?"
 
-#: ../src/cairo-dock.c:538 ../src/cairo-dock.c:785
+#: ../src/cairo-dock.c:608 ../src/cairo-dock.c:848
 msgid "Yes"
 msgstr ""
 
-#: ../src/cairo-dock.c:540 ../src/cairo-dock.c:786 ../data/messages:823
+#: ../src/cairo-dock.c:610 ../src/cairo-dock.c:849 ../data/messages:829
 msgid "No"
 msgstr "Ez"
 
-#: ../src/cairo-dock.c:543
+#: ../src/cairo-dock.c:613
 msgid ""
 "OpenGL allows you to use the hardware acceleration, reducing the CPU load to "
 "the minimum.\n"
@@ -1092,36 +1136,36 @@ msgstr ""
 "  edo -o aukera erabiliz OpenGL erabiltzera behartzeko eta -c Cairo "
 "erabiltzera behartzeko.)"
 
-#: ../src/cairo-dock.c:550
+#: ../src/cairo-dock.c:620
 msgid "Remember this choice"
 msgstr "Gogoratu aukera hau"
 
-#: ../src/cairo-dock.c:716 ../src/cairo-dock.c:908
+#: ../src/cairo-dock.c:780 ../src/cairo-dock.c:1000
 #, c-format
 msgid ""
 "The module '%s' has been deactivated because it may have caused some "
 "problems.\n"
-"You can reactivate it, but if it happens again please report it at "
-"https://github.com/Cairo-Dock/cairo-dock-core/issues"
+"You can reactivate it, but if it happens again please report it at https://"
+"github.com/Cairo-Dock/cairo-dock-core/issues"
 msgstr ""
 "'%s' modulua desaktibatu egin da, zenbait arazo sortu dituela susmatzen "
 "delako.\n"
-"Berriro aktiba dezakezu, berriro gertatzen bada jakinarazi "
-"https://github.com/Cairo-Dock/cairo-dock-core/issues"
+"Berriro aktiba dezakezu, berriro gertatzen bada jakinarazi https://github."
+"com/Cairo-Dock/cairo-dock-core/issues"
 
-#: ../src/cairo-dock.c:728
+#: ../src/cairo-dock.c:791
 msgid "< Maintenance mode >"
 msgstr "< Mantzentze era>"
 
-#: ../src/cairo-dock.c:730
+#: ../src/cairo-dock.c:793
 msgid "Something went wrong with this applet:"
 msgstr "Zerbait gaizki joan da applet honekin:"
 
-#: ../src/cairo-dock.c:782
+#: ../src/cairo-dock.c:845
 msgid "You're using our Cairo-Dock session"
 msgstr ""
 
-#: ../src/cairo-dock.c:788
+#: ../src/cairo-dock.c:851
 msgid ""
 "It can be interesting to use an adapted theme for this session.\n"
 "\n"
@@ -1131,12 +1175,13 @@ msgid ""
 "Themes manager"
 msgstr ""
 
-#: ../src/cairo-dock.c:833
+#: ../src/cairo-dock.c:896
 msgid ""
 "No plug-in were found.\n"
 "Plug-ins provide most of the functionalities (animations, applets, views, "
 "etc).\n"
-"See https://github.com/Cairo-Dock/cairo-dock-core/wiki for more information.\n"
+"See https://github.com/Cairo-Dock/cairo-dock-core/wiki for more "
+"information.\n"
 "There is almost no meaning in running the dock without them and it's "
 "probably due to a problem with the installation of these plug-ins.\n"
 "But if you really want to use the dock without these plug-ins, you can "
@@ -1145,13 +1190,52 @@ msgstr ""
 "Ez da pluginik aurkitu.\n"
 "Pluginek funtzionaltasun asko eskaintzen dituzte (animazioak, appletak, "
 "bistak, etab.)\n"
-"Ikus https://github.com/Cairo-Dock/cairo-dock-core/wiki informazio gehiagorako.\n"
+"Ikus https://github.com/Cairo-Dock/cairo-dock-core/wiki informazio "
+"gehiagorako.\n"
 "Zentzu gutxi dauka docka haiek gabe erabiltzea, eta seguru asko plugin "
 "horien instalazioan egondako arazoren baten ondorio da.\n"
 "Hala ere, docka benetan plugin horiek gabe erabili nahi baduzu, -f' aukera "
 "erabiliz abiaraz dezakezu, mezu hau berriro ager ez dadin.\n"
 
-#: ../src/cairo-dock.c:906
+#: ../src/cairo-dock.c:908
+msgid ""
+"Cairo-Dock is running in a Wayland session, but the compositor does not seem "
+"to support the wlr-layer-shell protocol. This is required for properly "
+"positioning the dock on the screen; it is likely that docks will show up in "
+"wrong locations. Please check that you are running a Wayland compositor that "
+"is compatible with wlr-layer-shell; see the documentation for more "
+"information. Please note that neither GNOME Shell nor the Ubuntu Wayland "
+"desktop session is supported. If you believe that your compositor should be "
+"supported, consider reporting this issue in our bug tracker.\n"
+"\n"
+"(to disable showing this message, run Cairo-Dock with the '--no-layer-shell' "
+"command line option)"
+msgstr ""
+
+#: ../src/cairo-dock.c:908
+msgid ""
+"Cairo-Dock is running in a Wayland session, but it was not compiled with gtk-"
+"layer-shell support. This is required for properly positioning the dock on "
+"the screen; it is likely that docks will show up in wrong locations. If you "
+"have installed Cairo-Dock from a binary package, please report this issue to "
+"the package's maintainer. If you have compiled Cairo-Dock yourself, please "
+"ensure that the development libraries for gtk-layer-shell are available; see "
+"the documentation for more information.\n"
+"\n"
+"(to disable showing this message, run Cairo-Dock with the '--no-layer-shell' "
+"command line option)"
+msgstr ""
+
+#: ../src/cairo-dock.c:916
+msgid ""
+"You are running Cairo-Dock in a Wayland session. Please note the support for "
+"Wayland is still experimental: not all features and plugins work yet.\n"
+"See the documentation for more information.\n"
+"Please consider reporting any issues you encounter in our bug tracker. Thank "
+"you!"
+msgstr ""
+
+#: ../src/cairo-dock.c:998
 #, c-format
 msgid ""
 "The module '%s' may have encountered a problem.\n"
@@ -1159,10 +1243,10 @@ msgid ""
 "at https://github.com/Cairo-Dock/cairo-dock-core/issues"
 msgstr ""
 "Badirudi '%s' moduluak arazoren bat izan duela.\n"
-"Ongi leheneratu da, baina berriro gertatzen bada, jakinaraz ezazu "
-"https://github.com/Cairo-Dock/cairo-dock-core/issues helbidean"
+"Ongi leheneratu da, baina berriro gertatzen bada, jakinaraz ezazu https://"
+"github.com/Cairo-Dock/cairo-dock-core/issues helbidean"
 
-#: ../src/gldit/cairo-dock-applet-facility.h:254
+#: ../src/gldit/cairo-dock-applet-facility.h:260
 msgid ""
 "The theme could not be found; the default theme will be used instead.\n"
 " You can change this by opening the configuration of this module. Do you "
@@ -1171,7 +1255,7 @@ msgstr ""
 "Gaia ez da aurkitu; gai lehenetsia erabiliko da haren ordez.\n"
 " Modulu honen konfigurazioa irekiz alda dezakezu hau. Orain egin nahi duzu?"
 
-#: ../src/gldit/cairo-dock-applet-facility.h:270
+#: ../src/gldit/cairo-dock-applet-facility.h:276
 msgid ""
 "The gauge theme could not be found; a default gauge will be used instead.\n"
 "You can change this by opening the configuration of this module. Do you want "
@@ -1181,121 +1265,117 @@ msgstr ""
 "haren ordez.\n"
 "Modulu honen konfigurazioa irekiz alda dezakezu hau. Orain egin nahi duzu?"
 
-#: ../src/gldit/cairo-dock-desklet-manager.c:806 ../data/messages:461
-#: ../data/messages:551 ../data/messages:691 ../data/messages:733
-#: ../data/messages:805 ../data/messages:839
+#: ../src/gldit/cairo-dock-desklet-manager.c:812 ../data/messages:467
+#: ../data/messages:557 ../data/messages:697 ../data/messages:739
+#: ../data/messages:811 ../data/messages:845
 msgid "Automatic"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-desklet-manager.c:819
+#: ../src/gldit/cairo-dock-desklet-manager.c:825
 msgid "_custom decoration_"
 msgstr "_dekorazio pertsonalizatua_"
 
-#: ../src/gldit/cairo-dock-dock-factory.c:1337
+#: ../src/gldit/cairo-dock-dock-factory.c:1371
 msgid "Sorry but the dock is locked"
 msgstr "Barkatu, docka blokeatuta dago"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:236
+#: ../src/gldit/cairo-dock-dock-manager.c:225
 msgid "Bottom dock"
 msgstr "Beheko docka"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:238
+#: ../src/gldit/cairo-dock-dock-manager.c:227
 msgid "Top dock"
 msgstr "Goiko docka"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:243
+#: ../src/gldit/cairo-dock-dock-manager.c:232
 msgid "Right dock"
 msgstr "Eskuineko docka"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:245
+#: ../src/gldit/cairo-dock-dock-manager.c:234
 msgid "Left dock"
 msgstr "Ezkerreko docak"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:1692
-#: ../src/gldit/cairo-dock-dock-manager.c:1792
+#: ../src/gldit/cairo-dock-dock-manager.c:1565
+#: ../src/gldit/cairo-dock-dock-manager.c:1663
 msgid "Pop up the main dock"
 msgstr "Bultzatu gora leiho nagusia"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:256
+#: ../src/gldit/cairo-dock-gui-factory.c:246
 #, c-format
 msgid "by %s"
 msgstr "%s(e)k"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:268
+#: ../src/gldit/cairo-dock-gui-factory.c:258
 msgid "kB"
 msgstr "kB"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:270
+#: ../src/gldit/cairo-dock-gui-factory.c:260
 msgid "MB"
 msgstr "MB"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:279
+#: ../src/gldit/cairo-dock-gui-factory.c:269
 msgid "Local"
 msgstr "Lokala"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:280
+#: ../src/gldit/cairo-dock-gui-factory.c:270
 msgid "User"
 msgstr "Erabiltzailea"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:281
+#: ../src/gldit/cairo-dock-gui-factory.c:271
 msgid "Net"
 msgstr "Sarea"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:282
+#: ../src/gldit/cairo-dock-gui-factory.c:272
 msgid "New"
 msgstr "Berria"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:283
+#: ../src/gldit/cairo-dock-gui-factory.c:273
 msgid "Updated"
 msgstr "Eguneratua"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:761
+#: ../src/gldit/cairo-dock-gui-factory.c:748
 msgid "Pick up a file"
 msgstr "Hartu fitxategi bat"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:761
+#: ../src/gldit/cairo-dock-gui-factory.c:748
 msgid "Pick up a directory"
 msgstr "Hartu direktorio bat"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1049
+#: ../src/gldit/cairo-dock-gui-factory.c:1036
 msgid "_Custom Icons_"
 msgstr "_Ikono pertsonalizatuak_"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1066
-#: ../src/gldit/cairo-dock-gui-factory.c:1111
-msgid "Use all screens"
-msgstr "Erabili pantaila guztiak"
-
-#: ../src/gldit/cairo-dock-gui-factory.c:1088 ../data/messages:13
-#: ../data/messages:163 ../data/messages:169 ../data/messages:909
+#: ../src/gldit/cairo-dock-gui-factory.c:1074 ../data/messages:13
+#: ../data/messages:165 ../data/messages:171 ../data/messages:915
 msgid "left"
 msgstr "ezkerrean"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1090 ../data/messages:11
-#: ../data/messages:161 ../data/messages:171 ../data/messages:907
+#: ../src/gldit/cairo-dock-gui-factory.c:1076 ../data/messages:11
+#: ../data/messages:163 ../data/messages:173 ../data/messages:913
 msgid "right"
 msgstr "eskuinean"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1092
-#: ../src/gldit/cairo-dock-gui-factory.c:1102
+#: ../src/gldit/cairo-dock-gui-factory.c:1078
+#: ../src/gldit/cairo-dock-gui-factory.c:1088
 msgid "middle"
 msgstr "erdian"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1098 ../data/messages:9
-#: ../data/messages:159 ../data/messages:905
+#: ../src/gldit/cairo-dock-gui-factory.c:1084 ../data/messages:9
+#: ../data/messages:161 ../data/messages:911
 msgid "top"
 msgstr "goian"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1100 ../data/messages:7
-#: ../data/messages:157 ../data/messages:903
+#: ../src/gldit/cairo-dock-gui-factory.c:1086 ../data/messages:7
+#: ../data/messages:159 ../data/messages:909
 msgid "bottom"
 msgstr "behean"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1105
+#: ../src/gldit/cairo-dock-gui-factory.c:1091
+#: ../src/gldit/cairo-dock-gui-factory.c:1097
 msgid "Screen"
 msgstr "Pantaila"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1399
+#: ../src/gldit/cairo-dock-gui-factory.c:1385
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -1306,7 +1386,7 @@ msgstr ""
 "Ziurtatu dockaren bertsio bera instalatu duzula ezaugarri horiek erabili "
 "ahal izateko."
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1408
+#: ../src/gldit/cairo-dock-gui-factory.c:1394
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
@@ -1315,91 +1395,102 @@ msgstr ""
 "'%s' plugina ez dago aktibatuta.\n"
 "Orain aktibatu?"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3043
+#: ../src/gldit/cairo-dock-gui-factory.c:2165
+msgid ""
+"You are running Cairo-Dock in a Wayland session.\n"
+"Setting a horizontal offset is not supported on Wayland yet."
+msgstr ""
+
+#: ../src/gldit/cairo-dock-gui-factory.c:2937
 msgid "link"
 msgstr "esteka"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3105
+#: ../src/gldit/cairo-dock-gui-factory.c:2999
 msgid "Grab"
 msgstr "Hartu"
 
-#: ../src/gldit/cairo-dock-launcher-manager.c:328
+#: ../src/gldit/cairo-dock-launcher-manager.c:378
 msgid "Enter a command"
 msgstr "Sartu komandoa"
 
-#: ../src/gldit/cairo-dock-launcher-manager.c:329
+#: ../src/gldit/cairo-dock-launcher-manager.c:379
 msgid "New launcher"
 msgstr "Abiarazle berria"
 
-#: ../src/gldit/cairo-dock-module-instance-manager.c:310
+#: ../src/gldit/cairo-dock-module-instance-manager.c:323
 msgid "by"
 msgstr "egilea"
 
-#: ../src/gldit/cairo-dock-struct.h:488 ../data/messages:1067
-#: ../data/messages:1075
+#: ../src/gldit/cairo-dock-struct.h:526 ../data/messages:1073
+#: ../data/messages:1081
 msgid "Default"
 msgstr "Lehenetsia"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:188
+#: ../src/gldit/cairo-dock-themes-manager.c:196
 #, c-format
 msgid "Are you sure you want to overwrite theme %s?"
 msgstr "Ziur zaude %s gaia gainidatzi nahi duzula?"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:265
+#: ../src/gldit/cairo-dock-themes-manager.c:273
 msgid "Last modification on:"
 msgstr "Azken aldaketa:"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:336
+#: ../src/gldit/cairo-dock-themes-manager.c:347
 msgid "Your theme should now be available in this directory:"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-themes-manager.c:341
+#: ../src/gldit/cairo-dock-themes-manager.c:352
 msgid "Error when launching 'cairo-dock-package-theme' script"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-themes-manager.c:362
+#: ../src/gldit/cairo-dock-themes-manager.c:373
 #, c-format
 msgid ""
 "Could not access remote file %s. Maybe the server is down.\n"
-"Please retry later or contact us at https://github.com/Cairo-Dock/cairo-dock-core/issues"
+"Please retry later or contact us at https://github.com/Cairo-Dock/cairo-dock-"
+"core/issues"
 msgstr ""
 "Ezin izan da urrutiko %s fitxategia atzitu. Agian zerbitzaria erorita dago.\n"
-"Saiatu geroago edo jarri gurekin harremanetan "
-"https://github.com/Cairo-Dock/cairo-dock-core/issues gunean."
+"Saiatu geroago edo jarri gurekin harremanetan https://github.com/Cairo-Dock/"
+"cairo-dock-core/issues gunean."
 
-#: ../src/gldit/cairo-dock-themes-manager.c:376
+#: ../src/gldit/cairo-dock-themes-manager.c:387
 #, c-format
 msgid "Are you sure you want to delete theme %s?"
 msgstr "Seguru zaude %s gaia ezabatu nahi duzula?"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:378
+#: ../src/gldit/cairo-dock-themes-manager.c:389
 msgid "Are you sure you want to delete these themes?"
 msgstr "Seguru zaude gai hauek ezabatu nahi duzula?"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:576 ../data/messages:39
-#: ../data/messages:211
+#: ../src/implementations/cairo-dock-hiding-effect.c:592 ../data/messages:41
+#: ../data/messages:213
 msgid "Move down"
 msgstr "Mugitu behera"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:584 ../data/messages:41
-#: ../data/messages:101 ../data/messages:213
+#: ../src/implementations/cairo-dock-hiding-effect.c:600 ../data/messages:43
+#: ../data/messages:103 ../data/messages:215
 msgid "Fade out"
 msgstr "Iraungi"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:592 ../data/messages:43
-#: ../data/messages:215
+#: ../src/implementations/cairo-dock-hiding-effect.c:608 ../data/messages:45
+#: ../data/messages:217
 msgid "Semi transparent"
 msgstr "Ia gardena"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:601 ../data/messages:45
-#: ../data/messages:217
+#: ../src/implementations/cairo-dock-hiding-effect.c:617 ../data/messages:47
+#: ../data/messages:219
 msgid "Zoom out"
 msgstr "Zooma urrundu"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:609 ../data/messages:47
-#: ../data/messages:219
+#: ../src/implementations/cairo-dock-hiding-effect.c:625 ../data/messages:49
+#: ../data/messages:221
 msgid "Folding"
 msgstr "Tolestea"
+
+#: ../src/implementations/cairo-dock-wayland-wm.c:117
+msgid "Select an open window by clicking on it or choosing it from the taskbar"
+msgstr ""
 
 #: ../Help/src/applet-composite.c:71
 msgid ""
@@ -1412,16 +1503,16 @@ msgid ""
 msgstr ""
 "Ongi etorri Cairo-Dockera!\n"
 "Applet honek docka erabiltzen hasten lagunduko dizu; egin klik bertan.\n"
-"Edozein galdera/eskari/iradokizun badaukazu, bisita gaitzazu "
-"https://github.com/Cairo-Dock/cairo-dock-core webgunean.\n"
+"Edozein galdera/eskari/iradokizun badaukazu, bisita gaitzazu https://github."
+"com/Cairo-Dock/cairo-dock-core webgunean.\n"
 "Software honekin goza dezazula espero dugu!\n"
 "  (orain elkarrizketa-koadro honetan klik egin dezakezu leihoa ixteko)"
 
-#: ../Help/src/applet-composite.c:165
+#: ../Help/src/applet-composite.c:166
 msgid "Don't ask me any more"
 msgstr "Ez galdetu berriro"
 
-#: ../Help/src/applet-composite.c:171
+#: ../Help/src/applet-composite.c:172
 msgid ""
 "To remove the black rectangle around the dock, you need to activate a "
 "composite manager.\n"
@@ -1431,7 +1522,7 @@ msgstr ""
 "aktibatu behar duzu.\n"
 "Orain aktibatu nahi duzu?"
 
-#: ../Help/src/applet-composite.c:182
+#: ../Help/src/applet-composite.c:183
 msgid ""
 "Do you want to keep this setting?\n"
 "In 15 seconds, the previous setting will be restored."
@@ -1439,7 +1530,7 @@ msgstr ""
 "Ezarpen hau mantendu nahi duzu?\n"
 "15 segundotan, aurreko ezarpenak leheneratuko dira."
 
-#: ../Help/src/applet-composite.c:198
+#: ../Help/src/applet-composite.c:199
 msgid ""
 "To remove the black rectangle around the dock, you will need to activate a "
 "composite manager.\n"
@@ -1470,27 +1561,19 @@ msgstr ""
 "Klik erdiko botoiarekin konfigurazio-leihoa irekitzeko.\n"
 "Klik eskuineko botoiarekin arazoak konpontzeko zenbait ekintza gauzatzeko."
 
-#: ../Help/src/applet-notifications.c:259
+#: ../Help/src/applet-notifications.c:95
 msgid "Open global settings"
 msgstr "Ireki ezarpen globalak"
 
-#: ../Help/src/applet-notifications.c:264
+#: ../Help/src/applet-notifications.c:100
 msgid "Activate composite"
 msgstr "Aktibatu konposizioa"
 
-#: ../Help/src/applet-notifications.c:266
-msgid "Disable the gnome-panel"
-msgstr "Desgaitu gnome-panel"
-
-#: ../Help/src/applet-notifications.c:268
-msgid "Disable Unity"
-msgstr "Desgaitu Unity"
-
-#: ../Help/src/applet-notifications.c:270
+#: ../Help/src/applet-notifications.c:102
 msgid "Online help"
 msgstr "Lineako laguntza"
 
-#: ../Help/src/applet-tips-dialog.c:152
+#: ../Help/src/applet-tips-dialog.c:163
 msgid "Tips and Tricks"
 msgstr "Iradokizunak eta trikimailuak"
 
@@ -1769,30 +1852,17 @@ msgstr "Leihoen aurrebista erakustea ikonoen gainean"
 
 #: ../Help/data/messages:73
 msgid ""
-"You need to run Compiz, and enable the \"Thumbnail Window Previews\" plug-in in Compiz. "
-"Install \"ccsm\" to be able to configure Compiz."
+"You need to run Compiz, and enable the \"Thumbnail Window Previews\" plug-in "
+"in Compiz. Install \"ccsm\" to be able to configure Compiz."
 msgstr ""
-"Compiz behar duzu, eta haren \"Thumbnail Window Previews\" plugina gaitu behar duzu. "
-"Instalatu \"ccsm\" Compiz konfiguratu ahal izateko."
-
-#: ../Help/data/messages:75 ../Help/data/messages:185
-#: ../Help/data/messages:205 ../Help/data/messages:243
-#: ../Help/data/messages:285 ../Help/data/messages:289
-#: ../Help/data/messages:295 ../Help/data/messages:299
-msgid "Tip: If this line is grayed, it's because this tip is not for you.)"
-msgstr ""
-"Iradokizuna: Lerro hau gris kolorekoa bada, iradokizun hau zuretzat ez dela "
-"esan nahi du.)"
+"Compiz behar duzu, eta haren \"Thumbnail Window Previews\" plugina gaitu "
+"behar duzu. Instalatu \"ccsm\" Compiz konfiguratu ahal izateko."
 
 #: ../Help/data/messages:77
-msgid "If you're using Compiz, you can click on this button:"
-msgstr "Compiz erabiltzen ari bazara, botoi honetan klik egin dezakezu:"
-
-#: ../Help/data/messages:81
 msgid "Positionning the dock on the screen"
 msgstr "Docka pantailan kokatzea"
 
-#: ../Help/data/messages:83
+#: ../Help/data/messages:79
 msgid ""
 "The dock can be placed anywhere on the screen.\n"
 "In the case of the main dock, right-click -> Cairo-Dock -> configure, and "
@@ -1806,11 +1876,11 @@ msgstr ""
 "Bigarren edo hirugarren dockaren kasuan, eskuineko klik -> Cairo-Dock -> "
 "konfiguratu dock hau, eta ondoren hautatu zuk nahi duzun kokapena."
 
-#: ../Help/data/messages:85
+#: ../Help/data/messages:81
 msgid "Hiding the dock to use all the screen"
 msgstr "Dockak ezkutatzea pantaila osoa erabiltzeko"
 
-#: ../Help/data/messages:87
+#: ../Help/data/messages:83
 msgid ""
 "The dock can hide itself to let all the screen for applications. But it can "
 "also be always visible like a panel.\n"
@@ -1826,11 +1896,11 @@ msgstr ""
 "Bigarren edo hirugarren dockaren kasuan, eskuineko klik -> Cairo-Dock -> "
 "konfiguratu dock hau, eta ondoren hautatu zuk nahi duzun ikusgaitasuna."
 
-#: ../Help/data/messages:91
+#: ../Help/data/messages:87
 msgid "Placing applets on your desktop"
 msgstr "Appletak mahaigainean jartzea"
 
-#: ../Help/data/messages:93
+#: ../Help/data/messages:89
 msgid ""
 "Applets can live inside desklets, which are small windows that can be placed "
 "wherever on your desktop.\n"
@@ -1840,11 +1910,11 @@ msgstr ""
 "edozein tokitan egon daitezkeen leiho txikiak dira.\n"
 "Applet bat docketik askatzeko, arrastatu eta jaregin docketik kanpo."
 
-#: ../Help/data/messages:95
+#: ../Help/data/messages:91
 msgid "Moving desklets"
 msgstr "Deskletak mugitzea"
 
-#: ../Help/data/messages:97
+#: ../Help/data/messages:93
 msgid ""
 "Desklets can be moved anywhere simply with the mouse.\n"
 "They can also be rotated by dragging the small arrows on the top and left "
@@ -1859,11 +1929,11 @@ msgstr ""
 "eskuineko klik egin eta \"bloketatu kokapena\" hautatauz. Desblokeatzeko, "
 "aukera horren hautapena ken dezakezu."
 
-#: ../Help/data/messages:99
+#: ../Help/data/messages:95
 msgid "Placing desklets"
 msgstr "Deskletak kokatzea"
 
-#: ../Help/data/messages:101
+#: ../Help/data/messages:97
 msgid ""
 "From the menu (right-click -> visibility), you can also decide to keep it "
 "above other windows, or on the Widget Layer (if you use Compiz), or make a "
@@ -1881,11 +1951,11 @@ msgstr ""
 "gardenak izan daitezen ezar daiteke (esan nahi du atzean dauden elementuetan "
 "klik egin dezakezula), behe eskuineko botoi txikian klik eginez."
 
-#: ../Help/data/messages:103
+#: ../Help/data/messages:99
 msgid "Changing the desklets decorations"
 msgstr "Deskleten dekorazioa aldatzea"
 
-#: ../Help/data/messages:105
+#: ../Help/data/messages:101
 msgid ""
 "Desklets can have decorations. To change that, open the settings of the "
 "applet, go to Desklet, and select the decoration you want (you can provide "
@@ -1895,15 +1965,15 @@ msgstr ""
 "ezarpenak, joan Desklet atalera, eta hautatu nahi duzun dekorazioa (zuk "
 "sortutako dekorazioak ere erabil ditzakezu)."
 
-#: ../Help/data/messages:107
+#: ../Help/data/messages:103
 msgid "Useful Features"
 msgstr "Ezugarri erabilgarriak"
 
-#: ../Help/data/messages:109
+#: ../Help/data/messages:105
 msgid "Having a calendar with tasks"
 msgstr "Zereginak dituen egutegia edukitzea"
 
-#: ../Help/data/messages:111
+#: ../Help/data/messages:107
 msgid ""
 "Activate the Clock applet.\n"
 "Clicking on it will display a calendar.\n"
@@ -1920,11 +1990,11 @@ msgstr ""
 "emango dizu (gertaera baino 15 minutu lehenago, edo egun bat lehenago "
 "urteurrenetan)."
 
-#: ../Help/data/messages:113
+#: ../Help/data/messages:109
 msgid "Having a list of all windows"
 msgstr "Leiho guztien zerrenda bat edukitzea"
 
-#: ../Help/data/messages:115
+#: ../Help/data/messages:111
 msgid ""
 "Activate the Switcher applet.\n"
 "Right-clicking on it will give you access to a list containing all the "
@@ -1940,11 +2010,11 @@ msgstr ""
 "egiteko gai bada.\n"
 "Ekintza hau erdiko klikarekin lotu dezakezu."
 
-#: ../Help/data/messages:117
+#: ../Help/data/messages:113
 msgid "Showing all the desktops"
 msgstr "Mahaigain guztiak erakustea"
 
-#: ../Help/data/messages:119
+#: ../Help/data/messages:115
 msgid ""
 "Activate either the Switcher applet or the Show-Desktop applet.\n"
 "Right-click on it -> \"show all the desktop\".\n"
@@ -1954,11 +2024,11 @@ msgstr ""
 "Eskuineko klik gainean -> \"erakutsi mahaigain osoa\".\n"
 "Ekintza hau erdiko klikarekin lotu dezakezu."
 
-#: ../Help/data/messages:121
+#: ../Help/data/messages:117
 msgid "Changing the screen resolution"
 msgstr "Pantailaren bereizmena aldatzea"
 
-#: ../Help/data/messages:123
+#: ../Help/data/messages:119
 msgid ""
 "Activate the Show-Desktop applet.\n"
 "Right-click on it -> \"change resolution\" -> select the one you want."
@@ -1966,11 +2036,11 @@ msgstr ""
 "Aktibatu Show-Desktop appleta.\n"
 "Eskuineko klik gainean -> \"aldatu bereizmena\" -> hautatu zuk nahi duzuna."
 
-#: ../Help/data/messages:125
+#: ../Help/data/messages:121
 msgid "Locking your session"
 msgstr "Saioa blokeatzea"
 
-#: ../Help/data/messages:127
+#: ../Help/data/messages:123
 msgid ""
 "Activate the Log-out applet.\n"
 "Right-click on it -> \"lock screen\".\n"
@@ -1980,11 +2050,11 @@ msgstr ""
 "Eskuineko klik gainean -> \"blokeatu pantaila\".\n"
 "Ekintza hau erdiko klikarekin lotu dezakezu."
 
-#: ../Help/data/messages:129
+#: ../Help/data/messages:125
 msgid "Quick-launching a program from keyboard (replacing ALT+F2)"
 msgstr "Aplikazio bat modu azkarrean abiaraztea teklatutik (ALT+F2 ordez)"
 
-#: ../Help/data/messages:131
+#: ../Help/data/messages:127
 msgid ""
 "Activate the Applications Menu applet.\n"
 "Middle-click on it, or right-click -> \"quick-launch\".\n"
@@ -1998,11 +2068,11 @@ msgstr ""
 "Testua automatikoki osatzen da (esaterako, \"fir\" idatziz, \"firefox\" "
 "agertuko da)."
 
-#: ../Help/data/messages:133
+#: ../Help/data/messages:129
 msgid "Turning Composite OFF during games"
 msgstr "Konposizioa desaktibatzea jokoetan"
 
-#: ../Help/data/messages:135
+#: ../Help/data/messages:131
 msgid ""
 "Activate the Composite Manager applet.\n"
 "Clicking on it will disable the Composite, which often makes games more "
@@ -2014,11 +2084,11 @@ msgstr ""
 "da.\n"
 "Berriro klik eginez, berriro gaituko da konposizioa."
 
-#: ../Help/data/messages:137
+#: ../Help/data/messages:133
 msgid "Seeing the hourly weather forecast"
 msgstr "Eguraldi-iragarpena ikustea orduro"
 
-#: ../Help/data/messages:139
+#: ../Help/data/messages:135
 msgid ""
 "Activate the Weather applet.\n"
 "Open its settings, go to Configure, and type the name of your city. Press "
@@ -2034,11 +2104,11 @@ msgstr ""
 "Orain, egun batean bi aldiz klik eginda egun horretarako orduroko eguraldi-"
 "iragarpena eskaintzen duen web-orrira joango zara."
 
-#: ../Help/data/messages:141
+#: ../Help/data/messages:137
 msgid "Adding a file or a web page into the dock"
 msgstr "Fitxategi bat edo web-orri bat gehitzea dockari"
 
-#: ../Help/data/messages:143
+#: ../Help/data/messages:139
 msgid ""
 "Simply drag a file or an html link and drop it onto the dock (an animated "
 "arrow should appear when you can drop).\n"
@@ -2054,11 +2124,11 @@ msgstr ""
 "Hainbat pila eduki ditzakezu, eta fitxategiak/loturak zuzenean jaregin "
 "ditzakezu pila batean."
 
-#: ../Help/data/messages:145
+#: ../Help/data/messages:141
 msgid "Importing a folder into the dock"
 msgstr "Karpeta bat dockera inportatzea"
 
-#: ../Help/data/messages:147
+#: ../Help/data/messages:143
 msgid ""
 "Simply drag a folder and drop it onto the dock (an animated arrow should "
 "appear when you can drop).\n"
@@ -2068,11 +2138,11 @@ msgstr ""
 "agertuko da jaregin dezakezun tokian).\n"
 "Karpetako fitxategiak inportatu ala ez hauta dezakezu."
 
-#: ../Help/data/messages:149
+#: ../Help/data/messages:145
 msgid "Accessing the recent events"
 msgstr "Azken aldiko gertaerak atzitzea"
 
-#: ../Help/data/messages:151
+#: ../Help/data/messages:147
 msgid ""
 "Activate the Recent-Events applet.\n"
 "You need to have the Zeitgeist daemon to be running. Install it if it's not "
@@ -2088,12 +2158,11 @@ msgstr ""
 "bideo eta dokumentu guztiak erakuts ditzake, modu azkarrean berriro atzi "
 "ahal ditzazun."
 
-#: ../Help/data/messages:153
+#: ../Help/data/messages:149
 msgid "Quickly opening a recent file with a launcher"
-msgstr ""
-"Azken aldiko fitxategi bat modu azkarrean irekitzea abiarazle batekin"
+msgstr "Azken aldiko fitxategi bat modu azkarrean irekitzea abiarazle batekin"
 
-#: ../Help/data/messages:155
+#: ../Help/data/messages:151
 msgid ""
 "Activate the Recent-Events applet.\n"
 "You need to have the Zeitgeist daemon to be running. Install it if it's not "
@@ -2107,11 +2176,11 @@ msgstr ""
 "Abiarazle batean eskuineko klik egitean, abiarazle horrekin ireki daitezkeen "
 "azken aldiko fitxategi guztiak agertuko dira menuan."
 
-#: ../Help/data/messages:157
+#: ../Help/data/messages:153
 msgid "Accessing disks"
 msgstr "Diskoak atzitzea"
 
-#: ../Help/data/messages:159
+#: ../Help/data/messages:155
 msgid ""
 "Activate the Shortcuts applet.\n"
 "Then all the disks (including USB key or external hard drives) will be "
@@ -2124,11 +2193,11 @@ msgstr ""
 "Disko bat deskonektatu baino lehen desmuntatzek, egin erdiko klik haren "
 "ikonoan."
 
-#: ../Help/data/messages:161
+#: ../Help/data/messages:157
 msgid "Accessing folder bookmarks"
 msgstr "Karpeten kalter-markak atzitzea"
 
-#: ../Help/data/messages:163
+#: ../Help/data/messages:159
 msgid ""
 "Activate the Shortcuts applet.\n"
 "Then all the folders bookmarks (the ones that appear in Nautilus) will be "
@@ -2143,11 +2212,11 @@ msgstr ""
 "ikonoan.\n"
 "Laster-marka bat kentzeko, eskuineko klik haren ikonoan -> kendu"
 
-#: ../Help/data/messages:165
+#: ../Help/data/messages:161
 msgid "Having multiple instances of an applet"
 msgstr "Applet baten instantzia bat baino gehiago edukitzea"
 
-#: ../Help/data/messages:167
+#: ../Help/data/messages:163
 msgid ""
 "Some applets can have several instances running at the same time: Clock, "
 "Stack, Weather, ...\n"
@@ -2164,11 +2233,11 @@ msgstr ""
 "hiri ezberdinetako uneko ordua eduki dezakezu zure dockean, edo hiri baten "
 "baino gehiagoren eguraldia."
 
-#: ../Help/data/messages:169
+#: ../Help/data/messages:165
 msgid "Adding / removing a desktop"
 msgstr "Mahaigain bat gehitzea / kentzea"
 
-#: ../Help/data/messages:171
+#: ../Help/data/messages:167
 msgid ""
 "Activate the Switcher applet.\n"
 "Right-click on it -> \"add a desktop\" or \"remove this desktop\".\n"
@@ -2179,11 +2248,11 @@ msgstr ""
 "hau\".\n"
 "Haietako bakoitzari izen ezberdin bat eman diezaiokezu."
 
-#: ../Help/data/messages:173
+#: ../Help/data/messages:169
 msgid "Controling the sound volume"
 msgstr "Soinu-bolumena kontrolatzea"
 
-#: ../Help/data/messages:175
+#: ../Help/data/messages:171
 msgid ""
 "Activate the Sound Volume applet.\n"
 "Then scroll up/down to increase/decrease the sound.\n"
@@ -2195,11 +2264,11 @@ msgstr ""
 "Bestela, ikonoan klik egin eta korritze-barra mugi dezakezu.\n"
 "Edkuineko klikak mututzeko eta mututasuna kentzeko balio du."
 
-#: ../Help/data/messages:177
+#: ../Help/data/messages:173
 msgid "Controling the screen brightness"
 msgstr "Pantailaren distira kontrolatzea"
 
-#: ../Help/data/messages:179
+#: ../Help/data/messages:175
 msgid ""
 "Activate the Screen Luminosity applet.\n"
 "Then scroll up/down to increase/decrease the brightness.\n"
@@ -2209,98 +2278,56 @@ msgstr ""
 "Ondoren korritu gora/behera distira handitu edo txikitzeko.\n"
 "Bestela, ikonoan klik egin eta korritze-barra mugi dezakezu."
 
-#: ../Help/data/messages:181
-msgid "Removing completely the gnome-panel"
-msgstr "gnome-panel erabat kentzea"
-
-#: ../Help/data/messages:183
-msgid ""
-"Open dconf-editor, edit the key "
-"/desktop/gnome/session/required_components/panel, and replace its content "
-"with \"cairo-dock\".\n"
-"Then restart your session : the gnome-panel has not been started, and the "
-"dock has been started (if not, you can add it to the startup programs)."
-msgstr ""
-"Ireki dconf-editor, editatu /desktop/gnome/session/required_components/panel "
-"gakoa, eta ordeztu haren edukia \"cairo-dock\" testuarekin.\n"
-"Ondoren, berrabiarazi saioa: gnome-panel ez da abiarazi, eta docka bai "
-"(horrela ez bada, abioko aplikazioen multzora gehitu ahal duzu)."
-
-#: ../Help/data/messages:187
-msgid ""
-"If you are on Gnome, you can click on this button in order to automatically "
-"modify this key:"
-msgstr ""
-"Gnomen bazaude, botoi honetan klik egin dezakezu gako hori automatikoki "
-"aldatzeko:"
-
-#: ../Help/data/messages:189
+#: ../Help/data/messages:177
 msgid "Troubleshooting"
 msgstr "Arazoen konponketa"
 
-#: ../Help/data/messages:191
+#: ../Help/data/messages:179
 msgid "If you have any question, don't hesitate to ask on our Github Page."
 msgstr ""
 "Edozein galdera badaukazu, ez izan zalantzarik eta galdetu gure foroan."
 
-#: ../Help/data/messages:193
+#: ../Help/data/messages:181
 msgid "Discussions"
 msgstr "Foroa"
 
-#: ../Help/data/messages:195
+#: ../Help/data/messages:183
 msgid "Our wiki can also help you, it is more complete on some points."
 msgstr ""
 "Gure wikian ere aurki dezakezu laguntza, zenbait gauzatarako osatuago dago."
 
-#: ../Help/data/messages:197
+#: ../Help/data/messages:185
 msgid "Wiki"
 msgstr "Wikia"
 
-#: ../Help/data/messages:199
+#: ../Help/data/messages:187
 msgid "I have a black background around my dock."
 msgstr "Atzeko plano beltza daukat nire dockaren inguruan."
 
-#: ../Help/data/messages:201
-msgid ""
-"Hint : If you have an ATI or an Intel card, you should try without OpenGL "
-"first, because their drivers are not yet perfect."
-msgstr ""
-"Iradokizuna: ATI edo Intel txartel bat badaukazu, OpenGL erabili gabe saiatu "
-"beharko zenuke lehenengo, txartel horien kontrolagailuak ez baitira "
-"perfektuak."
-
-#: ../Help/data/messages:203
+#: ../Help/data/messages:189
 msgid ""
 "You need to turn on compositing. For instance, you can run Compiz or "
 "xcompmgr. \n"
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open dconf-editor, edit the key "
-"'org.gnome.metacity.compositing-manager' and set it to 'true'."
+" Open dconf-editor, edit the key 'org.gnome.metacity.compositing-manager' "
+"and set it to 'true'."
 msgstr ""
 "Konposizioa aktibatu behar duzu. Adibidez, Compiz edo xcompmgr exekutatu "
 "behar duzu. \n"
 "XFCE edo KDE erabiltzen ari bazara, konposizioa leiho-kudeatzailearen "
 "aukeretan gai dezakezu.\n"
 "Gnome erabiltzen ari bazara, Metacityn gai dezakezu honeala :\n"
-" Ireki dconf-editor, editatu 'org.gnome.metacity.compositing-manager' "
-"gakoa eta ezarri 'true' balioa."
+" Ireki dconf-editor, editatu 'org.gnome.metacity.compositing-manager' gakoa "
+"eta ezarri 'true' balioa."
 
-#: ../Help/data/messages:207
-msgid ""
-"If you're on Gnome with Metacity (without Compiz), you can click on this "
-"button:"
-msgstr ""
-"Gnome Metacityrekin (Compiz gabe) erabiltzen ari bazara, botoi honetan klik "
-"egin dezakezu:"
-
-#: ../Help/data/messages:209
+#: ../Help/data/messages:191
 msgid "My machine is too old to run a composite manager."
 msgstr ""
 "Nire ordenagailua zaharregia da konposizio-kudeatzaile bat exekutatzeko."
 
-#: ../Help/data/messages:211
+#: ../Help/data/messages:193
 msgid ""
 "Don't panic, Cairo-Dock can emulate the transparency.\n"
 "To get rid of the black background, simply enable the corresponding option "
@@ -2310,11 +2337,11 @@ msgstr ""
 "Atzeko plano beltza kentzeko, gaitu aukera \"Sistema\" moduluaren azken "
 "aldean."
 
-#: ../Help/data/messages:213
+#: ../Help/data/messages:195
 msgid "The dock is horribly slow when I move the mouse into it."
 msgstr "Docka oso motela da sagua haren gainean mugitzen dudanean."
 
-#: ../Help/data/messages:215
+#: ../Help/data/messages:197
 msgid ""
 "If you have an Nvidia GeForce8 graphics card, please install the latest "
 "drivers, as the first ones were really buggy.\n"
@@ -2330,11 +2357,11 @@ msgstr ""
 "Docak OpenGL aukerarekin exekutatzen ari bada, saiatu hura desgaitzen docka "
 "\"cairo-dock -c\" aukerarekin abiarazita."
 
-#: ../Help/data/messages:217
+#: ../Help/data/messages:199
 msgid "I don't have these wonderful effects like fire, cube rotating, etc."
 msgstr "Ez dauzkat efektu bikain horiek: sua, kubua biratzen, etab."
 
-#: ../Help/data/messages:219
+#: ../Help/data/messages:201
 msgid ""
 "Tip: You can force OpenGL by launching the dock with «cairo-dock -o».but you "
 "might get a lot of visual artifacts."
@@ -2342,7 +2369,7 @@ msgstr ""
 "Aholkua: OpenGL behartu dezakezu docak \"cairo-dock -o\" komandoarekin "
 "abiaraziz, baina gauzaki pilo bat ikusteko arriskua duzu."
 
-#: ../Help/data/messages:221
+#: ../Help/data/messages:203
 msgid ""
 "You need a graphics card with drivers that support OpenGL2.0. Most Nvidia "
 "cards can do this, as can more and more Intel cards. Most ATI cards do not "
@@ -2352,15 +2379,15 @@ msgstr ""
 "duzu. Nvidia txartel askok onartzen dute, baita gero eta Intel txartel "
 "gehiagok ere. ATI txartel askok ez dute OpenGL 2.0 onartzen."
 
-#: ../Help/data/messages:223
+#: ../Help/data/messages:205
 msgid "I don't have any themes in the Theme Manager, except the default one."
 msgstr "Ez daukat gairik gai-kudeatzailean, lehenetsia besterik ez."
 
-#: ../Help/data/messages:225
+#: ../Help/data/messages:207
 msgid "Hint : Up to version 2.1.1-2, wget was used."
 msgstr "Aholkua: 2.1.1-2 bertsiotik gora wget erabiltzen da."
 
-#: ../Help/data/messages:227
+#: ../Help/data/messages:209
 msgid ""
 "Be sure that you are connected to the Net.\n"
 " If your connection is very slow, you can increase the connection timeout in "
@@ -2376,13 +2403,13 @@ msgstr ""
 "erabiltzeko; bilatu webean nola egin (funtsean, \"http_proxy\" ingurune-"
 "aldagaia konfiguratu behar duzu)."
 
-#: ../Help/data/messages:229
+#: ../Help/data/messages:211
 msgid "The «netspeed» applet displays 0 even when I'm downloading something"
 msgstr ""
 "\"netspeed\" appletak 0 erakusten du, nahiz eta zerbait deskargatzen ari "
 "naizen"
 
-#: ../Help/data/messages:231
+#: ../Help/data/messages:213
 msgid ""
 "Tip: you can run several instances of this applet if you wish to monitor "
 "several interfaces."
@@ -2390,7 +2417,7 @@ msgstr ""
 "Aholkua: applet honen instantzia bat baino gehiago exekuta dezakezu "
 "interfaze bat baino gehiago ikuskatzeko."
 
-#: ../Help/data/messages:233
+#: ../Help/data/messages:215
 msgid ""
 "You must tell the applet which interface you're using to connect to the Net "
 "(by default, this is «eth0»).\n"
@@ -2404,12 +2431,12 @@ msgstr ""
 "idatzi \"ifconfig\" terminal batean, eta ezikusi \"loop\" interfazea. Seguru "
 "asko \"eth1\", \"ath0\", \"wifi0\" edo antzeko zerbait izango da."
 
-#: ../Help/data/messages:235
+#: ../Help/data/messages:217
 msgid "The dustbin remains empty even when I delete a file."
 msgstr ""
 "Zakarrontziak hutsik jarraitzen du fitxategi batean ezabatzen dudanean."
 
-#: ../Help/data/messages:237
+#: ../Help/data/messages:219
 msgid ""
 "if you're using KDE, you may have to specify the path to the trash folder.\n"
 "Just edit the applet's configuration, and fill in the Trash path; it is "
@@ -2422,40 +2449,20 @@ msgstr ""
 "«~/ da. Kontuz idatzi bidea hemen!! (ez sartu zuriunerik edo karaktere "
 "ikusezinik)."
 
-#: ../Help/data/messages:239
-msgid ""
-"There is no icon in the Applications Menu even though I enable the option."
-msgstr ""
-"Ez dago ikonorik aplikazioen menuan, nahiz eta aukera hori gaitu dudan."
-
-#: ../Help/data/messages:241
-msgid ""
-"In Gnome, there is an option that override the dock's one. To enable icons "
-"in menus, open 'dconf-editor', go to Desktop / Gnome / Interface and enable "
-"the \"menus have icons\" and the \"buttons have icons\" options. "
-msgstr ""
-"Gnomen, dockaren aukera hori gainidazteko aukera bat dago. Ikonoak menuetan "
-"gaitzeko, ireki 'dconf-editor', joan Mahaigaina / Gnome / Interfazea "
-"aukerara eta gaitu \"menuek ikonoak dituzte\" eta \"botoiek ikonoak "
-"dituzte\" aukerak. "
-
-#: ../Help/data/messages:245
-msgid "If you're on Gnome you can click on this button:"
-msgstr "Gnomen bazaude, botoi honetan klik egin dezakezu:"
-
-#: ../Help/data/messages:247
+#: ../Help/data/messages:221
 msgid "The Project"
 msgstr "Proiektua"
 
-#: ../Help/data/messages:249
+#: ../Help/data/messages:223
 msgid "Join the project!"
 msgstr "Egin bat proiektuarekin!"
 
-#: ../Help/data/messages:251
+#: ../Help/data/messages:225
 msgid ""
 "We value your help! If you see a bug, if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on https://github.com/Cairo-Dock/cairo-dock-core.\n"
+"or if you just made a dream about the dock, pay us a visit on https://github."
+"com/Cairo-Dock/cairo-dock-core.\n"
 "English (and others!) speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -2470,16 +2477,16 @@ msgstr ""
 "Dockerako gai bat edo applet bat egiten baduzu, eta partekatu nahi baduzu, "
 "gure zerbitzarian integratuko dugu atsegin handiz!"
 
-#: ../Help/data/messages:253
+#: ../Help/data/messages:227
 msgid ""
 "If you wish to develop an applet, a complete documentation is available here."
 msgstr "Applet bat garatu nahi baduzu, dokumentazio ederra daukazu hemen."
 
-#: ../Help/data/messages:255
+#: ../Help/data/messages:229
 msgid "Documentation"
 msgstr "Dokumentazioa"
 
-#: ../Help/data/messages:257
+#: ../Help/data/messages:231
 msgid ""
 "If you wish to develop an applet in Python, Perl or any other language,\n"
 "or to interact with the dock in any kind of way, a full DBus API is "
@@ -2489,11 +2496,11 @@ msgstr ""
 "dockarekin elkarrekiten duen edozein ekintza garatu nahi baduzu, horretarako "
 "DBus API oso bat daukazu deskribatuta ondoren."
 
-#: ../Help/data/messages:259
+#: ../Help/data/messages:233
 msgid "DBus API"
 msgstr "DBus APIa"
 
-#: ../Help/data/messages:261
+#: ../Help/data/messages:235
 msgid ""
 "\n"
 "\n"
@@ -2503,135 +2510,82 @@ msgstr ""
 "\n"
 "Cairo-Dock taldea"
 
-#: ../Help/data/messages:263
+#: ../Help/data/messages:237
 msgid "Websites"
 msgstr "Webguneak"
 
-#: ../Help/data/messages:265
+#: ../Help/data/messages:239
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
 msgstr "Arazorik? Iradokizunik? Gurekin hitz egin nahi duzu? Zatoz!"
 
-#: ../Help/data/messages:267
+#: ../Help/data/messages:241
 msgid "Community site"
 msgstr "Komunitatearen webgunea"
 
-#: ../Help/data/messages:273
+#: ../Help/data/messages:247
 msgid "More applets available online!"
 msgstr "Applet gehiago eskuragarri sarean!"
 
-#: ../Help/data/messages:275
+#: ../Help/data/messages:249
 msgid "Cairo-Dock-Plug-ins-Extras"
 msgstr "Cairo-Dock-Plug-ins-Extras"
 
-#: ../Help/data/messages:277
+#: ../Help/data/messages:251
 msgid "Repositories"
 msgstr "Biltegiak"
 
-#: ../Help/data/messages:279
+#: ../Help/data/messages:253
 msgid ""
-"We maintain two repositories for Debian, Ubuntu and other Debian-forked:\n"
-" One for stable releases and another which is updated weekly (unstable "
-"version)"
+"We maintain repositories for Ubuntu and derivatives on Launchpad for the "
+"stable and development versions of Cairo-Dock:"
 msgstr ""
-"Bi biltegi dituzu Debian, Ubuntu eta Debianetik eratorritako beste banaketa "
-"batzuetarako:\n"
-" Bat bertsio egonkorretarako eta beste bat astero eguneratzen dena (bertsio "
-"ezegonkorra)"
 
-#: ../Help/data/messages:281
-msgid "Debian/Ubuntu"
-msgstr "Debian/Ubuntu"
-
-#: ../Help/data/messages:283
-msgid "Ubuntu"
-msgstr "Ubuntu"
-
-#: ../Help/data/messages:287
-msgid ""
-"If you're on Ubuntu, you can add our 'stable' repository by clicking on this "
-"button:\n"
-" After that, you can launch your update manager in order to install the "
-"latest stable version."
+#: ../Help/data/messages:255
+msgid "Stable"
 msgstr ""
-"Ubuntun bazaude, gure biltegi 'egonkorra' gehitu dezakezu botoi honetan klik "
-"eginez:\n"
-" Horren ondoren, zure eguneraketa-kudeatzailea abiarazi ahal duzu azken "
-"bertsio egonkorra instalatzeko."
 
-#: ../Help/data/messages:291
-msgid ""
-"If you're on Ubuntu, you can also add our 'weekly' ppa (can be unstable) by "
-"clicking on this button:\n"
-" After that, you can launch your update manager in order to install the "
-"latest weekly version."
+#: ../Help/data/messages:257
+msgid "https://launchpad.net/~cairo-dock-team/+archive/ubuntu/ppa"
 msgstr ""
-"Ubuntun bazaude gure 'Weekly' (asteroko) PPA ere gehitu dezakezu botoi "
-"honetan klik eginez:\n"
-" Horren ondoren, zure eguneraketa-kudeatzailea abiarazi ahal duzu asteko "
-"azken bertsioa instalatzeko."
 
-#: ../Help/data/messages:293
-msgid "Debian"
-msgstr "Debian"
-
-#: ../Help/data/messages:297
-msgid ""
-"If you're on Debian Stable, you can add our 'stable' repository by clicking "
-"on this button:\n"
-" After that, you can purge all 'cairo-dock*' packages, update the your "
-"system and reinstall 'cairo-dock' package."
+#: ../Help/data/messages:261
+msgid "https://launchpad.net/~cairo-dock-team/+archive/ubuntu/weekly"
 msgstr ""
-"Debian Stable bertsioan bazaude, gure 'stable' biltegia (egonkorra) gehitu "
-"dezakezu botoi honetan klik eginez:\n"
-" Horren ondoren, zure 'cairo-dock*' pakete guztiak betiko borratu, zure "
-"sistema eguneratu eta 'cairo-dock' paketea berriro instala dezakezu."
 
-#: ../Help/data/messages:301
-msgid ""
-"If you're on Debian Unstable, you can add our 'stable' repository by "
-"clicking on this button:\n"
-" After that, you can purge all 'cairo-dock*' packages, update the your "
-"system and reinstall 'cairo-dock' package."
-msgstr ""
-"Debian Unstable bertsioan bazaude, gure 'stable' biltegia (egonkorra) gehitu "
-"dezakezu botoi honetan klik eginez:\n"
-" Horren ondoren, zure 'cairo-dock*' pakete guztiak betiko borratu, zure "
-"sistema eguneratu eta 'cairo-dock' paketea berriro instala dezakezu."
-
-#: ../Help/data/messages:303 ../Help/data/messages:305 ../data/messages:1029
-#: ../data/messages:1061 ../data/messages:1097
+#: ../Help/data/messages:263 ../Help/data/messages:265 ../data/messages:1035
+#: ../data/messages:1067 ../data/messages:1103
 msgid "Icon"
 msgstr "Ikonoa"
 
-#: ../Help/data/messages:307
+#: ../Help/data/messages:267
 msgid "Name of the dock it belongs to:"
 msgstr "Zein dockean dagoen:"
 
-#: ../Help/data/messages:309
+#: ../Help/data/messages:269
 msgid "Name of the icon as it will appear in its caption in the dock:"
 msgstr "Ikonoaren izena, dockaren epigrafean agertu den eran:"
 
-#: ../Help/data/messages:311
+#: ../Help/data/messages:271
 msgid "Leave empty to use the default one."
 msgstr "Utzi hutsik lehenetsia erabiltzeko."
 
-#: ../Help/data/messages:313
+#: ../Help/data/messages:273
 msgid "Image filename:"
 msgstr "Irudiaren fitxategi-izena:"
 
-#: ../Help/data/messages:315
+#: ../Help/data/messages:275
 msgid "Set to 0 to use the default applet size"
 msgstr "Ezarri 0 balioa appletaren tamaina lehenetsia erabiltzeko"
 
-#: ../Help/data/messages:317
+#: ../Help/data/messages:277
 msgid "Desired icon size for this applet"
 msgstr "Ikono-tamaina applet honetarako"
 
-#: ../Help/data/messages:319
+#: ../Help/data/messages:279
 msgid "Desklet"
 msgstr "Desklet-ak"
 
-#: ../Help/data/messages:323
+#: ../Help/data/messages:283
 msgid ""
 "If locked, the desklet cannot be moved by simply dragging it with the left "
 "mouse button. It can still be moved with ALT + left-click."
@@ -2639,11 +2593,11 @@ msgstr ""
 "Blokeatuta badago, deskleta ezin da mugitu saguaren ezkerreko botoiarekin "
 "arrastatuz. Hala ere, Alt + ezkerreko klik ekintzaren bidez mugi daiteke."
 
-#: ../Help/data/messages:325
+#: ../Help/data/messages:285
 msgid "Lock position?"
 msgstr "Blokeatu kokapena?"
 
-#: ../Help/data/messages:327
+#: ../Help/data/messages:287
 msgid ""
 "Depending on your WindowManager, you may be able to resize this with ALT + "
 "middle-click or ALT + left-click."
@@ -2651,24 +2605,24 @@ msgstr ""
 "Zure leiho-kudeatzailearen arabera, horren tamaina aldatu ahal izango duzu "
 "Alt + erdiko klik edo Alt + ezkerreko klik erabiliz."
 
-#: ../Help/data/messages:329
+#: ../Help/data/messages:289
 msgid "Desklet dimensions (width x height):"
 msgstr "Deskletaren dimentsioak (zabalera x altuera):"
 
-#: ../Help/data/messages:331
+#: ../Help/data/messages:291
 msgid ""
 "Depending on your WindowManager, you may be able to move this with ALT + "
 "left-click.. Negative values are counted from the right/bottom of the screen"
 msgstr ""
 "Zure leiho-kudeatzailearen arabera, horren tamaina aldatu ahal izango duzu "
-"Alt + ezkerreko klik erabiliz. Balio negatiboak pantailaren "
-"eskuin/behealdetik zenbatzen dira."
+"Alt + ezkerreko klik erabiliz. Balio negatiboak pantailaren eskuin/"
+"behealdetik zenbatzen dira."
 
-#: ../Help/data/messages:333
+#: ../Help/data/messages:293
 msgid "Desklet position (x, y):"
 msgstr "Deskletaren kokapena (x, y):"
 
-#: ../Help/data/messages:335
+#: ../Help/data/messages:295
 msgid ""
 "You can quickly rotate the desklet with the mouse, by dragging the little "
 "buttons on its left and top sides."
@@ -2676,15 +2630,15 @@ msgstr ""
 "Deskleta saguarekin azkar bira dezakezu, goiko eta ezkerreko ertzetan dituen "
 "gezi txikiak arrastatuz"
 
-#: ../Help/data/messages:337
+#: ../Help/data/messages:297
 msgid "Rotation:"
 msgstr "Biraketa:"
 
-#: ../Help/data/messages:341
+#: ../Help/data/messages:301
 msgid "Is detached from the dock"
 msgstr "Docketik askatuta dago."
 
-#: ../Help/data/messages:343
+#: ../Help/data/messages:303
 msgid ""
 "for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
 "(class=Cairo-dock & type=Utility)"
@@ -2692,85 +2646,85 @@ msgstr ""
 "CompizFusionen \"widget layer\" aukerarako, ezarri portaera Compizen honela: "
 "(class=Cairo-dock & type=Utility)"
 
-#: ../Help/data/messages:345 ../data/messages:19 ../data/messages:57
-#: ../data/messages:191 ../data/messages:251 ../data/messages:921
+#: ../Help/data/messages:305 ../data/messages:21 ../data/messages:59
+#: ../data/messages:193 ../data/messages:253 ../data/messages:927
 msgid "Visibility:"
 msgstr "Ikusgarritasuna:"
 
-#: ../Help/data/messages:351
+#: ../Help/data/messages:311
 msgid "Keep below"
 msgstr "Mantendu azpian"
 
-#: ../Help/data/messages:353
+#: ../Help/data/messages:313
 msgid "Keep on widget layer"
 msgstr "Mantendu widgeten geruzan"
 
-#: ../Help/data/messages:357
+#: ../Help/data/messages:317
 msgid "Should be visible on all desktops?"
 msgstr "Mahaigain guztietan ikusgai?"
 
-#: ../Help/data/messages:359 ../data/messages:589
+#: ../Help/data/messages:319 ../data/messages:595
 msgid "Decorations"
 msgstr "Dekorazioak"
 
-#: ../Help/data/messages:361
+#: ../Help/data/messages:321
 msgid "Choose 'Custom decorations' to define your own decorations below."
 msgstr ""
 "Hautatu 'Dekorazio pertsonalizatuak' azpian zure dekorazio propioa "
 "definitzeko."
 
-#: ../Help/data/messages:363
+#: ../Help/data/messages:323
 msgid "Choose a decoration theme for this desklet:"
 msgstr "Hautatu dekorazio-gai bat desklet honetarako:"
 
-#: ../Help/data/messages:365
+#: ../Help/data/messages:325
 msgid ""
 "Image to be displayed below drawings, e.g. a frame. Leave empty for no image."
 msgstr ""
 "Marrazkien azpian erakutsiko den irudia, markoa alegia. Utzi hutsik irudirik "
 "ez erabiltzeko."
 
-#: ../Help/data/messages:367
+#: ../Help/data/messages:327
 msgid "Background image:"
 msgstr "Atzeko planoko irudia:"
 
-#: ../Help/data/messages:369
+#: ../Help/data/messages:329
 msgid "Background transparency:"
 msgstr "Atzeko planoren gardentasuna:"
 
-#: ../Help/data/messages:371
+#: ../Help/data/messages:331
 msgid "in pixels. Use this to adjust the left position of drawings."
 msgstr "pixeletan. Erabili hau marrazkien ezker kokapena zehazteko."
 
-#: ../Help/data/messages:373
+#: ../Help/data/messages:333
 msgid "Left offset:"
 msgstr "Ezker desplazamendua:"
 
-#: ../Help/data/messages:375
+#: ../Help/data/messages:335
 msgid "in pixels. Use this to adjust the top position of drawings."
 msgstr "pixeletan. Erabili hau marrazkien goiko kokapena zehazteko."
 
-#: ../Help/data/messages:377
+#: ../Help/data/messages:337
 msgid "Top offset:"
 msgstr "Goiko desplazamendua:"
 
-#: ../Help/data/messages:379
+#: ../Help/data/messages:339
 msgid "in pixels. Use this to adjust the right position of drawings."
 msgstr "pixeletan. Erabili hau marrazkien eskuin kokapena zehazteko."
 
-#: ../Help/data/messages:381
+#: ../Help/data/messages:341
 msgid "Right offset:"
 msgstr "Eskuin desplazamendua:"
 
-#: ../Help/data/messages:383
+#: ../Help/data/messages:343
 msgid "in pixels. Use this to adjust the bottom position of drawings."
 msgstr "pixeletan. Erabili hau marrazkien beheko kokapena zehazteko."
 
-#: ../Help/data/messages:385
+#: ../Help/data/messages:345
 msgid "Bottom offset:"
 msgstr "Beheko desplazamendua:"
 
-#: ../Help/data/messages:387
+#: ../Help/data/messages:347
 msgid ""
 "Image to be displayed above the drawings, e.g. a reflection. Leave empty for "
 "no image."
@@ -2778,31 +2732,35 @@ msgstr ""
 "Marrazkien gainean erakutsiko den irudia, isla alegia. Utzi hutsik irudirik "
 "ez erabiltzeko."
 
-#: ../Help/data/messages:389
+#: ../Help/data/messages:349
 msgid "Foreground image:"
 msgstr "Lehen planoko irudia:"
 
-#: ../Help/data/messages:391
+#: ../Help/data/messages:351
 msgid "Foreground tansparency:"
 msgstr "Lehen planoren gardentasuna:"
 
-#: ../data/messages:1 ../data/messages:897
+#: ../data/messages:1 ../data/messages:903
 msgid "Behavior"
 msgstr "Portaera"
 
-#: ../data/messages:3 ../data/messages:153 ../data/messages:899
+#: ../data/messages:3 ../data/messages:155 ../data/messages:905
 msgid "Position on the screen"
 msgstr "Kokatu pantailan"
 
-#: ../data/messages:5 ../data/messages:155 ../data/messages:901
+#: ../data/messages:5 ../data/messages:157 ../data/messages:907
 msgid "Choose which border of the screen the dock will be placed on:"
 msgstr "Aukeratu pantailako zein ertzetan kokatu docka"
 
-#: ../data/messages:15 ../data/messages:187
+#: ../data/messages:15 ../data/messages:175 ../data/messages:921
+msgid "Multi-screens"
+msgstr "Pantaila anitz"
+
+#: ../data/messages:17 ../data/messages:189
 msgid "Visibility of the main dock"
 msgstr "Dock nagusiaren ikusgarritasuna"
 
-#: ../data/messages:17 ../data/messages:189 ../data/messages:919
+#: ../data/messages:19 ../data/messages:191 ../data/messages:925
 msgid ""
 "Modes are sorted from the most intrusive to the less intrusive.\n"
 "When the dock is hidden or below a window, place the mouse on the screen's "
@@ -2816,39 +2774,39 @@ msgstr ""
 "Docka laster-tekla baten eraginez agertzen denean, zure saguaren kokapenean "
 "agertuko da. Bestelakoan, ikusezin mantenduko da, menu modura funtzionatuz."
 
-#: ../data/messages:23 ../data/messages:195 ../data/messages:925
+#: ../data/messages:25 ../data/messages:197 ../data/messages:931
 msgid "Reserve space for the dock"
 msgstr "Gorde lekua dockari"
 
-#: ../data/messages:25 ../data/messages:197 ../data/messages:927
+#: ../data/messages:27 ../data/messages:199 ../data/messages:933
 msgid "Keep the dock below"
 msgstr "Mantendu docka behean"
 
-#: ../data/messages:27 ../data/messages:199 ../data/messages:929
+#: ../data/messages:29 ../data/messages:201 ../data/messages:935
 msgid "Hide the dock when it overlaps the current window"
 msgstr "Gorde docka indarrean dagoen leihoari gainjartzean"
 
-#: ../data/messages:29 ../data/messages:201 ../data/messages:931
+#: ../data/messages:31 ../data/messages:203 ../data/messages:937
 msgid "Hide the dock whenever it overlaps any window"
 msgstr "Gorde docka edozein leihori gainjartzean"
 
-#: ../data/messages:31 ../data/messages:203 ../data/messages:933
+#: ../data/messages:33 ../data/messages:205 ../data/messages:939
 msgid "Keep the dock hidden"
 msgstr "Mantendu docka gordeta"
 
-#: ../data/messages:33 ../data/messages:205
+#: ../data/messages:35 ../data/messages:207
 msgid "Pop-up on shortcut"
 msgstr "Atera lasterbideekin"
 
-#: ../data/messages:35 ../data/messages:207
+#: ../data/messages:37 ../data/messages:209
 msgid "Effect used to hide the dock:"
 msgstr "Docka gordetzeko efektua:"
 
-#: ../data/messages:37 ../data/messages:69 ../data/messages:209
+#: ../data/messages:39 ../data/messages:71 ../data/messages:211
 msgid "None"
 msgstr "Inon ere ez"
 
-#: ../data/messages:49 ../data/messages:243
+#: ../data/messages:51 ../data/messages:245
 msgid ""
 "When you press the shortcut, the dock will show itself at the potition of "
 "your mouse. The rest of the time, it stays invisible, thus acting like a "
@@ -2857,30 +2815,30 @@ msgstr ""
 "Laster-tekla sakatzen duzunean, zure saguaren kokapenean agertuko da. "
 "Bestelakoan, ikusezin mantenduko da, menu modura funtzionatuz."
 
-#: ../data/messages:51 ../data/messages:245
+#: ../data/messages:53 ../data/messages:247
 msgid "Keyboard shortcut to pop-up the dock:"
 msgstr "Teklatu lasterbidea docka ateratzeko:"
 
-#: ../data/messages:53
+#: ../data/messages:55
 msgid "Visibility of sub-docks"
 msgstr "Azpidocken ikusgaitasuna"
 
-#: ../data/messages:55 ../data/messages:249
+#: ../data/messages:57 ../data/messages:251
 msgid ""
 "they will appear either when you click or when you linger over the icon "
 "pointing on it."
 msgstr ""
 "Klik egitean edo ikono gainean erakuslea aldi batez dagoenean agertuko dira."
 
-#: ../data/messages:59 ../data/messages:253
+#: ../data/messages:61 ../data/messages:255
 msgid "Appear on mouse over"
 msgstr "Sagua gainetik pasatzean agertu"
 
-#: ../data/messages:61 ../data/messages:255
+#: ../data/messages:63 ../data/messages:257
 msgid "Appear on click"
 msgstr "Klik egitean agertu"
 
-#: ../data/messages:65
+#: ../data/messages:67
 msgid ""
 "None       : Don't show opened windows in the dock.\n"
 "Minimalistic: Mix applications with its launcher, show other windows only if "
@@ -2898,136 +2856,136 @@ msgstr ""
 "Banatua: Banatu ataza-barra eta abiarazleak, eta erakutsi uneko mahaigainean "
 "dauden leihoak soilik."
 
-#: ../data/messages:67
+#: ../data/messages:69
 msgid "Behaviour of the Taskbar:"
 msgstr "Ataza-barraren portaera"
 
-#: ../data/messages:71
+#: ../data/messages:73
 msgid "Minimalistic"
 msgstr "Minimalista"
 
-#: ../data/messages:73
+#: ../data/messages:75
 msgid "Integrated"
 msgstr "Integratua"
 
-#: ../data/messages:75
+#: ../data/messages:77
 msgid "Separated"
 msgstr "Banatua"
 
-#: ../data/messages:77 ../data/messages:281
+#: ../data/messages:79 ../data/messages:283
 msgid "Place new icons"
 msgstr "Kokatu ikono berriak"
 
-#: ../data/messages:79 ../data/messages:283
+#: ../data/messages:81 ../data/messages:285
 msgid "At the beginning of the dock"
 msgstr "Dockaren hasieran"
 
-#: ../data/messages:81 ../data/messages:285
+#: ../data/messages:83 ../data/messages:287
 msgid "Before the launchers"
 msgstr "Abiarazleen aurretik"
 
-#: ../data/messages:83 ../data/messages:287
+#: ../data/messages:85 ../data/messages:289
 msgid "After the launchers"
 msgstr "Abiarazleen ondoren"
 
-#: ../data/messages:85 ../data/messages:289
+#: ../data/messages:87 ../data/messages:291
 msgid "At the end of the dock"
 msgstr "Dockaren amaieran"
 
-#: ../data/messages:87 ../data/messages:291
+#: ../data/messages:89 ../data/messages:293
 msgid "After a given icon"
 msgstr "Ikono jakin baten atzean"
 
-#: ../data/messages:89 ../data/messages:293
+#: ../data/messages:91 ../data/messages:295
 msgid "Place new icons after this one"
 msgstr "Kokatu ikono berriak honen atzean"
 
-#: ../data/messages:91
+#: ../data/messages:93
 msgid "Icons' animations and effects"
 msgstr "Ikonoak animazioak eta efektuak"
 
-#: ../data/messages:93
+#: ../data/messages:95
 msgid "On mouse hover:"
 msgstr "Sagua gainetik pasatzean:"
 
-#: ../data/messages:95
+#: ../data/messages:97
 msgid "On click:"
 msgstr "Klik egitean:"
 
-#: ../data/messages:97
+#: ../data/messages:99
 msgid "On appearance/disappearance:"
 msgstr "Agertzean/desagertzean:"
 
-#: ../data/messages:99
+#: ../data/messages:101
 msgid "Evaporate"
 msgstr "Lurrindu"
 
-#: ../data/messages:103
+#: ../data/messages:105
 msgid "Explode"
 msgstr "Lehertu"
 
-#: ../data/messages:105
+#: ../data/messages:107
 msgid "Break"
 msgstr "Hautsi"
 
-#: ../data/messages:107
+#: ../data/messages:109
 msgid "Black Hole"
 msgstr "Zulo beltza"
 
-#: ../data/messages:109
+#: ../data/messages:111
 msgid "Random"
 msgstr "Ausazkoa"
 
-#: ../data/messages:119 ../data/messages:553 ../data/messages:693
-#: ../data/messages:807 ../data/messages:841 ../data/messages:879
+#: ../data/messages:121 ../data/messages:559 ../data/messages:699
+#: ../data/messages:813 ../data/messages:847 ../data/messages:885
 msgid "Custom"
 msgstr ""
 
-#: ../data/messages:121 ../data/messages:747
+#: ../data/messages:123 ../data/messages:753
 msgid "Colour"
 msgstr "Kolorea"
 
-#: ../data/messages:125
+#: ../data/messages:127
 msgid "Choose a theme of icons :"
 msgstr "Aukeratu ikonoen gaia:"
 
-#: ../data/messages:127 ../data/messages:949
+#: ../data/messages:129 ../data/messages:955
 msgid "Icons size:"
 msgstr "Ikonoen tamaina:"
 
-#: ../data/messages:129 ../data/messages:955
+#: ../data/messages:131 ../data/messages:961
 msgid "Very small"
 msgstr "Oso txikia"
 
-#: ../data/messages:131 ../data/messages:957
+#: ../data/messages:133 ../data/messages:963
 msgid "Small"
 msgstr "Txikia"
 
-#: ../data/messages:133 ../data/messages:959
+#: ../data/messages:135 ../data/messages:965
 msgid "Medium"
 msgstr "Ertaina"
 
-#: ../data/messages:135 ../data/messages:961
+#: ../data/messages:137 ../data/messages:967
 msgid "Big"
 msgstr "Handia"
 
-#: ../data/messages:137 ../data/messages:963
+#: ../data/messages:139 ../data/messages:969
 msgid "Very Big"
 msgstr "Oso handia"
 
-#: ../data/messages:141 ../data/messages:529
+#: ../data/messages:143 ../data/messages:535
 msgid "Choose the default view for main docks :"
 msgstr "Aukeratu lehenetsitako ikuspegia jatorriko dockentzat :"
 
-#: ../data/messages:143 ../data/messages:533
+#: ../data/messages:145 ../data/messages:539
 msgid "You can overwrite this parameter for each sub-dock."
 msgstr "Parametro hau azpidock bakoitzarentzat gainidatz dezakezu."
 
-#: ../data/messages:145 ../data/messages:535
+#: ../data/messages:147 ../data/messages:541
 msgid "Choose the default view for sub-docks :"
 msgstr "Aukeratu lehenetsitako ikuspegia azpidockentzat."
 
-#: ../data/messages:149
+#: ../data/messages:151
 msgid ""
 "Many applets provide shortkeys for their actions. As soon as an applet is "
 "enabled, its shortkeys become available.\n"
@@ -3039,7 +2997,7 @@ msgstr ""
 "Egin klik bi aldiz lerro batean, eta sakatu ekintza bakoitzerako erabili "
 "nahi duzun laster-tekla"
 
-#: ../data/messages:165 ../data/messages:911
+#: ../data/messages:167 ../data/messages:917
 msgid ""
 "When set to 0 the dock will position itself relative to the left corner if "
 "horizontal and the top corner if vertical. When set to 1 it will position "
@@ -3053,19 +3011,15 @@ msgstr ""
 "izkinarekiko bertikalean. 0.5 balioa duenean, pantailaren ertzaren "
 "erdiarekiko kokapena izango du."
 
-#: ../data/messages:167 ../data/messages:913
+#: ../data/messages:169 ../data/messages:919
 msgid "Relative alignment:"
 msgstr "lerrokatze erlatiboa:"
 
-#: ../data/messages:173 ../data/messages:915
-msgid "Multi-screens"
-msgstr "Pantaila anitz"
-
-#: ../data/messages:175 ../data/messages:935
+#: ../data/messages:177 ../data/messages:941
 msgid "Offset from the screen's edge"
 msgstr "Desplazamendua pantailaren ertzetik"
 
-#: ../data/messages:177 ../data/messages:937
+#: ../data/messages:179 ../data/messages:943
 msgid ""
 "Gap from the absolute position on the screen's edge, in pixels. You can also "
 "move the dock by holding the ALT or CTRL key and the left mouse button."
@@ -3073,11 +3027,11 @@ msgstr ""
 "Pantailako ertzaren posizio absolutuarekiko tartea, pixeletan Alt edo Ctrl "
 "teklak saguaren ezker botoiarekin batera sakaturik ere mugi dezakezu docka."
 
-#: ../data/messages:179 ../data/messages:939
+#: ../data/messages:181 ../data/messages:945
 msgid "Lateral offset:"
 msgstr "Alboko desplazamendua:"
 
-#: ../data/messages:181 ../data/messages:941
+#: ../data/messages:183 ../data/messages:947
 msgid ""
 "in pixels. You can also move the dock by holding the ALT or CTRL key and the "
 "left mouse button."
@@ -3085,79 +3039,79 @@ msgstr ""
 "pixeletan. Alt edo Ctrl teklak saguaren ezker botoiarekin batera sakaturik "
 "ere mugi dezakezu docka."
 
-#: ../data/messages:183 ../data/messages:943
+#: ../data/messages:185 ../data/messages:949
 msgid "Distance to the screen edge:"
 msgstr "Pantaila ertzeraino distantzia:"
 
-#: ../data/messages:185
+#: ../data/messages:187
 msgid "Accessibility"
 msgstr "Erabilgarritasuna"
 
-#: ../data/messages:221
+#: ../data/messages:223
 msgid "The higher, the faster the dock will appear"
 msgstr "Gero eta altuagoa, azkarrago agertuko da docka"
 
-#: ../data/messages:223
+#: ../data/messages:225
 msgid "Callback sensitivity:"
 msgstr "Atzeradeiaren sentikortasuna:"
 
-#: ../data/messages:225
+#: ../data/messages:227
 msgid "high"
 msgstr "altua"
 
-#: ../data/messages:227
+#: ../data/messages:229
 msgid "low"
 msgstr "baxua"
 
-#: ../data/messages:229
+#: ../data/messages:231
 msgid "How to call the dock back:"
 msgstr "Nola deitu dockari berriz:"
 
-#: ../data/messages:231
+#: ../data/messages:233
 msgid "Hit the screen's border"
 msgstr "Jo pantailaren ertzera"
 
-#: ../data/messages:233
+#: ../data/messages:235
 msgid "Hit where the dock is"
 msgstr "Jo dockaren kokapenera"
 
-#: ../data/messages:235
+#: ../data/messages:237
 msgid "Hit the screen's corner"
 msgstr "Jo pantailaren ertzera"
 
-#: ../data/messages:237
+#: ../data/messages:239
 msgid "Hit a zone"
 msgstr "Jo kokapen batera"
 
-#: ../data/messages:239
+#: ../data/messages:241
 msgid "Size of the zone :"
 msgstr "Kokapenaren tamaina:"
 
-#: ../data/messages:241
+#: ../data/messages:243
 msgid "Image to display on the zone :"
 msgstr "Kokapena erakusteko irudia:"
 
-#: ../data/messages:247
+#: ../data/messages:249
 msgid "Sub-docks' visibility"
 msgstr "Azpidocken ikusgarritasuna"
 
-#: ../data/messages:257 ../data/messages:261
+#: ../data/messages:259 ../data/messages:263
 msgid "in ms."
 msgstr "milisegundotan"
 
-#: ../data/messages:259
+#: ../data/messages:261
 msgid "Delay before displaying a sub-dock:"
 msgstr "Azpidocka erakutsi aurreko denbora tartea:"
 
-#: ../data/messages:263
+#: ../data/messages:265
 msgid "Delay before leaving a sub-dock takes effect:"
 msgstr "Azpidock bat uztea efektua izateko denbora tartea:"
 
-#: ../data/messages:265
+#: ../data/messages:267
 msgid "TaskBar"
 msgstr "Ataza-barra"
 
-#: ../data/messages:269
+#: ../data/messages:271
 msgid ""
 "Cairo-Dock will then act as your taskbar. It is recommended to remove any "
 "other taskbars."
@@ -3165,11 +3119,11 @@ msgstr ""
 "Cairo-Dockek ataza-barra modura funtzionatuko du. Beste edozein ataza-barra "
 "kentzea gomendatzen da."
 
-#: ../data/messages:271
+#: ../data/messages:273
 msgid "Show currently opened applications in the dock?"
 msgstr "Irekita daude aplikazioak dockean ikusi?"
 
-#: ../data/messages:273
+#: ../data/messages:275
 msgid ""
 "Allows launchers to act as applications when their programs are running and "
 "displays a marker on icons to indicate this. You can launch other occurences "
@@ -3180,23 +3134,23 @@ msgstr ""
 "adierazteko. Programaren beste agerpen bat abiarazi dezakezu Shift+klik "
 "eginez."
 
-#: ../data/messages:275
+#: ../data/messages:277
 msgid "Mix launchers and applications"
 msgstr "Nahastu abiarazleak eta aplikazioak?"
 
-#: ../data/messages:277
+#: ../data/messages:279
 msgid "Only show applications on current desktop"
 msgstr "Uneko mahaigaineko aplikazioak bakarrik ikusi?"
 
-#: ../data/messages:279
+#: ../data/messages:281
 msgid "Only show icons whose windows are minimised"
 msgstr "Minimizatuak daudenen ikonoak bakarrik ikusi?"
 
-#: ../data/messages:295
+#: ../data/messages:297
 msgid "Automatically add a separator"
 msgstr "Gehitu banatzailea automatikoki"
 
-#: ../data/messages:297
+#: ../data/messages:299
 msgid ""
 "This allows you to group all the windows of a given application into a "
 "unique sub-dock, and to act on all of the windows at the same time."
@@ -3204,23 +3158,23 @@ msgstr ""
 "Honek adierazitako aplikazioko leiho guztiak azpidock bakarrean batzea "
 "ahalbidetzen du,  eta leiho guztiak batera aktibatzea."
 
-#: ../data/messages:299
+#: ../data/messages:301
 msgid "Group windows from the same application in a sub-dock ?"
 msgstr "Aplikazio berdineko leihoak azpidock baten taldekatu?"
 
-#: ../data/messages:301 ../data/messages:311
+#: ../data/messages:303 ../data/messages:313
 msgid "Enter the class of the applications, separated by a semi-colon ';'"
 msgstr "Sartu aplikazio motak, puntu eta komaz ';' banaturik"
 
-#: ../data/messages:303 ../data/messages:313
+#: ../data/messages:305 ../data/messages:315
 msgid "\t\tExcept the following classes:"
 msgstr "\t\tondorengo motetan ezik:"
 
-#: ../data/messages:305
+#: ../data/messages:307
 msgid "Representation"
 msgstr "Itxuratzea"
 
-#: ../data/messages:307
+#: ../data/messages:309
 msgid ""
 "If not set, the icon provided by X for each application will be used. If "
 "set, the same icon as the corresponding launcher will be used for each "
@@ -3229,11 +3183,11 @@ msgstr ""
 "Ezartzen ez bada, X-k aplikazio bakoitzerako ematen duen ikonoa erabiliko "
 "da.  Ezartzen bada, abiarazlearen ikonoa erabiliko da aplikazio bakoitzerako."
 
-#: ../data/messages:309
+#: ../data/messages:311
 msgid "Overwrite the X icon with the launchers' icon?"
 msgstr "Gainidatzi X ikonoak abiarazle bakoitzekoengatik?"
 
-#: ../data/messages:315
+#: ../data/messages:317
 msgid ""
 "A composite manager is required to display the thumbnail.\n"
 "OpenGL is required to draw the icon bent backwards."
@@ -3241,106 +3195,106 @@ msgstr ""
 "Konposizio-kudeatzailea behar da miniatura erakusteko.\n"
 "OpenGL behar da ikonoa atzerantz okertzeko."
 
-#: ../data/messages:317
+#: ../data/messages:319
 msgid "How to draw minimised windows ?"
 msgstr "Mola marrraztu lehio minimizatuak?"
 
-#: ../data/messages:319
+#: ../data/messages:321
 msgid "Make the icon transparent"
 msgstr "Ikonoa gardena egin?"
 
-#: ../data/messages:321
+#: ../data/messages:323
 msgid "Show a window's thumbnail"
 msgstr "Ikusi kuadro-txikiak leiho minimizatuetan"
 
-#: ../data/messages:323
+#: ../data/messages:325
 msgid "Draw it bent backwards"
 msgstr "Marraztu atzerantz okertuta"
 
-#: ../data/messages:325
+#: ../data/messages:327
 msgid "Transparency of icons whose window is minimised:"
 msgstr "Ikonoen gardentasuna, leihoak minimizaturik izan edo ez:"
 
-#: ../data/messages:327 ../data/messages:477 ../data/messages:603
-#: ../data/messages:629 ../data/messages:719
+#: ../data/messages:329 ../data/messages:483 ../data/messages:609
+#: ../data/messages:635 ../data/messages:725
 msgid "Opaque"
 msgstr "Opakoa"
 
-#: ../data/messages:329 ../data/messages:475 ../data/messages:601
-#: ../data/messages:627 ../data/messages:717
+#: ../data/messages:331 ../data/messages:481 ../data/messages:607
+#: ../data/messages:633 ../data/messages:723
 msgid "Transparent"
 msgstr "Gardena"
 
-#: ../data/messages:331
+#: ../data/messages:333
 msgid "Play a short animation of the icon when its window becomes active"
 msgstr "Leihoa aktiboa bihurtzean ikonoaren animazio motz bat egin?"
 
-#: ../data/messages:333
+#: ../data/messages:335
 msgid "\"...\" will be added at the end if the name is too long."
 msgstr "\"...\" gehituko zaio amaieran izena luzeegia bada."
 
-#: ../data/messages:335
+#: ../data/messages:337
 msgid "Maximum number of caracters in application name:"
 msgstr "Aplikazio izeneko karaktere kopuru maximoa:"
 
-#: ../data/messages:337
+#: ../data/messages:339
 msgid "Interaction"
 msgstr "Interakzioa"
 
-#: ../data/messages:339
+#: ../data/messages:341
 msgid "Action on middle-click on the related application"
 msgstr "Ekintza aplikazioan erdiko klik egitean"
 
-#: ../data/messages:341
+#: ../data/messages:343
 msgid "Nothing"
 msgstr "Ezer ere ez"
 
-#: ../data/messages:345
+#: ../data/messages:347
 msgid "Minimize"
 msgstr "Ikonotu"
 
-#: ../data/messages:347
+#: ../data/messages:349
 msgid "Launch new"
 msgstr "Abiarazi berria"
 
-#: ../data/messages:349
+#: ../data/messages:351
 msgid "Lower"
 msgstr "jaitsi"
 
-#: ../data/messages:351
+#: ../data/messages:353
 msgid "This is the default behaviour of most taskbars."
 msgstr "Ataza-barra gehienen lehenetsitako portaera da."
 
-#: ../data/messages:353
+#: ../data/messages:355
 msgid ""
 "Minimise the window when its icon is clicked, if it was already the active "
 "window ?"
 msgstr ""
 "Minimizatu leihoa bere ikonoa klikatzean, baldin eta bera leiho aktiboa bada?"
 
-#: ../data/messages:355
+#: ../data/messages:357
 msgid "Only if your Window Manager supports it."
 msgstr "Zure leiho-kudeatzaileak onartzen badu soilik."
 
-#: ../data/messages:357
+#: ../data/messages:359
 msgid ""
 "Present windows preview on click when several windows are grouped togather"
 msgstr ""
 
-#: ../data/messages:359
+#: ../data/messages:361
 msgid "Highlight applications requiring your attention with a dialog bubble"
 msgstr ""
 "Zure arreta eskatzen duten aplikazioa seinalatu elkarrizketa-burbuilaz?"
 
-#: ../data/messages:361
+#: ../data/messages:363
 msgid "in seconds"
 msgstr "segundutan"
 
-#: ../data/messages:363
+#: ../data/messages:365
 msgid "Duration of the dialog:"
 msgstr "Elkarrizketa koadroaren iraupena:"
 
-#: ../data/messages:365
+#: ../data/messages:367
 msgid ""
 "It will notify you even if, for instance, you are watching a movie in full "
 "screen or you are on another desktop.\n"
@@ -3348,23 +3302,31 @@ msgstr ""
 "Jakinarazpena jaso nahiz eta, adibidez, pelikula bat pantaila osora ikusten "
 "egon edo beste mahaigain baten egon.\n"
 
-#: ../data/messages:367
+#: ../data/messages:369
 msgid "Force the following applications to demand your attention"
 msgstr "Zure arreta eskatzera behartu animazio batez ondorengo aplikazioei?"
 
-#: ../data/messages:369
+#: ../data/messages:371
 msgid "Highlight applications demanding your attention with an animation"
 msgstr "Zure arreta eskatzen duten aplikazioa seinalatu animazioaz?"
 
-#: ../data/messages:373
+#: ../data/messages:375
+msgid "Enable new code paths on X11 to test for regressions."
+msgstr ""
+
+#: ../data/messages:377
+msgid "Experimental drawing code (X11)"
+msgstr ""
+
+#: ../data/messages:379
 msgid "Animations speed"
 msgstr "Animazioen abiadura"
 
-#: ../data/messages:375
+#: ../data/messages:381
 msgid "Animate sub-docks when they appear"
 msgstr "Animatu azpidockak agertzen direnean?"
 
-#: ../data/messages:377
+#: ../data/messages:383
 msgid ""
 "Icons will appear folded on themselves and will then unfold until they fill "
 "the whole dock. The smaller this value, the faster this will be."
@@ -3372,53 +3334,53 @@ msgstr ""
 "Ikonoak tolestuta agertuko dira eta ondoren destolestu egingo dira dock osoa "
 "bete arte. Balioa gero eta txikiagoa izan, azkarragoa izango da."
 
-#: ../data/messages:379
+#: ../data/messages:385
 msgid "Animation unfolding duration:"
 msgstr "Destoleste animazio iraupena:"
 
-#: ../data/messages:381 ../data/messages:389 ../data/messages:393
-#: ../data/messages:401 ../data/messages:405
+#: ../data/messages:387 ../data/messages:395 ../data/messages:399
+#: ../data/messages:407 ../data/messages:411
 msgid "fast"
 msgstr "azkarra"
 
-#: ../data/messages:383 ../data/messages:391 ../data/messages:395
-#: ../data/messages:403 ../data/messages:407
+#: ../data/messages:389 ../data/messages:397 ../data/messages:401
+#: ../data/messages:409 ../data/messages:413
 msgid "slow"
 msgstr "mantsoa"
 
-#: ../data/messages:385 ../data/messages:397
+#: ../data/messages:391 ../data/messages:403
 msgid "The more there are, the slower it will be"
 msgstr "Gero eta gehiago izan, motelagoa izango da"
 
-#: ../data/messages:387
+#: ../data/messages:393
 msgid "Number of steps in the zoom animation (grow/shrink):"
 msgstr "Zoom animazioko pauso kopurua (handitu gorantz/txikitu beherantz):"
 
-#: ../data/messages:399
+#: ../data/messages:405
 msgid "Number of steps in the auto-hide animation (move up/move down):"
 msgstr "Auto-gorde animazioko pauso kopurua (mugi gorantz/mugi beherantz):"
 
-#: ../data/messages:409
+#: ../data/messages:415
 msgid "Refresh rate"
 msgstr "Freskatze-maiztasuna"
 
-#: ../data/messages:411 ../data/messages:415 ../data/messages:419
+#: ../data/messages:417 ../data/messages:421 ../data/messages:425
 msgid "in Hz. This is to adjust behaviour relative to your CPU power."
 msgstr "Hz-etan. Portaera PUZaren energiaren arabera doitzeko da hau."
 
-#: ../data/messages:413
+#: ../data/messages:419
 msgid "Refresh rate when moving cursor into the dock:"
 msgstr "Freskatze-tasa kurtsoaren dockaren barruan mugitzean:"
 
-#: ../data/messages:417
+#: ../data/messages:423
 msgid "Animation frequency for the OpenGL backend:"
 msgstr "Animazio-maiztasuna OpenGL motorrerako:"
 
-#: ../data/messages:421
+#: ../data/messages:427
 msgid "Animation frequency for the Cairo backend:"
 msgstr "Animazio-maiztasuna Cairo motorrerako:"
 
-#: ../data/messages:423
+#: ../data/messages:429
 msgid ""
 "The transparency gradation pattern will then be re-calculated in real time. "
 "May need more CPU power."
@@ -3426,15 +3388,15 @@ msgstr ""
 "Gardentasun-gradazioaren eredua denbora errealean kalkulatuko da. PUZaren "
 "energia gehiago behar du."
 
-#: ../data/messages:425
+#: ../data/messages:431
 msgid "Reflections should be calculated in real-time?"
 msgstr "Islapenak denbora errealean kalkulatu?"
 
-#: ../data/messages:427
+#: ../data/messages:433
 msgid "Connection to the Internet"
 msgstr "Interneterako konexioa"
 
-#: ../data/messages:429
+#: ../data/messages:435
 msgid ""
 "Maximum time in seconds that you allow the connection to the server to take. "
 "This only limits the connection phase,  once the dock has connected this "
@@ -3444,11 +3406,11 @@ msgstr ""
 "Hau konexio faserako bakarrik da, behin docka konektatua aukera hau ez da "
 "aintzat hartzen."
 
-#: ../data/messages:431
+#: ../data/messages:437
 msgid "Connection timeout :"
 msgstr "Konexioaren denbora-muga :"
 
-#: ../data/messages:433
+#: ../data/messages:439
 msgid ""
 "Maximum time in seconds that you allow the whole operation to last. Some "
 "themes can be up to a few MB."
@@ -3456,158 +3418,158 @@ msgstr ""
 "Eragiketa osoak har dezakeen denbora maximoa segundotan. Gai batzuk MB gutxi "
 "batzuk har ditzakete."
 
-#: ../data/messages:435
+#: ../data/messages:441
 msgid "Maximum time to download a file:"
 msgstr "Fitxategi bat deskargatzeko gehieneko denbora:"
 
-#: ../data/messages:437
+#: ../data/messages:443
 msgid "Use this option if you experience problems to connect."
 msgstr "Erabili aukera hau konektatzeko arazoak badituzu."
 
-#: ../data/messages:439
+#: ../data/messages:445
 msgid "Force IPv4 ?"
 msgstr "Behartu IPv4 ?"
 
-#: ../data/messages:441
+#: ../data/messages:447
 msgid "Use this option if you connect to the Internet through a proxy."
 msgstr "Erabili aukera hau Internetera proxy bidez konektatuz gero."
 
-#: ../data/messages:443
+#: ../data/messages:449
 msgid "Are you behind a proxy ?"
 msgstr "proxy baten atzean zaude?"
 
-#: ../data/messages:445
+#: ../data/messages:451
 msgid "Proxy name :"
 msgstr "Proxy izena:"
 
-#: ../data/messages:447
+#: ../data/messages:453
 msgid "Port :"
 msgstr "Portua:"
 
-#: ../data/messages:449 ../data/messages:453
+#: ../data/messages:455 ../data/messages:459
 msgid ""
 "Let empty if you don't need to log-in to the proxy with a user/password."
 msgstr ""
 "Utzi hutsik proxy-ra konektatzeko erabiltzaile/pasahitza ez baduzu behar."
 
-#: ../data/messages:451
+#: ../data/messages:457
 msgid "User :"
 msgstr "Erabiltzailea :"
 
-#: ../data/messages:455
+#: ../data/messages:461
 msgid "Password :"
 msgstr "Pasahitza :"
 
-#: ../data/messages:465 ../data/messages:483 ../data/messages:979
+#: ../data/messages:471 ../data/messages:489 ../data/messages:985
 msgid "Colour gradation"
 msgstr "Kolore gradientea"
 
-#: ../data/messages:467
+#: ../data/messages:473
 msgid "Use a background image."
 msgstr "Erabili atzeko planoan irudi bat."
 
-#: ../data/messages:471 ../data/messages:685 ../data/messages:739
-#: ../data/messages:759 ../data/messages:797
+#: ../data/messages:477 ../data/messages:691 ../data/messages:745
+#: ../data/messages:765 ../data/messages:803
 msgid "Image file:"
 msgstr "Irudi fitxategia:"
 
-#: ../data/messages:473
+#: ../data/messages:479
 msgid "Image's transparency :"
 msgstr "Irudiaren gardentasuna:"
 
-#: ../data/messages:479 ../data/messages:985
+#: ../data/messages:485 ../data/messages:991
 msgid "Repeat image as a pattern to fill background?"
 msgstr "Errepikatu irudia eredu gisa atzeko planoa betetzeko?"
 
-#: ../data/messages:481
+#: ../data/messages:487
 msgid "Use a colour gradation."
 msgstr "Kolore gradientea erabili."
 
-#: ../data/messages:485 ../data/messages:987
+#: ../data/messages:491 ../data/messages:993
 msgid "Bright colour:"
 msgstr "Kolore distiratsua:"
 
-#: ../data/messages:487 ../data/messages:989
+#: ../data/messages:493 ../data/messages:995
 msgid "Dark colour:"
 msgstr "Kolore iluna:"
 
-#: ../data/messages:489
+#: ../data/messages:495
 msgid "In degrees, in relation to the vertical"
 msgstr "Gradutan, bertikalarekiko"
 
-#: ../data/messages:491
+#: ../data/messages:497
 msgid "Angle of the gradation :"
 msgstr "Gradientearen angelua:"
 
-#: ../data/messages:493
+#: ../data/messages:499
 msgid "If not nul, it will form stripes."
 msgstr "Hutsa bada, marra motakoa izango da."
 
-#: ../data/messages:495
+#: ../data/messages:501
 msgid "Repeat the gradation this number of times:"
 msgstr "Zenbat aldiz errepikatu gradientea:"
 
-#: ../data/messages:497
+#: ../data/messages:503
 msgid "Percentage of the bright colour:"
 msgstr "Kolore distiratsuaren ehunekoa:"
 
-#: ../data/messages:499
+#: ../data/messages:505
 msgid "Background when hidden"
 msgstr "Atzeko planoa, ezkutatuta dagoenean"
 
-#: ../data/messages:501
+#: ../data/messages:507
 msgid "Several applets can be visible even when the dock is hidden"
 msgstr ""
 "Zenbait applet ikusgai egongo dira baita docka ezkutatuta dagoenean ere"
 
-#: ../data/messages:503
+#: ../data/messages:509
 msgid "Default background color when the dock is hidden"
 msgstr "Atzeko planoaren kolore lehenetsia docka ezkutatuta dagoenean"
 
-#: ../data/messages:505
+#: ../data/messages:511
 msgid "External Frame"
 msgstr "Kanpoko markoa"
 
-#: ../data/messages:507 ../data/messages:511 ../data/messages:517
-#: ../data/messages:577 ../data/messages:655
+#: ../data/messages:513 ../data/messages:517 ../data/messages:523
+#: ../data/messages:583 ../data/messages:661
 msgid "in pixels."
 msgstr "pixeletan."
 
-#: ../data/messages:509 ../data/messages:561 ../data/messages:751
-#: ../data/messages:887
+#: ../data/messages:515 ../data/messages:567 ../data/messages:757
+#: ../data/messages:893
 msgid "Corner radius"
 msgstr ""
 
-#: ../data/messages:513 ../data/messages:563 ../data/messages:889
+#: ../data/messages:519 ../data/messages:569 ../data/messages:895
 msgid "Outline width"
 msgstr ""
 
-#: ../data/messages:515 ../data/messages:557 ../data/messages:813
-#: ../data/messages:845 ../data/messages:883
+#: ../data/messages:521 ../data/messages:563 ../data/messages:819
+#: ../data/messages:851 ../data/messages:889
 msgid "Outline colour"
 msgstr ""
 
-#: ../data/messages:519
+#: ../data/messages:525
 msgid "Margin between the frame and the icons or their reflects :"
 msgstr "Ikonoen edo ikono islapenen eta markoaren arteko margena."
 
-#: ../data/messages:521
+#: ../data/messages:527
 msgid "Are the bottom left and right corners rounded?"
 msgstr "Azpiko ezker eta eskuin ertzak borobilduak dira?"
 
-#: ../data/messages:523 ../data/messages:991
+#: ../data/messages:529 ../data/messages:997
 msgid "Stretch the dock to always fill the screen"
 msgstr "Luzatu docka pantaila betze arte beti?"
 
-#: ../data/messages:527
+#: ../data/messages:533
 msgid "Main Dock"
 msgstr "Dock nagusia"
 
-#: ../data/messages:531
+#: ../data/messages:537
 msgid "Sub-Docks"
 msgstr "Azpidockak"
 
-#: ../data/messages:537
+#: ../data/messages:543
 msgid ""
 "You can specify a ratio for the size of the sub-docks' icons, in relation to "
 "the main docks' icons size"
@@ -3615,76 +3577,76 @@ msgstr ""
 "Azpidockeko ikonoen tamaina ezar dezakezu dock nagusiaren ikonoekiko ehuneko "
 "bat ezarriz"
 
-#: ../data/messages:539
+#: ../data/messages:545
 msgid "Ratio for the size of the sub-docks' icons :"
 msgstr "Azpidockeko ikonoen tamaina ehunekoan:"
 
-#: ../data/messages:541 ../data/messages:777
+#: ../data/messages:547 ../data/messages:783
 msgid "smaller"
 msgstr "txikiagoa"
 
-#: ../data/messages:543
+#: ../data/messages:549
 msgid "larger"
 msgstr "handiagoa"
 
-#: ../data/messages:545
+#: ../data/messages:551
 msgid "Dialogs"
 msgstr "Elkarrizketa-koadroak"
 
-#: ../data/messages:547
+#: ../data/messages:553
 msgid "Bubble"
 msgstr "Burbuila"
 
-#: ../data/messages:555 ../data/messages:843 ../data/messages:869
-#: ../data/messages:881
+#: ../data/messages:561 ../data/messages:849 ../data/messages:875
+#: ../data/messages:887
 msgid "Background colour"
 msgstr ""
 
-#: ../data/messages:559 ../data/messages:847 ../data/messages:867
+#: ../data/messages:565 ../data/messages:853 ../data/messages:873
 msgid "Text colour"
 msgstr ""
 
-#: ../data/messages:565
+#: ../data/messages:571
 msgid "Shape of the bubble:"
 msgstr "Burbuilaren forma:"
 
-#: ../data/messages:567 ../data/messages:853 ../data/messages:891
+#: ../data/messages:573 ../data/messages:859 ../data/messages:897
 msgid "Font"
 msgstr "Letra-tipoa"
 
-#: ../data/messages:569 ../data/messages:855
+#: ../data/messages:575 ../data/messages:861
 msgid "Otherwise the default's system one will be used."
 msgstr "Bestela sistemako lehenetsia erabiliko da."
 
-#: ../data/messages:571 ../data/messages:857 ../data/messages:893
+#: ../data/messages:577 ../data/messages:863 ../data/messages:899
 msgid "Use a custom font for the text?"
 msgstr "Erabili letra-tipo pertsonalizatua testuarentzat?"
 
-#: ../data/messages:573 ../data/messages:859 ../data/messages:895
+#: ../data/messages:579 ../data/messages:865 ../data/messages:901
 msgid "Text font:"
 msgstr "Testuaren letra-tipoa:"
 
-#: ../data/messages:575 ../data/messages:631
+#: ../data/messages:581 ../data/messages:637
 msgid "Buttons"
 msgstr "Botoiak"
 
-#: ../data/messages:579
+#: ../data/messages:585
 msgid "Size of buttons in the info-bubbles (width x height) :"
 msgstr "Botoien tamaina informazio burbuiletan (zabalera x altuera):"
 
-#: ../data/messages:581
+#: ../data/messages:587
 msgid "Name of an image to use for the yes/ok button :"
 msgstr "Bai/Ados botoiaren irudiaren izena:"
 
-#: ../data/messages:583
+#: ../data/messages:589
 msgid "Name of an image to use for the no/cancel button :"
 msgstr "Ez/Utzi botoiaren irudiaren izena:"
 
-#: ../data/messages:585
+#: ../data/messages:591
 msgid "Size of the icon displayed next to the text :"
 msgstr "Testuaren alboan erakutsitako ikonoaren tamaina:"
 
-#: ../data/messages:591
+#: ../data/messages:597
 msgid ""
 "This can be customized for each desklet separately.\n"
 "Choose 'Custom decoration' to define your own decorations below"
@@ -3692,11 +3654,11 @@ msgstr ""
 "Hau desklet bakoitzerako pertsonaliza daiteke.\n"
 "Hautatu 'Dekorazio pertsonalizatua' azpian zure dekorazio propioa definitzeko"
 
-#: ../data/messages:593
+#: ../data/messages:599
 msgid "Choose a default decoration for all desklets :"
 msgstr "desklet guztien dekorazio lehenetsia aukeratu:"
 
-#: ../data/messages:595
+#: ../data/messages:601
 msgid ""
 "It's an image that will be displayed below the drawings, like a frame for "
 "example. Leave empty to not use any."
@@ -3704,47 +3666,47 @@ msgstr ""
 "Marrazkien gainean erakutsiko den irudia da, marko bat adibidez. Utzi hutsik "
 "ezer ez erabiltzeko."
 
-#: ../data/messages:597
+#: ../data/messages:603
 msgid "Background image :"
 msgstr "Atzeko planoko irudia"
 
-#: ../data/messages:599
+#: ../data/messages:605
 msgid "Background transparency :"
 msgstr "Atzeko planoren gardentasuna:"
 
-#: ../data/messages:605
+#: ../data/messages:611
 msgid "in pixels. Use this to adjust the left position of the drawings."
 msgstr "pixeletan. Erabili hau marrazkien ezker kokapena zehazteko."
 
-#: ../data/messages:607
+#: ../data/messages:613
 msgid "Left offset :"
 msgstr "Ezker desplazamendua:"
 
-#: ../data/messages:609
+#: ../data/messages:615
 msgid "in pixels. Use this to adjust the top position of the drawings."
 msgstr "pixeletan. Erabili hau marrazkien goiko kokapena zehazteko."
 
-#: ../data/messages:611
+#: ../data/messages:617
 msgid "Top offset :"
 msgstr "Goiko desplazamendua:"
 
-#: ../data/messages:613
+#: ../data/messages:619
 msgid "in pixels. Use this to adjust the right position of the drawings."
 msgstr "pixeletan. Erabili hau marrazkien eskuineko kokapena zehazteko."
 
-#: ../data/messages:615
+#: ../data/messages:621
 msgid "Right offset :"
 msgstr "Eskuin desplazamendua:"
 
-#: ../data/messages:617
+#: ../data/messages:623
 msgid "in pixels. Use this to adjust the bottom position of the drawings."
 msgstr "pixeletan. Erabili hau marrazkien beheko kokapena zehazteko."
 
-#: ../data/messages:619
+#: ../data/messages:625
 msgid "Bottom offset :"
 msgstr "Beheko desplazamendua:"
 
-#: ../data/messages:621
+#: ../data/messages:627
 msgid ""
 "It's an image that will be displayed above the drawings, like a reflection "
 "for example. Leave empty to not use any."
@@ -3752,87 +3714,85 @@ msgstr ""
 "Marrazkien gainean erakutsiko den irudia da, islapen bat adibidez. Utzi "
 "hutsik ezer ez erabiltzeko."
 
-#: ../data/messages:623
+#: ../data/messages:629
 msgid "Foreground image :"
 msgstr "Lehen planoko irudia:"
 
-#: ../data/messages:625
+#: ../data/messages:631
 msgid "Foreground tansparency :"
 msgstr "Lehen planoren gardentasuna:"
 
-#: ../data/messages:633
+#: ../data/messages:639
 msgid "Buttons size :"
 msgstr "Botoien tamaina:"
 
-#: ../data/messages:635 ../data/messages:641
+#: ../data/messages:641 ../data/messages:647
 msgid "Name of an image to use for the 'rotate' button :"
 msgstr "'Biratu' botoian erabiliko den irudiaren izena:"
 
-#: ../data/messages:637
+#: ../data/messages:643
 msgid "Name of an image to use for the 'reattach' button :"
 msgstr "'Berrerantsi' botoian erabiliko den irudiaren izena:"
 
-#: ../data/messages:639
+#: ../data/messages:645
 msgid "Name of an image to use for the 'depth rotate' button :"
 msgstr "'Biratu sakon' botoian erabiliko den irudiaren izena:"
 
-#: ../data/messages:645
+#: ../data/messages:651
 msgid "Icons' themes"
 msgstr "Ikonoen gaiak"
 
-#: ../data/messages:647
+#: ../data/messages:653
 msgid "Choose an icon theme :"
 msgstr "Aukeratu ikonoen gaia:"
 
-#: ../data/messages:649
+#: ../data/messages:655
 msgid "Image filename to use as a background for icons :"
 msgstr "Ikonoen atzeko planoan ezartzeko irudiaren fitxategi izena:"
 
-#: ../data/messages:651
+#: ../data/messages:657
 msgid "Icons size"
 msgstr "Ikonoen tamaina"
 
-#: ../data/messages:653 ../data/messages:671
+#: ../data/messages:659 ../data/messages:677
 msgid "Icons' size at rest (width x height) :"
 msgstr "Ikonoen tamaina atsedenean (zabalera x altuera):"
 
-#: ../data/messages:657
+#: ../data/messages:663
 msgid "Space between icons :"
 msgstr "Ikonoen arteko hutsunea:"
 
-#: ../data/messages:659
+#: ../data/messages:665
 msgid "Zoom effect"
 msgstr "Zoom efektua"
 
-#: ../data/messages:661
-msgid ""
-"set to 1 if you don't want the icons to zoom when you hover over them."
+#: ../data/messages:667
+msgid "set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Ezarri 1 balioan ikonoen gainetik pasatzean zoom efekturik ez baduzu nahi."
 
-#: ../data/messages:663
+#: ../data/messages:669
 msgid "Maximum zoom of the icons :"
 msgstr "Ikonoen zoom maximoa:"
 
-#: ../data/messages:665
+#: ../data/messages:671
 msgid ""
 "in pixels. Outside of this space (centered on the mouse), there is no zoom."
-msgstr ""
-"pixeletan. Tarte honetatik kanpora (saguan zentratua), ez dago zoomik."
+msgstr "pixeletan. Tarte honetatik kanpora (saguan zentratua), ez dago zoomik."
 
-#: ../data/messages:667
+#: ../data/messages:673
 msgid "Width of the space in which the zoom will be effective :"
 msgstr "Zoom efektua eraginkor izango den tartearen zabalera:"
 
-#: ../data/messages:669
+#: ../data/messages:675
 msgid "Separators"
 msgstr "Bereizleak"
 
-#: ../data/messages:673
+#: ../data/messages:679
 msgid "Force separator's image size to stay constant?"
 msgstr "Behartu bereizlearen irudiaren tamaina konstatea izatera?"
 
-#: ../data/messages:675
+#: ../data/messages:681
 msgid ""
 "Only the default, 3D-plane and curve views support flat and physical "
 "separators. Flat separators are rendered differently according to the view."
@@ -3841,49 +3801,49 @@ msgstr ""
 "eta fisikoak. Banatzaile lauak modu ezberdinean errendatzen dira "
 "ikuspegiaren arabera."
 
-#: ../data/messages:677
+#: ../data/messages:683
 msgid "How to draw the separators?"
 msgstr "Nola marraztu banatzaileak?"
 
-#: ../data/messages:679
+#: ../data/messages:685
 msgid "Use an image."
 msgstr "Erabili irudia."
 
-#: ../data/messages:681
+#: ../data/messages:687
 msgid "Flat separator"
 msgstr "Banatzaile laua"
 
-#: ../data/messages:683
+#: ../data/messages:689
 msgid "Physical separator"
 msgstr "Banatzaile fisikoa"
 
-#: ../data/messages:687
+#: ../data/messages:693
 msgid ""
 "Make the separator's image revolve when dock is on top/on the left/on the "
 "right?"
 msgstr "Bereizleen irudia birarazi docka goian/ezkerrean/eskuman dagoenean?"
 
-#: ../data/messages:695
+#: ../data/messages:701
 msgid "Colour of flat separators :"
 msgstr "Banatzaile lauaren kolorea:"
 
-#: ../data/messages:697
+#: ../data/messages:703
 msgid "Reflections"
 msgstr "Islapenak"
 
-#: ../data/messages:699
+#: ../data/messages:705
 msgid "Reflection visibility"
 msgstr ""
 
-#: ../data/messages:701
+#: ../data/messages:707
 msgid "light"
 msgstr "argia"
 
-#: ../data/messages:703
+#: ../data/messages:709
 msgid "strong"
 msgstr "indartsua"
 
-#: ../data/messages:705
+#: ../data/messages:711
 msgid ""
 "In percent of the icon's size. This parameter influence the total height of "
 "the dock."
@@ -3891,19 +3851,19 @@ msgstr ""
 "Ikonoaren tamainaren araberako ehunekoetan. Parametro honek dock osoaren "
 "altueran eragina du."
 
-#: ../data/messages:707
+#: ../data/messages:713
 msgid "Height of the reflection:"
 msgstr "Islapenaren altuera:"
 
-#: ../data/messages:709
+#: ../data/messages:715
 msgid "small"
 msgstr "txikia"
 
-#: ../data/messages:711
+#: ../data/messages:717
 msgid "tall"
 msgstr "Altua"
 
-#: ../data/messages:713
+#: ../data/messages:719
 msgid ""
 "It is their transparency when the dock is at rest; they will \"materialize\" "
 "progressively as the dock grows up. The closer to 0, the more transparent "
@@ -3913,47 +3873,47 @@ msgstr ""
 "\"materializatuko\" dira docka handiagoa egiten den heinean. Balioa 0tik "
 "gero eta hurbilago, gardenagoak izango dira."
 
-#: ../data/messages:715
+#: ../data/messages:721
 msgid "Icons' transparency at rest :"
 msgstr "Ikonoen gardentasuna atsedenean:"
 
-#: ../data/messages:721
+#: ../data/messages:727
 msgid "Link the icons with a string"
 msgstr "Lotu ikonoak soka batekin"
 
-#: ../data/messages:723
+#: ../data/messages:729
 msgid "Linewidth of the string, in pixels (0 to not use string) :"
 msgstr "Sokaren zabalera, pixeletan (0 sokarik ez erabiltzeko)"
 
-#: ../data/messages:725
+#: ../data/messages:731
 msgid "Colour of the string (red, blue, green, alpha) :"
 msgstr "Katearen kolorea (gorria, urdina, berdea, alfa) :"
 
-#: ../data/messages:729
+#: ../data/messages:735
 msgid "Indicator of the active window"
 msgstr "Leiho aktiboaren adierazlea"
 
-#: ../data/messages:737 ../data/messages:741 ../data/messages:745
+#: ../data/messages:743 ../data/messages:747 ../data/messages:751
 msgid "Frame"
 msgstr "Markoa"
 
-#: ../data/messages:743
+#: ../data/messages:749
 msgid "Fill background"
 msgstr ""
 
-#: ../data/messages:749
+#: ../data/messages:755
 msgid "Linewidth"
 msgstr ""
 
-#: ../data/messages:753 ../data/messages:785
+#: ../data/messages:759 ../data/messages:791
 msgid "Draw indicator above the icon?"
 msgstr "Marraztu adierazlea ikonoaren gainean?"
 
-#: ../data/messages:755
+#: ../data/messages:761
 msgid "Indicator of active launcher"
 msgstr "Abiarazle aktiboaren adierazlea"
 
-#: ../data/messages:757
+#: ../data/messages:763
 msgid ""
 "Indicators are drawn on launchers icons to show that they have already been "
 "launched. Leave blank to use the default one."
@@ -3961,7 +3921,7 @@ msgstr ""
 "Adierazleak abiarazleen ikonoetan marrazten dira jadanik abiarazita daudela "
 "ikusteko. Utzi hutsik lehenetsia erabiltzeko."
 
-#: ../data/messages:761
+#: ../data/messages:767
 msgid ""
 "The indicator is drawn on active launchers, but you may want to display it "
 "on applications too."
@@ -3969,11 +3929,11 @@ msgstr ""
 "Adierazlea abiarazle aktiboetan marrazten da, baina aplikazioetan ere "
 "marraztu ahal daitezke."
 
-#: ../data/messages:763
+#: ../data/messages:769
 msgid "Display an indicator on application icons too ?"
 msgstr "Aplikazioen ikonoetan ere ikusi erakuslea?"
 
-#: ../data/messages:765
+#: ../data/messages:771
 msgid ""
 "Relatively to the icons' size. You can use this parameter to adjust the "
 "indicator's vertical position.\n"
@@ -3985,11 +3945,11 @@ msgstr ""
 "Adierazlea ikonoari lotuta badago, desplazamendua gorantz izango da; "
 "bestela, beherantz."
 
-#: ../data/messages:767
+#: ../data/messages:773
 msgid "Vertical offset :"
 msgstr "Desplazamendu bertikala:"
 
-#: ../data/messages:769
+#: ../data/messages:775
 msgid ""
 "If the indicator is linked to the icon, it will then be zoomed like the icon "
 "and the offset will be upwards.\n"
@@ -4001,11 +3961,11 @@ msgstr ""
 "Bestela zuzenean dockean marraztuko da eta desplazamendua beherantz izango "
 "da."
 
-#: ../data/messages:771
+#: ../data/messages:777
 msgid "Link the indicator with its icon?"
 msgstr "Adierazle hau ikonoarekin lotu?"
 
-#: ../data/messages:773
+#: ../data/messages:779
 msgid ""
 "You can choose to make the indicator smaller or bigger than the icons. The "
 "bigger the value is, the bigger the indicator is. 1 means the indicator will "
@@ -4015,43 +3975,43 @@ msgstr ""
 "eta balio handiagoa, adierazlea handiagoa izango da. Balioa 1 bada, "
 "adierazleak ikonoaren tamaina bera izango du."
 
-#: ../data/messages:775
+#: ../data/messages:781
 msgid "Indicator size ratio :"
 msgstr "Adierazlearen tamaina erlazioa:"
 
-#: ../data/messages:779
+#: ../data/messages:785
 msgid "bigger"
 msgstr "handiagoa"
 
-#: ../data/messages:781
+#: ../data/messages:787
 msgid ""
-"Use it to make the indicator follow the orientation of the dock "
-"(top/bottom/right/left)."
+"Use it to make the indicator follow the orientation of the dock (top/bottom/"
+"right/left)."
 msgstr ""
 "Erabili adierazleak dockaren kokapenari (Goian/Behean/eskuman/ezkerrean) "
 "jarrai diezaion."
 
-#: ../data/messages:783
+#: ../data/messages:789
 msgid "Rotate the indicator with dock?"
 msgstr "Biratu adierazlea dockarekin batera?"
 
-#: ../data/messages:787
+#: ../data/messages:793
 msgid "Indicator of grouped windows"
 msgstr "Bateratutako leihoen adierazlea"
 
-#: ../data/messages:789
+#: ../data/messages:795
 msgid "How to show that several icons are grouped :"
 msgstr "Nola erakutsi bateratuak dauden hainbat ikono:"
 
-#: ../data/messages:791
+#: ../data/messages:797
 msgid "Draw an emblem"
 msgstr "Marraztu ikur bat"
 
-#: ../data/messages:793
+#: ../data/messages:799
 msgid "Draw the sub-dock's icons as a stack"
 msgstr "Marraztu azpidocken ikonoak pilatuta"
 
-#: ../data/messages:795
+#: ../data/messages:801
 msgid ""
 "It only makes sense if you chose to group the applis of the same class "
 "together. Leave blank to use the default one."
@@ -4059,107 +4019,107 @@ msgstr ""
 "Mota bereko aplikazioak batzea aukeratu bada soilik du zentzua. Utzi hutsik "
 "lehenetsia erabiltzeko."
 
-#: ../data/messages:799
+#: ../data/messages:805
 msgid "Zoom the indicator with its icon?"
 msgstr "Zoom adierazleari ikono honekin?"
 
-#: ../data/messages:801
+#: ../data/messages:807
 msgid "Progress bars"
 msgstr "Aurrerapen-barrak"
 
-#: ../data/messages:809
+#: ../data/messages:815
 msgid "Start color"
 msgstr "Hasierako kolorea"
 
-#: ../data/messages:811
+#: ../data/messages:817
 msgid "End color"
 msgstr "Amaierako kolorea"
 
-#: ../data/messages:815
+#: ../data/messages:821
 msgid "Bar thickness"
 msgstr "Barraren lodiera"
 
-#: ../data/messages:817
+#: ../data/messages:823
 msgid "Labels"
 msgstr "Etiketak"
 
-#: ../data/messages:819
+#: ../data/messages:825
 msgid "Label visibility"
 msgstr "Etiketaren ikusgarritasuna"
 
-#: ../data/messages:821
+#: ../data/messages:827
 msgid "Show labels:"
 msgstr "Ikus etiketak:"
 
-#: ../data/messages:825
+#: ../data/messages:831
 msgid "On pointed icon"
 msgstr "hautatutako ikonoan"
 
-#: ../data/messages:827
+#: ../data/messages:833
 msgid "On all icons"
 msgstr "Ikono guztietan"
 
-#: ../data/messages:829
+#: ../data/messages:835
 msgid "Neighbouring labels visibility:"
 msgstr ""
 
-#: ../data/messages:831
+#: ../data/messages:837
 msgid "more visible"
 msgstr ""
 
-#: ../data/messages:833
+#: ../data/messages:839
 msgid "less visible"
 msgstr ""
 
-#: ../data/messages:849
+#: ../data/messages:855
 msgid "Draw the outline of the text?"
 msgstr "Marraztu testua nabarmendua?"
 
-#: ../data/messages:851
+#: ../data/messages:857
 msgid "Margin around the text (in pixels) :"
 msgstr "Testuaren inguruko margina (pixeletan):"
 
-#: ../data/messages:861
+#: ../data/messages:867
 msgid "Quick-info are short information drawn on the icons."
 msgstr "Informazio azkarra ikonoetan marraztutako informazio laburra da."
 
-#: ../data/messages:863
+#: ../data/messages:869
 msgid "Quick-info"
 msgstr "Informazio azkarra"
 
-#: ../data/messages:865
+#: ../data/messages:871
 msgid "Use the same look as the labels?"
 msgstr "Etiketen itxura bera erabili?"
 
-#: ../data/messages:885
+#: ../data/messages:891
 msgid "Text colour:"
 msgstr ""
 
-#: ../data/messages:917
+#: ../data/messages:923
 msgid "Visibility of the dock"
 msgstr "Dockaren ikusgarritasuna"
 
-#: ../data/messages:951 ../data/messages:975
+#: ../data/messages:957 ../data/messages:981
 msgid "Same as main dock"
 msgstr "Dock nagusiaren bera"
 
-#: ../data/messages:953
+#: ../data/messages:959
 msgid "Tiny"
 msgstr "Txikia"
 
-#: ../data/messages:967
+#: ../data/messages:973
 msgid "Leave it empty to use the same view as the main dock."
 msgstr "Utzi hutsik dock nagusiaren ikuspegi bera erabiltzeko."
 
-#: ../data/messages:969
+#: ../data/messages:975
 msgid "Choose the view for this dock :/"
 msgstr "Hautatu dock honen ikuspegia :/"
 
-#: ../data/messages:973
+#: ../data/messages:979
 msgid "Fill the background with:"
 msgstr "Bete atzeko-planoa honekin:"
 
-#: ../data/messages:981
+#: ../data/messages:987
 msgid ""
 "Any format allowed; if empty, the colour gradation will be used as a fall "
 "back."
@@ -4167,27 +4127,27 @@ msgstr ""
 "Edozein formatu baimendua; hutsik badago kolore gradientea erabiliko da "
 "lehenetsia."
 
-#: ../data/messages:983
+#: ../data/messages:989
 msgid "Image filename to use as a background :"
 msgstr "Atzeko planoan erabiliko den irudiaren fitxategi izena:"
 
-#: ../data/messages:993
+#: ../data/messages:999
 msgid "Load theme"
 msgstr "Kargatu gaia"
 
-#: ../data/messages:995
+#: ../data/messages:1001
 msgid "You can even paste an internet URL."
 msgstr "Interneteko URL bat itsats dezakezu."
 
-#: ../data/messages:997
+#: ../data/messages:1003
 msgid "...or drag and drop a theme package here :"
 msgstr "... edo arrastatu eta jaregin gai-pakete bat hona:"
 
-#: ../data/messages:999
+#: ../data/messages:1005
 msgid "Theme loading options"
 msgstr "Gaien kargaren aukerak"
 
-#: ../data/messages:1001
+#: ../data/messages:1007
 msgid ""
 "If you tick this box, your launchers will be deleted and replaced by the "
 "ones provided in the new theme. Otherwise the current launchers will be "
@@ -4197,11 +4157,11 @@ msgstr ""
 "dakartzanak ordezkatuko dituzte. Bestela, uneko abiarazleak mantenduko dira "
 "eta ikonoak soilik aldatuko dira."
 
-#: ../data/messages:1003
+#: ../data/messages:1009
 msgid "Use the new theme's launchers?"
 msgstr "Gai berriaren abiarazleak erabili?"
 
-#: ../data/messages:1005
+#: ../data/messages:1011
 msgid ""
 "Otherwise the current behaviour will be kept. This defines the dock's "
 "position, behavioural settings such as auto-hide, using taskbar or not, etc."
@@ -4210,118 +4170,118 @@ msgstr ""
 "du, baita ezkutaketa automatikoa edo ataza-barra erabiltzea edo ez bezalako "
 "ezarpenak ere, etab."
 
-#: ../data/messages:1007
+#: ../data/messages:1013
 msgid "Use the new theme's behaviour?"
 msgstr "Erabili gai berriaren portaerak?"
 
-#: ../data/messages:1009
+#: ../data/messages:1015
 msgid "Save"
 msgstr "Gorde"
 
-#: ../data/messages:1011
+#: ../data/messages:1017
 msgid "You will then be able to re-open it at any time."
 msgstr "Ondoren, edozein unetan berriro ireki ahal izango duzu."
 
-#: ../data/messages:1013
+#: ../data/messages:1019
 msgid "Save current behaviour also?"
 msgstr "Gorde uneko portaera ere?"
 
-#: ../data/messages:1015
+#: ../data/messages:1021
 msgid "Save current launchers also?"
 msgstr "Gorde uneko abiarazleak ere?"
 
-#: ../data/messages:1017
+#: ../data/messages:1023
 msgid ""
 "The dock will build a complete tarball of your current theme, allowing you "
 "to easily exchange it with other people."
 msgstr ""
 
-#: ../data/messages:1019
+#: ../data/messages:1025
 msgid "Build a package of the theme?"
 msgstr "Gaiaren pakete bat sortu?"
 
-#: ../data/messages:1021
+#: ../data/messages:1027
 msgid "Directory in which the package will be saved:"
 msgstr ""
 
-#: ../data/messages:1023 ../data/messages:1025 ../data/messages:1027
-#: ../data/messages:1059 ../data/messages:1095
+#: ../data/messages:1029 ../data/messages:1031 ../data/messages:1033
+#: ../data/messages:1065 ../data/messages:1101
 msgid "Desktop Entry"
 msgstr "Mahaigain-sarrera"
 
-#: ../data/messages:1031 ../data/messages:1063 ../data/messages:1099
+#: ../data/messages:1037 ../data/messages:1069 ../data/messages:1105
 msgid "Name of the container it belongs to:"
 msgstr ""
 
-#: ../data/messages:1033
+#: ../data/messages:1039
 msgid "Sub-dock's name:"
 msgstr "Azpidockaren izena:"
 
-#: ../data/messages:1035
+#: ../data/messages:1041
 msgid "New sub-dock"
 msgstr "Azpidock berria"
 
-#: ../data/messages:1037
+#: ../data/messages:1043
 msgid "How to render the icon:"
 msgstr "Nola errendatu ikonoa:"
 
-#: ../data/messages:1039
+#: ../data/messages:1045
 msgid "Use an image"
 msgstr "Erabili irudia"
 
-#: ../data/messages:1041
+#: ../data/messages:1047
 msgid "Draw sub-dock's content as emblems"
 msgstr "Marraztu azpidocken edukia ikur modura"
 
-#: ../data/messages:1043
+#: ../data/messages:1049
 msgid "Draw sub-dock's content as stack"
 msgstr "Marraztu azpidocken edukia pilaketa modura"
 
-#: ../data/messages:1045
+#: ../data/messages:1051
 msgid "Draw sub-dock's content inside a box"
 msgstr "Marraztu azpidocken edukia kutxa baten barruan"
 
-#: ../data/messages:1047 ../data/messages:1069
+#: ../data/messages:1053 ../data/messages:1075
 msgid "Image's name or path:"
 msgstr "Irudiaren izena edo bidea:"
 
-#: ../data/messages:1049 ../data/messages:1077 ../data/messages:1103
+#: ../data/messages:1055 ../data/messages:1083 ../data/messages:1109
 msgid "Extra parameters"
 msgstr "Parametro gehiago"
 
-#: ../data/messages:1051
+#: ../data/messages:1057
 msgid "Name of the view used for the sub-dock:"
 msgstr "Azpidockerako erabilitako bistaratzearen izena:"
 
-#: ../data/messages:1053
+#: ../data/messages:1059
 msgid "If '0' the container will be displayed on every viewport."
 msgstr ""
 
-#: ../data/messages:1055 ../data/messages:1091
+#: ../data/messages:1061 ../data/messages:1097
 msgid "Only show in this specific viewport:"
 msgstr "Ikuspegi zehatz honetan bakarrik erakutsi:"
 
-#: ../data/messages:1057 ../data/messages:1093 ../data/messages:1105
+#: ../data/messages:1063 ../data/messages:1099 ../data/messages:1111
 msgid "Order you want for this launcher among the others:"
 msgstr ""
 
-#: ../data/messages:1065
+#: ../data/messages:1071
 msgid "Launcher's name:"
 msgstr "Abiarazlearen izena:"
 
-#: ../data/messages:1071
+#: ../data/messages:1077
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
-"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
+"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 "Adibidea: nautilus --no-desktop, gedit, etab. You can even enter a shortkey, "
 "e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 
-#: ../data/messages:1073
+#: ../data/messages:1079
 msgid "Command to launch on click:"
 msgstr "Klik egitean abiaraziko den komandoa:"
 
-#: ../data/messages:1079
+#: ../data/messages:1085
 msgid ""
 "If you chose to mix launcher and applications, this option will deactivate "
 "this behaviour for this launcher only. It can be useful for instance for a "
@@ -4329,11 +4289,11 @@ msgid ""
 "steal the terminal's icon from the taskbar."
 msgstr ""
 
-#: ../data/messages:1081
+#: ../data/messages:1087
 msgid "Don't link the launcher with its window"
 msgstr ""
 
-#: ../data/messages:1083
+#: ../data/messages:1089
 msgid ""
 "The only reason you may want to modify this parameter is if you made this "
 "launcher by hands. If you dropped it into the dock from the menu, it is "
@@ -4341,23 +4301,23 @@ msgid ""
 "program, which is useful to link the application with its launcher."
 msgstr ""
 
-#: ../data/messages:1085
+#: ../data/messages:1091
 msgid "Class of the program:"
 msgstr "Programaren klasea:"
 
-#: ../data/messages:1087
+#: ../data/messages:1093
 msgid "Run in a terminal?"
 msgstr "Terminal batean exekutatu?"
 
-#: ../data/messages:1089
+#: ../data/messages:1095
 msgid "If '0' the launcher will be displayed on every viewport."
 msgstr ""
 
-#: ../data/messages:1101
+#: ../data/messages:1107
 msgid "Separators' appearance is defined in the global configuration."
 msgstr ""
 
-#: ../data/messages:1108
+#: ../data/messages:1114
 msgid ""
 "<b>The basic 2D view of Cairo-Dock</b>\n"
 "Perfect if you want to make the dock look like a panel."
@@ -4365,106 +4325,232 @@ msgstr ""
 "<b>Cairo-Docken oinarrizko 2D bistaratzea</b>\n"
 "Perfektua dockak panel baten itxura eduki dezan nahi baduzu."
 
-#: ../data/messages:1110
-msgid "Cairo-Dock (Fallback Mode)"
-msgstr ""
-
-#: ../data/messages:1112
-msgid "A light and eye-candy dock and desklets for your desktop."
-msgstr ""
-
-#: ../data/messages:1114
-msgid "Multi-purpose Dock and Desklets"
-msgstr ""
-
-#: ../data/messages:1116
+#: ../data/messages:1115
 msgid "<b>New version: <span color='red'>GLX-Dock 3.3</span>!</b>"
 msgstr ""
 
-#: ../data/messages:1118
+#: ../data/messages:1117
 msgid ""
 "- Added a search entry in the <b>Applications Menu</b>.\n"
 "    It allows to rapidly look for programs from their name or their "
 "description"
 msgstr ""
 
-#: ../data/messages:1120
+#: ../data/messages:1119
 msgid "- Added support of <b>logind</b> in the Logout applet"
 msgstr ""
 
-#: ../data/messages:1122
+#: ../data/messages:1121
 msgid "- Better integration in the Cinnamon desktop"
 msgstr ""
 
-#: ../data/messages:1124
+#: ../data/messages:1123
 msgid ""
 "- Added support of the <b>StartupNotification</b> protocol.\n"
 "    It allows launchers to be animated until the application opens and "
 "avoids accidental double launches"
 msgstr ""
 
-#: ../data/messages:1126
+#: ../data/messages:1125
 msgid ""
 "- Added an new third-party applet: <b>Notification History</b> to never miss "
 "a notification"
 msgstr ""
 
-#: ../data/messages:1128
+#: ../data/messages:1127
 msgid "- Upgraded the <b>Dbus API</b> to be even more powerful"
 msgstr ""
 
-#: ../data/messages:1130
+#: ../data/messages:1129
 msgid "- A huge rewrite of the core using Objects"
 msgstr ""
 
-#: ../data/messages:1132
+#: ../data/messages:1131
 msgid "- If you like the project, please donate :-)"
 msgstr ""
 
-#: ../data/messages:1134
+#: ../data/messages:1133
 msgid "<b>New version: <span color='red'>GLX-Dock 3.4</span>!</b>"
 msgstr ""
 
-#: ../data/messages:1136
+#: ../data/messages:1135
 msgid "- <b>Menus</b>: added the possibility to customise them"
 msgstr ""
 
-#: ../data/messages:1138
+#: ../data/messages:1137
 msgid "- <b>Style</b>: unified the style of all components of the dock"
 msgstr ""
 
-#: ../data/messages:1140
+#: ../data/messages:1139
 msgid ""
 "- Better integration with <b>Compiz</b> (e.g. when using the <b>Cairo-Dock "
 "session</b>) and Cinnamon"
 msgstr ""
 
-#: ../data/messages:1142
+#: ../data/messages:1141
 msgid ""
 "- <b>Applications Menu</b> and <b>Logout</b> applets will wait the end of an "
 "update before displaying notifications"
 msgstr ""
 
-#: ../data/messages:1144
+#: ../data/messages:1143
 msgid ""
 "- Various improvements for <b>Applications Menu</b>, <b>Shortcuts</b>, "
 "<b>Status-Notifier</b> and <b>Terminal</b> applets"
 msgstr ""
 
-#: ../data/messages:1146
+#: ../data/messages:1145
 msgid "- Start working on <b>EGL</b> and <b>Wayland</b> support"
 msgstr ""
 
-#: ../data/messages:1148
+#: ../data/messages:1147
 msgid "- And as always ... various bug fixes and improvements!"
 msgstr ""
 
-#: ../data/messages:1150
+#: ../data/messages:1149
 msgid "If you like the project, please donate and/or contribute :-)"
 msgstr ""
 
-#: ../data/messages:1152
+#: ../data/messages:1151
 msgid ""
-"Note: We're switching from Bzr to Git on Github, feel free to fork! "
-"https://github.com/Cairo-Dock"
+"Note: We're switching from Bzr to Git on Github, feel free to fork! https://"
+"github.com/Cairo-Dock"
 msgstr ""
+
+#~ msgid "Windows management"
+#~ msgstr "Leihoen kudeaketa"
+
+#~ msgid "Use all screens"
+#~ msgstr "Erabili pantaila guztiak"
+
+#~ msgid "Disable the gnome-panel"
+#~ msgstr "Desgaitu gnome-panel"
+
+#~ msgid "Disable Unity"
+#~ msgstr "Desgaitu Unity"
+
+#~ msgid "Tip: If this line is grayed, it's because this tip is not for you.)"
+#~ msgstr ""
+#~ "Iradokizuna: Lerro hau gris kolorekoa bada, iradokizun hau zuretzat ez "
+#~ "dela esan nahi du.)"
+
+#~ msgid "If you're using Compiz, you can click on this button:"
+#~ msgstr "Compiz erabiltzen ari bazara, botoi honetan klik egin dezakezu:"
+
+#~ msgid "Removing completely the gnome-panel"
+#~ msgstr "gnome-panel erabat kentzea"
+
+#~ msgid ""
+#~ "Open dconf-editor, edit the key /desktop/gnome/session/"
+#~ "required_components/panel, and replace its content with \"cairo-dock\".\n"
+#~ "Then restart your session : the gnome-panel has not been started, and the "
+#~ "dock has been started (if not, you can add it to the startup programs)."
+#~ msgstr ""
+#~ "Ireki dconf-editor, editatu /desktop/gnome/session/required_components/"
+#~ "panel gakoa, eta ordeztu haren edukia \"cairo-dock\" testuarekin.\n"
+#~ "Ondoren, berrabiarazi saioa: gnome-panel ez da abiarazi, eta docka bai "
+#~ "(horrela ez bada, abioko aplikazioen multzora gehitu ahal duzu)."
+
+#~ msgid ""
+#~ "If you are on Gnome, you can click on this button in order to "
+#~ "automatically modify this key:"
+#~ msgstr ""
+#~ "Gnomen bazaude, botoi honetan klik egin dezakezu gako hori automatikoki "
+#~ "aldatzeko:"
+
+#~ msgid ""
+#~ "Hint : If you have an ATI or an Intel card, you should try without OpenGL "
+#~ "first, because their drivers are not yet perfect."
+#~ msgstr ""
+#~ "Iradokizuna: ATI edo Intel txartel bat badaukazu, OpenGL erabili gabe "
+#~ "saiatu beharko zenuke lehenengo, txartel horien kontrolagailuak ez "
+#~ "baitira perfektuak."
+
+#~ msgid ""
+#~ "If you're on Gnome with Metacity (without Compiz), you can click on this "
+#~ "button:"
+#~ msgstr ""
+#~ "Gnome Metacityrekin (Compiz gabe) erabiltzen ari bazara, botoi honetan "
+#~ "klik egin dezakezu:"
+
+#~ msgid ""
+#~ "There is no icon in the Applications Menu even though I enable the option."
+#~ msgstr ""
+#~ "Ez dago ikonorik aplikazioen menuan, nahiz eta aukera hori gaitu dudan."
+
+#~ msgid ""
+#~ "In Gnome, there is an option that override the dock's one. To enable "
+#~ "icons in menus, open 'dconf-editor', go to Desktop / Gnome / Interface "
+#~ "and enable the \"menus have icons\" and the \"buttons have icons\" "
+#~ "options. "
+#~ msgstr ""
+#~ "Gnomen, dockaren aukera hori gainidazteko aukera bat dago. Ikonoak "
+#~ "menuetan gaitzeko, ireki 'dconf-editor', joan Mahaigaina / Gnome / "
+#~ "Interfazea aukerara eta gaitu \"menuek ikonoak dituzte\" eta \"botoiek "
+#~ "ikonoak dituzte\" aukerak. "
+
+#~ msgid "If you're on Gnome you can click on this button:"
+#~ msgstr "Gnomen bazaude, botoi honetan klik egin dezakezu:"
+
+#~ msgid ""
+#~ "We maintain two repositories for Debian, Ubuntu and other Debian-forked:\n"
+#~ " One for stable releases and another which is updated weekly (unstable "
+#~ "version)"
+#~ msgstr ""
+#~ "Bi biltegi dituzu Debian, Ubuntu eta Debianetik eratorritako beste "
+#~ "banaketa batzuetarako:\n"
+#~ " Bat bertsio egonkorretarako eta beste bat astero eguneratzen dena "
+#~ "(bertsio ezegonkorra)"
+
+#~ msgid "Debian/Ubuntu"
+#~ msgstr "Debian/Ubuntu"
+
+#~ msgid "Ubuntu"
+#~ msgstr "Ubuntu"
+
+#~ msgid ""
+#~ "If you're on Ubuntu, you can add our 'stable' repository by clicking on "
+#~ "this button:\n"
+#~ " After that, you can launch your update manager in order to install the "
+#~ "latest stable version."
+#~ msgstr ""
+#~ "Ubuntun bazaude, gure biltegi 'egonkorra' gehitu dezakezu botoi honetan "
+#~ "klik eginez:\n"
+#~ " Horren ondoren, zure eguneraketa-kudeatzailea abiarazi ahal duzu azken "
+#~ "bertsio egonkorra instalatzeko."
+
+#~ msgid ""
+#~ "If you're on Ubuntu, you can also add our 'weekly' ppa (can be unstable) "
+#~ "by clicking on this button:\n"
+#~ " After that, you can launch your update manager in order to install the "
+#~ "latest weekly version."
+#~ msgstr ""
+#~ "Ubuntun bazaude gure 'Weekly' (asteroko) PPA ere gehitu dezakezu botoi "
+#~ "honetan klik eginez:\n"
+#~ " Horren ondoren, zure eguneraketa-kudeatzailea abiarazi ahal duzu asteko "
+#~ "azken bertsioa instalatzeko."
+
+#~ msgid "Debian"
+#~ msgstr "Debian"
+
+#~ msgid ""
+#~ "If you're on Debian Stable, you can add our 'stable' repository by "
+#~ "clicking on this button:\n"
+#~ " After that, you can purge all 'cairo-dock*' packages, update the your "
+#~ "system and reinstall 'cairo-dock' package."
+#~ msgstr ""
+#~ "Debian Stable bertsioan bazaude, gure 'stable' biltegia (egonkorra) "
+#~ "gehitu dezakezu botoi honetan klik eginez:\n"
+#~ " Horren ondoren, zure 'cairo-dock*' pakete guztiak betiko borratu, zure "
+#~ "sistema eguneratu eta 'cairo-dock' paketea berriro instala dezakezu."
+
+#~ msgid ""
+#~ "If you're on Debian Unstable, you can add our 'stable' repository by "
+#~ "clicking on this button:\n"
+#~ " After that, you can purge all 'cairo-dock*' packages, update the your "
+#~ "system and reinstall 'cairo-dock' package."
+#~ msgstr ""
+#~ "Debian Unstable bertsioan bazaude, gure 'stable' biltegia (egonkorra) "
+#~ "gehitu dezakezu botoi honetan klik eginez:\n"
+#~ " Horren ondoren, zure 'cairo-dock*' pakete guztiak betiko borratu, zure "
+#~ "sistema eguneratu eta 'cairo-dock' paketea berriro instala dezakezu."

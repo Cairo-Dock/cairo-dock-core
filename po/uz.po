@@ -8,36 +8,35 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2014-10-19 00:21+0000\n"
 "PO-Revision-Date: 2014-09-06 20:48+0000\n"
 "Last-Translator: Learner <muzaffar.habibullayev@yandex.ru>\n"
 "Language-Team: узбекский <>\n"
+"Language: uzbek\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2014-10-20 05:57+0000\n"
 "X-Generator: Launchpad (build 17196)\n"
-"Language: uzbek\n"
 
-#: ../src/cairo-dock-gui-advanced.c:120 ../src/cairo-dock-widget-plugins.c:173
-#: ../data/messages:267
+#: ../src/cairo-dock-gui-advanced.c:120 ../src/cairo-dock-widget-plugins.c:164
+#: ../data/messages:269
 msgid "Behaviour"
 msgstr "Ўзини тутиши"
 
-#: ../src/cairo-dock-gui-advanced.c:121 ../data/messages:111
-#: ../data/messages:835 ../data/messages:873 ../data/messages:945
+#: ../src/cairo-dock-gui-advanced.c:121 ../data/messages:113
+#: ../data/messages:841 ../data/messages:879 ../data/messages:951
 msgid "Appearance"
 msgstr "Ташқи Кўриниш"
 
-#: ../src/cairo-dock-gui-advanced.c:122 ../src/cairo-dock-widget-plugins.c:143
+#: ../src/cairo-dock-gui-advanced.c:122 ../src/cairo-dock-widget-plugins.c:134
 msgid "Files"
 msgstr "Файллар билан ишлаш"
 
-#: ../src/cairo-dock-gui-advanced.c:123 ../src/cairo-dock-widget-plugins.c:148
+#: ../src/cairo-dock-gui-advanced.c:123 ../src/cairo-dock-widget-plugins.c:139
 msgid "Internet"
 msgstr "Интернет"
 
-#: ../src/cairo-dock-gui-advanced.c:124 ../src/cairo-dock-widget-plugins.c:153
+#: ../src/cairo-dock-gui-advanced.c:124 ../src/cairo-dock-widget-plugins.c:144
 msgid "Desktop"
 msgstr "Иш столи"
 
@@ -45,32 +44,31 @@ msgstr "Иш столи"
 msgid "Accessories"
 msgstr "Иловалар"
 
-#: ../src/cairo-dock-gui-advanced.c:126 ../src/cairo-dock-gui-advanced.c:1495
-#: ../src/cairo-dock-gui-advanced.c:1496
-#: ../src/cairo-dock-widget-plugins.c:163 ../data/messages:117
-#: ../data/messages:371 ../data/messages:877
+#: ../src/cairo-dock-gui-advanced.c:126 ../src/cairo-dock-gui-advanced.c:1485
+#: ../src/cairo-dock-gui-advanced.c:1486 ../src/cairo-dock-widget-plugins.c:154
+#: ../data/messages:119 ../data/messages:373 ../data/messages:883
 msgid "System"
 msgstr "Тизим"
 
-#: ../src/cairo-dock-gui-advanced.c:127 ../src/cairo-dock-widget-plugins.c:168
+#: ../src/cairo-dock-gui-advanced.c:127 ../src/cairo-dock-widget-plugins.c:159
 msgid "Fun"
 msgstr "Кўнгилочар"
 
-#: ../src/cairo-dock-gui-advanced.c:128 ../src/cairo-dock-gui-advanced.c:1769
-#: ../src/gldit/cairo-dock-gui-factory.c:798
+#: ../src/cairo-dock-gui-advanced.c:128 ../src/cairo-dock-gui-advanced.c:1762
+#: ../src/gldit/cairo-dock-gui-factory.c:785
 msgid "All"
 msgstr "Ҳамммаси"
 
-#: ../src/cairo-dock-gui-advanced.c:1460
+#: ../src/cairo-dock-gui-advanced.c:1450
 msgid "Set the position of the main dock."
 msgstr "Асосий докнинг жойлашувини белгилаш."
 
-#: ../src/cairo-dock-gui-advanced.c:1461 ../src/cairo-dock-gui-advanced.c:1462
-#: ../Help/data/messages:321 ../data/messages:151
+#: ../src/cairo-dock-gui-advanced.c:1451 ../src/cairo-dock-gui-advanced.c:1452
+#: ../Help/data/messages:281 ../data/messages:153
 msgid "Position"
 msgstr "Жойлашув"
 
-#: ../src/cairo-dock-gui-advanced.c:1469
+#: ../src/cairo-dock-gui-advanced.c:1459
 msgid ""
 "Do you like your dock to be always visible,\n"
 " or on the contrary unobtrusive?\n"
@@ -80,80 +78,80 @@ msgstr ""
 "ёки аксинча сезилмсас бўлишини ёқтирасизми?\n"
 "Ўз докларингиз ва док-ичида-докларингизга кирадиган усулингизни мосланг!"
 
-#: ../src/cairo-dock-gui-advanced.c:1470 ../src/cairo-dock-gui-advanced.c:1471
-#: ../src/cairo-dock-user-menu.c:2027 ../Help/data/messages:339
+#: ../src/cairo-dock-gui-advanced.c:1460 ../src/cairo-dock-gui-advanced.c:1461
+#: ../src/cairo-dock-user-menu.c:2132 ../Help/data/messages:299
 msgid "Visibility"
 msgstr "Кўрсатиш хусусиятлари"
 
-#: ../src/cairo-dock-gui-advanced.c:1478
+#: ../src/cairo-dock-gui-advanced.c:1468
 msgid "Display and interact with currently open windows."
 msgstr "Жорий очилган ойналарни кўрсатиш ва мулоқотга киришиш."
 
-#: ../src/cairo-dock-gui-advanced.c:1479 ../src/cairo-dock-gui-advanced.c:1480
-#: ../Help/data/messages:41 ../data/messages:63
+#: ../src/cairo-dock-gui-advanced.c:1469 ../src/cairo-dock-gui-advanced.c:1470
+#: ../Help/data/messages:41 ../data/messages:65
 msgid "Taskbar"
 msgstr "Вазифалар панели"
 
-#: ../src/cairo-dock-gui-advanced.c:1487
+#: ../src/cairo-dock-gui-advanced.c:1477
 msgid "Define all the keyboard shortcuts currently available."
 msgstr "Ҳозирда мавжуд барча тезкор чақириш тугмаларини белгилаш."
 
-#: ../src/cairo-dock-gui-advanced.c:1488 ../data/messages:147
+#: ../src/cairo-dock-gui-advanced.c:1478 ../data/messages:149
 msgid "Shortkeys"
 msgstr "Тезкор чақириш тугмалари"
 
-#: ../src/cairo-dock-gui-advanced.c:1494
+#: ../src/cairo-dock-gui-advanced.c:1484
 msgid "All of the parameters you will never want to tweak."
 msgstr "Сиз ҳеч қачон ўзгартиришни хоҳламайдиган параметрлар."
 
-#: ../src/cairo-dock-gui-advanced.c:1506
+#: ../src/cairo-dock-gui-advanced.c:1496
 msgid "Configure the global style."
 msgstr "Умумий услубни созлаш."
 
-#: ../src/cairo-dock-gui-advanced.c:1507 ../src/cairo-dock-gui-advanced.c:1508
-#: ../data/messages:113 ../data/messages:115 ../data/messages:459
-#: ../data/messages:549 ../data/messages:689 ../data/messages:731
-#: ../data/messages:803 ../data/messages:837 ../data/messages:871
-#: ../data/messages:875
+#: ../src/cairo-dock-gui-advanced.c:1497 ../src/cairo-dock-gui-advanced.c:1498
+#: ../data/messages:115 ../data/messages:117 ../data/messages:465
+#: ../data/messages:555 ../data/messages:695 ../data/messages:737
+#: ../data/messages:809 ../data/messages:843 ../data/messages:877
+#: ../data/messages:881
 msgid "Style"
 msgstr "Услуб"
 
-#: ../src/cairo-dock-gui-advanced.c:1515
+#: ../src/cairo-dock-gui-advanced.c:1505
 msgid "Configure docks appearance."
 msgstr "Док ташқи кўринишини созлаш."
 
-#: ../src/cairo-dock-gui-advanced.c:1516 ../Help/data/messages:79
+#: ../src/cairo-dock-gui-advanced.c:1506 ../Help/data/messages:75
 msgid "Docks"
 msgstr "Доклар"
 
-#: ../src/cairo-dock-gui-advanced.c:1517 ../data/messages:457
-#: ../data/messages:971
+#: ../src/cairo-dock-gui-advanced.c:1507 ../data/messages:463
+#: ../data/messages:977
 msgid "Background"
 msgstr "Орқа фон"
 
-#: ../src/cairo-dock-gui-advanced.c:1518 ../data/messages:139
-#: ../data/messages:525 ../data/messages:965
+#: ../src/cairo-dock-gui-advanced.c:1508 ../data/messages:141
+#: ../data/messages:531 ../data/messages:971
 msgid "Views"
 msgstr "Кўринишлар"
 
-#: ../src/cairo-dock-gui-advanced.c:1526
+#: ../src/cairo-dock-gui-advanced.c:1516
 msgid "Configure text bubble appearance."
 msgstr "Матн ойнаси ташқи кўринишини созлаш."
 
-#: ../src/cairo-dock-gui-advanced.c:1527 ../src/cairo-dock-gui-advanced.c:1528
+#: ../src/cairo-dock-gui-advanced.c:1517 ../src/cairo-dock-gui-advanced.c:1518
 msgid "Dialog boxes and Menus"
 msgstr "Диалог қутилари ва Менюлар"
 
-#: ../src/cairo-dock-gui-advanced.c:1535
+#: ../src/cairo-dock-gui-advanced.c:1525
 msgid "Applets can be displayed on your desktop as widgets."
 msgstr "Апплетлар иш столингизда виджетлар сифатида кўрсатилиши мумкин."
 
-#: ../src/cairo-dock-gui-advanced.c:1536 ../src/cairo-dock-gui-advanced.c:1537
-#: ../Help/data/messages:89 ../data/messages:587
+#: ../src/cairo-dock-gui-advanced.c:1526 ../src/cairo-dock-gui-advanced.c:1527
+#: ../Help/data/messages:85 ../data/messages:593
 msgid "Desklets"
 msgstr "Десклетлар"
 
-#: ../src/cairo-dock-gui-advanced.c:1544
+#: ../src/cairo-dock-gui-advanced.c:1534
 msgid ""
 "All about icons:\n"
 " size, reflection, icon theme,..."
@@ -161,102 +159,101 @@ msgstr ""
 "Нишончаларга оид ҳаммаси:\n"
 " ҳажми, акси, нишонча мавзуси,..."
 
-#: ../src/cairo-dock-gui-advanced.c:1545 ../src/cairo-dock-gui-advanced.c:1546
-#: ../Help/data/messages:11 ../data/messages:123 ../data/messages:643
-#: ../data/messages:947
+#: ../src/cairo-dock-gui-advanced.c:1535 ../src/cairo-dock-gui-advanced.c:1536
+#: ../Help/data/messages:11 ../data/messages:125 ../data/messages:649
+#: ../data/messages:953
 msgid "Icons"
 msgstr "Нишончалар"
 
-#: ../src/cairo-dock-gui-advanced.c:1547 ../data/messages:727
+#: ../src/cairo-dock-gui-advanced.c:1537 ../data/messages:733
 msgid "Indicators"
 msgstr "Индикаторлар"
 
-#: ../src/cairo-dock-gui-advanced.c:1555
+#: ../src/cairo-dock-gui-advanced.c:1545
 msgid "Define icon caption and quick-info style."
 msgstr "Нишонча ёзуви ва тезкор-маълумот услубини белгилаш."
 
-#: ../src/cairo-dock-gui-advanced.c:1556 ../src/cairo-dock-gui-advanced.c:1557
+#: ../src/cairo-dock-gui-advanced.c:1546 ../src/cairo-dock-gui-advanced.c:1547
 msgid "Captions"
 msgstr "Нишонча ёзувлари"
 
-#: ../src/cairo-dock-gui-advanced.c:1564
+#: ../src/cairo-dock-gui-advanced.c:1554
 msgid "Try new themes and save your theme."
 msgstr "Янги мавзуларни синаб кўринг ва ўз мавзуингизни сақланг."
 
-#: ../src/cairo-dock-gui-advanced.c:1565 ../src/cairo-dock-gui-simple.c:115
+#: ../src/cairo-dock-gui-advanced.c:1555 ../src/cairo-dock-gui-simple.c:115
 #: ../src/cairo-dock-gui-simple.c:117
 msgid "Themes"
 msgstr "Мавзулар"
 
-#: ../src/cairo-dock-gui-advanced.c:1571
+#: ../src/cairo-dock-gui-advanced.c:1561
 msgid "Current items in your dock(s)."
 msgstr "Док(лар)ингиздаги жорий нарсалар."
 
-#: ../src/cairo-dock-gui-advanced.c:1572 ../src/cairo-dock-gui-simple.c:91
+#: ../src/cairo-dock-gui-advanced.c:1562 ../src/cairo-dock-gui-simple.c:91
 #: ../src/cairo-dock-gui-simple.c:93
 msgid "Current items"
 msgstr "Жорий нарсалар"
 
-#: ../src/cairo-dock-gui-advanced.c:1692
+#: ../src/cairo-dock-gui-advanced.c:1685
 msgid "Filter"
 msgstr "Фильтр"
 
-#: ../src/cairo-dock-gui-advanced.c:1731
+#: ../src/cairo-dock-gui-advanced.c:1724
 msgid "All words"
 msgstr "Барча сўзлар"
 
-#: ../src/cairo-dock-gui-advanced.c:1732
+#: ../src/cairo-dock-gui-advanced.c:1725
 msgid "Highlighted words"
 msgstr "Ажратиб кўрсатилган сўзлар"
 
-#: ../src/cairo-dock-gui-advanced.c:1733
+#: ../src/cairo-dock-gui-advanced.c:1726
 msgid "Hide others"
 msgstr "Бошқаларни яшириш"
 
-#: ../src/cairo-dock-gui-advanced.c:1734
+#: ../src/cairo-dock-gui-advanced.c:1727
 msgid "Search in description"
 msgstr "Тасвирлашга кўра излаш"
 
-#: ../src/cairo-dock-gui-advanced.c:1738
+#: ../src/cairo-dock-gui-advanced.c:1731
 msgid "Hide disabled"
 msgstr "Яширишни ўчириш"
 
-#: ../src/cairo-dock-gui-advanced.c:1747
+#: ../src/cairo-dock-gui-advanced.c:1740
 msgid "Categories"
 msgstr "Категориялар"
 
-#: ../src/cairo-dock-gui-advanced.c:1845
+#: ../src/cairo-dock-gui-advanced.c:1838
 msgid "Enable this module"
 msgstr "Мазкур модулни йўлга қўйиш"
 
-#: ../src/cairo-dock-gui-advanced.c:1872 ../src/cairo-dock-gui-simple.c:199
-#: ../src/cairo-dock-user-menu.c:1837 ../src/cairo-dock-user-menu.c:1839
-#: ../src/cairo-dock-user-menu.c:1912 ../src/cairo-dock-user-menu.c:1914
-#: ../data/messages:343
+#: ../src/cairo-dock-gui-advanced.c:1865 ../src/cairo-dock-gui-simple.c:204
+#: ../src/cairo-dock-user-menu.c:196 ../src/cairo-dock-user-menu.c:1985
+#: ../src/cairo-dock-user-menu.c:1987 ../data/messages:345
 msgid "Close"
 msgstr "Ёпиш"
 
-#: ../src/cairo-dock-gui-advanced.c:1880
+#: ../src/cairo-dock-gui-advanced.c:1873
 msgid "Back"
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1888 ../src/cairo-dock-gui-simple.c:207
+#: ../src/cairo-dock-gui-advanced.c:1881 ../src/cairo-dock-gui-simple.c:212
 msgid "Apply"
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1904
+#: ../src/cairo-dock-gui-advanced.c:1897
 msgid "More applets"
 msgstr "Кўпроқ апплетлар"
 
-#: ../src/cairo-dock-gui-advanced.c:1905
+#: ../src/cairo-dock-gui-advanced.c:1898
 msgid "Get more applets online !"
 msgstr "Онлайнда кўпроқ апплетларни олинг !"
 
-#: ../src/cairo-dock-gui-advanced.c:1997 ../src/cairo-dock-gui-simple.c:354
+#: ../src/cairo-dock-gui-advanced.c:1990 ../src/cairo-dock-gui-simple.c:355
 msgid "Cairo-Dock configuration"
 msgstr "Cairo-Dock созлашлари"
 
-#: ../src/cairo-dock-gui-advanced.c:2582
+#: ../src/cairo-dock-gui-advanced.c:2575
 msgid "Simple Mode"
 msgstr "Оддий Режим"
 
@@ -268,11 +265,11 @@ msgstr "Қўшимчалар"
 msgid "Configuration"
 msgstr "Созлаш"
 
-#: ../src/cairo-dock-gui-simple.c:635
+#: ../src/cairo-dock-gui-simple.c:637
 msgid "Advanced Mode"
 msgstr "Кенгайган Режим"
 
-#: ../src/cairo-dock-gui-simple.c:636
+#: ../src/cairo-dock-gui-simple.c:638
 msgid ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customise your current theme."
@@ -280,7 +277,7 @@ msgstr ""
 "Кенгайган режим докнинг ҳар бир параметрини созлашга имкон беради. Бу "
 "сизнинг жорий мавзуингизни ўзгартириш учун қудратли восита."
 
-#: ../src/cairo-dock-user-interaction.c:417
+#: ../src/cairo-dock-user-interaction.c:429
 msgid ""
 "The option 'overwrite X icons' has been automatically enabled in the "
 "config.\n"
@@ -289,81 +286,81 @@ msgstr ""
 "'overwrite X icons'хоссаси автоматик тарзда созланди.\n"
 "У 'Вазифалар панели' модулида жойлашган."
 
-#: ../src/cairo-dock-user-menu.c:119
+#: ../src/cairo-dock-user-menu.c:131
 msgid "Delete this dock?"
 msgstr "Ушбу док ўчирилсинми?"
 
-#: ../src/cairo-dock-user-menu.c:176
+#: ../src/cairo-dock-user-menu.c:193
 msgid "About Cairo-Dock"
 msgstr "Cairo-Dock ҳақида"
 
-#: ../src/cairo-dock-user-menu.c:209 ../Help/data/messages:271
+#: ../src/cairo-dock-user-menu.c:226 ../Help/data/messages:245
 msgid "Development site"
 msgstr "Ривожлантириш сайти"
 
-#: ../src/cairo-dock-user-menu.c:210 ../Help/data/messages:269
+#: ../src/cairo-dock-user-menu.c:227 ../Help/data/messages:243
 msgid "Find the latest version of Cairo-Dock here !"
 msgstr "Cairo-Dock нинг сўнгги версиясини шу ердан олинг !"
 
-#: ../src/cairo-dock-user-menu.c:214 ../src/cairo-dock-user-menu.c:1088
-#: ../src/cairo-dock-widget-plugins.c:297
+#: ../src/cairo-dock-user-menu.c:231 ../src/cairo-dock-user-menu.c:1136
+#: ../src/cairo-dock-widget-plugins.c:279
 msgid "Get more applets!"
 msgstr "Кўпроқ апплетларни олинг!"
 
-#: ../src/cairo-dock-user-menu.c:218 ../src/cairo-dock-user-menu.c:224
+#: ../src/cairo-dock-user-menu.c:235 ../src/cairo-dock-user-menu.c:241
 msgid "Donate"
 msgstr "Хайрия"
 
-#: ../src/cairo-dock-user-menu.c:221 ../src/cairo-dock-user-menu.c:227
+#: ../src/cairo-dock-user-menu.c:238 ../src/cairo-dock-user-menu.c:244
 msgid ""
 "Support the people who spend countless hours to bring you the best dock ever."
 msgstr ""
 "Сизга энг яхши док тақдим этиш учун саноқсиз соатларни сарфловчи инсонларни "
 "қўллаб-қувватланг."
 
-#: ../src/cairo-dock-user-menu.c:255
+#: ../src/cairo-dock-user-menu.c:273
 msgid "Here is a list of the current developers and contributors"
 msgstr "Қуйида ҳозирдаги ишлаб чиқувчилар ва ҳисса қўшувчиларнинг рўйхати"
 
-#: ../src/cairo-dock-user-menu.c:256
+#: ../src/cairo-dock-user-menu.c:274
 msgid "Developers"
 msgstr "Ишлаб чиқувчилар"
 
-#: ../src/cairo-dock-user-menu.c:257
+#: ../src/cairo-dock-user-menu.c:275
 msgid "Main developer and project leader"
 msgstr "Асосий ишлаб чиқувчи ва лойиҳа раҳбари"
 
-#: ../src/cairo-dock-user-menu.c:258
+#: ../src/cairo-dock-user-menu.c:276
 msgid "Contributors / Hackers"
 msgstr "Ҳисса қўшганлар/ Хакерлар"
 
-#: ../src/cairo-dock-user-menu.c:260
+#: ../src/cairo-dock-user-menu.c:278 ../Help/data/messages:259
 msgid "Development"
 msgstr "Ишлаб чиқиш"
 
-#: ../src/cairo-dock-user-menu.c:275
+#: ../src/cairo-dock-user-menu.c:294
 msgid "Website"
 msgstr "Веб-сайт"
 
-#: ../src/cairo-dock-user-menu.c:276
+#: ../src/cairo-dock-user-menu.c:295
 msgid "Beta-testing / Suggestions / Forum animation"
 msgstr "Бета-синов / Таклифлар / Форум анимацияси"
 
-#: ../src/cairo-dock-user-menu.c:277
+#: ../src/cairo-dock-user-menu.c:296
 msgid "Translators for this language"
 msgstr "Мазкур тил таржимонлари"
 
-#: ../src/cairo-dock-user-menu.c:278
+#: ../src/cairo-dock-user-menu.c:297
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Learner https://launchpad.net/~muzaffar-habibullayev"
 
-#: ../src/cairo-dock-user-menu.c:280
+#: ../src/cairo-dock-user-menu.c:299
 msgid "Support"
 msgstr "Қўллаб-қувватлаш"
 
-#: ../src/cairo-dock-user-menu.c:310
+#: ../src/cairo-dock-user-menu.c:330
 msgid ""
 "Thanks to all people that help us to improve the Cairo-Dock project.\n"
 "Thanks to all current, former and future contributors."
@@ -371,47 +368,51 @@ msgstr ""
 "Cairo-Dock лойиҳасини ривожлантиришга ёрдам берган барча инсонларга раҳмат.\n"
 "Ҳозирги, собиқ ва келажакдаги барча ҳисса қўшувчиларга раҳмат."
 
-#: ../src/cairo-dock-user-menu.c:312
+#: ../src/cairo-dock-user-menu.c:332
 msgid "How to help us?"
 msgstr "Бизга қандай ёрдам бериш мумкин?"
 
-#: ../src/cairo-dock-user-menu.c:313
+#: ../src/cairo-dock-user-menu.c:333
 msgid "Don't hesitate to join the project, we need you ;)"
 msgstr "Лойиҳага ҳеч иккиланмай қўшилинг, сиз бизга кераксиз ;)"
 
-#: ../src/cairo-dock-user-menu.c:314
+#: ../src/cairo-dock-user-menu.c:334
 msgid "Former contributors"
 msgstr "Собиқ ҳисса қўшувчилар"
 
-#: ../src/cairo-dock-user-menu.c:315
+#: ../src/cairo-dock-user-menu.c:335
 msgid "For a complete list, please have a look to BZR logs"
 msgstr "Тўлиқ рўйхат учун марҳамат BZR логларига қаранг"
 
-#: ../src/cairo-dock-user-menu.c:316
+#: ../src/cairo-dock-user-menu.c:336
 msgid "Users of our forum"
 msgstr "Форумимиз фойдаланувчилари"
 
-#: ../src/cairo-dock-user-menu.c:317
+#: ../src/cairo-dock-user-menu.c:337
 msgid "List of our forum's members"
 msgstr "Форумимиз аъзолари рўйхати"
 
-#: ../src/cairo-dock-user-menu.c:318
+#: ../src/cairo-dock-user-menu.c:338
 msgid "Artwork"
 msgstr "Тасвирий санъат ишлари"
 
-#: ../src/cairo-dock-user-menu.c:320
+#: ../src/cairo-dock-user-menu.c:340
 msgid "Thanks"
 msgstr "Миинатдорчилик"
 
-#: ../src/cairo-dock-user-menu.c:410
+#: ../src/cairo-dock-user-menu.c:352
+msgid "Technical info"
+msgstr ""
+
+#: ../src/cairo-dock-user-menu.c:444
 msgid "Quit Cairo-Dock?"
 msgstr "Cairo-Dock дан чиқилсинми?"
 
-#: ../src/cairo-dock-user-menu.c:440 ../src/cairo-dock-user-menu.c:580
+#: ../src/cairo-dock-user-menu.c:474 ../src/cairo-dock-user-menu.c:618
 msgid "Separator"
 msgstr "Ажратувчи"
 
-#: ../src/cairo-dock-user-menu.c:543
+#: ../src/cairo-dock-user-menu.c:580
 msgid ""
 "The new dock has been created.\n"
 "Now move some launchers or applets into it by right-clicking on the icon -> "
@@ -421,32 +422,32 @@ msgstr ""
 "Энди баъзи ишга туширгичлар ёки апплетларни нишонча устига ўнг сичқонча "
 "тугмасини босиб -> бошқа докка кўчириш орқали унга кўчиринг"
 
-#: ../src/cairo-dock-user-menu.c:574
+#: ../src/cairo-dock-user-menu.c:612
 msgid "Add"
 msgstr "Қўшиш"
 
-#: ../src/cairo-dock-user-menu.c:576
+#: ../src/cairo-dock-user-menu.c:614
 msgid "Sub-dock"
 msgstr "Док-ичида-док"
 
-#: ../src/cairo-dock-user-menu.c:578
+#: ../src/cairo-dock-user-menu.c:616
 msgid "Main dock"
 msgstr "Асосий док"
 
-#: ../src/cairo-dock-user-menu.c:582
+#: ../src/cairo-dock-user-menu.c:620
 msgid "Custom launcher"
 msgstr "Ўзгарган ишга туширгич"
 
-#: ../src/cairo-dock-user-menu.c:583
+#: ../src/cairo-dock-user-menu.c:621
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
 msgstr "Одатда сиз ишга туширгични менюдан суриб уни докка қўясиз."
 
-#: ../src/cairo-dock-user-menu.c:585
+#: ../src/cairo-dock-user-menu.c:624
 msgid "Applet"
 msgstr "Апплет"
 
-#: ../src/cairo-dock-user-menu.c:602
+#: ../src/cairo-dock-user-menu.c:641
 msgid ""
 "Do you want to re-dispatch the icons contained inside this container into "
 "the dock?\n"
@@ -455,21 +456,21 @@ msgstr ""
 "Бу ерда жойлашган нишончаларни док ичига қайтаришни хоҳлайсизми?\n"
 "(акс ҳолда улар йўқотилади)"
 
-#: ../src/cairo-dock-user-menu.c:624
+#: ../src/cairo-dock-user-menu.c:664
 msgid "separator"
 msgstr "ажратувчи"
 
-#: ../src/cairo-dock-user-menu.c:628
+#: ../src/cairo-dock-user-menu.c:668
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
 msgstr ""
 "Сиз мазкур нишонча (%s) ни докдан олиб ташламоқчисиз. Ишончингиз комилми?"
 
-#: ../src/cairo-dock-user-menu.c:643
+#: ../src/cairo-dock-user-menu.c:684
 msgid "Sorry, this icon doesn't have a configuration file."
 msgstr "Узр, ушбу нишонча созлаш файлига эга эмас."
 
-#: ../src/cairo-dock-user-menu.c:683
+#: ../src/cairo-dock-user-menu.c:724
 msgid ""
 "The new dock has been created.\n"
 "You can customize it by right-clicking on it -> cairo-dock -> configure this "
@@ -479,16 +480,15 @@ msgstr ""
 "Унинг устига ўнг сичқонча тугмасини босиб -> cairo-dock -> мазкур докни "
 "созлаш орқали уни ўзгартиришингиз мумкин."
 
-#: ../src/cairo-dock-user-menu.c:689
+#: ../src/cairo-dock-user-menu.c:730
 msgid "Move to another dock"
 msgstr "Бошқа докка кўчириш"
 
-#: ../src/cairo-dock-user-menu.c:691
-#: ../src/gldit/cairo-dock-gui-factory.c:1226
+#: ../src/cairo-dock-user-menu.c:732 ../src/gldit/cairo-dock-gui-factory.c:1212
 msgid "New main dock"
 msgstr "Янги асосий док"
 
-#: ../src/cairo-dock-user-menu.c:772
+#: ../src/cairo-dock-user-menu.c:800
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
@@ -496,110 +496,109 @@ msgstr ""
 "Узр, мувофиқ тасвирлаш файли топилмади.\n"
 "Қўлланмалар Менюсидан ишга туширгични суриб қўйиб кўринг."
 
-#: ../src/cairo-dock-user-menu.c:819
+#: ../src/cairo-dock-user-menu.c:849
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr ""
 "Сиз мазкур апплет (%s) ни докдан олиб ташламоқчисиз. Ишончингиз комилми?"
 
-#: ../src/cairo-dock-user-menu.c:888 ../src/gldit/cairo-dock-gui-factory.c:761
+#: ../src/cairo-dock-user-menu.c:922 ../src/gldit/cairo-dock-gui-factory.c:748
 msgid "Pick up an image"
 msgstr "Тасвирни танлаш"
 
-#: ../src/cairo-dock-user-menu.c:891 ../src/gldit/cairo-dock-gui-factory.c:764
+#: ../src/cairo-dock-user-menu.c:925 ../src/gldit/cairo-dock-gui-factory.c:751
 msgid "Ok"
 msgstr ""
 
-#: ../src/cairo-dock-user-menu.c:893 ../src/cairo-dock-widget-shortkeys.c:128
-#: ../src/cairo-dock-widget-themes.c:234
-#: ../src/gldit/cairo-dock-gui-factory.c:766
+#: ../src/cairo-dock-user-menu.c:927 ../src/cairo-dock-widget-shortkeys.c:129
+#: ../src/cairo-dock-widget-themes.c:236
+#: ../src/gldit/cairo-dock-gui-factory.c:753
 msgid "Cancel"
 msgstr ""
 
-#: ../src/cairo-dock-user-menu.c:905 ../src/gldit/cairo-dock-gui-factory.c:805
-#: ../data/messages:463 ../data/messages:469 ../data/messages:735
-#: ../data/messages:977
+#: ../src/cairo-dock-user-menu.c:939 ../src/gldit/cairo-dock-gui-factory.c:792
+#: ../data/messages:469 ../data/messages:475 ../data/messages:741
+#: ../data/messages:983
 msgid "Image"
 msgstr "Тасвир"
 
-#: ../src/cairo-dock-user-menu.c:1005
+#: ../src/cairo-dock-user-menu.c:1020 ../src/cairo-dock-user-menu.c:1099
+msgid "This will (un)lock the position of the icons."
+msgstr "Бу нишончалар жойлашувини қулфлайди(қулфдан чиқаради)."
+
+#: ../src/cairo-dock-user-menu.c:1050
 msgid "Configure"
 msgstr "Созлаш"
 
-#: ../src/cairo-dock-user-menu.c:1010
+#: ../src/cairo-dock-user-menu.c:1052
 msgid "Configure behaviour, appearance, and applets."
 msgstr "Ўзини тутиш, ташқи кўриниш, ва апплетларни созлаш."
 
-#: ../src/cairo-dock-user-menu.c:1015
+#: ../src/cairo-dock-user-menu.c:1060
 msgid "Configure this dock"
 msgstr "Мазкур докни созлаш"
 
-#: ../src/cairo-dock-user-menu.c:1020
+#: ../src/cairo-dock-user-menu.c:1062
 msgid "Customize the position, visibility and appearance of this main dock."
 msgstr ""
 "Мазкур асосий докнинг жойлашуви, кўрсатиш хусусиятлари ва ташқи кўринишини "
 "ўзгартиринг."
 
-#: ../src/cairo-dock-user-menu.c:1022
+#: ../src/cairo-dock-user-menu.c:1065
 msgid "Delete this dock"
 msgstr "Мазкур докни ўчириш"
 
-#: ../src/cairo-dock-user-menu.c:1032
+#: ../src/cairo-dock-user-menu.c:1076
 msgid "Manage themes"
 msgstr "Мавзуларни бошқариш"
 
-#: ../src/cairo-dock-user-menu.c:1037
+#: ../src/cairo-dock-user-menu.c:1078
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
 msgstr ""
 "Сервердаги кўп сонли мавзулар орасидан танланг ёки ўзингизнинг мавзуингизни "
 "сақланг."
 
-#: ../src/cairo-dock-user-menu.c:1049
+#: ../src/cairo-dock-user-menu.c:1092
 msgid "Lock icons position"
 msgstr "Нишончалар жойлашувини қулфлаш"
 
-#: ../src/cairo-dock-user-menu.c:1053
-msgid "This will (un)lock the position of the icons."
-msgstr "Бу нишончалар жойлашувини қулфлайди(қулфдан чиқаради)."
-
-#: ../src/cairo-dock-user-menu.c:1059
+#: ../src/cairo-dock-user-menu.c:1106
 msgid "Quick-Hide"
 msgstr "Тез-Яшириш"
 
-#: ../src/cairo-dock-user-menu.c:1064
+#: ../src/cairo-dock-user-menu.c:1108
 msgid "This will hide the dock until you hover over it with the mouse."
 msgstr "Бу токи сичқонча билан устига яқинлашмагунча докни яшириб туради."
 
-#: ../src/cairo-dock-user-menu.c:1077
+#: ../src/cairo-dock-user-menu.c:1124
 msgid "Launch Cairo-Dock on startup"
 msgstr "Cairo-Dock ни Тизимга киришда Ишга тушириш"
 
-#: ../src/cairo-dock-user-menu.c:1093
-msgid ""
-"Third-party applets provide integration with many programs, like Pidgin"
+#: ../src/cairo-dock-user-menu.c:1138
+msgid "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Учинчи тараф апплетлари турли дастурлар, масалан Pidgin кабилар билан "
 "интеграцияни таъминлайди."
 
-#: ../src/cairo-dock-user-menu.c:1096 ../Help/src/applet-init.c:28
-#: ../Help/src/applet-notifications.c:269
+#: ../src/cairo-dock-user-menu.c:1144 ../Help/src/applet-init.c:28
+#: ../Help/src/applet-notifications.c:101
 msgid "Help"
 msgstr "Ёрдам"
 
-#: ../src/cairo-dock-user-menu.c:1101
+#: ../src/cairo-dock-user-menu.c:1146
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
 msgstr "Муаммолар йўқ, фақат ечимлар (ва кўплаб ёрдамчи маълумотлар!)"
 
-#: ../src/cairo-dock-user-menu.c:1105
+#: ../src/cairo-dock-user-menu.c:1152
 msgid "About"
 msgstr "Ҳақида"
 
-#: ../src/cairo-dock-user-menu.c:1114
+#: ../src/cairo-dock-user-menu.c:1162
 msgid "Quit"
 msgstr "Чиқиш"
 
-#: ../src/cairo-dock-user-menu.c:1123
+#: ../src/cairo-dock-user-menu.c:1164
 msgid ""
 "You're using a Cairo-Dock Session!\n"
 "It's not advised to quit the dock but you can press Shift to unlock this "
@@ -609,198 +608,190 @@ msgstr ""
 "Докдан чиқиш тавсия этилмайди лекин Shift ёрдамида мазкур меню пунктини "
 "очишингиз мумкин."
 
-#: ../src/cairo-dock-user-menu.c:1149 ../src/cairo-dock-user-menu.c:1162
+#: ../src/cairo-dock-user-menu.c:1195 ../src/cairo-dock-user-menu.c:1208
 msgid "Launch a new (Shift+clic)"
 msgstr "Янги ишга тушириш (Shift+сичқонча)"
 
-#: ../src/cairo-dock-user-menu.c:1154 ../src/cairo-dock-user-menu.c:1235
+#: ../src/cairo-dock-user-menu.c:1200 ../src/cairo-dock-user-menu.c:1282
 msgid "Applet's handbook"
 msgstr "Апплет бўйича маълумотнома"
 
-#: ../src/cairo-dock-user-menu.c:1169 ../src/cairo-dock-user-menu.c:1214
+#: ../src/cairo-dock-user-menu.c:1215 ../src/cairo-dock-user-menu.c:1261
 msgid "Edit"
 msgstr "Таҳрир"
 
-#: ../src/cairo-dock-user-menu.c:1171 ../src/cairo-dock-user-menu.c:1221
+#: ../src/cairo-dock-user-menu.c:1217 ../src/cairo-dock-user-menu.c:1268
 msgid "Remove"
 msgstr "Олиб ташлаш"
 
-#: ../src/cairo-dock-user-menu.c:1172
+#: ../src/cairo-dock-user-menu.c:1218
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
 msgstr ""
 "Ишга туширгични олиб ташлаш учун сичқонча билан докдан ташқарига суринг ."
 
-#: ../src/cairo-dock-user-menu.c:1181
+#: ../src/cairo-dock-user-menu.c:1228
 msgid "Make it a launcher"
 msgstr "Ишга туширгичга айлантириш"
 
-#: ../src/cairo-dock-user-menu.c:1204
+#: ../src/cairo-dock-user-menu.c:1251
 msgid "Remove custom icon"
 msgstr "Ўзгарган нишончани олиб ташлаш"
 
-#: ../src/cairo-dock-user-menu.c:1208
+#: ../src/cairo-dock-user-menu.c:1255
 msgid "Set a custom icon"
 msgstr "Ўзгарган нишончани ўрнатиш"
 
-#: ../src/cairo-dock-user-menu.c:1218
+#: ../src/cairo-dock-user-menu.c:1265
 msgid "Detach"
 msgstr "Алоҳида қилиш"
 
-#: ../src/cairo-dock-user-menu.c:1218
+#: ../src/cairo-dock-user-menu.c:1265
 msgid "Return to the dock"
 msgstr "Докка қайтариш"
 
-#: ../src/cairo-dock-user-menu.c:1225
+#: ../src/cairo-dock-user-menu.c:1272
 msgid "Duplicate"
 msgstr "Нусхаси"
 
-#: ../src/cairo-dock-user-menu.c:1399
+#: ../src/cairo-dock-user-menu.c:1446
 #, c-format
 msgid "Move all to desktop %d - face %d"
 msgstr "Барчасини %d иш столи -юзи %d га кўчириш"
 
-#: ../src/cairo-dock-user-menu.c:1399
+#: ../src/cairo-dock-user-menu.c:1446
 #, c-format
 msgid "Move to desktop %d - face %d"
 msgstr "%d иш столи -юзи %d га кўчириш"
 
-#: ../src/cairo-dock-user-menu.c:1401
+#: ../src/cairo-dock-user-menu.c:1448
 #, c-format
 msgid "Move all to desktop %d"
 msgstr "Барчасини %d иш столига кўчириш"
 
-#: ../src/cairo-dock-user-menu.c:1401
+#: ../src/cairo-dock-user-menu.c:1448
 #, c-format
 msgid "Move to desktop %d"
 msgstr "%d иш столига кўчириш"
 
-#: ../src/cairo-dock-user-menu.c:1403
+#: ../src/cairo-dock-user-menu.c:1450
 #, c-format
 msgid "Move all to face %d"
 msgstr "Барчасини %d юзига кўчириш"
 
-#: ../src/cairo-dock-user-menu.c:1403
+#: ../src/cairo-dock-user-menu.c:1450
 #, c-format
 msgid "Move to face %d"
 msgstr "%d юзига кўчириш"
 
-#: ../src/cairo-dock-user-menu.c:1831 ../src/cairo-dock-user-menu.c:1882
+#: ../src/cairo-dock-user-menu.c:1979
 msgid "Window"
 msgstr "Ойна"
 
-#: ../src/cairo-dock-user-menu.c:1837 ../src/cairo-dock-user-menu.c:1860
-#: ../src/cairo-dock-user-menu.c:1901 ../src/cairo-dock-user-menu.c:1912
-#: ../src/cairo-dock-user-menu.c:1935 ../src/cairo-dock-user-menu.c:1976
-#: ../src/cairo-dock-user-menu.c:1986 ../Help/src/applet-notifications.c:259
+#: ../src/cairo-dock-user-menu.c:1985 ../src/cairo-dock-user-menu.c:2008
+#: ../src/cairo-dock-user-menu.c:2045 ../src/cairo-dock-user-menu.c:2086
+#: ../src/cairo-dock-user-menu.c:2096 ../Help/src/applet-notifications.c:95
 msgid "middle-click"
 msgstr "сичқонча ўрта-тугмаси"
 
-#: ../src/cairo-dock-user-menu.c:1852 ../src/cairo-dock-user-menu.c:1893
+#: ../src/cairo-dock-user-menu.c:2000
 msgid "Unmaximise"
 msgstr "Йиғиш"
 
-#: ../src/cairo-dock-user-menu.c:1852 ../src/cairo-dock-user-menu.c:1893
+#: ../src/cairo-dock-user-menu.c:2000
 msgid "Maximise"
 msgstr "Ёйиш"
 
-#: ../src/cairo-dock-user-menu.c:1860 ../src/cairo-dock-user-menu.c:1862
-#: ../src/cairo-dock-user-menu.c:1901 ../src/cairo-dock-user-menu.c:1903
+#: ../src/cairo-dock-user-menu.c:2008 ../src/cairo-dock-user-menu.c:2010
 msgid "Minimise"
 msgstr "Ихчамлаштириш"
 
-#: ../src/cairo-dock-user-menu.c:1877 ../src/cairo-dock-user-menu.c:1887
+#: ../src/cairo-dock-user-menu.c:2024
 msgid "Show"
 msgstr "Кўрсатиш"
 
-#: ../src/cairo-dock-user-menu.c:1921 ../src/cairo-dock-user-menu.c:2010
+#: ../src/cairo-dock-user-menu.c:2030 ../src/cairo-dock-user-menu.c:2111
 msgid "Other actions"
 msgstr "Бошқа ҳаракатлар"
 
-#: ../src/cairo-dock-user-menu.c:1924
+#: ../src/cairo-dock-user-menu.c:2033
 msgid "Move to this desktop"
 msgstr "Ушбу иш столига кўчириш"
 
-#: ../src/cairo-dock-user-menu.c:1929
+#: ../src/cairo-dock-user-menu.c:2039
 msgid "Not Fullscreen"
 msgstr "Тўлиқ экран эмас"
 
-#: ../src/cairo-dock-user-menu.c:1929
+#: ../src/cairo-dock-user-menu.c:2039
 msgid "Fullscreen"
 msgstr "Тўла экран"
 
-#: ../src/cairo-dock-user-menu.c:1935 ../src/cairo-dock-user-menu.c:1937
+#: ../src/cairo-dock-user-menu.c:2045 ../src/cairo-dock-user-menu.c:2047
 msgid "Below other windows"
 msgstr "Бошқа ойналарнинг остида"
 
-#: ../src/cairo-dock-user-menu.c:1945
+#: ../src/cairo-dock-user-menu.c:2055
 msgid "Don't keep above"
 msgstr "Юқорида сақламаслик"
 
-#: ../src/cairo-dock-user-menu.c:1945 ../Help/data/messages:349
+#: ../src/cairo-dock-user-menu.c:2055 ../Help/data/messages:309
 msgid "Keep above"
 msgstr "Юқорида сақлаш"
 
-#: ../src/cairo-dock-user-menu.c:1949
+#: ../src/cairo-dock-user-menu.c:2059
 msgid "Visible only on this desktop"
 msgstr "Фақат шу иш столида кўринадиган"
 
-#: ../src/cairo-dock-user-menu.c:1949
+#: ../src/cairo-dock-user-menu.c:2059
 msgid "Visible on all desktops"
 msgstr "Барча иш столларида кўринадиган"
 
-#: ../src/cairo-dock-user-menu.c:1957
+#: ../src/cairo-dock-user-menu.c:2068
 msgid "Kill"
 msgstr "Тугатиш"
 
-#: ../src/cairo-dock-user-menu.c:1972
+#: ../src/cairo-dock-user-menu.c:2082
 msgid "Windows"
 msgstr "Ойналар"
 
-#: ../src/cairo-dock-user-menu.c:1976 ../src/cairo-dock-user-menu.c:1978
-#: ../src/cairo-dock-user-menu.c:2006
+#: ../src/cairo-dock-user-menu.c:2086 ../src/cairo-dock-user-menu.c:2088
 msgid "Close all"
 msgstr "Барчасини ёпиш"
 
-#: ../src/cairo-dock-user-menu.c:1986 ../src/cairo-dock-user-menu.c:1988
-#: ../src/cairo-dock-user-menu.c:2004
+#: ../src/cairo-dock-user-menu.c:2096 ../src/cairo-dock-user-menu.c:2098
 msgid "Minimise all"
 msgstr "Барчасини ихчамлаштириш"
 
-#: ../src/cairo-dock-user-menu.c:1996 ../src/cairo-dock-user-menu.c:2002
+#: ../src/cairo-dock-user-menu.c:2106
 msgid "Show all"
 msgstr "Барчасини кўрсатиш"
 
-#: ../src/cairo-dock-user-menu.c:2000
-msgid "Windows management"
-msgstr "Ойналар бошқаруви"
-
-#: ../src/cairo-dock-user-menu.c:2012
+#: ../src/cairo-dock-user-menu.c:2113
 msgid "Move all to this desktop"
 msgstr "Барчасини ушбу иш столига кўчириш"
 
-#: ../src/cairo-dock-user-menu.c:2035 ../Help/data/messages:347
+#: ../src/cairo-dock-user-menu.c:2140 ../Help/data/messages:307
 msgid "Normal"
 msgstr "Нормал"
 
-#: ../src/cairo-dock-user-menu.c:2041 ../data/messages:21 ../data/messages:193
-#: ../data/messages:923
+#: ../src/cairo-dock-user-menu.c:2146 ../data/messages:23 ../data/messages:195
+#: ../data/messages:929
 msgid "Always on top"
 msgstr "Доим юқорида"
 
-#: ../src/cairo-dock-user-menu.c:2048
+#: ../src/cairo-dock-user-menu.c:2153
 msgid "Always below"
 msgstr "Доим пастда"
 
-#: ../src/cairo-dock-user-menu.c:2065 ../Help/data/messages:355
+#: ../src/cairo-dock-user-menu.c:2170 ../Help/data/messages:315
 msgid "Reserve space"
 msgstr "Жойни заҳира қилиш"
 
-#: ../src/cairo-dock-user-menu.c:2072
+#: ../src/cairo-dock-user-menu.c:2177
 msgid "On all desktops"
 msgstr "Барча иш столларида"
 
-#: ../src/cairo-dock-user-menu.c:2078
+#: ../src/cairo-dock-user-menu.c:2183
 msgid "Lock position"
 msgstr "Жойлашувни қулфлаш"
 
@@ -813,36 +804,34 @@ msgid "Effects:"
 msgstr "Эффектлар:"
 
 #: ../src/cairo-dock-widget-items.c:243
-msgid ""
-"Main dock's parameters are available in the main configuration window."
+msgid "Main dock's parameters are available in the main configuration window."
 msgstr "Асосий док параметрлари асосий созлаш ойнасида мавжуд."
 
-#: ../src/cairo-dock-widget-items.c:724
+#: ../src/cairo-dock-widget-items.c:710
 msgid "Remove this item"
 msgstr "Мазкур нарсани олиб ташлаш"
 
-#: ../src/cairo-dock-widget-plugins.c:105
+#: ../src/cairo-dock-widget-plugins.c:103
 msgid "Configure this applet"
 msgstr "Мазкур апплетни созлаш"
 
-#: ../src/cairo-dock-widget-plugins.c:158
+#: ../src/cairo-dock-widget-plugins.c:149
 msgid "Accessory"
 msgstr "Илова"
 
-#: ../src/cairo-dock-widget-plugins.c:245
+#: ../src/cairo-dock-widget-plugins.c:235
 msgid "Plug-in"
 msgstr "Плагин"
 
-#: ../src/cairo-dock-widget-plugins.c:251 ../Help/src/applet-tips-dialog.c:297
+#: ../src/cairo-dock-widget-plugins.c:241 ../Help/src/applet-tips-dialog.c:309
 msgid "Category"
 msgstr "Категория"
 
-#: ../src/cairo-dock-widget-plugins.c:279
-msgid ""
-"Click on an applet in order to have a preview and a description for it."
+#: ../src/cairo-dock-widget-plugins.c:265
+msgid "Click on an applet in order to have a preview and a description for it."
 msgstr "Апплетга оид маълумотлар ва тасвирлашни кўриш учун устига босинг."
 
-#: ../src/cairo-dock-widget-shortkeys.c:125
+#: ../src/cairo-dock-widget-shortkeys.c:126
 msgid "Press the shortkey"
 msgstr "Тезкор чақириш тугмасини босинг"
 
@@ -850,23 +839,30 @@ msgstr "Тезкор чақириш тугмасини босинг"
 msgid "Change the shortkey"
 msgstr "Тезкор чақириш тугмасини ўзгартириш"
 
-#: ../src/cairo-dock-widget-shortkeys.c:234
+#: ../src/cairo-dock-widget-shortkeys.c:225
 msgid "Origin"
 msgstr "Манбаси"
 
-#: ../src/cairo-dock-widget-shortkeys.c:239
+#: ../src/cairo-dock-widget-shortkeys.c:230
 msgid "Action"
 msgstr "Ҳаракат"
 
-#: ../src/cairo-dock-widget-shortkeys.c:243
+#: ../src/cairo-dock-widget-shortkeys.c:234
 msgid "Shortkey"
 msgstr "Тезкор чақириш тугмаси"
 
-#: ../src/cairo-dock-widget-themes.c:89
+#: ../src/cairo-dock-widget-shortkeys.c:261
+#: ../src/gldit/cairo-dock-gui-factory.c:3022
+msgid ""
+"You are running Cairo-Dock in a Wayland session.\n"
+"Setting global keyboard shortcuts is not supported on Wayland yet."
+msgstr ""
+
+#: ../src/cairo-dock-widget-themes.c:90
 msgid "Could not import the theme."
 msgstr "Мавзуни олиб бўлмади."
 
-#: ../src/cairo-dock-widget-themes.c:194
+#: ../src/cairo-dock-widget-themes.c:195
 msgid ""
 "You have made some changes to the current theme.\n"
 "You will lose them if you don't save before choosing a new theme. Continue "
@@ -876,70 +872,70 @@ msgstr ""
 "Агар янги мавзу танлашдан олдин сақламасангиз уларни йўқотасиз. Барибир "
 "давом этилсинми?"
 
-#: ../src/cairo-dock-widget-themes.c:222
+#: ../src/cairo-dock-widget-themes.c:224
 msgid "Please wait while importing the theme..."
 msgstr "Мавзу олинмоқда, илтимос бироз кутинг..."
 
-#: ../src/cairo-dock-widget-themes.c:281
+#: ../src/cairo-dock-widget-themes.c:283
 msgid "Rate me"
 msgstr "Баҳо беринг"
 
-#: ../src/cairo-dock-widget-themes.c:379 ../src/cairo-dock-widget-themes.c:381
+#: ../src/cairo-dock-widget-themes.c:384 ../src/cairo-dock-widget-themes.c:386
 msgid "You must try the theme before you can rate it."
 msgstr "Баҳо беришингиздан аввал мавзуни синаб кўришингиз керак."
 
-#: ../src/cairo-dock-widget-themes.c:428
+#: ../src/cairo-dock-widget-themes.c:433
 msgid "The theme has been deleted"
 msgstr "Мавзу ўчирилди"
 
-#: ../src/cairo-dock-widget-themes.c:458
+#: ../src/cairo-dock-widget-themes.c:462
 msgid "Delete this theme"
 msgstr "Ушбу мавзуни ўчириш"
 
-#: ../src/cairo-dock-widget-themes.c:489
-#: ../src/gldit/cairo-dock-gui-factory.c:2379
+#: ../src/cairo-dock-widget-themes.c:486
+#: ../src/gldit/cairo-dock-gui-factory.c:2304
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr "'%s' даги мавзуларни рўйхатланмоқда ..."
 
-#: ../src/cairo-dock-widget-themes.c:512
+#: ../src/cairo-dock-widget-themes.c:509
 msgid "Theme"
 msgstr "Мавзу"
 
-#: ../src/cairo-dock-widget-themes.c:525
+#: ../src/cairo-dock-widget-themes.c:522
 msgid "Rating"
 msgstr "Баҳо"
 
-#: ../src/cairo-dock-widget-themes.c:531
+#: ../src/cairo-dock-widget-themes.c:528
 msgid "Sobriety"
 msgstr "Мўътадиллик"
 
-#: ../src/cairo-dock-widget-themes.c:595
+#: ../src/cairo-dock-widget-themes.c:588
 msgid "Save as:"
 msgstr "...сифатида сақлаш:"
 
-#: ../src/cairo-dock-widget-themes.c:675
+#: ../src/cairo-dock-widget-themes.c:667
 msgid "Importing theme ..."
 msgstr "Мавзу олинмоқда..."
 
-#: ../src/cairo-dock-widget-themes.c:683
+#: ../src/cairo-dock-widget-themes.c:675
 msgid "Theme has been saved"
 msgstr "Мавзу сақланди"
 
-#: ../src/cairo-dock.c:148
+#: ../src/cairo-dock.c:164
 #, c-format
 msgid "Happy new year %d !!!"
 msgstr "Янги йил муборак бўлсин %d"
 
-#: ../src/cairo-dock.c:351
+#: ../src/cairo-dock.c:382
 msgid "Use Cairo backend."
 msgstr "Cairo бекендидан фойдаланиш."
 
-#: ../src/cairo-dock.c:354
+#: ../src/cairo-dock.c:385
 msgid "Use OpenGL backend."
 msgstr "OpenGL бекендидан фойдаланиш."
 
-#: ../src/cairo-dock.c:357
+#: ../src/cairo-dock.c:388
 msgid ""
 "Use OpenGL backend with indirect rendering. There are very few case where "
 "this option should be used."
@@ -947,21 +943,21 @@ msgstr ""
 "OpenGL бекендидан билвосита намойиш орқали фойдаланиш. Камдан кам ҳолатларда "
 "ушбу хосса даркор бўлади."
 
-#: ../src/cairo-dock.c:360
+#: ../src/cairo-dock.c:391
 msgid "Ask again on startup which backend to use."
 msgstr "Иш бошлашда қайси бекенддан фойдаланишни яна сўраш."
 
-#: ../src/cairo-dock.c:363
+#: ../src/cairo-dock.c:394
 msgid "Force the dock to consider this environnement - use it with care."
 msgstr ""
 "Докни ушбу муҳитни ҳисобга олишга мажбурлаш.- буни эҳтиётлик билан ишлатинг."
 
-#: ../src/cairo-dock.c:366
+#: ../src/cairo-dock.c:397
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
 msgstr "~/.config/cairo-dock ўрнига докни мазкур жилддан юклатиш."
 
-#: ../src/cairo-dock.c:369
+#: ../src/cairo-dock.c:400
 msgid ""
 "Address of a server containing additional themes. This will overwrite the "
 "default server address."
@@ -969,7 +965,7 @@ msgstr ""
 "Қўшимча мавзулар мавжуд сервер манзили. Бу асли ўрнатилган сервер манзили "
 "устидан ёзилади."
 
-#: ../src/cairo-dock.c:372
+#: ../src/cairo-dock.c:403
 msgid ""
 "Wait for N seconds before starting; this is useful if you notice some "
 "problems when the dock starts with the session."
@@ -977,7 +973,7 @@ msgstr ""
 "Бошлашдан аввал N секунд кутиш; бу докни бошлашда айрим муаммоларни "
 "сезганингизда қўл келади."
 
-#: ../src/cairo-dock.c:375
+#: ../src/cairo-dock.c:406
 msgid ""
 "Allow to edit the config before the dock is started and show the config "
 "panel on start."
@@ -985,53 +981,49 @@ msgstr ""
 "Док бошланишидан аввал созлашни таҳрир қилишга имкон бериш ва бошлашда "
 "созлаш панелини кўрсатиш."
 
-#: ../src/cairo-dock.c:378
+#: ../src/cairo-dock.c:409
 msgid "Exclude a given plug-in from activating (it is still loaded though)."
 msgstr "Берилган плагинни фаолланишдан чиқариб ташлаш (у барибир юкланади)."
 
-#: ../src/cairo-dock.c:381
+#: ../src/cairo-dock.c:412
 msgid "Don't load any plug-ins."
 msgstr "Плагинлар юкланмасин"
 
-#: ../src/cairo-dock.c:384
-msgid ""
-"Work around some bugs in Metacity Window-Manager (invisible dialogs or sub-"
-"docks)"
+#: ../src/cairo-dock.c:415
+msgid "Work around potential glitches when dialogs or sub-docks appear"
 msgstr ""
-"Metacity Ойна Бошқарувчиси даги айрим хатолар бўйича ишлаш (кўринмас "
-"диалоглар ёки док-ичида-доклар)"
 
-#: ../src/cairo-dock.c:387
+#: ../src/cairo-dock.c:418
 msgid ""
 "Log verbosity (debug,message,warning,critical,error); default is warning."
 msgstr ""
 
-#: ../src/cairo-dock.c:390
+#: ../src/cairo-dock.c:421
 msgid "Force to display some output messages with colors."
 msgstr "Баъзи хабарларни рангли кўрсаттириш."
 
-#: ../src/cairo-dock.c:393
+#: ../src/cairo-dock.c:424
 msgid "Print version and quit."
 msgstr "Версияни кўрсатиш ва чиқиш."
 
-#: ../src/cairo-dock.c:396
+#: ../src/cairo-dock.c:427
 msgid "Lock the dock so that any modification is impossible for users."
 msgstr ""
 "Фойдаланувчилар учун докка ҳар қандай ўзгартириш киритишни қулфлаб қўйиш."
 
-#: ../src/cairo-dock.c:400
+#: ../src/cairo-dock.c:431
 msgid "Keep the dock above other windows."
 msgstr "Ҳар қандай ҳолатда докни бошқа ойналар устида сақлаш."
 
-#: ../src/cairo-dock.c:403
+#: ../src/cairo-dock.c:434
 msgid "Don't make the dock appear on all desktops."
 msgstr "Докни барча иш столларида кўрсатилмасин."
 
-#: ../src/cairo-dock.c:406 ../src/cairo-dock.c:466
+#: ../src/cairo-dock.c:437 ../src/cairo-dock.c:497
 msgid "Cairo-Dock makes anything, including coffee !"
 msgstr "Cairo-Dock ҳар нарса қилади, ҳатто кофе ҳам!"
 
-#: ../src/cairo-dock.c:409
+#: ../src/cairo-dock.c:440
 msgid ""
 "Ask the dock to load additionnal modules contained in this directory (though "
 "it is unsafe for your dock to load unnofficial modules)."
@@ -1039,7 +1031,7 @@ msgstr ""
 "Докдан ушбу жилддан қўшимча модулларни юклашни сўраш (гарчи норасмий "
 "модулларни юклаш док учун хавфли бўлса ҳам)."
 
-#: ../src/cairo-dock.c:412
+#: ../src/cairo-dock.c:443
 msgid ""
 "For debugging purpose only. The crash manager will not be started to hunt "
 "down the bugs."
@@ -1047,7 +1039,7 @@ msgstr ""
 "Фақат хатоларни тўғрилаш мақсадида. Бузилишлар бошқарувчиси хатоларни тутиш "
 "учун ишга туширилмайди."
 
-#: ../src/cairo-dock.c:415
+#: ../src/cairo-dock.c:446
 msgid ""
 "For debugging purpose only. Some hidden and still unstable options will be "
 "activated."
@@ -1055,19 +1047,72 @@ msgstr ""
 "Фақат хатоларни тўғрилаш мақсадида. Айрим яширин ва барқарор бўлмаган "
 "хоссалар фаоллаштирилади."
 
-#: ../src/cairo-dock.c:535
+#: ../src/cairo-dock.c:449
+msgid "Force using the Wayland backends (disable X11 backends)."
+msgstr ""
+
+#: ../src/cairo-dock.c:452
+msgid "Force using the X11 backend (disable any Wayland functionality)."
+msgstr ""
+
+#: ../src/cairo-dock.c:455
+msgid "Use EGL on X11."
+msgstr ""
+
+#: ../src/cairo-dock.c:458
+msgid "For debugging purpose only. Disable gtk-layer-shell support."
+msgstr ""
+
+#: ../src/cairo-dock.c:461
+msgid ""
+"For debugging purpose only. Do not blacklist incompatible plugins on Wayland."
+msgstr ""
+
+#: ../src/cairo-dock.c:464
+msgid ""
+"For debugging purposes. Fail loading the specified plugin module after "
+"opening it. Multiple modules can be specified by repeating this option "
+"multiple times."
+msgstr ""
+
+#: ../src/cairo-dock.c:467
+msgid ""
+"For debugging purposes only. Fail loading all plugin modules (after opening)."
+msgstr ""
+
+#: ../src/cairo-dock.c:470
+msgid ""
+"For debugging purposes only. Do not check version compatibility after "
+"loading a plugin module."
+msgstr ""
+
+#: ../src/cairo-dock.c:473
+msgid "For debugging purposes only. Do not use systemd to launch apps."
+msgstr ""
+
+#: ../src/cairo-dock.c:476
+msgid "For debugging purposes only. Do not use DBus activation to launch apps."
+msgstr ""
+
+#: ../src/cairo-dock.c:479
+msgid ""
+"For debugging purposes only. Rely on GIO to launch apps instead of our own "
+"implementation (implies --disable-systemd)."
+msgstr ""
+
+#: ../src/cairo-dock.c:605
 msgid "Use OpenGL in Cairo-Dock"
 msgstr "Cairo-Dock да OpenGL дан фойдаланиш"
 
-#: ../src/cairo-dock.c:538 ../src/cairo-dock.c:785
+#: ../src/cairo-dock.c:608 ../src/cairo-dock.c:848
 msgid "Yes"
 msgstr ""
 
-#: ../src/cairo-dock.c:540 ../src/cairo-dock.c:786 ../data/messages:823
+#: ../src/cairo-dock.c:610 ../src/cairo-dock.c:849 ../data/messages:829
 msgid "No"
 msgstr "Йўқ"
 
-#: ../src/cairo-dock.c:543
+#: ../src/cairo-dock.c:613
 msgid ""
 "OpenGL allows you to use the hardware acceleration, reducing the CPU load to "
 "the minimum.\n"
@@ -1088,36 +1133,36 @@ msgstr ""
 "туширинг,\n"
 "  ёки -o хоссаси билан OpenGLни ва -c билан cairoни бошлаш.)"
 
-#: ../src/cairo-dock.c:550
+#: ../src/cairo-dock.c:620
 msgid "Remember this choice"
 msgstr "Мазкур танловни эслаб қолиш"
 
-#: ../src/cairo-dock.c:716 ../src/cairo-dock.c:908
+#: ../src/cairo-dock.c:780 ../src/cairo-dock.c:1000
 #, c-format
 msgid ""
 "The module '%s' has been deactivated because it may have caused some "
 "problems.\n"
-"You can reactivate it, but if it happens again please report it at "
-"https://github.com/Cairo-Dock/cairo-dock-core/issues"
+"You can reactivate it, but if it happens again please report it at https://"
+"github.com/Cairo-Dock/cairo-dock-core/issues"
 msgstr ""
 "'%s' модули фаолсизлантирилди, чунки у баъзи муаммоларни келтириб чиқарган "
 "бўлиши мумкин.\n"
 "Сиз уни қайта фаоллаштиришингиз мумкин, агар ҳолат қайтарилса, марҳамат "
 "https://github.com/Cairo-Dock/cairo-dock-core/issues да хабар қолдиринг"
 
-#: ../src/cairo-dock.c:728
+#: ../src/cairo-dock.c:791
 msgid "< Maintenance mode >"
 msgstr "< Maintenance mode >"
 
-#: ../src/cairo-dock.c:730
+#: ../src/cairo-dock.c:793
 msgid "Something went wrong with this applet:"
 msgstr "Мазкур апплет билан қандайдир носозлик содир бўлди:"
 
-#: ../src/cairo-dock.c:782
+#: ../src/cairo-dock.c:845
 msgid "You're using our Cairo-Dock session"
 msgstr ""
 
-#: ../src/cairo-dock.c:788
+#: ../src/cairo-dock.c:851
 msgid ""
 "It can be interesting to use an adapted theme for this session.\n"
 "\n"
@@ -1127,12 +1172,13 @@ msgid ""
 "Themes manager"
 msgstr ""
 
-#: ../src/cairo-dock.c:833
+#: ../src/cairo-dock.c:896
 msgid ""
 "No plug-in were found.\n"
 "Plug-ins provide most of the functionalities (animations, applets, views, "
 "etc).\n"
-"See https://github.com/Cairo-Dock/cairo-dock-core/wiki for more information.\n"
+"See https://github.com/Cairo-Dock/cairo-dock-core/wiki for more "
+"information.\n"
 "There is almost no meaning in running the dock without them and it's "
 "probably due to a problem with the installation of these plug-ins.\n"
 "But if you really want to use the dock without these plug-ins, you can "
@@ -1141,13 +1187,52 @@ msgstr ""
 "Ҳеч қандай плагин топилмади.\n"
 "Плагинлар функцияларнинг кўпчилигини таъминлайди (анимациялар, апплетлар, "
 "кўринишлар, ва ҳоказо).\n"
-"Кўпроқ маълумот учун https://github.com/Cairo-Dock/cairo-dock-core/wiki га қаранг.\n"
+"Кўпроқ маълумот учун https://github.com/Cairo-Dock/cairo-dock-core/wiki га "
+"қаранг.\n"
 "Докни уларсиз ишга туширишдан деярли ҳеч қандай маъно йўқ ва бу мазкур "
 "плагинларни ўрнатиш муаммолари сабабли бўлса керак.\n"
 "Лекин ҳақиқатдан докни уларсиз ишлатмоқчи бўлсангиз, '-f' хоссаси билан ушбу "
 "хабарни бошқа кўрсатилмаслик учун докни ишга туширишингиз мумкин.\n"
 
-#: ../src/cairo-dock.c:906
+#: ../src/cairo-dock.c:908
+msgid ""
+"Cairo-Dock is running in a Wayland session, but the compositor does not seem "
+"to support the wlr-layer-shell protocol. This is required for properly "
+"positioning the dock on the screen; it is likely that docks will show up in "
+"wrong locations. Please check that you are running a Wayland compositor that "
+"is compatible with wlr-layer-shell; see the documentation for more "
+"information. Please note that neither GNOME Shell nor the Ubuntu Wayland "
+"desktop session is supported. If you believe that your compositor should be "
+"supported, consider reporting this issue in our bug tracker.\n"
+"\n"
+"(to disable showing this message, run Cairo-Dock with the '--no-layer-shell' "
+"command line option)"
+msgstr ""
+
+#: ../src/cairo-dock.c:908
+msgid ""
+"Cairo-Dock is running in a Wayland session, but it was not compiled with gtk-"
+"layer-shell support. This is required for properly positioning the dock on "
+"the screen; it is likely that docks will show up in wrong locations. If you "
+"have installed Cairo-Dock from a binary package, please report this issue to "
+"the package's maintainer. If you have compiled Cairo-Dock yourself, please "
+"ensure that the development libraries for gtk-layer-shell are available; see "
+"the documentation for more information.\n"
+"\n"
+"(to disable showing this message, run Cairo-Dock with the '--no-layer-shell' "
+"command line option)"
+msgstr ""
+
+#: ../src/cairo-dock.c:916
+msgid ""
+"You are running Cairo-Dock in a Wayland session. Please note the support for "
+"Wayland is still experimental: not all features and plugins work yet.\n"
+"See the documentation for more information.\n"
+"Please consider reporting any issues you encounter in our bug tracker. Thank "
+"you!"
+msgstr ""
+
+#: ../src/cairo-dock.c:998
 #, c-format
 msgid ""
 "The module '%s' may have encountered a problem.\n"
@@ -1158,7 +1243,7 @@ msgstr ""
 "У муваффақиятли қайта тикланди, лекин агар ҳолат қайтарилса, марҳамат "
 "https://github.com/Cairo-Dock/cairo-dock-core/issues да хабар қолдиринг"
 
-#: ../src/gldit/cairo-dock-applet-facility.h:254
+#: ../src/gldit/cairo-dock-applet-facility.h:260
 msgid ""
 "The theme could not be found; the default theme will be used instead.\n"
 " You can change this by opening the configuration of this module. Do you "
@@ -1168,7 +1253,7 @@ msgstr ""
 " Мазкур модул созлашларини очиб буни ўзгартиришингиз мумкин. Шундай қилишни "
 "хоҳлайсизми?"
 
-#: ../src/gldit/cairo-dock-applet-facility.h:270
+#: ../src/gldit/cairo-dock-applet-facility.h:276
 msgid ""
 "The gauge theme could not be found; a default gauge will be used instead.\n"
 "You can change this by opening the configuration of this module. Do you want "
@@ -1178,121 +1263,117 @@ msgstr ""
 " Мазкур модул созлашларини очиб буни ўзгартиришингиз мумкин. Шундай қилишни "
 "хоҳлайсизми?"
 
-#: ../src/gldit/cairo-dock-desklet-manager.c:806 ../data/messages:461
-#: ../data/messages:551 ../data/messages:691 ../data/messages:733
-#: ../data/messages:805 ../data/messages:839
+#: ../src/gldit/cairo-dock-desklet-manager.c:812 ../data/messages:467
+#: ../data/messages:557 ../data/messages:697 ../data/messages:739
+#: ../data/messages:811 ../data/messages:845
 msgid "Automatic"
 msgstr "Автоматик тарзда"
 
-#: ../src/gldit/cairo-dock-desklet-manager.c:819
+#: ../src/gldit/cairo-dock-desklet-manager.c:825
 msgid "_custom decoration_"
 msgstr "_ўзгартирилган декорация_"
 
-#: ../src/gldit/cairo-dock-dock-factory.c:1337
+#: ../src/gldit/cairo-dock-dock-factory.c:1371
 msgid "Sorry but the dock is locked"
 msgstr "Узр, лекин док қулфланган"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:236
+#: ../src/gldit/cairo-dock-dock-manager.c:225
 msgid "Bottom dock"
 msgstr "Қуйи док"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:238
+#: ../src/gldit/cairo-dock-dock-manager.c:227
 msgid "Top dock"
 msgstr "Юқори док"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:243
+#: ../src/gldit/cairo-dock-dock-manager.c:232
 msgid "Right dock"
 msgstr "Ўнг док"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:245
+#: ../src/gldit/cairo-dock-dock-manager.c:234
 msgid "Left dock"
 msgstr "Чап док"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:1692
-#: ../src/gldit/cairo-dock-dock-manager.c:1792
+#: ../src/gldit/cairo-dock-dock-manager.c:1565
+#: ../src/gldit/cairo-dock-dock-manager.c:1663
 msgid "Pop up the main dock"
 msgstr "Асосий докни чиқариш"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:256
+#: ../src/gldit/cairo-dock-gui-factory.c:246
 #, c-format
 msgid "by %s"
 msgstr "%s бўйича"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:268
+#: ../src/gldit/cairo-dock-gui-factory.c:258
 msgid "kB"
 msgstr "кб"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:270
+#: ../src/gldit/cairo-dock-gui-factory.c:260
 msgid "MB"
 msgstr "МБ"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:279
+#: ../src/gldit/cairo-dock-gui-factory.c:269
 msgid "Local"
 msgstr "Маҳаллий"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:280
+#: ../src/gldit/cairo-dock-gui-factory.c:270
 msgid "User"
 msgstr "Фойдаланувчи"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:281
+#: ../src/gldit/cairo-dock-gui-factory.c:271
 msgid "Net"
 msgstr "Тармоқ"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:282
+#: ../src/gldit/cairo-dock-gui-factory.c:272
 msgid "New"
 msgstr "Янги"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:283
+#: ../src/gldit/cairo-dock-gui-factory.c:273
 msgid "Updated"
 msgstr "Янгиланган"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:761
+#: ../src/gldit/cairo-dock-gui-factory.c:748
 msgid "Pick up a file"
 msgstr "Файлни танлаш"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:761
+#: ../src/gldit/cairo-dock-gui-factory.c:748
 msgid "Pick up a directory"
 msgstr "Жилдни танлаш"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1049
+#: ../src/gldit/cairo-dock-gui-factory.c:1036
 msgid "_Custom Icons_"
 msgstr "_Ўзгартирилган Нишончалар_"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1066
-#: ../src/gldit/cairo-dock-gui-factory.c:1111
-msgid "Use all screens"
-msgstr "Барча экранлардан фойдаланиш"
-
-#: ../src/gldit/cairo-dock-gui-factory.c:1088 ../data/messages:13
-#: ../data/messages:163 ../data/messages:169 ../data/messages:909
+#: ../src/gldit/cairo-dock-gui-factory.c:1074 ../data/messages:13
+#: ../data/messages:165 ../data/messages:171 ../data/messages:915
 msgid "left"
 msgstr "чап"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1090 ../data/messages:11
-#: ../data/messages:161 ../data/messages:171 ../data/messages:907
+#: ../src/gldit/cairo-dock-gui-factory.c:1076 ../data/messages:11
+#: ../data/messages:163 ../data/messages:173 ../data/messages:913
 msgid "right"
 msgstr "ўнг"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1092
-#: ../src/gldit/cairo-dock-gui-factory.c:1102
+#: ../src/gldit/cairo-dock-gui-factory.c:1078
+#: ../src/gldit/cairo-dock-gui-factory.c:1088
 msgid "middle"
 msgstr "ўрта"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1098 ../data/messages:9
-#: ../data/messages:159 ../data/messages:905
+#: ../src/gldit/cairo-dock-gui-factory.c:1084 ../data/messages:9
+#: ../data/messages:161 ../data/messages:911
 msgid "top"
 msgstr "юқори"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1100 ../data/messages:7
-#: ../data/messages:157 ../data/messages:903
+#: ../src/gldit/cairo-dock-gui-factory.c:1086 ../data/messages:7
+#: ../data/messages:159 ../data/messages:909
 msgid "bottom"
 msgstr "қуйи"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1105
+#: ../src/gldit/cairo-dock-gui-factory.c:1091
+#: ../src/gldit/cairo-dock-gui-factory.c:1097
 msgid "Screen"
 msgstr "Экран"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1399
+#: ../src/gldit/cairo-dock-gui-factory.c:1385
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -1303,7 +1384,7 @@ msgstr ""
 "Ушбу хусусиятлардан фойдаланиш учун уни док билан бир хил версияда "
 "ўрнатилганлигига ишонч ҳосил қилинг."
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1408
+#: ../src/gldit/cairo-dock-gui-factory.c:1394
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
@@ -1312,91 +1393,102 @@ msgstr ""
 "'%s' плагини фаол эмас.\n"
 "Уни фаоллаштирилсинми?"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3043
+#: ../src/gldit/cairo-dock-gui-factory.c:2165
+msgid ""
+"You are running Cairo-Dock in a Wayland session.\n"
+"Setting a horizontal offset is not supported on Wayland yet."
+msgstr ""
+
+#: ../src/gldit/cairo-dock-gui-factory.c:2937
 msgid "link"
 msgstr "линк"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3105
+#: ../src/gldit/cairo-dock-gui-factory.c:2999
 msgid "Grab"
 msgstr "Ушлаш"
 
-#: ../src/gldit/cairo-dock-launcher-manager.c:328
+#: ../src/gldit/cairo-dock-launcher-manager.c:378
 msgid "Enter a command"
 msgstr "Буйруқни киритинг"
 
-#: ../src/gldit/cairo-dock-launcher-manager.c:329
+#: ../src/gldit/cairo-dock-launcher-manager.c:379
 msgid "New launcher"
 msgstr "Янги ишга туширгич"
 
-#: ../src/gldit/cairo-dock-module-instance-manager.c:310
+#: ../src/gldit/cairo-dock-module-instance-manager.c:323
 msgid "by"
 msgstr ""
 
-#: ../src/gldit/cairo-dock-struct.h:488 ../data/messages:1067
-#: ../data/messages:1075
+#: ../src/gldit/cairo-dock-struct.h:526 ../data/messages:1073
+#: ../data/messages:1081
 msgid "Default"
 msgstr "Асли"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:188
+#: ../src/gldit/cairo-dock-themes-manager.c:196
 #, c-format
 msgid "Are you sure you want to overwrite theme %s?"
 msgstr "%s мавзусининг устидан ёзишга ишончингиз комилми?"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:265
+#: ../src/gldit/cairo-dock-themes-manager.c:273
 msgid "Last modification on:"
 msgstr "Сўнгги ўзгартириш:"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:336
+#: ../src/gldit/cairo-dock-themes-manager.c:347
 msgid "Your theme should now be available in this directory:"
 msgstr "Сизнинг мавзуингиз энди қуйидаги жилдда мавжуд бўлиши лозим:"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:341
+#: ../src/gldit/cairo-dock-themes-manager.c:352
 msgid "Error when launching 'cairo-dock-package-theme' script"
 msgstr "'cairo-dock-package-theme' скрптини ишга туширишда хато"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:362
+#: ../src/gldit/cairo-dock-themes-manager.c:373
 #, c-format
 msgid ""
 "Could not access remote file %s. Maybe the server is down.\n"
-"Please retry later or contact us at https://github.com/Cairo-Dock/cairo-dock-core/issues"
+"Please retry later or contact us at https://github.com/Cairo-Dock/cairo-dock-"
+"core/issues"
 msgstr ""
 "Узоқдаги файлга кириб бўлмади %s Балки сервер ишламаётгандир.\n"
-"Илтимос кейинроқ ҳаракат қилиб кўринг ёки биз билан "
-"https://github.com/Cairo-Dock/cairo-dock-core/issues да алоқага чиқинг."
+"Илтимос кейинроқ ҳаракат қилиб кўринг ёки биз билан https://github.com/Cairo-"
+"Dock/cairo-dock-core/issues да алоқага чиқинг."
 
-#: ../src/gldit/cairo-dock-themes-manager.c:376
+#: ../src/gldit/cairo-dock-themes-manager.c:387
 #, c-format
 msgid "Are you sure you want to delete theme %s?"
 msgstr "%s мавзусини ўчиришга ишончингиз комилми?"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:378
+#: ../src/gldit/cairo-dock-themes-manager.c:389
 msgid "Are you sure you want to delete these themes?"
 msgstr "Ушбу мавзуларни ўчиришга ишончингиз комилми?"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:576 ../data/messages:39
-#: ../data/messages:211
+#: ../src/implementations/cairo-dock-hiding-effect.c:592 ../data/messages:41
+#: ../data/messages:213
 msgid "Move down"
 msgstr "Пастга кўчириш"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:584 ../data/messages:41
-#: ../data/messages:101 ../data/messages:213
+#: ../src/implementations/cairo-dock-hiding-effect.c:600 ../data/messages:43
+#: ../data/messages:103 ../data/messages:215
 msgid "Fade out"
 msgstr "Хиралашиб йўқолиш"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:592 ../data/messages:43
-#: ../data/messages:215
+#: ../src/implementations/cairo-dock-hiding-effect.c:608 ../data/messages:45
+#: ../data/messages:217
 msgid "Semi transparent"
 msgstr "Ярим шаффофлик"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:601 ../data/messages:45
-#: ../data/messages:217
+#: ../src/implementations/cairo-dock-hiding-effect.c:617 ../data/messages:47
+#: ../data/messages:219
 msgid "Zoom out"
 msgstr "Кичрайтириш"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:609 ../data/messages:47
-#: ../data/messages:219
+#: ../src/implementations/cairo-dock-hiding-effect.c:625 ../data/messages:49
+#: ../data/messages:221
 msgid "Folding"
 msgstr "Буклаш"
+
+#: ../src/implementations/cairo-dock-wayland-wm.c:117
+msgid "Select an open window by clicking on it or choosing it from the taskbar"
+msgstr ""
 
 #: ../Help/src/applet-composite.c:71
 msgid ""
@@ -1410,16 +1502,16 @@ msgstr ""
 "Cairo-Dockка хуш келибсиз !\n"
 "Мазкур апплет докдан фойдалинишни бошлашда сизга ёрдам берш учун; шунчаки "
 "унинг устига босинг.\n"
-"Агар бирор савол/талаб/изоҳингиз бўлса, марҳамат "
-"https://github.com/Cairo-Dock/cairo-dock-core га ташриф буюринг.\n"
+"Агар бирор савол/талаб/изоҳингиз бўлса, марҳамат https://github.com/Cairo-"
+"Dock/cairo-dock-core га ташриф буюринг.\n"
 "Ушбу дастур сизга манзур бўлишидан умиддамиз !\n"
 "  (диалогни ёпиш учун устига босишингиз мумкин)"
 
-#: ../Help/src/applet-composite.c:165
+#: ../Help/src/applet-composite.c:166
 msgid "Don't ask me any more"
 msgstr "Мендан бошқа сўралмасин"
 
-#: ../Help/src/applet-composite.c:171
+#: ../Help/src/applet-composite.c:172
 msgid ""
 "To remove the black rectangle around the dock, you need to activate a "
 "composite manager.\n"
@@ -1429,7 +1521,7 @@ msgstr ""
 "фаоллаштиришингиз лозим.\n"
 "Уни ҳозир фаоллаштирилсинми?"
 
-#: ../Help/src/applet-composite.c:182
+#: ../Help/src/applet-composite.c:183
 msgid ""
 "Do you want to keep this setting?\n"
 "In 15 seconds, the previous setting will be restored."
@@ -1437,7 +1529,7 @@ msgstr ""
 "Ушбу мосламани сақламоқчимисиз?\n"
 "15 секунддан сўнг олдинги мосламалар тикланади."
 
-#: ../Help/src/applet-composite.c:198
+#: ../Help/src/applet-composite.c:199
 msgid ""
 "To remove the black rectangle around the dock, you will need to activate a "
 "composite manager.\n"
@@ -1469,27 +1561,19 @@ msgstr ""
 "Ўрта тугма созлаш ойнасини очиш учун.\n"
 "Ўнг тугма айрим муаммоларни бартараф этиш ҳаракатларга кириш учун."
 
-#: ../Help/src/applet-notifications.c:259
+#: ../Help/src/applet-notifications.c:95
 msgid "Open global settings"
 msgstr "Умумий мосламаларни очиш"
 
-#: ../Help/src/applet-notifications.c:264
+#: ../Help/src/applet-notifications.c:100
 msgid "Activate composite"
 msgstr "Композитни фаоллаштириш"
 
-#: ../Help/src/applet-notifications.c:266
-msgid "Disable the gnome-panel"
-msgstr "Gnome-panel ни ўчириш"
-
-#: ../Help/src/applet-notifications.c:268
-msgid "Disable Unity"
-msgstr "Unity ни ўчириш"
-
-#: ../Help/src/applet-notifications.c:270
+#: ../Help/src/applet-notifications.c:102
 msgid "Online help"
 msgstr "Онлайн ёрдам"
 
-#: ../Help/src/applet-tips-dialog.c:152
+#: ../Help/src/applet-tips-dialog.c:163
 msgid "Tips and Tricks"
 msgstr "Маслаҳатлар ва Ҳийлалар"
 
@@ -1668,9 +1752,9 @@ msgid ""
 msgstr ""
 "Нишончалар орасига ажратувчи қўшиш учун док устига ўнг тугмани босиш -> "
 "қўшиш -> ажратувчи.\n"
-"Шунингдек, агар турли хилдаги нишончаларни(ишга "
-"туширгичлар/қўлланмалар/апплетлар) ажратиш хоссасини йўлга қўйган бўлсангиз, "
-"ажратувчи автоматик тарзда ҳар бир гуруҳ ўртасига қўшилади.\n"
+"Шунингдек, агар турли хилдаги нишончаларни(ишга туширгичлар/қўлланмалар/"
+"апплетлар) ажратиш хоссасини йўлга қўйган бўлсангиз, ажратувчи автоматик "
+"тарзда ҳар бир гуруҳ ўртасига қўшилади.\n"
 "\"Панел\" кўринишида ажратувчилар нишончалар орасидаги бўшлиқ сифатида "
 "намойиш қилинади."
 
@@ -1755,8 +1839,8 @@ msgid ""
 msgstr ""
 "Қўлланма бир неча ойналарга эга бўлганда ҳар бир ойна учун бир нишонча докда "
 "пайдо бўлади; улар биргаликда док-ичида-докка гуруҳланади.\n"
-"Асосий нишонча устига босиш қўлланманинг барча ойналарини ёнма-ён "
-"кўрсатади.(Агар Ойна Бошқарувчиси бунга қодир бўлса)."
+"Асосий нишонча устига босиш қўлланманинг барча ойналарини ёнма-ён кўрсатади."
+"(Агар Ойна Бошқарувчиси бунга қодир бўлса)."
 
 #: ../Help/data/messages:67
 msgid "Setting a custom icon for an application"
@@ -1773,30 +1857,18 @@ msgstr "Нишончалар устида аввалдан ойналарни к
 
 #: ../Help/data/messages:73
 msgid ""
-"You need to run Compiz, and enable the \"Thumbnail Window Previews\" plug-in in Compiz. "
-"Install \"ccsm\" to be able to configure Compiz."
+"You need to run Compiz, and enable the \"Thumbnail Window Previews\" plug-in "
+"in Compiz. Install \"ccsm\" to be able to configure Compiz."
 msgstr ""
 "Сиз Compiz ни ишга туширишингиз, ва \"Ойналарни олдиндан кўриш\" плагинини "
 "Compizдан йўлга қўйишингиз керак. Compizни созлай олиш учун \"ccsm\" ни "
 "ўрнатинг."
 
-#: ../Help/data/messages:75 ../Help/data/messages:185
-#: ../Help/data/messages:205 ../Help/data/messages:243
-#: ../Help/data/messages:285 ../Help/data/messages:289
-#: ../Help/data/messages:295 ../Help/data/messages:299
-msgid "Tip: If this line is grayed, it's because this tip is not for you.)"
-msgstr "Маслаҳат: Агар чизиқ кулранг бўлса,бу маслаҳат сизга эмас.)"
-
 #: ../Help/data/messages:77
-msgid "If you're using Compiz, you can click on this button:"
-msgstr ""
-"Агар Compiz дан фойдаланётган бўлсангиз, ушбу тугмани босишингиз мумкин:"
-
-#: ../Help/data/messages:81
 msgid "Positionning the dock on the screen"
 msgstr "Докни экранда жойлаштириш"
 
-#: ../Help/data/messages:83
+#: ../Help/data/messages:79
 msgid ""
 "The dock can be placed anywhere on the screen.\n"
 "In the case of the main dock, right-click -> Cairo-Dock -> configure, and "
@@ -1810,11 +1882,11 @@ msgstr ""
 "2чи ва 3чи док учун, ўнг тугма -> Cairo-Dock -> ушбу докни ўрнатиш, ва кейин "
 "ўзингиз хоҳлаган жойлашувни танланг."
 
-#: ../Help/data/messages:85
+#: ../Help/data/messages:81
 msgid "Hiding the dock to use all the screen"
 msgstr "Бутун экрандан фойдаланиш учун докни яшириш"
 
-#: ../Help/data/messages:87
+#: ../Help/data/messages:83
 msgid ""
 "The dock can hide itself to let all the screen for applications. But it can "
 "also be always visible like a panel.\n"
@@ -1830,11 +1902,11 @@ msgstr ""
 "2чи ва 3чи док ҳолатида эса, ўнг-тугма -> Cairo-Dock -> мазкур докни "
 "ўрнатиш, ва кейин ўзингиз хоҳлаган кўрсатилишни танланг."
 
-#: ../Help/data/messages:91
+#: ../Help/data/messages:87
 msgid "Placing applets on your desktop"
 msgstr "Апплетларни сизнинг иш столингизга жойлаштириш"
 
-#: ../Help/data/messages:93
+#: ../Help/data/messages:89
 msgid ""
 "Applets can live inside desklets, which are small windows that can be placed "
 "wherever on your desktop.\n"
@@ -1844,11 +1916,11 @@ msgstr ""
 "ичида яшаши мумкин.\n"
 "Апплетни докдан ажратиш учун шунчаки уни докдан ташқарига суриб ташланг."
 
-#: ../Help/data/messages:95
+#: ../Help/data/messages:91
 msgid "Moving desklets"
 msgstr "Десклетларни кўчириш"
 
-#: ../Help/data/messages:97
+#: ../Help/data/messages:93
 msgid ""
 "Desklets can be moved anywhere simply with the mouse.\n"
 "They can also be rotated by dragging the small arrows on the top and left "
@@ -1863,11 +1935,11 @@ msgstr ""
 "\"жойлашувни қулфлаш\" орқали жойлашувини қулфлаб қўйишингиз мумкин. Қулфдан "
 "чиқариш учун ушбу хосссани танлашни бекор қилинг."
 
-#: ../Help/data/messages:99
+#: ../Help/data/messages:95
 msgid "Placing desklets"
 msgstr "Десклетларни жойлаштириш"
 
-#: ../Help/data/messages:101
+#: ../Help/data/messages:97
 msgid ""
 "From the menu (right-click -> visibility), you can also decide to keep it "
 "above other windows, or on the Widget Layer (if you use Compiz), or make a "
@@ -1885,11 +1957,11 @@ msgstr ""
 "орқали сичқонча учун шаффоф қилиб ўрнатилиши мумкин (яъни унинг орқасидаги "
 "нарсани босишингиз мумкин)"
 
-#: ../Help/data/messages:103
+#: ../Help/data/messages:99
 msgid "Changing the desklets decorations"
 msgstr "Десклет декорацияларини ўзгартириш"
 
-#: ../Help/data/messages:105
+#: ../Help/data/messages:101
 msgid ""
 "Desklets can have decorations. To change that, open the settings of the "
 "applet, go to Desklet, and select the decoration you want (you can provide "
@@ -1899,15 +1971,15 @@ msgstr ""
 "мосламаларини очинг, Десклетга киринг ва хоҳлаган декорацияни танланг (ўз "
 "шахсий декорациянгизни ҳам қўллашингиз мумкин)."
 
-#: ../Help/data/messages:107
+#: ../Help/data/messages:103
 msgid "Useful Features"
 msgstr "Фойдали Хусусиятлар"
 
-#: ../Help/data/messages:109
+#: ../Help/data/messages:105
 msgid "Having a calendar with tasks"
 msgstr "Вазифали календарга эга бўлиш"
 
-#: ../Help/data/messages:111
+#: ../Help/data/messages:107
 msgid ""
 "Activate the Clock applet.\n"
 "Clicking on it will display a calendar.\n"
@@ -1923,11 +1995,11 @@ msgstr ""
 "Вазифа режага киритилган ёки киритиш арафасида бўлганда апплет сизни "
 "огоҳлантиради (воқеадан 15мин олдин, ва юбилей бўлса 1 кун олдин)."
 
-#: ../Help/data/messages:113
+#: ../Help/data/messages:109
 msgid "Having a list of all windows"
 msgstr "Барча ойналарнинг рўйхатига эга бўлиш"
 
-#: ../Help/data/messages:115
+#: ../Help/data/messages:111
 msgid ""
 "Activate the Switcher applet.\n"
 "Right-clicking on it will give you access to a list containing all the "
@@ -1943,11 +2015,11 @@ msgstr ""
 "кўрсатишингиз мумкин.\n"
 "Мазкур ҳаракатни ўрта тугмага боғлаб қўйишингиз мумкин."
 
-#: ../Help/data/messages:117
+#: ../Help/data/messages:113
 msgid "Showing all the desktops"
 msgstr "Барча иш столларини кўрсатиш"
 
-#: ../Help/data/messages:119
+#: ../Help/data/messages:115
 msgid ""
 "Activate either the Switcher applet or the Show-Desktop applet.\n"
 "Right-click on it -> \"show all the desktop\".\n"
@@ -1957,11 +2029,11 @@ msgstr ""
 "Устига ўнг тугма -> \"барча иш столларини кўрсатиш\".\n"
 "Мазкур ҳаракатни ўрта тугмага боғлаб қўйишингиз мумкин."
 
-#: ../Help/data/messages:121
+#: ../Help/data/messages:117
 msgid "Changing the screen resolution"
 msgstr "Экран ўлчамини ўзгартириш"
 
-#: ../Help/data/messages:123
+#: ../Help/data/messages:119
 msgid ""
 "Activate the Show-Desktop applet.\n"
 "Right-click on it -> \"change resolution\" -> select the one you want."
@@ -1969,11 +2041,11 @@ msgstr ""
 "Иш столини кўрсатиш апплетини фаоллаштиринг.\n"
 "Устига ўнг тугма -> \"ўлчамни ўзгартириш\" -> хоҳлаганингизни танланг."
 
-#: ../Help/data/messages:125
+#: ../Help/data/messages:121
 msgid "Locking your session"
 msgstr "Сеансни қулфлаш"
 
-#: ../Help/data/messages:127
+#: ../Help/data/messages:123
 msgid ""
 "Activate the Log-out applet.\n"
 "Right-click on it -> \"lock screen\".\n"
@@ -1983,12 +2055,11 @@ msgstr ""
 "Устига ўнг тугма -> \"Экранни қулфлаш\".\n"
 "Бу ҳаракатни ўрта тугмага боғлашингиз мумкин."
 
-#: ../Help/data/messages:129
+#: ../Help/data/messages:125
 msgid "Quick-launching a program from keyboard (replacing ALT+F2)"
-msgstr ""
-"Дастурни клавиатура ёрдамида тезкор ишга тушириш (ALT+F2ни алмаштириш)"
+msgstr "Дастурни клавиатура ёрдамида тезкор ишга тушириш (ALT+F2ни алмаштириш)"
 
-#: ../Help/data/messages:131
+#: ../Help/data/messages:127
 msgid ""
 "Activate the Applications Menu applet.\n"
 "Middle-click on it, or right-click -> \"quick-launch\".\n"
@@ -2001,11 +2072,11 @@ msgstr ""
 "Матн автоматик тарзда охирига етказилади (масалан \"fir\" ёзилса \"firefox\" "
 "қилиб охирига етказилади.)"
 
-#: ../Help/data/messages:133
+#: ../Help/data/messages:129
 msgid "Turning Composite OFF during games"
 msgstr "Ўйинлар давомида Композитни ўчириб қўйиш"
 
-#: ../Help/data/messages:135
+#: ../Help/data/messages:131
 msgid ""
 "Activate the Composite Manager applet.\n"
 "Clicking on it will disable the Composite, which often makes games more "
@@ -2016,11 +2087,11 @@ msgstr ""
 "Устига босиш Композитни ўчиради, бу кўпинча ўйинларни равонлаштиради.\n"
 "Устига яна босиш Композитни йўлга қўяди."
 
-#: ../Help/data/messages:137
+#: ../Help/data/messages:133
 msgid "Seeing the hourly weather forecast"
 msgstr "Соатлик об-ҳаво башоратини кўриб туриш"
 
-#: ../Help/data/messages:139
+#: ../Help/data/messages:135
 msgid ""
 "Activate the Weather applet.\n"
 "Open its settings, go to Configure, and type the name of your city. Press "
@@ -2036,11 +2107,11 @@ msgstr ""
 "Энди кун устига босиш сизни ушбу кун учун ҳар соатлик башорат веб-саҳифасига "
 "олиб киради."
 
-#: ../Help/data/messages:141
+#: ../Help/data/messages:137
 msgid "Adding a file or a web page into the dock"
 msgstr "Докка файл ёки веб саҳифасини қўшиш"
 
-#: ../Help/data/messages:143
+#: ../Help/data/messages:139
 msgid ""
 "Simply drag a file or an html link and drop it onto the dock (an animated "
 "arrow should appear when you can drop).\n"
@@ -2056,11 +2127,11 @@ msgstr ""
 "Сиз бир неча Стекка эга бўлишингиз мумкин, ва файл/линкларни Стекка тўғридан-"
 "тўғри суриб қўйишингиз мумкин."
 
-#: ../Help/data/messages:145
+#: ../Help/data/messages:141
 msgid "Importing a folder into the dock"
 msgstr "Жилдни докка олиш"
 
-#: ../Help/data/messages:147
+#: ../Help/data/messages:143
 msgid ""
 "Simply drag a folder and drop it onto the dock (an animated arrow should "
 "appear when you can drop).\n"
@@ -2070,11 +2141,11 @@ msgstr ""
 "бўлиши керак).\n"
 "Сиз жилднинг файллари киритиладими ёки йўқми танлашингиз мумкин."
 
-#: ../Help/data/messages:149
+#: ../Help/data/messages:145
 msgid "Accessing the recent events"
 msgstr "Яқиндаги воқеаларга кириш"
 
-#: ../Help/data/messages:151
+#: ../Help/data/messages:147
 msgid ""
 "Activate the Recent-Events applet.\n"
 "You need to have the Zeitgeist daemon to be running. Install it if it's not "
@@ -2088,11 +2159,11 @@ msgstr ""
 "Апплет тезлик билан кира олишингиз учун яқинда сиз фойдаланган барча "
 "файллар, жилдлар, қўшиқлар, видеолар ва ҳужжатларни кўрсата олади."
 
-#: ../Help/data/messages:153
+#: ../Help/data/messages:149
 msgid "Quickly opening a recent file with a launcher"
 msgstr "Яқинда ишлатилган файлни ишга туширгич билан тезкор очиш"
 
-#: ../Help/data/messages:155
+#: ../Help/data/messages:151
 msgid ""
 "Activate the Recent-Events applet.\n"
 "You need to have the Zeitgeist daemon to be running. Install it if it's not "
@@ -2106,11 +2177,11 @@ msgstr ""
 "билан очса бўладиган яқинда фойдаланилган файллар унинг менюсида пайдо "
 "бўлади."
 
-#: ../Help/data/messages:157
+#: ../Help/data/messages:153
 msgid "Accessing disks"
 msgstr "Дискларга кириш"
 
-#: ../Help/data/messages:159
+#: ../Help/data/messages:155
 msgid ""
 "Activate the Shortcuts applet.\n"
 "Then all the disks (including USB key or external hard drives) will be "
@@ -2122,11 +2193,11 @@ msgstr ""
 "ичида-докда рўйхатланади.\n"
 "Дискни чиқаришдан олдин узиш учун нишончаси устига ўрта тугмани босинг."
 
-#: ../Help/data/messages:161
+#: ../Help/data/messages:157
 msgid "Accessing folder bookmarks"
 msgstr "Жилд хатчўпларига кириш"
 
-#: ../Help/data/messages:163
+#: ../Help/data/messages:159
 msgid ""
 "Activate the Shortcuts applet.\n"
 "Then all the folders bookmarks (the ones that appear in Nautilus) will be "
@@ -2140,11 +2211,11 @@ msgstr ""
 "Хатчўпни қўшиш учун шунчаки жилдни апплет нишончаси устига суриб қўйинг.\n"
 "Хатчўпни олиб ташлаш учун унинг нишончаси устига ўнг тугма -> олиб ташлаш"
 
-#: ../Help/data/messages:165
+#: ../Help/data/messages:161
 msgid "Having multiple instances of an applet"
 msgstr "Апллетнинг бир нечтасига эга бўлиш"
 
-#: ../Help/data/messages:167
+#: ../Help/data/messages:163
 msgid ""
 "Some applets can have several instances running at the same time: Clock, "
 "Stack, Weather, ...\n"
@@ -2160,11 +2231,11 @@ msgstr ""
 "турли мамлакатлар учун вақтни кўриш ёки турли шаҳарлардаги об-ҳавони кўриш "
 "имконини беради."
 
-#: ../Help/data/messages:169
+#: ../Help/data/messages:165
 msgid "Adding / removing a desktop"
 msgstr "Иш столини қўшиш / олиб ташлаш"
 
-#: ../Help/data/messages:171
+#: ../Help/data/messages:167
 msgid ""
 "Activate the Switcher applet.\n"
 "Right-click on it -> \"add a desktop\" or \"remove this desktop\".\n"
@@ -2175,11 +2246,11 @@ msgstr ""
 "ташлаш\".\n"
 "Ҳатто ҳар бири учун ном танлашингиз мумкин."
 
-#: ../Help/data/messages:173
+#: ../Help/data/messages:169
 msgid "Controling the sound volume"
 msgstr "Товуш баландлигини назорат қилиш"
 
-#: ../Help/data/messages:175
+#: ../Help/data/messages:171
 msgid ""
 "Activate the Sound Volume applet.\n"
 "Then scroll up/down to increase/decrease the sound.\n"
@@ -2192,11 +2263,11 @@ msgstr ""
 "ҳаракатлантиришингиз мумкин.\n"
 "Ўрта тугма товушни ўчиради/ёқади."
 
-#: ../Help/data/messages:177
+#: ../Help/data/messages:173
 msgid "Controling the screen brightness"
 msgstr "Экран ёрқинлигини назорат қилиш"
 
-#: ../Help/data/messages:179
+#: ../Help/data/messages:175
 msgid ""
 "Activate the Screen Luminosity applet.\n"
 "Then scroll up/down to increase/decrease the brightness.\n"
@@ -2206,74 +2277,40 @@ msgstr ""
 "Кейин ёрқинликни кўпайтириш/камайтириш учун юқори/пастга юрғизинг.\n"
 "Ёки ўрнига нишонча устига босиб юрғизиш панелини ҳаракатлантиришингиз мумкин."
 
-#: ../Help/data/messages:181
-msgid "Removing completely the gnome-panel"
-msgstr "Gnome-panel ни тўлиқ олиб ташлаш"
-
-#: ../Help/data/messages:183
-msgid ""
-"Open dconf-editor, edit the key "
-"/desktop/gnome/session/required_components/panel, and replace its content "
-"with \"cairo-dock\".\n"
-"Then restart your session : the gnome-panel has not been started, and the "
-"dock has been started (if not, you can add it to the startup programs)."
-msgstr ""
-"dconf-editor ни очинг, /desktop/gnome/session/required_components/panel "
-"калитини таҳрир қилинг, ва унинг таркибини \"cairo-dock\" билан "
-"алмаштиринг.\n"
-"Кейин сеансни қайтадан бошланг : the gnome-panel бошланмади ва док бошланди "
-"(агар бундай бўлмаса, уни ишга тушувчи дастурларга қўшишингиз мумкин)."
-
-#: ../Help/data/messages:187
-msgid ""
-"If you are on Gnome, you can click on this button in order to automatically "
-"modify this key:"
-msgstr ""
-"Агар Gnomeда бўлсангиз, мазкур тугмани автоматик тарзда мослаш учун ушбу "
-"тугмани босишингиз мумкин:"
-
-#: ../Help/data/messages:189
+#: ../Help/data/messages:177
 msgid "Troubleshooting"
 msgstr "Муаммоларни ҳал қилиш"
 
-#: ../Help/data/messages:191
+#: ../Help/data/messages:179
 msgid "If you have any question, don't hesitate to ask on our Github Page."
 msgstr "Саволингиз бўлса, форумимизда сўрашга хижолат қилманг."
 
-#: ../Help/data/messages:193
+#: ../Help/data/messages:181
 msgid "Discussions"
 msgstr "Форум"
 
-#: ../Help/data/messages:195
+#: ../Help/data/messages:183
 msgid "Our wiki can also help you, it is more complete on some points."
 msgstr ""
 "Бизнинг wiki ҳам сизга ёрдам бериши мумкин, баъзи масалаларда у тўлиқроқ."
 
-#: ../Help/data/messages:197
+#: ../Help/data/messages:185
 msgid "Wiki"
 msgstr "Wiki"
 
-#: ../Help/data/messages:199
+#: ../Help/data/messages:187
 msgid "I have a black background around my dock."
 msgstr "Докимнинг атрофида қора тасвир."
 
-#: ../Help/data/messages:201
-msgid ""
-"Hint : If you have an ATI or an Intel card, you should try without OpenGL "
-"first, because their drivers are not yet perfect."
-msgstr ""
-"Ёрдамчи маълумот : Агар сизда ATI ёки Intel картаси бўлса, аввал OpenGLсиз "
-"уриниб кўринг, чунки уларнинг драйверлари ҳозирча мукаммал эмас."
-
-#: ../Help/data/messages:203
+#: ../Help/data/messages:189
 msgid ""
 "You need to turn on compositing. For instance, you can run Compiz or "
 "xcompmgr. \n"
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open dconf-editor, edit the key "
-"'org.gnome.metacity.compositing-manager' and set it to 'true'."
+" Open dconf-editor, edit the key 'org.gnome.metacity.compositing-manager' "
+"and set it to 'true'."
 msgstr ""
 "Сиздан композитни ёқиш талаб этилади.Масалан, Compiz ёки xcompmgr ни "
 "бажаришингиз керак. \n"
@@ -2284,20 +2321,12 @@ msgstr ""
 "dconf-editor ни очинг, 'org.gnome.metacity.compositing-manager' калитини "
 "таҳрирланг ва уни 'true' қилиб ўрнатинг."
 
-#: ../Help/data/messages:207
-msgid ""
-"If you're on Gnome with Metacity (without Compiz), you can click on this "
-"button:"
-msgstr ""
-"Агар сиз Gnomeда Metacity билан (Compizсиз) бўлсангиз, ушбу тугмани "
-"босишингиз мумкин:"
-
-#: ../Help/data/messages:209
+#: ../Help/data/messages:191
 msgid "My machine is too old to run a composite manager."
 msgstr ""
 "Менинг компьютерим композит бошқарувчисини бажариш учун эскилик қилади."
 
-#: ../Help/data/messages:211
+#: ../Help/data/messages:193
 msgid ""
 "Don't panic, Cairo-Dock can emulate the transparency.\n"
 "To get rid of the black background, simply enable the corresponding option "
@@ -2307,11 +2336,11 @@ msgstr ""
 "Қора орқа фондан халос бўлиш учун шунчаки \"Тизим\" модули охиридаги мос "
 "хоссани йўлга қўйинг"
 
-#: ../Help/data/messages:213
+#: ../Help/data/messages:195
 msgid "The dock is horribly slow when I move the mouse into it."
 msgstr "Устига сичқончани олиб борганимда док жуда ҳам секин ишлайди."
 
-#: ../Help/data/messages:215
+#: ../Help/data/messages:197
 msgid ""
 "If you have an Nvidia GeForce8 graphics card, please install the latest "
 "drivers, as the first ones were really buggy.\n"
@@ -2328,11 +2357,11 @@ msgstr ""
 "Агар док OpenGL билан ишлаётган бўлса, докни «cairo-dock -c» билан ишга "
 "тушириш орқали уни ўчиришга ҳаракат қилинг."
 
-#: ../Help/data/messages:217
+#: ../Help/data/messages:199
 msgid "I don't have these wonderful effects like fire, cube rotating, etc."
 msgstr "Олов, куб айланиши,ва ҳоказо каби ажойиб эффектлар менда йўқ."
 
-#: ../Help/data/messages:219
+#: ../Help/data/messages:201
 msgid ""
 "Tip: You can force OpenGL by launching the dock with «cairo-dock -o».but you "
 "might get a lot of visual artifacts."
@@ -2340,7 +2369,7 @@ msgstr ""
 "Маслаҳат: Сиз OpenGLни «cairo-dock -o» билан мажбурлашингиз мумкин ёки "
 "кўплаб кўринадиган артифактларни олишингиз мумкин."
 
-#: ../Help/data/messages:221
+#: ../Help/data/messages:203
 msgid ""
 "You need a graphics card with drivers that support OpenGL2.0. Most Nvidia "
 "cards can do this, as can more and more Intel cards. Most ATI cards do not "
@@ -2351,15 +2380,15 @@ msgstr ""
 "бунга қодир бўлиб бормоқда. Кўпчилик ATI карталари OpenGL2.0 ни қўллаб "
 "қувватламайди."
 
-#: ../Help/data/messages:223
+#: ../Help/data/messages:205
 msgid "I don't have any themes in the Theme Manager, except the default one."
 msgstr "Мавзулар Бошқарувчисида асли ўрнатилгандан бошқа бирорта мавзу йўқ."
 
-#: ../Help/data/messages:225
+#: ../Help/data/messages:207
 msgid "Hint : Up to version 2.1.1-2, wget was used."
 msgstr "Ёрдамчи маълумот : 2.1.1-2 версиясига қадар wgetдан фойдаланилган."
 
-#: ../Help/data/messages:227
+#: ../Help/data/messages:209
 msgid ""
 "Be sure that you are connected to the Net.\n"
 " If your connection is very slow, you can increase the connection timeout in "
@@ -2375,12 +2404,12 @@ msgstr ""
 "керак, қандай қилишни интернетдан қидиринг.(асосан, сиз \"http_proxy\" "
 "ўзгарувчан муҳитини ўрнатишингиз керак бўлади)"
 
-#: ../Help/data/messages:229
+#: ../Help/data/messages:211
 msgid "The «netspeed» applet displays 0 even when I'm downloading something"
 msgstr ""
 "«netspeed» апплети ҳатто бирор нарса кўчириб олаётганимда ҳам 0 кўрсатади"
 
-#: ../Help/data/messages:231
+#: ../Help/data/messages:213
 msgid ""
 "Tip: you can run several instances of this applet if you wish to monitor "
 "several interfaces."
@@ -2388,7 +2417,7 @@ msgstr ""
 "Маслаҳат:агар бир нечта интерфейсни назорат қилмоқчи бўлсангиз мазкур "
 "апплетнинг бир қанча вариантини бажаришингиз мумкин."
 
-#: ../Help/data/messages:233
+#: ../Help/data/messages:215
 msgid ""
 "You must tell the applet which interface you're using to connect to the Net "
 "(by default, this is «eth0»).\n"
@@ -2402,11 +2431,11 @@ msgstr ""
 "топиш учун «ifconfig» ни терминалда ёзинг, ва «loop» интерфейсини эътиборсиз "
 "қолдиринг.Тахминан бу «eth1», «ath0», ёки «wifi0» каби бўлса керак."
 
-#: ../Help/data/messages:235
+#: ../Help/data/messages:217
 msgid "The dustbin remains empty even when I delete a file."
 msgstr "Ҳатто файлни ўчирганимда ҳам чиқиндилар қутиси бўш қолаяпти."
 
-#: ../Help/data/messages:237
+#: ../Help/data/messages:219
 msgid ""
 "if you're using KDE, you may have to specify the path to the trash folder.\n"
 "Just edit the applet's configuration, and fill in the Trash path; it is "
@@ -2418,40 +2447,20 @@ msgstr ""
 "тахминан «~/.locale/share/Trash/files» бўлади.Бу ерда йўлни ёзаётганда жуда "
 "эҳтиёт бўлинг!!! (бўшлиқлар ёки айрим кўринмас белгиларни киритманг)."
 
-#: ../Help/data/messages:239
-msgid ""
-"There is no icon in the Applications Menu even though I enable the option."
-msgstr ""
-"Гарчи бу хоссани йўлга қўйган бўлсам ҳам Қўлланмалар Менюсида нишонча йўқ."
-
-#: ../Help/data/messages:241
-msgid ""
-"In Gnome, there is an option that override the dock's one. To enable icons "
-"in menus, open 'dconf-editor', go to Desktop / Gnome / Interface and enable "
-"the \"menus have icons\" and the \"buttons have icons\" options. "
-msgstr ""
-"Gnomeда докдагининг устини ёпиш хоссаси мавжуд.Менюлардаги нишончаларни "
-"йўлга қўйиш учун'dconf-editor'ни очинг, Иш столи / Gnome / Интерфейс га "
-"киринг ва \"менюлар нишончаларга эга\" ва \"тугмалар нишончаларга эга\" "
-"хоссаларини йўлга қўйинг. "
-
-#: ../Help/data/messages:245
-msgid "If you're on Gnome you can click on this button:"
-msgstr "Агар Gnomeда бўлсангиз қуйидаги тугмани босишингиз мумкин:"
-
-#: ../Help/data/messages:247
+#: ../Help/data/messages:221
 msgid "The Project"
 msgstr "Лойиҳа"
 
-#: ../Help/data/messages:249
+#: ../Help/data/messages:223
 msgid "Join the project!"
 msgstr "Лойиҳага қўшилинг!"
 
-#: ../Help/data/messages:251
+#: ../Help/data/messages:225
 msgid ""
 "We value your help! If you see a bug, if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on https://github.com/Cairo-Dock/cairo-dock-core.\n"
+"or if you just made a dream about the dock, pay us a visit on https://github."
+"com/Cairo-Dock/cairo-dock-core.\n"
 "English (and others!) speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -2459,23 +2468,24 @@ msgid ""
 msgstr ""
 "Биз сизнинг ёрдамингизни қадрлаймиз! Агар хатони сезсангиз, агар яна бирор "
 "нарса яхшиланиши мумкин деб ҳисобласангиз,\n"
-"ёки шунчаки докка оид орзуингиз бўлса, https://github.com/Cairo-Dock/cairo-dock-core га ташриф буюринг.\n"
+"ёки шунчаки докка оид орзуингиз бўлса, https://github.com/Cairo-Dock/cairo-"
+"dock-core га ташриф буюринг.\n"
 "Инглиз (ва бошқа!) тилда сўзловчилар марҳамат, хижолат қилманг! ;-)\n"
 "\n"
 "Агар док ёки бирор апплет учун мавзу яратиб уни баҳам кўрмоқчи бўлсангиз, "
 "биз бажонидил уни серверимизга киритамиз !"
 
-#: ../Help/data/messages:253
+#: ../Help/data/messages:227
 msgid ""
 "If you wish to develop an applet, a complete documentation is available here."
 msgstr ""
 "Агар апплетни ривожлантирмоқчи бўлсангиз тўлиқ документация бу ерда мавжуд."
 
-#: ../Help/data/messages:255
+#: ../Help/data/messages:229
 msgid "Documentation"
 msgstr "Документация"
 
-#: ../Help/data/messages:257
+#: ../Help/data/messages:231
 msgid ""
 "If you wish to develop an applet in Python, Perl or any other language,\n"
 "or to interact with the dock in any kind of way, a full DBus API is "
@@ -2485,11 +2495,11 @@ msgstr ""
 "ёки док билан ҳар қандай бошқа усулда мулоқот қилмоқчи бўлсангиз, тўлиқ DBus "
 "API бу ерда тасвирланган."
 
-#: ../Help/data/messages:259
+#: ../Help/data/messages:233
 msgid "DBus API"
 msgstr "DBus API"
 
-#: ../Help/data/messages:261
+#: ../Help/data/messages:235
 msgid ""
 "\n"
 "\n"
@@ -2499,136 +2509,83 @@ msgstr ""
 "\n"
 "Cairo-Dock Жамоаси"
 
-#: ../Help/data/messages:263
+#: ../Help/data/messages:237
 msgid "Websites"
 msgstr "Веб-сайтлар"
 
-#: ../Help/data/messages:265
+#: ../Help/data/messages:239
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
 msgstr ""
 "Муаммолар ёки таклифлар борми? Ёки шунчаки суҳбатлашмоқчимисиз? Марҳамат!"
 
-#: ../Help/data/messages:267
+#: ../Help/data/messages:241
 msgid "Community site"
 msgstr "Жамият сайти"
 
-#: ../Help/data/messages:273
+#: ../Help/data/messages:247
 msgid "More applets available online!"
 msgstr "Кўпроқ апплетлар онлайнда мавжуд!"
 
-#: ../Help/data/messages:275
+#: ../Help/data/messages:249
 msgid "Cairo-Dock-Plug-ins-Extras"
 msgstr "Cairo-Dock Қўшимча Плагинлари"
 
-#: ../Help/data/messages:277
+#: ../Help/data/messages:251
 msgid "Repositories"
 msgstr "Манбалар"
 
-#: ../Help/data/messages:279
+#: ../Help/data/messages:253
 msgid ""
-"We maintain two repositories for Debian, Ubuntu and other Debian-forked:\n"
-" One for stable releases and another which is updated weekly (unstable "
-"version)"
+"We maintain repositories for Ubuntu and derivatives on Launchpad for the "
+"stable and development versions of Cairo-Dock:"
 msgstr ""
-"Биз Debian, Ubuntu ва бошқа Debian-асосидагилар учун иккита манбани "
-"юритамиз:\n"
-" Бири барқарор релизлар учун ва бошқаси ҳар ҳафта янгиланади (барқарор "
-"бўлмаган версия)"
 
-#: ../Help/data/messages:281
-msgid "Debian/Ubuntu"
-msgstr "Debian/Ubuntu"
-
-#: ../Help/data/messages:283
-msgid "Ubuntu"
-msgstr "Ubuntu"
-
-#: ../Help/data/messages:287
-msgid ""
-"If you're on Ubuntu, you can add our 'stable' repository by clicking on this "
-"button:\n"
-" After that, you can launch your update manager in order to install the "
-"latest stable version."
+#: ../Help/data/messages:255
+msgid "Stable"
 msgstr ""
-"Агар Ubuntu да бўлсангиз, 'stable' манбамизни ушбу тугмани босиш орқали "
-"қўшишингиз мумкин:\n"
-" Шундан сўнг, мавжуд энг сўнгги барқарор версияни ўрнатиш учун янгиланиш "
-"бошқарувчисини ишга туширинг."
 
-#: ../Help/data/messages:291
-msgid ""
-"If you're on Ubuntu, you can also add our 'weekly' ppa (can be unstable) by "
-"clicking on this button:\n"
-" After that, you can launch your update manager in order to install the "
-"latest weekly version."
+#: ../Help/data/messages:257
+msgid "https://launchpad.net/~cairo-dock-team/+archive/ubuntu/ppa"
 msgstr ""
-"Агар Ubuntu да бўлсангиз, 'weekly' ppa манбамизни (барқарор бўлмаслиги "
-"мумкин) ушбу тугмани босиш орқали қўшишингиз мумкин:\n"
-" Шундан сўнг, мавжуд энг сўнгги ҳафталик версияни ўрнатиш учун янгиланиш "
-"бошқарувчисини ишга туширинг."
 
-#: ../Help/data/messages:293
-msgid "Debian"
-msgstr "Debian"
-
-#: ../Help/data/messages:297
-msgid ""
-"If you're on Debian Stable, you can add our 'stable' repository by clicking "
-"on this button:\n"
-" After that, you can purge all 'cairo-dock*' packages, update the your "
-"system and reinstall 'cairo-dock' package."
+#: ../Help/data/messages:261
+msgid "https://launchpad.net/~cairo-dock-team/+archive/ubuntu/weekly"
 msgstr ""
-"Агар Debian Stable да бўлсангиз, 'барқарор' манбани ушбу тугма устига босиш "
-"орқали қўшишингиз мумкин:\n"
-" Шундан сўнг барча 'cairo-dock*' пакетларини тозалаб, тизимингизни "
-"янгилашингиз ва 'cairo-dock' пакетини қайта ўрнатишингиз мумкин."
 
-#: ../Help/data/messages:301
-msgid ""
-"If you're on Debian Unstable, you can add our 'stable' repository by "
-"clicking on this button:\n"
-" After that, you can purge all 'cairo-dock*' packages, update the your "
-"system and reinstall 'cairo-dock' package."
-msgstr ""
-"Агар Debian unstable да бўлсангиз, 'барқарор' манбани ушбу тугма устига "
-"босиш орқали қўшишингиз мумкин:\n"
-" Шундан сўнг барча 'cairo-dock*' пакетларини тозалаб, тизимингизни "
-"янгилашингиз ва 'cairo-dock' пакетини қайта ўрнатишингиз мумкин."
-
-#: ../Help/data/messages:303 ../Help/data/messages:305 ../data/messages:1029
-#: ../data/messages:1061 ../data/messages:1097
+#: ../Help/data/messages:263 ../Help/data/messages:265 ../data/messages:1035
+#: ../data/messages:1067 ../data/messages:1103
 msgid "Icon"
 msgstr "Нишонча"
 
-#: ../Help/data/messages:307
+#: ../Help/data/messages:267
 msgid "Name of the dock it belongs to:"
 msgstr "Қарашли бўлган док номи:"
 
-#: ../Help/data/messages:309
+#: ../Help/data/messages:269
 msgid "Name of the icon as it will appear in its caption in the dock:"
 msgstr "Нишончанинг докдаги ёзувида пайдо бўладиган номи:"
 
-#: ../Help/data/messages:311
+#: ../Help/data/messages:271
 msgid "Leave empty to use the default one."
 msgstr "Аслидан фойдаланиш учун бўш қолдиринг."
 
-#: ../Help/data/messages:313
+#: ../Help/data/messages:273
 msgid "Image filename:"
 msgstr "Тасвир файли номи:"
 
-#: ../Help/data/messages:315
+#: ../Help/data/messages:275
 msgid "Set to 0 to use the default applet size"
 msgstr "Апплетнинг асл ҳажмидан фойдаланиш учун 0 га тўғриланг"
 
-#: ../Help/data/messages:317
+#: ../Help/data/messages:277
 msgid "Desired icon size for this applet"
 msgstr "Мазкур апплет учун сиз хоҳлаган нишонча ҳажми"
 
-#: ../Help/data/messages:319
+#: ../Help/data/messages:279
 msgid "Desklet"
 msgstr "Десклет"
 
-#: ../Help/data/messages:323
+#: ../Help/data/messages:283
 msgid ""
 "If locked, the desklet cannot be moved by simply dragging it with the left "
 "mouse button. It can still be moved with ALT + left-click."
@@ -2636,11 +2593,11 @@ msgstr ""
 "Қулфланган ҳолатда десклет шунчаки уни сичқонча чап тугмаси билан суриш "
 "орқали кўчириб бўлмайди. У ҳали ҳам ALT + чап-тугма билан кўчирилиши мумкин."
 
-#: ../Help/data/messages:325
+#: ../Help/data/messages:285
 msgid "Lock position?"
 msgstr "Жойлашув қулфлансинми?"
 
-#: ../Help/data/messages:327
+#: ../Help/data/messages:287
 msgid ""
 "Depending on your WindowManager, you may be able to resize this with ALT + "
 "middle-click or ALT + left-click."
@@ -2648,11 +2605,11 @@ msgstr ""
 "ОйнаБошқарувчингиздан келиб чиқиб, ALT + ўрта-тугма ёки ALT + чап-тугма "
 "ёрдамида унинг ҳажмини ўзгартиришингиз мумкин."
 
-#: ../Help/data/messages:329
+#: ../Help/data/messages:289
 msgid "Desklet dimensions (width x height):"
 msgstr "Десклет ҳажми (эни x бўйи):"
 
-#: ../Help/data/messages:331
+#: ../Help/data/messages:291
 msgid ""
 "Depending on your WindowManager, you may be able to move this with ALT + "
 "left-click.. Negative values are counted from the right/bottom of the screen"
@@ -2660,11 +2617,11 @@ msgstr ""
 "ОйнаБошқарувчингиздан келиб чиқиб, буни ALT + чап-тугма билан кўчиришингиз "
 "мумкин... Манфий қийматлар экраннинг ўнг/пастидан саналади."
 
-#: ../Help/data/messages:333
+#: ../Help/data/messages:293
 msgid "Desklet position (x, y):"
 msgstr "Десклет жойлашуви (x, y):"
 
-#: ../Help/data/messages:335
+#: ../Help/data/messages:295
 msgid ""
 "You can quickly rotate the desklet with the mouse, by dragging the little "
 "buttons on its left and top sides."
@@ -2672,15 +2629,15 @@ msgstr ""
 "Десклетни сичқонча ёрдамида унинг чап ва юқори томнларидаги кичик тугмаларни "
 "суриш орқали тезлик билан айлантиришингиз мумкин."
 
-#: ../Help/data/messages:337
+#: ../Help/data/messages:297
 msgid "Rotation:"
 msgstr "Айланиш:"
 
-#: ../Help/data/messages:341
+#: ../Help/data/messages:301
 msgid "Is detached from the dock"
 msgstr "Докдан алоҳида"
 
-#: ../Help/data/messages:343
+#: ../Help/data/messages:303
 msgid ""
 "for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
 "(class=Cairo-dock & type=Utility)"
@@ -2688,89 +2645,89 @@ msgstr ""
 "CompizFusionнинг виджет қалами учун Compiz ўзини тутишини қуйидагича "
 "белгиланг: (class=Cairo-dock & type=Utility)"
 
-#: ../Help/data/messages:345 ../data/messages:19 ../data/messages:57
-#: ../data/messages:191 ../data/messages:251 ../data/messages:921
+#: ../Help/data/messages:305 ../data/messages:21 ../data/messages:59
+#: ../data/messages:193 ../data/messages:253 ../data/messages:927
 msgid "Visibility:"
 msgstr "Кўрсатилиши:"
 
-#: ../Help/data/messages:351
+#: ../Help/data/messages:311
 msgid "Keep below"
 msgstr "Пастда сақлаш"
 
-#: ../Help/data/messages:353
+#: ../Help/data/messages:313
 msgid "Keep on widget layer"
 msgstr "Виджетлар қаторида сақлаш"
 
-#: ../Help/data/messages:357
+#: ../Help/data/messages:317
 msgid "Should be visible on all desktops?"
 msgstr "Барча иш столларида кўрсатилсинми?"
 
-#: ../Help/data/messages:359 ../data/messages:589
+#: ../Help/data/messages:319 ../data/messages:595
 msgid "Decorations"
 msgstr "Декорациялар"
 
-#: ../Help/data/messages:361
+#: ../Help/data/messages:321
 msgid "Choose 'Custom decorations' to define your own decorations below."
 msgstr ""
 "Ўз шахсий декорацияларингизни белгилаш учун қуйида 'Ўзгарган декорациялар' "
 "ни танланг."
 
-#: ../Help/data/messages:363
+#: ../Help/data/messages:323
 msgid "Choose a decoration theme for this desklet:"
 msgstr "Мазкур десклет учун декорация танланг:"
 
-#: ../Help/data/messages:365
+#: ../Help/data/messages:325
 msgid ""
 "Image to be displayed below drawings, e.g. a frame. Leave empty for no image."
 msgstr ""
 "Чизмалар остида кўрсатиладиган тасвир, масалан рамка. Тасвир қўймаслик учун "
 "бўш қолдиринг."
 
-#: ../Help/data/messages:367
+#: ../Help/data/messages:327
 msgid "Background image:"
 msgstr "Орқа фон тасвири:"
 
-#: ../Help/data/messages:369
+#: ../Help/data/messages:329
 msgid "Background transparency:"
 msgstr "Орқа фон шаффофлиги:"
 
-#: ../Help/data/messages:371
+#: ../Help/data/messages:331
 msgid "in pixels. Use this to adjust the left position of drawings."
 msgstr ""
 "пикселларда. Расмларнинг чап жойлашувини мослаш учун шундан фойдаланинг."
 
-#: ../Help/data/messages:373
+#: ../Help/data/messages:333
 msgid "Left offset:"
 msgstr "Чап силжиш:"
 
-#: ../Help/data/messages:375
+#: ../Help/data/messages:335
 msgid "in pixels. Use this to adjust the top position of drawings."
 msgstr ""
 "пикселларда. Расмларнинг юқори жойлашувини мослаш учун шундан фойдаланинг."
 
-#: ../Help/data/messages:377
+#: ../Help/data/messages:337
 msgid "Top offset:"
 msgstr "Юқори силжиш:"
 
-#: ../Help/data/messages:379
+#: ../Help/data/messages:339
 msgid "in pixels. Use this to adjust the right position of drawings."
 msgstr ""
 "пикселларда. Расмларнинг ўнг жойлашувини мослаш учун шундан фойдаланинг."
 
-#: ../Help/data/messages:381
+#: ../Help/data/messages:341
 msgid "Right offset:"
 msgstr "Ўнг силжиш:"
 
-#: ../Help/data/messages:383
+#: ../Help/data/messages:343
 msgid "in pixels. Use this to adjust the bottom position of drawings."
 msgstr ""
 "пикселларда. Расмларнинг қуйи жойлашувини мослаш учун шундан фойдаланинг."
 
-#: ../Help/data/messages:385
+#: ../Help/data/messages:345
 msgid "Bottom offset:"
 msgstr "Қуйи силжиш:"
 
-#: ../Help/data/messages:387
+#: ../Help/data/messages:347
 msgid ""
 "Image to be displayed above the drawings, e.g. a reflection. Leave empty for "
 "no image."
@@ -2778,31 +2735,35 @@ msgstr ""
 "Чизмалар устида кўрсатиладиган тасвир, масалан акс. Тасвир қўймаслик учун "
 "бўш қолдиринг."
 
-#: ../Help/data/messages:389
+#: ../Help/data/messages:349
 msgid "Foreground image:"
 msgstr "Олди фон тасвири:"
 
-#: ../Help/data/messages:391
+#: ../Help/data/messages:351
 msgid "Foreground tansparency:"
 msgstr "Олди фон шаффофлиги:"
 
-#: ../data/messages:1 ../data/messages:897
+#: ../data/messages:1 ../data/messages:903
 msgid "Behavior"
 msgstr "Ўзини тутиши"
 
-#: ../data/messages:3 ../data/messages:153 ../data/messages:899
+#: ../data/messages:3 ../data/messages:155 ../data/messages:905
 msgid "Position on the screen"
 msgstr "Экрандаги жойлашув"
 
-#: ../data/messages:5 ../data/messages:155 ../data/messages:901
+#: ../data/messages:5 ../data/messages:157 ../data/messages:907
 msgid "Choose which border of the screen the dock will be placed on:"
 msgstr "Док жойлаштириладиган экран чегарасини танланг:"
 
-#: ../data/messages:15 ../data/messages:187
+#: ../data/messages:15 ../data/messages:175 ../data/messages:921
+msgid "Multi-screens"
+msgstr "Кўп-экранлар"
+
+#: ../data/messages:17 ../data/messages:189
 msgid "Visibility of the main dock"
 msgstr "Асосий док кўрсатилиши"
 
-#: ../data/messages:17 ../data/messages:189 ../data/messages:919
+#: ../data/messages:19 ../data/messages:191 ../data/messages:925
 msgid ""
 "Modes are sorted from the most intrusive to the less intrusive.\n"
 "When the dock is hidden or below a window, place the mouse on the screen's "
@@ -2816,39 +2777,39 @@ msgstr ""
 "Тезкор чақиришда чиққан док сичқончангиз турган жойда пайдо бўлади. Қолган "
 "вақт у кўринмас ҳолатда бўлади, яъни худди меню каби ўзини тутади."
 
-#: ../data/messages:23 ../data/messages:195 ../data/messages:925
+#: ../data/messages:25 ../data/messages:197 ../data/messages:931
 msgid "Reserve space for the dock"
 msgstr "Док учун жойни заҳиралаш"
 
-#: ../data/messages:25 ../data/messages:197 ../data/messages:927
+#: ../data/messages:27 ../data/messages:199 ../data/messages:933
 msgid "Keep the dock below"
 msgstr "Докни пастда сақлаш"
 
-#: ../data/messages:27 ../data/messages:199 ../data/messages:929
+#: ../data/messages:29 ../data/messages:201 ../data/messages:935
 msgid "Hide the dock when it overlaps the current window"
 msgstr "Қачонки жорий ойна устига чиқса докни яшириш"
 
-#: ../data/messages:29 ../data/messages:201 ../data/messages:931
+#: ../data/messages:31 ../data/messages:203 ../data/messages:937
 msgid "Hide the dock whenever it overlaps any window"
 msgstr "Қачонки бирор ойна устига чиқса докни яшириш"
 
-#: ../data/messages:31 ../data/messages:203 ../data/messages:933
+#: ../data/messages:33 ../data/messages:205 ../data/messages:939
 msgid "Keep the dock hidden"
 msgstr "Докни яширин сақлаш"
 
-#: ../data/messages:33 ../data/messages:205
+#: ../data/messages:35 ../data/messages:207
 msgid "Pop-up on shortcut"
 msgstr "Тезкор чақиришда чиқиш"
 
-#: ../data/messages:35 ../data/messages:207
+#: ../data/messages:37 ../data/messages:209
 msgid "Effect used to hide the dock:"
 msgstr "Докни яшириш учун фойдаланиладиган эффект:"
 
-#: ../data/messages:37 ../data/messages:69 ../data/messages:209
+#: ../data/messages:39 ../data/messages:71 ../data/messages:211
 msgid "None"
 msgstr "Ҳеч қандай"
 
-#: ../data/messages:49 ../data/messages:243
+#: ../data/messages:51 ../data/messages:245
 msgid ""
 "When you press the shortcut, the dock will show itself at the potition of "
 "your mouse. The rest of the time, it stays invisible, thus acting like a "
@@ -2858,29 +2819,29 @@ msgstr ""
 "бўлади. Қолган вақт у кўринмас ҳолатда бўлади, яъни худди меню каби ўзини "
 "тутади."
 
-#: ../data/messages:51 ../data/messages:245
+#: ../data/messages:53 ../data/messages:247
 msgid "Keyboard shortcut to pop-up the dock:"
 msgstr "Докни чиқариш учун тезкор тугма бирикмаси:"
 
-#: ../data/messages:53
+#: ../data/messages:55
 msgid "Visibility of sub-docks"
 msgstr "Док-ичида-докларнинг кўрсатилиши"
 
-#: ../data/messages:55 ../data/messages:249
+#: ../data/messages:57 ../data/messages:251
 msgid ""
 "they will appear either when you click or when you linger over the icon "
 "pointing on it."
 msgstr ""
 
-#: ../data/messages:59 ../data/messages:253
+#: ../data/messages:61 ../data/messages:255
 msgid "Appear on mouse over"
 msgstr "Устига сичқонча олиб келганда пайдо бўлиш"
 
-#: ../data/messages:61 ../data/messages:255
+#: ../data/messages:63 ../data/messages:257
 msgid "Appear on click"
 msgstr "Босганда пайдо бўлиш"
 
-#: ../data/messages:65
+#: ../data/messages:67
 msgid ""
 "None       : Don't show opened windows in the dock.\n"
 "Minimalistic: Mix applications with its launcher, show other windows only if "
@@ -2899,137 +2860,137 @@ msgstr ""
 "Ажратилган   : Вазифалар панелини ишга туширгичлардан ажратиш ва фақат жорий "
 "иш столидаги ойналарни кўрсатиш."
 
-#: ../data/messages:67
+#: ../data/messages:69
 msgid "Behaviour of the Taskbar:"
 msgstr "Вазифалар панелининг ўзини тутиши:"
 
-#: ../data/messages:71
+#: ../data/messages:73
 msgid "Minimalistic"
 msgstr "Ихчам"
 
-#: ../data/messages:73
+#: ../data/messages:75
 msgid "Integrated"
 msgstr "Интеграциялашган"
 
-#: ../data/messages:75
+#: ../data/messages:77
 msgid "Separated"
 msgstr "Ажратилган"
 
-#: ../data/messages:77 ../data/messages:281
+#: ../data/messages:79 ../data/messages:283
 msgid "Place new icons"
 msgstr "Янги нишончаларни жойлаштириш"
 
-#: ../data/messages:79 ../data/messages:283
+#: ../data/messages:81 ../data/messages:285
 msgid "At the beginning of the dock"
 msgstr "Докнинг бошланишида"
 
-#: ../data/messages:81 ../data/messages:285
+#: ../data/messages:83 ../data/messages:287
 msgid "Before the launchers"
 msgstr "Ишга туширгичлар олдида"
 
-#: ../data/messages:83 ../data/messages:287
+#: ../data/messages:85 ../data/messages:289
 msgid "After the launchers"
 msgstr "Ишга туширгичлардан кейин"
 
-#: ../data/messages:85 ../data/messages:289
+#: ../data/messages:87 ../data/messages:291
 msgid "At the end of the dock"
 msgstr "Докнинг охирида"
 
-#: ../data/messages:87 ../data/messages:291
+#: ../data/messages:89 ../data/messages:293
 msgid "After a given icon"
 msgstr "Берилган нишончадан кейин"
 
-#: ../data/messages:89 ../data/messages:293
+#: ../data/messages:91 ../data/messages:295
 msgid "Place new icons after this one"
 msgstr "Бунисидан кейин янги нишончаларни қўйиш"
 
-#: ../data/messages:91
+#: ../data/messages:93
 msgid "Icons' animations and effects"
 msgstr "Нишончаларнинг анимация ва эффектлари"
 
-#: ../data/messages:93
+#: ../data/messages:95
 msgid "On mouse hover:"
 msgstr "Сичқонча олиб келинганда:"
 
-#: ../data/messages:95
+#: ../data/messages:97
 msgid "On click:"
 msgstr "Босилганда:"
 
-#: ../data/messages:97
+#: ../data/messages:99
 msgid "On appearance/disappearance:"
 msgstr "Пайдо бўлиш/йўқолишда:"
 
-#: ../data/messages:99
+#: ../data/messages:101
 msgid "Evaporate"
 msgstr "Буғланиш"
 
-#: ../data/messages:103
+#: ../data/messages:105
 msgid "Explode"
 msgstr "Портлаш"
 
-#: ../data/messages:105
+#: ../data/messages:107
 msgid "Break"
 msgstr "Синиш"
 
-#: ../data/messages:107
+#: ../data/messages:109
 msgid "Black Hole"
 msgstr "Қора Туйнук"
 
-#: ../data/messages:109
+#: ../data/messages:111
 msgid "Random"
 msgstr "Тасодифий"
 
-#: ../data/messages:119 ../data/messages:553 ../data/messages:693
-#: ../data/messages:807 ../data/messages:841 ../data/messages:879
+#: ../data/messages:121 ../data/messages:559 ../data/messages:699
+#: ../data/messages:813 ../data/messages:847 ../data/messages:885
 msgid "Custom"
 msgstr "Ўзгартирилган"
 
-#: ../data/messages:121 ../data/messages:747
+#: ../data/messages:123 ../data/messages:753
 msgid "Colour"
 msgstr "Ранг"
 
-#: ../data/messages:125
+#: ../data/messages:127
 msgid "Choose a theme of icons :"
 msgstr "Нишончалар мавзусини танланг :"
 
-#: ../data/messages:127 ../data/messages:949
+#: ../data/messages:129 ../data/messages:955
 msgid "Icons size:"
 msgstr "Нишонча ҳажми:"
 
-#: ../data/messages:129 ../data/messages:955
+#: ../data/messages:131 ../data/messages:961
 msgid "Very small"
 msgstr "Жуда кичик"
 
-#: ../data/messages:131 ../data/messages:957
+#: ../data/messages:133 ../data/messages:963
 msgid "Small"
 msgstr "Кичик"
 
-#: ../data/messages:133 ../data/messages:959
+#: ../data/messages:135 ../data/messages:965
 msgid "Medium"
 msgstr "Ўртача"
 
-#: ../data/messages:135 ../data/messages:961
+#: ../data/messages:137 ../data/messages:967
 msgid "Big"
 msgstr "Катта"
 
-#: ../data/messages:137 ../data/messages:963
+#: ../data/messages:139 ../data/messages:969
 msgid "Very Big"
 msgstr "Жуда катта"
 
-#: ../data/messages:141 ../data/messages:529
+#: ../data/messages:143 ../data/messages:535
 msgid "Choose the default view for main docks :"
 msgstr "Асосий доклар учун асли ўрнатиладиган кўринишни танланг :"
 
-#: ../data/messages:143 ../data/messages:533
+#: ../data/messages:145 ../data/messages:539
 msgid "You can overwrite this parameter for each sub-dock."
 msgstr ""
 "Сиз ҳар бир док-ичида-док учун параметрларни қайта белгилашингиз мумкин."
 
-#: ../data/messages:145 ../data/messages:535
+#: ../data/messages:147 ../data/messages:541
 msgid "Choose the default view for sub-docks :"
 msgstr "Док-ичида-доклар учун асли ўрнатилган кўринишни танланг :"
 
-#: ../data/messages:149
+#: ../data/messages:151
 msgid ""
 "Many applets provide shortkeys for their actions. As soon as an applet is "
 "enabled, its shortkeys become available.\n"
@@ -3041,7 +3002,7 @@ msgstr ""
 "устига икки марта босиб, тегишли ҳаракат учун ишлатмоқчи бўлган тезкор "
 "чақириш тугмасини босинг."
 
-#: ../data/messages:165 ../data/messages:911
+#: ../data/messages:167 ../data/messages:917
 msgid ""
 "When set to 0 the dock will position itself relative to the left corner if "
 "horizontal and the top corner if vertical. When set to 1 it will position "
@@ -3050,29 +3011,25 @@ msgid ""
 "the screen's edge."
 msgstr ""
 
-#: ../data/messages:167 ../data/messages:913
+#: ../data/messages:169 ../data/messages:919
 msgid "Relative alignment:"
 msgstr ""
 
-#: ../data/messages:173 ../data/messages:915
-msgid "Multi-screens"
-msgstr "Кўп-экранлар"
-
-#: ../data/messages:175 ../data/messages:935
+#: ../data/messages:177 ../data/messages:941
 msgid "Offset from the screen's edge"
 msgstr "Экран четидан силжиш"
 
-#: ../data/messages:177 ../data/messages:937
+#: ../data/messages:179 ../data/messages:943
 msgid ""
 "Gap from the absolute position on the screen's edge, in pixels. You can also "
 "move the dock by holding the ALT or CTRL key and the left mouse button."
 msgstr ""
 
-#: ../data/messages:179 ../data/messages:939
+#: ../data/messages:181 ../data/messages:945
 msgid "Lateral offset:"
 msgstr "Бир томонга силжиш:"
 
-#: ../data/messages:181 ../data/messages:941
+#: ../data/messages:183 ../data/messages:947
 msgid ""
 "in pixels. You can also move the dock by holding the ALT or CTRL key and the "
 "left mouse button."
@@ -3080,79 +3037,79 @@ msgstr ""
 "пикселларда. Шунингдек докни ALT ёки CTRL тугмаси ва чап сичқонча тугмасини "
 "ушлаб туриб кўчиришингиз мумкин."
 
-#: ../data/messages:183 ../data/messages:943
+#: ../data/messages:185 ../data/messages:949
 msgid "Distance to the screen edge:"
 msgstr "Экран четигача масофа:"
 
-#: ../data/messages:185
+#: ../data/messages:187
 msgid "Accessibility"
 msgstr "Киришга имкон"
 
-#: ../data/messages:221
+#: ../data/messages:223
 msgid "The higher, the faster the dock will appear"
 msgstr "Қанча баланд бўлса, док шунча тез пайдо бўлади"
 
-#: ../data/messages:223
+#: ../data/messages:225
 msgid "Callback sensitivity:"
 msgstr "Таъсирчанлик:"
 
-#: ../data/messages:225
+#: ../data/messages:227
 msgid "high"
 msgstr "юқори"
 
-#: ../data/messages:227
+#: ../data/messages:229
 msgid "low"
 msgstr "паст"
 
-#: ../data/messages:229
+#: ../data/messages:231
 msgid "How to call the dock back:"
 msgstr "Докни қандай қилиб қайта чақириш:"
 
-#: ../data/messages:231
+#: ../data/messages:233
 msgid "Hit the screen's border"
 msgstr "Экран чегарасига урилиш"
 
-#: ../data/messages:233
+#: ../data/messages:235
 msgid "Hit where the dock is"
 msgstr "Док жойлашган ерга урилиш"
 
-#: ../data/messages:235
+#: ../data/messages:237
 msgid "Hit the screen's corner"
 msgstr "Экран бурчагига урилиш"
 
-#: ../data/messages:237
+#: ../data/messages:239
 msgid "Hit a zone"
 msgstr "Зонага урилиш"
 
-#: ../data/messages:239
+#: ../data/messages:241
 msgid "Size of the zone :"
 msgstr "Зона ҳажми :"
 
-#: ../data/messages:241
+#: ../data/messages:243
 msgid "Image to display on the zone :"
 msgstr "Зонада кўрсатиладиган тасвир :"
 
-#: ../data/messages:247
+#: ../data/messages:249
 msgid "Sub-docks' visibility"
 msgstr "Док-ичида-докнинг кўрсатилиши"
 
-#: ../data/messages:257 ../data/messages:261
+#: ../data/messages:259 ../data/messages:263
 msgid "in ms."
 msgstr "мсек ларда."
 
-#: ../data/messages:259
+#: ../data/messages:261
 msgid "Delay before displaying a sub-dock:"
 msgstr "Док-ичида-докни намойиш қилишдан аввал кутиш:"
 
-#: ../data/messages:263
+#: ../data/messages:265
 msgid "Delay before leaving a sub-dock takes effect:"
 msgstr ""
 
-#: ../data/messages:265
+#: ../data/messages:267
 msgid "TaskBar"
 msgstr "Вазифалар Панели"
 
-#: ../data/messages:269
+#: ../data/messages:271
 msgid ""
 "Cairo-Dock will then act as your taskbar. It is recommended to remove any "
 "other taskbars."
@@ -3160,34 +3117,34 @@ msgstr ""
 "Cairo-Dock вазифалар панели сифатида ишлайди. Бошқа вазифа панелларини олиб "
 "ташлаш тавсия этилади."
 
-#: ../data/messages:271
+#: ../data/messages:273
 msgid "Show currently opened applications in the dock?"
 msgstr "Очилган қўлланмаларни докда кўрсатилсинми?"
 
-#: ../data/messages:273
+#: ../data/messages:275
 msgid ""
 "Allows launchers to act as applications when their programs are running and "
 "displays a marker on icons to indicate this. You can launch other occurences "
 "of the program with SHIFT+click."
 msgstr ""
 
-#: ../data/messages:275
+#: ../data/messages:277
 msgid "Mix launchers and applications"
 msgstr "Ишга туширгичларни ва қўлланмаларни аралаштириш"
 
-#: ../data/messages:277
+#: ../data/messages:279
 msgid "Only show applications on current desktop"
 msgstr "Ушбу иш столида Фақат қўлланмаларни кўрсатиш"
 
-#: ../data/messages:279
+#: ../data/messages:281
 msgid "Only show icons whose windows are minimised"
 msgstr "Фақат ойналари ихчамлаштирилган нишончаларни кўрсатиш"
 
-#: ../data/messages:295
+#: ../data/messages:297
 msgid "Automatically add a separator"
 msgstr "Автоматик тарзда ажратувчини қўшиш"
 
-#: ../data/messages:297
+#: ../data/messages:299
 msgid ""
 "This allows you to group all the windows of a given application into a "
 "unique sub-dock, and to act on all of the windows at the same time."
@@ -3195,23 +3152,23 @@ msgstr ""
 "Бу берилган қўлланманинг барча ойналарини ягона док-ичида-докка гуруҳлашга "
 "ва барча ойналар устида бир вақтнинг ўзида ишлашга имкон беради."
 
-#: ../data/messages:299
+#: ../data/messages:301
 msgid "Group windows from the same application in a sub-dock ?"
 msgstr "Бир хил қўлланмадан чиққан ойналарни док-ичида-докка гуруҳлансинми ?"
 
-#: ../data/messages:301 ../data/messages:311
+#: ../data/messages:303 ../data/messages:313
 msgid "Enter the class of the applications, separated by a semi-colon ';'"
 msgstr ""
 
-#: ../data/messages:303 ../data/messages:313
+#: ../data/messages:305 ../data/messages:315
 msgid "\t\tExcept the following classes:"
 msgstr "\t\tҚуйидаги таснифлардан ташқари:"
 
-#: ../data/messages:305
+#: ../data/messages:307
 msgid "Representation"
 msgstr "Намойиш қилиш"
 
-#: ../data/messages:307
+#: ../data/messages:309
 msgid ""
 "If not set, the icon provided by X for each application will be used. If "
 "set, the same icon as the corresponding launcher will be used for each "
@@ -3221,11 +3178,11 @@ msgstr ""
 "ишлатилади. Агар ўрнатилган бўлса, тегишли ишга туширгич билан бир хил "
 "нишонча ҳар бир қўлланма учун ишлатилади."
 
-#: ../data/messages:309
+#: ../data/messages:311
 msgid "Overwrite the X icon with the launchers' icon?"
 msgstr "X нишончани устини ишга туширгичининг нишончаси билан ёпилсинми?"
 
-#: ../data/messages:315
+#: ../data/messages:317
 msgid ""
 "A composite manager is required to display the thumbnail.\n"
 "OpenGL is required to draw the icon bent backwards."
@@ -3233,77 +3190,77 @@ msgstr ""
 "Эскизларни кўрсатиш учун композит бошқарувчиси талаб этилади.\n"
 "Нишончани орқа томонга эгиб чизиш учун OpenGL талаб этилади."
 
-#: ../data/messages:317
+#: ../data/messages:319
 msgid "How to draw minimised windows ?"
 msgstr "Ихчамлаштирилган ойналар қандай чизилади ?"
 
-#: ../data/messages:319
+#: ../data/messages:321
 msgid "Make the icon transparent"
 msgstr "Нишончани шаффоф қилиш"
 
-#: ../data/messages:321
+#: ../data/messages:323
 msgid "Show a window's thumbnail"
 msgstr "Ойна эскизини кўрсатиш"
 
-#: ../data/messages:323
+#: ../data/messages:325
 msgid "Draw it bent backwards"
 msgstr "Уни орқага эгиб чизиш"
 
-#: ../data/messages:325
+#: ../data/messages:327
 msgid "Transparency of icons whose window is minimised:"
 msgstr "Ойналари ихчамлаштирилган нишончаларнинг шаффофлиги:"
 
-#: ../data/messages:327 ../data/messages:477 ../data/messages:603
-#: ../data/messages:629 ../data/messages:719
+#: ../data/messages:329 ../data/messages:483 ../data/messages:609
+#: ../data/messages:635 ../data/messages:725
 msgid "Opaque"
 msgstr "Хира"
 
-#: ../data/messages:329 ../data/messages:475 ../data/messages:601
-#: ../data/messages:627 ../data/messages:717
+#: ../data/messages:331 ../data/messages:481 ../data/messages:607
+#: ../data/messages:633 ../data/messages:723
 msgid "Transparent"
 msgstr "Шаффоф"
 
-#: ../data/messages:331
+#: ../data/messages:333
 msgid "Play a short animation of the icon when its window becomes active"
 msgstr "Нишонча ойнаси фаоллашганда қисқа анимация ўйнаш"
 
-#: ../data/messages:333
+#: ../data/messages:335
 msgid "\"...\" will be added at the end if the name is too long."
 msgstr "Агар исм узунлик қилса, охирига \"...\" қўшилади."
 
-#: ../data/messages:335
+#: ../data/messages:337
 msgid "Maximum number of caracters in application name:"
 msgstr "Қўлланма номидаги максимал тимсоллар сони:"
 
-#: ../data/messages:337
+#: ../data/messages:339
 msgid "Interaction"
 msgstr "Мулоқот"
 
-#: ../data/messages:339
+#: ../data/messages:341
 msgid "Action on middle-click on the related application"
 msgstr "Тегишли қўлланма устига ўрта тугма босилгандаги ҳаракат"
 
-#: ../data/messages:341
+#: ../data/messages:343
 msgid "Nothing"
 msgstr "Ҳеч нарса"
 
-#: ../data/messages:345
+#: ../data/messages:347
 msgid "Minimize"
 msgstr "Ихчамлаштириш"
 
-#: ../data/messages:347
+#: ../data/messages:349
 msgid "Launch new"
 msgstr "Янги ишга тушириш"
 
-#: ../data/messages:349
+#: ../data/messages:351
 msgid "Lower"
 msgstr "Пастроқ"
 
-#: ../data/messages:351
+#: ../data/messages:353
 msgid "This is the default behaviour of most taskbars."
 msgstr "Бу кўпчилик вазифа панелларинг асли ўрнатилган ўзини тутиши."
 
-#: ../data/messages:353
+#: ../data/messages:355
 msgid ""
 "Minimise the window when its icon is clicked, if it was already the active "
 "window ?"
@@ -3311,31 +3268,31 @@ msgstr ""
 "Агар у аллақачон фаол ойна бўлса, нишончаси устига босилганда "
 "ихчамлаштирилсинми ?"
 
-#: ../data/messages:355
+#: ../data/messages:357
 msgid "Only if your Window Manager supports it."
 msgstr "Фақт сизнинг Ойна Бошқарувчингиз буни қўллаб қувватласагина."
 
-#: ../data/messages:357
+#: ../data/messages:359
 msgid ""
 "Present windows preview on click when several windows are grouped togather"
 msgstr ""
 "Бир қанча ойналар бирга гуруҳланганда ойналар қисқа маълумотини кўрсатиш"
 
-#: ../data/messages:359
+#: ../data/messages:361
 msgid "Highlight applications requiring your attention with a dialog bubble"
 msgstr ""
 "Эътиборингизни талаб қиладиган қўлланмаларни диалог матн ойнаси билан "
 "ажратиб кўрсатиш"
 
-#: ../data/messages:361
+#: ../data/messages:363
 msgid "in seconds"
 msgstr "секундларда"
 
-#: ../data/messages:363
+#: ../data/messages:365
 msgid "Duration of the dialog:"
 msgstr "Диалог давомийлиги:"
 
-#: ../data/messages:365
+#: ../data/messages:367
 msgid ""
 "It will notify you even if, for instance, you are watching a movie in full "
 "screen or you are on another desktop.\n"
@@ -3343,259 +3300,267 @@ msgstr ""
 "Бу ҳатто, масалан сиз тўла экранда кино кўраётган бўлсангиз ёки бошқа иш "
 "столида бўлсангиз ҳам хабар беради.\n"
 
-#: ../data/messages:367
+#: ../data/messages:369
 msgid "Force the following applications to demand your attention"
 msgstr "Қуйидаги қўлланмаларни сизнинг эътиборингизни қаратишга мажбурлаш"
 
-#: ../data/messages:369
+#: ../data/messages:371
 msgid "Highlight applications demanding your attention with an animation"
 msgstr ""
 "Эътиборингизни талаб қиладиган қўлланмаларни анимация билан ажратиб кўрсатиш"
 
-#: ../data/messages:373
+#: ../data/messages:375
+msgid "Enable new code paths on X11 to test for regressions."
+msgstr ""
+
+#: ../data/messages:377
+msgid "Experimental drawing code (X11)"
+msgstr ""
+
+#: ../data/messages:379
 msgid "Animations speed"
 msgstr "Анимациялар тезлиги"
 
-#: ../data/messages:375
+#: ../data/messages:381
 msgid "Animate sub-docks when they appear"
 msgstr "Док-ичида-доклар пайдо бўлганда анимациялаш"
 
-#: ../data/messages:377
+#: ../data/messages:383
 msgid ""
 "Icons will appear folded on themselves and will then unfold until they fill "
 "the whole dock. The smaller this value, the faster this will be."
 msgstr ""
 
-#: ../data/messages:379
+#: ../data/messages:385
 msgid "Animation unfolding duration:"
 msgstr "Анимация очилиш давомийлиги:"
 
-#: ../data/messages:381 ../data/messages:389 ../data/messages:393
-#: ../data/messages:401 ../data/messages:405
+#: ../data/messages:387 ../data/messages:395 ../data/messages:399
+#: ../data/messages:407 ../data/messages:411
 msgid "fast"
 msgstr "тез"
 
-#: ../data/messages:383 ../data/messages:391 ../data/messages:395
-#: ../data/messages:403 ../data/messages:407
+#: ../data/messages:389 ../data/messages:397 ../data/messages:401
+#: ../data/messages:409 ../data/messages:413
 msgid "slow"
 msgstr "секин"
 
-#: ../data/messages:385 ../data/messages:397
+#: ../data/messages:391 ../data/messages:403
 msgid "The more there are, the slower it will be"
 msgstr "Қанча кўп бўлса, шунча секин бўлади"
 
-#: ../data/messages:387
+#: ../data/messages:393
 msgid "Number of steps in the zoom animation (grow/shrink):"
 msgstr ""
 
-#: ../data/messages:399
+#: ../data/messages:405
 msgid "Number of steps in the auto-hide animation (move up/move down):"
 msgstr ""
 
-#: ../data/messages:409
+#: ../data/messages:415
 msgid "Refresh rate"
 msgstr ""
 
-#: ../data/messages:411 ../data/messages:415 ../data/messages:419
+#: ../data/messages:417 ../data/messages:421 ../data/messages:425
 msgid "in Hz. This is to adjust behaviour relative to your CPU power."
 msgstr ""
 "Hz да. Бу сизнинг CPU қувватига нисбатан ўзини тутишни мослаштириш учун."
 
-#: ../data/messages:413
+#: ../data/messages:419
 msgid "Refresh rate when moving cursor into the dock:"
 msgstr ""
 
-#: ../data/messages:417
+#: ../data/messages:423
 msgid "Animation frequency for the OpenGL backend:"
 msgstr "OpenGL бекенди учун анимация частотаси:"
 
-#: ../data/messages:421
+#: ../data/messages:427
 msgid "Animation frequency for the Cairo backend:"
 msgstr "Cairo бекенди учун анимация частотаси:"
 
-#: ../data/messages:423
+#: ../data/messages:429
 msgid ""
 "The transparency gradation pattern will then be re-calculated in real time. "
 "May need more CPU power."
 msgstr ""
 
-#: ../data/messages:425
+#: ../data/messages:431
 msgid "Reflections should be calculated in real-time?"
 msgstr ""
 
-#: ../data/messages:427
+#: ../data/messages:433
 msgid "Connection to the Internet"
 msgstr "Интернетга Уланиш"
 
-#: ../data/messages:429
+#: ../data/messages:435
 msgid ""
 "Maximum time in seconds that you allow the connection to the server to take. "
 "This only limits the connection phase,  once the dock has connected this "
 "option is of no more use."
 msgstr ""
 
-#: ../data/messages:431
+#: ../data/messages:437
 msgid "Connection timeout :"
 msgstr "Алоқа узилиш вақти :"
 
-#: ../data/messages:433
+#: ../data/messages:439
 msgid ""
 "Maximum time in seconds that you allow the whole operation to last. Some "
 "themes can be up to a few MB."
 msgstr ""
 
-#: ../data/messages:435
+#: ../data/messages:441
 msgid "Maximum time to download a file:"
 msgstr "Файлни кўчириб олиш учун максимал вақт:"
 
-#: ../data/messages:437
+#: ../data/messages:443
 msgid "Use this option if you experience problems to connect."
 msgstr "Ушбу хоссадан алоқа ўрнатишда муаммоларга дуч келсангиз фойдаланинг."
 
-#: ../data/messages:439
+#: ../data/messages:445
 msgid "Force IPv4 ?"
 msgstr "IPv4 мажбурлансинми?"
 
-#: ../data/messages:441
+#: ../data/messages:447
 msgid "Use this option if you connect to the Internet through a proxy."
 msgstr "Агар Интернетга прокси орқали улансангиз ушбу хоссадан фойдаланинг."
 
-#: ../data/messages:443
+#: ../data/messages:449
 msgid "Are you behind a proxy ?"
 msgstr "Прокси ортидамисиз?"
 
-#: ../data/messages:445
+#: ../data/messages:451
 msgid "Proxy name :"
 msgstr "Прокси номи :"
 
-#: ../data/messages:447
+#: ../data/messages:453
 msgid "Port :"
 msgstr "Порт :"
 
-#: ../data/messages:449 ../data/messages:453
+#: ../data/messages:455 ../data/messages:459
 msgid ""
 "Let empty if you don't need to log-in to the proxy with a user/password."
 msgstr ""
 "Агар проксига фойдаланувчи/махфий сўз билан киришингиз керак бўлмаса бўш "
 "қолдиринг"
 
-#: ../data/messages:451
+#: ../data/messages:457
 msgid "User :"
 msgstr "Фойдаланувчи :"
 
-#: ../data/messages:455
+#: ../data/messages:461
 msgid "Password :"
 msgstr "Махфий сўз :"
 
-#: ../data/messages:465 ../data/messages:483 ../data/messages:979
+#: ../data/messages:471 ../data/messages:489 ../data/messages:985
 msgid "Colour gradation"
 msgstr "Ранг градиенти"
 
-#: ../data/messages:467
+#: ../data/messages:473
 msgid "Use a background image."
 msgstr "Орқа фон тасвиридан фойдаланиш."
 
-#: ../data/messages:471 ../data/messages:685 ../data/messages:739
-#: ../data/messages:759 ../data/messages:797
+#: ../data/messages:477 ../data/messages:691 ../data/messages:745
+#: ../data/messages:765 ../data/messages:803
 msgid "Image file:"
 msgstr "Тасвир файли:"
 
-#: ../data/messages:473
+#: ../data/messages:479
 msgid "Image's transparency :"
 msgstr "Тасвир шаффофлиги :"
 
-#: ../data/messages:479 ../data/messages:985
+#: ../data/messages:485 ../data/messages:991
 msgid "Repeat image as a pattern to fill background?"
 msgstr ""
 
-#: ../data/messages:481
+#: ../data/messages:487
 msgid "Use a colour gradation."
 msgstr "Ранг градиентидан фойдаланиш."
 
-#: ../data/messages:485 ../data/messages:987
+#: ../data/messages:491 ../data/messages:993
 msgid "Bright colour:"
 msgstr "Оч ранг:"
 
-#: ../data/messages:487 ../data/messages:989
+#: ../data/messages:493 ../data/messages:995
 msgid "Dark colour:"
 msgstr "Тўқ ранг:"
 
-#: ../data/messages:489
+#: ../data/messages:495
 msgid "In degrees, in relation to the vertical"
 msgstr "Даражаларда, вертикалга нисбатан"
 
-#: ../data/messages:491
+#: ../data/messages:497
 msgid "Angle of the gradation :"
 msgstr "Градиент бурчаги :"
 
-#: ../data/messages:493
+#: ../data/messages:499
 msgid "If not nul, it will form stripes."
 msgstr ""
 
-#: ../data/messages:495
+#: ../data/messages:501
 msgid "Repeat the gradation this number of times:"
 msgstr "Градиентни шунча марта такрорлаш:"
 
-#: ../data/messages:497
+#: ../data/messages:503
 msgid "Percentage of the bright colour:"
 msgstr "Оч ранг фоизи:"
 
-#: ../data/messages:499
+#: ../data/messages:505
 msgid "Background when hidden"
 msgstr "Яширин бўлгандаги орқа фон"
 
-#: ../data/messages:501
+#: ../data/messages:507
 msgid "Several applets can be visible even when the dock is hidden"
 msgstr "Бир неча апплетлар ҳатто док яширин бўлса ҳам кўрсатилиши мумкин"
 
-#: ../data/messages:503
+#: ../data/messages:509
 msgid "Default background color when the dock is hidden"
 msgstr "Док яширинлигидаги асли ўрнатилган орқа фон ранги"
 
-#: ../data/messages:505
+#: ../data/messages:511
 msgid "External Frame"
 msgstr "Ташқи Рамка"
 
-#: ../data/messages:507 ../data/messages:511 ../data/messages:517
-#: ../data/messages:577 ../data/messages:655
+#: ../data/messages:513 ../data/messages:517 ../data/messages:523
+#: ../data/messages:583 ../data/messages:661
 msgid "in pixels."
 msgstr "пикселларда."
 
-#: ../data/messages:509 ../data/messages:561 ../data/messages:751
-#: ../data/messages:887
+#: ../data/messages:515 ../data/messages:567 ../data/messages:757
+#: ../data/messages:893
 msgid "Corner radius"
 msgstr "Бурчак радиуси"
 
-#: ../data/messages:513 ../data/messages:563 ../data/messages:889
+#: ../data/messages:519 ../data/messages:569 ../data/messages:895
 msgid "Outline width"
 msgstr "Ташқи чизиқ қалинлиги"
 
-#: ../data/messages:515 ../data/messages:557 ../data/messages:813
-#: ../data/messages:845 ../data/messages:883
+#: ../data/messages:521 ../data/messages:563 ../data/messages:819
+#: ../data/messages:851 ../data/messages:889
 msgid "Outline colour"
 msgstr "Ташқи чизиқ ранги"
 
-#: ../data/messages:519
+#: ../data/messages:525
 msgid "Margin between the frame and the icons or their reflects :"
 msgstr "Рамка ва нишончалар ёки уларнинг акслари ўртасидаги чегара чизиғи :"
 
-#: ../data/messages:521
+#: ../data/messages:527
 msgid "Are the bottom left and right corners rounded?"
 msgstr "Қуйи ва ўнг бурчаклар юмалоқлансинми?"
 
-#: ../data/messages:523 ../data/messages:991
+#: ../data/messages:529 ../data/messages:997
 msgid "Stretch the dock to always fill the screen"
 msgstr "Докни доим экранни тўлдирадиган қилиб ёйиш"
 
-#: ../data/messages:527
+#: ../data/messages:533
 msgid "Main Dock"
 msgstr "Асосий Док"
 
-#: ../data/messages:531
+#: ../data/messages:537
 msgid "Sub-Docks"
 msgstr "Док-ичида-Доклар"
 
-#: ../data/messages:537
+#: ../data/messages:543
 msgid ""
 "You can specify a ratio for the size of the sub-docks' icons, in relation to "
 "the main docks' icons size"
@@ -3603,76 +3568,76 @@ msgstr ""
 "Сиз Док-ичида-докларнинг ҳажми учун асосий докларнинг нишончалари ҳажмига "
 "нисбатан ўлчамни белгилашингиз мумкин"
 
-#: ../data/messages:539
+#: ../data/messages:545
 msgid "Ratio for the size of the sub-docks' icons :"
 msgstr "Док-ичида-докларнинг нишончалари ҳажми учун ўлчам :"
 
-#: ../data/messages:541 ../data/messages:777
+#: ../data/messages:547 ../data/messages:783
 msgid "smaller"
 msgstr "кичикроқ"
 
-#: ../data/messages:543
+#: ../data/messages:549
 msgid "larger"
 msgstr "каттароқ"
 
-#: ../data/messages:545
+#: ../data/messages:551
 msgid "Dialogs"
 msgstr "Диалоглар"
 
-#: ../data/messages:547
+#: ../data/messages:553
 msgid "Bubble"
 msgstr "Матн ойнаси"
 
-#: ../data/messages:555 ../data/messages:843 ../data/messages:869
-#: ../data/messages:881
+#: ../data/messages:561 ../data/messages:849 ../data/messages:875
+#: ../data/messages:887
 msgid "Background colour"
 msgstr "Орқа фон ранги"
 
-#: ../data/messages:559 ../data/messages:847 ../data/messages:867
+#: ../data/messages:565 ../data/messages:853 ../data/messages:873
 msgid "Text colour"
 msgstr "Матн ранги"
 
-#: ../data/messages:565
+#: ../data/messages:571
 msgid "Shape of the bubble:"
 msgstr "Матн ойнасининг шакли:"
 
-#: ../data/messages:567 ../data/messages:853 ../data/messages:891
+#: ../data/messages:573 ../data/messages:859 ../data/messages:897
 msgid "Font"
 msgstr "Шрифт"
 
-#: ../data/messages:569 ../data/messages:855
+#: ../data/messages:575 ../data/messages:861
 msgid "Otherwise the default's system one will be used."
 msgstr "Акс ҳолда асли системадагисидан фойдаланилади."
 
-#: ../data/messages:571 ../data/messages:857 ../data/messages:893
+#: ../data/messages:577 ../data/messages:863 ../data/messages:899
 msgid "Use a custom font for the text?"
 msgstr "Матн учун ўзгартирилган шрифт қўлланилсинми?"
 
-#: ../data/messages:573 ../data/messages:859 ../data/messages:895
+#: ../data/messages:579 ../data/messages:865 ../data/messages:901
 msgid "Text font:"
 msgstr "Матн шрифти:"
 
-#: ../data/messages:575 ../data/messages:631
+#: ../data/messages:581 ../data/messages:637
 msgid "Buttons"
 msgstr "Тугмалар"
 
-#: ../data/messages:579
+#: ../data/messages:585
 msgid "Size of buttons in the info-bubbles (width x height) :"
 msgstr "Инфо-матн ойналаридаги тугмалар ҳажми (эни x баландлиги) :"
 
-#: ../data/messages:581
+#: ../data/messages:587
 msgid "Name of an image to use for the yes/ok button :"
 msgstr "ҳа/ok тугмаси учун тасвир номи :"
 
-#: ../data/messages:583
+#: ../data/messages:589
 msgid "Name of an image to use for the no/cancel button :"
 msgstr "йўқ/бекор қилиш тугмаси учун тасвир номи :"
 
-#: ../data/messages:585
+#: ../data/messages:591
 msgid "Size of the icon displayed next to the text :"
 msgstr "Матн ёнида кўрсатиладиган нишонча ҳажми :"
 
-#: ../data/messages:591
+#: ../data/messages:597
 msgid ""
 "This can be customized for each desklet separately.\n"
 "Choose 'Custom decoration' to define your own decorations below"
@@ -3680,11 +3645,11 @@ msgstr ""
 "Бу ҳар бир десклет учун алоҳида ўзгартирилиши мумкин.\n"
 "Қуйида ўз декорацияларингизни белгилаш учун 'Ўзгарган декорация' ни танланг"
 
-#: ../data/messages:593
+#: ../data/messages:599
 msgid "Choose a default decoration for all desklets :"
 msgstr "Барча десклетлар учун асли ўрнатилган декорацияни танланг :"
 
-#: ../data/messages:595
+#: ../data/messages:601
 msgid ""
 "It's an image that will be displayed below the drawings, like a frame for "
 "example. Leave empty to not use any."
@@ -3692,51 +3657,51 @@ msgstr ""
 "Бу тасвир чизмалар остида кўрсатилади, масалан рамка каби. Ҳеч нарсадан "
 "фойдаланмаслик учун бўш қолдиринг."
 
-#: ../data/messages:597
+#: ../data/messages:603
 msgid "Background image :"
 msgstr "Орқа фон тасвири :"
 
-#: ../data/messages:599
+#: ../data/messages:605
 msgid "Background transparency :"
 msgstr "Орқа фон шаффофлиги :"
 
-#: ../data/messages:605
+#: ../data/messages:611
 msgid "in pixels. Use this to adjust the left position of the drawings."
 msgstr ""
 "пикселларда. Расмларнинг чап жойлашувини мослаш учун шундан фойдаланинг."
 
-#: ../data/messages:607
+#: ../data/messages:613
 msgid "Left offset :"
 msgstr "Чап силжиш:"
 
-#: ../data/messages:609
+#: ../data/messages:615
 msgid "in pixels. Use this to adjust the top position of the drawings."
 msgstr ""
 "пикселларда. Расмларнинг юқори жойлашувини мослаш учун шундан фойдаланинг."
 
-#: ../data/messages:611
+#: ../data/messages:617
 msgid "Top offset :"
 msgstr "Юқори силжиш:"
 
-#: ../data/messages:613
+#: ../data/messages:619
 msgid "in pixels. Use this to adjust the right position of the drawings."
 msgstr ""
 "пикселларда. Расмларнинг ўнг жойлашувини мослаш учун шундан фойдаланинг."
 
-#: ../data/messages:615
+#: ../data/messages:621
 msgid "Right offset :"
 msgstr "Ўнг силжиш :"
 
-#: ../data/messages:617
+#: ../data/messages:623
 msgid "in pixels. Use this to adjust the bottom position of the drawings."
 msgstr ""
 "пикселларда. Расмларнинг қуйи жойлашувини мослаш учун шундан фойдаланинг."
 
-#: ../data/messages:619
+#: ../data/messages:625
 msgid "Bottom offset :"
 msgstr "Қуйи силжиш :"
 
-#: ../data/messages:621
+#: ../data/messages:627
 msgid ""
 "It's an image that will be displayed above the drawings, like a reflection "
 "for example. Leave empty to not use any."
@@ -3744,136 +3709,134 @@ msgstr ""
 "Бу тасвир чизмалар устида кўрсатилади, масалан акс каби. Ҳеч нарсадан "
 "фойдаланмаслик учун бўш қолдиринг."
 
-#: ../data/messages:623
+#: ../data/messages:629
 msgid "Foreground image :"
 msgstr "Олди фон тасвири :"
 
-#: ../data/messages:625
+#: ../data/messages:631
 msgid "Foreground tansparency :"
 msgstr "Олди фон шаффофлиги :"
 
-#: ../data/messages:633
+#: ../data/messages:639
 msgid "Buttons size :"
 msgstr "Тугмалар ҳажми :"
 
-#: ../data/messages:635 ../data/messages:641
+#: ../data/messages:641 ../data/messages:647
 msgid "Name of an image to use for the 'rotate' button :"
 msgstr "'айлантириш' тугмаси учун фойдаланиладиган тасвир номи :"
 
-#: ../data/messages:637
+#: ../data/messages:643
 msgid "Name of an image to use for the 'reattach' button :"
 msgstr "'қайта қўшиш' тугмаси учун фойдаланиладиган тасвир номи :"
 
-#: ../data/messages:639
+#: ../data/messages:645
 msgid "Name of an image to use for the 'depth rotate' button :"
 msgstr "'чуқур айлантириш' тугмаси учун фойдаланиладиган тасвир номи :"
 
-#: ../data/messages:645
+#: ../data/messages:651
 msgid "Icons' themes"
 msgstr "Нишончалар мавзулари"
 
-#: ../data/messages:647
+#: ../data/messages:653
 msgid "Choose an icon theme :"
 msgstr "Нишонча мавзусини танланг:"
 
-#: ../data/messages:649
+#: ../data/messages:655
 msgid "Image filename to use as a background for icons :"
-msgstr ""
-"Нишончалар учун орқа фон сифатида фойдаланиладиган тасвир файли номи :"
+msgstr "Нишончалар учун орқа фон сифатида фойдаланиладиган тасвир файли номи :"
 
-#: ../data/messages:651
+#: ../data/messages:657
 msgid "Icons size"
 msgstr "Нишончалар ҳажми"
 
-#: ../data/messages:653 ../data/messages:671
+#: ../data/messages:659 ../data/messages:677
 msgid "Icons' size at rest (width x height) :"
 msgstr ""
 
-#: ../data/messages:657
+#: ../data/messages:663
 msgid "Space between icons :"
 msgstr "Нишончалар орасидаги масофа:"
 
-#: ../data/messages:659
+#: ../data/messages:665
 msgid "Zoom effect"
 msgstr "Яқинлаштириш эффекти"
 
-#: ../data/messages:661
-msgid ""
-"set to 1 if you don't want the icons to zoom when you hover over them."
+#: ../data/messages:667
+msgid "set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr ""
 "Агар устига келганда нишончалар яқинлаштирилмаслигини хоҳласангиз 1 га "
 "ўрнатинг."
 
-#: ../data/messages:663
+#: ../data/messages:669
 msgid "Maximum zoom of the icons :"
 msgstr "Нишончаларнинг максимал яқинлаштирилиши :"
 
-#: ../data/messages:665
+#: ../data/messages:671
 msgid ""
 "in pixels. Outside of this space (centered on the mouse), there is no zoom."
 msgstr ""
 
-#: ../data/messages:667
+#: ../data/messages:673
 msgid "Width of the space in which the zoom will be effective :"
 msgstr ""
 
-#: ../data/messages:669
+#: ../data/messages:675
 msgid "Separators"
 msgstr "Ажратувчилар"
 
-#: ../data/messages:673
+#: ../data/messages:679
 msgid "Force separator's image size to stay constant?"
 msgstr "Ажратувчи тасвири ўзгармай туришга мажбурлансинми?"
 
-#: ../data/messages:675
+#: ../data/messages:681
 msgid ""
 "Only the default, 3D-plane and curve views support flat and physical "
 "separators. Flat separators are rendered differently according to the view."
 msgstr ""
 
-#: ../data/messages:677
+#: ../data/messages:683
 msgid "How to draw the separators?"
 msgstr "Ажратувчилар қандай чизилади?"
 
-#: ../data/messages:679
+#: ../data/messages:685
 msgid "Use an image."
 msgstr "Тасвирдан фойдаланиш."
 
-#: ../data/messages:681
+#: ../data/messages:687
 msgid "Flat separator"
 msgstr "Текис ажратувчи"
 
-#: ../data/messages:683
+#: ../data/messages:689
 msgid "Physical separator"
 msgstr ""
 
-#: ../data/messages:687
+#: ../data/messages:693
 msgid ""
 "Make the separator's image revolve when dock is on top/on the left/on the "
 "right?"
 msgstr "Док юқорида/чапда/ўнгдалигида ажратувчи тасвири айлантирилсинми?"
 
-#: ../data/messages:695
+#: ../data/messages:701
 msgid "Colour of flat separators :"
 msgstr "Текис ажратувчиларнинг ранги :"
 
-#: ../data/messages:697
+#: ../data/messages:703
 msgid "Reflections"
 msgstr "Акс кўринишлар"
 
-#: ../data/messages:699
+#: ../data/messages:705
 msgid "Reflection visibility"
 msgstr "Акс кўринишнинг кўрсатилиши"
 
-#: ../data/messages:701
+#: ../data/messages:707
 msgid "light"
 msgstr "енгил"
 
-#: ../data/messages:703
+#: ../data/messages:709
 msgid "strong"
 msgstr "кучли"
 
-#: ../data/messages:705
+#: ../data/messages:711
 msgid ""
 "In percent of the icon's size. This parameter influence the total height of "
 "the dock."
@@ -3881,66 +3844,66 @@ msgstr ""
 "Нишонча ҳажмининг фоизида. Ушбу параметр докнинг умумий баландлигига таъсир "
 "қилади."
 
-#: ../data/messages:707
+#: ../data/messages:713
 msgid "Height of the reflection:"
 msgstr "Акс кўриниш баландлиги:"
 
-#: ../data/messages:709
+#: ../data/messages:715
 msgid "small"
 msgstr "кичик"
 
-#: ../data/messages:711
+#: ../data/messages:717
 msgid "tall"
 msgstr "баланд"
 
-#: ../data/messages:713
+#: ../data/messages:719
 msgid ""
 "It is their transparency when the dock is at rest; they will \"materialize\" "
 "progressively as the dock grows up. The closer to 0, the more transparent "
 "they will be."
 msgstr ""
 
-#: ../data/messages:715
+#: ../data/messages:721
 msgid "Icons' transparency at rest :"
 msgstr ""
 
-#: ../data/messages:721
+#: ../data/messages:727
 msgid "Link the icons with a string"
 msgstr "Нишончаларни ип билан боғлаш"
 
-#: ../data/messages:723
+#: ../data/messages:729
 msgid "Linewidth of the string, in pixels (0 to not use string) :"
 msgstr "Ипнинг қалинлиги, пикселларда (ипдан фойдаланмаслик учун 0) :"
 
-#: ../data/messages:725
+#: ../data/messages:731
 msgid "Colour of the string (red, blue, green, alpha) :"
 msgstr "Ип ранги (қизил, кўк, яшил, шаффоф) :"
 
-#: ../data/messages:729
+#: ../data/messages:735
 msgid "Indicator of the active window"
 msgstr "Фаол ойна индикатори"
 
-#: ../data/messages:737 ../data/messages:741 ../data/messages:745
+#: ../data/messages:743 ../data/messages:747 ../data/messages:751
 msgid "Frame"
 msgstr "Рамка"
 
-#: ../data/messages:743
+#: ../data/messages:749
 msgid "Fill background"
 msgstr "Орқа фонни тўлдириш"
 
-#: ../data/messages:749
+#: ../data/messages:755
 msgid "Linewidth"
 msgstr "Чизиқ қалинлиги"
 
-#: ../data/messages:753 ../data/messages:785
+#: ../data/messages:759 ../data/messages:791
 msgid "Draw indicator above the icon?"
 msgstr "Нишонча устига индикатор чизилсинми?"
 
-#: ../data/messages:755
+#: ../data/messages:761
 msgid "Indicator of active launcher"
 msgstr "Фаол ишга туширгич индикатори"
 
-#: ../data/messages:757
+#: ../data/messages:763
 msgid ""
 "Indicators are drawn on launchers icons to show that they have already been "
 "launched. Leave blank to use the default one."
@@ -3948,7 +3911,7 @@ msgstr ""
 "Аллақачон ишга туширилганини кўрсатиш учун ишга туширгич нишончалари устида "
 "индикаторлар чизилади. Асли ўрнатилганини қўллаш учун бўш қолдиринг."
 
-#: ../data/messages:761
+#: ../data/messages:767
 msgid ""
 "The indicator is drawn on active launchers, but you may want to display it "
 "on applications too."
@@ -3956,11 +3919,11 @@ msgstr ""
 "Индикатор фаол ишга туширгичлар устига чизилади, лекин уни бошқа қўлланмалар "
 "устига ҳам чизилишини хоҳлашингиз мумкин."
 
-#: ../data/messages:763
+#: ../data/messages:769
 msgid "Display an indicator on application icons too ?"
 msgstr "Индикаторни қўлланма нишончалари устида ҳам кўрсатилсинми ?"
 
-#: ../data/messages:765
+#: ../data/messages:771
 msgid ""
 "Relatively to the icons' size. You can use this parameter to adjust the "
 "indicator's vertical position.\n"
@@ -3972,11 +3935,11 @@ msgstr ""
 "Агар индикатор нишончага боғланган бўлса, силжиш юқорига бўлади, акс ҳолда "
 "қуйига бўлади."
 
-#: ../data/messages:767
+#: ../data/messages:773
 msgid "Vertical offset :"
 msgstr "Вертикал силжиш :"
 
-#: ../data/messages:769
+#: ../data/messages:775
 msgid ""
 "If the indicator is linked to the icon, it will then be zoomed like the icon "
 "and the offset will be upwards.\n"
@@ -3987,11 +3950,11 @@ msgstr ""
 "силжиш юқорига бўлади, акс ҳолда у тўғридан-тўғри докка чизилади ва силжиш "
 "қуйига бўлади."
 
-#: ../data/messages:771
+#: ../data/messages:777
 msgid "Link the indicator with its icon?"
 msgstr "Индикаторни нишончаси билан боғлансинми?"
 
-#: ../data/messages:773
+#: ../data/messages:779
 msgid ""
 "You can choose to make the indicator smaller or bigger than the icons. The "
 "bigger the value is, the bigger the indicator is. 1 means the indicator will "
@@ -4001,43 +3964,43 @@ msgstr ""
 "Қиймат қанча катта бўлса, индикатор шунча катта бўлади. 1 индикатор "
 "нишончалар билан бир хил катталикда бўлишини англатади."
 
-#: ../data/messages:775
+#: ../data/messages:781
 msgid "Indicator size ratio :"
 msgstr "Нишонча ҳажми ўлчами :"
 
-#: ../data/messages:779
+#: ../data/messages:785
 msgid "bigger"
 msgstr "каттароқ"
 
-#: ../data/messages:781
+#: ../data/messages:787
 msgid ""
-"Use it to make the indicator follow the orientation of the dock "
-"(top/bottom/right/left)."
+"Use it to make the indicator follow the orientation of the dock (top/bottom/"
+"right/left)."
 msgstr ""
-"Бундан нишонча док ориентациясига эргашиши учун фойдаланинг "
-"(юқори/паст/ўнг/чап)."
+"Бундан нишонча док ориентациясига эргашиши учун фойдаланинг (юқори/паст/ўнг/"
+"чап)."
 
-#: ../data/messages:783
+#: ../data/messages:789
 msgid "Rotate the indicator with dock?"
 msgstr "Нишонча док билан бирга айлантирилсинми?"
 
-#: ../data/messages:787
+#: ../data/messages:793
 msgid "Indicator of grouped windows"
 msgstr "Гуруҳланган ойналар индикатори"
 
-#: ../data/messages:789
+#: ../data/messages:795
 msgid "How to show that several icons are grouped :"
 msgstr "Бир қанча нишончалар гуруҳланганини қандай кўрсатиш :"
 
-#: ../data/messages:791
+#: ../data/messages:797
 msgid "Draw an emblem"
 msgstr "Ёрлиқ чизиш"
 
-#: ../data/messages:793
+#: ../data/messages:799
 msgid "Draw the sub-dock's icons as a stack"
 msgstr "Док-ичида-док нишончаларини стек сифатида чизиш"
 
-#: ../data/messages:795
+#: ../data/messages:801
 msgid ""
 "It only makes sense if you chose to group the applis of the same class "
 "together. Leave blank to use the default one."
@@ -4045,133 +4008,133 @@ msgstr ""
 "Бу фақат бир хил таснифдаги апплетларни гуруҳлаганда фойда бериши мумкин. "
 "Асли ўрнатилганидан фойдаланиш учун бўш қолдиринг."
 
-#: ../data/messages:799
+#: ../data/messages:805
 msgid "Zoom the indicator with its icon?"
 msgstr "Индикаторни нишончаси билан яқинлаштирилсинми?"
 
-#: ../data/messages:801
+#: ../data/messages:807
 msgid "Progress bars"
 msgstr "Жараён панеллари"
 
-#: ../data/messages:809
+#: ../data/messages:815
 msgid "Start color"
 msgstr "Бошланғич ранг"
 
-#: ../data/messages:811
+#: ../data/messages:817
 msgid "End color"
 msgstr "Якунловчи ранг"
 
-#: ../data/messages:815
+#: ../data/messages:821
 msgid "Bar thickness"
 msgstr "Панел қалинлиги"
 
-#: ../data/messages:817
+#: ../data/messages:823
 msgid "Labels"
 msgstr "Ёрлиқлар"
 
-#: ../data/messages:819
+#: ../data/messages:825
 msgid "Label visibility"
 msgstr "Ёрлиқ кўрсатилиши"
 
-#: ../data/messages:821
+#: ../data/messages:827
 msgid "Show labels:"
 msgstr "Ёрлиқларни кўрсатиш:"
 
-#: ../data/messages:825
+#: ../data/messages:831
 msgid "On pointed icon"
 msgstr "Белгиланган нишончада"
 
-#: ../data/messages:827
+#: ../data/messages:833
 msgid "On all icons"
 msgstr "Барча нишончаларда"
 
-#: ../data/messages:829
+#: ../data/messages:835
 msgid "Neighbouring labels visibility:"
 msgstr "Қўшни ёрлиқларнинг кўрсатилиши:"
 
-#: ../data/messages:831
+#: ../data/messages:837
 msgid "more visible"
 msgstr "яхшироқ кўринадиган"
 
-#: ../data/messages:833
+#: ../data/messages:839
 msgid "less visible"
 msgstr "камроқ кўринадиган"
 
-#: ../data/messages:849
+#: ../data/messages:855
 msgid "Draw the outline of the text?"
 msgstr "Матн ташқи чизиғини чизилсинми?"
 
-#: ../data/messages:851
+#: ../data/messages:857
 msgid "Margin around the text (in pixels) :"
 msgstr "Матн атрофи чегара чизиғи (пикселларда) :"
 
-#: ../data/messages:861
+#: ../data/messages:867
 msgid "Quick-info are short information drawn on the icons."
 msgstr "Тезкор ва қисқа маълумот нишончалар устига чизилади."
 
-#: ../data/messages:863
+#: ../data/messages:869
 msgid "Quick-info"
 msgstr "Тезкор маълумот"
 
-#: ../data/messages:865
+#: ../data/messages:871
 msgid "Use the same look as the labels?"
 msgstr "Ёрлиқлар билан бир хил ранг қўлланилсинми?"
 
-#: ../data/messages:885
+#: ../data/messages:891
 msgid "Text colour:"
 msgstr "Матн ранги:"
 
-#: ../data/messages:917
+#: ../data/messages:923
 msgid "Visibility of the dock"
 msgstr "Докнинг кўрсатилиши"
 
-#: ../data/messages:951 ../data/messages:975
+#: ../data/messages:957 ../data/messages:981
 msgid "Same as main dock"
 msgstr "Асосий док билан бир хил"
 
-#: ../data/messages:953
+#: ../data/messages:959
 msgid "Tiny"
 msgstr "Митти"
 
-#: ../data/messages:967
+#: ../data/messages:973
 msgid "Leave it empty to use the same view as the main dock."
 msgstr "Асосий док билан бир хил кўринишдан фойдаланиш учун бўш қолдиринг."
 
-#: ../data/messages:969
+#: ../data/messages:975
 msgid "Choose the view for this dock :/"
 msgstr "Ушбу док учун кўринишни танланг :/"
 
-#: ../data/messages:973
+#: ../data/messages:979
 msgid "Fill the background with:"
 msgstr "Орқа фонни ушбу билан тўлдириш:"
 
-#: ../data/messages:981
+#: ../data/messages:987
 msgid ""
 "Any format allowed; if empty, the colour gradation will be used as a fall "
 "back."
 msgstr ""
 
-#: ../data/messages:983
+#: ../data/messages:989
 msgid "Image filename to use as a background :"
 msgstr "Орқа фон сифатида фойдаланиладиган тасвирнинг файл номи :"
 
-#: ../data/messages:993
+#: ../data/messages:999
 msgid "Load theme"
 msgstr "Мавзуни юклаш"
 
-#: ../data/messages:995
+#: ../data/messages:1001
 msgid "You can even paste an internet URL."
 msgstr "Ҳатто интернет URLни ҳам қўйишингиз мумкин."
 
-#: ../data/messages:997
+#: ../data/messages:1003
 msgid "...or drag and drop a theme package here :"
 msgstr "...ёки мавзу пакетини бу ерга суриб қўйинг :"
 
-#: ../data/messages:999
+#: ../data/messages:1005
 msgid "Theme loading options"
 msgstr "Мавзуни юклаш хоссалари"
 
-#: ../data/messages:1001
+#: ../data/messages:1007
 msgid ""
 "If you tick this box, your launchers will be deleted and replaced by the "
 "ones provided in the new theme. Otherwise the current launchers will be "
@@ -4181,11 +4144,11 @@ msgstr ""
 "мавзуда таъминланганлари билан алмаштирилади. Акс ҳолда жорий ишга "
 "туширгичлар сақлаб қолинади, фақат нишончалар алмаштирилади."
 
-#: ../data/messages:1003
+#: ../data/messages:1009
 msgid "Use the new theme's launchers?"
 msgstr "Янги мавзунинг ишга туширгичидан фойдаланилсинми?"
 
-#: ../data/messages:1005
+#: ../data/messages:1011
 msgid ""
 "Otherwise the current behaviour will be kept. This defines the dock's "
 "position, behavioural settings such as auto-hide, using taskbar or not, etc."
@@ -4194,27 +4157,27 @@ msgstr ""
 "яшириш,вазифалар панелидан фойдаланиш ёки фойдаланмаслик, ва ҳоказо каби "
 "ўзини тутиш мосламаларини белгилаб беради."
 
-#: ../data/messages:1007
+#: ../data/messages:1013
 msgid "Use the new theme's behaviour?"
 msgstr "Янги мавзунинг ўзини тутишидан фойдаланилсинми?"
 
-#: ../data/messages:1009
+#: ../data/messages:1015
 msgid "Save"
 msgstr "Сақлаш"
 
-#: ../data/messages:1011
+#: ../data/messages:1017
 msgid "You will then be able to re-open it at any time."
 msgstr "Хоҳлаганда яна қайта очишингиз мумкин бўлади."
 
-#: ../data/messages:1013
+#: ../data/messages:1019
 msgid "Save current behaviour also?"
 msgstr "Жорий ўзини тутиш ҳам сақлансинми?"
 
-#: ../data/messages:1015
+#: ../data/messages:1021
 msgid "Save current launchers also?"
 msgstr "Жорий ишга туширгичлар ҳам сақлансинми?"
 
-#: ../data/messages:1017
+#: ../data/messages:1023
 msgid ""
 "The dock will build a complete tarball of your current theme, allowing you "
 "to easily exchange it with other people."
@@ -4222,93 +4185,93 @@ msgstr ""
 "Док жорий мавзуингизнинг тўлиқ тарбалини яратиб, бошқа инсонлар билан уни "
 "осонликча алмашишга имкон беради."
 
-#: ../data/messages:1019
+#: ../data/messages:1025
 msgid "Build a package of the theme?"
 msgstr "Мавзу пакети яратилсинми?"
 
-#: ../data/messages:1021
+#: ../data/messages:1027
 msgid "Directory in which the package will be saved:"
 msgstr "Пакет сақланадиган жилд:"
 
-#: ../data/messages:1023 ../data/messages:1025 ../data/messages:1027
-#: ../data/messages:1059 ../data/messages:1095
+#: ../data/messages:1029 ../data/messages:1031 ../data/messages:1033
+#: ../data/messages:1065 ../data/messages:1101
 msgid "Desktop Entry"
 msgstr "Иш столи Элементи"
 
-#: ../data/messages:1031 ../data/messages:1063 ../data/messages:1099
+#: ../data/messages:1037 ../data/messages:1069 ../data/messages:1105
 msgid "Name of the container it belongs to:"
 msgstr "Қарашли бўлган таркиб номи:"
 
-#: ../data/messages:1033
+#: ../data/messages:1039
 msgid "Sub-dock's name:"
 msgstr "Док-ичида-докнинг номи:"
 
-#: ../data/messages:1035
+#: ../data/messages:1041
 msgid "New sub-dock"
 msgstr "Янги док-ичида-док"
 
-#: ../data/messages:1037
+#: ../data/messages:1043
 msgid "How to render the icon:"
 msgstr "Нишончани қандай намойиш этиш:"
 
-#: ../data/messages:1039
+#: ../data/messages:1045
 msgid "Use an image"
 msgstr "Тасвирдан фойдаланиш"
 
-#: ../data/messages:1041
+#: ../data/messages:1047
 msgid "Draw sub-dock's content as emblems"
 msgstr "Док-ичида-док таркибини эмблема сифатида чизиш"
 
-#: ../data/messages:1043
+#: ../data/messages:1049
 msgid "Draw sub-dock's content as stack"
 msgstr "Док-ичида-док таркибини стек сифатида чизиш"
 
-#: ../data/messages:1045
+#: ../data/messages:1051
 msgid "Draw sub-dock's content inside a box"
 msgstr "Док-ичида-док таркибини стек қути ичига чизиш"
 
-#: ../data/messages:1047 ../data/messages:1069
+#: ../data/messages:1053 ../data/messages:1075
 msgid "Image's name or path:"
 msgstr "Тасвир номи ёки йўли:"
 
-#: ../data/messages:1049 ../data/messages:1077 ../data/messages:1103
+#: ../data/messages:1055 ../data/messages:1083 ../data/messages:1109
 msgid "Extra parameters"
 msgstr "Қўшимча параметрлар"
 
-#: ../data/messages:1051
+#: ../data/messages:1057
 msgid "Name of the view used for the sub-dock:"
 msgstr "Док-ичида-док учун фойдаланиладиган кўриниш номи:"
 
-#: ../data/messages:1053
+#: ../data/messages:1059
 msgid "If '0' the container will be displayed on every viewport."
 msgstr ""
 
-#: ../data/messages:1055 ../data/messages:1091
+#: ../data/messages:1061 ../data/messages:1097
 msgid "Only show in this specific viewport:"
 msgstr ""
 
-#: ../data/messages:1057 ../data/messages:1093 ../data/messages:1105
+#: ../data/messages:1063 ../data/messages:1099 ../data/messages:1111
 msgid "Order you want for this launcher among the others:"
 msgstr "Бошқалари орасида мазкур ишга туширгич учун тартиб:"
 
-#: ../data/messages:1065
+#: ../data/messages:1071
 msgid "Launcher's name:"
 msgstr "Ишга туширгичнинг номи:"
 
-#: ../data/messages:1071
+#: ../data/messages:1077
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
-"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
+"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
 "Намуна:  nautilus --no-desktop, gedit, ва ҳоказо. Сиз ҳатто тезкор чақирув "
 "тугмасини ҳам киритишингиз мумкин, масалан <Alt>F1, <Ctrl>c,  <Ctrl>v, ва "
 "ҳоказо"
 
-#: ../data/messages:1073
+#: ../data/messages:1079
 msgid "Command to launch on click:"
 msgstr "Сичқонча босилганда ишга тушадиган буйруқ:"
 
-#: ../data/messages:1079
+#: ../data/messages:1085
 msgid ""
 "If you chose to mix launcher and applications, this option will deactivate "
 "this behaviour for this launcher only. It can be useful for instance for a "
@@ -4316,11 +4279,11 @@ msgid ""
 "steal the terminal's icon from the taskbar."
 msgstr ""
 
-#: ../data/messages:1081
+#: ../data/messages:1087
 msgid "Don't link the launcher with its window"
 msgstr "Ишга туширгич ойнаси билан боғланмасин"
 
-#: ../data/messages:1083
+#: ../data/messages:1089
 msgid ""
 "The only reason you may want to modify this parameter is if you made this "
 "launcher by hands. If you dropped it into the dock from the menu, it is "
@@ -4332,23 +4295,23 @@ msgstr ""
 "яхшиси унга тегманг.У дастур таснифини белгилайди, бу эса қўлланмани ўзининг "
 "ишга туширгичи билан боғлаш учун асқотади."
 
-#: ../data/messages:1085
+#: ../data/messages:1091
 msgid "Class of the program:"
 msgstr "Дастурнинг таснифи:"
 
-#: ../data/messages:1087
+#: ../data/messages:1093
 msgid "Run in a terminal?"
 msgstr "Терминалда бажарилсинми?"
 
-#: ../data/messages:1089
+#: ../data/messages:1095
 msgid "If '0' the launcher will be displayed on every viewport."
 msgstr ""
 
-#: ../data/messages:1101
+#: ../data/messages:1107
 msgid "Separators' appearance is defined in the global configuration."
 msgstr "Ажратувчиларнинг ташқи кўриниши умумий созлашда белгиланади."
 
-#: ../data/messages:1108
+#: ../data/messages:1114
 msgid ""
 "<b>The basic 2D view of Cairo-Dock</b>\n"
 "Perfect if you want to make the dock look like a panel."
@@ -4356,23 +4319,11 @@ msgstr ""
 "<b>Бошланғич 2D кўринишдаги Cairo-Dock</b>\n"
 "Панел кўринишидаги докни хоҳловчилар учун айни муддао."
 
-#: ../data/messages:1110
-msgid "Cairo-Dock (Fallback Mode)"
-msgstr "Cairo-Dock (Аппарат Тезланиши Режими)"
-
-#: ../data/messages:1112
-msgid "A light and eye-candy dock and desklets for your desktop."
-msgstr "Иш столингиз учун енгил ва кўзингиз қувнайдиган док ва десклетлар."
-
-#: ../data/messages:1114
-msgid "Multi-purpose Dock and Desklets"
-msgstr "Кўп мақсадли Док ва Десклетлар"
-
-#: ../data/messages:1116
+#: ../data/messages:1115
 msgid "<b>New version: <span color='red'>GLX-Dock 3.3</span>!</b>"
 msgstr "<b>Янги версия: <span color='red'>GLX-Dock 3.3</span>!</b>"
 
-#: ../data/messages:1118
+#: ../data/messages:1117
 msgid ""
 "- Added a search entry in the <b>Applications Menu</b>.\n"
 "    It allows to rapidly look for programs from their name or their "
@@ -4381,15 +4332,15 @@ msgstr ""
 "- <b>Қўлланмалар Менюси</b> да излаш киритмаси қўшилди .\n"
 "    Бу тасвирланиши ёки номига кўра дастурларни тезкор қидиришга имкон беради"
 
-#: ../data/messages:1120
+#: ../data/messages:1119
 msgid "- Added support of <b>logind</b> in the Logout applet"
 msgstr "- Чиқиш апплетига <b>logind</b> ни қўллаб қувватлаш қўшилди"
 
-#: ../data/messages:1122
+#: ../data/messages:1121
 msgid "- Better integration in the Cinnamon desktop"
 msgstr "- Cinnamon иш столига яхшироқ интеграция"
 
-#: ../data/messages:1124
+#: ../data/messages:1123
 msgid ""
 "- Added support of the <b>StartupNotification</b> protocol.\n"
 "    It allows launchers to be animated until the application opens and "
@@ -4399,7 +4350,7 @@ msgstr ""
 "    Бу ишга туширгичларнинг қўлланма очилгунга қадар анимацияланишига имкон "
 "беради ва тасодифий ишга тушишларнинг олдини олади"
 
-#: ../data/messages:1126
+#: ../data/messages:1125
 msgid ""
 "- Added an new third-party applet: <b>Notification History</b> to never miss "
 "a notification"
@@ -4407,63 +4358,209 @@ msgstr ""
 "- Янги учинчи тараф апплети қўшилди: <b>Хабарномалар Тарихи</b> ҳеч қачон "
 "хабарномани ўтказиб юбормаслик учун"
 
-#: ../data/messages:1128
+#: ../data/messages:1127
 msgid "- Upgraded the <b>Dbus API</b> to be even more powerful"
 msgstr "Янада кучлироқ бўлиш учун <b>Dbus API</b> янгиланди"
 
-#: ../data/messages:1130
+#: ../data/messages:1129
 msgid "- A huge rewrite of the core using Objects"
-msgstr ""
-"Асосий қисмдан фойдаланувчи Объектларнинг улкан миқёсда қайта ёзилиши"
+msgstr "Асосий қисмдан фойдаланувчи Объектларнинг улкан миқёсда қайта ёзилиши"
 
-#: ../data/messages:1132
+#: ../data/messages:1131
 msgid "- If you like the project, please donate :-)"
 msgstr "- Агар лойиҳа сизга манзур бўлса, хайрия қилишингиз мумкин :-)"
 
-#: ../data/messages:1134
+#: ../data/messages:1133
 msgid "<b>New version: <span color='red'>GLX-Dock 3.4</span>!</b>"
 msgstr ""
 
-#: ../data/messages:1136
+#: ../data/messages:1135
 msgid "- <b>Menus</b>: added the possibility to customise them"
 msgstr ""
 
-#: ../data/messages:1138
+#: ../data/messages:1137
 msgid "- <b>Style</b>: unified the style of all components of the dock"
 msgstr ""
 
-#: ../data/messages:1140
+#: ../data/messages:1139
 msgid ""
 "- Better integration with <b>Compiz</b> (e.g. when using the <b>Cairo-Dock "
 "session</b>) and Cinnamon"
 msgstr ""
 
-#: ../data/messages:1142
+#: ../data/messages:1141
 msgid ""
 "- <b>Applications Menu</b> and <b>Logout</b> applets will wait the end of an "
 "update before displaying notifications"
 msgstr ""
 
-#: ../data/messages:1144
+#: ../data/messages:1143
 msgid ""
 "- Various improvements for <b>Applications Menu</b>, <b>Shortcuts</b>, "
 "<b>Status-Notifier</b> and <b>Terminal</b> applets"
 msgstr ""
 
-#: ../data/messages:1146
+#: ../data/messages:1145
 msgid "- Start working on <b>EGL</b> and <b>Wayland</b> support"
 msgstr ""
 
-#: ../data/messages:1148
+#: ../data/messages:1147
 msgid "- And as always ... various bug fixes and improvements!"
 msgstr ""
 
-#: ../data/messages:1150
+#: ../data/messages:1149
 msgid "If you like the project, please donate and/or contribute :-)"
 msgstr ""
 
-#: ../data/messages:1152
+#: ../data/messages:1151
 msgid ""
-"Note: We're switching from Bzr to Git on Github, feel free to fork! "
-"https://github.com/Cairo-Dock"
+"Note: We're switching from Bzr to Git on Github, feel free to fork! https://"
+"github.com/Cairo-Dock"
 msgstr ""
+
+#~ msgid "Windows management"
+#~ msgstr "Ойналар бошқаруви"
+
+#~ msgid "Use all screens"
+#~ msgstr "Барча экранлардан фойдаланиш"
+
+#~ msgid "Disable the gnome-panel"
+#~ msgstr "Gnome-panel ни ўчириш"
+
+#~ msgid "Disable Unity"
+#~ msgstr "Unity ни ўчириш"
+
+#~ msgid "Tip: If this line is grayed, it's because this tip is not for you.)"
+#~ msgstr "Маслаҳат: Агар чизиқ кулранг бўлса,бу маслаҳат сизга эмас.)"
+
+#~ msgid "If you're using Compiz, you can click on this button:"
+#~ msgstr ""
+#~ "Агар Compiz дан фойдаланётган бўлсангиз, ушбу тугмани босишингиз мумкин:"
+
+#~ msgid "Removing completely the gnome-panel"
+#~ msgstr "Gnome-panel ни тўлиқ олиб ташлаш"
+
+#~ msgid ""
+#~ "Open dconf-editor, edit the key /desktop/gnome/session/"
+#~ "required_components/panel, and replace its content with \"cairo-dock\".\n"
+#~ "Then restart your session : the gnome-panel has not been started, and the "
+#~ "dock has been started (if not, you can add it to the startup programs)."
+#~ msgstr ""
+#~ "dconf-editor ни очинг, /desktop/gnome/session/required_components/panel "
+#~ "калитини таҳрир қилинг, ва унинг таркибини \"cairo-dock\" билан "
+#~ "алмаштиринг.\n"
+#~ "Кейин сеансни қайтадан бошланг : the gnome-panel бошланмади ва док "
+#~ "бошланди (агар бундай бўлмаса, уни ишга тушувчи дастурларга қўшишингиз "
+#~ "мумкин)."
+
+#~ msgid ""
+#~ "If you are on Gnome, you can click on this button in order to "
+#~ "automatically modify this key:"
+#~ msgstr ""
+#~ "Агар Gnomeда бўлсангиз, мазкур тугмани автоматик тарзда мослаш учун ушбу "
+#~ "тугмани босишингиз мумкин:"
+
+#~ msgid ""
+#~ "Hint : If you have an ATI or an Intel card, you should try without OpenGL "
+#~ "first, because their drivers are not yet perfect."
+#~ msgstr ""
+#~ "Ёрдамчи маълумот : Агар сизда ATI ёки Intel картаси бўлса, аввал "
+#~ "OpenGLсиз уриниб кўринг, чунки уларнинг драйверлари ҳозирча мукаммал эмас."
+
+#~ msgid ""
+#~ "If you're on Gnome with Metacity (without Compiz), you can click on this "
+#~ "button:"
+#~ msgstr ""
+#~ "Агар сиз Gnomeда Metacity билан (Compizсиз) бўлсангиз, ушбу тугмани "
+#~ "босишингиз мумкин:"
+
+#~ msgid ""
+#~ "There is no icon in the Applications Menu even though I enable the option."
+#~ msgstr ""
+#~ "Гарчи бу хоссани йўлга қўйган бўлсам ҳам Қўлланмалар Менюсида нишонча йўқ."
+
+#~ msgid ""
+#~ "In Gnome, there is an option that override the dock's one. To enable "
+#~ "icons in menus, open 'dconf-editor', go to Desktop / Gnome / Interface "
+#~ "and enable the \"menus have icons\" and the \"buttons have icons\" "
+#~ "options. "
+#~ msgstr ""
+#~ "Gnomeда докдагининг устини ёпиш хоссаси мавжуд.Менюлардаги нишончаларни "
+#~ "йўлга қўйиш учун'dconf-editor'ни очинг, Иш столи / Gnome / Интерфейс га "
+#~ "киринг ва \"менюлар нишончаларга эга\" ва \"тугмалар нишончаларга эга\" "
+#~ "хоссаларини йўлга қўйинг. "
+
+#~ msgid "If you're on Gnome you can click on this button:"
+#~ msgstr "Агар Gnomeда бўлсангиз қуйидаги тугмани босишингиз мумкин:"
+
+#~ msgid ""
+#~ "We maintain two repositories for Debian, Ubuntu and other Debian-forked:\n"
+#~ " One for stable releases and another which is updated weekly (unstable "
+#~ "version)"
+#~ msgstr ""
+#~ "Биз Debian, Ubuntu ва бошқа Debian-асосидагилар учун иккита манбани "
+#~ "юритамиз:\n"
+#~ " Бири барқарор релизлар учун ва бошқаси ҳар ҳафта янгиланади (барқарор "
+#~ "бўлмаган версия)"
+
+#~ msgid "Debian/Ubuntu"
+#~ msgstr "Debian/Ubuntu"
+
+#~ msgid "Ubuntu"
+#~ msgstr "Ubuntu"
+
+#~ msgid ""
+#~ "If you're on Ubuntu, you can add our 'stable' repository by clicking on "
+#~ "this button:\n"
+#~ " After that, you can launch your update manager in order to install the "
+#~ "latest stable version."
+#~ msgstr ""
+#~ "Агар Ubuntu да бўлсангиз, 'stable' манбамизни ушбу тугмани босиш орқали "
+#~ "қўшишингиз мумкин:\n"
+#~ " Шундан сўнг, мавжуд энг сўнгги барқарор версияни ўрнатиш учун янгиланиш "
+#~ "бошқарувчисини ишга туширинг."
+
+#~ msgid ""
+#~ "If you're on Ubuntu, you can also add our 'weekly' ppa (can be unstable) "
+#~ "by clicking on this button:\n"
+#~ " After that, you can launch your update manager in order to install the "
+#~ "latest weekly version."
+#~ msgstr ""
+#~ "Агар Ubuntu да бўлсангиз, 'weekly' ppa манбамизни (барқарор бўлмаслиги "
+#~ "мумкин) ушбу тугмани босиш орқали қўшишингиз мумкин:\n"
+#~ " Шундан сўнг, мавжуд энг сўнгги ҳафталик версияни ўрнатиш учун янгиланиш "
+#~ "бошқарувчисини ишга туширинг."
+
+#~ msgid "Debian"
+#~ msgstr "Debian"
+
+#~ msgid ""
+#~ "If you're on Debian Stable, you can add our 'stable' repository by "
+#~ "clicking on this button:\n"
+#~ " After that, you can purge all 'cairo-dock*' packages, update the your "
+#~ "system and reinstall 'cairo-dock' package."
+#~ msgstr ""
+#~ "Агар Debian Stable да бўлсангиз, 'барқарор' манбани ушбу тугма устига "
+#~ "босиш орқали қўшишингиз мумкин:\n"
+#~ " Шундан сўнг барча 'cairo-dock*' пакетларини тозалаб, тизимингизни "
+#~ "янгилашингиз ва 'cairo-dock' пакетини қайта ўрнатишингиз мумкин."
+
+#~ msgid ""
+#~ "If you're on Debian Unstable, you can add our 'stable' repository by "
+#~ "clicking on this button:\n"
+#~ " After that, you can purge all 'cairo-dock*' packages, update the your "
+#~ "system and reinstall 'cairo-dock' package."
+#~ msgstr ""
+#~ "Агар Debian unstable да бўлсангиз, 'барқарор' манбани ушбу тугма устига "
+#~ "босиш орқали қўшишингиз мумкин:\n"
+#~ " Шундан сўнг барча 'cairo-dock*' пакетларини тозалаб, тизимингизни "
+#~ "янгилашингиз ва 'cairo-dock' пакетини қайта ўрнатишингиз мумкин."
+
+#~ msgid "Cairo-Dock (Fallback Mode)"
+#~ msgstr "Cairo-Dock (Аппарат Тезланиши Режими)"
+
+#~ msgid "A light and eye-candy dock and desklets for your desktop."
+#~ msgstr "Иш столингиз учун енгил ва кўзингиз қувнайдиган док ва десклетлар."
+
+#~ msgid "Multi-purpose Dock and Desklets"
+#~ msgstr "Кўп мақсадли Док ва Десклетлар"
