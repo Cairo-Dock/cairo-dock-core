@@ -57,7 +57,7 @@ if test $UPDATE_CORE -gt 0; then
 	cd ${CORE_DIR}
 	if test -x $CAIRO_DOCK_EXTRACT_MESSAGE; then
 		rm -f data/messages
-		for c in data/*.conf.in data/cairo-dock*.desktop data/*.desktop.in Help/data/Help.conf.in
+		for c in data/*.conf.in data/*.desktop.in Help/data/Help.conf.in
 		do # les .conf peuvent être dans un dossier build et il ne reste plus que des .conf.in.
 			$CAIRO_DOCK_EXTRACT_MESSAGE $c
 		done;
@@ -85,7 +85,7 @@ if test $UPDATE_PLUGINS -gt 0; then
 	echo "extracing the messages of the plug-ins ..."
 	for plugin in *
 	do
-		if test -d $plugin; then
+		if test -d $plugin/data; then
 			cd $plugin
 			if test -e CMakeLists.txt; then  # le Makefile peut etre dans un autre dossier
 				echo "  extracting sentences from $plugin ..."

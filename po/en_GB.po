@@ -7,36 +7,36 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cairo-dock-core\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"POT-Creation-Date: 2014-10-19 00:21+0000\n"
+"POT-Creation-Date: 2025-09-21 12:46+0200\n"
 "PO-Revision-Date: 2014-09-09 23:27+0000\n"
 "Last-Translator: Anthony Harrington <untaintableangel@ubuntu.com>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2014-10-20 05:57+0000\n"
 "X-Generator: Launchpad (build 17196)\n"
-"Language: \n"
 
-#: ../src/cairo-dock-gui-advanced.c:120 ../src/cairo-dock-widget-plugins.c:173
-#: ../data/messages:267
+#: ../src/cairo-dock-gui-advanced.c:120 ../src/cairo-dock-widget-plugins.c:164
+#: ../data/messages:269
 msgid "Behaviour"
 msgstr "Behaviour"
 
-#: ../src/cairo-dock-gui-advanced.c:121 ../data/messages:111
-#: ../data/messages:835 ../data/messages:873 ../data/messages:945
+#: ../src/cairo-dock-gui-advanced.c:121 ../data/messages:113
+#: ../data/messages:841 ../data/messages:879 ../data/messages:951
 msgid "Appearance"
 msgstr "Appearance"
 
-#: ../src/cairo-dock-gui-advanced.c:122 ../src/cairo-dock-widget-plugins.c:143
+#: ../src/cairo-dock-gui-advanced.c:122 ../src/cairo-dock-widget-plugins.c:134
 msgid "Files"
 msgstr "Files"
 
-#: ../src/cairo-dock-gui-advanced.c:123 ../src/cairo-dock-widget-plugins.c:148
+#: ../src/cairo-dock-gui-advanced.c:123 ../src/cairo-dock-widget-plugins.c:139
 msgid "Internet"
 msgstr "Internet"
 
-#: ../src/cairo-dock-gui-advanced.c:124 ../src/cairo-dock-widget-plugins.c:153
+#: ../src/cairo-dock-gui-advanced.c:124 ../src/cairo-dock-widget-plugins.c:144
 msgid "Desktop"
 msgstr "Desktop"
 
@@ -44,32 +44,31 @@ msgstr "Desktop"
 msgid "Accessories"
 msgstr "Accessories"
 
-#: ../src/cairo-dock-gui-advanced.c:126 ../src/cairo-dock-gui-advanced.c:1495
-#: ../src/cairo-dock-gui-advanced.c:1496
-#: ../src/cairo-dock-widget-plugins.c:163 ../data/messages:117
-#: ../data/messages:371 ../data/messages:877
+#: ../src/cairo-dock-gui-advanced.c:126 ../src/cairo-dock-gui-advanced.c:1485
+#: ../src/cairo-dock-gui-advanced.c:1486 ../src/cairo-dock-widget-plugins.c:154
+#: ../data/messages:119 ../data/messages:373 ../data/messages:883
 msgid "System"
 msgstr "System"
 
-#: ../src/cairo-dock-gui-advanced.c:127 ../src/cairo-dock-widget-plugins.c:168
+#: ../src/cairo-dock-gui-advanced.c:127 ../src/cairo-dock-widget-plugins.c:159
 msgid "Fun"
 msgstr "Fun"
 
-#: ../src/cairo-dock-gui-advanced.c:128 ../src/cairo-dock-gui-advanced.c:1769
-#: ../src/gldit/cairo-dock-gui-factory.c:798
+#: ../src/cairo-dock-gui-advanced.c:128 ../src/cairo-dock-gui-advanced.c:1762
+#: ../src/gldit/cairo-dock-gui-factory.c:785
 msgid "All"
 msgstr "All"
 
-#: ../src/cairo-dock-gui-advanced.c:1460
+#: ../src/cairo-dock-gui-advanced.c:1450
 msgid "Set the position of the main dock."
 msgstr "Set the position of the main dock."
 
-#: ../src/cairo-dock-gui-advanced.c:1461 ../src/cairo-dock-gui-advanced.c:1462
-#: ../Help/data/messages:321 ../data/messages:151
+#: ../src/cairo-dock-gui-advanced.c:1451 ../src/cairo-dock-gui-advanced.c:1452
+#: ../Help/data/messages:281 ../data/messages:153
 msgid "Position"
 msgstr "Position"
 
-#: ../src/cairo-dock-gui-advanced.c:1469
+#: ../src/cairo-dock-gui-advanced.c:1459
 msgid ""
 "Do you like your dock to be always visible,\n"
 " or on the contrary unobtrusive?\n"
@@ -79,80 +78,80 @@ msgstr ""
 " or on the contrary unobtrusive?\n"
 "Configure the way you access your docks and sub-docks!"
 
-#: ../src/cairo-dock-gui-advanced.c:1470 ../src/cairo-dock-gui-advanced.c:1471
-#: ../src/cairo-dock-user-menu.c:2027 ../Help/data/messages:339
+#: ../src/cairo-dock-gui-advanced.c:1460 ../src/cairo-dock-gui-advanced.c:1461
+#: ../src/cairo-dock-user-menu.c:2132 ../Help/data/messages:299
 msgid "Visibility"
 msgstr "Visibility"
 
-#: ../src/cairo-dock-gui-advanced.c:1478
+#: ../src/cairo-dock-gui-advanced.c:1468
 msgid "Display and interact with currently open windows."
 msgstr "Display and interact with currently open windows."
 
-#: ../src/cairo-dock-gui-advanced.c:1479 ../src/cairo-dock-gui-advanced.c:1480
-#: ../Help/data/messages:41 ../data/messages:63
+#: ../src/cairo-dock-gui-advanced.c:1469 ../src/cairo-dock-gui-advanced.c:1470
+#: ../Help/data/messages:41 ../data/messages:65
 msgid "Taskbar"
 msgstr "Taskbar"
 
-#: ../src/cairo-dock-gui-advanced.c:1487
+#: ../src/cairo-dock-gui-advanced.c:1477
 msgid "Define all the keyboard shortcuts currently available."
 msgstr "Define all the keyboard shortcuts currently available."
 
-#: ../src/cairo-dock-gui-advanced.c:1488 ../data/messages:147
+#: ../src/cairo-dock-gui-advanced.c:1478 ../data/messages:149
 msgid "Shortkeys"
 msgstr "Shortkeys"
 
-#: ../src/cairo-dock-gui-advanced.c:1494
+#: ../src/cairo-dock-gui-advanced.c:1484
 msgid "All of the parameters you will never want to tweak."
 msgstr "All of the parameters you will never want to tweak."
 
-#: ../src/cairo-dock-gui-advanced.c:1506
+#: ../src/cairo-dock-gui-advanced.c:1496
 msgid "Configure the global style."
 msgstr "Configure the global style."
 
-#: ../src/cairo-dock-gui-advanced.c:1507 ../src/cairo-dock-gui-advanced.c:1508
-#: ../data/messages:113 ../data/messages:115 ../data/messages:459
-#: ../data/messages:549 ../data/messages:689 ../data/messages:731
-#: ../data/messages:803 ../data/messages:837 ../data/messages:871
-#: ../data/messages:875
+#: ../src/cairo-dock-gui-advanced.c:1497 ../src/cairo-dock-gui-advanced.c:1498
+#: ../data/messages:115 ../data/messages:117 ../data/messages:465
+#: ../data/messages:555 ../data/messages:695 ../data/messages:737
+#: ../data/messages:809 ../data/messages:843 ../data/messages:877
+#: ../data/messages:881
 msgid "Style"
 msgstr "Style"
 
-#: ../src/cairo-dock-gui-advanced.c:1515
+#: ../src/cairo-dock-gui-advanced.c:1505
 msgid "Configure docks appearance."
 msgstr "Configure dock's appearance."
 
-#: ../src/cairo-dock-gui-advanced.c:1516 ../Help/data/messages:79
+#: ../src/cairo-dock-gui-advanced.c:1506 ../Help/data/messages:75
 msgid "Docks"
 msgstr "Docks"
 
-#: ../src/cairo-dock-gui-advanced.c:1517 ../data/messages:457
-#: ../data/messages:971
+#: ../src/cairo-dock-gui-advanced.c:1507 ../data/messages:463
+#: ../data/messages:977
 msgid "Background"
 msgstr "Background"
 
-#: ../src/cairo-dock-gui-advanced.c:1518 ../data/messages:139
-#: ../data/messages:525 ../data/messages:965
+#: ../src/cairo-dock-gui-advanced.c:1508 ../data/messages:141
+#: ../data/messages:531 ../data/messages:971
 msgid "Views"
 msgstr "Views"
 
-#: ../src/cairo-dock-gui-advanced.c:1526
+#: ../src/cairo-dock-gui-advanced.c:1516
 msgid "Configure text bubble appearance."
 msgstr "Configure text bubble appearance."
 
-#: ../src/cairo-dock-gui-advanced.c:1527 ../src/cairo-dock-gui-advanced.c:1528
+#: ../src/cairo-dock-gui-advanced.c:1517 ../src/cairo-dock-gui-advanced.c:1518
 msgid "Dialog boxes and Menus"
 msgstr "Dialogue boxes and Menus"
 
-#: ../src/cairo-dock-gui-advanced.c:1535
+#: ../src/cairo-dock-gui-advanced.c:1525
 msgid "Applets can be displayed on your desktop as widgets."
 msgstr "Applets can be displayed on your desktop as widgets."
 
-#: ../src/cairo-dock-gui-advanced.c:1536 ../src/cairo-dock-gui-advanced.c:1537
-#: ../Help/data/messages:89 ../data/messages:587
+#: ../src/cairo-dock-gui-advanced.c:1526 ../src/cairo-dock-gui-advanced.c:1527
+#: ../Help/data/messages:85 ../data/messages:593
 msgid "Desklets"
 msgstr "Desklets"
 
-#: ../src/cairo-dock-gui-advanced.c:1544
+#: ../src/cairo-dock-gui-advanced.c:1534
 msgid ""
 "All about icons:\n"
 " size, reflection, icon theme,..."
@@ -160,102 +159,101 @@ msgstr ""
 "All about icons:\n"
 " size, reflection, icon theme,..."
 
-#: ../src/cairo-dock-gui-advanced.c:1545 ../src/cairo-dock-gui-advanced.c:1546
-#: ../Help/data/messages:11 ../data/messages:123 ../data/messages:643
-#: ../data/messages:947
+#: ../src/cairo-dock-gui-advanced.c:1535 ../src/cairo-dock-gui-advanced.c:1536
+#: ../Help/data/messages:11 ../data/messages:125 ../data/messages:649
+#: ../data/messages:953
 msgid "Icons"
 msgstr "Icons"
 
-#: ../src/cairo-dock-gui-advanced.c:1547 ../data/messages:727
+#: ../src/cairo-dock-gui-advanced.c:1537 ../data/messages:733
 msgid "Indicators"
 msgstr "Indicators"
 
-#: ../src/cairo-dock-gui-advanced.c:1555
+#: ../src/cairo-dock-gui-advanced.c:1545
 msgid "Define icon caption and quick-info style."
 msgstr "Define icon caption and quick-info style."
 
-#: ../src/cairo-dock-gui-advanced.c:1556 ../src/cairo-dock-gui-advanced.c:1557
+#: ../src/cairo-dock-gui-advanced.c:1546 ../src/cairo-dock-gui-advanced.c:1547
 msgid "Captions"
 msgstr "Captions"
 
-#: ../src/cairo-dock-gui-advanced.c:1564
+#: ../src/cairo-dock-gui-advanced.c:1554
 msgid "Try new themes and save your theme."
 msgstr "Try new themes and save your theme."
 
-#: ../src/cairo-dock-gui-advanced.c:1565 ../src/cairo-dock-gui-simple.c:115
+#: ../src/cairo-dock-gui-advanced.c:1555 ../src/cairo-dock-gui-simple.c:115
 #: ../src/cairo-dock-gui-simple.c:117
 msgid "Themes"
 msgstr "Themes"
 
-#: ../src/cairo-dock-gui-advanced.c:1571
+#: ../src/cairo-dock-gui-advanced.c:1561
 msgid "Current items in your dock(s)."
 msgstr "Current items in your dock(s)."
 
-#: ../src/cairo-dock-gui-advanced.c:1572 ../src/cairo-dock-gui-simple.c:91
+#: ../src/cairo-dock-gui-advanced.c:1562 ../src/cairo-dock-gui-simple.c:91
 #: ../src/cairo-dock-gui-simple.c:93
 msgid "Current items"
 msgstr "Current items"
 
-#: ../src/cairo-dock-gui-advanced.c:1692
+#: ../src/cairo-dock-gui-advanced.c:1685
 msgid "Filter"
 msgstr "Filter"
 
-#: ../src/cairo-dock-gui-advanced.c:1731
+#: ../src/cairo-dock-gui-advanced.c:1724
 msgid "All words"
 msgstr "All words"
 
-#: ../src/cairo-dock-gui-advanced.c:1732
+#: ../src/cairo-dock-gui-advanced.c:1725
 msgid "Highlighted words"
 msgstr "Highlighted words"
 
-#: ../src/cairo-dock-gui-advanced.c:1733
+#: ../src/cairo-dock-gui-advanced.c:1726
 msgid "Hide others"
 msgstr "Hide others"
 
-#: ../src/cairo-dock-gui-advanced.c:1734
+#: ../src/cairo-dock-gui-advanced.c:1727
 msgid "Search in description"
 msgstr "Search in description"
 
-#: ../src/cairo-dock-gui-advanced.c:1738
+#: ../src/cairo-dock-gui-advanced.c:1731
 msgid "Hide disabled"
 msgstr "Hide disabled"
 
-#: ../src/cairo-dock-gui-advanced.c:1747
+#: ../src/cairo-dock-gui-advanced.c:1740
 msgid "Categories"
 msgstr "Categories"
 
-#: ../src/cairo-dock-gui-advanced.c:1845
+#: ../src/cairo-dock-gui-advanced.c:1838
 msgid "Enable this module"
 msgstr "Enable this module"
 
-#: ../src/cairo-dock-gui-advanced.c:1872 ../src/cairo-dock-gui-simple.c:199
-#: ../src/cairo-dock-user-menu.c:1837 ../src/cairo-dock-user-menu.c:1839
-#: ../src/cairo-dock-user-menu.c:1912 ../src/cairo-dock-user-menu.c:1914
-#: ../data/messages:343
+#: ../src/cairo-dock-gui-advanced.c:1865 ../src/cairo-dock-gui-simple.c:204
+#: ../src/cairo-dock-user-menu.c:196 ../src/cairo-dock-user-menu.c:1985
+#: ../src/cairo-dock-user-menu.c:1987 ../data/messages:345
 msgid "Close"
 msgstr "Close"
 
-#: ../src/cairo-dock-gui-advanced.c:1880
+#: ../src/cairo-dock-gui-advanced.c:1873
 msgid "Back"
 msgstr "Back"
 
-#: ../src/cairo-dock-gui-advanced.c:1888 ../src/cairo-dock-gui-simple.c:207
+#: ../src/cairo-dock-gui-advanced.c:1881 ../src/cairo-dock-gui-simple.c:212
 msgid "Apply"
 msgstr "Apply"
 
-#: ../src/cairo-dock-gui-advanced.c:1904
+#: ../src/cairo-dock-gui-advanced.c:1897
 msgid "More applets"
 msgstr "More applets"
 
-#: ../src/cairo-dock-gui-advanced.c:1905
+#: ../src/cairo-dock-gui-advanced.c:1898
 msgid "Get more applets online !"
 msgstr "Get more applets online !"
 
-#: ../src/cairo-dock-gui-advanced.c:1997 ../src/cairo-dock-gui-simple.c:354
+#: ../src/cairo-dock-gui-advanced.c:1990 ../src/cairo-dock-gui-simple.c:355
 msgid "Cairo-Dock configuration"
 msgstr "Cairo-Dock configuration"
 
-#: ../src/cairo-dock-gui-advanced.c:2582
+#: ../src/cairo-dock-gui-advanced.c:2575
 msgid "Simple Mode"
 msgstr "Simple Mode"
 
@@ -267,11 +265,11 @@ msgstr "Add-ons"
 msgid "Configuration"
 msgstr "Configuration"
 
-#: ../src/cairo-dock-gui-simple.c:635
+#: ../src/cairo-dock-gui-simple.c:637
 msgid "Advanced Mode"
 msgstr "Advanced Mode"
 
-#: ../src/cairo-dock-gui-simple.c:636
+#: ../src/cairo-dock-gui-simple.c:638
 msgid ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customise your current theme."
@@ -279,7 +277,7 @@ msgstr ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customise your current theme."
 
-#: ../src/cairo-dock-user-interaction.c:417
+#: ../src/cairo-dock-user-interaction.c:429
 msgid ""
 "The option 'overwrite X icons' has been automatically enabled in the "
 "config.\n"
@@ -289,70 +287,70 @@ msgstr ""
 "config.\n"
 "It is located in the 'Taskbar' module."
 
-#: ../src/cairo-dock-user-menu.c:119
+#: ../src/cairo-dock-user-menu.c:131
 msgid "Delete this dock?"
 msgstr "Delete this dock?"
 
-#: ../src/cairo-dock-user-menu.c:176
+#: ../src/cairo-dock-user-menu.c:193
 msgid "About Cairo-Dock"
 msgstr "About Cairo-Dock"
 
-#: ../src/cairo-dock-user-menu.c:209 ../Help/data/messages:271
+#: ../src/cairo-dock-user-menu.c:226 ../Help/data/messages:245
 msgid "Development site"
 msgstr "Development site"
 
-#: ../src/cairo-dock-user-menu.c:210 ../Help/data/messages:269
+#: ../src/cairo-dock-user-menu.c:227 ../Help/data/messages:243
 msgid "Find the latest version of Cairo-Dock here !"
 msgstr "Find the latest version of Cairo-Dock here !"
 
-#: ../src/cairo-dock-user-menu.c:214 ../src/cairo-dock-user-menu.c:1088
-#: ../src/cairo-dock-widget-plugins.c:297
+#: ../src/cairo-dock-user-menu.c:231 ../src/cairo-dock-user-menu.c:1136
+#: ../src/cairo-dock-widget-plugins.c:279
 msgid "Get more applets!"
 msgstr "Get more applets!"
 
-#: ../src/cairo-dock-user-menu.c:218 ../src/cairo-dock-user-menu.c:224
+#: ../src/cairo-dock-user-menu.c:235 ../src/cairo-dock-user-menu.c:241
 msgid "Donate"
 msgstr "Donate"
 
-#: ../src/cairo-dock-user-menu.c:221 ../src/cairo-dock-user-menu.c:227
+#: ../src/cairo-dock-user-menu.c:238 ../src/cairo-dock-user-menu.c:244
 msgid ""
 "Support the people who spend countless hours to bring you the best dock ever."
 msgstr ""
 "Support the people who spend countless hours to bring you the best dock ever."
 
-#: ../src/cairo-dock-user-menu.c:255
+#: ../src/cairo-dock-user-menu.c:273
 msgid "Here is a list of the current developers and contributors"
 msgstr "Here is a list of the current developers and contributors"
 
-#: ../src/cairo-dock-user-menu.c:256
+#: ../src/cairo-dock-user-menu.c:274
 msgid "Developers"
 msgstr "Developers"
 
-#: ../src/cairo-dock-user-menu.c:257
+#: ../src/cairo-dock-user-menu.c:275
 msgid "Main developer and project leader"
 msgstr "Main developer and project leader"
 
-#: ../src/cairo-dock-user-menu.c:258
+#: ../src/cairo-dock-user-menu.c:276
 msgid "Contributors / Hackers"
 msgstr "Contributors / Hackers"
 
-#: ../src/cairo-dock-user-menu.c:260
+#: ../src/cairo-dock-user-menu.c:278 ../Help/data/messages:259
 msgid "Development"
 msgstr "Development"
 
-#: ../src/cairo-dock-user-menu.c:275
+#: ../src/cairo-dock-user-menu.c:294
 msgid "Website"
 msgstr "Website"
 
-#: ../src/cairo-dock-user-menu.c:276
+#: ../src/cairo-dock-user-menu.c:295
 msgid "Beta-testing / Suggestions / Forum animation"
 msgstr "Beta-testing / Suggestions / Forum animation"
 
-#: ../src/cairo-dock-user-menu.c:277
+#: ../src/cairo-dock-user-menu.c:296
 msgid "Translators for this language"
 msgstr "Translators for this language"
 
-#: ../src/cairo-dock-user-menu.c:278
+#: ../src/cairo-dock-user-menu.c:297
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -366,11 +364,11 @@ msgstr ""
 "  pickarooney https://launchpad.net/~richard-walsh\n"
 "  taiebot65 https://launchpad.net/~taiebot65"
 
-#: ../src/cairo-dock-user-menu.c:280
+#: ../src/cairo-dock-user-menu.c:299
 msgid "Support"
 msgstr "Support"
 
-#: ../src/cairo-dock-user-menu.c:310
+#: ../src/cairo-dock-user-menu.c:330
 msgid ""
 "Thanks to all people that help us to improve the Cairo-Dock project.\n"
 "Thanks to all current, former and future contributors."
@@ -378,47 +376,51 @@ msgstr ""
 "Thanks to all people that help us to improve the Cairo-Dock project.\n"
 "Thanks to all current, former and future contributors."
 
-#: ../src/cairo-dock-user-menu.c:312
+#: ../src/cairo-dock-user-menu.c:332
 msgid "How to help us?"
 msgstr "How to help us?"
 
-#: ../src/cairo-dock-user-menu.c:313
+#: ../src/cairo-dock-user-menu.c:333
 msgid "Don't hesitate to join the project, we need you ;)"
 msgstr "Don't hesitate to join the project, we need you ;)"
 
-#: ../src/cairo-dock-user-menu.c:314
+#: ../src/cairo-dock-user-menu.c:334
 msgid "Former contributors"
 msgstr "Former contributors"
 
-#: ../src/cairo-dock-user-menu.c:315
+#: ../src/cairo-dock-user-menu.c:335
 msgid "For a complete list, please have a look to BZR logs"
 msgstr "For a complete list, please have a look to BZR logs"
 
-#: ../src/cairo-dock-user-menu.c:316
+#: ../src/cairo-dock-user-menu.c:336
 msgid "Users of our forum"
 msgstr "Users of our forum"
 
-#: ../src/cairo-dock-user-menu.c:317
+#: ../src/cairo-dock-user-menu.c:337
 msgid "List of our forum's members"
 msgstr "List of our forum's members"
 
-#: ../src/cairo-dock-user-menu.c:318
+#: ../src/cairo-dock-user-menu.c:338
 msgid "Artwork"
 msgstr "Artwork"
 
-#: ../src/cairo-dock-user-menu.c:320
+#: ../src/cairo-dock-user-menu.c:340
 msgid "Thanks"
 msgstr "Thanks"
 
-#: ../src/cairo-dock-user-menu.c:410
+#: ../src/cairo-dock-user-menu.c:352
+msgid "Technical info"
+msgstr ""
+
+#: ../src/cairo-dock-user-menu.c:444
 msgid "Quit Cairo-Dock?"
 msgstr "Quit Cairo-Dock?"
 
-#: ../src/cairo-dock-user-menu.c:440 ../src/cairo-dock-user-menu.c:580
+#: ../src/cairo-dock-user-menu.c:474 ../src/cairo-dock-user-menu.c:618
 msgid "Separator"
 msgstr "Separator"
 
-#: ../src/cairo-dock-user-menu.c:543
+#: ../src/cairo-dock-user-menu.c:580
 msgid ""
 "The new dock has been created.\n"
 "Now move some launchers or applets into it by right-clicking on the icon -> "
@@ -428,33 +430,33 @@ msgstr ""
 "Now move some launchers or applets to it by right-clicking on the icon -> "
 "move to another dock"
 
-#: ../src/cairo-dock-user-menu.c:574
+#: ../src/cairo-dock-user-menu.c:612
 msgid "Add"
 msgstr "Add"
 
-#: ../src/cairo-dock-user-menu.c:576
+#: ../src/cairo-dock-user-menu.c:614
 msgid "Sub-dock"
 msgstr "Sub-dock"
 
-#: ../src/cairo-dock-user-menu.c:578
+#: ../src/cairo-dock-user-menu.c:616
 msgid "Main dock"
 msgstr "Main dock"
 
-#: ../src/cairo-dock-user-menu.c:582
+#: ../src/cairo-dock-user-menu.c:620
 msgid "Custom launcher"
 msgstr "Custom launcher"
 
-#: ../src/cairo-dock-user-menu.c:583
+#: ../src/cairo-dock-user-menu.c:621
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
 msgstr ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
 
-#: ../src/cairo-dock-user-menu.c:585
+#: ../src/cairo-dock-user-menu.c:624
 msgid "Applet"
 msgstr "Applet"
 
-#: ../src/cairo-dock-user-menu.c:602
+#: ../src/cairo-dock-user-menu.c:641
 msgid ""
 "Do you want to re-dispatch the icons contained inside this container into "
 "the dock?\n"
@@ -464,20 +466,20 @@ msgstr ""
 "the dock?\n"
 "(otherwise they will be destroyed)"
 
-#: ../src/cairo-dock-user-menu.c:624
+#: ../src/cairo-dock-user-menu.c:664
 msgid "separator"
 msgstr "separator"
 
-#: ../src/cairo-dock-user-menu.c:628
+#: ../src/cairo-dock-user-menu.c:668
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
 msgstr "You're about to remove this icon (%s) from the dock. Are you sure?"
 
-#: ../src/cairo-dock-user-menu.c:643
+#: ../src/cairo-dock-user-menu.c:684
 msgid "Sorry, this icon doesn't have a configuration file."
 msgstr "Sorry, this icon doesn't have a configuration file."
 
-#: ../src/cairo-dock-user-menu.c:683
+#: ../src/cairo-dock-user-menu.c:724
 msgid ""
 "The new dock has been created.\n"
 "You can customize it by right-clicking on it -> cairo-dock -> configure this "
@@ -487,16 +489,15 @@ msgstr ""
 "You can customise it by right-clicking on it -> cairo-dock -> configure this "
 "dock."
 
-#: ../src/cairo-dock-user-menu.c:689
+#: ../src/cairo-dock-user-menu.c:730
 msgid "Move to another dock"
 msgstr "Move to another dock"
 
-#: ../src/cairo-dock-user-menu.c:691
-#: ../src/gldit/cairo-dock-gui-factory.c:1226
+#: ../src/cairo-dock-user-menu.c:732 ../src/gldit/cairo-dock-gui-factory.c:1212
 msgid "New main dock"
 msgstr "New main dock"
 
-#: ../src/cairo-dock-user-menu.c:772
+#: ../src/cairo-dock-user-menu.c:800
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
@@ -504,105 +505,104 @@ msgstr ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
 
-#: ../src/cairo-dock-user-menu.c:819
+#: ../src/cairo-dock-user-menu.c:849
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr "You're about to remove this applet (%s) from the dock. Are you sure?"
 
-#: ../src/cairo-dock-user-menu.c:888 ../src/gldit/cairo-dock-gui-factory.c:761
+#: ../src/cairo-dock-user-menu.c:922 ../src/gldit/cairo-dock-gui-factory.c:748
 msgid "Pick up an image"
 msgstr "Pick up an image"
 
-#: ../src/cairo-dock-user-menu.c:891 ../src/gldit/cairo-dock-gui-factory.c:764
+#: ../src/cairo-dock-user-menu.c:925 ../src/gldit/cairo-dock-gui-factory.c:751
 msgid "Ok"
 msgstr "OK"
 
-#: ../src/cairo-dock-user-menu.c:893 ../src/cairo-dock-widget-shortkeys.c:128
-#: ../src/cairo-dock-widget-themes.c:234
-#: ../src/gldit/cairo-dock-gui-factory.c:766
+#: ../src/cairo-dock-user-menu.c:927 ../src/cairo-dock-widget-shortkeys.c:129
+#: ../src/cairo-dock-widget-themes.c:236
+#: ../src/gldit/cairo-dock-gui-factory.c:753
 msgid "Cancel"
 msgstr "Cancel"
 
-#: ../src/cairo-dock-user-menu.c:905 ../src/gldit/cairo-dock-gui-factory.c:805
-#: ../data/messages:463 ../data/messages:469 ../data/messages:735
-#: ../data/messages:977
+#: ../src/cairo-dock-user-menu.c:939 ../src/gldit/cairo-dock-gui-factory.c:792
+#: ../data/messages:469 ../data/messages:475 ../data/messages:741
+#: ../data/messages:983
 msgid "Image"
 msgstr "Image"
 
-#: ../src/cairo-dock-user-menu.c:1005
-msgid "Configure"
-msgstr "Configure"
-
-#: ../src/cairo-dock-user-menu.c:1010
-msgid "Configure behaviour, appearance, and applets."
-msgstr "Configure behaviour, appearance, and applets."
-
-#: ../src/cairo-dock-user-menu.c:1015
-msgid "Configure this dock"
-msgstr "Configure this dock"
-
-#: ../src/cairo-dock-user-menu.c:1020
-msgid "Customize the position, visibility and appearance of this main dock."
-msgstr "Customise the position, visibility and appearance of this main dock."
-
-#: ../src/cairo-dock-user-menu.c:1022
-msgid "Delete this dock"
-msgstr "Delete this dock"
-
-#: ../src/cairo-dock-user-menu.c:1032
-msgid "Manage themes"
-msgstr "Manage themes"
-
-#: ../src/cairo-dock-user-menu.c:1037
-msgid ""
-"Choose from amongst many themes on the server or save your current theme."
-msgstr ""
-"Choose from amongst many themes on the server or save your current theme."
-
-#: ../src/cairo-dock-user-menu.c:1049
-msgid "Lock icons position"
-msgstr "Lock icon's position"
-
-#: ../src/cairo-dock-user-menu.c:1053
+#: ../src/cairo-dock-user-menu.c:1020 ../src/cairo-dock-user-menu.c:1099
 msgid "This will (un)lock the position of the icons."
 msgstr "This will (un)lock the position of the icons."
 
-#: ../src/cairo-dock-user-menu.c:1059
+#: ../src/cairo-dock-user-menu.c:1050
+msgid "Configure"
+msgstr "Configure"
+
+#: ../src/cairo-dock-user-menu.c:1052
+msgid "Configure behaviour, appearance, and applets."
+msgstr "Configure behaviour, appearance, and applets."
+
+#: ../src/cairo-dock-user-menu.c:1060
+msgid "Configure this dock"
+msgstr "Configure this dock"
+
+#: ../src/cairo-dock-user-menu.c:1062
+msgid "Customize the position, visibility and appearance of this main dock."
+msgstr "Customise the position, visibility and appearance of this main dock."
+
+#: ../src/cairo-dock-user-menu.c:1065
+msgid "Delete this dock"
+msgstr "Delete this dock"
+
+#: ../src/cairo-dock-user-menu.c:1076
+msgid "Manage themes"
+msgstr "Manage themes"
+
+#: ../src/cairo-dock-user-menu.c:1078
+msgid ""
+"Choose from amongst many themes on the server or save your current theme."
+msgstr ""
+"Choose from amongst many themes on the server or save your current theme."
+
+#: ../src/cairo-dock-user-menu.c:1092
+msgid "Lock icons position"
+msgstr "Lock icon's position"
+
+#: ../src/cairo-dock-user-menu.c:1106
 msgid "Quick-Hide"
 msgstr "Quick-Hide"
 
-#: ../src/cairo-dock-user-menu.c:1064
+#: ../src/cairo-dock-user-menu.c:1108
 msgid "This will hide the dock until you hover over it with the mouse."
 msgstr "This will hide the dock until you hover over it with the mouse."
 
-#: ../src/cairo-dock-user-menu.c:1077
+#: ../src/cairo-dock-user-menu.c:1124
 msgid "Launch Cairo-Dock on startup"
 msgstr "Launch Cairo-Dock on startup"
 
-#: ../src/cairo-dock-user-menu.c:1093
-msgid ""
-"Third-party applets provide integration with many programs, like Pidgin"
+#: ../src/cairo-dock-user-menu.c:1138
+msgid "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Third-party applets provide integration with many programs, like Pidgin"
 
-#: ../src/cairo-dock-user-menu.c:1096 ../Help/src/applet-init.c:28
-#: ../Help/src/applet-notifications.c:269
+#: ../src/cairo-dock-user-menu.c:1144 ../Help/src/applet-init.c:28
+#: ../Help/src/applet-notifications.c:101
 msgid "Help"
 msgstr "Help"
 
-#: ../src/cairo-dock-user-menu.c:1101
+#: ../src/cairo-dock-user-menu.c:1146
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
 msgstr "There are no problems, only solutions (and a lot of useful hints!)"
 
-#: ../src/cairo-dock-user-menu.c:1105
+#: ../src/cairo-dock-user-menu.c:1152
 msgid "About"
 msgstr "About"
 
-#: ../src/cairo-dock-user-menu.c:1114
+#: ../src/cairo-dock-user-menu.c:1162
 msgid "Quit"
 msgstr "Quit"
 
-#: ../src/cairo-dock-user-menu.c:1123
+#: ../src/cairo-dock-user-menu.c:1164
 msgid ""
 "You're using a Cairo-Dock Session!\n"
 "It's not advised to quit the dock but you can press Shift to unlock this "
@@ -612,198 +612,190 @@ msgstr ""
 "It's not advised to quit the dock but you can press Shift to unlock this "
 "menu entry."
 
-#: ../src/cairo-dock-user-menu.c:1149 ../src/cairo-dock-user-menu.c:1162
+#: ../src/cairo-dock-user-menu.c:1195 ../src/cairo-dock-user-menu.c:1208
 msgid "Launch a new (Shift+clic)"
 msgstr "Launch new window (shift click)"
 
-#: ../src/cairo-dock-user-menu.c:1154 ../src/cairo-dock-user-menu.c:1235
+#: ../src/cairo-dock-user-menu.c:1200 ../src/cairo-dock-user-menu.c:1282
 msgid "Applet's handbook"
 msgstr "Applet's handbook"
 
-#: ../src/cairo-dock-user-menu.c:1169 ../src/cairo-dock-user-menu.c:1214
+#: ../src/cairo-dock-user-menu.c:1215 ../src/cairo-dock-user-menu.c:1261
 msgid "Edit"
 msgstr "Edit"
 
-#: ../src/cairo-dock-user-menu.c:1171 ../src/cairo-dock-user-menu.c:1221
+#: ../src/cairo-dock-user-menu.c:1217 ../src/cairo-dock-user-menu.c:1268
 msgid "Remove"
 msgstr "Remove"
 
-#: ../src/cairo-dock-user-menu.c:1172
+#: ../src/cairo-dock-user-menu.c:1218
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
 msgstr ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
 
-#: ../src/cairo-dock-user-menu.c:1181
+#: ../src/cairo-dock-user-menu.c:1228
 msgid "Make it a launcher"
 msgstr "Make it a launcher"
 
-#: ../src/cairo-dock-user-menu.c:1204
+#: ../src/cairo-dock-user-menu.c:1251
 msgid "Remove custom icon"
 msgstr "Remove custom icon"
 
-#: ../src/cairo-dock-user-menu.c:1208
+#: ../src/cairo-dock-user-menu.c:1255
 msgid "Set a custom icon"
 msgstr "Set a custom icon"
 
-#: ../src/cairo-dock-user-menu.c:1218
+#: ../src/cairo-dock-user-menu.c:1265
 msgid "Detach"
 msgstr "Detach"
 
-#: ../src/cairo-dock-user-menu.c:1218
+#: ../src/cairo-dock-user-menu.c:1265
 msgid "Return to the dock"
 msgstr "Return to the dock"
 
-#: ../src/cairo-dock-user-menu.c:1225
+#: ../src/cairo-dock-user-menu.c:1272
 msgid "Duplicate"
 msgstr "Duplicate"
 
-#: ../src/cairo-dock-user-menu.c:1399
+#: ../src/cairo-dock-user-menu.c:1446
 #, c-format
 msgid "Move all to desktop %d - face %d"
 msgstr "Move all to desktop %d - face %d"
 
-#: ../src/cairo-dock-user-menu.c:1399
+#: ../src/cairo-dock-user-menu.c:1446
 #, c-format
 msgid "Move to desktop %d - face %d"
 msgstr "Move to desktop %d - face %d"
 
-#: ../src/cairo-dock-user-menu.c:1401
+#: ../src/cairo-dock-user-menu.c:1448
 #, c-format
 msgid "Move all to desktop %d"
 msgstr "Move all to desktop %d"
 
-#: ../src/cairo-dock-user-menu.c:1401
+#: ../src/cairo-dock-user-menu.c:1448
 #, c-format
 msgid "Move to desktop %d"
 msgstr "Move to desktop %d"
 
-#: ../src/cairo-dock-user-menu.c:1403
+#: ../src/cairo-dock-user-menu.c:1450
 #, c-format
 msgid "Move all to face %d"
 msgstr "Move all to face %d"
 
-#: ../src/cairo-dock-user-menu.c:1403
+#: ../src/cairo-dock-user-menu.c:1450
 #, c-format
 msgid "Move to face %d"
 msgstr "Move to face %d"
 
-#: ../src/cairo-dock-user-menu.c:1831 ../src/cairo-dock-user-menu.c:1882
+#: ../src/cairo-dock-user-menu.c:1979
 msgid "Window"
 msgstr "Window"
 
-#: ../src/cairo-dock-user-menu.c:1837 ../src/cairo-dock-user-menu.c:1860
-#: ../src/cairo-dock-user-menu.c:1901 ../src/cairo-dock-user-menu.c:1912
-#: ../src/cairo-dock-user-menu.c:1935 ../src/cairo-dock-user-menu.c:1976
-#: ../src/cairo-dock-user-menu.c:1986 ../Help/src/applet-notifications.c:259
+#: ../src/cairo-dock-user-menu.c:1985 ../src/cairo-dock-user-menu.c:2008
+#: ../src/cairo-dock-user-menu.c:2045 ../src/cairo-dock-user-menu.c:2086
+#: ../src/cairo-dock-user-menu.c:2096 ../Help/src/applet-notifications.c:95
 msgid "middle-click"
 msgstr "middle-click"
 
-#: ../src/cairo-dock-user-menu.c:1852 ../src/cairo-dock-user-menu.c:1893
+#: ../src/cairo-dock-user-menu.c:2000
 msgid "Unmaximise"
 msgstr "Unmaximise"
 
-#: ../src/cairo-dock-user-menu.c:1852 ../src/cairo-dock-user-menu.c:1893
+#: ../src/cairo-dock-user-menu.c:2000
 msgid "Maximise"
 msgstr "Maximise"
 
-#: ../src/cairo-dock-user-menu.c:1860 ../src/cairo-dock-user-menu.c:1862
-#: ../src/cairo-dock-user-menu.c:1901 ../src/cairo-dock-user-menu.c:1903
+#: ../src/cairo-dock-user-menu.c:2008 ../src/cairo-dock-user-menu.c:2010
 msgid "Minimise"
 msgstr "Minimise"
 
-#: ../src/cairo-dock-user-menu.c:1877 ../src/cairo-dock-user-menu.c:1887
+#: ../src/cairo-dock-user-menu.c:2024
 msgid "Show"
 msgstr "Show"
 
-#: ../src/cairo-dock-user-menu.c:1921 ../src/cairo-dock-user-menu.c:2010
+#: ../src/cairo-dock-user-menu.c:2030 ../src/cairo-dock-user-menu.c:2111
 msgid "Other actions"
 msgstr "Other actions"
 
-#: ../src/cairo-dock-user-menu.c:1924
+#: ../src/cairo-dock-user-menu.c:2033
 msgid "Move to this desktop"
 msgstr "Move to this desktop"
 
-#: ../src/cairo-dock-user-menu.c:1929
+#: ../src/cairo-dock-user-menu.c:2039
 msgid "Not Fullscreen"
 msgstr "Not Fullscreen"
 
-#: ../src/cairo-dock-user-menu.c:1929
+#: ../src/cairo-dock-user-menu.c:2039
 msgid "Fullscreen"
 msgstr "Fullscreen"
 
-#: ../src/cairo-dock-user-menu.c:1935 ../src/cairo-dock-user-menu.c:1937
+#: ../src/cairo-dock-user-menu.c:2045 ../src/cairo-dock-user-menu.c:2047
 msgid "Below other windows"
 msgstr "Below other windows"
 
-#: ../src/cairo-dock-user-menu.c:1945
+#: ../src/cairo-dock-user-menu.c:2055
 msgid "Don't keep above"
 msgstr "Don't keep above"
 
-#: ../src/cairo-dock-user-menu.c:1945 ../Help/data/messages:349
+#: ../src/cairo-dock-user-menu.c:2055 ../Help/data/messages:309
 msgid "Keep above"
 msgstr "Keep above"
 
-#: ../src/cairo-dock-user-menu.c:1949
+#: ../src/cairo-dock-user-menu.c:2059
 msgid "Visible only on this desktop"
 msgstr "Visible only on this desktop"
 
-#: ../src/cairo-dock-user-menu.c:1949
+#: ../src/cairo-dock-user-menu.c:2059
 msgid "Visible on all desktops"
 msgstr "Visible on all desktops"
 
-#: ../src/cairo-dock-user-menu.c:1957
+#: ../src/cairo-dock-user-menu.c:2068
 msgid "Kill"
 msgstr "Kill"
 
-#: ../src/cairo-dock-user-menu.c:1972
+#: ../src/cairo-dock-user-menu.c:2082
 msgid "Windows"
 msgstr "Windows"
 
-#: ../src/cairo-dock-user-menu.c:1976 ../src/cairo-dock-user-menu.c:1978
-#: ../src/cairo-dock-user-menu.c:2006
+#: ../src/cairo-dock-user-menu.c:2086 ../src/cairo-dock-user-menu.c:2088
 msgid "Close all"
 msgstr "Close all"
 
-#: ../src/cairo-dock-user-menu.c:1986 ../src/cairo-dock-user-menu.c:1988
-#: ../src/cairo-dock-user-menu.c:2004
+#: ../src/cairo-dock-user-menu.c:2096 ../src/cairo-dock-user-menu.c:2098
 msgid "Minimise all"
 msgstr "Minimise all"
 
-#: ../src/cairo-dock-user-menu.c:1996 ../src/cairo-dock-user-menu.c:2002
+#: ../src/cairo-dock-user-menu.c:2106
 msgid "Show all"
 msgstr "Show all"
 
-#: ../src/cairo-dock-user-menu.c:2000
-msgid "Windows management"
-msgstr "Windows management"
-
-#: ../src/cairo-dock-user-menu.c:2012
+#: ../src/cairo-dock-user-menu.c:2113
 msgid "Move all to this desktop"
 msgstr "Move all to this desktop"
 
-#: ../src/cairo-dock-user-menu.c:2035 ../Help/data/messages:347
+#: ../src/cairo-dock-user-menu.c:2140 ../Help/data/messages:307
 msgid "Normal"
 msgstr "Normal"
 
-#: ../src/cairo-dock-user-menu.c:2041 ../data/messages:21 ../data/messages:193
-#: ../data/messages:923
+#: ../src/cairo-dock-user-menu.c:2146 ../data/messages:23 ../data/messages:195
+#: ../data/messages:929
 msgid "Always on top"
 msgstr "Always on top"
 
-#: ../src/cairo-dock-user-menu.c:2048
+#: ../src/cairo-dock-user-menu.c:2153
 msgid "Always below"
 msgstr "Always below"
 
-#: ../src/cairo-dock-user-menu.c:2065 ../Help/data/messages:355
+#: ../src/cairo-dock-user-menu.c:2170 ../Help/data/messages:315
 msgid "Reserve space"
 msgstr "Reserve space"
 
-#: ../src/cairo-dock-user-menu.c:2072
+#: ../src/cairo-dock-user-menu.c:2177
 msgid "On all desktops"
 msgstr "On all desktops"
 
-#: ../src/cairo-dock-user-menu.c:2078
+#: ../src/cairo-dock-user-menu.c:2183
 msgid "Lock position"
 msgstr "Lock position"
 
@@ -816,38 +808,35 @@ msgid "Effects:"
 msgstr "Effects:"
 
 #: ../src/cairo-dock-widget-items.c:243
-msgid ""
-"Main dock's parameters are available in the main configuration window."
-msgstr ""
-"Main dock's parameters are available in the main configuration window."
+msgid "Main dock's parameters are available in the main configuration window."
+msgstr "Main dock's parameters are available in the main configuration window."
 
-#: ../src/cairo-dock-widget-items.c:724
+#: ../src/cairo-dock-widget-items.c:710
 msgid "Remove this item"
 msgstr "Remove this item"
 
-#: ../src/cairo-dock-widget-plugins.c:105
+#: ../src/cairo-dock-widget-plugins.c:103
 msgid "Configure this applet"
 msgstr "Configure this applet"
 
-#: ../src/cairo-dock-widget-plugins.c:158
+#: ../src/cairo-dock-widget-plugins.c:149
 msgid "Accessory"
 msgstr "Accessory"
 
-#: ../src/cairo-dock-widget-plugins.c:245
+#: ../src/cairo-dock-widget-plugins.c:235
 msgid "Plug-in"
 msgstr "Plug-in"
 
-#: ../src/cairo-dock-widget-plugins.c:251 ../Help/src/applet-tips-dialog.c:297
+#: ../src/cairo-dock-widget-plugins.c:241 ../Help/src/applet-tips-dialog.c:309
 msgid "Category"
 msgstr "Category"
 
-#: ../src/cairo-dock-widget-plugins.c:279
-msgid ""
-"Click on an applet in order to have a preview and a description for it."
+#: ../src/cairo-dock-widget-plugins.c:265
+msgid "Click on an applet in order to have a preview and a description for it."
 msgstr ""
 "Click on an applet in order to have a preview and a description for it."
 
-#: ../src/cairo-dock-widget-shortkeys.c:125
+#: ../src/cairo-dock-widget-shortkeys.c:126
 msgid "Press the shortkey"
 msgstr "Press the shortkey"
 
@@ -855,23 +844,30 @@ msgstr "Press the shortkey"
 msgid "Change the shortkey"
 msgstr "Change the shortkey"
 
-#: ../src/cairo-dock-widget-shortkeys.c:234
+#: ../src/cairo-dock-widget-shortkeys.c:225
 msgid "Origin"
 msgstr "Origin"
 
-#: ../src/cairo-dock-widget-shortkeys.c:239
+#: ../src/cairo-dock-widget-shortkeys.c:230
 msgid "Action"
 msgstr "Action"
 
-#: ../src/cairo-dock-widget-shortkeys.c:243
+#: ../src/cairo-dock-widget-shortkeys.c:234
 msgid "Shortkey"
 msgstr "Shortkey"
 
-#: ../src/cairo-dock-widget-themes.c:89
+#: ../src/cairo-dock-widget-shortkeys.c:261
+#: ../src/gldit/cairo-dock-gui-factory.c:3022
+msgid ""
+"You are running Cairo-Dock in a Wayland session.\n"
+"Setting global keyboard shortcuts is not supported on Wayland yet."
+msgstr ""
+
+#: ../src/cairo-dock-widget-themes.c:90
 msgid "Could not import the theme."
 msgstr "Could not import the theme."
 
-#: ../src/cairo-dock-widget-themes.c:194
+#: ../src/cairo-dock-widget-themes.c:195
 msgid ""
 "You have made some changes to the current theme.\n"
 "You will lose them if you don't save before choosing a new theme. Continue "
@@ -881,70 +877,70 @@ msgstr ""
 "You will lose them if you don't save before choosing a new theme. Continue "
 "anyway?"
 
-#: ../src/cairo-dock-widget-themes.c:222
+#: ../src/cairo-dock-widget-themes.c:224
 msgid "Please wait while importing the theme..."
 msgstr "Please wait while importing the theme..."
 
-#: ../src/cairo-dock-widget-themes.c:281
+#: ../src/cairo-dock-widget-themes.c:283
 msgid "Rate me"
 msgstr "Rate me"
 
-#: ../src/cairo-dock-widget-themes.c:379 ../src/cairo-dock-widget-themes.c:381
+#: ../src/cairo-dock-widget-themes.c:384 ../src/cairo-dock-widget-themes.c:386
 msgid "You must try the theme before you can rate it."
 msgstr "You must try the theme before you can rate it."
 
-#: ../src/cairo-dock-widget-themes.c:428
+#: ../src/cairo-dock-widget-themes.c:433
 msgid "The theme has been deleted"
 msgstr "The theme has been deleted"
 
-#: ../src/cairo-dock-widget-themes.c:458
+#: ../src/cairo-dock-widget-themes.c:462
 msgid "Delete this theme"
 msgstr "Delete this theme"
 
-#: ../src/cairo-dock-widget-themes.c:489
-#: ../src/gldit/cairo-dock-gui-factory.c:2379
+#: ../src/cairo-dock-widget-themes.c:486
+#: ../src/gldit/cairo-dock-gui-factory.c:2304
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr "Listing themes in '%s' ..."
 
-#: ../src/cairo-dock-widget-themes.c:512
+#: ../src/cairo-dock-widget-themes.c:509
 msgid "Theme"
 msgstr "Theme"
 
-#: ../src/cairo-dock-widget-themes.c:525
+#: ../src/cairo-dock-widget-themes.c:522
 msgid "Rating"
 msgstr "Rating"
 
-#: ../src/cairo-dock-widget-themes.c:531
+#: ../src/cairo-dock-widget-themes.c:528
 msgid "Sobriety"
 msgstr "Sobriety"
 
-#: ../src/cairo-dock-widget-themes.c:595
+#: ../src/cairo-dock-widget-themes.c:588
 msgid "Save as:"
 msgstr "Save as:"
 
-#: ../src/cairo-dock-widget-themes.c:675
+#: ../src/cairo-dock-widget-themes.c:667
 msgid "Importing theme ..."
 msgstr "Importing theme ..."
 
-#: ../src/cairo-dock-widget-themes.c:683
+#: ../src/cairo-dock-widget-themes.c:675
 msgid "Theme has been saved"
 msgstr "The Theme has been saved"
 
-#: ../src/cairo-dock.c:148
+#: ../src/cairo-dock.c:164
 #, c-format
 msgid "Happy new year %d !!!"
 msgstr "Happy new year %d !!!"
 
-#: ../src/cairo-dock.c:351
+#: ../src/cairo-dock.c:382
 msgid "Use Cairo backend."
 msgstr "Use Cairo backend."
 
-#: ../src/cairo-dock.c:354
+#: ../src/cairo-dock.c:385
 msgid "Use OpenGL backend."
 msgstr "Use OpenGL backend."
 
-#: ../src/cairo-dock.c:357
+#: ../src/cairo-dock.c:388
 msgid ""
 "Use OpenGL backend with indirect rendering. There are very few case where "
 "this option should be used."
@@ -952,21 +948,21 @@ msgstr ""
 "Use OpenGL backend with indirect rendering. There are very few case where "
 "this option should be used."
 
-#: ../src/cairo-dock.c:360
+#: ../src/cairo-dock.c:391
 msgid "Ask again on startup which backend to use."
 msgstr "Ask again on startup which backend to use."
 
-#: ../src/cairo-dock.c:363
+#: ../src/cairo-dock.c:394
 msgid "Force the dock to consider this environnement - use it with care."
 msgstr "Force the dock to consider this environnement - use it with care."
 
-#: ../src/cairo-dock.c:366
+#: ../src/cairo-dock.c:397
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
 msgstr ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
 
-#: ../src/cairo-dock.c:369
+#: ../src/cairo-dock.c:400
 msgid ""
 "Address of a server containing additional themes. This will overwrite the "
 "default server address."
@@ -974,7 +970,7 @@ msgstr ""
 "Address of a server containing additional themes. This will overwrite the "
 "default server address."
 
-#: ../src/cairo-dock.c:372
+#: ../src/cairo-dock.c:403
 msgid ""
 "Wait for N seconds before starting; this is useful if you notice some "
 "problems when the dock starts with the session."
@@ -982,7 +978,7 @@ msgstr ""
 "Wait for N seconds before starting; this is useful if you notice some "
 "problems when the dock starts with the session."
 
-#: ../src/cairo-dock.c:375
+#: ../src/cairo-dock.c:406
 msgid ""
 "Allow to edit the config before the dock is started and show the config "
 "panel on start."
@@ -990,53 +986,49 @@ msgstr ""
 "Allow editing of the configuration before the dock is started and show the "
 "config panel on start."
 
-#: ../src/cairo-dock.c:378
+#: ../src/cairo-dock.c:409
 msgid "Exclude a given plug-in from activating (it is still loaded though)."
 msgstr "Exclude a given plug-in from activating (it is still loaded though)."
 
-#: ../src/cairo-dock.c:381
+#: ../src/cairo-dock.c:412
 msgid "Don't load any plug-ins."
 msgstr "Don't load any plug-ins."
 
-#: ../src/cairo-dock.c:384
-msgid ""
-"Work around some bugs in Metacity Window-Manager (invisible dialogs or sub-"
-"docks)"
+#: ../src/cairo-dock.c:415
+msgid "Work around potential glitches when dialogs or sub-docks appear"
 msgstr ""
-"Work around some bugs in Metacity Window-Manager (invisible dialogues or sub-"
-"docks)"
 
-#: ../src/cairo-dock.c:387
+#: ../src/cairo-dock.c:418
 msgid ""
 "Log verbosity (debug,message,warning,critical,error); default is warning."
 msgstr ""
 "Log verbosity (debug,message,warning,critical,error); default is warning."
 
-#: ../src/cairo-dock.c:390
+#: ../src/cairo-dock.c:421
 msgid "Force to display some output messages with colors."
 msgstr "Force to display some output messages with colours."
 
-#: ../src/cairo-dock.c:393
+#: ../src/cairo-dock.c:424
 msgid "Print version and quit."
 msgstr "Print version and quit."
 
-#: ../src/cairo-dock.c:396
+#: ../src/cairo-dock.c:427
 msgid "Lock the dock so that any modification is impossible for users."
 msgstr "Lock the dock so that any user modification is impossible."
 
-#: ../src/cairo-dock.c:400
-msgid "Keep the dock above other windows whatever."
-msgstr "Keep the dock above other windows whatever."
+#: ../src/cairo-dock.c:431
+msgid "Keep the dock above other windows."
+msgstr "Keep the dock above other windows."
 
-#: ../src/cairo-dock.c:403
+#: ../src/cairo-dock.c:434
 msgid "Don't make the dock appear on all desktops."
 msgstr "Don't make the dock appear on all desktops."
 
-#: ../src/cairo-dock.c:406 ../src/cairo-dock.c:466
+#: ../src/cairo-dock.c:437 ../src/cairo-dock.c:497
 msgid "Cairo-Dock makes anything, including coffee !"
 msgstr "Cairo-Dock makes anything, including coffee !"
 
-#: ../src/cairo-dock.c:409
+#: ../src/cairo-dock.c:440
 msgid ""
 "Ask the dock to load additionnal modules contained in this directory (though "
 "it is unsafe for your dock to load unnofficial modules)."
@@ -1044,7 +1036,7 @@ msgstr ""
 "Ask the dock to load additional modules contained in this directory (though "
 "it is unsafe for your dock to load unofficial modules)."
 
-#: ../src/cairo-dock.c:412
+#: ../src/cairo-dock.c:443
 msgid ""
 "For debugging purpose only. The crash manager will not be started to hunt "
 "down the bugs."
@@ -1052,7 +1044,7 @@ msgstr ""
 "For debugging purpose only. The crash manager will not be started to hunt "
 "down the bugs."
 
-#: ../src/cairo-dock.c:415
+#: ../src/cairo-dock.c:446
 msgid ""
 "For debugging purpose only. Some hidden and still unstable options will be "
 "activated."
@@ -1060,19 +1052,72 @@ msgstr ""
 "For debugging purpose only. Some hidden and still unstable options will be "
 "activated."
 
-#: ../src/cairo-dock.c:535
+#: ../src/cairo-dock.c:449
+msgid "Force using the Wayland backends (disable X11 backends)."
+msgstr ""
+
+#: ../src/cairo-dock.c:452
+msgid "Force using the X11 backend (disable any Wayland functionality)."
+msgstr ""
+
+#: ../src/cairo-dock.c:455
+msgid "Use EGL on X11."
+msgstr ""
+
+#: ../src/cairo-dock.c:458
+msgid "For debugging purpose only. Disable gtk-layer-shell support."
+msgstr ""
+
+#: ../src/cairo-dock.c:461
+msgid ""
+"For debugging purpose only. Do not blacklist incompatible plugins on Wayland."
+msgstr ""
+
+#: ../src/cairo-dock.c:464
+msgid ""
+"For debugging purposes. Fail loading the specified plugin module after "
+"opening it. Multiple modules can be specified by repeating this option "
+"multiple times."
+msgstr ""
+
+#: ../src/cairo-dock.c:467
+msgid ""
+"For debugging purposes only. Fail loading all plugin modules (after opening)."
+msgstr ""
+
+#: ../src/cairo-dock.c:470
+msgid ""
+"For debugging purposes only. Do not check version compatibility after "
+"loading a plugin module."
+msgstr ""
+
+#: ../src/cairo-dock.c:473
+msgid "For debugging purposes only. Do not use systemd to launch apps."
+msgstr ""
+
+#: ../src/cairo-dock.c:476
+msgid "For debugging purposes only. Do not use DBus activation to launch apps."
+msgstr ""
+
+#: ../src/cairo-dock.c:479
+msgid ""
+"For debugging purposes only. Rely on GIO to launch apps instead of our own "
+"implementation (implies --disable-systemd)."
+msgstr ""
+
+#: ../src/cairo-dock.c:605
 msgid "Use OpenGL in Cairo-Dock"
 msgstr "Use OpenGL in Cairo-Dock"
 
-#: ../src/cairo-dock.c:538 ../src/cairo-dock.c:785
+#: ../src/cairo-dock.c:608 ../src/cairo-dock.c:848
 msgid "Yes"
 msgstr "Yes"
 
-#: ../src/cairo-dock.c:540 ../src/cairo-dock.c:786 ../data/messages:823
+#: ../src/cairo-dock.c:610 ../src/cairo-dock.c:849 ../data/messages:829
 msgid "No"
 msgstr "No"
 
-#: ../src/cairo-dock.c:543
+#: ../src/cairo-dock.c:613
 msgid ""
 "OpenGL allows you to use the hardware acceleration, reducing the CPU load to "
 "the minimum.\n"
@@ -1092,36 +1137,36 @@ msgstr ""
 "(To not show this dialogue, launch the dock from the Applications menu,\n"
 "or with the -o flag to force OpenGL or -c to force cairo.)"
 
-#: ../src/cairo-dock.c:550
+#: ../src/cairo-dock.c:620
 msgid "Remember this choice"
 msgstr "Remember this choice"
 
-#: ../src/cairo-dock.c:716 ../src/cairo-dock.c:908
+#: ../src/cairo-dock.c:780 ../src/cairo-dock.c:1000
 #, c-format
 msgid ""
 "The module '%s' has been deactivated because it may have caused some "
 "problems.\n"
-"You can reactivate it, but if it happens again please report it at "
-"https://github.com/Cairo-Dock/cairo-dock-core/issues"
+"You can reactivate it, but if it happens again please report it at https://"
+"github.com/Cairo-Dock/cairo-dock-core/issues"
 msgstr ""
 "The module '%s' has been deactivated because it may have caused some "
 "problems.\n"
-"You can reactivate it, but if it happens again please report it at "
-"https://github.com/Cairo-Dock/cairo-dock-core/issues"
+"You can reactivate it, but if it happens again please report it at https://"
+"github.com/Cairo-Dock/cairo-dock-core/issues"
 
-#: ../src/cairo-dock.c:728
+#: ../src/cairo-dock.c:791
 msgid "< Maintenance mode >"
 msgstr "< Maintenance mode >"
 
-#: ../src/cairo-dock.c:730
+#: ../src/cairo-dock.c:793
 msgid "Something went wrong with this applet:"
 msgstr "Something went wrong with this applet:"
 
-#: ../src/cairo-dock.c:782
+#: ../src/cairo-dock.c:845
 msgid "You're using our Cairo-Dock session"
 msgstr "You're using our Cairo-Dock session"
 
-#: ../src/cairo-dock.c:788
+#: ../src/cairo-dock.c:851
 msgid ""
 "It can be interesting to use an adapted theme for this session.\n"
 "\n"
@@ -1137,12 +1182,13 @@ msgstr ""
 "Note: your current theme will be saved and can be reimported later from the "
 "Themes manager"
 
-#: ../src/cairo-dock.c:833
+#: ../src/cairo-dock.c:896
 msgid ""
 "No plug-in were found.\n"
 "Plug-ins provide most of the functionalities (animations, applets, views, "
 "etc).\n"
-"See https://github.com/Cairo-Dock/cairo-dock-core/wiki for more information.\n"
+"See https://github.com/Cairo-Dock/cairo-dock-core/wiki for more "
+"information.\n"
 "There is almost no meaning in running the dock without them and it's "
 "probably due to a problem with the installation of these plug-ins.\n"
 "But if you really want to use the dock without these plug-ins, you can "
@@ -1151,13 +1197,52 @@ msgstr ""
 "No plug-ins were found.\n"
 "Plug-ins provide most of the functionalities (animations, applets, views, "
 "etc).\n"
-"See https://github.com/Cairo-Dock/cairo-dock-core/wiki for more information.\n"
+"See https://github.com/Cairo-Dock/cairo-dock-core/wiki for more "
+"information.\n"
 "There is almost no meaning in running the dock without them and it's "
 "probably due to a problem with the installation of these plug-ins.\n"
 "But if you really want to use the dock without these plug-ins, you can "
 "launch the dock with the '-f' option to no longer have this message.\n"
 
-#: ../src/cairo-dock.c:906
+#: ../src/cairo-dock.c:908
+msgid ""
+"Cairo-Dock is running in a Wayland session, but the compositor does not seem "
+"to support the wlr-layer-shell protocol. This is required for properly "
+"positioning the dock on the screen; it is likely that docks will show up in "
+"wrong locations. Please check that you are running a Wayland compositor that "
+"is compatible with wlr-layer-shell; see the documentation for more "
+"information. Please note that neither GNOME Shell nor the Ubuntu Wayland "
+"desktop session is supported. If you believe that your compositor should be "
+"supported, consider reporting this issue in our bug tracker.\n"
+"\n"
+"(to disable showing this message, run Cairo-Dock with the '--no-layer-shell' "
+"command line option)"
+msgstr ""
+
+#: ../src/cairo-dock.c:908
+msgid ""
+"Cairo-Dock is running in a Wayland session, but it was not compiled with gtk-"
+"layer-shell support. This is required for properly positioning the dock on "
+"the screen; it is likely that docks will show up in wrong locations. If you "
+"have installed Cairo-Dock from a binary package, please report this issue to "
+"the package's maintainer. If you have compiled Cairo-Dock yourself, please "
+"ensure that the development libraries for gtk-layer-shell are available; see "
+"the documentation for more information.\n"
+"\n"
+"(to disable showing this message, run Cairo-Dock with the '--no-layer-shell' "
+"command line option)"
+msgstr ""
+
+#: ../src/cairo-dock.c:916
+msgid ""
+"You are running Cairo-Dock in a Wayland session. Please note the support for "
+"Wayland is still experimental: not all features and plugins work yet.\n"
+"See the documentation for more information.\n"
+"Please consider reporting any issues you encounter in our bug tracker. Thank "
+"you!"
+msgstr ""
+
+#: ../src/cairo-dock.c:998
 #, c-format
 msgid ""
 "The module '%s' may have encountered a problem.\n"
@@ -1168,7 +1253,7 @@ msgstr ""
 "It has been restored successfully, but if it happens again, please report it "
 "at https://github.com/Cairo-Dock/cairo-dock-core/issues"
 
-#: ../src/gldit/cairo-dock-applet-facility.h:254
+#: ../src/gldit/cairo-dock-applet-facility.h:260
 msgid ""
 "The theme could not be found; the default theme will be used instead.\n"
 " You can change this by opening the configuration of this module. Do you "
@@ -1178,7 +1263,7 @@ msgstr ""
 " You can change this by opening the configuration of this module. Do you "
 "want to do it now?"
 
-#: ../src/gldit/cairo-dock-applet-facility.h:270
+#: ../src/gldit/cairo-dock-applet-facility.h:276
 msgid ""
 "The gauge theme could not be found; a default gauge will be used instead.\n"
 "You can change this by opening the configuration of this module. Do you want "
@@ -1188,121 +1273,117 @@ msgstr ""
 "You can change this by opening the configuration of this module. Do you want "
 "to do it now?"
 
-#: ../src/gldit/cairo-dock-desklet-manager.c:806 ../data/messages:461
-#: ../data/messages:551 ../data/messages:691 ../data/messages:733
-#: ../data/messages:805 ../data/messages:839
+#: ../src/gldit/cairo-dock-desklet-manager.c:812 ../data/messages:467
+#: ../data/messages:557 ../data/messages:697 ../data/messages:739
+#: ../data/messages:811 ../data/messages:845
 msgid "Automatic"
 msgstr "Automatic"
 
-#: ../src/gldit/cairo-dock-desklet-manager.c:819
+#: ../src/gldit/cairo-dock-desklet-manager.c:825
 msgid "_custom decoration_"
 msgstr "_custom decoration_"
 
-#: ../src/gldit/cairo-dock-dock-factory.c:1337
+#: ../src/gldit/cairo-dock-dock-factory.c:1371
 msgid "Sorry but the dock is locked"
 msgstr "Sorry but the dock is locked"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:236
+#: ../src/gldit/cairo-dock-dock-manager.c:225
 msgid "Bottom dock"
 msgstr "Bottom dock"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:238
+#: ../src/gldit/cairo-dock-dock-manager.c:227
 msgid "Top dock"
 msgstr "Top dock"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:243
+#: ../src/gldit/cairo-dock-dock-manager.c:232
 msgid "Right dock"
 msgstr "Right dock"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:245
+#: ../src/gldit/cairo-dock-dock-manager.c:234
 msgid "Left dock"
 msgstr "Left dock"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:1692
-#: ../src/gldit/cairo-dock-dock-manager.c:1792
+#: ../src/gldit/cairo-dock-dock-manager.c:1565
+#: ../src/gldit/cairo-dock-dock-manager.c:1663
 msgid "Pop up the main dock"
 msgstr "Pop up the main dock"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:256
+#: ../src/gldit/cairo-dock-gui-factory.c:246
 #, c-format
 msgid "by %s"
 msgstr "by %s"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:268
+#: ../src/gldit/cairo-dock-gui-factory.c:258
 msgid "kB"
 msgstr "kB"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:270
+#: ../src/gldit/cairo-dock-gui-factory.c:260
 msgid "MB"
 msgstr "MB"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:279
+#: ../src/gldit/cairo-dock-gui-factory.c:269
 msgid "Local"
 msgstr "Local"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:280
+#: ../src/gldit/cairo-dock-gui-factory.c:270
 msgid "User"
 msgstr "User"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:281
+#: ../src/gldit/cairo-dock-gui-factory.c:271
 msgid "Net"
 msgstr "Net"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:282
+#: ../src/gldit/cairo-dock-gui-factory.c:272
 msgid "New"
 msgstr "New"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:283
+#: ../src/gldit/cairo-dock-gui-factory.c:273
 msgid "Updated"
 msgstr "Updated"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:761
+#: ../src/gldit/cairo-dock-gui-factory.c:748
 msgid "Pick up a file"
 msgstr "Pick up a file"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:761
+#: ../src/gldit/cairo-dock-gui-factory.c:748
 msgid "Pick up a directory"
 msgstr "Pick up a directory"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1049
+#: ../src/gldit/cairo-dock-gui-factory.c:1036
 msgid "_Custom Icons_"
 msgstr "_Custom Icons_"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1066
-#: ../src/gldit/cairo-dock-gui-factory.c:1111
-msgid "Use all screens"
-msgstr "Use all screens"
-
-#: ../src/gldit/cairo-dock-gui-factory.c:1088 ../data/messages:13
-#: ../data/messages:163 ../data/messages:169 ../data/messages:909
+#: ../src/gldit/cairo-dock-gui-factory.c:1074 ../data/messages:13
+#: ../data/messages:165 ../data/messages:171 ../data/messages:915
 msgid "left"
 msgstr "left"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1090 ../data/messages:11
-#: ../data/messages:161 ../data/messages:171 ../data/messages:907
+#: ../src/gldit/cairo-dock-gui-factory.c:1076 ../data/messages:11
+#: ../data/messages:163 ../data/messages:173 ../data/messages:913
 msgid "right"
 msgstr "right"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1092
-#: ../src/gldit/cairo-dock-gui-factory.c:1102
+#: ../src/gldit/cairo-dock-gui-factory.c:1078
+#: ../src/gldit/cairo-dock-gui-factory.c:1088
 msgid "middle"
 msgstr "middle"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1098 ../data/messages:9
-#: ../data/messages:159 ../data/messages:905
+#: ../src/gldit/cairo-dock-gui-factory.c:1084 ../data/messages:9
+#: ../data/messages:161 ../data/messages:911
 msgid "top"
 msgstr "top"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1100 ../data/messages:7
-#: ../data/messages:157 ../data/messages:903
+#: ../src/gldit/cairo-dock-gui-factory.c:1086 ../data/messages:7
+#: ../data/messages:159 ../data/messages:909
 msgid "bottom"
 msgstr "bottom"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1105
+#: ../src/gldit/cairo-dock-gui-factory.c:1091
+#: ../src/gldit/cairo-dock-gui-factory.c:1097
 msgid "Screen"
 msgstr "Screen"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1399
+#: ../src/gldit/cairo-dock-gui-factory.c:1385
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -1313,7 +1394,7 @@ msgstr ""
 "Be sure to install it with the same version as the dock to enjoy these "
 "features."
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1408
+#: ../src/gldit/cairo-dock-gui-factory.c:1394
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
@@ -1322,90 +1403,102 @@ msgstr ""
 "The '%s' plug-in is not active.\n"
 "Activate it now?"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3043
+#: ../src/gldit/cairo-dock-gui-factory.c:2165
+msgid ""
+"You are running Cairo-Dock in a Wayland session.\n"
+"Setting a horizontal offset is not supported on Wayland yet."
+msgstr ""
+
+#: ../src/gldit/cairo-dock-gui-factory.c:2937
 msgid "link"
 msgstr "link"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:3105
+#: ../src/gldit/cairo-dock-gui-factory.c:2999
 msgid "Grab"
 msgstr "Grab"
 
-#: ../src/gldit/cairo-dock-launcher-manager.c:328
+#: ../src/gldit/cairo-dock-launcher-manager.c:378
 msgid "Enter a command"
 msgstr "Enter a command"
 
-#: ../src/gldit/cairo-dock-launcher-manager.c:329
+#: ../src/gldit/cairo-dock-launcher-manager.c:379
 msgid "New launcher"
 msgstr "New launcher"
 
-#: ../src/gldit/cairo-dock-module-instance-manager.c:310
+#: ../src/gldit/cairo-dock-module-instance-manager.c:323
 msgid "by"
 msgstr "by"
 
-#: ../src/gldit/cairo-dock-struct.h:488 ../data/messages:1067
-#: ../data/messages:1075
+#: ../src/gldit/cairo-dock-struct.h:526 ../data/messages:1073
+#: ../data/messages:1081
 msgid "Default"
 msgstr "Default"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:188
+#: ../src/gldit/cairo-dock-themes-manager.c:196
 #, c-format
 msgid "Are you sure you want to overwrite theme %s?"
 msgstr "Are you sure you want to overwrite theme %s?"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:265
+#: ../src/gldit/cairo-dock-themes-manager.c:273
 msgid "Last modification on:"
 msgstr "Last modification on:"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:336
+#: ../src/gldit/cairo-dock-themes-manager.c:347
 msgid "Your theme should now be available in this directory:"
 msgstr "Your theme should now be available in this directory:"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:341
+#: ../src/gldit/cairo-dock-themes-manager.c:352
 msgid "Error when launching 'cairo-dock-package-theme' script"
 msgstr "Error when launching 'cairo-dock-package-theme' script"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:362
+#: ../src/gldit/cairo-dock-themes-manager.c:373
 #, c-format
 msgid ""
 "Could not access remote file %s. Maybe the server is down.\n"
-"Please retry later or contact us at https://github.com/Cairo-Dock/cairo-dock-core/issues"
+"Please retry later or contact us at https://github.com/Cairo-Dock/cairo-dock-"
+"core/issues"
 msgstr ""
 "Could not access remote file %s. Maybe the server is down.\n"
-"Please retry later or contact us at https://github.com/Cairo-Dock/cairo-dock-core/issues"
+"Please retry later or contact us at https://github.com/Cairo-Dock/cairo-dock-"
+"core/issues"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:376
+#: ../src/gldit/cairo-dock-themes-manager.c:387
 #, c-format
 msgid "Are you sure you want to delete theme %s?"
 msgstr "Are you sure you want to delete theme %s?"
 
-#: ../src/gldit/cairo-dock-themes-manager.c:378
+#: ../src/gldit/cairo-dock-themes-manager.c:389
 msgid "Are you sure you want to delete these themes?"
 msgstr "Are you sure you want to delete these themes?"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:576 ../data/messages:39
-#: ../data/messages:211
+#: ../src/implementations/cairo-dock-hiding-effect.c:592 ../data/messages:41
+#: ../data/messages:213
 msgid "Move down"
 msgstr "Move down"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:584 ../data/messages:41
-#: ../data/messages:101 ../data/messages:213
+#: ../src/implementations/cairo-dock-hiding-effect.c:600 ../data/messages:43
+#: ../data/messages:103 ../data/messages:215
 msgid "Fade out"
 msgstr "Fade out"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:592 ../data/messages:43
-#: ../data/messages:215
+#: ../src/implementations/cairo-dock-hiding-effect.c:608 ../data/messages:45
+#: ../data/messages:217
 msgid "Semi transparent"
 msgstr "Semi transparent"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:601 ../data/messages:45
-#: ../data/messages:217
+#: ../src/implementations/cairo-dock-hiding-effect.c:617 ../data/messages:47
+#: ../data/messages:219
 msgid "Zoom out"
 msgstr "Zoom out"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:609 ../data/messages:47
-#: ../data/messages:219
+#: ../src/implementations/cairo-dock-hiding-effect.c:625 ../data/messages:49
+#: ../data/messages:221
 msgid "Folding"
 msgstr "Folding"
+
+#: ../src/implementations/cairo-dock-wayland-wm.c:117
+msgid "Select an open window by clicking on it or choosing it from the taskbar"
+msgstr ""
 
 #: ../Help/src/applet-composite.c:71
 msgid ""
@@ -1423,11 +1516,11 @@ msgstr ""
 "Hope you will enjoy this software !\n"
 "  (you can now click on this dialogue to close it)"
 
-#: ../Help/src/applet-composite.c:165
+#: ../Help/src/applet-composite.c:166
 msgid "Don't ask me any more"
 msgstr "Don't ask me any more"
 
-#: ../Help/src/applet-composite.c:171
+#: ../Help/src/applet-composite.c:172
 msgid ""
 "To remove the black rectangle around the dock, you need to activate a "
 "composite manager.\n"
@@ -1437,7 +1530,7 @@ msgstr ""
 "composite manager.\n"
 "Do you want to activate it now?"
 
-#: ../Help/src/applet-composite.c:182
+#: ../Help/src/applet-composite.c:183
 msgid ""
 "Do you want to keep this setting?\n"
 "In 15 seconds, the previous setting will be restored."
@@ -1445,7 +1538,7 @@ msgstr ""
 "Do you want to keep this setting?\n"
 "In 15 seconds, the previous setting will be restored."
 
-#: ../Help/src/applet-composite.c:198
+#: ../Help/src/applet-composite.c:199
 msgid ""
 "To remove the black rectangle around the dock, you will need to activate a "
 "composite manager.\n"
@@ -1477,27 +1570,19 @@ msgstr ""
 "Middle-click to open the configuration window.\n"
 "Right-click to access some troubleshooting actions."
 
-#: ../Help/src/applet-notifications.c:259
+#: ../Help/src/applet-notifications.c:95
 msgid "Open global settings"
 msgstr "Open global settings"
 
-#: ../Help/src/applet-notifications.c:264
+#: ../Help/src/applet-notifications.c:100
 msgid "Activate composite"
 msgstr "Activate composite"
 
-#: ../Help/src/applet-notifications.c:266
-msgid "Disable the gnome-panel"
-msgstr "Disable the gnome-panel"
-
-#: ../Help/src/applet-notifications.c:268
-msgid "Disable Unity"
-msgstr "Disable Unity"
-
-#: ../Help/src/applet-notifications.c:270
+#: ../Help/src/applet-notifications.c:102
 msgid "Online help"
 msgstr "Online help"
 
-#: ../Help/src/applet-tips-dialog.c:152
+#: ../Help/src/applet-tips-dialog.c:163
 msgid "Tips and Tricks"
 msgstr "Tips and Tricks"
 
@@ -1775,28 +1860,17 @@ msgstr "Showing windows preview over the icons"
 
 #: ../Help/data/messages:73
 msgid ""
-"You need to run Compiz, and enable the \"Window Preview\" plug-in in Compiz. "
-"Install \"ccsm\" to be able to configure Compiz."
+"You need to run Compiz, and enable the \"Thumbnail Window Previews\" plug-in "
+"in Compiz. Install \"ccsm\" to be able to configure Compiz."
 msgstr ""
-"You need to run Compiz, and enable the \"Window Preview\" plug-in in Compiz. "
-"Install \"ccsm\" to be able to configure Compiz."
-
-#: ../Help/data/messages:75 ../Help/data/messages:185
-#: ../Help/data/messages:205 ../Help/data/messages:243
-#: ../Help/data/messages:285 ../Help/data/messages:289
-#: ../Help/data/messages:295 ../Help/data/messages:299
-msgid "Tip: If this line is grayed, it's because this tip is not for you.)"
-msgstr "Tip: If this line is greyed, it's because this tip is not for you."
+"You need to run Compiz, and enable the \"Thumbnail Window Previews\" plug-in "
+"in Compiz. Install \"ccsm\" to be able to configure Compiz."
 
 #: ../Help/data/messages:77
-msgid "If you're using Compiz, you can click on this button:"
-msgstr "If you're using Compiz, you can click on this button:"
-
-#: ../Help/data/messages:81
 msgid "Positionning the dock on the screen"
 msgstr "Positionning the dock on the screen"
 
-#: ../Help/data/messages:83
+#: ../Help/data/messages:79
 msgid ""
 "The dock can be placed anywhere on the screen.\n"
 "In the case of the main dock, right-click -> Cairo-Dock -> configure, and "
@@ -1810,11 +1884,11 @@ msgstr ""
 "In the case of a 2nd or 3rd dock, right-click -> Cairo-Dock -> set up this "
 "dock, and then select the position you want."
 
-#: ../Help/data/messages:85
+#: ../Help/data/messages:81
 msgid "Hiding the dock to use all the screen"
 msgstr "Hiding the dock to use all the screen"
 
-#: ../Help/data/messages:87
+#: ../Help/data/messages:83
 msgid ""
 "The dock can hide itself to let all the screen for applications. But it can "
 "also be always visible like a panel.\n"
@@ -1830,11 +1904,11 @@ msgstr ""
 "In the case of a 2nd or 3rd dock, right-click -> Cairo-Dock -> set up this "
 "dock, and then select the visibility you want."
 
-#: ../Help/data/messages:91
+#: ../Help/data/messages:87
 msgid "Placing applets on your desktop"
 msgstr "Placing applets on your desktop"
 
-#: ../Help/data/messages:93
+#: ../Help/data/messages:89
 msgid ""
 "Applets can live inside desklets, which are small windows that can be placed "
 "wherever on your desktop.\n"
@@ -1844,11 +1918,11 @@ msgstr ""
 "wherever on your desktop.\n"
 "To detach an applet from the dock, simply drag and drop it outside the dock."
 
-#: ../Help/data/messages:95
+#: ../Help/data/messages:91
 msgid "Moving desklets"
 msgstr "Moving desklets"
 
-#: ../Help/data/messages:97
+#: ../Help/data/messages:93
 msgid ""
 "Desklets can be moved anywhere simply with the mouse.\n"
 "They can also be rotated by dragging the small arrows on the top and left "
@@ -1862,11 +1936,11 @@ msgstr ""
 "If you don't want to move it any more, you can lock its position by right-"
 "clicking on it -> \"lock position\". To unlock it, deselect this option."
 
-#: ../Help/data/messages:99
+#: ../Help/data/messages:95
 msgid "Placing desklets"
 msgstr "Placing desklets"
 
-#: ../Help/data/messages:101
+#: ../Help/data/messages:97
 msgid ""
 "From the menu (right-click -> visibility), you can also decide to keep it "
 "above other windows, or on the Widget Layer (if you use Compiz), or make a "
@@ -1884,11 +1958,11 @@ msgstr ""
 "to the mouse (means you can click on what is behind them), by clicking on "
 "the small bottom-right button."
 
-#: ../Help/data/messages:103
+#: ../Help/data/messages:99
 msgid "Changing the desklets decorations"
 msgstr "Changing the desklets decorations"
 
-#: ../Help/data/messages:105
+#: ../Help/data/messages:101
 msgid ""
 "Desklets can have decorations. To change that, open the settings of the "
 "applet, go to Desklet, and select the decoration you want (you can provide "
@@ -1898,15 +1972,15 @@ msgstr ""
 "applet, go to Desklet, and select the decoration you want (you can provide "
 "your own one)."
 
-#: ../Help/data/messages:107
+#: ../Help/data/messages:103
 msgid "Useful Features"
 msgstr "Useful Features"
 
-#: ../Help/data/messages:109
+#: ../Help/data/messages:105
 msgid "Having a calendar with tasks"
 msgstr "Having a calendar with tasks"
 
-#: ../Help/data/messages:111
+#: ../Help/data/messages:107
 msgid ""
 "Activate the Clock applet.\n"
 "Clicking on it will display a calendar.\n"
@@ -1923,11 +1997,11 @@ msgstr ""
 "(15mn before the event, and also 1 day before in the case of an anniversary "
 "or birthday)."
 
-#: ../Help/data/messages:113
+#: ../Help/data/messages:109
 msgid "Having a list of all windows"
 msgstr "Having a list of all windows"
 
-#: ../Help/data/messages:115
+#: ../Help/data/messages:111
 msgid ""
 "Activate the Switcher applet.\n"
 "Right-clicking on it will give you access to a list containing all the "
@@ -1943,11 +2017,11 @@ msgstr ""
 "to do that.\n"
 "You can bind this action to the middle-click."
 
-#: ../Help/data/messages:117
+#: ../Help/data/messages:113
 msgid "Showing all the desktops"
 msgstr "Showing all the desktops"
 
-#: ../Help/data/messages:119
+#: ../Help/data/messages:115
 msgid ""
 "Activate either the Switcher applet or the Show-Desktop applet.\n"
 "Right-click on it -> \"show all the desktop\".\n"
@@ -1957,11 +2031,11 @@ msgstr ""
 "Right-click on it -> \"show all the desktop\".\n"
 "You can bind this action to the middle-click."
 
-#: ../Help/data/messages:121
+#: ../Help/data/messages:117
 msgid "Changing the screen resolution"
 msgstr "Changing the screen resolution"
 
-#: ../Help/data/messages:123
+#: ../Help/data/messages:119
 msgid ""
 "Activate the Show-Desktop applet.\n"
 "Right-click on it -> \"change resolution\" -> select the one you want."
@@ -1969,11 +2043,11 @@ msgstr ""
 "Activate the Show-Desktop applet.\n"
 "Right-click on it -> \"change resolution\" -> select the one you want."
 
-#: ../Help/data/messages:125
+#: ../Help/data/messages:121
 msgid "Locking your session"
 msgstr "Locking your session"
 
-#: ../Help/data/messages:127
+#: ../Help/data/messages:123
 msgid ""
 "Activate the Log-out applet.\n"
 "Right-click on it -> \"lock screen\".\n"
@@ -1983,11 +2057,11 @@ msgstr ""
 "Right-click on it -> \"lock screen\".\n"
 "You can bind this action to the middle-click."
 
-#: ../Help/data/messages:129
+#: ../Help/data/messages:125
 msgid "Quick-launching a program from keyboard (replacing ALT+F2)"
 msgstr "Quick-launching a program from keyboard (replacing ALT+F2)"
 
-#: ../Help/data/messages:131
+#: ../Help/data/messages:127
 msgid ""
 "Activate the Applications Menu applet.\n"
 "Middle-click on it, or right-click -> \"quick-launch\".\n"
@@ -2001,11 +2075,11 @@ msgstr ""
 "The text is automatically completed (for instance, typing \"fir\" will be "
 "completed into \"firefox\")."
 
-#: ../Help/data/messages:133
+#: ../Help/data/messages:129
 msgid "Turning Composite OFF during games"
 msgstr "Turning Composite OFF during games"
 
-#: ../Help/data/messages:135
+#: ../Help/data/messages:131
 msgid ""
 "Activate the Composite Manager applet.\n"
 "Clicking on it will disable the Composite, which often makes games more "
@@ -2017,11 +2091,11 @@ msgstr ""
 "smoother.\n"
 "Clicking again on it will enable the Composite."
 
-#: ../Help/data/messages:137
+#: ../Help/data/messages:133
 msgid "Seeing the hourly weather forecast"
 msgstr "Seeing the hourly weather forecast"
 
-#: ../Help/data/messages:139
+#: ../Help/data/messages:135
 msgid ""
 "Activate the Weather applet.\n"
 "Open its settings, go to Configure, and type the name of your city. Press "
@@ -2037,11 +2111,11 @@ msgstr ""
 "Now, double-clicking on a day will lead you to the web page of the hourly "
 "forecast for this day."
 
-#: ../Help/data/messages:141
+#: ../Help/data/messages:137
 msgid "Adding a file or a web page into the dock"
 msgstr "Adding a file or a web page into the dock"
 
-#: ../Help/data/messages:143
+#: ../Help/data/messages:139
 msgid ""
 "Simply drag a file or an html link and drop it onto the dock (an animated "
 "arrow should appear when you can drop).\n"
@@ -2057,11 +2131,11 @@ msgstr ""
 "You can have several Stacks, and you can drop files/links onto a Stack "
 "directly."
 
-#: ../Help/data/messages:145
+#: ../Help/data/messages:141
 msgid "Importing a folder into the dock"
 msgstr "Importing a folder into the dock"
 
-#: ../Help/data/messages:147
+#: ../Help/data/messages:143
 msgid ""
 "Simply drag a folder and drop it onto the dock (an animated arrow should "
 "appear when you can drop).\n"
@@ -2071,83 +2145,83 @@ msgstr ""
 "appear when you can drop).\n"
 "You can choose to import the folder's files or not."
 
-#: ../Help/data/messages:149
+#: ../Help/data/messages:145
 msgid "Accessing the recent events"
 msgstr "Accessing the recent events"
+
+#: ../Help/data/messages:147
+msgid ""
+"Activate the Recent-Events applet.\n"
+"You need to have the Zeitgeist daemon to be running. Install it if it's not "
+"present.\n"
+"The applet can then display all the files, folders, web pages, songs, videos "
+"and documents you have accessed recently, so that you can access them "
+"quickly."
+msgstr ""
+"Activate the Recent-Events applet.\n"
+"You need to have the Zeitgeist daemon running. Install it if it's not "
+"present.\n"
+"The applet can then display all the files, folders, web pages, songs, videos "
+"and documents you have accessed recently, so that you can access them "
+"quickly."
+
+#: ../Help/data/messages:149
+msgid "Quickly opening a recent file with a launcher"
+msgstr "Quickly opening a recent file with a launcher"
 
 #: ../Help/data/messages:151
 msgid ""
 "Activate the Recent-Events applet.\n"
 "You need to have the Zeitgeist daemon to be running. Install it if it's not "
 "present.\n"
-"The applet can then display all the files, folders, web pages, songs, videos "
-"and documents you have accessed recently, so that you can access them "
-"quickly."
+"Now when you right-click on a launcher, all the recent files that can be "
+"opened with this launcher will appear in its menu."
 msgstr ""
 "Activate the Recent-Events applet.\n"
 "You need to have the Zeitgeist daemon running. Install it if it's not "
 "present.\n"
-"The applet can then display all the files, folders, web pages, songs, videos "
-"and documents you have accessed recently, so that you can access them "
-"quickly."
+"Now when you right-click on a launcher, all the recent files that can be "
+"opened with this launcher will appear in its menu."
 
 #: ../Help/data/messages:153
-msgid "Quickly opening a recent file with a launcher"
-msgstr "Quickly opening a recent file with a launcher"
+msgid "Accessing disks"
+msgstr "Accessing disks"
 
 #: ../Help/data/messages:155
 msgid ""
-"Activate the Recent-Events applet.\n"
-"You need to have the Zeitgeist daemon to be running. Install it if it's not "
-"present.\n"
-"Now when you right-click on a launcher, all the recent files that can be "
-"opened with this launcher will appear in its menu."
+"Activate the Shortcuts applet.\n"
+"Then all the disks (including USB key or external hard drives) will be "
+"listed in a sub-dock.\n"
+"To unmount a disk before disconnecting it, middle-click on its icon."
 msgstr ""
-"Activate the Recent-Events applet.\n"
-"You need to have the Zeitgeist daemon running. Install it if it's not "
-"present.\n"
-"Now when you right-click on a launcher, all the recent files that can be "
-"opened with this launcher will appear in its menu."
+"Activate the Shortcuts applet.\n"
+"Then all the disks (including USB key or external hard drives) will be "
+"listed in a sub-dock.\n"
+"To unmount a disk before disconnecting it, middle-click on its icon."
 
 #: ../Help/data/messages:157
-msgid "Accessing disks"
-msgstr "Accessing disks"
+msgid "Accessing folder bookmarks"
+msgstr "Accessing folder bookmarks"
 
 #: ../Help/data/messages:159
 msgid ""
 "Activate the Shortcuts applet.\n"
-"Then all the disks (including USB key or external hard drives) will be "
+"Then all the folders bookmarks (the ones that appear in Nautilus) will be "
 "listed in a sub-dock.\n"
-"To unmount a disk before disconnecting it, middle-click on its icon."
+"To add a bookmark, simply drag-and-drop a folder onto the applet's icon.\n"
+"To remove a bookmark, right-click on its icon -> remove"
 msgstr ""
 "Activate the Shortcuts applet.\n"
-"Then all the disks (including USB key or external hard drives) will be "
+"Then all the folders bookmarks (the ones that appear in Nautilus) will be "
 "listed in a sub-dock.\n"
-"To unmount a disk before disconnecting it, middle-click on its icon."
+"To add a bookmark, simply drag-and-drop a folder onto the applet's icon.\n"
+"To remove a bookmark, right-click on its icon -> remove"
 
 #: ../Help/data/messages:161
-msgid "Accessing folder bookmarks"
-msgstr "Accessing folder bookmarks"
-
-#: ../Help/data/messages:163
-msgid ""
-"Activate the Shortcuts applet.\n"
-"Then all the folders bookmarks (the ones that appear in Nautilus) will be "
-"listed in a sub-dock.\n"
-"To add a bookmark, simply drag-and-drop a folder onto the applet's icon.\n"
-"To remove a bookmark, right-click on its icon -> remove"
-msgstr ""
-"Activate the Shortcuts applet.\n"
-"Then all the folders bookmarks (the ones that appear in Nautilus) will be "
-"listed in a sub-dock.\n"
-"To add a bookmark, simply drag-and-drop a folder onto the applet's icon.\n"
-"To remove a bookmark, right-click on its icon -> remove"
-
-#: ../Help/data/messages:165
 msgid "Having multiple instances of an applet"
 msgstr "Having multiple instances of an applet"
 
-#: ../Help/data/messages:167
+#: ../Help/data/messages:163
 msgid ""
 "Some applets can have several instances running at the same time: Clock, "
 "Stack, Weather, ...\n"
@@ -2163,11 +2237,11 @@ msgstr ""
 "to have the current time for different countries in your dock or the weather "
 "in different cities."
 
-#: ../Help/data/messages:169
+#: ../Help/data/messages:165
 msgid "Adding / removing a desktop"
 msgstr "Adding / removing a desktop"
 
-#: ../Help/data/messages:171
+#: ../Help/data/messages:167
 msgid ""
 "Activate the Switcher applet.\n"
 "Right-click on it -> \"add a desktop\" or \"remove this desktop\".\n"
@@ -2177,11 +2251,11 @@ msgstr ""
 "Right-click on it -> \"add a desktop\" or \"remove this desktop\".\n"
 "You can even name each of them."
 
-#: ../Help/data/messages:173
+#: ../Help/data/messages:169
 msgid "Controling the sound volume"
 msgstr "Controlling the sound volume"
 
-#: ../Help/data/messages:175
+#: ../Help/data/messages:171
 msgid ""
 "Activate the Sound Volume applet.\n"
 "Then scroll up/down to increase/decrease the sound.\n"
@@ -2193,11 +2267,11 @@ msgstr ""
 "Alternatively, you can click on the icon and move the scroll bar.\n"
 "Middle-click will mute/unmute."
 
-#: ../Help/data/messages:177
+#: ../Help/data/messages:173
 msgid "Controling the screen brightness"
 msgstr "Controlling the screen brightness"
 
-#: ../Help/data/messages:179
+#: ../Help/data/messages:175
 msgid ""
 "Activate the Screen Luminosity applet.\n"
 "Then scroll up/down to increase/decrease the brightness.\n"
@@ -2207,95 +2281,53 @@ msgstr ""
 "Then scroll up/down to increase/decrease the brightness.\n"
 "Alternatively, you can click on the icon and move the scroll bar."
 
-#: ../Help/data/messages:181
-msgid "Removing completely the gnome-panel"
-msgstr "Removing completely the gnome-panel"
-
-#: ../Help/data/messages:183
-msgid ""
-"Open gconf-editor, edit the key "
-"/desktop/gnome/session/required_components/panel, and replace its content "
-"with \"cairo-dock\".\n"
-"Then restart your session : the gnome-panel has not been started, and the "
-"dock has been started (if not, you can add it to the startup programs)."
-msgstr ""
-"Open gconf-editor, edit the key "
-"/desktop/gnome/session/required_components/panel, and replace its content "
-"with \"cairo-dock\".\n"
-"Then restart your session : the gnome-panel has not been started, and the "
-"dock has been started (if not, you can add it to the startup programs)."
-
-#: ../Help/data/messages:187
-msgid ""
-"If you are on Gnome, you can click on this button in order to automatically "
-"modify this key:"
-msgstr ""
-"If you are on Gnome, you can click on this button in order to automatically "
-"modify this key:"
-
-#: ../Help/data/messages:189
+#: ../Help/data/messages:177
 msgid "Troubleshooting"
 msgstr "Troubleshooting"
 
-#: ../Help/data/messages:191
+#: ../Help/data/messages:179
 msgid "If you have any question, don't hesitate to ask on our Github Page."
 msgstr "If you have any question, don't hesitate to ask on our Github Page."
 
-#: ../Help/data/messages:193
+#: ../Help/data/messages:181
 msgid "Discussions"
 msgstr "Discussions"
 
-#: ../Help/data/messages:195
+#: ../Help/data/messages:183
 msgid "Our wiki can also help you, it is more complete on some points."
 msgstr "Our wiki can also help you, it is more complete on some points."
 
-#: ../Help/data/messages:197
+#: ../Help/data/messages:185
 msgid "Wiki"
 msgstr "Wiki"
 
-#: ../Help/data/messages:199
+#: ../Help/data/messages:187
 msgid "I have a black background around my dock."
 msgstr "I have a black background around my dock."
 
-#: ../Help/data/messages:201
-msgid ""
-"Hint : If you have an ATI or an Intel card, you should try without OpenGL "
-"first, because their drivers are not yet perfect."
-msgstr ""
-"Hint: If you have an ATI or an Intel card, you should try without OpenGL "
-"first, because their drivers are not yet perfect."
-
-#: ../Help/data/messages:203
+#: ../Help/data/messages:189
 msgid ""
 "You need to turn on compositing. For instance, you can run Compiz or "
 "xcompmgr. \n"
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key "
-"'/apps/metacity/general/compositing_manager' and set it to 'true'."
+" Open dconf-editor, edit the key 'org.gnome.metacity.compositing-manager' "
+"and set it to 'true'."
 msgstr ""
 "You need to turn on compositing. For instance, you can run Compiz or "
 "xcompmgr. \n"
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way:\n"
-" Open gconf-editor, edit the key "
-"'/apps/metacity/general/compositing_manager' and set it to 'true'."
+" Open dconf-editor, edit the key 'org.gnome.metacity.compositing-manager' "
+"and set it to 'true'."
 
-#: ../Help/data/messages:207
-msgid ""
-"If you're on Gnome with Metacity (without Compiz), you can click on this "
-"button:"
-msgstr ""
-"If you're on Gnome with Metacity (without Compiz), you can click on this "
-"button:"
-
-#: ../Help/data/messages:209
+#: ../Help/data/messages:191
 msgid "My machine is too old to run a composite manager."
 msgstr "My machine is too old to run a composite manager."
 
-#: ../Help/data/messages:211
+#: ../Help/data/messages:193
 msgid ""
 "Don't panic, Cairo-Dock can emulate the transparency.\n"
 "To get rid of the black background, simply enable the corresponding option "
@@ -2305,11 +2337,11 @@ msgstr ""
 "To get rid of the black background, simply enable the corresponding option "
 "in the end of the «System» module"
 
-#: ../Help/data/messages:213
+#: ../Help/data/messages:195
 msgid "The dock is horribly slow when I move the mouse into it."
 msgstr "The dock is horribly slow when I move the mouse into it."
 
-#: ../Help/data/messages:215
+#: ../Help/data/messages:197
 msgid ""
 "If you have an Nvidia GeForce8 graphics card, please install the latest "
 "drivers, as the first ones were really buggy.\n"
@@ -2325,11 +2357,11 @@ msgstr ""
 "If the dock is running with OpenGL, try to disable it by launching the dock "
 "with «cairo-dock -c»."
 
-#: ../Help/data/messages:217
+#: ../Help/data/messages:199
 msgid "I don't have these wonderful effects like fire, cube rotating, etc."
 msgstr "I don't have these wonderful effects like fire, cube rotating, etc."
 
-#: ../Help/data/messages:219
+#: ../Help/data/messages:201
 msgid ""
 "Tip: You can force OpenGL by launching the dock with «cairo-dock -o».but you "
 "might get a lot of visual artifacts."
@@ -2337,7 +2369,7 @@ msgstr ""
 "Tip: You can force OpenGL by launching the dock with «cairo-dock -o».but you "
 "might get a lot of visual artifacts."
 
-#: ../Help/data/messages:221
+#: ../Help/data/messages:203
 msgid ""
 "You need a graphics card with drivers that support OpenGL2.0. Most Nvidia "
 "cards can do this, as can more and more Intel cards. Most ATI cards do not "
@@ -2347,16 +2379,15 @@ msgstr ""
 "cards can do this, as can more and more Intel cards. Most ATI cards do not "
 "support OpenGL2.0."
 
-#: ../Help/data/messages:223
+#: ../Help/data/messages:205
 msgid "I don't have any themes in the Theme Manager, except the default one."
-msgstr ""
-"I don't have any themes in the Theme Manager, except the default one."
+msgstr "I don't have any themes in the Theme Manager, except the default one."
 
-#: ../Help/data/messages:225
+#: ../Help/data/messages:207
 msgid "Hint : Up to version 2.1.1-2, wget was used."
 msgstr "Hint: Up to version 2.1.1-2, wget was used."
 
-#: ../Help/data/messages:227
+#: ../Help/data/messages:209
 msgid ""
 "Be sure that you are connected to the Net.\n"
 " If your connection is very slow, you can increase the connection timeout in "
@@ -2372,11 +2403,11 @@ msgstr ""
 "search on the web how to do it (basically, you have to set up the "
 "\"http_proxy\" environment variable)."
 
-#: ../Help/data/messages:229
+#: ../Help/data/messages:211
 msgid "The «netspeed» applet displays 0 even when I'm downloading something"
 msgstr "The «netspeed» applet displays 0 even when I'm downloading something"
 
-#: ../Help/data/messages:231
+#: ../Help/data/messages:213
 msgid ""
 "Tip: you can run several instances of this applet if you wish to monitor "
 "several interfaces."
@@ -2384,7 +2415,7 @@ msgstr ""
 "Tip: you can run several instances of this applet if you wish to monitor "
 "several interfaces."
 
-#: ../Help/data/messages:233
+#: ../Help/data/messages:215
 msgid ""
 "You must tell the applet which interface you're using to connect to the Net "
 "(by default, this is «eth0»).\n"
@@ -2398,11 +2429,11 @@ msgstr ""
 "«ifconfig» in a terminal, and ignore the «loop» interface. It's probably "
 "something like «eth1», «ath0», or «wifi0».."
 
-#: ../Help/data/messages:235
+#: ../Help/data/messages:217
 msgid "The dustbin remains empty even when I delete a file."
 msgstr "The dustbin remains empty even when I delete a file."
 
-#: ../Help/data/messages:237
+#: ../Help/data/messages:219
 msgid ""
 "if you're using KDE, you may have to specify the path to the trash folder.\n"
 "Just edit the applet's configuration, and fill in the Trash path; it is "
@@ -2414,39 +2445,20 @@ msgstr ""
 "probably «~/.locale/share/Trash/files». Be very careful when typing a path "
 "here!!! (do not insert spaces or some invisible caracters)."
 
-#: ../Help/data/messages:239
-msgid ""
-"There is no icon in the Applications Menu even though I enable the option."
-msgstr ""
-"There is no icon in the Applications Menu even though I enabled the option."
-
-#: ../Help/data/messages:241
-msgid ""
-"In Gnome, there is an option that override the dock's one. To enable icons "
-"in menus, open 'gconf-editor', go to Desktop / Gnome / Interface and enable "
-"the \"menus have icons\" and the \"buttons have icons\" options. "
-msgstr ""
-"In Gnome, there is an option that override the dock's one. To enable icons "
-"in menus, open 'gconf-editor', go to Desktop / Gnome / Interface and enable "
-"the \"menus have icons\" and the \"buttons have icons\" options. "
-
-#: ../Help/data/messages:245
-msgid "If you're on Gnome you can click on this button:"
-msgstr "If you're on Gnome you can click on this button:"
-
-#: ../Help/data/messages:247
+#: ../Help/data/messages:221
 msgid "The Project"
 msgstr "The Project"
 
-#: ../Help/data/messages:249
+#: ../Help/data/messages:223
 msgid "Join the project!"
 msgstr "Join the project!"
 
-#: ../Help/data/messages:251
+#: ../Help/data/messages:225
 msgid ""
 "We value your help! If you see a bug, if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on https://github.com/Cairo-Dock/cairo-dock-core.\n"
+"or if you just made a dream about the dock, pay us a visit on https://github."
+"com/Cairo-Dock/cairo-dock-core.\n"
 "English (and others!) speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
@@ -2454,23 +2466,24 @@ msgid ""
 msgstr ""
 "We value your help! If you see a bug, if you think something could be "
 "improved,\n"
-"or if you just made a dream about the dock, pay us a visit on https://github.com/Cairo-Dock/cairo-dock-core.\n"
+"or if you just made a dream about the dock, pay us a visit on https://github."
+"com/Cairo-Dock/cairo-dock-core.\n"
 "English (and others!) speakers are welcome, so don’t be shy ! ;-)\n"
 "\n"
 "If you made a theme for the dock or one of the applet, and want to share it, "
 "we’ll be happy to integrate it on our server !"
 
-#: ../Help/data/messages:253
+#: ../Help/data/messages:227
 msgid ""
 "If you wish to develop an applet, a complete documentation is available here."
 msgstr ""
 "If you wish to develop an applet, a complete documentation is available here."
 
-#: ../Help/data/messages:255
+#: ../Help/data/messages:229
 msgid "Documentation"
 msgstr "Documentation"
 
-#: ../Help/data/messages:257
+#: ../Help/data/messages:231
 msgid ""
 "If you wish to develop an applet in Python, Perl or any other language,\n"
 "or to interact with the dock in any kind of way, a full DBus API is "
@@ -2480,11 +2493,11 @@ msgstr ""
 "or to interact with the dock in any kind of way, a full DBus API is "
 "described here."
 
-#: ../Help/data/messages:259
+#: ../Help/data/messages:233
 msgid "DBus API"
 msgstr "DBus API"
 
-#: ../Help/data/messages:261
+#: ../Help/data/messages:235
 msgid ""
 "\n"
 "\n"
@@ -2494,135 +2507,82 @@ msgstr ""
 "\n"
 "The Cairo-Dock Team"
 
-#: ../Help/data/messages:263
+#: ../Help/data/messages:237
 msgid "Websites"
 msgstr "Websites"
 
-#: ../Help/data/messages:265
+#: ../Help/data/messages:239
 msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
 msgstr "Problems? Suggestions? Just want to talk to us? Come on over!"
 
-#: ../Help/data/messages:267
+#: ../Help/data/messages:241
 msgid "Community site"
 msgstr "Community site"
 
-#: ../Help/data/messages:273
+#: ../Help/data/messages:247
 msgid "More applets available online!"
 msgstr "More applets are available online!"
 
-#: ../Help/data/messages:275
+#: ../Help/data/messages:249
 msgid "Cairo-Dock-Plug-ins-Extras"
 msgstr "Cairo-Dock-Plug-ins-Extras"
 
-#: ../Help/data/messages:277
+#: ../Help/data/messages:251
 msgid "Repositories"
 msgstr "Repositories"
 
-#: ../Help/data/messages:279
+#: ../Help/data/messages:253
 msgid ""
-"We maintain two repositories for Debian, Ubuntu and other Debian-forked:\n"
-" One for stable releases and another which is updated weekly (unstable "
-"version)"
+"We maintain repositories for Ubuntu and derivatives on Launchpad for the "
+"stable and development versions of Cairo-Dock:"
 msgstr ""
-"We maintain two repositories for Debian, Ubuntu and other Debian-forked "
-"distributions:\n"
-" one for stable releases and another which is updated weekly (unstable "
-"version)."
 
-#: ../Help/data/messages:281
-msgid "Debian/Ubuntu"
-msgstr "Debian/Ubuntu"
-
-#: ../Help/data/messages:283
-msgid "Ubuntu"
-msgstr "Ubuntu"
-
-#: ../Help/data/messages:287
-msgid ""
-"If you're on Ubuntu, you can add our 'stable' repository by clicking on this "
-"button:\n"
-" After that, you can launch your update manager in order to install the "
-"latest stable version."
+#: ../Help/data/messages:255
+msgid "Stable"
 msgstr ""
-"If you're on Ubuntu, you can add our 'stable' repository by clicking on this "
-"button:\n"
-" After that, you can launch your update manager to install the latest stable "
-"version."
 
-#: ../Help/data/messages:291
-msgid ""
-"If you're on Ubuntu, you can also add our 'weekly' ppa (can be unstable) by "
-"clicking on this button:\n"
-" After that, you can launch your update manager in order to install the "
-"latest weekly version."
+#: ../Help/data/messages:257
+msgid "https://launchpad.net/~cairo-dock-team/+archive/ubuntu/ppa"
 msgstr ""
-"If you're on Ubuntu, you can also add our 'weekly' ppa (can be unstable) by "
-"clicking on this button:\n"
-" After that, you can launch your update manager to install the latest weekly "
-"version."
 
-#: ../Help/data/messages:293
-msgid "Debian"
-msgstr "Debian"
-
-#: ../Help/data/messages:297
-msgid ""
-"If you're on Debian Stable, you can add our 'stable' repository by clicking "
-"on this button:\n"
-" After that, you can purge all 'cairo-dock*' packages, update the your "
-"system and reinstall 'cairo-dock' package."
+#: ../Help/data/messages:261
+msgid "https://launchpad.net/~cairo-dock-team/+archive/ubuntu/weekly"
 msgstr ""
-"If you're on Debian Stable, you can add our 'stable' repository by clicking "
-"on this button:\n"
-" After that, you can purge all 'cairo-dock*' packages, update the system and "
-"reinstall 'cairo-dock' package."
 
-#: ../Help/data/messages:301
-msgid ""
-"If you're on Debian Unstable, you can add our 'stable' repository by "
-"clicking on this button:\n"
-" After that, you can purge all 'cairo-dock*' packages, update the your "
-"system and reinstall 'cairo-dock' package."
-msgstr ""
-"If you're on Debian Unstable, you can add our 'stable' repository by "
-"clicking on this button:\n"
-" After that, you can purge all 'cairo-dock*' packages, update the system and "
-"reinstall 'cairo-dock' package."
-
-#: ../Help/data/messages:303 ../Help/data/messages:305 ../data/messages:1029
-#: ../data/messages:1061 ../data/messages:1097
+#: ../Help/data/messages:263 ../Help/data/messages:265 ../data/messages:1035
+#: ../data/messages:1067 ../data/messages:1103
 msgid "Icon"
 msgstr "Icon"
 
-#: ../Help/data/messages:307
+#: ../Help/data/messages:267
 msgid "Name of the dock it belongs to:"
 msgstr "Name of the dock it belongs to:"
 
-#: ../Help/data/messages:309
+#: ../Help/data/messages:269
 msgid "Name of the icon as it will appear in its caption in the dock:"
 msgstr "Name of the icon as it will appear in its caption in the dock:"
 
-#: ../Help/data/messages:311
+#: ../Help/data/messages:271
 msgid "Leave empty to use the default one."
 msgstr "Leave empty to use the default one."
 
-#: ../Help/data/messages:313
+#: ../Help/data/messages:273
 msgid "Image filename:"
 msgstr "Image filename:"
 
-#: ../Help/data/messages:315
+#: ../Help/data/messages:275
 msgid "Set to 0 to use the default applet size"
 msgstr "Set to 0 to use the default applet size"
 
-#: ../Help/data/messages:317
+#: ../Help/data/messages:277
 msgid "Desired icon size for this applet"
 msgstr "Desired icon size for this applet"
 
-#: ../Help/data/messages:319
+#: ../Help/data/messages:279
 msgid "Desklet"
 msgstr "Desklet"
 
-#: ../Help/data/messages:323
+#: ../Help/data/messages:283
 msgid ""
 "If locked, the desklet cannot be moved by simply dragging it with the left "
 "mouse button. It can still be moved with ALT + left-click."
@@ -2630,11 +2590,11 @@ msgstr ""
 "If locked, the desklet cannot be moved by simply dragging it with the left "
 "mouse button. It can still be moved with ALT + left-click."
 
-#: ../Help/data/messages:325
+#: ../Help/data/messages:285
 msgid "Lock position?"
 msgstr "Lock position?"
 
-#: ../Help/data/messages:327
+#: ../Help/data/messages:287
 msgid ""
 "Depending on your WindowManager, you may be able to resize this with ALT + "
 "middle-click or ALT + left-click."
@@ -2642,11 +2602,11 @@ msgstr ""
 "Depending on your WindowManager, you may be able to resize this with ALT + "
 "middle-click or ALT + left-click."
 
-#: ../Help/data/messages:329
+#: ../Help/data/messages:289
 msgid "Desklet dimensions (width x height):"
 msgstr "Desklet dimensions (width x height):"
 
-#: ../Help/data/messages:331
+#: ../Help/data/messages:291
 msgid ""
 "Depending on your WindowManager, you may be able to move this with ALT + "
 "left-click.. Negative values are counted from the right/bottom of the screen"
@@ -2655,11 +2615,11 @@ msgstr ""
 "left-click. Negative values are calculated from the right/bottom of the "
 "screen"
 
-#: ../Help/data/messages:333
+#: ../Help/data/messages:293
 msgid "Desklet position (x, y):"
 msgstr "Desklet position (x, y):"
 
-#: ../Help/data/messages:335
+#: ../Help/data/messages:295
 msgid ""
 "You can quickly rotate the desklet with the mouse, by dragging the little "
 "buttons on its left and top sides."
@@ -2667,15 +2627,15 @@ msgstr ""
 "You can quickly rotate the desklet with the mouse by dragging the little "
 "buttons on its left and top sides."
 
-#: ../Help/data/messages:337
+#: ../Help/data/messages:297
 msgid "Rotation:"
 msgstr "Rotation:"
 
-#: ../Help/data/messages:341
+#: ../Help/data/messages:301
 msgid "Is detached from the dock"
 msgstr "Is detached from the dock"
 
-#: ../Help/data/messages:343
+#: ../Help/data/messages:303
 msgid ""
 "for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
 "(class=Cairo-dock & type=Utility)"
@@ -2683,82 +2643,82 @@ msgstr ""
 "for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
 "(class=Cairo-dock & type=Utility)"
 
-#: ../Help/data/messages:345 ../data/messages:19 ../data/messages:57
-#: ../data/messages:191 ../data/messages:251 ../data/messages:921
+#: ../Help/data/messages:305 ../data/messages:21 ../data/messages:59
+#: ../data/messages:193 ../data/messages:253 ../data/messages:927
 msgid "Visibility:"
 msgstr "Visibility:"
 
-#: ../Help/data/messages:351
+#: ../Help/data/messages:311
 msgid "Keep below"
 msgstr "Keep below"
 
-#: ../Help/data/messages:353
+#: ../Help/data/messages:313
 msgid "Keep on widget layer"
 msgstr "Keep on widget layer"
 
-#: ../Help/data/messages:357
+#: ../Help/data/messages:317
 msgid "Should be visible on all desktops?"
 msgstr "Should be visible on all desktops?"
 
-#: ../Help/data/messages:359 ../data/messages:589
+#: ../Help/data/messages:319 ../data/messages:595
 msgid "Decorations"
 msgstr "Decorations"
 
-#: ../Help/data/messages:361
+#: ../Help/data/messages:321
 msgid "Choose 'Custom decorations' to define your own decorations below."
 msgstr "Choose 'Custom decorations' to define your own decorations below."
 
-#: ../Help/data/messages:363
+#: ../Help/data/messages:323
 msgid "Choose a decoration theme for this desklet:"
 msgstr "Choose a decoration theme for this desklet:"
 
-#: ../Help/data/messages:365
+#: ../Help/data/messages:325
 msgid ""
 "Image to be displayed below drawings, e.g. a frame. Leave empty for no image."
 msgstr ""
 "Image to be displayed below drawings, e.g. a frame. Leave empty for no image."
 
-#: ../Help/data/messages:367
+#: ../Help/data/messages:327
 msgid "Background image:"
 msgstr "Background image:"
 
-#: ../Help/data/messages:369
+#: ../Help/data/messages:329
 msgid "Background transparency:"
 msgstr "Background transparency:"
 
-#: ../Help/data/messages:371
+#: ../Help/data/messages:331
 msgid "in pixels. Use this to adjust the left position of drawings."
 msgstr "in pixels. Use this to adjust the left position of drawings."
 
-#: ../Help/data/messages:373
+#: ../Help/data/messages:333
 msgid "Left offset:"
 msgstr "Left offset:"
 
-#: ../Help/data/messages:375
+#: ../Help/data/messages:335
 msgid "in pixels. Use this to adjust the top position of drawings."
 msgstr "in pixels. Use this to adjust the top position of drawings."
 
-#: ../Help/data/messages:377
+#: ../Help/data/messages:337
 msgid "Top offset:"
 msgstr "Top offset:"
 
-#: ../Help/data/messages:379
+#: ../Help/data/messages:339
 msgid "in pixels. Use this to adjust the right position of drawings."
 msgstr "in pixels. Use this to adjust the right position of drawings."
 
-#: ../Help/data/messages:381
+#: ../Help/data/messages:341
 msgid "Right offset:"
 msgstr "Right offset:"
 
-#: ../Help/data/messages:383
+#: ../Help/data/messages:343
 msgid "in pixels. Use this to adjust the bottom position of drawings."
 msgstr "in pixels. Use this to adjust the bottom position of drawings."
 
-#: ../Help/data/messages:385
+#: ../Help/data/messages:345
 msgid "Bottom offset:"
 msgstr "Bottom offset:"
 
-#: ../Help/data/messages:387
+#: ../Help/data/messages:347
 msgid ""
 "Image to be displayed above the drawings, e.g. a reflection. Leave empty for "
 "no image."
@@ -2766,31 +2726,35 @@ msgstr ""
 "Image to be displayed above the drawings, e.g. a reflection. Leave empty for "
 "no image."
 
-#: ../Help/data/messages:389
+#: ../Help/data/messages:349
 msgid "Foreground image:"
 msgstr "Foreground image:"
 
-#: ../Help/data/messages:391
+#: ../Help/data/messages:351
 msgid "Foreground tansparency:"
 msgstr "Foreground tansparency:"
 
-#: ../data/messages:1 ../data/messages:897
+#: ../data/messages:1 ../data/messages:903
 msgid "Behavior"
 msgstr "Behaviour"
 
-#: ../data/messages:3 ../data/messages:153 ../data/messages:899
+#: ../data/messages:3 ../data/messages:155 ../data/messages:905
 msgid "Position on the screen"
 msgstr "Position on the screen"
 
-#: ../data/messages:5 ../data/messages:155 ../data/messages:901
+#: ../data/messages:5 ../data/messages:157 ../data/messages:907
 msgid "Choose which border of the screen the dock will be placed on:"
 msgstr "Choose which border of the screen the dock will be placed on:"
 
-#: ../data/messages:15 ../data/messages:187
+#: ../data/messages:15 ../data/messages:175 ../data/messages:921
+msgid "Multi-screens"
+msgstr "Multi-screens"
+
+#: ../data/messages:17 ../data/messages:189
 msgid "Visibility of the main dock"
 msgstr "Visibility of the main dock"
 
-#: ../data/messages:17 ../data/messages:189 ../data/messages:919
+#: ../data/messages:19 ../data/messages:191 ../data/messages:925
 msgid ""
 "Modes are sorted from the most intrusive to the less intrusive.\n"
 "When the dock is hidden or below a window, place the mouse on the screen's "
@@ -2804,39 +2768,39 @@ msgstr ""
 "When the dock pops up on shortcut, it will appear at the position of your "
 "mouse. The rest of the time, it stays invisible, thus acting like a menu."
 
-#: ../data/messages:23 ../data/messages:195 ../data/messages:925
+#: ../data/messages:25 ../data/messages:197 ../data/messages:931
 msgid "Reserve space for the dock"
 msgstr "Reserve space for the dock"
 
-#: ../data/messages:25 ../data/messages:197 ../data/messages:927
+#: ../data/messages:27 ../data/messages:199 ../data/messages:933
 msgid "Keep the dock below"
 msgstr "Keep the dock below"
 
-#: ../data/messages:27 ../data/messages:199 ../data/messages:929
+#: ../data/messages:29 ../data/messages:201 ../data/messages:935
 msgid "Hide the dock when it overlaps the current window"
 msgstr "Hide the dock when it overlaps the current window"
 
-#: ../data/messages:29 ../data/messages:201 ../data/messages:931
+#: ../data/messages:31 ../data/messages:203 ../data/messages:937
 msgid "Hide the dock whenever it overlaps any window"
 msgstr "Hide the dock whenever it overlaps any windows"
 
-#: ../data/messages:31 ../data/messages:203 ../data/messages:933
+#: ../data/messages:33 ../data/messages:205 ../data/messages:939
 msgid "Keep the dock hidden"
 msgstr "Keep the dock hidden"
 
-#: ../data/messages:33 ../data/messages:205
+#: ../data/messages:35 ../data/messages:207
 msgid "Pop-up on shortcut"
 msgstr "Pop-up on shortcut"
 
-#: ../data/messages:35 ../data/messages:207
+#: ../data/messages:37 ../data/messages:209
 msgid "Effect used to hide the dock:"
 msgstr "Effect used to hide the dock:"
 
-#: ../data/messages:37 ../data/messages:69 ../data/messages:209
+#: ../data/messages:39 ../data/messages:71 ../data/messages:211
 msgid "None"
 msgstr "None"
 
-#: ../data/messages:49 ../data/messages:243
+#: ../data/messages:51 ../data/messages:245
 msgid ""
 "When you press the shortcut, the dock will show itself at the potition of "
 "your mouse. The rest of the time, it stays invisible, thus acting like a "
@@ -2846,15 +2810,15 @@ msgstr ""
 "your mouse. The rest of the time, it stays invisible, thus acting like a "
 "menu."
 
-#: ../data/messages:51 ../data/messages:245
+#: ../data/messages:53 ../data/messages:247
 msgid "Keyboard shortcut to pop-up the dock:"
 msgstr "Keyboard shortcut to pop-up the dock:"
 
-#: ../data/messages:53
+#: ../data/messages:55
 msgid "Visibility of sub-docks"
 msgstr "Visibility of sub-docks"
 
-#: ../data/messages:55 ../data/messages:249
+#: ../data/messages:57 ../data/messages:251
 msgid ""
 "they will appear either when you click or when you linger over the icon "
 "pointing on it."
@@ -2862,15 +2826,15 @@ msgstr ""
 "they will appear either when you click or when you linger over the icon "
 "pointing on it."
 
-#: ../data/messages:59 ../data/messages:253
+#: ../data/messages:61 ../data/messages:255
 msgid "Appear on mouse over"
 msgstr "Appear on mouse over"
 
-#: ../data/messages:61 ../data/messages:255
+#: ../data/messages:63 ../data/messages:257
 msgid "Appear on click"
 msgstr "Appear on click"
 
-#: ../data/messages:65
+#: ../data/messages:67
 msgid ""
 "None       : Don't show opened windows in the dock.\n"
 "Minimalistic: Mix applications with its launcher, show other windows only if "
@@ -2888,136 +2852,136 @@ msgstr ""
 "Separated : Separate the taskbar from the launchers and only show windows "
 "that are on the current desktop."
 
-#: ../data/messages:67
+#: ../data/messages:69
 msgid "Behaviour of the Taskbar:"
 msgstr "Behaviour of the Taskbar:"
 
-#: ../data/messages:71
+#: ../data/messages:73
 msgid "Minimalistic"
 msgstr "Minimalistic"
 
-#: ../data/messages:73
+#: ../data/messages:75
 msgid "Integrated"
 msgstr "Integrated"
 
-#: ../data/messages:75
+#: ../data/messages:77
 msgid "Separated"
 msgstr "Separated"
 
-#: ../data/messages:77 ../data/messages:281
+#: ../data/messages:79 ../data/messages:283
 msgid "Place new icons"
 msgstr "Place new icons"
 
-#: ../data/messages:79 ../data/messages:283
+#: ../data/messages:81 ../data/messages:285
 msgid "At the beginning of the dock"
 msgstr "At the beginning of the dock"
 
-#: ../data/messages:81 ../data/messages:285
+#: ../data/messages:83 ../data/messages:287
 msgid "Before the launchers"
 msgstr "Before the launchers"
 
-#: ../data/messages:83 ../data/messages:287
+#: ../data/messages:85 ../data/messages:289
 msgid "After the launchers"
 msgstr "After the launchers"
 
-#: ../data/messages:85 ../data/messages:289
+#: ../data/messages:87 ../data/messages:291
 msgid "At the end of the dock"
 msgstr "At the end of the dock"
 
-#: ../data/messages:87 ../data/messages:291
+#: ../data/messages:89 ../data/messages:293
 msgid "After a given icon"
 msgstr "After a given icon"
 
-#: ../data/messages:89 ../data/messages:293
+#: ../data/messages:91 ../data/messages:295
 msgid "Place new icons after this one"
 msgstr "Place new icons after this one"
 
-#: ../data/messages:91
+#: ../data/messages:93
 msgid "Icons' animations and effects"
 msgstr "Icons' animations and effects"
 
-#: ../data/messages:93
+#: ../data/messages:95
 msgid "On mouse hover:"
 msgstr "On mouse hover:"
 
-#: ../data/messages:95
+#: ../data/messages:97
 msgid "On click:"
 msgstr "On click:"
 
-#: ../data/messages:97
+#: ../data/messages:99
 msgid "On appearance/disappearance:"
 msgstr "On appearance/disappearance:"
 
-#: ../data/messages:99
+#: ../data/messages:101
 msgid "Evaporate"
 msgstr "Evaporate"
 
-#: ../data/messages:103
+#: ../data/messages:105
 msgid "Explode"
 msgstr "Explode"
 
-#: ../data/messages:105
+#: ../data/messages:107
 msgid "Break"
 msgstr "Break"
 
-#: ../data/messages:107
+#: ../data/messages:109
 msgid "Black Hole"
 msgstr "Black Hole"
 
-#: ../data/messages:109
+#: ../data/messages:111
 msgid "Random"
 msgstr "Random"
 
-#: ../data/messages:119 ../data/messages:553 ../data/messages:693
-#: ../data/messages:807 ../data/messages:841 ../data/messages:879
+#: ../data/messages:121 ../data/messages:559 ../data/messages:699
+#: ../data/messages:813 ../data/messages:847 ../data/messages:885
 msgid "Custom"
 msgstr "Custom"
 
-#: ../data/messages:121 ../data/messages:747
+#: ../data/messages:123 ../data/messages:753
 msgid "Colour"
 msgstr "Colour"
 
-#: ../data/messages:125
+#: ../data/messages:127
 msgid "Choose a theme of icons :"
 msgstr "Choose a theme of icons:"
 
-#: ../data/messages:127 ../data/messages:949
+#: ../data/messages:129 ../data/messages:955
 msgid "Icons size:"
 msgstr "Icons size:"
 
-#: ../data/messages:129 ../data/messages:955
+#: ../data/messages:131 ../data/messages:961
 msgid "Very small"
 msgstr "Very small"
 
-#: ../data/messages:131 ../data/messages:957
+#: ../data/messages:133 ../data/messages:963
 msgid "Small"
 msgstr "Small"
 
-#: ../data/messages:133 ../data/messages:959
+#: ../data/messages:135 ../data/messages:965
 msgid "Medium"
 msgstr "Medium"
 
-#: ../data/messages:135 ../data/messages:961
+#: ../data/messages:137 ../data/messages:967
 msgid "Big"
 msgstr "Big"
 
-#: ../data/messages:137 ../data/messages:963
+#: ../data/messages:139 ../data/messages:969
 msgid "Very Big"
 msgstr "Very Big"
 
-#: ../data/messages:141 ../data/messages:529
+#: ../data/messages:143 ../data/messages:535
 msgid "Choose the default view for main docks :"
 msgstr "Choose the default view for main docks:"
 
-#: ../data/messages:143 ../data/messages:533
+#: ../data/messages:145 ../data/messages:539
 msgid "You can overwrite this parameter for each sub-dock."
 msgstr "You can overwrite this parameter for each sub-dock."
 
-#: ../data/messages:145 ../data/messages:535
+#: ../data/messages:147 ../data/messages:541
 msgid "Choose the default view for sub-docks :"
 msgstr "Choose the default view for sub-docks:"
 
-#: ../data/messages:149
+#: ../data/messages:151
 msgid ""
 "Many applets provide shortkeys for their actions. As soon as an applet is "
 "enabled, its shortkeys become available.\n"
@@ -3029,7 +2993,7 @@ msgstr ""
 "Double-click on a line, and press the shortkey you want to use for the "
 "corresponding action."
 
-#: ../data/messages:165 ../data/messages:911
+#: ../data/messages:167 ../data/messages:917
 msgid ""
 "When set to 0 the dock will position itself relative to the left corner if "
 "horizontal and the top corner if vertical. When set to 1 it will position "
@@ -3043,19 +3007,15 @@ msgstr ""
 "vertical. When set to 0.5, it will position itself relative to the middle of "
 "the screen's edge."
 
-#: ../data/messages:167 ../data/messages:913
+#: ../data/messages:169 ../data/messages:919
 msgid "Relative alignment:"
 msgstr "Relative alignment:"
 
-#: ../data/messages:173 ../data/messages:915
-msgid "Multi-screens"
-msgstr "Multi-screens"
-
-#: ../data/messages:175 ../data/messages:935
+#: ../data/messages:177 ../data/messages:941
 msgid "Offset from the screen's edge"
 msgstr "Offset from the screen's edge"
 
-#: ../data/messages:177 ../data/messages:937
+#: ../data/messages:179 ../data/messages:943
 msgid ""
 "Gap from the absolute position on the screen's edge, in pixels. You can also "
 "move the dock by holding the ALT or CTRL key and the left mouse button."
@@ -3063,11 +3023,11 @@ msgstr ""
 "Gap from the absolute position on the screen's edge, in pixels. You can also "
 "move the dock by holding the ALT or CTRL key and the left mouse button."
 
-#: ../data/messages:179 ../data/messages:939
+#: ../data/messages:181 ../data/messages:945
 msgid "Lateral offset:"
 msgstr "Lateral offset:"
 
-#: ../data/messages:181 ../data/messages:941
+#: ../data/messages:183 ../data/messages:947
 msgid ""
 "in pixels. You can also move the dock by holding the ALT or CTRL key and the "
 "left mouse button."
@@ -3075,79 +3035,79 @@ msgstr ""
 "in pixels. You can also move the dock by holding the ALT or CTRL key and the "
 "left mouse button."
 
-#: ../data/messages:183 ../data/messages:943
+#: ../data/messages:185 ../data/messages:949
 msgid "Distance to the screen edge:"
 msgstr "Distance to the screen edge:"
 
-#: ../data/messages:185
+#: ../data/messages:187
 msgid "Accessibility"
 msgstr "Accessibility"
 
-#: ../data/messages:221
+#: ../data/messages:223
 msgid "The higher, the faster the dock will appear"
 msgstr "The higher, the faster the dock will appear"
 
-#: ../data/messages:223
+#: ../data/messages:225
 msgid "Callback sensitivity:"
 msgstr "Callback sensitivity:"
 
-#: ../data/messages:225
+#: ../data/messages:227
 msgid "high"
 msgstr "high"
 
-#: ../data/messages:227
+#: ../data/messages:229
 msgid "low"
 msgstr "low"
 
-#: ../data/messages:229
+#: ../data/messages:231
 msgid "How to call the dock back:"
 msgstr "How to call the dock back:"
 
-#: ../data/messages:231
+#: ../data/messages:233
 msgid "Hit the screen's border"
 msgstr "Hit the screen's border"
 
-#: ../data/messages:233
+#: ../data/messages:235
 msgid "Hit where the dock is"
 msgstr "Hit where the dock is"
 
-#: ../data/messages:235
+#: ../data/messages:237
 msgid "Hit the screen's corner"
 msgstr "Hit the screen's corner"
 
-#: ../data/messages:237
+#: ../data/messages:239
 msgid "Hit a zone"
 msgstr "Hit a zone"
 
-#: ../data/messages:239
+#: ../data/messages:241
 msgid "Size of the zone :"
 msgstr "Size of the zone:"
 
-#: ../data/messages:241
+#: ../data/messages:243
 msgid "Image to display on the zone :"
 msgstr "Image to display in the zone:"
 
-#: ../data/messages:247
+#: ../data/messages:249
 msgid "Sub-docks' visibility"
 msgstr "Sub-docks' visibility"
 
-#: ../data/messages:257 ../data/messages:261
+#: ../data/messages:259 ../data/messages:263
 msgid "in ms."
 msgstr "in ms."
 
-#: ../data/messages:259
+#: ../data/messages:261
 msgid "Delay before displaying a sub-dock:"
 msgstr "Delay before displaying a sub-dock:"
 
-#: ../data/messages:263
+#: ../data/messages:265
 msgid "Delay before leaving a sub-dock takes effect:"
 msgstr "Delay before leaving a sub-dock takes effect:"
 
-#: ../data/messages:265
+#: ../data/messages:267
 msgid "TaskBar"
 msgstr "Taskbar"
 
-#: ../data/messages:269
+#: ../data/messages:271
 msgid ""
 "Cairo-Dock will then act as your taskbar. It is recommended to remove any "
 "other taskbars."
@@ -3155,11 +3115,11 @@ msgstr ""
 "Cairo-Dock will then act as your taskbar. It is recommended to remove any "
 "other taskbars."
 
-#: ../data/messages:271
+#: ../data/messages:273
 msgid "Show currently opened applications in the dock?"
 msgstr "Show currently opened applications in the dock?"
 
-#: ../data/messages:273
+#: ../data/messages:275
 msgid ""
 "Allows launchers to act as applications when their programs are running and "
 "displays a marker on icons to indicate this. You can launch other occurences "
@@ -3169,23 +3129,23 @@ msgstr ""
 "displays a marker on icons to indicate this. You can launch other occurences "
 "of the program with SHIFT+click."
 
-#: ../data/messages:275
+#: ../data/messages:277
 msgid "Mix launchers and applications"
 msgstr "Mix launchers and applications"
 
-#: ../data/messages:277
+#: ../data/messages:279
 msgid "Only show applications on current desktop"
 msgstr "Only show applications on current desktop"
 
-#: ../data/messages:279
+#: ../data/messages:281
 msgid "Only show icons whose windows are minimised"
 msgstr "Only show icons whose windows are minimised"
 
-#: ../data/messages:295
+#: ../data/messages:297
 msgid "Automatically add a separator"
 msgstr "Automatically add a separator"
 
-#: ../data/messages:297
+#: ../data/messages:299
 msgid ""
 "This allows you to group all the windows of a given application into a "
 "unique sub-dock, and to act on all of the windows at the same time."
@@ -3193,23 +3153,23 @@ msgstr ""
 "This allows you to group all the windows of a given application into a "
 "unique sub-dock, and to act on all of the windows at the same time."
 
-#: ../data/messages:299
+#: ../data/messages:301
 msgid "Group windows from the same application in a sub-dock ?"
 msgstr "Group windows from the same application in a sub-dock ?"
 
-#: ../data/messages:301 ../data/messages:311
+#: ../data/messages:303 ../data/messages:313
 msgid "Enter the class of the applications, separated by a semi-colon ';'"
 msgstr "Enter the class of the applications, separated by a semi-colon ';'"
 
-#: ../data/messages:303 ../data/messages:313
+#: ../data/messages:305 ../data/messages:315
 msgid "\t\tExcept the following classes:"
 msgstr "\t\tExcept the following classes:"
 
-#: ../data/messages:305
+#: ../data/messages:307
 msgid "Representation"
 msgstr "Representation"
 
-#: ../data/messages:307
+#: ../data/messages:309
 msgid ""
 "If not set, the icon provided by X for each application will be used. If "
 "set, the same icon as the corresponding launcher will be used for each "
@@ -3219,11 +3179,11 @@ msgstr ""
 "set, the same icon as the corresponding launcher will be used for each "
 "application."
 
-#: ../data/messages:309
+#: ../data/messages:311
 msgid "Overwrite the X icon with the launchers' icon?"
 msgstr "Overwrite the X icon with the launchers' icon?"
 
-#: ../data/messages:315
+#: ../data/messages:317
 msgid ""
 "A composite manager is required to display the thumbnail.\n"
 "OpenGL is required to draw the icon bent backwards."
@@ -3231,77 +3191,77 @@ msgstr ""
 "A composite manager is required to display the thumbnail.\n"
 "OpenGL is required to draw the icon bent backwards."
 
-#: ../data/messages:317
+#: ../data/messages:319
 msgid "How to draw minimised windows ?"
 msgstr "How to draw minimised windows ?"
 
-#: ../data/messages:319
+#: ../data/messages:321
 msgid "Make the icon transparent"
 msgstr "Make the icon transparent"
 
-#: ../data/messages:321
+#: ../data/messages:323
 msgid "Show a window's thumbnail"
 msgstr "Show a window's thumbnail"
 
-#: ../data/messages:323
+#: ../data/messages:325
 msgid "Draw it bent backwards"
 msgstr "Draw it bent backwards"
 
-#: ../data/messages:325
+#: ../data/messages:327
 msgid "Transparency of icons whose window is minimised:"
 msgstr "Transparency of icons whose window is minimised:"
 
-#: ../data/messages:327 ../data/messages:477 ../data/messages:603
-#: ../data/messages:629 ../data/messages:719
+#: ../data/messages:329 ../data/messages:483 ../data/messages:609
+#: ../data/messages:635 ../data/messages:725
 msgid "Opaque"
 msgstr "Opaque"
 
-#: ../data/messages:329 ../data/messages:475 ../data/messages:601
-#: ../data/messages:627 ../data/messages:717
+#: ../data/messages:331 ../data/messages:481 ../data/messages:607
+#: ../data/messages:633 ../data/messages:723
 msgid "Transparent"
 msgstr "Transparent"
 
-#: ../data/messages:331
+#: ../data/messages:333
 msgid "Play a short animation of the icon when its window becomes active"
 msgstr "Play a short animation of the icon when its window becomes active"
 
-#: ../data/messages:333
+#: ../data/messages:335
 msgid "\"...\" will be added at the end if the name is too long."
 msgstr "\"...\" will be added at the end if the name is too long."
 
-#: ../data/messages:335
+#: ../data/messages:337
 msgid "Maximum number of caracters in application name:"
 msgstr "Maximum number of caracters in application name:"
 
-#: ../data/messages:337
+#: ../data/messages:339
 msgid "Interaction"
 msgstr "Interaction"
 
-#: ../data/messages:339
+#: ../data/messages:341
 msgid "Action on middle-click on the related application"
 msgstr "Action on middle-click on the related application"
 
-#: ../data/messages:341
+#: ../data/messages:343
 msgid "Nothing"
 msgstr "Nothing"
 
-#: ../data/messages:345
+#: ../data/messages:347
 msgid "Minimize"
 msgstr "Minimise"
 
-#: ../data/messages:347
+#: ../data/messages:349
 msgid "Launch new"
 msgstr "Launch new"
 
-#: ../data/messages:349
+#: ../data/messages:351
 msgid "Lower"
 msgstr "Lower"
 
-#: ../data/messages:351
+#: ../data/messages:353
 msgid "This is the default behaviour of most taskbars."
 msgstr "This is the default behaviour of most taskbars."
 
-#: ../data/messages:353
+#: ../data/messages:355
 msgid ""
 "Minimise the window when its icon is clicked, if it was already the active "
 "window ?"
@@ -3309,29 +3269,29 @@ msgstr ""
 "Minimise the window when its icon is clicked if it was already the active "
 "window"
 
-#: ../data/messages:355
+#: ../data/messages:357
 msgid "Only if your Window Manager supports it."
 msgstr "Only if your Window Manager supports it."
 
-#: ../data/messages:357
+#: ../data/messages:359
 msgid ""
 "Present windows preview on click when several windows are grouped togather"
 msgstr ""
 "Present windows preview on click when several windows are grouped together"
 
-#: ../data/messages:359
+#: ../data/messages:361
 msgid "Highlight applications requiring your attention with a dialog bubble"
 msgstr "Highlight applications requiring your attention with a dialog bubble"
 
-#: ../data/messages:361
+#: ../data/messages:363
 msgid "in seconds"
 msgstr "in seconds"
 
-#: ../data/messages:363
+#: ../data/messages:365
 msgid "Duration of the dialog:"
 msgstr "Duration of the dialogue:"
 
-#: ../data/messages:365
+#: ../data/messages:367
 msgid ""
 "It will notify you even if, for instance, you are watching a movie in full "
 "screen or you are on another desktop.\n"
@@ -3339,23 +3299,31 @@ msgstr ""
 "It will notify you even if, for instance, you are watching a movie in full "
 "screen or you are on another desktop.\n"
 
-#: ../data/messages:367
+#: ../data/messages:369
 msgid "Force the following applications to demand your attention"
 msgstr "Force the following applications to demand your attention"
 
-#: ../data/messages:369
+#: ../data/messages:371
 msgid "Highlight applications demanding your attention with an animation"
 msgstr "Highlight applications demanding your attention with an animation"
 
-#: ../data/messages:373
+#: ../data/messages:375
+msgid "Enable new code paths on X11 to test for regressions."
+msgstr ""
+
+#: ../data/messages:377
+msgid "Experimental drawing code (X11)"
+msgstr ""
+
+#: ../data/messages:379
 msgid "Animations speed"
 msgstr "Animations speed"
 
-#: ../data/messages:375
+#: ../data/messages:381
 msgid "Animate sub-docks when they appear"
 msgstr "Animate sub-docks when they appear"
 
-#: ../data/messages:377
+#: ../data/messages:383
 msgid ""
 "Icons will appear folded on themselves and will then unfold until they fill "
 "the whole dock. The smaller this value, the faster this will be."
@@ -3363,53 +3331,53 @@ msgstr ""
 "Icons will appear folded on themselves and will then unfold until they fill "
 "the whole dock. The smaller this value, the faster this will be."
 
-#: ../data/messages:379
+#: ../data/messages:385
 msgid "Animation unfolding duration:"
 msgstr "Animation unfolding duration:"
 
-#: ../data/messages:381 ../data/messages:389 ../data/messages:393
-#: ../data/messages:401 ../data/messages:405
+#: ../data/messages:387 ../data/messages:395 ../data/messages:399
+#: ../data/messages:407 ../data/messages:411
 msgid "fast"
 msgstr "fast"
 
-#: ../data/messages:383 ../data/messages:391 ../data/messages:395
-#: ../data/messages:403 ../data/messages:407
+#: ../data/messages:389 ../data/messages:397 ../data/messages:401
+#: ../data/messages:409 ../data/messages:413
 msgid "slow"
 msgstr "slow"
 
-#: ../data/messages:385 ../data/messages:397
+#: ../data/messages:391 ../data/messages:403
 msgid "The more there are, the slower it will be"
 msgstr "The more there are, the slower it will be"
 
-#: ../data/messages:387
+#: ../data/messages:393
 msgid "Number of steps in the zoom animation (grow/shrink):"
 msgstr "Number of steps in the zoom animation (grow/shrink):"
 
-#: ../data/messages:399
+#: ../data/messages:405
 msgid "Number of steps in the auto-hide animation (move up/move down):"
 msgstr "Number of steps in the auto-hide animation (move up/move down):"
 
-#: ../data/messages:409
+#: ../data/messages:415
 msgid "Refresh rate"
 msgstr "Refresh rate"
 
-#: ../data/messages:411 ../data/messages:415 ../data/messages:419
+#: ../data/messages:417 ../data/messages:421 ../data/messages:425
 msgid "in Hz. This is to adjust behaviour relative to your CPU power."
 msgstr "in Hz. This is to adjust behaviour relative to your CPU power."
 
-#: ../data/messages:413
+#: ../data/messages:419
 msgid "Refresh rate when moving cursor into the dock:"
 msgstr "Refresh rate when moving cursor into the dock:"
 
-#: ../data/messages:417
+#: ../data/messages:423
 msgid "Animation frequency for the OpenGL backend:"
 msgstr "Animation frequency for the OpenGL backend:"
 
-#: ../data/messages:421
+#: ../data/messages:427
 msgid "Animation frequency for the Cairo backend:"
 msgstr "Animation frequency for the Cairo backend:"
 
-#: ../data/messages:423
+#: ../data/messages:429
 msgid ""
 "The transparency gradation pattern will then be re-calculated in real time. "
 "May need more CPU power."
@@ -3417,15 +3385,15 @@ msgstr ""
 "The transparency gradation pattern will then be re-calculated in real time. "
 "May need more CPU power."
 
-#: ../data/messages:425
+#: ../data/messages:431
 msgid "Reflections should be calculated in real-time?"
 msgstr "Reflections should be calculated in real-time?"
 
-#: ../data/messages:427
+#: ../data/messages:433
 msgid "Connection to the Internet"
 msgstr "Connection to the Internet"
 
-#: ../data/messages:429
+#: ../data/messages:435
 msgid ""
 "Maximum time in seconds that you allow the connection to the server to take. "
 "This only limits the connection phase,  once the dock has connected this "
@@ -3435,11 +3403,11 @@ msgstr ""
 "server. This only limits the connection phase,  once the dock has connected "
 "this option becomes obsolete."
 
-#: ../data/messages:431
+#: ../data/messages:437
 msgid "Connection timeout :"
 msgstr "Connection timeout :"
 
-#: ../data/messages:433
+#: ../data/messages:439
 msgid ""
 "Maximum time in seconds that you allow the whole operation to last. Some "
 "themes can be up to a few MB."
@@ -3447,157 +3415,157 @@ msgstr ""
 "Maximum time in seconds that you allow the whole operation to last. Some "
 "themes can be up to a few MB."
 
-#: ../data/messages:435
+#: ../data/messages:441
 msgid "Maximum time to download a file:"
 msgstr "Maximum time to download a file:"
 
-#: ../data/messages:437
+#: ../data/messages:443
 msgid "Use this option if you experience problems to connect."
 msgstr "Use this option if you have problems connecting."
 
-#: ../data/messages:439
+#: ../data/messages:445
 msgid "Force IPv4 ?"
 msgstr "Force IPv4 ?"
 
-#: ../data/messages:441
+#: ../data/messages:447
 msgid "Use this option if you connect to the Internet through a proxy."
 msgstr "Use this option if you connect to the Internet through a proxy."
 
-#: ../data/messages:443
+#: ../data/messages:449
 msgid "Are you behind a proxy ?"
 msgstr "Are you behind a proxy?"
 
-#: ../data/messages:445
+#: ../data/messages:451
 msgid "Proxy name :"
 msgstr "Proxy name:"
 
-#: ../data/messages:447
+#: ../data/messages:453
 msgid "Port :"
 msgstr "Port:"
 
-#: ../data/messages:449 ../data/messages:453
+#: ../data/messages:455 ../data/messages:459
 msgid ""
 "Let empty if you don't need to log-in to the proxy with a user/password."
 msgstr ""
 "Leave empty if you don't need to log-in to the proxy with a user/password."
 
-#: ../data/messages:451
+#: ../data/messages:457
 msgid "User :"
 msgstr "User :"
 
-#: ../data/messages:455
+#: ../data/messages:461
 msgid "Password :"
 msgstr "Password:"
 
-#: ../data/messages:465 ../data/messages:483 ../data/messages:979
+#: ../data/messages:471 ../data/messages:489 ../data/messages:985
 msgid "Colour gradation"
 msgstr "Colour gradation"
 
-#: ../data/messages:467
+#: ../data/messages:473
 msgid "Use a background image."
 msgstr "Use a background image."
 
-#: ../data/messages:471 ../data/messages:685 ../data/messages:739
-#: ../data/messages:759 ../data/messages:797
+#: ../data/messages:477 ../data/messages:691 ../data/messages:745
+#: ../data/messages:765 ../data/messages:803
 msgid "Image file:"
 msgstr "Image file:"
 
-#: ../data/messages:473
+#: ../data/messages:479
 msgid "Image's transparency :"
 msgstr "Image's transparency:"
 
-#: ../data/messages:479 ../data/messages:985
+#: ../data/messages:485 ../data/messages:991
 msgid "Repeat image as a pattern to fill background?"
 msgstr "Repeat image as a pattern to fill background?"
 
-#: ../data/messages:481
+#: ../data/messages:487
 msgid "Use a colour gradation."
 msgstr "Use a colour gradation."
 
-#: ../data/messages:485 ../data/messages:987
+#: ../data/messages:491 ../data/messages:993
 msgid "Bright colour:"
 msgstr "Bright colour:"
 
-#: ../data/messages:487 ../data/messages:989
+#: ../data/messages:493 ../data/messages:995
 msgid "Dark colour:"
 msgstr "Dark colour:"
 
-#: ../data/messages:489
+#: ../data/messages:495
 msgid "In degrees, in relation to the vertical"
 msgstr "In degrees, in relation to the vertical"
 
-#: ../data/messages:491
+#: ../data/messages:497
 msgid "Angle of the gradation :"
 msgstr "Angle of the gradation:"
 
-#: ../data/messages:493
+#: ../data/messages:499
 msgid "If not nul, it will form stripes."
 msgstr "If not nul, it will form stripes."
 
-#: ../data/messages:495
+#: ../data/messages:501
 msgid "Repeat the gradation this number of times:"
 msgstr "Repeat the gradation this number of times:"
 
-#: ../data/messages:497
+#: ../data/messages:503
 msgid "Percentage of the bright colour:"
 msgstr "Percentage of the bright colour:"
 
-#: ../data/messages:499
+#: ../data/messages:505
 msgid "Background when hidden"
 msgstr "Background when hidden"
 
-#: ../data/messages:501
+#: ../data/messages:507
 msgid "Several applets can be visible even when the dock is hidden"
 msgstr "Several applets can be visible even when the dock is hidden"
 
-#: ../data/messages:503
+#: ../data/messages:509
 msgid "Default background color when the dock is hidden"
 msgstr "Default background colour when the dock is hidden"
 
-#: ../data/messages:505
+#: ../data/messages:511
 msgid "External Frame"
 msgstr "External Frame"
 
-#: ../data/messages:507 ../data/messages:511 ../data/messages:517
-#: ../data/messages:577 ../data/messages:655
+#: ../data/messages:513 ../data/messages:517 ../data/messages:523
+#: ../data/messages:583 ../data/messages:661
 msgid "in pixels."
 msgstr "in pixels."
 
-#: ../data/messages:509 ../data/messages:561 ../data/messages:751
-#: ../data/messages:887
+#: ../data/messages:515 ../data/messages:567 ../data/messages:757
+#: ../data/messages:893
 msgid "Corner radius"
 msgstr "Corner radius"
 
-#: ../data/messages:513 ../data/messages:563 ../data/messages:889
+#: ../data/messages:519 ../data/messages:569 ../data/messages:895
 msgid "Outline width"
 msgstr "Outline width"
 
-#: ../data/messages:515 ../data/messages:557 ../data/messages:813
-#: ../data/messages:845 ../data/messages:883
+#: ../data/messages:521 ../data/messages:563 ../data/messages:819
+#: ../data/messages:851 ../data/messages:889
 msgid "Outline colour"
 msgstr "Outline colour"
 
-#: ../data/messages:519
+#: ../data/messages:525
 msgid "Margin between the frame and the icons or their reflects :"
 msgstr "Margin between the frame and the icons or their reflects :"
 
-#: ../data/messages:521
+#: ../data/messages:527
 msgid "Are the bottom left and right corners rounded?"
 msgstr "Are the bottom left and right corners rounded?"
 
-#: ../data/messages:523 ../data/messages:991
+#: ../data/messages:529 ../data/messages:997
 msgid "Stretch the dock to always fill the screen"
 msgstr "Stretch the dock to always fill the screen"
 
-#: ../data/messages:527
+#: ../data/messages:533
 msgid "Main Dock"
 msgstr "Main Dock"
 
-#: ../data/messages:531
+#: ../data/messages:537
 msgid "Sub-Docks"
 msgstr "Sub-Docks"
 
-#: ../data/messages:537
+#: ../data/messages:543
 msgid ""
 "You can specify a ratio for the size of the sub-docks' icons, in relation to "
 "the main docks' icons size"
@@ -3605,76 +3573,76 @@ msgstr ""
 "You can specify a ratio for the size of the sub-docks' icons, in relation to "
 "the main docks' icons size"
 
-#: ../data/messages:539
+#: ../data/messages:545
 msgid "Ratio for the size of the sub-docks' icons :"
 msgstr "Ratio for the size of the sub-docks' icons:"
 
-#: ../data/messages:541 ../data/messages:777
+#: ../data/messages:547 ../data/messages:783
 msgid "smaller"
 msgstr "smaller"
 
-#: ../data/messages:543
+#: ../data/messages:549
 msgid "larger"
 msgstr "larger"
 
-#: ../data/messages:545
+#: ../data/messages:551
 msgid "Dialogs"
 msgstr "Dialogue boxes"
 
-#: ../data/messages:547
+#: ../data/messages:553
 msgid "Bubble"
 msgstr "Bubble"
 
-#: ../data/messages:555 ../data/messages:843 ../data/messages:869
-#: ../data/messages:881
+#: ../data/messages:561 ../data/messages:849 ../data/messages:875
+#: ../data/messages:887
 msgid "Background colour"
 msgstr "Background colour"
 
-#: ../data/messages:559 ../data/messages:847 ../data/messages:867
+#: ../data/messages:565 ../data/messages:853 ../data/messages:873
 msgid "Text colour"
 msgstr "Text colour"
 
-#: ../data/messages:565
+#: ../data/messages:571
 msgid "Shape of the bubble:"
 msgstr "Shape of the bubble:"
 
-#: ../data/messages:567 ../data/messages:853 ../data/messages:891
+#: ../data/messages:573 ../data/messages:859 ../data/messages:897
 msgid "Font"
 msgstr "Font"
 
-#: ../data/messages:569 ../data/messages:855
+#: ../data/messages:575 ../data/messages:861
 msgid "Otherwise the default's system one will be used."
 msgstr "Otherwise the default's system one will be used."
 
-#: ../data/messages:571 ../data/messages:857 ../data/messages:893
+#: ../data/messages:577 ../data/messages:863 ../data/messages:899
 msgid "Use a custom font for the text?"
 msgstr "Use a custom font for the text?"
 
-#: ../data/messages:573 ../data/messages:859 ../data/messages:895
+#: ../data/messages:579 ../data/messages:865 ../data/messages:901
 msgid "Text font:"
 msgstr "Text font:"
 
-#: ../data/messages:575 ../data/messages:631
+#: ../data/messages:581 ../data/messages:637
 msgid "Buttons"
 msgstr "Buttons"
 
-#: ../data/messages:579
+#: ../data/messages:585
 msgid "Size of buttons in the info-bubbles (width x height) :"
 msgstr "Size of buttons in the info-bubbles (width x height):"
 
-#: ../data/messages:581
+#: ../data/messages:587
 msgid "Name of an image to use for the yes/ok button :"
 msgstr "Name of an image to use for the yes/ok button:"
 
-#: ../data/messages:583
+#: ../data/messages:589
 msgid "Name of an image to use for the no/cancel button :"
 msgstr "Name of an image to use for the no/cancel button:"
 
-#: ../data/messages:585
+#: ../data/messages:591
 msgid "Size of the icon displayed next to the text :"
 msgstr "Size of the icon displayed next to the text:"
 
-#: ../data/messages:591
+#: ../data/messages:597
 msgid ""
 "This can be customized for each desklet separately.\n"
 "Choose 'Custom decoration' to define your own decorations below"
@@ -3682,11 +3650,11 @@ msgstr ""
 "This can be customised for each desklet separately.\n"
 "Choose 'Custom decoration' to define your own decorations below"
 
-#: ../data/messages:593
+#: ../data/messages:599
 msgid "Choose a default decoration for all desklets :"
 msgstr "Choose a default decoration for all desklets:"
 
-#: ../data/messages:595
+#: ../data/messages:601
 msgid ""
 "It's an image that will be displayed below the drawings, like a frame for "
 "example. Leave empty to not use any."
@@ -3694,47 +3662,47 @@ msgstr ""
 "It's an image that will be displayed below the drawings, like a frame for "
 "example. Leave empty to not use any."
 
-#: ../data/messages:597
+#: ../data/messages:603
 msgid "Background image :"
 msgstr "Background image:"
 
-#: ../data/messages:599
+#: ../data/messages:605
 msgid "Background transparency :"
 msgstr "Background transparency:"
 
-#: ../data/messages:605
+#: ../data/messages:611
 msgid "in pixels. Use this to adjust the left position of the drawings."
 msgstr "in pixels. Use this to adjust the left position of the drawings."
 
-#: ../data/messages:607
+#: ../data/messages:613
 msgid "Left offset :"
 msgstr "Left offset:"
 
-#: ../data/messages:609
+#: ../data/messages:615
 msgid "in pixels. Use this to adjust the top position of the drawings."
 msgstr "in pixels. Use this to adjust the top position of the drawings."
 
-#: ../data/messages:611
+#: ../data/messages:617
 msgid "Top offset :"
 msgstr "Top offset:"
 
-#: ../data/messages:613
+#: ../data/messages:619
 msgid "in pixels. Use this to adjust the right position of the drawings."
 msgstr "in pixels. Use this to adjust the right position of the drawings."
 
-#: ../data/messages:615
+#: ../data/messages:621
 msgid "Right offset :"
 msgstr "Right offset:"
 
-#: ../data/messages:617
+#: ../data/messages:623
 msgid "in pixels. Use this to adjust the bottom position of the drawings."
 msgstr "in pixels. Use this to adjust the bottom position of the drawings."
 
-#: ../data/messages:619
+#: ../data/messages:625
 msgid "Bottom offset :"
 msgstr "Bottom offset:"
 
-#: ../data/messages:621
+#: ../data/messages:627
 msgid ""
 "It's an image that will be displayed above the drawings, like a reflection "
 "for example. Leave empty to not use any."
@@ -3742,87 +3710,85 @@ msgstr ""
 "It's an image that will be displayed above the drawings, like a reflection "
 "for example. Leave empty to not use any."
 
-#: ../data/messages:623
+#: ../data/messages:629
 msgid "Foreground image :"
 msgstr "Foreground image:"
 
-#: ../data/messages:625
+#: ../data/messages:631
 msgid "Foreground tansparency :"
 msgstr "Foreground tansparency:"
 
-#: ../data/messages:633
+#: ../data/messages:639
 msgid "Buttons size :"
 msgstr "Buttons size:"
 
-#: ../data/messages:635 ../data/messages:641
+#: ../data/messages:641 ../data/messages:647
 msgid "Name of an image to use for the 'rotate' button :"
 msgstr "Name of an image to use for the 'rotate' button:"
 
-#: ../data/messages:637
+#: ../data/messages:643
 msgid "Name of an image to use for the 'reattach' button :"
 msgstr "Name of an image to use for the 'reattach' button:"
 
-#: ../data/messages:639
+#: ../data/messages:645
 msgid "Name of an image to use for the 'depth rotate' button :"
 msgstr "Name of an image to use for the 'depth rotate' button:"
 
-#: ../data/messages:645
+#: ../data/messages:651
 msgid "Icons' themes"
 msgstr "Icons' themes"
 
-#: ../data/messages:647
+#: ../data/messages:653
 msgid "Choose an icon theme :"
 msgstr "Choose an icon theme:"
 
-#: ../data/messages:649
+#: ../data/messages:655
 msgid "Image filename to use as a background for icons :"
 msgstr "Image filename to use as a background for icons:"
 
-#: ../data/messages:651
+#: ../data/messages:657
 msgid "Icons size"
 msgstr "Icons size"
 
-#: ../data/messages:653 ../data/messages:671
+#: ../data/messages:659 ../data/messages:677
 msgid "Icons' size at rest (width x height) :"
 msgstr "Icons' size at rest (width x height) :"
 
-#: ../data/messages:657
+#: ../data/messages:663
 msgid "Space between icons :"
 msgstr "Space between icons:"
 
-#: ../data/messages:659
+#: ../data/messages:665
 msgid "Zoom effect"
 msgstr "Zoom effect"
 
-#: ../data/messages:661
-msgid ""
-"set to 1 if you don't want the icons to zoom when you hover over them."
-msgstr ""
-"set to 1 if you don't want the icons to zoom when you hover over them."
+#: ../data/messages:667
+msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgstr "set to 1 if you don't want the icons to zoom when you hover over them."
 
-#: ../data/messages:663
+#: ../data/messages:669
 msgid "Maximum zoom of the icons :"
 msgstr "Maximum zoom of the icons:"
 
-#: ../data/messages:665
+#: ../data/messages:671
 msgid ""
 "in pixels. Outside of this space (centered on the mouse), there is no zoom."
 msgstr ""
 "in pixels. Outside of this space (centered on the mouse), there is no zoom."
 
-#: ../data/messages:667
+#: ../data/messages:673
 msgid "Width of the space in which the zoom will be effective :"
 msgstr "Width of the space in which the zoom will be effective:"
 
-#: ../data/messages:669
+#: ../data/messages:675
 msgid "Separators"
 msgstr "Separators"
 
-#: ../data/messages:673
+#: ../data/messages:679
 msgid "Force separator's image size to stay constant?"
 msgstr "Force separator's image size to stay constant?"
 
-#: ../data/messages:675
+#: ../data/messages:681
 msgid ""
 "Only the default, 3D-plane and curve views support flat and physical "
 "separators. Flat separators are rendered differently according to the view."
@@ -3830,23 +3796,23 @@ msgstr ""
 "Only the default, 3D-plane and curve views support flat and physical "
 "separators. Flat separators are rendered differently according to the view."
 
-#: ../data/messages:677
+#: ../data/messages:683
 msgid "How to draw the separators?"
 msgstr "How to draw the separators?"
 
-#: ../data/messages:679
+#: ../data/messages:685
 msgid "Use an image."
 msgstr "Use an image."
 
-#: ../data/messages:681
+#: ../data/messages:687
 msgid "Flat separator"
 msgstr "Flat separator"
 
-#: ../data/messages:683
+#: ../data/messages:689
 msgid "Physical separator"
 msgstr "Physical separator"
 
-#: ../data/messages:687
+#: ../data/messages:693
 msgid ""
 "Make the separator's image revolve when dock is on top/on the left/on the "
 "right?"
@@ -3854,27 +3820,27 @@ msgstr ""
 "Make the separator's image revolve when dock is on top/on the left/on the "
 "right?"
 
-#: ../data/messages:695
+#: ../data/messages:701
 msgid "Colour of flat separators :"
 msgstr "Colour of flat separators:"
 
-#: ../data/messages:697
+#: ../data/messages:703
 msgid "Reflections"
 msgstr "Reflections"
 
-#: ../data/messages:699
+#: ../data/messages:705
 msgid "Reflection visibility"
 msgstr "Reflection visibility"
 
-#: ../data/messages:701
+#: ../data/messages:707
 msgid "light"
 msgstr "light"
 
-#: ../data/messages:703
+#: ../data/messages:709
 msgid "strong"
 msgstr "strong"
 
-#: ../data/messages:705
+#: ../data/messages:711
 msgid ""
 "In percent of the icon's size. This parameter influence the total height of "
 "the dock."
@@ -3882,19 +3848,19 @@ msgstr ""
 "In percent of the icon's size. This parameter influence the total height of "
 "the dock."
 
-#: ../data/messages:707
+#: ../data/messages:713
 msgid "Height of the reflection:"
 msgstr "Height of the reflection:"
 
-#: ../data/messages:709
+#: ../data/messages:715
 msgid "small"
 msgstr "small"
 
-#: ../data/messages:711
+#: ../data/messages:717
 msgid "tall"
 msgstr "tall"
 
-#: ../data/messages:713
+#: ../data/messages:719
 msgid ""
 "It is their transparency when the dock is at rest; they will \"materialize\" "
 "progressively as the dock grows up. The closer to 0, the more transparent "
@@ -3904,67 +3870,67 @@ msgstr ""
 "progressively as the dock grows up. The closer to 0, the more transparent "
 "they will be."
 
-#: ../data/messages:715
+#: ../data/messages:721
 msgid "Icons' transparency at rest :"
 msgstr "Icons' transparency at rest:"
 
-#: ../data/messages:721
+#: ../data/messages:727
 msgid "Link the icons with a string"
 msgstr "Link the icons with a string"
 
-#: ../data/messages:723
+#: ../data/messages:729
 msgid "Linewidth of the string, in pixels (0 to not use string) :"
 msgstr "Linewidth of the string, in pixels (0 to not use string):"
 
-#: ../data/messages:725
+#: ../data/messages:731
 msgid "Colour of the string (red, blue, green, alpha) :"
 msgstr "Colour of the string (red, blue, green, alpha) :"
 
-#: ../data/messages:729
+#: ../data/messages:735
 msgid "Indicator of the active window"
 msgstr "Indicator of the active window"
 
-#: ../data/messages:737 ../data/messages:741 ../data/messages:745
+#: ../data/messages:743 ../data/messages:747 ../data/messages:751
 msgid "Frame"
 msgstr "Frame"
 
-#: ../data/messages:743
+#: ../data/messages:749
 msgid "Fill background"
 msgstr "Fill background"
 
-#: ../data/messages:749
+#: ../data/messages:755
 msgid "Linewidth"
 msgstr "Linewidth"
 
-#: ../data/messages:753 ../data/messages:785
+#: ../data/messages:759 ../data/messages:791
 msgid "Draw indicator above the icon?"
 msgstr "Draw indicator above the icon?"
 
-#: ../data/messages:755
+#: ../data/messages:761
 msgid "Indicator of active launcher"
 msgstr "Indicator of active launcher"
 
-#: ../data/messages:757
-msgid ""
-"Indicators are drawn on launchers icons to show that they have already been "
-"launched. Leave blank to use the default one."
-msgstr ""
-"Indicators are drawn on launchers icons to show that they have already been "
-"launched. Leave blank to use the default one."
-
-#: ../data/messages:761
-msgid ""
-"The indicator is drawn on active launchers, but you may want to display it "
-"on applications too."
-msgstr ""
-"The indicator is drawn on active launchers, but you may want to display it "
-"on applications too."
-
 #: ../data/messages:763
+msgid ""
+"Indicators are drawn on launchers icons to show that they have already been "
+"launched. Leave blank to use the default one."
+msgstr ""
+"Indicators are drawn on launchers icons to show that they have already been "
+"launched. Leave blank to use the default one."
+
+#: ../data/messages:767
+msgid ""
+"The indicator is drawn on active launchers, but you may want to display it "
+"on applications too."
+msgstr ""
+"The indicator is drawn on active launchers, but you may want to display it "
+"on applications too."
+
+#: ../data/messages:769
 msgid "Display an indicator on application icons too ?"
 msgstr "Display an indicator on application icons too?"
 
-#: ../data/messages:765
+#: ../data/messages:771
 msgid ""
 "Relatively to the icons' size. You can use this parameter to adjust the "
 "indicator's vertical position.\n"
@@ -3976,11 +3942,11 @@ msgstr ""
 "If the indicator is linked to the icon, the offset will be upwards, "
 "otherwise downwards."
 
-#: ../data/messages:767
+#: ../data/messages:773
 msgid "Vertical offset :"
 msgstr "Vertical offset:"
 
-#: ../data/messages:769
+#: ../data/messages:775
 msgid ""
 "If the indicator is linked to the icon, it will then be zoomed like the icon "
 "and the offset will be upwards.\n"
@@ -3992,11 +3958,11 @@ msgstr ""
 "Otherwise it will be drawn directly on the dock and the offset will be "
 "downwards."
 
-#: ../data/messages:771
+#: ../data/messages:777
 msgid "Link the indicator with its icon?"
 msgstr "Link the indicator with its icon?"
 
-#: ../data/messages:773
+#: ../data/messages:779
 msgid ""
 "You can choose to make the indicator smaller or bigger than the icons. The "
 "bigger the value is, the bigger the indicator is. 1 means the indicator will "
@@ -4006,43 +3972,43 @@ msgstr ""
 "bigger the value is, the bigger the indicator is. 1 means the indicator will "
 "have the same size as the icons."
 
-#: ../data/messages:775
+#: ../data/messages:781
 msgid "Indicator size ratio :"
 msgstr "Indicator size ratio:"
 
-#: ../data/messages:779
+#: ../data/messages:785
 msgid "bigger"
 msgstr "bigger"
 
-#: ../data/messages:781
+#: ../data/messages:787
 msgid ""
-"Use it to make the indicator follow the orientation of the dock "
-"(top/bottom/right/left)."
+"Use it to make the indicator follow the orientation of the dock (top/bottom/"
+"right/left)."
 msgstr ""
-"Use it to make the indicator follow the orientation of the dock "
-"(top/bottom/right/left)."
+"Use it to make the indicator follow the orientation of the dock (top/bottom/"
+"right/left)."
 
-#: ../data/messages:783
+#: ../data/messages:789
 msgid "Rotate the indicator with dock?"
 msgstr "Rotate the indicator with dock?"
 
-#: ../data/messages:787
+#: ../data/messages:793
 msgid "Indicator of grouped windows"
 msgstr "Indicator of grouped windows"
 
-#: ../data/messages:789
+#: ../data/messages:795
 msgid "How to show that several icons are grouped :"
 msgstr "How to show that several icons are grouped :"
 
-#: ../data/messages:791
+#: ../data/messages:797
 msgid "Draw an emblem"
 msgstr "Draw an emblem"
 
-#: ../data/messages:793
+#: ../data/messages:799
 msgid "Draw the sub-dock's icons as a stack"
 msgstr "Draw the sub-dock's icons as a stack"
 
-#: ../data/messages:795
+#: ../data/messages:801
 msgid ""
 "It only makes sense if you chose to group the applis of the same class "
 "together. Leave blank to use the default one."
@@ -4050,107 +4016,107 @@ msgstr ""
 "It only makes sense if you chose to group the applis of the same class "
 "together. Leave blank to use the default one."
 
-#: ../data/messages:799
+#: ../data/messages:805
 msgid "Zoom the indicator with its icon?"
 msgstr "Zoom the indicator with its icon?"
 
-#: ../data/messages:801
+#: ../data/messages:807
 msgid "Progress bars"
 msgstr "Progress bars"
 
-#: ../data/messages:809
+#: ../data/messages:815
 msgid "Start color"
 msgstr "Start colour"
 
-#: ../data/messages:811
+#: ../data/messages:817
 msgid "End color"
 msgstr "End colour"
 
-#: ../data/messages:815
+#: ../data/messages:821
 msgid "Bar thickness"
 msgstr "Bar thickness"
 
-#: ../data/messages:817
+#: ../data/messages:823
 msgid "Labels"
 msgstr "Labels"
 
-#: ../data/messages:819
+#: ../data/messages:825
 msgid "Label visibility"
 msgstr "Label visibility"
 
-#: ../data/messages:821
+#: ../data/messages:827
 msgid "Show labels:"
 msgstr "Show labels:"
 
-#: ../data/messages:825
+#: ../data/messages:831
 msgid "On pointed icon"
 msgstr "On pointed icon"
 
-#: ../data/messages:827
+#: ../data/messages:833
 msgid "On all icons"
 msgstr "On all icons"
 
-#: ../data/messages:829
+#: ../data/messages:835
 msgid "Neighbouring labels visibility:"
 msgstr "Visibility of neighbouring labels:"
 
-#: ../data/messages:831
+#: ../data/messages:837
 msgid "more visible"
 msgstr "more visible"
 
-#: ../data/messages:833
+#: ../data/messages:839
 msgid "less visible"
 msgstr "less visible"
 
-#: ../data/messages:849
+#: ../data/messages:855
 msgid "Draw the outline of the text?"
 msgstr "Draw the outline of the text?"
 
-#: ../data/messages:851
+#: ../data/messages:857
 msgid "Margin around the text (in pixels) :"
 msgstr "Margin around the text (in pixels):"
 
-#: ../data/messages:861
+#: ../data/messages:867
 msgid "Quick-info are short information drawn on the icons."
 msgstr "Quick-info are short information drawn on the icons."
 
-#: ../data/messages:863
+#: ../data/messages:869
 msgid "Quick-info"
 msgstr "Quick-info"
 
-#: ../data/messages:865
+#: ../data/messages:871
 msgid "Use the same look as the labels?"
 msgstr "Use the same look as the labels?"
 
-#: ../data/messages:885
+#: ../data/messages:891
 msgid "Text colour:"
 msgstr "Text colour:"
 
-#: ../data/messages:917
+#: ../data/messages:923
 msgid "Visibility of the dock"
 msgstr "Visibility of the dock"
 
-#: ../data/messages:951 ../data/messages:975
+#: ../data/messages:957 ../data/messages:981
 msgid "Same as main dock"
 msgstr "Same as main dock"
 
-#: ../data/messages:953
+#: ../data/messages:959
 msgid "Tiny"
 msgstr "Tiny"
 
-#: ../data/messages:967
+#: ../data/messages:973
 msgid "Leave it empty to use the same view as the main dock."
 msgstr "Leave it empty to use the same view as the main dock."
 
-#: ../data/messages:969
+#: ../data/messages:975
 msgid "Choose the view for this dock :/"
 msgstr "Choose the view for this dock:/"
 
-#: ../data/messages:973
+#: ../data/messages:979
 msgid "Fill the background with:"
 msgstr "Fill the background with:"
 
-#: ../data/messages:981
+#: ../data/messages:987
 msgid ""
 "Any format allowed; if empty, the colour gradation will be used as a fall "
 "back."
@@ -4158,27 +4124,27 @@ msgstr ""
 "Any format allowed; if empty, the colour gradation will be used as a fall "
 "back."
 
-#: ../data/messages:983
+#: ../data/messages:989
 msgid "Image filename to use as a background :"
 msgstr "Image filename to use as a background:"
 
-#: ../data/messages:993
+#: ../data/messages:999
 msgid "Load theme"
 msgstr "Load theme"
 
-#: ../data/messages:995
+#: ../data/messages:1001
 msgid "You can even paste an internet URL."
 msgstr "You can even paste an internet URL."
 
-#: ../data/messages:997
+#: ../data/messages:1003
 msgid "...or drag and drop a theme package here :"
 msgstr "...or drag and drop a theme package here:"
 
-#: ../data/messages:999
+#: ../data/messages:1005
 msgid "Theme loading options"
 msgstr "Theme loading options"
 
-#: ../data/messages:1001
+#: ../data/messages:1007
 msgid ""
 "If you tick this box, your launchers will be deleted and replaced by the "
 "ones provided in the new theme. Otherwise the current launchers will be "
@@ -4188,11 +4154,11 @@ msgstr ""
 "ones provided in the new theme. Otherwise the current launchers will be "
 "kept, only icons will be replaced."
 
-#: ../data/messages:1003
+#: ../data/messages:1009
 msgid "Use the new theme's launchers?"
 msgstr "Use the new theme's launchers?"
 
-#: ../data/messages:1005
+#: ../data/messages:1011
 msgid ""
 "Otherwise the current behaviour will be kept. This defines the dock's "
 "position, behavioural settings such as auto-hide, using taskbar or not, etc."
@@ -4200,27 +4166,27 @@ msgstr ""
 "Otherwise the current behaviour will be kept. This defines the dock's "
 "position, behavioural settings such as auto-hide, using taskbar or not, etc."
 
-#: ../data/messages:1007
+#: ../data/messages:1013
 msgid "Use the new theme's behaviour?"
 msgstr "Use the new theme's behaviour?"
 
-#: ../data/messages:1009
+#: ../data/messages:1015
 msgid "Save"
 msgstr "Save"
 
-#: ../data/messages:1011
+#: ../data/messages:1017
 msgid "You will then be able to re-open it at any time."
 msgstr "You will then be able to re-open it at any time."
 
-#: ../data/messages:1013
+#: ../data/messages:1019
 msgid "Save current behaviour also?"
 msgstr "Save current behaviour also?"
 
-#: ../data/messages:1015
+#: ../data/messages:1021
 msgid "Save current launchers also?"
 msgstr "Save current launchers also?"
 
-#: ../data/messages:1017
+#: ../data/messages:1023
 msgid ""
 "The dock will build a complete tarball of your current theme, allowing you "
 "to easily exchange it with other people."
@@ -4228,92 +4194,92 @@ msgstr ""
 "The dock will build a complete tarball of your current theme, allowing you "
 "to easily exchange it with other people."
 
-#: ../data/messages:1019
+#: ../data/messages:1025
 msgid "Build a package of the theme?"
 msgstr "Build a package of the theme?"
 
-#: ../data/messages:1021
+#: ../data/messages:1027
 msgid "Directory in which the package will be saved:"
 msgstr "Directory in which the package will be saved:"
 
-#: ../data/messages:1023 ../data/messages:1025 ../data/messages:1027
-#: ../data/messages:1059 ../data/messages:1095
+#: ../data/messages:1029 ../data/messages:1031 ../data/messages:1033
+#: ../data/messages:1065 ../data/messages:1101
 msgid "Desktop Entry"
 msgstr "Desktop Entry"
 
-#: ../data/messages:1031 ../data/messages:1063 ../data/messages:1099
+#: ../data/messages:1037 ../data/messages:1069 ../data/messages:1105
 msgid "Name of the container it belongs to:"
 msgstr "Name of the container it belongs to:"
 
-#: ../data/messages:1033
+#: ../data/messages:1039
 msgid "Sub-dock's name:"
 msgstr "Sub-dock's name:"
 
-#: ../data/messages:1035
+#: ../data/messages:1041
 msgid "New sub-dock"
 msgstr "New sub-dock"
 
-#: ../data/messages:1037
+#: ../data/messages:1043
 msgid "How to render the icon:"
 msgstr "How to render the icon:"
 
-#: ../data/messages:1039
+#: ../data/messages:1045
 msgid "Use an image"
 msgstr "Use an image"
 
-#: ../data/messages:1041
+#: ../data/messages:1047
 msgid "Draw sub-dock's content as emblems"
 msgstr "Draw sub-dock's content as emblems"
 
-#: ../data/messages:1043
+#: ../data/messages:1049
 msgid "Draw sub-dock's content as stack"
 msgstr "Draw sub-dock's content as stack"
 
-#: ../data/messages:1045
+#: ../data/messages:1051
 msgid "Draw sub-dock's content inside a box"
 msgstr "Draw sub-dock's content inside a box"
 
-#: ../data/messages:1047 ../data/messages:1069
+#: ../data/messages:1053 ../data/messages:1075
 msgid "Image's name or path:"
 msgstr "Image's name or path:"
 
-#: ../data/messages:1049 ../data/messages:1077 ../data/messages:1103
+#: ../data/messages:1055 ../data/messages:1083 ../data/messages:1109
 msgid "Extra parameters"
 msgstr "Extra parameters"
 
-#: ../data/messages:1051
+#: ../data/messages:1057
 msgid "Name of the view used for the sub-dock:"
 msgstr "Name of the view used for the sub-dock:"
 
-#: ../data/messages:1053
+#: ../data/messages:1059
 msgid "If '0' the container will be displayed on every viewport."
 msgstr "If '0' the container will be displayed on every viewport."
 
-#: ../data/messages:1055 ../data/messages:1091
+#: ../data/messages:1061 ../data/messages:1097
 msgid "Only show in this specific viewport:"
 msgstr "Only show in this specific viewport:"
 
-#: ../data/messages:1057 ../data/messages:1093 ../data/messages:1105
+#: ../data/messages:1063 ../data/messages:1099 ../data/messages:1111
 msgid "Order you want for this launcher among the others:"
 msgstr "Order you want for this launcher among the others:"
 
-#: ../data/messages:1065
+#: ../data/messages:1071
 msgid "Launcher's name:"
 msgstr "Launcher's name:"
 
-#: ../data/messages:1071
+#: ../data/messages:1077
 msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
-"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
+"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 msgstr ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, "
-"e.g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
+"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
 
-#: ../data/messages:1073
+#: ../data/messages:1079
 msgid "Command to launch on click:"
 msgstr "Command to launch on click:"
 
-#: ../data/messages:1079
+#: ../data/messages:1085
 msgid ""
 "If you chose to mix launcher and applications, this option will deactivate "
 "this behaviour for this launcher only. It can be useful for instance for a "
@@ -4325,11 +4291,11 @@ msgstr ""
 "launcher that launches a script in a terminal, but you don't want it to "
 "steal the terminal's icon from the taskbar."
 
-#: ../data/messages:1081
+#: ../data/messages:1087
 msgid "Don't link the launcher with its window"
 msgstr "Don't link the launcher with its window"
 
-#: ../data/messages:1083
+#: ../data/messages:1089
 msgid ""
 "The only reason you may want to modify this parameter is if you made this "
 "launcher by hands. If you dropped it into the dock from the menu, it is "
@@ -4341,23 +4307,23 @@ msgstr ""
 "nearly sure that you shouldn't touch it. It defines the class of the "
 "program, which is useful to link the application with its launcher."
 
-#: ../data/messages:1085
+#: ../data/messages:1091
 msgid "Class of the program:"
 msgstr "Class of the program:"
 
-#: ../data/messages:1087
+#: ../data/messages:1093
 msgid "Run in a terminal?"
 msgstr "Run in a terminal?"
 
-#: ../data/messages:1089
+#: ../data/messages:1095
 msgid "If '0' the launcher will be displayed on every viewport."
 msgstr "If '0' the launcher will be displayed on every viewport."
 
-#: ../data/messages:1101
+#: ../data/messages:1107
 msgid "Separators' appearance is defined in the global configuration."
 msgstr "Separators' appearance is defined in the global configuration."
 
-#: ../data/messages:1108
+#: ../data/messages:1114
 msgid ""
 "<b>The basic 2D view of Cairo-Dock</b>\n"
 "Perfect if you want to make the dock look like a panel."
@@ -4365,23 +4331,11 @@ msgstr ""
 "<b>The basic 2D view of Cairo-Dock</b>\n"
 "Perfect if you want to make the dock look like a panel."
 
-#: ../data/messages:1110
-msgid "Cairo-Dock (Fallback Mode)"
-msgstr "Cairo-Dock (Fallback Mode)"
-
-#: ../data/messages:1112
-msgid "A light and eye-candy dock and desklets for your desktop."
-msgstr "Light and eye-candy filled dock and desklets for your desktop."
-
-#: ../data/messages:1114
-msgid "Multi-purpose Dock and Desklets"
-msgstr "Multi-purpose Dock and Desklets"
-
-#: ../data/messages:1116
+#: ../data/messages:1115
 msgid "<b>New version: <span color='red'>GLX-Dock 3.3</span>!</b>"
 msgstr "<b>New version: <span color='red'>GLX-Dock 3.3</span>!</b>"
 
-#: ../data/messages:1118
+#: ../data/messages:1117
 msgid ""
 "- Added a search entry in the <b>Applications Menu</b>.\n"
 "    It allows to rapidly look for programs from their name or their "
@@ -4391,15 +4345,15 @@ msgstr ""
 "    It allows to rapidly look for programs from their name or their "
 "description"
 
-#: ../data/messages:1120
+#: ../data/messages:1119
 msgid "- Added support of <b>logind</b> in the Logout applet"
 msgstr "- Added support of <b>logind</b> in the Logout applet"
 
-#: ../data/messages:1122
+#: ../data/messages:1121
 msgid "- Better integration in the Cinnamon desktop"
 msgstr "- Better integration in the Cinnamon desktop"
 
-#: ../data/messages:1124
+#: ../data/messages:1123
 msgid ""
 "- Added support of the <b>StartupNotification</b> protocol.\n"
 "    It allows launchers to be animated until the application opens and "
@@ -4409,7 +4363,7 @@ msgstr ""
 "    It allows launchers to be animated until the application opens and "
 "avoids accidental double launches"
 
-#: ../data/messages:1126
+#: ../data/messages:1125
 msgid ""
 "- Added an new third-party applet: <b>Notification History</b> to never miss "
 "a notification"
@@ -4417,31 +4371,31 @@ msgstr ""
 "- Added an new third-party applet: <b>Notification History</b> to never miss "
 "a notification"
 
-#: ../data/messages:1128
+#: ../data/messages:1127
 msgid "- Upgraded the <b>Dbus API</b> to be even more powerful"
 msgstr "- Upgraded the <b>Dbus API</b> to be even more powerful"
 
-#: ../data/messages:1130
+#: ../data/messages:1129
 msgid "- A huge rewrite of the core using Objects"
 msgstr "- A huge rewrite of the core using Objects"
 
-#: ../data/messages:1132
+#: ../data/messages:1131
 msgid "- If you like the project, please donate :-)"
 msgstr "- If you like the project, please donate :-)"
 
-#: ../data/messages:1134
+#: ../data/messages:1133
 msgid "<b>New version: <span color='red'>GLX-Dock 3.4</span>!</b>"
 msgstr "<b>New version: <span color='red'>GLX-Dock 3.4</span>!</b>"
 
-#: ../data/messages:1136
+#: ../data/messages:1135
 msgid "- <b>Menus</b>: added the possibility to customise them"
 msgstr "- <b>Menus</b>: added the possibility to customise them"
 
-#: ../data/messages:1138
+#: ../data/messages:1137
 msgid "- <b>Style</b>: unified the style of all components of the dock"
 msgstr "- <b>Style</b>: unified the style of all components of the dock"
 
-#: ../data/messages:1140
+#: ../data/messages:1139
 msgid ""
 "- Better integration with <b>Compiz</b> (e.g. when using the <b>Cairo-Dock "
 "session</b>) and Cinnamon"
@@ -4449,7 +4403,7 @@ msgstr ""
 "- Better integration with <b>Compiz</b> (e.g. when using the <b>Cairo-Dock "
 "session</b>) and Cinnamon"
 
-#: ../data/messages:1142
+#: ../data/messages:1141
 msgid ""
 "- <b>Applications Menu</b> and <b>Logout</b> applets will wait the end of an "
 "update before displaying notifications"
@@ -4457,7 +4411,7 @@ msgstr ""
 "- <b>Applications Menu</b> and <b>Logout</b> applets will wait the end of an "
 "update before displaying notifications"
 
-#: ../data/messages:1144
+#: ../data/messages:1143
 msgid ""
 "- Various improvements for <b>Applications Menu</b>, <b>Shortcuts</b>, "
 "<b>Status-Notifier</b> and <b>Terminal</b> applets"
@@ -4465,22 +4419,167 @@ msgstr ""
 "- Various improvements for <b>Applications Menu</b>, <b>Shortcuts</b>, "
 "<b>Status-Notifier</b> and <b>Terminal</b> applets"
 
-#: ../data/messages:1146
+#: ../data/messages:1145
 msgid "- Start working on <b>EGL</b> and <b>Wayland</b> support"
 msgstr "- Start working on <b>EGL</b> and <b>Wayland</b> support"
 
-#: ../data/messages:1148
+#: ../data/messages:1147
 msgid "- And as always ... various bug fixes and improvements!"
 msgstr "- And as always ... various bug fixes and improvements!"
 
-#: ../data/messages:1150
+#: ../data/messages:1149
 msgid "If you like the project, please donate and/or contribute :-)"
 msgstr "If you like the project, please donate and/or contribute :-)"
 
-#: ../data/messages:1152
+#: ../data/messages:1151
 msgid ""
-"Note: We're switching from Bzr to Git on Github, feel free to fork! "
-"https://github.com/Cairo-Dock"
+"Note: We're switching from Bzr to Git on Github, feel free to fork! https://"
+"github.com/Cairo-Dock"
 msgstr ""
-"Note: We're switching from Bzr to Git on Github, feel free to fork! "
-"https://github.com/Cairo-Dock"
+"Note: We're switching from Bzr to Git on Github, feel free to fork! https://"
+"github.com/Cairo-Dock"
+
+#~ msgid "Windows management"
+#~ msgstr "Windows management"
+
+#~ msgid "Use all screens"
+#~ msgstr "Use all screens"
+
+#~ msgid "Disable the gnome-panel"
+#~ msgstr "Disable the gnome-panel"
+
+#~ msgid "Disable Unity"
+#~ msgstr "Disable Unity"
+
+#~ msgid "Tip: If this line is grayed, it's because this tip is not for you.)"
+#~ msgstr "Tip: If this line is greyed, it's because this tip is not for you."
+
+#~ msgid "If you're using Compiz, you can click on this button:"
+#~ msgstr "If you're using Compiz, you can click on this button:"
+
+#~ msgid "Removing completely the gnome-panel"
+#~ msgstr "Removing completely the gnome-panel"
+
+#~ msgid ""
+#~ "Open dconf-editor, edit the key /desktop/gnome/session/"
+#~ "required_components/panel, and replace its content with \"cairo-dock\".\n"
+#~ "Then restart your session : the gnome-panel has not been started, and the "
+#~ "dock has been started (if not, you can add it to the startup programs)."
+#~ msgstr ""
+#~ "Open dconf-editor, edit the key /desktop/gnome/session/"
+#~ "required_components/panel, and replace its content with \"cairo-dock\".\n"
+#~ "Then restart your session : the gnome-panel has not been started, and the "
+#~ "dock has been started (if not, you can add it to the startup programs)."
+
+#~ msgid ""
+#~ "If you are on Gnome, you can click on this button in order to "
+#~ "automatically modify this key:"
+#~ msgstr ""
+#~ "If you are on Gnome, you can click on this button in order to "
+#~ "automatically modify this key:"
+
+#~ msgid ""
+#~ "Hint : If you have an ATI or an Intel card, you should try without OpenGL "
+#~ "first, because their drivers are not yet perfect."
+#~ msgstr ""
+#~ "Hint: If you have an ATI or an Intel card, you should try without OpenGL "
+#~ "first, because their drivers are not yet perfect."
+
+#~ msgid ""
+#~ "If you're on Gnome with Metacity (without Compiz), you can click on this "
+#~ "button:"
+#~ msgstr ""
+#~ "If you're on Gnome with Metacity (without Compiz), you can click on this "
+#~ "button:"
+
+#~ msgid ""
+#~ "There is no icon in the Applications Menu even though I enable the option."
+#~ msgstr ""
+#~ "There is no icon in the Applications Menu even though I enabled the "
+#~ "option."
+
+#~ msgid ""
+#~ "In Gnome, there is an option that override the dock's one. To enable "
+#~ "icons in menus, open 'dconf-editor', go to Desktop / Gnome / Interface "
+#~ "and enable the \"menus have icons\" and the \"buttons have icons\" "
+#~ "options. "
+#~ msgstr ""
+#~ "In Gnome, there is an option that override the dock's one. To enable "
+#~ "icons in menus, open 'dconf-editor', go to Desktop / Gnome / Interface "
+#~ "and enable the \"menus have icons\" and the \"buttons have icons\" "
+#~ "options. "
+
+#~ msgid "If you're on Gnome you can click on this button:"
+#~ msgstr "If you're on Gnome you can click on this button:"
+
+#~ msgid ""
+#~ "We maintain two repositories for Debian, Ubuntu and other Debian-forked:\n"
+#~ " One for stable releases and another which is updated weekly (unstable "
+#~ "version)"
+#~ msgstr ""
+#~ "We maintain two repositories for Debian, Ubuntu and other Debian-forked "
+#~ "distributions:\n"
+#~ " one for stable releases and another which is updated weekly (unstable "
+#~ "version)."
+
+#~ msgid "Debian/Ubuntu"
+#~ msgstr "Debian/Ubuntu"
+
+#~ msgid "Ubuntu"
+#~ msgstr "Ubuntu"
+
+#~ msgid ""
+#~ "If you're on Ubuntu, you can add our 'stable' repository by clicking on "
+#~ "this button:\n"
+#~ " After that, you can launch your update manager in order to install the "
+#~ "latest stable version."
+#~ msgstr ""
+#~ "If you're on Ubuntu, you can add our 'stable' repository by clicking on "
+#~ "this button:\n"
+#~ " After that, you can launch your update manager to install the latest "
+#~ "stable version."
+
+#~ msgid ""
+#~ "If you're on Ubuntu, you can also add our 'weekly' ppa (can be unstable) "
+#~ "by clicking on this button:\n"
+#~ " After that, you can launch your update manager in order to install the "
+#~ "latest weekly version."
+#~ msgstr ""
+#~ "If you're on Ubuntu, you can also add our 'weekly' ppa (can be unstable) "
+#~ "by clicking on this button:\n"
+#~ " After that, you can launch your update manager to install the latest "
+#~ "weekly version."
+
+#~ msgid "Debian"
+#~ msgstr "Debian"
+
+#~ msgid ""
+#~ "If you're on Debian Stable, you can add our 'stable' repository by "
+#~ "clicking on this button:\n"
+#~ " After that, you can purge all 'cairo-dock*' packages, update the your "
+#~ "system and reinstall 'cairo-dock' package."
+#~ msgstr ""
+#~ "If you're on Debian Stable, you can add our 'stable' repository by "
+#~ "clicking on this button:\n"
+#~ " After that, you can purge all 'cairo-dock*' packages, update the system "
+#~ "and reinstall 'cairo-dock' package."
+
+#~ msgid ""
+#~ "If you're on Debian Unstable, you can add our 'stable' repository by "
+#~ "clicking on this button:\n"
+#~ " After that, you can purge all 'cairo-dock*' packages, update the your "
+#~ "system and reinstall 'cairo-dock' package."
+#~ msgstr ""
+#~ "If you're on Debian Unstable, you can add our 'stable' repository by "
+#~ "clicking on this button:\n"
+#~ " After that, you can purge all 'cairo-dock*' packages, update the system "
+#~ "and reinstall 'cairo-dock' package."
+
+#~ msgid "Cairo-Dock (Fallback Mode)"
+#~ msgstr "Cairo-Dock (Fallback Mode)"
+
+#~ msgid "A light and eye-candy dock and desklets for your desktop."
+#~ msgstr "Light and eye-candy filled dock and desklets for your desktop."
+
+#~ msgid "Multi-purpose Dock and Desklets"
+#~ msgstr "Multi-purpose Dock and Desklets"
