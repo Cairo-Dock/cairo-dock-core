@@ -125,7 +125,10 @@ main (int argc, char** argv)
 	GError *erreur = NULL;
 	g_key_file_load_from_file (pKeyFile, cConfFilePath, G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS, &erreur);
 	if (erreur != NULL)
-		g_error ("/!\\ [%s] %s\n", cConfFilePath, erreur->message);
+	{
+		g_critical ("/!\\ [%s] %s\n", cConfFilePath, erreur->message);
+		return 1;
+	}
 	
 	int iNbBuffers = 0;
 	gsize length = 0;
