@@ -1948,7 +1948,7 @@ msgstr ""
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key "
+"Open dconf-editor, edit the key "
 "/desktop/gnome/session/required_components/panel, and replace its content "
 "with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
@@ -1998,13 +1998,13 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key "
-"'/apps/metacity/general/compositing_manager' and set it to 'true'."
+" Open dconf-editor, edit the key "
+"'org.gnome.metacity.compositing-manager' and set it to 'true'."
 msgstr ""
 "您必須要啟用合成(compositing)。比如說您可以啟用 Compiz 或者是 xcompmgr 。 \n"
 "假如您使用的是XFCE或者KDE，您可以在視窗管理員的選項當中啟用合成。\n"
 "假如您使用的是Gnome，您可以用下面的方法啟用：\n"
-" 開啟組態編輯器(gconf-editor)，修改下列位置 /apps/metacity/general/compositing_manager "
+" 開啟組態編輯器(dconf-editor)，修改下列位置 org.gnome.metacity.compositing-manager "
 "，把數值設定為 true 。"
 
 #: ../Help/data/messages:207
@@ -2129,10 +2129,10 @@ msgstr "即使我啟用了這個選項，還是沒有這個應用程式選當當
 #: ../Help/data/messages:241
 msgid ""
 "In Gnome, there is an option that override the dock's one. To enable icons "
-"in menus, open 'gconf-editor', go to Desktop / Gnome / Interface and enable "
+"in menus, open 'dconf-editor', go to Desktop / Gnome / Interface and enable "
 "the \"menus have icons\" and the \"buttons have icons\" options. "
 msgstr ""
-"在Gnome當中才有效。這是一個可以忽略Dock自有圖示的選項。要啟用選單上的圖示，開啟「組態編輯器」(gconf-editor)，到下列的位置： "
+"在Gnome當中才有效。這是一個可以忽略Dock自有圖示的選項。要啟用選單上的圖示，開啟「組態編輯器」(dconf-editor)，到下列的位置： "
 "Desktop / Gnome / Interface 並且啟用 \"menus have icons\" 以及 \"buttons have "
 "icons\" 選項。 "
 

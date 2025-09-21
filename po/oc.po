@@ -1907,7 +1907,7 @@ msgstr ""
 
 #: ../Help/data/messages:183
 msgid ""
-"Open gconf-editor, edit the key "
+"Open dconf-editor, edit the key "
 "/desktop/gnome/session/required_components/panel, and replace its content "
 "with \"cairo-dock\".\n"
 "Then restart your session : the gnome-panel has not been started, and the "
@@ -1957,8 +1957,8 @@ msgid ""
 "If you're using XFCE or KDE, you can just enable compositing in the window "
 "manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key "
-"'/apps/metacity/general/compositing_manager' and set it to 'true'."
+" Open dconf-editor, edit the key "
+"'org.gnome.metacity.compositing-manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
@@ -2066,7 +2066,7 @@ msgstr ""
 #: ../Help/data/messages:241
 msgid ""
 "In Gnome, there is an option that override the dock's one. To enable icons "
-"in menus, open 'gconf-editor', go to Desktop / Gnome / Interface and enable "
+"in menus, open 'dconf-editor', go to Desktop / Gnome / Interface and enable "
 "the \"menus have icons\" and the \"buttons have icons\" options. "
 msgstr ""
 

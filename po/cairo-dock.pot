@@ -1815,7 +1815,7 @@ msgid ""
 "You need to turn on compositing. For instance, you can run Compiz or xcompmgr. \n"
 "If you're using XFCE or KDE, you can just enable compositing in the window manager options.\n"
 "If you're using Gnome, you can enable it in Metacity in this way :\n"
-" Open gconf-editor, edit the key '/apps/metacity/general/compositing_manager' and set it to 'true'."
+" Open dconf-editor, edit the key 'org.gnome.metacity.compositing-manager' and set it to 'true'."
 msgstr ""
 
 #: ../Help/data/messages:207
