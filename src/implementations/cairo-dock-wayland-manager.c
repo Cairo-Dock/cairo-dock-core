@@ -211,10 +211,18 @@ static void _layer_shell_init_for_window (GldiContainer *pContainer)
 		// has this functionality. Setting keyboard interactivity may still fail at
 		// runtime if the compositor does not support this. In this case, the dock
 		// will not receive keyboard events at all.
-		// TODO: make this optional, so that cairo-dock can be compiled targeting an
-		// older version of gtk-layer-shell (even if a newer version is installed;
-		// since versions are ABI compatible, this is possible)
-		gtk_layer_set_keyboard_mode (window, GTK_LAYER_SHELL_KEYBOARD_MODE_ON_DEMAND);
+		// We do not set this on KWin, since newer versions will then include our
+		// windows in tracking focus and send a deactivated event for the active
+		// window when the dock is clicked (this will confuse our tracking of the
+		// active window, see: https://github.com/Cairo-Dock/cairo-dock-core/issues/140).
+		// Also, there seems to be no downside, as we still get keyboard modifiers
+		// for clicks and popups also still get keyboard focus.
+		if (s_CompositorType == WAYLAND_COMPOSITOR_UNKNOWN) _try_detect_compositor ();
+		gtk_layer_set_keyboard_mode (window,
+			(s_CompositorType == WAYLAND_COMPOSITOR_KWIN) ?
+			GTK_LAYER_SHELL_KEYBOARD_MODE_NONE :
+			GTK_LAYER_SHELL_KEYBOARD_MODE_ON_DEMAND
+		);
 		gtk_layer_set_namespace (window, "cairo-dock");
 	}
 }
