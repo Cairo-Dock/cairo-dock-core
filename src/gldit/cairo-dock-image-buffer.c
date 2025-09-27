@@ -36,6 +36,7 @@ extern gchar *g_cCurrentImagesPath;
 extern gboolean g_bUseOpenGL;
 extern CairoDockGLConfig g_openglConfig;
 extern gboolean g_bEasterEggs;
+extern GldiContainer *g_pPrimaryContainer;
 
 
 gchar *cairo_dock_search_image_s_path (const gchar *cImageFile)
@@ -568,7 +569,7 @@ gboolean cairo_dock_begin_draw_image_buffer_opengl (CairoDockImageBuffer *pImage
 	else
 		return FALSE;
 	
-	GdkWindow* gdkwindow = gldi_container_get_gdk_window (pContainer);
+	GdkWindow* gdkwindow = gldi_container_get_gdk_window (pContainer ? pContainer : g_pPrimaryContainer);
 	gint scale = gdk_window_get_scale_factor (gdkwindow);
 	
 	// set up an ortho view ourselves
