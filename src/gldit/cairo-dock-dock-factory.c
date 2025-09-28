@@ -1127,6 +1127,13 @@ static gboolean _on_button_press (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventButt
 	}
 	else if (pButton->button == 3 && pButton->type == GDK_BUTTON_PRESS)  // clique droit.
 	{
+		if (s_iSidShowSubDockDemand && pDock == s_pDockShowingSubDock)
+		{
+			g_source_remove (s_iSidShowSubDockDemand);
+			s_iSidShowSubDockDemand = 0;
+			s_pDockShowingSubDock = NULL;
+			s_pSubDockShowing = NULL;
+		}
 		GtkWidget *menu = gldi_container_build_menu (CAIRO_CONTAINER (pDock), icon);  // genere un CAIRO_DOCK_BUILD_CONTAINER_MENU et CAIRO_DOCK_BUILD_ICON_MENU.
 		
 		gldi_menu_popup (menu);
