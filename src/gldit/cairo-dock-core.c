@@ -196,7 +196,7 @@ bWAYFIRE = TRUE;
 	
 	gchar *text = g_strdup_printf (
 		"Cairo-Dock version: %s\n"
-		"   compiled date: %s %s\n\n"
+		"   compiled date: %s\n\n"
 		"Cairo-Dock was built with support for:\n"
 		" * GTK version:                  %d.%d\n"
 		" * X11:                          %s\n"
@@ -216,7 +216,7 @@ bWAYFIRE = TRUE;
 		" * detected desktop environment: %s\n"
 		"%s",
 		GLDI_VERSION,
-		__DATE__, __TIME__,
+		GLDI_COMPILE_DATE,
 		GTK_MAJOR_VERSION, GTK_MINOR_VERSION,
 		bX11 ? "yes" : "no",
 		bWAYLAND ? "yes" : "no",

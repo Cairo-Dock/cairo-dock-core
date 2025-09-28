@@ -65,6 +65,7 @@ if( WIN32 )
 endif( WIN32 )
 
 set (PACKAGE ${CMAKE_PROJECT_NAME})
+string (TIMESTAMP GLDI_COMPILE_DATE)
 set (GETTEXT_PACKAGE ${PACKAGE})
 
 set (prefix ${CMAKE_INSTALL_PREFIX})  # /usr/local

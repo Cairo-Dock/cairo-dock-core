@@ -19,6 +19,7 @@
 
 
 #include <stdio.h>
+#include <time.h>
 #include <glib.h>
 #include <gio/gio.h>
 #include <gio/gdesktopappinfo.h>
@@ -27,7 +28,8 @@
 
 GDBusProxy *s_proxy = NULL;
 
-static guint64 s_iLaunchID = 0;
+static guint32 s_iLaunchID = 0; // unique counter to be used as a suffix for systemd unit names
+static guint32 s_iLaunchTS = 0; // timestamp of when we were launched, to be used as a prefix for systemd unit names
 
 static void _spawn_end (GObject*, GAsyncResult *res, gpointer)
 {
@@ -75,16 +77,29 @@ static void _spawn_app (const gchar * const *args, const gchar *id, const gchar 
 	
 	_init_variant_types ();
 	
+	/* Note: systemd unit names must be unique. We ensure this by:
+	 *  -- using the "app-cairodock-" prefix to distinguish from other units
+	 *  -- adding the app-id to distinguish between apps started by us
+	 *  -- adding a @num suffix to distinguish between multiple instances of the same app
+	 *  -- adding the time we were started as part of our prefix, to avoid clashes if
+	 *     Cairo-Dock is restarted (or started multiple times, e.g. during development;
+	 *     this will still not work if two instances of Cairo-Dock are started at the
+	 *     exact same time, but we expect this not to occur in normal usage)
+	 * Note: systemd will create a separate slice for each service started by us,
+	 * and an additional prefix, but this does not really matter.
+	 *  */
 	s_iLaunchID++;
+	// we don't expect a wrap around, but just in case, we reset the time prefix in this case
+	if (!s_iLaunchID) s_iLaunchTS = (guint32) time (NULL);
 	char *name;
 	const size_t len = strlen (id);
 	const size_t max_len =
 		255 // length allowed by systemd
-		- 24 // length of our prefix + dash + suffix + nul terminator
-		- 20; // max length of a 64-bit integer
+		- 25 // length of our prefix + dash + suffix + nul terminator
+		- 20; // 2 * max length of a 32-bit integer
 	if (len > max_len)
-		name = g_strdup_printf ("app-cairodock-%.*s@%"G_GUINT64_FORMAT".service", (int)max_len, id, s_iLaunchID);
-	else name = g_strdup_printf ("app-cairodock-%s@%"G_GUINT64_FORMAT".service", id, s_iLaunchID);
+		name = g_strdup_printf ("app-cairodock-%"G_GUINT32_FORMAT"-%.*s@%"G_GUINT32_FORMAT".service", s_iLaunchTS, (int)max_len, id, s_iLaunchID);
+	else name = g_strdup_printf ("app-cairodock-%"G_GUINT32_FORMAT"-%s@%"G_GUINT32_FORMAT".service", s_iLaunchTS, id, s_iLaunchID);
 	
 	GVariantBuilder var_builder;
 	g_variant_builder_init  (&var_builder, s_full_type);
@@ -160,6 +175,7 @@ void cairo_dock_systemd_integration_init (void)
 		NULL, // GCancellable
 		_proxy_connected,
 		NULL);
+	s_iLaunchTS = (guint32) time (NULL); // should be safe to cast and we do not care about the actual value, only that it is unique
 }
 
 
