@@ -1,16 +1,6 @@
 # Recent changelog (see ChangeLog-history.txt for the previous ones)
 [ChangeLog]
 
-3.3.1 = <b>New version: <span color='red'>GLX-Dock 3.3</span>!</b>
-3.3.1.0 = - Added a search entry in the <b>Applications Menu</b>.\n    It allows to rapidly look for programs from their name or their description
-3.3.1.1 = - Added support of <b>logind</b> in the Logout applet
-3.3.1.2 = - Better integration in the Cinnamon desktop
-3.3.1.3 = - Added support of the <b>StartupNotification</b> protocol.\n    It allows launchers to be animated until the application opens and avoids accidental double launches
-3.3.1.4 = - Added an new third-party applet: <b>Notification History</b> to never miss a notification
-3.3.1.5 = - Upgraded the <b>Dbus API</b> to be even more powerful
-3.3.1.6 = - A huge rewrite of the core using Objects
-3.3.1.7 = - If you like the project, please donate :-)
-
 3.4.0 = <b>New version: <span color='red'>GLX-Dock 3.4</span>!</b>
 3.4.0.0 = - <b>Menus</b>: added the possibility to customise them
 3.4.0.1 = - <b>Style</b>: unified the style of all components of the dock
@@ -21,3 +11,19 @@
 3.4.0.6 = - And as always ... various bug fixes and improvements!
 3.4.0.7 = If you like the project, please donate and/or contribute :-)
 3.4.0.8 = Note: We're switching from Bzr to Git on Github, feel free to fork! https://github.com/Cairo-Dock
+
+3.5.0 = <b>New version: <span color='red'>GLX-Dock 3.5</span>!</b>
+3.5.0.1 = - Many bug fixes and improvements!
+
+3.6.0 = <b>New version: <span color='red'>GLX-Dock 3.6</span>!</b>
+3.6.0.0 = - <b>Wayland support</b>: main features work under select compositors (Wayfire, KWin, Labwc, Cosmic, etc.).
+3.6.0.1 =     <b>note</b>: some limitations remain, be sure to check our Wiki page for more information
+3.6.0.2 = - <b>HiDPI support</b>: the dock now supports high-resolution screens (with integer scale factors)
+3.6.0.3 = - Reworked the detection of applications, fixing many issues with misidentified apps
+3.6.0.4 = - <b>Weather</b> applet updated, switched to new provider (note: need to re-enter your location)
+3.6.0.5 = - Translation updates in several languages, thanks to everyone who contributed on Launchpad!
+3.6.0.6 = - Many additional bug fixes and updates!
+3.6.0.7 = Note: the old project website will be discontinued, please refer to our Github Wiki for up-to-date information: https://github.com/Cairo-Dock/cairo-dock-core/wiki
+3.6.0.8 = Please report any problems you find on our Github issues page: https://github.com/Cairo-Dock/cairo-dock-core/issues
+
+
