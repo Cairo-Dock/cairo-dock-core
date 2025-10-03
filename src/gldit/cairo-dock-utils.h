@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 *@file cairo-dock-utils.h Some helper functions.
 */
 
-gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters);;
+gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters);
 
 /** Remove the version number from a string. Directly modifies the string.
  * @param cString a string.
