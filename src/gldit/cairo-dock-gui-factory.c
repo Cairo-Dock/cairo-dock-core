@@ -1267,7 +1267,7 @@ static gboolean _on_screen_modified (GtkWidget *pCombo)
 	g_hash_table_destroy (pHashTable);
 	return GLDI_NOTIFICATION_LET_PASS;
 }
-static void _on_list_destroyed (GtkWidget*, gpointer data)
+static void _on_list_destroyed (G_GNUC_UNUSED GtkWidget* pWidget, gpointer data)
 {
 	gldi_object_remove_notification (&myDesktopMgr,
 		NOTIFICATION_DESKTOP_GEOMETRY_CHANGED,

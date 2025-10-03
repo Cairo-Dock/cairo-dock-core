@@ -599,14 +599,14 @@ static void _done_internal (void)
 }
 
 
-static void _update_window_stack (void *ptr, void*)
+static void _update_window_stack (void *ptr, G_GNUC_UNUSED void* dummy)
 {
 	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor*)ptr;
 	GldiWindowActor *actor = (GldiWindowActor*)ptr;
 	actor->iStackOrder = wactor->stacking_order_pending;
 }
 
-static gboolean _stack_change_notify (void*)
+static gboolean _stack_change_notify (G_GNUC_UNUSED void* dummy)
 {
 	gldi_windows_foreach_unordered (_update_window_stack, NULL);
 	gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_Z_ORDER_CHANGED, NULL);
@@ -619,7 +619,7 @@ void gldi_wayland_wm_notify_stack_change (void)
 	if (!s_sidStackNotify) s_sidStackNotify = g_idle_add (_stack_change_notify, NULL);
 }
 
-static void _restack_windows (void* ptr, void*)
+static void _restack_windows (void* ptr, G_GNUC_UNUSED void* dummy)
 {
 	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor*)ptr;
 	s_iStackCounter++;

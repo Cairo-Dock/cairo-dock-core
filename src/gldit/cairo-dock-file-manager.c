@@ -544,7 +544,7 @@ static void _free_submenu_data_item (gpointer ptr)
 	gldi_object_unref (GLDI_OBJECT (data->app));
 	g_free (data);
 }
-static void _free_submenu_data (gpointer ptr, GObject*)
+static void _free_submenu_data (gpointer ptr, G_GNUC_UNUSED GObject* pObj)
 {
 	struct _submenu_data *data = (struct _submenu_data*)ptr;
 	g_list_free_full (data->data_list, _free_submenu_data_item);
@@ -552,7 +552,7 @@ static void _free_submenu_data (gpointer ptr, GObject*)
 	g_free (data);
 }
 
-static void _submenu_launch_with (GtkMenuItem*, gpointer ptr)
+static void _submenu_launch_with (G_GNUC_UNUSED GtkMenuItem* pMenuItem, gpointer ptr)
 {
 	struct _launch_with_data *data = (struct _launch_with_data*)ptr;
 	const gchar *cURIs[] = {data->data->cPath, NULL};

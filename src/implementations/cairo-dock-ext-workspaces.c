@@ -159,7 +159,7 @@ static void _update_current_desktop (void)
 	}
 }
 
-static gboolean _notify (void*)
+static gboolean _notify (G_GNUC_UNUSED void* dummy)
 {
 	if (s_bLayoutChanged) _update_desktop_layout ();
 	_update_current_desktop ();
@@ -171,7 +171,7 @@ static gboolean _notify (void*)
 	return FALSE;
 }
 
-static gboolean _notify_name (void*)
+static gboolean _notify_name (G_GNUC_UNUSED void* dummy)
 {
 	gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_NAMES_CHANGED);
 	
@@ -191,19 +191,19 @@ static void _wm_notify (void)
 /**
  * Workspace events
  */
-static void _id (void*, struct ext_workspace_handle_v1*, const char*)
+static void _id (G_GNUC_UNUSED void* data, G_GNUC_UNUSED struct ext_workspace_handle_v1* handle, G_GNUC_UNUSED const char* id)
 {
 	/* ID could be used to identify workspaces across sessions. For now, we don't care. */
 }
 
-static void _name (void *data, struct ext_workspace_handle_v1*, const char *name)
+static void _name (void *data, G_GNUC_UNUSED struct ext_workspace_handle_v1* handle, const char *name)
 {
 	CosmicWS *desktop = (CosmicWS*)data;
 	g_free (desktop->pending_name);
 	desktop->pending_name = g_strdup ((gchar *)name);
 }
 
-static void _coordinates (void *data, struct ext_workspace_handle_v1*, struct wl_array *coords)
+static void _coordinates (void *data, G_GNUC_UNUSED struct ext_workspace_handle_v1* handle, struct wl_array *coords)
 {
 	CosmicWS *desktop = (CosmicWS*)data;
 	uint32_t *cdata = (uint32_t*)coords->data;
@@ -223,7 +223,7 @@ static void _coordinates (void *data, struct ext_workspace_handle_v1*, struct wl
 	}
 }
 
-static void _state (void *data, struct ext_workspace_handle_v1*, uint32_t state)
+static void _state (void *data, G_GNUC_UNUSED struct ext_workspace_handle_v1* handle, uint32_t state)
 {
 	gboolean bActivated = (state & EXT_WORKSPACE_HANDLE_V1_STATE_ACTIVE);
 	gboolean bHidden = (state & EXT_WORKSPACE_HANDLE_V1_STATE_HIDDEN);
@@ -233,12 +233,12 @@ static void _state (void *data, struct ext_workspace_handle_v1*, uint32_t state)
 	if (bActivated) s_pPending = desktop;
 }
 
-static void _capabilities (void*, G_GNUC_UNUSED struct ext_workspace_handle_v1* handle, G_GNUC_UNUSED uint32_t cap)
+static void _capabilities (G_GNUC_UNUSED void* data, G_GNUC_UNUSED struct ext_workspace_handle_v1* handle, G_GNUC_UNUSED uint32_t cap)
 {
 	/* don't care for now */
 }
 
-static void _removed (void *data, struct ext_workspace_handle_v1*)
+static void _removed (void *data, G_GNUC_UNUSED struct ext_workspace_handle_v1* handle)
 {
 	CosmicWS *desktop = (CosmicWS*)data;
 	desktop->bRemoved = TRUE;
@@ -267,17 +267,17 @@ static const struct ext_workspace_handle_v1_listener desktop_listener = {
 };
 
 
-static void _group_capabilities (void*, G_GNUC_UNUSED struct ext_workspace_group_handle_v1* handle, G_GNUC_UNUSED uint32_t cap)
+static void _group_capabilities (G_GNUC_UNUSED void* data, G_GNUC_UNUSED struct ext_workspace_group_handle_v1* handle, G_GNUC_UNUSED uint32_t cap)
 {
 	/* don't care */
 }
 
-static void _output_enter (void*, struct ext_workspace_group_handle_v1* handle, struct wl_output* output)
+static void _output_enter (G_GNUC_UNUSED void* data, struct ext_workspace_group_handle_v1* handle, struct wl_output* output)
 {
 	if (handle == s_pWSGroup) s_ws_output = output;
 }
 
-static void _output_leave (void*, struct ext_workspace_group_handle_v1* handle, struct wl_output* output)
+static void _output_leave (G_GNUC_UNUSED void* data, struct ext_workspace_group_handle_v1* handle, struct wl_output* output)
 {
 	if (handle == s_pWSGroup && output == s_ws_output) s_ws_output = NULL;
 }
@@ -289,7 +289,7 @@ static gboolean _ws_handle_eq (const void *x, const void *y)
 	return (desktop->handle == handle);
 }
 
-static void _workspace_group_enter (void*, struct ext_workspace_group_handle_v1* handle, struct ext_workspace_handle_v1 *ws)
+static void _workspace_group_enter (G_GNUC_UNUSED void* data, struct ext_workspace_group_handle_v1* handle, struct ext_workspace_handle_v1 *ws)
 {
 	unsigned int ix;
 	if (g_ptr_array_find_with_equal_func (s_aDesktops, ws, _ws_handle_eq, &ix))
@@ -304,12 +304,12 @@ static void _workspace_group_enter (void*, struct ext_workspace_group_handle_v1*
 	}
 }
 
-static void _workspace_group_leave (void*, struct ext_workspace_group_handle_v1*, struct ext_workspace_handle_v1 *ws)
+static void _workspace_group_leave (G_GNUC_UNUSED void* data, G_GNUC_UNUSED struct ext_workspace_group_handle_v1* handle, struct ext_workspace_handle_v1 *ws)
 {
 	_workspace_group_enter (NULL, NULL, ws);
 }
 
-static void _group_removed (void*, struct ext_workspace_group_handle_v1 *handle)
+static void _group_removed (G_GNUC_UNUSED void* data, struct ext_workspace_group_handle_v1 *handle)
 {
 	if (handle == s_pWSGroup)
 	{
@@ -339,7 +339,7 @@ static const struct ext_workspace_group_handle_v1_listener group_listener = {
 };
 
 
-static void _new_workspace_group (void*, struct ext_workspace_manager_v1*, struct ext_workspace_group_handle_v1 *new_group)
+static void _new_workspace_group (G_GNUC_UNUSED void* data, G_GNUC_UNUSED struct ext_workspace_manager_v1* handle, struct ext_workspace_group_handle_v1 *new_group)
 {
 	if (s_pWSGroup)
 	{
@@ -353,7 +353,7 @@ static void _new_workspace_group (void*, struct ext_workspace_manager_v1*, struc
 	}
 }
 
-static void _desktop_created (void*, struct ext_workspace_manager_v1*,
+static void _desktop_created (G_GNUC_UNUSED void* data, G_GNUC_UNUSED struct ext_workspace_manager_v1* handle,
 	struct ext_workspace_handle_v1 *new_workspace)
 {
 	CosmicWS *desktop = g_new0 (CosmicWS, 1);
@@ -366,7 +366,7 @@ static void _desktop_created (void*, struct ext_workspace_manager_v1*,
 	ext_workspace_handle_v1_add_listener (new_workspace, &desktop_listener, desktop);
 }
 
-static void _done (void*, struct ext_workspace_manager_v1*)
+static void _done (G_GNUC_UNUSED void* data, G_GNUC_UNUSED struct ext_workspace_manager_v1* handle)
 {
 	GPtrArray *to_invalid = NULL;
 	
@@ -489,7 +489,7 @@ static void _done (void*, struct ext_workspace_manager_v1*)
 	if (bName && !s_sidNotifyName) s_sidNotifyName = g_idle_add (_notify_name, NULL);
 }
 
-static void _finished (void*, struct ext_workspace_manager_v1 *handle)
+static void _finished (G_GNUC_UNUSED void* data, struct ext_workspace_manager_v1 *handle)
 {
 	ext_workspace_manager_v1_destroy (handle);
 }

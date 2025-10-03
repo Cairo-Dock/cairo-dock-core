@@ -312,7 +312,8 @@ gboolean cairo_dock_notification_middle_click_icon (G_GNUC_UNUSED gpointer pUser
 }
 
 
-gboolean cairo_dock_notification_scroll_icon (G_GNUC_UNUSED gpointer pUserData, Icon *icon, G_GNUC_UNUSED GldiContainer *pContainer, int iDirection, gboolean)
+gboolean cairo_dock_notification_scroll_icon (G_GNUC_UNUSED gpointer pUserData, Icon *icon, G_GNUC_UNUSED GldiContainer *pContainer,
+	int iDirection, G_GNUC_UNUSED gboolean bEmulated)
 {
 	if (CAIRO_DOCK_IS_MULTI_APPLI (icon) || CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (icon))  // emulate an alt+tab on the list of applis of the sub-dock
 	{

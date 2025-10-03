@@ -1575,7 +1575,7 @@ static void _on_drag_data_get (G_GNUC_UNUSED GtkWidget *widget, G_GNUC_UNUSED Gd
 }
 
 static gboolean _on_drag_failed (G_GNUC_UNUSED GtkWidget *widget, G_GNUC_UNUSED GdkDragContext *context,
-		G_GNUC_UNUSED GtkDragResult result, gpointer)
+		G_GNUC_UNUSED GtkDragResult result, G_GNUC_UNUSED gpointer ptr)
 {
 	if (!s_pDndIcon) return FALSE;
 	

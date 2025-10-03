@@ -42,7 +42,7 @@ static unsigned int s_iCurrent = 0; // index into desktops array with the curren
 static GldiDesktopGeometry s_pending_geometry = {0}; // desktop geometry according to the latest info received
 static guint s_sidNotify = 0;
 
-static gboolean _notify_desktop_change (void*)
+static gboolean _notify_desktop_change (G_GNUC_UNUSED void* dummy)
 {
 	g_desktopGeometry.iNbDesktops = s_pending_geometry.iNbDesktops;
 	g_desktopGeometry.iNbViewportX = s_pending_geometry.iNbViewportX;
@@ -167,7 +167,7 @@ static void _desktop_id (void *data, G_GNUC_UNUSED struct org_kde_plasma_virtual
 
 guint s_sidNotifyName = 0;
 
-static gboolean _name_notify (void*)
+static gboolean _name_notify (G_GNUC_UNUSED void* dummy)
 {
 	gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_NAMES_CHANGED);
 	s_sidNotifyName = 0;

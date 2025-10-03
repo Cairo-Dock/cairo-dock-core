@@ -249,7 +249,7 @@ static void _container_end_draw (GldiContainer *pContainer)
 	glXSwapBuffers (dpy, Xid);
 }
 
-static void _init_opengl_context (GtkWidget*, GldiContainer *pContainer)
+static void _init_opengl_context (G_GNUC_UNUSED GtkWidget* pWidget, GldiContainer *pContainer)
 {
 	if (!_container_make_current (pContainer))
 	{

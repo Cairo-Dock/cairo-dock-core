@@ -439,7 +439,7 @@ static void _start_default_backend (void)
 }
 
 
-static void _refresh2 (CairoDock *pDock, gpointer)
+static void _refresh2 (CairoDock *pDock, G_GNUC_UNUSED gpointer dummy)
 {
 	gldi_dock_visibility_refresh (pDock);
 }

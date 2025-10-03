@@ -110,7 +110,7 @@ static void _process_app (gpointer data, gpointer user_data)
 	g_hash_table_insert (db->alt_class_table, alt_id, desktop_app);
 }
 
-static gpointer _thread_func (gpointer)
+static gpointer _thread_func (G_GNUC_UNUSED gpointer ptr)
 {
 	while (1)
 	{
@@ -148,7 +148,7 @@ static gpointer _thread_func (gpointer)
 	return NULL;
 }
 
-static gboolean _start_thread (gpointer)
+static gboolean _start_thread (G_GNUC_UNUSED gpointer ptr)
 {
 	if (!update_pending) return FALSE;
 	g_mutex_lock (&mutex);
@@ -164,7 +164,7 @@ static gboolean _start_thread (gpointer)
 	return FALSE; // needed to remove timeout
 }
 
-static void _on_apps_changed(GAppInfoMonitor*, void*) {
+static void _on_apps_changed(G_GNUC_UNUSED GAppInfoMonitor* pMonitor, G_GNUC_UNUSED void* dummy) {
 	if(update_pending) return;
 	update_pending = TRUE;
 	g_timeout_add_seconds (5, _start_thread, NULL);

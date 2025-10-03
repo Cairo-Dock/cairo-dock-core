@@ -31,7 +31,7 @@ GDBusProxy *s_proxy = NULL;
 static guint32 s_iLaunchID = 0; // unique counter to be used as a suffix for systemd unit names
 static guint32 s_iLaunchTS = 0; // timestamp of when we were launched, to be used as a prefix for systemd unit names
 
-static void _spawn_end (GObject*, GAsyncResult *res, gpointer)
+static void _spawn_end (G_GNUC_UNUSED GObject* pObj, GAsyncResult *res, G_GNUC_UNUSED gpointer ptr)
 {
 	GError *err = NULL;
 	GVariant *ret = g_dbus_proxy_call_finish (s_proxy, res, &err);
@@ -90,7 +90,7 @@ static void _spawn_app (const gchar * const *args, const gchar *id, const gchar 
 	 *  */
 	s_iLaunchID++;
 	// we don't expect a wrap around, but just in case, we reset the time prefix in this case
-	if (!s_iLaunchID) s_iLaunchTS = (guint32) time (NULL);
+	if (!s_iLaunchID) s_iLaunchTS = (guint32) time (NULL); 
 	char *name;
 	const size_t len = strlen (id);
 	const size_t max_len =
@@ -141,7 +141,7 @@ static void _spawn_app (const gchar * const *args, const gchar *id, const gchar 
 }
 
 
-static void _proxy_connected (GObject*, GAsyncResult *res, gpointer)
+static void _proxy_connected (G_GNUC_UNUSED GObject* pObj, GAsyncResult *res, G_GNUC_UNUSED gpointer ptr)
 {
 	s_proxy = g_dbus_proxy_new_for_bus_finish (res, NULL);
 	if (s_proxy)

@@ -117,7 +117,7 @@ static void _dummy (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct zwf_output_v2
 	
 }
 
-static gboolean _menu_request (void*)
+static gboolean _menu_request (G_GNUC_UNUSED void* ptr)
 {
 	gldi_object_notify (&myDesktopMgr, NOTIFICATION_MENU_REQUEST);
 	s_sidMenu = 0;
@@ -232,7 +232,7 @@ typedef struct _layer_shell_hotspots {
 } layer_shell_hotspots;
 
 
-static output_hotspots_base *_layer_shell_new_output (GdkMonitor*)
+static output_hotspots_base *_layer_shell_new_output (G_GNUC_UNUSED GdkMonitor* pMonitor)
 {
 	return (output_hotspots_base*) g_new0 (layer_shell_hotspots, 1);
 }

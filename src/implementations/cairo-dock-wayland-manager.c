@@ -304,7 +304,7 @@ struct _KBData
 	guint iSidTimer;
 };
 
-static void _kb_mode_data_destroy (gpointer ptr, GObject*)
+static void _kb_mode_data_destroy (gpointer ptr, G_GNUC_UNUSED GObject* pObj)
 {
 	if (ptr)
 	{

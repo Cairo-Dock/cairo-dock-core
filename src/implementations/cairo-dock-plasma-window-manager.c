@@ -334,7 +334,8 @@ static void _gldi_toplevel_application_menu_cb (void* data, G_GNUC_UNUSED pwhand
 	cd_debug ("got app menu address: %s %s", service_name, object_path);
 }
 
-static void _gldi_toplevel_client_geometry_cb (void*, pwhandle*, int32_t, int32_t, uint32_t, uint32_t)
+static void _gldi_toplevel_client_geometry_cb (G_GNUC_UNUSED void* data, G_GNUC_UNUSED pwhandle* handle,
+	G_GNUC_UNUSED int32_t x, G_GNUC_UNUSED int32_t y, G_GNUC_UNUSED uint32_t w, G_GNUC_UNUSED uint32_t h)
 {
 	/* don't care */
 }
@@ -394,7 +395,7 @@ static void _window_cb ( G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct org_kde_
 static gboolean s_bDesktopIsVisible = FALSE;
 static guint s_sid_desktop_visibility = 0;
 
-static gboolean _notify_desktop_visibility (void*)
+static gboolean _notify_desktop_visibility ( G_GNUC_UNUSED void* ptr)
 {
 	gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_VISIBILITY_CHANGED);
 	s_sid_desktop_visibility = 0;

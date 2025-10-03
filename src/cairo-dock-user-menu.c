@@ -93,7 +93,7 @@ struct _MenuParams {
 	// no need to store menu, it is given to all callbacks anyway
 };
 
-void _menu_destroy_notify (gpointer data, GObject*)
+void _menu_destroy_notify (gpointer data, G_GNUC_UNUSED GObject* pObj)
 {
 	g_free (data); // data is struct _MenuParams
 }
@@ -1015,7 +1015,7 @@ static void _cairo_dock_remove_custom_appli_icon (G_GNUC_UNUSED GtkMenuItem *pMe
 	}
 }
 
-static void _lock_icons_menu_add_tooltip (GtkWidget *pMenuItem, gpointer)
+static void _lock_icons_menu_add_tooltip (GtkWidget *pMenuItem, G_GNUC_UNUSED gpointer dummy)
 {
 	gtk_widget_set_tooltip_text (pMenuItem, _("This will (un)lock the position of the icons."));
 }
@@ -1293,7 +1293,7 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
  /////////// LES OPERATIONS SUR LES APPLIS ///////////////////////
 /////////////////////////////////////////////////////////////////
 
-static void _cairo_dock_close_appli (GtkButton*, gpointer data)
+static void _cairo_dock_close_appli (G_GNUC_UNUSED GtkButton* pButton, gpointer data)
 {
 	struct _MenuParams *params = (struct _MenuParams*) data;
 	if (CAIRO_DOCK_IS_APPLI (params->pIcon))
@@ -1305,7 +1305,7 @@ static void _cairo_dock_kill_appli (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpoint
 	if (CAIRO_DOCK_IS_APPLI (params->pIcon))
 		gldi_window_kill (params->pIcon->pAppli);
 }
-static void _cairo_dock_minimize_appli (GtkButton*, gpointer data)
+static void _cairo_dock_minimize_appli (G_GNUC_UNUSED GtkButton* pButton, gpointer data)
 {
 	struct _MenuParams *params = (struct _MenuParams*) data;
 	if (CAIRO_DOCK_IS_APPLI (params->pIcon))
@@ -1322,7 +1322,7 @@ static void _cairo_dock_lower_appli (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpoin
 	}
 }
 
-static void _cairo_dock_show_appli (GtkButton*, gpointer data)
+static void _cairo_dock_show_appli (G_GNUC_UNUSED GtkButton* pButton, gpointer data)
 {
 	struct _MenuParams *params = (struct _MenuParams*) data;
 	if (CAIRO_DOCK_IS_APPLI (params->pIcon))
@@ -1331,7 +1331,7 @@ static void _cairo_dock_show_appli (GtkButton*, gpointer data)
 	}
 }
 
-static void _cairo_dock_maximize_appli (GtkButton*, gpointer data)
+static void _cairo_dock_maximize_appli (G_GNUC_UNUSED GtkButton* pButton, gpointer data)
 {
 	struct _MenuParams *params = (struct _MenuParams*) data;
 	if (CAIRO_DOCK_IS_APPLI (params->pIcon))
@@ -1423,7 +1423,7 @@ static void _cairo_dock_move_class_to_desktop (G_GNUC_UNUSED GtkMenuItem *pMenuI
 	}
 }
 
-static void _free_desktops_user_data (gpointer data, GObject*)
+static void _free_desktops_user_data (gpointer data, G_GNUC_UNUSED GObject* pObj)
 {
 	g_free (data);
 }
@@ -1496,7 +1496,7 @@ struct _AppAction {
 	gchar *action_name;
 };
 
-static void _menu_item_destroyed (gpointer data, GObject*)
+static void _menu_item_destroyed (gpointer data, G_GNUC_UNUSED GObject* pObj)
 {
 	if (data)
 	{
@@ -1515,7 +1515,7 @@ static void _cairo_dock_launch_class_action (G_GNUC_UNUSED GtkMenuItem *pMenuIte
 	gldi_app_info_launch_action (pAction->app, pAction->action);
 }
 
-static void _cairo_dock_show_class (GtkButton*, gpointer data)
+static void _cairo_dock_show_class (G_GNUC_UNUSED GtkButton* pButton, gpointer data)
 {
 	struct _MenuParams *params = (struct _MenuParams*) data;
 	Icon *icon = params->pIcon;
@@ -1539,7 +1539,7 @@ static void _cairo_dock_show_class (GtkButton*, gpointer data)
 	gldi_dock_leave_synthetic (icon->pSubDock);
 }
 
-static void _cairo_dock_minimize_class (GtkButton*, gpointer data)
+static void _cairo_dock_minimize_class (G_GNUC_UNUSED GtkButton* pButton, gpointer data)
 {
 	struct _MenuParams *params = (struct _MenuParams*) data;
 	Icon *icon = params->pIcon;
@@ -1558,7 +1558,7 @@ static void _cairo_dock_minimize_class (GtkButton*, gpointer data)
 	}
 }
 
-static void _cairo_dock_close_class (GtkButton*, gpointer data)
+static void _cairo_dock_close_class (G_GNUC_UNUSED GtkButton* pButton, gpointer data)
 {
 	struct _MenuParams *params = (struct _MenuParams*) data;
 	Icon *icon = params->pIcon;
@@ -1796,7 +1796,7 @@ typedef struct _MenuButtonData
 	struct _MenuParams *pData;
 } MenuButtonData;
 
-static void _free_button_data (gpointer data, GObject*)
+static void _free_button_data (gpointer data, G_GNUC_UNUSED GObject* pObj)
 {
 	if (!data) return;
 	MenuButtonData *pCustomData = (MenuButtonData*)data;

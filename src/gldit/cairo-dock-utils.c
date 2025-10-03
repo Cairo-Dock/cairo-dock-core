@@ -287,7 +287,7 @@ gchar *cairo_dock_launch_command_sync_with_stderr (const gchar *cCommand, gboole
 	return standard_output;
 }
 
-static void _child_watch_dummy (GPid pid, gint, gpointer)
+static void _child_watch_dummy (GPid pid, G_GNUC_UNUSED gint status, G_GNUC_UNUSED gpointer data)
 {
 	g_spawn_close_pid (pid); // note: this is a no-op
 }
