@@ -7,6 +7,7 @@ SET(impl_SRCS
 	cairo-dock-hiding-effect.c           cairo-dock-hiding-effect.h
 	cairo-dock-icon-container.c          cairo-dock-icon-container.h
 	cairo-dock-default-view.c            cairo-dock-default-view.h
+	cairo-dock-gio-vfs.c                 cairo-dock-gio-vfs.h
 	cairo-dock-compiz-integration.c      cairo-dock-compiz-integration.h
 	cairo-dock-kwin-integration.c        cairo-dock-kwin-integration.h
 	cairo-dock-gnome-shell-integration.c cairo-dock-gnome-shell-integration.h
