@@ -241,7 +241,7 @@ static void _gldi_toplevel_output_leave_cb ( G_GNUC_UNUSED void *data, G_GNUC_UN
  */
 static GHashTable *s_hPendingActivate = NULL;
 
-static gboolean _find_dummy (gpointer, gpointer, gpointer) { return TRUE; }
+static gboolean _find_dummy (G_GNUC_UNUSED gpointer x, G_GNUC_UNUSED gpointer y, G_GNUC_UNUSED gpointer z) { return TRUE; }
 
 static void _update_active (GldiWaylandWindowActor *wactor, gboolean bActive)
 {
@@ -347,7 +347,7 @@ static void _ext_workspace_entered (void *data, G_GNUC_UNUSED cosmic_handle *han
 	if (gldi_ext_workspaces_find (wshandle, &x, &y)) gldi_wayland_wm_viewport_changed (wactor, x, y, wactor->init_done);
 }
 
-static void _ext_workspace_left (void*, cosmic_handle*, struct ext_workspace_handle_v1*)
+static void _ext_workspace_left (G_GNUC_UNUSED void* data, G_GNUC_UNUSED cosmic_handle* handle, G_GNUC_UNUSED struct ext_workspace_handle_v1* wshandle)
 {
 	
 }
@@ -366,17 +366,17 @@ static void _geometry_cb (void* data, G_GNUC_UNUSED cosmic_handle* handle,
 	gldi_wayland_wm_geometry_changed (wactor, &geom, wactor->init_done);
 }
 
-static void _ws_dummy (void*, cosmic_handle*, struct zcosmic_workspace_handle_v1*)
+static void _ws_dummy (G_GNUC_UNUSED void* data, G_GNUC_UNUSED cosmic_handle* handle, G_GNUC_UNUSED struct zcosmic_workspace_handle_v1* wshandle)
 {
 	
 }
 
-static void _dummy_str (void*, cosmic_handle*, const char*)
+static void _dummy_str (G_GNUC_UNUSED void* data, G_GNUC_UNUSED cosmic_handle* handle, G_GNUC_UNUSED const char* dummy)
 {
 	/* don't care */
 }
 
-static void _dummy_void (void*, cosmic_handle*)
+static void _dummy_void (G_GNUC_UNUSED void* data, G_GNUC_UNUSED cosmic_handle* handle)
 {
 	/* don't care */
 }
@@ -441,13 +441,13 @@ static void _toplevel_manager_finished ( G_GNUC_UNUSED void *data, G_GNUC_UNUSED
 }
 
 
-static void _new_toplevel_dummy (void*, struct zcosmic_toplevel_info_v1*, cosmic_handle*)
+static void _new_toplevel_dummy (G_GNUC_UNUSED void* data, G_GNUC_UNUSED struct zcosmic_toplevel_info_v1* manager, G_GNUC_UNUSED cosmic_handle* handle)
 {
 	/* no-op, with version >= 2 we should not receive this event anymore;
 	 * however, we still provide a handler just in case, to avoid crashing */
 }
 
-static void _toplevel_manager_finished_dummy (void*, struct zcosmic_toplevel_info_v1*)
+static void _toplevel_manager_finished_dummy (G_GNUC_UNUSED void* data, G_GNUC_UNUSED struct zcosmic_toplevel_info_v1* manager)
 {
 	/* no-op, with version >= 2, this does not matter */
 }
@@ -554,7 +554,7 @@ static inline gboolean _dock_overlaps_area (const CairoDock *pDock, const GtkAll
 		pArea->y < dy + dh && pArea->y + pArea->height > dy);
 }
 
-static gboolean _check_overlap (void*, void *val, void *ptr)
+static gboolean _check_overlap (G_GNUC_UNUSED void* dummy, void *val, void *ptr)
 {
 	return _dock_overlaps_area ((CairoDock*)ptr, (GtkAllocation*)val);
 }
@@ -569,7 +569,7 @@ static gboolean _dock_has_overlap_window (CairoDock *pDock)
 	return FALSE;
 }
 
-static void _toplevel_enter (void *data, struct zcosmic_overlap_notification_v1*,
+static void _toplevel_enter (void *data, G_GNUC_UNUSED struct zcosmic_overlap_notification_v1* notif,
 	struct ext_foreign_toplevel_handle_v1* toplevel, int x, int y, int width, int height) //!! TODO: use parameters to decide on overlap !!
 {
 	if (!data) return;
@@ -646,13 +646,14 @@ static void _toplevel_leave (void *data, struct zcosmic_overlap_notification_v1*
 	}
 }
 
-static void _layer_enter (void*, struct zcosmic_overlap_notification_v1*, const char*, const char*,
-	unsigned int, unsigned int, int, int, int, int)
+static void _layer_enter (G_GNUC_UNUSED void* data, G_GNUC_UNUSED struct zcosmic_overlap_notification_v1* notif,
+	G_GNUC_UNUSED const char* dummy1, G_GNUC_UNUSED const char* dummy2,
+	G_GNUC_UNUSED unsigned int x1, G_GNUC_UNUSED unsigned int x2, G_GNUC_UNUSED int x3, G_GNUC_UNUSED int x4, G_GNUC_UNUSED int x5, G_GNUC_UNUSED int x6)
 {
 	/* don't care */
 }
 
-static void _layer_leave (void*, struct zcosmic_overlap_notification_v1*, const char*)
+static void _layer_leave (G_GNUC_UNUSED void* data, G_GNUC_UNUSED struct zcosmic_overlap_notification_v1* notif, G_GNUC_UNUSED const char* dummy)
 {
 	/* don't care */
 }
@@ -691,7 +692,7 @@ static void _check_dock_active (CairoDock *pDock, gpointer data)
 	}
 }
 
-static int _vis_active_window_changed (void*, GldiWaylandWindowActor *wactor)
+static int _vis_active_window_changed (G_GNUC_UNUSED void* data, GldiWaylandWindowActor *wactor)
 {
 	if (wactor) cd_debug ("wactor: %p (%s)", wactor, wactor->actor.cName ? wactor->actor.cName : "(no name)");
 	else cd_debug ("wactor: NULL");

@@ -1108,7 +1108,7 @@ static void _raise_from_shortcut (G_GNUC_UNUSED const char *cKeyShortcut, G_GNUC
 
 static unsigned int s_sidDesktopGeom = 0;
 
-static gboolean _reposition_root_docks_idle (void*)
+static gboolean _reposition_root_docks_idle (G_GNUC_UNUSED void* dummy)
 {
 	s_sidDesktopGeom = 0;
 	

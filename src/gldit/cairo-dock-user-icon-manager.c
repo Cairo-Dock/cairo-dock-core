@@ -124,7 +124,7 @@ Icon *gldi_user_icon_new (const gchar *cConfFile)
 }
 
 
-static void _load_one_icon (gpointer pAttr, gpointer)
+static void _load_one_icon (gpointer pAttr, G_GNUC_UNUSED gpointer dummy)
 {
 	GldiUserIconAttr *attr = (GldiUserIconAttr*)pAttr;
 	

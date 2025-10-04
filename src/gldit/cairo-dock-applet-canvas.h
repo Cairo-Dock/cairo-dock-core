@@ -59,7 +59,7 @@ typedef struct _AppletData AppletData;
 #define CD_APPLET_DEFINE_PROTO \
 gboolean CD_APPLET_DEFINE_FUNC (GldiVisitCard *pVisitCard, GldiModuleInterface *pInterface)
 #define CD_APPLET_POST_LOAD_PROTO \
-gboolean CD_APPLET_POST_LOAD_FUNC (GldiVisitCard *pVisitCard, GldiModuleInterface *pInterface, gpointer)
+gboolean CD_APPLET_POST_LOAD_FUNC (GldiVisitCard *pVisitCard, GldiModuleInterface *pInterface, G_GNUC_UNUSED gpointer pReserved)
 #define CD_APPLET_INIT_PROTO(pApplet) \
 void CD_APPLET_INIT_FUNC (GldiModuleInstance *pApplet, G_GNUC_UNUSED GKeyFile *pKeyFile)
 #define CD_APPLET_STOP_PROTO \
@@ -85,7 +85,7 @@ gboolean CD_APPLET_ON_DOUBLE_CLICK_FUNC (GldiModuleInstance *myApplet, Icon *pCl
 #define CD_APPLET_ON_DROP_DATA_PROTO \
 gboolean CD_APPLET_ON_DROP_DATA_FUNC (GldiModuleInstance *myApplet, const gchar *cReceivedData, Icon *pClickedIcon, double fPosition, GldiContainer *pClickedContainer)
 #define CD_APPLET_ON_SCROLL_PROTO \
-gboolean CD_APPLET_ON_SCROLL_FUNC (GldiModuleInstance *myApplet, Icon *pClickedIcon, GldiContainer *pClickedContainer, int iDirection, gboolean)
+gboolean CD_APPLET_ON_SCROLL_FUNC (GldiModuleInstance *myApplet, Icon *pClickedIcon, GldiContainer *pClickedContainer, int iDirection, G_GNUC_UNUSED gboolean bEmulated)
 #define CD_APPLET_ON_UPDATE_ICON_PROTO \
 gboolean CD_APPLET_ON_UPDATE_ICON_FUNC (GldiModuleInstance *myApplet, Icon *pIcon, GldiContainer *pContainer, gboolean *bContinueAnimation)
 

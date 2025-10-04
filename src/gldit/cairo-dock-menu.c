@@ -487,7 +487,8 @@ static void _on_menu_deactivated (GtkMenuShell *pMenu, G_GNUC_UNUSED gpointer da
 }
 
 static void _menu_realized_cb (GtkWidget *widget, gpointer user_data);
-static void _menu_popped_up_cb (GtkWidget *widget, void*, void*, GdkGravity, GdkGravity, gpointer user_data)
+static void _menu_popped_up_cb (GtkWidget *widget, G_GNUC_UNUSED void* rect1, G_GNUC_UNUSED void* rect2,
+	G_GNUC_UNUSED gboolean flipped_x, G_GNUC_UNUSED gboolean flipped_y, gpointer user_data)
 {
 	_menu_realized_cb (widget, user_data);
 }
@@ -686,7 +687,7 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 
 
 static void _init_menu_item (GtkWidget *pMenuItem);
-static void _init_menu_item2 (GtkWidget *menu, gpointer)
+static void _init_menu_item2 (GtkWidget *menu, G_GNUC_UNUSED gpointer dummy)
 {
 	_init_menu_item (menu);
 }
@@ -979,7 +980,7 @@ typedef struct _GldiMenuItemTooltip {
 	gpointer pData;
 } GldiMenuItemTooltip;
 
-static void _free_tooltip_data (gpointer ptr, GObject*)
+static void _free_tooltip_data (gpointer ptr, G_GNUC_UNUSED GObject* pObj)
 {
 	if (!ptr) return;
 	GldiMenuItemTooltip *pCustomData = (GldiMenuItemTooltip*)ptr;
