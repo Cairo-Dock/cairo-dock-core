@@ -165,6 +165,7 @@ struct _GldiTerminal {
 };
 
 static const struct _GldiTerminal s_vTerminals[] = {
+	{ { "xdg-terminal-exec", NULL, NULL }, CAIRO_DOCK_UNKNOWN_ENV /* ignored */, FALSE },
 	{ { "kgx", "-e", NULL }, CAIRO_DOCK_GNOME, FALSE }, // new replacement for gnome-terminal
 	{ { "gnome-terminal", "--", NULL }, CAIRO_DOCK_GNOME, FALSE },
 	{ { "konsole", "-e", NULL }, CAIRO_DOCK_KDE, FALSE },
@@ -197,6 +198,13 @@ static void _choose_terminal (void)
 		if (tmp)
 		{
 			g_free (tmp);
+			
+			/**
+			 * First entry is xdg-terminal-exec which is a cross-desktop wrapper to select
+			 * the user's preferred terminal. If it is present, we always use it.
+			 */
+			if (s_iTerminal == 0) break;
+			
 			// if we don't know the environment, we take any terminal
 			if (g_iDesktopEnv == CAIRO_DOCK_UNKNOWN_ENV) break;
 			
