@@ -50,32 +50,38 @@ CairoDockDesktopEnv g_iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
 // dependancies
 
 // private
-static CairoDockDesktopEnvBackend *s_pEnvBackend = NULL;
+static CairoDockDesktopEnvBackend s_EnvBackend = { NULL };
 
 
 void cairo_dock_fm_force_desktop_env (CairoDockDesktopEnv iForceDesktopEnv)
 {
-	g_return_if_fail (s_pEnvBackend == NULL);
-	g_iDesktopEnv = iForceDesktopEnv;
+	g_iDesktopEnv = iForceDesktopEnv; // note: this is only called from cairo-dock.c, before desktop specific plugins are loaded
 }
 
 void cairo_dock_fm_register_vfs_backend (CairoDockDesktopEnvBackend *pVFSBackend)
 {
-	g_free (s_pEnvBackend);
-	s_pEnvBackend = pVFSBackend;
+	gpointer *ptr = (gpointer*)&s_EnvBackend;
+	gpointer *src = (gpointer*)pVFSBackend;
+	gpointer *src_end = (gpointer*)(pVFSBackend + 1);
+	while (src != src_end)
+	{
+		if (*src) *ptr = *src;
+		src ++;
+		ptr ++;
+	}
 }
 
 gboolean cairo_dock_fm_vfs_backend_is_defined (void)
 {
-	return (s_pEnvBackend != NULL);
+	return FALSE; /// TODO: remove this function !!
 }
 
 
 GList * cairo_dock_fm_list_directory (const gchar *cURI, CairoDockFMSortType g_fm_iSortType, int iNewIconsType, gboolean bListHiddenFiles, int iNbMaxFiles, gchar **cFullURI)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->list_directory != NULL)
+	if (s_EnvBackend.list_directory != NULL)
 	{
-		return s_pEnvBackend->list_directory (cURI, g_fm_iSortType, iNewIconsType, bListHiddenFiles, iNbMaxFiles, cFullURI);
+		return s_EnvBackend.list_directory (cURI, g_fm_iSortType, iNewIconsType, bListHiddenFiles, iNbMaxFiles, cFullURI);
 	}
 	else
 	{
@@ -86,9 +92,9 @@ GList * cairo_dock_fm_list_directory (const gchar *cURI, CairoDockFMSortType g_f
 
 gsize cairo_dock_fm_measure_diretory (const gchar *cBaseURI, gint iCountType, gboolean bRecursive, gint *pCancel)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->measure_directory != NULL)
+	if (s_EnvBackend.measure_directory != NULL)
 	{
-		return s_pEnvBackend->measure_directory (cBaseURI, iCountType, bRecursive, pCancel);
+		return s_EnvBackend.measure_directory (cBaseURI, iCountType, bRecursive, pCancel);
 	}
 	else
 		return 0;
@@ -96,9 +102,9 @@ gsize cairo_dock_fm_measure_diretory (const gchar *cBaseURI, gint iCountType, gb
 
 gboolean cairo_dock_fm_get_file_info (const gchar *cBaseURI, gchar **cName, gchar **cURI, gchar **cIconName, gboolean *bIsDirectory, int *iVolumeID, double *fOrder, CairoDockFMSortType iSortType)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->get_file_info != NULL)
+	if (s_EnvBackend.get_file_info != NULL)
 	{
-		s_pEnvBackend->get_file_info (cBaseURI, cName, cURI, cIconName, bIsDirectory, iVolumeID, fOrder, iSortType);
+		s_EnvBackend.get_file_info (cBaseURI, cName, cURI, cIconName, bIsDirectory, iVolumeID, fOrder, iSortType);
 		return TRUE;
 	}
 	else
@@ -107,9 +113,9 @@ gboolean cairo_dock_fm_get_file_info (const gchar *cBaseURI, gchar **cName, gcha
 
 gboolean cairo_dock_fm_get_file_properties (const gchar *cURI, guint64 *iSize, time_t *iLastModificationTime, gchar **cMimeType, int *iUID, int *iGID, int *iPermissionsMask)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->get_file_properties != NULL)
+	if (s_EnvBackend.get_file_properties != NULL)
 	{
-		s_pEnvBackend->get_file_properties (cURI, iSize, iLastModificationTime, cMimeType, iUID, iGID, iPermissionsMask);
+		s_EnvBackend.get_file_properties (cURI, iSize, iLastModificationTime, cMimeType, iUID, iGID, iPermissionsMask);
 		return TRUE;
 	}
 	else
@@ -118,9 +124,9 @@ gboolean cairo_dock_fm_get_file_properties (const gchar *cURI, guint64 *iSize, t
 
 gboolean cairo_dock_fm_launch_uri (const gchar *cURI)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->launch_uri != NULL && cURI != NULL)
+	if (s_EnvBackend.launch_uri != NULL && cURI != NULL)
 	{
-		s_pEnvBackend->launch_uri (cURI);
+		s_EnvBackend.launch_uri (cURI);
 		
 		// add it to the recent files.
 		GtkRecentManager *rm = gtk_recent_manager_get_default () ;
@@ -142,17 +148,17 @@ gboolean cairo_dock_fm_launch_uri (const gchar *cURI)
 gboolean cairo_dock_fm_add_monitor_full (const gchar *cURI, gboolean bDirectory, const gchar *cMountedURI, CairoDockFMMonitorCallback pCallback, gpointer data)
 {
 	g_return_val_if_fail (cURI != NULL, FALSE);
-	if (s_pEnvBackend != NULL && s_pEnvBackend->add_monitor != NULL)
+	if (s_EnvBackend.add_monitor != NULL)
 	{
 		if (cMountedURI != NULL && strcmp (cMountedURI, cURI) != 0)
 		{
-			s_pEnvBackend->add_monitor (cURI, FALSE, pCallback, data);
+			s_EnvBackend.add_monitor (cURI, FALSE, pCallback, data);
 			if (bDirectory)
-				s_pEnvBackend->add_monitor (cMountedURI, TRUE, pCallback, data);
+				s_EnvBackend.add_monitor (cMountedURI, TRUE, pCallback, data);
 		}
 		else
 		{
-			s_pEnvBackend->add_monitor (cURI, bDirectory, pCallback, data);
+			s_EnvBackend.add_monitor (cURI, bDirectory, pCallback, data);
 		}
 		return TRUE;
 	}
@@ -163,12 +169,12 @@ gboolean cairo_dock_fm_add_monitor_full (const gchar *cURI, gboolean bDirectory,
 gboolean cairo_dock_fm_remove_monitor_full (const gchar *cURI, gboolean bDirectory, const gchar *cMountedURI)
 {
 	g_return_val_if_fail (cURI != NULL, FALSE);
-	if (s_pEnvBackend != NULL && s_pEnvBackend->remove_monitor != NULL)
+	if (s_EnvBackend.remove_monitor != NULL)
 	{
-		s_pEnvBackend->remove_monitor (cURI);
+		s_EnvBackend.remove_monitor (cURI);
 		if (cMountedURI != NULL && strcmp (cMountedURI, cURI) != 0 && bDirectory)
 		{
-			s_pEnvBackend->remove_monitor (cMountedURI);
+			s_EnvBackend.remove_monitor (cMountedURI);
 		}
 		return TRUE;
 	}
@@ -180,9 +186,9 @@ gboolean cairo_dock_fm_remove_monitor_full (const gchar *cURI, gboolean bDirecto
 
 gboolean cairo_dock_fm_mount_full (const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, gpointer user_data)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->mount != NULL && iVolumeID > 0 && cURI != NULL)
+	if (s_EnvBackend.mount != NULL && iVolumeID > 0 && cURI != NULL)
 	{
-		s_pEnvBackend->mount (cURI, iVolumeID, pCallback, user_data);
+		s_EnvBackend.mount (cURI, iVolumeID, pCallback, user_data);
 		return TRUE;
 	}
 	else
@@ -191,9 +197,9 @@ gboolean cairo_dock_fm_mount_full (const gchar *cURI, int iVolumeID, CairoDockFM
 
 gboolean cairo_dock_fm_unmount_full (const gchar *cURI, int iVolumeID, CairoDockFMMountCallback pCallback, gpointer user_data)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->unmount != NULL && iVolumeID > 0 && cURI != NULL)
+	if (s_EnvBackend.unmount != NULL && iVolumeID > 0 && cURI != NULL)
 	{
-		s_pEnvBackend->unmount (cURI, iVolumeID, pCallback, user_data);
+		s_EnvBackend.unmount (cURI, iVolumeID, pCallback, user_data);
 		return TRUE;
 	}
 	else
@@ -202,24 +208,24 @@ gboolean cairo_dock_fm_unmount_full (const gchar *cURI, int iVolumeID, CairoDock
 
 gchar *cairo_dock_fm_is_mounted (const gchar *cURI, gboolean *bIsMounted)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->is_mounted != NULL)
-		return s_pEnvBackend->is_mounted (cURI, bIsMounted);
+	if (s_EnvBackend.is_mounted != NULL)
+		return s_EnvBackend.is_mounted (cURI, bIsMounted);
 	else
 		return NULL;
 }
 
 gboolean cairo_dock_fm_can_eject (const gchar *cURI)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->can_eject != NULL)
-		return s_pEnvBackend->can_eject (cURI);
+	if (s_EnvBackend.can_eject != NULL)
+		return s_EnvBackend.can_eject (cURI);
 	else
 		return FALSE;
 }
 
 gboolean cairo_dock_fm_eject_drive (const gchar *cURI)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->eject != NULL)
-		return s_pEnvBackend->eject (cURI);
+	if (s_EnvBackend.eject != NULL)
+		return s_EnvBackend.eject (cURI);
 	else
 		return FALSE;
 }
@@ -227,9 +233,9 @@ gboolean cairo_dock_fm_eject_drive (const gchar *cURI)
 
 gboolean cairo_dock_fm_delete_file (const gchar *cURI, gboolean bNoTrash)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->delete_file != NULL)
+	if (s_EnvBackend.delete_file != NULL)
 	{
-		return s_pEnvBackend->delete_file (cURI, bNoTrash);
+		return s_EnvBackend.delete_file (cURI, bNoTrash);
 	}
 	else
 		return FALSE;
@@ -237,9 +243,9 @@ gboolean cairo_dock_fm_delete_file (const gchar *cURI, gboolean bNoTrash)
 
 gboolean cairo_dock_fm_rename_file (const gchar *cOldURI, const gchar *cNewName)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->rename != NULL)
+	if (s_EnvBackend.rename != NULL)
 	{
-		return s_pEnvBackend->rename (cOldURI, cNewName);
+		return s_EnvBackend.rename (cOldURI, cNewName);
 	}
 	else
 		return FALSE;
@@ -247,9 +253,9 @@ gboolean cairo_dock_fm_rename_file (const gchar *cOldURI, const gchar *cNewName)
 
 gboolean cairo_dock_fm_move_file (const gchar *cURI, const gchar *cDirectoryURI)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->move != NULL)
+	if (s_EnvBackend.move != NULL)
 	{
-		return s_pEnvBackend->move (cURI, cDirectoryURI);
+		return s_EnvBackend.move (cURI, cDirectoryURI);
 	}
 	else
 		return FALSE;
@@ -257,9 +263,9 @@ gboolean cairo_dock_fm_move_file (const gchar *cURI, const gchar *cDirectoryURI)
 
 gboolean cairo_dock_fm_create_file (const gchar *cURI, gboolean bDirectory)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->create != NULL)
+	if (s_EnvBackend.create != NULL)
 	{
-		return s_pEnvBackend->create (cURI, bDirectory);
+		return s_EnvBackend.create (cURI, bDirectory);
 	}
 	else
 		return FALSE;
@@ -267,9 +273,9 @@ gboolean cairo_dock_fm_create_file (const gchar *cURI, gboolean bDirectory)
 
 GList *cairo_dock_fm_list_apps_for_file (const gchar *cURI)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->list_apps_for_file != NULL)
+	if (s_EnvBackend.list_apps_for_file != NULL)
 	{
-		return s_pEnvBackend->list_apps_for_file (cURI);
+		return s_EnvBackend.list_apps_for_file (cURI);
 	}
 	else
 		return NULL;
@@ -277,9 +283,9 @@ GList *cairo_dock_fm_list_apps_for_file (const gchar *cURI)
 
 gboolean cairo_dock_fm_empty_trash (void)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->empty_trash != NULL)
+	if (s_EnvBackend.empty_trash != NULL)
 	{
-		s_pEnvBackend->empty_trash ();
+		s_EnvBackend.empty_trash ();
 		return TRUE;
 	}
 	else
@@ -288,9 +294,9 @@ gboolean cairo_dock_fm_empty_trash (void)
 
 gchar *cairo_dock_fm_get_trash_path (const gchar *cNearURI, gchar **cFileInfoPath)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->get_trash_path != NULL)
+	if (s_EnvBackend.get_trash_path != NULL)
 	{
-		return s_pEnvBackend->get_trash_path (cNearURI, cFileInfoPath);
+		return s_EnvBackend.get_trash_path (cNearURI, cFileInfoPath);
 	}
 	else
 		return NULL;
@@ -298,9 +304,9 @@ gchar *cairo_dock_fm_get_trash_path (const gchar *cNearURI, gchar **cFileInfoPat
 
 gchar *cairo_dock_fm_get_desktop_path (void)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->get_desktop_path != NULL)
+	if (s_EnvBackend.get_desktop_path != NULL)
 	{
-		return s_pEnvBackend->get_desktop_path ();
+		return s_EnvBackend.get_desktop_path ();
 	}
 	else
 		return NULL;
@@ -308,12 +314,12 @@ gchar *cairo_dock_fm_get_desktop_path (void)
 
 gboolean cairo_dock_fm_logout (void)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->logout!= NULL)
+	if (s_EnvBackend.logout != NULL)
 	{
 		const gchar *sm = g_getenv ("SESSION_MANAGER");
 		if (sm == NULL || *sm == '\0')  // if there is no session-manager, the desktop methods are useless.
 			return FALSE;
-		s_pEnvBackend->logout ();
+		s_EnvBackend.logout ();
 		return TRUE;
 	}
 	else
@@ -322,12 +328,12 @@ gboolean cairo_dock_fm_logout (void)
 
 gboolean cairo_dock_fm_shutdown (void)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->shutdown!= NULL)
+	if (s_EnvBackend.shutdown != NULL)
 	{
 		const gchar *sm = g_getenv ("SESSION_MANAGER");
 		if (sm == NULL || *sm == '\0')  // idem
 			return FALSE;
-		s_pEnvBackend->shutdown ();
+		s_EnvBackend.shutdown ();
 		return TRUE;
 	}
 	else
@@ -336,12 +342,12 @@ gboolean cairo_dock_fm_shutdown (void)
 
 gboolean cairo_dock_fm_reboot (void)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->reboot!= NULL)
+	if (s_EnvBackend.reboot != NULL)
 	{
 		const gchar *sm = g_getenv ("SESSION_MANAGER");
 		if (sm == NULL || *sm == '\0')  // idem
 			return FALSE;
-		s_pEnvBackend->reboot ();
+		s_EnvBackend.reboot ();
 		return TRUE;
 	}
 	else
@@ -350,9 +356,9 @@ gboolean cairo_dock_fm_reboot (void)
 
 gboolean cairo_dock_fm_lock_screen (void)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->lock_screen != NULL)
+	if (s_EnvBackend.lock_screen != NULL)
 	{
-		s_pEnvBackend->lock_screen ();
+		s_EnvBackend.lock_screen ();
 		return TRUE;
 	}
 	else
@@ -361,14 +367,14 @@ gboolean cairo_dock_fm_lock_screen (void)
 
 gboolean cairo_dock_fm_can_setup_time (void)
 {
-	return (s_pEnvBackend != NULL && s_pEnvBackend->setup_time!= NULL);
+	return (s_EnvBackend.setup_time!= NULL);
 }
 
 gboolean cairo_dock_fm_setup_time (void)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->setup_time!= NULL)
+	if (s_EnvBackend.setup_time!= NULL)
 	{
-		s_pEnvBackend->setup_time ();
+		s_EnvBackend.setup_time ();
 		return TRUE;
 	}
 	else
@@ -377,9 +383,9 @@ gboolean cairo_dock_fm_setup_time (void)
 
 gboolean cairo_dock_fm_show_system_monitor (void)
 {
-	if (s_pEnvBackend != NULL && s_pEnvBackend->show_system_monitor!= NULL)
+	if (s_EnvBackend.show_system_monitor!= NULL)
 	{
-		s_pEnvBackend->show_system_monitor ();
+		s_EnvBackend.show_system_monitor ();
 		return TRUE;
 	}
 	else
@@ -388,12 +394,12 @@ gboolean cairo_dock_fm_show_system_monitor (void)
 
 Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, GldiContainer *pContainer, CairoDockFMSortType iFileSortType)
 {
-	if (s_pEnvBackend == NULL || s_pEnvBackend->get_file_info == NULL)
+	if (s_EnvBackend.get_file_info == NULL)
 		return NULL;
 	Icon *pNewIcon = cairo_dock_create_dummy_launcher (NULL, NULL, NULL, NULL, 0);  // not a type that the dock can handle => the creator must handle it itself.
 	pNewIcon->cBaseURI = g_strdup (cURI);
 	gboolean bIsDirectory;
-	s_pEnvBackend->get_file_info (cURI, &pNewIcon->cName, &pNewIcon->cCommand, &pNewIcon->cFileName, &bIsDirectory, &pNewIcon->iVolumeID, &pNewIcon->fOrder, iFileSortType);
+	s_EnvBackend.get_file_info (cURI, &pNewIcon->cName, &pNewIcon->cCommand, &pNewIcon->cFileName, &bIsDirectory, &pNewIcon->iVolumeID, &pNewIcon->fOrder, iFileSortType);
 	if (pNewIcon->cName == NULL)
 	{
 		gldi_object_unref (GLDI_OBJECT (pNewIcon));

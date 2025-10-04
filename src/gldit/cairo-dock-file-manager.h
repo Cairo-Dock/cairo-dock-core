@@ -129,7 +129,8 @@ struct _CairoDockDesktopEnvBackend {
 };
 
 
-/** Register a environment backend, overwriting any previous backend.
+/** Register a environment backend. It only overwrites functions in the previous backend
+ * if they are provided in pVFSBackend.
 */
 void cairo_dock_fm_register_vfs_backend (CairoDockDesktopEnvBackend *pVFSBackend);
 
