@@ -71,12 +71,6 @@ void cairo_dock_fm_register_vfs_backend (CairoDockDesktopEnvBackend *pVFSBackend
 	}
 }
 
-gboolean cairo_dock_fm_vfs_backend_is_defined (void)
-{
-	return FALSE; /// TODO: remove this function !!
-}
-
-
 GList * cairo_dock_fm_list_directory (const gchar *cURI, CairoDockFMSortType g_fm_iSortType, int iNewIconsType, gboolean bListHiddenFiles, int iNbMaxFiles, gchar **cFullURI)
 {
 	if (s_EnvBackend.list_directory != NULL)

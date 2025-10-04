@@ -134,8 +134,6 @@ struct _CairoDockDesktopEnvBackend {
 */
 void cairo_dock_fm_register_vfs_backend (CairoDockDesktopEnvBackend *pVFSBackend);
 
-gboolean cairo_dock_fm_vfs_backend_is_defined (void);
-
 void cairo_dock_fm_force_desktop_env (CairoDockDesktopEnv iForceDesktopEnv);
 
 /** List the content of a directory and turn it into a list of icons.
