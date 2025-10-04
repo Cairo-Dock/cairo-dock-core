@@ -56,7 +56,7 @@ static void _gio_vfs_free_monitor_data (gpointer *data)
 	}
 }
 
-void _fill_backend (CairoDockDesktopEnvBackend *pVFSBackend);
+static void _fill_backend (CairoDockDesktopEnvBackend *pVFSBackend);
 void gldi_register_gio_vfs_backend (void)
 {
 	/** TODO: the DBus service might be needed for mounting volumes to
@@ -1651,7 +1651,7 @@ static void cairo_dock_gio_vfs_lock_screen (void) {
 	}
 }
 
-void _fill_backend(CairoDockDesktopEnvBackend *pVFSBackend)
+static void _fill_backend(CairoDockDesktopEnvBackend *pVFSBackend)
 {
 	if(pVFSBackend)
 	{
