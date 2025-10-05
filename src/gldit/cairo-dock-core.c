@@ -53,6 +53,7 @@
 #include "cairo-dock-graph.h"
 #include "cairo-dock-default-view.h"
 #include "cairo-dock-hiding-effect.h"
+#include "cairo-dock-gio-vfs.h"
 #include "cairo-dock-icon-container.h"
 #include "cairo-dock-utils.h"  // cairo_dock_get_version_from_string
 #include "cairo-dock-file-manager.h"
@@ -103,6 +104,7 @@ static void _gldi_register_core_managers (void)
 	if (!g_bForceWayland) gldi_register_X_manager ();
 	if (!g_bForceX11) gldi_register_wayland_manager ();
 	if (!g_bDisableSystemd) cairo_dock_systemd_integration_init ();
+	gldi_register_gio_vfs_backend (); // this it not actually a "manager", just registers a set of functions used by the file manager
 }
 
 void gldi_init (GldiRenderingMethod iRendering)
