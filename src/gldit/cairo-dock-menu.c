@@ -24,7 +24,7 @@
 #include <gtk/gtk.h>
 #include "gtk3imagemenuitem.h"
 
-#include "cairo-dock-container.h"
+#include "cairo-dock-container-priv.h"
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-icon-facility.h"  // cairo_dock_get_icon_container
 #include "cairo-dock-desktop-manager.h"  // gldi_desktop_get_height

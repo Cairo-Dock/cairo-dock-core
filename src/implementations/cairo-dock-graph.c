@@ -27,7 +27,7 @@
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-draw.h"
-#include "cairo-dock-container.h"
+#include "cairo-dock-container-priv.h"
 #include "cairo-dock-icon-manager.h"  // myIconsParam.quickInfoTextDescription
 #include "cairo-dock-graph.h"
 

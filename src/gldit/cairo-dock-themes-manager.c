@@ -41,8 +41,8 @@
 #include "cairo-dock-utils.h"  // cairo_dock_get_command_with_right_terminal
 #include "cairo-dock-packages.h"
 #include "cairo-dock-core.h"
-#include "cairo-dock-applications-manager.h"  // cairo_dock_get_current_active_icon
-#include "cairo-dock-dock-facility.h"
+#include "cairo-dock-applications-priv.h"  // cairo_dock_get_current_active_icon
+#include "cairo-dock-dock-priv.h" // cairo_dock_make_preview
 #include "cairo-dock-themes-manager.h"
 
 // public data

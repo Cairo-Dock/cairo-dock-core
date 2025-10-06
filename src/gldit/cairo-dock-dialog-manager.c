@@ -20,7 +20,7 @@
 #include "gldi-config.h"
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-icon-facility.h"
-#include "cairo-dock-container.h"
+#include "cairo-dock-container-priv.h"
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"
@@ -39,7 +39,7 @@
 #include "cairo-dock-menu.h"  // _init_menu_style
 #include "cairo-dock-style-manager.h"
 #define _MANAGER_DEF_
-#include "cairo-dock-dialog-manager.h"
+#include "cairo-dock-dialog-priv.h"
 
 // public (manager, config, data)
 CairoDialogsParam myDialogsParam;

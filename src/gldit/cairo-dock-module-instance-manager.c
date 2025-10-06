@@ -20,6 +20,7 @@
 
 #include <stddef.h>
 #include "gldi-config.h"
+#include "cairo-dock-container-priv.h" // gldi_container_use_new_positioning_code
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-keyfile-utilities.h"  // cairo_dock_conf_file_needs_update
@@ -31,7 +32,7 @@
 #include "cairo-dock-dialog-factory.h"  // gldi_dialog_new
 #include "cairo-dock-config.h"  // cairo_dock_get_string_key_value
 #include "cairo-dock-icon-facility.h"  // cairo_dock_set_icon_container
-#include "cairo-dock-dock-facility.h"  // cairo_dock_resize_icon_in_dock
+#include "cairo-dock-dock-priv.h"
 #include "cairo-dock-data-renderer.h"
 #include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file
 #include "cairo-dock-module-manager.h"

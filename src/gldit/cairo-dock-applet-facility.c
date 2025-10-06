@@ -38,10 +38,11 @@
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-icon-factory.h"
-#include "cairo-dock-container.h"
+#include "cairo-dock-container-priv.h"
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-dock-facility.h"
+#include "cairo-dock-dock-priv.h"
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-applet-facility.h"
 

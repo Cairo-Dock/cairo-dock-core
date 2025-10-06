@@ -34,13 +34,13 @@
 #include "cairo-dock-draw.h"
 #include "cairo-dock-icon-facility.h"  // cairo_dock_set_icon_container
 #include "cairo-dock-module-instance-manager.h"  // gldi_module_instance_detach
-#include "cairo-dock-dialog-manager.h"  // gldi_dialogs_replace_all
+#include "cairo-dock-dialog-priv.h"
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-container.h"
+#include "cairo-dock-container-priv.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-draw-opengl.h"

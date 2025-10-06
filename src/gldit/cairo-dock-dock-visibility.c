@@ -22,9 +22,10 @@
 #include "cairo-dock-container.h"
 #include "cairo-dock-object.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-windows-manager.h"
+#include "cairo-dock-windows-manager-priv.h"
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-dock-manager.h"
+#include "cairo-dock-dock-priv.h"
 #include "cairo-dock-dock-visibility.h"
 
 

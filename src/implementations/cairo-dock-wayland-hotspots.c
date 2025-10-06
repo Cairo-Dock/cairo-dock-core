@@ -26,6 +26,7 @@
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-facility.h"
+#include "cairo-dock-dock-priv.h"
 #include "cairo-dock-log.h"
 #include <gdk/gdk.h>
 #include <gdk/gdkwayland.h>

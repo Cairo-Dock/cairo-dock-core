@@ -30,7 +30,7 @@
 #include "cairo-dock-module-instance-manager.h"  // GldiModuleInstance
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-animations.h"
-#include "cairo-dock-container.h"
+#include "cairo-dock-container-priv.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-icon-manager.h"  // cairo_dock_search_icon_s_path

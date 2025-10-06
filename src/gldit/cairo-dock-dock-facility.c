@@ -20,7 +20,7 @@
 #include <math.h>
 #include <gtk/gtk.h>
 
-#include "cairo-dock-applications-manager.h"  // cairo_dock_set_icons_geometry_for_window_manager
+#include "cairo-dock-applications-priv.h"  // cairo_dock_set_icons_geometry_for_window_manager
 #include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-separator-manager.h"  // GLDI_OBJECT_IS_SEPARATOR_ICON
 #include "cairo-dock-stack-icon-manager.h"  // GLDI_OBJECT_IS_DRAWER_ICON
@@ -30,15 +30,17 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-style-manager.h"
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-dialog-manager.h"  // gldi_dialogs_replace_all
+#include "cairo-dock-dialog-priv.h"  // gldi_dialogs_replace_all
 #include "cairo-dock-indicator-manager.h"  // myIndicators.bUseClassIndic
 #include "cairo-dock-animations.h"
 #include "cairo-dock-desktop-manager.h"  // gldi_desktop_get*
 #include "cairo-dock-data-renderer.h"  // cairo_dock_reload_data_renderer_on_icon
 #include "cairo-dock-opengl.h"  // gldi_gl_container_begin_draw
+#include "cairo-dock-container-priv.h"
 
 extern CairoDockGLConfig g_openglConfig;
 #include "cairo-dock-dock-facility.h"
+#include "cairo-dock-dock-priv.h"
 
 extern gboolean g_bUseOpenGL;  // for cairo_dock_make_preview()
 

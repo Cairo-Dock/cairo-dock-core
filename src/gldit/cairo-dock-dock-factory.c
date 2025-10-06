@@ -25,7 +25,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw-opengl.h"  // for the redirected texture
 #include "cairo-dock-data-renderer.h"  // cairo_dock_reload_data_renderer_on_icon/cairo_dock_refresh_data_renderer
-#include "cairo-dock-windows-manager.h"  // gldi_windows_get_active
+#include "cairo-dock-windows-manager-priv.h"
 #include "cairo-dock-indicator-manager.h"  // myIndicators.bUseClassIndic
 #include "cairo-dock-draw.h"
 #include "cairo-dock-animations.h"
@@ -38,20 +38,22 @@
 #include "cairo-dock-stack-icon-manager.h"
 #include "cairo-dock-separator-manager.h"
 #include "cairo-dock-class-icon-manager.h"
-#include "cairo-dock-application-facility.h"
+#include "cairo-dock-applications-priv.h"
 #include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-config.h"  // cairo_dock_is_loading
-#include "cairo-dock-dock-facility.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-menu.h"  // gldi_menu_popup
 #include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file, cairo_dock_add_conf_file
 #include "cairo-dock-dock-visibility.h"  // gldi_dock_visibility_refresh
 #include "cairo-dock-flying-container.h"
 #include "cairo-dock-backends-manager.h"
-#include "cairo-dock-class-manager.h"  // cairo_dock_check_class_subdock_is_empty
+#include "cairo-dock-class-manager-priv.h"  // cairo_dock_check_class_subdock_is_empty
 #include "cairo-dock-desktop-manager.h"
-#include "cairo-dock-windows-manager.h"  // gldi_windows_get_active
-#include "cairo-dock-dock-factory.h"
+#include "cairo-dock-container-priv.h"
+#include "cairo-dock-dock-facility.h"
+#include "cairo-dock-dock-manager.h"
+#include "cairo-dock-dialog-priv.h" //gldi_dialogs_refresh_all, gldi_dialogs_replace_all
+#include "cairo-dock-dock-priv.h" // also includes dock-factory
 
 // dependencies
 extern CairoDockHidingEffect *g_pHidingBackend;

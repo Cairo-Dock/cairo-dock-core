@@ -59,7 +59,9 @@
 #include "cairo-dock-icon-facility.h"  // cairo_dock_get_first_icon
 #include "cairo-dock-module-manager.h"  // gldi_modules_new_from_directory
 #include "cairo-dock-module-instance-manager.h"  // GldiModuleInstance
+#include "cairo-dock-container-priv.h" // cairo_dock_set_containers_non_sticky, cairo_dock_enable_containers_opacity
 #include "cairo-dock-dock-manager.h"
+#include "cairo-dock-dock-priv.h" // cairo_dock_force_docks_above
 #include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-themes-manager.h"
 #include "cairo-dock-dialog-factory.h"

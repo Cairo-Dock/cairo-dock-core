@@ -21,7 +21,7 @@
 #include "gldi-config.h"
 #ifdef HAVE_WAYLAND
 
-#include "cairo-dock-windows-manager.h"
+#include "cairo-dock-windows-manager-priv.h"
 #include "cairo-dock-desktop-manager.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-wayland-wm.h"

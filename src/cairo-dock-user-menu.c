@@ -31,7 +31,7 @@
 #include "gldi-icon-names.h"
 #include "cairo-dock-animations.h"  // cairo_dock_trigger_icon_removal_from_dock
 #include "cairo-dock-icon-facility.h"
-#include "cairo-dock-applications-manager.h"
+#include "cairo-dock-applications-priv.h"
 #include "cairo-dock-stack-icon-manager.h"
 #include "cairo-dock-separator-manager.h"
 #include "cairo-dock-applet-manager.h"
@@ -47,11 +47,12 @@
 #include "cairo-dock-utils.h"  // cairo_dock_launch_command_sync
 #include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-class-manager.h"
-#include "cairo-dock-container.h"
+#include "cairo-dock-dock-priv.h"
+#include "cairo-dock-class-manager-priv.h"
+#include "cairo-dock-container-priv.h"
 #include "cairo-dock-dialog-factory.h"  // gldi_dialog_show_*
 #include "cairo-dock-desktop-manager.h"
-#include "cairo-dock-windows-manager.h"
+#include "cairo-dock-windows-manager-priv.h"
 #include "cairo-dock-wayland-manager.h" // gldi_wayland_manager_have_layer_shell
 #include "cairo-dock-user-interaction.h"  // set_custom_icon_on_appli
 #include "cairo-dock-gui-backend.h"

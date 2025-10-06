@@ -42,14 +42,15 @@
 #include "cairo-dock-utils.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-surface-factory.h"
-#include "cairo-dock-applications-manager.h"  // myTaskbarParam.iMinimizedWindowRenderType
+#include "cairo-dock-applications-priv.h"  // myTaskbarParam.iMinimizedWindowRenderType
 #include "cairo-dock-desktop-manager.h"
-#include "cairo-dock-class-manager.h"  // gldi_class_startup_notify_end
-#include "cairo-dock-windows-manager.h"
-#include "cairo-dock-container.h"  // GldiContainerManagerBackend
+#include "cairo-dock-class-manager-priv.h"  // gldi_class_startup_notify_end
+#include "cairo-dock-windows-manager-priv.h"
+#include "cairo-dock-container-priv.h"  // GldiContainerManagerBackend
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dock-manager.h" // gldi_docks_foreach_root
 #include "cairo-dock-dock-facility.h" // gldi_dock_get_screen_offset_y
+#include "cairo-dock-dock-priv.h"
 #include "cairo-dock-icon-facility.h" // cairo_dock_get_icon_container
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-task.h"

@@ -38,7 +38,7 @@
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-opengl.h"  // for texture_from_pixmap
 #include "cairo-dock-X-utilities.h"
-#include "cairo-dock-windows-manager.h" // gldi_window_parse_class
+#include "cairo-dock-windows-manager-priv.h" // gldi_window_parse_class
 
 #include <cairo/cairo-xlib.h>  // needed for cairo_xlib_surface_create
 

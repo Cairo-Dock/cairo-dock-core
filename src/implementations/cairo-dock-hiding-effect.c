@@ -24,6 +24,7 @@
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-hiding-effect.h"
+#include "cairo-dock-dock-priv.h"
 
 extern gboolean g_bUseOpenGL;
 extern CairoDockGLConfig g_openglConfig;

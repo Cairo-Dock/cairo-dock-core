@@ -26,8 +26,8 @@
 #include <gdk/gdkwayland.h>
 #include "wayland-wlr-foreign-toplevel-management-client-protocol.h"
 #include "cairo-dock-desktop-manager.h"
-#include "cairo-dock-windows-manager.h"
-#include "cairo-dock-container.h"
+#include "cairo-dock-windows-manager-priv.h"
+#include "cairo-dock-container-priv.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-foreign-toplevel.h"
 #include "cairo-dock-wayland-wm.h"

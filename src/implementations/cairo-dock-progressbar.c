@@ -32,7 +32,7 @@
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-indicator-manager.h"
 #include "cairo-dock-style-manager.h"
-#include "cairo-dock-container.h"  // cairo_dock_get_max_scale
+#include "cairo-dock-container-priv.h"  // cairo_dock_get_max_scale
 #include "cairo-dock-icon-facility.h"  // cairo_dock_get_icon_max_scale
 #include "cairo-dock-progressbar.h"
 

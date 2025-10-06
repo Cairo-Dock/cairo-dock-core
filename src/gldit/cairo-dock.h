@@ -47,7 +47,6 @@
 #include <gldit/cairo-dock-separator-manager.h>
 #include <gldit/cairo-dock-stack-icon-manager.h>
 #include <gldit/cairo-dock-class-icon-manager.h>
-#include <gldit/cairo-dock-application-facility.h>
 #include <gldit/cairo-dock-icon-facility.h>
 #include <gldit/cairo-dock-icon-factory.h>
 #include "gldi-icon-names.h"

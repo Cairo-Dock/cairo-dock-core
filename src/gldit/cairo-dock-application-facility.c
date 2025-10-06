@@ -18,7 +18,7 @@
 */
 
 #include "cairo-dock-icon-facility.h"  // gldi_icon_set_name
-#include "cairo-dock-dialog-factory.h"
+#include "cairo-dock-dialog-priv.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-applications-manager.h"
@@ -26,15 +26,16 @@
 #include "cairo-dock-separator-manager.h"
 #include "cairo-dock-applet-manager.h"
 #include "cairo-dock-stack-icon-manager.h"
-#include "cairo-dock-windows-manager.h"
+#include "cairo-dock-windows-manager-priv.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-class-manager.h"
-#include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
+#include "cairo-dock-class-manager-priv.h"
+#include "cairo-dock-dock-facility.h"  // cairo_dock_is_hidden
+#include "cairo-dock-dock-priv.h" // cairo_dock_trigger_redraw_subdock_content_on_icon, cairo_dock_set_icon_size_in_dock
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-indicator-manager.h"  // myIndicatorsParam.bUseClassIndic
 #include "cairo-dock-class-icon-manager.h"  // gldi_class_icon_new
-#include "cairo-dock-application-facility.h"
+#include "cairo-dock-applications-priv.h"
 
 extern CairoDock *g_pMainDock;
 extern CairoDockHidingEffect *g_pHidingBackend;  // cairo_dock_is_hidden

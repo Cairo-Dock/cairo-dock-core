@@ -25,11 +25,11 @@
 #include "cairo-dock-animations.h"  // cairo_dock_calculate_magnitude
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"  // myDocksParam
-#include "cairo-dock-applications-manager.h"
+#include "cairo-dock-applications-priv.h" // myTaskbarParam.fVisibleAppliAlpha, .iMinimizedWindowRenderType
 #include "cairo-dock-separator-manager.h"
 #include "cairo-dock-applet-manager.h"
 #include "cairo-dock-backends-manager.h"
-#include "cairo-dock-container.h"
+#include "cairo-dock-container-priv.h"
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-desktop-manager.h"  // g_pFakeTransparencyDesktopBg
 #include "cairo-dock-windows-manager.h"

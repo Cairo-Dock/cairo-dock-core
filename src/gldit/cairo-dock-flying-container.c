@@ -31,7 +31,7 @@
 #include "cairo-dock-applet-manager.h"  // GLDI_OBJECT_IS_APPLET_ICON
 #include "cairo-dock-log.h"
 #include "cairo-dock-desklet-factory.h"
-#include "cairo-dock-container.h"
+#include "cairo-dock-container-priv.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-factory.h"

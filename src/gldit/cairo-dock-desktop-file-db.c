@@ -23,7 +23,7 @@
 #include <gio/gio.h>
 #include <gmodule.h>
 #include "cairo-dock-desktop-file-db.h"
-#include "cairo-dock-class-manager.h" // cairo_dock_guess_class
+#include "cairo-dock-class-manager-priv.h" // cairo_dock_guess_class
 #include "cairo-dock-log.h" // cd_error
 
 static GAppInfoMonitor *monitor = NULL;

@@ -31,7 +31,7 @@
 #include "cairo-dock-dock-manager.h"  // CAIRO_CONTAINER_IS_OPENGL
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-draw.h"
-#include "cairo-dock-container.h"
+#include "cairo-dock-container-priv.h"
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-icon-manager.h"  // myIconsParam, NOTIFICATION_UPDATE_ICON_SLOW

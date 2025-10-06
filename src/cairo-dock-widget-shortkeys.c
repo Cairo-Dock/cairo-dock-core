@@ -25,7 +25,7 @@
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-icon-manager.h"  // cairo_dock_search_icon_size
 #include "cairo-dock-gui-manager.h"
-#include "cairo-dock-container.h"
+#include "cairo-dock-container-priv.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-keybinder.h"

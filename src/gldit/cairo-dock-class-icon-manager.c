@@ -19,7 +19,7 @@
 
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-class-manager.h"  // cairo_dock_create_surface_from_class
+#include "cairo-dock-class-manager-priv.h"  // cairo_dock_create_surface_from_class
 #include "cairo-dock-indicator-manager.h"  // myIndicatorsParam.bUseClassIndic
 #include "cairo-dock-class-icon-manager.h"
 

@@ -38,24 +38,25 @@
 #include "cairo-dock-applet-manager.h"
 #include "cairo-dock-stack-icon-manager.h"
 #include "cairo-dock-class-icon-manager.h"
-#include "cairo-dock-class-manager.h"  // cairo_dock_update_class_subdock_name
+#include "cairo-dock-class-manager-priv.h"  // cairo_dock_update_class_subdock_name
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-themes-manager.h"  // cairo_dock_add_conf_file
-#include "cairo-dock-dock-factory.h"
-#include "cairo-dock-dock-facility.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-animations.h"
-#include "cairo-dock-container.h"
+#include "cairo-dock-container-priv.h"
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-indicator-manager.h"  // myIndicatorsParam.bUseClassIndic
 #include "cairo-dock-style-manager.h"
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-dock-visibility.h"
+#include "cairo-dock-dock-facility.h"
 #include "cairo-dock-dock-manager.h"
+#include "cairo-dock-dock-priv.h" // also includes dock-factory
+#include "cairo-dock-dialog-manager.h" // myDialogObjectMgr
 #include "cairo-dock-windows-manager.h"
 
 

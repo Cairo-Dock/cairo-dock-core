@@ -30,8 +30,8 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"  // gldi_docks_redraw_all_root
 #include "cairo-dock-draw-opengl.h"
-#include "cairo-dock-container.h"
-#include "cairo-dock-applications-manager.h"  // cairo_dock_foreach_appli_icon
+#include "cairo-dock-container-priv.h"
+#include "cairo-dock-applications-priv.h"  // cairo_dock_foreach_appli_icon, myTaskbarParam
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-icon-manager.h"
 #include "cairo-dock-icon-facility.h"  // cairo_dock_get_icon_container

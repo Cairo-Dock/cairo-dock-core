@@ -39,7 +39,7 @@
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-class-manager.h"  // gldi_class_startup_notify_end
 #include "cairo-dock-windows-manager.h"
-#include "cairo-dock-container.h"  // GldiContainerManagerBackend
+#include "cairo-dock-container-priv.h"  // GldiContainerManagerBackend
 #include "cairo-dock-dock-factory.h" // struct _CairoDock
 #include "cairo-dock-dock-manager.h" // myDockObjectMgr, needed for CAIRO_DOCK_IS_DOCK
 #include "cairo-dock-icon-facility.h" // cairo_dock_get_icon_container
@@ -662,7 +662,7 @@ const gchar *gldi_wayland_get_detected_compositor (void)
 #else // HAVE_WAYLAND
 
 #include "cairo-dock-log.h"
-#include "cairo-dock-container.h"
+#include "cairo-dock-container-priv.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-wayland-manager.h"
 

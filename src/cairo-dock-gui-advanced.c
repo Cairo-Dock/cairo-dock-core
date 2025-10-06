@@ -35,7 +35,7 @@
 #include "cairo-dock-dialog-factory.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-dock-factory.h"
-#include "cairo-dock-applications-manager.h"
+#include "cairo-dock-applications-priv.h" // cairo_dock_get_current_active_icon
 #include "cairo-dock-desktop-manager.h"  // gldi_desktop_get_width
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-gui-manager.h"

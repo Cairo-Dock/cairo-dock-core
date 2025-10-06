@@ -38,14 +38,14 @@
 #include "cairo-dock-module-instance-manager.h"  // GldiModuleInstance
 #include "cairo-dock-applet-facility.h"  // play_sound
 #include "cairo-dock-dialog-manager.h"
-#include "cairo-dock-applications-manager.h"
+#include "cairo-dock-applications-priv.h" // cairo_dock_get_current_active_icon
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-dock-facility.h"  // cairo_dock_get_available_docks
+#include "cairo-dock-dock-priv.h" // cairo_dock_get_available_docks, gldi_dock_get_readable_name
 #include "cairo-dock-packages.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-backends-manager.h"
-#include "cairo-dock-windows-manager.h"  // gldi_window_pick
+#include "cairo-dock-windows-manager-priv.h"  // gldi_window_pick
 #include "cairo-dock-task.h"
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-desktop-manager.h"

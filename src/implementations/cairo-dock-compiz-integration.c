@@ -28,8 +28,8 @@
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-windows-manager.h"  // bIsHidden
 #include "cairo-dock-icon-factory.h"  // pAppli
-#include "cairo-dock-container.h"  // gldi_container_get_gdk_window
-#include "cairo-dock-class-manager.h"
+#include "cairo-dock-container-priv.h"  // gldi_container_get_gdk_window
+#include "cairo-dock-class-manager-priv.h"
 #include "cairo-dock-utils.h"  // cairo_dock_launch_command_argv_sync_with_stderr
 #include "cairo-dock-X-utilities.h"  // cairo_dock_get_X_display, cairo_dock_change_nb_viewports
 #include "cairo-dock-compiz-integration.h"

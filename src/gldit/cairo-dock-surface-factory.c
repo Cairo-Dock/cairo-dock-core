@@ -27,7 +27,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-launcher-manager.h"
-#include "cairo-dock-container.h"
+#include "cairo-dock-container-priv.h"
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-icon-manager.h"  // cairo_dock_search_icon_s_path

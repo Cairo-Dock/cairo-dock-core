@@ -36,7 +36,7 @@
 #include "cairo-dock-icon-facility.h"  // gldi_icons_get_any_without_dialog
 #include "cairo-dock-task.h"
 #include "cairo-dock-dock-manager.h"  // gldi_dock_get
-#include "cairo-dock-applications-manager.h"  // cairo_dock_get_current_active_icon
+#include "cairo-dock-applications-priv.h"  // cairo_dock_get_current_active_icon
 #include "cairo-dock-themes-manager.h"  // cairo_dock_export_current_theme
 #include "cairo-dock-config.h"  // cairo_dock_load_current_theme
 #include "cairo-dock-gui-manager.h"  // cairo_dock_set_status_message
