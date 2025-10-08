@@ -134,7 +134,7 @@ install(FILES
 	cairo-dock-struct.h 			cairo-dock-global-variables.h
 	${CMAKE_CURRENT_BINARY_DIR}/gldi-config.h  # gldi-module-config.h doesn't need to be installed
 	gldi-icon-names.h
-	cairo-dock-core.h			cairo-dock-manager.h
+	cairo-dock-manager.h
 	cairo-dock-object.h
 	cairo-dock-icon-factory.h		cairo-dock-icon-manager.h
 	cairo-dock-icon-facility.h
