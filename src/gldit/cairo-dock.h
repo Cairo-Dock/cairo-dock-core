@@ -29,7 +29,6 @@
 #include <gldit/cairo-dock-struct.h>
 #include <gldit/gldi-config.h>
 #include <gldit/cairo-dock-global-variables.h>
-#include <gldit/cairo-dock-core.h>
 // Containers
 #include <gldit/cairo-dock-container.h>
 #include <gldit/cairo-dock-dock-manager.h>
