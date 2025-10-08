@@ -108,10 +108,8 @@ gboolean cairo_dock_launch_command_single_gui (const gchar *cExec);
  */
 const gchar * cairo_dock_get_default_terminal (void);
 
-/* Like g_strcmp0, but saves a function call.
-*/
-#define gldi_strings_differ(s1, s2) (!s1 ? s2 != NULL : !s2 ? s1 != NULL : strcmp(s1, s2) != 0)
-#define cairo_dock_strings_differ gldi_strings_differ
+/* Legacy definiton used in many places */
+#define cairo_dock_strings_differ g_strcmp0
 
 
 /** Simple "backend" for managing processes launched by us. Mainly needed to put
