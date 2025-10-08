@@ -221,6 +221,12 @@ static void _choose_terminal (void)
 	if (iFirst >= 0) s_iTerminal = iFirst; // reset to the first one found if there is no better match
 }
 
+const gchar * cairo_dock_get_default_terminal (void)
+{
+	_choose_terminal ();
+	return s_vTerminals[s_iTerminal].args[0];
+}
+
 
 static gchar **_process_cmdline (const gchar *cCmdline, gboolean bKeepFiles, int *pFilePos, GAppInfo *app)
 {

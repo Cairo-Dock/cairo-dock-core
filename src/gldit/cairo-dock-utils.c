@@ -512,23 +512,6 @@ gboolean cairo_dock_launch_command_single_gui (const gchar *cExec)
 	return cairo_dock_launch_command_argv_full (args, NULL, GLDI_LAUNCH_GUI | GLDI_LAUNCH_SLICE);
 }
 
-const gchar * cairo_dock_get_default_terminal (void)
-{
-	const gchar *cTerm = g_getenv ("COLORTERM");
-	if (cTerm != NULL && strlen (cTerm) > 1)  // Filter COLORTERM=1 or COLORTERM=y because we need the name of the terminal
-		return cTerm;
-	else if (g_iDesktopEnv == CAIRO_DOCK_GNOME)
-		return "gnome-terminal";
-	else if (g_iDesktopEnv == CAIRO_DOCK_XFCE)
-		return "xfce4-terminal";
-	else if (g_iDesktopEnv == CAIRO_DOCK_KDE)
-		return "konsole";
-	else if ((cTerm = g_getenv ("TERM")) != NULL)
-		return cTerm;
-	else
-		return "xterm";
-}
-
 
 void gldi_register_process_manager_backend (GldiChildProcessManagerBackend *backend)
 {
