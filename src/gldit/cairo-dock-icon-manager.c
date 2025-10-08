@@ -64,6 +64,7 @@ extern CairoDock *g_pMainDock;
 extern gchar *g_cCurrentThemePath;
 extern gboolean g_bUseOpenGL;
 extern gchar *g_cCurrentIconsPath;
+extern GldiManager myIndicatorsMgr;
 
 // private
 static GList *s_pFloatingIconsList = NULL;

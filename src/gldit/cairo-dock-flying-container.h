@@ -28,7 +28,6 @@ G_BEGIN_DECLS
 typedef struct _CairoFlyingAttr CairoFlyingAttr;
 
 #ifndef _MANAGER_DEF_
-extern GldiManager myFlyingsMgr;
 extern GldiObjectManager myFlyingObjectMgr;
 #endif
 

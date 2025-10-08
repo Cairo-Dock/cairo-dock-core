@@ -29,6 +29,7 @@
 #include <stdlib.h>
 
 #include "gldi-config.h"
+#include "cairo-dock-manager.h"
 
 #ifdef HAVE_LIBCRYPT
 #ifdef __FreeBSD__

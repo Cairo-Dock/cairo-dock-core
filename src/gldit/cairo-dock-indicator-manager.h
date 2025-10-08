@@ -23,7 +23,7 @@
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
-#include "cairo-dock-manager.h"
+#include "cairo-dock-object.h"
 #include "cairo-dock-style-facility.h"  // GldiColor
 G_BEGIN_DECLS
 
@@ -36,7 +36,6 @@ typedef struct _CairoIndicatorsParam CairoIndicatorsParam;
 
 #ifndef _MANAGER_DEF_
 extern CairoIndicatorsParam myIndicatorsParam;
-extern GldiManager myIndicatorsMgr;
 #endif
 
 // params

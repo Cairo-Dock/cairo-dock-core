@@ -23,7 +23,7 @@
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
-#include "cairo-dock-manager.h"
+#include "cairo-dock-object.h"
 #include "cairo-dock-style-facility.h"  // GldiTextDescription
 #include "cairo-dock-icon-factory.h"  // CairoDockIconGroup
 G_BEGIN_DECLS
@@ -39,7 +39,6 @@ typedef struct _CairoIconsParam CairoIconsParam;
 
 #ifndef _MANAGER_DEF_
 extern CairoIconsParam myIconsParam;
-extern GldiManager myIconsMgr;
 extern GldiObjectManager myIconObjectMgr;
 #endif
 

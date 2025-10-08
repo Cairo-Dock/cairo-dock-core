@@ -43,7 +43,6 @@ typedef struct _CairoDialogAttr CairoDialogAttr;
 
 #ifndef _MANAGER_DEF_
 extern CairoDialogsParam myDialogsParam;
-extern GldiManager myDialogsMgr;
 extern GldiObjectManager myDialogObjectMgr;
 #endif
 

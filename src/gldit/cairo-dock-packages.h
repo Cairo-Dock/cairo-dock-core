@@ -23,7 +23,7 @@
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
-#include "cairo-dock-manager.h"
+#include "cairo-dock-object.h"
 
 G_BEGIN_DECLS
 
@@ -42,7 +42,6 @@ typedef struct _CairoConnectionParam CairoConnectionParam;
 
 #ifndef _MANAGER_DEF_
 extern CairoConnectionParam myConnectionParam;
-extern GldiManager myConnectionMgr;
 #endif
 
 // params

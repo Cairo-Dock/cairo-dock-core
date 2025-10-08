@@ -38,7 +38,6 @@ typedef struct _CairoDocksParam CairoDocksParam;
 
 #ifndef _MANAGER_DEF_
 extern CairoDocksParam myDocksParam;
-extern GldiManager myDocksMgr;
 extern GldiObjectManager myDockObjectMgr;
 #endif
 

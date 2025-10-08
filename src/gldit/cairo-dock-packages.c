@@ -29,6 +29,7 @@
 #include <curl/curl.h>
 
 #include "gldi-config.h"
+#include "cairo-dock-manager.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-task.h"
 #include "cairo-dock-config.h"

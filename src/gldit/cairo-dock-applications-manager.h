@@ -34,7 +34,6 @@ typedef struct _Icon AppliIcon;
 
 #ifndef _MANAGER_DEF_
 extern CairoTaskbarParam myTaskbarParam;
-extern GldiManager myTaskbarMgr;
 extern GldiObjectManager myAppliIconObjectMgr;
 #endif
 
