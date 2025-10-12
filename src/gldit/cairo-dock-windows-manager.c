@@ -21,7 +21,7 @@
 #include "cairo-dock-desktop-manager.h"  // g_desktopGeometry
 #include "cairo-dock-utils.h"  // cairo_dock_remove_version_from_string
 #define _MANAGER_DEF_
-#include "cairo-dock-windows-manager.h"
+#include "cairo-dock-windows-manager-priv.h"
 
 // public (manager, config, data)
 GldiObjectManager myWindowObjectMgr;
