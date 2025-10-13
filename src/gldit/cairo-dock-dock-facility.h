@@ -69,62 +69,11 @@ void cairo_dock_trigger_update_dock_size (CairoDock *pDock);
 Icon *cairo_dock_calculate_dock_icons (CairoDock *pDock);
 
 
-/* Demande au WM d'empecher les autres fenetres d'empieter sur l'espace du dock.
-* L'espace reserve est pris sur la taille minimale du dock, c'est-a-dire la taille de la zone de rappel si l'auto-hide est active,
-* ou la taille du dock au repos sinon.
-* @param pDock le dock.
-* @param bReserve TRUE pour reserver l'espace, FALSE pour annuler la reservation.
-*/
-void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve);
-
-/* Borne la position d'un dock a l'interieur de l'ecran.
-*@param pDock le dock.
-*/
-void cairo_dock_prevent_dock_from_out_of_screen (CairoDock *pDock);  // -> dock-manager
-
-/* Calcule la position d'un dock etant donne ses nouvelles dimensions.
-*/
-void cairo_dock_get_window_position_at_balance (CairoDock *pDock, int iNewWidth, int iNewHeight, int *iNewPositionX, int *iNewPositionY);
-
-/* Met a jour les zones d'input d'un dock.
-*/
-void cairo_dock_update_input_shape (CairoDock *pDock);
-
-#define cairo_dock_set_input_shape_active(pDock) do {\
-	gldi_container_set_input_shape (CAIRO_CONTAINER (pDock), NULL);\
-	if (pDock->fMagnitudeMax == 0.)\
-		gldi_container_set_input_shape (CAIRO_CONTAINER (pDock), pDock->pShapeBitmap);\
-	else if (pDock->pActiveShapeBitmap != NULL)\
-		gldi_container_set_input_shape (CAIRO_CONTAINER (pDock), pDock->pActiveShapeBitmap);\
-	} while (0)
-#define cairo_dock_set_input_shape_at_rest(pDock) do {\
-	gldi_container_set_input_shape (CAIRO_CONTAINER (pDock), NULL);\
-	gldi_container_set_input_shape (CAIRO_CONTAINER (pDock), pDock->pShapeBitmap);\
-	} while (0)
-#define cairo_dock_set_input_shape_hidden(pDock) do {\
-	gldi_container_set_input_shape (CAIRO_CONTAINER (pDock), NULL);\
-	gldi_container_set_input_shape (CAIRO_CONTAINER (pDock), pDock->pHiddenShapeBitmap);\
-	} while (0)
-
 /** Pop up a sub-dock.
 *@param pPointedIcon icon pointing on the sub-dock.
 *@param pParentDock dock containing the icon.
 */
 void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock);
-
-/** Get a list of available docks.
-*@param pParentDock excluding this dock if not NULL
-*@param pSubDock excluding this dock and its children if not NULL
-*@return a list of CairoDock*
-*/
-GList *cairo_dock_get_available_docks (CairoDock *pParentDock, CairoDock *pSubDock);
-
-/** Get a list of available docks where an user icon can be placed. Its current parent dock is excluded, as well as its sub-dock (if any) and its children.
-*@param pIcon the icon
-*@return a list of CairoDock*
-*/
-#define cairo_dock_get_available_docks_for_icon(pIcon) cairo_dock_get_available_docks (CAIRO_DOCK(cairo_dock_get_icon_container(pIcon)), pIcon->pSubDock)
-
 
 /** Calculate the position at rest (when the mouse is outside of the dock and its size is normal) of the icons of a linear dock.
 *@param pIconList a list of icons.
@@ -161,8 +110,6 @@ void cairo_dock_check_if_mouse_inside_linear (CairoDock *pDock);
 */
 void cairo_dock_check_can_drop_linear (CairoDock *pDock);
 
-void cairo_dock_stop_marking_icons (CairoDock *pDock);
-
 void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pParentDock);
 
 
@@ -172,23 +119,7 @@ void cairo_dock_set_subdock_position_linear (Icon *pPointedIcon, CairoDock *pPar
 */
 GList *cairo_dock_get_first_drawn_element_linear (GList *icons);
 
-
-void cairo_dock_trigger_redraw_subdock_content (CairoDock *pDock);
-void cairo_dock_trigger_redraw_subdock_content_on_icon (Icon *icon);
-
-void cairo_dock_redraw_subdock_content (CairoDock *pDock);
-
 void cairo_dock_trigger_set_WM_icons_geometry (CairoDock *pDock);
-
-
-void cairo_dock_resize_icon_in_dock (Icon *pIcon, CairoDock *pDock);
-
-
-void cairo_dock_load_dock_background (CairoDock *pDock);
-void cairo_dock_trigger_load_dock_background (CairoDock *pDock);  // peu utile
-
-
-void cairo_dock_make_preview (CairoDock *pDock, const gchar *cPreviewPath);
 
 G_END_DECLS
 #endif
