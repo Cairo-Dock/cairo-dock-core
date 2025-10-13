@@ -30,6 +30,7 @@
 #include "gldi-config.h"
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-config.h"
+#include "cairo-dock-data-renderer.h"  // cairo_dock_reload_data_renderer_on_icon/cairo_dock_refresh_data_renderer
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-separator-manager.h"  // gldi_automatic_separators_add_in_list
@@ -379,9 +380,61 @@ void gldi_icons_foreach_in_docks (GldiIconFunc pFunction, gpointer pUserData)
 
 
 
-static void _reload_buffer_in_one_dock (/**const gchar *cDockName, */CairoDock *pDock, gpointer data)
+
+static void _reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, gboolean bUpdateIconSize)
 {
-	cairo_dock_reload_buffers_in_dock (pDock, TRUE, GPOINTER_TO_INT (data));
+	//g_print ("************%s (%d, %d)\n", __func__, pDock->bIsMainDock, bRecursive);
+	if (bUpdateIconSize && pDock->bGlobalIconSize)
+		pDock->iIconSize = myIconsParam.iIconWidth;
+	
+	// for each icon, reload its buffer (size may change).
+	Icon* icon;
+	GList* ic;
+	for (ic = pDock->icons; ic != NULL; ic = ic->next)
+	{
+		icon = ic->data;
+		
+		if (CAIRO_DOCK_IS_APPLET (icon))  // for an applet, we need to let the module know that the size or the theme has changed, so that it can reload its private buffers.
+		{
+			gldi_object_reload (GLDI_OBJECT(icon->pModuleInstance), FALSE);
+		}
+		else
+		{
+			if (bUpdateIconSize)
+			{
+				cairo_dock_icon_set_requested_size (icon, 0, 0);
+				cairo_dock_set_icon_size_in_dock (pDock, icon);
+			}
+			
+			if (bUpdateIconSize && cairo_dock_get_icon_data_renderer (icon) != NULL)  // we need to reload the DataRenderer to use the new size
+			{
+				cairo_dock_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));  // the DataRenderer uses the ImageBuffer's size on loading, so we need to load it now
+				cairo_dock_reload_data_renderer_on_icon (icon, CAIRO_CONTAINER (pDock));
+			}
+			else
+			{
+				cairo_dock_trigger_load_icon_buffers (icon);
+			}
+		}
+		
+		if (bRecursive && icon->pSubDock != NULL)  // we handle the sub-dock for applets too, so that they don't need to care.
+		{
+			if (bUpdateIconSize)
+				icon->pSubDock->iIconSize = pDock->iIconSize;
+			_reload_buffers_in_dock (icon->pSubDock, bRecursive, bUpdateIconSize);
+		}
+	}
+	
+	if (bUpdateIconSize)
+	{
+		cairo_dock_update_dock_size (pDock);
+	}
+	gtk_widget_queue_draw (pDock->container.pWidget);
+}
+
+static void _reload_buffer_in_one_dock (CairoDock *pDock, gpointer data)
+{
+	_reload_buffers_in_dock (pDock, TRUE, GPOINTER_TO_INT (data));
 }
 static void _cairo_dock_draw_one_subdock_icon (G_GNUC_UNUSED const gchar *cDockName, CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 {
@@ -430,36 +483,6 @@ void cairo_dock_set_all_views_to_default (int iDockType)
   //////////////////////
  // ROOT DOCK CONFIG //
 //////////////////////
-
-void gldi_rootdock_write_gaps (CairoDock *pDock)
-{
-	if (pDock->iRefCount > 0)
-		return;
-	
-	cairo_dock_prevent_dock_from_out_of_screen (pDock);
-	if (pDock->bIsMainDock)
-	{
-		cairo_dock_update_conf_file (g_cConfFile,
-			G_TYPE_INT, "Position", "x gap", pDock->iGapX,
-			G_TYPE_INT, "Position", "y gap", pDock->iGapY,
-			G_TYPE_INVALID);
-	}
-	else
-	{
-		const gchar *cDockName = gldi_dock_get_name (pDock);
-		gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
-		if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))  // shouldn't happen
-		{
-			cairo_dock_add_conf_file (GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
-		}
-		
-		cairo_dock_update_conf_file (cConfFilePath,
-			G_TYPE_INT, "Behavior", "x gap", pDock->iGapX,
-			G_TYPE_INT, "Behavior", "y gap", pDock->iGapY,
-			G_TYPE_INVALID);
-		g_free (cConfFilePath);
-	}
-}
 
 int cairo_dock_convert_icon_size_to_pixels (GldiIconSizeEnum s, double *fMaxScale, double *fReflectSize, int *iIconGap)
 {
@@ -859,18 +882,9 @@ void cairo_dock_stop_quick_hide (void)
 	}
 }
 
-void cairo_dock_allow_entrance (CairoDock *pDock)
-{
-	pDock->bEntranceDisabled = FALSE;
-}
-
-void cairo_dock_disable_entrance (CairoDock *pDock)
-{
-	pDock->bEntranceDisabled = TRUE;
-}
-
 gboolean cairo_dock_entrance_is_allowed (CairoDock *pDock)
 {
+	//!! currently this function always returns TRUE, bEntranceDisabled is never set to TRUE
 	return (! pDock->bEntranceDisabled);
 }
 
@@ -1624,7 +1638,7 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 	if (pPosition->iScreenBorder != pPrevPosition->iScreenBorder)
 	{
 		_set_dock_orientation (pDock, pPosition->iScreenBorder);
-		cairo_dock_reload_buffers_in_dock (pDock, TRUE, FALSE);  // icons may have a different width and height, so changing the orientation will affect them.  also, stack-icons may be drawn differently according to the orientation (ex.: box).
+		_reload_buffers_in_dock (pDock, TRUE, FALSE);  // icons may have a different width and height, so changing the orientation will affect them.  also, stack-icons may be drawn differently according to the orientation (ex.: box).
 	}
 	pDock->bExtendedMode = pBackground->bExtendedMode;
 	pDock->iGapX = pPosition->iGapX;
@@ -1913,7 +1927,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	//\__________________ load the icons.
 	if (pIconList != NULL)
 	{
-		cairo_dock_reload_buffers_in_dock (pDock, FALSE, TRUE);  // idle reload; FALSE = not recursively, TRUE = compute icons size
+		_reload_buffers_in_dock (pDock, FALSE, TRUE);  // idle reload; FALSE = not recursively, TRUE = compute icons size
 	}
 	
 	cairo_dock_update_dock_size (pDock);
@@ -2048,7 +2062,7 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, G_GNUC_UN
 	cairo_dock_set_default_renderer (pDock);
 	
 	pDock->backgroundBuffer.iWidth ++;  // pour forcer le chargement du fond.
-	cairo_dock_reload_buffers_in_dock (pDock, TRUE, TRUE);
+	_reload_buffers_in_dock (pDock, TRUE, TRUE);
 	
 	_cairo_dock_draw_one_subdock_icon (NULL, pDock, NULL);  // container-icons may be drawn differently according to the orientation (ex.: box). must be done after sub-docks are reloaded.
 	

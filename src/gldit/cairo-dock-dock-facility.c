@@ -362,27 +362,6 @@ void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 	gldi_container_reserve_space (CAIRO_CONTAINER(pDock), left, right, top, bottom, left_start_y, left_end_y, right_start_y, right_end_y, top_start_x, top_end_x, bottom_start_x, bottom_end_x);
 }
 
-void cairo_dock_prevent_dock_from_out_of_screen (CairoDock *pDock)
-{
-	int x, y;  // position of the invariant point of the dock.
-	x = pDock->container.iWindowPositionX +  pDock->container.iWidth * pDock->fAlign;
-	y = (pDock->container.bDirectionUp ? pDock->container.iWindowPositionY + pDock->container.iHeight : pDock->container.iWindowPositionY);
-	//cd_debug ("%s (%d;%d)", __func__, x, y);
-	
-	int W = gldi_dock_get_screen_width (pDock), H = gldi_dock_get_screen_height (pDock);
-	pDock->iGapX = x - W * pDock->fAlign;
-	pDock->iGapY = (pDock->container.bDirectionUp ? H - y : y);
-	//cd_debug (" -> (%d;%d)", pDock->iGapX, pDock->iGapY);
-	
-	if (pDock->iGapX < - W/2)
-		pDock->iGapX = - W/2;
-	if (pDock->iGapX > W/2)
-		pDock->iGapX = W/2;
-	if (pDock->iGapY < 0)
-		pDock->iGapY = 0;
-	if (pDock->iGapY > H)
-		pDock->iGapY = H;
-}
 
 #define CD_VISIBILITY_MARGIN 20
 void cairo_dock_get_window_position_at_balance (CairoDock *pDock, int iNewWidth, int iNewHeight, int *iNewPositionX, int *iNewPositionY)

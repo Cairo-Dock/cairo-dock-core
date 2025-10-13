@@ -191,7 +191,7 @@ struct _CairoDock {
 	gboolean bIsDragging;
 	/// Backup of the auto-hide state before quick-hide.
 	gboolean bTemporaryHidden;
-	/// whether mouse can't enter into the dock.
+	/// whether mouse can't enter into the dock. -- Currently not used, always FALSE
 	gboolean bEntranceDisabled;
 	/// whether the dock is shrinking down.
 	gboolean bIsShrinkingDown;

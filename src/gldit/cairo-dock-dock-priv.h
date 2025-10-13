@@ -88,8 +88,6 @@ void cairo_dock_move_resize_dock (CairoDock *pDock);
 */
 void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingDock);
 
-void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, gboolean bUpdateIconSize);
-
 void cairo_dock_set_icon_size_in_dock (CairoDock *pDock, Icon *icon);
 
 void cairo_dock_create_redirect_texture_for_dock (CairoDock *pDock);
@@ -134,8 +132,6 @@ gboolean cairo_dock_check_unique_subdock_name (Icon *pIcon);
 */
 void gldi_dock_rename (CairoDock *pDock, const gchar *cNewName);
 
-void gldi_rootdock_write_gaps (CairoDock *pDock);
-
 int cairo_dock_convert_icon_size_to_pixels (GldiIconSizeEnum s, double *fMaxScale, double *fReflectSize, int *iIconGap);
 
 GldiIconSizeEnum cairo_dock_convert_icon_size_to_enum (int iIconSize);
@@ -145,8 +141,6 @@ GldiIconSizeEnum cairo_dock_convert_icon_size_to_enum (int iIconSize);
 */
 void gldi_dock_add_conf_file_for_name (const gchar *cDockName);
 
-void cairo_dock_allow_entrance (CairoDock *pDock);
-void cairo_dock_disable_entrance (CairoDock *pDock);
 gboolean cairo_dock_entrance_is_allowed (CairoDock *pDock);
 void cairo_dock_activate_temporary_auto_hide (CairoDock *pDock);
 void cairo_dock_deactivate_temporary_auto_hide (CairoDock *pDock);
@@ -175,11 +169,6 @@ void gldi_register_docks_manager (void);
 * @param bReserve TRUE pour reserver l'espace, FALSE pour annuler la reservation.
 */
 void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve);
-
-/* Borne la position d'un dock a l'interieur de l'ecran.
-*@param pDock le dock.
-*/
-void cairo_dock_prevent_dock_from_out_of_screen (CairoDock *pDock);  // -> dock-manager
 
 /* Calcule la position d'un dock etant donne ses nouvelles dimensions.
 */
