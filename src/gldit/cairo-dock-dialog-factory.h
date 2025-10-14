@@ -153,17 +153,9 @@ struct _CairoDialog {
 	gpointer reserved[2];
 };
 
-#define CAIRO_DIALOG_FIRST_BUTTON 0
-#define CAIRO_DIALOG_ENTER_KEY -1
-#define CAIRO_DIALOG_ESCAPE_KEY -2
 
-#define CAIRO_DIALOG_MIN_SIZE 20
-#define CAIRO_DIALOG_TEXT_MARGIN 3
 #define CAIRO_DIALOG_MIN_ENTRY_WIDTH 150
 #define CAIRO_DIALOG_MIN_SCALE_WIDTH 150
-#define CAIRO_DIALOG_BUTTON_OFFSET 3
-#define CAIRO_DIALOG_VGAP 4
-#define CAIRO_DIALOG_BUTTON_GAP 16
 
 /** Say if an object is a Dialog.
 *@param obj the object.
@@ -176,8 +168,6 @@ struct _CairoDialog {
 *@return the dialog.
 */
 #define CAIRO_DIALOG(pContainer) ((CairoDialog *)pContainer)
-
-void gldi_dialog_init_internals (CairoDialog *pDialog, CairoDialogAttr *pAttribute);
 
 /** Create a new dialog.
 *@param pAttribute attributes of the dialog.
@@ -297,9 +287,6 @@ CairoDialog * gldi_dialog_show_general_message (const gchar *cMessage, double fT
 */
 int gldi_dialog_show_and_wait (const gchar *cText, Icon *pIcon, GldiContainer *pContainer, const gchar *cIconPath, GtkWidget *pInteractiveWidget);
 
-
-GtkWidget *cairo_dock_steal_widget_from_its_container (GtkWidget *pWidget);  // should be elsewhere
-
 /** Detach the interactive widget from a dialog. The widget can then be placed anywhere after that. You have to unref it after you placed it into a container, or to destroy it.
 *@param pDialog the desklet with an interactive widget.
 *@return the widget.
@@ -308,13 +295,10 @@ GtkWidget *gldi_dialog_steal_interactive_widget (CairoDialog *pDialog);
 
 void gldi_dialog_redraw_interactive_widget (CairoDialog *pDialog);
 
-void gldi_dialog_set_icon (CairoDialog *pDialog, const gchar *cImageFilePath);
-void gldi_dialog_set_icon_surface (CairoDialog *pDialog, cairo_surface_t *pNewIconSurface, int iNewIconSize);
-
 void gldi_dialog_set_message (CairoDialog *pDialog, const gchar *cMessage);
 void gldi_dialog_set_message_printf (CairoDialog *pDialog, const gchar *cMessageFormat, ...);
 
-void gldi_dialog_reload (CairoDialog *pDialog);
+// void gldi_dialog_reload (CairoDialog *pDialog); // not used
 
 #define gldi_dialog_set_widget_text_color(...)
 #define gldi_dialog_set_widget_bg_color(...)
