@@ -1002,6 +1002,7 @@ void gldi_dialog_set_message_printf (CairoDialog *pDialog, const gchar *cMessage
 	va_end (args);
 }
 
+/*
 void gldi_dialog_reload (CairoDialog *pDialog)
 {
 	// re-set the GTK style class (global style may have changed between system / custom)
@@ -1024,3 +1025,5 @@ void gldi_dialog_reload (CairoDialog *pDialog)
 	// reload sizes (radius or linewidth may have changed)
 	_compute_dialog_sizes (pDialog);
 }
+*/
+
