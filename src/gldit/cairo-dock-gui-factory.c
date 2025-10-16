@@ -51,6 +51,7 @@
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-separator-manager.h" // GLDI_OBJECT_IS_SEPARATOR_ICON
 #include "cairo-dock-menu.h" // gldi_menu_item_new_full2
+#include "cairo-dock-file-manager.h" // cairo_dock_fm_launch_uri
 #include "cairo-dock-gui-factory.h"
 
 #define CAIRO_DOCK_ICON_MARGIN 6
@@ -1838,6 +1839,11 @@ const gchar *cairo_dock_parse_key_comment (gchar *cKeyComment, char *iElementTyp
 	return cUsefulComment;
 }
 
+static gboolean _open_btn_url (GtkLinkButton *pURL, G_GNUC_UNUSED gpointer data)
+{
+	return cairo_dock_fm_launch_uri (gtk_link_button_get_uri (pURL));
+}
+
 GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFilePath)
 {
 	g_return_val_if_fail (pKeyFile != NULL && cGroupName != NULL, NULL);
@@ -3087,9 +3093,15 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 					}
 					
 					GtkWidget *pExternFrame;
+					gboolean bDisabled = FALSE;
 					if (iElementType == CAIRO_DOCK_WIDGET_FRAME)
 					{
 						pExternFrame = gtk_frame_new (NULL);
+#ifndef AVOID_PATENT_CRAP
+						// do nothing, bDisabled already set to FALSE
+#else
+						bDisabled = !g_strcmp0 (cValue, "Zoom effect");
+#endif
 						gtk_container_set_border_width (GTK_CONTAINER (pExternFrame), CAIRO_DOCK_GUI_MARGIN);
 						gtk_frame_set_shadow_type (GTK_FRAME (pExternFrame), GTK_SHADOW_OUT);
 						gtk_frame_set_label_widget (GTK_FRAME (pExternFrame), (pLabelContainer != NULL ? pLabelContainer : pLabel));
@@ -3116,8 +3128,25 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						0);
 
 					pFrameVBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, CAIRO_DOCK_GUI_MARGIN);
-					gtk_container_add (GTK_CONTAINER (pFrame),
-						pFrameVBox);
+					if (bDisabled) {
+						gtk_widget_set_sensitive (pFrameVBox, FALSE);
+						
+						GtkWidget *pBoxV = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+						GtkWidget *pBoxH = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+						GtkWidget *pImg  = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_MENU);
+						GtkWidget *pLbl  = gtk_label_new (_("Cairo-Dock has been built with the icon zoom effect disabled. See here for more info: "));
+						GtkWidget *pURL  = gtk_link_button_new ("https://github.com/Cairo-Dock/cairo-dock-core/issues/156");
+						// note: we use our own handler to open URLs so that we can use systemd to launch the browser if needed
+						g_signal_connect (G_OBJECT (pURL), "activate-link", G_CALLBACK (_open_btn_url), NULL);
+						
+						gtk_box_pack_start (GTK_BOX (pBoxH), pImg, FALSE, FALSE, 20);
+						gtk_box_pack_start (GTK_BOX (pBoxH), pLbl, FALSE, FALSE, 0);
+						gtk_box_pack_start (GTK_BOX (pBoxH), pURL, FALSE, FALSE, 0);
+						gtk_box_pack_start (GTK_BOX (pBoxV), pBoxH, FALSE, FALSE, 5);
+						gtk_box_pack_start (GTK_BOX (pBoxV), pFrameVBox, FALSE, FALSE, 0);
+						gtk_container_add (GTK_CONTAINER (pFrame), pBoxV);
+					}
+					else gtk_container_add (GTK_CONTAINER (pFrame), pFrameVBox);
 					
 					if (pAuthorizedValuesList[0] == NULL || *pAuthorizedValuesList[0] == '\0')
 						g_free (cValue);
