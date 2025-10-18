@@ -341,24 +341,20 @@ CairoDock * gldi_appli_icon_detach (Icon *pIcon)
 }
 
 #define x_icon_geometry(icon, pDock) (icon->fXAtRest + (pDock->container.iWidth - pDock->iActiveWidth) * pDock->fAlign + (pDock->iActiveWidth - pDock->fFlatDockWidth) / 2)
-///#define y_icon_geometry(icon, pDock) (pDock->container.iWindowPositionY + icon->fDrawY - icon->fHeight * myIconsParam.fAmplitude * pDock->fMagnitudeMax)
-//!! TODO: is this sensible? on Wayland, the position should be relative to the window -- maybe we need to change the API to take the container?
-#define y_icon_geometry(icon, pDock) (icon->fDrawY)
+#define y_icon_geometry(icon, pDock) (icon->fYAtRest)
 void gldi_appli_icon_set_geometry_for_window_manager (Icon *icon, CairoDock *pDock)
 {
-	//g_print ("%s (%s)\n", __func__, icon->cName);
 	int iX, iY, iWidth, iHeight;
 	iX = x_icon_geometry (icon, pDock);
-	iY = y_icon_geometry (icon, pDock);  // il faudrait un fYAtRest ...
-	//g_print (" -> %d;%d (%.2f)\n", iX - pDock->container.iWindowPositionX, iY - pDock->container.iWindowPositionY, icon->fXAtRest);
+	iY = y_icon_geometry (icon, pDock);
 	iWidth = icon->fWidth;
-	int dh = (icon->image.iWidth - icon->fHeight);
-	iHeight = icon->fHeight + 2 * dh;  // on elargit en haut et en bas, pour gerer les cas ou l'icone grossirait vers le haut ou vers le bas.
+	iHeight = icon->fHeight;
+	cd_debug ("%s -> %d;%d (%.2f) %dx%d (%f)\n", icon->cName, iX, iY, icon->fXAtRest, iWidth, iHeight, icon->fScale);
 	
 	if (pDock->container.bIsHorizontal)
-		gldi_window_set_thumbnail_area (icon->pAppli, &pDock->container, iX, iY - dh, iWidth, iHeight);
+		gldi_window_set_thumbnail_area (icon->pAppli, &pDock->container, iX, iY, iWidth, iHeight);
 	else
-		gldi_window_set_thumbnail_area (icon->pAppli, &pDock->container, iY - dh, iX, iHeight, iWidth);
+		gldi_window_set_thumbnail_area (icon->pAppli, &pDock->container, iY, iX, iHeight, iWidth);
 }
 
 void gldi_appli_reserve_geometry_for_window_manager (GldiWindowActor *pAppli, Icon *icon, CairoDock *pMainDock)
