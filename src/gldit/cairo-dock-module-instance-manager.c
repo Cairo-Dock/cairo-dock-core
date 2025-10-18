@@ -438,6 +438,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 			if (pDock)
 			{
 				gldi_icon_insert_in_container (pIcon, CAIRO_CONTAINER(pDock), ! cairo_dock_is_loading ());  // animate the icon if it's instantiated by the user, not during the initial loading.
+				gldi_dock_attach_applet (pDock, pInstance); // needed to ensure the dock stays alive as long as pInstance, even if the applet detaches its icon later
 				
 				/* we need to load the icon's buffer before we init the module,
 				 * because the applet may need it. no need to do it in desklet
@@ -519,6 +520,9 @@ static void reset_object (GldiObject *obj)
 		gldi_icon_detach (pIcon);
 		gldi_object_unref (GLDI_OBJECT(pIcon));
 	}
+	
+	if (pInstance->pDock != NULL)
+		gldi_dock_detach_applet (pInstance->pDock, pInstance);
 	
 	gldi_module_instance_release_data_slot (pInstance);
 	
@@ -640,6 +644,7 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReadConfig, GKeyFile 
 			{
 				cd_message ("the container has changed (%s -> %s)", gldi_dock_get_name(pCurrentDock), pMinimalConfig->bIsDetached ? "desklet" : pMinimalConfig->cDockName);
 				gldi_icon_detach (pIcon);
+				gldi_dock_detach_applet (pCurrentDock, pInstance);
 			}
 			else if (pCurrentDesklet != NULL && ! pMinimalConfig->bIsDetached)  // was in a desklet, now is in a dock
 			{
@@ -692,6 +697,7 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReadConfig, GKeyFile 
 		if (pNewDock != pCurrentDock)  // insert in its new dock.
 		{
 			gldi_icon_insert_in_container (pIcon, CAIRO_CONTAINER(pNewDock), CAIRO_DOCK_ANIMATE_ICON);
+			gldi_dock_attach_applet (pNewDock, pInstance);
 			cairo_dock_load_icon_buffers (pIcon, pNewContainer);
 			/* do it now, since the applet may need it. no need to do it in
 			 * desklet mode, since the desklet doesn't have a renderer yet (so
