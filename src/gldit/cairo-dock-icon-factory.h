@@ -144,6 +144,7 @@ struct _Icon {
 	//\____________ Drawing parameters.
 	gdouble fXMin, fXMax;  // Abscisse extremale gauche/droite que the icon atteindra (variable avec la vague).
 	gdouble fXAtRest;  // Abscisse de the icon au repos.
+	gdouble fYAtRest;
 	gdouble fPhase;  // Phase de the icon (entre -pi et piconi).
 	gdouble fX, fY;  // Abscisse/Ordonnee temporaire du bord haut-gauche de l'image de the icon.
 	
