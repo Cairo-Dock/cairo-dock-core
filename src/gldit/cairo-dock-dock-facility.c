@@ -500,9 +500,10 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
  /// LINEAR DOCK ///
 ///////////////////
 
-void cairo_dock_calculate_icons_positions_at_rest_linear (GList *pIconList, double fFlatDockWidth)
+void cairo_dock_calculate_icons_positions_at_rest_linear (CairoDock *pDock)
 {
-	//g_print ("%s (%d, +%d)\n", __func__, fFlatDockWidth);
+	GList *pIconList = pDock->icons;
+	double fFlatDockWidth = pDock->fFlatDockWidth;
 	double x_cumulated = 0;
 	GList* ic;
 	Icon *icon;
@@ -517,6 +518,10 @@ void cairo_dock_calculate_icons_positions_at_rest_linear (GList *pIconList, doub
 		else
 			icon->fXAtRest = x_cumulated;
 		//g_print ("%s : fXAtRest = %.2f\n", icon->cName, icon->fXAtRest);
+		// note: fYAtRest only used for setting the minimize position of apps
+		int tmp1 = myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin;
+		icon->fYAtRest = (pDock->container.bDirectionUp ?
+			pDock->iMaxDockHeight - tmp1 - icon->fHeight : tmp1);
 
 		x_cumulated += icon->fWidth + myIconsParam.iIconGap;
 	}

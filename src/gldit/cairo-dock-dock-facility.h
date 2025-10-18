@@ -76,10 +76,9 @@ Icon *cairo_dock_calculate_dock_icons (CairoDock *pDock);
 void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock);
 
 /** Calculate the position at rest (when the mouse is outside of the dock and its size is normal) of the icons of a linear dock.
-*@param pIconList a list of icons.
-*@param fFlatDockWidth width of all the icons placed next to each other.
+*@param pDock the dock.
 */
-void cairo_dock_calculate_icons_positions_at_rest_linear (GList *pIconList, double fFlatDockWidth);
+void cairo_dock_calculate_icons_positions_at_rest_linear (CairoDock *pDock);
 
 double cairo_dock_calculate_max_dock_width (CairoDock *pDock, double fFlatDockWidth, double fWidthConstraintFactor, double fExtraWidth);
 
