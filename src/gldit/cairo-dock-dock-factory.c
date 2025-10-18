@@ -2111,7 +2111,7 @@ static gboolean _destroy_empty_dock (CairoDock *pDock)
 	if (pDock->bIconIsFlyingAway)  // keep the dock alive for now, in case the user re-inserts the flying icon in it.
 		return TRUE;
 	pDock->iSidDestroyEmptyDock = 0;
-	if (pDock->icons == NULL && pDock->iRefCount == 0 && ! pDock->bIsMainDock)  // le dock est toujours a detruire.
+	if (pDock->icons == NULL && pDock->iRefCount == 0 && pDock->applets == NULL && ! pDock->bIsMainDock)  // le dock est toujours a detruire.
 	{
 		cd_debug ("The dock '%s' is empty. No icon, no dock.", pDock->cDockName);
 		gldi_object_unref (GLDI_OBJECT(pDock));
@@ -2207,7 +2207,7 @@ static void _detach_icon (GldiContainer *pContainer, Icon *icon)
 	}
 	
 	//\___________________ On prevoit la destruction du dock si c'est un dock principal qui devient vide.
-	if (pDock->iRefCount == 0 && pDock->icons == NULL && ! pDock->bIsMainDock)  // on supprime les docks principaux vides.
+	if (pDock->iRefCount == 0 && pDock->icons == NULL && pDock->applets == NULL && ! pDock->bIsMainDock)  // on supprime les docks principaux vides.
 	{
 		if (pDock->iSidDestroyEmptyDock == 0)
 			pDock->iSidDestroyEmptyDock = g_idle_add ((GSourceFunc) _destroy_empty_dock, pDock);
@@ -2316,6 +2316,22 @@ static void _insert_icon (GldiContainer *pContainer, Icon *icon, gboolean bAnima
 	
 	//\______________ Notify everybody.
 	gldi_object_notify (pDock, NOTIFICATION_INSERT_ICON, icon, pDock);  /// TODO: make it a Container notification...
+}
+
+void gldi_dock_attach_applet (CairoDock *pDock, GldiModuleInstance *pInstance)
+{
+	pDock->applets = g_list_prepend (pDock->applets, pInstance); // note: we don't care about order
+}
+
+void gldi_dock_detach_applet (CairoDock *pDock, GldiModuleInstance *pInstance)
+{
+	pDock->applets = g_list_remove_all (pDock->applets, pInstance);
+	// Need to check if this dock should be deleted (as did not delete it when removing the applet's icon)
+	if (pDock->iRefCount == 0 && pDock->icons == NULL && pDock->applets == NULL && ! pDock->bIsMainDock)  // on supprime les docks principaux vides.
+	{
+		if (pDock->iSidDestroyEmptyDock == 0)
+			pDock->iSidDestroyEmptyDock = g_idle_add ((GSourceFunc) _destroy_empty_dock, pDock);
+	}
 }
 
 void gldi_dock_init_internals (CairoDock *pDock)
