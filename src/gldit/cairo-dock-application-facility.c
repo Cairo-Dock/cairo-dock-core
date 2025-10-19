@@ -340,13 +340,26 @@ CairoDock * gldi_appli_icon_detach (Icon *pIcon)
 	return pParentDock;
 }
 
-#define x_icon_geometry(icon, pDock) (icon->fXAtRest + (pDock->container.iWidth - pDock->iActiveWidth) * pDock->fAlign + (pDock->iActiveWidth - pDock->fFlatDockWidth) / 2)
-#define y_icon_geometry(icon, pDock) (icon->fYAtRest)
+static void _get_icon_geometry (Icon *icon, CairoDock *pDock, int *pX, int *pY)
+{
+	double fX, fY;
+	if (pDock->pRenderer->get_minimize_pos)
+	{
+		pDock->pRenderer->get_minimize_pos (icon, pDock, &fX, &fY);
+		*pX = (int)fX;
+		*pY = (int)fY;
+	}
+	else
+	{
+		*pX = (int)(icon->fXAtRest + (pDock->container.iWidth - pDock->iActiveWidth) * pDock->fAlign + (pDock->iActiveWidth - pDock->fFlatDockWidth) / 2);
+		*pY = (int)icon->fYAtRest;
+	}
+}
+
 void gldi_appli_icon_set_geometry_for_window_manager_full (GldiWindowActor *pAppli, Icon *icon, CairoDock *pDock)
 {
 	int iX, iY, iWidth, iHeight;
-	iX = x_icon_geometry (icon, pDock);
-	iY = y_icon_geometry (icon, pDock);
+	_get_icon_geometry (icon, pDock, &iX, &iY);
 	iWidth = icon->fWidth;
 	iHeight = icon->fHeight;
 	cd_debug ("%s -> %s, %d;%d (%.2f) %dx%d (%f)\n", icon->cName, pDock->cDockName, iX, iY, icon->fXAtRest, iWidth, iHeight, icon->fScale);
@@ -376,14 +389,10 @@ void gldi_appli_reserve_geometry_for_window_manager (GldiWindowActor *pAppli, Ic
 			CairoDock *pClassmateDock = (pClassmate ? CAIRO_DOCK(cairo_dock_get_icon_container (pClassmate)) : NULL);
 			if (myTaskbarParam.bGroupAppliByClass && pClassmate != NULL && pClassmateDock != NULL)  // on va se grouper avec cette icone.
 			{
-				x = x_icon_geometry (pClassmate, pClassmateDock);
+				_get_icon_geometry (pClassmate, pClassmateDock, &x, &y);
 				if (cairo_dock_is_hidden (pMainDock))
 				{
-					y = (pClassmateDock->container.bDirectionUp ? 0 : gldi_desktop_get_height());
-				}
-				else
-				{
-					y = y_icon_geometry (pClassmate, pClassmateDock);
+					y = (pClassmateDock->container.bDirectionUp ? 0 : pClassmateDock->iActiveHeight);
 				}
 				pIconDock = pClassmateDock;
 				w = pClassmate->fWidth;
@@ -391,14 +400,11 @@ void gldi_appli_reserve_geometry_for_window_manager (GldiWindowActor *pAppli, Ic
 			}
 			else if (myTaskbarParam.bMixLauncherAppli && pClassmate != NULL && pClassmateDock != NULL)  // on va se placer a cote.
 			{
-				x = x_icon_geometry (pClassmate, pClassmateDock) + pClassmate->fWidth/2;
+				_get_icon_geometry (pClassmate, pClassmateDock, &x, &y);
+				x += pClassmate->fWidth/2;
 				if (cairo_dock_is_hidden (pClassmateDock))
 				{
-					y = (pClassmateDock->container.bDirectionUp ? 0 : gldi_desktop_get_height());
-				}
-				else
-				{
-					y = y_icon_geometry (pClassmate, pClassmateDock);
+					y = (pClassmateDock->container.bDirectionUp ? 0 : pClassmateDock->iActiveHeight);
 				}
 				pIconDock = pClassmateDock;
 				w = pClassmate->fWidth;
@@ -437,14 +443,11 @@ void gldi_appli_reserve_geometry_for_window_manager (GldiWindowActor *pAppli, Ic
 				
 				if (pLastLauncher != NULL)  // on se placera juste apres.
 				{
-					x = x_icon_geometry (pLastLauncher, pMainDock) + pLastLauncher->fWidth - w / 2;
+					_get_icon_geometry (pLastLauncher, pMainDock, &x, &y);
+					x += pLastLauncher->fWidth - w / 2;
 					if (cairo_dock_is_hidden (pMainDock))
 					{
 						y = (pMainDock->container.bDirectionUp ? 0 : pMainDock->iActiveHeight);
-					}
-					else
-					{
-						y = y_icon_geometry (pLastLauncher, pMainDock);
 					}
 				}
 				else  // aucune icone avant notre groupe, on sera insere en 1er.
