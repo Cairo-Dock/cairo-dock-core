@@ -302,7 +302,14 @@ struct _CairoDock {
 	/// any data necessary for the dock visibility backend to work -- managed by the backend
 	gpointer pVisibilityData;
 	
-	gpointer reserved[3];
+	/// List of applets that are currently connected to this dock. This prevents the dock being deleted as long
+	/// as it is not empty. Only modified by module-instance-manager.
+	/// It is necessary to keep this separately from icons, as some applets might (temporarily or permanently)
+	/// remove their icon even while keeping their association with the dock, resulting in a crash if the dock
+	/// is then subsequently freed; e.g. Cairo-Penguin or Status-Notifier.
+	GList *applets;
+	
+	gpointer reserved[2];
 };
 
 
@@ -371,6 +378,20 @@ void gldi_dock_leave_synthetic (CairoDock *pDock);
 */
 void gldi_dock_enter_synthetic (CairoDock *pDock);
 
+/** Attach an applet to a dock. This will prevent the dock from being
+*  deleted even if the applet detaches its icon. Should be used for
+*  all applets that have this dock set as their parent container.
+*@param pDock a dock.
+*@param pInstance an instance of a loaded applet
+*/
+void gldi_dock_attach_applet (CairoDock *pDock, GldiModuleInstance *pInstance);
+
+/** Detach an applet from a dock. The dock will be removed if no applets
+*  or icons are left in it.
+*@param pDock a dock.
+*@param pInstance an instance of a loaded applet to detach
+*/
+void gldi_dock_detach_applet (CairoDock *pDock, GldiModuleInstance *pInstance);
 
 G_END_DECLS
 #endif
