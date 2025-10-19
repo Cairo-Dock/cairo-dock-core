@@ -342,19 +342,24 @@ CairoDock * gldi_appli_icon_detach (Icon *pIcon)
 
 #define x_icon_geometry(icon, pDock) (icon->fXAtRest + (pDock->container.iWidth - pDock->iActiveWidth) * pDock->fAlign + (pDock->iActiveWidth - pDock->fFlatDockWidth) / 2)
 #define y_icon_geometry(icon, pDock) (icon->fYAtRest)
-void gldi_appli_icon_set_geometry_for_window_manager (Icon *icon, CairoDock *pDock)
+void gldi_appli_icon_set_geometry_for_window_manager_full (GldiWindowActor *pAppli, Icon *icon, CairoDock *pDock)
 {
 	int iX, iY, iWidth, iHeight;
 	iX = x_icon_geometry (icon, pDock);
 	iY = y_icon_geometry (icon, pDock);
 	iWidth = icon->fWidth;
 	iHeight = icon->fHeight;
-	cd_debug ("%s -> %d;%d (%.2f) %dx%d (%f)\n", icon->cName, iX, iY, icon->fXAtRest, iWidth, iHeight, icon->fScale);
+	cd_debug ("%s -> %s, %d;%d (%.2f) %dx%d (%f)\n", icon->cName, pDock->cDockName, iX, iY, icon->fXAtRest, iWidth, iHeight, icon->fScale);
 	
 	if (pDock->container.bIsHorizontal)
-		gldi_window_set_thumbnail_area (icon->pAppli, &pDock->container, iX, iY, iWidth, iHeight);
+		gldi_window_set_thumbnail_area (pAppli, &pDock->container, iX, iY, iWidth, iHeight);
 	else
-		gldi_window_set_thumbnail_area (icon->pAppli, &pDock->container, iY, iX, iHeight, iWidth);
+		gldi_window_set_thumbnail_area (pAppli, &pDock->container, iY, iX, iHeight, iWidth);
+}
+
+void gldi_appli_icon_set_geometry_for_window_manager (Icon *icon, CairoDock *pDock)
+{
+	gldi_appli_icon_set_geometry_for_window_manager_full (icon->pAppli, icon, pDock);
 }
 
 void gldi_appli_reserve_geometry_for_window_manager (GldiWindowActor *pAppli, Icon *icon, CairoDock *pMainDock)
@@ -457,7 +462,7 @@ void gldi_appli_reserve_geometry_for_window_manager (GldiWindowActor *pAppli, Ic
 			}
 			//g_print (" - %s en (%d;%d)\n", icon->cName, x, y);
 
-			if (pMainDock->container.bIsHorizontal)
+			if (pIconDock->container.bIsHorizontal)
 				gldi_window_set_thumbnail_area (pAppli, &pIconDock->container, x, y, w, h);
 			else
 				gldi_window_set_thumbnail_area (pAppli, &pIconDock->container, y, x, h, w);

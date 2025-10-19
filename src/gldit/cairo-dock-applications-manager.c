@@ -587,20 +587,31 @@ void cairo_dock_foreach_appli_icon (GldiIconFunc pFunction, gpointer pUserData)
 	g_hash_table_foreach (s_hAppliIconsTable, (GHFunc) _for_one_appli_icon, data);
 }
 
-void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock)
+static void _set_icons_geometry (CairoDock *pDock, Icon *pTargetIcon, CairoDock *pTargetDock)
 {
-	if (! s_bAppliManagerIsRunning)
-		return ;
-	//g_print ("%s (main:%d, ref:%d)\n", __func__, pDock->bIsMainDock, pDock->iRefCount);
-	
 	Icon *icon;
 	GList *ic;
 	for (ic = pDock->icons; ic != NULL; ic = ic->next)
 	{
 		icon = ic->data;
 		if (CAIRO_DOCK_IS_APPLI (icon))
-			gldi_appli_icon_set_geometry_for_window_manager (icon, pDock);
+			gldi_appli_icon_set_geometry_for_window_manager_full (icon->pAppli, pTargetIcon ? pTargetIcon : icon, pTargetDock);
+		if (icon->pSubDock != NULL && (!gldi_container_is_visible (CAIRO_CONTAINER (icon->pSubDock)) ||
+			icon->pSubDock->bIsShrinkingDown))
+		{
+			// set the minimize position of any app from this subdock to the icon on the main dock
+			_set_icons_geometry (icon->pSubDock, pTargetIcon ? pTargetIcon : icon, pTargetDock);
+		}
 	}
+}
+
+void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock)
+{
+	if (! s_bAppliManagerIsRunning)
+		return ;
+	//g_print ("%s (main:%d, ref:%d)\n", __func__, pDock->bIsMainDock, pDock->iRefCount);
+	
+	_set_icons_geometry (pDock, NULL, pDock);
 	
 	if (pDock->bIsMainDock && myTaskbarParam.bHideVisibleApplis)  // on complete avec les applis pas dans le dock, pour que l'effet de minimisation pointe (a peu pres) au bon endroit quand on la minimisera.
 	{
