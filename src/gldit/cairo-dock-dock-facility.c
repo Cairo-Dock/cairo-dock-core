@@ -1015,6 +1015,7 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 		///gtk_widget_queue_draw (pSubDock->container.pWidget);
 	}
 	gldi_object_notify (pPointedIcon, NOTIFICATION_UNFOLD_SUBDOCK, pPointedIcon);
+	pSubDock->bWMIconsNeedUpdate = TRUE; // will update minimize positions when the dock's content actually gets drawn
 	
 	gldi_dialogs_replace_all ();
 }
@@ -1123,7 +1124,9 @@ void cairo_dock_redraw_subdock_content (CairoDock *pDock)
 
 static gboolean _update_WM_icons (CairoDock *pDock)
 {
-	cairo_dock_set_icons_geometry_for_window_manager (pDock);
+	if (gtk_widget_get_mapped (pDock->container.pWidget) &&
+			!(pDock->iRefCount > 0 && pDock->bIsShrinkingDown))
+		cairo_dock_set_icons_geometry_for_window_manager (pDock);
 	pDock->iSidUpdateWMIcons = 0;
 	return FALSE;
 }

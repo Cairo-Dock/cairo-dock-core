@@ -121,6 +121,8 @@ void _dock_size_update_opengl (CairoDock *pDock)
 
 static gboolean _on_expose (G_GNUC_UNUSED GtkWidget *pWidget, cairo_t *pCairoContext, CairoDock *pDock)
 {
+	gboolean bIsLoading = cairo_dock_is_loading ();
+	
 	if (g_bUseOpenGL && pDock->pRenderer->render_opengl != NULL)  // OpenGL rendering
 	{
 		GdkRectangle area;
@@ -141,7 +143,7 @@ static gboolean _on_expose (G_GNUC_UNUSED GtkWidget *pWidget, cairo_t *pCairoCon
 		if (! gldi_gl_container_begin_draw_full (CAIRO_CONTAINER (pDock), area.x + area.y != 0 ? &area : NULL, TRUE))
 			return FALSE;
 		
-		if (cairo_dock_is_loading ())
+		if (bIsLoading)
 		{
 			// don't draw anything, just let it transparent
 		}
@@ -160,7 +162,7 @@ static gboolean _on_expose (G_GNUC_UNUSED GtkWidget *pWidget, cairo_t *pCairoCon
 	{
 		cairo_dock_init_drawing_context_on_container (CAIRO_CONTAINER (pDock), pCairoContext);
 		
-		if (cairo_dock_is_loading ())
+		if (bIsLoading)
 		{
 			// don't draw anything, just let it transparent
 		}
@@ -173,6 +175,13 @@ static gboolean _on_expose (G_GNUC_UNUSED GtkWidget *pWidget, cairo_t *pCairoCon
 			gldi_object_notify (pDock, NOTIFICATION_RENDER, pDock, pCairoContext);
 		}
 	}
+	
+	if (!bIsLoading && pDock->bWMIconsNeedUpdate)
+	{
+		cairo_dock_trigger_set_WM_icons_geometry (pDock);
+		pDock->bWMIconsNeedUpdate = FALSE;
+	}
+	
 	return FALSE;
 }
 
@@ -723,6 +732,20 @@ static gboolean _on_dock_unmap (GtkWidget* pWidget, G_GNUC_UNUSED GdkEvent* pEve
 	{
 		// for some reason we need this to make gtk_widget_is_visible() work
 		if (!pDock->iSidHideBack) pDock->iSidHideBack = g_idle_add (_hide_dock_idle, pDock);
+		
+		// update minimize geometry on parent docks
+		CairoDock *pParentDock = pDock;
+		Icon *pTargetIcon;
+		do
+		{
+			pTargetIcon = cairo_dock_search_icon_pointing_on_dock (pParentDock, &pParentDock);
+			if (pTargetIcon && gtk_widget_get_mapped (pParentDock->container.pWidget) &&
+				(pParentDock->iRefCount == 0 || ! pParentDock->bIsShrinkingDown))
+			{
+				cairo_dock_trigger_set_WM_icons_geometry (pParentDock);
+				break;
+			}
+		} while (pTargetIcon);
 	}
 	_on_leave_notify (pWidget, NULL, pDock);
 	return FALSE;
@@ -1668,6 +1691,7 @@ static void _hide_parent_dock (CairoDock *pDock)
 		if (pParentDock->iRefCount == 0)
 		{
 			gldi_dock_leave_synthetic (pParentDock);
+			cairo_dock_trigger_set_WM_icons_geometry (pParentDock); // just in case
 		}
 		else
 		{
@@ -2307,6 +2331,27 @@ static void _insert_icon (GldiContainer *pContainer, Icon *icon, gboolean bAnima
 		icon->fInsertRemoveFactor = 0.;
 	
 	cairo_dock_trigger_update_dock_size (pDock);
+	
+	// If this is a subdock that is currently hidden (or is being hidden), we need to update the minimize position
+	// of the new icon on the parent (if it is an app icon).
+	// (note: for visible docks, the size update will take care of setting the correct minimize position)
+	if (pDock->iRefCount > 0 && CAIRO_DOCK_ICON_TYPE_IS_APPLI (icon) &&
+		(!gtk_widget_get_mapped (pDock->container.pWidget) || pDock->bIsShrinkingDown))
+	{
+		CairoDock *pParentDock = pDock;
+		Icon *pTargetIcon;
+		do
+		{
+			pTargetIcon = cairo_dock_search_icon_pointing_on_dock (pParentDock, &pParentDock);
+			if (pTargetIcon && gtk_widget_get_mapped (pParentDock->container.pWidget) &&
+				(pParentDock->iRefCount == 0 || ! pParentDock->bIsShrinkingDown))
+			{
+				// found a suitable target icon
+				gldi_appli_icon_set_geometry_for_window_manager_full (icon->pAppli, pTargetIcon, pParentDock);
+				break;
+			}
+		} while (pTargetIcon && pParentDock->iRefCount > 0);
+	}
 	
 	if (pDock->iRefCount != 0 && ! CAIRO_DOCK_ICON_TYPE_IS_SEPARATOR (icon))  // on prevoit le redessin de l'icone pointant sur le sous-dock.
 	{

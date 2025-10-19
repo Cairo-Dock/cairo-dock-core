@@ -205,6 +205,8 @@ struct _CairoDock {
 	gboolean bIconIsFlyingAway;
 	/// whether icons in the dock can be dragged with the mouse (inside and outside of the dock).
 	gboolean bPreventDraggingIcons;
+	/// whether we need to update the minimize position of icons in this dock; the update will take
+	/// effect the next time the dock is drawn (to ensure that it has a valid surface)
 	gboolean bWMIconsNeedUpdate;
 	
 	/// maximum height of the icons.

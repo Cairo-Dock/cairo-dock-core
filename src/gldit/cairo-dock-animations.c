@@ -157,6 +157,14 @@ void cairo_dock_start_shrinking (CairoDock *pDock)
 		pDock->bIsShrinkingDown = TRUE;
 		
 		cairo_dock_launch_animation (CAIRO_CONTAINER (pDock));
+		
+		if (pDock->iRefCount > 0)
+		{
+			// set the minimize position of any icons in this dock to its parent
+			CairoDock *pParentDock;
+			if (cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock))
+				cairo_dock_trigger_set_WM_icons_geometry (pParentDock);
+		}
 	}
 }
 
