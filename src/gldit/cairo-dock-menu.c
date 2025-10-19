@@ -323,6 +323,14 @@ static gboolean _draw_menu (GtkWidget *pWidget,
 	CairoDialogDecorator *pDecorator = cairo_dock_get_dialog_decorator (myDialogsParam.cDecoratorName);
 	if (pDecorator)
 		pDecorator->render_menu (pWidget, pCairoContext);
+	else
+	{
+		if (myDialogsParam.bUseDefaultColors)
+			gldi_style_colors_set_bg_color_full (pCairoContext, FALSE);
+		else
+			gldi_color_set_cairo_rgb (pCairoContext, &myDialogsParam.fBgColor);
+		cairo_paint (pCairoContext);
+	}
 	
 	// draw the items
 	cairo_set_source_rgba (pCairoContext, 0.0, 0.0, 0.0, 1.0);
