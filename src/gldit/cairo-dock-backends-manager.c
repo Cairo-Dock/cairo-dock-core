@@ -29,7 +29,7 @@
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-desklet-manager.h"
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-container.h"
+#include "cairo-dock-container-priv.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-backends-manager.h"
 

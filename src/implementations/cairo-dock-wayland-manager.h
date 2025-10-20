@@ -33,10 +33,6 @@ G_BEGIN_DECLS
 * The Wayland manager handles signals from Wayland and dispatch them to the Windows manager and the Desktop manager.
 */
 
-#ifndef _MANAGER_DEF_
-extern GldiManager myWaylandMgr;
-#endif
-
 typedef enum {
 	NB_NOTIFICATIONS_WAYLAND_DESKTOP = NB_NOTIFICATIONS_OBJECT
 	} CairoWaylandDesktopNotifications;

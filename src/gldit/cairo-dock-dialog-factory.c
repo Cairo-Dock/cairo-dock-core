@@ -27,7 +27,7 @@
 #include "gldi-config.h"
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-icon-facility.h"
-#include "cairo-dock-container.h"
+#include "cairo-dock-container-priv.h"
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"
@@ -39,11 +39,10 @@
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-animations.h"  // cairo_dock_launch_animation
 #include "cairo-dock-launcher-manager.h"  // cairo_dock_search_icon_s_path
-#include "cairo-dock-windows-manager.h"  // gldi_windows_get_active
+#include "cairo-dock-windows-manager.h"  // gldi_windows_get_active, gldi_window_is_on_current_desktop
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-style-manager.h"
-#include "cairo-dock-dialog-manager.h"
-#include "cairo-dock-dialog-factory.h"
+#include "cairo-dock-dialog-priv.h"
 
 extern gboolean g_bUseOpenGL;
 extern CairoDock *g_pMainDock;
@@ -1008,6 +1007,7 @@ void gldi_dialog_set_message_printf (CairoDialog *pDialog, const gchar *cMessage
 	va_end (args);
 }
 
+/*
 void gldi_dialog_reload (CairoDialog *pDialog)
 {
 	// re-set the GTK style class (global style may have changed between system / custom)
@@ -1030,3 +1030,5 @@ void gldi_dialog_reload (CairoDialog *pDialog)
 	// reload sizes (radius or linewidth may have changed)
 	_compute_dialog_sizes (pDialog);
 }
+*/
+

@@ -32,21 +32,21 @@
 #include "cairo-dock-class-icon-manager.h"
 #include "cairo-dock-animations.h"  // cairo_dock_trigger_icon_removal_from_dock
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
+#include "cairo-dock-dock-priv.h" // cairo_dock_trigger_redraw_subdock_content
 #include "cairo-dock-icon-facility.h"  // gldi_icon_set_name
-#include "cairo-dock-container.h"
+#include "cairo-dock-container-priv.h"
 #include "cairo-dock-object.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-desktop-manager.h"  // NOTIFICATION_DESKTOP_CHANGED
-#include "cairo-dock-class-manager.h"
+#include "cairo-dock-class-manager-priv.h"
 #include "cairo-dock-draw-opengl.h"  // cairo_dock_create_texture_from_surface
 #include "cairo-dock-keyfile-utilities.h"  // cairo_dock_open_key_file
-#include "cairo-dock-application-facility.h"
-#include "cairo-dock-windows-manager.h"
+#include "cairo-dock-windows-manager-priv.h"
 #include "cairo-dock-overlay.h"  // cairo_dock_print_overlay_on_icon
 #define _MANAGER_DEF_
-#include "cairo-dock-applications-manager.h"
+#include "cairo-dock-applications-priv.h"
 
 #define CAIRO_DOCK_DEFAULT_APPLI_ICON_NAME "default-icon-appli.svg"
 

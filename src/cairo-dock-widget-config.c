@@ -24,9 +24,10 @@
 #include "cairo-dock-config.h"  // cairo_dock_get_color_key_value
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-file-manager.h"  // cairo_dock_copy_file
-#include "cairo-dock-applications-manager.h"
+#include "cairo-dock-applications-priv.h" // myTaskbarParam.bShowAppli
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-dock-manager.h"
+#include "cairo-dock-dock-priv.h" // cairo_dock_convert_icon_size_*
 #include "cairo-dock-style-manager.h"
 #include "cairo-dock-module-manager.h"
 #include "cairo-dock-module-instance-manager.h"  // gldi_module_instance_reload

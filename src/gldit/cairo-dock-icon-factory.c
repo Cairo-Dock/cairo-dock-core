@@ -30,7 +30,7 @@
 #include "cairo-dock-module-instance-manager.h"  // GldiModuleInstance
 #include "cairo-dock-log.h"
 #include "cairo-dock-utils.h"  // cairo_dock_cut_string
-#include "cairo-dock-applications-manager.h"  // myTaskbarParam.iAppliMaxNameLength
+#include "cairo-dock-applications-priv.h"  // myTaskbarParam.iAppliMaxNameLength
 #include "cairo-dock-separator-manager.h"  // GLDI_OBJECT_IS_SEPARATOR_ICON
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
 #include "cairo-dock-backends-manager.h"  // cairo_dock_get_icon_container_renderer

@@ -23,6 +23,7 @@
 
 #include "gldi-config.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-manager.h"
 #include "cairo-dock-config.h"  // cairo_dock_get_string_key_value
 #include "cairo-dock-keyfile-utilities.h"  // cairo_dock_write_keys_to_file
 #include "cairo-dock-opengl-font.h"

@@ -35,16 +35,14 @@
 #include "cairo-dock-dialog-factory.h"  // gldi_dialog_show_temporary
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-container.h"
+#include "cairo-dock-container-priv.h"
 #include "cairo-dock-utils.h"  // cairo_dock_property_is_present_on_root
-#include "cairo-dock-class-manager.h"  // GldiAppInfo functions
+#include "cairo-dock-class-manager-priv.h"  // GldiAppInfo functions
 #include "cairo-dock-icon-manager.h"  // cairo_dock_free_icon
 #include "cairo-dock-menu.h" // gldi_menu_add_item
-#define _MANAGER_DEF_
 #include "cairo-dock-file-manager.h"
 
-// public (manager, config, data)
-GldiManager myDesktopEnvMgr;
+// public (data)
 CairoDockDesktopEnv g_iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
 
 // dependancies
@@ -746,35 +744,10 @@ const gchar *cairo_dock_fm_get_desktop_name (void)
 		"unknown");
 }
 
-static void init (void)
+void gldi_register_desktop_environment_manager (void)
 {
 	g_iDesktopEnv = _guess_environment ();
 	cd_message ("We found this desktop environment: %s",
 		cairo_dock_fm_get_desktop_name ());
 }
 
-
-  ///////////////
- /// MANAGER ///
-///////////////
-
-void gldi_register_desktop_environment_manager (void)
-{
-	// Manager
-	memset (&myDesktopEnvMgr, 0, sizeof (GldiManager));
-	gldi_object_init (GLDI_OBJECT(&myDesktopEnvMgr), &myManagerObjectMgr, NULL);
-	myDesktopEnvMgr.cModuleName 	= "Desktop Env";
-	// interface
-	myDesktopEnvMgr.init 			= init;
-	myDesktopEnvMgr.load 			= NULL;
-	myDesktopEnvMgr.unload 			= NULL;
-	myDesktopEnvMgr.reload 			= (GldiManagerReloadFunc)NULL;
-	myDesktopEnvMgr.get_config 		= (GldiManagerGetConfigFunc)NULL;
-	myDesktopEnvMgr.reset_config	 = (GldiManagerResetConfigFunc)NULL;
-	// Config
-	myDesktopEnvMgr.pConfig = (GldiManagerConfigPtr)NULL;
-	myDesktopEnvMgr.iSizeOfConfig = 0;
-	// data
-	myDesktopEnvMgr.pData = (GldiManagerDataPtr)NULL;
-	myDesktopEnvMgr.iSizeOfData = 0;
-}

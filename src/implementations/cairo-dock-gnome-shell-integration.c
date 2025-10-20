@@ -19,7 +19,7 @@
 
 #include "cairo-dock-log.h"
 #include "cairo-dock-dbus.h"
-#include "cairo-dock-class-manager.h"
+#include "cairo-dock-class-manager-priv.h"
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-gnome-shell-integration.h"
 

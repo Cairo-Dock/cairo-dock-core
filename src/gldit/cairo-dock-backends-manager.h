@@ -24,7 +24,7 @@
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
-#include "cairo-dock-manager.h"
+#include "cairo-dock-object.h"
 #include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-dialog-factory.h"
@@ -34,7 +34,6 @@ G_BEGIN_DECLS
 typedef struct _CairoBackendsParam CairoBackendsParam;
 
 #ifndef _MANAGER_DEF_
-extern GldiManager myBackendsMgr;
 extern CairoBackendsParam myBackendsParam;
 #endif
 

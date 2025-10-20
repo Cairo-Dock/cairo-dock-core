@@ -23,7 +23,7 @@
 #include "cairo-dock-icon-facility.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-facility.h"  // cairo_dock_get_first_drawn_element_linear
-#include "cairo-dock-applications-manager.h"  // myTaskbarParam.fVisibleAppliAlpha
+#include "cairo-dock-applications-priv.h"  // myTaskbarParam.fVisibleAppliAlpha, .iMinimizedWindowRenderType
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-separator-manager.h"
 #include "cairo-dock-applet-manager.h"

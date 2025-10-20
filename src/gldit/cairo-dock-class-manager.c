@@ -35,7 +35,7 @@
 #include "cairo-dock-stack-icon-manager.h"
 #include "cairo-dock-separator-manager.h"
 #include "cairo-dock-class-icon-manager.h"
-#include "cairo-dock-dock-factory.h"
+#include "cairo-dock-dock-priv.h"
 #include "cairo-dock-desktop-manager.h"  // gldi_desktop_notify_startup
 #include "cairo-dock-module-manager.h"  // GldiModule
 #include "cairo-dock-module-instance-manager.h"  // GldiModuleInstance
@@ -45,14 +45,14 @@
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-icon-manager.h"
 #include "cairo-dock-indicator-manager.h"  // myIndicatorsParam.bUseClassIndic
-#include "cairo-dock-container.h"
+#include "cairo-dock-container-priv.h"
 #include "cairo-dock-animations.h"
-#include "cairo-dock-application-facility.h"
+#include "cairo-dock-applications-priv.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-desktop-file-db.h"
-#include "cairo-dock-class-manager.h"
+#include "cairo-dock-class-manager-priv.h"
 
 extern CairoDock *g_pMainDock;
 extern CairoDockDesktopEnv g_iDesktopEnv;
@@ -219,6 +219,12 @@ static void _choose_terminal (void)
 	}
 	
 	if (iFirst >= 0) s_iTerminal = iFirst; // reset to the first one found if there is no better match
+}
+
+const gchar * cairo_dock_get_default_terminal (void)
+{
+	_choose_terminal ();
+	return s_vTerminals[s_iTerminal].args[0];
 }
 
 

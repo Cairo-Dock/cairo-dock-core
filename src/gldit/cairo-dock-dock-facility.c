@@ -20,7 +20,7 @@
 #include <math.h>
 #include <gtk/gtk.h>
 
-#include "cairo-dock-applications-manager.h"  // cairo_dock_set_icons_geometry_for_window_manager
+#include "cairo-dock-applications-priv.h"  // cairo_dock_set_icons_geometry_for_window_manager
 #include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-separator-manager.h"  // GLDI_OBJECT_IS_SEPARATOR_ICON
 #include "cairo-dock-stack-icon-manager.h"  // GLDI_OBJECT_IS_DRAWER_ICON
@@ -30,15 +30,17 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-style-manager.h"
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-dialog-manager.h"  // gldi_dialogs_replace_all
+#include "cairo-dock-dialog-priv.h"  // gldi_dialogs_replace_all
 #include "cairo-dock-indicator-manager.h"  // myIndicators.bUseClassIndic
 #include "cairo-dock-animations.h"
 #include "cairo-dock-desktop-manager.h"  // gldi_desktop_get*
 #include "cairo-dock-data-renderer.h"  // cairo_dock_reload_data_renderer_on_icon
 #include "cairo-dock-opengl.h"  // gldi_gl_container_begin_draw
+#include "cairo-dock-container-priv.h"
 
 extern CairoDockGLConfig g_openglConfig;
 #include "cairo-dock-dock-facility.h"
+#include "cairo-dock-dock-priv.h"
 
 extern gboolean g_bUseOpenGL;  // for cairo_dock_make_preview()
 
@@ -362,27 +364,6 @@ void cairo_dock_reserve_space_for_dock (CairoDock *pDock, gboolean bReserve)
 	gldi_container_reserve_space (CAIRO_CONTAINER(pDock), left, right, top, bottom, left_start_y, left_end_y, right_start_y, right_end_y, top_start_x, top_end_x, bottom_start_x, bottom_end_x);
 }
 
-void cairo_dock_prevent_dock_from_out_of_screen (CairoDock *pDock)
-{
-	int x, y;  // position of the invariant point of the dock.
-	x = pDock->container.iWindowPositionX +  pDock->container.iWidth * pDock->fAlign;
-	y = (pDock->container.bDirectionUp ? pDock->container.iWindowPositionY + pDock->container.iHeight : pDock->container.iWindowPositionY);
-	//cd_debug ("%s (%d;%d)", __func__, x, y);
-	
-	int W = gldi_dock_get_screen_width (pDock), H = gldi_dock_get_screen_height (pDock);
-	pDock->iGapX = x - W * pDock->fAlign;
-	pDock->iGapY = (pDock->container.bDirectionUp ? H - y : y);
-	//cd_debug (" -> (%d;%d)", pDock->iGapX, pDock->iGapY);
-	
-	if (pDock->iGapX < - W/2)
-		pDock->iGapX = - W/2;
-	if (pDock->iGapX > W/2)
-		pDock->iGapX = W/2;
-	if (pDock->iGapY < 0)
-		pDock->iGapY = 0;
-	if (pDock->iGapY > H)
-		pDock->iGapY = H;
-}
 
 #define CD_VISIBILITY_MARGIN 20
 void cairo_dock_get_window_position_at_balance (CairoDock *pDock, int iNewWidth, int iNewHeight, int *iNewPositionX, int *iNewPositionY)

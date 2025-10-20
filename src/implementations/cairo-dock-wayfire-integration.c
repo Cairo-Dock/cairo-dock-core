@@ -34,8 +34,8 @@
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-windows-manager.h"  // bIsHidden
 #include "cairo-dock-icon-factory.h"  // pAppli
-#include "cairo-dock-container.h"  // gldi_container_get_gdk_window
-#include "cairo-dock-class-manager.h"
+#include "cairo-dock-container-priv.h"  // gldi_container_get_gdk_window
+#include "cairo-dock-class-manager-priv.h"
 
 static const char default_socket[] = "/tmp/wayfire-wayland-1.socket";
 

@@ -24,7 +24,7 @@
 #include <glib.h>
 
 #include "cairo-dock-struct.h"
-#include "cairo-dock-manager.h"
+#include "cairo-dock-object.h"
 #include "cairo-dock-data-renderer.h"
 G_BEGIN_DECLS
 
@@ -35,7 +35,6 @@ G_BEGIN_DECLS
 // manager
 
 #ifndef _MANAGER_DEF_
-extern GldiManager myDataRenderersMgr;
 extern GldiObjectManager myDataRendererObjectMgr;
 #endif
 

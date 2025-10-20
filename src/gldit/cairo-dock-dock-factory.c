@@ -25,7 +25,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw-opengl.h"  // for the redirected texture
 #include "cairo-dock-data-renderer.h"  // cairo_dock_reload_data_renderer_on_icon/cairo_dock_refresh_data_renderer
-#include "cairo-dock-windows-manager.h"  // gldi_windows_get_active
+#include "cairo-dock-windows-manager-priv.h"
 #include "cairo-dock-indicator-manager.h"  // myIndicators.bUseClassIndic
 #include "cairo-dock-draw.h"
 #include "cairo-dock-animations.h"
@@ -38,26 +38,30 @@
 #include "cairo-dock-stack-icon-manager.h"
 #include "cairo-dock-separator-manager.h"
 #include "cairo-dock-class-icon-manager.h"
-#include "cairo-dock-application-facility.h"
+#include "cairo-dock-applications-priv.h"
 #include "cairo-dock-launcher-manager.h"
 #include "cairo-dock-config.h"  // cairo_dock_is_loading
-#include "cairo-dock-dock-facility.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-menu.h"  // gldi_menu_popup
-#include "cairo-dock-dock-manager.h"
+#include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file, cairo_dock_add_conf_file
 #include "cairo-dock-dock-visibility.h"  // gldi_dock_visibility_refresh
 #include "cairo-dock-flying-container.h"
 #include "cairo-dock-backends-manager.h"
-#include "cairo-dock-class-manager.h"  // cairo_dock_check_class_subdock_is_empty
+#include "cairo-dock-class-manager-priv.h"  // cairo_dock_check_class_subdock_is_empty
 #include "cairo-dock-desktop-manager.h"
-#include "cairo-dock-windows-manager.h"  // gldi_windows_get_active
-#include "cairo-dock-dock-factory.h"
+#include "cairo-dock-container-priv.h"
+#include "cairo-dock-dock-facility.h"
+#include "cairo-dock-dock-manager.h"
+#include "cairo-dock-dialog-priv.h" //gldi_dialogs_refresh_all, gldi_dialogs_replace_all
+#include "cairo-dock-dock-priv.h" // also includes dock-factory
 
 // dependencies
 extern CairoDockHidingEffect *g_pHidingBackend;
 extern CairoDockHidingEffect *g_pKeepingBelowBackend;
 extern gboolean g_bUseOpenGL;
 extern CairoDockGLConfig g_openglConfig;
+extern gchar *g_cConfFile;
+extern gchar *g_cCurrentThemePath;
 
 // private
 static Icon *s_pIconClicked = NULL;  // pour savoir quand on deplace une icone a la souris. Dangereux si l'icone se fait effacer en cours ...
@@ -877,6 +881,7 @@ void gldi_dock_enter_synthetic (CairoDock *pDock)
 	_on_enter_notify (NULL, NULL, pDock);
 }
 
+static void _rootdock_write_gaps (CairoDock *pDock);
 
 static gboolean _on_key_release (G_GNUC_UNUSED GtkWidget *pWidget,
 	GdkEventKey *pKey,
@@ -893,7 +898,7 @@ static gboolean _on_key_release (G_GNUC_UNUSED GtkWidget *pWidget,
 		if ((pKey->state & GDK_MOD1_MASK) && pKey->keyval == 0)  // On relache la touche ALT, typiquement apres avoir fait un ALT + clique gauche + deplacement.
 		{
 			if (pDock->iRefCount == 0 && pDock->iVisibility != CAIRO_DOCK_VISI_SHORTKEY && !gldi_container_is_wayland_backend ())
-				gldi_rootdock_write_gaps (pDock);
+				_rootdock_write_gaps (pDock);
 		}
 	}
 	return TRUE;
@@ -1084,7 +1089,7 @@ static gboolean _on_button_press (G_GNUC_UNUSED GtkWidget* pWidget, GdkEventButt
 				else
 				{
 					if (pDock->iRefCount == 0 && pDock->iVisibility != CAIRO_DOCK_VISI_SHORTKEY && !gldi_container_is_wayland_backend ())
-						gldi_rootdock_write_gaps (pDock);
+						_rootdock_write_gaps (pDock);
 				}
 				//g_print ("- apres clic : s_pIconClicked <- NULL\n");
 				s_pIconClicked = NULL;
@@ -1801,8 +1806,6 @@ static gboolean _cairo_dock_hide (CairoDock *pDock)
 			}
 			
 			pDock->pRenderer->calculate_icons (pDock);
-			///pDock->fFoldingFactor = (myBackendsParam.bAnimateOnAutoHide ? .99 : 0.);  // on arme le depliage.
-			cairo_dock_allow_entrance (pDock);
 			
 			gldi_dialogs_replace_all ();
 			
@@ -1838,7 +1841,6 @@ static gboolean _cairo_dock_show (CairoDock *pDock)
 	if (pDock->fHideOffset < 0.01)
 	{
 		pDock->fHideOffset = 0;
-		cairo_dock_allow_entrance (pDock);
 		gldi_dialogs_replace_all ();  // we need it here so that a modal dialog is replaced when the dock unhides (else it would stay behind).
 		gldi_container_update_polling_screen_edge ();
 		return FALSE;
@@ -2453,6 +2455,11 @@ CairoDock *gldi_subdock_new (const gchar *cDockName, const gchar *cRendererName,
 	return (CairoDock*)gldi_object_new (&myDockObjectMgr, &attr);
 }
 
+  ///////////////
+ /// HELPERS ///
+///////////////
+
+
 static gboolean _move_resize_dock (CairoDock *pDock)
 {
 	gldi_container_move_resize_dock (pDock);
@@ -2521,58 +2528,6 @@ void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingD
 	}
 
 	g_list_free (pIconsList);
-}
-
-
-void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, gboolean bUpdateIconSize)
-{
-	//g_print ("************%s (%d, %d)\n", __func__, pDock->bIsMainDock, bRecursive);
-	if (bUpdateIconSize && pDock->bGlobalIconSize)
-		pDock->iIconSize = myIconsParam.iIconWidth;
-	
-	// for each icon, reload its buffer (size may change).
-	Icon* icon;
-	GList* ic;
-	for (ic = pDock->icons; ic != NULL; ic = ic->next)
-	{
-		icon = ic->data;
-		
-		if (CAIRO_DOCK_IS_APPLET (icon))  // for an applet, we need to let the module know that the size or the theme has changed, so that it can reload its private buffers.
-		{
-			gldi_object_reload (GLDI_OBJECT(icon->pModuleInstance), FALSE);
-		}
-		else
-		{
-			if (bUpdateIconSize)
-			{
-				cairo_dock_icon_set_requested_size (icon, 0, 0);
-				cairo_dock_set_icon_size_in_dock (pDock, icon);
-			}
-			
-			if (bUpdateIconSize && cairo_dock_get_icon_data_renderer (icon) != NULL)  // we need to reload the DataRenderer to use the new size
-			{
-				cairo_dock_load_icon_buffers (icon, CAIRO_CONTAINER (pDock));  // the DataRenderer uses the ImageBuffer's size on loading, so we need to load it now
-				cairo_dock_reload_data_renderer_on_icon (icon, CAIRO_CONTAINER (pDock));
-			}
-			else
-			{
-				cairo_dock_trigger_load_icon_buffers (icon);
-			}
-		}
-		
-		if (bRecursive && icon->pSubDock != NULL)  // we handle the sub-dock for applets too, so that they don't need to care.
-		{
-			if (bUpdateIconSize)
-				icon->pSubDock->iIconSize = pDock->iIconSize;
-			cairo_dock_reload_buffers_in_dock (icon->pSubDock, bRecursive, bUpdateIconSize);
-		}
-	}
-	
-	if (bUpdateIconSize)
-	{
-		cairo_dock_update_dock_size (pDock);
-	}
-	gtk_widget_queue_draw (pDock->container.pWidget);
 }
 
 
@@ -2668,3 +2623,57 @@ void cairo_dock_create_redirect_texture_for_dock (CairoDock *pDock)
 	if (pDock->iFboId == 0)
 		glGenFramebuffersEXT(1, &pDock->iFboId);
 }
+
+
+static void _prevent_dock_from_out_of_screen (CairoDock *pDock)
+{
+	int x, y;  // position of the invariant point of the dock.
+	x = pDock->container.iWindowPositionX +  pDock->container.iWidth * pDock->fAlign;
+	y = (pDock->container.bDirectionUp ? pDock->container.iWindowPositionY + pDock->container.iHeight : pDock->container.iWindowPositionY);
+	//cd_debug ("%s (%d;%d)", __func__, x, y);
+	
+	int W = gldi_dock_get_screen_width (pDock), H = gldi_dock_get_screen_height (pDock);
+	pDock->iGapX = x - W * pDock->fAlign;
+	pDock->iGapY = (pDock->container.bDirectionUp ? H - y : y);
+	//cd_debug (" -> (%d;%d)", pDock->iGapX, pDock->iGapY);
+	
+	if (pDock->iGapX < - W/2)
+		pDock->iGapX = - W/2;
+	if (pDock->iGapX > W/2)
+		pDock->iGapX = W/2;
+	if (pDock->iGapY < 0)
+		pDock->iGapY = 0;
+	if (pDock->iGapY > H)
+		pDock->iGapY = H;
+}
+
+static void _rootdock_write_gaps (CairoDock *pDock)
+{
+	if (pDock->iRefCount > 0)
+		return;
+	
+	_prevent_dock_from_out_of_screen (pDock);
+	if (pDock->bIsMainDock)
+	{
+		cairo_dock_update_conf_file (g_cConfFile,
+			G_TYPE_INT, "Position", "x gap", pDock->iGapX,
+			G_TYPE_INT, "Position", "y gap", pDock->iGapY,
+			G_TYPE_INVALID);
+	}
+	else
+	{
+		const gchar *cDockName = gldi_dock_get_name (pDock);
+		gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
+		if (! g_file_test (cConfFilePath, G_FILE_TEST_EXISTS))  // shouldn't happen
+		{
+			cairo_dock_add_conf_file (GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_MAIN_DOCK_CONF_FILE, cConfFilePath);
+		}
+		
+		cairo_dock_update_conf_file (cConfFilePath,
+			G_TYPE_INT, "Behavior", "x gap", pDock->iGapX,
+			G_TYPE_INT, "Behavior", "y gap", pDock->iGapY,
+			G_TYPE_INVALID);
+		g_free (cConfFilePath);
+	}
+}
+

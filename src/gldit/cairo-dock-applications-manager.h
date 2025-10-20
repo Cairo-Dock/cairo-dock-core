@@ -28,66 +28,9 @@ G_BEGIN_DECLS
 *@file cairo-dock-applications-manager.h This class manages the list of icons representing a window, ie the Taskbar.
 */
 
-// manager
-typedef struct _CairoTaskbarParam CairoTaskbarParam;
-typedef struct _Icon AppliIcon;
-
 #ifndef _MANAGER_DEF_
-extern CairoTaskbarParam myTaskbarParam;
-extern GldiManager myTaskbarMgr;
 extern GldiObjectManager myAppliIconObjectMgr;
 #endif
-
-
-typedef enum {
-	CAIRO_APPLI_BEFORE_FIRST_ICON,
-	CAIRO_APPLI_BEFORE_FIRST_LAUNCHER,
-	CAIRO_APPLI_AFTER_LAST_LAUNCHER,
-	CAIRO_APPLI_AFTER_LAST_ICON,
-	CAIRO_APPLI_AFTER_ICON,
-	CAIRO_APPLI_NB_PLACEMENTS
-} CairoTaskbarPlacement;
-
-typedef enum {
-	CAIRO_APPLI_ACTION_NONE,
-	CAIRO_APPLI_ACTION_CLOSE,
-	CAIRO_APPLI_ACTION_MINIMISE,
-	CAIRO_APPLI_ACTION_LAUNCH_NEW,
-	CAIRO_APPLI_ACTION_LOWER,
-	CAIRO_APPLI_ACTION_NB_ACTIONS
-} CairoTaskbarAction;
-
-// params
-struct _CairoTaskbarParam {
-	gboolean bShowAppli;
-	gboolean bGroupAppliByClass;
-	gint iAppliMaxNameLength;
-	gboolean bMinimizeOnClick;
-	gboolean bPresentClassOnClick;
-	CairoTaskbarAction iActionOnMiddleClick;
-	gboolean bHideVisibleApplis;
-	gdouble fVisibleAppliAlpha;
-	gboolean bAppliOnCurrentDesktopOnly;
-	gboolean bDemandsAttentionWithDialog;
-	gint iDialogDuration;
-	gchar *cAnimationOnDemandsAttention;
-	gchar *cAnimationOnActiveWindow;
-	gboolean bOverWriteXIcons;
-	gint iMinimizedWindowRenderType;
-	gboolean bMixLauncherAppli;
-	gchar *cOverwriteException;
-	gchar *cGroupException;
-	gchar *cForceDemandsAttention;
-	CairoTaskbarPlacement iIconPlacement;
-	gchar *cRelativeIconName;
-	gboolean bSeparateApplis;
-	} ;
-
-// signals
-typedef enum {
-	NB_NOTIFICATIONS_TASKBAR = NB_NOTIFICATIONS_ICON,
-	} CairoTaskbarNotifications;
-
 
 /** Say if an object is an AppliIcon.
 *@param obj the object.
@@ -96,21 +39,10 @@ typedef enum {
 #define GLDI_OBJECT_IS_APPLI_ICON(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), &myAppliIconObjectMgr)
 
 
-/** Start the applications manager. It will load all the appli-icons, and keep monitoring them. If enabled, it will insert them into the dock.
-*@param pDock the main dock
-*/
-void cairo_dock_start_applications_manager (CairoDock *pDock);
-
-
 /** Get the list of appli-icons, including the icons not currently displayed in the dock. You can then order the list by z-order, name, etc.
 *@return a newly allocated list of appli-icons. You must free the list when you're done with it, but not the icons.
 */
 GList *cairo_dock_get_current_applis_list (void);
-
-/** Get the icon of the currently active window, if any.
-*@return the icon (maybe not inside a dock, maybe NULL).
-*/
-Icon *cairo_dock_get_current_active_icon (void);
 
 /** Get the icon of a given window, if any.
 *@param actor the window actor
@@ -124,10 +56,8 @@ Icon *cairo_dock_get_appli_icon (GldiWindowActor *actor);
 */
 void cairo_dock_foreach_appli_icon (GldiIconFunc pFunction, gpointer pUserData);
 
-void cairo_dock_set_icons_geometry_for_window_manager (CairoDock *pDock);
-
-
-void gldi_register_applications_manager (void);
+// defined in cairo-dock-application-facility.c
+const CairoDockImageBuffer *gldi_appli_icon_get_image_buffer (Icon *pIcon);
 
 G_END_DECLS
 #endif

@@ -27,19 +27,19 @@
 #include "cairo-dock-icon-facility.h" // cairo_dock_compute_icon_area
 #include "cairo-dock-icon-manager.h"  // myIconsParam
 #include "cairo-dock-dock-facility.h" // cairo_dock_is_hidden
-#include "cairo-dock-dock-manager.h"  // gldi_dock_get
+#include "cairo-dock-dock-manager.h"
+#include "cairo-dock-dock-priv.h"
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-utils.h"  // cairo_dock_string_is_address
-#include "cairo-dock-windows-manager.h"  // gldi_windows_get_active
 #include "cairo-dock-opengl.h"
 #include "cairo-dock-animations.h"  // cairo_dock_animation_will_be_visible
 #include "cairo-dock-desktop-manager.h"  // gldi_desktop_get_width
 #include "cairo-dock-menu.h"  // gldi_menu_new
 #include "cdwindow.h"
 #define _MANAGER_DEF_
-#include "cairo-dock-container.h"
+#include "cairo-dock-container-priv.h"
 
 #if (GTK_MAJOR_VERSION == 3 && GTK_MINOR_VERSION == 22)
 #include "gdk-move-to-rect-hack.h"

@@ -32,9 +32,9 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-utils.h"
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-applications-manager.h"  // myTaskbarParam.bMixLauncherAppli
+#include "cairo-dock-applications-priv.h"  // myTaskbarParam.bMixLauncherAppli
 #include "cairo-dock-class-icon-manager.h"
-#include "cairo-dock-class-manager.h"  // cairo_dock_inhibite_class
+#include "cairo-dock-class-manager-priv.h"  // cairo_dock_inhibite_class
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
 #include "cairo-dock-separator-manager.h"  // cairo_dock_create_separator_surface

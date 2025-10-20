@@ -22,7 +22,7 @@
 
 #include "cairo-dock-struct.h"
 #include "cairo-dock-desklet-factory.h"  // CairoDeskletAttribute
-#include "cairo-dock-manager.h"
+#include "cairo-dock-object.h"
 G_BEGIN_DECLS
 
 /**
@@ -52,7 +52,6 @@ typedef struct _GldiModuleAttr GldiModuleAttr;
 
 #ifndef _MANAGER_DEF_
 extern GldiModulesParam myModulesParam;
-extern GldiManager myModulesMgr;
 extern GldiObjectManager myModuleObjectMgr;
 #endif
 

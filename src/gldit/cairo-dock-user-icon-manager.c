@@ -22,7 +22,7 @@
 #include "cairo-dock-icon-facility.h"  // cairo_dock_compare_icons_order
 #include "cairo-dock-log.h"
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-dock-facility.h"  // cairo_dock_update_dock_size
+#include "cairo-dock-dock-priv.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-themes-manager.h"  // cairo_dock_delete_conf_file
 #include "cairo-dock-launcher-manager.h"

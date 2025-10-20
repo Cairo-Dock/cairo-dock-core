@@ -43,7 +43,6 @@ typedef struct _CairoDialogAttr CairoDialogAttr;
 
 #ifndef _MANAGER_DEF_
 extern CairoDialogsParam myDialogsParam;
-extern GldiManager myDialogsMgr;
 extern GldiObjectManager myDialogObjectMgr;
 #endif
 
@@ -116,14 +115,6 @@ typedef enum {
 void gldi_dialogs_remove_on_icon (Icon *icon);
 
 
-void gldi_dialogs_refresh_all (void);
-
-void gldi_dialogs_replace_all (void);
-
-
-CairoDialog *gldi_dialogs_foreach (GCompareFunc callback, gpointer data);
-
-
 /** Hide a dialog.
 *@param pDialog the dialog.
 */
@@ -136,14 +127,6 @@ void gldi_dialog_unhide (CairoDialog *pDialog);
 *@param pDialog the dialog.
 */
 void gldi_dialog_toggle_visibility (CairoDialog *pDialog);
-/** Notify the dialog's dock that the dialog is hidden or destroyed.
- *  This generates a "leave" event for the mouse and "unfreezes" the
- *  dock as well.
- *@param pDialog the dialog being hidden or destroyed.
- */
-void gldi_dialog_leave (CairoDialog *pDialog);
-
-void gldi_register_dialogs_manager (void);
 
 G_END_DECLS
 #endif

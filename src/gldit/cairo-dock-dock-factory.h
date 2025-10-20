@@ -51,8 +51,7 @@ typedef enum {
 	CAIRO_DOCK_NB_POSITIONS
 	} CairoDockPositionType;
 
-#define CAIRO_DOCK_ANIMATE_ICON TRUE
-#define CAIRO_DOCK_INSERT_SEPARATOR TRUE
+#define CAIRO_DOCK_ANIMATE_ICON TRUE 
 
 typedef void (*CairoDockComputeSizeFunc) (CairoDock *pDock);
 typedef Icon* (*CairoDockCalculateIconsFunc) (CairoDock *pDock);
@@ -118,17 +117,6 @@ typedef enum {
 	CAIRO_DOCK_VISI_SHORTKEY,
 	CAIRO_DOCK_NB_VISI
 	} CairoDockVisibility;
-
-typedef struct _CairoDockAttr CairoDockAttr;
-struct _CairoDockAttr {
-	// parent attributes
-	GldiContainerAttr cattr;
-	const gchar *cDockName;
-	const gchar *cRendererName;
-	GList *pIconList;
-	gboolean bSubDock;
-	CairoDock *pParentDock;
-};
 
 /// Definition of a Dock, which derives from a Container.
 struct _CairoDock {
@@ -203,7 +191,7 @@ struct _CairoDock {
 	gboolean bIsDragging;
 	/// Backup of the auto-hide state before quick-hide.
 	gboolean bTemporaryHidden;
-	/// whether mouse can't enter into the dock.
+	/// whether mouse can't enter into the dock. -- Currently not used, always FALSE
 	gboolean bEntranceDisabled;
 	/// whether the dock is shrinking down.
 	gboolean bIsShrinkingDown;
@@ -329,39 +317,12 @@ struct _CairoDock {
 
 void cairo_dock_freeze_docks (gboolean bFreeze);
 
-void gldi_dock_init_internals (CairoDock *pDock);
-
 
 /** Create a new root dock.
 *@param cDockName the name that identifies the dock
 *@return the new dock.
 */
 CairoDock *gldi_dock_new (const gchar *cDockName);
-
-/** Create a new dock of type "sub-dock", and load a given list of icons inside. The list then belongs to the dock, so it must not be freeed after that. The buffers of each icon are loaded, so they just need to have an image filename and a name.
-* @param cDockName the name that identifies the dock.
-* @param cRendererName name of a renderer. If NULL, the default renderer will be applied.
-* @param pParentDock the parent dock.
-* @param pIconList a list of icons that will be loaded and inserted into the new dock (optional).
-* @return the new dock.
-*/
-CairoDock *gldi_subdock_new (const gchar *cDockName, const gchar *cRendererName, CairoDock *pParentDock, GList *pIconList);
-
-/* Deplace et redimensionne un dock a ses position et taille attitrees. Ne change pas la zone d'input (cela doit etre fait par ailleurs), et ne la replace pas (cela est fait lors du configure).
-*/
-void cairo_dock_move_resize_dock (CairoDock *pDock);
-
-/** Remove all icons from a dock (and its sub-docks). If the receiving dock is NULL, the icons are destroyed and removed from the current theme itself.
-*@param pDock a dock.
-*@param pReceivingDock the dock that will receive the icons, or NULL to destroy and remove the icons.
-*/
-void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingDock);
-
-void cairo_dock_reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, gboolean bUpdateIconSize);
-
-void cairo_dock_set_icon_size_in_dock (CairoDock *pDock, Icon *icon);
-
-void cairo_dock_create_redirect_texture_for_dock (CairoDock *pDock);
 
 /** Notify pDock that the mouse has possibly left it, just as if it
 *  received the "leave-notify-event" signal from GTK. Use this e.g.
@@ -377,21 +338,6 @@ void gldi_dock_leave_synthetic (CairoDock *pDock);
 *@param pDock a dock.
 */
 void gldi_dock_enter_synthetic (CairoDock *pDock);
-
-/** Attach an applet to a dock. This will prevent the dock from being
-*  deleted even if the applet detaches its icon. Should be used for
-*  all applets that have this dock set as their parent container.
-*@param pDock a dock.
-*@param pInstance an instance of a loaded applet
-*/
-void gldi_dock_attach_applet (CairoDock *pDock, GldiModuleInstance *pInstance);
-
-/** Detach an applet from a dock. The dock will be removed if no applets
-*  or icons are left in it.
-*@param pDock a dock.
-*@param pInstance an instance of a loaded applet to detach
-*/
-void gldi_dock_detach_applet (CairoDock *pDock, GldiModuleInstance *pInstance);
 
 G_END_DECLS
 #endif

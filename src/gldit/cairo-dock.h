@@ -29,7 +29,6 @@
 #include <gldit/cairo-dock-struct.h>
 #include <gldit/gldi-config.h>
 #include <gldit/cairo-dock-global-variables.h>
-#include <gldit/cairo-dock-core.h>
 // Containers
 #include <gldit/cairo-dock-container.h>
 #include <gldit/cairo-dock-dock-manager.h>
@@ -48,7 +47,6 @@
 #include <gldit/cairo-dock-separator-manager.h>
 #include <gldit/cairo-dock-stack-icon-manager.h>
 #include <gldit/cairo-dock-class-icon-manager.h>
-#include <gldit/cairo-dock-application-facility.h>
 #include <gldit/cairo-dock-icon-facility.h>
 #include <gldit/cairo-dock-icon-factory.h>
 #include "gldi-icon-names.h"

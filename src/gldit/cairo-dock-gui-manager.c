@@ -33,7 +33,7 @@
 #include "cairo-dock-draw.h"
 #include "cairo-dock-dialog-manager.h"
 #include "cairo-dock-dock-manager.h"
-#include "cairo-dock-container.h"
+#include "cairo-dock-container-priv.h"
 #include "cairo-dock-applications-manager.h"
 #include "cairo-dock-image-buffer.h"
 #define _MANAGER_DEF_

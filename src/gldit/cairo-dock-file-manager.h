@@ -22,7 +22,6 @@
 
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-struct.h"
-#include "cairo-dock-manager.h"
 G_BEGIN_DECLS
 
 /**
@@ -30,11 +29,6 @@ G_BEGIN_DECLS
 * - the VFS (Virtual File System)
 * - the various desktop-related tools.
 */
-
-// manager
-#ifndef _MANAGER_DEF_
-extern GldiManager myDesktopEnvMgr;
-#endif
 
 
 /// Type of available Desktop Environments.
