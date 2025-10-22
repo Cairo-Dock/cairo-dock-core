@@ -1807,6 +1807,7 @@ static gboolean _cairo_dock_hide (CairoDock *pDock)
 		{
 			pDock->fHideOffset = 1;
 			gldi_container_update_polling_screen_edge ();
+			cairo_dock_set_icons_geometry_for_window_manager (pDock); // since we want apps to minimize to the bottom of the screen now
 			
 			//g_print ("on arrete le cachage\n");
 			gboolean bVisibleIconsPresent = FALSE;
@@ -1867,6 +1868,7 @@ static gboolean _cairo_dock_show (CairoDock *pDock)
 		pDock->fHideOffset = 0;
 		gldi_dialogs_replace_all ();  // we need it here so that a modal dialog is replaced when the dock unhides (else it would stay behind).
 		gldi_container_update_polling_screen_edge ();
+		cairo_dock_set_icons_geometry_for_window_manager (pDock); // set back the normal minimize locations
 		return FALSE;
 	}
 	return TRUE;
