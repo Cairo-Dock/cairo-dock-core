@@ -364,6 +364,16 @@ void gldi_appli_icon_set_geometry_for_window_manager_full (GldiWindowActor *pApp
 	iHeight = icon->fHeight;
 	cd_debug ("%s -> %s, %d;%d (%.2f) %dx%d (%f)\n", icon->cName, pDock->cDockName, iX, iY, icon->fXAtRest, iWidth, iHeight, icon->fScale);
 	
+	if (cairo_dock_is_hidden (pDock))
+	{
+		// If the dock is hidden, we set the minimize position to be a one pixel strip on
+		// the bottom (or top). This is required as on KWin, the "magic lamp" animation always
+		// starts from the top of the given area, so for a larger box, minimized windows
+		// would look like disappearing in the middle of nowhere.
+		iY = pDock->container.bDirectionUp ? pDock->iActiveHeight - 1 : 0;
+		iHeight = 1;
+	}
+	
 	if (pDock->container.bIsHorizontal)
 		gldi_window_set_thumbnail_area (pAppli, &pDock->container, iX, iY, iWidth, iHeight);
 	else
@@ -390,25 +400,27 @@ void gldi_appli_reserve_geometry_for_window_manager (GldiWindowActor *pAppli, Ic
 			if (myTaskbarParam.bGroupAppliByClass && pClassmate != NULL && pClassmateDock != NULL)  // on va se grouper avec cette icone.
 			{
 				_get_icon_geometry (pClassmate, pClassmateDock, &x, &y);
-				if (cairo_dock_is_hidden (pMainDock))
-				{
-					y = (pClassmateDock->container.bDirectionUp ? 0 : pClassmateDock->iActiveHeight);
-				}
-				pIconDock = pClassmateDock;
 				w = pClassmate->fWidth;
 				h = pClassmate->fHeight;
+				if (cairo_dock_is_hidden (pClassmateDock))
+				{
+					y = (pClassmateDock->container.bDirectionUp ? pClassmateDock->iActiveHeight - 1 : 0);
+					h = 1;
+				}
+				pIconDock = pClassmateDock;
 			}
 			else if (myTaskbarParam.bMixLauncherAppli && pClassmate != NULL && pClassmateDock != NULL)  // on va se placer a cote.
 			{
 				_get_icon_geometry (pClassmate, pClassmateDock, &x, &y);
 				x += pClassmate->fWidth/2;
-				if (cairo_dock_is_hidden (pClassmateDock))
-				{
-					y = (pClassmateDock->container.bDirectionUp ? 0 : pClassmateDock->iActiveHeight);
-				}
-				pIconDock = pClassmateDock;
 				w = pClassmate->fWidth;
 				h = pClassmate->fHeight;
+				if (cairo_dock_is_hidden (pClassmateDock))
+				{
+					y = (pClassmateDock->container.bDirectionUp ? pClassmateDock->iActiveHeight - 1 : 0);
+					h = 1;
+				}
+				pIconDock = pClassmateDock;
 			}
 			else  // on va se placer a la fin de la barre des taches.
 			{
@@ -447,7 +459,8 @@ void gldi_appli_reserve_geometry_for_window_manager (GldiWindowActor *pAppli, Ic
 					x += pLastLauncher->fWidth - w / 2;
 					if (cairo_dock_is_hidden (pMainDock))
 					{
-						y = (pMainDock->container.bDirectionUp ? 0 : pMainDock->iActiveHeight);
+						y = (pMainDock->container.bDirectionUp ? pMainDock->iActiveHeight - 1 : 0);
+						h = 1;
 					}
 				}
 				else  // aucune icone avant notre groupe, on sera insere en 1er.
@@ -455,11 +468,12 @@ void gldi_appli_reserve_geometry_for_window_manager (GldiWindowActor *pAppli, Ic
 					x = (pMainDock->container.iWidth - pMainDock->fFlatDockWidth) / 2;
 					if (cairo_dock_is_hidden (pMainDock))
 					{
-						y = (pMainDock->container.bDirectionUp ? 0 : pMainDock->iActiveHeight);
+						y = (pMainDock->container.bDirectionUp ? pMainDock->iActiveHeight - 1 : 0);
+						h = 1;
 					}
 					else
 					{
-						y = 0;
+						y = (pMainDock->container.bDirectionUp ? pMainDock->iActiveHeight - pMainDock->iMinDockHeight : 0);
 					}
 				}
 			}
