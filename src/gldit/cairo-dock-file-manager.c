@@ -41,6 +41,7 @@
 #include "cairo-dock-icon-manager.h"  // cairo_dock_free_icon
 #include "cairo-dock-menu.h" // gldi_menu_add_item
 #include "cairo-dock-file-manager.h"
+#include "cairo-dock-module-manager.h" // myModuleObjectMgr, NOTIFICATION_LOGOUT
 
 // public (data)
 CairoDockDesktopEnv g_iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
@@ -56,14 +57,18 @@ void cairo_dock_fm_force_desktop_env (CairoDockDesktopEnv iForceDesktopEnv)
 	g_iDesktopEnv = iForceDesktopEnv; // note: this is only called from cairo-dock.c, before desktop specific plugins are loaded
 }
 
-void cairo_dock_fm_register_vfs_backend (CairoDockDesktopEnvBackend *pVFSBackend)
+void cairo_dock_fm_register_vfs_backend (CairoDockDesktopEnvBackend *pVFSBackend, gboolean bOverwrite)
 {
 	gpointer *ptr = (gpointer*)&s_EnvBackend;
 	gpointer *src = (gpointer*)pVFSBackend;
 	gpointer *src_end = (gpointer*)(pVFSBackend + 1);
 	while (src != src_end)
 	{
-		if (*src) *ptr = *src;
+		if (*src)
+		{
+			if (!*ptr || bOverwrite)
+				*ptr = *src;
+		}
 		src ++;
 		ptr ++;
 	}
@@ -308,9 +313,7 @@ gboolean cairo_dock_fm_logout (void)
 {
 	if (s_EnvBackend.logout != NULL)
 	{
-		const gchar *sm = g_getenv ("SESSION_MANAGER");
-		if (sm == NULL || *sm == '\0')  // if there is no session-manager, the desktop methods are useless.
-			return FALSE;
+		gldi_object_notify (&myModuleObjectMgr, NOTIFICATION_LOGOUT);
 		s_EnvBackend.logout ();
 		return TRUE;
 	}
@@ -322,9 +325,7 @@ gboolean cairo_dock_fm_shutdown (void)
 {
 	if (s_EnvBackend.shutdown != NULL)
 	{
-		const gchar *sm = g_getenv ("SESSION_MANAGER");
-		if (sm == NULL || *sm == '\0')  // idem
-			return FALSE;
+		gldi_object_notify (&myModuleObjectMgr, NOTIFICATION_LOGOUT);
 		s_EnvBackend.shutdown ();
 		return TRUE;
 	}
@@ -336,9 +337,7 @@ gboolean cairo_dock_fm_reboot (void)
 {
 	if (s_EnvBackend.reboot != NULL)
 	{
-		const gchar *sm = g_getenv ("SESSION_MANAGER");
-		if (sm == NULL || *sm == '\0')  // idem
-			return FALSE;
+		gldi_object_notify (&myModuleObjectMgr, NOTIFICATION_LOGOUT);
 		s_EnvBackend.reboot ();
 		return TRUE;
 	}
@@ -355,6 +354,57 @@ gboolean cairo_dock_fm_lock_screen (void)
 	}
 	else
 		return FALSE;
+}
+
+gboolean cairo_dock_fm_suspend (void)
+{
+	if (s_EnvBackend.suspend != NULL)
+	{
+		s_EnvBackend.suspend ();
+		return TRUE;
+	}
+	else
+		return FALSE;
+}
+
+gboolean cairo_dock_fm_hibernate (void)
+{
+	if (s_EnvBackend.hibernate != NULL)
+	{
+		s_EnvBackend.hibernate ();
+		return TRUE;
+	}
+	else
+		return FALSE;
+}
+
+gboolean cairo_dock_fm_hybrid_sleep (void)
+{
+	if (s_EnvBackend.hybrid_sleep != NULL)
+	{
+		s_EnvBackend.hybrid_sleep ();
+		return TRUE;
+	}
+	else
+		return FALSE;
+}
+
+void cairo_dock_fm_can_shutdown_reboot_logout (
+	gboolean *bCanShutdown,
+	gboolean *bCanReboot,
+	gboolean *bCanLogout,
+	gboolean *bCanSuspend,
+	gboolean *bCanHibernate,
+	gboolean *bCanHybridSleep,
+	gboolean *bCanLockScreen)
+{
+	if (bCanShutdown)    *bCanShutdown    = (s_EnvBackend.shutdown     != NULL);
+	if (bCanReboot)      *bCanReboot      = (s_EnvBackend.reboot       != NULL);
+	if (bCanLogout)      *bCanLogout      = (s_EnvBackend.logout       != NULL);
+	if (bCanSuspend)     *bCanSuspend     = (s_EnvBackend.suspend      != NULL);
+	if (bCanHibernate)   *bCanHibernate   = (s_EnvBackend.hibernate    != NULL);
+	if (bCanHybridSleep) *bCanHybridSleep = (s_EnvBackend.hybrid_sleep != NULL);
+	if (bCanLockScreen)  *bCanLockScreen  = (s_EnvBackend.lock_screen  != NULL);
 }
 
 gboolean cairo_dock_fm_can_setup_time (void)
