@@ -85,7 +85,9 @@ void gldi_register_gio_vfs_backend (void)
 	
 	CairoDockDesktopEnvBackend backend = { NULL };
 	_fill_backend (&backend);
-	cairo_dock_fm_register_vfs_backend (&backend);
+	// FALSE: do not overwrite any functions already registered (by the
+	// *-integration plugins, although it is likely we run before them)
+	cairo_dock_fm_register_vfs_backend (&backend, FALSE);
 }
 
 /**
@@ -1624,33 +1626,7 @@ static GList *cairo_dock_gio_vfs_list_apps_for_file (const gchar *cBaseURI)
 	return g_app_info_get_all_for_type (cMimeType);
 }
 
-static void cairo_dock_gio_vfs_lock_screen (void) {
-	const char *args[] = {NULL, NULL, NULL};
-	if (gldi_container_is_wayland_backend ())
-	{
-		// xdg-screensaver does not work on (most) Wayland compositors
-		// we use loginctl and hope it works
-		args[0] = "loginctl";
-		args[1] = "lock-session";
-		// will be transient (basically just calls the DBus method, we could do it ourselves as well)
-		cairo_dock_launch_command_argv (args);
-	}
-	else
-	{
-		args[0] = "which";
-		args[1] = "xdg-screensaver";
-		gchar *cResult = cairo_dock_launch_command_argv_sync_with_stderr (args, FALSE);
-		if (cResult != NULL && *cResult == '/')
-		{
-			args[0] = "xdg-screensaver";
-			args[1] = "lock";
-			cairo_dock_launch_command_argv_full (args, NULL, GLDI_LAUNCH_SLICE);
-		}
-		g_free (cResult);
-	}
-}
-
-static void _fill_backend(CairoDockDesktopEnvBackend *pVFSBackend)
+static void _fill_backend (CairoDockDesktopEnvBackend *pVFSBackend)
 {
 	if(pVFSBackend)
 	{
@@ -1674,7 +1650,6 @@ static void _fill_backend(CairoDockDesktopEnvBackend *pVFSBackend)
 		pVFSBackend->empty_trash = cairo_dock_gio_vfs_empty_trash;
 		pVFSBackend->get_desktop_path = cairo_dock_gio_vfs_get_desktop_path;
 		pVFSBackend->list_apps_for_file = cairo_dock_gio_vfs_list_apps_for_file;
-		pVFSBackend->lock_screen = cairo_dock_gio_vfs_lock_screen;
 	}
 }
 

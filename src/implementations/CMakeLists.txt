@@ -20,6 +20,7 @@ SET(impl_SRCS
 	cairo-dock-egl.c                     cairo-dock-egl.h
 	cairo-dock-wayland-manager.c         cairo-dock-wayland-manager.h
 	cairo-dock-wayland-hotspots.c        cairo-dock-wayland-hotspots.h
+	cairo-dock-logout-backend.c          cairo-dock-logout-backend.h
 )
 #if ("${HAVE_X11}")
 #	SET(impl_SRCS ${impl_SRCS}
