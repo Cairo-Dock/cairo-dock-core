@@ -23,10 +23,12 @@
 #include <X11/Xatom.h>
 #endif
 
+#include <glib.h>
+#include <gio/gio.h>
+
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-dbus.h"
 #include "cairo-dock-X-utilities.h"  // cairo_dock_get_X_display
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-dock-factory.h"
@@ -39,9 +41,9 @@
 #endif
 #include "cairo-dock-X-manager.h" // gldi_X_manager_get_window_xid
 
-static DBusGProxy *s_pKwinAccelProxy = NULL;
-static DBusGProxy *s_pPlasmaAccelProxy = NULL;
-static DBusGProxy *s_pWindowViewProxy = NULL;
+static GDBusProxy *s_pKwinAccelProxy = NULL;
+static GDBusProxy *s_pPlasmaAccelProxy = NULL;
+static GDBusProxy *s_pWindowViewProxy = NULL;
 
 #define CD_KGLOBALACCEL_BUS "org.kde.kglobalaccel"
 #define CD_KGLOBALACCEL_KWIN_OBJECT "/component/kwin"
@@ -60,15 +62,18 @@ static gboolean present_windows (void)
 	if (s_pKwinAccelProxy != NULL)
 	{
 		GError *erreur = NULL;
-		bSuccess = dbus_g_proxy_call (s_pKwinAccelProxy, "invokeShortcut", &erreur,
-			G_TYPE_STRING, "ExposeAll",
-			G_TYPE_INVALID,
-			G_TYPE_INVALID);
+		
+		GVariant *res = g_dbus_proxy_call_sync (s_pKwinAccelProxy, "invokeShortcut",
+			g_variant_new ("(s)", "ExposeAll"), G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, &erreur);
 		if (erreur)
 		{
 			cd_warning ("Kwin ExposeAll error: %s", erreur->message);
 			g_error_free (erreur);
-			bSuccess = FALSE;
+		}
+		else
+		{
+			g_variant_unref (res);
+			bSuccess = TRUE;
 		}
 	}
 	return bSuccess;
@@ -84,46 +89,57 @@ static gboolean present_class (const gchar *cClass)
 	if (s_pWindowViewProxy != NULL)
 	{
 		GError *erreur = NULL;
-		
-		const GList *pIcons = cairo_dock_list_existing_appli_with_class (cClass);
-		unsigned int len = g_list_length ((GList*)pIcons); //!! TODO: why does this not take a const GList ??
-		const char **uuids = g_new0 (const char*, len + 1);
-		
+				
 		unsigned int i;
+		GVariantBuilder builder;
+#if GLIB_CHECK_VERSION (2, 84, 0)
+		g_variant_builder_init_static
+#else
+		g_variant_builder_init
+#endif
+			(&builder, G_VARIANT_TYPE ("as"));
+		const GList *pIcons = cairo_dock_list_existing_appli_with_class (cClass);
 		for (i = 0; pIcons; pIcons = pIcons->next)
 		{
 			Icon *pOneIcon = pIcons->data;
 #ifdef HAVE_WAYLAND_PROTOCOLS
-			if (bIsWayland) uuids[i] = gldi_plasma_window_manager_get_uuid (pOneIcon->pAppli);
+			if (bIsWayland)
+			{
+				g_variant_builder_add (&builder, "s", gldi_plasma_window_manager_get_uuid (pOneIcon->pAppli));
+				i++;
+			}
 			else
 #endif
 			{
 				unsigned long xid = gldi_X_manager_get_window_xid (pOneIcon->pAppli);
-				if (xid) uuids[i] = g_strdup_printf ("%lu", xid);
+				if (xid)
+				{
+					g_variant_builder_add_value (&builder, g_variant_new_take_string (g_strdup_printf ("%lu", xid)));
+					i++;
+				}
 			}
-			if (uuids[i]) i++;
 		}
 		
 		if (!i)
+		{
 			cd_warning ("No uuids found for class: %s", cClass);
+			g_variant_builder_clear (&builder);
+		}
 		else
 		{
-			bSuccess = dbus_g_proxy_call (s_pWindowViewProxy, "activate", &erreur,
-				G_TYPE_STRV, uuids,
-				G_TYPE_INVALID,
-				G_TYPE_INVALID);
+			GVariant *res = g_dbus_proxy_call_sync (s_pWindowViewProxy, "activate",
+				g_variant_new ("(as)", &builder), G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, &erreur);
 			if (erreur)
 			{
 				cd_warning ("Kwin ExposeAll error: %s", erreur->message);
 				g_error_free (erreur);
-				bSuccess = FALSE;
+			}
+			else
+			{
+				g_variant_unref (res);
+				bSuccess = TRUE;
 			}
 		}
-#ifdef HAVE_WAYLAND_PROTOCOLS
-		if (bIsWayland) g_free (uuids);
-		else
-#endif
-			g_strfreev ((char**)uuids);
 	}
 	return bSuccess;
 }
@@ -134,15 +150,17 @@ static gboolean present_desktops (void)
 	if (s_pKwinAccelProxy != NULL)
 	{
 		GError *erreur = NULL;
-		bSuccess = dbus_g_proxy_call (s_pKwinAccelProxy, "invokeShortcut", &erreur,
-			G_TYPE_STRING, "ShowDesktopGrid",
-			G_TYPE_INVALID,
-			G_TYPE_INVALID);
+		GVariant *res = g_dbus_proxy_call_sync (s_pKwinAccelProxy, "invokeShortcut",
+			g_variant_new ("(s)", "ShowDesktopGrid"), G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, &erreur);
 		if (erreur)
 		{
 			cd_warning ("Kwin ShowDesktopGrid error: %s", erreur->message);
 			g_error_free (erreur);
-			bSuccess = FALSE;
+		}
+		else
+		{
+			g_variant_unref (res);
+			bSuccess = TRUE;
 		}
 	}
 	return bSuccess;
@@ -154,15 +172,17 @@ static gboolean show_widget_layer (void)
 	if (s_pPlasmaAccelProxy != NULL)
 	{
 		GError *erreur = NULL;
-		bSuccess = dbus_g_proxy_call (s_pPlasmaAccelProxy, "invokeShortcut", &erreur,
-			G_TYPE_STRING, "show dashboard",
-			G_TYPE_INVALID,
-			G_TYPE_INVALID);
+		GVariant *res = g_dbus_proxy_call_sync (s_pPlasmaAccelProxy, "invokeShortcut",
+			g_variant_new ("(s)", "show dashboard"), G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, &erreur);
 		if (erreur)
 		{
 			cd_warning ("Plasma-desktop 'Show Dashboard' error: %s", erreur->message);
 			g_error_free (erreur);
-			bSuccess = FALSE;
+		}
+		else
+		{
+			g_variant_unref (res);
+			bSuccess = TRUE;
 		}
 	}
 	return bSuccess;
@@ -185,32 +205,82 @@ static void _register_kwin_backend (void)
 	gldi_desktop_manager_register_backend (&p, "KWin");
 }
 
+/*
 static void _unregister_kwin_backend (void)
 {
-	//cairo_dock_wm_register_backend (NULL);
+	cairo_dock_wm_register_backend (NULL);
 }
+*/
 
-static void _on_kwin_owner_changed (G_GNUC_UNUSED const gchar *cName, gboolean bOwned, G_GNUC_UNUSED gpointer data)
+static void _on_name_appeared (GDBusConnection *connection, const gchar *name,
+	G_GNUC_UNUSED const gchar *name_owner, G_GNUC_UNUSED gpointer data)
 {
-	cd_debug ("Kwin is on the bus (%d)", bOwned);
+	GError *erreur = NULL;
 	
-	if (bOwned)  // set up the proxies
+	if (!strcmp (name, CD_KGLOBALACCEL_BUS))
 	{
 		g_return_if_fail (s_pKwinAccelProxy == NULL);
+		g_return_if_fail (s_pPlasmaAccelProxy == NULL);
 		
-		s_pKwinAccelProxy = cairo_dock_create_new_session_proxy (
-			CD_KGLOBALACCEL_BUS,
+		//!! TODO: use async versions ?
+		s_pKwinAccelProxy = g_dbus_proxy_new_sync (connection,
+			G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START | G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+			NULL, // GDBusInterfaceInfo -- we could supply this, but work anyway
+			name,
 			CD_KGLOBALACCEL_KWIN_OBJECT,
-			CD_KGLOBALACCEL_INTERFACE);
+			CD_KGLOBALACCEL_INTERFACE,
+			NULL,
+			&erreur);
+		if (erreur)
+		{
+			cd_warning ("Error creating KWin proxy: %s", erreur->message);
+			g_error_free (erreur);
+			erreur = NULL;
+		}
 		
-		s_pPlasmaAccelProxy = cairo_dock_create_new_session_proxy (
-			CD_KGLOBALACCEL_BUS,
+		s_pPlasmaAccelProxy = g_dbus_proxy_new_sync (connection,
+			G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START | G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+			NULL, // GDBusInterfaceInfo -- we could supply this, but work anyway
+			name,
 			CD_KGLOBALACCEL_PLASMA_OBJECT,
-			CD_KGLOBALACCEL_INTERFACE);
+			CD_KGLOBALACCEL_INTERFACE,
+			NULL,
+			&erreur);
+		if (erreur)
+		{
+			cd_warning ("Error creating KWin proxy: %s", erreur->message);
+			g_error_free (erreur);
+			erreur = NULL;
+		}
 		
-		_register_kwin_backend ();
+		if (s_pPlasmaAccelProxy || s_pKwinAccelProxy) _register_kwin_backend ();
 	}
-	else
+	else if (!strcmp (name, CD_WINDOWVIEW_BUS))
+	{
+		g_return_if_fail (s_pWindowViewProxy == NULL);
+		
+		s_pWindowViewProxy = g_dbus_proxy_new_sync (connection,
+			G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START | G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+			NULL, // GDBusInterfaceInfo -- we could supply this, but work anyway
+			name,
+			CD_WINDOWVIEW_OBJECT,
+			CD_WINDOWVIEW_INTERFACE,
+			NULL,
+			&erreur);
+		if (erreur)
+		{
+			cd_warning ("Error creating KWin proxy: %s", erreur->message);
+			g_error_free (erreur);
+			erreur = NULL;
+		}
+		
+		if (s_pWindowViewProxy) _register_kwin_backend ();
+	}
+}
+
+static void _on_name_vanished (G_GNUC_UNUSED GDBusConnection *connection, const gchar *name, G_GNUC_UNUSED gpointer user_data)
+{
+	if (!strcmp (name, CD_KGLOBALACCEL_BUS))
 	{
 		if (s_pKwinAccelProxy)
 		{
@@ -222,68 +292,24 @@ static void _on_kwin_owner_changed (G_GNUC_UNUSED const gchar *cName, gboolean b
 			g_object_unref (s_pPlasmaAccelProxy);
 			s_pPlasmaAccelProxy = NULL;
 		}
-		
-		_unregister_kwin_backend ();
 	}
-}
-static void _on_detect_kwin (gboolean bPresent, G_GNUC_UNUSED gpointer data)
-{
-	cd_debug ("Kwin is present: %d", bPresent);
-	if (bPresent)
-	{
-		_on_kwin_owner_changed (CD_KGLOBALACCEL_BUS, TRUE, NULL);
-	}
-	cairo_dock_watch_dbus_name_owner (CD_KGLOBALACCEL_BUS,
-		(CairoDockDbusNameOwnerChangedFunc) _on_kwin_owner_changed,
-		NULL);
-}
-
-static void _on_windowview_owner_changed (G_GNUC_UNUSED const gchar *cName, gboolean bOwned, G_GNUC_UNUSED gpointer data)
-{
-	cd_debug ("Kwin is on the bus (%d)", bOwned);
-	
-	if (bOwned)  // set up the proxies
-	{
-		g_return_if_fail (s_pWindowViewProxy == NULL);
-		
-		s_pWindowViewProxy = cairo_dock_create_new_session_proxy (
-			CD_WINDOWVIEW_BUS,
-			CD_WINDOWVIEW_OBJECT,
-			CD_WINDOWVIEW_INTERFACE);
-		
-		_register_kwin_backend ();
-	}
-	else
+	else if (!strcmp (name, CD_WINDOWVIEW_BUS))
 	{
 		if (s_pWindowViewProxy)
 		{
 			g_object_unref (s_pWindowViewProxy);
 			s_pWindowViewProxy = NULL;
 		}
-		
-		//!! TODO: this is a no-op, do not call it
-		_unregister_kwin_backend ();
 	}
-}
-static void _on_detect_windowview (gboolean bPresent, G_GNUC_UNUSED gpointer data)
-{
-	cd_debug ("KWin.Effect.WindowView1 is present: %d", bPresent);
-	if (bPresent)
-	{
-		_on_windowview_owner_changed (CD_WINDOWVIEW_BUS, TRUE, NULL);
-	}
-	cairo_dock_watch_dbus_name_owner (CD_WINDOWVIEW_BUS,
-		(CairoDockDbusNameOwnerChangedFunc) _on_windowview_owner_changed,
-		NULL);
+	
+	//!! TODO: we cannot "unregister" our backend, although it would not matter much, since there is no alternative to use anyway
 }
 
 void cd_init_kwin_backend (void)
 {
-	cairo_dock_dbus_detect_application_async (CD_KGLOBALACCEL_BUS,
-		(CairoDockOnAppliPresentOnDbus) _on_detect_kwin,
-		NULL);
-	cairo_dock_dbus_detect_application_async (CD_WINDOWVIEW_BUS,
-		(CairoDockOnAppliPresentOnDbus) _on_detect_windowview,
-		NULL);
+	g_bus_watch_name (G_BUS_TYPE_SESSION, CD_KGLOBALACCEL_BUS, G_BUS_NAME_WATCHER_FLAGS_NONE,
+		_on_name_appeared, _on_name_vanished, NULL, NULL);
+	g_bus_watch_name (G_BUS_TYPE_SESSION, CD_WINDOWVIEW_BUS, G_BUS_NAME_WATCHER_FLAGS_NONE,
+		_on_name_appeared, _on_name_vanished, NULL, NULL);
 }
 
