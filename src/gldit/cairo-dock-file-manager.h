@@ -120,13 +120,18 @@ struct _CairoDockDesktopEnvBackend {
 	CairoDockFMUserActionFunc		reboot;
 	CairoDockFMUserActionFunc		setup_time;
 	CairoDockFMUserActionFunc		show_system_monitor;
+	CairoDockFMUserActionFunc		suspend;
+	CairoDockFMUserActionFunc		hibernate;
+	CairoDockFMUserActionFunc		hybrid_sleep;
 };
 
 
-/** Register a environment backend. It only overwrites functions in the previous backend
- * if they are provided in pVFSBackend.
+/** Register a environment backend.
+ *@param pVFSBackend the new backend to register
+ *@param bOverwrite whether to overwrite functions that have been already registered;
+ *	this applies only to functions that are provided in pVFSBackend.
 */
-void cairo_dock_fm_register_vfs_backend (CairoDockDesktopEnvBackend *pVFSBackend);
+void cairo_dock_fm_register_vfs_backend (CairoDockDesktopEnvBackend *pVFSBackend, gboolean bOverwrite);
 
 void cairo_dock_fm_force_desktop_env (CairoDockDesktopEnv iForceDesktopEnv);
 
@@ -219,6 +224,21 @@ gboolean cairo_dock_fm_shutdown (void);
 /** Raise the reboot panel.
 */
 gboolean cairo_dock_fm_reboot (void);
+
+gboolean cairo_dock_fm_suspend (void);
+
+gboolean cairo_dock_fm_hibernate (void);
+
+gboolean cairo_dock_fm_hybrid_sleep (void);
+
+void cairo_dock_fm_can_shutdown_reboot_logout (
+	gboolean *bCanShutdown,
+	gboolean *bCanReboot,
+	gboolean *bCanLogout,
+	gboolean *bCanSuspend,
+	gboolean *bCanHibernate,
+	gboolean *bCanHybridSleep,
+	gboolean *bCanLockScreen);
 
 /** Lock the screen.
 */
