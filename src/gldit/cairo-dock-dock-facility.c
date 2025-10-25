@@ -206,7 +206,7 @@ void cairo_dock_trigger_update_dock_size (CairoDock *pDock)
 
 static gboolean _emit_leave_signal_delayed (CairoDock *pDock)
 {
-	gldi_dock_leave_synthetic (pDock);
+	gldi_dock_leave_synthetic_full (pDock, FALSE);
 	pDock->iSidLeaveDemand = 0;
 	return FALSE;
 }
@@ -279,8 +279,9 @@ static void cairo_dock_manage_mouse_position (CairoDock *pDock)
 			{
 				if (pDock->iRefCount > 0)
 				{
-					Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
-					if (pPointingIcon && pPointingIcon->bPointed)  // sous-dock pointe, on le laisse en position haute.
+					CairoDock *pParentDock = NULL;
+					Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
+					if (pPointingIcon && pPointingIcon->bPointed && pParentDock && pParentDock->container.bInside)  // sous-dock pointe, on le laisse en position haute.
 						return;
 				}
 				//g_print ("on force a quitter (iRefCount:%d; bIsGrowingUp:%d; iMagnitudeIndex:%d)\n", pDock->iRefCount, pDock->bIsGrowingUp, pDock->iMagnitudeIndex);
