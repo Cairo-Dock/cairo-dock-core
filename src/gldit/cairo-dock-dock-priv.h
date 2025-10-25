@@ -222,6 +222,16 @@ void cairo_dock_trigger_load_dock_background (CairoDock *pDock);  // peu utile
 
 void cairo_dock_make_preview (CairoDock *pDock, const gchar *cPreviewPath);
 
+/** Notify pDock that the mouse has possibly left it, just as if it
+*  received the "leave-notify-event" signal from GTK, similarly to
+*  \ref gldi_dock_leave_synthetic.
+*@param pDock a dock.
+*@param bRecheckMouse whether to check that the mouse is indeed outside of the dock;
+*   set this to FALSE if the mouse position has already been updated, e.g. by 
+*   a dock rendering backend
+*/
+void gldi_dock_leave_synthetic_full (CairoDock *pDock, gboolean bRecheckMouse);
+
 G_END_DECLS
 #endif
 

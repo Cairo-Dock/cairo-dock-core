@@ -115,8 +115,30 @@ CairoDock *gldi_appli_icon_insert_in_dock (Icon *icon, CairoDock *pMainDock, gbo
 
 CairoDock *gldi_appli_icon_detach (Icon *pIcon);
 
+/** Set the minimize location for an application window. This is used by the window
+* manager / compositor when the window is minimize as the "target" of the minimize
+* animation. On at least Compiz, it is also used as an area that triggers showing
+* window previews when entered with the mouse.
+*@param pAppli the application whose minimize position to set
+*@param icon the icon that should be the minimize target (can be different from pAppli's icon)
+*@param pDock the dock that contains icon
+*/
+void gldi_appli_icon_set_geometry_for_window_manager_full (GldiWindowActor *pAppli, Icon *icon, CairoDock *pDock);
+/** Set the minimize location for an application window. Simplified version where
+* the corresponding icon is used.
+*@param icon an application icon
+*@param pDock the dock that contains icon
+*/
 void gldi_appli_icon_set_geometry_for_window_manager (Icon *icon, CairoDock *pDock);
 
+/** Reserve a minimize location for an application window whose associated icon
+* might not be displayed currently (i.e. it is detached). The location will be set
+* to where the icon will appear if it is inserted to the given dock.
+*@param pAppli the application whose minimize position to set
+*@param icon the icon corresponding to this application
+*@param pMainDock the dock to use if no more appropriate dock is found 
+* Note: this function does nothing if icon is not a detached icon (i.e. if it is already displayed in a dock).
+*/
 void gldi_appli_reserve_geometry_for_window_manager (GldiWindowActor *pAppli, Icon *icon, CairoDock *pMainDock);
 
 void gldi_window_inhibitors_set_name (GldiWindowActor *actor, const gchar *cNewName);

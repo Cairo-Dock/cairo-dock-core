@@ -62,6 +62,7 @@ typedef void (*CairoDockGLRenderFunc) (CairoDock *pDock);
 typedef void (*CairoDockRenderFreeDataFunc) (CairoDock *pDock);
 typedef void (*CairoDockSetInputShapeFunc) (CairoDock *pDock);
 typedef void (*CairoDockSetIconSizeFunc) (Icon *pIcon, CairoDock *pDock);
+typedef void (*CairoDockGetMinimizePosFunc) (Icon *pIcon, CairoDock *pDock, double *fX, double *fY);
 
 /// Dock's renderer, also known as 'view'.
 struct _CairoDockRenderer {
@@ -83,6 +84,8 @@ struct _CairoDockRenderer {
 	CairoDockSetInputShapeFunc update_input_shape;
 	/// function called to define the size of an icon, or NULL to let the container handles that.
 	CairoDockSetIconSizeFunc set_icon_size;
+	/// function called to get the minimize position of an appli represented by an icon, or NULL to use fXAtRest / fYAtRest.
+	CairoDockGetMinimizePosFunc get_minimize_pos;
 	/// TRUE if the view uses the OpenGL stencil buffer.
 	gboolean bUseStencil;
 	/// TRUE is the view uses reflects.
@@ -205,6 +208,8 @@ struct _CairoDock {
 	gboolean bIconIsFlyingAway;
 	/// whether icons in the dock can be dragged with the mouse (inside and outside of the dock).
 	gboolean bPreventDraggingIcons;
+	/// whether we need to update the minimize position of icons in this dock; the update will take
+	/// effect the next time the dock is drawn (to ensure that it has a valid surface)
 	gboolean bWMIconsNeedUpdate;
 	
 	/// maximum height of the icons.

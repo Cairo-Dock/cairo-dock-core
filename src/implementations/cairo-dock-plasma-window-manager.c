@@ -58,6 +58,7 @@ struct _GldiPlasmaWindowActor {
 	unsigned int cap_and_state; // capabilites and state that is not stored elsewhere
 	char *service_name; // appmenu service name
 	char *object_path; // appmenu object path
+	GldiContainer *pMinimizeContainer; // the container that this actor's minimize position is set to
 };
 typedef struct _GldiPlasmaWindowActor GldiPlasmaWindowActor;
 
@@ -68,7 +69,10 @@ typedef enum {
 static uint32_t server_protocol_version = 0;
 static GHashTable *s_hIDTable = NULL;
 
-// window manager interface
+
+/***********************************************************************
+ * window manager interface
+ */
 
 static void _move_to_nth_desktop (GldiWindowActor *actor, G_GNUC_UNUSED int iNumDesktop,
 	int iDeltaViewportX, int iDeltaViewportY)
@@ -169,22 +173,6 @@ static void _can_minimize_maximize_close ( G_GNUC_UNUSED GldiWindowActor *actor,
 	*bCanClose    = !!(pactor->cap_and_state & ORG_KDE_PLASMA_WINDOW_MANAGEMENT_STATE_CLOSEABLE);
 }
 
-/// TODO: which one of these two are really used? In cairo-dock-X-manager.c,
-/// they seem to do the same thing
-static void _set_thumbnail_area (GldiWindowActor *actor, GldiContainer* pContainer, int x, int y, int w, int h)
-{
-	if ( ! (actor && pContainer) ) return;
-	if (w < 0 || h < 0) return;
-	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor *)actor;
-	GdkWindow* window = gldi_container_get_gdk_window (pContainer);
-	if (!window) return;
-	struct wl_surface* surface = gdk_wayland_window_get_wl_surface (window);
-	if (!surface) return;
-	
-	org_kde_plasma_window_set_minimized_geometry(wactor->handle, surface, x, y, w, h);
-}
-
-
 gboolean _send_sigkill (void *data)
 {
 	GldiPlasmaWindowActor *pactor = (GldiPlasmaWindowActor*)data;
@@ -215,7 +203,119 @@ static void _get_menu_address (GldiWindowActor *actor, char **service_name, char
 }
 
 
-/**  callbacks  **/
+/***********************************************************************
+ * window manager interface -> minimize position handling
+ * 
+ * We need to keep track which containers have minimize positions to be able to unset it as needed.
+ */
+
+// any container that has minimize positions is stored here with all window actors that have been set for it
+// key: GldiContainer*
+// value: GHashTable of GldiPlasmaWindowActor*
+static GHashTable *s_hContainers = NULL;
+
+
+static void _unset_container (gpointer key, G_GNUC_UNUSED gpointer value, G_GNUC_UNUSED gpointer user_data)
+{
+	if (key)
+	{
+		GldiPlasmaWindowActor *pactor = (GldiPlasmaWindowActor*)key;
+		pactor->pMinimizeContainer = NULL;
+	}
+}
+
+static void _on_container_unmap (G_GNUC_UNUSED GtkWidget *pWidget, gpointer data);
+
+static gboolean _on_container_destroy (G_GNUC_UNUSED gpointer data, GldiContainer *pContainer)
+{
+	// we need to remove this container from our hash table and unset it for all associated window actors
+	GHashTable *hContainer = g_hash_table_lookup (s_hContainers, pContainer);
+	if (hContainer)
+	{
+		g_hash_table_foreach (hContainer, _unset_container, NULL);
+		g_hash_table_remove (s_hContainers, pContainer);
+		g_hash_table_unref (hContainer);
+	}
+	
+	if (pContainer->pWidget)
+	{
+		g_signal_handlers_disconnect_by_func (pContainer->pWidget, G_CALLBACK (_on_container_unmap), pContainer);
+		gldi_object_remove_notification (pContainer, NOTIFICATION_DESTROY, (GldiNotificationFunc) _on_container_destroy, NULL);
+	}
+	
+	return GLDI_NOTIFICATION_LET_PASS;
+}
+
+static void _on_container_unmap (G_GNUC_UNUSED GtkWidget *pWidget, gpointer data)
+{
+	if (!data) return;
+	
+	GldiContainer *pContainer = (GldiContainer*)data;
+	_on_container_destroy (NULL, pContainer);
+}
+
+static void _thumbnail_remove_from_container (GldiPlasmaWindowActor *pactor, gboolean bUnset)
+{
+	if (!pactor->pMinimizeContainer) return;
+	
+	if (bUnset)
+	{
+		GdkWindow* window = gldi_container_get_gdk_window (pactor->pMinimizeContainer);
+		if (window)
+		{
+			struct wl_surface* surface = gdk_wayland_window_get_wl_surface (window);
+			if (surface) org_kde_plasma_window_unset_minimized_geometry (pactor->wactor.handle, surface);
+		}
+	}
+	
+	GHashTable *hContainer = g_hash_table_lookup (s_hContainers, pactor->pMinimizeContainer);
+	if (hContainer) g_hash_table_remove (hContainer, pactor);
+	
+	pactor->pMinimizeContainer = NULL;
+}
+
+static void _thumbnail_add_to_container (GldiPlasmaWindowActor *pactor, GldiContainer *pContainer)
+{
+	GHashTable *hContainer = g_hash_table_lookup (s_hContainers, pContainer);
+	if (!hContainer)
+	{
+		hContainer = g_hash_table_new (NULL, NULL);
+		g_hash_table_insert (s_hContainers, pContainer, hContainer);
+		
+		// we need to remove container if its window is unmapped or if it is destroyed
+		g_signal_connect (G_OBJECT (pContainer->pWidget), "unmap", G_CALLBACK (_on_container_unmap), pContainer);
+		gldi_object_register_notification (pContainer, NOTIFICATION_DESTROY, (GldiNotificationFunc) _on_container_destroy, FALSE, NULL);
+	}
+	g_hash_table_add (hContainer, pactor);
+	pactor->pMinimizeContainer = pContainer;
+}
+
+// Note: if pContainer == NULL or w < 0 or h < 0, then we unset any previously set minimize area,
+// but do not set a new one
+static void _set_thumbnail_area (GldiWindowActor *actor, GldiContainer* pContainer, int x, int y, int w, int h)
+{
+	if (!actor) return;
+	
+	struct wl_surface* surface = NULL;
+	if (pContainer && w >= 0 && h >= 0)
+	{
+		GdkWindow* window = gldi_container_get_gdk_window (pContainer);
+		if (window) surface = gdk_wayland_window_get_wl_surface (window);
+	}
+	
+	GldiPlasmaWindowActor *pactor = (GldiPlasmaWindowActor*) actor;
+	if (pactor->pMinimizeContainer != pContainer)
+	{
+		_thumbnail_remove_from_container (pactor, TRUE); // TRUE -- unset minimize geometry
+		if (surface) _thumbnail_add_to_container (pactor, pContainer);
+	}
+	
+	if (surface) org_kde_plasma_window_set_minimized_geometry(pactor->wactor.handle, surface, x, y, w, h);
+}
+
+/***********************************************************************
+ * callbacks
+ */
 static void _gldi_toplevel_title_cb (void *data, G_GNUC_UNUSED pwhandle *handle, const char *title)
 {
 	GldiWaylandWindowActor* wactor = (GldiWaylandWindowActor*)data;
@@ -493,11 +593,8 @@ static struct org_kde_plasma_window_management_listener gldi_toplevel_manager = 
     .stacking_order_changed_2 = _stacking_order_changed_2
 };
 
-static struct org_kde_plasma_window_management* s_ptoplevel_manager = NULL;
-static uint32_t protocol_id;
-static gboolean protocol_found = FALSE;
-
 /// Desktop management functions
+static struct org_kde_plasma_window_management* s_ptoplevel_manager = NULL;
 static gboolean _desktop_is_visible (void) { return s_bDesktopIsVisible; }
 static gboolean _show_hide_desktop (gboolean bShow)
 {
@@ -505,11 +602,17 @@ static gboolean _show_hide_desktop (gboolean bShow)
 	return TRUE;
 }
 
+
+/***********************************************************************
+ * object manager, init
+ */
+
 static void _reset_object (GldiObject* obj)
 {
 	GldiPlasmaWindowActor* pactor = (GldiPlasmaWindowActor*)obj;
 	if (pactor)
 	{
+		_thumbnail_remove_from_container (pactor, FALSE); // FALSE: no need to unset geometry, the handle will be destroyed anyway
 		g_hash_table_remove (s_hIDTable, pactor->uuid);
 		g_free (pactor->uuid);
 		org_kde_plasma_window_destroy ((pwhandle*)pactor->wactor.handle);
@@ -518,12 +621,17 @@ static void _reset_object (GldiObject* obj)
 	}
 }
 
+static uint32_t protocol_id;
+static gboolean protocol_found = FALSE;
+
 static void gldi_plasma_window_manager_init ()
 {
 	// hash table to map uuids to windows
 	// note: no free functions, the keys are the uuids stored in (and owned by)
 	//  the GldiPlasmaWindowActor, they are freed together
 	s_hIDTable = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, NULL);
+	
+	s_hContainers = g_hash_table_new (NULL, NULL);
 	
 	org_kde_plasma_window_management_add_listener (s_ptoplevel_manager, &gldi_toplevel_manager, NULL);
 	// register window manager

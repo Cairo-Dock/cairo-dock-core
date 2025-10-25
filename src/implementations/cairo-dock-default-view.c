@@ -44,10 +44,13 @@
 
 static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 {
-	cairo_dock_calculate_icons_positions_at_rest_linear (pDock->icons, pDock->fFlatDockWidth);
+	const double fLineWidth = (myDocksParam.bUseDefaultColors ? myStyleParam.iLineWidth : myDocksParam.iDockLineWidth);
+	pDock->iMaxDockHeight = (int) ceil ((1 + myIconsParam.fAmplitude) * pDock->iMaxIconHeight * pDock->container.fRatio) + fLineWidth + myDocksParam.iFrameMargin + (pDock->container.bIsHorizontal ? myIconsParam.iLabelSize : 0);
+	//g_print ("myIconsParam.iLabelSize : %d => %d\n", myIconsParam.iLabelSize, (int)pDock->iMaxDockHeight);
+	
+	cairo_dock_calculate_icons_positions_at_rest_linear (pDock);
 
 	pDock->iDecorationsHeight = pDock->iMaxIconHeight * pDock->container.fRatio + 2 * myDocksParam.iFrameMargin;
-	double fLineWidth = (myDocksParam.bUseDefaultColors ? myStyleParam.iLineWidth : myDocksParam.iDockLineWidth);
 	double fRadius = (myDocksParam.bUseDefaultColors ? myStyleParam.iCornerRadius : myDocksParam.iDockRadius);
 	if (pDock->iDecorationsHeight + fLineWidth - 2 * fRadius < 0)
 		fRadius = (pDock->iDecorationsHeight + fLineWidth) / 2 - 1;
@@ -72,9 +75,6 @@ static void cd_calculate_max_dock_size_default (CairoDock *pDock)
 		}
 	}
 	
-	pDock->iMaxDockHeight = (int) ceil ((1 + myIconsParam.fAmplitude) * pDock->iMaxIconHeight * pDock->container.fRatio) + fLineWidth + myDocksParam.iFrameMargin + (pDock->container.bIsHorizontal ? myIconsParam.iLabelSize : 0);
-	//g_print ("myIconsParam.iLabelSize : %d => %d\n", myIconsParam.iLabelSize, (int)pDock->iMaxDockHeight);
-
 	pDock->iDecorationsWidth = pDock->iMaxDockWidth;
 	pDock->iMinDockHeight = pDock->iMaxIconHeight * pDock->container.fRatio + 2 * myDocksParam.iFrameMargin + 2 * fLineWidth;
 	

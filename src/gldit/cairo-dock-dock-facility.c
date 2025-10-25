@@ -206,7 +206,7 @@ void cairo_dock_trigger_update_dock_size (CairoDock *pDock)
 
 static gboolean _emit_leave_signal_delayed (CairoDock *pDock)
 {
-	gldi_dock_leave_synthetic (pDock);
+	gldi_dock_leave_synthetic_full (pDock, FALSE);
 	pDock->iSidLeaveDemand = 0;
 	return FALSE;
 }
@@ -279,8 +279,9 @@ static void cairo_dock_manage_mouse_position (CairoDock *pDock)
 			{
 				if (pDock->iRefCount > 0)
 				{
-					Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, NULL);
-					if (pPointingIcon && pPointingIcon->bPointed)  // sous-dock pointe, on le laisse en position haute.
+					CairoDock *pParentDock = NULL;
+					Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (pDock, &pParentDock);
+					if (pPointingIcon && pPointingIcon->bPointed && pParentDock && pParentDock->container.bInside)  // sous-dock pointe, on le laisse en position haute.
 						return;
 				}
 				//g_print ("on force a quitter (iRefCount:%d; bIsGrowingUp:%d; iMagnitudeIndex:%d)\n", pDock->iRefCount, pDock->bIsGrowingUp, pDock->iMagnitudeIndex);
@@ -500,9 +501,10 @@ void cairo_dock_update_input_shape (CairoDock *pDock)
  /// LINEAR DOCK ///
 ///////////////////
 
-void cairo_dock_calculate_icons_positions_at_rest_linear (GList *pIconList, double fFlatDockWidth)
+void cairo_dock_calculate_icons_positions_at_rest_linear (CairoDock *pDock)
 {
-	//g_print ("%s (%d, +%d)\n", __func__, fFlatDockWidth);
+	GList *pIconList = pDock->icons;
+	double fFlatDockWidth = pDock->fFlatDockWidth;
 	double x_cumulated = 0;
 	GList* ic;
 	Icon *icon;
@@ -517,6 +519,10 @@ void cairo_dock_calculate_icons_positions_at_rest_linear (GList *pIconList, doub
 		else
 			icon->fXAtRest = x_cumulated;
 		//g_print ("%s : fXAtRest = %.2f\n", icon->cName, icon->fXAtRest);
+		// note: fYAtRest only used for setting the minimize position of apps
+		int tmp1 = myDocksParam.iDockLineWidth + myDocksParam.iFrameMargin;
+		icon->fYAtRest = (pDock->container.bDirectionUp ?
+			pDock->iMaxDockHeight - tmp1 - icon->fHeight : tmp1);
 
 		x_cumulated += icon->fWidth + myIconsParam.iIconGap;
 	}
@@ -1010,6 +1016,7 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 		///gtk_widget_queue_draw (pSubDock->container.pWidget);
 	}
 	gldi_object_notify (pPointedIcon, NOTIFICATION_UNFOLD_SUBDOCK, pPointedIcon);
+	pSubDock->bWMIconsNeedUpdate = TRUE; // will update minimize positions when the dock's content actually gets drawn
 	
 	gldi_dialogs_replace_all ();
 }
@@ -1118,7 +1125,9 @@ void cairo_dock_redraw_subdock_content (CairoDock *pDock)
 
 static gboolean _update_WM_icons (CairoDock *pDock)
 {
-	cairo_dock_set_icons_geometry_for_window_manager (pDock);
+	if (gtk_widget_get_mapped (pDock->container.pWidget) &&
+			!(pDock->iRefCount > 0 && pDock->bIsShrinkingDown))
+		cairo_dock_set_icons_geometry_for_window_manager (pDock);
 	pDock->iSidUpdateWMIcons = 0;
 	return FALSE;
 }
