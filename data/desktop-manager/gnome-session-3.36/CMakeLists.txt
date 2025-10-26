@@ -11,4 +11,6 @@ install (FILES
 install (FILES
 	gnome-session-x11@cairo-dock-compiz.target
 	gnome-session-x11@cairo-dock-metacity.target
+	cairo-dock-session-metacity.service
+	cairo-dock-session-compiz.service
 	DESTINATION ${unitdir})
