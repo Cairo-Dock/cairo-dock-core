@@ -1,7 +1,7 @@
 [Unit]
 Description=GNOME/Cairo-Dock Session
-OnFailure=gnome-session-failed.target
-OnFailureJobMode=replace
+OnFailure=gnome-session-shutdown.target
+OnFailureJobMode=replace-irreversibly
 DefaultDependencies=no
 RefuseManualStart=no
 
@@ -20,4 +20,37 @@ After=gnome-flashback.target
 BindsTo=gnome-session.target
 After=gnome-session.target
 
+# Dependencies
+Wants=cairo-dock-session-compiz.service
+Wants=cairo-dock.service
+
 Wants=ayatana-indicators.target
+
+Wants=org.gnome.SettingsDaemon.A11ySettings.target
+Wants=org.gnome.SettingsDaemon.Color.target
+Wants=org.gnome.SettingsDaemon.Datetime.target
+Wants=org.gnome.SettingsDaemon.Housekeeping.target
+Wants=org.gnome.SettingsDaemon.Keyboard.target
+Wants=org.gnome.SettingsDaemon.MediaKeys.target
+Wants=org.gnome.SettingsDaemon.Power.target
+Wants=org.gnome.SettingsDaemon.PrintNotifications.target
+Wants=org.gnome.SettingsDaemon.Rfkill.target
+Wants=org.gnome.SettingsDaemon.ScreensaverProxy.target
+Wants=org.gnome.SettingsDaemon.Sharing.target
+Wants=org.gnome.SettingsDaemon.Smartcard.target
+Wants=org.gnome.SettingsDaemon.Sound.target
+Wants=org.gnome.SettingsDaemon.UsbProtection.target
+Wants=org.gnome.SettingsDaemon.Wwan.target
+Wants=org.gnome.SettingsDaemon.XSettings.target
+
+Wants=gcr-ssh-agent.socket
+Wants=gnome-disk-utility-notify.service
+
+Wants=gnome-flashback-clipboard.service
+Wants=gnome-flashback-idle-monitor.service
+Wants=gnome-flashback-media-keys.service
+Wants=gnome-flashback-polkit.service
+
+Requires=gnome-session-x11-services-ready.target
+Requires=gnome-flashback.target
+
