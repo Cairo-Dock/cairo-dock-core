@@ -91,6 +91,8 @@ typedef gchar * (*CairoDockFMGetTrashFunc) (const gchar *cNearURI, gchar **cFile
 typedef void (*CairoDockFMEmptyTrashFunc) (void);
 typedef gchar * (*CairoDockFMGetDesktopFunc) (void);
 typedef void (*CairoDockFMUserActionFunc) (void);
+typedef void (*CairoDockFMConfirmationFunc) (gpointer data, CairoDockFMUserActionFunc action);
+typedef void (*CairoDockFMActionWithConfirmationFunc) (CairoDockFMConfirmationFunc cb_confirm, gpointer data);
 
 /// Definition of the Desktop Environment backend.
 struct _CairoDockDesktopEnvBackend {
@@ -114,10 +116,10 @@ struct _CairoDockDesktopEnvBackend {
 	CairoDockFMEmptyTrashFunc		empty_trash;
 	CairoDockFMGetTrashFunc 		get_trash_path;
 	CairoDockFMGetDesktopFunc 		get_desktop_path;
-	CairoDockFMUserActionFunc		logout;
+	CairoDockFMActionWithConfirmationFunc logout;
 	CairoDockFMUserActionFunc		lock_screen;
-	CairoDockFMUserActionFunc		shutdown;
-	CairoDockFMUserActionFunc		reboot;
+	CairoDockFMActionWithConfirmationFunc shutdown;
+	CairoDockFMActionWithConfirmationFunc reboot;
 	CairoDockFMUserActionFunc		setup_time;
 	CairoDockFMUserActionFunc		show_system_monitor;
 	CairoDockFMUserActionFunc		suspend;
@@ -215,15 +217,35 @@ gchar *cairo_dock_fm_get_trash_path (const gchar *cNearURI, gchar **cFileInfoPat
 */
 gchar *cairo_dock_fm_get_desktop_path (void);
 
-/** Raise the logout panel.
+/** Log out of the current session.
+*@param cb_confirm a function to call if confirmation is necessary
+*@param data user data to pass to cb_confirm
+*@returns Whether a backend-provided logout function was called.
+*
+* Note: how the logout action is carried out depends on the backend. Specifically,
+* in some cases, it will trigger a confirmation dialog from the system (e.g. gnome-session-quit,
+* KDE Plasma, etc.), while in other cases, the action is executed without confirmation
+* (e.g. logind). In the latter cases, if cb_confirm is not NULL, it will be called to
+* present a confirmation dialog to the user. If the action is confirmed, the callback
+* passed to cb_confirm should be called.
 */
-gboolean cairo_dock_fm_logout (void);
-/** Raise the shutdown panel.
+gboolean cairo_dock_fm_logout (CairoDockFMConfirmationFunc cb_confirm, gpointer data);
+/** Initiate a shutdown.
+*@param cb_confirm a function to call if confirmation is necessary
+*@param data user data to pass to cb_confirm
+*@returns Whether a backend-provided shutdown function was called.
+*
+* See the notes with \ref cairo_dock_fm_logout about the role of the callback function.
 */
-gboolean cairo_dock_fm_shutdown (void);
-/** Raise the reboot panel.
+gboolean cairo_dock_fm_shutdown (CairoDockFMConfirmationFunc cb_confirm, gpointer data);
+/** Initiate a system reboot.
+*@param cb_confirm a function to call if confirmation is necessary
+*@param data user data to pass to cb_confirm
+*@returns Whether a backend-provided reboot function was called.
+*
+* See the notes with \ref cairo_dock_fm_logout about the role of the callback function.
 */
-gboolean cairo_dock_fm_reboot (void);
+gboolean cairo_dock_fm_reboot (CairoDockFMConfirmationFunc cb_confirm, gpointer data);
 
 gboolean cairo_dock_fm_suspend (void);
 

@@ -309,36 +309,36 @@ gchar *cairo_dock_fm_get_desktop_path (void)
 		return NULL;
 }
 
-gboolean cairo_dock_fm_logout (void)
+gboolean cairo_dock_fm_logout (CairoDockFMConfirmationFunc cb_confirm, gpointer data)
 {
 	if (s_EnvBackend.logout != NULL)
 	{
 		gldi_object_notify (&myModuleObjectMgr, NOTIFICATION_LOGOUT);
-		s_EnvBackend.logout ();
+		s_EnvBackend.logout (cb_confirm, data);
 		return TRUE;
 	}
 	else
 		return FALSE;
 }
 
-gboolean cairo_dock_fm_shutdown (void)
+gboolean cairo_dock_fm_shutdown (CairoDockFMConfirmationFunc cb_confirm, gpointer data)
 {
 	if (s_EnvBackend.shutdown != NULL)
 	{
 		gldi_object_notify (&myModuleObjectMgr, NOTIFICATION_LOGOUT);
-		s_EnvBackend.shutdown ();
+		s_EnvBackend.shutdown (cb_confirm, data);
 		return TRUE;
 	}
 	else
 		return FALSE;
 }
 
-gboolean cairo_dock_fm_reboot (void)
+gboolean cairo_dock_fm_reboot (CairoDockFMConfirmationFunc cb_confirm, gpointer data)
 {
 	if (s_EnvBackend.reboot != NULL)
 	{
 		gldi_object_notify (&myModuleObjectMgr, NOTIFICATION_LOGOUT);
-		s_EnvBackend.reboot ();
+		s_EnvBackend.reboot (cb_confirm, data);
 		return TRUE;
 	}
 	else
