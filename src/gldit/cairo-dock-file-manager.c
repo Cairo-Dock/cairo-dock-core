@@ -745,6 +745,8 @@ static CairoDockDesktopEnv _guess_environment (void)
 	{
 		if (strstr(cEnv, "GNOME") != NULL)
 			return CAIRO_DOCK_GNOME;
+		else if (strstr(cEnv, "Cinnamon") != NULL)
+			return CAIRO_DOCK_GNOME; // close enough
 		else if (strstr(cEnv, "XFCE") != NULL)
 			return CAIRO_DOCK_XFCE;
 		else if (strstr(cEnv, "KDE") != NULL)
