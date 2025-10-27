@@ -141,31 +141,65 @@ static void _spawn_app (const gchar * const *args, const gchar *id, const gchar 
 }
 
 
+
 static void _proxy_connected (G_GNUC_UNUSED GObject* pObj, GAsyncResult *res, G_GNUC_UNUSED gpointer ptr)
 {
 	s_proxy = g_dbus_proxy_new_for_bus_finish (res, NULL);
 	if (s_proxy)
 	{
-		const char *owner = g_dbus_proxy_get_name_owner (s_proxy);
-		if (!owner)
-		{
-			// we expect that systemd should be on the bus before 
-			// TODO: or possibly wait for it to appear later?
-			cd_message ("no owner for org.freedesktop.systemd1, not registering");
-			g_object_unref (s_proxy);
-			s_proxy = NULL;
-			return;
-		}
-		
+		// Now that we have a proxy, register our backend for starting apps
 		GldiChildProcessManagerBackend backend;
 		backend.spawn_app = _spawn_app;
 		gldi_register_process_manager_backend (&backend);
 	}
+	else cd_warning ("Cannot create DBus proxy for org.freedesktop.systemd1");
 }
 
-
-void cairo_dock_systemd_integration_init (void)
+static void _got_version (GObject* pObj, GAsyncResult *res, G_GNUC_UNUSED gpointer ptr)
 {
+	GError *erreur = NULL;
+	GVariant *prop = g_dbus_proxy_call_finish (G_DBUS_PROXY (pObj), res, &erreur);
+	if (erreur)
+	{
+		cd_warning ("Cannot get systemd version, not registering (%s)", erreur->message);
+		g_error_free (erreur);
+		return;
+	}
+	
+	long version = -1L;
+	if (g_variant_is_of_type (prop, G_VARIANT_TYPE ("(v)")))
+	{
+		GVariant *tmp1 = g_variant_get_child_value (prop, 0);
+		GVariant *tmp2 = g_variant_get_variant (tmp1);
+		if (g_variant_is_of_type (tmp2, G_VARIANT_TYPE ("s")))
+		{
+			gsize len = 0;
+			const gchar *tmp3 = g_variant_get_string (tmp2, &len); // note: return value is never NULL
+			if (len > 0)
+			{
+				char *end;
+				version = strtol (tmp3, &end, 10); // e.g. 255.4-1ubuntu8.11, we only want the major version, which is the integer part
+				if (end == tmp3) version = -1; // error parsing
+			}
+		}
+		g_variant_unref (tmp1);
+		g_variant_unref (tmp2);
+	}
+	g_variant_unref (prop);
+	
+	if (version < 0L)
+	{
+		cd_warning ("Unexpected format for systemd version");
+		return;
+	}
+	
+	if (version < 250L)
+	{
+		cd_message ("Systemd version < 250, not registering");
+		return;
+	}
+	
+	// connect to the real proxy
 	g_dbus_proxy_new_for_bus (G_BUS_TYPE_SESSION,
 		G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS | G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
 		NULL, // GDBusInterfaceInfo
@@ -174,6 +208,50 @@ void cairo_dock_systemd_integration_init (void)
 		"org.freedesktop.systemd1.Manager",
 		NULL, // GCancellable
 		_proxy_connected,
+		NULL);
+}
+
+static void _props_proxy_connected (G_GNUC_UNUSED GObject* pObj, GAsyncResult *res, G_GNUC_UNUSED gpointer ptr)
+{
+	GDBusProxy *proxy = g_dbus_proxy_new_for_bus_finish (res, NULL);
+	if (proxy)
+	{
+		const char *owner = g_dbus_proxy_get_name_owner (proxy);
+		if (!owner)
+		{
+			cd_message ("no owner for org.freedesktop.systemd1, not registering");
+			g_object_unref (proxy);
+			return;
+		}
+		
+		// Check whether we have systemd version >= 250. This is needed for the 
+		// ExitType property, which is in turn needed to properly track the lifetime
+		// of apps launched by us (see above). Since there are a lot of properties
+		// and we are not interested in changes, we use the G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES
+		// and just read this value once using the DBus interface.
+		g_dbus_proxy_call (proxy, "Get", g_variant_new ("(ss)", "org.freedesktop.systemd1.Manager", "Version"),
+			G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, _got_version, NULL);
+		// Discard our proxy as it is only for the Properties interface; we will reconnect to the
+		// Manager interface after we got the version (note: proxy is refed by the previous call
+		// and will be unrefed after the callback).
+		g_object_unref (proxy);
+	}
+	else cd_warning ("Cannot create DBus proxy for org.freedesktop.systemd1");
+}
+
+void cairo_dock_systemd_integration_init (void)
+{
+	// Note: we don't use g_bus_watch_name () as we expect that systemd will already be
+	// on the bus and will not disappear. We just check whether there is a name owner
+	// in the callback to verify it is really available.
+	g_dbus_proxy_new_for_bus (G_BUS_TYPE_SESSION,
+		G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS | G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
+		NULL, // GDBusInterfaceInfo
+		"org.freedesktop.systemd1",
+		"/org/freedesktop/systemd1",
+		"org.freedesktop.DBus.Properties", // first, we just want to read the "Version" property
+		NULL, // GCancellable
+		_props_proxy_connected,
 		NULL);
 	s_iLaunchTS = (guint32) time (NULL); // should be safe to cast and we do not care about the actual value, only that it is unique
 }
