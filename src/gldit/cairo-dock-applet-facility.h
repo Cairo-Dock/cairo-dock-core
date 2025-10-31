@@ -200,14 +200,14 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 *@param cKeyName name of the key in the conf file.
 *@param length pointer to the number of strings that were extracted from the conf file.
 *@param cDefaultValues default value if the group/key is not found (typically if the key is new). It is a string with words separated by ';'. It can be NULL.
-*@return a table of strings, to be freeed with 'g_strfreev'.
+*@return a table of strings, to be freed with 'g_strfreev'.
 */
 #define CD_CONFIG_GET_STRING_LIST_WITH_DEFAULT(cGroupName, cKeyName, length, cDefaultValues) cairo_dock_get_string_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushConfFileNeeded, length, cDefaultValues, NULL, NULL)
 /** Get the value of a 'strings list' from the conf file, with NULL as default value.
 *@param cGroupName name of the group in the conf file.
 *@param cKeyName name of the key in the conf file.
 *@param length pointer to the number of strings that were extracted from the conf file.
-*@return a table of strings, to be freeed with 'g_strfreev'.
+*@return a table of strings, to be freed with 'g_strfreev'.
 */
 #define CD_CONFIG_GET_STRING_LIST(cGroupName, cKeyName, length) CD_CONFIG_GET_STRING_LIST_WITH_DEFAULT(cGroupName, cKeyName, length, NULL)
 
@@ -380,7 +380,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 /** Path of the applet's instance's conf file.
 */
 #define CD_APPLET_MY_CONF_FILE myApplet->cConfFilePath
-/** Key file of the applet instance, availale during the init, config, and reload.
+/** Key file of the applet instance, available during the init, config, and reload.
 */
 #define CD_APPLET_MY_KEY_FILE pKeyFile
 
@@ -423,7 +423,7 @@ cairo_dock_get_integer_list_key_value (pKeyFile, cGroupName, cKeyName, &bFlushCo
 #define CD_APPLET_MY_MENU pAppletMenu
 
 //\______________________ drop.
-/** Data received after a drop occured (string).
+/** Data received after a drop occurred (string).
 */
 #define CD_APPLET_RECEIVED_DATA cReceivedData
 
@@ -797,7 +797,7 @@ gldi_shortkey_new (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
 
 //\_________________________________ TASKBAR
 /** Let your applet control the window of an external program, instead of the Taskbar.
- *\param cApplicationClass the class of the application you wish to control (in lower case), or NULL to stop controling any appli.
+ *\param cApplicationClass the class of the application you wish to control (in lower case), or NULL to stop controlling any appli.
 */
 #define CD_APPLET_MANAGE_APPLICATION(cApplicationClass) do {\
 	if (cairo_dock_strings_differ (myIcon->cClass, (cApplicationClass))) {\

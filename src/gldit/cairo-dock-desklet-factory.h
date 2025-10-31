@@ -36,7 +36,7 @@ G_BEGIN_DECLS
 
 /**
 *@file cairo-dock-desklet-factory.h This class defines the Desklets, that are Widgets placed directly on your desktop.
-* A Desklet is a container that holds 1 applet's icon plus an optionnal list of other icons and an optionnal GTK widget, has a decoration, suports several accessibility types (like Compiz Widget Layer), and has a renderer.
+* A Desklet is a container that holds 1 applet's icon plus an optional list of other icons and an optional GTK widget, has a decoration, supports several accessibility types (like Compiz Widget Layer), and has a renderer.
 * Desklets can be resized or moved directly with the mouse, and can be rotated in the 3 directions of space.
 * To actually create or destroy a Desklet, use the Desklet Manager's functoins in \ref cairo-dock-desklet-manager.h.
 */
@@ -124,9 +124,9 @@ struct _CairoDeskletRenderer {
 	CairoDeskletCalculateIconsFunc 			calculate_icons;
 	/// function called on each iteration of the rendering loop.
 	CairoDeskletUpdateRendererDataFunc 	update;
-	/// optionnal rendering function with OpenGL that only draws the bounding boxes of the icons (for picking).
+	/// optional rendering function with OpenGL that only draws the bounding boxes of the icons (for picking).
 	CairoDeskletGLRenderFunc 			render_bounding_box;
-	/// An optionnal list of preset configs.
+	/// An optional list of preset configs.
 	GList *pPreDefinedConfigList;
 };
 
@@ -176,7 +176,7 @@ struct _CairoDesklet {
 	gint iDesiredWidth, iDesiredHeight;  // taille a atteindre (fixee par l'utilisateur dans le.conf)
 	gint iKnownWidth, iKnownHeight;  // taille connue par l'applet associee.
 	gboolean bSpaceReserved;  // l'espace est actuellement reserve.
-	gboolean bAllowMinimize;  // TRUE to allow the desklet to be minimized once. The flag is reseted to FALSE after the desklet has minimized.
+	gboolean bAllowMinimize;  // TRUE to allow the desklet to be minimized once. The flag is reset to FALSE after the desklet has minimized.
 	gint iMouseX2d;  // X position of the pointer taking into account the 2D transformations on the desklet (for an opengl renderer, you'll have to use the picking).
 	gint iMouseY2d;  // Y position of the pointer taking into account the 2D transformations on the desklet (for an opengl renderer, you'll have to use the picking).
 	GTimer *pUnmapTimer;

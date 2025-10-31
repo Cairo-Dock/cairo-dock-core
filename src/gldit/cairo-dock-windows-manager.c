@@ -26,7 +26,7 @@
 // public (manager, config, data)
 GldiObjectManager myWindowObjectMgr;
 
-// dependancies
+// dependencies
 
 // private
 GList *s_pWindowsList = NULL;  // list of all window actors
@@ -424,7 +424,7 @@ gchar* gldi_window_parse_class(const gchar* res_class, const gchar* res_name) {
 	if (res_class)
 	{
 		cd_debug ("  res_name : %s(%x); res_class : %s(%x)", res_name, res_name, res_class, res_class);
-		if (strcmp (res_class, "Wine") == 0 && res_name && (g_str_has_suffix (res_name, ".exe") || g_str_has_suffix (res_name, ".EXE")))  // wine application: use the name instead, because we don't want to group all wine apps togather
+		if (strcmp (res_class, "Wine") == 0 && res_name && (g_str_has_suffix (res_name, ".exe") || g_str_has_suffix (res_name, ".EXE")))  // wine application: use the name instead, because we don't want to group all wine apps together
 		{
 			cd_debug ("  wine application detected, changing the class '%s' to '%s'", res_class, res_name);
 			cClass = g_ascii_strdown (res_name, -1);
@@ -476,7 +476,7 @@ gchar* gldi_window_parse_class(const gchar* res_class, const gchar* res_name) {
 		// remove some suffices that can be problematic: .exe, .py (note: cClass is already lowercase here)
 		if (g_str_has_suffix (cClass, ".exe")) cClass[strlen (cClass) - 4] = 0;
 		else if (g_str_has_suffix (cClass, ".py")) cClass[strlen (cClass) - 3] = 0;
-		cairo_dock_remove_version_from_string (cClass);  // we remore number of version (e.g. Openoffice.org-3.1)
+		cairo_dock_remove_version_from_string (cClass);  // we remove number of version (e.g. Openoffice.org-3.1)
 		cd_debug ("got an application with class '%s'", cClass);
 	}
 	return cClass;

@@ -82,7 +82,7 @@ fi
 ###
 if test $UPDATE_PLUGINS -gt 0; then
 	cd ${PLUGINS_DIR}
-	echo "extracing the messages of the plug-ins ..."
+	echo "extracting the messages of the plug-ins ..."
 	for plugin in *
 	do
 		if test -d $plugin/data; then
@@ -117,7 +117,7 @@ fi
 ###
 if test $UPDATE_THIRD_PARTY -gt 0; then
 	cd ${PLUGINS_EXTRA_DIR}
-	echo "extracing the messages of third-party applets ..."
+	echo "extracting the messages of third-party applets ..."
 	for applet in `sed -n "/^\[/p" list.conf | tr -d []`; do
 		if test -d $applet; then
 			cd $applet

@@ -46,7 +46,7 @@ CairoDialogsParam myDialogsParam;
 GldiManager myDialogsMgr;
 GldiObjectManager myDialogObjectMgr;
 
-// dependancies
+// dependencies
 extern CairoDock *g_pMainDock;
 extern gboolean g_bUseOpenGL;
 extern CairoDockHidingEffect *g_pHidingBackend;  // cairo_dock_is_hidden
@@ -1482,7 +1482,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 		if (CAIRO_DOCK_IS_DOCK (pContainer))
 		{
 			CAIRO_DOCK (pContainer)->bHasModalWindow = TRUE;
-			gldi_dock_enter_synthetic (CAIRO_DOCK (pContainer));  // to prevent the dock from hiding. We want to see it while the dialog is visible (a leave event will be emited when it disappears).
+			gldi_dock_enter_synthetic (CAIRO_DOCK (pContainer));  // to prevent the dock from hiding. We want to see it while the dialog is visible (a leave event will be emitted when it disappears).
 		}
 	}
 	else if (CAIRO_DOCK_IS_DOCK (pContainer) && gldi_container_use_new_positioning_code ())

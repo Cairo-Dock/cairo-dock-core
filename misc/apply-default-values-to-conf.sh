@@ -73,7 +73,7 @@ set_current_conf_file "cairo-dock.conf"
 set_value "Position"	    "x gap" 			    0
 set_value "Position"	    "y gap" 			    0
 set_value "Position"	    "xinerama"		    false
-set_value "Accessibility"   "max autorized width"   0
+set_value "Accessibility"   "max authorized width"   0
 set_value "Accessibility"   "visibility"  	    4
 set_value "Accessibility"   "leaving delay"	    250
 set_value "Accessibility"   "show delay"  	    300
@@ -163,7 +163,7 @@ set_current_conf_file "plug-ins/drop_indicator/drop_indicator.conf"
 set_value "Drag and drop indicator"     "speed" 		    2
 
 set_current_conf_file "plug-ins/dustbin/dustbin.conf"
-set_value "Configuration"   "additionnal directories"     ""
+set_value "Configuration"   "additional directories"     ""
 set_value "Configuration"   "alternative file browser"    ""
 
 set_current_conf_file "plug-ins/GMenu/GMenu.conf"

@@ -253,7 +253,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName, gint iDesiredIconS
 		int j = 0;
 		while (cSuffixTab[j] != NULL)
 		{
-			if (strcmp(str+1, cSuffixTab[j]) == 0)  // exemple : "firefox.svg", but not "firefox-3.0" or "org.gnome.Calculator"
+			if (strcmp(str+1, cSuffixTab[j]) == 0)  // example : "firefox.svg", but not "firefox-3.0" or "org.gnome.Calculator"
 			{
 				bHasSuffix = TRUE;
 				break;
@@ -546,7 +546,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 	cd_debug ("label font: %s, %d\n", pLabels->iconTextDescription.cFont, pLabels->iconTextDescription.iSize);
 	
 	//\___________________ labels text color
-	pLabels->iconTextDescription.bOutlined = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "text oulined", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+	pLabels->iconTextDescription.bOutlined = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "text outlined", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
 	GldiColor couleur_backlabel = {{0., 0., 0., 0.85}};
 	GldiColor couleur_label = {{1., 1., 1., 1.}};

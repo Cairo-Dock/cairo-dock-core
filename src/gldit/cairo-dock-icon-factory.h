@@ -64,7 +64,7 @@ typedef enum {
 
 /// Icon's interface
 struct _IconInterface {
-	/// function that loads the icon surface (and optionnally texture).
+	/// function that loads the icon surface (and optionally texture).
 	void (*load_image) (Icon *icon);
 	/// function called when the user drag something over the icon for more than 500ms.
 	void (*action_on_drag_hover) (Icon *icon);

@@ -37,7 +37,7 @@
 GldiManager myBackendsMgr;
 CairoBackendsParam myBackendsParam;
 
-// dependancies
+// dependencies
 extern gboolean g_bUseOpenGL;
 
 // private

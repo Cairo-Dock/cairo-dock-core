@@ -56,7 +56,7 @@ CD_APPLET_INIT_BEGIN
 CD_APPLET_INIT_END
 
 
-//\___________ Here is where you stop your applet. myConfig and myData are still valid, but will be reseted to 0 at the end of the function. In the end, your applet will go back to its original state, as if it had never been activated.
+//\___________ Here is where you stop your applet. myConfig and myData are still valid, but will be reset to 0 at the end of the function. In the end, your applet will go back to its original state, as if it had never been activated.
 CD_APPLET_STOP_BEGIN
 	CD_APPLET_UNREGISTER_FOR_CLICK_EVENT;
 	CD_APPLET_UNREGISTER_FOR_MIDDLE_CLICK_EVENT;

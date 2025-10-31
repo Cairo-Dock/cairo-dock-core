@@ -68,7 +68,7 @@ static gchar *s_cDistantThemeDirName = NULL;
 #define CAIRO_DOCK_LOCAL_ICONS_DIR "icons"
 #define CAIRO_DOCK_LOCAL_IMAGES_DIR "images"
 
-// dependancies
+// dependencies
 extern CairoDock *g_pMainDock;
 
 

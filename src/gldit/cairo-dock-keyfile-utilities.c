@@ -239,7 +239,7 @@ static void cairo_dock_merge_key_files (GKeyFile *pOriginalKeyFile, GKeyFile *pR
 			if (! g_key_file_has_key (pReplacementKeyFile, cGroupName, cKeyName, NULL))
 			{
 				cComment = g_key_file_get_comment (pOriginalKeyFile, cGroupName, cKeyName, NULL);
-				if (cComment != NULL && cComment[0] != '\0' && cComment[1] != '0')  // not hidden nor peristent
+				if (cComment != NULL && cComment[0] != '\0' && cComment[1] != '0')  // not hidden nor persistent
 				{
 					g_key_file_remove_comment (pOriginalKeyFile, cGroupName, cKeyName, NULL);
 					g_key_file_remove_key (pOriginalKeyFile, cGroupName, cKeyName, NULL);

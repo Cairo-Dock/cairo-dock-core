@@ -29,7 +29,7 @@
 G_BEGIN_DECLS
 
 /**
-*@file cairo-dock-data-renderer-manager.h This class manages the list of available Data Renderers and their global ressources.
+*@file cairo-dock-data-renderer-manager.h This class manages the list of available Data Renderers and their global resources.
 */
 
 // manager

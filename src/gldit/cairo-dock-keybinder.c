@@ -49,7 +49,7 @@
 // public (manager, config, data)
 GldiObjectManager myShortkeyObjectMgr;
 
-// dependancies
+// dependencies
 
 // private
 static GSList *s_pKeyBindings = NULL;
@@ -157,7 +157,7 @@ gboolean gldi_shortkey_rebind (GldiShortkey *binding,
 	g_return_val_if_fail (binding != NULL, FALSE);
 	cd_debug ("%s (%s)", __func__, binding->keystring);
 	
-	// ensure it's a registerd binding
+	// ensure it's a registered binding
 	GSList *iter = g_slist_find (s_pKeyBindings, binding);
 	g_return_val_if_fail (iter != NULL, FALSE);
 	

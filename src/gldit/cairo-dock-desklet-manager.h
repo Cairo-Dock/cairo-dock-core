@@ -35,7 +35,7 @@ G_BEGIN_DECLS
 
 /**
 *@file cairo-dock-desklet-manager.h This class manages the Desklets, that are Widgets placed directly on your desktop.
-* A Desklet is a container that holds 1 applet's icon plus an optionnal list of other icons and an optionnal GTK widget, has a decoration, suports several accessibility types (like Compiz Widget Layer), and has a renderer.
+* A Desklet is a container that holds 1 applet's icon plus an optional list of other icons and an optional GTK widget, has a decoration, supports several accessibility types (like Compiz Widget Layer), and has a renderer.
 * Desklets can be resized or moved directly with the mouse, and can be rotated in the 3 directions of space.
 */
 

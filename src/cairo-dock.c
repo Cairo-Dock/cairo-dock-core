@@ -217,7 +217,7 @@ static void _cairo_dock_intercept_signal (int signal)
 		g_print ("Couldn't guess if it was an applet's fault or not. It may have crashed inside the core or inside a thread\n");
 	}
 	
-	// if the crash occurs on startup, take additionnal measures; else just respawn quietly.
+	// if the crash occurs on startup, take additional measures; else just respawn quietly.
 	if (! s_bSucessfulLaunch)  // a crash on startup,
 	{
 		if (s_iNbCrashes < 2)  // the first 2 crashes, restart with a delay (in case we were launched too early on startup).
@@ -350,7 +350,7 @@ int main (int argc, char** argv)
 	 */
 	if (s_iNbCrashes > 4)
 	{
-		g_print ("Sorry, Cairo-Dock has encoutered some problems, and will quit.\n");
+		g_print ("Sorry, Cairo-Dock has encountered some problems, and will quit.\n");
 		return 1;
 	}
 
@@ -393,7 +393,7 @@ int main (int argc, char** argv)
 			_("Ask again on startup which backend to use."), NULL},
 		{"env", 'e', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
 			&cEnvironment,
-			_("Force the dock to consider this environnement - use it with care."), NULL},
+			_("Force the dock to consider this environment - use it with care."), NULL},
 		{"dir", 'd', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
 			&cUserDefinedDataDir,
 			_("Force the dock to load from this directory, instead of ~/.config/cairo-dock."), NULL},
@@ -439,7 +439,7 @@ int main (int argc, char** argv)
 			_("Cairo-Dock makes anything, including coffee !"), NULL},
 		{"modules-dir", 'M', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,
 			&cUserDefinedModuleDir,
-			_("Ask the dock to load additionnal modules contained in this directory (though it is unsafe for your dock to load unnofficial modules)."), NULL},
+			_("Ask the dock to load additional modules contained in this directory (though it is unsafe for your dock to load unofficial modules)."), NULL},
 		{"testing", 'T', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&bTesting,
 			_("For debugging purpose only. The crash manager will not be started to hunt down the bugs."), NULL},
@@ -674,7 +674,7 @@ int main (int argc, char** argv)
 			gldi_modules_new_from_directory (cUserDefinedModuleDir, &erreur);  // load user plug-ins
 			if (erreur != NULL)
 			{
-				cd_warning ("%s\n  no additionnal module will be available", erreur->message);
+				cd_warning ("%s\n  no additional module will be available", erreur->message);
 				g_error_free (erreur);
 				erreur = NULL;
 			}

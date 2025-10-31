@@ -14,7 +14,7 @@ Fabounet :
    * proposed to see the help if it has never been done
    * message when no plug-in
    * removed some print messages
- * Config pannel :
+ * Config panel :
    * changed the agencement of many options for a better ergonomy.
    * enhancement of previews in config panels
    * correction of the icon's order bug
@@ -48,7 +48,7 @@ Fabounet :
    * added some tooltips to the menu
    * lock dock option works now for all icons
  * Themes :
-   * added versionning for distant themes
+   * added versioning for distant themes
    * Default: correction in some conf files
    * fixed 1 crash when reloading theme
    * Improved the theme selector
@@ -81,7 +81,7 @@ Matttbe :
 Fabounet :
  * Miscellaneous
    * animations and effects names are now translated
-   * fixed versionning for Dbus and Switcher
+   * fixed versioning for Dbus and Switcher
  * Rendering :
    * fixed a bug in rendering-caroussel
    * fixed a bug on Slide view (wrong placement)
@@ -91,7 +91,7 @@ Fabounet :
    * small bug-fix on MP if artist AND title is empty
    * fixed a infinite loop when a player crash
    * Fixed blank covers for Audacious
-   * modified the dowload of covers (Amazon has changed its API)
+   * modified the download of covers (Amazon has changed its API)
    * prevent empty image from Amazon 
  * Switcher :
    * fixed a bug with windows list with Metacity
@@ -174,7 +174,7 @@ Core
  * VFS backend: new methods added
  * OpenGL backend: added a cairo-like API for paths
  * Applet API: unified methods to handle icons in sub-docks and desklets
- * Added ability to have several docks with independant configurations
+ * Added ability to have several docks with independent configurations
  * Icons that demand attention are visible even when the dock is hidden
  * Icons are now loaded progressively for a faster startup
  * Desklets: added ability to click behind desklets

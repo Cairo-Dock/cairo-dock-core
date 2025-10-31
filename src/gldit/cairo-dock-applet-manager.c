@@ -39,7 +39,7 @@
 // public (manager, config, data)
 GldiObjectManager myAppletIconObjectMgr;
 
-// dependancies
+// dependencies
 
 // private
 

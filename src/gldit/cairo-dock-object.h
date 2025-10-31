@@ -152,7 +152,7 @@ Note: it is safe to remove the callback when it is called, but not another one.
 *@param pObject the object (Icon, Container, Manager) for which the action has been registered.
 *@param iNotifType type of the notification.
 *@param pFunction callback.
-*@param pUserData data that was registerd with the callback.
+*@param pUserData data that was registered with the callback.
 */
 void gldi_object_remove_notification (gpointer pObject, GldiNotificationType iNotifType, GldiNotificationFunc pFunction, gpointer pUserData);
 
