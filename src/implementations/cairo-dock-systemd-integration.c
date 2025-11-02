@@ -26,7 +26,7 @@
 #include "cairo-dock-systemd-integration.h"
 #include <cairo-dock-log.h>
 
-GDBusProxy *s_proxy = NULL;
+static GDBusProxy *s_proxy = NULL;
 
 static guint32 s_iLaunchID = 0; // unique counter to be used as a suffix for systemd unit names
 static guint32 s_iLaunchTS = 0; // timestamp of when we were launched, to be used as a prefix for systemd unit names
