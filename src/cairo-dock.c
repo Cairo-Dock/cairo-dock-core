@@ -46,7 +46,7 @@
 **
 *******************************************************************************/
 
-#include <unistd.h> // sleep, execl
+#include <unistd.h> // sleep, execl, isatty
 #include <signal.h>
 
 #define __USE_POSIX
@@ -262,8 +262,6 @@ static gboolean on_delete_maintenance_gui (G_GNUC_UNUSED GtkWidget *pWidget, GMa
 	return FALSE;  // TRUE <=> ne pas detruire la fenetre.
 }
 
-static void PrintMuteFunc (G_GNUC_UNUSED const gchar *string) {}
-
 static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
 {
 	gchar *cConfFilePath = g_strdup_printf ("%s/.cairo-dock", cCairoDockDataDir);
@@ -353,11 +351,6 @@ int main (int argc, char** argv)
 		g_print ("Sorry, Cairo-Dock has encoutered some problems, and will quit.\n");
 		return 1;
 	}
-
-	// mute all output messages if CD is not launched from a terminal
-	if (getenv("TERM") == NULL)  /// why not isatty(stdout) ?...
-		g_set_print_handler(PrintMuteFunc);
-	
 	
 	// init lib
 	dbus_g_thread_init (); // it's a wrapper: it will use dbus_threads_init_default ();
@@ -650,13 +643,16 @@ int main (int argc, char** argv)
 		}
 	}
 	
-	gchar *msg = gldi_get_diag_msg ();
-	g_print ("\n"
-	" ============================================================================\n"
-	"%s"
-	" ============================================================================\n\n",
-		msg);
-	g_free (msg);
+	if (isatty (STDOUT_FILENO))
+	{
+		gchar *msg = gldi_get_diag_msg ();
+		g_print ("\n"
+		" ============================================================================\n"
+		"%s"
+		" ============================================================================\n\n",
+			msg);
+		g_free (msg);
+	}
 	
 	//\___________________ load plug-ins (must be done after everything is initialized).
 	if (! bSafeMode)
