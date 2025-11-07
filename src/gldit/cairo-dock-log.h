@@ -85,7 +85,7 @@ void cd_log_force_use_color (void);
 #define cd_message(...)                                                \
   cd_log_location(G_LOG_LEVEL_MESSAGE, __FILE__, __PRETTY_FUNCTION__, __LINE__,__VA_ARGS__)
 
-/* Write a debug message on the terminal. Debug message are only useful for developpers.
+/* Write a debug message on the terminal. Debug message are only useful for developers.
 *@param ... the message format and parameters, in a 'printf' style.
 */
 #define cd_debug(...)                                                  \

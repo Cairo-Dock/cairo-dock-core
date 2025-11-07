@@ -122,14 +122,14 @@ int cairo_dock_dbus_get_integer (DBusGProxy *pDbusProxy, const gchar *cAccessor)
 /** Get the value of a 'string' parameter on the bus.
 *@param pDbusProxy proxy to the connection.
 *@param cAccessor name of the accessor.
-*@return the value of the parameter, to be freeed with g_free.
+*@return the value of the parameter, to be freed with g_free.
 */
 gchar *cairo_dock_dbus_get_string (DBusGProxy *pDbusProxy, const gchar *cAccessor);
 
 /** Get the value of a 'string list' parameter on the bus.
 *@param pDbusProxy proxy to the connection.
 *@param cAccessor name of the accessor.
-*@return the value of the parameter, to be freeed with g_strfreev.
+*@return the value of the parameter, to be freed with g_strfreev.
 */
 gchar **cairo_dock_dbus_get_string_list (DBusGProxy *pDbusProxy, const gchar *cAccessor);
 

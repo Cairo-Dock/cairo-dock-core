@@ -31,7 +31,7 @@ G_BEGIN_DECLS
 /**
 *@file cairo-dock-config.h This class manages the configuration system of Cairo-Dock.
 * Cairo-Dock and any items (icons, root docks, modules, etc) are configured by conf files.
-* Conf files containes some information usable by the GUI manager to build a corresponding config panel and update the conf file automatically, which relieves you from this thankless task.
+* Conf files contains some information usable by the GUI manager to build a corresponding config panel and update the conf file automatically, which relieves you from this thankless task.
 */
 
 /*

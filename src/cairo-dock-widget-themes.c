@@ -242,7 +242,7 @@ static gboolean _cairo_dock_load_theme (GKeyFile* pKeyFile, ThemesWidget *pTheme
 		cd_debug ("start importation...");
 		pThemesWidget->pImportTask = cairo_dock_import_theme_async (cNewThemeName, bLoadBehavior, bLoadLaunchers, _load_theme, pThemesWidget);  // if 'pThemesWidget' is destroyed, the 'reset' callback will be called and will cancel the task.
 	}
-	else  // if the theme is already local and uptodate, there is really no need to show a progressbar, because only the download/unpacking is done asynchonously (and the copy of the files is fast enough).
+	else  // if the theme is already local and uptodate, there is really no need to show a progressbar, because only the download/unpacking is done asynchronously (and the copy of the files is fast enough).
 	{
 		bThemeImported = cairo_dock_import_theme (cNewThemeName, bLoadBehavior, bLoadLaunchers);
 		

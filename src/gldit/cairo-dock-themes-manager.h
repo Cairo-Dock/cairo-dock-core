@@ -35,7 +35,7 @@ void cairo_dock_delete_conf_file (const gchar *cConfFilePath);
 
 gboolean cairo_dock_add_conf_file (const gchar *cOriginalConfFilePath, const gchar *cConfFilePath);
 
-/** Update a conf file with a list of values of the form : {type, name of the groupe, name of the key, value}. Must end with G_TYPE_INVALID.
+/** Update a conf file with a list of values of the form : {type, name of the group, name of the key, value}. Must end with G_TYPE_INVALID.
 *@param cConfFilePath path to the conf file.
 *@param iFirstDataType type of the first value.
 */
@@ -60,27 +60,27 @@ gchar *cairo_dock_write_keys_to_new_conf_file (GKeyFile *pKeyFile, const gchar *
  * @param cNewThemeName name to export the theme to.
  * @param bSaveBehavior whether to save the behavior parameters too.
  * @param bSaveLaunchers whether to save the launchers too.
- * @return TRUE if the theme could be exported succefuly.
+ * @return TRUE if the theme could be exported successfully.
  */
 gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean bSaveBehavior, gboolean bSaveLaunchers);
 
 /** Create a package of the current theme. Packages can be distributed easily, and imported into the dock by a mere drag and drop into the Theme Manager. The package is placed in the cDirPath directory (or $HOME if cDirPath is wrong).
  * @param cThemeName name of the package.
  * @param cDirPath path to the directory
- * @return TRUE if the theme could be packaged succefuly.
+ * @return TRUE if the theme could be packaged successfully.
  */
 gboolean cairo_dock_package_current_theme (const gchar *cThemeName, const gchar *cDirPath);
 
 
 /** Extract a package into the themes folder. Does not load it.
  * @param cPackagePath path of a package. If the package is distant, it is first downoladed.
- * @return the path of the theme folder, or NULL if anerror occured.
+ * @return the path of the theme folder, or NULL if anerror occurred.
  */
 gchar * cairo_dock_depackage_theme (const gchar *cPackagePath);
 
 /** Remove some exported themes from the hard-disk.
  * @param cThemesList a list of theme names, NULL-terminated.
- * @return TRUE if the themes has been succefuly deleted.
+ * @return TRUE if the themes has been successfully deleted.
  */
 gboolean cairo_dock_delete_themes (gchar **cThemesList);
 
@@ -88,7 +88,7 @@ gboolean cairo_dock_delete_themes (gchar **cThemesList);
  * @param cThemeName name of the theme to import.
  * @param bLoadBehavior whether to import the behavior parameters too.
  * @param bLoadLaunchers whether to import the launchers too.
- * @return TRUE if the theme could be imported succefuly.
+ * @return TRUE if the theme could be imported successfully.
  */
 gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavior, gboolean bLoadLaunchers);
 
@@ -111,7 +111,7 @@ GldiTask *cairo_dock_import_theme_async (const gchar *cThemeName, gboolean bLoad
 *@param cCurrentThemeDirPath path to the current theme
 *@param cLocalThemeDirPath path to the installed themes (default themes)
 *@param cDistantThemeDirName folder of the themes on the server
-*@param cThemeServerAdress adress of the themes server
+*@param cThemeServerAdress address of the themes server
 */
 void cairo_dock_set_paths (gchar *cRootDataDirPath, gchar *cExtraDirPath, gchar *cThemesDirPath, gchar *cCurrentThemeDirPath, gchar *cLocalThemeDirPath, gchar *cDistantThemeDirName, gchar *cThemeServerAdress);
 

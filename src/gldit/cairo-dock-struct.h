@@ -236,11 +236,11 @@
  * 
  * In the section CD_APPLET_INIT_BEGIN/CD_APPLET_INIT_END, write the code that will run on startup.
  * 
- * In the section CD_APPLET_STOP_BEGIN/CD_APPLET_STOP_END, write the code that will run when the applet is deactivated: remove any timer, destroy any allocated ressources, unregister notifications, etc.
+ * In the section CD_APPLET_STOP_BEGIN/CD_APPLET_STOP_END, write the code that will run when the applet is deactivated: remove any timer, destroy any allocated resources, unregister notifications, etc.
  * 
  * In the section CD_APPLET_RELOAD_BEGIN/CD_APPLET_RELOAD_END section, write the code that will run when the applet is reloaded; this can happen in 2 cases:
  *   - when the configuration is changed (\ref CD_APPLET_MY_CONFIG_CHANGED is TRUE, for instance when the user edits the applet)
- *   - when something else changed (\ref CD_APPLET_MY_CONFIG_CHANGED is FALSE, for instance when the icon theme is changed, or the icon size is changed); in this case, most of the time you have nothing to do, except if you loaded some ressources yourself.
+ *   - when something else changed (\ref CD_APPLET_MY_CONFIG_CHANGED is FALSE, for instance when the icon theme is changed, or the icon size is changed); in this case, most of the time you have nothing to do, except if you loaded some resources yourself.
  * 
  * Edit the file <i>src/applet-config.c</i>;
  * In the section CD_APPLET_GET_CONFIG_BEGIN/CD_APPLET_GET_CONFIG_END, get all your config parameters (don't forget to define them in applet-struct.h). Use the CD_CONFIG_GET_* macros (defined in cairo-dock-applet-facility.h) to do so conveniently.
@@ -277,7 +277,7 @@
  * - <b>myDock</b> : if your container is a dock, myDock = myContainer, otherwise it is NULL.
  * - <b>myDesklet</b> : if your container is a desklet, myDesklet = myContainer, otherwise it is NULL.
  * - <b>myConfig</b> : the structure holding all the parameters you get in your config file. You have to define it in <i>applet-struct.h</i>.
- * - <b>myData</b> : the structure holding all the ressources loaded at run-time. You have to define it in <i>applet-struct.h</i>.
+ * - <b>myData</b> : the structure holding all the resources loaded at run-time. You have to define it in <i>applet-struct.h</i>.
  * - <b>myDrawContext</b> : a cairo context, if you need to draw on the icon with the libcairo.
  * 
  * - To get values contained inside your <b>conf file</b>, you can use the following :\n
@@ -318,7 +318,7 @@
  * 
  * But you can also make your own animation, like <i>Clock</i> of <i>Cairo-Penguin</i>. You will have to integrate yourself into the rendering loop of your container. Don't panic, here again, Cairo-Dock helps you !
  * 
- * First you will register to the "update container" notification, with a simple call to \ref CD_APPLET_REGISTER_FOR_UPDATE_ICON_SLOW_EVENT or \ref CD_APPLET_REGISTER_FOR_UPDATE_ICON_EVENT, depending on the refresh frequency you need : ~10Hz or ~33Hz. A high frequency needs of course more CPU, and most of the time the slow frequancy is enough.
+ * First you will register to the "update container" notification, with a simple call to \ref CD_APPLET_REGISTER_FOR_UPDATE_ICON_SLOW_EVENT or \ref CD_APPLET_REGISTER_FOR_UPDATE_ICON_EVENT, depending on the refresh frequency you need : ~10Hz or ~33Hz. A high frequency needs of course more CPU, and most of the time the slow frequency is enough.
  * 
  * Then you will just put all your code in a \ref CD_APPLET_ON_UPDATE_ICON_BEGIN/\ref CD_APPLET_ON_UPDATE_ICON_END section. That's all ! In this section, do what you want, like redrawing your icon, possibly incrementing a counter to know until where you went, etc. See \ref opengl "the previous paragraph" to draw on your icon.
  * Inside the rendering loop, you can skip an iteration with \ref CD_APPLET_SKIP_UPDATE_ICON, and quit the loop with \ref CD_APPLET_STOP_UPDATE_ICON or \ref CD_APPLET_PAUSE_UPDATE_ICON (don't forget to quit the loop when you're done, otherwise your container may continue to redraw itself, which means a needless CPU load).
@@ -355,7 +355,7 @@
  * 
  * 
  * \n
- * \section advanced_sec Advanced functionnalities
+ * \section advanced_sec Advanced functionalities
  * 
  * \subsection advanced_config How can I make my own widgets in the config panel ?
  * 
@@ -391,7 +391,7 @@
  * 
  * \subsection multi How can I make my applet multi-instanciable ?
  *
- * Applets can be launched several times, an instance will be created each time. To ensure your applet can be instanciated several times, you just need to pass myApplet to any function that uses one of its fields (myData, myIcon, etc). Then, to indicate Cairo-Dock that your applet is multi-instanciable, you'll have to define the macro CD_APPLET_MULTI_INSTANCE in each file. A convenient way to do that is to define it in the CMakeLists.txt by adding the following line: \code add_definitions (-DCD_APPLET_MULTI_INSTANCE="1") \endcode.
+ * Applets can be launched several times, an instance will be created each time. To ensure your applet can be instantiated several times, you just need to pass myApplet to any function that uses one of its fields (myData, myIcon, etc). Then, to indicate Cairo-Dock that your applet is multi-instanciable, you'll have to define the macro CD_APPLET_MULTI_INSTANCE in each file. A convenient way to do that is to define it in the CMakeLists.txt by adding the following line: \code add_definitions (-DCD_APPLET_MULTI_INSTANCE="1") \endcode.
  * 
  * 
  * \subsection render_container How can I draw anywhere on the dock, not only on my icon ?

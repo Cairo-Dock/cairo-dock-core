@@ -67,7 +67,7 @@ static GldiObjectManager myAppInfoObjectMgr;
 struct _CairoDockClassAppli {
 	/// TRUE if the appli must use the icon provided by X instead the one from the theme.
 	gboolean bUseXIcon;
-	/// TRUE if the appli doesn't group togather with its class.
+	/// TRUE if the appli doesn't group together with its class.
 	gboolean bExpand;
 	/// List of the inhibitors of the class.
 	GList *pIconsOfClass;
@@ -1204,7 +1204,7 @@ void cairo_dock_deinhibite_class (const gchar *cClass, Icon *pInhibitorIcon)
 		cairo_dock_trigger_load_icon_buffers (pInhibitorIcon);  // in case the inhibitor was drawn with an emblem or a stack of the applis
 	}
 
-	if (pInhibitorIcon == NULL || pInhibitorIcon->pAppli != NULL)  // the launcher is controlling 1 appli icon, or we deinhibate all the inhibitors.
+	if (pInhibitorIcon == NULL || pInhibitorIcon->pAppli != NULL)  // the launcher is controlling 1 appli icon, or we deinhibit all the inhibitors.
 	{
 		const GList *pList = cairo_dock_list_existing_appli_with_class (cClass);
 		Icon *pIcon;
@@ -2552,7 +2552,7 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 				{
 					g_free (cDefaultClass);
 					cDefaultClass = g_strdup_printf ("%s%s", "libreoffice", str+2);
-					str = strchr (cDefaultClass, ' ');  // remove the additionnal params of the command.
+					str = strchr (cDefaultClass, ' ');  // remove the additional params of the command.
 					if (str)
 						*str = '\0';
 					cClass = cDefaultClass;  // "libreoffice-writer"

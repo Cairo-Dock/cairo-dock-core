@@ -117,7 +117,7 @@ typedef enum {
 
 /** Get a Dock from a given name.
 * @param cDockName the name of the dock.
-* @return the dock that has been registerd under this name, or NULL if none exists.
+* @return the dock that has been registered under this name, or NULL if none exists.
 */
 CairoDock *gldi_dock_get (const gchar *cDockName);
 

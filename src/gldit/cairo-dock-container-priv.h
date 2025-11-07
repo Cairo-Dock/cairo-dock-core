@@ -178,7 +178,7 @@ void gldi_container_move_to_rect (GldiContainer *pContainer,
 									gdouble rel_anchor_dy);
 
 /** Calculate the parameters to pass to gldi_container_move_to_rect() to
- * 	poisition a child container on the given pContainer, pointing to pPointedIcon.
+ * 	position a child container on the given pContainer, pointing to pPointedIcon.
  * 	This can be used for subdocks, dialogs and menus.
  *  The bSkipLabel parameter controls whether to leave space for an icon's label on a horizontal dock
  *  (should be TRUE for subdocks and dialogs, FALSE for menus). */
@@ -251,10 +251,10 @@ void gldi_container_disable_drop (GldiContainer *pContainer); // not used at all
 /// Get the GdkAtom used internally from dragging icons between docks
 GdkAtom gldi_container_icon_dnd_atom (void);
 
-/** Notify everybody that a drop has just occured.
+/** Notify everybody that a drop has just occurred.
 * @param cReceivedData the dropped data.
-* @param pPointedIcon the icon which was pointed when the drop occured.
-* @param fOrder the order of the icon if the drop occured on it, or LAST_ORDER if the drop occured between 2 icons.
+* @param pPointedIcon the icon which was pointed when the drop occurred.
+* @param fOrder the order of the icon if the drop occurred on it, or LAST_ORDER if the drop occurred between 2 icons.
 * @param pContainer the container of the icon
 */
 void gldi_container_notify_drop_data (GldiContainer *pContainer, gchar *cReceivedData, Icon *pPointedIcon, double fOrder);

@@ -41,7 +41,7 @@ G_BEGIN_DECLS
 * 
 * The first character of the comment defines the type of widget. Known types are listed in the CairoDockGUIWidgetType enum.
 * 
-* A key can be a behaviour key or an appearance key. Appearance keys are keys that defines the look of the appli, they belong to the theme. Behaviour keys are keys that define some configuration parameters, that depends on the user. To mark a key as an apppearance one, suffix the widget character with a '+'. Thus, keys not marked with a '+' won't be loaded when the user loads a theme, except if he forces it.
+* A key can be a behaviour key or an appearance key. Appearance keys are keys that defines the look of the appli, they belong to the theme. Behaviour keys are keys that define some configuration parameters, that depends on the user. To mark a key as an appearance one, suffix the widget character with a '+'. Thus, keys not marked with a '+' won't be loaded when the user loads a theme, except if he forces it.
 * 
 * After the widget character and its suffix, some widget accept a list of values. For instance, a spinbutton can have a min and a max limits, a list can have pre-defined elements, etc. Such values are set between '[' and ']' brackets, and separated by ';' inside.
 * 
@@ -63,7 +63,7 @@ typedef enum {
 	CAIRO_DOCK_WIDGET_SPIN_INTEGER='i',
 	/// integer in an horizontal scale.
 	CAIRO_DOCK_WIDGET_HSCALE_INTEGER='I',
-	/// pair of integers for dimansion WidthxHeight
+	/// pair of integers for dimension WidthxHeight
 	CAIRO_DOCK_WIDGET_SIZE_INTEGER='j',
 	/// double in a spin button.
 	CAIRO_DOCK_WIDGET_SPIN_DOUBLE='f',
@@ -232,7 +232,7 @@ The widgets represent a pair (group,key) as defined in the config file.
 @param pWidgetList list of widgets built from the config file
 @param cGroupName name of the group the widget belongs to
 @param cKeyName name of the key the widget represents
-@return the widget asociated with the (group,key) , or NULL if none is found
+@return the widget associated with the (group,key) , or NULL if none is found
 */
 CairoDockGroupKeyWidget *cairo_dock_gui_find_group_key_widget_in_list (GSList *pWidgetList, const gchar *cGroupName, const gchar *cKeyName);
 

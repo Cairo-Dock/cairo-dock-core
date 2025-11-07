@@ -54,7 +54,7 @@ static gboolean _launch_task_timer (GldiTask *pTask)
 }
 static gboolean _check_for_update_idle (GldiTask *pTask)
 {
-	// process the data (we don't need to wait that the thread is over, so do it now, it will let more time for the thread to finish, and therfore often save a 'usleep').
+	// process the data (we don't need to wait that the thread is over, so do it now, it will let more time for the thread to finish, and therefore often save a 'usleep').
 	if (pTask->bNeedsUpdate)  // data are ready to be processed -> perform the update
 	{
 		if (! pTask->bDiscard)  // of course if the task has been discarded before, don't do anything.
@@ -110,7 +110,7 @@ static gboolean _check_for_update_idle (GldiTask *pTask)
 	}
 	
 	// if the thread is not yet over, come back in 1ms.
-	g_usleep (1);  // we don't want to block the main loop until the thread is over; so just sleep 1ms to give it a chance to terminate. so it's a kind of 'sched_yield()' wihout blocking the main loop.
+	g_usleep (1);  // we don't want to block the main loop until the thread is over; so just sleep 1ms to give it a chance to terminate. so it's a kind of 'sched_yield()' without blocking the main loop.
 	return TRUE;
 }
 static gpointer _get_data_threaded (GldiTask *pTask)

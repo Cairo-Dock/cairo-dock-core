@@ -73,9 +73,9 @@ struct _CairoDockHidingEffect {
 	void (*pre_render) (CairoDock *pDock, double fOffset, cairo_t *pCairoContext);
 	/// function called before the icons are drawn (opengl)
 	void (*pre_render_opengl) (CairoDock *pDock, double fOffset);
-	/// function called afer the icons are drawn (cairo)
+	/// function called after the icons are drawn (cairo)
 	void (*post_render) (CairoDock *pDock, double fOffset, cairo_t *pCairoContext);
-	/// function called afer the icons are drawn (opengl)
+	/// function called after the icons are drawn (opengl)
 	void (*post_render_opengl) (CairoDock *pDock, double fOffset);
 	/// function called when the animation is started.
 	void (*init) (CairoDock *pDock);
@@ -90,7 +90,7 @@ struct _CairoDockHidingEffect {
 */
 #define cairo_dock_container_is_animating(pContainer) (CAIRO_CONTAINER(pContainer)->iSidGLAnimation != 0)
 
-/** Say if it's usefull to launch an animation on a Dock (indeed, it's useless to launch it if it will be invisible).
+/** Say if it's useful to launch an animation on a Dock (indeed, it's useless to launch it if it will be invisible).
 *@param pDock the Dock to animate.
 */
 #define cairo_dock_animation_will_be_visible(pDock) ( \
@@ -200,7 +200,7 @@ void cairo_dock_stop_marking_icon_animation_as (Icon *pIcon, CairoDockAnimationS
 *@param iDuration duration if the transition, in ms. Can be 0 for an endless transition, in which case you can stop the transition with #cairo_dock_remove_transition_on_icon.
 *@param bRemoveWhenFinished TRUE to destroy and remove the transition when it is finished.
 *@param pUserData data passed to the rendering functions.
-*@param pFreeUserDataFunc function called to free the user data when the transition is destroyed (optionnal).
+*@param pFreeUserDataFunc function called to free the user data when the transition is destroyed (optional).
 */
 void cairo_dock_set_transition_on_icon (Icon *pIcon, GldiContainer *pContainer, CairoDockTransitionRenderFunc render_step_cairo, CairoDockTransitionGLRenderFunc render_step_opengl, gboolean bFastPace, gint iDuration, gboolean bRemoveWhenFinished, gpointer pUserData, GFreeFunc pFreeUserDataFunc);
 

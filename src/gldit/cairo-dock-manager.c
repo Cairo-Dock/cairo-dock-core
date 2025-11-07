@@ -29,7 +29,7 @@
 // public (manager, config, data)
 GldiObjectManager myManagerObjectMgr;
 
-// dependancies
+// dependencies
 extern GldiContainer *g_pPrimaryContainer;
 extern gchar *g_cConfFile;
 

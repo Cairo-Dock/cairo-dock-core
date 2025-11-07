@@ -49,7 +49,7 @@
 CairoIndicatorsParam myIndicatorsParam;
 GldiManager myIndicatorsMgr;
 
-// dependancies
+// dependencies
 extern CairoDock *g_pMainDock;
 
 // private

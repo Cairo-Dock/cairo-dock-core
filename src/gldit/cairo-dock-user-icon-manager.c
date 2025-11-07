@@ -34,7 +34,7 @@
 // public (manager, config, data)
 GldiObjectManager myUserIconObjectMgr;
 
-// dependancies
+// dependencies
 extern gchar *g_cCurrentLaunchersPath;
 
 // private

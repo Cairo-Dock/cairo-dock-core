@@ -34,7 +34,7 @@
 // public (manager, config, data)
 GldiObjectManager myOverlayObjectMgr;
 
-// dependancies
+// dependencies
 extern gboolean g_bUseOpenGL;
 
 // private
@@ -59,7 +59,7 @@ static inline void cairo_dock_add_overlay_to_icon (Icon *pIcon, CairoOverlay *pO
 	// complete the overlay
 	pOverlay->iPosition = iPosition;
 	pOverlay->data = data;
-	pOverlay->pIcon = pIcon;  // overlays are stucked to their icon.
+	pOverlay->pIcon = pIcon;  // overlays are stuck to their icon.
 	
 	// remove any overlay that matches the couple (position, data).
 	if (data != NULL)

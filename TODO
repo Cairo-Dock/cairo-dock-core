@@ -62,7 +62,7 @@ For each new version:
 	- search in Recent-Events' dialog (seems like libzeitgeist is buggy)
 	- taskbar: separator as an option -> test
 	- taskbar, minimized windows only: when restored, an appli icon gets the "?" for a second before disappearing
-	- Twitter: when a new entry apears in the timeline, have to click on the applet to stop the animation (doesn't stop from the menu).
+	- Twitter: when a new entry appears in the timeline, have to click on the applet to stop the animation (doesn't stop from the menu).
 	- image buffer: draw the surface from the center, like the texture.
 	- Icons: use an image buffer + a request size.
 	- add a function cairo_dock_render_one_icon_in_desklet_opengl().

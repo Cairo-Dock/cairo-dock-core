@@ -29,7 +29,7 @@
 G_BEGIN_DECLS
 
 /**
-*@file cairo-dock-icon-manager.h This class manages the icons parameters and their associated ressources.
+*@file cairo-dock-icon-manager.h This class manages the icons parameters and their associated resources.
 *
 * Specialized Icons are handled by the corresponding manager.
 */
@@ -124,7 +124,7 @@ void cairo_dock_set_specified_desktop_for_icon (Icon *pIcon, int iSpecificDeskto
  */
 gint cairo_dock_search_icon_size (GtkIconSize iIconSize);
 
-/** Search the path of an icon into the defined icons themes. It also handles the '~' caracter in paths.
+/** Search the path of an icon into the defined icons themes. It also handles the '~' character in paths.
  * @param cFileName name of the icon file.
  * @param iDesiredIconSize desired icon size if we use icons from user icons theme.
  * @return the complete path of the icon, or NULL if not found.

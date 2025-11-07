@@ -233,7 +233,7 @@ void cairo_dock_load_icon_quickinfo (Icon *icon)
 void cairo_dock_load_icon_buffers (Icon *pIcon, GldiContainer *pContainer)
 {
 	gboolean bLoadText = TRUE;
-	if (pIcon->iSidLoadImage != 0)  // if a load was sheduled, cancel it and do it now (we need to load the applets' buffer before initializing the module).
+	if (pIcon->iSidLoadImage != 0)  // if a load was scheduled, cancel it and do it now (we need to load the applets' buffer before initializing the module).
 	{
 		//g_print (" load %s immediately\n", pIcon->cName);
 		g_source_remove (pIcon->iSidLoadImage);

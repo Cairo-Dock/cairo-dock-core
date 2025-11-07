@@ -32,8 +32,8 @@ G_BEGIN_DECLS
 *  - the visit card allows it to define itself (name, category, default icon, etc)
 *  - the interface defines the entry points for init, stop, reload, read config, and reset data.
 *
-* Modules can be instanciated several times; each time they are, an instance \ref _GldiModuleInstance is created.
-* Each instance holds a set of data: the icon and its container, the config structure and its conf file, the data structure and a slot to plug datas into containers and icons. All these data are optionnal; a module that has an icon is also called an applet.
+* Modules can be instantiated several times; each time they are, an instance \ref _GldiModuleInstance is created.
+* Each instance holds a set of data: the icon and its container, the config structure and its conf file, the data structure and a slot to plug datas into containers and icons. All these data are optional; a module that has an icon is also called an applet.
 */
 
 /**
@@ -242,7 +242,7 @@ struct _CairoDockMinimalAppletConfig {
 
 #define gldi_module_is_auto_loaded(pModule) ((pModule->pInterface->initModule == NULL || pModule->pInterface->stopModule == NULL || pModule->pVisitCard->cInternalModule != NULL) && pModule->pVisitCard->iContainerType == CAIRO_DOCK_MODULE_IS_PLUGIN)
 
-/** Create a new module. The module takes ownership of the 2 arguments, unless an error occured.
+/** Create a new module. The module takes ownership of the 2 arguments, unless an error occurred.
 * @param pVisitCard the visit card of the module
 * @param pInterface the interface of the module
 * @return the new module, or NULL if the visit card is invalid.
@@ -251,14 +251,14 @@ GldiModule *gldi_module_new (GldiVisitCard *pVisitCard, GldiModuleInterface *pIn
 
 /** Create a new module from a .so file.
 * @param cSoFilePath path to the .so file
-* @return the new module, or NULL if an error occured.
+* @return the new module, or NULL if an error occurred.
 */
 GldiModule *gldi_module_new_from_so_file (const gchar *cSoFilePath);
 
 /** Create new modules from all the .so files contained in the given folder.
 * @param cModuleDirPath path to the folder
 * @param erreur an error
-* @return the new module, or NULL if an error occured.
+* @return the new module, or NULL if an error occurred.
 */
 void gldi_modules_new_from_directory (const gchar *cModuleDirPath, GError **erreur);
 

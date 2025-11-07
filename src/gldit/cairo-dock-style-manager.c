@@ -35,7 +35,7 @@
 GldiStyleParam myStyleParam;
 GldiManager myStyleMgr;
 
-// dependancies
+// dependencies
 extern gchar *g_cCurrentThemePath;
 extern gboolean g_bUseOpenGL;
 

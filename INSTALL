@@ -29,7 +29,7 @@ sudo make install
 
 For 64bits (x86_64) architectures, the libraries are installed in a 'lib64' directory by default but it seems it can be a problem for some distributions (e.g.: ArchLinux). If you have a problem by launching Cairo-Dock, you can compile it (core and its plug-ins) with the flag "FORCE_NOT_LIB64":
     $ cmake CMakeLists.txt -DCMAKE_INSTALL_PREFIX=/usr -DFORCE_NOT_LIB64=yes
-You can also force another prefix for this librairy directory with "LIB_SUFFIX" flag, e.g. for 'lib32' directory:
+You can also force another prefix for this library directory with "LIB_SUFFIX" flag, e.g. for 'lib32' directory:
     $ cmake CMakeLists.txt -DCMAKE_INSTALL_PREFIX=/usr -DLIB_SUFFIX=32
 
 

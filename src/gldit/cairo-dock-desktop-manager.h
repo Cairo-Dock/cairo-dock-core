@@ -76,7 +76,7 @@ Old behavior: separate iNbDesktops + iNbViewportX / iNbViewportY:
       viewports to _NET_DESKTOP_GEOMETRY / _NET_DESKTOP_VIEWPORT:
       https://specifications.freedesktop.org/wm-spec/latest/ar01s03.html
 
-Typcial behavior:
+Typical behavior:
   - Compiz (+ also Gnome-shell?): iNbDesktops == 1, "workspaces" correspond to viewports only
   - other WMs: iNbDesktops >= 1, iNbViewportX == iNbViewportY == 1
 
@@ -84,7 +84,7 @@ Questions / issues:
   - Unsure if for any WM / DE, we can have both iNbDesktops > 1 and multiple viewports. In theory, on Wayland
       this will be possible with the ext-workspace protocol if there are multiple workspace groups. On X11,
       this is explicitly supported by the standards, but likely not implemented by WMs.
-  - Are there X11 WMs that provide multipe desktops and arranges them in 2D? In theory, this is possible using
+  - Are there X11 WMs that provide multiple desktops and arranges them in 2D? In theory, this is possible using
       _NET_DESKTOP_LAYOUT, however Cairo-Dock currently does not handle this. Note: according to the
       specification, this is set by the "pager", which is possibly a separate entity from the WM:
       https://specifications.freedesktop.org/wm-spec/latest/ar01s03.html
@@ -117,7 +117,7 @@ Minimal changes for Wayland:
       -> "desktops" would be interpreted as independent viewports in this case
 
 Plan for a new API:
-  - two-level structure with "desktops" and "vieports"
+  - two-level structure with "desktops" and "viewports"
   - on X11: desktop <-> _NET_NUMBER_OF_DESKTOPS / _NET_CURRENT_DESKTOP / _NET_DESKTOP_LAYOUT
             workspace <-> _NET_DESKTOP_GEOMETRY / _NET_DESKTOP_VIEWPORT
   - on Wayland: desktop <-> workspace-group, viewport <-> workspace (on KWin, only one desktop)
@@ -125,7 +125,7 @@ Plan for a new API:
   - number of viewports per desktop can be different -> dynamic storage of a new _GldiViewportGeometry for
       each desktop
   - desktops are always "independent": a window can only span one (or all for sticky windows)
-  - vieports can be overlapping (a window can span multiple), flag / setting for this that is set by the backend
+  - viewports can be overlapping (a window can span multiple), flag / setting for this that is set by the backend
 
 Next steps:
   - change API for adding and removing "workspaces", these are handled by a backend-specific way (move some of the
@@ -179,7 +179,7 @@ struct _GldiDesktopBackground {
 /////////////////////
 
 /** Register a Desktop Manager backend. NULL functions do not overwrite existing ones.
-*@param pBackend a Desktop Manager backend; can be freeed after.
+*@param pBackend a Desktop Manager backend; can be freed after.
 */
 void gldi_desktop_manager_register_backend (GldiDesktopManagerBackend *pBackend, const gchar *name);
 
@@ -230,7 +230,7 @@ gboolean gldi_desktop_set_current (int iDesktopNumber, int iViewportNumberX, int
  * Typically this can mean adding one more workspace / desktop as the "last" one.
  * On X11, this will resize the desktop geometry, and could result in adding
  * multiple viewports.
- * Might not suceed, depending on the capabilities of the backend
+ * Might not succeed, depending on the capabilities of the backend
  * (NOTIFICATION_DESKTOP_GEOMETRY_CHANGED will be emitted if successful).
  */
 void gldi_desktop_add_workspace (void);
@@ -239,7 +239,7 @@ void gldi_desktop_add_workspace (void);
  * internal ordering of workspaces. The actual number of workspaces can
  * be > 1, depending on the backend (on X11, if viewports are arranged
  * in a square).
- * Might not suceed, depending on the capabilities of the backend
+ * Might not succeed, depending on the capabilities of the backend
  * (NOTIFICATION_DESKTOP_GEOMETRY_CHANGED will be emitted if successful).
  */
 void gldi_desktop_remove_last_workspace (void);

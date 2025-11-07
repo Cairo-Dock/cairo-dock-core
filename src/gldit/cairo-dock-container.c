@@ -53,7 +53,7 @@ GldiObjectManager myContainerObjectMgr;
 GldiContainer *g_pPrimaryContainer = NULL;
 GldiDesktopBackground *g_pFakeTransparencyDesktopBg = NULL;
 
-// dependancies
+// dependencies
 extern CairoDockGLConfig g_openglConfig;
 extern gboolean g_bUseOpenGL;
 extern CairoDockHidingEffect *g_pHidingBackend;  // cairo_dock_is_hidden

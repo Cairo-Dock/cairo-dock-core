@@ -605,7 +605,7 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 							xactor->bIgnored = bSkipTaskbar;
 							gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESTROYED, actor);
 						}
-						continue;  // actor is either freeed or ignored
+						continue;  // actor is either freed or ignored
 					}
 					
 					if (xactor->bIgnored)  // skip taskbar

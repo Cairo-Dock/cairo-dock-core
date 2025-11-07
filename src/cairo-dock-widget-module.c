@@ -36,7 +36,7 @@ static gboolean _on_module_activated (ModuleWidget *pModuleWidget, G_GNUC_UNUSED
 
 static gchar *_get_valid_module_conf_file (GldiModule *pModule)
 {
-	if (pModule->pVisitCard->cConfFileName != NULL)  // not instanciated yet, take a conf-file in the module's user dir, or the default conf-file.
+	if (pModule->pVisitCard->cConfFileName != NULL)  // not instantiated yet, take a conf-file in the module's user dir, or the default conf-file.
 	{
 		// open the module's user dir.
 		gchar *cUserDataDirPath = gldi_module_get_config_dir (pModule);

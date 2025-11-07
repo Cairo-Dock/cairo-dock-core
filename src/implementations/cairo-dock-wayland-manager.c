@@ -347,11 +347,11 @@ void gldi_wayland_grab_keyboard (GldiContainer *pContainer)
 	/* Note: the above will trigger a commit, but not immediately, while we should
 	 * not commit ourselves as the associated wl_surface might be in an inconsistent state.
 	 * So we set up a callback to reset to GTK_LAYER_SHELL_KEYBOARD_MODE_ON_DEMAND,
-	 * hopefully after this change has been commited. For the complexities involved, see e.g.
+	 * hopefully after this change has been comitted. For the complexities involved, see e.g.
 	 * https://github.com/wmww/gtk-layer-shell/issues/51
 	 * https://github.com/wmww/gtk-layer-shell/issues/143
 	 * (this case is less severe as likely no "breaking" change is happening, but we still
-	 * should not commit behing the back of GTK) */
+	 * should not commit behind the back of GTK) */
 	_set_kb_mode_callback (window);
 #endif
 }

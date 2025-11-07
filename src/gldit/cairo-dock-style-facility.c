@@ -125,7 +125,7 @@ gchar *_get_default_system_font (void)
 			cd_debug ("s_cFontName: %s", s_cFontName);
 			if (s_cFontName && *s_cFontName == '\'')  // the value may be between quotes... get rid of them!
 			{
-				s_cFontName ++;  // s_cFontName is never freeed
+				s_cFontName ++;  // s_cFontName is never freed
 				s_cFontName[strlen(s_cFontName) - 1] = '\0';
 			}
 		}

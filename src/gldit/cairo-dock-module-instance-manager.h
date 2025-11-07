@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 * @file cairo-dock-module-instance-manager.h This class defines the instances of modules.
 *
 * A module-instance represents one instance of a module; it holds a set of data: the icon and its container, the config structure and its conf file, the data structure and a slot to plug datas into containers and icons.
-* All these parameters are optionnal; a module-instance that has an icon is also called an applet.
+* All these parameters are optional; a module-instance that has an icon is also called an applet.
 */
 
 // manager
@@ -47,7 +47,7 @@ typedef enum {
 	} GldiModuleInstancesNotifications;
 
 
-/// Definition of an instance of a module. A module can be instanciated several times.
+/// Definition of an instance of a module. A module can be instantiated several times.
 struct _GldiModuleInstance {
 	/// object
 	GldiObject object;

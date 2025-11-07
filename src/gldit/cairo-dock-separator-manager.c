@@ -35,7 +35,7 @@
 // public (manager, config, data)
 GldiObjectManager mySeparatorIconObjectMgr;
 
-// dependancies
+// dependencies
 extern gchar *g_cCurrentLaunchersPath;
 
 // private

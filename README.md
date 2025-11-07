@@ -58,7 +58,7 @@ Bug reports
 You can report bugs using Github [issues](https://github.com/Cairo-Dock/cairo-dock-core/issues). If possible:
 
 * Read our wiki specially the '[Troubleshooting](https://github.com/Cairo-Dock/cairo-dock-core/wiki/Troubleshooting)' section which can help you to resolve some bugs like a black background, messages at startup, etc.
-* Please include also some information like your distribution, your achitecture (32/64bits), your Desktop Manager (Gnome, KDE, XFCE,...) your Window Manager (Compiz, Metacity, Kwin, etc.) or Wayland compositor (Wayfire, Kwin, Labwc, etc.), if you use Cairo-Dock with or without OpenGL, with which theme, etc. On a recent version (>= 3.5.99), you can just copy the "Technical info" page from the About dialog (right click on the dock -> Cairo-Dock -> About) which covers the most important details.
+* Please include also some information like your distribution, your architecture (32/64bits), your Desktop Manager (Gnome, KDE, XFCE,...) your Window Manager (Compiz, Metacity, Kwin, etc.) or Wayland compositor (Wayfire, Kwin, Labwc, etc.), if you use Cairo-Dock with or without OpenGL, with which theme, etc. On a recent version (>= 3.5.99), you can just copy the "Technical info" page from the About dialog (right click on the dock -> Cairo-Dock -> About) which covers the most important details.
 * Include the method to reproduce the bug (which actions, which options activated)
 * Run the dock with the command
           cairo-dock -l debug > debug.txt

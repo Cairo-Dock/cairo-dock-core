@@ -109,27 +109,27 @@ typedef void (* CairoDockGetPackagesFunc ) (GHashTable *pPackagesTable, gpointer
 gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtractTo, const gchar *cRealArchiveName);
 
 /** Download a distant file into a given location.
-*@param cURL adress of the file.
+*@param cURL address of the file.
 *@param cLocalPath a local path where to store the file.
 *@return TRUE on success, else FALSE..
 */
 gboolean cairo_dock_download_file (const gchar *cURL, const gchar *cLocalPath);
 
 /** Download a distant file as a temporary file.
-*@param cURL adress of the file.
+*@param cURL address of the file.
 *@return the local path of the file on success, else NULL. Free the string after using it.
 */
 gchar *cairo_dock_download_file_in_tmp (const gchar *cURL);
 
 /** Download an archive and extract it into a given folder.
-*@param cURL adress of the file.
+*@param cURL address of the file.
 *@param cExtractTo folder where to extract the archive (the archive is deleted then).
 *@return the local path of the file on success, else NULL. Free the string after using it.
 */
 gchar *cairo_dock_download_archive (const gchar *cURL, const gchar *cExtractTo);
 
 /** Asynchronously download a distant file into a given location. This function is non-blocking, you'll get a CairoTask that you can discard at any time, and you'll get the path of the downloaded file as the first argument of the callback (the second being the data you passed to this function).
-*@param cURL adress of the file.
+*@param cURL address of the file.
 *@param cLocalPath a local path where to store the file, or NULL for a temporary file.
 *@param pCallback function called when the download is finished. It takes the path of the downloaded file (it belongs to the task so don't free it) and the data you've set here.
 *@param data data to be passed to the callback.
@@ -148,7 +148,7 @@ GldiTask *cairo_dock_download_file_async (const gchar *cURL, const gchar *cLocal
 gchar *cairo_dock_get_url_data_with_post (const gchar *cURL, gboolean bGetOutputHeaders, GError **erreur, const gchar *cFirstProperty, ...);
 
 /** Retrieve the data of a distant URL.
-*@param cURL distant adress to get data from.
+*@param cURL distant address to get data from.
 *@param erreur an error.
 *@return the data (NULL if failed). It's an array of chars, possibly containing nul chars. Free it after using.
 */
@@ -157,7 +157,7 @@ gchar *cairo_dock_get_url_data_with_post (const gchar *cURL, gboolean bGetOutput
 gchar *cairo_dock_get_url_data_with_headers (const gchar *cURL, gboolean bGetOutputHeaders, GError **erreur, const gchar *cFirstProperty, ...);
 
 /** Asynchronously retrieve the content of a distant URL. This function is non-blocking, you'll get a CairoTask that you can discard at any time, and you'll get the content of the downloaded file as the first argument of the callback (the second being the data you passed to this function).
-*@param cURL distant adress to get data from.
+*@param cURL distant address to get data from.
 *@param pCallback function called when the download is finished. It takes the content of the downloaded file (it belongs to the task so don't free it) and the data you've set here.
 *@param data data to be passed to the callback.
 *@return the Task that is doing the job. Keep it and use \ref cairo_dock_discard_task whenever you want to discard the download (for instance if the user cancels it), or \ref cairo_dock_free_task inside your callback.
@@ -179,18 +179,18 @@ GHashTable *cairo_dock_list_local_packages (const gchar *cPackagesDir, GHashTabl
 GHashTable *cairo_dock_list_net_packages (const gchar *cServerAdress, const gchar *cDirectory, const gchar *cListFileName, GHashTable *hProvidedTable, GError **erreur);
 
 /** Get a list of packages from differente sources.
-*@param cSharePackagesDir path of a local folder containg packages or NULL.
-*@param cUserPackagesDir path of a user folder containg packages or NULL.
-*@param cDistantPackagesDir path of a distant folder containg packages or NULL.
+*@param cSharePackagesDir path of a local folder containing packages or NULL.
+*@param cUserPackagesDir path of a user folder containing packages or NULL.
+*@param cDistantPackagesDir path of a distant folder containing packages or NULL.
 *@param pTable a table of packages previously retrieved, or NULL.
 *@return a hash table of (name, #_CairoDockPackage). Free it with g_hash_table_destroy when you're done with it.
 */
 GHashTable *cairo_dock_list_packages (const gchar *cSharePackagesDir, const gchar *cUserPackagesDir, const gchar *cDistantPackagesDir, GHashTable *pTable);
 
 /** Asynchronously get a list of packages from differente sources. This function is non-blocking, you'll get a CairoTask that you can discard at any time, and you'll get a hash-table of the packages as the first argument of the callback (the second being the data you passed to this function).
-*@param cSharePackagesDir path of a local folder containg packages or NULL.
-*@param cUserPackagesDir path of a user folder containg packages or NULL.
-*@param cDistantPackagesDir path of a distant folder containg packages or NULL.
+*@param cSharePackagesDir path of a local folder containing packages or NULL.
+*@param cUserPackagesDir path of a user folder containing packages or NULL.
+*@param cDistantPackagesDir path of a distant folder containing packages or NULL.
 *@param pCallback function called when the listing is finished. It takes the hash-table of the found packages (it belongs to the task so don't free it) and the data you've set here.
 *@param data data to be passed to the callback.
 *@param pTable a table of packages previously retrieved, or NULL.
@@ -203,7 +203,7 @@ GldiTask *cairo_dock_list_packages_async (const gchar *cSharePackagesDir, const 
 *@param cPackageName name of the package.
 *@param cSharePackagesDir path of a local folder containing packages or NULL.
 *@param cUserPackagesDir path of a user folder containing packages or NULL.
-*@param cDistantPackagesDir path of a distant folder containg packages or NULL.
+*@param cDistantPackagesDir path of a distant folder containing packages or NULL.
 *@param iGivenType type of package, or CAIRO_DOCK_ANY_PACKAGE if any type of package should be considered.
 *@return a newly allocated string containing the complete local path of the package. If the package is distant, it is downloaded and extracted into this folder.
 */

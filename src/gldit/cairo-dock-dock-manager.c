@@ -69,7 +69,7 @@ CairoDock *g_pMainDock = NULL;  // pointeur sur le dock principal.
 CairoDockHidingEffect *g_pHidingBackend = NULL;
 CairoDockHidingEffect *g_pKeepingBelowBackend = NULL;
 
-// dependancies
+// dependencies
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
 extern gboolean g_bUseOpenGL;

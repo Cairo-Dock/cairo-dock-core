@@ -108,7 +108,7 @@ set_target_properties ("gldi" PROPERTIES
 	#OUTPUT_NAME ${PROJECT_NAME}
 )
 
-# Link the result to the librairies.
+# Link the result to the libraries.
 target_link_libraries("gldi"
 	${PACKAGE_LIBRARIES}
 	${GTK_LIBRARIES}

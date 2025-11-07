@@ -46,7 +46,7 @@
 // public (data)
 CairoDockDesktopEnv g_iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
 
-// dependancies
+// dependencies
 
 // private
 static CairoDockDesktopEnvBackend s_EnvBackend = { NULL };
@@ -692,7 +692,7 @@ static gboolean _wait_pid (gpointer *pData)
 
 		pCallback (pUserData);
 
-		// free allocated ressources just used for this function
+		// free allocated resources just used for this function
 		g_free (cProcess);
 		g_free (pData);
 

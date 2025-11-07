@@ -47,7 +47,7 @@ struct _CairoDockGLPath {
  */
 CairoDockGLPath *cairo_dock_new_gl_path (int iNbVertices, double x0, double y0, int iWidth, int iHeight);
 
-/** Destroy a path and free its allocated ressources.
+/** Destroy a path and free its allocated resources.
  * @param pPath the path.
  */
 void cairo_dock_free_gl_path (CairoDockGLPath *pPath);

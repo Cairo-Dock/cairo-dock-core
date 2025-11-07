@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 *@file cairo-dock-opengl.h This class manages the OpenGL backend and context.
 */
 
-/// This strucure summarizes the available OpenGL configuration on the system.
+/// This structure summarizes the available OpenGL configuration on the system.
 struct _CairoDockGLConfig {
 	gboolean bIndirectRendering;
 	gboolean bAlphaAvailable;

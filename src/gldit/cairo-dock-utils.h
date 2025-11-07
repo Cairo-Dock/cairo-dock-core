@@ -49,7 +49,7 @@ void cairo_dock_remove_html_spaces (gchar *cString);
 */
 void cairo_dock_get_version_from_string (const gchar *cVersionString, int *iMajorVersion, int *iMinorVersion, int *iMicroVersion);
 
-/** Say if a string is an adress (file://xxx, http://xxx, ftp://xxx, etc).
+/** Say if a string is an address (file://xxx, http://xxx, ftp://xxx, etc).
 * @param cString a string.
 * @return TRUE if it's an address.
 */
@@ -108,7 +108,7 @@ gboolean cairo_dock_launch_command_single_gui (const gchar *cExec);
  */
 const gchar * cairo_dock_get_default_terminal (void);
 
-/* Legacy definiton used in many places */
+/* Legacy definition used in many places */
 #define cairo_dock_strings_differ g_strcmp0
 
 

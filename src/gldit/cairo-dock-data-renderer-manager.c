@@ -34,7 +34,7 @@
 GldiManager myDataRenderersMgr;
 GldiObjectManager myDataRendererObjectMgr;
 
-// dependancies
+// dependencies
 extern gboolean g_bUseOpenGL;
 extern gchar *g_cExtrasDirPath;
 

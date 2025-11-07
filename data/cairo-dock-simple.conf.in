@@ -43,7 +43,7 @@ frame_task =
 #Y-[None;0;0;Minimalistic;1;1;Integrated;1;1;Separated;1;1] Behaviour of the Taskbar:
 #{None       : Don't show opened windows in the dock.
 #Minimalistic: Mix applications with its launcher, show other windows only if they are minimized (like in MacOSX).
-#Integrated  : Mix applications with its launcher, show all others windows and group windows togather in sub-dock (default).
+#Integrated  : Mix applications with its launcher, show all others windows and group windows together in sub-dock (default).
 #Separated   : Separate the taskbar from the launchers and only show windows that are on the current desktop.}
 taskbar = 2
 

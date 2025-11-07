@@ -33,7 +33,7 @@
 // public (manager, config, data)
 GldiObjectManager myStackIconObjectMgr;
 
-// dependancies
+// dependencies
 extern gchar *g_cCurrentLaunchersPath;
 
 // private

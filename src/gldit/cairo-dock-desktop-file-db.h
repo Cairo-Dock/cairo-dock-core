@@ -44,7 +44,7 @@ void gldi_desktop_file_db_stop (void);
 /**
  * Try to look up an installed app. This function can block the first time it's called if the DB has not been
  * fully populated yet.
- * @param class Dektop file ID, class or app-id of an app to look up (matching is based on the basename of
+ * @param class Desktop file ID, class or app-id of an app to look up (matching is based on the basename of
  * 	its .desktop file, and the content of the StartupWMClass and Exec keys in it).
  * @param bOnlyDesktopID if TRUE, only the .desktop file name is used for matching (can be useful if looking
  * 	for a known .desktop file).

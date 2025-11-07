@@ -535,7 +535,7 @@ void cairo_dock_render_hidden_dock_opengl (CairoDock *pDock)
 	GldiColor bg_color;
 	const double r = 4; // corner radius of the background
 	const double gap = 2;  // gap to the screen
-	double dw = (myIconsParam.iIconGap > 2 ? 2 : 0);  // 1px margin around the icons for a better readability (only if icons won't be stuck togather then).
+	double dw = (myIconsParam.iIconGap > 2 ? 2 : 0);  // 1px margin around the icons for a better readability (only if icons won't be stuck together then).
 	double w, h;
 	_cairo_dock_set_blend_alpha ();
 	do

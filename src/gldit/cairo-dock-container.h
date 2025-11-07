@@ -71,7 +71,7 @@ typedef enum {
 	NOTIFICATION_MIDDLE_CLICK_ICON,
 	/// notification called when the user scrolls on a container. data : {Icon, CairoContainer, int iDirection, int bEmulated}
 	/// Note: Icon is the icon under the mouse or can be NULL if the mouse is not over any icon. Currently it is only emitted on docks and desklets.
-	/// iDirection is either GDK_SCROLL_UP or GDK_SCROLL_DOWN; bEmulated is TRUE if this event is synthetized based on
+	/// iDirection is either GDK_SCROLL_UP or GDK_SCROLL_DOWN; bEmulated is TRUE if this event is synthesized based on
 	/// a series of GDK_SCROLL_SMOOTH events received earlier (so it can be ignored if those were handled)
 	NOTIFICATION_SCROLL_ICON,
 	/// notification called when the user scrolls on a container and a GDK_SCROLL_SMOOTH event was delivered
