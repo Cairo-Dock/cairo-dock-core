@@ -120,7 +120,8 @@ target_link_libraries("gldi"
 	${LIBCRYPT_LIBS}
 	implementations
 	${GTKLAYERSHELL_LIBRARIES}
-	${LIBDL_LIBRARIES})
+	${LIBDL_LIBRARIES}
+	${JSON_LIBRARIES})
 
 
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/gldi.pc.in ${CMAKE_CURRENT_BINARY_DIR}/gldi.pc)
