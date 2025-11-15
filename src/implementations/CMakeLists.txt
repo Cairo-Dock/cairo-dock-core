@@ -10,7 +10,6 @@ SET(impl_SRCS
 	cairo-dock-gio-vfs.c                 cairo-dock-gio-vfs.h
 	cairo-dock-compiz-integration.c      cairo-dock-compiz-integration.h
 	cairo-dock-kwin-integration.c        cairo-dock-kwin-integration.h
-	cairo-dock-gnome-shell-integration.c cairo-dock-gnome-shell-integration.h
 	cairo-dock-cinnamon-integration.c    cairo-dock-cinnamon-integration.h
 	cairo-dock-wayfire-integration.c     cairo-dock-wayfire-integration.h
 	cairo-dock-systemd-integration.c     cairo-dock-systemd-integration.h
