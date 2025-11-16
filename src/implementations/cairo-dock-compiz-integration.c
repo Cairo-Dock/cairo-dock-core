@@ -17,6 +17,9 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <glib.h>
+#include <gio/gio.h>
+
 #include "gldi-config.h"
 #ifdef HAVE_X11
 #include <X11/Xatom.h>
@@ -24,7 +27,6 @@
 #endif
 
 #include "cairo-dock-log.h"
-#include "cairo-dock-dbus.h"
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-windows-manager.h"  // bIsHidden
 #include "cairo-dock-icon-factory.h"  // pAppli
@@ -34,11 +36,11 @@
 #include "cairo-dock-X-utilities.h"  // cairo_dock_get_X_display, cairo_dock_change_nb_viewports
 #include "cairo-dock-compiz-integration.h"
 
-static DBusGProxy *s_pScaleProxy = NULL;
-static DBusGProxy *s_pExposeProxy = NULL;
-static DBusGProxy *s_pWidgetLayerProxy = NULL;
-static DBusGProxy *s_pHSizeProxy = NULL;
-static DBusGProxy *s_pVSizeProxy = NULL;
+static GDBusProxy *s_pScaleProxy = NULL;
+static GDBusProxy *s_pExposeProxy = NULL;
+static GDBusProxy *s_pWidgetLayerProxy = NULL;
+static GDBusProxy *s_pHSizeProxy = NULL;
+static GDBusProxy *s_pVSizeProxy = NULL;
 
 #ifdef HAVE_X11
 static inline Window _get_root_Xid (void)
@@ -50,33 +52,31 @@ static inline Window _get_root_Xid (void)
 #define _get_root_Xid(...) 0
 #endif
 
-static gboolean present_windows (void)
+static gboolean _present_windows (void)
 {
-	int root = _get_root_Xid();
+	gint32 root = _get_root_Xid();
 	if (! root)
 		return FALSE;
 	gboolean bSuccess = FALSE;
 	if (s_pScaleProxy != NULL)
 	{
 		GError *erreur = NULL;
-		bSuccess = dbus_g_proxy_call (s_pScaleProxy, "activate", &erreur,
-			G_TYPE_STRING, "root",
-			G_TYPE_INT, root,
-			G_TYPE_STRING, "",
-			G_TYPE_STRING, "",
-			G_TYPE_INVALID,
-			G_TYPE_INVALID);
+		GVariant *res = g_dbus_proxy_call_sync (s_pScaleProxy, "activate",
+			g_variant_new ("(siss)", "root", root, "", ""),
+			G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, &erreur);
+		if (res) g_variant_unref (res); // don't care
+		
 		if (erreur)
 		{
 			cd_warning ("compiz scale error: %s", erreur->message);
 			g_error_free (erreur);
-			bSuccess = FALSE;
 		}
+		else bSuccess = TRUE;
 	}
 	return bSuccess;
 }
 
-static gboolean present_class (const gchar *cClass)
+static gboolean _present_class (const gchar *cClass)
 {
 	cd_debug ("%s (%s)", __func__, cClass);
 	const GList *pIcons = cairo_dock_list_existing_appli_with_class (cClass);
@@ -109,25 +109,22 @@ static gboolean present_class (const gchar *cClass)
 		else
 			cMatch = g_strdup_printf ("class=.%s*", cClass+1);
 		cd_message ("Compiz: match '%s'", cMatch);
-		bSuccess = dbus_g_proxy_call (s_pScaleProxy, "activate", &erreur,
-			G_TYPE_STRING, "root",
-			G_TYPE_INT, root,
-			G_TYPE_STRING, "match",
-			G_TYPE_STRING, cMatch,
-			G_TYPE_INVALID,
-			G_TYPE_INVALID);  // in oldest version of Compiz (< 0.9.8), it doesn't present windows of other viewports
+		GVariant *res = g_dbus_proxy_call_sync (s_pScaleProxy, "activate",
+			g_variant_new ("(siss)", "root", root, "match", cMatch),
+			G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, &erreur);
+		if (res) g_variant_unref (res); // don't care
 		g_free (cMatch);
 		if (erreur)
 		{
 			cd_warning ("compiz scale error: %s", erreur->message);
 			g_error_free (erreur);
-			bSuccess = FALSE;
 		}
+		else bSuccess = TRUE;
 	}
 	return bSuccess;
 }
 
-static gboolean present_desktops (void)
+static gboolean _present_desktops (void)
 {
 	int root = _get_root_Xid();
 	if (! root)
@@ -137,22 +134,21 @@ static gboolean present_desktops (void)
 	if (s_pExposeProxy != NULL)
 	{
 		GError *erreur = NULL;
-		bSuccess = dbus_g_proxy_call (s_pExposeProxy, "activate", &erreur,
-			G_TYPE_STRING, "root",
-			G_TYPE_INT, root,
-			G_TYPE_INVALID,
-			G_TYPE_INVALID);
+		GVariant *res = g_dbus_proxy_call_sync (s_pExposeProxy, "activate",
+			g_variant_new ("(si)", "root", root),
+			G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, &erreur);
+		if (res) g_variant_unref (res); // don't care
 		if (erreur)
 		{
 			cd_warning ("compiz expo error: %s", erreur->message);
 			g_error_free (erreur);
-			bSuccess = FALSE;
 		}
+		else bSuccess = TRUE;
 	}
 	return bSuccess;
 }
 
-static gboolean show_widget_layer (void)
+static gboolean _show_widget_layer (void)
 {
 	int root = _get_root_Xid();
 	if (! root)
@@ -162,46 +158,62 @@ static gboolean show_widget_layer (void)
 	if (s_pWidgetLayerProxy != NULL)
 	{
 		GError *erreur = NULL;
-		bSuccess = dbus_g_proxy_call (s_pWidgetLayerProxy, "activate", &erreur,
-			G_TYPE_STRING, "root",
-			G_TYPE_INT, root,
-			G_TYPE_INVALID,
-			G_TYPE_INVALID);
+		GVariant *res = g_dbus_proxy_call_sync (s_pWidgetLayerProxy, "activate",
+			g_variant_new ("(si)", "root", root),
+			G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, &erreur);
+		if (res) g_variant_unref (res); // don't care
 		if (erreur)
 		{
 			cd_warning ("compiz widget layer error: %s", erreur->message);
 			g_error_free (erreur);
-			bSuccess = FALSE;
 		}
+		bSuccess = TRUE;
 	}
 	return bSuccess;
 }
 
 #ifdef HAVE_X11
-static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, G_GNUC_UNUSED gpointer data)
+static void _on_got_active_plugins (GObject *obj, GAsyncResult* async_res, G_GNUC_UNUSED gpointer data)
 {
 	cd_debug ("%s ()", __func__);
+	GDBusProxy *proxy = (GDBusProxy*)obj;
+	g_object_ref (proxy); // we might need the proxy after the end of the call
 	// get the active plug-ins.
 	GError *error = NULL;
-	gchar **plugins = NULL;
-	dbus_g_proxy_end_call (proxy,
-		call_id,
-		&error,
-		G_TYPE_STRV,
-		&plugins,
-		G_TYPE_INVALID);
+	const gchar **plugins = NULL;
+	gsize len = 0;
+	GVariant *res = g_dbus_proxy_call_finish (proxy, async_res, &error);
+	
 	if (error)
 	{
 		cd_warning ("compiz active plug-ins error: %s", error->message);
+		g_object_unref (proxy);
 		g_error_free (error);
 		return;
 	}
-	g_return_if_fail (plugins != NULL);
+	
+	if (!res || !g_variant_is_of_type (res, G_VARIANT_TYPE ("(as)")))
+	{
+		cd_warning ("compiz active plug-ins: unexpected result type");
+		if (res) g_variant_unref (res);
+		g_object_unref (proxy);
+		return;
+	}
+	
+	GVariant *res2 = g_variant_get_child_value (res, 0);
+	if (res2) plugins = g_variant_get_strv (res2, &len);
+	else
+	{
+		cd_warning ("compiz active plug-ins: unexpected result type");
+		g_variant_unref (res);
+		g_object_unref (proxy);
+		return;
+	}
 	
 	// look for the 'widget' plug-in.
 	gboolean bFound = FALSE;
-	int i;
-	for (i = 0; plugins[i] != NULL; i++)
+	gsize i;
+	for (i = 0; i < len; i++)
 	{
 		if (strcmp (plugins[i], "widget") == 0)
 		{
@@ -211,15 +223,15 @@ static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, 
 	}
 	
 	// if not present, add it to the list and send it back to Compiz.
-	if (!bFound)  // then we parsed all the 'plugins' array, so i = nb-elements.
+	if (!bFound)
 	{
-		gchar **plugins2 = g_new0 (gchar*, i+2);  // +1 for 'widget' and +1 for NULL
-		memcpy (plugins2, plugins, i * sizeof (gchar*));
-		plugins2[i] = (gchar*)"widget";  // elements of 'plugins2' are not freed.
+		const gchar **plugins2 = g_new0 (const gchar*, len + 2);  // +1 for 'widget' and +1 for NULL
+		memcpy (plugins2, plugins, len * sizeof (gchar*));
+		plugins2[len] = "widget";  // elements of 'plugins2' are not freed.
 
 		if (cd_is_the_new_compiz ())
 		{
-			gchar *cPluginsList = g_strjoinv (",", plugins2);
+			gchar *cPluginsList = g_strjoinv (",", (gchar**)plugins2); // note: should not modify strings
 			cd_debug ("Compiz Plugins List: %s", cPluginsList);
 			const gchar * const args[] = {SHARE_DATA_DIR"/scripts/help_scripts.sh", "compiz_new_replace_list_plugins", cPluginsList, NULL};
 			cairo_dock_launch_command_argv (args);
@@ -227,41 +239,61 @@ static void _on_got_active_plugins (DBusGProxy *proxy, DBusGProxyCall *call_id, 
 		}
 		else
 		{	// It seems it doesn't work with Compiz 0.9 :-? => compiz (core) - Warn: Can't set Value with type 12 to option "active_plugins" with type 11 (with dbus-send too...)
-			dbus_g_proxy_call_no_reply (proxy,
-				"set",
-				G_TYPE_STRV,
-				plugins2,
-				G_TYPE_INVALID);
+			g_dbus_proxy_call (proxy, "set", g_variant_new_strv (plugins2, len + 1),
+				G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, NULL, NULL);
 		}
 		
 		g_free (plugins2);  // elements belong to 'plugins' or are const.
 	}
-	g_strfreev (plugins);
+	g_free (plugins);
+	g_variant_unref (res);
+	g_variant_unref (res2);
+	g_object_unref (proxy);
 }
+
+static void _got_widget_plugin_proxy (G_GNUC_UNUSED GObject *obj, GAsyncResult *res, G_GNUC_UNUSED gpointer ptr)
+{
+	GError *erreur = NULL;
+	GDBusProxy *proxy = g_dbus_proxy_new_finish (res, &erreur);
+	if (erreur)
+	{
+		cd_warning ("Error creating Compiz plugin list DBus proxy: %s", erreur->message);
+		g_error_free (erreur);
+	}
+	else
+	{
+		g_dbus_proxy_call (proxy,
+			"get",
+			NULL, // no parameters
+			G_DBUS_CALL_FLAGS_NO_AUTO_START,
+			-1, // timeout
+			NULL, // GCancellable
+			_on_got_active_plugins,
+			NULL);
+		g_object_unref (proxy); // ref will be kept by the call
+	}
+}
+
 static gboolean _check_widget_plugin (G_GNUC_UNUSED gpointer data)
 {
 	// first get the active plug-ins.
-	DBusGProxy *pActivePluginsProxy = cairo_dock_create_new_session_proxy (
+	g_dbus_proxy_new_for_bus (G_BUS_TYPE_SESSION,
+		G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START | G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+		NULL, // GDBusInterfaceInfo
 		CD_COMPIZ_BUS,
 		cd_is_the_new_compiz () ?
 			CD_COMPIZ_OBJECT"/core/screen0/active_plugins":
 			CD_COMPIZ_OBJECT"/core/allscreens/active_plugins",
-		CD_COMPIZ_INTERFACE);
-	
-	dbus_g_proxy_begin_call (pActivePluginsProxy,
-		"get",
-		(DBusGProxyCallNotify) _on_got_active_plugins,
-		NULL,
-		NULL,
-		G_TYPE_INVALID);
-	///g_object_unref (pActivePluginsProxy);
+		CD_COMPIZ_INTERFACE,
+		NULL, // GCancellable
+		_got_widget_plugin_proxy,
+		NULL);
 	
 	return FALSE;
 }
-#endif  // else not used
-static gboolean set_on_widget_layer (GldiContainer *pContainer, gboolean bOnWidgetLayer)
+
+static gboolean _set_on_widget_layer (GldiContainer *pContainer, gboolean bOnWidgetLayer)
 {
-	#ifdef HAVE_X11
 	static gboolean s_bChecked = TRUE;
 	static Atom s_aCompizWidget = None;
 	
@@ -296,12 +328,13 @@ static gboolean set_on_widget_layer (GldiContainer *pContainer, gboolean bOnWidg
 			s_aCompizWidget);
 	}
 	return TRUE;
-	#else
-	(void)pContainer;  // avoid unused parameter
-	(void)bOnWidgetLayer;  // avoid unused parameter
-	return FALSE;
-	#endif
 }
+#else
+static gboolean _set_on_widget_layer (G_GNUC_UNUSED GldiContainer *pContainer, G_GNUC_UNUSED gboolean bOnWidgetLayer)
+{
+	return FALSE;
+}
+#endif // HAVE_X11
 
 /* Only add workspaces with Compiz: We shouldn't add desktops when using Compiz
  * and with this method, Compiz saves the new state
@@ -311,18 +344,20 @@ static void _compiz_set_nb_viewports (int X, int Y)
 	if (s_pHSizeProxy != NULL && s_pVSizeProxy != NULL)
 	{
 		GError *error = NULL;
-		dbus_g_proxy_call (s_pHSizeProxy, "set", &error,
-			G_TYPE_INT, X,
-			G_TYPE_INVALID, G_TYPE_INVALID);
+		GVariant *res = g_dbus_proxy_call_sync (s_pHSizeProxy, "set",
+			g_variant_new ("(i)", (gint32)X),
+			G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, &error);
+		if (res) g_variant_unref (res);
 		if (error)
 		{
 			cd_warning ("compiz HSize error: %s", error->message);
 			g_error_free (error);
 		}
 		error = NULL;
-		dbus_g_proxy_call (s_pVSizeProxy, "set", &error,
-			G_TYPE_INT, Y,
-			G_TYPE_INVALID, G_TYPE_INVALID);
+		res = g_dbus_proxy_call_sync (s_pVSizeProxy, "set",
+			g_variant_new ("(i)", (gint32)Y),
+			G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, &error);
+		if (res) g_variant_unref (res);
 		if (error)
 		{
 			cd_warning ("compiz VSize error: %s", error->message);
@@ -341,17 +376,21 @@ static void _remove_workspace (void)
 	cairo_dock_change_nb_viewports (-1, _compiz_set_nb_viewports);
 }
 
+static gboolean bRegistered = FALSE;
 
 static void _register_compiz_backend (void)
 {
+	if (bRegistered) return;
+	bRegistered = TRUE;
+	
 	GldiDesktopManagerBackend p;
 	memset(&p, 0, sizeof (GldiDesktopManagerBackend));
 	
-	p.present_class = present_class;
-	p.present_windows = present_windows;
-	p.present_desktops = present_desktops;
-	p.show_widget_layer = show_widget_layer;
-	p.set_on_widget_layer = set_on_widget_layer;
+	p.present_class = _present_class;
+	p.present_windows = _present_windows;
+	p.present_desktops = _present_desktops;
+	p.show_widget_layer = _show_widget_layer;
+	p.set_on_widget_layer = _set_on_widget_layer;
 	p.add_workspace = _add_workspace;
 	p.remove_last_workspace = _remove_workspace;
 	
@@ -362,6 +401,26 @@ static void _register_compiz_backend (void)
 static void _unregister_compiz_backend (void)
 {
 	//cairo_dock_wm_register_backend (NULL);
+}
+
+
+static void _got_compiz_proxy (G_GNUC_UNUSED GObject *obj, GAsyncResult *res, gpointer data)
+{
+	GError *error = NULL;
+	GDBusProxy *proxy = g_dbus_proxy_new_finish (res, &error);
+	if (error)
+	{
+		cd_warning ("Error connecting to Compiz DBus proxy: %s", error->message);
+		g_error_free (error);
+		return;
+	}
+	
+	GDBusProxy **target = (GDBusProxy**)data;
+	if (*target) g_object_unref (*target); // should not happen, but just to be safe
+	*target = proxy;
+	
+	// we need to call this only once, but it is OK to call multiple times
+	_register_compiz_backend ();
 }
 
 gboolean cd_is_the_new_compiz (void)
@@ -390,83 +449,106 @@ gboolean cd_is_the_new_compiz (void)
 	return s_bNewCompiz;
 }
 
-static void _on_compiz_owner_changed (G_GNUC_UNUSED const gchar *cName, gboolean bOwned, G_GNUC_UNUSED gpointer data)
+static void _on_name_appeared (GDBusConnection *connection, const gchar *name,
+	G_GNUC_UNUSED const gchar *name_owner, G_GNUC_UNUSED gpointer data)
 {
-	cd_debug ("Compiz is on the bus (%d)", bOwned);
+	cd_debug ("Compiz is on the bus");
 	
-	if (bOwned)  // set up the proxies
-	{
-		g_return_if_fail (s_pScaleProxy == NULL);
-		
-		gboolean bNewCompiz = cd_is_the_new_compiz ();
-		
-		s_pScaleProxy = cairo_dock_create_new_session_proxy (
-			CD_COMPIZ_BUS,
-			bNewCompiz ?
-				CD_COMPIZ_OBJECT"/scale/screen0/initiate_all_key":
-				CD_COMPIZ_OBJECT"/scale/allscreens/initiate_all_key",
-			CD_COMPIZ_INTERFACE);
-		
-		s_pExposeProxy = cairo_dock_create_new_session_proxy (
-			CD_COMPIZ_BUS,
-			bNewCompiz ?
-				CD_COMPIZ_OBJECT"/expo/screen0/expo_button":
-				CD_COMPIZ_OBJECT"/expo/allscreens/expo_button",
-			CD_COMPIZ_INTERFACE);
-		
-		s_pWidgetLayerProxy = cairo_dock_create_new_session_proxy (
-			CD_COMPIZ_BUS,
-			bNewCompiz ?
-				CD_COMPIZ_OBJECT"/widget/screen0/toggle_button":
-				CD_COMPIZ_OBJECT"/widget/allscreens/toggle_button",
-			CD_COMPIZ_INTERFACE);
-		
-		s_pHSizeProxy = cairo_dock_create_new_session_proxy (
-			CD_COMPIZ_BUS,
-			bNewCompiz ?
-				CD_COMPIZ_OBJECT"/core/screen0/hsize":
-				CD_COMPIZ_OBJECT"/core/allscreens/hsize",
-			CD_COMPIZ_INTERFACE);
-		
-		s_pVSizeProxy = cairo_dock_create_new_session_proxy (
-			CD_COMPIZ_BUS,
-			bNewCompiz ?
-				CD_COMPIZ_OBJECT"/core/screen0/vsize":
-				CD_COMPIZ_OBJECT"/core/allscreens/vsize",
-			CD_COMPIZ_INTERFACE);
-		
-		_register_compiz_backend ();
-	}
-	else if (s_pScaleProxy != NULL)
+	gboolean bNewCompiz = cd_is_the_new_compiz ();
+	
+	g_dbus_proxy_new (connection, 
+		G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START | G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+		NULL, // GDBusInterfaceInfo
+		name,
+		bNewCompiz ?
+			CD_COMPIZ_OBJECT"/scale/screen0/initiate_all_key":
+			CD_COMPIZ_OBJECT"/scale/allscreens/initiate_all_key",
+		CD_COMPIZ_INTERFACE,
+		NULL, // GCancellable
+		_got_compiz_proxy,
+		&s_pScaleProxy);
+	
+	g_dbus_proxy_new (connection, 
+		G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START | G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+		NULL, // GDBusInterfaceInfo
+		name,
+		bNewCompiz ?
+			CD_COMPIZ_OBJECT"/expo/screen0/expo_button":
+			CD_COMPIZ_OBJECT"/expo/allscreens/expo_button",
+		CD_COMPIZ_INTERFACE,
+		NULL, // GCancellable
+		_got_compiz_proxy,
+		&s_pExposeProxy);
+	
+	g_dbus_proxy_new (connection, 
+		G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START | G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+		NULL, // GDBusInterfaceInfo
+		name,
+		bNewCompiz ?
+			CD_COMPIZ_OBJECT"/widget/screen0/toggle_button":
+			CD_COMPIZ_OBJECT"/widget/allscreens/toggle_button",
+		CD_COMPIZ_INTERFACE,
+		NULL, // GCancellable
+		_got_compiz_proxy,
+		&s_pWidgetLayerProxy);
+	
+	g_dbus_proxy_new (connection, 
+		G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START | G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+		NULL, // GDBusInterfaceInfo
+		name,
+		bNewCompiz ?
+			CD_COMPIZ_OBJECT"/core/screen0/hsize":
+			CD_COMPIZ_OBJECT"/core/allscreens/hsize",
+		CD_COMPIZ_INTERFACE,
+		NULL, // GCancellable
+		_got_compiz_proxy,
+		&s_pHSizeProxy);
+	
+	g_dbus_proxy_new (connection, 
+		G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START | G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+		NULL, // GDBusInterfaceInfo
+		name,
+		bNewCompiz ?
+			CD_COMPIZ_OBJECT"/core/screen0/vsize":
+			CD_COMPIZ_OBJECT"/core/allscreens/vsize",
+		CD_COMPIZ_INTERFACE,
+		NULL, // GCancellable
+		_got_compiz_proxy,
+		&s_pVSizeProxy);
+}
+	
+static void _on_name_vanished (G_GNUC_UNUSED GDBusConnection *connection, G_GNUC_UNUSED const gchar *name, G_GNUC_UNUSED gpointer user_data)
+{
+	if (s_pScaleProxy != NULL)
 	{
 		g_object_unref (s_pScaleProxy);
 		s_pScaleProxy = NULL;
+	}
+	if (s_pExposeProxy != NULL)
+	{
 		g_object_unref (s_pExposeProxy);
 		s_pExposeProxy = NULL;
+	}
+	if (s_pWidgetLayerProxy != NULL)
+	{
 		g_object_unref (s_pWidgetLayerProxy);
 		s_pWidgetLayerProxy = NULL;
+	}
+	if (s_pHSizeProxy != NULL)
+	{
 		g_object_unref (s_pHSizeProxy);
 		s_pHSizeProxy = NULL;
+	}
+	if (s_pVSizeProxy != NULL)
+	{
 		g_object_unref (s_pVSizeProxy);
 		s_pVSizeProxy = NULL;
-		
-		_unregister_compiz_backend ();
 	}
+	_unregister_compiz_backend ();
 }
-static void _on_detect_compiz (gboolean bPresent, G_GNUC_UNUSED gpointer data)
-{
-	cd_debug ("Compiz is present: %d", bPresent);
-	if (bPresent)
-	{
-		_on_compiz_owner_changed (CD_COMPIZ_BUS, TRUE, NULL);
-	}
-	cairo_dock_watch_dbus_name_owner (CD_COMPIZ_BUS,
-		(CairoDockDbusNameOwnerChangedFunc) _on_compiz_owner_changed,
-		NULL);
-}
+
 void cd_init_compiz_backend (void)
 {
-	cairo_dock_dbus_detect_application_async (CD_COMPIZ_BUS,
-		(CairoDockOnAppliPresentOnDbus) _on_detect_compiz,
-		NULL);
+	g_bus_watch_name (G_BUS_TYPE_SESSION, CD_COMPIZ_BUS, G_BUS_NAME_WATCHER_FLAGS_NONE,
+		_on_name_appeared, _on_name_vanished, NULL, NULL);
 }
