@@ -546,7 +546,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 	cd_debug ("label font: %s, %d\n", pLabels->iconTextDescription.cFont, pLabels->iconTextDescription.iSize);
 	
 	//\___________________ labels text color
-	pLabels->iconTextDescription.bOutlined = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "text outlined", &bFlushConfFileNeeded, TRUE, NULL, NULL);
+	pLabels->iconTextDescription.bOutlined = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "text oulined", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	
 	GldiColor couleur_backlabel = {{0., 0., 0., 0.85}};
 	GldiColor couleur_label = {{1., 1., 1., 1.}};
