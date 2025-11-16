@@ -74,7 +74,7 @@ struct _CairoDockRenderer {
 	CairoDockRenderFunc render;
 	/// optimized rendering function (cairo) that only redraw a part of the dock.
 	CairoDockRenderOptimizedFunc render_optimized;
-	/// rendering function (OpenGL, optionnal).
+	/// rendering function (OpenGL, optional).
 	CairoDockGLRenderFunc render_opengl;
 	/// function that computes the position of the dock when it's a sub-dock.
 	CairoDockSetSubDockPositionFunc set_subdock_position;
@@ -254,7 +254,7 @@ struct _CairoDock {
 	gpointer pRendererData;
 	/// Set to TRUE by the renderer if one can drop between 2 icons.
 	gboolean bCanDrop;
-	/// set by the view to say if the mouse is currently on icons, on the egde, or outside of icons.
+	/// set by the view to say if the mouse is currently on icons, on the edge, or outside of icons.
 	CairoDockMousePositionType iMousePositionType;
 	/// width of the dock at rest.
 	gint iMinDockWidth;

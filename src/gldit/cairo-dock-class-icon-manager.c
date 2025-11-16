@@ -26,7 +26,7 @@
 // public (manager, config, data)
 GldiObjectManager myClassIconObjectMgr;
 
-// dependancies
+// dependencies
 
 // private
 

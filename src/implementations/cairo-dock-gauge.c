@@ -17,7 +17,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/** See the "data/gauges" folder for some exemples */
+/** See the "data/gauges" folder for some examples */
 
 #include <string.h>
 #include <math.h>

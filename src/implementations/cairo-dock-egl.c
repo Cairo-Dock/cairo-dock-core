@@ -237,7 +237,7 @@ static gboolean _initialize_opengl_backend (gboolean bForceOpenGL)
 	g_openglConfig.bAlphaAvailable = bAlphaAvailable;
 	s_eglConfig = config;
 	
-	// create a rendering context (All other context will share ressources with it, and it will be the default context in case no other context exist)
+	// create a rendering context (All other context will share resources with it, and it will be the default context in case no other context exist)
 	if (!eglBindAPI (EGL_OPENGL_API))  // specify the type of client API context before we create one.
 	{
 		cd_warning ("Could not bind an EGL API, OpenGL will not be available");

@@ -41,7 +41,7 @@
 CairoConnectionParam myConnectionParam;
 GldiManager myConnectionMgr;
 
-// dependancies
+// dependencies
 
 // private
 #define CAIRO_DOCK_DEFAULT_PACKAGES_LIST_FILE "list.conf"
@@ -175,7 +175,7 @@ gboolean cairo_dock_download_file (const gchar *cURL, const gchar *cLocalPath)
 	
 	// check the result
 	gboolean bOk;
-	if (r != CURLE_OK)  // an error occured
+	if (r != CURLE_OK)  // an error occurred
 	{
 		cd_warning ("Couldn't download file '%s' (%s)", cURL, curl_easy_strerror (r));
 		g_remove (cLocalPath);

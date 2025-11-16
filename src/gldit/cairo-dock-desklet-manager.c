@@ -57,7 +57,7 @@ CairoDeskletsParam myDeskletsParam;
 GldiManager myDeskletsMgr;
 GldiObjectManager myDeskletObjectMgr;
 
-// dependancies
+// dependencies
 extern gboolean g_bUseOpenGL;
 extern CairoDock *g_pMainDock;  // pour savoir s'il faut afficher les boutons rattach.
 
@@ -949,12 +949,12 @@ static void init (void)
 	gldi_object_register_notification (&myDesktopMgr,
 		NOTIFICATION_DESKTOP_GEOMETRY_CHANGED,
 		(GldiNotificationFunc) _on_desktop_geometry_changed,
-		GLDI_RUN_AFTER, NULL);  // replace all desklets that are positionned relatively to the right or bottom edge
+		GLDI_RUN_AFTER, NULL);  // replace all desklets that are positioned relatively to the right or bottom edge
 	gldi_object_register_notification (&myStyleMgr,
 		NOTIFICATION_STYLE_CHANGED,
 		(GldiNotificationFunc) on_style_changed,
 		GLDI_RUN_AFTER, NULL);
-	s_iStartupTime = time (NULL);  // on startup, the WM can take a long time before it has positionned all the desklets. To avoid irrelevant configure events, we set a delay.
+	s_iStartupTime = time (NULL);  // on startup, the WM can take a long time before it has positioned all the desklets. To avoid irrelevant configure events, we set a delay.
 }
 
   ///////////////

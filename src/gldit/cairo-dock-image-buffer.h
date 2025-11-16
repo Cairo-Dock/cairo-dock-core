@@ -111,7 +111,7 @@ gboolean cairo_dock_image_buffer_next_frame_no_loop (CairoDockImageBuffer *pImag
 
 #define cairo_dock_image_buffer_rewind(pImage) gettimeofday (&pImage->time, NULL)
 
-/** Reset an ImageBuffer's ressources. It can be used to load another image then.
+/** Reset an ImageBuffer's resources. It can be used to load another image then.
 *@param pImage an ImageBuffer.
 */
 void cairo_dock_unload_image_buffer (CairoDockImageBuffer *pImage);

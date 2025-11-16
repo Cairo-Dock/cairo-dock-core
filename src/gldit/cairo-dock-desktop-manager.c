@@ -33,7 +33,7 @@
 GldiManager myDesktopMgr;
 GldiDesktopGeometry g_desktopGeometry;
 
-// dependancies
+// dependencies
 extern GldiContainer *g_pPrimaryContainer;
 
 // private

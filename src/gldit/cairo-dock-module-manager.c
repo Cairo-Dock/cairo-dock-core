@@ -49,7 +49,7 @@ gboolean g_bDisableAllModules = FALSE; // fail loading any module (for debugging
 gboolean g_bNoCheckModuleVersion = FALSE; // do not check module version compatibility (similar to bEasterEggs, but only applies here)
 gchar **g_cExcludedModules = NULL; // specific modules to exclude (try loading them but fail, for debugging)
 
-// dependancies
+// dependencies
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentThemePath;
 extern int g_iMajorVersion, g_iMinorVersion, g_iMicroVersion;
@@ -623,14 +623,14 @@ void gldi_module_add_instance (GldiModule *pModule)
 	// check that the module is already active
 	if (pModule->pInstancesList == NULL)
 	{
-		cd_warning ("This module has not been instanciated yet");
+		cd_warning ("This module has not been instantiated yet");
 		return ;
 	}
 	
-	// check that the module can be multi-instanciated
+	// check that the module can be multi-instantiated
 	if (! pModule->pVisitCard->bMultiInstance)
 	{
-		cd_warning ("This module can't be instanciated more than once");
+		cd_warning ("This module can't be instantiated more than once");
 		return ;
 	}
 	

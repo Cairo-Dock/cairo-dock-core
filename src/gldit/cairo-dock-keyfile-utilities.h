@@ -91,13 +91,13 @@ void cairo_dock_remove_group_key_from_conf_file (GKeyFile *pKeyFile, const gchar
 gboolean cairo_dock_rename_group_in_conf_file (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cNewGroupName);
 
 /* Used g_key_file_get_locale_string only if the key name exists and is not empty
- * Can be anoying to use it with an empty string because gettext mays return a non empty string (e.g. on OpenSUSE we get the .po header)
+ * Can be annoying to use it with an empty string because gettext mays return a non empty string (e.g. on OpenSUSE we get the .po header)
  */
 gchar * cairo_dock_get_locale_string_from_conf_file (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, const gchar *cLocale);
 
 void cairo_dock_update_keyfile_va_args (const gchar *cConfFilePath, GType iFirstDataType, va_list args);
 
-/** Update a conf file with a list of values of the form : {type, name of the groupe, name of the key, value}. Must end with G_TYPE_INVALID.
+/** Update a conf file with a list of values of the form : {type, name of the group, name of the key, value}. Must end with G_TYPE_INVALID.
 *@param cConfFilePath path to the conf file.
 *@param iFirstDataType type of the first value.
 */

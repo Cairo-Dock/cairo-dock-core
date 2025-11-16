@@ -1595,7 +1595,7 @@ gboolean cairo_dock_get_xwindow_type (Window Xid, Window *pTransientFor)
 				bKeep = TRUE;
 				break;
 			}
-			if (pTypeBuffer[i] == s_aNetWmWindowTypeDialog)  // dialog -> skip modal dialog, because we can't act on it independantly from the parent window (it's most probably a dialog box like an open/save dialog)
+			if (pTypeBuffer[i] == s_aNetWmWindowTypeDialog)  // dialog -> skip modal dialog, because we can't act on it independently from the parent window (it's most probably a dialog box like an open/save dialog)
 			{
 				XGetTransientForHint (s_XDisplay, Xid, pTransientFor);  // maybe we should also get the _NET_WM_STATE_MODAL property, although if a dialog is set modal but not transient, that would probably be an error from the application.
 				if (*pTransientFor == None)

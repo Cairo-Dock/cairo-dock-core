@@ -46,7 +46,7 @@
 // public (manager, config, data)
 GldiObjectManager myLauncherObjectMgr;
 
-// dependancies
+// dependencies
 extern gchar *g_cCurrentLaunchersPath;
 extern CairoDockDesktopEnv g_iDesktopEnv;
 

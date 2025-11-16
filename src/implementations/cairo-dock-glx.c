@@ -189,7 +189,7 @@ static gboolean _initialize_opengl_backend (gboolean bForceOpenGL)
 		return FALSE;
 	}
 	
-	//\_________________ create a context for this visual. All other context will share ressources with it, and it will be the default context in case no other context exist.
+	//\_________________ create a context for this visual. All other context will share resources with it, and it will be the default context in case no other context exist.
 	Display *dpy = s_XDisplay;
 	s_XContext = glXCreateContext (dpy, pVisInfo, NULL, TRUE);
 	g_return_val_if_fail (s_XContext != 0, FALSE);

@@ -52,7 +52,7 @@
 GldiManager myFlyingsMgr;
 GldiObjectManager myFlyingObjectMgr;
 
-// dependancies
+// dependencies
 extern GldiContainer *g_pPrimaryContainer;
 extern gchar *g_cCurrentThemePath;
 extern gboolean g_bUseOpenGL;

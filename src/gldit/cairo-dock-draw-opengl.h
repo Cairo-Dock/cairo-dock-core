@@ -71,7 +71,7 @@ GLuint cairo_dock_create_texture_from_surface_full (cairo_surface_t *pImageSurfa
 /** Load a cairo surface into an OpenGL texture. The surface can be destroyed after that if you don't need it.
  *  The texture will have the same (physical) size as the surface, but potentially rounded up to the nearest
  *  power of 2 if needed. This function is the same as cairo_dock_create_texture_from_surface_full () but does
- *  not returm the size of the new texture.
+ *  not return the size of the new texture.
 *@param pImageSurface the surface, created with one of the 'cairo_dock_create_surface_xxx' functions.
 *@return the newly allocated texture, to be destroyed with _cairo_dock_delete_texture.
 */

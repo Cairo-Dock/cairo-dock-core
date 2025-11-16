@@ -140,7 +140,7 @@ gboolean gldi_window_manager_have_coordinates (void);
 gboolean gldi_window_manager_can_track_workspaces (void);
 
 /** Check how window position coordinates should be interpreted. Result is only
- *  valud if gldi_window_manager_have_coordinates () == TRUE as well.
+ *  valid if gldi_window_manager_have_coordinates () == TRUE as well.
  *@return whether window coordinates should be interpreted relative to the
  * currently active workspace / viewport; if false, coordinates are relative
  * to the workspace / viewport that the window is currently on

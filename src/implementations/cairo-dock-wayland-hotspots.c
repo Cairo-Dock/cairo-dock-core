@@ -50,7 +50,7 @@ typedef struct _hotspot_hit {
 
 typedef struct _output_hotspots_base {
 	GdkMonitor *monitor;
-	guint hotspot_width[4]; // area of hotspots needed on each egde (0: none)
+	guint hotspot_width[4]; // area of hotspots needed on each edge (0: none)
 	guint hotspot_height[4]; // order corresponds to values in the CairoDockPositionType enum
 	hotspot_hit hit[4]; // convenience structure used as parameter to the hotspot hit callback function
 } output_hotspots_base;

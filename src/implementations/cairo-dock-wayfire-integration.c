@@ -79,7 +79,7 @@ static int _write_data(const char* buf, size_t n) {
  * is no open socket. The caller should free() the returned string when done.
  * The length of the message is stored in msg_len (if not NULL).
  * Note: this will block until there is a message to read.
- * TOOD: do this async by adding it to the main loop?
+ * TODO: do this async by adding it to the main loop?
  */
 static char* _read_msg(uint32_t* out_len)
 {
@@ -175,7 +175,7 @@ static gboolean _present_desktops() {
 	return _call_ipc_method_no_data ("expo/toggle");
 }
 
-/* Toggle show destop functionality (i.e. minimize / unminimize all views).
+/* Toggle show desktop functionality (i.e. minimize / unminimize all views).
  * Note: bShow argument is ignored, we don't know if the desktop is shown / hidden */
 static gboolean _show_hide_desktop(G_GNUC_UNUSED gboolean bShow) {
 	return _call_ipc_method_no_data ("wm-actions/toggle_showdesktop");

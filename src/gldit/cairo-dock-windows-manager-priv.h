@@ -94,7 +94,7 @@ void gldi_window_set_sticky (GldiWindowActor *actor, gboolean bSticky);
 
 GldiWindowActor *gldi_window_pick (GtkWindow *pParentWindow);
 
-/** Get all currently managed windows as mebers of a GPtrArray.
+/** Get all currently managed windows as members of a GPtrArray.
  *@return a newly allocated GPtrArray with all windows (the order is unspecified); the caller should
 	free this with g_ptr_array_free()
  */

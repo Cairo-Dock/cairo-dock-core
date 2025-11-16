@@ -49,7 +49,7 @@
 // public (manager, config, data)
 GldiObjectManager myModuleInstanceObjectMgr;
 
-// dependancies
+// dependencies
 extern CairoDock *g_pMainDock;
 extern gchar *g_cCurrentThemePath;
 

@@ -26,7 +26,7 @@
 G_BEGIN_DECLS
 
 /** @file cairo-dock-dialog-factory.h This class defines the Dialog container, useful to bring interaction with the user.
-* A Dialog is a container that points to an icon. It contains the following optionnal components :
+* A Dialog is a container that points to an icon. It contains the following optional components :
 * - a message
 * - an image on its left
 * - a interaction widget below it
@@ -138,7 +138,7 @@ struct _CairoDialog {
 	gint iSidTimer;// le timer pour la destruction automatique du dialog.
 	gboolean bUseMarkup;// whether markup is used to draw the text (as defined in the attributes on init)
 	gboolean bNoInput;// whether the dialog is transparent to mouse input.
-	gboolean bAllowMinimize;  // TRUE to allow the dialog to be minimized once. The flag is reseted to FALSE after the desklet has minimized.
+	gboolean bAllowMinimize;  // TRUE to allow the dialog to be minimized once. The flag is reset to FALSE after the desklet has minimized.
 	GTimer *pUnmapTimer;  // timer to filter 2 consecutive unmap events
 	cairo_region_t* pShapeBitmap;
 	gboolean bPositionForced;
@@ -175,7 +175,7 @@ struct _CairoDialog {
 */
 CairoDialog *gldi_dialog_new (CairoDialogAttr *pAttribute);
 
-/** Pop up a dialog with a message, a widget, 2 buttons ok/cancel and an icon, all optionnal.
+/** Pop up a dialog with a message, a widget, 2 buttons ok/cancel and an icon, all optional.
 *@param cText the message to display.
 *@param pIcon the icon that will hold the dialog.
 *@param pContainer the container of the icon.
@@ -283,7 +283,7 @@ CairoDialog * gldi_dialog_show_general_message (const gchar *cMessage, double fT
 *@param pContainer the container of the icon.
 *@param cIconPath path to an icon to display in the margin.
 *@param pInteractiveWidget an interactive widget.
-*@return the number of the button that was clicked : 0 or -1 for OK, 1 or -2 for CANCEL, -3 if the dialog has been destroyed before. The dialog is destroyed after the user choosed, but the interactive widget is not destroyed, which allows to retrieve the changes made by the user. Destroy it with 'gtk_widget_destroy' when you're done with it.
+*@return the number of the button that was clicked : 0 or -1 for OK, 1 or -2 for CANCEL, -3 if the dialog has been destroyed before. The dialog is destroyed after the user chose, but the interactive widget is not destroyed, which allows to retrieve the changes made by the user. Destroy it with 'gtk_widget_destroy' when you're done with it.
 */
 int gldi_dialog_show_and_wait (const gchar *cText, Icon *pIcon, GldiContainer *pContainer, const gchar *cIconPath, GtkWidget *pInteractiveWidget);
 

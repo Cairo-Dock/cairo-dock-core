@@ -55,7 +55,7 @@ CairoTaskbarParam myTaskbarParam;
 GldiManager myTaskbarMgr;
 GldiObjectManager myAppliIconObjectMgr;
 
-// dependancies
+// dependencies
 extern CairoDock *g_pMainDock;
 extern gboolean g_bUseOpenGL;
 //extern int g_iDamageEvent;
@@ -867,10 +867,10 @@ static gboolean _remove_appli (G_GNUC_UNUSED GldiWindowActor *actor, Icon *pIcon
 	
 	// make it an invalid appli
 	gldi_icon_unset_appli (pIcon);  // we don't want to go into the 'unregister'
-	g_free (pIcon->cClass);  // nor the class manager, since we reseted it beforehand.
+	g_free (pIcon->cClass);  // nor the class manager, since we reset it beforehand.
 	pIcon->cClass = NULL;
 	
-	// if not inside a dock, free it, else it will be freeed with the dock.
+	// if not inside a dock, free it, else it will be freed with the dock.
 	if (cairo_dock_get_icon_container (pIcon) == NULL)  // not in a dock.
 	{
 		gldi_object_unref (GLDI_OBJECT (pIcon));

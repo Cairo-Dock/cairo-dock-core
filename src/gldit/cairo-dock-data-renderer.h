@@ -75,7 +75,7 @@ struct _CairoDataRendererAttribute {
 	gint iNbValues;
 	/// number of values to remember over time. For instance graphs can display as much values as the icon's width [2 by default and minimum].
 	gint iMemorySize;
-	/// an array of pairs of (min,max) values. [optionnal, input values will be considered between 0 and 1 if NULL].
+	/// an array of pairs of (min,max) values. [optional, input values will be considered between 0 and 1 if NULL].
 	gdouble *pMinMaxValues;
 	/// whether to automatically update the values' range [false by default].
 	gboolean bUpdateMinMax;
@@ -85,13 +85,13 @@ struct _CairoDataRendererAttribute {
 	RendererRotateTheme iRotateTheme;
 	/// time needed to update to the new values. The update is smooth in OpenGL mode. [0 by default]
 	gint iLatencyTime;
-	/// a function used to format the values into a string. Only useful if you make te DataRenderer write the values [optionnal, by default the values are formatted with 2 decimals].
+	/// a function used to format the values into a string. Only useful if you make te DataRenderer write the values [optional, by default the values are formatted with 2 decimals].
 	CairoDataRendererFormatValueFunc format_value;
-	/// data to be passed to the format function [optionnal].
+	/// data to be passed to the format function [optional].
 	gpointer pFormatData;
-	/// an optionnal list of emblems to draw on the overlay.
+	/// an optional list of emblems to draw on the overlay.
 	gchar **cEmblems;
-	/// an optionnal list of labels to write on the overlay.
+	/// an optional list of labels to write on the overlay.
 	gchar **cLabels;
 };
 
@@ -149,7 +149,7 @@ struct _CairoDataRenderer {
 	//\_________________ filled at init by the implementation.
 	/// interface of the Data Renderer.
 	CairoDataRendererInterface interface;
-	//\_________________ filled at loading time independantly of the renderer type.
+	//\_________________ filled at loading time independently of the renderer type.
 	/// internal data to be drawn by the renderer.
 	CairoDataToRenderer data;
 	/// size of the drawing area.
@@ -167,7 +167,7 @@ struct _CairoDataRenderer {
 	/// the time it will take to update to the new value, with a smooth animation (require openGL capacity)
 	gint iLatencyTime;
 	//\_________________ filled at load time by the implementation.
-	/// the rank of the renderer, eg the number of values it can display at once (for exemple, 1 for a bar, 2 for a dual-gauge)
+	/// the rank of the renderer, eg the number of values it can display at once (for example, 1 for a bar, 2 for a dual-gauge)
 	gint iRank;  // nbre de valeurs que peut afficher 1 unite (en general : gauge:1/2, graph:1/2, bar:1)
 	/// set to TRUE <=> the renderer can draw the values as text itself.
 	gboolean bCanRenderValueAsText;
@@ -181,11 +181,11 @@ struct _CairoDataRenderer {
 	gboolean bUseOverlay;
 	/// position of the overlay, in the case the renderer uses one.
 	CairoOverlayPosition iOverlayPosition;
-	/// an optionnal list of labels to be displayed on the Data Renderer to indicate the nature of each value. Same size as the set of values.
+	/// an optional list of labels to be displayed on the Data Renderer to indicate the nature of each value. Same size as the set of values.
 	CairoDataRendererText *pLabels;
-	/// an optionnal list of emblems to be displayed on the Data Renderer to indicate the nature of each value. Same size as the set of values.
+	/// an optional list of emblems to be displayed on the Data Renderer to indicate the nature of each value. Same size as the set of values.
 	CairoDataRendererEmblem *pEmblems;
-	/// an optionnal list of text zones to write the values. Same size as the set of values.
+	/// an optional list of text zones to write the values. Same size as the set of values.
 	CairoDataRendererTextParam *pValuesText;
 	//\_________________ dynamic.
 	/// the animation counter for the smooth movement.
@@ -220,7 +220,7 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, GldiContainer *pCont
 *@param pNewValues a set a new values (must be of the size defined on the creation of the Renderer)*/
 void cairo_dock_render_new_data_on_icon (Icon *pIcon, GldiContainer *pContainer, cairo_t *pCairoContext, double *pNewValues);
 
-/**Remove the Data Renderer of an icon. All the allocated ressources will be freed.
+/**Remove the Data Renderer of an icon. All the allocated resources will be freed.
 *@param pIcon the icon*/
 void cairo_dock_remove_data_renderer_on_icon (Icon *pIcon);
 

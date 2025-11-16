@@ -71,7 +71,7 @@ struct _GldiTask {
 	GTimer *pClock;
 	// time elapsed since last update.
 	double fElapsedTime;
-	// function called when the task is destroyed to free the shared memory (optionnal).
+	// function called when the task is destroyed to free the shared memory (optional).
 	GFreeFunc free_data;
 	// below are the parameters accessed inside the thread => only between mutex lock/unlock
 	/// structure passed as parameter of the 'get_data' and 'update' functions. Must not be accessed outside of these 2 functions !
@@ -102,9 +102,9 @@ void gldi_task_launch_delayed (GldiTask *pTask, guint delay);
 
 /** Create a periodic Task.
 *@param iPeriod time between 2 iterations, possibly nul for a Task to be executed once only.
-*@param get_data asynchonous function, which carries out the heavy job parallel to the dock; stores the results in the shared memory.
-*@param update synchonous function, which carries out the update of the dock from the result of the previous function. Returns TRUE to continue, FALSE to stop.
-*@param free_data function called when the Task is destroyed, to free the shared memory (optionnal).
+*@param get_data asynchronous function, which carries out the heavy job parallel to the dock; stores the results in the shared memory.
+*@param update synchronous function, which carries out the update of the dock from the result of the previous function. Returns TRUE to continue, FALSE to stop.
+*@param free_data function called when the Task is destroyed, to free the shared memory (optional).
 *@param pSharedMemory structure passed as a parameter of the get_data and update functions. Must not be accessed outside of these functions !
 *@return the newly allocated Task, ready to be launched with \ref gldi_task_launch. Free it with \ref gldi_task_free or \ref gldi_task_discard.
 */
@@ -112,8 +112,8 @@ GldiTask *gldi_task_new_full (int iPeriod, GldiGetDataAsyncFunc get_data, GldiUp
 
 /** Create a periodic Task.
 *@param iPeriod time between 2 iterations, possibly nul for a Task to be executed once only.
-*@param get_data asynchonous function, which carries out the heavy job parallel to the dock; stores the results in the shared memory.
-*@param update synchonous function, which carries out the update of the dock from the result of the previous function. Returns TRUE to continue, FALSE to stop.
+*@param get_data asynchronous function, which carries out the heavy job parallel to the dock; stores the results in the shared memory.
+*@param update synchronous function, which carries out the update of the dock from the result of the previous function. Returns TRUE to continue, FALSE to stop.
 *@param pSharedMemory structure passed as a parameter of the get_data and update functions. Must not be accessed outside of these  functions !
 *@return the newly allocated Task, ready to be launched with \ref gldi_task_launch. Free it with \ref gldi_task_free or \ref gldi_task_discard.
 */
@@ -129,7 +129,7 @@ void gldi_task_stop (GldiTask *pTask);
 */
 void gldi_task_discard (GldiTask *pTask);
 
-/** Stop and destroy a periodic Task, freeing all the allocated ressources. Unlike \ref gldi_task_discard, the task is stopped before being freeed, so this is a blocking call. If you want to destroy the task inside the update callback, don't use this function; use \ref gldi_task_discard instead.
+/** Stop and destroy a periodic Task, freeing all the allocated resources. Unlike \ref gldi_task_discard, the task is stopped before being freed, so this is a blocking call. If you want to destroy the task inside the update callback, don't use this function; use \ref gldi_task_discard instead.
 *@param pTask the periodic Task.
 */
 void gldi_task_free (GldiTask *pTask);

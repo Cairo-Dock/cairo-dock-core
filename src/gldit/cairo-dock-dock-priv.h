@@ -69,7 +69,7 @@ typedef enum {
 
 void gldi_dock_init_internals (CairoDock *pDock);
 
-/** Create a new dock of type "sub-dock", and load a given list of icons inside. The list then belongs to the dock, so it must not be freeed after that. The buffers of each icon are loaded, so they just need to have an image filename and a name.
+/** Create a new dock of type "sub-dock", and load a given list of icons inside. The list then belongs to the dock, so it must not be freed after that. The buffers of each icon are loaded, so they just need to have an image filename and a name.
 * @param cDockName the name that identifies the dock.
 * @param cRendererName name of a renderer. If NULL, the default renderer will be applied.
 * @param pParentDock the parent dock.

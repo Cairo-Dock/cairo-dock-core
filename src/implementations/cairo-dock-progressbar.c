@@ -17,7 +17,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/** See the "data/gauges" folder for some exemples */
+/** See the "data/gauges" folder for some examples */
 
 #include <math.h>
 
@@ -248,7 +248,7 @@ static void render_opengl (ProgressBar *pProgressBar)
 	int iWidth = pRenderer->iWidth;
 	
 	double x, y, v, w, r = pProgressBar->iBarThickness/2.;
-	double dx = .5;  // required to not have sharp edges on the left rounded corners... although maybe it should be adressed by the Overlay...
+	double dx = .5;  // required to not have sharp edges on the left rounded corners... although maybe it should be addressed by the Overlay...
 	int i;
 	for (i = 0; i < iNbValues; i ++)
 	{
