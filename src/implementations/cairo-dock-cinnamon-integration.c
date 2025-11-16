@@ -17,13 +17,15 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <glib.h>
+#include <gio/gio.h>
+
 #include "cairo-dock-log.h"
-#include "cairo-dock-dbus.h"
 #include "cairo-dock-class-manager-priv.h"
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-cinnamon-integration.h"
 
-static DBusGProxy *s_pProxy = NULL;
+static GDBusProxy *s_pProxy = NULL;
 
 #define CD_CINNAMON_BUS "org.Cinnamon"
 #define CD_CINNAMON_OBJECT "/org/Cinnamon"
@@ -36,24 +38,27 @@ static gboolean _eval (const gchar *cmd)
 	gboolean bSuccess = FALSE;
 	if (s_pProxy != NULL)
 	{
-		gchar *cResult = NULL;
 		GError *error = NULL;
-		dbus_g_proxy_call (s_pProxy, "Eval", &error,
-			G_TYPE_STRING, cmd,
-			G_TYPE_INVALID,
-			G_TYPE_BOOLEAN, &bSuccess,
-			G_TYPE_STRING, &cResult,
-			G_TYPE_INVALID);
+		
+		GVariant *res = g_dbus_proxy_call_sync (s_pProxy, "Eval",
+			g_variant_new ("(s)", cmd), G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, &error);
+		
 		if (error)
 		{
 			cd_warning (error->message);
 			g_error_free (error);
 		}
-		if (cResult)
+		else if (res && g_variant_is_of_type (res, G_VARIANT_TYPE ("(bs)")))
 		{
+			// result is a bool + string
+			g_variant_get_child (res, 0, "b", &bSuccess);
+			GVariant *str = g_variant_get_child_value (res, 1);
+			const gchar *cResult = g_variant_get_string (str, NULL);
+			
 			cd_debug ("%s", cResult);
-			g_free (cResult);
+			g_variant_unref (str);
 		}
+		if (res) g_variant_unref (res);
 	}
 	return bSuccess;
 }
@@ -103,8 +108,13 @@ static gboolean present_class (const gchar *cClass)
 	return bSuccess;
 }
 
+static gboolean bRegistered = FALSE;
+
 static void _register_cinnamon_backend (void)
 {
+	if (bRegistered) return;
+	bRegistered = TRUE;
+	
 	GldiDesktopManagerBackend p;
 	memset(&p, 0, sizeof (GldiDesktopManagerBackend));
 	
@@ -117,25 +127,47 @@ static void _register_cinnamon_backend (void)
 
 static void _unregister_cinnamon_backend (void)
 {
+	// we cannot unregister, but there would be no point anyway
+	
 	//cairo_dock_wm_register_backend (NULL);
 }
 
-static void _on_cinnamon_owner_changed (G_GNUC_UNUSED const gchar *cName, gboolean bOwned, G_GNUC_UNUSED gpointer data)
+static void _on_proxy_connected (G_GNUC_UNUSED GObject *obj, GAsyncResult *res, G_GNUC_UNUSED gpointer ptr)
 {
-	cd_debug ("Cinnamon is on the bus (%d)", bOwned);
-	
-	if (bOwned)  // set up the proxy
+	if (s_pProxy)
 	{
-		g_return_if_fail (s_pProxy == NULL);
-		
-		s_pProxy = cairo_dock_create_new_session_proxy (
-			CD_CINNAMON_BUS,
-			CD_CINNAMON_OBJECT,
-			CD_CINNAMON_INTERFACE);
-		
-		_register_cinnamon_backend ();
+		// should not happen
+		g_object_unref (s_pProxy);
+		s_pProxy = NULL;
 	}
-	else if (s_pProxy != NULL)
+	
+	GError *erreur = NULL;
+	s_pProxy = g_dbus_proxy_new_finish (res, &erreur);
+	if (erreur)
+	{
+		cd_warning ("Error creating Cinnamon DBus proxy: %s", erreur->message);
+		g_error_free (erreur);
+	}
+	else _register_cinnamon_backend ();
+}
+
+static void _on_name_appeared (GDBusConnection *connection, const gchar *name,
+	G_GNUC_UNUSED const gchar *name_owner, G_GNUC_UNUSED gpointer data)
+{	
+	g_dbus_proxy_new (connection,
+		G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START | G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+		NULL, // GDBusInterfaceInfo -- we could supply this, but works anyway
+		name,
+		CD_CINNAMON_OBJECT,
+		CD_CINNAMON_INTERFACE,
+		NULL,
+		_on_proxy_connected,
+		NULL);
+}
+
+static void _on_name_vanished (G_GNUC_UNUSED GDBusConnection *connection, G_GNUC_UNUSED const gchar *name, G_GNUC_UNUSED gpointer user_data)
+{
+	if (s_pProxy != NULL)
 	{
 		g_object_unref (s_pProxy);
 		s_pProxy = NULL;
@@ -143,20 +175,10 @@ static void _on_cinnamon_owner_changed (G_GNUC_UNUSED const gchar *cName, gboole
 		_unregister_cinnamon_backend ();
 	}
 }
-static void _on_detect_cinnamon (gboolean bPresent, G_GNUC_UNUSED gpointer data)
-{
-	cd_debug ("Cinnamon is present: %d", bPresent);
-	if (bPresent)
-	{
-		_on_cinnamon_owner_changed (CD_CINNAMON_BUS, TRUE, NULL);
-	}
-	cairo_dock_watch_dbus_name_owner (CD_CINNAMON_BUS,
-		(CairoDockDbusNameOwnerChangedFunc) _on_cinnamon_owner_changed,
-		NULL);
-}
+
 void cd_init_cinnamon_backend (void)
 {
-	cairo_dock_dbus_detect_application_async (CD_CINNAMON_BUS,
-		(CairoDockOnAppliPresentOnDbus) _on_detect_cinnamon,
-		NULL);
+	g_bus_watch_name (G_BUS_TYPE_SESSION, CD_CINNAMON_BUS, G_BUS_NAME_WATCHER_FLAGS_NONE,
+		_on_name_appeared, _on_name_vanished, NULL, NULL);
 }
+

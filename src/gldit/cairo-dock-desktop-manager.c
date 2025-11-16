@@ -23,7 +23,6 @@
 #include "cairo-dock-draw-opengl.h"  // cairo_dock_create_texture_from_surface
 #include "cairo-dock-compiz-integration.h"
 #include "cairo-dock-kwin-integration.h"
-#include "cairo-dock-gnome-shell-integration.h"
 #include "cairo-dock-cinnamon-integration.h"
 #include "cairo-dock-wayfire-integration.h"
 #include "cairo-dock-wayland-manager.h" // gldi_wayland_release_keyboard (needed on Wayfire)
@@ -556,7 +555,6 @@ static void init (void)
 	//\__________________ Init the Window Manager backends.
 	cd_init_compiz_backend ();
 	cd_init_kwin_backend ();
-	cd_init_gnome_shell_backend ();
 	cd_init_cinnamon_backend ();
 	cd_init_wayfire_backend ();
 }
