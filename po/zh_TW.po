@@ -938,7 +938,7 @@ msgid "Ask again on startup which backend to use."
 msgstr "啟動時再次詢問要使用哪個後端。"
 
 #: ../src/cairo-dock.c:394
-msgid "Force the dock to consider this environnement - use it with care."
+msgid "Force the dock to consider this environment - use it with care."
 msgstr "強制 docks 使用這個環境 - 請小心使用。"
 
 #: ../src/cairo-dock.c:397
@@ -1009,8 +1009,8 @@ msgstr "Cairo-Dock 可以做任何事，包含咖啡！"
 
 #: ../src/cairo-dock.c:440
 msgid ""
-"Ask the dock to load additionnal modules contained in this directory (though "
-"it is unsafe for your dock to load unnofficial modules)."
+"Ask the dock to load additional modules contained in this directory (though "
+"it is unsafe for your dock to load unofficial modules)."
 msgstr ""
 "要求 dock 載入這個目錄中所含的額外模組 (雖然讓您的 dock 載入非官方的模組並不"
 "安全)。"
@@ -1538,7 +1538,7 @@ msgstr "使用此Dock"
 #: ../Help/data/messages:5
 msgid ""
 "Most icons in the dock have several actions: the primary action on left-"
-"click, a secondary action on middle-click, and additionnal actions on right-"
+"click, a secondary action on middle-click, and additional actions on right-"
 "click (in the menu).\n"
 "Some applets let you bind a shortkey to an action, and decide which action "
 "sould be on middle-click."
@@ -1718,7 +1718,7 @@ msgstr "群組指定應用程式的視窗"
 #: ../Help/data/messages:65
 msgid ""
 "When an application has several windows, one icon for each window will "
-"appear in the dock; they will be grouped togather into a sub-dock.\n"
+"appear in the dock; they will be grouped together into a sub-dock.\n"
 "Clicking on the main icon will display all the windows of the application "
 "side-by-side (if your Window Manager is able to do that)."
 msgstr ""
@@ -1744,7 +1744,7 @@ msgstr ""
 "用來設定 Compiz。"
 
 #: ../Help/data/messages:77
-msgid "Positionning the dock on the screen"
+msgid "Positioning the dock on the screen"
 msgstr "在螢幕上定位Dock"
 
 #: ../Help/data/messages:79
@@ -1835,7 +1835,7 @@ msgid ""
 "Activate the Clock applet.\n"
 "Clicking on it will display a calendar.\n"
 "Double-clicking on a day will pop-up a task-editor. Here you can add/remove "
-"taks.\n"
+"tasks.\n"
 "When a task has been or is going to be scheduled, the applet will warn you "
 "(15mn before the event, and also 1 day before in the case of an anniversary)."
 msgstr ""
@@ -2011,7 +2011,7 @@ msgid ""
 "Some applets can have several instances running at the same time: Clock, "
 "Stack, Weather, ...\n"
 "Right click on the applet's icon -> \"launch another instance\".\n"
-"You can configure each instance independantely. This allows you, for "
+"You can configure each instance independently. This allows you, for "
 "example, to have the current time for different countries in your dock or "
 "the weather in different cities."
 msgstr ""
@@ -2028,7 +2028,7 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:169
-msgid "Controling the sound volume"
+msgid "Controlling the sound volume"
 msgstr "控制音量"
 
 #: ../Help/data/messages:171
@@ -2040,7 +2040,7 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:173
-msgid "Controling the screen brightness"
+msgid "Controlling the screen brightness"
 msgstr "控制螢幕亮度"
 
 #: ../Help/data/messages:175
@@ -2200,7 +2200,7 @@ msgid ""
 "if you're using KDE, you may have to specify the path to the trash folder.\n"
 "Just edit the applet's configuration, and fill in the Trash path; it is "
 "probably «~/.locale/share/Trash/files». Be very careful when typing a path "
-"here!!! (do not insert spaces or some invisible caracters)."
+"here!!! (do not insert spaces or some invisible characters)."
 msgstr ""
 "假如您在 KDE 下，您也許要告訴回收桶面板程式系統的回收桶路徑在哪裡。\n"
 "只要修改面板程式的設置，並且填入回收桶路徑；這可能會在 ~/.locale/share/Trash/"
@@ -2576,7 +2576,7 @@ msgid ""
 "Minimalistic: Mix applications with its launcher, show other windows only if "
 "they are minimized (like in MacOSX).\n"
 "Integrated  : Mix applications with its launcher, show all others windows "
-"and group windows togather in sub-dock (default).\n"
+"and group windows together in sub-dock (default).\n"
 "Separated   : Separate the taskbar from the launchers and only show windows "
 "that are on the current desktop."
 msgstr ""
@@ -2946,7 +2946,7 @@ msgid "\"...\" will be added at the end if the name is too long."
 msgstr "名稱太長的尾端將會自動加上\"...\""
 
 #: ../data/messages:337
-msgid "Maximum number of caracters in application name:"
+msgid "Maximum number of characters in application name:"
 msgstr "應用程式名稱最多的字元數："
 
 #: ../data/messages:339
@@ -2989,7 +2989,7 @@ msgstr "只有您的視窗管理程式支援它時。"
 
 #: ../data/messages:359
 msgid ""
-"Present windows preview on click when several windows are grouped togather"
+"Present windows preview on click when several windows are grouped together"
 msgstr "當多個視窗群組在一起時避免在點選時預覽視窗"
 
 #: ../data/messages:361

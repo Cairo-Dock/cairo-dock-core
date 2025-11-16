@@ -968,7 +968,7 @@ msgid "Ask again on startup which backend to use."
 msgstr "Chiedi nuovamente all'avvio quale backend usare."
 
 #: ../src/cairo-dock.c:394
-msgid "Force the dock to consider this environnement - use it with care."
+msgid "Force the dock to consider this environment - use it with care."
 msgstr ""
 "Forza la dock a considerare questo ambiente - da utilizzare con attenzione."
 
@@ -1048,8 +1048,8 @@ msgstr "Cairo-Dock può fare ogni cosa, anche il caffè!"
 
 #: ../src/cairo-dock.c:440
 msgid ""
-"Ask the dock to load additionnal modules contained in this directory (though "
-"it is unsafe for your dock to load unnofficial modules)."
+"Ask the dock to load additional modules contained in this directory (though "
+"it is unsafe for your dock to load unofficial modules)."
 msgstr ""
 "Domanda alla dock di caricare i moduli addizionali contenuti in questa "
 "directory (sebbene non sia sicuro per la tua dock caricare moduli non "
@@ -1619,7 +1619,7 @@ msgstr "Usando la dock"
 #: ../Help/data/messages:5
 msgid ""
 "Most icons in the dock have several actions: the primary action on left-"
-"click, a secondary action on middle-click, and additionnal actions on right-"
+"click, a secondary action on middle-click, and additional actions on right-"
 "click (in the menu).\n"
 "Some applets let you bind a shortkey to an action, and decide which action "
 "sould be on middle-click."
@@ -1863,7 +1863,7 @@ msgstr "Raggruppare le finestre di una data applicazione"
 #: ../Help/data/messages:65
 msgid ""
 "When an application has several windows, one icon for each window will "
-"appear in the dock; they will be grouped togather into a sub-dock.\n"
+"appear in the dock; they will be grouped together into a sub-dock.\n"
 "Clicking on the main icon will display all the windows of the application "
 "side-by-side (if your Window Manager is able to do that)."
 msgstr ""
@@ -1894,7 +1894,7 @@ msgstr ""
 "\"ccsm\" per potere configurare Compiz."
 
 #: ../Help/data/messages:77
-msgid "Positionning the dock on the screen"
+msgid "Positioning the dock on the screen"
 msgstr "Posizionare la dock sullo schermo"
 
 #: ../Help/data/messages:79
@@ -2013,7 +2013,7 @@ msgid ""
 "Activate the Clock applet.\n"
 "Clicking on it will display a calendar.\n"
 "Double-clicking on a day will pop-up a task-editor. Here you can add/remove "
-"taks.\n"
+"tasks.\n"
 "When a task has been or is going to be scheduled, the applet will warn you "
 "(15mn before the event, and also 1 day before in the case of an anniversary)."
 msgstr ""
@@ -2256,7 +2256,7 @@ msgid ""
 "Some applets can have several instances running at the same time: Clock, "
 "Stack, Weather, ...\n"
 "Right click on the applet's icon -> \"launch another instance\".\n"
-"You can configure each instance independantely. This allows you, for "
+"You can configure each instance independently. This allows you, for "
 "example, to have the current time for different countries in your dock or "
 "the weather in different cities."
 msgstr ""
@@ -2284,7 +2284,7 @@ msgstr ""
 "Puoi anche dare un nome a ciascuna di esse."
 
 #: ../Help/data/messages:169
-msgid "Controling the sound volume"
+msgid "Controlling the sound volume"
 msgstr "Controlla il volume audio"
 
 #: ../Help/data/messages:171
@@ -2300,7 +2300,7 @@ msgstr ""
 "Clic centrale per togliere/rimettere l'audio (silenzioso)."
 
 #: ../Help/data/messages:173
-msgid "Controling the screen brightness"
+msgid "Controlling the screen brightness"
 msgstr "Controlla la luminosità dello schermo"
 
 #: ../Help/data/messages:175
@@ -2471,7 +2471,7 @@ msgid ""
 "if you're using KDE, you may have to specify the path to the trash folder.\n"
 "Just edit the applet's configuration, and fill in the Trash path; it is "
 "probably «~/.locale/share/Trash/files». Be very careful when typing a path "
-"here!!! (do not insert spaces or some invisible caracters)."
+"here!!! (do not insert spaces or some invisible characters)."
 msgstr ""
 "Se usi KDE, è possibile tu debba dirgli il percorso della cartella Cestino.\n"
 "Apri l'editor di configurazione, e riempi il percorso del cestino; "
@@ -2883,7 +2883,7 @@ msgid ""
 "Minimalistic: Mix applications with its launcher, show other windows only if "
 "they are minimized (like in MacOSX).\n"
 "Integrated  : Mix applications with its launcher, show all others windows "
-"and group windows togather in sub-dock (default).\n"
+"and group windows together in sub-dock (default).\n"
 "Separated   : Separate the taskbar from the launchers and only show windows "
 "that are on the current desktop."
 msgstr ""
@@ -3275,7 +3275,7 @@ msgstr ""
 "Se il nome è troppo lungo saranno aggiunti i tre punti \"...\" alla fine."
 
 #: ../data/messages:337
-msgid "Maximum number of caracters in application name:"
+msgid "Maximum number of characters in application name:"
 msgstr "Numero massimo di caratteri nel nome dell'applicazione:"
 
 #: ../data/messages:339
@@ -3320,7 +3320,7 @@ msgstr "Soltanto se il tuo Window Manager lo supporta."
 
 #: ../data/messages:359
 msgid ""
-"Present windows preview on click when several windows are grouped togather"
+"Present windows preview on click when several windows are grouped together"
 msgstr ""
 "Mostra un'anteprima delle finestre al clic, quando molteplici finestre sono "
 "raggruppate assieme"
