@@ -50,6 +50,7 @@
 #include "cairo-dock-cosmic-toplevel.h"
 #include "cairo-dock-plasma-virtual-desktop.h"
 #include "cairo-dock-ext-workspaces.h"
+#include "cairo-dock-ext-toplevel.h"
 #include "cairo-dock-wayland-wm.h"
 #endif
 #include "cairo-dock-wayland-hotspots.h"
@@ -587,7 +588,8 @@ static void init (void)
 				cd_warning ("inconsistent compositor types detected!");
 			s_CompositorType = WAYLAND_COMPOSITOR_KWIN;
 		}
-		else gldi_wlr_foreign_toplevel_try_init (registry);
+		else if (!gldi_ext_toplevel_try_init (registry))
+			gldi_wlr_foreign_toplevel_try_init (registry);
 		if (!gldi_plasma_virtual_desktop_try_init (registry))
 			gldi_ext_workspaces_try_init (registry);
 	}
