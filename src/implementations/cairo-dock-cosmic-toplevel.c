@@ -82,6 +82,7 @@ static gboolean can_maximize = FALSE;
 static gboolean can_minimize = FALSE;
 static gboolean can_fullscreen = FALSE;
 static gboolean can_move_workspace = FALSE;
+static gboolean can_sticky = FALSE;
 
 static gboolean list_found = FALSE;
 static gboolean manager_found = FALSE;
@@ -171,6 +172,15 @@ static void _set_fullscreen (GldiWindowActor *actor, gboolean bFullScreen)
 	else zcosmic_toplevel_manager_v1_unset_fullscreen (s_ptoplevel_manager, wactor->chandle);
 }
 
+static void _set_sticky (GldiWindowActor *actor, gboolean bSticky)
+{
+	if (!actor) return;
+	if (!can_sticky) return; // will be the case if compositor protocol version is < 3, in this case we should avoid this request
+	GldiCosmicWindowActor *wactor = (GldiCosmicWindowActor *)actor;
+	if (bSticky) zcosmic_toplevel_manager_v1_set_sticky (s_ptoplevel_manager, wactor->chandle);
+	else zcosmic_toplevel_manager_v1_unset_sticky (s_ptoplevel_manager, wactor->chandle);
+}
+
 static void _capabilities_cb (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct zcosmic_toplevel_manager_v1 *manager,
 	struct wl_array *c)
 {
@@ -180,6 +190,7 @@ static void _capabilities_cb (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct zco
 	can_minimize = FALSE;
 	can_fullscreen = FALSE;
 	can_move_workspace = FALSE;
+	can_sticky = FALSE;
 
 	int i;
 	uint32_t* cdata = (uint32_t*)c->data;
@@ -195,11 +206,21 @@ static void _capabilities_cb (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct zco
 			can_minimize = TRUE; break;     
 		case ZCOSMIC_TOPLEVEL_MANAGER_V1_ZCOSMIC_TOPLELEVEL_MANAGEMENT_CAPABILITIES_V1_FULLSCREEN:
 			can_fullscreen = TRUE; break;   
-		case ZCOSMIC_TOPLEVEL_MANAGER_V1_ZCOSMIC_TOPLELEVEL_MANAGEMENT_CAPABILITIES_V1_MOVE_TO_WORKSPACE:
+		case ZCOSMIC_TOPLEVEL_MANAGER_V1_ZCOSMIC_TOPLELEVEL_MANAGEMENT_CAPABILITIES_V1_MOVE_TO_EXT_WORKSPACE:
 			can_move_workspace = TRUE; break;
+		case ZCOSMIC_TOPLEVEL_MANAGER_V1_ZCOSMIC_TOPLELEVEL_MANAGEMENT_CAPABILITIES_V1_STICKY:
+			can_sticky = TRUE; break;
 	}
 }
 
+static void _get_supported_actions (gboolean *bCanFullscreen, gboolean *bCanSticky, gboolean *bCanBelow, gboolean *bCanAbove, gboolean *bCanKill)
+{
+	if (bCanFullscreen) *bCanFullscreen = can_fullscreen;
+	if (bCanSticky) *bCanSticky = can_sticky;
+	if (bCanBelow) *bCanBelow = FALSE; // not supported
+	if (bCanAbove) *bCanAbove = FALSE;
+	if (bCanKill) *bCanKill = FALSE;
+}
 
 
 /**********************************************************************
@@ -821,10 +842,11 @@ gboolean gldi_cosmic_toplevel_try_init (struct wl_registry *registry)
 	wmb.get_transient_for = _get_transient_for;
 	// wmb.is_above_or_below = _is_above_or_below;
 	// wmb.is_sticky = _is_sticky;
-	// wmb.set_sticky = _set_sticky;
+	wmb.set_sticky = _set_sticky;
 	wmb.can_minimize_maximize_close = _can_minimize_maximize_close;
 	// wmb.get_id = _get_id;
 	wmb.pick_window = gldi_wayland_wm_pick_window;
+	wmb.get_supported_actions = _get_supported_actions;
 	int flags = GLDI_WM_NO_VIEWPORT_OVERLAP | GLDI_WM_GEOM_REL_TO_VIEWPORT;
 	if (info_version >= 2) flags |= GLDI_WM_HAVE_WINDOW_GEOMETRY;
 	if (info_version >= 3) flags |= GLDI_WM_HAVE_WORKSPACES; // we only use ext-workspaces now, which are only available with version >= 3

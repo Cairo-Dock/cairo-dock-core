@@ -202,6 +202,14 @@ static void _get_menu_address (GldiWindowActor *actor, char **service_name, char
 	if (object_path)  *object_path  = pactor->object_path;
 }
 
+static void _get_supported_actions (gboolean *bCanFullscreen, gboolean *bCanSticky, gboolean *bCanBelow, gboolean *bCanAbove, gboolean *bCanKill)
+{
+	if (bCanFullscreen) *bCanFullscreen = TRUE;
+	if (bCanSticky) *bCanSticky = TRUE;
+	if (bCanBelow) *bCanBelow = FALSE; // not supported
+	if (bCanAbove) *bCanAbove = TRUE;
+	if (bCanKill) *bCanKill = TRUE;
+}
 
 /***********************************************************************
  * window manager interface -> minimize position handling
@@ -659,6 +667,7 @@ static void gldi_plasma_window_manager_init ()
 	// wmb.get_id = _get_id;
 	wmb.get_menu_address = _get_menu_address;
 	wmb.pick_window = gldi_wayland_wm_pick_window;
+	wmb.get_supported_actions = _get_supported_actions;
 	wmb.flags = GINT_TO_POINTER (GLDI_WM_NO_VIEWPORT_OVERLAP | GLDI_WM_GEOM_REL_TO_VIEWPORT | GLDI_WM_HAVE_WINDOW_GEOMETRY | GLDI_WM_HAVE_WORKSPACES);
 	wmb.name = "plasma";
 	gldi_windows_manager_register_backend (&wmb);

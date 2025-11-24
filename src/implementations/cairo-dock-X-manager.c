@@ -1580,6 +1580,15 @@ static gboolean _dispatch (G_GNUC_UNUSED GSource *source, G_GNUC_UNUSED GSourceF
 	return _cairo_dock_unstack_Xevents (NULL);
 }
 
+static void _get_supported_actions (gboolean *bCanFullscreen, gboolean *bCanSticky, gboolean *bCanBelow, gboolean *bCanAbove, gboolean *bCanKill)
+{
+	// note: there is no way to test for capabilities, we just assume that everything will work
+	if (bCanFullscreen) *bCanFullscreen = TRUE;
+	if (bCanSticky) *bCanSticky = TRUE;
+	if (bCanBelow) *bCanBelow = TRUE;
+	if (bCanAbove) *bCanAbove = TRUE;
+	if (bCanKill) *bCanKill = TRUE;
+}
 
 static void init (void)
 {
@@ -1696,6 +1705,7 @@ static void init (void)
 	wmb.can_minimize_maximize_close = _can_minimize_maximize_close;
 	wmb.get_id = _get_id;
 	wmb.pick_window = _pick_window;
+	wmb.get_supported_actions = _get_supported_actions;
 	//!! TODO: figure out GLDI_WM_NO_VIEWPORT_OVERLAP flag (depends on the WM, needs to be done in *-integration.c) !!
 	wmb.flags = GINT_TO_POINTER (GLDI_WM_HAVE_WINDOW_GEOMETRY | GLDI_WM_HAVE_WORKSPACES);
 	wmb.name = "X11";
