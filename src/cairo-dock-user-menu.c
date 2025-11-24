@@ -2028,6 +2028,13 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 		}
 		
 		//\_________________________ Other actions
+		gboolean bCanFullscreen = FALSE;
+		gboolean bCanSticky = FALSE;
+		gboolean bCanBelow = FALSE;
+		gboolean bCanAbove = FALSE;
+		gboolean bCanKill = FALSE;
+		gldi_window_manager_get_supported_actions (&bCanFullscreen, &bCanSticky, &bCanBelow, &bCanAbove, &bCanKill);
+		
 		GtkWidget *pSubMenuOtherActions = cairo_dock_create_sub_menu (_("Other actions"), menu, NULL);
 
 		// Move
@@ -2037,7 +2044,8 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 			gtk_widget_set_sensitive (pMenuItem, FALSE);
 
 		// Fullscreen
-		_add_entry_in_menu (pAppli->bIsFullScreen ? _("Not Fullscreen") : _("Fullscreen"), pAppli->bIsFullScreen ? GLDI_ICON_NAME_LEAVE_FULLSCREEN : GLDI_ICON_NAME_FULLSCREEN, _cairo_dock_set_appli_fullscreen, pSubMenuOtherActions, params);
+		pMenuItem = _add_entry_in_menu (pAppli->bIsFullScreen ? _("Not Fullscreen") : _("Fullscreen"), pAppli->bIsFullScreen ? GLDI_ICON_NAME_LEAVE_FULLSCREEN : GLDI_ICON_NAME_FULLSCREEN, _cairo_dock_set_appli_fullscreen, pSubMenuOtherActions, params);
+		if (!bCanFullscreen) gtk_widget_set_sensitive (pMenuItem, FALSE);
 
 		// Below
 		if (! pAppli->bIsHidden)  // this could be a button in the menu, if we find an icon that doesn't look too much like the "minimise" one
@@ -2046,18 +2054,21 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 				cLabel = g_strdup_printf ("%s (%s)", _("Below other windows"), _("middle-click"));
 			else
 				cLabel = g_strdup (_("Below other windows"));
-			_add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-lower.svg", _cairo_dock_lower_appli, pSubMenuOtherActions, params);
+			pMenuItem = _add_entry_in_menu (cLabel, CAIRO_DOCK_SHARE_DATA_DIR"/icons/icon-lower.svg", _cairo_dock_lower_appli, pSubMenuOtherActions, params);
 			g_free (cLabel);
+			if (! bCanBelow) gtk_widget_set_sensitive (pMenuItem, FALSE);
 		}
 
 		// Above
 		gboolean bIsAbove=FALSE, bIsBelow=FALSE;
 		gldi_window_is_above_or_below (pAppli, &bIsAbove, &bIsBelow);
-		_add_entry_in_menu (bIsAbove ? _("Don't keep above") : _("Keep above"), bIsAbove ? GLDI_ICON_NAME_GOTO_BOTTOM : GLDI_ICON_NAME_GOTO_TOP, _cairo_dock_change_window_above, pSubMenuOtherActions, params);
+		pMenuItem = _add_entry_in_menu (bIsAbove ? _("Don't keep above") : _("Keep above"), bIsAbove ? GLDI_ICON_NAME_GOTO_BOTTOM : GLDI_ICON_NAME_GOTO_TOP, _cairo_dock_change_window_above, pSubMenuOtherActions, params);
+		if (! bCanAbove) gtk_widget_set_sensitive (pMenuItem, FALSE);
 
 		// Sticky
 		gboolean bIsSticky = gldi_window_is_sticky (pAppli);
-		_add_entry_in_menu (bIsSticky ? _("Visible only on this desktop") : _("Visible on all desktops"), GLDI_ICON_NAME_JUMP_TO, _cairo_dock_change_window_sticky, pSubMenuOtherActions, params);
+		pMenuItem = _add_entry_in_menu (bIsSticky ? _("Visible only on this desktop") : _("Visible on all desktops"), GLDI_ICON_NAME_JUMP_TO, _cairo_dock_change_window_sticky, pSubMenuOtherActions, params);
+		if (! bCanSticky) gtk_widget_set_sensitive (pMenuItem, FALSE);
 
 		if (!bIsSticky)  // if the window is sticky, it's on all desktops/viewports, so you can't move it to another
 			_add_desktops_entry (pSubMenuOtherActions, FALSE, params);
@@ -2066,7 +2077,8 @@ gboolean cairo_dock_notification_build_icon_menu (G_GNUC_UNUSED gpointer *pUserD
 		pMenuItem = gtk_separator_menu_item_new ();
 		gtk_menu_shell_append (GTK_MENU_SHELL (pSubMenuOtherActions), pMenuItem);
 
-		_add_entry_in_menu (_("Kill"), GLDI_ICON_NAME_CLOSE, _cairo_dock_kill_appli, pSubMenuOtherActions, params);
+		pMenuItem = _add_entry_in_menu (_("Kill"), GLDI_ICON_NAME_CLOSE, _cairo_dock_kill_appli, pSubMenuOtherActions, params);
+		if (! bCanKill) gtk_widget_set_sensitive (pMenuItem, FALSE);
 	}
 	else if (CAIRO_DOCK_IS_MULTI_APPLI (icon))
 	{
