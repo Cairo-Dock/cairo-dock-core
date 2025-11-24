@@ -57,6 +57,7 @@ struct _GldiWindowManagerBackend {
 	void (*move_to_viewport_abs) (GldiWindowActor *actor, int iNumDesktop, int iViewportX, int iViewportY); // like move_to_nth_desktop, but use absolute viewport coordinates
 	gpointer flags; // GldiWMBackendFlags, cast to pointer
 	void (*get_menu_address) (GldiWindowActor *actor, char **service_name, char **object_path);
+	void (*get_supported_actions) (gboolean *bCanFullscreen, gboolean *bCanSticky, gboolean *bCanBelow, gboolean *bCanAbove, gboolean *bCanKill);
 	} ;
 
 /** Register a Window Manager backend. NULL functions are simply ignored.
@@ -100,6 +101,13 @@ GldiWindowActor *gldi_window_pick (GtkWindow *pParentWindow);
  */
 GPtrArray *gldi_window_manager_get_all (void);
 
+/** Get whether the given additional window actions are supported by the WM backend. */
+void gldi_window_manager_get_supported_actions (
+	gboolean *bCanFullscreen,
+	gboolean *bCanSticky,
+	gboolean *bCanBelow,
+	gboolean *bCanAbove,
+	gboolean *bCanKill);
 
 /** Utility for parsing special cases in the window class / app ID;
 * used by both the X and Wayland backends.

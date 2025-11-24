@@ -293,6 +293,23 @@ void gldi_window_can_minimize_maximize_close (GldiWindowActor *actor, gboolean *
 	}
 }
 
+void gldi_window_manager_get_supported_actions (
+	gboolean *bCanFullscreen,
+	gboolean *bCanSticky,
+	gboolean *bCanBelow,
+	gboolean *bCanAbove,
+	gboolean *bCanKill)
+{
+	if (bCanFullscreen) *bCanFullscreen = FALSE;
+	if (bCanSticky) *bCanSticky = FALSE;
+	if (bCanBelow) *bCanBelow = FALSE;
+	if (bCanAbove) *bCanAbove = FALSE;
+	if (bCanKill) *bCanKill = FALSE;
+	if (s_backend.get_supported_actions)
+		s_backend.get_supported_actions (bCanFullscreen, bCanSticky, bCanBelow, bCanAbove, bCanKill);
+}
+
+
 guint gldi_window_get_id (GldiWindowActor *actor)
 {
 	if (actor && s_backend.get_id)
