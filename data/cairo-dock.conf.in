@@ -503,6 +503,10 @@ launcher size = 40;40
 #{in pixels.}
 icon gap = 0
 
+#e+[0.4;1;smaller;bigger] Extra icon scale :
+#{You can choose to make the icons smaller, leaving an extra gap around them.}
+extra scale = 1.
+
 #F+[Zoom effect;@pkgdatadir@/icons/icon-wave.png]
 frame_shape =
 #f+[1;5] Maximum zoom of the icons :

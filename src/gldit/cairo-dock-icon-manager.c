@@ -481,6 +481,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 		pIcons->iIconWidth = 48;
 	if (pIcons->iIconHeight == 0)
 		pIcons->iIconHeight = 48;
+	pIcons->fExtraScale = cairo_dock_get_double_key_value (pKeyFile, "Icons", "extra scale", &bFlushConfFileNeeded, 1., NULL, NULL);
 	
 	//\___________________ Parametres des separateurs.
 	cairo_dock_get_size_key_value_helper (pKeyFile, "Icons", "separator ", bFlushConfFileNeeded, pIcons->iSeparatorWidth, pIcons->iSeparatorHeight);
