@@ -55,7 +55,7 @@ void cairo_dock_set_desktops_names (gchar **cNames);
 int cairo_dock_get_current_desktop (void);
 void cairo_dock_get_current_viewport (int *iCurrentViewPortX, int *iCurrentViewPortY);
 int cairo_dock_get_nb_desktops (void);
-void cairo_dock_get_nb_viewports (int *iNbViewportX, int *iNbViewportY);
+void cairo_dock_get_nb_viewports (int *pResX, int *pResY);
 
 gboolean cairo_dock_desktop_is_visible (void);
 void cairo_dock_show_hide_desktop (gboolean bShow);
@@ -66,10 +66,10 @@ Pixmap cairo_dock_get_window_background_pixmap (Window Xid);
 
 GdkPixbuf *cairo_dock_get_pixbuf_from_pixmap (int XPixmapID, gboolean bAddAlpha);
 
-void cairo_dock_set_nb_viewports (int iNbViewportX, int iNbViewportY);
+void cairo_dock_set_nb_viewports (int iNewX, int iNewY);
 void cairo_dock_set_nb_desktops (gulong iNbDesktops);
 
-typedef void (*GldiChangeViewportFunc) (int iNbViewportX, int iNbViewportY);
+typedef void (*GldiChangeViewportFunc) (int iNewX, int iNewY);
 
 /** Change the number of viewports while keeping the total workarea as a rectangle.
  *  The new dimensions are calculated to keep it close to a square. The actual change
