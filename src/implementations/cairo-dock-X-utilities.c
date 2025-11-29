@@ -341,7 +341,7 @@ int cairo_dock_get_nb_desktops (void)
 	return iNumberOfDesktops;
 }
 
-void cairo_dock_get_nb_viewports (int *iNbViewportX, int *iNbViewportY)
+void cairo_dock_get_nb_viewports (int *pResX, int *pResY)
 {
 	// update display scale factor (might have changed since last call)
 	cairo_dock_X_display_scale = _get_scale_factor ();
@@ -354,8 +354,8 @@ void cairo_dock_get_nb_viewports (int *iNbViewportX, int *iNbViewportY)
 	if (iBufferNbElements > 0)
 	{
 		cd_debug ("pVirtualScreenSizeBuffer : %dx%d ; screen : %dx%d", pVirtualScreenSizeBuffer[0], pVirtualScreenSizeBuffer[1], gldi_desktop_get_width(), gldi_desktop_get_height());
-		*iNbViewportX = pVirtualScreenSizeBuffer[0] / (gldi_desktop_get_width() * cairo_dock_X_display_scale);
-		*iNbViewportY = pVirtualScreenSizeBuffer[1] / (gldi_desktop_get_height() * cairo_dock_X_display_scale);
+		*pResX = pVirtualScreenSizeBuffer[0] / (gldi_desktop_get_width() * cairo_dock_X_display_scale);
+		*pResY = pVirtualScreenSizeBuffer[1] / (gldi_desktop_get_height() * cairo_dock_X_display_scale);
 		XFree (pVirtualScreenSizeBuffer);
 	}
 }
@@ -522,7 +522,7 @@ GdkPixbuf *cairo_dock_get_pixbuf_from_pixmap (int XPixmapID, gboolean bAddAlpha)
 }
 
 
-void cairo_dock_set_nb_viewports (int iNbViewportX, int iNbViewportY)
+void cairo_dock_set_nb_viewports (int iNewX, int iNewY)
 {
 	XEvent xClientMessage;
 	Window root = DefaultRootWindow (s_XDisplay);
@@ -534,8 +534,8 @@ void cairo_dock_set_nb_viewports (int iNbViewportX, int iNbViewportY)
 	xClientMessage.xclient.window = root;
 	xClientMessage.xclient.message_type = s_aNetDesktopGeometry;
 	xClientMessage.xclient.format = 32;
-	xClientMessage.xclient.data.l[0] = iNbViewportX * gldi_desktop_get_width() * cairo_dock_X_display_scale;
-	xClientMessage.xclient.data.l[1] = iNbViewportY * gldi_desktop_get_height() * cairo_dock_X_display_scale;
+	xClientMessage.xclient.data.l[0] = iNewX * gldi_desktop_get_width() * cairo_dock_X_display_scale;
+	xClientMessage.xclient.data.l[1] = iNewY * gldi_desktop_get_height() * cairo_dock_X_display_scale;
 	xClientMessage.xclient.data.l[2] = 0;
 	xClientMessage.xclient.data.l[3] = 2;
 	xClientMessage.xclient.data.l[4] = 0;
@@ -577,18 +577,17 @@ void cairo_dock_set_nb_desktops (gulong iNbDesktops)
 void cairo_dock_change_nb_viewports (int iDeltaNbDesktops, GldiChangeViewportFunc cb)
 {
 	// taken from the switcher applet
-	int iNewX, iNewY;
+	int iNewX = g_desktopGeometry.pViewportsX[0];
+	int iNewY = g_desktopGeometry.pViewportsY[0];
 	// Try to keep a square: (delta > 0 && X <= Y) || (delta < 0 && X > Y)
-	if ((iDeltaNbDesktops > 0) == (g_desktopGeometry.iNbViewportX <= g_desktopGeometry.iNbViewportY))
+	if ((iDeltaNbDesktops > 0) == (g_desktopGeometry.pViewportsX[0] <= g_desktopGeometry.pViewportsY[0]))
 	{
-		iNewX = g_desktopGeometry.iNbViewportX + iDeltaNbDesktops;
+		iNewX += iDeltaNbDesktops;
 		if (iNewX <= 0) return; // cannot remove the last viewport
-		iNewY = g_desktopGeometry.iNbViewportY;
 	}
 	else
 	{
-		iNewX = g_desktopGeometry.iNbViewportX;
-		iNewY = g_desktopGeometry.iNbViewportY + iDeltaNbDesktops;
+		iNewY += iDeltaNbDesktops;
 		if (iNewY <= 0) return; // cannot remove the last viewport
 	}
 	cb (iNewX, iNewY);
