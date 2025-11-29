@@ -94,13 +94,12 @@ static uint32_t list_id, manager_id, info_id, overlap_id, list_version, manager_
 /**********************************************************************
  * window manager interface -- toplevel manager                       */
 
-static void _move_to_nth_desktop (GldiWindowActor *actor, G_GNUC_UNUSED int iNumDesktop,
-	int x, int y)
+static void _move_to_nth_desktop (GldiWindowActor *actor, int iNumDesktop, int x, int y)
 {
 	if (!(s_ws_output && can_move_workspace)) return;
 	if (manager_version < 4) return; // ext_workspace support was added at version 4 only
 	GldiCosmicWindowActor *wactor = (GldiCosmicWindowActor *)actor;
-	struct ext_workspace_handle_v1 *ws = gldi_ext_workspaces_get_handle (x, y);
+	struct ext_workspace_handle_v1 *ws = gldi_ext_workspaces_get_handle (iNumDesktop, x, y);
 	//!! TODO: we need a valid wl_output here !!
 	if (ws) zcosmic_toplevel_manager_v1_move_to_ext_workspace (s_ptoplevel_manager, wactor->chandle, ws, s_ws_output);
 }
@@ -370,8 +369,8 @@ static void _gldi_toplevel_parent_cb (void* data, G_GNUC_UNUSED wfthandle *handl
 static void _ext_workspace_entered (void *data, G_GNUC_UNUSED cosmic_handle *handle, struct ext_workspace_handle_v1 *wshandle)
 {
 	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor*)data;
-	int x, y;
-	if (gldi_ext_workspaces_find (wshandle, &x, &y)) gldi_wayland_wm_viewport_changed (wactor, x, y, wactor->init_done);
+	int d, x, y;
+	if (gldi_ext_workspaces_find (wshandle, &d, &x, &y)) gldi_wayland_wm_viewport_changed (wactor, d, x, y, wactor->init_done);
 }
 
 static void _ext_workspace_left (G_GNUC_UNUSED void* data, G_GNUC_UNUSED cosmic_handle* handle, G_GNUC_UNUSED struct ext_workspace_handle_v1* wshandle)
