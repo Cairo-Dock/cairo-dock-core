@@ -78,8 +78,8 @@ static void _move_to_nth_desktop (GldiWindowActor *actor, G_GNUC_UNUSED int iNum
 	int iDeltaViewportX, int iDeltaViewportY)
 {
 	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor *)actor;
-	unsigned int old_id = actor->iViewPortY * g_desktopGeometry.iNbViewportX + actor->iViewPortX;
-	unsigned int new_id = iDeltaViewportY * g_desktopGeometry.iNbViewportX + iDeltaViewportX;
+	unsigned int old_id = actor->iViewPortY * g_desktopGeometry.pViewportsX[0] + actor->iViewPortX;
+	unsigned int new_id = iDeltaViewportY * g_desktopGeometry.pViewportsX[0] + iDeltaViewportX;
 	if (old_id == new_id) return; // avoid a no-op which could end up removing the window
 	
 	const char *old_desktop_id = gldi_plasma_virtual_desktop_get_id (old_id);
@@ -411,7 +411,7 @@ static void _virtual_desktop_entered (void *data, G_GNUC_UNUSED pwhandle *handle
 	GldiWaylandWindowActor* wactor = (GldiWaylandWindowActor*)data;
 	int x, y;
 	if (gldi_plasma_virtual_desktop_get_coords (desktop_id, &x, &y))
-		gldi_wayland_wm_viewport_changed (wactor, x, y, wactor->init_done);
+		gldi_wayland_wm_viewport_changed (wactor, 0, x, y, wactor->init_done);
 }
 
 /* dummy callback shared between all that take a const char* parameter */

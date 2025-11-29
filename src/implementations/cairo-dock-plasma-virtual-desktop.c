@@ -39,14 +39,21 @@ static unsigned int s_iDesktopCap = 0; // capacity of the above array
 static unsigned int s_iRows = 1; // number of rows the desktops are arranged into
 static unsigned int s_iCurrent = 0; // index into desktops array with the currently active desktop
 
-static GldiDesktopGeometry s_pending_geometry = {0}; // desktop geometry according to the latest info received
+static struct {
+	int iNbDesktops;
+	int iNbViewportX;
+	int iNbViewportY;
+	int iCurrentDesktop;
+	int iCurrentViewportX;
+	int iCurrentViewportY;
+} s_pending_geometry = {0}; // desktop geometry according to the latest info received
 static guint s_sidNotify = 0;
 
 static gboolean _notify_desktop_change (G_GNUC_UNUSED void* dummy)
 {
-	g_desktopGeometry.iNbDesktops = s_pending_geometry.iNbDesktops;
-	g_desktopGeometry.iNbViewportX = s_pending_geometry.iNbViewportX;
-	g_desktopGeometry.iNbViewportY = s_pending_geometry.iNbViewportY;
+	g_desktopGeometry.iNbDesktops = s_pending_geometry.iNbDesktops; // note: this is always 1
+	g_desktopGeometry.pViewportsX[0] = s_pending_geometry.iNbViewportX; // note: these are allocated in gldi_register_desktop_manager ()
+	g_desktopGeometry.pViewportsY[0] = s_pending_geometry.iNbViewportY;
 	
 	g_desktopGeometry.iCurrentDesktop = s_pending_geometry.iCurrentDesktop;
 	g_desktopGeometry.iCurrentViewportX = s_pending_geometry.iCurrentViewportX;
@@ -111,7 +118,7 @@ static void _update_windows (gpointer ptr, gpointer data)
 	else if (par->desktop_removed >= 0 && ix >= par->desktop_removed && ix > 0) ix--;
 	int newY = ix / cols_new;
 	int newX = ix % cols_new;
-	gldi_wayland_wm_viewport_changed (wactor, newX, newY, wactor->init_done);
+	gldi_wayland_wm_viewport_changed (wactor, 0, newX, newY, wactor->init_done);
 }
 
 
@@ -310,7 +317,7 @@ static gchar** _get_desktops_names (void)
 static void _set_current_desktop (G_GNUC_UNUSED int iDesktopNumber, int iViewportNumberX, int iViewportNumberY)
 {
 	// desktop number is ignored (it should be 0)
-	unsigned int iReq = g_desktopGeometry.iNbViewportX * iViewportNumberY + iViewportNumberX;
+	unsigned int iReq = g_desktopGeometry.pViewportsX[0] * iViewportNumberY + iViewportNumberX;
 	if (iReq < s_iNumDesktops)
 		org_kde_plasma_virtual_desktop_request_activate (desktops[iReq]->handle);
 }
