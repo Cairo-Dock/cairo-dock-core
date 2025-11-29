@@ -603,7 +603,10 @@ void gldi_register_wayland_manager (void)
 	}
 	
 	s_CompositorType = WAYLAND_COMPOSITOR_UNKNOWN;
-	g_desktopGeometry.iNbDesktops = g_desktopGeometry.iNbViewportX = g_desktopGeometry.iNbViewportY = 1;
+	g_desktopGeometry.iNbDesktops = 1;
+	// note: pViewportsX/Y are allocated as 1-length arrays in gldi_register_desktop_manager () which is called before this function
+	g_desktopGeometry.pViewportsX[0] = 1;
+	g_desktopGeometry.pViewportsY[0] = 1;
 	
 	// Manager
 	memset (&myWaylandMgr, 0, sizeof (GldiManager));
