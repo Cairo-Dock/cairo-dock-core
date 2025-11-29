@@ -64,6 +64,29 @@ void gldi_desktop_get_current (int *iCurrentDesktop, int *iCurrentViewportX, int
 	*iCurrentViewportY = g_desktopGeometry.iCurrentViewportY;
 }
 
+int gldi_desktop_get_desktop_width (int iNbDesktop)
+{
+	if (g_desktopGeometry.pDesktopSizes && iNbDesktop < g_desktopGeometry.iNbDesktops)
+		return g_desktopGeometry.pDesktopSizes[iNbDesktop].width;
+	return g_desktopGeometry.Xscreen.width;
+}
+
+int gldi_desktop_get_desktop_height (int iNbDesktop)
+{
+	if (g_desktopGeometry.pDesktopSizes && iNbDesktop < g_desktopGeometry.iNbDesktops)
+		return g_desktopGeometry.pDesktopSizes[iNbDesktop].height;
+	return g_desktopGeometry.Xscreen.height;
+}
+
+gboolean gldi_desktop_have_multiple_viewports (void)
+{
+	int i;
+	for (i = 0; i < g_desktopGeometry.iNbDesktops; i++)
+		if (g_desktopGeometry.pViewportsX[i] > 1 || g_desktopGeometry.pViewportsY[i] > 1)
+			return TRUE;
+	return FALSE;
+}
+
 
   //////////////////////////////
  /// DESKTOP MANAGER BACKEND ///
@@ -608,6 +631,9 @@ void gldi_register_desktop_manager (void)
 	// get the properties of screens / monitors, set up signals
 	g_desktopGeometry.iNbScreens = 0;
 	g_desktopGeometry.pScreens = NULL;
+	g_desktopGeometry.pDesktopSizes = NULL;
+	g_desktopGeometry.pViewportsX = g_new0 (int, 1);
+	g_desktopGeometry.pViewportsY = g_new0 (int, 1);
 	GdkDisplay *dsp = gdk_display_get_default ();
 	GdkScreen *screen = gdk_display_get_default_screen (dsp);
 	// fill out the list of screens / monitors
