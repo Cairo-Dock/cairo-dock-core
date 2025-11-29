@@ -90,9 +90,12 @@ void gldi_icons_foreach (GldiIconFunc pFunction, gpointer pUserData)
  /// ICONS PER DESKTOP ///
 /////////////////////////
 
+// number of all viewports among all desktops, should be recalculated before using _is_invisible_on_this_desktop()
+static int s_iNbTotalViewports = 0;
+
 #define _is_invisible_on_this_desktop(icon, index) (icon->iSpecificDesktop != 0  /*specific desktop is defined*/ \
 	&& icon->iSpecificDesktop != index  /*specific desktop is not the current one*/ \
-	&& icon->iSpecificDesktop <= g_desktopGeometry.iNbDesktops * g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY)  /*specific desktop is reachable*/
+	&& icon->iSpecificDesktop <= s_iNbTotalViewports)  /*specific desktop is reachable*/
 
 static void _cairo_dock_detach_launcher (Icon *pIcon)
 {
@@ -147,10 +150,27 @@ void cairo_dock_hide_show_launchers_on_other_desktops (void )  /// TODO: add a m
 	if (s_iNbNonStickyLaunchers <= 0)
 		return ;
 	
+	// recalculate the total number of viewports -- we could optimize this to only happen when the number of viewports changes;
+	// in any case, we'd likely want to change how "index" is interpreted as it will be unintuitive for > 1 desktops with > 1 viewports
+	s_iNbTotalViewports = 0;
+	
 	// calculate the index of the current desktop
 	int iCurrentDesktop = 0, iCurrentViewportX = 0, iCurrentViewportY = 0;
 	gldi_desktop_get_current (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
-	int index = iCurrentDesktop * g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY + iCurrentViewportX * g_desktopGeometry.iNbViewportY + iCurrentViewportY + 1;  // +1 car on commence a compter a partir de 1.
+	int index = 0;
+	
+	int i;
+	for (i = 0; i < g_desktopGeometry.iNbDesktops; i++)
+	{
+		int vx = g_desktopGeometry.pViewportsX[i];
+		int vy = g_desktopGeometry.pViewportsY[i];
+		int vtotal = vx * vy;
+		
+		s_iNbTotalViewports += vtotal;
+		if (i < iCurrentDesktop) index += vtotal;
+		else if (i == iCurrentDesktop)
+			index += iCurrentViewportX * vy + iCurrentViewportY + 1;  // +1 as icon->iSpecificDesktop starts from 1 (0 means all desktops)
+	}
 	
 	// first detach what shouldn't be shown on this desktop
 	gldi_icons_foreach_in_docks ((GldiIconFunc)_hide_icon_on_other_desktops, GINT_TO_POINTER (index));

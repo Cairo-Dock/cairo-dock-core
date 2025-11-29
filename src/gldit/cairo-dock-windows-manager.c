@@ -380,31 +380,33 @@ gboolean gldi_window_is_on_desktop (GldiWindowActor *pAppli, int iNumDesktop, in
 	if (pAppli->bIsSticky || pAppli->iNumDesktop == -1)  // a sticky window is by definition on all desktops/viewports
 		return TRUE;
 	
+	if (pAppli->iNumDesktop != iNumDesktop) return FALSE; // desktops never overlap
+	
+	// here, we have pAppli->iNumDesktop == iNumDesktop
 	if ( !(flags & GLDI_WM_HAVE_WINDOW_GEOMETRY) || (flags & GLDI_WM_NO_VIEWPORT_OVERLAP))
-		return (pAppli->iNumDesktop == iNumDesktop && pAppli->iViewPortX == iNumViewportX
-			&& pAppli->iViewPortY == iNumViewportY);
+		return (pAppli->iViewPortX == iNumViewportX && pAppli->iViewPortY == iNumViewportY);
 	
 	// On calcule les coordonnees en repere absolu.
 	int x = pAppli->windowGeometry.x;  // par rapport au viewport courant (or self, depending on the backend)
-	if (flags & GLDI_WM_GEOM_REL_TO_VIEWPORT) x += pAppli->iViewPortX * gldi_desktop_get_width();  // repere absolu
-	else x += g_desktopGeometry.iCurrentViewportX * gldi_desktop_get_width();
+	if (flags & GLDI_WM_GEOM_REL_TO_VIEWPORT) x += pAppli->iViewPortX * gldi_desktop_get_desktop_width(iNumDesktop);  // repere absolu
+	else x += g_desktopGeometry.iCurrentViewportX * gldi_desktop_get_desktop_width(iNumDesktop);
 	if (x < 0)
-		x += g_desktopGeometry.iNbViewportX * gldi_desktop_get_width();
+		x += g_desktopGeometry.pViewportsX[iNumDesktop] * gldi_desktop_get_desktop_width(iNumDesktop);
 	
 	int y = pAppli->windowGeometry.y;
-	if (flags & GLDI_WM_GEOM_REL_TO_VIEWPORT) y += pAppli->iViewPortY * gldi_desktop_get_height();
-	else y += g_desktopGeometry.iCurrentViewportY * gldi_desktop_get_height();
+	if (flags & GLDI_WM_GEOM_REL_TO_VIEWPORT) y += pAppli->iViewPortY * gldi_desktop_get_desktop_height(iNumDesktop);
+	else y += g_desktopGeometry.iCurrentViewportY * gldi_desktop_get_desktop_height(iNumDesktop);
 	if (y < 0)
-		y += g_desktopGeometry.iNbViewportY * gldi_desktop_get_height();
+		y += g_desktopGeometry.pViewportsY[iNumDesktop] * gldi_desktop_get_desktop_height(iNumDesktop);
 	
 	int w = pAppli->windowGeometry.width, h = pAppli->windowGeometry.height;
 	
 	// test d'intersection avec le viewport donne.
-	return ((pAppli->iNumDesktop == -1 || pAppli->iNumDesktop == iNumDesktop) &&
-		x + w > iNumViewportX * gldi_desktop_get_width() &&
-		x < (iNumViewportX + 1) * gldi_desktop_get_width() &&
-		y + h > iNumViewportY * gldi_desktop_get_height() &&
-		y < (iNumViewportY + 1) * gldi_desktop_get_height());
+	return (
+		x + w > iNumViewportX * gldi_desktop_get_desktop_width(iNumDesktop) &&
+		x < (iNumViewportX + 1) * gldi_desktop_get_desktop_width(iNumDesktop) &&
+		y + h > iNumViewportY * gldi_desktop_get_desktop_height(iNumDesktop) &&
+		y < (iNumViewportY + 1) * gldi_desktop_get_desktop_height(iNumDesktop));
 }
 
 void gldi_window_move_to_current_desktop (GldiWindowActor *pAppli)

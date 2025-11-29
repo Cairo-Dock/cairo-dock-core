@@ -881,6 +881,15 @@ static gboolean _move_desklet (void *data)
 {
 	CairoDesklet *pDesklet = (CairoDesklet*) data;
 	
+	if (gldi_container_is_wayland_backend ())
+	{
+		/** Note: on Wayland, this is not supported, so no use trying. We could try to use
+		 * compositor-specific protocols or IPC, but that would require different APIs.
+		 * */
+		pDesklet->iSidMove = 0;
+		return FALSE;
+	}
+	
 	int iAbsolutePositionX = pDesklet->iDesiredX;
 	if (iAbsolutePositionX < 0)
 	{
@@ -897,8 +906,13 @@ static gboolean _move_desklet (void *data)
 	}
 	cd_debug (" let's place the deklet at (%d;%d)", iAbsolutePositionX, iAbsolutePositionY);
 	
-	if (pDesklet->iRequestedDesktopIx < 0 || pDesklet->iRequestedDesktopIx >=
-		g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY * g_desktopGeometry.iNbDesktops)
+	/**
+	 * This code is only run on X11, where we know that all desktops have the same number of
+	 * viewports, so we can use the first one (which will always be provided). */
+	const int vx = g_desktopGeometry.pViewportsX[0];
+	const int vy = g_desktopGeometry.pViewportsY[0];
+	if (pDesklet->iRequestedDesktopIx < 0 ||
+		pDesklet->iRequestedDesktopIx >= vx * vy * g_desktopGeometry.iNbDesktops)
 	{
 		gtk_window_stick (GTK_WINDOW (pDesklet->container.pWidget));
 		if (iAbsolutePositionX != pDesklet->container.iWindowPositionX ||
@@ -911,13 +925,13 @@ static gboolean _move_desklet (void *data)
 	else
 	{
 		gtk_window_unstick (GTK_WINDOW (pDesklet->container.pWidget));
-		// here we have g_desktopGeometry.iNbViewportX > 0 and g_desktopGeometry.iNbViewportY > 0
+		// here we have vx > 0 and vy > 0
 	
 		int iNumDesktop, iNumViewportX, iNumViewportY;
-		iNumDesktop = pDesklet->iRequestedDesktopIx / (g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY);
-		int index2  = pDesklet->iRequestedDesktopIx % (g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY);
-		iNumViewportX = index2 / g_desktopGeometry.iNbViewportY;
-		iNumViewportY = index2 % g_desktopGeometry.iNbViewportY;
+		iNumDesktop = pDesklet->iRequestedDesktopIx / (vx * vy);
+		int index2  = pDesklet->iRequestedDesktopIx % (vx * vy);
+		iNumViewportX = index2 / vy;
+		iNumViewportY = index2 % vy;
 		
 		int iCurrentDesktop, iCurrentViewportX, iCurrentViewportY;
 		gldi_desktop_get_current (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
@@ -927,8 +941,8 @@ static gboolean _move_desklet (void *data)
 		iNumViewportY -= iCurrentViewportY;
 		cd_debug ("on le place en %d + %d", iNumViewportX * gldi_desktop_get_width(), iAbsolutePositionX);
 		
+		// note: on X11, gldi_desktop_get_width () is the same as gldi_desktop_get_desktop_width ()
 		gldi_container_move (CAIRO_CONTAINER (pDesklet), iNumDesktop, iNumViewportX * gldi_desktop_get_width() + iAbsolutePositionX, iNumViewportY * gldi_desktop_get_height() + iAbsolutePositionY);
-	
 	}
 	
 	pDesklet->iSidMove = 0;
@@ -1242,7 +1256,8 @@ void gldi_desklet_set_sticky (CairoDesklet *pDesklet, gboolean bSticky)
 		gtk_window_unstick (GTK_WINDOW (pDesklet->container.pWidget));
 		int iCurrentDesktop, iCurrentViewportX, iCurrentViewportY;
 		gldi_desktop_get_current (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
-		iNumDesktop = iCurrentDesktop * g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY + iCurrentViewportX * g_desktopGeometry.iNbViewportY + iCurrentViewportY;
+		// note: this only makes sense on X11 where all desktops have the same number of viewports (see lines 885-914)
+		iNumDesktop = iCurrentDesktop * g_desktopGeometry.pViewportsX[0] * g_desktopGeometry.pViewportsY[0] + iCurrentViewportX * g_desktopGeometry.pViewportsY[0] + iCurrentViewportY;
 		cd_debug (">>> on colle ce desklet sur le bureau %d", iNumDesktop);
 	}
 	
