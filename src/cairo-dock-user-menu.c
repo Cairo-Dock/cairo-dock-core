@@ -1439,22 +1439,29 @@ static void _add_desktops_entry (GtkWidget *pMenu, gboolean bAll, struct _MenuPa
 	
 	if (!gldi_window_manager_can_move_to_desktop ()) return;
 	
-	if (g_desktopGeometry.iNbDesktops > 1 || g_desktopGeometry.iNbViewportX > 1 || g_desktopGeometry.iNbViewportY > 1)
+	gboolean bMultipleDesktops = (g_desktopGeometry.iNbDesktops > 1);
+	gboolean bMultipleViewports = gldi_desktop_have_multiple_viewports ();
+	
+	if (bMultipleDesktops || bMultipleViewports)
 	{
 		// add separator
 		pMenuItem = gtk_separator_menu_item_new ();
 		gtk_menu_shell_append (GTK_MENU_SHELL (pMenu), pMenuItem);
 
-		int i, j, k, iDesktopCode;
+		int i, j, k;
 		const gchar *cLabel;
-		if (g_desktopGeometry.iNbDesktops > 1 && (g_desktopGeometry.iNbViewportX > 1 || g_desktopGeometry.iNbViewportY > 1))
+		if (bMultipleDesktops && bMultipleViewports)
 			cLabel = bAll ? _("Move all to desktop %d - face %d") : _("Move to desktop %d - face %d");
-		else if (g_desktopGeometry.iNbDesktops > 1)
+		else if (bMultipleDesktops)
 			cLabel = bAll ? _("Move all to desktop %d") : _("Move to desktop %d");
 		else
 			cLabel = bAll ? _("Move all to face %d") : _("Move to face %d");
 		GString *sDesktop = g_string_new ("");
-		gpointer *pDesktopData = g_new0 (gpointer, 4 * g_desktopGeometry.iNbDesktops * g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY);
+		
+		gsize iTotalViewports = 0;
+		for (i = 0; i < g_desktopGeometry.iNbDesktops; i++)
+			iTotalViewports += g_desktopGeometry.pViewportsX[i] * g_desktopGeometry.pViewportsY[i];
+		gpointer *pDesktopData = g_new0 (gpointer, 4 * iTotalViewports);
 		g_object_weak_ref (G_OBJECT (pMenu), _free_desktops_user_data, pDesktopData);
 		gpointer *user_data;
 		Icon *icon = params->pIcon;
@@ -1462,22 +1469,23 @@ static void _add_desktops_entry (GtkWidget *pMenu, gboolean bAll, struct _MenuPa
 		
 		for (i = 0; i < g_desktopGeometry.iNbDesktops; i ++)  // on range par bureau.
 		{
-			for (j = 0; j < g_desktopGeometry.iNbViewportY; j ++)  // puis par rangee.
+			for (j = 0; j < g_desktopGeometry.pViewportsY[i]; j ++)  // puis par rangee.
 			{
-				for (k = 0; k < g_desktopGeometry.iNbViewportX; k ++)
+				for (k = 0; k < g_desktopGeometry.pViewportsX[i]; k ++)
 				{
-					if (g_desktopGeometry.iNbDesktops > 1 && (g_desktopGeometry.iNbViewportX > 1 || g_desktopGeometry.iNbViewportY > 1))
-						g_string_printf (sDesktop, cLabel, i+1, j*g_desktopGeometry.iNbViewportX+k+1);
-					else if (g_desktopGeometry.iNbDesktops > 1)
+					if (bMultipleDesktops && bMultipleViewports)
+						g_string_printf (sDesktop, cLabel, i+1, j*g_desktopGeometry.pViewportsX[i]+k+1);
+					else if (bMultipleDesktops)
 						g_string_printf (sDesktop, cLabel, i+1);
 					else
-						g_string_printf (sDesktop, cLabel, j*g_desktopGeometry.iNbViewportX+k+1);
-					iDesktopCode = i * g_desktopGeometry.iNbViewportY * g_desktopGeometry.iNbViewportX + j * g_desktopGeometry.iNbViewportX + k;
-					user_data = &pDesktopData[4*iDesktopCode];
+						g_string_printf (sDesktop, cLabel, j*g_desktopGeometry.pViewportsX[i]+k+1);
+					
+					user_data = pDesktopData;
 					user_data[0] = params;
 					user_data[1] = GINT_TO_POINTER (i);
 					user_data[2] = GINT_TO_POINTER (j);
 					user_data[3] = GINT_TO_POINTER (k);
+					pDesktopData += 4;
 					
 					pMenuItem = cairo_dock_add_in_menu_with_stock_and_data (sDesktop->str, NULL, G_CALLBACK (bAll ? _cairo_dock_move_class_to_desktop : _cairo_dock_move_appli_to_desktop), pMenu, user_data);
 					if (pAppli && gldi_window_is_on_desktop (pAppli, i, k, j))
