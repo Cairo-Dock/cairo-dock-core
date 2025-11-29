@@ -51,6 +51,7 @@ struct _GldiWaylandWindowActor {
 	gboolean unfocused_pending; // this window has lost focus
 	
 	int stacking_order_pending; // pending stacking order (e.g. if it was activated)
+	int pending_desktop;
 	int pending_viewport_x, pending_viewport_y;
 	GtkAllocation pending_window_geometry;
 	
@@ -89,7 +90,7 @@ void gldi_wayland_wm_activated (GldiWaylandWindowActor *wactor, gboolean activat
 
 void gldi_wayland_wm_closed (GldiWaylandWindowActor *wactor, gboolean notify);
 
-void gldi_wayland_wm_viewport_changed (GldiWaylandWindowActor *wactor, int viewport_x, int viewport_y, gboolean notify);
+void gldi_wayland_wm_viewport_changed (GldiWaylandWindowActor *wactor, int desktop, int viewport_x, int viewport_y, gboolean notify);
 void gldi_wayland_wm_geometry_changed (GldiWaylandWindowActor *wactor, const GtkAllocation *new_geom, gboolean notify);
 
 void gldi_wayland_wm_done (GldiWaylandWindowActor *wactor);
