@@ -195,7 +195,11 @@ struct _CairoDesklet {
 	guint time;  // date du clic.
 	
 	CairoDeskletVisibility iVisibility;
-	gpointer reserved[4];
+	gint iDesiredX; // desired position from the config file
+	gint iDesiredY;
+	gint iSidMove; // trigger a move of the desklet to its intended position
+	gint iRequestedDesktopIx;
+	gpointer reserved[2];
 };
 
 /** Say if an object is a Desklet.
