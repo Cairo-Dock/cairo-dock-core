@@ -173,7 +173,10 @@ struct _CairoDesklet {
 	//\________________ internal
 	gint iSidWritePosition;  // un timer pour retarder l'ecriture dans le fichier lors des deplacements.
 	gint iSidWriteSize;  // un timer pour retarder l'ecriture dans le fichier lors des redimensionnements.
+	gint iSidMove; // idle event source to trigger a move of the desklet to its intended position
 	gint iDesiredWidth, iDesiredHeight;  // taille a atteindre (fixee par l'utilisateur dans le.conf)
+	gint iDesiredX, iDesiredY; // desired position from the config file (negative values mean right / bottom aligned)
+	gint iRequestedDesktopIx; // index of desktop / workspace requested based on the config
 	gint iKnownWidth, iKnownHeight;  // taille connue par l'applet associee.
 	gboolean bSpaceReserved;  // l'espace est actuellement reserve.
 	gboolean bAllowMinimize;  // TRUE to allow the desklet to be minimized once. The flag is reset to FALSE after the desklet has minimized.
@@ -195,11 +198,7 @@ struct _CairoDesklet {
 	guint time;  // date du clic.
 	
 	CairoDeskletVisibility iVisibility;
-	gint iDesiredX; // desired position from the config file
-	gint iDesiredY;
-	gint iSidMove; // trigger a move of the desklet to its intended position
-	gint iRequestedDesktopIx;
-	gpointer reserved[2];
+	gpointer reserved[4];
 };
 
 /** Say if an object is a Desklet.
