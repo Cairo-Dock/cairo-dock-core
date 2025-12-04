@@ -190,7 +190,7 @@ static void _capabilities_cb (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct zco
 	can_minimize = FALSE;
 	can_fullscreen = FALSE;
 	can_move_workspace = FALSE;
-	can_sticky = FALSE;
+//	can_sticky = FALSE; -- we don't get notified, even though it is supported
 
 	int i;
 	uint32_t* cdata = (uint32_t*)c->data;
@@ -207,9 +207,11 @@ static void _capabilities_cb (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct zco
 		case ZCOSMIC_TOPLEVEL_MANAGER_V1_ZCOSMIC_TOPLELEVEL_MANAGEMENT_CAPABILITIES_V1_FULLSCREEN:
 			can_fullscreen = TRUE; break;   
 		case ZCOSMIC_TOPLEVEL_MANAGER_V1_ZCOSMIC_TOPLELEVEL_MANAGEMENT_CAPABILITIES_V1_MOVE_TO_EXT_WORKSPACE:
+		// note: we don't seem to get the above, only the MOVE_TO_WORKSPACE version
+		case ZCOSMIC_TOPLEVEL_MANAGER_V1_ZCOSMIC_TOPLELEVEL_MANAGEMENT_CAPABILITIES_V1_MOVE_TO_WORKSPACE:
 			can_move_workspace = TRUE; break;
-		case ZCOSMIC_TOPLEVEL_MANAGER_V1_ZCOSMIC_TOPLELEVEL_MANAGEMENT_CAPABILITIES_V1_STICKY:
-			can_sticky = TRUE; break;
+//		case ZCOSMIC_TOPLEVEL_MANAGER_V1_ZCOSMIC_TOPLELEVEL_MANAGEMENT_CAPABILITIES_V1_STICKY:
+//			can_sticky = TRUE; break;
 	}
 }
 
@@ -295,6 +297,7 @@ static void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED cosmic_handle *ha
 	gboolean maximized_pending = FALSE;
 	gboolean minimized_pending = FALSE;
 	gboolean fullscreen_pending = FALSE;
+	gboolean sticky_pending = FALSE;
 	int i;
 	uint32_t* stdata = (uint32_t*)state->data;
 	for (i = 0; i*sizeof(uint32_t) < state->size; i++)
@@ -310,7 +313,8 @@ static void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED cosmic_handle *ha
 			minimized_pending = TRUE;
 		else if (stdata[i] == ZCOSMIC_TOPLEVEL_HANDLE_V1_STATE_FULLSCREEN)
 			fullscreen_pending = TRUE;
-		//!! TODO: sticky !!
+		else if (stdata[i] == ZCOSMIC_TOPLEVEL_HANDLE_V1_STATE_STICKY)
+			sticky_pending = TRUE;
 	}
 	
 	cd_debug ("wactor: %p (%s), activated: %d", wactor, wactor->actor.cName ? wactor->actor.cName : "(no name)", activated_pending);
@@ -319,6 +323,7 @@ static void _gldi_toplevel_state_cb (void *data, G_GNUC_UNUSED cosmic_handle *ha
 	gldi_wayland_wm_maximized_changed (wactor, maximized_pending, FALSE);
 	gldi_wayland_wm_minimized_changed (wactor, minimized_pending, FALSE);
 	gldi_wayland_wm_fullscreen_changed (wactor, fullscreen_pending, FALSE);
+	gldi_wayland_wm_sticky_changed (wactor, sticky_pending, FALSE);
 }
 
 static void _gldi_toplevel_done_cb (void *data, G_GNUC_UNUSED ext_handle *handle)
@@ -819,6 +824,8 @@ gboolean gldi_cosmic_toplevel_try_init (struct wl_registry *registry)
 		cd_error ("cannot bind cosmic_toplevel_info!");
 		return FALSE;
 	}
+	
+	if (manager_version >= 3) can_sticky = TRUE; // note: this is supported, but Cosmic "forgets" to send the capability
 	
 	// register window manager
 	GldiWindowManagerBackend wmb;
