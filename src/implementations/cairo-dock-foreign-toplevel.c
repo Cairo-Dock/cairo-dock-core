@@ -112,7 +112,15 @@ static void _set_fullscreen (GldiWindowActor *actor, gboolean bFullScreen)
 	else zwlr_foreign_toplevel_handle_v1_unset_fullscreen (wactor->handle);
 }
 
-
+static void _get_supported_actions (gboolean *bCanFullscreen, gboolean *bCanSticky, gboolean *bCanBelow, gboolean *bCanAbove, gboolean *bCanKill)
+{
+	// note: there is no capabilities event, we just guess based on the requests that are available
+	if (bCanFullscreen) *bCanFullscreen = TRUE;
+	if (bCanSticky) *bCanSticky = FALSE;
+	if (bCanBelow) *bCanBelow = FALSE;
+	if (bCanAbove) *bCanAbove = FALSE;
+	if (bCanKill) *bCanKill = FALSE;
+}
 
 
 /**********************************************************************
@@ -259,6 +267,7 @@ static void gldi_zwlr_foreign_toplevel_manager_init ()
 	wmb.can_minimize_maximize_close = _can_minimize_maximize_close;
 	// wmb.get_id = _get_id;
 	wmb.pick_window = gldi_wayland_wm_pick_window;
+	wmb.get_supported_actions = _get_supported_actions;
 	wmb.name = "wlr";
 	gldi_windows_manager_register_backend (&wmb);
 	
