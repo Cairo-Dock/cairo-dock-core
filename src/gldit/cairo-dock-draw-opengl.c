@@ -347,6 +347,7 @@ void cairo_dock_render_one_icon_opengl (Icon *icon, CairoDock *pDock, double fDo
 			glTranslatef ((!pDock->container.bDirectionUp ? icon->fHeight * (- icon->fScale + 1)/2 : icon->fHeight * (icon->fScale - 1)/2), 0., 0.);
 		}
 	}
+	glScalef (myIconsParam.fExtraScale, myIconsParam.fExtraScale, 1.);
 	if (icon->fOrientation != 0)
 	{
 		glTranslatef (-icon->fWidth * icon->fScale/2, icon->fHeight * icon->fScale/2, 0.);

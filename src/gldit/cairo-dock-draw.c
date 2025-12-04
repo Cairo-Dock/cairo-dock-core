@@ -574,6 +574,11 @@ void cairo_dock_render_one_icon (Icon *icon, CairoDock *pDock, cairo_t *pCairoCo
 	
 	cairo_save (pCairoContext);
 	
+	cairo_translate (pCairoContext,
+		0.5 * (1.0 - myIconsParam.fExtraScale) * icon->fWidth * icon->fWidthFactor * icon->fScale,
+		0.5 * (1.0 - myIconsParam.fExtraScale) * icon->fHeight * icon->fHeightFactor * icon->fScale);
+	cairo_scale (pCairoContext, myIconsParam.fExtraScale, myIconsParam.fExtraScale);
+	
 	//\_____________________ On positionne l'icone.
 	if (icon->fOrientation != 0)
 		cairo_rotate (pCairoContext, icon->fOrientation);
