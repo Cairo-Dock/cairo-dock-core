@@ -62,6 +62,9 @@ GtkWidget *gldi_menu_new (Icon *pIcon);
  */
 void gldi_menu_init (GtkWidget *pMenu, Icon *pIcon);
 
+/** Reassign an already existing menu to a new icon. */
+void gldi_menu_reinit (GtkWidget *pMenu, Icon *pIcon);
+
 /** Pop-up a menu. The menu is placed above the icon, or above the container, or above the mouse, depending on how it has been initialized.
 *@param menu the menu.
 *@param event an event to which the menu is popped up in response (NULL to use the current GTK event)

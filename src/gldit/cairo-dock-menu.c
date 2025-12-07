@@ -318,6 +318,52 @@ void gldi_menu_init (GtkWidget *pMenu, Icon *pIcon)
 	}
 }
 
+void gldi_menu_reinit (GtkWidget *pMenu, Icon *pIcon)
+{
+	GldiMenuParams *pParams = g_object_get_data (G_OBJECT (pMenu), "gldi-params");
+	if (! pParams)
+	{
+		gldi_menu_init (pMenu, pIcon);
+		return;
+	}
+	
+	Icon *pOldIcon = pParams->pIcon;
+	if (pOldIcon)
+		gldi_object_remove_notification (pOldIcon,
+			NOTIFICATION_DESTROY,
+			(GldiNotificationFunc) _on_icon_destroyed,
+			pMenu);
+	
+	// link the menu to the new icon
+	g_object_set_data (G_OBJECT (pMenu), "gldi-icon", pIcon);
+	pParams->pIcon = pIcon;
+	if (pIcon)
+	{
+		gldi_object_register_notification (pIcon,
+			NOTIFICATION_DESTROY,
+			(GldiNotificationFunc) _on_icon_destroyed,
+			GLDI_RUN_AFTER, pMenu);  // when the icon is destroyed, unlink the menu from it; when the menu is destroyed, the above notification will be unregistered on the icon in the "destroy" callback
+		
+	
+	
+		// set transient for (parent relationship; needed for positioning on Wayland)
+		// note: it is an error to try to map (and position) a popup
+		// relative to a window that is not mapped; we need to take care of this
+		if (gldi_container_use_new_positioning_code ())
+		{
+			GldiContainer *pContainer = cairo_dock_get_icon_container (pIcon);
+			if (pContainer)
+			{
+				GtkWidget *pWindow = gtk_widget_get_toplevel (pMenu);
+				GtkWindow *tmp = GTK_WINDOW (pContainer->pWidget);
+				while (tmp && !gtk_widget_get_mapped (GTK_WIDGET(tmp)))
+					tmp = gtk_window_get_transient_for (tmp);
+				gtk_window_set_transient_for (GTK_WINDOW (pWindow), tmp);
+			}
+		}
+	}
+}
+
 
 static void _menu_realized_cb (GtkWidget *widget, gpointer user_data)
 {
