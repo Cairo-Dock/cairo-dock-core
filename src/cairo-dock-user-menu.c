@@ -1026,15 +1026,18 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
 	struct _MenuParams *params = g_new0 (struct _MenuParams, 1);
 	params->pContainer = pContainer;
 	g_object_weak_ref (G_OBJECT (menu), _menu_destroy_notify, (gpointer)params);
-	
+	Icon *pAppletIcon = NULL; // pointing icon if it is an applet
 
 	if (CAIRO_DOCK_IS_DESKLET (pContainer) && icon != NULL && ! CAIRO_DOCK_ICON_TYPE_IS_APPLET (icon))  // not on the icons of a desklet, except the applet icon (on a desklet, it's easy to click out of any icon).
 		return GLDI_NOTIFICATION_LET_PASS;
 
-	if (CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->iRefCount > 0)  // not on the sub-docks, except user sub-docks.
+	// not on the sub-docks, except user sub-docks and sub-docks created by applets (e.g. Status-Notifier in non-compact mode).
+	if (CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->iRefCount > 0)
 	{
 		Icon *pPointingIcon = cairo_dock_search_icon_pointing_on_dock (CAIRO_DOCK (pContainer), NULL);
-		if (pPointingIcon != NULL && ! CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pPointingIcon))
+		if (pPointingIcon != NULL && CAIRO_DOCK_ICON_TYPE_IS_APPLET (pPointingIcon))
+			pAppletIcon = pPointingIcon;
+		else if (pPointingIcon != NULL && ! CAIRO_DOCK_ICON_TYPE_IS_CONTAINER (pPointingIcon))
 			return GLDI_NOTIFICATION_LET_PASS;
 	}
 
@@ -1182,6 +1185,7 @@ gboolean cairo_dock_notification_build_container_menu (G_GNUC_UNUSED gpointer *p
 	{
 		pIcon = CAIRO_DESKLET (pContainer)->pIcon;
 	}
+	else if (pAppletIcon) pIcon = pAppletIcon;
 	params->pIcon = pIcon;
 
 	if (pIcon != NULL && ! CAIRO_DOCK_IS_AUTOMATIC_SEPARATOR (pIcon))
