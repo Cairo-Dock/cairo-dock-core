@@ -57,7 +57,7 @@ extern gboolean g_bUseOpenGL;
 static void _reserve_space_for_desklet (CairoDesklet *pDesklet, gboolean bReserve);
 static void _trigger_move_desklet (CairoDesklet *pDesklet);
 
-#define CD_WRITE_DELAY 600  // ms
+#define CD_WRITE_DELAY 300  // ms
 
   ///////////////
  /// SIGNALS ///
@@ -119,8 +119,9 @@ static void _cairo_dock_set_desklet_input_shape (CairoDesklet *pDesklet)
 	}
 }
 
-static gboolean _cairo_dock_write_desklet_size (CairoDesklet *pDesklet)
+static gboolean _cairo_dock_desklet_reload_decorations_and_write_size (CairoDesklet *pDesklet)
 {
+	cd_debug ("%dx%d", pDesklet->container.iWidth, pDesklet->container.iHeight);
 	if (pDesklet->pIcon->pModuleInstance != NULL && ! pDesklet->pIcon->pModuleInstance->pModule->pVisitCard->bStaticDeskletSize && pDesklet->pIcon != NULL &&
 		(pDesklet->iDesiredWidth == 0 && pDesklet->iDesiredHeight == 0) && gldi_desklet_manager_is_ready ())
 	{
@@ -231,6 +232,7 @@ static gboolean on_configure_desklet (G_GNUC_UNUSED GtkWidget* pWidget,
 	GdkEventConfigure* pEvent,
 	CairoDesklet *pDesklet)
 {
+	if (pEvent->send_event) return FALSE; // ignore synthetic events, these are just repeats of "real" configure events
 	cd_debug (" >>>>>>>>> %s (%dx%d, %d;%d)", __func__, pEvent->width, pEvent->height, pEvent->x, pEvent->y);
 	gboolean bMove = FALSE;
 	if (pDesklet->container.iWidth != pEvent->width || pDesklet->container.iHeight != pEvent->height)
@@ -269,8 +271,8 @@ static gboolean on_configure_desklet (G_GNUC_UNUSED GtkWidget* pWidget,
 		{
 			g_source_remove (pDesklet->iSidWriteSize);
 		}
-		if (pDesklet->iDesiredWidth > 0 && pDesklet->iDesiredHeight > 0) // only if size is adjustable by the user
-			pDesklet->iSidWriteSize = g_timeout_add (CD_WRITE_DELAY, (GSourceFunc) _cairo_dock_write_desklet_size, (gpointer) pDesklet);
+		pDesklet->iSidWriteSize = g_timeout_add (CD_WRITE_DELAY,
+			(GSourceFunc) _cairo_dock_desklet_reload_decorations_and_write_size, (gpointer) pDesklet);
 	}
 	
 	int x = pEvent->x, y = pEvent->y;
@@ -899,9 +901,12 @@ static gboolean _move_desklet (void *data)
 		g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY * g_desktopGeometry.iNbDesktops)
 	{
 		gtk_window_stick (GTK_WINDOW (pDesklet->container.pWidget));
-		gdk_window_move (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDesklet)),
-			iAbsolutePositionX,
-			iAbsolutePositionY);
+		if (iAbsolutePositionX != pDesklet->container.iWindowPositionX ||
+			iAbsolutePositionY != pDesklet->container.iWindowPositionY)
+		{
+			gdk_window_move (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDesklet)),
+				iAbsolutePositionX, iAbsolutePositionY);
+		}
 	}
 	else
 	{
