@@ -107,19 +107,19 @@ void cairo_dock_force_docks_above (void)
 // UNLOAD //
 static gboolean _free_one_dock (G_GNUC_UNUSED const gchar *cDockName, CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 {
-	g_free (pDock->cDockName);
-	pDock->cDockName = NULL;  // to not remove it from the table/list
 	gldi_object_unref (GLDI_OBJECT(pDock));
 	return TRUE;
 }
 void cairo_dock_reset_docks_table (void)
 {
+	// need to free this first as calls from reset_object might end up accessing elements in it
+	// (specifically screen edge monitoring would re-check based on this whether to keep polling)
+	g_list_free (s_pRootDockList);
+	s_pRootDockList = NULL;
+	
 	s_bResetAll = TRUE;
 	g_hash_table_foreach_remove (s_hDocksTable, (GHRFunc) _free_one_dock, NULL);
 	g_pMainDock = NULL;
-	
-	g_list_free (s_pRootDockList);
-	s_pRootDockList = NULL;
 	s_bResetAll = FALSE;
 }
 
@@ -1970,7 +1970,6 @@ static void reset_object (GldiObject *obj)
 			pIcon->pSubDock = NULL;
 		gldi_object_unref (GLDI_OBJECT(pIcon));
 	}
-	///g_list_foreach (icons, (GFunc)gldi_object_unref, NULL);
 	g_list_free (icons);
 	
 	// if it's a sub-dock, ensure the main icon looses its sub-dock
@@ -1981,24 +1980,28 @@ static void reset_object (GldiObject *obj)
 			pPointedIcon->pSubDock = NULL;
 	}
 	
-	// unregister it
-	if (pDock->cDockName)
+	// unregister it (unless we are deleting the whole table when this is done at once in cairo_dock_reset_docks_table ())
+	if (! s_bResetAll)
 	{
 		g_hash_table_remove (s_hDocksTable, pDock->cDockName);
 		s_pRootDockList = g_list_remove (s_pRootDockList, pDock);
 	}
 	
-	// stop the mouse scrutation
+	// stop the mouse scrutation + dock visibility polling
 	if (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP
 	|| pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY
 	|| pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE
 	|| pDock->iVisibility == CAIRO_DOCK_VISI_KEEP_BELOW)
 	{
+		// whether the visibility backend should be stopped for this dock
+		gboolean bStopVis = (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP
+			|| pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY);
 		/// this will ensure that screen edge polling will stop for this dock
 		pDock->iVisibility = CAIRO_DOCK_VISI_KEEP_ABOVE;
 		pDock->bAutoHide = FALSE;
 		pDock->bIsBelow = FALSE;
 		gldi_container_update_polling_screen_edge ();
+		if (bStopVis) gldi_dock_visibility_refresh (pDock); // will stop polling and free any data
 	}
 	
 	// free data
