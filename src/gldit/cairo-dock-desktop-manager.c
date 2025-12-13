@@ -106,14 +106,27 @@ const gchar *gldi_desktop_manager_get_backend_names (void)
 	return s_registered_backends ? s_registered_backends : "none";
 }
 
-void gldi_desktop_present_class (const gchar *cClass, GldiContainer *pContainer)  // scale matching class
+void gldi_desktop_present_class_with_callback (const gchar *cClass, GldiContainer *pContainer,
+	CairoDockDesktopManagerActionResult cb, gpointer user_data) // scale matching class
 {
-	g_return_val_if_fail (cClass != NULL, FALSE);
+	if (cClass == NULL || *cClass == '\0')
+	{
+		cd_warning ("no window class provided");
+		if (cb) cb (FALSE, user_data); // ensure that the callback is always called (e.g. if user_data needs to be freed by the caller)
+		return;
+	}
+	
 	if (s_backend.present_class != NULL)
 	{
 		gldi_wayland_release_keyboard (pContainer, GLDI_KEYBOARD_RELEASE_PRESENT_WINDOWS);
-		s_backend.present_class (cClass);
+		s_backend.present_class (cClass, cb, user_data);
 	}
+	else if (cb) cb (FALSE, user_data); // ensure that the callback is always called
+}
+
+void gldi_desktop_present_class (const gchar *cClass, GldiContainer *pContainer)  // scale matching class
+{
+	gldi_desktop_present_class_with_callback (cClass, pContainer, NULL, NULL);
 }
 
 void gldi_desktop_present_windows (GldiContainer *pContainer)  // scale

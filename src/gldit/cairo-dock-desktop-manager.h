@@ -146,9 +146,12 @@ struct _GldiDesktopGeometry {
 	int iCurrentViewportX, iCurrentViewportY;
 	};
 
+
+typedef void (*CairoDockDesktopManagerActionResult) (gboolean bSuccess, gpointer user_data);
+
 /// Definition of the Desktop Manager backend.
 struct _GldiDesktopManagerBackend {
-	void (*present_class) (const gchar *cClass);
+	void (*present_class) (const gchar *cClass, CairoDockDesktopManagerActionResult cb, gpointer user_data);
 	void (*present_windows) (void);
 	void (*present_desktops) (void);
 	void (*show_widget_layer) (void);
@@ -158,7 +161,7 @@ struct _GldiDesktopManagerBackend {
 	gchar** (*get_desktops_names) (void);
 	gboolean (*set_desktops_names) (gchar **cNames);
 	cairo_surface_t* (*get_desktop_bg_surface) (void);
-	gboolean (*set_current_desktop) (int iDesktopNumber, int iViewportNumberX, int iViewportNumberY);
+	void (*set_current_desktop) (int iDesktopNumber, int iViewportNumberX, int iViewportNumberY);
 	void (*refresh) (void);
 	gboolean (*grab_shortkey) (guint keycode, guint modifiers, gboolean grab);
 	void (*add_workspace) (void); // gldi_desktop_add_workspace ()
@@ -190,6 +193,17 @@ const gchar *gldi_desktop_manager_get_backend_names (void);
 *@param pContainer currently active container which might need to be unfocused
 */
 void gldi_desktop_present_class (const gchar *cClass, GldiContainer *pContainer);
+
+/** Present all the windows of a given class, notifying the caller of the result asynchronously.
+*@param cClass the class.
+*@param pContainer currently active container which might need to be unfocused
+*@param cb callback function to call with the result (i.e. a boolean indicating success)
+*@param user_data user data to pass to cb
+*
+* Note that cb may be called directly (if the action is performed synchronously) or at a later time.
+*/
+void gldi_desktop_present_class_with_callback (const gchar *cClass, GldiContainer *pContainer,
+	CairoDockDesktopManagerActionResult cb, gpointer user_data);
 
 /** Present all the windows of the current desktop. */
 void gldi_desktop_present_windows (GldiContainer *pContainer);
