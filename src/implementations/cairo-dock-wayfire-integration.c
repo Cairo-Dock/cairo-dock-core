@@ -40,6 +40,24 @@
 static const char default_socket[] = "/tmp/wayfire-wayland-1.socket";
 
 static GIOChannel *s_pIOChannel = NULL; // GIOChannel encapsulating the above socket
+static unsigned int s_sidIO = 0; // source ID for the above added to the main loop
+
+struct cb_data {
+	CairoDockDesktopManagerActionResult cb;
+	gpointer user_data;
+};
+GQueue s_cb_queue; // queue of callbacks for submitted actions -- contains cb_data structs or NULLs if an action does not have a callback
+
+// Helper function to signal failure and free one element of the queue
+void _cb_fail (gpointer data)
+{
+	if (data)
+	{
+		struct cb_data *cb = (struct cb_data*)data;
+		cb->cb (FALSE, cb->user_data);
+		g_free (cb);
+	}
+}
 
 /*
  * Read a message from socket and return its contents or NULL if there
@@ -47,13 +65,11 @@ static GIOChannel *s_pIOChannel = NULL; // GIOChannel encapsulating the above so
  * The length of the message is stored in msg_len (if not NULL).
  * Note: this will block until there is a message to read.
  */
-static char* _read_msg (uint32_t* out_len)
+static char* _read_msg_full (uint32_t* out_len, GIOChannel *pIOChannel)
 {
-	if (! s_pIOChannel) return NULL;
-	
 	const size_t header_size = 4;
 	char header[header_size];
-	if (g_io_channel_read_chars (s_pIOChannel, header, header_size, NULL, NULL) != G_IO_STATUS_NORMAL)
+	if (g_io_channel_read_chars (pIOChannel, header, header_size, NULL, NULL) != G_IO_STATUS_NORMAL)
 	{
 		//!! TODO: will we try to call this function with no data to read?
 		cd_warning ("Error reading from Wayfire's socket");
@@ -66,7 +82,7 @@ static char* _read_msg (uint32_t* out_len)
 	char* msg = (char*)g_malloc (msg_len + 1);
 	if (msg_len)
 	{
-		if (g_io_channel_read_chars (s_pIOChannel, msg, msg_len, &n_read, NULL) != G_IO_STATUS_NORMAL
+		if (g_io_channel_read_chars (pIOChannel, msg, msg_len, &n_read, NULL) != G_IO_STATUS_NORMAL
 			|| n_read != msg_len)
 		{
 			//!! TODO: should we care if the whole message cannot be read at once?
@@ -79,60 +95,70 @@ static char* _read_msg (uint32_t* out_len)
 	if (out_len) *out_len = msg_len;
 	return msg;
 }
+/* same as above, but use our static variable */
+static char* _read_msg (uint32_t* out_len)
+{
+	if (! s_pIOChannel) return NULL;
+	return _read_msg_full (out_len, s_pIOChannel);
+}
 
 /* Send a message to the socket. Return 0 on success, -1 on failure */
-static int _send_msg (const char* msg, uint32_t len)
+static int _send_msg_full (const char* msg, uint32_t len, GIOChannel *pIOChannel)
 {
-	if (! s_pIOChannel) return -1;
-	
 	const size_t header_size = 4;
 	gsize n_written = 0;
 	char header[header_size];
 	memcpy(header, &len, header_size);
-	if ((g_io_channel_write_chars (s_pIOChannel, header, header_size, &n_written, NULL) != G_IO_STATUS_NORMAL) ||
-		(g_io_channel_write_chars (s_pIOChannel, msg, len, &n_written, NULL) != G_IO_STATUS_NORMAL))
+	if ((g_io_channel_write_chars (pIOChannel, header, header_size, &n_written, NULL) != G_IO_STATUS_NORMAL) ||
+		(g_io_channel_write_chars (pIOChannel, msg, len, &n_written, NULL) != G_IO_STATUS_NORMAL))
 	{
 		cd_warning ("Error writing to Wayfire's socket");
 		return -1;
 	}
 	return 0;
 }
-
-/* Call a Wayfire IPC method and try to check if it was successful. */
-static gboolean _call_ipc(struct json_object* data) {
-	size_t len;
-	const char *tmp = json_object_to_json_string_length (data, JSON_C_TO_STRING_SPACED, &len);
-	if (!(tmp && len)) return FALSE;
-	
-	if(_send_msg(tmp, len) < 0) return FALSE;
-	
-	uint32_t len2 = 0;
-	char* tmp2 = _read_msg(&len2);
-	if(!tmp2) return FALSE;
-	
-	struct json_object *res = json_tokener_parse (tmp2);
-	struct json_object *result = json_object_object_get (res, "result");
-	gboolean ret = FALSE;
-	if (result)
-	{
-		const char *value = json_object_get_string (result);
-		if (value && !strcmp(value, "ok")) ret = TRUE;
-	}
-	
-	json_object_put (res);
-	free(tmp2);
-	
-	return ret;
+/* same as above, but use our static variable */
+static int _send_msg (const char* msg, uint32_t len)
+{
+	if (! s_pIOChannel) return -1;
+	return _send_msg_full (msg, len, s_pIOChannel);
 }
 
-static gboolean _call_ipc_method_no_data (const char *method)
+/* Call a Wayfire IPC method and try to check if it was successful. */
+static void _call_ipc(struct json_object* data, CairoDockDesktopManagerActionResult cb, gpointer user_data) {
+	size_t len;
+	const char *tmp = json_object_to_json_string_length (data, JSON_C_TO_STRING_SPACED, &len);
+	if (!(tmp && len))
+	{
+		if (cb) cb (FALSE, user_data);
+		return;
+	}
+	
+	if(_send_msg(tmp, len) < 0)
+	{
+		//!! TODO: we should probably tear down our socket here since this means a serious error !!
+		if (cb) cb (FALSE, user_data);
+		return;
+	}
+	
+	// save the callback if provided
+	if (cb)
+	{
+		struct cb_data *data = g_new (struct cb_data, 1);
+		data->cb = cb;
+		data->user_data = user_data;
+		g_queue_push_tail (&s_cb_queue, data);
+	}
+	else g_queue_push_tail (&s_cb_queue, NULL); // dummy element
+}
+
+static void _call_ipc_method_no_data (const char *method)
 {
 	struct json_object *obj = json_object_new_object ();
 	json_object_object_add (obj, "method", json_object_new_string (method));
 	json_object_object_add (obj, "data", json_object_new_object ());
-	gboolean ret = _call_ipc (obj);
+	_call_ipc (obj, NULL, NULL);
 	json_object_put (obj);
-	return ret;
 }
 
 /* Start scale on the current workspace */
@@ -151,9 +177,8 @@ static void _present_class(const gchar *cClass, CairoDockDesktopManagerActionRes
 		json_object_object_add (data, "all_workspaces", json_object_new_boolean (1));
 		json_object_object_add (data, "app_id", json_object_new_string (cWmClass));
 		json_object_object_add (obj, "data", data);
-		gboolean ret = _call_ipc (obj);
+		_call_ipc (obj, cb, user_data);
 		json_object_put (obj);
-		if (cb) cb (ret, user_data);
 	}
 	else if (cb) cb (FALSE, user_data);
 }
@@ -193,7 +218,68 @@ static void _unregister_wayfire_backend() {
 }
 */
 
+
+gboolean _socket_cb (G_GNUC_UNUSED GIOChannel *pSource, GIOCondition cond, G_GNUC_UNUSED gpointer data)
+{
+	gboolean bContinue = FALSE;
+	
+	if ((cond & G_IO_HUP) || (cond & G_IO_ERR))
+		cd_warning ("Wayfire socket disconnected");	
+	else if (cond & G_IO_IN)
+	{
+		// we should be able to read at least one complete message
+		uint32_t len2 = 0;
+		char* tmp2 = _read_msg(&len2);
+		if (tmp2)
+		{
+			struct json_object *res = json_tokener_parse (tmp2);
+			if (res)
+			{
+				bContinue = TRUE; // we could read a valid JSON, the connection is OK
+				gboolean bResult = FALSE;
+				struct json_object *result = json_object_object_get (res, "result");
+				if (result)
+				{
+					const char *value = json_object_get_string (result);
+					if (value && !strcmp(value, "ok")) bResult = TRUE;
+				}
+				
+				json_object_put (res);
+				
+				// consume the callback that belongs to this call
+				if (g_queue_is_empty (&s_cb_queue))
+					g_critical ("Missing callback in queue");
+				else
+				{
+					struct cb_data *data = g_queue_pop_head (&s_cb_queue);
+					if (data)
+					{
+						data->cb (bResult, data->user_data);
+						g_free (data);
+					}
+				}
+			}
+			else cd_warning ("Invalid JSON returned by Wayfire");
+			free(tmp2);
+		}
+		// if we have no message, warning already shown, we will stop the connection
+		// as bContinue == FALSE
+	}
+	
+	if (!bContinue)
+	{
+		s_sidIO = 0;
+		s_pIOChannel = NULL;
+		g_queue_clear_full (&s_cb_queue, _cb_fail);
+		return FALSE; // will also free our GIOChannel and close the socket
+	}
+	
+	return TRUE;
+}
+
 void cd_init_wayfire_backend (void) {
+	g_queue_init (&s_cb_queue);
+	
 	const char* wf_socket = getenv("WAYFIRE_SOCKET");
 	if (!wf_socket) wf_socket = default_socket;
 	
@@ -211,35 +297,35 @@ void cd_init_wayfire_backend (void) {
 		return;
 	}
 	
-	s_pIOChannel = g_io_channel_unix_new (wayfire_socket);
-	if (!s_pIOChannel)
+	GIOChannel *pIOChannel = g_io_channel_unix_new (wayfire_socket);
+	if (!pIOChannel)
 	{
 		cd_warning ("Cannot create GIOChannel!");
 		close (wayfire_socket);
 		return;
 	}
 	
-	g_io_channel_set_close_on_unref (s_pIOChannel, TRUE); // take ownership of wayfire_socket
-	g_io_channel_set_encoding (s_pIOChannel, NULL, NULL); // otherwise GLib would try to validate received data as UTF-8
-	g_io_channel_set_buffered (s_pIOChannel, FALSE); // we don't want GLib to block trying to read too much data
+	g_io_channel_set_close_on_unref (pIOChannel, TRUE); // take ownership of wayfire_socket
+	g_io_channel_set_encoding (pIOChannel, NULL, NULL); // otherwise GLib would try to validate received data as UTF-8
+	g_io_channel_set_buffered (pIOChannel, FALSE); // we don't want GLib to block trying to read too much data
 	
 	// Check supported capabilities -- do this here so that we can register only
 	// the supported functions.
 	// Note: we need to do this synchronously, since we should register the desktop
 	// manager backend before other components are initialized (e.g. keybindings).
 	const char *msg = "{\"method\": \"list-methods\", \"data\": {}}";
-	if (_send_msg (msg, strlen (msg)) < 0)
+	if (_send_msg_full (msg, strlen (msg), pIOChannel) < 0)
 	{
 		// warning already shown
-		g_io_channel_unref (s_pIOChannel);
+		g_io_channel_unref (pIOChannel);
 		return;
 	}
 	uint32_t len = 0;
-	char *ret = _read_msg (&len);
+	char *ret = _read_msg_full (&len, pIOChannel);
 	if (!ret)
 	{
 		// warning already shown
-		g_io_channel_unref (s_pIOChannel);
+		g_io_channel_unref (pIOChannel);
 		return;
 	}
 	
@@ -248,7 +334,7 @@ void cd_init_wayfire_backend (void) {
 	if (! methods || ! json_object_is_type (methods, json_type_array))
 	{
 		cd_warning ("Error getting the list of available IPC methods!");
-		g_io_channel_unref (s_pIOChannel);
+		g_io_channel_unref (pIOChannel);
 		json_object_put (res);
 		g_free (ret);
 		return;
@@ -282,7 +368,23 @@ void cd_init_wayfire_backend (void) {
 	json_object_put (res);
 	g_free (ret);
 	
-	if (any_found) gldi_desktop_manager_register_backend (&p, "Wayfire");
+	if (any_found)
+	{
+		s_sidIO = g_io_add_watch (pIOChannel, G_IO_IN | G_IO_HUP | G_IO_ERR, _socket_cb, NULL);
+		if (s_sidIO)
+		{
+			s_pIOChannel = pIOChannel;
+			gldi_desktop_manager_register_backend (&p, "Wayfire");
+		}
+		else cd_warning ("Cannot add socket IO event source!");
+	}
+	else
+	{
+		cd_message ("Connected to Wayfire socket, but no methods available, not registering");
+		g_io_channel_unref (pIOChannel);
+	}
+	
+	g_io_channel_unref (pIOChannel); // note: ref taken by g_io_add_watch () if succesful
 }
 
 #else
