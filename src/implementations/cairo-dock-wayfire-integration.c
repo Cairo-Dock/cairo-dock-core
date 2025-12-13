@@ -30,6 +30,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <json.h>
+#include <libevdev/libevdev.h>
 
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-windows-manager.h"  // bIsHidden
@@ -45,6 +46,9 @@ static unsigned int s_sidIO = 0; // source ID for the above added to the main lo
 struct cb_data {
 	CairoDockDesktopManagerActionResult cb;
 	gpointer user_data;
+	gboolean is_binding; // our own callback for registering keybindings -- in this case, cb is NULL, but the following fields are valid
+	guint keycode;
+	guint modifiers;
 };
 GQueue s_cb_queue; // queue of callbacks for submitted actions -- contains cb_data structs or NULLs if an action does not have a callback
 
@@ -144,7 +148,7 @@ static void _call_ipc(struct json_object* data, CairoDockDesktopManagerActionRes
 	// save the callback if provided
 	if (cb)
 	{
-		struct cb_data *data = g_new (struct cb_data, 1);
+		struct cb_data *data = g_new0 (struct cb_data, 1);
 		data->cb = cb;
 		data->user_data = user_data;
 		g_queue_push_tail (&s_cb_queue, data);
@@ -195,6 +199,120 @@ static void _show_hide_desktop(G_GNUC_UNUSED gboolean bShow) {
 	_call_ipc_method_no_data ("wm-actions/toggle_showdesktop");
 }
 
+
+/***********************************************************************
+ * keybindings
+ ***********************************************************************/
+
+struct wf_keybinding
+{
+	guint keycode;
+	guint modifiers;
+	uint64_t id;
+};
+
+GList *s_pBindings = NULL;
+
+static void _binding_registered (gboolean bSuccess, guint keycode, guint modifiers, uint64_t id)
+{
+	if (bSuccess) cd_debug ("Binding registered: %u, %u -- %lu", keycode, modifiers, id);
+	else cd_warning ("Cannot register binding: %u, %u", keycode, modifiers);
+	
+	if (!bSuccess) return; //!! TODO: signal error in this case
+	
+	struct wf_keybinding *binding = g_new (struct wf_keybinding, 1);
+	binding->keycode = keycode;
+	binding->modifiers = modifiers;
+	binding->id = id;
+	
+	s_pBindings = g_list_prepend (s_pBindings, binding);
+}
+
+#ifdef HAVE_EVDEV
+static gboolean _bind_key (guint keycode, guint modifiers, gboolean grab)
+{
+	if (grab)
+	{
+		const char *name = libevdev_event_code_get_name (EV_KEY, keycode - 8); // difference between X11 and Linux hardware keycodes
+		if (!name)
+		{
+			cd_warning ("Unknown keycode: %u", keycode);
+			return FALSE;
+		}
+		
+		GString *str = g_string_sized_new (40); // all modifiers + some long key name
+		
+		// first process modifiers (note: GDK_SUPER_MASK and GDK_META_MASK have been removed by the caller)
+		if (modifiers & GDK_CONTROL_MASK) g_string_append (str, "<ctrl>");
+		if (modifiers & GDK_MOD1_MASK) g_string_append (str, "<alt>");
+		if (modifiers & GDK_SHIFT_MASK) g_string_append (str, "<shift>");
+		if (modifiers & GDK_MOD4_MASK) g_string_append (str, "<super>"); //!! TODO: verify !!
+		
+		g_string_append (str, name);
+		
+		cd_debug ("Trying to register binding: %u, %u -- %s", keycode, modifiers, str->str);
+		
+		struct json_object *obj = json_object_new_object ();
+		json_object_object_add (obj, "method", json_object_new_string ("command/register-binding"));
+		struct json_object *data = json_object_new_object ();
+		json_object_object_add (data, "binding", json_object_new_string_len (str->str, str->len));
+		json_object_object_add (data, "exec-always", json_object_new_boolean (1)); // unsure, maybe FALSE would be better?
+		json_object_object_add (obj, "data", data);
+		
+		size_t len;
+		const char *tmp = json_object_to_json_string_length (obj, JSON_C_TO_STRING_SPACED, &len);
+		if (!(tmp && len))
+		{
+			json_object_put (obj);
+			return FALSE;
+		}
+		
+		int ret = _send_msg(tmp, len);
+		json_object_put (obj);
+		g_string_free (str, TRUE);
+		
+		if (ret < 0) return FALSE; //!! TODO: destroy the socket?
+		
+		// add a callback
+		struct cb_data *cb = g_new0 (struct cb_data, 1);
+		cb->is_binding = TRUE;
+		cb->keycode = keycode;
+		cb->modifiers = modifiers;
+		g_queue_push_tail (&s_cb_queue, cb);
+	}
+	//!! TODO: remove bindings
+	else
+	{
+		GList *it = s_pBindings;
+		while (it)
+		{
+			struct wf_keybinding *binding = (struct wf_keybinding*)it->data;
+			
+			if (binding->keycode == keycode && binding->modifiers == modifiers)
+			{
+				struct json_object *obj = json_object_new_object ();
+				json_object_object_add (obj, "method", json_object_new_string ("command/unregister-binding"));
+				struct json_object *data = json_object_new_object ();
+				json_object_object_add (data, "binding-id", json_object_new_uint64 (binding->id));
+				json_object_object_add (obj, "data", data);
+				_call_ipc (obj, NULL, NULL); // we don't care about the result in this case
+				json_object_put (obj);
+				
+				s_pBindings = g_list_delete_link (s_pBindings, it);
+				g_free (binding);
+				break;
+			}
+			
+			it = it->next;
+		}
+		
+		if (!it) cd_warning ("Cannot find binding to unregister");
+	}
+	
+	return TRUE;
+}
+#endif
+
 /*
 static gboolean _set_current_desktop(G_GNUC_UNUSED int iDesktopNumber, int iViewportNumberX, int iViewportNumberY) {
 	// note: iDesktopNumber is always ignored, we only have one desktop
@@ -237,27 +355,88 @@ gboolean _socket_cb (G_GNUC_UNUSED GIOChannel *pSource, GIOCondition cond, G_GNU
 			{
 				bContinue = TRUE; // we could read a valid JSON, the connection is OK
 				gboolean bResult = FALSE;
-				struct json_object *result = json_object_object_get (res, "result");
-				if (result)
+				
+				struct json_object *event = json_object_object_get (res, "event");
+				if (event)
 				{
-					const char *value = json_object_get_string (result);
-					if (value && !strcmp(value, "ok")) bResult = TRUE;
+					// try to process an event that we are subscribed to
+					const char *event_str = json_object_get_string (event);
+					if (!event_str) cd_warning ("Cannot parse event name!");
+					else
+					{
+						if (! strcmp (event_str, "command-binding"))
+						{
+							struct json_object *id_obj = json_object_object_get (res, "binding-id");
+							if (id_obj)
+							{
+								errno = 0;
+								uint64_t id = json_object_get_uint64 (id_obj);
+								if (errno) cd_warning ("Cannot parse binding ID");
+								else
+								{
+									GList *it = s_pBindings;
+									while (it)
+									{
+										struct wf_keybinding *binding = (struct wf_keybinding*)it->data;
+										if (binding->id == id)
+										{
+											// found
+											gldi_object_notify (&myDesktopMgr, NOTIFICATION_SHORTKEY_PRESSED, binding->keycode, binding->modifiers);
+											break;
+										}
+										it = it->next;
+									}
+									
+									if (!it) cd_warning ("Binding event with unknown ID");
+								}
+							}
+							else cd_warning ("Binding event without ID");
+						}
+					}
+				}
+				else
+				{
+					// in this case, this is a reply to a request we sent before
+					struct json_object *result = json_object_object_get (res, "result");
+					if (result)
+					{
+						const char *value = json_object_get_string (result);
+						if (value && !strcmp(value, "ok")) bResult = TRUE;
+					}
+					
+					// consume the callback that belongs to this call
+					if (g_queue_is_empty (&s_cb_queue))
+						g_critical ("Missing callback in queue");
+					else
+					{
+						struct cb_data *data = g_queue_pop_head (&s_cb_queue);
+						if (data)
+						{
+							if (data->is_binding)
+							{
+								// result of registering a keybinding
+								uint64_t id = 0;
+								if (bResult)
+								{
+									struct json_object *id_obj = json_object_object_get (res, "binding-id");
+									if (id_obj)
+									{
+										errno = 0;
+										id = json_object_get_uint64 (id_obj);
+										if (errno) bResult = FALSE;
+									}
+									else bResult = FALSE;
+								}
+								
+								_binding_registered (bResult, data->keycode, data->modifiers, id);
+							}
+							else data->cb (bResult, data->user_data);
+							g_free (data);
+						}
+					}
 				}
 				
 				json_object_put (res);
-				
-				// consume the callback that belongs to this call
-				if (g_queue_is_empty (&s_cb_queue))
-					g_critical ("Missing callback in queue");
-				else
-				{
-					struct cb_data *data = g_queue_pop_head (&s_cb_queue);
-					if (data)
-					{
-						data->cb (bResult, data->user_data);
-						g_free (data);
-					}
-				}
 			}
 			else cd_warning ("Invalid JSON returned by Wayfire");
 			free(tmp2);
@@ -362,6 +541,10 @@ void cd_init_wayfire_backend (void) {
 				{ p.present_desktops = _present_desktops; any_found = TRUE; }
 			else if (! p.show_hide_desktop && ! strcmp (value, "wm-actions/toggle_showdesktop"))
 				{ p.show_hide_desktop = _show_hide_desktop; any_found = TRUE; }
+#ifdef HAVE_EVDEV
+			else if (! p.grab_shortkey && ! strcmp (value, "command/register-binding"))
+				{ p.grab_shortkey = _bind_key; any_found = TRUE; }
+#endif
 		}
 	}
 	
