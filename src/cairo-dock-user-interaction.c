@@ -42,6 +42,7 @@
 extern gboolean g_bLocked;
 extern gchar *g_cConfFile;
 extern gchar *g_cCurrentIconsPath;
+extern CairoDock *g_pMainDock;
 
 static int _compare_zorder (Icon *icon1, Icon *icon2)  // classe par z-order decroissant.
 {
@@ -187,6 +188,29 @@ static gboolean _launch_icon_command (Icon *icon)
 	}
 	return GLDI_NOTIFICATION_INTERCEPT;
 }
+
+static Icon *s_pLastPresentIcon = NULL;
+static gboolean s_bWarningShown = FALSE;
+static gboolean _present_class_icon_destroy_cb (G_GNUC_UNUSED gpointer data, GldiObject *pObj)
+{
+	if (pObj == GLDI_OBJECT (s_pLastPresentIcon)) s_pLastPresentIcon = NULL;
+	return GLDI_NOTIFICATION_LET_PASS;
+}
+static void _present_class_cb (gboolean bSuccess, G_GNUC_UNUSED gpointer user_data)
+{
+	if (! bSuccess && ! s_bWarningShown)
+	{
+		s_bWarningShown = TRUE;
+		Icon *pIcon = s_pLastPresentIcon;
+		if (!pIcon) pIcon = gldi_icons_get_any_without_dialog ();
+		gldi_dialog_show_temporary (
+_("Cannot show preview of application windows. Check if your window manager / compositor supports this feature \
+(it is usually called \"scale\" or \"overview\").\nIf this happens only for a particular app, please open a bug report on our Github page."),
+			pIcon, pIcon->pContainer ? pIcon->pContainer : CAIRO_CONTAINER (g_pMainDock), 10000);
+	}
+	if (s_pLastPresentIcon) gldi_object_remove_notification (s_pLastPresentIcon, NOTIFICATION_DESTROY,
+		(GldiNotificationFunc) _present_class_icon_destroy_cb, NULL);
+}
 gboolean cairo_dock_notification_click_icon (G_GNUC_UNUSED gpointer pUserData, Icon *icon, GldiContainer *pContainer, guint iButtonState)
 {
 	if (icon == NULL || ! CAIRO_DOCK_IS_DOCK (pContainer))
@@ -210,12 +234,28 @@ gboolean cairo_dock_notification_click_icon (G_GNUC_UNUSED gpointer pUserData, I
 	{
 		if (myTaskbarParam.bPresentClassOnClick // if we want to use this feature
 		&& (!myDocksParam.bShowSubDockOnClick  // if sub-docks are shown on mouse over
-			|| gldi_container_is_visible (CAIRO_CONTAINER (icon->pSubDock)))  // or this sub-dock is already visible
-		&& gldi_desktop_present_class (icon->cClass, pContainer)) // we use the scale plugin if it's possible
+			|| gldi_container_is_visible (CAIRO_CONTAINER (icon->pSubDock))))  // or this sub-dock is already visible
 		{
-			_show_all_windows (icon->pSubDock->icons); // show all windows
-			// in case the dock is visible or about to be visible, hide it, as it would confuse the user to have both.
-			gldi_dock_leave_synthetic (icon->pSubDock);
+			if (gldi_desktop_can_present_class ())
+			{
+				// We save the icon to anchor our warning dialog to if things did not work. We also add a notification
+				// in case it gets destroyed (i.e. a weak ref) -- this is an overkill, but just to be sure...
+				s_pLastPresentIcon = icon;
+				gldi_object_register_notification (icon, NOTIFICATION_DESTROY, (GldiNotificationFunc) _present_class_icon_destroy_cb, FALSE, NULL);
+				gldi_desktop_present_class_with_callback (icon->cClass, pContainer, _present_class_cb, NULL); // we use the scale plugin if it's possible
+				_show_all_windows (icon->pSubDock->icons); // show all windows
+				// in case the dock is visible or about to be visible, hide it, as it would confuse the user to have both.
+				gldi_dock_leave_synthetic (icon->pSubDock);
+			}
+			else
+			{
+				// We just call our callback to potentially display the warning dialog if it has not been shown yet
+				s_pLastPresentIcon = icon;
+				_present_class_cb (FALSE, NULL);
+			}
+			// We intercept this notification in any case, as it is disorienting to have all windows
+			// minimized if the user is expecting scale to be started. It is better that nothing
+			// happens and we can show a warning as well.
 			return GLDI_NOTIFICATION_INTERCEPT;
 		}
 	}
