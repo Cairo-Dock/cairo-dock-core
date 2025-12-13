@@ -106,52 +106,47 @@ const gchar *gldi_desktop_manager_get_backend_names (void)
 	return s_registered_backends ? s_registered_backends : "none";
 }
 
-gboolean gldi_desktop_present_class (const gchar *cClass, GldiContainer *pContainer)  // scale matching class
+void gldi_desktop_present_class (const gchar *cClass, GldiContainer *pContainer)  // scale matching class
 {
 	g_return_val_if_fail (cClass != NULL, FALSE);
 	if (s_backend.present_class != NULL)
 	{
 		gldi_wayland_release_keyboard (pContainer, GLDI_KEYBOARD_RELEASE_PRESENT_WINDOWS);
-		return s_backend.present_class (cClass);
+		s_backend.present_class (cClass);
 	}
-	return FALSE;
 }
 
-gboolean gldi_desktop_present_windows (GldiContainer *pContainer)  // scale
+void gldi_desktop_present_windows (GldiContainer *pContainer)  // scale
 {
 	if (s_backend.present_windows != NULL)
 	{
 		gldi_wayland_release_keyboard (pContainer, GLDI_KEYBOARD_RELEASE_PRESENT_WINDOWS);
-		return s_backend.present_windows ();
+		s_backend.present_windows ();
 	}
-	return FALSE;
 }
 
-gboolean gldi_desktop_present_desktops (void)  // expose
+void gldi_desktop_present_desktops (void)  // expose
 {
 	if (s_backend.present_desktops != NULL)
 	{
-		return s_backend.present_desktops ();
+		s_backend.present_desktops ();
 	}
-	return FALSE;
 }
 
-gboolean gldi_desktop_show_widget_layer (void)  // widget
+void gldi_desktop_show_widget_layer (void)  // widget
 {
 	if (s_backend.show_widget_layer != NULL)
 	{
-		return s_backend.show_widget_layer ();
+		s_backend.show_widget_layer ();
 	}
-	return FALSE;
 }
 
-gboolean gldi_desktop_set_on_widget_layer (GldiContainer *pContainer, gboolean bOnWidgetLayer)
+void gldi_desktop_set_on_widget_layer (GldiContainer *pContainer, gboolean bOnWidgetLayer)
 {
 	if (s_backend.set_on_widget_layer != NULL)
 	{
-		return s_backend.set_on_widget_layer (pContainer, bOnWidgetLayer);
+		s_backend.set_on_widget_layer (pContainer, bOnWidgetLayer);
 	}
-	return FALSE;
 }
 
 gboolean gldi_desktop_can_present_class (void)
@@ -180,14 +175,12 @@ gboolean gldi_desktop_can_set_on_widget_layer (void)
 }
 
 
-gboolean gldi_desktop_show_hide (gboolean bShow)
+void gldi_desktop_show_hide (gboolean bShow)
 {
 	if (s_backend.show_hide_desktop)
 	{
 		s_backend.show_hide_desktop (bShow);
-		return TRUE;
 	}
-	return FALSE;
 }
 gboolean gldi_desktop_is_visible (void)
 {
@@ -215,11 +208,10 @@ static cairo_surface_t *_get_desktop_bg_surface (void)
 	return NULL;
 }
 
-gboolean gldi_desktop_set_current (int iDesktopNumber, int iViewportNumberX, int iViewportNumberY)
+void gldi_desktop_set_current (int iDesktopNumber, int iViewportNumberX, int iViewportNumberY)
 {
 	if (s_backend.set_current_desktop)
-		return s_backend.set_current_desktop (iDesktopNumber, iViewportNumberX, iViewportNumberY);
-	return FALSE;
+		s_backend.set_current_desktop (iDesktopNumber, iViewportNumberX, iViewportNumberY);
 }
 
 void gldi_desktop_add_workspace (void)

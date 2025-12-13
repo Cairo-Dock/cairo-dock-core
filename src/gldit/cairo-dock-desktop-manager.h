@@ -148,12 +148,12 @@ struct _GldiDesktopGeometry {
 
 /// Definition of the Desktop Manager backend.
 struct _GldiDesktopManagerBackend {
-	gboolean (*present_class) (const gchar *cClass);
-	gboolean (*present_windows) (void);
-	gboolean (*present_desktops) (void);
-	gboolean (*show_widget_layer) (void);
-	gboolean (*set_on_widget_layer) (GldiContainer *pContainer, gboolean bOnWidgetLayer);
-	gboolean (*show_hide_desktop) (gboolean bShow);
+	void (*present_class) (const gchar *cClass);
+	void (*present_windows) (void);
+	void (*present_desktops) (void);
+	void (*show_widget_layer) (void);
+	void (*set_on_widget_layer) (GldiContainer *pContainer, gboolean bOnWidgetLayer);
+	void (*show_hide_desktop) (gboolean bShow);
 	gboolean (*desktop_is_visible) (void);
 	gchar** (*get_desktops_names) (void);
 	gboolean (*set_desktops_names) (gchar **cNames);
@@ -188,31 +188,23 @@ const gchar *gldi_desktop_manager_get_backend_names (void);
 /** Present all the windows of a given class.
 *@param cClass the class.
 *@param pContainer currently active container which might need to be unfocused
-*@return TRUE on success
 */
-gboolean gldi_desktop_present_class (const gchar *cClass, GldiContainer *pContainer);
+void gldi_desktop_present_class (const gchar *cClass, GldiContainer *pContainer);
 
-/** Present all the windows of the current desktop.
-*@return TRUE on success
-*/
-gboolean gldi_desktop_present_windows (GldiContainer *pContainer);
+/** Present all the windows of the current desktop. */
+void gldi_desktop_present_windows (GldiContainer *pContainer);
 
-/** Present all the desktops.
-*@return TRUE on success
-*/
-gboolean gldi_desktop_present_desktops (void);
+/** Present all the desktops. */
+void gldi_desktop_present_desktops (void);
 
-/** Show the Widget Layer.
-*@return TRUE on success
-*/
-gboolean gldi_desktop_show_widget_layer (void);
+/** Show the Widget Layer. */
+void gldi_desktop_show_widget_layer (void);
 
 /** Set a Container to be displayed on the Widget Layer.
 *@param pContainer a container.
 *@param bOnWidgetLayer whether to set or unset the option.
-*@return TRUE on success
 */
-gboolean gldi_desktop_set_on_widget_layer (GldiContainer *pContainer, gboolean bOnWidgetLayer);
+void gldi_desktop_set_on_widget_layer (GldiContainer *pContainer, gboolean bOnWidgetLayer);
 
 gboolean gldi_desktop_can_present_class (void);
 gboolean gldi_desktop_can_present_windows (void);
@@ -220,11 +212,11 @@ gboolean gldi_desktop_can_present_desktops (void);
 gboolean gldi_desktop_can_show_widget_layer (void);
 gboolean gldi_desktop_can_set_on_widget_layer (void);
 
-gboolean gldi_desktop_show_hide (gboolean bShow);
+void gldi_desktop_show_hide (gboolean bShow);
 gboolean gldi_desktop_is_visible (void);
 gchar** gldi_desktop_get_names (void);
 gboolean gldi_desktop_set_names (gchar **cNames);
-gboolean gldi_desktop_set_current (int iDesktopNumber, int iViewportNumberX, int iViewportNumberY);
+void gldi_desktop_set_current (int iDesktopNumber, int iViewportNumberX, int iViewportNumberY);
 
 /** Adds a new workspace, desktop or viewport in an implementation-defined manner.
  * Typically this can mean adding one more workspace / desktop as the "last" one.
