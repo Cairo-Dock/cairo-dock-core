@@ -39,74 +39,63 @@
 
 static const char default_socket[] = "/tmp/wayfire-wayland-1.socket";
 
-int wayfire_socket = -1; // socket connection to Wayfire
-
-/* helpers to read and write data */
-static int _read_data(char* buf, size_t n) {
-	size_t s = 0;
-	do {
-		ssize_t tmp = read(wayfire_socket, buf + s, n);
-		if(tmp < 0) {
-			cd_warning("Error reading data from Wayfire's IPC socket!");
-			close(wayfire_socket);
-			wayfire_socket = -1;
-			return -1;
-		}
-		s += tmp;
-		n -= tmp;
-	} while(n);
-	return 0;
-}
-
-static int _write_data(const char* buf, size_t n) {
-	size_t s = 0;
-	do {
-		ssize_t tmp = write(wayfire_socket, buf + s, n);
-		if(tmp < 0) {
-			cd_warning("Error writing data to Wayfire's IPC socket!");
-			close(wayfire_socket);
-			wayfire_socket = -1;
-			return -1;
-		}
-		s += tmp;
-		n -= tmp;
-	} while(n);
-	return 0;
-}
+static GIOChannel *s_pIOChannel = NULL; // GIOChannel encapsulating the above socket
 
 /*
  * Read a message from socket and return its contents or NULL if there
  * is no open socket. The caller should free() the returned string when done.
  * The length of the message is stored in msg_len (if not NULL).
  * Note: this will block until there is a message to read.
- * TODO: do this async by adding it to the main loop?
  */
-static char* _read_msg(uint32_t* out_len)
+static char* _read_msg (uint32_t* out_len)
 {
-	if (wayfire_socket == -1) return NULL;
+	if (! s_pIOChannel) return NULL;
 	
 	const size_t header_size = 4;
 	char header[header_size];
-	if(_read_data(header, header_size) < 0) return NULL;
+	if (g_io_channel_read_chars (s_pIOChannel, header, header_size, NULL, NULL) != G_IO_STATUS_NORMAL)
+	{
+		//!! TODO: will we try to call this function with no data to read?
+		cd_warning ("Error reading from Wayfire's socket");
+		return NULL;
+	}
 	
 	uint32_t msg_len;
 	memcpy(&msg_len, header, header_size);
-	char* msg = (char*)malloc(msg_len + 1);
-	if(msg_len) if(_read_data(msg, msg_len) < 0) { free(msg); return NULL; }
+	gsize n_read = 0;
+	char* msg = (char*)g_malloc (msg_len + 1);
+	if (msg_len)
+	{
+		if (g_io_channel_read_chars (s_pIOChannel, msg, msg_len, &n_read, NULL) != G_IO_STATUS_NORMAL
+			|| n_read != msg_len)
+		{
+			//!! TODO: should we care if the whole message cannot be read at once?
+			cd_warning ("Error reading from Wayfire's socket");
+			g_free (msg);
+			return NULL;
+		}
+	}
 	msg[msg_len] = 0;
-	if(out_len) *out_len = msg_len;
+	if (out_len) *out_len = msg_len;
 	return msg;
 }
 
 /* Send a message to the socket. Return 0 on success, -1 on failure */
-static int _send_msg(const char* msg, uint32_t len) {
-	if (wayfire_socket == -1) return -1;
+static int _send_msg (const char* msg, uint32_t len)
+{
+	if (! s_pIOChannel) return -1;
 	
 	const size_t header_size = 4;
+	gsize n_written = 0;
 	char header[header_size];
 	memcpy(header, &len, header_size);
-	if(_write_data(header, header_size) < 0) return -1;
-	return _write_data(msg, len);
+	if ((g_io_channel_write_chars (s_pIOChannel, header, header_size, &n_written, NULL) != G_IO_STATUS_NORMAL) ||
+		(g_io_channel_write_chars (s_pIOChannel, msg, len, &n_written, NULL) != G_IO_STATUS_NORMAL))
+	{
+		cd_warning ("Error writing to Wayfire's socket");
+		return -1;
+	}
+	return 0;
 }
 
 /* Call a Wayfire IPC method and try to check if it was successful. */
@@ -147,12 +136,12 @@ static gboolean _call_ipc_method_no_data (const char *method)
 }
 
 /* Start scale on the current workspace */
-static gboolean _present_windows() {
-	return _call_ipc_method_no_data ("scale/toggle");
+static void _present_windows() {
+	_call_ipc_method_no_data ("scale/toggle");
 }
 
 /* Start scale including all views of the given class */
-static gboolean _present_class(const gchar *cClass) {
+static void _present_class(const gchar *cClass, CairoDockDesktopManagerActionResult cb, gpointer user_data) {
 	const gchar *cWmClass = cairo_dock_get_class_wm_class (cClass);
 	if (cWmClass) 
 	{
@@ -164,21 +153,21 @@ static gboolean _present_class(const gchar *cClass) {
 		json_object_object_add (obj, "data", data);
 		gboolean ret = _call_ipc (obj);
 		json_object_put (obj);
-		return ret;
+		if (cb) cb (ret, user_data);
 	}
-	else return FALSE;
+	else if (cb) cb (FALSE, user_data);
 }
 
 
 /* Start expo on the current output */
-static gboolean _present_desktops() {
-	return _call_ipc_method_no_data ("expo/toggle");
+static void _present_desktops() {
+	_call_ipc_method_no_data ("expo/toggle");
 }
 
 /* Toggle show desktop functionality (i.e. minimize / unminimize all views).
  * Note: bShow argument is ignored, we don't know if the desktop is shown / hidden */
-static gboolean _show_hide_desktop(G_GNUC_UNUSED gboolean bShow) {
-	return _call_ipc_method_no_data ("wm-actions/toggle_showdesktop");
+static void _show_hide_desktop(G_GNUC_UNUSED gboolean bShow) {
+	_call_ipc_method_no_data ("wm-actions/toggle_showdesktop");
 }
 
 /*
@@ -204,35 +193,96 @@ static void _unregister_wayfire_backend() {
 }
 */
 
-void cd_init_wayfire_backend() {
+void cd_init_wayfire_backend (void) {
 	const char* wf_socket = getenv("WAYFIRE_SOCKET");
-	if(!wf_socket) wf_socket = default_socket;
+	if (!wf_socket) wf_socket = default_socket;
 	
-	wayfire_socket = socket(AF_UNIX, SOCK_STREAM | SOCK_CLOEXEC, 0);
-	if(wayfire_socket < 0) return;
+	int wayfire_socket = socket (AF_UNIX, SOCK_STREAM | SOCK_CLOEXEC, 0);
+	if (wayfire_socket < 0) return;
 	
 	struct sockaddr_un sa;
-	memset(&sa, 0, sizeof(sa));
+	memset (&sa, 0, sizeof(sa));
 	sa.sun_family = AF_UNIX;
-	strncpy(sa.sun_path, wf_socket, sizeof(sa.sun_path) - 1);
+	strncpy (sa.sun_path, wf_socket, sizeof (sa.sun_path) - 1);
 	
 	
-	if(connect(wayfire_socket, (const struct sockaddr*)&sa, sizeof(sa))) {
-		close(wayfire_socket);
-		wayfire_socket = -1;
+	if (connect (wayfire_socket, (const struct sockaddr*)&sa, sizeof (sa))) {
+		close (wayfire_socket);
 		return;
 	}
 	
+	s_pIOChannel = g_io_channel_unix_new (wayfire_socket);
+	if (!s_pIOChannel)
+	{
+		cd_warning ("Cannot create GIOChannel!");
+		close (wayfire_socket);
+		return;
+	}
+	
+	g_io_channel_set_close_on_unref (s_pIOChannel, TRUE); // take ownership of wayfire_socket
+	g_io_channel_set_encoding (s_pIOChannel, NULL, NULL); // otherwise GLib would try to validate received data as UTF-8
+	g_io_channel_set_buffered (s_pIOChannel, FALSE); // we don't want GLib to block trying to read too much data
+	
+	// Check supported capabilities -- do this here so that we can register only
+	// the supported functions.
+	// Note: we need to do this synchronously, since we should register the desktop
+	// manager backend before other components are initialized (e.g. keybindings).
+	const char *msg = "{\"method\": \"list-methods\", \"data\": {}}";
+	if (_send_msg (msg, strlen (msg)) < 0)
+	{
+		// warning already shown
+		g_io_channel_unref (s_pIOChannel);
+		return;
+	}
+	uint32_t len = 0;
+	char *ret = _read_msg (&len);
+	if (!ret)
+	{
+		// warning already shown
+		g_io_channel_unref (s_pIOChannel);
+		return;
+	}
+	
+	struct json_object *res = json_tokener_parse (ret);
+	struct json_object *methods = json_object_object_get (res, "methods"); // should be an array
+	if (! methods || ! json_object_is_type (methods, json_type_array))
+	{
+		cd_warning ("Error getting the list of available IPC methods!");
+		g_io_channel_unref (s_pIOChannel);
+		json_object_put (res);
+		g_free (ret);
+		return;
+	}
+	
+	// we have a list of methods, need to check the expected ones
 	GldiDesktopManagerBackend p;
 	memset(&p, 0, sizeof (GldiDesktopManagerBackend));
 	
-	p.present_class = _present_class;
-	p.present_windows = _present_windows;
-	p.present_desktops = _present_desktops;
-	p.show_hide_desktop = _show_hide_desktop;
-	// p.set_current_desktop = _set_current_desktop;
+	size_t n_methods = json_object_array_length (methods);
+	size_t i;
+	gboolean any_found = FALSE;
+	for (i = 0; i < n_methods; i++)
+	{
+		struct json_object *m = json_object_array_get_idx (methods, i);
+		const char *value = json_object_get_string (m);
+		if (! value) cd_warning ("Invalid json value among IPC methods!");
+		else
+		{
+			if (! p.present_class && ! strcmp (value, "scale_ipc_filter/activate_appid"))
+				{ p.present_class = _present_class; any_found = TRUE; }
+			else if (! p.present_windows && ! strcmp (value, "scale/toggle"))
+				{ p.present_windows = _present_windows; any_found = TRUE; }
+			else if (! p.present_desktops && ! strcmp (value, "expo/toggle"))
+				{ p.present_desktops = _present_desktops; any_found = TRUE; }
+			else if (! p.show_hide_desktop && ! strcmp (value, "wm-actions/toggle_showdesktop"))
+				{ p.show_hide_desktop = _show_hide_desktop; any_found = TRUE; }
+		}
+	}
 	
-	gldi_desktop_manager_register_backend (&p, "Wayfire");
+	json_object_put (res);
+	g_free (ret);
+	
+	if (any_found) gldi_desktop_manager_register_backend (&p, "Wayfire");
 }
 
 #else
