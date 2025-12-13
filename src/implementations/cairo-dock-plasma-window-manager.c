@@ -604,10 +604,9 @@ static struct org_kde_plasma_window_management_listener gldi_toplevel_manager = 
 /// Desktop management functions
 static struct org_kde_plasma_window_management* s_ptoplevel_manager = NULL;
 static gboolean _desktop_is_visible (void) { return s_bDesktopIsVisible; }
-static gboolean _show_hide_desktop (gboolean bShow)
+static void _show_hide_desktop (gboolean bShow)
 {
 	org_kde_plasma_window_management_show_desktop (s_ptoplevel_manager, bShow);
-	return TRUE;
 }
 
 

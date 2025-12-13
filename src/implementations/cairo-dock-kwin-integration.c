@@ -54,155 +54,167 @@ static GDBusProxy *s_pWindowViewProxy = NULL;
 #define CD_WINDOWVIEW_BUS "org.kde.KWin.Effect.WindowView1"
 #define CD_WINDOWVIEW_INTERFACE "org.kde.KWin.Effect.WindowView1"
 
-static gboolean bRegistered = FALSE;
-
-static gboolean present_windows (void)
+static void present_windows (void)
 {
-	gboolean bSuccess = FALSE;
 	if (s_pKwinAccelProxy != NULL)
-	{
-		GError *erreur = NULL;
-		
-		GVariant *res = g_dbus_proxy_call_sync (s_pKwinAccelProxy, "invokeShortcut",
-			g_variant_new ("(s)", "ExposeAll"), G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, &erreur);
-		if (erreur)
-		{
-			cd_warning ("Kwin ExposeAll error: %s", erreur->message);
-			g_error_free (erreur);
-		}
-		else
-		{
-			g_variant_unref (res);
-			bSuccess = TRUE;
-		}
-	}
-	return bSuccess;
+		g_dbus_proxy_call (s_pKwinAccelProxy, "invokeShortcut",
+			g_variant_new ("(s)", "ExposeAll"),
+			G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, NULL, NULL);
 }
 
-static gboolean present_class (const gchar *cClass)
+struct preset_class_cb_data
 {
+	CairoDockDesktopManagerActionResult cb;
+	gpointer user_data;
+};
+
+static void _present_class_cb (GObject *pObj, GAsyncResult *pRes, gpointer data)
+{
+	struct preset_class_cb_data *cb_data = (struct preset_class_cb_data*)data;
+	
+	GError *err = NULL;
+	GVariant *res = g_dbus_proxy_call_finish (G_DBUS_PROXY (pObj), pRes, &err);
+	if (err)
+	{
+		cd_warning ("Error calling present class for KWin: %s", err->message);
+		g_error_free (err);
+		cb_data->cb (FALSE, cb_data->user_data);
+	}
+	else
+	{
+		g_variant_unref (res); // don't care -- or do we need to check for success here as well?
+		cb_data->cb (TRUE, cb_data->user_data); // signal success
+	}
+	
+	g_free (cb_data);
+}
+
+static void present_class (const gchar *cClass, CairoDockDesktopManagerActionResult cb, gpointer user_data)
+{
+	if (! s_pWindowViewProxy)
+	{
+		if (cb) cb (FALSE, user_data);
+		return;
+	}
+	
+	
 #ifdef HAVE_WAYLAND_PROTOCOLS
 	gboolean bIsWayland = gldi_container_is_wayland_backend ();
 #endif
 	
-	gboolean bSuccess = FALSE;
-	if (s_pWindowViewProxy != NULL)
-	{
-		GError *erreur = NULL;
-				
-		unsigned int i;
-		GVariantBuilder builder;
+	unsigned int i;
+	GVariantBuilder builder;
 #if GLIB_CHECK_VERSION (2, 84, 0)
-		g_variant_builder_init_static
+	g_variant_builder_init_static
 #else
-		g_variant_builder_init
+	g_variant_builder_init
 #endif
-			(&builder, G_VARIANT_TYPE ("as"));
-		const GList *pIcons = cairo_dock_list_existing_appli_with_class (cClass);
-		for (i = 0; pIcons; pIcons = pIcons->next)
-		{
-			Icon *pOneIcon = pIcons->data;
+		(&builder, G_VARIANT_TYPE ("as"));
+	const GList *pIcons = cairo_dock_list_existing_appli_with_class (cClass);
+	for (i = 0; pIcons; pIcons = pIcons->next)
+	{
+		Icon *pOneIcon = pIcons->data;
 #ifdef HAVE_WAYLAND_PROTOCOLS
-			if (bIsWayland)
+		if (bIsWayland)
+		{
+			g_variant_builder_add (&builder, "s", gldi_plasma_window_manager_get_uuid (pOneIcon->pAppli));
+			i++;
+		}
+		else
+#endif
+		{
+			unsigned long xid = gldi_X_manager_get_window_xid (pOneIcon->pAppli);
+			if (xid)
 			{
-				g_variant_builder_add (&builder, "s", gldi_plasma_window_manager_get_uuid (pOneIcon->pAppli));
+				g_variant_builder_add_value (&builder, g_variant_new_take_string (g_strdup_printf ("%lu", xid)));
 				i++;
 			}
-			else
-#endif
-			{
-				unsigned long xid = gldi_X_manager_get_window_xid (pOneIcon->pAppli);
-				if (xid)
-				{
-					g_variant_builder_add_value (&builder, g_variant_new_take_string (g_strdup_printf ("%lu", xid)));
-					i++;
-				}
-			}
-		}
-		
-		if (!i)
-		{
-			cd_warning ("No uuids found for class: %s", cClass);
-			g_variant_builder_clear (&builder);
-		}
-		else
-		{
-			GVariant *res = g_dbus_proxy_call_sync (s_pWindowViewProxy, "activate",
-				g_variant_new ("(as)", &builder), G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, &erreur);
-			if (erreur)
-			{
-				cd_warning ("Kwin ExposeAll error: %s", erreur->message);
-				g_error_free (erreur);
-			}
-			else
-			{
-				g_variant_unref (res);
-				bSuccess = TRUE;
-			}
 		}
 	}
-	return bSuccess;
+	
+	if (!i)
+	{
+		cd_warning ("No uuids found for class: %s", cClass);
+		g_variant_builder_clear (&builder);
+		if (cb) cb (FALSE, user_data); // need to ensure the callback in this case as well
+	}
+	else
+	{
+		if (cb)
+		{
+			struct preset_class_cb_data *cb_data = g_new0 (struct preset_class_cb_data, 1);
+			cb_data->cb = cb;
+			cb_data->user_data = user_data;
+			g_dbus_proxy_call (s_pWindowViewProxy, "activate",
+				g_variant_new ("(as)", &builder),
+				G_DBUS_CALL_FLAGS_NO_AUTO_START,
+				-1,
+				NULL,
+				_present_class_cb,
+				cb_data);
+		}
+		else g_dbus_proxy_call (s_pWindowViewProxy, "activate",
+			g_variant_new ("(as)", &builder),
+			G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, NULL, NULL);
+	}
 }
 
-static gboolean present_desktops (void)
+static void present_desktops (void)
 {
-	gboolean bSuccess = FALSE;
 	if (s_pKwinAccelProxy != NULL)
-	{
-		GError *erreur = NULL;
-		GVariant *res = g_dbus_proxy_call_sync (s_pKwinAccelProxy, "invokeShortcut",
-			g_variant_new ("(s)", "ShowDesktopGrid"), G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, &erreur);
-		if (erreur)
-		{
-			cd_warning ("Kwin ShowDesktopGrid error: %s", erreur->message);
-			g_error_free (erreur);
-		}
-		else
-		{
-			g_variant_unref (res);
-			bSuccess = TRUE;
-		}
-	}
-	return bSuccess;
+		g_dbus_proxy_call (s_pKwinAccelProxy, "invokeShortcut",
+			g_variant_new ("(s)", "ShowDesktopGrid"), // parameters
+			G_DBUS_CALL_FLAGS_NO_AUTO_START, // flags
+			-1, // timeout
+			NULL, // GCancellable
+			NULL, // callback -- we don't care about the result
+			NULL); // user_data
 }
 
-static gboolean show_widget_layer (void)
+static void show_widget_layer (void)
 {
-	gboolean bSuccess = FALSE;
 	if (s_pPlasmaAccelProxy != NULL)
-	{
-		GError *erreur = NULL;
-		GVariant *res = g_dbus_proxy_call_sync (s_pPlasmaAccelProxy, "invokeShortcut",
-			g_variant_new ("(s)", "show dashboard"), G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, &erreur);
-		if (erreur)
-		{
-			cd_warning ("Plasma-desktop 'Show Dashboard' error: %s", erreur->message);
-			g_error_free (erreur);
-		}
-		else
-		{
-			g_variant_unref (res);
-			bSuccess = TRUE;
-		}
-	}
-	return bSuccess;
+		g_dbus_proxy_call (s_pPlasmaAccelProxy, "invokeShortcut",
+			g_variant_new ("(s)", "show dashboard"),
+			G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, NULL, NULL);
 }
+
+
+static gboolean s_bGlobalAccelRegistered = FALSE;
+static gboolean s_bWindowViewRegistered = FALSE;
 
 static void _register_kwin_backend (void)
 {
-	// only register once, we do not unregister anyway
-	if (bRegistered) return;
-	bRegistered = TRUE;
 	GldiDesktopManagerBackend p;
 	memset(&p, 0, sizeof (GldiDesktopManagerBackend));
+	gboolean bRegister = FALSE;
 	
-	p.present_class = present_class;
-	p.present_windows = present_windows;
-	p.present_desktops = present_desktops;
-	p.show_widget_layer = show_widget_layer;
-	p.set_on_widget_layer = NULL;  // the Dashboard is not a real widget layer :-/
+	// only register once, we do not unregister anyway
+	if (! s_bGlobalAccelRegistered)
+	{
+		if (s_pKwinAccelProxy)
+		{
+			// functions handled by this proxy
+			p.present_windows = present_windows;
+			p.present_desktops = present_desktops;
+			bRegister = TRUE;
+		}
+		if (s_pPlasmaAccelProxy)
+		{
+			p.show_widget_layer = show_widget_layer;
+			bRegister = TRUE;
+		}
+		s_bGlobalAccelRegistered = bRegister;
+	}
 	
-	gldi_desktop_manager_register_backend (&p, "KWin");
+	if (! s_bWindowViewRegistered && s_pWindowViewProxy)
+	{
+		p.present_class = present_class;
+		bRegister = TRUE;
+		s_bWindowViewRegistered = TRUE;
+	}
+	
+	if (bRegister) gldi_desktop_manager_register_backend (&p, "KWin");
 }
 
 /*
@@ -222,7 +234,6 @@ static void _on_name_appeared (GDBusConnection *connection, const gchar *name,
 		g_return_if_fail (s_pKwinAccelProxy == NULL);
 		g_return_if_fail (s_pPlasmaAccelProxy == NULL);
 		
-		//!! TODO: use async versions ?
 		s_pKwinAccelProxy = g_dbus_proxy_new_sync (connection,
 			G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START | G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
 			NULL, // GDBusInterfaceInfo -- we could supply this, but work anyway

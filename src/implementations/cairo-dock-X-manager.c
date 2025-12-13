@@ -784,13 +784,12 @@ static gboolean _set_desktops_names (gchar **cNames)
 	return TRUE;
 }
 
-static gboolean _set_current_desktop (int iDesktopNumber, int iViewportNumberX, int iViewportNumberY)
+static void _set_current_desktop (int iDesktopNumber, int iViewportNumberX, int iViewportNumberY)
 {
 	if (iDesktopNumber >= 0)
 		cairo_dock_set_current_desktop (iDesktopNumber);
 	if (iViewportNumberX >= 0 && iViewportNumberY >= 0)
 		cairo_dock_set_current_viewport (iViewportNumberX, iViewportNumberY);
-	return TRUE;
 }
 
 static void _add_workspace (void)

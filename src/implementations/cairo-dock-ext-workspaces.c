@@ -532,7 +532,7 @@ static unsigned int _get_ix (guint x, guint y)
 	return i;
 }
 
-static gboolean _set_current_desktop (G_GNUC_UNUSED int iDesktopNumber, int iViewportNumberX, int iViewportNumberY)
+static void _set_current_desktop (G_GNUC_UNUSED int iDesktopNumber, int iViewportNumberX, int iViewportNumberY)
 {
 	// desktop number is ignored (it should be 0)
 	if (iViewportNumberX >= 0 && iViewportNumberY >= 0)
@@ -545,11 +545,9 @@ static gboolean _set_current_desktop (G_GNUC_UNUSED int iDesktopNumber, int iVie
 		{
 			ext_workspace_handle_v1_activate (desktops[iReq]->handle);
 			ext_workspace_manager_v1_commit (s_pWSManager);
-			return TRUE; // we don't know if we succeeded
 		}
 	}
 	cd_warning ("cosmic-workspaces: invalid workspace requested!\n");
-	return FALSE;
 }
 
 /* currently not supported on either Cosmic or Labwc, easier to disable 
