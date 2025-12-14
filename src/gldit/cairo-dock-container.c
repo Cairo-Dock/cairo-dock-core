@@ -552,10 +552,10 @@ void gldi_container_present (GldiContainer *pContainer)
 		s_backend.present (pContainer);
 }
 
-void gldi_container_init_layer (GldiContainer *pContainer)
+void gldi_container_init_layer (GldiContainer *pContainer, const gchar *cNamespace)
 {
 	if (s_backend.init_layer)
-		s_backend.init_layer (pContainer);
+		s_backend.init_layer (pContainer, cNamespace);
 }
 
 void gldi_container_move_resize_dock (CairoDock *pDock)
