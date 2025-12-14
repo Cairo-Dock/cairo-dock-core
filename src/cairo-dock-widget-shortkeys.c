@@ -253,14 +253,22 @@ ShortkeysWidget *cairo_dock_shortkeys_widget_new (void)
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 	gtk_container_add (GTK_CONTAINER (pScrolledWindow), pShortkeysWidget->pShortKeysTreeView);
 	
-	if (gldi_container_is_wayland_backend ())
+	if (! gldi_desktop_can_grab_shortkey ())
 	{
 		GtkWidget *pBoxV = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
 		GtkWidget *pBoxH = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+		GtkWidget *pBoxT = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
 		GtkWidget *pImg  = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_MENU);
-		GtkWidget *pLbl  = gtk_label_new (_("You are running Cairo-Dock in a Wayland session.\nSetting global keyboard shortcuts is not supported on Wayland yet."));
+		GtkWidget *pLbl  = gtk_label_new (_(
+"You are running Cairo-Dock in a session where setting global keyboard shortcuts is not supported; "
+"currently, this is the case for most Wayland compositors. You may need to check your compositor's "
+"settings and explicitly enable keybindings by external apps. See our Wiki for more information:"));
+		gtk_label_set_line_wrap (GTK_LABEL (pLbl), TRUE);
+		GtkWidget *pLink = gtk_link_button_new ("https://github.com/Cairo-Dock/cairo-dock-core/wiki");
+		gtk_box_pack_start (GTK_BOX (pBoxT), pLbl, FALSE, FALSE, 0);
+		gtk_box_pack_start (GTK_BOX (pBoxT), pLink, FALSE, FALSE, 0);
 		gtk_box_pack_start (GTK_BOX (pBoxH), pImg, FALSE, FALSE, 20);
-		gtk_box_pack_start (GTK_BOX (pBoxH), pLbl, FALSE, FALSE, 0);
+		gtk_box_pack_start (GTK_BOX (pBoxH), pBoxT, FALSE, FALSE, 20);
 		gtk_container_add (GTK_CONTAINER (pBoxV), pBoxH);
 		gtk_widget_set_sensitive (pShortkeysWidget->pShortKeysTreeView, FALSE);
 		gtk_container_add (GTK_CONTAINER (pBoxV), pScrolledWindow);

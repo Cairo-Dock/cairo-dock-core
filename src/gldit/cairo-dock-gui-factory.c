@@ -3021,12 +3021,17 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 							"clicked",
 							G_CALLBACK (_cairo_dock_key_grab_clicked),
 							data);
-						if (gldi_container_is_wayland_backend ())
+						if (! gldi_desktop_can_grab_shortkey ())
 						{
 							gtk_widget_set_sensitive (pGrabKeyButton, FALSE);
 							gtk_widget_set_sensitive (pOneWidget, FALSE);
-							const char *tmp = _("You are running Cairo-Dock in a Wayland session.\nSetting global keyboard shortcuts is not supported on Wayland yet.");
+							char *tmp = g_strdup_printf ("%s\n%s", _(
+"You are running Cairo-Dock in a session where setting global keyboard shortcuts is not supported; "
+"currently, this is the case for most Wayland compositors. You may need to check your compositor's "
+"settings and explicitly enable keybindings by external apps. See our Wiki for more information:"),
+								"https://github.com/Cairo-Dock/cairo-dock-core/wiki");
 							gtk_widget_set_tooltip_text (pKeyBox, tmp);
+							g_free (tmp);
 						}
 					}
 					_pack_in_widget_box (pGrabKeyButton);
