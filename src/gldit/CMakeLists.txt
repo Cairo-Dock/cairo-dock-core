@@ -121,7 +121,8 @@ target_link_libraries("gldi"
 	implementations
 	${GTKLAYERSHELL_LIBRARIES}
 	${LIBDL_LIBRARIES}
-	${JSON_LIBRARIES})
+	${JSON_LIBRARIES}
+	${EVDEV_LIBRARIES})
 
 
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/gldi.pc.in ${CMAKE_CURRENT_BINARY_DIR}/gldi.pc)

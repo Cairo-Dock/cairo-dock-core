@@ -307,16 +307,12 @@ static gchar** _get_desktops_names (void)
 	return ret;
 }
 
-static gboolean _set_current_desktop (G_GNUC_UNUSED int iDesktopNumber, int iViewportNumberX, int iViewportNumberY)
+static void _set_current_desktop (G_GNUC_UNUSED int iDesktopNumber, int iViewportNumberX, int iViewportNumberY)
 {
 	// desktop number is ignored (it should be 0)
 	unsigned int iReq = g_desktopGeometry.iNbViewportX * iViewportNumberY + iViewportNumberX;
 	if (iReq < s_iNumDesktops)
-	{
 		org_kde_plasma_virtual_desktop_request_activate (desktops[iReq]->handle);
-		return TRUE; // we don't know if we succeeded
-	}
-	return FALSE;
 }
 
 static struct org_kde_plasma_virtual_desktop_management* s_pmanager = NULL;

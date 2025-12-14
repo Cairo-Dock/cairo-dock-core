@@ -39,6 +39,7 @@ struct _ShortkeysWidget {
 	gchar *cClickAnim;
 	gchar *cClickEffect;
 	int iEffectOnDisappearance;
+	GtkWindow *pMainWindow;
 };
 
 #define SHORKEYS_WIDGET(w) ((ShortkeysWidget*)(w))
@@ -46,7 +47,7 @@ struct _ShortkeysWidget {
 #define IS_SHORKEYS_WIDGET(w) (w && CD_WIDGET(w)->iType == WIDGET_SHORKEYS)
 
 
-ShortkeysWidget *cairo_dock_shortkeys_widget_new (void);
+ShortkeysWidget *cairo_dock_shortkeys_widget_new (GtkWindow *pMainWindow);
 
 
 G_END_DECLS

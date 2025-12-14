@@ -1154,7 +1154,7 @@ static CDWidget *_build_items_widget (G_GNUC_UNUSED CairoDockGroupDescription *p
 
 static CDWidget *_build_shortkeys_widget (G_GNUC_UNUSED CairoDockGroupDescription *pGroupDescription, G_GNUC_UNUSED GldiModuleInstance *unused)
 {
-	ShortkeysWidget *pShortkeysWidget = cairo_dock_shortkeys_widget_new ();
+	ShortkeysWidget *pShortkeysWidget = cairo_dock_shortkeys_widget_new (GTK_WINDOW (s_pMainWindow));
 	
 	return CD_WIDGET (pShortkeysWidget);
 }

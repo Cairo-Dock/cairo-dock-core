@@ -31,56 +31,79 @@ static GDBusProxy *s_pProxy = NULL;
 #define CD_CINNAMON_OBJECT "/org/Cinnamon"
 #define CD_CINNAMON_INTERFACE "org.Cinnamon"
 
-/// Note: this has been tested with Cinnamon-1.6 on Mint-14 and Cinnamon-1.7.4 on Ubuntu-13.04
 
-static gboolean _eval (const gchar *cmd)
+struct eval_cb_data
 {
+	CairoDockDesktopManagerActionResult cb;
+	gpointer user_data;
+};
+
+static void _eval_cb (GObject *pObj, GAsyncResult *pRes, gpointer data)
+{
+	struct eval_cb_data *cb_data = (struct eval_cb_data*)data;
+	GError *error = NULL;
 	gboolean bSuccess = FALSE;
+	
+	GVariant *res = g_dbus_proxy_call_finish (G_DBUS_PROXY (pObj), pRes, &error);
+	if (error)
+	{
+		cd_warning ("Error calling Cinnamon method: %s", error->message);
+		g_error_free (error);
+	}
+	else if (res && g_variant_is_of_type (res, G_VARIANT_TYPE ("(bs)")))
+	{
+		// result is a bool + string
+		g_variant_get_child (res, 0, "b", &bSuccess);
+		GVariant *str = g_variant_get_child_value (res, 1);
+		const gchar *cResult = g_variant_get_string (str, NULL);
+		
+		cd_debug ("%s", cResult);
+		g_variant_unref (str);
+	}
+	if (res) g_variant_unref (res);
+	
+	cb_data->cb (bSuccess, cb_data->user_data); // signal success
+	g_free (cb_data);
+}
+
+static void _eval (const gchar *cmd, CairoDockDesktopManagerActionResult cb, gpointer user_data)
+{
 	if (s_pProxy != NULL)
 	{
-		GError *error = NULL;
-		
-		GVariant *res = g_dbus_proxy_call_sync (s_pProxy, "Eval",
-			g_variant_new ("(s)", cmd), G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, &error);
-		
-		if (error)
+		if (cb)
 		{
-			cd_warning (error->message);
-			g_error_free (error);
+			struct eval_cb_data *cb_data = g_new0 (struct eval_cb_data, 1);
+			cb_data->cb = cb;
+			cb_data->user_data = user_data;
+			g_dbus_proxy_call (s_pProxy, "Eval", g_variant_new ("(s)", cmd),
+				G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, _eval_cb, cb_data);
 		}
-		else if (res && g_variant_is_of_type (res, G_VARIANT_TYPE ("(bs)")))
-		{
-			// result is a bool + string
-			g_variant_get_child (res, 0, "b", &bSuccess);
-			GVariant *str = g_variant_get_child_value (res, 1);
-			const gchar *cResult = g_variant_get_string (str, NULL);
-			
-			cd_debug ("%s", cResult);
-			g_variant_unref (str);
-		}
-		if (res) g_variant_unref (res);
+		else g_dbus_proxy_call (s_pProxy, "Eval", g_variant_new ("(s)", cmd),
+			G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, NULL, NULL);
 	}
-	return bSuccess;
+	else if (cb) cb (FALSE, user_data);
 }
 
-static gboolean present_overview (void)
+static void present_overview (void)
 {
-	return _eval ("Main.overview.toggle();");
+	_eval ("Main.overview.toggle();", NULL, NULL);
 }
 
-static gboolean present_expo (void)
+static void present_expo (void)
 {
-	return _eval ("Main.expo.toggle();");
+	_eval ("Main.expo.toggle();", NULL, NULL);
 }
 
-static gboolean present_class (const gchar *cClass)
+static void present_class (const gchar *cClass, CairoDockDesktopManagerActionResult cb, gpointer user_data)
 {
 	cd_debug ("%s", cClass);
 	GList *pIcons = (GList*)cairo_dock_list_existing_appli_with_class (cClass);
 	if (pIcons == NULL)
-		return FALSE;
+	{
+		if (cb) cb (FALSE, user_data);
+		return;
+	}
 	
-	gboolean bSuccess = FALSE;
 	if (s_pProxy != NULL)
 	{
 		const gchar *cWmClass = cairo_dock_get_class_wm_class (cClass);
@@ -102,10 +125,9 @@ static gboolean present_class (const gchar *cClass)
 			} \
 		}", iWorkspace, cWmClass);
 		cd_debug ("eval(%s)", code);
-		bSuccess = _eval (code);
+		_eval (code, cb, user_data);
 		g_free (code);
 	}
-	return bSuccess;
 }
 
 static gboolean bRegistered = FALSE;

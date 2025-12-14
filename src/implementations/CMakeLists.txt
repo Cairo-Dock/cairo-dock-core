@@ -100,7 +100,8 @@ link_directories(
 	${GTKLAYERSHELL_LIBRARY_DIRS}
 	${EGL_LIBRARY_DIRS}
 	${GTK_LIBRARY_DIRS}
-	${JSON_LIBRARY_DIRS})
+	${JSON_LIBRARY_DIRS}
+	${EVDEV_LIBRARY_DIRS})
 
 include_directories(
 	${PACKAGE_INCLUDE_DIRS}
@@ -110,6 +111,7 @@ include_directories(
 	${EGL_INCLUDE_DIRS}
 	${GTK_INCLUDE_DIRS}
 	${JSON_INCLUDE_DIRS}
+	${EVDEV_INCLUDE_DIRS}
 	${CMAKE_SOURCE_DIR}/src/gldit
 	${CMAKE_BINARY_DIR}/src/gldit
 	${CMAKE_SOURCE_DIR}/src/implementations

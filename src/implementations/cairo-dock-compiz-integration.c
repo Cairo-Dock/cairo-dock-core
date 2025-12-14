@@ -52,36 +52,50 @@ static inline Window _get_root_Xid (void)
 #define _get_root_Xid(...) 0
 #endif
 
-static gboolean _present_windows (void)
+static void _present_windows (void)
 {
 	gint32 root = _get_root_Xid();
 	if (! root)
-		return FALSE;
-	gboolean bSuccess = FALSE;
+		return;
 	if (s_pScaleProxy != NULL)
-	{
-		GError *erreur = NULL;
-		GVariant *res = g_dbus_proxy_call_sync (s_pScaleProxy, "activate",
+		g_dbus_proxy_call (s_pScaleProxy, "activate",
 			g_variant_new ("(siss)", "root", root, "", ""),
-			G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, &erreur);
-		if (res) g_variant_unref (res); // don't care
-		
-		if (erreur)
-		{
-			cd_warning ("compiz scale error: %s", erreur->message);
-			g_error_free (erreur);
-		}
-		else bSuccess = TRUE;
-	}
-	return bSuccess;
+			G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, NULL, NULL);
 }
 
-static gboolean _present_class (const gchar *cClass)
+struct preset_class_cb_data
+{
+	CairoDockDesktopManagerActionResult cb;
+	gpointer user_data;
+};
+
+static void _present_class_cb (GObject *pObj, GAsyncResult *pRes, gpointer data)
+{
+	struct preset_class_cb_data *cb_data = (struct preset_class_cb_data*)data;
+	
+	GError *err = NULL;
+	GVariant *res = g_dbus_proxy_call_finish (G_DBUS_PROXY (pObj), pRes, &err);
+	if (err)
+	{
+		cd_warning ("Error calling scale with windows for Compiz: %s", err->message);
+		g_error_free (err);
+		cb_data->cb (FALSE, cb_data->user_data);
+	}
+	else
+	{
+		g_variant_unref (res); // don't care -- or do we need to check for success here as well?
+		cb_data->cb (TRUE, cb_data->user_data); // signal success
+	}
+	
+	g_free (cb_data);
+}
+
+static void _present_class (const gchar *cClass, CairoDockDesktopManagerActionResult cb, gpointer user_data)
 {
 	cd_debug ("%s (%s)", __func__, cClass);
 	const GList *pIcons = cairo_dock_list_existing_appli_with_class (cClass);
 	if (pIcons == NULL)
-		return FALSE;
+		goto err; // need to call cb to ensure user_data will not be leaked
 	
 	gboolean bAllHidden = TRUE;
 	Icon *pOneIcon;
@@ -91,17 +105,13 @@ static gboolean _present_class (const gchar *cClass)
 		pOneIcon = ic->data;
 		bAllHidden &= pOneIcon->pAppli->bIsHidden;
 	}
-	if (bAllHidden)
-		return FALSE;
+	if (bAllHidden) goto err;
 	
 	int root = _get_root_Xid();
-	if (! root)
-		return FALSE;
+	if (! root) goto err;
 	
-	gboolean bSuccess = FALSE;
 	if (s_pScaleProxy != NULL)
 	{
-		GError *erreur = NULL;
 		const gchar *cWmClass = cairo_dock_get_class_wm_class (cClass);
 		gchar *cMatch;
 		if (cWmClass)
@@ -109,67 +119,51 @@ static gboolean _present_class (const gchar *cClass)
 		else
 			cMatch = g_strdup_printf ("class=.%s*", cClass+1);
 		cd_message ("Compiz: match '%s'", cMatch);
-		GVariant *res = g_dbus_proxy_call_sync (s_pScaleProxy, "activate",
+		
+		if (cb)
+		{
+			struct preset_class_cb_data *cb_data = g_new0 (struct preset_class_cb_data, 1);
+			cb_data->cb = cb;
+			cb_data->user_data = user_data;
+			g_dbus_proxy_call (s_pScaleProxy, "activate",
+				g_variant_new ("(siss)", "root", root, "match", cMatch),
+				G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, _present_class_cb, cb_data);
+		}
+		else g_dbus_proxy_call (s_pScaleProxy, "activate",
 			g_variant_new ("(siss)", "root", root, "match", cMatch),
-			G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, &erreur);
-		if (res) g_variant_unref (res); // don't care
+			G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, NULL, NULL);
+
 		g_free (cMatch);
-		if (erreur)
-		{
-			cd_warning ("compiz scale error: %s", erreur->message);
-			g_error_free (erreur);
-		}
-		else bSuccess = TRUE;
 	}
-	return bSuccess;
+
+	return;
+
+err:
+	if (cb) cb (FALSE, user_data); // signal an error
 }
 
-static gboolean _present_desktops (void)
+static void _present_desktops (void)
 {
 	int root = _get_root_Xid();
 	if (! root)
-		return FALSE;
+		return;
 	
-	gboolean bSuccess = FALSE;
 	if (s_pExposeProxy != NULL)
-	{
-		GError *erreur = NULL;
-		GVariant *res = g_dbus_proxy_call_sync (s_pExposeProxy, "activate",
+		g_dbus_proxy_call (s_pExposeProxy, "activate",
 			g_variant_new ("(si)", "root", root),
-			G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, &erreur);
-		if (res) g_variant_unref (res); // don't care
-		if (erreur)
-		{
-			cd_warning ("compiz expo error: %s", erreur->message);
-			g_error_free (erreur);
-		}
-		else bSuccess = TRUE;
-	}
-	return bSuccess;
+			G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, NULL, NULL);
 }
 
-static gboolean _show_widget_layer (void)
+static void _show_widget_layer (void)
 {
 	int root = _get_root_Xid();
 	if (! root)
-		return FALSE;
+		return;
 	
-	gboolean bSuccess = FALSE;
 	if (s_pWidgetLayerProxy != NULL)
-	{
-		GError *erreur = NULL;
-		GVariant *res = g_dbus_proxy_call_sync (s_pWidgetLayerProxy, "activate",
+		g_dbus_proxy_call (s_pWidgetLayerProxy, "activate",
 			g_variant_new ("(si)", "root", root),
-			G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, &erreur);
-		if (res) g_variant_unref (res); // don't care
-		if (erreur)
-		{
-			cd_warning ("compiz widget layer error: %s", erreur->message);
-			g_error_free (erreur);
-		}
-		bSuccess = TRUE;
-	}
-	return bSuccess;
+			G_DBUS_CALL_FLAGS_NO_AUTO_START, -1, NULL, NULL, NULL);
 }
 
 #ifdef HAVE_X11
@@ -292,7 +286,7 @@ static gboolean _check_widget_plugin (G_GNUC_UNUSED gpointer data)
 	return FALSE;
 }
 
-static gboolean _set_on_widget_layer (GldiContainer *pContainer, gboolean bOnWidgetLayer)
+static void _set_on_widget_layer (GldiContainer *pContainer, gboolean bOnWidgetLayer)
 {
 	static gboolean s_bChecked = TRUE;
 	static Atom s_aCompizWidget = None;
@@ -301,7 +295,7 @@ static gboolean _set_on_widget_layer (GldiContainer *pContainer, gboolean bOnWid
 	Window Xid = GDK_WINDOW_XID (gldi_container_get_gdk_window(pContainer));
 	Display *dpy = cairo_dock_get_X_display ();
 	if (! dpy)
-		return FALSE;
+		return;
 	if (s_aCompizWidget == None)
 		s_aCompizWidget = XInternAtom (dpy, "_COMPIZ_WIDGET", False);
 	
@@ -327,12 +321,6 @@ static gboolean _set_on_widget_layer (GldiContainer *pContainer, gboolean bOnWid
 			Xid,
 			s_aCompizWidget);
 	}
-	return TRUE;
-}
-#else
-static gboolean _set_on_widget_layer (G_GNUC_UNUSED GldiContainer *pContainer, G_GNUC_UNUSED gboolean bOnWidgetLayer)
-{
-	return FALSE;
 }
 #endif // HAVE_X11
 
@@ -390,7 +378,9 @@ static void _register_compiz_backend (void)
 	p.present_windows = _present_windows;
 	p.present_desktops = _present_desktops;
 	p.show_widget_layer = _show_widget_layer;
+#ifdef HAVE_X11
 	p.set_on_widget_layer = _set_on_widget_layer;
+#endif
 	p.add_workspace = _add_workspace;
 	p.remove_last_workspace = _remove_workspace;
 	

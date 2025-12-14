@@ -21,6 +21,7 @@
 #include "cairo-dock-desklet-manager.h"  // cairo_dock_foreach_desklet
 #include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-draw-opengl.h"  // cairo_dock_create_texture_from_surface
+#include "cairo-dock-keybinder.h"
 #include "cairo-dock-compiz-integration.h"
 #include "cairo-dock-kwin-integration.h"
 #include "cairo-dock-cinnamon-integration.h"
@@ -106,52 +107,65 @@ const gchar *gldi_desktop_manager_get_backend_names (void)
 	return s_registered_backends ? s_registered_backends : "none";
 }
 
-gboolean gldi_desktop_present_class (const gchar *cClass, GldiContainer *pContainer)  // scale matching class
+void gldi_desktop_present_class_with_callback (const gchar *cClass, GldiContainer *pContainer,
+	CairoDockDesktopManagerActionResult cb, gpointer user_data) // scale matching class
 {
-	g_return_val_if_fail (cClass != NULL, FALSE);
+	if (cClass == NULL || *cClass == '\0')
+	{
+		cd_warning ("no window class provided");
+		if (cb) cb (FALSE, user_data); // ensure that the callback is always called (e.g. if user_data needs to be freed by the caller)
+		return;
+	}
+	
 	if (s_backend.present_class != NULL)
 	{
 		gldi_wayland_release_keyboard (pContainer, GLDI_KEYBOARD_RELEASE_PRESENT_WINDOWS);
-		return s_backend.present_class (cClass);
+		s_backend.present_class (cClass, cb, user_data);
 	}
-	return FALSE;
+	else if (cb) cb (FALSE, user_data); // ensure that the callback is always called
 }
 
-gboolean gldi_desktop_present_windows (GldiContainer *pContainer)  // scale
+void gldi_desktop_present_class (const gchar *cClass, GldiContainer *pContainer)  // scale matching class
+{
+	gldi_desktop_present_class_with_callback (cClass, pContainer, NULL, NULL);
+}
+
+void gldi_desktop_present_windows (GldiContainer *pContainer)  // scale
 {
 	if (s_backend.present_windows != NULL)
 	{
 		gldi_wayland_release_keyboard (pContainer, GLDI_KEYBOARD_RELEASE_PRESENT_WINDOWS);
-		return s_backend.present_windows ();
+		s_backend.present_windows ();
 	}
-	return FALSE;
 }
 
-gboolean gldi_desktop_present_desktops (void)  // expose
+void gldi_desktop_present_desktops (void)  // expose
 {
 	if (s_backend.present_desktops != NULL)
 	{
-		return s_backend.present_desktops ();
+		s_backend.present_desktops ();
 	}
-	return FALSE;
 }
 
-gboolean gldi_desktop_show_widget_layer (void)  // widget
+void gldi_desktop_show_widget_layer (void)  // widget
 {
 	if (s_backend.show_widget_layer != NULL)
 	{
-		return s_backend.show_widget_layer ();
+		s_backend.show_widget_layer ();
 	}
-	return FALSE;
 }
 
-gboolean gldi_desktop_set_on_widget_layer (GldiContainer *pContainer, gboolean bOnWidgetLayer)
+void gldi_desktop_set_on_widget_layer (GldiContainer *pContainer, gboolean bOnWidgetLayer)
 {
 	if (s_backend.set_on_widget_layer != NULL)
 	{
-		return s_backend.set_on_widget_layer (pContainer, bOnWidgetLayer);
+		s_backend.set_on_widget_layer (pContainer, bOnWidgetLayer);
 	}
-	return FALSE;
+}
+
+gboolean gldi_desktop_can_grab_shortkey (void)
+{
+	return (s_backend.grab_shortkey != NULL);
 }
 
 gboolean gldi_desktop_can_present_class (void)
@@ -180,14 +194,12 @@ gboolean gldi_desktop_can_set_on_widget_layer (void)
 }
 
 
-gboolean gldi_desktop_show_hide (gboolean bShow)
+void gldi_desktop_show_hide (gboolean bShow)
 {
 	if (s_backend.show_hide_desktop)
 	{
 		s_backend.show_hide_desktop (bShow);
-		return TRUE;
 	}
-	return FALSE;
 }
 gboolean gldi_desktop_is_visible (void)
 {
@@ -215,11 +227,10 @@ static cairo_surface_t *_get_desktop_bg_surface (void)
 	return NULL;
 }
 
-gboolean gldi_desktop_set_current (int iDesktopNumber, int iViewportNumberX, int iViewportNumberY)
+void gldi_desktop_set_current (int iDesktopNumber, int iViewportNumberX, int iViewportNumberY)
 {
 	if (s_backend.set_current_desktop)
-		return s_backend.set_current_desktop (iDesktopNumber, iViewportNumberX, iViewportNumberY);
-	return FALSE;
+		s_backend.set_current_desktop (iDesktopNumber, iViewportNumberX, iViewportNumberY);
 }
 
 void gldi_desktop_add_workspace (void)
@@ -240,11 +251,15 @@ void gldi_desktop_refresh (void)
 		s_backend.refresh ();
 }
 
-gboolean gldi_desktop_grab_shortkey (guint keycode, guint modifiers, gboolean grab)
+void gldi_desktop_grab_shortkey (GldiShortkey *pBinding, gboolean grab, CairoDockGrabKeyResult cb)
 {
 	if (s_backend.grab_shortkey)
-		return s_backend.grab_shortkey (keycode, modifiers, grab);
-	return FALSE;
+		s_backend.grab_shortkey (pBinding, grab, cb);
+	else
+	{
+		pBinding->bSuccess = FALSE; // not bound
+		if (grab && cb) cb (pBinding); // signal failure explicitly
+	}
 }
 
   //////////////////
