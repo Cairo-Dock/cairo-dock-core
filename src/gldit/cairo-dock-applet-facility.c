@@ -81,6 +81,8 @@ void cairo_dock_set_icon_surface_full (cairo_t *pIconContext, cairo_surface_t *p
 		cairo_restore (pIconContext);
 	}
 	cairo_dock_end_draw_icon_cairo (pIcon);
+	
+	if (pIcon->pContainer) gtk_widget_queue_draw (pIcon->pContainer->pWidget);
 }
 
 
