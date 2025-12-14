@@ -37,6 +37,7 @@
 #include "cairo-dock-icon-factory.h"  // pAppli
 #include "cairo-dock-container-priv.h"  // gldi_container_get_gdk_window
 #include "cairo-dock-class-manager-priv.h"
+#include "cairo-dock-keybinder.h"
 
 static const char default_socket[] = "/tmp/wayfire-wayland-1.socket";
 
@@ -44,13 +45,19 @@ static GIOChannel *s_pIOChannel = NULL; // GIOChannel encapsulating the above so
 static unsigned int s_sidIO = 0; // source ID for the above added to the main loop
 
 struct cb_data {
-	CairoDockDesktopManagerActionResult cb;
+	gpointer cb; // callback function (either CairoDockDesktopManagerActionResult or CairoDockGrabKeyResult)
 	gpointer user_data;
-	gboolean is_binding; // our own callback for registering keybindings -- in this case, cb is NULL, but the following fields are valid
-	guint keycode;
-	guint modifiers;
+	GldiShortkey *pBinding; // keybinding that is being added (if this callback belongs to a keybinding call)
 };
 GQueue s_cb_queue; // queue of callbacks for submitted actions -- contains cb_data structs or NULLs if an action does not have a callback
+
+struct wf_keybinding
+{
+	guint keycode;
+	guint modifiers;
+	uint64_t id;
+};
+GList *s_pBindings = NULL; // list of registered keybindings (wf_keybinding structs)
 
 // Helper function to signal failure and free one element of the queue
 void _cb_fail (gpointer data)
@@ -58,9 +65,26 @@ void _cb_fail (gpointer data)
 	if (data)
 	{
 		struct cb_data *cb = (struct cb_data*)data;
-		cb->cb (FALSE, cb->user_data);
+		if (cb->pBinding)
+		{
+			cb->pBinding->bSuccess = FALSE;
+			if (cb->cb) ((CairoDockGrabKeyResult) cb->cb) (cb->pBinding);
+			gldi_object_unref (GLDI_OBJECT (cb->pBinding)); // ref was taken in _bind_key ()
+		}
+		else if (cb->cb)
+			((CairoDockDesktopManagerActionResult) cb->cb) (FALSE, cb->user_data);
 		g_free (cb);
 	}
+}
+
+void _handle_broken_socket (void)
+{
+	if (s_sidIO) g_source_remove (s_sidIO); // will close the socket and free s_pIOChannel as well
+	s_sidIO = 0;
+	s_pIOChannel = NULL;
+	g_queue_clear_full (&s_cb_queue, _cb_fail);
+	g_list_free_full (s_pBindings, g_free);
+	s_pBindings = NULL;
 }
 
 /*
@@ -75,7 +99,7 @@ static char* _read_msg_full (uint32_t* out_len, GIOChannel *pIOChannel)
 	char header[header_size];
 	if (g_io_channel_read_chars (pIOChannel, header, header_size, NULL, NULL) != G_IO_STATUS_NORMAL)
 	{
-		//!! TODO: will we try to call this function with no data to read?
+		//!! TODO: should this be a failure or is it possible to recover?
 		cd_warning ("Error reading from Wayfire's socket");
 		return NULL;
 	}
@@ -114,22 +138,24 @@ static int _send_msg_full (const char* msg, uint32_t len, GIOChannel *pIOChannel
 	char header[header_size];
 	memcpy(header, &len, header_size);
 	if ((g_io_channel_write_chars (pIOChannel, header, header_size, &n_written, NULL) != G_IO_STATUS_NORMAL) ||
-		(g_io_channel_write_chars (pIOChannel, msg, len, &n_written, NULL) != G_IO_STATUS_NORMAL))
+		(g_io_channel_write_chars (pIOChannel, msg, len, &n_written, NULL) != G_IO_STATUS_NORMAL) ||
+		n_written != len)
 	{
 		cd_warning ("Error writing to Wayfire's socket");
 		return -1;
 	}
 	return 0;
 }
-/* same as above, but use our static variable */
-static int _send_msg (const char* msg, uint32_t len)
-{
-	if (! s_pIOChannel) return -1;
-	return _send_msg_full (msg, len, s_pIOChannel);
-}
 
 /* Call a Wayfire IPC method and try to check if it was successful. */
-static void _call_ipc(struct json_object* data, CairoDockDesktopManagerActionResult cb, gpointer user_data) {
+static void _call_ipc (struct json_object* data, CairoDockDesktopManagerActionResult cb, gpointer user_data) {
+	if (! s_pIOChannel)
+	{
+		// socket was already closed; we should not call _handle_broken_socket () again
+		if (cb) cb (FALSE, user_data);
+		return;
+	}
+	
 	size_t len;
 	const char *tmp = json_object_to_json_string_length (data, JSON_C_TO_STRING_SPACED, &len);
 	if (!(tmp && len))
@@ -138,10 +164,10 @@ static void _call_ipc(struct json_object* data, CairoDockDesktopManagerActionRes
 		return;
 	}
 	
-	if(_send_msg(tmp, len) < 0)
+	if (_send_msg_full (tmp, len, s_pIOChannel) < 0)
 	{
-		//!! TODO: we should probably tear down our socket here since this means a serious error !!
 		if (cb) cb (FALSE, user_data);
+		_handle_broken_socket ();
 		return;
 	}
 	
@@ -204,40 +230,48 @@ static void _show_hide_desktop(G_GNUC_UNUSED gboolean bShow) {
  * keybindings
  ***********************************************************************/
 
-struct wf_keybinding
+static void _binding_registered (gboolean bSuccess, GldiShortkey *pBinding, CairoDockGrabKeyResult cb, uint64_t id)
 {
-	guint keycode;
-	guint modifiers;
-	uint64_t id;
-};
-
-GList *s_pBindings = NULL;
-
-static void _binding_registered (gboolean bSuccess, guint keycode, guint modifiers, uint64_t id)
-{
-	if (bSuccess) cd_debug ("Binding registered: %u, %u -- %lu", keycode, modifiers, id);
-	else cd_warning ("Cannot register binding: %u, %u", keycode, modifiers);
+	pBinding->bSuccess = bSuccess;
 	
-	if (!bSuccess) return; //!! TODO: signal error in this case
+	if (bSuccess)
+	{
+		struct wf_keybinding *binding = g_new (struct wf_keybinding, 1);
+		binding->keycode = pBinding->keycode;
+		binding->modifiers = pBinding->modifiers;
+		binding->id = id;
 	
-	struct wf_keybinding *binding = g_new (struct wf_keybinding, 1);
-	binding->keycode = keycode;
-	binding->modifiers = modifiers;
-	binding->id = id;
+		s_pBindings = g_list_prepend (s_pBindings, binding);
+	}
 	
-	s_pBindings = g_list_prepend (s_pBindings, binding);
+	if (cb) cb (pBinding);
+	gldi_object_unref (GLDI_OBJECT (pBinding)); // ref was taken in _bind_key () -- note that this might immediately unbind if was unrefed outside
 }
 
 #ifdef HAVE_EVDEV
-static gboolean _bind_key (guint keycode, guint modifiers, gboolean grab)
+static void _bind_key (GldiShortkey *pBinding, gboolean grab, CairoDockGrabKeyResult cb)
 {
+	if (! s_pIOChannel)
+	{
+		// socket was already closed; we should not call _handle_broken_socket () again
+		// (in this case, our binding list should be empty as well)
+		pBinding->bSuccess = FALSE;
+		if (cb) cb (pBinding);
+		return;
+	}
+	
+	guint keycode = pBinding->keycode;
+	guint modifiers = pBinding->modifiers;
+	
 	if (grab)
 	{
-		const char *name = libevdev_event_code_get_name (EV_KEY, keycode - 8); // difference between X11 and Linux hardware keycodes
+		const char *name = libevdev_event_code_get_name (EV_KEY, keycode - 8); // -8: difference between X11 and Linux hardware keycodes
 		if (!name)
 		{
 			cd_warning ("Unknown keycode: %u", keycode);
-			return FALSE;
+			pBinding->bSuccess = FALSE;
+			if (cb) cb (pBinding);
+			return;
 		}
 		
 		GString *str = g_string_sized_new (40); // all modifiers + some long key name
@@ -246,7 +280,7 @@ static gboolean _bind_key (guint keycode, guint modifiers, gboolean grab)
 		if (modifiers & GDK_CONTROL_MASK) g_string_append (str, "<ctrl>");
 		if (modifiers & GDK_MOD1_MASK) g_string_append (str, "<alt>");
 		if (modifiers & GDK_SHIFT_MASK) g_string_append (str, "<shift>");
-		if (modifiers & GDK_MOD4_MASK) g_string_append (str, "<super>"); //!! TODO: verify !!
+		if (modifiers & GDK_MOD4_MASK) g_string_append (str, "<super>");
 		
 		g_string_append (str, name);
 		
@@ -264,24 +298,32 @@ static gboolean _bind_key (guint keycode, guint modifiers, gboolean grab)
 		if (!(tmp && len))
 		{
 			json_object_put (obj);
-			return FALSE;
+			g_string_free (str, TRUE);
+			pBinding->bSuccess = FALSE;
+			if (cb) cb (pBinding);
+			return;
 		}
 		
-		int ret = _send_msg(tmp, len);
+		int ret = _send_msg_full (tmp, len, s_pIOChannel);
 		json_object_put (obj);
 		g_string_free (str, TRUE);
 		
-		if (ret < 0) return FALSE; //!! TODO: destroy the socket?
+		if (ret < 0)
+		{
+			pBinding->bSuccess = FALSE;
+			if (cb) cb (pBinding);
+			_handle_broken_socket ();
+			return;
+		}
 		
 		// add a callback
-		struct cb_data *cb = g_new0 (struct cb_data, 1);
-		cb->is_binding = TRUE;
-		cb->keycode = keycode;
-		cb->modifiers = modifiers;
-		g_queue_push_tail (&s_cb_queue, cb);
+		struct cb_data *cb1 = g_new0 (struct cb_data, 1);
+		cb1->pBinding = pBinding;
+		cb1->cb = cb;
+		gldi_object_ref (GLDI_OBJECT (pBinding)); // need to keep a reference in case the caller destroys it before our callback
+		g_queue_push_tail (&s_cb_queue, cb1);
 	}
-	//!! TODO: remove bindings
-	else
+	else if (pBinding->bSuccess) // only try to remove if it was successfully registered
 	{
 		GList *it = s_pBindings;
 		while (it)
@@ -308,8 +350,6 @@ static gboolean _bind_key (guint keycode, guint modifiers, gboolean grab)
 		
 		if (!it) cd_warning ("Cannot find binding to unregister");
 	}
-	
-	return TRUE;
 }
 #endif
 
@@ -347,7 +387,7 @@ gboolean _socket_cb (G_GNUC_UNUSED GIOChannel *pSource, GIOCondition cond, G_GNU
 	{
 		// we should be able to read at least one complete message
 		uint32_t len2 = 0;
-		char* tmp2 = _read_msg(&len2);
+		char* tmp2 = _read_msg (&len2);
 		if (tmp2)
 		{
 			struct json_object *res = json_tokener_parse (tmp2);
@@ -412,7 +452,7 @@ gboolean _socket_cb (G_GNUC_UNUSED GIOChannel *pSource, GIOCondition cond, G_GNU
 						struct cb_data *data = g_queue_pop_head (&s_cb_queue);
 						if (data)
 						{
-							if (data->is_binding)
+							if (data->pBinding)
 							{
 								// result of registering a keybinding
 								uint64_t id = 0;
@@ -428,9 +468,9 @@ gboolean _socket_cb (G_GNUC_UNUSED GIOChannel *pSource, GIOCondition cond, G_GNU
 									else bResult = FALSE;
 								}
 								
-								_binding_registered (bResult, data->keycode, data->modifiers, id);
+								_binding_registered (bResult, data->pBinding, (CairoDockGrabKeyResult) data->cb, id);
 							}
-							else data->cb (bResult, data->user_data);
+							else if (data->cb) ((CairoDockDesktopManagerActionResult) data->cb) (bResult, data->user_data);
 							g_free (data);
 						}
 					}
@@ -450,6 +490,8 @@ gboolean _socket_cb (G_GNUC_UNUSED GIOChannel *pSource, GIOCondition cond, G_GNU
 		s_sidIO = 0;
 		s_pIOChannel = NULL;
 		g_queue_clear_full (&s_cb_queue, _cb_fail);
+		g_list_free_full (s_pBindings, g_free);
+		s_pBindings = NULL;
 		return FALSE; // will also free our GIOChannel and close the socket
 	}
 	
@@ -561,11 +603,7 @@ void cd_init_wayfire_backend (void) {
 		}
 		else cd_warning ("Cannot add socket IO event source!");
 	}
-	else
-	{
-		cd_message ("Connected to Wayfire socket, but no methods available, not registering");
-		g_io_channel_unref (pIOChannel);
-	}
+	else cd_message ("Connected to Wayfire socket, but no methods available, not registering");
 	
 	g_io_channel_unref (pIOChannel); // note: ref taken by g_io_add_watch () if succesful
 }
