@@ -148,6 +148,7 @@ struct _GldiDesktopGeometry {
 
 
 typedef void (*CairoDockDesktopManagerActionResult) (gboolean bSuccess, gpointer user_data);
+typedef void (*CairoDockGrabKeyResult) (GldiShortkey *pBinding);
 
 /// Definition of the Desktop Manager backend.
 struct _GldiDesktopManagerBackend {
@@ -163,7 +164,7 @@ struct _GldiDesktopManagerBackend {
 	cairo_surface_t* (*get_desktop_bg_surface) (void);
 	void (*set_current_desktop) (int iDesktopNumber, int iViewportNumberX, int iViewportNumberY);
 	void (*refresh) (void);
-	gboolean (*grab_shortkey) (guint keycode, guint modifiers, gboolean grab);
+	void (*grab_shortkey) (GldiShortkey *pBinding, gboolean grab, CairoDockGrabKeyResult cb); // note: cb will only be called if grab == TRUE
 	void (*add_workspace) (void); // gldi_desktop_add_workspace ()
 	void (*remove_last_workspace) (void); // gldi_desktop_remove_last_workspace ()
 	};
@@ -253,7 +254,16 @@ void gldi_desktop_remove_last_workspace (void);
 
 void gldi_desktop_refresh (void);
 
-gboolean gldi_desktop_grab_shortkey (guint keycode, guint modifiers, gboolean grab);
+/** Register or unregister a keybinding that will then trigger the
+* NOTIFICATION_SHORTKEY_PRESSED signal.
+*@param pBinding the keybinding to register or unregister
+*@param grab whether to register a keybinding or unregister an existing one
+*@param cb a callback function to notify the caller of the result; it will
+  only be called if grab == TRUE (it is assumed that unbinding always works).
+*
+* Note: pBinding->bSuccess will be updated based on the result.
+*/
+void gldi_desktop_grab_shortkey (GldiShortkey *pBinding, gboolean grab, CairoDockGrabKeyResult cb);
 
   ////////////////////
  // Desktop access //

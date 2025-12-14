@@ -21,6 +21,7 @@
 #include "cairo-dock-desklet-manager.h"  // cairo_dock_foreach_desklet
 #include "cairo-dock-desklet-factory.h"
 #include "cairo-dock-draw-opengl.h"  // cairo_dock_create_texture_from_surface
+#include "cairo-dock-keybinder.h"
 #include "cairo-dock-compiz-integration.h"
 #include "cairo-dock-kwin-integration.h"
 #include "cairo-dock-cinnamon-integration.h"
@@ -245,11 +246,15 @@ void gldi_desktop_refresh (void)
 		s_backend.refresh ();
 }
 
-gboolean gldi_desktop_grab_shortkey (guint keycode, guint modifiers, gboolean grab)
+void gldi_desktop_grab_shortkey (GldiShortkey *pBinding, gboolean grab, CairoDockGrabKeyResult cb)
 {
 	if (s_backend.grab_shortkey)
-		return s_backend.grab_shortkey (keycode, modifiers, grab);
-	return FALSE;
+		s_backend.grab_shortkey (pBinding, grab, cb);
+	else
+	{
+		pBinding->bSuccess = FALSE; // not bound
+		if (grab && cb) cb (pBinding); // signal failure explicitly
+	}
 }
 
   //////////////////

@@ -127,7 +127,7 @@ GldiShortkey *gldi_shortkey_new (const gchar *keystring,
  * @param cNewDescription the new description, or NULL to keep the current one.
  * @return TRUE on success
 */
-gboolean gldi_shortkey_rebind (GldiShortkey *binding,
+void gldi_shortkey_rebind (GldiShortkey *binding,
 	const gchar *cNewKeyString,
 	const gchar *cNewDescription);
 

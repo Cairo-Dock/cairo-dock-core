@@ -55,10 +55,10 @@ GldiObjectManager myShortkeyObjectMgr;
 static GSList *s_pKeyBindings = NULL;
 
 
-static gboolean do_grab_key (GldiShortkey *binding)
+static void do_grab_key (GldiShortkey *binding, CairoDockGrabKeyResult cb)
 {
 	if (binding->keystring == NULL)
-		return FALSE;
+		return; // no need to signal failure, let's assume the caller checks this
 	
 	// parse the shortkey to get the keycode and modifiers
 	guint keysym = 0;
@@ -68,7 +68,7 @@ static gboolean do_grab_key (GldiShortkey *binding)
 		&accelerator_codes,
 		&binding->modifiers);
 	if (accelerator_codes == NULL)
-		return FALSE;
+		return;
 	
 	binding->keycode = accelerator_codes[0];  // just take the first one
 	g_free (accelerator_codes);
@@ -81,14 +81,14 @@ static gboolean do_grab_key (GldiShortkey *binding)
 	cd_debug ("%s -> %d, %d %d", binding->keystring, keysym, binding->keycode, binding->modifiers);
 	
 	// now grab the shortkey from the server
-	return gldi_desktop_grab_shortkey (binding->keycode, binding->modifiers, TRUE);  // TRUE <=> grab
+	gldi_desktop_grab_shortkey (binding, TRUE, cb);  // TRUE <=> grab
 }
 
 static gboolean do_ungrab_key (GldiShortkey *binding)
 {
 	cd_debug ("Removing grab for '%s'", binding->keystring);
 	
-	gldi_desktop_grab_shortkey (binding->keycode, binding->modifiers, FALSE);  // FALSE <=> ungrab
+	gldi_desktop_grab_shortkey (binding, FALSE, NULL);  // FALSE <=> ungrab
 	
 	return TRUE;
 }
@@ -117,10 +117,8 @@ static gboolean _on_keymap_changed (G_GNUC_UNUSED gpointer data, gboolean update
 	{
 		GldiShortkey *binding = (GldiShortkey *) iter->data;
 
-		if (updated)
-			binding->bSuccess = do_grab_key (binding);
-		else
-			do_ungrab_key (binding);
+		if (updated) do_grab_key (binding, NULL); // no callback, bSuccess will be updated
+		else do_ungrab_key (binding);
 	}
 	return GLDI_NOTIFICATION_LET_PASS;
 }
@@ -150,16 +148,22 @@ GldiShortkey *gldi_shortkey_new (const gchar *keystring,
 }
 
 
-gboolean gldi_shortkey_rebind (GldiShortkey *binding,
+void _shortkey_rebind_cb (GldiShortkey *binding)
+{
+	// note: currently, there are no users of this notification
+	gldi_object_notify (binding, NOTIFICATION_SHORTKEY_CHANGED, binding);
+}
+
+void gldi_shortkey_rebind (GldiShortkey *binding,
 	const gchar *cNewKeyString,
 	const gchar *cNewDescription)
 {
-	g_return_val_if_fail (binding != NULL, FALSE);
+	g_return_if_fail (binding != NULL);
 	cd_debug ("%s (%s)", __func__, binding->keystring);
 	
 	// ensure it's a registered binding
 	GSList *iter = g_slist_find (s_pKeyBindings, binding);
-	g_return_val_if_fail (iter != NULL, FALSE);
+	g_return_if_fail (iter != NULL);
 	
 	// update the description if needed
 	if (cNewDescription != NULL)
@@ -170,7 +174,7 @@ gboolean gldi_shortkey_rebind (GldiShortkey *binding,
 	
 	// if the shortkey is the same and already bound, no need to re-grab it.
 	if (g_strcmp0 (cNewKeyString, binding->keystring) == 0 && binding->bSuccess)
-		return TRUE;
+		return;
 	
 	// unbind its current shortkey
 	if (binding->bSuccess)
@@ -183,11 +187,7 @@ gboolean gldi_shortkey_rebind (GldiShortkey *binding,
 		binding->keystring = g_strdup (cNewKeyString);
 	}
 	
-	binding->bSuccess = do_grab_key (binding);
-	
-	gldi_object_notify (binding, NOTIFICATION_SHORTKEY_CHANGED, binding);
-	
-	return binding->bSuccess;
+	do_grab_key (binding, _shortkey_rebind_cb);
 }
 
 
@@ -329,6 +329,14 @@ static void init (void)
  /// MANAGER ///
 ///////////////
 
+static void _shortkey_warning_cb (GldiShortkey *pShortkey)
+{
+	if (! pShortkey->bSuccess)
+	{
+		cd_warning ("Couldn't bind '%s' (%s: %s)\n This shortkey is probably already used by another applet or another application", pShortkey->keystring, pShortkey->cDemander, pShortkey->cDescription);
+	}
+}
+
 static void init_object (GldiObject *obj, gpointer attr)
 {
 	GldiShortkey *pShortkey = (GldiShortkey*)obj;
@@ -350,14 +358,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	
 	// try to grab the key
 	if (pShortkey->keystring != NULL)
-	{
-		pShortkey->bSuccess = do_grab_key (pShortkey);
-		
-		if (! pShortkey->bSuccess)
-		{
-			cd_warning ("Couldn't bind '%s' (%s: %s)\n This shortkey is probably already used by another applet or another application", pShortkey->keystring, pShortkey->cDemander, pShortkey->cDescription);
-		}
-	}
+		do_grab_key (pShortkey, _shortkey_warning_cb);
 }
 
 static void reset_object (GldiObject *obj)
