@@ -100,8 +100,10 @@ static void on_cancel_shortkey (G_GNUC_UNUSED GtkButton *button, GtkWidget *pInp
 {
 	gtk_widget_destroy (pInputDialog);
 }
-static void _cairo_dock_initiate_change_shortkey (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GtkTreeView *pTreeView)
+static void _cairo_dock_initiate_change_shortkey (G_GNUC_UNUSED GtkMenuItem *pMenuItem, ShortkeysWidget *pShortkeysWidget)
 {
+	GtkTreeView *pTreeView = GTK_TREE_VIEW (pShortkeysWidget->pShortKeysTreeView);
+
 	// ensure a line is selected
 	GtkTreeSelection *pSelection = gtk_tree_view_get_selection (pTreeView);
 	GtkTreeModel *pModel;
@@ -111,10 +113,10 @@ static void _cairo_dock_initiate_change_shortkey (G_GNUC_UNUSED GtkMenuItem *pMe
 
 	// build a small modal input dialog, mainly to prevent any other interaction.
 	GtkWidget *pInputDialog = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_decorated (GTK_WINDOW (pInputDialog), FALSE);
+	// gtk_window_set_decorated (GTK_WINDOW (pInputDialog), FALSE); -- does the opposite on Wayland, better not use it
 	gtk_window_set_skip_taskbar_hint (GTK_WINDOW (pInputDialog), TRUE);
 	gtk_window_set_skip_pager_hint (GTK_WINDOW (pInputDialog), TRUE);
-	//gtk_window_set_transient_for (GTK_WINDOW (pInputDialog), GTK_WINDOW (pMainWindow));
+	gtk_window_set_transient_for (GTK_WINDOW (pInputDialog), pShortkeysWidget->pMainWindow);
 	gtk_window_set_modal (GTK_WINDOW (pInputDialog), TRUE);
 
 	gtk_widget_add_events (pInputDialog, GDK_KEY_PRESS_MASK);
@@ -132,21 +134,22 @@ static void _cairo_dock_initiate_change_shortkey (G_GNUC_UNUSED GtkMenuItem *pMe
 
 	gtk_widget_show_all (pInputDialog);
 }
-static gboolean _on_click_shortkey_tree_view (GtkTreeView *pTreeView, GdkEventButton* pButton, G_GNUC_UNUSED gpointer data)
+static gboolean _on_click_shortkey_tree_view (G_GNUC_UNUSED GtkTreeView *pTreeView, GdkEventButton* pButton, gpointer data)
 {
 	if ((pButton->button == 3 && pButton->type == GDK_BUTTON_RELEASE)  // right click
 	|| (pButton->button == 1 && pButton->type == GDK_2BUTTON_PRESS))  // double click
 	{
+		ShortkeysWidget *pShortkeysWidget = (ShortkeysWidget*)data;
 		if (pButton->button == 3)
 		{
 			GtkWidget *pMenu = gtk_menu_new ();
-			cairo_dock_gui_menu_item_add (pMenu, _("Change the shortkey"), GLDI_ICON_NAME_PROPERTIES, G_CALLBACK (_cairo_dock_initiate_change_shortkey), pTreeView);
+			cairo_dock_gui_menu_item_add (pMenu, _("Change the shortkey"), GLDI_ICON_NAME_PROPERTIES, G_CALLBACK (_cairo_dock_initiate_change_shortkey), pShortkeysWidget);
 			gtk_widget_show_all (pMenu);
 			gtk_menu_popup_at_pointer (GTK_MENU (pMenu), NULL);
 		}
 		else
 		{
-			_cairo_dock_initiate_change_shortkey (NULL, pTreeView);
+			_cairo_dock_initiate_change_shortkey (NULL, pShortkeysWidget);
 		}
 	}
 	return FALSE;
@@ -194,7 +197,7 @@ void cairo_dock_add_shortkey_to_model (GldiShortkey *binding, GtkListStore *pMod
 		CD_SHORTKEY_MODEL_BINDING, binding, -1);
 	if (surface) cairo_surface_destroy (surface);
 }
-static GtkWidget *_cairo_dock_build_shortkeys_widget (void)
+static GtkWidget *_cairo_dock_build_shortkeys_widget (ShortkeysWidget *pShortkeysWidget)
 {
 	// fill the model
 	GtkListStore *pModel = gtk_list_store_new (CD_SHORTKEY_MODEL_NB_COLUMNS,
@@ -211,8 +214,8 @@ static GtkWidget *_cairo_dock_build_shortkeys_widget (void)
 	GtkWidget *pOneWidget = gtk_tree_view_new_with_model (GTK_TREE_MODEL (pModel));
 	g_object_unref (pModel);
 	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (pOneWidget), TRUE);
-	g_signal_connect (G_OBJECT (pOneWidget), "button-press-event", G_CALLBACK (_on_click_shortkey_tree_view), NULL);
-	g_signal_connect (G_OBJECT (pOneWidget), "button-release-event", G_CALLBACK (_on_click_shortkey_tree_view), NULL);
+	g_signal_connect (G_OBJECT (pOneWidget), "button-press-event", G_CALLBACK (_on_click_shortkey_tree_view), pShortkeysWidget);
+	g_signal_connect (G_OBJECT (pOneWidget), "button-release-event", G_CALLBACK (_on_click_shortkey_tree_view), pShortkeysWidget);
 	
 	// define the rendering of the treeview
 	GtkTreeViewColumn* col;
@@ -240,13 +243,14 @@ static GtkWidget *_cairo_dock_build_shortkeys_widget (void)
 }
 
 
-ShortkeysWidget *cairo_dock_shortkeys_widget_new (void)
+ShortkeysWidget *cairo_dock_shortkeys_widget_new (GtkWindow *pMainWindow)
 {
 	ShortkeysWidget *pShortkeysWidget = g_new0 (ShortkeysWidget, 1);
 	pShortkeysWidget->widget.iType = WIDGET_SHORTKEYS;
 	pShortkeysWidget->widget.reload = _shortkeys_widget_reload;
 	
-	pShortkeysWidget->pShortKeysTreeView = _cairo_dock_build_shortkeys_widget ();
+	pShortkeysWidget->pShortKeysTreeView = _cairo_dock_build_shortkeys_widget (pShortkeysWidget);
+	pShortkeysWidget->pMainWindow = pMainWindow;
 	
 	GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
 	g_object_set (pScrolledWindow, "height-request", MIN (2*CAIRO_DOCK_PREVIEW_HEIGHT, gldi_desktop_get_height() - 175), NULL);

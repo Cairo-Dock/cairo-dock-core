@@ -393,7 +393,7 @@ static void _build_config_widget (ConfigWidget *pConfigWidget)
 	CairoDockGroupKeyWidget *pShortkeysWidget = cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, "Shortkeys", "shortkeys");
 	if (pShortkeysWidget != NULL)
 	{
-		pConfigWidget->pShortKeysWidget = cairo_dock_shortkeys_widget_new ();
+		pConfigWidget->pShortKeysWidget = cairo_dock_shortkeys_widget_new (pConfigWidget->pMainWindow);
 		
 		gtk_box_pack_start (GTK_BOX (pShortkeysWidget->pKeyBox), pConfigWidget->pShortKeysWidget->widget.pWidget, FALSE, FALSE, 0);
 	}
