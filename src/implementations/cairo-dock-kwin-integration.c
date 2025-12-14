@@ -163,7 +163,7 @@ static void present_desktops (void)
 {
 	if (s_pKwinAccelProxy != NULL)
 		g_dbus_proxy_call (s_pKwinAccelProxy, "invokeShortcut",
-			g_variant_new ("(s)", "ShowDesktopGrid"), // parameters
+			g_variant_new ("(s)", "Grid View"), // parameters
 			G_DBUS_CALL_FLAGS_NO_AUTO_START, // flags
 			-1, // timeout
 			NULL, // GCancellable
