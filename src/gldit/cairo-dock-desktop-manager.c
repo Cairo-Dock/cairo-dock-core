@@ -163,6 +163,11 @@ void gldi_desktop_set_on_widget_layer (GldiContainer *pContainer, gboolean bOnWi
 	}
 }
 
+gboolean gldi_desktop_can_grab_shortkey (void)
+{
+	return (s_backend.grab_shortkey != NULL);
+}
+
 gboolean gldi_desktop_can_present_class (void)
 {
 	return (s_backend.present_class != NULL);

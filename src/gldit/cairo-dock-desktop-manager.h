@@ -221,6 +221,7 @@ void gldi_desktop_show_widget_layer (void);
 */
 void gldi_desktop_set_on_widget_layer (GldiContainer *pContainer, gboolean bOnWidgetLayer);
 
+gboolean gldi_desktop_can_grab_shortkey (void);
 gboolean gldi_desktop_can_present_class (void);
 gboolean gldi_desktop_can_present_windows (void);
 gboolean gldi_desktop_can_present_desktops (void);
