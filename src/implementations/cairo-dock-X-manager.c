@@ -52,6 +52,7 @@
 #include "cairo-dock-dock-facility.h" // gldi_dock_get_screen_offset_y
 #include "cairo-dock-dock-priv.h"
 #include "cairo-dock-icon-facility.h" // cairo_dock_get_icon_container
+#include "cairo-dock-keybinder.h"
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-task.h"
 #include "cairo-dock-glx.h"
@@ -762,10 +763,9 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
  /// DESKTOP MANAGER BACKEND ///
 ///////////////////////////////
 
-static gboolean _show_hide_desktop (gboolean bShow)
+static void _show_hide_desktop (gboolean bShow)
 {
 	cairo_dock_show_hide_desktop (bShow);
-	return TRUE;
 }
 
 static gboolean _desktop_is_visible (void)
@@ -889,8 +889,11 @@ static void _refresh (void)
 	cd_debug ("desktop refresh -> %dx%dx%d", g_desktopGeometry.iNbDesktops, g_desktopGeometry.iNbViewportX, g_desktopGeometry.iNbViewportY);
 }
 
-static gboolean _grab_shortkey (guint keycode, guint modifiers, gboolean grab)
+static void _grab_shortkey (GldiShortkey *pBinding, gboolean grab, CairoDockGrabKeyResult cb)
 {
+	guint keycode = pBinding->keycode;
+	guint modifiers = pBinding->modifiers;
+	
 	Window root = DefaultRootWindow (s_XDisplay);
 	
 	guint mod_masks [] = {
@@ -923,11 +926,17 @@ static gboolean _grab_shortkey (guint keycode, guint modifiers, gboolean grab)
 				root);
 	}
 	
-	// sync with the server to get any error feedback
-	XSync (s_XDisplay, False);
-	int error = cairo_dock_get_X_error_code ();
 	
-	return (error == 0);
+	
+	if (grab)
+	{
+		// sync with the server to get any error feedback
+		XSync (s_XDisplay, False);
+		int error = cairo_dock_get_X_error_code ();
+		pBinding->bSuccess = (error == 0);
+		if (cb) cb (pBinding);
+	}
+	else pBinding->bSuccess = FALSE;
 }
 
   ///////////////////////////////
