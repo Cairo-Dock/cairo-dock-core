@@ -125,7 +125,7 @@ static void _spawn_app (const gchar * const *args, const gchar *id, const gchar 
 		if (env) for (; *env; ++env) g_variant_builder_add (&env_builder, "s", *env);
 		g_variant_builder_add (&var_builder, "(sv)", "Environment", g_variant_builder_end (&env_builder));
 	}
-	if (working_dir) g_variant_builder_add (&var_builder, "(sv)", "WorkingDirectory", working_dir);
+	if (working_dir) g_variant_builder_add (&var_builder, "(sv)", "WorkingDirectory", g_variant_new_string (working_dir));
 	// fail if systemd cannot exec the process binary
 	g_variant_builder_add   (&var_builder, "(sv)", "Type", g_variant_new_string ("exec"));
 	// clean up failed processes (otherwise, systemd service units remain in the "failed" state)
