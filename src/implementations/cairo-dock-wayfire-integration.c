@@ -30,7 +30,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <json.h>
+#ifdef HAVE_EVDEV
 #include <libevdev/libevdev.h>
+#endif
 
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-windows-manager.h"  // bIsHidden
