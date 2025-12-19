@@ -37,6 +37,10 @@ StartupWMClass =
 #b Run in a terminal?
 Terminal = false
 
+#D Working directory:
+#{Launch the command in this directory. Only supported for custom commands.}
+Path =
+
 #i-[0;16] Only show in this specific viewport:
 #{If '0' the launcher will be displayed on every viewport.}
 ShowOnViewport = 0
