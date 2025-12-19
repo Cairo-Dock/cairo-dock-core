@@ -86,6 +86,12 @@ static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 		g_free (cStartupWMClass);
 		cStartupWMClass = NULL;
 	}
+	else
+	{
+		gchar *tmp = cStartupWMClass;
+		cStartupWMClass = g_ascii_strdown (tmp, -1);
+		g_free (tmp);
+	}
 	
 	// get the origin of the desktop file.
 	gchar *cClass = NULL;
@@ -106,7 +112,7 @@ static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 			}
 		}
 		g_strfreev (pOrigins);
-		bHaveOrigins = TRUE;
+		bHaveOrigins = (i > 0); // i == 0 if pOrigins had no elements
 	}
 
 	// if no origin class could be found, try to guess the class
