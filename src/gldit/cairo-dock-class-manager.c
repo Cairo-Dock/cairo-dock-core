@@ -2693,7 +2693,7 @@ static gchar *_cairo_dock_register_class_full (const gchar *cSearchTerm, const g
 			else if (cWmClass)
 			{
 				// if cFallbackClass != NULL, we did this search already above
-				gchar *tmp = g_ascii_strdown (cWmClass, -1);
+				gchar *tmp = g_ascii_strdown (cWmClass, -1); // note: will already be lowercase if read from a launcher
 				app = _search_desktop_file (tmp, TRUE, FALSE);
 				g_free (tmp);
 			}
@@ -2718,9 +2718,10 @@ static gchar *_cairo_dock_register_class_full (const gchar *cSearchTerm, const g
 			if (bUseWmClass && cWmClass != NULL && !g_hash_table_contains (s_hAltClass, cWmClass))
 				g_hash_table_insert (s_hAltClass, g_strdup (cWmClass), pClassAppli);
 			if (pResult) *pResult = pClassAppli;
+			return g_strdup (cSearchTerm);
 		}
 		cd_debug ("couldn't find the desktop file %s", cSearchTerm);
-		return g_strdup (cSearchTerm);
+		return NULL;
 	}
 	
 	//\__________________ open it. -- TODO: use g_app_info_get_id () instead?
