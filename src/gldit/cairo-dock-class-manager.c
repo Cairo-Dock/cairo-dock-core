@@ -394,24 +394,34 @@ static void _init_appinfo (GldiObject *obj, gpointer attr)
 	if (! bDbusActivatable)
 	{
 		// parse the command lines to launch this app if not DBus activated
-		const gchar *cCmdline = params->cCmdline;
-		if (!cCmdline) cCmdline = g_app_info_get_commandline (info->app);
-		if (!cCmdline)
+		if (params->cCmdline)
 		{
-			const char *id = g_app_info_get_id (info->app);
-			cd_warning ("Cannot get value of Exec= key for app: %s", id ? id : "(unknown)");
-			g_object_unref (info->app);
-			info->app = NULL;
-			return;
+			// this is a user supplied command, we just run it with sh -c
+			info->args = g_new0 (char*, 4);
+			info->args[0] = g_strdup ("sh"); // could use static strings, but not worth the
+			info->args[1] = g_strdup ("-c"); // complication for saving 6 bytes :)
+			info->args[2] = g_strdup (params->cCmdline);
 		}
-		info->args = _process_cmdline (cCmdline, TRUE, &(info->args_file_pos), info->app);
-		if (!info->args)
+		else
 		{
-			// warning already shown in _process_cmdline, just bail out
-			// we mark app as empty for the caller to detect failure
-			g_object_unref (info->app);
-			info->app = NULL;
-			return;
+			const gchar *cCmdline = g_app_info_get_commandline (info->app);
+			if (!cCmdline)
+			{
+				const char *id = g_app_info_get_id (info->app);
+				cd_warning ("Cannot get value of Exec= key for app: %s", id ? id : "(unknown)");
+				g_object_unref (info->app);
+				info->app = NULL;
+				return;
+			}
+			info->args = _process_cmdline (cCmdline, TRUE, &(info->args_file_pos), info->app);
+			if (!info->args)
+			{
+				// warning already shown in _process_cmdline, just bail out
+				// we mark app as empty for the caller to detect failure
+				g_object_unref (info->app);
+				info->app = NULL;
+				return;
+			}
 		}
 		
 		// parse additional actions
