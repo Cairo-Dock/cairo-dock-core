@@ -156,7 +156,10 @@ static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 	// override the launcher command if necessary
 	if (cCommand != NULL)
 	{
-		GldiAppInfo *app = gldi_app_info_new_from_commandline (cCommand, icon->cName, NULL,
+		gchar *cWorkingDir = g_key_file_get_string (pKeyFile, "Desktop Entry", "Path", NULL);
+		
+		GldiAppInfo *app = gldi_app_info_new_from_commandline (cCommand, icon->cName,
+			(cWorkingDir && *cWorkingDir) ? cWorkingDir : NULL,
 			g_key_file_get_boolean (pKeyFile, "Desktop Entry", "Terminal", NULL));
 		if (app)
 		{
@@ -165,6 +168,7 @@ static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 			icon->pAppInfo = app;
 		}
 		g_free (cCommand);
+		g_free (cWorkingDir);
 	}
 	else if (icon->pAppInfo)
 	{
