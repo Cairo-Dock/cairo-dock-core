@@ -154,6 +154,7 @@ struct _GldiAppInfo {
 	int args_file_pos; // position of files / URIs in args or -1 if not found
 	gchar *cWorkingDir; // working directory to start the app in (need to store here since we cannot grab this from app)
 	gboolean bNeedsTerminal; // whether this app needs to be launched in a terminal
+	gboolean bCustomCmd; // if TRUE, args[0] is a full command line, to be run in a shell (i.e. with sh -c) after appending filenames
 	//!! TODO: each action can have its own icon
 };
 
@@ -383,10 +384,9 @@ static void _init_appinfo (GldiObject *obj, gpointer attr)
 		if (params->cCmdline)
 		{
 			// this is a user supplied command, we just run it with sh -c
-			info->args = g_new0 (char*, 4);
-			info->args[0] = g_strdup ("sh"); // could use static strings, but not worth the
-			info->args[1] = g_strdup ("-c"); // complication for saving 6 bytes :)
-			info->args[2] = g_strdup (params->cCmdline);
+			info->args = g_new0 (char*, 2);
+			info->args[0] = g_strdup (params->cCmdline);
+			info->bCustomCmd = TRUE;
 		}
 		else
 		{
@@ -571,6 +571,41 @@ void gldi_app_info_launch (GldiAppInfo *app, const gchar* const *uris)
 				const char * const *tmp2;
 				for (tmp2 = s_vTerminals[s_iTerminal].args; *tmp2; ++tmp2) n_term++;
 			}
+		}
+		
+		if (app->bCustomCmd)
+		{
+			// command specified by the user, we launch it with just sh -c
+			const char *cmd = app->args[0];
+			char *to_free = NULL;
+			int i;
+			
+			if (n_uris)
+			{
+				// append URIs at the end of the command -- this might not work, but we cannot do any better
+				GString *str = g_string_new (cmd);
+				for (i = 0; i < n_uris; i++)
+				{
+					char *tmp = g_shell_quote (uris[i]);
+					g_string_append_printf (str, " %s", tmp);
+					g_free (tmp);
+				}
+				to_free = g_string_free (str, FALSE);
+				cmd = to_free;
+			}
+			
+			const char **args = g_new0 (const char*, 4 + n_term);
+			for (i = 0; i < n_term; i++)
+				args[i] = s_vTerminals[s_iTerminal].args[i];
+			args[i] = "sh";
+			args[i+1] = "-c";
+			args[i+2] = cmd;
+			// note: there will still be a NULL-terminator left in args
+			cairo_dock_launch_command_argv_full2 (args, app->cWorkingDir, GLDI_LAUNCH_GUI | GLDI_LAUNCH_SLICE, app->app);
+			
+			g_free (args);
+			g_free (to_free);
+			return;
 		}
 		
 		// slight optimization: if the last arg is for files, we do not need to allocate a new array
