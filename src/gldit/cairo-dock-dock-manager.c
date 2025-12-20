@@ -1836,7 +1836,11 @@ static void init_object (GldiObject *obj, gpointer attr)
 		// need to set now, so that gldi_dock_init_internals () will not try to show this dock
 		pDock->iRefCount = 1;
 	}
-	gldi_container_init_layer (&(pDock->container));
+	{
+		gchar *cNamespace = (! dattr->bSubDock) ? g_strdup_printf ("cairo-dock-%s", dattr->cDockName) : NULL;
+		gldi_container_init_layer (&(pDock->container), cNamespace);
+		g_free (cNamespace);
+	}
 	
 	//\__________________ init internals
 	gldi_dock_init_internals (pDock);

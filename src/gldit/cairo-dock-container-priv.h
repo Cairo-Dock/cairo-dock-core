@@ -51,8 +51,10 @@ struct _GldiContainerManagerBackend {
 	gboolean (*is_active) (GldiContainer *pContainer);
 	void (*present) (GldiContainer *pContainer);
 	/// extra functionality for Wayland / gtk_layer_shell
-	/// Initialize layer-shell additions -- need to be called before mapping window first
-	void (*init_layer) (GldiContainer *pContainer);
+	/// Initialize layer-shell additions -- need to be called before mapping window first.
+	/// cNamespace is used for main windows (i.e. not popups) and can be used to identify
+	/// the container later (e.g. events received over a Wayland protocol or IPC)
+	void (*init_layer) (GldiContainer *pContainer, const gchar *cNamespace);
 	/// return if running on Wayland
 	gboolean (*is_wayland) ();
 	/// Set to keep the container's GtkWindow below or above other windows.
@@ -136,12 +138,13 @@ void gldi_container_move (GldiContainer *pContainer, int iNumDesktop, int iAbsol
 
 /** Make this container a layer-shell surface. This can be used to properly position a dock on the screen on wlroots-based Wayland compositors
 *@param pContainer the container
+*@param cNamespace optionally the "namespace" to set, essentially similar to an app-id; set to "cairo-dock" if NULL
 * 
 * See here for more details: https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-layer-shell-unstable-v1.xml
 * 
 * Below functions provide basic functionality to position the dock and place it above / below other windows.
 */
-void gldi_container_init_layer (GldiContainer *pContainer);
+void gldi_container_init_layer (GldiContainer *pContainer, const gchar *cNamespace);
 
 /** Move and resize a root dock. On X11, this uses gdk_window_move_resize ().
 * On Wayland, this uses gdk_window_resize () and layer-shell anchors based on the dock's orientation.

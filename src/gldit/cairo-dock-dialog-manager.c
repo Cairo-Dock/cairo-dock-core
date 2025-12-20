@@ -1464,7 +1464,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 		while (tmp && !gtk_widget_get_mapped (GTK_WIDGET(tmp)))
 			tmp = gtk_window_get_transient_for (tmp);
 		gtk_window_set_transient_for (GTK_WINDOW (pDialog->container.pWidget), tmp);
-		gldi_container_init_layer (&(pDialog->container));
+		gldi_container_init_layer (&(pDialog->container), NULL); // dialogs are popups, we don't care about their namespace
 	}
 	
 	//\________________ set up its orientation (do it now, as we need bDirectionUp to place the internal widgets)

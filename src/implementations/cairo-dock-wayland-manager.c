@@ -180,7 +180,7 @@ static void _set_keep_below (GldiContainer *pContainer, gboolean bKeepBelow)
 	gtk_layer_set_layer (window, bKeepBelow ? GTK_LAYER_SHELL_LAYER_BOTTOM : GTK_LAYER_SHELL_LAYER_TOP);
 }
 
-static void _layer_shell_init_for_window (GldiContainer *pContainer)
+static void _layer_shell_init_for_window (GldiContainer *pContainer, const gchar *cNamespace)
 {
 	GtkWindow* window = GTK_WINDOW (pContainer->pWidget);
 	if (gtk_window_get_transient_for (window))
@@ -223,7 +223,7 @@ static void _layer_shell_init_for_window (GldiContainer *pContainer)
 			GTK_LAYER_SHELL_KEYBOARD_MODE_NONE :
 			GTK_LAYER_SHELL_KEYBOARD_MODE_ON_DEMAND
 		);
-		gtk_layer_set_namespace (window, "cairo-dock");
+		gtk_layer_set_namespace (window, cNamespace ? cNamespace : "cairo-dock");
 	}
 }
 
