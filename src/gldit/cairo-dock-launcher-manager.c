@@ -115,35 +115,26 @@ static gboolean _get_launcher_params (Icon *icon, GKeyFile *pKeyFile)
 		bHaveOrigins = (i > 0); // i == 0 if pOrigins had no elements
 	}
 
-	// if no origin class could be found, try to guess the class
-	gchar *cFallbackClass = NULL;
 	if (!cClass && cCommand)  // no class found, maybe an old launcher or a custom one, try to guess from the info in the user desktop file.
 	{
-		// we try the StartupWMClass and the command line as fallbacks
-		cFallbackClass = cairo_dock_guess_class (cCommand, NULL);
-			
 		if (cStartupWMClass)
 		{
-			// first try based on the commandline (but fail if not found)
-			cClass = cairo_dock_register_class2 (cFallbackClass, cStartupWMClass, FALSE, FALSE);
-			if (!cClass)
-			{
-				// re-try based on the WMClass below
-				g_free (cFallbackClass);
-				cFallbackClass = cairo_dock_guess_class (NULL, cStartupWMClass);
-			}
+			// if there is a user-defined class, use only this
+			cClass = cairo_dock_register_class2 (cStartupWMClass, NULL, TRUE, FALSE);
 		}
-		
-		// last attempt, register the class even if no info is found
-		if (!cClass)
-			cClass = cairo_dock_register_class2 (cFallbackClass, cStartupWMClass, TRUE, FALSE);
+		else
+		{
+			// we try to guess a possible class based on the command line
+			gchar *cFallbackClass = cairo_dock_guess_class (cCommand, NULL);
+			cClass = cairo_dock_register_class2 (cFallbackClass, NULL, TRUE, FALSE);
+			g_free (cFallbackClass);
+		}
 	}
 
 	// get common data from the class
 	if (cClass != NULL)
 	{
 		icon->cClass = cClass;
-		g_free (cFallbackClass);
 		// this sets the display name, the icon filename and the GAppInfo used to launch the app
 		cairo_dock_set_data_from_class (cClass, icon);
 		if (iNumOrigin > 0)  // it's not the first origin that gave us the correct class, so let's write it down to avoid searching the next time.
