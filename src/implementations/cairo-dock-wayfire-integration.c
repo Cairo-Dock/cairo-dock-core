@@ -85,6 +85,7 @@ void _cb_fail (gpointer data)
 	}
 }
 
+static void _vis_handle_broken_socket (void);
 void _handle_broken_socket (void)
 {
 	if (s_sidIO) g_source_remove (s_sidIO); // will close the socket and free s_pIOChannel as well
@@ -93,6 +94,7 @@ void _handle_broken_socket (void)
 	g_queue_clear_full (&s_cb_queue, _cb_fail);
 	g_list_free_full (s_pBindings, g_free);
 	s_pBindings = NULL;
+	_vis_handle_broken_socket ();
 }
 
 /*
@@ -415,6 +417,23 @@ static wf_vis_data *_get_dock_vis_data (CairoDock *pDock)
 	return data;
 }
 
+static void _free_vis_data_and_show (CairoDock *pDock, G_GNUC_UNUSED void *ptr)
+{
+	if (pDock->pVisibilityData)
+	{
+		gldi_object_remove_notification (GLDI_OBJECT (pDock), NOTIFICATION_DESTROY,
+			(GldiNotificationFunc) _free_vis_data_for_dock, NULL);
+		g_free (pDock->pVisibilityData);
+		pDock->pVisibilityData = NULL;
+	}
+	if (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP ||
+		pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY)
+	{
+		// avoid the dock staying hidden in this case
+		if (cairo_dock_is_temporary_hidden (pDock))
+			cairo_dock_deactivate_temporary_auto_hide (pDock);
+	}
+}
 
 static void _reset_dock_vis_data (CairoDock *pDock, G_GNUC_UNUSED void *ptr)
 {
@@ -541,6 +560,14 @@ static void _check_should_listen_dock (CairoDock *pDock, void *ptr)
 		pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY);
 }
 
+static void _vis_handle_broken_socket (void)
+{
+	s_bWatchRegistered = FALSE;
+	s_bWatchEvents = FALSE;
+	s_bListViewsDone = FALSE;
+	gldi_docks_foreach_root ((GFunc)_free_vis_data_and_show, NULL);
+	g_hash_table_remove_all (s_pWindowPos);
+}
 
 static void _add_vis_watch_cb (gboolean bSuccess, G_GNUC_UNUSED gpointer user_data);
 static void _list_views_cb (const struct json_object *arr);
@@ -626,15 +653,14 @@ static void _visibility_refresh (CairoDock *pDock)
 
 static void _add_vis_watch_cb (gboolean bSuccess, G_GNUC_UNUSED gpointer user_data)
 {
-	if (!s_bWatchEvents) return; // if cancelled in the meantime
-	
 	if (!bSuccess)
 	{
 		cd_warning ("Cannot add Wayfire event watch");
 		return;
 	}
-	
 	s_bWatchRegistered = TRUE;
+	
+	if (!s_bWatchEvents) return; // if cancelled in the meantime
 	
 	// now we are watching events, but we need to call list-views, since
 	// we may not get events about all of them
