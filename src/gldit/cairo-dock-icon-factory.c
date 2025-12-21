@@ -195,6 +195,18 @@ void cairo_dock_load_icon_text (Icon *icon)
 		cTruncatedName = cairo_dock_cut_string (icon->cName, myTaskbarParam.iAppliMaxNameLength);
 	}
 	
+	cd_warning (
+		"Loading icon: %s (truncated name: %s)\n"
+		"\tsize: %d, bUseMarkup: %d, fMaxRelativeWidth: %f\n"
+		"\tdesktop width: %d, iNbScreens: %d",
+		icon->cName, cTruncatedName ? cTruncatedName : "(none)",
+		myIconsParam.iconTextDescription.iSize,
+		(int)myIconsParam.iconTextDescription.bUseMarkup,
+		myIconsParam.iconTextDescription.fMaxRelativeWidth,
+		gldi_desktop_get_width (),
+		g_desktopGeometry.iNbScreens
+	);
+	
 	int iWidth, iHeight;
 	cairo_surface_t *pSurface = cairo_dock_create_surface_from_text ((cTruncatedName != NULL ? cTruncatedName : icon->cName),
 		&myIconsParam.iconTextDescription,
