@@ -154,6 +154,7 @@ struct _GldiAppInfo {
 	int args_file_pos; // position of files / URIs in args or -1 if not found
 	gchar *cWorkingDir; // working directory to start the app in (need to store here since we cannot grab this from app)
 	gboolean bNeedsTerminal; // whether this app needs to be launched in a terminal
+	gboolean bCustomCmd; // if TRUE, args[0] is a full command line, to be run in a shell (i.e. with sh -c) after appending filenames
 	//!! TODO: each action can have its own icon
 };
 
@@ -380,24 +381,33 @@ static void _init_appinfo (GldiObject *obj, gpointer attr)
 	if (! bDbusActivatable)
 	{
 		// parse the command lines to launch this app if not DBus activated
-		const gchar *cCmdline = params->cCmdline;
-		if (!cCmdline) cCmdline = g_app_info_get_commandline (info->app);
-		if (!cCmdline)
+		if (params->cCmdline)
 		{
-			const char *id = g_app_info_get_id (info->app);
-			cd_warning ("Cannot get value of Exec= key for app: %s", id ? id : "(unknown)");
-			g_object_unref (info->app);
-			info->app = NULL;
-			return;
+			// this is a user supplied command, we just run it with sh -c
+			info->args = g_new0 (char*, 2);
+			info->args[0] = g_strdup (params->cCmdline);
+			info->bCustomCmd = TRUE;
 		}
-		info->args = _process_cmdline (cCmdline, TRUE, &(info->args_file_pos), info->app);
-		if (!info->args)
+		else
 		{
-			// warning already shown in _process_cmdline, just bail out
-			// we mark app as empty for the caller to detect failure
-			g_object_unref (info->app);
-			info->app = NULL;
-			return;
+			const gchar *cCmdline = g_app_info_get_commandline (info->app);
+			if (!cCmdline)
+			{
+				const char *id = g_app_info_get_id (info->app);
+				cd_warning ("Cannot get value of Exec= key for app: %s", id ? id : "(unknown)");
+				g_object_unref (info->app);
+				info->app = NULL;
+				return;
+			}
+			info->args = _process_cmdline (cCmdline, TRUE, &(info->args_file_pos), info->app);
+			if (!info->args)
+			{
+				// warning already shown in _process_cmdline, just bail out
+				// we mark app as empty for the caller to detect failure
+				g_object_unref (info->app);
+				info->app = NULL;
+				return;
+			}
 		}
 		
 		// parse additional actions
@@ -561,6 +571,41 @@ void gldi_app_info_launch (GldiAppInfo *app, const gchar* const *uris)
 				const char * const *tmp2;
 				for (tmp2 = s_vTerminals[s_iTerminal].args; *tmp2; ++tmp2) n_term++;
 			}
+		}
+		
+		if (app->bCustomCmd)
+		{
+			// command specified by the user, we launch it with just sh -c
+			const char *cmd = app->args[0];
+			char *to_free = NULL;
+			int i;
+			
+			if (n_uris)
+			{
+				// append URIs at the end of the command -- this might not work, but we cannot do any better
+				GString *str = g_string_new (cmd);
+				for (i = 0; i < n_uris; i++)
+				{
+					char *tmp = g_shell_quote (uris[i]);
+					g_string_append_printf (str, " %s", tmp);
+					g_free (tmp);
+				}
+				to_free = g_string_free (str, FALSE);
+				cmd = to_free;
+			}
+			
+			const char **args = g_new0 (const char*, 4 + n_term);
+			for (i = 0; i < n_term; i++)
+				args[i] = s_vTerminals[s_iTerminal].args[i];
+			args[i] = "sh";
+			args[i+1] = "-c";
+			args[i+2] = cmd;
+			// note: there will still be a NULL-terminator left in args
+			cairo_dock_launch_command_argv_full2 (args, app->cWorkingDir, GLDI_LAUNCH_GUI | GLDI_LAUNCH_SLICE, app->app);
+			
+			g_free (args);
+			g_free (to_free);
+			return;
 		}
 		
 		// slight optimization: if the last arg is for files, we do not need to allocate a new array
@@ -2679,7 +2724,7 @@ static gchar *_cairo_dock_register_class_full (const gchar *cSearchTerm, const g
 			else if (cWmClass)
 			{
 				// if cFallbackClass != NULL, we did this search already above
-				gchar *tmp = g_ascii_strdown (cWmClass, -1);
+				gchar *tmp = g_ascii_strdown (cWmClass, -1); // note: will already be lowercase if read from a launcher
 				app = _search_desktop_file (tmp, TRUE, FALSE);
 				g_free (tmp);
 			}
@@ -2704,9 +2749,10 @@ static gchar *_cairo_dock_register_class_full (const gchar *cSearchTerm, const g
 			if (bUseWmClass && cWmClass != NULL && !g_hash_table_contains (s_hAltClass, cWmClass))
 				g_hash_table_insert (s_hAltClass, g_strdup (cWmClass), pClassAppli);
 			if (pResult) *pResult = pClassAppli;
+			return g_strdup (cSearchTerm);
 		}
 		cd_debug ("couldn't find the desktop file %s", cSearchTerm);
-		return g_strdup (cSearchTerm);
+		return NULL;
 	}
 	
 	//\__________________ open it. -- TODO: use g_app_info_get_id () instead?

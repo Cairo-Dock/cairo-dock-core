@@ -33,3 +33,9 @@
 3.6.1.3 = - Fix not starting some GSD components in the Cairo-Dock X11 sessions
 3.6.1.4 = - Fix not being able to start apps with systemd version &lt; 250 (disable systemd integration in this case as a required feature is unavailable)
 
+3.6.2 = <b>New version: <span color='red'>GLX-Dock 3.6.2</span>!</b>
+3.6.2.0 = This is a bugfix release with the following improvements:
+3.6.2.1 = - Fix a double free and a small memory leak
+3.6.2.2 = - Fix a crash in systemd-integration when launching apps with a working directory set
+3.6.2.3 = - Fix applet icons not updating under some conditions
+3.6.2.4 = - Launchers: run custom commands in a shell again, allow setting a working directory
