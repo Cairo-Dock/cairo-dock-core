@@ -1,10 +1,10 @@
-
 [Desktop Entry]
 Type=Application
 Exec=@CMAKE_INSTALL_PREFIX@/bin/cairo-dock -A
 Icon=cairo-dock
 Terminal=false
 X-KDE-Wayland-Interfaces=org_kde_plasma_window_management
+@DESKTOP_EXTRA_VAR@
 
 Name=Cairo-Dock (Fallback Mode)
 Name[de]=Cairo-Dock (Fallback-Modus)

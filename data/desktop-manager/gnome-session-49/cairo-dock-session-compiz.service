@@ -1,0 +1,11 @@
+[Unit]
+Description=Compiz
+After=graphical-session.target
+Requisite=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Slice=session.slice
+ExecStart=/usr/bin/compiz
+Restart=on-failure
+RestartSec=0ms
