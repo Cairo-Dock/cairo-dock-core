@@ -248,7 +248,21 @@ static gboolean _on_change_current_desktop_viewport (void)
 
 static void _on_change_nb_desktops (void)
 {
-	g_desktopGeometry.iNbDesktops = cairo_dock_get_nb_desktops ();
+	int tmp = cairo_dock_get_nb_desktops ();
+	if (tmp < 1) tmp = 1; // should not happen
+	if (tmp != g_desktopGeometry.iNbDesktops)
+	{
+		g_desktopGeometry.pViewportsX = g_renew (int, g_desktopGeometry.pViewportsX, tmp);
+		g_desktopGeometry.pViewportsY = g_renew (int, g_desktopGeometry.pViewportsY, tmp);
+		int i;
+		for (i = g_desktopGeometry.iNbDesktops; i < tmp; i++)
+		{
+			g_desktopGeometry.pViewportsX[i] = g_desktopGeometry.pViewportsX[0];
+			g_desktopGeometry.pViewportsY[i] = g_desktopGeometry.pViewportsY[0];
+		}
+		g_desktopGeometry.iNbDesktops = tmp;
+	}
+	
 	_cairo_dock_retrieve_current_desktop_and_viewport ();  // au cas ou on enleve le bureau courant.
 	
 	gldi_object_notify (&myDesktopMgr, NOTIFICATION_DESKTOP_GEOMETRY_CHANGED, FALSE);
@@ -257,7 +271,13 @@ static void _on_change_nb_desktops (void)
 static void _on_change_desktop_geometry (gboolean bIsNetDesktopGeometry)
 {
 	// check if the number of viewports has changed.
-	cairo_dock_get_nb_viewports (&g_desktopGeometry.iNbViewportX, &g_desktopGeometry.iNbViewportY);
+	int vx = 1, vy = 1, i;
+	cairo_dock_get_nb_viewports (&vx, &vy);
+	for (i = 0; i < g_desktopGeometry.iNbDesktops; i++)
+	{
+		g_desktopGeometry.pViewportsX[i] = vx;
+		g_desktopGeometry.pViewportsY[i] = vy;
+	}
 	_cairo_dock_retrieve_current_desktop_and_viewport ();  // au cas ou on enleve le viewport courant.
 	
 	// notify everybody
@@ -794,14 +814,14 @@ static void _set_current_desktop (int iDesktopNumber, int iViewportNumberX, int 
 
 static void _add_workspace (void)
 {
-	if (g_desktopGeometry.iNbViewportX == 1 && g_desktopGeometry.iNbViewportY == 1)
+	if (g_desktopGeometry.pViewportsX[0] == 1 && g_desktopGeometry.pViewportsY[0] == 1)
 		cairo_dock_set_nb_desktops (g_desktopGeometry.iNbDesktops + 1);
 	else cairo_dock_change_nb_viewports (1, cairo_dock_set_nb_viewports);
 }
 
 static void _remove_workspace (void)
 {
-	if (g_desktopGeometry.iNbViewportX == 1 && g_desktopGeometry.iNbViewportY == 1)
+	if (g_desktopGeometry.pViewportsX[0] == 1 && g_desktopGeometry.pViewportsY[0] == 1)
 	{
 		// note: do not attempt to remove the last desktop
 		if (g_desktopGeometry.iNbDesktops > 1)
@@ -885,8 +905,19 @@ static cairo_surface_t *_get_desktop_bg_surface (void)  // attention : fonction 
 static void _refresh (void)
 {
 	g_desktopGeometry.iNbDesktops = cairo_dock_get_nb_desktops ();
-	cairo_dock_get_nb_viewports (&g_desktopGeometry.iNbViewportX, &g_desktopGeometry.iNbViewportY);
-	cd_debug ("desktop refresh -> %dx%dx%d", g_desktopGeometry.iNbDesktops, g_desktopGeometry.iNbViewportX, g_desktopGeometry.iNbViewportY);
+	g_desktopGeometry.pViewportsX = g_renew (int, g_desktopGeometry.pViewportsX, g_desktopGeometry.iNbDesktops);
+	g_desktopGeometry.pViewportsY = g_renew (int, g_desktopGeometry.pViewportsY, g_desktopGeometry.iNbDesktops);
+	
+	int vx = 1, vy = 1, i;
+	cairo_dock_get_nb_viewports (&vx, &vy);
+	for (i = 0; i < g_desktopGeometry.iNbDesktops; i++)
+	{
+		g_desktopGeometry.pViewportsX[i] = vx;
+		g_desktopGeometry.pViewportsY[i] = vy;
+	}
+	_cairo_dock_retrieve_current_desktop_and_viewport ();
+	
+	cd_debug ("desktop refresh -> %dx%dx%d", g_desktopGeometry.iNbDesktops, g_desktopGeometry.pViewportsX[0], g_desktopGeometry.pViewportsY[0]);
 }
 
 static void _grab_shortkey (GldiShortkey *pBinding, gboolean grab, CairoDockGrabKeyResult cb)
@@ -1122,9 +1153,9 @@ static int _get_current_desktop_index (GldiContainer *pContainer)
 	int iGlobalPositionX, iGlobalPositionY, iWidthExtent, iHeightExtent;
 	cairo_dock_get_xwindow_geometry (Xid, &iGlobalPositionX, &iGlobalPositionY, &iWidthExtent, &iHeightExtent);  // relative to the current viewport
 	if (iGlobalPositionX < 0)
-		iGlobalPositionX += g_desktopGeometry.iNbViewportX * gldi_desktop_get_width() * cairo_dock_X_display_scale;
+		iGlobalPositionX += g_desktopGeometry.pViewportsX[0] * gldi_desktop_get_width() * cairo_dock_X_display_scale;
 	if (iGlobalPositionY < 0)
-		iGlobalPositionY += g_desktopGeometry.iNbViewportY * gldi_desktop_get_height() * cairo_dock_X_display_scale;
+		iGlobalPositionY += g_desktopGeometry.pViewportsY[0] * gldi_desktop_get_height() * cairo_dock_X_display_scale;
 	
 	int iViewportX = iGlobalPositionX / (gldi_desktop_get_width() * cairo_dock_X_display_scale);
 	int iViewportY = iGlobalPositionY / (gldi_desktop_get_height() * cairo_dock_X_display_scale);
@@ -1133,14 +1164,14 @@ static int _get_current_desktop_index (GldiContainer *pContainer)
 	gldi_desktop_get_current (&iCurrentDesktop, &iCurrentViewportX, &iCurrentViewportY);
 	
 	iViewportX += iCurrentViewportX;
-	if (iViewportX >= g_desktopGeometry.iNbViewportX)
-		iViewportX -= g_desktopGeometry.iNbViewportX;
+	if (iViewportX >= g_desktopGeometry.pViewportsX[0])
+		iViewportX -= g_desktopGeometry.pViewportsX[0];
 	iViewportY += iCurrentViewportY;
-	if (iViewportY >= g_desktopGeometry.iNbViewportY)
-		iViewportY -= g_desktopGeometry.iNbViewportY;
+	if (iViewportY >= g_desktopGeometry.pViewportsY[0])
+		iViewportY -= g_desktopGeometry.pViewportsY[0];
 	//g_print ("position : %d,%d,%d / %d,%d,%d\n", iDesktop, iViewportX, iViewportY, iCurrentDesktop, iCurrentViewportX, iCurrentViewportY);
 	
-	return iDesktop * g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY + iViewportX * g_desktopGeometry.iNbViewportY + iViewportY;
+	return iDesktop * g_desktopGeometry.pViewportsX[0] * g_desktopGeometry.pViewportsY[0] + iViewportX * g_desktopGeometry.pViewportsY[0] + iViewportY;
 }
 
 static void _move (GldiContainer *pContainer, int iNumDesktop, int iAbsolutePositionX, int iAbsolutePositionY)
@@ -1654,9 +1685,7 @@ static void init (void)
 		s_iCurrentActiveWindow = cairo_dock_get_active_xwindow ();
 	
 	//\__________________ get the current desktop/viewport
-	g_desktopGeometry.iNbDesktops = cairo_dock_get_nb_desktops ();
-	cairo_dock_get_nb_viewports (&g_desktopGeometry.iNbViewportX, &g_desktopGeometry.iNbViewportY);
-	_cairo_dock_retrieve_current_desktop_and_viewport ();
+	_refresh ();
 	
 	//\__________________ listen for X events
 	Window root = DefaultRootWindow (s_XDisplay);

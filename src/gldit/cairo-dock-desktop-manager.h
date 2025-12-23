@@ -76,6 +76,12 @@ Old behavior: separate iNbDesktops + iNbViewportX / iNbViewportY:
       viewports to _NET_DESKTOP_GEOMETRY / _NET_DESKTOP_VIEWPORT:
       https://specifications.freedesktop.org/wm-spec/latest/ar01s03.html
 
+New behavior:
+  - instead of iNbViewportX / iNbViewportY, we have pViewportsX and pViewportsY arrays that give the
+      workspace grid size for each desktop
+  - on X11 all elements are expected to be the same, but on Wayland, we can have different-sized grids
+      for each workspace group
+
 Typical behavior:
   - Compiz (+ also Gnome-shell?): iNbDesktops == 1, "workspaces" correspond to viewports only
   - other WMs: iNbDesktops >= 1, iNbViewportX == iNbViewportY == 1
@@ -105,8 +111,8 @@ Questions / issues:
 
 Minimal changes for Wayland:
   - workspace groups correspond to desktops, and workspaces to viewports; make sure things work for multiple
-      workspace groups
-  - allow viewports to be non-overlapping (GLDI_WM_NO_VIEWPORT_OVERLAP -- this is how desktops behave)
+      workspace groups -> basic support added, switcher plugin only uses the first desktop
+  - allow viewports to be non-overlapping (GLDI_WM_NO_VIEWPORT_OVERLAP -- this is how desktops behave) -> done
   - workspaces are arranged into 1 or 2 dimensions, based on the coordinates (higher dimensions are not
       supported, converted to 1D)
   - update the switcher applet to display desktops / workspace groups more independently
@@ -122,8 +128,7 @@ Plan for a new API:
             workspace <-> _NET_DESKTOP_GEOMETRY / _NET_DESKTOP_VIEWPORT
   - on Wayland: desktop <-> workspace-group, viewport <-> workspace (on KWin, only one desktop)
   - both desktops and viewports can be arranged into a 2D grid (for desktops, add this)
-  - number of viewports per desktop can be different -> dynamic storage of a new _GldiViewportGeometry for
-      each desktop
+  - number of viewports per desktop can be different -> dynamic storage in pViewportsX / pViewportsY arrays
   - desktops are always "independent": a window can only span one (or all for sticky windows)
   - viewports can be overlapping (a window can span multiple), flag / setting for this that is set by the backend
 
@@ -131,8 +136,8 @@ Next steps:
   - change API for adding and removing "workspaces", these are handled by a backend-specific way (move some of the
       logic from the switcher plugin to core) -> done
   - make the number of viewports per desktop independent, use this to implement the ext-workspace /
-      cosmic-workspace protocol
-  - implement support for _NET_DESKTOP_LAYOUT for arranging desktops in a 2D grid on X11
+      cosmic-workspace protocol -> done
+  - implement support for _NET_DESKTOP_LAYOUT for arranging desktops in a 2D grid on X11 -> maybe we don't need this
 */
 
 // data
@@ -141,7 +146,9 @@ struct _GldiDesktopGeometry {
 	GtkAllocation *pScreens;  // liste of all screen devices.
 	GtkAllocation Xscreen;  // logical screen, possibly made of several screen devices.
 	int iNbDesktops;
-	int iNbViewportX, iNbViewportY;
+	GtkAllocation *pDesktopSizes; // width / height of each desktop (can be different from Xscreen if desktops do not cover all monitors) -- can be NULL to use Xscreen
+	int *pViewportsX; // X size of each desktop (number of viewports)
+	int *pViewportsY; // Y size of each desktop (number of viewports)
 	int iCurrentDesktop;
 	int iCurrentViewportX, iCurrentViewportY;
 	};
@@ -286,8 +293,18 @@ void gldi_desktop_get_current (int *iCurrentDesktop, int *iCurrentViewportX, int
 #define gldi_desktop_get_width() g_desktopGeometry.Xscreen.width
 #define gldi_desktop_get_height() g_desktopGeometry.Xscreen.height
 
+int gldi_desktop_get_desktop_width (int iNbDesktop);
+int gldi_desktop_get_desktop_height (int iNbDesktop);
+
 /// Get the list of monitors currently managed -- caller should not modify the GdkMonitor* pointers stored here
 GdkMonitor *const *gldi_desktop_get_monitors (int *iNumMonitors);
+
+
+/** Get whether there are multiple viewports (on any desktop). This is to allow optimizations in the case
+ * when iNbDesktops > 1, but each desktop has only one viewport (will be the case on more "traditional"
+ * X11 WMs).
+ */
+gboolean gldi_desktop_have_multiple_viewports (void);
 
   ////////////////////////
  // Desktop background //

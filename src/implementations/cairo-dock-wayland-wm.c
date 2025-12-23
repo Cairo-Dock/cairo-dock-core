@@ -210,8 +210,9 @@ void gldi_wayland_wm_activated (GldiWaylandWindowActor *wactor, gboolean activat
 	if (notify) gldi_wayland_wm_done (wactor);
 }
 
-void gldi_wayland_wm_viewport_changed (GldiWaylandWindowActor *wactor, int viewport_x, int viewport_y, gboolean notify)
+void gldi_wayland_wm_viewport_changed (GldiWaylandWindowActor *wactor, int desktop, int viewport_x, int viewport_y, gboolean notify)
 {
+	wactor->pending_desktop = desktop;
 	wactor->pending_viewport_x = viewport_x;
 	wactor->pending_viewport_y = viewport_y;
 	_set_pending_change (wactor, NC_VIEWPORT);
@@ -300,8 +301,13 @@ static gboolean _update_viewport (GldiWaylandWindowActor *wactor, gboolean notif
 		actor->iViewPortY = wactor->pending_viewport_y;
 		changed = TRUE;
 	}
+	if (wactor->pending_desktop != actor->iNumDesktop)
+	{
+		actor->iNumDesktop = wactor->pending_desktop;
+		changed = TRUE;
+	}
 	if (notify && changed) gldi_object_notify (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESKTOP_CHANGED, actor);
-	return (changed && changed);
+	return (notify && changed);
 }
 
 static gboolean _update_geometry (GldiWaylandWindowActor *wactor, gboolean notify)

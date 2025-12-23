@@ -109,7 +109,8 @@ static void present_class (const gchar *cClass, CairoDockDesktopManagerActionRes
 		const gchar *cWmClass = cairo_dock_get_class_wm_class (cClass);
 		int iNumDesktop, iViewPortX, iViewPortY;
 		gldi_desktop_get_current (&iNumDesktop, &iViewPortX, &iViewPortY);
-		int iWorkspace = iNumDesktop * g_desktopGeometry.iNbViewportX * g_desktopGeometry.iNbViewportY + iViewPortX + iViewPortY * g_desktopGeometry.iNbViewportX;
+		// note: this is only used on X11, all desktops have the same viewport geometry
+		int iWorkspace = iNumDesktop * g_desktopGeometry.pViewportsX[0] * g_desktopGeometry.pViewportsY[0] + iViewPortX + iViewPortY * g_desktopGeometry.pViewportsX[0];
 		gchar *code = g_strdup_printf ("Main.overview.show(); \
 		let windows = global.get_window_actors(); \
 		let ws = Main.overview.workspacesView._workspaces[%d]._monitors[0]; \
