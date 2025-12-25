@@ -143,6 +143,9 @@ void gldi_wayland_wm_appid_changed (GldiWaylandWindowActor *wactor, const char *
 {
 	g_free (wactor->cClassPending);
 	wactor->cClassPending = g_strdup ((gchar *)app_id);
+	// app-ids should not contain spaces, but some compositors can add extra info after, let's ignore it for now
+	char *tmp = strchr (wactor->cClassPending, ' ');
+	if (tmp) *tmp = 0;
 	if (notify) gldi_wayland_wm_done (wactor);
 }
 
