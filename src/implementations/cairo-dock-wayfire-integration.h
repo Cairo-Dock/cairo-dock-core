@@ -29,7 +29,25 @@ G_BEGIN_DECLS
 *@file cairo-dock-wayfire-integration.h This class implements the integration of Wayfire inside Cairo-Dock.
 */
 
+/** Init the Wayfire integration backend. Will try to connect Wayfire's IPC
+ * socket and query the available functions. */
 void cd_init_wayfire_backend (void);
+/** Init setting and tracking the sticky and always on top states if available.
+ * Can be called either before or after cd_init_wayfire_backend (). */
+void gldi_wf_init_sticky_above (void);
+/** Return if setting the sticky or always on top states on windows is possible.
+ * Should call gldi_wf_init_sticky_above () before this function. */
+void gldi_wf_can_sticky_above (gboolean *bCanSticky, gboolean *bCanAbove);
+/** Set or unset the sticky state for the given window actor. */
+void gldi_wf_set_sticky (GldiWindowActor *actor, gboolean bSticky);
+/** Set or unset the always on top state for the given window actor. */
+void gldi_wf_set_above (GldiWindowActor *actor, gboolean bAbove);
+/** Check whether a window is kept above or below of other windows.
+ * Note:
+ *  - bIsBelow will always be set to FALSE (not supported)
+ *  - bIsAbove only reflects the state set by us, not by other methods (e.g. keybindings)
+ */
+void gldi_wf_is_above_or_below (GldiWindowActor *actor, gboolean *bIsAbove, gboolean *bIsBelow);
 
 G_END_DECLS
 #endif
