@@ -317,7 +317,7 @@ static void _group_removed (G_GNUC_UNUSED void* data, struct ext_workspace_group
 		if (s_aDesktops->len)
 		{
 			// the compositor should have deleted all desktop handles before
-			cd_critical ("cosmic-workspaces: non-empty workspace group removed!");
+			cd_critical ("ext-workspaces: non-empty workspace group removed!");
 			g_ptr_array_set_size (s_aDesktops, 0); // will call _free_workspace () for each element
 		}
 		
@@ -545,9 +545,10 @@ static void _set_current_desktop (G_GNUC_UNUSED int iDesktopNumber, int iViewpor
 		{
 			ext_workspace_handle_v1_activate (desktops[iReq]->handle);
 			ext_workspace_manager_v1_commit (s_pWSManager);
+			return;
 		}
 	}
-	cd_warning ("cosmic-workspaces: invalid workspace requested!\n");
+	cd_warning ("ext-workspaces: invalid workspace requested!\n");
 }
 
 /* currently not supported on either Cosmic or Labwc, easier to disable 
@@ -617,7 +618,7 @@ struct ext_workspace_handle_v1 *gldi_ext_workspaces_get_handle (int x, int y)
 	unsigned int iReq = _get_ix ((guint)x, (guint)y);
 	if (iReq < s_iNumDesktops)
 		return desktops[iReq]->handle;
-	cd_warning ("cosmic-workspaces: invalid workspace requested!\n");
+	cd_warning ("ext-workspaces: invalid workspace requested!\n");
 	return NULL;
 }
 
