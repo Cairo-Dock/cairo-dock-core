@@ -143,6 +143,16 @@ void gldi_wayland_wm_appid_changed (GldiWaylandWindowActor *wactor, const char *
 {
 	g_free (wactor->cClassPending);
 	wactor->cClassPending = g_strdup ((gchar *)app_id);
+	// app-ids should not contain spaces, but some compositors can add extra info, e.g. Wayfire can add an IPC ID
+	char *tmp = strchr (wactor->cClassPending, ' ');
+	if (tmp)
+	{
+		if (*(tmp+1)) wactor->cClassExtra = tmp + 1;
+		else wactor->cClassExtra = NULL;
+		*tmp = 0;
+		
+	}
+	else wactor->cClassExtra = NULL;
 	if (notify) gldi_wayland_wm_done (wactor);
 }
 

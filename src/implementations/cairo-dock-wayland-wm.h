@@ -25,6 +25,7 @@
 #include <wayland-client.h>
 #include <stdint.h>
 #include "cairo-dock-struct.h"
+#include "cairo-dock-windows-manager.h"
 
 struct _GldiWaylandWindowActor {
 	GldiWindowActor actor;
@@ -36,6 +37,9 @@ struct _GldiWaylandWindowActor {
 	
 	gchar* cClassPending; // new app_id received
 	gchar* cTitlePending; // new title received
+	// extra info for integrating with compositor-specific IPC backends
+	const gchar *cClassExtra; // extra parts of cClassPending (after the first space), optionally provided by Wayfire
+	gpointer pExtraData; // extra information that can be stored by an IPC backend
 	
 	gboolean maximized_pending; // maximized state received
 	gboolean minimized_pending; // minimized state received
@@ -59,6 +63,8 @@ typedef struct _GldiWaylandWindowActor GldiWaylandWindowActor;
 
 // manager for the above, can be extended by more specific implementations
 extern GldiObjectManager myWaylandWMObjectMgr;
+
+#define GLDI_OBJECT_IS_WAYLAND_WINDOW(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), &myWaylandWMObjectMgr)
 
 // notifications (no additional ones beyond the WM notifications)
 typedef enum {
