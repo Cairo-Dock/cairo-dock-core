@@ -12,12 +12,13 @@ SET(impl_SRCS
 	cairo-dock-kwin-integration.c        cairo-dock-kwin-integration.h
 	cairo-dock-cinnamon-integration.c    cairo-dock-cinnamon-integration.h
 	cairo-dock-wayfire-integration.c     cairo-dock-wayfire-integration.h
+	cairo-dock-niri-integration.c        cairo-dock-niri-integration.h
 	cairo-dock-systemd-integration.c     cairo-dock-systemd-integration.h
 	cairo-dock-X-manager.c               cairo-dock-X-manager.h
 	cairo-dock-X-utilities.c             cairo-dock-X-utilities.h
 	cairo-dock-glx.c                     cairo-dock-glx.h
 	cairo-dock-egl.c                     cairo-dock-egl.h
-	cairo-dock-wayland-manager.c         cairo-dock-wayland-manager.h
+	cairo-dock-wayland-manager.c         cairo-dock-wayland-manager.h         cairo-dock-wayland-manager-priv.h
 	cairo-dock-wayland-hotspots.c        cairo-dock-wayland-hotspots.h
 	cairo-dock-logout-backend.c          cairo-dock-logout-backend.h
 )
