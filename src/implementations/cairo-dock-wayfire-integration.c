@@ -383,6 +383,7 @@ static gboolean s_bHaveAbove = FALSE; // whether Wayfire provides the "view-abov
 static gboolean s_bCanSticky = FALSE;
 static gboolean s_bCanAbove = FALSE;
 static gboolean s_bNeedStickyAbove = FALSE; // toplevel manager requested the above functionality
+static gboolean s_bHaveAbove = FALSE; // whether Wayfire provides the "view-above" event
 
 static gboolean s_bWatchWMEvents = FALSE;
 // hash table mapping view IPC IDs to window actors
@@ -558,10 +559,14 @@ void gldi_wf_set_above (GldiWindowActor *actor, gboolean bAbove)
 	json_object_object_add (data, "view-id", json_object_new_uint64 (id));
 	json_object_object_add (obj, "data", data);
 	
-	wf_view_data *cbdata = g_new0 (wf_view_data, 1);
-	cbdata->id = id;
-	cbdata->bAbove = bAbove;
-	_call_ipc (obj, _set_above_cb, cbdata); // we give the ID as the parameter in case wactor is destroyed before the callback
+	wf_view_data *cbdata = NULL;
+	if (!s_bHaveAbove)
+	{
+		cbdata = g_new0 (wf_view_data, 1);
+		cbdata->id = id;
+		cbdata->bAbove = bAbove;
+	}
+	_call_ipc (obj, cbdata ? _set_above_cb : NULL, cbdata); // we give the ID as the parameter in case wactor is destroyed before the callback
 	json_object_put (obj);
 }
 
@@ -588,6 +593,8 @@ void gldi_wf_is_above_or_below (GldiWindowActor *actor, gboolean *bIsAbove, gboo
 static gboolean s_bWatchVisEvents = FALSE;
 // whether we registered a watch (we can only do this once)
 static gboolean s_bWatchRegistered = FALSE;
+// whether we received Wayfire's configuration
+static gboolean s_bGotConfig = FALSE;
 // whether we received the initial list of views already
 static gboolean s_bListViewsDone = FALSE;
 // hash table tracking window positions (note: we track positions
@@ -778,6 +785,16 @@ static void _check_should_listen_dock (CairoDock *pDock, void *ptr)
 
 static void _vis_handle_broken_socket (void)
 {
+	if (s_bWatchWMEvents)
+	{
+		gldi_object_remove_notification (&myWindowObjectMgr, NOTIFICATION_WINDOW_CREATED,
+			(GldiNotificationFunc) _wf_on_window_created, NULL);
+		gldi_object_remove_notification (&myWindowObjectMgr, NOTIFICATION_WINDOW_DESTROYED,
+			(GldiNotificationFunc) _wf_on_window_destroyed, NULL);
+		gldi_object_remove_notification (&myWindowObjectMgr, NOTIFICATION_WINDOW_CLASS_CHANGED,
+			(GldiNotificationFunc) _wf_on_window_class_changed, NULL);
+	}
+	
 	s_bWatchRegistered = FALSE;
 	s_bWatchVisEvents = FALSE;
 	s_bWatchWMEvents = FALSE;
@@ -790,6 +807,7 @@ static void _vis_handle_broken_socket (void)
 static void _add_vis_watch_cb (gboolean bSuccess, G_GNUC_UNUSED gpointer user_data);
 static void _list_views_cb (const struct json_object *arr);
 static void _process_view (const gchar *event, const struct json_object *view);
+static void _got_configuration (struct json_object *conf);
 static void _visibility_refresh (CairoDock *pDock)
 {
 	gboolean bShouldListen = (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP ||
@@ -852,13 +870,49 @@ static void _start_watch_events (void)
 	// start listening to Wayfire's events
 	if (s_bWatchRegistered)
 	{
-		_add_vis_watch_cb (TRUE, NULL);
+		if (s_bGotConfig) _add_vis_watch_cb (TRUE, NULL); // otherwise, we'll handle this from _got_configuration ()
 		return;
 	}
 	
+	s_bWatchRegistered = TRUE; // we can only try once
+	
+	// check first whether the view-above event is available
+	const gchar *req = "{\"method\": \"wayfire/configuration\", \"data\": { } }";
+	int ret = _send_msg_full (req, strlen (req), s_pIOChannel);
+	if (ret < 0)
+	{
+		// socket error, abort
+		_handle_broken_socket ();
+		return;
+	}
+	
+	// add a callback to check if we succeeded
+	struct cb_data *cb1 = g_new0 (struct cb_data, 1);
+	cb1->cb = _got_configuration;
+	g_queue_push_tail (&s_cb_queue, cb1);
+}
+	
+static void _got_configuration (struct json_object *conf)
+{	
+	struct json_object *version = json_object_object_get (conf, "api-version");
+	if (version)
+	{
+		uint64_t ver = json_object_get_uint64 (version);
+		s_bHaveAbove = (ver >= 20251226);
+	}
+	else cd_warning ("Cannot parse Wayfire version!");
+	
+	s_bGotConfig = TRUE;
+	
 	const gchar *watch_req =
+	s_bHaveAbove ?
 "{\"method\": \"window-rules/events/watch\", \"data\": {"
-"\"events\": [\"view-focused\", \"view-geometry-changed\", \"view-minimized\", \"view-mapped\", \"view-unmapped\", \"view-sticky\"] } }"; // TODO: outputs?
+"\"events\": [\"view-focused\", \"view-geometry-changed\", \"view-minimized\","
+"\"view-mapped\", \"view-unmapped\", \"view-sticky\", \"view-always-on-top\"] } }" :
+"{\"method\": \"window-rules/events/watch\", \"data\": {"
+"\"events\": [\"view-focused\", \"view-geometry-changed\", \"view-minimized\","
+"\"view-mapped\", \"view-unmapped\", \"view-sticky\"] } }";
+
 	int ret = _send_msg_full (watch_req, strlen (watch_req), s_pIOChannel);
 	if (ret < 0)
 	{
@@ -880,7 +934,6 @@ static void _add_vis_watch_cb (gboolean bSuccess, G_GNUC_UNUSED gpointer user_da
 		cd_warning ("Cannot add Wayfire event watch");
 		return;
 	}
-	s_bWatchRegistered = TRUE;
 	
 	if (! (s_bWatchVisEvents || s_bWatchWMEvents)) return; // if cancelled in the meantime
 	
@@ -1081,19 +1134,37 @@ static void _process_view (const gchar *event, const struct json_object *view)
 				gldi_docks_foreach_root ((GFunc)_wf_hide_if_overlap_or_show_if_no_overlapping_window, pRect);
 		}
 		
-		if (s_bWatchWMEvents && (!event || (!strcmp (event, "view-sticky") || !strcmp (event, "view-mapped")))) // initial state or change
+		if (s_bWatchWMEvents)
 		{
-			tmp = json_object_object_get (view, "sticky");
-			if (!tmp || ! json_object_is_type (tmp, json_type_boolean))
-			{
-				cd_warning ("No 'sticky' property for view %u", id);
-				return;
-			}
-			gboolean bSticky = json_object_get_boolean (tmp);
+			gboolean bInitialState = !event || !strcmp (event, "view-mapped");
+			gboolean bStickyChanged = !bInitialState && event && !strcmp (event, "view-sticky");
+			gboolean bAboveChanged  = !bInitialState && event && !strcmp (event, "view-always-on-top");
 			
-			// note: s_pActorMap != NULL if s_bWatchWMEvents == TRUE
-			GldiWaylandWindowActor *wactor = g_hash_table_lookup (s_pActorMap, GUINT_TO_POINTER (id));
-			if (wactor) gldi_wayland_wm_sticky_changed (wactor, bSticky, TRUE);
+			if (bInitialState || bStickyChanged || bAboveChanged)
+			{
+				// note: s_pActorMap != NULL if s_bWatchWMEvents == TRUE
+				GldiWaylandWindowActor *wactor = g_hash_table_lookup (s_pActorMap, GUINT_TO_POINTER (id));
+				if (wactor)
+				{
+					//!! TODO: if we have not received the WINDOW_CREATED signal yet, we cannot set these !!
+					if (bInitialState || bStickyChanged)
+					{
+						tmp = json_object_object_get (view, "sticky");
+						if (!tmp || ! json_object_is_type (tmp, json_type_boolean))
+							cd_warning ("No 'sticky' property for view %u", id);
+						else gldi_wayland_wm_sticky_changed (wactor, json_object_get_boolean (tmp), TRUE);
+					}
+					if ((bInitialState || bAboveChanged) && wactor->pExtraData && s_bHaveAbove)
+					{
+						wf_view_data *pData = (wf_view_data*)wactor->pExtraData;
+						
+						tmp = json_object_object_get (view, "always-on-top");
+						if (!tmp || ! json_object_is_type (tmp, json_type_boolean))
+							cd_warning ("No 'always-on-top' property for view %u", id);
+						else pData->bAbove = json_object_get_boolean (tmp);
+					}
+				}
+			}
 		}
 	}
 	else if (! (strcmp (str, "background") && strcmp (str, "panel") && strcmp (str, "overlay")))
@@ -1176,6 +1247,7 @@ gboolean _socket_cb (G_GNUC_UNUSED GIOChannel *pSource, GIOCondition cond, G_GNU
 				struct cb_data *peek_cb = g_queue_peek_head (&s_cb_queue); // OK to call with an empty queue
 				gboolean is_array = json_object_is_type (res, json_type_array);
 				gboolean is_list_cb = peek_cb && (peek_cb->cb == _list_views_cb);
+				gboolean is_conf_cb = peek_cb && (peek_cb->cb == _got_configuration);
 				if (is_list_cb)
 				{
 					// this is the reply to a list-views request, process it
@@ -1183,6 +1255,15 @@ gboolean _socket_cb (G_GNUC_UNUSED GIOChannel *pSource, GIOCondition cond, G_GNU
 					if (is_array) _list_views_cb (res);
 					else cd_warning ("Unexpected reply format to list-views request"); //!! TODO: cancel watching events !!
 					
+					json_object_put (res);
+					g_free (tmp2);
+					return TRUE;
+				}
+				else if (is_conf_cb)
+				{
+					// this is the reply to a wayfire/configuration request, process it
+					g_free (g_queue_pop_head (&s_cb_queue)); // we don't need the callback struct anymore
+					_got_configuration (res);
 					json_object_put (res);
 					g_free (tmp2);
 					return TRUE;
