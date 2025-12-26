@@ -593,7 +593,11 @@ static gboolean s_bListViewsDone = FALSE;
 // hash table tracking window positions (note: we track positions
 // separately, so dock visibility tracking will work even if we
 // don't receive IPC IDs)
-static GHashTable *s_pWindowPos = NULL; // key: IPC ID, value: GdkRectangle*
+typedef struct _wf_window_pos {
+	GdkRectangle rect;
+	uint32_t output_id;
+} wf_window_pos;
+static GHashTable *s_pWindowPos = NULL; // key: IPC ID, value: wf_window_pos*
 static uint32_t s_last_active = (uint32_t)-1; // last known active view (-1 means none)
 
 // data attached to each dock
@@ -601,6 +605,7 @@ typedef struct _wf_vis_data {
 	gboolean bListening; // whether we are keeping track of this dock's overlaps
 	int x, y; // note: can be negative (although not expected)
 	int w, h;
+	uint32_t output_id; // ID of the output the dock is on
 } wf_vis_data;
 
 static gboolean _free_vis_data_for_dock (G_GNUC_UNUSED gpointer data, GldiObject *pObj)
@@ -665,10 +670,11 @@ static void _visibility_stop (void)
 
 // Check if a dock overlaps with a given rectangle.
 // Caller should ensure that pDock->pVisibilityData != NULL
-static gboolean _check_overlap (CairoDock *pDock, GdkRectangle *pArea)
+static gboolean _check_overlap (CairoDock *pDock, wf_window_pos *pWindowPos)
 {
 	wf_vis_data *dock_rect = (wf_vis_data*) pDock->pVisibilityData;
 	if (dock_rect->w < 0 || dock_rect->h < 0) return FALSE; // we are not monitoring this dock
+	if (dock_rect->output_id != pWindowPos->output_id) return FALSE; // not on the same ouput
 	
 	int dx, dy, dw, dh;
 	if (pDock->container.bIsHorizontal)
@@ -689,16 +695,17 @@ static gboolean _check_overlap (CairoDock *pDock, GdkRectangle *pArea)
 	dx += dock_rect->x;
 	dy += dock_rect->y;
 	
+	GdkRectangle *pArea = &(pWindowPos->rect);
 	return ((pArea->x < dx + dw) && (pArea->x + pArea->width > dx) &&
 		(pArea->y < dy + dh) && (pArea->y + pArea->height > dy));
 }
 
 static gboolean _check_overlap2 (G_GNUC_UNUSED gpointer key, gpointer value, gpointer user_data)
 {
-	return _check_overlap ((CairoDock*)user_data, (GdkRectangle*)value);
+	return _check_overlap ((CairoDock*)user_data, (wf_window_pos*)value);
 }
 
-static void _wf_hide_show_if_on_our_way (CairoDock *pDock, GdkRectangle *pRect)
+static void _wf_hide_show_if_on_our_way (CairoDock *pDock, wf_window_pos *pRect)
 {
 	if (pDock->iVisibility != CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP)
 		return ;
@@ -725,7 +732,7 @@ static void _wf_hide_if_overlap_or_show_if_no_overlapping_window (CairoDock *pDo
 	if (pDock->iVisibility != CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP_ANY)
 		return ;
 	
-	GdkRectangle *pRect = (GdkRectangle*)data;
+	wf_window_pos *pRect = (wf_window_pos*)data;
 	
 	if (pRect && _check_overlap (pDock, pRect))
 	{
@@ -816,7 +823,7 @@ static void _visibility_refresh (CairoDock *pDock)
 			}
 			else
 			{
-				GdkRectangle *pRect = g_hash_table_lookup (s_pWindowPos, GUINT_TO_POINTER (s_last_active));
+				wf_window_pos *pRect = g_hash_table_lookup (s_pWindowPos, GUINT_TO_POINTER (s_last_active));
 				if (!pRect) cd_warning ("Cannot find the active window's coordinates!"); // should not happen
 				else _wf_hide_show_if_on_our_way (pDock, pRect);
 			}
@@ -909,7 +916,7 @@ static void _list_views_cb (const struct json_object *arr)
 	if (s_bWatchVisEvents)
 	{
 		gldi_docks_foreach_root ((GFunc)_wf_hide_if_any_overlap_or_show, NULL);
-		GdkRectangle *pRect = (s_last_active != (uint32_t)-1) ? g_hash_table_lookup (s_pWindowPos, GUINT_TO_POINTER (s_last_active)) : NULL;
+		wf_window_pos *pRect = (s_last_active != (uint32_t)-1) ? g_hash_table_lookup (s_pWindowPos, GUINT_TO_POINTER (s_last_active)) : NULL;
 		if (pRect) gldi_docks_foreach_root ((GFunc)_wf_hide_show_if_on_our_way, pRect);
 	}
 	
@@ -928,14 +935,21 @@ static gboolean _get_int_value (const struct json_object *obj, const gchar *key,
 	return TRUE;
 }
 
-static gboolean _get_view_geometry (const struct json_object *view, GdkRectangle *rect)
+static gboolean _get_view_geometry (const struct json_object *view, wf_window_pos *rect)
 {
-	const struct json_object *tmp = json_object_object_get (view, "geometry");
+	const struct json_object *tmp = json_object_object_get (view, "output-id");
+	if (!tmp || !json_object_is_type (tmp, json_type_int)) return FALSE;
+	
+	errno = 0;
+	rect->output_id = (uint32_t)json_object_get_uint64 (tmp); // note: Wayfire IPC IDs are 32-bit
+	if (errno) return FALSE;
+	
+	tmp = json_object_object_get (view, "geometry");
 	if (!tmp || ! json_object_is_type (tmp, json_type_object))
 		return FALSE;
 	
-	return (_get_int_value (tmp, "x", &rect->x) && _get_int_value (tmp, "y", &rect->y) &&
-		_get_int_value (tmp, "width", &rect->width) && _get_int_value (tmp, "height", &rect->height));
+	return (_get_int_value (tmp, "x", &rect->rect.x) && _get_int_value (tmp, "y", &rect->rect.y) &&
+		_get_int_value (tmp, "width", &rect->rect.width) && _get_int_value (tmp, "height", &rect->rect.height));
 }
 
 // Process a view, either because of an event, or from the initial reply to
@@ -1022,7 +1036,7 @@ static void _process_view (const gchar *event, const struct json_object *view)
 		if (s_bWatchVisEvents)
 		{
 			// get and update the view's geometry
-			GdkRectangle rect;
+			wf_window_pos rect;
 			gboolean bGeomChanged = FALSE;
 			if (! _get_view_geometry (view, &rect))
 			{
@@ -1030,21 +1044,23 @@ static void _process_view (const gchar *event, const struct json_object *view)
 				return;
 			}
 			
-			GdkRectangle *pRect = g_hash_table_lookup (s_pWindowPos, GUINT_TO_POINTER (id));
+			wf_window_pos *pRect = g_hash_table_lookup (s_pWindowPos, GUINT_TO_POINTER (id));
 			if (!pRect)
 			{
-				pRect = g_new (GdkRectangle, 1);
+				pRect = g_new (wf_window_pos, 1);
 				g_hash_table_insert (s_pWindowPos, GUINT_TO_POINTER (id), pRect);
 				bGeomChanged = TRUE;
 			}
-			else bGeomChanged = (pRect->x != rect.x) || (pRect->y != rect.y) ||
-				(pRect->width != rect.width) || (pRect->height != rect.height);
+			else bGeomChanged = (pRect->rect.x != rect.rect.x) || (pRect->rect.y != rect.rect.y) ||
+				(pRect->rect.width != rect.rect.width) || (pRect->rect.height != rect.rect.height) ||
+				(pRect->output_id != rect.output_id);
 			if (bGeomChanged)
 			{
-				pRect->x = rect.x;
-				pRect->y = rect.y;
-				pRect->width = rect.width;
-				pRect->height = rect.height;
+				pRect->rect.x = rect.rect.x;
+				pRect->rect.y = rect.rect.y;
+				pRect->rect.width  = rect.rect.width;
+				pRect->rect.height = rect.rect.height;
+				pRect->output_id   = rect.output_id;
 			}
 			
 			// check if this is the active window
@@ -1101,24 +1117,25 @@ static void _process_view (const gchar *event, const struct json_object *view)
 			{
 				wf_vis_data *data = _get_dock_vis_data (pDock);
 				
-				GdkRectangle rect;
+				wf_window_pos rect;
 				if (! _get_view_geometry (view, &rect))
 				{
 					cd_warning ("Cannot parse geometry for view %u", id);
 					return;
 				}
 				
-				data->x = rect.x;
-				data->y = rect.y;
-				data->w = rect.width;
-				data->h = rect.height;
+				data->x = rect.rect.x;
+				data->y = rect.rect.y;
+				data->w = rect.rect.width;
+				data->h = rect.rect.height;
+				data->output_id = rect.output_id;
 				
 				if (data->bListening && s_bListViewsDone)
 				{
 					if (pDock->iVisibility == CAIRO_DOCK_VISI_AUTO_HIDE_ON_OVERLAP)
 					{
 						// we only need to test if we have an active view
-						GdkRectangle *pRect = (s_last_active != (uint32_t)-1) ?
+						wf_window_pos *pRect = (s_last_active != (uint32_t)-1) ?
 							g_hash_table_lookup (s_pWindowPos, GUINT_TO_POINTER (s_last_active)) : NULL;
 						if (pRect) _wf_hide_show_if_on_our_way (pDock, pRect);
 					}
