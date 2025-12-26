@@ -210,7 +210,7 @@ void gldi_desktop_present_class_with_callback (const gchar *cClass, GldiContaine
 void gldi_desktop_present_windows (GldiContainer *pContainer);
 
 /** Present all the desktops. */
-void gldi_desktop_present_desktops (void);
+void gldi_desktop_present_desktops (GldiContainer *pContainer);
 
 /** Show the Widget Layer. */
 void gldi_desktop_show_widget_layer (void);

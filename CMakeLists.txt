@@ -13,7 +13,7 @@ include (GNUInstallDirs)
 
 ########### project ###############
 
-set (VERSION "3.6.94") # no dash, only numbers, dots and maybe alpha/beta/rc, e.g.: 3.3.1 or 3.3.99.alpha1
+set (VERSION "3.6.95") # no dash, only numbers, dots and maybe alpha/beta/rc, e.g.: 3.3.1 or 3.3.99.alpha1
 
 add_compile_options (-std=c99 -Wall -Wextra -Werror-implicit-function-declaration) # -Wextra -Wwrite-strings -Wuninitialized -Wstrict-prototypes -Wreturn-type -Wparentheses -Warray-bounds)
 if (NOT DEFINED CMAKE_BUILD_TYPE)
@@ -132,7 +132,6 @@ if (enable-wayland-support)
 	endif()
 endif()
 
-set (with_wayfire_ipc "no (no Wayland support)")
 if (WAYLAND_FOUND)
 	enable_if_not_defined (enable-wayland-protocols) # enabled by default
 	if (enable-wayland-protocols)
@@ -156,15 +155,17 @@ if (WAYLAND_FOUND)
 	pkg_check_modules ("JSON" "json-c")
 	pkg_check_modules ("EVDEV" "libevdev")
 	if (JSON_FOUND)
+		set (with_extra_ipc "yes")
 		set (HAVE_JSON 1)
 		if (EVDEV_FOUND)
 			set (HAVE_EVDEV 1)
-			set (with_wayfire_ipc "yes")
+			set (with_wayfire_shotkeys "yes")
 		else()
-			set (with_wayfire_ipc "yes (libevdev not found, keyboard shortcuts will be unavailable)")
+			set (with_wayfire_shotkeys "no (libevdev not found)")
 		endif()
 	else()
-		set (with_wayfire_ipc "no (json-c library not found)")
+		set (with_extra_ipc "no (json-c library not found)")
+		set (with_wayfire_shotkeys "no (json-c library not found)")
 	endif()
 endif()
 
@@ -391,7 +392,8 @@ MESSAGE (STATUS " * With EGL support    : ${with_egl}")
 MESSAGE (STATUS " * With Wayland support: ${with_wayland}")
 if (WAYLAND_FOUND)
 	MESSAGE (STATUS " * With Wayland taskbar: ${with_wayland_taskbar}")
-	MESSAGE (STATUS " * With Wayfire IPC    : ${with_wayfire_ipc}")
+	MESSAGE (STATUS " * With custom IPC     : ${with_extra_ipc}")
+	MESSAGE (STATUS " * w/ Wayfire shortkeys: ${with_wayfire_shotkeys}")
 endif()
 MESSAGE (STATUS " * With gtk-layer-shell: ${with_gtk_layer_shell}")
 if (HAVE_LIBCRYPT)

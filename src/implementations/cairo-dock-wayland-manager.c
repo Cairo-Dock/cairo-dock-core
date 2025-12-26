@@ -55,7 +55,7 @@
 #include "cairo-dock-wayland-hotspots.h"
 #include "cairo-dock-egl.h"
 #define _MANAGER_DEF_
-#include "cairo-dock-wayland-manager.h"
+#include "cairo-dock-wayland-manager-priv.h"
 
 #include "gldi-config.h"
 #ifdef HAVE_GTK_LAYER_SHELL
@@ -74,18 +74,6 @@ extern gboolean g_bUseOpenGL;
 static struct wl_display *s_pDisplay = NULL;
 static struct wl_compositor* s_pCompositor = NULL;
 static gboolean s_bHave_Layer_Shell = FALSE;
-
-
-// detect and store the compositor that we are running under
-// this can be used to handle quirks
-typedef enum {
-	WAYLAND_COMPOSITOR_NONE, // we are not running under Wayland
-	WAYLAND_COMPOSITOR_UNKNOWN, // unable to detect compositor
-	WAYLAND_COMPOSITOR_GENERIC, // compositor which does not require specific quirks (functionally same as UNKNOWN)
-	WAYLAND_COMPOSITOR_WAYFIRE,
-	WAYLAND_COMPOSITOR_KWIN,
-	WAYLAND_COMPOSITOR_COSMIC
-} GldiWaylandCompositorType;
 
 static GldiWaylandCompositorType s_CompositorType = WAYLAND_COMPOSITOR_NONE;
 
@@ -106,6 +94,8 @@ static void _try_detect_compositor (void)
 	}
 }
 
+GldiWaylandCompositorType gldi_wayland_get_compositor_type (void) { return s_CompositorType; }
+void gldi_wayland_set_compositor_type (GldiWaylandCompositorType type) { s_CompositorType = type; }
 
 CairoDockPositionType gldi_wayland_get_edge_for_dock (const CairoDock *pDock)
 {
@@ -388,8 +378,13 @@ void gldi_wayland_release_keyboard (GldiContainer *pContainer, GldiWaylandReleas
 	if (s_CompositorType == WAYLAND_COMPOSITOR_UNKNOWN)
 		_try_detect_compositor ();
 	
-	if (s_CompositorType != WAYLAND_COMPOSITOR_WAYFIRE && reason == GLDI_KEYBOARD_RELEASE_PRESENT_WINDOWS)
-		return; // extra keyboard release in this case is only needed on Wayfire
+	if (reason == GLDI_KEYBOARD_RELEASE_PRESENT_WINDOWS)
+	{
+		if (s_CompositorType != WAYLAND_COMPOSITOR_WAYFIRE && s_CompositorType != WAYLAND_COMPOSITOR_NIRI)
+			return; // extra keyboard release in this case is only needed on Wayfire and niri
+	}
+	if (reason == GLDI_KEYBOARD_RELEASE_PRESENT_DESKTOPS && s_CompositorType != WAYLAND_COMPOSITOR_NIRI)
+		return; // extra keyboard release in this case is only needed on niri
 	
 	switch (s_CompositorType)
 	{
@@ -402,7 +397,7 @@ void gldi_wayland_release_keyboard (GldiContainer *pContainer, GldiWaylandReleas
 		case WAYLAND_COMPOSITOR_COSMIC:
 			_release_keyboard_activate ();
 			break;
-		default: // generic and unknown
+		default: // generic, niri and unknown
 			_release_keyboard_layer_shell (pContainer);
 			break;
 	}
@@ -649,6 +644,8 @@ const gchar *gldi_wayland_get_detected_compositor (void)
 			return "Cosmic";
 		case WAYLAND_COMPOSITOR_GENERIC:
 			return "generic";
+		case WAYLAND_COMPOSITOR_NIRI:
+			return "niri";
 		case WAYLAND_COMPOSITOR_UNKNOWN:
 			// try to detect based on the desktop manager backend
 			_try_detect_compositor ();

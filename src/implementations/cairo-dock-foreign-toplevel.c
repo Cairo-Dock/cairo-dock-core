@@ -31,6 +31,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-foreign-toplevel.h"
 #include "cairo-dock-wayland-wm.h"
+#include "cairo-dock-wayland-manager-priv.h"
 #include "cairo-dock-wayfire-integration.h"
 
 #include <stdio.h>
@@ -85,7 +86,7 @@ static GldiWindowActor* _get_transient_for(GldiWindowActor* actor)
 static void _can_minimize_maximize_close ( G_GNUC_UNUSED GldiWindowActor *actor, gboolean *bCanMinimize, gboolean *bCanMaximize, gboolean *bCanClose)
 {
 	// we don't know, set everything to true
-	*bCanMinimize = TRUE;
+	*bCanMinimize = (gldi_wayland_get_compositor_type () != WAYLAND_COMPOSITOR_NIRI);
 	*bCanMaximize = TRUE;
 	*bCanClose = TRUE;
 }

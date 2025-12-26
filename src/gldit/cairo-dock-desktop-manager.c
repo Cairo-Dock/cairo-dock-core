@@ -26,6 +26,7 @@
 #include "cairo-dock-kwin-integration.h"
 #include "cairo-dock-cinnamon-integration.h"
 #include "cairo-dock-wayfire-integration.h"
+#include "cairo-dock-niri-integration.h"
 #include "cairo-dock-wayland-manager.h" // gldi_wayland_release_keyboard (needed on Wayfire)
 #define _MANAGER_DEF_
 #include "cairo-dock-desktop-manager.h"
@@ -139,10 +140,11 @@ void gldi_desktop_present_windows (GldiContainer *pContainer)  // scale
 	}
 }
 
-void gldi_desktop_present_desktops (void)  // expose
+void gldi_desktop_present_desktops (GldiContainer *pContainer)  // expose
 {
 	if (s_backend.present_desktops != NULL)
 	{
+		gldi_wayland_release_keyboard (pContainer, GLDI_KEYBOARD_RELEASE_PRESENT_DESKTOPS);
 		s_backend.present_desktops ();
 	}
 }
@@ -572,6 +574,7 @@ static void init (void)
 	cd_init_kwin_backend ();
 	cd_init_cinnamon_backend ();
 	cd_init_wayfire_backend ();
+	cd_init_niri_backend ();
 }
 
 

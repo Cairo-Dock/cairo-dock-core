@@ -53,7 +53,8 @@ CairoDockPositionType gldi_wayland_get_edge_for_dock (const CairoDock *pDock);
 
 typedef enum {
 	GLDI_KEYBOARD_RELEASE_MENU_CLOSED,
-	GLDI_KEYBOARD_RELEASE_PRESENT_WINDOWS
+	GLDI_KEYBOARD_RELEASE_PRESENT_WINDOWS,
+	GLDI_KEYBOARD_RELEASE_PRESENT_DESKTOPS
 } GldiWaylandReleaseKeyboardReason;
 
 void gldi_wayland_grab_keyboard (GldiContainer *pContainer);
