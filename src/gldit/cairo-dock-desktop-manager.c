@@ -140,10 +140,11 @@ void gldi_desktop_present_windows (GldiContainer *pContainer)  // scale
 	}
 }
 
-void gldi_desktop_present_desktops (void)  // expose
+void gldi_desktop_present_desktops (GldiContainer *pContainer)  // expose
 {
 	if (s_backend.present_desktops != NULL)
 	{
+		gldi_wayland_release_keyboard (pContainer, GLDI_KEYBOARD_RELEASE_PRESENT_DESKTOPS);
 		s_backend.present_desktops ();
 	}
 }
