@@ -383,7 +383,6 @@ static gboolean s_bHaveAbove = FALSE; // whether Wayfire provides the "view-abov
 static gboolean s_bCanSticky = FALSE;
 static gboolean s_bCanAbove = FALSE;
 static gboolean s_bNeedStickyAbove = FALSE; // toplevel manager requested the above functionality
-static gboolean s_bHaveAbove = FALSE; // whether Wayfire provides the "view-above" event
 
 static gboolean s_bWatchWMEvents = FALSE;
 // hash table mapping view IPC IDs to window actors
@@ -1225,7 +1224,7 @@ static void _process_view (const gchar *event, const struct json_object *view)
  * parse incoming messages, init
  ***********************************************************************/
 
-gboolean _socket_cb (G_GNUC_UNUSED GIOChannel *pSource, GIOCondition cond, G_GNUC_UNUSED gpointer data)
+static gboolean _socket_cb (G_GNUC_UNUSED GIOChannel *pSource, GIOCondition cond, G_GNUC_UNUSED gpointer data)
 {
 	gboolean bContinue = FALSE;
 	
