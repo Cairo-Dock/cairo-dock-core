@@ -74,6 +74,7 @@
 #include "cairo-dock-packages.h"
 #include "cairo-dock-utils.h"  // cairo_dock_launch_command
 #include "cairo-dock-core.h"
+#include "cairo-dock-dbus-priv.h" // cairo_dock_dbus_own_name
 
 #include "cairo-dock-gui-manager.h"
 #include "cairo-dock-gui-backend.h"
@@ -366,7 +367,9 @@ int main (int argc, char** argv)
 	textdomain (CAIRO_DOCK_GETTEXT_PACKAGE);
 	
 	//\___________________ get app's options.
-	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSticky = FALSE, bCappuccino = FALSE, bPrintVersion = FALSE, bTesting = FALSE, bForceOpenGL = FALSE, bToggleIndirectRendering = FALSE, bKeepAbove = FALSE, bForceColors = FALSE, bAskBackend = FALSE, bTransparencyWorkaround = FALSE;
+	gboolean bSafeMode = FALSE, bMaintenance = FALSE, bNoSticky = FALSE, bCappuccino = FALSE, bPrintVersion = FALSE,
+	bTesting = FALSE, bForceOpenGL = FALSE, bToggleIndirectRendering = FALSE, bKeepAbove = FALSE, bForceColors = FALSE,
+	bAskBackend = FALSE, bTransparencyWorkaround = FALSE, bAllowMultiInstance = FALSE, bNoDBusName = FALSE;
 	gchar *cEnvironment = NULL, *cUserDefinedDataDir = NULL, *cVerbosity = 0, *cUserDefinedModuleDir = NULL, *cExcludeModule = NULL, *cThemeServerAdress = NULL;
 	int iDelay = 0;
 	GOptionEntry pOptionsTable[] =
@@ -445,6 +448,12 @@ int main (int argc, char** argv)
 		{"x11", 'X', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bForceX11,
 			_("Force using the X11 backend (disable any Wayland functionality)."), NULL},
+		{"allow-multi-instance", 'I', G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&bAllowMultiInstance,
+			_("Allow multiple instances of Cairo-Dock to run."), NULL},
+		{"no-dbus-name", 0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
+			&bNoDBusName,
+			_("Do not try to own the \"org.cairodock.CairoDock\" DBus name (DBus interface will be unavailable)."), NULL},
 		{"egl", 0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_NONE,
 			&g_bX11UseEgl,
 			_("Use EGL on X11."), NULL},
@@ -527,6 +536,18 @@ int main (int argc, char** argv)
 		else
 			cd_warning ("Unknown environment '%s'", cEnvironment);
 		g_free (cEnvironment);
+	}
+	
+	//\___________________ try to own our DBus name
+	if (!bNoDBusName && !cairo_dock_dbus_own_name ())
+	{
+		if (!cairo_dock_dbus_is_enabled ())
+			cd_warning ("DBus is unavailable, functions to communicate with apps and system components will not work!");
+		else if (!bAllowMultiInstance)
+		{
+			//!! TODO: check if another instance is really running and responsive? (e.g. with a Ping-like call)
+			cd_error ("Cairo-Dock is already running, not starting another instance (use the \"-I\" command line option to override).");
+		}
 	}
 	
 	//\___________________ get global config.
