@@ -21,7 +21,68 @@
 #include <glib.h>
 
 #include "cairo-dock-log.h"
-#include "cairo-dock-dbus.h"
+#include "cairo-dock-dbus-priv.h"
+
+/***********************************************************************
+ * New interface */
+
+static GDBusConnection *s_pMainConnection = NULL;
+static const gchar *s_cBusName = "org.cairodock.CairoDock";
+static gboolean s_bNameOwned = FALSE;
+
+
+gboolean cairo_dock_dbus_is_enabled (void)
+{
+	return (s_pMainConnection != NULL);
+}
+
+GDBusConnection *cairo_dock_dbus_get_session_bus (void)
+{
+	return s_pMainConnection;
+}
+
+const gchar *cairo_dock_dbus_get_owned_name (void)
+{
+	return s_bNameOwned ? s_cBusName : NULL;
+}
+
+static void _on_bus_acquired (GDBusConnection *pConn, G_GNUC_UNUSED const gchar* cName, G_GNUC_UNUSED gpointer ptr)
+{
+	s_pMainConnection = pConn;
+}
+
+
+gboolean s_bNameAcquiredOrLost = FALSE;
+
+static void _on_name_acquired (G_GNUC_UNUSED GDBusConnection* pConn, G_GNUC_UNUSED const gchar* cName, G_GNUC_UNUSED gpointer data)
+{
+	s_bNameOwned = TRUE;
+	s_bNameAcquiredOrLost = TRUE;
+}
+
+static void _on_name_lost (G_GNUC_UNUSED GDBusConnection* pConn, G_GNUC_UNUSED const gchar* cName, G_GNUC_UNUSED gpointer data)
+{
+	s_bNameOwned = FALSE;
+	s_bNameAcquiredOrLost = TRUE;
+}
+
+gboolean cairo_dock_dbus_own_name (void)
+{
+	//\____________ Register the service name (the service name is registerd once by the first gldi instance).
+	g_bus_own_name (G_BUS_TYPE_SESSION, s_cBusName, G_BUS_NAME_OWNER_FLAGS_DO_NOT_QUEUE, _on_bus_acquired, // bus acquired handler
+		_on_name_acquired, _on_name_lost, NULL, NULL);
+	
+	// Wait until we have acquired the bus. This is necessary as we want to know whether we succeeded.
+	GMainContext *pContext = g_main_context_default ();
+	do g_main_context_iteration (pContext, TRUE);
+	while (!s_bNameAcquiredOrLost);
+	
+	return s_bNameOwned;
+}
+
+
+/***********************************************************************
+ * Deprecated interface -- to be removed. */
 
 static DBusGConnection *s_pSessionConnexion = NULL;
 static DBusGConnection *s_pSystemConnexion = NULL;
@@ -99,12 +160,6 @@ gboolean cairo_dock_register_service_name (const gchar *cServiceName)
 		return FALSE;
 	}
 	return TRUE;
-}
-
-
-gboolean cairo_dock_dbus_is_enabled (void)
-{
-	return (cairo_dock_get_session_connection () != NULL && cairo_dock_get_system_connection () != NULL);
 }
 
 static void on_name_owner_changed (G_GNUC_UNUSED DBusGProxy *pProxy, const gchar *cName, G_GNUC_UNUSED const gchar *cPrevOwner, const gchar *cNewOwner, G_GNUC_UNUSED gpointer data)
