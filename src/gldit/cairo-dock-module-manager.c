@@ -188,6 +188,9 @@ static void _module_new_from_so_file (const gchar *cSoFilePath)
 		goto discard;
 	}
 	
+	gboolean bDisable = FALSE;
+	const gchar *cDisableReason = NULL;
+	
 	if (!g_bNoCheckModuleVersion && !g_bEasterEggs)
 	{
 		// check module compatibility
@@ -224,23 +227,26 @@ static void _module_new_from_so_file (const gchar *cSoFilePath)
 					!g_bNoWaylandExclude)
 				{
 					cd_message ("Not loading module ('%s') as it does not support Wayland\n", cSoFilePath);
-					goto discard;
+					bDisable = TRUE;
+					cDisableReason = _("You are running Cairo-dock in a Wayland session, but this plug-in does not support Wayland.");
 				}
 			}
 			else if (! (pVisitCard->iMicroVersionNeeded & CAIRO_DOCK_MODULE_SUPPORTS_X11))
 			{
 				cd_message ("Not loading module ('%s') as it does not support X11\n", cSoFilePath);
-				goto discard;
+				bDisable = TRUE;
+				cDisableReason = _("You are running Cairo-dock in an X11 session, but this plug-in does not support X11.");
 			}
 			// test if module requires OpenGL
-			if ((pVisitCard->iMicroVersionNeeded & CAIRO_DOCK_MODULE_REQUIRES_OPENGL) && !g_bUseOpenGL)
+			if (!bDisable && (pVisitCard->iMicroVersionNeeded & CAIRO_DOCK_MODULE_REQUIRES_OPENGL) && !g_bUseOpenGL)
 			{
 				cd_message ("Not loading module ('%s') as it requires OpenGL\n", cSoFilePath);
-				goto discard;
+				bDisable = TRUE;
+				cDisableReason = _("This plug-in requires OpenGL, but it is not enabled.");
 			}
-			if (pVisitCard->postLoad)
+			if (!bDisable && pVisitCard->postLoad)
 				if (!pVisitCard->postLoad (pVisitCard, pInterface, NULL))
-					goto discard; // this module does not want to be loaded (can happen to xxx-integration or icon-effect for instance)
+					bDisable = TRUE;
 		}
 		else
 		{
@@ -262,7 +268,10 @@ static void _module_new_from_so_file (const gchar *cSoFilePath)
 	// create a new module with these info
 	GldiModule *pModule = gldi_module_new (pVisitCard, pInterface);  // takes ownership of pVisitCard and pInterface
 	if (pModule)
+	{
 		pModule->handle = handle;
+		if (bDisable) gldi_module_disable (pModule, cDisableReason);
+	}
 	return;
 	
 discard:
@@ -370,6 +379,7 @@ static void _gldi_module_load_config_and_activate (GldiModule *module, gboolean 
 		if (cUserDataDirPath == NULL)
 		{
 			cd_warning ("Unable to open the config folder of module %s\nCheck permissions", module->pVisitCard->cModuleName);
+			gldi_module_disable (module, _("Could not create a configuration directory for this module.\nPlease check that Cairo-Dock's configuration directory exists and is writable."));
 			return;
 		}
 		
@@ -384,8 +394,12 @@ static void _gldi_module_load_config_and_activate (GldiModule *module, gboolean 
 			{
 				cd_warning ("couldn't open folder %s (%s)", cUserDataDirPath, tmp_erreur->message);
 				g_error_free (tmp_erreur);
+				
+				module->cDisableReason = g_strdup_printf ("%s %s\n%s",
+					_("Cannot open module configuration directory:"), cUserDataDirPath,
+					_("Please check that it exists and is writable."));
+				module->iState = CAIRO_DOCK_MODULE_DISABLED;
 				g_free (cUserDataDirPath);
-				//!! TODO: maybe disable this module in this case?
 				return ;
 			}
 			
@@ -429,6 +443,12 @@ static void _gldi_module_load_config_and_activate (GldiModule *module, gboolean 
 			if (! r)  // the copy failed.
 			{
 				cd_warning ("couldn't copy %s into %s; check permissions and file's existence", module->cConfFilePath, cUserDataDirPath);
+				
+				module->cDisableReason = g_strdup_printf ("%s %s\n%s",
+					_("Cannot open module configuration directory:"), cUserDataDirPath,
+					_("Please check that it exists and is writable."));
+				module->iState = CAIRO_DOCK_MODULE_DISABLED;
+				
 				g_free (cConfFilePath);
 				g_free (cUserDataDirPath);
 				return;
@@ -548,7 +568,7 @@ void gldi_modules_activate_all (gboolean bOnlyAutoLoaded)
 			continue ;
 		}
 		
-		if (pModule->pInstancesList == NULL)  // not yet active
+		if (pModule->iState == CAIRO_DOCK_MODULE_INACTIVE)  // not yet active
 		{
 			_gldi_module_load_config_and_activate (pModule, TRUE);
 		}
@@ -781,6 +801,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	
 	if (g_hash_table_lookup (s_hModuleTable, mattr->pVisitCard->cModuleName) != NULL)
 	{
+		//!! TODO: pModule is leaked (caller will not expect to free it)
 		cd_warning ("a module with the name '%s' is already registered", mattr->pVisitCard->cModuleName);
 		return;
 	}
