@@ -38,7 +38,6 @@
 #include "cairo-dock-module-manager-priv.h"
 
 // public (manager, config, data)
-GldiModulesParam myModulesParam;
 GldiManager myModulesMgr;
 GldiObjectManager myModuleObjectMgr;
 
@@ -66,6 +65,12 @@ typedef struct _GldiModuleAttr {
 	GldiModuleInterface *pInterface;
 } GldiModuleAttr;
 
+typedef struct _GldiModulesParam GldiModulesParam;
+// params
+struct _GldiModulesParam {
+	gchar **cActiveModuleList;
+	};
+static GldiModulesParam myModulesParam;
 
   ///////////////
  /// MANAGER ///
@@ -480,8 +485,10 @@ void gldi_modules_load_auto_config (void)
 	}
 }
 
-void gldi_modules_activate_from_list (gchar **cActiveModuleList)
+void gldi_modules_activate_all (gboolean bOnlyAutoLoaded)
 {
+	gchar **cActiveModuleList = bOnlyAutoLoaded ? NULL : myModulesParam.cActiveModuleList;
+	
 	//\_______________ On active les modules auto-charges en premier.
 	gchar *cModuleName;
 	GldiModule *pModule;

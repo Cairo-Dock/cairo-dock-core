@@ -23,17 +23,6 @@
 #include "cairo-dock-module-manager.h"
 G_BEGIN_DECLS
 
-typedef struct _GldiModulesParam GldiModulesParam;
-// params
-struct _GldiModulesParam {
-	gchar **cActiveModuleList;
-	};
-
-#ifndef _MANAGER_DEF_
-extern GldiModulesParam myModulesParam;
-#endif
-
-
 #define gldi_module_is_auto_loaded(pModule) ((pModule->pInterface->initModule == NULL || pModule->pInterface->stopModule == NULL || pModule->pVisitCard->cInternalModule != NULL) && pModule->pVisitCard->iContainerType == CAIRO_DOCK_MODULE_IS_PLUGIN)
 
 /** Create new modules from all the .so files contained in the given folder.
@@ -50,7 +39,10 @@ void gldi_modules_write_active (void);
 /** Load the config of all auto-loaded modules without activating them. */
 void gldi_modules_load_auto_config (void);
 
-void gldi_modules_activate_from_list (gchar **cActiveModuleList);
+/** Activate all modules based on the config file.
+* @param bOnlyAutoLoaded only activate auto-loaded modules, not general modules
+*/
+void gldi_modules_activate_all (gboolean bOnlyAutoLoaded);
 
 void gldi_modules_deactivate_all (void);
 
