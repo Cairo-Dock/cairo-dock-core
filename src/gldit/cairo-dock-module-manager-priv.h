@@ -32,10 +32,6 @@ G_BEGIN_DECLS
 */
 void gldi_modules_new_from_directory (const gchar *cModuleDirPath, GError **erreur);
 
-//!! to be removed
-void gldi_modules_write_active (void);
-
-
 /** Load the config of all auto-loaded modules without activating them. */
 void gldi_modules_load_auto_config (void);
 

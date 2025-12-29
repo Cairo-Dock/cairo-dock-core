@@ -476,11 +476,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	//\____________________ add to the module.
 	pModule->pInstancesList = g_list_prepend (pModule->pInstancesList, pInstance);
 	if (pModule->pInstancesList->next == NULL)  // pInstance has been inserted in first, so it means it was the first instance
-	{
 		gldi_object_notify (pInstance->pModule, NOTIFICATION_MODULE_ACTIVATED, pModule->pVisitCard->cModuleName, TRUE);
-		if (! cairo_dock_is_loading ())
-			gldi_modules_write_active ();
-	}
 }
 
 static void reset_object (GldiObject *obj)
@@ -535,8 +531,8 @@ static void reset_object (GldiObject *obj)
 		pInstance->pModule->pInstancesList = g_list_remove (pInstance->pModule->pInstancesList, pInstance);
 		if (pInstance->pModule->pInstancesList == NULL)
 		{
+			// will remove module from the config if needed
 			gldi_object_notify (pInstance->pModule, NOTIFICATION_MODULE_ACTIVATED, pInstance->pModule->pVisitCard->cModuleName, FALSE);
-			gldi_modules_write_active ();
 		}
 	}
 }

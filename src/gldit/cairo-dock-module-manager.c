@@ -59,6 +59,7 @@ extern gboolean g_bUseOpenGL;
 static GHashTable *s_hModuleTable = NULL;
 static GList *s_AutoLoadedModules = NULL;
 static guint s_iSidWriteModules = 0;
+static gboolean s_bSelfNotify = FALSE;
 
 typedef struct _GldiModuleAttr {
 	GldiVisitCard *pVisitCard;
@@ -68,9 +69,15 @@ typedef struct _GldiModuleAttr {
 typedef struct _GldiModulesParam GldiModulesParam;
 // params
 struct _GldiModulesParam {
-	gchar **cActiveModuleList;
+	gchar **cActiveModuleList; // modules in the config file or NULL if not found (should not happen)
+	gsize len; // number of elements in the above list
+	gsize cap; // capacity of the above list not including the NULL-terminator (0 <=> cActiveModuleList == NULL)
 	};
 static GldiModulesParam myModulesParam;
+
+static void _module_add_to_config (GldiModule *pModule);
+static void _module_remove_from_config (GldiModule *pModule);
+
 
   ///////////////
  /// MANAGER ///
@@ -111,37 +118,19 @@ int gldi_module_get_nb (void)
 	return g_hash_table_size (s_hModuleTable);
 }
 
-static void _write_one_module_name (const gchar *cModuleName, GldiModule *pModule, GString *pString)
-{
-	if (pModule->pInstancesList != NULL && ! gldi_module_is_auto_loaded (pModule))
-	{
-		g_string_append_printf (pString, "%s;", cModuleName);
-	}
-}
-static gchar *_gldi_module_list_active (void)
-{
-	GString *pString = g_string_new ("");
-	
-	g_hash_table_foreach (s_hModuleTable, (GHFunc) _write_one_module_name, pString);
-	
-	if (pString->len > 0)
-		pString->str[pString->len-1] = '\0';
-	
-	return g_string_free (pString, FALSE);
-}
-
 static gboolean _write_modules_idle (G_GNUC_UNUSED gpointer data)
 {
-	gchar *cModuleNames = _gldi_module_list_active ();
+	gchar *cModuleNames = myModulesParam.cActiveModuleList ?
+		g_strjoinv (";", myModulesParam.cActiveModuleList) : NULL;
 	cd_debug ("%s", cModuleNames);
 	cairo_dock_update_conf_file (g_cConfFile,
-		G_TYPE_STRING, "System", "modules", cModuleNames,
+		G_TYPE_STRING, "System", "modules", cModuleNames ? cModuleNames : "",
 		G_TYPE_INVALID);
 	g_free (cModuleNames);
 	s_iSidWriteModules = 0;
 	return FALSE;
 }
-void gldi_modules_write_active (void)
+static void _trigger_write_modules (void)
 {
 	if (s_iSidWriteModules == 0)
 		s_iSidWriteModules = g_idle_add (_write_modules_idle, NULL);
@@ -454,20 +443,33 @@ static void _gldi_module_load_config_and_activate (GldiModule *module, gboolean 
 	}
 }
 
-void gldi_module_activate (GldiModule *module)
+void gldi_module_activate (GldiModule *pModule)
 {
-	_gldi_module_load_config_and_activate (module, TRUE);
+	_gldi_module_load_config_and_activate (pModule, TRUE);
+	
+	if (pModule->pInstancesList)
+	{
+		// module successfully activated, update our config
+		_module_add_to_config (pModule);
+	}
 }
 
-void gldi_module_deactivate (GldiModule *module)  // stop all instances of a module
+void _module_deactivate (GldiModule *module)  // stop all instances of a module without updating our config
 {
 	g_return_if_fail (module != NULL);
 	cd_debug ("%s (%s, %s)", __func__, module->pVisitCard->cModuleName, module->cConfFilePath);
 	GList *pInstances = module->pInstancesList;
 	module->pInstancesList = NULL;  // set to NULL already so that notifications don't get fooled. This can probably be avoided...
 	g_list_free_full (pInstances, (GDestroyNotify)gldi_object_unref);
+	s_bSelfNotify = TRUE; // we want to ignore our own notification
 	gldi_object_notify (module, NOTIFICATION_MODULE_ACTIVATED, module->pVisitCard->cModuleName, FALSE);  // throw it since the list was NULL when the instances were destroyed
-	gldi_modules_write_active ();  // same
+	s_bSelfNotify = FALSE;
+}
+
+void gldi_module_deactivate (GldiModule *module)  // stop all instances of a module
+{
+	_module_deactivate (module);
+	_module_remove_from_config (module);
 }
 
 
@@ -498,7 +500,7 @@ void gldi_modules_activate_all (gboolean bOnlyAutoLoaded)
 		pModule = m->data;
 		if (pModule->pInstancesList == NULL)  // not yet active
 		{
-			gldi_module_activate (pModule);
+			_gldi_module_load_config_and_activate (pModule, TRUE); // do not update config
 		}
 		else
 		{
@@ -530,11 +532,11 @@ void gldi_modules_activate_all (gboolean bOnlyAutoLoaded)
 		
 		if (pModule->pInstancesList == NULL)  // not yet active
 		{
-			gldi_module_activate (pModule);
+			_gldi_module_load_config_and_activate (pModule, TRUE);
 		}
 	}
 	
-	// don't write down
+	// don't write down -- TODO: remove, not needed anymore
 	if (s_iSidWriteModules != 0)
 	{
 		g_source_remove (s_iSidWriteModules);
@@ -544,8 +546,8 @@ void gldi_modules_activate_all (gboolean bOnlyAutoLoaded)
 
 static void _deactivate_one_module (G_GNUC_UNUSED gchar *cModuleName, GldiModule *pModule, G_GNUC_UNUSED gpointer data)
 {
-	if (! gldi_module_is_auto_loaded (pModule))
-		gldi_module_deactivate (pModule);
+	if (! gldi_module_is_auto_loaded (pModule)) // auto-loaded modules will be done separately later
+		_module_deactivate (pModule); // do not disable in the config file
 }
 void gldi_modules_deactivate_all (void)
 {
@@ -558,10 +560,10 @@ void gldi_modules_deactivate_all (void)
 	for (m = s_AutoLoadedModules; m != NULL; m = m->next)
 	{
 		pModule = m->data;
-		gldi_module_deactivate (pModule);
+		_module_deactivate (pModule);
 	}
 	
-	// don't write down
+	// don't write down -- TODO: remove, not needed anymore
 	if (s_iSidWriteModules != 0)
 	{
 		g_source_remove (s_iSidWriteModules);
@@ -658,11 +660,84 @@ void gldi_module_add_instance (GldiModule *pModule)
 static gboolean get_config (GKeyFile *pKeyFile, GldiModulesParam *pModules)
 {
 	gboolean bFlushConfFileNeeded = FALSE;
-	
-	gsize length=0;
-	pModules->cActiveModuleList = cairo_dock_get_string_list_key_value (pKeyFile, "System", "modules", &bFlushConfFileNeeded, &length, NULL, "Applets", "modules_0");
-	
+	pModules->cActiveModuleList = cairo_dock_get_string_list_key_value (pKeyFile, "System", "modules",
+		&bFlushConfFileNeeded, &pModules->len, NULL, "Applets", "modules_0");
+	pModules->cap = pModules->len;
 	return bFlushConfFileNeeded;
+}
+
+static void _module_add_to_config (GldiModule *pModule)
+{
+	if (gldi_module_is_auto_loaded (pModule)) return; // we should not end up here, but just in case
+	if (myModulesParam.cActiveModuleList &&
+		g_strv_contains ((const gchar * const*)myModulesParam.cActiveModuleList, pModule->pVisitCard->cModuleName))
+	{
+		return; // already in the list (should not happen, maybe show a warning?)
+	}
+	
+	if (! myModulesParam.cActiveModuleList)
+	{
+		gsize s = g_hash_table_size (s_hModuleTable); // will be > 0, since we can only get here if some modules have been loaded already
+		myModulesParam.cActiveModuleList = g_new0 (gchar*, s + 1);
+		myModulesParam.cap = s;
+		myModulesParam.len = 0;
+	}
+	else if (myModulesParam.len == myModulesParam.cap)
+	{
+		gsize s = g_hash_table_size (s_hModuleTable);
+		gsize i;
+		if (s <= myModulesParam.cap) s = myModulesParam.cap + 20; // we don't expect a lot of modules, but also no need to be stingy here ...
+		myModulesParam.cActiveModuleList = g_renew (gchar*, myModulesParam.cActiveModuleList, s + 1);
+		for (i = myModulesParam.cap + 1; i <= s; i++) myModulesParam.cActiveModuleList[i] = NULL; // no g_renew0 (), we have to set the new elements to NULL
+	}
+	
+	myModulesParam.cActiveModuleList[myModulesParam.len] = g_strdup (pModule->pVisitCard->cModuleName);
+	myModulesParam.len++;
+	
+	_trigger_write_modules ();
+}
+
+static void _module_remove_from_config (GldiModule *pModule)
+{
+	if (gldi_module_is_auto_loaded (pModule)) return; // we should not end up here, but just in case
+	if (! myModulesParam.cActiveModuleList)
+	{
+		cd_warning ("No active modules!");
+		return;
+	}
+	gsize i;
+	for (i = 0; i < myModulesParam.len; i++)
+		if (! strcmp (myModulesParam.cActiveModuleList[i], pModule->pVisitCard->cModuleName)) break;
+	
+	if (i == myModulesParam.len)
+	{
+		cd_warning ("Module not found among the list of active modules: '%s'", pModule->pVisitCard->cModuleName);
+		return;
+	}
+	
+	g_free (myModulesParam.cActiveModuleList[i]);
+	if (i + 1 == myModulesParam.len) myModulesParam.cActiveModuleList[i] = NULL; // it was the last one in the list
+	else
+	{
+		// move the last one in its place, no need to keep the order
+		myModulesParam.cActiveModuleList[i] = myModulesParam.cActiveModuleList[myModulesParam.len - 1];
+		myModulesParam.cActiveModuleList[myModulesParam.len - 1] = NULL;
+	}
+	myModulesParam.len--;
+	
+	_trigger_write_modules ();
+}
+
+gboolean _on_module_activated (gpointer pUserData, G_GNUC_UNUSED const gchar *cModuleName, gboolean bActivated)
+{
+	// only if the module was deactivated and the notification does not come from ourselves
+	if (!bActivated && !s_bSelfNotify)
+	{
+		GldiModule *pModule = (GldiModule*)pUserData;
+		_module_remove_from_config (pModule);
+	}
+	
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
   ////////////////////
@@ -672,6 +747,8 @@ static gboolean get_config (GKeyFile *pKeyFile, GldiModulesParam *pModules)
 static void reset_config (GldiModulesParam *pModules)
 {
 	g_free (pModules->cActiveModuleList);
+	pModules->len = 0;
+	pModules->cap = 0;
 }
 
   ////////////
@@ -717,6 +794,9 @@ static void init_object (GldiObject *obj, gpointer attr)
 	
 	if (gldi_module_is_auto_loaded (pModule))  // a module that doesn't have an init/stop entry point, or that extends a manager; we'll activate it automatically (and before the others).
 		s_AutoLoadedModules = g_list_prepend (s_AutoLoadedModules, pModule);
+	else // we need to listen to when the last instance is removed to delete the module from the config
+		gldi_object_register_notification (GLDI_OBJECT (pModule), NOTIFICATION_MODULE_ACTIVATED,
+			(GldiNotificationFunc) _on_module_activated, FALSE, pModule);
 	
 	// notify everybody
 	gldi_object_notify (&myModuleObjectMgr, NOTIFICATION_MODULE_REGISTERED, pModule->pVisitCard->cModuleName, TRUE);
@@ -729,10 +809,13 @@ static void reset_object (GldiObject *obj)
 		return;
 	
 	// deactivate the module, if it was active
-	gldi_module_deactivate (pModule);
+	_module_deactivate (pModule); // do not delete from the config file, we are likely shutting down
 	
 	// unregister the module
 	g_hash_table_remove (s_hModuleTable, pModule->pVisitCard->cModuleName);
+	
+	if (gldi_module_is_auto_loaded (pModule))
+		s_AutoLoadedModules = g_list_remove (s_AutoLoadedModules, pModule);
 	
 	// notify everybody
 	gldi_object_notify (&myModuleObjectMgr, NOTIFICATION_MODULE_REGISTERED, pModule->pVisitCard->cModuleName, FALSE);
