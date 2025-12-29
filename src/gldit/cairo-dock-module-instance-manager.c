@@ -35,7 +35,7 @@
 #include "cairo-dock-dock-priv.h"
 #include "cairo-dock-data-renderer.h"
 #include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file
-#include "cairo-dock-module-manager-priv.h" // gldi_modules_write_active
+#include "cairo-dock-module-manager-priv.h" // gldi_module_instance_new_full is defined here
 #define _MANAGER_DEF_
 #include "cairo-dock-module-instance-manager.h"
 
@@ -60,10 +60,18 @@ static GldiModuleInstance *s_pUsedSlots[CAIRO_DOCK_NB_DATA_SLOT+1];
 
 GldiModuleInstance *gldi_module_instance_new_full (GldiModule *pModule, gchar *cConfFilePath, gboolean bActivate)  // The module-instance takes ownership of the path
 {
+	g_return_val_if_fail (pModule->iState != CAIRO_DOCK_MODULE_DISABLED, NULL); // will show a warning, do not call this function for an already disabled module
 	GldiModuleInstanceAttr attr = {pModule, cConfFilePath, bActivate};
 	
 	GldiModuleInstance *pInstance = g_malloc0 (CEIL_ALIGNED_SIZE(sizeof (GldiModuleInstance)) + CEIL_ALIGNED_SIZE(pModule->pVisitCard->iSizeOfConfig) + pModule->pVisitCard->iSizeOfData);  // we allocate everything at once, since config and data will anyway live as long as the instance itself.
 	gldi_object_init (GLDI_OBJECT(pInstance), &myModuleInstanceObjectMgr, &attr);
+	
+	if (pModule->iState == CAIRO_DOCK_MODULE_DISABLED)
+	{
+		// note: pInstance has not been freed in this case, since it was not added to the instance list yet
+		gldi_object_unref (GLDI_OBJECT (pInstance));
+		return NULL;
+	}
 	return pInstance;
 }
 
@@ -402,6 +410,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	GKeyFile *pKeyFile = gldi_module_instance_open_conf_file (pInstance, pMinimalConfig);
 	if (pInstance->cConfFilePath != NULL && pKeyFile == NULL)  // we have a conf file, but it was unreadable -> cancel
 	{
+		//!! TODO: pInstance will likely be leaked in this case !!
 		cd_warning ("unreadable config file (%s) for applet %s", pInstance->cConfFilePath, pModule->pVisitCard->cModuleName);
 		g_free (pMinimalConfig);
 		return;
@@ -463,7 +472,6 @@ static void init_object (GldiObject *obj, gpointer attr)
 	if (mattr->bActivate && pModule->pInterface->initModule)
 	{
 		pModule->pInterface->initModule (pInstance, pKeyFile);
-		pInstance->uActive.bIsActive = TRUE;
 	}
 	
 	if (pDesklet && pDesklet->iDesiredWidth == 0 && pDesklet->iDesiredHeight == 0)  // can happen if the desklet has already resized itself before the init.
@@ -473,10 +481,13 @@ static void init_object (GldiObject *obj, gpointer attr)
 	if (pKeyFile != NULL)
 		g_key_file_free (pKeyFile);
 	
-	//\____________________ add to the module.
-	pModule->pInstancesList = g_list_prepend (pModule->pInstancesList, pInstance);
-	if (pModule->pInstancesList->next == NULL)  // pInstance has been inserted in first, so it means it was the first instance
-		gldi_object_notify (pInstance->pModule, NOTIFICATION_MODULE_ACTIVATED, pModule->pVisitCard->cModuleName, TRUE);
+	//\____________________ add to the module. (only if module has not been disabled in initModule ())
+	if (pModule->iState != CAIRO_DOCK_MODULE_DISABLED)
+	{
+		pModule->pInstancesList = g_list_prepend (pModule->pInstancesList, pInstance);
+		if (pModule->pInstancesList->next == NULL)  // pInstance has been inserted in first, so it means it was the first instance
+			gldi_object_notify (pInstance->pModule, NOTIFICATION_MODULE_ACTIVATED, pModule->pVisitCard->cModuleName, TRUE);
+	}
 }
 
 static void reset_object (GldiObject *obj)

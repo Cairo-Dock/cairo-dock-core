@@ -44,6 +44,10 @@ void gldi_modules_deactivate_all (void);
 
 void gldi_register_modules_manager (void);
 
+/** Create a new instance of a module. Only activates it if bActivate == TRUE (FALSE is only valid for auto-loaded modules).
+ * Note: function defined in cairo-dock-module-instance-manager.c */
+GldiModuleInstance *gldi_module_instance_new_full (GldiModule *pModule, gchar *cConfFilePath, gboolean bActivate);
+
 G_END_DECLS
 #endif
 

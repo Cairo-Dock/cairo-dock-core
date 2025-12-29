@@ -87,6 +87,16 @@ typedef enum {
 	CAIRO_DOCK_MODULE_REQUIRES_OPENGL = 1<<2
 } GldiModuleFlags;
 
+/// Possible states of a module
+typedef enum {
+	/// Module has been loaded successfully, but is not activated yet
+	CAIRO_DOCK_MODULE_INACTIVE = 0,
+	/// Module is active (in this case, pInstancesList != NULL)
+	CAIRO_DOCK_MODULE_ACTIVE,
+	/// Module has been disabled after loading (e.g. not supported environment)
+	CAIRO_DOCK_MODULE_DISABLED,
+} GldiModuleState;
+
 #define CAIRO_DOCK_MODULE_DEFAULT_FLAGS (CAIRO_DOCK_MODULE_SUPPORTS_X11 | CAIRO_DOCK_MODULE_SUPPORTS_WAYLAND)
 
 /// Definition of the visit card of a module. Contains everything that is statically defined for a module.
@@ -200,6 +210,10 @@ struct _GldiModule {
 	gpointer handle;
 	/// list of instances of the module.
 	GList *pInstancesList;
+	/// state of the module
+	GldiModuleState iState;
+	/// user visible reason why this module was disabled (if any)
+	gchar *cDisableReason;
 	gpointer reserved[2];
 };
 
@@ -272,6 +286,19 @@ void gldi_module_activate (GldiModule *module);
 *@param module the module to deactivate
 */
 void gldi_module_deactivate (GldiModule *module);
+
+/** Disable a module, so that it cannot be activated anymore.
+* Use this if some circumstance prevents the module from functioning
+* (e.g. for *-integration if it is not run in the corresponding DE).
+* This also means deactivating and freeing all module instances, so if
+* calling it from a plugin, be careful that module data will not be
+* available after this function returns.
+* Currently, this is a one-time action that cannot be reversed.
+*@param pModule the module to disable
+*@param cReason the reason for disabling the module to be displayed to
+*  the user in the advanced config GUI.
+*/
+void gldi_module_disable (GldiModule *pModule, const gchar *cReason);
 
 // cp file
 gchar *gldi_module_add_conf_file (GldiModule *pModule);  /// should maybe be in the module-instance too...

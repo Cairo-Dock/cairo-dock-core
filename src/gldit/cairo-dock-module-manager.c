@@ -361,6 +361,8 @@ static void _gldi_module_load_config_and_activate (GldiModule *module, gboolean 
 		return ;
 	}
 	
+	if (module->iState == CAIRO_DOCK_MODULE_DISABLED) return; // avoid activating disabled modules
+	
 	if (module->pVisitCard->cConfFileName != NULL)  // the module has a conf file -> create an instance for each of them.
 	{
 		// check that the module's config dir exists or create it.
@@ -383,6 +385,7 @@ static void _gldi_module_load_config_and_activate (GldiModule *module, gboolean 
 				cd_warning ("couldn't open folder %s (%s)", cUserDataDirPath, tmp_erreur->message);
 				g_error_free (tmp_erreur);
 				g_free (cUserDataDirPath);
+				//!! TODO: maybe disable this module in this case?
 				return ;
 			}
 			
@@ -400,6 +403,7 @@ static void _gldi_module_load_config_and_activate (GldiModule *module, gboolean 
 				cInstanceFilePath = g_strdup_printf ("%s/%s", cUserDataDirPath, cFileName);
 				gldi_module_instance_new_full (module, cInstanceFilePath, bActivate);  // takes ownership of 'cInstanceFilePath'.
 				n ++;
+				if (module->iState == CAIRO_DOCK_MODULE_DISABLED) break;
 			}
 			g_dir_close (dir);
 		}
@@ -441,13 +445,16 @@ static void _gldi_module_load_config_and_activate (GldiModule *module, gboolean 
 	{
 		gldi_module_instance_new_full (module, NULL, bActivate);
 	}
+	
+	if (module->iState != CAIRO_DOCK_MODULE_DISABLED && bActivate)
+		module->iState = CAIRO_DOCK_MODULE_ACTIVE;
 }
 
 void gldi_module_activate (GldiModule *pModule)
 {
 	_gldi_module_load_config_and_activate (pModule, TRUE);
 	
-	if (pModule->pInstancesList)
+	if (pModule->iState == CAIRO_DOCK_MODULE_ACTIVE)
 	{
 		// module successfully activated, update our config
 		_module_add_to_config (pModule);
@@ -460,10 +467,15 @@ void _module_deactivate (GldiModule *module)  // stop all instances of a module 
 	cd_debug ("%s (%s, %s)", __func__, module->pVisitCard->cModuleName, module->cConfFilePath);
 	GList *pInstances = module->pInstancesList;
 	module->pInstancesList = NULL;  // set to NULL already so that notifications don't get fooled. This can probably be avoided...
-	g_list_free_full (pInstances, (GDestroyNotify)gldi_object_unref);
-	s_bSelfNotify = TRUE; // we want to ignore our own notification
-	gldi_object_notify (module, NOTIFICATION_MODULE_ACTIVATED, module->pVisitCard->cModuleName, FALSE);  // throw it since the list was NULL when the instances were destroyed
-	s_bSelfNotify = FALSE;
+	if (pInstances) // can be NULL if the first instance failed loading and is calling gldi_module_disable ()
+	{
+		g_list_free_full (pInstances, (GDestroyNotify)gldi_object_unref);
+		s_bSelfNotify = TRUE; // we want to ignore our own notification
+		gldi_object_notify (module, NOTIFICATION_MODULE_ACTIVATED, module->pVisitCard->cModuleName, FALSE);  // throw it since the list was NULL when the instances were destroyed
+		s_bSelfNotify = FALSE;
+	}
+	if (module->iState != CAIRO_DOCK_MODULE_DISABLED)
+		module->iState = CAIRO_DOCK_MODULE_INACTIVE;
 }
 
 void gldi_module_deactivate (GldiModule *module)  // stop all instances of a module
@@ -472,6 +484,12 @@ void gldi_module_deactivate (GldiModule *module)  // stop all instances of a mod
 	_module_remove_from_config (module);
 }
 
+void gldi_module_disable (GldiModule *pModule, const gchar *cReason)
+{
+	_module_deactivate (pModule);
+	pModule->iState = CAIRO_DOCK_MODULE_DISABLED;
+	if (cReason) pModule->cDisableReason = g_strdup (cReason);
+}
 
 void gldi_modules_load_auto_config (void)
 {
@@ -502,15 +520,15 @@ void gldi_modules_activate_all (gboolean bOnlyAutoLoaded)
 		{
 			_gldi_module_load_config_and_activate (pModule, TRUE); // do not update config
 		}
-		else
+		else if (pModule->iState == CAIRO_DOCK_MODULE_INACTIVE)
 		{
 			// note: auto-loaded modules only have a single instance
 			GldiModuleInstance *pInstance = pModule->pInstancesList->data;
-			if (pInstance && !pInstance->uActive.bIsActive)
+			if (pModule->pInterface->initModule)
 			{
-				if (pModule->pInterface->initModule)
-					pModule->pInterface->initModule (pInstance, NULL);
-				pInstance->uActive.bIsActive = TRUE;
+				pModule->pInterface->initModule (pInstance, NULL);
+				if (pModule->iState != CAIRO_DOCK_MODULE_DISABLED)
+					pModule->iState = CAIRO_DOCK_MODULE_ACTIVE;
 			}
 		}
 	}
@@ -535,13 +553,6 @@ void gldi_modules_activate_all (gboolean bOnlyAutoLoaded)
 			_gldi_module_load_config_and_activate (pModule, TRUE);
 		}
 	}
-	
-	// don't write down -- TODO: remove, not needed anymore
-	if (s_iSidWriteModules != 0)
-	{
-		g_source_remove (s_iSidWriteModules);
-		s_iSidWriteModules = 0;
-	}
 }
 
 static void _deactivate_one_module (G_GNUC_UNUSED gchar *cModuleName, GldiModule *pModule, G_GNUC_UNUSED gpointer data)
@@ -561,13 +572,6 @@ void gldi_modules_deactivate_all (void)
 	{
 		pModule = m->data;
 		_module_deactivate (pModule);
-	}
-	
-	// don't write down -- TODO: remove, not needed anymore
-	if (s_iSidWriteModules != 0)
-	{
-		g_source_remove (s_iSidWriteModules);
-		s_iSidWriteModules = 0;
 	}
 }
 
@@ -825,6 +829,7 @@ static void reset_object (GldiObject *obj)
 		dlclose (pModule->handle);
 	g_free (pModule->pInterface);
 	g_free (pModule->pVisitCard); // toutes les chaines sont statiques.
+	g_free (pModule->cDisableReason);
 }
 
 static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, G_GNUC_UNUSED GKeyFile *pKeyFile)
