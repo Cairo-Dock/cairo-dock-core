@@ -21,7 +21,7 @@
 #include "gldi-icon-names.h"
 #include "cairo-dock-struct.h"
 #include "cairo-dock-keyfile-utilities.h"
-#include "cairo-dock-module-manager.h"
+#include "cairo-dock-module-manager-priv.h"
 #include "cairo-dock-icon-manager.h"  // cairo_dock_search_icon_s_path
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-log.h"

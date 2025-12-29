@@ -35,7 +35,7 @@
 #include "cairo-dock-config.h"
 #include "cairo-dock-module-instance-manager.h"
 #define _MANAGER_DEF_
-#include "cairo-dock-module-manager.h"
+#include "cairo-dock-module-manager-priv.h"
 
 // public (manager, config, data)
 GldiModulesParam myModulesParam;
@@ -60,6 +60,11 @@ extern gboolean g_bUseOpenGL;
 static GHashTable *s_hModuleTable = NULL;
 static GList *s_AutoLoadedModules = NULL;
 static guint s_iSidWriteModules = 0;
+
+typedef struct _GldiModuleAttr {
+	GldiVisitCard *pVisitCard;
+	GldiModuleInterface *pInterface;
+} GldiModuleAttr;
 
 
   ///////////////
@@ -150,9 +155,12 @@ GldiModule *gldi_module_new (GldiVisitCard *pVisitCard, GldiModuleInterface *pIn
 	return (GldiModule*)gldi_object_new (&myModuleObjectMgr, &attr);
 }
 
-GldiModule *gldi_module_new_from_so_file (const gchar *cSoFilePath)
+/** Create a new module from a .so file and add it to our hashtable of modules.
+* @param cSoFilePath path to the .so file
+*/
+static void _module_new_from_so_file (const gchar *cSoFilePath)
 {
-	g_return_val_if_fail (cSoFilePath != NULL, NULL);
+	g_return_if_fail (cSoFilePath != NULL);
 	GldiVisitCard *pVisitCard = NULL;
 	GldiModuleInterface *pInterface = NULL;
 	
@@ -162,7 +170,7 @@ GldiModule *gldi_module_new_from_so_file (const gchar *cSoFilePath)
 	if (! handle)
 	{
 		cd_warning ("while opening module '%s' : (%s)", cSoFilePath, dlerror());
-		return NULL;
+		return;
 	}
 	
 	// find the pre-init entry point
@@ -261,14 +269,13 @@ GldiModule *gldi_module_new_from_so_file (const gchar *cSoFilePath)
 	GldiModule *pModule = gldi_module_new (pVisitCard, pInterface);  // takes ownership of pVisitCard and pInterface
 	if (pModule)
 		pModule->handle = handle;
-	return pModule;
+	return;
 	
 discard:
 	///g_module_close (pModule);
 	dlclose (handle);
-	cairo_dock_free_visit_card (pVisitCard);
+	g_free (pVisitCard); // toutes les chaines sont statiques.
 	g_free (pInterface);
-	return NULL;
 }
 
 /* Load modules from cModuleDirPath which must be non-NULL */
@@ -294,7 +301,7 @@ static void _gldi_modules_new_from_directory2 (const gchar *cModuleDirPath, GErr
 		if (g_str_has_suffix (cFileName, ".so"))
 		{
 			g_string_printf (sFilePath, "%s/%s", cModuleDirPath, cFileName);
-			(void)gldi_module_new_from_so_file (sFilePath->str);
+			_module_new_from_so_file (sFilePath->str);
 		}
 	}
 	while (1);
@@ -342,11 +349,6 @@ gchar *gldi_module_get_config_dir (GldiModule *pModule)
 	}
 	
 	return cUserDataDirPath;
-}
-
-void cairo_dock_free_visit_card (GldiVisitCard *pVisitCard)
-{
-	g_free (pVisitCard);  // toutes les chaines sont statiques.
 }
 
 
@@ -732,7 +734,7 @@ static void reset_object (GldiObject *obj)
 	if (pModule->handle)
 		dlclose (pModule->handle);
 	g_free (pModule->pInterface);
-	cairo_dock_free_visit_card (pModule->pVisitCard);
+	g_free (pModule->pVisitCard); // toutes les chaines sont statiques.
 }
 
 static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, G_GNUC_UNUSED GKeyFile *pKeyFile)

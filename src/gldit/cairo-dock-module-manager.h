@@ -47,24 +47,10 @@ G_BEGIN_DECLS
 #define GLDI_ABI_VERSION 20251226
 
 // manager
-typedef struct _GldiModulesParam GldiModulesParam;
-typedef struct _GldiModuleAttr GldiModuleAttr;
-
 #ifndef _MANAGER_DEF_
-extern GldiModulesParam myModulesParam;
 extern GldiObjectManager myModuleObjectMgr;
 #endif
 
-
-struct _GldiModuleAttr {
-	GldiVisitCard *pVisitCard;
-	GldiModuleInterface *pInterface;
-};
-
-// params
-struct _GldiModulesParam {
-	gchar **cActiveModuleList;
-	};
 
 // signals
 typedef enum {
@@ -240,8 +226,6 @@ struct _CairoDockMinimalAppletConfig {
  // MODULE LOADER //
 ///////////////////
 
-#define gldi_module_is_auto_loaded(pModule) ((pModule->pInterface->initModule == NULL || pModule->pInterface->stopModule == NULL || pModule->pVisitCard->cInternalModule != NULL) && pModule->pVisitCard->iContainerType == CAIRO_DOCK_MODULE_IS_PLUGIN)
-
 /** Create a new module. The module takes ownership of the 2 arguments, unless an error occurred.
 * @param pVisitCard the visit card of the module
 * @param pInterface the interface of the module
@@ -249,27 +233,12 @@ struct _CairoDockMinimalAppletConfig {
 */
 GldiModule *gldi_module_new (GldiVisitCard *pVisitCard, GldiModuleInterface *pInterface);
 
-/** Create a new module from a .so file.
-* @param cSoFilePath path to the .so file
-* @return the new module, or NULL if an error occurred.
-*/
-GldiModule *gldi_module_new_from_so_file (const gchar *cSoFilePath);
-
-/** Create new modules from all the .so files contained in the given folder.
-* @param cModuleDirPath path to the folder
-* @param erreur an error
-* @return the new module, or NULL if an error occurred.
-*/
-void gldi_modules_new_from_directory (const gchar *cModuleDirPath, GError **erreur);
-
 /** Get the path to the folder containing the config files of a module (one file per instance). The folder is created if needed.
 * If the module is not configurable, or if the folder couldn't be created, NULL is returned.
 * @param pModule the module
 * @return the path to the folder (free it after use).
 */
 gchar *gldi_module_get_config_dir (GldiModule *pModule);
-
-void cairo_dock_free_visit_card (GldiVisitCard *pVisitCard);
 
 
   /////////////
@@ -289,15 +258,10 @@ GldiModule *gldi_module_foreach_in_alphabetical_order (GCompareFunc pCallback, g
 int gldi_module_get_nb (void);
 #define cairo_dock_get_nb_modules gldi_module_get_nb
 
-void gldi_modules_write_active (void);
-
 
   ///////////////////////
  // MODULES HIGH LEVEL//
 ///////////////////////
-
-/** Load the config of all auto-loaded modules without activating them. */
-void gldi_modules_load_auto_config (void);
 
 /** Create and initialize all the instances of a module.
 *@param module the module to activate.
@@ -309,17 +273,12 @@ void gldi_module_activate (GldiModule *module);
 */
 void gldi_module_deactivate (GldiModule *module);
 
-void gldi_modules_activate_from_list (gchar **cActiveModuleList);
-
-void gldi_modules_deactivate_all (void);
-
 // cp file
 gchar *gldi_module_add_conf_file (GldiModule *pModule);  /// should maybe be in the module-instance too...
 // cp file + instanciate_module
 void gldi_module_add_instance (GldiModule *pModule);
 
 
-void gldi_register_modules_manager (void);
-
 G_END_DECLS
 #endif
+

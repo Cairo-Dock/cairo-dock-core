@@ -35,7 +35,7 @@
 #include "cairo-dock-dock-priv.h"
 #include "cairo-dock-data-renderer.h"
 #include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file
-#include "cairo-dock-module-manager.h"
+#include "cairo-dock-module-manager-priv.h" // gldi_modules_write_active
 #define _MANAGER_DEF_
 #include "cairo-dock-module-instance-manager.h"
 

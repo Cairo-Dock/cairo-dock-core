@@ -28,7 +28,7 @@
 
 #include "config.h"
 #include "gldi-icon-names.h"
-#include "cairo-dock-module-manager.h"  // gldi_module_foreach
+#include "cairo-dock-module-manager-priv.h"  // gldi_module_foreach, gldi_module_is_auto_loaded
 #include "cairo-dock-module-instance-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-desklet-manager.h"  // cairo_dock_foreach_desklet

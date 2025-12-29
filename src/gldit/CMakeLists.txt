@@ -19,7 +19,7 @@ SET(core_lib_SRCS
 	cairo-dock-applet-manager.c 		cairo-dock-applet-manager.h
 	cairo-dock-applet-facility.c 		cairo-dock-applet-facility.h
 	cairo-dock-separator-manager.c 		cairo-dock-separator-manager.h
-	cairo-dock-module-manager.c 		cairo-dock-module-manager.h
+	cairo-dock-module-manager.c 		cairo-dock-module-manager.h             cairo-dock-module-manager-priv.h
 	cairo-dock-module-instance-manager.c cairo-dock-module-instance-manager.h
 	# containers
 	cairo-dock-container.c 				cairo-dock-container.h                  cairo-dock-container-priv.h
