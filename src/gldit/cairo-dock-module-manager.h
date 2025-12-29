@@ -44,7 +44,7 @@ G_BEGIN_DECLS
  * It is not required the change this when adding a function to the
  * public API (loading the module will fail if it refers to an
  * unresolved symbol anyway). */
-#define GLDI_ABI_VERSION 20251226
+#define GLDI_ABI_VERSION 20251229
 
 // manager
 #ifndef _MANAGER_DEF_
