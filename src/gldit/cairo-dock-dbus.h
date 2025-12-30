@@ -22,6 +22,7 @@
 #define  __CAIRO_DOCK_DBUS__
 
 #include <glib.h>
+#include <gio/gio.h>
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-bindings.h>
 G_BEGIN_DECLS
@@ -31,6 +32,29 @@ G_BEGIN_DECLS
 * DBus is used to communicate and interact with other running applications.
 */ 
 
+
+/***********************************************************************
+ * New interface */
+
+
+/** Say if the bus is available or not.
+*@return TRUE if the connection to the bus has been established.
+*/
+gboolean cairo_dock_dbus_is_enabled (void);
+
+/** Get a connection to the session bus (if connected).
+*@return main DBusConnection to the session bus or NULL if unavailable
+*/
+GDBusConnection *cairo_dock_dbus_get_session_bus (void);
+
+/** Get the DBus well-known name under which Cairo-Dock is registered
+* on the session bus. By default, it is "org.CairoDock.cairodock".
+*@return the DBus name registered or NULL if we do not own a DBus name
+*/
+const gchar *cairo_dock_dbus_get_owned_name (void);
+
+
+/** Deprecated interface -- to be removed. */
 
 typedef void (*CairoDockDbusNameOwnerChangedFunc) (const gchar *cName, gboolean bOwned, gpointer data);
 
@@ -50,10 +74,6 @@ DBusGProxy *cairo_dock_get_main_system_proxy (void);
 */
 gboolean cairo_dock_register_service_name (const gchar *cServiceName);
 
-/** Say if the bus is available or not.
-*@return TRUE if the connection to the bus has been established.
-*/
-gboolean cairo_dock_dbus_is_enabled (void);
 
 void cairo_dock_watch_dbus_name_owner (const char *cName, CairoDockDbusNameOwnerChangedFunc pCallback, gpointer data);
 

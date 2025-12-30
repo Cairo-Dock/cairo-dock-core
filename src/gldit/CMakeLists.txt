@@ -55,7 +55,7 @@ SET(core_lib_SRCS
 	cairo-dock-gui-manager.c 			cairo-dock-gui-manager.h
 	cairo-dock-gui-factory.c 			cairo-dock-gui-factory.h
 	cairo-dock-keybinder.c 				cairo-dock-keybinder.h
-	cairo-dock-dbus.c 					cairo-dock-dbus.h 
+	cairo-dock-dbus.c 					cairo-dock-dbus.h                       cairo-dock-dbus-priv.h
 	cairo-dock-keyfile-utilities.c 		cairo-dock-keyfile-utilities.h
 	cairo-dock-packages.c 				cairo-dock-packages.h
 	cairo-dock-particle-system.c 		cairo-dock-particle-system.h
