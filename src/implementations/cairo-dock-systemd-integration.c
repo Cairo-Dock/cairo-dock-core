@@ -82,26 +82,14 @@ static void _spawn_app (const gchar * const *args, const gchar *id, const gchar 
 	_init_variant_builder   (&var_builder, G_VARIANT_TYPE ("(ssa(sv)a(sa(sv)))"));
 	g_variant_builder_add_value (&var_builder, g_variant_new_take_string (name));
 	g_variant_builder_add   (&var_builder, "s", "fail");
+	
+	// Unit properties
 	g_variant_builder_open  (&var_builder, G_VARIANT_TYPE ("a(sv)"));
 	g_variant_builder_add   (&var_builder, "(sv)", "Description", g_variant_new_string (desc));
-	{
-		GVariantBuilder args_builder;
-		_init_variant_builder   (&args_builder, G_VARIANT_TYPE ("(sasb)"));
-		g_variant_builder_add   (&args_builder, "s", args[0]);
-		g_variant_builder_open  (&args_builder, G_VARIANT_TYPE ("as"));
-		for(; *args; ++args) g_variant_builder_add (&args_builder, "s", *args);
-		g_variant_builder_close (&args_builder);
-		g_variant_builder_add   (&args_builder, "b", FALSE);
-		GVariant *tmp = g_variant_builder_end (&args_builder);
-		g_variant_builder_add   (&var_builder, "(sv)", "ExecStart", g_variant_new_array (NULL, &tmp, 1));
-	}
-	if (env && *env)
-	{
-		GVariantBuilder env_builder;
-		_init_variant_builder (&env_builder, G_VARIANT_TYPE ("as"));
-		if (env) for (; *env; ++env) g_variant_builder_add (&env_builder, "s", *env);
-		g_variant_builder_add (&var_builder, "(sv)", "Environment", g_variant_builder_end (&env_builder));
-	}
+	GVariant *tmp = g_variant_new ("(s^asb)", args[0], args, FALSE); // FALSE -> do not keep a "failed" unit on unclean exit
+	// note: ExecStart expects an array of (sasb)
+	g_variant_builder_add   (&var_builder, "(sv)", "ExecStart", g_variant_new_array (NULL, &tmp, 1));
+	if (env && *env) g_variant_builder_add (&var_builder, "(sv)", "Environment", g_variant_new_strv (env, -1));
 	if (working_dir) g_variant_builder_add (&var_builder, "(sv)", "WorkingDirectory", g_variant_new_string (working_dir));
 	// fail if systemd cannot exec the process binary
 	g_variant_builder_add   (&var_builder, "(sv)", "Type", g_variant_new_string ("exec"));
