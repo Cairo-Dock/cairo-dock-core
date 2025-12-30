@@ -42,7 +42,7 @@
 #include "cairo-dock-X-manager.h"
 #include "cairo-dock-wayland-manager.h"
 #include "cairo-dock-systemd-integration.h"
-#include "cairo-dock-module-manager.h"
+#include "cairo-dock-module-manager-priv.h"
 #include "cairo-dock-module-instance-manager.h"
 #include "cairo-dock-packages.h"
 #include "cairo-dock-style-manager.h"

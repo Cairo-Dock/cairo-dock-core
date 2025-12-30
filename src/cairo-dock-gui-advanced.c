@@ -113,6 +113,7 @@ static int s_iPreviewWidth, s_iNbButtonsByRow;
 static CairoDialog *s_pDialog = NULL;
 static guint s_iSidShowGroupDialog = 0;
 static guint s_iSidCheckGroupButton = 0;
+static gchar *s_cActiveModules = NULL;
 
 static CDWidget *s_pCurrentGroupWidget2 = NULL;
 
@@ -1168,6 +1169,8 @@ static void on_click_apply (G_GNUC_UNUSED GtkButton *button, G_GNUC_UNUSED GtkWi
 static void on_click_quit (G_GNUC_UNUSED GtkButton *button, GtkWidget *pWindow)
 {
 	gtk_widget_destroy (pWindow);
+	g_free (s_cActiveModules);
+	s_cActiveModules = NULL;
 }
 
 /**static void on_click_ok (GtkButton *button, GtkWidget *pWindow)
@@ -1338,7 +1341,55 @@ static void _add_sub_group_to_group_button (CairoDockGroupDescription *pGroupDes
 	pSubGroup[2] = (gchar*)cTitle;
 	pGroupDescription->pGroups = g_list_append (pGroupDescription->pGroups, pSubGroup);
 }
-static CairoDockGroupDescription *_add_group_button (const gchar *cGroupName, const gchar *cIcon, int iCategory, const gchar *cDescription, const gchar *cPreviewFilePath, int iActivation, gboolean bConfigurable, const gchar *cGettextDomain, const gchar *cTitle)
+
+typedef enum
+{
+	MODULE_CAN_ENABLE = 1, // module can be activated by the user
+	MODULE_IS_ACTIVE = 2, // module is currently activated
+} ModuleState;
+
+static ModuleState _get_module_state (GldiModule *pModule)
+{
+	const gchar *cModuleName = pModule->pVisitCard->cModuleName;
+	ModuleState iActive = 0; // inactive and cannot be activated
+	if (pModule->iState != CAIRO_DOCK_MODULE_DISABLED)
+	{
+		if (! pModule->pInterface->stopModule)
+			iActive = MODULE_IS_ACTIVE; // active, but cannot be disabled by the user
+		else
+		{
+			iActive |= MODULE_CAN_ENABLE; // module can be activated / stopped by the user
+			if (g_pPrimaryContainer == NULL && s_cActiveModules != NULL)  // avant chargement du theme.
+			{
+				gchar *str = g_strstr_len (s_cActiveModules, strlen (s_cActiveModules), cModuleName);
+				if (str != NULL &&
+					(str[strlen(cModuleName)] == '\0' || str[strlen(cModuleName)] == ';') &&
+					(str == s_cActiveModules || *(str-1) == ';'))
+				{
+					iActive |= MODULE_IS_ACTIVE;
+				}
+			}
+			else if (pModule->iState == CAIRO_DOCK_MODULE_ACTIVE)
+				iActive |= MODULE_IS_ACTIVE;
+		}
+	}
+	return iActive;
+}
+
+static void _add_module_disabled_tooltip (GtkWidget *pWidget, const gchar *cDisableReason)
+{
+	if (cDisableReason)
+	{
+		gchar *tmp = g_strdup_printf ("%s\n%s", _("This plug-in cannot be enabled as it is not supported in the current desktop environment."), cDisableReason);
+		gtk_widget_set_tooltip_text (pWidget, tmp);
+		g_free (tmp);
+	}
+	else gtk_widget_set_tooltip_text (pWidget, _("This plug-in cannot be enabled as it is not supported in the current desktop environment.\nCheck our Wiki for more information: https://github.com/Cairo-Dock/cairo-dock-core/wiki"));
+}
+
+static CairoDockGroupDescription *_add_group_button (const gchar *cGroupName, const gchar *cIcon, int iCategory,
+	const gchar *cDescription, const gchar *cPreviewFilePath, ModuleState iActivation, gboolean bConfigurable,
+	const gchar *cGettextDomain, const gchar *cTitle, const gchar *cDisableReason)
 {
 	//\____________ On garde une trace de ses caracteristiques.
 	CairoDockGroupDescription *pGroupDescription = g_new0 (CairoDockGroupDescription, 1);
@@ -1356,15 +1407,18 @@ static CairoDockGroupDescription *_add_group_button (const gchar *cGroupName, co
 	pGroupDescription->pGroupHBox = pGroupHBox;
 	
 	pGroupDescription->pActivateButton = gtk_check_button_new ();
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pGroupDescription->pActivateButton), iActivation);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pGroupDescription->pActivateButton), !!(iActivation & MODULE_IS_ACTIVE));
 	g_signal_connect (G_OBJECT (pGroupDescription->pActivateButton), "clicked", G_CALLBACK(on_click_activate_given_group), pGroupDescription);
-	if (iActivation == -1)
+	if (! (iActivation & MODULE_CAN_ENABLE))
 		gtk_widget_set_sensitive (pGroupDescription->pActivateButton, FALSE);
 	gtk_box_pack_start (GTK_BOX (pGroupHBox),
 		pGroupDescription->pActivateButton,
 		FALSE,
 		FALSE,
 		0);
+	
+	if (iActivation == 0) // Disabled module, add a tooltip
+		_add_module_disabled_tooltip (pGroupHBox, cDisableReason);
 	
 	GtkWidget *pGroupButton = gtk_button_new ();
 	gtk_button_set_relief (GTK_BUTTON (pGroupButton), GTK_RELIEF_NONE);
@@ -1395,36 +1449,22 @@ static CairoDockGroupDescription *_add_group_button (const gchar *cGroupName, co
 	_add_module_to_grid (&s_pCategoryWidgetTables[iCategory], pGroupHBox);
 	return pGroupDescription;
 }
-static gboolean _cairo_dock_add_one_module_widget (GldiModule *pModule, const gchar *cActiveModules)
+static gboolean _cairo_dock_add_one_module_widget (GldiModule *pModule, G_GNUC_UNUSED gpointer data)
 {
 	if (pModule->pVisitCard->cInternalModule != NULL)  // this module extends a manager, it will be merged with this one.
 		return TRUE;  // continue.
 	
-	const gchar *cModuleName = pModule->pVisitCard->cModuleName;
-	///if (pModule->cConfFilePath == NULL && ! g_bEasterEggs)  // option perso : les plug-ins non utilises sont grises et ne rajoutent pas leur .conf au theme courant.
-	///	pModule->cConfFilePath = cairo_dock_check_module_conf_file (pModule->pVisitCard);
-	int iActive;
-	if (! pModule->pInterface->stopModule)
-		iActive = -1;
-	else if (g_pPrimaryContainer == NULL && cActiveModules != NULL)  // avant chargement du theme.
-	{
-		gchar *str = g_strstr_len (cActiveModules, strlen (cActiveModules), cModuleName);
-		iActive = (str != NULL &&
-			(str[strlen(cModuleName)] == '\0' || str[strlen(cModuleName)] == ';') &&
-			(str == cActiveModules || *(str-1) == ';'));
-	}
-	else
-		iActive = (pModule->pInstancesList != NULL);
-	
-	CairoDockGroupDescription *pGroupDescription = _add_group_button (cModuleName,
+	CairoDockGroupDescription *pGroupDescription = _add_group_button (
+		pModule->pVisitCard->cModuleName,
 		pModule->pVisitCard->cIconFilePath,
 		pModule->pVisitCard->iCategory,
 		pModule->pVisitCard->cDescription,
 		pModule->pVisitCard->cPreviewFilePath,
-		iActive,
+		_get_module_state (pModule),
 		pModule->pVisitCard->cConfFileName != NULL,
 		pModule->pVisitCard->cGettextDomain,
-		pModule->pVisitCard->cTitle);
+		pModule->pVisitCard->cTitle,
+		pModule->cDisableReason);
 	//g_print ("+ %s : %x;%x\n", cModuleName,pGroupDescription, pGroupDescription->pActivateButton);
 	pGroupDescription->build_widget = _build_module_widget;
 	return TRUE;  // continue.
@@ -1436,10 +1476,11 @@ _add_group_button (cGroupName,\
 		iCategory,\
 		cDescription,\
 		NULL,  /* pas de prevue*/\
-		-1,  /* <=> non desactivable*/\
+		MODULE_IS_ACTIVE,  /* <=> non desactivable*/\
 		TRUE,  /* <=> configurable*/\
 		NULL,  /* domaine de traduction : celui du dock.*/\
-		cTitle)
+		cTitle, \
+		NULL)  /* disable reason -- not needed, as it is enabled */
 static void _add_main_groups_buttons (void)
 {
 	CairoDockGroupDescription *pGroupDescription;
@@ -1813,18 +1854,17 @@ static GtkWidget *cairo_dock_build_main_ihm (const gchar *cConfFilePath)  // 'cC
 	_add_main_groups_buttons ();
 	
 	//\_____________ On remplit avec les modules.
-	gchar *cActiveModules;
+	if (s_cActiveModules) g_free (s_cActiveModules);
 	if (g_pPrimaryContainer == NULL)
 	{
 		GKeyFile* pKeyFile = g_key_file_new();
 		g_key_file_load_from_file (pKeyFile, cConfFilePath, 0, NULL);  // inutile de garder les commentaires ici.
-		cActiveModules = g_key_file_get_string (pKeyFile, "System", "modules", NULL);
+		s_cActiveModules = g_key_file_get_string (pKeyFile, "System", "modules", NULL);
 		g_key_file_free (pKeyFile);
 	}
 	else
-		cActiveModules = NULL;
-	gldi_module_foreach_in_alphabetical_order ((GCompareFunc) _cairo_dock_add_one_module_widget, cActiveModules);
-	g_free (cActiveModules);
+		s_cActiveModules = NULL;
+	gldi_module_foreach_in_alphabetical_order ((GCompareFunc) _cairo_dock_add_one_module_widget, NULL);
 	
 	//\_____________ On ajoute le cadre d'activation du module.
 	s_pGroupFrame = gtk_frame_new ("pouet");
@@ -2178,16 +2218,10 @@ static void _present_group_widget (CairoDockGroupDescription *pGroupDescription,
 	
 	g_signal_handlers_block_by_func (s_pActivateButton, on_click_activate_current_group, NULL);
 	GldiModule *pModule = gldi_module_get (pGroupDescription->cGroupName);
-	if (pModule != NULL && pModule->pInterface->stopModule != NULL)
-	{
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (s_pActivateButton), pModule->pInstancesList != NULL);
-		gtk_widget_set_sensitive (s_pActivateButton, TRUE);
-	}
-	else
-	{
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (s_pActivateButton), TRUE);
-		gtk_widget_set_sensitive (s_pActivateButton, FALSE);
-	}
+	ModuleState iActive = pModule ? _get_module_state (pModule) : MODULE_IS_ACTIVE;
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (s_pActivateButton), !!(iActive & MODULE_IS_ACTIVE));
+	gtk_widget_set_sensitive (s_pActivateButton, !!(iActive & MODULE_CAN_ENABLE));
+	if (iActive == 0) _add_module_disabled_tooltip (s_pActivateButton, pModule->cDisableReason); // note: pModule != NULL in this case
 	g_signal_handlers_unblock_by_func (s_pActivateButton, on_click_activate_current_group, NULL);
 	
 	//\_______________ disable 'hide inactive applets' filter.

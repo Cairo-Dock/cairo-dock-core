@@ -21,7 +21,7 @@
 #include "gldi-icon-names.h"
 #include "cairo-dock-struct.h"
 #include "cairo-dock-keyfile-utilities.h"
-#include "cairo-dock-module-manager.h"
+#include "cairo-dock-module-manager-priv.h"
 #include "cairo-dock-icon-manager.h"  // cairo_dock_search_icon_s_path
 #include "cairo-dock-gui-factory.h"
 #include "cairo-dock-log.h"
@@ -178,7 +178,8 @@ static void _cairo_dock_render_category (G_GNUC_UNUSED GtkTreeViewColumn *tree_c
 static gboolean _cairo_dock_add_module_to_modele (gchar *cModuleName, GldiModule *pModule, GtkListStore *pModel)
 {
 	if (pModule->pVisitCard->iCategory != CAIRO_DOCK_CATEGORY_THEME  // don't display the animations plug-ins
-		&& ! gldi_module_is_auto_loaded (pModule))  // don't display modules that can't be disabled
+		&& ! gldi_module_is_auto_loaded (pModule)  // don't display modules that can't be disabled
+		&& pModule->iState != CAIRO_DOCK_MODULE_DISABLED) // don't display disabled modules (they are still shown in the advanced GUI)
 	{
 		//g_print (" + %s\n",  pModule->pVisitCard->cIconFilePath);
 		int iSize = cairo_dock_search_icon_size (GTK_ICON_SIZE_LARGE_TOOLBAR);

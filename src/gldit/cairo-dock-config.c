@@ -47,7 +47,7 @@ static char DES_crypt_key[64] =
 #include "cairo-dock-log.h"
 #include "cairo-dock-icon-manager.h"  // cairo_dock_hide_show_launchers_on_other_desktops
 #include "cairo-dock-applications-priv.h"  // cairo_dock_start_applications_manager
-#include "cairo-dock-module-manager.h"  // gldi_modules_activate_from_list
+#include "cairo-dock-module-manager-priv.h"  // gldi_modules_activate_from_list, gldi_modules_load_auto_config
 #include "cairo-dock-themes-manager.h"  // cairo_dock_update_conf_file
 #include "cairo-dock-dock-factory.h"  // gldi_dock_new
 #include "cairo-dock-file-manager.h"  // cairo_dock_get_file_size
@@ -468,7 +468,7 @@ void cairo_dock_load_current_theme (void)
 	
 	//\___________________ Load all managers data.
 	gldi_managers_load ();
-	gldi_modules_activate_from_list (NULL);  // load auto-loaded modules before loading anything (views, etc)
+	gldi_modules_activate_all (TRUE); // TRUE -> only load auto-loaded modules before loading anything (views, etc)
 	
 	//\___________________ Now load the user icons (launchers, etc).
 	gldi_user_icons_new_from_directory (g_cCurrentLaunchersPath);
@@ -476,7 +476,7 @@ void cairo_dock_load_current_theme (void)
 	cairo_dock_hide_show_launchers_on_other_desktops ();
 	
 	//\___________________ Load the applets.
-	gldi_modules_activate_from_list (myModulesParam.cActiveModuleList);
+	gldi_modules_activate_all (FALSE); // FALSE -> load everything
 	
 	//\___________________ Start the applications manager (will load the icons if the option is enabled).
 	cairo_dock_start_applications_manager (pMainDock);

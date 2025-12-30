@@ -315,7 +315,7 @@ static inline void _set_preview_image (const gchar *cPreviewFilePath, GtkImage *
 	requisition.height = CAIRO_DOCK_PREVIEW_HEIGHT;
 	
 	int scale = 1;
-	GdkWindow* gdkwindow = gldi_container_get_gdk_window (CAIRO_CONTAINER (g_pMainDock));
+	GdkWindow* gdkwindow = g_pMainDock ? gldi_container_get_gdk_window (CAIRO_CONTAINER (g_pMainDock)) : NULL;
 	if (gdkwindow) scale = gdk_window_get_scale_factor (gdkwindow);
 
 	GdkPixbuf *pPreviewPixbuf = cairo_dock_load_gdk_pixbuf_with_max_size (cPreviewFilePath,
@@ -1659,7 +1659,8 @@ GtkWidget *cairo_dock_widget_handbook_new (GldiModule *pModule)
 
 	// ModuleImage
 	int scale = 1;
-	GdkWindow* gdkwindow = gldi_container_get_gdk_window (CAIRO_CONTAINER (g_pMainDock));
+	// note: g_pMainDock will be NULL in maintenance mode -- in this case, we will get blurry images on HiDPI monitors
+	GdkWindow* gdkwindow = g_pMainDock ? gldi_container_get_gdk_window (CAIRO_CONTAINER (g_pMainDock)) : NULL;
 	if (gdkwindow) scale = gdk_window_get_scale_factor (gdkwindow);
 	GdkPixbuf *pPreviewPixbuf = cairo_dock_load_gdk_pixbuf_with_max_size (pModule->pVisitCard->cPreviewFilePath,
 		200 * scale, 200 * scale);
