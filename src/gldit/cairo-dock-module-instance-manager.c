@@ -95,17 +95,16 @@ static void _read_module_config (GKeyFile *pKeyFile, GldiModuleInstance *pInstan
 		
 		bFlushConfFileNeeded = pInterface->read_conf_file (pInstance, pKeyFile);
 	}
-	if (! bFlushConfFileNeeded)
-		bFlushConfFileNeeded = cairo_dock_conf_file_needs_update (pKeyFile, pVisitCard->cModuleVersion);
 	if (bFlushConfFileNeeded)
 	{
+		// if there were still missing values (the plug-in uses some setting not in its template)
 		gchar *cTemplate = g_strdup_printf ("%s/%s", pVisitCard->cShareDataDir, pVisitCard->cConfFileName);
 		cairo_dock_upgrade_conf_file_full (pInstance->cConfFilePath, pKeyFile, cTemplate, FALSE);  // keep private keys.
 		g_free (cTemplate);
 	}
 }
 
-GKeyFile *gldi_module_instance_open_conf_file (GldiModuleInstance *pInstance, CairoDockMinimalAppletConfig *pMinimalConfig)
+static GKeyFile *_open_conf_file (GldiModuleInstance *pInstance, CairoDockMinimalAppletConfig *pMinimalConfig, gboolean bCheckUpdate)
 {
 	g_return_val_if_fail (pInstance != NULL, NULL);
 	//\____________________ we open its config file.
@@ -116,6 +115,20 @@ GKeyFile *gldi_module_instance_open_conf_file (GldiModuleInstance *pInstance, Ca
 	GKeyFile *pKeyFile = cairo_dock_open_key_file (cInstanceConfFilePath);
 	if (pKeyFile == NULL)  // unreadable file.
 		return NULL;
+	
+	// check if we need to update the key file
+	if (bCheckUpdate && cairo_dock_conf_file_needs_update (pKeyFile, pInstance->pModule->pVisitCard->cModuleVersion))
+	{
+		// update to the new version first, so that default values will be read already (no missing values in the next step)
+		gchar *cTemplate = g_strdup_printf ("%s/%s", pInstance->pModule->pVisitCard->cShareDataDir, pInstance->pModule->pVisitCard->cConfFileName);
+		cairo_dock_upgrade_conf_file_full (cInstanceConfFilePath, pKeyFile, cTemplate, FALSE);  // keep private keys.
+		g_free (cTemplate);
+		
+		// re-read the updated file -- this is a bit wasteful, but this does not happen often
+		g_key_file_free (pKeyFile);
+		pKeyFile = cairo_dock_open_key_file (cInstanceConfFilePath);
+		g_return_val_if_fail (pKeyFile, NULL); // something went wrong -- should not happen
+	}
 	
 	if (pInstance->pModule->pVisitCard->iContainerType == CAIRO_DOCK_MODULE_IS_PLUGIN)  // This module doesn't have any icon (not an applet).
 	{
@@ -253,6 +266,11 @@ GKeyFile *gldi_module_instance_open_conf_file (GldiModuleInstance *pInstance, Ca
 	}
 	
 	return pKeyFile;
+}
+
+GKeyFile *gldi_module_instance_open_conf_file (GldiModuleInstance *pInstance, CairoDockMinimalAppletConfig *pMinimalConfig)
+{
+	return _open_conf_file (pInstance, pMinimalConfig, FALSE);
 }
 
 void gldi_module_instance_free_generic_config (CairoDockMinimalAppletConfig *pMinimalConfig)
@@ -407,7 +425,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	
 	//\____________________ open the conf file.
 	CairoDockMinimalAppletConfig *pMinimalConfig = g_new0 (CairoDockMinimalAppletConfig, 1);
-	GKeyFile *pKeyFile = gldi_module_instance_open_conf_file (pInstance, pMinimalConfig);
+	GKeyFile *pKeyFile = _open_conf_file (pInstance, pMinimalConfig, TRUE); // TRUE -> already apply any update from settings template
 	if (pInstance->cConfFilePath != NULL && pKeyFile == NULL)  // we have a conf file, but it was unreadable -> cancel
 	{
 		//!! TODO: pInstance will likely be leaked in this case !!
