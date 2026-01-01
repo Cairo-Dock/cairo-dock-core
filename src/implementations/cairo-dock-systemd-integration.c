@@ -201,6 +201,7 @@ void cairo_dock_systemd_integration_init (void)
 		NULL, // cancellable
 		_got_version,
 		NULL);
+	g_object_unref (G_OBJECT (pConn)); // the above call has taken a ref on pConn
 	
 	s_iLaunchTS = (guint32) time (NULL); // should be safe to cast and we do not care about the actual value, only that it is unique
 }
