@@ -154,7 +154,7 @@ struct _GldiAppInfo {
 	int args_file_pos; // position of files / URIs in args or -1 if not found
 	gchar *cWorkingDir; // working directory to start the app in (need to store here since we cannot grab this from app)
 	gboolean bNeedsTerminal; // whether this app needs to be launched in a terminal
-	gboolean bCustomCmd; // if TRUE, args[0] is a full command line, to be run in a shell (i.e. with sh -c) after appending filenames
+	gboolean bCustomCmd; // if TRUE, args[2] is a full command line, to be run in a shell given by args[0] and args[1] after appending filenames
 	//!! TODO: each action can have its own icon
 };
 
@@ -398,8 +398,10 @@ static void _init_appinfo (GldiObject *obj, gpointer attr)
 		if (params->cCmdline)
 		{
 			// this is a user supplied command, we just run it with sh -c
-			info->args = g_new0 (char*, 2);
-			info->args[0] = g_strdup (params->cCmdline);
+			info->args = g_new0 (char*, 4);
+			info->args[0] = g_strdup ("sh"); // weird, but will be freed later
+			info->args[1] = g_strdup ("-c");
+			info->args[2] = g_strdup (params->cCmdline);
 			info->bCustomCmd = TRUE;
 		}
 		else
@@ -590,34 +592,44 @@ void gldi_app_info_launch (GldiAppInfo *app, const gchar* const *uris)
 		if (app->bCustomCmd)
 		{
 			// command specified by the user, we launch it with just sh -c
-			const char *cmd = app->args[0];
+			char *cmd = NULL;
 			char *to_free = NULL;
-			int i;
+			const char **to_free2 = NULL;
+			
+			const char **args = NULL;
+			int i = 0;
+			if (n_term > 0)
+			{
+				args = g_new0 (const char*, 4 + n_term);
+				for (i = 0; i < n_term; i++)
+					args[i] = s_vTerminals[s_iTerminal].args[i];
+				args[i] = app->args[0];
+				args[i+1] = app->args[1];
+			}
+			else args = (const char**)app->args; // we can just reuse the argument vector (swapping out args[2] as necessary)
 			
 			if (n_uris)
 			{
 				// append URIs at the end of the command -- this might not work, but we cannot do any better
+				cmd = app->args[2];
 				GString *str = g_string_new (cmd);
-				for (i = 0; i < n_uris; i++)
+				int j;
+				for (j = 0; j < n_uris; j++)
 				{
-					char *tmp = g_shell_quote (uris[i]);
+					char *tmp = g_shell_quote (uris[j]);
 					g_string_append_printf (str, " %s", tmp);
 					g_free (tmp);
 				}
 				to_free = g_string_free (str, FALSE);
-				cmd = to_free;
+				args[i+2] = to_free;
 			}
-			
-			const char **args = g_new0 (const char*, 4 + n_term);
-			for (i = 0; i < n_term; i++)
-				args[i] = s_vTerminals[s_iTerminal].args[i];
-			args[i] = "sh";
-			args[i+1] = "-c";
-			args[i+2] = cmd;
+			else if (n_term) args[i+2] = app->args[2];
 			// note: there will still be a NULL-terminator left in args
 			cairo_dock_launch_command_argv_full2 (args, app->cWorkingDir, GLDI_LAUNCH_GUI | GLDI_LAUNCH_SLICE, app->app);
 			
-			g_free (args);
+			if (n_uris && !n_term) app->args[2] = cmd; // was modified
+			
+			g_free (to_free2);
 			g_free (to_free);
 			return;
 		}
