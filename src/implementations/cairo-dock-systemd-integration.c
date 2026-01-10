@@ -86,9 +86,10 @@ static void _spawn_app (const gchar * const *args, const gchar *id, const gchar 
 	// Unit properties
 	g_variant_builder_open  (&var_builder, G_VARIANT_TYPE ("a(sv)"));
 	g_variant_builder_add   (&var_builder, "(sv)", "Description", g_variant_new_string (desc));
-	GVariant *tmp = g_variant_new ("(s^asb)", args[0], args, FALSE); // FALSE -> do not keep a "failed" unit on unclean exit
-	// note: ExecStart expects an array of (sasb)
-	g_variant_builder_add   (&var_builder, "(sv)", "ExecStart", g_variant_new_array (NULL, &tmp, 1));
+	const gchar *exec_flags[] = {"no-env-expand", "ignore-failure", NULL};	
+	GVariant *tmp = g_variant_new ("(s^as^as)", args[0], args, exec_flags);
+	// note: ExecStartEx expects an array of (sasas)
+	g_variant_builder_add   (&var_builder, "(sv)", "ExecStartEx", g_variant_new_array (NULL, &tmp, 1));
 	if (env && *env) g_variant_builder_add (&var_builder, "(sv)", "Environment", g_variant_new_strv (env, -1));
 	if (working_dir) g_variant_builder_add (&var_builder, "(sv)", "WorkingDirectory", g_variant_new_string (working_dir));
 	// fail if systemd cannot exec the process binary
