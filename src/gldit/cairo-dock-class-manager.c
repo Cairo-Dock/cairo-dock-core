@@ -229,7 +229,7 @@ const gchar * cairo_dock_get_default_terminal (void)
 }
 
 
-static gchar **_process_cmdline (const gchar *cCmdline, gboolean bKeepFiles, int *pFilePos, GAppInfo *app)
+static gchar **_process_cmdline (const gchar *cCmdline, gboolean bKeepFiles, int *pFilePos, GAppInfo *app, gboolean *bIsShell)
 {
 	int args_len;
 	int file_pos = -1;
@@ -242,6 +242,110 @@ static gchar **_process_cmdline (const gchar *cCmdline, gboolean bKeepFiles, int
 		cd_warning ("cannot parse command line: %s\n", err->message);
 		g_error_free (err);
 		return NULL;
+	}
+	
+	// detect a shell command (e.g. sh -c "somecommand")
+	// in this case, we need to keeo args[2] as the "command"
+	if (args_len == 3 && !strcmp (tmp[1], "-c") && (
+		// For now, we recognize sh, bash and dash as shells, as these are most likely used in
+		// Exec= keys (as other shells are not that commonly installed)
+		!strcmp (tmp[0], "sh") || !strcmp (tmp[0], "bash") || !strcmp (tmp[0], "dash") ||
+		!strcmp (tmp[0], "/bin/sh") || !strcmp (tmp[0], "/bin/bash") ||
+		!strcmp (tmp[0], "/usr/bin/sh") || !strcmp (tmp[0], "/usr/bin/bash") ||
+		!strcmp (tmp[0], "/bin/dash") || !strcmp (tmp[0], "/usr/bin/dash")
+	))
+	{
+		// Notes:
+		// (1) in this case, we do not set pFilePos: files should always be added to args[2]
+		// (2) we do not (cannot) check whether the command is actually valid
+		if (bIsShell) *bIsShell = TRUE;
+		
+		// Process substitutions in tmp[2]
+		GString *str = NULL;
+		gchar *cmd = tmp[2];
+		int x = 0, y = 0;
+		while(cmd[y])
+		{
+			if (cmd[y] == '%')
+			{
+				const gchar *to_append = NULL;
+				switch(cmd[y+1])
+				{
+					case '%':
+						cmd[x] = '%';
+						x++;
+						y += 2;
+						break;
+					case 'c':
+						// name of the app
+						to_append = g_app_info_get_name (app);
+						if (!to_append) y += 2; // just ignore if not known
+						break;
+					case 'k':
+						// path to the .desktop file name
+						if (G_IS_DESKTOP_APP_INFO (app))
+						{
+							GDesktopAppInfo *desktop_app = G_DESKTOP_APP_INFO (app);
+							to_append = g_desktop_app_info_get_filename (desktop_app);
+						}
+						if (!to_append) y += 2; // just ignore if not known
+						break;
+					case 'f':
+					case 'F':
+					case 'u':
+					case 'U':
+					// file arguments, we just remove these (and hope it is OK to add files at the end)
+					case 'd':
+					case 'D':
+					case 'n':
+					case 'N':
+					case 'v':
+					case 'm':
+					// deprecated escapes, we just remove them
+					case 'i':
+					// should expand to --icon [filename], but easier to just ignore, not really used
+						y += 2;
+						break;
+					case 0:
+					// end of string in the middle, let's just remove it
+						y++;
+						break;
+					default:
+						// an unknown escape is an error, we just ignore it
+						cd_warning ("Unkown escape sequence in command: %%%c", cmd[y+1]);
+						y += 2;
+						break;
+				}
+				if (to_append)
+				{
+					if (!str) str = g_string_new_len (cmd, x);
+					else g_string_append_len (str, cmd, x);
+					gchar *tmp2 = g_shell_quote (to_append);
+					g_string_append (str, tmp2);
+					g_free (tmp2);
+					
+					cmd += y + 2;
+					y = 0;
+					x = 0;
+				}
+			}
+			else
+			{
+				if (x != y) cmd[x] = cmd[y];
+				x++;
+				y++;
+			}
+		}
+		cmd[x] = 0;
+		
+		if (str)
+		{
+			g_string_append (str, cmd);
+			g_free (tmp[2]);
+			tmp[2] = g_string_free (str, FALSE);
+		}
+		
+		return tmp;
 	}
 	
 	// process useful substitutions and remove the rest
@@ -415,7 +519,7 @@ static void _init_appinfo (GldiObject *obj, gpointer attr)
 				info->app = NULL;
 				return;
 			}
-			info->args = _process_cmdline (cCmdline, TRUE, &(info->args_file_pos), info->app);
+			info->args = _process_cmdline (cCmdline, TRUE, &(info->args_file_pos), info->app, &info->bCustomCmd);
 			if (!info->args)
 			{
 				// warning already shown in _process_cmdline, just bail out
@@ -458,7 +562,7 @@ static void _init_appinfo (GldiObject *obj, gpointer attr)
 						break;
 					}
 					
-					info->action_args[i] = _process_cmdline (exec, FALSE, NULL, info->app);
+					info->action_args[i] = _process_cmdline (exec, FALSE, NULL, info->app, NULL);
 					g_free (exec);
 					if (!info->action_args[i])
 					{
