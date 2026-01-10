@@ -434,6 +434,29 @@ gboolean cairo_dock_fm_show_system_monitor (void)
 		return FALSE;
 }
 
+gboolean cairo_dock_fm_toggle_network (void)
+{
+	if (s_EnvBackend.toggle_network)
+	{
+		s_EnvBackend.toggle_network ();
+		return TRUE;
+	}
+	return FALSE;
+}
+
+/** Try to toggle Wifi.
+*@return Whether a backend-provided function was called.
+*/
+gboolean cairo_dock_fm_toggle_wifi (void)
+{
+	if (s_EnvBackend.toggle_wifi)
+	{
+		s_EnvBackend.toggle_wifi ();
+		return TRUE;
+	}
+	return FALSE;
+}
+
 Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, GldiContainer *pContainer, CairoDockFMSortType iFileSortType)
 {
 	if (s_EnvBackend.get_file_info == NULL)
