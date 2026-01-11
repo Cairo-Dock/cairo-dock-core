@@ -1008,6 +1008,24 @@ gchar *cairo_dock_get_xwindow_class (Window Xid, gchar **cWMClass, gchar **cWMNa
 	return cClass;
 }
 
+gchar *cairo_dock_get_xwindow_string_prop (Window Xid, Atom aProp)
+{
+	Atom aReturnedType = 0;
+	int aReturnedFormat = 0;
+	unsigned long iLeftBytes, iBufferNbElements=0;
+	guchar *pBuffer = NULL;
+	gchar *ret = NULL;
+	XGetWindowProperty (s_XDisplay, Xid, aProp, 0, G_MAXULONG, False, s_aString, &aReturnedType,
+		&aReturnedFormat, &iBufferNbElements, &iLeftBytes, &pBuffer);
+	
+	if (iBufferNbElements > 0)
+	{
+		ret = g_strdup ((gchar *)pBuffer);
+		XFree (pBuffer);
+	}
+	return ret;
+}
+
 gboolean cairo_dock_xwindow_is_maximized (Window Xid)
 {
 	g_return_val_if_fail (Xid > 0, FALSE);

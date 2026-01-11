@@ -110,6 +110,7 @@ void cairo_dock_set_xwindow_border (Window Xid, gboolean bWithBorder);
 gulong cairo_dock_get_xwindow_timestamp (Window Xid);
 gchar *cairo_dock_get_xwindow_name (Window Xid, gboolean bSearchWmName);
 gchar *cairo_dock_get_xwindow_class (Window Xid, gchar **cWMClass, gchar **cWMName);
+gchar *cairo_dock_get_xwindow_string_prop (Window Xid, Atom aProp);
 
 gboolean cairo_dock_xwindow_is_maximized (Window Xid);
 gboolean cairo_dock_xwindow_is_fullscreen (Window Xid);

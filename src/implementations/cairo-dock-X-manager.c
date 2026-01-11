@@ -104,6 +104,8 @@ static Atom s_aNetWmIcon;
 static Atom s_aWmHints;
 static Atom s_aNetStartupInfoBegin;
 static Atom s_aNetStartupInfo;
+static Atom s_aKDEAppmenuObj;
+static Atom s_aKDEAppmenuName;
 static GHashTable *s_hXWindowTable = NULL;  // table of (Xid,actor)
 static GHashTable *s_hXClientMessageTable = NULL;  // table of (Xid,client-message)
 static int s_iTime = 1;  // on peut aller jusqu'a 2^31, soit 17 ans a 4Hz.
@@ -133,6 +135,8 @@ struct _GldiXWindowActor {
 	Window XTransientFor;
 	guint iDemandsAttention;  // a mask of XAttentionFlag
 	gboolean bIgnored;
+	char *cKDEAppMenuServiceName; // appmenu service name
+	char *cKDEAppMenuObjectPath; // appmenu object path
 	};
 
 
@@ -191,6 +195,8 @@ static GldiXWindowActor *_make_new_actor (Window Xid)
 		actor->bIsFullScreen = bIsFullScreen;
 		actor->bDemandsAttention = bDemandsAttention;
 		actor->bIsSticky = bIsSticky;
+		xactor->cKDEAppMenuObjectPath  = cairo_dock_get_xwindow_string_prop (Xid, s_aKDEAppmenuObj);
+		xactor->cKDEAppMenuServiceName = cairo_dock_get_xwindow_string_prop (Xid, s_aKDEAppmenuName);
 	}
 	else  // make a dumy actor, so that we don't try to check it any more
 	{
@@ -713,6 +719,16 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 					g_free (cOldClass);
 					g_free (cOldWmClass);
 				}
+				else if (event.xproperty.atom == s_aKDEAppmenuObj)
+				{
+					g_free (xactor->cKDEAppMenuObjectPath);
+					xactor->cKDEAppMenuObjectPath = cairo_dock_get_xwindow_string_prop (Xid, s_aKDEAppmenuObj);
+				}
+				else if (event.xproperty.atom == s_aKDEAppmenuName)
+				{
+					g_free (xactor->cKDEAppMenuServiceName);
+					xactor->cKDEAppMenuServiceName = cairo_dock_get_xwindow_string_prop (Xid, s_aKDEAppmenuName);
+				}
 			}
 			else if (event.type == ConfigureNotify)
 			{
@@ -1167,6 +1183,13 @@ static void _present (GldiContainer *pContainer)
 static void _set_keep_below (GldiContainer *pContainer, gboolean bKeepBelow)
 {
 	gtk_window_set_keep_below (GTK_WINDOW (pContainer->pWidget), bKeepBelow);
+}
+
+static void _get_menu_address (GldiWindowActor *actor, char **service_name, char **object_path)
+{
+	GldiXWindowActor *xactor = (GldiXWindowActor*)actor;
+	if (service_name) *service_name = xactor->cKDEAppMenuServiceName;
+	if (object_path)  *object_path  = xactor->cKDEAppMenuObjectPath;
 }
 
 static void _move_resize_dock (CairoDock *pDock)
@@ -1624,6 +1647,8 @@ static void init (void)
 	s_aNetWmDesktop			= XInternAtom (s_XDisplay, "_NET_WM_DESKTOP", False);
 	s_aNetStartupInfoBegin 	= XInternAtom (s_XDisplay, "_NET_STARTUP_INFO_BEGIN", False);
 	s_aNetStartupInfo 		= XInternAtom (s_XDisplay, "_NET_STARTUP_INFO", False);
+	s_aKDEAppmenuObj 		= XInternAtom (s_XDisplay, "_KDE_NET_WM_APPMENU_OBJECT_PATH", False);
+	s_aKDEAppmenuName 		= XInternAtom (s_XDisplay, "_KDE_NET_WM_APPMENU_SERVICE_NAME", False);
 	
 	s_hXWindowTable = g_hash_table_new_full (g_int_hash,
 		g_int_equal,
@@ -1712,6 +1737,7 @@ static void init (void)
 	wmb.set_sticky = _set_sticky;
 	wmb.can_minimize_maximize_close = _can_minimize_maximize_close;
 	wmb.get_id = _get_id;
+	wmb.get_menu_address = _get_menu_address;
 	wmb.pick_window = _pick_window;
 	wmb.get_supported_actions = _get_supported_actions;
 	//!! TODO: figure out GLDI_WM_NO_VIEWPORT_OVERLAP flag (depends on the WM, needs to be done in *-integration.c) !!
@@ -1820,6 +1846,9 @@ static void reset_object (GldiObject *obj)
 		XCompositeUnredirectWindow (s_XDisplay, actor->Xid, CompositeRedirectAutomatic);
 	}
 	#endif
+	
+	g_free (actor->cKDEAppMenuObjectPath);
+	g_free (actor->cKDEAppMenuServiceName);
 }
 
 void gldi_register_X_manager (void)
