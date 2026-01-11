@@ -60,6 +60,10 @@ static GldiTask *s_pTask = NULL;
 // proxy for actions, either to Logind or ConsoleKit
 static GDBusProxy *s_proxy = NULL;
 
+// proxy for NetworkManager (for toggling network status)
+static GDBusProxy *s_proxy_nm = NULL;
+static gboolean s_bNmChecked = FALSE;
+
 static void _console_kit_action (const gchar *cAction)
 {
 	if (!s_proxy)
@@ -388,27 +392,114 @@ static void _cd_logout_check_capabilities_async (G_GNUC_UNUSED gpointer ptr)
 	}
 }
 
+static void _toggle_network (void)
+{
+	g_return_if_fail (s_proxy_nm != NULL);
+	
+	GVariant *v = g_dbus_proxy_get_cached_property (s_proxy_nm, "NetworkingEnabled");
+	if (!v) cd_warning ("Cannot read the 'NetworkingEnabled' property");
+	else
+	{
+		if (!g_variant_is_of_type (v, G_VARIANT_TYPE ("b")))
+			cd_warning ("Unexpected property type for 'NetworkingEnabled': %s", g_variant_get_type_string (v));
+		else
+		{
+			gboolean bEnabled = g_variant_get_boolean (v);
+			g_dbus_proxy_call (s_proxy_nm, "Enable", g_variant_new ("(b)", !bEnabled),
+				G_DBUS_CALL_FLAGS_ALLOW_INTERACTIVE_AUTHORIZATION, -1,
+				NULL, NULL, NULL);
+		}
+		
+		g_variant_unref (v);
+	}
+}
+
+static void _toggle_wifi (void)
+{
+	g_return_if_fail (s_proxy_nm != NULL);
+	
+	GVariant *v = g_dbus_proxy_get_cached_property (s_proxy_nm, "WirelessEnabled");
+	if (!v) cd_warning ("Cannot read the 'WirelessEnabled' property");
+	else
+	{
+		if (!g_variant_is_of_type (v, G_VARIANT_TYPE ("b")))
+			cd_warning ("Unexpected property type for 'WirelessEnabled': %s", g_variant_get_type_string (v));
+		else
+		{
+			gboolean bEnabled = g_variant_get_boolean (v);
+			g_dbus_proxy_call (s_proxy_nm, "org.freedesktop.DBus.Properties.Set",
+				g_variant_new ("(ssv)", "org.freedesktop.NetworkManager", "WirelessEnabled", g_variant_new_boolean(!bEnabled)),
+				G_DBUS_CALL_FLAGS_ALLOW_INTERACTIVE_AUTHORIZATION, -1,
+				NULL, NULL, NULL);
+		}
+		
+		g_variant_unref (v);
+	}
+}
+
+static void _register_backend (void)
+{
+	gboolean bAnyValid = FALSE;
+	
+	CairoDockDesktopEnvBackend backend = { NULL };
+	if (s_bCanStop) { backend.shutdown = _shut_down; bAnyValid = TRUE; }
+	if (s_bCanRestart) { backend.reboot = _restart; bAnyValid = TRUE; }
+	if (s_bCanSuspend) { backend.suspend = _suspend; bAnyValid = TRUE; }
+	if (s_bCanHibernate) { backend.hibernate = _hibernate; bAnyValid = TRUE; }
+	if (s_bCanHybridSleep) { backend.hybrid_sleep = _hybridSleep; bAnyValid = TRUE; }
+	if (s_iLogoutType != CD_LOGOUT_UNKNOWN) { backend.logout = _logout; bAnyValid = TRUE; }
+	if (s_bCanLock) { backend.lock_screen = _lock_screen; bAnyValid = TRUE; }
+	
+	if (s_proxy_nm)
+	{
+		bAnyValid = TRUE;
+		backend.toggle_network = _toggle_network;
+		backend.toggle_wifi = _toggle_wifi;
+	}
+	
+	if (!bAnyValid) return;
+	
+	// FALSE -- we do not want to overwrite the DE-specific functions already
+	// registered by the *-integration plugins (since we run asynchronously,
+	// they might be registered earlier)
+	cairo_dock_fm_register_vfs_backend (&backend, FALSE);
+}
+
 static gboolean _cd_logout_got_capabilities (G_GNUC_UNUSED gpointer ptr)
 {
 	// fetch the capabilities.
 	gldi_task_discard (s_pTask);
 	s_pTask = NULL;
 	
-	CairoDockDesktopEnvBackend backend = { NULL };
-	if (s_bCanStop) backend.shutdown = _shut_down;
-	if (s_bCanRestart) backend.reboot = _restart;
-	if (s_bCanSuspend) backend.suspend = _suspend;
-	if (s_bCanHibernate) backend.hibernate = _hibernate;
-	if (s_bCanHybridSleep) backend.hybrid_sleep = _hybridSleep;
-	if (s_iLogoutType != CD_LOGOUT_UNKNOWN) backend.logout = _logout;
-	if (s_bCanLock) backend.lock_screen = _lock_screen;
-	
-	// FALSE -- we do not want to overwrite the DE-specific functions already
-	// registered by the *-integration plugins (since we run asynchronously,
-	// they might be registered earlier)
-	cairo_dock_fm_register_vfs_backend (&backend, FALSE);
+	if (s_bNmChecked) _register_backend ();
 	
 	return FALSE;
+}
+
+static void _got_nm_proxy (G_GNUC_UNUSED GObject *pObj, GAsyncResult *pRes, G_GNUC_UNUSED gpointer ptr)
+{
+	s_bNmChecked = TRUE;
+	
+	GError *err = NULL;
+	s_proxy_nm = g_dbus_proxy_new_for_bus_finish (pRes, &err);
+	if (err)
+	{
+		cd_warning ("Cannot create NetworkManager DBus proxy: %s", err->message);
+		g_error_free (err);
+	}
+	else
+	{
+		gchar *cName = g_dbus_proxy_get_name_owner (s_proxy_nm);
+		if (!cName)
+		{
+			// no NetworkManager, will not use it (it should be available already when the session is started, no need to watch the name)
+			g_object_unref (G_OBJECT (s_proxy_nm));
+			s_proxy_nm = NULL;
+		}
+		else g_free (cName);
+	}
+	
+	if (!s_pTask) _register_backend ();
 }
 
 
@@ -430,5 +521,16 @@ void gldi_logout_backend_init (void)
 	// Note: we add 500 ms delay in case some services are not available
 	// right away.
 	gldi_task_launch_delayed (s_pTask, 500);
+	
+	// create NetworkManager proxy
+	g_dbus_proxy_new_for_bus (G_BUS_TYPE_SYSTEM,
+		G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
+		NULL, // interface info
+		"org.freedesktop.NetworkManager",
+		"/org/freedesktop/NetworkManager",
+		"org.freedesktop.NetworkManager",
+		NULL, // cancellable
+		_got_nm_proxy,
+		NULL);
 }
 

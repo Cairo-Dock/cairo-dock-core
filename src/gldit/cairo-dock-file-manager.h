@@ -94,6 +94,7 @@ typedef void (*CairoDockFMUserActionFunc) (void);
 typedef void (*CairoDockFMConfirmationFunc) (gpointer data, CairoDockFMUserActionFunc action);
 typedef void (*CairoDockFMActionWithConfirmationFunc) (CairoDockFMConfirmationFunc cb_confirm, gpointer data);
 
+
 /// Definition of the Desktop Environment backend.
 struct _CairoDockDesktopEnvBackend {
 	CairoDockFMGetFileInfoFunc 		get_file_info;
@@ -125,6 +126,8 @@ struct _CairoDockDesktopEnvBackend {
 	CairoDockFMUserActionFunc		suspend;
 	CairoDockFMUserActionFunc		hibernate;
 	CairoDockFMUserActionFunc		hybrid_sleep;
+	CairoDockFMUserActionFunc		toggle_network;
+	CairoDockFMUserActionFunc		toggle_wifi;
 };
 
 
@@ -282,6 +285,16 @@ Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, GldiContainer *pCon
 
 
 gboolean cairo_dock_fm_move_into_directory (const gchar *cURI, Icon *icon, GldiContainer *pContainer);
+
+/** Try to toggle networking (on all available devices).
+*@return Whether a backend-provided function was called.
+*/
+gboolean cairo_dock_fm_toggle_network (void);
+
+/** Try to toggle Wifi.
+*@return Whether a backend-provided function was called.
+*/
+gboolean cairo_dock_fm_toggle_wifi (void);
 
 
 /** Get the size of a local file.
