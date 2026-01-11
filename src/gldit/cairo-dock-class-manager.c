@@ -154,7 +154,7 @@ struct _GldiAppInfo {
 	int args_file_pos; // position of files / URIs in args or -1 if not found
 	gchar *cWorkingDir; // working directory to start the app in (need to store here since we cannot grab this from app)
 	gboolean bNeedsTerminal; // whether this app needs to be launched in a terminal
-	gboolean bCustomCmd; // if TRUE, args[0] is a full command line, to be run in a shell (i.e. with sh -c) after appending filenames
+	gboolean bCustomCmd; // if TRUE, args[2] is a full command line, to be run in a shell given by args[0] and args[1] after appending filenames
 	//!! TODO: each action can have its own icon
 };
 
@@ -229,7 +229,7 @@ const gchar * cairo_dock_get_default_terminal (void)
 }
 
 
-static gchar **_process_cmdline (const gchar *cCmdline, gboolean bKeepFiles, int *pFilePos, GAppInfo *app)
+static gchar **_process_cmdline (const gchar *cCmdline, gboolean bKeepFiles, int *pFilePos, GAppInfo *app, gboolean *bIsShell)
 {
 	int args_len;
 	int file_pos = -1;
@@ -242,6 +242,110 @@ static gchar **_process_cmdline (const gchar *cCmdline, gboolean bKeepFiles, int
 		cd_warning ("cannot parse command line: %s\n", err->message);
 		g_error_free (err);
 		return NULL;
+	}
+	
+	// detect a shell command (e.g. sh -c "somecommand")
+	// in this case, we need to keeo args[2] as the "command"
+	if (args_len == 3 && !strcmp (tmp[1], "-c") && (
+		// For now, we recognize sh, bash and dash as shells, as these are most likely used in
+		// Exec= keys (as other shells are not that commonly installed)
+		!strcmp (tmp[0], "sh") || !strcmp (tmp[0], "bash") || !strcmp (tmp[0], "dash") ||
+		!strcmp (tmp[0], "/bin/sh") || !strcmp (tmp[0], "/bin/bash") ||
+		!strcmp (tmp[0], "/usr/bin/sh") || !strcmp (tmp[0], "/usr/bin/bash") ||
+		!strcmp (tmp[0], "/bin/dash") || !strcmp (tmp[0], "/usr/bin/dash")
+	))
+	{
+		// Notes:
+		// (1) in this case, we do not set pFilePos: files should always be added to args[2]
+		// (2) we do not (cannot) check whether the command is actually valid
+		if (bIsShell) *bIsShell = TRUE;
+		
+		// Process substitutions in tmp[2]
+		GString *str = NULL;
+		gchar *cmd = tmp[2];
+		int x = 0, y = 0;
+		while(cmd[y])
+		{
+			if (cmd[y] == '%')
+			{
+				const gchar *to_append = NULL;
+				switch(cmd[y+1])
+				{
+					case '%':
+						cmd[x] = '%';
+						x++;
+						y += 2;
+						break;
+					case 'c':
+						// name of the app
+						to_append = g_app_info_get_name (app);
+						if (!to_append) y += 2; // just ignore if not known
+						break;
+					case 'k':
+						// path to the .desktop file name
+						if (G_IS_DESKTOP_APP_INFO (app))
+						{
+							GDesktopAppInfo *desktop_app = G_DESKTOP_APP_INFO (app);
+							to_append = g_desktop_app_info_get_filename (desktop_app);
+						}
+						if (!to_append) y += 2; // just ignore if not known
+						break;
+					case 'f':
+					case 'F':
+					case 'u':
+					case 'U':
+					// file arguments, we just remove these (and hope it is OK to add files at the end)
+					case 'd':
+					case 'D':
+					case 'n':
+					case 'N':
+					case 'v':
+					case 'm':
+					// deprecated escapes, we just remove them
+					case 'i':
+					// should expand to --icon [filename], but easier to just ignore, not really used
+						y += 2;
+						break;
+					case 0:
+					// end of string in the middle, let's just remove it
+						y++;
+						break;
+					default:
+						// an unknown escape is an error, we just ignore it
+						cd_warning ("Unkown escape sequence in command: %%%c", cmd[y+1]);
+						y += 2;
+						break;
+				}
+				if (to_append)
+				{
+					if (!str) str = g_string_new_len (cmd, x);
+					else g_string_append_len (str, cmd, x);
+					gchar *tmp2 = g_shell_quote (to_append);
+					g_string_append (str, tmp2);
+					g_free (tmp2);
+					
+					cmd += y + 2;
+					y = 0;
+					x = 0;
+				}
+			}
+			else
+			{
+				if (x != y) cmd[x] = cmd[y];
+				x++;
+				y++;
+			}
+		}
+		cmd[x] = 0;
+		
+		if (str)
+		{
+			g_string_append (str, cmd);
+			g_free (tmp[2]);
+			tmp[2] = g_string_free (str, FALSE);
+		}
+		
+		return tmp;
 	}
 	
 	// process useful substitutions and remove the rest
@@ -398,8 +502,10 @@ static void _init_appinfo (GldiObject *obj, gpointer attr)
 		if (params->cCmdline)
 		{
 			// this is a user supplied command, we just run it with sh -c
-			info->args = g_new0 (char*, 2);
-			info->args[0] = g_strdup (params->cCmdline);
+			info->args = g_new0 (char*, 4);
+			info->args[0] = g_strdup ("sh"); // weird, but will be freed later
+			info->args[1] = g_strdup ("-c");
+			info->args[2] = g_strdup (params->cCmdline);
 			info->bCustomCmd = TRUE;
 		}
 		else
@@ -413,7 +519,7 @@ static void _init_appinfo (GldiObject *obj, gpointer attr)
 				info->app = NULL;
 				return;
 			}
-			info->args = _process_cmdline (cCmdline, TRUE, &(info->args_file_pos), info->app);
+			info->args = _process_cmdline (cCmdline, TRUE, &(info->args_file_pos), info->app, &info->bCustomCmd);
 			if (!info->args)
 			{
 				// warning already shown in _process_cmdline, just bail out
@@ -456,7 +562,7 @@ static void _init_appinfo (GldiObject *obj, gpointer attr)
 						break;
 					}
 					
-					info->action_args[i] = _process_cmdline (exec, FALSE, NULL, info->app);
+					info->action_args[i] = _process_cmdline (exec, FALSE, NULL, info->app, NULL);
 					g_free (exec);
 					if (!info->action_args[i])
 					{
@@ -590,34 +696,44 @@ void gldi_app_info_launch (GldiAppInfo *app, const gchar* const *uris)
 		if (app->bCustomCmd)
 		{
 			// command specified by the user, we launch it with just sh -c
-			const char *cmd = app->args[0];
+			char *cmd = NULL;
 			char *to_free = NULL;
-			int i;
+			const char **to_free2 = NULL;
+			
+			const char **args = NULL;
+			int i = 0;
+			if (n_term > 0)
+			{
+				args = g_new0 (const char*, 4 + n_term);
+				for (i = 0; i < n_term; i++)
+					args[i] = s_vTerminals[s_iTerminal].args[i];
+				args[i] = app->args[0];
+				args[i+1] = app->args[1];
+			}
+			else args = (const char**)app->args; // we can just reuse the argument vector (swapping out args[2] as necessary)
 			
 			if (n_uris)
 			{
 				// append URIs at the end of the command -- this might not work, but we cannot do any better
+				cmd = app->args[2];
 				GString *str = g_string_new (cmd);
-				for (i = 0; i < n_uris; i++)
+				int j;
+				for (j = 0; j < n_uris; j++)
 				{
-					char *tmp = g_shell_quote (uris[i]);
+					char *tmp = g_shell_quote (uris[j]);
 					g_string_append_printf (str, " %s", tmp);
 					g_free (tmp);
 				}
 				to_free = g_string_free (str, FALSE);
-				cmd = to_free;
+				args[i+2] = to_free;
 			}
-			
-			const char **args = g_new0 (const char*, 4 + n_term);
-			for (i = 0; i < n_term; i++)
-				args[i] = s_vTerminals[s_iTerminal].args[i];
-			args[i] = "sh";
-			args[i+1] = "-c";
-			args[i+2] = cmd;
+			else if (n_term) args[i+2] = app->args[2];
 			// note: there will still be a NULL-terminator left in args
 			cairo_dock_launch_command_argv_full2 (args, app->cWorkingDir, GLDI_LAUNCH_GUI | GLDI_LAUNCH_SLICE, app->app);
 			
-			g_free (args);
+			if (n_uris && !n_term) app->args[2] = cmd; // was modified
+			
+			g_free (to_free2);
 			g_free (to_free);
 			return;
 		}
