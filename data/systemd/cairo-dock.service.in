@@ -6,6 +6,7 @@ Requisite=graphical-session.target
 
 [Service]
 ExecStart=@CMAKE_INSTALL_PREFIX@/bin/cairo-dock
+Type=exec
 BusName=org.cairodock.CairoDock
 
 [Install]
