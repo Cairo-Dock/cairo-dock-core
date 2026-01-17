@@ -1017,6 +1017,9 @@ gchar *cairo_dock_get_xwindow_string_prop (Window Xid, Atom aProp)
 	gchar *ret = NULL;
 	XGetWindowProperty (s_XDisplay, Xid, aProp, 0, G_MAXULONG, False, s_aString, &aReturnedType,
 		&aReturnedFormat, &iBufferNbElements, &iLeftBytes, &pBuffer);
+	if (iBufferNbElements == 0)
+		XGetWindowProperty (s_XDisplay, Xid, aProp, 0, G_MAXULONG, False, s_aUtf8String, &aReturnedType,
+			&aReturnedFormat, &iBufferNbElements, &iLeftBytes, &pBuffer);
 	
 	if (iBufferNbElements > 0)
 	{
