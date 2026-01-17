@@ -828,10 +828,11 @@ int main (int argc, char** argv)
 	//\___________________ load the current theme.
 	cd_message ("loading theme ...");
 	const gchar *cDesktopSessionEnv = g_getenv ("DESKTOP_SESSION");
+	if (!cDesktopSessionEnv || !*cDesktopSessionEnv) cDesktopSessionEnv = g_getenv ("XDG_SESSION_DESKTOP");
 	if (! g_file_test (g_cConfFile, G_FILE_TEST_EXISTS))  // no theme yet, copy the default theme first.
 	{
 		const gchar *cThemeName;
-		if (g_strcmp0 (cDesktopSessionEnv, "cairo-dock") == 0)
+		if (cDesktopSessionEnv && strncmp (cDesktopSessionEnv, "cairo-dock", 10) == 0) // match e.g. cairo-dock-wayfire and similar
 		{
 			cThemeName = "Default-Panel";
 			// We're using the CD session for the first time
@@ -856,7 +857,8 @@ int main (int argc, char** argv)
 	 *  dock is not used (case: the user has already launched the dock and he
 	 *  wants to test the Cairo-Dock session: propose a theme with two docks)
 	 */
-	else if (! s_bCDSessionLaunched && g_strcmp0 (cDesktopSessionEnv, "cairo-dock") == 0)
+	else if (! s_bCDSessionLaunched && cDesktopSessionEnv
+		&& strncmp (cDesktopSessionEnv, "cairo-dock", 10) == 0) // match e.g. cairo-dock-wayfire and similar as well
 	{
 		gchar *cSecondDock = g_strdup_printf ("%s/"CAIRO_DOCK_MAIN_DOCK_NAME"-2.conf", g_cCurrentThemePath);
 		if (! g_file_test (cSecondDock, G_FILE_TEST_EXISTS))
