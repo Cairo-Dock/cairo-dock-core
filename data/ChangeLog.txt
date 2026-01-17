@@ -39,3 +39,11 @@
 3.6.2.2 = - Fix a crash in systemd-integration when launching apps with a working directory set
 3.6.2.3 = - Fix applet icons not updating under some conditions
 3.6.2.4 = - Launchers: run custom commands in a shell again, allow setting a working directory
+
+3.6.3 = <b>New version: <span color='red'>GLX-Dock 3.6.3</span>!</b>
+3.6.3.0 = This is a bugfix release with the following improvements:
+3.6.3.1 = - Allow restarting the dock if it crashed when it is run as a systemd service
+3.6.3.2 = - Disable environment variable substitution in systemd-integration for better handling of shell commands
+3.6.3.3 = - Fix some typos in the UI
+3.6.3.4 = - Fix identifying apps on Wayfire with detailed app-id reporting
+
