@@ -161,27 +161,21 @@ static int _send_msg_full (const char* msg, uint32_t len, GIOChannel *pIOChannel
 }
 
 /* Call a Wayfire IPC method and try to check if it was successful. */
-static void _call_ipc (struct json_object* data, CairoDockDesktopManagerActionResult cb, gpointer user_data) {
+static gboolean _call_ipc_internal (struct json_object *data, gpointer cb, gpointer user_data)
+{
 	if (! s_pIOChannel)
-	{
 		// socket was already closed; we should not call _handle_broken_socket () again
-		if (cb) cb (FALSE, user_data);
-		return;
-	}
+		return FALSE;
 	
 	size_t len;
 	const char *tmp = json_object_to_json_string_length (data, JSON_C_TO_STRING_SPACED, &len);
 	if (!(tmp && len))
-	{
-		if (cb) cb (FALSE, user_data);
-		return;
-	}
+		return FALSE;
 	
 	if (_send_msg_full (tmp, len, s_pIOChannel) < 0)
 	{
-		if (cb) cb (FALSE, user_data);
 		_handle_broken_socket ();
-		return;
+		return FALSE;
 	}
 	
 	// save the callback if provided
@@ -193,6 +187,13 @@ static void _call_ipc (struct json_object* data, CairoDockDesktopManagerActionRe
 		g_queue_push_tail (&s_cb_queue, data);
 	}
 	else g_queue_push_tail (&s_cb_queue, NULL); // dummy element
+	
+	return TRUE;
+}
+
+static void _call_ipc (struct json_object* data, CairoDockDesktopManagerActionResult cb, gpointer user_data) {
+	if (!_call_ipc_internal (data, cb, user_data))
+		if (cb) cb (FALSE, user_data);
 }
 
 static void _call_ipc_method_no_data (const char *method)
@@ -383,15 +384,23 @@ static gboolean s_bHaveAbove = FALSE; // whether Wayfire provides the "view-abov
 static gboolean s_bCanSticky = FALSE;
 static gboolean s_bCanAbove = FALSE;
 static gboolean s_bNeedStickyAbove = FALSE; // toplevel manager requested the above functionality
+static gboolean s_bHaveMenuProps = FALSE; // if gtk-shell and kde-appmenu properties are available
 
 static gboolean s_bWatchWMEvents = FALSE;
 // hash table mapping view IPC IDs to window actors
 static GHashTable *s_pActorMap = NULL; // key: IPC ID, value: GldiWaylandWindowActor*
+// hash table IDs seen in the IPC interface but not with a matching GldiWaylandWindowActor
+typedef enum {
+	MISSING_ACTOR_STATE_STICKY = 1,
+	MISSING_ACTOR_STATE_ABOVE = 2
+} WfMissingActorState;
+static GHashTable *s_pMissingActors = NULL; // key: IPC ID, value: WfMissingActorState
 
-// extra data to store with views (in theory, we could stuff this into a 64-bit int, but cleaner to allocate an extra struct)
+// extra data to store with views
 typedef struct _wf_view_data {
 	uint32_t id; // IPC ID of this view
 	gboolean bAbove; // whether this view is always on top
+	gboolean bPropsChecked; // whether we already queried the menu DBus properties for this view
 } wf_view_data;
 
 // function to free view data in s_pActorMap
@@ -403,9 +412,109 @@ static void _reset_view_data (gpointer data)
 	wactor->pExtraData = NULL;
 }
 
+typedef enum {
+	PROP_GTK_BUS_NAME,
+	PROP_GTK_MENUBAR_PATH,
+	PROP_GTK_APPMENU_PATH,
+	PROP_GTK_WINDOW_PATH,
+	PROP_GTK_APP_PATH,
+	PROP_KDE_SERVICE_NAME,
+	PROP_KDE_OBJECT_PATH
+} WfViewMenuProps;
+
+typedef struct _wf_view_prop_cb_data {
+	WfViewMenuProps prop;
+	uint32_t id;
+} wf_view_prop_cb_data;
+
+static void _on_got_view_prop (wf_view_prop_cb_data *data, struct json_object *res, gboolean bResult)
+{
+	GldiWaylandWindowActor *wactor = g_hash_table_lookup (s_pActorMap, GUINT_TO_POINTER (data->id));
+	if (wactor) // note: not an error if missing, could have been destroyed
+	{
+		struct json_object *tmp = bResult ? json_object_object_get (res, "value") : NULL;
+		if (tmp || !bResult)
+		{
+			const char *value = tmp ? json_object_get_string (tmp) : NULL;
+			if (value || !bResult)
+			{
+				GldiWindowActor *actor = (GldiWindowActor*)wactor;
+				if (!actor->pDBusProps) actor->pDBusProps = g_new0 (GldiWindowDBusProperties, 1);
+				
+				switch (data->prop)
+				{
+					case PROP_GTK_BUS_NAME:
+						g_free (actor->pDBusProps->cGTKBusName);
+						actor->pDBusProps->cGTKBusName = (value && *value) ? g_strdup (value) : NULL;
+						break;
+					case PROP_GTK_MENUBAR_PATH:
+						g_free (actor->pDBusProps->cGTKMenuBarPath);
+						actor->pDBusProps->cGTKMenuBarPath = (value && *value) ? g_strdup (value) : NULL;
+						break;
+					case PROP_GTK_APPMENU_PATH:
+						g_free (actor->pDBusProps->cGTKAppMenuPath);
+						actor->pDBusProps->cGTKAppMenuPath = (value && *value) ? g_strdup (value) : NULL;
+						break;
+					case PROP_GTK_WINDOW_PATH:
+						g_free (actor->pDBusProps->cGTKWindowPath);
+						actor->pDBusProps->cGTKWindowPath = (value && *value) ? g_strdup (value) : NULL;
+						break;
+					case PROP_GTK_APP_PATH:
+						g_free (actor->pDBusProps->cGTKAppPath);
+						actor->pDBusProps->cGTKAppPath = (value && *value) ? g_strdup (value) : NULL;
+						break;
+					case PROP_KDE_SERVICE_NAME:
+						g_free (actor->pDBusProps->cKDEServiceName);
+						actor->pDBusProps->cKDEServiceName = (value && *value) ? g_strdup (value) : NULL;
+						break;
+					case PROP_KDE_OBJECT_PATH:
+						g_free (actor->pDBusProps->cKDEObjectPath);
+						actor->pDBusProps->cKDEObjectPath = (value && *value) ? g_strdup (value) : NULL;
+						break;
+				}
+			}
+			else cd_warning ("No 'value' member in reply to get-view-property request");
+		}
+		else cd_warning ("No 'value' member in reply to get-view-property request");
+	}
+	
+	g_free (data);
+}
+
+static gboolean _check_one_prop (uint32_t id, const char *prop_name, WfViewMenuProps prop)
+{
+	struct json_object *obj = json_object_new_object ();
+	json_object_object_add (obj, "method", json_object_new_string ("window-rules/get-view-property"));
+	struct json_object *data = json_object_new_object ();
+	json_object_object_add (data, "id", json_object_new_uint64 (id));
+	json_object_object_add (data, "property", json_object_new_string (prop_name));
+	json_object_object_add (obj, "data", data);
+	
+	wf_view_prop_cb_data *cb_data1 = g_new (wf_view_prop_cb_data, 1);
+	cb_data1->id = id;
+	cb_data1->prop = prop;
+	
+	gboolean ret = _call_ipc_internal (obj, _on_got_view_prop, cb_data1);
+	if (!ret) g_gree (cb_data1);
+	json_object_put (obj);
+	return ret;
+}
+
+static void _check_menu_props (uint32_t id)
+{
+	// note: failure means error writing to Wayfire's socket, do not continue with the checks in this case
+	if (_check_one_prop (id, "kde-appmenu-service-name", PROP_KDE_SERVICE_NAME))
+	if (_check_one_prop (id, "kde-appmenu-object-path", PROP_KDE_OBJECT_PATH))
+	if (_check_one_prop (id, "gtk-shell-app-menu-path", PROP_GTK_APPMENU_PATH))
+	if (_check_one_prop (id, "gtk-shell-application-object-path", PROP_GTK_APP_PATH))
+	if (_check_one_prop (id, "gtk-shell-menubar-path", PROP_GTK_MENUBAR_PATH))
+	if (_check_one_prop (id, "gtk-shell-unique-bus-name", PROP_GTK_BUS_NAME))
+		_check_one_prop (id, "gtk-shell-window-object-path", PROP_GTK_WINDOW_PATH);
+}
+
 static gboolean _wf_on_window_created (G_GNUC_UNUSED gpointer data, GldiWindowActor *actor)
 {
-	if (!(s_bCanAbove || s_bCanSticky)) return GLDI_NOTIFICATION_LET_PASS;
+	if (!(s_bCanAbove || s_bCanSticky || s_bHaveMenuProps)) return GLDI_NOTIFICATION_LET_PASS;
 	if (!GLDI_OBJECT_IS_WAYLAND_WINDOW (actor)) return GLDI_NOTIFICATION_LET_PASS;
 	
 	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor*)actor;
@@ -427,6 +536,22 @@ static gboolean _wf_on_window_created (G_GNUC_UNUSED gpointer data, GldiWindowAc
 				pData->id = id;
 				wactor->pExtraData = pData; // pExtraData should be NULL here
 				g_hash_table_insert (s_pActorMap, GUINT_TO_POINTER (id), wactor); // note: will invalidate any previous value
+				
+				// check if this view was already seen
+				gpointer tmp;
+				if (g_hash_table_lookup_extended (s_pMissingActors, GUINT_TO_POINTER (id), NULL, &tmp))
+				{
+					WfMissingActorState st = GPOINTER_TO_INT (tmp);
+					gldi_wayland_wm_sticky_changed (wactor, st & MISSING_ACTOR_STATE_STICKY, TRUE);
+					pData->bAbove = st & MISSING_ACTOR_STATE_ABOVE;
+					g_hash_table_remove (s_pMissingActors, GUINT_TO_POINTER (id));
+				}
+				
+				if (s_bHaveMenuProps)
+				{
+					_check_menu_props (id);
+					pData->bPropsChecked = TRUE;
+				}
 			}
 			else cd_warning ("Error parsing IPC ID: %s", tmp - 7);
 		}
@@ -437,7 +562,7 @@ static gboolean _wf_on_window_created (G_GNUC_UNUSED gpointer data, GldiWindowAc
 
 static gboolean _wf_on_window_destroyed (G_GNUC_UNUSED gpointer data, GldiWindowActor *actor)
 {
-	if (!(s_bCanAbove || s_bCanSticky)) return GLDI_NOTIFICATION_LET_PASS;
+	if (!(s_bCanAbove || s_bCanSticky || s_bHaveMenuProps)) return GLDI_NOTIFICATION_LET_PASS;
 	if (!GLDI_OBJECT_IS_WAYLAND_WINDOW (actor)) return GLDI_NOTIFICATION_LET_PASS;
 	
 	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor*)actor;
@@ -451,11 +576,34 @@ static gboolean _wf_on_window_destroyed (G_GNUC_UNUSED gpointer data, GldiWindow
 	return GLDI_NOTIFICATION_LET_PASS;
 }
 
-static gboolean _wf_on_window_class_changed (G_GNUC_UNUSED gpointer data, GldiWindowActor *actor,
+static gboolean _wf_on_window_class_changed (G_GNUC_UNUSED gpointer ptr, GldiWindowActor *actor,
 	G_GNUC_UNUSED const gchar *cOldClass, G_GNUC_UNUSED const gchar *cOldWmClass)
 {
+	if (!(s_bCanAbove || s_bCanSticky || s_bHaveMenuProps)) return GLDI_NOTIFICATION_LET_PASS;
+	if (!GLDI_OBJECT_IS_WAYLAND_WINDOW (actor)) return GLDI_NOTIFICATION_LET_PASS;
+	
+	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor*)actor;
+	gboolean bHaveData = (wactor->pExtraData != NULL);
+	wf_view_data data;
+	if (bHaveData)
+	{
+		wf_view_data *pData = (wf_view_data*)wactor->pExtraData;
+		data = *pData;
+	}
+	
 	_wf_on_window_destroyed (NULL, actor);
 	_wf_on_window_created (NULL, actor);
+	
+	if (bHaveData && (wactor->pExtraData != NULL))
+	{
+		wf_view_data *pData = (wf_view_data*)wactor->pExtraData;
+		if (pData->id == data.id) // ID should be the same, but just in case
+		{
+			pData->bAbove = data.bAbove;
+			pData->bPropsChecked = data.bPropsChecked;
+		}
+		else cd_warning ("View ID changed unexpectedly!");
+	}
 	
 	return GLDI_NOTIFICATION_LET_PASS;
 }
@@ -466,12 +614,13 @@ static void _add_existing_actor (gpointer ptr, G_GNUC_UNUSED gpointer data)
 	_wf_on_window_created (NULL, (GldiWindowActor*)ptr);
 }
 
-static void _init_sticky_above (void)
+static void _init_window_maping (void)
 {
-	if (! (s_bCanAbove || s_bCanSticky)) return;
+	if (! (s_bCanAbove || s_bCanSticky || s_bHaveMenuProps)) return;
 	if (s_bWatchWMEvents) return; // already started
 	
 	s_pActorMap = g_hash_table_new_full (NULL, NULL, NULL, _reset_view_data);
+	s_pMissingActors = g_hash_table_new (NULL, NULL);
 	
 	gldi_object_register_notification (&myWindowObjectMgr,
 		NOTIFICATION_WINDOW_CREATED,
@@ -497,7 +646,7 @@ static void _init_sticky_above (void)
 
 void gldi_wf_init_sticky_above (void)
 {
-	if (s_bCanAbove || s_bCanSticky) _init_sticky_above ();
+	if (s_bCanAbove || s_bCanSticky) _init_window_maping ();
 	else s_bNeedStickyAbove = TRUE;
 }
 
@@ -801,6 +950,7 @@ static void _vis_handle_broken_socket (void)
 	gldi_docks_foreach_root ((GFunc)_free_vis_data_and_show, NULL);
 	g_hash_table_remove_all (s_pWindowPos);
 	g_hash_table_remove_all (s_pActorMap);
+	g_hash_table_remove_all (s_pMissingActors);
 }
 
 static void _add_vis_watch_cb (gboolean bSuccess, G_GNUC_UNUSED gpointer user_data);
@@ -898,6 +1048,8 @@ static void _got_configuration (struct json_object *conf)
 	{
 		uint64_t ver = json_object_get_uint64 (version);
 		s_bHaveAbove = (ver >= 20251226);
+		s_bHaveMenuProps = (ver >= 20260122);
+		if (s_bHaveMenuProps) _init_window_maping (); // no-op if already started
 	}
 	else cd_warning ("Cannot parse Wayfire version!");
 	
@@ -1049,6 +1201,7 @@ static void _process_view (const gchar *event, const struct json_object *view)
 		if (tmp && json_object_is_type (tmp, json_type_boolean) && json_object_get_boolean (tmp))
 			bDelete = TRUE;
 	}
+	else g_hash_table_remove (s_pMissingActors, GUINT_TO_POINTER (id));
 	
 	if (bDelete)
 	{
@@ -1145,7 +1298,8 @@ static void _process_view (const gchar *event, const struct json_object *view)
 				GldiWaylandWindowActor *wactor = g_hash_table_lookup (s_pActorMap, GUINT_TO_POINTER (id));
 				if (wactor)
 				{
-					//!! TODO: if we have not received the WINDOW_CREATED signal yet, we cannot set these !!
+					wf_view_data *pData = (wf_view_data*)wactor->pExtraData;
+					
 					if (bInitialState || bStickyChanged)
 					{
 						tmp = json_object_object_get (view, "sticky");
@@ -1155,13 +1309,37 @@ static void _process_view (const gchar *event, const struct json_object *view)
 					}
 					if ((bInitialState || bAboveChanged) && wactor->pExtraData && s_bHaveAbove)
 					{
-						wf_view_data *pData = (wf_view_data*)wactor->pExtraData;
-						
 						tmp = json_object_object_get (view, "always-on-top");
 						if (!tmp || ! json_object_is_type (tmp, json_type_boolean))
 							cd_warning ("No 'always-on-top' property for view %u", id);
 						else pData->bAbove = json_object_get_boolean (tmp);
 					}
+					if (!pData->bPropsChecked)
+					{
+						_check_menu_props (id);
+						pData->bPropsChecked = TRUE;
+					}
+				}
+				else
+				{
+					// note: if id is not in s_pMissingActors, this will return NULL, which corresponds to neither state being set
+					WfMissingActorState st = GPOINTER_TO_INT (g_hash_table_lookup (s_pMissingActors, GUINT_TO_POINTER (id)));
+					if (bInitialState || bStickyChanged)
+					{
+						tmp = json_object_object_get (view, "sticky");
+						if (!tmp || ! json_object_is_type (tmp, json_type_boolean))
+							cd_warning ("No 'sticky' property for view %u", id);
+						else if (json_object_get_boolean (tmp)) st |= MISSING_ACTOR_STATE_STICKY;
+					}
+					if ((bInitialState || bAboveChanged) && s_bHaveAbove)
+					{
+						tmp = json_object_object_get (view, "always-on-top");
+						if (!tmp || ! json_object_is_type (tmp, json_type_boolean))
+							cd_warning ("No 'always-on-top' property for view %u", id);
+						else if (json_object_get_boolean (tmp)) st |= MISSING_ACTOR_STATE_ABOVE;
+					}
+					
+					g_hash_table_insert (s_pMissingActors, GUINT_TO_POINTER (id), GINT_TO_POINTER (st));
 				}
 			}
 		}
@@ -1347,7 +1525,11 @@ static gboolean _socket_cb (G_GNUC_UNUSED GIOChannel *pSource, GIOCondition cond
 								
 								_binding_registered (bResult, data->pBinding, (CairoDockGrabKeyResult) data->cb, id);
 							}
-							else if (data->cb) ((CairoDockDesktopManagerActionResult) data->cb) (bResult, data->user_data);
+							else if (data->cb)
+							{
+								if (data->cb == _on_got_view_prop) _on_got_view_prop ((wf_view_prop_cb_data*) data->user_data, res, bResult);
+								else ((CairoDockDesktopManagerActionResult) data->cb) (bResult, data->user_data);
+							}
 							g_free (data);
 						}
 					}
@@ -1503,7 +1685,7 @@ void cd_init_wayfire_backend (void) {
 				gldi_dock_visibility_register_backend (&dvb);
 				
 				if ((s_bCanAbove || s_bCanSticky) && s_bNeedStickyAbove)
-					_init_sticky_above ();
+					_init_window_maping ();
 			}
 		}
 		else cd_warning ("Cannot add socket IO event source!");
