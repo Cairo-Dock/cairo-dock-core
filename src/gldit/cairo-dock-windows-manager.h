@@ -53,6 +53,20 @@ typedef enum {
 
 // data
 
+/// Additional info about DBus interfaces related to a window that might be set
+typedef struct _DBusProps {
+	// Windows that support the GTK interfaces
+	gchar *cGTKBusName; // DBus name
+	gchar *cGTKMenuBarPath;
+	gchar *cGTKAppMenuPath; // not used
+	gchar *cGTKWindowPath;
+	gchar *cGTKAppPath;
+	
+	// Windows that support the com.canonical.dbusmenu interface
+	gchar *cKDEServiceName; // DBus name 
+	gchar *cKDEObjectPath; // object path
+} GldiWindowDBusProperties;
+
 /// Definition of a window actor.
 struct _GldiWindowActor {
 	GldiObject object;
@@ -73,6 +87,7 @@ struct _GldiWindowActor {
 	gint iAge;  // age of the window (a mere growing integer).
 	gboolean bIsTransientFor;  // TRUE if the window is transient (for a parent window).
 	gboolean bIsSticky;
+	GldiWindowDBusProperties *pDBusProps; // DBus properties (if set, can be NULL)
 	};
 
 
@@ -113,14 +128,17 @@ void gldi_window_move_to_current_desktop (GldiWindowActor *pAppli);
 
 guint gldi_window_get_id (GldiWindowActor *pAppli);
 
-/** Get the object path at which this window's app might export its global menus if supported by the backend.
+/** Get the DBus properties set for this window if set and supported by the backend. Currently,
+ * the X11 and KWin backends support filling out the DBus name and object paths required to
+ * support global menus.
  *@param actor the window whose menu is requested
- *@param service_name return location for the dbus service name
- *@param object_path return location for the object path
- * Note: the returned values in service_name and object_path point to strings owned by this window
- * actor instance and should not be modified or freed by the caller.
+ *@return a struct with the relevant DBus properties set or NULL if unset / unknown; any member may
+ * be NULL if not set.
+ * 
+ * Note: members of the returned struct belong to the window and may change at any time. The caller
+ * should make copies if it wishes to use them later.
  */
-void gldi_window_get_menu_address (GldiWindowActor *actor, char **service_name, char **object_path);
+const GldiWindowDBusProperties *gldi_window_get_dbus_props (const GldiWindowActor *actor);
 
 
 /* WM capabilities -- use cases outside of cairo-dock-windows-manager.c (especially plugins)

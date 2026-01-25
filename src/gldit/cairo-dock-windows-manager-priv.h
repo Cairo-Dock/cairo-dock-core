@@ -56,7 +56,6 @@ struct _GldiWindowManagerBackend {
 	const gchar *name; // name of the current backend
 	void (*move_to_viewport_abs) (GldiWindowActor *actor, int iNumDesktop, int iViewportX, int iViewportY); // like move_to_nth_desktop, but use absolute viewport coordinates
 	gpointer flags; // GldiWMBackendFlags, cast to pointer
-	void (*get_menu_address) (GldiWindowActor *actor, char **service_name, char **object_path);
 	void (*get_supported_actions) (gboolean *bCanFullscreen, gboolean *bCanSticky, gboolean *bCanBelow, gboolean *bCanAbove, gboolean *bCanKill);
 	} ;
 

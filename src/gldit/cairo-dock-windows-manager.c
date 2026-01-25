@@ -317,10 +317,10 @@ guint gldi_window_get_id (GldiWindowActor *actor)
 	return 0;
 }
 
-void gldi_window_get_menu_address (GldiWindowActor *actor, char **service_name, char **object_path)
+const GldiWindowDBusProperties *gldi_window_get_dbus_props (const GldiWindowActor *actor)
 {
-	if (actor && s_backend.get_menu_address)
-		s_backend.get_menu_address (actor, service_name, object_path);
+	if (actor) return actor->pDBusProps;
+	else return NULL;
 }
 
 GldiWindowActor *gldi_window_pick (GtkWindow *pParentWindow)
@@ -519,6 +519,18 @@ static void reset_object (GldiObject *obj)
 	g_free (actor->cWmName);
 	g_free (actor->cLastAttentionDemand);
 	s_pWindowsList = g_list_remove (s_pWindowsList, actor);
+	
+	if (actor->pDBusProps)
+	{
+		g_free (actor->pDBusProps->cGTKBusName);
+		g_free (actor->pDBusProps->cGTKMenuBarPath);
+		g_free (actor->pDBusProps->cGTKAppMenuPath);
+		g_free (actor->pDBusProps->cGTKWindowPath);
+		g_free (actor->pDBusProps->cGTKAppPath);
+		g_free (actor->pDBusProps->cKDEServiceName);
+		g_free (actor->pDBusProps->cKDEObjectPath);
+		g_free (actor->pDBusProps);
+	}
 }
 
 void gldi_register_windows_manager (void)
