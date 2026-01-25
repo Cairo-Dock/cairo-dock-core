@@ -13,7 +13,7 @@ include (GNUInstallDirs)
 
 ########### project ###############
 
-set (VERSION "3.6.2") # no dash, only numbers, dots and maybe alpha/beta/rc, e.g.: 3.3.1 or 3.3.99.alpha1
+set (VERSION "3.6.3") # no dash, only numbers, dots and maybe alpha/beta/rc, e.g.: 3.3.1 or 3.3.99.alpha1
 
 add_compile_options (-std=c99 -Wall -Wextra -Werror-implicit-function-declaration) # -Wextra -Wwrite-strings -Wuninitialized -Wstrict-prototypes -Wreturn-type -Wparentheses -Warray-bounds)
 if (NOT DEFINED CMAKE_BUILD_TYPE)
@@ -320,7 +320,7 @@ add_subdirectory (po)
 # this is actually a plug-in for cairo-dock, not for gldi
 # it uses some functions of cairo-dock (they are binded dynamically), that's why it can't go with other plug-ins
 set (GETTEXT_HELP ${GETTEXT_PACKAGE})
-set (VERSION_HELP "0.11.0")
+set (VERSION_HELP "0.11.1")
 set (PACKAGE_HELP "cd-Help")
 set (helpdatadir "${pkgdatadir}/plug-ins/Help")
 set (dock_version "${VERSION}")

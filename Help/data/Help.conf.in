@@ -5,8 +5,8 @@
 
 #X[Using the dock]
 Using the dock =
-#>Most icons in the dock have several actions: the primary action on left-click, a secondary action on middle-click, and additionnal actions on right-click (in the menu).
-#Some applets let you bind a shortkey to an action, and decide which action sould be on middle-click.
+#>Most icons in the dock have several actions: the primary action on left-click, a secondary action on middle-click, and additional actions on right-click (in the menu).
+#Some applets let you bind a shortkey to an action, and decide which action should be on middle-click.
 _Using the dock =
 
 #X[Adding features]
@@ -102,7 +102,7 @@ _Switching between the windows of a same application =
 
 #X[Grouping windows of a given application]
 Grouping windows of a given application =
-#>When an application has several windows, one icon for each window will appear in the dock; they will be grouped togather into a sub-dock.
+#>When an application has several windows, one icon for each window will appear in the dock; they will be grouped together into a sub-dock.
 #Clicking on the main icon will display all the windows of the application side-by-side (if your Window Manager is able to do that).
 _Grouping windows of a given application =
 
@@ -120,12 +120,12 @@ _Showing windows preview =
 #[@pkgdatadir@/icons/icon-background.svg]
 [Docks]
 
-#X[Positionning the dock on the screen]
-Positionning the dock on the screen =
+#X[Positioning the dock on the screen]
+Positioning the dock on the screen =
 #>The dock can be placed anywhere on the screen.
 #In the case of the main dock, right-click -> Cairo-Dock -> configure, and then select the position you want.
 #In the case of a 2nd or 3rd dock, right-click -> Cairo-Dock -> set up this dock, and then select the position you want.
-_Positionning the dock on the screen=
+_Positioning the dock on the screen=
 
 #X[Hiding the dock to use all the screen]
 Hiding the dock to use all the screen=
@@ -186,7 +186,7 @@ _Changing the desklets decorations =
 Having a calendar with tasks =
 #>Activate the Clock applet.
 #Clicking on it will display a calendar.
-#Double-clicking on a day will pop-up a task-editor. Here you can add/remove taks.
+#Double-clicking on a day will pop-up a task-editor. Here you can add/remove tasks.
 #When a task has been or is going to be scheduled, the applet will warn you (15mn before the event, and also 1 day before in the case of an anniversary).
 _Having a calendar with tasks =
 
@@ -287,7 +287,7 @@ _Accessing folder bookmarks =
 Having multiple instances of an applet =
 #>Some applets can have several instances running at the same time: Clock, Stack, Weather, ...
 #Right click on the applet's icon -> "launch another instance".
-#You can configure each instance independantely. This allows you, for example, to have the current time for different countries in your dock or the weather in different cities.
+#You can configure each instance independently. This allows you, for example, to have the current time for different countries in your dock or the weather in different cities.
 _Having multiple instances of an applet =
 
 #X[Adding / removing a desktop]
@@ -297,20 +297,20 @@ Adding / removing a desktop =
 #You can even name each of them.
 _Adding / removing a desktop =
 
-#X[Controling the sound volume]
-Controling the sound volume =
+#X[Controlling the sound volume]
+Controlling the sound volume =
 #>Activate the Sound Volume applet.
 #Then scroll up/down to increase/decrease the sound.
 #Alternatively, you can click on the icon and move the scroll bar.
 #Middle-click will mute/unmute.
-_Controling the sound volume =
+_Controlling the sound volume =
 
-#X[Controling the screen brightness]
-Controling the screen brightness =
+#X[Controlling the screen brightness]
+Controlling the screen brightness =
 #>Activate the Screen Luminosity applet.
 #Then scroll up/down to increase/decrease the brightness.
 #Alternatively, you can click on the icon and move the scroll bar.
-_Controling the screen brightness =
+_Controlling the screen brightness =
 
 
 #[@pkgdatadir@/icons/icon-behavior.svg]
@@ -362,7 +362,7 @@ netspeed=
 #X [The dustbin remains empty even when I delete a file.]
 Xdustbin=
 #> if you're using KDE, you may have to specify the path to the trash folder.
-#Just edit the applet's configuration, and fill in the Trash path; it is probably «~/.locale/share/Trash/files». Be very careful when typing a path here!!! (do not insert spaces or some invisible caracters).
+#Just edit the applet's configuration, and fill in the Trash path; it is probably «~/.locale/share/Trash/files». Be very careful when typing a path here!!! (do not insert spaces or some invisible characters).
 dustbin=
 
 

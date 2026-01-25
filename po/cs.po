@@ -943,7 +943,7 @@ msgid "Ask again on startup which backend to use."
 msgstr "Při startu se znovu dotázat na použití podpory."
 
 #: ../src/cairo-dock.c:394
-msgid "Force the dock to consider this environnement - use it with care."
+msgid "Force the dock to consider this environment - use it with care."
 msgstr "Přinutit dock používat toto prostředí - použijte s rozvahou."
 
 #: ../src/cairo-dock.c:397
@@ -1017,8 +1017,8 @@ msgstr "Cairo-Dock dělá cokoliv, včetně kafe !"
 
 #: ../src/cairo-dock.c:440
 msgid ""
-"Ask the dock to load additionnal modules contained in this directory (though "
-"it is unsafe for your dock to load unnofficial modules)."
+"Ask the dock to load additional modules contained in this directory (though "
+"it is unsafe for your dock to load unofficial modules)."
 msgstr ""
 "Požádat dock k nahrání přídavných modulů obsažených v tomto adresáři "
 "(přestože nahrání neoficielních modulů není bezpečné)."
@@ -1573,7 +1573,7 @@ msgstr "Použít panel"
 #: ../Help/data/messages:5
 msgid ""
 "Most icons in the dock have several actions: the primary action on left-"
-"click, a secondary action on middle-click, and additionnal actions on right-"
+"click, a secondary action on middle-click, and additional actions on right-"
 "click (in the menu).\n"
 "Some applets let you bind a shortkey to an action, and decide which action "
 "sould be on middle-click."
@@ -1787,7 +1787,7 @@ msgstr "Seskupen oken dané aplikace"
 #: ../Help/data/messages:65
 msgid ""
 "When an application has several windows, one icon for each window will "
-"appear in the dock; they will be grouped togather into a sub-dock.\n"
+"appear in the dock; they will be grouped together into a sub-dock.\n"
 "Clicking on the main icon will display all the windows of the application "
 "side-by-side (if your Window Manager is able to do that)."
 msgstr ""
@@ -1817,7 +1817,7 @@ msgstr ""
 "Compizu. Instalovat \"ccsm\" aby bylo možno konfigurovat Compiz."
 
 #: ../Help/data/messages:77
-msgid "Positionning the dock on the screen"
+msgid "Positioning the dock on the screen"
 msgstr "Umístění docku na obrazovce"
 
 #: ../Help/data/messages:79
@@ -1920,7 +1920,7 @@ msgid ""
 "Activate the Clock applet.\n"
 "Clicking on it will display a calendar.\n"
 "Double-clicking on a day will pop-up a task-editor. Here you can add/remove "
-"taks.\n"
+"tasks.\n"
 "When a task has been or is going to be scheduled, the applet will warn you "
 "(15mn before the event, and also 1 day before in the case of an anniversary)."
 msgstr ""
@@ -2103,7 +2103,7 @@ msgid ""
 "Some applets can have several instances running at the same time: Clock, "
 "Stack, Weather, ...\n"
 "Right click on the applet's icon -> \"launch another instance\".\n"
-"You can configure each instance independantely. This allows you, for "
+"You can configure each instance independently. This allows you, for "
 "example, to have the current time for different countries in your dock or "
 "the weather in different cities."
 msgstr ""
@@ -2124,7 +2124,7 @@ msgstr ""
 "Dokonce můžete každou z nich pojmenovat."
 
 #: ../Help/data/messages:169
-msgid "Controling the sound volume"
+msgid "Controlling the sound volume"
 msgstr "Ovládání hlasitosti"
 
 #: ../Help/data/messages:171
@@ -2140,7 +2140,7 @@ msgstr ""
 "Prostřední klik umlčí/povolí zvuk."
 
 #: ../Help/data/messages:173
-msgid "Controling the screen brightness"
+msgid "Controlling the screen brightness"
 msgstr "Ovládání jasu obrazovky"
 
 #: ../Help/data/messages:175
@@ -2303,7 +2303,7 @@ msgid ""
 "if you're using KDE, you may have to specify the path to the trash folder.\n"
 "Just edit the applet's configuration, and fill in the Trash path; it is "
 "probably «~/.locale/share/Trash/files». Be very careful when typing a path "
-"here!!! (do not insert spaces or some invisible caracters)."
+"here!!! (do not insert spaces or some invisible characters)."
 msgstr ""
 "Pokud používáte KDE, možná budete muset zadat cestu ke složce odpadkového "
 "koše.\n"
@@ -2700,7 +2700,7 @@ msgid ""
 "Minimalistic: Mix applications with its launcher, show other windows only if "
 "they are minimized (like in MacOSX).\n"
 "Integrated  : Mix applications with its launcher, show all others windows "
-"and group windows togather in sub-dock (default).\n"
+"and group windows together in sub-dock (default).\n"
 "Separated   : Separate the taskbar from the launchers and only show windows "
 "that are on the current desktop."
 msgstr ""
@@ -3077,7 +3077,7 @@ msgid "\"...\" will be added at the end if the name is too long."
 msgstr "\"...\" bude přidáno na konec jména, pokud bude příliš dlouhé."
 
 #: ../data/messages:337
-msgid "Maximum number of caracters in application name:"
+msgid "Maximum number of characters in application name:"
 msgstr "Maximální počet znaků ve jméně aplikace:"
 
 #: ../data/messages:339
@@ -3120,7 +3120,7 @@ msgstr "Pouze pokud je podporováno Vaším Window manažerem"
 
 #: ../data/messages:359
 msgid ""
-"Present windows preview on click when several windows are grouped togather"
+"Present windows preview on click when several windows are grouped together"
 msgstr ""
 
 #: ../data/messages:361
