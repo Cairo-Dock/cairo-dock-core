@@ -495,7 +495,7 @@ static gboolean _check_one_prop (uint32_t id, const char *prop_name, WfViewMenuP
 	cb_data1->prop = prop;
 	
 	gboolean ret = _call_ipc_internal (obj, _on_got_view_prop, cb_data1);
-	if (!ret) g_gree (cb_data1);
+	if (!ret) g_free (cb_data1);
 	json_object_put (obj);
 	return ret;
 }
