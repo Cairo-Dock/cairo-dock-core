@@ -26,7 +26,13 @@
 #include "cairo-dock-systemd-integration.h"
 #include <cairo-dock-log.h>
 
-GDBusProxy *s_proxy = NULL;
+#if GLIB_CHECK_VERSION (2, 84, 0)
+#define _init_variant_builder g_variant_builder_init_static
+#else
+#define _init_variant_builder g_variant_builder_init
+#endif
+
+static GDBusProxy *s_proxy = NULL;
 
 static guint32 s_iLaunchID = 0; // unique counter to be used as a suffix for systemd unit names
 static guint32 s_iLaunchTS = 0; // timestamp of when we were launched, to be used as a prefix for systemd unit names
@@ -43,39 +49,10 @@ static void _spawn_end (G_GNUC_UNUSED GObject* pObj, GAsyncResult *res, G_GNUC_U
 	}
 }
 
-
-static GVariantType *s_full_type = NULL;
-static GVariantType *s_props_type = NULL;
-static GVariantType *s_aux_type = NULL;
-static GVariantType *s_args_one_type = NULL;
-static GVariantType *s_string_array_type = NULL;
-
-static void _init_variant_types (void)
-{
-	/*
-	       StartTransientUnit(in  s name,
-                         in  s mode,
-                         in  a(sv) properties,
-                         in  a(sa(sv)) aux,
-                         out o job);
-	*/
-	if (!s_full_type) s_full_type = g_variant_type_new ("(ssa(sv)a(sa(sv)))");
-	if (!s_props_type) s_props_type = g_variant_type_new ("a(sv)");
-	if (!s_aux_type) s_aux_type = g_variant_type_new ("a(sa(sv))");
-	// format of args
-	if (!s_args_one_type) s_args_one_type = g_variant_type_new ("(sasb)");
-	// args and env vectors
-	if (!s_string_array_type) s_string_array_type = g_variant_type_new ("as");
-	
-	// note: all type variables are leaked -- could add a destructor that is called on exit
-}
-
 static void _spawn_app (const gchar * const *args, const gchar *id, const gchar *desc, const gchar * const *env, const gchar *working_dir)
 {
 	if (!s_proxy) return;
 	if (!(args && *args)) return;
-	
-	_init_variant_types ();
 	
 	/* Note: systemd unit names must be unique. We ensure this by:
 	 *  -- using the "app-cairodock-" prefix to distinguish from other units
@@ -102,29 +79,18 @@ static void _spawn_app (const gchar * const *args, const gchar *id, const gchar 
 	else name = g_strdup_printf ("app-cairodock-%"G_GUINT32_FORMAT"-%s@%"G_GUINT32_FORMAT".service", s_iLaunchTS, id, s_iLaunchID);
 	
 	GVariantBuilder var_builder;
-	g_variant_builder_init  (&var_builder, s_full_type);
+	_init_variant_builder   (&var_builder, G_VARIANT_TYPE ("(ssa(sv)a(sa(sv)))"));
 	g_variant_builder_add_value (&var_builder, g_variant_new_take_string (name));
 	g_variant_builder_add   (&var_builder, "s", "fail");
-	g_variant_builder_open  (&var_builder, s_props_type);
+	
+	// Unit properties
+	g_variant_builder_open  (&var_builder, G_VARIANT_TYPE ("a(sv)"));
 	g_variant_builder_add   (&var_builder, "(sv)", "Description", g_variant_new_string (desc));
-	{
-		GVariantBuilder args_builder;
-		g_variant_builder_init  (&args_builder, s_args_one_type);
-		g_variant_builder_add   (&args_builder, "s", args[0]);
-		g_variant_builder_open  (&args_builder, s_string_array_type);
-		for(; *args; ++args) g_variant_builder_add (&args_builder, "s", *args);
-		g_variant_builder_close (&args_builder);
-		g_variant_builder_add   (&args_builder, "b", FALSE);
-		GVariant *tmp = g_variant_builder_end (&args_builder);
-		g_variant_builder_add   (&var_builder, "(sv)", "ExecStart", g_variant_new_array (NULL, &tmp, 1));
-	}
-	if (env && *env)
-	{
-		GVariantBuilder env_builder;
-		g_variant_builder_init (&env_builder, s_string_array_type);
-		if (env) for (; *env; ++env) g_variant_builder_add (&env_builder, "s", *env);
-		g_variant_builder_add (&var_builder, "(sv)", "Environment", g_variant_builder_end (&env_builder));
-	}
+	const gchar *exec_flags[] = {"no-env-expand", "ignore-failure", NULL};	
+	GVariant *tmp = g_variant_new ("(s^as^as)", args[0], args, exec_flags);
+	// note: ExecStartEx expects an array of (sasas)
+	g_variant_builder_add   (&var_builder, "(sv)", "ExecStartEx", g_variant_new_array (NULL, &tmp, 1));
+	if (env && *env) g_variant_builder_add (&var_builder, "(sv)", "Environment", g_variant_new_strv (env, -1));
 	if (working_dir) g_variant_builder_add (&var_builder, "(sv)", "WorkingDirectory", g_variant_new_string (working_dir));
 	// fail if systemd cannot exec the process binary
 	g_variant_builder_add   (&var_builder, "(sv)", "Type", g_variant_new_string ("exec"));
@@ -134,7 +100,7 @@ static void _spawn_app (const gchar * const *args, const gchar *id, const gchar 
 	// kill any child processes after the main process exited; this is a problem e.g. with cosmic-files)
 	g_variant_builder_add   (&var_builder, "(sv)", "ExitType", g_variant_new_string ("cgroup"));
 	g_variant_builder_close (&var_builder);
-	g_variant_builder_open  (&var_builder, s_aux_type);
+	g_variant_builder_open  (&var_builder, G_VARIANT_TYPE ("a(sa(sv))"));
 	g_variant_builder_close (&var_builder);
 	
 	g_dbus_proxy_call (s_proxy, "StartTransientUnit", g_variant_builder_end (&var_builder), G_DBUS_CALL_FLAGS_NONE, -1, NULL, _spawn_end, NULL);
