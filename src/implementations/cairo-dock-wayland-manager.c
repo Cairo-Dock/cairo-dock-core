@@ -50,6 +50,7 @@
 #include "cairo-dock-cosmic-toplevel.h"
 #include "cairo-dock-plasma-virtual-desktop.h"
 #include "cairo-dock-ext-workspaces.h"
+#include "cairo-dock-ext-toplevel.h"
 #endif
 #include "cairo-dock-wayland-wm.h"
 #include "cairo-dock-wayland-hotspots.h"
@@ -489,13 +490,18 @@ static void _registry_global_cb ( G_GNUC_UNUSED void *data, struct wl_registry *
 	{
 		cd_debug("Found plasma-virtual-desktop-manager");
 	}
-	else if (gldi_cosmic_toplevel_match_protocol (id, interface, version))
-	{
-		cd_debug("Found cosmic-toplevel-manager");
-	}
 	else if (gldi_ext_workspaces_match_protocol (id, interface, version))
 	{
 		cd_debug("Found ext-workspace-manager");
+	}
+	// note: for now, both cosmic and ext-toplevel use the same protocol (ext-toplevel-list)
+	// so we need to check both
+	else
+	{
+		if (gldi_cosmic_toplevel_match_protocol (id, interface, version))
+			cd_debug ("Found cosmic-toplevel-manager");
+		if (gldi_ext_toplevel_match_protocol (id, interface, version))
+			cd_debug ("Found ext-toplevel-state");
 	}
 #else
 	(void)version; // avoid warning
@@ -573,7 +579,8 @@ static void init (void)
 				cd_warning ("inconsistent compositor types detected!");
 			s_CompositorType = WAYLAND_COMPOSITOR_KWIN;
 		}
-		else gldi_wlr_foreign_toplevel_try_init (registry);
+		else if (!gldi_ext_toplevel_try_init (registry))
+			gldi_wlr_foreign_toplevel_try_init (registry);
 		if (!gldi_plasma_virtual_desktop_try_init (registry))
 			gldi_ext_workspaces_try_init (registry);
 	}
