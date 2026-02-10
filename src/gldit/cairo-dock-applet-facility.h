@@ -516,12 +516,12 @@ gldi_shortkey_new (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
  // LABEL //
 ///////////
 /** Set a new label on the applet's icon.
-*@param cIconName the label.
+*@param cIconName the label or NULL to unset (not recommended).
 */
 #define CD_APPLET_SET_NAME_FOR_MY_ICON(cIconName) \
 	gldi_icon_set_name (myIcon, cIconName)
 /** Set a new label on the applet's icon.
-*@param cIconNameFormat the label, in a 'printf'-like format.
+*@param cIconNameFormat the label, in a 'printf'-like format. Should not be NULL.
 *@param ... values to be written in the string.
 */
 #define CD_APPLET_SET_NAME_FOR_MY_ICON_PRINTF(cIconNameFormat, ...) \
@@ -532,12 +532,12 @@ gldi_shortkey_new (cShortKey, myApplet->pModule->pVisitCard->cTitle, cDescriptio
  // QUICK-INFO//
 ///////////////
 /** Set a quick-info on the applet's icon.
-*@param cQuickInfo the quick-info. This is a small text (a few characters) that is superimposed on the icon.
+*@param cQuickInfo the quick-info. This is a small text (a few characters) that is superimposed on the icon or NULL to remove.
 */
 #define CD_APPLET_SET_QUICK_INFO_ON_MY_ICON(cQuickInfo) \
 	gldi_icon_set_quick_info (myIcon, cQuickInfo)
 /** Set a quick-info on the applet's icon.
-*@param cQuickInfoFormat the label, in a 'printf'-like format.
+*@param cQuickInfoFormat the label, in a 'printf'-like format. Should not be NULL.
 *@param ... values to be written in the string.
 */
 #define CD_APPLET_SET_QUICK_INFO_ON_MY_ICON_PRINTF(cQuickInfoFormat, ...) \

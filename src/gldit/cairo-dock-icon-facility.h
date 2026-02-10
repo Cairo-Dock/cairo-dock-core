@@ -278,13 +278,13 @@ void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2
 
 /** Set the label of an icon. If it has a sub-dock, it is renamed (the name is possibly altered to stay unique). The label buffer is updated too.
 *@param pIcon the icon.
-*@param cIconName the new label of the icon. You can even pass pIcon->cName.
+*@param cIconName the new label of the icon. You can even pass pIcon->cName. Can be NULL, but not recommended as it will result in missing name in the UI.
 */
 void gldi_icon_set_name (Icon *pIcon, const gchar *cIconName);
 
 /** Same as above, but takes a printf-like format string.
 *@param pIcon the icon.
-*@param cIconNameFormat the new label of the icon, in a 'printf' way.
+*@param cIconNameFormat the new label of the icon, in a 'printf' way. Should not be NULL.
 *@param ... data to be inserted into the string.
 */
 void gldi_icon_set_name_printf (Icon *pIcon, const gchar *cIconNameFormat, ...) G_GNUC_PRINTF (2, 3);
@@ -297,7 +297,7 @@ void gldi_icon_set_quick_info (Icon *pIcon, const gchar *cQuickInfo);
 
 /** Same as above, but takes a printf-like format string.
 *@param pIcon the icon.
-*@param cQuickInfoFormat the text of the quick-info, in a 'printf' way.
+*@param cQuickInfoFormat the text of the quick-info, in a 'printf' way. Should not be NULL.
 *@param ... data to be inserted into the string.
 */
 void gldi_icon_set_quick_info_printf (Icon *pIcon, const gchar *cQuickInfoFormat, ...) G_GNUC_PRINTF (2, 3);
