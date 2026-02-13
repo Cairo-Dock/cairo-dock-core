@@ -509,6 +509,15 @@ int main (int argc, char** argv)
 	if (g_bForceWayland) gdk_set_allowed_backends ("wayland");
 	if (g_bForceX11) gdk_set_allowed_backends ("x11");
 	
+	/** Trigger initializing GIO before any threads are spawned. This is
+	 * (hopefully) a workaround for deadlocks that may occur when certain
+	 * GObjects are used from different threads the first time, see:
+	 * https://github.com/Cairo-Dock/cairo-dock-core/issues/247
+	 * https://gitlab.gnome.org/GNOME/glib/-/issues/3892
+	 * https://gitlab.gnome.org/GNOME/glib/-/issues/541
+	 */
+	g_vfs_get_default ();
+	
 	gtk_init (&argc, &argv);
 	
 	if (g_bLocked) cd_warning ("Cairo-Dock will be locked.");
