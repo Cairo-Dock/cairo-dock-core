@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=GNOME/Cairo-Dock (Metacity)
+Comment=This session logs you into GNOME Flashback with Cairo-Dock and Metacity
+Exec=gnome-session --session=cairo-dock-metacity
+TryExec=metacity
+Type=Application
+DesktopNames=GNOME-Flashback;GNOME;
+X-Ubuntu-Gettext-Domain=gnome-flashback
