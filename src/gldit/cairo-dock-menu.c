@@ -717,6 +717,7 @@ GtkWidget *gldi_menu_item_new_full2 (const gchar *cLabel, const gchar *cImage, g
 			GtkWidget *image = NULL;
 			int size;
 			gtk_icon_size_lookup (iSize, &size, NULL);
+			size *= myDialogsParam.fUIScale;
 			
 			// note: this takes care to load the icon with the correct scale factor
 			cairo_surface_t *surface = cairo_dock_create_surface_from_icon (cImage, size, size);

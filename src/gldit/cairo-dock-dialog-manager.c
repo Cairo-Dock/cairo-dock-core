@@ -1006,14 +1006,19 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDialogsParam *pDialogs)
 {
 	gboolean bFlushConfFileNeeded = FALSE;
 	
+	pDialogs->fUIScale = cairo_dock_get_double_key_value (pKeyFile, "System", "ui scale", &bFlushConfFileNeeded, 1., NULL, NULL);
+	
 	pDialogs->cButtonOkImage = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "button_ok image", &bFlushConfFileNeeded, NULL, NULL, NULL);
 	pDialogs->cButtonCancelImage = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "button_cancel image", &bFlushConfFileNeeded, NULL, NULL, NULL);
 	
 	cairo_dock_get_size_key_value_helper (pKeyFile, "Dialogs", "button ", bFlushConfFileNeeded, pDialogs->iDialogButtonWidth, pDialogs->iDialogButtonHeight);
+	pDialogs->iDialogButtonWidth *= pDialogs->fUIScale;
+	pDialogs->iDialogButtonHeight *= pDialogs->fUIScale;
 	
 	GldiColor couleur_bulle = {{1.0, 1.0, 1.0, 0.7}};
 	cairo_dock_get_color_key_value (pKeyFile, "Dialogs", "bg color", &bFlushConfFileNeeded, &pDialogs->fBgColor, &couleur_bulle, NULL, "background color");
 	pDialogs->iDialogIconSize = MAX (16, cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "icon size", &bFlushConfFileNeeded, 48, NULL, NULL));
+	pDialogs->iDialogIconSize *= pDialogs->fUIScale;
 	
 	pDialogs->cDecoratorName = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "decorator", &bFlushConfFileNeeded, "comics", NULL, NULL);
 	
@@ -1056,6 +1061,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDialogsParam *pDialogs)
 	gboolean bCustomFont = cairo_dock_get_boolean_key_value (pKeyFile, "Dialogs", "custom", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	gchar *cFont = (bCustomFont ? cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "message police", &bFlushConfFileNeeded, NULL, "Icons", NULL) : NULL);
 	gldi_text_description_set_font (&pDialogs->dialogTextDescription, cFont);
+	pDialogs->dialogTextDescription.iSize *= pDialogs->fUIScale;
 	
 	pDialogs->dialogTextDescription.fMaxRelativeWidth = .5;  // limit to half of the screen (the dialog is not placed on a given screen, it can overlap 2 screens, so it's half of the mean screen width)
 	
