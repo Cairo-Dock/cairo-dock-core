@@ -182,9 +182,13 @@ animation on demands attention = rotate
 
 [System]
 
-#B- Experimental drawing code (X11)
+#b- Experimental drawing code (X11)
 #{Enable new code paths on X11 to test for regressions.}
 X11_new_rendering_code=false
+
+#e+[0.5;2;smaller;bigger] UI scaling factor :
+#{Scale the UI additionally by this factor. You can use this as a workaround if the dock appears too small or too large.}
+ui scale = 1.
 
 #X-[Animations speed;@pkgdatadir@/icons/icon-movment.png]
 frame_mov =
