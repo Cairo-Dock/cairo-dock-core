@@ -1526,9 +1526,11 @@ static void _add_main_groups_buttons (void)
 		_("System"));
 	_add_sub_group_to_group_button (pGroupDescription, "System", "icon-system.svg", _("System"));
 	pGroupDescription->pManagers = g_list_prepend (pGroupDescription->pManagers, (gchar*)"Docks");
+	pGroupDescription->pManagers = g_list_prepend (pGroupDescription->pManagers, (gchar*)"Dialogs");
 	pGroupDescription->pManagers = g_list_prepend (pGroupDescription->pManagers, (gchar*)"Connection");
 	pGroupDescription->pManagers = g_list_prepend (pGroupDescription->pManagers, (gchar*)"Containers");
 	pGroupDescription->pManagers = g_list_prepend (pGroupDescription->pManagers, (gchar*)"Backends");
+	pGroupDescription->pManagers = g_list_prepend (pGroupDescription->pManagers, (gchar*)"Icons");
 	pGroupDescription->build_widget = _build_config_group_widget;
 	
 	pGroupDescription = _add_one_main_group_button ("Style",
