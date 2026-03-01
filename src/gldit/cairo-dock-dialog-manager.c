@@ -36,7 +36,6 @@
 #include "cairo-dock-animations.h"  // for cairo_dock_is_hidden
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-dialog-factory.h"
-#include "cairo-dock-menu.h"  // _init_menu_style
 #include "cairo-dock-style-manager.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-dialog-priv.h"
@@ -1100,6 +1099,7 @@ static void _init_menu_style (void)
 			gldi_style_colors_freeze ();
 			g_object_unref (cssProvider);
 			cssProvider = NULL;
+			//!! TODO: might still need a minimal provider to adjust font size !!
 		}
 	}
 	else
@@ -1153,14 +1153,18 @@ static void _init_menu_style (void)
 				&length,
 				NULL);
 		}
+		g_free (cCustomCssFile);
 		
 		gchar *css;
 		if (cCustomCss != NULL)
 		{
 			css = g_strconcat (cssheader, cCustomCss, NULL);
+			g_free (cCustomCss);
 		}
 		else
 		{
+			gchar *cFontSize = (myDialogsParam.fUIScale != 1.0) ? g_strdup_printf ("font-size: %f %%;\n", myDialogsParam.fUIScale * 100.0) : NULL;
+			
 			css = g_strconcat (cssheader,
 			".gldimenuitem * { \
 				/*engine: none;*/ \
@@ -1169,8 +1173,9 @@ static void _init_menu_style (void)
 			} \
 			.gldimenuitem { \
 				text-shadow: none; \
-				border-image: none; \
-				box-shadow: none; \
+				border-image: none; \n",
+				cFontSize ? cFontSize : "",
+			"	box-shadow: none; \
 				background: transparent; \
 				color: @menuitem_text_color; \
 				border-color: transparent; \
@@ -1334,12 +1339,15 @@ static void _init_menu_style (void)
 			NULL);  // we also define ".menu", so that custom widgets (like in the SoundMenu) can get our colors. Note that we don't redefine Gtk's menuitem, because we want to keep normal menus for GUI
 			// for "entry", using "background-color" will not affect entries inside another widget (like a box), we actually have to use "background" ... (TBC with gtk > 3.6)
 			// for ".window-frame": remove shadow added by some WMs (Marco/Metacity) to the menu (LP #1407880)
+			
+			g_free (cFontSize);
 		}
 		
 		gldi_style_colors_freeze ();
 		gtk_css_provider_load_from_data (cssProvider,
 			css, -1, NULL);  // (should) clear any previously loaded information
 		gldi_style_colors_freeze ();
+		g_free (cssheader);
 		g_free (css);
 	}
 }
@@ -1381,7 +1389,8 @@ static void reload (CairoDialogsParam *pPrevDialogs, CairoDialogsParam *pDialogs
 	}
 	
 	if (pPrevDialogs->bUseDefaultColors != pDialogs->bUseDefaultColors
-	|| ! pDialogs->bUseDefaultColors)
+	|| ! pDialogs->bUseDefaultColors
+	|| pPrevDialogs->fUIScale != pDialogs->fUIScale)
 		on_style_changed (NULL);
 }
 
