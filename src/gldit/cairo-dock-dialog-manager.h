@@ -61,6 +61,7 @@ struct _CairoDialogsParam {
 	gint iCornerRadius;
 	GldiTextDescription dialogTextDescription;
 	gdouble fUIScale;
+	gdouble fMenuFontScale;
 };
 
 
