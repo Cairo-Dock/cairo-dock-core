@@ -1194,7 +1194,7 @@ static void _init_menu_style (void)
 				-unico-focus-border-color: alpha (@menuitem_child_bg_color, .6); \
 				-unico-focus-fill-color: alpha (@menuitem_child_bg_color, .2); \
 			} \
-			.gldimenuitem label { \
+			.gldimenuitem { \
 				text-shadow: none; \
 				border-image: none; \
 				box-shadow: none; \
