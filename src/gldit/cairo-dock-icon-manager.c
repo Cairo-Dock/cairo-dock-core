@@ -481,7 +481,24 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 		pIcons->iIconWidth = 48;
 	if (pIcons->iIconHeight == 0)
 		pIcons->iIconHeight = 48;
-	double fUIScale = cairo_dock_get_double_key_value (pKeyFile, "System", "ui scale", &bFlushConfFileNeeded, 1., NULL, NULL);
+	
+	double fUIScale = 1.0;
+	int iUIScaleBackend = cairo_dock_get_integer_key_value (pKeyFile, "System", "ui scale backend", &bFlushConfFileNeeded, 2, NULL, NULL);
+	gboolean bScale = FALSE;
+	switch (iUIScaleBackend)
+	{
+		case 2: // both
+			bScale = TRUE;
+			break;
+		case 1: // Wayland
+			bScale = gldi_container_is_wayland_backend ();
+			break;
+		case 0: // X11
+			bScale = !gldi_container_is_wayland_backend ();
+			break;
+	}
+	if (bScale) fUIScale = cairo_dock_get_double_key_value (pKeyFile, "System", "ui scale", &bFlushConfFileNeeded, 1., NULL, NULL);
+	
 	pIcons->iIconWidth *= fUIScale;
 	pIcons->iIconHeight *= fUIScale;
 	pIcons->fExtraScale = cairo_dock_get_double_key_value (pKeyFile, "Icons", "extra scale", &bFlushConfFileNeeded, 1., NULL, NULL);
