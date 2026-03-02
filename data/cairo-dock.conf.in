@@ -186,9 +186,20 @@ animation on demands attention = rotate
 #{Enable new code paths on X11 to test for regressions.}
 X11_new_rendering_code=false
 
+#F+[Additional UI scaling;zoom-fit-best]
+frame_scale =
+
 #e+[0.5;2;smaller;bigger] UI scaling factor :
 #{Scale the UI additionally by this factor. You can use this as a workaround if the dock appears too small or too large.}
 ui scale = 1.
+
+#l+[X11;Wayland;Always] Apply scaling on display server:
+#{Select to only apply the above scaling factor when running in an environment with a specific display server.}
+ui scale backend = 2
+
+#b- Do not scale fonts in menus
+#{Select this if fonts in menus are already scaled by GTK ("Scaling factor" setting on the "Fonts" tab of GNOME Tweaks).}
+ui scale exclude menus = false
 
 #X-[Animations speed;@pkgdatadir@/icons/icon-movment.png]
 frame_mov =
