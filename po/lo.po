@@ -1,0 +1,4318 @@
+# Lao translation for cairo-dock-core
+# Copyright (c) 2025 Rosetta Contributors and Canonical Ltd 2025
+# This file is distributed under the same license as the cairo-dock-core package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: cairo-dock-core\n"
+"Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
+"POT-Creation-Date: 2025-09-21 19:12+0000\n"
+"PO-Revision-Date: 2025-11-12 03:27+0000\n"
+"Last-Translator: boneni <Unknown>\n"
+"Language-Team: Lao <lo@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2026-03-05 22:01+0000\n"
+"X-Generator: Launchpad (build 2b2e09fee12efee48836b36f2ca9a800f38d982a)\n"
+
+#: ../src/cairo-dock-gui-advanced.c:120 ../src/cairo-dock-widget-plugins.c:164
+#: ../data/messages:269
+msgid "Behaviour"
+msgstr "ພຶດຕິກຳ"
+
+#: ../src/cairo-dock-gui-advanced.c:121 ../data/messages:113
+#: ../data/messages:841 ../data/messages:879 ../data/messages:951
+msgid "Appearance"
+msgstr "ໜ້າຕາ"
+
+#: ../src/cairo-dock-gui-advanced.c:122 ../src/cairo-dock-widget-plugins.c:134
+msgid "Files"
+msgstr "ໄຟລ໌"
+
+#: ../src/cairo-dock-gui-advanced.c:123 ../src/cairo-dock-widget-plugins.c:139
+msgid "Internet"
+msgstr "ອິນເຕີເນັດ"
+
+#: ../src/cairo-dock-gui-advanced.c:124 ../src/cairo-dock-widget-plugins.c:144
+msgid "Desktop"
+msgstr "ເດັສທັອບ"
+
+#: ../src/cairo-dock-gui-advanced.c:125
+msgid "Accessories"
+msgstr "ອຸປະກອນເສີມ"
+
+#: ../src/cairo-dock-gui-advanced.c:126 ../src/cairo-dock-gui-advanced.c:1485
+#: ../src/cairo-dock-gui-advanced.c:1486 ../src/cairo-dock-widget-plugins.c:154
+#: ../data/messages:119 ../data/messages:373 ../data/messages:883
+msgid "System"
+msgstr "ລະບົບ"
+
+#: ../src/cairo-dock-gui-advanced.c:127 ../src/cairo-dock-widget-plugins.c:159
+msgid "Fun"
+msgstr "ເພື່ອຄວາມບັນເທີງ"
+
+#: ../src/cairo-dock-gui-advanced.c:128 ../src/cairo-dock-gui-advanced.c:1762
+#: ../src/gldit/cairo-dock-gui-factory.c:785
+msgid "All"
+msgstr "ທັງໝົດ"
+
+#: ../src/cairo-dock-gui-advanced.c:1450
+msgid "Set the position of the main dock."
+msgstr "ຕັ້ງຕຳແໜ່ງຂອງດັອກຫຼັກ."
+
+#: ../src/cairo-dock-gui-advanced.c:1451 ../src/cairo-dock-gui-advanced.c:1452
+#: ../Help/data/messages:281 ../data/messages:153
+msgid "Position"
+msgstr "ຕຳແໜ່ງ"
+
+#: ../src/cairo-dock-gui-advanced.c:1459
+msgid ""
+"Do you like your dock to be always visible,\n"
+" or on the contrary unobtrusive?\n"
+"Configure the way you access your docks and sub-docks!"
+msgstr ""
+"ທ່ານມັກໃຫ້ດັອກຂອງທ່ານເຫັນຕະຫຼອດເວລາ,\n"
+" ຫຼື ບໍ່ໃຫ້ລົບກວນສາຍຕາ?\n"
+" ຕັ້ງຄ່າວິທີການເຂົ້າເຖິງດັອກ ແລະ ດັອກຍ່ອຍຂອງທ່ານ!"
+
+#: ../src/cairo-dock-gui-advanced.c:1460 ../src/cairo-dock-gui-advanced.c:1461
+#: ../src/cairo-dock-user-menu.c:2132 ../Help/data/messages:299
+msgid "Visibility"
+msgstr "ການເບິ່ງເຫັນ"
+
+#: ../src/cairo-dock-gui-advanced.c:1468
+msgid "Display and interact with currently open windows."
+msgstr "ສະແດງ ແລະ ໂຕ້ຕອບກັບໜ້າຕ່າງທີ່ກຳລັງເປີດຢູ່."
+
+#: ../src/cairo-dock-gui-advanced.c:1469 ../src/cairo-dock-gui-advanced.c:1470
+#: ../Help/data/messages:41 ../data/messages:65
+msgid "Taskbar"
+msgstr "ແຖບໜ້າວຽກ"
+
+#: ../src/cairo-dock-gui-advanced.c:1477
+msgid "Define all the keyboard shortcuts currently available."
+msgstr "ກຳນົດປຸ່ມລັດທັງໝົດທີ່ມີຢູ່ໃນປັດຈຸບັນ."
+
+#: ../src/cairo-dock-gui-advanced.c:1478 ../data/messages:149
+msgid "Shortkeys"
+msgstr "ປຸ່ມລັດ"
+
+#: ../src/cairo-dock-gui-advanced.c:1484
+msgid "All of the parameters you will never want to tweak."
+msgstr "ພາຣາມິເຕີທັງໝົດທີ່ທ່ານຈະບໍ່ຕ້ອງການປັບແຕ່ງ."
+
+#: ../src/cairo-dock-gui-advanced.c:1496
+msgid "Configure the global style."
+msgstr "ຕັ້ງຄ່າຮູບແບບລວມ."
+
+#: ../src/cairo-dock-gui-advanced.c:1497 ../src/cairo-dock-gui-advanced.c:1498
+#: ../data/messages:115 ../data/messages:117 ../data/messages:465
+#: ../data/messages:555 ../data/messages:695 ../data/messages:737
+#: ../data/messages:809 ../data/messages:843 ../data/messages:877
+#: ../data/messages:881
+msgid "Style"
+msgstr "ຮູບແບບ"
+
+#: ../src/cairo-dock-gui-advanced.c:1505
+msgid "Configure docks appearance."
+msgstr "ຕັ້ງຄ່າໜ້າຕາຂອງດັອກ."
+
+#: ../src/cairo-dock-gui-advanced.c:1506 ../Help/data/messages:75
+msgid "Docks"
+msgstr "ດັອກ"
+
+#: ../src/cairo-dock-gui-advanced.c:1507 ../data/messages:463
+#: ../data/messages:977
+msgid "Background"
+msgstr "ພື້ນຫຼັງ"
+
+#: ../src/cairo-dock-gui-advanced.c:1508 ../data/messages:141
+#: ../data/messages:531 ../data/messages:971
+msgid "Views"
+msgstr "ຈຳນວນຄົນເບິ່ງ"
+
+#: ../src/cairo-dock-gui-advanced.c:1516
+msgid "Configure text bubble appearance."
+msgstr "ຕັ້ງຄ່າໜ້າຕາຂອງກ່ອງຂໍ້ຄວາມ."
+
+#: ../src/cairo-dock-gui-advanced.c:1517 ../src/cairo-dock-gui-advanced.c:1518
+msgid "Dialog boxes and Menus"
+msgstr "ກ່ອງໂຕ້ຕອບ ແລະ ເມນູ"
+
+#: ../src/cairo-dock-gui-advanced.c:1525
+msgid "Applets can be displayed on your desktop as widgets."
+msgstr "ແອັບເລັດສາມາດສະແດງເທິງເດັສທັອບຂອງທ່ານເປັນວິດເຈັດໄດ້."
+
+#: ../src/cairo-dock-gui-advanced.c:1526 ../src/cairo-dock-gui-advanced.c:1527
+#: ../Help/data/messages:85 ../data/messages:593
+msgid "Desklets"
+msgstr "ເດສເລັດ"
+
+#: ../src/cairo-dock-gui-advanced.c:1534
+msgid ""
+"All about icons:\n"
+" size, reflection, icon theme,..."
+msgstr ""
+"ທຸກຢ່າງກ່ຽວກັບໄອຄອນ:\n"
+" ຂະໜາດ, ການສະທ້ອນ, ທີມໄອຄອນ,..."
+
+#: ../src/cairo-dock-gui-advanced.c:1535 ../src/cairo-dock-gui-advanced.c:1536
+#: ../Help/data/messages:11 ../data/messages:125 ../data/messages:649
+#: ../data/messages:953
+msgid "Icons"
+msgstr "ໄອຄອນ"
+
+#: ../src/cairo-dock-gui-advanced.c:1537 ../data/messages:733
+msgid "Indicators"
+msgstr "ຕົວຊີ້ບອກ"
+
+#: ../src/cairo-dock-gui-advanced.c:1545
+msgid "Define icon caption and quick-info style."
+msgstr "ກຳນົດຮູບແບບຄຳບັນຍາຍໄອຄອນ ແລະ ຂໍ້ມູນດ່ວນ."
+
+#: ../src/cairo-dock-gui-advanced.c:1546 ../src/cairo-dock-gui-advanced.c:1547
+msgid "Captions"
+msgstr "ຄຳບັນຍາຍ"
+
+#: ../src/cairo-dock-gui-advanced.c:1554
+msgid "Try new themes and save your theme."
+msgstr "ລອງໃຊ້ທີມໃໝ່ ແລະ ບັນທຶກທີມຂອງທ່ານ."
+
+#: ../src/cairo-dock-gui-advanced.c:1555 ../src/cairo-dock-gui-simple.c:115
+#: ../src/cairo-dock-gui-simple.c:117
+msgid "Themes"
+msgstr "ທີມ"
+
+#: ../src/cairo-dock-gui-advanced.c:1561
+msgid "Current items in your dock(s)."
+msgstr "ລາຍການປັດຈຸບັນໃນດັອກຂອງທ່ານ."
+
+#: ../src/cairo-dock-gui-advanced.c:1562 ../src/cairo-dock-gui-simple.c:91
+#: ../src/cairo-dock-gui-simple.c:93
+msgid "Current items"
+msgstr "ລາຍການປັດຈຸບັນ"
+
+#: ../src/cairo-dock-gui-advanced.c:1685
+msgid "Filter"
+msgstr "ກັ່ນຕອງ"
+
+#: ../src/cairo-dock-gui-advanced.c:1724
+msgid "All words"
+msgstr "ທຸກຄຳສັບ"
+
+#: ../src/cairo-dock-gui-advanced.c:1725
+msgid "Highlighted words"
+msgstr "ຄຳສັບທີ່ເນັ້ນ"
+
+#: ../src/cairo-dock-gui-advanced.c:1726
+msgid "Hide others"
+msgstr "ເຊື່ອງອັນອື່ນ"
+
+#: ../src/cairo-dock-gui-advanced.c:1727
+msgid "Search in description"
+msgstr "ຄົ້ນຫາໃນຄຳອະທິບາຍ"
+
+#: ../src/cairo-dock-gui-advanced.c:1731
+msgid "Hide disabled"
+msgstr "ເຊື່ອງອັນທີ່ປິດໃຊ້ງານ"
+
+#: ../src/cairo-dock-gui-advanced.c:1740
+msgid "Categories"
+msgstr "ປະເພດ"
+
+#: ../src/cairo-dock-gui-advanced.c:1838
+msgid "Enable this module"
+msgstr "ເປີດໃຊ້ໂມດູນນີ້"
+
+#: ../src/cairo-dock-gui-advanced.c:1865 ../src/cairo-dock-gui-simple.c:204
+#: ../src/cairo-dock-user-menu.c:196 ../src/cairo-dock-user-menu.c:1985
+#: ../src/cairo-dock-user-menu.c:1987 ../data/messages:345
+msgid "Close"
+msgstr "ປິດ"
+
+#: ../src/cairo-dock-gui-advanced.c:1873
+msgid "Back"
+msgstr "ກັບ"
+
+#: ../src/cairo-dock-gui-advanced.c:1881 ../src/cairo-dock-gui-simple.c:212
+msgid "Apply"
+msgstr "ນຳໃຊ້"
+
+#: ../src/cairo-dock-gui-advanced.c:1897
+msgid "More applets"
+msgstr "ແອັບເລັດເພີ່ມເຕີມ"
+
+#: ../src/cairo-dock-gui-advanced.c:1898
+msgid "Get more applets online !"
+msgstr "ຮັບແອັບເລັດເພີ່ມເຕີມທາງອອນລາຍ!"
+
+#: ../src/cairo-dock-gui-advanced.c:1990 ../src/cairo-dock-gui-simple.c:355
+msgid "Cairo-Dock configuration"
+msgstr "ການຕັ້ງຄ່າ Cairo-Dock"
+
+#: ../src/cairo-dock-gui-advanced.c:2575
+msgid "Simple Mode"
+msgstr "ໂໝດງ່າຍ"
+
+#: ../src/cairo-dock-gui-simple.c:99 ../src/cairo-dock-gui-simple.c:101
+msgid "Add-ons"
+msgstr "ສ່ວນເສີມ"
+
+#: ../src/cairo-dock-gui-simple.c:107 ../src/cairo-dock-gui-simple.c:109
+msgid "Configuration"
+msgstr "ການຕັ້ງຄ່າ"
+
+#: ../src/cairo-dock-gui-simple.c:637
+msgid "Advanced Mode"
+msgstr "ໂໝດຂັ້ນສູງ"
+
+#: ../src/cairo-dock-gui-simple.c:638
+msgid ""
+"The advanced mode lets you tweak every single parameter of the dock. It is a "
+"powerful tool to customise your current theme."
+msgstr ""
+"ໂໝດຂັ້ນສູງຊ່ວຍໃຫ້ທ່ານປັບແຕ່ງທຸກພາຣາມິເຕີຂອງດັອກໄດ້. "
+"ມັນເປັນເຄື່ອງມືທີ່ມີປະສິດທິພາບໃນການປັບແຕ່ງທີມປັດຈຸບັນຂອງທ່ານ."
+
+#: ../src/cairo-dock-user-interaction.c:429
+msgid ""
+"The option 'overwrite X icons' has been automatically enabled in the "
+"config.\n"
+"It is located in the 'Taskbar' module."
+msgstr ""
+"ຕົວເລືອກ 'ຂຽນທັບໄອຄອນ X' ໄດ້ຖືກເປີດໃຊ້ງານໂດຍອັດຕະໂນມັດໃນການຕັ້ງຄ່າ.\n"
+" ມັນຢູ່ໃນໂມດູນ 'ແຖບໜ້າວຽກ'."
+
+#: ../src/cairo-dock-user-menu.c:131
+msgid "Delete this dock?"
+msgstr "ລຶບດັອກນີ້ບໍ່?"
+
+#: ../src/cairo-dock-user-menu.c:193
+msgid "About Cairo-Dock"
+msgstr "ກ່ຽວກັບ Cairo-Dock"
+
+#: ../src/cairo-dock-user-menu.c:226 ../Help/data/messages:245
+msgid "Development site"
+msgstr "ເວັບໄຊການພັດທະນາ"
+
+#: ../src/cairo-dock-user-menu.c:227 ../Help/data/messages:243
+msgid "Find the latest version of Cairo-Dock here !"
+msgstr "ຊອກຫາ Cairo-Dock ເວີຊັນຫຼ້າສຸດໄດ້ທີ່ນີ້!"
+
+#: ../src/cairo-dock-user-menu.c:231 ../src/cairo-dock-user-menu.c:1136
+#: ../src/cairo-dock-widget-plugins.c:279
+msgid "Get more applets!"
+msgstr "ຮັບແອັບເລັດເພີ່ມເຕີມ!"
+
+#: ../src/cairo-dock-user-menu.c:235 ../src/cairo-dock-user-menu.c:241
+msgid "Donate"
+msgstr "ບໍລິຈາກ"
+
+#: ../src/cairo-dock-user-menu.c:238 ../src/cairo-dock-user-menu.c:244
+msgid ""
+"Support the people who spend countless hours to bring you the best dock ever."
+msgstr "ສະໜັບສະໜູນຜູ້ທີ່ໃຊ້ເວລານັບບໍ່ຖ້ວນເພື່ອສ້າງດັອກທີ່ດີທີ່ສຸດໃຫ້ທ່ານ."
+
+#: ../src/cairo-dock-user-menu.c:273
+msgid "Here is a list of the current developers and contributors"
+msgstr "ນີ້ແມ່ນລາຍຊື່ນັກພັດທະນາ ແລະ ຜູ້ປະກອບສ່ວນໃນປັດຈຸບັນ"
+
+#: ../src/cairo-dock-user-menu.c:274
+msgid "Developers"
+msgstr "ນັກພັດທະນາ"
+
+#: ../src/cairo-dock-user-menu.c:275
+msgid "Main developer and project leader"
+msgstr "ນັກພັດທະນາຫຼັກ ແລະ ຜູ້ນຳໂຄງການ"
+
+#: ../src/cairo-dock-user-menu.c:276
+msgid "Contributors / Hackers"
+msgstr "ຜູ້ປະກອບສ່ວນ / ແຮກເກີ"
+
+#: ../src/cairo-dock-user-menu.c:278 ../Help/data/messages:259
+msgid "Development"
+msgstr "ການພັດທະນາ"
+
+#: ../src/cairo-dock-user-menu.c:294
+msgid "Website"
+msgstr "ເວັບໄຊ"
+
+#: ../src/cairo-dock-user-menu.c:295
+msgid "Beta-testing / Suggestions / Forum animation"
+msgstr "ທົດສອບເບຕ້າ / ຄຳແນະນຳ / ການເຄື່ອນໄຫວໃນເວບບອດ"
+
+#: ../src/cairo-dock-user-menu.c:296
+msgid "Translators for this language"
+msgstr "ນັກແປສຳລັບພາສານີ້"
+
+#: ../src/cairo-dock-user-menu.c:297
+msgid "translator-credits"
+msgstr ""
+"Launchpad Contributions:\n"
+"  boneni https://launchpad.net/~boneni2025"
+
+#: ../src/cairo-dock-user-menu.c:299
+msgid "Support"
+msgstr "ການສະໜັບສະໜູນ"
+
+#: ../src/cairo-dock-user-menu.c:330
+msgid ""
+"Thanks to all people that help us to improve the Cairo-Dock project.\n"
+"Thanks to all current, former and future contributors."
+msgstr ""
+"ຂອບໃຈທຸກຄົນທີ່ຊ່ວຍພວກເຮົາປັບປຸງໂຄງການ Cairo-Dock.\n"
+" ຂອບໃຈຜູ້ປະກອບສ່ວນທັງໃນປັດຈຸບັນ, ອະດີດ ແລະ ອະນາຄົດ."
+
+#: ../src/cairo-dock-user-menu.c:332
+msgid "How to help us?"
+msgstr "ຈະຊ່ວຍພວກເຮົາໄດ້ແນວໃດ?"
+
+#: ../src/cairo-dock-user-menu.c:333
+msgid "Don't hesitate to join the project, we need you ;)"
+msgstr "ຢ່າລັງເລທີ່ຈະເຂົ້າຮ່ວມໂຄງການ, ພວກເຮົາຕ້ອງການທ່ານ ;)"
+
+#: ../src/cairo-dock-user-menu.c:334
+msgid "Former contributors"
+msgstr "ຜູ້ປະກອບສ່ວນໃນອະດີດ"
+
+#: ../src/cairo-dock-user-menu.c:335
+msgid "For a complete list, please have a look to BZR logs"
+msgstr "ສຳລັບລາຍຊື່ທັງໝົດ, ກະລຸນາເບິ່ງໃນບັນທຶກຂອງ BZR"
+
+#: ../src/cairo-dock-user-menu.c:336
+msgid "Users of our forum"
+msgstr "ຜູ້ໃຊ້ເວບບອດຂອງພວກເຮົາ"
+
+#: ../src/cairo-dock-user-menu.c:337
+msgid "List of our forum's members"
+msgstr "ລາຍຊື່ສະມາຊິກເວບບອດຂອງພວກເຮົາ"
+
+#: ../src/cairo-dock-user-menu.c:338
+msgid "Artwork"
+msgstr "ງານສິລະປະ"
+
+#: ../src/cairo-dock-user-menu.c:340
+msgid "Thanks"
+msgstr "ຂອບໃຈ"
+
+#: ../src/cairo-dock-user-menu.c:352
+msgid "Technical info"
+msgstr "ຂໍ້ມູນດ້ານເຕັກນິກ"
+
+#: ../src/cairo-dock-user-menu.c:444
+msgid "Quit Cairo-Dock?"
+msgstr "ອອກຈາກ Cairo-Dock ບໍ່?"
+
+#: ../src/cairo-dock-user-menu.c:474 ../src/cairo-dock-user-menu.c:618
+msgid "Separator"
+msgstr "ຕົວຂັ້ນ"
+
+#: ../src/cairo-dock-user-menu.c:580
+msgid ""
+"The new dock has been created.\n"
+"Now move some launchers or applets into it by right-clicking on the icon -> "
+"move to another dock"
+msgstr ""
+"ດັອກໃໝ່ໄດ້ຖືກສ້າງຂຶ້ນແລ້ວ.\n"
+" ຕອນນີ້ຍ້າຍຕົວເປີດ ຫຼື ແອັບເລັດບາງອັນເຂົ້າໄປໃນນັ້ນໂດຍການຄລິກຂວາໃສ່ໄອຄອນ -> ຍ້າຍໄປດັອກອື່ນ"
+
+#: ../src/cairo-dock-user-menu.c:612
+msgid "Add"
+msgstr "ເພີ່ມ"
+
+#: ../src/cairo-dock-user-menu.c:614
+msgid "Sub-dock"
+msgstr "ດັອກຍ່ອຍ"
+
+#: ../src/cairo-dock-user-menu.c:616
+msgid "Main dock"
+msgstr "ດັອກຫຼັກ"
+
+#: ../src/cairo-dock-user-menu.c:620
+msgid "Custom launcher"
+msgstr "ຕົວເປີດແບບກຳນົດເອງ"
+
+#: ../src/cairo-dock-user-menu.c:621
+msgid ""
+"Usually you would drag a launcher from the menu and drop it on the dock."
+msgstr "ໂດຍປົກກະຕິແລ້ວທ່ານຈະລາກຕົວເປີດຈາກເມນູແລ້ວວາງລົງໃສ່ດັອກ."
+
+#: ../src/cairo-dock-user-menu.c:624
+msgid "Applet"
+msgstr "ແອັບເລັດ"
+
+#: ../src/cairo-dock-user-menu.c:641
+msgid ""
+"Do you want to re-dispatch the icons contained inside this container into "
+"the dock?\n"
+"(otherwise they will be destroyed)"
+msgstr ""
+"ທ່ານຕ້ອງການແຈກຢາຍໄອຄອນທີ່ຢູ່ໃນຄອນເທນເນີນີ້ຄືນໃໝ່ໃສ່ດັອກບໍ່?\n"
+" (ຖ້າບໍ່ດັ່ງນັ້ນພວກມັນຈະຖືກທຳລາຍ)"
+
+#: ../src/cairo-dock-user-menu.c:664
+msgid "separator"
+msgstr "ຕົວຂັ້ນ"
+
+#: ../src/cairo-dock-user-menu.c:668
+#, c-format
+msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
+msgstr "ທ່ານກຳລັງຈະລຶບໄອຄອນນີ້ (%s) ອອກຈາກດັອກ. ທ່ານແນ່ໃຈບໍ່?"
+
+#: ../src/cairo-dock-user-menu.c:684
+msgid "Sorry, this icon doesn't have a configuration file."
+msgstr "ຂໍອະໄພ, ໄອຄອນນີ້ບໍ່ມີໄຟລ໌ການຕັ້ງຄ່າ."
+
+#: ../src/cairo-dock-user-menu.c:724
+msgid ""
+"The new dock has been created.\n"
+"You can customize it by right-clicking on it -> cairo-dock -> configure this "
+"dock."
+msgstr ""
+"ດັອກໃໝ່ໄດ້ຖືກສ້າງຂຶ້ນແລ້ວ.\n"
+" ທ່ານສາມາດປັບແຕ່ງມັນໄດ້ໂດຍການຄລິກຂວາໃສ່ມັນ -> cairo-dock -> ຕັ້ງຄ່າດັອກນີ້."
+
+#: ../src/cairo-dock-user-menu.c:730
+msgid "Move to another dock"
+msgstr "ຍ້າຍໄປດັອກອື່ນ"
+
+#: ../src/cairo-dock-user-menu.c:732 ../src/gldit/cairo-dock-gui-factory.c:1212
+msgid "New main dock"
+msgstr "ດັອກຫຼັກໃໝ່"
+
+#: ../src/cairo-dock-user-menu.c:800
+msgid ""
+"Sorry, couldn't find the corresponding description file.\n"
+"Consider dragging and dropping the launcher from the Applications Menu."
+msgstr ""
+"ຂໍອະໄພ, ບໍ່ພົບໄຟລ໌ຄຳອະທິບາຍທີ່ກ່ຽວຂ້ອງ.\n"
+" ລອງລາກແລະວາງຕົວເປີດຈາກເມນູແອັບພລິເຄຊັນ."
+
+#: ../src/cairo-dock-user-menu.c:849
+#, c-format
+msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
+msgstr "ທ່ານກຳລັງຈະລຶບແອັບເລັດນີ້ (%s) ອອກຈາກດັອກ. ທ່ານແນ່ໃຈບໍ່?"
+
+#: ../src/cairo-dock-user-menu.c:922 ../src/gldit/cairo-dock-gui-factory.c:748
+msgid "Pick up an image"
+msgstr "ເລືອກຮູບພາບ"
+
+#: ../src/cairo-dock-user-menu.c:925 ../src/gldit/cairo-dock-gui-factory.c:751
+msgid "Ok"
+msgstr "ຕົກລົງ"
+
+#: ../src/cairo-dock-user-menu.c:927 ../src/cairo-dock-widget-shortkeys.c:129
+#: ../src/cairo-dock-widget-themes.c:236
+#: ../src/gldit/cairo-dock-gui-factory.c:753
+msgid "Cancel"
+msgstr "ຍົກເລີກ"
+
+#: ../src/cairo-dock-user-menu.c:939 ../src/gldit/cairo-dock-gui-factory.c:792
+#: ../data/messages:469 ../data/messages:475 ../data/messages:741
+#: ../data/messages:983
+msgid "Image"
+msgstr "ຮູບພາບ"
+
+#: ../src/cairo-dock-user-menu.c:1020 ../src/cairo-dock-user-menu.c:1099
+msgid "This will (un)lock the position of the icons."
+msgstr "ການກະທຳນີ້ຈະ (ປົດ)ລັອກຕຳແໜ່ງຂອງໄອຄອນ."
+
+#: ../src/cairo-dock-user-menu.c:1050
+msgid "Configure"
+msgstr "ຕັ້ງຄ່າ"
+
+#: ../src/cairo-dock-user-menu.c:1052
+msgid "Configure behaviour, appearance, and applets."
+msgstr "ຕັ້ງຄ່າພຶດຕິກຳ, ໜ້າຕາ, ແລະ ແອັບເລັດ."
+
+#: ../src/cairo-dock-user-menu.c:1060
+msgid "Configure this dock"
+msgstr "ຕັ້ງຄ່າດັອກນີ້"
+
+#: ../src/cairo-dock-user-menu.c:1062
+msgid "Customize the position, visibility and appearance of this main dock."
+msgstr "ປັບແຕ່ງຕຳແໜ່ງ, ການເບິ່ງເຫັນ ແລະ ໜ້າຕາຂອງດັອກຫຼັກນີ້."
+
+#: ../src/cairo-dock-user-menu.c:1065
+msgid "Delete this dock"
+msgstr "ລຶບດັອກນີ້"
+
+#: ../src/cairo-dock-user-menu.c:1076
+msgid "Manage themes"
+msgstr "ຈັດການທີມ"
+
+#: ../src/cairo-dock-user-menu.c:1078
+msgid ""
+"Choose from amongst many themes on the server or save your current theme."
+msgstr "ເລືອກຈາກຫຼາຍໆທີມໃນເຊີບເວີ ຫຼື ບັນທຶກທີມປັດຈຸບັນຂອງທ່ານ."
+
+#: ../src/cairo-dock-user-menu.c:1092
+msgid "Lock icons position"
+msgstr "ລັອກຕຳແໜ່ງໄອຄອນ"
+
+#: ../src/cairo-dock-user-menu.c:1106
+msgid "Quick-Hide"
+msgstr "ເຊື່ອງດ່ວນ"
+
+#: ../src/cairo-dock-user-menu.c:1108
+msgid "This will hide the dock until you hover over it with the mouse."
+msgstr "ການກະທຳນີ້ຈະເຊື່ອງດັອກໄວ້ຈົນກວ່າທ່ານຈະເລື່ອນເມົ້າໄປເທິງມັນ."
+
+#: ../src/cairo-dock-user-menu.c:1124
+msgid "Launch Cairo-Dock on startup"
+msgstr "ເປີດ Cairo-Dock ເມື່ອເລີ່ມລະບົບ"
+
+#: ../src/cairo-dock-user-menu.c:1138
+msgid "Third-party applets provide integration with many programs, like Pidgin"
+msgstr "ແອັບເລັດຂອງບຸກຄົນທີສາມໃຫ້ການເຊື່ອມໂຍງກັບຫຼາຍໂປຣແກຣມ, ເຊັ່ນ Pidgin"
+
+#: ../src/cairo-dock-user-menu.c:1144 ../Help/src/applet-init.c:28
+#: ../Help/src/applet-notifications.c:101
+msgid "Help"
+msgstr "ຊ່ວຍເຫຼືອ"
+
+#: ../src/cairo-dock-user-menu.c:1146
+msgid "There are no problems, only solutions (and a lot of useful hints!)"
+msgstr "ບໍ່ມີບັນຫາ, ມີແຕ່ທາງອອກ (ແລະ ຄຳແນະນຳທີ່ເປັນປະໂຫຍດຫຼາຍຢ່າງ!)"
+
+#: ../src/cairo-dock-user-menu.c:1152
+msgid "About"
+msgstr "ກ່ຽວກັບ"
+
+#: ../src/cairo-dock-user-menu.c:1162
+msgid "Quit"
+msgstr "ອອກ"
+
+#: ../src/cairo-dock-user-menu.c:1164
+msgid ""
+"You're using a Cairo-Dock Session!\n"
+"It's not advised to quit the dock but you can press Shift to unlock this "
+"menu entry."
+msgstr ""
+"ທ່ານກຳລັງໃຊ້ເຊດຊັນຂອງ Cairo-Dock!\n"
+" ບໍ່ແນະນຳໃຫ້ອອກຈາກດັອກ ແຕ່ທ່ານສາມາດກົດ Shift ເພື່ອປົດລັອກລາຍການເມນູນີ້ໄດ້."
+
+#: ../src/cairo-dock-user-menu.c:1195 ../src/cairo-dock-user-menu.c:1208
+msgid "Launch a new (Shift+clic)"
+msgstr "ເປີດໃໝ່ (Shift+ຄລິກ)"
+
+#: ../src/cairo-dock-user-menu.c:1200 ../src/cairo-dock-user-menu.c:1282
+msgid "Applet's handbook"
+msgstr "ຄູ່ມືຂອງແອັບເລັດ"
+
+#: ../src/cairo-dock-user-menu.c:1215 ../src/cairo-dock-user-menu.c:1261
+msgid "Edit"
+msgstr "ແກ້ໄຂ"
+
+#: ../src/cairo-dock-user-menu.c:1217 ../src/cairo-dock-user-menu.c:1268
+msgid "Remove"
+msgstr "ລຶບ"
+
+#: ../src/cairo-dock-user-menu.c:1218
+msgid ""
+"You can remove a launcher by dragging it out of the dock with the mouse ."
+msgstr "ທ່ານສາມາດລຶບຕົວເປີດໄດ້ໂດຍການລາກມັນອອກຈາກດັອກດ້ວຍເມົ້າ."
+
+#: ../src/cairo-dock-user-menu.c:1228
+msgid "Make it a launcher"
+msgstr "ເຮັດໃຫ້ມັນເປັນຕົວເປີດ"
+
+#: ../src/cairo-dock-user-menu.c:1251
+msgid "Remove custom icon"
+msgstr "ລຶບໄອຄອນທີ່ກຳນົດເອງ"
+
+#: ../src/cairo-dock-user-menu.c:1255
+msgid "Set a custom icon"
+msgstr "ຕັ້ງໄອຄອນແບບກຳນົດເອງ"
+
+#: ../src/cairo-dock-user-menu.c:1265
+msgid "Detach"
+msgstr "ແຍກອອກ"
+
+#: ../src/cairo-dock-user-menu.c:1265
+msgid "Return to the dock"
+msgstr "ກັບໄປທີ່ດັອກ"
+
+#: ../src/cairo-dock-user-menu.c:1272
+msgid "Duplicate"
+msgstr "ເຮັດຊ້ຳ"
+
+#: ../src/cairo-dock-user-menu.c:1446
+#, c-format
+msgid "Move all to desktop %d - face %d"
+msgstr "ຍ້າຍທັງໝົດໄປເດັສທັອບ %d - ໜ້າ %d"
+
+#: ../src/cairo-dock-user-menu.c:1446
+#, c-format
+msgid "Move to desktop %d - face %d"
+msgstr "ຍ້າຍໄປເດັສທັອບ %d - ໜ້າ %d"
+
+#: ../src/cairo-dock-user-menu.c:1448
+#, c-format
+msgid "Move all to desktop %d"
+msgstr "ຍ້າຍທັງໝົດໄປເດັສທັອບ %d"
+
+#: ../src/cairo-dock-user-menu.c:1448
+#, c-format
+msgid "Move to desktop %d"
+msgstr "ຍ້າຍໄປເດັສທັອບ %d"
+
+#: ../src/cairo-dock-user-menu.c:1450
+#, c-format
+msgid "Move all to face %d"
+msgstr "ຍ້າຍທັງໝົດໄປໜ້າ %d"
+
+#: ../src/cairo-dock-user-menu.c:1450
+#, c-format
+msgid "Move to face %d"
+msgstr "ຍ້າຍໄປໜ້າ %d"
+
+#: ../src/cairo-dock-user-menu.c:1979
+msgid "Window"
+msgstr "ໜ້າຕ່າງ"
+
+#: ../src/cairo-dock-user-menu.c:1985 ../src/cairo-dock-user-menu.c:2008
+#: ../src/cairo-dock-user-menu.c:2045 ../src/cairo-dock-user-menu.c:2086
+#: ../src/cairo-dock-user-menu.c:2096 ../Help/src/applet-notifications.c:95
+msgid "middle-click"
+msgstr "ຄລິກກາງ"
+
+#: ../src/cairo-dock-user-menu.c:2000
+msgid "Unmaximise"
+msgstr "ຍົກເລີກການຂະຫຍາຍສູງສຸດ"
+
+#: ../src/cairo-dock-user-menu.c:2000
+msgid "Maximise"
+msgstr "ຂະຫຍາຍສູງສຸດ"
+
+#: ../src/cairo-dock-user-menu.c:2008 ../src/cairo-dock-user-menu.c:2010
+msgid "Minimise"
+msgstr "ຫຍໍ້ລົງ"
+
+#: ../src/cairo-dock-user-menu.c:2024
+msgid "Show"
+msgstr "ສະແດງ"
+
+#: ../src/cairo-dock-user-menu.c:2030 ../src/cairo-dock-user-menu.c:2111
+msgid "Other actions"
+msgstr "ການກະທຳອື່ນໆ"
+
+#: ../src/cairo-dock-user-menu.c:2033
+msgid "Move to this desktop"
+msgstr "ຍ້າຍໄປເດັສທັອບນີ້"
+
+#: ../src/cairo-dock-user-menu.c:2039
+msgid "Not Fullscreen"
+msgstr "ບໍ່ເຕັມຈໍ"
+
+#: ../src/cairo-dock-user-menu.c:2039
+msgid "Fullscreen"
+msgstr "ເຕັມຈໍ"
+
+#: ../src/cairo-dock-user-menu.c:2045 ../src/cairo-dock-user-menu.c:2047
+msgid "Below other windows"
+msgstr "ຢູ່ລຸ່ມໜ້າຕ່າງອື່ນ"
+
+#: ../src/cairo-dock-user-menu.c:2055
+msgid "Don't keep above"
+msgstr "ບໍ່ໃຫ້ຢູ່ເທິງຕະຫຼອດ"
+
+#: ../src/cairo-dock-user-menu.c:2055 ../Help/data/messages:309
+msgid "Keep above"
+msgstr "ໃຫ້ຢູ່ເທິງຕະຫຼອດ"
+
+#: ../src/cairo-dock-user-menu.c:2059
+msgid "Visible only on this desktop"
+msgstr "ເຫັນໄດ້ສະເພາະໃນເດັສທັອບນີ້"
+
+#: ../src/cairo-dock-user-menu.c:2059
+msgid "Visible on all desktops"
+msgstr "ເຫັນໄດ້ໃນທຸກເດັສທັອບ"
+
+#: ../src/cairo-dock-user-menu.c:2068
+msgid "Kill"
+msgstr "ສັ່ງປິດ"
+
+#: ../src/cairo-dock-user-menu.c:2082
+msgid "Windows"
+msgstr "ໜ້າຕ່າງຕ່າງໆ"
+
+#: ../src/cairo-dock-user-menu.c:2086 ../src/cairo-dock-user-menu.c:2088
+msgid "Close all"
+msgstr "ປິດທັງໝົດ"
+
+#: ../src/cairo-dock-user-menu.c:2096 ../src/cairo-dock-user-menu.c:2098
+msgid "Minimise all"
+msgstr "ຫຍໍ້ລົງທັງໝົດ"
+
+#: ../src/cairo-dock-user-menu.c:2106
+msgid "Show all"
+msgstr "ສະແດງທັງໝົດ"
+
+#: ../src/cairo-dock-user-menu.c:2113
+msgid "Move all to this desktop"
+msgstr "ຍ້າຍທັງໝົດມາເດັສທັອບນີ້"
+
+#: ../src/cairo-dock-user-menu.c:2140 ../Help/data/messages:307
+msgid "Normal"
+msgstr "ປົກກະຕິ"
+
+#: ../src/cairo-dock-user-menu.c:2146 ../data/messages:23 ../data/messages:195
+#: ../data/messages:929
+msgid "Always on top"
+msgstr "ຢູ່ເທິງຕະຫຼອດ"
+
+#: ../src/cairo-dock-user-menu.c:2153
+msgid "Always below"
+msgstr "ຢູ່ລຸ່ມຕະຫຼອດ"
+
+#: ../src/cairo-dock-user-menu.c:2170 ../Help/data/messages:315
+msgid "Reserve space"
+msgstr "ຈອງພື້ນທີ່"
+
+#: ../src/cairo-dock-user-menu.c:2177
+msgid "On all desktops"
+msgstr "ໃນທຸກເດັສທັອບ"
+
+#: ../src/cairo-dock-user-menu.c:2183
+msgid "Lock position"
+msgstr "ລັອກຕຳແໜ່ງ"
+
+#: ../src/cairo-dock-widget-config.c:333
+msgid "Animation:"
+msgstr "ພາບເຄື່ອນໄຫວ:"
+
+#: ../src/cairo-dock-widget-config.c:350
+msgid "Effects:"
+msgstr "ເອັບເຟັກ:"
+
+#: ../src/cairo-dock-widget-items.c:243
+msgid "Main dock's parameters are available in the main configuration window."
+msgstr "ພາຣາມິເຕີຂອງດັອກຫຼັກມີຢູ່ໃນໜ້າຕ່າງການຕັ້ງຄ່າຫຼັກ."
+
+#: ../src/cairo-dock-widget-items.c:710
+msgid "Remove this item"
+msgstr "ລຶບລາຍການນີ້"
+
+#: ../src/cairo-dock-widget-plugins.c:103
+msgid "Configure this applet"
+msgstr "ຕັ້ງຄ່າແອັບເລັດນີ້"
+
+#: ../src/cairo-dock-widget-plugins.c:149
+msgid "Accessory"
+msgstr "ອຸປະກອນເສີມ"
+
+#: ../src/cairo-dock-widget-plugins.c:235
+msgid "Plug-in"
+msgstr "ປລັກອິນ"
+
+#: ../src/cairo-dock-widget-plugins.c:241 ../Help/src/applet-tips-dialog.c:309
+msgid "Category"
+msgstr "ປະເພດ"
+
+#: ../src/cairo-dock-widget-plugins.c:265
+msgid "Click on an applet in order to have a preview and a description for it."
+msgstr "ຄລິກໃສ່ແອັບເລັດເພື່ອເບິ່ງຕົວຢ່າງ ແລະ ຄຳອະທິບາຍຂອງມັນ."
+
+#: ../src/cairo-dock-widget-shortkeys.c:126
+msgid "Press the shortkey"
+msgstr "ກົດປຸ່ມລັດ"
+
+#: ../src/cairo-dock-widget-shortkeys.c:143
+msgid "Change the shortkey"
+msgstr "ປ່ຽນປຸ່ມລັດ"
+
+#: ../src/cairo-dock-widget-shortkeys.c:225
+msgid "Origin"
+msgstr "ແຫຼ່ງກຳເນີດ"
+
+#: ../src/cairo-dock-widget-shortkeys.c:230
+msgid "Action"
+msgstr "ການກະທຳ"
+
+#: ../src/cairo-dock-widget-shortkeys.c:234
+msgid "Shortkey"
+msgstr "ປຸ່ມລັດ"
+
+#: ../src/cairo-dock-widget-shortkeys.c:261
+#: ../src/gldit/cairo-dock-gui-factory.c:3022
+msgid ""
+"You are running Cairo-Dock in a Wayland session.\n"
+"Setting global keyboard shortcuts is not supported on Wayland yet."
+msgstr ""
+"ທ່ານກຳລັງໃຊ້ Cairo-Dock ໃນເຊດຊັນ Wayland.\n"
+" ການຕັ້ງຄ່າປຸ່ມລັດທົ່ວລະບົບຍັງບໍ່ຮອງຮັບໃນ Wayland ເທື່ອ."
+
+#: ../src/cairo-dock-widget-themes.c:90
+msgid "Could not import the theme."
+msgstr "ບໍ່ສາມາດນຳເຂົ້າທີມໄດ້."
+
+#: ../src/cairo-dock-widget-themes.c:195
+msgid ""
+"You have made some changes to the current theme.\n"
+"You will lose them if you don't save before choosing a new theme. Continue "
+"anyway?"
+msgstr ""
+"ທ່ານໄດ້ປ່ຽນແປງທີມປັດຈຸບັນ.\n"
+" ທ່ານຈະສູນເສຍການປ່ຽນແປງເຫຼົ່ານັ້ນ ຖ້າທ່ານບໍ່ບັນທຶກກ່ອນທີ່ຈະເລືອກທີມໃໝ່. ຕ້ອງການດຳເນີນການຕໍ່ບໍ່?"
+
+#: ../src/cairo-dock-widget-themes.c:224
+msgid "Please wait while importing the theme..."
+msgstr "ກະລຸນາລໍຖ້າໃນຂະນະທີ່ກຳລັງນຳເຂົ້າທີມ..."
+
+#: ../src/cairo-dock-widget-themes.c:283
+msgid "Rate me"
+msgstr "ໃຫ້ຄະແນນຂ້ອຍ"
+
+#: ../src/cairo-dock-widget-themes.c:384 ../src/cairo-dock-widget-themes.c:386
+msgid "You must try the theme before you can rate it."
+msgstr "ທ່ານຕ້ອງລອງໃຊ້ທີມກ່ອນຈຶ່ງຈະສາມາດໃຫ້ຄະແນນໄດ້."
+
+#: ../src/cairo-dock-widget-themes.c:433
+msgid "The theme has been deleted"
+msgstr "ທີມໄດ້ຖືກລຶບແລ້ວ"
+
+#: ../src/cairo-dock-widget-themes.c:462
+msgid "Delete this theme"
+msgstr "ລຶບທີມນີ້"
+
+#: ../src/cairo-dock-widget-themes.c:486
+#: ../src/gldit/cairo-dock-gui-factory.c:2304
+#, c-format
+msgid "Listing themes in '%s' ..."
+msgstr "ກຳລັງສະແດງລາຍຊື່ທີມໃນ '%s' ..."
+
+#: ../src/cairo-dock-widget-themes.c:509
+msgid "Theme"
+msgstr "ທີມ"
+
+#: ../src/cairo-dock-widget-themes.c:522
+msgid "Rating"
+msgstr "ຄະແນນ"
+
+#: ../src/cairo-dock-widget-themes.c:528
+msgid "Sobriety"
+msgstr "ຄວາມລຽບງ່າຍ"
+
+#: ../src/cairo-dock-widget-themes.c:588
+msgid "Save as:"
+msgstr "ບັນທຶກເປັນ:"
+
+#: ../src/cairo-dock-widget-themes.c:667
+msgid "Importing theme ..."
+msgstr "ກຳລັງນຳເຂົ້າທີມ ..."
+
+#: ../src/cairo-dock-widget-themes.c:675
+msgid "Theme has been saved"
+msgstr "ທີມໄດ້ຖືກບັນທຶກແລ້ວ"
+
+#: ../src/cairo-dock.c:164
+#, c-format
+msgid "Happy new year %d !!!"
+msgstr "ສະບາຍດີປີໃໝ່ %d !!!"
+
+#: ../src/cairo-dock.c:382
+msgid "Use Cairo backend."
+msgstr "ໃຊ້ Cairo backend."
+
+#: ../src/cairo-dock.c:385
+msgid "Use OpenGL backend."
+msgstr "ໃຊ້ OpenGL backend."
+
+#: ../src/cairo-dock.c:388
+msgid ""
+"Use OpenGL backend with indirect rendering. There are very few case where "
+"this option should be used."
+msgstr "ໃຊ້ OpenGL backend ດ້ວຍການສະແດງຜົນແບບທາງອ້ອມ. ມີກໍລະນີນ້ອຍຫຼາຍທີ່ຄວນໃຊ້ຕົວເລືອກນີ້."
+
+#: ../src/cairo-dock.c:391
+msgid "Ask again on startup which backend to use."
+msgstr "ຖາມອີກຄັ້ງໃນຕອນເລີ່ມຕົ້ນວ່າຈະໃຊ້ backend ໃດ."
+
+#: ../src/cairo-dock.c:394
+msgid "Force the dock to consider this environment - use it with care."
+msgstr "ບັງຄັບໃຫ້ດັອກພິຈາລະນາສະພາບແວດລ້ອມນີ້ - ໃຊ້ມັນດ້ວຍຄວາມລະມັດລະວັງ."
+
+#: ../src/cairo-dock.c:397
+msgid ""
+"Force the dock to load from this directory, instead of ~/.config/cairo-dock."
+msgstr "ບັງຄັບໃຫ້ດັອກໂຫຼດຈາກໄດເຣັກທໍຣີນີ້, ແທນທີ່ຈະເປັນ ~/.config/cairo-dock."
+
+#: ../src/cairo-dock.c:400
+msgid ""
+"Address of a server containing additional themes. This will overwrite the "
+"default server address."
+msgstr "ທີ່ຢູ່ຂອງເຊີບເວີທີ່ມີທີມເພີ່ມເຕີມ. ອັນນີ້ຈະຂຽນທັບທີ່ຢູ່ເຊີບເວີເລີ່ມຕົ້ນ."
+
+#: ../src/cairo-dock.c:403
+msgid ""
+"Wait for N seconds before starting; this is useful if you notice some "
+"problems when the dock starts with the session."
+msgstr ""
+"ລໍຖ້າ N ວິນາທີກ່ອນທີ່ຈະເລີ່ມຕົ້ນ; ອັນນີ້ມີປະໂຫຍດຖ້າທ່ານສັງເກດເຫັນບາງບັນຫາເມື່ອດັອກເລີ່ມຕົ້ນກັບເຊດຊັນ."
+
+#: ../src/cairo-dock.c:406
+msgid ""
+"Allow to edit the config before the dock is started and show the config "
+"panel on start."
+msgstr "ອະນຸຍາດໃຫ້ແກ້ໄຂການຕັ້ງຄ່າກ່ອນທີ່ດັອກຈະເລີ່ມຕົ້ນ ແລະ ສະແດງແຜງການຕັ້ງຄ່າເມື່ອເລີ່ມຕົ້ນ."
+
+#: ../src/cairo-dock.c:409
+msgid "Exclude a given plug-in from activating (it is still loaded though)."
+msgstr "ຍົກເວັ້ນປລັກອິນທີ່ໃຫ້ມາຈາກການເປີດໃຊ້ງານ (ແຕ່ມັນຍັງຖືກໂຫຼດຢູ່)."
+
+#: ../src/cairo-dock.c:412
+msgid "Don't load any plug-ins."
+msgstr "ບໍ່ໂຫຼດປລັກອິນໃດໆ."
+
+#: ../src/cairo-dock.c:415
+msgid "Work around potential glitches when dialogs or sub-docks appear"
+msgstr "ແກ້ໄຂບັນຫາທີ່ອາດເກີດຂຶ້ນເມື່ອກ່ອງໂຕ້ຕອບ ຫຼື ດັອກຍ່ອຍປາກົດຂຶ້ນ"
+
+#: ../src/cairo-dock.c:418
+msgid ""
+"Log verbosity (debug,message,warning,critical,error); default is warning."
+msgstr ""
+"ຄວາມລະອຽດຂອງບັນທຶກ (debug,message,warning,critical,error); ຄ່າເລີ່ມຕົ້ນແມ່ນ warning."
+
+#: ../src/cairo-dock.c:421
+msgid "Force to display some output messages with colors."
+msgstr "ບັງຄັບໃຫ້ສະແດງຂໍ້ຄວາມບາງຢ່າງດ້ວຍສີ."
+
+#: ../src/cairo-dock.c:424
+msgid "Print version and quit."
+msgstr "ພິມເວີຊັນ ແລະ ອອກ."
+
+#: ../src/cairo-dock.c:427
+msgid "Lock the dock so that any modification is impossible for users."
+msgstr "ລັອກດັອກເພື່ອບໍ່ໃຫ້ຜູ້ໃຊ້ສາມາດແກ້ໄຂໃດໆໄດ້."
+
+#: ../src/cairo-dock.c:431
+msgid "Keep the dock above other windows."
+msgstr "ຮັກສາໃຫ້ດັອກຢູ່ເທິງໜ້າຕ່າງອື່ນໆ."
+
+#: ../src/cairo-dock.c:434
+msgid "Don't make the dock appear on all desktops."
+msgstr "ບໍ່ໃຫ້ດັອກປາກົດໃນທຸກເດັສທັອບ."
+
+#: ../src/cairo-dock.c:437 ../src/cairo-dock.c:497
+msgid "Cairo-Dock makes anything, including coffee !"
+msgstr "Cairo-Dock ເຮັດໄດ້ທຸກຢ່າງ, ແມ່ນແຕ່ກາເຟ!"
+
+#: ../src/cairo-dock.c:440
+msgid ""
+"Ask the dock to load additional modules contained in this directory (though "
+"it is unsafe for your dock to load unofficial modules)."
+msgstr ""
+"ຂໍໃຫ້ດັອກໂຫຼດໂມດູນເພີ່ມເຕີມທີ່ບັນຈຸຢູ່ໃນໄດເຣັກທໍຣີນີ້ "
+"(ເຖິງແມ່ນວ່າມັນຈະບໍ່ປອດໄພສຳລັບດັອກຂອງທ່ານທີ່ຈະໂຫຼດໂມດູນທີ່ບໍ່ເປັນທາງການ)."
+
+#: ../src/cairo-dock.c:443
+msgid ""
+"For debugging purpose only. The crash manager will not be started to hunt "
+"down the bugs."
+msgstr "ເພື່ອຈຸດປະສົງໃນການດີບັກເທົ່ານັ້ນ. ຕົວຈັດການການຂັດຂ້ອງຈະບໍ່ຖືກເລີ່ມຕົ້ນເພື່ອຊອກຫາຂໍ້ບົກພ່ອງ."
+
+#: ../src/cairo-dock.c:446
+msgid ""
+"For debugging purpose only. Some hidden and still unstable options will be "
+"activated."
+msgstr "ເພື່ອຈຸດປະສົງໃນການດີບັກເທົ່ານັ້ນ. ຕົວເລືອກທີ່ເຊື່ອງໄວ້ ແລະ ຍັງບໍ່ສະຖຽນບາງອັນຈະຖືກເປີດໃຊ້ງານ."
+
+#: ../src/cairo-dock.c:449
+msgid "Force using the Wayland backends (disable X11 backends)."
+msgstr "ບັງຄັບໃຊ້ Wayland backends (ປິດໃຊ້ງານ X11 backends)."
+
+#: ../src/cairo-dock.c:452
+msgid "Force using the X11 backend (disable any Wayland functionality)."
+msgstr "ບັງຄັບໃຊ້ X11 backend (ປິດການເຮັດວຽກຂອງ Wayland ທັງໝົດ)."
+
+#: ../src/cairo-dock.c:455
+msgid "Use EGL on X11."
+msgstr "ໃຊ້ EGL ໃນ X11."
+
+#: ../src/cairo-dock.c:458
+msgid "For debugging purpose only. Disable gtk-layer-shell support."
+msgstr "ເພື່ອຈຸດປະສົງໃນການດີບັກເທົ່ານັ້ນ. ປິດການຮອງຮັບ gtk-layer-shell."
+
+#: ../src/cairo-dock.c:461
+msgid ""
+"For debugging purpose only. Do not blacklist incompatible plugins on Wayland."
+msgstr "ເພື່ອຈຸດປະສົງໃນການດີບັກເທົ່ານັ້ນ. ຢ່າຂຶ້ນບັນຊີດຳປລັກອິນທີ່ບໍ່ເຂົ້າກັນໃນ Wayland."
+
+#: ../src/cairo-dock.c:464
+msgid ""
+"For debugging purposes. Fail loading the specified plugin module after "
+"opening it. Multiple modules can be specified by repeating this option "
+"multiple times."
+msgstr ""
+"ເພື່ອຈຸດປະສົງໃນການດີບັກ. ເຮັດໃຫ້ການໂຫຼດໂມດູນປລັກອິນທີ່ລະບຸໄວ້ລົ້ມເຫຼວຫຼັງຈາກເປີດມັນ. "
+"ສາມາດລະບຸຫຼາຍໂມດູນໄດ້ໂດຍການໃຊ້ຕົວເລືອກນີ້ຊ້ຳໆ."
+
+#: ../src/cairo-dock.c:467
+msgid ""
+"For debugging purposes only. Fail loading all plugin modules (after opening)."
+msgstr "ເພື່ອຈຸດປະສົງໃນການດີບັກເທົ່ານັ້ນ. ເຮັດໃຫ້ການໂຫຼດໂມດູນປລັກອິນທັງໝົດລົ້ມເຫຼວ (ຫຼັງຈາກເປີດ)."
+
+#: ../src/cairo-dock.c:470
+msgid ""
+"For debugging purposes only. Do not check version compatibility after "
+"loading a plugin module."
+msgstr "ເພື່ອຈຸດປະສົງໃນການດີບັກເທົ່ານັ້ນ. ຢ່າກວດສອບຄວາມເຂົ້າກັນໄດ້ຂອງເວີຊັນຫຼັງຈາກໂຫຼດໂມດູນປລັກອິນ."
+
+#: ../src/cairo-dock.c:473
+msgid "For debugging purposes only. Do not use systemd to launch apps."
+msgstr "ເພື່ອຈຸດປະສົງໃນການດີບັກເທົ່ານັ້ນ. ຢ່າໃຊ້ systemd ເພື່ອເປີດແອັບ."
+
+#: ../src/cairo-dock.c:476
+msgid "For debugging purposes only. Do not use DBus activation to launch apps."
+msgstr "ເພື່ອຈຸດປະສົງໃນການດີບັກເທົ່ານັ້ນ. ຢ່າໃຊ້ DBus activation ເພື່ອເປີດແອັບ."
+
+#: ../src/cairo-dock.c:479
+msgid ""
+"For debugging purposes only. Rely on GIO to launch apps instead of our own "
+"implementation (implies --disable-systemd)."
+msgstr ""
+"ເພື່ອຈຸດປະສົງໃນການດີບັກເທົ່ານັ້ນ. ອີງໃສ່ GIO ເພື່ອເປີດແອັບແທນການຈັດຕັ້ງປະຕິບັດຂອງພວກເຮົາເອງ "
+"(ໝາຍຄວາມວ່າ --disable-systemd)."
+
+#: ../src/cairo-dock.c:605
+msgid "Use OpenGL in Cairo-Dock"
+msgstr "ໃຊ້ OpenGL ໃນ Cairo-Dock"
+
+#: ../src/cairo-dock.c:608 ../src/cairo-dock.c:848
+msgid "Yes"
+msgstr "ແມ່ນ"
+
+#: ../src/cairo-dock.c:610 ../src/cairo-dock.c:849 ../data/messages:829
+msgid "No"
+msgstr "ບໍ່"
+
+#: ../src/cairo-dock.c:613
+msgid ""
+"OpenGL allows you to use the hardware acceleration, reducing the CPU load to "
+"the minimum.\n"
+"It also allows some pretty visual effects similar to Compiz.\n"
+"However, some cards and/or their drivers don't fully support it, which may "
+"prevent the dock from running correctly.\n"
+"Do you want to activate OpenGL ?\n"
+" (To not show this dialog, launch the dock from the Application menu,\n"
+"  or with the -o option to force OpenGL and -c to force cairo.)"
+msgstr ""
+"OpenGL ຊ່ວຍໃຫ້ທ່ານໃຊ້ການເລັ່ງຮາດແວ, ຫຼຸດຜ່ອນການໂຫຼດຂອງ CPU ໃຫ້ເຫຼືອໜ້ອຍທີ່ສຸດ.\n"
+" ມັນຍັງຊ່ວຍໃຫ້ມີເອັບເຟັກພາບທີ່ສວຍງາມຄ້າຍຄືກັບ Compiz.\n"
+" ຢ່າງໃດກໍຕາມ, ບາງກາດຈໍ ແລະ/ຫຼື ໄດເວີຂອງພວກມັນບໍ່ຮອງຮັບມັນຢ່າງເຕັມທີ່, "
+"ເຊິ່ງອາດເຮັດໃຫ້ດັອກເຮັດວຽກບໍ່ຖືກຕ້ອງ.\n"
+" ທ່ານຕ້ອງການເປີດໃຊ້ OpenGL ບໍ່?\n"
+" (ເພື່ອບໍ່ໃຫ້ສະແດງກ່ອງໂຕ້ຕອບນີ້, ໃຫ້ເປີດດັອກຈາກເມນູແອັບພລິເຄຊັນ,\n"
+" ຫຼື ດ້ວຍຕົວເລືອກ -o ເພື່ອບັງຄັບໃຊ້ OpenGL ແລະ -c ເພື່ອບັງຄັບໃຊ້ cairo.)"
+
+#: ../src/cairo-dock.c:620
+msgid "Remember this choice"
+msgstr "ຈື່ຈຳຕົວເລືອກນີ້"
+
+#: ../src/cairo-dock.c:780 ../src/cairo-dock.c:1000
+#, c-format
+msgid ""
+"The module '%s' has been deactivated because it may have caused some "
+"problems.\n"
+"You can reactivate it, but if it happens again please report it at https://"
+"github.com/Cairo-Dock/cairo-dock-core/issues"
+msgstr ""
+"ໂມດູນ '%s' ໄດ້ຖືກປິດໃຊ້ງານ ເພາະມັນອາດຈະກໍ່ໃຫ້ເກີດບັນຫາບາງຢ່າງ.\n"
+" ທ່ານສາມາດເປີດໃຊ້ມັນຄືນໄດ້, ແຕ່ຖ້າມັນເກີດຂຶ້ນອີກ ກະລຸນາລາຍງານທີ່ https://github.com/Cairo-"
+"Dock/cairo-dock-core/issues"
+
+#: ../src/cairo-dock.c:791
+msgid "< Maintenance mode >"
+msgstr "< ໂໝດບຳລຸງຮັກສາ >"
+
+#: ../src/cairo-dock.c:793
+msgid "Something went wrong with this applet:"
+msgstr "ມີບາງຢ່າງຜິດພາດກັບແອັບເລັດນີ້:"
+
+#: ../src/cairo-dock.c:845
+msgid "You're using our Cairo-Dock session"
+msgstr "ທ່ານກຳລັງໃຊ້ເຊດຊັນ Cairo-Dock ຂອງພວກເຮົາ"
+
+#: ../src/cairo-dock.c:851
+msgid ""
+"It can be interesting to use an adapted theme for this session.\n"
+"\n"
+"Do you want to load our \"Default-Panel\" theme?\n"
+"\n"
+"Note: your current theme will be saved and can be reimported later from the "
+"Themes manager"
+msgstr ""
+"ມັນອາດຈະເປັນສິ່ງທີ່ໜ້າສົນໃຈທີ່ຈະໃຊ້ທີມທີ່ປັບແຕ່ງມາສຳລັບເຊດຊັນນີ້.\n"
+"\n"
+" ທ່ານຕ້ອງການໂຫຼດທີມ \"Default-Panel\" ຂອງພວກເຮົາບໍ່?\n"
+"\n"
+" ໝາຍເຫດ: ທີມປັດຈຸບັນຂອງທ່ານຈະຖືກບັນທຶກໄວ້ ແລະ ສາມາດນຳເຂົ້າຄືນໄດ້ໃນພາຍຫຼັງຈາກຕົວຈັດການທີມ"
+
+#: ../src/cairo-dock.c:896
+msgid ""
+"No plug-in were found.\n"
+"Plug-ins provide most of the functionalities (animations, applets, views, "
+"etc).\n"
+"See https://github.com/Cairo-Dock/cairo-dock-core/wiki for more "
+"information.\n"
+"There is almost no meaning in running the dock without them and it's "
+"probably due to a problem with the installation of these plug-ins.\n"
+"But if you really want to use the dock without these plug-ins, you can "
+"launch the dock with the '-f' option to no longer have this message.\n"
+msgstr ""
+"ບໍ່ພົບປລັກອິນ.\n"
+" ປລັກອິນໃຫ້ຄວາມສາມາດສ່ວນໃຫຍ່ (ພາບເຄື່ອນໄຫວ, ແອັບເລັດ, ມຸມມອງ, ແລະ ອື່ນໆ).\n"
+" ເບິ່ງ https://github.com/Cairo-Dock/cairo-dock-core/wiki ສຳລັບຂໍ້ມູນເພີ່ມເຕີມ.\n"
+" ເກືອບບໍ່ມີຄວາມໝາຍໃນການເປີດດັອກໂດຍບໍ່ມີພວກມັນ ແລະ ມັນອາດຈະເກີດຈາກບັນຫາການຕິດຕັ້ງປລັກອິນເຫຼົ່ານີ້.\n"
+" ແຕ່ຖ້າທ່ານຕ້ອງການໃຊ້ດັອກໂດຍບໍ່ມີປລັກອິນເຫຼົ່ານີ້ແທ້ໆ, ທ່ານສາມາດເປີດດັອກດ້ວຍຕົວເລືອກ '-f' "
+"ເພື່ອບໍ່ໃຫ້ເຫັນຂໍ້ຄວາມນີ້ອີກ.\n"
+
+#: ../src/cairo-dock.c:908
+msgid ""
+"Cairo-Dock is running in a Wayland session, but the compositor does not seem "
+"to support the wlr-layer-shell protocol. This is required for properly "
+"positioning the dock on the screen; it is likely that docks will show up in "
+"wrong locations. Please check that you are running a Wayland compositor that "
+"is compatible with wlr-layer-shell; see the documentation for more "
+"information. Please note that neither GNOME Shell nor the Ubuntu Wayland "
+"desktop session is supported. If you believe that your compositor should be "
+"supported, consider reporting this issue in our bug tracker.\n"
+"\n"
+"(to disable showing this message, run Cairo-Dock with the '--no-layer-shell' "
+"command line option)"
+msgstr ""
+"Cairo-Dock ກໍາລັງເຮັດວຽກຢູ່ໃນເຊດຊັນ Wayland, ແຕ່ຄອມໂພສິເຕີເບິ່ງຄືວ່າບໍ່ຮອງຮັບໂປຣໂຕຄໍ wlr-"
+"layer-shell. ອັນນີ້ຈຳເປັນສຳລັບການວາງຕຳແໜ່ງດັອກເທິງໜ້າຈໍຢ່າງຖືກຕ້ອງ; "
+"ມີແນວໂນ້ມວ່າດັອກຈະສະແດງໃນຕຳແໜ່ງທີ່ຜິດ. ກະລຸນາກວດສອບວ່າທ່ານກຳລັງໃຊ້ຄອມໂພສິເຕີ Wayland "
+"ທີ່ເຂົ້າກັນໄດ້ກັບ wlr-layer-shell; ເບິ່ງເອກະສານສຳລັບຂໍ້ມູນເພີ່ມເຕີມ. ກະລຸນາຮັບຊາບວ່າທັງ GNOME "
+"Shell ແລະ ເຊດຊັນເດັສທັອບ Ubuntu Wayland ບໍ່ໄດ້ຮັບການຮອງຮັບ. "
+"ຖ້າທ່ານເຊື່ອວ່າຄອມໂພສິເຕີຂອງທ່ານຄວນຈະໄດ້ຮັບການຮອງຮັບ, "
+"ພິຈາລະນາລາຍງານບັນຫານີ້ໃນຕົວຕິດຕາມບັກຂອງພວກເຮົາ.\n"
+"\n"
+" (ເພື່ອປິດການສະແດງຂໍ້ຄວາມນີ້, ໃຫ້ເປີດ Cairo-Dock ດ້ວຍຕົວເລືອກຄຳສັ່ງ '--no-layer-shell')"
+
+#: ../src/cairo-dock.c:908
+msgid ""
+"Cairo-Dock is running in a Wayland session, but it was not compiled with gtk-"
+"layer-shell support. This is required for properly positioning the dock on "
+"the screen; it is likely that docks will show up in wrong locations. If you "
+"have installed Cairo-Dock from a binary package, please report this issue to "
+"the package's maintainer. If you have compiled Cairo-Dock yourself, please "
+"ensure that the development libraries for gtk-layer-shell are available; see "
+"the documentation for more information.\n"
+"\n"
+"(to disable showing this message, run Cairo-Dock with the '--no-layer-shell' "
+"command line option)"
+msgstr ""
+"Cairo-Dock ກໍາລັງເຮັດວຽກຢູ່ໃນເຊດຊັນ Wayland, ແຕ່ມັນບໍ່ໄດ້ຖືກຄອມໄພລ໌ພ້ອມກັບການຮອງຮັບ gtk-"
+"layer-shell. ອັນນີ້ຈຳເປັນສຳລັບການວາງຕຳແໜ່ງດັອກເທິງໜ້າຈໍຢ່າງຖືກຕ້ອງ; "
+"ມີແນວໂນ້ມວ່າດັອກຈະສະແດງໃນຕຳແໜ່ງທີ່ຜິດ. ຖ້າທ່ານໄດ້ຕິດຕັ້ງ Cairo-Dock ຈາກແພັກເກດໄບນາຣີ, "
+"ກະລຸນາລາຍງານບັນຫານີ້ໃຫ້ກັບຜູ້ຮັກສາແພັກເກດ. ຖ້າທ່ານໄດ້ຄອມໄພລ໌ Cairo-Dock ເອງ, "
+"ກະລຸນາຮັບປະກັນວ່າຫໍສະໝຸດການພັດທະນາສຳລັບ gtk-layer-shell ມີຢູ່; "
+"ເບິ່ງເອກະສານສຳລັບຂໍ້ມູນເພີ່ມເຕີມ.\n"
+"\n"
+" (ເພື່ອປິດການສະແດງຂໍ້ຄວາມນີ້, ໃຫ້ເປີດ Cairo-Dock ດ້ວຍຕົວເລືອກຄຳສັ່ງ '--no-layer-shell')"
+
+#: ../src/cairo-dock.c:916
+msgid ""
+"You are running Cairo-Dock in a Wayland session. Please note the support for "
+"Wayland is still experimental: not all features and plugins work yet.\n"
+"See the documentation for more information.\n"
+"Please consider reporting any issues you encounter in our bug tracker. Thank "
+"you!"
+msgstr ""
+"ທ່ານກຳລັງໃຊ້ Cairo-Dock ໃນເຊດຊັນ Wayland. ກະລຸນາຮັບຊາບວ່າການຮອງຮັບ Wayland "
+"ຍັງຢູ່ໃນຂັ້ນທົດລອງ: ບໍ່ແມ່ນທຸກຟີເຈີ ແລະ ປລັກອິນຈະເຮັດວຽກໄດ້ເທື່ອ.\n"
+" ເບິ່ງເອກະສານສຳລັບຂໍ້ມູນເພີ່ມເຕີມ.\n"
+" ກະລຸນາພິຈາລະນາລາຍງານບັນຫາໃດໆທີ່ທ່ານພົບໃນຕົວຕິດຕາມບັກຂອງພວກເຮົາ. ຂອບໃຈ!"
+
+#: ../src/cairo-dock.c:998
+#, c-format
+msgid ""
+"The module '%s' may have encountered a problem.\n"
+"It has been restored successfully, but if it happens again, please report it "
+"at https://github.com/Cairo-Dock/cairo-dock-core/issues"
+msgstr ""
+"ໂມດູນ '%s' ອາດຈະພົບບັນຫາ.\n"
+" ມັນໄດ້ຖືກກູ້ຄືນສຳເລັດແລ້ວ, ແຕ່ຖ້າມັນເກີດຂຶ້ນອີກ, ກະລຸນາລາຍງານທີ່ https://github.com/Cairo-"
+"Dock/cairo-dock-core/issues"
+
+#: ../src/gldit/cairo-dock-applet-facility.h:260
+msgid ""
+"The theme could not be found; the default theme will be used instead.\n"
+" You can change this by opening the configuration of this module. Do you "
+"want to do it now?"
+msgstr ""
+"ບໍ່ພົບທີມ; ຈະໃຊ້ທີມເລີ່ມຕົ້ນແທນ.\n"
+" ທ່ານສາມາດປ່ຽນແປງສິ່ງນີ້ໄດ້ໂດຍການເປີດການຕັ້ງຄ່າຂອງໂມດູນນີ້. ທ່ານຕ້ອງການເຮັດຕອນນີ້ບໍ່?"
+
+#: ../src/gldit/cairo-dock-applet-facility.h:276
+msgid ""
+"The gauge theme could not be found; a default gauge will be used instead.\n"
+"You can change this by opening the configuration of this module. Do you want "
+"to do it now?"
+msgstr ""
+"ບໍ່ພົບທີມເກຈ; ຈະໃຊ້ເກຈເລີ່ມຕົ້ນແທນ.\n"
+" ທ່ານສາມາດປ່ຽນແປງສິ່ງນີ້ໄດ້ໂດຍການເປີດການຕັ້ງຄ່າຂອງໂມດູນນີ້. ທ່ານຕ້ອງການເຮັດຕອນນີ້ບໍ່?"
+
+#: ../src/gldit/cairo-dock-desklet-manager.c:812 ../data/messages:467
+#: ../data/messages:557 ../data/messages:697 ../data/messages:739
+#: ../data/messages:811 ../data/messages:845
+msgid "Automatic"
+msgstr "ອັດຕະໂນມັດ"
+
+#: ../src/gldit/cairo-dock-desklet-manager.c:825
+msgid "_custom decoration_"
+msgstr "_ການຕົບແຕ່ງແບບກຳນົດເອງ_"
+
+#: ../src/gldit/cairo-dock-dock-factory.c:1371
+msgid "Sorry but the dock is locked"
+msgstr "ຂໍອະໄພ ແຕ່ດັອກຖືກລັອກຢູ່"
+
+#: ../src/gldit/cairo-dock-dock-manager.c:225
+msgid "Bottom dock"
+msgstr "ດັອກລຸ່ມ"
+
+#: ../src/gldit/cairo-dock-dock-manager.c:227
+msgid "Top dock"
+msgstr "ດັອກເທິງ"
+
+#: ../src/gldit/cairo-dock-dock-manager.c:232
+msgid "Right dock"
+msgstr "ດັອກຂວາ"
+
+#: ../src/gldit/cairo-dock-dock-manager.c:234
+msgid "Left dock"
+msgstr "ດັອກຊ້າຍ"
+
+#: ../src/gldit/cairo-dock-dock-manager.c:1565
+#: ../src/gldit/cairo-dock-dock-manager.c:1663
+msgid "Pop up the main dock"
+msgstr "ສະແດງດັອກຫຼັກຂຶ້ນມາ"
+
+#: ../src/gldit/cairo-dock-gui-factory.c:246
+#, c-format
+msgid "by %s"
+msgstr "ໂດຍ %s"
+
+#: ../src/gldit/cairo-dock-gui-factory.c:258
+msgid "kB"
+msgstr "ກິໂລໄບຕ໌"
+
+#: ../src/gldit/cairo-dock-gui-factory.c:260
+msgid "MB"
+msgstr "ເມກາໄບຕ໌"
+
+#: ../src/gldit/cairo-dock-gui-factory.c:269
+msgid "Local"
+msgstr "ໃນເຄື່ອງ"
+
+#: ../src/gldit/cairo-dock-gui-factory.c:270
+msgid "User"
+msgstr "ຜູ້ໃຊ້"
+
+#: ../src/gldit/cairo-dock-gui-factory.c:271
+msgid "Net"
+msgstr "ອິນເຕີເນັດ"
+
+#: ../src/gldit/cairo-dock-gui-factory.c:272
+msgid "New"
+msgstr "ໃໝ່"
+
+#: ../src/gldit/cairo-dock-gui-factory.c:273
+msgid "Updated"
+msgstr "ອັບເດດແລ້ວ"
+
+#: ../src/gldit/cairo-dock-gui-factory.c:748
+msgid "Pick up a file"
+msgstr "ເລືອກໄຟລ໌"
+
+#: ../src/gldit/cairo-dock-gui-factory.c:748
+msgid "Pick up a directory"
+msgstr "ເລືອກໂຟເດີ"
+
+#: ../src/gldit/cairo-dock-gui-factory.c:1036
+msgid "_Custom Icons_"
+msgstr "_ໄອຄອນແບບກຳນົດເອງ_"
+
+#: ../src/gldit/cairo-dock-gui-factory.c:1074 ../data/messages:13
+#: ../data/messages:165 ../data/messages:171 ../data/messages:915
+msgid "left"
+msgstr "ຊ້າຍ"
+
+#: ../src/gldit/cairo-dock-gui-factory.c:1076 ../data/messages:11
+#: ../data/messages:163 ../data/messages:173 ../data/messages:913
+msgid "right"
+msgstr "ຂວາ"
+
+#: ../src/gldit/cairo-dock-gui-factory.c:1078
+#: ../src/gldit/cairo-dock-gui-factory.c:1088
+msgid "middle"
+msgstr "ກາງ"
+
+#: ../src/gldit/cairo-dock-gui-factory.c:1084 ../data/messages:9
+#: ../data/messages:161 ../data/messages:911
+msgid "top"
+msgstr "ເທິງ"
+
+#: ../src/gldit/cairo-dock-gui-factory.c:1086 ../data/messages:7
+#: ../data/messages:159 ../data/messages:909
+msgid "bottom"
+msgstr "ລຸ່ມ"
+
+#: ../src/gldit/cairo-dock-gui-factory.c:1091
+#: ../src/gldit/cairo-dock-gui-factory.c:1097
+msgid "Screen"
+msgstr "ໜ້າຈໍ"
+
+#: ../src/gldit/cairo-dock-gui-factory.c:1385
+#, c-format
+msgid ""
+"The '%s' module was not found.\n"
+"Be sure to install it with the same version as the dock to enjoy these "
+"features."
+msgstr ""
+"ບໍ່ພົບໂມດູນ '%s'.\n"
+" ກະລຸນາຕິດຕັ້ງມັນດ້ວຍເວີຊັນດຽວກັບດັອກເພື່ອໃຊ້ຟີເຈີເຫຼົ່ານີ້."
+
+#: ../src/gldit/cairo-dock-gui-factory.c:1394
+#, c-format
+msgid ""
+"The '%s' plug-in is not active.\n"
+"Activate it now?"
+msgstr ""
+"ປລັກອິນ '%s' ບໍ່ໄດ້ເປີດໃຊ້ງານ.\n"
+" ຕ້ອງການເປີດໃຊ້ງານຕອນນີ້ບໍ່?"
+
+#: ../src/gldit/cairo-dock-gui-factory.c:2165
+msgid ""
+"You are running Cairo-Dock in a Wayland session.\n"
+"Setting a horizontal offset is not supported on Wayland yet."
+msgstr ""
+"ທ່ານກຳລັງໃຊ້ Cairo-Dock ໃນເຊດຊັນ Wayland.\n"
+" ການຕັ້ງຄ່າໄລຍະຫ່າງແນວນອນຍັງບໍ່ຮອງຮັບໃນ Wayland ເທື່ອ."
+
+#: ../src/gldit/cairo-dock-gui-factory.c:2937
+msgid "link"
+msgstr "ລິ້ງ"
+
+#: ../src/gldit/cairo-dock-gui-factory.c:2999
+msgid "Grab"
+msgstr "ຈັບ"
+
+#: ../src/gldit/cairo-dock-launcher-manager.c:378
+msgid "Enter a command"
+msgstr "ປ້ອນຄຳສັ່ງ"
+
+#: ../src/gldit/cairo-dock-launcher-manager.c:379
+msgid "New launcher"
+msgstr "ຕົວເປີດໃໝ່"
+
+#: ../src/gldit/cairo-dock-module-instance-manager.c:323
+msgid "by"
+msgstr "ໂດຍ"
+
+#: ../src/gldit/cairo-dock-struct.h:526 ../data/messages:1073
+#: ../data/messages:1081
+msgid "Default"
+msgstr "ຄ່າເລີ່ມຕົ້ນ"
+
+#: ../src/gldit/cairo-dock-themes-manager.c:196
+#, c-format
+msgid "Are you sure you want to overwrite theme %s?"
+msgstr "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການຂຽນທັບທີມ %s?"
+
+#: ../src/gldit/cairo-dock-themes-manager.c:273
+msgid "Last modification on:"
+msgstr "ແກ້ໄຂຄັ້ງລ່າສຸດເມື່ອ:"
+
+#: ../src/gldit/cairo-dock-themes-manager.c:347
+msgid "Your theme should now be available in this directory:"
+msgstr "ທີມຂອງທ່ານຄວນຈະມີຢູ່ໃນໄດເຣັກທໍຣີນີ້ແລ້ວ:"
+
+#: ../src/gldit/cairo-dock-themes-manager.c:352
+msgid "Error when launching 'cairo-dock-package-theme' script"
+msgstr "ເກີດຂໍ້ຜິດພາດເມື່ອເປີດສະຄຣິບ 'cairo-dock-package-theme'"
+
+#: ../src/gldit/cairo-dock-themes-manager.c:373
+#, c-format
+msgid ""
+"Could not access remote file %s. Maybe the server is down.\n"
+"Please retry later or contact us at https://github.com/Cairo-Dock/cairo-dock-"
+"core/issues"
+msgstr ""
+"ບໍ່ສາມາດເຂົ້າເຖິງໄຟລ໌ທາງໄກ %s. ບາງທີເຊີບເວີອາດຈະລົ້ມ.\n"
+" ກະລຸນາລອງໃໝ່ອີກຄັ້ງໃນພາຍຫຼັງ ຫຼື ຕິດຕໍ່ພວກເຮົາທີ່ https://github.com/Cairo-Dock/cairo-dock-"
+"core/issues"
+
+#: ../src/gldit/cairo-dock-themes-manager.c:387
+#, c-format
+msgid "Are you sure you want to delete theme %s?"
+msgstr "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບທີມ %s?"
+
+#: ../src/gldit/cairo-dock-themes-manager.c:389
+msgid "Are you sure you want to delete these themes?"
+msgstr "ທ່ານແນ່ໃຈບໍ່ວ່າຕ້ອງການລຶບທີມເຫຼົ່ານີ້?"
+
+#: ../src/implementations/cairo-dock-hiding-effect.c:592 ../data/messages:41
+#: ../data/messages:213
+msgid "Move down"
+msgstr "ເລື່ອນລົງ"
+
+#: ../src/implementations/cairo-dock-hiding-effect.c:600 ../data/messages:43
+#: ../data/messages:103 ../data/messages:215
+msgid "Fade out"
+msgstr "ຈາງຫາຍໄປ"
+
+#: ../src/implementations/cairo-dock-hiding-effect.c:608 ../data/messages:45
+#: ../data/messages:217
+msgid "Semi transparent"
+msgstr "ໂປ່ງໃສເຄິ່ງໜຶ່ງ"
+
+#: ../src/implementations/cairo-dock-hiding-effect.c:617 ../data/messages:47
+#: ../data/messages:219
+msgid "Zoom out"
+msgstr "ຊູມອອກ"
+
+#: ../src/implementations/cairo-dock-hiding-effect.c:625 ../data/messages:49
+#: ../data/messages:221
+msgid "Folding"
+msgstr "ພັບເຂົ້າ"
+
+#: ../src/implementations/cairo-dock-wayland-wm.c:117
+msgid "Select an open window by clicking on it or choosing it from the taskbar"
+msgstr "ເລືອກໜ້າຕ່າງທີ່ເປີດຢູ່ໂດຍການຄລິກໃສ່ມັນ ຫຼື ເລືອກຈາກແຖບໜ້າວຽກ"
+
+#: ../Help/src/applet-composite.c:71
+msgid ""
+"Welcome in Cairo-Dock !\n"
+"This applet is here to help you start using the dock; just click on it.\n"
+"If you have any question/request/remark, please pay us a visit at\n"
+"https://github.com/Cairo-Dock/cairo-dock-core.\n"
+"Hope you will enjoy this software !\n"
+"  (you can now click on this dialog to close it)"
+msgstr ""
+"ຍິນດີຕ້ອນຮັບສູ່ Cairo-Dock !\n"
+" ແອັບເລັດນີ້ມີໄວ້ເພື່ອຊ່ວຍທ່ານເລີ່ມຕົ້ນໃຊ້ດັອກ; ພຽງແຕ່ຄລິກໃສ່ມັນ.\n"
+" ຖ້າທ່ານມີຄຳຖາມ/ຄຳຮ້ອງຂໍ/ຄຳຕິຊົມ, ກະລຸນາເຂົ້າເບິ່ງພວກເຮົາທີ່\n"
+" https://github.com/Cairo-Dock/cairo-dock-core.\n"
+" ຫວັງວ່າທ່ານຈະມັກຊອບແວນີ້!\n"
+" (ຕອນນີ້ທ່ານສາມາດຄລິກໃສ່ກ່ອງໂຕ້ຕອບນີ້ເພື່ອປິດມັນ)"
+
+#: ../Help/src/applet-composite.c:166
+msgid "Don't ask me any more"
+msgstr "ບໍ່ຕ້ອງຖາມຂ້ອຍອີກ"
+
+#: ../Help/src/applet-composite.c:172
+msgid ""
+"To remove the black rectangle around the dock, you need to activate a "
+"composite manager.\n"
+"Do you want to activate it now?"
+msgstr ""
+"ເພື່ອລຶບສີ່ຫຼ່ຽມສີດຳອ້ອມດັອກ, ທ່ານຈຳເປັນຕ້ອງເປີດໃຊ້ຕົວຈັດການຄອມໂພສິດ.\n"
+" ທ່ານຕ້ອງການເປີດໃຊ້ມັນຕອນນີ້ບໍ່?"
+
+#: ../Help/src/applet-composite.c:183
+msgid ""
+"Do you want to keep this setting?\n"
+"In 15 seconds, the previous setting will be restored."
+msgstr ""
+"ທ່ານຕ້ອງການຮັກສາການຕັ້ງຄ່ານີ້ໄວ້ບໍ່?\n"
+" ໃນ 15 ວິນາທີ, ການຕັ້ງຄ່າກ່ອນໜ້າຈະຖືກກູ້ຄືນ."
+
+#: ../Help/src/applet-composite.c:199
+msgid ""
+"To remove the black rectangle around the dock, you will need to activate a "
+"composite manager.\n"
+"For instance, this can be done by activating desktop effects, launching "
+"Compiz, or activating the composition in Metacity.\n"
+"If your machine can't support composition, Cairo-Dock can emulate it. This "
+"option is in the 'System' module of the configuration, at the bottom of the "
+"page."
+msgstr ""
+"ເພື່ອລຶບສີ່ຫຼ່ຽມສີດຳອ້ອມດັອກ, ທ່ານຈະຕ້ອງເປີດໃຊ້ຕົວຈັດການຄອມໂພສິດ.\n"
+" ຕົວຢ່າງ, ສາມາດເຮັດໄດ້ໂດຍການເປີດໃຊ້ເອັບເຟັກເດັສທັອບ, ເປີດ Compiz, ຫຼື ເປີດໃຊ້ຄອມໂພສິດໃນ "
+"Metacity.\n"
+" ຖ້າເຄື່ອງຂອງທ່ານບໍ່ຮອງຮັບຄອມໂພສິດ, Cairo-Dock ສາມາດຈຳລອງມັນໄດ້. ຕົວເລືອກນີ້ຢູ່ໃນໂມດູນ 'ລະບົບ' "
+"ຂອງການຕັ້ງຄ່າ, ຢູ່ດ້ານລຸ່ມຂອງໜ້າ."
+
+#: ../Help/src/applet-init.c:31
+msgid ""
+"This applet is made to help you.\n"
+"Click on its icon to pop up useful tips about the possibilities of Cairo-"
+"Dock.\n"
+"Middle-click to open the configuration window.\n"
+"Right-click to access some troubleshooting actions."
+msgstr ""
+"ແອັບເລັດນີ້ສ້າງຂຶ້ນເພື່ອຊ່ວຍທ່ານ.\n"
+" ຄລິກທີ່ໄອຄອນຂອງມັນເພື່ອສະແດງຄຳແນະນຳທີ່ເປັນປະໂຫຍດກ່ຽວກັບຄວາມສາມາດຂອງ Cairo-Dock.\n"
+" ຄລິກກາງເພື່ອເປີດໜ້າຕ່າງການຕັ້ງຄ່າ.\n"
+" ຄລິກຂວາເພື່ອເຂົ້າເຖິງການກະທຳແກ້ໄຂບັນຫາບາງຢ່າງ."
+
+#: ../Help/src/applet-notifications.c:95
+msgid "Open global settings"
+msgstr "ເປີດການຕັ້ງຄ່າທົ່ວໄປ"
+
+#: ../Help/src/applet-notifications.c:100
+msgid "Activate composite"
+msgstr "ເປີດໃຊ້ຄອມໂພສິດ"
+
+#: ../Help/src/applet-notifications.c:102
+msgid "Online help"
+msgstr "ຊ່ວຍເຫຼືອອອນລາຍ"
+
+#: ../Help/src/applet-tips-dialog.c:163
+msgid "Tips and Tricks"
+msgstr "ເຄັດລັບແລະວິທີການ"
+
+#: ../Help/data/messages:1
+msgid "General"
+msgstr "ທົ່ວໄປ"
+
+#: ../Help/data/messages:3
+msgid "Using the dock"
+msgstr "ການໃຊ້ດັອກ"
+
+#: ../Help/data/messages:5
+msgid ""
+"Most icons in the dock have several actions: the primary action on left-"
+"click, a secondary action on middle-click, and additional actions on right-"
+"click (in the menu).\n"
+"Some applets let you bind a shortkey to an action, and decide which action "
+"sould be on middle-click."
+msgstr ""
+"ໄອຄອນສ່ວນໃຫຍ່ໃນດັອກມີຫຼາຍການກະທຳ: ການກະທຳຫຼັກເມື່ອຄລິກຊ້າຍ, ການກະທຳຮອງເມື່ອຄລິກກາງ, ແລະ "
+"ການກະທຳເພີ່ມເຕີມເມື່ອຄລິກຂວາ (ໃນເມນູ).\n"
+" ບາງແອັບເລັດໃຫ້ທ່ານຜູກປຸ່ມລັດກັບການກະທຳ, ແລະ ຕັດສິນໃຈວ່າການກະທຳໃດຄວນຈະຢູ່ທີ່ການຄລິກກາງ."
+
+#: ../Help/data/messages:7
+msgid "Adding features"
+msgstr "ການເພີ່ມຟີເຈີ"
+
+#: ../Help/data/messages:9
+msgid ""
+"Cairo-Dock has a lot of applets. Applets are small applications that live "
+"inside the dock, for instance a clock or a log-out button.\n"
+"To enable new applets, open the settings (right-click -> Cairo-Dock -> "
+"configure), go to \"Add-ons\", and tick the applet you want.\n"
+"More applets can be installed easily: in the configuration window, click on "
+"the \"More applets\" button (which will lead you to our applets web page) "
+"and then just drag-and-drop the link of an applet into your dock."
+msgstr ""
+"Cairo-Dock ມີແອັບເລັດຫຼາຍອັນ. ແອັບເລັດແມ່ນແອັບພລິເຄຊັນຂະໜາດນ້ອຍທີ່ຢູ່ໃນດັອກ, ຕົວຢ່າງເຊັ່ນ ໂມງ ຫຼື "
+"ປຸ່ມອອກຈາກລະບົບ.\n"
+" ເພື່ອເປີດໃຊ້ແອັບເລັດໃໝ່, ໃຫ້ເປີດການຕັ້ງຄ່າ (ຄລິກຂວາ -> Cairo-Dock -> ຕັ້ງຄ່າ), ໄປທີ່ "
+"\"ສ່ວນເສີມ\", ແລະ ໝາຍຕິກໃສ່ແອັບເລັດທີ່ທ່ານຕ້ອງການ.\n"
+" ສາມາດຕິດຕັ້ງແອັບເລັດເພີ່ມເຕີມໄດ້ງ່າຍ: ໃນໜ້າຕ່າງການຕັ້ງຄ່າ, ຄລິກທີ່ປຸ່ມ "
+"\"ແອັບເລັດເພີ່ມເຕີມ\" (ເຊິ່ງຈະພາທ່ານໄປທີ່ໜ້າເວັບແອັບເລັດຂອງພວກເຮົາ) ແລະ "
+"ຈາກນັ້ນພຽງແຕ່ລາກແລະວາງລິ້ງຂອງແອັບເລັດລົງໃນດັອກຂອງທ່ານ."
+
+#: ../Help/data/messages:13
+msgid "Adding a launcher"
+msgstr "ການເພີ່ມຕົວເປີດ"
+
+#: ../Help/data/messages:15
+msgid ""
+"You can add a launcher by drag-and-dropping it from the Applications Menu "
+"into the dock. An animated arrow will appear when you can drop.\n"
+"Alternatively, if an application is already opened, you can right-click on "
+"its icon and select \"make it a launcher\"."
+msgstr ""
+"ທ່ານສາມາດເພີ່ມໂຕເປີດໂປຣແກຣມໄດ້ໂດຍການລາກ-ແລະ-ວາງມັນຈາກເມນູໂປຣແກຣມລົງໃສ່ແທ່ນດັອກ. "
+"ລູກສອນເຄື່ອນໄຫວຈະປາກົດຂຶ້ນເມື່ອທ່ານສາມາດວາງໄດ້.\n"
+"ອີກທາງເລືອກໜຶ່ງ, ຖ້າໂປຣແກຣມໃດໜຶ່ງເປີດຢູ່ແລ້ວ, ທ່ານສາມາດຄລິກຂວາໃສ່ໄອຄອນຂອງມັນ ແລະ ເລືອກ "
+"\"ສ້າງເປັນໂຕເປີດໂປຣແກຣມ\"."
+
+#: ../Help/data/messages:17
+msgid "Removing a launcher"
+msgstr "ການລຶບໂຕເປີດໂປຣແກຣມ"
+
+#: ../Help/data/messages:19
+msgid ""
+"You can remove a launcher by drag-and-dropping it outside the dock. A "
+"\"delete\" emblem will appear on it when you can drop it."
+msgstr ""
+"ທ່ານສາມາດລຶບໂຕເປີດໂປຣແກຣມໄດ້ໂດຍການລາກ-ແລະ-ວາງມັນອອກໄປນອກແທ່ນດັອກ. ສັນຍາລັກ \"ລຶບ\" "
+"ຈະປາກົດຂຶ້ນເທິງມັນເມື່ອທ່ານສາມາດວາງໄດ້."
+
+#: ../Help/data/messages:21
+msgid "Grouping icons into a sub-dock"
+msgstr "ການຈັດກຸ່ມໄອຄອນເຂົ້າໃນແທ່ນດັອກຍ່ອຍ"
+
+#: ../Help/data/messages:23
+msgid ""
+"You can group icons into a \"sub-dock\".\n"
+"To add a sub-dock, right-click on the dock -> add -> a sub-dock.\n"
+"To move an icon into the sub-dock, right-click on an icon -> move to another "
+"dock -> select the sub-dock's name."
+msgstr ""
+"ທ່ານສາມາດຈັດກຸ່ມໄອຄອນເຂົ້າໃນ \"ແທ່ນດັອກຍ່ອຍ\".\n"
+"ເພື່ອເພີ່ມແທ່ນດັອກຍ່ອຍ, ຄລິກຂວາໃສ່ແທ່ນດັອກ -> ເພີ່ມ -> ແທ່ນດັອກຍ່ອຍ.\n"
+"ເພື່ອຍ້າຍໄອຄອນເຂົ້າໄປໃນແທ່ນດັອກຍ່ອຍ, ຄລິກຂວາໃສ່ໄອຄອນ -> ຍ້າຍໄປແທ່ນດັອກອື່ນ -> "
+"ເລືອກຊື່ຂອງແທ່ນດັອກຍ່ອຍ."
+
+#: ../Help/data/messages:25
+msgid "Moving icons"
+msgstr "ການຍ້າຍໄອຄອນ"
+
+#: ../Help/data/messages:27
+msgid ""
+"You can drag any icon to a new location inside its dock.\n"
+"You can move an icon into another dock by right-clicking on it -> move to "
+"another dock -> select the dock you want.\n"
+"If you select \"a new main dock\", a main dock will be created with this "
+"icon inside."
+msgstr ""
+"ທ່ານສາມາດລາກໄອຄອນໃດໜຶ່ງໄປໃສ່ຕຳແໜ່ງໃໝ່ພາຍໃນແທ່ນດັອກຂອງມັນໄດ້.\n"
+"ທ່ານສາມາດຍ້າຍໄອຄອນໄປໃສ່ແທ່ນດັອກອື່ນໄດ້ໂດຍການຄລິກຂວາໃສ່ມັນ -> ຍ້າຍໄປແທ່ນດັອກອື່ນ -> "
+"ເລືອກແທ່ນດັອກທີ່ທ່ານຕ້ອງການ.\n"
+"ຖ້າທ່ານເລືອກ \"ແທ່ນດັອກຫຼັກໃໝ່\", ແທ່ນດັອກຫຼັກໃໝ່ຈະຖືກສ້າງຂຶ້ນພ້ອມກັບໄອຄອນນີ້ຢູ່ພາຍໃນ."
+
+#: ../Help/data/messages:29
+msgid "Changing an icon's image"
+msgstr "ການປ່ຽນຮູບຂອງໄອຄອນ"
+
+#: ../Help/data/messages:31
+msgid ""
+"For a launcher or an applet:\n"
+"Open the settings of the icon, and set a path to an image.\n"
+"- For an aplication icon:\n"
+"Right-click on the icon -> \"Other actions\" -> \"set a custom icon\", and "
+"choose an image. To remove the custom image, right-click on the icon -> "
+"\"Other actions\" -> \"remove the custom icon\".\n"
+"\n"
+"If you have installed some icons themes on your PC, you can also select one "
+"of them to be used instead of the default icon theme, in the global config "
+"window."
+msgstr ""
+"ສຳລັບໂຕເປີດໂປຣແກຣມ ຫຼື ແອັບເປັດ:\n"
+"ເປີດການຕັ້ງຄ່າຂອງໄອຄອນ, ແລະ ກໍານົດເສັ້ນທາງໄປຫາຮູບພາບ.\n"
+"- ສຳລັບໄອຄອນຂອງໂປຣແກຣມ:\n"
+"ຄລິກຂວາໃສ່ໄອຄອນ -> \"ການດຳເນີນການອື່ນໆ\" -> \"ຕັ້ງໄອຄອນກຳນົດເອງ\", ແລະ ເລືອກຮູບພາບ. "
+"ເພື່ອລຶບຮູບພາບທີ່ກຳນົດເອງອອກ, ຄລິກຂວາໃສ່ໄອຄອນ -> \"ການດຳເນີນການອື່ນໆ\" -> "
+"\"ລຶບໄອຄອນກຳນົດເອງ\".\n"
+"\n"
+"ຖ້າທ່ານໄດ້ຕິດຕັ້ງຊຸດຮູບແບບໄອຄອນບາງອັນໃນຄອມພິວເຕີຂອງທ່ານ, "
+"ທ່ານຍັງສາມາດເລືອກອັນໃດອັນໜຶ່ງມາໃຊ້ແທນຊຸດຮູບແບບໄອຄອນເລີ່ມຕົ້ນໄດ້, ໃນໜ້າຕ່າງການຕັ້ງຄ່າລວມ."
+
+#: ../Help/data/messages:33
+msgid "Resizing icons"
+msgstr "ການປັບຂະໜາດໄອຄອນ"
+
+#: ../Help/data/messages:35
+msgid ""
+"You can make the icons and the zoom effect smaller or bigger. Open the "
+"settings (right-click -> Cairo-Dock -> configure), and go to Appearance (or "
+"Icons in advanced mode).\n"
+"Note that if there are too many icons inside the dock, they will be zoomed "
+"out to fit in the screen.\n"
+"Also, you can define the size of each applet independently in their own "
+"settings."
+msgstr ""
+"ທ່ານສາມາດເຮັດໃຫ້ໄອຄອນ ແລະ ເອັບເຟັກການຊູມນ້ອຍລົງ ຫຼື ໃຫຍ່ຂຶ້ນໄດ້. ເປີດການຕັ້ງຄ່າ (ຄລິກຂວາ -> "
+"Cairo-Dock -> ຕັ້ງຄ່າ), ແລະ ໄປທີ່ ຮູບລັກ (ຫຼື ໄອຄອນ ໃນໂໝດຂັ້ນສູງ).\n"
+"ໃຫ້ສັງເກດວ່າ ຖ້າມີໄອຄອນຫຼາຍເກີນໄປໃນແທ່ນດັອກ, ພວກມັນຈະຖືກຊູມອອກເພື່ອໃຫ້ພໍດີກັບໜ້າຈໍ.\n"
+"ນອກຈາກນີ້, ທ່ານຍັງສາມາດກຳນົດຂະໜາດຂອງແຕ່ລະແອັບເປັດໄດ້ຢ່າງອິດສະຫຼະໃນການຕັ້ງຄ່າຂອງມັນເອງ."
+
+#: ../Help/data/messages:37
+msgid "Separating icons"
+msgstr "ການແຍກໄອຄອນ"
+
+#: ../Help/data/messages:39
+msgid ""
+"You can add separators between icons by right-clicking on the dock -> add -> "
+"a separator.\n"
+"Also, if you enabled the option to separate icons of different types "
+"(launchers/applications/applets), a separator will be added automatically "
+"between each group.\n"
+"In the \"panel\" view, separators are represented as gap between icons."
+msgstr ""
+"ທ່ານສາມາດເພີ່ມໂຕຂັ້ນລະຫວ່າງໄອຄອນໄດ້ໂດຍການຄລິກຂວາໃສ່ແທ່ນດັອກ -> ເພີ່ມ -> ໂຕຂັ້ນ.\n"
+"ນອກຈາກນີ້, ຖ້າທ່ານເປີດໃຊ້ຕົວເລືອກເພື່ອແຍກໄອຄອນປະເພດຕ່າງໆ (ໂຕເປີດໂປຣແກຣມ/ໂປຣແກຣມ/ແອັບເປັດ), "
+"ໂຕຂັ້ນຈະຖືກເພີ່ມເຂົ້າໂດຍອັດຕະໂນມັດລະຫວ່າງແຕ່ລະກຸ່ມ.\n"
+"ໃນມຸມມອງ \"ແຜງຄວບຄຸມ\", ໂຕຂັ້ນຈະຖືກສະແດງເປັນຊ່ອງຫວ່າງລະຫວ່າງໄອຄອນ."
+
+#: ../Help/data/messages:43
+msgid "Using the dock as a taskbar"
+msgstr "ການໃຊ້ແທ່ນດັອກເປັນແຖບໜ້າວຽກ"
+
+#: ../Help/data/messages:45
+msgid ""
+"When an application is running, a corresponding icon will appear in the "
+"dock.\n"
+"If the application already has a launcher, the icon will not appear, instead "
+"its launcher will have a small indicator.\n"
+"Note that you can decide which applications should appear in the dock: only "
+"the windows of the current desktop, only the hidden windows, separated from "
+"the launcher, etc."
+msgstr ""
+"ເມື່ອໂປຣແກຣມກຳລັງເຮັດວຽກ, ໄອຄອນທີ່ກົງກັນຈະປາກົດໃນແທ່ນດັອກ.\n"
+"ຖ້າໂປຣແກຣມມີໂຕເປີດໂປຣແກຣມຢູ່ແລ້ວ, ໄອຄອນຈະບໍ່ປາກົດ, "
+"ແຕ່ໂຕເປີດໂປຣແກຣມຂອງມັນຈະມີໂຕຊີ້ບອກນ້ອຍໆແທນ.\n"
+"ໃຫ້ສັງເກດວ່າທ່ານສາມາດຕັດສິນໃຈໄດ້ວ່າໂປຣແກຣມໃດຄວນປາກົດໃນແທ່ນດັອກ: "
+"ສະເພາະໜ້າຕ່າງຂອງເດັສທັອບປັດຈຸບັນ, ສະເພາະໜ້າຕ່າງທີ່ຖືກເຊື່ອງໄວ້, ແຍກອອກຈາກໂຕເປີດໂປຣແກຣມ, ແລະ "
+"ອື່ນໆ."
+
+#: ../Help/data/messages:47
+msgid "Closing a window"
+msgstr "ການປິດໜ້າຕ່າງ"
+
+#: ../Help/data/messages:49
+msgid ""
+"You can close a window by middle-clicking on its icon (or from the menu)."
+msgstr "ທ່ານສາມາດປິດໜ້າຕ່າງໄດ້ໂດຍການຄລິກປຸ່ມກາງໃສ່ໄອຄອນຂອງມັນ (ຫຼື ຈາກເມນູ)."
+
+#: ../Help/data/messages:51
+msgid "Minimizing / restauring a window"
+msgstr "ການຫຍໍ້ / ການຟື້ນຄືນໜ້າຕ່າງ"
+
+#: ../Help/data/messages:53
+msgid ""
+"Clicking on its icon will bring the window on top.\n"
+"When the window has the focus, clicking on its icon will minimize the window."
+msgstr ""
+"ການຄລິກໃສ່ໄອຄອນຂອງມັນຈະນຳເອົາໜ້າຕ່າງຂຶ້ນມາຢູ່ເທິງສຸດ.\n"
+"ເມື່ອໜ້າຕ່າງຖືກເລືອກຢູ່, ການຄລິກໃສ່ໄອຄອນຂອງມັນຈະຫຍໍ້ໜ້າຕ່າງລົງ."
+
+#: ../Help/data/messages:55
+msgid "Launching an application several times"
+msgstr "ການເປີດໂປຣແກຣມຫຼາຍຄັ້ງ"
+
+#: ../Help/data/messages:57
+msgid ""
+"You can launch an application several times by SHIFT+clicking on its icon "
+"(or from the menu)."
+msgstr "ທ່ານສາມາດເປີດໂປຣແກຣມຫຼາຍຄັ້ງໄດ້ໂດຍການກົດ SHIFT+ຄລິກ ໃສ່ໄອຄອນຂອງມັນ (ຫຼື ຈາກເມນູ)."
+
+#: ../Help/data/messages:59
+msgid "Switching between the windows of a same application"
+msgstr "ການສັບປ່ຽນລະຫວ່າງໜ້າຕ່າງຂອງໂປຣແກຣມດຽວກັນ"
+
+#: ../Help/data/messages:61
+msgid ""
+"With your mouse, scroll up/down on one of the icons of the application. Each "
+"time you scroll, the next/previous window will be presented to you."
+msgstr ""
+"ໃຊ້ເມົ້າຂອງທ່ານ, ເລື່ອນຂຶ້ນ/ລົງ ໃສ່ໄອຄອນໃດໜຶ່ງຂອງໂປຣແກຣມ. ແຕ່ລະຄັ້ງທີ່ທ່ານເລື່ອນ, ໜ້າຕ່າງຕໍ່ໄປ/"
+"ກ່ອນໜ້າຈະຖືກສະແດງໃຫ້ທ່ານເຫັນ."
+
+#: ../Help/data/messages:63
+msgid "Grouping windows of a given application"
+msgstr "ການຈັດກຸ່ມໜ້າຕ່າງຂອງໂປຣແກຣມໃດໜຶ່ງ"
+
+#: ../Help/data/messages:65
+msgid ""
+"When an application has several windows, one icon for each window will "
+"appear in the dock; they will be grouped together into a sub-dock.\n"
+"Clicking on the main icon will display all the windows of the application "
+"side-by-side (if your Window Manager is able to do that)."
+msgstr ""
+"ເມື່ອໂປຣແກຣມໃດໜຶ່ງມີຫຼາຍໜ້າຕ່າງ, ໄອຄອນໜຶ່ງອັນສຳລັບແຕ່ລະໜ້າຕ່າງຈະປາກົດໃນແທ່ນດັອກ; "
+"ພວກມັນຈະຖືກຈັດກຸ່ມເຂົ້າກັນໃນແທ່ນດັອກຍ່ອຍ.\n"
+"ການຄລິກໃສ່ໄອຄອນຫຼັກຈະສະແດງໜ້າຕ່າງທັງໝົດຂອງໂປຣແກຣມຄຽງຂ້າງກັນ "
+"(ຖ້າໂຕຈັດການໜ້າຕ່າງຂອງທ່ານສາມາດເຮັດໄດ້)."
+
+#: ../Help/data/messages:67
+msgid "Setting a custom icon for an application"
+msgstr "ການຕັ້ງໄອຄອນກຳນົດເອງໃຫ້ກັບໂປຣແກຣມ"
+
+#: ../Help/data/messages:69
+msgid "See \"Changing an icon's image\" in the \"Icons\" category."
+msgstr "ເບິ່ງ \"ການປ່ຽນຮູບຂອງໄອຄອນ\" ໃນໝວດ \"ໄອຄອນ\"."
+
+#: ../Help/data/messages:71
+msgid "Showing windows preview over the icons"
+msgstr "ການສະແດງຕົວຢ່າງໜ້າຕ່າງເໜືອໄອຄອນ"
+
+#: ../Help/data/messages:73
+msgid ""
+"You need to run Compiz, and enable the \"Thumbnail Window Previews\" plug-in "
+"in Compiz. Install \"ccsm\" to be able to configure Compiz."
+msgstr ""
+"ທ່ານຈຳເປັນຕ້ອງເປີດໃຊ້ Compiz, ແລະ ເປີດໃຊ້ປລັກອິນ \"Thumbnail Window Previews\" ໃນ "
+"Compiz. ຕິດຕັ້ງ \"ccsm\" ເພື່ອໃຫ້ສາມາດຕັ້ງຄ່າ Compiz ໄດ້."
+
+#: ../Help/data/messages:77
+msgid "Positioning the dock on the screen"
+msgstr "ການວາງຕຳແໜ່ງແທ່ນດັອກເທິງໜ້າຈໍ"
+
+#: ../Help/data/messages:79
+msgid ""
+"The dock can be placed anywhere on the screen.\n"
+"In the case of the main dock, right-click -> Cairo-Dock -> configure, and "
+"then select the position you want.\n"
+"In the case of a 2nd or 3rd dock, right-click -> Cairo-Dock -> set up this "
+"dock, and then select the position you want."
+msgstr ""
+"ແທ່ນດັອກສາມາດວາງໄວ້ບ່ອນໃດກໍໄດ້ເທິງໜ້າຈໍ.\n"
+"ໃນກໍລະນີຂອງແທ່ນດັອກຫຼັກ, ຄລິກຂວາ -> Cairo-Dock -> ຕັ້ງຄ່າ, ແລະ "
+"ຈາກນັ້ນເລືອກຕຳແໜ່ງທີ່ທ່ານຕ້ອງການ.\n"
+"ໃນກໍລະນີຂອງແທ່ນດັອກທີ 2 ຫຼື 3, ຄລິກຂວາ -> Cairo-Dock -> ຕັ້ງຄ່າແທ່ນດັອກນີ້, ແລະ "
+"ຈາກນັ້ນເລືອກຕຳແໜ່ງທີ່ທ່ານຕ້ອງການ."
+
+#: ../Help/data/messages:81
+msgid "Hiding the dock to use all the screen"
+msgstr "ການເຊື່ອງແທ່ນດັອກເພື່ອໃຊ້ພື້ນທີ່ໜ້າຈໍທັງໝົດ"
+
+#: ../Help/data/messages:83
+msgid ""
+"The dock can hide itself to let all the screen for applications. But it can "
+"also be always visible like a panel.\n"
+"To change that, right-click -> Cairo-Dock -> configure, and then select the "
+"visibility you want.\n"
+"In the case of a 2nd or 3rd dock, right-click -> Cairo-Dock -> set up this "
+"dock, and then select the visibility you want."
+msgstr ""
+"ແທ່ນດັອກສາມາດເຊື່ອງຕົວເອງເພື່ອໃຫ້ພື້ນທີ່ໜ້າຈໍທັງໝົດແກ່ໂປຣແກຣມ. "
+"ແຕ່ມັນກໍສາມາດເຫັນໄດ້ຕະຫຼອດເວລາເໝືອນກັບແຜງຄວບຄຸມ.\n"
+"ເພື່ອປ່ຽນແປງສິ່ງນັ້ນ, ຄລິກຂວາ -> Cairo-Dock -> ຕັ້ງຄ່າ, ແລະ "
+"ຈາກນັ້ນເລືອກການເບິ່ງເຫັນທີ່ທ່ານຕ້ອງການ.\n"
+"ໃນກໍລະນີຂອງແທ່ນດັອກທີ 2 ຫຼື 3, ຄລິກຂວາ -> Cairo-Dock -> ຕັ້ງຄ່າແທ່ນດັອກນີ້, ແລະ "
+"ຈາກນັ້ນເລືອກການເບິ່ງເຫັນທີ່ທ່ານຕ້ອງການ."
+
+#: ../Help/data/messages:87
+msgid "Placing applets on your desktop"
+msgstr "ການວາງແອັບເປັດເທິງເດັສທັອບຂອງທ່ານ"
+
+#: ../Help/data/messages:89
+msgid ""
+"Applets can live inside desklets, which are small windows that can be placed "
+"wherever on your desktop.\n"
+"To detach an applet from the dock, simply drag and drop it outside the dock."
+msgstr ""
+"ແອັບເປັດສາມາດຢູ່ໃນເດສເລັດ, ເຊິ່ງເປັນໜ້າຕ່າງນ້ອຍໆທີ່ສາມາດວາງໄວ້ບ່ອນໃດກໍໄດ້ເທິງເດັສທັອບຂອງທ່ານ.\n"
+"ເພື່ອແຍກແອັບເປັດອອກຈາກແທ່ນດັອກ, ພຽງແຕ່ລາກແລະວາງມັນອອກໄປນອກແທ່ນດັອກ."
+
+#: ../Help/data/messages:91
+msgid "Moving desklets"
+msgstr "ການຍ້າຍເດສເລັດ"
+
+#: ../Help/data/messages:93
+msgid ""
+"Desklets can be moved anywhere simply with the mouse.\n"
+"They can also be rotated by dragging the small arrows on the top and left "
+"sides.\n"
+"If you don't want to move it any more, you can lock its position by right-"
+"clicking on it -> \"lock position\". To unlock it, de-select this option."
+msgstr ""
+"ເດສເລັດສາມາດຍ້າຍໄປບ່ອນໃດກໍໄດ້ງ່າຍໆດ້ວຍເມົ້າ.\n"
+"ພວກມັນຍັງສາມາດໝຸນໄດ້ໂດຍການລາກລູກສອນນ້ອຍໆຢູ່ດ້ານເທິງແລະດ້ານຊ້າຍ.\n"
+"ຖ້າທ່ານບໍ່ຕ້ອງການຍ້າຍມັນອີກ, ທ່ານສາມາດລັອກຕຳແໜ່ງຂອງມັນໄດ້ໂດຍການຄລິກຂວາໃສ່ມັນ -> "
+"\"ລັອກຕຳແໜ່ງ\". ເພື່ອປົດລັອກ, ໃຫ້ຍົກເລີກການເລືອກຕົວເລືອກນີ້."
+
+#: ../Help/data/messages:95
+msgid "Placing desklets"
+msgstr "ການວາງເດສເລັດ"
+
+#: ../Help/data/messages:97
+msgid ""
+"From the menu (right-click -> visibility), you can also decide to keep it "
+"above other windows, or on the Widget Layer (if you use Compiz), or make a "
+"\"desklet bar\" by placing them on a side of the screen and selecting "
+"\"reserve space\".\n"
+"Desklets that don't need interaction (like the clock) can be set transparent "
+"to the mouse (means you can click on what is behind them), by clicking on "
+"the small bottom-right button."
+msgstr ""
+"ຈາກເມນູ (ຄລິກຂວາ -> ການເບິ່ງເຫັນ), ທ່ານຍັງສາມາດຕັດສິນໃຈໃຫ້ມັນຢູ່ເໜືອໜ້າຕ່າງອື່ນ, ຫຼື ຢູ່ເທິງຊັ້ນວິດເຈັດ "
+"(ຖ້າທ່ານໃຊ້ Compiz), ຫຼື ສ້າງ \"ແຖບເດສເລັດ\" ໂດຍການວາງພວກມັນໄວ້ຂ້າງໜຶ່ງຂອງໜ້າຈໍ ແລະ ເລືອກ "
+"\"ຈອງພື້ນທີ່\".\n"
+"ເດສເລັດທີ່ບໍ່ຕ້ອງການການໂຕ້ຕອບ (ເຊັ່ນ: ໂມງ) ສາມາດຕັ້ງໃຫ້ໂປ່ງໃສຕໍ່ເມົ້າໄດ້ "
+"(ໝາຍຄວາມວ່າທ່ານສາມາດຄລິກໃສ່ສິ່ງທີ່ຢູ່ເບື້ອງຫຼັງພວກມັນ), ໂດຍການຄລິກໃສ່ປຸ່ມນ້ອຍໆດ້ານລຸ່ມຂວາ."
+
+#: ../Help/data/messages:99
+msgid "Changing the desklets decorations"
+msgstr "ການປ່ຽນການຕົກແຕ່ງຂອງເດສເລັດ"
+
+#: ../Help/data/messages:101
+msgid ""
+"Desklets can have decorations. To change that, open the settings of the "
+"applet, go to Desklet, and select the decoration you want (you can provide "
+"your own one)."
+msgstr ""
+"ເດສເລັດສາມາດມີການຕົກແຕ່ງໄດ້. ເພື່ອປ່ຽນແປງສິ່ງນັ້ນ, ເປີດການຕັ້ງຄ່າຂອງແອັບເປັດ, ໄປທີ່ ເດສເລັດ, ແລະ "
+"ເລືອກການຕົກແຕ່ງທີ່ທ່ານຕ້ອງການ (ທ່ານສາມາດໃຫ້ຂອງຕົນເອງໄດ້)."
+
+#: ../Help/data/messages:103
+msgid "Useful Features"
+msgstr "ຄຸນສົມບັດທີ່ເປັນປະໂຫຍດ"
+
+#: ../Help/data/messages:105
+msgid "Having a calendar with tasks"
+msgstr "ການມີປະຕິທິນພ້ອມກັບໜ້າວຽກ"
+
+#: ../Help/data/messages:107
+msgid ""
+"Activate the Clock applet.\n"
+"Clicking on it will display a calendar.\n"
+"Double-clicking on a day will pop-up a task-editor. Here you can add/remove "
+"tasks.\n"
+"When a task has been or is going to be scheduled, the applet will warn you "
+"(15mn before the event, and also 1 day before in the case of an anniversary)."
+msgstr ""
+"ເປີດໃຊ້ແອັບເປັດໂມງ.\n"
+"ການຄລິກໃສ່ມັນຈະສະແດງປະຕິທິນ.\n"
+"ການຄລິກສອງຄັ້ງໃສ່ວັນທີຈະສະແດງໂຕແກ້ໄຂໜ້າວຽກຂຶ້ນມາ. ທີ່ນີ້ທ່ານສາມາດເພີ່ມ/ລຶບໜ້າວຽກໄດ້.\n"
+"ເມື່ອໜ້າວຽກໃດໜຶ່ງຖືກກຳນົດເວລາໄວ້ແລ້ວ ຫຼື ກຳລັງຈະຖືກກຳນົດ, ແອັບເປັດຈະແຈ້ງເຕືອນທ່ານ (15 "
+"ນາທີກ່ອນເຫດການ, ແລະ ຍັງແຈ້ງເຕືອນ 1 ມື້ກ່ອນໃນກໍລະນີວັນຄົບຮອບ)."
+
+#: ../Help/data/messages:109
+msgid "Having a list of all windows"
+msgstr "ການມີລາຍຊື່ຂອງໜ້າຕ່າງທັງໝົດ"
+
+#: ../Help/data/messages:111
+msgid ""
+"Activate the Switcher applet.\n"
+"Right-clicking on it will give you access to a list containing all the "
+"windows, sorted by desktops.\n"
+"You can also display the windows side-by-side if your Window-Manager is able "
+"to do that.\n"
+"You can bind this action to the middle-click."
+msgstr ""
+"ເປີດໃຊ້ແອັບເປັດໂຕສັບປ່ຽນ.\n"
+"ການຄລິກຂວາໃສ່ມັນຈະໃຫ້ທ່ານເຂົ້າເຖິງລາຍຊື່ທີ່ບັນຈຸໜ້າຕ່າງທັງໝົດ, ຈັດຮຽງຕາມເດັສທັອບ.\n"
+"ທ່ານຍັງສາມາດສະແດງໜ້າຕ່າງຄຽງຂ້າງກັນໄດ້ ຖ້າໂຕຈັດການໜ້າຕ່າງຂອງທ່ານສາມາດເຮັດໄດ້.\n"
+"ທ່ານສາມາດຜູກການກະທຳນີ້ເຂົ້າກັບການຄລິກປຸ່ມກາງໄດ້."
+
+#: ../Help/data/messages:113
+msgid "Showing all the desktops"
+msgstr "ການສະແດງເດັສທັອບທັງໝົດ"
+
+#: ../Help/data/messages:115
+msgid ""
+"Activate either the Switcher applet or the Show-Desktop applet.\n"
+"Right-click on it -> \"show all the desktop\".\n"
+"You can bind this action to the middle-click."
+msgstr ""
+"ເປີດໃຊ້ແອັບເປັດໂຕສັບປ່ຽນ ຫຼື ແອັບເປັດສະແດງເດັສທັອບ.\n"
+"ຄລິກຂວາໃສ່ມັນ -> \"ສະແດງເດັສທັອບທັງໝົດ\".\n"
+"ທ່ານສາມາດຜູກການກະທຳນີ້ເຂົ້າກັບການຄລິກປຸ່ມກາງໄດ້."
+
+#: ../Help/data/messages:117
+msgid "Changing the screen resolution"
+msgstr "ການປ່ຽນຄວາມລະອຽດໜ້າຈໍ"
+
+#: ../Help/data/messages:119
+msgid ""
+"Activate the Show-Desktop applet.\n"
+"Right-click on it -> \"change resolution\" -> select the one you want."
+msgstr ""
+"ເປີດໃຊ້ແອັບເປັດສະແດງເດັສທັອບ.\n"
+"ຄລິກຂວາໃສ່ມັນ -> \"ປ່ຽນຄວາມລະອຽດ\" -> ເລືອກອັນທີ່ທ່ານຕ້ອງການ."
+
+#: ../Help/data/messages:121
+msgid "Locking your session"
+msgstr "ການລັອກເຊສຊັນຂອງທ່ານ"
+
+#: ../Help/data/messages:123
+msgid ""
+"Activate the Log-out applet.\n"
+"Right-click on it -> \"lock screen\".\n"
+"You can bind this action to the middle-click."
+msgstr ""
+"ເປີດໃຊ້ແອັບເປັດອອກຈາກລະບົບ.\n"
+"ຄລິກຂວາໃສ່ມັນ -> \"ລັອກໜ້າຈໍ\".\n"
+"ທ່ານສາມາດຜູກການກະທຳນີ້ເຂົ້າກັບການຄລິກປຸ່ມກາງໄດ້."
+
+#: ../Help/data/messages:125
+msgid "Quick-launching a program from keyboard (replacing ALT+F2)"
+msgstr "ການເປີດໂປຣແກຣມດ່ວນຈາກແປ້ນພິມ (ແທນທີ່ ALT+F2)"
+
+#: ../Help/data/messages:127
+msgid ""
+"Activate the Applications Menu applet.\n"
+"Middle-click on it, or right-click -> \"quick-launch\".\n"
+"You can bin a shortkey for this action.\n"
+"The text is automatically completed (for instance, typing \"fir\" will be "
+"completed into \"firefox\")."
+msgstr ""
+"ເປີດໃຊ້ແອັບເປັດເມນູໂປຣແກຣມ.\n"
+"ຄລິກປຸ່ມກາງໃສ່ມັນ, ຫຼື ຄລິກຂວາ -> \"ເປີດດ່ວນ\".\n"
+"ທ່ານສາມາດກຳນົດປຸ່ມລັດສຳລັບການກະທຳນີ້ໄດ້.\n"
+"ຂໍ້ຄວາມຈະຖືກຕື່ມໃຫ້ຄົບໂດຍອັດຕະໂນມັດ (ຕົວຢ່າງ, ການພິມ \"fir\" ຈະຖືກຕື່ມເປັນ \"firefox\")."
+
+#: ../Help/data/messages:129
+msgid "Turning Composite OFF during games"
+msgstr "ການປິດຄອມໂພສິດໃນລະຫວ່າງຫຼິ້ນເກມ"
+
+#: ../Help/data/messages:131
+msgid ""
+"Activate the Composite Manager applet.\n"
+"Clicking on it will disable the Composite, which often makes games more "
+"smooth.\n"
+"Clicking again on it will enable the Composite."
+msgstr ""
+"ເປີດໃຊ້ແອັບເປັດໂຕຈັດການຄອມໂພສິດ.\n"
+"ການຄລິກໃສ່ມັນຈະປິດການໃຊ້ງານຄອມໂພສິດ, ເຊິ່ງມັກຈະເຮັດໃຫ້ການຫຼິ້ນເກມລ່ຽນໄຫຼຂຶ້ນ.\n"
+"ການຄລິກໃສ່ມັນອີກຄັ້ງຈະເປີດການໃຊ້ງານຄອມໂພສິດ."
+
+#: ../Help/data/messages:133
+msgid "Seeing the hourly weather forecast"
+msgstr "ການເບິ່ງພະຍາກອນອາກາດລາຍຊົ່ວໂມງ"
+
+#: ../Help/data/messages:135
+msgid ""
+"Activate the Weather applet.\n"
+"Open its settings, go to Configure, and type the name of your city. Press "
+"Enter, and select your city from the list that will appear.\n"
+"Then validate to close the settings window.\n"
+"Now, double-clicking on a day will lead you to the web page of the hourly "
+"forecast for this day."
+msgstr ""
+"ເປີດໃຊ້ແອັບເປັດພະຍາກອນອາກາດ.\n"
+"ເປີດການຕັ້ງຄ່າຂອງມັນ, ໄປທີ່ ຕັ້ງຄ່າ, ແລະ ພິມຊື່ເມືອງຂອງທ່ານ. ກົດ Enter, ແລະ "
+"ເລືອກເມືອງຂອງທ່ານຈາກລາຍຊື່ທີ່ຈະປາກົດຂຶ້ນ.\n"
+"ຈາກນັ້ນກົດຢືນຢັນເພື່ອປິດໜ້າຕ່າງການຕັ້ງຄ່າ.\n"
+"ຕອນນີ້, ການຄລິກສອງຄັ້ງໃສ່ວັນໃດໜຶ່ງຈະພາທ່ານໄປທີ່ໜ້າເວັບຂອງພະຍາກອນອາກາດລາຍຊົ່ວໂມງສຳລັບວັນນັ້ນ."
+
+#: ../Help/data/messages:137
+msgid "Adding a file or a web page into the dock"
+msgstr "ການເພີ່ມໄຟລ໌ ຫຼື ໜ້າເວັບເຂົ້າໃນແທ່ນດັອກ"
+
+#: ../Help/data/messages:139
+msgid ""
+"Simply drag a file or an html link and drop it onto the dock (an animated "
+"arrow should appear when you can drop).\n"
+"It will be added into the Stack. The Stack is a sub-dock that can contain "
+"any file or link you want to access quickly.\n"
+"You can have several Stacks, and you can drop files/links onto a Stack "
+"directly."
+msgstr ""
+"ພຽງແຕ່ລາກໄຟລ໌ ຫຼື ລິ້ງ html ແລະ ວາງມັນລົງເທິງແທ່ນດັອກ "
+"(ລູກສອນເຄື່ອນໄຫວຄວນຈະປາກົດຂຶ້ນເມື່ອທ່ານສາມາດວາງໄດ້).\n"
+"ມັນຈະຖືກເພີ່ມເຂົ້າໃນ Stack. Stack ແມ່ນແທ່ນດັອກຍ່ອຍທີ່ສາມາດບັນຈຸໄຟລ໌ ຫຼື "
+"ລິ້ງໃດກໍໄດ້ທີ່ທ່ານຕ້ອງການເຂົ້າເຖິງຢ່າງວ່ອງໄວ.\n"
+"ທ່ານສາມາດມີຫຼາຍ Stack, ແລະ ທ່ານສາມາດວາງໄຟລ໌/ລິ້ງລົງເທິງ Stack ໂດຍກົງ."
+
+#: ../Help/data/messages:141
+msgid "Importing a folder into the dock"
+msgstr "ການນຳເຂົ້າໂຟເດີເຂົ້າໃນແທ່ນດັອກ"
+
+#: ../Help/data/messages:143
+msgid ""
+"Simply drag a folder and drop it onto the dock (an animated arrow should "
+"appear when you can drop).\n"
+"You can choose to import the folder's files or not."
+msgstr ""
+"ພຽງແຕ່ລາກໂຟເດີ ແລະ ວາງມັນລົງເທິງແທ່ນດັອກ "
+"(ລູກສອນເຄື່ອນໄຫວຄວນຈະປາກົດຂຶ້ນເມື່ອທ່ານສາມາດວາງໄດ້).\n"
+"ທ່ານສາມາດເລືອກວ່າຈະນຳເຂົ້າໄຟລ໌ຂອງໂຟເດີຫຼືບໍ່."
+
+#: ../Help/data/messages:145
+msgid "Accessing the recent events"
+msgstr "ການເຂົ້າເຖິງເຫດການຫຼ້າສຸດ"
+
+#: ../Help/data/messages:147
+msgid ""
+"Activate the Recent-Events applet.\n"
+"You need to have the Zeitgeist daemon to be running. Install it if it's not "
+"present.\n"
+"The applet can then display all the files, folders, web pages, songs, videos "
+"and documents you have accessed recently, so that you can access them "
+"quickly."
+msgstr ""
+"ເປີດໃຊ້ແອັບເປັດເຫດການຫຼ້າສຸດ.\n"
+"ທ່ານຈຳເປັນຕ້ອງໃຫ້ Zeitgeist daemon ເຮັດວຽກຢູ່. ຕິດຕັ້ງມັນຖ້າຍັງບໍ່ມີ.\n"
+"ແອັບເປັດຈະສາມາດສະແດງໄຟລ໌, ໂຟເດີ, ໜ້າເວັບ, ເພງ, ວິດີໂອ ແລະ "
+"ເອກະສານທັງໝົດທີ່ທ່ານເຂົ້າເຖິງເມື່ອບໍ່ດົນມານີ້, ເພື່ອໃຫ້ທ່ານສາມາດເຂົ້າເຖິງພວກມັນໄດ້ຢ່າງວ່ອງໄວ."
+
+#: ../Help/data/messages:149
+msgid "Quickly opening a recent file with a launcher"
+msgstr "ການເປີດໄຟລ໌ຫຼ້າສຸດຢ່າງວ່ອງໄວດ້ວຍໂຕເປີດໂປຣແກຣມ"
+
+#: ../Help/data/messages:151
+msgid ""
+"Activate the Recent-Events applet.\n"
+"You need to have the Zeitgeist daemon to be running. Install it if it's not "
+"present.\n"
+"Now when you right-click on a launcher, all the recent files that can be "
+"opened with this launcher will appear in its menu."
+msgstr ""
+"ເປີດໃຊ້ແອັບເປັດເຫດການຫຼ້າສຸດ.\n"
+"ທ່ານຈຳເປັນຕ້ອງໃຫ້ Zeitgeist daemon ເຮັດວຽກຢູ່. ຕິດຕັ້ງມັນຖ້າຍັງບໍ່ມີ.\n"
+"ຕອນນີ້ເມື່ອທ່ານຄລິກຂວາໃສ່ໂຕເປີດໂປຣແກຣມ, "
+"ໄຟລ໌ຫຼ້າສຸດທັງໝົດທີ່ສາມາດເປີດດ້ວຍໂຕເປີດໂປຣແກຣມນີ້ຈະປາກົດໃນເມນູຂອງມັນ."
+
+#: ../Help/data/messages:153
+msgid "Accessing disks"
+msgstr "ການເຂົ້າເຖິງດິສກ໌"
+
+#: ../Help/data/messages:155
+msgid ""
+"Activate the Shortcuts applet.\n"
+"Then all the disks (including USB key or external hard drives) will be "
+"listed in a sub-dock.\n"
+"To unmount a disk before disconnecting it, middle-click on its icon."
+msgstr ""
+"ເປີດໃຊ້ແອັບເປັດທາງລັດ.\n"
+"ຈາກນັ້ນດິສກ໌ທັງໝົດ (ລວມທັງ USB ຫຼື ຮາດດິສກ໌ພາຍນອກ) ຈະຖືກສະແດງໃນແທ່ນດັອກຍ່ອຍ.\n"
+"ເພື່ອ unmount ດິສກ໌ກ່ອນທີ່ຈະຕັດການເຊື່ອມຕໍ່, ໃຫ້ຄລິກປຸ່ມກາງໃສ່ໄອຄອນຂອງມັນ."
+
+#: ../Help/data/messages:157
+msgid "Accessing folder bookmarks"
+msgstr "ການເຂົ້າເຖິງບຸກມາກໂຟເດີ"
+
+#: ../Help/data/messages:159
+msgid ""
+"Activate the Shortcuts applet.\n"
+"Then all the folders bookmarks (the ones that appear in Nautilus) will be "
+"listed in a sub-dock.\n"
+"To add a bookmark, simply drag-and-drop a folder onto the applet's icon.\n"
+"To remove a bookmark, right-click on its icon -> remove"
+msgstr ""
+"ເປີດໃຊ້ແອັບເປັດທາງລັດ.\n"
+"ຈາກນັ້ນບຸກມາກໂຟເດີທັງໝົດ (ອັນທີ່ປາກົດໃນ Nautilus) ຈະຖືກສະແດງໃນແທ່ນດັອກຍ່ອຍ.\n"
+"ເພື່ອເພີ່ມບຸກມາກ, ພຽງແຕ່ລາກ-ແລະ-ວາງໂຟເດີລົງເທິງໄອຄອນຂອງແອັບເປັດ.\n"
+"ເພື່ອລຶບບຸກມາກ, ຄລິກຂວາໃສ່ໄອຄອນຂອງມັນ -> ລຶບ"
+
+#: ../Help/data/messages:161
+msgid "Having multiple instances of an applet"
+msgstr "ການມີແອັບເປັດຫຼາຍໂຕໃນເວລາດຽວກັນ"
+
+#: ../Help/data/messages:163
+msgid ""
+"Some applets can have several instances running at the same time: Clock, "
+"Stack, Weather, ...\n"
+"Right click on the applet's icon -> \"launch another instance\".\n"
+"You can configure each instance independently. This allows you, for example, "
+"to have the current time for different countries in your dock or the weather "
+"in different cities."
+msgstr ""
+"ແອັບເປັດບາງອັນສາມາດມີຫຼາຍໂຕເຮັດວຽກພ້ອມກັນໄດ້: ໂມງ, Stack, ພະຍາກອນອາກາດ, ...\n"
+"ຄລິກຂວາໃສ່ໄອຄອນຂອງແອັບເປັດ -> \"ເປີດອີກໂຕໜຶ່ງ\".\n"
+"ທ່ານສາມາດຕັ້ງຄ່າແຕ່ລະໂຕໄດ້ຢ່າງອິດສະຫຼະ. ນີ້ອະນຸຍາດໃຫ້ທ່ານ, ຕົວຢ່າງ, "
+"ມີເວລາປັດຈຸບັນຂອງປະເທດຕ່າງໆໃນແທ່ນດັອກຂອງທ່ານ ຫຼື ພະຍາກອນອາກາດໃນເມືອງຕ່າງໆ."
+
+#: ../Help/data/messages:165
+msgid "Adding / removing a desktop"
+msgstr "ການເພີ່ມ / ລຶບເດັສທັອບ"
+
+#: ../Help/data/messages:167
+msgid ""
+"Activate the Switcher applet.\n"
+"Right-click on it -> \"add a desktop\" or \"remove this desktop\".\n"
+"You can even name each of them."
+msgstr ""
+"ເປີດໃຊ້ແອັບເປັດໂຕສັບປ່ຽນ.\n"
+"ຄລິກຂວາໃສ່ມັນ -> \"ເພີ່ມເດັສທັອບ\" ຫຼື \"ລຶບເດັສທັອບນີ້\".\n"
+"ທ່ານຍັງສາມາດຕັ້ງຊື່ໃຫ້ແຕ່ລະອັນໄດ້."
+
+#: ../Help/data/messages:169
+msgid "Controlling the sound volume"
+msgstr "ການຄວບຄຸມລະດັບສຽງ"
+
+#: ../Help/data/messages:171
+msgid ""
+"Activate the Sound Volume applet.\n"
+"Then scroll up/down to increase/decrease the sound.\n"
+"Alternatively, you can click on the icon and move the scroll bar.\n"
+"Middle-click will mute/unmute."
+msgstr ""
+"ເປີດໃຊ້ແອັບເປັດລະດັບສຽງ.\n"
+"ຈາກນັ້ນເລື່ອນຂຶ້ນ/ລົງເພື່ອເພີ່ມ/ຫຼຸດສຽງ.\n"
+"ອີກທາງເລືອກໜຶ່ງ, ທ່ານສາມາດຄລິກໃສ່ໄອຄອນ ແລະ ຍ້າຍແຖບເລື່ອນ.\n"
+"ການຄລິກປຸ່ມກາງຈະປິດ/ເປີດສຽງ."
+
+#: ../Help/data/messages:173
+msgid "Controlling the screen brightness"
+msgstr "ການຄວບຄຸມຄວາມສະຫວ່າງໜ້າຈໍ"
+
+#: ../Help/data/messages:175
+msgid ""
+"Activate the Screen Luminosity applet.\n"
+"Then scroll up/down to increase/decrease the brightness.\n"
+"Alternatively, you can click on the icon and move the scroll bar."
+msgstr ""
+"ເປີດໃຊ້ແອັບເປັດຄວາມສະຫວ່າງໜ້າຈໍ.\n"
+"ຈາກນັ້ນເລື່ອນຂຶ້ນ/ລົງເພື່ອເພີ່ມ/ຫຼຸດຄວາມສະຫວ່າງ.\n"
+"ອີກທາງເລືອກໜຶ່ງ, ທ່ານສາມາດຄລິກໃສ່ໄອຄອນ ແລະ ຍ້າຍແຖບເລື່ອນ."
+
+#: ../Help/data/messages:177
+msgid "Troubleshooting"
+msgstr "ການແກ້ໄຂບັນຫາ"
+
+#: ../Help/data/messages:179
+msgid "If you have any question, don't hesitate to ask on our Github Page."
+msgstr "ຖ້າທ່ານມີຄຳຖາມໃດໆ, ຢ່າລັງເລທີ່ຈະຖາມໃນໜ້າ Github ຂອງພວກເຮົາ."
+
+#: ../Help/data/messages:181
+msgid "Discussions"
+msgstr "ການສົນທະນາ"
+
+#: ../Help/data/messages:183
+msgid "Our wiki can also help you, it is more complete on some points."
+msgstr "ວິກິຂອງພວກເຮົາກໍສາມາດຊ່ວຍທ່ານໄດ້, ມັນຄົບຖ້ວນກວ່າໃນບາງຈຸດ."
+
+#: ../Help/data/messages:185
+msgid "Wiki"
+msgstr "ວິກິ"
+
+#: ../Help/data/messages:187
+msgid "I have a black background around my dock."
+msgstr "ຂ້ອຍມີພື້ນຫຼັງສີດຳອ້ອມຮອບແທ່ນດັອກຂອງຂ້ອຍ."
+
+#: ../Help/data/messages:189
+msgid ""
+"You need to turn on compositing. For instance, you can run Compiz or "
+"xcompmgr. \n"
+"If you're using XFCE or KDE, you can just enable compositing in the window "
+"manager options.\n"
+"If you're using Gnome, you can enable it in Metacity in this way :\n"
+" Open dconf-editor, edit the key 'org.gnome.metacity.compositing-manager' "
+"and set it to 'true'."
+msgstr ""
+"ທ່ານຈຳເປັນຕ້ອງເປີດການປະສົມພາບ (compositing). ຕົວຢ່າງ, ທ່ານສາມາດເປີດໃຊ້ Compiz ຫຼື "
+"xcompmgr. \n"
+"ຖ້າທ່ານໃຊ້ XFCE ຫຼື KDE, ທ່ານພຽງແຕ່ເປີດໃຊ້ການປະສົມພາບໃນຕົວເລືອກຂອງໂຕຈັດການໜ້າຕ່າງ.\n"
+"ຖ້າທ່ານໃຊ້ Gnome, ທ່ານສາມາດເປີດໃຊ້ມັນໃນ Metacity ດ້ວຍວິທີນີ້:\n"
+" ເປີດ dconf-editor, ແກ້ໄຂຄີ 'org.gnome.metacity.compositing-manager' ແລະ "
+"ຕັ້ງຄ່າເປັນ 'true'."
+
+#: ../Help/data/messages:191
+msgid "My machine is too old to run a composite manager."
+msgstr "ເຄື່ອງຄອມພິວເຕີຂອງຂ້ອຍເກົ່າເກີນໄປທີ່ຈະເປີດໃຊ້ໂຕຈັດການການປະສົມພາບ."
+
+#: ../Help/data/messages:193
+msgid ""
+"Don't panic, Cairo-Dock can emulate the transparency.\n"
+"To get rid of the black background, simply enable the corresponding option "
+"in the end of the «System» module"
+msgstr ""
+"ຢ່າຕົກໃຈ, Cairo-Dock ສາມາດຈຳລອງຄວາມໂປ່ງໃສໄດ້.\n"
+"ເພື່ອລົບພື້ນຫຼັງສີດຳອອກ, ພຽງແຕ່ເປີດໃຊ້ຕົວເລືອກທີ່ກ່ຽວຂ້ອງໃນຕອນທ້າຍຂອງໂມດູນ «ລະບົບ»"
+
+#: ../Help/data/messages:195
+msgid "The dock is horribly slow when I move the mouse into it."
+msgstr "ແທ່ນດັອກຊ້າຢ່າງໜ້າຢ້ານເມື່ອຂ້ອຍຍ້າຍເມົ້າເຂົ້າໄປໃນມັນ."
+
+#: ../Help/data/messages:197
+msgid ""
+"If you have an Nvidia GeForce8 graphics card, please install the latest "
+"drivers, as the first ones were really buggy.\n"
+"If the dock is running without OpenGL, try to reduce the number of icons in "
+"the main dock, or try to reduce its size.\n"
+"If the dock is running with OpenGL, try to disable it by launching the dock "
+"with «cairo-dock -c»."
+msgstr ""
+"ຖ້າທ່ານມີກາດຈໍ Nvidia GeForce8, ກະລຸນາຕິດຕັ້ງໄດຣເວີລ່າສຸດ, ເພາະວ່າລຸ້ນທຳອິດມີບັກຫຼາຍແທ້ໆ.\n"
+"ຖ້າແທ່ນດັອກເຮັດວຽກໂດຍບໍ່ມີ OpenGL, ລອງຫຼຸດຈຳນວນໄອຄອນໃນແທ່ນດັອກຫຼັກ, ຫຼື ລອງຫຼຸດຂະໜາດຂອງມັນ.\n"
+"ຖ້າແທ່ນດັອກເຮັດວຽກດ້ວຍ OpenGL, ລອງປິດການໃຊ້ງານມັນໂດຍການເປີດແທ່ນດັອກດ້ວຍ «cairo-dock -c»."
+
+#: ../Help/data/messages:199
+msgid "I don't have these wonderful effects like fire, cube rotating, etc."
+msgstr "ຂ້ອຍບໍ່ມີເອັບເຟັກທີ່ໜ້າອັດສະຈັນເຫຼົ່ານີ້ ເຊັ່ນ: ໄຟ, ການໝຸນຂອງກ້ອນຄິວ, ແລະ ອື່ນໆ."
+
+#: ../Help/data/messages:201
+msgid ""
+"Tip: You can force OpenGL by launching the dock with «cairo-dock -o».but you "
+"might get a lot of visual artifacts."
+msgstr ""
+"ຄຳແນະນຳ: ທ່ານສາມາດບັງຄັບໃຊ້ OpenGL ໄດ້ໂດຍການເປີດແທ່ນດັອກດ້ວຍ «cairo-dock -o», "
+"ແຕ່ທ່ານອາດຈະໄດ້ຮັບພາບທີ່ຜິດປົກກະຕິຫຼາຍ."
+
+#: ../Help/data/messages:203
+msgid ""
+"You need a graphics card with drivers that support OpenGL2.0. Most Nvidia "
+"cards can do this, as can more and more Intel cards. Most ATI cards do not "
+"support OpenGL2.0."
+msgstr ""
+"ທ່ານຈຳເປັນຕ້ອງມີກາດຈໍທີ່ມີໄດຣເວີທີ່ຮອງຮັບ OpenGL2.0. ກາດຈໍ Nvidia ສ່ວນໃຫຍ່ສາມາດເຮັດໄດ້, "
+"ເຊັ່ນດຽວກັນກັບກາດຈໍ Intel ທີ່ນັບມື້ນັບຫຼາຍຂຶ້ນ. ກາດຈໍ ATI ສ່ວນໃຫຍ່ບໍ່ຮອງຮັບ OpenGL2.0."
+
+#: ../Help/data/messages:205
+msgid "I don't have any themes in the Theme Manager, except the default one."
+msgstr "ຂ້ອຍບໍ່ມີຊຸດຮູບແບບໃດໆໃນໂຕຈັດການຊຸດຮູບແບບ, ຍົກເວັ້ນອັນເລີ່ມຕົ້ນ."
+
+#: ../Help/data/messages:207
+msgid "Hint : Up to version 2.1.1-2, wget was used."
+msgstr "ຄຳແນະນຳ: ຈົນເຖິງເວີຊັນ 2.1.1-2, wget ໄດ້ຖືກໃຊ້."
+
+#: ../Help/data/messages:209
+msgid ""
+"Be sure that you are connected to the Net.\n"
+" If your connection is very slow, you can increase the connection timeout in "
+"the \"System\" module.\n"
+" If you're under a proxy, you'll have to configure \"curl\" to use it; "
+"search on the web how to do it (basically, you have to set up the "
+"\"http_proxy\" environment variable)."
+msgstr ""
+"ກວດສອບໃຫ້ແນ່ໃຈວ່າທ່ານເຊື່ອມຕໍ່ກັບອິນເຕີເນັດແລ້ວ.\n"
+" ຖ້າການເຊື່ອມຕໍ່ຂອງທ່ານຊ້າຫຼາຍ, ທ່ານສາມາດເພີ່ມເວລາໝົດກຳນົດຂອງການເຊື່ອມຕໍ່ໄດ້ໃນໂມດູນ \"ລະບົບ\".\n"
+" ຖ້າທ່ານຢູ່ພາຍໃຕ້ພຣັອກຊີ, ທ່ານຈະຕ້ອງຕັ້ງຄ່າ \"curl\" ເພື່ອໃຊ້ມັນ; ຄົ້ນຫາວິທີການໃນເວັບ "
+"(ໂດຍພື້ນຖານແລ້ວ, ທ່ານຕ້ອງຕັ້ງຄ່າຕົວແປສະພາບແວດລ້ອມ \"http_proxy\")."
+
+#: ../Help/data/messages:211
+msgid "The «netspeed» applet displays 0 even when I'm downloading something"
+msgstr "ແອັບເປັດ «netspeed» ສະແດງ 0 ເຖິງແມ່ນວ່າຂ້ອຍກຳລັງດາວໂຫຼດບາງຢ່າງຢູ່"
+
+#: ../Help/data/messages:213
+msgid ""
+"Tip: you can run several instances of this applet if you wish to monitor "
+"several interfaces."
+msgstr "ຄຳແນະນຳ: ທ່ານສາມາດເປີດໃຊ້ແອັບເປັດນີ້ຫຼາຍໂຕໄດ້ຖ້າທ່ານຕ້ອງການຕິດຕາມຫຼາຍອິນເຕີເຟດ."
+
+#: ../Help/data/messages:215
+msgid ""
+"You must tell the applet which interface you're using to connect to the Net "
+"(by default, this is «eth0»).\n"
+"Just edit its configuration, and enter the interface name. To find it, type "
+"«ifconfig» in a terminal, and ignore the «loop» interface. It's probably "
+"something like «eth1», «ath0», or «wifi0».."
+msgstr ""
+"ທ່ານຕ້ອງບອກແອັບເປັດວ່າທ່ານໃຊ້ອິນເຕີເຟດໃດເພື່ອເຊື່ອມຕໍ່ກັບອິນເຕີເນັດ (ໂດຍຄ່າເລີ່ມຕົ້ນແມ່ນ «eth0»).\n"
+"ພຽງແຕ່ແກ້ໄຂການຕັ້ງຄ່າຂອງມັນ, ແລະ ໃສ່ຊື່ອິນເຕີເຟດ. ເພື່ອຊອກຫາມັນ, ພິມ «ifconfig» ໃນເທີມິນໍ, ແລະ "
+"ບໍ່ສົນໃຈອິນເຕີເຟດ «loop». ມັນອາດຈະເປັນບາງຢ່າງເຊັ່ນ «eth1», «ath0», ຫຼື «wifi0».."
+
+#: ../Help/data/messages:217
+msgid "The dustbin remains empty even when I delete a file."
+msgstr "ຖັງຂີ້ເຫຍື້ອຫວ່າງເປົ່າເຖິງແມ່ນວ່າຂ້ອຍຈະລຶບໄຟລ໌."
+
+#: ../Help/data/messages:219
+msgid ""
+"if you're using KDE, you may have to specify the path to the trash folder.\n"
+"Just edit the applet's configuration, and fill in the Trash path; it is "
+"probably «~/.locale/share/Trash/files». Be very careful when typing a path "
+"here!!! (do not insert spaces or some invisible characters)."
+msgstr ""
+"ຖ້າທ່ານໃຊ້ KDE, ທ່ານອາດຈະຕ້ອງກຳນົດເສັ້ນທາງໄປຫາໂຟເດີຖັງຂີ້ເຫຍື້ອ.\n"
+"ພຽງແຕ່ແກ້ໄຂການຕັ້ງຄ່າຂອງແອັບເປັດ, ແລະ ຕື່ມໃສ່ເສັ້ນທາງ Trash; ມັນອາດຈະແມ່ນ «~/.locale/share/"
+"Trash/files». ລະມັດລະວັງຫຼາຍເມື່ອພິມເສັ້ນທາງທີ່ນີ້!!! (ຢ່າໃສ່ຍະຫວ່າງ ຫຼື ຕົວອັກສອນທີ່ເບິ່ງບໍ່ເຫັນ)."
+
+#: ../Help/data/messages:221
+msgid "The Project"
+msgstr "ໂຄງການ"
+
+#: ../Help/data/messages:223
+msgid "Join the project!"
+msgstr "ເຂົ້າຮ່ວມໂຄງການ!"
+
+#: ../Help/data/messages:225
+msgid ""
+"We value your help! If you see a bug, if you think something could be "
+"improved,\n"
+"or if you just made a dream about the dock, pay us a visit on https://github."
+"com/Cairo-Dock/cairo-dock-core.\n"
+"English (and others!) speakers are welcome, so don’t be shy ! ;-)\n"
+"\n"
+"If you made a theme for the dock or one of the applet, and want to share it, "
+"we’ll be happy to integrate it on our server !"
+msgstr ""
+"ພວກເຮົາເຫັນຄຸນຄ່າໃນການຊ່ວຍເຫຼືອຂອງທ່ານ! ຖ້າທ່ານເຫັນບັກ, ຖ້າທ່ານຄິດວ່າບາງຢ່າງສາມາດປັບປຸງໄດ້,\n"
+"ຫຼື ຖ້າທ່ານພຽງແຕ່ຝັນກ່ຽວກັບແທ່ນດັອກ, ມາຢ້ຽມຢາມພວກເຮົາໄດ້ທີ່ https://github.com/Cairo-Dock/"
+"cairo-dock-core.\n"
+"ຍິນດີຕ້ອນຮັບຜູ້ທີ່ເວົ້າພາສາອັງກິດ (ແລະ ພາສາອື່ນໆ!), ສະນັ້ນຢ່າອາຍ! ;-)\n"
+"\n"
+"ຖ້າທ່ານສ້າງຊຸດຮູບແບບສຳລັບແທ່ນດັອກ ຫຼື ແອັບເປັດໃດໜຶ່ງ, ແລະ ຕ້ອງການແບ່ງປັນ, "
+"ພວກເຮົາຍິນດີທີ່ຈະລວມມັນໄວ້ໃນເຊີບເວີຂອງພວກເຮົາ!"
+
+#: ../Help/data/messages:227
+msgid ""
+"If you wish to develop an applet, a complete documentation is available here."
+msgstr "ຖ້າທ່ານຕ້ອງການພັດທະນາແອັບເປັດ, ມີເອກະສານທີ່ສົມບູນໃຫ້ຢູ່ທີ່ນີ້."
+
+#: ../Help/data/messages:229
+msgid "Documentation"
+msgstr "ເອກະສານ"
+
+#: ../Help/data/messages:231
+msgid ""
+"If you wish to develop an applet in Python, Perl or any other language,\n"
+"or to interact with the dock in any kind of way, a full DBus API is "
+"described here."
+msgstr ""
+"ຖ້າທ່ານຕ້ອງການພັດທະນາແອັບເປັດໃນ Python, Perl ຫຼື ພາສາອື່ນໆ,\n"
+"ຫຼື ເພື່ອໂຕ້ຕອບກັບແທ່ນດັອກໃນທຸກຮູບແບບ, DBus API ສະບັບເຕັມໄດ້ຖືກອະທິບາຍໄວ້ທີ່ນີ້."
+
+#: ../Help/data/messages:233
+msgid "DBus API"
+msgstr "DBus API"
+
+#: ../Help/data/messages:235
+msgid ""
+"\n"
+"\n"
+"The Cairo-Dock Team"
+msgstr ""
+"\n"
+"\n"
+"ທີມງານ Cairo-Dock"
+
+#: ../Help/data/messages:237
+msgid "Websites"
+msgstr "ເວັບໄຊ"
+
+#: ../Help/data/messages:239
+msgid "Problems? Suggestions? Just want to talk to us? Come on over!"
+msgstr "ມີບັນຫາ? ມີຄຳແນະນຳ? ພຽງແຕ່ຢາກລົມກັບພວກເຮົາ? ເຂົ້າມາເລີຍ!"
+
+#: ../Help/data/messages:241
+msgid "Community site"
+msgstr "ເວັບໄຊຊຸມຊົນ"
+
+#: ../Help/data/messages:247
+msgid "More applets available online!"
+msgstr "ມີແອັບເປັດເພີ່ມເຕີມໃຫ້ດາວໂຫຼດອອນລາຍ!"
+
+#: ../Help/data/messages:249
+msgid "Cairo-Dock-Plug-ins-Extras"
+msgstr "Cairo-Dock-Plug-ins-Extras"
+
+#: ../Help/data/messages:251
+msgid "Repositories"
+msgstr "ແຫຼ່ງເກັບຂໍ້ມູນ"
+
+#: ../Help/data/messages:253
+msgid ""
+"We maintain repositories for Ubuntu and derivatives on Launchpad for the "
+"stable and development versions of Cairo-Dock:"
+msgstr ""
+"ພວກເຮົາຮັກສາແຫຼ່ງເກັບຂໍ້ມູນສຳລັບ Ubuntu ແລະ ລະບົບທີ່ກ່ຽວຂ້ອງໃນ Launchpad ສຳລັບເວີຊັນຄົງທີ່ ແລະ "
+"ເວີຊັນພັດທະນາຂອງ Cairo-Dock:"
+
+#: ../Help/data/messages:255
+msgid "Stable"
+msgstr "ສະບັບຄົງທີ່"
+
+#: ../Help/data/messages:257
+msgid "https://launchpad.net/~cairo-dock-team/+archive/ubuntu/ppa"
+msgstr "https://launchpad.net/~cairo-dock-team/+archive/ubuntu/ppa"
+
+#: ../Help/data/messages:261
+msgid "https://launchpad.net/~cairo-dock-team/+archive/ubuntu/weekly"
+msgstr "https://launchpad.net/~cairo-dock-team/+archive/ubuntu/weekly"
+
+#: ../Help/data/messages:263 ../Help/data/messages:265 ../data/messages:1035
+#: ../data/messages:1067 ../data/messages:1103
+msgid "Icon"
+msgstr "ໄອຄອນ"
+
+#: ../Help/data/messages:267
+msgid "Name of the dock it belongs to:"
+msgstr "ຊື່ຂອງແທ່ນດັອກທີ່ມັນຂຶ້ນກັບ:"
+
+#: ../Help/data/messages:269
+msgid "Name of the icon as it will appear in its caption in the dock:"
+msgstr "ຊື່ຂອງໄອຄອນທີ່ຈະປາກົດໃນຄຳບັນຍາຍຂອງມັນໃນແທ່ນດັອກ:"
+
+#: ../Help/data/messages:271
+msgid "Leave empty to use the default one."
+msgstr "ປະໄວ້ຫວ່າງເພື່ອໃຊ້ອັນເລີ່ມຕົ້ນ."
+
+#: ../Help/data/messages:273
+msgid "Image filename:"
+msgstr "ຊື່ໄຟລ໌ຮູບພາບ:"
+
+#: ../Help/data/messages:275
+msgid "Set to 0 to use the default applet size"
+msgstr "ຕັ້ງເປັນ 0 ເພື່ອໃຊ້ຂະໜາດແອັບເປັດເລີ່ມຕົ້ນ"
+
+#: ../Help/data/messages:277
+msgid "Desired icon size for this applet"
+msgstr "ຂະໜາດໄອຄອນທີ່ຕ້ອງການສຳລັບແອັບເປັດນີ້"
+
+#: ../Help/data/messages:279
+msgid "Desklet"
+msgstr "ເດສເລັດ"
+
+#: ../Help/data/messages:283
+msgid ""
+"If locked, the desklet cannot be moved by simply dragging it with the left "
+"mouse button. It can still be moved with ALT + left-click."
+msgstr ""
+"ຖ້າຖືກລັອກ, ເດສເລັດຈະບໍ່ສາມາດຍ້າຍໄດ້ໂດຍການລາກດ້ວຍປຸ່ມເມົ້າຊ້າຍ. ມັນຍັງສາມາດຍ້າຍໄດ້ດ້ວຍ ALT + "
+"ຄລິກຊ້າຍ."
+
+#: ../Help/data/messages:285
+msgid "Lock position?"
+msgstr "ລັອກຕຳແໜ່ງບໍ່?"
+
+#: ../Help/data/messages:287
+msgid ""
+"Depending on your WindowManager, you may be able to resize this with ALT + "
+"middle-click or ALT + left-click."
+msgstr ""
+"ຂຶ້ນກັບໂຕຈັດການໜ້າຕ່າງຂອງທ່ານ, ທ່ານອາດຈະສາມາດປັບຂະໜາດນີ້ໄດ້ດ້ວຍ ALT + ຄລິກກາງ ຫຼື ALT + "
+"ຄລິກຊ້າຍ."
+
+#: ../Help/data/messages:289
+msgid "Desklet dimensions (width x height):"
+msgstr "ຂະໜາດຂອງເດສເລັດ (ກວ້າງ x ສູງ):"
+
+#: ../Help/data/messages:291
+msgid ""
+"Depending on your WindowManager, you may be able to move this with ALT + "
+"left-click.. Negative values are counted from the right/bottom of the screen"
+msgstr ""
+"ຂຶ້ນກັບໂຕຈັດການໜ້າຕ່າງຂອງທ່ານ, ທ່ານອາດຈະສາມາດຍ້າຍນີ້ໄດ້ດ້ວຍ ALT + ຄລິກຊ້າຍ.. "
+"ຄ່າລົບຈະຖືກນັບຈາກດ້ານຂວາ/ລຸ່ມຂອງໜ້າຈໍ"
+
+#: ../Help/data/messages:293
+msgid "Desklet position (x, y):"
+msgstr "ຕຳແໜ່ງຂອງເດສເລັດ (x, y):"
+
+#: ../Help/data/messages:295
+msgid ""
+"You can quickly rotate the desklet with the mouse, by dragging the little "
+"buttons on its left and top sides."
+msgstr ""
+"ທ່ານສາມາດໝຸນເດສເລັດໄດ້ຢ່າງວ່ອງໄວດ້ວຍເມົ້າ, ໂດຍການລາກປຸ່ມນ້ອຍໆຢູ່ດ້ານຊ້າຍ ແລະ ດ້ານເທິງຂອງມັນ."
+
+#: ../Help/data/messages:297
+msgid "Rotation:"
+msgstr "ການໝຸນ:"
+
+#: ../Help/data/messages:301
+msgid "Is detached from the dock"
+msgstr "ຖືກແຍກອອກຈາກແທ່ນດັອກ"
+
+#: ../Help/data/messages:303
+msgid ""
+"for CompizFusion's \"widget layer\", set behaviour in Compiz to: "
+"(class=Cairo-dock & type=Utility)"
+msgstr ""
+"ສຳລັບ \"ຊັ້ນວິດເຈັດ\" ຂອງ CompizFusion, ຕັ້ງພຶດຕິກຳໃນ Compiz ເປັນ: (class=Cairo-dock & "
+"type=Utility)"
+
+#: ../Help/data/messages:305 ../data/messages:21 ../data/messages:59
+#: ../data/messages:193 ../data/messages:253 ../data/messages:927
+msgid "Visibility:"
+msgstr "ການເບິ່ງເຫັນ:"
+
+#: ../Help/data/messages:311
+msgid "Keep below"
+msgstr "ຮັກສາໄວ້ດ້ານລຸ່ມ"
+
+#: ../Help/data/messages:313
+msgid "Keep on widget layer"
+msgstr "ຮັກສາໄວ້ໃນຊັ້ນວິດເຈັດ"
+
+#: ../Help/data/messages:317
+msgid "Should be visible on all desktops?"
+msgstr "ຄວນຈະເຫັນໄດ້ໃນທຸກເດັສທັອບບໍ່?"
+
+#: ../Help/data/messages:319 ../data/messages:595
+msgid "Decorations"
+msgstr "ການຕົກແຕ່ງ"
+
+#: ../Help/data/messages:321
+msgid "Choose 'Custom decorations' to define your own decorations below."
+msgstr "ເລືອກ 'ການຕົກແຕ່ງກຳນົດເອງ' ເພື່ອກຳນົດການຕົກແຕ່ງຂອງທ່ານເອງດ້ານລຸ່ມ."
+
+#: ../Help/data/messages:323
+msgid "Choose a decoration theme for this desklet:"
+msgstr "ເລືອກຊຸດຮູບແບບການຕົກແຕ່ງສຳລັບເດສເລັດນີ້:"
+
+#: ../Help/data/messages:325
+msgid ""
+"Image to be displayed below drawings, e.g. a frame. Leave empty for no image."
+msgstr "ຮູບພາບທີ່ຈະສະແດງຢູ່ລຸ່ມຮູບແຕ້ມ, ເຊັ່ນ: ຂອບຮູບ. ປະໄວ້ຫວ່າງຖ້າບໍ່ຕ້ອງການຮູບພາບ."
+
+#: ../Help/data/messages:327
+msgid "Background image:"
+msgstr "ຮູບພາບພື້ນຫຼັງ:"
+
+#: ../Help/data/messages:329
+msgid "Background transparency:"
+msgstr "ຄວາມໂປ່ງໃສຂອງພື້ນຫຼັງ:"
+
+#: ../Help/data/messages:331
+msgid "in pixels. Use this to adjust the left position of drawings."
+msgstr "ເປັນພິກເຊລ. ໃຊ້ນີ້ເພື່ອປັບຕຳແໜ່ງດ້ານຊ້າຍຂອງຮູບແຕ້ມ."
+
+#: ../Help/data/messages:333
+msgid "Left offset:"
+msgstr "ໄລຍະຫ່າງດ້ານຊ້າຍ:"
+
+#: ../Help/data/messages:335
+msgid "in pixels. Use this to adjust the top position of drawings."
+msgstr "ເປັນພິກເຊລ. ໃຊ້ນີ້ເພື່ອປັບຕຳແໜ່ງດ້ານເທິງຂອງຮູບແຕ້ມ."
+
+#: ../Help/data/messages:337
+msgid "Top offset:"
+msgstr "ໄລຍະຫ່າງດ້ານເທິງ:"
+
+#: ../Help/data/messages:339
+msgid "in pixels. Use this to adjust the right position of drawings."
+msgstr "ເປັນພິກເຊລ. ໃຊ້ນີ້ເພື່ອປັບຕຳແໜ່ງດ້ານຂວາຂອງຮູບແຕ້ມ."
+
+#: ../Help/data/messages:341
+msgid "Right offset:"
+msgstr "ໄລຍະຫ່າງດ້ານຂວາ:"
+
+#: ../Help/data/messages:343
+msgid "in pixels. Use this to adjust the bottom position of drawings."
+msgstr "ເປັນພິກເຊລ. ໃຊ້ນີ້ເພື່ອປັບຕຳແໜ່ງດ້ານລຸ່ມຂອງຮູບແຕ້ມ."
+
+#: ../Help/data/messages:345
+msgid "Bottom offset:"
+msgstr "ໄລຍະຫ່າງດ້ານລຸ່ມ:"
+
+#: ../Help/data/messages:347
+msgid ""
+"Image to be displayed above the drawings, e.g. a reflection. Leave empty for "
+"no image."
+msgstr "ຮູບພາບທີ່ຈະສະແດງຢູ່ເໜືອຮູບແຕ້ມ, ເຊັ່ນ: ພາບສະທ້ອນ. ປະໄວ້ຫວ່າງຖ້າບໍ່ຕ້ອງການຮູບພາບ."
+
+#: ../Help/data/messages:349
+msgid "Foreground image:"
+msgstr "ຮູບພາບດ້ານໜ້າ:"
+
+#: ../Help/data/messages:351
+msgid "Foreground tansparency:"
+msgstr "ຄວາມໂປ່ງໃສຂອງດ້ານໜ້າ:"
+
+#: ../data/messages:1 ../data/messages:903
+msgid "Behavior"
+msgstr "ພຶດຕິກຳ"
+
+#: ../data/messages:3 ../data/messages:155 ../data/messages:905
+msgid "Position on the screen"
+msgstr "ຕຳແໜ່ງເທິງໜ້າຈໍ"
+
+#: ../data/messages:5 ../data/messages:157 ../data/messages:907
+msgid "Choose which border of the screen the dock will be placed on:"
+msgstr "ເລືອກຂອບຂອງໜ້າຈໍທີ່ແທ່ນດັອກຈະຖືກວາງ:"
+
+#: ../data/messages:15 ../data/messages:175 ../data/messages:921
+msgid "Multi-screens"
+msgstr "ຫຼາຍໜ້າຈໍ"
+
+#: ../data/messages:17 ../data/messages:189
+msgid "Visibility of the main dock"
+msgstr "ການເບິ່ງເຫັນຂອງແທ່ນດັອກຫຼັກ"
+
+#: ../data/messages:19 ../data/messages:191 ../data/messages:925
+msgid ""
+"Modes are sorted from the most intrusive to the less intrusive.\n"
+"When the dock is hidden or below a window, place the mouse on the screen's "
+"border to call it back.\n"
+"When the dock pops up on shortcut, it will appear at the position of your "
+"mouse. The rest of the time, it stays invisible, thus acting like a menu."
+msgstr ""
+"ໂໝດຖືກຈັດຮຽງຈາກແບບທີ່ລົບກວນທີ່ສຸດໄປຫາແບບທີ່ລົບກວນນ້ອຍທີ່ສຸດ.\n"
+"ເມື່ອແທ່ນດັອກຖືກເຊື່ອງ ຫຼື ຢູ່ລຸ່ມໜ້າຕ່າງ, ວາງເມົ້າໃສ່ຂອບໜ້າຈໍເພື່ອເອີ້ນມັນຄືນ.\n"
+"ເມື່ອແທ່ນດັອກສະແດງຂຶ້ນເມື່ອກົດທາງລັດ, ມັນຈະປາກົດທີ່ຕຳແໜ່ງຂອງເມົ້າຂອງທ່ານ. ເວລາທີ່ເຫຼືອ, "
+"ມັນຈະເບິ່ງບໍ່ເຫັນ, ເຮັດໜ້າທີ່ຄືກັບເມນູ."
+
+#: ../data/messages:25 ../data/messages:197 ../data/messages:931
+msgid "Reserve space for the dock"
+msgstr "ຈອງພື້ນທີ່ສຳລັບແທ່ນດັອກ"
+
+#: ../data/messages:27 ../data/messages:199 ../data/messages:933
+msgid "Keep the dock below"
+msgstr "ຮັກສາແທ່ນດັອກໄວ້ດ້ານລຸ່ມ"
+
+#: ../data/messages:29 ../data/messages:201 ../data/messages:935
+msgid "Hide the dock when it overlaps the current window"
+msgstr "ເຊື່ອງແທ່ນດັອກເມື່ອມັນຊ້ອນທັບໜ້າຕ່າງປັດຈຸບັນ"
+
+#: ../data/messages:31 ../data/messages:203 ../data/messages:937
+msgid "Hide the dock whenever it overlaps any window"
+msgstr "ເຊື່ອງແທ່ນດັອກທຸກຄັ້ງທີ່ມັນຊ້ອນທັບໜ້າຕ່າງໃດໜຶ່ງ"
+
+#: ../data/messages:33 ../data/messages:205 ../data/messages:939
+msgid "Keep the dock hidden"
+msgstr "ຮັກສາແທ່ນດັອກໃຫ້ເຊື່ອງໄວ້"
+
+#: ../data/messages:35 ../data/messages:207
+msgid "Pop-up on shortcut"
+msgstr "ສະແດງຂຶ້ນເມື່ອກົດທາງລັດ"
+
+#: ../data/messages:37 ../data/messages:209
+msgid "Effect used to hide the dock:"
+msgstr "ເອັບເຟັກທີ່ໃຊ້ເພື່ອເຊື່ອງແທ່ນດັອກ:"
+
+#: ../data/messages:39 ../data/messages:71 ../data/messages:211
+msgid "None"
+msgstr "ບໍ່ມີ"
+
+#: ../data/messages:51 ../data/messages:245
+msgid ""
+"When you press the shortcut, the dock will show itself at the potition of "
+"your mouse. The rest of the time, it stays invisible, thus acting like a "
+"menu."
+msgstr ""
+"ເມື່ອທ່ານກົດທາງລັດ, ແທ່ນດັອກຈະສະແດງຕົວມັນເອງຢູ່ທີ່ຕຳແໜ່ງຂອງເມົ້າຂອງທ່ານ. ເວລາທີ່ເຫຼືອ, "
+"ມັນຈະເບິ່ງບໍ່ເຫັນ, ເຮັດໜ້າທີ່ຄືກັບເມນູ."
+
+#: ../data/messages:53 ../data/messages:247
+msgid "Keyboard shortcut to pop-up the dock:"
+msgstr "ປຸ່ມລັດແປ້ນພິມເພື່ອສະແດງແທ່ນດັອກ:"
+
+#: ../data/messages:55
+msgid "Visibility of sub-docks"
+msgstr "ການເບິ່ງເຫັນຂອງແທ່ນດັອກຍ່ອຍ"
+
+#: ../data/messages:57 ../data/messages:251
+msgid ""
+"they will appear either when you click or when you linger over the icon "
+"pointing on it."
+msgstr "ພວກມັນຈະປາກົດຂຶ້ນເມື່ອທ່ານຄລິກ ຫຼື ເມື່ອທ່ານຄ້າງເມົ້າໄວ້ເທິງໄອຄອນທີ່ຊີ້ໃສ່ມັນ."
+
+#: ../data/messages:61 ../data/messages:255
+msgid "Appear on mouse over"
+msgstr "ປາກົດເມື່ອເມົ້າຢູ່ເທິງ"
+
+#: ../data/messages:63 ../data/messages:257
+msgid "Appear on click"
+msgstr "ປາກົດເມື່ອຄລິກ"
+
+#: ../data/messages:67
+msgid ""
+"None       : Don't show opened windows in the dock.\n"
+"Minimalistic: Mix applications with its launcher, show other windows only if "
+"they are minimized (like in MacOSX).\n"
+"Integrated  : Mix applications with its launcher, show all others windows "
+"and group windows together in sub-dock (default).\n"
+"Separated   : Separate the taskbar from the launchers and only show windows "
+"that are on the current desktop."
+msgstr ""
+"ບໍ່ມີ: ບໍ່ສະແດງໜ້າຕ່າງທີ່ເປີດຢູ່ໃນແທ່ນດັອກ.\n"
+"ນ້ອຍທີ່ສຸດ: ປະສົມໂປຣແກຣມກັບໂຕເປີດຂອງມັນ, ສະແດງໜ້າຕ່າງອື່ນໆສະເພາະຖ້າພວກມັນຖືກຫຍໍ້ລົງ (ຄືໃນ "
+"MacOSX).\n"
+"ລວມ: ປະສົມໂປຣແກຣມກັບໂຕເປີດຂອງມັນ, ສະແດງໜ້າຕ່າງອື່ນໆທັງໝົດ ແລະ "
+"ຈັດກຸ່ມໜ້າຕ່າງເຂົ້າກັນໃນແທ່ນດັອກຍ່ອຍ (ຄ່າເລີ່ມຕົ້ນ).\n"
+"ແຍກ: ແຍກແຖບໜ້າວຽກອອກຈາກໂຕເປີດໂປຣແກຣມ ແລະ ສະແດງສະເພາະໜ້າຕ່າງທີ່ຢູ່ໃນເດັສທັອບປັດຈຸບັນ."
+
+#: ../data/messages:69
+msgid "Behaviour of the Taskbar:"
+msgstr "ພຶດຕິກຳຂອງແຖບໜ້າວຽກ:"
+
+#: ../data/messages:73
+msgid "Minimalistic"
+msgstr "ນ້ອຍທີ່ສຸດ"
+
+#: ../data/messages:75
+msgid "Integrated"
+msgstr "ລວມ"
+
+#: ../data/messages:77
+msgid "Separated"
+msgstr "ແຍກ"
+
+#: ../data/messages:79 ../data/messages:283
+msgid "Place new icons"
+msgstr "ວາງໄອຄອນໃໝ່"
+
+#: ../data/messages:81 ../data/messages:285
+msgid "At the beginning of the dock"
+msgstr "ຢູ່ຕອນຕົ້ນຂອງແທ່ນດັອກ"
+
+#: ../data/messages:83 ../data/messages:287
+msgid "Before the launchers"
+msgstr "ກ່ອນໂຕເປີດໂປຣແກຣມ"
+
+#: ../data/messages:85 ../data/messages:289
+msgid "After the launchers"
+msgstr "ຫຼັງໂຕເປີດໂປຣແກຣມ"
+
+#: ../data/messages:87 ../data/messages:291
+msgid "At the end of the dock"
+msgstr "ຢູ່ຕອນທ້າຍຂອງແທ່ນດັອກ"
+
+#: ../data/messages:89 ../data/messages:293
+msgid "After a given icon"
+msgstr "ຫຼັງຈາກໄອຄອນທີ່ກຳນົດ"
+
+#: ../data/messages:91 ../data/messages:295
+msgid "Place new icons after this one"
+msgstr "ວາງໄອຄອນໃໝ່ຫຼັງຈາກອັນນີ້"
+
+#: ../data/messages:93
+msgid "Icons' animations and effects"
+msgstr "ອະນິເມຊັນ ແລະ ເອັບເຟັກຂອງໄອຄອນ"
+
+#: ../data/messages:95
+msgid "On mouse hover:"
+msgstr "ເມື່ອເມົ້າຢູ່ເທິງ:"
+
+#: ../data/messages:97
+msgid "On click:"
+msgstr "ເມື່ອຄລິກ:"
+
+#: ../data/messages:99
+msgid "On appearance/disappearance:"
+msgstr "ເມື່ອປາກົດ/ຫາຍໄປ:"
+
+#: ../data/messages:101
+msgid "Evaporate"
+msgstr "ລະເຫີຍ"
+
+#: ../data/messages:105
+msgid "Explode"
+msgstr "ລະເບີດ"
+
+#: ../data/messages:107
+msgid "Break"
+msgstr "ແຕກ"
+
+#: ../data/messages:109
+msgid "Black Hole"
+msgstr "ຂຸມດຳ"
+
+#: ../data/messages:111
+msgid "Random"
+msgstr "ສຸ່ມ"
+
+#: ../data/messages:121 ../data/messages:559 ../data/messages:699
+#: ../data/messages:813 ../data/messages:847 ../data/messages:885
+msgid "Custom"
+msgstr "ກຳນົດເອງ"
+
+#: ../data/messages:123 ../data/messages:753
+msgid "Colour"
+msgstr "ສີ"
+
+#: ../data/messages:127
+msgid "Choose a theme of icons :"
+msgstr "ເລືອກຊຸດຮູບແບບຂອງໄອຄອນ :"
+
+#: ../data/messages:129 ../data/messages:955
+msgid "Icons size:"
+msgstr "ຂະໜາດໄອຄອນ:"
+
+#: ../data/messages:131 ../data/messages:961
+msgid "Very small"
+msgstr "ນ້ອຍຫຼາຍ"
+
+#: ../data/messages:133 ../data/messages:963
+msgid "Small"
+msgstr "ນ້ອຍ"
+
+#: ../data/messages:135 ../data/messages:965
+msgid "Medium"
+msgstr "ປານກາງ"
+
+#: ../data/messages:137 ../data/messages:967
+msgid "Big"
+msgstr "ໃຫຍ່"
+
+#: ../data/messages:139 ../data/messages:969
+msgid "Very Big"
+msgstr "ໃຫຍ່ຫຼາຍ"
+
+#: ../data/messages:143 ../data/messages:535
+msgid "Choose the default view for main docks :"
+msgstr "ເລືອກມຸມມອງເລີ່ມຕົ້ນສຳລັບແທ່ນດັອກຫຼັກ :"
+
+#: ../data/messages:145 ../data/messages:539
+msgid "You can overwrite this parameter for each sub-dock."
+msgstr "ທ່ານສາມາດປ່ຽນແທນພາຣາມິເຕີນີ້ໄດ້ສຳລັບແຕ່ລະແທ່ນດັອກຍ່ອຍ."
+
+#: ../data/messages:147 ../data/messages:541
+msgid "Choose the default view for sub-docks :"
+msgstr "ເລືອກມຸມມອງເລີ່ມຕົ້ນສຳລັບແທ່ນດັອກຍ່ອຍ :"
+
+#: ../data/messages:151
+msgid ""
+"Many applets provide shortkeys for their actions. As soon as an applet is "
+"enabled, its shortkeys become available.\n"
+"Double-click on a line, and press the shortkey you want to use for the "
+"corresponding action."
+msgstr ""
+"ແອັບເປັດຫຼາຍອັນມີປຸ່ມລັດສຳລັບການກະທຳຂອງມັນ. ທັນທີທີ່ແອັບເປັດຖືກເປີດໃຊ້, ປຸ່ມລັດຂອງມັນກໍຈະສາມາດໃຊ້ໄດ້.\n"
+"ຄລິກສອງຄັ້ງໃສ່ແຖວ, ແລະ ກົດປຸ່ມລັດທີ່ທ່ານຕ້ອງການໃຊ້ສຳລັບການກະທຳທີ່ກ່ຽວຂ້ອງ."
+
+#: ../data/messages:167 ../data/messages:917
+msgid ""
+"When set to 0 the dock will position itself relative to the left corner if "
+"horizontal and the top corner if vertical. When set to 1 it will position "
+"itself relative to the right corner if horizontal and the bottom corner if "
+"vertical. When set to 0.5, it will position itself relative to the middle of "
+"the screen's edge."
+msgstr ""
+"ເມື່ອຕັ້ງເປັນ 0 ແທ່ນດັອກຈະວາງຕຳແໜ່ງຕົວເອງທຽບກັບມຸມຊ້າຍຖ້າເປັນແນວນອນ ແລະ ມຸມເທິງຖ້າເປັນແນວຕັ້ງ. "
+"ເມື່ອຕັ້ງເປັນ 1 ມັນຈະວາງຕຳແໜ່ງຕົວເອງທຽບກັບມຸມຂວາຖ້າເປັນແນວນອນ ແລະ ມຸມລຸ່ມຖ້າເປັນແນວຕັ້ງ. "
+"ເມື່ອຕັ້ງເປັນ 0.5, ມັນຈະວາງຕຳແໜ່ງຕົວເອງທຽບກັບຈຸດກາງຂອງຂອບໜ້າຈໍ."
+
+#: ../data/messages:169 ../data/messages:919
+msgid "Relative alignment:"
+msgstr "ການຈັດວາງສຳພັດ:"
+
+#: ../data/messages:177 ../data/messages:941
+msgid "Offset from the screen's edge"
+msgstr "ໄລຍະຫ່າງຈາກຂອບໜ້າຈໍ"
+
+#: ../data/messages:179 ../data/messages:943
+msgid ""
+"Gap from the absolute position on the screen's edge, in pixels. You can also "
+"move the dock by holding the ALT or CTRL key and the left mouse button."
+msgstr ""
+"ຊ່ອງຫວ່າງຈາກຕຳແໜ່ງສຳບູນເທິງຂອບໜ້າຈໍ, ເປັນພິກເຊລ. ທ່ານຍັງສາມາດຍ້າຍແທ່ນດັອກໄດ້ໂດຍການກົດປຸ່ມ ALT "
+"ຫຼື CTRL ຄ້າງໄວ້ ແລະ ປຸ່ມເມົ້າຊ້າຍ."
+
+#: ../data/messages:181 ../data/messages:945
+msgid "Lateral offset:"
+msgstr "ໄລຍະຫ່າງດ້ານຂ້າງ:"
+
+#: ../data/messages:183 ../data/messages:947
+msgid ""
+"in pixels. You can also move the dock by holding the ALT or CTRL key and the "
+"left mouse button."
+msgstr ""
+"ເປັນພິກເຊລ. ທ່ານຍັງສາມາດຍ້າຍແທ່ນດັອກໄດ້ໂດຍການກົດປຸ່ມ ALT ຫຼື CTRL ຄ້າງໄວ້ ແລະ ປຸ່ມເມົ້າຊ້າຍ."
+
+#: ../data/messages:185 ../data/messages:949
+msgid "Distance to the screen edge:"
+msgstr "ໄລຍະຫ່າງຫາຂອບໜ້າຈໍ:"
+
+#: ../data/messages:187
+msgid "Accessibility"
+msgstr "ການເຂົ້າເຖິງ"
+
+#: ../data/messages:223
+msgid "The higher, the faster the dock will appear"
+msgstr "ຍິ່ງສູງ, ແທ່ນດັອກກໍຈະປາກົດຂຶ້ນໄວຂຶ້ນ"
+
+#: ../data/messages:225
+msgid "Callback sensitivity:"
+msgstr "ຄວາມໄວໃນການຕອບສະໜອງ:"
+
+#: ../data/messages:227
+msgid "high"
+msgstr "ສູງ"
+
+#: ../data/messages:229
+msgid "low"
+msgstr "ຕ່ຳ"
+
+#: ../data/messages:231
+msgid "How to call the dock back:"
+msgstr "ວິທີເອີ້ນແທ່ນດັອກກັບຄືນ:"
+
+#: ../data/messages:233
+msgid "Hit the screen's border"
+msgstr "ແຕະທີ່ຂອບໜ້າຈໍ"
+
+#: ../data/messages:235
+msgid "Hit where the dock is"
+msgstr "ແຕະບ່ອນທີ່ແທ່ນດັອກຢູ່"
+
+#: ../data/messages:237
+msgid "Hit the screen's corner"
+msgstr "ແຕະທີ່ມຸມໜ້າຈໍ"
+
+#: ../data/messages:239
+msgid "Hit a zone"
+msgstr "ແຕະທີ່ເຂດ"
+
+#: ../data/messages:241
+msgid "Size of the zone :"
+msgstr "ຂະໜາດຂອງເຂດ :"
+
+#: ../data/messages:243
+msgid "Image to display on the zone :"
+msgstr "ຮູບພາບທີ່ຈະສະແດງໃນເຂດ :"
+
+#: ../data/messages:249
+msgid "Sub-docks' visibility"
+msgstr "ການເບິ່ງເຫັນຂອງແທ່ນດັອກຍ່ອຍ"
+
+#: ../data/messages:259 ../data/messages:263
+msgid "in ms."
+msgstr "ເປັນ ມລວ."
+
+#: ../data/messages:261
+msgid "Delay before displaying a sub-dock:"
+msgstr "ການໜ່ວງເວລາກ່ອນສະແດງແທ່ນດັອກຍ່ອຍ:"
+
+#: ../data/messages:265
+msgid "Delay before leaving a sub-dock takes effect:"
+msgstr "ການໜ່ວງເວລາກ່ອນອອກຈາກແທ່ນດັອກຍ່ອຍມີຜົນ:"
+
+#: ../data/messages:267
+msgid "TaskBar"
+msgstr "ແຖບໜ້າວຽກ"
+
+#: ../data/messages:271
+msgid ""
+"Cairo-Dock will then act as your taskbar. It is recommended to remove any "
+"other taskbars."
+msgstr "Cairo-Dock ຈະເຮັດໜ້າທີ່ເປັນແຖບໜ້າວຽກຂອງທ່ານ. ແນະນຳໃຫ້ລຶບແຖບໜ້າວຽກອື່ນໆອອກ."
+
+#: ../data/messages:273
+msgid "Show currently opened applications in the dock?"
+msgstr "ສະແດງໂປຣແກຣມທີ່ກຳລັງເປີດຢູ່ໃນແທ່ນດັອກບໍ່?"
+
+#: ../data/messages:275
+msgid ""
+"Allows launchers to act as applications when their programs are running and "
+"displays a marker on icons to indicate this. You can launch other occurences "
+"of the program with SHIFT+click."
+msgstr ""
+"ອະນຸຍາດໃຫ້ໂຕເປີດໂປຣແກຣມເຮັດໜ້າທີ່ເປັນໂປຣແກຣມເມື່ອໂປຣແກຣມຂອງພວກມັນກຳລັງເຮັດວຽກ ແລະ "
+"ສະແດງເຄື່ອງໝາຍເທິງໄອຄອນເພື່ອບອກສິ່ງນີ້. ທ່ານສາມາດເປີດໂປຣແກຣມໂຕອື່ນໄດ້ດ້ວຍ SHIFT+ຄລິກ."
+
+#: ../data/messages:277
+msgid "Mix launchers and applications"
+msgstr "ປະສົມໂຕເປີດໂປຣແກຣມ ແລະ ໂປຣແກຣມ"
+
+#: ../data/messages:279
+msgid "Only show applications on current desktop"
+msgstr "ສະແດງສະເພາະໂປຣແກຣມໃນເດັສທັອບປັດຈຸບັນ"
+
+#: ../data/messages:281
+msgid "Only show icons whose windows are minimised"
+msgstr "ສະແດງສະເພາະໄອຄອນທີ່ໜ້າຕ່າງຖືກຫຍໍ້ລົງ"
+
+#: ../data/messages:297
+msgid "Automatically add a separator"
+msgstr "ເພີ່ມໂຕຂັ້ນໂດຍອັດຕະໂນມັດ"
+
+#: ../data/messages:299
+msgid ""
+"This allows you to group all the windows of a given application into a "
+"unique sub-dock, and to act on all of the windows at the same time."
+msgstr ""
+"ນີ້ອະນຸຍາດໃຫ້ທ່ານຈັດກຸ່ມໜ້າຕ່າງທັງໝົດຂອງໂປຣແກຣມໃດໜຶ່ງເຂົ້າໃນແທ່ນດັອກຍ່ອຍດຽວ, ແລະ "
+"ກະທຳກັບໜ້າຕ່າງທັງໝົດໃນເວລາດຽວກັນ."
+
+#: ../data/messages:301
+msgid "Group windows from the same application in a sub-dock ?"
+msgstr "ຈັດກຸ່ມໜ້າຕ່າງຈາກໂປຣແກຣມດຽວກັນໃນແທ່ນດັອກຍ່ອຍບໍ່ ?"
+
+#: ../data/messages:303 ../data/messages:313
+msgid "Enter the class of the applications, separated by a semi-colon ';'"
+msgstr "ໃສ່ຊັ້ນຂອງໂປຣແກຣມ, ແຍກດ້ວຍເຄື່ອງໝາຍຈ້ຳຈຸດ ';'"
+
+#: ../data/messages:305 ../data/messages:315
+msgid "\t\tExcept the following classes:"
+msgstr "\t\tຍົກເວັ້ນຊັ້ນຕໍ່ໄປນີ້:"
+
+#: ../data/messages:307
+msgid "Representation"
+msgstr "ການສະແດງຜົນ"
+
+#: ../data/messages:309
+msgid ""
+"If not set, the icon provided by X for each application will be used. If "
+"set, the same icon as the corresponding launcher will be used for each "
+"application."
+msgstr ""
+"ຖ້າບໍ່ໄດ້ຕັ້ງຄ່າ, ໄອຄອນທີ່ X ໃຫ້ສຳລັບແຕ່ລະໂປຣແກຣມຈະຖືກນຳໃຊ້. ຖ້າຕັ້ງຄ່າ, "
+"ໄອຄອນດຽວກັນກັບໂຕເປີດໂປຣແກຣມທີ່ກ່ຽວຂ້ອງຈະຖືກນຳໃຊ້ສຳລັບແຕ່ລະໂປຣແກຣມ."
+
+#: ../data/messages:311
+msgid "Overwrite the X icon with the launchers' icon?"
+msgstr "ຂຽນທັບໄອຄອນ X ດ້ວຍໄອຄອນຂອງໂຕເປີດໂປຣແກຣມບໍ່?"
+
+#: ../data/messages:317
+msgid ""
+"A composite manager is required to display the thumbnail.\n"
+"OpenGL is required to draw the icon bent backwards."
+msgstr ""
+"ຕ້ອງການໂຕຈັດການການປະສົມພາບເພື່ອສະແດງຮູບຕົວຢ່າງຂະໜາດນ້ອຍ.\n"
+"ຕ້ອງການ OpenGL ເພື່ອແຕ້ມໄອຄອນໂຄ້ງໄປທາງຫຼັງ."
+
+#: ../data/messages:319
+msgid "How to draw minimised windows ?"
+msgstr "ວິທີແຕ້ມໜ້າຕ່າງທີ່ຖືກຫຍໍ້ ?"
+
+#: ../data/messages:321
+msgid "Make the icon transparent"
+msgstr "ເຮັດໃຫ້ໄອຄອນໂປ່ງໃສ"
+
+#: ../data/messages:323
+msgid "Show a window's thumbnail"
+msgstr "ສະແດງຮູບຕົວຢ່າງຂະໜາດນ້ອຍຂອງໜ້າຕ່າງ"
+
+#: ../data/messages:325
+msgid "Draw it bent backwards"
+msgstr "ແຕ້ມມັນໃຫ້ໂຄ້ງໄປທາງຫຼັງ"
+
+#: ../data/messages:327
+msgid "Transparency of icons whose window is minimised:"
+msgstr "ຄວາມໂປ່ງໃສຂອງໄອຄອນທີ່ໜ້າຕ່າງຖືກຫຍໍ້:"
+
+#: ../data/messages:329 ../data/messages:483 ../data/messages:609
+#: ../data/messages:635 ../data/messages:725
+msgid "Opaque"
+msgstr "ທຶບແສງ"
+
+#: ../data/messages:331 ../data/messages:481 ../data/messages:607
+#: ../data/messages:633 ../data/messages:723
+msgid "Transparent"
+msgstr "ໂປ່ງໃສ"
+
+#: ../data/messages:333
+msgid "Play a short animation of the icon when its window becomes active"
+msgstr "ຫຼິ້ນອະນິເມຊັນສັ້ນໆຂອງໄອຄອນເມື່ອໜ້າຕ່າງຂອງມັນເຄື່ອນໄຫວ"
+
+#: ../data/messages:335
+msgid "\"...\" will be added at the end if the name is too long."
+msgstr "\"...\" ຈະຖືກເພີ່ມໃສ່ທ້າຍຖ້າຊື່ຍາວເກີນໄປ."
+
+#: ../data/messages:337
+msgid "Maximum number of characters in application name:"
+msgstr "ຈຳນວນຕົວອັກສອນສູງສຸດໃນຊື່ໂປຣແກຣມ:"
+
+#: ../data/messages:339
+msgid "Interaction"
+msgstr "ການໂຕ້ຕອບ"
+
+#: ../data/messages:341
+msgid "Action on middle-click on the related application"
+msgstr "ການກະທຳເມື່ອຄລິກກາງໃສ່ໂປຣແກຣມທີ່ກ່ຽວຂ້ອງ"
+
+#: ../data/messages:343
+msgid "Nothing"
+msgstr "ບໍ່ມີຫຍັງ"
+
+#: ../data/messages:347
+msgid "Minimize"
+msgstr "ຫຍໍ້ລົງ"
+
+#: ../data/messages:349
+msgid "Launch new"
+msgstr "ເປີດໃໝ່"
+
+#: ../data/messages:351
+msgid "Lower"
+msgstr "ລົງລຸ່ມ"
+
+#: ../data/messages:353
+msgid "This is the default behaviour of most taskbars."
+msgstr "ນີ້ແມ່ນພຶດຕິກຳເລີ່ມຕົ້ນຂອງແຖບໜ້າວຽກສ່ວນໃຫຍ່."
+
+#: ../data/messages:355
+msgid ""
+"Minimise the window when its icon is clicked, if it was already the active "
+"window ?"
+msgstr "ຫຍໍ້ໜ້າຕ່າງລົງເມື່ອຄລິກໄອຄອນຂອງມັນ, ຖ້າມັນເປັນໜ້າຕ່າງທີ່ເຄື່ອນໄຫວຢູ່ແລ້ວບໍ່ ?"
+
+#: ../data/messages:357
+msgid "Only if your Window Manager supports it."
+msgstr "ສະເພາະຖ້າໂຕຈັດການໜ້າຕ່າງຂອງທ່ານຮອງຮັບ."
+
+#: ../data/messages:359
+msgid ""
+"Present windows preview on click when several windows are grouped together"
+msgstr "ສະແດງຕົວຢ່າງໜ້າຕ່າງເມື່ອຄລິກ ເມື່ອມີຫຼາຍໜ້າຕ່າງຖືກຈັດກຸ່ມເຂົ້າກັນ"
+
+#: ../data/messages:361
+msgid "Highlight applications requiring your attention with a dialog bubble"
+msgstr "ເນັ້ນໂປຣແກຣມທີ່ຕ້ອງການຄວາມສົນໃຈຂອງທ່ານດ້ວຍຟອງຂໍ້ຄວາມ"
+
+#: ../data/messages:363
+msgid "in seconds"
+msgstr "ເປັນວິນາທີ"
+
+#: ../data/messages:365
+msgid "Duration of the dialog:"
+msgstr "ໄລຍະເວລາຂອງກ່ອງໂຕ້ຕອບ:"
+
+#: ../data/messages:367
+msgid ""
+"It will notify you even if, for instance, you are watching a movie in full "
+"screen or you are on another desktop.\n"
+msgstr "ມັນຈະແຈ້ງເຕືອນທ່ານເຖິງແມ່ນວ່າ, ຕົວຢ່າງ, ທ່ານກຳລັງເບິ່ງໜັງແບບເຕັມຈໍ ຫຼື ທ່ານຢູ່ເດັສທັອບອື່ນ.\n"
+
+#: ../data/messages:369
+msgid "Force the following applications to demand your attention"
+msgstr "ບັງຄັບໃຫ້ໂປຣແກຣມຕໍ່ໄປນີ້ຮຽກຮ້ອງຄວາມສົນໃຈຂອງທ່ານ"
+
+#: ../data/messages:371
+msgid "Highlight applications demanding your attention with an animation"
+msgstr "ເນັ້ນໂປຣແກຣມທີ່ຮຽກຮ້ອງຄວາມສົນໃຈຂອງທ່ານດ້ວຍອະນິເມຊັນ"
+
+#: ../data/messages:375
+msgid "Enable new code paths on X11 to test for regressions."
+msgstr "ເປີດໃຊ້ເສັ້ນທາງໂຄດໃໝ່ໃນ X11 ເພື່ອທົດສອບການຖົດຖອຍ."
+
+#: ../data/messages:377
+msgid "Experimental drawing code (X11)"
+msgstr "ໂຄດແຕ້ມຮູບແບບທົດລອງ (X11)"
+
+#: ../data/messages:379
+msgid "Animations speed"
+msgstr "ຄວາມໄວຂອງອະນິເມຊັນ"
+
+#: ../data/messages:381
+msgid "Animate sub-docks when they appear"
+msgstr "ສ້າງອະນິເມຊັນໃຫ້ແທ່ນດັອກຍ່ອຍເມື່ອພວກມັນປາກົດ"
+
+#: ../data/messages:383
+msgid ""
+"Icons will appear folded on themselves and will then unfold until they fill "
+"the whole dock. The smaller this value, the faster this will be."
+msgstr ""
+"ໄອຄອນຕ່າງໆຈະປະກົດຂຶ້ນໃນລັກສະນະຫຸບເຂົ້າ, ຈາກນັ້ນຈຶ່ງຄ່ອຍໆກາງອອກຈົນເຕັມພື້ນທີ່ຂອງດັອກ. "
+"ຄ່າຍິ່ງນ້ອຍເທົ່າໃດ, ການສະແດງຜົນກໍຈະຍິ່ງໄວຂຶ້ນເທົ່ານັ້ນ."
+
+#: ../data/messages:385
+msgid "Animation unfolding duration:"
+msgstr "ໄລຍະເວລາຂອງອະນິເມຊັນການເປີດອອກ:"
+
+#: ../data/messages:387 ../data/messages:395 ../data/messages:399
+#: ../data/messages:407 ../data/messages:411
+msgid "fast"
+msgstr "ໄວ"
+
+#: ../data/messages:389 ../data/messages:397 ../data/messages:401
+#: ../data/messages:409 ../data/messages:413
+msgid "slow"
+msgstr "ຊ້າ"
+
+#: ../data/messages:391 ../data/messages:403
+msgid "The more there are, the slower it will be"
+msgstr "ຍິ່ງມີຫຼາຍ, ກໍຈະຍິ່ງຊ້າ"
+
+#: ../data/messages:393
+msgid "Number of steps in the zoom animation (grow/shrink):"
+msgstr "ຈຳນວນຂັ້ນຕອນໃນອະນິເມຊັນການຊູມ (ຂະຫຍາຍ/ຫຍໍ້):"
+
+#: ../data/messages:405
+msgid "Number of steps in the auto-hide animation (move up/move down):"
+msgstr "ຈຳນວນຂັ້ນຕອນໃນອະນິເມຊັນການເຊື່ອງອັດຕະໂນມັດ (ເລື່ອນຂຶ້ນ/ເລື່ອນລົງ):"
+
+#: ../data/messages:415
+msgid "Refresh rate"
+msgstr "ອັດຕາການໂຫຼດຂໍ້ມູນຄືນໃໝ່"
+
+#: ../data/messages:417 ../data/messages:421 ../data/messages:425
+msgid "in Hz. This is to adjust behaviour relative to your CPU power."
+msgstr "ເປັນ Hz. ນີ້ແມ່ນເພື່ອປັບພຶດຕິກຳໃຫ້ເຂົ້າກັບພະລັງງານ CPU ຂອງທ່ານ."
+
+#: ../data/messages:419
+msgid "Refresh rate when moving cursor into the dock:"
+msgstr "ອັດຕາການໂຫຼດຂໍ້ມູນຄືນໃໝ່ເມື່ອຍ້າຍເຄີເຊີເຂົ້າໃນແທ່ນດັອກ:"
+
+#: ../data/messages:423
+msgid "Animation frequency for the OpenGL backend:"
+msgstr "ຄວາມຖີ່ຂອງອະນິເມຊັນສຳລັບເບື້ອງຫຼັງ OpenGL:"
+
+#: ../data/messages:427
+msgid "Animation frequency for the Cairo backend:"
+msgstr "ຄວາມຖີ່ຂອງອະນິເມຊັນສຳລັບເບື້ອງຫຼັງ Cairo:"
+
+#: ../data/messages:429
+msgid ""
+"The transparency gradation pattern will then be re-calculated in real time. "
+"May need more CPU power."
+msgstr ""
+"ຮູບແບບການໄລ່ສີຄວາມໂປ່ງໃສຈະຖືກຄຳນວນຄືນໃໝ່ໃນເວລາຈິງ. ອາດຈະຕ້ອງການພະລັງງານ CPU ເພີ່ມເຕີມ."
+
+#: ../data/messages:431
+msgid "Reflections should be calculated in real-time?"
+msgstr "ຄວນຄຳນວນພາບສະທ້ອນໃນເວລາຈິງບໍ່?"
+
+#: ../data/messages:433
+msgid "Connection to the Internet"
+msgstr "ການເຊື່ອມຕໍ່ອິນເຕີເນັດ"
+
+#: ../data/messages:435
+msgid ""
+"Maximum time in seconds that you allow the connection to the server to take. "
+"This only limits the connection phase,  once the dock has connected this "
+"option is of no more use."
+msgstr ""
+"ເວລາສູງສຸດເປັນວິນາທີທີ່ທ່ານອະນຸຍາດໃຫ້ການເຊື່ອມຕໍ່ກັບເຊີບເວີໃຊ້. ນີ້ຈຳກັດພຽງແຕ່ໄລຍະການເຊື່ອມຕໍ່, "
+"ເມື່ອແທ່ນດັອກເຊື່ອມຕໍ່ແລ້ວ ຕົວເລືອກນີ້ກໍບໍ່ມີປະໂຫຍດອີກ."
+
+#: ../data/messages:437
+msgid "Connection timeout :"
+msgstr "ເວລາໝົດກຳນົດຂອງການເຊື່ອມຕໍ່ :"
+
+#: ../data/messages:439
+msgid ""
+"Maximum time in seconds that you allow the whole operation to last. Some "
+"themes can be up to a few MB."
+msgstr ""
+"ເວລາສູງສຸດເປັນວິນາທີທີ່ທ່ານອະນຸຍາດໃຫ້ການດຳເນີນການທັງໝົດແກ່ຍາວ. "
+"ບາງຊຸດຮູບແບບອາດມີຂະໜາດເຖິງສອງສາມ MB."
+
+#: ../data/messages:441
+msgid "Maximum time to download a file:"
+msgstr "ເວລາສູງສຸດໃນການດາວໂຫຼດໄຟລ໌:"
+
+#: ../data/messages:443
+msgid "Use this option if you experience problems to connect."
+msgstr "ໃຊ້ຕົວເລືອກນີ້ຖ້າທ່ານປະສົບບັນຫາໃນການເຊື່ອມຕໍ່."
+
+#: ../data/messages:445
+msgid "Force IPv4 ?"
+msgstr "ບັງຄັບໃຊ້ IPv4 ບໍ່ ?"
+
+#: ../data/messages:447
+msgid "Use this option if you connect to the Internet through a proxy."
+msgstr "ໃຊ້ຕົວເລືອກນີ້ຖ້າທ່ານເຊື່ອມຕໍ່ອິນເຕີເນັດຜ່ານພຣັອກຊີ."
+
+#: ../data/messages:449
+msgid "Are you behind a proxy ?"
+msgstr "ທ່ານຢູ່ຫຼັງພຣັອກຊີບໍ່ ?"
+
+#: ../data/messages:451
+msgid "Proxy name :"
+msgstr "ຊື່ພຣັອກຊີ :"
+
+#: ../data/messages:453
+msgid "Port :"
+msgstr "ພອດ :"
+
+#: ../data/messages:455 ../data/messages:459
+msgid ""
+"Let empty if you don't need to log-in to the proxy with a user/password."
+msgstr "ປະໄວ້ຫວ່າງຖ້າທ່ານບໍ່ຈຳເປັນຕ້ອງເຂົ້າສູ່ລະບົບພຣັອກຊີດ້ວຍຊື່ຜູ້ໃຊ້/ລະຫັດຜ່ານ."
+
+#: ../data/messages:457
+msgid "User :"
+msgstr "ຜູ້ໃຊ້ :"
+
+#: ../data/messages:461
+msgid "Password :"
+msgstr "ລະຫັດຜ່ານ :"
+
+#: ../data/messages:471 ../data/messages:489 ../data/messages:985
+msgid "Colour gradation"
+msgstr "ການໄລ່ສີ"
+
+#: ../data/messages:473
+msgid "Use a background image."
+msgstr "ໃຊ້ຮູບພາບພື້ນຫຼັງ."
+
+#: ../data/messages:477 ../data/messages:691 ../data/messages:745
+#: ../data/messages:765 ../data/messages:803
+msgid "Image file:"
+msgstr "ໄຟລ໌ຮູບພາບ:"
+
+#: ../data/messages:479
+msgid "Image's transparency :"
+msgstr "ຄວາມໂປ່ງໃສຂອງຮູບພາບ :"
+
+#: ../data/messages:485 ../data/messages:991
+msgid "Repeat image as a pattern to fill background?"
+msgstr "ເຮັດຊ້ຳຮູບພາບເປັນຮູບແບບເພື່ອຕື່ມພື້ນຫຼັງບໍ່?"
+
+#: ../data/messages:487
+msgid "Use a colour gradation."
+msgstr "ໃຊ້ການໄລ່ສີ."
+
+#: ../data/messages:491 ../data/messages:993
+msgid "Bright colour:"
+msgstr "ສີສະຫວ່າງ:"
+
+#: ../data/messages:493 ../data/messages:995
+msgid "Dark colour:"
+msgstr "ສີເຂັ້ມ:"
+
+#: ../data/messages:495
+msgid "In degrees, in relation to the vertical"
+msgstr "ເປັນອົງສາ, ທຽບກັບແນວຕັ້ງ"
+
+#: ../data/messages:497
+msgid "Angle of the gradation :"
+msgstr "ມຸມຂອງການໄລ່ສີ :"
+
+#: ../data/messages:499
+msgid "If not nul, it will form stripes."
+msgstr "ຖ້າບໍ່ແມ່ນສູນ, ມັນຈະປະກອບເປັນເສັ້ນດ່າງ."
+
+#: ../data/messages:501
+msgid "Repeat the gradation this number of times:"
+msgstr "ເຮັດຊ້ຳການໄລ່ສີຈຳນວນຄັ້ງນີ້:"
+
+#: ../data/messages:503
+msgid "Percentage of the bright colour:"
+msgstr "ເປີເຊັນຂອງສີສະຫວ່າງ:"
+
+#: ../data/messages:505
+msgid "Background when hidden"
+msgstr "ພື້ນຫຼັງເມື່ອເຊື່ອງໄວ້"
+
+#: ../data/messages:507
+msgid "Several applets can be visible even when the dock is hidden"
+msgstr "ແອັບເປັດຫຼາຍອັນສາມາດເບິ່ງເຫັນໄດ້ເຖິງແມ່ນວ່າແທ່ນດັອກຈະຖືກເຊື່ອງໄວ້"
+
+#: ../data/messages:509
+msgid "Default background color when the dock is hidden"
+msgstr "ສີພື້ນຫຼັງເລີ່ມຕົ້ນເມື່ອແທ່ນດັອກຖືກເຊື່ອງໄວ້"
+
+#: ../data/messages:511
+msgid "External Frame"
+msgstr "ຂອບພາຍນອກ"
+
+#: ../data/messages:513 ../data/messages:517 ../data/messages:523
+#: ../data/messages:583 ../data/messages:661
+msgid "in pixels."
+msgstr "ເປັນພິກເຊລ."
+
+#: ../data/messages:515 ../data/messages:567 ../data/messages:757
+#: ../data/messages:893
+msgid "Corner radius"
+msgstr "ລັດສະໝີມຸມ"
+
+#: ../data/messages:519 ../data/messages:569 ../data/messages:895
+msgid "Outline width"
+msgstr "ຄວາມກວ້າງຂອງເສັ້ນຂອບ"
+
+#: ../data/messages:521 ../data/messages:563 ../data/messages:819
+#: ../data/messages:851 ../data/messages:889
+msgid "Outline colour"
+msgstr "ສີຂອງເສັ້ນຂອບ"
+
+#: ../data/messages:525
+msgid "Margin between the frame and the icons or their reflects :"
+msgstr "ຂອບເຂດລະຫວ່າງຂອບ ແລະ ໄອຄອນ ຫຼື ພາບສະທ້ອນຂອງພວກມັນ :"
+
+#: ../data/messages:527
+msgid "Are the bottom left and right corners rounded?"
+msgstr "ມຸມລຸ່ມຊ້າຍ ແລະ ຂວາເປັນມຸມມົນບໍ່?"
+
+#: ../data/messages:529 ../data/messages:997
+msgid "Stretch the dock to always fill the screen"
+msgstr "ຍືດແທ່ນດັອກໃຫ້ເຕັມໜ້າຈໍສະເໝີ"
+
+#: ../data/messages:533
+msgid "Main Dock"
+msgstr "ແທ່ນດັອກຫຼັກ"
+
+#: ../data/messages:537
+msgid "Sub-Docks"
+msgstr "ແທ່ນດັອກຍ່ອຍ"
+
+#: ../data/messages:543
+msgid ""
+"You can specify a ratio for the size of the sub-docks' icons, in relation to "
+"the main docks' icons size"
+msgstr "ທ່ານສາມາດກຳນົດອັດຕາສ່ວນຂະໜາດຂອງໄອຄອນໃນແທ່ນດັອກຍ່ອຍ, ທຽບກັບຂະໜາດໄອຄອນໃນແທ່ນດັອກຫຼັກ"
+
+#: ../data/messages:545
+msgid "Ratio for the size of the sub-docks' icons :"
+msgstr "ອັດຕາສ່ວນຂະໜາດຂອງໄອຄອນໃນແທ່ນດັອກຍ່ອຍ :"
+
+#: ../data/messages:547 ../data/messages:783
+msgid "smaller"
+msgstr "ນ້ອຍລົງ"
+
+#: ../data/messages:549
+msgid "larger"
+msgstr "ໃຫຍ່ຂຶ້ນ"
+
+#: ../data/messages:551
+msgid "Dialogs"
+msgstr "ກ່ອງໂຕ້ຕອບ"
+
+#: ../data/messages:553
+msgid "Bubble"
+msgstr "ຟອງ"
+
+#: ../data/messages:561 ../data/messages:849 ../data/messages:875
+#: ../data/messages:887
+msgid "Background colour"
+msgstr "ສີພື້ນຫຼັງ"
+
+#: ../data/messages:565 ../data/messages:853 ../data/messages:873
+msgid "Text colour"
+msgstr "ສີຕົວອັກສອນ"
+
+#: ../data/messages:571
+msgid "Shape of the bubble:"
+msgstr "ຮູບຮ່າງຂອງຟອງ:"
+
+#: ../data/messages:573 ../data/messages:859 ../data/messages:897
+msgid "Font"
+msgstr "ຟອນ"
+
+#: ../data/messages:575 ../data/messages:861
+msgid "Otherwise the default's system one will be used."
+msgstr "ຖ້າບໍ່ດັ່ງນັ້ນ ຈະໃຊ້ອັນເລີ່ມຕົ້ນຂອງລະບົບ."
+
+#: ../data/messages:577 ../data/messages:863 ../data/messages:899
+msgid "Use a custom font for the text?"
+msgstr "ໃຊ້ຟອນກຳນົດເອງສຳລັບຂໍ້ຄວາມບໍ່?"
+
+#: ../data/messages:579 ../data/messages:865 ../data/messages:901
+msgid "Text font:"
+msgstr "ຟອນຂໍ້ຄວາມ:"
+
+#: ../data/messages:581 ../data/messages:637
+msgid "Buttons"
+msgstr "ປຸ່ມ"
+
+#: ../data/messages:585
+msgid "Size of buttons in the info-bubbles (width x height) :"
+msgstr "ຂະໜາດຂອງປຸ່ມໃນຟອງຂໍ້ມູນ (ກວ້າງ x ສູງ) :"
+
+#: ../data/messages:587
+msgid "Name of an image to use for the yes/ok button :"
+msgstr "ຊື່ຂອງຮູບພາບທີ່ຈະໃຊ້ສຳລັບປຸ່ມ ຕົກລົງ/ແມ່ນ :"
+
+#: ../data/messages:589
+msgid "Name of an image to use for the no/cancel button :"
+msgstr "ຊື່ຂອງຮູບພາບທີ່ຈະໃຊ້ສຳລັບປຸ່ມ ບໍ່/ຍົກເລີກ :"
+
+#: ../data/messages:591
+msgid "Size of the icon displayed next to the text :"
+msgstr "ຂະໜາດຂອງໄອຄອນທີ່ສະແດງຖັດຈາກຂໍ້ຄວາມ :"
+
+#: ../data/messages:597
+msgid ""
+"This can be customized for each desklet separately.\n"
+"Choose 'Custom decoration' to define your own decorations below"
+msgstr ""
+"ສາມາດກຳນົດສິ່ງນີ້ໄດ້ຕ່າງຫາກສຳລັບແຕ່ລະເດສເລັດ.\n"
+"ເລືອກ 'ການຕົກແຕ່ງກຳນົດເອງ' ເພື່ອກຳນົດການຕົກແຕ່ງຂອງທ່ານເອງດ້ານລຸ່ມ"
+
+#: ../data/messages:599
+msgid "Choose a default decoration for all desklets :"
+msgstr "ເລືອກການຕົກແຕ່ງເລີ່ມຕົ້ນສຳລັບເດສເລັດທັງໝົດ :"
+
+#: ../data/messages:601
+msgid ""
+"It's an image that will be displayed below the drawings, like a frame for "
+"example. Leave empty to not use any."
+msgstr "ມັນແມ່ນຮູບພາບທີ່ຈະສະແດງຢູ່ລຸ່ມຮູບແຕ້ມ, ເຊັ່ນຂອບຮູບ. ປະໄວ້ຫວ່າງຖ້າບໍ່ຕ້ອງການໃຊ້."
+
+#: ../data/messages:603
+msgid "Background image :"
+msgstr "ຮູບພາບພື້ນຫຼັງ :"
+
+#: ../data/messages:605
+msgid "Background transparency :"
+msgstr "ຄວາມໂປ່ງໃສຂອງພື້ນຫຼັງ :"
+
+#: ../data/messages:611
+msgid "in pixels. Use this to adjust the left position of the drawings."
+msgstr "ເປັນພິກເຊລ. ໃຊ້ນີ້ເພື່ອປັບຕຳແໜ່ງດ້ານຊ້າຍຂອງຮູບແຕ້ມ."
+
+#: ../data/messages:613
+msgid "Left offset :"
+msgstr "ໄລຍະຫ່າງດ້ານຊ້າຍ :"
+
+#: ../data/messages:615
+msgid "in pixels. Use this to adjust the top position of the drawings."
+msgstr "ເປັນພິກເຊລ. ໃຊ້ນີ້ເພື່ອປັບຕຳແໜ່ງດ້ານເທິງຂອງຮູບແຕ້ມ."
+
+#: ../data/messages:617
+msgid "Top offset :"
+msgstr "ໄລຍະຫ່າງດ້ານເທິງ :"
+
+#: ../data/messages:619
+msgid "in pixels. Use this to adjust the right position of the drawings."
+msgstr "ເປັນພິກເຊລ. ໃຊ້ນີ້ເພື່ອປັບຕຳແໜ່ງດ້ານຂວາຂອງຮູບແຕ້ມ."
+
+#: ../data/messages:621
+msgid "Right offset :"
+msgstr "ໄລຍະຫ່າງດ້ານຂວາ :"
+
+#: ../data/messages:623
+msgid "in pixels. Use this to adjust the bottom position of the drawings."
+msgstr "ເປັນພິກເຊລ. ໃຊ້ນີ້ເພື່ອປັບຕຳແໜ່ງດ້ານລຸ່ມຂອງຮູບແຕ້ມ."
+
+#: ../data/messages:625
+msgid "Bottom offset :"
+msgstr "ໄລຍະຫ່າງດ້ານລຸ່ມ :"
+
+#: ../data/messages:627
+msgid ""
+"It's an image that will be displayed above the drawings, like a reflection "
+"for example. Leave empty to not use any."
+msgstr "ມັນແມ່ນຮູບພາບທີ່ຈະສະແດງຢູ່ເໜືອຮູບແຕ້ມ, ເຊັ່ນພາບສະທ້ອນ. ປະໄວ້ຫວ່າງຖ້າບໍ່ຕ້ອງການໃຊ້."
+
+#: ../data/messages:629
+msgid "Foreground image :"
+msgstr "ຮູບພາບດ້ານໜ້າ :"
+
+#: ../data/messages:631
+msgid "Foreground tansparency :"
+msgstr "ຄວາມໂປ່ງໃສຂອງດ້ານໜ້າ :"
+
+#: ../data/messages:639
+msgid "Buttons size :"
+msgstr "ຂະໜາດປຸ່ມ :"
+
+#: ../data/messages:641 ../data/messages:647
+msgid "Name of an image to use for the 'rotate' button :"
+msgstr "ຊື່ຂອງຮູບພາບທີ່ຈະໃຊ້ສຳລັບປຸ່ມ 'ໝຸນ' :"
+
+#: ../data/messages:643
+msgid "Name of an image to use for the 'reattach' button :"
+msgstr "ຊື່ຂອງຮູບພາບທີ່ຈະໃຊ້ສຳລັບປຸ່ມ 'ຕິດຄືນ' :"
+
+#: ../data/messages:645
+msgid "Name of an image to use for the 'depth rotate' button :"
+msgstr "ຊື່ຂອງຮູບພາບທີ່ຈະໃຊ້ສຳລັບປຸ່ມ 'ໝຸນຕາມຄວາມເລິກ' :"
+
+#: ../data/messages:651
+msgid "Icons' themes"
+msgstr "ຊຸດຮູບແບບຂອງໄອຄອນ"
+
+#: ../data/messages:653
+msgid "Choose an icon theme :"
+msgstr "ເລືອກຊຸດຮູບແບບໄອຄອນ :"
+
+#: ../data/messages:655
+msgid "Image filename to use as a background for icons :"
+msgstr "ຊື່ໄຟລ໌ຮູບພາບທີ່ຈະໃຊ້ເປັນພື້ນຫຼັງສຳລັບໄອຄອນ :"
+
+#: ../data/messages:657
+msgid "Icons size"
+msgstr "ຂະໜາດໄອຄອນ"
+
+#: ../data/messages:659 ../data/messages:677
+msgid "Icons' size at rest (width x height) :"
+msgstr "ຂະໜາດໄອຄອນ lúc nghỉ (ກວ້າງ x ສູງ) :"
+
+#: ../data/messages:663
+msgid "Space between icons :"
+msgstr "ຊ່ອງຫວ່າງລະຫວ່າງໄອຄອນ :"
+
+#: ../data/messages:665
+msgid "Zoom effect"
+msgstr "ເອັບເຟັກການຊູມ"
+
+#: ../data/messages:667
+msgid "set to 1 if you don't want the icons to zoom when you hover over them."
+msgstr "ຕັ້ງເປັນ 1 ຖ້າທ່ານບໍ່ຕ້ອງການໃຫ້ໄອຄອນຊູມເມື່ອທ່ານເລື່ອນເມົ້າໄປເທິງພວກມັນ."
+
+#: ../data/messages:669
+msgid "Maximum zoom of the icons :"
+msgstr "ການຊູມສູງສຸດຂອງໄອຄອນ :"
+
+#: ../data/messages:671
+msgid ""
+"in pixels. Outside of this space (centered on the mouse), there is no zoom."
+msgstr "ເປັນພິກເຊລ. ນອກພື້ນທີ່ນີ້ (ຢູ່ໃຈກາງເມົ້າ), ຈະບໍ່ມີການຊູມ."
+
+#: ../data/messages:673
+msgid "Width of the space in which the zoom will be effective :"
+msgstr "ຄວາມກວ້າງຂອງພື້ນທີ່ທີ່ການຊູມຈະມີຜົນ :"
+
+#: ../data/messages:675
+msgid "Separators"
+msgstr "ໂຕຂັ້ນ"
+
+#: ../data/messages:679
+msgid "Force separator's image size to stay constant?"
+msgstr "ບັງຄັບໃຫ້ຂະໜາດຮູບພາບຂອງໂຕຂັ້ນຄົງທີ່ບໍ່?"
+
+#: ../data/messages:681
+msgid ""
+"Only the default, 3D-plane and curve views support flat and physical "
+"separators. Flat separators are rendered differently according to the view."
+msgstr ""
+"ສະເພາະມຸມມອງເລີ່ມຕົ້ນ, ລະນາບ 3D ແລະ ໂຄ້ງເທົ່ານັ້ນທີ່ຮອງຮັບໂຕຂັ້ນແບບຮາບພຽງ ແລະ ແບບກາຍະພາບ. "
+"ໂຕຂັ້ນແບບຮາບພຽງຈະຖືກສະແດງຜົນແຕກຕ່າງກັນໄປຕາມມຸມມອງ."
+
+#: ../data/messages:683
+msgid "How to draw the separators?"
+msgstr "ວິທີແຕ້ມໂຕຂັ້ນ?"
+
+#: ../data/messages:685
+msgid "Use an image."
+msgstr "ໃຊ້ຮູບພາບ."
+
+#: ../data/messages:687
+msgid "Flat separator"
+msgstr "ໂຕຂັ້ນແບບຮາບພຽງ"
+
+#: ../data/messages:689
+msgid "Physical separator"
+msgstr "ໂຕຂັ້ນແບບກາຍະພາບ"
+
+#: ../data/messages:693
+msgid ""
+"Make the separator's image revolve when dock is on top/on the left/on the "
+"right?"
+msgstr "ເຮັດໃຫ້ຮູບພາບຂອງໂຕຂັ້ນໝຸນເມື່ອແທ່ນດັອກຢູ່ເທິງ/ຊ້າຍ/ຂວາບໍ່?"
+
+#: ../data/messages:701
+msgid "Colour of flat separators :"
+msgstr "ສີຂອງໂຕຂັ້ນແບບຮາບພຽງ :"
+
+#: ../data/messages:703
+msgid "Reflections"
+msgstr "ພາບສະທ້ອນ"
+
+#: ../data/messages:705
+msgid "Reflection visibility"
+msgstr "ການເບິ່ງເຫັນຂອງພາບສະທ້ອນ"
+
+#: ../data/messages:707
+msgid "light"
+msgstr "ອ່ອນ"
+
+#: ../data/messages:709
+msgid "strong"
+msgstr "ແຮງ"
+
+#: ../data/messages:711
+msgid ""
+"In percent of the icon's size. This parameter influence the total height of "
+"the dock."
+msgstr "ເປັນເປີເຊັນຂອງຂະໜາດໄອຄອນ. ພາຣາມິເຕີນີ້ມີອິດທິພົນຕໍ່ຄວາມສູງທັງໝົດຂອງແທ່ນດັອກ."
+
+#: ../data/messages:713
+msgid "Height of the reflection:"
+msgstr "ຄວາມສູງຂອງພາບສະທ້ອນ:"
+
+#: ../data/messages:715
+msgid "small"
+msgstr "ນ້ອຍ"
+
+#: ../data/messages:717
+msgid "tall"
+msgstr "ສູງ"
+
+#: ../data/messages:719
+msgid ""
+"It is their transparency when the dock is at rest; they will \"materialize\" "
+"progressively as the dock grows up. The closer to 0, the more transparent "
+"they will be."
+msgstr ""
+"ມັນແມ່ນຄວາມໂປ່ງໃສຂອງພວກມັນເມື່ອແທ່ນດັອກຢູ່ສະຖຽນ; ພວກມັນຈະ \"ປາກົດຕົວ\" "
+"ຂຶ້ນເທື່ອລະໜ້ອຍເມື່ອແທ່ນດັອກຂະຫຍາຍຕົວ. ຍິ່ງໃກ້ 0, ກໍຈະຍິ່ງໂປ່ງໃສ."
+
+#: ../data/messages:721
+msgid "Icons' transparency at rest :"
+msgstr "ຄວາມໂປ່ງໃສຂອງໄອຄອນເມື່ອຢູ່ສະຖຽນ :"
+
+#: ../data/messages:727
+msgid "Link the icons with a string"
+msgstr "ເຊື່ອມຕໍ່ໄອຄອນດ້ວຍເສັ້ນ"
+
+#: ../data/messages:729
+msgid "Linewidth of the string, in pixels (0 to not use string) :"
+msgstr "ຄວາມໜາຂອງເສັ້ນ, ເປັນພິກເຊລ (0 ເພື່ອບໍ່ໃຊ້ເສັ້ນ) :"
+
+#: ../data/messages:731
+msgid "Colour of the string (red, blue, green, alpha) :"
+msgstr "ສີຂອງເສັ້ນ (ແດງ, ຟ້າ, ຂຽວ, ອັລຟາ) :"
+
+#: ../data/messages:735
+msgid "Indicator of the active window"
+msgstr "ໂຕຊີ້ບອກຂອງໜ້າຕ່າງທີ່ເຄື່ອນໄຫວ"
+
+#: ../data/messages:743 ../data/messages:747 ../data/messages:751
+msgid "Frame"
+msgstr "ຂອບ"
+
+#: ../data/messages:749
+msgid "Fill background"
+msgstr "ຕື່ມພື້ນຫຼັງ"
+
+#: ../data/messages:755
+msgid "Linewidth"
+msgstr "ຄວາມໜາຂອງເສັ້ນ"
+
+#: ../data/messages:759 ../data/messages:791
+msgid "Draw indicator above the icon?"
+msgstr "ແຕ້ມໂຕຊີ້ບອກເໜືອໄອຄອນບໍ່?"
+
+#: ../data/messages:761
+msgid "Indicator of active launcher"
+msgstr "ໂຕຊີ້ບອກຂອງໂຕເປີດໂປຣແກຣມທີ່ເຄື່ອນໄຫວ"
+
+#: ../data/messages:763
+msgid ""
+"Indicators are drawn on launchers icons to show that they have already been "
+"launched. Leave blank to use the default one."
+msgstr ""
+"ໂຕຊີ້ບອກຖືກແຕ້ມໃສ່ໄອຄອນຂອງໂຕເປີດໂປຣແກຣມເພື່ອສະແດງວ່າພວກມັນໄດ້ຖືກເປີດແລ້ວ. "
+"ປະໄວ້ຫວ່າງເພື່ອໃຊ້ອັນເລີ່ມຕົ້ນ."
+
+#: ../data/messages:767
+msgid ""
+"The indicator is drawn on active launchers, but you may want to display it "
+"on applications too."
+msgstr "ໂຕຊີ້ບອກຖືກແຕ້ມໃສ່ໂຕເປີດໂປຣແກຣມທີ່ເຄື່ອນໄຫວ, ແຕ່ທ່ານອາດຈະຕ້ອງການສະແດງມັນໃສ່ໂປຣແກຣມນຳ."
+
+#: ../data/messages:769
+msgid "Display an indicator on application icons too ?"
+msgstr "ສະແດງໂຕຊີ້ບອກໃສ່ໄອຄອນໂປຣແກຣມນຳບໍ່ ?"
+
+#: ../data/messages:771
+msgid ""
+"Relatively to the icons' size. You can use this parameter to adjust the "
+"indicator's vertical position.\n"
+"If the indicator is linked to the icon, the offset will be upwards, "
+"otherwise downwards."
+msgstr ""
+"ທຽບກັບຂະໜາດຂອງໄອຄອນ. ທ່ານສາມາດໃຊ້ພາຣາມິເຕີນີ້ເພື່ອປັບຕຳແໜ່ງແນວຕັ້ງຂອງໂຕຊີ້ບອກ.\n"
+"ຖ້າໂຕຊີ້ບອກເຊື່ອມຕໍ່ກັບໄອຄອນ, ໄລຍະຫ່າງຈະໄປທາງເທິງ, ຖ້າບໍ່ດັ່ງນັ້ນກໍຈະໄປທາງລຸ່ມ."
+
+#: ../data/messages:773
+msgid "Vertical offset :"
+msgstr "ໄລຍະຫ່າງແນວຕັ້ງ :"
+
+#: ../data/messages:775
+msgid ""
+"If the indicator is linked to the icon, it will then be zoomed like the icon "
+"and the offset will be upwards.\n"
+"Otherwise it will be drawn directly on the dock and the offset will be "
+"downwards."
+msgstr ""
+"ຖ້າໂຕຊີ້ບອກເຊື່ອມຕໍ່ກັບໄອຄອນ, ມັນຈະຖືກຊູມຄືກັບໄອຄອນ ແລະ ໄລຍະຫ່າງຈະໄປທາງເທິງ.\n"
+"ຖ້າບໍ່ດັ່ງນັ້ນ ມັນຈະຖືກແຕ້ມໂດຍກົງໃສ່ແທ່ນດັອກ ແລະ ໄລຍະຫ່າງຈະໄປທາງລຸ່ມ."
+
+#: ../data/messages:777
+msgid "Link the indicator with its icon?"
+msgstr "ເຊື່ອມຕໍ່ໂຕຊີ້ບອກກັບໄອຄອນຂອງມັນບໍ່?"
+
+#: ../data/messages:779
+msgid ""
+"You can choose to make the indicator smaller or bigger than the icons. The "
+"bigger the value is, the bigger the indicator is. 1 means the indicator will "
+"have the same size as the icons."
+msgstr ""
+"ທ່ານສາມາດເລືອກເຮັດໃຫ້ໂຕຊີ້ບອກນ້ອຍລົງ ຫຼື ໃຫຍ່ກວ່າໄອຄອນໄດ້. ຄ່າຍິ່ງໃຫຍ່, ໂຕຊີ້ບອກກໍຍິ່ງໃຫຍ່. 1 "
+"ໝາຍຄວາມວ່າໂຕຊີ້ບອກຈະມີຂະໜາດເທົ່າກັບໄອຄອນ."
+
+#: ../data/messages:781
+msgid "Indicator size ratio :"
+msgstr "ອັດຕາສ່ວນຂະໜາດໂຕຊີ້ບອກ :"
+
+#: ../data/messages:785
+msgid "bigger"
+msgstr "ໃຫຍ່ຂຶ້ນ"
+
+#: ../data/messages:787
+msgid ""
+"Use it to make the indicator follow the orientation of the dock (top/bottom/"
+"right/left)."
+msgstr "ໃຊ້ມັນເພື່ອເຮັດໃຫ້ໂຕຊີ້ບອກເຄື່ອນຕາມທິດທາງຂອງແທ່ນດັອກ (ເທິງ/ລຸ່ມ/ຂວາ/ຊ້າຍ)."
+
+#: ../data/messages:789
+msgid "Rotate the indicator with dock?"
+msgstr "ໝຸນໂຕຊີ້ບອກພ້ອມກັບແທ່ນດັອກບໍ່?"
+
+#: ../data/messages:793
+msgid "Indicator of grouped windows"
+msgstr "ໂຕຊີ້ບອກຂອງໜ້າຕ່າງທີ່ຖືກຈັດກຸ່ມ"
+
+#: ../data/messages:795
+msgid "How to show that several icons are grouped :"
+msgstr "ວິທີສະແດງວ່າຫຼາຍໄອຄອນຖືກຈັດກຸ່ມ :"
+
+#: ../data/messages:797
+msgid "Draw an emblem"
+msgstr "ແຕ້ມສັນຍາລັກ"
+
+#: ../data/messages:799
+msgid "Draw the sub-dock's icons as a stack"
+msgstr "ແຕ້ມໄອຄອນຂອງແທ່ນດັອກຍ່ອຍເປັນກອງ"
+
+#: ../data/messages:801
+msgid ""
+"It only makes sense if you chose to group the applis of the same class "
+"together. Leave blank to use the default one."
+msgstr "ມັນມີຄວາມໝາຍກໍຕໍ່ເມື່ອທ່ານເລືອກຈັດກຸ່ມໂປຣແກຣມຊັ້ນດຽວກັນເຂົ້າກັນ. ປະໄວ້ຫວ່າງເພື່ອໃຊ້ອັນເລີ່ມຕົ້ນ."
+
+#: ../data/messages:805
+msgid "Zoom the indicator with its icon?"
+msgstr "ຊູມໂຕຊີ້ບອກພ້ອມກັບໄອຄອນຂອງມັນບໍ່?"
+
+#: ../data/messages:807
+msgid "Progress bars"
+msgstr "ແຖບຄວາມຄືບໜ້າ"
+
+#: ../data/messages:815
+msgid "Start color"
+msgstr "ສີເລີ່ມຕົ້ນ"
+
+#: ../data/messages:817
+msgid "End color"
+msgstr "ສີສິ້ນສຸດ"
+
+#: ../data/messages:821
+msgid "Bar thickness"
+msgstr "ຄວາມໜາຂອງແຖບ"
+
+#: ../data/messages:823
+msgid "Labels"
+msgstr "ປ້າຍກຳກັບ"
+
+#: ../data/messages:825
+msgid "Label visibility"
+msgstr "ການເບິ່ງເຫັນຂອງປ້າຍກຳກັບ"
+
+#: ../data/messages:827
+msgid "Show labels:"
+msgstr "ສະແດງປ້າຍກຳກັບ:"
+
+#: ../data/messages:831
+msgid "On pointed icon"
+msgstr "ເທິງໄອຄອນທີ່ຖືກຊີ້"
+
+#: ../data/messages:833
+msgid "On all icons"
+msgstr "ເທິງທຸກໄອຄອນ"
+
+#: ../data/messages:835
+msgid "Neighbouring labels visibility:"
+msgstr "ການເບິ່ງເຫັນຂອງປ້າຍກຳກັບຂ້າງຄຽງ:"
+
+#: ../data/messages:837
+msgid "more visible"
+msgstr "ເຫັນໄດ້ຊັດເຈນຂຶ້ນ"
+
+#: ../data/messages:839
+msgid "less visible"
+msgstr "ເຫັນໄດ້ຊັດເຈນໜ້ອຍລົງ"
+
+#: ../data/messages:855
+msgid "Draw the outline of the text?"
+msgstr "ແຕ້ມເສັ້ນຂອບຂອງຂໍ້ຄວາມບໍ່?"
+
+#: ../data/messages:857
+msgid "Margin around the text (in pixels) :"
+msgstr "ຂອບເຂດອ້ອມຮອບຂໍ້ຄວາມ (ເປັນພິກເຊລ) :"
+
+#: ../data/messages:867
+msgid "Quick-info are short information drawn on the icons."
+msgstr "ຂໍ້ມູນດ່ວນແມ່ນຂໍ້ມູນສັ້ນໆທີ່ແຕ້ມໃສ່ໄອຄອນ."
+
+#: ../data/messages:869
+msgid "Quick-info"
+msgstr "ຂໍ້ມູນດ່ວນ"
+
+#: ../data/messages:871
+msgid "Use the same look as the labels?"
+msgstr "ໃຊ້ຮູບລັກດຽວກັນກັບປ້າຍກຳກັບບໍ່?"
+
+#: ../data/messages:891
+msgid "Text colour:"
+msgstr "ສີຕົວອັກສອນ:"
+
+#: ../data/messages:923
+msgid "Visibility of the dock"
+msgstr "ການເບິ່ງເຫັນຂອງແທ່ນດັອກ"
+
+#: ../data/messages:957 ../data/messages:981
+msgid "Same as main dock"
+msgstr "ຄືກັບແທ່ນດັອກຫຼັກ"
+
+#: ../data/messages:959
+msgid "Tiny"
+msgstr "ນ້ອຍຈິ໋ວ"
+
+#: ../data/messages:973
+msgid "Leave it empty to use the same view as the main dock."
+msgstr "ປະໄວ້ຫວ່າງເພື່ອໃຊ້ມຸມມອງດຽວກັນກັບແທ່ນດັອກຫຼັກ."
+
+#: ../data/messages:975
+msgid "Choose the view for this dock :/"
+msgstr "ເລືອກມຸມມອງສຳລັບແທ່ນດັອກນີ້ :/"
+
+#: ../data/messages:979
+msgid "Fill the background with:"
+msgstr "ຕື່ມພື້ນຫຼັງດ້ວຍ:"
+
+#: ../data/messages:987
+msgid ""
+"Any format allowed; if empty, the colour gradation will be used as a fall "
+"back."
+msgstr "ອະນຸຍາດທຸກຮູບແບບ; ຖ້າຫວ່າງ, ການໄລ່ສີຈະຖືກໃຊ້ແທນ."
+
+#: ../data/messages:989
+msgid "Image filename to use as a background :"
+msgstr "ຊື່ໄຟລ໌ຮູບພາບທີ່ຈະໃຊ້ເປັນພື້ນຫຼັງ :"
+
+#: ../data/messages:999
+msgid "Load theme"
+msgstr "ໂຫຼດຊຸດຮູບແບບ"
+
+#: ../data/messages:1001
+msgid "You can even paste an internet URL."
+msgstr "ທ່ານຍັງສາມາດວາງ URL ຈາກອິນເຕີເນັດໄດ້."
+
+#: ../data/messages:1003
+msgid "...or drag and drop a theme package here :"
+msgstr "...ຫຼື ລາກ ແລະ ວາງແພັກເກັດຊຸດຮູບແບບທີ່ນີ້ :"
+
+#: ../data/messages:1005
+msgid "Theme loading options"
+msgstr "ຕົວເລືອກການໂຫຼດຊຸດຮູບແບບ"
+
+#: ../data/messages:1007
+msgid ""
+"If you tick this box, your launchers will be deleted and replaced by the "
+"ones provided in the new theme. Otherwise the current launchers will be "
+"kept, only icons will be replaced."
+msgstr ""
+"ຖ້າທ່ານໝາຍໃສ່ກ່ອງນີ້, ໂຕເປີດໂປຣແກຣມຂອງທ່ານຈະຖືກລຶບ ແລະ ແທນທີ່ດ້ວຍອັນທີ່ໃຫ້ມາໃນຊຸດຮູບແບບໃໝ່. "
+"ຖ້າບໍ່ດັ່ງນັ້ນ ໂຕເປີດໂປຣແກຣມປັດຈຸບັນຈະຖືກເກັບໄວ້, ຈະມີພຽງແຕ່ໄອຄອນທີ່ຖືກປ່ຽນ."
+
+#: ../data/messages:1009
+msgid "Use the new theme's launchers?"
+msgstr "ໃຊ້ໂຕເປີດໂປຣແກຣມຂອງຊຸດຮູບແບບໃໝ່ບໍ່?"
+
+#: ../data/messages:1011
+msgid ""
+"Otherwise the current behaviour will be kept. This defines the dock's "
+"position, behavioural settings such as auto-hide, using taskbar or not, etc."
+msgstr ""
+"ຖ້າບໍ່ດັ່ງນັ້ນ ພຶດຕິກຳປັດຈຸບັນຈະຖືກເກັບໄວ້. ນີ້ກຳນົດຕຳແໜ່ງຂອງແທ່ນດັອກ, ການຕັ້ງຄ່າພຶດຕິກຳເຊັ່ນ "
+"ການເຊື່ອງອັດຕະໂນມັດ, ການໃຊ້ແຖບໜ້າວຽກ ຫຼື ບໍ່, ແລະ ອື່ນໆ."
+
+#: ../data/messages:1013
+msgid "Use the new theme's behaviour?"
+msgstr "ໃຊ້ພຶດຕິກຳຂອງຊຸດຮູບແບບໃໝ່ບໍ່?"
+
+#: ../data/messages:1015
+msgid "Save"
+msgstr "ບັນທຶກ"
+
+#: ../data/messages:1017
+msgid "You will then be able to re-open it at any time."
+msgstr "ຈາກນັ້ນທ່ານຈະສາມາດເປີດມັນຄືນໄດ້ທຸກເວລາ."
+
+#: ../data/messages:1019
+msgid "Save current behaviour also?"
+msgstr "ບັນທຶກພຶດຕິກຳປັດຈຸບັນນຳບໍ່?"
+
+#: ../data/messages:1021
+msgid "Save current launchers also?"
+msgstr "ບັນທຶກໂຕເປີດໂປຣແກຣມປັດຈຸບັນນຳບໍ່?"
+
+#: ../data/messages:1023
+msgid ""
+"The dock will build a complete tarball of your current theme, allowing you "
+"to easily exchange it with other people."
+msgstr ""
+"ແທ່ນດັອກຈະສ້າງ tarball ທີ່ສົມບູນຂອງຊຸດຮູບແບບປັດຈຸບັນຂອງທ່ານ, "
+"ອະນຸຍາດໃຫ້ທ່ານແລກປ່ຽນມັນກັບຄົນອື່ນໄດ້ຢ່າງງ່າຍດາຍ."
+
+#: ../data/messages:1025
+msgid "Build a package of the theme?"
+msgstr "ສ້າງແພັກເກັດຂອງຊຸດຮູບແບບບໍ່?"
+
+#: ../data/messages:1027
+msgid "Directory in which the package will be saved:"
+msgstr "ໄດເຣັກທໍຣີທີ່ຈະບັນທຶກແພັກເກັດ:"
+
+#: ../data/messages:1029 ../data/messages:1031 ../data/messages:1033
+#: ../data/messages:1065 ../data/messages:1101
+msgid "Desktop Entry"
+msgstr "ລາຍການເດັສທັອບ"
+
+#: ../data/messages:1037 ../data/messages:1069 ../data/messages:1105
+msgid "Name of the container it belongs to:"
+msgstr "ຊື່ຂອງກ່ອງບັນຈຸທີ່ມັນຂຶ້ນກັບ:"
+
+#: ../data/messages:1039
+msgid "Sub-dock's name:"
+msgstr "ຊື່ຂອງແທ່ນດັອກຍ່ອຍ:"
+
+#: ../data/messages:1041
+msgid "New sub-dock"
+msgstr "ແທ່ນດັອກຍ່ອຍໃໝ່"
+
+#: ../data/messages:1043
+msgid "How to render the icon:"
+msgstr "ວິທີສະແດງຜົນໄອຄອນ:"
+
+#: ../data/messages:1045
+msgid "Use an image"
+msgstr "ໃຊ້ຮູບພາບ"
+
+#: ../data/messages:1047
+msgid "Draw sub-dock's content as emblems"
+msgstr "ແຕ້ມເນື້ອໃນຂອງແທ່ນດັອກຍ່ອຍເປັນສັນຍາລັກ"
+
+#: ../data/messages:1049
+msgid "Draw sub-dock's content as stack"
+msgstr "ແຕ້ມເນື້ອໃນຂອງແທ່ນດັອກຍ່ອຍເປັນກອງ"
+
+#: ../data/messages:1051
+msgid "Draw sub-dock's content inside a box"
+msgstr "ແຕ້ມເນື້ອໃນຂອງແທ່ນດັອກຍ່ອຍພາຍໃນກ່ອງ"
+
+#: ../data/messages:1053 ../data/messages:1075
+msgid "Image's name or path:"
+msgstr "ຊື່ ຫຼື ເສັ້ນທາງຂອງຮູບພາບ:"
+
+#: ../data/messages:1055 ../data/messages:1083 ../data/messages:1109
+msgid "Extra parameters"
+msgstr "ພາຣາມິເຕີເພີ່ມເຕີມ"
+
+#: ../data/messages:1057
+msgid "Name of the view used for the sub-dock:"
+msgstr "ຊື່ຂອງມຸມມອງທີ່ໃຊ້ສຳລັບແທ່ນດັອກຍ່ອຍ:"
+
+#: ../data/messages:1059
+msgid "If '0' the container will be displayed on every viewport."
+msgstr "ຖ້າ '0' ກ່ອງບັນຈຸຈະຖືກສະແດງໃນທຸກ viewport."
+
+#: ../data/messages:1061 ../data/messages:1097
+msgid "Only show in this specific viewport:"
+msgstr "ສະແດງສະເພາະໃນ viewport ນີ້:"
+
+#: ../data/messages:1063 ../data/messages:1099 ../data/messages:1111
+msgid "Order you want for this launcher among the others:"
+msgstr "ລຳດັບທີ່ທ່ານຕ້ອງການສຳລັບໂຕເປີດໂປຣແກຣມນີ້ໃນບັນດາອັນອື່ນ:"
+
+#: ../data/messages:1071
+msgid "Launcher's name:"
+msgstr "ຊື່ຂອງໂຕເປີດໂປຣແກຣມ:"
+
+#: ../data/messages:1077
+msgid ""
+"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
+"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+msgstr ""
+"ຕົວຢ່າງ: nautilus --no-desktop, gedit, ແລະ ອື່ນໆ. ທ່ານຍັງສາມາດໃສ່ປຸ່ມລັດໄດ້, ເຊັ່ນ "
+"<Alt>F1, <Ctrl>c,  <Ctrl>v, ແລະ ອື່ນໆ"
+
+#: ../data/messages:1079
+msgid "Command to launch on click:"
+msgstr "ຄຳສັ່ງທີ່ຈະເປີດເມື່ອຄລິກ:"
+
+#: ../data/messages:1085
+msgid ""
+"If you chose to mix launcher and applications, this option will deactivate "
+"this behaviour for this launcher only. It can be useful for instance for a "
+"launcher that launches a script in a terminal, but you don't want it to "
+"steal the terminal's icon from the taskbar."
+msgstr ""
+"ຖ້າທ່ານເລືອກທີ່ຈະປະສົມໂຕເປີດໂປຣແກຣມ ແລະ ໂປຣແກຣມ, "
+"ຕົວເລືອກນີ້ຈະປິດການໃຊ້ງານພຶດຕິກຳນີ້ສະເພາະໂຕເປີດໂປຣແກຣມນີ້ເທົ່ານັ້ນ. ມັນອາດຈະເປັນປະໂຫຍດ, ຕົວຢ່າງ, "
+"ສຳລັບໂຕເປີດໂປຣແກຣມທີ່ເປີດສະຄຣິບໃນເທີມິນໍ, ແຕ່ທ່ານບໍ່ຕ້ອງການໃຫ້ມັນລັກໄອຄອນຂອງເທີມິນໍຈາກແຖບໜ້າວຽກ."
+
+#: ../data/messages:1087
+msgid "Don't link the launcher with its window"
+msgstr "ບໍ່ເຊື່ອມຕໍ່ໂຕເປີດໂປຣແກຣມກັບໜ້າຕ່າງຂອງມັນ"
+
+#: ../data/messages:1089
+msgid ""
+"The only reason you may want to modify this parameter is if you made this "
+"launcher by hands. If you dropped it into the dock from the menu, it is "
+"nearly sure that you shouldn't touch it. It defines the class of the "
+"program, which is useful to link the application with its launcher."
+msgstr ""
+"ເຫດຜົນດຽວທີ່ທ່ານອາດຈະຕ້ອງການແກ້ໄຂພາຣາມິເຕີນີ້ແມ່ນຖ້າທ່ານສ້າງໂຕເປີດໂປຣແກຣມນີ້ດ້ວຍຕົນເອງ. "
+"ຖ້າທ່ານວາງມັນລົງໃນແທ່ນດັອກຈາກເມນູ, ເກືອບແນ່ນອນວ່າທ່ານບໍ່ຄວນແຕະຕ້ອງມັນ. ມັນກຳນົດຊັ້ນຂອງໂປຣແກຣມ, "
+"ເຊິ່ງເປັນປະໂຫຍດໃນການເຊື່ອມຕໍ່ໂປຣແກຣມກັບໂຕເປີດຂອງມັນ."
+
+#: ../data/messages:1091
+msgid "Class of the program:"
+msgstr "ຊັ້ນຂອງໂປຣແກຣມ:"
+
+#: ../data/messages:1093
+msgid "Run in a terminal?"
+msgstr "ເປີດໃນເທີມິນໍບໍ່?"
+
+#: ../data/messages:1095
+msgid "If '0' the launcher will be displayed on every viewport."
+msgstr "ຖ້າ '0' ໂຕເປີດໂປຣແກຣມຈະຖືກສະແດງໃນທຸກ viewport."
+
+#: ../data/messages:1107
+msgid "Separators' appearance is defined in the global configuration."
+msgstr "ຮູບລັກຂອງໂຕຂັ້ນຖືກກຳນົດໃນການຕັ້ງຄ່າລວມ."
+
+#: ../data/messages:1114
+msgid ""
+"<b>The basic 2D view of Cairo-Dock</b>\n"
+"Perfect if you want to make the dock look like a panel."
+msgstr ""
+"<b>ມຸມມອງ 2D ພື້ນຖານຂອງ Cairo-Dock</b>\n"
+"ເໝາະສົມຖ້າທ່ານຕ້ອງການເຮັດໃຫ້ແທ່ນດັອກເບິ່ງຄືກັບແຜງຄວບຄຸມ."
+
+#: ../data/messages:1115
+msgid "<b>New version: <span color='red'>GLX-Dock 3.3</span>!</b>"
+msgstr "<b>ເວີຊັນໃໝ່: <span color='red'>GLX-Dock 3.3</span>!</b>"
+
+#: ../data/messages:1117
+msgid ""
+"- Added a search entry in the <b>Applications Menu</b>.\n"
+"    It allows to rapidly look for programs from their name or their "
+"description"
+msgstr ""
+"- ເພີ່ມຊ່ອງຄົ້ນຫາໃນ <b>ເມນູໂປຣແກຣມ</b>.\n"
+"    ມັນອະນຸຍາດໃຫ້ຄົ້ນຫາໂປຣແກຣມຢ່າງວ່ອງໄວຈາກຊື່ ຫຼື ຄຳອະທິບາຍຂອງພວກມັນ"
+
+#: ../data/messages:1119
+msgid "- Added support of <b>logind</b> in the Logout applet"
+msgstr "- ເພີ່ມການຮອງຮັບ <b>logind</b> ໃນແອັບເປັດອອກຈາກລະບົບ"
+
+#: ../data/messages:1121
+msgid "- Better integration in the Cinnamon desktop"
+msgstr "- ການເຊື່ອມໂຍງທີ່ດີຂຶ້ນໃນເດັສທັອບ Cinnamon"
+
+#: ../data/messages:1123
+msgid ""
+"- Added support of the <b>StartupNotification</b> protocol.\n"
+"    It allows launchers to be animated until the application opens and "
+"avoids accidental double launches"
+msgstr ""
+"- ເພີ່ມການຮອງຮັບໂປຣໂຕຄໍ <b>StartupNotification</b>.\n"
+"    ມັນອະນຸຍາດໃຫ້ໂຕເປີດໂປຣແກຣມມີອະນິເມຊັນຈົນກວ່າໂປຣແກຣມຈະເປີດ ແລະ ຫຼີກລ້ຽງການເປີດຊ້ຳໂດຍບັງເອີນ"
+
+#: ../data/messages:1125
+msgid ""
+"- Added an new third-party applet: <b>Notification History</b> to never miss "
+"a notification"
+msgstr "- ເພີ່ມແອັບເປັດໃໝ່ຈາກພາຍນອກ: <b>ປະຫວັດການແຈ້ງເຕືອນ</b> ເພື່ອບໍ່ໃຫ້ພາດການແຈ້ງເຕືອນໃດໆ"
+
+#: ../data/messages:1127
+msgid "- Upgraded the <b>Dbus API</b> to be even more powerful"
+msgstr "- ອັບເກຣດ <b>Dbus API</b> ໃຫ້ມີປະສິດທິພາບຍິ່ງຂຶ້ນ"
+
+#: ../data/messages:1129
+msgid "- A huge rewrite of the core using Objects"
+msgstr "- ການຂຽນຫຼັກການໃໝ່ຄັ້ງໃຫຍ່ໂດຍໃຊ້ Objects"
+
+#: ../data/messages:1131
+msgid "- If you like the project, please donate :-)"
+msgstr "- ຖ້າທ່ານມັກໂຄງການນີ້, ກະລຸນາບໍລິຈາກ :-)"
+
+#: ../data/messages:1133
+msgid "<b>New version: <span color='red'>GLX-Dock 3.4</span>!</b>"
+msgstr "<b>ເວີຊັນໃໝ່: <span color='red'>GLX-Dock 3.4</span>!</b>"
+
+#: ../data/messages:1135
+msgid "- <b>Menus</b>: added the possibility to customise them"
+msgstr "- <b>ເມນູ</b>: ເພີ່ມຄວາມສາມາດໃນການປັບແຕ່ງພວກມັນ"
+
+#: ../data/messages:1137
+msgid "- <b>Style</b>: unified the style of all components of the dock"
+msgstr "- <b>ສະໄຕລ໌</b>: ລວມສະໄຕລ໌ຂອງທຸກອົງປະກອບຂອງແທ່ນດັອກໃຫ້ເປັນໜຶ່ງດຽວ"
+
+#: ../data/messages:1139
+msgid ""
+"- Better integration with <b>Compiz</b> (e.g. when using the <b>Cairo-Dock "
+"session</b>) and Cinnamon"
+msgstr ""
+"- ການເຊື່ອມໂຍງທີ່ດີຂຶ້ນກັບ <b>Compiz</b> (ຕົວຢ່າງ ເມື່ອໃຊ້ <b>ເຊສຊັນ Cairo-Dock</b>) ແລະ "
+"Cinnamon"
+
+#: ../data/messages:1141
+msgid ""
+"- <b>Applications Menu</b> and <b>Logout</b> applets will wait the end of an "
+"update before displaying notifications"
+msgstr ""
+"- ແອັບເປັດ <b>ເມນູໂປຣແກຣມ</b> ແລະ <b>ອອກຈາກລະບົບ</b> "
+"ຈະລໍຖ້າໃຫ້ການອັບເດດສິ້ນສຸດກ່ອນທີ່ຈະສະແດງການແຈ້ງເຕືອນ"
+
+#: ../data/messages:1143
+msgid ""
+"- Various improvements for <b>Applications Menu</b>, <b>Shortcuts</b>, "
+"<b>Status-Notifier</b> and <b>Terminal</b> applets"
+msgstr ""
+"- ການປັບປຸງຕ່າງໆສຳລັບແອັບເປັດ <b>ເມນູໂປຣແກຣມ</b>, <b>ທາງລັດ</b>, <b>Status-Notifier</"
+"b> ແລະ <b>ເທີມິນໍ</b>"
+
+#: ../data/messages:1145
+msgid "- Start working on <b>EGL</b> and <b>Wayland</b> support"
+msgstr "- ເລີ່ມເຮັດວຽກກ່ຽວກັບການຮອງຮັບ <b>EGL</b> ແລະ <b>Wayland</b>"
+
+#: ../data/messages:1147
+msgid "- And as always ... various bug fixes and improvements!"
+msgstr "- ແລະ ເຊັ່ນເຄີຍ ... ການແກ້ໄຂບັກ ແລະ ການປັບປຸງຕ່າງໆ!"
+
+#: ../data/messages:1149
+msgid "If you like the project, please donate and/or contribute :-)"
+msgstr "ຖ້າທ່ານມັກໂຄງການນີ້, ກະລຸນາບໍລິຈາກ ແລະ/ຫຼື ມີສ່ວນຮ່ວມ :-)"
+
+#: ../data/messages:1151
+msgid ""
+"Note: We're switching from Bzr to Git on Github, feel free to fork! https://"
+"github.com/Cairo-Dock"
+msgstr ""
+"ໝາຍເຫດ: ພວກເຮົາກຳລັງປ່ຽນຈາກ Bzr ໄປເປັນ Git ໃນ Github, ສາມາດ fork ໄດ້ຕາມສະບາຍ! "
+"https://github.com/Cairo-Dock"
