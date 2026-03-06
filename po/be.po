@@ -1531,7 +1531,7 @@ msgid ""
 "click, a secondary action on middle-click, and additional actions on right-"
 "click (in the menu).\n"
 "Some applets let you bind a shortkey to an action, and decide which action "
-"sould be on middle-click."
+"should be on middle-click."
 msgstr ""
 
 #: ../Help/data/messages:7
