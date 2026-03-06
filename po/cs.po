@@ -17,57 +17,71 @@ msgstr ""
 "X-Launchpad-Export-Date: 2014-10-20 05:54+0000\n"
 "X-Generator: Launchpad (build 17196)\n"
 
-#: ../src/cairo-dock-gui-advanced.c:120 ../src/cairo-dock-widget-plugins.c:164
+#: ../src/cairo-dock-gui-advanced.c:121 ../src/cairo-dock-widget-plugins.c:164
 #: ../data/messages:269
 msgid "Behaviour"
 msgstr "Chování"
 
-#: ../src/cairo-dock-gui-advanced.c:121 ../data/messages:113
-#: ../data/messages:841 ../data/messages:879 ../data/messages:951
+#: ../src/cairo-dock-gui-advanced.c:122 ../data/messages:113
+#: ../data/messages:849 ../data/messages:887 ../data/messages:959
 msgid "Appearance"
 msgstr "Vzhled"
 
-#: ../src/cairo-dock-gui-advanced.c:122 ../src/cairo-dock-widget-plugins.c:134
+#: ../src/cairo-dock-gui-advanced.c:123 ../src/cairo-dock-widget-plugins.c:134
 msgid "Files"
 msgstr "Soubory"
 
-#: ../src/cairo-dock-gui-advanced.c:123 ../src/cairo-dock-widget-plugins.c:139
+#: ../src/cairo-dock-gui-advanced.c:124 ../src/cairo-dock-widget-plugins.c:139
 msgid "Internet"
 msgstr "Internet"
 
-#: ../src/cairo-dock-gui-advanced.c:124 ../src/cairo-dock-widget-plugins.c:144
+#: ../src/cairo-dock-gui-advanced.c:125 ../src/cairo-dock-widget-plugins.c:144
 msgid "Desktop"
 msgstr "Pracovní plocha"
 
-#: ../src/cairo-dock-gui-advanced.c:125
+#: ../src/cairo-dock-gui-advanced.c:126
 msgid "Accessories"
 msgstr "Doplňky"
 
-#: ../src/cairo-dock-gui-advanced.c:126 ../src/cairo-dock-gui-advanced.c:1485
-#: ../src/cairo-dock-gui-advanced.c:1486 ../src/cairo-dock-widget-plugins.c:154
-#: ../data/messages:119 ../data/messages:373 ../data/messages:883
+#: ../src/cairo-dock-gui-advanced.c:127 ../src/cairo-dock-gui-advanced.c:1526
+#: ../src/cairo-dock-gui-advanced.c:1527 ../src/cairo-dock-widget-plugins.c:154
+#: ../data/messages:119 ../data/messages:373 ../data/messages:891
 msgid "System"
 msgstr "Systém"
 
-#: ../src/cairo-dock-gui-advanced.c:127 ../src/cairo-dock-widget-plugins.c:159
+#: ../src/cairo-dock-gui-advanced.c:128 ../src/cairo-dock-widget-plugins.c:159
 msgid "Fun"
 msgstr "Zábava"
 
-#: ../src/cairo-dock-gui-advanced.c:128 ../src/cairo-dock-gui-advanced.c:1762
-#: ../src/gldit/cairo-dock-gui-factory.c:785
+#: ../src/cairo-dock-gui-advanced.c:129 ../src/cairo-dock-gui-advanced.c:1803
+#: ../src/gldit/cairo-dock-gui-factory.c:786
 msgid "All"
 msgstr "Vše"
 
-#: ../src/cairo-dock-gui-advanced.c:1450
+#: ../src/cairo-dock-gui-advanced.c:1383
+msgid ""
+"This plug-in cannot be enabled as it is not supported in the current desktop "
+"environment."
+msgstr ""
+
+#: ../src/cairo-dock-gui-advanced.c:1387
+msgid ""
+"This plug-in cannot be enabled as it is not supported in the current desktop "
+"environment.\n"
+"Check our Wiki for more information: https://github.com/Cairo-Dock/cairo-"
+"dock-core/wiki"
+msgstr ""
+
+#: ../src/cairo-dock-gui-advanced.c:1491
 msgid "Set the position of the main dock."
 msgstr "Nastavit pozici hlavního doku."
 
-#: ../src/cairo-dock-gui-advanced.c:1451 ../src/cairo-dock-gui-advanced.c:1452
+#: ../src/cairo-dock-gui-advanced.c:1492 ../src/cairo-dock-gui-advanced.c:1493
 #: ../Help/data/messages:281 ../data/messages:153
 msgid "Position"
 msgstr "Poloha"
 
-#: ../src/cairo-dock-gui-advanced.c:1459
+#: ../src/cairo-dock-gui-advanced.c:1500
 msgid ""
 "Do you like your dock to be always visible,\n"
 " or on the contrary unobtrusive?\n"
@@ -77,80 +91,80 @@ msgstr ""
 " nebo naopak nenápadný ?\n"
 "Nastavte si, jak chcete ke svému doku a sub-dokům přistupovat!"
 
-#: ../src/cairo-dock-gui-advanced.c:1460 ../src/cairo-dock-gui-advanced.c:1461
-#: ../src/cairo-dock-user-menu.c:2132 ../Help/data/messages:299
+#: ../src/cairo-dock-gui-advanced.c:1501 ../src/cairo-dock-gui-advanced.c:1502
+#: ../src/cairo-dock-user-menu.c:2149 ../Help/data/messages:299
 msgid "Visibility"
 msgstr "Viditelnost"
 
-#: ../src/cairo-dock-gui-advanced.c:1468
+#: ../src/cairo-dock-gui-advanced.c:1509
 msgid "Display and interact with currently open windows."
 msgstr "Zobrazuje a ovládá právě otevřená okna."
 
-#: ../src/cairo-dock-gui-advanced.c:1469 ../src/cairo-dock-gui-advanced.c:1470
+#: ../src/cairo-dock-gui-advanced.c:1510 ../src/cairo-dock-gui-advanced.c:1511
 #: ../Help/data/messages:41 ../data/messages:65
 msgid "Taskbar"
 msgstr "Lišta aplikací"
 
-#: ../src/cairo-dock-gui-advanced.c:1477
+#: ../src/cairo-dock-gui-advanced.c:1518
 msgid "Define all the keyboard shortcuts currently available."
 msgstr "Definování dostupných klávesových zkratek"
 
-#: ../src/cairo-dock-gui-advanced.c:1478 ../data/messages:149
+#: ../src/cairo-dock-gui-advanced.c:1519 ../data/messages:149
 msgid "Shortkeys"
 msgstr "Klávesové zkratky"
 
-#: ../src/cairo-dock-gui-advanced.c:1484
+#: ../src/cairo-dock-gui-advanced.c:1525
 msgid "All of the parameters you will never want to tweak."
 msgstr "Parametry, které nikdy nebudete chtít upravovat."
 
-#: ../src/cairo-dock-gui-advanced.c:1496
+#: ../src/cairo-dock-gui-advanced.c:1537
 msgid "Configure the global style."
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1497 ../src/cairo-dock-gui-advanced.c:1498
+#: ../src/cairo-dock-gui-advanced.c:1538 ../src/cairo-dock-gui-advanced.c:1539
 #: ../data/messages:115 ../data/messages:117 ../data/messages:465
-#: ../data/messages:555 ../data/messages:695 ../data/messages:737
-#: ../data/messages:809 ../data/messages:843 ../data/messages:877
-#: ../data/messages:881
+#: ../data/messages:555 ../data/messages:703 ../data/messages:745
+#: ../data/messages:817 ../data/messages:851 ../data/messages:885
+#: ../data/messages:889
 msgid "Style"
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1505
+#: ../src/cairo-dock-gui-advanced.c:1546
 msgid "Configure docks appearance."
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1506 ../Help/data/messages:75
+#: ../src/cairo-dock-gui-advanced.c:1547 ../Help/data/messages:75
 msgid "Docks"
 msgstr "Docky"
 
-#: ../src/cairo-dock-gui-advanced.c:1507 ../data/messages:463
-#: ../data/messages:977
+#: ../src/cairo-dock-gui-advanced.c:1548 ../data/messages:463
+#: ../data/messages:985
 msgid "Background"
 msgstr "Pozadí"
 
-#: ../src/cairo-dock-gui-advanced.c:1508 ../data/messages:141
-#: ../data/messages:531 ../data/messages:971
+#: ../src/cairo-dock-gui-advanced.c:1549 ../data/messages:141
+#: ../data/messages:531 ../data/messages:979
 msgid "Views"
 msgstr "Zobrazení"
 
-#: ../src/cairo-dock-gui-advanced.c:1516
+#: ../src/cairo-dock-gui-advanced.c:1557
 msgid "Configure text bubble appearance."
 msgstr "Nastavení vzhledu textových bublin."
 
-#: ../src/cairo-dock-gui-advanced.c:1517 ../src/cairo-dock-gui-advanced.c:1518
+#: ../src/cairo-dock-gui-advanced.c:1558 ../src/cairo-dock-gui-advanced.c:1559
 msgid "Dialog boxes and Menus"
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1525
+#: ../src/cairo-dock-gui-advanced.c:1566
 msgid "Applets can be displayed on your desktop as widgets."
 msgstr "Applety mohou být zobrazeny na vaší ploše jako widgety."
 
-#: ../src/cairo-dock-gui-advanced.c:1526 ../src/cairo-dock-gui-advanced.c:1527
+#: ../src/cairo-dock-gui-advanced.c:1567 ../src/cairo-dock-gui-advanced.c:1568
 #: ../Help/data/messages:85 ../data/messages:593
 msgid "Desklets"
 msgstr "Desklety"
 
-#: ../src/cairo-dock-gui-advanced.c:1534
+#: ../src/cairo-dock-gui-advanced.c:1575
 msgid ""
 "All about icons:\n"
 " size, reflection, icon theme,..."
@@ -158,101 +172,101 @@ msgstr ""
 "Vše o ikonách:\n"
 " velikost, zrcadlení, motiv ikon..."
 
-#: ../src/cairo-dock-gui-advanced.c:1535 ../src/cairo-dock-gui-advanced.c:1536
+#: ../src/cairo-dock-gui-advanced.c:1576 ../src/cairo-dock-gui-advanced.c:1577
 #: ../Help/data/messages:11 ../data/messages:125 ../data/messages:649
-#: ../data/messages:953
+#: ../data/messages:961
 msgid "Icons"
 msgstr "Ikony"
 
-#: ../src/cairo-dock-gui-advanced.c:1537 ../data/messages:733
+#: ../src/cairo-dock-gui-advanced.c:1578 ../data/messages:741
 msgid "Indicators"
 msgstr "Indikátory"
 
-#: ../src/cairo-dock-gui-advanced.c:1545
+#: ../src/cairo-dock-gui-advanced.c:1586
 msgid "Define icon caption and quick-info style."
 msgstr "Nastavte styl popisků ikon a rychlého infa."
 
-#: ../src/cairo-dock-gui-advanced.c:1546 ../src/cairo-dock-gui-advanced.c:1547
+#: ../src/cairo-dock-gui-advanced.c:1587 ../src/cairo-dock-gui-advanced.c:1588
 msgid "Captions"
 msgstr "Popisky"
 
-#: ../src/cairo-dock-gui-advanced.c:1554
+#: ../src/cairo-dock-gui-advanced.c:1595
 msgid "Try new themes and save your theme."
 msgstr "Zkuste nová témata a uložte své téma."
 
-#: ../src/cairo-dock-gui-advanced.c:1555 ../src/cairo-dock-gui-simple.c:115
+#: ../src/cairo-dock-gui-advanced.c:1596 ../src/cairo-dock-gui-simple.c:115
 #: ../src/cairo-dock-gui-simple.c:117
 msgid "Themes"
 msgstr "Témata"
 
-#: ../src/cairo-dock-gui-advanced.c:1561
+#: ../src/cairo-dock-gui-advanced.c:1602
 msgid "Current items in your dock(s)."
 msgstr "Současné položky ve vašem doku."
 
-#: ../src/cairo-dock-gui-advanced.c:1562 ../src/cairo-dock-gui-simple.c:91
+#: ../src/cairo-dock-gui-advanced.c:1603 ../src/cairo-dock-gui-simple.c:91
 #: ../src/cairo-dock-gui-simple.c:93
 msgid "Current items"
 msgstr "Současné položky."
 
-#: ../src/cairo-dock-gui-advanced.c:1685
+#: ../src/cairo-dock-gui-advanced.c:1726
 msgid "Filter"
 msgstr "Filtr"
 
-#: ../src/cairo-dock-gui-advanced.c:1724
+#: ../src/cairo-dock-gui-advanced.c:1765
 msgid "All words"
 msgstr "Všechna slova"
 
-#: ../src/cairo-dock-gui-advanced.c:1725
+#: ../src/cairo-dock-gui-advanced.c:1766
 msgid "Highlighted words"
 msgstr "Zvýraznit slova"
 
-#: ../src/cairo-dock-gui-advanced.c:1726
+#: ../src/cairo-dock-gui-advanced.c:1767
 msgid "Hide others"
 msgstr "Schovat ostatní"
 
-#: ../src/cairo-dock-gui-advanced.c:1727
+#: ../src/cairo-dock-gui-advanced.c:1768
 msgid "Search in description"
 msgstr "Hledat v popisu"
 
-#: ../src/cairo-dock-gui-advanced.c:1731
+#: ../src/cairo-dock-gui-advanced.c:1772
 msgid "Hide disabled"
 msgstr "Skrýt zakázané"
 
-#: ../src/cairo-dock-gui-advanced.c:1740
+#: ../src/cairo-dock-gui-advanced.c:1781
 msgid "Categories"
 msgstr "Kategorie"
 
-#: ../src/cairo-dock-gui-advanced.c:1838
+#: ../src/cairo-dock-gui-advanced.c:1878
 msgid "Enable this module"
 msgstr "Povolit tento modul."
 
-#: ../src/cairo-dock-gui-advanced.c:1865 ../src/cairo-dock-gui-simple.c:204
-#: ../src/cairo-dock-user-menu.c:196 ../src/cairo-dock-user-menu.c:1985
-#: ../src/cairo-dock-user-menu.c:1987 ../data/messages:345
+#: ../src/cairo-dock-gui-advanced.c:1905 ../src/cairo-dock-gui-simple.c:204
+#: ../src/cairo-dock-user-menu.c:197 ../src/cairo-dock-user-menu.c:1990
+#: ../src/cairo-dock-user-menu.c:1992 ../data/messages:345
 msgid "Close"
 msgstr "Zavřít"
 
-#: ../src/cairo-dock-gui-advanced.c:1873
+#: ../src/cairo-dock-gui-advanced.c:1913
 msgid "Back"
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1881 ../src/cairo-dock-gui-simple.c:212
+#: ../src/cairo-dock-gui-advanced.c:1921 ../src/cairo-dock-gui-simple.c:212
 msgid "Apply"
 msgstr ""
 
-#: ../src/cairo-dock-gui-advanced.c:1897
+#: ../src/cairo-dock-gui-advanced.c:1937
 msgid "More applets"
 msgstr "Více appletů"
 
-#: ../src/cairo-dock-gui-advanced.c:1898
+#: ../src/cairo-dock-gui-advanced.c:1938
 msgid "Get more applets online !"
 msgstr "Získat více appletů online!"
 
-#: ../src/cairo-dock-gui-advanced.c:1990 ../src/cairo-dock-gui-simple.c:355
+#: ../src/cairo-dock-gui-advanced.c:2030 ../src/cairo-dock-gui-simple.c:355
 msgid "Cairo-Dock configuration"
 msgstr "Nastavení Cairo-Docku"
 
-#: ../src/cairo-dock-gui-advanced.c:2575
+#: ../src/cairo-dock-gui-advanced.c:2609
 msgid "Simple Mode"
 msgstr "Jednoduchý režim"
 
@@ -276,7 +290,16 @@ msgstr ""
 "Pokročilý režim vám umožňuje nastavit všechny parametry doku. Je to mocný "
 "nástroj k úpravě aktuálního motivu."
 
-#: ../src/cairo-dock-user-interaction.c:429
+#: ../src/cairo-dock-user-interaction.c:207
+msgid ""
+"Cannot show preview of application windows. Check if your window manager / "
+"compositor supports this feature (it is usually called \"scale\" or "
+"\"overview\").\n"
+"If this happens only for a particular app, please open a bug report on our "
+"Github page."
+msgstr ""
+
+#: ../src/cairo-dock-user-interaction.c:470
 msgid ""
 "The option 'overwrite X icons' has been automatically enabled in the "
 "config.\n"
@@ -285,70 +308,70 @@ msgstr ""
 "Volba 'přepsat X ikony' byla automaticky aktivována v nastavení.\n"
 "Nachází se v sekci 'Lišta aplikací'"
 
-#: ../src/cairo-dock-user-menu.c:131
+#: ../src/cairo-dock-user-menu.c:132
 msgid "Delete this dock?"
 msgstr "Smazat tento dok?"
 
-#: ../src/cairo-dock-user-menu.c:193
+#: ../src/cairo-dock-user-menu.c:194
 msgid "About Cairo-Dock"
 msgstr "O Cairo-Dock"
 
-#: ../src/cairo-dock-user-menu.c:226 ../Help/data/messages:245
+#: ../src/cairo-dock-user-menu.c:227 ../Help/data/messages:245
 msgid "Development site"
 msgstr "Web vývojářů"
 
-#: ../src/cairo-dock-user-menu.c:227 ../Help/data/messages:243
+#: ../src/cairo-dock-user-menu.c:228 ../Help/data/messages:243
 msgid "Find the latest version of Cairo-Dock here !"
 msgstr "Zde naleznete nejnovější verzi Cairo-Dock!"
 
-#: ../src/cairo-dock-user-menu.c:231 ../src/cairo-dock-user-menu.c:1136
-#: ../src/cairo-dock-widget-plugins.c:279
+#: ../src/cairo-dock-user-menu.c:232 ../src/cairo-dock-user-menu.c:1140
+#: ../src/cairo-dock-widget-plugins.c:280
 msgid "Get more applets!"
 msgstr "Získejte další applety!"
 
-#: ../src/cairo-dock-user-menu.c:235 ../src/cairo-dock-user-menu.c:241
+#: ../src/cairo-dock-user-menu.c:236 ../src/cairo-dock-user-menu.c:242
 msgid "Donate"
 msgstr "Přispět"
 
-#: ../src/cairo-dock-user-menu.c:238 ../src/cairo-dock-user-menu.c:244
+#: ../src/cairo-dock-user-menu.c:239 ../src/cairo-dock-user-menu.c:245
 msgid ""
 "Support the people who spend countless hours to bring you the best dock ever."
 msgstr ""
 "Pomozte lidem, kteří tráví bezpočet hodin, aby vám přinesli ten nejlepší dok."
 
-#: ../src/cairo-dock-user-menu.c:273
+#: ../src/cairo-dock-user-menu.c:274
 msgid "Here is a list of the current developers and contributors"
 msgstr "Zde je seznam současných vývojářů a přispěvatelů"
 
-#: ../src/cairo-dock-user-menu.c:274
+#: ../src/cairo-dock-user-menu.c:275
 msgid "Developers"
 msgstr "Vývojáři"
 
-#: ../src/cairo-dock-user-menu.c:275
+#: ../src/cairo-dock-user-menu.c:276
 msgid "Main developer and project leader"
 msgstr "Hlavní vývojáři a vedoucí projektu"
 
-#: ../src/cairo-dock-user-menu.c:276
+#: ../src/cairo-dock-user-menu.c:277
 msgid "Contributors / Hackers"
 msgstr "Vývojáři / testéři"
 
-#: ../src/cairo-dock-user-menu.c:278 ../Help/data/messages:259
+#: ../src/cairo-dock-user-menu.c:279 ../Help/data/messages:259
 msgid "Development"
 msgstr "Vývoj"
 
-#: ../src/cairo-dock-user-menu.c:294
+#: ../src/cairo-dock-user-menu.c:295
 msgid "Website"
 msgstr "Webová stránka"
 
-#: ../src/cairo-dock-user-menu.c:295
+#: ../src/cairo-dock-user-menu.c:296
 msgid "Beta-testing / Suggestions / Forum animation"
 msgstr "Beta-testování / Návrhy / Fórum animací"
 
-#: ../src/cairo-dock-user-menu.c:296
+#: ../src/cairo-dock-user-menu.c:297
 msgid "Translators for this language"
 msgstr "Překladatelé pro tento jazyk"
 
-#: ../src/cairo-dock-user-menu.c:297
+#: ../src/cairo-dock-user-menu.c:298
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -359,11 +382,11 @@ msgstr ""
 "  Michal Mlejnek https://launchpad.net/~chaemil72\n"
 "  Milhouse https://launchpad.net/~milhouse-mujweb"
 
-#: ../src/cairo-dock-user-menu.c:299
+#: ../src/cairo-dock-user-menu.c:300
 msgid "Support"
 msgstr "Podpora"
 
-#: ../src/cairo-dock-user-menu.c:330
+#: ../src/cairo-dock-user-menu.c:331
 msgid ""
 "Thanks to all people that help us to improve the Cairo-Dock project.\n"
 "Thanks to all current, former and future contributors."
@@ -371,51 +394,51 @@ msgstr ""
 "Poděkování všem lidem, kteří nám pomáhají vylepšovat Cairo-Dock projekt.\n"
 "Poděkování všem současným, dřívějším i budoucím přispěvatelům."
 
-#: ../src/cairo-dock-user-menu.c:332
+#: ../src/cairo-dock-user-menu.c:333
 msgid "How to help us?"
 msgstr "Jak nám pomoci?"
 
-#: ../src/cairo-dock-user-menu.c:333
+#: ../src/cairo-dock-user-menu.c:334
 msgid "Don't hesitate to join the project, we need you ;)"
 msgstr "Neváhejte se zapojit do projektu, potřebujeme vás ;)"
 
-#: ../src/cairo-dock-user-menu.c:334
+#: ../src/cairo-dock-user-menu.c:335
 msgid "Former contributors"
 msgstr "Dřívější přispěvatelé"
 
-#: ../src/cairo-dock-user-menu.c:335
+#: ../src/cairo-dock-user-menu.c:336
 msgid "For a complete list, please have a look to BZR logs"
 msgstr "Chcete-li komletní seznam, prohlídněte si BZR logy"
 
-#: ../src/cairo-dock-user-menu.c:336
+#: ../src/cairo-dock-user-menu.c:337
 msgid "Users of our forum"
 msgstr "Uživatelé našeho fóra"
 
-#: ../src/cairo-dock-user-menu.c:337
+#: ../src/cairo-dock-user-menu.c:338
 msgid "List of our forum's members"
 msgstr "Seznam členů našeho fóra"
 
-#: ../src/cairo-dock-user-menu.c:338
+#: ../src/cairo-dock-user-menu.c:339
 msgid "Artwork"
 msgstr "Kresba"
 
-#: ../src/cairo-dock-user-menu.c:340
+#: ../src/cairo-dock-user-menu.c:341
 msgid "Thanks"
 msgstr "Poděkování"
 
-#: ../src/cairo-dock-user-menu.c:352
+#: ../src/cairo-dock-user-menu.c:353
 msgid "Technical info"
 msgstr ""
 
-#: ../src/cairo-dock-user-menu.c:444
+#: ../src/cairo-dock-user-menu.c:445
 msgid "Quit Cairo-Dock?"
 msgstr "Ukončit Cairo-Dock ?"
 
-#: ../src/cairo-dock-user-menu.c:474 ../src/cairo-dock-user-menu.c:618
+#: ../src/cairo-dock-user-menu.c:475 ../src/cairo-dock-user-menu.c:619
 msgid "Separator"
 msgstr "Oddělovač"
 
-#: ../src/cairo-dock-user-menu.c:580
+#: ../src/cairo-dock-user-menu.c:581
 msgid ""
 "The new dock has been created.\n"
 "Now move some launchers or applets into it by right-clicking on the icon -> "
@@ -425,32 +448,32 @@ msgstr ""
 "Nyní do něj přesuňte spouštěče, nebo applety, kliknutím pravým tlačítkem na "
 "ikonu a volbou 'Přesunout do jiného doku'"
 
-#: ../src/cairo-dock-user-menu.c:612
+#: ../src/cairo-dock-user-menu.c:613
 msgid "Add"
 msgstr "Přidat"
 
-#: ../src/cairo-dock-user-menu.c:614
+#: ../src/cairo-dock-user-menu.c:615
 msgid "Sub-dock"
 msgstr "Sub-dok"
 
-#: ../src/cairo-dock-user-menu.c:616
+#: ../src/cairo-dock-user-menu.c:617
 msgid "Main dock"
 msgstr "Hlavní dok"
 
-#: ../src/cairo-dock-user-menu.c:620
+#: ../src/cairo-dock-user-menu.c:621
 msgid "Custom launcher"
 msgstr "Uživatelský spouštěč"
 
-#: ../src/cairo-dock-user-menu.c:621
+#: ../src/cairo-dock-user-menu.c:622
 msgid ""
 "Usually you would drag a launcher from the menu and drop it on the dock."
 msgstr "Obvykle uchopíte spouštěč z menu a přesunete ho do doku."
 
-#: ../src/cairo-dock-user-menu.c:624
+#: ../src/cairo-dock-user-menu.c:625
 msgid "Applet"
 msgstr "Aplet"
 
-#: ../src/cairo-dock-user-menu.c:641
+#: ../src/cairo-dock-user-menu.c:642
 msgid ""
 "Do you want to re-dispatch the icons contained inside this container into "
 "the dock?\n"
@@ -459,20 +482,20 @@ msgstr ""
 "Opravdu chcete přesunout ikony uvnitř tohoto kontejneru do docku?\n"
 " (ostatní budou odstraněny)"
 
-#: ../src/cairo-dock-user-menu.c:664
+#: ../src/cairo-dock-user-menu.c:665
 msgid "separator"
 msgstr "oddělovač"
 
-#: ../src/cairo-dock-user-menu.c:668
+#: ../src/cairo-dock-user-menu.c:669
 #, c-format
 msgid "You're about to remove this icon (%s) from the dock. Are you sure?"
 msgstr "Opravdu chcete tuto ikonu (%s) odstranit z doku?"
 
-#: ../src/cairo-dock-user-menu.c:684
+#: ../src/cairo-dock-user-menu.c:685
 msgid "Sorry, this icon doesn't have a configuration file."
 msgstr "Tato ikona nemá konfigurační soubor."
 
-#: ../src/cairo-dock-user-menu.c:724
+#: ../src/cairo-dock-user-menu.c:725
 msgid ""
 "The new dock has been created.\n"
 "You can customize it by right-clicking on it -> cairo-dock -> configure this "
@@ -482,15 +505,15 @@ msgstr ""
 "Přizpůsobit si ho můžete kliknutím pravým tlačítkem a volbou Cairo-Dock -> "
 "Nastavit tento dok."
 
-#: ../src/cairo-dock-user-menu.c:730
+#: ../src/cairo-dock-user-menu.c:731
 msgid "Move to another dock"
 msgstr "Přesunout do jiného doku"
 
-#: ../src/cairo-dock-user-menu.c:732 ../src/gldit/cairo-dock-gui-factory.c:1212
+#: ../src/cairo-dock-user-menu.c:733 ../src/gldit/cairo-dock-gui-factory.c:1213
 msgid "New main dock"
 msgstr "Nový hlavní dok"
 
-#: ../src/cairo-dock-user-menu.c:800
+#: ../src/cairo-dock-user-menu.c:801
 msgid ""
 "Sorry, couldn't find the corresponding description file.\n"
 "Consider dragging and dropping the launcher from the Applications Menu."
@@ -498,104 +521,104 @@ msgstr ""
 "Nebyl nalezen odpovídající soubor.\n"
 "Zvažte přetáhnutí ikon z menu Aplikace do doku."
 
-#: ../src/cairo-dock-user-menu.c:849
+#: ../src/cairo-dock-user-menu.c:850
 #, c-format
 msgid "You're about to remove this applet (%s) from the dock. Are you sure?"
 msgstr "Chcete odebrat tento applet (%s) z doku. Jste si jisti?"
 
-#: ../src/cairo-dock-user-menu.c:922 ../src/gldit/cairo-dock-gui-factory.c:748
+#: ../src/cairo-dock-user-menu.c:923 ../src/gldit/cairo-dock-gui-factory.c:749
 msgid "Pick up an image"
 msgstr "Uchopit obrázek"
 
-#: ../src/cairo-dock-user-menu.c:925 ../src/gldit/cairo-dock-gui-factory.c:751
+#: ../src/cairo-dock-user-menu.c:926 ../src/gldit/cairo-dock-gui-factory.c:752
 msgid "Ok"
 msgstr ""
 
-#: ../src/cairo-dock-user-menu.c:927 ../src/cairo-dock-widget-shortkeys.c:129
+#: ../src/cairo-dock-user-menu.c:928 ../src/cairo-dock-widget-shortkeys.c:131
 #: ../src/cairo-dock-widget-themes.c:236
-#: ../src/gldit/cairo-dock-gui-factory.c:753
+#: ../src/gldit/cairo-dock-gui-factory.c:754
 msgid "Cancel"
 msgstr ""
 
-#: ../src/cairo-dock-user-menu.c:939 ../src/gldit/cairo-dock-gui-factory.c:792
-#: ../data/messages:469 ../data/messages:475 ../data/messages:741
-#: ../data/messages:983
+#: ../src/cairo-dock-user-menu.c:940 ../src/gldit/cairo-dock-gui-factory.c:793
+#: ../data/messages:469 ../data/messages:475 ../data/messages:749
+#: ../data/messages:991
 msgid "Image"
 msgstr "Obrázek"
 
-#: ../src/cairo-dock-user-menu.c:1020 ../src/cairo-dock-user-menu.c:1099
+#: ../src/cairo-dock-user-menu.c:1021 ../src/cairo-dock-user-menu.c:1103
 msgid "This will (un)lock the position of the icons."
 msgstr "Tato volba uzamkne/odeemkne pozici ikon"
 
-#: ../src/cairo-dock-user-menu.c:1050
+#: ../src/cairo-dock-user-menu.c:1054
 msgid "Configure"
 msgstr "Nastavení"
 
-#: ../src/cairo-dock-user-menu.c:1052
+#: ../src/cairo-dock-user-menu.c:1056
 msgid "Configure behaviour, appearance, and applets."
 msgstr "Nastavit umístění, vzhled a applety"
 
-#: ../src/cairo-dock-user-menu.c:1060
+#: ../src/cairo-dock-user-menu.c:1064
 msgid "Configure this dock"
 msgstr "Nastavit tento dok"
 
-#: ../src/cairo-dock-user-menu.c:1062
+#: ../src/cairo-dock-user-menu.c:1066
 msgid "Customize the position, visibility and appearance of this main dock."
 msgstr "Přizpůsobit pozici, viditelnost a vzhled tohoto hlavního doku."
 
-#: ../src/cairo-dock-user-menu.c:1065
+#: ../src/cairo-dock-user-menu.c:1069
 msgid "Delete this dock"
 msgstr "Odstranit tento dok"
 
-#: ../src/cairo-dock-user-menu.c:1076
+#: ../src/cairo-dock-user-menu.c:1080
 msgid "Manage themes"
 msgstr "Správa motivů"
 
-#: ../src/cairo-dock-user-menu.c:1078
+#: ../src/cairo-dock-user-menu.c:1082
 msgid ""
 "Choose from amongst many themes on the server or save your current theme."
 msgstr "Umožňuje vybrat spoustu motivů ze serveru nebo uložit vaše vlastní."
 
-#: ../src/cairo-dock-user-menu.c:1092
+#: ../src/cairo-dock-user-menu.c:1096
 msgid "Lock icons position"
 msgstr "Uzmkonout polohu ikon"
 
-#: ../src/cairo-dock-user-menu.c:1106
+#: ../src/cairo-dock-user-menu.c:1110
 msgid "Quick-Hide"
 msgstr "Rychle schovat"
 
-#: ../src/cairo-dock-user-menu.c:1108
+#: ../src/cairo-dock-user-menu.c:1112
 msgid "This will hide the dock until you hover over it with the mouse."
 msgstr "Panel se bude skrývat. Přejetím myši nad panelem se opět zobrazí."
 
-#: ../src/cairo-dock-user-menu.c:1124
+#: ../src/cairo-dock-user-menu.c:1128
 msgid "Launch Cairo-Dock on startup"
 msgstr "Spustit Cairo-Dock při startu systému"
 
-#: ../src/cairo-dock-user-menu.c:1138
+#: ../src/cairo-dock-user-menu.c:1142
 msgid "Third-party applets provide integration with many programs, like Pidgin"
 msgstr ""
 "Applety třetích stran zajišťují integraci s mnoha programy, například s "
 "Pidginem."
 
-#: ../src/cairo-dock-user-menu.c:1144 ../Help/src/applet-init.c:28
+#: ../src/cairo-dock-user-menu.c:1148 ../Help/src/applet-init.c:28
 #: ../Help/src/applet-notifications.c:101
 msgid "Help"
 msgstr "Nápověda"
 
-#: ../src/cairo-dock-user-menu.c:1146
+#: ../src/cairo-dock-user-menu.c:1150
 msgid "There are no problems, only solutions (and a lot of useful hints!)"
 msgstr "Není tu žádný problém, jsou zde jen řešení (a spoustu užitečných rad.)"
 
-#: ../src/cairo-dock-user-menu.c:1152
+#: ../src/cairo-dock-user-menu.c:1156
 msgid "About"
 msgstr "O programu"
 
-#: ../src/cairo-dock-user-menu.c:1162
+#: ../src/cairo-dock-user-menu.c:1166
 msgid "Quit"
 msgstr "Ukončit"
 
-#: ../src/cairo-dock-user-menu.c:1164
+#: ../src/cairo-dock-user-menu.c:1168
 msgid ""
 "You're using a Cairo-Dock Session!\n"
 "It's not advised to quit the dock but you can press Shift to unlock this "
@@ -605,205 +628,205 @@ msgstr ""
 "Nedoporučuje se opustit dock, ele stiskem klávesy Shift můžete odemknout "
 "toto menu."
 
-#: ../src/cairo-dock-user-menu.c:1195 ../src/cairo-dock-user-menu.c:1208
+#: ../src/cairo-dock-user-menu.c:1200 ../src/cairo-dock-user-menu.c:1213
 msgid "Launch a new (Shift+clic)"
 msgstr "Spustit nový (Shift + Kliknutí)"
 
-#: ../src/cairo-dock-user-menu.c:1200 ../src/cairo-dock-user-menu.c:1282
+#: ../src/cairo-dock-user-menu.c:1205 ../src/cairo-dock-user-menu.c:1287
 msgid "Applet's handbook"
 msgstr "Příručka appletu"
 
-#: ../src/cairo-dock-user-menu.c:1215 ../src/cairo-dock-user-menu.c:1261
+#: ../src/cairo-dock-user-menu.c:1220 ../src/cairo-dock-user-menu.c:1266
 msgid "Edit"
 msgstr "Upravit"
 
-#: ../src/cairo-dock-user-menu.c:1217 ../src/cairo-dock-user-menu.c:1268
+#: ../src/cairo-dock-user-menu.c:1222 ../src/cairo-dock-user-menu.c:1273
 msgid "Remove"
 msgstr "Odebrat"
 
-#: ../src/cairo-dock-user-menu.c:1218
+#: ../src/cairo-dock-user-menu.c:1223
 msgid ""
 "You can remove a launcher by dragging it out of the dock with the mouse ."
 msgstr "Můžete odebrat spouštěč přetažením pomocí myši pryč z docku."
 
-#: ../src/cairo-dock-user-menu.c:1228
+#: ../src/cairo-dock-user-menu.c:1233
 msgid "Make it a launcher"
 msgstr "Vytvořit spouštěč"
 
-#: ../src/cairo-dock-user-menu.c:1251
+#: ../src/cairo-dock-user-menu.c:1256
 msgid "Remove custom icon"
 msgstr "Odstranit uživatelskou ikonu"
 
-#: ../src/cairo-dock-user-menu.c:1255
+#: ../src/cairo-dock-user-menu.c:1260
 msgid "Set a custom icon"
 msgstr "Zvolit vlastní ikonu"
 
-#: ../src/cairo-dock-user-menu.c:1265
+#: ../src/cairo-dock-user-menu.c:1270
 msgid "Detach"
 msgstr "Oddělit"
 
-#: ../src/cairo-dock-user-menu.c:1265
+#: ../src/cairo-dock-user-menu.c:1270
 msgid "Return to the dock"
 msgstr "Vrátit do docku"
 
-#: ../src/cairo-dock-user-menu.c:1272
+#: ../src/cairo-dock-user-menu.c:1277
 msgid "Duplicate"
 msgstr "Duplikovat"
 
-#: ../src/cairo-dock-user-menu.c:1446
+#: ../src/cairo-dock-user-menu.c:1451
 #, c-format
 msgid "Move all to desktop %d - face %d"
 msgstr "Přesunout na všechny plochy %d - plocha %d"
 
-#: ../src/cairo-dock-user-menu.c:1446
+#: ../src/cairo-dock-user-menu.c:1451
 #, c-format
 msgid "Move to desktop %d - face %d"
 msgstr "Přemístit na plochu %d - plocha %d"
 
-#: ../src/cairo-dock-user-menu.c:1448
+#: ../src/cairo-dock-user-menu.c:1453
 #, c-format
 msgid "Move all to desktop %d"
 msgstr "Přesunout vše na plochu %d"
 
-#: ../src/cairo-dock-user-menu.c:1448
+#: ../src/cairo-dock-user-menu.c:1453
 #, c-format
 msgid "Move to desktop %d"
 msgstr "Přesunout na plochu %d"
 
-#: ../src/cairo-dock-user-menu.c:1450
+#: ../src/cairo-dock-user-menu.c:1455
 #, c-format
 msgid "Move all to face %d"
 msgstr "Přesunout vše na plochu %d"
 
-#: ../src/cairo-dock-user-menu.c:1450
+#: ../src/cairo-dock-user-menu.c:1455
 #, c-format
 msgid "Move to face %d"
 msgstr "Přesunout na plochu %d"
 
-#: ../src/cairo-dock-user-menu.c:1979
+#: ../src/cairo-dock-user-menu.c:1984
 msgid "Window"
 msgstr "Okno"
 
-#: ../src/cairo-dock-user-menu.c:1985 ../src/cairo-dock-user-menu.c:2008
-#: ../src/cairo-dock-user-menu.c:2045 ../src/cairo-dock-user-menu.c:2086
-#: ../src/cairo-dock-user-menu.c:2096 ../Help/src/applet-notifications.c:95
+#: ../src/cairo-dock-user-menu.c:1990 ../src/cairo-dock-user-menu.c:2013
+#: ../src/cairo-dock-user-menu.c:2058 ../src/cairo-dock-user-menu.c:2103
+#: ../src/cairo-dock-user-menu.c:2113 ../Help/src/applet-notifications.c:95
 msgid "middle-click"
 msgstr "Prostřední klik myši"
 
-#: ../src/cairo-dock-user-menu.c:2000
+#: ../src/cairo-dock-user-menu.c:2005
 msgid "Unmaximise"
 msgstr "Demaximalizovat"
 
-#: ../src/cairo-dock-user-menu.c:2000
+#: ../src/cairo-dock-user-menu.c:2005
 msgid "Maximise"
 msgstr "Maximalizovat"
 
-#: ../src/cairo-dock-user-menu.c:2008 ../src/cairo-dock-user-menu.c:2010
+#: ../src/cairo-dock-user-menu.c:2013 ../src/cairo-dock-user-menu.c:2015
 msgid "Minimise"
 msgstr "Minimalizovat"
 
-#: ../src/cairo-dock-user-menu.c:2024
+#: ../src/cairo-dock-user-menu.c:2029
 msgid "Show"
 msgstr "Ukázat"
 
-#: ../src/cairo-dock-user-menu.c:2030 ../src/cairo-dock-user-menu.c:2111
+#: ../src/cairo-dock-user-menu.c:2042 ../src/cairo-dock-user-menu.c:2128
 msgid "Other actions"
 msgstr "Ostatní akce"
 
-#: ../src/cairo-dock-user-menu.c:2033
+#: ../src/cairo-dock-user-menu.c:2045
 msgid "Move to this desktop"
 msgstr "Přesunout na tuto plochu"
 
-#: ../src/cairo-dock-user-menu.c:2039
+#: ../src/cairo-dock-user-menu.c:2051
 msgid "Not Fullscreen"
 msgstr "Ne přes celou obrazovku"
 
-#: ../src/cairo-dock-user-menu.c:2039
+#: ../src/cairo-dock-user-menu.c:2051
 msgid "Fullscreen"
 msgstr "Přes celou obrazovku"
 
-#: ../src/cairo-dock-user-menu.c:2045 ../src/cairo-dock-user-menu.c:2047
+#: ../src/cairo-dock-user-menu.c:2058 ../src/cairo-dock-user-menu.c:2060
 msgid "Below other windows"
 msgstr "Pod ostatními okny"
 
-#: ../src/cairo-dock-user-menu.c:2055
+#: ../src/cairo-dock-user-menu.c:2069
 msgid "Don't keep above"
 msgstr "Nedržet navrchu"
 
-#: ../src/cairo-dock-user-menu.c:2055 ../Help/data/messages:309
+#: ../src/cairo-dock-user-menu.c:2069 ../Help/data/messages:309
 msgid "Keep above"
 msgstr "Držet navrchu"
 
-#: ../src/cairo-dock-user-menu.c:2059
+#: ../src/cairo-dock-user-menu.c:2074
 msgid "Visible only on this desktop"
 msgstr "Viditelné pouze na této ploše"
 
-#: ../src/cairo-dock-user-menu.c:2059
+#: ../src/cairo-dock-user-menu.c:2074
 msgid "Visible on all desktops"
 msgstr "Viditelné na všech plochách"
 
-#: ../src/cairo-dock-user-menu.c:2068
+#: ../src/cairo-dock-user-menu.c:2084
 msgid "Kill"
 msgstr "Zabít"
 
-#: ../src/cairo-dock-user-menu.c:2082
+#: ../src/cairo-dock-user-menu.c:2099
 msgid "Windows"
 msgstr "Okna"
 
-#: ../src/cairo-dock-user-menu.c:2086 ../src/cairo-dock-user-menu.c:2088
+#: ../src/cairo-dock-user-menu.c:2103 ../src/cairo-dock-user-menu.c:2105
 msgid "Close all"
 msgstr "Zavřít vše"
 
-#: ../src/cairo-dock-user-menu.c:2096 ../src/cairo-dock-user-menu.c:2098
+#: ../src/cairo-dock-user-menu.c:2113 ../src/cairo-dock-user-menu.c:2115
 msgid "Minimise all"
 msgstr "Minimalizovat vše"
 
-#: ../src/cairo-dock-user-menu.c:2106
+#: ../src/cairo-dock-user-menu.c:2123
 msgid "Show all"
 msgstr "Zobrazit vše"
 
-#: ../src/cairo-dock-user-menu.c:2113
+#: ../src/cairo-dock-user-menu.c:2130
 msgid "Move all to this desktop"
 msgstr "Přesunout vše na tuto plochu"
 
-#: ../src/cairo-dock-user-menu.c:2140 ../Help/data/messages:307
+#: ../src/cairo-dock-user-menu.c:2157 ../Help/data/messages:307
 msgid "Normal"
 msgstr "Normální"
 
-#: ../src/cairo-dock-user-menu.c:2146 ../data/messages:23 ../data/messages:195
-#: ../data/messages:929
+#: ../src/cairo-dock-user-menu.c:2163 ../data/messages:23 ../data/messages:195
+#: ../data/messages:937
 msgid "Always on top"
 msgstr "Vždy navrchu"
 
-#: ../src/cairo-dock-user-menu.c:2153
+#: ../src/cairo-dock-user-menu.c:2170
 msgid "Always below"
 msgstr "Vždy vespod"
 
-#: ../src/cairo-dock-user-menu.c:2170 ../Help/data/messages:315
+#: ../src/cairo-dock-user-menu.c:2187 ../Help/data/messages:315
 msgid "Reserve space"
 msgstr "Vyhradit místo"
 
-#: ../src/cairo-dock-user-menu.c:2177
+#: ../src/cairo-dock-user-menu.c:2194
 msgid "On all desktops"
 msgstr "Na všech plochách"
 
-#: ../src/cairo-dock-user-menu.c:2183
+#: ../src/cairo-dock-user-menu.c:2200
 msgid "Lock position"
 msgstr "Zamknout pozici"
 
-#: ../src/cairo-dock-widget-config.c:333
+#: ../src/cairo-dock-widget-config.c:334
 msgid "Animation:"
 msgstr "Animace:"
 
-#: ../src/cairo-dock-widget-config.c:350
+#: ../src/cairo-dock-widget-config.c:351
 msgid "Effects:"
 msgstr "Efekty:"
 
-#: ../src/cairo-dock-widget-items.c:243
+#: ../src/cairo-dock-widget-items.c:244
 msgid "Main dock's parameters are available in the main configuration window."
 msgstr "Základní parametry panelu jsou dostupné v hlavním konfiguračním okně"
 
-#: ../src/cairo-dock-widget-items.c:710
+#: ../src/cairo-dock-widget-items.c:711
 msgid "Remove this item"
 msgstr "Odstranit tuto položku"
 
@@ -815,43 +838,45 @@ msgstr "Nastavit tento applet"
 msgid "Accessory"
 msgstr "Příslušenství"
 
-#: ../src/cairo-dock-widget-plugins.c:235
+#: ../src/cairo-dock-widget-plugins.c:236
 msgid "Plug-in"
 msgstr "Zásuvný modul"
 
-#: ../src/cairo-dock-widget-plugins.c:241 ../Help/src/applet-tips-dialog.c:309
+#: ../src/cairo-dock-widget-plugins.c:242 ../Help/src/applet-tips-dialog.c:309
 msgid "Category"
 msgstr "Kategorie"
 
-#: ../src/cairo-dock-widget-plugins.c:265
+#: ../src/cairo-dock-widget-plugins.c:266
 msgid "Click on an applet in order to have a preview and a description for it."
 msgstr "Klikněte na applet pro zobrazení jeho náhledu a popisu."
 
-#: ../src/cairo-dock-widget-shortkeys.c:126
+#: ../src/cairo-dock-widget-shortkeys.c:128
 msgid "Press the shortkey"
 msgstr "Stisknout klávesovou zkratku"
 
-#: ../src/cairo-dock-widget-shortkeys.c:143
+#: ../src/cairo-dock-widget-shortkeys.c:146
 msgid "Change the shortkey"
 msgstr "Změnit klávesovou zkratku"
 
-#: ../src/cairo-dock-widget-shortkeys.c:225
+#: ../src/cairo-dock-widget-shortkeys.c:228
 msgid "Origin"
 msgstr "Původní"
 
-#: ../src/cairo-dock-widget-shortkeys.c:230
+#: ../src/cairo-dock-widget-shortkeys.c:233
 msgid "Action"
 msgstr "Akce"
 
-#: ../src/cairo-dock-widget-shortkeys.c:234
+#: ../src/cairo-dock-widget-shortkeys.c:237
 msgid "Shortkey"
 msgstr "Klávesová zkratka"
 
-#: ../src/cairo-dock-widget-shortkeys.c:261
-#: ../src/gldit/cairo-dock-gui-factory.c:3022
+#: ../src/cairo-dock-widget-shortkeys.c:267
+#: ../src/gldit/cairo-dock-gui-factory.c:3030
 msgid ""
-"You are running Cairo-Dock in a Wayland session.\n"
-"Setting global keyboard shortcuts is not supported on Wayland yet."
+"You are running Cairo-Dock in a session where setting global keyboard "
+"shortcuts is not supported; currently, this is the case for most Wayland "
+"compositors. You may need to check your compositor's settings and explicitly "
+"enable keybindings by external apps. See our Wiki for more information:"
 msgstr ""
 
 #: ../src/cairo-dock-widget-themes.c:90
@@ -888,7 +913,7 @@ msgid "Delete this theme"
 msgstr "Smazání tématu"
 
 #: ../src/cairo-dock-widget-themes.c:486
-#: ../src/gldit/cairo-dock-gui-factory.c:2304
+#: ../src/gldit/cairo-dock-gui-factory.c:2311
 #, c-format
 msgid "Listing themes in '%s' ..."
 msgstr "Seznam motivů v '%s' ..."
@@ -917,20 +942,20 @@ msgstr "Import tématu ..."
 msgid "Theme has been saved"
 msgstr "Téma by mělo být uloženo"
 
-#: ../src/cairo-dock.c:164
+#: ../src/cairo-dock.c:167
 #, c-format
 msgid "Happy new year %d !!!"
 msgstr "Šťastný nový rok  %d !!!"
 
-#: ../src/cairo-dock.c:382
+#: ../src/cairo-dock.c:380
 msgid "Use Cairo backend."
 msgstr "Použít Cairo backend."
 
-#: ../src/cairo-dock.c:385
+#: ../src/cairo-dock.c:383
 msgid "Use OpenGL backend."
 msgstr "Použít OpenGL podporu."
 
-#: ../src/cairo-dock.c:388
+#: ../src/cairo-dock.c:386
 msgid ""
 "Use OpenGL backend with indirect rendering. There are very few case where "
 "this option should be used."
@@ -938,26 +963,26 @@ msgstr ""
 "Použít OpenGL backend s nepřímým renderingem. Toto nastavení se nepoužívá "
 "často."
 
-#: ../src/cairo-dock.c:391
+#: ../src/cairo-dock.c:389
 msgid "Ask again on startup which backend to use."
 msgstr "Při startu se znovu dotázat na použití podpory."
 
-#: ../src/cairo-dock.c:394
+#: ../src/cairo-dock.c:392
 msgid "Force the dock to consider this environment - use it with care."
 msgstr "Přinutit dock používat toto prostředí - použijte s rozvahou."
 
-#: ../src/cairo-dock.c:397
+#: ../src/cairo-dock.c:395
 msgid ""
 "Force the dock to load from this directory, instead of ~/.config/cairo-dock."
 msgstr "Přinutit dock načtení z této složky, místo z ~/.config/cairo-dock."
 
-#: ../src/cairo-dock.c:400
+#: ../src/cairo-dock.c:398
 msgid ""
 "Address of a server containing additional themes. This will overwrite the "
 "default server address."
 msgstr "Adresa serveru s dašími tématy. Toto přepíše výchozí adresu serveru."
 
-#: ../src/cairo-dock.c:403
+#: ../src/cairo-dock.c:401
 msgid ""
 "Wait for N seconds before starting; this is useful if you notice some "
 "problems when the dock starts with the session."
@@ -965,7 +990,7 @@ msgstr ""
 "Před spuštěním počkat N sekund; toto je užitečné v případě, že zjistíte "
 "nějaké potíže se spouštěním docku v tomto sezení."
 
-#: ../src/cairo-dock.c:406
+#: ../src/cairo-dock.c:404
 msgid ""
 "Allow to edit the config before the dock is started and show the config "
 "panel on start."
@@ -973,49 +998,49 @@ msgstr ""
 "Povolit upravit nastavení před spuštěním docku a zobrazit nastavovací panel "
 "při startu."
 
-#: ../src/cairo-dock.c:409
+#: ../src/cairo-dock.c:407
 msgid "Exclude a given plug-in from activating (it is still loaded though)."
 msgstr ""
 
-#: ../src/cairo-dock.c:412
+#: ../src/cairo-dock.c:410
 msgid "Don't load any plug-ins."
 msgstr "Nezavádět jakékoliv pluginy."
 
-#: ../src/cairo-dock.c:415
+#: ../src/cairo-dock.c:413
 msgid "Work around potential glitches when dialogs or sub-docks appear"
 msgstr ""
 
-#: ../src/cairo-dock.c:418
+#: ../src/cairo-dock.c:416
 msgid ""
 "Log verbosity (debug,message,warning,critical,error); default is warning."
 msgstr ""
 "Upovídaný log (ladění,zprávy,varování,kritické chyby); výchozí je varování."
 
-#: ../src/cairo-dock.c:421
+#: ../src/cairo-dock.c:419
 msgid "Force to display some output messages with colors."
 msgstr "Vynutit zobrazování výstupních zpráv barevně."
 
-#: ../src/cairo-dock.c:424
+#: ../src/cairo-dock.c:422
 msgid "Print version and quit."
 msgstr "Zobrazit číslo verze a skončit."
 
-#: ../src/cairo-dock.c:427
+#: ../src/cairo-dock.c:425
 msgid "Lock the dock so that any modification is impossible for users."
 msgstr "Uzamknout dock tak, aby nebyly možné jakékoliv změny uživateli."
 
-#: ../src/cairo-dock.c:431
+#: ../src/cairo-dock.c:429
 msgid "Keep the dock above other windows."
 msgstr "Podržet dock nad všemi ostatními onky."
 
-#: ../src/cairo-dock.c:434
+#: ../src/cairo-dock.c:432
 msgid "Don't make the dock appear on all desktops."
 msgstr "Nezobrazovat dock na všech plochách."
 
-#: ../src/cairo-dock.c:437 ../src/cairo-dock.c:497
+#: ../src/cairo-dock.c:435 ../src/cairo-dock.c:501
 msgid "Cairo-Dock makes anything, including coffee !"
 msgstr "Cairo-Dock dělá cokoliv, včetně kafe !"
 
-#: ../src/cairo-dock.c:440
+#: ../src/cairo-dock.c:438
 msgid ""
 "Ask the dock to load additional modules contained in this directory (though "
 "it is unsafe for your dock to load unofficial modules)."
@@ -1023,13 +1048,13 @@ msgstr ""
 "Požádat dock k nahrání přídavných modulů obsažených v tomto adresáři "
 "(přestože nahrání neoficielních modulů není bezpečné)."
 
-#: ../src/cairo-dock.c:443
+#: ../src/cairo-dock.c:441
 msgid ""
 "For debugging purpose only. The crash manager will not be started to hunt "
 "down the bugs."
 msgstr "Pouze pro ladící účly. Crash manager se pro zachycení chyby nespustí."
 
-#: ../src/cairo-dock.c:446
+#: ../src/cairo-dock.c:444
 msgid ""
 "For debugging purpose only. Some hidden and still unstable options will be "
 "activated."
@@ -1037,72 +1062,82 @@ msgstr ""
 "Pouze pro ladící účely. Některé skryté a dosud nestabilní rozšíření budou "
 "aktivována."
 
-#: ../src/cairo-dock.c:449
+#: ../src/cairo-dock.c:447
 msgid "Force using the Wayland backends (disable X11 backends)."
 msgstr ""
 
-#: ../src/cairo-dock.c:452
+#: ../src/cairo-dock.c:450
 msgid "Force using the X11 backend (disable any Wayland functionality)."
 msgstr ""
 
-#: ../src/cairo-dock.c:455
+#: ../src/cairo-dock.c:453
+msgid "Allow multiple instances of Cairo-Dock to run."
+msgstr ""
+
+#: ../src/cairo-dock.c:456
+msgid ""
+"Do not try to own the \"org.cairodock.CairoDock\" DBus name (DBus interface "
+"will be unavailable)."
+msgstr ""
+
+#: ../src/cairo-dock.c:459
 msgid "Use EGL on X11."
 msgstr ""
 
-#: ../src/cairo-dock.c:458
+#: ../src/cairo-dock.c:462
 msgid "For debugging purpose only. Disable gtk-layer-shell support."
 msgstr ""
 
-#: ../src/cairo-dock.c:461
+#: ../src/cairo-dock.c:465
 msgid ""
 "For debugging purpose only. Do not blacklist incompatible plugins on Wayland."
 msgstr ""
 
-#: ../src/cairo-dock.c:464
+#: ../src/cairo-dock.c:468
 msgid ""
 "For debugging purposes. Fail loading the specified plugin module after "
 "opening it. Multiple modules can be specified by repeating this option "
 "multiple times."
 msgstr ""
 
-#: ../src/cairo-dock.c:467
+#: ../src/cairo-dock.c:471
 msgid ""
 "For debugging purposes only. Fail loading all plugin modules (after opening)."
 msgstr ""
 
-#: ../src/cairo-dock.c:470
+#: ../src/cairo-dock.c:474
 msgid ""
 "For debugging purposes only. Do not check version compatibility after "
 "loading a plugin module."
 msgstr ""
 
-#: ../src/cairo-dock.c:473
+#: ../src/cairo-dock.c:477
 msgid "For debugging purposes only. Do not use systemd to launch apps."
 msgstr ""
 
-#: ../src/cairo-dock.c:476
+#: ../src/cairo-dock.c:480
 msgid "For debugging purposes only. Do not use DBus activation to launch apps."
 msgstr ""
 
-#: ../src/cairo-dock.c:479
+#: ../src/cairo-dock.c:483
 msgid ""
 "For debugging purposes only. Rely on GIO to launch apps instead of our own "
 "implementation (implies --disable-systemd)."
 msgstr ""
 
-#: ../src/cairo-dock.c:605
+#: ../src/cairo-dock.c:630
 msgid "Use OpenGL in Cairo-Dock"
 msgstr "Použít OpenGL k vykreslování Cairo-Docku"
 
-#: ../src/cairo-dock.c:608 ../src/cairo-dock.c:848
+#: ../src/cairo-dock.c:633 ../src/cairo-dock.c:878
 msgid "Yes"
 msgstr ""
 
-#: ../src/cairo-dock.c:610 ../src/cairo-dock.c:849 ../data/messages:829
+#: ../src/cairo-dock.c:635 ../src/cairo-dock.c:879 ../data/messages:837
 msgid "No"
 msgstr "Ne"
 
-#: ../src/cairo-dock.c:613
+#: ../src/cairo-dock.c:638
 msgid ""
 "OpenGL allows you to use the hardware acceleration, reducing the CPU load to "
 "the minimum.\n"
@@ -1122,11 +1157,11 @@ msgstr ""
 " (Pokud se chcete vyhnout tomuto dialogu, spusťte dok z menu Apikace,\n"
 "  nebo z terminálu použitím přepínačů -o pro OpenGL, nebo -c pro cairo)"
 
-#: ../src/cairo-dock.c:620
+#: ../src/cairo-dock.c:645
 msgid "Remember this choice"
 msgstr "Zapamatovat si tuto volbu"
 
-#: ../src/cairo-dock.c:780 ../src/cairo-dock.c:1000
+#: ../src/cairo-dock.c:808 ../src/cairo-dock.c:1030
 #, c-format
 msgid ""
 "The module '%s' has been deactivated because it may have caused some "
@@ -1138,19 +1173,19 @@ msgstr ""
 "Můžete tho znovu aktivovat, Pokud se to ude opakovat, pak děkujeme za zprávu "
 "na https://github.com/Cairo-Dock/cairo-dock-core/issues"
 
-#: ../src/cairo-dock.c:791
+#: ../src/cairo-dock.c:819
 msgid "< Maintenance mode >"
 msgstr "< Režim údržby >"
 
-#: ../src/cairo-dock.c:793
+#: ../src/cairo-dock.c:821
 msgid "Something went wrong with this applet:"
 msgstr "Něco bylo špatně s apletem:"
 
-#: ../src/cairo-dock.c:845
+#: ../src/cairo-dock.c:875
 msgid "You're using our Cairo-Dock session"
 msgstr ""
 
-#: ../src/cairo-dock.c:851
+#: ../src/cairo-dock.c:881
 msgid ""
 "It can be interesting to use an adapted theme for this session.\n"
 "\n"
@@ -1160,7 +1195,7 @@ msgid ""
 "Themes manager"
 msgstr ""
 
-#: ../src/cairo-dock.c:896
+#: ../src/cairo-dock.c:926
 msgid ""
 "No plug-in were found.\n"
 "Plug-ins provide most of the functionalities (animations, applets, views, "
@@ -1181,7 +1216,7 @@ msgstr ""
 "Pokud ale opravdu chcete používat dock bez doplňků, můžete jej spouštět s "
 "parametrem '-f' který potlačí tuto zprávu.\n"
 
-#: ../src/cairo-dock.c:908
+#: ../src/cairo-dock.c:938
 msgid ""
 "Cairo-Dock is running in a Wayland session, but the compositor does not seem "
 "to support the wlr-layer-shell protocol. This is required for properly "
@@ -1196,7 +1231,7 @@ msgid ""
 "command line option)"
 msgstr ""
 
-#: ../src/cairo-dock.c:908
+#: ../src/cairo-dock.c:938
 msgid ""
 "Cairo-Dock is running in a Wayland session, but it was not compiled with gtk-"
 "layer-shell support. This is required for properly positioning the dock on "
@@ -1210,7 +1245,7 @@ msgid ""
 "command line option)"
 msgstr ""
 
-#: ../src/cairo-dock.c:916
+#: ../src/cairo-dock.c:946
 msgid ""
 "You are running Cairo-Dock in a Wayland session. Please note the support for "
 "Wayland is still experimental: not all features and plugins work yet.\n"
@@ -1219,7 +1254,7 @@ msgid ""
 "you!"
 msgstr ""
 
-#: ../src/cairo-dock.c:998
+#: ../src/cairo-dock.c:1028
 #, c-format
 msgid ""
 "The module '%s' may have encountered a problem.\n"
@@ -1251,8 +1286,8 @@ msgstr ""
 "modulu. Má se soubor otevřít teď?"
 
 #: ../src/gldit/cairo-dock-desklet-manager.c:812 ../data/messages:467
-#: ../data/messages:557 ../data/messages:697 ../data/messages:739
-#: ../data/messages:811 ../data/messages:845
+#: ../data/messages:557 ../data/messages:705 ../data/messages:747
+#: ../data/messages:819 ../data/messages:853
 msgid "Automatic"
 msgstr ""
 
@@ -1260,107 +1295,107 @@ msgstr ""
 msgid "_custom decoration_"
 msgstr "_vlastní dekorace_"
 
-#: ../src/gldit/cairo-dock-dock-factory.c:1371
+#: ../src/gldit/cairo-dock-dock-factory.c:1469
 msgid "Sorry but the dock is locked"
 msgstr "Bohužel dock je uzamčen"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:225
+#: ../src/gldit/cairo-dock-dock-manager.c:227
 msgid "Bottom dock"
 msgstr "Spodní panel"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:227
+#: ../src/gldit/cairo-dock-dock-manager.c:229
 msgid "Top dock"
 msgstr "Horní panel"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:232
+#: ../src/gldit/cairo-dock-dock-manager.c:234
 msgid "Right dock"
 msgstr "Pravý panel"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:234
+#: ../src/gldit/cairo-dock-dock-manager.c:236
 msgid "Left dock"
 msgstr "Levý panel"
 
-#: ../src/gldit/cairo-dock-dock-manager.c:1565
-#: ../src/gldit/cairo-dock-dock-manager.c:1663
+#: ../src/gldit/cairo-dock-dock-manager.c:1580
+#: ../src/gldit/cairo-dock-dock-manager.c:1678
 msgid "Pop up the main dock"
 msgstr "Vyskakovací hlavní panel"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:246
+#: ../src/gldit/cairo-dock-gui-factory.c:247
 #, c-format
 msgid "by %s"
 msgstr "pomocí %s"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:258
+#: ../src/gldit/cairo-dock-gui-factory.c:259
 msgid "kB"
 msgstr "kB"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:260
+#: ../src/gldit/cairo-dock-gui-factory.c:261
 msgid "MB"
 msgstr "MB"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:269
+#: ../src/gldit/cairo-dock-gui-factory.c:270
 msgid "Local"
 msgstr "Lokální"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:270
+#: ../src/gldit/cairo-dock-gui-factory.c:271
 msgid "User"
 msgstr "Uživatel"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:271
+#: ../src/gldit/cairo-dock-gui-factory.c:272
 msgid "Net"
 msgstr "Síť"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:272
+#: ../src/gldit/cairo-dock-gui-factory.c:273
 msgid "New"
 msgstr "Nový"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:273
+#: ../src/gldit/cairo-dock-gui-factory.c:274
 msgid "Updated"
 msgstr "Aktualizováno"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:748
+#: ../src/gldit/cairo-dock-gui-factory.c:749
 msgid "Pick up a file"
 msgstr "Vybrat soubor"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:748
+#: ../src/gldit/cairo-dock-gui-factory.c:749
 msgid "Pick up a directory"
 msgstr "Vybrat adresář"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1036
+#: ../src/gldit/cairo-dock-gui-factory.c:1037
 msgid "_Custom Icons_"
 msgstr "_Vlastní ikony_"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1074 ../data/messages:13
-#: ../data/messages:165 ../data/messages:171 ../data/messages:915
+#: ../src/gldit/cairo-dock-gui-factory.c:1075 ../data/messages:13
+#: ../data/messages:165 ../data/messages:171 ../data/messages:923
 msgid "left"
 msgstr "vlevo"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1076 ../data/messages:11
-#: ../data/messages:163 ../data/messages:173 ../data/messages:913
+#: ../src/gldit/cairo-dock-gui-factory.c:1077 ../data/messages:11
+#: ../data/messages:163 ../data/messages:173 ../data/messages:921
 msgid "right"
 msgstr "vpravo"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1078
-#: ../src/gldit/cairo-dock-gui-factory.c:1088
+#: ../src/gldit/cairo-dock-gui-factory.c:1079
+#: ../src/gldit/cairo-dock-gui-factory.c:1089
 msgid "middle"
 msgstr "uprostřed"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1084 ../data/messages:9
-#: ../data/messages:161 ../data/messages:911
+#: ../src/gldit/cairo-dock-gui-factory.c:1085 ../data/messages:9
+#: ../data/messages:161 ../data/messages:919
 msgid "top"
 msgstr "nahoře"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1086 ../data/messages:7
-#: ../data/messages:159 ../data/messages:909
+#: ../src/gldit/cairo-dock-gui-factory.c:1087 ../data/messages:7
+#: ../data/messages:159 ../data/messages:917
 msgid "bottom"
 msgstr "dole"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1091
-#: ../src/gldit/cairo-dock-gui-factory.c:1097
+#: ../src/gldit/cairo-dock-gui-factory.c:1092
+#: ../src/gldit/cairo-dock-gui-factory.c:1098
 msgid "Screen"
 msgstr "Obrazovka"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1385
+#: ../src/gldit/cairo-dock-gui-factory.c:1386
 #, c-format
 msgid ""
 "The '%s' module was not found.\n"
@@ -1371,7 +1406,7 @@ msgstr ""
 "Ujistětě se, že instalujete modul stejné verze jakou má dok, abyste mohli "
 "využít těchto možnosí."
 
-#: ../src/gldit/cairo-dock-gui-factory.c:1394
+#: ../src/gldit/cairo-dock-gui-factory.c:1395
 #, c-format
 msgid ""
 "The '%s' plug-in is not active.\n"
@@ -1380,34 +1415,73 @@ msgstr ""
 "Plugin %s není aktivován.\n"
 "Chcete ho aktivovat nyní?"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2165
+#: ../src/gldit/cairo-dock-gui-factory.c:2172
 msgid ""
 "You are running Cairo-Dock in a Wayland session.\n"
 "Setting a horizontal offset is not supported on Wayland yet."
 msgstr ""
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2937
+#: ../src/gldit/cairo-dock-gui-factory.c:2944
 msgid "link"
 msgstr "odkaz"
 
-#: ../src/gldit/cairo-dock-gui-factory.c:2999
+#: ../src/gldit/cairo-dock-gui-factory.c:3006
 msgid "Grab"
 msgstr "Zachytit"
 
-#: ../src/gldit/cairo-dock-launcher-manager.c:378
+#: ../src/gldit/cairo-dock-gui-factory.c:3143
+msgid ""
+"Cairo-Dock has been built with the icon zoom effect disabled. See here for "
+"more info: "
+msgstr ""
+
+#: ../src/gldit/cairo-dock-launcher-manager.c:379
 msgid "Enter a command"
 msgstr "Vložit příkaz"
 
-#: ../src/gldit/cairo-dock-launcher-manager.c:379
+#: ../src/gldit/cairo-dock-launcher-manager.c:380
 msgid "New launcher"
 msgstr "Nový spouštěč"
 
-#: ../src/gldit/cairo-dock-module-instance-manager.c:323
+#: ../src/gldit/cairo-dock-module-instance-manager.c:350
 msgid "by"
 msgstr "pomocí"
 
-#: ../src/gldit/cairo-dock-struct.h:526 ../data/messages:1073
-#: ../data/messages:1081
+#: ../src/gldit/cairo-dock-module-manager.c:231
+msgid ""
+"You are running Cairo-dock in a Wayland session, but this plug-in does not "
+"support Wayland."
+msgstr ""
+
+#: ../src/gldit/cairo-dock-module-manager.c:238
+msgid ""
+"You are running Cairo-dock in an X11 session, but this plug-in does not "
+"support X11."
+msgstr ""
+
+#: ../src/gldit/cairo-dock-module-manager.c:245
+msgid "This plug-in requires OpenGL, but it is not enabled."
+msgstr ""
+
+#: ../src/gldit/cairo-dock-module-manager.c:382
+msgid ""
+"Could not create a configuration directory for this module.\n"
+"Please check that Cairo-Dock's configuration directory exists and is "
+"writable."
+msgstr ""
+
+#: ../src/gldit/cairo-dock-module-manager.c:399
+#: ../src/gldit/cairo-dock-module-manager.c:448
+msgid "Cannot open module configuration directory:"
+msgstr ""
+
+#: ../src/gldit/cairo-dock-module-manager.c:400
+#: ../src/gldit/cairo-dock-module-manager.c:449
+msgid "Please check that it exists and is writable."
+msgstr ""
+
+#: ../src/gldit/cairo-dock-struct.h:526 ../data/messages:1077
+#: ../data/messages:1085
 msgid "Default"
 msgstr "Výchozí"
 
@@ -1448,27 +1522,32 @@ msgstr "Opravdu chcete odstranit motiv %s?"
 msgid "Are you sure you want to delete these themes?"
 msgstr "Opravdu chete odstranit tyto motivy?"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:592 ../data/messages:41
+#: ../src/implementations/cairo-dock-gio-vfs.c:345
+#: ../src/implementations/cairo-dock-gio-vfs.c:530
+msgid "File System"
+msgstr ""
+
+#: ../src/implementations/cairo-dock-hiding-effect.c:593 ../data/messages:41
 #: ../data/messages:213
 msgid "Move down"
 msgstr "Přesunout dolů"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:600 ../data/messages:43
+#: ../src/implementations/cairo-dock-hiding-effect.c:601 ../data/messages:43
 #: ../data/messages:103 ../data/messages:215
 msgid "Fade out"
 msgstr "Zvolna mizet"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:608 ../data/messages:45
+#: ../src/implementations/cairo-dock-hiding-effect.c:609 ../data/messages:45
 #: ../data/messages:217
 msgid "Semi transparent"
 msgstr "Poloprůhledný"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:617 ../data/messages:47
+#: ../src/implementations/cairo-dock-hiding-effect.c:618 ../data/messages:47
 #: ../data/messages:219
 msgid "Zoom out"
 msgstr "Oddálit"
 
-#: ../src/implementations/cairo-dock-hiding-effect.c:625 ../data/messages:49
+#: ../src/implementations/cairo-dock-hiding-effect.c:626 ../data/messages:49
 #: ../data/messages:221
 msgid "Folding"
 msgstr "Složit"
@@ -1576,7 +1655,7 @@ msgid ""
 "click, a secondary action on middle-click, and additional actions on right-"
 "click (in the menu).\n"
 "Some applets let you bind a shortkey to an action, and decide which action "
-"sould be on middle-click."
+"should be on middle-click."
 msgstr ""
 "Většina ikon v docku má několik akcí: primární akce levým klikem, další akce "
 "prostředním klikem, a doplňkové akce pravým klikem (v menu).\n"
@@ -2103,9 +2182,9 @@ msgid ""
 "Some applets can have several instances running at the same time: Clock, "
 "Stack, Weather, ...\n"
 "Right click on the applet's icon -> \"launch another instance\".\n"
-"You can configure each instance independently. This allows you, for "
-"example, to have the current time for different countries in your dock or "
-"the weather in different cities."
+"You can configure each instance independently. This allows you, for example, "
+"to have the current time for different countries in your dock or the weather "
+"in different cities."
 msgstr ""
 
 #: ../Help/data/messages:165
@@ -2416,8 +2495,8 @@ msgstr ""
 msgid "https://launchpad.net/~cairo-dock-team/+archive/ubuntu/weekly"
 msgstr ""
 
-#: ../Help/data/messages:263 ../Help/data/messages:265 ../data/messages:1035
-#: ../data/messages:1067 ../data/messages:1103
+#: ../Help/data/messages:263 ../Help/data/messages:265 ../data/messages:1039
+#: ../data/messages:1071 ../data/messages:1111
 msgid "Icon"
 msgstr "Ikona"
 
@@ -2508,7 +2587,7 @@ msgid ""
 msgstr ""
 
 #: ../Help/data/messages:305 ../data/messages:21 ../data/messages:59
-#: ../data/messages:193 ../data/messages:253 ../data/messages:927
+#: ../data/messages:193 ../data/messages:253 ../data/messages:935
 msgid "Visibility:"
 msgstr "Viditelnost:"
 
@@ -2597,19 +2676,19 @@ msgstr "Obrázek na popředí :"
 msgid "Foreground tansparency:"
 msgstr "Průhlednost popředí :"
 
-#: ../data/messages:1 ../data/messages:903
+#: ../data/messages:1 ../data/messages:911
 msgid "Behavior"
 msgstr "Chování"
 
-#: ../data/messages:3 ../data/messages:155 ../data/messages:905
+#: ../data/messages:3 ../data/messages:155 ../data/messages:913
 msgid "Position on the screen"
 msgstr "Pozice na obrazovce"
 
-#: ../data/messages:5 ../data/messages:157 ../data/messages:907
+#: ../data/messages:5 ../data/messages:157 ../data/messages:915
 msgid "Choose which border of the screen the dock will be placed on:"
 msgstr "Vyberte, na kterém okraji obrazovky má být dok umístěn:"
 
-#: ../data/messages:15 ../data/messages:175 ../data/messages:921
+#: ../data/messages:15 ../data/messages:175 ../data/messages:929
 msgid "Multi-screens"
 msgstr ""
 
@@ -2617,7 +2696,7 @@ msgstr ""
 msgid "Visibility of the main dock"
 msgstr "Viditelnost hlavního docku"
 
-#: ../data/messages:19 ../data/messages:191 ../data/messages:925
+#: ../data/messages:19 ../data/messages:191 ../data/messages:933
 msgid ""
 "Modes are sorted from the most intrusive to the less intrusive.\n"
 "When the dock is hidden or below a window, place the mouse on the screen's "
@@ -2631,23 +2710,23 @@ msgstr ""
 "Pokud je dok vyvolán klávesovou zkratkou, zobrazí se v místě kurzoru myši. "
 "Po zbytek času zůstává neviditelný."
 
-#: ../data/messages:25 ../data/messages:197 ../data/messages:931
+#: ../data/messages:25 ../data/messages:197 ../data/messages:939
 msgid "Reserve space for the dock"
 msgstr "Rezervovat místo pro dok"
 
-#: ../data/messages:27 ../data/messages:199 ../data/messages:933
+#: ../data/messages:27 ../data/messages:199 ../data/messages:941
 msgid "Keep the dock below"
 msgstr "Držet dok vespod"
 
-#: ../data/messages:29 ../data/messages:201 ../data/messages:935
+#: ../data/messages:29 ../data/messages:201 ../data/messages:943
 msgid "Hide the dock when it overlaps the current window"
 msgstr "Schovat dok, pokud je překryt aktuálním oknem"
 
-#: ../data/messages:31 ../data/messages:203 ../data/messages:937
+#: ../data/messages:31 ../data/messages:203 ../data/messages:945
 msgid "Hide the dock whenever it overlaps any window"
 msgstr "Schovat dok, pokud je překryt jakýmkoli oknem"
 
-#: ../data/messages:33 ../data/messages:205 ../data/messages:939
+#: ../data/messages:33 ../data/messages:205 ../data/messages:947
 msgid "Keep the dock hidden"
 msgstr "Držet dok schovaný"
 
@@ -2785,12 +2864,12 @@ msgstr ""
 msgid "Random"
 msgstr "Náhodně"
 
-#: ../data/messages:121 ../data/messages:559 ../data/messages:699
-#: ../data/messages:813 ../data/messages:847 ../data/messages:885
+#: ../data/messages:121 ../data/messages:559 ../data/messages:707
+#: ../data/messages:821 ../data/messages:855 ../data/messages:893
 msgid "Custom"
 msgstr ""
 
-#: ../data/messages:123 ../data/messages:753
+#: ../data/messages:123 ../data/messages:761
 msgid "Colour"
 msgstr "Barva"
 
@@ -2798,27 +2877,27 @@ msgstr "Barva"
 msgid "Choose a theme of icons :"
 msgstr "Vyberte motiv ikon:"
 
-#: ../data/messages:129 ../data/messages:955
+#: ../data/messages:129 ../data/messages:963
 msgid "Icons size:"
 msgstr "Velikost ikon:"
 
-#: ../data/messages:131 ../data/messages:961
+#: ../data/messages:131 ../data/messages:969
 msgid "Very small"
 msgstr "Velmi malé"
 
-#: ../data/messages:133 ../data/messages:963
+#: ../data/messages:133 ../data/messages:971
 msgid "Small"
 msgstr "Malé"
 
-#: ../data/messages:135 ../data/messages:965
+#: ../data/messages:135 ../data/messages:973
 msgid "Medium"
 msgstr "Střední"
 
-#: ../data/messages:137 ../data/messages:967
+#: ../data/messages:137 ../data/messages:975
 msgid "Big"
 msgstr "Velké"
 
-#: ../data/messages:139 ../data/messages:969
+#: ../data/messages:139 ../data/messages:977
 msgid "Very Big"
 msgstr "Velmi velké"
 
@@ -2842,7 +2921,7 @@ msgid ""
 "corresponding action."
 msgstr ""
 
-#: ../data/messages:167 ../data/messages:917
+#: ../data/messages:167 ../data/messages:925
 msgid ""
 "When set to 0 the dock will position itself relative to the left corner if "
 "horizontal and the top corner if vertical. When set to 1 it will position "
@@ -2855,15 +2934,15 @@ msgstr ""
 "umístí relativně k pravému rohu při horizontální, a k spodnímu rohu při "
 "vertikální pozici."
 
-#: ../data/messages:169 ../data/messages:919
+#: ../data/messages:169 ../data/messages:927
 msgid "Relative alignment:"
 msgstr "Relativní zarovnání:"
 
-#: ../data/messages:177 ../data/messages:941
+#: ../data/messages:177 ../data/messages:949
 msgid "Offset from the screen's edge"
 msgstr "Odsazení od hrany obrazovky"
 
-#: ../data/messages:179 ../data/messages:943
+#: ../data/messages:179 ../data/messages:951
 msgid ""
 "Gap from the absolute position on the screen's edge, in pixels. You can also "
 "move the dock by holding the ALT or CTRL key and the left mouse button."
@@ -2871,11 +2950,11 @@ msgstr ""
 "Vzdálenost od hrany obrazovky v bodech. Můžete také dok přemístit držením "
 "klávesy ALT, nebo CTRL a levého tlačítka myši."
 
-#: ../data/messages:181 ../data/messages:945
+#: ../data/messages:181 ../data/messages:953
 msgid "Lateral offset:"
 msgstr "Boční odsazení"
 
-#: ../data/messages:183 ../data/messages:947
+#: ../data/messages:183 ../data/messages:955
 msgid ""
 "in pixels. You can also move the dock by holding the ALT or CTRL key and the "
 "left mouse button."
@@ -2883,7 +2962,7 @@ msgstr ""
 "v bodech. Můžete také dok přemístit držením klávesy ALT, nebo CTRL a levého "
 "tlačítka myši."
 
-#: ../data/messages:185 ../data/messages:949
+#: ../data/messages:185 ../data/messages:957
 msgid "Distance to the screen edge:"
 msgstr "Vzdálenost od hrany obrazovky:"
 
@@ -3059,12 +3138,12 @@ msgid "Transparency of icons whose window is minimised:"
 msgstr "Průhlednost ikon, jejichž okno je minimalizované:"
 
 #: ../data/messages:329 ../data/messages:483 ../data/messages:609
-#: ../data/messages:635 ../data/messages:725
+#: ../data/messages:635 ../data/messages:733
 msgid "Opaque"
 msgstr "neprůhledné"
 
 #: ../data/messages:331 ../data/messages:481 ../data/messages:607
-#: ../data/messages:633 ../data/messages:723
+#: ../data/messages:633 ../data/messages:731
 msgid "Transparent"
 msgstr "průhledné"
 
@@ -3302,7 +3381,7 @@ msgstr "Uživatel:"
 msgid "Password :"
 msgstr "Heslo :"
 
-#: ../data/messages:471 ../data/messages:489 ../data/messages:985
+#: ../data/messages:471 ../data/messages:489 ../data/messages:993
 msgid "Colour gradation"
 msgstr "Barevný přechod"
 
@@ -3310,8 +3389,8 @@ msgstr "Barevný přechod"
 msgid "Use a background image."
 msgstr "Použít obrázek na pozadí."
 
-#: ../data/messages:477 ../data/messages:691 ../data/messages:745
-#: ../data/messages:765 ../data/messages:803
+#: ../data/messages:477 ../data/messages:699 ../data/messages:753
+#: ../data/messages:773 ../data/messages:811
 msgid "Image file:"
 msgstr "Soubor s obrázkem:"
 
@@ -3319,7 +3398,7 @@ msgstr "Soubor s obrázkem:"
 msgid "Image's transparency :"
 msgstr "Průhlednost obrázku:"
 
-#: ../data/messages:485 ../data/messages:991
+#: ../data/messages:485 ../data/messages:999
 msgid "Repeat image as a pattern to fill background?"
 msgstr "Opakovat obrázek jako vzor k vyplnění pozadí?"
 
@@ -3327,11 +3406,11 @@ msgstr "Opakovat obrázek jako vzor k vyplnění pozadí?"
 msgid "Use a colour gradation."
 msgstr "Použít barevný přechod."
 
-#: ../data/messages:491 ../data/messages:993
+#: ../data/messages:491 ../data/messages:1001
 msgid "Bright colour:"
 msgstr "Světlá barva:"
 
-#: ../data/messages:493 ../data/messages:995
+#: ../data/messages:493 ../data/messages:1003
 msgid "Dark colour:"
 msgstr "Tmavá barva:"
 
@@ -3376,17 +3455,17 @@ msgstr "Vnější rámeček"
 msgid "in pixels."
 msgstr "v bodech."
 
-#: ../data/messages:515 ../data/messages:567 ../data/messages:757
-#: ../data/messages:893
+#: ../data/messages:515 ../data/messages:567 ../data/messages:765
+#: ../data/messages:901
 msgid "Corner radius"
 msgstr ""
 
-#: ../data/messages:519 ../data/messages:569 ../data/messages:895
+#: ../data/messages:519 ../data/messages:569 ../data/messages:903
 msgid "Outline width"
 msgstr ""
 
-#: ../data/messages:521 ../data/messages:563 ../data/messages:819
-#: ../data/messages:851 ../data/messages:889
+#: ../data/messages:521 ../data/messages:563 ../data/messages:827
+#: ../data/messages:859 ../data/messages:897
 msgid "Outline colour"
 msgstr ""
 
@@ -3398,7 +3477,7 @@ msgstr "Odstup rámečku od ikon a jejich zrcadlení:"
 msgid "Are the bottom left and right corners rounded?"
 msgstr "Zaoblit i spodní rohy?"
 
-#: ../data/messages:529 ../data/messages:997
+#: ../data/messages:529 ../data/messages:1005
 msgid "Stretch the dock to always fill the screen"
 msgstr "Roztáhnout dok, aby vždy vyplňoval obrazovku?"
 
@@ -3422,7 +3501,7 @@ msgstr ""
 msgid "Ratio for the size of the sub-docks' icons :"
 msgstr "Poměr velikosti ikon sub-doků:"
 
-#: ../data/messages:547 ../data/messages:783
+#: ../data/messages:547 ../data/messages:669 ../data/messages:791
 msgid "smaller"
 msgstr "menší"
 
@@ -3438,12 +3517,12 @@ msgstr "Dialogy"
 msgid "Bubble"
 msgstr "Bublina"
 
-#: ../data/messages:561 ../data/messages:849 ../data/messages:875
-#: ../data/messages:887
+#: ../data/messages:561 ../data/messages:857 ../data/messages:883
+#: ../data/messages:895
 msgid "Background colour"
 msgstr ""
 
-#: ../data/messages:565 ../data/messages:853 ../data/messages:873
+#: ../data/messages:565 ../data/messages:861 ../data/messages:881
 msgid "Text colour"
 msgstr ""
 
@@ -3451,19 +3530,19 @@ msgstr ""
 msgid "Shape of the bubble:"
 msgstr "Tvar bubliny:"
 
-#: ../data/messages:573 ../data/messages:859 ../data/messages:897
+#: ../data/messages:573 ../data/messages:867 ../data/messages:905
 msgid "Font"
 msgstr "Písmo"
 
-#: ../data/messages:575 ../data/messages:861
+#: ../data/messages:575 ../data/messages:869
 msgid "Otherwise the default's system one will be used."
 msgstr "Jinak bude použito výchozí systémové písmo."
 
-#: ../data/messages:577 ../data/messages:863 ../data/messages:899
+#: ../data/messages:577 ../data/messages:871 ../data/messages:907
 msgid "Use a custom font for the text?"
 msgstr "Použít vlastní písmo pro text?"
 
-#: ../data/messages:579 ../data/messages:865 ../data/messages:901
+#: ../data/messages:579 ../data/messages:873 ../data/messages:909
 msgid "Text font:"
 msgstr "Písmo textu:"
 
@@ -3595,7 +3674,7 @@ msgstr "Jméno souboru s obrázkem pro pozadí ikon:"
 msgid "Icons size"
 msgstr "Velikost ikon"
 
-#: ../data/messages:659 ../data/messages:677
+#: ../data/messages:659 ../data/messages:685
 msgid "Icons' size at rest (width x height) :"
 msgstr ""
 
@@ -3604,35 +3683,48 @@ msgid "Space between icons :"
 msgstr "Rozestup mezi ikonami:"
 
 #: ../data/messages:665
+msgid ""
+"You can choose to make the icons smaller, leaving an extra gap around them."
+msgstr ""
+
+#: ../data/messages:667
+msgid "Extra icon scale :"
+msgstr ""
+
+#: ../data/messages:671 ../data/messages:793
+msgid "bigger"
+msgstr "větší"
+
+#: ../data/messages:673
 msgid "Zoom effect"
 msgstr "Efekt zvětšení"
 
-#: ../data/messages:667
+#: ../data/messages:675
 msgid "set to 1 if you don't want the icons to zoom when you hover over them."
 msgstr "Nastavte na 1, pokud nechcete, aby se ikony po najetí myší zvětšovaly."
 
-#: ../data/messages:669
+#: ../data/messages:677
 msgid "Maximum zoom of the icons :"
 msgstr "Maximální zvětšení ikon:"
 
-#: ../data/messages:671
+#: ../data/messages:679
 msgid ""
 "in pixels. Outside of this space (centered on the mouse), there is no zoom."
 msgstr "v bodech. Mimo tento prostor nebude docházet k zvětšení."
 
-#: ../data/messages:673
+#: ../data/messages:681
 msgid "Width of the space in which the zoom will be effective :"
 msgstr "Šírka oblasti, kde se bude efekt zvětšení projevovat:"
 
-#: ../data/messages:675
+#: ../data/messages:683
 msgid "Separators"
 msgstr "Oddělovače"
 
-#: ../data/messages:679
+#: ../data/messages:687
 msgid "Force separator's image size to stay constant?"
 msgstr "Držet konstantní velikost obrázku oddělovače?"
 
-#: ../data/messages:681
+#: ../data/messages:689
 msgid ""
 "Only the default, 3D-plane and curve views support flat and physical "
 "separators. Flat separators are rendered differently according to the view."
@@ -3641,69 +3733,69 @@ msgstr ""
 "oddělovače. Ploché oddělovače jsou vykreslovány jinak, v závislosti na "
 "zobrazení."
 
-#: ../data/messages:683
+#: ../data/messages:691
 msgid "How to draw the separators?"
 msgstr "Jak zobrazovat oddělovače?"
 
-#: ../data/messages:685
+#: ../data/messages:693
 msgid "Use an image."
 msgstr "Použít obrázek"
 
-#: ../data/messages:687
+#: ../data/messages:695
 msgid "Flat separator"
 msgstr "Plochý oddělovač"
 
-#: ../data/messages:689
+#: ../data/messages:697
 msgid "Physical separator"
 msgstr "Fyzický oddělovač"
 
-#: ../data/messages:693
+#: ../data/messages:701
 msgid ""
 "Make the separator's image revolve when dock is on top/on the left/on the "
 "right?"
 msgstr ""
 "Má se natočení oddělovače přzpůsobit, pokud je dok nahoře/vlevo/vpravo?"
 
-#: ../data/messages:701
+#: ../data/messages:709
 msgid "Colour of flat separators :"
 msgstr "Barva plochých oddělovačů:"
 
-#: ../data/messages:703
+#: ../data/messages:711
 msgid "Reflections"
 msgstr "Zrcadlení"
 
-#: ../data/messages:705
+#: ../data/messages:713
 msgid "Reflection visibility"
 msgstr ""
 
-#: ../data/messages:707
+#: ../data/messages:715
 msgid "light"
 msgstr "slabá"
 
-#: ../data/messages:709
+#: ../data/messages:717
 msgid "strong"
 msgstr "silná"
 
-#: ../data/messages:711
+#: ../data/messages:719
 msgid ""
 "In percent of the icon's size. This parameter influence the total height of "
 "the dock."
 msgstr ""
 "V procentech velikosti ikony. Tento parametr ovlivňuje celkovou výšku doku."
 
-#: ../data/messages:713
+#: ../data/messages:721
 msgid "Height of the reflection:"
 msgstr "Výška zrcadlení:"
 
-#: ../data/messages:715
+#: ../data/messages:723
 msgid "small"
 msgstr "nízké"
 
-#: ../data/messages:717
+#: ../data/messages:725
 msgid "tall"
 msgstr "vysoké"
 
-#: ../data/messages:719
+#: ../data/messages:727
 msgid ""
 "It is their transparency when the dock is at rest; they will \"materialize\" "
 "progressively as the dock grows up. The closer to 0, the more transparent "
@@ -3712,47 +3804,47 @@ msgstr ""
 "Pokud opustíte myší dok, ikony zprůhlední podle tohoto nastavení. Po najetí "
 "myši nad dok, se opět zobrazí normálně."
 
-#: ../data/messages:721
+#: ../data/messages:729
 msgid "Icons' transparency at rest :"
 msgstr "Průhlednost ikon při nečinnosti:"
 
-#: ../data/messages:727
+#: ../data/messages:735
 msgid "Link the icons with a string"
 msgstr "Propojit ikony linkou"
 
-#: ../data/messages:729
+#: ../data/messages:737
 msgid "Linewidth of the string, in pixels (0 to not use string) :"
 msgstr "Šířka linky v bodech (0 znamená žádnou linku):"
 
-#: ../data/messages:731
+#: ../data/messages:739
 msgid "Colour of the string (red, blue, green, alpha) :"
 msgstr "Barva linky:"
 
-#: ../data/messages:735
+#: ../data/messages:743
 msgid "Indicator of the active window"
 msgstr "Indikátor aktivního okna"
 
-#: ../data/messages:743 ../data/messages:747 ../data/messages:751
+#: ../data/messages:751 ../data/messages:755 ../data/messages:759
 msgid "Frame"
 msgstr "Rámeček"
 
-#: ../data/messages:749
+#: ../data/messages:757
 msgid "Fill background"
 msgstr ""
 
-#: ../data/messages:755
+#: ../data/messages:763
 msgid "Linewidth"
 msgstr ""
 
-#: ../data/messages:759 ../data/messages:791
+#: ../data/messages:767 ../data/messages:799
 msgid "Draw indicator above the icon?"
 msgstr "Zobrazovat indikátor nad ikonou?"
 
-#: ../data/messages:761
+#: ../data/messages:769
 msgid "Indicator of active launcher"
 msgstr "Indikátor aktivního spouštěče"
 
-#: ../data/messages:763
+#: ../data/messages:771
 msgid ""
 "Indicators are drawn on launchers icons to show that they have already been "
 "launched. Leave blank to use the default one."
@@ -3760,7 +3852,7 @@ msgstr ""
 "Indikátory jsou zobrazovány u ikon spouštěčů, které již byly spuštěny. "
 "Ponechte prázdné pro použití výchozího."
 
-#: ../data/messages:767
+#: ../data/messages:775
 msgid ""
 "The indicator is drawn on active launchers, but you may want to display it "
 "on applications too."
@@ -3768,11 +3860,11 @@ msgstr ""
 "Indikátory se zobrazují u aktivních spouštěčů, ale můžete chtít zobrazovat "
 "je také u samotných aplikací."
 
-#: ../data/messages:769
+#: ../data/messages:777
 msgid "Display an indicator on application icons too ?"
 msgstr "Zobrazovat indikátor také u ikon aplikací?"
 
-#: ../data/messages:771
+#: ../data/messages:779
 msgid ""
 "Relatively to the icons' size. You can use this parameter to adjust the "
 "indicator's vertical position.\n"
@@ -3784,11 +3876,11 @@ msgstr ""
 "Pokud je indikátor spojen s ikonou, posune se směrem nahoru, jinak směrem "
 "dolů."
 
-#: ../data/messages:773
+#: ../data/messages:781
 msgid "Vertical offset :"
 msgstr "Vertikální odsazení:"
 
-#: ../data/messages:775
+#: ../data/messages:783
 msgid ""
 "If the indicator is linked to the icon, it will then be zoomed like the icon "
 "and the offset will be upwards.\n"
@@ -3799,11 +3891,11 @@ msgstr ""
 "ní a posun bude směrem nahoru.\n"
 "V opačném případě bude vykreslován přímo do doku a posu bude směrem dolů."
 
-#: ../data/messages:777
+#: ../data/messages:785
 msgid "Link the indicator with its icon?"
 msgstr "Spojit indikátor s ikonou?"
 
-#: ../data/messages:779
+#: ../data/messages:787
 msgid ""
 "You can choose to make the indicator smaller or bigger than the icons. The "
 "bigger the value is, the bigger the indicator is. 1 means the indicator will "
@@ -3812,15 +3904,11 @@ msgstr ""
 "Můžete si zvolit, zda bude indikátor menší, nebo větší, než ikony. Čím větší "
 "hodnota, tím větší indikátor. 1 znamená stejnou velikost, jakou mají ikony."
 
-#: ../data/messages:781
+#: ../data/messages:789
 msgid "Indicator size ratio :"
 msgstr "Poměr velikosti indikátoru:"
 
-#: ../data/messages:785
-msgid "bigger"
-msgstr "větší"
-
-#: ../data/messages:787
+#: ../data/messages:795
 msgid ""
 "Use it to make the indicator follow the orientation of the dock (top/bottom/"
 "right/left)."
@@ -3828,27 +3916,27 @@ msgstr ""
 "Zvolte, pokud má indikátor následovat orientaci doku (nahoře/dole/vlevo/"
 "vpravo)."
 
-#: ../data/messages:789
+#: ../data/messages:797
 msgid "Rotate the indicator with dock?"
 msgstr "Otáčet indikátor s dokem?"
 
-#: ../data/messages:793
+#: ../data/messages:801
 msgid "Indicator of grouped windows"
 msgstr "Indikátor seskupených oken"
 
-#: ../data/messages:795
+#: ../data/messages:803
 msgid "How to show that several icons are grouped :"
 msgstr "Jak označit seskupené ikony:"
 
-#: ../data/messages:797
+#: ../data/messages:805
 msgid "Draw an emblem"
 msgstr ""
 
-#: ../data/messages:799
+#: ../data/messages:807
 msgid "Draw the sub-dock's icons as a stack"
 msgstr "Zobrazit ikony sub-doku jako skladiště (stack)"
 
-#: ../data/messages:801
+#: ../data/messages:809
 msgid ""
 "It only makes sense if you chose to group the applis of the same class "
 "together. Leave blank to use the default one."
@@ -3856,107 +3944,107 @@ msgstr ""
 "Má smysl pouze v případě, že jste nastavili seskupování oken stejné třídy. "
 "Nechte prázdné pro použití výchozího."
 
-#: ../data/messages:805
+#: ../data/messages:813
 msgid "Zoom the indicator with its icon?"
 msgstr "Zvětšovat indikátor s ikonou?"
 
-#: ../data/messages:807
+#: ../data/messages:815
 msgid "Progress bars"
 msgstr "Ukazatel průběhu"
 
-#: ../data/messages:815
+#: ../data/messages:823
 msgid "Start color"
 msgstr "Počáteční barva"
 
-#: ../data/messages:817
+#: ../data/messages:825
 msgid "End color"
 msgstr "Koncová barva"
 
-#: ../data/messages:821
+#: ../data/messages:829
 msgid "Bar thickness"
 msgstr ""
 
-#: ../data/messages:823
+#: ../data/messages:831
 msgid "Labels"
 msgstr "Popisky"
 
-#: ../data/messages:825
+#: ../data/messages:833
 msgid "Label visibility"
 msgstr "Viditelnost popisku"
 
-#: ../data/messages:827
+#: ../data/messages:835
 msgid "Show labels:"
 msgstr "Zobrazit popisky:"
 
-#: ../data/messages:831
+#: ../data/messages:839
 msgid "On pointed icon"
 msgstr "U ikony, nad níž je myš"
 
-#: ../data/messages:833
+#: ../data/messages:841
 msgid "On all icons"
 msgstr "U všech ikon"
 
-#: ../data/messages:835
+#: ../data/messages:843
 msgid "Neighbouring labels visibility:"
 msgstr ""
 
-#: ../data/messages:837
+#: ../data/messages:845
 msgid "more visible"
 msgstr ""
 
-#: ../data/messages:839
+#: ../data/messages:847
 msgid "less visible"
 msgstr ""
 
-#: ../data/messages:855
+#: ../data/messages:863
 msgid "Draw the outline of the text?"
 msgstr "Kreslit ohraničení textu?"
 
-#: ../data/messages:857
+#: ../data/messages:865
 msgid "Margin around the text (in pixels) :"
 msgstr "Tloušťka okraje kolem textu (v bodech):"
 
-#: ../data/messages:867
+#: ../data/messages:875
 msgid "Quick-info are short information drawn on the icons."
 msgstr ""
 
-#: ../data/messages:869
+#: ../data/messages:877
 msgid "Quick-info"
 msgstr ""
 
-#: ../data/messages:871
+#: ../data/messages:879
 msgid "Use the same look as the labels?"
 msgstr ""
 
-#: ../data/messages:891
+#: ../data/messages:899
 msgid "Text colour:"
 msgstr ""
 
-#: ../data/messages:923
+#: ../data/messages:931
 msgid "Visibility of the dock"
 msgstr "Viditelnost doku"
 
-#: ../data/messages:957 ../data/messages:981
+#: ../data/messages:965 ../data/messages:989
 msgid "Same as main dock"
 msgstr "Stejný jako hlavní dok"
 
-#: ../data/messages:959
+#: ../data/messages:967
 msgid "Tiny"
 msgstr ""
 
-#: ../data/messages:973
+#: ../data/messages:981
 msgid "Leave it empty to use the same view as the main dock."
 msgstr "Ponechte prázdné, pokud má vypadat stejně jako hlavní dok."
 
-#: ../data/messages:975
+#: ../data/messages:983
 msgid "Choose the view for this dock :/"
 msgstr "Vyberte vzhled pro tento dok:"
 
-#: ../data/messages:979
+#: ../data/messages:987
 msgid "Fill the background with:"
 msgstr "Pozadí vyplnit:"
 
-#: ../data/messages:987
+#: ../data/messages:995
 msgid ""
 "Any format allowed; if empty, the colour gradation will be used as a fall "
 "back."
@@ -3964,27 +4052,27 @@ msgstr ""
 "Povolen je libovolný formát. Pokud necháte prázdné, bude použit barevný "
 "přechod."
 
-#: ../data/messages:989
+#: ../data/messages:997
 msgid "Image filename to use as a background :"
 msgstr "Jméno souboru s obrázkem pro pozadí:"
 
-#: ../data/messages:999
+#: ../data/messages:1007
 msgid "Load theme"
 msgstr "Načíst motiv"
 
-#: ../data/messages:1001
+#: ../data/messages:1009
 msgid "You can even paste an internet URL."
 msgstr "Můžete také vložit internetovou URL."
 
-#: ../data/messages:1003
+#: ../data/messages:1011
 msgid "...or drag and drop a theme package here :"
 msgstr "...nebo přetáhnout motiv sem:"
 
-#: ../data/messages:1005
+#: ../data/messages:1013
 msgid "Theme loading options"
 msgstr ""
 
-#: ../data/messages:1007
+#: ../data/messages:1015
 msgid ""
 "If you tick this box, your launchers will be deleted and replaced by the "
 "ones provided in the new theme. Otherwise the current launchers will be "
@@ -3994,11 +4082,11 @@ msgstr ""
 "nahrazeny těmi, které obsahuje nový motiv. V opačném případě budou aktuální "
 "spouštěče zachovány, nahrazeny budou pouze ikony."
 
-#: ../data/messages:1009
+#: ../data/messages:1017
 msgid "Use the new theme's launchers?"
 msgstr "Použít spouštěče z nového motivu?"
 
-#: ../data/messages:1011
+#: ../data/messages:1019
 msgid ""
 "Otherwise the current behaviour will be kept. This defines the dock's "
 "position, behavioural settings such as auto-hide, using taskbar or not, etc."
@@ -4007,27 +4095,27 @@ msgstr ""
 "doku, nastavení chování, jako je automatické schovávání, použití lišty "
 "spuštěných aplikací, atd."
 
-#: ../data/messages:1013
+#: ../data/messages:1021
 msgid "Use the new theme's behaviour?"
 msgstr "Použít chování z nového motivu?"
 
-#: ../data/messages:1015
+#: ../data/messages:1023
 msgid "Save"
 msgstr "Uložit"
 
-#: ../data/messages:1017
+#: ../data/messages:1025
 msgid "You will then be able to re-open it at any time."
 msgstr "Pak můžete motiv kdykoli znovu otevřít."
 
-#: ../data/messages:1019
+#: ../data/messages:1027
 msgid "Save current behaviour also?"
 msgstr "Uložit také aktuální nastavení chování?"
 
-#: ../data/messages:1021
+#: ../data/messages:1029
 msgid "Save current launchers also?"
 msgstr "Uložit také spouštěče?"
 
-#: ../data/messages:1023
+#: ../data/messages:1031
 msgid ""
 "The dock will build a complete tarball of your current theme, allowing you "
 "to easily exchange it with other people."
@@ -4035,92 +4123,87 @@ msgstr ""
 "Dok vytvoří kompletní balík s aktuálním motivem, který si můžete jednoduše "
 "vyměňovat s ostatními."
 
-#: ../data/messages:1025
+#: ../data/messages:1033
 msgid "Build a package of the theme?"
 msgstr "Vytvořit balík s motivem?"
 
-#: ../data/messages:1027
+#: ../data/messages:1035
 msgid "Directory in which the package will be saved:"
 msgstr ""
 
-#: ../data/messages:1029 ../data/messages:1031 ../data/messages:1033
-#: ../data/messages:1065 ../data/messages:1101
+#: ../data/messages:1037 ../data/messages:1069 ../data/messages:1109
 msgid "Desktop Entry"
 msgstr "Obsah plochy"
 
-#: ../data/messages:1037 ../data/messages:1069 ../data/messages:1105
+#: ../data/messages:1041 ../data/messages:1073 ../data/messages:1113
 msgid "Name of the container it belongs to:"
 msgstr ""
 
-#: ../data/messages:1039
+#: ../data/messages:1043
 msgid "Sub-dock's name:"
 msgstr "Jméno sub-doku:"
 
-#: ../data/messages:1041
+#: ../data/messages:1045
 msgid "New sub-dock"
 msgstr "Nový sub-dok"
 
-#: ../data/messages:1043
+#: ../data/messages:1047
 msgid "How to render the icon:"
 msgstr "Jak vykreslovat ikony:"
 
-#: ../data/messages:1045
+#: ../data/messages:1049
 msgid "Use an image"
 msgstr "Použít obrázek"
 
-#: ../data/messages:1047
+#: ../data/messages:1051
 msgid "Draw sub-dock's content as emblems"
 msgstr ""
 
-#: ../data/messages:1049
+#: ../data/messages:1053
 msgid "Draw sub-dock's content as stack"
 msgstr ""
 
-#: ../data/messages:1051
+#: ../data/messages:1055
 msgid "Draw sub-dock's content inside a box"
 msgstr ""
 
-#: ../data/messages:1053 ../data/messages:1075
+#: ../data/messages:1057 ../data/messages:1079
 msgid "Image's name or path:"
 msgstr "Jméno obrázku nebo cesta:"
 
-#: ../data/messages:1055 ../data/messages:1083 ../data/messages:1109
+#: ../data/messages:1059 ../data/messages:1087 ../data/messages:1117
 msgid "Extra parameters"
 msgstr "Další parametry"
 
-#: ../data/messages:1057
+#: ../data/messages:1061
 msgid "Name of the view used for the sub-dock:"
 msgstr ""
 
-#: ../data/messages:1059
+#: ../data/messages:1063
 msgid "If '0' the container will be displayed on every viewport."
 msgstr ""
 
-#: ../data/messages:1061 ../data/messages:1097
+#: ../data/messages:1065 ../data/messages:1105
 msgid "Only show in this specific viewport:"
 msgstr ""
 
-#: ../data/messages:1063 ../data/messages:1099 ../data/messages:1111
+#: ../data/messages:1067 ../data/messages:1107 ../data/messages:1119
 msgid "Order you want for this launcher among the others:"
 msgstr ""
 
-#: ../data/messages:1071
+#: ../data/messages:1075
 msgid "Launcher's name:"
 msgstr "Jméno spouštěče:"
 
-#: ../data/messages:1077
-msgid ""
-"Example: nautilus --no-desktop, gedit, etc. You can even enter a shortkey, e."
-"g. <Alt>F1, <Ctrl>c,  <Ctrl>v, etc"
+#: ../data/messages:1081
+msgid "Example: nautilus --no-desktop, gedit, etc. It will be run in a shell."
 msgstr ""
-"Například: nautilus --no-desktop, gedit, apod. Dokonce můžete použít "
-"klávesové zkratky, např. <Alt>F1, <Ctrl>c,  <Ctrl>v, apod."
 
-#: ../data/messages:1079
+#: ../data/messages:1083
 msgid "Command to launch on click:"
 msgstr "příkaz spuštěný klikem"
 
-#: ../data/messages:1085
+#: ../data/messages:1089
 msgid ""
 "If you chose to mix launcher and applications, this option will deactivate "
 "this behaviour for this launcher only. It can be useful for instance for a "
@@ -4128,11 +4211,11 @@ msgid ""
 "steal the terminal's icon from the taskbar."
 msgstr ""
 
-#: ../data/messages:1087
+#: ../data/messages:1091
 msgid "Don't link the launcher with its window"
 msgstr ""
 
-#: ../data/messages:1089
+#: ../data/messages:1093
 msgid ""
 "The only reason you may want to modify this parameter is if you made this "
 "launcher by hands. If you dropped it into the dock from the menu, it is "
@@ -4140,23 +4223,32 @@ msgid ""
 "program, which is useful to link the application with its launcher."
 msgstr ""
 
-#: ../data/messages:1091
+#: ../data/messages:1095
 msgid "Class of the program:"
 msgstr ""
 
-#: ../data/messages:1093
+#: ../data/messages:1097
 msgid "Run in a terminal?"
 msgstr "Spustit v terminálu?"
 
-#: ../data/messages:1095
+#: ../data/messages:1099
+msgid ""
+"Launch the command in this directory. Only supported for custom commands."
+msgstr ""
+
+#: ../data/messages:1101
+msgid "Working directory:"
+msgstr ""
+
+#: ../data/messages:1103
 msgid "If '0' the launcher will be displayed on every viewport."
 msgstr ""
 
-#: ../data/messages:1107
+#: ../data/messages:1115
 msgid "Separators' appearance is defined in the global configuration."
 msgstr ""
 
-#: ../data/messages:1114
+#: ../data/messages:1122
 msgid ""
 "<b>The basic 2D view of Cairo-Dock</b>\n"
 "Perfect if you want to make the dock look like a panel."
@@ -4164,96 +4256,117 @@ msgstr ""
 "<b>Základní  Cairo-Dock 2D pohled</b>\n"
 "Perfektní, pokud chcete, aby váš  dock vypadal jako panel."
 
-#: ../data/messages:1115
-msgid "<b>New version: <span color='red'>GLX-Dock 3.3</span>!</b>"
-msgstr ""
-
-#: ../data/messages:1117
-msgid ""
-"- Added a search entry in the <b>Applications Menu</b>.\n"
-"    It allows to rapidly look for programs from their name or their "
-"description"
-msgstr ""
-
-#: ../data/messages:1119
-msgid "- Added support of <b>logind</b> in the Logout applet"
-msgstr ""
-
-#: ../data/messages:1121
-msgid "- Better integration in the Cinnamon desktop"
-msgstr ""
-
 #: ../data/messages:1123
-msgid ""
-"- Added support of the <b>StartupNotification</b> protocol.\n"
-"    It allows launchers to be animated until the application opens and "
-"avoids accidental double launches"
-msgstr ""
-
-#: ../data/messages:1125
-msgid ""
-"- Added an new third-party applet: <b>Notification History</b> to never miss "
-"a notification"
-msgstr ""
-
-#: ../data/messages:1127
-msgid "- Upgraded the <b>Dbus API</b> to be even more powerful"
-msgstr ""
-
-#: ../data/messages:1129
-msgid "- A huge rewrite of the core using Objects"
-msgstr ""
-
-#: ../data/messages:1131
-msgid "- If you like the project, please donate :-)"
-msgstr ""
-
-#: ../data/messages:1133
 msgid "<b>New version: <span color='red'>GLX-Dock 3.4</span>!</b>"
 msgstr ""
 
-#: ../data/messages:1135
+#: ../data/messages:1125
 msgid "- <b>Menus</b>: added the possibility to customise them"
 msgstr ""
 
-#: ../data/messages:1137
+#: ../data/messages:1127
 msgid "- <b>Style</b>: unified the style of all components of the dock"
 msgstr ""
 
-#: ../data/messages:1139
+#: ../data/messages:1129
 msgid ""
 "- Better integration with <b>Compiz</b> (e.g. when using the <b>Cairo-Dock "
 "session</b>) and Cinnamon"
 msgstr ""
 
-#: ../data/messages:1141
+#: ../data/messages:1131
 msgid ""
 "- <b>Applications Menu</b> and <b>Logout</b> applets will wait the end of an "
 "update before displaying notifications"
 msgstr ""
 
-#: ../data/messages:1143
+#: ../data/messages:1133
 msgid ""
 "- Various improvements for <b>Applications Menu</b>, <b>Shortcuts</b>, "
 "<b>Status-Notifier</b> and <b>Terminal</b> applets"
 msgstr ""
 
-#: ../data/messages:1145
+#: ../data/messages:1135
 msgid "- Start working on <b>EGL</b> and <b>Wayland</b> support"
 msgstr ""
 
-#: ../data/messages:1147
+#: ../data/messages:1137
 msgid "- And as always ... various bug fixes and improvements!"
 msgstr ""
 
-#: ../data/messages:1149
+#: ../data/messages:1139
 msgid "If you like the project, please donate and/or contribute :-)"
+msgstr ""
+
+#: ../data/messages:1141
+msgid ""
+"Note: We're switching from Bzr to Git on Github, feel free to fork! https://"
+"github.com/Cairo-Dock"
+msgstr ""
+
+#: ../data/messages:1143
+msgid "<b>New version: <span color='red'>GLX-Dock 3.5</span>!</b>"
+msgstr ""
+
+#: ../data/messages:1145
+msgid "- Many bug fixes and improvements!"
+msgstr ""
+
+#: ../data/messages:1147
+msgid "<b>New version: <span color='red'>GLX-Dock 3.6</span>!</b>"
+msgstr ""
+
+#: ../data/messages:1149
+msgid ""
+"- <b>Wayland support</b>: main features work under select compositors "
+"(Wayfire, KWin, Labwc, Cosmic, etc.)."
 msgstr ""
 
 #: ../data/messages:1151
 msgid ""
-"Note: We're switching from Bzr to Git on Github, feel free to fork! https://"
-"github.com/Cairo-Dock"
+"<b>note</b>: some limitations remain, be sure to check our Wiki page for "
+"more information"
+msgstr ""
+
+#: ../data/messages:1153
+msgid ""
+"- <b>HiDPI support</b>: the dock now supports high-resolution screens (with "
+"integer scale factors)"
+msgstr ""
+
+#: ../data/messages:1155
+msgid ""
+"- Reworked the detection of applications, fixing many issues with "
+"misidentified apps"
+msgstr ""
+
+#: ../data/messages:1157
+msgid ""
+"- <b>Weather</b> applet updated, switched to new provider (note: need to re-"
+"enter your location)"
+msgstr ""
+
+#: ../data/messages:1159
+msgid ""
+"- Translation updates in several languages, thanks to everyone who "
+"contributed on Launchpad!"
+msgstr ""
+
+#: ../data/messages:1161
+msgid "- Many additional bug fixes and updates!"
+msgstr ""
+
+#: ../data/messages:1163
+msgid ""
+"Note: the old project website will be discontinued, please refer to our "
+"Github Wiki for up-to-date information: https://github.com/Cairo-Dock/cairo-"
+"dock-core/wiki"
+msgstr ""
+
+#: ../data/messages:1165
+msgid ""
+"Please report any problems you find on our Github issues page: https://"
+"github.com/Cairo-Dock/cairo-dock-core/issues"
 msgstr ""
 
 #~ msgid "Windows management"
