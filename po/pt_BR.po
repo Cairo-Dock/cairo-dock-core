@@ -6,15 +6,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.1.0-alpha\n"
 "Report-Msgid-Bugs-To: fabounet@glx-dock.org\n"
-"PO-Revision-Date: 2025-09-08 10:09+0000\n"
-"Last-Translator: Lorenzo Fagundes Antunes <fantunes.lorenzo@gmail.com>\n"
+"POT-Creation-Date: 2025-09-21 19:12+0000\n"
+"PO-Revision-Date: 2026-03-05 21:56+0000\n"
+"Last-Translator: Alfredo Langa <Unknown>\n"
 "Language-Team: \n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2025-09-21 14:00+0000\n"
-"X-Generator: Launchpad (build 299e6cec2b88528c8351aab8852cf896cddc6846)\n"
+"X-Launchpad-Export-Date: 2026-03-05 22:00+0000\n"
+"X-Generator: Launchpad (build 2b2e09fee12efee48836b36f2ca9a800f38d982a)\n"
 
 #: ../src/cairo-dock-gui-advanced.c:120 ../src/cairo-dock-widget-plugins.c:164
 #: ../data/messages:269
@@ -72,8 +73,8 @@ msgid ""
 " or on the contrary unobtrusive?\n"
 "Configure the way you access your docks and sub-docks!"
 msgstr ""
-"Deseja que seu dock esteja sempre visível,\n"
-" ou do contrário não obstrusivo ?\n"
+"Queres que o seu dock permaneça visível, \n"
+"ou ao contrário não obstrusivo?\n"
 "Configure a forma de acesso aos docks e sub-docks !"
 
 #: ../src/cairo-dock-gui-advanced.c:1460 ../src/cairo-dock-gui-advanced.c:1461
@@ -83,7 +84,7 @@ msgstr "Visibilidade"
 
 #: ../src/cairo-dock-gui-advanced.c:1468
 msgid "Display and interact with currently open windows."
-msgstr "Exibir e interagir com a janela atualmente aberta."
+msgstr "Exibir e interagir com as janelas atualmente abertas."
 
 #: ../src/cairo-dock-gui-advanced.c:1469 ../src/cairo-dock-gui-advanced.c:1470
 #: ../Help/data/messages:41 ../data/messages:65
@@ -100,7 +101,7 @@ msgstr "Atalhos"
 
 #: ../src/cairo-dock-gui-advanced.c:1484
 msgid "All of the parameters you will never want to tweak."
-msgstr "Todos os parâmetros que você nunca desejará ajustar."
+msgstr "Todos os parâmetros que jamais desejará ajustar."
 
 #: ../src/cairo-dock-gui-advanced.c:1496
 msgid "Configure the global style."
@@ -170,11 +171,11 @@ msgstr "Indicadores"
 
 #: ../src/cairo-dock-gui-advanced.c:1545
 msgid "Define icon caption and quick-info style."
-msgstr "Defina o estilo dos rótulos dos ícones e das informações rápidas."
+msgstr "Defina a legenda do ícone e estilo de informação rápida."
 
 #: ../src/cairo-dock-gui-advanced.c:1546 ../src/cairo-dock-gui-advanced.c:1547
 msgid "Captions"
-msgstr "Rótulos"
+msgstr "Legendas"
 
 #: ../src/cairo-dock-gui-advanced.c:1554
 msgid "Try new themes and save your theme."
@@ -204,7 +205,7 @@ msgstr "Todas as palavras"
 
 #: ../src/cairo-dock-gui-advanced.c:1725
 msgid "Highlighted words"
-msgstr "Palavras destacadas"
+msgstr "Palavras realçadas"
 
 #: ../src/cairo-dock-gui-advanced.c:1726
 msgid "Hide others"
@@ -246,7 +247,7 @@ msgstr "Mais mini-aplicativos"
 
 #: ../src/cairo-dock-gui-advanced.c:1898
 msgid "Get more applets online !"
-msgstr "Mais mini-aplicativos online!"
+msgstr "Obter mais mini-aplicativos"
 
 #: ../src/cairo-dock-gui-advanced.c:1990 ../src/cairo-dock-gui-simple.c:355
 msgid "Cairo-Dock configuration"
@@ -273,8 +274,8 @@ msgid ""
 "The advanced mode lets you tweak every single parameter of the dock. It is a "
 "powerful tool to customise your current theme."
 msgstr ""
-"O modo avançado deixa você configurar qualquer parâmetro do dock. É uma "
-"ferramenta poderosa para personalizar seu tema atual."
+"O modo avançado te permita configurar qualquer parâmetro do dock. É uma "
+"ferramenta poderosa para personalizar sue tema atual."
 
 #: ../src/cairo-dock-user-interaction.c:429
 msgid ""
@@ -288,7 +289,7 @@ msgstr ""
 
 #: ../src/cairo-dock-user-menu.c:131
 msgid "Delete this dock?"
-msgstr "Remover este dock?"
+msgstr "Excluir este dock?"
 
 #: ../src/cairo-dock-user-menu.c:193
 msgid "About Cairo-Dock"
@@ -359,6 +360,7 @@ msgstr ""
 "  Cairo-Dock Devs https://launchpad.net/~cairo-dock-team\n"
 "  Celio Alves https://launchpad.net/~celio.alves\n"
 "  Charles Junior Rech https://launchpad.net/~charlespito\n"
+"  Daniel Kondor https://launchpad.net/~kondor-dani\n"
 "  Drivador https://launchpad.net/~drivador-legenda\n"
 "  Eduardo Mucelli Rezende Oliveira https://launchpad.net/~eduardo-mucelli\n"
 "  Eliel Teotonio https://launchpad.net/~eliel-teotonio\n"
@@ -2239,9 +2241,9 @@ msgid ""
 "Some applets can have several instances running at the same time: Clock, "
 "Stack, Weather, ...\n"
 "Right click on the applet's icon -> \"launch another instance\".\n"
-"You can configure each instance independently. This allows you, for "
-"example, to have the current time for different countries in your dock or "
-"the weather in different cities."
+"You can configure each instance independently. This allows you, for example, "
+"to have the current time for different countries in your dock or the weather "
+"in different cities."
 msgstr ""
 "Algumas aplicações java podem ter várias instâncias em execução ao mesmo "
 "tempo: Relógio, Pilha, Tempo, ... clique Direito sobre o ícone do applet -> "
@@ -4467,152 +4469,3 @@ msgid ""
 msgstr ""
 "Nota: Estamos a mudar a partir de Bzr para o Git no Github, sinta-se livre "
 "para garfo! https://github.com/Cairo-Dock"
-
-#~ msgid "Windows management"
-#~ msgstr "Gerenciador de Janelas"
-
-#~ msgid "Use all screens"
-#~ msgstr "Use todas as telas"
-
-#~ msgid "Disable the gnome-panel"
-#~ msgstr "Desabilitar o gnome-panel"
-
-#~ msgid "Disable Unity"
-#~ msgstr "Desabilitar Unity"
-
-#~ msgid "Tip: If this line is grayed, it's because this tip is not for you.)"
-#~ msgstr "Dica: Se a linha está acizentada, é porque a dica não é para você.)"
-
-#~ msgid "If you're using Compiz, you can click on this button:"
-#~ msgstr "Se o Compiz estiver sendo usado, você pode clicar neste botão:"
-
-#~ msgid "Removing completely the gnome-panel"
-#~ msgstr "Removendo completamente o gnome-panel"
-
-#~ msgid ""
-#~ "Open gconf-editor, edit the key /desktop/gnome/session/"
-#~ "required_components/panel, and replace its content with \"cairo-dock\".\n"
-#~ "Then restart your session : the gnome-panel has not been started, and the "
-#~ "dock has been started (if not, you can add it to the startup programs)."
-#~ msgstr ""
-#~ "Abra o gconf-editor, edite a chave /desktop/gnome/session/"
-#~ "required_components/panel, e substituir seu conteúdo por \"cairo-dock\".\n"
-#~ "Em seguida, reiniciar a sessão: o gnome-panel não foi iniciado, e a "
-#~ "estação foi iniciado (se não, você pode adicioná-lo aos programas de "
-#~ "inicialização)."
-
-#~ msgid ""
-#~ "If you are on Gnome, you can click on this button in order to "
-#~ "automatically modify this key:"
-#~ msgstr ""
-#~ "Se você estiver no Gnome, você pode clicar neste botão para modifcar esta "
-#~ "chave automaticamente:"
-
-#~ msgid "Forum"
-#~ msgstr "Fórum"
-
-#~ msgid ""
-#~ "Hint : If you have an ATI or an Intel card, you should try without OpenGL "
-#~ "first, because their drivers are not yet perfect."
-#~ msgstr ""
-#~ "Dica : Se você tem placa de vídeo ATI ou Intel, você deveria rodar sem "
-#~ "OpenGL primeiro, pois os drivers ainda não estão perfeitos."
-
-#~ msgid ""
-#~ "If you're on Gnome with Metacity (without Compiz), you can click on this "
-#~ "button:"
-#~ msgstr ""
-#~ "Se você estiver no Gnome com Metacity (sem Compiz), você pode clicar "
-#~ "neste botão:"
-
-#~ msgid ""
-#~ "There is no icon in the Applications Menu even though I enable the option."
-#~ msgstr ""
-#~ "Não existe ícone no Menu de Aplicativos, mesmo que eu ative a opção."
-
-#~ msgid ""
-#~ "In Gnome, there is an option that override the dock's one. To enable "
-#~ "icons in menus, open 'gconf-editor', go to Desktop / Gnome / Interface "
-#~ "and enable the \"menus have icons\" and the \"buttons have icons\" "
-#~ "options. "
-#~ msgstr ""
-#~ "No Gnome, existe uma opção que sobrepõe-se à do painel. Para ligar ícones "
-#~ "no menus, abra 'gconf-editor', vá para Desktop / Gnome / Interface e "
-#~ "ative as opções \"Mostrar ícones nos menus\" e \"Mostrar ícones nos "
-#~ "botões\". "
-
-#~ msgid "If you're on Gnome you can click on this button:"
-#~ msgstr "Se você estiver no Gnome, você pode clicar neste botão:"
-
-#~ msgid ""
-#~ "We maintain two repositories for Debian, Ubuntu and other Debian-forked:\n"
-#~ " One for stable releases and another which is updated weekly (unstable "
-#~ "version)"
-#~ msgstr ""
-#~ "Nos mantemos dois repositórios para Debian, Ubuntu e outros Debian-"
-#~ "bifurcada:\n"
-#~ " -Uma para as versões estáveis e outro que é atualizado semanalmente "
-#~ "(versão instável)"
-
-#~ msgid "Debian/Ubuntu"
-#~ msgstr "Debian/Ubuntu"
-
-#~ msgid "Ubuntu"
-#~ msgstr "Ubuntu"
-
-#~ msgid ""
-#~ "If you're on Ubuntu, you can add our 'stable' repository by clicking on "
-#~ "this button:\n"
-#~ " After that, you can launch your update manager in order to install the "
-#~ "latest stable version."
-#~ msgstr ""
-#~ "Se você está no Ubuntu, você pode adicionar o nosso repositório 'estável' "
-#~ "clicando neste botão:\n"
-#~ " -Depois disso, você pode iniciar seu gerenciador de atualizações em "
-#~ "ordem para a instalação da ultima versão estável"
-
-#~ msgid ""
-#~ "If you're on Ubuntu, you can also add our 'weekly' ppa (can be unstable) "
-#~ "by clicking on this button:\n"
-#~ " After that, you can launch your update manager in order to install the "
-#~ "latest weekly version."
-#~ msgstr ""
-#~ "Se você está no Ubuntu, você também pode adicionar o nosso ppa "
-#~ "\"semanal\" (pode ser instável), clicando neste botão:\n"
-#~ "Depois disso, você pode iniciar seu gerenciador de atualizações, a fim de "
-#~ "instalar a última versão semanal."
-
-#~ msgid "Debian"
-#~ msgstr "Debian"
-
-#~ msgid ""
-#~ "If you're on Debian Stable, you can add our 'stable' repository by "
-#~ "clicking on this button:\n"
-#~ " After that, you can purge all 'cairo-dock*' packages, update the your "
-#~ "system and reinstall 'cairo-dock' package."
-#~ msgstr ""
-#~ "Se você estiver no Debian estavel, você pode adicionar o nosso "
-#~ "repositório 'estável' clicando neste botão:\n"
-#~ " -Depois disso, você pode remover todos os pacotes 'cairo-dock*', "
-#~ "atualize o seu sistema e reinstalar 'cairo-dock'"
-
-#~ msgid ""
-#~ "If you're on Debian Unstable, you can add our 'stable' repository by "
-#~ "clicking on this button:\n"
-#~ " After that, you can purge all 'cairo-dock*' packages, update the your "
-#~ "system and reinstall 'cairo-dock' package."
-#~ msgstr ""
-#~ "Se você estiver no Debian instável, você pode adicionar o nosso "
-#~ "repositório 'estável' clicando neste botão:\n"
-#~ " -Depois disso, você pode remover todos os pacotes 'cairo-dock*', "
-#~ "atualize o seu sistema e reinstalar 'cairo-dock'"
-
-#~ msgid "Cairo-Dock (Fallback Mode)"
-#~ msgstr "O Cairo-Dock (O Modo Fallback)"
-
-#~ msgid "A light and eye-candy dock and desklets for your desktop."
-#~ msgstr ""
-#~ "Um dock leve e bonito com miniaplicativos para a sua área de trabalho."
-
-#~ msgid "Multi-purpose Dock and Desklets"
-#~ msgstr "Multi-propósito Dock e Desklets"
