@@ -481,14 +481,36 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 		pIcons->iIconWidth = 48;
 	if (pIcons->iIconHeight == 0)
 		pIcons->iIconHeight = 48;
+	
+	double fUIScale = 1.0;
+	int iUIScaleBackend = cairo_dock_get_integer_key_value (pKeyFile, "System", "ui scale backend", &bFlushConfFileNeeded, 2, NULL, NULL);
+	gboolean bScale = FALSE;
+	switch (iUIScaleBackend)
+	{
+		case 2: // both
+			bScale = TRUE;
+			break;
+		case 1: // Wayland
+			bScale = gldi_container_is_wayland_backend ();
+			break;
+		case 0: // X11
+			bScale = !gldi_container_is_wayland_backend ();
+			break;
+	}
+	if (bScale) fUIScale = cairo_dock_get_double_key_value (pKeyFile, "System", "ui scale", &bFlushConfFileNeeded, 1., NULL, NULL);
+	
+	pIcons->iIconWidth *= fUIScale;
+	pIcons->iIconHeight *= fUIScale;
 	pIcons->fExtraScale = cairo_dock_get_double_key_value (pKeyFile, "Icons", "extra scale", &bFlushConfFileNeeded, 1., NULL, NULL);
 	
 	//\___________________ Parametres des separateurs.
 	cairo_dock_get_size_key_value_helper (pKeyFile, "Icons", "separator ", bFlushConfFileNeeded, pIcons->iSeparatorWidth, pIcons->iSeparatorHeight);
 	if (pIcons->iSeparatorWidth == 0)
 		pIcons->iSeparatorWidth = pIcons->iIconWidth;
+	else pIcons->iSeparatorWidth *= fUIScale;
 	if (pIcons->iSeparatorHeight == 0)
 		pIcons->iSeparatorHeight = pIcons->iIconHeight;
+	else pIcons->iSeparatorHeight *= fUIScale;
 	if (pIcons->iSeparatorHeight > pIcons->iIconHeight)
 		pIcons->iSeparatorHeight = pIcons->iIconHeight;
 	
@@ -543,6 +565,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 	
 	gchar *cFont = (bCustomFont ? cairo_dock_get_string_key_value (pKeyFile, "Labels", "police", &bFlushConfFileNeeded, NULL, "Icons", NULL) : NULL);
 	gldi_text_description_set_font (&pLabels->iconTextDescription, cFont);
+	pLabels->iconTextDescription.iSize *= fUIScale;
 	
 	cd_debug ("label font: %s, %d\n", pLabels->iconTextDescription.cFont, pLabels->iconTextDescription.iSize);
 	
@@ -581,7 +604,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoIconsParam *pIcons)
 	//\___________________ quick-info
 	gldi_text_description_copy (&pLabels->quickInfoTextDescription, &pLabels->iconTextDescription);
 	pLabels->quickInfoTextDescription.iMargin = 1;  // to minimize the surface of the quick-info (0 would be too much).
-	pLabels->quickInfoTextDescription.iSize = 12;  // no need to update the fd, it will be done when loading the text buffer
+	pLabels->quickInfoTextDescription.iSize = 12 * fUIScale;  // no need to update the fd, it will be done when loading the text buffer
 	
 	gboolean bQuickInfoSameLook = cairo_dock_get_boolean_key_value (pKeyFile, "Labels", "qi same", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	if ( !bQuickInfoSameLook)

@@ -36,7 +36,6 @@
 #include "cairo-dock-animations.h"  // for cairo_dock_is_hidden
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-dialog-factory.h"
-#include "cairo-dock-menu.h"  // _init_menu_style
 #include "cairo-dock-style-manager.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-dialog-priv.h"
@@ -1006,14 +1005,40 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDialogsParam *pDialogs)
 {
 	gboolean bFlushConfFileNeeded = FALSE;
 	
+	pDialogs->fMenuFontScale = 1.0;
+	pDialogs->fUIScale = 1.0;
+	int iUIScaleBackend = cairo_dock_get_integer_key_value (pKeyFile, "System", "ui scale backend", &bFlushConfFileNeeded, 2, NULL, NULL);
+	gboolean bScale = FALSE;
+	switch (iUIScaleBackend)
+	{
+		case 2: // both
+			bScale = TRUE;
+			break;
+		case 1: // Wayland
+			bScale = gldi_container_is_wayland_backend ();
+			break;
+		case 0: // X11
+			bScale = !gldi_container_is_wayland_backend ();
+			break;
+	}
+	if (bScale)
+	{
+		pDialogs->fUIScale = cairo_dock_get_double_key_value (pKeyFile, "System", "ui scale", &bFlushConfFileNeeded, 1., NULL, NULL);
+		gboolean bDontScaleMenus = cairo_dock_get_boolean_key_value (pKeyFile, "System", "ui scale exclude menus", &bFlushConfFileNeeded, FALSE, NULL, NULL);
+		if (!bDontScaleMenus) pDialogs->fMenuFontScale = pDialogs->fUIScale;
+	}
+	
 	pDialogs->cButtonOkImage = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "button_ok image", &bFlushConfFileNeeded, NULL, NULL, NULL);
 	pDialogs->cButtonCancelImage = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "button_cancel image", &bFlushConfFileNeeded, NULL, NULL, NULL);
 	
 	cairo_dock_get_size_key_value_helper (pKeyFile, "Dialogs", "button ", bFlushConfFileNeeded, pDialogs->iDialogButtonWidth, pDialogs->iDialogButtonHeight);
+	pDialogs->iDialogButtonWidth *= pDialogs->fUIScale;
+	pDialogs->iDialogButtonHeight *= pDialogs->fUIScale;
 	
 	GldiColor couleur_bulle = {{1.0, 1.0, 1.0, 0.7}};
 	cairo_dock_get_color_key_value (pKeyFile, "Dialogs", "bg color", &bFlushConfFileNeeded, &pDialogs->fBgColor, &couleur_bulle, NULL, "background color");
 	pDialogs->iDialogIconSize = MAX (16, cairo_dock_get_integer_key_value (pKeyFile, "Dialogs", "icon size", &bFlushConfFileNeeded, 48, NULL, NULL));
+	pDialogs->iDialogIconSize *= pDialogs->fUIScale;
 	
 	pDialogs->cDecoratorName = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "decorator", &bFlushConfFileNeeded, "comics", NULL, NULL);
 	
@@ -1056,6 +1081,7 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDialogsParam *pDialogs)
 	gboolean bCustomFont = cairo_dock_get_boolean_key_value (pKeyFile, "Dialogs", "custom", &bFlushConfFileNeeded, TRUE, NULL, NULL);
 	gchar *cFont = (bCustomFont ? cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "message police", &bFlushConfFileNeeded, NULL, "Icons", NULL) : NULL);
 	gldi_text_description_set_font (&pDialogs->dialogTextDescription, cFont);
+	pDialogs->dialogTextDescription.iSize *= pDialogs->fUIScale;
 	
 	pDialogs->dialogTextDescription.fMaxRelativeWidth = .5;  // limit to half of the screen (the dialog is not placed on a given screen, it can overlap 2 screens, so it's half of the mean screen width)
 	
@@ -1094,6 +1120,7 @@ static void _init_menu_style (void)
 			gldi_style_colors_freeze ();
 			g_object_unref (cssProvider);
 			cssProvider = NULL;
+			//!! TODO: might still need a minimal provider to adjust font size !!
 		}
 	}
 	else
@@ -1147,14 +1174,20 @@ static void _init_menu_style (void)
 				&length,
 				NULL);
 		}
+		g_free (cCustomCssFile);
 		
 		gchar *css;
 		if (cCustomCss != NULL)
 		{
 			css = g_strconcat (cssheader, cCustomCss, NULL);
+			g_free (cCustomCss);
 		}
 		else
 		{
+			gchar *cFontSize = (myDialogsParam.fMenuFontScale != 1.0) ?
+				g_strdup_printf (".gldimenuitem label { font-size: %f%%; }\n", myDialogsParam.fMenuFontScale * 100.0)
+				: NULL;
+			
 			css = g_strconcat (cssheader,
 			".gldimenuitem * { \
 				/*engine: none;*/ \
@@ -1325,15 +1358,19 @@ static void _init_menu_style (void)
 			.window-frame { \
 				box-shadow: none; \
 			}",
+			cFontSize,
 			NULL);  // we also define ".menu", so that custom widgets (like in the SoundMenu) can get our colors. Note that we don't redefine Gtk's menuitem, because we want to keep normal menus for GUI
 			// for "entry", using "background-color" will not affect entries inside another widget (like a box), we actually have to use "background" ... (TBC with gtk > 3.6)
 			// for ".window-frame": remove shadow added by some WMs (Marco/Metacity) to the menu (LP #1407880)
+			
+			g_free (cFontSize);
 		}
 		
 		gldi_style_colors_freeze ();
 		gtk_css_provider_load_from_data (cssProvider,
 			css, -1, NULL);  // (should) clear any previously loaded information
 		gldi_style_colors_freeze ();
+		g_free (cssheader);
 		g_free (css);
 	}
 }
@@ -1375,7 +1412,8 @@ static void reload (CairoDialogsParam *pPrevDialogs, CairoDialogsParam *pDialogs
 	}
 	
 	if (pPrevDialogs->bUseDefaultColors != pDialogs->bUseDefaultColors
-	|| ! pDialogs->bUseDefaultColors)
+	|| ! pDialogs->bUseDefaultColors
+	|| pPrevDialogs->fMenuFontScale != pDialogs->fMenuFontScale)
 		on_style_changed (NULL);
 }
 
