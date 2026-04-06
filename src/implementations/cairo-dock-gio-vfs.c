@@ -477,7 +477,8 @@ static GList *cairo_dock_gio_vfs_list_directory (const gchar *cBaseURI, CairoDoc
 		if (pFileInfo == NULL)
 			break ;
 		
-		gboolean bIsHidden = g_file_info_get_is_hidden (pFileInfo);
+		gboolean bInfoHasHiddenAttr = g_file_info_has_attribute (pFileInfo, G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN);
+		gboolean bIsHidden = bInfoHasHiddenAttr && g_file_info_get_is_hidden (pFileInfo);
 		if (bListHiddenFiles || ! bIsHidden)
 		{
 			GFileType iFileType = g_file_info_get_file_type (pFileInfo);
@@ -488,7 +489,8 @@ static GList *cairo_dock_gio_vfs_list_directory (const gchar *cBaseURI, CairoDoc
 				continue;
 			}
 			const gchar *cFileName = g_file_info_get_name (pFileInfo);
-			const gchar *cMimeType = g_file_info_get_content_type (pFileInfo);
+			const gboolean bInfoHasContentType = g_file_info_has_attribute (pFileInfo, G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE);
+			const gchar *cMimeType = bInfoHasContentType ? g_file_info_get_content_type (pFileInfo) : NULL;
 			gchar *cName = NULL;
 			
 			icon = cairo_dock_create_dummy_launcher (NULL, NULL, NULL, NULL, 0);
@@ -618,6 +620,7 @@ static gsize cairo_dock_gio_vfs_measure_directory (const gchar *cBaseURI, gint i
 	const gchar *cAttributes = G_FILE_ATTRIBUTE_STANDARD_TYPE","
 		G_FILE_ATTRIBUTE_STANDARD_SIZE","
 		G_FILE_ATTRIBUTE_STANDARD_NAME","
+		G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE","
 		G_FILE_ATTRIBUTE_STANDARD_TARGET_URI;
 	GFileEnumerator *pFileEnum = g_file_enumerate_children (pFile,
 		cAttributes,
@@ -643,10 +646,11 @@ static gsize cairo_dock_gio_vfs_measure_directory (const gchar *cBaseURI, gint i
 		pFileInfo = g_file_enumerator_next_file (pFileEnum, NULL, &erreur);
 		if (erreur != NULL)
 		{
+			const gboolean bInfoHasContentType = g_file_info_has_attribute (pFileInfo, G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE);
 			cd_warning ("gvfs-integration : %s (%s [%s]: %s)", erreur->message,
 				g_file_info_get_name (pFileInfo),
 				g_file_info_get_display_name (pFileInfo),
-				g_file_info_get_content_type (pFileInfo));
+				(bInfoHasContentType ? g_file_info_get_content_type (pFileInfo) : "(NULL)"));
 			g_error_free (erreur);
 			erreur = NULL;
 			continue;
