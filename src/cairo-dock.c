@@ -53,7 +53,6 @@
 #include <time.h>
 
 #include <glib/gstdio.h>
-#include <dbus/dbus-glib.h>  // dbus_g_thread_init
 
 #include "config.h"
 #include "cairo-dock-icon-facility.h"  // cairo_dock_get_first_icon
@@ -353,8 +352,6 @@ int main (int argc, char** argv)
 		return 1;
 	}
 	
-	// init lib
-	dbus_g_thread_init (); // it's a wrapper: it will use dbus_threads_init_default ();
 	
 	GError *erreur = NULL;
 	
