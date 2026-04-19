@@ -13,7 +13,7 @@ include (GNUInstallDirs)
 
 ########### project ###############
 
-set (VERSION "3.6.98") # no dash, only numbers, dots and maybe alpha/beta/rc, e.g.: 3.3.1 or 3.3.99.alpha1
+set (VERSION "3.6.99") # no dash, only numbers, dots and maybe alpha/beta/rc, e.g.: 3.3.1 or 3.3.99.alpha1
 
 add_compile_options (-std=c99 -Wall -Wextra -Werror-implicit-function-declaration) # -Wextra -Wwrite-strings -Wuninitialized -Wstrict-prototypes -Wreturn-type -Wparentheses -Warray-bounds)
 if (NOT DEFINED CMAKE_BUILD_TYPE)
@@ -104,7 +104,7 @@ list(APPEND CMAKE_INSTALL_RPATH ${libdir})
 
 # check for mandatory dependencies
 # for pkg_check_modules -- use semicolon to have more details if a package is missing
-set (packages_required_semicolon "glib-2.0 >= 2.40.0;gthread-2.0;cairo;librsvg-2.0;dbus-1;dbus-glib-1;libxml-2.0;gl;glu;libcurl")
+set (packages_required_semicolon "glib-2.0 >= 2.40.0;gthread-2.0;cairo;librsvg-2.0;libxml-2.0;gl;glu;libcurl")
 # for gldi.pc -- replace semicolons with spaces
 STRING (REPLACE ";" " " packages_required "${packages_required_semicolon}") # note: need to use quotes around ${packages_required_semicolon} for this to work!
 pkg_check_modules ("PACKAGE" REQUIRED ${packages_required_semicolon})
