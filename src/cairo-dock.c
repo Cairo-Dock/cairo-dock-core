@@ -514,6 +514,9 @@ int main (int argc, char** argv)
 	 * https://gitlab.gnome.org/GNOME/glib/-/issues/541
 	 */
 	g_vfs_get_default ();
+	// needs to be created explicitly for loading extensions such as libgioremote-volume-monitor.so
+	GVolumeMonitor *tmp_vol = g_volume_monitor_get ();
+	g_object_unref (tmp_vol);
 	
 	gtk_init (&argc, &argv);
 	
