@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<protocol name="ext_foreign_toplevel_state_v1">
+  <copyright>
+    Copyright © 2018 Ilia Bozhinov
+    Copyright © 2020 Isaac Freund
+    Copyright © 2022 wb9688
+    Copyright © 2023 i509VCB
+    Copyright @ 2024 Victoria Brekenfeld
+
+    Permission to use, copy, modify, distribute, and sell this
+    software and its documentation for any purpose is hereby granted
+    without fee, provided that the above copyright notice appear in
+    all copies and that both that copyright notice and this permission
+    notice appear in supporting documentation, and that the name of
+    the copyright holders not be used in advertising or publicity
+    pertaining to distribution of the software without specific,
+    written prior permission.  The copyright holders make no
+    representations about the suitability of this software for any
+    purpose.  It is provided "as is" without express or implied
+    warranty.
+
+    THE COPYRIGHT HOLDERS DISCLAIM ALL WARRANTIES WITH REGARD TO THIS
+    SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+    FITNESS, IN NO EVENT SHALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY
+    SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+    WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN
+    AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
+    ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+    THIS SOFTWARE.
+  </copyright>
+
+  <description summary="describe and manage toplevel state">
+    The purpose of the interfaces in this protocol is to describe
+    and potentially allow management of the state of a foreign toplevel.
+
+    This protocol depends on the ext-foreign-toplevel-list protocol.
+
+    The compositor may choose to restrict this protocol to a special client
+    launched by the compositor itself or expose it to all clients,
+    this is compositor policy.
+
+    The key words "must", "must not", "required", "shall", "shall not",
+    "should", "should not", "recommended",  "may", and "optional" in this
+    document are to be interpreted as described in IETF RFC 2119.
+
+    Warning! The protocol described in this file is currently in the testing
+    phase. Backward compatible changes may be added together with the
+    corresponding interface version bump. Backward incompatible changes can
+    only be done by creating a new major version of the extension.
+  </description>
+
+  <interface name="ext_foreign_toplevel_state_manager_v1" version="1">
+    <description summary="describe toplevel state">
+      The global object used to initialize the extension interfaces to get updates
+      to the state of a toplevel.
+    </description>
+
+    <enum name="notifications" bitfield="true">
+      <entry name="maximize" value="1" summary="ext_foreign_toplevel_handle_state_v1.state may contain maximized"/>
+      <entry name="minimize" value="2" summary="ext_foreign_toplevel_handle_state_v1.state may contain minimized"/>
+      <entry name="activated" value="4" summary="ext_foreign_toplevel_handle_state_v1.state may contain activated"/>
+      <entry name="fullscreen" value="8" summary="ext_foreign_toplevel_handle_state_v1.state may contain fullscreen"/>
+      <entry name="always_on_top" value="16" summary="ext_foreign_toplevel_handle_state_v1.state may contain always-on-top"/>
+      <entry name="sticky" value="32" summary="ext_foreign_toplevel_handle_state_v1.state may contain sticky"/>
+      <entry name="shaded" value="64" summary="ext_foreign_toplevel_handle_state_v1.state may contain shaded"/>
+    </enum>
+
+    <enum name="actions" bitfield="true">
+      <entry name="close" value="1" summary="close is available"/>
+      <entry name="maximize" value="2" summary="set_maximized and unset_maximized are available"/>
+      <entry name="minimize" value="4" summary="set_minimized and unset_minimized are available"/>
+      <entry name="activated" value="8" summary="activate is available"/>
+      <entry name="fullscreen" value="16" summary="set_fullscreen and unset_fullscreen are available"/>
+      <entry name="always_on_top" value="32" summary="set_always_on_top and unset_always_on_top are available"/>
+      <entry name="sticky" value="64" summary="set_sticky and unset_sticky are available"/>
+      <entry name="shaded" value="128" summary="set_shaded and unset_shaded are available"/>
+    </enum>
+
+    <event name="capabilities">
+    <description summary="compositor capabilities">
+        This event advertises the capabilities supported by the compositor. If
+        a capability isn't supported, clients should hide or disable the UI
+        elements that visualize the corresponding states or actions. E.g. if
+        maximizing isn't supported, a taskbar might not show a corresponding
+        button in its context menu.
+
+        Compositors must send this event once after creation of an
+        ext_foreign_toplevel_state_v1. When the capabilities change, compositors
+        must send this event again.
+      </description>
+      <arg name="notifications" type="uint" summary="notifications the client can receive" enum="notifications" />
+      <arg name="actions" type="uint" summary="actions the client can perform" enum="actions" />
+    </event>
+
+    <enum name="error">
+      <description summary="ext_foreign_toplevel_state_v1 errors">
+        These errors are sent in response to ext_foreign_toplevel_state_v1 requests.
+      </description>
+      <entry name="already_constructed" value="0"
+        summary="the ext_foreign_toplevel_state_handle_v1 was already constructed for the specified ext_foreign_toplevel_handle_v1 object"/>
+    </enum>
+
+    <request name="destroy" type="destructor">
+      <description summary="destroy the ext_foreign_toplevel_state_v1 object">
+        Destroys the ext_foreign_toplevel_state_v1 object.
+
+        This does not affect any existing ext_foreign_toplevel_state_handle_v1 objects.
+      </description>
+    </request>
+
+    <request name="get_state_handle">
+      <description summary="create the object for toplevel state updates">
+        This request creates an extension object to receive state updates for the
+        foreign toplevel.
+
+        It is illegal to destroy the ext_foreign_toplevel_handle_v1 before the
+        ext_foreign_toplevel_state_handle_v1 object is destroyed and must result in
+        a orphaned error.
+
+        It is also illegal to create more than one ext_foreign_toplevel_state_handle_v1
+        object per toplevel handle instance and must result in a already_constructed
+        error.
+      </description>
+
+      <arg name="handle" type="object" interface="ext_foreign_toplevel_handle_v1"/>
+      <arg name="id" type="new_id" interface="ext_foreign_toplevel_state_handle_v1"/>
+    </request>
+  </interface>
+
+  <interface name="ext_foreign_toplevel_state_handle_v1" version="1">
+    <description summary="toplevel state updates">
+      This object receives events when the state of a toplevel has changed.
+
+      This object extends the ext_foreign_toplevel_handle_v1 interface and uses the
+      ext_foreign_toplevel_handle_v1.done event to atomically apply pending state.
+    </description>
+
+    <enum name="error">
+      <description summary="ext_foreign_toplevel_state_handle_v1 errors">
+        These errors are sent in response to ext_foreign_toplevel_state_handle_v1 requests.
+      </description>
+
+      <entry name="orphaned" value="0"
+          summary="the ext_foreign_toplevel_handle_v1 was destroyed before this object"/>
+
+      <entry name="invalid_rectangle" value="1"
+        summary="the provided rectangle is invalid"/>
+    </enum>
+
+    <enum name="state" bitfield="true">
+      <description summary="types of states on the toplevel">
+        The different states that a toplevel may have.
+      </description>
+      <entry name="maximized"  value="1" summary="the toplevel is maximized"/>
+      <entry name="minimized"  value="2" summary="the toplevel is minimized"/>
+      <entry name="activated"  value="4" summary="the toplevel is active"/>
+      <entry name="fullscreen" value="8" summary="the toplevel is fullscreen"/>
+      <entry name="always_on_top" value="16" summary="the toplevel is always ordered to the top"/>
+      <entry name="sticky" value="32" summary="the toplevel is visible on all workspaces"/>
+      <entry name="shaded" value="64" summary="the toplevel is invisible and represented by a placeholder"/>
+    </enum>
+
+    <request name="destroy" type="destructor">
+      <description summary="destroy the ext_foreign_toplevel_state_handle_v1 object">
+        This request should be used when the client no longer wishes to receive
+        updates to the toplevel state or after the closed event has been received to
+        allow destruction of the object.
+
+        See ext_foreign_toplevel_state_v1 for more information about destroying this
+        object.
+      </description>
+    </request>
+
+    <event name="state">
+      <description summary="the toplevel state changed">
+        This event is emitted once on creation of the ext_foreign_toplevel_state_handle_v1
+        and again whenever the state of the toplevel changes.
+
+        The array contains 32-bit unsigned integers of host endianness that
+        must be interpreted as ext_foreign_toplevel_state_handle_v1.state values.
+
+        The configured state must not be applied immediately. See
+        ext_foreign_toplevel_handle_v1.done for details.
+      </description>
+      <arg name="states" type="uint" summary="bitfield of ext_foreign_toplevel_state_handle_v1.state" enum="state"/>
+    </event>
+
+    <event name="output_enter">
+      <description summary="toplevel entered an output">
+        The toplevel has entered the output. Like wl_surface.enter, the toplevel
+        may overlap with zero or more outputs.
+
+        The compositor must only send wl_output objects which the client has bound.
+        The compositor must also send this event for every wl_output the client has
+        bound. Clients can filter out wl_output objects which do not belong to the same
+        event queue.
+
+        If the ext_foreign_toplevel_handle_v1.finished event was received, then the
+        compositor must not send this event.
+
+        The configured state must not be applied immediately. See
+        ext_foreign_toplevel_handle_v1.done for details.
+      </description>
+      <arg name="output" type="object" interface="wl_output" summary="the output the toplevel entered"/>
+    </event>
+
+    <event name="output_leave">
+      <description summary="toplevel left an output">
+        The toplevel has left the output. Like wl_surface.leave, the toplevel
+        may leave the output due to movement, resizing or the output is being
+        destroyed.
+
+        The compositor must only send wl_output objects which the client has bound.
+        The compositor must also send this event for every wl_output the client has
+        bound. Clients can filter out wl_output objects which do not belong to the same
+        event queue.
+
+        If the ext_foreign_toplevel_handle_v1.finished event was received, then the
+        compositor must not send this event.
+
+        The configured state must not be applied immediately. See
+        ext_foreign_toplevel_handle_v1.done for details.
+      </description>
+      <arg name="output" type="object" interface="wl_output" summary="the output the toplevel left"/>
+    </event>
+
+    <event name="parent">
+      <description summary="parent change">
+        This event is emitted whenever the parent of the toplevel changes. A
+        value of NULL means that there is no parent.
+
+        The compositor must only send a ext_foreign_toplevel_handle_v1 object
+        which was created using the same ext_foreign_toplevel_list object as
+        the ext_foreign_toplevel_handle_v1 object this interface extends. No
+        event is emitted when the parent handle is destroyed by the client.
+
+        If the ext_foreign_toplevel_handle_v1.finished event was received, then the
+        compositor must not send this event.
+
+        The configured state must not be applied immediately. See
+        ext_foreign_toplevel_handle_v1.done for details.
+      </description>
+      <arg name="parent" type="object" interface="ext_foreign_toplevel_handle_v1" allow-null="true"
+        summary="parent of the toplevel"/>
+    </event>
+
+    <request name="close">
+      <description summary="request that a toplevel be closed">
+        If the compositor honors this request, the
+        ext_foreign_toplevel_state_handle_v1.closed event will be sent.
+      </description>
+    </request>
+
+    <request name="set_maximized">
+      <description summary="request that a toplevel be maximized">
+        If the compositor honors this request, the
+        ext_foreign_toplevel_state_handle_v1.state event will be sent.
+      </description>
+    </request>
+
+    <request name="unset_maximized">
+      <description summary="request that a toplevel be unmaximized">
+        If the compositor honors this request, the
+        ext_foreign_toplevel_state_handle_v1.state event will be sent.
+      </description>
+    </request>
+
+    <request name="set_minimized">
+      <description summary="request that a toplevel be minimized">
+        If the compositor honors this request, the
+        ext_foreign_toplevel_state_handle_v1.state event will be sent.
+      </description>
+    </request>
+
+    <request name="unset_minimized">
+      <description summary="request that a toplevel be unminimized">
+        If the compositor honors this request, the
+        ext_foreign_toplevel_state_handle_v1.state event will be sent.
+      </description>
+    </request>
+
+    <request name="set_fullscreen">
+      <description summary="request that a toplevel be fullscreened">
+        If the compositor honors this request, the
+        ext_foreign_toplevel_state_handle_v1.state and potentially the
+        ext_foreign_toplevel_state_handle_v1.output_enter/output_leave events will
+        be sent.
+
+        The output parameter a hint to the compositor and may be ignored. A
+        value of NULL indicates that the compositor should choose the target
+        output, if it honors the fullscreen request.
+      </description>
+      <arg name="output" type="object" interface="wl_output" allow-null="true"/>
+    </request>
+
+    <request name="unset_fullscreen">
+      <description summary="request that a toplevel be unfullscreened">
+        If the compositor honors this request, the
+        ext_foreign_toplevel_state_handle_v1.state event will be sent.
+      </description>
+    </request>
+
+    <request name="activate">
+      <description summary="request that a toplevel be activated">
+        If the compositor honors this request, the
+        ext_foreign_toplevel_state_handle_v1.state event will be sent.
+      </description>
+      <arg name="seat" type="object" interface="wl_seat"/>
+    </request>
+
+    <request name="set_always_on_top">
+      <description summary="request that a toplevel be always shown on top">
+        If the compositor honors this request, the
+        ext_foreign_toplevel_state_handle_v1.state event will be sent.
+      </description>
+    </request>
+
+    <request name="unset_always_on_top">
+      <description summary="request that a toplevel return to normal stacking behaviour">
+        If the compositor honors this request, the
+        ext_foreign_toplevel_state_handle_v1.state event will be sent.
+      </description>
+    </request>
+
+    <request name="set_sticky">
+      <description summary="request that a toplevel be shown on all workspaces">
+        If the compositor honors this request, the
+        ext_foreign_toplevel_state_handle_v1.state event will be sent.
+      </description>
+    </request>
+
+    <request name="unset_sticky">
+      <description summary="request that a toplevel be part of a single workspace again">
+        If the compositor honors this request, the
+        ext_foreign_toplevel_state_handle_v1.state event will be sent.
+      </description>
+    </request>
+
+    <request name="set_shaded">
+      <description summary="request that a toplevel be shaded">
+        If the compositor honors this request, the
+        ext_foreign_toplevel_state_handle_v1.state event will be sent.
+      </description>
+    </request>
+
+    <request name="unset_shaded">
+      <description summary="request that a toplevel be unshaded">
+        If the compositor honors this request, the
+        ext_foreign_toplevel_state_handle_v1.state event will be sent.
+      </description>
+    </request>
+
+    <request name="set_rectangle">
+      <description summary="designate a rectangle to represent a toplevel">
+        If a client using this protocol displays UI elements corresponding
+        to toplevels, it may use this request to inform the server about such
+        a relation. This information may be used by the server, for example as
+        the target for a minimize animation.
+
+        If the client sets more than one rectangle, only the most recently
+        set rectangle is considered.
+
+        The dimensions are given in surface-local coordinates.
+
+        Setting width=height=0 removes the current rectangle if one was set.
+      </description>
+      <arg name="surface" type="object" interface="wl_surface"/>
+      <arg name="x" type="int"/>
+      <arg name="y" type="int"/>
+      <arg name="width" type="int"/>
+      <arg name="height" type="int"/>
+    </request>
+  </interface>
+</protocol>

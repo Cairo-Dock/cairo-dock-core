@@ -38,6 +38,7 @@ if(WaylandScanner_FOUND)
 		cairo-dock-plasma-window-manager.c   cairo-dock-plasma-window-manager.h
 		cairo-dock-plasma-virtual-desktop.c  cairo-dock-plasma-virtual-desktop.h
 		cairo-dock-ext-workspaces.c          cairo-dock-ext-workspaces.h
+		cairo-dock-ext-toplevel.c            cairo-dock-ext-toplevel.h
 	)
 
 	ecm_add_wayland_client_protocol(
@@ -76,6 +77,10 @@ if(WaylandScanner_FOUND)
 		impl_SRCS
 		PROTOCOL "proto/ext-foreign-toplevel-list-v1.xml"
 		BASENAME "ext-toplevel-list")
+	ecm_add_wayland_client_protocol(
+		impl_SRCS
+		PROTOCOL "proto/ext-foreign-toplevel-state-v1.xml"
+		BASENAME "ext-toplevel-state")
 	ecm_add_wayland_client_protocol(
 		impl_SRCS
 		PROTOCOL "proto/plasma-virtual-desktop.xml"
