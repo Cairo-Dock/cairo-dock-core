@@ -22,7 +22,9 @@
 #ifndef CAIRO_DOCK_WAYLAND_WM_H
 #define CAIRO_DOCK_WAYLAND_WM_H
 
+#ifdef HAVE_WAYLAND
 #include <wayland-client.h>
+#endif
 #include <stdint.h>
 #include "cairo-dock-struct.h"
 #include "cairo-dock-windows-manager.h"
