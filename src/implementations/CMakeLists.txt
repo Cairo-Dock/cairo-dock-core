@@ -19,7 +19,6 @@ SET(impl_SRCS
 	cairo-dock-glx.c                     cairo-dock-glx.h
 	cairo-dock-egl.c                     cairo-dock-egl.h
 	cairo-dock-wayland-manager.c         cairo-dock-wayland-manager.h         cairo-dock-wayland-manager-priv.h
-	cairo-dock-wayland-hotspots.c        cairo-dock-wayland-hotspots.h
 	cairo-dock-logout-backend.c          cairo-dock-logout-backend.h
 )
 #if ("${HAVE_X11}")
@@ -28,6 +27,13 @@ SET(impl_SRCS
 #		cairo-dock-glx.c                     cairo-dock-glx.h
 #	)
 #endif()
+
+if(HAVE_WAYLAND)
+	SET(impl_SRCS
+		${impl_SRCS}
+		cairo-dock-wayland-hotspots.c        cairo-dock-wayland-hotspots.h
+	)
+endif()
 
 if(WaylandScanner_FOUND)
 	SET(impl_SRCS

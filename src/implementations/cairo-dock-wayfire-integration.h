@@ -32,6 +32,8 @@ G_BEGIN_DECLS
 /** Init the Wayfire integration backend. Will try to connect Wayfire's IPC
  * socket and query the available functions. */
 void cd_init_wayfire_backend (void);
+
+#ifdef HAVE_WAYLAND_PROTOCOLS
 /** Init setting and tracking the sticky and always on top states if available.
  * Can be called either before or after cd_init_wayfire_backend (). */
 void gldi_wf_init_sticky_above (void);
@@ -48,6 +50,7 @@ void gldi_wf_set_above (GldiWindowActor *actor, gboolean bAbove);
  *  - bIsAbove only reflects the state set by us, not by other methods (e.g. keybindings)
  */
 void gldi_wf_is_above_or_below (GldiWindowActor *actor, gboolean *bIsAbove, gboolean *bIsBelow);
+#endif
 
 G_END_DECLS
 #endif

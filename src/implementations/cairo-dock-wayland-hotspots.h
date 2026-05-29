@@ -25,7 +25,6 @@
 #ifndef CAIRO_DOCK_WAYLAND_HOTSPOTS_H
 #define CAIRO_DOCK_WAYLAND_HOTSPOTS_H
 
-#ifdef HAVE_WAYLAND
 #include <wayland-client.h>
 #include <stdint.h>
 #include <glib.h>
@@ -45,6 +44,5 @@ GldiWaylandHotspotsType gldi_wayland_hotspots_try_init (struct wl_registry *regi
 /// Update the hotspots we are listening to (based on the configuration of all root docks)
 void gldi_wayland_hotspots_update (void);
 
-#endif
 #endif
 

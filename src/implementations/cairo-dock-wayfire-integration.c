@@ -19,13 +19,15 @@
 
 #include "gldi-config.h"
 #include "cairo-dock-wayfire-integration.h"
+#include "cairo-dock-log.h"
+#include "cairo-dock-windows-manager.h"
+
+#ifdef HAVE_JSON && HAVE_WAYLAND_PROTOCOLS
+
 #include "cairo-dock-wayland-wm.h"
 #include "cairo-dock-dock-priv.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-dock-visibility.h"
-#include "cairo-dock-log.h"
-
-#ifdef HAVE_JSON
 
 #include <sys/types.h>
 #include <sys/socket.h>
