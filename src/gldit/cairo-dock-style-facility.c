@@ -22,7 +22,6 @@
 
 #include "cairo-dock-log.h"
 #include "cairo-dock-file-manager.h"  // CairoDockDesktopEnv
-#include "cairo-dock-utils.h"  // cairo_dock_launch_command_sync
 #include "cairo-dock-style-manager.h"  // GldiStyleParam
 #include "cairo-dock-style-facility.h"
 
@@ -119,14 +118,28 @@ gchar *_get_default_system_font (void)
 	{
 		if (g_iDesktopEnv == CAIRO_DOCK_GNOME)
 		{
-			//!! TODO: use GSettings directly !!
-			const char * const args[] = {"gsettings", "get", "org.gnome.desktop.interface", "font-name", NULL};
-			s_cFontName = cairo_dock_launch_command_argv_sync_with_stderr (args, FALSE);  // GTK3
-			cd_debug ("s_cFontName: %s", s_cFontName);
-			if (s_cFontName && *s_cFontName == '\'')  // the value may be between quotes... get rid of them!
+			GSettingsSchema *schema = g_settings_schema_source_lookup (
+				g_settings_schema_source_get_default (),
+				"org.gnome.desktop.interface",
+				TRUE);
+			if (schema)
 			{
-				s_cFontName ++;  // s_cFontName is never freed
-				s_cFontName[strlen(s_cFontName) - 1] = '\0';
+				if (g_settings_schema_has_key (schema, "font-name"))
+				{
+					GSettings *settings = g_settings_new_full (schema, NULL, NULL);
+					if (settings)
+					{
+						GVariant *var = g_settings_get_value (settings, "font-name");
+						if (var)
+						{
+							if (g_variant_is_of_type (var, G_VARIANT_TYPE ("s")))
+								s_cFontName = g_variant_dup_string (var, NULL); // note: s_cFontName is leaked
+							g_variant_unref (var);
+						}
+						g_object_unref (settings);
+					}
+				}
+				g_settings_schema_unref (schema);
 			}
 		}
 		if (! s_cFontName)
@@ -221,6 +234,7 @@ void gldi_text_description_reset (GldiTextDescription *pTextDescription)
 
 void gldi_text_description_set_font (GldiTextDescription *pTextDescription, gchar *cFont)
 {
+	g_free (pTextDescription->cFont);
 	pTextDescription->cFont = cFont;
 	
 	if (cFont != NULL)
