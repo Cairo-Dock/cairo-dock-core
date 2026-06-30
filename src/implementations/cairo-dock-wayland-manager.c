@@ -50,8 +50,8 @@
 #include "cairo-dock-cosmic-toplevel.h"
 #include "cairo-dock-plasma-virtual-desktop.h"
 #include "cairo-dock-ext-workspaces.h"
-#endif
 #include "cairo-dock-wayland-wm.h"
+#endif
 #include "cairo-dock-wayland-hotspots.h"
 #include "cairo-dock-egl.h"
 #define _MANAGER_DEF_
@@ -673,8 +673,9 @@ gboolean gldi_wayland_manager_have_layer_shell ()
 	return FALSE;
 }
 
-void gldi_wayland_grab_keyboard (GldiContainer*) { }
-void gldi_wayland_release_keyboard (GldiContainer*, GldiWaylandReleaseKeyboardReason) { }
+void gldi_wayland_grab_keyboard (G_GNUC_UNUSED GldiContainer* pContainer) { }
+void gldi_wayland_release_keyboard (G_GNUC_UNUSED GldiContainer* pContainer,
+	G_GNUC_UNUSED GldiWaylandReleaseKeyboardReason reason) { }
 
 const gchar *gldi_wayland_get_detected_compositor (void)
 {

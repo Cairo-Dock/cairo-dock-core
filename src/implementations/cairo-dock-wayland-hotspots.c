@@ -20,7 +20,6 @@
 
 #include "gldi-config.h"
 
-#ifdef HAVE_WAYLAND
 #include "cairo-dock-wayland-hotspots.h"
 #include "cairo-dock-wayland-manager.h"
 #include "cairo-dock-dock-manager.h"
@@ -532,6 +531,4 @@ GldiWaylandHotspotsType gldi_wayland_hotspots_try_init (struct wl_registry *regi
 	}
     return type;
 }
-
-#endif // HAVE_WAYLAND
 
