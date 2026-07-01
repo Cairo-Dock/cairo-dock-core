@@ -1005,27 +1005,17 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDialogsParam *pDialogs)
 {
 	gboolean bFlushConfFileNeeded = FALSE;
 	
-	pDialogs->fMenuFontScale = 1.0;
-	pDialogs->fUIScale = 1.0;
-	int iUIScaleBackend = cairo_dock_get_integer_key_value (pKeyFile, "System", "ui scale backend", &bFlushConfFileNeeded, 2, NULL, NULL);
-	gboolean bScale = FALSE;
-	switch (iUIScaleBackend)
+	double fScale = 1.0;
+	if (gldi_container_get_scale_setting (pKeyFile, &fScale, &bFlushConfFileNeeded))
 	{
-		case 2: // both
-			bScale = TRUE;
-			break;
-		case 1: // Wayland
-			bScale = gldi_container_is_wayland_backend ();
-			break;
-		case 0: // X11
-			bScale = !gldi_container_is_wayland_backend ();
-			break;
-	}
-	if (bScale)
-	{
-		pDialogs->fUIScale = cairo_dock_get_double_key_value (pKeyFile, "System", "ui scale", &bFlushConfFileNeeded, 1., NULL, NULL);
+		pDialogs->fUIScale = fScale;
 		gboolean bDontScaleMenus = cairo_dock_get_boolean_key_value (pKeyFile, "System", "ui scale exclude menus", &bFlushConfFileNeeded, FALSE, NULL, NULL);
-		if (!bDontScaleMenus) pDialogs->fMenuFontScale = pDialogs->fUIScale;
+		if (!bDontScaleMenus) pDialogs->fMenuFontScale = fScale;
+	}
+	else
+	{
+		pDialogs->fMenuFontScale = 1.0;
+		pDialogs->fUIScale = 1.0;
 	}
 	
 	pDialogs->cButtonOkImage = cairo_dock_get_string_key_value (pKeyFile, "Dialogs", "button_ok image", &bFlushConfFileNeeded, NULL, NULL, NULL);

@@ -758,6 +758,28 @@ static gboolean get_config (GKeyFile *pKeyFile, GldiContainersParam *pContainers
 	return bFlushConfFileNeeded;
 }
 
+gboolean gldi_container_get_scale_setting (GKeyFile *pKeyFile, double *fScale, gboolean *bFlushConfFileNeeded)
+{
+	int iUIScaleBackend = cairo_dock_get_integer_key_value (pKeyFile, "System", "ui scale backend", bFlushConfFileNeeded, 2, NULL, NULL);
+	gboolean bScale = FALSE;
+	switch (iUIScaleBackend)
+	{
+		case 2: // both
+			bScale = TRUE;
+			break;
+		case 1: // Wayland
+			bScale = gldi_container_is_wayland_backend ();
+			break;
+		case 0: // X11
+			bScale = !gldi_container_is_wayland_backend ();
+			break;
+	}
+	if (bScale)
+		*fScale = cairo_dock_get_double_key_value (pKeyFile, "System", "ui scale", bFlushConfFileNeeded, 1., NULL, NULL);
+	
+	return bScale;
+}
+
   ////////////
  /// LOAD ///
 ////////////
