@@ -22,7 +22,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-windows-manager.h"
 
-#ifdef HAVE_JSON && HAVE_WAYLAND_PROTOCOLS
+#if defined(HAVE_JSON) && defined(HAVE_WAYLAND_PROTOCOLS)
 
 #include "cairo-dock-wayland-wm.h"
 #include "cairo-dock-dock-priv.h"
