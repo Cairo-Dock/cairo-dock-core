@@ -1312,6 +1312,9 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 	
 	// frame
 	pBackground->iDockRadius = cairo_dock_get_integer_key_value (pKeyFile, "Background", "corner radius", &bFlushConfFileNeeded, 12, NULL, NULL);
+	pDocksParam->fUIScale = 1.0;
+	if (gldi_container_get_scale_setting (pKeyFile, &pDocksParam->fUIScale, &bFlushConfFileNeeded))
+		pBackground->iDockRadius *= pDocksParam->fUIScale;
 
 	pBackground->iDockLineWidth = cairo_dock_get_integer_key_value (pKeyFile, "Background", "line width", &bFlushConfFileNeeded, 2, NULL, NULL);
 
