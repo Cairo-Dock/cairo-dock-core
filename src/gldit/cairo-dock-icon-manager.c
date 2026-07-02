@@ -765,8 +765,6 @@ static void _reload_separators (G_GNUC_UNUSED const gchar *cDockName, CairoDock 
 	}
 	if (bHasSeparator)
 	{
-		if (bSeparatorsNeedReload)
-			cairo_dock_update_dock_size (pDock);  // either to trigger the loading of the separator rendering, or to take into account the change in the separators size
 		gtk_widget_queue_draw (pDock->container.pWidget);  // in any case, refresh the drawing
 	}
 }
@@ -833,7 +831,8 @@ static void reload (CairoIconsParam *pPrevIcons, CairoIconsParam *pIcons)
 		(!g_bUseOpenGL && pPrevIcons->fReflectHeightRatio != pIcons->fReflectHeightRatio) ||
 		(!g_bUseOpenGL && pPrevIcons->fAlbedo != pIcons->fAlbedo) ||
 		bThemeChanged ||
-		bIconBackgroundImagesChanged)  // oui on ne fait pas dans la finesse.
+		bIconBackgroundImagesChanged ||
+		bSeparatorsNeedReload)  // oui on ne fait pas dans la finesse.
 	{
 		cairo_dock_reload_buffers_in_all_docks (TRUE);
 	}
