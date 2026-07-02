@@ -285,7 +285,7 @@ static GKeyFile *_make_simple_conf_file (ConfigWidget *pConfigWidget)
 	
 	g_key_file_set_string (pSimpleKeyFile, "Appearance", "default icon directory", myIconsParam.cIconTheme);
 	
-	int iIconSize = cairo_dock_convert_icon_size_to_enum (myIconsParam.iIconWidth);
+	int iIconSize = cairo_dock_convert_icon_size_to_enum (myIconsParam.iIconWidth / myDocksParam.fUIScale);
 	iIconSize --;  // skip the "default" enum
 	
 	g_key_file_set_integer (pSimpleKeyFile, "Appearance", "icon size", iIconSize);
