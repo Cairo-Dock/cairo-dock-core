@@ -385,8 +385,12 @@ void gldi_icons_foreach_in_docks (GldiIconFunc pFunction, gpointer pUserData)
 static void _reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, gboolean bUpdateIconSize)
 {
 	//g_print ("************%s (%d, %d)\n", __func__, pDock->bIsMainDock, bRecursive);
-	if (bUpdateIconSize && pDock->bGlobalIconSize)
-		pDock->iIconSize = myIconsParam.iIconWidth;
+	if (bUpdateIconSize)
+	{
+		if (pDock->bGlobalIconSize)
+			pDock->iIconSize = myIconsParam.iIconWidth;
+		else pDock->iIconSize = pDock->iIconSizeOrig * myDocksParam.fUIScale;
+	}
 	
 	// for each icon, reload its buffer (size may change).
 	Icon* icon;
@@ -638,8 +642,9 @@ static gboolean _get_root_dock_config (CairoDock *pDock)
 	int s = cairo_dock_get_integer_key_value (pKeyFile, "Appearance", "icon size", &bFlushConfFileNeeded, ICON_DEFAULT, NULL, NULL);  // ICON_DEFAULT <=> same as main dock
 	double fMaxScale, fReflectSize;
 	int iIconGap;
-	pDock->iIconSize = cairo_dock_convert_icon_size_to_pixels (s, &fMaxScale, &fReflectSize, &iIconGap);
+	pDock->iIconSizeOrig = cairo_dock_convert_icon_size_to_pixels (s, &fMaxScale, &fReflectSize, &iIconGap);
 	pDock->bGlobalIconSize = (s == ICON_DEFAULT);
+	pDock->iIconSize = pDock->iIconSizeOrig * myDocksParam.fUIScale;
 	
 	//\______________ View.
 	g_free (pDock->cRendererName);

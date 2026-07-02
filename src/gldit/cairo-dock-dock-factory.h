@@ -152,6 +152,10 @@ struct _CairoDock {
 	// icons
 	/// icon size, as specified in the config of the dock
 	gint iIconSize;
+	/// original (unscaled) icon size
+	/// iIconSize is this multiplied by myDocksParam.fUIScale
+	gint iIconSizeOrig;
+	
 	/// whether the dock should use the global icons size parameters.
 	gboolean bGlobalIconSize;
 	// background
