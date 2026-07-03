@@ -317,6 +317,14 @@ int cairo_dock_get_file_size (const gchar *cFilePath);
 
 gboolean cairo_dock_copy_file (const gchar *cFilePath, const gchar *cDestPath);
 
+/** Recursively copy files matching a criteria from one directory to another.
+*@param cSourceDir source directory (files in this directory are considered, but the directory itself is not copied)
+*@param cDestDir destination directory
+*@param pFilter filter function, only files where this returns TRUE are copied (if it returns FALSE for a directory, it is skipped entirely)
+*@param data user data to pass to pFilter
+*/
+typedef gboolean (*CairoDockFMCopyFilterFunc) (GFileInfo *pFileInfo, unsigned int depth, gconstpointer data);
+gboolean cairo_dock_fm_recursive_copy (const gchar *cSourceDir, const gchar *cDestDir, CairoDockFMCopyFilterFunc pFilter, gpointer data);
 
 /** Get process ID given its name
  * @param cProcessName name of the process
