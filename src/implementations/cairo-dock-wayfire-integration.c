@@ -387,6 +387,7 @@ static gboolean s_bCanSticky = FALSE;
 static gboolean s_bCanAbove = FALSE;
 static gboolean s_bNeedStickyAbove = FALSE; // toplevel manager requested the above functionality
 static gboolean s_bHaveMenuProps = FALSE; // if gtk-shell and kde-appmenu properties are available
+static gboolean s_bCoordsFloat = FALSE; // coordinates are reported as floats (newer Wayfire versions)
 
 static gboolean s_bWatchWMEvents = FALSE;
 // hash table mapping view IPC IDs to window actors
@@ -1051,6 +1052,7 @@ static void _got_configuration (struct json_object *conf)
 		uint64_t ver = json_object_get_uint64 (version);
 		s_bHaveAbove = (ver >= 20251226);
 		s_bHaveMenuProps = (ver >= 20260122);
+		s_bCoordsFloat = (ver >= 20260617);
 		if (s_bHaveMenuProps) _init_window_maping (); // no-op if already started
 	}
 	else cd_warning ("Cannot parse Wayfire version!");
@@ -1130,14 +1132,32 @@ static void _list_views_cb (const struct json_object *arr)
 }
 
 
+static gboolean _get_int_value2 (const struct json_object *tmp, int32_t *res)
+{
+	if (!json_object_is_type (tmp, json_type_int)) return FALSE;
+	errno = 0;
+	int64_t res2 = json_object_get_int64 (tmp);
+	if (errno || res2 > G_MAXINT32 || res2 < G_MININT32) return FALSE;
+	*res = (int32_t) res2;
+	return TRUE;
+}
+
 static gboolean _get_int_value (const struct json_object *obj, const gchar *key, int32_t *res)
 {
 	const struct json_object *tmp = json_object_object_get (obj, key);
-	if (!tmp || ! json_object_is_type (tmp, json_type_int)) return FALSE;
+	if (!tmp) return FALSE;
+	return _get_int_value2 (tmp, res);
+}
+
+static gboolean _get_float_value (const struct json_object *obj, const gchar *key, int32_t *res)
+{
+	const struct json_object *tmp = json_object_object_get (obj, key);
+	if (!tmp) return FALSE;
+	if (!json_object_is_type (tmp, json_type_double)) return _get_int_value2 (tmp, res); // try parse as integer instead
 	errno = 0;
-	int64_t res2 = json_object_get_int64 (tmp);
-	if (errno || res2 > G_MAXINT32) return FALSE;
-	*res = (int32_t) res2;
+	double res2 = json_object_get_double (tmp);
+	if (errno || res2 > G_MAXINT32 || res2 < G_MININT32) return FALSE;
+	*res = (int32_t) round (res2); // note: cannot do much if it is not a whole number
 	return TRUE;
 }
 
@@ -1154,8 +1174,13 @@ static gboolean _get_view_geometry (const struct json_object *view, wf_window_po
 	if (!tmp || ! json_object_is_type (tmp, json_type_object))
 		return FALSE;
 	
-	return (_get_int_value (tmp, "x", &rect->rect.x) && _get_int_value (tmp, "y", &rect->rect.y) &&
-		_get_int_value (tmp, "width", &rect->rect.width) && _get_int_value (tmp, "height", &rect->rect.height));
+	return
+		s_bCoordsFloat ?
+		(_get_float_value (tmp, "x", &rect->rect.x) && _get_float_value (tmp, "y", &rect->rect.y) &&
+			_get_float_value (tmp, "width", &rect->rect.width) && _get_float_value (tmp, "height", &rect->rect.height))
+		:
+		(_get_int_value (tmp, "x", &rect->rect.x) && _get_int_value (tmp, "y", &rect->rect.y) &&
+			_get_int_value (tmp, "width", &rect->rect.width) && _get_int_value (tmp, "height", &rect->rect.height));
 }
 
 // Process a view, either because of an event, or from the initial reply to
