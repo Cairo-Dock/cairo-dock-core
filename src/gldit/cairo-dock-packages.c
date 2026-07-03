@@ -34,6 +34,7 @@
 #include "cairo-dock-task.h"
 #include "cairo-dock-config.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-file-manager.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-packages.h"
 
@@ -111,11 +112,8 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 	}
 	else if (cTempBackup != NULL)
 	{
-		gchar *cCommand = g_strdup_printf ("rm -rf \"%s\"", cTempBackup);
-		int r = system (cCommand);
-		if (r < 0)
+		if (!cairo_dock_fm_delete_file (cTempBackup, TRUE))
 			cd_warning ("Couldn't remove temporary folder (%s)", cCommand);
-		g_free (cCommand);
 	}
 	
 	g_free (cCommand);
