@@ -228,6 +228,120 @@ gboolean cairo_dock_fm_eject_drive (const gchar *cURI)
 }
 
 
+static gboolean _empty_dir (const gchar *cBaseURI, CairoDockFMDirectoryFilterFunc pFilter, gconstpointer data, gboolean bRecurse, gboolean *bRemain)
+{
+	GFile *pFile = (*cBaseURI == '/' ? g_file_new_for_path (cBaseURI) : g_file_new_for_uri (cBaseURI));
+	GError *erreur = NULL;
+	const gchar *cAttributes = G_FILE_ATTRIBUTE_STANDARD_TYPE","
+		G_FILE_ATTRIBUTE_STANDARD_NAME;
+	GFileEnumerator *pFileEnum = g_file_enumerate_children (pFile,
+		cAttributes,
+		G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
+		NULL,
+		&erreur);
+	if (erreur != NULL)
+	{
+		cd_warning ("%s", erreur->message);
+		g_object_unref (pFile);
+		g_error_free (erreur);
+		return FALSE;
+	}
+	
+	gboolean ret = TRUE;
+	*bRemain = FALSE;
+	GString *sFileUri = g_string_new ("");
+	GFileInfo *pFileInfo;
+	do
+	{
+		pFileInfo = g_file_enumerator_next_file (pFileEnum, NULL, &erreur);
+		if (erreur != NULL)
+		{
+			cd_warning ("%s", erreur->message);
+			g_error_free (erreur);
+			ret = FALSE; // no point in continuing, we cannot empty the directory in this case
+			break;
+		}
+		if (pFileInfo == NULL) break; // we are at the end
+		
+		GFileType iFileType = g_file_info_get_file_type (pFileInfo);
+		const gchar *cFileName = g_file_info_get_name (pFileInfo);
+		if (iFileType != G_FILE_TYPE_DIRECTORY && pFilter && !pFilter (cFileName, data))
+		{
+			// skip this file
+			*bRemain = TRUE;
+			g_object_unref (pFileInfo);
+			continue;
+		}
+		
+		g_string_printf (sFileUri, "%s/%s", cBaseURI, cFileName);
+		
+		gboolean bKeep = FALSE;
+		if (iFileType == G_FILE_TYPE_DIRECTORY)
+		{
+			if (bRecurse) ret = _empty_dir (sFileUri->str, pFilter, data, bRecurse, &bKeep);
+			else bKeep = TRUE;
+			if (ret && bKeep) *bRemain = TRUE;
+		}
+		
+		if (ret && !bKeep)
+		{
+			GFile *file = (*cBaseURI == '/' ? g_file_new_for_path (sFileUri->str) : g_file_new_for_uri (sFileUri->str));
+			g_file_delete (file, NULL, &erreur);
+			if (erreur != NULL)
+			{
+				cd_warning ("%s", erreur->message);
+				g_error_free (erreur);
+				erreur = NULL;
+				ret = FALSE;
+			}
+			g_object_unref (file);
+		}
+		
+		g_object_unref (pFileInfo);
+	} while (ret);
+	
+	g_string_free (sFileUri, TRUE);
+	g_object_unref (pFileEnum);
+	g_object_unref (pFile);
+	return ret;
+}
+
+gboolean cairo_dock_fm_empty_directory (const gchar *cURI, gboolean bRecurse, CairoDockFMDirectoryFilterFunc pFilter, gconstpointer data)
+{
+	g_return_val_if_fail (cURI != NULL, FALSE);
+	GFile *pFile = (*cURI == '/' ? g_file_new_for_path (cURI) : g_file_new_for_uri (cURI));
+	
+	GError *erreur = NULL;
+	
+	const gchar *cQuery = G_FILE_ATTRIBUTE_STANDARD_TYPE;
+	GFileInfo *pFileInfo = g_file_query_info (pFile,
+		cQuery,
+		G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
+		NULL,
+		&erreur);
+	if (erreur != NULL)
+	{
+		cd_warning ("%s", erreur->message);
+		g_error_free (erreur);
+		g_object_unref (pFile);
+		return FALSE;
+	}
+	
+	gboolean ret;
+	gboolean dummy;
+	GFileType iFileType = g_file_info_get_file_type (pFileInfo);
+	if (iFileType == G_FILE_TYPE_DIRECTORY)
+		ret = _empty_dir (cURI, pFilter, data, bRecurse, &dummy);
+	else
+	{
+		cd_warning ("Path is not a directory: %s\n", cURI);
+		ret = FALSE;
+	}
+	
+	g_object_unref (pFile);
+	return ret;
+}
+
 gboolean cairo_dock_fm_delete_file (const gchar *cURI, gboolean bNoTrash)
 {
 	if (s_EnvBackend.delete_file != NULL)

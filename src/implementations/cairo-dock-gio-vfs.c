@@ -40,8 +40,6 @@
 
 extern GldiContainer *g_pPrimaryContainer;
 
-static void _cairo_dock_gio_vfs_empty_dir (const gchar *cBaseURI);
-
 static GHashTable *s_hMonitorHandleTable = NULL;
 
 static void _gio_vfs_free_monitor_data (gpointer *data)
@@ -1259,7 +1257,7 @@ static gboolean cairo_dock_gio_vfs_delete_file (const gchar *cURI, gboolean bNoT
 		GFileType iFileType = g_file_info_get_file_type (pFileInfo);
 		if (iFileType == G_FILE_TYPE_DIRECTORY)
 		{
-			_cairo_dock_gio_vfs_empty_dir (cURI);
+			cairo_dock_fm_empty_directory (cURI, TRUE, NULL, NULL);
 		}
 		
 		bSuccess = g_file_delete (pFile, NULL, &erreur);
@@ -1422,71 +1420,6 @@ static gchar *cairo_dock_gio_vfs_get_desktop_path (void)
 	return cPath;
 }
 
-static void _cairo_dock_gio_vfs_empty_dir (const gchar *cBaseURI)
-{
-	if (cBaseURI == NULL)
-		return ;
-	
-	GFile *pFile = (*cBaseURI == '/' ? g_file_new_for_path (cBaseURI) : g_file_new_for_uri (cBaseURI));
-	GError *erreur = NULL;
-	const gchar *cAttributes = G_FILE_ATTRIBUTE_STANDARD_TYPE","
-		G_FILE_ATTRIBUTE_STANDARD_NAME;
-	GFileEnumerator *pFileEnum = g_file_enumerate_children (pFile,
-		cAttributes,
-		G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
-		NULL,
-		&erreur);
-	if (erreur != NULL)
-	{
-		cd_warning ("gvfs-integration : %s", erreur->message);
-		g_object_unref (pFile);
-		g_error_free (erreur);
-		return ;
-	}
-	
-	GString *sFileUri = g_string_new ("");
-	GFileInfo *pFileInfo;
-	GFile *file;
-	do
-	{
-		pFileInfo = g_file_enumerator_next_file (pFileEnum, NULL, &erreur);
-		if (erreur != NULL)
-		{
-			cd_warning ("gvfs-integration : %s", erreur->message);
-			g_error_free (erreur);
-			erreur = NULL;
-			continue;
-		}
-		if (pFileInfo == NULL)
-			break ;
-		
-		GFileType iFileType = g_file_info_get_file_type (pFileInfo);
-		const gchar *cFileName = g_file_info_get_name (pFileInfo);
-		
-		g_string_printf (sFileUri, "%s/%s", cBaseURI, cFileName);
-		if (iFileType == G_FILE_TYPE_DIRECTORY)
-		{
-			_cairo_dock_gio_vfs_empty_dir (sFileUri->str);
-		}
-		
-		file = (*cBaseURI == '/' ? g_file_new_for_path (sFileUri->str) : g_file_new_for_uri (sFileUri->str));
-		g_file_delete (file, NULL, &erreur);
-		if (erreur != NULL)
-		{
-			cd_warning ("gvfs-integration : %s", erreur->message);
-			g_error_free (erreur);
-			erreur = NULL;
-		}
-		g_object_unref (file);
-		
-		g_object_unref (pFileInfo);
-	} while (1);
-	
-	g_string_free (sFileUri, TRUE);
-	g_object_unref (pFileEnum);
-	g_object_unref (pFile);
-}
-
 static inline int _convert_base16 (char c)
 {
 	int x;
@@ -1550,7 +1483,7 @@ static void cairo_dock_gio_vfs_empty_trash (void)
 			GFileType iFileType = g_file_info_get_file_type (pFileInfo);
 			if (iFileType == G_FILE_TYPE_DIRECTORY)  // can't delete a non-empty folder located on a different volume than home.
 			{
-				_cairo_dock_gio_vfs_empty_dir (sFileUri->str);
+				cairo_dock_fm_empty_directory (sFileUri->str, TRUE, NULL, NULL);
 			}
 			GFile *file = g_file_new_for_uri (sFileUri->str);
 			g_file_delete (file, NULL, &erreur);

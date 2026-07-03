@@ -109,12 +109,12 @@ struct _CairoDockDesktopEnvBackend {
 	CairoDockFMUnmountFunc 			unmount;
 	CairoDockFMAddMonitorFunc 		add_monitor;
 	CairoDockFMRemoveMonitorFunc 	remove_monitor;
-	CairoDockFMDeleteFileFunc 		delete_file;
-	CairoDockFMRenameFileFunc 		rename;
-	CairoDockFMMoveFileFunc 		move;
+	CairoDockFMDeleteFileFunc 		delete_file; // implemented in kde-integration
+	CairoDockFMRenameFileFunc 		rename; // implemented in kde-integration
+	CairoDockFMMoveFileFunc 		move; // implemented in kde-integration
 	CairoDockFMCreateFileFunc 		create;
 	CairoDockFMListAppsForFileFunc 	list_apps_for_file;
-	CairoDockFMEmptyTrashFunc		empty_trash;
+	CairoDockFMEmptyTrashFunc		empty_trash; // implemented in kde-integration
 	CairoDockFMGetTrashFunc 		get_trash_path;
 	CairoDockFMGetDesktopFunc 		get_desktop_path;
 	CairoDockFMActionWithConfirmationFunc logout;
@@ -192,6 +192,18 @@ gboolean cairo_dock_fm_eject_drive (const gchar *cURI);
 /** Delete a file.
 */
 gboolean cairo_dock_fm_delete_file (const gchar *cURI, gboolean bNoTrash);
+
+/** Empty a directory by deleting all files in it that match a criterion.
+*@param cURI the directory to empty
+*@param bRecurse whether to recursively delete subdirectories
+*@param pFilter optional filter function; only files matching the filter
+    are deleted (i.e. where the function returns TRUE). Empty directories
+    are always deleted if bRecurse == TRUE.
+*@param data parameter to pass to pFilter
+*@returns FALSE if any errors occured (warnings already printed on the console), TRUE otherwise
+*/
+typedef gboolean (*CairoDockFMDirectoryFilterFunc) (const gchar *cFileName, gconstpointer data);
+gboolean cairo_dock_fm_empty_directory (const gchar *cURI, gboolean bRecurse, CairoDockFMDirectoryFilterFunc pFilter, gconstpointer data);
 
 /** Rename a file.
 */
