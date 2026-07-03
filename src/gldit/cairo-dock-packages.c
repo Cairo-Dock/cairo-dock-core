@@ -28,6 +28,9 @@
 #include <glib/gi18n.h>
 #include <curl/curl.h>
 
+#include <archive.h>
+#include <archive_entry.h>
+
 #include "gldi-config.h"
 #include "cairo-dock-manager.h"
 #include "cairo-dock-keyfile-utilities.h"
@@ -53,12 +56,83 @@ static gchar *s_cPackageServerAdress = NULL;
  /// DOWNLOAD API ///
 ////////////////////
 
+
+/* Simple function to uncompress a tar archive. Taken from the examples here:
+ * https://github.com/libarchive/libarchive/wiki/Examples (in the public domain)
+ */
+static gboolean _uncompress_archive (const gchar *cArchivePath, const gchar *cExtractTo)
+{
+	struct archive *a;
+	struct archive *ext;
+	struct archive_entry *entry;
+	int flags;
+	int r;
+	gboolean ret = TRUE;
+	GString *str = g_string_new (NULL);
+
+	flags = 0;
+
+	a = archive_read_new();
+	archive_read_support_format_all(a);
+	archive_read_support_filter_all(a);
+	ext = archive_write_disk_new();
+	archive_write_disk_set_options(ext, flags);
+	// archive_write_disk_set_standard_lookup(ext);
+	
+	r = archive_read_open_filename (a, cArchivePath, 10240);
+	if (r != ARCHIVE_OK) ret = FALSE;
+	else while (1) {
+		r = archive_read_next_header (a, &entry);
+		if (r == ARCHIVE_EOF) break;
+		
+		if (r < ARCHIVE_OK) cd_warning ("%s", archive_error_string (a));
+		if (r < ARCHIVE_WARN) { ret = FALSE; break; }
+		
+		
+		g_string_printf (str, "%s/%s", cExtractTo, archive_entry_pathname (entry));
+		archive_entry_set_pathname (entry, str->str);
+
+		r = archive_write_header(ext, entry);
+		if (r < ARCHIVE_OK) cd_warning ("%s", archive_error_string (ext));
+		
+		else if (archive_entry_size(entry) > 0) {
+			const void *buff;
+			size_t size;
+			la_int64_t offset;
+
+			while (1) {
+				r = archive_read_data_block(a, &buff, &size, &offset);
+				if (r == ARCHIVE_EOF) break;
+				if (r < ARCHIVE_OK) cd_warning ("%s", archive_error_string (a));
+				else
+				{
+					r = archive_write_data_block(ext, buff, size, offset);
+					if (r < ARCHIVE_OK) cd_warning ("%s", archive_error_string (ext));
+				}
+				
+				if (r < ARCHIVE_WARN) break;
+			}
+		}
+		
+		if (r == ARCHIVE_EOF || r == ARCHIVE_OK) r = archive_write_finish_entry (ext);
+		if (r < ARCHIVE_OK) cd_warning ("%s", archive_error_string(ext));
+		if (r < ARCHIVE_WARN) { ret = FALSE; break; }
+	}
+	archive_read_close (a);
+	archive_read_free (a);
+	archive_write_close (ext);
+	archive_write_free (ext);
+	g_string_free (str, TRUE);
+	
+	return ret;
+}
+
 gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtractTo, const gchar *cRealArchiveName)
 {
 	//\_______________ on cree le repertoire d'extraction.
 	if (!g_file_test (cExtractTo, G_FILE_TEST_EXISTS))
 	{
-		if (g_mkdir (cExtractTo, 7*8*8+7*8+5) != 0)
+		if (g_mkdir_with_parents (cExtractTo, 7*8*8+7*8+5) != 0)
 		{
 			cd_warning ("couldn't create directory %s", cExtractTo);
 			return NULL;
@@ -81,6 +155,8 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 		cLocalFileName[strlen(cLocalFileName)-8] = '\0';
 	else if (g_str_has_suffix (cLocalFileName, ".tgz"))
 		cLocalFileName[strlen(cLocalFileName)-4] = '\0';
+	else if (g_str_has_suffix (cLocalFileName, ".zip"))
+		cLocalFileName[strlen(cLocalFileName)-4] = '\0';
 	g_return_val_if_fail (cLocalFileName != NULL && *cLocalFileName != '\0', NULL);
 	
 	gchar *cResultPath = g_strdup_printf ("%s/%s", cExtractTo, cLocalFileName);
@@ -95,14 +171,15 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 	}
 	
 	//\_______________ on decompresse l'archive.
-	gchar *cCommand = g_strdup_printf ("tar xf%c \"%s\" -C \"%s\"", (g_str_has_suffix (cArchivePath, "bz2") ? 'j' : 'z'), cArchivePath, cExtractTo);
-	cd_debug ("tar : %s", cCommand);
-	int r = system (cCommand);
+	gboolean r = _uncompress_archive (cArchivePath, cExtractTo);
 	
 	//\_______________ on verifie le resultat, en remettant l'original en cas d'echec.
-	if (r != 0 || !g_file_test (cResultPath, G_FILE_TEST_EXISTS))
+	gboolean bExists = g_file_test (cResultPath, G_FILE_TEST_EXISTS);
+	if (!r) if (bExists) cairo_dock_fm_delete_file (cResultPath, TRUE); // if extraction did not work, clean up
+	
+	if (!(r && bExists))
 	{
-		cd_warning ("Invalid archive file (%s)", cCommand);
+		cd_warning ("Invalid archive file (%s)", cArchivePath);
 		if (cTempBackup != NULL)
 		{
 			g_rename (cTempBackup, cResultPath);
@@ -113,10 +190,9 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 	else if (cTempBackup != NULL)
 	{
 		if (!cairo_dock_fm_delete_file (cTempBackup, TRUE))
-			cd_warning ("Couldn't remove temporary folder (%s)", cCommand);
+			cd_warning ("Couldn't remove temporary folder (%s)", cTempBackup);
 	}
 	
-	g_free (cCommand);
 	g_free (cTempBackup);
 	return cResultPath;
 }

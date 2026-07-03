@@ -106,6 +106,19 @@ struct _CairoDockPackage {
 /// Prototype of the function called when the list of packages is available. Use g_hash_table_ref if you want to keep the table outside of this function.
 typedef void (* CairoDockGetPackagesFunc ) (GHashTable *pPackagesTable, gpointer data);
 
+/** Uncompress an already downloaded package archive to the given directory.
+*@param cArchivePath path of the downloaded archive file
+*@param cExtractTo path to extract to (root of archive is extracted here)
+*@param cRealArchiveName true archive name (if e.g. cArchivePath is a temporary file name), or NULL
+*@return path to the successfully extracted package or NULL on failure
+
+Notes:
+ - This function will block during the extraction. Use a GldiTask to keep the UI responsive.
+ - This is not intended as a general extractor as a specific format is assumed: the archive
+   should contain a single subdirectory with the same equal to the basename of cRealArchiveName
+   (with the extension removed). The return value will thus be the combination of this with
+   cExtractTo.
+*/
 gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtractTo, const gchar *cRealArchiveName);
 
 /** Download a distant file into a given location.
