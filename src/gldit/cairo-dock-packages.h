@@ -115,9 +115,8 @@ typedef void (* CairoDockGetPackagesFunc ) (GHashTable *pPackagesTable, gpointer
 Notes:
  - This function will block during the extraction. Use a GldiTask to keep the UI responsive.
  - This is not intended as a general extractor as a specific format is assumed: the archive
-   should contain a single subdirectory with the same equal to the basename of cRealArchiveName
-   (with the extension removed). The return value will thus be the combination of this with
-   cExtractTo.
+   should contain a single subdirectory whose name is equal to the basename of cRealArchiveName
+   (with the extension removed). Extraction will fail if this condition is not satisfied.
 */
 gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtractTo, const gchar *cRealArchiveName);
 

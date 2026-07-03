@@ -60,7 +60,7 @@ static gchar *s_cPackageServerAdress = NULL;
 /* Simple function to uncompress a tar archive. Taken from the examples here:
  * https://github.com/libarchive/libarchive/wiki/Examples (in the public domain)
  */
-static gboolean _uncompress_archive (const gchar *cArchivePath, const gchar *cExtractTo)
+static gboolean _uncompress_archive (const gchar *cArchivePath, const gchar *cExtractTo, const gchar *cPrefix)
 {
 	struct archive *a;
 	struct archive *ext;
@@ -69,6 +69,7 @@ static gboolean _uncompress_archive (const gchar *cArchivePath, const gchar *cEx
 	int r;
 	gboolean ret = TRUE;
 	GString *str = g_string_new (NULL);
+	size_t uPrefixLen = strlen(cPrefix);
 
 	flags = 0;
 
@@ -88,8 +89,16 @@ static gboolean _uncompress_archive (const gchar *cArchivePath, const gchar *cEx
 		if (r < ARCHIVE_OK) cd_warning ("%s", archive_error_string (a));
 		if (r < ARCHIVE_WARN) { ret = FALSE; break; }
 		
+		const char *fn = archive_entry_pathname (entry);
+		if (!fn || strncmp (fn, cPrefix, uPrefixLen) || // we want to match the prefix and
+			!(fn[uPrefixLen] == 0 || fn[uPrefixLen] == '/')) // be a directory
+		{
+			cd_warning ("Unexpected content in archive (%s): %s!", cPrefix, fn);
+			ret = FALSE;
+			break;
+		}
 		
-		g_string_printf (str, "%s/%s", cExtractTo, archive_entry_pathname (entry));
+		g_string_printf (str, "%s/%s", cExtractTo, fn);
 		archive_entry_set_pathname (entry, str->str);
 
 		r = archive_write_header(ext, entry);
@@ -129,6 +138,8 @@ static gboolean _uncompress_archive (const gchar *cArchivePath, const gchar *cEx
 
 gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtractTo, const gchar *cRealArchiveName)
 {
+	g_return_val_if_fail (cArchivePath != NULL, NULL);
+	
 	//\_______________ on cree le repertoire d'extraction.
 	if (!g_file_test (cExtractTo, G_FILE_TEST_EXISTS))
 	{
@@ -145,7 +156,14 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 		cRealArchiveName = cArchivePath;
 	gchar *str = strrchr (cRealArchiveName, '/');
 	if (str != NULL)
+	{
+		if (str[1] == '\0') // sanity check
+		{
+			cd_warning ("Invalid archive file name: %s\n", cRealArchiveName);
+			return NULL;
+		}
 		cLocalFileName = g_strdup (str+1);
+	}
 	else
 		cLocalFileName = g_strdup (cRealArchiveName);
 	
@@ -157,10 +175,14 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 		cLocalFileName[strlen(cLocalFileName)-4] = '\0';
 	else if (g_str_has_suffix (cLocalFileName, ".zip"))
 		cLocalFileName[strlen(cLocalFileName)-4] = '\0';
-	g_return_val_if_fail (cLocalFileName != NULL && *cLocalFileName != '\0', NULL);
+	if (*cLocalFileName == '\0')
+	{
+		cd_warning ("Invalid archive file name: %s\n", cRealArchiveName);
+		g_free (cLocalFileName);
+		return NULL;
+	}
 	
 	gchar *cResultPath = g_strdup_printf ("%s/%s", cExtractTo, cLocalFileName);
-	g_free (cLocalFileName);
 	
 	//\_______________ on deplace un dossier identique prealable.
 	gchar *cTempBackup = NULL;
@@ -171,7 +193,7 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 	}
 	
 	//\_______________ on decompresse l'archive.
-	gboolean r = _uncompress_archive (cArchivePath, cExtractTo);
+	gboolean r = _uncompress_archive (cArchivePath, cExtractTo, cLocalFileName);
 	
 	//\_______________ on verifie le resultat, en remettant l'original en cas d'echec.
 	gboolean bExists = g_file_test (cResultPath, G_FILE_TEST_EXISTS);
@@ -194,6 +216,7 @@ gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtr
 	}
 	
 	g_free (cTempBackup);
+	g_free (cLocalFileName);
 	return cResultPath;
 }
 
