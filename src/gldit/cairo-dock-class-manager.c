@@ -2507,12 +2507,35 @@ static GDesktopAppInfo *_search_desktop_file (const gchar *cDesktopFile, gboolea
 	}
 	
 	// handle potential partial matches and special cases
-	// #0: special casing for Gnome Terminal, required at least on Ubuntu 22.04 and 24.04
-	// (should be fixed in newer versions, see e.g. here: https://gitlab.gnome.org/GNOME/gnome-terminal/-/issues/8033)
+	
+	/* #0: special casing for apps with known problems */
+	
+	/* #0.1: Gnome Terminal, required at least on Ubuntu 22.04 and 24.04
+	 * (should be fixed in newer versions, see e.g. here: https://gitlab.gnome.org/GNOME/gnome-terminal/-/issues/8033)
+	 */
 	if (!strcmp (cDesktopFile, "gnome-terminal-server"))
 	{
 		const char *tmpkey = "org.gnome.terminal";
 		app = gldi_desktop_file_db_lookup (tmpkey, TRUE); // we want exact match for org.gnome.terminal.desktop
+		if (app)
+		{
+			g_free (tmp_to_free); // can be NULL
+			return g_object_ref (app);
+		}
+	}
+	/* #0.2: gted -> org.gnome.TextEditor.desktop, required at least on Ubuntu 24.04.
+	 * Note: issue only exists in X11 where WM_CLASS is the program name for most GTK4 apps,
+	 * as opposed to Wayland where the "application-id" is used; see details here:
+	 * https://gitlab.gnome.org/GNOME/gtk/-/work_items/8296
+	 * In this case, normally, WM_CLASS would be "gnome-text-editor", which is correctly
+	 * matched based on the Exec= key in the .desktop file. However, on Ubuntu 24.04, "gted"
+	 * exists as a symlink and if it is used to launch the app, WM_CLASS will also be set to
+	 * "gted" that is not possible to match with normal methods.
+	 */
+	if (!strcmp (cDesktopFile, "gted"))
+	{
+		const char *tmpkey = "org.gnome.texteditor";
+		app = gldi_desktop_file_db_lookup (tmpkey, TRUE); // we want exact match
 		if (app)
 		{
 			g_free (tmp_to_free); // can be NULL
