@@ -365,31 +365,10 @@ static void _cairo_dock_about (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GldiContain
 	//don't use gtk_dialog_run(), as we don't want to block the dock
 }
 
-static void _launch_url (const gchar *cURL)
-{
-	if  (! cairo_dock_fm_launch_uri (cURL))
-	{
-		gchar *cCommand = g_strdup_printf ("\
-which xdg-open > /dev/null && xdg-open %s || \
-which firefox > /dev/null && firefox %s || \
-which konqueror > /dev/null && konqueror %s || \
-which iceweasel > /dev/null && konqueror %s || \
-which opera > /dev/null && opera %s ",
-			cURL,
-			cURL,
-			cURL,
-			cURL,
-			cURL);  // pas super beau mais efficace ^_^
-		int r = system (cCommand);
-		if (r < 0)
-			cd_warning ("Not able to launch this command: %s", cCommand);
-		g_free (cCommand);
-	}
-}
 static void _cairo_dock_show_third_party_applets (G_GNUC_UNUSED GtkMenuItem *pMenuItem, G_GNUC_UNUSED gpointer data)
 {
 	gchar *cLink = cairo_dock_get_third_party_applets_link ();
-	_launch_url (cLink);
+	cairo_dock_fm_launch_uri (cLink);
 	g_free (cLink);
 }
 
