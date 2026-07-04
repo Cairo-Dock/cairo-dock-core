@@ -441,14 +441,6 @@ static gchar *_cairo_dock_get_theme_path (const gchar *cThemeName)  // a theme n
 	return cNewThemePath;
 }
 
-static void _launch_cmd (const gchar *cCommand)
-{
-	cd_debug ("%s", cCommand);
-	int r = system (cCommand);
-	if (r < 0)
-		cd_warning ("Not able to launch this command: %s", cCommand);
-}
-
 static gboolean _check_has_suffix_inv (const gchar *cFileName, gconstpointer data)
 {
 	return ! g_str_has_suffix (cFileName, (const char*)data);
@@ -500,6 +492,7 @@ static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboo
 	}
 	else
 	{
+		//!! TODO: we want to copy the style properties even in this case !!
 		GDir *dir = g_dir_open (cNewThemePath, 0, NULL);
 		const gchar* cDockConfFile;
 		gchar *cThemeDockConfFile, *cUserDockConfFile;
@@ -525,25 +518,17 @@ static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboo
 	}
 	
 	//\___________________ We load icons
-	if (bLoadLaunchers)
-	{
-		cairo_dock_fm_empty_directory (g_cCurrentIconsPath, FALSE, NULL, NULL);
-		cairo_dock_fm_empty_directory (g_cCurrentImagesPath, FALSE, NULL, NULL);
-	}
+	// We always remove previous icons, otherwise we could end up with a mixed theme
+	cairo_dock_fm_empty_directory (g_cCurrentIconsPath, FALSE, NULL, NULL);
+	cairo_dock_fm_empty_directory (g_cCurrentImagesPath, FALSE, NULL, NULL);
+	
 	gchar *cNewLocalIconsPath = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
 	if (! g_file_test (cNewLocalIconsPath, G_FILE_TEST_IS_DIR))  // it's an old theme: move icons to a new dir 'icons'.
 	{
 		g_string_printf (sCommand, "%s/%s", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR);
 		cairo_dock_fm_recursive_copy (sCommand->str, g_cCurrentIconsPath, _copy_filter_no_launchers, NULL);
 	}
-	else
-	{
-		//!! TODO: match icons with the same base filename !!
-		g_string_printf (sCommand, "for f in \"%s\"/* ; do rm -f \"%s/`basename \"${f%%.*}\"`\"*; done;", cNewLocalIconsPath, g_cCurrentIconsPath);  // we erase double items because we could have x.png and x.svg and the dock will not know which it has to use.
-		_launch_cmd (sCommand->str);
-		
-		cairo_dock_fm_recursive_copy (cNewLocalIconsPath, g_cCurrentIconsPath, NULL, NULL);
-	}
+	else cairo_dock_fm_recursive_copy (cNewLocalIconsPath, g_cCurrentIconsPath, NULL, NULL);
 	
 	g_free (cNewLocalIconsPath);
 	
