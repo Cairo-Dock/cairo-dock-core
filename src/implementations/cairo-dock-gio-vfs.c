@@ -1231,50 +1231,17 @@ static void cairo_dock_gio_vfs_remove_monitor (const gchar *cURI)
 
 
 
-static gboolean cairo_dock_gio_vfs_delete_file (const gchar *cURI, gboolean bNoTrash)
+static gboolean cairo_dock_gio_vfs_delete_file (const gchar *cURI, G_GNUC_UNUSED gboolean bNoTrash)
 {
-	g_return_val_if_fail (cURI != NULL, FALSE);
+	// note: bNoTrash == TRUE always
 	GFile *pFile = (*cURI == '/' ? g_file_new_for_path (cURI) : g_file_new_for_uri (cURI));
 	
 	GError *erreur = NULL;
-	gboolean bSuccess;
-	if (bNoTrash)
+	gboolean bSuccess = g_file_trash (pFile, NULL, &erreur);
+	if (erreur != NULL)
 	{
-		const gchar *cQuery = G_FILE_ATTRIBUTE_STANDARD_TYPE;
-		GFileInfo *pFileInfo = g_file_query_info (pFile,
-			cQuery,
-			G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
-			NULL,
-			&erreur);
-		if (erreur != NULL)
-		{
-			cd_warning ("gvfs-integration : %s", erreur->message);
-			g_error_free (erreur);
-			g_object_unref (pFile);
-			return FALSE;
-		}
-		
-		GFileType iFileType = g_file_info_get_file_type (pFileInfo);
-		if (iFileType == G_FILE_TYPE_DIRECTORY)
-		{
-			cairo_dock_fm_empty_directory (cURI, TRUE, NULL, NULL);
-		}
-		
-		bSuccess = g_file_delete (pFile, NULL, &erreur);
-		if (erreur != NULL)
-		{
-			cd_warning ("gvfs-integration : %s", erreur->message);
-			g_error_free (erreur);
-		}
-	}
-	else
-	{
-		bSuccess = g_file_trash (pFile, NULL, &erreur);
-		if (erreur != NULL)
-		{
-			cd_warning ("gvfs-integration : %s", erreur->message);
-			g_error_free (erreur);
-		}
+		cd_warning ("gvfs-integration : %s", erreur->message);
+		g_error_free (erreur);
 	}
 	g_object_unref (pFile);
 	return bSuccess;

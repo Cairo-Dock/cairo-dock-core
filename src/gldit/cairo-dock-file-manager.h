@@ -81,7 +81,7 @@ typedef void (*CairoDockFMMonitorCallback) (CairoDockFMEventType iEventType, con
 typedef void (*CairoDockFMAddMonitorFunc) (const gchar *cURI, gboolean bDirectory, CairoDockFMMonitorCallback pCallback, gpointer data);
 typedef void (*CairoDockFMRemoveMonitorFunc) (const gchar *cURI);
 
-typedef gboolean (*CairoDockFMDeleteFileFunc) (const gchar *cURI, gboolean bNoTrash);
+typedef gboolean (*CairoDockFMDeleteFileFunc) (const gchar *cURI, gboolean bNoTrash); // note: only called with bNoTrash == FALSE
 typedef gboolean (*CairoDockFMRenameFileFunc) (const gchar *cOldURI, const gchar *cNewName);
 typedef gboolean (*CairoDockFMMoveFileFunc) (const gchar *cURI, const gchar *cDirectoryURI);
 typedef gboolean (*CairoDockFMCreateFileFunc) (const gchar *cURI, gboolean bDirectory);

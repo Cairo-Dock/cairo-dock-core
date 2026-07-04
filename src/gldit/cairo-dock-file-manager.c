@@ -345,6 +345,49 @@ gboolean cairo_dock_fm_empty_directory (const gchar *cURI, gboolean bRecurse, Ca
 
 gboolean cairo_dock_fm_delete_file (const gchar *cURI, gboolean bNoTrash)
 {
+	g_return_val_if_fail (cURI != NULL, FALSE);
+	
+	if (bNoTrash)
+	{
+		GFile *pFile = (*cURI == '/' ? g_file_new_for_path (cURI) : g_file_new_for_uri (cURI));
+		
+		GError *erreur = NULL;
+		const gchar *cQuery = G_FILE_ATTRIBUTE_STANDARD_TYPE;
+		GFileInfo *pFileInfo = g_file_query_info (pFile,
+			cQuery,
+			G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
+			NULL,
+			&erreur);
+		if (erreur != NULL)
+		{
+			cd_warning ("%s", erreur->message);
+			g_error_free (erreur);
+			g_object_unref (pFile);
+			return FALSE;
+		}
+		
+		GFileType iFileType = g_file_info_get_file_type (pFileInfo);
+		
+		gboolean bSuccess = TRUE;
+		if (iFileType == G_FILE_TYPE_DIRECTORY)
+			bSuccess = cairo_dock_fm_empty_directory (cURI, TRUE, NULL, NULL);
+		
+		if (bSuccess)
+		{
+			bSuccess = g_file_delete (pFile, NULL, &erreur);
+			if (erreur != NULL)
+			{
+				cd_warning ("gvfs-integration : %s", erreur->message);
+				g_error_free (erreur);
+			}
+		}
+		
+		g_object_unref (pFileInfo);
+		g_object_unref (pFile);
+		return bSuccess;
+	}
+	
+	// bNoTrash == FALSE here, i.e. we want to move the file to trash
 	if (s_EnvBackend.delete_file != NULL)
 	{
 		return s_EnvBackend.delete_file (cURI, bNoTrash);
