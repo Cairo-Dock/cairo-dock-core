@@ -718,7 +718,7 @@ gboolean _recursive_copy_internal (const gchar *cSourceDir, const gchar *cDestDi
 	GFile *pFile = g_file_new_for_path (cSourceDir);
 	GError *erreur = NULL;
 	const gchar *cAttributes = G_FILE_ATTRIBUTE_STANDARD_TYPE","
-		G_FILE_ATTRIBUTE_STANDARD_NAME;
+		G_FILE_ATTRIBUTE_STANDARD_NAME","G_FILE_ATTRIBUTE_STANDARD_SYMLINK_TARGET;
 	GFileEnumerator *pFileEnum = g_file_enumerate_children (pFile, cAttributes,
 		G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL, &erreur);
 	if (erreur != NULL)
@@ -780,9 +780,32 @@ gboolean _recursive_copy_internal (const gchar *cSourceDir, const gchar *cDestDi
 		}
 		else
 		{
-			// copy a normal file
 			if (bExists) cairo_dock_fm_delete_file (sDestUri->str, TRUE); // delete if it already exists
-			ret = cairo_dock_copy_file (sFileUri->str, sDestUri->str);
+			if (iFileType == G_FILE_TYPE_SYMBOLIC_LINK)
+			{
+				// handle symlinks specially, keeping the link
+				const char *cTarget = g_file_info_get_symlink_target (pFileInfo);
+				
+				// check if the target actually exists (some themes might contain broken links)
+				g_string_printf (sFileUri, "%s/%s", cSourceDir, cTarget);
+				if (g_file_test (sFileUri->str, G_FILE_TEST_EXISTS))
+				{
+					GFile *tmp = g_file_new_for_path (sDestUri->str);
+					// note: this assumes the link will work in the new location
+					// (which it should as we expect a relative link to files in
+					// the same directory)
+					g_file_make_symbolic_link (tmp, cTarget, NULL, &erreur);
+					g_object_unref (tmp);
+					if (erreur)
+					{
+						cd_warning ("%s", erreur->message);
+						g_error_free (erreur);
+						ret = FALSE;
+					}
+				}
+			}
+			// copy a normal file
+			else ret = cairo_dock_copy_file (sFileUri->str, sDestUri->str);
 		}
 		
 		g_object_unref (pFileInfo);

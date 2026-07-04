@@ -315,6 +315,11 @@ gboolean cairo_dock_fm_toggle_wifi (void);
 */
 int cairo_dock_get_file_size (const gchar *cFilePath);
 
+/** Copy the contents of a single file.
+*@param cFilePath File to copy. Cannot be a directory. For symlinks, the content of the linked file will be copied (not the link).
+*@param cDestPath Destination. Can be a directory (in which case a file with the same name as the source is created there).
+*@return whether the file was successfully copied.
+*/
 gboolean cairo_dock_copy_file (const gchar *cFilePath, const gchar *cDestPath);
 
 /** Recursively copy files matching a criteria from one directory to another.
