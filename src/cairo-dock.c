@@ -854,12 +854,9 @@ int main (int argc, char** argv)
 		}
 		else
 			cThemeName = "Default-Single";
-		gchar *cCommand = g_strdup_printf ("cp -r \"%s/%s\"/* \"%s\"", CAIRO_DOCK_SHARE_DATA_DIR"/themes", cThemeName, g_cCurrentThemePath);
-		cd_message (cCommand);
-		int r = system (cCommand);
-		if (r < 0)
-			cd_warning ("Not able to launch this command: %s", cCommand);
-		g_free (cCommand);
+		gchar *cThemePath = g_strdup_printf ("%s/%s", CAIRO_DOCK_SHARE_DATA_DIR"/themes", cThemeName);
+		cairo_dock_fm_recursive_copy (cThemePath, g_cCurrentThemePath, NULL, NULL);
+		g_free (cThemePath);
 	}
 	/* The first time the Cairo-Dock session is used but not the first time the
 	 *  dock is launched: propose to use the Default-Panel theme if a second
