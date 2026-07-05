@@ -1010,7 +1010,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDialogsParam *pDialogs)
 	{
 		pDialogs->fUIScale = fScale;
 		gboolean bDontScaleMenus = cairo_dock_get_boolean_key_value (pKeyFile, "System", "ui scale exclude menus", &bFlushConfFileNeeded, FALSE, NULL, NULL);
-		if (!bDontScaleMenus) pDialogs->fMenuFontScale = fScale;
+		if (bDontScaleMenus) pDialogs->fMenuFontScale = 1.0;
+		else pDialogs->fMenuFontScale = fScale;
 	}
 	else
 	{
