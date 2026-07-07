@@ -110,6 +110,7 @@ static Atom s_aGTKMenuBarPath;
 static Atom s_aGTKWindowPath;
 static Atom s_aGTKAppPath;
 static Atom s_aGTKDBusName;
+static Atom s_aGTKAppID;
 static GHashTable *s_hXWindowTable = NULL;  // table of (Xid,actor)
 static GHashTable *s_hXClientMessageTable = NULL;  // table of (Xid,client-message)
 static int s_iTime = 1;  // on peut aller jusqu'a 2^31, soit 17 ans a 4Hz.
@@ -220,6 +221,14 @@ static GldiXWindowActor *_make_new_actor (Window Xid)
 			actor->pDBusProps->cGTKWindowPath = window_path;
 			actor->pDBusProps->cGTKMenuBarPath = menu_path;
 			actor->pDBusProps->cGTKBusName = name;
+		}
+		
+		// GTK app-id
+		gchar *app_id = cairo_dock_get_xwindow_string_prop (Xid, s_aGTKAppID);
+		if (app_id)
+		{
+			if (!actor->pDBusProps) actor->pDBusProps = g_new0 (GldiWindowDBusProperties, 1);
+			actor->pDBusProps->cGTKAppID = app_id;
 		}
 	}
 	else  // make a dumy actor, so that we don't try to check it any more
@@ -778,6 +787,12 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 					if (!actor->pDBusProps) actor->pDBusProps = g_new0 (GldiWindowDBusProperties, 1);
 					else g_free (actor->pDBusProps->cGTKBusName);
 					actor->pDBusProps->cGTKBusName = cairo_dock_get_xwindow_string_prop (Xid, s_aGTKDBusName);
+				}
+				else if (event.xproperty.atom == s_aGTKAppID)
+				{
+					if (!actor->pDBusProps) actor->pDBusProps = g_new0 (GldiWindowDBusProperties, 1);
+					else g_free (actor->pDBusProps->cGTKAppID);
+					actor->pDBusProps->cGTKAppID = cairo_dock_get_xwindow_string_prop (Xid, s_aGTKAppID);
 				}
 			}
 			else if (event.type == ConfigureNotify)
@@ -1696,6 +1711,7 @@ static void init (void)
 	s_aGTKWindowPath 		= XInternAtom (s_XDisplay, "_GTK_WINDOW_OBJECT_PATH", False);
 	s_aGTKAppPath 			= XInternAtom (s_XDisplay, "_GTK_APPLICATION_OBJECT_PATH", False);
 	s_aGTKDBusName 			= XInternAtom (s_XDisplay, "_GTK_UNIQUE_BUS_NAME", False);
+	s_aGTKAppID 			= XInternAtom (s_XDisplay, "_GTK_APPLICATION_ID", False);
 	
 	s_hXWindowTable = g_hash_table_new_full (g_int_hash,
 		g_int_equal,
