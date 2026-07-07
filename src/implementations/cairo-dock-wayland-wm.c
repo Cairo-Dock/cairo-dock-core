@@ -153,6 +153,8 @@ void gldi_wayland_wm_appid_changed (GldiWaylandWindowActor *wactor, const char *
 		
 	}
 	else wactor->cClassExtra = NULL;
+	
+	gldi_object_notify (&myWaylandWMObjectMgr, NOTIFICATION_WAYLAND_APP_ID, wactor);
 	if (notify) gldi_wayland_wm_done (wactor);
 }
 
