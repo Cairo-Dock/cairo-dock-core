@@ -37,7 +37,7 @@
 
 #include "cairo-dock-log.h"
 #include "cairo-dock-utils.h"  // cairo_dock_string_contains
-#include "cairo-dock-opengl.h"
+#include "cairo-dock-opengl-priv.h"
 #include "cairo-dock-egl.h"
 #include "cairo-dock-container-priv.h" // cairo_dock_set_default_rgba_visual
 

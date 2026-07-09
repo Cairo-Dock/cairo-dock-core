@@ -27,7 +27,7 @@
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-desktop-manager.h"  // desktop dimensions
 
-#include "cairo-dock-opengl.h"
+#include "cairo-dock-opengl-priv.h"
 
 // public (manager, config, data)
 CairoDockGLConfig g_openglConfig;

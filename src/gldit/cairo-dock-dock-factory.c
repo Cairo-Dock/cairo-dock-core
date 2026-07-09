@@ -23,6 +23,7 @@
 
 #include "cairo-dock-separator-manager.h"  // gldi_auto_separator_icon_new
 #include "cairo-dock-log.h"
+#include "cairo-dock-opengl-priv.h"
 #include "cairo-dock-draw-opengl.h"  // for the redirected texture
 #include "cairo-dock-data-renderer.h"  // cairo_dock_reload_data_renderer_on_icon/cairo_dock_refresh_data_renderer
 #include "cairo-dock-windows-manager-priv.h"

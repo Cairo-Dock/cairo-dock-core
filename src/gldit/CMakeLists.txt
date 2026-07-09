@@ -44,7 +44,7 @@ SET(core_lib_SRCS
 	cairo-dock-desktop-manager.c		cairo-dock-desktop-manager.h
 	cairo-dock-windows-manager.c		cairo-dock-windows-manager.h            cairo-dock-windows-manager-priv.h
 	cairo-dock-image-buffer.c			cairo-dock-image-buffer.h 
-	cairo-dock-opengl.c 				cairo-dock-opengl.h
+	cairo-dock-opengl.c 				cairo-dock-opengl.h						cairo-dock-opengl-priv.h
 	cairo-dock-opengl-path.c 			cairo-dock-opengl-path.h
 	cairo-dock-opengl-font.c 			cairo-dock-opengl-font.h
 	cairo-dock-surface-factory.c 		cairo-dock-surface-factory.h

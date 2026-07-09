@@ -35,7 +35,7 @@
 #include "cairo-dock-animations.h"
 #include "cairo-dock-desktop-manager.h"  // gldi_desktop_get*
 #include "cairo-dock-data-renderer.h"  // cairo_dock_reload_data_renderer_on_icon
-#include "cairo-dock-opengl.h"  // gldi_gl_container_begin_draw
+#include "cairo-dock-opengl-priv.h"  // gldi_gl_container_begin_draw
 #include "cairo-dock-container-priv.h"
 
 extern CairoDockGLConfig g_openglConfig;

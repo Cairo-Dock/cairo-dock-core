@@ -43,7 +43,7 @@
 #include "cairo-dock-dock-factory.h" // struct _CairoDock
 #include "cairo-dock-dock-manager.h" // myDockObjectMgr, needed for CAIRO_DOCK_IS_DOCK
 #include "cairo-dock-icon-facility.h" // cairo_dock_get_icon_container
-#include "cairo-dock-opengl.h"
+#include "cairo-dock-opengl-priv.h"
 #ifdef HAVE_WAYLAND_PROTOCOLS
 #include "cairo-dock-foreign-toplevel.h"
 #include "cairo-dock-plasma-window-manager.h"

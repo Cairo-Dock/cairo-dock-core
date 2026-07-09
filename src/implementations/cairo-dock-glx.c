@@ -30,7 +30,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-utils.h"  // cairo_dock_string_contains
 #include "cairo-dock-X-utilities.h"  // cairo_dock_get_X_display
-#include "cairo-dock-opengl.h"
+#include "cairo-dock-opengl-priv.h"
 
 // dependencies
 extern CairoDockGLConfig g_openglConfig;

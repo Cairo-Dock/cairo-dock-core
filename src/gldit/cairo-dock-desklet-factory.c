@@ -45,6 +45,7 @@
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-draw-opengl.h"
+#include "cairo-dock-opengl-priv.h"
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-animations.h"
 #include "cairo-dock-launcher-manager.h"

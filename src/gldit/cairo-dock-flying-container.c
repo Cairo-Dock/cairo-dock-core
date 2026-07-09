@@ -23,7 +23,7 @@
 #include "gldi-config.h"
 #include "gldi-icon-names.h"
 #include "cairo-dock-draw.h"
-#include "cairo-dock-opengl.h"
+#include "cairo-dock-opengl-priv.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-icon-factory.h"
 #include "cairo-dock-icon-facility.h"

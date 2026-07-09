@@ -47,7 +47,7 @@
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-image-buffer.h"
 #include "cairo-dock-desklet-factory.h"
-#include "cairo-dock-opengl.h"
+#include "cairo-dock-opengl-priv.h"
 #include "cairo-dock-opengl-path.h"
 #define _MANAGER_DEF_
 #include "cairo-dock-desklet-manager.h"
