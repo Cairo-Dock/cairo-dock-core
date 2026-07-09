@@ -55,6 +55,7 @@
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-task.h"
+#include "cairo-dock-opengl-priv.h"
 #include "cairo-dock-glx.h"
 #include "cairo-dock-egl.h"
 #define _MANAGER_DEF_
@@ -1117,7 +1118,7 @@ static cairo_surface_t* _get_thumbnail_surface (GldiWindowActor *actor, int iWid
 static GLuint _get_texture (GldiWindowActor *actor)
 {
 	GldiXWindowActor *xactor = (GldiXWindowActor *)actor;
-	return cairo_dock_texture_from_pixmap (xactor->Xid, xactor->iBackingPixmap);  /// TODO: make an EGL version of this...
+	return gldi_gl_texture_from_pixmap (xactor->Xid, xactor->iBackingPixmap);
 }
 
 static GldiWindowActor *_get_transient_for (GldiWindowActor *actor)

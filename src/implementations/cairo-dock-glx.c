@@ -35,6 +35,7 @@
 // dependencies
 extern CairoDockGLConfig g_openglConfig;
 extern GldiContainer *g_pPrimaryContainer;
+extern gboolean g_bEasterEggs;
 
 // private
 static Display *s_XDisplay = NULL;
@@ -42,6 +43,12 @@ static GLXContext s_XContext = 0;
 static XVisualInfo *s_XVisInfo = NULL;
 GdkVisual *s_pGdkVisual = NULL;
 #define _gldi_container_get_Xid(pContainer) GDK_WINDOW_XID (gldi_container_get_gdk_window(pContainer))
+
+static gboolean s_bTextureFromPixmapAvailable = FALSE;
+static void (*_bindTexImage) (Display *display, GLXDrawable drawable, int buffer, int *attribList) = NULL;
+static void (*_releaseTexImage) (Display *display, GLXDrawable drawable, int buffer) = NULL;
+
+
 
 static gboolean _check_client_glx_extension (const char *extName)
 {
@@ -205,12 +212,11 @@ static gboolean _initialize_opengl_backend (gboolean bForceOpenGL)
 	which would force us to do a XDeleteProperty ( dpy, DefaultRootWindow (dpy), XInternAtom (dpy, "RGB_DEFAULT_MAP", 0) ) */
 	
 	//\_________________ on verifier les capacites des textures.
-	g_openglConfig.bTextureFromPixmapAvailable = _check_client_glx_extension ("GLX_EXT_texture_from_pixmap");
-	if (g_openglConfig.bTextureFromPixmapAvailable)
+	if (_check_client_glx_extension ("GLX_EXT_texture_from_pixmap"))
 	{
-		g_openglConfig.bindTexImage = (gpointer)glXGetProcAddress ((GLubyte *) "glXBindTexImageEXT");
-		g_openglConfig.releaseTexImage = (gpointer)glXGetProcAddress ((GLubyte *) "glXReleaseTexImageEXT");
-		g_openglConfig.bTextureFromPixmapAvailable = (g_openglConfig.bindTexImage && g_openglConfig.releaseTexImage);
+		_bindTexImage = (gpointer)glXGetProcAddress ((GLubyte *) "glXBindTexImageEXT");
+		_releaseTexImage = (gpointer)glXGetProcAddress ((GLubyte *) "glXReleaseTexImageEXT");
+		s_bTextureFromPixmapAvailable = (_bindTexImage && _releaseTexImage);
 	}
 	
 	return TRUE;
@@ -296,6 +302,119 @@ static void _container_finish (GldiContainer *pContainer)
 	}
 }
 
+static GLuint _glx_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
+{
+	if (!iBackingPixmap || ! s_bTextureFromPixmapAvailable)
+		return 0;
+	
+	Display *display = s_XDisplay;
+	XWindowAttributes attrib;
+	XGetWindowAttributes (display, Xid, &attrib);
+	
+	VisualID visualid = XVisualIDFromVisual (attrib.visual);
+	
+	int nfbconfigs;
+	int screen = 0;
+	GLXFBConfig *fbconfigs = glXGetFBConfigs (display, screen, &nfbconfigs);
+	
+	GLfloat top=0., bottom=0.;
+	XVisualInfo *visinfo;
+	int value;
+	int i;
+	for (i = 0; i < nfbconfigs; i++)
+	{
+		visinfo = glXGetVisualFromFBConfig (display, fbconfigs[i]);
+		if (!visinfo || visinfo->visualid != visualid)
+			continue;
+	
+		glXGetFBConfigAttrib (display, fbconfigs[i], GLX_DRAWABLE_TYPE, &value);
+		if (!(value & GLX_PIXMAP_BIT))
+			continue;
+	
+		glXGetFBConfigAttrib (display, fbconfigs[i],
+			GLX_BIND_TO_TEXTURE_TARGETS_EXT,
+			&value);
+		if (!(value & GLX_TEXTURE_2D_BIT_EXT))
+			continue;
+		
+		glXGetFBConfigAttrib (display, fbconfigs[i],
+			GLX_BIND_TO_TEXTURE_RGBA_EXT,
+			&value);
+		if (value == FALSE)
+		{
+			glXGetFBConfigAttrib (display, fbconfigs[i],
+				GLX_BIND_TO_TEXTURE_RGB_EXT,
+				&value);
+			if (value == FALSE)
+				continue;
+		}
+		
+		glXGetFBConfigAttrib (display, fbconfigs[i],
+			GLX_Y_INVERTED_EXT,
+			&value);
+		if (value == TRUE)
+		{
+			top = 0.0f;
+			bottom = 1.0f;
+		}
+		else
+		{
+			top = 1.0f;
+			bottom = 0.0f;
+		}
+		
+		break;
+	}
+	
+	if (i == nfbconfigs)
+	{
+		cd_warning ("No FB Config found");
+		return 0;
+	}
+	
+	int pixmapAttribs[5] = { GLX_TEXTURE_TARGET_EXT, GLX_TEXTURE_2D_EXT,
+		GLX_TEXTURE_FORMAT_EXT, GLX_TEXTURE_FORMAT_RGBA_EXT,
+		None };
+	GLXPixmap glxpixmap = glXCreatePixmap (display, fbconfigs[i], iBackingPixmap, pixmapAttribs);
+	g_return_val_if_fail (glxpixmap != 0, 0);
+	
+	GLuint texture;
+	glEnable (GL_TEXTURE_2D);
+	glGenTextures (1, &texture);
+	glBindTexture (GL_TEXTURE_2D, texture);
+	
+	_bindTexImage (display, glxpixmap, GLX_FRONT_LEFT_EXT, NULL);
+	
+	glTexParameteri (GL_TEXTURE_2D,
+		GL_TEXTURE_MIN_FILTER,
+		g_bEasterEggs ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
+	if (g_bEasterEggs)
+		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	
+	// draw using iBackingPixmap as texture
+	glBegin (GL_QUADS);
+	
+	glTexCoord2d (0.0f, bottom);
+	glVertex2d (0.0f, 0.0f);
+	
+	glTexCoord2d (0.0f, top);
+	glVertex2d (0.0f, attrib.height);
+	
+	glTexCoord2d (1.0f, top);
+	glVertex2d (attrib.width, attrib.height);
+	
+	glTexCoord2d (1.0f, bottom);
+	glVertex2d (attrib.width, 0.0f);
+	
+	glEnd ();
+	glDisable (GL_TEXTURE_2D);
+	
+	_releaseTexImage (display, glxpixmap, GLX_FRONT_LEFT_EXT);
+	glXDestroyGLXPixmap (display, glxpixmap);
+	return texture;
+}
+
 void gldi_register_glx_backend (void)
 {
 	GldiGLManagerBackend gmb;
@@ -307,6 +426,7 @@ void gldi_register_glx_backend (void)
 	gmb.container_end_draw = _container_end_draw;
 	gmb.container_init = _container_init;
 	gmb.container_finish = _container_finish;
+	gmb.texture_from_pixmap = _glx_texture_from_pixmap;
 	gmb.name = "GLX";
 	gldi_gl_manager_register_backend (&gmb);
 
