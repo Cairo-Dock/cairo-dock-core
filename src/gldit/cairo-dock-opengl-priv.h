@@ -24,6 +24,10 @@
 
 #include "cairo-dock-opengl.h"
 
+#ifdef HAVE_X11
+#include <X11/Xlib.h>
+#endif
+
 G_BEGIN_DECLS
 
 /**
@@ -38,14 +42,6 @@ struct _CairoDockGLConfig {
 	gboolean bAccumBufferAvailable;
 	gboolean bFboAvailable;
 	gboolean bNonPowerOfTwoAvailable;
-	gboolean bTextureFromPixmapAvailable;
-	#ifdef HAVE_GLX
-	void (*bindTexImage) (Display *display, GLXDrawable drawable, int buffer, int *attribList);  // texture from pixmap
-	void (*releaseTexImage) (Display *display, GLXDrawable drawable, int buffer);  // texture from pixmap
-	#elif defined(HAVE_EGL)
-	void (*bindTexImage) (EGLDisplay *display, EGLSurface drawable, int buffer);  // texture from pixmap
-	void (*releaseTexImage) (EGLDisplay *display, EGLSurface drawable, int buffer);  // texture from pixmap
-	#endif
 };
 
 struct _GldiGLManagerBackend {
@@ -58,6 +54,11 @@ struct _GldiGLManagerBackend {
 	void (*container_finish) (GldiContainer *pContainer);
 	void (*container_resized) (GldiContainer *pContainer, int iWidth, int iHeight);
 	const gchar *name;
+#ifdef HAVE_X11
+	GLuint (*texture_from_pixmap) (Window Xid, Pixmap iBackingPixmap);
+#else
+	gpointer unused; // note: not sure if it is important to keep the same layout
+#endif
 };
 	
 
@@ -84,6 +85,15 @@ void gldi_gl_backend_force_indirect_rendering (void);
  *  calling this function.
  */
 void gldi_gl_init_opengl_context (void);
+
+const gchar *gldi_gl_get_backend_name ();
+
+void gldi_gl_manager_register_backend (GldiGLManagerBackend *pBackend);
+
+
+#ifdef HAVE_X11
+GLuint gldi_gl_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap);
+#endif
 
 
   ///////////////
@@ -133,11 +143,6 @@ void gldi_gl_container_init (GldiContainer *pContainer);
 void gldi_gl_container_resized (GldiContainer *pContainer, int iWidth, int iHeight);
 
 void gldi_gl_container_finish (GldiContainer *pContainer);
-
-
-const gchar *gldi_gl_get_backend_name ();
-
-void gldi_gl_manager_register_backend (GldiGLManagerBackend *pBackend);
 
 G_END_DECLS
 #endif
