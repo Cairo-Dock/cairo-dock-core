@@ -276,6 +276,13 @@ void gldi_container_set_input_shape(GldiContainer *pContainer, cairo_region_t *p
 void gldi_register_containers_manager (void);
 
 
+  //////////
+ // MISC //
+//////////
+
+// Get the scale factor set in the config
+gboolean gldi_container_get_scale_setting (GKeyFile *pKeyFile, double *fScale, gboolean *bFlushConfFileNeeded);
+
 G_END_DECLS
 #endif
 

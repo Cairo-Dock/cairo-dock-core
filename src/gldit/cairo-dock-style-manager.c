@@ -25,6 +25,7 @@
 
 #include "cairo-dock-config.h"
 #include "cairo-dock-log.h"
+#include "cairo-dock-container-priv.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-surface-factory.h"  // cairo_dock_create_blank_surface
 #include "cairo-dock-keyfile-utilities.h"  // cairo_dock_open_key_file
@@ -461,6 +462,10 @@ static gboolean get_config (GKeyFile *pKeyFile, GldiStyleParam *pStyleParam)
 		pStyleParam->iLineWidth = g_key_file_get_integer (pKeyFile, "Style", "linewidth", NULL);
 		cairo_dock_get_color_key_value (pKeyFile, "Style", "line color", &bFlushConfFileNeeded, &pStyleParam->fLineColor, NULL, NULL, NULL);
 	}
+	
+	double fScale = 1.0;
+	if (gldi_container_get_scale_setting (pKeyFile, &fScale, &bFlushConfFileNeeded))
+		pStyleParam->iCornerRadius *= fScale;
 	
 	GldiColor bg_color = {{1.0, 1.0, 1.0, 0.7}};
 	cairo_dock_get_color_key_value (pKeyFile, "Style", "bg color", &bFlushConfFileNeeded, &pStyleParam->fBgColor, &bg_color, "Dialogs", "background color");

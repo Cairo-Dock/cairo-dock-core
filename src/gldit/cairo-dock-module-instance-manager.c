@@ -140,6 +140,8 @@ static GKeyFile *_open_conf_file (GldiModuleInstance *pInstance, CairoDockMinima
 	{
 		gboolean bUnused;
 		cairo_dock_get_size_key_value_helper (pKeyFile, "Icon", "icon ", bUnused, pMinimalConfig->iDesiredIconWidth, pMinimalConfig->iDesiredIconHeight);  // for a dock, if 0, will just get the default size; for a desklet, unused.
+		pMinimalConfig->iDesiredIconWidth *= myDocksParam.fUIScale;
+		pMinimalConfig->iDesiredIconHeight *= myDocksParam.fUIScale;
 		
 		pMinimalConfig->cLabel = cairo_dock_get_string_key_value (pKeyFile, "Icon", "name", NULL, NULL, NULL, NULL);
 		if (pMinimalConfig->cLabel == NULL && !pInstance->pModule->pVisitCard->bAllowEmptyTitle)
@@ -227,6 +229,8 @@ static GKeyFile *_open_conf_file (GldiModuleInstance *pInstance, CairoDockMinima
 			pDeskletAttribute->iDeskletWidth = 96;
 		if (pDeskletAttribute->iDeskletHeight == 0)
 			pDeskletAttribute->iDeskletHeight = 96;
+		pDeskletAttribute->iDeskletWidth *= myDocksParam.fUIScale;
+		pDeskletAttribute->iDeskletHeight *= myDocksParam.fUIScale;
 		
 		pDeskletAttribute->iDeskletPositionX = cairo_dock_get_integer_key_value (pKeyFile, "Desklet", "x position", NULL, 0, NULL, NULL);
 		pDeskletAttribute->iDeskletPositionY = cairo_dock_get_integer_key_value (pKeyFile, "Desklet", "y position", NULL, 0, NULL, NULL);

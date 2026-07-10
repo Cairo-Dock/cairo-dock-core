@@ -385,8 +385,12 @@ void gldi_icons_foreach_in_docks (GldiIconFunc pFunction, gpointer pUserData)
 static void _reload_buffers_in_dock (CairoDock *pDock, gboolean bRecursive, gboolean bUpdateIconSize)
 {
 	//g_print ("************%s (%d, %d)\n", __func__, pDock->bIsMainDock, bRecursive);
-	if (bUpdateIconSize && pDock->bGlobalIconSize)
-		pDock->iIconSize = myIconsParam.iIconWidth;
+	if (bUpdateIconSize)
+	{
+		if (pDock->bGlobalIconSize)
+			pDock->iIconSize = myIconsParam.iIconWidth;
+		else pDock->iIconSize = pDock->iIconSizeOrig * myDocksParam.fUIScale;
+	}
 	
 	// for each icon, reload its buffer (size may change).
 	Icon* icon;
@@ -638,8 +642,9 @@ static gboolean _get_root_dock_config (CairoDock *pDock)
 	int s = cairo_dock_get_integer_key_value (pKeyFile, "Appearance", "icon size", &bFlushConfFileNeeded, ICON_DEFAULT, NULL, NULL);  // ICON_DEFAULT <=> same as main dock
 	double fMaxScale, fReflectSize;
 	int iIconGap;
-	pDock->iIconSize = cairo_dock_convert_icon_size_to_pixels (s, &fMaxScale, &fReflectSize, &iIconGap);
+	pDock->iIconSizeOrig = cairo_dock_convert_icon_size_to_pixels (s, &fMaxScale, &fReflectSize, &iIconGap);
 	pDock->bGlobalIconSize = (s == ICON_DEFAULT);
+	pDock->iIconSize = pDock->iIconSizeOrig * myDocksParam.fUIScale;
 	
 	//\______________ View.
 	g_free (pDock->cRendererName);
@@ -1312,6 +1317,9 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 	
 	// frame
 	pBackground->iDockRadius = cairo_dock_get_integer_key_value (pKeyFile, "Background", "corner radius", &bFlushConfFileNeeded, 12, NULL, NULL);
+	pDocksParam->fUIScale = 1.0;
+	if (gldi_container_get_scale_setting (pKeyFile, &pDocksParam->fUIScale, &bFlushConfFileNeeded))
+		pBackground->iDockRadius *= pDocksParam->fUIScale;
 
 	pBackground->iDockLineWidth = cairo_dock_get_integer_key_value (pKeyFile, "Background", "line width", &bFlushConfFileNeeded, 2, NULL, NULL);
 
@@ -1490,6 +1498,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 			pAccessibility->iZoneWidth = 20;
 		if (pAccessibility->iZoneHeight < 2)
 			pAccessibility->iZoneHeight = 2;
+		pAccessibility->iZoneWidth *= pDocksParam->fUIScale;
+		pAccessibility->iZoneHeight *= pDocksParam->fUIScale;
 		pAccessibility->cZoneImage = cairo_dock_get_string_key_value (pKeyFile, "Accessibility", "callback image", &bFlushConfFileNeeded, 0, "Background", NULL);
 		pAccessibility->fZoneAlpha = 1.;  // on laisse l'utilisateur definir la transparence qu'il souhaite directement dans l'image.
 	}
