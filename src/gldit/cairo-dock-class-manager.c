@@ -93,7 +93,7 @@ typedef struct _CairoDockClassAppli CairoDockClassAppli;
 static GHashTable *s_hClassTable = NULL;
 static GHashTable *s_hAltClass = NULL; // we store alternative class / app-ids here
 
-static gchar *_cairo_dock_register_class_full (const gchar *cSearchTerm, const gchar *cFallbackClass, const gchar *cWmClass,
+static gchar *_cairo_dock_register_class_full (const gchar *cSearchTerm, const gchar * const *cFallbackClass, const gchar *cWmClass,
 	gboolean bUseWmClass, gboolean bCreateAlways, gboolean bIsDesktopFile, GDesktopAppInfo *app, CairoDockClassAppli **pResult);
 
 static void _cairo_dock_free_class_appli (CairoDockClassAppli *pClassAppli)
@@ -1047,10 +1047,34 @@ gboolean cairo_dock_add_appli_icon_to_class (Icon *pIcon)
 		 *     some apps do otherwise, e.g. exfalso sets
 		 * WM_CLASS(STRING) = "io.github.quodlibet.ExFalso", "Exfalso"
 		 * (where the first string is wm_name and corresponds to the correct desktop file ID)
+		 * (4) we use the application-id of apps based on GtkApplication
+		 *     this is provided by:
+		 *       -- the _GTK_APPLICATION_ID property on X11 windows
+		 *       -- via the gtk-shell protocol on Wayland, currently only
+		 *          relayed by Wayfire as part of the app-id if the
+		 *          "workarounds.app_id_mode = full" setting is set
 		 */
-		char *cClass = _cairo_dock_register_class_full (pIcon->cClass, pIcon->pAppli->cWmName,
+		const char *cFallbackClass[] = {NULL, NULL, NULL};
+		int i = 0;
+		
+		// GTK app-id, needs to be converted to lower case
+		char *cGTKAppID = NULL;
+		if (pIcon->pAppli->pDBusProps && pIcon->pAppli->pDBusProps->cGTKAppID)
+			cGTKAppID = g_ascii_strdown (pIcon->pAppli->pDBusProps->cGTKAppID, -1);
+		if (cGTKAppID) {
+			cFallbackClass[i] = cGTKAppID;
+			i++;
+		}
+		
+		// res_name property, already converted to lower case in X-utilities
+		if (pIcon->pAppli->cWmName) {
+			cFallbackClass[i] = pIcon->pAppli->cWmName;
+			i++;
+		}
+		char *cClass = _cairo_dock_register_class_full (pIcon->cClass, cFallbackClass,
 			pIcon->pAppli->cWmClass, FALSE, TRUE, FALSE, NULL, &pClassAppli);
-		if (cClass) g_free (cClass);
+		g_free (cGTKAppID);
+		g_free (cClass);
 		if (!pClassAppli) return FALSE; // should not happen
 	}
 
@@ -2790,7 +2814,7 @@ gchar *cairo_dock_guess_class (const gchar *cCommand, const gchar *cStartupWMCla
 * is registered and (a copy of) cClassName is returned. Also, if an app is found, cClassName is always
 * added as a key (so if cClassName != NULL, the return value is always a copy of it).
 */
-static gchar *_cairo_dock_register_class_full (const gchar *cSearchTerm, const gchar *cFallbackClass, const gchar *cWmClass,
+static gchar *_cairo_dock_register_class_full (const gchar *cSearchTerm, const gchar * const *cFallbackClass, const gchar *cWmClass,
 	gboolean bUseWmClass, gboolean bCreateAlways, gboolean bIsDesktopFile, GDesktopAppInfo *app, CairoDockClassAppli **pResult)
 {
 	g_return_val_if_fail ((cSearchTerm || app), NULL);
@@ -2809,13 +2833,18 @@ static gchar *_cairo_dock_register_class_full (const gchar *cSearchTerm, const g
 	pClassAppli = _cairo_dock_lookup_class_appli (cSearchTerm);
 	if (!pClassAppli && cFallbackClass)
 	{
-		pClassAppli = _cairo_dock_lookup_class_appli (cFallbackClass);
-		if (pClassAppli)
+		int i;
+		for (i = 0; cFallbackClass[i]; i++)
 		{
-			// save the original class key as well (takes ownership of cClass)
-			g_hash_table_insert (s_hAltClass, g_strdup (cSearchTerm), pClassAppli);
-			// adjust the return value (for line 2114)
-			cClass = g_strdup (cFallbackClass);
+			pClassAppli = _cairo_dock_lookup_class_appli (cFallbackClass[i]);
+			if (pClassAppli)
+			{
+				// save the original class key as well (takes ownership of cClass)
+				g_hash_table_insert (s_hAltClass, g_strdup (cSearchTerm), pClassAppli);
+				// adjust the return value (for line 2114)
+				cClass = g_strdup (cFallbackClass[i]);
+				break;
+			}
 		}
 	}
 
@@ -2844,22 +2873,23 @@ static gchar *_cairo_dock_register_class_full (const gchar *cSearchTerm, const g
 	if (app) g_object_ref (app); // will be unrefed later
 
 	//\__________________ search the desktop file's path.
-	if (!app && cFallbackClass)
+	if (!app && cFallbackClass && *cFallbackClass)
 	{
 		// in this case, we do a two-stage search: first we try exact matches, then using heuristics
 		// this is to avoid edge cases where cFallbackClass would be an exact match
 		app = _search_desktop_file (cSearchTerm, TRUE, bIsDesktopFile);
-		if (!app)
+		
+		int i;
+		for (i = 0; !app && cFallbackClass[i]; i++)
+			app = _search_desktop_file (cFallbackClass[i], TRUE, FALSE);
+		
+		if (!app && cWmClass)
 		{
-			app = _search_desktop_file (cFallbackClass, TRUE, FALSE);
-			if (!app && cWmClass)
-			{
-				// note: cWmClass can contain upper-case characters, but we only
-				// store lower-case versions
-				gchar *tmp = g_ascii_strdown (cWmClass, -1);
-				app = _search_desktop_file (tmp, TRUE, FALSE);
-				g_free (tmp);
-			}
+			// note: cWmClass can contain upper-case characters, but we only
+			// store lower-case versions
+			gchar *tmp = g_ascii_strdown (cWmClass, -1);
+			app = _search_desktop_file (tmp, TRUE, FALSE);
+			g_free (tmp);
 		}
 	}
 	
@@ -2868,19 +2898,17 @@ static gchar *_cairo_dock_register_class_full (const gchar *cSearchTerm, const g
 		//!! TODO: maybe we should not allow heuristics for .desktop file names?
 		/// (e.g. should "terminal.desktop" match "org.gnome.Terminal.desktop" ?)
 		app = _search_desktop_file (cSearchTerm, FALSE, bIsDesktopFile);
-		if (!app)
+		
+		int i;
+		if (cFallbackClass) for (i = 0; !app && cFallbackClass[i]; i++)
+			app = _search_desktop_file (cFallbackClass[i], FALSE, FALSE);
+		
+		if (!app && cWmClass && !((cFallbackClass && *cFallbackClass)))
 		{
-			if (cFallbackClass)
-			{
-				app = _search_desktop_file (cFallbackClass, FALSE, FALSE);
-			}
-			else if (cWmClass)
-			{
-				// if cFallbackClass != NULL, we did this search already above
-				gchar *tmp = g_ascii_strdown (cWmClass, -1); // note: will already be lowercase if read from a launcher
-				app = _search_desktop_file (tmp, TRUE, FALSE);
-				g_free (tmp);
-			}
+			// if cFallbackClass != NULL, we did this search already above
+			gchar *tmp = g_ascii_strdown (cWmClass, -1); // note: will already be lowercase if read from a launcher
+			app = _search_desktop_file (tmp, TRUE, FALSE);
+			g_free (tmp);
 		}
 	}
 	

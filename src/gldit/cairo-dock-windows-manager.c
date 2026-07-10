@@ -529,6 +529,7 @@ static void reset_object (GldiObject *obj)
 		g_free (actor->pDBusProps->cGTKAppPath);
 		g_free (actor->pDBusProps->cKDEServiceName);
 		g_free (actor->pDBusProps->cKDEObjectPath);
+		g_free (actor->pDBusProps->cGTKAppID);
 		g_free (actor->pDBusProps);
 	}
 }

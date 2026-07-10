@@ -50,6 +50,9 @@ void gldi_wf_set_above (GldiWindowActor *actor, gboolean bAbove);
  *  - bIsAbove only reflects the state set by us, not by other methods (e.g. keybindings)
  */
 void gldi_wf_is_above_or_below (GldiWindowActor *actor, gboolean *bIsAbove, gboolean *bIsBelow);
+
+/** Set up extra tracking of app-id changes so that the GTK application-id can be extracted. */
+void gldi_wf_backend_init_appid_tracking (void);
 #endif
 
 G_END_DECLS

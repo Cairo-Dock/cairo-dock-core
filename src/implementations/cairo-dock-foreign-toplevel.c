@@ -277,6 +277,7 @@ static void gldi_zwlr_foreign_toplevel_manager_init ()
 	gldi_windows_manager_register_backend (&wmb);
 	
 	gldi_wayland_wm_init(_destroy);
+	gldi_wf_backend_init_appid_tracking (); // optional functionality to get the GTK application-id supplied by Wayfire
 }
 
 static uint32_t protocol_id, protocol_version;

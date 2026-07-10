@@ -68,7 +68,10 @@ extern GldiObjectManager myWaylandWMObjectMgr;
 
 // notifications (no additional ones beyond the WM notifications)
 typedef enum {
-	NB_NOTIFICATIONS_WAYLAND_WM_MANAGER = NB_NOTIFICATIONS_WINDOWS
+	// emitted when the app-id of a Wayland view has changed, but before it has been fully processed,
+	// use it only for additional internal processing
+	NOTIFICATION_WAYLAND_APP_ID = NB_NOTIFICATIONS_WINDOWS,
+	NB_NOTIFICATIONS_WAYLAND_WM_MANAGER
 } CairoWaylandWMManagerNotifications;
 
 // functions to update the state of a toplevel and potentially signal

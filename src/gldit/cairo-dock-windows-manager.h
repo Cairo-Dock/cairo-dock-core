@@ -65,6 +65,9 @@ typedef struct _DBusProps {
 	// Windows that support the com.canonical.dbusmenu interface
 	gchar *cKDEServiceName; // DBus name 
 	gchar *cKDEObjectPath; // object path
+	
+	// Additional info
+	gchar *cGTKAppID; // application-id for GTK apps
 } GldiWindowDBusProperties;
 
 /// Definition of a window actor.
