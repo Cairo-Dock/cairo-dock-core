@@ -441,17 +441,6 @@ static gchar *_cairo_dock_get_theme_path (const gchar *cThemeName)  // a theme n
 	return cNewThemePath;
 }
 
-static gboolean _check_has_suffix_inv (const gchar *cFileName, gconstpointer data)
-{
-	return ! g_str_has_suffix (cFileName, (const char*)data);
-}
-
-static gboolean _copy_filter_conf (GFileInfo *pFileInfo, G_GNUC_UNUSED unsigned int depth, G_GNUC_UNUSED gconstpointer data)
-{
-	const gchar *cFileName = g_file_info_get_name (pFileInfo);
-	return g_str_has_suffix (cFileName, ".conf");
-}
-
 static gboolean _copy_filter_no_launchers (GFileInfo *pFileInfo, G_GNUC_UNUSED unsigned int depth, G_GNUC_UNUSED gconstpointer data)
 {
 	GFileType iFileType = g_file_info_get_file_type (pFileInfo);
@@ -477,22 +466,47 @@ static gboolean _copy_filter_no_launchers_conf (GFileInfo *pFileInfo, unsigned i
 	else return !g_str_has_suffix (cFileName, ".conf");
 }
 
+static gboolean _copy_filter_no_launcher_dir (GFileInfo *pFileInfo, unsigned int depth, G_GNUC_UNUSED gconstpointer data)
+{
+	GFileType iFileType = g_file_info_get_file_type (pFileInfo);
+	const gchar *cFileName = g_file_info_get_name (pFileInfo);
+	
+	if (iFileType == G_FILE_TYPE_DIRECTORY && depth == 0)
+		return !!strcmp (cFileName, CAIRO_DOCK_LAUNCHERS_DIR); // exclude launcher directory only
+	return TRUE; // otherwise, copy everything
+}
+
 
 static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboolean bLoadBehavior, gboolean bLoadLaunchers)
 {
 	g_return_val_if_fail (cNewThemePath != NULL && g_file_test (cNewThemePath, G_FILE_TEST_EXISTS), FALSE);
 	
-	//\___________________ We load global behaviour parameters for each dock.
+	// Cleanup
+	// We always remove previous icons, otherwise we could end up with a mixed theme
+	cairo_dock_fm_empty_directory (g_cCurrentIconsPath, FALSE, NULL, NULL);
+	cairo_dock_fm_empty_directory (g_cCurrentImagesPath, FALSE, NULL, NULL);
+	
+	
+	//\___________________ We load behaviour parameters for each dock and plug-in.
 	GString *sCommand = g_string_new ("");
 	cd_message ("Applying changes ...");
 	if (g_pMainDock == NULL || bLoadBehavior)
 	{
-		cairo_dock_fm_empty_directory (g_cCurrentThemePath, FALSE, (CairoDockFMDirectoryFilterFunc)g_str_has_suffix, ".conf");
-		cairo_dock_fm_recursive_copy (cNewThemePath, g_cCurrentThemePath, _copy_filter_conf, NULL); // only copy from main directory (no recursion)
+		// Simple case: we delete all config files (since there could be multiple docks / multiple plugin instances),
+		// and then copy everything (except launchers), overwriting any existing files
+		cairo_dock_fm_empty_directory (g_cCurrentThemePath, TRUE, (CairoDockFMDirectoryFilterFunc)g_str_has_suffix, ".conf");
+		cairo_dock_fm_recursive_copy (cNewThemePath, g_cCurrentThemePath, _copy_filter_no_launcher_dir, NULL);
 	}
 	else
 	{
+		// More complicated case: we only merge .conf files, leaving the current configuration in place
+		
 		//!! TODO: we want to copy the style properties even in this case !!
+		
+		// We copy all files of the new theme except launchers and .conf files (dock and plug-ins).
+		cairo_dock_fm_recursive_copy (cNewThemePath, g_cCurrentThemePath, _copy_filter_no_launchers_conf, GINT_TO_POINTER(1));
+		
+		// We update docks' configuration
 		GDir *dir = g_dir_open (cNewThemePath, 0, NULL);
 		const gchar* cDockConfFile;
 		gchar *cThemeDockConfFile, *cUserDockConfFile;
@@ -515,61 +529,15 @@ static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboo
 			}
 		}
 		g_dir_close (dir);
-	}
-	
-	//\___________________ We load icons
-	// We always remove previous icons, otherwise we could end up with a mixed theme
-	cairo_dock_fm_empty_directory (g_cCurrentIconsPath, FALSE, NULL, NULL);
-	cairo_dock_fm_empty_directory (g_cCurrentImagesPath, FALSE, NULL, NULL);
-	
-	gchar *cNewLocalIconsPath = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
-	if (! g_file_test (cNewLocalIconsPath, G_FILE_TEST_IS_DIR))  // it's an old theme: move icons to a new dir 'icons'.
-	{
-		g_string_printf (sCommand, "%s/%s", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR);
-		cairo_dock_fm_recursive_copy (sCommand->str, g_cCurrentIconsPath, _copy_filter_no_launchers, NULL);
-	}
-	else cairo_dock_fm_recursive_copy (cNewLocalIconsPath, g_cCurrentIconsPath, NULL, NULL);
-	
-	g_free (cNewLocalIconsPath);
-	
-	//\___________________ We load extras.
-	g_string_printf (sCommand, "%s/%s", cNewThemePath, CAIRO_DOCK_LOCAL_EXTRAS_DIR);
-	if (g_file_test (sCommand->str, G_FILE_TEST_IS_DIR))
-		cairo_dock_fm_recursive_copy (sCommand->str, g_cExtrasDirPath, NULL, NULL);
-	
-	//\___________________ We load launcher if needed after having removed old ones.
-	if (! g_file_test (g_cCurrentLaunchersPath, G_FILE_TEST_EXISTS))
-		g_mkdir (g_cCurrentLaunchersPath, 7*8*8+7*8+5); //!! TODO: error checking?
-	
-	if (g_pMainDock == NULL || bLoadLaunchers)
-	{
-		cairo_dock_fm_empty_directory (g_cCurrentLaunchersPath, TRUE, (CairoDockFMDirectoryFilterFunc)g_str_has_suffix, ".desktop");
-
-		g_string_printf (sCommand, "%s/%s", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR);
-		cairo_dock_fm_recursive_copy (sCommand->str, g_cCurrentLaunchersPath, _copy_filter_launchers, NULL);
-	}
-	
-	//\___________________ We replace all files by the new ones.
-	cairo_dock_fm_empty_directory (g_cCurrentThemePath, FALSE, _check_has_suffix_inv, ".conf");
-
-	if (g_pMainDock == NULL || bLoadBehavior)
-	{
-		// copy everything except conf files in the main dir (which were copied before) and launchers
-		cairo_dock_fm_recursive_copy (cNewThemePath, g_cCurrentThemePath, _copy_filter_no_launchers_conf, GINT_TO_POINTER(0));
-	}
-	else
-	{
-		// We copy all files of the new theme except launchers and .conf files (dock and plug-ins).
-		cairo_dock_fm_recursive_copy (cNewThemePath, g_cCurrentThemePath, _copy_filter_no_launchers_conf, GINT_TO_POINTER(1));
 		
 		// iterate all .conf files of all plug-ins, then update them and merge them with the current theme.
 		gchar *cNewPlugInsDir = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_PLUG_INS_DIR);  // dir of plug-ins of the new theme.
-		GDir *dir = g_dir_open (cNewPlugInsDir, 0, NULL);  // NULL if this theme doesn't have any 'plug-ins' dir.
+		dir = g_dir_open (cNewPlugInsDir, 0, NULL);  // NULL if this theme doesn't have any 'plug-ins' dir.
 		const gchar* cModuleDirName;
 		gchar *cConfFilePath, *cNewConfFilePath, *cUserDataDirPath, *cConfFileName;
 		do
 		{
-			cModuleDirName = g_dir_read_name (dir);  // name of the dir of the theme (maybe != of theme's name)
+			cModuleDirName = g_dir_read_name (dir);
 			if (cModuleDirName == NULL)
 				break ;
 			
@@ -618,6 +586,28 @@ static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboo
 		while (1);
 		g_dir_close (dir);
 		g_free (cNewPlugInsDir);
+	}
+	
+	// Old themes: icons were part of launchers, move them to the icons dir
+	gchar *cNewLocalIconsPath = g_strdup_printf ("%s/%s", cNewThemePath, CAIRO_DOCK_LOCAL_ICONS_DIR);
+	if (! g_file_test (cNewLocalIconsPath, G_FILE_TEST_IS_DIR))
+	{
+		g_string_printf (sCommand, "%s/%s", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR);
+		cairo_dock_fm_recursive_copy (sCommand->str, g_cCurrentIconsPath, _copy_filter_no_launchers, NULL);
+	}
+	g_free (cNewLocalIconsPath);
+	
+	
+	//\___________________ We load launcher if needed after having removed old ones.
+	if (! g_file_test (g_cCurrentLaunchersPath, G_FILE_TEST_EXISTS))
+		g_mkdir (g_cCurrentLaunchersPath, 7*8*8+7*8+5);
+	
+	if (g_pMainDock == NULL || bLoadLaunchers)
+	{
+		cairo_dock_fm_empty_directory (g_cCurrentLaunchersPath, TRUE, (CairoDockFMDirectoryFilterFunc)g_str_has_suffix, ".desktop");
+
+		g_string_printf (sCommand, "%s/%s", cNewThemePath, CAIRO_DOCK_LAUNCHERS_DIR);
+		cairo_dock_fm_recursive_copy (sCommand->str, g_cCurrentLaunchersPath, _copy_filter_launchers, NULL);
 	}
 	
 	g_string_printf (sCommand, "%s/last-modif", g_cCurrentThemePath);
