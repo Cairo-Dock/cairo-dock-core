@@ -337,9 +337,7 @@ gchar *gldi_module_get_config_dir (GldiModule *pModule)
 	{
 		cd_message ("directory %s doesn't exist, it will be added.", cUserDataDirPath);
 		
-		gchar *command = g_strdup_printf ("mkdir -p \"%s\"", cUserDataDirPath);
-		int r = system (command);
-		g_free (command);
+		int r = g_mkdir_with_parents (cUserDataDirPath, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
 		
 		if (r != 0)
 		{

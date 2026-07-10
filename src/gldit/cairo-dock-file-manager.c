@@ -20,8 +20,9 @@
 #define _POSIX_C_SOURCE 200809L // needed for O_CLOEXEC
 #include <stdlib.h>      // atoi
 #include <string.h>      // memset
-#include <sys/stat.h>    // stat
+#include <sys/stat.h>    // stat, mkdir
 #include <fcntl.h>  // open
+#include <unistd.h> // unlink
 #include <sys/sendfile.h>  // sendfile
 #include <errno.h>  // errno
 
@@ -228,8 +229,165 @@ gboolean cairo_dock_fm_eject_drive (const gchar *cURI)
 }
 
 
+static gboolean _empty_dir (const gchar *cBaseURI, CairoDockFMDirectoryFilterFunc pFilter, gconstpointer data, gboolean bRecurse, gboolean *bRemain)
+{
+	GFile *pFile = (*cBaseURI == '/' ? g_file_new_for_path (cBaseURI) : g_file_new_for_uri (cBaseURI));
+	GError *erreur = NULL;
+	const gchar *cAttributes = G_FILE_ATTRIBUTE_STANDARD_TYPE","
+		G_FILE_ATTRIBUTE_STANDARD_NAME;
+	GFileEnumerator *pFileEnum = g_file_enumerate_children (pFile,
+		cAttributes,
+		G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
+		NULL,
+		&erreur);
+	if (erreur != NULL)
+	{
+		cd_warning ("%s", erreur->message);
+		g_object_unref (pFile);
+		g_error_free (erreur);
+		return FALSE;
+	}
+	
+	gboolean ret = TRUE;
+	*bRemain = FALSE;
+	GString *sFileUri = g_string_new ("");
+	GFileInfo *pFileInfo;
+	do
+	{
+		pFileInfo = g_file_enumerator_next_file (pFileEnum, NULL, &erreur);
+		if (erreur != NULL)
+		{
+			cd_warning ("%s", erreur->message);
+			g_error_free (erreur);
+			ret = FALSE; // no point in continuing, we cannot empty the directory in this case
+			break;
+		}
+		if (pFileInfo == NULL) break; // we are at the end
+		
+		GFileType iFileType = g_file_info_get_file_type (pFileInfo);
+		const gchar *cFileName = g_file_info_get_name (pFileInfo);
+		if (iFileType != G_FILE_TYPE_DIRECTORY && pFilter && !pFilter (cFileName, data))
+		{
+			// skip this file
+			*bRemain = TRUE;
+			g_object_unref (pFileInfo);
+			continue;
+		}
+		
+		g_string_printf (sFileUri, "%s/%s", cBaseURI, cFileName);
+		
+		gboolean bKeep = FALSE;
+		if (iFileType == G_FILE_TYPE_DIRECTORY)
+		{
+			if (bRecurse) ret = _empty_dir (sFileUri->str, pFilter, data, bRecurse, &bKeep);
+			else bKeep = TRUE;
+			if (ret && bKeep) *bRemain = TRUE;
+		}
+		
+		if (ret && !bKeep)
+		{
+			GFile *file = (*cBaseURI == '/' ? g_file_new_for_path (sFileUri->str) : g_file_new_for_uri (sFileUri->str));
+			g_file_delete (file, NULL, &erreur);
+			if (erreur != NULL)
+			{
+				cd_warning ("%s", erreur->message);
+				g_error_free (erreur);
+				erreur = NULL;
+				ret = FALSE;
+			}
+			g_object_unref (file);
+		}
+		
+		g_object_unref (pFileInfo);
+	} while (ret);
+	
+	g_string_free (sFileUri, TRUE);
+	g_object_unref (pFileEnum);
+	g_object_unref (pFile);
+	return ret;
+}
+
+gboolean cairo_dock_fm_empty_directory (const gchar *cURI, gboolean bRecurse, CairoDockFMDirectoryFilterFunc pFilter, gconstpointer data)
+{
+	g_return_val_if_fail (cURI != NULL, FALSE);
+	GFile *pFile = (*cURI == '/' ? g_file_new_for_path (cURI) : g_file_new_for_uri (cURI));
+	
+	GError *erreur = NULL;
+	
+	const gchar *cQuery = G_FILE_ATTRIBUTE_STANDARD_TYPE;
+	GFileInfo *pFileInfo = g_file_query_info (pFile,
+		cQuery,
+		G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
+		NULL,
+		&erreur);
+	if (erreur != NULL)
+	{
+		cd_warning ("%s", erreur->message);
+		g_error_free (erreur);
+		g_object_unref (pFile);
+		return FALSE;
+	}
+	
+	gboolean ret;
+	gboolean dummy;
+	GFileType iFileType = g_file_info_get_file_type (pFileInfo);
+	if (iFileType == G_FILE_TYPE_DIRECTORY)
+		ret = _empty_dir (cURI, pFilter, data, bRecurse, &dummy);
+	else
+	{
+		cd_warning ("Path is not a directory: %s\n", cURI);
+		ret = FALSE;
+	}
+	
+	g_object_unref (pFile);
+	return ret;
+}
+
 gboolean cairo_dock_fm_delete_file (const gchar *cURI, gboolean bNoTrash)
 {
+	g_return_val_if_fail (cURI != NULL, FALSE);
+	
+	if (bNoTrash)
+	{
+		GFile *pFile = (*cURI == '/' ? g_file_new_for_path (cURI) : g_file_new_for_uri (cURI));
+		
+		GError *erreur = NULL;
+		const gchar *cQuery = G_FILE_ATTRIBUTE_STANDARD_TYPE;
+		GFileInfo *pFileInfo = g_file_query_info (pFile,
+			cQuery,
+			G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
+			NULL,
+			&erreur);
+		if (erreur != NULL)
+		{
+			cd_warning ("%s", erreur->message);
+			g_error_free (erreur);
+			g_object_unref (pFile);
+			return FALSE;
+		}
+		
+		GFileType iFileType = g_file_info_get_file_type (pFileInfo);
+		
+		gboolean bSuccess = TRUE;
+		if (iFileType == G_FILE_TYPE_DIRECTORY)
+			bSuccess = cairo_dock_fm_empty_directory (cURI, TRUE, NULL, NULL);
+		
+		if (bSuccess)
+		{
+			bSuccess = g_file_delete (pFile, NULL, &erreur);
+			if (erreur != NULL)
+			{
+				cd_warning ("gvfs-integration : %s", erreur->message);
+				g_error_free (erreur);
+			}
+		}
+		
+		g_object_unref (pFileInfo);
+		g_object_unref (pFile);
+		return bSuccess;
+	}
+	
+	// bNoTrash == FALSE here, i.e. we want to move the file to trash
 	if (s_EnvBackend.delete_file != NULL)
 	{
 		return s_EnvBackend.delete_file (cURI, bNoTrash);
@@ -594,6 +752,164 @@ gboolean cairo_dock_copy_file (const gchar *cFilePath, const gchar *cDestPath)
 	}
 	close (dest_fd);
 	close (src_fd);
+	return ret;
+}
+
+
+gboolean _recursive_copy_internal (const gchar *cSourceDir, const gchar *cDestDir, CairoDockFMCopyFilterFunc pFilter, unsigned int depth, gpointer data)
+{
+	GFile *pFile = g_file_new_for_path (cSourceDir);
+	GError *erreur = NULL;
+	const gchar *cAttributes = G_FILE_ATTRIBUTE_STANDARD_TYPE","
+		G_FILE_ATTRIBUTE_STANDARD_NAME","G_FILE_ATTRIBUTE_STANDARD_SYMLINK_TARGET;
+	GFileEnumerator *pFileEnum = g_file_enumerate_children (pFile, cAttributes,
+		G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL, &erreur);
+	if (erreur != NULL)
+	{
+		cd_warning ("%s", erreur->message);
+		g_object_unref (pFile);
+		g_error_free (erreur);
+		return FALSE;
+	}
+	
+	gboolean ret = TRUE;
+	GString *sFileUri = g_string_new (NULL);
+	GString *sDestUri = g_string_new (NULL);
+	GFileInfo *pFileInfo;
+	do
+	{
+		pFileInfo = g_file_enumerator_next_file (pFileEnum, NULL, &erreur);
+		if (erreur != NULL)
+		{
+			cd_warning ("%s", erreur->message);
+			g_error_free (erreur);
+			ret = FALSE; // no point in continuing, just signal an error
+			break;
+		}
+		if (pFileInfo == NULL) break; // we are at the end
+		
+		if (pFilter && !pFilter (pFileInfo, depth, data))
+		{
+			g_object_unref (pFileInfo);
+			continue;
+		}
+		
+		GFileType iFileType = g_file_info_get_file_type (pFileInfo);
+		const gchar *cFileName = g_file_info_get_name (pFileInfo);
+		
+		g_string_printf (sFileUri, "%s/%s", cSourceDir, cFileName);
+		g_string_printf (sDestUri, "%s/%s", cDestDir, cFileName);
+		
+		gboolean bExists = g_file_test (sDestUri->str, G_FILE_TEST_EXISTS);
+		gboolean bIsDir = bExists && g_file_test (sDestUri->str, G_FILE_TEST_IS_DIR);
+		
+		if (iFileType == G_FILE_TYPE_DIRECTORY)
+		{
+			// we should try to create it
+			if (bExists)
+			{
+				if (!bIsDir) unlink (sDestUri->str); // just overwrite it
+			}
+			else
+			{
+				if (mkdir (sDestUri->str, 7*8*8+7*8+5) != 0)
+				{
+					cd_warning ("couldn't create directory %s", sDestUri->str);
+					ret = FALSE;
+				}
+			}
+			
+			if (ret) ret = _recursive_copy_internal (sFileUri->str, sDestUri->str, pFilter, depth + 1, data);
+		}
+		else
+		{
+			if (bExists) cairo_dock_fm_delete_file (sDestUri->str, TRUE); // delete if it already exists
+			if (iFileType == G_FILE_TYPE_SYMBOLIC_LINK)
+			{
+				// handle symlinks specially, keeping the link
+				const char *cTarget = g_file_info_get_symlink_target (pFileInfo);
+				
+				// check if the target actually exists (some themes might contain broken links)
+				g_string_printf (sFileUri, "%s/%s", cSourceDir, cTarget);
+				if (g_file_test (sFileUri->str, G_FILE_TEST_EXISTS))
+				{
+					GFile *tmp = g_file_new_for_path (sDestUri->str);
+					// note: this assumes the link will work in the new location
+					// (which it should as we expect a relative link to files in
+					// the same directory)
+					g_file_make_symbolic_link (tmp, cTarget, NULL, &erreur);
+					g_object_unref (tmp);
+					if (erreur)
+					{
+						cd_warning ("%s", erreur->message);
+						g_error_free (erreur);
+						ret = FALSE;
+					}
+				}
+			}
+			// copy a normal file
+			else ret = cairo_dock_copy_file (sFileUri->str, sDestUri->str);
+		}
+		
+		g_object_unref (pFileInfo);
+	} while (ret);
+	
+	g_object_unref (pFileEnum);
+	g_object_unref (pFile);
+	return ret;
+}
+
+gboolean cairo_dock_fm_recursive_copy (const gchar *cSourceDir, const gchar *cDestDir, CairoDockFMCopyFilterFunc pFilter, gpointer data)
+{
+	g_return_val_if_fail (cSourceDir && cDestDir, FALSE);
+	
+	// check that both source and destination are directories
+	GFile *pFile1 = g_file_new_for_path (cSourceDir);
+	GFile *pFile2 = g_file_new_for_path (cDestDir);
+	
+	GError *erreur = NULL;
+	gboolean ret = FALSE;
+	
+	const gchar *cQuery = G_FILE_ATTRIBUTE_STANDARD_TYPE;
+	GFileInfo *pFileInfo = g_file_query_info (pFile1, cQuery,
+		G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL, &erreur);
+	if (erreur != NULL)
+	{
+		cd_warning ("%s", erreur->message);
+		g_error_free (erreur);
+		goto copy_end;
+	}
+	
+	GFileType iFileType = g_file_info_get_file_type (pFileInfo);
+	if (iFileType != G_FILE_TYPE_DIRECTORY)
+	{
+		cd_warning ("Source is not a directory or does not exist: %s", cSourceDir);
+		g_object_unref (pFileInfo);
+		goto copy_end;
+	}
+	
+	pFileInfo = g_file_query_info (pFile2, cQuery,
+		G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL, &erreur);
+	if (erreur != NULL)
+	{
+		cd_warning ("%s", erreur->message);
+		g_error_free (erreur);
+		goto copy_end;
+	}
+	
+	iFileType = g_file_info_get_file_type (pFileInfo);
+	g_object_unref (pFileInfo);
+	if (iFileType != G_FILE_TYPE_DIRECTORY)
+	{
+		cd_warning ("Destination is not a directory or does not exist: %s", cDestDir);
+		goto copy_end;
+	}
+	
+	ret = _recursive_copy_internal (cSourceDir, cDestDir, pFilter, 0, data);
+	
+copy_end:
+	g_object_unref (pFile1);
+	g_object_unref (pFile2);
 	return ret;
 }
 

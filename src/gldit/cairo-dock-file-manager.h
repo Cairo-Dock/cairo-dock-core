@@ -81,7 +81,7 @@ typedef void (*CairoDockFMMonitorCallback) (CairoDockFMEventType iEventType, con
 typedef void (*CairoDockFMAddMonitorFunc) (const gchar *cURI, gboolean bDirectory, CairoDockFMMonitorCallback pCallback, gpointer data);
 typedef void (*CairoDockFMRemoveMonitorFunc) (const gchar *cURI);
 
-typedef gboolean (*CairoDockFMDeleteFileFunc) (const gchar *cURI, gboolean bNoTrash);
+typedef gboolean (*CairoDockFMDeleteFileFunc) (const gchar *cURI, gboolean bNoTrash); // note: only called with bNoTrash == FALSE
 typedef gboolean (*CairoDockFMRenameFileFunc) (const gchar *cOldURI, const gchar *cNewName);
 typedef gboolean (*CairoDockFMMoveFileFunc) (const gchar *cURI, const gchar *cDirectoryURI);
 typedef gboolean (*CairoDockFMCreateFileFunc) (const gchar *cURI, gboolean bDirectory);
@@ -109,12 +109,12 @@ struct _CairoDockDesktopEnvBackend {
 	CairoDockFMUnmountFunc 			unmount;
 	CairoDockFMAddMonitorFunc 		add_monitor;
 	CairoDockFMRemoveMonitorFunc 	remove_monitor;
-	CairoDockFMDeleteFileFunc 		delete_file;
-	CairoDockFMRenameFileFunc 		rename;
-	CairoDockFMMoveFileFunc 		move;
+	CairoDockFMDeleteFileFunc 		delete_file; // implemented in kde-integration
+	CairoDockFMRenameFileFunc 		rename; // implemented in kde-integration
+	CairoDockFMMoveFileFunc 		move; // implemented in kde-integration
 	CairoDockFMCreateFileFunc 		create;
 	CairoDockFMListAppsForFileFunc 	list_apps_for_file;
-	CairoDockFMEmptyTrashFunc		empty_trash;
+	CairoDockFMEmptyTrashFunc		empty_trash; // implemented in kde-integration
 	CairoDockFMGetTrashFunc 		get_trash_path;
 	CairoDockFMGetDesktopFunc 		get_desktop_path;
 	CairoDockFMActionWithConfirmationFunc logout;
@@ -192,6 +192,18 @@ gboolean cairo_dock_fm_eject_drive (const gchar *cURI);
 /** Delete a file.
 */
 gboolean cairo_dock_fm_delete_file (const gchar *cURI, gboolean bNoTrash);
+
+/** Empty a directory by deleting all files in it that match a criterion.
+*@param cURI the directory to empty
+*@param bRecurse whether to recursively delete subdirectories
+*@param pFilter optional filter function; only files matching the filter
+    are deleted (i.e. where the function returns TRUE). Empty directories
+    are always deleted if bRecurse == TRUE.
+*@param data parameter to pass to pFilter
+*@returns FALSE if any errors occured (warnings already printed on the console), TRUE otherwise
+*/
+typedef gboolean (*CairoDockFMDirectoryFilterFunc) (const gchar *cFileName, gconstpointer data);
+gboolean cairo_dock_fm_empty_directory (const gchar *cURI, gboolean bRecurse, CairoDockFMDirectoryFilterFunc pFilter, gconstpointer data);
 
 /** Rename a file.
 */
@@ -303,8 +315,21 @@ gboolean cairo_dock_fm_toggle_wifi (void);
 */
 int cairo_dock_get_file_size (const gchar *cFilePath);
 
+/** Copy the contents of a single file.
+*@param cFilePath File to copy. Cannot be a directory. For symlinks, the content of the linked file will be copied (not the link).
+*@param cDestPath Destination. Can be a directory (in which case a file with the same name as the source is created there).
+*@return whether the file was successfully copied.
+*/
 gboolean cairo_dock_copy_file (const gchar *cFilePath, const gchar *cDestPath);
 
+/** Recursively copy files matching a criteria from one directory to another.
+*@param cSourceDir source directory (files in this directory are considered, but the directory itself is not copied)
+*@param cDestDir destination directory
+*@param pFilter filter function, only files where this returns TRUE are copied (if it returns FALSE for a directory, it is skipped entirely)
+*@param data user data to pass to pFilter
+*/
+typedef gboolean (*CairoDockFMCopyFilterFunc) (GFileInfo *pFileInfo, unsigned int depth, gconstpointer data);
+gboolean cairo_dock_fm_recursive_copy (const gchar *cSourceDir, const gchar *cDestDir, CairoDockFMCopyFilterFunc pFilter, gpointer data);
 
 /** Get process ID given its name
  * @param cProcessName name of the process
