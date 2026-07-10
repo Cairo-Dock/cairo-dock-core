@@ -20,11 +20,15 @@
 #include "gldi-config.h"
 #include "cairo-dock-wayfire-integration.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-windows-manager.h"
 
-#if defined(HAVE_JSON) && defined(HAVE_WAYLAND_PROTOCOLS)
+#ifdef HAVE_WAYLAND_PROTOCOLS
 
 #include "cairo-dock-wayland-wm.h"
+#include "cairo-dock-windows-manager.h"
+#include "cairo-dock-wayland-manager-priv.h"
+
+#ifdef HAVE_JSON
+
 #include "cairo-dock-dock-priv.h"
 #include "cairo-dock-dock-manager.h"
 #include "cairo-dock-dock-visibility.h"
@@ -41,7 +45,6 @@
 #endif
 
 #include "cairo-dock-desktop-manager.h"
-#include "cairo-dock-windows-manager.h"  // bIsHidden
 #include "cairo-dock-icon-factory.h"  // pAppli
 #include "cairo-dock-container-priv.h"  // gldi_container_get_gdk_window
 #include "cairo-dock-class-manager-priv.h"
@@ -1722,24 +1725,54 @@ void cd_init_wayfire_backend (void) {
 	g_io_channel_unref (pIOChannel); // note: ref taken by g_io_add_watch () if succesful
 }
 
-#else
+#else // HAVE_JSON
 
 void cd_init_wayfire_backend (void) {
 	cd_message("Cairo-Dock was not built with Wayfire IPC support");
 }
 
-void gldi_wf_init_sticky_above (void) { }
-void gldi_wf_can_sticky_above (gboolean *bCanSticky, gboolean *bCanAbove)
+#endif // HAVE_JSON
+
+static gboolean _wf_appid_changed (G_GNUC_UNUSED gpointer ptr, GldiWaylandWindowActor *wactor)
 {
-	if (bCanSticky) *bCanSticky = FALSE;
-	if (bCanAbove) *bCanAbove = FALSE;
+	if (!wactor) return GLDI_NOTIFICATION_LET_PASS;
+	
+	GldiWindowActor *actor = (GldiWindowActor*)wactor;
+	
+	// App ID format:
+	// xdg-shell-app-id gtk-shell-app-id wf-ipc-id
+	// cClassExtra already skipped the first part
+	const char *cGTKAppID = wactor->cClassExtra;
+	
+	while (*cGTKAppID == ' ') ++cGTKAppID;
+	if (!*cGTKAppID) return GLDI_NOTIFICATION_LET_PASS;
+	if (!strncmp (cGTKAppID, "wf-ipc-", 7)) return GLDI_NOTIFICATION_LET_PASS; // only IPC ID given
+	
+	// we have a valid string in cGTKAppID, potentially followed by a space and the IPC ID
+	const char *tmp2 = strchr (cGTKAppID, ' ');
+	size_t len = tmp2 ? (size_t)(tmp2 - cGTKAppID) : strlen(cGTKAppID); // will be > 0
+	
+	if (!actor->pDBusProps) actor->pDBusProps = g_new0 (GldiWindowDBusProperties, 1);
+	else g_free (actor->pDBusProps->cGTKAppID);
+	actor->pDBusProps->cGTKAppID = g_strndup (cGTKAppID, len);
+	
+	return GLDI_NOTIFICATION_LET_PASS;
 }
-void gldi_wf_set_sticky (G_GNUC_UNUSED GldiWindowActor *actor, G_GNUC_UNUSED gboolean bSticky) { }
-void gldi_wf_set_above (G_GNUC_UNUSED GldiWindowActor *actor, G_GNUC_UNUSED gboolean bAbove) { }
-void gldi_wf_is_above_or_below (G_GNUC_UNUSED GldiWindowActor *actor, gboolean *bIsAbove, gboolean *bIsBelow)
+
+void gldi_wf_backend_init_appid_tracking (void)
 {
-	if (bIsAbove) *bIsAbove = FALSE;
-	if (bIsBelow) *bIsBelow = FALSE;
+	GldiWaylandCompositorType type = gldi_wayland_get_compositor_type ();
+	if (type == WAYLAND_COMPOSITOR_WAYFIRE || type == WAYLAND_COMPOSITOR_UNKNOWN)
+		gldi_object_register_notification (&myWaylandWMObjectMgr,
+			NOTIFICATION_WAYLAND_APP_ID,
+			(GldiNotificationFunc) _wf_appid_changed,
+			GLDI_RUN_FIRST, NULL);
+}
+
+#else // HAVE_WAYLAND_PROTOCOLS
+
+void cd_init_wayfire_backend (void) {
+	cd_message("Cairo-Dock was not built with Wayfire IPC support");
 }
 
 #endif
