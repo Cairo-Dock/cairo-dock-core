@@ -141,6 +141,7 @@ struct _GldiXWindowActor {
 	Window XTransientFor;
 	guint iDemandsAttention;  // a mask of XAttentionFlag
 	gboolean bIgnored;
+	gint iWidthOrig, iHeightOrig; // width and height without scaling
 	};
 
 
@@ -812,8 +813,10 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 				actor->iViewPortX = x / gldi_desktop_get_width() + g_desktopGeometry.iCurrentViewportX;
 				actor->iViewPortY = y / gldi_desktop_get_height() + g_desktopGeometry.iCurrentViewportY;
 				
-				if (w != actor->windowGeometry.width || h != actor->windowGeometry.height)  // size has changed
+				if (w != xactor->iWidthOrig || h != xactor->iHeightOrig)  // size has changed
 				{
+					xactor->iWidthOrig = w;
+					xactor->iHeightOrig = h;
 					_update_backing_pixmap (xactor);
 				}
 				
@@ -1115,10 +1118,16 @@ static cairo_surface_t* _get_thumbnail_surface (GldiWindowActor *actor, int iWid
 	return cairo_dock_create_surface_from_xpixmap (xactor->iBackingPixmap, iWidth, iHeight);
 }
 
-static GLuint _get_texture (GldiWindowActor *actor)
+static GLuint _get_texture (GldiWindowActor *actor, int *pWidth, int *pHeight)
 {
 	GldiXWindowActor *xactor = (GldiXWindowActor *)actor;
-	return gldi_gl_texture_from_pixmap (xactor->Xid, xactor->iBackingPixmap);
+	if (xactor->iHeightOrig > 0 && xactor->iWidthOrig > 0)
+	{
+		*pWidth = xactor->iWidthOrig;
+		*pHeight = xactor->iHeightOrig;
+		return gldi_gl_texture_from_pixmap (xactor->Xid, xactor->iBackingPixmap);
+	}
+	return 0;
 }
 
 static GldiWindowActor *_get_transient_for (GldiWindowActor *actor)
@@ -1863,6 +1872,9 @@ static void init_object (GldiObject *obj, gpointer attr)
 	actor->windowGeometry.y = iLocalPositionY;
 	actor->windowGeometry.width = iWidthExtent / cairo_dock_X_display_scale;
 	actor->windowGeometry.height = iHeightExtent / cairo_dock_X_display_scale;
+	
+	xactor->iWidthOrig = iWidthExtent;
+	xactor->iHeightOrig = iHeightExtent;
 	
 	actor->iAge = s_iNumWindow;
 	if (s_iNumWindow == INT_MAX) s_iNumWindow = 1;
