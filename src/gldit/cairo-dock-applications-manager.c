@@ -824,6 +824,10 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoTaskbarParam *pTaskBar)
 		}
 		
 		pTaskBar->cAnimationOnActiveWindow = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "animation on active window", &bFlushConfFileNeeded, "wobbly", NULL, NULL);
+		
+		// this is ugly to have here, but needed for the X manager to successfully create pixmaps
+		// for window thumbnails
+		gldi_object_notify (&myAppliIconObjectMgr, NOTIFICATION_TASKBAR_PAR_CHANGED, NULL);
 	}
 	return bFlushConfFileNeeded;
 }
