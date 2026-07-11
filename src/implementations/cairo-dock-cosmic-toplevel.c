@@ -5,7 +5,7 @@
  * and cosmic_toplevel_management_unstable_v1 protocol.
  * See for more info: https://github.com/pop-os/cosmic-protocols
  * 
- * Copyright 2020-2025 Daniel Kondor <kondor.dani@gmail.com>
+ * Copyright 2020-2026 Daniel Kondor <kondor.dani@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,6 +44,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-cosmic-toplevel.h"
 #include "cairo-dock-wayland-wm.h"
+#include "cairo-dock-wayland-manager.h"
 #include "cairo-dock-ext-workspaces.h"
 
 #include <stdio.h>
@@ -84,12 +85,7 @@ static gboolean can_fullscreen = FALSE;
 static gboolean can_move_workspace = FALSE;
 static gboolean can_sticky = FALSE;
 
-static gboolean list_found = FALSE;
-static gboolean manager_found = FALSE;
-static gboolean info_found = FALSE;
-static gboolean overlap_found = FALSE;
-static uint32_t list_id, manager_id, info_id, overlap_id, list_version, manager_version, info_version, overlap_version;
-
+static uint32_t manager_version = 0;
 
 /**********************************************************************
  * window manager interface -- toplevel manager                       */
@@ -783,6 +779,47 @@ static void _visibility_refresh (CairoDock *pDock)
 
 gboolean gldi_cosmic_toplevel_try_init (struct wl_registry *registry)
 {
+	gboolean list_found = FALSE;
+	gboolean manager_found = FALSE;
+	gboolean info_found = FALSE;
+	gboolean overlap_found = FALSE;
+	uint32_t list_id, manager_id, info_id, overlap_id, list_version, info_version, overlap_version;
+	const GldiWaylandProtocolInfo *info;
+	
+	info = gldi_wayland_get_global (zcosmic_toplevel_manager_v1_interface.name);
+	if (info)
+	{
+		manager_found = TRUE;
+		manager_id = info->id;
+		manager_version = info->version;
+	}
+	info = gldi_wayland_get_global (zcosmic_toplevel_info_v1_interface.name);
+	if (info)
+	{
+		info_found = TRUE;
+		info_id = info->id;
+		info_version = info->version;
+	}
+	info = gldi_wayland_get_global (ext_foreign_toplevel_list_v1_interface.name);
+	if (info)
+	{
+		list_found = TRUE;
+		list_id = info->id;
+		list_version = info->version;
+	}
+#ifdef HAVE_GTK_LAYER_SHELL
+	if (!g_bDisableLayerShell)
+	{
+		info = gldi_wayland_get_global (zcosmic_overlap_notify_v1_interface.name);
+		if (info)
+		{
+			overlap_found = TRUE;
+			overlap_id = info->id;
+			overlap_version = info->version;
+		}
+	}
+#endif
+	
 	if (!(manager_found && info_found && list_found)) return FALSE;
 	
 	if (list_version > (uint32_t)ext_foreign_toplevel_list_v1_interface.version)
@@ -906,42 +943,6 @@ gboolean gldi_cosmic_toplevel_try_init (struct wl_registry *registry)
 	gldi_dock_visibility_register_backend (&dvb);
 	
 	return TRUE;
-}
-
-
-gboolean gldi_cosmic_toplevel_match_protocol (uint32_t id, const char *interface, uint32_t version)
-{
-	if (!strcmp (interface, zcosmic_toplevel_manager_v1_interface.name))
-	{
-		manager_found = TRUE;
-		manager_id = id;
-		manager_version = version;
-		return TRUE;
-	}
-	if (!strcmp (interface, zcosmic_toplevel_info_v1_interface.name))
-	{
-		info_found = TRUE;
-		info_id = id;
-		info_version = version;
-		return TRUE;
-	}
-	if (!strcmp (interface, ext_foreign_toplevel_list_v1_interface.name))
-	{
-		list_found = TRUE;
-		list_id = id;
-		list_version = version;
-		return TRUE;
-	}
-#ifdef HAVE_GTK_LAYER_SHELL
-	if (!g_bDisableLayerShell && !strcmp (interface, zcosmic_overlap_notify_v1_interface.name))
-	{
-		overlap_found = TRUE;
-		overlap_id = id;
-		overlap_version = version;
-		return TRUE;
-	}
-#endif
-	return FALSE;
 }
 
 #endif

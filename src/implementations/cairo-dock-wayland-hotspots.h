@@ -6,7 +6,7 @@
  *   -- on Wayfire, wf-shell is used 
  *   -- as a generic case, a transparent layer-shell surface is used
  * 
- * Copyright 2021-2024 Daniel Kondor <kondor.dani@gmail.com>
+ * Copyright 2021-2026 Daniel Kondor <kondor.dani@gmail.com>
  * 
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -28,9 +28,6 @@
 #include <wayland-client.h>
 #include <stdint.h>
 #include <glib.h>
-
-/// Try to match Wayland protocols that we need to use
-gboolean gldi_wayland_hotspots_match_protocol (uint32_t id, const char *interface, uint32_t version);
 
 typedef enum {
 	GLDI_WAYLAND_HOTSPOTS_NONE, // we could not init support for hotspots

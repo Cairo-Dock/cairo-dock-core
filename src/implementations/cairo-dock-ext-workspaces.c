@@ -2,7 +2,7 @@
  * cairo-dock-ext-workspaces.c -- desktop / workspace management
  *  facilities based on the ext-workspace Wayland protocol
  * 
- * Copyright 2024-2025 Daniel Kondor <kondor.dani@gmail.com>
+ * Copyright 2024-2026 Daniel Kondor <kondor.dani@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-ext-workspaces.h"
 #include "cairo-dock-wayland-wm.h"
+#include "cairo-dock-wayland-manager.h"
 
 struct wl_output *s_ws_output = NULL;
 
@@ -571,26 +572,17 @@ static void _remove_workspace (void)
 }
 */
 
-static uint32_t protocol_id, protocol_version;
-static gboolean protocol_found = FALSE;
-
-gboolean gldi_ext_workspaces_match_protocol (uint32_t id, const char *interface, uint32_t version)
-{
-	if (!strcmp(interface, ext_workspace_manager_v1_interface.name))
-	{
-		protocol_found = TRUE;
-		protocol_id = id;
-		protocol_version = version;
-		if ((uint32_t)ext_workspace_manager_v1_interface.version < protocol_version)
-			protocol_version = ext_workspace_manager_v1_interface.version;
-		return TRUE;
-	}
-	return FALSE;
-}
-
 gboolean gldi_ext_workspaces_try_init (struct wl_registry *registry)
 {
-	if (!protocol_found) return FALSE;
+	uint32_t protocol_id, protocol_version;
+	const GldiWaylandProtocolInfo *info = gldi_wayland_get_global (ext_workspace_manager_v1_interface.name);
+	if (!info) return FALSE;
+	
+	protocol_id = info->id;
+	protocol_version = info->version;
+	if ((uint32_t)ext_workspace_manager_v1_interface.version < protocol_version)
+		protocol_version = ext_workspace_manager_v1_interface.version;
+	
 	s_pWSManager = wl_registry_bind (registry, protocol_id, &ext_workspace_manager_v1_interface, protocol_version);
 	if (!s_pWSManager) return FALSE;
 	

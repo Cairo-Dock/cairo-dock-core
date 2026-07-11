@@ -3,7 +3,7 @@
  * 
  * Functions to monitor screen edges for recalling a hidden dock.
  * 
- * Copyright 2021-2025 Daniel Kondor <kondor.dani@gmail.com>
+ * Copyright 2021-2026 Daniel Kondor <kondor.dani@gmail.com>
  * 
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -101,8 +101,6 @@ static void _hotspot_hit_cb (CairoDock *pDock, gpointer user_data)
 #ifdef HAVE_WAYLAND_PROTOCOLS
 /// Private variables
 static struct zwf_shell_manager_v2 *s_pshell_manager = NULL;
-static uint32_t wf_shell_id, wf_shell_version;
-static gboolean wf_shell_found = FALSE;
 static guint s_sidMenu = 0;
 
 typedef struct _wf_hotspots {
@@ -460,34 +458,18 @@ void gldi_wayland_hotspots_update (void)
 }
 
 
-/// Try to match Wayland protocols that we need to use
-gboolean gldi_wayland_hotspots_match_protocol (uint32_t id, const char *interface, uint32_t version)
-{
-#ifdef HAVE_WAYLAND_PROTOCOLS
-	if (!strcmp (interface, zwf_shell_manager_v2_interface.name))
-	{
-		wf_shell_id = id;
-		wf_shell_version = version;
-		wf_shell_found = TRUE;
-		return TRUE;
-	}
-#else
-	// avoid warnings for unused variables
-	(void)id;
-	(void)interface;
-	(void)version;
-#endif
-	return FALSE;
-}
-
 /// Try to init based on the protocols found
 GldiWaylandHotspotsType gldi_wayland_hotspots_try_init (struct wl_registry *registry)
 {
 	GldiWaylandHotspotsType type = GLDI_WAYLAND_HOTSPOTS_NONE;
 	
 #ifdef HAVE_WAYLAND_PROTOCOLS
-	if (wf_shell_found)
+	const GldiWaylandProtocolInfo *info = gldi_wayland_get_global (zwf_shell_manager_v2_interface.name);
+	if (info)
 	{
+		uint32_t wf_shell_id = info->id;
+		uint32_t wf_shell_version = info->version;
+		
 		if (wf_shell_version > (uint32_t)zwf_shell_manager_v2_interface.version)
 		{
 			wf_shell_version = zwf_shell_manager_v2_interface.version;

@@ -5,7 +5,7 @@
  * and cosmic_toplevel_management_unstable_v1 protocol.
  * See for more info: https://github.com/pop-os/cosmic-protocols
  * 
- * Copyright 2020-2024 Daniel Kondor <kondor.dani@gmail.com>
+ * Copyright 2020-2026 Daniel Kondor <kondor.dani@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,6 @@
 #include <wayland-client.h>
 #include <stdint.h>
 
-gboolean gldi_cosmic_toplevel_match_protocol (uint32_t id, const char *interface, uint32_t version);
 gboolean gldi_cosmic_toplevel_try_init (struct wl_registry *registry);
 
 #endif
