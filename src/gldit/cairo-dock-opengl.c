@@ -27,7 +27,7 @@
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-desktop-manager.h"  // desktop dimensions
 
-#include "cairo-dock-opengl.h"
+#include "cairo-dock-opengl-priv.h"
 
 // public (manager, config, data)
 CairoDockGLConfig g_openglConfig;
@@ -343,11 +343,10 @@ static void _post_initialize_opengl_backend (void)  // initialisation necessitan
 	const gchar *cVendor   = (const gchar *) glGetString (GL_VENDOR);
 	const gchar *cRenderer = (const gchar *) glGetString (GL_RENDERER);
 
-	cd_message ("OpenGL config summary :\n - bNonPowerOfTwoAvailable : %d\n - bFboAvailable : %d\n - direct rendering : %d\n - bTextureFromPixmapAvailable : %d\n - bAccumBufferAvailable : %d\n - Anisotroy filtering level max : %.1f\n - OpenGL version: %s\n - OpenGL vendor: %s\n - OpenGL renderer: %s\n\n",
+	cd_message ("OpenGL config summary :\n - bNonPowerOfTwoAvailable : %d\n - bFboAvailable : %d\n - direct rendering : %d\n - bAccumBufferAvailable : %d\n - Anisotroy filtering level max : %.1f\n - OpenGL version: %s\n - OpenGL vendor: %s\n - OpenGL renderer: %s\n\n",
 		g_openglConfig.bNonPowerOfTwoAvailable,
 		g_openglConfig.bFboAvailable,
 		!g_openglConfig.bIndirectRendering,
-		g_openglConfig.bTextureFromPixmapAvailable,
 		g_openglConfig.bAccumBufferAvailable,
 		fMaximumAnistropy,
 		cVersion,
@@ -384,6 +383,12 @@ void gldi_gl_container_finish (GldiContainer *pContainer)
 		s_backend.container_finish (pContainer);
 }
 
+GLuint gldi_gl_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
+{
+	if (g_bUseOpenGL && s_backend.texture_from_pixmap)
+		return s_backend.texture_from_pixmap (Xid, iBackingPixmap);
+	return 0;
+}
 
 const gchar *gldi_gl_get_backend_name ()
 {

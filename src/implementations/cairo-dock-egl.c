@@ -37,13 +37,14 @@
 
 #include "cairo-dock-log.h"
 #include "cairo-dock-utils.h"  // cairo_dock_string_contains
-#include "cairo-dock-opengl.h"
+#include "cairo-dock-opengl-priv.h"
 #include "cairo-dock-egl.h"
 #include "cairo-dock-container-priv.h" // cairo_dock_set_default_rgba_visual
 
 // dependencies
 extern CairoDockGLConfig g_openglConfig;
 extern GldiContainer *g_pPrimaryContainer;
+extern gboolean g_bEasterEggs;
 
 // private
 static GdkDisplay *s_gdkDisplay = NULL;
@@ -52,6 +53,7 @@ static EGLContext s_eglContext = 0;
 static EGLConfig s_eglConfig = 0;
 static gboolean s_eglX11 = FALSE;
 static gboolean s_eglWayland = FALSE;
+static gboolean s_bNativePixmap = FALSE;
 
 // platform functions -- use these if supported
 // note: eglCreatePlatformWindowSurface and eglCreatePlatformWindowSurfaceEXT differ
@@ -255,6 +257,8 @@ static gboolean _initialize_opengl_backend (gboolean bForceOpenGL)
 		return FALSE;
 	}
 	
+	s_bNativePixmap = _check_client_egl_extension ("EGL_KHR_image_pixmap");
+	
 	return TRUE;
 }
 
@@ -454,6 +458,38 @@ static void _egl_window_resize_wayland (GldiContainer* pContainer, int iWidth, i
 }
 #endif
 
+#ifdef HAVE_X11
+static GLuint _egl_texture_from_pixmap (G_GNUC_UNUSED Window Xid, Pixmap iBackingPixmap)
+{
+	if (! (iBackingPixmap && s_bNativePixmap)) return 0;
+	
+	EGLAttrib pixmapAttribs[] = {
+		EGL_IMAGE_PRESERVED_KHR, EGL_TRUE,
+        EGL_NONE };
+    EGLImage image = eglCreateImage (s_eglDisplay, NULL, EGL_NATIVE_PIXMAP_KHR, (EGLClientBuffer)iBackingPixmap, pixmapAttribs);
+    if (!image)
+    {
+		cd_warning ("Error creating EGLImage");
+		return 0;
+	}
+    
+    GLuint texture;
+	glEnable (GL_TEXTURE_2D);
+	glGenTextures (1, &texture);
+	glBindTexture (GL_TEXTURE_2D, texture);
+	
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	
+	glEGLImageTargetTexture2DOES (GL_TEXTURE_2D, image);
+	glBindTexture (GL_TEXTURE_2D, 0);
+	eglDestroyImage (s_eglDisplay, image);
+	return texture;
+}
+#endif
+
 void gldi_register_egl_backend (void)
 {
 	// this fills out s_eglX11 and e_eglWayland values used in
@@ -470,6 +506,9 @@ void gldi_register_egl_backend (void)
 	gmb.container_finish = _container_finish;
 #ifdef HAVE_WAYLAND
 	if (s_eglWayland) gmb.container_resized = _egl_window_resize_wayland;
+#endif
+#ifdef HAVE_X11
+	if (s_eglX11) gmb.texture_from_pixmap = _egl_texture_from_pixmap;
 #endif
 	gmb.name = "EGL";
 	gldi_gl_manager_register_backend (&gmb);

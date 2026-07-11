@@ -46,7 +46,7 @@ struct _GldiWindowManagerBackend {
 	void (*set_window_border) (GldiWindowActor *actor, gboolean bWithBorder);
 	cairo_surface_t* (*get_icon_surface) (GldiWindowActor *actor, int iWidth, int iHeight);
 	cairo_surface_t* (*get_thumbnail_surface) (GldiWindowActor *actor, int iWidth, int iHeight);
-	GLuint (*get_texture) (GldiWindowActor *actor);
+	GLuint (*get_texture) (GldiWindowActor *actor, int *iWidth, int *iHeight);
 	GldiWindowActor* (*get_transient_for) (GldiWindowActor *actor);
 	void (*is_above_or_below) (GldiWindowActor *actor, gboolean *bIsAbove, gboolean *bIsBelow);
 	void (*set_sticky) (GldiWindowActor *actor, gboolean bSticky);
@@ -80,9 +80,25 @@ void gldi_window_set_thumbnail_area (GldiWindowActor *actor, GldiContainer* pCon
 
 cairo_surface_t* gldi_window_get_icon_surface (GldiWindowActor *actor, int iWidth, int iHeight);
 
+/** Get the contents of a window as a cairo surface (if available).
+*@param actor the window to snapshot
+*@param iWidth desired width of the surface
+*@param iHeight desired height of the surface
+*@return a cairo surface with the window contents or NULL if unavailable.
+* Note: the content is scaled to fit in the desired size (without distortion). On X11, this
+* function will typically not work for windows that render on the GPU.
+*/
 cairo_surface_t* gldi_window_get_thumbnail_surface (GldiWindowActor *actor, int iWidth, int iHeight);
 
-GLuint gldi_window_get_texture (GldiWindowActor *actor);
+/** Get the contents of a window as an OpenGL texture.
+*@param actor the window to snapshot
+*@param pWidth return location for the width of the resulting texture
+*@param pHeight return location for the height of the resulting texture
+*@return a newly created OpenGL texture with the window contents or 0 if unavailable.
+* Note: the content is returned in its original size (stored in pWidth and pHeight).
+* The caller should scale it as appropriate when using it.
+*/
+GLuint gldi_window_get_texture (GldiWindowActor *actor, int *pWidth, int *pHeight);
 
 GldiWindowActor* gldi_window_get_transient_for (GldiWindowActor *actor);
 

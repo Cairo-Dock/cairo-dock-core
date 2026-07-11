@@ -26,7 +26,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw.h"
 #include "cairo-dock-draw-opengl.h"
-#include "cairo-dock-opengl.h"  // gldi_gl_container_make_current
+#include "cairo-dock-opengl-priv.h"  // gldi_gl_container_make_current
 #include "cairo-dock-image-buffer.h"
 
 extern gchar *g_cCurrentThemePath;

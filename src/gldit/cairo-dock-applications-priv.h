@@ -82,7 +82,8 @@ struct _CairoTaskbarParam {
 
 // signals
 typedef enum {
-	NB_NOTIFICATIONS_TASKBAR = NB_NOTIFICATIONS_ICON,
+	NOTIFICATION_TASKBAR_PAR_CHANGED = NB_NOTIFICATIONS_ICON,
+	NB_NOTIFICATIONS_TASKBAR
 	} CairoTaskbarNotifications;
 
 

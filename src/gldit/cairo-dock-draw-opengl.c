@@ -32,6 +32,7 @@
 #include "cairo-dock-overlay.h"
 #include "cairo-dock-style-manager.h"
 #include "cairo-dock-opengl-path.h"
+#include "cairo-dock-opengl-priv.h"
 
 #include "cairo-dock-draw-opengl.h"
 

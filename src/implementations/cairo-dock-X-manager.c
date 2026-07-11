@@ -55,6 +55,7 @@
 #include "cairo-dock-keybinder.h"
 #include "cairo-dock-X-utilities.h"
 #include "cairo-dock-task.h"
+#include "cairo-dock-opengl-priv.h"
 #include "cairo-dock-glx.h"
 #include "cairo-dock-egl.h"
 #define _MANAGER_DEF_
@@ -140,6 +141,7 @@ struct _GldiXWindowActor {
 	Window XTransientFor;
 	guint iDemandsAttention;  // a mask of XAttentionFlag
 	gboolean bIgnored;
+	gint iWidthOrig, iHeightOrig; // width and height without scaling
 	};
 
 
@@ -310,8 +312,8 @@ static void _update_backing_pixmap (GldiXWindowActor *actor)
 #ifdef HAVE_XEXTEND
 	if (myTaskbarParam.bShowAppli && myTaskbarParam.iMinimizedWindowRenderType == 1 && cairo_dock_xcomposite_is_available ())
 	{
-		if (actor->iBackingPixmap != 0)
-			XFreePixmap (s_XDisplay, actor->iBackingPixmap);
+		if (actor->iBackingPixmap != 0) XFreePixmap (s_XDisplay, actor->iBackingPixmap);
+		else XCompositeRedirectWindow (s_XDisplay, actor->Xid, CompositeRedirectAutomatic); // first time, need to set up redirect
 		actor->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, actor->Xid);
 		cd_debug ("new backing pixmap : %d", actor->iBackingPixmap);
 	}
@@ -811,8 +813,10 @@ static gboolean _cairo_dock_unstack_Xevents (G_GNUC_UNUSED gpointer data)
 				actor->iViewPortX = x / gldi_desktop_get_width() + g_desktopGeometry.iCurrentViewportX;
 				actor->iViewPortY = y / gldi_desktop_get_height() + g_desktopGeometry.iCurrentViewportY;
 				
-				if (w != actor->windowGeometry.width || h != actor->windowGeometry.height)  // size has changed
+				if (w != xactor->iWidthOrig || h != xactor->iHeightOrig)  // size has changed
 				{
+					xactor->iWidthOrig = w;
+					xactor->iHeightOrig = h;
 					_update_backing_pixmap (xactor);
 				}
 				
@@ -1114,10 +1118,16 @@ static cairo_surface_t* _get_thumbnail_surface (GldiWindowActor *actor, int iWid
 	return cairo_dock_create_surface_from_xpixmap (xactor->iBackingPixmap, iWidth, iHeight);
 }
 
-static GLuint _get_texture (GldiWindowActor *actor)
+static GLuint _get_texture (GldiWindowActor *actor, int *pWidth, int *pHeight)
 {
 	GldiXWindowActor *xactor = (GldiXWindowActor *)actor;
-	return cairo_dock_texture_from_pixmap (xactor->Xid, xactor->iBackingPixmap);  /// TODO: make an EGL version of this...
+	if (xactor->iHeightOrig > 0 && xactor->iWidthOrig > 0 && xactor->iBackingPixmap)
+	{
+		*pWidth = xactor->iWidthOrig;
+		*pHeight = xactor->iHeightOrig;
+		return gldi_gl_texture_from_pixmap (xactor->Xid, xactor->iBackingPixmap);
+	}
+	return 0;
 }
 
 static GldiWindowActor *_get_transient_for (GldiWindowActor *actor)
@@ -1646,6 +1656,31 @@ unsigned long gldi_X_manager_get_window_xid (GldiWindowActor *actor)
 	return 0; // None
 }
 
+
+/* Update the backing pixmap of windows if these might be needed (for displaying thumbnails for
+ * minimized windows). Unfortunately, creating these just when needed (e.g. in _get_texture()
+ * above) does not work -- it seems that there needs to be some time delay between creating and
+ * using the backing pixmap. We listen to changes in the taskbar parameters and create backing
+ * pixmaps for all windows if these might be needed. Note: When originally creating window actors
+ * for the initially open windows, the taskbar parameters are not yet set up, so their backing
+ * pixmap also needs to be created later, after the taskbar configuration has been read.
+ * 
+ * Note: we do not free already created pixmaps even if they are not needed -- maybe this could be
+ * optimized?
+ */
+static void _check_update_pixmap (G_GNUC_UNUSED gpointer key, gpointer value, G_GNUC_UNUSED gpointer data)
+{
+	GldiXWindowActor *xactor = (GldiXWindowActor*)value;
+	if (!xactor->bIgnored) _update_backing_pixmap (xactor);
+}
+
+static gboolean _on_taskbar_par_changed (G_GNUC_UNUSED GldiObject *pObj)
+{
+	if (myTaskbarParam.bShowAppli && myTaskbarParam.iMinimizedWindowRenderType == 1 && cairo_dock_xcomposite_is_available ())
+		g_hash_table_foreach (s_hXWindowTable, _check_update_pixmap, NULL);
+	return GLDI_NOTIFICATION_LET_PASS;
+}
+
   ////////////
  /// INIT ///
 ////////////
@@ -1827,6 +1862,11 @@ static void init (void)
 	if (_prefer_egl ()) gldi_register_egl_backend ();
 	else gldi_register_glx_backend ();
 	
+	gldi_object_register_notification (&myAppliIconObjectMgr,
+		NOTIFICATION_TASKBAR_PAR_CHANGED,
+		(GldiNotificationFunc) _on_taskbar_par_changed,
+		GLDI_RUN_FIRST, NULL);
+	
 	//\__________________ get modifiers we want to filter
 	lookup_ignorable_modifiers ();
 }
@@ -1863,18 +1903,20 @@ static void init_object (GldiObject *obj, gpointer attr)
 	actor->windowGeometry.width = iWidthExtent / cairo_dock_X_display_scale;
 	actor->windowGeometry.height = iHeightExtent / cairo_dock_X_display_scale;
 	
+	xactor->iWidthOrig = iWidthExtent;
+	xactor->iHeightOrig = iHeightExtent;
+	
 	actor->iAge = s_iNumWindow;
 	if (s_iNumWindow == INT_MAX) s_iNumWindow = 1;
 	else s_iNumWindow++;
 	
-	// get window thumbnail
+	// get window thumbnail if needed; note: this does not work at startup, since the taskbar parameters
+	// are not yet available; we will update them in response to the NOTIFICATION_TASKBAR_PAR_CHANGED signal
 	#ifdef HAVE_XEXTEND
 	if (myTaskbarParam.bShowAppli && myTaskbarParam.iMinimizedWindowRenderType == 1 && cairo_dock_xcomposite_is_available ())
 	{
 		XCompositeRedirectWindow (s_XDisplay, Xid, CompositeRedirectAutomatic);  // redirect the window content to the backing pixmap (the WM may or may not already do this).
 		xactor->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, Xid);
-		/*icon->iDamageHandle = XDamageCreate (s_XDisplay, Xid, XDamageReportNonEmpty);  // XDamageReportRawRectangles
-		cd_debug ("backing pixmap : %d ; iDamageHandle : %d", icon->iBackingPixmap, icon->iDamageHandle);*/
 	}
 	#endif
 	

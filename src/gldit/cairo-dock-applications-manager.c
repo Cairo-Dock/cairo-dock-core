@@ -634,6 +634,7 @@ static void _load_appli (Icon *icon)
 	int iHeight = cairo_dock_icon_get_allocated_height (icon);
 	if (iWidth <= 0 || iHeight <= 0) return;
 	
+	// Note: pPrevSurface and iPrevTexture will be freed by the caller (cairo_dock_load_icon_image ())
 	cairo_surface_t *pPrevSurface = icon->image.pSurface;
 	GLuint iPrevTexture = icon->image.iTexture;
 	icon->image.pSurface = NULL;
@@ -645,9 +646,49 @@ static void _load_appli (Icon *icon)
 		// create the thumbnail (window preview).
 		if (g_bUseOpenGL)  // in OpenGL, we should be able to use the texture-from-pixmap mechanism
 		{
-			GLuint iTexture = gldi_window_get_texture (icon->pAppli);
+			int iTexWidth, iTexHeight;
+			GLuint iTexture = gldi_window_get_texture (icon->pAppli, &iTexWidth, &iTexHeight);
 			if (iTexture)
-				cairo_dock_load_image_buffer_from_texture (&icon->image, iTexture, iWidth, iHeight);
+			{
+				icon->image.iTexture = cairo_dock_create_texture_from_raw_data (NULL, iWidth, iHeight);
+				
+				if (! icon->image.iTexture) cd_warning ("Cannot create new icon texture");
+				else
+				{
+					if (! cairo_dock_begin_draw_icon (icon, 0))  // 0 <=> erase the current texture.
+					{
+						cd_warning ("Cannot render to icon texture");
+						_cairo_dock_delete_texture (icon->image.iTexture);
+						icon->image.iTexture = 0;
+					}
+					else
+					{
+						// note: iTexWidth > 0 and iTexHeight > 0 if we got a valid texture
+						double sw = ((double)iWidth) / iTexWidth;
+						double sh = ((double)iHeight) / iTexHeight;
+						
+						int w, h;
+						if (sw < sh)
+						{
+							w = iWidth;
+							h = sw * iTexHeight;
+						}
+						else
+						{
+							w = sh * iTexWidth;
+							h = iHeight;
+						}
+						
+						_cairo_dock_enable_texture ();
+						_cairo_dock_set_blend_pbuffer ();
+						_cairo_dock_apply_texture_at_size (iTexture, w, h);
+						_cairo_dock_disable_texture ();
+						cairo_dock_end_draw_icon (icon);
+					}
+				}
+				
+				_cairo_dock_delete_texture (iTexture);
+			}
 		}
 		if (icon->image.iTexture == 0)  // if not opengl or didn't work, get the content of the pixmap from the X server.
 		{
@@ -783,6 +824,10 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoTaskbarParam *pTaskBar)
 		}
 		
 		pTaskBar->cAnimationOnActiveWindow = cairo_dock_get_string_key_value (pKeyFile, "TaskBar", "animation on active window", &bFlushConfFileNeeded, "wobbly", NULL, NULL);
+		
+		// this is ugly to have here, but needed for the X manager to successfully create pixmaps
+		// for window thumbnails
+		gldi_object_notify (&myAppliIconObjectMgr, NOTIFICATION_TASKBAR_PAR_CHANGED, NULL);
 	}
 	return bFlushConfFileNeeded;
 }

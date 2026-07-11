@@ -69,7 +69,7 @@
 #include "cairo-dock-file-manager.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-keybinder.h"
-#include "cairo-dock-opengl.h"
+#include "cairo-dock-opengl-priv.h"
 #include "cairo-dock-packages.h"
 #include "cairo-dock-utils.h"  // cairo_dock_launch_command
 #include "cairo-dock-core.h"

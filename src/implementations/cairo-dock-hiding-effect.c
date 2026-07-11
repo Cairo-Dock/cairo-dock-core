@@ -22,6 +22,7 @@
 #include "cairo-dock-animations.h"  // definition of CairoDockHidingEffect
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw-opengl.h"
+#include "cairo-dock-opengl-priv.h"
 #include "cairo-dock-backends-manager.h"
 #include "cairo-dock-hiding-effect.h"
 #include "cairo-dock-dock-priv.h"

@@ -131,9 +131,6 @@ cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, int iWidth,
 
 cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, int iWidth, int iHeight);
 
-GLuint cairo_dock_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap);
-
-
 gboolean cairo_dock_get_xwindow_type (Window Xid, Window *pTransientFor);
 
 gboolean cairo_dock_xcomposite_is_available (void);
