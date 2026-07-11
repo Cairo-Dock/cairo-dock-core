@@ -312,8 +312,8 @@ static void _update_backing_pixmap (GldiXWindowActor *actor)
 #ifdef HAVE_XEXTEND
 	if (myTaskbarParam.bShowAppli && myTaskbarParam.iMinimizedWindowRenderType == 1 && cairo_dock_xcomposite_is_available ())
 	{
-		if (actor->iBackingPixmap != 0)
-			XFreePixmap (s_XDisplay, actor->iBackingPixmap);
+		if (actor->iBackingPixmap != 0) XFreePixmap (s_XDisplay, actor->iBackingPixmap);
+		else XCompositeRedirectWindow (s_XDisplay, actor->Xid, CompositeRedirectAutomatic); // first time, need to set up redirect
 		actor->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, actor->Xid);
 		cd_debug ("new backing pixmap : %d", actor->iBackingPixmap);
 	}
@@ -1121,7 +1121,7 @@ static cairo_surface_t* _get_thumbnail_surface (GldiWindowActor *actor, int iWid
 static GLuint _get_texture (GldiWindowActor *actor, int *pWidth, int *pHeight)
 {
 	GldiXWindowActor *xactor = (GldiXWindowActor *)actor;
-	if (xactor->iHeightOrig > 0 && xactor->iWidthOrig > 0)
+	if (xactor->iHeightOrig > 0 && xactor->iWidthOrig > 0 && xactor->iBackingPixmap)
 	{
 		*pWidth = xactor->iWidthOrig;
 		*pHeight = xactor->iHeightOrig;
@@ -1656,6 +1656,31 @@ unsigned long gldi_X_manager_get_window_xid (GldiWindowActor *actor)
 	return 0; // None
 }
 
+
+/* Update the backing pixmap of windows if these might be needed (for displaying thumbnails for
+ * minimized windows). Unfortunately, creating these just when needed (e.g. in _get_texture()
+ * above) does not work -- it seems that there needs to be some time delay between creating and
+ * using the backing pixmap. We listen to changes in the taskbar parameters and create backing
+ * pixmaps for all windows if these might be needed. Note: When originally creating window actors
+ * for the initially open windows, the taskbar parameters are not yet set up, so their backing
+ * pixmap also needs to be created later, after the taskbar configuration has been read.
+ * 
+ * Note: we do not free already created pixmaps even if they are not needed -- maybe this could be
+ * optimized?
+ */
+static void _check_update_pixmap (G_GNUC_UNUSED gpointer key, gpointer value, G_GNUC_UNUSED gpointer data)
+{
+	GldiXWindowActor *xactor = (GldiXWindowActor*)value;
+	if (!xactor->bIgnored) _update_backing_pixmap (xactor);
+}
+
+static gboolean _on_taskbar_par_changed (G_GNUC_UNUSED GldiObject *pObj)
+{
+	if (myTaskbarParam.bShowAppli && myTaskbarParam.iMinimizedWindowRenderType == 1 && cairo_dock_xcomposite_is_available ())
+		g_hash_table_foreach (s_hXWindowTable, _check_update_pixmap, NULL);
+	return GLDI_NOTIFICATION_LET_PASS;
+}
+
   ////////////
  /// INIT ///
 ////////////
@@ -1837,6 +1862,11 @@ static void init (void)
 	if (_prefer_egl ()) gldi_register_egl_backend ();
 	else gldi_register_glx_backend ();
 	
+	gldi_object_register_notification (&myAppliIconObjectMgr,
+		NOTIFICATION_TASKBAR_PAR_CHANGED,
+		(GldiNotificationFunc) _on_taskbar_par_changed,
+		GLDI_RUN_FIRST, NULL);
+	
 	//\__________________ get modifiers we want to filter
 	lookup_ignorable_modifiers ();
 }
@@ -1880,14 +1910,13 @@ static void init_object (GldiObject *obj, gpointer attr)
 	if (s_iNumWindow == INT_MAX) s_iNumWindow = 1;
 	else s_iNumWindow++;
 	
-	// get window thumbnail
+	// get window thumbnail if needed; note: this does not work at startup, since the taskbar parameters
+	// are not yet available; we will update them in response to the NOTIFICATION_TASKBAR_PAR_CHANGED signal
 	#ifdef HAVE_XEXTEND
 	if (myTaskbarParam.bShowAppli && myTaskbarParam.iMinimizedWindowRenderType == 1 && cairo_dock_xcomposite_is_available ())
 	{
 		XCompositeRedirectWindow (s_XDisplay, Xid, CompositeRedirectAutomatic);  // redirect the window content to the backing pixmap (the WM may or may not already do this).
 		xactor->iBackingPixmap = XCompositeNameWindowPixmap (s_XDisplay, Xid);
-		/*icon->iDamageHandle = XDamageCreate (s_XDisplay, Xid, XDamageReportNonEmpty);  // XDamageReportRawRectangles
-		cd_debug ("backing pixmap : %d ; iDamageHandle : %d", icon->iBackingPixmap, icon->iDamageHandle);*/
 	}
 	#endif
 	
