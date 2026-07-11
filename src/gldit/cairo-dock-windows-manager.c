@@ -243,11 +243,11 @@ cairo_surface_t *gldi_window_get_thumbnail_surface (GldiWindowActor *actor, int 
 	return NULL;
 }
 
-GLuint gldi_window_get_texture (GldiWindowActor *actor)
+GLuint gldi_window_get_texture (GldiWindowActor *actor, int *pWidth, int *pHeight)
 {
 	g_return_val_if_fail (actor != NULL, 0);
 	if (s_backend.get_texture)
-		return s_backend.get_texture (actor);
+		return s_backend.get_texture (actor, pWidth, pHeight);
 	return 0;
 }
 
