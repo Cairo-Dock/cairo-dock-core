@@ -9,6 +9,7 @@ plugins_prefix = @plugins-prefix@
 plugins_locale = @plugins-locale@
 plugins_gettext = @plugins-gettext@
 gtkversion = @GTK_MAJOR@
+have_wayland = @WAYLAND_FOUND@
 
 Name: gldi
 Description: openGL Desktop Interface. A library to build advanced interfaces for the desktop (dock, panel, desklet, dialog, ...); it supports both cairo and openGL.
