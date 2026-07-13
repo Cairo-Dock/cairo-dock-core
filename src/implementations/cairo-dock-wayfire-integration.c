@@ -1744,6 +1744,7 @@ static gboolean _wf_appid_changed (G_GNUC_UNUSED gpointer ptr, GldiWaylandWindow
 	// cClassExtra already skipped the first part
 	const char *cGTKAppID = wactor->cClassExtra;
 	
+	if (!cGTKAppID) return GLDI_NOTIFICATION_LET_PASS;
 	while (*cGTKAppID == ' ') ++cGTKAppID;
 	if (!*cGTKAppID) return GLDI_NOTIFICATION_LET_PASS;
 	if (!strncmp (cGTKAppID, "wf-ipc-", 7)) return GLDI_NOTIFICATION_LET_PASS; // only IPC ID given
