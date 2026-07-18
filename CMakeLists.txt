@@ -202,7 +202,12 @@ if (enable-x11-support)
 	# check for GLX -- TODO: using 'pkg_check_modules ("GLX" "glx")' should work, or very old versions do not provide glx.pc?
 	enable_if_not_defined (enable-glx-support)
 	if (enable-glx-support)
-		check_library_exists (GL glXMakeCurrent "" HAVE_GLX)  # HAVE_GLX remains undefined if not found, else it's "1"
+		check_library_exists (GL glXMakeCurrent "" GLX_FOUND)  # HAVE_GLX remains undefined if not found, else it's "1"
+		if (GLX_FOUND)
+			# Set this in a separate variable, since GLX_FOUND will be cached by CMake, thus disabling
+			# X11 or GLX would have no effect unless the cache is deleted.
+			set (HAVE_GLX 1)
+		endif()
 	endif()
 	
 	# check for X extensions
