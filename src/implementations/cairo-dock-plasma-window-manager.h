@@ -5,7 +5,7 @@
  * org_kde_plasma_window_management protocol.
  * See e.g. https://wayland.app/protocols/kde-plasma-window-management
  * 
- * Copyright 2020-2024 Daniel Kondor <kondor.dani@gmail.com>
+ * Copyright 2020-2026 Daniel Kondor <kondor.dani@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,6 @@
 #include <wayland-client.h>
 #include <stdint.h>
 
-gboolean gldi_plasma_window_manager_match_protocol (uint32_t id, const char *interface, uint32_t version);
 gboolean gldi_plasma_window_manager_try_init (struct wl_registry *registry);
 
 const char *gldi_plasma_window_manager_get_uuid (GldiWindowActor *actor);

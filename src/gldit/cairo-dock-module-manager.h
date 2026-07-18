@@ -44,7 +44,7 @@ G_BEGIN_DECLS
  * It is not required the change this when adding a function to the
  * public API (loading the module will fail if it refers to an
  * unresolved symbol anyway). */
-#define GLDI_ABI_VERSION 20260702
+#define GLDI_ABI_VERSION 20260715
 
 // manager
 #ifndef _MANAGER_DEF_
@@ -81,9 +81,13 @@ typedef enum {
 	CAIRO_DOCK_MODULE_CAN_OTHERS 	= 1<<2
 	} GldiModuleContainerType;
 
+/// Flags for compatibility checks when loading a plug-in
 typedef enum {
+	/// This plug-in can function in an X11 desktop environment
 	CAIRO_DOCK_MODULE_SUPPORTS_X11 = 1<<0,
+	/// This plug-in can function in a Wayland desktop environment
 	CAIRO_DOCK_MODULE_SUPPORTS_WAYLAND = 1<<1,
+	/// This plug-in requires OpenGL to function (if OpenGL is not available, it will be disabled)
 	CAIRO_DOCK_MODULE_REQUIRES_OPENGL = 1<<2
 } GldiModuleFlags;
 
@@ -97,62 +101,69 @@ typedef enum {
 	CAIRO_DOCK_MODULE_DISABLED,
 } GldiModuleState;
 
+/// Default compatibility flags: the plug-in can work on both X11 and Wayland and does not require OpenGL
 #define CAIRO_DOCK_MODULE_DEFAULT_FLAGS (CAIRO_DOCK_MODULE_SUPPORTS_X11 | CAIRO_DOCK_MODULE_SUPPORTS_WAYLAND)
 
 /// Definition of the visit card of a module. Contains everything that is statically defined for a module.
 struct _GldiVisitCard {
-	// nom du module qui servira a l'identifier.
+	/// name of the module (only used internally)
 	const gchar *cModuleName;
-	// minimum major version needed for this module (if <= 3), or indicator of new API / ABI (if == 4)
+	/// minimum major version needed for this module (if <= 3), or indicator of new API / ABI (if == 4)
 	gint iMajorVersionNeeded;
-	// minimum minor version needed for this module (if major version <= 3), or exact ABI version needed if major version == 4
+	/// minimum minor version needed for this module (if major version <= 3), or exact ABI version needed if major version == 4
 	gint iMinorVersionNeeded;
-	// numero de version micro de cairo-dock necessaire au bon fonctionnement du module (if major version <= 3)
-	//   or flags (if major version == 4)
+	/// minimum micro version needed for this module (if major version <= 3), or compatibility flags
+	/// if major version == 4, see \ref GldiModuleFlags
 	gint iMicroVersionNeeded;
-	// chemin d'une image de previsualisation.
+	/// preview image (shown in the advanced GUI main panel and in the module settings page)
 	const gchar *cPreviewFilePath;
-	// Nom du domaine pour la traduction du module par 'gettext'.
+	/// gettext translation domain
 	const gchar *cGettextDomain;
-	// Version du dock pour laquelle a ete compilee le module.
+	/// Version du dock pour laquelle a ete compilee le module.
 	const gchar *cDockVersionOnCompilation;
-	// version courante du module.
+	/// version courante du module.
 	const gchar *cModuleVersion;
-	// repertoire du plug-in cote utilisateur.
+	/// repertoire du plug-in cote utilisateur.
 	const gchar *cUserDataDir;
-	// repertoire d'installation du plug-in.
+	/// repertoire d'installation du plug-in.
 	const gchar *cShareDataDir;
-	// nom de son fichier de conf.
+	/// nom de son fichier de conf.
 	const gchar *cConfFileName;
-	// categorie de l'applet.
+	/// plug-in category
 	GldiModuleCategory iCategory;
-	// chemin d'une image pour l'icone du module dans le panneau de conf du dock.
+	/// chemin d'une image pour l'icone du module dans le panneau de conf du dock.
 	const gchar *cIconFilePath;
-	// taille de la structure contenant la config du module.
+	/// size of module configuration to allocate
 	gint iSizeOfConfig;
-	// taille de la structure contenant les donnees du module.
+	/// size of module data to allocate
 	gint iSizeOfData;
-	// VRAI ssi le plug-in peut etre instancie plusiers fois.
+	/// whether multiple instances of this plug-ing can be activated
 	gboolean bMultiInstance;
-	// description et mode d'emploi succint.
+	/// short description to display to the user
 	const gchar *cDescription;
-	// auteur/pseudo
+	/// plug-in author to display to the user
 	const gchar *cAuthor;
-	// nom d'un module interne auquel ce module se rattache, ou NULL si aucun.
+	/// name of the internal component that this plug-in is attached to or NULL if none
+	/// (typically used for plug-ins that provide core functionality, e.g. dock-rendering)
 	const gchar *cInternalModule;
-	// nom du module tel qu'affiche a l'utilisateur.
+	/// plug-in name to display to the user
 	const gchar *cTitle;
+	/// type of the container that this plug-in can be attached to
 	GldiModuleContainerType iContainerType;
 	gboolean bStaticDeskletSize;
-	// whether to display the applet's name on the icon's label if it's NULL or not.
+	/// whether to display the applet's name on the icon's label if it's NULL or not.
 	gboolean bAllowEmptyTitle;
-	// if TRUE and the applet inhibites a class, then appli icons will be placed after the applet icon.
+	/// if TRUE and the applet inhibites a class, then appli icons will be placed after the applet icon.
 	gboolean bActAsLauncher;
-	// function called after the module has been successfully loaded; use this to register functionality that should always be active
-	// return FALSE to unload the module (in this case, care should be taken to not register any functions / callbacks / signals, to not crash later)
-	// members of pVisitCard and pInterface can be filled out / updated here if it was not done in pre_init already
-	// only available if iMajorVersionNeeded == 4
-	gboolean (* postLoad) (GldiVisitCard *pVisitCard, GldiModuleInterface *pInterface, gpointer reserved);
+	/** Function called after the module has been successfully loaded; use this to register functionality
+	 * that should always be active. Call \ref gldi_module_disable () from this function to disable this module
+	 * (will not be possible to activate it, i.e. the initModule () function will never be called;
+	 * in this case, care should be taken to not register any functions / callbacks / signals, to not crash later).
+	 * members of pVisitCard and pInterface in pModule can be filled out / updated here if it was not
+	 * done in pre_init () already.
+	 * Only available if iMajorVersionNeeded == 4.
+	 */
+	void (* postLoad) (GldiModule *pModule, gpointer reserved);
 	gpointer reserved;
 };
 

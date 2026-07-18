@@ -145,6 +145,12 @@ GldiModule *gldi_module_new (GldiVisitCard *pVisitCard, GldiModuleInterface *pIn
 {
 	g_return_val_if_fail (pVisitCard != NULL && pVisitCard->cModuleName != NULL, NULL);
 	
+	if (g_hash_table_lookup (s_hModuleTable, pVisitCard->cModuleName) != NULL)
+	{
+		cd_warning ("a module with the name '%s' is already registered", pVisitCard->cModuleName);
+		return NULL;
+	}
+	
 	GldiModuleAttr attr = {pVisitCard, pInterface};
 	return (GldiModule*)gldi_object_new (&myModuleObjectMgr, &attr);
 }
@@ -159,7 +165,6 @@ static void _module_new_from_so_file (const gchar *cSoFilePath)
 	GldiModuleInterface *pInterface = NULL;
 	
 	// open the .so file
-	///GModule *module = g_module_open (pGldiModule->cSoFilePath, G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
 	gpointer handle = dlopen (cSoFilePath, RTLD_NOW | RTLD_LOCAL);
 	if (! handle)
 	{
@@ -168,10 +173,7 @@ static void _module_new_from_so_file (const gchar *cSoFilePath)
 	}
 	
 	// find the pre-init entry point
-	GldiModulePreInit function_pre_init = NULL;
-	/**bSymbolFound = g_module_symbol (module, "pre_init", (gpointer) &function_pre_init);
-	if (bSymbolFound && function_pre_init != NULL)*/
-	function_pre_init = dlsym (handle, "pre_init");
+	GldiModulePreInit function_pre_init = dlsym (handle, "pre_init");
 	if (function_pre_init == NULL)
 	{
 		cd_warning ("this module ('%s') does not have the common entry point 'pre_init', it may be broken or icompatible with cairo-dock", cSoFilePath);
@@ -244,9 +246,6 @@ static void _module_new_from_so_file (const gchar *cSoFilePath)
 				bDisable = TRUE;
 				cDisableReason = _("This plug-in requires OpenGL, but it is not enabled.");
 			}
-			if (!bDisable && pVisitCard->postLoad)
-				if (!pVisitCard->postLoad (pVisitCard, pInterface, NULL))
-					bDisable = TRUE;
 		}
 		else
 		{
@@ -266,16 +265,21 @@ static void _module_new_from_so_file (const gchar *cSoFilePath)
 	}
 	
 	// create a new module with these info
-	GldiModule *pModule = gldi_module_new (pVisitCard, pInterface);  // takes ownership of pVisitCard and pInterface
+	GldiModule *pModule = gldi_module_new (pVisitCard, pInterface);  // takes ownership of pVisitCard and pInterface only if returns non-NULL
 	if (pModule)
-	{
 		pModule->handle = handle;
-		if (bDisable) gldi_module_disable (pModule, cDisableReason);
-	}
+	else goto discard; // this can only happen if the module has already been loaded before (cModuleName is in s_hModuleTable)
+	
+	if (pVisitCard->iMajorVersionNeeded == 4) // always call the postLoad () function if it exists (and the module has not been disabled yet)
+		if (!bDisable && pVisitCard->postLoad) pVisitCard->postLoad (pModule, NULL);
+	
+	if (bDisable) gldi_module_disable (pModule, cDisableReason); // keep loaded but disabled
+	else if (gldi_module_is_auto_loaded (pModule))  // a module that doesn't have an init/stop entry point, or that extends a manager; we'll activate it automatically (and before the others).
+		s_AutoLoadedModules = g_list_prepend (s_AutoLoadedModules, pModule);
+	
 	return;
 	
 discard:
-	///g_module_close (pModule);
 	dlclose (handle);
 	g_free (pVisitCard); // toutes les chaines sont statiques.
 	g_free (pInterface);
@@ -504,6 +508,9 @@ void gldi_module_deactivate (GldiModule *module)  // stop all instances of a mod
 
 void gldi_module_disable (GldiModule *pModule, const gchar *cReason)
 {
+	g_return_if_fail (pModule != NULL);
+	g_return_if_fail (pModule->iState != CAIRO_DOCK_MODULE_DISABLED);
+	
 	_module_deactivate (pModule);
 	pModule->iState = CAIRO_DOCK_MODULE_DISABLED;
 	if (cReason) pModule->cDisableReason = g_strdup (cReason);
@@ -752,12 +759,12 @@ static void _module_remove_from_config (GldiModule *pModule)
 
 gboolean _on_module_activated (gpointer pUserData, G_GNUC_UNUSED const gchar *cModuleName, gboolean bActivated)
 {
-	// only if the module was deactivated and the notification does not come from ourselves
-	if (!bActivated && !s_bSelfNotify)
-	{
-		GldiModule *pModule = (GldiModule*)pUserData;
+	GldiModule *pModule = (GldiModule*)pUserData;
+	
+	// only if the module was deactivated, the notification does not come from ourselves
+	// and it is not an auto-loaded module
+	if (!bActivated && !s_bSelfNotify && !gldi_module_is_auto_loaded (pModule))
 		_module_remove_from_config (pModule);
-	}
 	
 	return GLDI_NOTIFICATION_LET_PASS;
 }
@@ -794,15 +801,8 @@ static void init_object (GldiObject *obj, gpointer attr)
 	GldiModule *pModule = (GldiModule*)obj;
 	GldiModuleAttr *mattr = (GldiModuleAttr*)attr;
 	
-	// check everything is ok
+	// check everything is ok -- not needed? (only called from gldi_module_new ())
 	g_return_if_fail (mattr != NULL && mattr->pVisitCard != NULL && mattr->pVisitCard->cModuleName);
-	
-	if (g_hash_table_lookup (s_hModuleTable, mattr->pVisitCard->cModuleName) != NULL)
-	{
-		//!! TODO: pModule is leaked (caller will not expect to free it)
-		cd_warning ("a module with the name '%s' is already registered", mattr->pVisitCard->cModuleName);
-		return;
-	}
 	
 	// set params
 	pModule->pVisitCard = mattr->pVisitCard;
@@ -815,11 +815,8 @@ static void init_object (GldiObject *obj, gpointer attr)
 	// register the module
 	g_hash_table_insert (s_hModuleTable, (gpointer)pModule->pVisitCard->cModuleName, pModule);
 	
-	if (gldi_module_is_auto_loaded (pModule))  // a module that doesn't have an init/stop entry point, or that extends a manager; we'll activate it automatically (and before the others).
-		s_AutoLoadedModules = g_list_prepend (s_AutoLoadedModules, pModule);
-	else // we need to listen to when the last instance is removed to delete the module from the config
-		gldi_object_register_notification (GLDI_OBJECT (pModule), NOTIFICATION_MODULE_ACTIVATED,
-			(GldiNotificationFunc) _on_module_activated, FALSE, pModule);
+	gldi_object_register_notification (GLDI_OBJECT (pModule), NOTIFICATION_MODULE_ACTIVATED,
+		(GldiNotificationFunc) _on_module_activated, FALSE, pModule);
 	
 	// notify everybody
 	gldi_object_notify (&myModuleObjectMgr, NOTIFICATION_MODULE_REGISTERED, pModule->pVisitCard->cModuleName, TRUE);

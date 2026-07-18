@@ -21,11 +21,29 @@
 #ifndef __CAIRO_DOCK_APPLET_MULTI_INSTANCE__
 #define  __CAIRO_DOCK_APPLET_MULTI_INSTANCE__
 
+/**
+*@file cairo-dock-applet-multi-intance.h This file defines macros specific to multi-instance applets.
+* The same are also defined for single-instance applets with the same interface.
+*/
+
 
 #define CD_APPLET_DEFINE_BEGIN(cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, cDescription, cAuthor) \
 	CD_APPLET_DEFINE_ALL_BEGIN (cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, cDescription, cAuthor) \
 	pVisitCard->bMultiInstance = TRUE;
 
+/** General applet definition. Use this to define an applet and its interface in more complex cases.
+ * Code enclosed between this macro and \ref CD_APPLET_DEFINE2_END will be executed when the plug-in
+ * module is first loaded and can perform basic checks and initialization that must be done before the
+ * module is activated via the \ref CD_APPLET_INIT_BEGIN function. Be careful that the applet's instance
+ * variable (myApplet) and configuration (myConfig) are not available at this point. You can call the
+ * \ref gldi_module_disable () function from here to disable the module entirely if it is not possible
+ * to use it in the current environment.
+*@param cName name of the applet, shown to the user (use the N_() macro to translate it)
+*@param iFlags flags describing module compatibility; see \ref GldiModuleFlags
+*@param iAppletCategory category of the applet; see \ref GldiModuleCategory for available categories
+*@param cDescription (short) description of the applet, to be displayed to the user in a dialog bubble when the mouse is hovered on this applet in the configuration window
+*@param cAuthor Applet creator, displayed on the applet's settings page
+*/
 #define CD_APPLET_DEFINE2_BEGIN(cName, iFlags, _iAppletCategory, _cDescription, _cAuthor) \
 	CD_APPLET_DEFINE2_ALL_BEGIN (cName, iFlags, _iAppletCategory, _cDescription, _cAuthor) \
 	pVisitCard->bMultiInstance = TRUE;

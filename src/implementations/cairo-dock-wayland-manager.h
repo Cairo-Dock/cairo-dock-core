@@ -63,5 +63,19 @@ void gldi_wayland_release_keyboard (GldiContainer *pContainer, GldiWaylandReleas
 /// Get the name of the Wayland compositor that was detected
 const gchar *gldi_wayland_get_detected_compositor (void);
 
+
+#ifdef HAVE_WAYLAND
+
+typedef struct _GldiWaylandProtocolInfo {
+	uint32_t id;
+	uint32_t version;
+} GldiWaylandProtocolInfo;
+
+/// Get information about a Wayland global or NULL if it does not exist
+const GldiWaylandProtocolInfo *gldi_wayland_get_global (const char *cInterfaceName);
+/// Get the registry that can be used to bind globals
+struct wl_registry *gldi_wayland_get_registry (void);
+#endif
+
 G_END_DECLS
 #endif

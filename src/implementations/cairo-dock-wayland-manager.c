@@ -77,7 +77,8 @@ static gboolean s_bHave_Layer_Shell = FALSE;
 
 static GldiWaylandCompositorType s_CompositorType = WAYLAND_COMPOSITOR_NONE;
 
-
+////////////////////////////////////////////////////////////////////////
+// Utilities
 static void _try_detect_compositor (void)
 {
 	const char *dmb_names = gldi_desktop_manager_get_backend_names ();
@@ -97,6 +98,11 @@ static void _try_detect_compositor (void)
 GldiWaylandCompositorType gldi_wayland_get_compositor_type (void) { return s_CompositorType; }
 void gldi_wayland_set_compositor_type (GldiWaylandCompositorType type) { s_CompositorType = type; }
 
+static gboolean _is_wayland() { return TRUE; }
+
+
+////////////////////////////////////////////////////////////////////////
+// Containers: positioning, input shape, keyboard and mouse focus
 CairoDockPositionType gldi_wayland_get_edge_for_dock (const CairoDock *pDock)
 {
 	CairoDockPositionType pos;
@@ -460,8 +466,12 @@ static void _adjust_aimed_point (const Icon *pIcon, G_GNUC_UNUSED GtkWidget *pWi
 	}
 }
 
-static gboolean _is_wayland() { return TRUE; }
 
+////////////////////////////////////////////////////////////////////////
+// Registry
+struct wl_registry *s_pRegistry = NULL;
+static GHashTable *s_pProtocolMap = NULL; // key: name (owned), value: GldiWaylandProtocolInfo (owned)
+static GHashTable *s_pProtocolMapRev = NULL; // key: id, value: name (unowned, from the above)
 
 static gboolean s_bInitializing = TRUE;  // each time a callback is called on startup, it will set this to TRUE, and we'll make a roundtrip to the server until no callback is called.
 
@@ -473,30 +483,13 @@ static void _registry_global_cb ( G_GNUC_UNUSED void *data, struct wl_registry *
 		s_pCompositor = wl_registry_bind(registry, id, &wl_compositor_interface, 1);
 	}
 #ifdef HAVE_WAYLAND_PROTOCOLS
-	else if (gldi_wayland_hotspots_match_protocol (id, interface, version))
-	{
-		/* this space is intentionally left blank */
-	}
-	else if (gldi_wlr_foreign_toplevel_match_protocol (id, interface, version))
-	{
-		cd_debug("Found foreign-toplevel-manager");
-	}
-	else if (gldi_plasma_window_manager_match_protocol (id, interface, version))
-	{
-		cd_debug("Found plasma-window-manager");
-	}
-	else if (gldi_plasma_virtual_desktop_match_protocol (id, interface, version))
-	{
-		cd_debug("Found plasma-virtual-desktop-manager");
-	}
-	else if (gldi_cosmic_toplevel_match_protocol (id, interface, version))
-	{
-		cd_debug("Found cosmic-toplevel-manager");
-	}
-	else if (gldi_ext_workspaces_match_protocol (id, interface, version))
-	{
-		cd_debug("Found ext-workspace-manager");
-	}
+	gchar *key = g_strdup (interface);
+	GldiWaylandProtocolInfo *info = g_new (GldiWaylandProtocolInfo, 1);
+	info->id = id;
+	info->version = version;
+	g_hash_table_insert (s_pProtocolMap, key, info);
+	g_hash_table_insert (s_pProtocolMapRev, GUINT_TO_POINTER (id), key);
+	/// TODO: send out a notification?
 #else
 	(void)version; // avoid warning
 #endif
@@ -506,7 +499,15 @@ static void _registry_global_cb ( G_GNUC_UNUSED void *data, struct wl_registry *
 static void _registry_global_remove_cb (G_GNUC_UNUSED void *data, G_GNUC_UNUSED struct wl_registry *registry, uint32_t id)
 {
 	cd_debug ("got a global object has disappeared: id=%d", id);
-	/// TODO: find it and destroy it...
+	
+	char *interface = g_hash_table_lookup (s_pProtocolMapRev, GUINT_TO_POINTER (id));
+	if (!interface) cd_warning ("Global %d not found", id);
+	else
+	{
+		g_hash_table_remove (s_pProtocolMapRev, GUINT_TO_POINTER (id));
+		g_hash_table_remove (s_pProtocolMap, interface);
+	}
+	/// TODO: send out a notification?
 }
 
 static const struct wl_registry_listener registry_listener = {
@@ -514,11 +515,24 @@ static const struct wl_registry_listener registry_listener = {
 	_registry_global_remove_cb
 };
 
+const GldiWaylandProtocolInfo *gldi_wayland_get_global (const char *cInterfaceName)
+{
+	return g_hash_table_lookup (s_pProtocolMap, cInterfaceName);
+}
+struct wl_registry *gldi_wayland_get_registry ()
+{
+	return s_pRegistry;
+}
+
 
 static void init (void)
 {
 	//\__________________ listen for Wayland events
-	struct wl_registry *registry = wl_display_get_registry (s_pDisplay);
+	s_pProtocolMap = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+	s_pProtocolMapRev = g_hash_table_new (NULL, NULL);
+	
+	s_pRegistry = wl_display_get_registry (s_pDisplay);
+	struct wl_registry *registry = s_pRegistry;
 	wl_registry_add_listener (registry, &registry_listener, NULL);
 	do
 	{

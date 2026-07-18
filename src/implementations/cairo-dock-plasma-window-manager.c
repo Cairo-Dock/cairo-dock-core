@@ -4,7 +4,7 @@
  * Interact with Wayland clients via the plasma-window-management
  * protocol. See e.g. https://invent.kde.org/libraries/plasma-wayland-protocols/-/blob/master/src/protocols/plasma-window-management.xml
  * 
- * Copyright 2021-2024 Daniel Kondor <kondor.dani@gmail.com>
+ * Copyright 2021-2026 Daniel Kondor <kondor.dani@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,7 @@
 #include "cairo-dock-plasma-window-manager.h"
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-wayland-wm.h"
+#include "cairo-dock-wayland-manager.h"
 #include "cairo-dock-plasma-virtual-desktop.h"
 
 #include <stdio.h>
@@ -622,9 +623,6 @@ static void _reset_object (GldiObject* obj)
 	}
 }
 
-static uint32_t protocol_id;
-static gboolean protocol_found = FALSE;
-
 static void gldi_plasma_window_manager_init ()
 {
 	// hash table to map uuids to windows
@@ -685,23 +683,13 @@ static void gldi_plasma_window_manager_init ()
 	gldi_object_set_manager (GLDI_OBJECT (&myPlasmaWindowObjectMgr), &myWaylandWMObjectMgr);
 }
 
-
-gboolean gldi_plasma_window_manager_match_protocol (uint32_t id, const char *interface, uint32_t version)
-{
-	if (!strcmp(interface, org_kde_plasma_window_management_interface.name))
-	{
-		protocol_found = TRUE;
-		protocol_id = id;
-		server_protocol_version = version;
-		return TRUE;
-	}
-	return FALSE;
-}
-
 gboolean gldi_plasma_window_manager_try_init (struct wl_registry *registry)
 {
-	if (!protocol_found) return FALSE;
+	const GldiWaylandProtocolInfo *info = gldi_wayland_get_global (org_kde_plasma_window_management_interface.name);
+	if (!info) return FALSE;
 	
+	uint32_t protocol_id = info->id;
+	server_protocol_version = info->version;
 	uint32_t protocol_version = server_protocol_version;
 	if (protocol_version > (uint32_t)org_kde_plasma_window_management_interface.version)
 	{

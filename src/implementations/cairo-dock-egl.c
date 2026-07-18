@@ -221,7 +221,7 @@ static gboolean _initialize_opengl_backend (gboolean bForceOpenGL)
 			if (bForceOpenGL)
 			{
 				cd_warning ("we could not get an ARGB-visual, trying to get an RGB one (fake transparency will be used in return) ...");
-				config_attribs[12] = None;
+				config_attribs[12] = EGL_NONE;
 				bAlphaAvailable = FALSE;
 				eglChooseConfig (dpy, config_attribs, &config, 1, &numConfigs);
 			}

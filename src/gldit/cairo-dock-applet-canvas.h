@@ -59,7 +59,7 @@ typedef struct _AppletData AppletData;
 #define CD_APPLET_DEFINE_PROTO \
 gboolean CD_APPLET_DEFINE_FUNC (GldiVisitCard *pVisitCard, GldiModuleInterface *pInterface)
 #define CD_APPLET_POST_LOAD_PROTO \
-gboolean CD_APPLET_POST_LOAD_FUNC (GldiVisitCard *pVisitCard, GldiModuleInterface *pInterface, G_GNUC_UNUSED gpointer pReserved)
+void CD_APPLET_POST_LOAD_FUNC (GldiModule *pModule, G_GNUC_UNUSED gpointer pReserved)
 #define CD_APPLET_INIT_PROTO(pApplet) \
 void CD_APPLET_INIT_FUNC (GldiModuleInstance *pApplet, G_GNUC_UNUSED GKeyFile *pKeyFile)
 #define CD_APPLET_STOP_PROTO \
@@ -175,7 +175,7 @@ CD_APPLET_DEFINE_PROTO \
 	pVisitCard->cTitle = dgettext (MY_APPLET_GETTEXT_DOMAIN, pVisitCard->cTitle);\
 	return TRUE ;\
 }
-/** Fonction de pre-initialisation generique. Ne fais que definir l'applet (en appelant les 2 macros precedentes), la plupart du temps cela est suffisant.
+/** General macro to define an applet. Deprecated; use \ref CD_APPLET_DEFINITION2 instead.
 */
 #define CD_APPLET_DEFINITION(cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, cDescription, cAuthor) \
 CD_APPLET_DEFINE_BEGIN (cName, iMajorVersion, iMinorVersion, iMicroVersion, iAppletCategory, cDescription, cAuthor) \
@@ -191,12 +191,26 @@ CD_APPLET_DEFINE_ALL_BEGIN (cName, 4, GLDI_ABI_VERSION, iFlags, _iAppletCategory
 	pVisitCard->postLoad = CD_APPLET_POST_LOAD_FUNC; \
 CD_APPLET_DEFINE_END \
 CD_APPLET_POST_LOAD_PROTO \
-{
+{ \
+	GldiVisitCard *pVisitCard = pModule->pVisitCard; \
+	GldiModuleInterface *pInterface = pModule->pInterface; \
+	(void)*pVisitCard; \
+	(void)*pInterface; \
 
+/// End of module definition in more complex cases. Use together with \ref CD_APPLET_DEFINE2_BEGIN
 #define CD_APPLET_DEFINE2_END \
-	return TRUE; \
 }
 
+/** General applet definition. Use this to define an applet and its interface in common cases.
+*@param cName name of the applet, shown to the user (use the N_() macro to translate it)
+*@param iFlags flags describing module compatibility; see \ref GldiModuleFlags
+*@param iAppletCategory category of the applet; see \ref GldiModuleCategory for available categories
+*@param cDescription (short) description of the applet, to be displayed to the user in a dialog bubble when the mouse is hovered on this applet in the configuration window
+*@param cAuthor Applet creator, displayed on the applet's settings page
+* 
+* Note: use this macro for simple cases. If you need to perform some early initialization, use the macro pair
+* \ref CD_APPLET_DEFINE2_BEGIN and \ref CD_APPLET_DEFINE2_END instead.
+*/
 #define CD_APPLET_DEFINITION2(cName, iFlags, iAppletCategory, cDescription, cAuthor) \
 CD_APPLET_DEFINE2_BEGIN (cName, iFlags, iAppletCategory, cDescription, cAuthor) \
 CD_APPLET_DEFINE_COMMON_APPLET_INTERFACE \

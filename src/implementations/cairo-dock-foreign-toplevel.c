@@ -4,7 +4,7 @@
  * Interact with Wayland clients via the zwlr_foreign_toplevel_manager
  * protocol. See e.g. https://github.com/swaywm/wlr-protocols/blob/master/unstable/wlr-foreign-toplevel-management-unstable-v1.xml
  * 
- * Copyright 2020-2024 Daniel Kondor <kondor.dani@gmail.com>
+ * Copyright 2020-2026 Daniel Kondor <kondor.dani@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -280,25 +280,14 @@ static void gldi_zwlr_foreign_toplevel_manager_init ()
 	gldi_wf_backend_init_appid_tracking (); // optional functionality to get the GTK application-id supplied by Wayfire
 }
 
-static uint32_t protocol_id, protocol_version;
-static gboolean protocol_found = FALSE;
-
-gboolean gldi_wlr_foreign_toplevel_match_protocol (uint32_t id, const char *interface, uint32_t version)
-{
-	if (!strcmp(interface, zwlr_foreign_toplevel_manager_v1_interface.name))
-	{
-		protocol_found = TRUE;
-		protocol_id = id;
-		protocol_version = version;
-		return TRUE;
-	}
-	return FALSE;
-}
-
 
 gboolean gldi_wlr_foreign_toplevel_try_init (struct wl_registry *registry)
 {
-	if (!protocol_found) return FALSE;
+	const GldiWaylandProtocolInfo *info = gldi_wayland_get_global (zwlr_foreign_toplevel_manager_v1_interface.name);
+	if (!info) return FALSE;
+	
+	uint32_t protocol_id = info->id;
+	uint32_t protocol_version = info->version;
 	
 	if (protocol_version > (uint32_t)zwlr_foreign_toplevel_manager_v1_interface.version)
 	{
@@ -315,7 +304,6 @@ gboolean gldi_wlr_foreign_toplevel_try_init (struct wl_registry *registry)
 	cd_error ("Could not bind wlr-foreign-toplevel-manager!");
     return FALSE;
 }
-
 
 #endif
 

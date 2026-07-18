@@ -383,12 +383,14 @@ void gldi_gl_container_finish (GldiContainer *pContainer)
 		s_backend.container_finish (pContainer);
 }
 
+#ifdef HAVE_X11
 GLuint gldi_gl_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 {
 	if (g_bUseOpenGL && s_backend.texture_from_pixmap)
 		return s_backend.texture_from_pixmap (Xid, iBackingPixmap);
 	return 0;
 }
+#endif
 
 const gchar *gldi_gl_get_backend_name ()
 {

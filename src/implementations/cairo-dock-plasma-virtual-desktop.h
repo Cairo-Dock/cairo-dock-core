@@ -2,7 +2,7 @@
  * cairo-dock-plasma-virtual-desktop.h -- desktop / workspace management
  *  facilities for KWin / KDE Plasma
  * 
- * Copyright 2024 Daniel Kondor <kondor.dani@gmail.com>
+ * Copyright 2024-2026 Daniel Kondor <kondor.dani@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,6 @@
 #include <wayland-client.h>
 #include <stdint.h>
 
-gboolean gldi_plasma_virtual_desktop_match_protocol (uint32_t id, const char *interface, uint32_t version);
 gboolean gldi_plasma_virtual_desktop_try_init (struct wl_registry *registry);
 
 /// Try to get the coordinates of a virtual desktop with the associated ID.
