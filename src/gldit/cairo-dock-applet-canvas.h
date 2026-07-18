@@ -194,8 +194,8 @@ CD_APPLET_POST_LOAD_PROTO \
 { \
 	GldiVisitCard *pVisitCard = pModule->pVisitCard; \
 	GldiModuleInterface *pInterface = pModule->pInterface; \
-	(void)*pVisitCard; \
-	(void)*pInterface; \
+	(void)pVisitCard; \
+	(void)pInterface; \
 
 /// End of module definition in more complex cases. Use together with \ref CD_APPLET_DEFINE2_BEGIN
 #define CD_APPLET_DEFINE2_END \
