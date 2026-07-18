@@ -143,7 +143,7 @@ static void _trigger_write_modules (void)
 
 GldiModule *gldi_module_new (GldiVisitCard *pVisitCard, GldiModuleInterface *pInterface)
 {
-	g_return_val_if_fail (pVisitCard != NULL && pVisitCard->cModuleName != NULL, NULL);
+	g_return_val_if_fail (pVisitCard != NULL && pVisitCard->cModuleName != NULL && pInterface != NULL, NULL);
 	
 	if (g_hash_table_lookup (s_hModuleTable, pVisitCard->cModuleName) != NULL)
 	{
@@ -274,8 +274,14 @@ static void _module_new_from_so_file (const gchar *cSoFilePath)
 		if (!bDisable && pVisitCard->postLoad) pVisitCard->postLoad (pModule, NULL);
 	
 	if (bDisable) gldi_module_disable (pModule, cDisableReason); // keep loaded but disabled
-	else if (gldi_module_is_auto_loaded (pModule))  // a module that doesn't have an init/stop entry point, or that extends a manager; we'll activate it automatically (and before the others).
-		s_AutoLoadedModules = g_list_prepend (s_AutoLoadedModules, pModule);
+	
+	if (pModule->iState != CAIRO_DOCK_MODULE_DISABLED) // only if module has not been disabled (either above or in the postLoad() function)
+		if (gldi_module_is_auto_loaded (pModule))
+		{
+			// a module that doesn't have an init/stop entry point, or that extends a manager;
+			// we'll activate it automatically (and before the others).
+			s_AutoLoadedModules = g_list_prepend (s_AutoLoadedModules, pModule);
+		}
 	
 	return;
 	
@@ -800,9 +806,6 @@ static void init_object (GldiObject *obj, gpointer attr)
 {
 	GldiModule *pModule = (GldiModule*)obj;
 	GldiModuleAttr *mattr = (GldiModuleAttr*)attr;
-	
-	// check everything is ok -- not needed? (only called from gldi_module_new ())
-	g_return_if_fail (mattr != NULL && mattr->pVisitCard != NULL && mattr->pVisitCard->cModuleName);
 	
 	// set params
 	pModule->pVisitCard = mattr->pVisitCard;

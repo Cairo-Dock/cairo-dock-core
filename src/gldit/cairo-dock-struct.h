@@ -404,7 +404,7 @@
  * Some applets need more control over their life-cycle. Beyond applets that define their own message domain for internationalization (see \ref translations), this typically relates to applets that provide some essential functionality for the dock (e.g. renderers, desktop environment integration, etc.). In this case, instead of defining the applet with CD_APPLET_DEFINITION2, use the macro pair CD_APPLET_DEFINE2_BEGIN / CD_APPLET_DEFINE2_END and
  * - Add early initialization steps between these; this will be run when the applet is first opened (loaded from disk), regardless wether it is enabled yet. Be careful that the applet's instance variable (myApplet) and configuration (myConfig) are not available at this point (so you will need to use static variables to save any state). Also, no docks, cairo or OpenGL contexts exist, and the current theme has not been loaded at this point as well. It is thus recommended to keep things here absolute minimal.
  * - Also you have to manually define the applet's interface here (load, stop, config functions, etc.); see the GldiModuleInterface struct from cairo-dock-module-manager.h for a description of each function and what it does, or use the CD_APPLET_DEFINE_COMMON_APPLET_INTERFACE macro that defines these with the usual function names thus you can use the same macros as you would with CD_APPLET_DEFINITION2.
- * - You can also call the function \ref gldi_module_disable () at this point to prevent you applet to be loaded (it will still show up in the config panel, but will not be possible to enable it).
+ * - You can also call the function \ref gldi_module_disable () at this point to prevent you applet being loaded (it will still show up in the config panel, but will not be possible to enable it).
  * 
  * 
  * \subsection auto_load Auto-loaded applets
@@ -424,7 +424,7 @@
  * 
  * \subsection disable Disabling applets
  * 
- * Applets will be disabled via two possible mechanisms:
+ * Applets can be disabled via two possible mechanisms:
  *  - API / ABI incompatibility. This happens if the applet's .so file cannot be loaded (due to e.g. missing symbols if it was compiled for a different API version) or if the ABI version stored in the .so file does not match that of the running Cairo-Dock instance (if it was compiled against a different ABI version, defined via the \ref GLDI_ABI_VERSION macro). In this case, loading of the module is aborted early in the process and thus the applet will not show up among available plug-ins in the configuration window. Applets that are disabled by the "-D" command line option will be treated like this as well. The ABI version check can be overridden with the "--no-module-version-check" command line option, which will then likely result in crashes later. Of course, failures from opening the .so file due to missing symbols cannot be circumvented.
  *  - Incompatible environment. This happens if the applet is not compatible with the current environment, either detected via automated checks based on the module flags given to the \ref CD_APPLET_DEFINITION2 macro (currently it checks for X11, Wayland and OpenGL support), or if the applet calls the \ref gldi_module_disable () function at any time (including in between the \ref CD_APPLET_DEFINE2_BEGIN and \ref CD_APPLET_DEFINE2_END macro pair). In this case, the applet will be shown in the configuration window, but will not be possible to enable it. An optional message will be shown to the user as a tooltip to explain why the applet is disabled.
  * 
