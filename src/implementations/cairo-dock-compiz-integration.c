@@ -17,16 +17,18 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "cairo-dock-log.h"
+
+#include "gldi-config.h"
+
+#ifdef HAVE_X11
+
 #include <glib.h>
 #include <gio/gio.h>
 
-#include "gldi-config.h"
-#ifdef HAVE_X11
 #include <X11/Xatom.h>
 #include <gdk/gdkx.h>  // GDK_WINDOW_XID
-#endif
 
-#include "cairo-dock-log.h"
 #include "cairo-dock-desktop-manager.h"
 #include "cairo-dock-windows-manager.h"  // bIsHidden
 #include "cairo-dock-icon-factory.h"  // pAppli
@@ -542,3 +544,12 @@ void cd_init_compiz_backend (void)
 	g_bus_watch_name (G_BUS_TYPE_SESSION, CD_COMPIZ_BUS, G_BUS_NAME_WATCHER_FLAGS_NONE,
 		_on_name_appeared, _on_name_vanished, NULL, NULL);
 }
+#else // HAVE_X11
+
+void cd_init_compiz_backend (void)
+{
+	cd_message ("Cairo-Dock was not built with X11 support, not loading Compiz integration");
+}
+
+#endif
+

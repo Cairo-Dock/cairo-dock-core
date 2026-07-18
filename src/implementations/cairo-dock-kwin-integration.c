@@ -123,12 +123,16 @@ static void present_class (const gchar *cClass, CairoDockDesktopManagerActionRes
 		else
 #endif
 		{
+#ifdef HAVE_X11
+			// note: this code path will only be called if HAVE_X11 is defined (since otherwise, we will not
+			// have a taskbar in the first place on X11)
 			unsigned long xid = gldi_X_manager_get_window_xid (pOneIcon->pAppli);
 			if (xid)
 			{
 				g_variant_builder_add_value (&builder, g_variant_new_take_string (g_strdup_printf ("%lu", xid)));
 				i++;
 			}
+#endif
 		}
 	}
 	
