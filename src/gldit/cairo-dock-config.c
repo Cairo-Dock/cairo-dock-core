@@ -28,6 +28,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <libsecret/secret.h>
+
 #include "gldi-config.h"
 #include "cairo-dock-manager.h"
 
@@ -611,6 +613,31 @@ void cairo_dock_encrypt_string( const gchar *cDecryptedString,  gchar **cEncrypt
 #else
 	*cEncryptedString = g_strdup( cDecryptedString );
 #endif
+}
+
+
+static gboolean s_bHaveSecret = FALSE;
+static gboolean s_bSecretChecked = FALSE;
+
+gboolean cairo_dock_can_store_secret (void)
+{
+	if (! s_bSecretChecked)
+	{
+		GError *err = NULL;
+		SecretService *pService = secret_service_get_sync (SECRET_SERVICE_NONE, NULL, &err);
+		if (pService)
+		{
+			s_bHaveSecret = TRUE;
+			g_object_unref (pService);
+		}
+		else
+		{
+			cd_warning ("Cannot connect to a secret service backend, password storage will not be available:\n\t%s", err->message);
+			g_error_free (err);
+		}
+	}
+	
+	return s_bHaveSecret;
 }
 
 
