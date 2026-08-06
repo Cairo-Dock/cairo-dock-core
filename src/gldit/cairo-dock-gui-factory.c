@@ -2965,11 +2965,19 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				pEntry = pOneWidget;
 				if( iElementType == CAIRO_DOCK_WIDGET_PASSWORD_ENTRY )  // on cache le texte entre et on decrypte 'cValue'.
 				{
-					gtk_entry_set_visibility (GTK_ENTRY (pOneWidget), FALSE);
-					gchar *cDecryptedString = NULL;
-					cairo_dock_decrypt_string ( cValue, &cDecryptedString );
-					g_free (cValue);
-					cValue = cDecryptedString;
+					if (cairo_dock_can_store_secret ())
+					{
+						gtk_entry_set_visibility (GTK_ENTRY (pOneWidget), FALSE);
+						gchar *cDecryptedString = NULL;
+						cairo_dock_decrypt_string ( cValue, &cDecryptedString );
+						g_free (cValue);
+						cValue = cDecryptedString;
+					}
+					else
+					{
+						gtk_widget_set_sensitive (pOneWidget, FALSE);
+						gtk_widget_set_tooltip_text (pKeyBox, _("Cannot connect to the secret store of your desktop session, password storage is not available."));
+					}
 				}
 				gtk_entry_set_text (GTK_ENTRY (pOneWidget), cValue);
 				_pack_subwidget (pOneWidget);
