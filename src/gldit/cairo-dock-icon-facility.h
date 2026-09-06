@@ -279,8 +279,17 @@ void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2
 /** Set the label of an icon. If it has a sub-dock, it is renamed (the name is possibly altered to stay unique). The label buffer is updated too.
 *@param pIcon the icon.
 *@param cIconName the new label of the icon. You can even pass pIcon->cName. Can be NULL, but not recommended as it will result in missing name in the UI.
+*
+* Note: cIconName will be checked with g_utf8_validate() and truncated to only include valid UTF-8.
 */
 void gldi_icon_set_name (Icon *pIcon, const gchar *cIconName);
+
+/** Set the label of an icon. If it has a sub-dock, it is renamed (the name is possibly altered to stay unique). The label buffer is updated too.
+ * Same as \ref gldi_icon_set_name(), but the caller has to ensure that the passed name is valid UTF-8.
+*@param pIcon the icon.
+*@param cIconName the new label of the icon. You can even pass pIcon->cName. Can be NULL, but not recommended as it will result in missing name in the UI.
+*/
+void gldi_icon_set_name_utf8 (Icon *pIcon, const gchar *cIconName);
 
 /** Same as above, but takes a printf-like format string.
 *@param pIcon the icon.
@@ -301,7 +310,6 @@ void gldi_icon_set_quick_info (Icon *pIcon, const gchar *cQuickInfo);
 *@param ... data to be inserted into the string.
 */
 void gldi_icon_set_quick_info_printf (Icon *pIcon, const gchar *cQuickInfoFormat, ...) G_GNUC_PRINTF (2, 3);
-
 
 #define cairo_dock_listen_for_double_click(pIcon) (pIcon)->iNbDoubleClickListeners ++
 
@@ -334,7 +342,6 @@ void cairo_dock_end_draw_icon (Icon *pIcon);
 void gldi_theme_icon_write_container_name_in_conf_file (Icon *pIcon, const gchar *cParentDockName);
 
 void gldi_theme_icon_write_order_in_conf_file (Icon *pIcon, double fOrder);
-
 
 gboolean gldi_icon_launch_command (Icon *pIcon);
 

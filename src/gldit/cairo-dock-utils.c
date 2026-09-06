@@ -66,7 +66,8 @@ gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters)  // gere l
 		
 		if (iNbChars != -1)
 		{
-			cTruncatedName = g_new0 (gchar, 8 * (iNbChars + 4));  // 8 octets par caractere.
+			// maximum 4 bytes per character according to GLib (g_utf8_validate() rejects characters > 4 bytes) + 3 x '.' + null terminator
+			cTruncatedName = g_new0 (gchar, 4 * iNbChars + 4);
 			if (iNbChars != 0)
 				g_utf8_strncpy (cTruncatedName, cUtf8Name, iNbChars);
 			
@@ -106,6 +107,33 @@ gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters)  // gere l
 		g_free (cUtf8Name);
 	//g_print (" -> etiquette : %s\n", cTruncatedName);
 	return cTruncatedName;
+}
+
+gchar *cairo_dock_cut_string_utf8 (const gchar *cUtf8Name, int iNbCaracters)
+{
+	iStringLength = g_utf8_strlen (cUtf8Name, -1);
+	int iNbChars = -1;
+	if (iNbCaracters < 0)
+	{
+		iNbChars = MAX (0, iStringLength + iNbCaracters);
+	}
+	else if (iStringLength > iNbCaracters)
+	{
+		iNbChars = iNbCaracters;
+	}
+	
+	if (iNbChars != -1)
+	{
+		// maximum 4 bytes per character according to GLib (g_utf8_validate() rejects characters > 4 bytes) + 3 x '.' + null terminator
+		cTruncatedName = g_new0 (gchar, 4 * iNbChars + 4);
+		if (iNbChars != 0)
+			g_utf8_strncpy (cTruncatedName, cUtf8Name, iNbChars);
+		
+		gchar *cTruncature = g_utf8_offset_to_pointer (cTruncatedName, iNbChars);
+		*cTruncature = '.';
+		*(cTruncature+1) = '.';
+		*(cTruncature+2) = '.';
+	}
 }
 
 

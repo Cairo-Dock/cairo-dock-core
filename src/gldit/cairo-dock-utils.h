@@ -30,6 +30,8 @@ G_BEGIN_DECLS
 
 gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters);
 
+gchar *cairo_dock_cut_string_utf8 (const gchar *cString, int iNbCaracters);
+
 /** Remove the version number from a string. Directly modifies the string.
  * @param cString a string.
  * @return TRUE if a version has been removed.
