@@ -192,7 +192,8 @@ void cairo_dock_load_icon_text (Icon *icon)
 	gchar *cTruncatedName = NULL;
 	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskbarParam.iAppliMaxNameLength > 0)
 	{
-		cTruncatedName = cairo_dock_cut_string (icon->cName, myTaskbarParam.iAppliMaxNameLength);
+		// icon name has been validated as UTF-8 before
+		cTruncatedName = cairo_dock_cut_string_utf8 (icon->cName, myTaskbarParam.iAppliMaxNameLength);
 	}
 	
 	int iWidth, iHeight;

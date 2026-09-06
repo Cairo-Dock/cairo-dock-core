@@ -111,7 +111,7 @@ gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters)  // gere l
 
 gchar *cairo_dock_cut_string_utf8 (const gchar *cUtf8Name, int iNbCaracters)
 {
-	iStringLength = g_utf8_strlen (cUtf8Name, -1);
+	int iStringLength = g_utf8_strlen (cUtf8Name, -1);
 	int iNbChars = -1;
 	if (iNbCaracters < 0)
 	{
@@ -125,7 +125,7 @@ gchar *cairo_dock_cut_string_utf8 (const gchar *cUtf8Name, int iNbCaracters)
 	if (iNbChars != -1)
 	{
 		// maximum 4 bytes per character according to GLib (g_utf8_validate() rejects characters > 4 bytes) + 3 x '.' + null terminator
-		cTruncatedName = g_new0 (gchar, 4 * iNbChars + 4);
+		gchar *cTruncatedName = g_new0 (gchar, 4 * iNbChars + 4);
 		if (iNbChars != 0)
 			g_utf8_strncpy (cTruncatedName, cUtf8Name, iNbChars);
 		
@@ -133,7 +133,10 @@ gchar *cairo_dock_cut_string_utf8 (const gchar *cUtf8Name, int iNbCaracters)
 		*cTruncature = '.';
 		*(cTruncature+1) = '.';
 		*(cTruncature+2) = '.';
+		return cTruncatedName;
 	}
+	
+	return NULL;
 }
 
 
