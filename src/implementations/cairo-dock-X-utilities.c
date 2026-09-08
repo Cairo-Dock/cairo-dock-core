@@ -982,6 +982,9 @@ gchar *cairo_dock_get_xwindow_name (Window Xid, gboolean bSearchWmName)
 	{
 		cName = g_strdup ((gchar *)pNameBuffer);
 		XFree (pNameBuffer);
+		
+		gchar *cEnd = NULL;
+		if (!g_utf8_validate (cName, -1, (const gchar**)&cEnd)) *cEnd = 0;
 	}
 	return cName;
 }
@@ -992,11 +995,18 @@ gchar *cairo_dock_get_xwindow_class (Window Xid, gchar **cWMClass, gchar **cWMNa
 	gchar *cClass = NULL;
 	if (XGetClassHint (s_XDisplay, Xid, pClassHint) != 0 && pClassHint->res_class)
 	{
-		cClass = gldi_window_parse_class(pClassHint->res_class, pClassHint->res_name);
-		if (cClass)
+		gchar *cEnd = NULL;
+		if (!g_utf8_validate (pClassHint->res_class, -1, (const gchar**)cEnd)) *cEnd = 0;
+		if (!g_utf8_validate (pClassHint->res_name, -1, (const gchar**)cEnd)) *cEnd = 0;
+		
+		if (*pClassHint->res_class)
 		{
-			if (cWMClass) *cWMClass = g_strdup (pClassHint->res_class);
-			if (pClassHint->res_name && cWMName) *cWMName = g_ascii_strdown (pClassHint->res_name, -1);
+			cClass = gldi_window_parse_class (pClassHint->res_class, pClassHint->res_name);
+			if (cClass)
+			{
+				if (cWMClass) *cWMClass = g_strdup (pClassHint->res_class);
+				if (pClassHint->res_name && *pClassHint->res_name && cWMName) *cWMName = g_ascii_strdown (pClassHint->res_name, -1);
+			}
 		}
 		XFree (pClassHint->res_name);
 		XFree (pClassHint->res_class);

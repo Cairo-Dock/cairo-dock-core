@@ -134,6 +134,10 @@ void gldi_wayland_wm_title_changed (GldiWaylandWindowActor *wactor, const char *
 {
 	g_free (wactor->cTitlePending);
 	wactor->cTitlePending = g_strdup ((gchar *)title);
+	// validate that the title received is valid UTF-8 (this is expected, but clients can
+	// send any string and compositors might not validate it)
+	char *cEnd = NULL;
+	if (!g_utf8_validate (wactor->cTitlePending, -1, (const gchar**)&cEnd)) *cEnd = 0; // may result in an empty string
 	_set_pending_change (wactor, NC_TITLE);
 	if (notify) gldi_wayland_wm_done (wactor);
 }
@@ -143,6 +147,12 @@ void gldi_wayland_wm_appid_changed (GldiWaylandWindowActor *wactor, const char *
 {
 	g_free (wactor->cClassPending);
 	wactor->cClassPending = g_strdup ((gchar *)app_id);
+	// validate that it is valid UTF-8 (note: the standard is vague about encoding, but
+	// recommends that app-ids follow the desktop entry spec which only allows basic
+	// alphanumeric characters that fit into ASCII; for simplicity, we require UTF-8)
+	char *cEnd = NULL;
+	if (!g_utf8_validate (wactor->cClassPending, -1, (const gchar**)&cEnd)) *cEnd = 0; // may result in an empty string
+	
 	// app-ids should not contain spaces, but some compositors can add extra info, e.g. Wayfire can add an IPC ID
 	char *tmp = strchr (wactor->cClassPending, ' ');
 	if (tmp)
