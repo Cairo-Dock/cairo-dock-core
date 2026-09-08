@@ -66,6 +66,21 @@ Icon * cairo_dock_create_dummy_launcher (gchar *cName, gchar *cFileName, gchar *
 	pIcon->fHeightFactor = 1.;
 	pIcon->cCommand = cCommand;
 	
+	// validate name
+	if (pIcon->cName)
+	{
+		gchar *cEnd = NULL;
+		if (!g_utf8_validate (pIcon->cName, -1, (const gchar**)&cEnd))
+		{
+			if (cEnd == pIcon->cName)
+			{
+				g_free (pIcon->cName);
+				pIcon->cName = NULL;
+			}
+			else *cEnd = 0;
+		}
+	}
+	
 	return pIcon;
 }
 
