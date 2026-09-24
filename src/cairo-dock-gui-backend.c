@@ -210,25 +210,7 @@ void cairo_dock_register_config_gui_backend (CairoDockMainGuiBackend *pBackend)
 
 static void _display_window (GtkWidget *pWindow)
 {
-	// place it on the current desktop, and avoid overlapping the main dock
-	if (pWindow && g_pMainDock != NULL)  // evitons d'empieter sur le main dock.
-	{
-		if (g_pMainDock->container.bIsHorizontal)
-		{
-			if (g_pMainDock->container.bDirectionUp)
-				gtk_window_move (GTK_WINDOW (pWindow), 0, 0);
-			else
-				gtk_window_move (GTK_WINDOW (pWindow), 0, g_pMainDock->iMinDockHeight+10);
-		}
-		else
-		{
-			if (g_pMainDock->container.bDirectionUp)
-				gtk_window_move (GTK_WINDOW (pWindow), 0, 0);
-			else
-				gtk_window_move (GTK_WINDOW (pWindow), g_pMainDock->iMinDockHeight+10, 0);
-		}
-	}
-	
+	g_return_if_fail (pWindow != NULL);
 	// take focus
 	gtk_window_present (GTK_WINDOW (pWindow));
 }
