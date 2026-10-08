@@ -66,6 +66,21 @@ Icon * cairo_dock_create_dummy_launcher (gchar *cName, gchar *cFileName, gchar *
 	pIcon->fHeightFactor = 1.;
 	pIcon->cCommand = cCommand;
 	
+	// validate name
+	if (pIcon->cName)
+	{
+		gchar *cEnd = NULL;
+		if (!g_utf8_validate (pIcon->cName, -1, (const gchar**)&cEnd))
+		{
+			if (cEnd == pIcon->cName)
+			{
+				g_free (pIcon->cName);
+				pIcon->cName = NULL;
+			}
+			else *cEnd = 0;
+		}
+	}
+	
 	return pIcon;
 }
 
@@ -192,7 +207,8 @@ void cairo_dock_load_icon_text (Icon *icon)
 	gchar *cTruncatedName = NULL;
 	if (CAIRO_DOCK_IS_APPLI (icon) && myTaskbarParam.iAppliMaxNameLength > 0)
 	{
-		cTruncatedName = cairo_dock_cut_string (icon->cName, myTaskbarParam.iAppliMaxNameLength);
+		// icon name has been validated as UTF-8 before
+		cTruncatedName = cairo_dock_cut_string_utf8 (icon->cName, myTaskbarParam.iAppliMaxNameLength);
 	}
 	
 	int iWidth, iHeight;

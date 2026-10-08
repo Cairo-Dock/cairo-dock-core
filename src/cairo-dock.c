@@ -51,6 +51,7 @@
 
 #define __USE_POSIX
 #include <time.h>
+#include <locale.h>
 
 #include <glib/gstdio.h>
 #include <glib-unix.h> // g_unix_signal_add
@@ -341,6 +342,8 @@ static void _cairo_dock_get_global_config (const gchar *cCairoDockDataDir)
 
 int main (int argc, char** argv)
 {
+	setlocale (LC_ALL, "");
+	
 	//\___________________ build the command line used to respawn, and check if we have been launched from another life.
 	s_argc_max = argc + 8; // we add maximum 6 new parameters + NULL terminator
 	s_argv = g_new0 (char*, s_argc_max);

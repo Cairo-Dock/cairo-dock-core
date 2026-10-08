@@ -554,29 +554,49 @@ void cairo_dock_move_icon_after_icon (CairoDock *pDock, Icon *icon1, Icon *icon2
 }
 
 
-void gldi_icon_set_name (Icon *pIcon, const gchar *cIconName)  // fonction proposee par Necropotame.
+static void _set_icon_name_internal (Icon *pIcon, const gchar *cIconName, gchar *cNewName)
 {
-	g_return_if_fail (pIcon != NULL);  // le contexte sera verifie plus loin.
-	gchar *cUniqueName = NULL;
-	
 	if (pIcon->pSubDock != NULL)
 	{
-		cUniqueName = cairo_dock_get_unique_dock_name (cIconName);
-		cIconName = cUniqueName;
-		gldi_dock_rename (pIcon->pSubDock, cUniqueName);
+		char *cUniqueName = cairo_dock_get_unique_dock_name (cNewName ? cNewName : cIconName);
+		g_free (cNewName);
+		cNewName = cUniqueName;
+		gldi_dock_rename (pIcon->pSubDock, cNewName);
 	}
-	if (pIcon->cName != cIconName)
+	if (cNewName)
 	{
 		g_free (pIcon->cName);
-		pIcon->cName = g_strdup (cIconName);
+		pIcon->cName = cNewName;
 	}
-	
-	g_free (cUniqueName);
+	else if (pIcon->cName != cIconName)
+	{
+		g_free (pIcon->cName);
+		pIcon->cName = g_strdup (cIconName); // works on NULL as well
+	}
 	
 	cairo_dock_load_icon_text (pIcon);
 	
 	if (pIcon->pContainer && pIcon->pContainer->bInside)  // for a dock, in this case the label will be visible.
 		cairo_dock_redraw_container (pIcon->pContainer);  // this is not really optimized, ideally the view should provide a way to redraw the label area only...
+}
+
+void gldi_icon_set_name (Icon *pIcon, const gchar *cIconName)  // fonction proposee par Necropotame.
+{
+	g_return_if_fail (pIcon != NULL);
+	
+	const gchar *cEnd = NULL;
+	if (g_utf8_validate (cIconName, -1, &cEnd))
+		_set_icon_name_internal (pIcon, cIconName, NULL);
+	else
+		// truncate to use only the valid part
+		_set_icon_name_internal (pIcon, NULL, (cEnd != cIconName) ? g_strndup (cIconName, cEnd - cIconName) : NULL);
+}
+
+void gldi_icon_set_name_utf8 (Icon *pIcon, const gchar *cIconName)
+{
+	g_return_if_fail (pIcon != NULL);  // le contexte sera verifie plus loin.
+	
+	_set_icon_name_internal (pIcon, cIconName, NULL);
 }
 
 void gldi_icon_set_name_printf (Icon *pIcon, const gchar *cIconNameFormat, ...)

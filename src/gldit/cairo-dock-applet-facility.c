@@ -343,7 +343,7 @@ void cairo_dock_insert_icons_in_applet (GldiModuleInstance *pInstance, GList *pI
 			if (pIcon->cName == NULL)
 				gldi_icon_set_name (pIcon, pInstance->pModule->pVisitCard->cModuleName);
 			if (cairo_dock_check_unique_subdock_name (pIcon))
-				gldi_icon_set_name (pIcon, pIcon->cName);
+				gldi_icon_set_name_utf8 (pIcon, pIcon->cName);
 			pIcon->pSubDock = gldi_subdock_new (pIcon->cName, cDockRenderer, pInstance->pDock, pIconsList);
 			if (pIcon->pSubDock)
 				pIcon->pSubDock->bPreventDraggingIcons = TRUE;  // par defaut pour toutes les applets on empeche de pouvoir deplacer/supprimer les icones a la souris.
@@ -394,7 +394,7 @@ void cairo_dock_insert_icon_in_applet (GldiModuleInstance *pInstance, Icon *pOne
 			if (pIcon->cName == NULL)
 				gldi_icon_set_name (pIcon, pInstance->pModule->pVisitCard->cModuleName);
 			if (cairo_dock_check_unique_subdock_name (pIcon))
-				gldi_icon_set_name (pIcon, pIcon->cName);
+				gldi_icon_set_name_utf8 (pIcon, pIcon->cName);
 			pIcon->pSubDock = gldi_subdock_new (pIcon->cName, NULL, pInstance->pDock, NULL);
 			if (pIcon->pSubDock)
 				pIcon->pSubDock->bPreventDraggingIcons = TRUE;  // par defaut pour toutes les applets on empeche de pouvoir deplacer/supprimer les icones a la souris.
