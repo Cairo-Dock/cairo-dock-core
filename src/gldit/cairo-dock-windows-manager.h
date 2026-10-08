@@ -84,7 +84,7 @@ struct _GldiWindowActor {
 	gint iStackOrder;
 	gchar *cClass; // parsed class of this window (i.e. the result of gldi_window_parse_class ())
 	gchar *cWmClass; // original class as reported by the WM (needed in some cases to match it)
-	gchar *cName; // window title, displayed as label
+	gchar *cName; // window title, displayed as label -- should be valid UTF-8, ensured by backends
 	gchar *cWmName; // only used on X11, res_name part of XClassHint (i.e. the first string in WM_CLASS), not parsed
 	gchar *cLastAttentionDemand;
 	gint iAge;  // age of the window (a mere growing integer).
