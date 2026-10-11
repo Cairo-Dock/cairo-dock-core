@@ -29,7 +29,7 @@
 #include "cairo-dock-niri-integration.h"
 #include "cairo-dock-wayland-manager.h" // gldi_wayland_release_keyboard (needed on Wayfire)
 #define _MANAGER_DEF_
-#include "cairo-dock-desktop-manager.h"
+#include "cairo-dock-desktop-manager-priv.h"
 
 // public (manager, config, data)
 GldiManager myDesktopMgr;

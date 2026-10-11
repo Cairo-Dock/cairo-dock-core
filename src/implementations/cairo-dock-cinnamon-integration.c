@@ -22,7 +22,7 @@
 
 #include "cairo-dock-log.h"
 #include "cairo-dock-class-manager-priv.h"
-#include "cairo-dock-desktop-manager.h"
+#include "cairo-dock-desktop-manager-priv.h"
 #include "cairo-dock-cinnamon-integration.h"
 
 static GDBusProxy *s_pProxy = NULL;

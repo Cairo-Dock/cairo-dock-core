@@ -23,7 +23,7 @@
 
 #ifdef HAVE_JSON
 
-#include "cairo-dock-desktop-manager.h"
+#include "cairo-dock-desktop-manager-priv.h"
 #include "cairo-dock-wayland-manager-priv.h"
 
 #include <sys/types.h>
