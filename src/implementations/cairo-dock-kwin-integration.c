@@ -27,7 +27,7 @@
 #include <gio/gio.h>
 
 #include "cairo-dock-icon-factory.h"
-#include "cairo-dock-desktop-manager.h"
+#include "cairo-dock-desktop-manager-priv.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-X-utilities.h"  // cairo_dock_get_X_display
 #include "cairo-dock-icon-factory.h"

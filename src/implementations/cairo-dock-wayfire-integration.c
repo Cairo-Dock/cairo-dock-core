@@ -44,7 +44,7 @@
 #include <libevdev/libevdev.h>
 #endif
 
-#include "cairo-dock-desktop-manager.h"
+#include "cairo-dock-desktop-manager-priv.h"
 #include "cairo-dock-icon-factory.h"  // pAppli
 #include "cairo-dock-container-priv.h"  // gldi_container_get_gdk_window
 #include "cairo-dock-class-manager-priv.h"

@@ -29,7 +29,7 @@
 #include <X11/Xatom.h>
 #include <gdk/gdkx.h>  // GDK_WINDOW_XID
 
-#include "cairo-dock-desktop-manager.h"
+#include "cairo-dock-desktop-manager-priv.h"
 #include "cairo-dock-windows-manager.h"  // bIsHidden
 #include "cairo-dock-icon-factory.h"  // pAppli
 #include "cairo-dock-container-priv.h"  // gldi_container_get_gdk_window
