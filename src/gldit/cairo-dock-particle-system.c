@@ -35,8 +35,7 @@ void cairo_dock_render_particles_full (CairoParticleSystem *pParticleSystem, int
 	_cairo_dock_enable_texture ();
 	
 	if (pParticleSystem->bAddLuminance)
-		_cairo_dock_set_blend_over ();
-		//glBlendFunc (GL_SRC_ALPHA, GL_ONE);
+		glBlendFuncSeparate (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ZERO, GL_ONE);
 	else
 		_cairo_dock_set_blend_alpha ();
 	
