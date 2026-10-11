@@ -154,7 +154,7 @@ static GtkWidget *_make_notebook (void)
 	g_object_set (G_OBJECT (pNoteBook), "tab-pos", GTK_POS_TOP, NULL);
 	return pNoteBook;
 }
-ConfigGroupWidget *cairo_dock_config_group_widget_new (GList *pGroups, GList *pManagers)
+ConfigGroupWidget *cairo_dock_config_group_widget_new (GList *pGroups, GList *pManagers, GtkWidget *pMainWindow)
 {
 	ConfigGroupWidget *pConfigGroupWidget = g_new0 (ConfigGroupWidget, 1);
 	pConfigGroupWidget->widget.iType = WIDGET_CONFIG_GROUP;
@@ -191,7 +191,7 @@ ConfigGroupWidget *cairo_dock_config_group_widget_new (GList *pGroups, GList *pM
 		pWidget = cairo_dock_build_group_widget (pKeyFile,
 			cGroupName,
 			NULL,  // gettext domain
-			NULL,  // main window
+			pMainWindow,  // main window
 			&pConfigGroupWidget->widget.pWidgetList,
 			pConfigGroupWidget->widget.pDataGarbage,
 			g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_CONF_FILE));
@@ -247,7 +247,7 @@ ConfigGroupWidget *cairo_dock_config_group_widget_new (GList *pGroups, GList *pM
 			cOriginalConfFilePath = g_strdup_printf ("%s/%s", pModule->pVisitCard->cShareDataDir, pModule->pVisitCard->cConfFileName);
 			pNoteBook = cairo_dock_build_key_file_widget_full (pExtraKeyFile,
 				pModule->pVisitCard->cGettextDomain,
-				NULL,
+				pMainWindow,
 				&pExtraWidgetList,
 				pConfigGroupWidget->widget.pDataGarbage,  // the garbage array can be mutualized with 'pConfigGroupWidget'
 				cOriginalConfFilePath,

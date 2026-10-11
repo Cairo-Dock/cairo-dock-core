@@ -42,7 +42,7 @@ struct _ConfigGroupWidget {
 #define IS_CONFIG_GROUP_WIDGET(w) (w && CD_WIDGET(w)->iType == WIDGET_CONFIG_GROUP)
 
 
-ConfigGroupWidget *cairo_dock_config_group_widget_new (GList *pGroups, GList *pManagers);
+ConfigGroupWidget *cairo_dock_config_group_widget_new (GList *pGroups, GList *pManagers, GtkWidget *pMainWindow);
 
 G_END_DECLS
 #endif

@@ -1134,7 +1134,7 @@ static CDWidget *_build_module_widget (CairoDockGroupDescription *pGroupDescript
 
 static CDWidget *_build_config_group_widget (CairoDockGroupDescription *pGroupDescription, G_GNUC_UNUSED GldiModuleInstance *unused)
 {
-	ConfigGroupWidget *pConfigGroupWidget = cairo_dock_config_group_widget_new (pGroupDescription->pGroups, pGroupDescription->pManagers);
+	ConfigGroupWidget *pConfigGroupWidget = cairo_dock_config_group_widget_new (pGroupDescription->pGroups, pGroupDescription->pManagers, s_pMainWindow);
 	
 	return CD_WIDGET (pConfigGroupWidget);
 }
