@@ -576,7 +576,13 @@ static void _set_icon_name_internal (Icon *pIcon, const gchar *cIconName, gchar 
 	
 	cairo_dock_load_icon_text (pIcon);
 	
-	if (pIcon->pContainer && pIcon->pContainer->bInside)  // for a dock, in this case the label will be visible.
+	if (CAIRO_DOCK_IS_DOCK (pIcon->pContainer)) // note: OK to pass NULL
+	{
+		// for some views (e.g. parabole), the dock size can depend on the icon labels
+		// note: will also trigger a redraw, so no need for the following check
+		cairo_dock_trigger_update_dock_size (CAIRO_DOCK (pIcon->pContainer));
+	}
+	else if (pIcon->pContainer && pIcon->pContainer->bInside)  // for a dock, in this case the label will be visible.
 		cairo_dock_redraw_container (pIcon->pContainer);  // this is not really optimized, ideally the view should provide a way to redraw the label area only...
 }
 
