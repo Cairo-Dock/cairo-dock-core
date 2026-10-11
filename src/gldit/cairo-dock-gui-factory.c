@@ -1440,7 +1440,7 @@ GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *p
 	g_signal_connect (G_OBJECT (pDescriptionLabel), "destroy", G_CALLBACK (on_delete_async_widget), NULL);
 
 	// min size
-	int iFrameWidth = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pMainWindow), "frame-width"));
+	int iFrameWidth = pMainWindow ? GPOINTER_TO_INT (g_object_get_data (G_OBJECT (pMainWindow), "frame-width")) : 0;
 	int iMinSize = (gldi_desktop_get_width() - iFrameWidth) /2.5;
 
 	// preview image
