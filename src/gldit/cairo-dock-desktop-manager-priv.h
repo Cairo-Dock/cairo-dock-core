@@ -31,7 +31,7 @@ G_BEGIN_DECLS
 */
 
 
-typedef void (*CairoDockGrabKeyResult) (GldiShortkey *pBinding);
+typedef void (*CairoDockGrabKeyResult) (GldiShortkey *pBinding, gpointer user_data);
 
 /// Definition of the Desktop Manager backend.
 struct _GldiDesktopManagerBackend {
@@ -47,7 +47,7 @@ struct _GldiDesktopManagerBackend {
 	cairo_surface_t* (*get_desktop_bg_surface) (void);
 	void (*set_current_desktop) (int iDesktopNumber, int iViewportNumberX, int iViewportNumberY);
 	void (*refresh) (void);
-	void (*grab_shortkey) (GldiShortkey *pBinding, gboolean grab, CairoDockGrabKeyResult cb); // note: cb will only be called if grab == TRUE
+	void (*grab_shortkey) (GldiShortkey *pBinding, gboolean grab, CairoDockGrabKeyResult cb, gpointer user_data); // note: cb will only be called if grab == TRUE
 	void (*add_workspace) (void); // gldi_desktop_add_workspace ()
 	void (*remove_last_workspace) (void); // gldi_desktop_remove_last_workspace ()
 	gchar* (*get_monitor_description) (GdkMonitor *pMonitor);
@@ -76,7 +76,7 @@ const gchar *gldi_desktop_manager_get_backend_names (void);
 *
 * Note: pBinding->bSuccess will be updated based on the result.
 */
-void gldi_desktop_grab_shortkey (GldiShortkey *pBinding, gboolean grab, CairoDockGrabKeyResult cb);
+void gldi_desktop_grab_shortkey (GldiShortkey *pBinding, gboolean grab, CairoDockGrabKeyResult cb, gpointer user_data);
 
 
 void gldi_register_desktop_manager (void);

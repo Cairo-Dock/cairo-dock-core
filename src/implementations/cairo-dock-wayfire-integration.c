@@ -84,7 +84,7 @@ void _cb_fail (gpointer data)
 		if (cb->pBinding)
 		{
 			cb->pBinding->bSuccess = FALSE;
-			if (cb->cb) ((CairoDockGrabKeyResult) cb->cb) (cb->pBinding);
+			if (cb->cb) ((CairoDockGrabKeyResult) cb->cb) (cb->pBinding, cb->user_data);
 			gldi_object_unref (GLDI_OBJECT (cb->pBinding)); // ref was taken in _bind_key ()
 		}
 		else if (cb->cb)
@@ -254,7 +254,7 @@ static void _show_hide_desktop(G_GNUC_UNUSED gboolean bShow) {
  * keybindings
  ***********************************************************************/
 
-static void _binding_registered (gboolean bSuccess, GldiShortkey *pBinding, CairoDockGrabKeyResult cb, uint64_t id)
+static void _binding_registered (gboolean bSuccess, GldiShortkey *pBinding, CairoDockGrabKeyResult cb, gpointer user_data, uint64_t id)
 {
 	pBinding->bSuccess = bSuccess;
 	
@@ -268,19 +268,19 @@ static void _binding_registered (gboolean bSuccess, GldiShortkey *pBinding, Cair
 		s_pBindings = g_list_prepend (s_pBindings, binding);
 	}
 	
-	if (cb) cb (pBinding);
+	if (cb) cb (pBinding, user_data);
 	gldi_object_unref (GLDI_OBJECT (pBinding)); // ref was taken in _bind_key () -- note that this might immediately unbind if was unrefed outside
 }
 
 #ifdef HAVE_EVDEV
-static void _bind_key (GldiShortkey *pBinding, gboolean grab, CairoDockGrabKeyResult cb)
+static void _bind_key (GldiShortkey *pBinding, gboolean grab, CairoDockGrabKeyResult cb, gpointer user_data)
 {
 	if (! s_pIOChannel)
 	{
 		// socket was already closed; we should not call _handle_broken_socket () again
 		// (in this case, our binding list should be empty as well)
 		pBinding->bSuccess = FALSE;
-		if (cb) cb (pBinding);
+		if (cb) cb (pBinding, user_data);
 		return;
 	}
 	
@@ -294,7 +294,7 @@ static void _bind_key (GldiShortkey *pBinding, gboolean grab, CairoDockGrabKeyRe
 		{
 			cd_warning ("Unknown keycode: %u", keycode);
 			pBinding->bSuccess = FALSE;
-			if (cb) cb (pBinding);
+			if (cb) cb (pBinding, user_data);
 			return;
 		}
 		
@@ -324,7 +324,7 @@ static void _bind_key (GldiShortkey *pBinding, gboolean grab, CairoDockGrabKeyRe
 			json_object_put (obj);
 			g_string_free (str, TRUE);
 			pBinding->bSuccess = FALSE;
-			if (cb) cb (pBinding);
+			if (cb) cb (pBinding, user_data);
 			return;
 		}
 		
@@ -335,7 +335,7 @@ static void _bind_key (GldiShortkey *pBinding, gboolean grab, CairoDockGrabKeyRe
 		if (ret < 0)
 		{
 			pBinding->bSuccess = FALSE;
-			if (cb) cb (pBinding);
+			if (cb) cb (pBinding, user_data);
 			_handle_broken_socket ();
 			return;
 		}
@@ -344,6 +344,7 @@ static void _bind_key (GldiShortkey *pBinding, gboolean grab, CairoDockGrabKeyRe
 		struct cb_data *cb1 = g_new0 (struct cb_data, 1);
 		cb1->pBinding = pBinding;
 		cb1->cb = cb;
+		cb1->user_data = user_data;
 		gldi_object_ref (GLDI_OBJECT (pBinding)); // need to keep a reference in case the caller destroys it before our callback
 		g_queue_push_tail (&s_cb_queue, cb1);
 	}
@@ -1562,7 +1563,7 @@ static gboolean _socket_cb (G_GNUC_UNUSED GIOChannel *pSource, GIOCondition cond
 									else bResult = FALSE;
 								}
 								
-								_binding_registered (bResult, data->pBinding, (CairoDockGrabKeyResult) data->cb, id);
+								_binding_registered (bResult, data->pBinding, (CairoDockGrabKeyResult) data->cb, data->user_data, id);
 							}
 							else if (data->cb)
 							{
