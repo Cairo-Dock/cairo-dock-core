@@ -743,7 +743,7 @@ static gboolean _get_root_dock_config (CairoDock *pDock)
 	
 	//\______________ Visibility.
 	CairoDockVisibility iVisibility = cairo_dock_get_integer_key_value (pKeyFile, "Behavior", "visibility", &bFlushConfFileNeeded, FALSE, "Position", NULL);
-	gldi_dock_set_visibility (pDock, iVisibility);
+	gldi_dock_set_visibility (pDock, iVisibility); // note: iVisibility will never be CAIRO_DOCK_VISI_SHORTKEY in this case (only possible for the main dock)
 	
 	//\______________ Icons size.
 	int s = cairo_dock_get_integer_key_value (pKeyFile, "Appearance", "icon size", &bFlushConfFileNeeded, ICON_DEFAULT, NULL, NULL);  // ICON_DEFAULT <=> same as main dock
@@ -1931,6 +1931,15 @@ static void _save_custom_widget (GKeyFile *pKeyFile, GSList *pWidgetList)
  /// LOAD ///
 ////////////
 
+
+static void _raise_shortcut_bound (G_GNUC_UNUSED GldiShortkey *pShortkey, G_GNUC_UNUSED gpointer user_data)
+{
+	g_return_if_fail (g_pMainDock != NULL);
+	
+	// will update as required
+	gldi_dock_set_visibility (g_pMainDock, myDocksParam.iVisibility);
+}
+
 static void _load_visible_zone (const gchar *cVisibleZoneImageFile, int iVisibleZoneWidth, int iVisibleZoneHeight, double fVisibleZoneAlpha)
 {
 	cairo_dock_unload_image_buffer (&g_pVisibleZoneBuffer);
@@ -1956,19 +1965,21 @@ static void load (void)
 	{
 		if (s_pPopupBinding == NULL)
 		{
-			s_pPopupBinding = gldi_shortkey_new (myDocksParam.cRaiseDockShortcut,
+			s_pPopupBinding = gldi_shortkey_new_full (myDocksParam.cRaiseDockShortcut,
 				"Cairo-Dock",
 				_("Pop up the main dock"),
 				GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON,
 				g_cConfFile,
 				"Accessibility",
 				"raise shortcut",
-				(CDBindkeyHandler) _raise_from_shortcut,
+				_raise_from_shortcut,
+				NULL,
+				_raise_shortcut_bound,
 				NULL);
 		}
 		else
 		{
-			gldi_shortkey_rebind (s_pPopupBinding, myDocksParam.cRaiseDockShortcut, NULL);
+			gldi_shortkey_rebind_full (s_pPopupBinding, myDocksParam.cRaiseDockShortcut, NULL, _raise_shortcut_bound, NULL);
 		}
 	}
 }
@@ -2079,7 +2090,7 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 	{
 		if (s_pPopupBinding == NULL)
 		{
-			s_pPopupBinding = gldi_shortkey_new (myDocksParam.cRaiseDockShortcut,
+			s_pPopupBinding = gldi_shortkey_new_full (myDocksParam.cRaiseDockShortcut,
 				"Cairo-Dock",
 				_("Pop up the main dock"),
 				GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON,
@@ -2087,14 +2098,17 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 				"Accessibility",
 				"raise shortcut",
 				(CDBindkeyHandler) _raise_from_shortcut,
+				NULL,
+				_raise_shortcut_bound,
 				NULL);
 		}
 		else
 		{
-			gldi_shortkey_rebind (s_pPopupBinding, myDocksParam.cRaiseDockShortcut, NULL);
+			gldi_shortkey_rebind_full (s_pPopupBinding, myDocksParam.cRaiseDockShortcut, NULL,
+				_raise_shortcut_bound, NULL);
 		}
 	}
-	else
+	else if (s_pPopupBinding)
 	{
 		gldi_object_unref (GLDI_OBJECT(s_pPopupBinding));
 		s_pPopupBinding = NULL;
@@ -2121,7 +2135,8 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 		gldi_docks_redraw_all_root ();
 	}
 	
-	gldi_dock_set_visibility (pDock, pAccessibility->iVisibility);
+	if (pAccessibility->iVisibility != CAIRO_DOCK_VISI_SHORTKEY)
+		gldi_dock_set_visibility (pDock, pAccessibility->iVisibility);
 }
 
 
