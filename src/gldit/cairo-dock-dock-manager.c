@@ -1720,6 +1720,15 @@ static void _load_custom_widget (GKeyFile *pKeyFile, GSList *pWidgetList)
 		}
 	}
 	
+	CairoDockGroupKeyWidget *pGroupKeyWidget = cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, cGroup, "num_screen");
+	if (!pGroupKeyWidget)
+	{
+		/** TODO: is this actually a problem? Happens normally when loading the "Docks" page
+		 * in the advanced config which does not have this setting. */
+		cd_warning ("Cannot find widget for dock position");
+		return;
+	}
+	
 	GtkListStore *pListStore = gtk_list_store_new (CD_SCREEN_NB_COLUMNS,
 		G_TYPE_STRING,   /* CD_SCREEN_LABEL*/
 		G_TYPE_STRING,   /* CD_SCREEN_DESCRIPTION*/
@@ -1846,14 +1855,6 @@ static void _load_custom_widget (GKeyFile *pKeyFile, GSList *pWidgetList)
 	if (bDisconnected) gtk_combo_box_set_active (GTK_COMBO_BOX (pOneWidget), 0); // screen set, but not found (it was added first)
 	else if (iCurrent >= 0) gtk_combo_box_set_active (GTK_COMBO_BOX (pOneWidget), iCurrent); // screen set and found
 	// note: if there is no setting, the combo box will be blank, since we don't have access to which screen the dock is actually on
-	
-	CairoDockGroupKeyWidget *pGroupKeyWidget = cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, cGroup, "num_screen");
-	if (!pGroupKeyWidget)
-	{
-		cd_warning ("Cannot find widget for dock position");
-		g_object_unref (G_OBJECT(pOneWidget));
-		return;
-	}
 	
 	gtk_box_pack_end (GTK_BOX (pGroupKeyWidget->pKeyBox), pOneWidget, FALSE, FALSE, 0);
 }
