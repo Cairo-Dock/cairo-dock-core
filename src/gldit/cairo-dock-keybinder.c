@@ -43,7 +43,7 @@
 #endif
 
 #include "cairo-dock-log.h"
-#include "cairo-dock-desktop-manager.h"
+#include "cairo-dock-desktop-manager-priv.h"
 #include "cairo-dock-keybinder.h"
 
 // public (manager, config, data)
@@ -52,13 +52,28 @@ GldiObjectManager myShortkeyObjectMgr;
 // dependencies
 
 // private
+struct _GldiShortkeyAttr {
+	const gchar            *keystring;
+	CDBindkeyHandler        handler;
+	gpointer                user_data;
+	const gchar            *cDemander;
+	const gchar            *cDescription;
+	const gchar            *cIconFilePath;
+	const gchar            *cConfFilePath;
+	const gchar            *cGroupName;
+	const gchar            *cKeyName;
+	CDBindkeyCB             bind_cb;
+	gpointer                bind_data;
+};
+typedef struct _GldiShortkeyAttr GldiShortkeyAttr;
+
 static GSList *s_pKeyBindings = NULL;
 
 
-static void do_grab_key (GldiShortkey *binding, CairoDockGrabKeyResult cb)
+static gboolean _do_grab_key (GldiShortkey *binding, CairoDockGrabKeyResult cb, gpointer user_data)
 {
 	if (binding->keystring == NULL)
-		return; // no need to signal failure, let's assume the caller checks this
+		return FALSE;
 	
 	// parse the shortkey to get the keycode and modifiers
 	guint keysym = 0;
@@ -68,7 +83,7 @@ static void do_grab_key (GldiShortkey *binding, CairoDockGrabKeyResult cb)
 		&accelerator_codes,
 		&binding->modifiers);
 	if (accelerator_codes == NULL)
-		return;
+		return FALSE;
 	
 	binding->keycode = accelerator_codes[0];  // just take the first one
 	g_free (accelerator_codes);
@@ -81,16 +96,15 @@ static void do_grab_key (GldiShortkey *binding, CairoDockGrabKeyResult cb)
 	cd_debug ("%s -> %d, %d %d", binding->keystring, keysym, binding->keycode, binding->modifiers);
 	
 	// now grab the shortkey from the server
-	gldi_desktop_grab_shortkey (binding, TRUE, cb);  // TRUE <=> grab
+	gldi_desktop_grab_shortkey (binding, TRUE, cb, user_data);  // TRUE <=> grab
+	return TRUE;
 }
 
-static gboolean do_ungrab_key (GldiShortkey *binding)
+static void _do_ungrab_key (GldiShortkey *binding)
 {
 	cd_debug ("Removing grab for '%s'", binding->keystring);
 	
-	gldi_desktop_grab_shortkey (binding, FALSE, NULL);  // FALSE <=> ungrab
-	
-	return TRUE;
+	gldi_desktop_grab_shortkey (binding, FALSE, NULL, NULL);  // FALSE <=> ungrab
 }
 
 static gboolean _on_shortkey_pressed (G_GNUC_UNUSED gpointer data, guint keycode, guint modifiers)
@@ -110,21 +124,8 @@ static gboolean _on_shortkey_pressed (G_GNUC_UNUSED gpointer data, guint keycode
 	return GLDI_NOTIFICATION_LET_PASS;
 }
 
-static gboolean _on_keymap_changed (G_GNUC_UNUSED gpointer data, gboolean updated)
-{
-	GSList *iter;
-	for (iter = s_pKeyBindings; iter != NULL; iter = iter->next)
-	{
-		GldiShortkey *binding = (GldiShortkey *) iter->data;
 
-		if (updated) do_grab_key (binding, NULL); // no callback, bSuccess will be updated
-		else do_ungrab_key (binding);
-	}
-	return GLDI_NOTIFICATION_LET_PASS;
-}
-
-
-GldiShortkey *gldi_shortkey_new (const gchar *keystring,
+GldiShortkey *gldi_shortkey_new_full (const gchar *keystring,
 	const gchar *cDemander,
 	const gchar *cDescription,
 	const gchar *cIconFilePath,
@@ -132,7 +133,9 @@ GldiShortkey *gldi_shortkey_new (const gchar *keystring,
 	const gchar *cGroupName,
 	const gchar *cKeyName,
 	CDBindkeyHandler handler,
-	gpointer user_data)
+	gpointer user_data,
+	CDBindkeyCB result_cb,
+	gpointer result_data)
 {
 	GldiShortkeyAttr attr;
 	attr.keystring = keystring;
@@ -144,19 +147,48 @@ GldiShortkey *gldi_shortkey_new (const gchar *keystring,
 	attr.cKeyName = cKeyName;
 	attr.handler = handler;
 	attr.user_data = user_data;
+	attr.bind_cb = result_cb;
+	attr.bind_data = result_data;
 	return (GldiShortkey*)gldi_object_new (&myShortkeyObjectMgr, &attr);
 }
 
-
-void _shortkey_rebind_cb (GldiShortkey *binding)
+GldiShortkey *gldi_shortkey_new (const gchar *keystring,
+	const gchar *cDemander,
+	const gchar *cDescription,
+	const gchar *cIconFilePath,
+	const gchar *cConfFilePath,
+	const gchar *cGroupName,
+	const gchar *cKeyName,
+	CDBindkeyHandler handler,
+	gpointer user_data)
 {
-	// note: currently, there are no users of this notification
+	return gldi_shortkey_new_full (keystring, cDemander, cDescription, cIconFilePath, cConfFilePath,
+		cGroupName, cKeyName, handler, user_data, NULL, NULL);
+}
+
+typedef struct _CDShortkeyRebindData {
+	CDBindkeyCB result_cb;
+	gpointer result_data;
+} CDShortkeyRebindData;
+
+void _shortkey_rebind_cb (GldiShortkey *binding, gpointer user_data)
+{
+	CDShortkeyRebindData *pData = (CDShortkeyRebindData*)user_data;
+	if (pData)
+	{
+		// in this case, result_cb is not NULL (see below)
+		pData->result_cb (binding, pData->result_data);
+		g_free (pData);
+	}
+	
 	gldi_object_notify (binding, NOTIFICATION_SHORTKEY_CHANGED, binding);
 }
 
-void gldi_shortkey_rebind (GldiShortkey *binding,
+void gldi_shortkey_rebind_full (GldiShortkey *binding,
 	const gchar *cNewKeyString,
-	const gchar *cNewDescription)
+	const gchar *cNewDescription,
+	CDBindkeyCB result_cb,
+	gpointer result_data)
 {
 	g_return_if_fail (binding != NULL);
 	cd_debug ("%s (%s)", __func__, binding->keystring);
@@ -177,8 +209,7 @@ void gldi_shortkey_rebind (GldiShortkey *binding,
 		return;
 	
 	// unbind its current shortkey
-	if (binding->bSuccess)
-		do_ungrab_key (binding);
+	if (binding->bSuccess) _do_ungrab_key (binding);
 
 	// rebind it to the new shortkey
 	if (cNewKeyString != binding->keystring)
@@ -187,7 +218,51 @@ void gldi_shortkey_rebind (GldiShortkey *binding,
 		binding->keystring = g_strdup (cNewKeyString);
 	}
 	
-	do_grab_key (binding, _shortkey_rebind_cb);
+	/* Note: instead of giving result_cb and result_data directly, we
+	 * need to go through our own callback first to be able to signal
+	 * the NOTIFICATION_SHORTKEY_CHANGED notification. */
+	CDShortkeyRebindData *pData = NULL;
+	if (result_cb)
+	{
+		pData = g_new (CDShortkeyRebindData, 1);
+		pData->result_cb = result_cb;
+		pData->result_data = result_data;
+	}
+	if (!_do_grab_key (binding, _shortkey_rebind_cb, pData))
+	{
+		// this means that the binding could not be parsed, signal failure here
+		binding->bSuccess = FALSE;
+		if (result_cb)
+		{
+			result_cb (binding, result_data);
+			g_free (pData);
+		}
+	}
+}
+
+void gldi_shortkey_rebind (GldiShortkey *binding,
+	const gchar *cNewKeyString,
+	const gchar *cNewDescription)
+{
+	gldi_shortkey_rebind_full (binding, cNewKeyString, cNewDescription, NULL, NULL);
+}
+
+static gboolean _on_keymap_changed (G_GNUC_UNUSED gpointer data, gboolean updated)
+{
+	GSList *iter;
+	for (iter = s_pKeyBindings; iter != NULL; iter = iter->next)
+	{
+		GldiShortkey *binding = (GldiShortkey *) iter->data;
+
+		if (updated) _do_grab_key (binding, _shortkey_rebind_cb, NULL); // will emit NOTIFICATION_SHORTKEY_CHANGED
+		else
+		{
+			// note: this event is sent on X11 and is followed by the same with updated == TRUE
+			_do_ungrab_key (binding);
+			binding->bSuccess = FALSE;
+		}
+	}
+	return GLDI_NOTIFICATION_LET_PASS;
 }
 
 
@@ -329,7 +404,7 @@ static void init (void)
  /// MANAGER ///
 ///////////////
 
-static void _shortkey_warning_cb (GldiShortkey *pShortkey)
+static void _shortkey_warning_cb (GldiShortkey *pShortkey, G_GNUC_UNUSED gpointer ptr)
 {
 	if (! pShortkey->bSuccess)
 	{
@@ -357,8 +432,12 @@ static void init_object (GldiObject *obj, gpointer attr)
 	s_pKeyBindings = g_slist_prepend (s_pKeyBindings, pShortkey);
 	
 	// try to grab the key
-	if (pShortkey->keystring != NULL)
-		do_grab_key (pShortkey, _shortkey_warning_cb);
+	if (!_do_grab_key (pShortkey, sattr->bind_cb ? sattr->bind_cb : _shortkey_warning_cb, sattr->bind_data))
+	{
+		// could not parse, indicate failure
+		// note: bSuccess == FALSE at this point (newly allocated object)
+		if (sattr->bind_cb) sattr->bind_cb (pShortkey, sattr->bind_data);
+	}
 }
 
 static void reset_object (GldiObject *obj)
@@ -367,7 +446,7 @@ static void reset_object (GldiObject *obj)
 	
 	// unbind the shortkey
 	if (pShortkey->bSuccess)
-		do_ungrab_key (pShortkey);
+		_do_ungrab_key (pShortkey);
 	
 	// remove it from the list
 	cd_debug (" --- remove key binding '%s'", pShortkey->keystring);

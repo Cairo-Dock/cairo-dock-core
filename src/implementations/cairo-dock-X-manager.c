@@ -974,7 +974,7 @@ static void _refresh (void)
 	cd_debug ("desktop refresh -> %dx%dx%d", g_desktopGeometry.iNbDesktops, g_desktopGeometry.iNbViewportX, g_desktopGeometry.iNbViewportY);
 }
 
-static void _grab_shortkey (GldiShortkey *pBinding, gboolean grab, CairoDockGrabKeyResult cb)
+static void _grab_shortkey (GldiShortkey *pBinding, gboolean grab, CairoDockGrabKeyResult cb, gpointer user_data)
 {
 	guint keycode = pBinding->keycode;
 	guint modifiers = pBinding->modifiers;
@@ -1019,7 +1019,7 @@ static void _grab_shortkey (GldiShortkey *pBinding, gboolean grab, CairoDockGrab
 		XSync (s_XDisplay, False);
 		int error = cairo_dock_get_X_error_code ();
 		pBinding->bSuccess = (error == 0);
-		if (cb) cb (pBinding);
+		if (cb) cb (pBinding, user_data);
 	}
 	else pBinding->bSuccess = FALSE;
 }

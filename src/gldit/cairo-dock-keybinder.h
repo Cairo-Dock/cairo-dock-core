@@ -48,6 +48,9 @@ G_BEGIN_DECLS
 /// Definition of a callback, called when a shortcut is pressed by the user.
 typedef void (* CDBindkeyHandler) (const gchar *keystring, gpointer user_data);
 
+/// Callback for binding the shortkey
+typedef void (* CDBindkeyCB) (GldiShortkey *pShortkey, gpointer user_data);
+
 struct _GldiShortkey {
 	/// object.
 	GldiObject object;
@@ -67,23 +70,9 @@ struct _GldiShortkey {
 
 
 // manager
-typedef struct _GldiShortkeyAttr GldiShortkeyAttr;
-
 #ifndef _MANAGER_DEF_
 extern GldiObjectManager myShortkeyObjectMgr;
 #endif
-
-struct _GldiShortkeyAttr {
-	const gchar            *keystring;
-	CDBindkeyHandler        handler;
-	gpointer                user_data;
-	const gchar            *cDemander;
-	const gchar            *cDescription;
-	const gchar            *cIconFilePath;
-	const gchar            *cConfFilePath;
-	const gchar            *cGroupName;
-	const gchar            *cKeyName;
-};
 
 // signals
 typedef enum {
@@ -102,7 +91,7 @@ typedef enum {
  * @param cKeyName key name where it's stored in the conf file
  * @param handler function called when the shortkey is pressed by the user
  * @param user_data data passed to the callback
- * @return the shortkey, already bound.
+ * @return the shortkey, which might or might not be already bound
 */
 GldiShortkey *gldi_shortkey_new (const gchar *keystring,
 	const gchar *cDemander,
@@ -113,6 +102,36 @@ GldiShortkey *gldi_shortkey_new (const gchar *keystring,
 	const gchar *cKeyName,
 	CDBindkeyHandler handler,
 	gpointer user_data);
+
+/** Create a new shortkey, calling the given callback with the result so that the caller can
+ * deterministically check whether it succeeded.
+ * @param keystring a shortcut.
+ * @param cDemander the actor making the demand
+ * @param cDescription a short description of the action
+ * @param cIconFilePath an icon that represents the demander
+ * @param cConfFilePath conf file where the shortkey stored
+ * @param cGroupName group name where it's stored in the conf file
+ * @param cKeyName key name where it's stored in the conf file
+ * @param handler function called when the shortkey is pressed by the user
+ * @param user_data data passed to the callback
+ * @param result_cb function that will be called when the binding is finished (succeeded or failed)
+ * @param result_data data passed to the result_cb callback
+ * @return the shortkey, which might or might not be already bound
+ * 
+ * Note: result_cb might be called immediately (i.e. before returning from this function),
+ * or some time later if binding is done asynchronously.
+*/
+GldiShortkey *gldi_shortkey_new_full (const gchar *keystring,
+	const gchar *cDemander,
+	const gchar *cDescription,
+	const gchar *cIconFilePath,
+	const gchar *cConfFilePath,
+	const gchar *cGroupName,
+	const gchar *cKeyName,
+	CDBindkeyHandler handler,
+	gpointer user_data,
+	CDBindkeyCB result_cb,
+	gpointer result_data);
 
 /** Says if the shortkey of a key binding could be grabbed.
  * @param binding a key binding.
@@ -130,6 +149,23 @@ GldiShortkey *gldi_shortkey_new (const gchar *keystring,
 void gldi_shortkey_rebind (GldiShortkey *binding,
 	const gchar *cNewKeyString,
 	const gchar *cNewDescription);
+
+/** Rebind a shortkey to a new one with a callback function to deterministically signal success or failure.
+ * If the shortkey is the same, don't re-bind it.
+ * @param binding a key binding.
+ * @param cNewKeyString the new shortkey
+ * @param cNewDescription the new description, or NULL to keep the current one.
+ * @param result_cb function that will be called when the binding is finished (succeeded or failed)
+ * @param result_data data passed to the result_cb callback
+ * 
+ * Note: result_cb might be called immediately (i.e. before returning from this function),
+ * or some time later if binding is done asynchronously.
+*/
+void gldi_shortkey_rebind_full (GldiShortkey *binding,
+	const gchar *cNewKeyString,
+	const gchar *cNewDescription,
+	CDBindkeyCB result_cb,
+	gpointer result_data);
 
 
 void gldi_shortkeys_foreach (GFunc pCallback, gpointer data);
