@@ -2340,10 +2340,11 @@ static void init_object (GldiObject *obj, gpointer attr)
 	//\__________________ load the icons.
 	if (pIconList != NULL)
 	{
-		_reload_buffers_in_dock (pDock, FALSE, TRUE);  // idle reload; FALSE = not recursively, TRUE = compute icons size
+		// idle reload; FALSE = not recursively, TRUE = compute icons size
+		// this will also call cairo_dock_update_dock_size() on the dock
+		_reload_buffers_in_dock (pDock, FALSE, TRUE);
 	}
-	
-	cairo_dock_update_dock_size (pDock);
+	else cairo_dock_update_dock_size (pDock);
 }
 
 static void reset_object (GldiObject *obj)
