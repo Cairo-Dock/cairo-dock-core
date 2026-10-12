@@ -59,6 +59,7 @@ void cairo_dock_update_dock_size (CairoDock *pDock)
 	}
 	int iPrevMaxDockHeight = pDock->iMaxDockHeight;
 	int iPrevMaxDockWidth = pDock->iMaxDockWidth;
+	double fMaxIconWidth = 0.0;
 	
 	//\__________________________ First compute the dock's size.
 	
@@ -76,7 +77,10 @@ void cairo_dock_update_dock_size (CairoDock *pDock)
 			icon->fHeight /= pDock->container.fRatio;
 			pDock->fFlatDockWidth += icon->fWidth + myIconsParam.iIconGap;
 			if (! GLDI_OBJECT_IS_SEPARATOR_ICON (icon))
+			{
 				pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, icon->fHeight);
+				fMaxIconWidth = MAX (fMaxIconWidth, icon->fWidth);
+			}
 		}
 		if (pDock->iMaxIconHeight == 0)
 			pDock->iMaxIconHeight = 10;
@@ -100,17 +104,20 @@ void cairo_dock_update_dock_size (CairoDock *pDock)
 	if (iScreenHeight > 0 && iMaxAuthorizedWidth > 0) do
 	{
 		double fPrevRatio = pDock->container.fRatio;
+		double fWidth1 = (myDocksParam.bExtendWidth && pDock->iRefCount == 0)
+			? (pDock->iMinDockWidth + 2.0 * pDock->fMagnitudeMax * myIconsParam.fAmplitude * fMaxIconWidth)
+			: pDock->iMaxDockWidth;
 		//g_print ("  %s (%d / %d)\n", __func__, (int)pDock->iMaxDockWidth, iMaxAuthorizedWidth);
-		if (pDock->iMaxDockWidth > iMaxAuthorizedWidth)
+		if (fWidth1 > iMaxAuthorizedWidth)
 		{
-			pDock->container.fRatio *= (double)iMaxAuthorizedWidth / pDock->iMaxDockWidth;
+			pDock->container.fRatio *= (double)iMaxAuthorizedWidth / fWidth1;
 		}
 		else
 		{
 			double fMaxRatio = (pDock->iRefCount == 0 ? 1 : myBackendsParam.fSubDockSizeRatio);
 			if (pDock->container.fRatio < fMaxRatio)
 			{
-				pDock->container.fRatio *= (double)iMaxAuthorizedWidth / pDock->iMaxDockWidth;
+				pDock->container.fRatio *= (double)iMaxAuthorizedWidth / fWidth1;
 				pDock->container.fRatio = MIN (pDock->container.fRatio, fMaxRatio);
 			}
 			else
@@ -128,12 +135,19 @@ void cairo_dock_update_dock_size (CairoDock *pDock)
 			Icon *icon;
 			GList *ic;
 			pDock->fFlatDockWidth = -myIconsParam.iIconGap;
+			pDock->iMaxIconHeight = 0;
+			fMaxIconWidth = 0.0;
 			for (ic = pDock->icons; ic != NULL; ic = ic->next)
 			{
 				icon = ic->data;
 				icon->fWidth *= pDock->container.fRatio / fPrevRatio;
 				icon->fHeight *= pDock->container.fRatio / fPrevRatio;
 				pDock->fFlatDockWidth += icon->fWidth + myIconsParam.iIconGap;
+				if (! GLDI_OBJECT_IS_SEPARATOR_ICON (icon))
+				{
+					pDock->iMaxIconHeight = MAX (pDock->iMaxIconHeight, icon->fHeight);
+					fMaxIconWidth = MAX (fMaxIconWidth, icon->fWidth);
+				}
 			}
 			hmax *= pDock->container.fRatio / fPrevRatio;
 			
@@ -145,10 +159,18 @@ void cairo_dock_update_dock_size (CairoDock *pDock)
 				pDock->iActiveHeight = pDock->iMaxDockHeight;
 		}
 		
+		fWidth1 = (myDocksParam.bExtendWidth && pDock->iRefCount == 0)
+			? (pDock->iMinDockWidth + 2.0 * pDock->fMagnitudeMax * myIconsParam.fAmplitude * fMaxIconWidth)
+			: pDock->iMaxDockWidth;
+		if (fWidth1 <= iMaxAuthorizedWidth && pDock->iMaxDockHeight <= iScreenHeight
+			&& (pDock->container.fRatio >= 1.0 || pDock->iMaxDockWidth >= iMaxAuthorizedWidth-5))
+		{
+			break;
+		}
+		
 		//g_print ("*** ratio : %.3f -> %.3f\n", fPrevRatio, pDock->container.fRatio);
 		n ++;
-	} while ((pDock->iMaxDockWidth > iMaxAuthorizedWidth || pDock->iMaxDockHeight > iScreenHeight || (pDock->container.fRatio < 1 && pDock->iMaxDockWidth < iMaxAuthorizedWidth-5)) && n < 8);
-	pDock->iMaxIconHeight = hmax;
+	} while (n < 8);
 	//g_print (">>> iMaxIconHeight : %d, ratio : %.2f, fFlatDockWidth : %.2f\n", (int) pDock->iMaxIconHeight, pDock->container.fRatio, pDock->fFlatDockWidth);
 	
 	//\__________________________ Then take the necessary actions due to the new size.
