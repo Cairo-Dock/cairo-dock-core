@@ -1165,17 +1165,22 @@ void gldi_dock_set_visibility (CairoDock *pDock, CairoDockVisibility iVisibility
 		{
 			if (s_pPopupBinding && gldi_shortkey_could_grab (s_pPopupBinding))  // a shortkey has been registered and grabbed to show/hide the dock => hide the dock.
 			{
-				gtk_widget_hide (pDock->container.pWidget);
+				cairo_dock_start_hiding (pDock);
+				pDock->bAutoHide = TRUE;
 			}
 			else  // bind couldn't be done (no shortkey or couldn't grab it).
 			{
 				// g_print ("bind couldn't be done (no shortkey or couldn't grab it).\n");
 				pDock->iVisibility = CAIRO_DOCK_VISI_KEEP_ABOVE;
+				pDock->bAutoHide = FALSE;
+				cairo_dock_start_showing (pDock);
 			}
 		}
 		else if (bShortKey0)  // option is now disabled => show the dock.
 		{
 			_reposition_root_docks (FALSE);  // FALSE => tous.
+			pDock->bAutoHide = FALSE;
+			cairo_dock_start_showing (pDock);
 		}
 	}
 	
@@ -1191,7 +1196,7 @@ void gldi_dock_set_visibility (CairoDock *pDock, CairoDockVisibility iVisibility
 static gboolean _autohide_after_shortkey (CairoDock *pDock)
 {
 	if (pDock->iVisibility == CAIRO_DOCK_VISI_SHORTKEY && gldi_container_is_visible (CAIRO_CONTAINER (pDock)) && ! pDock->container.bInside)
-		gtk_widget_hide (pDock->container.pWidget);
+		cairo_dock_start_hiding (pDock);
 	pDock->iSidHideBack = 0;
 	return FALSE;
 }
@@ -1200,10 +1205,8 @@ static void _show_dock_at_mouse (CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 	if (pDock->iVisibility != CAIRO_DOCK_VISI_SHORTKEY)
 		return;
 	
-	if (gldi_container_is_visible (CAIRO_CONTAINER (pDock)))  // already visible -> hide (toggle)
-	{
-		gtk_widget_hide (pDock->container.pWidget);
-	}
+	if (!cairo_dock_is_hidden (pDock))  // already visible -> hide (toggle)
+		cairo_dock_start_hiding (pDock);
 	else  // invisible -> show
 	{
 		// calculate the position where the dock will be shown (under the mouse)
@@ -1215,17 +1218,19 @@ static void _show_dock_at_mouse (CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 		///pDock->iGapY = (pDock->container.bDirectionUp ? g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal] - (pDock->container.iWindowPositionY + iMouseY) : pDock->container.iWindowPositionY + iMouseY);
 		pDock->iGapX = pDock->container.iWindowPositionX + pDock->container.iMouseX - (W - pDock->container.iWidth) * pDock->fAlign - pDock->container.iWidth/2 - iScreenOffsetX;
 		pDock->iGapY = (pDock->container.bDirectionUp ? H - (pDock->container.iWindowPositionY + pDock->container.iMouseY) : pDock->container.iWindowPositionY + pDock->container.iMouseY) - iScreenOffsetY;
-		cd_debug (" => %d;%d", g_pMainDock->iGapX, g_pMainDock->iGapY);
-	
+
 		int iNewPositionX, iNewPositionY;
 		cairo_dock_get_window_position_at_balance (pDock,
 			pDock->container.iWidth, pDock->container.iHeight,
 			&iNewPositionX, &iNewPositionY);
-		cd_debug (" ==> %d;%d", iNewPositionX, iNewPositionY);
-		if (iNewPositionX < 0)
-			iNewPositionX = 0;
-		else if (iNewPositionX + pDock->container.iWidth > W)
-			iNewPositionX = W - pDock->container.iWidth;
+		
+		cd_debug (" %d;%d => %d;%d ==> %d;%d", pDock->container.iMouseX, pDock->container.iMouseY,
+			pDock->iGapX, pDock->iGapY, iNewPositionX, iNewPositionY);
+		
+		if (iNewPositionX + (pDock->container.iWidth - pDock->iMaxDockWidth) / 2 < 0)
+			iNewPositionX = (pDock->iMaxDockWidth - pDock->container.iWidth) / 2;
+		else if (iNewPositionX + (pDock->container.iWidth + pDock->iMaxDockWidth) / 2 > W)
+			iNewPositionX = W - (pDock->container.iWidth + pDock->iMaxDockWidth) / 2;
 	
 		if (iNewPositionY < 0)
 			iNewPositionY = 0;
@@ -1233,10 +1238,15 @@ static void _show_dock_at_mouse (CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 			iNewPositionY = H - pDock->container.iHeight;
 		
 		// show the dock
-		gtk_window_move (GTK_WINDOW (pDock->container.pWidget),
-			(pDock->container.bIsHorizontal ? iNewPositionX : iNewPositionY),
-			(pDock->container.bIsHorizontal ? iNewPositionY : iNewPositionX));
 		gtk_widget_show (pDock->container.pWidget);
+		gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)),
+			(pDock->container.bIsHorizontal ? iNewPositionX : iNewPositionY),
+			(pDock->container.bIsHorizontal ? iNewPositionY : iNewPositionX),
+			(pDock->container.bIsHorizontal ? pDock->iMaxDockWidth : pDock->iMaxDockHeight),
+			(pDock->container.bIsHorizontal ? pDock->iMaxDockHeight : pDock->iMaxDockWidth)
+		); // works better than gtk_window_move()
+		
+		cairo_dock_start_showing (pDock);
 		
 		// schedule a hiding in a few seconds
 		if (pDock->iSidHideBack != 0)
@@ -1932,9 +1942,12 @@ static void _save_custom_widget (GKeyFile *pKeyFile, GSList *pWidgetList)
 ////////////
 
 
-static void _raise_shortcut_bound (G_GNUC_UNUSED GldiShortkey *pShortkey, G_GNUC_UNUSED gpointer user_data)
+static void _raise_shortcut_bound (GldiShortkey *pShortkey, G_GNUC_UNUSED gpointer user_data)
 {
 	g_return_if_fail (g_pMainDock != NULL);
+	
+	// need to set here, so that we can access it from gldi_dock_set_visibility() already
+	if (!s_pPopupBinding) s_pPopupBinding = pShortkey;
 	
 	// will update as required
 	gldi_dock_set_visibility (g_pMainDock, myDocksParam.iVisibility);
