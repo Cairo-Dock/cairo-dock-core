@@ -1209,42 +1209,49 @@ static void _show_dock_at_mouse (CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 		cairo_dock_start_hiding (pDock);
 	else  // invisible -> show
 	{
-		// calculate the position where the dock will be shown (under the mouse)
-		gldi_container_update_mouse_position (CAIRO_CONTAINER (pDock));
-	
-		int W = gldi_dock_get_screen_width (pDock), H = gldi_dock_get_screen_height (pDock);
-		int iScreenOffsetX = gldi_dock_get_screen_offset_x (pDock), iScreenOffsetY = gldi_dock_get_screen_offset_y (pDock);
-		///pDock->iGapX = pDock->container.iWindowPositionX + iMouseX - g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] * pDock->fAlign;
-		///pDock->iGapY = (pDock->container.bDirectionUp ? g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal] - (pDock->container.iWindowPositionY + iMouseY) : pDock->container.iWindowPositionY + iMouseY);
-		pDock->iGapX = pDock->container.iWindowPositionX + pDock->container.iMouseX - (W - pDock->container.iWidth) * pDock->fAlign - pDock->container.iWidth/2 - iScreenOffsetX;
-		pDock->iGapY = (pDock->container.bDirectionUp ? H - (pDock->container.iWindowPositionY + pDock->container.iMouseY) : pDock->container.iWindowPositionY + pDock->container.iMouseY) - iScreenOffsetY;
+		if (!gldi_container_is_wayland_backend() && myDocksParam.bRaiseAtMouse)
+		{
+			// calculate the position where the dock will be shown (under the mouse)
+			gldi_container_update_mouse_position (CAIRO_CONTAINER (pDock));
+		
+			int W = gldi_dock_get_screen_width (pDock), H = gldi_dock_get_screen_height (pDock);
+			int iScreenOffsetX = gldi_dock_get_screen_offset_x (pDock), iScreenOffsetY = gldi_dock_get_screen_offset_y (pDock);
+			///pDock->iGapX = pDock->container.iWindowPositionX + iMouseX - g_desktopGeometry.iScreenWidth[pDock->container.bIsHorizontal] * pDock->fAlign;
+			///pDock->iGapY = (pDock->container.bDirectionUp ? g_desktopGeometry.iScreenHeight[pDock->container.bIsHorizontal] - (pDock->container.iWindowPositionY + iMouseY) : pDock->container.iWindowPositionY + iMouseY);
+			pDock->iGapX = pDock->container.iWindowPositionX + pDock->container.iMouseX - (W - pDock->container.iWidth) * pDock->fAlign - pDock->container.iWidth/2 - iScreenOffsetX;
+			pDock->iGapY = (pDock->container.bDirectionUp ? H - (pDock->container.iWindowPositionY + pDock->container.iMouseY) : pDock->container.iWindowPositionY + pDock->container.iMouseY) - iScreenOffsetY;
 
-		int iNewPositionX, iNewPositionY;
-		cairo_dock_get_window_position_at_balance (pDock,
-			pDock->container.iWidth, pDock->container.iHeight,
-			&iNewPositionX, &iNewPositionY);
+			/** TODO: the following is almost the same as the _move_resize_dock() function in
+			 * cairo-dock-X-manager.c, the only difference is that here, we constrain the position
+			 * (which might be good to add there too?) */
+			int iNewPositionX, iNewPositionY;
+			cairo_dock_get_window_position_at_balance (pDock,
+				pDock->container.iWidth, pDock->container.iHeight,
+				&iNewPositionX, &iNewPositionY);
+			
+			cd_debug (" %d;%d => %d;%d ==> %d;%d", pDock->container.iMouseX, pDock->container.iMouseY,
+				pDock->iGapX, pDock->iGapY, iNewPositionX, iNewPositionY);
+			
+			if (iNewPositionX + (pDock->container.iWidth - pDock->iMaxDockWidth) / 2 < 0)
+				iNewPositionX = (pDock->iMaxDockWidth - pDock->container.iWidth) / 2;
+			else if (iNewPositionX + (pDock->container.iWidth + pDock->iMaxDockWidth) / 2 > W)
+				iNewPositionX = W - (pDock->container.iWidth + pDock->iMaxDockWidth) / 2;
 		
-		cd_debug (" %d;%d => %d;%d ==> %d;%d", pDock->container.iMouseX, pDock->container.iMouseY,
-			pDock->iGapX, pDock->iGapY, iNewPositionX, iNewPositionY);
-		
-		if (iNewPositionX + (pDock->container.iWidth - pDock->iMaxDockWidth) / 2 < 0)
-			iNewPositionX = (pDock->iMaxDockWidth - pDock->container.iWidth) / 2;
-		else if (iNewPositionX + (pDock->container.iWidth + pDock->iMaxDockWidth) / 2 > W)
-			iNewPositionX = W - (pDock->container.iWidth + pDock->iMaxDockWidth) / 2;
-	
-		if (iNewPositionY < 0)
-			iNewPositionY = 0;
-		else if (iNewPositionY + pDock->container.iHeight > H)
-			iNewPositionY = H - pDock->container.iHeight;
-		
-		// show the dock
-		gtk_widget_show (pDock->container.pWidget);
-		gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)),
-			(pDock->container.bIsHorizontal ? iNewPositionX : iNewPositionY),
-			(pDock->container.bIsHorizontal ? iNewPositionY : iNewPositionX),
-			(pDock->container.bIsHorizontal ? pDock->iMaxDockWidth : pDock->iMaxDockHeight),
-			(pDock->container.bIsHorizontal ? pDock->iMaxDockHeight : pDock->iMaxDockWidth)
-		); // works better than gtk_window_move()
+			if (iNewPositionY < 0)
+				iNewPositionY = 0;
+			else if (iNewPositionY + pDock->container.iHeight > H)
+				iNewPositionY = H - pDock->container.iHeight;
+			
+			// show the dock
+			gtk_widget_show (pDock->container.pWidget);
+			gdk_window_move_resize (gldi_container_get_gdk_window (CAIRO_CONTAINER (pDock)),
+				(pDock->container.bIsHorizontal ? iNewPositionX : iNewPositionY),
+				(pDock->container.bIsHorizontal ? iNewPositionY : iNewPositionX),
+				(pDock->container.bIsHorizontal ? pDock->iMaxDockWidth : pDock->iMaxDockHeight),
+				(pDock->container.bIsHorizontal ? pDock->iMaxDockHeight : pDock->iMaxDockWidth)
+			); // works better than gtk_window_move()
+		}
+		else gtk_widget_show (pDock->container.pWidget); // usual position
 		
 		cairo_dock_start_showing (pDock);
 		
@@ -2121,6 +2128,14 @@ static void reload (CairoDocksParam *pPrevDocksParam, CairoDocksParam *pDocksPar
 		{
 			gldi_shortkey_rebind_full (s_pPopupBinding, myDocksParam.cRaiseDockShortcut, NULL,
 				_raise_shortcut_bound, NULL);
+		}
+		
+		if (pPrevAccessibility->iVisibility == CAIRO_DOCK_VISI_SHORTKEY &&
+			!pAccessibility->bRaiseAtMouse && pPrevAccessibility->bRaiseAtMouse &&
+			!gldi_container_is_wayland_backend())
+		{
+			// note: iGapX and iGapY has been reset above
+			cairo_dock_move_resize_dock (pDock);
 		}
 	}
 	else if (s_pPopupBinding)
