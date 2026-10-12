@@ -83,6 +83,7 @@ static GdkMonitor* _get_monitor_for_dock (CairoDock *pDock)
 
 static void _hotspot_hit_cb (CairoDock *pDock, gpointer user_data)
 {
+	if (pDock->iVisibility == CAIRO_DOCK_VISI_SHORTKEY) return;
 	if (! pDock->bAutoHide && pDock->iVisibility != CAIRO_DOCK_VISI_KEEP_BELOW) return;
 	
 	const hotspot_hit *hit = (const hotspot_hit*)user_data;
@@ -414,6 +415,7 @@ static gboolean _monitor_removed (G_GNUC_UNUSED gpointer user_data, GdkMonitor *
 /// Update the hotspots listened to for this dock if needed
 static void _update_dock_hotspots (CairoDock *pDock, G_GNUC_UNUSED gpointer user_data)
 {
+	if (pDock->iVisibility == CAIRO_DOCK_VISI_SHORTKEY) return;
 	if (! (pDock->bAutoHide && pDock->fHideOffset > 0.0) && ! pDock->bIsBelow) return;
 	
 	CairoDockPositionType pos = gldi_wayland_get_edge_for_dock (pDock);
