@@ -18,18 +18,22 @@ screen_geometry =
 #F-[Visibility of the main dock;@pkgdatadir@/icons/icon-visibility.svg]
 frame_visi =
 
-#Y-[Always on top;0;0;Reserve space for the dock;0;0;Keep the dock below;0;0;Hide the dock when it overlaps the current window;1;1;Hide the dock whenever it overlaps any window;1;1;Keep the dock hidden;1;1;Pop-up on shortcut;2;1] Visibility:
+#Y-[Always on top;0;0;Reserve space for the dock;0;0;Keep the dock below;0;0;Hide the dock when it overlaps the current window;1;1;Hide the dock whenever it overlaps any window;1;1;Keep the dock hidden;1;1;Pop-up on shortcut;2;2] Visibility:
 #{Modes are sorted from the most intrusive to the less intrusive.
 #When the dock is hidden or below a window, place the mouse on the screen's border to call it back.
-#When the dock pops up on shortcut, it will appear at the position of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
+#When the dock pops up on shortcut, it will only appear when recalled. The rest of the time, it stays invisible, thus acting like a menu.}
 visibility = 4
 
 #L-[None;Move down;Fade out;Semi transparent;Zoom out;Folding] Effect used to hide the dock:
 hide effect = Move down
 
 #k- Keyboard shortcut to pop-up the dock:
-#{When you press the shortcut, the dock will show itself at the potition of your mouse. The rest of the time, it stays invisible, thus acting like a menu.}
+#{When you press the shortcut, the dock will show itself. The rest of the time, it stays invisible, thus acting like a menu.}
 raise shortcut = 
+
+#b- Pop-up the dock at the current mouse position:
+#{When you press the shortcut, the dock will show itself at the potition of your mouse instead of its usual position. Only available on X11.}
+raise at mouse = false
 
 #F-[Visibility of sub-docks;@pkgdatadir@/icons/icon-subdock.png]
 frame_sub =
