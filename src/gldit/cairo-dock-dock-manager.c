@@ -1557,6 +1557,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 	
 	pAccessibility->cHideEffect = cairo_dock_get_string_key_value (pKeyFile, "Accessibility", "hide effect", &bFlushConfFileNeeded, NULL, NULL, NULL);
 	
+	pAccessibility->bRaiseAtMouse = cairo_dock_get_boolean_key_value (pKeyFile, "Accessibility", "raise at mouse", &bFlushConfFileNeeded, FALSE, NULL, NULL);
+	
 	if (iVisibility == -1)  // option nouvelle 2.1.3
 	{
 		if (g_key_file_get_boolean (pKeyFile, "Accessibility", "reserve space", NULL))
