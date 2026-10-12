@@ -1308,6 +1308,7 @@ typedef struct {
 
 static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, CDMousePolling *pMouse)
 {
+	if (pDock->iVisibility == CAIRO_DOCK_VISI_SHORTKEY) return;
 	if (! pDock->bAutoHide && pDock->iVisibility != CAIRO_DOCK_VISI_KEEP_BELOW)
 		return;
 	
@@ -1457,7 +1458,7 @@ static gboolean s_bShouldPoll = FALSE;
 
 static void _check_should_poll_screen_edge (CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 {
-	if (pDock->bAutoHide == TRUE) s_bShouldPoll = TRUE;
+	if (pDock->bAutoHide == TRUE && pDock->iVisibility != CAIRO_DOCK_VISI_SHORTKEY) s_bShouldPoll = TRUE;
 	else switch (pDock->iVisibility)
 	{
 		case CAIRO_DOCK_VISI_KEEP_BELOW:
