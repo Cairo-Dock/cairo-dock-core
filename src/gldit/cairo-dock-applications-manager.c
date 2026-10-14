@@ -145,7 +145,7 @@ static gboolean _on_window_name_changed (G_GNUC_UNUSED gpointer data, GldiWindow
 	if (pIcon == NULL)
 		return GLDI_NOTIFICATION_LET_PASS;
 	
-	gldi_icon_set_name (pIcon, actor->cName);
+	gldi_icon_set_name_utf8 (pIcon, actor->cName);
 	
 	///cairo_dock_update_name_on_inhibitors (actor->cClass, actor, pIcon->cName);
 	gldi_window_inhibitors_set_name (actor, pIcon->cName);
