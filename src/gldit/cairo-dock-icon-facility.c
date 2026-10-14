@@ -591,7 +591,7 @@ void gldi_icon_set_name (Icon *pIcon, const gchar *cIconName)  // fonction propo
 	g_return_if_fail (pIcon != NULL);
 	
 	const gchar *cEnd = NULL;
-	if (g_utf8_validate (cIconName, -1, &cEnd))
+	if (!cIconName || g_utf8_validate (cIconName, -1, &cEnd))
 		_set_icon_name_internal (pIcon, cIconName, NULL);
 	else
 		// truncate to use only the valid part
