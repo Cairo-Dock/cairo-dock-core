@@ -282,20 +282,26 @@ endif()
 ########### desktop manager ###############
 
 if (enable-desktop-manager)
-	if (NOT DEFINED gnome-session-use-systemd)
-		set (gnome-session-use-systemd FALSE)
-		find_program (GS_COMMAND gnome-session)
-		if (GS_COMMAND)
-			# note: --debug is needed as older versions would redirect output to the system log, see:
-			# https://gitlab.gnome.org/GNOME/gnome-session/-/issues/64
-			execute_process (COMMAND ${GS_COMMAND} --version --debug OUTPUT_VARIABLE GS_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
-			# output format: /usr/libexec/gnome-session-binary 46.0 -- we need the last component
-			STRING (REGEX MATCH "[0-9.]+$" GS_VERSION ${GS_VERSION}) # keep only the version number
+	find_program (GS_COMMAND gnome-session)
+	if (GS_COMMAND)
+		# note: --debug is needed as older versions would redirect output to the system log, see:
+		# https://gitlab.gnome.org/GNOME/gnome-session/-/issues/64
+		execute_process (COMMAND ${GS_COMMAND} --version --debug OUTPUT_VARIABLE GS_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
+		# output format: /usr/libexec/gnome-session-binary 46.0 -- we need the last component
+		STRING (REGEX MATCH "[0-9.]+$" GS_VERSION ${GS_VERSION}) # keep only the version number
+		if ("${GS_VERSION}" VERSION_GREATER_EQUAL "50.0")
+			message(FATAL_ERROR "Desktop session only works with gnome-session versions < 50!")
+		endif ()
+		if (NOT DEFINED gnome-session-use-systemd)
+			set (gnome-session-use-systemd FALSE)
 			if ("${GS_VERSION}" VERSION_GREATER_EQUAL "49.0")
 				set (gnome-session-use-systemd TRUE)
 			endif ()
 		endif ()
+	else ()
+		message(FATAL_ERROR "Cannot find 'gnome-session' (required for the desktop sessions)")
 	endif ()
+	
 	if (gnome-session-use-systemd)
 		if (NOT DEFINED enable-systemd-service)
 			set (enable-systemd-service TRUE)
