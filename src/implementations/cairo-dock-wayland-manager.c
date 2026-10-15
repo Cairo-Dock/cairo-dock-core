@@ -36,7 +36,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-applications-manager.h"  // myTaskbarParam.iMinimizedWindowRenderType
-#include "cairo-dock-desktop-manager.h"
+#include "cairo-dock-desktop-manager-priv.h"
 #include "cairo-dock-class-manager.h"  // gldi_class_startup_notify_end
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-container-priv.h"  // GldiContainerManagerBackend

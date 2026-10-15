@@ -30,7 +30,7 @@
 #include <gdk/gdkwayland.h>
 #include "wayland-plasma-window-management-client-protocol.h"
 #include "cairo-dock-windows-manager-priv.h"
-#include "cairo-dock-desktop-manager.h"
+#include "cairo-dock-desktop-manager-priv.h"
 #include "cairo-dock-container-priv.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-plasma-window-manager.h"

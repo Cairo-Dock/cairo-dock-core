@@ -20,7 +20,7 @@
 
 #include "wayland-plasma-virtual-desktop-client-protocol.h"
 #include "cairo-dock-log.h"
-#include "cairo-dock-desktop-manager.h"
+#include "cairo-dock-desktop-manager-priv.h"
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-plasma-virtual-desktop.h"
 #include "cairo-dock-wayland-wm.h"

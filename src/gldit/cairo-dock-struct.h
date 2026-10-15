@@ -502,8 +502,6 @@ typedef struct _GldiDesktopGeometry GldiDesktopGeometry;
 
 typedef struct _GldiDesktopBackground GldiDesktopBackground;
 
-typedef struct _GldiDesktopManagerBackend GldiDesktopManagerBackend;
-
 typedef struct _GldiWindowManagerBackend GldiWindowManagerBackend;
 
 typedef struct _GldiWindowActor GldiWindowActor;
