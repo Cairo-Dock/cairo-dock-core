@@ -1085,11 +1085,15 @@ static CairoDockDesktopEnv _guess_environment (void)
 		if (strstr(cEnv, "GNOME") != NULL)
 			return CAIRO_DOCK_GNOME;
 		else if (strstr(cEnv, "Cinnamon") != NULL)
-			return CAIRO_DOCK_GNOME; // close enough
+			return CAIRO_DOCK_CINNAMON;
 		else if (strstr(cEnv, "XFCE") != NULL)
 			return CAIRO_DOCK_XFCE;
 		else if (strstr(cEnv, "KDE") != NULL)
 			return CAIRO_DOCK_KDE;
+		else if (strstr(cEnv, "MATE") != NULL)
+			return CAIRO_DOCK_MATE;
+		else if (strstr(cEnv, "COSMIC") != NULL)
+			return CAIRO_DOCK_COSMIC;
 		else
 		{
 			cd_debug ("couldn't interpret XDG_CURRENT_DESKTOP=%s", cEnv);
