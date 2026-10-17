@@ -51,28 +51,49 @@ CairoDockDesktopEnv g_iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
 
 // private
 static CairoDockDesktopEnvBackend s_EnvBackend = { NULL };
-
+static CairoDockDesktopEnvBackend s_EnvBackendCore = { NULL };
+static CairoDockDesktopEnvBackend s_EnvBackendOverride = { NULL };
 
 void cairo_dock_fm_force_desktop_env (CairoDockDesktopEnv iForceDesktopEnv)
 {
 	g_iDesktopEnv = iForceDesktopEnv; // note: this is only called from cairo-dock.c, before desktop specific plugins are loaded
 }
 
-void cairo_dock_fm_register_vfs_backend (CairoDockDesktopEnvBackend *pVFSBackend, gboolean bOverwrite)
+static void _set_env_backend (CairoDockDesktopEnvBackend *target, CairoDockDesktopEnvBackend *src, gboolean bKeep)
 {
-	gpointer *ptr = (gpointer*)&s_EnvBackend;
-	gpointer *src = (gpointer*)pVFSBackend;
-	gpointer *src_end = (gpointer*)(pVFSBackend + 1);
-	while (src != src_end)
+	gpointer *ptr = (gpointer*)target;
+	gpointer *ptr_end = (gpointer*)(target + 1);
+	gpointer *src2 = src ? (gpointer*)src : NULL;
+	while (ptr != ptr_end)
 	{
-		if (*src)
+		if (src2)
 		{
-			if (!*ptr || bOverwrite)
-				*ptr = *src;
+			if (*src2 || !bKeep) *ptr = *src2;
+			++src2;
 		}
-		src ++;
-		ptr ++;
+		else if (!bKeep) *ptr = NULL;
+		++ptr;
 	}
+}
+
+static void _merge_backends (void)
+{
+	_set_env_backend (&s_EnvBackend, &s_EnvBackendCore, FALSE); // reset from the core
+	_set_env_backend (&s_EnvBackend, &s_EnvBackendOverride, TRUE); // finally, set the override from the DE plugin
+}
+
+void cairo_dock_fm_register_vfs_backend (CairoDockDesktopEnvBackend *pVFSBackend)
+{
+	// will override already set functions only if defined in pVFSBackend
+	_set_env_backend (&s_EnvBackendCore, pVFSBackend, TRUE);
+	_merge_backends ();
+}
+
+void cairo_dock_fm_register_de_integration_override_backend (CairoDockDesktopEnvBackend *pVFSBackend)
+{
+	// will override already set functions and erase any function not set in pVFSBackend
+	_set_env_backend (&s_EnvBackendOverride, pVFSBackend, FALSE);
+	_merge_backends ();
 }
 
 GList * cairo_dock_fm_list_directory (const gchar *cURI, CairoDockFMSortType g_fm_iSortType, int iNewIconsType, gboolean bListHiddenFiles, int iNbMaxFiles, gchar **cFullURI)
@@ -1133,10 +1154,23 @@ static CairoDockDesktopEnv _guess_environment (void)
 
 const gchar *cairo_dock_fm_get_desktop_name (void)
 {
-	return (g_iDesktopEnv == CAIRO_DOCK_GNOME ? "GNOME" :
-		g_iDesktopEnv == CAIRO_DOCK_XFCE ? "XFCE" :
-		g_iDesktopEnv == CAIRO_DOCK_KDE ? "KDE" :
-		"unknown");
+	switch (g_iDesktopEnv)
+	{
+		case CAIRO_DOCK_GNOME:
+			return "GNOME";
+		case CAIRO_DOCK_KDE:
+			return "KDE";
+		case CAIRO_DOCK_XFCE:
+			return "XFCE";
+		case CAIRO_DOCK_CINNAMON:
+			return "Cinnamon";
+		case CAIRO_DOCK_MATE:
+			return "MATE";
+		case CAIRO_DOCK_COSMIC:
+			return "COSMIC";
+		default:
+			return "unknown";
+	}
 }
 
 void gldi_register_desktop_environment_manager (void)
