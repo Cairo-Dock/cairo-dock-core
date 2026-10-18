@@ -1103,16 +1103,16 @@ static CairoDockDesktopEnv _guess_environment (void)
 	const gchar *cEnv = g_getenv ("XDG_CURRENT_DESKTOP");
 	if (cEnv != NULL)
 	{
-		if (strstr(cEnv, "GNOME") != NULL)
-			return CAIRO_DOCK_GNOME;
-		else if (strstr(cEnv, "Cinnamon") != NULL)
+		if (strstr(cEnv, "Cinnamon") != NULL)
 			return CAIRO_DOCK_CINNAMON;
+		else if (strstr(cEnv, "MATE") != NULL)
+			return CAIRO_DOCK_MATE;
+		else if (strstr(cEnv, "GNOME") != NULL)
+			return CAIRO_DOCK_GNOME;
 		else if (strstr(cEnv, "XFCE") != NULL)
 			return CAIRO_DOCK_XFCE;
 		else if (strstr(cEnv, "KDE") != NULL)
 			return CAIRO_DOCK_KDE;
-		else if (strstr(cEnv, "MATE") != NULL)
-			return CAIRO_DOCK_MATE;
 		else if (strstr(cEnv, "COSMIC") != NULL)
 			return CAIRO_DOCK_COSMIC;
 		else
