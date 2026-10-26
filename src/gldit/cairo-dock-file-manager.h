@@ -147,7 +147,7 @@ void cairo_dock_fm_register_vfs_backend (CairoDockDesktopEnvBackend *pVFSBackend
 */
 void cairo_dock_fm_register_de_integration_override_backend (CairoDockDesktopEnvBackend *pVFSBackend);
 
-void cairo_dock_fm_force_desktop_env (CairoDockDesktopEnv iForceDesktopEnv);
+void cairo_dock_fm_force_desktop_env (const gchar *cDesktopEnv);
 
 /** List the content of a directory and turn it into a list of icons.
 */
