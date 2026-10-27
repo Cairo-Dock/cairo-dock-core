@@ -84,6 +84,7 @@ struct _CairoDocksParam {
 	gdouble fZoneAlpha;
 	gchar *cRaiseDockShortcut;
 	gint iUnhideDockDelay;
+	gboolean bRaiseAtMouse;
 	//Sub-Dock visibility
 	gboolean bShowSubDockOnClick;
 	gint iShowSubDockDelay;

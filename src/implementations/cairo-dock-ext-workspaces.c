@@ -19,7 +19,7 @@
  */
 
 #include "cairo-dock-log.h"
-#include "cairo-dock-desktop-manager.h"
+#include "cairo-dock-desktop-manager-priv.h"
 #include "cairo-dock-windows-manager.h"
 #include "cairo-dock-ext-workspaces.h"
 #include "cairo-dock-wayland-wm.h"

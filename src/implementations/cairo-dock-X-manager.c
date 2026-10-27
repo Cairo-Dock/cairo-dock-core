@@ -43,7 +43,7 @@
 #include "cairo-dock-log.h"
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-applications-priv.h"  // myTaskbarParam.iMinimizedWindowRenderType
-#include "cairo-dock-desktop-manager.h"
+#include "cairo-dock-desktop-manager-priv.h"
 #include "cairo-dock-class-manager-priv.h"  // gldi_class_startup_notify_end
 #include "cairo-dock-windows-manager-priv.h"
 #include "cairo-dock-container-priv.h"  // GldiContainerManagerBackend
@@ -974,7 +974,7 @@ static void _refresh (void)
 	cd_debug ("desktop refresh -> %dx%dx%d", g_desktopGeometry.iNbDesktops, g_desktopGeometry.iNbViewportX, g_desktopGeometry.iNbViewportY);
 }
 
-static void _grab_shortkey (GldiShortkey *pBinding, gboolean grab, CairoDockGrabKeyResult cb)
+static void _grab_shortkey (GldiShortkey *pBinding, gboolean grab, CairoDockGrabKeyResult cb, gpointer user_data)
 {
 	guint keycode = pBinding->keycode;
 	guint modifiers = pBinding->modifiers;
@@ -1019,7 +1019,7 @@ static void _grab_shortkey (GldiShortkey *pBinding, gboolean grab, CairoDockGrab
 		XSync (s_XDisplay, False);
 		int error = cairo_dock_get_X_error_code ();
 		pBinding->bSuccess = (error == 0);
-		if (cb) cb (pBinding);
+		if (cb) cb (pBinding, user_data);
 	}
 	else pBinding->bSuccess = FALSE;
 }
@@ -1308,6 +1308,7 @@ typedef struct {
 
 static void _cairo_dock_unhide_root_dock_on_mouse_hit (CairoDock *pDock, CDMousePolling *pMouse)
 {
+	if (pDock->iVisibility == CAIRO_DOCK_VISI_SHORTKEY) return;
 	if (! pDock->bAutoHide && pDock->iVisibility != CAIRO_DOCK_VISI_KEEP_BELOW)
 		return;
 	
@@ -1457,7 +1458,7 @@ static gboolean s_bShouldPoll = FALSE;
 
 static void _check_should_poll_screen_edge (CairoDock *pDock, G_GNUC_UNUSED gpointer data)
 {
-	if (pDock->bAutoHide == TRUE) s_bShouldPoll = TRUE;
+	if (pDock->bAutoHide == TRUE && pDock->iVisibility != CAIRO_DOCK_VISI_SHORTKEY) s_bShouldPoll = TRUE;
 	else switch (pDock->iVisibility)
 	{
 		case CAIRO_DOCK_VISI_KEEP_BELOW:

@@ -29,7 +29,7 @@
 #include "cairo-dock-niri-integration.h"
 #include "cairo-dock-wayland-manager.h" // gldi_wayland_release_keyboard (needed on Wayfire)
 #define _MANAGER_DEF_
-#include "cairo-dock-desktop-manager.h"
+#include "cairo-dock-desktop-manager-priv.h"
 
 // public (manager, config, data)
 GldiManager myDesktopMgr;
@@ -253,14 +253,14 @@ void gldi_desktop_refresh (void)
 		s_backend.refresh ();
 }
 
-void gldi_desktop_grab_shortkey (GldiShortkey *pBinding, gboolean grab, CairoDockGrabKeyResult cb)
+void gldi_desktop_grab_shortkey (GldiShortkey *pBinding, gboolean grab, CairoDockGrabKeyResult cb, gpointer user_data)
 {
 	if (s_backend.grab_shortkey)
-		s_backend.grab_shortkey (pBinding, grab, cb);
+		s_backend.grab_shortkey (pBinding, grab, cb, user_data);
 	else
 	{
 		pBinding->bSuccess = FALSE; // not bound
-		if (grab && cb) cb (pBinding); // signal failure explicitly
+		if (grab && cb) cb (pBinding, user_data); // signal failure explicitly
 	}
 }
 
