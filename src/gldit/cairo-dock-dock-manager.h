@@ -96,6 +96,7 @@ struct _CairoDocksParam {
 	gboolean bUseDefaultColors;
 	// additional UI scaling (all dimensions should be scaled by this)
 	gdouble fUIScale;
+	gboolean bExtendWidth;
 	};
 
 /// signals
