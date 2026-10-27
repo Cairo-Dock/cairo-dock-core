@@ -825,6 +825,11 @@ int main (int argc, char** argv)
 		NOTIFICATION_NEW,
 		(GldiNotificationFunc) cairo_dock_notification_desklet_added_removed,
 		GLDI_RUN_AFTER, NULL);
+	/** TODO: this will not work well on Wayfire, where the creation of keybindings is
+	 * asynchronous, thus the newly created binding will always show up as "failed".
+	 * However, this is unlikely a problem in practice, since we don't expect a new
+	 * keybinding to be created while the GUI is being shown (the notification is
+	 * only for updating the GUI). */
 	gldi_object_register_notification (&myShortkeyObjectMgr,
 		NOTIFICATION_NEW,
 		(GldiNotificationFunc) cairo_dock_notification_shortkey_added_removed_changed,
