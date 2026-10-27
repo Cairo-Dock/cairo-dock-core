@@ -177,6 +177,8 @@ static GKeyFile *_make_simple_conf_file (ConfigWidget *pConfigWidget)
 	
 	g_key_file_set_string (pSimpleKeyFile, "Behavior", "raise shortcut", myDocksParam.cRaiseDockShortcut);
 	
+	g_key_file_set_boolean (pSimpleKeyFile, "Behavior", "raise at mouse", myDocksParam.bRaiseAtMouse);
+	
 	g_key_file_set_integer (pSimpleKeyFile, "Behavior", "num_screen", myDocksParam.iScreenReq);
 	
 	g_key_file_set_string (pSimpleKeyFile, "Behavior", "screen_description", myDocksParam.cScreenReqDesc ? myDocksParam.cScreenReqDesc : "");
@@ -481,6 +483,9 @@ static void _config_widget_apply (CDWidget *pCdWidget)
 	gchar *cRaiseDockShortcut = g_key_file_get_string (pSimpleKeyFile, "Behavior", "raise shortcut", NULL);
 	g_key_file_set_string (pKeyFile, "Accessibility", "raise shortcut", cRaiseDockShortcut);
 	g_free (cRaiseDockShortcut);
+	
+	gboolean bRaiseAtMouse = g_key_file_get_boolean (pSimpleKeyFile, "Behavior", "raise at mouse", NULL);
+	g_key_file_set_boolean (pKeyFile, "Accessibility", "raise at mouse", bRaiseAtMouse);
 	
 	int iScreenReq = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "num_screen", NULL);
 	g_key_file_set_integer (pKeyFile, "Position", "num_screen", iScreenReq);
