@@ -171,7 +171,7 @@ static const struct _GldiTerminal s_vTerminals[] = {
 	{ { "gnome-terminal", "--", NULL }, CAIRO_DOCK_GNOME, FALSE },
 	{ { "konsole", "-e", NULL }, CAIRO_DOCK_KDE, FALSE },
 	{ { "xfce4-terminal", "-x", NULL }, CAIRO_DOCK_XFCE, FALSE },
-	{ { "mate-terminal", "-x", NULL }, CAIRO_DOCK_GNOME, FALSE }, // note: MATE likely sets desktop environment as GNOME
+	{ { "mate-terminal", "-x", NULL }, CAIRO_DOCK_MATE, FALSE },
 	{ { "foot", NULL, NULL }, CAIRO_DOCK_UNKNOWN_ENV, TRUE },
 	{ { "sakura", "-e", NULL }, CAIRO_DOCK_UNKNOWN_ENV, FALSE },
 	{ { "alacritty", "-e", NULL }, CAIRO_DOCK_UNKNOWN_ENV, FALSE },

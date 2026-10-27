@@ -459,10 +459,7 @@ static void _register_backend (void)
 	
 	if (!bAnyValid) return;
 	
-	// FALSE -- we do not want to overwrite the DE-specific functions already
-	// registered by the *-integration plugins (since we run asynchronously,
-	// they might be registered earlier)
-	cairo_dock_fm_register_vfs_backend (&backend, FALSE);
+	cairo_dock_fm_register_vfs_backend (&backend);
 }
 
 static gboolean _cd_logout_got_capabilities (G_GNUC_UNUSED gpointer ptr)

@@ -37,6 +37,9 @@ typedef enum {
 	CAIRO_DOCK_GNOME,
 	CAIRO_DOCK_KDE,
 	CAIRO_DOCK_XFCE,
+	CAIRO_DOCK_CINNAMON,
+	CAIRO_DOCK_MATE,
+	CAIRO_DOCK_COSMIC,
 	CAIRO_DOCK_NB_DESKTOPS
 	} CairoDockDesktopEnv;
 
@@ -131,14 +134,20 @@ struct _CairoDockDesktopEnvBackend {
 };
 
 
-/** Register a environment backend.
+/** Register a environment backend. Already registered functions will be overriden.
+ * This operation cannot be undone; if the backend function might need to be deregistered
+ * in the future, use cairo_dock_fm_register_de_integration_override_backend().
  *@param pVFSBackend the new backend to register
- *@param bOverwrite whether to overwrite functions that have been already registered;
- *	this applies only to functions that are provided in pVFSBackend.
 */
-void cairo_dock_fm_register_vfs_backend (CairoDockDesktopEnvBackend *pVFSBackend, gboolean bOverwrite);
+void cairo_dock_fm_register_vfs_backend (CairoDockDesktopEnvBackend *pVFSBackend);
 
-void cairo_dock_fm_force_desktop_env (CairoDockDesktopEnv iForceDesktopEnv);
+/** Register a desktop environment integration backend. Only one such backend can be registered, and it 
+ *  overrides functions from the VFS backend automatically. Any previously registered functions will be dropped.
+ *@param pVFSBackend the new backend to register.
+*/
+void cairo_dock_fm_register_de_integration_override_backend (CairoDockDesktopEnvBackend *pVFSBackend);
+
+void cairo_dock_fm_force_desktop_env (const gchar *cDesktopEnv);
 
 /** List the content of a directory and turn it into a list of icons.
 */

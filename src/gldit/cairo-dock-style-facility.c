@@ -116,11 +116,15 @@ gchar *_get_default_system_font (void)
 	static gchar *s_cFontName = NULL;
 	if (s_cFontName == NULL)
 	{
-		if (g_iDesktopEnv == CAIRO_DOCK_GNOME)
+		const char *cFontSchema = NULL;
+		if (g_iDesktopEnv == CAIRO_DOCK_GNOME) cFontSchema = "org.gnome.desktop.interface";
+		if (g_iDesktopEnv == CAIRO_DOCK_CINNAMON) cFontSchema = "org.cinnamon.desktop.interface";
+		if (g_iDesktopEnv == CAIRO_DOCK_MATE) cFontSchema = "org.mate.interface";
+		if (cFontSchema)
 		{
 			GSettingsSchema *schema = g_settings_schema_source_lookup (
 				g_settings_schema_source_get_default (),
-				"org.gnome.desktop.interface",
+				cFontSchema,
 				TRUE);
 			if (schema)
 			{

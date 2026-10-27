@@ -83,9 +83,7 @@ void gldi_register_gio_vfs_backend (void)
 	
 	CairoDockDesktopEnvBackend backend = { NULL };
 	_fill_backend (&backend);
-	// FALSE: do not overwrite any functions already registered (by the
-	// *-integration plugins, although it is likely we run before them)
-	cairo_dock_fm_register_vfs_backend (&backend, FALSE);
+	cairo_dock_fm_register_vfs_backend (&backend);
 }
 
 /**
