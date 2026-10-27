@@ -1518,6 +1518,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoDocksParam *pDocksParam)
 	
 	pAccessibility->bExtendedMode = cairo_dock_get_boolean_key_value (pKeyFile, "Background", "extended", &bFlushConfFileNeeded, FALSE, "Accessibility", NULL);
 	
+	pAccessibility->bExtendWidth = cairo_dock_get_boolean_key_value (pKeyFile, "Background", "extend_width", &bFlushConfFileNeeded, FALSE, NULL, NULL);
+	
 	// hidden bg
 	GldiColor hcolor = {{.8, .8, .8, .5}};
 	cairo_dock_get_color_key_value (pKeyFile, "Background", "hidden bg color", &bFlushConfFileNeeded, &pBackground->fHiddenBg, &hcolor, NULL, NULL);

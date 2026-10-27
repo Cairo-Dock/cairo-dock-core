@@ -577,19 +577,9 @@ int main (int argc, char** argv)
 	if (bForceColors)
 		cd_log_force_use_color ();
 	
-	CairoDockDesktopEnv iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
 	if (cEnvironment != NULL)
 	{
-		if (strcmp (cEnvironment, "gnome") == 0)
-			iDesktopEnv = CAIRO_DOCK_GNOME;
-		else if (strcmp (cEnvironment, "kde") == 0)
-			iDesktopEnv = CAIRO_DOCK_KDE;
-		else if (strcmp (cEnvironment, "xfce") == 0)
-			iDesktopEnv = CAIRO_DOCK_XFCE;
-		else if (strcmp (cEnvironment, "none") == 0)
-			iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
-		else
-			cd_warning ("Unknown environment '%s'", cEnvironment);
+		cairo_dock_fm_force_desktop_env (cEnvironment);
 		g_free (cEnvironment);
 	}
 	
@@ -656,9 +646,6 @@ int main (int argc, char** argv)
 	
 	if (bTransparencyWorkaround)
 		cairo_dock_enable_containers_opacity ();
-	
-	if (iDesktopEnv != CAIRO_DOCK_UNKNOWN_ENV)
-		cairo_dock_fm_force_desktop_env (iDesktopEnv);
 	
 	if (bToggleIndirectRendering)
 		gldi_gl_backend_force_indirect_rendering ();

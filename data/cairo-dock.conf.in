@@ -368,6 +368,9 @@ rounded bottom corner = true
 #b+ Stretch the dock to always fill the screen
 extended = false
 
+#b+ Allow the dock to extend beyond the screen
+#{Docks' content will still stay visible}
+extend_width = false
 
 [Views]
 

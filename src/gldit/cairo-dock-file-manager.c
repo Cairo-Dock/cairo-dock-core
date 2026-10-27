@@ -51,28 +51,45 @@ CairoDockDesktopEnv g_iDesktopEnv = CAIRO_DOCK_UNKNOWN_ENV;
 
 // private
 static CairoDockDesktopEnvBackend s_EnvBackend = { NULL };
+static CairoDockDesktopEnvBackend s_EnvBackendCore = { NULL };
+static CairoDockDesktopEnvBackend s_EnvBackendOverride = { NULL };
 
 
-void cairo_dock_fm_force_desktop_env (CairoDockDesktopEnv iForceDesktopEnv)
+static void _set_env_backend (CairoDockDesktopEnvBackend *target, CairoDockDesktopEnvBackend *src, gboolean bKeep)
 {
-	g_iDesktopEnv = iForceDesktopEnv; // note: this is only called from cairo-dock.c, before desktop specific plugins are loaded
+	gpointer *ptr = (gpointer*)target;
+	gpointer *ptr_end = (gpointer*)(target + 1);
+	gpointer *src2 = src ? (gpointer*)src : NULL;
+	while (ptr != ptr_end)
+	{
+		if (src2)
+		{
+			if (*src2 || !bKeep) *ptr = *src2;
+			++src2;
+		}
+		else if (!bKeep) *ptr = NULL;
+		++ptr;
+	}
 }
 
-void cairo_dock_fm_register_vfs_backend (CairoDockDesktopEnvBackend *pVFSBackend, gboolean bOverwrite)
+static void _merge_backends (void)
 {
-	gpointer *ptr = (gpointer*)&s_EnvBackend;
-	gpointer *src = (gpointer*)pVFSBackend;
-	gpointer *src_end = (gpointer*)(pVFSBackend + 1);
-	while (src != src_end)
-	{
-		if (*src)
-		{
-			if (!*ptr || bOverwrite)
-				*ptr = *src;
-		}
-		src ++;
-		ptr ++;
-	}
+	_set_env_backend (&s_EnvBackend, &s_EnvBackendCore, FALSE); // reset from the core
+	_set_env_backend (&s_EnvBackend, &s_EnvBackendOverride, TRUE); // finally, set the override from the DE plugin
+}
+
+void cairo_dock_fm_register_vfs_backend (CairoDockDesktopEnvBackend *pVFSBackend)
+{
+	// will override already set functions only if defined in pVFSBackend
+	_set_env_backend (&s_EnvBackendCore, pVFSBackend, TRUE);
+	_merge_backends ();
+}
+
+void cairo_dock_fm_register_de_integration_override_backend (CairoDockDesktopEnvBackend *pVFSBackend)
+{
+	// will override already set functions and erase any function not set in pVFSBackend
+	_set_env_backend (&s_EnvBackendOverride, pVFSBackend, FALSE);
+	_merge_backends ();
 }
 
 GList * cairo_dock_fm_list_directory (const gchar *cURI, CairoDockFMSortType g_fm_iSortType, int iNewIconsType, gboolean bListHiddenFiles, int iNbMaxFiles, gchar **cFullURI)
@@ -1076,68 +1093,100 @@ gboolean cairo_dock_fm_monitor_pid (const gchar *cProcessName, gboolean bCheckSa
  /// INIT ///
 ////////////
 
-static CairoDockDesktopEnv _guess_environment (void)
+void cairo_dock_fm_force_desktop_env (const gchar *cDesktopEnv)
+{
+	if (!cDesktopEnv) return;
+	gchar *cEnvLower = g_ascii_strdown (cDesktopEnv, -1); // we only match ASCII characters anyway
+	
+	if (strstr(cEnvLower, "cinnamon") != NULL)
+		g_iDesktopEnv = CAIRO_DOCK_CINNAMON;
+	else if (strstr(cEnvLower, "mate") != NULL)
+		g_iDesktopEnv = CAIRO_DOCK_MATE;
+	else if (strstr(cEnvLower, "gnome") != NULL)
+		g_iDesktopEnv = CAIRO_DOCK_GNOME;
+	else if (strstr(cEnvLower, "xfce") != NULL)
+		g_iDesktopEnv = CAIRO_DOCK_XFCE;
+	else if (strstr(cEnvLower, "kde") != NULL)
+		g_iDesktopEnv = CAIRO_DOCK_KDE;
+	else if (strstr(cEnvLower, "cosmic") != NULL)
+		g_iDesktopEnv = CAIRO_DOCK_COSMIC;
+	
+	g_free (cEnvLower);
+}
+
+static void _guess_environment (void)
 {
 	// first, let's try out with XDG_CURRENT_DESKTOP
 	const gchar *cEnv = g_getenv ("XDG_CURRENT_DESKTOP");
 	if (cEnv != NULL)
 	{
-		if (strstr(cEnv, "GNOME") != NULL)
-			return CAIRO_DOCK_GNOME;
-		else if (strstr(cEnv, "Cinnamon") != NULL)
-			return CAIRO_DOCK_GNOME; // close enough
-		else if (strstr(cEnv, "XFCE") != NULL)
-			return CAIRO_DOCK_XFCE;
-		else if (strstr(cEnv, "KDE") != NULL)
-			return CAIRO_DOCK_KDE;
-		else
-		{
-			cd_debug ("couldn't interpret XDG_CURRENT_DESKTOP=%s", cEnv);
-		}
+		cairo_dock_fm_force_desktop_env (cEnv);
+		if (g_iDesktopEnv != CAIRO_DOCK_UNKNOWN_ENV) return;
+		else cd_debug ("couldn't interpret XDG_CURRENT_DESKTOP=%s", cEnv);
 	}
 	
 	// else, fall back to some old (less reliable) methods
 	cEnv = g_getenv ("GNOME_DESKTOP_SESSION_ID");  // this value is now deprecated, but has been maintained for compatibility, so let's keep using it (Note: a possible alternative would be to check for org.gnome.SessionManager on Dbus)
 	if (cEnv != NULL && *cEnv != '\0')
-		return CAIRO_DOCK_GNOME;
+	{
+		g_iDesktopEnv = CAIRO_DOCK_GNOME;
+		return;
+	}
 	
 	cEnv = g_getenv ("KDE_FULL_SESSION");
 	if (cEnv != NULL && *cEnv != '\0')
-		return CAIRO_DOCK_KDE;
+	{
+		g_iDesktopEnv = CAIRO_DOCK_KDE;
+		return;
+	}
 	
 	cEnv = g_getenv ("KDE_SESSION_UID");
 	if (cEnv != NULL && *cEnv != '\0')
-		return CAIRO_DOCK_KDE;
+	{
+		g_iDesktopEnv = CAIRO_DOCK_KDE;
+		return;
+	}
 	
 	#ifdef HAVE_X11
 	if (cairo_dock_property_is_present_on_root ("_DT_SAVE_MODE"))
-		return CAIRO_DOCK_XFCE;
+	{
+		g_iDesktopEnv = CAIRO_DOCK_XFCE;
+		return;
+	}
 	#endif
 	
 	const char * const args[] = {"pgrep", "kwin", NULL}; // will also match kwin_wayland, kwin_x11, etc.
 	gchar *cKWin = cairo_dock_launch_command_argv_sync_with_stderr (args, FALSE);
 	if (cKWin != NULL && *cKWin != '\0')
-	{
-		g_free (cKWin);
-		return CAIRO_DOCK_KDE;
-	}
+		g_iDesktopEnv = CAIRO_DOCK_KDE;
 	g_free (cKWin);
-	
-	return CAIRO_DOCK_UNKNOWN_ENV;
-	
 }
 
 const gchar *cairo_dock_fm_get_desktop_name (void)
 {
-	return (g_iDesktopEnv == CAIRO_DOCK_GNOME ? "GNOME" :
-		g_iDesktopEnv == CAIRO_DOCK_XFCE ? "XFCE" :
-		g_iDesktopEnv == CAIRO_DOCK_KDE ? "KDE" :
-		"unknown");
+	switch (g_iDesktopEnv)
+	{
+		case CAIRO_DOCK_GNOME:
+			return "GNOME";
+		case CAIRO_DOCK_KDE:
+			return "KDE";
+		case CAIRO_DOCK_XFCE:
+			return "XFCE";
+		case CAIRO_DOCK_CINNAMON:
+			return "Cinnamon";
+		case CAIRO_DOCK_MATE:
+			return "MATE";
+		case CAIRO_DOCK_COSMIC:
+			return "COSMIC";
+		default:
+			return "unknown";
+	}
 }
 
 void gldi_register_desktop_environment_manager (void)
 {
-	g_iDesktopEnv = _guess_environment ();
+	if (g_iDesktopEnv == CAIRO_DOCK_UNKNOWN_ENV) // force_desktop_env() has not been called yet
+		_guess_environment ();
 	cd_message ("We found this desktop environment: %s",
 		cairo_dock_fm_get_desktop_name ());
 }
