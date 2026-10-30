@@ -394,7 +394,7 @@ static void _cd_logout_check_capabilities_async (G_GNUC_UNUSED gpointer ptr)
 
 static void _toggle_network (void)
 {
-	g_return_if_fail (s_proxy_nm != NULL);
+	cd_return_if_fail (s_proxy_nm != NULL);
 	
 	GVariant *v = g_dbus_proxy_get_cached_property (s_proxy_nm, "NetworkingEnabled");
 	if (!v) cd_warning ("Cannot read the 'NetworkingEnabled' property");
@@ -416,7 +416,7 @@ static void _toggle_network (void)
 
 static void _toggle_wifi (void)
 {
-	g_return_if_fail (s_proxy_nm != NULL);
+	cd_return_if_fail (s_proxy_nm != NULL);
 	
 	GVariant *v = g_dbus_proxy_get_cached_property (s_proxy_nm, "WirelessEnabled");
 	if (!v) cd_warning ("Cannot read the 'WirelessEnabled' property");

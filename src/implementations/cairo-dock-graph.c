@@ -50,8 +50,8 @@ extern gboolean g_bUseOpenGL;
 
 static void render (Graph *pGraph, cairo_t *pCairoContext)
 {
-	g_return_if_fail (pGraph != NULL);
-	g_return_if_fail (pCairoContext != NULL && cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
+	cd_return_if_fail (pGraph != NULL);
+	cd_return_if_fail (pCairoContext != NULL && cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
 	
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGraph);
 	CairoDataToRenderer *pData = cairo_data_renderer_get_data (pRenderer);
@@ -63,7 +63,7 @@ static void render (Graph *pGraph, cairo_t *pCairoContext)
 		cairo_paint (pCairoContext);
 	}
 
-	g_return_if_fail (pRenderer->iRank != 0); // workaround: FIXME
+	cd_return_if_fail (pRenderer->iRank != 0); // workaround: FIXME
 	int iNbDrawings = iNbValues / pRenderer->iRank;
 	if (iNbDrawings == 0)
 		return;
@@ -208,7 +208,7 @@ static void render (Graph *pGraph, cairo_t *pCairoContext)
 /* not used
 static void render_opengl (Graph *pGraph)
 {
-	g_return_if_fail (pGraph != NULL);
+	cd_return_if_fail (pGraph != NULL);
 	
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGraph);
 	
@@ -324,7 +324,7 @@ static cairo_pattern_t *_cairo_dock_create_graph_pattern (Graph *pGraph, gdouble
 				0.,
 				0.);
 		}
-		g_return_val_if_fail (cairo_pattern_status (pGradationPattern) == CAIRO_STATUS_SUCCESS, NULL);	
+		cd_return_val_if_fail (cairo_pattern_status (pGradationPattern) == CAIRO_STATUS_SUCCESS, NULL);	
 		
 		cairo_pattern_set_extend (pGradationPattern, CAIRO_EXTEND_PAD);
 		cairo_pattern_add_color_stop_rgba (pGradationPattern,

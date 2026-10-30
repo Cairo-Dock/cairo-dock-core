@@ -297,7 +297,7 @@ GldiDesktopBackground *gldi_desktop_background_get (gboolean bWithTextureToo)
 static gboolean _destroy_bg (GldiDesktopBackground *pDesktopBg)
 {
 	//g_print ("%s ()\n", __func__);
-	g_return_val_if_fail (pDesktopBg != NULL, 0);
+	cd_return_val_if_fail (pDesktopBg != NULL, 0);
 	if (pDesktopBg->pSurface != NULL)
 	{
 		cairo_surface_destroy (pDesktopBg->pSurface);
@@ -328,13 +328,13 @@ void gldi_desktop_background_destroy (GldiDesktopBackground *pDesktopBg)
 
 cairo_surface_t *gldi_desktop_background_get_surface (GldiDesktopBackground *pDesktopBg)
 {
-	g_return_val_if_fail (pDesktopBg != NULL, NULL);
+	cd_return_val_if_fail (pDesktopBg != NULL, NULL);
 	return pDesktopBg->pSurface;
 }
 
 GLuint gldi_desktop_background_get_texture (GldiDesktopBackground *pDesktopBg)
 {
-	g_return_val_if_fail (pDesktopBg != NULL, 0);
+	cd_return_val_if_fail (pDesktopBg != NULL, 0);
 	return pDesktopBg->iTexture;
 }
 

@@ -90,7 +90,7 @@ static gboolean _on_window_created (G_GNUC_UNUSED gpointer data, GldiWindowActor
 {
 	if (!s_bAppliManagerIsRunning) return GLDI_NOTIFICATION_LET_PASS;
 	Icon *pIcon = _get_appli_icon (actor);
-	g_return_val_if_fail (pIcon == NULL, GLDI_NOTIFICATION_LET_PASS);
+	cd_return_val_if_fail (pIcon == NULL, GLDI_NOTIFICATION_LET_PASS);
 	
 	// create an appli-icon
 	pIcon = cairo_dock_create_icon_from_window (actor);
@@ -489,7 +489,7 @@ static void _create_appli_icon (GldiWindowActor *actor, CairoDock *pDock)
 }
 void cairo_dock_start_applications_manager (CairoDock *pDock)
 {
-	g_return_if_fail (!s_bAppliManagerIsRunning);
+	cd_return_if_fail (!s_bAppliManagerIsRunning);
 	
 	cairo_dock_set_overwrite_exceptions (myTaskbarParam.cOverwriteException);
 	cairo_dock_set_group_exceptions (myTaskbarParam.cGroupException);

@@ -105,7 +105,7 @@ void cd_log_force_use_color (void);
 
 /**
  * Print a warning to the terminal and return from the current function if the given
- * condition does not evaluate to TRUE. This is similar to g_return_if_fail() in GLib,
+ * condition does not evaluate to TRUE. This is similar to cd_return_if_fail() in GLib,
  * but with consistent and well-defined behavior, so it can be used for conditions that
  * can possibly be FALSE without UB. Also, the check will not be disabled with
  * G_DISABLE_CHECKS.
@@ -121,7 +121,7 @@ void cd_log_force_use_color (void);
 
 /**
  * Print a warning to the terminal and return the given value from the current function
- * if the condition does not evaluate to TRUE. This is similar to g_return_val_if_fail().
+ * if the condition does not evaluate to TRUE. This is similar to cd_return_val_if_fail().
  *@param cond the condition to test
  *@param val the value to return (must be compatible with the current function's return value)
  */

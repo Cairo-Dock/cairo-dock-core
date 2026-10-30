@@ -143,7 +143,7 @@ static void __load_needle (GaugeIndicator *pGaugeIndicator, int iWidth, int iHei
 	
 	// load the SVG file.
 	RsvgHandle *pSvgHandle = rsvg_handle_new_from_file (pGaugeImage->cImagePath, NULL);
-	g_return_if_fail (pSvgHandle != NULL);
+	cd_return_if_fail (pSvgHandle != NULL);
 	
 	// get the SVG dimensions.
 	gdouble W, H;
@@ -178,10 +178,10 @@ static void __load_needle (GaugeIndicator *pGaugeIndicator, int iWidth, int iHei
 	
 	// make a cairo surface.
 	cairo_surface_t *pNeedleSurface = cairo_dock_create_blank_surface (pGaugeIndicator->iNeedleWidth, pGaugeIndicator->iNeedleHeight);
-	g_return_if_fail (cairo_surface_status (pNeedleSurface) == CAIRO_STATUS_SUCCESS);
+	cd_return_if_fail (cairo_surface_status (pNeedleSurface) == CAIRO_STATUS_SUCCESS);
 	
 	cairo_t* pDrawingContext = cairo_create (pNeedleSurface);
-	g_return_if_fail (cairo_status (pDrawingContext) == CAIRO_STATUS_SUCCESS);
+	cd_return_if_fail (cairo_status (pDrawingContext) == CAIRO_STATUS_SUCCESS);
 	
 	cairo_scale (pDrawingContext, pGaugeIndicator->fNeedleScale, pGaugeIndicator->fNeedleScale);
 	cairo_translate (pDrawingContext, pGaugeIndicator->iNeedleOffsetX, pGaugeIndicator->iNeedleOffsetY);
@@ -228,7 +228,7 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 		return FALSE;
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGauge);
 	
-	g_return_val_if_fail (cThemePath != NULL, FALSE);
+	cd_return_val_if_fail (cThemePath != NULL, FALSE);
 	
 	xmlInitParser ();
 	xmlDocPtr pGaugeTheme;
@@ -236,7 +236,7 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 	gchar *cXmlFile = g_strdup_printf ("%s/theme.xml", cThemePath);
 	pGaugeTheme = cairo_dock_open_xml_file (cXmlFile, "gauge", &pGaugeMainNode, NULL);
 	g_free (cXmlFile);
-	g_return_val_if_fail (pGaugeTheme != NULL && pGaugeMainNode != NULL, FALSE);
+	cd_return_val_if_fail (pGaugeTheme != NULL && pGaugeMainNode != NULL, FALSE);
 	
 	xmlChar *cAttribute, *cNodeContent, *cTextNodeContent, *cTypeAttr;
 	GString *sImagePath = g_string_new ("");
@@ -525,7 +525,7 @@ static gboolean _load_theme (Gauge *pGauge, const gchar *cThemePath)
 	cairo_dock_close_xml_file (pGaugeTheme);
 	g_string_free (sImagePath, TRUE);
 	
-	g_return_val_if_fail (pRenderer->iRank != 0 && pGaugeIndicator != NULL, FALSE);
+	cd_return_val_if_fail (pRenderer->iRank != 0 && pGaugeIndicator != NULL, FALSE);
 	
 	return TRUE;
 }
@@ -676,8 +676,8 @@ static void cairo_dock_draw_one_gauge (cairo_t *pCairoContext, Gauge *pGauge, in
 }
 void render (Gauge *pGauge, cairo_t *pCairoContext)
 {
-	g_return_if_fail (pGauge != NULL && pGauge->pIndicatorList != NULL);
-	g_return_if_fail (pCairoContext != NULL && cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
+	cd_return_if_fail (pGauge != NULL && pGauge->pIndicatorList != NULL);
+	cd_return_if_fail (pCairoContext != NULL && cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
 	
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGauge);
 	CairoDataToRenderer *pData = cairo_data_renderer_get_data (pRenderer);
@@ -762,7 +762,7 @@ static void _draw_gauge_needle_opengl (Gauge *pGauge, GaugeIndicator *pGaugeIndi
 		return;
 	
 	GaugeImage *pGaugeImage = pGaugeIndicator->pImageNeedle;
-	g_return_if_fail (pGaugeImage != NULL);
+	cd_return_if_fail (pGaugeImage != NULL);
 	
 	int iWidth = pGauge->dataRenderer.iWidth, iHeight = pGauge->dataRenderer.iHeight;
 	if(pGaugeImage->image.iTexture != 0)
@@ -839,7 +839,7 @@ static void cairo_dock_draw_one_gauge_opengl (Gauge *pGauge, int iDataOffset)
 }
 static void render_opengl (Gauge *pGauge)
 {
-	g_return_if_fail (pGauge != NULL && pGauge->pIndicatorList != NULL);
+	cd_return_if_fail (pGauge != NULL && pGauge->pIndicatorList != NULL);
 	
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pGauge);
 	CairoDataToRenderer *pData = cairo_data_renderer_get_data (pRenderer);
@@ -914,7 +914,7 @@ static void render_opengl (Gauge *pGauge)
 static void reload (Gauge *pGauge)
 {
 	//g_print ("%s (%dx%d)\n", __func__, iWidth, iHeight);
-	g_return_if_fail (pGauge != NULL);
+	cd_return_if_fail (pGauge != NULL);
 	
 	int iWidth, iHeight;
 	cairo_data_renderer_get_size (CAIRO_DATA_RENDERER (pGauge), &iWidth, &iHeight);

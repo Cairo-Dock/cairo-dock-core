@@ -494,7 +494,7 @@ gboolean cairo_dock_is_loading (void)
 
 void cairo_dock_decrypt_string( const gchar *cEncryptedString,  gchar **cDecryptedString )
 {
-	g_return_if_fail (cDecryptedString != NULL);
+	cd_return_if_fail (cDecryptedString != NULL);
 	if( !cEncryptedString || *cEncryptedString == '\0' )
 	{
 		*cDecryptedString = g_strdup( "" );
@@ -557,7 +557,7 @@ void cairo_dock_decrypt_string( const gchar *cEncryptedString,  gchar **cDecrypt
 
 void cairo_dock_encrypt_string( const gchar *cDecryptedString,  gchar **cEncryptedString )
 {
-	g_return_if_fail (cEncryptedString != NULL);
+	cd_return_if_fail (cEncryptedString != NULL);
 	if( !cDecryptedString || *cDecryptedString == '\0' )
 	{
 		*cEncryptedString = g_strdup( "" );

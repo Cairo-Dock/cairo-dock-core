@@ -310,7 +310,7 @@ static void _cairo_dock_render_to_context (CairoDataRenderer *pRenderer, Icon *p
 		ctx = cairo_dock_begin_draw_icon_cairo (pIcon, 0, pCairoContext);
 		pCairoContext = ctx;
 	}
-	g_return_if_fail (pCairoContext != NULL);
+	cd_return_if_fail (pCairoContext != NULL);
 	
 	//\________________ On dessine.
 	cairo_save (pCairoContext);
@@ -625,7 +625,7 @@ void cairo_dock_add_new_data_renderer_on_icon (Icon *pIcon, GldiContainer *pCont
 static gboolean _render_delayed (Icon *pIcon)
 {
 	CairoDataRenderer *pRenderer = cairo_dock_get_icon_data_renderer (pIcon);
-	g_return_val_if_fail (pRenderer != NULL, FALSE);
+	cd_return_val_if_fail (pRenderer != NULL, FALSE);
 	
 	GldiContainer *pContainer = pIcon->pContainer;
 	if (pContainer)
@@ -644,7 +644,7 @@ static gboolean _render_delayed (Icon *pIcon)
 void cairo_dock_render_new_data_on_icon (Icon *pIcon, GldiContainer *pContainer, cairo_t *pCairoContext, double *pNewValues)
 {
 	CairoDataRenderer *pRenderer = cairo_dock_get_icon_data_renderer (pIcon);
-	g_return_if_fail (pRenderer != NULL);
+	cd_return_if_fail (pRenderer != NULL);
 	
 	//\___________________ On met a jour les valeurs du renderer.
 	CairoDataToRenderer *pData = cairo_data_renderer_get_data (pRenderer);
@@ -796,7 +796,7 @@ void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, GldiContainer *pConta
 	cd_debug ("%s (%s)", __func__, pIcon->cName);
 	//\_____________ update the renderer size.
 	CairoDataRenderer *pRenderer = cairo_dock_get_icon_data_renderer (pIcon);
-	g_return_if_fail (pRenderer != NULL && pRenderer->interface.reload != NULL);
+	cd_return_if_fail (pRenderer != NULL && pRenderer->interface.reload != NULL);
 	
 	cairo_dock_get_icon_extent (pIcon, &pRenderer->iWidth, &pRenderer->iHeight);
 	
@@ -814,7 +814,7 @@ void cairo_dock_reload_data_renderer_on_icon (Icon *pIcon, GldiContainer *pConta
 void cairo_dock_resize_data_renderer_history (Icon *pIcon, int iNewMemorySize)
 {
 	CairoDataRenderer *pRenderer = cairo_dock_get_icon_data_renderer (pIcon);
-	g_return_if_fail (pRenderer != NULL);
+	cd_return_if_fail (pRenderer != NULL);
 	CairoDataToRenderer *pData = cairo_data_renderer_get_data (pRenderer);
 	
 	iNewMemorySize = MAX (2, iNewMemorySize);
@@ -844,7 +844,7 @@ void cairo_dock_resize_data_renderer_history (Icon *pIcon, int iNewMemorySize)
 void cairo_dock_refresh_data_renderer (Icon *pIcon, GldiContainer *pContainer)
 {
 	CairoDataRenderer *pRenderer = cairo_dock_get_icon_data_renderer (pIcon);
-	g_return_if_fail (pRenderer != NULL);
+	cd_return_if_fail (pRenderer != NULL);
 	
 	_refresh (pRenderer, pIcon, pContainer);
 }

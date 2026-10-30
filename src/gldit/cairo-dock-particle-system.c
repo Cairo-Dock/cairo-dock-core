@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <cairo.h>
 
+#include "cairo-dock-log.h"
 #include "cairo-dock-draw-opengl.h"
 #include "cairo-dock-particle-system.h"
 
@@ -163,7 +164,7 @@ void cairo_dock_render_particles_full (CairoParticleSystem *pParticleSystem, int
 
 CairoParticleSystem *cairo_dock_create_particle_system (int iNbParticles, GLuint iTexture, double fWidth, double fHeight)
 {
-	g_return_val_if_fail (iNbParticles > 0, NULL);
+	cd_return_val_if_fail (iNbParticles > 0, NULL);
 	CairoParticleSystem *pParticleSystem = g_new0 (CairoParticleSystem, 1);
 	pParticleSystem->iNbParticles = iNbParticles;
 	pParticleSystem->pParticles = g_new0 (CairoParticle, iNbParticles);

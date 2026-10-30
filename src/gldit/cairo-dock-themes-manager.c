@@ -74,7 +74,7 @@ extern CairoDock *g_pMainDock;
 
 static gchar * _replace_slash_by_underscore (gchar *cName)
 {
-	g_return_val_if_fail (cName != NULL, NULL);
+	cd_return_val_if_fail (cName != NULL, NULL);
 
 	for (int i = 0; cName[i] != '\0'; i++)
 	{
@@ -186,7 +186,7 @@ static gboolean _copy_exclude_launchers_config (GFileInfo *pFileInfo, unsigned i
 
 gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean bSaveBehavior, gboolean bSaveLaunchers)
 {
-	g_return_val_if_fail (cNewThemeName != NULL, FALSE);
+	cd_return_val_if_fail (cNewThemeName != NULL, FALSE);
 
 	gchar *cNewThemeNameWithoutSlashes = _replace_slash_by_underscore (g_strdup (cNewThemeName));
 	
@@ -292,7 +292,7 @@ gboolean cairo_dock_export_current_theme (const gchar *cNewThemeName, gboolean b
 
 gboolean cairo_dock_package_current_theme (const gchar *cThemeName, const gchar *cDirPath)
 {
-	g_return_val_if_fail (cThemeName != NULL, FALSE);
+	cd_return_val_if_fail (cThemeName != NULL, FALSE);
 	gboolean bSuccess = FALSE;
 
 	gchar *cNewThemeName = _escape_string_for_filename (cThemeName);
@@ -368,7 +368,7 @@ gchar *cairo_dock_depackage_theme (const gchar *cPackagePath)
 
 gboolean cairo_dock_delete_themes (gchar **cThemesList)
 {
-	g_return_val_if_fail (cThemesList != NULL && cThemesList[0] != NULL, FALSE);
+	cd_return_val_if_fail (cThemesList != NULL && cThemesList[0] != NULL, FALSE);
 	
 	GString *sCommand = g_string_new ("");
 	gboolean bThemeDeleted = FALSE;
@@ -479,7 +479,7 @@ static gboolean _copy_filter_no_launcher_dir (GFileInfo *pFileInfo, unsigned int
 
 static gboolean _cairo_dock_import_local_theme (const gchar *cNewThemePath, gboolean bLoadBehavior, gboolean bLoadLaunchers)
 {
-	g_return_val_if_fail (cNewThemePath != NULL && g_file_test (cNewThemePath, G_FILE_TEST_EXISTS), FALSE);
+	cd_return_val_if_fail (cNewThemePath != NULL && g_file_test (cNewThemePath, G_FILE_TEST_EXISTS), FALSE);
 	
 	// Cleanup
 	// We always remove previous icons, otherwise we could end up with a mixed theme
@@ -623,7 +623,7 @@ gboolean cairo_dock_import_theme (const gchar *cThemeName, gboolean bLoadBehavio
 {
 	//\___________________ Get the local path of the theme (if necessary, it is downloaded and/or unzipped).
 	gchar *cNewThemePath = _cairo_dock_get_theme_path (cThemeName);
-	g_return_val_if_fail (cNewThemePath != NULL && g_file_test (cNewThemePath, G_FILE_TEST_EXISTS), FALSE);
+	cd_return_val_if_fail (cNewThemePath != NULL && g_file_test (cNewThemePath, G_FILE_TEST_EXISTS), FALSE);
 	
 	//\___________________ import the theme in the current theme.
 	gboolean bSuccess = _cairo_dock_import_local_theme (cNewThemePath, bLoadBehavior, bLoadLaunchers);

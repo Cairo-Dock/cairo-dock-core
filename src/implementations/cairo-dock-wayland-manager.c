@@ -544,7 +544,7 @@ static struct zxdg_output_v1_listener s_output_listener = {
 static void _add_monitor (G_GNUC_UNUSED GdkDisplay *dsp, GdkMonitor *mon, G_GNUC_UNUSED gpointer data)
 {
 	struct wl_output *wloutput = gdk_wayland_monitor_get_wl_output (mon);
-	g_return_if_fail (wloutput != NULL && s_pOutputMap != NULL);
+	cd_return_if_fail (wloutput != NULL && s_pOutputMap != NULL);
 	
 	if (g_hash_table_lookup (s_pOutputMap, mon)) return; // already added
 	XdgOutputInfo *info = g_new0 (XdgOutputInfo, 1);
@@ -555,7 +555,7 @@ static void _add_monitor (G_GNUC_UNUSED GdkDisplay *dsp, GdkMonitor *mon, G_GNUC
 
 static void _remove_monitor (G_GNUC_UNUSED GdkDisplay *dsp, GdkMonitor *mon, G_GNUC_UNUSED gpointer data)
 {
-	g_return_if_fail (s_pOutputMap != NULL);
+	cd_return_if_fail (s_pOutputMap != NULL);
 	g_hash_table_remove (s_pOutputMap, mon);
 }
 

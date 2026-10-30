@@ -190,12 +190,12 @@ void gldi_shortkey_rebind_full (GldiShortkey *binding,
 	CDBindkeyCB result_cb,
 	gpointer result_data)
 {
-	g_return_if_fail (binding != NULL);
+	cd_return_if_fail (binding != NULL);
 	cd_debug ("%s (%s)", __func__, binding->keystring);
 	
 	// ensure it's a registered binding
 	GSList *iter = g_slist_find (s_pKeyBindings, binding);
-	g_return_if_fail (iter != NULL);
+	cd_return_if_fail (iter != NULL);
 	
 	// update the description if needed
 	if (cNewDescription != NULL)
@@ -295,7 +295,7 @@ static gboolean _xtest_is_available (void)
 
 gboolean cairo_dock_trigger_shortkey (const gchar *cKeyString)  // the idea was taken from xdo.
 {
-	g_return_val_if_fail (cKeyString != NULL, FALSE);
+	cd_return_val_if_fail (cKeyString != NULL, FALSE);
 	if (! _xtest_is_available ())  // XTest extension not available, or not an X session
 		return FALSE;
 	cd_message ("%s (%s)", __func__, cKeyString);

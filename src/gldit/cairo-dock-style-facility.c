@@ -209,7 +209,7 @@ void gldi_text_description_free (GldiTextDescription *pTextDescription)
 
 void gldi_text_description_copy (GldiTextDescription *pDestTextDescription, GldiTextDescription *pOrigTextDescription)
 {
-	g_return_if_fail (pOrigTextDescription != NULL && pDestTextDescription != NULL);
+	cd_return_if_fail (pOrigTextDescription != NULL && pDestTextDescription != NULL);
 	memcpy (pDestTextDescription, pOrigTextDescription, sizeof (GldiTextDescription));
 	pDestTextDescription->cFont = g_strdup (pOrigTextDescription->cFont);
 	pDestTextDescription->fd = pango_font_description_copy (pOrigTextDescription->fd);
@@ -217,7 +217,7 @@ void gldi_text_description_copy (GldiTextDescription *pDestTextDescription, Gldi
 
 GldiTextDescription *gldi_text_description_duplicate (GldiTextDescription *pTextDescription)
 {
-	g_return_val_if_fail (pTextDescription != NULL, NULL);
+	cd_return_val_if_fail (pTextDescription != NULL, NULL);
 	GldiTextDescription *pTextDescription2 = g_memdup2 (pTextDescription, sizeof (GldiTextDescription));
 	pTextDescription2->cFont = g_strdup (pTextDescription->cFont);
 	pTextDescription2->fd = pango_font_description_copy (pTextDescription->fd);

@@ -422,7 +422,7 @@ static gboolean on_button_press_desklet(G_GNUC_UNUSED GtkWidget *pWidget,
 				if (x > pDesklet->container.iWidth - myDeskletsParam.iDeskletButtonSize && y < myDeskletsParam.iDeskletButtonSize)  // on verifie qu'on est encore dedans.
 				{
 					Icon *icon = pDesklet->pIcon;
-					g_return_val_if_fail (CAIRO_DOCK_IS_APPLET (icon), FALSE);
+					cd_return_val_if_fail (CAIRO_DOCK_IS_APPLET (icon), FALSE);
 					gldi_module_instance_detach (icon->pModuleInstance);
 					return GLDI_NOTIFICATION_INTERCEPT;  // interception du signal.
 				}
@@ -434,7 +434,7 @@ static gboolean on_button_press_desklet(G_GNUC_UNUSED GtkWidget *pWidget,
 				if (x > pDesklet->container.iWidth - myDeskletsParam.iDeskletButtonSize && y > pDesklet->container.iHeight - myDeskletsParam.iDeskletButtonSize)  // on verifie qu'on est encore dedans.
 				{
 					Icon *icon = pDesklet->pIcon;
-					g_return_val_if_fail (CAIRO_DOCK_IS_APPLET (icon), FALSE);
+					cd_return_val_if_fail (CAIRO_DOCK_IS_APPLET (icon), FALSE);
 					pDesklet->bNoInput = ! pDesklet->bNoInput;
 					cd_debug ("no input : %d (%s)", pDesklet->bNoInput, icon->pModuleInstance->cConfFilePath);
 					cairo_dock_update_conf_file (icon->pModuleInstance->cConfFilePath,
@@ -526,7 +526,7 @@ static void _on_drag_data_received (G_GNUC_UNUSED GtkWidget *pWidget, G_GNUC_UNU
 {
 	//\_________________ On recupere l'URI.
 	gchar *cReceivedData = (gchar *) gtk_selection_data_get_data (selection_data);  // the data are actually 'const guchar*', but since we only allowed text and urls, it will be a string
-	g_return_if_fail (cReceivedData != NULL);
+	cd_return_if_fail (cReceivedData != NULL);
 	int length = strlen (cReceivedData);
 	if (cReceivedData[length-1] == '\n')
 		cReceivedData[--length] = '\0';  // on vire le retour chariot final.
@@ -1058,7 +1058,7 @@ void gldi_desklet_decoration_free (CairoDeskletDecoration *pDecoration)
 
 void gldi_desklet_add_interactive_widget_with_margin (CairoDesklet *pDesklet, GtkWidget *pInteractiveWidget, int iRightMargin)
 {
-	g_return_if_fail (pDesklet != NULL && pInteractiveWidget != NULL);
+	cd_return_if_fail (pDesklet != NULL && pInteractiveWidget != NULL);
 	if (pDesklet->pInteractiveWidget != NULL || gtk_bin_get_child (GTK_BIN (pDesklet->container.pWidget)) != NULL)
 	{
 		cd_warning ("This desklet already has an interactive widget !");
@@ -1084,7 +1084,7 @@ void gldi_desklet_add_interactive_widget_with_margin (CairoDesklet *pDesklet, Gt
 
 void gldi_desklet_set_margin (CairoDesklet *pDesklet, int iRightMargin)
 {
-	g_return_if_fail (pDesklet != NULL && pDesklet->pInteractiveWidget != NULL);
+	cd_return_if_fail (pDesklet != NULL && pDesklet->pInteractiveWidget != NULL);
 	
 	GtkWidget *pHBox = gtk_bin_get_child (GTK_BIN (pDesklet->container.pWidget));
 	if (pHBox && pHBox != pDesklet->pInteractiveWidget)  // precaution.

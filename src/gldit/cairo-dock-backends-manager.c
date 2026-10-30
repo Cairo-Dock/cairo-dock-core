@@ -132,7 +132,7 @@ void cairo_dock_remove_desklet_renderer (const gchar *cRendererName)
 
 void cairo_dock_predefine_desklet_renderer_config (CairoDeskletRenderer *pRenderer, const gchar *cConfigName, CairoDeskletRendererConfigPtr pConfig)
 {
-	g_return_if_fail (cConfigName != NULL && pConfig != NULL);
+	cd_return_if_fail (cConfigName != NULL && pConfig != NULL);
 	CairoDeskletRendererPreDefinedConfig *pPreDefinedConfig = g_new (CairoDeskletRendererPreDefinedConfig, 1);
 	pPreDefinedConfig->cName = g_strdup (cConfigName);
 	pPreDefinedConfig->pConfig = pConfig;
@@ -142,7 +142,7 @@ void cairo_dock_predefine_desklet_renderer_config (CairoDeskletRenderer *pRender
 CairoDeskletRendererConfigPtr cairo_dock_get_desklet_renderer_predefined_config (const gchar *cRendererName, const gchar *cConfigName)
 {
 	CairoDeskletRenderer *pRenderer = cairo_dock_get_desklet_renderer (cRendererName);
-	g_return_val_if_fail (pRenderer != NULL && cConfigName != NULL, NULL);
+	cd_return_val_if_fail (pRenderer != NULL && cConfigName != NULL, NULL);
 	
 	GList *c;
 	CairoDeskletRendererPreDefinedConfig *pPreDefinedConfig;
@@ -247,7 +247,7 @@ void cairo_dock_foreach_icon_container_renderer (GHFunc pCallback, gpointer data
 
 void cairo_dock_set_renderer (CairoDock *pDock, const gchar *cRendererName)
 {
-	g_return_if_fail (pDock != NULL);
+	cd_return_if_fail (pDock != NULL);
 	cd_message ("%s (%x:%s)", __func__, pDock, cRendererName);
 	
 	if (pDock->pRenderer && pDock->pRenderer->free_data)
@@ -279,14 +279,14 @@ void cairo_dock_set_renderer (CairoDock *pDock, const gchar *cRendererName)
 
 void cairo_dock_set_default_renderer (CairoDock *pDock)
 {
-	g_return_if_fail (pDock != NULL);
+	cd_return_if_fail (pDock != NULL);
 	cairo_dock_set_renderer (pDock, pDock->cRendererName);  // NULL => laissera le champ cRendererName nul plutot que de mettre le nom de la vue par defaut.
 }
 
 
 void cairo_dock_set_desklet_renderer (CairoDesklet *pDesklet, CairoDeskletRenderer *pRenderer, CairoDeskletRendererConfigPtr pConfig)
 {
-	g_return_if_fail (pDesklet != NULL);
+	cd_return_if_fail (pDesklet != NULL);
 	
 	if (pDesklet->pRenderer != NULL && pDesklet->pRenderer->free_data != NULL)  // meme si pDesklet->pRendererData == NULL.
 	{
@@ -336,7 +336,7 @@ void cairo_dock_set_desklet_renderer_by_name (CairoDesklet *pDesklet, const gcha
 
 void cairo_dock_set_dialog_renderer (CairoDialog *pDialog, CairoDialogRenderer *pRenderer, CairoDialogRendererConfigPtr pConfig)
 {
-	g_return_if_fail (pDialog != NULL);
+	cd_return_if_fail (pDialog != NULL);
 	
 	if (pDialog->pRenderer != NULL && pDialog->pRenderer->free_data != NULL)
 	{
@@ -450,21 +450,21 @@ void cairo_dock_free_animation_record (CairoDockAnimationRecord *pRecord)
 
 int cairo_dock_get_animation_id (const gchar *cAnimation)
 {
-	g_return_val_if_fail (cAnimation != NULL, 0);
+	cd_return_val_if_fail (cAnimation != NULL, 0);
 	CairoDockAnimationRecord *pRecord = g_hash_table_lookup (s_hAnimationsTable, cAnimation);
 	return (pRecord ? pRecord->id : 0);
 }
 
 const gchar *cairo_dock_get_animation_displayed_name (const gchar *cAnimation)
 {
-	g_return_val_if_fail (cAnimation != NULL, NULL);
+	cd_return_val_if_fail (cAnimation != NULL, NULL);
 	CairoDockAnimationRecord *pRecord = g_hash_table_lookup (s_hAnimationsTable, cAnimation);
 	return (pRecord ? pRecord->cDisplayedName : NULL);
 }
 
 void cairo_dock_unregister_animation (const gchar *cAnimation)
 {
-	g_return_if_fail (cAnimation != NULL);
+	cd_return_if_fail (cAnimation != NULL);
 	g_hash_table_remove (s_hAnimationsTable, cAnimation);
 }
 

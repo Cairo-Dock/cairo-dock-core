@@ -52,7 +52,7 @@ cairo_t * cairo_dock_create_drawing_context_generic (GldiContainer *pContainer)
 cairo_t *cairo_dock_create_drawing_context_on_container (GldiContainer *pContainer)
 {
 	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (pContainer);
-	g_return_val_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS, NULL);
+	cd_return_val_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS, NULL);
 	
 	cairo_dock_init_drawing_context_on_container (pContainer, pCairoContext);
 	
@@ -79,7 +79,7 @@ void cairo_dock_init_drawing_context_on_container (GldiContainer *pContainer, ca
 cairo_t *cairo_dock_create_drawing_context_on_area (GldiContainer *pContainer, GdkRectangle *pArea, double *fBgColor)
 {
 	cairo_t *pCairoContext = cairo_dock_create_drawing_context_generic (pContainer);
-	g_return_val_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS, pCairoContext);
+	cd_return_val_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS, pCairoContext);
 	
 	if (pArea != NULL && (pArea->x > 0 || pArea->y > 0))
 	{
@@ -420,7 +420,7 @@ void cairo_dock_draw_icon_reflect_cairo (Icon *icon, GldiContainer *pContainer, 
 						0.,
 						0,
 						icon->image.iHeight * myIconsParam.fReflectHeightRatio);
-				g_return_if_fail (cairo_pattern_status (pGradationPattern) == CAIRO_STATUS_SUCCESS);
+				cd_return_if_fail (cairo_pattern_status (pGradationPattern) == CAIRO_STATUS_SUCCESS);
 				
 				cairo_pattern_set_extend (pGradationPattern, CAIRO_EXTEND_NONE);
 				cairo_pattern_add_color_stop_rgba (pGradationPattern,
@@ -450,7 +450,7 @@ void cairo_dock_draw_icon_reflect_cairo (Icon *icon, GldiContainer *pContainer, 
 						0.,
 						icon->image.iWidth * myIconsParam.fReflectHeightRatio,
 						0);
-				g_return_if_fail (cairo_pattern_status (pGradationPattern) == CAIRO_STATUS_SUCCESS);
+				cd_return_if_fail (cairo_pattern_status (pGradationPattern) == CAIRO_STATUS_SUCCESS);
 				
 				cairo_pattern_set_extend (pGradationPattern, CAIRO_EXTEND_NONE);
 				cairo_pattern_add_color_stop_rgba (pGradationPattern,

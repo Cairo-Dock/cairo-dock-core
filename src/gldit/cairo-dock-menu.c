@@ -82,11 +82,11 @@ static void _set_margin_position (GtkWidget *pMenu, GldiMenuParams *pParams)
 {
 	if (pParams == NULL)
 		pParams = g_object_get_data (G_OBJECT (pMenu), "gldi-params");
-	g_return_if_fail (pParams);
+	cd_return_if_fail (pParams);
 	Icon *pIcon = pParams->pIcon;
-	g_return_if_fail (pIcon);
+	cd_return_if_fail (pIcon);
 	GldiContainer *pContainer = cairo_dock_get_icon_container (pIcon);
-	g_return_if_fail (pContainer);
+	cd_return_if_fail (pContainer);
 	
 	// define where the menu will point
 	int iMarginPosition;  // b, t, r, l
@@ -239,7 +239,7 @@ static void _menu_popped_up_cb (GtkWidget *widget, G_GNUC_UNUSED void* rect1, G_
 
 void gldi_menu_init (GtkWidget *pMenu, Icon *pIcon)
 {
-	g_return_if_fail (g_object_get_data (G_OBJECT (pMenu), "gldi-params") == NULL);
+	cd_return_if_fail (g_object_get_data (G_OBJECT (pMenu), "gldi-params") == NULL);
 	
 	#if (CAIRO_DOCK_FORCE_ICON_IN_MENUS == 1)
 	gtk_menu_set_reserve_toggle_size (GTK_MENU(pMenu), TRUE);
@@ -368,7 +368,7 @@ void gldi_menu_reinit (GtkWidget *pMenu, Icon *pIcon)
 static void _menu_realized_cb (GtkWidget *widget, gpointer user_data)
 {
 	GldiMenuParams *pParams = (GldiMenuParams*)user_data;
-	g_return_if_fail (pParams != NULL);
+	cd_return_if_fail (pParams != NULL);
 	
 	int w, h;  // taille menu
 	GtkRequisition requisition;
@@ -415,7 +415,7 @@ static void _place_menu_on_icon (GtkMenu *menu, gint *x, gint *y, gboolean *push
 {
 	*push_in = FALSE;
 	GldiMenuParams *pParams = g_object_get_data (G_OBJECT(menu), "gldi-params");
-	g_return_if_fail (pParams != NULL);
+	cd_return_if_fail (pParams != NULL);
 
 	Icon *pIcon = pParams->pIcon;
 	GldiContainer *pContainer = (pIcon ? cairo_dock_get_icon_container (pIcon) : NULL);
@@ -534,7 +534,7 @@ static void _adjust_anchor (GdkGravity *anchor, gboolean bLeft)
 static void _popup_menu (GtkWidget *menu, const GdkEvent *event)
 {
 	GldiMenuParams *pParams = g_object_get_data (G_OBJECT(menu), "gldi-params");
-	g_return_if_fail (pParams != NULL);
+	cd_return_if_fail (pParams != NULL);
 
 	Icon *pIcon = pParams->pIcon;
 	GldiContainer *pContainer = (pIcon ? cairo_dock_get_icon_container (pIcon) : NULL);

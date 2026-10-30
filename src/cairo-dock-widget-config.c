@@ -155,7 +155,7 @@ static GKeyFile *_make_simple_conf_file (ConfigWidget *pConfigWidget)
 	}
 	
 	GKeyFile* pSimpleKeyFile = cairo_dock_open_key_file (cConfFilePath);
-	g_return_val_if_fail (pSimpleKeyFile != NULL, NULL);
+	cd_return_val_if_fail (pSimpleKeyFile != NULL, NULL);
 	
 	if (cairo_dock_conf_file_needs_update (pSimpleKeyFile, CAIRO_DOCK_VERSION))
 	{
@@ -163,7 +163,7 @@ static GKeyFile *_make_simple_conf_file (ConfigWidget *pConfigWidget)
 		
 		g_key_file_free (pSimpleKeyFile);
 		pSimpleKeyFile = cairo_dock_open_key_file (cConfFilePath);
-		g_return_val_if_fail (pSimpleKeyFile != NULL, NULL);
+		cd_return_val_if_fail (pSimpleKeyFile != NULL, NULL);
 	}
 	
 	// comportement
@@ -448,7 +448,7 @@ static void _config_widget_apply (CDWidget *pCdWidget)
 	//\_____________ open and update the simple key-file.
 	gchar *cConfFilePath = g_strdup_printf ("%s/%s", g_cCurrentThemePath, CAIRO_DOCK_SIMPLE_CONF_FILE);
 	GKeyFile* pSimpleKeyFile = cairo_dock_open_key_file (cConfFilePath);
-	g_return_if_fail (pSimpleKeyFile != NULL);
+	cd_return_if_fail (pSimpleKeyFile != NULL);
 	
 	// update the keys with the widgets.
 	cairo_dock_update_keyfile_from_widget_list (pSimpleKeyFile, pConfigWidget->widget.pWidgetList);
@@ -467,7 +467,7 @@ static void _config_widget_apply (CDWidget *pCdWidget)
 	
 	// open the main conf file to update it.
 	GKeyFile* pKeyFile = cairo_dock_open_key_file (g_cConfFile);
-	g_return_if_fail (pKeyFile != NULL);
+	cd_return_if_fail (pKeyFile != NULL);
 	
 	// behavior
 	CairoDockPositionType iScreenBorder = g_key_file_get_integer (pSimpleKeyFile, "Behavior", "screen border", NULL);

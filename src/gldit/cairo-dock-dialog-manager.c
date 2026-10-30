@@ -466,7 +466,7 @@ static gboolean _remove_dialog_on_icon (CairoDialog *pDialog, Icon *icon)
 }
 void gldi_dialogs_remove_on_icon (Icon *icon)  // gldi_icon_remove_dialog ?...
 {
-	g_return_if_fail (icon != NULL);
+	cd_return_if_fail (icon != NULL);
 	gldi_dialogs_foreach ((GCompareFunc)_remove_dialog_on_icon, icon);
 }
 
@@ -542,7 +542,7 @@ static void _cairo_dock_dialog_find_optimal_placement (CairoDialog *pDialog)
 
 static void _cairo_dock_dialog_calculate_aimed_point (Icon *pIcon, GldiContainer *pContainer, int *iX, int *iY, gboolean *bRight, gboolean *bIsHorizontal, gboolean *bDirectionUp, double fAlign)
 {
-	g_return_if_fail (/*pIcon != NULL && */pContainer != NULL);
+	cd_return_if_fail (/*pIcon != NULL && */pContainer != NULL);
 	//g_print ("%s (%.2f, %.2f)\n", __func__, pIcon?pIcon->fXAtRest:0, pIcon?pIcon->fDrawX:0);
 	if (CAIRO_DOCK_IS_DOCK (pContainer))
 	{

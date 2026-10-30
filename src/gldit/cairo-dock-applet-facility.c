@@ -331,10 +331,10 @@ void cairo_dock_open_module_config_on_demand (int iClickedButton, G_GNUC_UNUSED 
 void cairo_dock_insert_icons_in_applet (GldiModuleInstance *pInstance, GList *pIconsList, const gchar *cDockRenderer, const gchar *cDeskletRenderer, gpointer pDeskletRendererData)
 {
 	Icon *pIcon = pInstance->pIcon;
-	g_return_if_fail (pIcon != NULL);
+	cd_return_if_fail (pIcon != NULL);
 	
 	GldiContainer *pContainer = pInstance->pContainer;
-	g_return_if_fail (pContainer != NULL);
+	cd_return_if_fail (pContainer != NULL);
 	
 	if (pInstance->pDock)
 	{
@@ -405,7 +405,7 @@ void cairo_dock_insert_icon_in_applet (GldiModuleInstance *pInstance, Icon *pOne
 	{
 		pContainer = CAIRO_CONTAINER (pInstance->pDesklet);
 	}
-	g_return_if_fail (pContainer != NULL);
+	cd_return_if_fail (pContainer != NULL);
 	
 	// insert the icon inside
 	gldi_icon_insert_in_container (pOneIcon, pContainer, ! CAIRO_DOCK_ANIMATE_ICON);
@@ -415,10 +415,10 @@ void cairo_dock_insert_icon_in_applet (GldiModuleInstance *pInstance, Icon *pOne
 void cairo_dock_remove_all_icons_from_applet (GldiModuleInstance *pInstance)
 {
 	Icon *pIcon = pInstance->pIcon;
-	g_return_if_fail (pIcon != NULL);
+	cd_return_if_fail (pIcon != NULL);
 	
 	GldiContainer *pContainer = pInstance->pContainer;
-	g_return_if_fail (pContainer != NULL);
+	cd_return_if_fail (pContainer != NULL);
 	
 	cd_debug ("%s (%s)", __func__, pInstance->pModule->pVisitCard->cModuleName);
 	if (pInstance->pDesklet && pInstance->pDesklet->icons != NULL)
@@ -467,10 +467,10 @@ void cairo_dock_remove_all_icons_from_applet (GldiModuleInstance *pInstance)
 void cairo_dock_resize_applet (GldiModuleInstance *pInstance, int w, int h)
 {
 	Icon *pIcon = pInstance->pIcon;
-	g_return_if_fail (pIcon != NULL);
+	cd_return_if_fail (pIcon != NULL);
 	
 	GldiContainer *pContainer = pInstance->pContainer;
-	g_return_if_fail (pContainer != NULL);
+	cd_return_if_fail (pContainer != NULL);
 	
 	if (pInstance->pDock)
 	{

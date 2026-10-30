@@ -57,7 +57,7 @@ static void _gldi_appli_icon_demands_attention (Icon *icon, CairoDock *pDock, gb
 		else
 		{
 			pDialog = gldi_dialog_show_temporary (pHiddenIcon->cName, icon, CAIRO_CONTAINER (pDock), 1000*myTaskbarParam.iDialogDuration); // mieux vaut montrer pas d'icone dans le dialogue que de montrer une icone qui n'a pas de rapport avec l'appli demandant l'attention.
-			g_return_if_fail (pDialog != NULL);
+			cd_return_if_fail (pDialog != NULL);
 			gldi_dialog_set_icon_surface (pDialog, pHiddenIcon->image.pSurface, pDialog->iIconSize);
 		}
 		if (pDialog && bForceDemand)
@@ -156,7 +156,7 @@ void gldi_appli_icon_stop_demanding_attention (Icon *icon)
 
 void gldi_appli_icon_animate_on_active (Icon *icon, CairoDock *pParentDock)
 {
-	g_return_if_fail (pParentDock != NULL);
+	cd_return_if_fail (pParentDock != NULL);
 	if (! cairo_dock_icon_is_being_inserted_or_removed (icon))  // sinon on laisse l'animation actuelle.
 	{
 		if (myTaskbarParam.cAnimationOnActiveWindow)
@@ -295,7 +295,7 @@ CairoDock *gldi_appli_icon_insert_in_dock (Icon *icon, CairoDock *pMainDock, gbo
 	
 	//\_________________ On determine dans quel dock l'inserer (cree au besoin).
 	CairoDock *pParentDock = _get_parent_dock_for_appli (icon, pMainDock);
-	g_return_val_if_fail (pParentDock != NULL, NULL);
+	cd_return_val_if_fail (pParentDock != NULL, NULL);
 
 	//\_________________ On l'insere dans son dock parent en animant ce dernier eventuellement.
 	if (myTaskbarParam.bMixLauncherAppli && pParentDock != cairo_dock_get_class_subdock (icon->cClass))  // this appli is amongst the launchers in the main dock

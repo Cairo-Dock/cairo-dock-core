@@ -235,8 +235,8 @@ static void _on_name_appeared (GDBusConnection *connection, const gchar *name,
 	
 	if (!strcmp (name, CD_KGLOBALACCEL_BUS))
 	{
-		g_return_if_fail (s_pKwinAccelProxy == NULL);
-		g_return_if_fail (s_pPlasmaAccelProxy == NULL);
+		cd_return_if_fail (s_pKwinAccelProxy == NULL);
+		cd_return_if_fail (s_pPlasmaAccelProxy == NULL);
 		
 		s_pKwinAccelProxy = g_dbus_proxy_new_sync (connection,
 			G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START | G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
@@ -272,7 +272,7 @@ static void _on_name_appeared (GDBusConnection *connection, const gchar *name,
 	}
 	else if (!strcmp (name, CD_WINDOWVIEW_BUS))
 	{
-		g_return_if_fail (s_pWindowViewProxy == NULL);
+		cd_return_if_fail (s_pWindowViewProxy == NULL);
 		
 		s_pWindowViewProxy = g_dbus_proxy_new_sync (connection,
 			G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START | G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,

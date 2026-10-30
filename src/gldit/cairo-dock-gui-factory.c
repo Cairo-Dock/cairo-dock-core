@@ -535,7 +535,7 @@ static void _cairo_dock_selection_changed (GtkTreeModel *model, GtkTreeIter iter
 static void _cairo_dock_select_custom_item_in_combo (GtkComboBox *widget, gpointer *data)
 {
 	GtkTreeModel *model = gtk_combo_box_get_model (widget);
-	g_return_if_fail (model != NULL);
+	cd_return_if_fail (model != NULL);
 
 	GtkTreeIter iter;
 	if (!gtk_combo_box_get_active_iter (widget, &iter))
@@ -546,7 +546,7 @@ static void _cairo_dock_select_custom_item_in_combo (GtkComboBox *widget, gpoint
 	int iNbWidgets = GPOINTER_TO_INT (data[2]);
 	GList *children = gtk_container_get_children (GTK_CONTAINER (parent));
 	GList *c = g_list_find (children, pKeyBox);
-	g_return_if_fail (c != NULL && c->next != NULL);
+	cd_return_if_fail (c != NULL && c->next != NULL);
 	
 	gchar *cName = NULL;
 	gtk_tree_model_get (model, &iter, CAIRO_DOCK_MODEL_RESULT, &cName, -1);
@@ -567,7 +567,7 @@ static void _cairo_dock_select_custom_item_in_combo (GtkComboBox *widget, gpoint
 static void _cairo_dock_select_one_item_in_combo (GtkComboBox *widget, gpointer *data)
 {
 	GtkTreeModel *model = gtk_combo_box_get_model (widget);
-	g_return_if_fail (model != NULL);
+	cd_return_if_fail (model != NULL);
 	
 	GtkTreeIter iter;
 	if (!gtk_combo_box_get_active_iter (widget, &iter))
@@ -591,7 +591,7 @@ static gboolean _cairo_dock_select_one_item_in_tree (G_GNUC_UNUSED GtkTreeSelect
 static void _cairo_dock_select_one_item_in_control_combo (GtkComboBox *widget, gpointer *data)
 {
 	GtkTreeModel *model = gtk_combo_box_get_model (widget);
-	g_return_if_fail (model != NULL);
+	cd_return_if_fail (model != NULL);
 	
 	//g_print ("%s ()\n", __func__);
 	GtkTreeIter iter;
@@ -606,7 +606,7 @@ static void _cairo_dock_select_one_item_in_control_combo (GtkComboBox *widget, g
 	int iNbWidgets = GPOINTER_TO_INT (data[2]);
 	GList *children = gtk_container_get_children (GTK_CONTAINER (parent));
 	GList *c = g_list_find (children, pKeyBox);
-	g_return_if_fail (c != NULL);
+	cd_return_if_fail (c != NULL);
 	
 	//g_print ("%d widgets controles\n", iNbWidgets);
 	GtkWidget *w;
@@ -661,7 +661,7 @@ static GList *_activate_sub_widgets (GList *children, int iNbControlledWidgets, 
 static void _cairo_dock_select_one_item_in_control_combo_selective (GtkComboBox *widget, gpointer *data)
 {
 	GtkTreeModel *model = gtk_combo_box_get_model (widget);
-	g_return_if_fail (model != NULL);
+	cd_return_if_fail (model != NULL);
 	
 	GtkTreeIter iter;
 	if (!gtk_combo_box_get_active_iter (widget, &iter))
@@ -679,7 +679,7 @@ static void _cairo_dock_select_one_item_in_control_combo_selective (GtkComboBox 
 	//g_print ("%s (%d, %d / %d)\n", __func__, iOrder1, iOrder2, iNbWidgets);
 	GList *children = gtk_container_get_children (GTK_CONTAINER (parent));
 	GList *c = g_list_find (children, pKeyBox);
-	g_return_if_fail (c != NULL);
+	cd_return_if_fail (c != NULL);
 	
 	//g_print ("%d widgets controles (%d au total)\n", iNbWidgets, g_list_length (children));
 	GtkWidget *w;
@@ -970,7 +970,7 @@ static void _cairo_dock_toggle_control_button (GtkCheckButton *pButton, gpointer
 	
 	GList *children = gtk_container_get_children (GTK_CONTAINER (parent));
 	GList *c = g_list_find (children, pKeyBox);
-	g_return_if_fail (c != NULL);
+	cd_return_if_fail (c != NULL);
 	
 	gboolean bActive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (pButton));
 	if (iNbWidgets < 0)
@@ -1315,7 +1315,7 @@ static void cairo_dock_fill_combo_with_themes (GtkWidget *pCombo, GHashTable *pT
 	cd_debug ("%s (%s, %s)", __func__, cActiveTheme, cHint);
 	// fill the combo's model
 	GtkTreeModel *modele = gtk_combo_box_get_model (GTK_COMBO_BOX (pCombo));
-	g_return_if_fail (modele != NULL);
+	cd_return_if_fail (modele != NULL);
 	cairo_dock_fill_model_with_themes (GTK_LIST_STORE (modele), pThemeTable, cHint);
 	
 	// select the given one
@@ -1353,7 +1353,7 @@ static void _got_themes_combo_list (GHashTable *pThemeTable, gpointer *data)
 	}
 	
 	GtkTreeModel *pModel = gtk_combo_box_get_model (GTK_COMBO_BOX (pCombo));
-	g_return_if_fail (pModel != NULL);
+	cd_return_if_fail (pModel != NULL);
 	GtkTreeIter iter;
 	if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (pCombo), &iter))
 	{
@@ -1611,7 +1611,7 @@ GtkWidget *cairo_dock_gui_make_preview_box (GtkWidget *pMainWindow, GtkWidget *p
 
 GtkWidget *cairo_dock_widget_handbook_new (GldiModule *pModule)
 {
-	g_return_val_if_fail (pModule != NULL, NULL);
+	cd_return_val_if_fail (pModule != NULL, NULL);
 	
 	// Frame with label
 	GtkWidget *pFrame = gtk_frame_new (NULL);
@@ -1783,7 +1783,7 @@ const gchar *cairo_dock_parse_key_comment (gchar *cKeyComment, char *iElementTyp
 
 		while (*cUsefulComment != '\0' && *cUsefulComment != ']')
 			cUsefulComment ++;
-		g_return_val_if_fail (*cUsefulComment != '\0', NULL);
+		cd_return_val_if_fail (*cUsefulComment != '\0', NULL);
 		*cUsefulComment = '\0';
 		cUsefulComment ++;
 		while (*cUsefulComment == ' ')  // on saute les espaces.
@@ -1847,7 +1847,7 @@ static gboolean _open_btn_url (GtkLinkButton *pURL, G_GNUC_UNUSED gpointer data)
 
 GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFilePath)
 {
-	g_return_val_if_fail (pKeyFile != NULL && cGroupName != NULL, NULL);
+	cd_return_val_if_fail (pKeyFile != NULL && cGroupName != NULL, NULL);
 	//GPtrArray *pDataGarbage = g_ptr_array_new ();
 	//GPtrArray *pModelGarbage = g_ptr_array_new ();
 	
@@ -1897,7 +1897,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 	pFrameVBox = NULL;
 	
 	pKeyList = g_key_file_get_keys (pKeyFile, cGroupName, NULL, NULL);
-	g_return_val_if_fail (pKeyList != NULL, NULL);
+	cd_return_val_if_fail (pKeyList != NULL, NULL);
 	
 	for (j = 0; pKeyList[j] != NULL; j ++)
 	{
@@ -3250,7 +3250,7 @@ GtkWidget *cairo_dock_build_key_file_widget_full (GKeyFile* pKeyFile, const gcha
 {
 	gsize length = 0;
 	gchar **pGroupList = g_key_file_get_groups (pKeyFile, &length);
-	g_return_val_if_fail (pGroupList != NULL, NULL);
+	cd_return_val_if_fail (pGroupList != NULL, NULL);
 	
 	GtkWidget *pNoteBook = pCurrentNoteBook;
 	if (! pNoteBook)
@@ -3533,7 +3533,7 @@ void cairo_dock_fill_model_with_themes (GtkListStore *pModel, GHashTable *pTheme
 void cairo_dock_fill_combo_with_list (GtkWidget *pCombo, GList *pElementList, const gchar *cActiveElement)
 {
 	GtkTreeModel *pModele = gtk_combo_box_get_model (GTK_COMBO_BOX (pCombo));
-	g_return_if_fail (pModele != NULL);
+	cd_return_if_fail (pModele != NULL);
 	
 	GtkTreeIter iter;
 	GList *l;
@@ -3592,7 +3592,7 @@ GtkWidget *cairo_dock_gui_make_combo (gboolean bWithEntry)
 void cairo_dock_gui_select_in_combo_full (GtkWidget *pOneWidget, const gchar *cValue, gboolean bIsTheme)
 {
 	GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX (pOneWidget));
-	g_return_if_fail (model != NULL);
+	cd_return_if_fail (model != NULL);
 	GtkTreeIter iter;
 	if (_cairo_dock_find_iter_from_name_full (GTK_LIST_STORE (model), cValue, &iter, bIsTheme))
 	{
@@ -3710,7 +3710,7 @@ CairoDockGroupKeyWidget *cairo_dock_gui_find_group_key_widget_in_list (GSList *p
 
 GtkWidget *cairo_dock_gui_image_from_file (const gchar *cIcon, int iSize)
 {
-	g_return_val_if_fail (cIcon, NULL);
+	cd_return_val_if_fail (cIcon, NULL);
 	int size = cairo_dock_search_icon_size (iSize);
 	cairo_surface_t *surface = cairo_dock_create_surface_from_icon (cIcon, size, size);
 	if (surface)

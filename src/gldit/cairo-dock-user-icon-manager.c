@@ -46,7 +46,7 @@ static gboolean _user_icon_conf_open (const gchar *cConfFile, GldiUserIconAttr *
 	gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, cConfFile);
 	GKeyFile* pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
 	g_free (cDesktopFilePath);
-	g_return_val_if_fail (pKeyFile != NULL, FALSE);
+	cd_return_val_if_fail (pKeyFile != NULL, FALSE);
 	
 	//\__________________ get the type of the icon
 	if (g_key_file_has_key (pKeyFile, "Desktop Entry", "Icon Type", NULL))
@@ -153,7 +153,7 @@ void gldi_user_icons_new_from_directory (const gchar *cDirectory)
 {
 	cd_message ("%s (%s)", __func__, cDirectory);
 	GDir *dir = g_dir_open (cDirectory, 0, NULL);
-	g_return_if_fail (dir != NULL);
+	cd_return_if_fail (dir != NULL);
 	
 	const gchar *cFileName;
 	GPtrArray *array = g_ptr_array_new_full (10, g_free);
@@ -261,7 +261,7 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, GKeyFile 
 	
 	gchar *cDesktopFilePath = g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, icon->cDesktopFileName);
 	pKeyFile = cairo_dock_open_key_file (cDesktopFilePath);
-	g_return_val_if_fail (pKeyFile != NULL, NULL);
+	cd_return_val_if_fail (pKeyFile != NULL, NULL);
 	
 	//\_____________ remember current state.
 	CairoDock *pDock = CAIRO_DOCK (cairo_dock_get_icon_container (icon));
@@ -288,7 +288,7 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, GKeyFile 
 		cd_message ("The parent dock (%s) doesn't exist, we create it", icon->cParentDockName);
 		pNewDock = gldi_dock_new (icon->cParentDockName);
 	}
-	g_return_val_if_fail (pNewDock != NULL, pKeyFile);
+	cd_return_val_if_fail (pNewDock != NULL, pKeyFile);
 	
 	//\_____________ manage the change of container or order.
 	if (pDock != pNewDock || icon->fOrder != fOrder)

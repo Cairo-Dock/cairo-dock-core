@@ -132,7 +132,7 @@ static gchar *_cd_get_icon_path (GIcon *pIcon, const gchar *cTargetURI)
 
 static GDrive *_cd_find_drive_from_name (const gchar *cName)
 {
-	g_return_val_if_fail (cName != NULL, NULL);
+	cd_return_val_if_fail (cName != NULL, NULL);
 	cd_message ("%s (%s)", __func__, cName);
 	GVolumeMonitor *pVolumeMonitor = g_volume_monitor_get ();
 	GDrive *pFoundDrive = NULL;
@@ -169,10 +169,10 @@ static GDrive *_cd_find_drive_from_name (const gchar *cName)
 }
 static gchar *_cd_find_volume_name_from_drive_name (const gchar *cName)
 {
-	g_return_val_if_fail (cName != NULL, NULL);
+	cd_return_val_if_fail (cName != NULL, NULL);
 	cd_message ("%s (%s)", __func__, cName);
 	GDrive *pDrive = _cd_find_drive_from_name (cName);
-	g_return_val_if_fail (pDrive != NULL, NULL);
+	cd_return_val_if_fail (pDrive != NULL, NULL);
 	
 	gchar *cVolumeName = NULL;
 	GList *pAssociatedVolumes = g_drive_get_volumes (pDrive);
@@ -215,7 +215,7 @@ static gboolean _cd_find_can_eject_from_drive_name (const gchar *cName)
 {
 	cd_debug ("%s (%s)", __func__, cName);
 	GDrive *pDrive = _cd_find_drive_from_name (cName);
-	g_return_val_if_fail (pDrive != NULL, FALSE);
+	cd_return_val_if_fail (pDrive != NULL, FALSE);
 	
 	gboolean bCanEject = g_drive_can_eject (pDrive);
 	g_object_unref (pDrive);
@@ -227,7 +227,7 @@ static void cairo_dock_gio_vfs_get_file_info (const gchar *cBaseURI, gchar **cNa
 	*cName = NULL;
 	*cURI = NULL;
 	*cIconName = NULL;
-	g_return_if_fail (cBaseURI != NULL);
+	cd_return_if_fail (cBaseURI != NULL);
 	GError *erreur = NULL;
 	cd_message ("%s (%s)", __func__, cBaseURI);
 	
@@ -255,7 +255,7 @@ static void cairo_dock_gio_vfs_get_file_info (const gchar *cBaseURI, gchar **cNa
 	
 	// get its attributes.
 	GFile *pFile = g_file_new_for_uri (cValidUri);
-	g_return_if_fail (pFile);
+	cd_return_if_fail (pFile);
 	const gchar *cQuery = G_FILE_ATTRIBUTE_STANDARD_TYPE","
 		G_FILE_ATTRIBUTE_STANDARD_SIZE","
 		G_FILE_ATTRIBUTE_TIME_MODIFIED","
@@ -421,7 +421,7 @@ static void cairo_dock_gio_vfs_get_file_info (const gchar *cBaseURI, gchar **cNa
 
 static GList *cairo_dock_gio_vfs_list_directory (const gchar *cBaseURI, CairoDockFMSortType iSortType, int iNewIconsGroup, gboolean bListHiddenFiles, int iNbMaxFiles, gchar **cValidUri)
 {
-	g_return_val_if_fail (cBaseURI != NULL, NULL);
+	cd_return_val_if_fail (cBaseURI != NULL, NULL);
 	cd_message ("%s (%s)", __func__, cBaseURI);
 	
 	gchar *cURI;
@@ -606,7 +606,7 @@ static GList *cairo_dock_gio_vfs_list_directory (const gchar *cBaseURI, CairoDoc
 
 static gsize cairo_dock_gio_vfs_measure_directory (const gchar *cBaseURI, gint iCountType, gboolean bRecursive, gint *pCancel)
 {
-	g_return_val_if_fail (cBaseURI != NULL, 0);
+	cd_return_val_if_fail (cBaseURI != NULL, 0);
 	//cd_debug ("%s (%s)", __func__, cBaseURI);
 	
 	gchar *cURI = (*cBaseURI == '/' ? g_strconcat ("file://", cBaseURI, NULL) : (gchar*)cBaseURI);  // we free it at the end if needed.
@@ -847,7 +847,7 @@ static void _got_default_for_uri_scheme_async (G_GNUC_UNUSED GObject* pObj, GAsy
 
 static void cairo_dock_gio_vfs_launch_uri (const gchar *cURI)
 {
-	g_return_if_fail (cURI != NULL);
+	cd_return_if_fail (cURI != NULL);
 	
 	// in case it's a mount point, take the URI that can actually be launched. 
 	gchar *cTargetURI = NULL;
@@ -947,7 +947,7 @@ static gchar *cairo_dock_gio_vfs_is_mounted (const gchar *cURI, gboolean *bIsMou
 
 static gchar * _cd_find_drive_name_from_URI (const gchar *cURI)
 {
-	g_return_val_if_fail (cURI != NULL, NULL);
+	cd_return_val_if_fail (cURI != NULL, NULL);
 	if (strncmp (cURI, "computer:///", 12) == 0)
 	{
 		gchar *cDriveName = g_strdup (cURI+12);
@@ -1037,7 +1037,7 @@ static void _gio_vfs_mount_callback (gpointer pObject, GAsyncResult *res, gpoint
 
 static void cairo_dock_gio_vfs_mount (const gchar *cURI, G_GNUC_UNUSED int iVolumeID, CairoDockFMMountCallback pCallback, gpointer user_data)
 {
-	g_return_if_fail (cURI != NULL);
+	cd_return_if_fail (cURI != NULL);
 	cd_message ("%s (%s)", __func__, cURI);
 	
 	gchar *cTargetURI = _cd_find_target_uri (cURI);
@@ -1083,7 +1083,7 @@ static void cairo_dock_gio_vfs_mount (const gchar *cURI, G_GNUC_UNUSED int iVolu
 
 static void cairo_dock_gio_vfs_unmount (const gchar *cURI, G_GNUC_UNUSED int iVolumeID, CairoDockFMMountCallback pCallback, gpointer user_data)
 {
-	g_return_if_fail (cURI != NULL);
+	cd_return_if_fail (cURI != NULL);
 	cd_message ("%s (%s)", __func__, cURI);
 	
 	gchar *cTargetURI = NULL;
@@ -1186,7 +1186,7 @@ static void _on_monitor_changed (G_GNUC_UNUSED GFileMonitor *monitor,
 
 static void cairo_dock_gio_vfs_add_monitor (const gchar *cURI, gboolean bDirectory, CairoDockFMMonitorCallback pCallback, gpointer user_data)
 {
-	g_return_if_fail (cURI != NULL);
+	cd_return_if_fail (cURI != NULL);
 	GError *erreur = NULL;
 	GFileMonitor *pMonitor;
 	GFile *pFile = (*cURI == '/' ? g_file_new_for_path (cURI) : g_file_new_for_uri (cURI));
@@ -1247,7 +1247,7 @@ static gboolean cairo_dock_gio_vfs_delete_file (const gchar *cURI, G_GNUC_UNUSED
 
 static gboolean cairo_dock_gio_vfs_rename_file (const gchar *cOldURI, const gchar *cNewName)
 {
-	g_return_val_if_fail (cOldURI != NULL, FALSE);
+	cd_return_val_if_fail (cOldURI != NULL, FALSE);
 	GFile *pOldFile = (*cOldURI == '/' ? g_file_new_for_path (cOldURI) : g_file_new_for_uri (cOldURI));
 	GError *erreur = NULL;
 	GFile *pNewFile = g_file_set_display_name (pOldFile, cNewName, NULL, &erreur);
@@ -1265,7 +1265,7 @@ static gboolean cairo_dock_gio_vfs_rename_file (const gchar *cOldURI, const gcha
 
 static gboolean cairo_dock_gio_vfs_move_file (const gchar *cURI, const gchar *cDirectoryURI)
 {
-	g_return_val_if_fail (cURI != NULL, FALSE);
+	cd_return_val_if_fail (cURI != NULL, FALSE);
 	cd_message (" %s -> %s", cURI, cDirectoryURI);
 	GFile *pFile = (*cURI == '/' ? g_file_new_for_path (cURI) : g_file_new_for_uri (cURI));
 	
@@ -1295,7 +1295,7 @@ static gboolean cairo_dock_gio_vfs_move_file (const gchar *cURI, const gchar *cD
 
 static gboolean cairo_dock_gio_vfs_create_file (const gchar *cURI, gboolean bDirectory)
 {
-	g_return_val_if_fail (cURI != NULL, FALSE);
+	cd_return_val_if_fail (cURI != NULL, FALSE);
 	GFile *pFile = (*cURI == '/' ? g_file_new_for_path (cURI) : g_file_new_for_uri (cURI));
 	
 	GError *erreur = NULL;
@@ -1317,7 +1317,7 @@ static gboolean cairo_dock_gio_vfs_create_file (const gchar *cURI, gboolean bDir
 
 static void cairo_dock_gio_vfs_get_file_properties (const gchar *cURI, guint64 *iSize, time_t *iLastModificationTime, gchar **cMimeType, int *iUID, int *iGID, int *iPermissionsMask)
 {
-	g_return_if_fail (cURI != NULL);
+	cd_return_if_fail (cURI != NULL);
 	GFile *pFile = (*cURI == '/' ? g_file_new_for_path (cURI) : g_file_new_for_uri (cURI));
 	GError *erreur = NULL;
 	const gchar *cQuery = G_FILE_ATTRIBUTE_STANDARD_SIZE","

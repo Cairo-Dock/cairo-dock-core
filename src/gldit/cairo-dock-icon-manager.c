@@ -227,7 +227,7 @@ extern GldiContainer *g_pPrimaryContainer;
 
 gchar *cairo_dock_search_icon_s_path (const gchar *cFileName, gint iDesiredIconSize)
 {
-	g_return_val_if_fail (cFileName != NULL, NULL);
+	cd_return_val_if_fail (cFileName != NULL, NULL);
 	
 	//\_______________________ easy cases: we receive a path.
 	if (*cFileName == '~')
@@ -241,7 +241,7 @@ gchar *cairo_dock_search_icon_s_path (const gchar *cFileName, gint iDesiredIconS
 	}
 	
 	//\_______________________ check for the presence of suffix and version number.
-	g_return_val_if_fail (s_pIconTheme != NULL, NULL);
+	cd_return_val_if_fail (s_pIconTheme != NULL, NULL);
 	
 	GString *sIconPath = g_string_new ("");
 	const gchar *cSuffixTab[4] = {".svg", ".png", ".xpm", NULL};
@@ -710,7 +710,7 @@ static void _on_icon_theme_changed (G_GNUC_UNUSED GtkIconTheme *pIconTheme, G_GN
 }
 static void _cairo_dock_load_icon_theme (void)
 {
-	g_return_if_fail (s_pIconTheme == NULL);
+	cd_return_if_fail (s_pIconTheme == NULL);
 	if (myIconsParam.cIconTheme == NULL  // no icon theme defined => use the default one.
 	|| strcmp (myIconsParam.cIconTheme, "_Custom Icons_") == 0)  // use custom icons and default theme as fallback
 	{

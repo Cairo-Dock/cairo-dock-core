@@ -53,12 +53,12 @@ void cairo_dock_update_desklet_widgets (CairoDesklet *pDesklet, GSList *pWidgetL
 	CairoDockGroupKeyWidget *pGroupKeyWidget;
 	GtkWidget *pOneWidget;
 	pGroupKeyWidget = cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, "Desklet", "locked");
-	g_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
+	cd_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
 	pOneWidget = pGroupKeyWidget->pSubWidgetList->data;
 	gtk_toggle_button_set_active  (GTK_TOGGLE_BUTTON (pOneWidget), pDesklet->bPositionLocked);
 	
 	pGroupKeyWidget = cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, "Desklet", "size");
-	g_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
+	cd_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
 	pOneWidget = pGroupKeyWidget->pSubWidgetList->data;
 	g_signal_handlers_block_matched (pOneWidget,
 		(GSignalMatchType) G_SIGNAL_MATCH_FUNC,
@@ -83,17 +83,17 @@ void cairo_dock_update_desklet_widgets (CairoDesklet *pDesklet, GSList *pWidgetL
 	int iRelativePositionY = (pDesklet->container.iWindowPositionY + pDesklet->container.iHeight/2 <= gldi_desktop_get_height()/2 ? pDesklet->container.iWindowPositionY : pDesklet->container.iWindowPositionY - gldi_desktop_get_height());
 	
 	pGroupKeyWidget = cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, "Desklet", "x position");
-	g_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
+	cd_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
 	pOneWidget = pGroupKeyWidget->pSubWidgetList->data;
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON (pOneWidget), iRelativePositionX);
 	
 	pGroupKeyWidget = cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, "Desklet", "y position");
-	g_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
+	cd_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
 	pOneWidget = pGroupKeyWidget->pSubWidgetList->data;
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON (pOneWidget), iRelativePositionY);
 	
 	pGroupKeyWidget = cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, "Desklet", "rotation");
-	g_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
+	cd_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
 	pOneWidget = pGroupKeyWidget->pSubWidgetList->data;
 	gtk_range_set_value (GTK_RANGE (pOneWidget), pDesklet->fRotation/G_PI*180.);
 }
@@ -106,17 +106,17 @@ void cairo_dock_update_desklet_visibility_widgets (CairoDesklet *pDesklet, GSLis
 	CairoDeskletVisibility iVisibility = pDesklet->iVisibility;
 	
 	pGroupKeyWidget = cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, "Desklet", "accessibility");
-	g_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
+	cd_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
 	pOneWidget = pGroupKeyWidget->pSubWidgetList->data;
 	gtk_combo_box_set_active (GTK_COMBO_BOX (pOneWidget), iVisibility);
 	
 	pGroupKeyWidget = cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, "Desklet", "sticky");
-	g_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
+	cd_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
 	pOneWidget = pGroupKeyWidget->pSubWidgetList->data;
 	gtk_toggle_button_set_active  (GTK_TOGGLE_BUTTON (pOneWidget), bIsSticky);
 	
 	pGroupKeyWidget = cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, "Desklet", "locked");
-	g_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
+	cd_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
 	pOneWidget = pGroupKeyWidget->pSubWidgetList->data;
 	gtk_toggle_button_set_active  (GTK_TOGGLE_BUTTON (pOneWidget), pDesklet->bPositionLocked);
 }
@@ -126,7 +126,7 @@ void cairo_dock_update_is_detached_widget (gboolean bIsDetached, GSList *pWidget
 	CairoDockGroupKeyWidget *pGroupKeyWidget;
 	GtkWidget *pOneWidget;
 	pGroupKeyWidget = cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, "Desklet", "initially detached");
-	g_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
+	cd_return_if_fail (pGroupKeyWidget != NULL && pGroupKeyWidget->pSubWidgetList != NULL);
 	pOneWidget = pGroupKeyWidget->pSubWidgetList->data;
 	gtk_toggle_button_set_active  (GTK_TOGGLE_BUTTON (pOneWidget), bIsDetached);
 }

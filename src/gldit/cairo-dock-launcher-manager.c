@@ -229,7 +229,7 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, GKeyFile 
 {
 	Icon *icon = (Icon*)obj;
 	if (bReloadConf)
-		g_return_val_if_fail (pKeyFile != NULL, NULL);
+		cd_return_val_if_fail (pKeyFile != NULL, NULL);
 	
 	gchar *cClass = icon->cClass;
 	icon->cClass = NULL;
@@ -354,7 +354,7 @@ gchar *gldi_launcher_add_conf_file (const gchar *cOrigin, const gchar *cDockName
 	//\__________________ open the template.
 	const gchar *cTemplateFile = GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_LAUNCHER_CONF_FILE;	
 	GKeyFile *pKeyFile = cairo_dock_open_key_file (cTemplateFile);
-	g_return_val_if_fail (pKeyFile != NULL, NULL);
+	cd_return_val_if_fail (pKeyFile != NULL, NULL);
 	
 	//\__________________ fill the parameters
 	g_key_file_set_string (pKeyFile, "Desktop Entry", "Origin", cFilePath?cFilePath:"");
@@ -415,12 +415,12 @@ Icon *gldi_launcher_add_new_full (const gchar *cURI, CairoDock *pDock, double fO
 		fOrder = (pLastIcon ? pLastIcon->fOrder + 1 : 1);
 	}
 	gchar *cNewDesktopFileName = gldi_launcher_add_conf_file (cURI, cDockName, fOrder, bValidate);
-	g_return_val_if_fail (cNewDesktopFileName != NULL, NULL);
+	cd_return_val_if_fail (cNewDesktopFileName != NULL, NULL);
 	
 	//\_________________ load the new icon
 	Icon *pNewIcon = gldi_user_icon_new (cNewDesktopFileName);
 	g_free (cNewDesktopFileName);
-	g_return_val_if_fail (pNewIcon, NULL);
+	cd_return_val_if_fail (pNewIcon, NULL);
 	
 	gldi_icon_insert_in_container (pNewIcon, CAIRO_CONTAINER(pDock), CAIRO_DOCK_ANIMATE_ICON);
 	

@@ -288,7 +288,7 @@ static void _shortkeys_widget_reload (CDWidget *pCdWidget)
 {
 	ShortkeysWidget *pShortkeysWidget = SHORKEYS_WIDGET (pCdWidget);
 	GtkTreeModel *pModel = gtk_tree_view_get_model (GTK_TREE_VIEW (pShortkeysWidget->pShortKeysTreeView));
-	g_return_if_fail (pModel != NULL);
+	cd_return_if_fail (pModel != NULL);
 	gtk_list_store_clear (GTK_LIST_STORE (pModel));
 	gldi_shortkeys_foreach ((GFunc) cairo_dock_add_shortkey_to_model, pModel);
 }

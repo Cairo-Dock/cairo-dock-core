@@ -694,7 +694,7 @@ CairoDialog *gldi_dialog_show (const gchar *cText, Icon *pIcon, GldiContainer *p
 
 CairoDialog *gldi_dialog_show_temporary_with_icon_printf (const gchar *cText, Icon *pIcon, GldiContainer *pContainer, double fTimeLength, const gchar *cIconPath, ...)
 {
-	g_return_val_if_fail (cText != NULL, NULL);
+	cd_return_val_if_fail (cText != NULL, NULL);
 	va_list args;
 	va_start (args, cIconPath);
 	gchar *cFullText = g_strdup_vprintf (cText, args);
@@ -706,19 +706,19 @@ CairoDialog *gldi_dialog_show_temporary_with_icon_printf (const gchar *cText, Ic
 
 CairoDialog *gldi_dialog_show_temporary_with_icon (const gchar *cText, Icon *pIcon, GldiContainer *pContainer, double fTimeLength, const gchar *cIconPath)
 {
-	g_return_val_if_fail (cText != NULL, NULL);
+	cd_return_val_if_fail (cText != NULL, NULL);
 	return gldi_dialog_show (cText, pIcon, pContainer, fTimeLength, cIconPath, NULL, NULL, NULL, NULL);
 }
 
 CairoDialog *gldi_dialog_show_temporary (const gchar *cText, Icon *pIcon, GldiContainer *pContainer, double fTimeLength)
 {
-	g_return_val_if_fail (cText != NULL, NULL);
+	cd_return_val_if_fail (cText != NULL, NULL);
 	return gldi_dialog_show (cText, pIcon, pContainer, fTimeLength, NULL, NULL, NULL, NULL, NULL);
 }
 
 CairoDialog *gldi_dialog_show_temporary_with_default_icon (const gchar *cText, Icon *pIcon, GldiContainer *pContainer, double fTimeLength)
 {
-	g_return_val_if_fail (cText != NULL, NULL);
+	cd_return_val_if_fail (cText != NULL, NULL);
 	
 	const gchar *cIconPath = GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_ICON;
 	
@@ -829,7 +829,7 @@ int gldi_dialog_show_and_wait (const gchar *cText, Icon *pIcon, GldiContainer *p
 
 GtkWidget *cairo_dock_steal_widget_from_its_container (GtkWidget *pWidget)
 {
-	g_return_val_if_fail (pWidget != NULL, NULL);
+	cd_return_val_if_fail (pWidget != NULL, NULL);
 	GtkWidget *pContainer = gtk_widget_get_parent (pWidget);
 	if (pContainer != NULL)
 	{
@@ -998,7 +998,7 @@ void gldi_dialog_set_message (CairoDialog *pDialog, const gchar *cMessage)
 }
 void gldi_dialog_set_message_printf (CairoDialog *pDialog, const gchar *cMessageFormat, ...)
 {
-	g_return_if_fail (cMessageFormat != NULL);
+	cd_return_if_fail (cMessageFormat != NULL);
 	va_list args;
 	va_start (args, cMessageFormat);
 	gchar *cMessage = g_strdup_vprintf (cMessageFormat, args);

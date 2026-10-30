@@ -1531,7 +1531,7 @@ void _on_drag_data_received (G_GNUC_UNUSED GtkWidget *pWidget, GdkDragContext *d
 		
 		//\_________________ On recupere l'URI.
 		gchar *cReceivedData = (gchar *)gtk_selection_data_get_data (selection_data);  // the data are actually 'const guchar*', but since we only allowed text and urls, it will be a string
-		g_return_if_fail (cReceivedData != NULL);
+		cd_return_if_fail (cReceivedData != NULL);
 		int length = strlen (cReceivedData);
 		if (cReceivedData[length-1] == '\n')
 			cReceivedData[--length] = '\0';  // on vire le retour chariot final.
@@ -2130,7 +2130,7 @@ static gboolean _on_dock_destroyed (GtkWidget *menu, GldiContainer *pContainer);
 static void _on_menu_deactivated (G_GNUC_UNUSED GtkMenuShell *menu, CairoDock *pDock)
 {
 	//g_print ("\n+++ %s ()\n\n", __func__);
-	g_return_if_fail (CAIRO_DOCK_IS_DOCK (pDock));
+	cd_return_if_fail (CAIRO_DOCK_IS_DOCK (pDock));
 	if (pDock->bHasModalWindow)  // don't send the signal if the menu was already deactivated.
 	{
 		pDock->bHasModalWindow = FALSE;
@@ -2231,7 +2231,7 @@ static void _detach_icon (GldiContainer *pContainer, Icon *icon)
 			break;
 		}
 	}
-	g_return_if_fail (ic != NULL);  // not found (shouldn't happen)
+	cd_return_if_fail (ic != NULL);  // not found (shouldn't happen)
 	
 	//\___________________ On stoppe ses animations.
 	gldi_icon_stop_animation (icon);
@@ -2612,7 +2612,7 @@ void cairo_dock_move_resize_dock (CairoDock *pDock)
 
 void cairo_dock_remove_icons_from_dock (CairoDock *pDock, CairoDock *pReceivingDock)
 {
-	g_return_if_fail (pReceivingDock != NULL);
+	cd_return_if_fail (pReceivingDock != NULL);
 	GList *pIconsList = pDock->icons;
 	pDock->icons = NULL;
 	Icon *icon;

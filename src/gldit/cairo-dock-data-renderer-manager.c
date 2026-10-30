@@ -89,7 +89,7 @@ void cairo_dock_remove_data_renderer (const gchar *cRendererName)
 CairoDataRenderer *cairo_dock_new_data_renderer (const gchar *cRendererName)
 {
 	CairoDockDataRendererRecord *pRecord = cairo_dock_get_data_renderer_record (cRendererName);
-	g_return_val_if_fail (pRecord != NULL && pRecord->iStructSize != 0, NULL);
+	cd_return_val_if_fail (pRecord != NULL && pRecord->iStructSize != 0, NULL);
 	
 	if (g_bUseOpenGL && s_pFont == NULL)
 	{
@@ -110,7 +110,7 @@ CairoDataRenderer *cairo_dock_new_data_renderer (const gchar *cRendererName)
 GHashTable *cairo_dock_list_available_themes_for_data_renderer (const gchar *cRendererName)
 {
 	CairoDockDataRendererRecord *pRecord = cairo_dock_get_data_renderer_record (cRendererName);
-	g_return_val_if_fail (pRecord != NULL, NULL);
+	cd_return_val_if_fail (pRecord != NULL, NULL);
 	
 	if (pRecord->cThemeDirName == NULL && pRecord->cDistantThemeDirName == NULL)
 		return NULL;
@@ -134,7 +134,7 @@ GHashTable *cairo_dock_list_available_themes_for_data_renderer (const gchar *cRe
 gchar *cairo_dock_get_data_renderer_theme_path (const gchar *cRendererName, const gchar *cThemeName, CairoDockPackageType iType)  // utile pour DBus aussi.
 {
 	CairoDockDataRendererRecord *pRecord = cairo_dock_get_data_renderer_record (cRendererName);
-	g_return_val_if_fail (pRecord != NULL, NULL);
+	cd_return_val_if_fail (pRecord != NULL, NULL);
 	
 	if (pRecord->cThemeDirName == NULL && pRecord->cDistantThemeDirName == NULL)
 		return NULL;
@@ -157,7 +157,7 @@ gchar *cairo_dock_get_data_renderer_theme_path (const gchar *cRendererName, cons
 gchar *cairo_dock_get_package_path_for_data_renderer (const gchar *cRendererName, const gchar *cAppletConfFilePath, GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cKeyName, gboolean *bFlushConfFileNeeded, const gchar *cDefaultThemeName)
 {
 	CairoDockDataRendererRecord *pRecord = cairo_dock_get_data_renderer_record (cRendererName);
-	g_return_val_if_fail (pRecord != NULL, NULL);
+	cd_return_val_if_fail (pRecord != NULL, NULL);
 	
 	gchar *cChosenThemeName = cairo_dock_get_string_key_value (pKeyFile, cGroupName, cKeyName, bFlushConfFileNeeded, cDefaultThemeName, NULL, NULL);
 	if (cChosenThemeName == NULL)

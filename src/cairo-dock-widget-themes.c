@@ -105,7 +105,7 @@ static gchar * _cairo_dock_save_current_theme (GKeyFile* pKeyFile)
 		cNewThemeName = NULL;
 	}
 	cd_message ("cNewThemeName : %s", cNewThemeName);
-	g_return_val_if_fail (cNewThemeName != NULL, FALSE);
+	cd_return_val_if_fail (cNewThemeName != NULL, FALSE);
 	
 	//\___________________ On sauve le theme courant sous ce nom.
 	cairo_dock_extract_package_type_from_name (cNewThemeName);
@@ -174,7 +174,7 @@ static gboolean _cairo_dock_load_theme (GKeyFile* pKeyFile, ThemesWidget *pTheme
 		}
 	}
 	
-	g_return_val_if_fail (cNewThemeName != NULL, FALSE);
+	cd_return_val_if_fail (cNewThemeName != NULL, FALSE);
 	
 	//\___________________ On recupere les options de chargement.
 	gboolean bLoadBehavior = g_key_file_get_boolean (pKeyFile, cGroupName, "use theme behaviour", NULL);
@@ -325,7 +325,7 @@ static GtkListStore *_make_rate_list_store (void)
 static void _change_rating (G_GNUC_UNUSED GtkCellRendererText * cell, gchar * path_string, gchar * new_text, GtkTreeModel * model)
 {
 	//g_print ("%s (%s : %s)\n", __func__, path_string, new_text);
-	g_return_if_fail (new_text != NULL && *new_text != '\0');
+	cd_return_if_fail (new_text != NULL && *new_text != '\0');
 	
 	GtkTreeIter it;
 	if (! gtk_tree_model_get_iter_from_string (model, &it, path_string))
@@ -350,7 +350,7 @@ static void _change_rating (G_GNUC_UNUSED GtkCellRendererText * cell, gchar * pa
 	gtk_tree_model_get (model, &it,
 		CAIRO_DOCK_MODEL_RESULT, &cThemeName,
 		CAIRO_DOCK_MODEL_STATE, &iState, -1);
-	g_return_if_fail (cThemeName != NULL);
+	cd_return_if_fail (cThemeName != NULL);
 	cairo_dock_extract_package_type_from_name (cThemeName);
 	//g_print ("theme : %s / %s\n", cThemeName, cDisplayedName);
 	
@@ -404,7 +404,7 @@ static void _got_themes_list (GHashTable *pThemeTable, ThemesWidget *pThemesWidg
 	pThemesWidget->pListTask = NULL;
 	
 	GtkListStore *pModel = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (pThemesWidget->pTreeView)));
-	g_return_if_fail (pModel != NULL);
+	cd_return_if_fail (pModel != NULL);
 	
 	gtk_list_store_clear (GTK_LIST_STORE (pModel));  // the 2nd time we pass here, the table is full of all themes, so we have to clear it to avoid double local and user themes.
 	cairo_dock_fill_model_with_themes (pModel, pThemeTable, NULL);
@@ -492,7 +492,7 @@ static void _make_tree_view_for_themes (ThemesWidget *pThemesWidget, GPtrArray *
 	//\______________ get the group/key widget
 	GSList *pWidgetList = pThemesWidget->widget.pWidgetList;
 	CairoDockGroupKeyWidget *myWidget = cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, "Load theme", "chosen theme");
-	g_return_if_fail (myWidget != NULL);
+	cd_return_if_fail (myWidget != NULL);
 	
 	//\______________ build the treeview.
 	GtkWidget *pOneWidget = cairo_dock_gui_make_tree_view (TRUE);
@@ -574,7 +574,7 @@ static void _make_combo_for_user_themes (ThemesWidget *pThemesWidget, GPtrArray 
 	//\______________ get the group/key widget
 	GSList *pWidgetList = pThemesWidget->widget.pWidgetList;
 	CairoDockGroupKeyWidget *myWidget = cairo_dock_gui_find_group_key_widget_in_list (pWidgetList, "Save", "theme name");
-	g_return_if_fail (myWidget != NULL);
+	cd_return_if_fail (myWidget != NULL);
 	
 	//\______________ build the combo-box.
 	GtkWidget *pOneWidget = cairo_dock_gui_make_combo (TRUE);
@@ -652,7 +652,7 @@ static void _themes_widget_apply (CDWidget *pCdWidget)
 	
 	//\_______________ open and update the conf file.
 	GKeyFile *pKeyFile = cairo_dock_open_key_file (pThemesWidget->cInitConfFile);
-	g_return_if_fail (pKeyFile != NULL);
+	cd_return_if_fail (pKeyFile != NULL);
 	
 	cairo_dock_update_keyfile_from_widget_list (pKeyFile, pThemesWidget->widget.pWidgetList);
 	

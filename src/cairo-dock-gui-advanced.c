@@ -415,7 +415,7 @@ void cairo_dock_apply_filter_on_group_widget (const gchar **pKeyWords, gboolean 
 
 static gboolean _search_in_key_file (const gchar **pKeyWords, GKeyFile *pKeyFile, const gchar *cGroup, const gchar *cGettextDomain, gboolean bAllWords, gboolean bSearchInToolTip)
 {
-	g_return_val_if_fail (pKeyFile != NULL, FALSE);
+	cd_return_val_if_fail (pKeyFile != NULL, FALSE);
 	gboolean bFound = FALSE;
 	
 	// get the groups
@@ -430,7 +430,7 @@ static gboolean _search_in_key_file (const gchar **pKeyWords, GKeyFile *pKeyFile
 		pGroupList = g_new0 (gchar *, 2);
 		pGroupList[0] = g_strdup (cGroup);
 	}
-	g_return_val_if_fail (pGroupList != NULL, FALSE);
+	cd_return_val_if_fail (pGroupList != NULL, FALSE);
 	
 	// search in each (group, key).
 	int iNbWords;
@@ -672,7 +672,7 @@ static void cairo_dock_apply_filter_on_group_list (const gchar **pKeyWords, gboo
 				{
 					const gchar *cManagerName = m->data;
 					GldiManager *pManager = gldi_manager_get (cManagerName);
-					g_return_if_fail (pManager != NULL);
+					cd_return_if_fail (pManager != NULL);
 					for (e = pManager->pExternalModules; e != NULL; e = e->next)
 					{
 						const gchar *cModuleName = e->data;
@@ -1183,11 +1183,11 @@ static void on_click_quit (G_GNUC_UNUSED GtkButton *button, GtkWidget *pWindow)
 
 static void on_click_activate_given_group (GtkToggleButton *button, CairoDockGroupDescription *pGroupDescription)
 {
-	g_return_if_fail (pGroupDescription != NULL);
+	cd_return_if_fail (pGroupDescription != NULL);
 	//g_print ("%s (%s)\n", __func__, pGroupDescription->cGroupName);
 	
 	GldiModule *pModule = gldi_module_get (pGroupDescription->cGroupName);
-	g_return_if_fail (pModule != NULL);  // only modules have their button sensitive (because only them can be (de)activated).
+	cd_return_if_fail (pModule != NULL);  // only modules have their button sensitive (because only them can be (de)activated).
 	if (g_pPrimaryContainer == NULL)
 	{
 		cairo_dock_add_remove_element_to_key (g_cConfFile, "System", "modules", pGroupDescription->cGroupName, gtk_toggle_button_get_active (button));
@@ -1210,7 +1210,7 @@ static void on_click_activate_current_group (GtkToggleButton *button, G_GNUC_UNU
 	if (pGroupDescription->pActivateButton != NULL)  // on repercute le changement sur le bouton d'activation du groupe.
 	{
 		GldiModule *pModule = gldi_module_get (pGroupDescription->cGroupName);
-		g_return_if_fail (pModule != NULL);
+		cd_return_if_fail (pModule != NULL);
 		g_signal_handlers_block_by_func (pGroupDescription->pActivateButton, on_click_activate_given_group, pGroupDescription);
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pGroupDescription->pActivateButton), pModule->pInstancesList != NULL);
 		g_signal_handlers_unblock_by_func (pGroupDescription->pActivateButton, on_click_activate_given_group, pGroupDescription);
@@ -1609,7 +1609,7 @@ static void _add_main_groups_buttons (void)
 
 static CairoDockGroupDescription *cairo_dock_find_module_description (const gchar *cModuleName)
 {
-	g_return_val_if_fail (cModuleName != NULL, NULL);
+	cd_return_val_if_fail (cModuleName != NULL, NULL);
 	CairoDockGroupDescription *pGroupDescription = NULL;
 	GList *pElement = NULL;
 	for (pElement = s_pGroupDescriptionList; pElement != NULL; pElement = pElement->next)
@@ -2123,13 +2123,13 @@ static void cairo_dock_toggle_category_button (int iCategory)
 static void _reload_current_module_widget (GldiModuleInstance *pModuleInstance, int iShowPage)
 {
 	// ensure the module is currently displayed.
-	g_return_if_fail (pModuleInstance != NULL);
+	cd_return_if_fail (pModuleInstance != NULL);
 	if (!s_pCurrentGroupWidget2)
 		return;
 	
 	const gchar *cGroupName = (pModuleInstance->pModule->pVisitCard->cInternalModule ? pModuleInstance->pModule->pVisitCard->cInternalModule : pModuleInstance->pModule->pVisitCard->cModuleName);  // if the module extends a manager, it's this one that we have to show.
 	CairoDockGroupDescription *pGroupDescription = cairo_dock_find_module_description (cGroupName);
-	g_return_if_fail (pGroupDescription != NULL);
+	cd_return_if_fail (pGroupDescription != NULL);
 	if (pGroupDescription != s_pCurrentGroup)
 		return;
 	
@@ -2187,7 +2187,7 @@ static void cairo_dock_enable_apply_button (gboolean bEnable)
 }
 static void _present_group_widget (CairoDockGroupDescription *pGroupDescription, GldiModuleInstance *pModuleInstance)
 {
-	g_return_if_fail (pGroupDescription != NULL && s_pMainWindow != NULL);
+	cd_return_if_fail (pGroupDescription != NULL && s_pMainWindow != NULL);
 	
 	// destroy/hide the current widget
 	_destroy_current_widget (TRUE);
@@ -2196,7 +2196,7 @@ static void _present_group_widget (CairoDockGroupDescription *pGroupDescription,
 	
 	// build the new  widget
 	s_pCurrentGroupWidget2 = pGroupDescription->build_widget (pGroupDescription, pModuleInstance);
-	g_return_if_fail (s_pCurrentGroupWidget2 != NULL);
+	cd_return_if_fail (s_pCurrentGroupWidget2 != NULL);
 	s_pCurrentGroup = pGroupDescription;
 	
 	// insert and show it
@@ -2239,11 +2239,11 @@ static void _present_group_widget (CairoDockGroupDescription *pGroupDescription,
 /* Not used
 static void cairo_dock_present_module_instance_gui (GldiModuleInstance *pModuleInstance)
 {
-	g_return_if_fail (pModuleInstance != NULL);
+	cd_return_if_fail (pModuleInstance != NULL);
 	
 	const gchar *cGroupName = (pModuleInstance->pModule->pVisitCard->cInternalModule ? pModuleInstance->pModule->pVisitCard->cInternalModule : pModuleInstance->pModule->pVisitCard->cModuleName);  // if the module extends a manager, it's this one that we have to show.
 	CairoDockGroupDescription *pGroupDescription = cairo_dock_find_module_description (cGroupName);
-	g_return_if_fail (pGroupDescription != NULL);
+	cd_return_if_fail (pGroupDescription != NULL);
 	
 	_present_group_widget (pGroupDescription, pModuleInstance);
 	cairo_dock_toggle_category_button (pGroupDescription->iCategory);
@@ -2294,7 +2294,7 @@ static GtkWidget *show_module_gui (const gchar *cModuleName)
 	cairo_dock_build_main_ihm (g_cConfFile);
 	
 	CairoDockGroupDescription *pGroupDescription = cairo_dock_find_module_description (cModuleName);
-	g_return_val_if_fail (pGroupDescription != NULL, s_pMainWindow);
+	cd_return_val_if_fail (pGroupDescription != NULL, s_pMainWindow);
 	
 	cairo_dock_show_group (pGroupDescription);
 	cairo_dock_toggle_category_button (pGroupDescription->iCategory);
@@ -2324,7 +2324,7 @@ static void update_module_state (const gchar *cModuleName, gboolean bActive)
 	}
 	
 	CairoDockGroupDescription *pGroupDescription = cairo_dock_find_module_description (cModuleName);
-	g_return_if_fail (pGroupDescription != NULL && pGroupDescription->pActivateButton != NULL);
+	cd_return_if_fail (pGroupDescription != NULL && pGroupDescription->pActivateButton != NULL);
 	g_signal_handlers_block_by_func (pGroupDescription->pActivateButton, on_click_activate_given_group, pGroupDescription);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (pGroupDescription->pActivateButton), bActive);
 	g_signal_handlers_unblock_by_func (pGroupDescription->pActivateButton, on_click_activate_given_group, pGroupDescription);
@@ -2335,10 +2335,10 @@ static inline gboolean _desklet_is_opened (CairoDesklet *pDesklet)
 	if (s_pMainWindow == NULL || pDesklet == NULL)
 		return FALSE;
 	Icon *pIcon = pDesklet->pIcon;
-	g_return_val_if_fail (pIcon != NULL, FALSE);
+	cd_return_val_if_fail (pIcon != NULL, FALSE);
 	
 	GldiModuleInstance *pModuleInstance = pIcon->pModuleInstance;
-	g_return_val_if_fail (pModuleInstance != NULL, FALSE);
+	cd_return_val_if_fail (pModuleInstance != NULL, FALSE);
 	
 	return _module_is_opened (pModuleInstance);
 }
@@ -2442,18 +2442,18 @@ static GtkWidget *show_gui (Icon *pIcon, GldiContainer *pContainer, GldiModuleIn
 		const gchar *cGroupName = (pModuleInstance->pModule->pVisitCard->cInternalModule ? pModuleInstance->pModule->pVisitCard->cInternalModule : pModuleInstance->pModule->pVisitCard->cModuleName);  // if the module extends a manager, it's this one that we have to show.
 		
 		pGroupDescription = cairo_dock_find_module_description (cGroupName);
-		g_return_val_if_fail (pGroupDescription != NULL, s_pMainWindow);
+		cd_return_val_if_fail (pGroupDescription != NULL, s_pMainWindow);
 		
 		_present_group_widget (pGroupDescription, pModuleInstance);
 	}
 	else
 	{
 		pGroupDescription = cairo_dock_find_module_description ("Items");
-		g_return_val_if_fail (pGroupDescription != NULL, s_pMainWindow);
+		cd_return_val_if_fail (pGroupDescription != NULL, s_pMainWindow);
 		
 		cairo_dock_show_group (pGroupDescription);
 		
-		g_return_val_if_fail (s_pCurrentGroupWidget2 != NULL, s_pMainWindow);
+		cd_return_val_if_fail (s_pCurrentGroupWidget2 != NULL, s_pMainWindow);
 		cairo_dock_items_widget_select_item (ITEMS_WIDGET (s_pCurrentGroupWidget2), pIcon, pContainer, pModuleInstance, iShowPage);
 	}
 	cairo_dock_toggle_category_button (pGroupDescription->iCategory);
@@ -2515,14 +2515,14 @@ static void set_status_message_on_gui (const gchar *cMessage)
 
 static void show_module_instance_gui (GldiModuleInstance *pModuleInstance, int iShowPage)
 {
-	g_return_if_fail (pModuleInstance != NULL);
+	cd_return_if_fail (pModuleInstance != NULL);
 	
 	// build the widget
 	cairo_dock_build_main_ihm (g_cConfFile);
 	
 	const gchar *cGroupName = (pModuleInstance->pModule->pVisitCard->cInternalModule ? pModuleInstance->pModule->pVisitCard->cInternalModule : pModuleInstance->pModule->pVisitCard->cModuleName);  // if the module extends a manager, it's this one that we have to show.
 	CairoDockGroupDescription *pGroupDescription = cairo_dock_find_module_description (cGroupName);
-	g_return_if_fail (pGroupDescription != NULL);
+	cd_return_if_fail (pGroupDescription != NULL);
 	
 	_present_group_widget (pGroupDescription, pModuleInstance);
 	
@@ -2538,13 +2538,13 @@ static void show_module_instance_gui (GldiModuleInstance *pModuleInstance, int i
 static void reload_current_widget (GldiModuleInstance *pModuleInstance, int iShowPage)
 {
 	// ensure the module is currently displayed.
-	g_return_if_fail (pModuleInstance != NULL);
+	cd_return_if_fail (pModuleInstance != NULL);
 	if (!s_pMainWindow || !s_pCurrentGroup)
 		return;
 	
 	const gchar *cGroupName = (pModuleInstance->pModule->pVisitCard->cInternalModule ? pModuleInstance->pModule->pVisitCard->cInternalModule : pModuleInstance->pModule->pVisitCard->cModuleName);  // if the module extends a manager, it's this one that we have to show.
 	CairoDockGroupDescription *pGroupDescription = cairo_dock_find_module_description (cGroupName);
-	g_return_if_fail (pGroupDescription != NULL);
+	cd_return_if_fail (pGroupDescription != NULL);
 	if (pGroupDescription != s_pCurrentGroup)
 		return;
 	

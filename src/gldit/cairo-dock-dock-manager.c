@@ -216,7 +216,7 @@ static void _find_similar_root_dock (CairoDock *pDock, gpointer *data)
 }
 gchar *gldi_dock_get_readable_name (CairoDock *pDock)
 {
-	g_return_val_if_fail (pDock != NULL, NULL);
+	cd_return_val_if_fail (pDock != NULL, NULL);
 	gchar *cUserName = NULL;
 	if (pDock->iRefCount == 0)
 	{
@@ -316,8 +316,8 @@ gboolean cairo_dock_check_unique_subdock_name (Icon *pIcon)
 void gldi_dock_rename (CairoDock *pDock, const gchar *cNewName)
 {
 	// ensure everything is ok
-	g_return_if_fail (pDock != NULL && cNewName != NULL);
-	g_return_if_fail (g_hash_table_lookup (s_hDocksTable, cNewName) == NULL);
+	cd_return_if_fail (pDock != NULL && cNewName != NULL);
+	cd_return_if_fail (g_hash_table_lookup (s_hDocksTable, cNewName) == NULL);
 	cd_debug("%s (%s -> %s)", __func__, pDock->cDockName, cNewName);
 	
 	// if it's a class subdock, first update the dock name in the class
@@ -666,7 +666,7 @@ static void _update_dock_screen_num (CairoDock *pDock)
 
 static gboolean _get_root_dock_config (CairoDock *pDock)
 {
-	g_return_val_if_fail (pDock != NULL, FALSE);
+	cd_return_val_if_fail (pDock != NULL, FALSE);
 	if (pDock->iRefCount > 0)
 		return FALSE;
 	
@@ -1955,7 +1955,7 @@ static void _save_custom_widget (GKeyFile *pKeyFile, GSList *pWidgetList)
 
 static void _raise_shortcut_bound (GldiShortkey *pShortkey, G_GNUC_UNUSED gpointer user_data)
 {
-	g_return_if_fail (g_pMainDock != NULL);
+	cd_return_if_fail (g_pMainDock != NULL);
 	
 	// need to set here, so that we can access it from gldi_dock_set_visibility() already
 	if (!s_pPopupBinding) s_pPopupBinding = pShortkey;
@@ -2271,7 +2271,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 	CairoDockAttr *dattr = (CairoDockAttr*)attr;
 	
 	// check everything is ok
-	g_return_if_fail (dattr != NULL && dattr->cDockName != NULL);
+	cd_return_if_fail (dattr != NULL && dattr->cDockName != NULL);
 	
 	if (g_hash_table_lookup (s_hDocksTable, dattr->cDockName) != NULL)
 	{

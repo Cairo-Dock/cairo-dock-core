@@ -138,7 +138,7 @@ static gboolean _uncompress_archive (const gchar *cArchivePath, const gchar *cEx
 
 gchar *cairo_dock_uncompress_file (const gchar *cArchivePath, const gchar *cExtractTo, const gchar *cRealArchiveName)
 {
-	g_return_val_if_fail (cArchivePath != NULL, NULL);
+	cd_return_val_if_fail (cArchivePath != NULL, NULL);
 	
 	//\_______________ on cree le repertoire d'extraction.
 	if (!g_file_test (cExtractTo, G_FILE_TEST_EXISTS))
@@ -257,11 +257,11 @@ static size_t _write_data_to_file (gpointer buffer, size_t size, size_t nmemb, F
 }
 gboolean cairo_dock_download_file (const gchar *cURL, const gchar *cLocalPath)
 {
-	g_return_val_if_fail (cLocalPath != NULL && cURL != NULL, FALSE);
+	cd_return_val_if_fail (cLocalPath != NULL && cURL != NULL, FALSE);
 	
 	// download the file
 	FILE *f = fopen (cLocalPath, "wb");
-	g_return_val_if_fail (f, FALSE);
+	cd_return_val_if_fail (f, FALSE);
 	
 	CURL *handle = _init_curl_connection (cURL);
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, _write_data_to_file);
@@ -324,7 +324,7 @@ gchar *cairo_dock_download_file_in_tmp (const gchar *cURL)
 
 gchar *cairo_dock_download_archive (const gchar *cURL, const gchar *cExtractTo)
 {
-	g_return_val_if_fail (cURL != NULL, NULL);
+	cd_return_val_if_fail (cURL != NULL, NULL);
 	
 	// download the archive
 	gchar *cArchivePath = cairo_dock_download_file_in_tmp (cURL);
@@ -648,7 +648,7 @@ static void _cairo_dock_parse_package_list (GKeyFile *pKeyFile, const gchar *cSe
 	// liste des packages.
 	gsize length=0;
 	gchar **pGroupList = g_key_file_get_groups (pKeyFile, &length);
-	g_return_if_fail (pGroupList != NULL);  // rien a charger dans la table, on quitte.
+	cd_return_if_fail (pGroupList != NULL);  // rien a charger dans la table, on quitte.
 	
 	// on parcourt la liste.
 	gchar *cPackageName, *cName, *cAuthor;
@@ -776,7 +776,7 @@ static void _cairo_dock_parse_package_list (GKeyFile *pKeyFile, const gchar *cSe
 }
 GHashTable *cairo_dock_list_net_packages (const gchar *cServerAdress, const gchar *cDirectory, const gchar *cListFileName, GHashTable *hProvidedTable, GError **erreur)
 {
-	g_return_val_if_fail (cServerAdress != NULL && *cServerAdress != '\0', hProvidedTable);
+	cd_return_val_if_fail (cServerAdress != NULL && *cServerAdress != '\0', hProvidedTable);
 	cd_message ("listing net packages on %s/%s ...", cServerAdress, cDirectory);
 	
 	// On recupere la liste des packages distants.

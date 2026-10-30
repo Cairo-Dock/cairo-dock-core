@@ -82,7 +82,7 @@ static void _module_widget_apply (CDWidget *pCdWidget)
 	
 	// update the conf file.
 	GKeyFile *pKeyFile = cairo_dock_open_key_file (pModuleWidget->cConfFilePath);
-	g_return_if_fail (pKeyFile != NULL);
+	cd_return_if_fail (pKeyFile != NULL);
 
 	cairo_dock_update_keyfile_from_widget_list (pKeyFile, pCdWidget->pWidgetList);
 	if (pModule->pInterface->save_custom_widget != NULL)
@@ -120,7 +120,7 @@ static void _module_widget_reset (CDWidget *pCdWidget)
 static void _build_module_widget (ModuleWidget *pModuleWidget)
 {
 	GKeyFile* pKeyFile = cairo_dock_open_key_file (pModuleWidget->cConfFilePath);
-	g_return_if_fail (pKeyFile != NULL);
+	cd_return_if_fail (pKeyFile != NULL);
 	
 	GSList *pWidgetList = NULL;
 	GPtrArray *pDataGarbage = g_ptr_array_new ();
@@ -191,7 +191,7 @@ static gboolean _on_module_activated (ModuleWidget *pModuleWidget, G_GNUC_UNUSED
 }
 ModuleWidget *cairo_dock_module_widget_new (GldiModule *pModule, GldiModuleInstance *pInstance, GtkWidget *pMainWindow)
 {
-	g_return_val_if_fail (pModule != NULL, NULL);
+	cd_return_val_if_fail (pModule != NULL, NULL);
 	
 	GldiModuleInstance *pModuleInstance = (pInstance ? pInstance : pModule->pInstancesList != NULL ? pModule->pInstancesList->data : NULL);  // can be NULL if the module is not yet activated.
 	ModuleWidget *pModuleWidget = g_new0 (ModuleWidget, 1);
@@ -216,7 +216,7 @@ ModuleWidget *cairo_dock_module_widget_new (GldiModule *pModule, GldiModuleInsta
 
 void cairo_dock_module_widget_update_desklet_params (ModuleWidget *pModuleWidget, CairoDesklet *pDesklet)
 {
-	g_return_if_fail (pModuleWidget != NULL);
+	cd_return_if_fail (pModuleWidget != NULL);
 	// check that it's about the current module
 	if (pDesklet == NULL || pDesklet->pIcon == NULL)
 		return;
@@ -232,7 +232,7 @@ void cairo_dock_module_widget_update_desklet_params (ModuleWidget *pModuleWidget
 
 void cairo_dock_module_widget_update_desklet_visibility_params (ModuleWidget *pModuleWidget, CairoDesklet *pDesklet)
 {
-	g_return_if_fail (pModuleWidget != NULL);
+	cd_return_if_fail (pModuleWidget != NULL);
 	// check that it's about the current module
 	if (pDesklet == NULL || pDesklet->pIcon == NULL)
 		return;
@@ -248,7 +248,7 @@ void cairo_dock_module_widget_update_desklet_visibility_params (ModuleWidget *pM
 
 void cairo_dock_module_widget_update_module_instance_container (ModuleWidget *pModuleWidget, GldiModuleInstance *pInstance, gboolean bDetached)
 {
-	g_return_if_fail (pModuleWidget != NULL);
+	cd_return_if_fail (pModuleWidget != NULL);
 	// check that it's about the current module
 	if (pInstance == NULL)
 		return;

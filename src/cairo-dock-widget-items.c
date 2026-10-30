@@ -111,7 +111,7 @@ static gboolean _search_item_in_model (GtkWidget *pTreeView, gpointer pItem, CDM
 
 static void _delete_current_launcher_widget (ItemsWidget *pItemsWidget)
 {
-	g_return_if_fail (pItemsWidget != NULL);
+	cd_return_if_fail (pItemsWidget != NULL);
 	
 	if (pItemsWidget->pCurrentLauncherWidget != NULL)
 	{
@@ -182,7 +182,7 @@ static gboolean _on_select_one_item_in_tree (G_GNUC_UNUSED GtkTreeSelection * se
 	{
 		// open applet's conf file.
 		GKeyFile* pKeyFile = cairo_dock_open_key_file (pInstance->cConfFilePath);
-		g_return_val_if_fail (pKeyFile != NULL, FALSE);
+		cd_return_val_if_fail (pKeyFile != NULL, FALSE);
 		
 		// build applet's widgets.
 		pDataGarbage = g_ptr_array_new ();
@@ -217,7 +217,7 @@ static gboolean _on_select_one_item_in_tree (G_GNUC_UNUSED GtkTreeSelection * se
 		{
 			// build dock's widgets
 			const gchar *cDockName = gldi_dock_get_name (pDock);  // CD_MODEL_NAME contient le nom affiche, qui peut differer.
-			g_return_val_if_fail (cDockName != NULL, FALSE);
+			cd_return_val_if_fail (cDockName != NULL, FALSE);
 			cd_message ("%s (%s)", __func__, cDockName);
 			
 			gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
@@ -655,7 +655,7 @@ static void _on_select_remove_item (G_GNUC_UNUSED GtkMenuItem *pMenuItem, GtkWid
 	GtkTreeSelection *pSelection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pTreeView));
 	GtkTreeModel *pModel = NULL;
 	GList *paths = gtk_tree_selection_get_selected_rows (pSelection, &pModel);
-	g_return_if_fail (paths != NULL && pModel != NULL);
+	cd_return_if_fail (paths != NULL && pModel != NULL);
 	GtkTreePath *path = paths->data;
 	
 	GtkTreeIter iter;
@@ -800,7 +800,7 @@ static void _items_widget_apply (CDWidget *pCdWidget)
 	{
 		// open the conf file.
 		GKeyFile *pKeyFile = cairo_dock_open_key_file (pModuleInstance->cConfFilePath);
-		g_return_if_fail (pKeyFile != NULL);
+		cd_return_if_fail (pKeyFile != NULL);
 		
 		// update the keys with the widgets.
 		cairo_dock_update_keyfile_from_widget_list (pKeyFile, pWidgetList);
@@ -839,12 +839,12 @@ static void _items_widget_apply (CDWidget *pCdWidget)
 		if (!pDock->bIsMainDock)  // pour l'instant le main dock n'a pas de fichier de conf
 		{
 			const gchar *cDockName = gldi_dock_get_name (pDock);
-			g_return_if_fail (cDockName != NULL);
+			cd_return_if_fail (cDockName != NULL);
 			gchar *cConfFilePath = g_strdup_printf ("%s/%s.conf", g_cCurrentThemePath, cDockName);
 			
 			// open the conf file.
 			GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
-			g_return_if_fail (pKeyFile != NULL);
+			cd_return_if_fail (pKeyFile != NULL);
 			
 			// update the keys with the widgets.
 			cairo_dock_update_keyfile_from_widget_list (pKeyFile, pWidgetList);
@@ -873,7 +873,7 @@ static void _items_widget_apply (CDWidget *pCdWidget)
 		
 		// open the conf file.
 		GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
-		g_return_if_fail (pKeyFile != NULL);
+		cd_return_if_fail (pKeyFile != NULL);
 		
 		// update the keys with the widgets.
 		cairo_dock_update_keyfile_from_widget_list (pKeyFile, pWidgetList);
@@ -910,7 +910,7 @@ static void _items_widget_apply (CDWidget *pCdWidget)
 
 void cairo_dock_items_widget_select_item (ItemsWidget *pItemsWidget, Icon *pIcon, GldiContainer *pContainer, GldiModuleInstance *pModuleInstance, int iNotebookPage)
 {
-	g_return_if_fail(pItemsWidget != NULL);
+	cd_return_if_fail(pItemsWidget != NULL);
 	_delete_current_launcher_widget (pItemsWidget);  // pItemsWidget->pCurrentLauncherWidget <- 0
 	
 	_select_item (pItemsWidget, pIcon, pContainer, pModuleInstance);  // set pItemsWidget->pCurrentLauncherWidget
@@ -955,7 +955,7 @@ static void _items_widget_reload (CDWidget *pCdWidget)
 
 void cairo_dock_items_widget_update_desklet_params (ItemsWidget *pItemsWidget, CairoDesklet *pDesklet)
 {
-	g_return_if_fail (pItemsWidget != NULL);
+	cd_return_if_fail (pItemsWidget != NULL);
 	// check that it's about the current item
 	if (pDesklet == NULL || pDesklet->pIcon == NULL)
 		return;
@@ -971,7 +971,7 @@ void cairo_dock_items_widget_update_desklet_params (ItemsWidget *pItemsWidget, C
 
 void cairo_dock_items_widget_update_desklet_visibility_params (ItemsWidget *pItemsWidget, CairoDesklet *pDesklet)
 {
-	g_return_if_fail (pItemsWidget != NULL);
+	cd_return_if_fail (pItemsWidget != NULL);
 	// check that it's about the current item
 	if (pDesklet == NULL || pDesklet->pIcon == NULL)
 		return;
@@ -987,7 +987,7 @@ void cairo_dock_items_widget_update_desklet_visibility_params (ItemsWidget *pIte
 
 void cairo_dock_items_widget_update_module_instance_container (ItemsWidget *pItemsWidget, GldiModuleInstance *pInstance, gboolean bDetached)
 {
-	g_return_if_fail (pItemsWidget != NULL);
+	cd_return_if_fail (pItemsWidget != NULL);
 	// check that it's about the current item
 	if (pInstance == NULL)
 		return;
@@ -1003,7 +1003,7 @@ void cairo_dock_items_widget_update_module_instance_container (ItemsWidget *pIte
 
 void cairo_dock_items_widget_reload_current_widget (ItemsWidget *pItemsWidget, GldiModuleInstance *pInstance, int iShowPage)
 {
-	g_return_if_fail (pItemsWidget != NULL && pItemsWidget->pTreeView != NULL);
+	cd_return_if_fail (pItemsWidget != NULL && pItemsWidget->pTreeView != NULL);
 	cd_debug ("%s ()", __func__);
 	
 	// check that it's about the current item
@@ -1026,7 +1026,7 @@ void cairo_dock_items_widget_reload_current_widget (ItemsWidget *pItemsWidget, G
 	GtkTreeSelection *pSelection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pItemsWidget->pTreeView));
 	GtkTreeModel *pModel = NULL;
 	GList *paths = gtk_tree_selection_get_selected_rows (pSelection, &pModel);
-	g_return_if_fail (paths != NULL && pModel != NULL);
+	cd_return_if_fail (paths != NULL && pModel != NULL);
 	GtkTreePath *path = paths->data;
 	
 	int iNotebookPage;

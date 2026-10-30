@@ -60,7 +60,7 @@ static GldiModuleInstance *s_pUsedSlots[CAIRO_DOCK_NB_DATA_SLOT+1];
 
 GldiModuleInstance *gldi_module_instance_new_full (GldiModule *pModule, gchar *cConfFilePath, gboolean bActivate)  // The module-instance takes ownership of the path
 {
-	g_return_val_if_fail (pModule->iState != CAIRO_DOCK_MODULE_DISABLED, NULL); // will show a warning, do not call this function for an already disabled module
+	cd_return_val_if_fail (pModule->iState != CAIRO_DOCK_MODULE_DISABLED, NULL); // will show a warning, do not call this function for an already disabled module
 	GldiModuleInstanceAttr attr = {pModule, cConfFilePath, bActivate};
 	
 	GldiModuleInstance *pInstance = g_malloc0 (CEIL_ALIGNED_SIZE(sizeof (GldiModuleInstance)) + CEIL_ALIGNED_SIZE(pModule->pVisitCard->iSizeOfConfig) + pModule->pVisitCard->iSizeOfData);  // we allocate everything at once, since config and data will anyway live as long as the instance itself.
@@ -106,7 +106,7 @@ static void _read_module_config (GKeyFile *pKeyFile, GldiModuleInstance *pInstan
 
 static GKeyFile *_open_conf_file (GldiModuleInstance *pInstance, CairoDockMinimalAppletConfig *pMinimalConfig, gboolean bCheckUpdate)
 {
-	g_return_val_if_fail (pInstance != NULL, NULL);
+	cd_return_val_if_fail (pInstance != NULL, NULL);
 	//\____________________ we open its config file.
 	if (pInstance->cConfFilePath == NULL)  // no config file (e.g. xxx-integration).
 		return NULL;
@@ -127,7 +127,7 @@ static GKeyFile *_open_conf_file (GldiModuleInstance *pInstance, CairoDockMinima
 		// re-read the updated file -- this is a bit wasteful, but this does not happen often
 		g_key_file_free (pKeyFile);
 		pKeyFile = cairo_dock_open_key_file (cInstanceConfFilePath);
-		g_return_val_if_fail (pKeyFile, NULL); // something went wrong -- should not happen
+		cd_return_val_if_fail (pKeyFile, NULL); // something went wrong -- should not happen
 	}
 	
 	if (pInstance->pModule->pVisitCard->iContainerType == CAIRO_DOCK_MODULE_IS_PLUGIN)  // This module doesn't have any icon (not an applet).
@@ -314,10 +314,10 @@ void gldi_module_instance_detach (GldiModuleInstance *pInstance)
 
 void gldi_module_instance_detach_at_position (GldiModuleInstance *pInstance, int iCenterX, int iCenterY)
 {
-	g_return_if_fail (pInstance->pDesklet == NULL);
+	cd_return_if_fail (pInstance->pDesklet == NULL);
 	//\__________________ open the conf file (we need the future size of the desklet).
 	GKeyFile *pKeyFile = cairo_dock_open_key_file (pInstance->cConfFilePath);
-	g_return_if_fail (pKeyFile != NULL);
+	cd_return_if_fail (pKeyFile != NULL);
 	
 	//\__________________ compute coordinates of the center of the desklet.
 	int iDeskletWidth = cairo_dock_get_integer_key_value (pKeyFile, "Desklet", "width", NULL, 92, NULL, NULL);
@@ -371,7 +371,7 @@ void gldi_module_instance_popup_description (GldiModuleInstance *pModuleInstance
 
 gboolean gldi_module_instance_reserve_data_slot (GldiModuleInstance *pInstance)
 {
-	g_return_val_if_fail (s_iNbUsedSlots < CAIRO_DOCK_NB_DATA_SLOT, FALSE);
+	cd_return_val_if_fail (s_iNbUsedSlots < CAIRO_DOCK_NB_DATA_SLOT, FALSE);
 	if (s_iNbUsedSlots == 0)
 		memset (s_pUsedSlots, 0, (CAIRO_DOCK_NB_DATA_SLOT+1) * sizeof (GldiModuleInstance*));
 	
@@ -574,7 +574,7 @@ static gboolean delete_object (GldiObject *obj)
 {
 	GldiModuleInstance *pInstance = (GldiModuleInstance*)obj;
 	cd_message ("%s (%s)", __func__, pInstance->cConfFilePath);
-	g_return_val_if_fail (pInstance->pModule->pInstancesList != NULL, FALSE);
+	cd_return_val_if_fail (pInstance->pModule->pInstancesList != NULL, FALSE);
 	
 	//\_________________ remove this instance from the current theme
 	if (pInstance->pModule->pInstancesList->next != NULL)  // not the last one -> delete its conf file

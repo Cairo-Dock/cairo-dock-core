@@ -327,7 +327,7 @@ static void _widget_plugins_reload (CDWidget *pCdWidget)
 	PluginsWidget *pPluginsWidget = PLUGINS_WIDGET (pCdWidget);
 	
 	GtkTreeModel *pModel = gtk_tree_view_get_model (GTK_TREE_VIEW (pPluginsWidget->pTreeView));
-	g_return_if_fail (pModel != NULL);
+	cd_return_if_fail (pModel != NULL);
 	gtk_list_store_clear (GTK_LIST_STORE (pModel));
 	
 	gldi_module_foreach ((GHRFunc) _cairo_dock_add_module_to_modele, pModel);
