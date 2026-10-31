@@ -63,7 +63,7 @@ GldiObject *gldi_object_new (GldiObjectManager *pMgr, gpointer attr)
 
 void gldi_object_ref (GldiObject *pObject)
 {
-	g_return_if_fail (pObject != NULL && pObject->ref > 0);
+	cd_return_if_fail (pObject != NULL && pObject->ref > 0);
 	pObject->ref ++;
 }
 
@@ -151,7 +151,7 @@ gboolean gldi_object_is_manager_child (GldiObject *pObject, GldiObjectManager *p
 
 void gldi_object_register_notification (gpointer pObject, GldiNotificationType iNotifType, GldiNotificationFunc pFunction, gboolean bRunFirst, gpointer pUserData)
 {
-	g_return_if_fail (pObject != NULL);
+	cd_return_if_fail (pObject != NULL);
 	// grab the notifications tab
 	GPtrArray *pNotificationsTab = GLDI_OBJECT(pObject)->pNotificationsTab;
 	if (!pNotificationsTab || pNotificationsTab->len < iNotifType)
@@ -172,7 +172,7 @@ void gldi_object_register_notification (gpointer pObject, GldiNotificationType i
 
 void gldi_object_remove_notification (gpointer pObject, GldiNotificationType iNotifType, GldiNotificationFunc pFunction, gpointer pUserData)
 {
-	g_return_if_fail (pObject != NULL);
+	cd_return_if_fail (pObject != NULL);
 	// grab the notifications tab
 	GPtrArray *pNotificationsTab = GLDI_OBJECT(pObject)->pNotificationsTab;
 	

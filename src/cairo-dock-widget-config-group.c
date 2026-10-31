@@ -39,7 +39,7 @@ static void _config_group_widget_apply (CDWidget *pCdWidget)
 	
 	// update the conf file.
 	GKeyFile *pKeyFile = cairo_dock_open_key_file (g_cConfFile);
-	g_return_if_fail (pKeyFile != NULL);
+	cd_return_if_fail (pKeyFile != NULL);
 
 	cairo_dock_update_keyfile_from_widget_list (pKeyFile, pCdWidget->pWidgetList);
 	
@@ -56,7 +56,7 @@ static void _config_group_widget_apply (CDWidget *pCdWidget)
 	{
 		cManagerName = m->data;
 		pManager = gldi_manager_get (cManagerName);
-		g_return_if_fail (pManager != NULL);
+		cd_return_if_fail (pManager != NULL);
 		
 		if (pManager->save_custom_widget)
 			pManager->save_custom_widget (pKeyFile, pCdWidget->pWidgetList);
@@ -165,7 +165,7 @@ ConfigGroupWidget *cairo_dock_config_group_widget_new (GList *pGroups, GList *pM
 	
 	// build its widget based on its config file.
 	GKeyFile* pKeyFile = cairo_dock_open_key_file (g_cConfFile);
-	g_return_val_if_fail (pKeyFile != NULL, NULL);
+	cd_return_val_if_fail (pKeyFile != NULL, NULL);
 	
 	GtkWidget *pWidget = NULL;
 	GtkWidget *pNoteBook = NULL;

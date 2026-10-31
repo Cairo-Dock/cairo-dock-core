@@ -226,7 +226,7 @@ static void _on_tips_category_changed (GtkComboBox *pWidget, gpointer *data)
 	CairoDialog *pDialog = data[1];
 	
 	int iNumItem = gtk_combo_box_get_active (pWidget);
-	g_return_if_fail (iNumItem < pTips->iNbGroups);
+	cd_return_if_fail (iNumItem < pTips->iNbGroups);
 	
 	pTips->iNumTipGroup = iNumItem;
 	
@@ -247,12 +247,12 @@ void cairo_dock_show_tips (void)
 	// open the tips file
 	const gchar *cConfFilePath = CD_APPLET_MY_CONF_FILE;
 	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
-	g_return_if_fail (pKeyFile != NULL);
+	cd_return_if_fail (pKeyFile != NULL);
 	
 	gsize iNbGroups = 0;
 	gchar **pGroupList = g_key_file_get_groups (pKeyFile, &iNbGroups);
 	iNbGroups -= 4;   // skip the last 4 groups (Troubleshooting and Contribute + Icon and Desklet).
-	g_return_if_fail (pGroupList != NULL && iNbGroups > 0);
+	cd_return_if_fail (pGroupList != NULL && iNbGroups > 0);
 	
 	// get the last displayed tip.
 	guint iNumTipGroup, iNumTipKey;
@@ -274,7 +274,7 @@ void cairo_dock_show_tips (void)
 	
 	gsize iNbKeys = 0;
 	gchar **pKeyList = g_key_file_get_keys (pKeyFile, cGroupName, &iNbKeys, NULL);
-	g_return_if_fail (pKeyList != NULL && iNbKeys > 0);
+	cd_return_if_fail (pKeyList != NULL && iNbKeys > 0);
 	if (iNumTipKey >= iNbKeys)  // be sure to stay inside the limits.
 		iNumTipKey = 0;
 	

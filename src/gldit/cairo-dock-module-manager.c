@@ -85,7 +85,7 @@ static void _module_remove_from_config (GldiModule *pModule);
 
 GldiModule *gldi_module_get (const gchar *cModuleName)
 {
-	g_return_val_if_fail (cModuleName != NULL, NULL);
+	cd_return_val_if_fail (cModuleName != NULL, NULL);
 	return g_hash_table_lookup (s_hModuleTable, cModuleName);
 }
 
@@ -143,7 +143,7 @@ static void _trigger_write_modules (void)
 
 GldiModule *gldi_module_new (GldiVisitCard *pVisitCard, GldiModuleInterface *pInterface)
 {
-	g_return_val_if_fail (pVisitCard != NULL && pVisitCard->cModuleName != NULL && pInterface != NULL, NULL);
+	cd_return_val_if_fail (pVisitCard != NULL && pVisitCard->cModuleName != NULL && pInterface != NULL, NULL);
 	
 	if (g_hash_table_lookup (s_hModuleTable, pVisitCard->cModuleName) != NULL)
 	{
@@ -160,7 +160,7 @@ GldiModule *gldi_module_new (GldiVisitCard *pVisitCard, GldiModuleInterface *pIn
 */
 static void _module_new_from_so_file (const gchar *cSoFilePath)
 {
-	g_return_if_fail (cSoFilePath != NULL);
+	cd_return_if_fail (cSoFilePath != NULL);
 	GldiVisitCard *pVisitCard = NULL;
 	GldiModuleInterface *pInterface = NULL;
 	
@@ -369,7 +369,7 @@ gchar *gldi_module_get_config_dir (GldiModule *pModule)
 
 static void _gldi_module_load_config_and_activate (GldiModule *module, gboolean bActivate)
 {
-	g_return_if_fail (module != NULL && module->pVisitCard != NULL);
+	cd_return_if_fail (module != NULL && module->pVisitCard != NULL);
 	cd_debug ("%s (%s)", __func__, module->pVisitCard->cModuleName);
 	
 	if (module->pInstancesList != NULL)
@@ -491,7 +491,7 @@ void gldi_module_activate (GldiModule *pModule)
 
 void _module_deactivate (GldiModule *module)  // stop all instances of a module without updating our config
 {
-	g_return_if_fail (module != NULL);
+	cd_return_if_fail (module != NULL);
 	cd_debug ("%s (%s, %s)", __func__, module->pVisitCard->cModuleName, module->cConfFilePath);
 	GList *pInstances = module->pInstancesList;
 	module->pInstancesList = NULL;  // set to NULL already so that notifications don't get fooled. This can probably be avoided...
@@ -514,8 +514,8 @@ void gldi_module_deactivate (GldiModule *module)  // stop all instances of a mod
 
 void gldi_module_disable (GldiModule *pModule, const gchar *cReason)
 {
-	g_return_if_fail (pModule != NULL);
-	g_return_if_fail (pModule->iState != CAIRO_DOCK_MODULE_DISABLED);
+	cd_return_if_fail (pModule != NULL);
+	cd_return_if_fail (pModule->iState != CAIRO_DOCK_MODULE_DISABLED);
 	
 	_module_deactivate (pModule);
 	pModule->iState = CAIRO_DOCK_MODULE_DISABLED;

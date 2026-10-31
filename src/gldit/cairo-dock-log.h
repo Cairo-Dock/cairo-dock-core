@@ -30,8 +30,8 @@
 # include <glib.h>
 G_BEGIN_DECLS
 
-/*
- * internal function
+/**
+ * Internal logging function, called by the cd_warning() and similar macros below.
  */
 void cd_log_location(const GLogLevelFlags loglevel,
                      const char *file,
@@ -39,6 +39,17 @@ void cd_log_location(const GLogLevelFlags loglevel,
                      const int line,
                      const char *format,
                      ...);
+
+/**
+ * Internal logging function, called by the cd_return_if_fail() and
+ * cd_return_val_if_fail(). This is a separate function from cd_log_location()
+ * to make setting breakpoints easier.
+ */
+void cd_warn_on_fail(const char *file,
+                     const char *func,
+                     const int line,
+                     const char *cond);
+
 
 /**
  * Initialize the log system.
@@ -90,6 +101,36 @@ void cd_log_force_use_color (void);
 */
 #define cd_debug(...)                                                  \
   cd_log_location(G_LOG_LEVEL_DEBUG, __FILE__, __PRETTY_FUNCTION__, __LINE__,__VA_ARGS__)
+
+
+/**
+ * Print a warning to the terminal and return from the current function if the given
+ * condition does not evaluate to TRUE. This is similar to cd_return_if_fail() in GLib,
+ * but with consistent and well-defined behavior, so it can be used for conditions that
+ * can possibly be FALSE without UB. Also, the check will not be disabled with
+ * G_DISABLE_CHECKS.
+ * See also https://gitlab.gnome.org/GNOME/glib/-/work_items/4075 for more context.
+ *@param cond the condition to test
+ */
+#define cd_return_if_fail(cond) do { \
+	if (G_UNLIKELY (! (cond))) { \
+		cd_warn_on_fail(__FILE__, __PRETTY_FUNCTION__, __LINE__, #cond); \
+		return; \
+	} \
+} while (0)
+
+/**
+ * Print a warning to the terminal and return the given value from the current function
+ * if the condition does not evaluate to TRUE. This is similar to cd_return_val_if_fail().
+ *@param cond the condition to test
+ *@param val the value to return (must be compatible with the current function's return value)
+ */
+#define cd_return_val_if_fail(cond, val) do { \
+	if (G_UNLIKELY (! (cond))) { \
+		cd_warn_on_fail(__FILE__, __PRETTY_FUNCTION__, __LINE__, #cond); \
+		return (val); \
+	} \
+} while (0)
 
 G_END_DECLS
 #endif 	    /* !CAIRO_DOCK_LOG_H_ */

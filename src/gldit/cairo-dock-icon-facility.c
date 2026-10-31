@@ -292,7 +292,7 @@ Icon *cairo_dock_get_previous_icon (GList *pIconList, Icon *pIcon)
 
 Icon *cairo_dock_get_icon_with_command (GList *pIconList, const gchar *cCommand)
 {
-	g_return_val_if_fail (cCommand != NULL, NULL);
+	cd_return_val_if_fail (cCommand != NULL, NULL);
 	GList* ic;
 	Icon *icon;
 	for (ic = pIconList; ic != NULL; ic = ic->next)
@@ -306,7 +306,7 @@ Icon *cairo_dock_get_icon_with_command (GList *pIconList, const gchar *cCommand)
 
 Icon *cairo_dock_get_icon_with_base_uri (GList *pIconList, const gchar *cBaseURI)
 {
-	g_return_val_if_fail (cBaseURI != NULL, NULL);
+	cd_return_val_if_fail (cBaseURI != NULL, NULL);
 	GList* ic;
 	Icon *icon;
 	for (ic = pIconList; ic != NULL; ic = ic->next)
@@ -321,7 +321,7 @@ Icon *cairo_dock_get_icon_with_base_uri (GList *pIconList, const gchar *cBaseURI
 
 Icon *cairo_dock_get_icon_with_name (GList *pIconList, const gchar *cName)
 {
-	g_return_val_if_fail (cName != NULL, NULL);
+	cd_return_val_if_fail (cName != NULL, NULL);
 	GList* ic;
 	Icon *icon;
 	for (ic = pIconList; ic != NULL; ic = ic->next)
@@ -588,7 +588,7 @@ static void _set_icon_name_internal (Icon *pIcon, const gchar *cIconName, gchar 
 
 void gldi_icon_set_name (Icon *pIcon, const gchar *cIconName)  // fonction proposee par Necropotame.
 {
-	g_return_if_fail (pIcon != NULL);
+	cd_return_if_fail (pIcon != NULL);
 	
 	const gchar *cEnd = NULL;
 	if (!cIconName || g_utf8_validate (cIconName, -1, &cEnd))
@@ -600,7 +600,7 @@ void gldi_icon_set_name (Icon *pIcon, const gchar *cIconName)  // fonction propo
 
 void gldi_icon_set_name_utf8 (Icon *pIcon, const gchar *cIconName)
 {
-	g_return_if_fail (pIcon != NULL);  // le contexte sera verifie plus loin.
+	cd_return_if_fail (pIcon != NULL);  // le contexte sera verifie plus loin.
 	
 	_set_icon_name_internal (pIcon, cIconName, NULL);
 }
@@ -617,7 +617,7 @@ void gldi_icon_set_name_printf (Icon *pIcon, const gchar *cIconNameFormat, ...)
 
 void gldi_icon_set_quick_info (Icon *pIcon, const gchar *cQuickInfo)
 {
-	g_return_if_fail (pIcon != NULL);
+	cd_return_if_fail (pIcon != NULL);
 	
 	if (pIcon->cQuickInfo != cQuickInfo)  // be paranoid, in case one passes pIcon->cQuickInfo to the function
 	{
@@ -643,7 +643,7 @@ void gldi_icon_set_quick_info_printf (Icon *pIcon, const gchar *cQuickInfoFormat
 
 cairo_surface_t *cairo_dock_icon_buffer_to_cairo (Icon *icon, int iWidth, int iHeight)
 {
-	g_return_val_if_fail (icon != NULL, NULL);
+	cd_return_val_if_fail (icon != NULL, NULL);
 	
 	return cairo_dock_image_buffer_copy_scale (&icon->image, iWidth, iHeight);
 }
@@ -713,7 +713,7 @@ void gldi_theme_icon_write_container_name_in_conf_file (Icon *pIcon, const gchar
 {
 	if (GLDI_OBJECT_IS_USER_ICON (pIcon))
 	{
-		g_return_if_fail (pIcon->cDesktopFileName != NULL);
+		cd_return_if_fail (pIcon->cDesktopFileName != NULL);
 		gchar *cDesktopFilePath = *pIcon->cDesktopFileName == '/' ? g_strdup (pIcon->cDesktopFileName) : g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pIcon->cDesktopFileName);
 		cairo_dock_update_conf_file (cDesktopFilePath,
 			G_TYPE_STRING, "Desktop Entry", "Container", cParentDockName,
@@ -732,7 +732,7 @@ void gldi_theme_icon_write_order_in_conf_file (Icon *pIcon, double fOrder)
 {
 	if (GLDI_OBJECT_IS_USER_ICON (pIcon))
 	{
-		g_return_if_fail (pIcon->cDesktopFileName != NULL);
+		cd_return_if_fail (pIcon->cDesktopFileName != NULL);
 		gchar *cDesktopFilePath = *pIcon->cDesktopFileName == '/' ? g_strdup (pIcon->cDesktopFileName) : g_strdup_printf ("%s/%s", g_cCurrentLaunchersPath, pIcon->cDesktopFileName);
 		cairo_dock_update_conf_file (cDesktopFilePath,
 			G_TYPE_DOUBLE, "Desktop Entry", "Order", fOrder,

@@ -254,7 +254,7 @@ static gboolean _animation_loop (GldiContainer *pContainer)
 
 CairoFlyingContainer *gldi_flying_container_new (Icon *pFlyingIcon, CairoDock *pOriginDock)
 {
-	g_return_val_if_fail (pFlyingIcon != NULL, NULL);
+	cd_return_val_if_fail (pFlyingIcon != NULL, NULL);
 	CairoFlyingAttr attr;
 	memset (&attr, 0, sizeof (CairoFlyingAttr));
 	attr.pIcon = pFlyingIcon;
@@ -353,7 +353,7 @@ static void _insert_icon (GldiContainer *pContainer, Icon *pIcon, G_GNUC_UNUSED 
 {
 	CairoFlyingContainer *pFlyingContainer = (CairoFlyingContainer*)pContainer;
 	// insert icon
-	g_return_if_fail (pFlyingContainer->pIcon == NULL || pFlyingContainer->pIcon == pIcon);
+	cd_return_if_fail (pFlyingContainer->pIcon == NULL || pFlyingContainer->pIcon == pIcon);
 	pFlyingContainer->pIcon = pIcon;
 }
 

@@ -144,7 +144,7 @@ static gpointer _get_data_threaded (GldiTask *pTask)
 }
 void gldi_task_launch (GldiTask *pTask)
 {
-	g_return_if_fail (pTask != NULL);
+	cd_return_if_fail (pTask != NULL);
 	if (pTask->get_data == NULL)  // no asynchronous work -> just call the 'update' and directly schedule the next iteration
 	{
 		_set_elapsed_time (pTask);
@@ -327,7 +327,7 @@ static void _restart_timer_with_frequency (GldiTask *pTask, int iNewPeriod)
 
 void gldi_task_change_frequency (GldiTask *pTask, int iNewPeriod)
 {
-	g_return_if_fail (pTask != NULL && pTask->iPeriod != 0 && iNewPeriod != 0);
+	cd_return_if_fail (pTask != NULL && pTask->iPeriod != 0 && iNewPeriod != 0);
 	pTask->iPeriod = iNewPeriod;
 	
 	_restart_timer_with_frequency (pTask, iNewPeriod);

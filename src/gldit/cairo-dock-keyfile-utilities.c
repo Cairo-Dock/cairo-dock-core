@@ -153,7 +153,7 @@ static void cairo_dock_merge_key_files (GKeyFile *pOriginalKeyFile, GKeyFile *pR
 	gsize length = 0;
 	gchar **pKeyList;
 	gchar **pGroupList = g_key_file_get_groups (pReplacementKeyFile, &length);
-	g_return_if_fail (pGroupList != NULL);
+	cd_return_if_fail (pGroupList != NULL);
 	gchar *cGroupName, *cKeyName, *cKeyValue, *cComment;
 	int i, j;
 	
@@ -164,7 +164,7 @@ static void cairo_dock_merge_key_files (GKeyFile *pOriginalKeyFile, GKeyFile *pR
 		// get the keys of the remplacement key-file.
 		length = 0;
 		pKeyList = g_key_file_get_keys (pReplacementKeyFile, cGroupName, NULL, NULL);
-		g_return_if_fail (pKeyList != NULL);
+		cd_return_if_fail (pKeyList != NULL);
 		
 		for (j = 0; pKeyList[j] != NULL; j ++)
 		{
@@ -207,7 +207,7 @@ static void cairo_dock_merge_key_files (GKeyFile *pOriginalKeyFile, GKeyFile *pR
 	
 	// remove keys from the original key-file which are not in the remplacement key-file, except hidden and persistent keys.
 	pGroupList = g_key_file_get_groups (pOriginalKeyFile, &length);
-	g_return_if_fail (pGroupList != NULL);
+	cd_return_if_fail (pGroupList != NULL);
 	for (i = 0; pGroupList[i] != NULL; i ++)
 	{
 		cGroupName = pGroupList[i];
@@ -215,7 +215,7 @@ static void cairo_dock_merge_key_files (GKeyFile *pOriginalKeyFile, GKeyFile *pR
 		// get the keys of the original key-file.
 		length = 0;
 		pKeyList = g_key_file_get_keys (pOriginalKeyFile, cGroupName, NULL, NULL);
-		g_return_if_fail (pKeyList != NULL);
+		cd_return_if_fail (pKeyList != NULL);
 		
 		for (j = 0; pKeyList[j] != NULL; j ++)
 		{
@@ -238,9 +238,9 @@ static void cairo_dock_merge_key_files (GKeyFile *pOriginalKeyFile, GKeyFile *pR
 void cairo_dock_merge_conf_files (const gchar *cConfFilePath, gchar *cReplacementConfFilePath, gchar iIdentifier)
 {
 	GKeyFile *pOriginalKeyFile = cairo_dock_open_key_file (cConfFilePath);
-	g_return_if_fail (pOriginalKeyFile != NULL);
+	cd_return_if_fail (pOriginalKeyFile != NULL);
 	GKeyFile *pReplacementKeyFile = cairo_dock_open_key_file (cReplacementConfFilePath);
-	g_return_if_fail (pReplacementKeyFile != NULL);
+	cd_return_if_fail (pReplacementKeyFile != NULL);
 	
 	cairo_dock_merge_key_files (pOriginalKeyFile, pReplacementKeyFile, iIdentifier);
 	cairo_dock_write_keys_to_file (pOriginalKeyFile, cConfFilePath);
@@ -265,7 +265,7 @@ static void _cairo_dock_replace_key_values (GKeyFile *pValuesKeyFile, GKeyFile *
 	gsize length = 0;
 	gchar **pKeyList;
 	gchar **pGroupList = g_key_file_get_groups (pKeysKeyFile, &length);
-	g_return_if_fail (pGroupList != NULL);
+	cd_return_if_fail (pGroupList != NULL);
 	gchar *cGroupName, *cKeyName, *cKeyValue, *cComment;
 	int i, j;
 	
@@ -276,7 +276,7 @@ static void _cairo_dock_replace_key_values (GKeyFile *pValuesKeyFile, GKeyFile *
 		// get the keys.
 		length = 0;
 		pKeyList = g_key_file_get_keys (pKeysKeyFile, cGroupName, NULL, NULL);
-		g_return_if_fail (pKeyList != NULL);
+		cd_return_if_fail (pKeyList != NULL);
 		
 		for (j = 0; pKeyList[j] != NULL; j ++)
 		{
@@ -321,7 +321,7 @@ static void _cairo_dock_replace_key_values (GKeyFile *pValuesKeyFile, GKeyFile *
 void cairo_dock_upgrade_conf_file_full (const gchar *cConfFilePath, GKeyFile *pKeyFile, const gchar *cDefaultConfFilePath, gboolean bUpdateKeys)
 {
 	GKeyFile *pUptodateKeyFile = cairo_dock_open_key_file (cDefaultConfFilePath);
-	g_return_if_fail (pUptodateKeyFile != NULL);
+	cd_return_if_fail (pUptodateKeyFile != NULL);
 	
 	_cairo_dock_replace_key_values (pKeyFile, pUptodateKeyFile, bUpdateKeys);
 	
@@ -392,7 +392,7 @@ void cairo_dock_add_remove_element_to_key (const gchar *cConfFilePath, const gch
 	{
 		//g_print ("on enleve %s\n", cElementName);
 		gchar *str = g_strstr_len (cElementList, strlen (cElementList), cElementName);
-		g_return_if_fail (str != NULL);
+		cd_return_if_fail (str != NULL);
 		if (str == cElementList)
 		{
 			if (str[strlen (cElementName)] == '\0')
@@ -437,7 +437,7 @@ gboolean cairo_dock_rename_group_in_conf_file (GKeyFile *pKeyFile, const gchar *
 		return FALSE;
 	
 	gchar **pKeyList = g_key_file_get_keys (pKeyFile, cGroupName, NULL, NULL);
-	g_return_val_if_fail (pKeyList != NULL, FALSE);
+	cd_return_val_if_fail (pKeyList != NULL, FALSE);
 	gchar *cValue;
 	int i;
 	for (i = 0; pKeyList[i] != NULL; i ++)

@@ -126,7 +126,7 @@ void cairo_dock_load_icon_image (Icon *icon, G_GNUC_UNUSED GldiContainer *pConta
 		cairo_dock_unload_image_buffer (&icon->image);
 		return;
 	}
-	g_return_if_fail (icon->fWidth > 0); // should never happen; if it does, it's an error, so be noisy.
+	cd_return_if_fail (icon->fWidth > 0); // should never happen; if it does, it's an error, so be noisy.
 	
 	//\______________ keep the current buffer on the icon so that the 'load' can use it (for instance, applis may draw emblems).
 	cairo_surface_t *pPrevSurface = icon->image.pSurface;
@@ -306,7 +306,7 @@ void cairo_dock_trigger_load_icon_buffers (Icon *pIcon)
 
 void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 {
-	g_return_if_fail (pIcon != NULL && pIcon->pSubDock != NULL && (pIcon->image.pSurface != NULL || pIcon->image.iTexture != 0));
+	cd_return_if_fail (pIcon != NULL && pIcon->pSubDock != NULL && (pIcon->image.pSurface != NULL || pIcon->image.iTexture != 0));
 	
 	CairoIconContainerRenderer *pRenderer = cairo_dock_get_icon_container_renderer (pIcon->cClass != NULL ? "Stack" : s_cRendererNames[pIcon->iSubdockViewType]);
 	if (pRenderer == NULL)
@@ -337,7 +337,7 @@ void cairo_dock_draw_subdock_content_on_icon (Icon *pIcon, CairoDock *pDock)
 	{
 		//\______________ On efface le dessin existant.
 		cairo_t *pCairoContext = cairo_dock_begin_draw_icon_cairo (pIcon, 0, NULL);  // 0 <=> erase
-		g_return_if_fail (pCairoContext != NULL);
+		cd_return_if_fail (pCairoContext != NULL);
 		
 		//\______________ On dessine les 3 ou 4 premieres icones du sous-dock.
 		pRenderer->render (pIcon, CAIRO_CONTAINER (pDock), w, h, pCairoContext);
@@ -360,7 +360,7 @@ void gldi_icon_detach (Icon *pIcon)
 
 void gldi_icon_insert_in_container (Icon *pIcon, GldiContainer *pContainer, gboolean bAnimateIcon)
 {
-	g_return_if_fail (pContainer->iface.insert_icon != NULL);  // the container must handle icons
+	cd_return_if_fail (pContainer->iface.insert_icon != NULL);  // the container must handle icons
 	if (cairo_dock_get_icon_container (pIcon) != NULL)  // the icon must not be in a container yet
 	{
 		cd_warning ("This icon (%s) is already inside a container !", pIcon->cName);

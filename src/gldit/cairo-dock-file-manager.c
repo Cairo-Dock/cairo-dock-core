@@ -162,7 +162,7 @@ gboolean cairo_dock_fm_launch_uri (const gchar *cURI)
 
 gboolean cairo_dock_fm_add_monitor_full (const gchar *cURI, gboolean bDirectory, const gchar *cMountedURI, CairoDockFMMonitorCallback pCallback, gpointer data)
 {
-	g_return_val_if_fail (cURI != NULL, FALSE);
+	cd_return_val_if_fail (cURI != NULL, FALSE);
 	if (s_EnvBackend.add_monitor != NULL)
 	{
 		if (cMountedURI != NULL && strcmp (cMountedURI, cURI) != 0)
@@ -183,7 +183,7 @@ gboolean cairo_dock_fm_add_monitor_full (const gchar *cURI, gboolean bDirectory,
 
 gboolean cairo_dock_fm_remove_monitor_full (const gchar *cURI, gboolean bDirectory, const gchar *cMountedURI)
 {
-	g_return_val_if_fail (cURI != NULL, FALSE);
+	cd_return_val_if_fail (cURI != NULL, FALSE);
 	if (s_EnvBackend.remove_monitor != NULL)
 	{
 		s_EnvBackend.remove_monitor (cURI);
@@ -326,7 +326,7 @@ static gboolean _empty_dir (const gchar *cBaseURI, CairoDockFMDirectoryFilterFun
 
 gboolean cairo_dock_fm_empty_directory (const gchar *cURI, gboolean bRecurse, CairoDockFMDirectoryFilterFunc pFilter, gconstpointer data)
 {
-	g_return_val_if_fail (cURI != NULL, FALSE);
+	cd_return_val_if_fail (cURI != NULL, FALSE);
 	GFile *pFile = (*cURI == '/' ? g_file_new_for_path (cURI) : g_file_new_for_uri (cURI));
 	
 	GError *erreur = NULL;
@@ -362,7 +362,7 @@ gboolean cairo_dock_fm_empty_directory (const gchar *cURI, gboolean bRecurse, Ca
 
 gboolean cairo_dock_fm_delete_file (const gchar *cURI, gboolean bNoTrash)
 {
-	g_return_val_if_fail (cURI != NULL, FALSE);
+	cd_return_val_if_fail (cURI != NULL, FALSE);
 	
 	if (bNoTrash)
 	{
@@ -682,7 +682,7 @@ Icon *cairo_dock_fm_create_icon_from_URI (const gchar *cURI, GldiContainer *pCon
 
 gboolean cairo_dock_fm_move_into_directory (const gchar *cURI, Icon *icon, GldiContainer *pContainer)
 {
-	g_return_val_if_fail (cURI != NULL && icon != NULL, FALSE);
+	cd_return_val_if_fail (cURI != NULL && icon != NULL, FALSE);
 	cd_message (" -> copie de %s dans %s", cURI, icon->cBaseURI);
 	gboolean bSuccess = cairo_dock_fm_move_file (cURI, icon->cBaseURI);
 	if (! bSuccess)
@@ -878,7 +878,7 @@ gboolean _recursive_copy_internal (const gchar *cSourceDir, const gchar *cDestDi
 
 gboolean cairo_dock_fm_recursive_copy (const gchar *cSourceDir, const gchar *cDestDir, CairoDockFMCopyFilterFunc pFilter, gpointer data)
 {
-	g_return_val_if_fail (cSourceDir && cDestDir, FALSE);
+	cd_return_val_if_fail (cSourceDir && cDestDir, FALSE);
 	
 	// check that both source and destination are directories
 	GFile *pFile1 = g_file_new_for_path (cSourceDir);

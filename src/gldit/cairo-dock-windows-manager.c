@@ -140,7 +140,7 @@ const gchar *gldi_windows_manager_get_name ()
 
 void gldi_window_move_to_desktop (GldiWindowActor *actor, int iNumDesktop, int iNumViewportX, int iNumViewportY)
 {
-	g_return_if_fail (actor != NULL);
+	cd_return_if_fail (actor != NULL);
 	if (s_backend.move_to_nth_desktop)
 		s_backend.move_to_nth_desktop (actor,
 			iNumDesktop,
@@ -152,7 +152,7 @@ void gldi_window_move_to_desktop (GldiWindowActor *actor, int iNumDesktop, int i
 
 void gldi_window_show (GldiWindowActor *actor)
 {
-	g_return_if_fail (actor != NULL);
+	cd_return_if_fail (actor != NULL);
 	if (s_backend.show)
 		s_backend.show (actor);
 }
@@ -160,56 +160,56 @@ void gldi_window_show (GldiWindowActor *actor)
 
 void gldi_window_close (GldiWindowActor *actor)
 {
-	g_return_if_fail (actor != NULL);
+	cd_return_if_fail (actor != NULL);
 	if (s_backend.close)
 		s_backend.close (actor);
 }
 
 void gldi_window_kill (GldiWindowActor *actor)
 {
-	g_return_if_fail (actor != NULL);
+	cd_return_if_fail (actor != NULL);
 	if (s_backend.kill)
 		s_backend.kill (actor);
 }
 
 void gldi_window_minimize (GldiWindowActor *actor)
 {
-	g_return_if_fail (actor != NULL);
+	cd_return_if_fail (actor != NULL);
 	if (s_backend.minimize)
 		s_backend.minimize (actor);
 }
 
 void gldi_window_lower (GldiWindowActor *actor)
 {
-	g_return_if_fail (actor != NULL);
+	cd_return_if_fail (actor != NULL);
 	if (s_backend.lower)
 		s_backend.lower (actor);
 }
 
 void gldi_window_maximize (GldiWindowActor *actor, gboolean bMaximize)
 {
-	g_return_if_fail (actor != NULL);
+	cd_return_if_fail (actor != NULL);
 	if (s_backend.maximize)
 		s_backend.maximize (actor, bMaximize);
 }
 
 void gldi_window_set_fullscreen (GldiWindowActor *actor, gboolean bFullScreen)
 {
-	g_return_if_fail (actor != NULL);
+	cd_return_if_fail (actor != NULL);
 	if (s_backend.set_fullscreen)
 		s_backend.set_fullscreen (actor, bFullScreen);
 }
 
 void gldi_window_set_above (GldiWindowActor *actor, gboolean bAbove)
 {
-	g_return_if_fail (actor != NULL);
+	cd_return_if_fail (actor != NULL);
 	if (s_backend.set_above)
 		s_backend.set_above (actor, bAbove);
 }
 
 void gldi_window_set_thumbnail_area (GldiWindowActor *actor, GldiContainer* pContainer, int x, int y, int w, int h)
 {
-	g_return_if_fail (actor != NULL);
+	cd_return_if_fail (actor != NULL);
 	if (s_backend.set_thumbnail_area)
 		s_backend.set_thumbnail_area (actor, pContainer, x, y, w, h);
 }
@@ -229,7 +229,7 @@ void gldi_window_set_border (GldiWindowActor *actor, gboolean bWithBorder)
 
 cairo_surface_t *gldi_window_get_icon_surface (GldiWindowActor *actor, int iWidth, int iHeight)
 {
-	g_return_val_if_fail (actor != NULL, NULL);
+	cd_return_val_if_fail (actor != NULL, NULL);
 	if (s_backend.get_icon_surface)
 		return s_backend.get_icon_surface (actor, iWidth, iHeight);
 	return NULL;
@@ -237,7 +237,7 @@ cairo_surface_t *gldi_window_get_icon_surface (GldiWindowActor *actor, int iWidt
 
 cairo_surface_t *gldi_window_get_thumbnail_surface (GldiWindowActor *actor, int iWidth, int iHeight)
 {
-	g_return_val_if_fail (actor != NULL, NULL);
+	cd_return_val_if_fail (actor != NULL, NULL);
 	if (s_backend.get_thumbnail_surface)
 		return s_backend.get_thumbnail_surface (actor, iWidth, iHeight);
 	return NULL;
@@ -245,7 +245,7 @@ cairo_surface_t *gldi_window_get_thumbnail_surface (GldiWindowActor *actor, int 
 
 GLuint gldi_window_get_texture (GldiWindowActor *actor, int *pWidth, int *pHeight)
 {
-	g_return_val_if_fail (actor != NULL, 0);
+	cd_return_val_if_fail (actor != NULL, 0);
 	if (s_backend.get_texture)
 		return s_backend.get_texture (actor, pWidth, pHeight);
 	return 0;
@@ -253,7 +253,7 @@ GLuint gldi_window_get_texture (GldiWindowActor *actor, int *pWidth, int *pHeigh
 
 GldiWindowActor *gldi_window_get_transient_for (GldiWindowActor *actor)
 {
-	g_return_val_if_fail (actor != NULL, NULL);
+	cd_return_val_if_fail (actor != NULL, NULL);
 	if (s_backend.get_transient_for)
 		return s_backend.get_transient_for (actor);
 	return NULL;

@@ -112,7 +112,7 @@ static void _cairo_dock_edit_and_reload_conf (G_GNUC_UNUSED GtkMenuItem *pMenuIt
 static void _cairo_dock_configure_root_dock (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpointer ptr)
 {
 	CairoDock *pDock = (CairoDock*)ptr;
-	g_return_if_fail (pDock->iRefCount == 0 && ! pDock->bIsMainDock);
+	cd_return_if_fail (pDock->iRefCount == 0 && ! pDock->bIsMainDock);
 	
 	cairo_dock_show_items_gui (NULL, CAIRO_CONTAINER (pDock), NULL, 0);
 }
@@ -125,7 +125,7 @@ static void _on_answer_delete_dock (int iClickedButton, G_GNUC_UNUSED GtkWidget 
 }
 static void _cairo_dock_delete_dock (G_GNUC_UNUSED GtkMenuItem *pMenuItem, CairoDock *pDock)
 {
-	g_return_if_fail (pDock->iRefCount == 0 && ! pDock->bIsMainDock);
+	cd_return_if_fail (pDock->iRefCount == 0 && ! pDock->bIsMainDock);
 	
 	Icon *pIcon = cairo_dock_get_pointed_icon (pDock->icons);
 	
@@ -735,7 +735,7 @@ static void _cairo_dock_make_launcher_from_appli (G_GNUC_UNUSED GtkMenuItem *pMe
 	struct _MenuParams *params = (struct _MenuParams*) data;
 	Icon *icon = params->pIcon;
 	CairoDock *pDock = CAIRO_DOCK (params->pContainer);
-	g_return_if_fail (icon->cClass != NULL);
+	cd_return_if_fail (icon->cClass != NULL);
 	
 	// look for the .desktop file of the program
 	cd_debug ("%s (%s)", __func__, icon->cClass);
@@ -793,7 +793,7 @@ static void _cairo_dock_initiate_config_module (G_GNUC_UNUSED GtkMenuItem *pMenu
 	GldiContainer *pContainer= params->pContainer;
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))
 		icon = (CAIRO_DESKLET (pContainer))->pIcon;  // l'icone cliquee du desklet n'est pas forcement celle qui contient le module.
-	g_return_if_fail (CAIRO_DOCK_IS_APPLET (icon));
+	cd_return_if_fail (CAIRO_DOCK_IS_APPLET (icon));
 	
 	cairo_dock_show_items_gui (icon, NULL, NULL, -1);
 }
@@ -805,7 +805,7 @@ static void _cairo_dock_detach_module (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpo
 	GldiContainer *pContainer= params->pContainer;
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))
 		icon = (CAIRO_DESKLET (pContainer))->pIcon;  // l'icone cliquee du desklet n'est pas forcement celle qui contient le module !
-	g_return_if_fail (CAIRO_DOCK_IS_APPLET (icon));
+	cd_return_if_fail (CAIRO_DOCK_IS_APPLET (icon));
 	
 	gldi_module_instance_detach (icon->pModuleInstance);
 }
@@ -824,7 +824,7 @@ static void _cairo_dock_remove_module_instance (G_GNUC_UNUSED GtkMenuItem *pMenu
 	GldiContainer *pContainer= params->pContainer;
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))
 		icon = (CAIRO_DESKLET (pContainer))->pIcon;  // l'icone cliquee du desklet n'est pas forcement celle qui contient le module !
-	g_return_if_fail (CAIRO_DOCK_IS_APPLET (icon));
+	cd_return_if_fail (CAIRO_DOCK_IS_APPLET (icon));
 	
 	gchar *question = g_strdup_printf (_("You're about to remove this applet (%s) from the dock. Are you sure?"), icon->pModuleInstance->pModule->pVisitCard->cTitle);
 	gldi_dialog_show_with_question (question,
@@ -841,7 +841,7 @@ static void _cairo_dock_add_module_instance (G_GNUC_UNUSED GtkMenuItem *pMenuIte
 	GldiContainer *pContainer= params->pContainer;
 	if (CAIRO_DOCK_IS_DESKLET (pContainer))
 		icon = (CAIRO_DESKLET (pContainer))->pIcon;  // l'icone cliquee du desklet n'est pas forcement celle qui contient le module !
-	g_return_if_fail (CAIRO_DOCK_IS_APPLET (icon));
+	cd_return_if_fail (CAIRO_DOCK_IS_APPLET (icon));
 	
 	gldi_module_add_instance (icon->pModuleInstance->pModule);
 }
@@ -877,8 +877,12 @@ static void _show_image_preview (GtkFileChooser *pFileChooser, GtkImage *pPrevie
 {
 	gchar *cFileName = gtk_file_chooser_get_preview_filename (pFileChooser);
 	if (cFileName == NULL)
+	{
+		gtk_file_chooser_set_preview_widget_active (pFileChooser, FALSE);
 		return ;
-	GdkPixbuf *pixbuf = cairo_dock_load_gdk_pixbuf (cFileName, 64, 64);
+	}
+
+	GdkPixbuf *pixbuf = cairo_dock_load_gdk_pixbuf_full (cFileName, 64, 64, NULL); // NULL -- don't care about errors
 	g_free (cFileName);
 	if (pixbuf != NULL)
 	{
@@ -886,7 +890,7 @@ static void _show_image_preview (GtkFileChooser *pFileChooser, GtkImage *pPrevie
 		g_object_unref (pixbuf);
 		gtk_file_chooser_set_preview_widget_active (pFileChooser, TRUE);
 	}
-	else
+	else // could not load pixbuf, cFileName is not an image file (e.g. directory, text file, etc.)
 		gtk_file_chooser_set_preview_widget_active (pFileChooser, FALSE);
 }
 static void _cairo_dock_set_custom_appli_icon (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpointer data)
@@ -1389,7 +1393,7 @@ static void _cairo_dock_move_class_to_desktop (G_GNUC_UNUSED GtkMenuItem *pMenuI
 	struct _MenuParams *params = (struct _MenuParams*) user_data[0];
 	Icon *icon = params->pIcon;
 	// CairoDock *pDock = data[1];
-	g_return_if_fail (icon->pSubDock != NULL);
+	cd_return_if_fail (icon->pSubDock != NULL);
 	int iDesktopNumber = GPOINTER_TO_INT (user_data[1]);
 	int iViewPortNumberY = GPOINTER_TO_INT (user_data[2]);
 	int iViewPortNumberX = GPOINTER_TO_INT (user_data[3]);
@@ -1504,7 +1508,7 @@ static void _cairo_dock_show_class (G_GNUC_UNUSED GtkButton* pButton, gpointer d
 	struct _MenuParams *params = (struct _MenuParams*) data;
 	Icon *icon = params->pIcon;
 	
-	g_return_if_fail (icon->pSubDock != NULL);
+	cd_return_if_fail (icon->pSubDock != NULL);
 	
 	gldi_desktop_present_class (icon->cClass, params->pContainer);
 	
@@ -1528,7 +1532,7 @@ static void _cairo_dock_minimize_class (G_GNUC_UNUSED GtkButton* pButton, gpoint
 	struct _MenuParams *params = (struct _MenuParams*) data;
 	Icon *icon = params->pIcon;
 	
-	g_return_if_fail (icon->pSubDock != NULL);
+	cd_return_if_fail (icon->pSubDock != NULL);
 	
 	Icon *pIcon;
 	GList *ic;
@@ -1547,7 +1551,7 @@ static void _cairo_dock_close_class (G_GNUC_UNUSED GtkButton* pButton, gpointer 
 	struct _MenuParams *params = (struct _MenuParams*) data;
 	Icon *icon = params->pIcon;
 	
-	g_return_if_fail (icon->pSubDock != NULL);
+	cd_return_if_fail (icon->pSubDock != NULL);
 	
 	Icon *pIcon;
 	GList *ic;
@@ -1566,7 +1570,7 @@ static void _cairo_dock_move_class_to_current_desktop (G_GNUC_UNUSED GtkMenuItem
 	struct _MenuParams *params = (struct _MenuParams*) data;
 	Icon *icon = params->pIcon;
 	
-	g_return_if_fail (icon->pSubDock != NULL);
+	cd_return_if_fail (icon->pSubDock != NULL);
 	
 	Icon *pIcon;
 	GList *ic;

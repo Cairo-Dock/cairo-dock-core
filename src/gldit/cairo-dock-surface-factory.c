@@ -445,28 +445,37 @@ cairo_surface_t *cairo_dock_create_surface_from_pixbuf (GdkPixbuf *pixbuf, doubl
 }
 
 
-GdkPixbuf *cairo_dock_load_gdk_pixbuf (const gchar *cImagePath, int iWidth, int iHeight)
+GdkPixbuf *cairo_dock_load_gdk_pixbuf_full (const gchar *cImagePath, int iWidth, int iHeight, GError **erreur)
 {
-	GError *erreur = NULL;
+	cd_return_val_if_fail (cImagePath != NULL, NULL);
+	
 	// note: g_file_read sets O_CLOEXEC by default, but gdk_pixbuf_new_from_file () does not
 	GFile *file = g_file_new_for_path (cImagePath);
-	GInputStream *istream = G_INPUT_STREAM (g_file_read (file, NULL, &erreur));
+	GInputStream *istream = G_INPUT_STREAM (g_file_read (file, NULL, erreur));
 	GdkPixbuf *pixbuf = NULL;
 	if (istream)
 	{
 		// type is detected automatically
 		if (iWidth >= 0 || iHeight >= 0)
-			pixbuf = gdk_pixbuf_new_from_stream_at_scale (istream, iWidth, iHeight, TRUE, NULL, &erreur);
-		else pixbuf = gdk_pixbuf_new_from_stream (istream, NULL, &erreur);
+			pixbuf = gdk_pixbuf_new_from_stream_at_scale (istream, iWidth, iHeight, TRUE, NULL, erreur);
+		else pixbuf = gdk_pixbuf_new_from_stream (istream, NULL, erreur);
 		g_object_unref (istream);
 	}
 	g_object_unref (file);
 	
+	return pixbuf;
+}
+
+
+GdkPixbuf *cairo_dock_load_gdk_pixbuf (const gchar *cImagePath, int iWidth, int iHeight)
+{
+	GError *erreur = NULL;
+	
+	GdkPixbuf *pixbuf = cairo_dock_load_gdk_pixbuf_full (cImagePath, iWidth, iHeight, &erreur);
 	if (erreur != NULL)
 	{
 		cd_warning (erreur->message);
 		g_error_free (erreur);
-		return NULL;
 	}
 	return pixbuf;
 }
@@ -514,7 +523,7 @@ static cairo_status_t _cairo_read_func (void *ptr, unsigned char *data, unsigned
 cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, double fMaxScale, int iWidthConstraint, int iHeightConstraint, CairoDockLoadImageModifier iLoadingModifier, double *fImageWidth, double *fImageHeight, double *fZoomX, double *fZoomY)
 {
 	//g_print ("%s (%s, %dx%dx%.2f, %d)\n", __func__, cImagePath, iWidthConstraint, iHeightConstraint, fMaxScale, iLoadingModifier);
-	g_return_val_if_fail (cImagePath != NULL, NULL);
+	cd_return_val_if_fail (cImagePath != NULL, NULL);
 	GError *erreur = NULL;
 	RsvgDimensionData rsvg_dimension_data;
 	RsvgHandle *rsvg_handle = NULL;
@@ -579,7 +588,7 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 		}
 		else
 		{
-			g_return_val_if_fail (rsvg_handle != NULL, NULL);
+			cd_return_val_if_fail (rsvg_handle != NULL, NULL);
 			rsvg_handle_get_dimensions (rsvg_handle, &rsvg_dimension_data);
 			int w = rsvg_dimension_data.width;
 			int h = rsvg_dimension_data.height;
@@ -693,7 +702,7 @@ cairo_surface_t *cairo_dock_create_surface_from_image (const gchar *cImagePath, 
 
 cairo_surface_t *cairo_dock_create_surface_from_image_simple (const gchar *cImageFile, double fImageWidth, double fImageHeight)
 {
-	g_return_val_if_fail (cImageFile != NULL, NULL);
+	cd_return_val_if_fail (cImageFile != NULL, NULL);
 	double fImageWidth_ = fImageWidth, fImageHeight_ = fImageHeight;
 	gchar *cImagePath;
 	if (*cImageFile == '/')
@@ -717,7 +726,7 @@ cairo_surface_t *cairo_dock_create_surface_from_image_simple (const gchar *cImag
 
 cairo_surface_t *cairo_dock_create_surface_from_icon (const gchar *cImageFile, double fImageWidth, double fImageHeight)
 {
-	g_return_val_if_fail (cImageFile != NULL, NULL);
+	cd_return_val_if_fail (cImageFile != NULL, NULL);
 	double fImageWidth_ = fImageWidth, fImageHeight_ = fImageHeight;
 	gchar *cIconPath;
 	if (*cImageFile == '/')
@@ -765,7 +774,7 @@ cairo_surface_t *cairo_dock_create_surface_from_pattern (const gchar *cImageFile
 		cairo_t *pCairoContext = cairo_create (pNewSurface);
 
 		cairo_pattern_t* pPattern = cairo_pattern_create_for_surface (pPatternSurface);
-		g_return_val_if_fail (cairo_pattern_status (pPattern) == CAIRO_STATUS_SUCCESS, NULL);
+		cd_return_val_if_fail (cairo_pattern_status (pPattern) == CAIRO_STATUS_SUCCESS, NULL);
 		cairo_pattern_set_extend (pPattern, CAIRO_EXTEND_REPEAT);
 
 		cairo_set_source (pCairoContext, pPattern);
@@ -783,7 +792,7 @@ cairo_surface_t *cairo_dock_create_surface_from_pattern (const gchar *cImageFile
 
 cairo_surface_t * cairo_dock_rotate_surface (cairo_surface_t *pSurface, double fImageWidth, double fImageHeight, double fRotationAngle)
 {
-	g_return_val_if_fail (pSurface != NULL, NULL);
+	cd_return_val_if_fail (pSurface != NULL, NULL);
 	if (fRotationAngle != 0)
 	{
 		cairo_surface_t *pNewSurfaceRotated;
@@ -833,9 +842,9 @@ cairo_surface_t * cairo_dock_rotate_surface (cairo_surface_t *pSurface, double f
 
 cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, GldiTextDescription *pTextDescription, double fMaxScale, int iMaxWidth, int *iTextWidth, int *iTextHeight)
 {
-	g_return_val_if_fail (cText != NULL && pTextDescription != NULL, NULL);
+	cd_return_val_if_fail (cText != NULL && pTextDescription != NULL, NULL);
 	cairo_t *pSourceContext = _get_source_context ();
-	g_return_val_if_fail (pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
+	cd_return_val_if_fail (pSourceContext != NULL && cairo_status (pSourceContext) == CAIRO_STATUS_SUCCESS, NULL);
 	
 	//\_________________ get the font description
 	PangoFontDescription *pDesc = gldi_text_description_get_description (pTextDescription);
@@ -965,7 +974,7 @@ cairo_surface_t *cairo_dock_create_surface_from_text_full (const gchar *cText, G
 
 cairo_surface_t * cairo_dock_duplicate_surface (cairo_surface_t *pSurface, double fWidth, double fHeight, double fDesiredWidth, double fDesiredHeight)
 {
-	g_return_val_if_fail (pSurface != NULL, NULL);
+	cd_return_val_if_fail (pSurface != NULL, NULL);
 
 	//\_______________ On cree la surface de la taille desiree.
 	if (fDesiredWidth == 0)

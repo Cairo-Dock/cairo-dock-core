@@ -74,7 +74,7 @@ void cairo_dock_set_status_message (GtkWidget *pWindow, const gchar *cMessage)
 
 void cairo_dock_set_status_message_printf (GtkWidget *pWindow, const gchar *cFormat, ...)
 {
-	g_return_if_fail (cFormat != NULL);
+	cd_return_if_fail (cFormat != NULL);
 	va_list args;
 	va_start (args, cFormat);
 	gchar *cMessage = g_strdup_vprintf (cFormat, args);

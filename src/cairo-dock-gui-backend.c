@@ -25,6 +25,7 @@
 #include <glib/gi18n.h>
 
 #include "gldi-icon-names.h"
+#include "cairo-dock-log.h"
 #include "cairo-dock-keyfile-utilities.h"
 #include "cairo-dock-gui-advanced.h"
 #include "cairo-dock-gui-simple.h"
@@ -91,7 +92,7 @@ GtkWidget *cairo_dock_make_switch_gui_button (void)
 
 void cairo_dock_gui_update_desklet_params (CairoDesklet *pDesklet)
 {
-	g_return_if_fail (pDesklet != NULL);
+	cd_return_if_fail (pDesklet != NULL);
 	if (s_pMainGuiBackend && s_pMainGuiBackend->update_desklet_params)
 		s_pMainGuiBackend->update_desklet_params (pDesklet);
 }
@@ -99,7 +100,7 @@ void cairo_dock_gui_update_desklet_params (CairoDesklet *pDesklet)
 
 void cairo_dock_gui_update_desklet_visibility (CairoDesklet *pDesklet)
 {
-	g_return_if_fail (pDesklet != NULL);
+	cd_return_if_fail (pDesklet != NULL);
 	if (s_pMainGuiBackend && s_pMainGuiBackend->update_desklet_visibility_params)
 		s_pMainGuiBackend->update_desklet_visibility_params (pDesklet);
 }
@@ -210,7 +211,7 @@ void cairo_dock_register_config_gui_backend (CairoDockMainGuiBackend *pBackend)
 
 static void _display_window (GtkWidget *pWindow)
 {
-	g_return_if_fail (pWindow != NULL);
+	cd_return_if_fail (pWindow != NULL);
 	// take focus
 	gtk_window_present (GTK_WINDOW (pWindow));
 }

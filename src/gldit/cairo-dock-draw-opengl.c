@@ -735,7 +735,7 @@ GLuint cairo_dock_create_texture_from_raw_data (const guchar *pTextureRaw, int i
 
 GLuint cairo_dock_create_texture_from_image_full (const gchar *cImageFile, double *fImageWidth, double *fImageHeight)
 {
-	g_return_val_if_fail (gtk_widget_get_realized (g_pPrimaryContainer->pWidget), 0);
+	cd_return_val_if_fail (gtk_widget_get_realized (g_pPrimaryContainer->pWidget), 0);
 	double fWidth=0, fHeight=0;
 	if (cImageFile == NULL)
 		return 0;

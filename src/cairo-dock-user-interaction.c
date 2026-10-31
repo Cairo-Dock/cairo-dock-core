@@ -454,7 +454,7 @@ gboolean cairo_dock_notification_drop_data_selection (G_GNUC_UNUSED gpointer pUs
 
 void cairo_dock_set_custom_icon_on_appli (const gchar *cFilePath, Icon *icon, GldiContainer *pContainer)
 {
-	g_return_if_fail (CAIRO_DOCK_IS_APPLI (icon) && cFilePath != NULL);
+	cd_return_if_fail (CAIRO_DOCK_IS_APPLI (icon) && cFilePath != NULL);
 	gchar *ext = strrchr (cFilePath, '.');
 	if (!ext)
 		return;

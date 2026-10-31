@@ -199,13 +199,13 @@ static gboolean _initialize_opengl_backend (gboolean bForceOpenGL)
 	//\_________________ create a context for this visual. All other context will share resources with it, and it will be the default context in case no other context exist.
 	Display *dpy = s_XDisplay;
 	s_XContext = glXCreateContext (dpy, pVisInfo, NULL, TRUE);
-	g_return_val_if_fail (s_XContext != 0, FALSE);
+	cd_return_val_if_fail (s_XContext != 0, FALSE);
 	
 	//\_________________ create a colormap based on this visual.
 	GdkScreen *screen = gdk_screen_get_default ();
 	GdkVisual *pGdkVisual = gdk_x11_screen_lookup_visual (screen, pVisInfo->visualid);
 	s_pGdkVisual = pGdkVisual;
-	g_return_val_if_fail (s_pGdkVisual != NULL, FALSE);
+	cd_return_val_if_fail (s_pGdkVisual != NULL, FALSE);
 	s_XVisInfo = pVisInfo;
 	/** Note: this is where we can't use gtkglext: gdk_x11_gl_config_new_from_visualid() sets a new colormap on the root window, and Qt doesn't like that
 	cf https://bugzilla.redhat.com/show_bug.cgi?id=440340
@@ -376,7 +376,7 @@ static GLuint _glx_texture_from_pixmap (Window Xid, Pixmap iBackingPixmap)
 		GLX_TEXTURE_FORMAT_EXT, GLX_TEXTURE_FORMAT_RGBA_EXT,
 		None };
 	GLXPixmap glxpixmap = glXCreatePixmap (display, fbconfigs[i], iBackingPixmap, pixmapAttribs);
-	g_return_val_if_fail (glxpixmap != 0, 0);
+	cd_return_val_if_fail (glxpixmap != 0, 0);
 	
 	GLuint texture;
 	glEnable (GL_TEXTURE_2D);

@@ -39,7 +39,7 @@ extern CairoDockGLConfig g_openglConfig;
 
 GLuint cairo_dock_create_texture_from_text_simple (const gchar *cText, const gchar *cFontDescription, cairo_t* pSourceContext, int *iWidth, int *iHeight)
 {
-	g_return_val_if_fail (cText != NULL && cFontDescription != NULL, 0);
+	cd_return_val_if_fail (cText != NULL && cFontDescription != NULL, 0);
 	
 	//\_________________ On ecrit le texte dans un calque Pango.
 	PangoLayout *pLayout = pango_cairo_create_layout (pSourceContext);
@@ -139,7 +139,7 @@ gldi_font_use_pango_font (const PangoFontDescription *font_desc,
 {
 	PangoFontMap *font_map;
 
-	g_return_val_if_fail (font_desc != NULL, NULL);
+	cd_return_val_if_fail (font_desc != NULL, NULL);
 	
 	font_map = pango_x_font_map_for_display (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()));
 
@@ -150,10 +150,10 @@ gldi_font_use_pango_font (const PangoFontDescription *font_desc,
 
 CairoDockGLFont *cairo_dock_load_bitmap_font (const gchar *cFontDescription, int first, int count)
 {
-	g_return_val_if_fail (cFontDescription != NULL && count > 0, NULL);
+	cd_return_val_if_fail (cFontDescription != NULL && count > 0, NULL);
 	
 	GLuint iListBase = glGenLists (count);
-	g_return_val_if_fail (iListBase != 0, NULL);
+	cd_return_val_if_fail (iListBase != 0, NULL);
 	
 	CairoDockGLFont *pFont = g_new0 (CairoDockGLFont, 1);
 	pFont->iListBase = iListBase;
@@ -165,7 +165,7 @@ CairoDockGLFont *cairo_dock_load_bitmap_font (const gchar *cFontDescription, int
 		first,
 		count,
 		iListBase);
-	g_return_val_if_fail (font != NULL, NULL);
+	cd_return_val_if_fail (font != NULL, NULL);
 	
 	PangoFontMetrics* metrics = pango_font_get_metrics (font, NULL);
 	pFont->iCharWidth = pango_font_metrics_get_approximate_char_width (metrics) / PANGO_SCALE;
@@ -178,7 +178,7 @@ CairoDockGLFont *cairo_dock_load_bitmap_font (const gchar *cFontDescription, int
 
 CairoDockGLFont *cairo_dock_load_textured_font (const gchar *cFontDescription, int first, int count)
 {
-	g_return_val_if_fail (g_pPrimaryContainer != NULL && count > 0, NULL);
+	cd_return_val_if_fail (g_pPrimaryContainer != NULL && count > 0, NULL);
 	if (first < 32)  // 32 = ' '
 	{
 		count -= (32 - first);
@@ -241,7 +241,7 @@ CairoDockGLFont *cairo_dock_load_textured_font_from_image (const gchar *cImagePa
 {
 	double fImageWidth, fImageHeight;
 	GLuint iTexture = cairo_dock_create_texture_from_image_full (cImagePath, &fImageWidth, &fImageHeight);
-	g_return_val_if_fail (iTexture != 0, NULL);
+	cd_return_val_if_fail (iTexture != 0, NULL);
 	
 	CairoDockGLFont *pFont = g_new0 (CairoDockGLFont, 1);
 	pFont->iTexture = iTexture;
@@ -353,7 +353,7 @@ void cairo_dock_draw_gl_text (const guchar *cText, CairoDockGLFont *pFont)
 
 void cairo_dock_draw_gl_text_in_area (const guchar *cText, CairoDockGLFont *pFont, int iWidth, int iHeight, gboolean bCentered)
 {
-	g_return_if_fail (pFont != NULL && cText != NULL);
+	cd_return_if_fail (pFont != NULL && cText != NULL);
 	if (pFont->iListBase != 0)  // marche po sur du raster.
 	{
 		cd_warning ("can't resize raster ! use a textured font inside.");
@@ -384,7 +384,7 @@ void cairo_dock_draw_gl_text_in_area (const guchar *cText, CairoDockGLFont *pFon
 
 void cairo_dock_draw_gl_text_at_position (const guchar *cText, CairoDockGLFont *pFont, int x, int y)
 {
-	g_return_if_fail (pFont != NULL && cText != NULL);
+	cd_return_if_fail (pFont != NULL && cText != NULL);
 	if (pFont->iListBase != 0)
 	{
 		glRasterPos2f (x, y);
@@ -398,7 +398,7 @@ void cairo_dock_draw_gl_text_at_position (const guchar *cText, CairoDockGLFont *
 
 void cairo_dock_draw_gl_text_at_position_in_area (const guchar *cText, CairoDockGLFont *pFont, int x, int y, int iWidth, int iHeight, gboolean bCentered)
 {
-	g_return_if_fail (pFont != NULL && cText != NULL);
+	cd_return_if_fail (pFont != NULL && cText != NULL);
 	if (pFont->iListBase != 0)  // marche po sur du raster.
 	{
 		cd_warning ("can't resize raster ! use a textured font inside.");

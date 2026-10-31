@@ -88,7 +88,7 @@ static void _make_bar_surface (ProgressBar *pProgressBar)
 				0.,
 				iWidth,
 				0.);  // de gauche a droite.
-			g_return_if_fail (cairo_pattern_status (pGradationPattern) == CAIRO_STATUS_SUCCESS);
+			cd_return_if_fail (cairo_pattern_status (pGradationPattern) == CAIRO_STATUS_SUCCESS);
 			
 			cairo_pattern_set_extend (pGradationPattern, CAIRO_EXTEND_NONE);
 			
@@ -179,8 +179,8 @@ static void load (ProgressBar *pProgressBar, Icon *pIcon, CairoProgressBarAttrib
 
 static void render (ProgressBar *pProgressBar, cairo_t *pCairoContext)
 {
-	g_return_if_fail (pProgressBar != NULL);
-	g_return_if_fail (pCairoContext != NULL && cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
+	cd_return_if_fail (pProgressBar != NULL);
+	cd_return_if_fail (pCairoContext != NULL && cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
 	
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pProgressBar);
 	int iNbValues = cairo_data_renderer_get_nb_values (pRenderer);
@@ -241,7 +241,7 @@ static void render (ProgressBar *pProgressBar, cairo_t *pCairoContext)
 
 static void render_opengl (ProgressBar *pProgressBar)
 {
-	g_return_if_fail (pProgressBar != NULL);
+	cd_return_if_fail (pProgressBar != NULL);
 	
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pProgressBar);
 	int iNbValues = cairo_data_renderer_get_nb_values (pRenderer);
@@ -313,7 +313,7 @@ static void render_opengl (ProgressBar *pProgressBar)
 
 static void reload (ProgressBar *pProgressBar)
 {
-	g_return_if_fail (pProgressBar != NULL);
+	cd_return_if_fail (pProgressBar != NULL);
 	
 	CairoDataRenderer *pRenderer = CAIRO_DATA_RENDERER (pProgressBar);
 	int iWidth = pRenderer->iWidth, iHeight = pRenderer->iHeight;

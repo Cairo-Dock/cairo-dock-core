@@ -899,7 +899,7 @@ static cairo_surface_t *_get_desktop_bg_surface (void)  // attention : fonction 
 {
 	//g_print ("+++ %s ()\n", __func__);
 	Pixmap iRootPixmapID = cairo_dock_get_window_background_pixmap (DefaultRootWindow (s_XDisplay));
-	g_return_val_if_fail (iRootPixmapID != 0, NULL);  // Note: depending on the WM, iRootPixmapID might be 0, and a window of type 'Desktop' might be used instead (covering the whole screen). We don't handle this case, as I've never encountered it yet.
+	cd_return_val_if_fail (iRootPixmapID != 0, NULL);  // Note: depending on the WM, iRootPixmapID might be 0, and a window of type 'Desktop' might be used instead (covering the whole screen). We don't handle this case, as I've never encountered it yet.
 	
 	cairo_surface_t *pDesktopBgSurface = NULL;
 	GdkPixbuf *pBgPixbuf = cairo_dock_get_pixbuf_from_pixmap (iRootPixmapID, FALSE);  // FALSE <=> don't add alpha channel
@@ -944,7 +944,7 @@ static cairo_surface_t *_get_desktop_bg_surface (void)  // attention : fonction 
 				cairo_t *pCairoContext = cairo_create (pDesktopBgSurface);
 				
 				cairo_pattern_t *pPattern = cairo_pattern_create_for_surface (pBgSurface);
-				g_return_val_if_fail (cairo_pattern_status (pPattern) == CAIRO_STATUS_SUCCESS, NULL);
+				cd_return_val_if_fail (cairo_pattern_status (pPattern) == CAIRO_STATUS_SUCCESS, NULL);
 				cairo_pattern_set_extend (pPattern, CAIRO_EXTEND_REPEAT);
 				
 				cairo_set_source (pCairoContext, pPattern);

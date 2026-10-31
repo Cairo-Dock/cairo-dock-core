@@ -397,7 +397,7 @@ CD_APPLET_ON_DROP_DATA_PROTO \
 	g_pCurrentModule = myApplet;\
 	if (pClickedIcon == myIcon || (myIcon != NULL && pClickedContainer == CAIRO_CONTAINER (myIcon->pSubDock)) || pClickedContainer == CAIRO_CONTAINER (myDesklet)) \
 	{ \
-		g_return_val_if_fail (cReceivedData != NULL, GLDI_NOTIFICATION_LET_PASS);
+		cd_return_val_if_fail (cReceivedData != NULL, GLDI_NOTIFICATION_LET_PASS);
 /** Fin de la fonction de notification du glisse-depose. Par defaut elle intercepte la notification si elle l'a recue.
 */
 #define CD_APPLET_ON_DROP_DATA_END \

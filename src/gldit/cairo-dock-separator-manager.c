@@ -101,7 +101,7 @@ gchar *gldi_separator_icon_add_conf_file (const gchar *cDockName, double fOrder)
 	//\__________________ open the template.
 	const gchar *cTemplateFile = GLDI_SHARE_DATA_DIR"/"CAIRO_DOCK_SEPARATOR_CONF_FILE;	
 	GKeyFile *pKeyFile = cairo_dock_open_key_file (cTemplateFile);
-	g_return_val_if_fail (pKeyFile != NULL, NULL);
+	cd_return_val_if_fail (pKeyFile != NULL, NULL);
 	
 	//\__________________ fill the parameters
 	g_key_file_set_double (pKeyFile, "Desktop Entry", "Order", fOrder);
@@ -133,12 +133,12 @@ Icon *gldi_separator_icon_add_new (CairoDock *pDock, double fOrder)
 		fOrder = (pLastIcon ? pLastIcon->fOrder + 1 : 1);
 	}
 	gchar *cNewDesktopFileName = gldi_separator_icon_add_conf_file (cDockName, fOrder);
-	g_return_val_if_fail (cNewDesktopFileName != NULL, NULL);
+	cd_return_val_if_fail (cNewDesktopFileName != NULL, NULL);
 	
 	//\_________________ load the new icon
 	Icon *pNewIcon = gldi_user_icon_new (cNewDesktopFileName);
 	g_free (cNewDesktopFileName);
-	g_return_val_if_fail (pNewIcon, NULL);
+	cd_return_val_if_fail (pNewIcon, NULL);
 	
 	gldi_icon_insert_in_container (pNewIcon, CAIRO_CONTAINER(pDock), CAIRO_DOCK_ANIMATE_ICON);
 	

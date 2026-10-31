@@ -248,9 +248,9 @@ void cairo_dock_start_showing (CairoDock *pDock)
 
 void gldi_icon_start_animation (Icon *pIcon)
 {
-	g_return_if_fail (pIcon != NULL);
+	cd_return_if_fail (pIcon != NULL);
 	CairoDock *pDock = CAIRO_DOCK (cairo_dock_get_icon_container(pIcon));
-	g_return_if_fail (CAIRO_DOCK_IS_DOCK (pDock));  // currently only animate icons that are inside a dock
+	cd_return_if_fail (CAIRO_DOCK_IS_DOCK (pDock));  // currently only animate icons that are inside a dock
 	cd_message ("%s (%s, %d)", __func__, pIcon->cName, pIcon->iAnimationState);
 	
 	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REST &&
@@ -264,7 +264,7 @@ void gldi_icon_start_animation (Icon *pIcon)
 void gldi_icon_request_animation (Icon *pIcon, const gchar *cAnimation, int iNbRounds)
 {
 	CairoDock *pDock = CAIRO_DOCK (cairo_dock_get_icon_container(pIcon));
-	g_return_if_fail (CAIRO_DOCK_IS_DOCK (pDock));  // currently only animate icons that are inside a dock
+	cd_return_if_fail (CAIRO_DOCK_IS_DOCK (pDock));  // currently only animate icons that are inside a dock
 	
 	if (pIcon->iAnimationState != CAIRO_DOCK_STATE_REST)  // on le fait avant de changer d'animation, pour le cas ou l'icone ne serait plus placee au meme endroit (rebond).
 		cairo_dock_redraw_container (CAIRO_CONTAINER (pDock));
@@ -279,7 +279,7 @@ void gldi_icon_request_animation (Icon *pIcon, const gchar *cAnimation, int iNbR
 void gldi_icon_request_attention (Icon *pIcon, const gchar *cAnimation, int iNbRounds)
 {
 	CairoDock *pDock = CAIRO_DOCK (cairo_dock_get_icon_container(pIcon));
-	g_return_if_fail (CAIRO_DOCK_IS_DOCK (pDock));  // currently only animate icons that are inside a dock
+	cd_return_if_fail (CAIRO_DOCK_IS_DOCK (pDock));  // currently only animate icons that are inside a dock
 	
 	// stop any current animation
 	gldi_icon_stop_animation (pIcon);
@@ -326,7 +326,7 @@ void gldi_icon_stop_attention (Icon *pIcon)
 	pIcon->bIsDemandingAttention = FALSE;
 	
 	CairoDock *pDock = CAIRO_DOCK (cairo_dock_get_icon_container(pIcon));
-	g_return_if_fail (pDock != NULL);
+	cd_return_if_fail (pDock != NULL);
 	gtk_widget_queue_draw (pDock->container.pWidget);  // redraw all the dock, since the animation of the icon can be larger than the icon itself.
 	
 	// on stoppe la demande d'attention recursivement vers le bas.

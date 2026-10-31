@@ -303,7 +303,7 @@ void gldi_gl_init_opengl_context ()
 // TODO: remove that when Mesa 10.1 will be used by most people
 static gboolean _is_blacklisted (const gchar *cVersion, const gchar *cVendor, const gchar *cRenderer)
 {
-	g_return_val_if_fail (cVersion && cVendor && cRenderer, FALSE);
+	cd_return_val_if_fail (cVersion && cVendor && cRenderer, FALSE);
 	if (strstr (cRenderer, "Mesa DRI Intel(R) Ivybridge Mobile") != NULL
 	    && (strstr (cVersion, "Mesa 9") != NULL // affect all versions <= 10.0
 	        || strstr (cVersion, "Mesa 10.0") != NULL)

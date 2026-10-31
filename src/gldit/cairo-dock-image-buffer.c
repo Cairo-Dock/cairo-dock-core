@@ -41,7 +41,7 @@ extern GldiContainer *g_pPrimaryContainer;
 
 gchar *cairo_dock_search_image_s_path (const gchar *cImageFile)
 {
-	g_return_val_if_fail (cImageFile != NULL, NULL);
+	cd_return_val_if_fail (cImageFile != NULL, NULL);
 	gchar *cImagePath;
 	if (*cImageFile == '~')
 	{
@@ -458,7 +458,7 @@ void cairo_dock_create_icon_fbo (void)  // it has been found that you get a spee
 {
 	if (! g_openglConfig.bFboAvailable)
 		return ;
-	g_return_if_fail (s_iFboId == 0);
+	cd_return_if_fail (s_iFboId == 0);
 	
 	glGenFramebuffersEXT(1, &s_iFboId);
 	
@@ -481,7 +481,7 @@ void cairo_dock_destroy_icon_fbo (void)
 
 cairo_t *cairo_dock_begin_draw_image_buffer_cairo (CairoDockImageBuffer *pImage, gint iRenderingMode, cairo_t *pCairoContext)
 {
-	g_return_val_if_fail (pImage->pSurface != NULL, NULL);
+	cd_return_val_if_fail (pImage->pSurface != NULL, NULL);
 	cairo_t *ctx = pCairoContext;
 	if (! ctx)
 	{
@@ -600,7 +600,7 @@ gboolean cairo_dock_begin_draw_image_buffer_opengl (CairoDockImageBuffer *pImage
 
 void cairo_dock_end_draw_image_buffer_opengl (CairoDockImageBuffer *pImage, GldiContainer *pContainer)
 {
-	g_return_if_fail (pImage->iTexture != 0);
+	cd_return_if_fail (pImage->iTexture != 0);
 	
 	gboolean bResetView = FALSE;
 	

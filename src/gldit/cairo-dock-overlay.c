@@ -123,7 +123,7 @@ void cairo_dock_remove_overlay_at_position (Icon *pIcon, CairoOverlayPosition iP
 {
 	if (! pIcon)
 		return;
-	g_return_if_fail (data != NULL);  // a NULL data can't be used to identify an overlay.
+	cd_return_if_fail (data != NULL);  // a NULL data can't be used to identify an overlay.
 	
 	GList* ov = pIcon->pOverlays, *next_ov;
 	CairoOverlay *p;
@@ -349,7 +349,7 @@ static void cairo_dock_print_overlay_on_icon (Icon *pIcon, CairoOverlay *pOverla
 	else if (pIcon->image.pSurface != NULL && pOverlay->image.pSurface != NULL)
 	{
 		cairo_t *pCairoContext = cairo_create (pIcon->image.pSurface);
-		g_return_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
+		cd_return_if_fail (cairo_status (pCairoContext) == CAIRO_STATUS_SUCCESS);
 		
 		cairo_translate (pCairoContext,
 			w/2 + x - wo/2,
@@ -406,7 +406,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 {
 	CairoOverlay *pOverlay = (CairoOverlay*)obj;
 	CairoOverlayAttr *cattr = (CairoOverlayAttr*)attr;
-	g_return_if_fail (cattr->pIcon != NULL);
+	cd_return_if_fail (cattr->pIcon != NULL);
 	
 	pOverlay->fScale = CD_DEFAULT_SCALE;
 	pOverlay->iPosition = cattr->iPosition;

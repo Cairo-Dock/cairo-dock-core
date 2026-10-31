@@ -188,7 +188,7 @@ static void _remove_background (G_GNUC_UNUSED GtkWidget *pWidget, GldiContainer 
 
 void cairo_dock_redraw_container (GldiContainer *pContainer)
 {
-	g_return_if_fail (pContainer != NULL);
+	cd_return_if_fail (pContainer != NULL);
 	GdkRectangle rect = {0, 0, pContainer->iWidth, pContainer->iHeight};
 	if (! pContainer->bIsHorizontal)
 	{
@@ -200,7 +200,7 @@ void cairo_dock_redraw_container (GldiContainer *pContainer)
 
 static inline void _redraw_container_area (GldiContainer *pContainer, GdkRectangle *pArea)
 {
-	g_return_if_fail (pContainer != NULL);
+	cd_return_if_fail (pContainer != NULL);
 	if (! gldi_container_is_visible (pContainer))
 		return ;
 	
@@ -224,9 +224,9 @@ void cairo_dock_redraw_container_area (GldiContainer *pContainer, GdkRectangle *
 
 void cairo_dock_redraw_icon (Icon *icon)
 {
-	g_return_if_fail (icon != NULL);
+	cd_return_if_fail (icon != NULL);
 	GldiContainer *pContainer = cairo_dock_get_icon_container (icon);
-	g_return_if_fail (pContainer != NULL);
+	cd_return_if_fail (pContainer != NULL);
 	GdkRectangle rect;
 	cairo_dock_compute_icon_area (icon, pContainer, &rect);
 	
@@ -287,7 +287,7 @@ GdkAtom gldi_container_icon_dnd_atom (void)
 
 void gldi_container_notify_drop_data (GldiContainer *pContainer, gchar *cReceivedData, Icon *pPointedIcon, double fOrder)
 {
-	g_return_if_fail (cReceivedData != NULL);
+	cd_return_if_fail (cReceivedData != NULL);
 	gchar *cData = NULL;
 	
 	gchar **cStringList = g_strsplit (cReceivedData, "\n", -1);
@@ -671,7 +671,7 @@ GtkWidget *gldi_container_build_menu (GldiContainer *pContainer, Icon *icon)
 		//g_print ("previous menu still alive\n");
 		gtk_widget_destroy (GTK_WIDGET (s_pMenu));  // -> 's_pMenu' becomes NULL thanks to the weak pointer.
 	}
-	g_return_val_if_fail (pContainer != NULL, NULL);
+	cd_return_val_if_fail (pContainer != NULL, NULL);
 	
 	//\_________________________ On construit le menu.
 	GtkWidget *menu = gldi_menu_new (icon);

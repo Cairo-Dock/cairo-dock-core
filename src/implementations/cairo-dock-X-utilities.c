@@ -115,7 +115,7 @@ Display *cairo_dock_initialize_X_desktop_support (void)
 	if (s_XDisplay != NULL)
 		return s_XDisplay;
 	s_XDisplay = XOpenDisplay (0);
-	g_return_val_if_fail (s_XDisplay != NULL, NULL);
+	cd_return_val_if_fail (s_XDisplay != NULL, NULL);
 	
 	// retrieve the display scale factor (from GDK, initialized already in desktop-manager)
 	cairo_dock_X_display_scale = _get_scale_factor ();
@@ -460,7 +460,7 @@ void cairo_dock_set_current_desktop (int iDesktopNumber)
 
 Pixmap cairo_dock_get_window_background_pixmap (Window Xid)
 {
-	g_return_val_if_fail (Xid > 0, None);
+	cd_return_val_if_fail (Xid > 0, None);
 	//cd_debug ("%s (%d)", __func__, Xid);
 	
 	Atom aReturnedType = 0;
@@ -505,7 +505,7 @@ GdkPixbuf *cairo_dock_get_pixbuf_from_pixmap (int XPixmapID, gboolean bAddAlpha)
 		iWidth,
 		iHeight);
 	cairo_surface_destroy(surface);
-	g_return_val_if_fail (pIconPixbuf != NULL, NULL);
+	cd_return_val_if_fail (pIconPixbuf != NULL, NULL);
 
 	//\__________________ On lui ajoute un canal alpha si necessaire.
 	if (! gdk_pixbuf_get_has_alpha (pIconPixbuf) && bAddAlpha)
@@ -651,7 +651,7 @@ gboolean cairo_dock_xcomposite_is_available (void)
 
 void cairo_dock_set_xwindow_timestamp (Window Xid, gulong iTimeStamp)
 {
-	g_return_if_fail (Xid > 0);
+	cd_return_if_fail (Xid > 0);
 	Atom aNetWmUserTime = XInternAtom (s_XDisplay, "_NET_WM_USER_TIME", False);
 	XChangeProperty (s_XDisplay,
 		Xid,
@@ -662,7 +662,7 @@ void cairo_dock_set_xwindow_timestamp (Window Xid, gulong iTimeStamp)
 
 void cairo_dock_set_strut_partial (Window Xid, int left, int right, int top, int bottom, int left_start_y, int left_end_y, int right_start_y, int right_end_y, int top_start_x, int top_end_x, int bottom_start_x, int bottom_end_x)
 {
-	g_return_if_fail (Xid > 0);
+	cd_return_if_fail (Xid > 0);
 	//g_print ("%s (%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d\n", __func__, left, right, top, bottom, left_start_y, left_end_y, right_start_y, right_end_y, top_start_x, top_end_x, bottom_start_x, bottom_end_x);
 	gulong iGeometryStrut[12] = {left, right, top, bottom, left_start_y, left_end_y, right_start_y, right_end_y, top_start_x, top_end_x, bottom_start_x, bottom_end_x};
 
@@ -687,7 +687,7 @@ void cairo_dock_set_xwindow_mask (Window Xid, long iMask)
 
 /*void cairo_dock_set_xwindow_type_hint (int Xid, const gchar *cWindowTypeName)
 {
-	g_return_if_fail (Xid > 0);
+	cd_return_if_fail (Xid > 0);
 	
 	gulong iWindowType = XInternAtom (s_XDisplay, cWindowTypeName, False);
 	cd_debug ("%s (%d, %s=%d)", __func__, Xid, cWindowTypeName, iWindowType);
@@ -702,7 +702,7 @@ void cairo_dock_set_xwindow_mask (Window Xid, long iMask)
 
 void cairo_dock_set_xicon_geometry (int Xid, int iX, int iY, int iWidth, int iHeight)
 {
-	g_return_if_fail (Xid > 0);
+	cd_return_if_fail (Xid > 0);
 
 	gulong iIconGeometry[4] = {iX, iY, iWidth, iHeight};
 	
@@ -723,7 +723,7 @@ void cairo_dock_set_xicon_geometry (int Xid, int iX, int iY, int iWidth, int iHe
 void cairo_dock_close_xwindow (Window Xid)
 {
 	//g_print ("%s (%d)\n", __func__, Xid);
-	g_return_if_fail (Xid > 0);
+	cd_return_if_fail (Xid > 0);
 	
 	XEvent xClientMessage;
 	
@@ -752,14 +752,14 @@ void cairo_dock_close_xwindow (Window Xid)
 
 void cairo_dock_kill_xwindow (Window Xid)
 {
-	g_return_if_fail (Xid > 0);
+	cd_return_if_fail (Xid > 0);
 	XKillClient (s_XDisplay, Xid);
 	XFlush (s_XDisplay);
 }
 
 void cairo_dock_show_xwindow (Window Xid)
 {
-	g_return_if_fail (Xid > 0);
+	cd_return_if_fail (Xid > 0);
 	XEvent xClientMessage;
 	Window root = DefaultRootWindow (s_XDisplay);
 
@@ -794,14 +794,14 @@ void cairo_dock_show_xwindow (Window Xid)
 
 void cairo_dock_minimize_xwindow (Window Xid)
 {
-	g_return_if_fail (Xid > 0);
+	cd_return_if_fail (Xid > 0);
 	XIconifyWindow (s_XDisplay, Xid, DefaultScreen (s_XDisplay));
 	XFlush (s_XDisplay);
 }
 
 void cairo_dock_lower_xwindow (Window Xid)
 {
-	g_return_if_fail (Xid > 0);
+	cd_return_if_fail (Xid > 0);
 	XLowerWindow (s_XDisplay, Xid);
 	XFlush (s_XDisplay);
 }
@@ -810,7 +810,7 @@ void cairo_dock_lower_xwindow (Window Xid)
 
 static void _cairo_dock_change_window_state (Window Xid, gulong iNewValue, Atom iProperty1, Atom iProperty2)
 {
-	g_return_if_fail (Xid > 0);
+	cd_return_if_fail (Xid > 0);
 	XEvent xClientMessage;
 
 	xClientMessage.xclient.type = ClientMessage;
@@ -859,7 +859,7 @@ void cairo_dock_set_xwindow_sticky (Window Xid, gboolean bSticky)
 
 void cairo_dock_move_xwindow_to_absolute_position (Window Xid, int iDesktopNumber, int iPositionX, int iPositionY)  // dans le referentiel du viewport courant.
 {
-	g_return_if_fail (Xid > 0);
+	cd_return_if_fail (Xid > 0);
 	XEvent xClientMessage;
 
 	xClientMessage.xclient.type = ClientMessage;
@@ -927,7 +927,7 @@ static void cairo_dock_get_xwindow_position_on_its_viewport (Window Xid, int *iR
 }
 void cairo_dock_move_xwindow_to_nth_desktop (Window Xid, int iDesktopNumber, int iDesktopViewportX, int iDesktopViewportY)
 {
-	g_return_if_fail (Xid > 0);
+	cd_return_if_fail (Xid > 0);
 	int iRelativePositionX, iRelativePositionY;
 	cairo_dock_get_xwindow_position_on_its_viewport (Xid, &iRelativePositionX, &iRelativePositionY);
 	
@@ -953,7 +953,7 @@ void cairo_dock_set_xwindow_border (Window Xid, gboolean bWithBorder)
 
 gulong cairo_dock_get_xwindow_timestamp (Window Xid)
 {
-	g_return_val_if_fail (Xid > 0, 0);
+	cd_return_val_if_fail (Xid > 0, 0);
 	Atom aNetWmUserTime = XInternAtom (s_XDisplay, "_NET_WM_USER_TIME", False);
 	gulong iLeftBytes, iBufferNbElements = 0;
 	Atom aReturnedType = 0;
@@ -1038,7 +1038,7 @@ gchar *cairo_dock_get_xwindow_string_prop (Window Xid, Atom aProp)
 
 gboolean cairo_dock_xwindow_is_maximized (Window Xid)
 {
-	g_return_val_if_fail (Xid > 0, FALSE);
+	cd_return_val_if_fail (Xid > 0, FALSE);
 
 	Atom aReturnedType = 0;
 	int aReturnedFormat = 0;
@@ -1064,7 +1064,7 @@ gboolean cairo_dock_xwindow_is_maximized (Window Xid)
 
 static gboolean _cairo_dock_window_is_in_state (Window Xid, Atom iState)
 {
-	g_return_val_if_fail (Xid > 0, FALSE);
+	cd_return_val_if_fail (Xid > 0, FALSE);
 	Atom aReturnedType = 0;
 	int aReturnedFormat = 0;
 	unsigned long iLeftBytes, iBufferNbElements = 0;
@@ -1106,7 +1106,7 @@ gboolean cairo_dock_xwindow_is_sticky (Window Xid)
 
 void cairo_dock_xwindow_is_above_or_below (Window Xid, gboolean *bIsAbove, gboolean *bIsBelow)
 {
-	g_return_if_fail (Xid > 0);
+	cd_return_if_fail (Xid > 0);
 	Atom aReturnedType = 0;
 	int aReturnedFormat = 0;
 	unsigned long iLeftBytes, iBufferNbElements = 0;
@@ -1140,7 +1140,7 @@ void cairo_dock_xwindow_is_above_or_below (Window Xid, gboolean *bIsAbove, gbool
 
 gboolean cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Window Xid, gboolean *bIsFullScreen, gboolean *bIsHidden, gboolean *bIsMaximized, gboolean *bDemandsAttention, gboolean *bIsSticky)
 {
-	g_return_val_if_fail (Xid > 0, FALSE);
+	cd_return_val_if_fail (Xid > 0, FALSE);
 	//cd_debug ("%s (%d)", __func__, Xid);
 	Atom aReturnedType = 0;
 	int aReturnedFormat = 0;
@@ -1204,7 +1204,7 @@ gboolean cairo_dock_xwindow_is_fullscreen_or_hidden_or_maximized (Window Xid, gb
 
 void cairo_dock_xwindow_can_minimize_maximized_close (Window Xid, gboolean *bCanMinimize, gboolean *bCanMaximize, gboolean *bCanClose)
 {
-	g_return_if_fail (Xid > 0);
+	cd_return_if_fail (Xid > 0);
 
 	Atom aReturnedType = 0;
 	int aReturnedFormat = 0;
@@ -1430,7 +1430,7 @@ cairo_surface_t *cairo_dock_create_surface_from_xwindow (Window Xid, int iWidth,
 
 cairo_surface_t *cairo_dock_create_surface_from_xpixmap (Pixmap Xid, int iWidth, int iHeight)
 {
-	g_return_val_if_fail (Xid > 0, NULL);
+	cd_return_val_if_fail (Xid > 0, NULL);
 	GdkPixbuf *pPixbuf = cairo_dock_get_pixbuf_from_pixmap (Xid, TRUE);
 	if (pPixbuf == NULL)
 	{

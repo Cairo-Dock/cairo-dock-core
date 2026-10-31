@@ -118,6 +118,14 @@ void cd_log_location(const GLogLevelFlags loglevel,
   va_end(args);
 }
 
+void cd_warn_on_fail(const char *file,
+                     const char *func,
+                     const int line,
+                     const char *cond)
+{
+	cd_log_location(G_LOG_LEVEL_WARNING, file, func, line, "Precondition check failed: %s", cond);
+}
+
 static void cairo_dock_log_handler(G_GNUC_UNUSED const gchar *log_domain,
                                    GLogLevelFlags log_level,
                                    const gchar *message,

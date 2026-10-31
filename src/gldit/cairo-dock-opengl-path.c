@@ -21,6 +21,7 @@
 #include <GL/gl.h>
 
 #include "cairo-dock-struct.h"
+#include "cairo-dock-log.h"
 #include "cairo-dock-icon-facility.h"  // cairo_dock_generate_string_path_opengl
 #include "cairo-dock-dock-factory.h"
 #include "cairo-dock-separator-manager.h"
@@ -74,7 +75,7 @@ void cairo_dock_gl_path_set_extent (CairoDockGLPath *pPath, int iWidth, int iHei
 
 void cairo_dock_gl_path_line_to (CairoDockGLPath *pPath, GLfloat x, GLfloat y)
 {
-	g_return_if_fail (pPath->iCurrentPt < pPath->iNbPoints);
+	cd_return_if_fail (pPath->iCurrentPt < pPath->iNbPoints);
 	_cd_gl_path_set_current_vertex (pPath, x, y);
 	pPath->iCurrentPt ++;
 }
@@ -95,7 +96,7 @@ void cairo_dock_gl_path_rel_line_to (CairoDockGLPath *pPath, GLfloat dx, GLfloat
 #define Bezier(x0,x1,x2,x3,t) (B0(t)*x0 + B1(t)*x1 + B2(t)*x2 + B3(t)*x3)
 void cairo_dock_gl_path_curve_to (CairoDockGLPath *pPath, int iNbPoints, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat x3, GLfloat y3)
 {
-	g_return_if_fail (pPath->iCurrentPt + iNbPoints <= pPath->iNbPoints);
+	cd_return_if_fail (pPath->iCurrentPt + iNbPoints <= pPath->iNbPoints);
 	GLfloat x0, y0;
 	x0 = _cd_gl_path_get_current_vertex_x (pPath);
 	y0 = _cd_gl_path_get_current_vertex_y (pPath);
@@ -121,7 +122,7 @@ void cairo_dock_gl_path_rel_curve_to (CairoDockGLPath *pPath, int iNbPoints, GLf
 #define Bezier2(p,q,s,t) ((1-t) * (1-t) * p + 2 * t * (1-t) * q + t * t * s)
 void cairo_dock_gl_path_simple_curve_to (CairoDockGLPath *pPath, int iNbPoints, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2)
 {
-	g_return_if_fail (pPath->iCurrentPt + iNbPoints <= pPath->iNbPoints);
+	cd_return_if_fail (pPath->iCurrentPt + iNbPoints <= pPath->iNbPoints);
 	GLfloat x0, y0;
 	x0 = _cd_gl_path_get_current_vertex_x (pPath);
 	y0 = _cd_gl_path_get_current_vertex_y (pPath);
@@ -146,7 +147,7 @@ void cairo_dock_gl_path_rel_simple_curve_to (CairoDockGLPath *pPath, int iNbPoin
 
 void cairo_dock_gl_path_arc (CairoDockGLPath *pPath, int iNbPoints, GLfloat xc, GLfloat yc, double r, double teta0, double cone)
 {
-	g_return_if_fail (pPath->iCurrentPt + iNbPoints <= pPath->iNbPoints);
+	cd_return_if_fail (pPath->iCurrentPt + iNbPoints <= pPath->iNbPoints);
 	double t;
 	int i;
 	for (i = 0; i < iNbPoints; i ++)

@@ -99,7 +99,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 {
 	GldiAppletIcon *icon = (GldiAppletIcon*)obj;
 	GldiAppletIconAttr *pAttributes = (GldiAppletIconAttr*)attr;
-	g_return_if_fail (pAttributes->pModuleInstance != NULL);
+	cd_return_if_fail (pAttributes->pModuleInstance != NULL);
 	
 	CairoDockMinimalAppletConfig *pMinimalConfig = pAttributes->pMinimalConfig;
 	

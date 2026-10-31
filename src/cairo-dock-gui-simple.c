@@ -247,7 +247,7 @@ GtkWidget *cairo_dock_build_generic_gui_window2 (const gchar *cTitle, int iWidth
 
 /**static inline GtkWidget *_make_image (const gchar *cImage, int iSize)
 {
-	g_return_val_if_fail (cImage != NULL, NULL);
+	cd_return_val_if_fail (cImage != NULL, NULL);
 	GtkWidget *pImage = NULL;
 	if (strncmp (cImage, "gtk-", 4) == 0)
 	{
@@ -315,7 +315,7 @@ static void _build_category_widget (CDCategory *pCategory)
 static void _on_switch_page (G_GNUC_UNUSED GtkNotebook *pNoteBook, GtkWidget *page, guint page_num, G_GNUC_UNUSED gpointer user_data)
 {
 	CDCategory *pCategory = _get_category (page_num);
-	g_return_if_fail (pCategory != NULL);
+	cd_return_if_fail (pCategory != NULL);
 	if (pCategory->pCdWidget == NULL)
 	{
 		_build_category_widget (pCategory);
@@ -546,7 +546,7 @@ static void reload_items (void)
 static void _reload_category_widget (CDCategoryEnum iCategory)
 {
 	CDCategory *pCategory = _get_category (iCategory);
-	g_return_if_fail (pCategory != NULL);
+	cd_return_if_fail (pCategory != NULL);
 	if (pCategory->pCdWidget != NULL)  // the category is built, reload it
 	{
 		GtkWidget *pPrevWidget = pCategory->pCdWidget->pWidget;
@@ -590,7 +590,7 @@ static void set_status_message_on_gui (const gchar *cMessage)
 
 static void reload_current_widget (GldiModuleInstance *pInstance, int iShowPage)
 {
-	g_return_if_fail (s_pSimpleConfigWindow != NULL);
+	cd_return_if_fail (s_pSimpleConfigWindow != NULL);
 	
 	CDCategory *pCategory = _get_category (CD_CATEGORY_ITEMS);
 	if (pCategory->pCdWidget != NULL)  // category is built
@@ -606,7 +606,7 @@ static void show_module_instance_gui (GldiModuleInstance *pModuleInstance, int i
 
 static CairoDockGroupKeyWidget *get_widget_from_name (G_GNUC_UNUSED GldiModuleInstance *pInstance, const gchar *cGroupName, const gchar *cKeyName)
 {
-	g_return_val_if_fail (s_pSimpleConfigWindow != NULL, NULL);
+	cd_return_val_if_fail (s_pSimpleConfigWindow != NULL, NULL);
 	cd_debug ("%s (%s, %s)", __func__, cGroupName, cKeyName);
 	CDCategory *pCategory = _get_current_category ();
 	CDWidget *pCdWidget = pCategory->pCdWidget;

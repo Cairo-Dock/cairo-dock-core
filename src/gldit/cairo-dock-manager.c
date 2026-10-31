@@ -111,7 +111,7 @@ static gboolean gldi_manager_get_config (GldiManager *pManager, GKeyFile *pKeyFi
 void gldi_manager_extend (GldiVisitCard *pVisitCard, const gchar *cManagerName)
 {
 	GldiManager *pManager = gldi_manager_get (cManagerName);
-	g_return_if_fail (pManager != NULL && pVisitCard->cInternalModule == NULL);
+	cd_return_if_fail (pManager != NULL && pVisitCard->cInternalModule == NULL);
 	pManager->pExternalModules = g_list_prepend (pManager->pExternalModules, (gpointer)pVisitCard->cModuleName);
 	pVisitCard->cInternalModule = cManagerName;
 }
@@ -166,7 +166,7 @@ void gldi_managers_get_config (const gchar *cConfFilePath, const gchar *cVersion
 {
 	//\___________________ On ouvre le fichier de conf.
 	GKeyFile *pKeyFile = cairo_dock_open_key_file (cConfFilePath);
-	g_return_if_fail (pKeyFile != NULL);
+	cd_return_if_fail (pKeyFile != NULL);
 	
 	//\___________________ On recupere la conf de tous les managers.
 	gboolean bFlushConfFileNeeded = gldi_managers_get_config_from_key_file (pKeyFile);
@@ -233,7 +233,7 @@ static GKeyFile* reload_object (GldiObject *obj, gboolean bReloadConf, GKeyFile 
 	if (bReloadConf && !pKeyFile)
 	{
 		pKeyFile = cairo_dock_open_key_file (g_cConfFile);
-		g_return_val_if_fail (pKeyFile != NULL, NULL);
+		cd_return_val_if_fail (pKeyFile != NULL, NULL);
 	}
 	
 	_gldi_manager_reload_from_keyfile (pManager, pKeyFile);

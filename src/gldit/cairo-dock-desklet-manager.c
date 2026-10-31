@@ -646,7 +646,7 @@ Icon *gldi_desklet_find_clicked_icon (CairoDesklet *pDesklet)
 	pDesklet->iMouseY2d = iMouseY;
 	
 	Icon *icon = pDesklet->pIcon;
-	g_return_val_if_fail (icon != NULL, NULL);  // peut arriver au tout debut, car on associe l'icone au desklet _apres_ l'avoir cree, et on fait tourner la gtk_main entre-temps (pour le redessiner invisible).
+	cd_return_val_if_fail (icon != NULL, NULL);  // peut arriver au tout debut, car on associe l'icone au desklet _apres_ l'avoir cree, et on fait tourner la gtk_main entre-temps (pour le redessiner invisible).
 	if (icon->fDrawX < iMouseX && icon->fDrawX + icon->fWidth * icon->fScale > iMouseX && icon->fDrawY < iMouseY && icon->fDrawY + icon->fHeight * icon->fScale > iMouseY)
 	{
 		return icon;
@@ -965,7 +965,7 @@ static void init_object (GldiObject *obj, gpointer attr)
 {
 	CairoDesklet *pDesklet = (CairoDesklet*)obj;
 	CairoDeskletAttr *pAttributes = (CairoDeskletAttr*)attr;
-	g_return_if_fail (pAttributes->pIcon != NULL);
+	cd_return_if_fail (pAttributes->pIcon != NULL);
 	
 	gldi_desklet_init_internals (pDesklet);
 	

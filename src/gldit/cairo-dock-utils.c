@@ -31,7 +31,7 @@ static GldiChildProcessManagerBackend s_backend = { 0 };
 
 gchar *cairo_dock_cut_string (const gchar *cString, int iNbCaracters)  // gere l'UTF-8
 {
-	g_return_val_if_fail (cString != NULL, NULL);
+	cd_return_val_if_fail (cString != NULL, NULL);
 	gchar *cTruncatedName = NULL;
 	gsize bytes_read, bytes_written;
 	GError *erreur = NULL;
@@ -224,7 +224,7 @@ gboolean cairo_dock_string_is_address (const gchar *cString)
 
 gboolean cairo_dock_string_contains (const char *cNames, const gchar *cName, const gchar *separators)
 {
-	g_return_val_if_fail (cNames != NULL, FALSE);
+	cd_return_val_if_fail (cNames != NULL, FALSE);
 	/*
 	** Search for cName in the extensions string.  Use of strstr()
 	** is not sufficient because extension names can be prefixes of
@@ -324,7 +324,7 @@ static void _child_watch_dummy (GPid pid, G_GNUC_UNUSED gint status, G_GNUC_UNUS
 }
 gboolean cairo_dock_launch_command_full (const gchar *cCommand, const gchar *cWorkingDirectory, GldiLaunchFlags flags)
 {
-	g_return_val_if_fail (cCommand != NULL, FALSE);
+	cd_return_val_if_fail (cCommand != NULL, FALSE);
 	cd_debug ("%s (%s , %s)", __func__, cCommand, cWorkingDirectory);
 	
 	gchar **args = NULL;
@@ -369,7 +369,7 @@ extern char **environ;
 gboolean cairo_dock_launch_command_argv_full2 (const gchar * const * args, const gchar *cWorkingDirectory, GldiLaunchFlags flags,
 	GAppInfo *app_info)
 {
-	g_return_val_if_fail (args != NULL && args[0] != NULL, FALSE);
+	cd_return_val_if_fail (args != NULL && args[0] != NULL, FALSE);
 	char *startup_id = NULL;
 	gboolean ret = TRUE;
 	

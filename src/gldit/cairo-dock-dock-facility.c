@@ -50,7 +50,7 @@ extern gboolean g_bUseOpenGL;  // for cairo_dock_make_preview()
  */
 void cairo_dock_update_dock_size (CairoDock *pDock)
 {
-	g_return_if_fail (pDock != NULL);
+	cd_return_if_fail (pDock != NULL);
 	cd_debug ("%p, %d", pDock, pDock->iRefCount);
 	if (pDock->iSidUpdateDockSize != 0)
 	{
@@ -935,7 +935,7 @@ void cairo_dock_show_subdock (Icon *pPointedIcon, CairoDock *pParentDock)
 {
 	cd_debug ("we show the child dock");
 	CairoDock *pSubDock = pPointedIcon->pSubDock;
-	g_return_if_fail (pSubDock != NULL);
+	cd_return_if_fail (pSubDock != NULL);
 
 	// set sane defaults for mouse position; this is needed since we
 	// cannot get the real position on Wayland when it is outside, but
@@ -1192,7 +1192,7 @@ static cairo_surface_t *_cairo_dock_make_stripes_background (int iWidth, int iHe
 			0.0f,
 			0.,
 			(fStripesAngle == 90) ? iHeight : - iHeight);
-	g_return_val_if_fail (cairo_pattern_status (pStripesPattern) == CAIRO_STATUS_SUCCESS, NULL);
+	cd_return_val_if_fail (cairo_pattern_status (pStripesPattern) == CAIRO_STATUS_SUCCESS, NULL);
 
 	cairo_pattern_set_extend (pStripesPattern, CAIRO_EXTEND_REPEAT);
 
