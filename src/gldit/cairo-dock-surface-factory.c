@@ -445,28 +445,37 @@ cairo_surface_t *cairo_dock_create_surface_from_pixbuf (GdkPixbuf *pixbuf, doubl
 }
 
 
-GdkPixbuf *cairo_dock_load_gdk_pixbuf (const gchar *cImagePath, int iWidth, int iHeight)
+GdkPixbuf *cairo_dock_load_gdk_pixbuf_full (const gchar *cImagePath, int iWidth, int iHeight, GError **erreur)
 {
-	GError *erreur = NULL;
+	cd_return_val_if_fail (cImagePath != NULL, NULL);
+	
 	// note: g_file_read sets O_CLOEXEC by default, but gdk_pixbuf_new_from_file () does not
 	GFile *file = g_file_new_for_path (cImagePath);
-	GInputStream *istream = G_INPUT_STREAM (g_file_read (file, NULL, &erreur));
+	GInputStream *istream = G_INPUT_STREAM (g_file_read (file, NULL, erreur));
 	GdkPixbuf *pixbuf = NULL;
 	if (istream)
 	{
 		// type is detected automatically
 		if (iWidth >= 0 || iHeight >= 0)
-			pixbuf = gdk_pixbuf_new_from_stream_at_scale (istream, iWidth, iHeight, TRUE, NULL, &erreur);
-		else pixbuf = gdk_pixbuf_new_from_stream (istream, NULL, &erreur);
+			pixbuf = gdk_pixbuf_new_from_stream_at_scale (istream, iWidth, iHeight, TRUE, NULL, erreur);
+		else pixbuf = gdk_pixbuf_new_from_stream (istream, NULL, erreur);
 		g_object_unref (istream);
 	}
 	g_object_unref (file);
 	
+	return pixbuf;
+}
+
+
+GdkPixbuf *cairo_dock_load_gdk_pixbuf (const gchar *cImagePath, int iWidth, int iHeight)
+{
+	GError *erreur = NULL;
+	
+	GdkPixbuf *pixbuf = cairo_dock_load_gdk_pixbuf_full (cImagePath, iWidth, iHeight, &erreur);
 	if (erreur != NULL)
 	{
 		cd_warning (erreur->message);
 		g_error_free (erreur);
-		return NULL;
 	}
 	return pixbuf;
 }

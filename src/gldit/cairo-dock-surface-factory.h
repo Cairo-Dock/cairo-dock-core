@@ -105,11 +105,27 @@ cairo_surface_t *cairo_dock_create_blank_surface_full (int iWidth, int iHeight, 
 *@param cImagePath complete path to the image.
 *@param iWidth desired width.
 *@param iHeight desired height.
-*@return the image loaded into a GdkPixbuf.
+*@return the image loaded into a GdkPixbuf or NULL on failure.
 * 
 * If both iWidth and iHeight are -1, the image is loaded at its natural size, otherwise it's scaled (preserving the aspect ratio).
+* If loading the image fails for any reason (file not found, unknown format, etc.), NULL is returned and an error is printed
+* on the console. If you need more information on the error, use cairo_dock_load_gdk_pixbuf_full() instead.
 */
 GdkPixbuf *cairo_dock_load_gdk_pixbuf (const gchar *cImagePath, int iWidth, int iHeight);
+
+/** Simple helper to read an image into a GdkPixbuf.
+*@param cImagePath complete path to the image.
+*@param iWidth desired width.
+*@param iHeight desired height.
+*@param erreur a pointer to a GError, initialized to NULL, which will be set to the error encountered if loading the image fails.
+    Can be NULL, in which case, errors are not reported.
+*@return the image loaded into a GdkPixbuf or NULL on error.
+* 
+* If both iWidth and iHeight are -1, the image is loaded at its natural size, otherwise it's scaled (preserving the aspect ratio).
+* If loading the image fails, NULL is returned and erreur is set (with the exception of cImagePath == NULL, in which case, a warning
+* is printed and erreur is not set).
+*/
+GdkPixbuf *cairo_dock_load_gdk_pixbuf_full (const gchar *cImagePath, int iWidth, int iHeight, GError **erreur);
 
 /** Simple helper to read an image into a GdkPixbuf, constraining the maximum size to the given dimentions.
 *@param cImagePath complete path to the image.
