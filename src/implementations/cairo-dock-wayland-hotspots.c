@@ -102,12 +102,14 @@ static void _hotspot_hit_cb (CairoDock *pDock, gpointer user_data)
 #ifdef HAVE_WAYLAND_PROTOCOLS
 /// Private variables
 static struct zwf_shell_manager_v2 *s_pshell_manager = NULL;
+static uint32_t s_wf_shell_version = 0;
 static guint s_sidMenu = 0;
 
 typedef struct _wf_hotspots {
 	struct _output_hotspots_base base;
 	struct zwf_output_v2 *output;
 	struct zwf_hotspot_v2 *hotspots[4]; // each output has four possible hotspots
+	guint current_width[4]; // current with of hotspots on each edge (0: none)
 } wf_hotspots;
 
 
@@ -167,10 +169,16 @@ static void _wf_shell_hotspot_leave_cb (G_GNUC_UNUSED void *data, G_GNUC_UNUSED 
 	
 }
 
+static void _wf_shell_hotspot_proximity_changed_cb (G_GNUC_UNUSED void *data,
+	G_GNUC_UNUSED struct zwf_hotspot_v2 *zwf_hotspot_v2, G_GNUC_UNUSED uint32_t proximity)
+{
+	
+}
 
 struct zwf_hotspot_v2_listener hotspot_listener = {
 	.enter = _wf_shell_hotspot_enter_cb,
-	.leave = _wf_shell_hotspot_leave_cb
+	.leave = _wf_shell_hotspot_leave_cb,
+	.proximity_changed = _wf_shell_hotspot_proximity_changed_cb
 };
 
 static uint32_t _wf_shell_get_anchor (int j)
@@ -195,18 +203,52 @@ static void _wf_shell_update_dock_hotspots (output_hotspots_base *base, int j)
 {
 	wf_hotspots *output = (wf_hotspots*)base;
 	
-	if (!output->hotspots[j])
+	if (s_wf_shell_version >= 3) // new version, hotspot might not cover the whole edge
+	{
+		if (output->hotspots[j])
+		{
+			if (output->current_width[j] == base->hotspot_width[j]) return; // current width is OK
+			zwf_hotspot_v2_destroy (output->hotspots[j]); // otherwise, recreate it with the updated width
+		}
+		
+		uint32_t x, y, w, h;
+		GdkRectangle geom;
+		// note: this returns the size in logical coordinates, but this seems
+		// to work well with hotspot creation below
+		gdk_monitor_get_geometry (base->monitor, &geom);
+	
+		if (j == CAIRO_DOCK_LEFT || j == CAIRO_DOCK_RIGHT)
+		{
+			w = 1;
+			h = base->hotspot_width[j];
+			x = (j == CAIRO_DOCK_LEFT) ? 0 : geom.width - 1;
+			y = geom.height / 2 - h / 2;
+		}
+		else
+		{
+			w = base->hotspot_width[j];
+			h = 1;
+			x = geom.width / 2 - w / 2;
+			y = (j == CAIRO_DOCK_TOP) ? 0 : geom.height - 1;
+		}
+		
+		output->hotspots[j] = zwf_output_v2_create_custom_hotspot (output->output,
+			x, y, w, h, base->hotspot_height[j], myDocksParam.iUnhideDockDelay);
+	}
+	else if (output->hotspots[j]) return; // no need to do anything
+	else // no hotspot yet, create a new one (old version, whole edge)
 	{
 		uint32_t pos2 = _wf_shell_get_anchor (j);
 		uint32_t thres = base->hotspot_height[j];
 		
 		output->hotspots[j] = zwf_output_v2_create_hotspot (output->output,
 			pos2, thres, myDocksParam.iUnhideDockDelay);
-		if (!output->hotspots[j]) return;
-		
-		cd_debug ("Created hotspot %p for output %p, position %d\n", output->hotspots[j], output->output, j);
-		zwf_hotspot_v2_add_listener (output->hotspots[j], &hotspot_listener, base->hit + j);
 	}
+	
+	if (!output->hotspots[j]) return;
+		
+	cd_debug ("Created hotspot %p for output %p, position %d\n", output->hotspots[j], output->output, j);
+	zwf_hotspot_v2_add_listener (output->hotspots[j], &hotspot_listener, base->hit + j);
 }
 
 static void _wf_shell_destroy_hotspot (output_hotspots_base *base, int j)
@@ -470,13 +512,13 @@ GldiWaylandHotspotsType gldi_wayland_hotspots_try_init (struct wl_registry *regi
 	if (info)
 	{
 		uint32_t wf_shell_id = info->id;
-		uint32_t wf_shell_version = info->version;
+		s_wf_shell_version = info->version;
 		
-		if (wf_shell_version > (uint32_t)zwf_shell_manager_v2_interface.version)
+		if (s_wf_shell_version > (uint32_t)zwf_shell_manager_v2_interface.version)
 		{
-			wf_shell_version = zwf_shell_manager_v2_interface.version;
+			s_wf_shell_version = zwf_shell_manager_v2_interface.version;
 		}
-        s_pshell_manager = wl_registry_bind (registry, wf_shell_id, &zwf_shell_manager_v2_interface, wf_shell_version);
+        s_pshell_manager = wl_registry_bind (registry, wf_shell_id, &zwf_shell_manager_v2_interface, s_wf_shell_version);
 		if (s_pshell_manager)
 		{
 			s_backend.new_output = _wf_shell_new_output;
