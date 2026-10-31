@@ -435,7 +435,7 @@ static void _update_dock_hotspots (CairoDock *pDock, G_GNUC_UNUSED gpointer user
 		myDocksParam.iZoneHeight : 1;
 	if (thres > outputs[i]->hotspot_height[pos]) outputs[i]->hotspot_height[pos] = thres;
 	thres = (myDocksParam.iCallbackMethod == CAIRO_HIT_ZONE) ? 
-		myDocksParam.iZoneWidth : gldi_dock_get_screen_width(pDock);
+		myDocksParam.iZoneWidth : pDock->iMinDockWidth;
 	if (thres > outputs[i]->hotspot_width[pos]) outputs[i]->hotspot_width[pos] = thres;
 }
 
