@@ -877,8 +877,12 @@ static void _show_image_preview (GtkFileChooser *pFileChooser, GtkImage *pPrevie
 {
 	gchar *cFileName = gtk_file_chooser_get_preview_filename (pFileChooser);
 	if (cFileName == NULL)
+	{
+		gtk_file_chooser_set_preview_widget_active (pFileChooser, FALSE);
 		return ;
-	GdkPixbuf *pixbuf = cairo_dock_load_gdk_pixbuf (cFileName, 64, 64);
+	}
+
+	GdkPixbuf *pixbuf = cairo_dock_load_gdk_pixbuf_full (cFileName, 64, 64, NULL); // NULL -- don't care about errors
 	g_free (cFileName);
 	if (pixbuf != NULL)
 	{
@@ -886,7 +890,7 @@ static void _show_image_preview (GtkFileChooser *pFileChooser, GtkImage *pPrevie
 		g_object_unref (pixbuf);
 		gtk_file_chooser_set_preview_widget_active (pFileChooser, TRUE);
 	}
-	else
+	else // could not load pixbuf, cFileName is not an image file (e.g. directory, text file, etc.)
 		gtk_file_chooser_set_preview_widget_active (pFileChooser, FALSE);
 }
 static void _cairo_dock_set_custom_appli_icon (G_GNUC_UNUSED GtkMenuItem *pMenuItem, gpointer data)
