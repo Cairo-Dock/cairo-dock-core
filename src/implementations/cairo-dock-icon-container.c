@@ -182,7 +182,7 @@ static void _cairo_dock_load_box_surface (void)
 	int iSizeHeight = myIconsParam.iIconHeight * (1 + myIconsParam.fAmplitude);
 	
 	gchar *cUserPath = cairo_dock_generate_file_path ("box-front");
-	if (! g_file_test (cUserPath, G_FILE_TEST_EXISTS))
+	if (cUserPath && ! g_file_test (cUserPath, G_FILE_TEST_EXISTS))
 	{
 		g_free (cUserPath);
 		cUserPath = NULL;
@@ -192,9 +192,10 @@ static void _cairo_dock_load_box_surface (void)
 		iSizeWidth,
 		iSizeHeight,
 		CAIRO_DOCK_FILL_SPACE);
+	g_free (cUserPath);
 	
 	cUserPath = cairo_dock_generate_file_path ("box-back");
-	if (! g_file_test (cUserPath, G_FILE_TEST_EXISTS))
+	if (cUserPath && ! g_file_test (cUserPath, G_FILE_TEST_EXISTS))
 	{
 		g_free (cUserPath);
 		cUserPath = NULL;
@@ -204,6 +205,7 @@ static void _cairo_dock_load_box_surface (void)
 		iSizeWidth,
 		iSizeHeight,
 		CAIRO_DOCK_FILL_SPACE);
+	g_free (cUserPath);
 }
 
 static void _cairo_dock_unload_box_surface (void)
