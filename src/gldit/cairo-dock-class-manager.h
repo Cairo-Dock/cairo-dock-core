@@ -141,18 +141,16 @@ void gldi_launch_desktop_app_info (GDesktopAppInfo *pDesktopAppInfo, const gchar
 /** Override the setting whether this app needs to run in a terminal. */
 void gldi_app_info_set_run_in_terminal (GldiAppInfo *app, gboolean bNeedsTerminal);
 
-/*
-* Ajoute un inhibiteur a une classe, et lui fait prendre immediatement le controle de la 1ere appli de cette classe trouvee, la detachant du dock. Rajoute l'indicateur si necessaire, et redessine le dock d'ou l'appli a ete enlevee, mais ne redessine pas l'icone inhibitrice.
-* @param cClass la classe.
-* @param pInhibitorIcon l'inhibiteur.
-* @return TRUE si l'inhibiteur a bien ete rajoute a la classe.
+/** Add an inhibitor icon to a class. If any windows of the corresponding app are already in the taskbar, remove the first one from the dock and assign it to this icon as well. In this case, also trigger a redraw of the dock (but it does not redraw the inhibitor icon itself).
+* @param cClass the class to inhibit. Should be already registered with cairo_dock_register_class().
+* @param pInhibitorIcon the inhibitor icon.
+* @return whether the inhibitor icon was successfully added.
 */
 gboolean cairo_dock_inhibite_class (const gchar *cClass, Icon *pInhibitorIcon);
 
-/*
-* Empeche une icone d'inhiber sa classe; l'icone est enlevee de sa classe, son controle sur une appli est desactive, sa classe remise a 0, et l'appli controlee est inseree dans le dock.
-* @param cClass la classe.
-* @param pInhibitorIcon l'icone inhibitrice.
+/** Stop an icon from inhibiting its class; the icon is removed from the inhibitor list of this class and its control over an application is disabled. The controlled application is placed back into the taskbar.
+* @param cClass the class to stop inhibiting.
+* @param pInhibitorIcon the current inhibitor icon.
 */
 void cairo_dock_deinhibite_class (const gchar *cClass, Icon *pInhibitorIcon);
 

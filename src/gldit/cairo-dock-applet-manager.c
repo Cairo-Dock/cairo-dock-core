@@ -46,16 +46,10 @@ GldiObjectManager myAppletIconObjectMgr;
 
 static cairo_surface_t *_create_applet_surface (const gchar *cIconFileName, int iWidth, int iHeight)
 {
-	cairo_surface_t *pNewSurface;
-	if (cIconFileName == NULL)
+	cairo_surface_t *pNewSurface = NULL;
+	gchar *cIconPath = cIconFileName ? cairo_dock_search_icon_s_path (cIconFileName, MAX (iWidth, iHeight)) : NULL;
+	if (cIconPath != NULL)
 	{
-		pNewSurface = cairo_dock_create_blank_surface (
-			iWidth,
-			iHeight);
-	}
-	else
-	{
-		gchar *cIconPath = cairo_dock_search_icon_s_path (cIconFileName, MAX (iWidth, iHeight));
 		pNewSurface = cairo_dock_create_surface_from_image_simple (cIconPath,
 			iWidth,
 			iHeight);

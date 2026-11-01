@@ -22,6 +22,8 @@
 
 #include "cairo-dock-icon-manager.h"  // myIconsParam.iIconWidth
 #include "cairo-dock-desklet-manager.h"  // CAIRO_DOCK_IS_DESKLET
+#include "cairo-dock-desktop-manager.h"  // gldi_desktop_get_monitors
+#include "cairo-dock-dock-manager.h"  // CAIRO_DOCK_IS_DOCK
 #include "cairo-dock-surface-factory.h"
 #include "cairo-dock-log.h"
 #include "cairo-dock-draw.h"
@@ -569,8 +571,36 @@ gboolean cairo_dock_begin_draw_image_buffer_opengl (CairoDockImageBuffer *pImage
 	else
 		return FALSE;
 	
-	GdkWindow* gdkwindow = gldi_container_get_gdk_window (pContainer ? pContainer : g_pPrimaryContainer);
-	gint scale = gdk_window_get_scale_factor (gdkwindow);
+	gint scale = 1;
+	GdkWindow *gdkwindow = pContainer ? gldi_container_get_gdk_window (pContainer) : NULL;
+	if (gdkwindow) scale = gdk_window_get_scale_factor (gdkwindow);
+	else
+	{
+		gboolean bDockScale = FALSE;
+		if (CAIRO_DOCK_IS_DOCK (pContainer))
+		{
+			CairoDock *pDock = CAIRO_DOCK (pContainer);
+			if (pDock->iScaleFactor != 0)
+			{
+				scale = pDock->iScaleFactor;
+				bDockScale = TRUE;
+			}
+		}
+		
+		if (!bDockScale)
+		{
+			if (g_pPrimaryContainer) gdkwindow = gldi_container_get_gdk_window (g_pPrimaryContainer);
+			if (gdkwindow) scale = gdk_window_get_scale_factor (gdkwindow);
+			else
+			{
+				// no container yet, or the container is not on a monitor, try to guess
+				// likely not necessary, as we will redraw the container when it is first shown
+				int N = 0;
+				GdkMonitor *const *pMonitors = gldi_desktop_get_monitors (&N);
+				if (N && pMonitors && *pMonitors) scale = gdk_monitor_get_scale_factor (*pMonitors);
+			}
+		}
+	}
 	
 	// set up an ortho view ourselves
 	glMatrixMode(GL_PROJECTION);

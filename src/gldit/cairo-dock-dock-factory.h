@@ -314,20 +314,6 @@ struct _CairoDock {
 };
 
 
-/** Say if an object is a Dock.
-*@param obj the object.
-*@return TRUE if the object is a Dock.
-*/
-#define GLDI_OBJECT_IS_DOCK(obj) gldi_object_is_manager_child (GLDI_OBJECT(obj), &myDockObjectMgr)
-#define CAIRO_DOCK_IS_DOCK GLDI_OBJECT_IS_DOCK
-
-/** Cast a Container into a Dock.
-* @param p the container to consider as a dock.
-* @return the dock.
-*/
-#define CAIRO_DOCK(p) ((CairoDock *)p)
-
-
 void cairo_dock_freeze_docks (gboolean bFreeze);
 
 
