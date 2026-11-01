@@ -975,8 +975,9 @@ static gboolean _cairo_dock_add_inhibitor_to_class (const gchar *cClass, Icon *p
 	CairoDockClassAppli *pClassAppli = _cairo_dock_lookup_class_appli (cClass);
 	cd_return_val_if_fail (pClassAppli != NULL, FALSE);
 
-	cd_return_val_if_fail (g_list_find (pClassAppli->pIconsOfClass, pIcon) == NULL, TRUE);
-	pClassAppli->pIconsOfClass = g_list_prepend (pClassAppli->pIconsOfClass, pIcon);
+	if (g_list_find (pClassAppli->pIconsOfClass, pIcon) == NULL)
+		pClassAppli->pIconsOfClass = g_list_prepend (pClassAppli->pIconsOfClass, pIcon);
+	else cd_warning ("Inhibitor icon already added to class: %p, %s", pIcon, cClass);
 
 	return TRUE;
 }
