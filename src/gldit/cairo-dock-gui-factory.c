@@ -2969,11 +2969,20 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 				{
 					if (cairo_dock_can_store_secret ())
 					{
-						gtk_entry_set_visibility (GTK_ENTRY (pOneWidget), FALSE);
-						gchar *cDecryptedString = NULL;
-						cairo_dock_decrypt_string ( cValue, &cDecryptedString );
-						g_free (cValue);
-						cValue = cDecryptedString;
+						if (cOriginalConfFileName)
+						{
+							gtk_entry_set_visibility (GTK_ENTRY (pOneWidget), FALSE);
+							gtk_entry_set_input_purpose (GTK_ENTRY (pOneWidget), GTK_INPUT_PURPOSE_PASSWORD);
+							gchar *cSecret = cairo_dock_lookup_secret (cOriginalConfFileName, cGroupName, cKeyName, NULL);
+							gtk_entry_set_text (GTK_ENTRY (pOneWidget), cSecret ? cSecret : cValue);
+							cairo_dock_free_secret_str (cSecret);
+						}
+						else
+						{
+							cd_warning ("Password entry, but no config file name, cannot store new value (%s -- %s)", cGroupName, cKeyName);
+							gtk_widget_set_sensitive (pOneWidget, FALSE);
+							gtk_widget_set_tooltip_text (pKeyBox, _("This configuration panel cannot store or retrieve passwords. This is likely a bug in Cairo-Dock; please report it at https://github.com/Cairo-Dock/cairo-dock-core/issues."));
+						}
 					}
 					else
 					{
@@ -2981,7 +2990,7 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 						gtk_widget_set_tooltip_text (pKeyBox, _("Cannot connect to the secret store of your desktop session, password storage is not available."));
 					}
 				}
-				gtk_entry_set_text (GTK_ENTRY (pOneWidget), cValue);
+				else gtk_entry_set_text (GTK_ENTRY (pOneWidget), cValue);
 				_pack_subwidget (pOneWidget);
 				
 				// on ajoute des boutons qui la rempliront.
@@ -3455,9 +3464,12 @@ static void _cairo_dock_get_each_widget_value (CairoDockGroupKeyWidget *pGroupKe
 		if (g_object_get_data (G_OBJECT (pOneWidget), "ignore-value") == NULL)
 		{
 			const gchar *cWidgetValue = gtk_entry_get_text (GTK_ENTRY (pOneWidget));
-			if( !gtk_entry_get_visibility(GTK_ENTRY (pOneWidget)) )
+			if(!gtk_entry_get_visibility(GTK_ENTRY (pOneWidget)))
 			{
-				cairo_dock_encrypt_string( cWidgetValue,  &cValue );
+				// password storage
+				if (pGroupKeyWidget->cOriginalConfFileName)
+					cairo_dock_store_secret (pGroupKeyWidget->cOriginalConfFileName, cGroupName, cKeyName, cWidgetValue, NULL);
+				else cd_warning ("No config file name set for password value (%s -- %s), not storing it", cGroupName, cKeyName);
 			}
 			else
 			{
