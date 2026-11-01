@@ -614,7 +614,8 @@ static void _build_themes_widget (ThemesWidget *pThemesWidget)
 			GTK_WIDGET (pMainWindow),  // main window
 			&pWidgetList,
 			pDataGarbage,
-			NULL);
+			NULL,
+			"themes.conf");
 		if (cairo_dock_current_theme_need_save ())
 			gtk_notebook_set_current_page (GTK_NOTEBOOK (pThemesWidget->widget.pWidget), 1);  // "Save"
 	}

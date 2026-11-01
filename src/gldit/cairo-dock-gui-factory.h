@@ -183,7 +183,8 @@ struct _CairoDockGroupKeyWidget {
 	gchar *cGroupName;
 	gchar *cKeyName;
 	GSList *pSubWidgetList;
-	gchar *cOriginalConfFilePath;
+	gchar *cOriginalConfFileDir; // path to the directory with the original config file or NULL if not available
+	gchar *cOriginalConfFileName; // name of the config file (used also as a key when saying passwords)
 	GtkWidget *pLabel;
 	GtkWidget *pKeyBox;
 	};
@@ -195,13 +196,13 @@ void _cairo_dock_set_value_in_pair (GtkSpinButton *pSpinButton, gpointer *data);
 
 const gchar *cairo_dock_parse_key_comment (gchar *cKeyComment, char *iElementType, guint *iNbElements, gchar ***pAuthorizedValuesList, gboolean *bAligned, const gchar **cTipString);
 
-GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFilePath);
+GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFileDir, const gchar *cOriginalConfFileName);
 
-GtkWidget *cairo_dock_build_key_file_widget_full (GKeyFile* pKeyFile, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFilePath, GtkWidget *pCurrentNoteBook);
+GtkWidget *cairo_dock_build_key_file_widget_full (GKeyFile* pKeyFile, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFileDir, const gchar *cOriginalConfFileName, GtkWidget *pCurrentNoteBook);
 
-#define cairo_dock_build_key_file_widget(pKeyFile, cGettextDomain, pMainWindow, pWidgetList, pDataGarbage, cOriginalConfFilePath) cairo_dock_build_key_file_widget_full (pKeyFile, cGettextDomain, pMainWindow, pWidgetList, pDataGarbage, cOriginalConfFilePath, NULL)
+#define cairo_dock_build_key_file_widget(pKeyFile, cGettextDomain, pMainWindow, pWidgetList, pDataGarbage, cOriginalConfFileDir, cOriginalConfFileName) cairo_dock_build_key_file_widget_full (pKeyFile, cGettextDomain, pMainWindow, pWidgetList, pDataGarbage, cOriginalConfFileDir, cOriginalConfFileName, NULL)
 
-GtkWidget *cairo_dock_build_conf_file_widget (const gchar *cConfFilePath, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFilePath);
+GtkWidget *cairo_dock_build_conf_file_widget (const gchar *cConfFilePath, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFileDir, const gchar *cOriginalConfFileName);
 
 
 void cairo_dock_update_keyfile_from_widget_list (GKeyFile *pKeyFile, GSList *pWidgetList);

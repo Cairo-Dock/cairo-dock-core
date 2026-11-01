@@ -186,14 +186,13 @@ static gboolean _on_select_one_item_in_tree (G_GNUC_UNUSED GtkTreeSelection * se
 		
 		// build applet's widgets.
 		pDataGarbage = g_ptr_array_new ();
-		gchar *cOriginalConfFilePath = g_strdup_printf ("%s/%s", pInstance->pModule->pVisitCard->cShareDataDir, pInstance->pModule->pVisitCard->cConfFileName);
 		pItemsWidget->pCurrentLauncherWidget = cairo_dock_build_key_file_widget (pKeyFile,
 			pInstance->pModule->pVisitCard->cGettextDomain,
 			GTK_WIDGET (pItemsWidget->pMainWindow),
 			&pWidgetList,
 			pDataGarbage,
-			cOriginalConfFilePath);
-		///g_free (cOriginalConfFilePath);
+			pInstance->pModule->pVisitCard->cShareDataDir,
+			pInstance->pModule->pVisitCard->cConfFileName);
 		pItemsWidget->widget.pWidgetList = pWidgetList;
 		pItemsWidget->widget.pDataGarbage = pDataGarbage;
 		
@@ -232,7 +231,7 @@ static gboolean _on_select_one_item_in_tree (G_GNUC_UNUSED GtkTreeSelection * se
 			{
 				pDataGarbage = g_ptr_array_new ();
 				pItemsWidget->pCurrentLauncherWidget = cairo_dock_build_key_file_widget (
-					pKeyFile, NULL, GTK_WIDGET (pItemsWidget->pMainWindow), &pWidgetList, pDataGarbage, NULL);
+					pKeyFile, NULL, GTK_WIDGET (pItemsWidget->pMainWindow), &pWidgetList, pDataGarbage, NULL, NULL);
 				
 				pItemsWidget->pCurrentContainer = CAIRO_CONTAINER (pDock);
 				
@@ -274,6 +273,7 @@ static gboolean _on_select_one_item_in_tree (G_GNUC_UNUSED GtkTreeSelection * se
 			GTK_WIDGET (pItemsWidget->pMainWindow),
 			&pWidgetList,
 			pDataGarbage,
+			NULL,
 			NULL);
 		
 		pItemsWidget->pCurrentIcon = pIcon;

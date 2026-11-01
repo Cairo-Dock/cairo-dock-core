@@ -829,7 +829,7 @@ static void _cairo_dock_set_original_value (G_GNUC_UNUSED GtkButton *button, Cai
 	gchar *cGroupName = pGroupKeyWidget->cGroupName;
 	gchar *cKeyName = pGroupKeyWidget->cKeyName;
 	GSList *pSubWidgetList = pGroupKeyWidget->pSubWidgetList;
-	gchar *cOriginalConfFilePath = pGroupKeyWidget->cOriginalConfFilePath;
+	gchar *cOriginalConfFilePath = g_strdup_printf ("%s/%s", pGroupKeyWidget->cOriginalConfFileDir, pGroupKeyWidget->cOriginalConfFileName);
 	cd_debug ("%s (%s, %s, %s)", __func__, cGroupName, cKeyName, cOriginalConfFilePath);
 	
 	GSList *pList;
@@ -839,6 +839,7 @@ static void _cairo_dock_set_original_value (G_GNUC_UNUSED GtkButton *button, Cai
 	
 	GKeyFile *pKeyFile = g_key_file_new ();
 	g_key_file_load_from_file (pKeyFile, cOriginalConfFilePath, 0, &erreur);  // inutile de garder les commentaires ce coup-ci.
+	g_free (cOriginalConfFilePath);
 	if (erreur != NULL)
 	{
 		cd_warning (erreur->message);
@@ -1849,7 +1850,8 @@ static gboolean _open_btn_url (GtkLinkButton *pURL, G_GNUC_UNUSED gpointer data)
 	return cairo_dock_fm_launch_uri (gtk_link_button_get_uri (pURL));
 }
 
-GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFilePath)
+GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGroupName, const gchar *cGettextDomain, GtkWidget *pMainWindow,
+	GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFileDir, const gchar *cOriginalConfFileName)
 {
 	cd_return_val_if_fail (pKeyFile != NULL && cGroupName != NULL, NULL);
 	//GPtrArray *pDataGarbage = g_ptr_array_new ();
@@ -3229,11 +3231,12 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 			pGroupKeyWidget->cGroupName = g_strdup (cGroupName);  // car on ne pourra pas le liberer s'il est partage entre plusieurs 'data'.
 			pGroupKeyWidget->cKeyName = cKeyName;
 			pGroupKeyWidget->pSubWidgetList = pSubWidgetList;
-			pGroupKeyWidget->cOriginalConfFilePath = (gchar *)cOriginalConfFilePath;
+			pGroupKeyWidget->cOriginalConfFileDir = g_strdup (cOriginalConfFileDir);
+			pGroupKeyWidget->cOriginalConfFileName = g_strdup (cOriginalConfFileName);
 			pGroupKeyWidget->pLabel = pLabel;
 			pGroupKeyWidget->pKeyBox = pKeyBox;  // on ne peut pas remonter a la keybox a partir du label a cause du cas particulier des widgets a prevue.
 			*pWidgetList = g_slist_prepend (*pWidgetList, pGroupKeyWidget);
-			if (bAddBackButton && cOriginalConfFilePath != NULL)
+			if (bAddBackButton && cOriginalConfFileDir != NULL)
 			{
 				pBackButton = gtk_button_new ();
 				GtkWidget *pImage = gtk_image_new_from_icon_name (GLDI_ICON_NAME_CLEAR, GTK_ICON_SIZE_MENU);
@@ -3258,7 +3261,8 @@ GtkWidget *cairo_dock_build_group_widget (GKeyFile *pKeyFile, const gchar *cGrou
 }
 
 
-GtkWidget *cairo_dock_build_key_file_widget_full (GKeyFile* pKeyFile, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFilePath, GtkWidget *pCurrentNoteBook)
+GtkWidget *cairo_dock_build_key_file_widget_full (GKeyFile* pKeyFile, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList,
+	GPtrArray *pDataGarbage, const gchar *cOriginalConfFileDir, const gchar *cOriginalConfFileName, GtkWidget *pCurrentNoteBook)
 {
 	gsize length = 0;
 	gchar **pGroupList = g_key_file_get_groups (pKeyFile, &length);
@@ -3316,7 +3320,7 @@ GtkWidget *cairo_dock_build_key_file_widget_full (GKeyFile* pKeyFile, const gcha
 		}
 		g_free (cGroupComment);
 		
-		pGroupWidget = cairo_dock_build_group_widget (pKeyFile, cGroupName, cGettextDomain, pMainWindow, pWidgetList, pDataGarbage, cOriginalConfFilePath);
+		pGroupWidget = cairo_dock_build_group_widget (pKeyFile, cGroupName, cGettextDomain, pMainWindow, pWidgetList, pDataGarbage, cOriginalConfFileDir, cOriginalConfFileName);
 		
 		GtkWidget *pScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
 		gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (pScrolledWindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
@@ -3329,7 +3333,8 @@ GtkWidget *cairo_dock_build_key_file_widget_full (GKeyFile* pKeyFile, const gcha
 	return pNoteBook;
 }
 
-GtkWidget *cairo_dock_build_conf_file_widget (const gchar *cConfFilePath, const gchar *cGettextDomain, GtkWidget *pMainWindow, GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFilePath)
+GtkWidget *cairo_dock_build_conf_file_widget (const gchar *cConfFilePath, const gchar *cGettextDomain, GtkWidget *pMainWindow,
+	GSList **pWidgetList, GPtrArray *pDataGarbage, const gchar *cOriginalConfFileDir, const gchar *cOriginalConfFileName)
 {
 	//\_____________ On recupere les groupes du fichier.
 	GKeyFile* pKeyFile = cairo_dock_open_key_file (cConfFilePath);
@@ -3337,7 +3342,8 @@ GtkWidget *cairo_dock_build_conf_file_widget (const gchar *cConfFilePath, const 
 		return NULL;
 	
 	//\_____________ On construit le widget.
-	GtkWidget *pNoteBook = cairo_dock_build_key_file_widget (pKeyFile, cGettextDomain, pMainWindow, pWidgetList, pDataGarbage, cOriginalConfFilePath);
+	GtkWidget *pNoteBook = cairo_dock_build_key_file_widget (pKeyFile, cGettextDomain, pMainWindow, pWidgetList,
+		pDataGarbage, cOriginalConfFileDir, cOriginalConfFileName);
 
 	g_key_file_free (pKeyFile);
 	return pNoteBook;
@@ -3486,7 +3492,8 @@ static void _cairo_dock_free_group_key_widget (CairoDockGroupKeyWidget *pGroupKe
         g_free (pGroupKeyWidget->cKeyName);
         g_free (pGroupKeyWidget->cGroupName);
         g_slist_free (pGroupKeyWidget->pSubWidgetList);  // les elements de pSubWidgetList sont les widgets, et se feront liberer lors de la destruction de la fenetre.
-        // cOriginalConfFilePath n'est pas duplique.
+        g_free (pGroupKeyWidget->cOriginalConfFileDir);
+        g_free (pGroupKeyWidget->cOriginalConfFileName);
         g_free (pGroupKeyWidget);
 }
 void cairo_dock_free_generated_widget_list (GSList *pWidgetList)

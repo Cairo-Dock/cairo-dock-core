@@ -124,13 +124,13 @@ static void _build_module_widget (ModuleWidget *pModuleWidget)
 	
 	GSList *pWidgetList = NULL;
 	GPtrArray *pDataGarbage = g_ptr_array_new ();
-	gchar *cOriginalConfFilePath = g_strdup_printf ("%s/%s", pModuleWidget->pModule->pVisitCard->cShareDataDir, pModuleWidget->pModule->pVisitCard->cConfFileName);
 	pModuleWidget->widget.pWidget = cairo_dock_build_key_file_widget (pKeyFile,
 		pModuleWidget->pModule->pVisitCard->cGettextDomain,
 		pModuleWidget->pMainWindow,
 		&pWidgetList,
 		pDataGarbage,
-		cOriginalConfFilePath);  // cOriginalConfFilePath is taken by the function
+		pModuleWidget->pModule->pVisitCard->cShareDataDir,
+		pModuleWidget->pModule->pVisitCard->cConfFileName);
 	pModuleWidget->widget.pWidgetList = pWidgetList;
 	pModuleWidget->widget.pDataGarbage = pDataGarbage;
 	
