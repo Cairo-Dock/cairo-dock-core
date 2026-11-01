@@ -203,15 +203,19 @@ static void _wf_shell_update_dock_hotspots (output_hotspots_base *base, int j)
 {
 	wf_hotspots *output = (wf_hotspots*)base;
 	
-	if (s_wf_shell_version >= 3) // new version, hotspot might not cover the whole edge
+	if (s_wf_shell_version >= 3 && output->hotspots[j])
 	{
-		if (output->hotspots[j])
-		{
-			if (output->current_width[j] == base->hotspot_width[j]) return; // current width is OK
-			zwf_hotspot_v2_destroy (output->hotspots[j]); // otherwise, recreate it with the updated width
-		}
-		
+		// new version, hotspot might not cover the whole edge, need to re-check width
+		if (output->current_width[j] == base->hotspot_width[j]) return; // current width is OK
+		zwf_hotspot_v2_destroy (output->hotspots[j]); // otherwise, recreate it with the updated width
+	}
+	
+	if (output->hotspots[j]) return; // already have a sufficient hotspot
+	
+	if (s_wf_shell_version >= 3)
+	{
 		uint32_t x, y, w, h;
+		gboolean bUseCustom = TRUE; // whether to use the create_custom_hotspot interface
 		GdkRectangle geom;
 		// note: this returns the size in logical coordinates, but this seems
 		// to work well with hotspot creation below
@@ -219,24 +223,33 @@ static void _wf_shell_update_dock_hotspots (output_hotspots_base *base, int j)
 	
 		if (j == CAIRO_DOCK_LEFT || j == CAIRO_DOCK_RIGHT)
 		{
-			w = 1;
 			h = base->hotspot_width[j];
-			x = (j == CAIRO_DOCK_LEFT) ? 0 : geom.width - 1;
-			y = geom.height / 2 - h / 2;
+			if (h < geom.height)
+			{
+				w = 1;
+				x = (j == CAIRO_DOCK_LEFT) ? 0 : geom.width - 1;
+				y = geom.height / 2 - h / 2;
+			}
+			else bUseCustom = FALSE;
 		}
 		else
 		{
 			w = base->hotspot_width[j];
-			h = 1;
-			x = geom.width / 2 - w / 2;
-			y = (j == CAIRO_DOCK_TOP) ? 0 : geom.height - 1;
+			if (w < geom.width)
+			{
+				h = 1;
+				x = geom.width / 2 - w / 2;
+				y = (j == CAIRO_DOCK_TOP) ? 0 : geom.height - 1;
+			}
+			else bUseCustom = FALSE;
 		}
 		
-		output->hotspots[j] = zwf_output_v2_create_custom_hotspot (output->output,
-			x, y, w, h, base->hotspot_height[j], myDocksParam.iUnhideDockDelay);
+		// only create a custom hotspot if the requested area is less than the screen width (height)
+		if (bUseCustom) output->hotspots[j] = zwf_output_v2_create_custom_hotspot (
+			output->output, x, y, w, h, base->hotspot_height[j], myDocksParam.iUnhideDockDelay);
 	}
-	else if (output->hotspots[j]) return; // no need to do anything
-	else // no hotspot yet, create a new one (old version, whole edge)
+	
+	if (!output->hotspots[j]) // old protocol version or hotspot covering the whole edge
 	{
 		uint32_t pos2 = _wf_shell_get_anchor (j);
 		uint32_t thres = base->hotspot_height[j];
@@ -245,8 +258,14 @@ static void _wf_shell_update_dock_hotspots (output_hotspots_base *base, int j)
 			pos2, thres, myDocksParam.iUnhideDockDelay);
 	}
 	
-	if (!output->hotspots[j]) return;
-		
+	if (!output->hotspots[j])
+	{
+		cd_warning ("Cannot create hotspot for output %p, position %d\n", output->output, j);
+		output->current_width[j] = 0;
+		return;
+	}
+	
+	output->current_width[j] = base->hotspot_width[j]; // update the width
 	cd_debug ("Created hotspot %p for output %p, position %d\n", output->hotspots[j], output->output, j);
 	zwf_hotspot_v2_add_listener (output->hotspots[j], &hotspot_listener, base->hit + j);
 }
@@ -258,6 +277,7 @@ static void _wf_shell_destroy_hotspot (output_hotspots_base *base, int j)
 	{
 		zwf_hotspot_v2_destroy (output->hotspots[j]);
 		output->hotspots[j] = NULL;
+		output->current_width[j] = 0;
 	}
 }
 #endif //HAVE_WAYLAND_PROTOCOLS
