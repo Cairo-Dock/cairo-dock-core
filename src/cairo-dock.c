@@ -1077,6 +1077,8 @@ int main (int argc, char** argv)
 	// Start Mainloop
 	gtk_main ();
 	
+	cairo_dock_close_gui (); // in case it is open
+	
 	signal (SIGSEGV, NULL);  // Segmentation violation
 	signal (SIGBUS, NULL);
 	signal (SIGFPE, NULL);  // Floating-point exception
