@@ -641,6 +641,50 @@ gboolean cairo_dock_can_store_secret (void)
 }
 
 
+static const SecretSchema *_get_secret_schema (void)
+{
+    static const SecretSchema cd_secret_schema = {
+        "org.cairodock.CairoDock", SECRET_SCHEMA_NONE,
+        {
+            {  "conf_file", SECRET_SCHEMA_ATTRIBUTE_STRING },
+            {  "group",     SECRET_SCHEMA_ATTRIBUTE_STRING },
+            {  "key",       SECRET_SCHEMA_ATTRIBUTE_STRING },
+            {  NULL, 0 },
+        }
+    };
+    return &cd_secret_schema;
+}
+
+gboolean cairo_dock_store_secret (const gchar *cConfFile, const gchar *cSection, const gchar *cKey, const gchar *cSecret, GError **err)
+{
+	return secret_password_store_sync (_get_secret_schema (),
+		NULL, // collection -- use the default
+		cKey, // label 
+		cSecret, // the password to store
+		NULL, // GCancellable
+		err,
+		"conf_file", cConfFile, // attributes in the schema
+		"group", cSection,
+		"key", cKey,
+		NULL);
+}
+
+gchar *cairo_dock_lookup_secret (const gchar *cConfFile, const gchar *cSection, const gchar *cKey, GError **err)
+{
+	return secret_password_lookup_sync (_get_secret_schema (),
+		NULL, // GCancellable
+		err,
+		"conf_file", cConfFile, // attributes in the schema
+		"group", cSection,
+		"key", cKey,
+		NULL);
+}
+
+void cairo_dock_free_secret_str (gchar *cSecret)
+{
+	secret_password_free (cSecret);
+}
+
 xmlDocPtr cairo_dock_open_xml_file (const gchar *cDataFilePath, const gchar *cRootNodeName, xmlNodePtr *root_node, GError **erreur)
 {
 	if (cairo_dock_get_file_size (cDataFilePath) == 0)
