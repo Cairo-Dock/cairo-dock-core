@@ -2288,6 +2288,8 @@ static void init_object (GldiObject *obj, gpointer attr)
 		gtk_window_set_transient_for (GTK_WINDOW (pDock->container.pWidget), GTK_WINDOW (pParentDock->container.pWidget));
 		// need to set now, so that gldi_dock_init_internals () will not try to show this dock
 		pDock->iRefCount = 1;
+		// set it to improve the loading of icon images
+		pDock->iScaleFactor = pParentDock->iScaleFactor;
 	}
 	{
 		gchar *cNamespace = (! dattr->bSubDock) ? g_strdup_printf ("cairo-dock-%s", dattr->cDockName) : NULL;
