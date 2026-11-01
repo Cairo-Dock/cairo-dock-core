@@ -496,8 +496,20 @@ static void _update_dock_hotspots (CairoDock *pDock, G_GNUC_UNUSED gpointer user
 	uint32_t thres = (myDocksParam.iCallbackMethod == CAIRO_HIT_ZONE) ? 
 		myDocksParam.iZoneHeight : 1;
 	if (thres > outputs[i]->hotspot_height[pos]) outputs[i]->hotspot_height[pos] = thres;
-	thres = (myDocksParam.iCallbackMethod == CAIRO_HIT_ZONE) ? 
-		myDocksParam.iZoneWidth : pDock->iMinDockWidth;
+	
+	switch(myDocksParam.iCallbackMethod)
+	{
+		case CAIRO_HIT_ZONE:
+			thresh = myDocksParam.iZoneWidth;
+			break;
+		case CAIRO_HIT_DOCK_PLACE:
+			thresh = pDock->iMinDockWidth;
+			break;
+		default:
+			// full edge -- note: CAIRO_HIT_SCREEN_CORNER is not supported yet
+			thresh = gldi_dock_get_screen_width (pDock);
+			break;
+	}
 	if (thres > outputs[i]->hotspot_width[pos]) outputs[i]->hotspot_width[pos] = thres;
 }
 
