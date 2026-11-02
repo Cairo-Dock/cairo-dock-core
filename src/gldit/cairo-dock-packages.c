@@ -224,23 +224,18 @@ static inline CURL *_init_curl_connection (const gchar *cURL)
 {
 	CURL *handle = curl_easy_init ();
 	curl_easy_setopt (handle, CURLOPT_URL, cURL);
-	if (myConnectionParam.cConnectionProxy != NULL)
+	GProxyResolver *pResolver = g_proxy_resolver_get_default ();
+	if (pResolver)
 	{
-		curl_easy_setopt (handle, CURLOPT_PROXY, myConnectionParam.cConnectionProxy);
-		if (myConnectionParam.iConnectionPort != 0)
-			curl_easy_setopt (handle, CURLOPT_PROXYPORT, myConnectionParam.iConnectionPort);
-		if (myConnectionParam.cConnectionUser != NULL && myConnectionParam.
-			cConnectionPasswd != NULL)
+		gchar **cProxy = g_proxy_resolver_lookup (pResolver, cURL, NULL, NULL);
+		if (cProxy)
 		{
-			gchar *cUserPwd = g_strdup_printf ("%s:%s", myConnectionParam.cConnectionUser, myConnectionParam.
-			cConnectionPasswd);
-			curl_easy_setopt (handle, CURLOPT_PROXYUSERPWD, cUserPwd);
-			g_free (cUserPwd);
-			/*curl_easy_setopt (handle, CURLOPT_PROXYUSERNAME, myConnectionParam.cConnectionUser);
-			if (myConnectionParam.cConnectionPasswd != NULL)
-				curl_easy_setopt (handle, CURLOPT_PROXYPASSWORD, myConnectionParam.cConnectionPasswd);*/  // a partir de libcurl 7.19.1, donc apres Jaunty
+			// note: *cProxy will include protocol, username, password and port if needed
+			if (*cProxy && strcmp (*cProxy, "direct://")) curl_easy_setopt (handle, CURLOPT_PROXY, *cProxy);
+			g_strfreev (cProxy);
 		}
 	}
+	
 	if (myConnectionParam.bForceIPv4)
 		curl_easy_setopt (handle, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);  // la resolution d'adresse en ipv6 peut etre tres lente chez certains.
 	curl_easy_setopt (handle, CURLOPT_TIMEOUT, myConnectionParam.iConnectionMaxTime);
@@ -999,28 +994,8 @@ static gboolean get_config (GKeyFile *pKeyFile, CairoConnectionParam *pSystem)
 	
 	pSystem->iConnectionTimeout = cairo_dock_get_integer_key_value (pKeyFile, "System", "conn timeout", &bFlushConfFileNeeded, 7, NULL, NULL);
 	pSystem->iConnectionMaxTime = cairo_dock_get_integer_key_value (pKeyFile, "System", "conn max time", &bFlushConfFileNeeded, 120, NULL, NULL);
-	if (cairo_dock_get_boolean_key_value (pKeyFile, "System", "conn use proxy", &bFlushConfFileNeeded, FALSE, NULL, NULL))
-	{
-		pSystem->cConnectionProxy = cairo_dock_get_string_key_value (pKeyFile, "System", "conn proxy", &bFlushConfFileNeeded, NULL, NULL, NULL);
-		pSystem->iConnectionPort = cairo_dock_get_integer_key_value (pKeyFile, "System", "conn port", &bFlushConfFileNeeded, 0, NULL, NULL);
-		pSystem->cConnectionUser = cairo_dock_get_string_key_value (pKeyFile, "System", "conn user", &bFlushConfFileNeeded, NULL, NULL, NULL);
-		gchar *cPasswd = cairo_dock_get_string_key_value (pKeyFile, "System", "conn passwd", &bFlushConfFileNeeded, NULL, NULL, NULL);
-		cairo_dock_decrypt_string (cPasswd, &pSystem->cConnectionPasswd);
-		pSystem->bForceIPv4 = cairo_dock_get_boolean_key_value (pKeyFile, "System", "force ipv4", &bFlushConfFileNeeded, TRUE, NULL, NULL);
-	}
 	
 	return bFlushConfFileNeeded;
-}
-
-  ////////////////////
- /// RESET CONFIG ///
-////////////////////
-
-static void reset_config (CairoConnectionParam *pSystem)
-{
-	g_free (pSystem->cConnectionProxy);
-	g_free (pSystem->cConnectionUser);
-	g_free (pSystem->cConnectionPasswd);
 }
 
 
@@ -1050,7 +1025,7 @@ void gldi_register_connection_manager (void)
 	myConnectionMgr.unload       = NULL;
 	myConnectionMgr.reload       = (GldiManagerReloadFunc)NULL;
 	myConnectionMgr.get_config   = (GldiManagerGetConfigFunc)get_config;
-	myConnectionMgr.reset_config = (GldiManagerResetConfigFunc)reset_config;
+	myConnectionMgr.reset_config = (GldiManagerResetConfigFunc)NULL;
 	// Config
 	myConnectionMgr.pConfig = (GldiManagerConfigPtr)&myConnectionParam;
 	myConnectionMgr.iSizeOfConfig = sizeof (CairoConnectionParam);
