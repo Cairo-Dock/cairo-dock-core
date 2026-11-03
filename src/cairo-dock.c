@@ -563,6 +563,9 @@ int main (int argc, char** argv)
 	// needs to be created explicitly for loading extensions such as libgioremote-volume-monitor.so
 	GVolumeMonitor *tmp_vol = g_volume_monitor_get ();
 	g_object_unref (tmp_vol);
+	// just to be safe...
+	GProxyResolver *pResolver = g_proxy_resolver_get_default ();
+	(void)pResolver; // no need to free it, returns a static instance (hopefully the above call will not be optimized away)
 	
 	gtk_init (&argc, &argv);
 	

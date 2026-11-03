@@ -194,7 +194,8 @@ ConfigGroupWidget *cairo_dock_config_group_widget_new (GList *pGroups, GList *pM
 			pMainWindow,  // main window
 			&pConfigGroupWidget->widget.pWidgetList,
 			pConfigGroupWidget->widget.pDataGarbage,
-			g_strdup (CAIRO_DOCK_SHARE_DATA_DIR"/"CAIRO_DOCK_CONF_FILE));
+			CAIRO_DOCK_SHARE_DATA_DIR,
+			CAIRO_DOCK_CONF_FILE);
 		
 		if (pNoteBook != NULL)
 		{
@@ -207,7 +208,6 @@ ConfigGroupWidget *cairo_dock_config_group_widget_new (GList *pGroups, GList *pM
 	GldiModule *pModule;
 	GldiModuleInstance *pExtraInstance;
 	GSList *pExtraWidgetList;
-	gchar *cOriginalConfFilePath;
 	GldiManager *pManager;
 	const gchar *cManagerName, *cModuleName;
 	GList *m, *e;
@@ -244,13 +244,13 @@ ConfigGroupWidget *cairo_dock_config_group_widget_new (GList *pGroups, GList *pM
 			}
 			
 			pExtraWidgetList = NULL;
-			cOriginalConfFilePath = g_strdup_printf ("%s/%s", pModule->pVisitCard->cShareDataDir, pModule->pVisitCard->cConfFileName);
 			pNoteBook = cairo_dock_build_key_file_widget_full (pExtraKeyFile,
 				pModule->pVisitCard->cGettextDomain,
 				pMainWindow,
 				&pExtraWidgetList,
 				pConfigGroupWidget->widget.pDataGarbage,  // the garbage array can be mutualized with 'pConfigGroupWidget'
-				cOriginalConfFilePath,
+				pModule->pVisitCard->cShareDataDir,
+				pModule->pVisitCard->cConfFileName,
 				pNoteBook);
 			
 			pConfigGroupWidget->pExtraWidgets = g_slist_append (pConfigGroupWidget->pExtraWidgets, pExtraWidgetList);  // append, so that we can parse the list in the same order again.

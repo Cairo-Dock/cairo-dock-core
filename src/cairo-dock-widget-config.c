@@ -388,7 +388,8 @@ static void _build_config_widget (ConfigWidget *pConfigWidget)
 			GTK_WIDGET (pConfigWidget->pMainWindow),  // main window
 			&pWidgetList,
 			pDataGarbage,
-			NULL);
+			NULL,
+			"cairo-dock.conf"); // we pretend we are in the advanced config, so password fields can be properly loaded and saved
 		// force to display this widget... to avoid a blank window?
 		gtk_widget_show_all (pConfigWidget->widget.pWidget);  // due to historical reasons, GtkNotebook refuses to switch to a page unless the child widget is visible.
 		gtk_notebook_set_current_page (GTK_NOTEBOOK (pConfigWidget->widget.pWidget), 0);  // force first Notebook

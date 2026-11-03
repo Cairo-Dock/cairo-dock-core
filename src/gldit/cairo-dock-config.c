@@ -28,6 +28,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <libsecret/secret.h>
+
 #include "gldi-config.h"
 #include "cairo-dock-manager.h"
 
@@ -613,6 +615,75 @@ void cairo_dock_encrypt_string( const gchar *cDecryptedString,  gchar **cEncrypt
 #endif
 }
 
+
+static gboolean s_bHaveSecret = FALSE;
+static gboolean s_bSecretChecked = FALSE;
+
+gboolean cairo_dock_can_store_secret (void)
+{
+	if (! s_bSecretChecked)
+	{
+		GError *err = NULL;
+		SecretService *pService = secret_service_get_sync (SECRET_SERVICE_NONE, NULL, &err);
+		if (pService)
+		{
+			s_bHaveSecret = TRUE;
+			g_object_unref (pService);
+		}
+		else
+		{
+			cd_warning ("Cannot connect to a secret service backend, password storage will not be available:\n\t%s", err->message);
+			g_error_free (err);
+		}
+	}
+	
+	return s_bHaveSecret;
+}
+
+
+static const SecretSchema *_get_secret_schema (void)
+{
+    static const SecretSchema cd_secret_schema = {
+        "org.cairodock.CairoDock", SECRET_SCHEMA_NONE,
+        {
+            {  "conf_file", SECRET_SCHEMA_ATTRIBUTE_STRING },
+            {  "group",     SECRET_SCHEMA_ATTRIBUTE_STRING },
+            {  "key",       SECRET_SCHEMA_ATTRIBUTE_STRING },
+            {  NULL, 0 },
+        }
+    };
+    return &cd_secret_schema;
+}
+
+gboolean cairo_dock_store_secret (const gchar *cConfFile, const gchar *cSection, const gchar *cKey, const gchar *cSecret, GError **err)
+{
+	return secret_password_store_sync (_get_secret_schema (),
+		NULL, // collection -- use the default
+		cKey, // label 
+		cSecret, // the password to store
+		NULL, // GCancellable
+		err,
+		"conf_file", cConfFile, // attributes in the schema
+		"group", cSection,
+		"key", cKey,
+		NULL);
+}
+
+gchar *cairo_dock_lookup_secret (const gchar *cConfFile, const gchar *cSection, const gchar *cKey, GError **err)
+{
+	return secret_password_lookup_sync (_get_secret_schema (),
+		NULL, // GCancellable
+		err,
+		"conf_file", cConfFile, // attributes in the schema
+		"group", cSection,
+		"key", cKey,
+		NULL);
+}
+
+void cairo_dock_free_secret_str (gchar *cSecret)
+{
+	secret_password_free (cSecret);
+}
 
 xmlDocPtr cairo_dock_open_xml_file (const gchar *cDataFilePath, const gchar *cRootNodeName, xmlNodePtr *root_node, GError **erreur)
 {

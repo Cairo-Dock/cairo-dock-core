@@ -172,6 +172,31 @@ void cairo_dock_decrypt_string( const gchar *cEncryptedString,  gchar **cDecrypt
 */
 void cairo_dock_encrypt_string( const gchar *cDecryptedString,  gchar **cEncryptedString );
 
+/** Check whether we can store passwords and other secrets. This function will block the first time it is called. */
+gboolean cairo_dock_can_store_secret (void);
+
+/** Store a secret in the keyring provided by the desktop environment. This is a synchronous operation that may block.
+*@param cConfFile the config file name that contains this secret
+*@param cSection the config file section that contains this secret
+*@param cKey the config file key that this secret corresponds to
+*@param cSecret the secret to store
+*@param err location to store an error on failure
+*@return whether the secret was successfully stored
+*/
+gboolean cairo_dock_store_secret (const gchar *cConfFile, const gchar *cSection, const gchar *cKey, const gchar *cSecret, GError **err);
+
+/** Retrieve a secret from the keyring of the desktop environment. This is a synchronous operation that may block.
+*@param cConfFile the config file name that contains this secret
+*@param cSection the config file section that contains this secret
+*@param cKey the config file key that this secret corresponds to
+*@param err location to store an error on failure
+*@return the secret or NULL if it was not found; free it with \ref cairo_dock_free_secret_str()
+*/
+gchar *cairo_dock_lookup_secret (const gchar *cConfFile, const gchar *cSection, const gchar *cKey, GError **err);
+
+/** Free a secret that was previously returned by \ref cairo_dock_lookup_secret(). */
+void cairo_dock_free_secret_str (gchar *cSecret);
+
 
 xmlDocPtr cairo_dock_open_xml_file (const gchar *cDataFilePath, const gchar *cRootNodeName, xmlNodePtr *root_node, GError **erreur);
 
