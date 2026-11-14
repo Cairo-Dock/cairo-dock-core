@@ -51,6 +51,12 @@ void gldi_wf_set_above (GldiWindowActor *actor, gboolean bAbove);
  */
 void gldi_wf_is_above_or_below (GldiWindowActor *actor, gboolean *bIsAbove, gboolean *bIsBelow);
 
+/** Init tracking the workspace and position of every window (Wayfire's IPC events). Needs the
+ * windows' IPC IDs, i.e. Wayfire's workarounds/app_id_mode = full; the windows manager gets the
+ * flags for workspaces and geometry once the first window with an IPC ID is seen.
+ * Can be called either before or after cd_init_wayfire_backend (). */
+void gldi_wf_init_window_places (void);
+
 /** Set up extra tracking of app-id changes so that the GTK application-id can be extracted. */
 void gldi_wf_backend_init_appid_tracking (void);
 #endif

@@ -25,6 +25,7 @@
 
 #include "cairo-dock-wayland-wm.h"
 #include "cairo-dock-windows-manager.h"
+#include "cairo-dock-windows-manager-priv.h"  // gldi_windows_manager_add_flags
 #include "cairo-dock-wayland-manager-priv.h"
 
 #ifdef HAVE_JSON
@@ -392,6 +393,20 @@ static gboolean s_bCanAbove = FALSE;
 static gboolean s_bNeedStickyAbove = FALSE; // toplevel manager requested the above functionality
 static gboolean s_bHaveMenuProps = FALSE; // if gtk-shell and kde-appmenu properties are available
 static gboolean s_bCoordsFloat = FALSE; // coordinates are reported as floats (newer Wayfire versions)
+static gboolean s_bCanWindowPlaces = FALSE; // we can list and watch views to track their workspaces and positions
+static gboolean s_bNeedWindowPlaces = FALSE; // toplevel manager requested the windows' workspaces and positions
+static gboolean s_bWindowPlacesFlagsSet = FALSE; // we told the windows manager that we track them
+
+static gboolean _track_window_places (void)
+{
+	return s_bCanWindowPlaces && s_bNeedWindowPlaces;
+}
+
+// whether we need to map IPC IDs to window actors
+static gboolean _need_window_mapping (void)
+{
+	return s_bCanAbove || s_bCanSticky || s_bHaveMenuProps || _track_window_places ();
+}
 
 static gboolean s_bWatchWMEvents = FALSE;
 // hash table mapping view IPC IDs to window actors
@@ -402,6 +417,21 @@ typedef enum {
 	MISSING_ACTOR_STATE_ABOVE = 2
 } WfMissingActorState;
 static GHashTable *s_pMissingActors = NULL; // key: IPC ID, value: WfMissingActorState
+
+// workspace grid, current workspace and size of each output
+typedef struct _wf_output_ws {
+	int x, y; // current workspace
+	int nx, ny; // size of the workspace grid
+	int w, h; // size of the output
+} wf_output_ws;
+static GHashTable *s_pOutputs = NULL; // key: output IPC ID, value: wf_output_ws*
+
+// last known workspace and position of each view (also for views without a window actor yet)
+typedef struct _wf_view_place {
+	int vx, vy; // workspace
+	GtkAllocation geom; // position relative to that workspace (GLDI_WM_GEOM_REL_TO_VIEWPORT)
+} wf_view_place;
+static GHashTable *s_pViewPlaces = NULL; // key: view IPC ID, value: wf_view_place*
 
 // extra data to store with views
 typedef struct _wf_view_data {
@@ -519,9 +549,15 @@ static void _check_menu_props (uint32_t id)
 		_check_one_prop (id, "gtk-shell-window-object-path", PROP_GTK_WINDOW_PATH);
 }
 
+static void _apply_view_place (GldiWaylandWindowActor *wactor, const wf_view_place *pPlace)
+{
+	gldi_wayland_wm_viewport_changed (wactor, pPlace->vx, pPlace->vy, FALSE);
+	gldi_wayland_wm_geometry_changed (wactor, &pPlace->geom, TRUE);
+}
+
 static gboolean _wf_on_window_created (G_GNUC_UNUSED gpointer data, GldiWindowActor *actor)
 {
-	if (!(s_bCanAbove || s_bCanSticky || s_bHaveMenuProps)) return GLDI_NOTIFICATION_LET_PASS;
+	if (!_need_window_mapping ()) return GLDI_NOTIFICATION_LET_PASS;
 	if (!GLDI_OBJECT_IS_WAYLAND_WINDOW (actor)) return GLDI_NOTIFICATION_LET_PASS;
 	
 	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor*)actor;
@@ -565,6 +601,19 @@ static gboolean _wf_on_window_created (G_GNUC_UNUSED gpointer data, GldiWindowAc
 					_check_menu_props (id);
 					pData->bPropsChecked = TRUE;
 				}
+				
+				if (_track_window_places ())
+				{
+					// we get IPC IDs (workarounds/app_id_mode = full), so we can tell where windows are
+					if (!s_bWindowPlacesFlagsSet)
+					{
+						gldi_windows_manager_add_flags (GLDI_WM_HAVE_WORKSPACES | GLDI_WM_HAVE_WINDOW_GEOMETRY |
+							GLDI_WM_GEOM_REL_TO_VIEWPORT | GLDI_WM_NO_VIEWPORT_OVERLAP);
+						s_bWindowPlacesFlagsSet = TRUE;
+					}
+					wf_view_place *pPlace = g_hash_table_lookup (s_pViewPlaces, GUINT_TO_POINTER (id));
+					if (pPlace) _apply_view_place (wactor, pPlace);
+				}
 			}
 			else cd_warning ("Error parsing IPC ID: %s", tmp - 7);
 		}
@@ -575,7 +624,7 @@ static gboolean _wf_on_window_created (G_GNUC_UNUSED gpointer data, GldiWindowAc
 
 static gboolean _wf_on_window_destroyed (G_GNUC_UNUSED gpointer data, GldiWindowActor *actor)
 {
-	if (!(s_bCanAbove || s_bCanSticky || s_bHaveMenuProps)) return GLDI_NOTIFICATION_LET_PASS;
+	if (!_need_window_mapping ()) return GLDI_NOTIFICATION_LET_PASS;
 	if (!GLDI_OBJECT_IS_WAYLAND_WINDOW (actor)) return GLDI_NOTIFICATION_LET_PASS;
 	
 	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor*)actor;
@@ -592,7 +641,7 @@ static gboolean _wf_on_window_destroyed (G_GNUC_UNUSED gpointer data, GldiWindow
 static gboolean _wf_on_window_class_changed (G_GNUC_UNUSED gpointer ptr, GldiWindowActor *actor,
 	G_GNUC_UNUSED const gchar *cOldClass, G_GNUC_UNUSED const gchar *cOldWmClass)
 {
-	if (!(s_bCanAbove || s_bCanSticky || s_bHaveMenuProps)) return GLDI_NOTIFICATION_LET_PASS;
+	if (!_need_window_mapping ()) return GLDI_NOTIFICATION_LET_PASS;
 	if (!GLDI_OBJECT_IS_WAYLAND_WINDOW (actor)) return GLDI_NOTIFICATION_LET_PASS;
 	
 	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor*)actor;
@@ -632,11 +681,13 @@ static void _add_existing_actor (gpointer ptr, G_GNUC_UNUSED gpointer data)
 
 static void _init_window_maping (void)
 {
-	if (! (s_bCanAbove || s_bCanSticky || s_bHaveMenuProps)) return;
+	if (!_need_window_mapping ()) return;
 	if (s_bWatchWMEvents) return; // already started
 	
 	s_pActorMap = g_hash_table_new_full (NULL, NULL, NULL, _reset_view_data);
 	s_pMissingActors = g_hash_table_new (NULL, NULL);
+	s_pOutputs = g_hash_table_new_full (NULL, NULL, NULL, g_free);
+	s_pViewPlaces = g_hash_table_new_full (NULL, NULL, NULL, g_free);
 	
 	gldi_object_register_notification (&myWindowObjectMgr,
 		NOTIFICATION_WINDOW_CREATED,
@@ -659,6 +710,12 @@ static void _init_window_maping (void)
 	_start_watch_events ();
 }
 
+
+void gldi_wf_init_window_places (void)
+{
+	s_bNeedWindowPlaces = TRUE;
+	if (s_bCanWindowPlaces) _init_window_maping (); // otherwise, done from cd_init_wayfire_backend ()
+}
 
 void gldi_wf_init_sticky_above (void)
 {
@@ -970,6 +1027,7 @@ static void _vis_handle_broken_socket (void)
 }
 
 static void _add_vis_watch_cb (gboolean bSuccess, G_GNUC_UNUSED gpointer user_data);
+static void _list_outputs_cb (const struct json_object *arr);
 static void _list_views_cb (const struct json_object *arr);
 static void _process_view (const gchar *event, const struct json_object *view);
 static void _got_configuration (struct json_object *conf);
@@ -1072,16 +1130,15 @@ static void _got_configuration (struct json_object *conf)
 	
 	s_bGotConfig = TRUE;
 	
-	const gchar *watch_req =
-	s_bHaveAbove ?
+	gchar *watch_req = g_strdup_printf (
 "{\"method\": \"window-rules/events/watch\", \"data\": {"
 "\"events\": [\"view-focused\", \"view-geometry-changed\", \"view-minimized\","
-"\"view-mapped\", \"view-unmapped\", \"view-sticky\", \"view-always-on-top\"] } }" :
-"{\"method\": \"window-rules/events/watch\", \"data\": {"
-"\"events\": [\"view-focused\", \"view-geometry-changed\", \"view-minimized\","
-"\"view-mapped\", \"view-unmapped\", \"view-sticky\"] } }";
+"\"view-mapped\", \"view-unmapped\", \"view-sticky\"%s%s] } }",
+		s_bHaveAbove ? ", \"view-always-on-top\"" : "",
+		_track_window_places () ? ", \"view-workspace-changed\", \"wset-workspace-changed\"" : "");
 
 	int ret = _send_msg_full (watch_req, strlen (watch_req), s_pIOChannel);
+	g_free (watch_req);
 	if (ret < 0)
 	{
 		// socket error, abort
@@ -1104,6 +1161,20 @@ static void _add_vis_watch_cb (gboolean bSuccess, G_GNUC_UNUSED gpointer user_da
 	}
 	
 	if (! (s_bWatchVisEvents || s_bWatchWMEvents)) return; // if cancelled in the meantime
+	
+	if (_track_window_places () && s_bWatchWMEvents)
+	{
+		// the outputs' workspaces first, they are needed to place the views
+		const gchar *outputs_req = "{\"method\": \"window-rules/list-outputs\", \"data\": {} }";
+		if (_send_msg_full (outputs_req, strlen (outputs_req), s_pIOChannel) < 0)
+		{
+			_handle_broken_socket ();
+			return;
+		}
+		struct cb_data *cb0 = g_new0 (struct cb_data, 1);
+		cb0->cb = _list_outputs_cb;
+		g_queue_push_tail (&s_cb_queue, cb0);
+	}
 	
 	// now we are watching events, but we need to call list-views, since
 	// we may not get events about all of them
@@ -1196,6 +1267,145 @@ static gboolean _get_view_geometry (const struct json_object *view, wf_window_po
 			_get_int_value (tmp, "width", &rect->rect.width) && _get_int_value (tmp, "height", &rect->rect.height));
 }
 
+/***********************************************************************
+ * the windows' workspaces and positions
+ ***********************************************************************/
+
+/* Wayfire reports a view's geometry relative to the current workspace of its output. With
+ * that output's current workspace (from list-outputs and the wset-workspace-changed events,
+ * which come on the same connection, in order) it is made absolute; the view is on the
+ * workspace that holds its center, and its position is stored relative to that workspace. */
+
+static void _update_output (const struct json_object *output)
+{
+	int32_t id, x, y, nx, ny, w, h;
+	const struct json_object *ws = output ? json_object_object_get (output, "workspace") : NULL;
+	const struct json_object *geom = output ? json_object_object_get (output, "geometry") : NULL;
+	if (! (ws && geom && _get_int_value (output, "id", &id) &&
+		_get_int_value (ws, "x", &x) && _get_int_value (ws, "y", &y) &&
+		_get_int_value (ws, "grid_width", &nx) && _get_int_value (ws, "grid_height", &ny) &&
+		_get_float_value (geom, "width", &w) && _get_float_value (geom, "height", &h)))
+	{
+		cd_warning ("Cannot parse output data");
+		return;
+	}
+	
+	wf_output_ws *pOutput = g_hash_table_lookup (s_pOutputs, GUINT_TO_POINTER ((uint32_t)id));
+	if (!pOutput)
+	{
+		pOutput = g_new (wf_output_ws, 1);
+		g_hash_table_insert (s_pOutputs, GUINT_TO_POINTER ((uint32_t)id), pOutput);
+	}
+	pOutput->x = x;
+	pOutput->y = y;
+	pOutput->nx = nx;
+	pOutput->ny = ny;
+	pOutput->w = w;
+	pOutput->h = h;
+}
+
+static void _list_outputs_cb (const struct json_object *arr)
+{
+	size_t i;
+	size_t len = json_object_array_length (arr);
+	for (i = 0; i < len; i++)
+		_update_output (json_object_array_get_idx (arr, i));
+}
+
+// floor division (positions left of or above the current workspace are negative)
+static int _div_floor (int a, int b)
+{
+	return (a >= 0) ? a / b : - ((- a + b - 1) / b);
+}
+
+static void _update_view_place (uint32_t id, const struct json_object *view)
+{
+	// mapped toplevel views only (minimized views keep their place)
+	struct json_object *tmp = json_object_object_get (view, "mapped");
+	if (! (tmp && json_object_get_boolean (tmp))) return;
+	tmp = json_object_object_get (view, "type");
+	const char *type = tmp ? json_object_get_string (tmp) : NULL;
+	if (! (type && ! strcmp (type, "toplevel"))) return;
+	
+	wf_window_pos rect;
+	if (! _get_view_geometry (view, &rect)) return; // e.g. a view without an output
+	wf_output_ws *pOutput = g_hash_table_lookup (s_pOutputs, GUINT_TO_POINTER (rect.output_id));
+	if (! (pOutput && pOutput->w > 0 && pOutput->h > 0)) return;
+	
+	int x = rect.rect.x + pOutput->x * pOutput->w; // relative to the first workspace
+	int y = rect.rect.y + pOutput->y * pOutput->h;
+	wf_view_place place;
+	place.vx = CLAMP (_div_floor (x + rect.rect.width / 2, pOutput->w), 0, MAX (pOutput->nx, 1) - 1);
+	place.vy = CLAMP (_div_floor (y + rect.rect.height / 2, pOutput->h), 0, MAX (pOutput->ny, 1) - 1);
+	place.geom.x = x - place.vx * pOutput->w;
+	place.geom.y = y - place.vy * pOutput->h;
+	place.geom.width = rect.rect.width;
+	place.geom.height = rect.rect.height;
+	
+	wf_view_place *pPlace = g_hash_table_lookup (s_pViewPlaces, GUINT_TO_POINTER (id));
+	if (pPlace && ! memcmp (pPlace, &place, sizeof (place))) return; // no change
+	if (!pPlace)
+	{
+		pPlace = g_new (wf_view_place, 1);
+		g_hash_table_insert (s_pViewPlaces, GUINT_TO_POINTER (id), pPlace);
+	}
+	*pPlace = place;
+	
+	GldiWaylandWindowActor *wactor = g_hash_table_lookup (s_pActorMap, GUINT_TO_POINTER (id));
+	if (wactor) _apply_view_place (wactor, pPlace); // otherwise, done when the actor is created
+}
+
+/* During a workspace switch, Wayfire sends the views' new geometry (relative to the new
+ * workspace) before wset-workspace-changed, so the places cannot be computed from single
+ * events. After any event, a little later, the outputs and the views are listed again: the
+ * two replies come in order and fit together (a switch in between sends another event). */
+static guint s_iPlacesTimer = 0;
+
+static void _list_places_cb (const struct json_object *arr)
+{
+	size_t i;
+	size_t len = json_object_array_length (arr);
+	for (i = 0; i < len; i++)
+	{
+		struct json_object *view = json_object_array_get_idx (arr, i);
+		struct json_object *tmp = view ? json_object_object_get (view, "id") : NULL;
+		if (tmp) _update_view_place ((uint32_t) json_object_get_uint64 (tmp), view);
+	}
+}
+
+static gboolean _request_places (G_GNUC_UNUSED gpointer data)
+{
+	s_iPlacesTimer = 0;
+	if (!s_pIOChannel) return G_SOURCE_REMOVE;
+	
+	const gchar *outputs_req = "{\"method\": \"window-rules/list-outputs\", \"data\": {} }";
+	const gchar *views_req = "{\"method\": \"window-rules/list-views\", \"data\": {} }";
+	if (_send_msg_full (outputs_req, strlen (outputs_req), s_pIOChannel) < 0)
+	{
+		_handle_broken_socket ();
+		return G_SOURCE_REMOVE;
+	}
+	struct cb_data *cb1 = g_new0 (struct cb_data, 1);
+	cb1->cb = _list_outputs_cb;
+	g_queue_push_tail (&s_cb_queue, cb1);
+	
+	if (_send_msg_full (views_req, strlen (views_req), s_pIOChannel) < 0)
+	{
+		_handle_broken_socket ();
+		return G_SOURCE_REMOVE;
+	}
+	struct cb_data *cb2 = g_new0 (struct cb_data, 1);
+	cb2->cb = _list_places_cb;
+	g_queue_push_tail (&s_cb_queue, cb2);
+	return G_SOURCE_REMOVE;
+}
+
+static void _schedule_places_update (void)
+{
+	// events come in bursts (a workspace switch, a window being dragged): update once
+	if (!s_iPlacesTimer) s_iPlacesTimer = g_timeout_add (100, _request_places, NULL);
+}
+
 // Process a view, either because of an event, or from the initial reply to
 // list-views (in this case, event == NULL).
 // Note: view can be NULL for some events (e.g. focus change with no newly focused view)
@@ -1234,6 +1444,15 @@ static void _process_view (const gchar *event, const struct json_object *view)
 	}
 	
 	gboolean bDelete = event && ! strcmp (event, "view-unmapped");
+	if (s_bWatchWMEvents && _track_window_places ())
+	{
+		if (!event) _update_view_place (id, view); // initial list-views, the outputs were listed just before
+		else
+		{
+			if (bDelete) g_hash_table_remove (s_pViewPlaces, GUINT_TO_POINTER (id));
+			_schedule_places_update ();
+		}
+	}
 	if (! bDelete)
 	{
 		// also can be true if a view was minimized
@@ -1466,6 +1685,8 @@ static gboolean _socket_cb (G_GNUC_UNUSED GIOChannel *pSource, GIOCondition cond
 				// events can arrive while we are waiting for a reply, they are not the reply
 				gboolean is_event = !is_array && (json_object_object_get (res, "event") != NULL);
 				gboolean is_list_cb = !is_event && peek_cb && (peek_cb->cb == _list_views_cb);
+				gboolean is_outputs_cb = !is_event && peek_cb && (peek_cb->cb == _list_outputs_cb);
+				gboolean is_places_cb = !is_event && peek_cb && (peek_cb->cb == _list_places_cb);
 				gboolean is_conf_cb = !is_event && peek_cb && (peek_cb->cb == _got_configuration);
 				if (is_list_cb)
 				{
@@ -1473,6 +1694,28 @@ static gboolean _socket_cb (G_GNUC_UNUSED GIOChannel *pSource, GIOCondition cond
 					g_free (g_queue_pop_head (&s_cb_queue)); // we don't need the callback struct anymore
 					if (is_array) _list_views_cb (res);
 					else cd_warning ("Unexpected reply format to list-views request"); //!! TODO: cancel watching events !!
+					
+					json_object_put (res);
+					g_free (tmp2);
+					return TRUE;
+				}
+				else if (is_outputs_cb)
+				{
+					// this is the reply to a list-outputs request
+					g_free (g_queue_pop_head (&s_cb_queue));
+					if (is_array) _list_outputs_cb (res);
+					else cd_warning ("Unexpected reply format to list-outputs request");
+					
+					json_object_put (res);
+					g_free (tmp2);
+					return TRUE;
+				}
+				else if (is_places_cb)
+				{
+					// this is the reply to a list-views request for the windows' places
+					g_free (g_queue_pop_head (&s_cb_queue));
+					if (is_array) _list_places_cb (res);
+					else cd_warning ("Unexpected reply format to list-views request");
 					
 					json_object_put (res);
 					g_free (tmp2);
@@ -1523,6 +1766,11 @@ static gboolean _socket_cb (G_GNUC_UNUSED GIOChannel *pSource, GIOCondition cond
 								}
 							}
 							else cd_warning ("Binding event without ID");
+						}
+						else if (! strcmp (event_str, "wset-workspace-changed"))
+						{
+							// an output's current workspace changed
+							if (s_pOutputs) _schedule_places_update ();
 						}
 						else
 						{
@@ -1711,6 +1959,8 @@ void cd_init_wayfire_backend (void) {
 		s_bCanAbove = FALSE;
 	}
 	
+	s_bCanWindowPlaces = (watch_found && list_found);
+	
 	if (any_found || (watch_found && list_found))
 	{
 		s_sidIO = g_io_add_watch (pIOChannel, G_IO_IN | G_IO_HUP | G_IO_ERR, _socket_cb, NULL);
@@ -1726,7 +1976,7 @@ void cd_init_wayfire_backend (void) {
 				dvb.name = "Wayfire IPC";
 				gldi_dock_visibility_register_backend (&dvb);
 				
-				if ((s_bCanAbove || s_bCanSticky) && s_bNeedStickyAbove)
+				if (((s_bCanAbove || s_bCanSticky) && s_bNeedStickyAbove) || _track_window_places ())
 					_init_window_maping ();
 			}
 		}
