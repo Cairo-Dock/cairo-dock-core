@@ -133,6 +133,11 @@ void gldi_windows_manager_register_backend (GldiWindowManagerBackend *pBackend)
 	}
 }
 
+void gldi_windows_manager_add_flags (int iFlags)
+{
+	s_backend.flags = GINT_TO_POINTER (GPOINTER_TO_INT (s_backend.flags) | iFlags);
+}
+
 const gchar *gldi_windows_manager_get_name ()
 {
 	return s_backend.name ? s_backend.name : "none";

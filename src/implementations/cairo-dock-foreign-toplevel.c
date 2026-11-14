@@ -247,6 +247,7 @@ static void gldi_zwlr_foreign_toplevel_manager_init ()
 	zwlr_foreign_toplevel_manager_v1_add_listener(s_ptoplevel_manager, &gldi_toplevel_manager, NULL);
 	
 	gldi_wf_init_sticky_above (); // optional functionality to set these states on Wayfire
+	gldi_wf_init_window_places (); // optional: the windows' workspaces and positions on Wayfire
 	
 	// register window manager
 	GldiWindowManagerBackend wmb;

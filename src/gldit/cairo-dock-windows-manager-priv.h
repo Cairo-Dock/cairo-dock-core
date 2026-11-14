@@ -66,6 +66,13 @@ void gldi_windows_manager_register_backend (GldiWindowManagerBackend *pBackend);
 
 const gchar *gldi_windows_manager_get_name ();
 
+/** Add flags (GldiWMBackendFlags) to the registered backend, for a helper that provides
+ * additional information after the backend was registered (e.g. the Wayfire integration
+ * tracking the windows' workspaces for the wlr foreign toplevel backend).
+*@param iFlags the flags to add
+*/
+void gldi_windows_manager_add_flags (int iFlags);
+
 /** Run a function on each window actor.
 *@param callback the callback (takes the actor and the data, returns TRUE to stop)
 *@param data user data
