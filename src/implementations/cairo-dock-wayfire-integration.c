@@ -1463,8 +1463,10 @@ static gboolean _socket_cb (G_GNUC_UNUSED GIOChannel *pSource, GIOCondition cond
 				
 				struct cb_data *peek_cb = g_queue_peek_head (&s_cb_queue); // OK to call with an empty queue
 				gboolean is_array = json_object_is_type (res, json_type_array);
-				gboolean is_list_cb = peek_cb && (peek_cb->cb == _list_views_cb);
-				gboolean is_conf_cb = peek_cb && (peek_cb->cb == _got_configuration);
+				// events can arrive while we are waiting for a reply, they are not the reply
+				gboolean is_event = !is_array && (json_object_object_get (res, "event") != NULL);
+				gboolean is_list_cb = !is_event && peek_cb && (peek_cb->cb == _list_views_cb);
+				gboolean is_conf_cb = !is_event && peek_cb && (peek_cb->cb == _got_configuration);
 				if (is_list_cb)
 				{
 					// this is the reply to a list-views request, process it
