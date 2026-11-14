@@ -46,6 +46,8 @@
 
 #include "cairo-dock-desktop-manager-priv.h"
 #include "cairo-dock-icon-factory.h"  // pAppli
+#include "cairo-dock-icon-facility.h"  // cairo_dock_get_icon_container
+#include "cairo-dock-applications-manager.h"  // cairo_dock_get_appli_icon
 #include "cairo-dock-container-priv.h"  // gldi_container_get_gdk_window
 #include "cairo-dock-class-manager-priv.h"
 #include "cairo-dock-keybinder.h"
@@ -392,6 +394,14 @@ static gboolean s_bCanAbove = FALSE;
 static gboolean s_bNeedStickyAbove = FALSE; // toplevel manager requested the above functionality
 static gboolean s_bHaveMenuProps = FALSE; // if gtk-shell and kde-appmenu properties are available
 static gboolean s_bCoordsFloat = FALSE; // coordinates are reported as floats (newer Wayfire versions)
+static gboolean s_bCanViewShot = FALSE; // the view-shot plugin is loaded (window thumbnails)
+static gboolean s_bNeedThumbnails = FALSE; // toplevel manager requested window thumbnails
+
+// whether we need to map IPC IDs to window actors
+static gboolean _need_window_mapping (void)
+{
+	return s_bCanAbove || s_bCanSticky || s_bHaveMenuProps || (s_bCanViewShot && s_bNeedThumbnails);
+}
 
 static gboolean s_bWatchWMEvents = FALSE;
 // hash table mapping view IPC IDs to window actors
@@ -408,14 +418,22 @@ typedef struct _wf_view_data {
 	uint32_t id; // IPC ID of this view
 	gboolean bAbove; // whether this view is always on top
 	gboolean bPropsChecked; // whether we already queried the menu DBus properties for this view
+	gboolean bThumbnailPending; // a view-shot/capture request for this view is on its way
+	cairo_surface_t *pThumbnail; // picture of this view received from view-shot, not used yet
 } wf_view_data;
+
+static void _free_view_data (wf_view_data *pData)
+{
+	if (pData->pThumbnail) cairo_surface_destroy (pData->pThumbnail);
+	g_free (pData);
+}
 
 // function to free view data in s_pActorMap
 static void _reset_view_data (gpointer data)
 {
 	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor*)data;
 	if (!wactor->pExtraData) return;
-	g_free (wactor->pExtraData);
+	_free_view_data ((wf_view_data*)wactor->pExtraData);
 	wactor->pExtraData = NULL;
 }
 
@@ -521,7 +539,7 @@ static void _check_menu_props (uint32_t id)
 
 static gboolean _wf_on_window_created (G_GNUC_UNUSED gpointer data, GldiWindowActor *actor)
 {
-	if (!(s_bCanAbove || s_bCanSticky || s_bHaveMenuProps)) return GLDI_NOTIFICATION_LET_PASS;
+	if (!_need_window_mapping ()) return GLDI_NOTIFICATION_LET_PASS;
 	if (!GLDI_OBJECT_IS_WAYLAND_WINDOW (actor)) return GLDI_NOTIFICATION_LET_PASS;
 	
 	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor*)actor;
@@ -575,7 +593,7 @@ static gboolean _wf_on_window_created (G_GNUC_UNUSED gpointer data, GldiWindowAc
 
 static gboolean _wf_on_window_destroyed (G_GNUC_UNUSED gpointer data, GldiWindowActor *actor)
 {
-	if (!(s_bCanAbove || s_bCanSticky || s_bHaveMenuProps)) return GLDI_NOTIFICATION_LET_PASS;
+	if (!_need_window_mapping ()) return GLDI_NOTIFICATION_LET_PASS;
 	if (!GLDI_OBJECT_IS_WAYLAND_WINDOW (actor)) return GLDI_NOTIFICATION_LET_PASS;
 	
 	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor*)actor;
@@ -584,7 +602,7 @@ static gboolean _wf_on_window_destroyed (G_GNUC_UNUSED gpointer data, GldiWindow
 	wf_view_data *pData = (wf_view_data*)wactor->pExtraData;
 	wactor->pExtraData = NULL;
 	g_hash_table_remove (s_pActorMap, GUINT_TO_POINTER (pData->id));
-	g_free (pData);
+	_free_view_data (pData);
 	
 	return GLDI_NOTIFICATION_LET_PASS;
 }
@@ -592,7 +610,7 @@ static gboolean _wf_on_window_destroyed (G_GNUC_UNUSED gpointer data, GldiWindow
 static gboolean _wf_on_window_class_changed (G_GNUC_UNUSED gpointer ptr, GldiWindowActor *actor,
 	G_GNUC_UNUSED const gchar *cOldClass, G_GNUC_UNUSED const gchar *cOldWmClass)
 {
-	if (!(s_bCanAbove || s_bCanSticky || s_bHaveMenuProps)) return GLDI_NOTIFICATION_LET_PASS;
+	if (!_need_window_mapping ()) return GLDI_NOTIFICATION_LET_PASS;
 	if (!GLDI_OBJECT_IS_WAYLAND_WINDOW (actor)) return GLDI_NOTIFICATION_LET_PASS;
 	
 	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor*)actor;
@@ -632,7 +650,7 @@ static void _add_existing_actor (gpointer ptr, G_GNUC_UNUSED gpointer data)
 
 static void _init_window_maping (void)
 {
-	if (! (s_bCanAbove || s_bCanSticky || s_bHaveMenuProps)) return;
+	if (!_need_window_mapping ()) return;
 	if (s_bWatchWMEvents) return; // already started
 	
 	s_pActorMap = g_hash_table_new_full (NULL, NULL, NULL, _reset_view_data);
@@ -745,6 +763,128 @@ void gldi_wf_is_above_or_below (GldiWindowActor *actor, gboolean *bIsAbove, gboo
 	
 	wf_view_data *pData = (wf_view_data*)wactor->pExtraData;
 	*bIsAbove = pData->bAbove;
+}
+
+
+/***********************************************************************
+ * thumbnails of minimized windows (view-shot plugin)
+ ***********************************************************************/
+
+/* The taskbar asks for the thumbnail synchronously (gldi_window_get_thumbnail_surface ()),
+ * while our IPC calls are asynchronous: the first request only asks Wayfire to save a
+ * picture of the view (view-shot/capture, which works for minimized views too) and returns
+ * NULL, so the normal icon is shown. When the picture has arrived, the icon is loaded again
+ * and this time gets the thumbnail, which is then dropped: the next minimization takes a new
+ * picture. The file is written in the user's runtime directory and removed at once. */
+
+typedef struct _wf_thumbnail_cb_data {
+	uint32_t id;
+	gchar *cFile;
+} wf_thumbnail_cb_data;
+
+static void _got_thumbnail (gboolean bSuccess, gpointer ptr)
+{
+	wf_thumbnail_cb_data *cb_data = (wf_thumbnail_cb_data*)ptr;
+	GldiWaylandWindowActor *wactor = s_pActorMap ? g_hash_table_lookup (s_pActorMap, GUINT_TO_POINTER (cb_data->id)) : NULL;
+	GldiWindowActor *actor = (GldiWindowActor*)wactor;
+	wf_view_data *pData = wactor ? (wf_view_data*)wactor->pExtraData : NULL;
+	if (pData) // note: not an error if missing, the window could have been closed
+	{
+		pData->bThumbnailPending = FALSE;
+		if (!bSuccess) cd_warning ("Cannot take a picture of view %u", cb_data->id);
+		else if (actor->bIsHidden) // still minimized
+		{
+			cairo_surface_t *pSurface = cairo_image_surface_create_from_png (cb_data->cFile);
+			if (cairo_surface_status (pSurface) != CAIRO_STATUS_SUCCESS)
+			{
+				cd_warning ("Cannot load the picture of view %u", cb_data->id);
+				cairo_surface_destroy (pSurface);
+			}
+			else
+			{
+				if (pData->pThumbnail) cairo_surface_destroy (pData->pThumbnail);
+				pData->pThumbnail = pSurface;
+				
+				// load the icon again, now with the thumbnail
+				Icon *pIcon = cairo_dock_get_appli_icon (actor);
+				GldiContainer *pContainer = pIcon ? cairo_dock_get_icon_container (pIcon) : NULL;
+				if (pContainer)
+				{
+					cairo_dock_load_icon_image (pIcon, pContainer);
+					cairo_dock_redraw_icon (pIcon);
+					if (CAIRO_DOCK_IS_DOCK (pContainer) && CAIRO_DOCK (pContainer)->iRefCount != 0)
+						cairo_dock_trigger_redraw_subdock_content (CAIRO_DOCK (pContainer));
+				}
+			}
+		}
+	}
+	unlink (cb_data->cFile);
+	g_free (cb_data->cFile);
+	g_free (cb_data);
+}
+
+// scale a picture to fit into iWidth x iHeight, keeping its aspect ratio, centered
+static cairo_surface_t *_fit_surface (cairo_surface_t *pSurface, int iWidth, int iHeight)
+{
+	int w = cairo_image_surface_get_width (pSurface);
+	int h = cairo_image_surface_get_height (pSurface);
+	if (w <= 0 || h <= 0) return NULL;
+	
+	cairo_surface_t *pResult = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, iWidth, iHeight);
+	cairo_t *cr = cairo_create (pResult);
+	double fScale = MIN ((double)iWidth / w, (double)iHeight / h);
+	cairo_translate (cr, (iWidth - w * fScale) / 2, (iHeight - h * fScale) / 2);
+	cairo_scale (cr, fScale, fScale);
+	cairo_set_source_surface (cr, pSurface, 0, 0);
+	cairo_pattern_set_filter (cairo_get_source (cr), CAIRO_FILTER_GOOD);
+	cairo_paint (cr);
+	cairo_destroy (cr);
+	return pResult;
+}
+
+void gldi_wf_init_thumbnails (void)
+{
+	s_bNeedThumbnails = TRUE;
+	if (s_bCanViewShot) _init_window_maping (); // otherwise, done from cd_init_wayfire_backend ()
+}
+
+cairo_surface_t *gldi_wf_get_thumbnail_surface (GldiWindowActor *actor, int iWidth, int iHeight)
+{
+	if (! (s_bCanViewShot && s_bWatchWMEvents) || iWidth <= 0 || iHeight <= 0) return NULL;
+	GldiWaylandWindowActor *wactor = (GldiWaylandWindowActor*)actor;
+	wf_view_data *pData = (wf_view_data*)wactor->pExtraData;
+	if (!pData) return NULL; // no IPC ID for this view (needs Wayfire's workarounds/app_id_mode = full)
+	
+	if (pData->pThumbnail)
+	{
+		cairo_surface_t *pSurface = _fit_surface (pData->pThumbnail, iWidth, iHeight);
+		cairo_surface_destroy (pData->pThumbnail);
+		pData->pThumbnail = NULL;
+		return pSurface;
+	}
+	
+	if (!pData->bThumbnailPending)
+	{
+		wf_thumbnail_cb_data *cb_data = g_new (wf_thumbnail_cb_data, 1);
+		cb_data->id = pData->id;
+		cb_data->cFile = g_strdup_printf ("%s/cairo-dock-thumbnail-%d-%u.png",
+			g_get_user_runtime_dir (), (int)getpid (), pData->id);
+		
+		struct json_object *obj = json_object_new_object ();
+		json_object_object_add (obj, "method", json_object_new_string ("view-shot/capture"));
+		struct json_object *data = json_object_new_object ();
+		json_object_object_add (data, "view-id", json_object_new_uint64 (pData->id));
+		json_object_object_add (data, "file", json_object_new_string (cb_data->cFile));
+		json_object_object_add (obj, "data", data);
+		if (_call_ipc_internal (obj, _got_thumbnail, cb_data)) pData->bThumbnailPending = TRUE;
+		else
+		{
+			g_free (cb_data->cFile);
+			g_free (cb_data);
+		}
+		json_object_put (obj);
+	}
+	return NULL; // for now, the normal icon is used
 }
 
 /***********************************************************************
@@ -1694,6 +1834,8 @@ void cd_init_wayfire_backend (void) {
 				s_bCanSticky = TRUE;
 			else if (! s_bCanAbove && ! strcmp (value, "wm-actions/set-always-on-top"))
 				s_bCanAbove = TRUE;
+			else if (! s_bCanViewShot && ! strcmp (value, "view-shot/capture"))
+				s_bCanViewShot = TRUE;
 #ifdef HAVE_EVDEV
 			else if (! p.grab_shortkey && ! strcmp (value, "command/register-binding"))
 				{ p.grab_shortkey = _bind_key; any_found = TRUE; }
@@ -1709,6 +1851,7 @@ void cd_init_wayfire_backend (void) {
 		// need to be able to list and watch views to set these
 		s_bCanSticky = FALSE;
 		s_bCanAbove = FALSE;
+		s_bCanViewShot = FALSE;
 	}
 	
 	if (any_found || (watch_found && list_found))
@@ -1726,7 +1869,7 @@ void cd_init_wayfire_backend (void) {
 				dvb.name = "Wayfire IPC";
 				gldi_dock_visibility_register_backend (&dvb);
 				
-				if ((s_bCanAbove || s_bCanSticky) && s_bNeedStickyAbove)
+				if (((s_bCanAbove || s_bCanSticky) && s_bNeedStickyAbove) || (s_bCanViewShot && s_bNeedThumbnails))
 					_init_window_maping ();
 			}
 		}

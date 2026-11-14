@@ -51,6 +51,14 @@ void gldi_wf_set_above (GldiWindowActor *actor, gboolean bAbove);
  */
 void gldi_wf_is_above_or_below (GldiWindowActor *actor, gboolean *bIsAbove, gboolean *bIsBelow);
 
+/** Init providing thumbnails of minimized windows if Wayfire's view-shot plugin is available.
+ * Can be called either before or after cd_init_wayfire_backend (). */
+void gldi_wf_init_thumbnails (void);
+/** Thumbnail of a minimized window, fitted into iWidth x iHeight. The picture is requested
+ * asynchronously: returns NULL until it has arrived, then the window's icon is reloaded.
+ * Needs the window's IPC ID, i.e. Wayfire's workarounds/app_id_mode = full. */
+cairo_surface_t *gldi_wf_get_thumbnail_surface (GldiWindowActor *actor, int iWidth, int iHeight);
+
 /** Set up extra tracking of app-id changes so that the GTK application-id can be extracted. */
 void gldi_wf_backend_init_appid_tracking (void);
 #endif

@@ -247,6 +247,7 @@ static void gldi_zwlr_foreign_toplevel_manager_init ()
 	zwlr_foreign_toplevel_manager_v1_add_listener(s_ptoplevel_manager, &gldi_toplevel_manager, NULL);
 	
 	gldi_wf_init_sticky_above (); // optional functionality to set these states on Wayfire
+	gldi_wf_init_thumbnails (); // optional: thumbnails of minimized windows on Wayfire
 	
 	// register window manager
 	GldiWindowManagerBackend wmb;
@@ -264,7 +265,7 @@ static void gldi_zwlr_foreign_toplevel_manager_init ()
 	wmb.set_thumbnail_area = _set_thumbnail_area;
 	// wmb.set_window_border = _set_window_border;
 	// wmb.get_icon_surface = _get_icon_surface;
-	// wmb.get_thumbnail_surface = _get_thumbnail_surface;
+	wmb.get_thumbnail_surface = gldi_wf_get_thumbnail_surface;
 	// wmb.get_texture = _get_texture;
 	wmb.get_transient_for = _get_transient_for;
 	wmb.is_above_or_below = gldi_wf_is_above_or_below;
