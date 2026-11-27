@@ -225,7 +225,7 @@ static void _wf_shell_update_dock_hotspots (output_hotspots_base *base, int j)
 		if (j == CAIRO_DOCK_LEFT || j == CAIRO_DOCK_RIGHT)
 		{
 			h = base->hotspot_width[j];
-			if (h < geom.height)
+			if (h < (unsigned int)geom.height)
 			{
 				w = 1;
 				x = (j == CAIRO_DOCK_LEFT) ? 0 : geom.width - 1;
@@ -236,7 +236,7 @@ static void _wf_shell_update_dock_hotspots (output_hotspots_base *base, int j)
 		else
 		{
 			w = base->hotspot_width[j];
-			if (w < geom.width)
+			if (w < (unsigned int)geom.width)
 			{
 				h = 1;
 				x = geom.width / 2 - w / 2;
@@ -501,14 +501,14 @@ static void _update_dock_hotspots (CairoDock *pDock, G_GNUC_UNUSED gpointer user
 	switch(myDocksParam.iCallbackMethod)
 	{
 		case CAIRO_HIT_ZONE:
-			thresh = myDocksParam.iZoneWidth;
+			thres = myDocksParam.iZoneWidth;
 			break;
 		case CAIRO_HIT_DOCK_PLACE:
-			thresh = pDock->iMinDockWidth;
+			thres = pDock->iMinDockWidth;
 			break;
 		default:
 			// full edge -- note: CAIRO_HIT_SCREEN_CORNER is not supported yet
-			thresh = gldi_dock_get_screen_width (pDock);
+			thres = gldi_dock_get_screen_width (pDock);
 			break;
 	}
 	if (thres > outputs[i]->hotspot_width[pos]) outputs[i]->hotspot_width[pos] = thres;
